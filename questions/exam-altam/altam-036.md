@@ -14,12 +14,14 @@ wiki_link:
   - Concepts/Long-Term+Care+Insurance
 points: 10
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:ed80c20ab97405f19689d73e641a7fec60bf25abe9cbd52334e088ded460bc01
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:79d66e84e51b5c8984d59490c7dae28f8f27279015f0c1dd31aa0412c9cee237
+  sources:
+    - "SOA Exam ALTAM Written-Answer Sample Questions (January 2026), Q36, pp.67-69 (question), sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
+    - "SOA Exam ALTAM Written-Answer Sample Solutions (January 2026), Q36, pp.74-75 (solution and graders' comments), sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-036.md
@@ -143,7 +145,7 @@ We now have
 | 1 | 0 | $P$ | -- | -- | $0.07P$ | 30,195 | $1.07P - 30{,}195$ |
 | 2 | 54,900 | -- | -- | -- | 3,843 | 56,000 | 2,743 |
 
-All the $\Pi_t$ values are the same as in (a), except for the first year:
+All the $\Pi_t$ values are the same as in (a) (as printed), except for the first year:
 
 $$\Pi_1 = Pr_1 = 1.07P - 30{,}195$$
 
@@ -152,7 +154,7 @@ $$NPV = 0.061P = 6711 - 6343\,v_{12\%} + (1.07P - 30{,}195)\,v_{12\%}$$
 $$\Rightarrow P = 28{,}973$$
 
 ### Examiner Report
-*Graders' Comments:* Many candidates did not attempt this question. For those who did, some incorrectly attempted to use recursion to calculate a new premium based on then new reserve, which doesn't work in part because of the constraint to maintain the same profit margin.
+*Graders' Comments:* Many candidates did not attempt this question. For those who did, some incorrectly attempted to use recursion to calculate a new premium based on then (as printed) new reserve, which doesn't work in part because of the constraint to maintain the same profit margin.
 
 ## Part d (1 point)
 
@@ -163,7 +165,7 @@ The insurer offers the deferred annuity at a single premium of 28,500. Describe 
 ### Explanation
 Disadvantages:
 
-Under the deferred annuity, the policyholder would pay 78,973 (annuity plus premium) in the first year, 50,000 in the second year, conditional on survival, and nothing thereafter. The total cost for a survivor, is 128,973. Under the annuity-due, the total cost is 110,000. So, for a 1-year survivor, even allowing for interest, the deferred annuity is more expensive.
+Under the deferred annuity, the policyholder would pay 78,973 (annuity plus premium) (as printed) in the first year, 50,000 in the second year, conditional on survival, and nothing thereafter. The total cost for a survivor, is 128,973. Under the annuity-due, the total cost is 110,000. So, for a 1-year survivor, even allowing for interest, the deferred annuity is more expensive.
 
 If death occurs in the first two years, the annuitant and/or beneficiaries will receive nothing, losing the single premium.
 

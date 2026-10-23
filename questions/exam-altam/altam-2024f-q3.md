@@ -16,12 +16,14 @@ wiki_link:
   - Concepts/Joint+Life
 points: 10
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:fe0462aa5582d93935947eced9f03411da49f215d98c35aae66bae1f1736e698
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:acd401f23f4e1a75b11b54e96b563db4b73987ef5b349b3c5591a8c9934ec8c7
+  sources:
+    - "SOA Exam ALTAM Fall 2024 — exam (question paper), Q3, pp.7-8, sha256:a75dc6453611a1e32f792a8f6c5efa70b61d82ce0a86291594d816b74f01b830 — https://www.soa.org/globalassets/assets/files/edu/2024/fall/exams/2024-fall-altam-exam.pdf"
+    - "SOA Exam ALTAM Fall 2024 — model solutions and examiners' comments, Q3, pp.4-6, sha256:bef60a4ff411c7fa3eb0fd8d4b6a52a32d8ddf620ff365270c2a6dce96299a4f — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/fall-2024-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-2024f-q3.md
@@ -62,7 +64,7 @@ The valuation assumptions are as follows:
 
 (vi) Monthly annuity values are determined using Woolhouse's 2-term approximation.
 
-(vii) The Traditional Unit Credit funding method is used for valuing the accrued benifits and for determining the Normal Contribution.
+(vii) The Traditional Unit Credit funding method is used for valuing the accrued benifits (as printed) and for determining the Normal Contribution.
 
 (viii) $i = 0.05$
 

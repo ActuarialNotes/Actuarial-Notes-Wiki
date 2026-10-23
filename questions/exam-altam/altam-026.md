@@ -13,12 +13,14 @@ wiki_link:
   - Concepts/Life+Insurance
 points: 8
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:6882bf2c5bc3973ad8814986bf0267f59da2f405f608f07e57e68df0031ea969
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:62aa9c535b1552edca8ad650a51315a75091c579d6e18f8347d2a357dfe8e980
+  sources:
+    - "SOA Exam ALTAM Sample Written-Answer Questions (January 2026), Q26, p.48, sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
+    - "SOA Exam ALTAM Sample Written-Answer Solutions (January 2026), Q26, pp.51-52, sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-026.md
@@ -64,7 +66,7 @@ $$\begin{align*}
 \end{align*}$$
 
 ### Examiner Report
-**Graders' Comments:** *Candidates could answer using the prospective approach or the recursion approach.. The most common errors involved incorrect treatment of expenses. Some candidates used the actual interest rate (1.07) instead of the pricing rate (1.05), which led to partial credit if the rest of the solution was correct.*
+**Graders' Comments:** *Candidates could answer using the prospective approach or the recursion approach.. (as printed) The most common errors involved incorrect treatment of expenses. Some candidates used the actual interest rate (1.07) instead of the pricing rate (1.05), which led to partial credit if the rest of the solution was correct.*
 
 ## Part c (3 points)
 

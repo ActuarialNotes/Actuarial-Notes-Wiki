@@ -20,6 +20,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import re
 import sys
 from collections import Counter, defaultdict
 from datetime import date
@@ -39,6 +40,9 @@ STATUS_LABELS = {
     "stale": "Stale (content changed)",
     "unverified": "Unverified",
 }
+
+
+OFF_SYLLABUS_RE = re.compile(r"^off_syllabus:\s*true\s*$", re.M)
 
 
 def area_for(rel: str) -> str:
@@ -65,6 +69,9 @@ def build() -> str:
     disputed: list[str] = []
     stale: list[str] = []
     recently_verified: list[tuple[str, str, int]] = []
+    # Per bank: (served | off_syllabus) → status counts. A served question is one the
+    # quiz can draw; `off_syllabus: true` keeps a question for the record, out of draws.
+    banks: dict[str, dict[str, Counter]] = defaultdict(lambda: defaultdict(Counter))
 
     files = list(V.iter_content_files())
     for path in files:
@@ -77,6 +84,11 @@ def build() -> str:
         area = area_for(rel)
         by_area[area][status] += 1
         totals[status] += 1
+        if rel.startswith("questions/") and rel.count("/") >= 2:
+            text = path.read_text(encoding="utf-8")
+            front = text.split("\n---", 1)[0] if text.startswith("---") else ""
+            served = "off" if OFF_SYLLABUS_RE.search(front) else "served"
+            banks[rel.split("/")[1]][served][status] += 1
 
         critical = block.get("open_critical") or 0
         if isinstance(critical, int) and critical > 0:
@@ -127,6 +139,22 @@ def build() -> str:
             f"| {area} | {counts['verified']} | {counts['in_review']} | {counts['disputed']} "
             f"| {counts['stale']} | {counts['unverified']} | {area_total} |"
         )
+
+    lines += ["", "## Question banks", "",
+              "A *served* question is one the quiz can draw; an off-syllabus one is kept for the "
+              "record (its sitting, its id, a search) and out of draws. Every served question "
+              "verified is the bar `docs/content-plan.md` (Phase Q) sets.", "",
+              "| Bank | Served verified | Served | Served not verified | Off-syllabus verified "
+              "| Off-syllabus |",
+              "|---|---:|---:|---:|---:|---:|"]
+    sums: Counter = Counter()
+    for bank in sorted(banks):
+        served, off = banks[bank]["served"], banks[bank]["off"]
+        row = (served["verified"], sum(served.values()), off["verified"], sum(off.values()))
+        sums.update({"sv": row[0], "s": row[1], "ov": row[2], "o": row[3]})
+        lines.append(f"| {bank} | {row[0]} | {row[1]} | {row[1] - row[0]} | {row[2]} | {row[3]} |")
+    lines.append(f"| **All banks** | **{sums['sv']}** | **{sums['s']}** | **{sums['s'] - sums['sv']}** "
+                 f"| **{sums['ov']}** | **{sums['o']}** |")
 
     lines += ["", "## Open findings", ""]
     if not open_by_severity:

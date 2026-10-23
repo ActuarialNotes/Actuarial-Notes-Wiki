@@ -13,12 +13,14 @@ wiki_link:
   - Concepts/Recursion
 points: 10
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:c4b8e47610d6f45d1e24cf0c7028f76df1e4de38722578ee8364885330462772
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:793a27082d375dd5bf8aac988c3698170cea2bdb4d3f71d334142084e493f13b
+  sources:
+    - "SOA Exam ALTAM Written-Answer Sample Questions (January 2026), Q33, pp.61-62 (question), sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
+    - "SOA Exam ALTAM Written-Answer Sample Solutions (January 2026), Q33, pp.66-68 (solution and graders' comments), sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-033.md
@@ -147,7 +149,7 @@ i.e. a gain from interest of 684,077.68
 
 Expected mortality cost – actual mortality cost, using the actual interest
 
-$$\left[1000\,q_{60}(250{,}000 + E_{10}) + 1000\,p_{60}\,{}_{11}V^g\right] - \left[1000\,q^*_{60}(250{,}000 + E_{10}) - 1000\,p^*_{60}\,{}_{11}V^g\right]$$
+$$\left[1000\,q_{60}(250{,}000 + E_{10}) + 1000\,p_{60}\,{}_{11}V^g\right] - \left[1000\,q^*_{60}(250{,}000 + E_{10}) - 1000\,p^*_{60}\,{}_{11}V^g\right] \text{ (as printed)}$$
 
 $$
 \begin{align*}
@@ -162,12 +164,12 @@ i.e. a loss from mortality of 467,795.37
 
 Expected expenses – Actual expenses, valued at year end, using actual interest & mortality
 
-$$\left(1000\left({}_{10}V^g + P - e_{10}\right)(1.06) + 1000\,q^*_{60}(250{,}000 + E_{10})\right) - \left[1000\left({}_{10}V^g + P - e^*_{10}\right)(1.06) + 1000\,q^*_{60}\left(250{,}000 + E^*_{10}\right)\right]$$
+$$\left(1000\left({}_{10}V^g + P - e_{10}\right)(1.06) + 1000\,q^*_{60}(250{,}000 + E_{10})\right) - \left[1000\left({}_{10}V^g + P - e^*_{10}\right)(1.06) + 1000\,q^*_{60}\left(250{,}000 + E^*_{10}\right)\right] \text{ (as printed)}$$
 
 $$
 \begin{align*}
 &= 1000(0.05P - 0.06P)(1.06) + 1000(0.006)(251{,}000 - 251{,}100) \\
-&= -58{,}618.46
+&= -58{,}618.46 \text{ (as printed)}
 \end{align*}
 $$
 

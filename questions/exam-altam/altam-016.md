@@ -13,12 +13,14 @@ wiki_link:
   - Concepts/Markov+Chain
 points: 10
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:67b7d08c7634325aa331f2a8b6a74de70b35d252c0c936f93e9506636a385af4
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:f10fc4906cf6352975a882077d5594667be1bf1053a99eb8425149adf57c7810
+  sources:
+    - "SOA Exam ALTAM Sample Written-Answer Questions (January 2026), Q16, pp.31-32, sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
+    - "SOA Exam ALTAM Sample Written-Answer Solutions (January 2026), Q16, pp.28-29, sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-016.md
@@ -77,8 +79,8 @@ $${}_{10}V^{(1)} = 500{,}000\,\bar{A}_{60:\overline{10}|}^{12} = 95{,}700$$
 
 where
 $$\begin{align*}
-\bar{A}_{60:\overline{10}|}^{12} &= \bar{A}_{60}^{12} - {}_{10}p_{60}^{11}\,v^{10}\,A_{70}^{12} \\
-&= 0.47904 - 90.75283)(1.05)^{-10}(0.62237) \\
+\bar{A}_{60:\overline{10}|}^{12} &= \bar{A}_{60}^{12} - {}_{10}p_{60}^{11}\,v^{10}\,A_{70}^{12} \text{ (as printed)} \\
+&= 0.47904 - 90.75283)(1.05)^{-10}(0.62237) \text{ (as printed)} \\
 &= 0.19140
 \end{align*}$$
 
@@ -109,7 +111,7 @@ $$\frac{d}{dt}\,{}_tV^{(1)} = \delta\,{}_tV^{(1)} - \mu_{x+t}^{12}\left(500{,}00
 At $t = 10$:
 
 $$\begin{align*}
-\frac{d}{dt}\,{}_tV^{(1)} &= \ln(1.05)(95{,}700) - (0.01811)(500{,}000 - 97{,}500) \\
+\frac{d}{dt}\,{}_tV^{(1)} &= \ln(1.05)(95{,}700) - (0.01811)(500{,}000 - 97{,}500) \text{ (as printed)} \\
 &= -2652.8
 \end{align*}$$
 
@@ -149,7 +151,7 @@ One reason for the change is that mortality is very high in the first year after
 
 This means, that (for example) the probability of a life dying in the next 6 months for a policyholder currently in State 1, is the same if they were diagnosed, say, in the last week as if they were diagnosed several years ago.
 
-(ii) This is inconsistent with the spike in mortality observed after diagnosis, as this implies a higher mortality rate for lives recently arrived in State 2, compared with lives who have been in State 2 for a long time.
+(ii) This is inconsistent with the spike in mortality observed after diagnosis, as this implies a higher mortality rate for lives recently arrived in State 2 (as printed), compared with lives who have been in State 2 (as printed) for a long time.
 
 ### Examiner Report
 **Graders' Comments:** *Many candidates skipped this part.*

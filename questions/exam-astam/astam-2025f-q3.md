@@ -14,12 +14,14 @@ wiki_link:
   - Concepts/Weibull+Distribution
 points: 9
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:fb50bf288e32c56b6917957db8ecb11cfe588d0d4af53e2c02c9b2c5928d8220
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:f7e46908a0f056df89df7b2199909b83198a631f1ad3a6d4c4e1f59cb9e3eaf3
+  sources:
+    - "SOA Exam ASTAM Fall 2025 — exam questions, Q3, p.8, sha256:82e9e32cfe70c47f3cba084117198396bf78398428322502889c33d163417254 — https://www.soa.org/globalassets/assets/files/edu/2025/fall/exams/2025-fall-astam-exam.pdf"
+    - "SOA Exam ASTAM Fall 2025 — model solutions and examiners' comments, Q3, pp.5-7, sha256:b575524316d2938cec3a30d74109c217e79c4d353b125e489e84e73fe6c44b0a — https://www.soa.org/globalassets/assets/files/edu/2026/spring/solutions/2025-11-astam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-astam/astam-2025f-q3.md
@@ -64,7 +66,7 @@ Let $H_\xi$ denote the Generalized Extreme Value distribution with parameter $\x
 
 ### Explanation
 
-Now $d = 2$ so $Y \sim U(0, 8) \Rightarrow F_Y(y) = \dfrac{y}{8}$, $0 < y \le 8$. Let $H(y)$ denote the d.f of the GEV distribution with $\xi = -1$, i.e. $H(y) = \exp\big(-(1 - y)\big)$ (for $y > 1$). Then we can use either of two approaches:
+Now $d = 2$ so $Y \sim U(0, 8) \Rightarrow F_Y(y) = \dfrac{y}{8}$, $0 < y \le 8$. Let $H(y)$ denote the d.f of the GEV distribution with $\xi = -1$, i.e. $H(y) = \exp\big(-(1 - y)\big)$ (for $y > 1$) (as printed). Then we can use either of two approaches:
 
 Either:
 
@@ -82,7 +84,7 @@ $$\frac{n c_n y}{8} = y \Rightarrow c_n = \frac{8}{n}; \qquad \frac{n(d_n - 8)}{
 
 Or:
 
-$$\lim_{n \to \infty} n S(c_n y + d_n) = -\log H(y) = -\log e^{-(1 - y)} = 1 - y \quad (\text{for } y > 1)$$
+$$\lim_{n \to \infty} n S(c_n y + d_n) = -\log H(y) = -\log e^{-(1 - y)} = 1 - y \quad (\text{for } y > 1) \text{ (as printed)}$$
 
 $$\text{Now } \lim_{n \to \infty} n S(c_n y + d_n) = n\left(1 - \frac{c_n y + d_n}{8}\right)$$
 

@@ -12,12 +12,14 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:f325da081dc05e97960fcd88d32cf243d7fe1b5edf3dcae1012264a4f7d59216
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:053c986c6422e47d2a462b791d5f9b14b8ee57c6f8b5672389842a1ec98a4c50
+  sources:
+    - "SOA Exam FAM-L Sample Questions (October 2024), Q7.41, p.125, sha256:4aaf3469628f2b63a689c187d963857a5a6e749c5eaca9978b264d854f60a28d — https://www.soa.org/globalassets/assets/files/edu/2024/fall/questions/2024-10-exam-fam-l-sample-questions.pdf"
+    - "SOA Exam FAM-L Sample Solutions (October 2024), Q7.41, p.82, sha256:9e7f7b03e0252ccb8f69e4f453d443d8d7cb43ef3945d05c935fdf234cae72ab — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/2024-10-exam-fam-l-sample-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-fam/faml-7-41.md
@@ -35,7 +37,7 @@ iv) $_{5}L$ is the gross future loss random variable at time 5, given the insure
 
 v) Mortality follows the Standard Ultimate Life Table
 
-iv) $i = 0.05$
+iv) (as printed) $i = 0.05$
 
 Calculate the 90th percentile of $_{5}L$.
 
@@ -59,7 +61,7 @@ $$\begin{align*}
 Assume that the 90th percentile is higher than this value. Then, we want the first 10% of deaths. $0.90l_{75} = 76{,}683.15$, which is between $l_{79}$ and $l_{80}$. The loss for deaths between these ages is:
 
 $$\begin{align*}
-100{,}000v^{5} &= 0.95(6750)\ddot{a}_{\overline{5}|} \\
+100{,}000v^{5} &= 0.95(6750)\ddot{a}_{\overline{5}|}\text{ (as printed)} \\
 &= 100{,}000(0.78353) - 0.95(6750)(4.54595) \\
 &= 78{,}353 - 29{,}151 \\
 &= 49{,}202.

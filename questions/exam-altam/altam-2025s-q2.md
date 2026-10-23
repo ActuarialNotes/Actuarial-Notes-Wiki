@@ -16,12 +16,14 @@ wiki_link:
   - Concepts/Critical+Illness+Insurance
 points: 10
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
   content_hash: sha256:453fee4213fe214e1d57e589ee9e2b5e6cbcdf666bdb215a736c99d2b7f257df
-  sources: []
+  sources:
+    - "Spring 2025 Advanced Long-Term Actuarial Mathematics (ALTAM) Exam – Exam File, Q2, pp.7-8, sha256:0d9d7e9ac2c69f2176d1c0a05a0a6a2e9b1006dd64ac8909dd6dbab48541da9b — https://www.soa.org/globalassets/assets/files/edu/2025/spring/exams/spring-2025-altam-exam.pdf"
+    - "SOA ALTAM April 2025 Model Solutions and Examiners' Comments, Q2, pp.2-5, sha256:6371e71ec29b9d7997e03348d4455e4d3e7418660261b36ddd4dd5a2fa0edf66 — https://www.soa.org/globalassets/assets/files/edu/2025/spring/solutions/2025-spring-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-2025s-q2.md

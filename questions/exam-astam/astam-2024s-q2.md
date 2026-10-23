@@ -16,12 +16,14 @@ wiki_link:
   - Concepts/Central+Limit+Theorem
 points: 8
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:e6b972f17789ec166798731116fe334a2c474a8aee873d108449113330849c32
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:8ab193e53ccfa881106380eb9d7053c58ef2f2a3c1465fe9dff348b4cea15a91
+  sources:
+    - "SOA Exam ASTAM Spring 2024 (April 24, 2024), question booklet, Q2, pp.4-5, sha256:e41c30b8ef94a58adba9510cdeb6875db0e3a2abdb3491df90b0eab848421fdf — https://www.soa.org/globalassets/assets/files/edu/2024/spring/exams/spring-2024-astam-exam.pdf"
+    - "SOA ASTAM April 2024 Model Solutions, Q2, pp.2-4, sha256:4f33d5c7e1aa38fd23684a24eb5e1c6535973fa01492638db9ecc94b87ace259 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/solutions/spring-2024-astam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-astam/astam-2024s-q2.md
@@ -38,7 +40,7 @@ Briefly describe two differences between the distributions of the loss for a sin
 
 2. The individual policy loss distribution will have a probability mass at zero, as many policies do not generate any claims. The average loss per policy distribution will not.
 
-3. The individual policy loss distribution will have a much higher standard deviation - i.e. a much larger spread – than the average loss per policy distribution, as the standard deviation of the average is 1/N times the standard deviation of each individual loss (assuming i.i.d).
+3. The individual policy loss distribution will have a much higher standard deviation - i.e. a much larger spread – than the average loss per policy distribution, as the standard deviation of the average is 1/N (as printed) times the standard deviation of each individual loss (assuming i.i.d).
 
 ### Examiner Report
 For Part(a), the candidates did not do great on this question. Many did correctly identify the difference in variance. However, beyond that they tended not really address the question with regard to the difference between the distributions. For Part (b) and Part (c), virtually everyone got these correct. The only common error was that some candidates did not note the B was the Base.
@@ -61,7 +63,7 @@ The average gross premium rate for 2024 is
 
 $$\begin{align*}
 &\frac{\text{New ave loss cost} + \text{fixed expenses per exposure}}{\text{permissible loss ratio}} \\
-&= \frac{(25000 + 30000)}{20} \times \frac{1}{0.85} \\
+&= \frac{(25000 + 30000)}{20} \times \frac{1}{0.85} \text{ (as printed)} \\
 &= 1647.06
 \end{align*}$$
 
@@ -91,7 +93,7 @@ $$\begin{align*}
 Region B: 1.00 (still base case)
 
 $$\begin{align*}
-\text{Region C:}\quad &\text{2023 differential} \times \frac{\text{Region A Loss Ratio}}{\text{Region B Loss Ratio}} \\
+\text{Region C:}\quad &\text{2023 differential} \times \frac{\text{Region A Loss Ratio}}{\text{Region B Loss Ratio}} \text{ (as printed)} \\
 &= 1.20\,\frac{0.76}{0.80} \\
 &= 1.14
 \end{align*}$$

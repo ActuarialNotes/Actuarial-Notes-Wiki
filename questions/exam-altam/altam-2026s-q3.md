@@ -16,12 +16,15 @@ wiki_link:
   - Concepts/Thiele's+Differential+Equation
 points: 11
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:2d99dd686107c5ff2ac6ccc939e79f9fdd87b4cb9ded2ae1948bab4d5eea89d5
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:f84ae3f526bce813e1d9203995301fbf34d740299326a05c22388ef1374aeacb
+  sources:
+    - "SOA Exam ALTAM Spring (April) 2026 – exam (questions), Q3, pp.6-7, sha256:be424c84e360f858fda955257513b27618d695b7e05cae80fca475145f90a9aa — https://www.soa.org/globalassets/assets/files/edu/2026/altam/april-2026-altam-exam.pdf"
+    - "SOA ALTAM Spring 2026 Model Solutions and Examiners' Comments, Q3, pp.5-6, sha256:ca1bffa86e9b64729358c65e002dc38c533661dda14693310f8b3cddc852b4d6 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/solutions/2026-spring-altam-solutions.pdf"
+    - "SOA Exam ALTAM April 2026 – Excel workbook (tables), sheet 'Sickness-Death Model', parameters O26:R33, sha256:2d8c59a01df2a61781bafcf3c64f9f85304dca80e284e5da1f73d9f223440074 — https://www.soa.org/globalassets/assets/files/edu/2026/altam/april-2026-altam-excel.xlsx"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-2026s-q3.md
@@ -68,11 +71,11 @@ $$
 
 $$\ddot{a}_{50:\overline{20}|}^{00} = \ddot{a}_{50}^{00} - v^{20}\,{}_{20}p_{50}^{00}\,\ddot{a}_{70}^{00} - v^{20}\,{}_{20}p_{50}^{01}\,\ddot{a}_{70}^{10}$$
 
-By W2term: $\ddot{a}_x^{00} = \bar{a}_x^{00} + 0.5$; $\quad \ddot{a}_x^{01} = \bar{a}_x^{01}$
+By W2term: $\ddot{a}_x^{00} = \bar{a}_x^{00} + 0.5$; $\quad \ddot{a}_x^{01} = \bar{a}_x^{01}$ (as printed)
 
 $$
 \begin{align*}
-\Rightarrow \ddot{a}_{50:\overline{20}|}^{00} &= (11.7454 + 0.5) - v^{20}(0.49695)(4.9609 + 0.5) - v^{20}(0.21132)(0.0134) \\
+\Rightarrow \ddot{a}_{50:\overline{20}|}^{00} &= (11.7454 + 0.5) - v^{20}(0.49695)(4.9609 + 0.5) - v^{20}(0.21132)\text{ (as printed)}(0.0134) \\
 &= 11.2215
 \end{align*}
 $$
@@ -106,7 +109,7 @@ You are given the following additional information:
 - ${}_tV^{(j)}$ denotes the gross premium policy value at time $t$ for a policy in State $j$ at time $t$.
 - For integer $t$, ${}_tV^{(j)}$ denotes the value immediately before the time $t$ premium is due to be paid, and ${}_{t^+}V^{(j)}$ denotes the value immediately after the time $t$ premium is due to be paid.
 - $\ddot{a}_{60:\overline{10}|}^{00} = 6.9073 \qquad {}_{10}V^{(1)} = 49{,}334$
-- $\mu_{60}^{01} = 0.014086 \qquad \mu_{60}^{02} = 0.014518 \qquad \mu_{60}^{10} = 0.003443 \qquad \mu_{60}^{12} = 0.02325$
+- $\mu_{60}^{01} = 0.014086 \qquad \mu_{60}^{02} = 0.014518 \qquad \mu_{60}^{10} = 0.003443 \qquad \mu_{60}^{12} = 0.02325$ (as printed)
 
 (i) Show that ${}_{10}V^{(0)} = 25{,}000$ to the nearest 100. You should calculate the value to the nearest 1.
 
@@ -146,7 +149,7 @@ $$\frac{d}{dt}\,{}_tV^{(0)} = \delta\,{}_tV^{(0)} - \mu_{x+t}^{01}\left({}_tV^{(
 $$
 \begin{align*}
 \Rightarrow \lim_{t \to 10^+} \frac{d}{dt}\,{}_tV^{(0)} &= \delta\,{}_{10^+}V^{(0)} - \mu_{60}^{01}\left({}_{10}V^{(1)} - {}_{10^+}V^{(0)}\right) - \mu_{60}^{02}\left(S - {}_{10^+}V^{(0)}\right) \\
-&= (0.04879)(28{,}094.74) - 0.014086(49{,}334 - 28{,}094.74) - 0.014518(100{,}000 - 28{,}094.74) \\
+&= (0.04879)(28{,}094.74)\text{ (as printed)} - 0.014086(49{,}334 - 28{,}094.74) - 0.014518(100{,}000 - 28{,}094.74) \\
 &= 27.6498
 \end{align*}
 $$
@@ -157,6 +160,6 @@ $${}_{10.2}V^{(0)} \approx {}_{10+}V^{(0)} + 0.2(27.6498) = 28100.3$$
 
 ### Examiner Report
 1. The key idea for the second half of Question 3 is that cash flows in State 0 are continuous at all times except at premium dates. So when we apply the Euler method to move forward from time 10 to 10.2, we need to start after the jump at time 10. The limit notation in the question signals that the limit is approaching time 10 from above.
-2. A common error was to include the premium in the differential equations. This is incorrect, in this case, because the premium is discretely paid, not continuously paid..
+2. A common error was to include the premium in the differential equations. This is incorrect, in this case, because the premium is discretely paid, not continuously paid.. (as printed)
 3. Candidates who wrote down a generic Thiele's formula, without any application to the contract in the question received no credit.
 4. Many candidates omitted this part.

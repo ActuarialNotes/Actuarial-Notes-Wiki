@@ -14,12 +14,14 @@ wiki_link:
   - Concepts/Fractional+Age+Assumption
 points: 8
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:5ebea87d580132eaf5a0fdd03a4d0a2eb9247ee99a45a410ce41e10f9c41d6fb
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:0c2375409aff8758dfe1f8be4d538cbe023a7c4c47832ebee8ab78767f9e6d08
+  sources:
+    - "SOA Exam ALTAM Fall 2024 — exam (question paper), Q2, pp.5-6, sha256:a75dc6453611a1e32f792a8f6c5efa70b61d82ce0a86291594d816b74f01b830 — https://www.soa.org/globalassets/assets/files/edu/2024/fall/exams/2024-fall-altam-exam.pdf"
+    - "SOA Exam ALTAM Fall 2024 — model solutions and examiners' comments, Q2, pp.2-3, sha256:bef60a4ff411c7fa3eb0fd8d4b6a52a32d8ddf620ff365270c2a6dce96299a4f — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/fall-2024-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-2024f-q2.md
@@ -46,7 +48,7 @@ The insurer uses the following multiple decrement table, where decrement (1) rep
 ### Explanation
 **(i)**
 
-$$\text{Prob. of a claim} = \frac{d_{40}^{(1)} + \dots + d_{44}^{(1)} + d_{40}^{(2)} + \dots + d_{44}^{(2)}}{l_{40}} = \frac{264 + 637}{100{,}000} = 0.0901$$
+$$\text{Prob. of a claim} = \frac{d_{40}^{(1)} + \dots + d_{44}^{(1)} + d_{40}^{(2)} + \dots + d_{44}^{(2)}}{l_{40}} = \frac{264 + 637}{100{,}000} = 0.0901 \text{ (as printed)}$$
 
 **(ii)**
 

@@ -14,13 +14,15 @@ wiki_link:
   - Concepts/Classification+Ratemaking
 points: 4
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:fdf3c18bb91d92b6fc1876c7380a3bc7eafa1dc9249a1a5329b8824fb01d1765
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:a6cad7c14da03b5a341eeef5141642260100805027df3914aa732ad3d6fb8859
+  sources:
+    - "SOA ASTAM Sample Questions (version of Feb. 23, 2026), Q2, pp.4-5, sha256:0294cf4e8717191cda2747e7a6bb49fbb5e2d08f2d281ec979e670621de74ab4 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/questions/february-2024-astam-questions.pdf"
+    - "SOA ASTAM Solutions to Sample Questions, Q2, pp.4-6, sha256:c4206394603cf205da0668d40333bee5aaa6e3dadcaa241fdb03e5488a1ba4e1 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/solutions/february-2024-astam-solutions.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/questions/exam-astam/astam-002.md
 ---
@@ -85,7 +87,7 @@ $$\text{Current Rate Earned Premium} = (12{,}000)\left(\frac{(1.10)(1.08)(0.96)}
 
 $$\begin{aligned}
 \text{Weighted Premium} &= \left[\frac{\left(\frac{7}{12}\right)\left(\frac{7}{12}\right)}{2}\right](1.10)P + \left[\frac{\left(\frac{2}{12}\right)\left(\frac{2}{12}\right)}{2}\right](1.10)(1.08)(0.96)P \\
-&\quad + \left\{1 - \left[\frac{\left(\frac{7}{12}\right)\left(\frac{7}{12}\right)}{2}\right] - \left[\frac{\left(\frac{2}{12}\right)\left(\frac{2}{12}\right)}{2}\right]\right\}(1.10)(1.08)P = 1.172368
+&\quad + \left\{1 - \left[\frac{\left(\frac{7}{12}\right)\left(\frac{7}{12}\right)}{2}\right] - \left[\frac{\left(\frac{2}{12}\right)\left(\frac{2}{12}\right)}{2}\right]\right\}(1.10)(1.08)P = 1.172368 \text{ (as printed)}
 \end{aligned}$$
 
 $$\text{Current Rate Earned Premium} = (8000)\left(\frac{(1.10)(1.08)(0.96)}{1.172368}\right) = 7782.40$$
@@ -109,7 +111,7 @@ For collision coverage for ABC Auto, rate differentials for 2019 are developed u
 | Reckless | 0.2 | 0.25 | $\alpha = 5, \theta = 1000$ |
 
 - (i) Calculate the indicated differentials for each Type, given that Safe is the base rate.
-- (ii) During 2019, ABC Auto experienced the following loss ratios for collision coverage based on the indicated differentials developed in Question 16:
+- (ii) During 2019, ABC Auto experienced the following loss ratios for collision coverage based on the indicated differentials developed in Question 16 (as printed):
 
    | Type | Loss Ratio |
    |---|---|
@@ -121,7 +123,7 @@ For collision coverage for ABC Auto, rate differentials for 2019 are developed u
 
 ### Explanation
 
-(i) We need to calculate the expected loss for each Type which $= E(S) = E(N)E(S)$
+(i) We need to calculate the expected loss for each Type which $= E(S) = E(N)E(S)$ (as printed)
 
 - Safe $\Rightarrow (0.04)(3000) = 120$
 - Not So Safe $\Rightarrow (0.10)(4000) = 400$
@@ -137,4 +139,4 @@ $$\text{Differential for Reckless} = \frac{1250}{120} = 10.41666$$
 
 $$\text{Indicated Differential for Not So Safe} = (3.33333)\left(\frac{0.63}{0.60}\right) = 3.50000$$
 
-$$\text{Indicated Differential for Class C} = (10.41666)\left(\frac{0.51}{0.60}\right) = 8.85416$$
+$$\text{Indicated Differential for Class C (as printed)} = (10.41666)\left(\frac{0.51}{0.60}\right) = 8.85416$$

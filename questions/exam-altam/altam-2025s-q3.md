@@ -15,12 +15,14 @@ wiki_link:
   - Concepts/Insurance+Premium
 points: 10
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:fc35911731f01a570a7264091812cd3b10c44239bcb1bbb5bec153939c5a7728
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:6214f8cbed787b3ce2e1ff6b9b449ac97e08511f71328630a45e05a893b0fed7
+  sources:
+    - "Spring 2025 Advanced Long-Term Actuarial Mathematics (ALTAM) Exam – Exam File, Q3, p.9, sha256:0d9d7e9ac2c69f2176d1c0a05a0a6a2e9b1006dd64ac8909dd6dbab48541da9b — https://www.soa.org/globalassets/assets/files/edu/2025/spring/exams/spring-2025-altam-exam.pdf"
+    - "SOA ALTAM April 2025 Model Solutions and Examiners' Comments, Q3, pp.6-10, sha256:6371e71ec29b9d7997e03348d4455e4d3e7418660261b36ddd4dd5a2fa0edf66 — https://www.soa.org/globalassets/assets/files/edu/2025/spring/solutions/2025-spring-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-2025s-q3.md
@@ -159,7 +161,7 @@ $$\ddot{a}_{60:70:\overline{20}|} = \frac{1 - A_{60:70:\overline{20}|}}{d} = \fr
 
 or
 
-$$\ddot{a}_{60:70:\overline{20}|} = \ddot{a}_{60:70} - {}_{20}E_{60}\cdot{}_{20}E_{70}(1.05)^{20}\,\ddot{a}_{70:80} = 11.2220 - 0.13555(4.5071) = 10.6110$$
+$$\ddot{a}_{60:70:\overline{20}|} = \ddot{a}_{60:70} - {}_{20}E_{60}\cdot{}_{20}E_{70}(1.05)^{20}\,\ddot{a}_{70:80}\text{ (as printed)} = 11.2220 - 0.13555(4.5071) = 10.6110$$
 
 $$\Rightarrow R = \frac{3865.96}{10.6110} - P = 64.21$$
 

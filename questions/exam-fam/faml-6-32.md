@@ -13,12 +13,14 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:e35d8258c4e1af71c9cf3fd1cff218f1c2b1aabb292f01563dd3f9b9613f81a9
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:b114120a0dc7c3473048c81a55c81a7df51504bada40ccc478496e2c290443b6
+  sources:
+    - "SOA Exam FAM Sample Questions, Syllabus Topics 7-10 (August 18, 2026), Q6.32, p.75, sha256:4aaf3469628f2b63a689c187d963857a5a6e749c5eaca9978b264d854f60a28d — https://www.soa.org/globalassets/assets/files/edu/2024/fall/questions/2024-10-exam-fam-l-sample-questions.pdf"
+    - "SOA Exam FAM Sample Solutions, Syllabus Topics 7-10 (August 18, 2026), Q6.32, p.50, sha256:9e7f7b03e0252ccb8f69e4f453d443d8d7cb43ef3945d05c935fdf234cae72ab — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/2024-10-exam-fam-l-sample-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-fam/faml-6-32.md
@@ -54,7 +56,7 @@ Let $P$ = monthly net premium
 
 $$\begin{align*}
 \text{EPV(premiums)} &= 12P\ddot{a}^{(12)}_{x} \\
-&\cong 12P\left[\alpha(12)\,\ddot{a}_{x} - \beta(12)\right] \\
+&\cong 12P\left[\alpha(12)\,\dot{a}_{x}\text{ (as printed)} - \beta(12)\right] \\
 &= 12P\left[1.00020(9.19) - 0.46651\right] \\
 &= 104.7039P
 \end{align*}$$

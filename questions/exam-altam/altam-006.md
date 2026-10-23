@@ -13,12 +13,14 @@ wiki_link:
   - Concepts/Present+Value
 points: 9
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:5de30ace481412b04fc9f38a95482dc416aa757a61e9e12d558805ad6b326ed4
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:37d8cd75e5f6ff5b00337922f0896a71bf13654183be31db71818be52b583c61
+  sources:
+    - "SOA Exam ALTAM Sample Written-Answer Questions (January 2026), Q6, pp.11-12, sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
+    - "SOA Exam ALTAM Sample Written-Answer Solutions (January 2026), Q6, pp.11-12, sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-006.md
@@ -83,7 +85,7 @@ $${}_5p_x^{13} = 1 - {}_5p_x^{11} - {}_5p_x^{12} = 1 - e^{-5(0.2)} - \left(e^{-5
 $$\begin{align*}
 \bar{a}_{x:\overline{5}|}^{11} &= \int_0^5 {}_tp_x^{11}\,e^{-\delta t}\,dt \\
 &= \int_0^5 e^{-0.2t}e^{-0.05t}\,dt \\
-&= \frac{1 - e^{5(0.25)}}{0.25} \\
+&= \frac{1 - e^{5(0.25)}}{0.25} \text{ (as printed)} \\
 &= 2.85398
 \end{align*}$$
 
@@ -92,7 +94,7 @@ $$\begin{align*}
 $$\begin{align*}
 \bar{a}_{x:\overline{5}|}^{12} &= \int_0^5 {}_tp_x^{12}\,e^{-\delta t}\,dt \\
 &= \int_0^5 \left(e^{-0.2t} - e^{-0.4t}\right)e^{-0.05t}\,dt \\
-&= 2.85398 - \frac{1 - e^{5(0.45)}}{0.45} \\
+&= 2.85398 - \frac{1 - e^{5(0.45)}}{0.45} \text{ (as printed)} \\
 &= 0.86598
 \end{align*}$$
 

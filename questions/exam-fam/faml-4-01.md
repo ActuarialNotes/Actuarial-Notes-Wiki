@@ -12,12 +12,14 @@ wiki_link:
 answer: "A"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
   content_hash: sha256:bbc33ff0008408cab6fb6a68d16c0dab31cce3a3fbc223742704de5749b2cbfc
-  sources: []
+  sources:
+    - "SOA Exam FAM-L Sample Questions (Topics 7-10, Aug 2026 version), Q4.1, p.26 (question), sha256:4aaf3469628f2b63a689c187d963857a5a6e749c5eaca9978b264d854f60a28d — https://www.soa.org/globalassets/assets/files/edu/2024/fall/questions/2024-10-exam-fam-l-sample-questions.pdf"
+    - "SOA Exam FAM-L Sample Solutions (Topics 7-10), Q4.1, p.18 (solution and key), sha256:9e7f7b03e0252ccb8f69e4f453d443d8d7cb43ef3945d05c935fdf234cae72ab — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/2024-10-exam-fam-l-sample-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-fam/faml-4-01.md

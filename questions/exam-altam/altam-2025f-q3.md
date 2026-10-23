@@ -16,12 +16,14 @@ wiki_link:
   - Concepts/Thiele's+Differential+Equation
 points: 11
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:acc07b70c6dfa0b8583a4646b787435a3ab1ffcd878d33d46b6cd9deb146e222
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:ef127a95c4675cd82ef74a958a202d5366eacc9ee434e812398df308ef2b9a6c
+  sources:
+    - "SOA Exam ALTAM Fall 2025 – exam (questions), Q3, pp.5-6, sha256:8298b1396b4c2dac7679324ddfc5451f9ebeb004d5dd019fb961a7ad76f8fbb8 — https://www.soa.org/globalassets/assets/files/edu/2025/fall/exams/2025-fall-altam-exam.pdf"
+    - "SOA ALTAM Fall 2025 Model Solutions and Examiners' Comments, Q3, pp.4-6, sha256:7d087ea5f200ed24a6bb37c8e74edebb3fc45943458d10d06bc02e46cd8f6b2a — https://www.soa.org/globalassets/assets/files/edu/2026/spring/solutions/2025-11-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-2025f-q3.md
@@ -128,7 +130,7 @@ $$P\bar{a}_{x:y}^{00} = 129{,}790.08 + 167.13(\lambda P)$$
 $$\Rightarrow P = \frac{129{,}790.08}{14.7443 - 0.0005 \times 167.13} = \mathbf{8{,}852.90}$$
 
 ### Examiner Report
-4. Part (c)(i) was done well by a large number of candidates. Part (c)(ii) proved more challenging, but this was consistent with the examiners' expectations..Many candidates got part (c)(iii) correct by using the givens in (c) (i) and (c) (ii) even if they could not do those parts. This is an excellent strategy in answering these questions and one of the reasons that the Exam Committee provides the answers or a close approximation to the answers. Candidates using this approach correctly got full credit for (c) (iii).
+4. Part (c)(i) was done well by a large number of candidates. Part (c)(ii) proved more challenging, but this was consistent with the examiners' expectations..Many (as printed) candidates got part (c)(iii) correct by using the givens in (c) (i) and (c) (ii) even if they could not do those parts. This is an excellent strategy in answering these questions and one of the reasons that the Exam Committee provides the answers or a close approximation to the answers. Candidates using this approach correctly got full credit for (c) (iii).
 
 ## Part d (1 point)
 
@@ -139,7 +141,7 @@ Let ${}_tV^{(j)}$ denote the net premium policy value at $t$ given that the poli
 
 $$\frac{d}{dt}\,{}_tV^{(0)} = \delta\,{}_tV^{(0)} + P - \lambda\left(tP - {}_tV^{(0)}\right) - \mu_{y+t}^{01}\left({}_tV^{(1)} - {}_tV^{(0)}\right) - \mu_{x+t}^{02}\left({}_tV^{(2)} - {}_tV^{(0)}\right)$$
 
-where ${}_tV^{(1)} = 50{,}000\,\bar{a}_x$ and ${}_tV^{(2)} = 50{,}000\,\bar{a}_y$
+where ${}_tV^{(1)} = 50{,}000\,\bar{a}_x$ and ${}_tV^{(2)} = 50{,}000\,\bar{a}_y$ (as printed)
 
 ### Examiner Report
 5. Candidates who attempted part (d) generally did well. Around 30% of candidates did not attempt it.

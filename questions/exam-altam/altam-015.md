@@ -13,12 +13,14 @@ wiki_link:
   - Concepts/State-Dependent+Insurance
 points: 9
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:d15ff43682abc1cc203ec48d5eaeb5f06c7353304249f828071ee5c9e6f9ba65
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:0d005e84bc9dd2144ae7a80ed4687a128354d089f8ec0e489a3c14cd9af3d7cb
+  sources:
+    - "SOA Exam ALTAM Sample Written-Answer Questions (January 2026), Q15, pp.29-30, sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
+    - "SOA Exam ALTAM Sample Written-Answer Solutions (January 2026), Q15, p.27, sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-015.md
@@ -120,7 +122,7 @@ $$\bar{a}_{x+t}^{\overline{11}} = \int_0^{\infty} {}_sp_{x+t}^{\overline{11}}\,e
 $\Rightarrow$ EPV(Sickness benefit)
 
 $$\begin{align*}
-&= 1000(7.6923-0.93773)1000\int_0^{10} {}_tp_x^{00}\,\mu_{x+t}^{01}\left(\bar{a}_{x+t}^{\overline{11}} - \bar{a}_{x+t:\overline{1}|}^{\overline{11}}\right)e^{-\delta t}\,dt \\
+&= 1000(7.6923-0.93773)1000\int_0^{10} {}_tp_x^{00}\,\mu_{x+t}^{01}\left(\bar{a}_{x+t}^{\overline{11}} - \bar{a}_{x+t:\overline{1}|}^{\overline{11}}\right)e^{-\delta t}\,dt \text{ (as printed)} \\
 &= 6754.58\int_0^{10} {}_tp_x^{00}\,\mu_{x+t}^{01}\,e^{-\delta t}\,dt \\
 &= 6754.58\,\bar{A}_{x:\overline{10}|}^{01} \\
 &= 1182.05

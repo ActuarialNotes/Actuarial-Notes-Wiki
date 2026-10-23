@@ -14,12 +14,14 @@ wiki_link:
   - Concepts/Woolhouse's+Formula
 points: 8
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:608380a773e88d59b599e6560b3865b59b643c7658f9bdfd8af15dfd8a60c765
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:b689940b1d54f311c0a09c6853d490b30986f2549b67086cf2a6c03e0915cef3
+  sources:
+    - "SOA Exam ALTAM Written-Answer Sample Questions (January 2026), Q43, pp.78-79 (question), sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
+    - "SOA Exam ALTAM Written-Answer Sample Solutions (January 2026), Q43, pp.87-88 (solution and graders' comments), sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-043.md
@@ -149,4 +151,4 @@ Conclusion: $\ddot{a}_{x|y}$ decreases.
 
 ### Examiner Report
 
-*Graders' Comments:* Many candidates used the broken heart syndrome as an example of positively correlated lifetimes and argued that the value of the reversionary annuity would decrease. This is answer (if complete) was awarded full credit. A few presented a more general argument to justify the decrease in EPV when lifetimes are positively correlated.
+*Graders' Comments:* Many candidates used the broken heart syndrome as an example of positively correlated lifetimes and argued that the value of the reversionary annuity would decrease. This is answer (as printed) (if complete) was awarded full credit. A few presented a more general argument to justify the decrease in EPV when lifetimes are positively correlated.

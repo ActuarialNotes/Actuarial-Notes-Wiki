@@ -12,12 +12,14 @@ wiki_link:
   - Concepts/Independent+Random+Variables
 points: 6
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
   content_hash: sha256:2b2143bdf283c00982bc1fba8d5f744ef5d4a0df1ca218d1ac8147b996e30457
-  sources: []
+  sources:
+    - "SOA Exam ALTAM Sample Written-Answer Questions (January 2026), Q17, p.33, sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
+    - "SOA Exam ALTAM Sample Written-Answer Solutions (January 2026), Q17, pp.30-31, sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-017.md

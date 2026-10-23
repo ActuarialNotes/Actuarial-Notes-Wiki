@@ -14,13 +14,15 @@ wiki_link:
   - Concepts/Payoff
 points: 4
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:38e1e0b3af0925eaf00ba90d4d3ee9ce69bc49fb3bec84afbb864028598f7bc8
-  sources: []
-  open_findings: 0
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:07e92fff24df252ce69222916da3355ff51abdcad3e454e79ca754cc7c36c191
+  sources:
+    - "SOA Exam ALTAM Written-Answer Sample Questions (January 2026), Q61, pp.108-109 (question), sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
+    - "SOA Exam ALTAM Written-Answer Sample Solutions (January 2026), Q61, pp.117-118 (solution and graders' comments), sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
+  open_findings: 2
   open_critical: 0
   log: .verify/questions/exam-altam/altam-061.md
 ---
@@ -49,11 +51,11 @@ You are given the following assumptions:
 
 - (i) The risk-free rate is $r = 0.04$ continuously compounded.
 - (ii) The volatility is $\sigma = 0.30$.
-- (iii) Mortality follows the Standard Ultimate Mortality Model.
+- (iii) Mortality follows the Standard Ultimate Mortality Model (as printed).
 - (iv) There are no exits other than death.
 
 - (i) Show that, in the calculation of the contribution of year 1 to the cost of the hedge portfolio at issue, $d_1$ is -0.018 to the nearest 0.001. You should calculate the value to the nearest 0.0001.
-- (ii) Show that the cost of the contribution of year 1 to the cost of the hedge portfolio at issue is 77 to the nearest 1. You should calculate the value to the nearest 0.01.
+- (ii) Show that the cost of the contribution of year 1 to the cost of the hedge portfolio at issue is 77 (as printed) to the nearest 1. You should calculate the value to the nearest 0.01.
 - (iii) Calculate the cost of the hedge portfolio at issue.
 - (iv) Let $c$ denote the component of the annual 3% management charge that is required to fund the GMDB guarantee. You are given that $c$ is a portion of the 3% annual charge at the start of each year, not an additional charge. Calculate $c$.
 - (v) Without further calculation, state with reason whether the cost of the hedge portfolio at issue would decrease if the fund price were 2 per share at inception.
@@ -135,7 +137,7 @@ The assets at the end of year 1 are $10{,}000(2)(0.97) = 19{,}400$
 The Reset Death Benefit for death in year 1 is
 
 $$\begin{align*}
-max(10{,}000e^{0.06}, F_2) &= max\left(19{,}400e^{0.06},\ 0.97(19{,}400)\frac{S_2}{S_1}\right) \\
+max(10{,}000e^{0.06}, F_2) \text{ (as printed)} &= max\left(19{,}400e^{0.06},\ 0.97(19{,}400)\frac{S_2}{S_1}\right) \\
 &= 18{,}818\,max\left(\frac{e^{0.06}}{0.97} - \frac{S_2}{S_1},\ 0\right)
 \end{align*}$$
 

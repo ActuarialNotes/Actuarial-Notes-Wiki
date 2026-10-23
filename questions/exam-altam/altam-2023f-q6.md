@@ -15,12 +15,15 @@ wiki_link:
   - Concepts/Service+Table
 points: 10
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:2832cab5c321e37915d4d4704c92c47870c6217091010db560660868fee1ae67
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:142f0efebcdf4937fe7c42496f70cbe05b6eb3f653cdc2ed1cf1313f21898a21
+  sources:
+    - "SOA Exam ALTAM Fall 2023 — exam (question paper), Q6, pp.11-12, sha256:c162b6a75c9ccaedf38fcc9f7f4debf83abcf768f1e6ee6ff0d84e89e3098bc7 — https://www.soa.org/globalassets/assets/files/edu/2023/fall/exams/fall-2023-altam-exam.pdf"
+    - "SOA Exam ALTAM Fall 2023 — model solutions and examiners' comments, Q6, pp.13-16, sha256:df2ab0d9bc15ea197487448a071c8d909aa27d14841c082505cbb63358a6b93b — https://www.soa.org/globalassets/assets/files/edu/2023/fall/solutions/altam-fall-2023-solutions.pdf"
+    - "SOA Exam ALTAM Fall 2023 — exam Excel workbook (tables), sheet 'Service Table', sha256:a6d6a2aeb020d4cdf6bb016971ae98037e97110ca2e16c11467b2b4bbbccda0a — https://www.soa.org/globalassets/assets/files/edu/2023/fall/exams/fall-2023-altam-exam.xlsx"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-2023f-q6.md
@@ -111,7 +114,7 @@ NC_A = AL_A\left(\frac{FAS_{36}}{FAS_{35}}\,\frac{11}{10} - 1\right)
 $$
 
 $$
-FAS_{36} = \tfrac{1}{2}(60{,}000 + 60{,}000 \times 1{,}1) = 63{,}000
+FAS_{36} = \tfrac{1}{2}(60{,}000 + 60{,}000 \times 1{,}1) = 63{,}000 \text{ (as printed)}
 $$
 
 $$
@@ -128,7 +131,7 @@ NC_A &= v\frac{l_{36}}{l_{35}}AL_A(t+1) + apv(\text{midyear benefits}) - AL_A(t)
 $$
 
 $$
-FAS_{36} = \tfrac{1}{2}(60{,}000 + 60{,}000 \times 1{,}1) = 63{,}000
+FAS_{36} = \tfrac{1}{2}(60{,}000 + 60{,}000 \times 1{,}1) = 63{,}000 \text{ (as printed)}
 $$
 
 $$
@@ -137,7 +140,7 @@ AL_A(t+1) &= 0.02 \times FAS_{36} \times svc \times \left(v^{24}\frac{r_{60x}}{l
 &= 0.02 \times 63{,}000 \times 11\left(\begin{aligned} &1.05^{-24} \times \tfrac{27{,}925.61}{207{,}871.81} \times 14.441 \\ &+ 1.05^{-24.5} \times \tfrac{6{,}187.56}{207{,}871.81} \times 14.315 \\ &+ 1.05^{-25} \times \tfrac{58{,}699.91}{207{,}871.81} \times 14.186 \end{aligned}\right) \\
 &= 13{,}860\left(\begin{aligned} &0.310068 \times 0.134341 \times 14.441 \\ &+ 0.302595 \times 0.029766 \times 14.315 \\ &+ 0.295303 \times 0.282385 \times 14.186 \end{aligned}\right) \\
 &= 13{,}860(0.601535 + 0.128937 + 1.182958) \\
-&= 8337{,}28 + 1787{,}07 + 16{,}395.80 \\
+&= 8337{,}28 + 1787{,}07 + 16{,}395.80 \text{ (as printed)} \\
 &= 26{,}520.14
 \end{align*}
 $$
@@ -153,7 +156,7 @@ NC_B = v\frac{l_{61}}{l_{60+}}AL_B(t+1) + apv(\text{midyear benefits}) - AL_B(t)
 $$
 
 $$
-FAS_{61} = \tfrac{1}{2}(100{,}000 + 100{,}000 \times 1{,}1) = 105{,}000
+FAS_{61} = \tfrac{1}{2}(100{,}000 + 100{,}000 \times 1{,}1) = 105{,}000 \text{ (as printed)}
 $$
 
 $$
@@ -166,7 +169,7 @@ AL_B(t+1) &= 0.02 \times FAS_{61} \times svc \times \ddot{a}_{61}^{(12)} \\
 $$
 
 $$
-FAS_{60.5} = \tfrac{1}{2}(100{,}000 \times 1.5 + 100{,}000 \times 1{,}1 \times 0.5) = 102{,}500
+FAS_{60.5} = \tfrac{1}{2}(100{,}000 \times 1.5 + 100{,}000 \times 1{,}1 \times 0.5) = 102{,}500 \text{ (as printed)}
 $$
 
 $$

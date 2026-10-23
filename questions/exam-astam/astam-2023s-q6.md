@@ -15,12 +15,14 @@ wiki_link:
   - Concepts/Approximate+Confidence+Interval
 points: 11
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:382ddea213dc139aa196d5b16b390d1a5d72ed9138e58900fbd6acb2d832ff2a
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:6fe6254d3364c15abfba2d61a988f99e3942a2b7c36b06a1a241dc60db5ad545
+  sources:
+    - "SOA Exam ASTAM Spring 2023 (April 26, 2023), question booklet, Q6, pp.11-12, sha256:fc23b48a1dbfd1d9c85380d5a3605927ba53d90641d5dcba1ab238bf3e02abaf — https://www.soa.org/globalassets/assets/files/edu/2023/spring/exams/spring-2023-exam-astam.pdf"
+    - "SOA ASTAM April 2023 Model Solutions, Q6, pp.14-15, sha256:ac32f8885c3d0e8456bb4edec83c8bf8a89243d21bd6ddaa232842c22d3640a3 — https://www.soa.org/globalassets/assets/files/edu/2023/spring/solutions/spring-2023-solutions-astam.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-astam/astam-2023s-q6.md
@@ -67,13 +69,13 @@ $$
 \hat{C}_{2,3} &= 225(1.09231) \\
 &= 245.77 \\
 \hat{X}_{23} &= 245.8 - 225 \\
-&= 20.77 \\
+&= 20.77 \text{ (as printed)} \\
 \hat{f}_3 &= \frac{158}{145} \\
 &= 1.08966 \\
 \hat{C}_{2,4} &= 245.8(1.08966) \\
 &= 267.80 \\
 \hat{X}_{24} &= 267.8 - 245.8 \\
-&= 22.03
+&= 22.03 \text{ (as printed)}
 \end{align*}
 $$
 
@@ -127,7 +129,7 @@ You are given that the chain ladder method generates the same estimate of projec
 ### Explanation
 **(i)** The MLE of $\mathrm{E}\left[X_{2,3}\right]$ is $\hat{\mu}_2\hat{\gamma}_3$, which is given to be equal to the chain ladder estimate $\hat{X}_{2,3}$. So, from (b), we have $\hat{\mu}_2\hat{\gamma}_3 = 20.77$.
 
-Similarly, we have
+**(ii)** Similarly, we have
 
 $$
 \begin{align*}
@@ -136,7 +138,7 @@ $$
 \end{align*}
 $$
 
-**(ii)** The sum of Poisson RVs is also Poisson, with parameter equal to the sum of the individual Poisson parameters. The outstanding claims for AY 2 are
+**(iii)** The sum of Poisson RVs is also Poisson, with parameter equal to the sum of the individual Poisson parameters. The outstanding claims for AY 2 are
 
 $$
 X_{2,3} + X_{2,4} \sim Poi\left(\mu_2(\gamma_3 + \gamma_4)\right)
@@ -146,7 +148,7 @@ $$
 \Rightarrow SD\left[X_{2,3} + X_{2,4}\right] \approx \sqrt{\hat{\mu}_2\left(\hat{\gamma}_3 + \hat{\gamma}_4\right)} \approx \sqrt{20.77 + 22.03} = 6.542
 $$
 
-**(iii)** The approximate 95% CI is
+**(iv)** (as printed) The approximate 95% CI is
 
 $$
 42.80 \pm 1.96(6.542) = [29.98,\ 55.62]

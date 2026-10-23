@@ -14,12 +14,14 @@ wiki_link:
   - Concepts/Profit+Margin
 points: 8
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:2d071a1266b9dc4d99c866c3438d6eb9c0698155b49b546aac3da477674b0a33
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:b2c1eff47c844201851f75655195e56829786bf98d0f814322ff1f7896d20f82
+  sources:
+    - "SOA Exam ALTAM Written-Answer Sample Questions (January 2026), Q49, pp.89-90 (question), sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
+    - "SOA Exam ALTAM Written-Answer Sample Solutions (January 2026), Q49, pp.99-100 (solution and graders' comments), sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-049.md
@@ -41,13 +43,13 @@ Show that the total death benefit at the end of the third year is 162,800 to the
 
 ### Explanation
 
-$$AV_t = \left((AV)\{t-1\} + P_t - E_t - COI_t\right)\left(1 + i_t^c\right)$$
+$$AV_t = \left((AV)\{t-1\} + P_t - E_t - COI_t\right)\left(1 + i_t^c\right) \text{ (as printed)}$$
 
 where $COI_t = ADB_t \times q_{x+t-1} \times v_{i_q}$, $ADB_t = 150{,}000$, and $i^q = 0.04$;
 
 $$\Rightarrow AV_3 = \left(8166 + 4800(0.95) - 377.88\right)(1.04) = 12{,}842$$
 
-The total DV in year 3 is $DB_3 = ADB_3 + AV_3 = 162{,}842$
+The total DV (as printed) in year 3 is $DB_3 = ADB_3 + AV_3 = 162{,}842$
 
 ## Part b (3 points)
 
@@ -103,13 +105,13 @@ Calculate the NPV.
 |---|---|---|
 | 0 | –800.00 | –800.00 |
 | 1 | 264.88 | 264.88 |
-| 2 | 667.00 | 600.01 |
+| 2 | 667.00 (as printed) | 600.01 |
 | 3 | 572.61 | 411.04 |
 
 Where $\Pi_0 = Pr_0$, and $\Pi_t = {}_{t-1}p_x^{(\tau)}\,Pr_t$.
 
 $$\begin{align*}
-\Rightarrow NPV &= -800 + 264.88v + 600.01v^2 + 411.40v^3 \quad \text{at 10\%} \\
+\Rightarrow NPV &= -800 + 264.88v + 600.01v^2 + 411.40v^3 \text{ (as printed)} \quad \text{at 10\%} \\
 &= 245.50
 \end{align*}$$
 

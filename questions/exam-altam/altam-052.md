@@ -13,12 +13,14 @@ wiki_link:
   - Concepts/Multiple+Decrement+Model
 points: 9
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:b0bee0655d08066bdc096be7ab3a3742b9784f4e9218255ba7aa877c37a8b924
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:09dc28cbeb28b73db3c0172bea367f6922cee7bad69cb73f7fd266c30e717845
+  sources:
+    - "SOA Exam ALTAM Written-Answer Sample Questions (January 2026), Q52, pp.95-96 (question), sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
+    - "SOA Exam ALTAM Written-Answer Sample Solutions (January 2026), Q52, pp.104 (solution and graders' comments), sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-052.md
@@ -48,7 +50,7 @@ AV_1 &= \left(2500(0.95) - 0.005(100{,}000)\,v_{6\%} - 30\right)(1.06) \\
 
 ### Examiner Report
 
-*Graders Comments:* Part (a) was done well, although a few assumed that this was a Type A policy, when it is a Type B (fixed additional death benefit).
+*Graders Comments (as printed):* Part (a) was done well, although a few assumed that this was a Type A policy, when it is a Type B (fixed additional death benefit).
 
 ## Part b (3 points)
 

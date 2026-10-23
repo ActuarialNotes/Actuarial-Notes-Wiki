@@ -15,12 +15,14 @@ wiki_link:
   - Concepts/Unpaid+Claims
 points: 8
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
   content_hash: sha256:2d87d51e3ba9792f28863c1c63063c1822d1112f6a35e2872146c703c56e85cd
-  sources: []
+  sources:
+    - "SOA Exam ASTAM Fall 2023, question booklet, Q6, p.11, sha256:94277623c3540e1ab20e885d53ae2c5a1e1290e3e1061dc162aa832e8e3efd92 — https://www.soa.org/globalassets/assets/files/edu/2023/fall/exams/fall-2023-astam-exam.pdf"
+    - "SOA ASTAM Fall 2023 Model Solutions (revised February 20, 2024), Q6, pp.16-17, sha256:0e43330341132ce0ac5392dd785e2897506886c307700d7bdd5c03f55b57502c — https://www.soa.org/globalassets/assets/files/edu/2023/fall/solutions/astam-fall-2023-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-astam/astam-2023f-q6.md

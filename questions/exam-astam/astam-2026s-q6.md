@@ -15,12 +15,14 @@ wiki_link:
   - Concepts/Estimator
 points: 11
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:08363beedd93646251fe06ea661d0c5390320a3dce3981c50623c47e16dbfe19
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:874e185854210160cda49ab9af9adfb736366c467d516c8f2a617541ee3c2900
+  sources:
+    - "SOA Exam ASTAM Spring 2026 — exam questions, Q6, pp.13-14, sha256:2d067bc99c3437f3791bb61c595db1e2cc8794b876f88dd9b506a5a543cac511 — https://www.soa.org/globalassets/assets/files/edu/2026/astam/april-2026-astam-exam.pdf"
+    - "SOA Exam ASTAM Spring 2026 — model solutions and examiners' comments, Q6, pp.13-15, sha256:3930c2d38ba3d08955f65aededeb3bbb1c1eab5191b4f11c7481ceb177a7522f — https://www.soa.org/globalassets/assets/files/edu/2026/spring/solutions/2026-spring-astam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-astam/astam-2026s-q6.md
@@ -85,14 +87,14 @@ ES_{0.99} &= \frac{1}{1 - \xi}\left(Q_{0.99} + \beta - \xi d\right) \\
 \end{align*}$$
 
 ### Examiner Report
-1. This part was done well by the candidates who did not omit the question..
+1. This part was done well by the candidates who did not omit the question.. (as printed)
 
 ## Part c (1 point)
 
 Show that the Hill estimator of $\alpha = \xi^{-1}$, denoted $\hat{\alpha}^H$, is 3.1 to the nearest 0.1. You should calculate the value to the nearest 0.01.
 
 ### Explanation
-We have $d = X_{(464)}$. This means that in the Hill estimator formula from the formula sheet, we have $j = 484$, so that
+We have $d = X_{(464)}$ (as printed). This means that in the Hill estimator formula from the formula sheet, we have $j = 484$, so that
 
 $$\begin{align*}
 \hat{\alpha}^H &= \left(\sum_{k=j}^{n} \frac{\log\left(x_{(k)}\right)}{n - j + 1} - \log\left(x_{(j)}\right)\right)^{-1} = \left(\sum_{k=484}^{500} \frac{\log\left(x_{(k)}\right)}{17} - \log(4953)\right)^{-1} \\
@@ -102,7 +104,7 @@ $$\begin{align*}
 
 ### Examiner Report
 1. Candidates performance was fair in part (c), on average. Many candidates correctly identified the given Hill estimator formula but missed the parameter inputs.
-2. In particular, understanding that in this case, j = 484, was not recognized by a significant umber of the candidates..
+2. In particular, understanding that in this case, j = 484, was not recognized by a significant umber (as printed) of the candidates..
 
 ## Part d (3.5 points)
 
@@ -158,7 +160,7 @@ From (i) we see that $Q_p = d\left(0.032\right)^{1/\hat{\alpha}}(1 - p)^{-(1/\ha
 $$\begin{align*}
 \Rightarrow ES_{0.99} &= \frac{d(0.032)^{1/\hat{\alpha}}}{0.01}\int_{0.99}^1 (1 - p)^{-1/\hat{\alpha}}\, dp \\
                       &= \frac{d(0.032)^{1/\hat{\alpha}}}{0.01\left(1 - \tfrac{1}{\hat{\alpha}}\right)}\left[-(1 - p)^{1 - 1/\hat{\alpha}}\right]_{0.99}^1 \\
-&= \frac{4953\left(0.33098\right)(0.99)^{0.678765}}{0.01\left(0.678765\right)} \\
+&= \frac{4953\left(0.33098\right)(0.99)^{0.678765}}{0.01\left(0.678765\right)} \text{ (as printed)} \\
  &= 10{,}602.81
 \end{align*}$$
 

@@ -13,12 +13,14 @@ wiki_link:
   - Concepts/Poisson+Distribution
 points: 6
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:131183bc3d12cde8fe0661f07a7c713ee3916763aac73c0881e1884c12eaa140
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:f9d60ef7d65dde91773b6879ef3ebbb138d57801960dc4b8837e8c1b3ed03a4e
+  sources:
+    - "SOA ASTAM Sample Questions (version of Feb. 23, 2026), Q23, pp.28-29, sha256:0294cf4e8717191cda2747e7a6bb49fbb5e2d08f2d281ec979e670621de74ab4 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/questions/february-2024-astam-questions.pdf"
+    - "SOA ASTAM Solutions to Sample Questions, Q23, pp.44-45, sha256:c4206394603cf205da0668d40333bee5aaa6e3dadcaa241fdb03e5488a1ba4e1 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/solutions/february-2024-astam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-astam/astam-023.md
@@ -61,7 +63,7 @@ $$
 From the unconditional variance formula, we have
 
 $$
-Var\left[X_t\right] = E\left[Var\left[X_t \mid \Theta\right]\right] + Var\left[E\left[X_t \mid \Theta\right]\right] = \nu + a = \mu + a
+Var\left[X_t\right] = E\left[Var\left[X_t \mid \Theta\right]\right] + Var\left[E\left[X_t \mid \Theta\right]\right] = \nu + a = \mu + a \text{ (as printed)}
 $$
 
 ## Part b
@@ -145,7 +147,7 @@ $$
 
 The estimated credibility premium for the number of claims for each policyholder is therefore
 
-$0.01745 X_1 + 0.98255(0.1745)$, where $X_1$, depending on the policyholder, is $0, 1, \ldots, 4$.
+$0.01745 X_1 + 0.98255(0.1745)$ (as printed), where $X_1$, depending on the policyholder, is $0, 1, \ldots, 4$.
 
 ## Part f
 

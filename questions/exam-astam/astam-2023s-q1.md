@@ -15,12 +15,14 @@ wiki_link:
   - Concepts/Policy+Limit
 points: 12
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
   content_hash: sha256:3de18ca69603e703e0acc0113e7f824d48b02b1b02fc4b35eef27aed924140ba
-  sources: []
+  sources:
+    - "SOA Exam ASTAM Spring 2023 (April 26, 2023), question booklet, Q1, pp.2, sha256:fc23b48a1dbfd1d9c85380d5a3605927ba53d90641d5dcba1ab238bf3e02abaf — https://www.soa.org/globalassets/assets/files/edu/2023/spring/exams/spring-2023-exam-astam.pdf"
+    - "SOA ASTAM April 2023 Model Solutions, Q1, pp.1-3, sha256:ac32f8885c3d0e8456bb4edec83c8bf8a89243d21bd6ddaa232842c22d3640a3 — https://www.soa.org/globalassets/assets/files/edu/2023/spring/solutions/spring-2023-solutions-astam.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-astam/astam-2023s-q1.md

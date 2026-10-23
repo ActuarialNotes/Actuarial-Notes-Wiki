@@ -14,12 +14,14 @@ wiki_link:
   - Concepts/Embedded+Option
 points: 9
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:e4bf4a8bb06cc266bb2430fccec63efe3565b50467ad60763b23f7d8775dd1ea
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:a3e4d0666af4aafbb748729f955c43b0d3a4a18d5eeac5f37054f0ca99afa5c7
+  sources:
+    - "SOA Exam ALTAM Fall 2024 — exam (question paper), Q6, pp.13-14, sha256:a75dc6453611a1e32f792a8f6c5efa70b61d82ce0a86291594d816b74f01b830 — https://www.soa.org/globalassets/assets/files/edu/2024/fall/exams/2024-fall-altam-exam.pdf"
+    - "SOA Exam ALTAM Fall 2024 — model solutions and examiners' comments, Q6, pp.13-15, sha256:bef60a4ff411c7fa3eb0fd8d4b6a52a32d8ddf620ff365270c2a6dce96299a4f — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/fall-2024-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-2024f-q6.md
@@ -58,7 +60,7 @@ $$d_2 = d_1 - \sigma\sqrt{T} = d_1 - 0.2\sqrt{10} = -0.158115$$
 
 $$
 \begin{align*}
-\Rightarrow p(0) &= 1000e^{-0.03(10)}\,\Phi(0.15811) - 818.73\,\Phi(-0.47432) \\
+\Rightarrow p(0) &= 1000e^{-0.03(10)}\,\Phi(0.15811) - 818.73\,\Phi(-0.47432) \text{ (as printed)} \\
 &= 1000e^{-0.03(10)}(0.562815) - 818.73(0.317636) \\
 &= 156.89
 \end{align*}
@@ -73,7 +75,7 @@ $$c = \frac{147.88}{1000\,\bar{a}_{60:\overline{10}|\,\delta=0.02}} = \frac{147.
 ### Examiner Report
 Overall, candidates who attempted this part did acceptable on it. Many candidates omitted the entire question. Overall, candidates did a good job of documenting their work which helps in awarding partial credit.
 
-The Black-Sholes formulas are given in the Formula Sheet. The hedge cost is a slight modification of this formula. Many candidates forgot to include the ${}_np_x$ in the calculation. Also, since the interest rate was a continuous interest rate, the proper adjustment was $e^{-0.02}$ instead of 0.98. Use of 0.98 resulted in a small deduction on the question. Part (ii) was an easy calculation even if you could not get the correct answer to part (i). You were given the value of 150 and could use it to get full credit for part (ii). Candidates are encouraged to read the entire question and answer easier parts even if they cannot get the harder parts.
+The Black-Sholes (as printed) formulas are given in the Formula Sheet. The hedge cost is a slight modification of this formula. Many candidates forgot to include the ${}_np_x$ in the calculation. Also, since the interest rate was a continuous interest rate, the proper adjustment was $e^{-0.02}$ instead of 0.98. Use of 0.98 resulted in a small deduction on the question. Part (ii) was an easy calculation even if you could not get the correct answer to part (i). You were given the value of 150 and could use it to get full credit for part (ii). Candidates are encouraged to read the entire question and answer easier parts even if they cannot get the harder parts.
 
 ## Part b (3 points)
 
@@ -131,7 +133,7 @@ Candidates did not do as well on this part. Quite a few candidates used 10 years
 
 Some candidates attempted to use the replicating portfolio instead of the B-S formula to answer this question. A few candidates were successful, but most were not.
 
-"State with reasons" means you must state the reasons to receive the credit. A lot of candidates just stated that the charge was sufficient with stating why.
+"State with reasons" means you must state the reasons to receive the credit. A lot of candidates just stated that the charge was sufficient with stating why (as printed).
 
 ## Part c (2 points)
 
@@ -161,7 +163,7 @@ Disadvantages:
 - If many p/h reset at the same time, it can create a spike in the guarantee cost of the portfolio, which could be a liquidity or solvency risk.
 
 ### Examiner Report
-Candidates actually did the best on part of the question with those attempting the question getting most or all of the points. This is another example where candidates are encouraged to read the entire question and answer easier parts even if they cannot get the harder parts.
+Candidates actually did the best on part of the question (as printed) with those attempting the question getting most or all of the points. This is another example where candidates are encouraged to read the entire question and answer easier parts even if they cannot get the harder parts.
 
 Many candidates did not state that the maturity date would be reset to 13 years. This was necessary to receive full credit.
 

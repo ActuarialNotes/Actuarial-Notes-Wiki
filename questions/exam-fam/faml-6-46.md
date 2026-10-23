@@ -12,12 +12,14 @@ wiki_link:
 answer: "E"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:d037bfaf98a8ee07dc6f75d98419bf61372c2266203e3fb57feb7ca023c67644
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:969048c0f9619a68e2b6f82275dc4f6217a0f9d08211b0638b74e293d6b0adf8
+  sources:
+    - "SOA Exam FAM Sample Questions, Syllabus Topics 7-10 (August 18, 2026), Q6.46, p.85, sha256:4aaf3469628f2b63a689c187d963857a5a6e749c5eaca9978b264d854f60a28d — https://www.soa.org/globalassets/assets/files/edu/2024/fall/questions/2024-10-exam-fam-l-sample-questions.pdf"
+    - "SOA Exam FAM Sample Solutions, Syllabus Topics 7-10 (August 18, 2026), Q6.46, p.58, sha256:9e7f7b03e0252ccb8f69e4f453d443d8d7cb43ef3945d05c935fdf234cae72ab — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/2024-10-exam-fam-l-sample-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-fam/faml-6-46.md
@@ -47,7 +49,7 @@ Calculate the level net premium.
 
 ## Explanation
 
-Let $P$ be the premium per 1 of insurance.
+Let $P$ be the premium per 1 of insurance (as printed).
 
 $$P\ddot{a}_{55:\overline{10}|} = 0.51213P + v^{10}\,{}_{10}p_{55}\,\ddot{a}_{65}$$
 

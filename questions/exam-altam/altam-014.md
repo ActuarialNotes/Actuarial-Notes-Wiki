@@ -13,12 +13,14 @@ wiki_link:
   - Concepts/Life+Insurance
 points: 10
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:95da03382aa5fd4859d7551b3c6680a834ec9f95bf4d50e809faaecd2b0350d4
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:4cdf07d31bf1743042dade4c5273e96f8e55f082d75a6a3ebcb70206b54f1ec3
+  sources:
+    - "SOA Exam ALTAM Sample Written-Answer Questions (January 2026), Q14, p.28, sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
+    - "SOA Exam ALTAM Sample Written-Answer Solutions (January 2026), Q14, pp.25-26, sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-014.md
@@ -70,7 +72,7 @@ $$\begin{align*}
 &= 1391.60
 \end{align*}$$
 
-(i)
+(i) (as printed)
 
 $$\text{EPV(premiums)} = P\left(1 + 0.99537v + 0.99027v^2\right) = P(2.84618)$$
 

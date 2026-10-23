@@ -13,12 +13,14 @@ wiki_link:
   - Concepts/Annuities
 points: 12
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
   content_hash: sha256:2ac85c6701b044db88951cc1ec6bc973978a5f302074c3f7d7cb9f5ac5f0cb22
-  sources: []
+  sources:
+    - "SOA Exam ALTAM Sample Written-Answer Questions (January 2026), Q11, pp.21-22, sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
+    - "SOA Exam ALTAM Sample Written-Answer Solutions (January 2026), Q11, p.21, sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-011.md

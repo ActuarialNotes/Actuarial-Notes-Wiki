@@ -14,12 +14,14 @@ wiki_link:
   - Concepts/Term+Life+Insurance
 points: 10
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:16bb0c789c108dde4eb1cab66352caf154c243b8c8ee36c649457b39a965ff14
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:0913a8fadf322bd6deb48bd379d013aafd8fa22f144d544d639b352f736fc470
+  sources:
+    - "SOA Exam ALTAM Written-Answer Sample Questions (January 2026), Q35, pp.65-66 (question), sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
+    - "SOA Exam ALTAM Written-Answer Sample Solutions (January 2026), Q35, pp.72-73 (solution and graders' comments), sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-035.md
@@ -71,7 +73,7 @@ $$
 {}_2V^n &= EPV \text{ of Future Benefits} - EPV \text{ of Future Premiums} \\
 &= S\,v\,q_{x+2} - P \\
  &= 1{,}000{,}000\left(1.05^{-1}\right)(0.3) - 177{,}313.20 \\
-&= 285{,}714.29 - 177{,}313{,}20 \\
+&= 285{,}714.29 - 177{,}313{,}20 \text{ (as printed)} \\
  &= 108{,}401.09
 \end{align*}
 $$
@@ -155,7 +157,7 @@ $$
 \begin{align*}
 PM &= \frac{NPV}{G\left(1 + v^1_{0.12}\,p_x^{(\tau)} + v^2_{0.12}\,{}_2p_x^{(\tau)}\right)} \\
 &= \frac{33{,}030.61}{210{,}000(1 + 0.7232143 + 0.4649235)} \\
- &= \frac{33{,}030.61}{495{,}508.93} \\
+ &= \frac{33{,}030.61}{495{,}508.93} \text{ (as printed)} \\
 &= 0.07188 \text{ or } 7.19\%
 \end{align*}
 $$

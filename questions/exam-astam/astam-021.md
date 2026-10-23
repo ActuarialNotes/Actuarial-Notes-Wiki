@@ -15,12 +15,14 @@ wiki_link:
   - Concepts/Bayesian
 points: 7
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:7a42c62a669c98f640438c8dddeb48409ad4a41984895a7e103c1b273a830a55
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:52b85e12a222efd1af1e0c19584cb7caeb83ffa4808d3c8ea8b09d95ea180806
+  sources:
+    - "SOA ASTAM Sample Questions (version of Feb. 23, 2026), Q21, p.26, sha256:0294cf4e8717191cda2747e7a6bb49fbb5e2d08f2d281ec979e670621de74ab4 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/questions/february-2024-astam-questions.pdf"
+    - "SOA ASTAM Solutions to Sample Questions, Q21, pp.40-41, sha256:c4206394603cf205da0668d40333bee5aaa6e3dadcaa241fdb03e5488a1ba4e1 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/solutions/february-2024-astam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-astam/astam-021.md
@@ -154,4 +156,4 @@ Your boss says, "It looks like this policyholder is a low-risk driver, so the co
 
 ### Explanation
 
-With three claims in 3 years, there is still more than a 16% probability that Adam is only a "fair" driver, with double the claim frequency of a "good" driver. Underestimating this risk could be costly.
+With three claims in 3 years, there is still more than a 16% probability that Adam (as printed) is only a "fair" driver, with double the claim frequency of a "good" driver. Underestimating this risk could be costly.

@@ -16,12 +16,14 @@ wiki_link:
   - Concepts/Maximum+Likelihood+Estimation
 points: 9
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
   content_hash: sha256:973b0047aca85a064b4275b0f8a0d953f55d703b288b2f03f94596a369c980ad
-  sources: []
+  sources:
+    - "SOA Exam ASTAM Fall 2025 — exam questions, Q2, pp.6-7, sha256:82e9e32cfe70c47f3cba084117198396bf78398428322502889c33d163417254 — https://www.soa.org/globalassets/assets/files/edu/2025/fall/exams/2025-fall-astam-exam.pdf"
+    - "SOA Exam ASTAM Fall 2025 — model solutions and examiners' comments, Q2, pp.2-4, sha256:b575524316d2938cec3a30d74109c217e79c4d353b125e489e84e73fe6c44b0a — https://www.soa.org/globalassets/assets/files/edu/2026/spring/solutions/2025-11-astam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-astam/astam-2025f-q2.md

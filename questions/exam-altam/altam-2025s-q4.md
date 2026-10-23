@@ -16,12 +16,14 @@ wiki_link:
   - Concepts/Whole+Life+Insurance
 points: 10
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:af2057ccec408054ac89d3003074e118f67849fd4c960cb5ecb10e469b59f6ce
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:53f2f5317fa045df45aec4065edab874e8b9a40cfbdaf5ad62ebee916ff51f19
+  sources:
+    - "Spring 2025 Advanced Long-Term Actuarial Mathematics (ALTAM) Exam – Exam File, Q4, pp.10-11, sha256:0d9d7e9ac2c69f2176d1c0a05a0a6a2e9b1006dd64ac8909dd6dbab48541da9b — https://www.soa.org/globalassets/assets/files/edu/2025/spring/exams/spring-2025-altam-exam.pdf"
+    - "SOA ALTAM April 2025 Model Solutions and Examiners' Comments, Q4, pp.11-14, sha256:6371e71ec29b9d7997e03348d4455e4d3e7418660261b36ddd4dd5a2fa0edf66 — https://www.soa.org/globalassets/assets/files/edu/2025/spring/solutions/2025-spring-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-2025s-q4.md
@@ -125,7 +127,7 @@ $$\Rightarrow P = \frac{14{,}612}{0.95\,\ddot{a}_{60}^{00} - 0.45} = 1846.77$$
 $$
 \begin{align*}
 {}_{10}V^{(0)} &= 100{,}000\left(A_{70}^{01} + {}_{10}p_{70}^{00}\,v^{10}A_{80}^{01}\right) - P\left(0.95\,\ddot{a}_{70}^{00}\right) \\
-&= 100{,}000(0.380964) - 1846.76(0.95 \times 8.7967) \\
+&= 100{,}000(0.380964) - 1846.76\text{ (as printed)}(0.95 \times 8.7967) \\
 &= 22{,}663.3
 \end{align*}
 $$
@@ -177,4 +179,4 @@ $$\left({}_{10}V + 0.95P\right)(1 + i) = p_{70}^{01}(100{,}000) + p_{70}^{00}\,{
 $$\Rightarrow {}_{11}V = 25{,}985.21$$
 
 ### Examiner Report
-Results were generally mixed. Candidates generally understood the formulas but struggled to apply to the question being asked. Specially most struggled on the first two parts but most did well in part 3 with many receiving full credit on part (iii). Some candidates miss the premium based expenses.
+Results were generally mixed. Candidates generally understood the formulas but struggled to apply to the question being asked. Specially (as printed) most struggled on the first two parts but most did well in part 3 with many receiving full credit on part (iii). Some candidates miss the premium based expenses.

@@ -17,12 +17,14 @@ wiki_link:
   - Concepts/Bayesian
 points: 10
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:e1b2d7f26c34c72e5194f61af59488542993e9c2dc30640b12c7e40247ac2735
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:caa6e2d6dede107fcfb6ee92fed35033f4e3a511d4997504306acc40f22d2170
+  sources:
+    - "SOA Exam ASTAM Spring 2026 — exam questions, Q4, pp.10-11, sha256:2d067bc99c3437f3791bb61c595db1e2cc8794b876f88dd9b506a5a543cac511 — https://www.soa.org/globalassets/assets/files/edu/2026/astam/april-2026-astam-exam.pdf"
+    - "SOA Exam ASTAM Spring 2026 — model solutions and examiners' comments, Q4, pp.7-9, sha256:3930c2d38ba3d08955f65aededeb3bbb1c1eab5191b4f11c7481ceb177a7522f — https://www.soa.org/globalassets/assets/files/edu/2026/spring/solutions/2026-spring-astam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-astam/astam-2026s-q4.md
@@ -141,10 +143,10 @@ Now suppose the claim frequency is estimated using Buhlmann credibility.
 (i)
 
 $$\begin{align*}
-v &= E\left[V\left[N\right]\right] \\
+v &= E\left[V\left[N\right]\right] \text{ (as printed)} \\
   &= E\left[\Lambda\right] \\
 &= 0.4 \\
-a &= V\left[E\left[N\right]\right] \\
+a &= V\left[E\left[N\right]\right] \text{ (as printed)} \\
   &= V\left[\Lambda\right] \\
 &= 0.08 \\
 \mu &= E\left[N\right] \\

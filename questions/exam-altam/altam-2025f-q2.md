@@ -13,12 +13,14 @@ wiki_link:
   - Concepts/Reserve
 points: 7
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
   content_hash: sha256:5a2b817a09b8f452bbc2c48dab0a651fe5d95c126894646c0c2c36d2d710c458
-  sources: []
+  sources:
+    - "SOA Exam ALTAM Fall 2025 – exam (questions), Q2, p.4, sha256:8298b1396b4c2dac7679324ddfc5451f9ebeb004d5dd019fb961a7ad76f8fbb8 — https://www.soa.org/globalassets/assets/files/edu/2025/fall/exams/2025-fall-altam-exam.pdf"
+    - "SOA ALTAM Fall 2025 Model Solutions and Examiners' Comments, Q2, pp.2-3, sha256:7d087ea5f200ed24a6bb37c8e74edebb3fc45943458d10d06bc02e46cd8f6b2a — https://www.soa.org/globalassets/assets/files/edu/2026/spring/solutions/2025-11-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-2025f-q2.md

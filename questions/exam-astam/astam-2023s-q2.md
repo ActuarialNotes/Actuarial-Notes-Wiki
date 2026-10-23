@@ -15,12 +15,14 @@ wiki_link:
   - Concepts/Poisson+Distribution
 points: 10
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:61d14b24a953a26f4a618f2e1f3e8cc8cbbac4f3e7eb4db52d9465e0f95bdd34
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:a3bf6cee3a83a1fc4241f125d443d1948e9196dd7bf43067acb3d882cd381f11
+  sources:
+    - "SOA Exam ASTAM Spring 2023 (April 26, 2023), question booklet, Q2, pp.3-4, sha256:fc23b48a1dbfd1d9c85380d5a3605927ba53d90641d5dcba1ab238bf3e02abaf — https://www.soa.org/globalassets/assets/files/edu/2023/spring/exams/spring-2023-exam-astam.pdf"
+    - "SOA ASTAM April 2023 Model Solutions, Q2, pp.4-6, sha256:ac32f8885c3d0e8456bb4edec83c8bf8a89243d21bd6ddaa232842c22d3640a3 — https://www.soa.org/globalassets/assets/files/edu/2023/spring/solutions/spring-2023-solutions-astam.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-astam/astam-2023s-q2.md
@@ -82,7 +84,7 @@ $$
 \begin{align*}
 L\left(\lambda, p_0^M\right) &= \prod_{k=0}^{\infty}\left(p_k^M\right)^{n_k} = \left(p_0^M\right)^{n_0}\prod_{k=1}^{4}\left(\frac{1-p_0^M}{1-p_0}\,p_k\right)^{n_k} \\
 &= \left(p_0^M\right)^{n_0}\left(1-p_0^M\right)^{n-n_0}\prod_{k=1}^{4}\left(\frac{\lambda^k e^{-\lambda}}{k!\left(1-e^{-\lambda}\right)}\right)^{n_k} \\
-&= \left(p_0^M\right)^{46}\left(1-p_0^M\right)^{54}\left(1-e^{-\lambda}\right)^{54} e^{-54\lambda}\,\lambda^{84}\,K
+&= \left(p_0^M\right)^{46}\left(1-p_0^M\right)^{54}\left(1-e^{-\lambda}\right)^{54} e^{-54\lambda}\,\lambda^{84}\,K \text{ (as printed)}
 \end{align*}
 $$
 

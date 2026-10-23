@@ -15,12 +15,14 @@ wiki_link:
   - Concepts/Equity-Linked+Insurance
 points: 9
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:c0896db9a39c3ce32e915ac31354527a74d36de70a20756a7a8488343c3baba4
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:4118f007ee71064bfa0955df2d76fd43e60564aea3eb7ce3621b6206872c7852
+  sources:
+    - "Spring 2025 Advanced Long-Term Actuarial Mathematics (ALTAM) Exam – Exam File, Q6, pp.14-15, sha256:0d9d7e9ac2c69f2176d1c0a05a0a6a2e9b1006dd64ac8909dd6dbab48541da9b — https://www.soa.org/globalassets/assets/files/edu/2025/spring/exams/spring-2025-altam-exam.pdf"
+    - "SOA ALTAM April 2025 Model Solutions and Examiners' Comments, Q6, pp.18-20, sha256:6371e71ec29b9d7997e03348d4455e4d3e7418660261b36ddd4dd5a2fa0edf66 — https://www.soa.org/globalassets/assets/files/edu/2025/spring/solutions/2025-spring-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-2025s-q6.md
@@ -119,7 +121,7 @@ $\Rightarrow$ guaranteed minimum income annual benefit is
 $$\gamma(140{,}000) = 0.08(140{,}000) = 11{,}200$$
 
 ### Examiner Report
-The primary goal with this question was to assess different benefit amounts as the benefit base. Many candidates missed different components to consider in calculating the benefit base. The most common mistake was recognizing that the fund value at time 6, 140,000, should have been considered (and is what we were looking for). Some candidates overcomplicated this and calculated an annuity factor.
+The primary goal with this question was to assess different benefit amounts as the benefit base. Many candidates missed different components to consider in calculating the benefit base. The most common mistake was recognizing (as printed) that the fund value at time 6, 140,000, should have been considered (and is what we were looking for). Some candidates overcomplicated this and calculated an annuity factor.
 
 ## Part d (1 point)
 

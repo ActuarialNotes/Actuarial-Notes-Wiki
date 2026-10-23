@@ -14,12 +14,14 @@ wiki_link:
   - Concepts/Fisher+Information
 points: 5
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:64857c968df8c3995126fbfd2c2c21c163e1eeae0bd676172a6d3e684d7c6815
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:80bb98b5089421f558cf45719f0b24a1fed48dfc6ffd83dbf7dba6b8518ab97b
+  sources:
+    - "SOA ASTAM Sample Questions (version of Feb. 23, 2026), Q12, p.17, sha256:0294cf4e8717191cda2747e7a6bb49fbb5e2d08f2d281ec979e670621de74ab4 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/questions/february-2024-astam-questions.pdf"
+    - "SOA ASTAM Solutions to Sample Questions, Q12, p.25, sha256:c4206394603cf205da0668d40333bee5aaa6e3dadcaa241fdb03e5488a1ba4e1 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/solutions/february-2024-astam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-astam/astam-012.md
@@ -39,7 +41,7 @@ You fitted both the Burr XII and the Pareto models to the data and the maximum l
 |---|---|---|---|---|
 | Pareto | $\alpha$ | 1.1819 | 0.1115 | –3515.941 |
 | | $\theta$ | 136.6418 | 21.1313 | |
-| Burr XII | $\alpha$ | 1.1931 | 0.2019 | –3526.253 |
+| Burr XII | $\alpha$ | 1.1931 | 0.2019 | –3526.253 (as printed) |
 | | $\theta$ | 138.6682 | 36.5152 | |
 | | $\gamma$ | 0.9956 | 0.0639 | |
 
@@ -72,7 +74,7 @@ Conduct a hypothesis test to examine whether $\gamma = 1$ based on the model est
 ### Explanation
 To test the null $H_0\!: \gamma = 1$, one can approximate the test statistic:
 
-$$\frac{\hat{\gamma} - 1}{se(\hat{\gamma})} = \frac{0.9956 - 1}{0.0638} = -0.06886$$
+$$\frac{\hat{\gamma} - 1}{se(\hat{\gamma})} = \frac{0.9956 - 1}{0.0638} = -0.06886 \text{ (as printed)}$$
 
 and if this is more than 2 (in absolute value, assuming two-sided test), then one can safely reject the null hypothesis. In this case, the test statistic is quite small so that we will not be able to reject the null hypothesis that the claims data may come from a Pareto.
 

@@ -16,12 +16,14 @@ wiki_link:
   - Concepts/Early+Retirement
 points: 10
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:51dfd9b50052b4a16e4ade49483c52e67388abb817a134801e649fba5eb0dd2b
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:78a4f93da1902cc94811f51e7c35950e37ce5e96d87ced823ed8e7dcfb313313
+  sources:
+    - "SOA Exam ALTAM Fall 2025 – exam (questions), Q6, pp.12-13, sha256:8298b1396b4c2dac7679324ddfc5451f9ebeb004d5dd019fb961a7ad76f8fbb8 — https://www.soa.org/globalassets/assets/files/edu/2025/fall/exams/2025-fall-altam-exam.pdf"
+    - "SOA ALTAM Fall 2025 Model Solutions and Examiners' Comments, Q6, pp.12-14, sha256:7d087ea5f200ed24a6bb37c8e74edebb3fc45943458d10d06bc02e46cd8f6b2a — https://www.soa.org/globalassets/assets/files/edu/2026/spring/solutions/2025-11-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-2025f-q6.md
@@ -130,7 +132,7 @@ The proportionate reduction factor for age 60, based on actuarial equivalence, w
 
 $$\frac{v^5\,\ddot{a}_{65}^{(12)}}{\ddot{a}_{60}^{(12)}} = \frac{(1.06)^{-5} \times 14.5260}{16.2437} = 0.6682389$$
 
-and, as it is quite lower than $1 - 0.003 \times 60 = 0.82$, the actuarial reduction factor offered by then plan seems too generous.
+and, as it is quite lower than $1 - 0.003 \times 60 = 0.82$, the actuarial reduction factor offered by then (as printed) plan seems too generous.
 
 ### Examiner Report
 5. In part (c), many candidates wrongly valued the benefit based on past and future service – possibly because they had used both in part (a). In (c)(iii), for full credit, candidates were required to state and justify their opinion on whether the actuarial reduction factor is reasonable. No credit was given to answers that merely defined the actuarial reduction factor.

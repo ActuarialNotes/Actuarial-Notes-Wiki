@@ -14,12 +14,14 @@ wiki_link:
   - Concepts/Reserve
 points: 10
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:8f7bf957e8b952c4238110bed3378ec16199658b5992a80449fa512dd8b75c5f
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:714b9c058ef27abcd8e0930b3973fcb007f0df97ea32295a4208cc947bc5f417
+  sources:
+    - "SOA Exam ALTAM Spring (April) 2026 – exam (questions), Q5, pp.10-11, sha256:be424c84e360f858fda955257513b27618d695b7e05cae80fca475145f90a9aa — https://www.soa.org/globalassets/assets/files/edu/2026/altam/april-2026-altam-exam.pdf"
+    - "SOA ALTAM Spring 2026 Model Solutions and Examiners' Comments, Q5, pp.10-12, sha256:ca1bffa86e9b64729358c65e002dc38c533661dda14693310f8b3cddc852b4d6 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/solutions/2026-spring-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-2026s-q5.md
@@ -152,7 +154,7 @@ A^{\;1}_{\overgroup{61:71}:\overline{10}|} &= \left(1 - d\,\ddot{a}_{61:71:\over
 \end{align*}
 $$
 
-$$\Rightarrow A^{\;1}_{\overline{61:71}:\overline{10}|} = 0.04744 + 0.13890 - 0.17900 = 0.008236$$
+$$\Rightarrow A^{\;1}_{\overline{61:71}:\overline{10}|} = 0.04744 + 0.13890\text{ (as printed)} - 0.17900 = 0.008236$$
 
 OR
 

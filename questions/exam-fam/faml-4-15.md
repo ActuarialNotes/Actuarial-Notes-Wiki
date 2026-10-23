@@ -12,12 +12,14 @@ wiki_link:
 answer: "E"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:51866339ca42c3918449ec798daed2cece381759b4228207c031229cb05a155a
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:30b47f99c44d9dc0ea93942021d9fda939c6e57efc7190c101f0a82fa8b162aa
+  sources:
+    - "SOA Exam FAM-L Sample Questions (Topics 7-10, Aug 2026 version), Q4.15, p.35 (question), sha256:4aaf3469628f2b63a689c187d963857a5a6e749c5eaca9978b264d854f60a28d — https://www.soa.org/globalassets/assets/files/edu/2024/fall/questions/2024-10-exam-fam-l-sample-questions.pdf"
+    - "SOA Exam FAM-L Sample Solutions (Topics 7-10), Q4.15, p.24 (solution and key), sha256:9e7f7b03e0252ccb8f69e4f453d443d8d7cb43ef3945d05c935fdf234cae72ab — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/2024-10-exam-fam-l-sample-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-fam/faml-4-15.md
@@ -57,7 +59,7 @@ E[Z] &= \int_{0}^{\infty} b_{t} \cdot v^{t} \cdot {}_{t}p_{x} \cdot \mu_{x+t}\,d
 
 $$\begin{align*}
 E[Z^{2}] &= \int_{0}^{\infty} \left(b_{t} \cdot v^{t}\right)^{2} \cdot {}_{t}p_{x} \cdot \mu_{x+t}\,dt \\
-&= \int_{0}^{\infty} \left(e^{0.04t}\right)\left(e^{-0.12t}\right)\left(0.04e^{-0.04}\right)dt \\
+&= \int_{0}^{\infty} \left(e^{0.04t}\right)\left(e^{-0.12t}\right)\left(0.04e^{-0.04}\right)\text{ (as printed)}\,dt \\
 &= \frac{0.04}{0.12} \\
 &= \frac{1}{3}
 \end{align*}$$

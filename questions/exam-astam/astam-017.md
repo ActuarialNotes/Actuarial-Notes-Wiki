@@ -14,13 +14,15 @@ wiki_link:
   - Concepts/Policy+Limit
 points: 5
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:fc4820c82dfef7dc7407a73e0c1dcbb71686379afcb1582786688a655782607e
-  sources: []
-  open_findings: 0
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:c95e8de0061ded295c7b2dc17d7bac1a2e97d3850b237e8d6b43dd53cf99366f
+  sources:
+    - "SOA ASTAM Sample Questions (version of Feb. 23, 2026), Q17, p.22, sha256:0294cf4e8717191cda2747e7a6bb49fbb5e2d08f2d281ec979e670621de74ab4 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/questions/february-2024-astam-questions.pdf"
+    - "SOA ASTAM Solutions to Sample Questions, Q17, p.33, sha256:c4206394603cf205da0668d40333bee5aaa6e3dadcaa241fdb03e5488a1ba4e1 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/solutions/february-2024-astam-solutions.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/questions/exam-astam/astam-017.md
 ---
@@ -91,7 +93,7 @@ Let $Y$ be the random variable representing the insured loss amount per claim wi
 
 ### Explanation
 
-$Y = \max(X, 1000)$
+$Y = \max(X, 1000)$ (as printed)
 
 $$
 \begin{align*}
@@ -103,7 +105,7 @@ $$
 
 ## Part e
 
-Using the delta method, construct an approximate 80% confidence for $E[Y]$.
+Using the delta method, construct an approximate 80% confidence (as printed) for $E[Y]$.
 
 ### Explanation
 
@@ -117,7 +119,7 @@ $$
 
 $$
 \begin{align*}
-g'(\theta) &= 1 - e^{-1000/\theta} + \frac{1000}{\theta}e^{-1000/\theta} \\
+g'(\theta) &= 1 - e^{-1000/\theta} + \frac{1000}{\theta}e^{-1000/\theta} \text{ (as printed)} \\
 \Rightarrow g'(\hat{\theta}) &= 1.0147 \\
 \Rightarrow V\left[g(\hat{\theta})\right] &\approx 1.0147^2(184{,}320) \\
            &= 189{,}780 \\

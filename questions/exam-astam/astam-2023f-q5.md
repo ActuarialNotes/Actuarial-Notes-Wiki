@@ -15,12 +15,14 @@ wiki_link:
   - Concepts/Overall+Rate+Level+Indication
 points: 9
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:b6f94df91f2588a85543721fcd9d8089be5395f5d55f26c91b366c4b7dea1dac
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:f0477ec40bf2efd809d846ecbb18671818ca045a29b6469cd4abf5314ffa0eea
+  sources:
+    - "SOA Exam ASTAM Fall 2023, question booklet, Q5, pp.9-10, sha256:94277623c3540e1ab20e885d53ae2c5a1e1290e3e1061dc162aa832e8e3efd92 — https://www.soa.org/globalassets/assets/files/edu/2023/fall/exams/fall-2023-astam-exam.pdf"
+    - "SOA ASTAM Fall 2023 Model Solutions (revised February 20, 2024), Q5, pp.13-15, sha256:0e43330341132ce0ac5392dd785e2897506886c307700d7bdd5c03f55b57502c — https://www.soa.org/globalassets/assets/files/edu/2023/fall/solutions/astam-fall-2023-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-astam/astam-2023f-q5.md
@@ -59,7 +61,7 @@ $$
 $$
 
 ### Examiner Report
-This was a question where Execl could be an asset in answering the question. However, as is clearly stated in the instructions, candidates who use Excel MUST provide enough work on the page for the grader to be able to follow their thought process and check their work. There were candidates using Excel who did not provide sufficient information.
+This was a question where Execl (as printed) could be an asset in answering the question. However, as is clearly stated in the instructions, candidates who use Excel MUST provide enough work on the page for the grader to be able to follow their thought process and check their work. There were candidates using Excel who did not provide sufficient information.
 
 ## Part b (3 points)
 

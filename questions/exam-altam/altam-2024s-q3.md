@@ -16,12 +16,14 @@ wiki_link:
   - Concepts/Adverse+Selection
 points: 11
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:75f9d5a2e309f4ce4646ade0ede14888d1cfe36f5b7d10eddbcf4c6a08ded4f0
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:00ad81e3ce4396287e40da8fc7a63507cb9b55b2e45fb2d9e2cf36e6bdc146cf
+  sources:
+    - "SOA Exam ALTAM Spring 2024 — exam (question paper), Q3, pp.7-9, sha256:7877c415a5859ee881046def4553cc2d714688607058c1d807a069d873320ee5 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/exams/spring-2024-altam-exam.pdf"
+    - "SOA Exam ALTAM Spring 2024 — model solutions and examiners' comments, Q3, pp.5-8, sha256:1ff2f7da08ae0d9bf5e542c2cbd87fa4b81ce334e1e47f8b117ecacc1103fb65 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/solutions/spring-2024-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-2024s-q3.md
@@ -34,7 +36,7 @@ NED Life sells special whole life insurances of 100,000 that include a sickness 
 
 $$\mu_x^{01} = a_1 + b_1 e^{c_1 x}; \quad \mu_x^{02} = a_2 + b_2 e^{c_2 x}; \quad \mu_x^{10} = b_1 e^{c_1(110-x)}; \quad \mu_x^{12} = 1.4\mu_x^{02}$$
 
-where $a_1 = 4 \times 10^{-4}$; $b_1 = 3.47 \times 10^{-6}$; $c_1 = 0.138$; $a_2 = 5 \times 10^{-4}$; $b_2 = 7.85 \times 10^{-5}$; $c_2 = 0.087$
+where $a_1 = 4 \times 10^{-4}$; $b_1 = 3.47 \times 10^{-6}$; $c_1 = 0.138$; $a_2 = 5 \times 10^{-4}$; $b_2 = 7.85 \times 10^{-5}$ (as printed); $c_2 = 0.087$
 
 - Death benefits are payable at the moment of death.
 - Sickness benefits are payable continuously at a rate of 12,000 per year while Sick.
@@ -59,7 +61,7 @@ $$
 $$
 
 ### Examiner Report
-Most candidates were able to successfully calculate the reserve at time 10, yet some candidates failed to realize that inputs needed to solve the problem were in the Excel tables.. As a result, there was no need to do any integration to determine the continuous actuarial present values.
+Most candidates were able to successfully calculate the reserve at time 10, yet some candidates failed to realize that inputs needed to solve the problem were in the Excel tables.. (as printed) As a result, there was no need to do any integration to determine the continuous actuarial present values.
 
 ## Part b (3 points)
 
@@ -84,18 +86,18 @@ The answer using the number given in the exam is
 
 $$
 \begin{align*}
-&= (0.048790)(162{,}296) - 12{,}000 - 0.00229(-118{,}046) - 0.03102(-62{,}296) \\
+&= (0.048790)(162{,}296) - 12{,}000 - 0.00229(-118{,}046) - 0.03102(-62{,}296) \text{ (as printed)} \\
 &= -1878.0
 \end{align*}
 $$
 
 **(ii)**
 
-$${}_{9.75}V^{(1)} \approx {}_{10}V^{(1)} - 0.25(-1945.13) = 162{,}783$$
+$${}_{9.75}V^{(1)} \approx {}_{10}V^{(1)} - 0.25(-1945.13) \text{ (as printed)} = 162{,}783$$
 
 OR:
 
-$${}_{9.75}V^{(1)} \approx {}_{10}V^{(1)} - 0.25(-1950) = 161{,}810$$
+$${}_{9.75}V^{(1)} \approx {}_{10}V^{(1)} - 0.25(-1950) = 161{,}810 \text{ (as printed)}$$
 
 OR:
 

@@ -14,12 +14,14 @@ wiki_link:
   - Concepts/Unpaid+Claims
 points: 4
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:9b7dc1c3272635d12e5d4e334d7cf681a1aa7d72deebc19bdef4c04533c03ad6
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:a194323ced7b7071cccd243fe8a71ac9e87ae587bbacd23c3711f23d05ff807e
+  sources:
+    - "SOA ASTAM Sample Questions (version of Feb. 23, 2026), Q3, pp.6-7, sha256:0294cf4e8717191cda2747e7a6bb49fbb5e2d08f2d281ec979e670621de74ab4 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/questions/february-2024-astam-questions.pdf"
+    - "SOA ASTAM Solutions to Sample Questions, Q3, pp.7-8, sha256:c4206394603cf205da0668d40333bee5aaa6e3dadcaa241fdb03e5488a1ba4e1 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/solutions/february-2024-astam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-astam/astam-003.md
@@ -113,7 +115,7 @@ The BF estimate of projected 2021 AY claims is
 
 $$\tilde{C}_{2021,5} = \hat{\beta}_0\,\hat{C}_{2021,5} + (1 - \hat{\beta}_0)\,\mu_{2021}$$
 
-$$\hat{\beta}_0 = \frac{1}{\hat{f}_0 \times \hat{f}_1 \times \cdots \hat{f}_4} = 0.54469$$
+$$\hat{\beta}_0 = \frac{1}{\hat{f}_0 \times \hat{f}_1 \times \cdots \hat{f}_4} = 0.54469 \text{ (as printed)}$$
 
 $\hat{C}_{2021,5}$ is the Chain Ladder estimated projected claims $= 4589.8$
 

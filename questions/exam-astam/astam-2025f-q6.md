@@ -17,12 +17,14 @@ wiki_link:
   - Concepts/Moment
 points: 9
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:356f93d2b505269a41264e50cee43b4a8af5e15173e0ed09d28851dabb03c63f
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:abe6b2386a8a9702e622642881f27d9cb02b4931fbe77ff0807a298f86e820b6
+  sources:
+    - "SOA Exam ASTAM Fall 2025 — exam questions, Q6, p.13, sha256:82e9e32cfe70c47f3cba084117198396bf78398428322502889c33d163417254 — https://www.soa.org/globalassets/assets/files/edu/2025/fall/exams/2025-fall-astam-exam.pdf"
+    - "SOA Exam ASTAM Fall 2025 — model solutions and examiners' comments, Q6, pp.14-17, sha256:b575524316d2938cec3a30d74109c217e79c4d353b125e489e84e73fe6c44b0a — https://www.soa.org/globalassets/assets/files/edu/2026/spring/solutions/2025-11-astam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-astam/astam-2025f-q6.md
@@ -110,7 +112,7 @@ The insurer then estimates the aggregate distribution using a lognormal approxim
 
 ### Explanation
 
-(i) Now we assume $S \approx W$ where $W \sim \text{LogN}(\mu^*, \sigma^*)$. We find $\mu^*$ and $\sigma^*$ by matching two moments of $S$ to two moments of $L$. From the formula sheet we have:
+(i) Now we assume $S \approx W$ where $W \sim \text{LogN}(\mu^*, \sigma^*)$. We find $\mu^*$ and $\sigma^*$ by matching two moments of $S$ to two moments of $L$ (as printed). From the formula sheet we have:
 
 $$E[W] = e^{\mu^* + (\sigma^*)^2/2} = 18{,}900 \Rightarrow \mu^* + (\sigma^*)^2/2 = \ln(18900) = 9.84692$$
 
@@ -126,7 +128,7 @@ $$
 
 (ii) We need Q such that $\Pr[W \le Q] = 0.95$, which means we first need to find $\mu^*$.
 
-We know that $\mu^* + (\sigma^*)^2 = 9.84692 \Rightarrow \mu^* = 9.84692 - 1.15418/2 = 9.2699$. So we have
+We know that $\mu^* + (\sigma^*)^2 = 9.84692$ (as printed) $\Rightarrow \mu^* = 9.84692 - 1.15418/2 = 9.2699$. So we have
 
 $$
 \begin{align*}
@@ -173,7 +175,7 @@ The lognormal estimate of the ES is also significantly larger than the normal ap
 
 ### Examiner Report
 
-8. Part (d)(i) was not done well. It is important to have some understanding of when the normal distribution is likely to be an adequate approximation, and when it is not. Luckily, the central limit theorem helps with that – when we aggregate a sufficiently large number of independent random variables, then the normal distribution will become increasingly accurate. Here though, we have a small number of expected losses, together with a positively skewed distribution, and an instruction that the insurer is particularly interested in the right tail. The lognormal approximation is positively skewed, and the ES value is significantly larger than the ES estimated using the normal distribution. Both facts point to the lognormal likely being a more appropriate approximating distribution in this case.
+8. Part (d)(i) was not done well. It is important to have some understanding of when the normal distribution is likely to be an adequate approximation, and when it is not. Luckily, the central limit theorem helps with that – when we aggregate a sufficiently large number of independent random variables, then the normal distribution will become increasingly accurate. Here though, we have a small number of expected losses, together with a positively skewed distribution, and an instruction that the insurer is particularly interested in the right tail (as printed). The lognormal approximation is positively skewed, and the ES value is significantly larger than the ES estimated using the normal distribution. Both facts point to the lognormal likely being a more appropriate approximating distribution in this case.
 
    Note that full credit for this part did not require the level of explanation given in the model above. It was sufficient for a candidate to note that the underlying distribution is positively skewed, and hence that the right tail risk measure estimated with the lognormal distribution, which is also positively skewed, is likely to be more accurate than the normal distribution, which is not.
 9. In practice, neither of these approximations will be very accurate. The point of part (d)(ii) was for candidates to show that they understand that the process of discretizing the severity distribution, and then using recursions (or fast Fourier transforms) to construct an a discretized aggregate distribution is another approach to approximating the underlying aggregate distribution. Very few candidates made this connection.

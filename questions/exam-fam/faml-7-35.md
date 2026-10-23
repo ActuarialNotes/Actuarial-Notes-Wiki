@@ -11,12 +11,14 @@ wiki_link:
 answer: "D"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:e14b97bc0463b822269845a7306654b1f6cf076f0bbea59a3527bd6bda897c7f
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:02444c08eb0e4923574f5d2408ea42bf9f6282e910ec25e25bb2a70702991de8
+  sources:
+    - "SOA Exam FAM-L Sample Questions (October 2024), Q7.35, p.122, sha256:4aaf3469628f2b63a689c187d963857a5a6e749c5eaca9978b264d854f60a28d — https://www.soa.org/globalassets/assets/files/edu/2024/fall/questions/2024-10-exam-fam-l-sample-questions.pdf"
+    - "SOA Exam FAM-L Sample Solutions (October 2024), Q7.35, p.81, sha256:9e7f7b03e0252ccb8f69e4f453d443d8d7cb43ef3945d05c935fdf234cae72ab — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/2024-10-exam-fam-l-sample-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-fam/faml-7-35.md
@@ -49,8 +51,6 @@ Calculate the valuation premium for year 5.
 The modified net premium reserve at duration 2 is:
 
 $${}_{2}V^{\text{mod}} = 100000A_{62} - P^{\text{mod}}\ddot{a}_{62}$$
-
-Setting it to 0,
 
 $$\begin{align*}
 P^{\text{mod}} &= 100000\,\frac{A_{62}}{\ddot{a}_{62}} \\

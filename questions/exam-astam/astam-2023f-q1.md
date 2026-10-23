@@ -17,12 +17,14 @@ wiki_link:
   - Concepts/Continuous+Random+Variable
 points: 11
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:7b467ddac1337c2b7c4a834df9118261ae0e5f04a4860bc70b42f5be1c65e19b
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:da29b72a84932a79b3f0840273880c5d3308c135ef2e2f97252633c43f42f37f
+  sources:
+    - "SOA Exam ASTAM Fall 2023, question booklet, Q1, pp.2-3, sha256:94277623c3540e1ab20e885d53ae2c5a1e1290e3e1061dc162aa832e8e3efd92 — https://www.soa.org/globalassets/assets/files/edu/2023/fall/exams/fall-2023-astam-exam.pdf"
+    - "SOA ASTAM Fall 2023 Model Solutions (revised February 20, 2024), Q1, pp.1-4, sha256:0e43330341132ce0ac5392dd785e2897506886c307700d7bdd5c03f55b57502c — https://www.soa.org/globalassets/assets/files/edu/2023/fall/solutions/astam-fall-2023-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-astam/astam-2023f-q1.md
@@ -73,7 +75,7 @@ Explain why the distribution of the cost of each dental visit in 2024 is Pareto,
 With 20% inflation, the distribution of individual claims for 2024 will be adjusted by a factor of 1.2. Because Pareto is a scale family with scale parameter $\theta$, the distribution of individual claims in 2024 will also have a Pareto with parameters $\alpha = 4$ and adjusted scale parameter $\theta = 1080$.
 
 ### Examiner Report
-For Part b, many candidates earned full credit by using the distribution function to prove the relationship or by pointing out that theta is a scale parameter so it is multiplied by 1.2. Full credit or no credit was given for other approaches or not even mentioning alpha. The question asks for an explanation. Quite a few candidates did not provide an explanation but merely repeated what was given.
+For Part b, many candidates earned full credit by using the distribution function to prove the relationship or by pointing out that theta is a scale parameter so it is multiplied by 1.2. Full credit or no credit (as printed) was given for other approaches or not even mentioning alpha. The question asks for an explanation. Quite a few candidates did not provide an explanation but merely repeated what was given.
 
 ## Part c (4 points)
 
@@ -134,7 +136,7 @@ Part c iii, many candidates treated the deductible as an annual deductible inste
 
 ## Part d (2 points)
 
-The insurer is instead considering imposing an ordinary deductible of 50 along with a maximum covered loss of $L$ on each claim payment in 2024. Calculate the value of $L$ that would result in the insurer's expected aggregate payments to the insurer being the same in 2024 as in 2023.
+The insurer is instead considering imposing an ordinary deductible of 50 along with a maximum covered loss of $L$ on each claim payment in 2024. Calculate the value of $L$ that would result in the insurer's expected aggregate payments to the insurer (as printed) being the same in 2024 as in 2023.
 
 ### Explanation
 Now $E[X \wedge L] - E[X \wedge 50] = 300$

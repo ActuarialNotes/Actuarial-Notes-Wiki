@@ -16,12 +16,14 @@ wiki_link:
   - Concepts/Normal+Approximation
 points: 12
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:16aac18733f13fc7106f7b87dae099aa6867dc1008296cc095ad6968c2cf3f7b
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:3ad27be29633b8579a9e84eac2d80413235e0316ca1eca9ba397fb8dc336f16c
+  sources:
+    - "SOA Exam ASTAM Fall 2024, question booklet, Q3, pp.5-6, sha256:c7e45ae70452fc50709e1721f3b9242de1e2af1ac0afc1cc29cf0449fb683f94 — https://www.soa.org/globalassets/assets/files/edu/2024/fall/exams/2024-fall-astam-exam.pdf"
+    - "SOA ASTAM October 2024 Model Solutions, Q3, pp.4-8, sha256:f1aa2ecb9f29f00351447712a247f5ac19c2cff2bd2d69a892e6eeb5854c9f8e — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/fall-2024-astam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-astam/astam-2024f-q3.md
@@ -106,7 +108,7 @@ The expected amount of the $j$th loss that is not covered under the policy is
 $$\begin{align*}
 \mathrm{E}[X_j \wedge d] &= \mathrm{E}[X_j]\,\Phi\left(\frac{\log d - \mu - \sigma^2}{\sigma}\right) + d\left(1 - \Phi\left(\frac{\log d - \mu}{\sigma}\right)\right) \\
 &= 1242.65\,\Phi(-2.071) + 500\big(1 - \Phi(-1.571)\big) \\
-&= 494.79
+&= 494.79 \text{ (as printed; the solution ends here)}
 \end{align*}$$
 
 Note: The formula for $E[X_j \wedge d]$ is given in the formula sheet.
@@ -206,7 +208,7 @@ Without further calculation, state with reasons whether $h$ is less than, equal 
 ### Explanation
 (i)
 
-$$X_j^* = \begin{cases} X_j - 2500 & X_j > 2500 \quad \leftarrow 2500 \textit{ is insurer oayment plus deductible} \\ 0 & X_j \le 2500 \end{cases}$$
+$$X_j^* = \begin{cases} X_j - 2500 & X_j > 2500 \quad \leftarrow 2500 \textit{ is insurer oayment plus deductible} \text{ (as printed)} \\ 0 & X_j \le 2500 \end{cases}$$
 
 $$\mathrm{E}\left[X_j^*\right] = \mathrm{E}[X_j] - \left(\mathrm{E}[X_j \wedge 2500]\right)$$
 

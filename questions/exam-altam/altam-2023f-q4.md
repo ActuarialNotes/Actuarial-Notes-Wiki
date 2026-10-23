@@ -15,12 +15,14 @@ wiki_link:
   - Concepts/Probability
 points: 9
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
   content_hash: sha256:47dc2ebbef3cfcd129c03ec0e3cac704c01cb67ab42b6c5c1b1a096ab9b55f41
-  sources: []
+  sources:
+    - "SOA Exam ALTAM Fall 2023 — exam (question paper), Q4, pp.8-9, sha256:c162b6a75c9ccaedf38fcc9f7f4debf83abcf768f1e6ee6ff0d84e89e3098bc7 — https://www.soa.org/globalassets/assets/files/edu/2023/fall/exams/fall-2023-altam-exam.pdf"
+    - "SOA Exam ALTAM Fall 2023 — model solutions and examiners' comments, Q4, pp.9-10, sha256:df2ab0d9bc15ea197487448a071c8d909aa27d14841c082505cbb63358a6b93b — https://www.soa.org/globalassets/assets/files/edu/2023/fall/solutions/altam-fall-2023-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-2023f-q4.md

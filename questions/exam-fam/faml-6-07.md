@@ -12,12 +12,15 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:d2dc000385dbcb24a6a5d150ad87e5611607ef4b12003506cd3dab0691127bea
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:551bb6126b446db8a2cb6ec258cd2e73be7696ba9b021dd33f91cdbb915930e8
+  sources:
+    - "SOA Exam FAM-L Sample Questions (Oct 2024), Q6.7, p.54, sha256:4aaf3469628f2b63a689c187d963857a5a6e749c5eaca9978b264d854f60a28d — https://www.soa.org/globalassets/assets/files/edu/2024/fall/questions/2024-10-exam-fam-l-sample-questions.pdf"
+    - "SOA Exam FAM-L Sample Solutions (Oct 2024), Q6.7, p.37-38, sha256:9e7f7b03e0252ccb8f69e4f453d443d8d7cb43ef3945d05c935fdf234cae72ab — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/2024-10-exam-fam-l-sample-solutions.pdf"
+    - "SOA Exam FAM Tables (Oct 2024), Standard Ultimate Life Table pp.20-21, sha256:430c8babdb38ff53ae7ce7d5d1d3bd55c2890eeb9ae96db5015121d1c2f11e17 — https://www.soa.org/globalassets/assets/files/edu/2024/fall/2024-10-exam-fam-tables.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-fam/faml-6-07.md
@@ -82,7 +85,7 @@ $$\begin{align*}
 &= 100{,}000\,{}_{20}E_{40} + \frac{\pi}{d}\left({}_{20}q_{40} - A^{1}_{40:\overline{20}|}\right) \\
 &= 100{,}000\,{}_{20}E_{40} + \frac{\pi}{d}\left({}_{20}q_{40} - 1 + d\ddot{a}_{40:\overline{20}|} + v^{20}\,{}_{20}p_{40}\right) \\
 &= 100{,}000\,{}_{20}E_{40} + \pi\ddot{a}_{40:\overline{20}|} - \pi\,{}_{20}p_{40}\,\frac{1 - v^{20}}{d} \\
-&= 100{,}000\,{}_{20}E_{40} + \pi\ddot{a}_{40:\overline{20}|} - {}_{20}p_{40}\,\ddot{a}_{\overline{20}|6\%}\,\pi.
+&= 100{,}000\,{}_{20}E_{40} + \pi\ddot{a}_{40:\overline{20}|} - {}_{20}p_{40}\,\ddot{a}_{\overline{20}|6\%}\,\pi. \quad \text{(the } 6\% \text{ as printed)}
 \end{align*}$$
 
 The answer is **C**.

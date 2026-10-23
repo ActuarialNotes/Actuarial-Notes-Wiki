@@ -13,12 +13,14 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:eeece9b449806b6e5e429c85948f272505f1bcf36639eb4881b1e2ac90358cc6
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:9ef90d527f82b85889463a2eaabc6023c87f191706bf6f639fdd946f868d9107
+  sources:
+    - "SOA Exam FAM-L Sample Questions (Oct 2024), Q6.21, p.66, sha256:4aaf3469628f2b63a689c187d963857a5a6e749c5eaca9978b264d854f60a28d — https://www.soa.org/globalassets/assets/files/edu/2024/fall/questions/2024-10-exam-fam-l-sample-questions.pdf"
+    - "SOA Exam FAM-L Sample Solutions (Oct 2024), Q6.21, p.44, sha256:9e7f7b03e0252ccb8f69e4f453d443d8d7cb43ef3945d05c935fdf234cae72ab — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/2024-10-exam-fam-l-sample-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-fam/faml-6-21.md
@@ -34,7 +36,7 @@ For a special fully discrete 15-year endowment insurance on (75), you are given:
 
 (iv) $A_{75:\overline{15}|} = 0.70$
 
-(v) $A_{75:\overline{15}|}^{\ \ 1} = 0.11$
+(v) $A_{75:\overline{15}|}^{\phantom{75:}1} = 0.11$
 
 Calculate the annual net premium.
 
@@ -48,10 +50,10 @@ Calculate the annual net premium.
 
 ## Explanation
 
-$$P \times \ddot{a}_{75:\overline{15}|} = 1000\,A^{1}_{75:\overline{15}|} + 15 \times P \times A_{75:\overline{15}|}^{\ \ 1} \;\rightarrow\; P = \frac{1000\,A^{1}_{75:\overline{15}|}}{\ddot{a}_{75:\overline{15}|} - 15 \times A_{75:\overline{15}|}^{\ \ 1}}$$
+$$P \times \ddot{a}_{75:\overline{15}|} = 1000\left(A^{1}_{75:\overline{15}|} + 15 \times P \times A_{75:\overline{15}|}^{\phantom{75:}1}\right) \text{ (as printed)} \;\rightarrow\; P = \frac{1000\,A^{1}_{75:\overline{15}|}}{\ddot{a}_{75:\overline{15}|} - 15 \times A_{75:\overline{15}|}^{\phantom{75:}1}}$$
 
 $$\begin{align*}
-A^{1}_{75:\overline{15}|} &= A_{75:\overline{15}|} - A_{75:\overline{15}|}^{\ \ 1} \\
+A^{1}_{75:\overline{15}|} &= A_{75:\overline{15}|} - A_{75:\overline{15}|}^{\phantom{75:}1} \\
 &= 0.7 - 0.11 \\
 &= 0.59
 \end{align*}$$

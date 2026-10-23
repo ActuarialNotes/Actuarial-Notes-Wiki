@@ -13,12 +13,15 @@ wiki_link:
   - Concepts/Normal+Cost
 points: 9
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:8ed0288dc239e15d321e9edd5fed0cfc4e7b5aa8330e4539ad7328cd2d9597bd
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:72723db124fdb726d86eb218a7abc9ff5d024d6e11afa8852e8727c6011fe697
+  sources:
+    - "SOA Exam ALTAM Written-Answer Sample Questions (January 2026), Q48, pp.87-88 (question), sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
+    - "SOA Exam ALTAM Written-Answer Sample Solutions (January 2026), Q48, pp.97-98 (solution and graders' comments), sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
+    - "SOA ALTAM April 2026 exam workbook (tables), sheet 'Service Table' (Standard Service Table), sha256:2d8c59a01df2a61781bafcf3c64f9f85304dca80e284e5da1f73d9f223440074 — https://www.soa.org/globalassets/assets/files/edu/2026/altam/april-2026-altam-excel.xlsx"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-048.md
@@ -32,7 +35,7 @@ The pension plan benefits are as follows:
 - Final average salary is the salary earned during the 12 months preceding retirement.
 - Benefits are reduced by 0.4% for each month retirement precedes age 65.
 
-The valuation at January 1, 2022 uses the projected unit cost (PUC) method with the following assumptions:
+The valuation at January 1, 2022 uses the projected unit cost (as printed) (PUC) method with the following assumptions:
 
 - (i) Salaries increase by 3% each January 1.
 - (ii) Retirements before 65 occur in the middle of the year of age.
@@ -87,7 +90,7 @@ AL &= \frac{12}{12.5} \times 16{,}503.92 + \frac{12}{13} \times v \times \frac{l
 $$NC = 16{,}503.92 + 191{,}309 \times \frac{l_{64}}{l_{63}} \times v - 167{,}151.26 = 13{,}269.11$$
 
 $$\begin{align*}
-AL &= \frac{0.5}{12.5} \times 16{,}503.92 + \frac{1}{13} \times v \times \frac{l_{64}}{l_{63}} \times 191{,}309 \\
+AL \text{ (as printed)} &= \frac{0.5}{12.5} \times 16{,}503.92 + \frac{1}{13} \times v \times \frac{l_{64}}{l_{63}} \times 191{,}309 \\
 &= \frac{0.5}{12.5} \times 16{,}503.92 + \frac{1}{13} \times 1.05^{-1} \times \frac{42{,}805.0}{47{,}579.3} \times 191{,}309 \\
 &= 660.16 + 12{,}608.96 \\
 &= 13{,}269.11

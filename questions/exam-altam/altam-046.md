@@ -14,12 +14,15 @@ wiki_link:
   - Concepts/Fractional+Age+Assumption
 points: 9
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:1e648af5102e63d4bf20d0021d7ad287fea5a05a8bbf569461f628f41c852d5d
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:e49e027e7631a55fab5b9704802c5ae6b59efaa101425bfa662c12beb96c9e86
+  sources:
+    - "SOA Exam ALTAM Written-Answer Sample Questions (January 2026), Q46, pp.83-84 (question), sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
+    - "SOA Exam ALTAM Written-Answer Sample Solutions (January 2026), Q46, pp.92-93 (solution and graders' comments), sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
+    - "SOA ALTAM April 2026 exam workbook (tables), sheet 'Service Table' (Standard Service Table), sha256:2d8c59a01df2a61781bafcf3c64f9f85304dca80e284e5da1f73d9f223440074 — https://www.soa.org/globalassets/assets/files/edu/2026/altam/april-2026-altam-excel.xlsx"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-046.md
@@ -76,7 +79,7 @@ Alternatively,
 $$\begin{align*}
 a_{57.5}^w &= {}_{7.5}E_{57.5:57.5}\,\ddot{a}_{65:65}^{(12)} + {}_{7.5}E_{57.5}\left(1 - {}_{7.5}p_{57.5}\right)\ddot{a}_{65}^{(12)} \\
 &= {}_{7.5}E_{57.5}\,\ddot{a}_{65}^{(12)} + {}_{7.5}E_{57.5:57.5}\left(\ddot{a}_{65}^{(12)} - \ddot{a}_{65:65}^{(12)}\right) \\
-&= (0.674057)(13.0807) + (0.6551081)(13.0870 - 11.2158) \\
+&= (0.674057)(13.0807)\text{ (as printed)} + (0.6551081)(13.0870 - 11.2158) \\
 &= 8.8213838 + 1.0258383 \\
 &= 10.04722
 \end{align*}$$
@@ -122,13 +125,13 @@ Or
 
 $$\begin{align*}
 NC &= v\,p_{57}\,AL_1 + EPV(\text{mid-year-exits}) - AL_0 \\
-&= 24{,}353.85 + 12{,}35.46 - 35{,}888.33 \\
+&= 24{,}353.85 + 12{,}35.46\text{ (as printed)} - 35{,}888.33 \\
 &= 850.94
 \end{align*}$$
 
 $$\begin{align*}
 v\,p_{57}\,AL_1 &= (36)(0.018)(100{,}000)\left\{\left(\frac{w_{58}}{l_{57}}\right)v^{1.5}\,a_{58.5}^w + \left(\frac{w_{59}}{l_{57}}\right)v^{2.5}\,a_{59.5}^w\right\} \\
-&= (64{,}800)\{0.1898566 + 0.185974\} \\
+&= (64{,}800)\{0.1898566 + 0.185974\text{ (as printed)}\} \\
 &= 24{,}353.85
 \end{align*}$$
 

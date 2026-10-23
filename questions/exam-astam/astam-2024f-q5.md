@@ -14,12 +14,14 @@ wiki_link:
   - Concepts/Credibility
 points: 10
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:d1a3708b3686e569dd972dc483edde65e712a21a07077fecf78256f86e443c48
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:358b0505604919cee7772be50e0fc8cf0038bc0bd7dea40bd853757ef9f46113
+  sources:
+    - "SOA Exam ASTAM Fall 2024, question booklet, Q5, pp.9-10, sha256:c7e45ae70452fc50709e1721f3b9242de1e2af1ac0afc1cc29cf0449fb683f94 — https://www.soa.org/globalassets/assets/files/edu/2024/fall/exams/2024-fall-astam-exam.pdf"
+    - "SOA ASTAM October 2024 Model Solutions, Q5, pp.13-14, sha256:f1aa2ecb9f29f00351447712a247f5ac19c2cff2bd2d69a892e6eeb5854c9f8e — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/fall-2024-astam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-astam/astam-2024f-q5.md
@@ -80,11 +82,11 @@ Var(X) &= E\big[Var[X|\beta]\big] + Var\big[E[X|\beta]\big] \\
 
 (ii) $a = Var[\beta]$ and $E[\beta] = E[X]$
 
-So $Var(X) = 2a + E[X](1 + E[X])$
+So $Var(X) = 2a + E[X](1 + E[X)$ (as printed)
 
 So that
 
-$$a = \frac{Var(X) - E[X](1 + E[X])}{2}$$
+$$a = \frac{Var(X) - E[X](1 + E[X)}{2} \text{ (as printed)}$$
 
 ### Examiner Report
 Some candidates omitted one or both parts of (c), but those who attempted it generally did fairly well. Most candidates were able to write down the variance decomposition formula and substitute in the correct values for the mean and variance of $X|\beta$. The most common mistake was to confuse $E[\beta^2]$ with $E[\beta]^2$ or confuse $E[\beta(1 + \beta)]$ with $E[\beta](1 + E[\beta])$. On both subparts, some candidates failed to show enough work for full credit.
@@ -117,7 +119,7 @@ $$\hat\mu = \bar X = \frac{(0)(2230) + 1(209) + 2(41) + 3(12) + 4(8)}{2500} = 0.
 
 (ii)
 
-$$s^2 = \frac{(0^2)(2230) + 1^2(209) + 2^2(41) + 3^2(12) + 4^2(8)}{2500} - (0.1436)^2\left(\frac{2500}{2499}\right) = 0.22307$$
+$$s^2 = \frac{(0^2)(2230) + 1^2(209) + 2^2(41) + 3^2(12) + 4^2(8)}{2500} - (0.1436)^2\left(\frac{2500}{2499}\right) = 0.22307 \text{ (as printed)}$$
 
 so that the standard deviation is $\sqrt{0.22307} = 0.4723$
 

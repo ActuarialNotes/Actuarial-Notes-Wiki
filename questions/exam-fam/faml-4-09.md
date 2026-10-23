@@ -14,12 +14,14 @@ wiki_link:
 answer: "D"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:9de33c1287508d7c0199446a4b274605ef38746857f1cae559563d312f852e4a
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:8aa5b8e99b909b4e378174286fb5fe8579367a58cbc65c29e65edabd352e60a8
+  sources:
+    - "SOA Exam FAM-L Sample Questions (Topics 7-10, Aug 2026 version), Q4.9, p.30 (question), sha256:4aaf3469628f2b63a689c187d963857a5a6e749c5eaca9978b264d854f60a28d — https://www.soa.org/globalassets/assets/files/edu/2024/fall/questions/2024-10-exam-fam-l-sample-questions.pdf"
+    - "SOA Exam FAM-L Sample Solutions (Topics 7-10), Q4.9, p.21 (solution and key), sha256:9e7f7b03e0252ccb8f69e4f453d443d8d7cb43ef3945d05c935fdf234cae72ab — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/2024-10-exam-fam-l-sample-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-fam/faml-4-09.md
@@ -29,13 +31,13 @@ You are given:
 
 (i) $A_{35:\overline{15}|} = 0.39$
 
-(ii) $A^{1}_{35:\overline{15}|}\ 0.25$
+(ii) $A^{1}_{35:\overline{15}|}\ 0.25$ (as printed)
 
 (iii) $A_{35} = 0.32$
 
 Calculate $A_{50}$.
 
-[Question 4 on the Fall 2014 exam
+[Question 4 on the Fall 2014 exam (as printed)
 
 - A) 0.35
 - B) 0.40

@@ -16,12 +16,14 @@ wiki_link:
   - Concepts/Hedging
 points: 9
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:3056c110064f3576689dc7cf36a37d1fc21bc1f74f39ab3bc7c4256338f289b3
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:3be860daeca99fe49f45e94e433f93f6e7e5e6a7e0ca4eb5cd1fc139b78f36fb
+  sources:
+    - "SOA Exam ALTAM Fall 2023 — exam (question paper), Q3, pp.6-7, sha256:c162b6a75c9ccaedf38fcc9f7f4debf83abcf768f1e6ee6ff0d84e89e3098bc7 — https://www.soa.org/globalassets/assets/files/edu/2023/fall/exams/fall-2023-altam-exam.pdf"
+    - "SOA Exam ALTAM Fall 2023 — model solutions and examiners' comments, Q3, pp.7-8, sha256:df2ab0d9bc15ea197487448a071c8d909aa27d14841c082505cbb63358a6b93b — https://www.soa.org/globalassets/assets/files/edu/2023/fall/solutions/altam-fall-2023-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-2023f-q3.md
@@ -125,7 +127,7 @@ $$
 $$
 
 ### Examiner Report
-For Part (b), many candidates struggled to identify the correct cashflows to include in the profit test. The VA is a separate account contract, so that the policyholder's funds are not part of the cashflows involved in the profit test. The management charge and unallocated premium are included as income, and the outgo relevant to the insurer's funds only the difference between a claim/benefit payout and the amount of policyholder's funds available.
+For Part (b), many candidates struggled to identify the correct cashflows to include in the profit test. The VA is a separate account contract, so that the policyholder's funds are not part of the cashflows involved in the profit test. The management charge and unallocated premium are included as income, and the outgo relevant to the insurer's funds (as printed) only the difference between a claim/benefit payout and the amount of policyholder's funds available.
 
 ## Part c (3 points)
 

@@ -15,12 +15,14 @@ wiki_link:
   - Concepts/Policy+Value
 points: 12
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
   content_hash: sha256:ed11f0ad39e26885bfed0513b2145ea1402fcca22c49fc1537525bb7b77a4c2d
-  sources: []
+  sources:
+    - "SOA Exam ALTAM Fall 2023 — exam (question paper), Q1, pp.2-3, sha256:c162b6a75c9ccaedf38fcc9f7f4debf83abcf768f1e6ee6ff0d84e89e3098bc7 — https://www.soa.org/globalassets/assets/files/edu/2023/fall/exams/fall-2023-altam-exam.pdf"
+    - "SOA Exam ALTAM Fall 2023 — model solutions and examiners' comments, Q1, pp.1-3, sha256:df2ab0d9bc15ea197487448a071c8d909aa27d14841c082505cbb63358a6b93b — https://www.soa.org/globalassets/assets/files/edu/2023/fall/solutions/altam-fall-2023-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-2023f-q1.md

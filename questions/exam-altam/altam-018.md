@@ -14,12 +14,14 @@ wiki_link:
   - Concepts/Policy+Value
 points: 11
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:1aa9f9c8b4a6bfdd36247091a3e395783d5f065e16049429f3eb3c498f6f5a43
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:5adcd16f420412d2a13c8f64e44d5f7b4804dc98401242bca22fb6780b52d71d
+  sources:
+    - "SOA Exam ALTAM Sample Written-Answer Questions (January 2026), Q18, pp.34-35, sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
+    - "SOA Exam ALTAM Sample Written-Answer Solutions (January 2026), Q18, pp.32-34, sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-018.md
@@ -39,7 +41,7 @@ You are given:
 State with reasons whether $(x)$ and $(y)$ have independent future lifetimes under this model.
 
 ### Explanation
-The future lifetimes of $(x)$ and $(y)$ are dependent, because the force of mortality for each is different depending on whether the other is alive or not, as $\mu_{x+t:y+t}^{01} \ne \mu_{x+t}^{23}$ and $\mu_{x+t:y+t}^{02} \ne \mu_{y+t}^{13}$. That means that the distribution of the time to death of $(x)$ is different if $(y)$ dies early than if $(y)$ dies later (and vice versa), which means the future lifetime random variables $T_x$ and $T_y$ are dependent.
+The future lifetimes of $(x)$ and $(y)$ are dependent, because the force of mortality for each is different depending on whether the other is alive or not, as $\mu_{x+t:y+t}^{01} \ne \mu_{x+t}^{23}$ and $\mu_{x+t:y+t}^{02} \ne \mu_{y+t}^{13}$. That means that the distribution of the time to death of $(x)$ is different if $(y)$ dies early (as printed) than if $(y)$ dies later (and vice versa), which means the future lifetime random variables $T_x$ and $T_y$ are dependent.
 
 ### Examiner Report
 **Graders' Comments:** *The key point, is that the force of mortality for each life is different from the married state than from the widowed state. Many candidates wrongly claimed that the lives are independent because there is no common shock transition.*
@@ -68,7 +70,7 @@ $$\int_0^t \frac{d}{dr}\ln\left({}_rp_{xy}^{00}\right)dr = \int_0^t -\left(\mu_{
 
 from the boundary condition, $\ln\left({}_0p_{xy}^{00}\right) = 0$, so
 
-$$\ln\left({}_tp_{xy}^{00}\right) = \int_0^t -\left(\mu_{x+r:y+r}^{01} + \mu_{x+r:y+r}^{02}\right)dr \;\Rightarrow\; {}_tp_{xy}^{00} = \exp\left(-\left(\mu_{x+r:y+r}^{01} + \mu_{x+r:y+r}^{02}\right)dr\right)$$
+$$\ln\left({}_tp_{xy}^{00}\right) = \int_0^t -\left(\mu_{x+r:y+r}^{01} + \mu_{x+r:y+r}^{02}\right)dr \;\Rightarrow\; {}_tp_{xy}^{00} = \exp\left(-\left(\mu_{x+r:y+r}^{01} + \mu_{x+r:y+r}^{02}\right)dr\right) \text{ (as printed)}$$
 
 ### Examiner Report
 **Graders' Comments:** *Most candidates scored partial credit for this part. Some candidates wrote down a few steps, but missed the key parts of the proof. An acceptable alternative approach was to plug the given solution into the Kolmogorov equation and demonstrate that the integral equation for ${}_tp_{xy}^{00}$ satisfies the Kolmogorov differential equation and the boundary condition. This approach was awarded full points if done correctly.*
@@ -161,4 +163,4 @@ $$\begin{align*}
 \end{align*}$$
 
 ### Examiner Report
-**Graders' Comments:** *As in (c), only the strongest candidates achieved full credit for this part. Many students correctly calculated the three policy calues, though some did not apply the correct annuity values ti the state-dependent polict values.*
+**Graders' Comments:** *As in (c), only the strongest candidates achieved full credit for this part. Many students correctly calculated the three policy calues (as printed), though some did not apply the correct annuity values ti (as printed) the state-dependent polict (as printed) values.*

@@ -15,12 +15,14 @@ wiki_link:
   - Concepts/Territory+Ratemaking
 points: 7
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:bcaf2fef3422d08f2a1c5c4618ad85543cf88f6ac0525cbb51d8b5b17e1b4cee
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:37ce9a5541c47fd74dc6cd3e1c568290b555e4911630aafbb275cf618d0e4595
+  sources:
+    - "SOA Exam ASTAM Spring 2023 (April 26, 2023), question booklet, Q5, pp.9-10, sha256:fc23b48a1dbfd1d9c85380d5a3605927ba53d90641d5dcba1ab238bf3e02abaf — https://www.soa.org/globalassets/assets/files/edu/2023/spring/exams/spring-2023-exam-astam.pdf"
+    - "SOA ASTAM April 2023 Model Solutions, Q5, pp.12-13, sha256:ac32f8885c3d0e8456bb4edec83c8bf8a89243d21bd6ddaa232842c22d3640a3 — https://www.soa.org/globalassets/assets/files/edu/2023/spring/solutions/spring-2023-solutions-astam.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-astam/astam-2023s-q5.md
@@ -113,7 +115,7 @@ Let $B$ = new base rate:
 $$
 \begin{align*}
 B\big(5000 + (0.95)(2200) + 1.15(3100) + (1.15)(0.95)(1300)\big) &= (1.07)\big(1{,}418{,}000 + 1{,}040{,}400\big) \\
-\Rightarrow B = \frac{2{,}630{,}488}{12{,}292.0} &= 217.84
+\Rightarrow B = \frac{2{,}630{,}488}{12{,}292.0} &= 217.84 \text{ (12,292.0 as printed; the bracket sums to 12,075.25)}
 \end{align*}
 $$
 
@@ -129,7 +131,7 @@ Part (c) was done well by those who attempted it, with most achieving maximum cr
 **(i)** The territory B premiums will increase by
 
 $$
-\frac{217.84}{200.00} \times \frac{1.15}{1.20} - 1 = 4.36\%
+\frac{217.84}{200.00} \times \frac{1.15}{1.20} - 1 = 4.36\% \text{ (as printed; these figures give 4.38\%)}
 $$
 
 **(ii)** The Territory A premiums will increase by $\dfrac{217.84}{200.00} - 1 = 8.92\%$.

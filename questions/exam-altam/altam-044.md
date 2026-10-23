@@ -13,12 +13,14 @@ wiki_link:
   - Concepts/Defined+Benefit+Plan
 points: 8
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:1d0b44cc03b096f05432298da091bee46b7ededa8b2c1344ba91ad8149451d00
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:8065c6053e287d0f62813b0a8f9137e0e44791b0169d4152060020c2342af541
+  sources:
+    - "SOA Exam ALTAM Written-Answer Sample Questions (January 2026), Q44, pp.80-81 (question), sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
+    - "SOA Exam ALTAM Written-Answer Sample Solutions (January 2026), Q44, pp.89 (solution and graders' comments), sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-044.md
@@ -77,7 +79,7 @@ $$414{,}380 \times \left(1.025 \times \frac{9}{8} - 1\right) = 63{,}452$$
 
 NC for age 60 group:
 
-$$1{,}556{,}111 \times \left(1.025 \times \frac{26}{25} - 1\right) = 102{,}704$$
+$$1{,}556{,}111 \text{ (as printed)} \times \left(1.025 \times \frac{26}{25} - 1\right) = 102{,}704$$
 
 Total Salary
 
@@ -111,4 +113,4 @@ Under PUC the curve of contribution rates by age is less steep, so the NC at age
 
 ### Examiner Report
 
-**Comment:** Candidates who used a sketch of the PUC and TUC conrribution rates to support their justification were generally given full credit (assuming the sketch was correct).
+**Comment:** Candidates who used a sketch of the PUC and TUC conrribution (as printed) rates to support their justification were generally given full credit (assuming the sketch was correct).

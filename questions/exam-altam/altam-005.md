@@ -13,12 +13,14 @@ wiki_link:
   - Concepts/Present+Value
 points: 9
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:528ad088b6608a8a666791845446520e23ad33cbd1fbf258953ff597f968deb7
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:e85cde054fd62211d96ecdb42e3148eb5a6e3d74a85f24ad3dd16b9384ea8252
+  sources:
+    - "SOA Exam ALTAM Sample Written-Answer Questions (January 2026), Q5, pp.9-10, sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
+    - "SOA Exam ALTAM Sample Written-Answer Solutions (January 2026), Q5, pp.9-10, sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-005.md
@@ -49,15 +51,15 @@ You are given the following information. Time $t$ is measured in years from the 
 ### Explanation
 (i) Let $\mu^{13} = \mu_t^{13}$ represent the constant transition force from State 1 to State 3. Then we have
 
-$$\bar{a}_x^{01} = \int_0^\infty {}_tp_0^{01}\,e^{-\delta t}\,dt$$
+$$\bar{a}_x^{01} \text{ (as printed)} = \int_0^\infty {}_tp_0^{01}\,e^{-\delta t}\,dt$$
 
 $$\bar{A}_0^{03} = \int_0^\infty {}_tp_0^{01}\,\mu_t^{13}\,e^{-\delta t}\,dt = \mu^{13}\int_0^\infty {}_tp_0^{01}\,e^{-\delta t}\,dt$$
 
-$$\Rightarrow \frac{\bar{A}_0^{03}}{\bar{a}_x^{01}} = \mu^{13}$$
+$$\Rightarrow \frac{\bar{A}_0^{03}}{\bar{a}_x^{01}} = \mu^{13} \text{ (as printed)}$$
 
 (ii)
 
-$$\bar{a}_t^{\overline{11}} = \int_0^\infty {}_rp_t^{\overline{11}}\,e^{-\delta r}\,dr \quad\text{where}\quad {}_rp_t^{\overline{11}} = e^{\int_0^r \mu_{t+s}^{12} + \mu_{t+s}^{13}\,ds} = e^{-0.3r}$$
+$$\bar{a}_t^{\overline{11}} = \int_0^\infty {}_rp_t^{\overline{11}}\,e^{-\delta r}\,dr \quad\text{where}\quad {}_rp_t^{\overline{11}} = e^{\int_0^r \mu_{t+s}^{12} + \mu_{t+s}^{13}\,ds} \text{ (as printed)} = e^{-0.3r}$$
 
 $$\Rightarrow \bar{a}_t^{\overline{11}} = \int_0^\infty e^{-0.34r}\,dr = \frac{1}{0.34} = 2.941$$
 

@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 import {
   observeReadiness,
   readinessDelta,
+  readinessMarkKey,
   sanitizeMarks,
   type ReadinessMarks,
 } from './readinessDelta'
@@ -109,5 +110,22 @@ describe('sanitizeMarks', () => {
     expect(sanitizeMarks(null)).toEqual({})
     expect(sanitizeMarks('nope')).toEqual({})
     expect(sanitizeMarks(42)).toEqual({})
+  })
+})
+
+describe('readinessMarkKey', () => {
+  it("keeps one account's day from becoming another's starting line", () => {
+    // An account that studied Exam P to 12% on this device, then a new account at 2%.
+    const old = readinessMarkKey('user-a', 'P')
+    const fresh = readinessMarkKey('user-b', 'P')
+    let marks = observeReadiness({}, old, 12, MON)
+    marks = observeReadiness(marks, fresh, 0.4, MON)
+    marks = observeReadiness(marks, fresh, 2, MON)
+    expect(readinessDelta(marks, fresh, MON)).toBe(2)
+    expect(readinessDelta(marks, old, MON)).toBe(0)
+  })
+
+  it('files a guest under its own key', () => {
+    expect(readinessMarkKey(null, 'P')).not.toBe(readinessMarkKey('user-a', 'P'))
   })
 })

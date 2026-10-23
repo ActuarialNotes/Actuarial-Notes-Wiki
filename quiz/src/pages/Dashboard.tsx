@@ -359,8 +359,13 @@ export default function Dashboard() {
   }, [activeProgressKey, updateTargetDate])
 
   // ── Study plan ─────────────────────────────────────────────────────────────
-  const { plan: studyPlan, config: planConfig, loading: planLoading, updateConfig: updatePlanConfig, regenerate: regeneratePlan, replaceTodaysConcepts } =
+  const { plan: computedPlan, config: planConfig, loading: planLoading, updateConfig: updatePlanConfig, regenerate: regeneratePlan, replaceTodaysConcepts } =
     useStudyPlan(activeSyllabus, masteryRecords, activeTargetDate, masteryLoading)
+  // The daily plan is what Pro buys. A free account has none — not a hidden
+  // one steering the page from behind the lock: Read concepts opens the whole
+  // syllabus, Start Quiz carries no count and opens the quiz builder with
+  // nothing picked, and no quest, heatmap or guide reads a plan's concepts.
+  const studyPlan = isPro ? computedPlan : null
 
   // Today's plan concepts — gates the "Start Quiz / Extra Credit" action
   // (mirrors the same derivation in ReadinessCard).
@@ -487,9 +492,9 @@ export default function Dashboard() {
     const topicsMastered = examRecords.filter(r =>
       r.state === 'level3' || r.state === 'level2'
     ).length
-    const daysRemaining = studyPlan?.daysRemaining ?? null
+    const daysRemaining = computedPlan?.daysRemaining ?? null
     return { daysRemaining, topicsMastered, totalTopics }
-  }, [activeSyllabus, activeProgressKey, masteryRecords, studyPlan])
+  }, [activeSyllabus, activeProgressKey, masteryRecords, computedPlan])
 
   // Personalization signals for the daily-quest board: how many concepts have
   // decayed to Forgotten (revive quests only appear when there's something to

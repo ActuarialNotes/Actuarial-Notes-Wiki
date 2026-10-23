@@ -41,8 +41,18 @@ export interface ReadinessMark {
   baseline: number
 }
 
-/** Marks by exam_progress key (`P`, `FM`, `MAS-I`, …). */
+/** Marks by `readinessMarkKey` — one account's exam_progress key (`P`, `FM`, …). */
 export type ReadinessMarks = Record<string, ReadinessMark>
+
+/**
+ * The key one account's mark for one exam is stored under (`accountId` null for a guest).
+ * A score is a fact about an account's mastery, not about the browser: keyed by exam
+ * alone, a new account signing in where another had studied the same exam opened its day
+ * at the other's score and showed a drop it never had.
+ */
+export function readinessMarkKey(accountId: string | null, examKey: string): string {
+  return `${accountId ?? 'guest'}:${examKey}`
+}
 
 /**
  * Fold one sighting of `examKey`'s readiness score into the marks, returning the next

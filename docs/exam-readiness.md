@@ -196,7 +196,8 @@ rather than state, which is what keeps it a signal; a zero is not worth an arrow
 
 It needs a memory, because the data cannot reconstruct it. A `ConceptMasteryRecord` carries
 `state` and `correct_count` as they stand *now* — not a log — so yesterday's score cannot be
-recomputed from what the app already holds. `lib/readinessDelta.ts` is that memory: per exam,
+recomputed from what the app already holds. `lib/readinessDelta.ts` is that memory: per account
+and exam (`readinessMarkKey` — two accounts on one browser never share a starting line),
 the local day of the last sighting, the score then, and the score the day is being measured
 against. `hooks/useReadinessDelta.ts` persists it (localStorage, like the daily gem and
 level-up buckets in `lib/dailyProgressStore.ts`) and the card observes its own score on every

@@ -1215,6 +1215,22 @@ also be in the original.
 - Q29 diagram has no 0→2 arrow, solution uses p^02 for the death benefit
 - 2023s Q1(a) column vector for 2p^22 (0.05, 0.10, 0.70, 0) yet result 0.490 right
 
+**Settled by the Phase Q checks (23 Oct 2026, runs `756d`, `fa02`, `e686`)**
+
+- **Not slips, left unmarked:**
+  - 2023s Q1(a): the vector is column 2 of P.
+  - 2023f Q1(e): −19,864.11 is exact with the unrounded q₇₅:₇₅.
+  - 2024s Q2(d): 7171.0 is intermediate rounding of 7,171.4.
+  - 2025s Q6: p(0) and p(6) are the exact Black-Scholes values.
+  - 2026s Q5: 139,800.5 is 10⁶ × 0.1398005.
+  - 2026s Q6: 10p70 differs only by rounding.
+- **New slips, marked (as printed):**
+  - 2024s Q3: the "answer using the number given in the exam" line substitutes 0.00229 for μ¹⁰, but b₂ moves μ¹². The printed −1878.0 follows the correct substitution.
+  - 2026s Q3: the stem's μ¹²₆₀ = 0.02325, where the exam's workbook (μ¹² = 1.4 μ⁰²) gives 0.020325. It feeds no result.
+- **Two slips that touch what a student computes:**
+  - 2024s Q3's stem b₂ = 7.85e-5 (the SOA's note says 7.58e-5 was meant). Trusting the stem gives 161,467, not the stated 162,300. The stem carries the marker and the explanation carries the SOA's note. A stem-level editorial note would be new prose, so it is the maintainer's call.
+  - Sample Q16(b)(ii): see the correction in *Sample 15-28* above.
+
 ## Appendix B — Fact-check wave records
 
 Moved here from `docs/verification-plan.md` §5, which now keeps only the method.

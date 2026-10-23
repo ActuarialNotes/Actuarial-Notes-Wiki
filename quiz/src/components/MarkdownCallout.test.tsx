@@ -40,3 +40,30 @@ describe('callout blockquotes', () => {
     expect(html).toContain('data-callout-toggle')
   })
 })
+
+describe('note cards', () => {
+  function renderMd(md: string): string {
+    return renderToStaticMarkup(
+      <ReactMarkdown remarkPlugins={[remarkGfm]} components={calloutComponents}>
+        {md}
+      </ReactMarkdown>,
+    )
+  }
+
+  it('draws [!idea] as an always-open violet card, even when written foldable', () => {
+    const html = renderMd(['> [!idea]- The idea', '> Take what has emerged at face value.'].join('\n'))
+    expect(html).not.toContain('[!idea]')
+    expect(html).toContain('aria-label="The idea"')
+    expect(html).toContain('bg-violet-50')
+    expect(html).toContain('Take what has emerged at face value.')
+    expect(html).not.toContain('data-callout-toggle')
+    expect(html).not.toContain('data-callout-body')
+  })
+
+  it('draws [!trap] as an amber card titled by its type when untitled', () => {
+    const html = renderMd(['> [!trap]', '> Immediate is not due.'].join('\n'))
+    expect(html).toContain('aria-label="Trap"')
+    expect(html).toContain('bg-amber-50')
+    expect(html).toContain('Immediate is not due.')
+  })
+})

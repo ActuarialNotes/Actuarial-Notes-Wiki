@@ -1,574 +1,358 @@
 ---
 name: actuarial-concept-definitions
-description: Write or improve a concept-definition page in Concepts/*.md — a concise precise definition, a LaTeX formula block, 1–3 worked examples, and collapsible "How it appears on the exam" and "Exam traps" sections. Use when the user asks to create, write, draft, fill in, or clean up a Concepts/ page (SOA Exam P / FM probability and financial mathematics, or CAS Exam 5+ ratemaking and reserving), to standardize the definition/formula/example structure of existing pages, to write a Resources/Books source-material page, or to review/validate an exam syllabus for missing terms and broken wiki-links.
+description: Write or improve a concept page in Concepts/*.md so it teaches — a precise definition, the defining formula (or, for a qualitative concept, its defining structure), "The idea" card that explains why it works, worked examples that model the reasoning, and collapsible "How it appears on the exam" and "Exam traps" sections. Use when the user asks to create, write, draft, fill in, explain better, or clean up a Concepts/ page (SOA Exam P / FM / FAM / ALTAM, CAS MAS-I / MAS-II / Exam 5–9, the DISCs, CIA modules), or to standardize existing pages to this shape. Not for Resources/Books pages (resource-pages skill) or for auditing a whole exam's syllabus and coverage (exam-material-review).
 ---
 
-# Actuarial Concept Definition Writer
+# Actuarial Concept Page Writer
 
-Writes the markdown concept pages under `Concepts/` that are the "database" the
-quiz app is built on. A concept page is a short, self-contained reference: what
-the thing **is**, the **formula** that defines it, and a few **worked examples**.
-Pages are rendered in the wiki (`quiz/src/components/wiki/`), feed the search
-index, and are linked from exam syllabi and question `wiki_link` arrays.
+Writes the markdown pages under `Concepts/` — the pages a candidate reads to
+*learn* a concept, usually for the first time, often from a link on a question
+they just got wrong. The app opens New concepts in the concept popup before a
+quiz, so a page is a first lesson as often as it is a reference card.
 
-This skill covers **Exam P (Probability)**, **Exam FM (Financial Mathematics)**,
-and the **CAS upper exams** (Exam 5 ratemaking/reserving and beyond). The page
-structure is the same for all of them; only notation and topic vocabulary differ.
+A good page answers, in this order: **what is it** (definition), **how is it
+computed or what does it consist of** (formula or structure), **why does it
+work that way** (the idea), **what does using it look like** (worked examples),
+and **where will the exam test it and how will I get it wrong** (closing
+sections).
 
-It also covers the two adjacent page types that share the vault's link graph:
-**`Resources/Books/` source-material pages** (see "Source-material pages"), and
-**auditing an exam syllabus** for unlinked terms and dead links (see "Reviewing a
-syllabus page").
+Before writing, read **`references/vault-mechanics.md`** — filenames, aliases,
+namesake pages and the LaTeX rules. Those are the things that break the built
+app silently. Read **`references/exemplar.md`** for one complete page in this
+shape, annotated.
 
-A `Resources/Books/` page now serves two products: it is a syllabus reading in
-Study mode *and* the only way a real, citable document enters **Cowork's** source
-catalogue. Registering it there is the `cowork-sources` skill.
+## How people learn from a page — the principles behind the shape
 
-## The filename *is* the API — read this first
+Every rule below serves one of these. When a rule doesn't fit a concept, fall
+back to the principle.
 
-A page's filename is its link target, and the build is unforgiving about it.
-These failures are invisible in the markdown and in Obsidian, but silently break
-the built app:
+1. **Precision first, then meaning.** A definition alone is memorised, not
+   understood. Every page states *why* the formula has its shape, so a
+   candidate can rebuild it and predict how it behaves (→ *The idea*).
+2. **Concrete before abstract.** Tie the general statement to a concrete case
+   early: a number or a familiar situation in the idea, and an example the
+   reader can try before reading the answer.
+3. **Worked examples show the thinking, not just the arithmetic.** A novice
+   learns more from studying a solved problem than solving one cold — *if* the
+   solution shows the plan, labels each step and says why (→ Examples).
+4. **Contrast teaches the boundary.** A concept is learned against its nearest
+   neighbour (BF vs chain ladder, annuity-immediate vs due). Build at least
+   one contrast into a page that has a neighbour.
+5. **Deal with a misconception where it arises.** A warning works when it sits
+   beside the idea it distorts and says what the wrong answer looks like
+   (→ inline `[!trap]` card, and the closing *Exam traps*).
+6. **Cut what doesn't help learning.** Short definitions, one formula per
+   block, every symbol defined, nothing a reader has to decode. Pages are read
+   on phones. Median page length is ~750 words; a long page needs a reason.
 
-- **The `.md` extension is mandatory.** Every collector in `quiz/vite.config.ts`
-  filters on `.endsWith('.md')`. A file saved without it is dropped from the
-  bundle entirely — the page vanishes from the wiki and search, and every
-  `[[link]]` to it dead-ends. This has really happened to core pages
-  (`Concepts/Ratemaking`, `Concepts/Loss Reserving`) and is undetectable by
-  reading the file.
-- **Filenames use spaces, never underscores or hyphens-for-spaces.**
-  `Retrospective_Rating.md` does not answer `[[Retrospective Rating]]`. Keep
-  genuine hyphens that belong to the term (`Bornhuetter-Ferguson Method`,
-  `On-Leveling`, `Self-Insured Retention`) — but then every inbound link must
-  spell them the same way. Hyphen/space drift is the single most common broken
-  link in this vault.
-- **`conceptMatch.ts` resolves display aliases, not filename variants.**
-  `[[Bond Price|Price]]` works because the *target* is exact. `[[Bond-Price]]`
-  does not. Never rely on fuzzy matching.
-
-Always finish with the validator (see "Workflow" step 6); it catches all three.
-
-## The required shape of every page
-
-The user's non-negotiable core: **concise precise definition → LaTeX formula
-block → 1–3 examples → how it appears on the exam → exam traps.** Use this
-canonical layout (it standardizes the ordering
-that is currently inconsistent across the vault — many pages scatter property
-bullets *above* the formula; always put them *after*):
+## The shape of every page
 
 ```markdown
 **Term** ($symbol$) is <one or two sentences: precise definition with [[wiki-links]]>.
 
 > $$ <the defining formula> $$
 
-- <supporting bullet: define remaining symbols, key property, or relationship>
-- <supporting bullet>
+- <where: the remaining symbols>
+- <a property, an assumption, a relationship, a contrast with its neighbour>
 
-![[Media/Optional_image.svg|500]]   ← only if a matching file already exists
+> [!idea] The idea
+> <1–3 sentences in plain words: why the formula has this shape, what it
+> trades off, how it behaves — with a small concrete number if it helps.>
 
-> [!example]- <Descriptive, actuarial title> {Example}
+> [!trap] <name of the slip>          ← optional, at most one or two per page
+> <What the wrong answer looks like, and the fix.>
+
+![[Media/Figures/<Concept>.svg|340]]   ← only if the file already exists
+
+> [!example]- <What this example demonstrates> {Example}
 > <Problem statement.>
 >
 > > [!answer]-
-> > <Worked solution. Multi-step → align*.>
+> > <Plan in one sentence → labelled steps → result → one "why" line.>
 
 > [!tip]- How it appears on the exam
 > - <the question shapes that test it, on the exams that link the page>
 
 > [!warning]- Exam traps
-> - <the mistakes that cost candidates the marks>
+> - <the remaining mistakes that cost candidates the marks>
 ```
 
-The two closing sections are **collapsible callouts**, folded by default like
-the learning objectives on an exam page (the trailing `-`). They are their own
-callout types — `tip` renders teal with a lightbulb, `warning` amber with a
-triangle — so they never read as one more `{Example}` card, and nothing that
-parses `[!example]` callouts (exam pages only) sees them.
+**Order matters, and part of it is load-bearing.** The *opening* — the
+definition, the formula and the bullets, everything above the first callout or
+figure — is read by code: Concept Craft's recipe reader (`pageOpening` in
+`quiz/src/lib/conceptRecipes.ts`) stops at the first callout, and the SEO
+description is the definition paragraph (`leadParagraph` in `lib/seo.ts`). So
+**nothing callout-shaped goes above the bullets**: the idea card follows them,
+and the figure follows the idea it illustrates.
 
 The only YAML frontmatter a concept page carries is its `verification:` block
-(`docs/verification.md`), and you don't write that by hand: author the page
-without frontmatter, then run `python3 scripts/verify_check.py --sync`, which
-adds it. The body starts directly with the bold term. (A handful of older
-non-P/FM pages carry other frontmatter keys too; do not copy those.)
-
-The one exception is **`aliases:`**, when a study guide links the page under a
-different spelling (`[[Black-Schole]]` for `Black-Scholes Model`). Write it as a
-YAML list in a frontmatter block of its own; `--sync` appends `verification:`
-after it:
-
-```markdown
----
-aliases:
-  - Black-Schole
-  - Black-Scholes
----
-**The Black-Scholes Model** …
-```
-
-Frontmatter aliases are read by Obsidian and the AI connector — **not by the
-app**, which fetches `Concepts/<exact link target>.md`. So an alias also goes in
-`scripts/concept_aliases.json` (see "Variant spellings on a generated study
-guide" below), which is what makes the link land in the app.
+(written by `python3 scripts/verify_check.py --sync`, never by hand) and, when
+a study guide links the page under another spelling, an `aliases:` list — see
+`references/vault-mechanics.md`. The body starts directly with the bold term.
 
 ### 1. The definition (first line)
 
-- Open with the bolded term, optionally its symbol/notation, then the
-  definition: `**Variance** $\sigma^2$ measures the spread ...` or
-  `The **Poisson Distribution** $X \sim \text{Poi}(\lambda)$ models ...`.
-- One or two sentences. Precise, not chatty. State what it *is* and what it's
-  *for*, not its history.
-- Link related concepts inline with Obsidian `[[wiki-links]]`
-  (`[[Random Variable]]`, `[[Present Value]]`). Link the first meaningful
-  mention of another concept; don't over-link common words.
+- Open with the bolded term, its symbol or abbreviation if it has one, then
+  the definition: `**Variance** $\sigma^2$ measures …`,
+  `The **Poisson Distribution** $X \sim \text{Poi}(\lambda)$ models …`.
+- One or two sentences: what it *is* and what it is *for*. Precise, not
+  chatty, no history.
+- Write it for the reader who doesn't know the term yet: if the precise
+  wording leans on jargon, link that jargon (`[[Random Variable]]`) — don't
+  explain it inline.
+- Link the first meaningful mention of another concept; don't over-link.
 - Introduce the main symbol here so the formula that follows is readable.
 
-### 2. The formula block
+### 2. The formula block (quantitative concepts)
 
-- Wrap the defining formula in a blockquote: `> $$ ... $$`. This is the
-  universal convention in the vault — keep it.
-- **Put the formula immediately after the definition, before any property
-  bullets.** This is the single most common inconsistency to fix on existing
-  pages.
-- **Keep each block mobile-readable — narrow, not wide.** Pages are read on
-  phones; a block that is too wide gets cut off or shrunk to illegibility. This
-  is the governing constraint and it overrides "consolidate everything."
-- **One *expression* per block; never place two formulas side by side.** Do not
-  join distinct equations on one line with `\qquad`, `,\quad`, or similar
-  horizontal spacing (e.g. `$$\mathcal{P}(S)=\{A:A\subseteq S\}, \qquad |\mathcal{P}(S)|=2^{|S|}$$`).
-  Split them into separate stacked `> $$` blocks instead:
+- The defining formula in a blockquote, `> $$ … $$`, **immediately after the
+  definition**, before any bullet.
+- **Narrow, never wide.** One expression per block; distinct formulas in
+  separate stacked `> $$` blocks, never side by side with `\qquad` or `,\quad`.
+  A single statement (a piecewise definition, a one-statement derivation) stays
+  in one block with `cases` / `aligned` / `align*`, which stack vertically. A
+  line too long for a phone breaks across `\\` at an `=` or a `+`.
+- Distributions: PMF/PDF, then mean and variance in their own blocks.
+- A **procedure** (the chain ladder, the ISO rating procedure, on-leveling)
+  may need its steps as a short numbered list after the formula: the formula
+  says what is computed, the steps say in what order.
 
-  ```markdown
-  > $$\mathcal{P}(S) = \{\, A : A \subseteq S \,\}$$
-  >
-  > $$|\mathcal{P}(S)| = 2^{|S|}$$
-  ```
+For a concept with no formula, see "Qualitative concepts" below.
 
-- **A single formula stays in one block.** Use `cases`, `aligned`, or `align*`
-  *inside one block* for a piecewise definition or a derivation that is one
-  logical statement — these stack *vertically*, so they stay narrow:
+### 3. Supporting bullets
 
-  ```markdown
-  > $$E[X] = \begin{cases} \displaystyle\sum_{k} k\, f(k) & \text{(discrete)} \\[6pt] \displaystyle\int_{-\infty}^{\infty} x\, f(x)\, dx & \text{(continuous)} \end{cases}$$
-  ```
+2–6 bullets, after the formula and before any callout:
 
-  The rule of thumb: **stack vertically (more blocks or more `\\` lines), never
-  spread horizontally.** If a single line is still too long to fit a phone,
-  break it across `\\` lines (e.g. at an `=` or a `+`).
-- Use separate `> $$` blocks for genuinely distinct formulas (e.g. PMF in one
-  block, then `E[X]` and `Var(X)` each in their own block rather than on one
-  wide line).
-- Define every symbol that appears. Prefer defining symbols in a bullet right
-  after the block (`- where $\lambda > 0$ is the average event rate`) over
-  cramming `\text{where ...}` lines inside the math.
-- Distributions: give the PMF/PDF, and include mean and variance (in a second
-  block or a bullet) — candidates expect them on the page.
+- **where:** define every symbol not defined in the definition
+  (`- where $\lambda > 0$ is the average event rate`), rather than cramming
+  `\text{where …}` into the math;
+- the key property or identity (linearity, memorylessness, premium/discount);
+- the **assumption** the method needs, and what happens when it fails;
+- the **contrast** with the nearest neighbour, in one line
+  (`- Compared with the [[Chain Ladder Method|chain ladder]]: …`);
+- relationships to other concepts, through `[[wiki-links]]`.
 
-### 3. Supporting bullets (after the formula)
+A bullet may carry a sentence of reasoning, but the central explanation
+belongs in the idea card, not spread across the bullets.
 
-2–4 bullets covering: remaining symbol definitions, the key property/identity
-(linearity, memorylessness, premium/discount condition…), and relationships to
-other concepts via `[[wiki-links]]`. Keep them tight.
+### 4. The idea — `> [!idea] The idea`
 
-### 4. Optional image
+The page's explanation: the mental model that makes the formula *obvious*
+rather than memorised. Required on every new page and on every page you
+restructure. The app draws it as a violet card in the shape of a question's
+Examiner's report (`components/MarkdownCallout.tsx`), always open.
 
-Only embed `![[Media/<file>|width]]` if the file **already exists** in `Media/`
-(distribution PDFs/PMFs live there as named SVGs, e.g. `Poisson_pmf.svg`,
-`Normal_distribution_pdf.svg`). Verify with `ls Media/`. **Never invent an image
-reference** — a broken embed renders as dead text.
-
-### 5. Examples (1–3, the deliverable's heart)
-
-Each example is a collapsible callout with a nested answer callout:
+- **1–3 sentences, plain words.** No new symbols; the reader has just seen the
+  formula. A short concrete number is welcome ("if 40% has been reported, BF
+  adds 60% of the *expected* losses to what's in").
+- **Say why, not what.** It must not restate the definition. Good ideas name
+  one of: the problem the concept solves, the trade-off it makes, why each
+  piece of the formula is there, or how the result moves when an input moves.
+- **The test:** from the idea alone, could a reader rebuild the formula, or
+  predict which way the answer moves when an input changes? If not, rewrite it.
+- Write the title exactly `The idea`. Never fold it (a trailing `-` is ignored
+  anyway: a card is read in place).
+- Placement: after the bullets, before the figure. When restructuring a page
+  whose best bullet *is* the idea (BF's "actual emergence is taken at face
+  value …"), move that reasoning into the card rather than repeating it.
 
 ```markdown
-> [!example]- Expected Payout on a Simple Policy {Example}
-> A claim size $X$ has PMF $P(X=0)=0.5$, $P(X=100)=0.3$, $P(X=500)=0.2$. Find $E[X]$.
->
-> > [!answer]-
-> > $$E[X] = 0(0.5) + 100(0.3) + 500(0.2) = 130$$
-> > On average the insurer pays \$130 per claim.
+> [!idea] The idea
+> Trust what has already been reported, and only *estimate* what hasn't. BF
+> leaves the actual emergence alone and fills the gap with expected losses, so
+> one large early claim moves the answer by exactly that claim, not by a
+> multiple of it.
 ```
 
-- The `-` after `[!example]`/`[!answer]` makes them **collapsed by default** —
-  keep it (questions first, answers hidden).
-- `{Example}` at the end of the title renders as a pill badge — keep it.
-- Title each example with what it demonstrates, in actuarial terms.
-- **How many:** scale to the concept.
-  - **1** — narrow, single-use concepts (e.g. `Force of Interest` conversion).
-  - **2** — most concepts: one plain application + one with an actuarial twist.
-  - **3** — foundational or multi-faceted concepts (`Expected Value`, `Bonds`,
-    `Annuity Immediate`, `Bayes Theorem`) where distinct cases each teach
-    something (e.g. discrete vs continuous; premium vs discount bond; prior
-    update vs partition).
-- **Make examples actuarial**, not generic: claims, losses, deductibles,
-  premiums, reserves, annuities, bonds, policyholders, endowments. This is the
-  whole point of the vault.
-- Vary difficulty across multiple examples (one direct, one multi-step).
-- Always end with the numeric answer and a one-line interpretation when it adds
-  meaning ("...so the bond sells at a premium").
+### 5. An inline trap — `> [!trap] <the slip>` (optional)
 
-### 6. How it appears on the exam (collapsible)
+For the one mistake most tied to the formula or the idea — the one a reader
+makes *while reading this formula* — put it right where it arises, as an amber
+card, instead of only at the bottom of the page.
 
-`> [!tip]- How it appears on the exam` — 2–5 bullets on the **question shapes**
-that test this concept on the exams that link the page: what the question gives
-and what it asks for, which other concepts it is paired with, whether it is a
-calculation, a definition-recognition or a "describe/evaluate" written answer,
-and roughly how many steps. Name the exam when the page serves several (`FAM`
-asks for X; `ALTAM` builds it into a profit test). Ground it in the syllabus
-objective wording (the exam page's numbered objectives) and in the question bank
-when one exists (`questions/<bank>/` tagged with the page) — never invent a
-frequency ("appears on every sitting") you have not counted.
+- At most one, two on a broad page. The rest stay in the closing
+  *Exam traps* list. Never state a trap in both places.
+- Title it with the slip, in a few words (`Paid losses, reported factors`,
+  `Immediate is not due`).
+- Body: what the wrong answer looks like, and the fix, in one or two
+  sentences.
+- Place it after the idea card, or **inside an example's answer at the step
+  where the slip happens** (nested one level deeper: `> > > [!trap] …`).
 
-### 7. Exam traps (collapsible)
+### 6. Optional figure
 
-`> [!warning]- Exam traps` — 2–5 bullets, each a specific mistake and its fix:
-a timing or convention slip (annuity-immediate vs due, curtate vs complete, `q`
-vs `p`), a confusable neighbour (`[[Deductible]]` vs `[[Deductible Rating]]`),
-a units or rate-basis mismatch, a sign or direction error, an assumption the
-method needs that the question quietly violates. Write the trap so a candidate
-could catch it mid-question: say what the wrong answer looks like. Generic
-advice ("read carefully") does not belong here.
+`![[Media/Figures/<Concept>.svg|340]]` only if the file already exists
+(`ls Media/Figures/`). The figures are generated (`docs/concept-figures.md`) —
+never invent an embed. Place it after the idea card: the picture should show
+what the idea says.
 
-Both callouts go **after the last example** and are required on every new
-page. Inside them, math and links work as in the body; keep each bullet to one
-or two lines.
+### 7. Worked examples (1–3)
 
-## LaTeX rules (phone readability — same as the question converters)
+Each is a collapsed `> [!example]- <title> {Example}` with a nested collapsed
+`> > [!answer]-`. Collapsed means the reader sees the problem first and can try
+it — keep both `-`s, and keep the `{Example}` badge.
 
-The app renders with `remark-math` + `rehype-katex`; pages are read on phones.
+**How many** scales to the concept: 1 for a narrow conversion (`Force of
+Interest`), 2 for most, 3 for a foundational or many-sided concept (`Expected
+Value`, `Bonds`, `Bayes Theorem`) where each case teaches something different.
 
-1. **`align*` for any multi-step derivation.** Never chain evaluation steps as
-   separate `$$` blocks. Each step on its own `&=` line:
+**What each example is for** — pick them as a set, not one at a time:
 
-   ```markdown
-   > > $$
-   > > \begin{align*}
-   > > P[H \mid C] &= \frac{P[C \mid H]\,P[H]}{P[C]} \\
-   > >            &= \frac{(0.40)(0.20)}{0.16} \\
-   > >            &= 0.50
-   > > \end{align*}
-   > > $$
-   ```
+- **Example 1 — the direct application.** The standard question shape, in an
+  actuarial setting.
+- **Example 2 — the contrast or the twist.** Compare with the neighbour on the
+  same data (BF vs chain ladder), change one condition and show the answer
+  move, or show the method *failing* when its assumption breaks. This is the
+  example that teaches the boundary of the concept.
+- **Example 3 (if earned)** — a multi-step exam-style problem, or a case the
+  first two don't cover (continuous vs discrete; a premium vs a discount bond).
 
-   (Inside an answer callout each line is also prefixed with `> > `.)
+**How each answer is written** — show the thinking:
 
-2. **`$$` delimiters on their own lines.** Never `$$\begin{align*}...\end{align*}$$`
-   on one line — it renders as raw text.
+1. **The plan, in one sentence, before any arithmetic.** What is being asked
+   and the route: "We need $P(H \mid C)$; its denominator $P(C)$ comes from the
+   law of total probability, so find that first."
+2. **Labelled steps.** Each chunk of working opens with a short plain-language
+   label of what it achieves ("First, the a priori expected losses:"). In an
+   `align*` block, the left-hand side often *is* the label
+   (`\% \text{ unreported} &= …`).
+3. **The result, with a one-line interpretation** ("… so the bond sells at a
+   premium").
+4. **One "why" line.** Pose the question a thoughtful reader would ask and
+   answer it in a sentence: `*Why is BF higher?* Emergence is running behind
+   the a priori, and BF doesn't extrapolate the shortfall.` This models the
+   self-explanation that makes an example stick.
 
-3. **One `=` per line in derivations.** Don't write `X &= formula = result`;
-   split the result onto its own `&=` line. Exception: short decimal→percent
-   pairs (`= 0.05127 = 5.127\%`) may stay together.
+Also:
 
-4. **Clean notation:** `$…$` inline, `$$…$$` for display. No smart quotes, no
-   OCR dashes (`−` → `-`), no Unicode fractions (`½` → `\frac{1}{2}`). Use
-   `\times`, `\leq`, `\geq`, `\cdot`. Escape dollar amounts as `\$`.
-   Money goes *inside* the math with the dollar escaped — `$\$1{,}000$` —
-   never an escaped dollar before the math (`\$$1{,}000$`), which starts with
-   `$$` and can open a display block.
+- **Actuarial, not generic**: claims, losses, deductibles, premiums, reserves,
+  annuities, bonds, policyholders. This is the point of the vault.
+- **Recompute every number in code**, not by eye, and state rounding where it
+  changes a digit.
+- A **written-answer** example (a "describe", "explain" or "evaluate" task)
+  follows "Qualitative concepts" below — its answer is a model answer, not a
+  number.
+
+### 8. How it appears on the exam — `> [!tip]-` (collapsed)
+
+2–5 bullets on the **question shapes** that test the concept on the exams that
+link the page: what the question gives and asks for, what it is paired with,
+whether it is a calculation, a recognition or a written answer — and for a
+written answer, its **command word** (*describe*, *explain*, *evaluate*,
+*recommend*), since that word decides what earns credit. Name the exam when the
+page serves several. Ground it in the exam page's objective wording and the
+question bank (`grep -rl "Concepts/<Name+With+Plusses>" questions/`) — never
+invent a frequency you have not counted.
+
+### 9. Exam traps — `> [!warning]-` (collapsed)
+
+2–5 bullets, each a specific mistake and its fix: a timing or convention slip
+(immediate vs due, curtate vs complete, `q` vs `p`), a confusable neighbour, a
+units or rate-basis mismatch, a sign or direction error, an assumption the
+question quietly violates. Say what the wrong answer looks like so a candidate
+can catch it mid-question. No generic advice ("read carefully"). Don't repeat
+the inline trap card here.
+
+Both closing callouts go after the last example and are required on every new
+page.
+
+## Qualitative concepts
+
+About a hundred pages have no formula: professional standards, governance,
+regulation, IFRS 17 policy, the DISCs' risk-management and data topics, much of
+Exams 6–9's reading. The page keeps the same order with three substitutions.
+
+1. **In place of the formula: the defining structure**, right after the
+   definition, as plain markdown (not a `>` box — a plain blockquote centres
+   its text). Pick the form the concept actually has:
+   - a **numbered list** of the criteria, components or steps
+     (the elements of a reserve opinion; the steps of a rate filing);
+   - a **hierarchy**, as a nested list (Rules of Professional Conduct →
+     Standards of Practice → educational notes → general practice);
+   - a **comparison table** against the concept it is confused with
+     (PAA vs GMM; materiality vs reasonableness).
+
+   Keep it narrow enough for a phone: a table of two or three short columns.
+2. **The idea card is just as required**: why the rule exists, what problem the
+   structure solves, what it protects against. ("The Act refers to the
+   profession's standards instead of writing a method into law, so the standards
+   can change without Parliament — which is why yesterday's practice isn't
+   compliant today.")
+3. **The examples are scenarios with model answers.** The problem gives a
+   situation and asks the exam's command word ("Assess whether each is accepted
+   actuarial practice", "Recommend and justify an approach"). The answer is
+   written the way an examiners' sample answer is: short, bulleted, each point
+   a **claim plus its reason tied to the scenario**, and as many points as the
+   question would want. Where more than one answer earns credit, say so, as the
+   examiners do ("Alternatively: …"). End with a "why" line on what separated a
+   full-credit answer from a partial one.
+
+`Concepts/Accepted Actuarial Practice.md` is a good model of the scenario
+example; give such a page its idea card and closing sections when you touch it.
 
 ## Workflow
 
-1. **Identify the concept(s)** and whether each page exists. Use `ls`, not just
-   a glob, so you *see* extensionless files:
-   `ls -b Concepts/ | grep -i "<keyword>"`. Existing → improve in place to this
-   structure; missing → create `Concepts/<Exact Name>.md`. For a vault-wide
-   worklist of missing pages — ranked, tiered and batched —
-   run `python3 scripts/find_concept_gaps.py` and read `CONCEPT_GAPS_PLAN.md`;
-   `--check` says whether a batch's links now resolve. Before writing a page for
-   a gap, check the vault for the same concept under another name (`Outstanding
-   Claim` is `Unpaid Claims`); an alias beats a duplicate page.
-2. **Read 2–3 neighboring pages** of the same family for tone/symbols (e.g. for
-   an FM annuity, read `Annuity Immediate`, `Annuity Due`, `Perpetuity`). Match
-   notation: `i`, `v`, `d`, `\delta`, `a_{\overline{n}|}`, `s_{\overline{n}|}`
-   for FM; `f(x)`, `F(x)`, `E[X]`, `\text{Var}(X)` for P; `CDF`, `f_{n \to n+1}`,
-   loss-ratio / pure-premium notation for Exam 5.
-3. **Write** the page in the canonical shape above.
-4. **Wire up wiki-links:** every `[[Name]]` must resolve to a real page. When two
-   pages share a name, link the one for *this* exam — see "Namesake pages" below.
-   If you reference a concept that doesn't exist yet, either drop the link or
-   flag it to the user — don't leave dangling links.
-5. **Place in the syllabus (new concepts):** if a brand-new concept belongs on
-   an exam, check whether the syllabus page references it under the right
-   learning objective. If not, mention to the user that it may need a syllabus
-   `[[link]]` (don't silently restructure the exam page).
-6. **Validate** — this is not optional, and it catches what review cannot:
+1. **Find the page.** `ls -b Concepts/ | grep -i "<keyword>"` (`ls`, not a
+   glob, so an extensionless file shows). Existing → improve in place to this
+   shape; missing → create `Concepts/<Exact Name>.md`. For the vault-wide
+   worklist of missing pages, `python3 scripts/find_concept_gaps.py` and
+   `CONCEPT_GAPS_PLAN.md`. Check the vault for the same concept under another
+   name first — an alias beats a duplicate page.
+2. **Read the source and the neighbours.** The syllabus reading the concept
+   comes from (the exam page's Source Material), and 2–3 neighbouring pages for
+   notation (`references/vault-mechanics.md` lists each exam's).
+3. **Find how it is tested.** The question bank tagged with the page, and the
+   exam page's objective. This feeds the examples, the closing sections and the
+   inline trap — the real mistakes are in the examiners' reports.
+4. **Write the idea first**, in your own words, before the rest. If you cannot
+   write it, you don't yet understand the concept well enough to write the
+   page; go back to the reading.
+5. **Write the page** in the shape above. On an existing page, **re-derive the
+   formula against the source** rather than reformatting it — pages that were
+   never rendered can carry real errors.
+6. **Wire links**: every `[[Name]]` must resolve; link the namesake for *this*
+   exam (`references/vault-mechanics.md`). A brand-new concept that belongs on
+   an exam: tell the user if the syllabus page doesn't link it — don't
+   restructure the exam page.
+7. **Validate** — not optional:
 
    ```bash
    python3 .claude/skills/actuarial-concept-definitions/validate_links.py \
        --exam "Exam 5 (CAS)" --questions exam-5
+   python3 scripts/verify_check.py --sync "Concepts/<page>.md"
    ```
 
-   Reports missing `.md` extensions, broken `[[links]]`, and question
-   `wiki_link:` entries with no matching page. Scope with `--exam`/`--questions`
-   while working on one exam; run bare for a vault-wide audit (expect a large
-   pre-existing backlog on Exams 6–9, whose source material is largely
-   unwritten). Exits non-zero on failure.
-7. **Build if you renamed or added files:** `cd quiz && npm run build && npm test`.
-   Renames change what the collectors bundle, so a rename that looks harmless in
-   git can still break the app.
-8. **Self-check** against the checklist below, then commit.
-
-## Variant spellings on a generated study guide
-
-The in-development exam pages (the SOA's FAM onward, the DISCs, 6U) are
-*generated* by `scripts/syllabus_write.py`, which links every noun phrase of an
-objective to the page that names it — or to the page that *should* exist, named
-by its own rule (Title Case, singular). That rule produces targets that are poor
-titles (`[[Black-Schole]]`, `[[Joint Live]]`, `[[Delta]]` for *delta method*) and
-cuts terms short (`[[Generalized Linear]] model`). Don't hand-edit those pages
-(`syllabus_lint.py` holds them to the extracted syllabus) and don't name a page
-after a bad target. Instead:
-
-1. Write the page under its proper title, with the linked spelling in its
-   frontmatter `aliases:`.
-2. Map the spelling in `scripts/concept_aliases.json` → `aliases` (key written
-   lower-case, hyphens as spaces: `"black schole": "Black-Scholes Model"`). When
-   the spelling means different pages on different exams, use `namesakes`
-   instead, keyed by wiki id (`"governance": {"default": "Corporate Governance",
-   "cp-312": "Model Governance"}`). `quiz/src/lib/examCatalog.test.ts` fails if
-   a target page doesn't exist, so commit the page before or with the entry.
-3. Re-render the affected exam pages — `python3 scripts/syllabus_write.py <wiki
-   ids>` then `python3 scripts/verify_check.py --sync` — which re-points the
-   links through the alias table and changes nothing else. A target that is
-   already a good title needs none of this: name the page exactly as linked.
-
-## Namesake pages — link the one for the right exam
-
-Several terms exist twice in the vault with different meanings per exam. Linking
-the wrong one is silent: the link resolves, so no validator catches it, but the
-reader lands on an unrelated page. Known collisions:
-
-| Term | Exam P/FM page (severity math) | Exam 5 page (pricing procedure) |
-|---|---|---|
-| Deductible | `Deductible` | `Deductible Rating` |
-| Coinsurance | `Coinsurance`, `Coinsurance Percentage` | `Coinsurance Rating` |
-| Case reserves | `Case Reserves` (the liability) | `Case Outstanding Development Method` (the technique) |
-| Trend | `Trend` (generic) | `Loss Trend`, `Premium Trend`, `Exposure Trend` |
-
-When a syllabus objective says "calculate deductible relativities," it wants the
-*rating* page. Check both candidates before linking.
-
-## Verifying an existing page before you restructure it
-
-When improving a page that already has content, **check the math, don't just
-reformat it.** Stub pages that were invisible to the build (see "The filename is
-the API") have never been read by a user and can carry real errors — one
-`Ratemaking` page stated the indication as
-`(Loss Ratio + Expense Ratio) / (1 - Profit)`, which loads expenses in the
-numerator *and* omits variable expenses from the denominator, double-counting
-them. Re-derive the defining formula against the source text before you keep it.
-
-## Source-material pages (`Resources/Books/`)
-
-Exam syllabi end with a **Source Material** callout linking one page per reading. A
-resource page describes that one real document — and **says only what the document
-says, naming where it read it**. The standard, the review that produced it and the
-pipeline are `docs/resource-pages.md`; read it before writing or editing one. The short
-form:
-
-```markdown
----
-Title: "Basic Ratemaking"
-Authors: "Geoff Werner and Claudine Modlin"
-Publisher: "Casualty Actuarial Society"
-Year: "2016"
-date: "2016"
-Edition: "5th"
-Type: "Textbook"
-Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf)"
----
-![[Basic Ratemaking (Werner - 2016) - Cover.svg]]
-
-One paragraph on what the document is, in its own terms (its abstract, purpose, scope,
-preface or the publisher's description); first sentence ≤ 160 characters.
-
-> [!info] On the syllabus
-> - [[Exam 5 (CAS)|Exam 5]] — Chapters 1 and 3–16 and the Appendices (the outline's words)
-
-## 1 Introduction
-- Bullets stating what the chapter says, each linking the [[Concept]] it teaches —
-  or the chapter's numbered sections, verbatim
-
-## Sources
-- [Basic Ratemaking, 5th ed. (CAS, 2016)](https://…) — the document: contents, chapters 1–16
-- [CAS Exam 5 Content Outline](https://…) — the citation and the assigned scope
-```
-
-The pipeline, in order:
-
-1. **Pin the document** from the exam's content outline or syllabus
-   (`quiz/src/data/examPdfLinks.ts`): citation, edition, scope.
-2. **Extract it** — `python3 scripts/resource_extract.py --url <document>` (or `--page`
-   for an existing page's `Available from`). It fetches the real document and writes its
-   sha256, metadata, bookmark outline already in the vault shape, contents pages, page
-   text, and images of scanned pages. For a book with no free copy, the `textbook-toc`
-   skill's source ladder is this step.
-3. **Write from the extraction** — division headings as the document titles them,
-   bullets read from the division, every source under `## Sources`. Never from memory;
-   commentary ("why it is on the syllabus", "the exam angles") belongs on concept pages.
-4. **Cover** — `python3 scripts/generate_resource_covers.py` (see below).
-5. **Lint** — `python3 scripts/resource_lint.py "Resources/Books/<page>.md"` (CI runs it on
-   every page) and `validate_links.py`.
-6. **Sync** — `python3 scripts/verify_check.py --sync "Resources/Books/<page>.md"`.
-
-Details that matter:
-
-- `Year`/`date` feed the Resources timeline; `Authors`, `Edition`, `Publisher`, `Type`,
-  `Code` and `ISBN` populate the card. **Every value is double-quoted**, keys in the
-  order above; `Type` comes from the vocabulary in `docs/resource-pages.md` §2.2.
-  `Available from` is only for an official copy a reader can open; a book for sale
-  carries its `ISBN` instead, and the card builds a *Get a copy* menu from it.
-- **Every content file needs a `verification:` block** as the last key of its
-  frontmatter (`docs/verification.md`) — but **do not write it by hand.** Author the
-  page without one, then run from the repo root:
-
-  ```bash
-  python3 scripts/verify_check.py --sync "Resources/Books/<your page>.md"
-  ```
-
-  which backfills the whole block and owns its derived fields. Hand-writing it is
-  a trap: `content_hash: null` is an *error* in the plain check, so a page copied
-  from a template and committed un-synced fails
-  `.github/workflows/verify-check.yml`, which gates every PR. Never hand-edit
-  `content_hash`, `status`, `open_findings` or `open_critical` afterwards either —
-  and note any edit to the page downgrades a `verified` status to `stale`, by
-  design (principle P4).
-- **Every page carries a cover**, and you do not have to find one. The metadata
-  card (`ResourceMetaCard`) shows the **first image embed in the body** as the
-  jacket and lifts it out so it is never rendered twice; a shelf of sources with no
-  pictures is much harder to scan than one with them. Write the page, then run:
-
-  ```bash
-  python3 scripts/generate_resource_covers.py     # draws a jacket from the front matter
-  ```
-
-  It draws one for any page lacking a cover and **never touches a page whose first
-  embed it does not own**, so a real publisher jacket dropped into
-  `Media/Attachments/` under a name not ending in `- Cover.svg` wins permanently.
-  A real jacket is the better picture — but a generated one is correct, and
-  omitting the cover is not. See `docs/resource-covers.md`.
-- The outline's job is to lead into the concept vault: link the concept a division
-  teaches, and only concepts whose pages exist.
-
-### Which `Resources/` directory
-
-`Resources/Books/` is the only one `virtual:wiki-content` bundles, so a page there
-opens from the bundle — offline, rate-limited, or not. **ASOPs, OSFI guidelines and
-statements of principles all live in `Resources/Books/`** for that reason, despite
-the folder's name.
-
-The vault's other `Resources/` directories — `Regulation/`, `Events/`,
-`Benchmarks/` — are dated pages that feed the Resources timeline/heatmap and use a
-different frontmatter schema (`date`/`type`, `source_url`, `source_type`,
-`pdf_url`; see `docs/research-corpus-plan.md`). They are **not** in the wiki
-bundle, so a page there is fetched from GitHub at runtime. Put a *reading* in
-`Books/`; put a dated *event or instrument* in the timeline directories.
-
-### These pages are also Cowork's source catalogue
-
-A `Resources/Books/` page is not only a syllabus reading. Cowork — the app's second
-product (`docs/cowork.md`) — lists documents an actuary works *from*, and a vault
-page is the **only** way a real, citable document gets into that catalogue: a
-Cowork entry either points at a vault page with a `wikiRef`, or it is a dateless,
-linkless `sample`. So a page written here is what turns a Cowork sample into a real
-source. Adding the catalogue entry is the `cowork-sources` skill.
-
-Two consequences for how you write the page:
-
-- **The filename is the API a third time.** `wikiRef.name` in
-  `quiz/src/data/coworkSources.ts` is the filename without `.md` — not the authored
-  `Title:`. Renaming or deleting a page that Cowork references fails
-  `quiz/src/lib/coworkContent.test.ts`, by design: the alternative is a Cowork row
-  that quietly opens an empty panel. If you rename one, grep
-  `quiz/src/data/coworkSources.ts` for the old name and update it in the same
-  change.
-- **The cover is doing double duty.** `lib/coworkCovers.ts` gives a Cowork resource
-  card its jacket by looking the vault page up *by name*, so a page with no cover
-  leads its card with a bare kind icon in both products. One more reason to run the
-  cover generator rather than omit.
-
-## Reviewing a syllabus page
-
-When asked to audit an exam syllabus ("what's missing?", "validate the study
-guide"), two distinct gaps matter and the second is easy to miss:
-
-1. **Linked but missing** — `[[Term]]` with no page. Found by the validator.
-2. **Present but unlinked** — the syllabus prose names a concept that *already
-   has a page*, but leaves it as plain text, so the reader never reaches it and
-   the app never counts it toward the exam's concept list. The validator cannot
-   see these; find them by diffing the concepts tested by that exam's questions
-   against the concepts the syllabus links:
-
-   ```bash
-   # concepts referenced by questions/<exam>/ but not linked on the syllabus page
-   ```
-
-   Objectives with **zero** links are the strongest signal — they usually mean a
-   whole learning objective has no concept coverage at all.
-
-Also check that question `wiki_link:` entries resolve (validator step 3). A
-question pointing at a naming variant still records mastery, against a slug the
-app can never display — so the concept looks permanently unstudied.
+   If you added or renamed a file, also `cd quiz && npm run build && npm test`.
+8. **Self-check** against the checklist, then present the page for review: per
+   `CLAUDE.md`, no concept content ships 100% AI-written without human review.
 
 ## Quality checklist (per page)
 
-- [ ] Body starts with `**Term**` + definition, under a frontmatter block holding only `aliases:` (if a variant spelling links it) and `verification:` (`scripts/verify_check.py --sync` writes it; never hand-edit its derived fields)
-- [ ] Each alias also mapped in `scripts/concept_aliases.json`, and the generated exam pages re-rendered
-- [ ] Definition is 1–2 precise sentences with relevant `[[wiki-links]]`
-- [ ] Defining formula is in a `> $$` block **immediately after** the definition
-- [ ] Each `> $$` block is mobile-narrow: no two formulas side-by-side via `\qquad`/`\quad`; distinct formulas in separate stacked blocks; long lines broken across `\\`
-- [ ] Distributions include PMF/PDF **and** mean/variance
-- [ ] Every symbol in the formula is defined (prose/bullet, not crammed `\text{where}`)
-- [ ] Property bullets come **after** the formula, before the examples
-- [ ] 1–3 `> [!example]- … {Example}` callouts, each with a nested `> [!answer]-`
-- [ ] `> [!tip]- How it appears on the exam` and `> [!warning]- Exam traps`, both collapsed (`-`), after the last example, specific to the exams that link the page
-- [ ] Worked numbers recomputed in code, not by eye
-- [ ] Example count scales to concept breadth; examples are actuarial, not generic
-- [ ] Multi-step solutions use `align*`, one `&=` step per line, `$$` on own lines
-- [ ] LaTeX is clean (no smart quotes, OCR dashes, Unicode fractions; money as `$\$1{,}000$`)
-- [ ] Image embeds only reference files that exist in `Media/`
-- [ ] `Resources/Books/` page only: written from the extracted document (`docs/resource-pages.md`), cover first, `## Sources` last, `python3 scripts/resource_lint.py` clean
-- [ ] All `[[wiki-links]]` resolve to existing `Concepts/` pages
-- [ ] Filename ends in `.md`, uses spaces (not underscores), and matches inbound links character-for-character
-- [ ] Namesake check: linked the exam-appropriate page (`Deductible Rating` vs `Deductible`, etc.)
-- [ ] If the page already existed, the defining formula was re-derived, not just reformatted
-- [ ] `validate_links.py` passes for the affected exam
-- [ ] If a `Resources/` page was renamed, `quiz/src/data/coworkSources.ts` was grepped for the old name (Cowork `wikiRef`s are filenames)
-- [ ] `npm run build && npm test` pass if any file was added or renamed
+**Teaching**
+- [ ] Definition: 1–2 precise sentences, jargon linked, main symbol introduced
+- [ ] `> [!idea] The idea` present, after the bullets: 1–3 plain sentences that say *why*, not *what*; passes the rebuild-or-predict test
+- [ ] At least one contrast with the nearest neighbour (a bullet or an example), where the concept has one
+- [ ] Examples chosen as a set: a direct application, then a contrast, twist or failure case
+- [ ] Each answer: a one-sentence plan, labelled steps, the result interpreted, one "why" line
+- [ ] Inline `[!trap]` cards: at most one or two, placed where the slip happens, not repeated in *Exam traps*
+- [ ] `> [!tip]- How it appears on the exam` grounded in the objective and the bank (command words for written answers); `> [!warning]- Exam traps` specific
+- [ ] Qualitative concept: defining structure (list, hierarchy or table) in place of the formula; scenario examples with model answers
 
-## Topic reference
-
-- **Exam P learning objectives:** General Probability · Univariate Random
-  Variables · Multivariate Random Variables.
-- **Exam FM learning objectives:** Time Value of Money · Annuities/Cash Flows ·
-  Loans · Bonds · General Cash Flows, Portfolios & ALM.
-- **Exam 5 learning objectives:** Ratemaking (45–55%) · Estimating Claim
-  Liabilities / Reserving (45–55%). Ratemaking is **prospective**, reserving
-  **retrospective** — say which, and keep the two vocabularies distinct
-  (development *to* ultimate vs. trend *forward to* the policy period; these are
-  separate adjustments and conflating them double-counts). Readings: Werner &
-  Modlin, Friedland, ASOP 12/13/43, CAS Statement of Principles.
-- The richer topic→concept mapping lives in
-  `.claude/skills/soa-exam-converter/SKILL.md`,
-  `.claude/skills/cas-exam-converter/SKILL.md`, and `scripts/ontology_map.py` —
-  consult them to pick canonical concept names and to keep new pages consistent
-  with how questions are tagged.
+**Form**
+- [ ] Body starts with `**Term**`; frontmatter holds only `aliases:` (if needed) and the synced `verification:`
+- [ ] Formula in a `> $$` block immediately after the definition; every block phone-narrow; every symbol defined
+- [ ] Distributions: PMF/PDF and mean/variance
+- [ ] Nothing callout-shaped above the bullets (the opening is read by code)
+- [ ] Multi-step working in `align*`, `$$` on their own lines, one `=` per line; clean LaTeX (`references/vault-mechanics.md`)
+- [ ] Worked numbers recomputed in code
+- [ ] Figure embeds only reference files that exist
+- [ ] All `[[links]]` resolve, to the right namesake; filename ends `.md`, spaces not underscores
+- [ ] Existing page: formula re-derived, not just reformatted
+- [ ] `validate_links.py` passes; `verify_check.py --sync` run; `npm run build && npm test` if files were added or renamed
 
 ## After bulk additions
 
-If you create several new concept pages, the maintenance scripts keep the vault
-consistent:
-
-```bash
-python3 scripts/update_wiki_links.py   # rebuilds wiki_link arrays + Concepts Without Review Questions.md
-```
-
-Run from the repo root. **Be deliberate about this one:** it rewrites
-`wiki_link` arrays across *every* exam's question bank, not just the one you
-worked on, so it turns a focused change into a repo-wide diff. When your work is
-scoped to a single exam, prefer remapping that exam's links by hand and telling
-the user the generated `Concepts Without Review Questions.md` is now stale and
-wants its own regeneration commit. Don't hand-edit that file — it is generated.
-
-Per `CLAUDE.md`, no concept content ships 100% AI-written without human review —
-present new/changed pages for the user to review before treating them as final.
+`python3 scripts/update_wiki_links.py` rebuilds `wiki_link` arrays and
+`Concepts Without Review Questions.md` — but it rewrites *every* bank, so on
+work scoped to one exam prefer remapping that exam's links by hand and telling
+the user the generated report is stale. Never hand-edit that file.

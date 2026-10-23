@@ -21,6 +21,11 @@ test.describe('flashcard collection', () => {
     // A row opens the concept in the popup, to read before the questions start.
     await page.getByRole('button', { name: 'Independent Events' }).click()
     await expect(page.getByRole('complementary', { name: 'Concept: Independent Events' })).toBeVisible()
+    // The row the popup shows is the one marked, and Next moves the mark down the list.
+    await expect(page.locator('.wiki-link--active')).toHaveText('Independent Events')
+    await page.getByRole('complementary', { name: /^Concept: / }).getByRole('button', { name: /^Next/ }).click()
+    await expect(page.locator('.wiki-link--active')).toHaveCount(1)
+    await expect(page.locator('.wiki-link--active')).not.toHaveText('Independent Events')
 
     await page.getByRole('button', { name: 'Start Quiz' }).click()
     // Starting the quiz leaves the popup behind with the list.

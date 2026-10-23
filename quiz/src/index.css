@@ -129,9 +129,12 @@
 }
 
 /* A source-material card is a whole card, not a run of text: the active
-   marker becomes a ring around it rather than a filled chip. */
+   marker becomes a ring around it rather than a filled chip. So does a row of
+   the pre-quiz concept list (components/PreQuizConcepts.tsx). */
 .wiki-link--active.source-card,
-.dark .wiki-link--active.source-card {
+.dark .wiki-link--active.source-card,
+.wiki-link--active.concept-row,
+.dark .wiki-link--active.concept-row {
   background: transparent;
   color: inherit !important;
   box-shadow: 0 0 0 2px hsl(var(--primary));

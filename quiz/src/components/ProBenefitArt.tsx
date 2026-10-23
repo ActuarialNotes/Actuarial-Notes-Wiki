@@ -1,14 +1,21 @@
 // The pictures on the Upgrade page.
 //
 // Each benefit is shown as a small, static vignette of the surface it unlocks —
-// the day's plan, the strategy picker, a concept's level history, Listen —
+// the day's plan, the strategy picker, a concept's level history, a project
+// attempt, the Gem Shop's Pro badge, the exams still being built, Listen —
 // drawn from the same tokens and marks as the real thing (CheckMark, the
 // mastery greens), so what a reader is shown here is what
 // they get after checkout. They are pictures, not controls: every one is
 // `aria-hidden` and carries no handlers; the card beside it says it in words.
 
-import { BookOpen, Circle, FileSpreadsheet, Pause, Sparkles } from 'lucide-react'
+import { BookOpen, Car, Circle, FileSpreadsheet, Gem, Pause, Sparkles, Star } from 'lucide-react'
 import { CheckMark } from '@/components/CheckMark'
+import { ExamLogo } from '@/components/ExamLogo'
+import { LogoTile } from '@/components/LogoTile'
+import { ProBadge } from '@/components/ProBadge'
+import { getCosmetic } from '@/lib/cosmetics'
+import { examAccentStyle } from '@/lib/examColors'
+import { EXAM_STATUS_LABEL, examStatus } from '@/lib/examStatus'
 import { cn } from '@/lib/utils'
 
 /** The frame every vignette sits in, so the four read as one set. */
@@ -167,6 +174,106 @@ export function ProgressArt() {
             ))}
           </svg>
         </div>
+      </div>
+    </ArtFrame>
+  )
+}
+
+/**
+ * A PCPA attempt under way — the brief's tile (the Projects tab's, drawn here
+ * from its parts so the entry chunk doesn't carry the brief catalogue), a line
+ * of the model in R, and the report against the CAS's word limit.
+ */
+export function ProjectArt() {
+  return (
+    <ArtFrame>
+      <div className="rounded-md bg-card p-3 shadow-sm">
+        <div className="flex items-center gap-2.5">
+          <LogoTile size="sm" style={examAccentStyle('CAS-PCPA')} className="bg-[var(--exam-accent-vivid)] text-white shadow-sm">
+            <Car className="h-3.5 w-3.5" />
+          </LogoTile>
+          <div className="min-w-0 flex-1">
+            <div className="truncate text-xs font-semibold">Collision Claim Severity</div>
+            <div className="text-[10px] text-muted-foreground">Rehearsal · 10 days left</div>
+          </div>
+        </div>
+        <div className="mt-2.5 truncate rounded bg-muted px-2 py-1.5 font-mono text-[10px]">
+          <span className="text-muted-foreground">fit &lt;- </span>glm(severity ~ ., family = Gamma(link = &quot;log&quot;))
+        </div>
+        <div className="mt-3 space-y-1">
+          <div className="flex justify-between text-[10px] text-muted-foreground">
+            <span>Report</span>
+            <span>912 / 1,250 words</span>
+          </div>
+          <div className="h-1.5 overflow-hidden rounded-full bg-muted">
+            <div className="h-full w-[73%] rounded-full bg-[var(--exam-accent-vivid)]" style={examAccentStyle('CAS-PCPA')} />
+          </div>
+        </div>
+      </div>
+    </ArtFrame>
+  )
+}
+
+/** The Gem Shop's card for the Pro-only Custom Badge, as the shop draws it. */
+export function BadgeArt() {
+  const price = getCosmetic('badge:custom')?.priceGems
+  return (
+    <ArtFrame className="flex justify-center">
+      <div className="flex w-40 flex-col items-center gap-2 rounded-md bg-card p-3 shadow-sm">
+        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-amber-400/15">
+          <Star className="h-6 w-6 text-amber-500" />
+        </div>
+        <div className="space-y-1 text-center">
+          <div className="text-[11px] font-semibold">Custom Badge</div>
+          <div className="flex items-center justify-center gap-1">
+            <span className="rounded-full bg-amber-500/15 px-1.5 py-0.5 text-[9px] font-semibold text-amber-600 dark:text-amber-400">
+              Mythic
+            </span>
+            <ProBadge />
+          </div>
+        </div>
+        {price != null && (
+          <div className="flex w-full items-center justify-center gap-1 rounded-md bg-primary py-1 text-[10px] font-medium text-primary-foreground">
+            {price} <Gem className="h-3 w-3" />
+          </div>
+        )}
+      </div>
+    </ArtFrame>
+  )
+}
+
+// Exams still being filled out. Their tags are read from `examStatus`, so the
+// picture can't claim an exam is unfinished after it has been promoted — drop
+// one from this list once it reads ready.
+const BUILDING: { examKey: string; examId?: string; name: string }[] = [
+  { examKey: 'MAS-II', name: 'MAS-II' },
+  { examKey: 'CAS-5', name: 'Exam 5' },
+  { examKey: 'CAS-8', name: 'Exam 8' },
+  { examKey: 'CAS-9', name: 'Exam 9' },
+  { examKey: 'CAS-6', examId: '6U', name: 'Exam 6U' },
+]
+
+/** The exams the subscription goes into: still in beta or in development. */
+export function FundArt() {
+  return (
+    <ArtFrame>
+      <div className="rounded-md bg-card p-3 shadow-sm">
+        <div className="text-xs font-semibold">Still being built</div>
+        <ul className="mt-2 grid grid-cols-2 gap-1.5 sm:grid-cols-5">
+          {BUILDING.map(({ examKey, examId, name }) => {
+            const status = examStatus(examKey, examId)
+            const label = EXAM_STATUS_LABEL[status]
+            return (
+              <li key={name} className="flex items-center gap-2 rounded-md bg-muted/60 p-1.5">
+                <ExamLogo examKey={examKey} size="sm" muted={status === 'development'} />
+                <div className="min-w-0">
+                  <div className="truncate text-[11px] font-medium">{name}</div>
+                  {label && <div className="truncate text-[9px] text-muted-foreground">{label}</div>}
+                </div>
+              </li>
+            )
+          })}
+        </ul>
       </div>
     </ArtFrame>
   )

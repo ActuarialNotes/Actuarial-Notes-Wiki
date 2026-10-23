@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useBack } from '@/hooks/useBack'
 import { useNavigate } from 'react-router-dom'
-import { ArrowRight, BadgeCheck, FlaskConical, Heart, Loader2, Lock, Tag, type LucideIcon } from 'lucide-react'
+import { ArrowRight, Loader2, Lock, Tag } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { useSubscription } from '@/hooks/useSubscription'
 import { supabase } from '@/lib/supabase'
@@ -10,42 +10,56 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { ProBadge } from '@/components/ProBadge'
 import { CheckMark } from '@/components/CheckMark'
-import { ProgressArt, StrategyArt, StudyPlanArt } from '@/components/ProBenefitArt'
+import { BadgeArt, FundArt, ProgressArt, ProjectArt, StrategyArt, StudyPlanArt } from '@/components/ProBenefitArt'
 import { trackUpgradeClicked } from '@/lib/analytics'
 
 // What Pro unlocks — each one a thing the app actually gates on `isPro`
 // today, told as what it does for the reader. Keep this list honest: a
 // benefit belongs here only once a surface checks for it (natural-voice
-// Listen and Cowork are off it until they ship).
+// Listen and Cowork are off it until they ship). The copy follows the
+// app-copy skill (.claude/skills/app-copy/).
 const HEADLINE_BENEFITS = [
-  'Walk into the exam knowing you\'ve covered it all',
-  'A plan for every day, paced to your exam date',
-  'Study in the order that works for you',
-  'Watch every concept go from new to mastered',
+  'A study plan for every day until your exam',
+  'Study in syllabus order, or the heaviest topics first',
+  'See which concepts you know and which are slipping',
+  'Rehearse the PCPA project from start to finish',
 ]
 
-const BENEFITS: { title: string; body: string; Art: () => React.JSX.Element }[] = [
+// Every card is the same shape: a picture of the surface, a title, a line or
+// two. A card marked `wide` spans both columns; its picture needs the room.
+const BENEFITS: { title: string; body: string; Art: () => React.JSX.Element; wide?: boolean }[] = [
   {
-    title: 'Open the app, know what\'s next',
-    body: 'No more staring at a syllabus wondering where to start. Set your exam date and each day\'s concepts are waiting — sized to your pace, and re-planned as you learn and forget.',
+    title: 'Know what to study today',
+    body: 'Set your exam date and the syllabus is split into daily lists, sized to the time you have left. Fall behind or start forgetting something, and the plan changes to match.',
     Art: StudyPlanArt,
   },
   {
-    title: 'Learn the way that suits you',
-    body: 'Build up from the first chapter, or bank the topics the exam weights most first. Either way, every day moves you closer.',
+    title: 'Pick the order',
+    body: 'Work through the syllabus from the first reading, or start with the topics worth the most marks. You can change your mind later in your plan settings.',
     Art: StrategyArt,
   },
   {
-    title: 'Feel your progress',
-    body: 'Watch each concept climb from New to mastered — every level gained, every slip caught before it costs you marks, and the questions behind each one.',
+    title: 'See what\'s sticking',
+    body: 'Each concept moves up from New to Level 3 as you answer questions on it, and you can see which questions moved it. Leave one too long and it drops back a level, so you find out in time to review it.',
     Art: ProgressArt,
+    wide: true,
   },
-]
-
-const EXTRAS: { text: string; Icon: LucideIcon }[] = [
-  { text: 'Projects: rehearse the PCPA project, start to finish', Icon: FlaskConical },
-  { text: 'Pro-only Custom Badge in the Gem Shop', Icon: BadgeCheck },
-  { text: 'Fund new exams, questions and features', Icon: Heart },
+  {
+    title: 'Practise the PCPA project',
+    body: 'Pick a case, get a data set and build your model in R or Python in the browser. Write the report under the real 1,250-word limit, then see how your model does on data it hasn\'t seen.',
+    Art: ProjectArt,
+  },
+  {
+    title: 'A badge only Pro members can buy',
+    body: 'The Custom Badge in the Gem Shop is for Pro members. Earn the gems by studying and it\'s yours.',
+    Art: BadgeArt,
+  },
+  {
+    title: 'Help build the next exam',
+    body: 'Actuarial Notes is made by one person. Your subscription pays for the hours that go into adding exams, writing questions and checking them against the source material.',
+    Art: FundArt,
+    wide: true,
+  },
 ]
 
 export default function Upgrade() {
@@ -134,7 +148,7 @@ export default function Upgrade() {
   ) : isPro ? (
     <div className="space-y-2">
       <div className="rounded-md bg-green-500/10 px-3 py-2 text-sm text-green-700 dark:text-green-400">
-        You're already a Pro member. Thanks for your support!
+        You're on Pro. Thank you for supporting the site.
       </div>
       <Button variant="outline" className="w-full" onClick={back.go}>
         Back to {back.label}
@@ -173,8 +187,8 @@ export default function Upgrade() {
           Pass exams and have fun doing it.
         </h1>
         <p className="mx-auto max-w-md text-muted-foreground text-balance">
-          Pro turns the syllabus into a little progress every day, so you walk into the
-          exam room confident you know it.
+          Pro tells you what to study each day until your exam, and keeps track of
+          what you've learned and what you're starting to forget.
         </p>
       </div>
 
@@ -202,12 +216,10 @@ export default function Upgrade() {
       </Card>
 
       <section className="space-y-4">
-        <h2 className="text-center text-xl font-semibold">Everything in Pro</h2>
+        <h2 className="text-center text-xl font-semibold">What you get</h2>
         <div className="grid gap-4 sm:grid-cols-2">
-          {BENEFITS.map(({ title, body, Art }, i) => (
-            // Three cards in two columns: the last spans both rather than
-            // leaving a hole beside it.
-            <Card key={title} className={i === BENEFITS.length - 1 ? 'overflow-hidden sm:col-span-2' : 'overflow-hidden'}>
+          {BENEFITS.map(({ title, body, Art, wide }) => (
+            <Card key={title} className={wide ? 'overflow-hidden sm:col-span-2' : 'overflow-hidden'}>
               <CardContent className="p-4 space-y-3">
                 <Art />
                 <div className="space-y-1">
@@ -219,21 +231,13 @@ export default function Upgrade() {
           ))}
         </div>
 
-        <ul className="grid gap-2 text-sm sm:grid-cols-2">
-          {EXTRAS.map(({ text, Icon }) => (
-            <li key={text} className="flex items-center gap-2.5 rounded-lg bg-muted/40 px-3 py-2.5">
-              <Icon className="h-4 w-4 shrink-0 text-muted-foreground" />
-              <span>{text}</span>
-            </li>
-          ))}
-        </ul>
       </section>
 
       {!isPro && !subLoading && (
         <Card className="mx-auto max-w-md ring-1 ring-primary/10 shadow-sm">
           <CardContent className="p-6 space-y-4 text-center">
             <div className="space-y-1">
-              <p className="text-lg font-semibold">Start studying with confidence today.</p>
+              <p className="text-lg font-semibold">Try it for a month</p>
               <p className="text-sm text-muted-foreground">$10 / month. Cancel anytime.</p>
             </div>
             {cta}
@@ -252,7 +256,7 @@ export default function Upgrade() {
           <CardContent className="space-y-3">
             {betaSuccess ? (
               <div className="rounded-md bg-green-500/10 px-3 py-2 text-sm text-green-700 dark:text-green-400">
-                Code redeemed! You now have Pro access. Welcome aboard.
+                That worked. You have Pro now.
               </div>
             ) : (
               <>

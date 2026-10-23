@@ -11,12 +11,14 @@ wiki_link:
 answer: "B"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:fd27618f119d02915db7e1675c7cff38dade132bf4761d57362a2efb2d3505f2
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:daf7953e6bfe5123878f0636f019262cb664bc29ce4fb0dab0eec58942f308d8
+  sources:
+    - "SOA Exam FAM-L Sample Questions (Topics 7-10, Aug 2026 version), Q3.1, p.13 (question), sha256:4aaf3469628f2b63a689c187d963857a5a6e749c5eaca9978b264d854f60a28d — https://www.soa.org/globalassets/assets/files/edu/2024/fall/questions/2024-10-exam-fam-l-sample-questions.pdf"
+    - "SOA Exam FAM-L Sample Solutions (Topics 7-10), Q3.1, p.10 (solution and key), sha256:9e7f7b03e0252ccb8f69e4f453d443d8d7cb43ef3945d05c935fdf234cae72ab — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/2024-10-exam-fam-l-sample-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-fam/faml-3-01.md
@@ -69,9 +71,9 @@ l_{[60]+5.75} &= (67{,}000)^{0.25}(65{,}000)^{0.75} \\
 $$\begin{align*}
 {}_{2|3}q_{[60]+0.75} &= \frac{l_{[60]+2.75} - l_{[60]+5.75}}{l_{[60]+0.75}} \\
 &= \frac{74{,}739 - 65{,}494}{79{,}249} \\
-&= 0.11679
+&= 0.11679\text{ (as printed)}
 \end{align*}$$
 
-$$1000\;{}_{2|3}q_{[60]+0.75} = 116.8$$
+$$1000\;{}_{2|3}q_{[60]+0.75} = 116.8\text{ (as printed)}$$
 
 The answer is **B**.

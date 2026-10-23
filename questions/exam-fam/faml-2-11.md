@@ -11,12 +11,14 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:69a5a939dde6c4cb2c9861e42a2c90d55d80fd80510921a0a93bec80aad0f695
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:0cb438dc5f66f4a3c2859c84d2f1ff7dd7f6fe0a1d7e6427218de235e8c399c7
+  sources:
+    - "SOA Exam FAM-L Sample Questions (Topics 7-10, Aug 2026 version), Q2.11, p.11 (question), sha256:4aaf3469628f2b63a689c187d963857a5a6e749c5eaca9978b264d854f60a28d — https://www.soa.org/globalassets/assets/files/edu/2024/fall/questions/2024-10-exam-fam-l-sample-questions.pdf"
+    - "SOA Exam FAM-L Sample Solutions (Topics 7-10), Q2.11, p.8 (solution and key), sha256:9e7f7b03e0252ccb8f69e4f453d443d8d7cb43ef3945d05c935fdf234cae72ab — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/2024-10-exam-fam-l-sample-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-fam/faml-2-11.md
@@ -58,10 +60,10 @@ The value for $l_{80}$ is arbitrary. Any other starting value gives the same res
 
 Another form for the survivors between 81 and 82 would be
 
-$\mu = -\ln(902/960) = 0.0095833$;
+$\mu = -\ln(902/960) = 0.0095833$ (as printed);
 
-$l_{81.1} = 960 \times e^{-0.1 \times 0.0095833} = 959.08$;
+$l_{81.1} = 960 \times e^{-0.1 \times 0.0095833} = 959.08$ (as printed);
 
-$l_{81.6} = 960 \times e^{-0.6 \times 0.0095833} = 954.496$.
+$l_{81.6} = 960 \times e^{-0.6 \times 0.0095833} = 954.496$ (as printed).
 
 The answer is **C**.

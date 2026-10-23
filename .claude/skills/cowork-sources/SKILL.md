@@ -1,6 +1,6 @@
 ---
 name: cowork-sources
-description: Add a publisher or a document to the Cowork source catalogue (quiz/src/data/coworkSources.ts) — the entities a Cowork reader follows and the documents they take into a library. Use when asked to add, extend, populate or fix a Cowork source, publisher, entity or document ("add OSFI to Cowork", "add the CIA's educational notes as a Cowork source", "put the MCT guideline in the Cowork catalogue", "replace the Intact sample with the real annual report", "populate the Cowork corpus"), and whenever a new Resources/Books page should also be reachable from Cowork. Not for Study-mode wiki pages on their own — writing the Resources/Books page itself is actuarial-concept-definitions, and its chapter outline is textbook-toc.
+description: Add a publisher or a document to the Cowork source catalogue (quiz/src/data/coworkSources.ts) — the entities a Cowork reader follows and the documents they take into a library. Use when asked to add, extend, populate or fix a Cowork source, publisher, entity or document ("add OSFI to Cowork", "add the CIA's educational notes as a Cowork source", "put the MCT guideline in the Cowork catalogue", "replace the Intact sample with the real annual report", "populate the Cowork corpus"), and whenever a new Resources/Books page should also be reachable from Cowork. Not for Study-mode wiki pages on their own — writing the Resources/Books page itself is resource-pages, and its chapter outline is textbook-toc.
 ---
 
 # Cowork Source Catalogue
@@ -56,7 +56,7 @@ entry is `sample: true` and that no `wikiRef` entry is a sample. So:
 > **To add a real, citable document to Cowork, it has to be a vault page.**
 > Author the `Resources/Books/*.md` page first — to the standard in
 > `docs/resource-pages.md`, written from the extracted document
-> (`scripts/resource_extract.py`; the `actuarial-concept-definitions` skill, with
+> (`scripts/resource_extract.py`; the `resource-pages` skill, with
 > `textbook-toc` for a book's outline) — then point a `wikiRef` at it here.
 
 That is the intended path and it is what "replacing a sample with real documents"

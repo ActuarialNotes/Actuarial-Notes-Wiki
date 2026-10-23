@@ -16,12 +16,14 @@ wiki_link:
   - Concepts/Prediction+Error
 points: 11
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:64b7c4506dad56346317952d27e49168eb9c401cdf8910da589372f99e913a2a
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:2c2b7600009e32bfefe4c0e10513322519f12d075eeca62a02d9620f29363c6b
+  sources:
+    - "SOA Exam ASTAM Fall 2024, question booklet, Q6, pp.11-13, sha256:c7e45ae70452fc50709e1721f3b9242de1e2af1ac0afc1cc29cf0449fb683f94 — https://www.soa.org/globalassets/assets/files/edu/2024/fall/exams/2024-fall-astam-exam.pdf"
+    - "SOA ASTAM October 2024 Model Solutions, Q6, pp.15-19, sha256:f1aa2ecb9f29f00351447712a247f5ac19c2cff2bd2d69a892e6eeb5854c9f8e — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/fall-2024-astam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-astam/astam-2024f-q6.md
@@ -74,9 +76,9 @@ $$\widehat{C}_{6,7} = 18{,}285.7 \text{ (from (a))}$$
 
 $$\widehat{\beta}_1 = \frac{1}{\widehat{\lambda}_1} = \frac{1}{1.99147} = 0.502141$$
 
-$$\mu_6 = 0.85(18{,}000) = 16{,}200$$
+$$\mu_6 = 0.85(18{,}000) = 16{,}200 \text{ (as printed; } 0.85(18{,}000) = 15{,}300\text{)}$$
 
-$$\Rightarrow \widetilde{C}_{6,7} = 0.502141(18{,}285.7) + 0.497849(16{,}200) = 16{,}799$$
+$$\Rightarrow \widetilde{C}_{6,7} = 0.502141(18{,}285.7) + 0.497849(16{,}200) = 16{,}799 \text{ (as printed)}$$
 
 $$\Rightarrow \widetilde{R}_{6,7} = 16{,}799 - 9{,}182 = 7{,}617$$
 

@@ -16,12 +16,14 @@ wiki_link:
   - Concepts/Hypothesis+Testing
 points: 12
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:00662b2d2b9ffa24c08ee49fd87c2c130acb4bf308669273e5d25709a570fd16
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:f44ce8b4fb3cd6e7a73d76d15458c17b7117f546f7bf40b501e4354596c13dea
+  sources:
+    - "SOA Exam ASTAM Fall 2023, question booklet, Q3, pp.5-7, sha256:94277623c3540e1ab20e885d53ae2c5a1e1290e3e1061dc162aa832e8e3efd92 — https://www.soa.org/globalassets/assets/files/edu/2023/fall/exams/fall-2023-astam-exam.pdf"
+    - "SOA ASTAM Fall 2023 Model Solutions (revised February 20, 2024), Q3, pp.8-10, sha256:0e43330341132ce0ac5392dd785e2897506886c307700d7bdd5c03f55b57502c — https://www.soa.org/globalassets/assets/files/edu/2023/fall/solutions/astam-fall-2023-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-astam/astam-2023f-q3.md
@@ -82,7 +84,7 @@ The actuary next fits a gamma distribution to the same claims data. You are give
 - The maximum likelihood estimate of the $\alpha$ parameter is $\hat{\alpha} = 0.92463$.
 - $\sum_{i=1}^{1000}\ln x_i = 6293.4$.
 
-(i) Show that the maximum likelihood estimate of the gamma distribution parameter $\theta$ is $\hat{\theta} = 1100$ to the nearest 1. You should calculate the value to the nearest 0.01.
+(i) Show that the maximum likelihood estimate of the gamma distribution parameter $\theta$ is $\hat{\theta} = 1100$ to the nearest 1 (as printed; the solution gives 1098.73). You should calculate the value to the nearest 0.01.
 
 (ii) Show that the maximum value of the log-likelihood function under the gamma distribution is -7920 to the nearest 5. You should calculate the value to the nearest 0.1. (Hint: You can use the GAMMA function in Excel.)
 
@@ -164,7 +166,7 @@ $$
 T = 2(l_1 - l_0) = 2\big(-7921.5 - (-7923.55)\big) = 4.10
 $$
 
-Under the null hypothesis, $T \sim \chi^2$ with 1 degree of freedom (difference between the number of parameters.
+Under the null hypothesis, $T \sim \chi^2$ with 1 degree of freedom (difference between the number of parameters (as printed).
 
 The $p$ value for this test is
 

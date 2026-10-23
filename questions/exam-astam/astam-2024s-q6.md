@@ -16,12 +16,14 @@ wiki_link:
   - Concepts/Hazard+Rate
 points: 11
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:b6295c883ffa776d3c84a0c736fdecccd7c0d1190d56c79e784b34f937fd317a
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:647b8548b6f4040db57bb42e0620d5efb294736118e846683556cdb57c248eef
+  sources:
+    - "SOA Exam ASTAM Spring 2024 (April 24, 2024), question booklet, Q6, pp.9-10, sha256:e41c30b8ef94a58adba9510cdeb6875db0e3a2abdb3491df90b0eab848421fdf — https://www.soa.org/globalassets/assets/files/edu/2024/spring/exams/spring-2024-astam-exam.pdf"
+    - "SOA ASTAM April 2024 Model Solutions, Q6, pp.15-18, sha256:4f33d5c7e1aa38fd23684a24eb5e1c6535973fa01492638db9ecc94b87ace259 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/solutions/spring-2024-astam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-astam/astam-2024s-q6.md
@@ -107,7 +109,7 @@ $$\begin{align*}
 (ii) From the formula sheet:
 
 $$\begin{align*}
-E[S - Q|S > Q] &\simeq \left(\frac{\lambda + Q}{\alpha - 1}\right) \\
+E[S - Q|S > Q] &\simeq \left(\frac{\lambda + Q}{\alpha - 1}\right) \text{ (as printed)} \\
 \Rightarrow E[S|S > Q] &\simeq \hat Q + \left(\frac{\hat\lambda + \hat Q}{\hat\alpha - 1}\right) = 14{,}583.3
 \end{align*}$$
 
@@ -122,7 +124,7 @@ Using normalizing functions $c_n = \gamma n^{1/\alpha}$ and $d_n = -\gamma$, sho
 Using the normalized distribution of the $n$-sample maximum, we have:
 
 $$\begin{align*}
-\lim_{n\to\infty} Pr\left(\frac{M_n - d_n}{c_n} \le x\right) &= \lim_{n\to\infty} Pr[M_n \le c_nx + d] \\
+\lim_{n\to\infty} Pr\left(\frac{M_n - d_n}{c_n} \le x\right) &= \lim_{n\to\infty} Pr[M_n \le c_nx + d] \text{ (as printed)} \\
 &= \lim_{n\to\infty} Pr[max(X_1, X_2, \ldots, X_n) \le (c_nx + d_n)] \\
 &= \lim_{n\to\infty}\big(F_X(c_nx + d_n)\big)^n \\
 &= \lim_{n\to\infty}\left(1 - \left(\frac{\gamma}{\gamma + \gamma n^{1/\alpha}x - \gamma}\right)^\alpha\right)^n \\

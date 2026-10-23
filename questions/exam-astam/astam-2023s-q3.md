@@ -15,12 +15,14 @@ wiki_link:
   - Concepts/Credibility
 points: 11
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:73469295c7caba655b840d4a8ad8ccce13943085005f876f2228c953a6f56054
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:c7ec7ce827be9b30e232859ce0e73832a42926f05866b90df777b4655a57d019
+  sources:
+    - "SOA Exam ASTAM Spring 2023 (April 26, 2023), question booklet, Q3, pp.5-6, sha256:fc23b48a1dbfd1d9c85380d5a3605927ba53d90641d5dcba1ab238bf3e02abaf — https://www.soa.org/globalassets/assets/files/edu/2023/spring/exams/spring-2023-exam-astam.pdf"
+    - "SOA ASTAM April 2023 Model Solutions, Q3, pp.7-9, sha256:ac32f8885c3d0e8456bb4edec83c8bf8a89243d21bd6ddaa232842c22d3640a3 — https://www.soa.org/globalassets/assets/files/edu/2023/spring/solutions/spring-2023-solutions-astam.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-astam/astam-2023s-q3.md
@@ -131,7 +133,7 @@ $$
 $$
 
 $$
-\Rightarrow P = 0.7906 \times 0.35455 + 0.2094 \times 0.24559 = 0.33173
+\Rightarrow P = 0.7906 \times 0.35455 \text{ (as printed)} + 0.2094 \times 0.24559 = 0.33173
 $$
 
 ### Examiner Report

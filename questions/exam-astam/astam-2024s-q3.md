@@ -16,12 +16,14 @@ wiki_link:
   - Concepts/Frequency
 points: 10
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
   content_hash: sha256:f7c24a40dfd4b8423b10da3862f90fa34746261d03ecd3807061ff7e5a7a9bff
-  sources: []
+  sources:
+    - "SOA Exam ASTAM Spring 2024 (April 24, 2024), question booklet, Q3, p.6, sha256:e41c30b8ef94a58adba9510cdeb6875db0e3a2abdb3491df90b0eab848421fdf — https://www.soa.org/globalassets/assets/files/edu/2024/spring/exams/spring-2024-astam-exam.pdf"
+    - "SOA ASTAM April 2024 Model Solutions, Q3, pp.5-8, sha256:4f33d5c7e1aa38fd23684a24eb5e1c6535973fa01492638db9ecc94b87ace259 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/solutions/spring-2024-astam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-astam/astam-2024s-q3.md

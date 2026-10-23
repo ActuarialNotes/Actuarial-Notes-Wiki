@@ -19,12 +19,14 @@ wiki_link:
   - Concepts/Probability+Distributions
 points: 10
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:133fccb1850ca81ca078d49722bc88639d29e8df993e3b289a9e87c6dc636f48
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:97425496364768c0b27a7f4ace631e1d32bcc7ab8874968f5e9f4b9076c35720
+  sources:
+    - "SOA Exam ASTAM Fall 2023, question booklet, Q2, p.4, sha256:94277623c3540e1ab20e885d53ae2c5a1e1290e3e1061dc162aa832e8e3efd92 — https://www.soa.org/globalassets/assets/files/edu/2023/fall/exams/fall-2023-astam-exam.pdf"
+    - "SOA ASTAM Fall 2023 Model Solutions (revised February 20, 2024), Q2, pp.5-7, sha256:0e43330341132ce0ac5392dd785e2897506886c307700d7bdd5c03f55b57502c — https://www.soa.org/globalassets/assets/files/edu/2023/fall/solutions/astam-fall-2023-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-astam/astam-2023f-q2.md
@@ -62,7 +64,7 @@ You are given that $X \sim \text{Pareto}(\alpha, \theta_X)$.
 - (ii) Determine an expression for the hazard rate function for $X$, $h_X(x)$, in terms of $\alpha$ and $\theta_X$.
 
 ### Explanation
-**(i)** For the Pareto distribution with $\alpha > 1$,
+For the Pareto distribution with $\alpha > 1$,
 
 $$
 \begin{align*}
@@ -76,7 +78,7 @@ Let $y = x - d$
 
 $$
 \begin{align*}
-e_X(d) &= \left(\frac{\theta_X + d}{\theta_X}\right)^\alpha\left(\int_0^\infty y\frac{\alpha\theta_X^\alpha}{(\theta + d + y)^{\alpha+1}}\,dy\right) \\
+e_X(d) &= \left(\frac{\theta_X + d}{\theta_X}\right)^\alpha\left(\int_0^\infty y\frac{\alpha\theta_X^\alpha}{(\theta + d + y)^{\alpha+1}}\,dy\right) \text{ (as printed)} \\
 &= \left(\frac{\theta_X + d}{\theta_X}\right)^\alpha\left(\frac{\theta_X}{\theta_X + d}\right)^\alpha\left(\int_0^\infty y\frac{\alpha(\theta_X + d)^\alpha}{(\theta_X + d + y)^{\alpha+1}}\,dy\right) \\
 &= \int_0^\infty y\frac{\alpha(\theta_X + d)^\alpha}{(\theta_X + d + y)^{\alpha+1}}\,dy
 \end{align*}
@@ -95,7 +97,7 @@ h(x) = \frac{f(x)}{S(x)} = \frac{\alpha\theta_X^\alpha}{(\theta_X + x)^{\alpha+1
 $$
 
 ### Examiner Report
-Part (c) asked for a proof of the maximum excess loss formula for the Pareto distribution. For full credit candidates were expected to ***prove*** the result starting from the definition of the function, but substantial partial credit was given to the candidates who used the excess loss formula from the formula sheet.
+Part (c) asked for a proof of the maximum (as printed) excess loss formula for the Pareto distribution. For full credit candidates were expected to ***prove*** the result starting from the definition of the function, but substantial partial credit was given to the candidates who used the excess loss formula from the formula sheet.
 
 ## Part d (2 points)
 
@@ -105,7 +107,7 @@ You are given that $Y \sim \text{Weibull}(\tau, \theta_Y)$.
 - (ii) Determine the range of values of $\tau$ for which $Y$ is heavy-tailed, based on the hazard rate function.
 
 ### Explanation
-**(i)** For the Weibull distribution,
+**(c)(i)** (as printed) For the Weibull distribution,
 
 $$
 h(x) = \frac{f(x)}{S(x)} = \frac{f(x)}{1 - F(x)} = \frac{\dfrac{\tau x^{\tau-1}}{\theta^\tau}e^{-(x/\theta)^\tau}}{e^{-(x/\theta)^\tau}} = \frac{\tau x^{\tau-1}}{\theta^\tau}
@@ -124,7 +126,7 @@ This derivative will be $\le 0$ for $0 \le \tau \le 1$ and hence these are the v
 You are given that $\alpha = 2$, $\tau = \tfrac{1}{2}$, $\theta_X = 20$, and $\theta_Y = 10$. Use the limiting ratio of the survival function of $X$ to the survival function of $Y$ to compare their relative tail weights.
 
 ### Explanation
-The limit of the ratio of survival functions is:
+**(d)** (as printed) The limit of the ratio of survival functions is:
 
 $$
 \lim_{x\to\infty}\frac{S_X(x)}{S_Y(x)} = \lim_{x\to\infty}\frac{\theta_X^2}{(\theta_X + x)^2}e^{(x/\theta_Y)^{0.5}}
@@ -135,7 +137,7 @@ Let $y = (x/\theta_Y)^{0.5}$:
 $$
 \begin{align*}
 \lim_{x\to\infty}\frac{S_X(x)}{S_Y(x)} &= \lim_{y\to\infty}\frac{\theta_X^2 e^y}{\left(\theta_X + \theta_Y y^2\right)^2} \\
-                                       &= \lim_{y\to\infty}\frac{\theta_X^2 e^y}{2\theta_X\theta_Y y^2 + \theta_X y^4} \\
+                                       &= \lim_{y\to\infty}\frac{\theta_X^2 e^y}{2\theta_X\theta_Y y^2 + \theta_X y^4} \text{ (as printed)} \\
 &= \lim_{y\to\infty}\frac{e^y}{y^2 + y^4} \\
  &= \infty
 \end{align*}
@@ -151,4 +153,4 @@ For Part(e), the candidate needed to take the limit of the ratio between two sur
 You are given that $Y$ is in the MDA of the Gumbel distribution. Briefly describe the implication of this on the moments of $Y$.
 
 ### Explanation
-As a distribution in the Gumbel MDA, $Y$ must have an infinite number of moments as all positive moments exist.
+**(e)** (as printed) As a distribution in the Gumbel MDA, $Y$ must have an infinite number of moments as all positive moments exist.

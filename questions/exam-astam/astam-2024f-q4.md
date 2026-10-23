@@ -17,12 +17,14 @@ wiki_link:
   - Concepts/Severity+Distribution
 points: 10
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
   content_hash: sha256:4c781bdc168171b5c3f5731630c0dea61b63493a855f010805d9770d5573fb0a
-  sources: []
+  sources:
+    - "SOA Exam ASTAM Fall 2024, question booklet, Q4, pp.7-8, sha256:c7e45ae70452fc50709e1721f3b9242de1e2af1ac0afc1cc29cf0449fb683f94 — https://www.soa.org/globalassets/assets/files/edu/2024/fall/exams/2024-fall-astam-exam.pdf"
+    - "SOA ASTAM October 2024 Model Solutions, Q4, pp.9-12, sha256:f1aa2ecb9f29f00351447712a247f5ac19c2cff2bd2d69a892e6eeb5854c9f8e — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/fall-2024-astam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-astam/astam-2024f-q4.md

@@ -13,12 +13,14 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:b952c33ee7cd852ece625b54feb45a38d38c8bac1272678c6e25b7ee54f04735
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:f8cb3f5d67215739dff80dcc50775cf5c5c82565361573451c2d8be169ec01eb
+  sources:
+    - "SOA Exam FAM Sample Questions, Syllabus Topics 1-6 (June 15, 2026), Q60, p.49, sha256:ef535e2198444052082114642e5884d8fe279975ebe7059abb363c5ecfcfd4de — https://www.soa.org/globalassets/assets/files/edu/2024/fall/questions/2024-10-exam-fam-s-sample-questions.pdf"
+    - "SOA Exam FAM Sample Solutions, Syllabus Topics 1-6 (July 17, 2026), Q60, p.27, sha256:7b3f61d8c385f486f3dbc586cdaab035fe9c45a055710e8327d213c4d3e71b48 — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/2024-10-exam-fam-s-sample-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-fam/fams-060.md
@@ -70,7 +72,7 @@ E(X \wedge x) &= \theta\left(1 - \frac{\theta}{x+\theta}\right) \\
 
 $$\begin{align*}
 &0.80[E(X \wedge 6000) - E(X \wedge 1000)] + 0.90[E(X) - E(X \wedge 14000)] \\
-&= 0.80[2727.27 - 833.33] + 0.90[5000 - 3684.21] \\
+&= 0.80[2727, 27 \text{ (as printed)} - 833.33] + 0.90[5000 - 3684.21] \\
 &= 1515.15 + 1184.21 \\
 &= 2699.36
 \end{align*}$$

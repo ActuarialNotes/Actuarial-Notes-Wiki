@@ -16,12 +16,14 @@ wiki_link:
   - Concepts/Aggregate+Loss+Model
 points: 11
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:2f9b3fe6ffa5172eb7b429ae8ad0ae608cc50e943bd23841b37465b8f0631ab0
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:631a74c29a132ecf684236f67eccaf3baa9caf7801b6180ee8d267e9e93dd4c3
+  sources:
+    - "SOA Exam ASTAM Fall 2025 — exam questions, Q4, pp.9-10, sha256:82e9e32cfe70c47f3cba084117198396bf78398428322502889c33d163417254 — https://www.soa.org/globalassets/assets/files/edu/2025/fall/exams/2025-fall-astam-exam.pdf"
+    - "SOA Exam ASTAM Fall 2025 — model solutions and examiners' comments, Q4, pp.8-10, sha256:b575524316d2938cec3a30d74109c217e79c4d353b125e489e84e73fe6c44b0a — https://www.soa.org/globalassets/assets/files/edu/2026/spring/solutions/2025-11-astam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-astam/astam-2025f-q4.md
@@ -63,7 +65,7 @@ $$LER = 0.4 \Rightarrow \frac{d}{310} = 0.4 \Rightarrow d = 124 \text{ which con
 
 Now, assume $100 < d \le 500$:
 
-$$LER = 0.4 \Rightarrow \frac{100 \times 0.6 + d \times 0.4}{310} \Rightarrow d = \mathbf{160}$$
+$$LER = 0.4 \Rightarrow \frac{100 \times 0.6 + d \times 0.4}{310} \Rightarrow d = \mathbf{160} \text{ (as printed)}$$
 
 ### Examiner Report
 
@@ -141,7 +143,7 @@ $$
 \Rightarrow g_1 &= f_1\, g_0 \\
                 &= (0.3)(0.67032) \\
 &= 0.20110 \\
-g_2 &= f_1\, g_1 + f_2\, g_0 \\
+g_2 &= f_1\, g_1 + f_2\, g_0 \text{ (as printed)} \\
 &= \left(\frac{1}{2}(0.3)(0.20110) + (0.1)(0.67032)\right) \\
 &= 0.09720
 \end{align*}
@@ -164,7 +166,7 @@ The net premium is
 $$
 \begin{align*}
 P^{SL} &= E[S] - E[S \wedge 1000] \\
-E[S] &= \lambda E\left[X^{**}\right] \\
+E[S] &= \lambda E\left[X^{**}\right] \text{ (as printed)} \\
      &= 1(400 \times 0.3 + 800 \times 0.1) \\
 &= 200 \\
 E[S \wedge 1000] &= 0g_0 + 400g_1 + 800g_2 + 1000\big(1 - (g_0 + g_1 + g_2)\big) \\

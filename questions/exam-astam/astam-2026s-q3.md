@@ -15,12 +15,14 @@ wiki_link:
   - Concepts/Severity+Discretization
 points: 10
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:8166a008aae960f538851a0b1aa2ef316bd5a9a3fda5bcc839efb6a420868863
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:72752e4d852b2b3b3e90b094faa6cc45fe282b04e20ba5afe4efa86a1ee40fa1
+  sources:
+    - "SOA Exam ASTAM Spring 2026 — exam questions, Q3, pp.8-9, sha256:2d067bc99c3437f3791bb61c595db1e2cc8794b876f88dd9b506a5a543cac511 — https://www.soa.org/globalassets/assets/files/edu/2026/astam/april-2026-astam-exam.pdf"
+    - "SOA Exam ASTAM Spring 2026 — model solutions and examiners' comments, Q3, pp.4-6, sha256:3930c2d38ba3d08955f65aededeb3bbb1c1eab5191b4f11c7481ceb177a7522f — https://www.soa.org/globalassets/assets/files/edu/2026/spring/solutions/2026-spring-astam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-astam/astam-2026s-q3.md
@@ -150,7 +152,7 @@ Let $Y^d$ denote the discretized severity random variable, let $h = 400$ denote 
 
 $$\begin{align*}
 f_1 &= \frac{2E[X \wedge 400] - E[X \wedge 0] - E[X \wedge 800]}{400} \\
-&= \frac{2\left(2000\left[1 - e^{-\frac{400}{1000}}\right]\right) - 2000\left[1 - e^{-\frac{0}{1000}}\right] - 2000\left[1 - e^{-\frac{800}{1000}}\right]}{400} \\
+&= \frac{2\left(2000\left[1 - e^{-\frac{400}{1000}}\right]\right) - 2000\left[1 - e^{-\frac{0}{1000}}\right] - 2000\left[1 - e^{-\frac{800}{1000}}\right]}{400} \text{ (as printed)} \\
 &= \frac{2(329.68) - 0 - 550.67}{400} \\
 &= 0.27172
 \end{align*}$$

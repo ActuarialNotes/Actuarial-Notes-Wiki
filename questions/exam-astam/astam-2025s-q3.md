@@ -16,12 +16,14 @@ wiki_link:
   - Concepts/Overall+Rate+Level+Indication
 points: 10
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:dcf6b9a4bf642ca11464536aec471a98c4bf03ee85dedcefb37fedbde8827c3a
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:d3a86a545b8764691721fe94e77fa50349698937425405b553735265be3f6678
+  sources:
+    - "SOA Exam ASTAM Spring 2025 — exam questions, Q3, pp.6-7, sha256:6abc81ba7d868ecb7eb1a7a747b4558adcfc1794531dcef0ef95c6c8f82c33e6 — https://www.soa.org/globalassets/assets/files/edu/2025/spring/exams/spring-2025-astam-exam.pdf"
+    - "SOA Exam ASTAM Spring 2025 — model solutions and examiners' comments, Q3, pp.6-9, sha256:f651a9645c9b8ace921bb11d9def2e3655895a0fd6c563fe8777c43eb3f706e5 — https://www.soa.org/globalassets/assets/files/edu/2025/spring/solutions/2025-spring-astam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-astam/astam-2025s-q3.md
@@ -75,7 +77,7 @@ Examiners' Comments: Candidates struggled with this part often not addressing th
 
 ### Explanation
 
-(i) Let $Y \sim \text{Pareto}(\alpha, \theta)$ denote the ground-up loss random variable. Given a deducible $d$, the claim severity random variable is $Y_d = Y - d \mid Y > d$, so that
+(i) Let $Y \sim \text{Pareto}(\alpha, \theta)$ denote the ground-up loss random variable. Given a deducible (as printed) $d$, the claim severity random variable is $Y_d = Y - d \mid Y > d$, so that
 
 $$
 \begin{align*}
@@ -106,7 +108,7 @@ $$\frac{178.50}{187.50} = 0.9520$$
 
 (iii) The expected aggregate claims for a Class C policy are $0.0430(4000) = 172.00$.
 
-The differential relative to Class A is
+(iv) (as printed) The differential relative to Class A is
 
 $$\frac{172.00}{187.50} = 0.9173$$
 
@@ -151,7 +153,7 @@ $$C: \ \frac{159.091}{187.297} = 0.8494$$
 
 (iii) The off-balance factor is the ratio of the new average differential to the old average differential, weighted by exposure, i.e.
 
-$$\frac{18{,}500(1) + 8000(0.8910) + 2200(0.8494)}{18{,}500(1) + 8000(0.9520) + 2200(0.9173)} = 0.9771$$
+$$\frac{18{,}500(1) + 8000(0.8910) + 2200(0.8494)}{18{,}500(1) + 8000(0.9520) + 2200(0.9173)} = 0.9771 \text{ (as printed)}$$
 
 ### Examiner Report
 
@@ -174,7 +176,7 @@ The current base rate for Class A is 200. The insurer decides to implement an ov
 $$
 \begin{align*}
 B\{18{,}500(1) + 8000(0.8910) + 2200(0.8494)\} &= 1.1(200)\{18{,}500(1) + 8000(0.9520) + 2200(0.9173)\} \\
-\Rightarrow B &= \frac{1.1(200)}{0.9771} \\
+\Rightarrow B &= \frac{1.1(200)}{0.9771} \text{ (as printed)} \\
               &= 225.16
 \end{align*}
 $$

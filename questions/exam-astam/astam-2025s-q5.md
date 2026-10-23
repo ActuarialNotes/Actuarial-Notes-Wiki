@@ -15,12 +15,14 @@ wiki_link:
   - Concepts/Expected+Loss+Method
 points: 11
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:9ad63c93ac6e34be7c95e316aeb357614b3dccbfe5e375cf9aa4841d4e250c3c
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:9e01f530e3dda88618d7667dda78ca418c9cf4b3c5706f75f2da975420d39b0d
+  sources:
+    - "SOA Exam ASTAM Spring 2025 — exam questions, Q5, pp.9-10, sha256:6abc81ba7d868ecb7eb1a7a747b4558adcfc1794531dcef0ef95c6c8f82c33e6 — https://www.soa.org/globalassets/assets/files/edu/2025/spring/exams/spring-2025-astam-exam.pdf"
+    - "SOA Exam ASTAM Spring 2025 — model solutions and examiners' comments, Q5, pp.14-18, sha256:f651a9645c9b8ace921bb11d9def2e3655895a0fd6c563fe8777c43eb3f706e5 — https://www.soa.org/globalassets/assets/files/edu/2025/spring/solutions/2025-spring-astam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-astam/astam-2025s-q5.md
@@ -43,13 +45,13 @@ Show that the estimated outstanding claims for Accident Year (AY) 3, using the c
 
 ### Explanation
 
-The outstanding claims for AY 3 are $\hat{C}_{3,3} - C_{3,0}$.
+The outstanding claims for AY 3 are . (as printed)
 
 $$\hat{C}_{3,3} = C_{3,0}(f_0 \times f_1 \times f_2)$$
 
 $$
 \begin{align*}
-(f_0 \times f_1 \times f_2) = \lambda_0 &= \left(\frac{1155 + 1304 + 1568}{660 + 792 + 825}\right)\left(\frac{1403 + 1650}{1155 + 1304}\right)\left(\frac{1568}{1650}\right) \\
+(f_0 \times f_1 \times f_2) = \lambda_0 &= \left(\frac{1155 + 1304 + 1568}{660 + 792 + 825}\right)\left(\frac{1403 + 1650}{1155 + 1304}\right)\left(\frac{1568}{1650}\right) \text{ (as printed)} \\
 &= (1.7686)(1.2416)(1.1176) \\
 &= 2.4540
 \end{align*}

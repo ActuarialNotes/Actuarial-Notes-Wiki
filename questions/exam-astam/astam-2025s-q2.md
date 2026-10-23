@@ -16,12 +16,14 @@ wiki_link:
   - Concepts/Frequency
 points: 11
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
   content_hash: sha256:f0952f6e7ca744c3aeef9cf4f90aa7069cf847493a8c3b476651751ca49153c4
-  sources: []
+  sources:
+    - "SOA Exam ASTAM Spring 2025 — exam questions, Q2, pp.4-5, sha256:6abc81ba7d868ecb7eb1a7a747b4558adcfc1794531dcef0ef95c6c8f82c33e6 — https://www.soa.org/globalassets/assets/files/edu/2025/spring/exams/spring-2025-astam-exam.pdf"
+    - "SOA Exam ASTAM Spring 2025 — model solutions and examiners' comments, Q2, pp.2-5, sha256:f651a9645c9b8ace921bb11d9def2e3655895a0fd6c563fe8777c43eb3f706e5 — https://www.soa.org/globalassets/assets/files/edu/2025/spring/solutions/2025-spring-astam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-astam/astam-2025s-q2.md

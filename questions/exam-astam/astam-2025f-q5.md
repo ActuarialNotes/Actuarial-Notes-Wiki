@@ -16,12 +16,14 @@ wiki_link:
   - Concepts/Unpaid+Claims
 points: 10
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:c3415de0f75b1f3fd04c449412be95fb9e30aea118936abd45a9fa5e4837e563
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:99d5f48b6f45bf868561c458eec3a136ce1ce883a8d111933314ed9c75fddb2a
+  sources:
+    - "SOA Exam ASTAM Fall 2025 — exam questions, Q5, pp.11-12, sha256:82e9e32cfe70c47f3cba084117198396bf78398428322502889c33d163417254 — https://www.soa.org/globalassets/assets/files/edu/2025/fall/exams/2025-fall-astam-exam.pdf"
+    - "SOA Exam ASTAM Fall 2025 — model solutions and examiners' comments, Q5, pp.11-13, sha256:b575524316d2938cec3a30d74109c217e79c4d353b125e489e84e73fe6c44b0a — https://www.soa.org/globalassets/assets/files/edu/2026/spring/solutions/2025-11-astam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-astam/astam-2025f-q5.md
@@ -177,9 +179,11 @@ $$E[Z_4] = \frac{n_4}{2} - \binom{n_4 - 1}{m_4}\frac{n_4}{2^{n_4}} = 2 - \binom{
 
 (iv) The test statistic is $Z = \sum Z_k = \mathbf{1}$
 
+(v) (as printed)
+
 $$p = 2\left(1 - \Phi\left(\frac{|Z - E[Z]|}{\sqrt{Var[Z]}}\right)\right) = 2\left(1 - \Phi\left(\frac{2}{\sqrt{1.125}}\right)\right) = \mathbf{5.93\%}$$
 
-(v) The test is not significant at the 5% level, and so at this significance we would accept the null hypothesis that payment patterns in different quarters are not significantly different.
+The test is not significant at the 5% level, and so at this significance we would accept the null hypothesis that payment patterns in different quarters are not significantly different.
 
 (Note though that the result is significant at the 10% level, and with so little data, the test is not very powerful.)
 

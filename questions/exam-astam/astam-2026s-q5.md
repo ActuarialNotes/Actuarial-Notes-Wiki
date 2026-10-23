@@ -15,12 +15,14 @@ wiki_link:
   - Concepts/Credibility
 points: 11
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
   content_hash: sha256:2baae69f2da4d3d2b8c69b2b0bd05f8ad9ddb903be3210fb203f0b6c311b7dcd
-  sources: []
+  sources:
+    - "SOA Exam ASTAM Spring 2026 — exam questions, Q5, p.12, sha256:2d067bc99c3437f3791bb61c595db1e2cc8794b876f88dd9b506a5a543cac511 — https://www.soa.org/globalassets/assets/files/edu/2026/astam/april-2026-astam-exam.pdf"
+    - "SOA Exam ASTAM Spring 2026 — model solutions and examiners' comments, Q5, pp.10-12, sha256:3930c2d38ba3d08955f65aededeb3bbb1c1eab5191b4f11c7481ceb177a7522f — https://www.soa.org/globalassets/assets/files/edu/2026/spring/solutions/2026-spring-astam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-astam/astam-2026s-q5.md

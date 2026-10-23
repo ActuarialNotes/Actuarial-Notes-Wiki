@@ -15,12 +15,14 @@ wiki_link:
   - Concepts/Posterior+Distribution
 points: 9
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:9ffb10b0ad637c8e738169e7660746839cf40cb31085a95c4e3d16a801c36cb6
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:c727cec102acb0e4b9e48cfca11e6fd203f43ced7e140977361009c39618c088
+  sources:
+    - "SOA Exam ASTAM Spring 2025 — exam questions, Q6, pp.11-12, sha256:6abc81ba7d868ecb7eb1a7a747b4558adcfc1794531dcef0ef95c6c8f82c33e6 — https://www.soa.org/globalassets/assets/files/edu/2025/spring/exams/spring-2025-astam-exam.pdf"
+    - "SOA Exam ASTAM Spring 2025 — model solutions and examiners' comments, Q6, pp.19-21, sha256:f651a9645c9b8ace921bb11d9def2e3655895a0fd6c563fe8777c43eb3f706e5 — https://www.soa.org/globalassets/assets/files/edu/2025/spring/solutions/2025-spring-astam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-astam/astam-2025s-q6.md
@@ -68,7 +70,7 @@ Calculate the Bayesian estimate of the annual claim amount of a randomly selecte
 
 Let $\alpha^* = \alpha + 100 = 130$; $\beta^* = \beta + \sum_{i=1}^{100} x_i = 60{,}000$.
 
-$$E[X] = E\big[E[X \mid \theta]\big] = E[\theta] = \frac{\beta^*\,\Gamma(\alpha^* - 1)}{\Gamma(\alpha^*)} = \frac{\beta^*}{\alpha^* - 1} = \frac{60{,}000}{130 - 1} = 465.12$$
+$$E[X] = E\big[E[X \mid \theta]\big] = E[\theta] = = \text{ (as printed) } \frac{\beta^*\,\Gamma(\alpha^* - 1)}{\Gamma(\alpha^*)} = \frac{\beta^*}{\alpha^* - 1} = \frac{60{,}000}{130 - 1} = 465.12$$
 
 ### Examiner Report
 

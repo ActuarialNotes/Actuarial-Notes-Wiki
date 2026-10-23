@@ -12,12 +12,14 @@ wiki_link:
 answer: "E"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:7089c054fe9774052cb4a326ab798752529ab60c3ff7dd86593f19f9a6d3cf16
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:d90f6d89336e14c9460d34eaf798f02cdf94a04cdc73d60ac2fe304a04738376
+  sources:
+    - "SOA Exam FAM-L Sample Questions (October 2024), Q7.5, p.97, sha256:4aaf3469628f2b63a689c187d963857a5a6e749c5eaca9978b264d854f60a28d — https://www.soa.org/globalassets/assets/files/edu/2024/fall/questions/2024-10-exam-fam-l-sample-questions.pdf"
+    - "SOA Exam FAM-L Sample Solutions (October 2024), Q7.5, p.66, sha256:9e7f7b03e0252ccb8f69e4f453d443d8d7cb43ef3945d05c935fdf234cae72ab — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/2024-10-exam-fam-l-sample-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-fam/faml-7-05.md
@@ -79,7 +81,7 @@ $$\begin{align*}
 \end{align*}$$
 
 $$\begin{align*}
-{}_{4.5}V &= \frac{(1{,}405.08 + 647.16)(1.03)^{0.5} - 0.02281(10{,}000)/(1.03)^{0.5}}{1 - 0.02281} \\
+{}_{4.5}V &= \frac{(1{,}405.08 + 647.16\text{ (as printed)})(1.03)^{0.5} - 0.02281(10{,}000)/(1.03)^{0.5}}{1 - 0.02281} \\
 &= 1{,}902
 \end{align*}$$
 

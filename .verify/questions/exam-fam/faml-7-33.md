@@ -1,0 +1,39 @@
+---
+target: questions/exam-fam/faml-7-33.md
+created: 2026-10-23
+---
+
+## [F-001] SOA printed slip kept without marker
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-23T18:38Z/8d0d
+- date: 2026-10-23
+- severity: minor
+- status: open
+- locus: explanation, policy value line
+- claim: The page reads "Policy value = 515.36 - 239.36 = 276" with no note, after computing 515.35 one line earlier.
+- evidence: SOA FAM-L sample solutions p.80 (sha256:9e7f7b03…), Question 7.33: the SOA prints "EPV future benefits = ... = 515.35" and then "Policy value = 515.36 - 239.36 = 276". A rounding slip that does not move the answer (C). Kept as printed and marked.
+- source_rank: 1
+- proposed_action: Mark 515.36 "(as printed)".
+- applied: true
+- fingerprint: 6066187be9de
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-23T18:38Z/8d0d
+- date: 2026-10-23
+- resolves: F-001
+- status: resolved
+- note: Marked "\text{ (as printed)}" after 515.36.
+
+## [C-001] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-23T18:38Z/8d0d
+- date: 2026-10-23
+- status_set: verified
+- confidence: high
+- checks_run: blind recompute (SULT recomputed from the Makeham law where used); answer key vs SOA; stem/options/tag diff against page image; explanation vs SOA solution; option debris; frontmatter, wiki_link targets exist
+- sources_checked: SOA Exam FAM-L Sample Questions (October 2024), Q7.33, p.121, sha256:4aaf3469628f2b63a689c187d963857a5a6e749c5eaca9978b264d854f60a28d — https://www.soa.org/globalassets/assets/files/edu/2024/fall/questions/2024-10-exam-fam-l-sample-questions.pdf; SOA Exam FAM-L Sample Solutions (October 2024), Q7.33, p.80, sha256:9e7f7b03e0252ccb8f69e4f453d443d8d7cb43ef3945d05c935fdf234cae72ab — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/2024-10-exam-fam-l-sample-solutions.pdf
+- note: Recomputed blind: 276.0; SOA key C, vault key C. Stem, options and tag line diffed against the page image (130 dpi): match. Explanation follows the SOA's method and figures line by line. SOA slip 515.36 marked (F-001).

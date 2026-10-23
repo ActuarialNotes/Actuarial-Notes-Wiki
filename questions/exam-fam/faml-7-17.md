@@ -12,12 +12,14 @@ wiki_link:
 answer: "D"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:918245b591ffeeb67fa12a4660a48ded653bd75cc269d1e99328d958765a48f4
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:11028a0d961811759307f6c8674183db1bcdef064e0e33d4544b75ec3fdd4f5d
+  sources:
+    - "SOA Exam FAM-L Sample Questions (October 2024), Q7.17, p.106, sha256:4aaf3469628f2b63a689c187d963857a5a6e749c5eaca9978b264d854f60a28d — https://www.soa.org/globalassets/assets/files/edu/2024/fall/questions/2024-10-exam-fam-l-sample-questions.pdf"
+    - "SOA Exam FAM-L Sample Solutions (October 2024), Q7.17, p.73, sha256:9e7f7b03e0252ccb8f69e4f453d443d8d7cb43ef3945d05c935fdf234cae72ab — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/2024-10-exam-fam-l-sample-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-fam/faml-7-17.md
@@ -47,7 +49,7 @@ Calculate $\dfrac{\text{Var}({}_{10}L)}{\text{Var}({}_{11}L)}$.
 
 ## Explanation
 
-$$\frac{V[{}_{10}L]}{V[{}_{11}L]} = \frac{\left(1 + \dfrac{P}{d}\right)^{2}\left({}^{2}A_{x+10} - A_{x+10}^{2}\right)}{\left(1 + \dfrac{P}{d}\right)^{2}\left({}^{2}A_{x+11} - A_{x+11}^{2}\right)}$$
+$$\frac{V[{}_{10}L]}{V[{}_{11}L]} = \frac{\left(1 + \dfrac{p}{d}\right)^{2}\left({}^{2}A_{x+10} - A_{x+10}^{2}\right)}{\left(1 + \dfrac{p}{d}\right)^{2}\left({}^{2}A_{x+11} - A_{x+11}^{2}\right)}\text{ (as printed)}$$
 
 $$\begin{align*}
 A_{x+10} &= vq_{x+10} + vp_{x+10}\,A_{x+11} \\

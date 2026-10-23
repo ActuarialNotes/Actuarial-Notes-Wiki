@@ -12,12 +12,14 @@ wiki_link:
 answer: "A"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:c88430ad8e5e18684cfdae1c9d782a57ad286f03724df9df9f3a3e8ed1df62be
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:4ee24849d9f42026d4c09b45479f0f78b08f627cfbb1252e48bf1b3f78b78fda
+  sources:
+    - "SOA Exam FAM-L Sample Questions (October 2024), Q7.18, p.106-107, sha256:4aaf3469628f2b63a689c187d963857a5a6e749c5eaca9978b264d854f60a28d — https://www.soa.org/globalassets/assets/files/edu/2024/fall/questions/2024-10-exam-fam-l-sample-questions.pdf"
+    - "SOA Exam FAM-L Sample Solutions (October 2024), Q7.18, p.74, sha256:9e7f7b03e0252ccb8f69e4f453d443d8d7cb43ef3945d05c935fdf234cae72ab — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/2024-10-exam-fam-l-sample-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-fam/faml-7-18.md
@@ -50,9 +52,7 @@ $$\begin{align*}
 &= 1 - \frac{\ddot{a}_{x+1}}{\ddot{a}_{x}}
 \end{align*}$$
 
-since $P_{x} + d = 1/\ddot{a}_{x}$. Hence
-
-$$\ddot{a}_{x}\left(1 - {}_{1}V_{x}\right) = \ddot{a}_{x+1}$$
+$$\Rightarrow \ddot{a}_{x}\left(1 - {}_{1}V_{x}\right) = \ddot{a}_{x+1}$$
 
 Since $\ddot{a}_{x} = 1 + v p_{x}\,\ddot{a}_{x+1}$, substituting we get
 

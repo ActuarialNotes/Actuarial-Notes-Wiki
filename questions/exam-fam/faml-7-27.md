@@ -13,12 +13,14 @@ wiki_link:
 answer: "B"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:8dfc38ca88550b9cfb56f7d016b41e491d630436a76748d582be57050d43090e
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:63119af6a30df09647c38ca4b81364bf323a27501592b75e3201ec8dc845ae50
+  sources:
+    - "SOA Exam FAM-L Sample Questions (October 2024), Q7.27, p.116, sha256:4aaf3469628f2b63a689c187d963857a5a6e749c5eaca9978b264d854f60a28d — https://www.soa.org/globalassets/assets/files/edu/2024/fall/questions/2024-10-exam-fam-l-sample-questions.pdf"
+    - "SOA Exam FAM-L Sample Solutions (October 2024), Q7.27, p.77, sha256:9e7f7b03e0252ccb8f69e4f453d443d8d7cb43ef3945d05c935fdf234cae72ab — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/2024-10-exam-fam-l-sample-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-fam/faml-7-27.md
@@ -55,7 +57,7 @@ Calculate *G*.
 
 Since $G$ is determined using the equivalence principle, ${}_{0}V = 0$.
 
-Then, with $P^{e} = G - 187$,
+Then,
 
 $$\begin{align*}
 {}_{1}V^{e} &= \frac{\left(0 + \overbrace{G - 187}^{P^{e}} - 0.25G - 10\right)(1.03)}{0.992} \\

@@ -1,8 +1,9 @@
 import { test, expect, type Page } from '@playwright/test'
+import { signIn } from './fixtures/signedIn'
 
 /**
- * The Projects tab and the PCPA project simulator (docs/pcpa-project.md),
- * signed out.
+ * The Projects tab and the PCPA project simulator (docs/pcpa-project.md), a
+ * Pro feature: signed in on a Pro account, and locked to everyone else.
  *
  * R and Python are downloaded from their CDNs on first use, which a CI runner
  * can't be relied on to reach, so this covers everything up to the first run:
@@ -27,12 +28,36 @@ async function startBrief(page: Page, mode: 'Rehearsal' | 'Practice' = 'Rehearsa
   await expect(page).toHaveURL(/\/project\/pcpa\/p-/)
 }
 
+test.describe('pcpa project, without Pro', () => {
+  test('locks the tab, marks it Pro in the sidebar, and sends an attempt link back to it', async ({ page }) => {
+    await page.goto('/project')
+    await expect(page.getByRole('heading', { name: /^Projects/, level: 1 })).toBeVisible()
+    await expect(page.getByRole('main').getByRole('link', { name: 'Sign in' })).toBeVisible()
+    await expect(page.getByRole('button', { name: 'New project' })).toHaveCount(0)
+    const sidebar = page.getByRole('navigation', { name: 'Main' })
+    await expect(sidebar.getByRole('link', { name: /^Projects/ })).toContainText('Pro')
+
+    await page.goto('/project/pcpa/p-unknown')
+    await expect(page).toHaveURL(/\/project$/)
+  })
+
+  test('offers the upgrade to a signed-in reader without Pro', async ({ page }) => {
+    await signIn(page)
+    await page.goto('/project')
+    await expect(page.getByRole('main').getByRole('link', { name: 'Upgrade to Pro' })).toHaveAttribute('href', '/upgrade')
+  })
+})
+
 test.describe('pcpa project', () => {
+  test.beforeEach(async ({ page }) => {
+    await signIn(page, { pro: true })
+  })
+
   test('lists every brief behind the + on the Projects tab, and starts the one chosen', async ({ page }) => {
     await page.goto('/project')
     await expect(page.getByRole('heading', { name: 'Projects', level: 1 })).toBeVisible()
-    // Signed out, the page says where attempts are kept, and that it isn't for good.
-    await expect(page.getByText('Saved in this browser only.')).toBeVisible()
+    // Signed in, the page says the attempts are kept with the account.
+    await expect(page.getByText(/Saved to your account/)).toBeVisible()
 
     await page.getByRole('button', { name: 'New project' }).first().click()
     const picker = page.getByRole('dialog', { name: 'New project' })
@@ -123,7 +148,7 @@ test.describe('pcpa project', () => {
     await expect(sidebar.getByRole('link', { name: 'Report', exact: true })).toHaveAttribute('aria-current', 'page')
 
     // Off the attempt, the views go with it.
-    await sidebar.getByRole('link', { name: 'Projects', exact: true }).click()
+    await sidebar.getByRole('link', { name: /^Projects/ }).click()
     await expect(page).toHaveURL(/\/project$/)
     await expect(sidebar.getByRole('link', { name: 'Workspace', exact: true })).toHaveCount(0)
   })

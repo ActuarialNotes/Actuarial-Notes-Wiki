@@ -15,6 +15,8 @@ export interface SignedInOptions {
   displayName?: string
   /** exam_progress rows: which exams the account is studying. */
   examProgress?: { exam_id: string; status: string; target_date: string | null }[]
+  /** An active Pro subscription (a `user_subscriptions` row), for Pro-only features. */
+  pro?: boolean
   /** An RPC's answer by name, given its arguments. Undefined falls through to null. */
   rpc?: Record<string, (args: Record<string, unknown>) => unknown>
 }
@@ -56,6 +58,11 @@ export async function signIn(page: Page, opts: SignedInOptions = {}) {
     }
     if (url.pathname === '/rest/v1/exam_progress' && route.request().method() === 'GET') {
       return json((opts.examProgress ?? []).map(r => ({ user_id: USER_ID, ...r })))
+    }
+    if (opts.pro && url.pathname === '/rest/v1/user_subscriptions' && route.request().method() === 'GET') {
+      const row = { tier: 'premium', status: 'active', current_period_end: null }
+      const single = (route.request().headers()['accept'] ?? '').includes('vnd.pgrst.object')
+      return json(single ? row : [row])
     }
     // Any other read is empty, and any write succeeds.
     if (route.request().method() === 'GET' || route.request().method() === 'HEAD') {

@@ -501,7 +501,8 @@ before touching that area**:
   its exam weighting), the bands and the insight line. `computeExamReadiness` is the *one* readiness
   number — the exam-page card, the Dashboard radial, the exam grid and the readiness
   projection all call it. Read before changing `lib/readiness.ts` or any readiness readout.
-- `docs/pcpa-project.md` — the **Projects tab** (`/project`, in the sidebar after Quiz, with an
+- `docs/pcpa-project.md` — the **Projects tab** (`/project`, in the sidebar after Quiz — a
+  **Pro** feature, its row marked with the Pro chip and the page locked to anyone else, with an
   open attempt's Brief / Workspace / Report / Submit views as rows under it — `lib/attemptViews.ts`;
   the PCPA study guide's **Project** button leads there too) and the **PCPA project simulator**
   behind it: every brief is a card grouped by the exam it is a project for (`data/projects.ts`
@@ -1393,6 +1394,13 @@ compile — don't "clean up" the flagged code as dead.
 ## Content conventions (markdown vault)
 
 - Wiki links use Obsidian syntax: `[[Concept Name]]` or `[[Concept Name|Display Text]]`.
+- Concept pages (`Concepts/*.md`) follow the `actuarial-concept-definitions` skill: definition →
+  `> $$formula$$` (or, for a qualitative concept, its defining list/hierarchy/table) → bullets →
+  `> [!idea] The idea` → collapsed examples → collapsed *How it appears on the exam* and *Exam
+  traps*. `[!idea]` and `[!trap]` are **note cards** — always open, in the Examiner's report
+  shape (`MarkdownCallout`, style guide §7.2b). Nothing callout-shaped goes above the bullets:
+  the opening is read by Concept Craft's recipe reader (`pageOpening`) and the SEO lead.
+  `Resources/Books/` pages have their own skill, `resource-pages`.
 - Exam pages use callout blocks (`> [!example]-`) listing learning objectives with weight
   percentages, e.g. `{23-30%}`.
 - The study tips under `Guides/<exam page>/` are still bundled (`virtual:exam-guides`) but no

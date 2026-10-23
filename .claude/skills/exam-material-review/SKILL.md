@@ -90,6 +90,20 @@ Two failure modes recur:
   `Transformations of Random Variables` and `Hazard Rate` were both orphans on
   Exam P.
 
+The validator finds the first kind of gap — `[[Term]]` with no page — but not
+the subtler one: the syllabus prose names a concept that **already has a page**
+and leaves it as plain text, so the reader never reaches it and the app never
+counts it toward the exam's concept list. Find those by diffing the concepts the
+exam's questions are tagged with against the concepts the syllabus links:
+a concept in `questions/<bank>/*.md` `wiki_link:` arrays that the exam page never
+links is a candidate. Objectives with **zero** links are the strongest signal —
+usually a whole learning objective with no concept coverage at all.
+
+Also check that every question `wiki_link:` entry resolves (the validator's
+`--questions` pass). A question pointing at a naming variant still records
+mastery, against a slug the app can never display — so the concept looks
+permanently unstudied.
+
 Check the syllabus text against the current published syllabus before assuming
 something is missing. Exam P's source-material list explicitly excludes MGFs;
 that is a deliberate scope decision, not a gap. Respect the vault's own scoping.
@@ -105,10 +119,14 @@ Priority follows how much a candidate is hurt, not how easy the fix is:
    vault, and on Exam FM the stubs carry over a hundred inbound question links.
 2. **Broken links** in the exam's graph.
 3. **Missing content for a heavily-weighted objective.** New concept pages.
-4. **Missing warnings and identification guidance** on existing pages. These go
-   in the page's two collapsible closing sections — `> [!tip]- How it appears on
-   the exam` and `> [!warning]- Exam traps` (the `actuarial-concept-definitions`
-   skill has the shape) — rather than in the definition or the bullets.
+4. **Pages that state but don't explain.** A page with a definition and a
+   formula but no `> [!idea] The idea` card, examples that plug in numbers with
+   no plan or "why" line, or no contrast with the concept it is confused with.
+   And **missing warnings and identification guidance**: the two collapsible
+   closing sections — `> [!tip]- How it appears on the exam` and
+   `> [!warning]- Exam traps` — with at most one inline `> [!trap]` card where a
+   slip is tied to the formula. The `actuarial-concept-definitions` skill has the
+   shape of all of these.
 5. **Second worked examples** on pages carrying only a plug-in.
 6. **Questions** for zero-coverage concepts.
 7. **Comprehension checks** for anything newly linked from the syllabus.
@@ -123,8 +141,10 @@ zero questions on either.
 This skill decides *what* to write; the others define the shape:
 
 - Concept pages → **actuarial-concept-definitions** (definition → `> $$formula$$`
-  → bullets → collapsible examples; `align*` for multi-step; one expression per
-  block, stacked never side-by-side, because pages are read on phones).
+  → bullets → `> [!idea] The idea` → collapsible examples with a plan, labelled
+  steps and a "why" line → the two closing sections; one expression per block,
+  stacked never side-by-side, because pages are read on phones).
+- Resource pages for the exam's readings → **resource-pages**.
 - Question files → **soa-exam-converter** / **cas-exam-converter** for the
   frontmatter contract. Ids continue the existing sequence (`p-401`, …);
   `wiki_link` uses `Concepts/Name+With+Plusses`.

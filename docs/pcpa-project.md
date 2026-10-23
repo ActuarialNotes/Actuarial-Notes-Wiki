@@ -13,6 +13,12 @@ The simulator reproduces that whole loop in the browser. It lives on the **Proje
 a brief and a data set and a deadline rather than a bank of questions. The PCPA study guide's
 **Project** button (`components/wiki/ExamProjectButton.tsx`) leads there too.
 
+**Projects are a Pro feature.** The sidebar row carries the Pro chip for every reader, and
+`pages/Project/index.tsx` checks `useSubscription().isPro` before anything else mounts: a
+reader without Pro gets a locked page at `/project` (*Sign in*, or *Upgrade to Pro* once
+signed in), and a link to an attempt is sent back there. Nothing behind the gate runs for
+them — no sync, no attempt store.
+
 ```
 Projects tab ──► + ──► Start sheet ──► Brief ──► Workspace ──► Report ──► Submit ──► Results
 (your attempts)  (pick a brief · mode · language · data)  (materials)  (R · Python · sheet)  (≤1,250 words)  (questions · attestation · clean run)  (assessment data · rubric · examiner's notes)
@@ -218,7 +224,9 @@ candidate signs in on. `lib/project/projectSync.ts` is the client half; the tabl
 
 **Signed out**, attempts are this browser's alone, and the Projects page says so — not
 permanent, gone with the site data, not on another device — with the way to sign in and keep
-them.
+them. Since the tab became Pro-only a signed-out reader never reaches that page; the rule is
+kept because `visibleTo` still decides what a signed-in Pro reader sees of attempts this
+browser made before.
 
 ## Submission and grading
 
@@ -257,7 +265,7 @@ rehearsal whose window closes unsubmitted can't be submitted, as on the real pro
 | Runtimes, file store, sheet files | `quiz/src/lib/project/` |
 | Stores | `quiz/src/hooks/usePcpaAttempts.ts`, `usePcpaWorkspace.ts`, `useProjectRuntime.ts` |
 | UI | `quiz/src/components/project/`, `quiz/src/pages/Project/` |
-| E2E | `quiz/e2e/pcpa-project.spec.ts` (signed out; stops short of running code — the runtimes come from CDNs) |
+| E2E | `quiz/e2e/pcpa-project.spec.ts` (the lock signed out and without Pro; the rest signed in on Pro, `signIn(page, { pro: true })`; stops short of running code — the runtimes come from CDNs) |
 
 To add a case: its material to `PROJECT_CASES`, a generator and an assessment draw to
 `pcpaData.ts` (`CaseId`, `generateCase`, `generateAssessment`), and its checks to `CASE_CHECKS`

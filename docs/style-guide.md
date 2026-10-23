@@ -345,6 +345,7 @@ so a colour always means the same thing.
 | **Incorrect / error / destructive** | `red` (→ `--destructive` for actions) | Wrong answers, delete actions, error text |
 | **Warning / caution / "at risk"** | `amber` (with `yellow`/`orange` siblings) | Forgotten/decaying concepts, cautions, "due" nudges |
 | **Info / neutral highlight** | `blue` | Informational callouts, neutral tips |
+| **An explanation — the idea behind a concept** | `violet` (not a verdict) | A concept page's `[!idea]` card (§7.2b) |
 | **A diff: added / dropped** | `green` / `red`, the correct/incorrect pairings (§4.2) | The Resources shelf's Vintage changes: a reading an edition added (ring + *New in* pill) or dropped (ring, struck title, *Dropped in* pill) |
 | **Reward / rare** | `amber`/gold + the rainbow **foil** gradient | Gems, L3 mastery, collected cards |
 | **Pro (the paid tier)** | monochrome — `bg-foreground` / `text-background` | The **Pro** label, wherever the tier is named (`components/ProBadge.tsx`) |
@@ -592,6 +593,24 @@ the chevron nudges right. Rows are separated by a hairline inset to start under 
 
 The exam lists on the Quiz and Study Guides tabs are the main use — `components/ExamRow.tsx`
 is **the** exam row, shared by both, and an exam's accent is its row's press wash.
+
+### 7.2b Note cards — the Examiner's report shape
+
+A **note card** is a tinted aside read in place: no side rule, `rounded-xl`, `p-4`, a small
+semibold title in the family's dark text with its icon (`h-4 w-4`, `gap-1.5`), and the body at
+reading size (`text-base text-foreground`). It never folds. Three exist, one per meaning:
+
+| Card | Family (§4.2 pairing) | Icon | Where |
+|---|---|---|---|
+| **Examiner's report** | `blue` (info) | `ClipboardList` | A question's written part, after the sample answer (`ExaminerReportCard` in `components/AnswerReference.tsx`) |
+| **The idea** | `violet` | `Sparkles` | A concept page, after the bullets under the formula — `> [!idea] The idea` |
+| **Trap** | `amber` (caution) | `AlertTriangle` | A concept page, beside the formula or inside an example's answer — `> [!trap] <the slip>` |
+
+The two vault cards are callout types drawn by `components/MarkdownCallout.tsx` (`card: true` on
+the style), so they work on every markdown surface and in Obsidian (as plain callouts). A card is
+for the one thing on the page the reader must not miss; anything that can wait — worked answers,
+the closing *Exam traps* list — stays a folding callout. Don't add a fourth card without a meaning
+that none of these carries.
 
 ### 7.3 Badges & chips (`badge.tsx`)
 

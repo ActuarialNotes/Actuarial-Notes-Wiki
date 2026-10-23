@@ -4,6 +4,7 @@ import { localDayKey } from '@/lib/streak'
 import {
   observeReadiness,
   readinessDelta,
+  readinessMarkKey,
   sanitizeMarks,
   type ReadinessMarks,
 } from '@/lib/readinessDelta'
@@ -54,22 +55,28 @@ export const useReadinessMarks = create<ReadinessMarksState>((set, get) => ({
 }))
 
 /**
- * How far `examKey`'s readiness score has moved today, in whole percentage points, and
- * the recording of `score` that makes tomorrow's answer possible.
+ * How far `examKey`'s readiness score has moved today for `accountId` (null for a guest),
+ * in whole percentage points, and the recording of `score` that makes tomorrow's answer
+ * possible.
  *
  * Pass `score` as `null` while the numbers behind it are still loading — an empty mastery
  * set scores near zero, and baselining the day on that would invent a double-digit jump
  * the moment the records arrive.
  */
-export function useReadinessDelta(examKey: string | null, score: number | null): number {
+export function useReadinessDelta(
+  accountId: string | null,
+  examKey: string | null,
+  score: number | null,
+): number {
   const marks = useReadinessMarks(s => s.marks)
   const observe = useReadinessMarks(s => s.observe)
   const day = localDayKey(new Date())
+  const key = examKey ? readinessMarkKey(accountId, examKey) : null
 
   useEffect(() => {
-    if (!examKey || score === null) return
-    observe(examKey, score, day)
-  }, [examKey, score, day, observe])
+    if (!key || score === null) return
+    observe(key, score, day)
+  }, [key, score, day, observe])
 
-  return examKey ? readinessDelta(marks, examKey, day) : 0
+  return key ? readinessDelta(marks, key, day) : 0
 }

@@ -5,13 +5,17 @@
 // same split pane the study guide reads one in, so a reader can brush up before
 // the questions start.
 
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { FileText, Play, X } from 'lucide-react'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
+import { refKey, useConceptHighlight } from '@/hooks/useConceptHighlight'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+
+/** The popup's source for a walk opened from this list — what the highlight matches on. */
+const PRE_QUIZ_SOURCE = 'quiz:pre-quiz-concepts'
 
 interface Props {
   /** New-state concept names in this quiz (slug form — matches the mastery key). */
@@ -31,6 +35,11 @@ interface Props {
 export function PreQuizConcepts({ concepts, planConcepts, onStart, onQuit }: Props) {
   const openAt = useConceptPopup(s => s.openAt)
   const popupOpen = useConceptPopup(s => s.open)
+  const listRef = useRef<HTMLUListElement>(null)
+  // The study guide's active-concept highlight: as Previous / Next walk the
+  // list, the row the popup is showing is ringed, the rest fade, and it is
+  // scrolled into the part of the window the popup leaves free.
+  useConceptHighlight(listRef, PRE_QUIZ_SOURCE)
 
   // The popup is mounted by this screen alone, so it must not outlive it: left
   // open, the store would pop it back up over the next page that mounts one
@@ -71,15 +80,16 @@ export function PreQuizConcepts({ concepts, planConcepts, onStart, onQuit }: Pro
               </p>
             </div>
 
-            <ul className="space-y-1.5">
+            <ul ref={listRef} className="space-y-1.5">
               {concepts.map((name, i) => {
                 const highlight = isInPlan(name)
                 return (
                   <li key={name}>
                     <button
                       type="button"
-                      onClick={() => openAt(refs, i)}
-                      className={`w-full flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-left hover:bg-accent/60 transition-colors${highlight ? ' plan-foil-ring' : ''}`}
+                      onClick={() => openAt(refs, i, PRE_QUIZ_SOURCE)}
+                      data-wikiref={refKey(refs[i])}
+                      className={`concept-row w-full flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-left hover:bg-accent/60 transition-colors${highlight ? ' plan-foil-ring' : ''}`}
                       title={highlight ? "In today's study plan" : undefined}
                     >
                       <FileText className="h-4 w-4 shrink-0 text-violet-500" aria-hidden="true" />

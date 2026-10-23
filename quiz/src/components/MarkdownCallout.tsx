@@ -9,6 +9,7 @@ import {
   BookOpen,
   Quote,
   Pencil,
+  Sparkles,
 } from 'lucide-react'
 import type { ExtraProps } from 'react-markdown'
 import { ExamWeightLabel } from '@/components/ExamWeightLabel'
@@ -43,6 +44,13 @@ type CalloutStyle = {
    * one-line summary, not an answer).
    */
   plainBody?: boolean
+  /**
+   * A tinted note card in the shape of a question's examiner's report
+   * (`ExaminerReportCard`): no side rule, the icon and a small bold title in
+   * the accent, the body at reading size. Never folded — a card is read in
+   * place, not opened.
+   */
+  card?: boolean
 }
 
 const DEFAULT_STYLE: CalloutStyle = {
@@ -129,6 +137,27 @@ const QUOTE_STYLE: CalloutStyle = {
   accentClass: 'text-muted-foreground',
 }
 
+// A concept page's "The idea" — why the formula has the shape it has, in
+// words. Violet, which the meaning map (style guide §4.1) keeps for it, so the
+// explanation never reads as a verdict or as the blue examiner's report.
+const IDEA_STYLE: CalloutStyle = {
+  icon: Sparkles,
+  borderClass: '',
+  accentClass: 'text-violet-900 dark:text-violet-100',
+  bgClass: 'bg-violet-50 dark:bg-violet-950/50',
+  card: true,
+}
+
+// A trap set beside the idea it distorts, rather than folded into the page's
+// closing "Exam traps" list. Amber: the caution hue.
+const TRAP_STYLE: CalloutStyle = {
+  icon: AlertTriangle,
+  borderClass: '',
+  accentClass: 'text-amber-900 dark:text-amber-100',
+  bgClass: 'bg-amber-50 dark:bg-amber-950/50',
+  card: true,
+}
+
 const STYLE_MAP: Record<string, CalloutStyle> = {
   note: DEFAULT_STYLE,
   info: SKY,
@@ -158,6 +187,8 @@ const STYLE_MAP: Record<string, CalloutStyle> = {
   abstract: CYAN,
   summary: CYAN,
   tldr: CYAN,
+  idea: IDEA_STYLE,
+  trap: TRAP_STYLE,
 }
 
 function getStyle(type: string): CalloutStyle {
@@ -332,10 +363,37 @@ const CONTENT_CLASSES_SHARED = [
 
 const CONTENT_CLASSES = `text-sm text-foreground ${BODY_FRAME} ${LEAD_PARAGRAPH} ${CONTENT_CLASSES_SHARED}`
 
+// A note card's body: the article's reading size, flush with the card's padding.
+const CARD_BODY_CLASSES = `text-base text-foreground [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 ${CONTENT_CLASSES_SHARED}`
+
+function NoteCard({ style, title, children }: { style: CalloutStyle; title: string; children: ReactNode }) {
+  const Icon = style.icon
+  return (
+    <section aria-label={title} className={`not-prose my-4 space-y-2 rounded-xl p-4 ${style.bgClass ?? 'bg-muted'}`}>
+      <p className={`flex items-center gap-1.5 text-sm font-semibold ${style.accentClass}`}>
+        {Icon && <Icon aria-hidden="true" className="h-4 w-4 shrink-0" />}
+        {renderTitle(title)}
+      </p>
+      {Children.count(children) > 0 && <div className={CARD_BODY_CLASSES}>{children}</div>}
+    </section>
+  )
+}
+
 function Callout({ type, fold, title, children }: CalloutProps) {
+  const style = getStyle(type)
+  if (style.card) {
+    return (
+      <NoteCard style={style} title={title || titleCase(type)}>
+        {children}
+      </NoteCard>
+    )
+  }
+  return <FoldingCallout type={type} fold={fold} title={title} style={style}>{children}</FoldingCallout>
+}
+
+function FoldingCallout({ type, fold, title, style, children }: CalloutProps & { style: CalloutStyle }) {
   const collapsible = fold !== ''
   const [open, setOpen] = useState(fold !== '-')
-  const style = getStyle(type)
   const Icon = style.icon
   const hasBody = Children.count(children) > 0
 

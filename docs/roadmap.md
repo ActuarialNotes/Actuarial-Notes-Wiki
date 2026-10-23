@@ -108,7 +108,7 @@ An item is ✅ only when all of the following are true:
 | **AI connector** (MCP server + Agent Skill) | Claude and ChatGPT users | ✅ live, read-only, no sign-in | — | §4.5; `ai-connector.md` |
 | **Actuarial Tools**: 32 calculators + 3 data sources | People and agents | ✅ live at `/tools` and over MCP | `TOOLS_ENABLED` | §4.5; `actuarial-tools.md` |
 | **Cowork**: Sources and Workflows | Practitioners | 🟡 Preview, one approved account | `COWORK_ENABLED` + `PREVIEW_APPROVED_EMAILS` | §4.5; `cowork.md`, `workflows.md`, `cowork-source-inventory.md` |
-| **Projects**: the PCPA simulator | PCPA candidates | ✅ live, 3 briefs | — | `pcpa-project.md` |
+| **Projects**: the PCPA simulator | PCPA candidates (Pro) | ✅ live, 3 briefs, Pro only | — | `pcpa-project.md` |
 | **Quiz Battle** | Candidates | ✅ live | — | `quiz-battle.md` |
 | **Concept Craft** | Candidates | ✅ live. Its relation labels are AI-written and not yet reviewed | — | `concept-craft.md` |
 | **Store** and Gem Shop | Candidates | ✅ live. Sells nothing; links to sellers | — | `store.md` |

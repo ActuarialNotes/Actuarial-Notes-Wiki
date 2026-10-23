@@ -12,12 +12,14 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:e3fcb9536dfc5a245ec9fcaa55258729a293b4b60fd7a092efa79c61caacebf1
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:5bee5d1d247da9465c95d6f2cd201e3ce417e3fb595a1b20291acc360d44c212
+  sources:
+    - "SOA Exam FAM-S sample questions (June 15, 2026), Q13, p.11, sha256:ef535e2198444052082114642e5884d8fe279975ebe7059abb363c5ecfcfd4de — https://www.soa.org/globalassets/assets/files/edu/2024/fall/questions/2024-10-exam-fam-s-sample-questions.pdf"
+    - "SOA Exam FAM-S sample solutions (July 17, 2026), Q13, p.7, sha256:7b3f61d8c385f486f3dbc586cdaab035fe9c45a055710e8327d213c4d3e71b48 — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/2024-10-exam-fam-s-sample-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-fam/fams-013.md
@@ -40,7 +42,7 @@ Determine the likelihood function of $p$.
 $$f(x) = p\frac{1}{100}e^{-x/100} + (1-p)\frac{1}{10{,}000}e^{-x/10{,}000}$$
 
 $$\begin{align*}
-L(100, 200) &= f(100)f(2000) \\
+L(100, 200)\text{ (as printed)} &= f(100)f(2000) \\
 &= \left(\frac{pe^{-1}}{100} + \frac{(1-p)e^{-0.01}}{10{,}000}\right)\left(\frac{pe^{-20}}{100} + \frac{(1-p)e^{-0.2}}{10{,}000}\right)
 \end{align*}$$
 

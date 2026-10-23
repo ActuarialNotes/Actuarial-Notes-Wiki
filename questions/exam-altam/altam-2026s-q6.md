@@ -16,12 +16,14 @@ wiki_link:
   - Concepts/Lognormal+Distribution
 points: 10
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:fd545e868f16b3394dc903daef60a1a5723de872d10c19cdad2dc57868df7013
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:3e9524d04beac8b66ddc2a87050d54d198b4ef70c1b7701b77a0d270a6e7560d
+  sources:
+    - "SOA Exam ALTAM Spring (April) 2026 – exam (questions), Q6, pp.12-13, sha256:be424c84e360f858fda955257513b27618d695b7e05cae80fca475145f90a9aa — https://www.soa.org/globalassets/assets/files/edu/2026/altam/april-2026-altam-exam.pdf"
+    - "SOA ALTAM Spring 2026 Model Solutions and Examiners' Comments, Q6, pp.13-15, sha256:ca1bffa86e9b64729358c65e002dc38c533661dda14693310f8b3cddc852b4d6 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/solutions/2026-spring-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-2026s-q6.md
@@ -58,7 +60,7 @@ $$\Rightarrow \Phi\left(-d_1(0)\right) = 0.26129$$
 
 $$d_2(0) = d_1(0) - \sigma\sqrt{10} = -0.15121 \quad \Rightarrow \Phi\left(-d_2(0)\right) = 0.56009$$
 
-$$\Rightarrow p(0) = 37{,}544.2 - 121{,}242.8 = 16{,}301.4$$
+$$\Rightarrow p(0) = 37{,}544.2 - 121{,}242.8\text{ (as printed)} = 16{,}301.4$$
 
 $${}_{10}p_{70} = \frac{l_{80}}{l_{70}} = 0.83064$$
 
@@ -84,7 +86,7 @@ $$\Rightarrow \pi(0) = {}_{10}p_{70}\,p(0) = 13540.65$$
 
 ### Examiner Report
 1. Questions involving option valuation are usually the poorest scoring questions on ALTAM exams, and this was not an exception.
-2. Nevertheless, part (i) was done reasonably well by most of the candidates who attempted it.
+2. Nevertheless, part (i) (as printed) was done reasonably well by most of the candidates who attempted it.
 3. The most common error was ignoring, or partially ignoring the initial 500 expense. Candidates were awarded partial credit if the calculation was otherwise correct.
 
 ## Part b (1.5 points)
@@ -120,7 +122,7 @@ $$
 \end{align*}
 $$
 
-We are given that $S_t$ follows a lognormal process, with parameters $\mu = 0.05$ and $\sigma = 0.25$. That means that for a fixed $t$, $S_t$ has a lognnormal distribution with parameters $t\mu$ and $\sqrt{t}\sigma$,
+We are given that $S_t$ follows a lognormal process, with parameters $\mu = 0.05$ and $\sigma = 0.25$. That means that for a fixed $t$, $S_t$ has a lognnormal (as printed) distribution with parameters $t\mu$ and $\sqrt{t}\sigma$,
 
 $$\Rightarrow S_{10} \sim \text{logN}\left(10\mu,\ \sqrt{10}\sigma\right) \text{ i.e. } S_{10} \sim \text{logN}(0.5,\ 0.790569)$$
 
@@ -133,7 +135,7 @@ $${}_{10}p_{70}\,(0.35548) = 0.29528$$
 ### Examiner Report
 1. This part, relates to material from FAM, where it is explained that underlying the Black Scholes formula is an assumption that the risky asset price follows a lognormal process.
 2. A small number of stronger candidates correctly identified the random variable ($S_{10}$) and also correctly identified the threshold for triggering the guarantee, but almost none were able to calculate the probability.
-3. The key misunderstanding was how to convert the information about the lognnormal process into information about the probability distribution of $S_{10}$
+3. The key misunderstanding was how to convert the information about the lognnormal (as printed) process into information about the probability distribution of $S_{10}$
 
 ## Part d (2 points)
 
@@ -158,7 +160,7 @@ $$\Rightarrow \text{GMIB} = 0.105(148{,}024) = 15{,}543 \text{ p.y.}$$
 
 $$0.105 = \frac{1}{\ddot{a}_{80_j}} \Rightarrow \ddot{a}_{80_j} = 9.524.$$
 
-From the tables, at $i = 0.05$, $\ddot{a}_{80_i} = 8.5484$. As the annuity value is a decreasing function of the interest rate, it follows that $j < 0.05$
+From the tables, at $i = 0.05$, $\ddot{a}_{80_i} = 8.5484$ (as printed). As the annuity value is a decreasing function of the interest rate, it follows that $j < 0.05$
 
 ### Examiner Report
 1. Part (i) was done well by those that attempted it.

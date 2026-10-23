@@ -16,12 +16,14 @@ wiki_link:
   - Concepts/Profit+Margin
 points: 12
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:b09241dc815bb6304a362d154e201c919d303493dd084d5a4d01d66b43767672
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:946d70748ebaabe606cbb3ad15935d4be826278a288020e478c4006078be9093
+  sources:
+    - "SOA Exam ALTAM Fall 2025 – exam (questions), Q5, pp.9-11, sha256:8298b1396b4c2dac7679324ddfc5451f9ebeb004d5dd019fb961a7ad76f8fbb8 — https://www.soa.org/globalassets/assets/files/edu/2025/fall/exams/2025-fall-altam-exam.pdf"
+    - "SOA ALTAM Fall 2025 Model Solutions and Examiners' Comments, Q5, pp.10-11, sha256:7d087ea5f200ed24a6bb37c8e74edebb3fc45943458d10d06bc02e46cd8f6b2a — https://www.soa.org/globalassets/assets/files/edu/2026/spring/solutions/2025-11-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-2025f-q5.md
@@ -84,7 +86,7 @@ Total: $\mathbf{33{,}083.75}$
 
 ### Examiner Report
 1. Overall performance on this question was very variable. Very few candidates omitted the question entirely, and around 30% earned full credit on at least 3 parts of the question. However, for parts (b), (c), and (d), many candidates earned little or no partial credit.
-2. Part (a) was done well overall. Many candidates used Excel to multiply the matrices in (a)(i), which earned full credit if correct. In (a)(ii) the most common error was using ${}_2p_{80}^{00}$ for the probability of the death benefit payment in the second year, but that probability includes the probability that the life died in the first year. The deferred probability is required for the year 2 benefit values.
+2. Part (a) was done well overall. Many candidates used Excel to multiply the matrices in (a)(i), which earned full credit if correct. In (a)(ii) the most common error was using ${}_2p_{80}^{00}$ (as printed) for the probability of the death benefit payment in the second year, but that probability includes the probability that the life died in the first year. The deferred probability is required for the year 2 benefit values.
 
 ## Part b (1 point)
 
@@ -112,7 +114,7 @@ The gross premium policy value at time $t$ for a policy in state $j$ is denoted 
 $$
 \begin{align*}
 {}_1V^{(0)} &= 50{,}000v\left({}_1p_{81}^{01}\right) + 100{,}000v\left({}_1p_{81}^{02}\right) + 300 - P \\
-&= 50{,}000(0.95)(0.20) + 100{,}000(0.95)(0.10) + 300 - 19.405.97 \\
+&= 50{,}000(0.95)(0.20) + 100{,}000(0.95)(0.10) + 300 - 19.405.97\text{ (as printed)} \\
 &= \mathbf{-105.97}
 \end{align*}
 $$
@@ -122,7 +124,7 @@ $$
 $$
 \begin{align*}
 {}_1V^{(1)} &= 50{,}000v\left({}_1p_{81}^{11}\right) + 100{,}000v\left({}_1p_{81}^{12}\right) + 300 \\
-&= 50{,}000(0.95)(0.4) + 100{,}000(0.95)(0.30) \\
+&= 50{,}000(0.95)(0.4) + 100{,}000(0.95)(0.30)\text{ (as printed)} \\
 &= \mathbf{47{,}800}
 \end{align*}
 $$

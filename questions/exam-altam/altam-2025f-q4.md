@@ -15,12 +15,14 @@ wiki_link:
   - Concepts/Hypothesis+Testing
 points: 10
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:2222b9c17b10e112fff41993fd0da42c2e11043461f0ba62dd3edfdaaa6d0dae
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:4774e85736a11fab7492c6bf9e3304a2b35c3dc39a2fd22555c92ddeae39c41c
+  sources:
+    - "SOA Exam ALTAM Fall 2025 – exam (questions), Q4, pp.7-8, sha256:8298b1396b4c2dac7679324ddfc5451f9ebeb004d5dd019fb961a7ad76f8fbb8 — https://www.soa.org/globalassets/assets/files/edu/2025/fall/exams/2025-fall-altam-exam.pdf"
+    - "SOA ALTAM Fall 2025 Model Solutions and Examiners' Comments, Q4, pp.7-9, sha256:7d087ea5f200ed24a6bb37c8e74edebb3fc45943458d10d06bc02e46cd8f6b2a — https://www.soa.org/globalassets/assets/files/edu/2026/spring/solutions/2025-11-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-2025f-q4.md
@@ -102,9 +104,9 @@ Show that the age 65 forces of mortality for the two lines are significantly dif
 ### Explanation
 From asymptotic MLE properties, $\hat{\mu}_{65}^A - \hat{\mu}_{65}^B$ is approximately Normally distributed, with variance equal to the sum of the individual MLE variances.
 
-We approximate this variance by $\sigma_A^2 + \sigma_B^2 = 4.3 \times 10^{-7} = 0.00069^2$. Hence, a 95% CI for $\mu_{65}^A - \mu_{65}^B$ is
+We approximate this variance by $\sigma_A^2 + \sigma_B^2 = 4.3 \times 10^{-7}\text{ (as printed)} = 0.00069^2$. Hence, a 95% CI for $\mu_{65}^A - \mu_{65}^B$ is
 
-$$\left(\left(\hat{\mu}_x^A - \hat{\mu}_x^B\right) \pm 1.95(0.00069)\right) = (0.0017,\ 0.0044).$$
+$$\left(\left(\hat{\mu}_x^A - \hat{\mu}_x^B\right) \pm 1.95\text{ (as printed)}(0.00069)\right) = (0.0017,\ 0.0044).$$
 
 As this CI does not contain 0, at the 95% confidence level the null hypothesis of equal forces is rejected.
 

@@ -16,12 +16,14 @@ wiki_link:
   - Concepts/Adverse+Selection
 points: 10
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
   content_hash: sha256:516a58625bb3496b9371174cdbf7f6cc1ee124228165c6600a85537e8cb113f1
-  sources: []
+  sources:
+    - "SOA Exam ALTAM Spring (April) 2026 – exam (questions), Q2, pp.4-5, sha256:be424c84e360f858fda955257513b27618d695b7e05cae80fca475145f90a9aa — https://www.soa.org/globalassets/assets/files/edu/2026/altam/april-2026-altam-exam.pdf"
+    - "SOA ALTAM Spring 2026 Model Solutions and Examiners' Comments, Q2, pp.2-4, sha256:ca1bffa86e9b64729358c65e002dc38c533661dda14693310f8b3cddc852b4d6 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/solutions/2026-spring-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-2026s-q2.md

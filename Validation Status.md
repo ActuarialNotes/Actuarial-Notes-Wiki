@@ -72,7 +72,7 @@ A *served* question is one the quiz can draw; an off-syllabus one is kept for th
 | Severity | Open |
 |---|---:|
 | major | 10 |
-| minor | 122 |
+| minor | 123 |
 | nit | 17 |
 
 ### Needs attention first

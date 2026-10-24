@@ -252,7 +252,10 @@ to §4. Where an item has a former roadmap ID (P0–P4), §4 gives it.
    by unverified files while it runs. **Q1 ✅ 2026-10-23: 490 of 494 verified** (two critical
    transcription errors fixed; four questions held on an SOA-side conflict for the maintainer); SRM's
    G7 passes. **Q2 ✅ 2026-10-23: all 394 Exam 6C questions verified** (6C's G7 passes; 194
-   report opening paragraphs restored that C13's scorer had missed). Next: Q3.
+   report opening paragraphs restored that C13's scorer had missed). **Q4 ✅ and Q3's report re-read ✅
+   2026-10-24:** all 156 off-syllabus questions on Exam 9's and 8's papers verified, and every report and
+   explanation on Exams 7, 8 and 9 re-read against the printed paper (almost none was CAS's text; all
+   restored). Left: the residue — six held questions, fm-231, four FM retags, Exam P's re-cite, chart crops.
 0. ~~**Content plan, Phase 1: ready means ready.**~~ ✅ 2026-10-18: every `ready` exam passes all
    seven gates (P and FM were at 5 and 6, C8); `publication_readiness.py --hold` guards them in CI;
    no open critical finding is left (V6: *MCT*, *Capital Required* and seven more pages, ÷1.5 not
@@ -551,7 +554,7 @@ Waves 0 and 1 are done. Wave 2 is mostly done.
 | V6 | The 2 open critical findings | ✅ 2026-10-18 | — | Runs `1567`, `dd77`: *MCT*, *Capital Required*, *Supervisory Target Capital Ratio*, *Probable Maximum Loss* verified; the ×1.5 and LICAT's "Base Solvency Buffer" fixed on 20 more pages (now `in_review`); the 6C figure builder fixed. Left: *Registered Reinsurance* F-002 (major), for a writer. |
 | V7 | Run summaries for the Exam 7 and DISC-RM runs | ✅ 2026-10-18 | — | Reconstructed from the per-file logs: `.verify/_runs/2026-10-11T02-10Z-e7.md` and `…-dv14.md`. |
 | V8 | Verify the 363 concept-gap pages | ⬜ | rides V5 | Written in phases A–D; human review required (that plan's D5). |
-| V11 | **Every question file verified** (content plan, Phase Q) | 🟡 Q1 ✅, Q2 ✅, Q3 next | **Now** | 3,637 of 3,643 served questions verified after Q1 and Q2 (from 2,826; the 6 left held for the maintainer), 131 of 290 off-syllabus (2026-10-23; `generate_validation_status.py` now writes a *Question banks* table). The waves: Q1 SOA prelims (494), Q2 Exam 6C (394), Q3 the residue, Q4 Exam 9's and 8's off-syllabus (156). Takes over the G7 halves of C5 and C9. |
+| V11 | **Every question file verified** (content plan, Phase Q) | 🟡 Q1 ✅, Q2 ✅, Q4 ✅; Q3's residue left | **Now** | 3,637 of 3,643 served questions verified after Q1 and Q2 (from 2,826; the 6 left held for the maintainer), 287 of 290 off-syllabus (2026-10-24; `generate_validation_status.py` now writes a *Question banks* table). The waves: Q1 SOA prelims (494), Q2 Exam 6C (394), Q3 the residue, Q4 Exam 9's and 8's off-syllabus (156). Takes over the G7 halves of C5 and C9. |
 
 ### 4.5 A: AI and practitioner products
 

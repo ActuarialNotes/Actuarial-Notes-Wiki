@@ -12,6 +12,7 @@ import { ProBadge } from '@/components/ProBadge'
 import { CheckMark } from '@/components/CheckMark'
 import { FundArt, ProgressArt, ProjectArt, StrategyArt, StudyPlanArt } from '@/components/ProBenefitArt'
 import { trackUpgradeClicked } from '@/lib/analytics'
+import { cn } from '@/lib/utils'
 
 // What Pro unlocks — each one a thing the app actually gates on `isPro`
 // today, told as what it does for the reader. Keep this list honest: a
@@ -25,9 +26,9 @@ const HEADLINE_BENEFITS = [
   'Rehearse the PCPA project from start to finish',
 ]
 
-// Every card is the same shape: a picture of the surface, a title, a line or
-// two. A card marked `wide` spans both columns; its picture needs the room.
-const BENEFITS: { title: string; body: string; Art: () => React.JSX.Element; wide?: boolean }[] = [
+// Every card is the same shape and the same width: a picture of the surface,
+// a title, a line or two.
+const BENEFITS: { title: string; body: string; Art: () => React.JSX.Element }[] = [
   {
     title: 'Follow a Daily Study Plan',
     body: 'Set your exam date and the syllabus is split into daily lists, sized to the time you have left. Fall behind or start forgetting something, and the plan changes to match.',
@@ -42,7 +43,6 @@ const BENEFITS: { title: string; body: string; Art: () => React.JSX.Element; wid
     title: 'Track Learning Progress',
     body: 'Each concept moves up from New to Level 3 as you answer questions on it, and you can see which questions moved it. Leave one too long and it drops back a level, so you find out in time to review it.',
     Art: ProgressArt,
-    wide: true,
   },
   {
     title: 'Rehearse the PCPA Project',
@@ -51,7 +51,7 @@ const BENEFITS: { title: string; body: string; Art: () => React.JSX.Element; wid
   },
   {
     title: 'Fund New Exams and Questions',
-    body: 'Actuarial Notes is made by one person. Your subscription pays for the hours that go into adding exams, writing questions and checking them against the source material.',
+    body: 'Your subscription pays for the hours that go into adding exams, writing questions and checking them against the source material.',
     Art: FundArt,
   },
 ]
@@ -212,8 +212,17 @@ export default function Upgrade() {
       <section className="space-y-4">
         <h2 className="text-center text-xl font-semibold">What you get</h2>
         <div className="grid gap-4 sm:grid-cols-2">
-          {BENEFITS.map(({ title, body, Art, wide }) => (
-            <Card key={title} className={wide ? 'overflow-hidden sm:col-span-2' : 'overflow-hidden'}>
+          {BENEFITS.map(({ title, body, Art }, i) => (
+            // An odd card out at the end is centred on its row, still one
+            // column wide, rather than leaving a hole beside it.
+            <Card
+              key={title}
+              className={cn(
+                'overflow-hidden',
+                BENEFITS.length % 2 === 1 && i === BENEFITS.length - 1 &&
+                  'sm:col-span-2 sm:mx-auto sm:w-[calc(50%-0.5rem)]',
+              )}
+            >
               <CardContent className="p-4 space-y-3">
                 <Art />
                 <div className="space-y-1">

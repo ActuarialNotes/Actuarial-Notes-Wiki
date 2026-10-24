@@ -98,6 +98,9 @@ on one is.
 Each entry: the date, the screen, what the maintainer said, and the rule it
 implies. Newest first.
 
+- 2026-10-24 · Upgrade page · Cut "Actuarial Notes is made by one person."
+  from the funding card. → Don't lead with who makes the app; say what the
+  money pays for.
 - 2026-10-23 · Upgrade page · Card titles were too vague ("See what's
   sticking"). Wanted: the feature, said precisely, Title Case, like "Track
   Learning Progress". → Titles are a verb plus the feature's in-app name.

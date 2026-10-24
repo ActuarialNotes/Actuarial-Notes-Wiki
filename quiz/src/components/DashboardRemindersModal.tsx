@@ -1,9 +1,11 @@
-import { X, Bell, Loader2 } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { X, Bell, Loader2, Lock } from 'lucide-react'
 import { useEmailPrefs } from '@/hooks/useEmailPrefs'
 import { formatHourLabel, detectTimezone } from '@/lib/dailyEmail'
 import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
 import { useSoundOnToggle } from '@/hooks/useSoundEffects'
+import { ProBadge } from '@/components/ProBadge'
 
 const HOURS = Array.from({ length: 24 }, (_, h) => h)
 
@@ -11,14 +13,22 @@ const HOURS = Array.from({ length: 24 }, (_, h) => h)
 // notification icon — the one place the preference is set: the opt-in toggle
 // plus a local send-time picker persisted to user_email_prefs. The email itself is sent server-side by the
 // daily-plan-email edge function (see docs/daily-plan-email.md).
+//
+// The email is today's study plan, and the study plan is Pro, so the email is
+// too: a free account sees the lock and an Upgrade link instead of the toggle,
+// and the sender skips any account that isn't Pro (an opt-in kept from a lapsed
+// subscription stays stored, and resumes if they subscribe again).
 
 interface Props {
   open: boolean
   onClose: () => void
   email: string
+  isPro: boolean
+  /** The subscription is still resolving — don't flash the lock at a Pro reader. */
+  subscriptionLoading: boolean
 }
 
-export function DashboardRemindersModal({ open, onClose, email }: Props) {
+export function DashboardRemindersModal({ open, onClose, email, isPro, subscriptionLoading }: Props) {
   // Paper: the panel sliding in.
   useSoundOnToggle(open, 'open', 'close')
   const { prefs, loading, saving, error, save } = useEmailPrefs()
@@ -37,7 +47,10 @@ export function DashboardRemindersModal({ open, onClose, email }: Props) {
         {/* Header */}
         <div className="flex items-center gap-2 px-4 h-12 shrink-0">
           <Bell className="h-4 w-4 text-primary shrink-0" />
-          <span className="flex-1 font-semibold text-sm">Daily reminder email</span>
+          <span className="flex-1 flex items-center gap-1.5 font-semibold text-sm">
+            Daily reminder email
+            {!isPro && !subscriptionLoading && <ProBadge />}
+          </span>
           <button
             type="button"
             onClick={onClose}
@@ -55,9 +68,14 @@ export function DashboardRemindersModal({ open, onClose, email }: Props) {
             Days with nothing scheduled are skipped.
           </p>
 
-          {loading ? (
+          {loading || subscriptionLoading ? (
             <div className="flex justify-center py-4">
               <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+            </div>
+          ) : !isPro ? (
+            <div className="flex items-start gap-2 rounded-lg bg-primary/5 px-3 py-2 text-sm text-muted-foreground">
+              <Lock className="h-4 w-4 shrink-0 mt-0.5 text-primary/60" />
+              <span>The daily email sends your study plan, which comes with Pro.</span>
             </div>
           ) : (
             <>
@@ -116,13 +134,27 @@ export function DashboardRemindersModal({ open, onClose, email }: Props) {
           )}
         </div>
 
-        <div className="px-5 pb-5 flex justify-end">
+        <div className="px-5 pb-5 flex justify-end gap-2">
+          {!isPro && !subscriptionLoading && (
+            <Link
+              to="/upgrade"
+              onClick={onClose}
+              className="rounded-md px-3 py-2 text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+            >
+              Upgrade
+            </Link>
+          )}
           <button
             type="button"
             onClick={onClose}
-            className="rounded-md px-3 py-2 text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+            className={cn(
+              'rounded-md px-3 py-2 text-sm font-medium transition-colors',
+              isPro || subscriptionLoading
+                ? 'bg-primary text-primary-foreground hover:bg-primary/90'
+                : 'bg-muted text-foreground hover:bg-accent',
+            )}
           >
-            Done
+            {isPro || subscriptionLoading ? 'Done' : 'Not now'}
           </button>
         </div>
       </div>

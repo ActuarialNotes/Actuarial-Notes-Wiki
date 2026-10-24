@@ -134,7 +134,7 @@ export default function Dashboard() {
   const { syllabi, loading: syllabusLoading, error: syllabusError } = useWikiSyllabus()
   const { progress: examProgress, targetDates, examVariants, updateTargetDate, loadingExams } = useExamProgress()
   const { records: masteryRecords, loading: masteryLoading, refresh: refreshMastery } = useConceptMastery()
-  const { isPro, refresh: refreshSubscription } = useSubscription()
+  const { isPro, loading: subscriptionLoading, refresh: refreshSubscription } = useSubscription()
   const { balance: gemBalance } = useGems()
   const { questions: allQuestions } = useAllQuestions()
 
@@ -962,6 +962,8 @@ export default function Dashboard() {
           open={remindersOpen}
           onClose={() => setRemindersOpen(false)}
           email={user?.email ?? ''}
+          isPro={isPro}
+          subscriptionLoading={subscriptionLoading}
         />
       )}
       {!isGuest && (

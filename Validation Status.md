@@ -92,31 +92,31 @@ Verified once, then edited. The check no longer speaks for what is on the page.
 
 | Page | Checked | Sources |
 |---|---|---:|
-| `questions/exam-8/cas8-2012-q1.md` | 2026-10-24 | 1 |
-| `questions/exam-8/cas8-2012-q11.md` | 2026-10-24 | 1 |
-| `questions/exam-8/cas8-2012-q12.md` | 2026-10-24 | 1 |
-| `questions/exam-8/cas8-2012-q13.md` | 2026-10-24 | 1 |
-| `questions/exam-8/cas8-2012-q14.md` | 2026-10-24 | 1 |
-| `questions/exam-8/cas8-2012-q15.md` | 2026-10-24 | 1 |
-| `questions/exam-8/cas8-2012-q16.md` | 2026-10-24 | 1 |
-| `questions/exam-8/cas8-2012-q17.md` | 2026-10-24 | 1 |
-| `questions/exam-8/cas8-2012-q18.md` | 2026-10-24 | 1 |
-| `questions/exam-8/cas8-2012-q19.md` | 2026-10-24 | 1 |
-| `questions/exam-8/cas8-2012-q2.md` | 2026-10-24 | 1 |
-| `questions/exam-8/cas8-2012-q20.md` | 2026-10-24 | 1 |
-| `questions/exam-8/cas8-2012-q21.md` | 2026-10-24 | 1 |
-| `questions/exam-8/cas8-2012-q22.md` | 2026-10-24 | 1 |
-| `questions/exam-8/cas8-2012-q23.md` | 2026-10-24 | 1 |
-| `questions/exam-8/cas8-2012-q3.md` | 2026-10-24 | 1 |
-| `questions/exam-8/cas8-2012-q4.md` | 2026-10-24 | 1 |
-| `questions/exam-8/cas8-2012-q5.md` | 2026-10-24 | 1 |
-| `questions/exam-8/cas8-2012-q6.md` | 2026-10-24 | 1 |
-| `questions/exam-8/cas8-2013-q1.md` | 2026-10-24 | 1 |
-| `questions/exam-8/cas8-2013-q10.md` | 2026-10-24 | 1 |
-| `questions/exam-8/cas8-2013-q11.md` | 2026-10-24 | 1 |
-| `questions/exam-8/cas8-2013-q12.md` | 2026-10-24 | 1 |
-| `questions/exam-8/cas8-2013-q13.md` | 2026-10-24 | 1 |
-| `questions/exam-8/cas8-2013-q14.md` | 2026-10-24 | 1 |
+| `questions/exam-7/cas7-2013-q1.md` | 2026-10-24 | 1 |
+| `questions/exam-7/cas7-2013-q10.md` | 2026-10-24 | 1 |
+| `questions/exam-7/cas7-2013-q11.md` | 2026-10-24 | 1 |
+| `questions/exam-7/cas7-2013-q12.md` | 2026-10-24 | 1 |
+| `questions/exam-7/cas7-2013-q13.md` | 2026-10-24 | 1 |
+| `questions/exam-7/cas7-2013-q2.md` | 2026-10-24 | 1 |
+| `questions/exam-7/cas7-2013-q3.md` | 2026-10-24 | 1 |
+| `questions/exam-7/cas7-2013-q4.md` | 2026-10-24 | 1 |
+| `questions/exam-7/cas7-2013-q5.md` | 2026-10-24 | 1 |
+| `questions/exam-7/cas7-2013-q6.md` | 2026-10-24 | 1 |
+| `questions/exam-7/cas7-2013-q7.md` | 2026-10-24 | 1 |
+| `questions/exam-7/cas7-2013-q8.md` | 2026-10-24 | 1 |
+| `questions/exam-7/cas7-2013-q9.md` | 2026-10-24 | 1 |
+| `questions/exam-7/cas7-2016-q1.md` | 2026-10-24 | 1 |
+| `questions/exam-7/cas7-2016-q10.md` | 2026-10-24 | 1 |
+| `questions/exam-7/cas7-2016-q11.md` | 2026-10-24 | 1 |
+| `questions/exam-7/cas7-2016-q12.md` | 2026-10-24 | 1 |
+| `questions/exam-7/cas7-2016-q13.md` | 2026-10-24 | 1 |
+| `questions/exam-7/cas7-2016-q14.md` | 2026-10-24 | 1 |
+| `questions/exam-7/cas7-2016-q15.md` | 2026-10-24 | 1 |
+| `questions/exam-7/cas7-2016-q16.md` | 2026-10-24 | 1 |
+| `questions/exam-7/cas7-2016-q17.md` | 2026-10-24 | 1 |
+| `questions/exam-7/cas7-2016-q18.md` | 2026-10-24 | 1 |
+| `questions/exam-7/cas7-2016-q19.md` | 2026-10-24 | 1 |
+| `questions/exam-7/cas7-2016-q2.md` | 2026-10-24 | 1 |
 
 ---
 

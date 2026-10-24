@@ -150,6 +150,10 @@ def _extract_pdf(path: Path, ocr: bool) -> dict:
     texts: list[str] = []
     ocr_pages: list[int] = []
     image_pages: list[int] = []
+    # A scanned page OCR was tried on and gave nothing back. Tesseract fails
+    # quietly (several fetches OCR'ing at once left whole booklets blank), and
+    # every stem on such a page then reads as `diverges`, so say so.
+    ocr_failed: list[int] = []
     for i, page in enumerate(doc):
         text = page.get_text()
         scanned = len(text.strip()) < SCAN_TEXT_THRESHOLD and bool(page.get_images())
@@ -161,6 +165,8 @@ def _extract_pdf(path: Path, ocr: bool) -> dict:
                     text = ocr_text
                     ocr_pages.append(i + 1)
                     scanned = False
+            if scanned:
+                ocr_failed.append(i + 1)
         if scanned:
             image_pages.append(i + 1)
         texts.append(text)
@@ -170,6 +176,7 @@ def _extract_pdf(path: Path, ocr: bool) -> dict:
         "outline": [[lvl, str(t), pg] for lvl, t, pg, *_ in doc.get_toc()],
         "ocr_pages": ocr_pages,
         "image_pages": image_pages,
+        "ocr_failed": ocr_failed,
         "ocr": use_ocr,
     }
     doc.close()
@@ -193,18 +200,29 @@ def fetch(url: str, ocr: bool = True, refresh: bool = False, root: Path | None =
     A source already cached is returned as is — that is the point — unless
     `refresh` is set, which re-downloads it. A changed sha256 on refresh means
     the publisher replaced the file under the same URL.
+
+    One exception: a PDF cached *without* OCR (`report_gaps.py` reads only the
+    text layer, and fetches with `ocr=False`) is re-extracted from the copy on
+    disk when a caller asks for OCR and its scanned pages could have it. Served
+    as cached, it left every stem on a scanned booklet reading as `diverges`.
     """
     folder = source_dir(url, root)
     meta_path = folder / "meta.json"
     if meta_path.is_file() and not refresh:
-        return json.loads(meta_path.read_text(encoding="utf-8"))
-
-    data, ctype, final = RE.fetch(url)
-    kind = RE.kind_of(data, ctype, urllib.parse.urlparse(final).path)
-    folder.mkdir(parents=True, exist_ok=True)
-    ext = {"pdf": ".pdf", "html": ".html"}.get(kind, ".bin")
-    original = folder / f"source{ext}"
-    original.write_bytes(data)
+        meta = json.loads(meta_path.read_text(encoding="utf-8"))
+        if not (ocr and wants_ocr(meta) and (folder / meta["file"]).is_file()):
+            return meta
+        original = folder / meta["file"]
+        data, final, kind = original.read_bytes(), meta["final_url"], meta["kind"]
+        fetched = meta["fetched"]
+    else:
+        data, ctype, final = RE.fetch(url)
+        kind = RE.kind_of(data, ctype, urllib.parse.urlparse(final).path)
+        folder.mkdir(parents=True, exist_ok=True)
+        ext = {"pdf": ".pdf", "html": ".html"}.get(kind, ".bin")
+        original = folder / f"source{ext}"
+        original.write_bytes(data)
+        fetched = date.today().isoformat()
 
     if kind == "pdf":
         info = _extract_pdf(original, ocr)
@@ -228,15 +246,25 @@ def fetch(url: str, ocr: bool = True, refresh: bool = False, root: Path | None =
         "bytes": len(data),
         "kind": kind,
         "file": original.name,
-        "fetched": date.today().isoformat(),
+        "fetched": fetched,
         **info,
     }
     meta_path.write_text(json.dumps(meta, indent=1, ensure_ascii=False), encoding="utf-8")
     return meta
 
 
+def wants_ocr(meta: dict) -> bool:
+    """A cached PDF whose scanned pages were extracted without OCR, on a machine
+    that has it — the copy `fetch(ocr=True)` re-extracts."""
+    if meta.get("kind") != "pdf" or meta.get("ocr") or not meta.get("image_pages"):
+        return False
+    tools = _ocr_tools()
+    return bool(tools and tools[0]())
+
+
 def source_file(url: str, root: Path | None = None) -> Path:
-    meta = fetch(url, root=root)
+    # Only the file is wanted here, so a copy cached without OCR will do.
+    meta = fetch(url, ocr=False, root=root)
     return source_dir(url, root) / meta["file"]
 
 
@@ -279,7 +307,11 @@ def _summary(meta: dict) -> str:
         bits.append(f"OCR pages {ranges(meta['ocr_pages'])}")
     if meta.get("image_pages"):
         bits.append(f"image-only pages {ranges(meta['image_pages'])}")
-    return f"{meta['url']}\n  " + " · ".join(bits) + f"\n  {source_dir(meta['url'])}"
+    out = f"{meta['url']}\n  " + " · ".join(bits) + f"\n  {source_dir(meta['url'])}"
+    if meta.get("ocr_failed"):
+        out += (f"\n  WARNING: OCR returned nothing on pages {ranges(meta['ocr_failed'])} — "
+                "re-fetch with --refresh, one document at a time")
+    return out
 
 
 def ranges(nums: list[int]) -> str:

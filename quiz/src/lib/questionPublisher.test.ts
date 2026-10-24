@@ -49,12 +49,18 @@ describe('the question bank, by publisher', () => {
   const byId = new Map(questions.map(x => [x.id, x]))
 
   // The SOA sample question a fact check cites the question against, by number:
-  // "SOA Exam P Sample Questions (Aug 2026 rev.), Q 4, questions PDF p.3, …".
+  // "SOA Exam P Sample Questions (Aug 2026 rev.), Q 4, questions PDF p.3, …",
+  // "SOA ASTAM Sample Questions (version of Feb. 23, 2026), Q15, p.20, …". FAM-L
+  // numbers its questions by AMLCR chapter, so its "Q6.25" is `faml-6-25`.
   const citedSampleNumbers = (x: Question) => (x.verification?.sources ?? []).flatMap(source => {
-    const match = /^SOA Exam (?:P|FM) Sample (?:Questions|Solutions)\b[^,]*, Q ?(\d+)\b/.exec(source)
-    return match ? [Number(match[1])] : []
+    const match = /^SOA\b.*?\bsample\b.*?, Q ?(\d+)(?:\.(\d+))?\b/i.exec(source)
+    if (!match) return []
+    return [match[2] === undefined ? `${Number(match[1])}` : `${Number(match[1])}.${Number(match[2])}`]
   })
-  const idNumber = (x: Question) => Number(/(\d+)$/.exec(x.id)?.[1])
+  const idNumber = (x: Question) => {
+    const chapter = /-(\d+)-(\d+)$/.exec(x.id)
+    return chapter ? `${Number(chapter[1])}.${Number(chapter[2])}` : `${Number(/(\d+)$/.exec(x.id)?.[1])}`
+  }
 
   it('names a publisher for every question', () => {
     expect(questions.length).toBeGreaterThan(0)

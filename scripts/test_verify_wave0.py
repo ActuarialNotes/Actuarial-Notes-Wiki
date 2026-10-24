@@ -56,6 +56,20 @@ class SourceCacheTests(unittest.TestCase):
         meta.update(image_pages=[], ocr_failed=[], ocr_pages=[1, 2, 3])
         self.assertNotIn("WARNING", S._summary(meta))
 
+    def test_a_scanned_copy_cached_without_ocr_is_re_extracted_for_ocr(self) -> None:
+        saved = S._ocr_tools
+        try:
+            S._ocr_tools = lambda: (lambda: True, None)
+            scanned = {"kind": "pdf", "ocr": False, "image_pages": [1, 2]}
+            self.assertTrue(S.wants_ocr(scanned))
+            self.assertFalse(S.wants_ocr({**scanned, "ocr": True}))         # OCR already tried
+            self.assertFalse(S.wants_ocr({**scanned, "image_pages": []}))   # nothing scanned
+            self.assertFalse(S.wants_ocr({**scanned, "kind": "html"}))
+            S._ocr_tools = lambda: (lambda: False, None)                    # no Tesseract here
+            self.assertFalse(S.wants_ocr(scanned))
+        finally:
+            S._ocr_tools = saved
+
     def test_a_page_spec_is_clipped_to_the_document(self) -> None:
         self.assertEqual(S.page_spec("3-5,9,40", 10), [3, 4, 5, 9])
         self.assertEqual(S.page_spec("", 3), [1, 2, 3])

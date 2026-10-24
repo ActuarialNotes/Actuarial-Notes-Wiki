@@ -31,7 +31,7 @@ const HEADLINE_BENEFITS = [
 const BENEFITS: { title: string; body: string; Art: () => React.JSX.Element }[] = [
   {
     title: 'Follow a Daily Study Plan',
-    body: 'Set your exam date and the syllabus is split into daily lists, sized to the time you have left. Fall behind or start forgetting something, and the plan changes to match.',
+    body: 'Set your exam date and the syllabus is split into daily lists, sized to the time you have left. Fall behind or start forgetting something, and the plan changes to match. Turn on the morning email and each day's list is in your inbox before you open the app.',
     Art: StudyPlanArt,
   },
   {

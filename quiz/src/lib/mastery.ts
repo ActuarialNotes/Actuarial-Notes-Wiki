@@ -21,6 +21,8 @@
 //   Forgotten, reflecting that well-recalled material is genuinely more durable.
 //   Adjust DECAY_DAYS_* below to tune the intervals.
 
+import { localDayKey } from '@/lib/streak'
+
 export type MasteryState = 'new' | 'level1' | 'level2' | 'level3' | 'forgotten'
 
 const VALID_MASTERY_STATES = new Set<string>(['new', 'level1', 'level2', 'level3', 'forgotten'])
@@ -92,7 +94,13 @@ export function applyAnswer(
   const decayed = decayIfStale(prev, at)
 
   const atIso = at.toISOString()
-  const todayDate = atIso.slice(0, 10)
+  // "Today" is the learner's local calendar day, the day every other day key in
+  // the app (the study plan, daily_completions, the Today card) is written in.
+  // A UTC day would roll over in the early evening west of Greenwich, letting a
+  // concept advance twice in one evening and refusing an advance the next morning
+  // that the study plan has scheduled.
+  const todayDate = localDayKey(at)
+  const localDayOf = (iso: string | null) => (iso ? localDayKey(new Date(iso)) : undefined)
   const next: ConceptMasteryRecord = {
     ...decayed,
     last_attempted_at: atIso,
@@ -104,7 +112,7 @@ export function applyAnswer(
     // it already used its daily advance — lock the state until tomorrow.
     // new/forgotten→level1 is always allowed because last_correct_at is null
     // or stale, never today.
-    const prevCorrectDate = decayed.last_correct_at?.slice(0, 10)
+    const prevCorrectDate = localDayOf(decayed.last_correct_at)
     const alreadyAdvancedToday = prevCorrectDate === todayDate
 
     next.correct_count = decayed.correct_count + 1
@@ -119,7 +127,7 @@ export function applyAnswer(
     // is today the level came from the current session — a concept that was 'new'
     // before this quiz cannot skip straight to 'forgotten' just because the user
     // answered correctly once and then failed the streak threshold.
-    const lastCorrectDate = decayed.last_correct_at?.slice(0, 10)
+    const lastCorrectDate = localDayOf(decayed.last_correct_at)
     if (
       next.incorrect_streak >= FORGET_FAIL_STREAK &&
       decayed.state !== 'new' &&

@@ -480,6 +480,19 @@ describe('generateStudyPlan — todaysLevelUps grounding', () => {
     }
   })
 
+  it('resolves an aliased level-up to the plan\'s name and drops other exams\' concepts', () => {
+    // Mastery stores [[Bond Price|Price]] under "bond price"; the plan shows "Price".
+    const plan = generateStudyPlan({
+      examId: 'FM',
+      syllabus,
+      masteryRecords: [],
+      config,
+      examDate: addDays(todayISO(), 40),
+      todaysLevelUps: ['bond price', 'Bond Price', 'Not On This Syllabus'],
+    })
+    expect(plan.todaysConcepts).toEqual(['Price'])
+  })
+
   it('caps todaysConcepts at the original count when todaysLevelUps exceeds it', () => {
     const baselineCount = generateStudyPlan({
       examId: 'FM',
@@ -674,8 +687,12 @@ describe('generateStudyPlan — even load distribution', () => {
     expect(plan.assignments.length).toBe(10)
   })
 
-  it('does not assign more sessions per day than targetDailyLoad for new concepts', () => {
-    // 20 new concepts, 30 days remaining → totalSessions = 60, targetDailyLoad = 2
+  it('keeps new concepts near the daily load target without running past the ready date', () => {
+    // 20 new concepts, 30 days remaining → totalSessions = 60, targetDailyLoad = 2.
+    // Sixty sessions don't fit two a day into the 29 days before the ready date
+    // (today can hold no review), so the target gives way by a session here and
+    // there — the deadline doesn't. Holding the target used to book the last
+    // reviews nine days after the ready date on a plan reported as on track.
     const bigSyllabus = largeSyllabus(20)
     const plan = generateStudyPlan({
       examId: 'FM',
@@ -690,8 +707,161 @@ describe('generateStudyPlan — even load distribution', () => {
     }
     const targetDailyLoad = Math.ceil((20 * 3) / 30)
     for (const [, count] of countByDay) {
-      expect(count).toBeLessThanOrEqual(targetDailyLoad)
+      expect(count).toBeLessThanOrEqual(targetDailyLoad + 1)
     }
+    for (const a of plan.assignments) {
+      expect(a.scheduledDate < config.targetReadyDate).toBe(true)
+    }
+    expect(plan.status).toBe('on_track')
+  })
+})
+
+// ── The ready date is a deadline ──────────────────────────────────────────────
+
+describe('generateStudyPlan — every session lands before the ready date', () => {
+  // The old scheduler held every day to ceil(sessions / days) and introduced new
+  // concepts as early as that allowed. When the pace needed every day nearly
+  // full, each stage pushed the next a day later and the plan ran weeks past its
+  // ready date — 60 concepts on a 93-day runway finished on day 119, after the
+  // exam — while reporting "on track". On a looser runway the same rounding
+  // finished weeks early instead.
+  const runways: Array<[concepts: number, days: number]> = [
+    [10, 30], [20, 30], [40, 60], [60, 93], [72, 81], [72, 120], [100, 81], [200, 81],
+  ]
+
+  for (const [concepts, days] of runways) {
+    it(`fits ${concepts} new concepts into ${days} days`, () => {
+      const readyDate = addDays(todayISO(), days)
+      const plan = generateStudyPlan({
+        examId: 'FM',
+        syllabus: largeSyllabus(concepts),
+        masteryRecords: [],
+        config: { ...config, targetReadyDate: readyDate },
+        examDate: addDays(readyDate, 12),
+      })
+      expect(plan.status).toBe('on_track')
+      expect(plan.assignments).toHaveLength(concepts * 3)
+      for (const a of plan.assignments) expect(a.scheduledDate < readyDate).toBe(true)
+    })
+  }
+
+  it('spreads a short list over a long runway instead of finishing weeks early', () => {
+    // 10 concepts, 93 days: one introduced every ~9 days, the last within the
+    // final fortnight — not ten in a row and eighty days of nothing.
+    const plan = generateStudyPlan({
+      examId: 'FM',
+      syllabus: largeSyllabus(10),
+      masteryRecords: [],
+      config: { ...config, targetReadyDate: addDays(todayISO(), 93) },
+      examDate: addDays(todayISO(), 100),
+    })
+    const intros = plan.assignments
+      .filter(a => a.initialState === 'new')
+      .map(a => daysBetween(todayISO(), a.scheduledDate))
+      .sort((a, b) => a - b)
+    expect(intros[0]).toBe(0)
+    expect(intros[intros.length - 1]).toBeGreaterThanOrEqual(93 - 14)
+    for (let i = 1; i < intros.length; i++) expect(intros[i] - intros[i - 1]).toBeGreaterThanOrEqual(8)
+  })
+
+  it('says "behind" when a pipeline cannot finish before the ready date', () => {
+    // One new concept needs four days (intro, +1, +3); two days can't hold it.
+    const plan = generateStudyPlan({
+      examId: 'FM',
+      syllabus: largeSyllabus(1),
+      masteryRecords: [],
+      config: { ...config, targetReadyDate: addDays(todayISO(), 2) },
+      examDate: addDays(todayISO(), 40),
+    })
+    expect(plan.status).toBe('behind')
+  })
+})
+
+// ── Decay is a deadline too ───────────────────────────────────────────────────
+
+describe('generateStudyPlan — reviews land before the concept decays', () => {
+  it('books every converging level2 review inside its 14-day decay window', () => {
+    // 20 concepts reached level2 yesterday. The load target alone would spread
+    // their level3 reviews one a day over 20 days — but level2 decays after 14,
+    // so the last six would ask for "→ Level 3" on a concept back at Level 1.
+    const lastCorrectDate = addDays(todayISO(), -1)
+    const masteryRecords = Array.from({ length: 20 }, (_, i) =>
+      rec(`Concept ${i + 1}`, { state: 'level2', correct_count: 2, last_correct_at: lastCorrectDate + 'T12:00:00Z' }),
+    )
+    const plan = generateStudyPlan({
+      examId: 'FM',
+      syllabus: largeSyllabus(20),
+      masteryRecords,
+      config: { ...config, targetReadyDate: addDays(todayISO(), 61) },
+      examDate: addDays(todayISO(), 70),
+    })
+    expect(plan.assignments).toHaveLength(20)
+    for (const a of plan.assignments) {
+      expect(a.scheduledDate >= addDays(lastCorrectDate, 2)).toBe(true)
+      expect(a.scheduledDate <= addDays(lastCorrectDate, 13)).toBe(true)
+    }
+  })
+
+  it('books a level1 concept\'s next review before it would be forgotten', () => {
+    // Level 1 five days ago: forgotten in two more days, whatever else is due.
+    const lastCorrectDate = addDays(todayISO(), -5)
+    const masteryRecords = Array.from({ length: 12 }, (_, i) =>
+      rec(`Concept ${i + 1}`, { state: 'level1', correct_count: 1, last_correct_at: lastCorrectDate + 'T12:00:00Z' }),
+    )
+    const plan = generateStudyPlan({
+      examId: 'FM',
+      syllabus: largeSyllabus(12),
+      masteryRecords,
+      config: { ...config, targetReadyDate: addDays(todayISO(), 61) },
+      examDate: addDays(todayISO(), 70),
+    })
+    for (const a of plan.assignments.filter(x => x.initialState === 'level1')) {
+      expect(a.scheduledDate <= addDays(lastCorrectDate, 6)).toBe(true)
+    }
+  })
+})
+
+// ── Days are local days ──────────────────────────────────────────────────────
+
+describe('generateStudyPlan — last_correct_at is read as a local day', () => {
+  const realTz = process.env.TZ
+  afterEach(() => {
+    process.env.TZ = realTz
+    vi.useRealTimers()
+  })
+
+  it('does not hold an evening\'s level-up back an extra day west of Greenwich', () => {
+    // 8pm in Chicago on Aug 27 is Aug 28 in UTC. The level was earned on the 27th,
+    // so its next review is due on the 28th — today — not the 29th.
+    process.env.TZ = 'America/Chicago'
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date('2026-08-28T15:00:00Z'))  // 10am Aug 28 in Chicago
+    const plan = generateStudyPlan({
+      examId: 'FM',
+      syllabus,
+      masteryRecords: [rec('Coupon Rate', { state: 'level1', correct_count: 1, last_correct_at: '2026-08-28T01:00:00Z' })],
+      config: { ...config, targetReadyDate: '2026-09-30', planStartDate: '2026-08-28' },
+      examDate: '2026-10-10',
+    })
+    const review = plan.assignments.find(a => a.conceptName === 'Coupon Rate' && a.initialState === 'level1')
+    expect(review?.scheduledDate).toBe('2026-08-28')
+  })
+
+  it('does not schedule a second advance on the same local day east of Greenwich', () => {
+    // 8am in Auckland on Aug 29 is Aug 28 in UTC. The level was earned today, so
+    // the next review is tomorrow, not today.
+    process.env.TZ = 'Pacific/Auckland'
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date('2026-08-29T02:00:00Z'))  // 2pm Aug 29 in Auckland
+    const plan = generateStudyPlan({
+      examId: 'FM',
+      syllabus,
+      masteryRecords: [rec('Coupon Rate', { state: 'level1', correct_count: 1, last_correct_at: '2026-08-28T20:00:00Z' })],
+      config: { ...config, targetReadyDate: '2026-09-30', planStartDate: '2026-08-29' },
+      examDate: '2026-10-10',
+    })
+    const review = plan.assignments.find(a => a.conceptName === 'Coupon Rate' && a.initialState === 'level1')
+    expect(review?.scheduledDate).toBe('2026-08-30')
   })
 })
 

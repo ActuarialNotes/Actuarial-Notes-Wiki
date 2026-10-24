@@ -61,7 +61,9 @@ def fm_loader() -> ContentLoader:
 
 
 def learner_view(lq) -> str:
-    return lq.render() + "\n" + json.dumps(asdict(lq))
+    # The dump's escaped newlines become spaces: `tokens` drops a backslash and the
+    # letters after it as a LaTeX command, so "\\n\\niii. Fixed" would lose its "iii".
+    return lq.render() + "\n" + json.dumps(asdict(lq)).replace("\\n", " ")
 
 
 class LoaderStripsSolutions(unittest.TestCase):

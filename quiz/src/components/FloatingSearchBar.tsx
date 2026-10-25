@@ -1,5 +1,5 @@
 import { forwardRef, type ReactNode, type Ref } from 'react'
-import { ChevronLeft, Search, X } from 'lucide-react'
+import { ChevronLeft, Hammer, Search, X } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { MobileNavButton } from '@/components/MobileNavButton'
 import { useSearchTracking } from '@/hooks/useSearchTracking'
@@ -176,14 +176,15 @@ export function FloatingSearchStrip({ title, icon, backLink, children }: Floatin
 export function ExamStatusBanner({ status }: { status: ExamStatus }) {
   if (status === 'development') {
     return (
-      <div className="bg-amber-500/10 py-1.5 text-center text-[11px] font-medium tracking-wide text-amber-600 dark:text-amber-400">
+      <div className="flex items-center justify-center gap-1 border-t border-dashed border-muted-foreground/40 py-1.5 text-center text-[11px] font-medium tracking-wide text-muted-foreground">
+        <Hammer className="h-3 w-3 shrink-0" aria-hidden />
         In Development — syllabus outline only, not yet available to study
       </div>
     )
   }
   if (status === 'beta') {
     return (
-      <div className="bg-emerald-500/10 py-1.5 text-center text-[11px] font-medium tracking-wide text-emerald-600 dark:text-emerald-400">
+      <div className="bg-amber-500/15 py-1.5 text-center text-[11px] font-medium tracking-wide text-amber-600 dark:text-amber-400">
         Beta
       </div>
     )

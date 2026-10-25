@@ -106,16 +106,10 @@ def _prior_lines(prior: dict) -> list[str]:
     return lines
 
 
-def build_persona(p: Profile, exam_title: str) -> str:
+def _who(p: Profile) -> str:
     mastered = ", ".join(p.mastered) or "none in particular"
     gaps = "\n".join(f"- {g}" for g in p.gaps) or "- (none listed)"
-    actions = "\n".join(f"- {name} {spec % NOTES_WORD_LIMIT if '%d' in spec else spec}"
-                        for name, spec in ACTIONS.items())
-    return f"""You are role-playing a real person studying for the actuarial exam {exam_title}, using the \
-Actuarial Notes study wiki. You are not an AI assistant with encyclopedic knowledge: you are this student, \
-and the point of the exercise is to find out how well the wiki teaches *them*.
-
-## Who you are
+    return f"""## Who you are
 {p.name}. {p.description}
 
 What you already know:
@@ -123,7 +117,17 @@ What you already know:
 Concepts you already have down: {mastered}.
 
 What you are weak on, or have never learned:
-{gaps}
+{gaps}"""
+
+
+def build_persona(p: Profile, exam_title: str) -> str:
+    actions = "\n".join(f"- {name} {spec % NOTES_WORD_LIMIT if '%d' in spec else spec}"
+                        for name, spec in ACTIONS.items())
+    return f"""You are role-playing a real person studying for the actuarial exam {exam_title}, using the \
+Actuarial Notes study wiki. You are not an AI assistant with encyclopedic knowledge: you are this student, \
+and the point of the exercise is to find out how well the wiki teaches *them*.
+
+{_who(p)}
 
 How you study:
 {chr(10).join('- ' + s for s in trait_sentences(p))}
@@ -153,6 +157,33 @@ The study session tells you your remaining budget after every action. Practice q
 what you are told after an answer depends on the study mode."""
 
 
+def build_control_persona(p: Profile, exam_title: str) -> str:
+    """The same student before studying: no wiki, no notes, only the prior knowledge.
+
+    The control learner's score is what the student gets without the guide, so the
+    difference from the studied learner's is what the guide taught."""
+    return f"""You are role-playing a real person who is about to start studying for the actuarial exam \
+{exam_title} and has not opened any study material yet. You are not an AI assistant with encyclopedic \
+knowledge: you are this student, and the point of the exercise is to find out what *they* can already do.
+
+{_who(p)}
+
+## The knowledge boundary — the most important rule
+- You may use only the prior knowledge above. You have no study pages and no notes.
+- If something you need — a formula, a definition, a technique, a fact about insurance or finance — is \
+not in your prior knowledge, you do not know it. Do not fill it in from general knowledge. Reason from \
+what you have, or guess, as this student would.
+- With each answer, list in `sources` what you used: `prior: <item>`, or `guess` if you used nothing.
+- Give each answer as you would submit it. You are not asked to show your working.
+- Perform like this student, not better: what they can't yet do is the data we need.
+
+## How you act
+You are given practice questions one at a time and told nothing about how you did. Reply to each with \
+exactly ONE JSON object and nothing else:
+{{"action": "answer", "args": {{"answer": <see the question>, "confidence": <0-100>, \
+"sources": ["prior: <item>", "guess"]}}}}"""
+
+
 @dataclass
 class Action:
     name: str
@@ -161,12 +192,12 @@ class Action:
 
 
 class Learner:
-    def __init__(self, guard, profile: Profile, exam_title: str, max_retries: int = 2):
+    def __init__(self, guard, profile: Profile, exam_title: str, max_retries: int = 2, control: bool = False):
         self.guard = guard
         self.profile = profile
         self.exam_title = exam_title
         self.max_retries = max_retries
-        self.system_prompt = build_persona(profile, exam_title)
+        self.system_prompt = (build_control_persona if control else build_persona)(profile, exam_title)
 
     def start(self) -> None:
         self.guard.start(self.system_prompt)

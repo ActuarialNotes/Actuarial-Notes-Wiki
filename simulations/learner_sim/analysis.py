@@ -12,9 +12,11 @@ import os
 import re
 from collections import defaultdict
 
+from .auditor import beyond_knowledge, norm_text, unreached_concepts
 from .content_loader import ContentLoader
 from .vault_parse import RawQuestion
 
+CONTROL_LOG = "control.jsonl"
 STUCK_SCORE = 0.5
 HIGH_CONF = 70
 LOW_CONF = 30
@@ -37,12 +39,52 @@ def _norm(s: str) -> str:
     return re.sub(r"\s+", " ", s.lower().replace("-", " ")).strip()
 
 
+class _KnownText:
+    """What a learner could have met by an attempt, as normalised text for `unreached_concepts`:
+    the pages it had opened, its notes, its prior knowledge, and the concepts of
+    questions whose solutions it was shown earlier in the same session."""
+
+    def __init__(self, run_dir: str, loader: ContentLoader, profile):
+        self.run_dir, self.loader = run_dir, loader
+        prior = [profile.description, *profile.mastered]
+        for v in profile.prior_knowledge.values():
+            prior += [str(x) for x in v] if isinstance(v, list) else [str(v)]
+        self.prior = norm_text(" ".join(prior))
+        self._pages: dict[str, str] = {}
+        self._notes: dict[int, str] = {}
+        self.shown: dict[int, set[str]] = defaultdict(set)
+
+    def page(self, title: str) -> str:
+        if title not in self._pages:
+            try:
+                self._pages[title] = norm_text(self.loader.source(title))
+            except (KeyError, OSError):
+                self._pages[title] = ""
+        return self._pages[title]
+
+    def notes(self, session: int) -> str:
+        if session not in self._notes:
+            # The notes as the session left them: lenient, like the rest of the check.
+            path = os.path.join(self.run_dir, "notes", f"session-{session}.md")
+            text = ""
+            if os.path.exists(path):
+                with open(path, encoding="utf-8") as fh:
+                    text = fh.read()
+            self._notes[session] = norm_text(text)
+        return self._notes[session]
+
+    def text(self, session: int, pages: set[str]) -> str:
+        return " | ".join([self.prior, self.notes(session), *sorted(self.shown[session]),
+                           *(self.page(t) for t in sorted(pages))])
+
+
 def analyze(run_dir: str, bank: dict[str, RawQuestion], loader: ContentLoader, profile) -> dict:
     events = read_events(os.path.join(run_dir, "events.jsonl"))
     start = next((e for e in events if e["type"] == "run_start"), {})
     end = [e for e in events if e["type"] == "run_end"]
     graded = {(e["session"], e["qid"]): e for e in events if e["type"] == "graded"}
     audits = {(e["session"], e["qid"]): e for e in events if e["type"] == "audit"}
+    known = _KnownText(run_dir, loader, profile)
     attempts = []
     for e in events:
         if e["type"] != "attempt":
@@ -52,7 +94,7 @@ def analyze(run_dir: str, bank: dict[str, RawQuestion], loader: ContentLoader, p
         if q is None:
             continue
         au = audits.get((e["session"], e["qid"]), {})
-        attempts.append({
+        row = {
             **{k: e.get(k) for k in ("session", "qid", "source_id", "answer", "confidence", "sources",
                                      "pages_before", "pages_during", "minutes", "pressed_to_guess", "repeat",
                                      "seen_in_guide")},
@@ -61,8 +103,18 @@ def analyze(run_dir: str, bank: dict[str, RawQuestion], loader: ContentLoader, p
             "difficulty": q.difficulty, "kind": "multiple-choice" if q.type == "multiple-choice" else "written",
             "path": q.path, "in_character": au.get("in_character", True),
             "audit_flags": (au.get("deterministic") or []) + [v.get("claim", "") for v in au.get("violations") or []],
-        })
+        }
+        pages = set(e.get("pages_ever_at_attempt") or []) | set(e.get("pages_during") or [])
+        unreached = unreached_concepts(row["concepts"], pages, known.text(e["session"], pages))
+        flag = beyond_knowledge(row, unreached)
+        if flag:
+            row["audit_flags"].append(flag)
+            row["in_character"] = False
+        if start.get("feedback") == "solution":
+            known.shown[e["session"]] |= {norm_text(c) for c in row["concepts"]}
+        attempts.append(row)
     scored = [a for a in attempts if a["verdict"] != "ungraded"]
+    control = control_summary(run_dir, scored)
 
     # score over time
     sessions = sorted({a["session"] for a in attempts} | {e["session"] for e in events if e["type"] == "session_end"})
@@ -195,7 +247,8 @@ def analyze(run_dir: str, bank: dict[str, RawQuestion], loader: ContentLoader, p
         "profile": profile.name, "profile_slug": profile.slug, "profile_description": profile.description,
         "strategy": start.get("strategy"), "feedback": start.get("feedback"), "exam": start.get("exam"),
         "exam_title": start.get("exam_title"), "pool": start.get("pool"), "excluded": start.get("excluded_reasons"),
-        "cost_usd": end[-1].get("cost_usd") if end else None, "stopped": end[-1].get("stopped") if end else None,
+        "cost_usd": (round((end[-1].get("cost_usd") or 0) + (control or {}).get("cost_usd", 0), 4)
+                     if end else None), "stopped": end[-1].get("stopped") if end else None,
         "near_misses": end[-1].get("near_misses") if end else None,
         "sessions": len(sessions), "attempts_total": len(attempts), "attempts_scored": len(scored),
         "ungraded": len(attempts) - len(scored),
@@ -208,7 +261,51 @@ def analyze(run_dir: str, bank: dict[str, RawQuestion], loader: ContentLoader, p
         "case_links": {t: sorted(v) for t, v in sorted(case_links.items())},
         "missing_requests": missing_requests, "stuck": stuck,
         "question_issues": sorted(issues.values(), key=lambda i: (-len(i["why"]), i["source_id"])),
-        "out_of_character": ooc, "attempts": attempts,
+        "out_of_character": ooc, "control": control, "attempts": attempts,
         "reflections": [{"session": e["session"], "text": e.get("reflection", "")}
                         for e in events if e["type"] == "end_session" and e.get("reflection")],
+    }
+
+
+def control_summary(run_dir: str, scored: list[dict]) -> dict | None:
+    """What studying added: the learner's score on each question beside the control
+    learner's (control.py), overall and by concept. None when no control ran.
+
+    Sets `control_score` on each scored attempt whose question the control answered."""
+    path = os.path.join(run_dir, CONTROL_LOG)
+    if not os.path.exists(path):
+        return None
+    events = read_events(path)
+    ctl = {e["source_id"]: e for e in events if e["type"] == "control_attempt" and e.get("verdict") != "ungraded"}
+    studied: dict[str, list[float]] = defaultdict(list)
+    concepts: dict[str, list[str]] = {}
+    qids: dict[str, str] = {}
+    for a in scored:
+        c = ctl.get(a["source_id"])
+        a["control_score"] = c["score"] if c else None
+        if c:
+            studied[a["source_id"]].append(a["score"])
+            concepts[a["source_id"]] = a["concepts"] or ["(untagged)"]
+            qids.setdefault(a["source_id"], a["qid"])
+    pairs = {sid: (sum(v) / len(v), ctl[sid]["score"]) for sid, v in studied.items()}
+
+    def compare(rows: list[tuple[float, float]]) -> dict:
+        s, k = sum(r[0] for r in rows) / len(rows), sum(r[1] for r in rows) / len(rows)
+        return {"studied": round(s, 3), "control": round(k, 3), "added": round(s - k, 3)}
+
+    by: dict[str, list[tuple[float, float]]] = defaultdict(list)
+    for sid, pair in pairs.items():
+        for c in concepts[sid]:
+            by[c].append(pair)
+    by_concept = [{"key": c, "n": len(v), **compare(v)} for c, v in by.items()]
+    by_concept.sort(key=lambda r: (r["added"], -r["n"], r["key"]))
+    overall = compare(list(pairs.values())) if pairs else {"studied": None, "control": None, "added": None}
+    return {
+        "questions": len(pairs), "asked": sum(1 for e in events if e["type"] == "control_attempt"),
+        "unanswered": sum(1 for e in events if e["type"] == "control_attempt" and not e.get("answered")),
+        **overall,
+        "known_without_study": [{"qid": qids[sid], "source_id": sid, "studied": round(st, 3)}
+                                for sid, (st, kn) in sorted(pairs.items()) if kn >= 1],
+        "by_concept": by_concept,
+        "cost_usd": round(sum(e.get("cost_usd") or 0 for e in events if e["type"] == "control_end"), 4),
     }

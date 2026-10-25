@@ -1,10 +1,15 @@
 """The character auditor: did the learner use knowledge it wasn't supposed to have?
 
 We cannot take knowledge out of a model, so we make its use visible instead.
-Two checks run on every attempt:
+Three checks run on every attempt:
 
 * deterministic — a `page:` source the learner never opened, or an answer
   with no sources listed at all;
+* deterministic, once the attempt is marked (analysis.py) — a confident, right
+  answer, not pressed into a guess, on a question none of whose concepts the
+  learner could have met: no page it opened is that concept's page or names it,
+  its notes don't name it, its prior knowledge doesn't, and no solution it was
+  shown earlier in the session was for a question on it (`beyond_knowledge`);
 * a separate, isolated model call per session, which reads the profile's
   knowledge boundary, the titles of the pages read, the notes the session
   started from and each attempt's answer with the sources it listed, and names
@@ -13,10 +18,13 @@ Two checks run on every attempt:
 
 Attempts with a violation are reported as *out of character*: still scored,
 but called out, so a guide is not credited with teaching what the model
-already knew.
+already knew. The control learner (control.py) measures the same thing from
+the other side, for every question rather than only the clear cases.
 """
 
 from __future__ import annotations
+
+import re
 
 from .backends import OneShot, extract_json
 from .profiles import Profile
@@ -40,6 +48,35 @@ def deterministic_flags(attempt: dict, pages_ever: set[str]) -> list[str]:
     if not attempt.get("sources"):
         flags.append("no sources listed")
     return flags
+
+
+BEYOND_CONFIDENCE = 70
+
+
+def norm_text(s: str) -> str:
+    """Lower case, hyphens and runs of whitespace as single spaces: how names are matched."""
+    return re.sub(r"\s+", " ", str(s).lower().replace("-", " ")).strip()
+
+
+def unreached_concepts(concepts: list[str], pages: set[str], known_text: str) -> list[str]:
+    """The concepts the learner had no way to meet: not a page it opened, and not
+    named in `known_text` (the pages it opened, its notes and its prior knowledge,
+    normalised with `norm_text`). A name merely appearing counts as met — the
+    check is meant to catch only the clear cases."""
+    opened = {norm_text(p) for p in pages}
+    return [c for c in concepts if norm_text(c) not in opened and norm_text(c) not in known_text]
+
+
+def beyond_knowledge(attempt: dict, unreached: list[str]) -> str | None:
+    """The flag for a confident, right answer on a question none of whose concepts
+    the learner could have met; None otherwise."""
+    concepts = attempt.get("concepts") or []
+    conf = attempt.get("confidence")
+    if (not concepts or len(unreached) < len(concepts) or attempt.get("pressed_to_guess")
+            or (attempt.get("score") or 0) < 1 or conf is None or conf < BEYOND_CONFIDENCE):
+        return None
+    return (f"answered right with {conf}% confidence on concepts it had no way to meet: "
+            + ", ".join(unreached))
 
 
 def audit_session(one_shot: OneShot | None, profile: Profile, pages_read: list[str], notes_at_start: str,

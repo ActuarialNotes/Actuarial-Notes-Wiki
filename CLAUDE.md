@@ -273,7 +273,10 @@ before touching that area**:
   reports show where guides and questions fail which learners. The learner may see study pages and
   question stems/options only — enforced by an allowlist loader, a context guard and a tool-less,
   MCP-less headless Claude Code backend, and proven by `simulations/tests/test_isolation.py` (CI).
-  Never edits the vault; only the run reports are committed.
+  Its working is never asked for or kept; what the guide taught is measured instead, by a **control
+  learner** — the same student with no pages and no notes, put to the same questions — whose score
+  is subtracted (`control.py`, the report's *What studying added*). Never edits the vault; only the
+  run reports are committed.
 - `docs/analytics-and-monitoring.md` — **Google Analytics** and error capture. GA is not in
   `index.html`: `initAnalytics()` (`lib/analytics.ts`, from `main.tsx`) loads it only on a
   measured visit — the production host, not automation (`navigator.webdriver`, bot user

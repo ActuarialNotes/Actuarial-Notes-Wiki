@@ -34,6 +34,7 @@ import learner_sim  # noqa: E402
 from learner_sim.backends import (ISOLATION_ARGS, ClaudeCodeSession, IsolationError, ScriptedSession,  # noqa: E402
                                   check_init_event)
 from learner_sim.content_loader import ContentLoader  # noqa: E402
+from learner_sim.control import run_control  # noqa: E402
 from learner_sim.exams import resolve_exam  # noqa: E402
 from learner_sim.guard import ContextGuard, SolutionIndex  # noqa: E402
 from learner_sim.profiles import profile_from_dict  # noqa: E402
@@ -208,6 +209,21 @@ class WholeRunNeverLeaks(unittest.TestCase):
                     shown.add(qids[qid])
             self.assertEqual(self.index.hits(msg, released), {}, msg[:300])
         self.assertTrue(shown, "positive control: released solutions do reach the learner and are detectable")
+
+    def test_control_learner_is_never_shown_a_solution_or_a_result(self):
+        _, qids = self._run("solution", "control")
+        run = SimulationRun(_profile(feedback="solution"), self.exam, os.path.join(self.tmp, "control"),
+                            RunConfig(sessions=0), RecordingFactory(), loader=self.loader, bank=self.bank)
+        factory = RecordingFactory()
+        asked = run_control(run, factory)
+        self.assertEqual(asked, len(qids), "every question the learner attempted goes to the control")
+        msgs = factory.messages()
+        self.assertNotIn("notes", msgs[0].split("## The knowledge boundary")[1].split("## How you act")[0]
+                         .replace("no notes", ""))
+        for msg in msgs:
+            self.assertEqual(self.index.hits(msg, set()), {}, msg[:300])
+            for told in ("Official solution", "Answer key", "Result for", "correct"):
+                self.assertNotIn(told, msg)
 
     def test_guard_blocks_a_leaky_loader(self):
         loader = ContentLoader(self.exam)

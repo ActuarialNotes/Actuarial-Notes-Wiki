@@ -33,6 +33,7 @@ function select(partial: Partial<Record<keyof FacetSelection, string[]>>): Facet
   const base = emptyFacets()
   return {
     difficulty: new Set(partial.difficulty ?? base.difficulty),
+    type: new Set(partial.type ?? base.type),
     concept: new Set(partial.concept ?? base.concept),
     source: new Set(partial.source ?? base.source),
     exam: new Set(partial.exam ?? base.exam),
@@ -197,7 +198,23 @@ describe('facetOptions', () => {
     expect(facetOptions(pool, 'sitting', select({ difficulty: ['hard'] })).map(o => o.value)).toEqual(['Fall 2018'])
   })
 
-  it('offers no sitting for a pool of undated questions', () => {
+  it('offers the types the pool holds, multiple choice first, by the names a reader knows', () => {
+    const bank = [
+      ...pool,
+      q({ id: 'w1', type: 'multi-part', difficulty: 'hard' }),
+      q({ id: 'w2', type: 'multi-part' }),
+    ]
+    expect(facetOptions(bank, 'type', emptyFacets())).toEqual([
+      { value: 'multiple-choice', label: 'Multiple choice', count: 4 },
+      { value: 'multi-part', label: 'Written answer', count: 2 },
+    ])
+    expect(facetOptions(bank, 'type', select({ difficulty: ['hard'] })).map(o => [o.value, o.count])).toEqual([
+      ['multiple-choice', 1], ['multi-part', 1],
+    ])
+    expect(bank.filter(x => matchesFacets(x, select({ type: ['multi-part'] }))).map(x => x.id)).toEqual(['w1', 'w2'])
+  })
+
+    it('offers no sitting for a pool of undated questions', () => {
     expect(facetOptions([pool[2]], 'sitting', emptyFacets())).toEqual([])
   })
 

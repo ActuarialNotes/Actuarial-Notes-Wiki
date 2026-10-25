@@ -3,7 +3,7 @@ import { ChevronRight, ExternalLink, FileText, Info, X } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { cn } from '@/lib/utils'
 import { githubBlobUrl } from '@/lib/github'
-import { conceptLabel } from '@/lib/questionFilters'
+import { QUESTION_TYPE_LABELS, conceptLabel } from '@/lib/questionFilters'
 import { hrefToEntryRef, wikiRoute } from '@/lib/wikiRoutes'
 import { questionSource } from '@/lib/questionSource'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
@@ -36,12 +36,6 @@ import type { Question } from '@/lib/parser'
  * those during a live quiz for the same reason (`showMeta`): "hard, Bayes
  * Theorem" narrows four options down to two. They appear once the answer is in.
  */
-
-const TYPE_LABELS: Record<Question['type'], string> = {
-  'multiple-choice': 'Multiple choice',
-  'free-entry': 'Written answer',
-  'multi-part': 'Multi-part',
-}
 
 interface QuestionInfoButtonProps {
   question: Question
@@ -220,7 +214,7 @@ export function QuestionInfoDialog({
             <InfoRow label="Question ID" value={question.id} mono />
             <InfoRow
               label="Format"
-              value={`${TYPE_LABELS[question.type]} · ${question.points > 0
+              value={`${QUESTION_TYPE_LABELS[question.type]} · ${question.points > 0
                 ? `${question.points} ${question.points === 1 ? 'point' : 'points'}`
                 : 'no point value printed'}`}
             />

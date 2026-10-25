@@ -1476,8 +1476,9 @@ compile — don't "clean up" the flagged code as dead.
   `questionFilters.ts`, `knowledgeBase.ts` …) turns the `+` back into a space before matching.
   A question file sits **directly** in its bank's folder: the build collects
   `questions/<exam-id>/*.md` and nothing deeper (`validate_content.py` warns about a nested
-  one — the four under `exam-p/probability/`, `exam-p/statistics/` and `exam-fm/interest/` are
-  early seed questions VERIFY can't yet move, since a log may not be renamed). Current banks: `exam-p`, `exam-fm`,
+  one; a log may not be renamed, so a file is moved by copying it to its new path and
+  withdrawing the old one, as the four early seed questions under `exam-p/probability/`,
+  `exam-p/statistics/` and `exam-fm/interest/` were, to `p-an-010`–`012` and `fm-an-001`). Current banks: `exam-p`, `exam-fm`,
   `exam-fam` (the SOA's two FAM sample sets — FAM-S as `fams-<n>`, FAM-L as `faml-<chapter>-<n>`
   after its numbering by AMLCR chapter — and six of the vault's own, `fam-an-001` …),
   `exam-srm` (the SOA's SRM sample set, `srm-<n>`, and five of the vault's own, `srm-an-001` …),

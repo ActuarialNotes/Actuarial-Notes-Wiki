@@ -11,13 +11,13 @@ wiki_link:
   - Concepts/Poisson+Distribution
   - Concepts/Geometric+Distribution
   - Concepts/Hypothesis+Testing
-points: 3
+points: 0
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-23
+  last_checked: 2026-10-25
   last_checked_by: agent:validate-v1
-  content_hash: sha256:be8e6a0e633453dcb4d7e48935a3d676b8dde922246d63d7c6e28ac5c2e37e42
+  content_hash: sha256:066ad0178dfce2357ea20f30b7e115f9f7480468235e42a5b9071782c2ce54bd
   sources:
     - "SOA ASTAM Sample Questions (version of Feb. 23, 2026), Q11, p.16, sha256:0294cf4e8717191cda2747e7a6bb49fbb5e2d08f2d281ec979e670621de74ab4 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/questions/february-2024-astam-questions.pdf"
     - "SOA ASTAM Solutions to Sample Questions, Q11, pp.23-24, sha256:c4206394603cf205da0668d40333bee5aaa6e3dadcaa241fdb03e5488a1ba4e1 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/solutions/february-2024-astam-solutions.pdf"

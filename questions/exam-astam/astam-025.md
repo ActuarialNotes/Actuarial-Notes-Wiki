@@ -11,17 +11,17 @@ wiki_link:
   - Concepts/Fisher+Information
   - Concepts/Approximate+Confidence+Interval
   - Concepts/Delta+Method
-points: 4
+points: 0
 verification:
-  status: in_review
-  confidence: null
-  last_checked: 2026-10-23
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-25
   last_checked_by: agent:validate-v1
-  content_hash: sha256:789342012e1830e444766e524f760148ce96b9db89180bf0988a5618057ba62b
+  content_hash: sha256:4ee14cf188e49e9d6807c2c8b3db95ddf37f339036bb37a491e6a9c39a24db55
   sources:
     - "SOA ASTAM Sample Questions (version of Feb. 23, 2026), Q25, p.31, sha256:0294cf4e8717191cda2747e7a6bb49fbb5e2d08f2d281ec979e670621de74ab4 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/questions/february-2024-astam-questions.pdf"
     - "SOA ASTAM Solutions to Sample Questions, Q25, p.47, sha256:c4206394603cf205da0668d40333bee5aaa6e3dadcaa241fdb03e5488a1ba4e1 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/solutions/february-2024-astam-solutions.pdf"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-astam/astam-025.md
 ---
@@ -114,3 +114,6 @@ g(\hat{\alpha}) \pm 1.96 \cdot \sqrt{\widehat{Var}(g(\hat{\alpha}))} &= g(\hat{\
 &= \frac{100}{\hat{\alpha} - 1} \pm 1.96 \cdot \frac{1}{\sqrt{n}}\left(\frac{100\hat{\alpha}}{\hat{\alpha} - 1}\right) \text{ (as printed)}
 \end{align*}
 $$
+
+> [!note] Editor's note
+> The SOA's variance drops the square on $(\hat{\alpha} - 1)$: squaring $\frac{dg}{d\alpha} = \frac{-100}{(\alpha - 1)^2}$ gives $Var(g(\hat{\alpha})) = \frac{\hat{\alpha}^2}{n} \cdot \frac{100^2}{(\hat{\alpha} - 1)^4} = \frac{1}{n}\left(\frac{100\hat{\alpha}}{(\hat{\alpha} - 1)^2}\right)^2$. The 95% confidence interval for $\mu$ is therefore $\frac{100}{\hat{\alpha} - 1} \pm 1.96 \cdot \frac{1}{\sqrt{n}}\left(\frac{100\hat{\alpha}}{(\hat{\alpha} - 1)^2}\right)$; the printed variance and interval are out by a factor of $(\hat{\alpha} - 1)$ in the standard error.

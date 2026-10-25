@@ -12,13 +12,13 @@ wiki_link:
   - Concepts/Limited+Expected+Value
   - Concepts/Censoring
   - Concepts/Fisher+Information
-points: 4
+points: 0
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-23
+  last_checked: 2026-10-25
   last_checked_by: agent:validate-v1
-  content_hash: sha256:6559e92be6612464f3142e75f6cf4f335f0cdf36d711fbe320a56b9d5c9af89b
+  content_hash: sha256:f2b2bf0e34142d3c9cc85cbf6dae31ba1f43c5801caa90184df229fbe48ea428
   sources:
     - "SOA ASTAM Sample Questions (version of Feb. 23, 2026), Q6, p.11, sha256:0294cf4e8717191cda2747e7a6bb49fbb5e2d08f2d281ec979e670621de74ab4 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/questions/february-2024-astam-questions.pdf"
     - "SOA ASTAM Solutions to Sample Questions, Q6, pp.14-15, sha256:c4206394603cf205da0668d40333bee5aaa6e3dadcaa241fdb03e5488a1ba4e1 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/solutions/february-2024-astam-solutions.pdf"

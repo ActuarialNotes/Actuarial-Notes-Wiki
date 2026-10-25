@@ -109,3 +109,38 @@ created: 2026-10-23
 - checks_run: independent recomputation of every computed part from the blind stem before reading the vault's explanation or the SOA solution (SULT built from its Makeham parameters; other tables as cited); stem, table, diagram and formula diff against the 100-dpi page images of the SOA question paper; explanation diff against the solution page images (method, figures, arithmetic, align rows); examiners' comments verbatim and filed under the part they name; every part's setup under the part the SOA prints it before; Media/Attachments diagrams exist and match the page; points per part and total; type multi-part; topic and wiki_link pages exist; validate_content.py --strict and question_lint.py pass
 - sources_checked: SOA Exam ALTAM Spring 2024 — exam (question paper), Q3, pp.7-9, sha256:7877c415a5859ee881046def4553cc2d714688607058c1d807a069d873320ee5 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/exams/spring-2024-altam-exam.pdf; SOA Exam ALTAM Spring 2024 — model solutions and examiners' comments, Q3, pp.5-8, sha256:1ff2f7da08ae0d9bf5e542c2cbd87fa4b81ce334e1e47f8b117ecacc1103fb65 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/solutions/spring-2024-altam-solutions.pdf
 - note: Stem and tables match exam pp.7-9 (Product Q, the 64.75 table and Product Q+ under (c), (e) and (f), as printed). Explanation and comments match solutions pp.5-8. Recompute by solving the Standard Sickness-Death Model numerically with b_2 = 7.58e-5: 10V(1) 162,301, dV/dt -1,944.8, P 6,518.0, 10V(1) Q 163,455, 9.75V(1) 163,944, 9.75V(0) 42,732, 10p00 0.7408, 10p01 0.1168, a-bar^01_65 2.885, F 182,931. The stem's printed b_2 = 7.85e-5 is the SOA's own acknowledged error; with it 10V(1) = 161,467, so the stem now carries (as printed) and the explanation the SOA's note. 4 minor finding(s) for SOA printed slips, marked (as printed) and resolved in this run.
+
+## [F-005] Stem's printed b_2 gives a different 10V(1) with no pointer at the stem
+- entry_type: finding
+- author: agent:writer
+- run_id: 2026-10-25T14:24Z/0282
+- date: 2026-10-25
+- severity: major
+- status: open
+- locus: stem, Standard Sickness-Death Model parameters
+- claim: The stem prints b_2 = 7.85 x 10^-5 (as printed) and part (a) asks to show 10V(1) = 162,300; the SOA's correction (7.58 x 10^-5) appears only in part (b)(i)'s explanation.
+- evidence: SOA Exam ALTAM Spring 2024 exam p.7 prints 7.85 x 10^-5; model solutions p.5: 'one of the parameters given in the exam was written as 7.85 x 10^-5 when it should have been 7.58 x 10^-5'. Writer's recompute (RK4 solve of the Kolmogorov equations from 65, h = 0.001, to age 135): with 7.58e-5, 10V(1) = 162,297 (SOA 162,296 from its tables); with 7.85e-5, 161,463. The earlier pass's 161,467 differs by 4, as its 162,301 did; the note says 'about 161,460'.
+- source_rank: 1
+- proposed_action: Maintainer decision: add an editor's note at the stem restating the SOA's own note; keep the printed 7.85 x 10^-5 with its (as printed) marker.
+- applied: true
+- fingerprint: 853dabc269d7
+
+## [F-005/R] Correction applied
+- entry_type: resolution
+- author: agent:writer
+- run_id: 2026-10-25T14:24Z/0282
+- date: 2026-10-25
+- resolves: F-005
+- status: resolved
+- note: Applied: editor's note added directly after the parameter line, restating the SOA's note (7.58 x 10^-5 intended; parts (a) and (b)(i) follow from it) and that the printed value gives 10V(1) of about 161,460, not 162,300. The stem's 7.85 x 10^-5 (as printed) is unchanged.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-25T14:34Z/a780
+- date: 2026-10-25
+- status_set: verified
+- confidence: medium
+- checks_run: checker for the writer's run 2026-10-25T14:24Z/0282: editor's note figures re-derived independently before reading the writer's working; note checked for accuracy, length, marking and placement directly after the passage it corrects; git diff HEAD confirms only the note (and agent soa-residue's points: line, already recorded) changed, publisher text, key and figures untouched; source pages re-rendered and read this session; Standard Sickness-Death Model solved numerically from age 65 (RK4, Kolmogorov forward equations, h = 0.002, 0.001, 0.00025 agree to 0.01)
+- sources_checked: SOA Exam ALTAM Spring 2024 — exam (question paper), Q3, pp.7-9, sha256:7877c415a5859ee881046def4553cc2d714688607058c1d807a069d873320ee5 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/exams/spring-2024-altam-exam.pdf; SOA Exam ALTAM Spring 2024 — model solutions and examiners' comments, Q3, pp.5-8, sha256:1ff2f7da08ae0d9bf5e542c2cbd87fa4b81ce334e1e47f8b117ecacc1103fb65 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/solutions/spring-2024-altam-solutions.pdf
+- note: Settled the figure by my own solve: with b2 = 7.58e-5, a-bar^11_65 = 8.81215, A-bar^12_65 = 0.568129 (deaths from state 1 and after recovery), a-bar^10_65 = 0.039446, 10V(1) = 162,297.5 (SOA 162,296.0 from four-figure tables); with the printed 7.85e-5, 8.69435, 0.573897, 0.039025, 10V(1) = 161,463.5. So the note's 'about 161,460' is right and the earlier pass's 161,467 (and 162,301) ran about 4 high. The SOA's own note on solutions p.5 (rendered) says one parameter 'was written as 7.85 x 10^-5 when it should have been 7.58 x 10^-5', which the editor's note restates; parts (c)-(f) give their own tables, so naming (a) and (b)(i) is the right scope. Stem p.7 (rendered) prints b2 = 7.85 x 10^-5; the rest of pp.7-9 and pp.5-8 spot-checked. Medium: the 161,460 rests on recomputation.

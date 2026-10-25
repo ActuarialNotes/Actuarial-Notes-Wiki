@@ -220,7 +220,9 @@ export function QuestionInfoDialog({
             <InfoRow label="Question ID" value={question.id} mono />
             <InfoRow
               label="Format"
-              value={`${TYPE_LABELS[question.type]} · ${question.points} ${question.points === 1 ? 'point' : 'points'}`}
+              value={`${TYPE_LABELS[question.type]} · ${question.points > 0
+                ? `${question.points} ${question.points === 1 ? 'point' : 'points'}`
+                : 'no point value printed'}`}
             />
             {question.author && <InfoRow label="Author" value={question.author} />}
             {showStudyMeta && (

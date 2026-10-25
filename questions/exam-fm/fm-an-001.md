@@ -1,0 +1,40 @@
+---
+id: "fm-an-001"
+exam: "Financial Mathematics"
+topic: "Time Value of Money"
+learning_objective: "Time Value of Money"
+difficulty: easy
+type: multiple-choice
+tags: ["exam-fm", "present-value", "compound-interest"]
+wiki_link:
+  - Concepts/Time+Value+of+Money
+  - Concepts/Time+Value+of+Money+Equations
+answer: "A"
+points: 1
+verification:
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-25
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:563d499068289163e005c82bbe252363cf4d434aa8ab1652a841d1ee8caad951
+  sources:
+    - "SOA, Notation and terminology used for Exam FM, p.1 (v = 1/(1+i); present value), sha256:f6cfa778c3c08d8118ff41f1cda86eda553cf5542b73ade914082fa55a292a0c — https://www.soa.org/globalassets/assets/Files/Edu/2019/exam-fm-notation-terminology2.pdf"
+    - "Finan, A Basic Course in the Theory of Interest and Derivatives Markets, §7 Present Value and Discount Functions, p.50 (discount function 1/(1+i)^t = v^t), sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf"
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-fm/fm-an-001.md
+---
+
+An investor will receive \$1,000 in 3 years. Using an annual effective interest rate of 5%, what is the present value of this payment?
+
+- A) 863.84
+- B) 857.34
+- C) 950.00
+- D) 1,157.63
+- E) 869.57
+
+## Explanation
+
+Using the present value formula with compound interest:
+
+$$PV = \frac{FV}{(1+i)^n} = \frac{1000}{(1.05)^3} = \frac{1000}{1.157625} \approx 863.84$$

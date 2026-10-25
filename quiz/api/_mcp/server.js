@@ -264,7 +264,8 @@ function questionHeading(ix, q) {
     q.objective,
     q.topic,
     q.difficulty,
-    `${q.points} point${q.points === 1 ? '' : 's'}`,
+    // A sample set that prints no point value is filed with 0, never an invented one.
+    q.points > 0 ? `${q.points} point${q.points === 1 ? '' : 's'}` : 'no point value printed',
     ...(q.sitting ? [`${q.originallyExam ?? examName(ix, q.exam)} ${q.sitting} paper`] : []),
   ].filter(Boolean).join(' · ')
 }

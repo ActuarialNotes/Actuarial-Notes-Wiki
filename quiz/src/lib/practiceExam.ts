@@ -29,7 +29,7 @@
 import { objectiveKey, type Question, type QuestionType } from './parser'
 import { practiceExamQuestions } from './pastExams'
 import { shuffle } from './quizDifficulty'
-import { paceForExam } from './quizTiming'
+import { paceForExam, pointsForPace } from './quizTiming'
 import { parseSectionWeight } from './readiness'
 import type { WikiExamSyllabus } from './wikiParser'
 
@@ -40,6 +40,8 @@ export interface PracticeExamBlueprint {
   questions: number
   /** The paper's total points when it is paced by the mark, else null. */
   points: number | null
+  /** What a question whose source prints no point value counts for (`pointsForPace`). */
+  unprintedPoints: number
   /** The question formats the paper sets; null when nothing says, which admits every one. */
   types: readonly QuestionType[] | null
 }
@@ -90,6 +92,7 @@ export function practiceExamBlueprint(exam: string): PracticeExamBlueprint {
     exam,
     questions: practiceExamQuestions(exam),
     points: pace?.per === 'point' ? pace.units : null,
+    unprintedPoints: pace?.per === 'point' ? pointsForPace(0, pace) : 1,
     types: PRACTICE_EXAM_TYPES[exam] ?? null,
   }
 }
@@ -175,8 +178,8 @@ export function apportion(total: number, weights: readonly number[], caps: reado
   return out
 }
 
-function pointsOf(q: Pick<Question, 'points'>): number {
-  return q.points > 0 ? q.points : 1
+function pointsOf(q: Pick<Question, 'points'>, unprinted = 1): number {
+  return q.points > 0 ? q.points : unprinted
 }
 
 /**
@@ -184,12 +187,12 @@ function pointsOf(q: Pick<Question, 'points'>): number {
  * it brings the total closer to the target, so a 12-point question doesn't
  * blow a 3-point gap but a 2-point one closes it.
  */
-function takeTowardPoints<T extends Pick<Question, 'points'>>(list: readonly T[], target: number): T[] {
+function takeTowardPoints<T extends Pick<Question, 'points'>>(list: readonly T[], target: number, unprinted: number): T[] {
   const out: T[] = []
   let sum = 0
   for (const q of list) {
     if (sum >= target) break
-    const p = pointsOf(q)
+    const p = pointsOf(q, unprinted)
     if (Math.abs(target - (sum + p)) < Math.abs(target - sum)) {
       out.push(q)
       sum += p
@@ -215,7 +218,7 @@ export function drawPracticeExam<T extends Question>(
 
   if (topics.length === 0) {
     return blueprint.points !== null
-      ? takeTowardPoints(eligible, blueprint.points)
+      ? takeTowardPoints(eligible, blueprint.points, blueprint.unprintedPoints)
       : eligible.slice(0, blueprint.questions)
   }
 
@@ -234,12 +237,13 @@ export function drawPracticeExam<T extends Question>(
     const target = blueprint.points
     const reached = bins.map((b, i) => (b.length > 0 ? weights[i] : 0))
     const sum = reached.reduce((n, w) => n + w, 0)
-    picked = sum > 0 ? bins.flatMap((b, i) => takeTowardPoints(b, (target * reached[i]) / sum)) : []
-    const have = picked.reduce((n, q) => n + pointsOf(q), 0)
+    const unprinted = blueprint.unprintedPoints
+    picked = sum > 0 ? bins.flatMap((b, i) => takeTowardPoints(b, (target * reached[i]) / sum, unprinted)) : []
+    const have = picked.reduce((n, q) => n + pointsOf(q, unprinted), 0)
     if (have < target) {
       const taken = new Set(picked)
       const rest = [...bins.flat(), ...unplaced].filter(q => !taken.has(q))
-      picked = picked.concat(takeTowardPoints(shuffle(rest, random), target - have))
+      picked = picked.concat(takeTowardPoints(shuffle(rest, random), target - have, unprinted))
     }
   } else {
     const n = Math.min(blueprint.questions, eligible.length)
@@ -271,6 +275,7 @@ function withEveryFormat<T extends Question>(
   if (!blueprint.types || blueprint.types.length < 2 || picked.length < blueprint.types.length) return picked
   const out = [...picked]
   const section = (q: T) => (syllabus ? sectionOf(q, syllabus) : -1)
+  const u = blueprint.unprintedPoints
   for (const type of blueprint.types) {
     if (out.some(q => q.type === type)) continue
     const candidate = eligible.find(q => q.type === type && !out.includes(q))
@@ -283,7 +288,7 @@ function withEveryFormat<T extends Question>(
     const sameSection = swappable.filter(q => section(q) === section(candidate))
     const pool = sameSection.length > 0 ? sameSection : swappable
     const replaced = pool.reduce((best, q) =>
-      Math.abs(pointsOf(q) - pointsOf(candidate)) < Math.abs(pointsOf(best) - pointsOf(candidate)) ? q : best)
+      Math.abs(pointsOf(q, u) - pointsOf(candidate, u)) < Math.abs(pointsOf(best, u) - pointsOf(candidate, u)) ? q : best)
     out[out.indexOf(replaced)] = candidate
   }
   return out

@@ -15,13 +15,13 @@ wiki_link:
   - Concepts/Moment
   - Concepts/Severity+Distribution
   - Concepts/Probability+Distributions
-points: 6
+points: 0
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-23
+  last_checked: 2026-10-25
   last_checked_by: agent:validate-v1
-  content_hash: sha256:bc60f9c5a06d653a59aedb09ef016f2387a8aac757418fe84079251682d530d4
+  content_hash: sha256:e60aabe27053ca40e56e9383bc84e4890c8f50ab38d91ba3e6065e978dcb9a8f
   sources:
     - "SOA ASTAM Sample Questions (version of Feb. 23, 2026), Q14, p.19, sha256:0294cf4e8717191cda2747e7a6bb49fbb5e2d08f2d281ec979e670621de74ab4 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/questions/february-2024-astam-questions.pdf"
     - "SOA ASTAM Solutions to Sample Questions, Q14, pp.27-28, sha256:c4206394603cf205da0668d40333bee5aaa6e3dadcaa241fdb03e5488a1ba4e1 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/solutions/february-2024-astam-solutions.pdf"

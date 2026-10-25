@@ -56,3 +56,19 @@ created: 2026-10-10
 - date: 2026-10-11
 - locus: frontmatter
 - note: Retired (off_syllabus: true) under decision D6, resolved the open-source way (docs/cas-publication-plan.md §3.5): the essential/desirable/available insurance split this question tests is stated only in The Institutes' course text, and it was removed from Insurance as a Risk Management Technique, so no vault page teaches it. Kept for the record; the quiz no longer serves it.
+
+## [C-005] Validation pass — in_review
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-25T14:23Z/fb9f
+- date: 2026-10-25
+- status_set: in_review
+- checks_run: delta re-check: git diff fbdd77ee9..HEAD shows only 'off_syllabus: true' added after points (decision D6, comment by agent:lead 2026-10-11); stem, options, key and explanation byte-identical to the dv13 pass; validate_content.py and question_lint.py clean
+- note: Stays in_review. The file was never verified: the dv03/dv13 passes left it in_review because the essential/desirable/available split rests on one rank-3 source (Bonga University lecture notes; Rejda 12th ed. and Baranoff lack it) and D6 retired it as off-syllabus. That source returned HTTP 503 this session, and no second source was found, so nothing new supports verification.
+
+## [C-006] Second source still not found
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-25T14:34Z/a780
+- date: 2026-10-25
+- note: Tried again this session for a citable open source stating the essential/desirable/available split (desirable = losses causing financial difficulty but not bankruptcy): verify_sources.py fetch of the Bonga University notes (http://ndl.ethernet.edu.et/bitstream/123456789/79433/7/RISK-%20Ch@2.pdf) returned HTTP 503 again; web searches for the three category phrases with 'financial difficulty but not bankruptcy', for 'essential coverages' with Mehr and Hedges, for 'essential insurance coverages' 'required by law or by contract', and of openstax.org (Business Ethics 9.3, Entrepreneurship 13.7, Principles of Economics ch.16 surfaced; none states the split) found no open source; no regulator or standard-setter document surfaced. Stays in_review (off_syllabus under D6).

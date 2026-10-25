@@ -12,17 +12,17 @@ wiki_link:
   - Concepts/Cramér-Rao+Lower+Bound
   - Concepts/Delta+Method
   - Concepts/Policy+Limit
-points: 5
+points: 0
 verification:
-  status: in_review
-  confidence: null
-  last_checked: 2026-10-23
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-25
   last_checked_by: agent:validate-v1
-  content_hash: sha256:c95e8de0061ded295c7b2dc17d7bac1a2e97d3850b237e8d6b43dd53cf99366f
+  content_hash: sha256:f12850043cd742ac5cec8af76d86dc7d6b3d9e98f8385b72394ff0f2dc44c4d5
   sources:
     - "SOA ASTAM Sample Questions (version of Feb. 23, 2026), Q17, p.22, sha256:0294cf4e8717191cda2747e7a6bb49fbb5e2d08f2d281ec979e670621de74ab4 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/questions/february-2024-astam-questions.pdf"
     - "SOA ASTAM Solutions to Sample Questions, Q17, p.33, sha256:c4206394603cf205da0668d40333bee5aaa6e3dadcaa241fdb03e5488a1ba4e1 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/solutions/february-2024-astam-solutions.pdf"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-astam/astam-017.md
 ---
@@ -128,3 +128,6 @@ g'(\theta) &= 1 - e^{-1000/\theta} + \frac{1000}{\theta}e^{-1000/\theta} \text{ 
 $$
 
 80% CI is approximately $621.25 \pm 1.28(435.6) = (62.96, 1179.54)$
+
+> [!note] Editor's note
+> The SOA's $g'(\theta)$ has $+$ where it should have $-$: differentiating $\theta\left(1 - e^{-1000/\theta}\right)$ gives $g'(\theta) = 1 - e^{-1000/\theta} - \frac{1000}{\theta}e^{-1000/\theta}$, so $g'(960) = 0.2796$, not 1.0147. Then $V\left[g(\hat{\theta})\right] \approx 0.2796^2(184{,}320) = 14{,}406 = 120.0^2$, and the 80% interval is $621.25 \pm 1.2816(120.0) \approx (467.4, 775.1)$, not $(62.96, 1179.54)$.

@@ -12,17 +12,17 @@ wiki_link:
   - Concepts/Loss+Ratio+Method
   - Concepts/Loss+Cost
   - Concepts/Classification+Ratemaking
-points: 4
+points: 0
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-10-23
+  last_checked: 2026-10-25
   last_checked_by: agent:validate-v1
-  content_hash: sha256:a6cad7c14da03b5a341eeef5141642260100805027df3914aa732ad3d6fb8859
+  content_hash: sha256:ce9df4acfe88c4afc70322d76b7a09d89cdf63af3271cdb8e74e6bdc1fcf9f84
   sources:
+    - "SOA ASTAM Solutions to Sample Questions, Q2, pp.4-6 (parallelogram figure p.4), sha256:c4206394603cf205da0668d40333bee5aaa6e3dadcaa241fdb03e5488a1ba4e1 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/solutions/february-2024-astam-solutions.pdf"
     - "SOA ASTAM Sample Questions (version of Feb. 23, 2026), Q2, pp.4-5, sha256:0294cf4e8717191cda2747e7a6bb49fbb5e2d08f2d281ec979e670621de74ab4 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/questions/february-2024-astam-questions.pdf"
-    - "SOA ASTAM Solutions to Sample Questions, Q2, pp.4-6, sha256:c4206394603cf205da0668d40333bee5aaa6e3dadcaa241fdb03e5488a1ba4e1 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/solutions/february-2024-astam-solutions.pdf"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-astam/astam-002.md
 ---
@@ -66,7 +66,9 @@ The following rate changes have occurred:
 
 ### Explanation
 
-(i) The SOA's solution draws the parallelogram as a figure. In words: calendar years 2017, 2018 and 2019 are drawn as three adjacent squares (time across, the portion of policies earned up the side). Each rate change is a diagonal line rising from the date it took effect: from 5/24 of the way through 2017 (March 15) into 2018, from 7/12 of the way through 2018 (July 30) into 2019, and from 10/12 of the way through 2019 (October 31). The regions between the lines are labelled, oldest first, $P$, $1.10P$, $(1.1)(1.08)P$ and, in the corner of 2019 after the last line, $(1.10)(1.08)(0.96)P$.
+(i)
+
+![Parallelogram diagram: calendar years 2017, 2018 and 2019 as three adjacent rectangles. Diagonal lines rise from 5/24 of the way through 2017 into 2018, from 7/12 of the way through 2018 into 2019, and from 10/12 of the way through 2019. The regions are labelled P, 1.10P and (1.1)(1.08)P, and an arrow points the label (1.10)(1.08)(0.96)P to the corner of 2019 after the last line](https://raw.githubusercontent.com/ActuarialNotes/Actuarial-Notes-Wiki/main/Media/Attachments/astam-002-b-i-parallelogram.png)
 
 (ii) **2017**
 

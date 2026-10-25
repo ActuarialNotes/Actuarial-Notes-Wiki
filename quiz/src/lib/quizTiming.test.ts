@@ -4,6 +4,7 @@ import {
   formatClock,
   formatPace,
   paceForExam,
+  pointsForPace,
   storedWithTimed,
   timeAllowanceSeconds,
   timedFromStored,
@@ -29,6 +30,14 @@ describe('timeAllowanceSeconds', () => {
       { exam: 'Exam 5', points: 1 },
       { exam: 'Exam 5', points: 3 },
     ])).toBe(Math.round(4 * perPoint))
+  })
+
+  it('gives a question with no printed points the paper’s average question', () => {
+    // ASTAM: 180 minutes, 60 points, six questions — an unscored sample question
+    // (`points: 0`) gets a sixth of the sitting, 30 minutes.
+    expect(timeAllowanceSeconds([{ exam: 'Exam ASTAM', points: 0 }])).toBe(30 * 60)
+    expect(pointsForPace(0, { units: 55 })).toBe(1)
+    expect(pointsForPace(2.5, { units: 60, questions: 6 })).toBe(2.5)
   })
 
   it('budgets a mixed set at each question’s own pace', () => {

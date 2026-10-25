@@ -48,6 +48,8 @@ def run_report(a: dict, run_id: str) -> str:
                   f"({pct(a['cumulative'][0])} → {pct(a['cumulative'][-1])})"]
     L += [""]
 
+    L += _control_section(a.get("control"))
+
     L += ["## Score by concept and tag", ""]
     L += ["**By concept** (weakest first)", ""]
     L += _table(["Concept", "Attempts", "Score"], [[r["key"], r["n"], pct(r["score"])] for r in a["by_concept"][:30]])
@@ -135,8 +137,9 @@ def run_report(a: dict, run_id: str) -> str:
 
     L += ["## Staying in character", ""]
     if a["out_of_character"]:
-        L += ["These attempts used knowledge the auditor could not trace to the profile, the pages read or the notes. "
-              "They are scored like the rest; read their results with that in mind.", ""]
+        L += ["These attempts used knowledge that could not be traced to the profile, the pages read or the notes: "
+              "the auditor named it, or the answer was right and confident on concepts the learner had no way to "
+              "meet. They are scored like the rest; read their results with that in mind.", ""]
         L += _table(["Attempt", "Question", "What was flagged"],
                     [[o["qid"], f"`{o['source_id']}`", _cut("; ".join(o["flags"]), 400)] for o in a["out_of_character"]])
     else:
@@ -156,7 +159,9 @@ def run_report(a: dict, run_id: str) -> str:
               f"{', '.join(x['pages_before'] or []) or 'none'}. Looked up while answering: "
               f"{', '.join(x['pages_during'] or []) or 'nothing'}.", "",
               f"Answer: `{_cut(json.dumps(x['answer']) if not isinstance(x['answer'], str) else x['answer'], 300)}`", "",
-              "Working:", "", "> " + _cut(x["reasoning"], 2500), "", "</details>", ""]
+              f"Sources it listed: {', '.join(str(s) for s in x['sources'] or []) or 'none'}."
+              + (f" Without studying: {pct(x['control_score'])}." if x.get("control_score") is not None else ""),
+              "", "</details>", ""]
 
     L += ["## Run details", "",
           f"- Question pool: {a['pool']} questions; left out: " +
@@ -166,14 +171,43 @@ def run_report(a: dict, run_id: str) -> str:
     return "\n".join(L)
 
 
+def _added(x) -> str:
+    return "—" if x is None else f"{100 * x:+.0f} pts"
+
+
+def _control_section(c: dict | None) -> list[str]:
+    L = ["## What studying added", ""]
+    if c is None:
+        return L + ["No control run (`--no-control`, or the run stopped early): nothing here separates what the guide taught from what "
+                    "the model already knew.", ""]
+    if not c["questions"]:
+        return L + ["The control learner answered none of this run's marked questions.", ""]
+    L += [f"The same student with no pages and no notes answered {c['questions']} of these questions: "
+          f"**{pct(c['control'])}** without studying, **{pct(c['studied'])}** after — studying added "
+          f"**{_added(c['added'])}**. Only that difference is the guide's; the rest the model knew already.", ""]
+    if c.get("unanswered"):
+        L += [f"{c['unanswered']} control question(s) got no usable answer and score zero.", ""]
+    L += ["**By concept** (least added first)", ""]
+    L += _table(["Concept", "Questions", "After studying", "Without", "Added"],
+                [[r["key"], r["n"], pct(r["studied"]), pct(r["control"]), _added(r["added"])]
+                 for r in c["by_concept"][:30]])
+    L += [""]
+    if c["known_without_study"]:
+        L += ["**Answered right without studying** — the guide gets no credit for these: " +
+              ", ".join(f"{k['qid']} (`{k['source_id']}`)" for k in c["known_without_study"]), ""]
+    return L
+
+
 def comparison_report(analyses: list[dict], run_id: str) -> str:
     exam = analyses[0]["exam_title"]
     names = [x["profile"] for x in analyses]
     L = [f"# Simulated learners compared: {exam}", "", f"Run `{run_id}` · {len(analyses)} profiles", ""]
     L += ["## Overall", ""]
-    L += _table(["Profile", "Strategy", "Sessions", "Attempts", "Score", "Out of character", "Cost"],
+    L += _table(["Profile", "Strategy", "Sessions", "Attempts", "Score", "Added by studying", "Out of character",
+                 "Cost"],
                 [[x["profile"], x["strategy"], x["sessions"], x["attempts_total"], pct(x["overall"]),
-                  len(x["out_of_character"]), f"${x['cost_usd'] or 0:.2f}"] for x in analyses])
+                  _added((x.get("control") or {}).get("added")), len(x["out_of_character"]),
+                  f"${x['cost_usd'] or 0:.2f}"] for x in analyses])
     L += [""]
 
     def matrix(key: str, min_profiles: int):

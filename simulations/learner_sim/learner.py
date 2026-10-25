@@ -6,13 +6,15 @@ the loader and passed through the guard) into actions. The isolation test
 holds it to that.
 
 Staying in character can only be asked of a model, not forced: the persona
-draws an explicit knowledge boundary, and every fact in the learner's working
-must carry a provenance tag — `[page: …]`, `[notes]` or `[prior: …]` — which
-the auditor (auditor.py) then checks.
+draws an explicit knowledge boundary, and each answer lists the sources it
+relied on — `page: <title>`, `notes`, `prior: <item>` or `guess` — which the auditor
+(auditor.py) then checks. The learner's working is not requested, and
+`trim_reply` keeps nothing of a reply but its action and that action's fields.
 """
 
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass, field
 
 from .backends import extract_json
@@ -24,12 +26,35 @@ ACTIONS = {
     "search": '{"query": "<words>"}  — find study pages',
     "update_notes": '{"notes": "<your COMPLETE notes file, markdown, at most %d words>"}  — replaces the file',
     "next_question": '{"focus": "<a concept or topic you want to practise, or empty>"}',
-    "answer": '{"reasoning": "<your full working, every fact tagged>", "answer": <see the question>, '
-              '"confidence": <0-100>, "sources": ["page: <title>", "notes", "prior: <item>"]}',
+    "answer": '{"answer": <see the question>, "confidence": <0-100>, '
+              '"sources": ["page: <title>", "notes", "prior: <item>", "guess"]}  — the answer as you would submit it',
     "flag_question": '{"reason": "<what is ambiguous, missing or wrong in the question>"}',
     "end_session": '{"reflection": "<what you learned, what still confuses you>"}',
 }
+# The fields each action takes. Anything else in a reply — prose around the JSON, or
+# a key no action defines — is never kept (see trim_reply).
+ARG_FIELDS = {
+    "syllabus": (),
+    "read_page": ("title", "mode"),
+    "search": ("query",),
+    "update_notes": ("notes",),
+    "next_question": ("focus",),
+    "answer": ("answer", "confidence", "sources"),
+    "flag_question": ("reason",),
+    "end_session": ("reflection",),
+}
 NOTES_WORD_LIMIT = 1500
+
+
+def trim_reply(reply: str) -> str:
+    """What is kept of a model reply: its action and that action's own fields, as JSON."""
+    try:
+        obj = extract_json(reply)
+    except ValueError:
+        return "(no action in reply; text not kept)"
+    name = str(obj.get("action") or "")
+    args = obj.get("args") if isinstance(obj.get("args"), dict) else {}
+    return json.dumps({"action": name, "args": {k: args[k] for k in ARG_FIELDS.get(name, ()) if k in args}})
 
 
 def _band(x: float, low: str, mid: str, high: str) -> str:
@@ -81,16 +106,10 @@ def _prior_lines(prior: dict) -> list[str]:
     return lines
 
 
-def build_persona(p: Profile, exam_title: str) -> str:
+def _who(p: Profile) -> str:
     mastered = ", ".join(p.mastered) or "none in particular"
     gaps = "\n".join(f"- {g}" for g in p.gaps) or "- (none listed)"
-    actions = "\n".join(f"- {name} {spec % NOTES_WORD_LIMIT if '%d' in spec else spec}"
-                        for name, spec in ACTIONS.items())
-    return f"""You are role-playing a real person studying for the actuarial exam {exam_title}, using the \
-Actuarial Notes study wiki. You are not an AI assistant with encyclopedic knowledge: you are this student, \
-and the point of the exercise is to find out how well the wiki teaches *them*.
-
-## Who you are
+    return f"""## Who you are
 {p.name}. {p.description}
 
 What you already know:
@@ -98,7 +117,17 @@ What you already know:
 Concepts you already have down: {mastered}.
 
 What you are weak on, or have never learned:
-{gaps}
+{gaps}"""
+
+
+def build_persona(p: Profile, exam_title: str) -> str:
+    actions = "\n".join(f"- {name} {spec % NOTES_WORD_LIMIT if '%d' in spec else spec}"
+                        for name, spec in ACTIONS.items())
+    return f"""You are role-playing a real person studying for the actuarial exam {exam_title}, using the \
+Actuarial Notes study wiki. You are not an AI assistant with encyclopedic knowledge: you are this student, \
+and the point of the exercise is to find out how well the wiki teaches *them*.
+
+{_who(p)}
 
 How you study:
 {chr(10).join('- ' + s for s in trait_sentences(p))}
@@ -111,13 +140,15 @@ not in those three places, you do not know it. Do not fill it in from general kn
 the wiki, reason from what you have, or guess, as this student would.
 - Your notes are your memory. Between sessions you remember only what your notes say. Anything worth \
 keeping goes into them with update_notes.
-- In your reasoning, tag every fact or formula with where it came from: [page: <title>], [notes] or \
-[prior: <item>]. An untagged fact counts as knowledge you were not supposed to have.
+- With each answer, list in `sources` what you used: `page: <title>` for a study page, `notes`, or \
+`prior: <item>`, or `guess` if you used nothing. List only what you actually used. Something you used but did not list counts as knowledge \
+you were not supposed to have.
+- Give each answer as you would submit it. You are not asked to show your working.
 - Perform like this student, not better: their misreadings, slips and doubts are the data we need.
 
 ## How you act
 Reply with exactly ONE JSON object and nothing else:
-{{"thought": "<a sentence or two, in character>", "action": "<name>", "args": {{...}}}}
+{{"action": "<name>", "args": {{...}}}}
 
 Actions:
 {actions}
@@ -126,22 +157,47 @@ The study session tells you your remaining budget after every action. Practice q
 what you are told after an answer depends on the study mode."""
 
 
+def build_control_persona(p: Profile, exam_title: str) -> str:
+    """The same student before studying: no wiki, no notes, only the prior knowledge.
+
+    The control learner's score is what the student gets without the guide, so the
+    difference from the studied learner's is what the guide taught."""
+    return f"""You are role-playing a real person who is about to start studying for the actuarial exam \
+{exam_title} and has not opened any study material yet. You are not an AI assistant with encyclopedic \
+knowledge: you are this student, and the point of the exercise is to find out what *they* can already do.
+
+{_who(p)}
+
+## The knowledge boundary — the most important rule
+- You may use only the prior knowledge above. You have no study pages and no notes.
+- If something you need — a formula, a definition, a technique, a fact about insurance or finance — is \
+not in your prior knowledge, you do not know it. Do not fill it in from general knowledge. Reason from \
+what you have, or guess, as this student would.
+- With each answer, list in `sources` what you used: `prior: <item>`, or `guess` if you used nothing.
+- Give each answer as you would submit it. You are not asked to show your working.
+- Perform like this student, not better: what they can't yet do is the data we need.
+
+## How you act
+You are given practice questions one at a time and told nothing about how you did. Reply to each with \
+exactly ONE JSON object and nothing else:
+{{"action": "answer", "args": {{"answer": <see the question>, "confidence": <0-100>, \
+"sources": ["prior: <item>", "guess"]}}}}"""
+
+
 @dataclass
 class Action:
     name: str
     args: dict = field(default_factory=dict)
-    thought: str = ""
-    raw: str = ""
     parse_failures: int = 0
 
 
 class Learner:
-    def __init__(self, guard, profile: Profile, exam_title: str, max_retries: int = 2):
+    def __init__(self, guard, profile: Profile, exam_title: str, max_retries: int = 2, control: bool = False):
         self.guard = guard
         self.profile = profile
         self.exam_title = exam_title
         self.max_retries = max_retries
-        self.system_prompt = build_persona(profile, exam_title)
+        self.system_prompt = (build_control_persona if control else build_persona)(profile, exam_title)
 
     def start(self) -> None:
         self.guard.start(self.system_prompt)
@@ -158,14 +214,14 @@ class Learner:
                 args = obj.get("args") or {}
                 if not isinstance(args, dict):
                     raise ValueError("args must be an object")
-                return Action(name, args, str(obj.get("thought") or ""), reply, failures)
+                return Action(name, args, failures)
             except ValueError as e:
                 failures += 1
                 if failures > self.max_retries:
-                    return Action("invalid", {"error": str(e)}, "", reply, failures)
+                    return Action("invalid", {"error": str(e)}, failures)
                 reply = self.guard.send(
                     f"That reply could not be used ({e}). Reply with exactly one JSON object: "
-                    '{"thought": "...", "action": "<one of ' + ", ".join(ACTIONS) + '>", "args": {...}}')
+                    '{"action": "<one of ' + ", ".join(ACTIONS) + '>", "args": {...}}')
 
     def close(self) -> None:
         self.guard.close()

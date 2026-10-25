@@ -14,6 +14,7 @@ from . import REPO_ROOT, SIM_DIR
 from .analysis import analyze
 from .backends import ClaudeCodeOneShot, ClaudeCodeSession, ScriptedSession
 from .content_loader import ContentLoader
+from .control import run_control
 from .diagnostician import diagnose
 from .exams import resolve_exam
 from .grader import Grader
@@ -43,6 +44,9 @@ def _run_one(profile_path: str, args, run_root: str, run_id: str) -> dict:
     run = SimulationRun(profile, exam, out_dir, cfg, factory, grading, auditor, loader, bank)
     print(f"[{profile.slug}] {exam.title}: {cfg.sessions} session(s), pool {len(run.pool)} questions …", flush=True)
     run.run()
+    if not args.no_control and not run.stopped_reason:
+        asked = run_control(run, factory, args.control_sample)
+        print(f"[{profile.slug}] control learner: {asked} question(s) closed book", flush=True)
     analysis = analyze(out_dir, bank, loader, profile)
     solution_of = Grader(bank).solution_text
     analysis["diagnosis"] = diagnose(analyst, analysis, bank, loader, solution_of)
@@ -72,6 +76,10 @@ def run_learner(argv: list[str] | None = None) -> int:
     ap.add_argument("--mc-only", action="store_true", help="multiple-choice questions only")
     ap.add_argument("--no-audit", action="store_true", help="skip the model half of the character audit")
     ap.add_argument("--no-diagnose", action="store_true", help="skip the model-written diagnosis and edits")
+    ap.add_argument("--no-control", action="store_true",
+                    help="skip the control learner (the same student, unstudied) that measures what studying added")
+    ap.add_argument("--control-sample", type=int,
+                    help="put at most this many of the learner's questions to the control learner")
     ap.add_argument("--seed", type=int)
     ap.add_argument("--parallel", type=int, default=1, help="profiles to run at once")
     ap.add_argument("--out", default=os.path.join(SIM_DIR, "runs"))

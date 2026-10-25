@@ -55,8 +55,7 @@ class ScriptedPolicy:
             labels = re.findall(r'"([a-z0-9]+)": ', text)
             ans = {lab: "I would apply the method from the reading." for lab in labels} or \
                 "I would apply the method from the reading."
-        return self._act("answer", {"reasoning": "I recall this from [notes] and [page: Syllabus].",
-                                    "answer": ans, "confidence": 40, "sources": ["notes"]})
+        return self._act("answer", {"answer": ans, "confidence": 40, "sources": ["notes", "page: Syllabus"]})
 
     def _act(self, name: str, args: dict) -> str:
-        return json.dumps({"thought": "scripted", "action": name, "args": args})
+        return json.dumps({"action": name, "args": args})

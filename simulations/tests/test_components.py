@@ -19,7 +19,10 @@ from learner_sim.backends import ScriptedOneShot, ScriptedSession, extract_json 
 from learner_sim.content_loader import ContentLoader, skim, truncate_derivations  # noqa: E402
 from learner_sim.exams import resolve_exam  # noqa: E402
 from learner_sim.grader import Grader, normalize_choice, numeric_match  # noqa: E402
-from learner_sim.learner import build_persona  # noqa: E402
+from learner_sim.analysis import control_summary  # noqa: E402
+from learner_sim.auditor import beyond_knowledge, deterministic_flags, norm_text, unreached_concepts  # noqa: E402
+from learner_sim.control import control_questions, run_control  # noqa: E402
+from learner_sim.learner import ACTIONS, ARG_FIELDS, build_control_persona, build_persona, trim_reply  # noqa: E402
 from learner_sim.profiles import ProfileError, load_profile, profile_from_dict  # noqa: E402
 from learner_sim.report import comparison_report, run_report  # noqa: E402
 from learner_sim.scripted import ScriptedPolicy  # noqa: E402
@@ -225,6 +228,138 @@ class RunAndReportTests(unittest.TestCase):
         cmp = comparison_report(self.analyses, "test")
         self.assertIn("## Which pages fail which learners", cmp)
         self.assertIn("| A |", cmp)
+
+
+class WorkingIsNotRecordedTests(unittest.TestCase):
+    """The learner's working is never asked for, and never kept."""
+
+    def test_no_action_asks_for_reasoning_or_thoughts(self):
+        for name, spec in ACTIONS.items():
+            self.assertNotIn("reasoning", spec, name)
+            self.assertNotIn("thought", spec, name)
+
+    def test_persona_asks_for_sources_not_working(self):
+        from learner_sim.profiles import profile_from_dict
+        prof = profile_from_dict({"name": "T", "exam": "FM", "description": "d"})
+        persona = build_persona(prof, "Exam FM")
+        self.assertIn('"sources"', persona)
+        self.assertIn("`guess`", persona)
+        self.assertNotIn("reasoning", persona.lower())
+        self.assertNotIn("thought", persona.lower())
+
+    def test_trim_reply_keeps_only_the_action_and_its_own_fields(self):
+        reply = ('Let me think about the Poisson step first. '
+                 '{"action": "answer", "args": {"answer": "B", "confidence": 60, '
+                 '"sources": ["notes"], "reasoning": "full working here", "thought": "hm"}} done')
+        kept = json.loads(trim_reply(reply))
+        self.assertEqual(kept, {"action": "answer",
+                                "args": {"answer": "B", "confidence": 60, "sources": ["notes"]}})
+        self.assertNotIn("working", trim_reply(reply))
+        self.assertNotIn("Poisson", trim_reply(reply))
+
+    def test_trim_reply_without_an_action_stores_no_text(self):
+        self.assertEqual(trim_reply("I would rather just explain it in prose."),
+                         "(no action in reply; text not kept)")
+
+    def test_every_action_has_its_kept_fields(self):
+        self.assertEqual(set(ARG_FIELDS), set(ACTIONS))
+
+    def test_an_answer_with_no_sources_is_flagged(self):
+        self.assertIn("no sources listed", deterministic_flags({"sources": []}, set()))
+        self.assertNotIn("no sources listed", deterministic_flags({"sources": ["notes"]}, set()))
+
+
+class BeyondKnowledgeTests(unittest.TestCase):
+    """A confident right answer on concepts the learner had no way to meet is flagged."""
+
+    ATTEMPT = {"concepts": ["Macaulay Duration"], "score": 1.0, "confidence": 90, "pressed_to_guess": False}
+
+    def test_unreached_unless_opened_or_named(self):
+        self.assertEqual(unreached_concepts(["Macaulay Duration"], set(), norm_text("compound interest")),
+                         ["Macaulay Duration"])
+        self.assertEqual(unreached_concepts(["Macaulay Duration"], {"Macaulay Duration"}, ""), [])
+        self.assertEqual(unreached_concepts(["Macaulay Duration"], set(), norm_text("See [[Macaulay-Duration]].")),
+                         [])
+
+    def test_flags_only_the_clear_case(self):
+        self.assertIn("Macaulay Duration", beyond_knowledge(self.ATTEMPT, ["Macaulay Duration"]))
+        for change in ({"score": 0.5}, {"confidence": 60}, {"confidence": None}, {"pressed_to_guess": True},
+                       {"concepts": []}):
+            self.assertIsNone(beyond_knowledge({**self.ATTEMPT, **change}, ["Macaulay Duration"]), change)
+
+    def test_one_reachable_concept_is_enough(self):
+        attempt = {**self.ATTEMPT, "concepts": ["Macaulay Duration", "Present Value"]}
+        self.assertIsNone(beyond_knowledge(attempt, ["Macaulay Duration"]))
+
+
+class ControlLearnerTests(unittest.TestCase):
+    """The same student, unstudied, answers the learner's questions; the difference is the guide's."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.tmp = tempfile.mkdtemp(prefix="learner-control-")
+        cls.exam = resolve_exam("FM")
+        cls.loader = ContentLoader(cls.exam)
+        cls.bank = load_bank(ROOT, cls.exam.bank)
+        cls.prof = profile_from_dict({"name": "C", "exam": "FM", "seed": 3,
+                                      "time_budget": {"steps_per_session": 16, "questions_per_session": 4}})
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(cls.tmp, ignore_errors=True)
+
+    def _run(self, name: str, sessions: int = 1) -> SimulationRun:
+        run = SimulationRun(self.prof, self.exam, os.path.join(self.tmp, name), RunConfig(sessions=sessions),
+                            lambda: ScriptedSession(ScriptedPolicy()), loader=self.loader, bank=self.bank)
+        run.run()
+        return run
+
+    def test_persona_has_no_pages_notes_or_working(self):
+        persona = build_control_persona(self.prof, "Exam FM")
+        self.assertIn("no study pages and no notes", persona)
+        self.assertIn('"action": "answer"', persona)
+        for word in ("read_page", "update_notes", "reasoning", "thought"):
+            self.assertNotIn(word, persona)
+
+    def test_asks_each_attempted_question_once_and_resumes(self):
+        run = self._run("resume")
+        attempted = set(run.state["attempts"])
+        self.assertEqual(run_control(run, lambda: ScriptedSession(ScriptedPolicy())), len(attempted))
+        events = read_events(os.path.join(run.out_dir, "control.jsonl"))
+        self.assertEqual(sorted(e["source_id"] for e in events if e["type"] == "control_attempt"), sorted(attempted))
+        self.assertEqual(control_questions(run), [])
+        self.assertEqual(run_control(run, lambda: ScriptedSession(ScriptedPolicy())), 0)
+
+    def test_sample_caps_the_control(self):
+        run = self._run("sample")
+        self.assertEqual(len(control_questions(run, sample=2)), 2)
+        self.assertEqual(control_questions(run, sample=2), control_questions(run, sample=2))
+
+    def test_summary_is_studied_minus_control(self):
+        out = os.path.join(self.tmp, "summary")
+        os.makedirs(out)
+        rows = [("q1", "Q1", 1.0, 1.0, ["Present Value"]), ("q2", "Q2", 1.0, 0.0, ["Duration"]),
+                ("q3", "Q3", 0.0, 0.0, ["Duration"])]
+        with open(os.path.join(out, "control.jsonl"), "w") as fh:
+            for sid, qid, _, ctl, _ in rows:
+                fh.write(json.dumps({"type": "control_attempt", "source_id": sid, "qid": qid, "answered": True,
+                                     "verdict": "correct" if ctl else "incorrect", "score": ctl}) + "\n")
+            fh.write(json.dumps({"type": "control_end", "cost_usd": 0.25}) + "\n")
+        scored = [{"source_id": sid, "qid": qid, "score": s, "concepts": c} for sid, qid, s, _, c in rows]
+        c = control_summary(out, scored)
+        self.assertEqual((c["questions"], c["studied"], c["control"], c["added"]), (3, 0.667, 0.333, 0.333))
+        self.assertEqual([k["source_id"] for k in c["known_without_study"]], ["q1"])
+        self.assertEqual({r["key"]: r["added"] for r in c["by_concept"]}, {"Present Value": 0.0, "Duration": 0.5})
+        self.assertEqual(c["cost_usd"], 0.25)
+        self.assertEqual([a["control_score"] for a in scored], [1.0, 0.0, 0.0])
+        self.assertIsNone(control_summary(os.path.join(self.tmp, "nowhere"), []))
+
+    def test_report_shows_what_studying_added(self):
+        run = self._run("report")
+        run_control(run, lambda: ScriptedSession(ScriptedPolicy()))
+        a = analyze(run.out_dir, self.bank, self.loader, self.prof)
+        self.assertIsNotNone(a["control"]["added"])
+        self.assertIn("## What studying added", run_report(a, "t"))
 
 
 if __name__ == "__main__":

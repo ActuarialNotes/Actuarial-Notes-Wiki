@@ -30,8 +30,8 @@ def reading_minutes(words: int, formulas: int, mode: str, p: Profile) -> float:
     return round(base + formulas * per_formula, 2)
 
 
-def question_minutes(stem_words: int, reasoning_words: int, p: Profile) -> float:
-    return round(stem_words / max(60, p.reading_speed_wpm) * 1.5 + reasoning_words / 15, 2)
+def question_minutes(stem_words: int, answer_words: int, p: Profile) -> float:
+    return round(stem_words / max(60, p.reading_speed_wpm) * 1.5 + answer_words / 15, 2)
 
 
 # ── question choice ────────────────────────────────────────────────────────

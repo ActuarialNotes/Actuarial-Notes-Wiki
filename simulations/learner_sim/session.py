@@ -33,6 +33,15 @@ from .textmatch import word_count
 from .vault_parse import RawQuestion, is_gradable, load_bank
 
 
+def _answer_text(response) -> str:
+    """The words a learner submitted, for timing: a letter, a value, or a written part's text."""
+    if isinstance(response, dict):
+        return " ".join(str(v) for v in response.values())
+    if isinstance(response, list):
+        return " ".join(str(v) for v in response)
+    return "" if response is None else str(response)
+
+
 @dataclass
 class RunConfig:
     sessions: int = 3
@@ -258,11 +267,9 @@ class SimulationRun:
         p = self.profile
         a = action.args
         log = self.log
-        if action.thought:
-            log.write("thought", action=action.name, text=action.thought[:2000])
         name = action.name
         if name == "invalid":
-            log.write("invalid_action", error=a.get("error"), raw=action.raw[:2000])
+            log.write("invalid_action", error=a.get("error"))
             return ("Your last reply couldn't be used. Reply with one JSON action.", False, pending, 0, None)
 
         if name == "end_session":
@@ -371,16 +378,16 @@ class SimulationRun:
                 conf = max(0, min(100, int(float(a.get("confidence")))))
             except (TypeError, ValueError):
                 conf = None
-            reasoning = str(a.get("reasoning") or "")
-            mins = question_minutes(pending["stem_words"], word_count(reasoning), p)
+            answer_text = _answer_text(response)
+            mins = question_minutes(pending["stem_words"], word_count(answer_text), p)
             log.minutes += mins
             fb = self.grader.grade(sid, qid, response)
             if fb.solution is not None:
                 guard.release(sid)
             sources = a.get("sources") if isinstance(a.get("sources"), list) else []
             attempt = {
-                "qid": qid, "source_id": sid, "reasoning": reasoning, "answer": response, "confidence": conf,
-                "sources": [str(s) for s in sources][:30], "thought": action.thought,
+                "qid": qid, "source_id": sid, "answer": response, "confidence": conf,
+                "sources": [str(s) for s in sources][:30],
                 "pages_before": list(ctx.pages_this_session), "pages_during": pending["pages_during"],
                 "pages_ever_at_attempt": sorted(ctx.pages_ever), "minutes": mins,
                 "pressed_to_guess": pending["pressed"], "repeat": pending["repeat"],

@@ -23,7 +23,7 @@ const SYLLABUS: WikiExamSyllabus = {
 describe('practiceExamBlueprint', () => {
   it('is the paper: DISC RM is 75 multiple-choice questions', () => {
     expect(practiceExamBlueprint('Exam DISC-RM')).toEqual({
-      exam: 'Exam DISC-RM', questions: 75, points: null, types: ['multiple-choice'],
+      exam: 'Exam DISC-RM', questions: 75, points: null, unprintedPoints: 1, types: ['multiple-choice'],
     })
   })
 
@@ -37,7 +37,7 @@ describe('practiceExamBlueprint', () => {
     expect(practiceExamBlueprint('Exam 5')).toMatchObject({
       questions: 25, points: 55, types: ['multi-part', 'multiple-choice', 'free-entry'],
     })
-    expect(practiceExamBlueprint('Exam ASTAM')).toMatchObject({ points: 60 })
+    expect(practiceExamBlueprint('Exam ASTAM')).toMatchObject({ points: 60, unprintedPoints: 10 })
   })
 
   it('admits a MAS paper’s fill-in-the-blank but not a multi-step written question', () => {
@@ -79,7 +79,7 @@ describe('drawPracticeExam', () => {
     ...Array.from({ length: 40 }, (_, i) => q(`b${i}`, { learning_objective: 'Statistics' })),
     ...Array.from({ length: 40 }, (_, i) => q(`c${i}`, { learning_objective: 'Linear Models' })),
   ]
-  const blueprint = { exam: 'Exam X', questions: 40, points: null, types: null }
+  const blueprint = { exam: 'Exam X', questions: 40, points: null, unprintedPoints: 1, types: null }
 
   it('weighs the sections, not the bank', () => {
     const draw = drawPracticeExam(pool, blueprint, SYLLABUS)
@@ -113,6 +113,15 @@ describe('drawPracticeExam', () => {
       // brings it nearest its share.
       expect(Math.abs(pts - 55)).toBeLessThanOrEqual(4)
     }
+  })
+
+  it('counts a question with no printed points as the paper’s average question', () => {
+    // ASTAM's sample set prints no points (filed `points: 0`): each counts as
+    // 60 / 6 = 10, so a 60-point rehearsal of them is six questions, not sixty.
+    const samples = Array.from({ length: 20 }, (_, i) =>
+      q(`s${i}`, { type: 'multi-part', points: 0, learning_objective: 'Statistics' }))
+    const draw = drawPracticeExam(samples, { ...blueprint, points: 60, unprintedPoints: 10 }, null)
+    expect(draw).toHaveLength(6)
   })
 
   it('is a uniform draw of the paper’s formats with no syllabus', () => {

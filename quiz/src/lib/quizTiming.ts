@@ -19,6 +19,8 @@ export interface ExamPace {
   per: 'question' | 'point'
   /** How many of them the sitting holds. */
   units: number
+  /** For a paper paced by the point: how many questions it sets, when its source says. */
+  questions?: number
 }
 
 /** Keyed by a question's `exam` field. */
@@ -35,10 +37,10 @@ export const EXAM_PACE: Record<string, ExamPace> = {
   'Exam SRM': { minutes: 210, per: 'question', units: 35 },
   // No format guide yet; the SOA's own syllabus (`Exam ASTAM (SOA).md`, its
   // opening line): a three-hour written exam of six questions, 60 points.
-  'Exam ASTAM': { minutes: 180, per: 'point', units: 60 },
+  'Exam ASTAM': { minutes: 180, per: 'point', units: 60, questions: 6 },
   // ALTAM's syllabus (`Exam ALTAM (SOA).md`) says the same: three hours, six
   // questions, 60 points.
-  'Exam ALTAM': { minutes: 180, per: 'point', units: 60 },
+  'Exam ALTAM': { minutes: 180, per: 'point', units: 60, questions: 6 },
   // Guides/Exam MAS-I (CAS): 4 hours, 45 multiple-choice questions.
   'Exam MAS-I': { minutes: 240, per: 'question', units: 45 },
   // Guides/Exam MAS-II (CAS): 4 hours, 45 multiple-choice questions.
@@ -56,6 +58,17 @@ export const EXAM_PACE: Record<string, ExamPace> = {
 /** Seconds a pace allows per question (or per point). */
 export function secondsPerUnit(pace: ExamPace): number {
   return (pace.minutes * 60) / pace.units
+}
+
+/**
+ * The points a question counts for on a paper paced by the point. A sample set
+ * that prints no point value is filed `points: 0` rather than given an invented
+ * one, and counts as the paper's average question — its points over its question
+ * count (ASTAM's 60 over 6), or 1 where the source gives no count.
+ */
+export function pointsForPace(points: number, pace: Pick<ExamPace, 'units' | 'questions'>): number {
+  if (points > 0) return points
+  return pace.questions ? pace.units / pace.questions : 1
 }
 
 export function paceForExam(exam: string | null | undefined): ExamPace | null {
@@ -76,7 +89,7 @@ export function timeAllowanceSeconds(
   for (const q of questions) {
     const pace = paceForExam(q.exam)
     if (!pace) return null
-    const units = pace.per === 'point' ? (q.points > 0 ? q.points : 1) : 1
+    const units = pace.per === 'point' ? pointsForPace(q.points, pace) : 1
     total += units * secondsPerUnit(pace)
   }
   return Math.round(total)

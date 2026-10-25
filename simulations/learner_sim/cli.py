@@ -138,5 +138,40 @@ def compare_learners(argv: list[str] | None = None) -> int:
     return 0
 
 
+def check_answerable(argv: list[str] | None = None) -> int:
+    from .answerability import read_results, report, run_check, served_questions
+
+    ap = argparse.ArgumentParser(prog="check-answerable",
+                                 description="Check that each question can be answered from the pages the vault "
+                                             "gives for it.")
+    ap.add_argument("--exam", required=True, help="exam whose bank to check (P, FM, MAS-I, MAS-II, 5, 6C, 7, 8, 9 …)")
+    ap.add_argument("--ids", help="comma-separated question ids (default: every served question)")
+    ap.add_argument("--limit", type=int, help="check at most this many questions this time")
+    ap.add_argument("--model", default="sonnet", help="model for both calls")
+    ap.add_argument("--parallel", type=int, default=4, help="questions checked at once")
+    ap.add_argument("--max-cost", type=float, help="stop starting new questions once the run has cost this many USD")
+    ap.add_argument("--out", default=os.path.join(SIM_DIR, "runs"))
+    ap.add_argument("--run-id", help="run directory name (reuse one to continue it)")
+    ap.add_argument("--report-only", action="store_true", help="rewrite report.md from results.jsonl, no model calls")
+    args = ap.parse_args(argv)
+
+    exam = resolve_exam(args.exam)
+    run_id = args.run_id or f"answerability-{dt.datetime.now().strftime('%Y%m%d-%H%M%S')}-{exam.key.lower()}"
+    out_dir = os.path.join(args.out, run_id)
+    loader = ContentLoader(exam)
+    bank = load_bank(REPO_ROOT, exam.bank)
+    _, left_out = served_questions(bank)
+    if args.report_only:
+        results = read_results(os.path.join(out_dir, "results.jsonl"))
+    else:
+        ids = [s.strip() for s in args.ids.split(",")] if args.ids else None
+        results = run_check(exam, loader, bank, out_dir, lambda: ClaudeCodeOneShot(args.model), ids=ids,
+                            limit=args.limit, parallel=args.parallel, max_cost=args.max_cost)
+    path = os.path.join(out_dir, "report.md")
+    write(path, report(exam, results, loader, run_id, left_out))
+    print(f"report → {path}")
+    return 0
+
+
 def main() -> int:
     return run_learner()

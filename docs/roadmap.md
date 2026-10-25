@@ -103,8 +103,8 @@ An item is ✅ only when all of the following are true:
 | Product | Who it's for | State | Gate | Subplan |
 |---|---|---|---|---|
 | **Study Mode** (quiz, flashcards, study plan, readiness, gamification) | Exam candidates | ✅ live | — | §4.2; `concept-learning-progression.md`, `study-plan-generation.md`, `exam-readiness.md` |
-| **Content vault**: 43 exam pages (12 CAS, 31 SOA), 1,389 concepts, 748 resources, 3,341 questions | Candidates and practitioners | ✅ live. 7 exams ready, 6 beta, 30 in development | `examStatus.ts` | §4.3; `content-plan.md` |
-| **Fact Check / VERIFY** | Every reader | 🟢 operating by hand. 48.6% of files verified; the weekly sweep has never run the agent | `FACT_CHECK_UI_ENABLED` | §4.4; `verification.md`, `verification-plan.md` |
+| **Content vault**: 84 exam pages (15 CAS, 40 SOA, 29 CIA), 1,392 concepts, 806 resources, 3,932 questions (2026-10-25) | Candidates and practitioners | ✅ live. 7 exams ready, 10 beta, 67 in development | `examStatus.ts` | §4.3; `content-plan.md` |
+| **Fact Check / VERIFY** | Every reader | 🟢 operating by hand. 76.9% of files verified, every served question among them (2026-10-25); sweeps run by hand (D19) | `FACT_CHECK_UI_ENABLED` | §4.4; `verification.md`, `verification-plan.md` |
 | **AI connector** (MCP server + Agent Skill) | Claude and ChatGPT users | ✅ live, read-only, no sign-in | — | §4.5; `ai-connector.md` |
 | **Actuarial Tools**: 32 calculators + 3 data sources | People and agents | ✅ live at `/tools` and over MCP | `TOOLS_ENABLED` | §4.5; `actuarial-tools.md` |
 | **Cowork**: Sources and Workflows | Practitioners | 🟡 Preview, one approved account | `COWORK_ENABLED` + `PREVIEW_APPROVED_EMAILS` | §4.5; `cowork.md`, `workflows.md`, `cowork-source-inventory.md` |
@@ -242,6 +242,21 @@ to §4. Where an item has a former roadmap ID (P0–P4), §4 gives it.
    in that doc.
 
 **Lane 3, content and Fact Check** (ordered by `content-plan.md`'s phases since 2026-10-18):
+0. **Content plan, Phase 2: every beta exam to `ready`.** The lane's focus from 2026-10-25 (the
+   maintainer's priority). Phase Q's claim was re-checked file by file: 3,639 of 3,639 served
+   questions are verified with current hashes. So G7 passes on all nine beta exams with a bank,
+   and G6 on all but PCPA. What is left is G4 and G5, the fact check of 292 concept pages and
+   95 readings once shared ones are counted once, plus PCPA's bank (C6) and 6C's page (C5). In
+   order (content plan §4):
+   - **Step 0:** the ISLR and Dobson deltas, so ready MAS-I is 7 / 7 again (the CIA commit made
+     them stale).
+   - **Steps 1–3:** MAS-II, Exam 9 and SRM. Each is one packet from ready.
+   - **Steps 4–7:** Exam 5, then FAM, ASTAM and ALTAM, loading the shared Klugman, Brown & Lennox
+     and AMLCR once.
+   - **Steps 8–9:** PCPA and 6C.
+
+   It runs on D27's open-text method. About 9–12M tokens, half of it 6C. **Exam 8, and 6C's six
+   study-kit readings, can't pass G5 without the CAS study kit (D20, re-asked as D28).**
 00. ~~**V11, content plan Phase Q: every question file verified**~~ ✅ 2026-10-25 (the lane's focus
    from 2026-10-23; it goes ahead of everything left in Phases 2–4). 817 served questions are not
    verified; 494 of them are the SOA prelims' banks, transcribed by a model from page images. The
@@ -265,15 +280,10 @@ to §4. Where an item has a former roadmap ID (P0–P4), §4 gives it.
    no open critical finding is left (V6: *MCT*, *Capital Required* and seven more pages, ÷1.5 not
    ×1.5); V10's topic tags and C18's slips done, bar four FM retags. Next is Phase 2: the
    converter (C13), then the beta exams.
-0a. **Content plan, Phase 2** (in progress, 2026-10-18): C13 done (the writer fixed, 83 report
-   paragraphs restored); every beta exam with a bank passes G3 and G6 (62 vault-written questions,
-   60 verified); Exam 8 at 6 / 7, held only by D20; V7 done. Exam 9's first round done; MAS-II's
-   first round done 18 Oct (4 / 7). D8, D22, D23 and D24 settled 18 Oct (D20's default stands),
-   and applied the same day: Exam 5's and MAS-II's pages verified (G1 ✅ on both), 6C's
-   re-transcribed (`in_review`, three older findings open), 29 McElreath questions
-   `off_syllabus`, Exam 9's held questions settled bar `cas9-an-009` (content plan, Phase 2).
-   Exam 9's open-text packets done the same day (34 of 35 concepts verified; 5 / 7, held by
-   *Enterprise Risk Management* and two readings). Next: Exam 5's papers → 6C → PCPA's bank (C6).
+0a. ~~**Content plan, Phase 2's first round**~~ ✅ 2026-10-18: C13 done (83 report paragraphs
+   restored); every beta exam with a bank passes G3 and G6; D8, D22, D23 and D24 settled and
+   applied (Exam 5's and MAS-II's pages verified); Exam 9's open-text packets; Exam 5's 14 papers.
+   The phase continues as item 0 above.
 0b. **Content plan, Phase 3: the SOA ASA prelims** (started 2026-10-18): C9's campaign table written (content plan
    §3.1a — what the SOA publishes for each prelim, the readings, the order SRM → FAM → ASTAM,
    ALTAM → PA, ATPA); the linker fixed (C17 and the noise/cut-short links), so G2 passes on all six
@@ -290,7 +300,8 @@ to §4. Where an item has a former roadmap ID (P0–P4), §4 gives it.
    its sample set (57 questions, most of them old MLC and LTAM papers') and seven sittings (37),
    transcribed and re-checked the same way, nine Excel questions left out; its one catch-all
    cleared by teaching G3's rename test a head noun shared across "and"; G1, G2, G3 and G6 pass.
-   Next: PA and ATPA, then the SRM, FAM, ASTAM and ALTAM fact-check campaigns (G4, G5, G7).
+   Their G7 passed in Phase Q, and their G4 and G5 are Phase 2's (item 0). Next here: PA and
+   ATPA, after Phase 2.
 1. ~~**C0: refresh the generated reports.**~~ ✅ 2026-10-17: both reports regenerated and
    passing `--check`, CONCEPT_GAPS' generated half refreshed (0 missing resources), and
    Exam 8's `"source_pages": "partial"` dropped.
@@ -300,17 +311,11 @@ to §4. Where an item has a former roadmap ID (P0–P4), §4 gives it.
 3. ~~**V4 (Wave 3a): verify FM Q351–Q462.**~~ ✅ 2026-10-17: all 112 verified (runs `48b2`,
    `63b1`); every key agrees. 12 minor findings stay open: 10 topic tags that aren't in
    `ontology_map.py`, and SOA's own day-1/day-10 wording on fm-358.
-4. **C1: take Exam 8 to ready** (content plan §3.1, step 2). 🟡 2026-10-17: **5 of 7
-   gates.** Done: the *Rating Class* catch-all (a new *Rate Class Validity* page); 11
-   vault-written questions for the 6 untested concepts; the page, 23 of 24 concepts, 11 of 12
-   readings and every on-syllabus question on the 8 papers verified (166; 34 of them Exam 9's).
-   Left, and neither can be done from the repo alone:
-   - **G4:** *Risk*'s ERM section has 3 minor findings. Its reading, Brehm et al., has no free
-     copy, so the section needs that reading or needs cutting. The CAS sense the exam uses is
-     verified.
-   - **G5:** the ISO CGL rating plan is supplied only in the CAS study kit. The maintainer
-     either reads a copy or accepts it as unverifiable (new decision **D20**).
-   Then `publication_readiness.py --check 8`, and the promotion is the maintainer's.
+4. **C1: Exam 8 to ready.** 🟡 6 of 7 gates since 2026-10-18 (*Risk* verified, run `rsk1`). Only
+   G5 is left: the ISO CGL rating plan, supplied in the CAS study kit and on the exam, with no
+   public copy. Under **D20** it stays `in_review` until the manual is read. D28 asks the
+   question again, because the same rule now also holds 6C. Then `publication_readiness.py
+   --check 8`, and the promotion is the maintainer's.
 
 ### 3.2 Next
 
@@ -332,10 +337,9 @@ These are in order within each lane.
   review next (syllabus-weighted, paper-shaped assembly is done — `lib/practiceExam.ts`).
 
 **Content:**
-- **C2:** Exam 9.
-- **C3:** Exam 5.
-- **C4:** MAS-II.
-- **C5:** 6C. D8 settled 2026-10-18; V6 closed in Phase 1.
+- C2–C6 (Exam 9, Exam 5, MAS-II, 6C, PCPA) and the four beta prelims' campaigns moved to **Now**
+  (Lane 3, item 0) on 2026-10-25.
+- **C9's rest:** PA and ATPA to beta, after Phase 2.
 - ~~**C9: write the SOA ASA-prelim publication plan.**~~ ✅ 2026-10-18, content plan §3.1a.
 - **C11:** the concept-gap leftovers (*Total Risk*, the 9 ambiguous targets, 21 stubs, 11
   link fixes).
@@ -521,12 +525,12 @@ gates through `--hold` in CI.
 | ID | Item | Status | Tier | Notes |
 |---|---|---|---|---|
 | C0 | Refresh the generated reports | ✅ 2026-10-17 | — | Both reports regenerated; CONCEPT_GAPS' generated half refreshed (0 missing resources); Exam 8's `source_pages: partial` dropped. Re-run them at each review (Appendix A). |
-| C1 | Exam 8 → ready | 🟡 6 of 7 gates (2026-10-18) | **Now** | Content plan Phase 2. *Risk* verified 18 Oct; only the ISO CGL plan is left (G5, D20). Open minor findings on the papers are mostly CAS's own printed slips the vault repeats untagged; they want an "(as printed)" note each. |
-| C2 | Exam 9 → ready | 🟡 4 of 7 | Next | Phase 2. G6 closed 18 Oct. First round 18 Oct (content plan Appendix A.4): 128 of 131 on-syllabus questions, 24 of 60 concepts and 7 of 9 readings verified. Left: three questions in review (decisions for a maintainer), and 36 concepts and 2 readings that rest on texts no session could read — Brehm et al., Mildenhall & Major, Grossi & Kunreuther (study kit or sold) and the Cummins (2000, 2008) and Coval-Jurek-Stafford journal texts (**D22**). |
-| C3 | Exam 5 → ready | 🟡 3 of 7 | Next | Phase 2. G3 and G6 closed 18 Oct. Apply the v02 outline (D8, settled 18 Oct: verbatim, `*Key concepts:*` lines); 60 concepts, 4 readings, 349 questions (their reports paraphrased — restore as printed in each packet); the Spring 2018 booklet still has to be found. |
-| C4 | MAS-II → ready | 🟡 4 of 7 | Next | Phase 2. G3 and G6 closed 18 Oct; first campaign round 18 Oct (content plan Appendix A.5): 167 of 168 questions, 96 of 98 concepts and all 6 readings verified (G5 ✅; Salis's study note, missing from the page, added). Left: the page's F-001 — it carries more tasks than the outline's 21 (**D23**); Fall 2019 Q35's explanation; *Backward Shift Operator* and *Correlogram*, which quote Cowpertwait's own wording (commercial, unread). |
-| C5 | Exam 6C → ready | 🟡 3 of 7 | Next | Phase 2. G6 closed 18 Oct (22 vault-written questions, all verified); V6's criticals closed in Phase 1. D8 settled 18 Oct (domain C re-transcribed, objective filter dropped). 137 concepts and 67 readings to verify; its 394 questions are verified (V11, wave Q2, 2026-10-23), so G7 passes. |
-| C6 | A PCPA bank | ⬜ | Later | Phase 2. The bank would be vault-written, because the CAS releases no PCPA questions. 29 concepts. |
+| C1 | Exam 8 → ready | 🟡 6 of 7 gates (2026-10-18) | **Now** | Content plan Phase 2. Only G5 is left: the ISO CGL plan, which is in the study kit only. It is held under D20, and D28 asks that again. The papers' printed-slip findings were closed in Phase Q (Q3). |
+| C2 | Exam 9 → ready | 🟡 5 of 7 (2026-10-25) | **Now** | Phase 2, step 2. G7 ✅ (Phase Q). Left: G4, *Enterprise Risk Management* (Brehm's four phases are in no open source: restate or cut); G5, CJS and Cummins 2008 `in_review` (try the assigned texts again, else a copy from the maintainer). |
+| C3 | Exam 5 → ready | 🟡 5 of 7 (2026-10-25) | **Now** | Phase 2, step 4. G1 and G7 ✅ (page re-transcribed per D8; all 357 questions verified). Left: 61 concepts and 4 free readings (Friedland, ASOP 13 and 43, CAS's ratemaking principles). |
+| C4 | MAS-II → ready | 🟡 5 of 7 (2026-10-25) | **Now** | Phase 2, step 1. G1 and G7 ✅. Left: *Backward Shift Operator* and *Correlogram* (they quote Cowpertwait; restate them to an open text) and ISLR's delta (the CIA commit made it stale). |
+| C5 | Exam 6C → ready | 🟡 4 of 7 (2026-10-25) | **Now** | Phase 2, step 9. G6 and G7 ✅ (all 394 questions verified, wave Q2). Left: the page's F-008–F-012 (G1), 137 concepts and 67 readings. Six of the readings are in the study kit only (D28). |
+| C6 | A PCPA bank, then PCPA → ready | ⬜ (4 of 7) | **Now** | Phase 2, step 8. A vault-written bank for its 29 concepts (D5), each question checked by a different agent from its writer, plus 5 concepts and 12 readings (mostly commercial, D7/D27). |
 | C7 | Exam 6U | ⬜ development, 3 of 7 | Later | Phase 4. All 45 reading pages exist, none verified. Its objective codes don't match its numbering. |
 | C8 | Close P and FM's own gaps | ✅ 2026-10-18 | — | Content plan Phase 1. FM: the *Term of Annuity* catch-all unlinked, page re-verified (run `7679`). P: 9 vault-written questions `p-an-001`–`009` for the six untested concepts, checked by other agents (`7432`, `488d`); *Insurer* verified (`66d2`). Both 7 / 7. |
 | C9 | **An SOA ASA-prelim publication plan** | ✅ 2026-10-18 | — | Content plan §3.1a: for FAM, SRM, ALTAM, ASTAM, PA and ATPA, what the SOA publishes (found on its own pages: sample sets for all, written-answer papers for ALTAM/ASTAM, project sittings for PA, one ATPA sample; no FAM or SRM papers will be released), the readings (mostly commercial, D7), the gates and the order. Phase 3's linker step lifted all six to G2 (G3 all but ALTAM). SRM's bank converted and SRM promoted to beta, 18 Oct; FAM's two sets converted and FAM promoted to beta, 19 Oct; ASTAM's and ALTAM's sample sets and seven papers each converted and both promoted to beta, 19 Oct. Next: PA and ATPA. |
@@ -673,13 +677,15 @@ Where a default is given, sessions build with it until the decision is made.
 | D16 | Actuaria Phase 4: ranked play and seasons | `actuaria-online.md` §9 | X3b | Not built |
 | D17 | The DISC link design | content plan §6 (was CAS D5) | — | The current design |
 | D18 | The open owner decisions in `syllabus-pipeline-review.md` §4 (D2, D3: applied implicitly, never written up) | that doc | C12 | As applied |
-| D20 | A syllabus reading with no public copy (the ISO CGL plan, in the CAS study kit only): read a copy and verify it, or accept it as unverifiable for G5 | C1 | Exam 8's G5 | ✅ settled 2026-10-18: the default stands — `in_review`, the gate red, until the manual is read |
+| D20 | A syllabus reading with no public copy (the ISO CGL plan, in the CAS study kit only): read a copy and verify it, or accept it as unverifiable for G5 | C1 | Exam 8's G5 | ✅ settled 2026-10-18: the default stands — `in_review`, the gate red, until the manual is read. Re-asked as D28 (2026-10-25): it now holds 6C too |
 | D21 | Goldburd et al.: describe the 2025 revision Exam 8 assigns on the existing 2020 page, keep 2020 with a note, or give Exam 8 its own page (F-003 on that page) | C1 run `f01e` | — | The page as it is |
 | D22 | Exam 9's unread readings: Brehm et al., Mildenhall & Major and Grossi & Kunreuther (study kit or sold, chapters unread), and the Cummins (2000, 2008) and Coval, Jurek & Stafford journal texts (paywalled, or SSRN/AEA blocked to the sessions): supply a copy, or name a free author-posted one a session can reach (the 2012 archived Wharton paper for Cummins 2000; SSRN 1057401 for Cummins 2008) | C2 run `6bfb` and the campaign's other reading packets | Exam 9's G4 and G5 | ✅ settled 2026-10-18: verify on open texts at D7's medium ceiling; only what no open source covers stays `in_review` |
 | D23 | MAS-II's page carries 36 tasks where the 2026 outline lists 21: restore the outline's tasks (dropping about ten concepts that are in the readings and tagged on paper questions, *Posterior Distribution* and *AIC* among them), or keep the vault's finer tasks and mark which are its own | C4 run `4700` (page F-001) | MAS-II's G1 | ✅ settled 2026-10-18: the outline's 21 tasks, the vault's concepts on `*Key concepts:*` lines |
 | D24 | MAS-II's 2019 papers test McElreath's Bayesian/MCMC reading (about 35 questions: MCMC, multilevel models, HPDIs, DIC, WAIC), which the 2026 outline no longer assigns: mark them `off_syllabus`, or keep them in quiz draws | C4 runs `f8d6`, `9dbf` | MAS-II's bank | ✅ settled 2026-10-18: `off_syllabus` |
 | D26 | Who beyond the one approved account sees **Community**, and whether it stays free | `community/access.ts`, `community.md` | X9 | Approved account only |
 | D25 | The Tutor after Beta: Beta is the approved accounts plus **Pro** (the maintainer's call, 2026-10-18); is the open stage free or Pro, and which exam comes after Exam 5 | `tutor.md` §10 | L8 | Preview: one account. Beta = Pro, when the maintainer moves `TUTOR_STAGE` |
+| D27 | Extend D22's open-text method (commercial readings' pages at medium against contents, catalogue and outline; their concepts against open texts) from Exam 9 to every beta exam | content plan §6 | Phase 2 (C2–C6, C9) | Yes: it follows from D7 and D22 |
+| D28 | A reading only in the **CAS study kit**, whose page states only what the outline says: verify the page at medium against the outline, or hold it `in_review` until the kit is read (D20, re-asked) | content plan §6 | C1, C5: Exam 8's and 6C's G5 | D20 stands: hold. Exam 8, and 6C's six kit-only readings, stay below `ready` |
 
 ### 6.2 Settled: don't re-open without a new reason
 
@@ -840,6 +846,13 @@ ls Concepts/*.md | wc -l; ls Resources/Books/*.md | wc -l
 ```
 
 ## Appendix B: Revision history
+
+- **2026-10-25, every beta exam to ready.** The maintainer made content plan Phase 2 lane 3's
+  first priority. Phase Q's claim was re-checked file by file and holds. The content plan was
+  re-measured: 7 ready, 10 beta, 67 in development; 76.9% of files verified. MAS-I is 6 / 7,
+  because the CIA commit made ISLR and Dobson stale. C2–C6 moved to Now in Phase 2's new order.
+  D27 was added (D22's open-text method for every beta exam; default yes), and D28 re-asks D20,
+  which now holds Exam 6C's six study-kit readings as well as Exam 8's.
 
 - **2026-10-25, Phase Q closed.** V11 ✅: every served question file verified (3,639 of 3,639),
   291 of 293 off-syllabus. The maintainer's pending content calls made with the recommended

@@ -6,13 +6,15 @@ the loader and passed through the guard) into actions. The isolation test
 holds it to that.
 
 Staying in character can only be asked of a model, not forced: the persona
-draws an explicit knowledge boundary, and every fact in the learner's working
-must carry a provenance tag — `[page: …]`, `[notes]` or `[prior: …]` — which
-the auditor (auditor.py) then checks.
+draws an explicit knowledge boundary, and each answer lists the sources it
+relied on — `page: <title>`, `notes` or `prior: <item>` — which the auditor
+(auditor.py) then checks. The learner's working is not requested, and
+`trim_reply` keeps nothing of a reply but its action and that action's fields.
 """
 
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass, field
 
 from .backends import extract_json
@@ -24,12 +26,35 @@ ACTIONS = {
     "search": '{"query": "<words>"}  — find study pages',
     "update_notes": '{"notes": "<your COMPLETE notes file, markdown, at most %d words>"}  — replaces the file',
     "next_question": '{"focus": "<a concept or topic you want to practise, or empty>"}',
-    "answer": '{"reasoning": "<your full working, every fact tagged>", "answer": <see the question>, '
-              '"confidence": <0-100>, "sources": ["page: <title>", "notes", "prior: <item>"]}',
+    "answer": '{"answer": <see the question>, "confidence": <0-100>, '
+              '"sources": ["page: <title>", "notes", "prior: <item>"]}  — the answer as you would submit it',
     "flag_question": '{"reason": "<what is ambiguous, missing or wrong in the question>"}',
     "end_session": '{"reflection": "<what you learned, what still confuses you>"}',
 }
+# The fields each action takes. Anything else in a reply — prose around the JSON, or
+# a key no action defines — is never kept (see trim_reply).
+ARG_FIELDS = {
+    "syllabus": (),
+    "read_page": ("title", "mode"),
+    "search": ("query",),
+    "update_notes": ("notes",),
+    "next_question": ("focus",),
+    "answer": ("answer", "confidence", "sources"),
+    "flag_question": ("reason",),
+    "end_session": ("reflection",),
+}
 NOTES_WORD_LIMIT = 1500
+
+
+def trim_reply(reply: str) -> str:
+    """What is kept of a model reply: its action and that action's own fields, as JSON."""
+    try:
+        obj = extract_json(reply)
+    except ValueError:
+        return "(no action in reply; text not kept)"
+    name = str(obj.get("action") or "")
+    args = obj.get("args") if isinstance(obj.get("args"), dict) else {}
+    return json.dumps({"action": name, "args": {k: args[k] for k in ARG_FIELDS.get(name, ()) if k in args}})
 
 
 def _band(x: float, low: str, mid: str, high: str) -> str:
@@ -111,13 +136,15 @@ not in those three places, you do not know it. Do not fill it in from general kn
 the wiki, reason from what you have, or guess, as this student would.
 - Your notes are your memory. Between sessions you remember only what your notes say. Anything worth \
 keeping goes into them with update_notes.
-- In your reasoning, tag every fact or formula with where it came from: [page: <title>], [notes] or \
-[prior: <item>]. An untagged fact counts as knowledge you were not supposed to have.
+- With each answer, list in `sources` what you used: `page: <title>` for a study page, `notes`, or \
+`prior: <item>`. List only what you actually used. Something you used but did not list counts as knowledge \
+you were not supposed to have.
+- Give each answer as you would submit it. You are not asked to show your working.
 - Perform like this student, not better: their misreadings, slips and doubts are the data we need.
 
 ## How you act
 Reply with exactly ONE JSON object and nothing else:
-{{"thought": "<a sentence or two, in character>", "action": "<name>", "args": {{...}}}}
+{{"action": "<name>", "args": {{...}}}}
 
 Actions:
 {actions}
@@ -130,8 +157,6 @@ what you are told after an answer depends on the study mode."""
 class Action:
     name: str
     args: dict = field(default_factory=dict)
-    thought: str = ""
-    raw: str = ""
     parse_failures: int = 0
 
 
@@ -158,14 +183,14 @@ class Learner:
                 args = obj.get("args") or {}
                 if not isinstance(args, dict):
                     raise ValueError("args must be an object")
-                return Action(name, args, str(obj.get("thought") or ""), reply, failures)
+                return Action(name, args, failures)
             except ValueError as e:
                 failures += 1
                 if failures > self.max_retries:
-                    return Action("invalid", {"error": str(e)}, "", reply, failures)
+                    return Action("invalid", {"error": str(e)}, failures)
                 reply = self.guard.send(
                     f"That reply could not be used ({e}). Reply with exactly one JSON object: "
-                    '{"thought": "...", "action": "<one of ' + ", ".join(ACTIONS) + '>", "args": {...}}')
+                    '{"action": "<one of ' + ", ".join(ACTIONS) + '>", "args": {...}}')
 
     def close(self) -> None:
         self.guard.close()

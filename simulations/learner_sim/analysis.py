@@ -53,9 +53,9 @@ def analyze(run_dir: str, bank: dict[str, RawQuestion], loader: ContentLoader, p
             continue
         au = audits.get((e["session"], e["qid"]), {})
         attempts.append({
-            **{k: e.get(k) for k in ("session", "qid", "source_id", "reasoning", "answer", "confidence", "sources",
+            **{k: e.get(k) for k in ("session", "qid", "source_id", "answer", "confidence", "sources",
                                      "pages_before", "pages_during", "minutes", "pressed_to_guess", "repeat",
-                                     "seen_in_guide", "thought")},
+                                     "seen_in_guide")},
             "verdict": g.get("verdict"), "score": g.get("score", 0.0), "parts": g.get("parts", []),
             "concepts": list(q.concepts), "topic": q.topic, "objective": q.objective,
             "difficulty": q.difficulty, "kind": "multiple-choice" if q.type == "multiple-choice" else "written",

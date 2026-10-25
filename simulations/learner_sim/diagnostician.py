@@ -2,9 +2,9 @@
 and the edits to the study pages that would have helped.
 
 It runs only after the simulation, as a separate isolated Claude Code call, and
-it does see everything — the official solutions, the pages, the learner's
-working — because its job is to compare what the guide teaches with what the
-question needed. Its output goes into the report; it never edits the vault.
+it sees the official solutions, the pages, the learner's answers and the sources
+it listed — but never its working, which is not recorded — because its job is to
+compare what the guide teaches with what the question needed. Its output goes into the report; it never edits the vault.
 """
 
 from __future__ import annotations
@@ -23,7 +23,8 @@ QUESTION_ISSUES = ("too_hard_for_guide", "ambiguous_wording", "answer_key_suspec
 
 SYSTEM = """You are reviewing an actuarial study wiki using evidence from a simulated student. The student \
 studied only the wiki's pages, then attempted practice questions. For each place it got stuck you get: the \
-concept page(s) it read, its working, its confidence, and the official solution. Decide WHY it got stuck, \
+concept page(s) it read, the answer it gave, the sources it listed, its confidence, and the official
+solution. Decide WHY it got stuck, \
 judging the wiki rather than the student wherever the evidence allows:
 - missing_prerequisite: the question needs knowledge the student lacked and the wiki assumes without teaching or linking
 - unclear_explanation: the page covers it, but in a way this student misread or couldn't follow
@@ -60,7 +61,7 @@ def build_prompt(analysis: dict, bank: dict[str, RawQuestion], loader: ContentLo
                 continue
             out += [f"-- Missed {q.source_id} ({q.path}), confidence {a['confidence']}",
                     "QUESTION:", _clip(scrub(q.stem + "\n" + "\n".join(p.stem for p in q.parts)), 2000),
-                    "STUDENT'S WORKING:", _clip(str(a.get("reasoning") or ""), 2000),
+                    f"SOURCES THE STUDENT LISTED: {', '.join(str(s) for s in a.get('sources') or []) or 'none'}",
                     f"STUDENT'S ANSWER: {_clip(str(a.get('answer')), 600)}",
                     "OFFICIAL SOLUTION:", _clip(solution_of(q), 2500)]
     qi = [i for i in analysis["question_issues"] if not any("worked example" in w for w in i["why"])]
@@ -76,7 +77,7 @@ def build_prompt(analysis: dict, bank: dict[str, RawQuestion], loader: ContentLo
         out += ["", "BROKEN LINKS SEEN: " + "; ".join(f"[[{t}]] on {', '.join(v)}"
                                                     for t, v in list(analysis["broken_links"].items())[:20])]
     out += ["", "Reply:", '{"root_causes": [{"concept": "...", "category": "<one of ' + "|".join(CATEGORIES) +
-            '>", "evidence": "<one or two sentences quoting the page/working>", "confidence": "low|medium|high"}],',
+            '>", "evidence": "<one or two sentences quoting the page or the solution>", "confidence": "low|medium|high"}],',
             ' "question_issues": [{"source_id": "...", "issue": "<one of ' + "|".join(QUESTION_ISSUES) +
             '>", "evidence": "..."}],',
             ' "edits": [{"file": "<vault-relative path>", "section": "<where>", "change": "<the text to add or '

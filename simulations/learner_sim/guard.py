@@ -29,6 +29,7 @@ from collections import defaultdict
 from typing import Iterable
 
 from .backends import ChatSession, IsolationError
+from .learner import trim_reply
 from .textmatch import shingles
 from .vault_parse import RawQuestion
 
@@ -102,7 +103,7 @@ class ContextGuard:
         self.check(text, "user")
         self._log("user", text)
         reply = self.backend.send(text)
-        self._log("assistant", reply)
+        self._log("assistant", trim_reply(reply))
         return reply
 
     def close(self) -> None:

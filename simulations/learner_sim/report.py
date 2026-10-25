@@ -156,7 +156,7 @@ def run_report(a: dict, run_id: str) -> str:
               f"{', '.join(x['pages_before'] or []) or 'none'}. Looked up while answering: "
               f"{', '.join(x['pages_during'] or []) or 'nothing'}.", "",
               f"Answer: `{_cut(json.dumps(x['answer']) if not isinstance(x['answer'], str) else x['answer'], 300)}`", "",
-              "Working:", "", "> " + _cut(x["reasoning"], 2500), "", "</details>", ""]
+              f"Sources it listed: {', '.join(str(s) for s in x['sources'] or []) or 'none'}.", "", "</details>", ""]
 
     L += ["## Run details", "",
           f"- Question pool: {a['pool']} questions; left out: " +

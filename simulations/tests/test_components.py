@@ -19,7 +19,8 @@ from learner_sim.backends import ScriptedOneShot, ScriptedSession, extract_json 
 from learner_sim.content_loader import ContentLoader, skim, truncate_derivations  # noqa: E402
 from learner_sim.exams import resolve_exam  # noqa: E402
 from learner_sim.grader import Grader, normalize_choice, numeric_match  # noqa: E402
-from learner_sim.learner import build_persona  # noqa: E402
+from learner_sim.auditor import deterministic_flags  # noqa: E402
+from learner_sim.learner import ACTIONS, build_persona, trim_reply  # noqa: E402
 from learner_sim.profiles import ProfileError, load_profile, profile_from_dict  # noqa: E402
 from learner_sim.report import comparison_report, run_report  # noqa: E402
 from learner_sim.scripted import ScriptedPolicy  # noqa: E402
@@ -225,6 +226,41 @@ class RunAndReportTests(unittest.TestCase):
         cmp = comparison_report(self.analyses, "test")
         self.assertIn("## Which pages fail which learners", cmp)
         self.assertIn("| A |", cmp)
+
+
+class WorkingIsNotRecordedTests(unittest.TestCase):
+    """The learner's working is never asked for, and never kept."""
+
+    def test_no_action_asks_for_reasoning_or_thoughts(self):
+        for name, spec in ACTIONS.items():
+            self.assertNotIn("reasoning", spec, name)
+            self.assertNotIn("thought", spec, name)
+
+    def test_persona_asks_for_sources_not_working(self):
+        from learner_sim.profiles import profile_from_dict
+        prof = profile_from_dict({"name": "T", "exam": "FM", "description": "d"})
+        persona = build_persona(prof, "Exam FM")
+        self.assertIn('"sources"', persona)
+        self.assertNotIn("reasoning", persona.lower())
+        self.assertNotIn("thought", persona.lower())
+
+    def test_trim_reply_keeps_only_the_action_and_its_own_fields(self):
+        reply = ('Let me think about the Poisson step first. '
+                 '{"action": "answer", "args": {"answer": "B", "confidence": 60, '
+                 '"sources": ["notes"], "reasoning": "full working here", "thought": "hm"}} done')
+        kept = json.loads(trim_reply(reply))
+        self.assertEqual(kept, {"action": "answer",
+                                "args": {"answer": "B", "confidence": 60, "sources": ["notes"]}})
+        self.assertNotIn("working", trim_reply(reply))
+        self.assertNotIn("Poisson", trim_reply(reply))
+
+    def test_trim_reply_without_an_action_stores_no_text(self):
+        self.assertEqual(trim_reply("I would rather just explain it in prose."),
+                         "(no action in reply; text not kept)")
+
+    def test_an_answer_with_no_sources_is_flagged(self):
+        self.assertIn("no sources listed", deterministic_flags({"sources": []}, set()))
+        self.assertNotIn("no sources listed", deterministic_flags({"sources": ["notes"]}, set()))
 
 
 if __name__ == "__main__":

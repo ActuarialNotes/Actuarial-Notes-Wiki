@@ -48,9 +48,17 @@ proves each one:
    the loader.
 
 Staying in character cannot be enforced, only made visible. The persona draws
-a knowledge boundary, working must tag each fact `[page: …]`, `[notes]` or
-`[prior: …]`, and the auditor flags what can't be traced. Notes are the only
-memory carried between sessions.
+a knowledge boundary, each answer lists the sources it used (`page: …`,
+`notes` or `prior: …`), and the auditor flags what can't be traced to them.
+Notes are the only memory carried between sessions.
+
+The learner's working is not part of the record. The protocol asks for the
+answer as the student would submit it, with no reasoning field and no
+free-text "thought"; a reply is kept only as its action and that action's own
+fields (`trim_reply`, which `context.jsonl` uses), so prose around the JSON is
+never stored. The reports show the answer, confidence, sources listed, pages
+read and time spent, and the diagnostician and auditor judge from those, not
+from anything the learner wrote about how it got there.
 
 ## Profiles
 
@@ -73,7 +81,8 @@ Some traits act in code as well as in the prompt:
 ## Outputs
 
 Each run writes `simulations/runs/<run-id>/<profile>/`. It holds
-`events.jsonl`, `context.jsonl` (everything the model was sent),
+`events.jsonl`, `context.jsonl` (everything the model was sent, and each reply
+reduced to its action and fields),
 `notes/session-N.md`, `state.json`, `analysis.json` and `report.md`, plus
 `comparison.md` when several profiles share an exam. Only the reports are
 committed (`simulations/.gitignore`).

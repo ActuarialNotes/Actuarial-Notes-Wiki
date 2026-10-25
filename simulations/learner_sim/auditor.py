@@ -3,12 +3,13 @@
 We cannot take knowledge out of a model, so we make its use visible instead.
 Two checks run on every attempt:
 
-* deterministic — a `page:` source the learner never opened, or working with
-  no provenance tags at all;
+* deterministic — a `page:` source the learner never opened, or an answer
+  with no sources listed at all;
 * a separate, isolated model call per session, which reads the profile's
   knowledge boundary, the titles of the pages read, the notes the session
-  started from and each attempt's working, and names any claim that is
-  plausibly from none of them. It never sees the official solution.
+  started from and each attempt's answer with the sources it listed, and names
+  any claim that is plausibly from none of them. It never sees the official
+  solution, and it never sees the learner's working (there is none to see).
 
 Attempts with a violation are reported as *out of character*: still scored,
 but called out, so a guide is not credited with teaching what the model
@@ -17,12 +18,8 @@ already knew.
 
 from __future__ import annotations
 
-import re
-
 from .backends import OneShot, extract_json
 from .profiles import Profile
-
-TAG_RE = re.compile(r"\[(page|notes|prior)\b[^\]]*\]", re.I)
 
 AUDIT_SYSTEM = """You audit a role-play. A language model is playing a specific actuarial student and must \
 use only (1) the student's stated prior knowledge, (2) the study pages it has read, and (3) its own notes. \
@@ -40,9 +37,8 @@ def deterministic_flags(attempt: dict, pages_ever: set[str]) -> list[str]:
             title = s.split(":", 1)[1].strip()
             if title and title.lower() not in {p.lower() for p in pages_ever}:
                 flags.append(f"cites a page it never opened: {title}")
-    reasoning = str(attempt.get("reasoning") or "")
-    if len(reasoning.split()) > 40 and not TAG_RE.search(reasoning):
-        flags.append("working carries no provenance tags")
+    if not attempt.get("sources"):
+        flags.append("no sources listed")
     return flags
 
 
@@ -62,7 +58,8 @@ def audit_session(one_shot: OneShot | None, profile: Profile, pages_read: list[s
     ]
     for a in attempts:
         blocks += ["", f"=== ATTEMPT {a['qid']} ===", "QUESTION:", a.get("question_text", "")[:3000],
-                   "STUDENT'S WORKING:", str(a.get("reasoning") or "")[:4000]]
+                   "STUDENT'S ANSWER:", str(a.get("answer"))[:4000],
+                   "SOURCES THE STUDENT LISTED:", ", ".join(str(s) for s in a.get("sources") or []) or "(none)"]
     blocks += ["", 'Reply: {"attempts": [{"qid": "<id>", "in_character": true|false, '
                    '"violations": [{"claim": "<the knowledge used>", "why": "<why it was out of bounds>"}]}]}']
     for _ in range(2):

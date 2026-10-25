@@ -1,0 +1,3681 @@
+{
+ "version": 1,
+ "exam": "Exam FM-2 (SOA)",
+ "bank": "exam-fm",
+ "questions": {
+  "fm-001": {
+   "path": "questions/exam-fm/fm-001.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:f8c5b98daaa706fed322c79285076b29b1a5fe45f491a9a57c68246c483c85d2",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "A nominal annual interest rate i^(m) convertible m times per year credits interest at i^(m)/m per period, so the accumulated value after one year is (1 + i^(m)/m)^m.",
+     "concept": "Nominal Interest Rate",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Convertible m-thly",
+       "quote": "A [[Nominal Interest Rate]] is **convertible $m$-thly** (or compounded $m$ times per year) when interest is credited $m$ times per year at the periodic rate $i^{(m)}/m$. The equivalent effective annual rate is:"
+      },
+      {
+       "page": "Nominal Interest Rate Convertible m-thly",
+       "quote": "$$\\left(1 + \\frac{i^{(m)}}{m}\\right)^m = 1 + i$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "With a constant force of interest delta, the accumulation factor over t years is e^(delta*t), so one year grows by a factor of e^delta.",
+     "concept": "Force of Interest",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Force of Interest",
+       "quote": "$$a(t) = e^{\\delta t}$$"
+      },
+      {
+       "page": "Force of Interest",
+       "quote": "$$i = e^\\delta - 1$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "Two interest measures are equivalent if they give the same accumulated value over the same period; equivalent rates therefore give equal one-year accumulation factors, and the equivalence holds for any time horizon (the 7.25-year term is irrelevant).",
+     "concept": "Equivalent Rates of Interest",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Effective Rate",
+       "quote": "It is the rate that, applied once per period, produces the same accumulation as an equivalent [[Nominal Interest Rate]] compounded more frequently."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "To convert from a nominal rate convertible m times per year to a force of interest, set e^delta = (1 + i^(m)/m)^m and solve delta = m*ln(1 + i^(m)/m).",
+     "concept": "Force of Interest",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Force of Interest",
+       "quote": "$$\\delta = \\ln(1+i)$$"
+      },
+      {
+       "page": "Convertible m-thly",
+       "quote": "$$1 + i = \\left(1 + \\frac{i^{(m)}}{m}\\right)^m$$"
+      }
+     ]
+    }
+   ]
+  },
+  "fm-002": {
+   "path": "questions/exam-fm/fm-002.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:777eb1ddc8cdab43600c354b881ce7e7364c99a66cd3d74b9468d67577629c1a",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "procedure",
+     "statement": "To find the accumulated value of level deposits made at the start of each k-year period, accumulate each deposit at the effective rate for its remaining time and sum the resulting terms, which form a geometric series with ratio (1+i)^k.",
+     "concept": "Annuity-Due",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The sum of a finite geometric series with first term a, common ratio r and n terms is a(1 - r^n)/(1 - r).",
+     "concept": "Geometric Series",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Geometric Progression",
+       "quote": "$$\\text{PV} = \\frac{1}{1+i} \\cdot \\frac{1-\\left(\\frac{1+g}{1+i}\\right)^n}{1 - \\frac{1+g}{1+i}}$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The accumulated value at time n of an annuity-immediate of 1 per period is s_angle(n) = ((1+i)^n - 1)/i.",
+     "concept": "Annuity-Immediate",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Annuity Immediate",
+       "quote": "$$s_{\\overline{n}|} = \\frac{(1+i)^n - 1}{i}$$"
+      },
+      {
+       "page": "Level Payment Annuity",
+       "quote": "$$= P \\cdot \\frac{(1+i)^n - 1}{i}$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "Payments made every k years can be treated as an annuity whose effective rate per k-year period is (1+i)^k - 1, so the accumulated value equals the payment times s_angle(n)/a_angle(k) evaluated at the annual rate i (for payments at the start of each k-year period).",
+     "concept": "Annuity with Payment Period Longer than Interest Period",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r5",
+     "kind": "procedure",
+     "statement": "A polynomial equation in a power of (1+i), such as x^2 - 5x + 4 = 0 with x = (1+i)^n, is solved by substitution and factoring; reject non-positive or non-meaningful roots (e.g., x = 1 giving i = 0, which fails the stated condition) and recover i from the valid root.",
+     "concept": "Solving for the Interest Rate",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "fm-003": {
+   "path": "questions/exam-fm/fm-003.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:0f02bfcca0c24eac4855aeea1a910082aac80ad8b9b09564f97bb10fb4045cd1",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "An annual nominal rate i compounded m times per year credits interest of i/m per period, so the effective rate per period is i/m.",
+     "concept": "Nominal Interest Rate",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Convertible m-thly",
+       "quote": "when interest is credited $m$ times per year at the periodic rate $i^{(m)}/m$"
+      },
+      {
+       "page": "Nominal Interest Rate",
+       "quote": "the year is divided into $m$ sub-periods each earning a periodic rate of $i^{(m)}/m$"
+      },
+      {
+       "page": "Nominal Interest Rate Convertible m-thly",
+       "quote": "Each period, interest at rate $i^{(m)}/m$ is credited."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "With compound interest, the accumulated value after n periods is the principal times (1 + j)^n, where j is the periodic effective rate.",
+     "concept": "Compound Interest",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Compound Interest",
+       "quote": "$$A(t) = P(1+i)^t$$"
+      },
+      {
+       "page": "Interest Rate",
+       "quote": "Under [[Compound Interest]], $1$ invested grows to $(1+i)^n$ after $n$ periods."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "Interest earned during a single period equals the balance at the end of the previous period times the periodic rate (equivalently, the difference of consecutive accumulated values).",
+     "concept": "Compound Interest",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "With simple interest at annual rate i, interest earned each period is the original principal times the rate for that period, so it is constant and does not depend on accrued interest.",
+     "concept": "Simple Interest",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Simple vs Compound Interest",
+       "quote": "Simple interest adds a constant **amount** each period"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "procedure",
+     "statement": "The last 6 months of the 8th year is the 16th semiannual period, so interest in it is earned on the balance after 15 semiannual periods.",
+     "concept": "Time Periods and Timeline",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "fm-004": {
+   "path": "questions/exam-fm/fm-004.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:7f0ba5bad2c8da47c1b17341f30dcee1a4a44d523444e190ed93d476b158bf76",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "The present value of an increasing annuity-immediate with payments 1, 2, ..., n at the ends of years 1 through n is (Ia)_{n|} = (ä_{n|} − n v^n)/i.",
+     "concept": "Increasing Annuity",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Arithmetic Increasing Annuity",
+       "quote": "An **arithmetic increasing annuity** has payments $1, 2, 3, \\ldots, n$ at the end of periods $1, 2, \\ldots, n$. Its present value is denoted $(Ia)_{\\overline{n}|}$:"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "For a payment stream that starts at the end of year 2 and increases by 1 each year, value it as an increasing annuity whose first payment is deferred by one year, i.e. multiply (Ia)_{n|} by v.",
+     "concept": "Deferred Annuity",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Deferred Annuity",
+       "quote": "{}_{k|}a_{\\overline{n}|} = v^k \\cdot a_{\\overline{n}|}"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The present value of a level perpetuity-immediate of amount P is P/i, and if it begins after a deferral period, discount it by v for each year of deferral (here, a perpetuity of n starting at time n+2 has value n v^(n+1)/i).",
+     "concept": "Perpetuity",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Level Perpetuity",
+       "quote": "The present value of a perpetuity-immediate (payments at end of period) paying $1$ per period at rate $i$:"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "The present value of an n-year annuity-immediate of 1 is a_{n|} = (1 − v^n)/i, and ä_{n|} = (1 + i)·a_{n|} = a_{n|}/v, so v·ä_{n|} = a_{n|}.",
+     "concept": "Annuity-Immediate",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Annuities",
+       "quote": "a_{\\overline{n}|} = \\frac{1-v^n}{i}"
+      },
+      {
+       "page": "Annuities",
+       "quote": "\\ddot{a}_{\\overline{n}|} = (1+i)\\,a_{\\overline{n}|}"
+      },
+      {
+       "page": "Annuity Due",
+       "quote": "Because each payment is received one period earlier than in an [[Annuity Immediate|annuity-immediate]], the annuity-due is worth exactly $(1+i)$ times as much."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "definition",
+     "statement": "The discount factor is v = 1/(1+i), so v^n = (1+i)^(−n), and solving for an unknown n in v^n = c uses logarithms: n = −ln(c)/ln(1+i).",
+     "concept": "Present Value and Discount Factor",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Discount Factor",
+       "quote": "- The $n$-period discount factor is $v^n = (1+i)^{-n}$."
+      }
+     ]
+    }
+   ]
+  },
+  "fm-005": {
+   "path": "questions/exam-fm/fm-005.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:55eacccc5f6152023b72e243eca274bcf5ad21c92467be6f839fcfe898b5f9c6",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "When a loan or fund earning interest is reduced by a level principal amount each period, the interest paid each period forms an arithmetic decreasing sequence, falling by the interest rate times the principal reduction each period.",
+     "concept": "Decreasing Annuity",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The accumulated value at the end of n periods of payments of n, n-1, ..., 1 at the ends of periods 1 through n is (Ds)_{n|i} = (n(1+i)^n - s_{n|i})/i.",
+     "concept": "Decreasing Annuity",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Decreasing Annuity",
+       "quote": "$$(Da)_{\\overline{n}|} = \\frac{n - a_{\\overline{n}|}}{i}$$"
+      },
+      {
+       "page": "Decreasing Annuity",
+       "quote": "The corresponding accumulated value is $(Ds)_{\\overline{n}|} = (1+i)^n (Da)_{\\overline{n}|}$."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The accumulated value of level end-of-period payments is s_{n|i} = ((1+i)^n - 1)/i.",
+     "concept": "Annuity-Immediate",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Annuity Immediate",
+       "quote": "$$s_{\\overline{n}|} = \\frac{(1+i)^n - 1}{i}$$"
+      },
+      {
+       "page": "Level Payment Annuity",
+       "quote": "$$= P \\cdot \\frac{(1+i)^n - 1}{i}$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "Split a payment stream into a level component and a decreasing arithmetic component, value each separately at the reinvestment rate, and add them to get the total accumulated value.",
+     "concept": "Decreasing Annuity",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Decreasing Annuity",
+       "quote": "$$PV = P \\cdot a_{\\overline{n}|} - \\frac{Q}{i}\\!\\left(a_{\\overline{n}|} - nv^n\\right)$$"
+      },
+      {
+       "page": "Increasing Annuity",
+       "quote": "A first payment $P$ rising by $Q$ a period is a level annuity of $P - Q$ plus $Q\\,(Ia)_{\\overline{n}|}$"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "Payments reinvested in a second fund accumulate at that fund's own interest rate, which can differ from the rate earned in the original fund.",
+     "concept": "Reinvestment Rate",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Fund Accumulation",
+       "quote": "A common Exam FM scenario: amounts withdrawn from one fund are immediately deposited into and accumulate within a **second** fund earning a different rate — the accumulated value in the second fund uses its own rate, even though the deposits originated from the first fund's activity."
+      }
+     ]
+    }
+   ]
+  },
+  "fm-006": {
+   "path": "questions/exam-fm/fm-006.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:985a6a54be1ad734e0cb2a1f7a11daa91d602de5006f56bdb24c69f173a3beb7",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "In a level-interest loan with annual payments, the interest due each year equals the effective rate times the outstanding balance at the start of that year.",
+     "concept": "Loan Amortization",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Loan Amortization",
+       "quote": "$$I_k = i\\,B_{k-1}$$"
+      },
+      {
+       "page": "Interest",
+       "quote": "where $i$ is the periodic [[Interest Rate]] and $B_{t-1}$ is the [[Outstanding Balance]] at the start of the period."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "The principal repaid in a period equals the payment minus the interest due, so the outstanding balance after the payment equals the prior balance minus that principal reduction.",
+     "concept": "Loan Amortization",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Loan Amortization",
+       "quote": "$$PR_k = K_k - I_k = B_{k-1} - B_k$$"
+      },
+      {
+       "page": "Amortization Schedule",
+       "quote": "| Outstanding balance $OB_k$ | $OB_{k-1} - PR_k$ |"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "When each payment is a fixed multiple m of the interest due, the balance is reduced by the factor (1 - (m-1)i) each period, so the balance after n periods is the original loan times (1 - (m-1)i)^n.",
+     "concept": "Loan Amortization",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "The outstanding loan balance at any time equals the present value of the remaining payments at the loan's interest rate (prospective method).",
+     "concept": "Outstanding Balance (Prospective Method)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Loans",
+       "quote": "the **prospective method** (present value of the remaining payments)"
+      },
+      {
+       "page": "Outstanding Balance",
+       "quote": "**Prospective method** (present value of future payments):"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "formula",
+     "statement": "The present value of a level annuity-immediate of 1 per period for n periods is a_angle(n) = (1 - v^n)/i.",
+     "concept": "Annuity-Immediate",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Annuity Immediate",
+       "quote": "$$a_{\\overline{n}|} = \\frac{1-v^n}{i}$$"
+      }
+     ]
+    }
+   ]
+  },
+  "fm-007": {
+   "path": "questions/exam-fm/fm-007.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:8410bc5bfb869248bd89c3230dc66597729cd4ade27c2c780608252969466eea",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "The book value (amortized value) of a bond at a given time is the present value of its remaining payments (coupons and redemption) at the purchase yield rate.",
+     "concept": "Bond Book Value",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Book Value",
+       "quote": "It equals the present value of all remaining cash flows (coupons and redemption) discounted at $j$, and also equals the price accumulated at $j$ minus the accumulated coupons."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The present value of a level annuity-immediate of n payments at effective rate i is a_angle_n = (1 - v^n)/i, with v = 1/(1+i).",
+     "concept": "Annuity-Immediate",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Annuity Immediate",
+       "quote": "$$a_{\\overline{n}|} = \\frac{1-v^n}{i}$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The coupon of a bond equals the coupon rate times the face (par) value, and the redemption value is the par value unless otherwise stated.",
+     "concept": "Bond Coupon and Redemption Value",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Coupon",
+       "quote": "A **coupon** is the periodic interest payment made by a bond issuer to the bondholder, equal to the face value $F$ multiplied by the coupon rate per period $r$."
+      },
+      {
+       "page": "Face Value",
+       "quote": "When the bond is redeemed at par, the [[Redemption Value]] $C = F$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "The interest portion of a bond coupon payment at time t equals the yield rate times the book value at time t-1 (the beginning of the period).",
+     "concept": "Bond Amortization Schedule",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bond Amortization",
+       "quote": "$$I_t = j\\,B_{t-1}$$"
+      },
+      {
+       "page": "Book Value",
+       "quote": "each coupon period the investor earns $j \\cdot BV_{k-1}$ in yield, and the difference between the coupon $Fr$ and the yield $j \\cdot BV_{k-1}$ is the write-down (premium) or write-up (discount) of the book value."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "procedure",
+     "statement": "To find the interest in the k-th coupon of an n-year bond, compute the book value at time k-1 as the PV of the remaining n-k+1 coupons and the redemption, then multiply by the yield rate.",
+     "concept": "Bond Amortization Schedule",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bond Amortization",
+       "quote": "One row can be found without the rest of the table: value $B_{t-1}$ at the original yield from the remaining coupons and redemption value, then take $I_t$ and $PR_t$ from it."
+      }
+     ]
+    }
+   ]
+  },
+  "fm-008": {
+   "path": "questions/exam-fm/fm-008.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:9dc49a65f8ae7f668baac06bd48675eece0b49e69153dd2a53ce764fd886adb7",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "The present value of a perpetuity-immediate paying a level amount R per period at effective rate i per period is R/i.",
+     "concept": "Perpetuity",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Perpetuity",
+       "quote": "$$a_{\\overline{\\infty}|} = \\frac{1}{i}$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "The value of a perpetuity immediately after a payment is the same as its value at time zero, because the remaining payments form an identical perpetuity-immediate starting one period later.",
+     "concept": "Perpetuity",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "Two cash flow streams are exchanged at equal value by setting the present value of the new annuity at the exchange date equal to the value of the old stream at that date.",
+     "concept": "Equation of Value",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Equation of Value",
+       "quote": "$$\\text{Value}_{t_0}(\\text{inflows}) = \\text{Value}_{t_0}(\\text{outflows})$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "definition",
+     "statement": "A geometrically increasing annuity-immediate has first payment X at the end of year one and each later payment is (1+k) times the preceding payment, so payment t equals X(1+k)^(t-1).",
+     "concept": "Geometric Annuity",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Geometric Increasing Annuity",
+       "quote": "For an $n$-payment annuity-immediate with first payment $1$ and growth rate $g$, payments are $1, (1+g), (1+g)^2, \\ldots, (1+g)^{n-1}$."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "When the payment growth rate k equals the interest rate i, each discounted payment in a geometric annuity equals Xv, so the present value of an n-payment annuity is X·n·v = nX/(1+i).",
+     "concept": "Geometric Annuity",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Geometric Increasing Annuity",
+       "quote": "When $i = g$, $\\text{PV} = n \\cdot v = n/(1+i)$."
+      }
+     ]
+    },
+    {
+     "id": "r6",
+     "kind": "definition",
+     "statement": "The discount factor is v = 1/(1+i), so (1+i)v = 1.",
+     "concept": "Discount Factor",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Discount Factor",
+       "quote": "$$v = \\frac{1}{1+i}$$"
+      }
+     ]
+    }
+   ]
+  },
+  "fm-009": {
+   "path": "questions/exam-fm/fm-009.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:2b1c1959ec687d62a3f2c688a8dda9448b905b65664f17332119a24c71db1891",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "A nominal discount rate d^(m) compounded m times per year corresponds to an effective discount rate of d^(m)/m per period, and the accumulation factor over n periods is (1 - d^(m)/m)^(-n).",
+     "concept": "Nominal Rates of Discount",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Nominal Discount Rate",
+       "quote": "$$a(t) = \\left(1 - \\frac{d^{(m)}}{m}\\right)^{-mt}$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "definition",
+     "statement": "A nominal interest rate i^(m) compounded m times per year corresponds to an effective rate of i^(m)/m per period, and the accumulation factor over n periods is (1 + i^(m)/m)^n.",
+     "concept": "Nominal Interest Rates",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Convertible m-thly",
+       "quote": "$$1 + i = \\left(1 + \\frac{i^{(m)}}{m}\\right)^m$$"
+      },
+      {
+       "page": "Nominal Interest Rate Convertible m-thly",
+       "quote": "Each period, interest at rate $i^{(m)}/m$ is credited."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "To solve for an unknown rate, write an equation of value at a chosen comparison date by accumulating each deposit with the rate in force over each time segment (using different rates in successive periods) and setting the total equal to the given balance.",
+     "concept": "Equation of Value",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Equation of Value",
+       "quote": "Every cash flow must be moved to the same comparison date before comparing, each at the [[Interest Rate]] that applies to it — one equation can equate the balances of two funds earning different rates."
+      }
+     ]
+    }
+   ]
+  },
+  "fm-010": {
+   "path": "questions/exam-fm/fm-010.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:f4496e729a60b2551f09d4e065381146147a12bf69719a50fc83a49a7db2daf8",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "The accumulation function from time 0 under a force of interest delta_t is a(t) = exp(integral from 0 to t of delta_s ds).",
+     "concept": "Force of Interest",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Force of Interest",
+       "quote": "$$a(t) = \\exp\\!\\left(\\int_0^t \\delta(s)\\,ds\\right)$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The accumulated value at time t2 of an amount invested at time t1 is the amount times a(t2)/a(t1), which equals exp of the integral of the force of interest from t1 to t2.",
+     "concept": "Force of Interest",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Variable Force of Interest",
+       "quote": "$$\\frac{a(t)}{a(s)} = \\exp\\!\\left(\\int_s^t \\delta(u)\\,du\\right)$$"
+      },
+      {
+       "page": "Time Value of Money Equations",
+       "quote": "each cash flow is moved to $t_0$ by the factor $a(t_0)/a(t_k)$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "definition",
+     "statement": "Interest earned over a period equals the fund balance at the end of the period minus the balance at the start of the period (including any deposits made at the start, but excluding deposits made during the period).",
+     "concept": "Interest Earned",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "To find an unknown deposit, set up an equation of value in which the interest earned over a period, computed as the opening balance (prior deposits accumulated plus the new deposit) times [a(t2)/a(t1) - 1], equals the stated amount, then solve for the unknown.",
+     "concept": "Equation of Value",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "fm-011": {
+   "path": "questions/exam-fm/fm-011.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:03fc2e16ab1039a81cc0e6d68851eb0c7aecf7cfa45f41b78aa7f6c8107b1d40",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "procedure",
+     "statement": "The present value of a perpetuity with a payment pattern that changes over time is found by splitting it into pieces (a level annuity-immediate for the initial years plus a deferred perpetuity) and summing the present values of the pieces.",
+     "concept": "Present Value of Annuities",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Geometric Increasing Perpetuity",
+       "quote": "Value the growing part at time 3, one period before its first payment, then discount it to time 0:"
+      },
+      {
+       "page": "Geometric Increasing Perpetuity",
+       "quote": "PV &= 100\\,a_{\\overline{3}|0.08} + 2{,}060\\,(1.08)^{-3} \\"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The present value of a level annuity-immediate of n payments is a_angle_n = (1 - v^n)/i, where v = 1/(1+i).",
+     "concept": "Annuity-Immediate",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Perpetuity",
+       "quote": "letting $n \\to \\infty$ in $a_{\\overline{n}|} = (1-v^n)/i$"
+      },
+      {
+       "page": "Annuity Immediate",
+       "quote": "$$a_{\\overline{n}|} = \\frac{1-v^n}{i}$$"
+      },
+      {
+       "page": "Level Payment Annuity",
+       "quote": "$$= P \\cdot \\frac{1-v^n}{i}$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "A deferred cash flow stream is valued by computing its present value as of the end of the deferral period and then discounting that value back to time 0 by v raised to the deferral length.",
+     "concept": "Deferred Annuities",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Geometric Increasing Perpetuity",
+       "quote": "Value the growing part at time 3, one period before its first payment, then discount it to time 0:"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "A perpetuity-immediate whose payments grow geometrically at rate k has present value P/(i - k), valid for k < i, where P is the first payment; equivalently the sum of r^t from t=1 to infinity equals r/(1-r) with r=(1+k)/(1+i).",
+     "concept": "Geometrically Increasing Perpetuity",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Geometric Increasing Perpetuity",
+       "quote": "For a first payment $P$, multiply by $P$."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "If a payment is K% larger than the preceding payment, it equals the preceding payment multiplied by (1 + K/100), so payments form a geometric progression with ratio 1+k.",
+     "concept": "Geometrically Increasing Annuity",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Geometric Progression",
+       "quote": "a **geometric progression** refers to a sequence of payments where each payment is a constant multiple $(1+g)$ of the previous one."
+      }
+     ]
+    }
+   ]
+  },
+  "fm-012": {
+   "path": "questions/exam-fm/fm-012.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:92394d000c3205b8b591c0edad480e225c3b181f314a61ff8d56fdb180b7e96f",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "The level payment P on a loan of amount L repaid over n years at effective annual rate i satisfies L = P * a_{n|i}, where a_{n|i} = (1 - v^n)/i, so P = L / a_{n|i}.",
+     "concept": "Level Payment Loan Amortization",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Amortization",
+       "quote": "$$P = \\frac{L}{a_{\\overline{n}|i}}$$"
+      },
+      {
+       "page": "Level Payment Annuity",
+       "quote": "$$\\text{PV} = P \\cdot a_{\\overline{n}|i}$$"
+      },
+      {
+       "page": "Level Payment Annuity",
+       "quote": "$$= P \\cdot \\frac{1-v^n}{i}$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "Total interest paid over the life of a loan equals the total of all payments minus the original loan amount (total principal repaid equals the loan amount).",
+     "concept": "Loan Amortization",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Loan Repayment Comparison",
+       "quote": "$$\\text{Total interest (level)} = n\\,P_{\\text{level}} - L$$"
+      },
+      {
+       "page": "Loan Amortization",
+       "quote": "Over the whole loan the principal portions add up to $L$, so the total interest is the total of the payments less $L$."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "For a loan repaid with fixed principal installments plus interest on the unpaid balance (installment/straight-line method), the interest each year equals i times the outstanding balance at the start of that year, and the balance falls by the fixed principal amount each year.",
+     "concept": "Installment Loan with Fixed Principal Payments",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Loan Repayment Comparison",
+       "quote": "Under constant-principal repayment, the principal portion each period is $L/n$, and interest is charged on the declining balance $L\\cdot\\frac{n-t+1}{n}$ at time $t$"
+      },
+      {
+       "page": "Loan Amortization",
+       "quote": "$$I_k = i\\,B_{k-1}$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "Total interest on a loan equals i times the sum of the outstanding balances at the beginning of each period, which for fixed principal installments forms an arithmetic sequence summed with the arithmetic series formula.",
+     "concept": "Installment Loan with Fixed Principal Payments",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Loan Repayment Comparison",
+       "quote": "summing the interest over all $n$ periods gives $iL\\frac{n+1}{2}$."
+      },
+      {
+       "page": "Loan Repayment Comparison",
+       "quote": "$$\\text{Total interest (constant principal)} = i\\,L\\cdot\\frac{n+1}{2}$$"
+      }
+     ]
+    }
+   ]
+  },
+  "fm-013": {
+   "path": "questions/exam-fm/fm-013.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:2e6d2ecc65ec6ffe8bb658cbceb0fe50fd6e007907b6bd2b1e92fc44f03e3b92",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "A nominal annual interest rate compounded monthly, i^(12), gives an effective monthly rate of i^(12)/12.",
+     "concept": "Nominal Interest Rate",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Loans",
+       "quote": "Monthly rate: $i^{(12)}/12 = 0.06/12 = 0.5\\%$."
+      },
+      {
+       "page": "Nominal Interest Rate",
+       "quote": "Rather than crediting interest once at year-end, the year is divided into $m$ sub-periods each earning a periodic rate of $i^{(m)}/m$."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "The outstanding loan balance at any time equals the present value of the remaining future payments at the loan interest rate (prospective method), which can be used when the original loan amount is unknown.",
+     "concept": "Outstanding Loan Balance",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Loans",
+       "quote": "the **prospective method** (present value of the remaining payments)"
+      },
+      {
+       "page": "Outstanding Balance",
+       "quote": "The prospective method needs only the remaining payments; the retrospective method needs only the original loan and the payments already made"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "For payments that decrease by a constant proportion each period (geometric progression), the k-th payment equals the first payment times (1+g)^(k-1), where g is the (negative) rate of change per period.",
+     "concept": "Geometric Annuity",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Geometric Increasing Annuity",
+       "quote": "For an $n$-payment annuity-immediate with first payment $1$ and growth rate $g$, payments are $1, (1+g), (1+g)^2, \\ldots, (1+g)^{n-1}$."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "The present value of a geometrically varying annuity-immediate with ratio r=(1+g) is a finite geometric series: sum of first-term·(r v)^(j) terms = (first term PV factor)(1 - (r v)^n)/(1 - r v).",
+     "concept": "Geometric Annuity",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Geometric Progression",
+       "quote": "$$\\text{PV} = \\frac{1}{1+i} \\cdot \\frac{1-\\left(\\frac{1+g}{1+i}\\right)^n}{1 - \\frac{1+g}{1+i}}$$"
+      },
+      {
+       "page": "Geometric Increasing Annuity",
+       "quote": "$$\\text{PV} = \\frac{1 - \\left(\\frac{1+g}{1+i}\\right)^n}{i-g}$$"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "procedure",
+     "statement": "To find the balance after the k-th payment, discount only the remaining payments (k+1 through n), re-indexing time so the first remaining payment is at time 1 (or equivalently using the original discount exponents with the correct payment indices).",
+     "concept": "Outstanding Loan Balance",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Outstanding Balance",
+       "quote": "$$OB_k = P \\cdot a_{\\overline{n-k}|i}$$"
+      }
+     ]
+    }
+   ]
+  },
+  "fm-014": {
+   "path": "questions/exam-fm/fm-014.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:d7a793b9d57b89994accfa80132fdd12c9a4a45d8d21855b83563c06d515cd30",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "The accumulated value at the end of m periods of level end-of-period deposits is the deposit times s_{m|i} = ((1+i)^m - 1)/i.",
+     "concept": "Annuity-Immediate",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Annuity Immediate",
+       "quote": "$$s_{\\overline{n}|} = \\frac{(1+i)^n - 1}{i}$$"
+      },
+      {
+       "page": "Level Payment Annuity",
+       "quote": "$$\\text{FV} = P \\cdot s_{\\overline{n}|i}$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "Decompose a payment stream with a step increase in level into a sum of level annuities covering different time spans (e.g., a stream of 2P over a later period equals P over the whole period plus P over the later period).",
+     "concept": "Annuity-Immediate",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "Set up an equation of value at a chosen comparison date by equating the accumulated value of all deposits to the target amount.",
+     "concept": "Equation of Value",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Equation of Value",
+       "quote": "An **equation of value** sets the value of all payments in equal to the value of all payments out, with every cash flow accumulated or discounted to one common **comparison date** $t_0$."
+      },
+      {
+       "page": "Equation of Value",
+       "quote": "$$X = 1000(1.06)^1 + 2000(1.06)^{-2} = 1060 + 1779.99 = 2839.99$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "Powers of the accumulation factor combine multiplicatively: if (1+i)^n = k, then (1+i)^{jn} = k^j.",
+     "concept": "Compound Interest",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "fm-015": {
+   "path": "questions/exam-fm/fm-015.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:cc587d8a662bbc16d10a363da1eae0a4172b1738cef4e4e2e408679b79331749",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "procedure",
+     "statement": "Convert a nominal annual rate convertible m times per year to an effective rate per period by dividing by m, then convert to an effective rate for a different period (e.g. monthly) by equating accumulation factors over the same time span, such as (1+j)^3 = 1 + i^(4)/4.",
+     "concept": "Nominal Interest Rate",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Nominal Interest Rate Convertible m-thly",
+       "quote": "$$\\left(1 + \\frac{i^{(m)}}{m}\\right)^m = 1 + i$$"
+      },
+      {
+       "page": "Nominal Interest Rate",
+       "quote": "The monthly periodic rate is $6\\%/12 = 0.5\\%$, so:"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "A payment stream that increases by a constant amount each period, starting at that same amount (payments P, 2P, ..., nP), equals P times the increasing annuity-immediate (Ia), so it can be valued by scaling (Ia) by P.",
+     "concept": "Increasing Annuity",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Arithmetic Increasing Annuity",
+       "quote": "Factor out 100: $PV = 100\\cdot(Ia)_{\\overline{5}|0.06}$."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The present value of an n-period increasing annuity-immediate with payments 1, 2, ..., n is (Ia)_{n|i} = (ä_{n|i} − n v^n) / i.",
+     "concept": "Increasing Annuity",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Arithmetic Increasing Annuity",
+       "quote": "An **arithmetic increasing annuity** has payments $1, 2, 3, \\ldots, n$ at the end of periods $1, 2, \\ldots, n$. Its present value is denoted $(Ia)_{\\overline{n}|}$:"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "The annuity-due present value factor is ä_{n|i} = (1 − v^n)/d = (1 − v^n)·(1+i)/i, where v = 1/(1+i).",
+     "concept": "Annuity-Due",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "fm-016": {
+   "path": "questions/exam-fm/fm-016.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:5df3908f3f8f1d1f34036f0006a39cb3cbbe1deb82b3103d998f9e49e0f462f8",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "The present value of a stream of payments is the sum of each payment multiplied by the discount factor v^t for its payment time t, where v = 1/(1+i) at annual effective rate i.",
+     "concept": "Present Value",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Present Value",
+       "quote": "For multiple cash flows $C_t$ at various times $t$, the total present value is $\\displaystyle PV = \\sum_t C_t\\, v^t$."
+      },
+      {
+       "page": "Discount Factor",
+       "quote": "The discount factor converts a future cash flow to its present value:"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "To compare or solve for an unknown rate, set the present values of two payment streams equal (equation of value) at a common valuation date.",
+     "concept": "Equation of Value",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Equation of Value",
+       "quote": "An **equation of value** sets the value of all payments in equal to the value of all payments out, with every cash flow accumulated or discounted to one common **comparison date** $t_0$."
+      },
+      {
+       "page": "Time Value of Money",
+       "quote": "An [[Equation of Value]] equates the values of two sets of payments at one comparison date."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "Powers of the discount factor combine by exponent rules, so v^(2n) = (v^n)^2, allowing known v^n to determine v^(2n).",
+     "concept": "Discount Factor",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "The annual effective interest rate is recovered from the discount factor via v = 1/(1+i), so i = 1/v - 1 (equivalently i = (v^10)^(-1/10) - 1 from v^10).",
+     "concept": "Annual Effective Interest Rate",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Discount Factor",
+       "quote": "$$v = \\frac{1}{1+i}$$"
+      }
+     ]
+    }
+   ]
+  },
+  "fm-017": {
+   "path": "questions/exam-fm/fm-017.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:2b125f4810b861bfa7b38f88524d3f299bc115ab38dff0cfff03e9170a04f9f5",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "The accumulation function for a time-varying force of interest is a(t) = exp(∫_0^t δ_r dr).",
+     "concept": "Force of Interest",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Force of Interest",
+       "quote": "$$a(t) = \\exp\\!\\left(\\int_0^t \\delta(s)\\,ds\\right)$$"
+      },
+      {
+       "page": "Accumulation Function",
+       "quote": "$$a(t) = \\exp\\!\\left(\\int_0^t \\delta(s)\\,ds\\right)$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "The accumulated value at time T of a continuous payment stream with rate ρ(t) is found by integrating ρ(t)·a(T)/a(t) from 0 to T, accumulating each payment from its payment time to T.",
+     "concept": "Continuous Payment Streams",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Continuous Annuity",
+       "quote": "$$\\bar{s}_{\\overline{n}|} = \\int_0^n e^{\\delta(n-t)}\\,dt$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "Set the accumulated value of the payments at time T equal to the given account value to form an equation of value, then solve for the unknown parameter.",
+     "concept": "Equation of Value",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Equation of Value",
+       "quote": "An **equation of value** sets the value of all payments in equal to the value of all payments out, with every cash flow accumulated or discounted to one common **comparison date** $t_0$."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "The accumulation factor from time t to T is a(T)/a(t), which equals exp(∫_t^T δ_r dr).",
+     "concept": "Accumulation Function",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Accumulated Value",
+       "quote": "under a [[Variable Force of Interest|force of interest]] $\\delta_r$ it equals $\\exp\\left(\\int_s^t \\delta_r\\,dr\\right)$."
+      },
+      {
+       "page": "Variable Force of Interest",
+       "quote": "$$\\frac{a(t)}{a(s)} = \\exp\\!\\left(\\int_s^t \\delta(u)\\,du\\right)$$"
+      }
+     ]
+    }
+   ]
+  },
+  "fm-018": {
+   "path": "questions/exam-fm/fm-018.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:631ab7238e3f050cd15e52f2603cb024b8c075ac96736b17177500e885bf8ed3",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "The price of a bond equals the present value of its coupons (coupon rate times par times the annuity-immediate factor) plus the present value of the redemption value, all at the yield rate per period.",
+     "concept": "Bond Pricing",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bond Price",
+       "quote": "$$P = Fr \\cdot a_{\\overline{n}|j} + C \\cdot v^n$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The annuity-immediate present value factor is a_{m|} = (1 - v^m)/i, where v = 1/(1+i).",
+     "concept": "Annuity-Immediate",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Annuity Immediate",
+       "quote": "$$a_{\\overline{n}|} = \\frac{1-v^n}{i}$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "For a bond with semi-annual coupons held n years, use 2n periods, with the coupon rate and yield rate expressed per half-year, so the discount factor over the term is v^{2n} where v is the semi-annual discount factor.",
+     "concept": "Bond Pricing",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Term of Bond",
+       "quote": "The number of [[Coupon]] payments: $n = \\text{term} \\times m$ where $m$ = payments per year"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "Given (1+i)^{-n} for a term of n years with semi-annual periods, the discount over 2n periods is obtained by treating (1+i)^{-n} as the n-period factor and its relation to v^{2n} per the problem's convention (here v^{2n} = (1+i)^{-n} squared as applied in the solution).",
+     "concept": "Present Value and Discount Factor",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Term of Bond",
+       "quote": "The number of [[Coupon]] payments: $n = \\text{term} \\times m$ where $m$ = payments per year"
+      },
+      {
+       "page": "Discount Factor",
+       "quote": "The $n$-period discount factor is $v^n = (1+i)^{-n}$."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "The coupon amount is par (face) times the coupon rate per period, and the coupon annuity PV can be written as Fr(1-v^m)/i = F(r/i)(1-v^m), so only the ratio r/i is needed.",
+     "concept": "Bond Pricing",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Coupon",
+       "quote": "A **coupon** is the periodic interest payment made by a bond issuer to the bondholder, equal to the face value $F$ multiplied by the coupon rate per period $r$."
+      }
+     ]
+    }
+   ]
+  },
+  "fm-019": {
+   "path": "questions/exam-fm/fm-019.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:3f30793a162fb77363d9d8d7192226c4608133e01897c90bd451f01cd62a5fff",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "The net present value of a project is the present value of its cash inflows minus the present value of its cash outflows (investments), discounted at a given interest rate.",
+     "concept": "Net Present Value",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Net Present Value",
+       "quote": "$$= PV(\\text{inflows}) - PV(\\text{outflows})$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The present value of a payment made at time t is the payment times v^t, where v = 1/(1+i) and i is the annual effective interest rate.",
+     "concept": "Present Value and Discount Factor",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Present Value",
+       "quote": "$$= FV \\cdot v^n$$"
+      },
+      {
+       "page": "Present Value",
+       "quote": "A payment of $FV$ due in $n$ periods at effective rate $i$ has present value:"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "To find an unknown cash flow when two projects have equal NPV, set the NPV expressions of the two projects (each with timed cash flows discounted to a common date) equal and solve for the unknown amount.",
+     "concept": "Equation of Value",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Equation of Value",
+       "quote": "$$\\text{Value}_{t_0}(\\text{inflows}) = \\text{Value}_{t_0}(\\text{outflows})$$"
+      },
+      {
+       "page": "Equation of Value",
+       "quote": "Cash flows before $t_0$ are accumulated to it; cash flows on or after $t_0$ are discounted to it."
+      }
+     ]
+    }
+   ]
+  },
+  "fm-020": {
+   "path": "questions/exam-fm/fm-020.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:417fd40228011d448c75da0d961724258e424fecfcc30e14ac77555a867c82b7",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "The present value of a perpetuity-immediate paying X per year is X/i.",
+     "concept": "Perpetuity",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Perpetuity",
+       "quote": "$$a_{\\overline{\\infty}|} = \\frac{1}{i}$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The present value of an n-year annuity-immediate paying X per year is X times a_angle_n = X(1 - v^n)/i, where v = 1/(1+i).",
+     "concept": "Annuity-Immediate",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Annuity Immediate",
+       "quote": "$$a_{\\overline{n}|} = \\frac{1-v^n}{i}$$"
+      },
+      {
+       "page": "Level Payment Annuity",
+       "quote": "$$\\text{PV} = P \\cdot a_{\\overline{n}|i}$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "The fraction of a perpetuity's present value that comes from its first n payments equals 1 - v^n, since a_angle_n divided by 1/i is 1 - v^n.",
+     "concept": "Perpetuity",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Perpetuity",
+       "quote": "For a **perpetuity-immediate** (payments at end of each period) the present value is obtained by letting $n \\to \\infty$ in $a_{\\overline{n}|} = (1-v^n)/i$; since $v^n \\to 0$:"
+      },
+      {
+       "page": "Annuity Immediate",
+       "quote": "$$a_{\\overline{n}|} = \\frac{1-v^n}{i}$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "A perpetuity whose payments begin after a deferral of m years has present value v^m times the present value of the perpetuity starting immediately (deferred perpetuity); equivalently, the PV of payments after time 2n is v^(2n) X/i.",
+     "concept": "Deferred Perpetuity",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Deferred Annuity",
+       "quote": "$${}_{k|}a_{\\overline{n}|} = v^k \\cdot a_{\\overline{n}|}$$"
+      }
+     ]
+    }
+   ]
+  },
+  "fm-021": {
+   "path": "questions/exam-fm/fm-021.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:6fe74e1f0c807fa306a420d1650090aed2d30f6ff555260764c338db2abcc0cb",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "A nominal annual interest rate compounded m times per year corresponds to an effective rate of i/m per compounding period.",
+     "concept": "Nominal Interest Rate",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Nominal Interest Rate",
+       "quote": "Rather than crediting interest once at year-end, the year is divided into $m$ sub-periods each earning a periodic rate of $i^{(m)}/m$."
+      },
+      {
+       "page": "Nominal Interest Rate Convertible m-thly",
+       "quote": "Each period, interest at rate $i^{(m)}/m$ is credited."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "A lump sum accumulates with compound interest as principal times (1+i)^n, so the interest paid at the end is principal times ((1+i)^n - 1).",
+     "concept": "Compound Interest",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Compound Interest",
+       "quote": "An investment of $P$ at effective annual rate $i$ grows to:"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "For a loan on which interest is paid each period and the principal is repaid at the end, the interest per period is the principal times the periodic rate, and total interest is that amount times the number of periods.",
+     "concept": "Interest-Only Loan",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Interest",
+       "quote": "I_t = i \\cdot B_{t-1}"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "The level payment that amortizes a loan L over n periods at periodic rate i is P = L / a_{n|i}, where a_{n|i} = (1 - v^n)/i.",
+     "concept": "Loan Amortization",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Amortization",
+       "quote": "P = \\frac{L}{a_{\\overline{n}|i}}"
+      },
+      {
+       "page": "Level Payment Annuity",
+       "quote": "= P \\cdot \\frac{1-v^n}{i}"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "Total interest paid over an amortized loan equals the sum of all payments minus the original principal.",
+     "concept": "Loan Amortization",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Loan Amortization",
+       "quote": "Over the whole loan the principal portions add up to $L$, so the total interest is the total of the payments less $L$."
+      },
+      {
+       "page": "Loan Repayment Comparison",
+       "quote": "\\text{Total interest (level)} = n\\,P_{\\text{level}} - L"
+      }
+     ]
+    }
+   ]
+  },
+  "fm-022": {
+   "path": "questions/exam-fm/fm-022.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:0e8e7209d40f3686da796443d7ee24ba5bdaa3cf13bc41d82fdcf0a210864f43",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "The interest earned during the nth year equals the accumulated value at time n minus the accumulated value at time n-1, i.e., A(n) - A(n-1).",
+     "concept": "Amount of Interest Earned in a Period",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "With a deposit P at time 0 and annual effective rate i, the interest earned in year n equals P(1+i)^(n-1) * i.",
+     "concept": "Annual Effective Interest Rate",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "To find an unknown effective rate from two equations that share the same unknown quantity, divide one equation by the other to eliminate the common amount, then solve for (1+i) by taking a root and subtract 1 to obtain i.",
+     "concept": "Solving for the Effective Interest Rate",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "fm-023": {
+   "path": "questions/exam-fm/fm-023.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:8081c5a216ed85abccdd970cd3e5eac87d7439fe840a76f50036bafdcc4c973f",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "For a level-payment loan, the outstanding balance at time t equals the present value of the remaining payments, i.e. the payment times the annuity-immediate factor for the remaining n−t years.",
+     "concept": "Loan Outstanding Balance (Prospective Method)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Amortization",
+       "quote": "Outstanding balance after payment $k$: $OB_k = P \\cdot a_{\\overline{n-k}|i}$"
+      },
+      {
+       "page": "Outstanding Balance",
+       "quote": "$$OB_k = P \\cdot a_{\\overline{n-k}|i}$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "Interest paid in a period equals the effective rate i times the outstanding balance at the start of that period (the balance at the end of the prior year).",
+     "concept": "Amortization Schedule",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Loan Amortization",
+       "quote": "$$I_k = i\\,B_{k-1}$$"
+      },
+      {
+       "page": "Interest",
+       "quote": "where $i$ is the periodic [[Interest Rate]] and $B_{t-1}$ is the [[Outstanding Balance]] at the start of the period."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "Principal repaid in a period equals the payment minus the interest paid in that period (equivalently, the reduction in the outstanding balance).",
+     "concept": "Amortization Schedule",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Loan Amortization",
+       "quote": "$$PR_k = K_k - I_k = B_{k-1} - B_k$$"
+      },
+      {
+       "page": "Interest",
+       "quote": "$$P_t = \\text{Payment} - I_t$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "The present value of an n-year annuity-immediate is a_angle(n) = (1 − v^n)/i, so i·a_angle(n) = 1 − v^n, where v = 1/(1+i).",
+     "concept": "Annuity-Immediate",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Annuity Immediate",
+       "quote": "$$a_{\\overline{n}|} = \\frac{1-v^n}{i}$$"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "definition",
+     "statement": "The effective discount rate d equals 1 − v (equivalently i·v), the relationship used to rewrite 1 − v as d.",
+     "concept": "Effective Rate of Discount",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "fm-024": {
+   "path": "questions/exam-fm/fm-024.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:e3e61a54614361a73c67906d6604c348b71fd4898ef229b150550d62cd1eeb43",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "The present value of a perpetuity-immediate paying a level amount at the end of each period is the payment times v/(1-v), where v is the discount factor per payment period (equivalently, payment divided by the effective rate per period).",
+     "concept": "Perpetuity",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Perpetuity",
+       "quote": "$$a_{\\overline{\\infty}|} = \\frac{1}{i}$$"
+      },
+      {
+       "page": "Perpetuity",
+       "quote": "$$PV = \\frac{50{,}000}{i} = \\frac{50{,}000}{0.04} = \\$1{,}250{,}000$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "For a perpetuity with payments every k years, treat it as a sum of payments discounted by v^k, 2k, 3k,... and sum the geometric series to get payment times v^k/(1-v^k), then solve for v^k.",
+     "concept": "Perpetuity",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r3",
+     "kind": "definition",
+     "statement": "The discount factor is v = 1/(1+i), so v raised to a fractional power t gives the present value factor for a payment made t years from now, and powers of v can be rearranged to move between time units (e.g., v^(1/3) = (v^3)^(1/9)).",
+     "concept": "Present Value and Discount Factor",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Discount Factor",
+       "quote": "The $n$-period discount factor is $v^n = (1+i)^{-n}$."
+      },
+      {
+       "page": "Discount Factor",
+       "quote": "$$v = \\frac{1}{1+i}$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "For a perpetuity with payments at intervals shorter than a year, use the discount factor over one payment interval, v^(1/m) for payments every 1/m year, in the perpetuity formula, with the same annual effective rate.",
+     "concept": "Perpetuity",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Payment Period",
+       "quote": "$$j = (1+i)^{1/m} - 1$$"
+      }
+     ]
+    }
+   ]
+  },
+  "fm-025": {
+   "path": "questions/exam-fm/fm-025.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:0c3a5410479e7b8e5c9cd0f884163e524e35c8aa65e9c0f6302b8b6f71f0bae0",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "procedure",
+     "statement": "Compute the annual coupon of a bond as the coupon rate times the par (face) value.",
+     "concept": "Bonds",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Coupon",
+       "quote": "$$\\text{Coupon} = Fr$$"
+      },
+      {
+       "page": "Coupon",
+       "quote": "Coupon} = Fr = 5000(0.03) = \\$150$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "Coupons received before maturity are reinvested at the reinvestment rate, so their accumulated value at maturity is the coupon amount times the accumulated-value annuity-immediate factor s-angle-n at the reinvestment rate.",
+     "concept": "Annuity-Immediate",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Reinvestment of Coupons",
+       "quote": "When coupons are reinvested at a rate $r_i$ per period, the **accumulated value** at the end of $n$ periods equals the future value of the coupon annuity at the reinvestment rate plus the redemption value $C$."
+      },
+      {
+       "page": "Reinvestment Risk",
+       "quote": "Reinvesting at 5%, their accumulated value at time 3 is:"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The accumulated value of an n-period annuity-immediate of 1 per period is s_{n|i} = ((1+i)^n - 1)/i.",
+     "concept": "Annuity-Immediate",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Annuity Immediate",
+       "quote": "$$s_{\\overline{n}|} = \\frac{(1+i)^n - 1}{i}$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "A bond whose maturity value equals par returns the par value at maturity in addition to the final coupon, so total funds at maturity equal the par value plus the accumulated reinvested coupons.",
+     "concept": "Bonds",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Reinvestment of Coupons",
+       "quote": "$$AV = Fr \\cdot s_{\\overline{n}|r_i} + C$$"
+      },
+      {
+       "page": "Reinvestment Risk",
+       "quote": "Adding the \\$$1{,}000$ redemption value gives a total of $252.20 + 1{,}000 = \\$1{,}252.20$."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "procedure",
+     "statement": "Profit or loss at the liability date equals the accumulated asset proceeds at maturity minus the liability payment; a shortfall is a loss and an excess is a gain.",
+     "concept": "Asset-Liability Matching",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Asset-Liability Portfolio",
+       "quote": "$$S(i) = \\sum_{t} v^t \\left(A_t - L_t\\right) = PV_A(i) - PV_L(i)$$"
+      },
+      {
+       "page": "Reinvestment of Coupons",
+       "quote": "When coupons are reinvested at a rate $r_i$ per period, the **accumulated value** at the end of $n$ periods equals the future value of the coupon annuity at the reinvestment rate plus the redemption value $C$."
+      }
+     ]
+    },
+    {
+     "id": "r6",
+     "kind": "fact",
+     "statement": "When reinvestment rates fall below the assumed rate, reinvested coupons accumulate to less and the asset-liability position shows a loss; when rates rise above it, the position shows a gain (reinvestment risk when durations are not matched).",
+     "concept": "Reinvestment Risk",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Reinvestment of Coupons",
+       "quote": "If $r_i < j$, the accumulated value is lower and the realized return falls below $j$; if $r_i > j$, the investor does better than the promised yield."
+      },
+      {
+       "page": "Reinvestment Risk",
+       "quote": "If reinvestment rates $j'$ fall below $j$, the accumulated value of coupons falls short of projection and the realized yield drops below $j$."
+      }
+     ]
+    }
+   ]
+  },
+  "fm-026": {
+   "path": "questions/exam-fm/fm-026.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:b403ed316d856ed8f101a5d3f8d3054bddd76aad9873587a77a55e76ebc7fa35",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "procedure",
+     "statement": "When payments grow with inflation from today's level, the first payment at time 1 equals the current amount times (1 + inflation rate), and payment t equals the current amount times (1 + inflation rate)^t.",
+     "concept": "Increasing Annuities",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r2",
+     "kind": "definition",
+     "statement": "The discount factor v equals 1/(1+i), where i is the annual effective interest rate, and a payment at time t has present value equal to the payment times v^t.",
+     "concept": "Present Value",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Present Value",
+       "quote": "future cash flows are multiplied by the discount factor $v = (1+i)^{-1}$ raised to the number of periods."
+      },
+      {
+       "page": "Present Value",
+       "quote": "For multiple cash flows $C_t$ at various times $t$, the total present value is $\\displaystyle PV = \\sum_t C_t\\, v^t$."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The present value of an annuity-immediate whose payments grow geometrically at rate g is the sum of a geometric series: PV = P·[(1+g)v − ((1+g)v)^(n+1)] / (1 − (1+g)v), where P is the base payment and n the number of payments.",
+     "concept": "Geometric Series Annuity",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Geometric Increasing Annuity",
+       "quote": "$$\\text{PV} = \\frac{1 - \\left(\\frac{1+g}{1+i}\\right)^n}{i-g}$$"
+      },
+      {
+       "page": "Geometric Progression",
+       "quote": "$$\\text{PV} = \\frac{1}{1+i} \\cdot \\frac{1-\\left(\\frac{1+g}{1+i}\\right)^n}{1 - \\frac{1+g}{1+i}}$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "The geometric series formula for a growing annuity remains valid when the growth rate exceeds the interest rate (ratio (1+g)v greater than 1), so the present value can still be computed.",
+     "concept": "Geometric Series Annuity",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Geometric Increasing Annuity",
+       "quote": "The present value (at effective rate $i \\neq g$) is:"
+      }
+     ]
+    }
+   ]
+  },
+  "fm-027": {
+   "path": "questions/exam-fm/fm-027.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:220103c3d53befd919c01cafff40ad3e0032a8370e1faaf325729771cf966cec",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "Net present value is the present value of cash inflows minus the present value of cash outflows (the initial investment), discounted at a given interest rate.",
+     "concept": "Net Present Value",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Net Present Value",
+       "quote": "$$= PV(\\text{inflows}) - PV(\\text{outflows})$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "When interim cash flows are reinvested at a specified rate, accumulate each cash flow forward to the end of the investment term at the reinvestment rate and sum them into a single terminal value.",
+     "concept": "Reinvestment Rate",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Reinvestment of Coupons",
+       "quote": "When coupons are reinvested at a rate $r_i$ per period, the **accumulated value** at the end of $n$ periods equals the future value of the coupon annuity at the reinvestment rate plus the redemption value $C$."
+      },
+      {
+       "page": "Accumulated Value",
+       "quote": "$$AV = \\sum_k C_{t_k} \\cdot (1+i)^{t - t_k}$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The accumulated value of an amount after n periods at annual effective rate i is the amount times (1+i)^n.",
+     "concept": "Compound Interest Accumulation",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Accumulated Value",
+       "quote": "Under [[Compound Interest]] at rate $i$, $a(t) = (1+i)^t$, so $AV = PV \\cdot (1+i)^t$."
+      },
+      {
+       "page": "Compound Interest",
+       "quote": "For $n$ periods at rate $i$, $(1+i)^n$ is the **accumulation factor** — the value at time $n$ of 1 invested now"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "The present value of an amount due at time n at annual effective rate i is the amount times (1+i)^(-n).",
+     "concept": "Present Value and Discounting",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Present Value",
+       "quote": "$$PV = FV \\cdot (1+i)^{-n}$$"
+      },
+      {
+       "page": "Compound Interest",
+       "quote": "$v^n = (1+i)^{-n}$ is the present value of 1 due in $n$ periods, where $v = (1+i)^{-1}$ is the [[Discount Factor|discount factor]]."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "The reinvestment rate and the NPV discount rate can differ; reinvestment rate is used to accumulate cash flows, while the stated valuation rate is used to discount to the present.",
+     "concept": "Reinvestment Rate",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Economic Value",
+       "quote": "Funds after 2 years} &= 130(1.04)^2 \\\\"
+      }
+     ]
+    }
+   ]
+  },
+  "fm-028": {
+   "path": "questions/exam-fm/fm-028.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:c2322bffc6a022d6ddfff18b856c302a5a3109081fe60a4cfb3fa6dc00ddce0e",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "The value of a bond equals the present value of its future coupon and redemption cash flows.",
+     "concept": "Bond Valuation",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bonds",
+       "quote": "**[[Bond Price|Price]]** — Present value of all future cash flows at the yield rate"
+      },
+      {
+       "page": "Bond Price",
+       "quote": "The **bond price** $P$ is the present value of all future cash flows from a bond, discounted at the yield rate $j$ per period."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The annual coupon of a bond equals the coupon rate times the par (face) value, and the final payment at maturity is the last coupon plus the redemption (par) value.",
+     "concept": "Bond Coupon Payments",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Spot Rate",
+       "quote": "$$P = \\frac{60}{1.04} + \\frac{60}{1.05^2} + \\frac{1060}{1.06^3}$$"
+      },
+      {
+       "page": "Face Value",
+       "quote": "The [[Coupon]] payment each period equals $F \\times r$ where $r$ is the [[Coupon Rate]] per period"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "definition",
+     "statement": "The t-year spot interest rate is the annual effective rate used to discount a single cash flow occurring at time t, so that its present value is the cash flow divided by (1 + s_t)^t.",
+     "concept": "Spot Interest Rates",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Spot Rates and Forward Rates",
+       "quote": "The [[Spot Rate]] $s_t$ is the annual effective rate earned on an investment made now and repaid in one sum at time $t$"
+      },
+      {
+       "page": "Spot Rate",
+       "quote": "The **$n$-year spot rate** $s_n$ is the yield to maturity on a zero-coupon bond that matures in exactly $n$ years, representing the market's required return for a single cash flow received at time $n$ with no intermediate payments."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "To value a bond using spot rates, discount each cash flow at the spot rate matching its payment time and sum the present values: P = sum C_t/(1+s_t)^t.",
+     "concept": "Spot Interest Rates",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Spot Rates and Forward Rates",
+       "quote": "convert whichever rates are given to spot rates (or to a product of forward-rate factors), then discount each cash flow at the rate for its own time"
+      }
+     ]
+    }
+   ]
+  },
+  "fm-029": {
+   "path": "questions/exam-fm/fm-029.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:00244ba9caaad2041ad1d9aa5db001e82cf37a2827c8432ce6c2d5d272804443",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "A bond's price (value) equals the present value of its coupons and redemption value, each cash flow discounted at the spot rate matching its time of payment.",
+     "concept": "Spot Rates",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Spot Rate",
+       "quote": "A coupon bond is priced by discounting each cash flow at the spot rate for that maturity:"
+      },
+      {
+       "page": "Spot Rate",
+       "quote": "$$P = \\frac{60}{1.04} + \\frac{60}{1.05^2} + \\frac{1060}{1.06^3}$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The price of a bond with par value F, coupon rate r, redemption C and n periods at yield i is P = F·r·a_{n|i} + C(1+i)^{-n}.",
+     "concept": "Bond Valuation",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Yield Rate",
+       "quote": "$$P = Fr \\cdot a_{\\overline{n}|j} + C \\cdot v^n$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "definition",
+     "statement": "The yield rate of a bond is the single effective interest rate i at which the present value of its cash flows equals its price.",
+     "concept": "Yield Rate",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Yield Rate",
+       "quote": "The **yield rate** $j$ (also called the yield to maturity) is the internal rate of return of a bond — the interest rate per period at which the present value of all future cash flows equals the current price $P$."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "To find the yield of a bond whose price was computed from spot rates, set the price equal to the level-yield bond price formula and solve for i numerically (trial and error, interpolation, or calculator).",
+     "concept": "Yield Rate",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Yield Rate",
+       "quote": "$$50\\,a_{\\overline{3}|j} + 1{,}000\\,v^3 = 950.26$$"
+      },
+      {
+       "page": "Yield Rate",
+       "quote": "The price $950.26$ lies between them, so interpolate:"
+      }
+     ]
+    }
+   ]
+  },
+  "fm-030": {
+   "path": "questions/exam-fm/fm-030.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:043a455077c7fa284651aef8901bc12b49941486f5aeff9846be7cb9ec4c0402",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "Macaulay duration equals the negative of the derivative of price with respect to yield, divided by price, times one plus the effective annual yield: D = -(dP/di)/P × (1+i).",
+     "concept": "Macaulay Duration",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r2",
+     "kind": "definition",
+     "statement": "Macaulay duration is the present-value-weighted average time of a bond's cash flows, measuring the bond's price sensitivity to yield.",
+     "concept": "Macaulay Duration",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Macaulay Duration",
+       "quote": "**Macaulay duration** $D_{Mac}$ is the weighted-average time to receipt of a bond's cash flows, where each cash flow is weighted by its [[Present Value]] as a fraction of total price:"
+      },
+      {
+       "page": "Duration",
+       "quote": "**Duration** measures the weighted-average time of a bond's (or portfolio's) cash flows, and quantifies its sensitivity to interest rate changes."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "Modified duration equals the negative of the price derivative divided by price, and Macaulay duration equals modified duration times (1+i).",
+     "concept": "Modified Duration",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Duration",
+       "quote": "$$D_{Mod} = \\frac{D_{Mac}}{1+j} = -\\frac{1}{P}\\frac{dP}{dj}$$"
+      }
+     ]
+    }
+   ]
+  },
+  "fm-031": {
+   "path": "questions/exam-fm/fm-031.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:607d35ddf5f32bb807790698c54855c0df0132374b5d85e87403e017b131800a",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "Macaulay duration is the present-value-weighted average time of a cash flow stream: the sum of t times the present value of the payment at time t, divided by the total present value.",
+     "concept": "Macaulay Duration",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Macaulay Duration",
+       "quote": "**Macaulay duration** $D_{Mac}$ is the weighted-average time to receipt of a bond's cash flows, where each cash flow is weighted by its [[Present Value]] as a fraction of total price:"
+      },
+      {
+       "page": "Macaulay Duration",
+       "quote": "$$D_{Mac} = \\frac{\\displaystyle\\sum_{t=1}^{n} t \\cdot C_t \\cdot v^t}{\\displaystyle\\sum_{t=1}^{n} C_t \\cdot v^t}$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The present value of a perpetuity-immediate paying 1 per year is a_infinity = 1/i.",
+     "concept": "Perpetuity",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Level Perpetuity",
+       "quote": "The present value of a perpetuity-immediate (payments at end of period) paying $1$ per period at rate $i$:"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The present value of an increasing perpetuity-immediate paying t at time t is (Ia)_infinity = 1/(i·d) = a-due_infinity / i.",
+     "concept": "Increasing Annuity",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Increasing Annuity",
+       "quote": "With no end date, the increasing [[Perpetuity|perpetuity]]-immediate $1, 2, 3, \\ldots$ is worth $(Ia)_{\\overline{\\infty}|} = 1/i + 1/i^2$, and the perpetuity-due $(I\\ddot{a})_{\\overline{\\infty}|} = 1/d^2$."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "The Macaulay duration of a level perpetuity-immediate equals 1/d, which is (1+i)/i.",
+     "concept": "Macaulay Duration",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Macaulay Duration",
+       "quote": "For a level [[Perpetuity]]-immediate — payments of 1 at the **end** of each period, forever — $D_{Mac} = (1+j)/j = 1/d$ periods."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "formula",
+     "statement": "The effective annual discount rate is d = i/(1+i).",
+     "concept": "Effective Rate of Discount",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Effective Discount Rate",
+       "quote": "$$d = \\frac{i}{1+i}$$"
+      }
+     ]
+    }
+   ]
+  },
+  "fm-032": {
+   "path": "questions/exam-fm/fm-032.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:a2057c7c8b85091f9fc7a56e152a1376e5087d1830f14ba6887dc3bcc631ca3e",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "Macaulay duration is the present-value-weighted average time of cash flows: the sum of t times v^t times the cash flow at time t, divided by the sum of v^t times the cash flow at time t (the price).",
+     "concept": "Macaulay Duration",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Macaulay Duration",
+       "quote": "$$D_{Mac} = \\frac{\\displaystyle\\sum_{t=1}^{n} t \\cdot C_t \\cdot v^t}{\\displaystyle\\sum_{t=1}^{n} C_t \\cdot v^t}$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "For cash flows growing at a constant rate g discounted at rate i, rewrite the discount factor as the product v(1+g) = 1/(1+j), giving an equivalent level-payment problem at modified rate j = (i-g)/(1+g).",
+     "concept": "Geometrically Increasing Annuity",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The present value of a perpetuity-immediate paying 1 per period is a_∞ = 1/j, and the increasing perpetuity-immediate (1,2,3,...) has present value (Ia)_∞ = 1/(j·d) = (1+j)/j².",
+     "concept": "Increasing Annuity",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Perpetuity",
+       "quote": "$$a_{\\overline{\\infty}|} = \\frac{1}{i}$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "The Macaulay duration of a level perpetuity-immediate (ratio of (Ia)_∞ to a_∞) equals 1/d = (1+i)/i, where d is the effective discount rate.",
+     "concept": "Macaulay Duration",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Macaulay Duration",
+       "quote": "For a level [[Perpetuity]]-immediate — payments of 1 at the **end** of each period, forever — $D_{Mac} = (1+j)/j = 1/d$ periods."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "definition",
+     "statement": "The effective annual discount rate is d = i/(1+i) = 1 - v, so 1/d = (1+i)/i.",
+     "concept": "Effective Rate of Discount",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Perpetuity",
+       "quote": "$$\\ddot{a}_{\\overline{\\infty}|} = \\frac{1}{d}$$"
+      },
+      {
+       "page": "Effective Discount Rate",
+       "quote": "$$d = \\frac{i}{1+i}$$"
+      }
+     ]
+    }
+   ]
+  },
+  "fm-033": {
+   "path": "questions/exam-fm/fm-033.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:fb390bf1395ed31958ba8904b08ffb91bdeb6111423583a6898e2aec96c78f79",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "With level end-of-year payments, the outstanding balance after the payment at time n-1 equals the present value of the one remaining payment, so the final payment equals the prior balance times (1+i).",
+     "concept": "Loan Amortization",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Final Payment",
+       "quote": "The final payment amount equals the [[Outstanding Balance]] at the previous payment date accumulated by one period."
+      },
+      {
+       "page": "Balloon Payment",
+       "quote": "Or equivalently, $B$ is the [[Outstanding Balance]] $OB_{n-1}$ accumulated one more period: $B = OB_{n-1}(1+i)$."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The amount of a loan repaid by n level end-of-year payments of P at effective rate i is P times the annuity-immediate present value factor a_{n|i} = (1-v^n)/i.",
+     "concept": "Annuity-Immediate",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Level Payment Annuity",
+       "quote": "$$\\text{PV} = P \\cdot a_{\\overline{n}|i}$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "The interest portion of a loan payment equals the interest rate times the outstanding balance at the start of the period, and the principal repaid is the payment minus this interest.",
+     "concept": "Loan Amortization",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Principal",
+       "quote": "**Principal in payment 1**: $PR_1 = P - I_1 = 3560.95 - 900.00 = \\$2{,}660.95$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "For a level-payment loan, successive principal repayments grow geometrically by a factor of (1+i), so P_t = P_1(1+i)^(t-1).",
+     "concept": "Loan Amortization",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Loan Amortization",
+       "quote": "With level payments $P$, the principal portions grow geometrically: $PR_k = P\\,v^{n-k+1}$, so $PR_{k+1} = PR_k(1+i)$"
+      },
+      {
+       "page": "Amortization Schedule",
+       "quote": "The principal portions form a geometric sequence: $PR_k = PR_1 \\cdot (1+i)^{k-1}$."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "In a level-payment loan, the final principal repaid equals the outstanding balance just before the final payment.",
+     "concept": "Loan Amortization",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Loan Amortization",
+       "quote": "$$PR_k = K_k - I_k = B_{k-1} - B_k$$"
+      },
+      {
+       "page": "Amortization",
+       "quote": "At the end of the $n$-th payment the loan is exactly paid off."
+      }
+     ]
+    }
+   ]
+  },
+  "fm-034": {
+   "path": "questions/exam-fm/fm-034.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:247522e2aa49f6bb0dac9b22ee4eb6d24de0bebd22014b5bb43e8329e7ac7895",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "When a bond's yield rate equals its coupon rate, the bond's price equals its par (redemption) value.",
+     "concept": "Bond Pricing",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Bond Price",
+       "quote": "when $Fr = Cj$ it sells at **par** ($P = C$)"
+      },
+      {
+       "page": "Coupon Rate",
+       "quote": "When the coupon rate equals the yield rate ($r = j$ for $F = C$), the bond prices at par."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "Semi-annual coupon amount equals the par value times the annual coupon rate divided by 2 (coupon rate per period times face value).",
+     "concept": "Bond Coupon Payments",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Coupon",
+       "quote": "For a bond with an annual coupon rate $r_{annual}$ that pays semi-annually, each coupon is $F \\cdot r_{annual}/2$."
+      },
+      {
+       "page": "Coupon",
+       "quote": "The coupon rate per semi-annual period is $r = 6\\%/2 = 3\\%$."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The accumulated value at the end of n periods of level payments made at the end of each period, reinvested at periodic rate j, is the payment times s_{n|j} = ((1+j)^n - 1)/j.",
+     "concept": "Annuity-Immediate",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Annuity Immediate",
+       "quote": "$$s_{\\overline{n}|} = \\frac{(1+i)^n - 1}{i}$$"
+      },
+      {
+       "page": "Level Payment Annuity",
+       "quote": "$$\\text{FV} = P \\cdot s_{\\overline{n}|i}$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "When coupons are reinvested at a different rate, the investor's overall yield is found by equating the purchase price accumulated at the annual effective yield over the term to the final accumulated value of reinvested coupons plus the redemption value.",
+     "concept": "Reinvestment Rate and Investment Yield",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Reinvestment of Coupons",
+       "quote": "The realized yield $r$ satisfies $1000(1+r)^4 = 1297.25$, giving $(1+r)^4 = 1.29725$, so $r = 1.29725^{1/4} - 1 \\approx 6.72\\%$."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "procedure",
+     "statement": "Solve for an unknown periodic interest rate from a given annuity accumulated value (s_{n|j} = known value) using a financial calculator or numerical method.",
+     "concept": "Solving for the Interest Rate of an Annuity",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Yield Rate",
+       "quote": "Solving exactly (BA II Plus: $N = 3$, $PV = 950.26$, $PMT = -50$, $FV = -1{,}000$, CPT $I/Y$) gives $j = 6.89\\%$."
+      },
+      {
+       "page": "Internal Rate of Return",
+       "quote": "For a long signature, the IRR is found numerically, by trial rates and interpolation or with a calculator's cash-flow function."
+      }
+     ]
+    },
+    {
+     "id": "r6",
+     "kind": "formula",
+     "statement": "A semi-annual effective rate j converts to an annual effective rate by i = (1+j)^2 - 1.",
+     "concept": "Effective Interest Rate Conversion",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Effective Rate",
+       "quote": "$$i = \\left(1 + \\frac{i^{(m)}}{m}\\right)^m - 1$$"
+      }
+     ]
+    }
+   ]
+  },
+  "fm-035": {
+   "path": "questions/exam-fm/fm-035.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:255a9b41422d2fe57b728ac69cbe29ccc3b1ddf3055302feb0f6d96bec26b149",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "procedure",
+     "statement": "To find the fund needed at retirement, divide the desired periodic income by the income rate per unit of fund (e.g. income per 1000 of fund) and scale up by the unit size.",
+     "concept": "Life Annuity Income Conversion",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "A nominal annual rate compounded monthly, i^(12), corresponds to an effective monthly rate of i^(12)/12.",
+     "concept": "Nominal Interest Rate",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Nominal Interest Rate Convertible m-thly",
+       "quote": "Each period, interest at rate $i^{(m)}/m$ is credited."
+      },
+      {
+       "page": "Nominal Interest Rate",
+       "quote": "The monthly periodic rate is $6\\%/12 = 0.5\\%$, so:"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "definition",
+     "statement": "An annuity-due makes payments at the beginning of each period, and its accumulated value at the end of n periods is s-due_{n|i} = ((1+i)^n - 1)/d, where d = i/(1+i).",
+     "concept": "Annuity-Due",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Annuity Due",
+       "quote": "An **annuity-due** is a series of $n$ level payments of 1 made at the **beginning** of each period."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "Set the accumulated value of level periodic contributions equal to the target fund (equation of value) and solve for the contribution amount.",
+     "concept": "Equation of Value",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Equation of Value",
+       "quote": "An **equation of value** sets the value of all payments in equal to the value of all payments out, with every cash flow accumulated or discounted to one common **comparison date** $t_0$."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "Monthly contributions made for a number of years total 12 times the years in payments, with the first contribution made at time 0 (start of each month), so they form an annuity-due over that many monthly periods.",
+     "concept": "Annuity-Due",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Annuity Due",
+       "quote": "An **annuity-due** is a series of $n$ level payments of 1 made at the **beginning** of each period."
+      },
+      {
+       "page": "Term of Annuity",
+       "quote": "A 30-year monthly mortgage has a term of 360 months."
+      }
+     ]
+    }
+   ]
+  },
+  "fm-036": {
+   "path": "questions/exam-fm/fm-036.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:4634e69498995887930aa3ed8bab602d3a1dec3cbe77f3b57aae6b19399e172b",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "procedure",
+     "statement": "To set up an equation of value, choose a single comparison date and express the value of all cash flows (deposits and withdrawals) at that date, setting total value of inflows equal to total value of outflows.",
+     "concept": "Equation of Value",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Equation of Value",
+       "quote": "An **equation of value** sets the value of all payments in equal to the value of all payments out, with every cash flow accumulated or discounted to one common **comparison date** $t_0$."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The present value of a payment of amount C made t years from now at effective annual rate i is C·v^t, where v = 1/(1+i).",
+     "concept": "Present Value and Discount Factor",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Present Value",
+       "quote": "$$PV = FV \\cdot (1+i)^{-n}$$"
+      },
+      {
+       "page": "Discount Factor",
+       "quote": "The discount factor converts a future cash flow to its present value:"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The accumulated value at time n of a payment C made at time t (t ≤ n) is C·(1+i)^(n−t).",
+     "concept": "Accumulated Value",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Accumulated Value",
+       "quote": "$$AV = \\sum_k C_{t_k} \\cdot (1+i)^{t - t_k}$$"
+      },
+      {
+       "page": "Future Value",
+       "quote": "$$\\text{FV}_n = \\sum_{t=0}^{n} C_t (1+i)^{n-t}$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "For a series of level payments, express the value at a chosen date as a sum of terms, with each payment's exponent equal to the time between its payment date and the comparison date, and match the number of terms to the number of payments.",
+     "concept": "Annuity Valuation",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Future Value",
+       "quote": "$$\\text{FV}_n = \\sum_{t=0}^{n} C_t (1+i)^{n-t}$$"
+      },
+      {
+       "page": "Future Value",
+       "quote": "\\text{FV} &= 500(1.06)^4 + 500(1.06)^3 + 500(1.06)^2 + 500(1.06)^1 \\\\"
+      }
+     ]
+    }
+   ]
+  },
+  "fm-037": {
+   "path": "questions/exam-fm/fm-037.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:b214af17064b5a1972286cf11b48925c3f5891fdb5c6ea34a93bdf5a7f5ade3c",
+   "verdict": "no requirements",
+   "requirements": []
+  },
+  "fm-038": {
+   "path": "questions/exam-fm/fm-038.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:d0b2a17b15ba469f34907439e2c6e10f6b4d64b61b06f3d4f3639fa50fe8cea0",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "procedure",
+     "statement": "To exactly match liabilities with assets (cash flow matching), start with the latest liability date, solve for the asset that is the only one paying then, and work backward, subtracting cash flows already provided at earlier times.",
+     "concept": "Cash Flow Matching",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Cash Flow Matching",
+       "quote": "Construction proceeds **backwards** from the last liability date — fund the final liability first, then the second-to-last, and so on."
+      },
+      {
+       "page": "Cash Flow Matching",
+       "quote": "A coupon bond bought for a later liability also pays coupons on the earlier dates, so those coupons reduce the amount still to be funded at each earlier date."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "A loan of L repaid with n equal annual payments at effective rate i has level payment L / a_angle(n) at rate i, where a_angle(n) = (1 - v^n)/i.",
+     "concept": "Annuity-Immediate",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Amortization",
+       "quote": "$$P = \\frac{L}{a_{\\overline{n}|i}}$$"
+      },
+      {
+       "page": "Annuity Immediate",
+       "quote": "$$a_{\\overline{n}|} = \\frac{1-v^n}{i}$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "definition",
+     "statement": "The amount lent in a loan equals the present value of the loan's repayments discounted at the loan's effective interest rate.",
+     "concept": "Present Value",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Amortization",
+       "quote": "Whatever the payment pattern, the loan equals the present value of its payments"
+      }
+     ]
+    }
+   ]
+  },
+  "fm-039": {
+   "path": "questions/exam-fm/fm-039.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:1db0eda9aa7986998bfb3849ba3c338935e62b9f886059fda3c81a30c6121b07",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "procedure",
+     "statement": "To match a liability with a zero-coupon bond, choose the bond amount so its maturity value equals the liability due at that time, and its purchase price is the maturity value discounted at the bond's yield rate.",
+     "concept": "Cash Flow Matching",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Cash Flow Matching",
+       "quote": "**Step 2 — Fund the time-1 liability:** Buy a 1-year zero-coupon bond with face value \\$$5{,}000$. At time 1 it pays exactly \\$$5{,}000$. ✓"
+      },
+      {
+       "page": "Cash Flow Matching",
+       "quote": "The portfolio cost is $\\dfrac{10{,}000}{(1+s_2)^2} + \\dfrac{5{,}000}{1+s_1}$, where $s_1, s_2$ are the current spot rates."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The price of a zero-coupon bond maturing in n years with face amount F and annual yield i is F/(1+i)^n.",
+     "concept": "Zero-Coupon Bond",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Spot Rate",
+       "quote": "The **$n$-year spot rate** $s_n$ is the yield to maturity on a zero-coupon bond that matures in exactly $n$ years"
+      },
+      {
+       "page": "Cash Flow Matching",
+       "quote": "The portfolio cost is $\\dfrac{10{,}000}{(1+s_2)^2} + \\dfrac{5{,}000}{1+s_1}$, where $s_1, s_2$ are the current spot rates."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "definition",
+     "statement": "A forward rate is the interest rate agreed now for an investment made at a future date over a specified period, such as a one-year rate starting two years from now.",
+     "concept": "Forward Interest Rate",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Forward Rate",
+       "quote": "A **forward rate** $f_{t_1, t_2}$ is the interest rate agreed upon today for an investment (or loan) beginning at a future time $t_1$ and maturing at time $t_2$."
+      },
+      {
+       "page": "Spot Rates and Forward Rates",
+       "quote": "the [[Forward Rate]] $f_{n,n+k}$ is the annual effective rate for an investment that starts $n$ years from now and lasts $k$ years."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "To fund a liability at time 3 using a bond maturing at time 2, the proceeds at time 2 are reinvested at the forward rate for one year, so the needed amount at time 2 is the liability divided by (1 + forward rate).",
+     "concept": "Reinvestment at Forward Rates",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r5",
+     "kind": "procedure",
+     "statement": "The total purchase cost of the matching portfolio is the sum of the prices of the individual bonds, where each bond's face amount is set by the cash flow it must supply.",
+     "concept": "Cash Flow Matching",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Cash Flow Matching",
+       "quote": "The portfolio cost is $\\dfrac{10{,}000}{(1+s_2)^2} + \\dfrac{5{,}000}{1+s_1}$, where $s_1, s_2$ are the current spot rates."
+      }
+     ]
+    }
+   ]
+  },
+  "fm-040": {
+   "path": "questions/exam-fm/fm-040.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:3528ef3d714a81ad6f9a6d1b278d0f561f3a9b0b2e3a9f14df0465496acee2c9",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "The price of a callable or non-callable bond equals the present value of its coupons (coupon rate times redemption value times an annuity-immediate factor) plus the present value of the redemption value, all discounted at the yield rate per period.",
+     "concept": "Bond Pricing",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bond Price",
+       "quote": "$$P = Fr \\cdot a_{\\overline{n}|j} + C \\cdot v^n$$"
+      },
+      {
+       "page": "Callable Bond",
+       "quote": "$$P = \\min_{m}\\left(Fr\\,a_{\\overline{m}|j} + C_m\\,v_j^{\\,m}\\right)$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "definition",
+     "statement": "A bond sells at a premium when its coupon rate per period exceeds the yield rate per period, so its price exceeds its redemption value.",
+     "concept": "Bond Premium and Discount",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bond Price",
+       "quote": "When $Fr > Cj$ the bond sells at a **premium** ($P > C$); when $Fr < Cj$ it sells at a **discount** ($P < C$); when $Fr = Cj$ it sells at **par** ($P = C$)."
+      },
+      {
+       "page": "Premium",
+       "quote": "With $C = F$ the test reduces to the familiar one: the coupon rate is **above** the yield rate, and the price is above par."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "For a callable premium bond, the investor's minimum yield occurs if the bond is called at the earliest possible call date, so the guaranteed yield is computed assuming the earliest call.",
+     "concept": "Callable Bonds",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Callable Bond",
+       "quote": "If the bond is at a **premium** (price $>$ redemption value, i.e. the yield is below the modified coupon rate $g = Fr/C$): assume the **earliest** call date."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "Convert a nominal annual rate convertible semiannually to an effective rate per period by dividing by 2, and convert the coupon rate and the call time in years into per-period coupon rate and number of semiannual periods.",
+     "concept": "Nominal Interest Rates",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Coupon",
+       "quote": "For a bond with an annual coupon rate $r_{annual}$ that pays semi-annually, each coupon is $F \\cdot r_{annual}/2$."
+      },
+      {
+       "page": "Coupon Rate",
+       "quote": "For a bond paying semi-annually with a $6\\%$ annual coupon rate, the per-period coupon rate is $r = 3\\%$."
+      },
+      {
+       "page": "Term of Bond",
+       "quote": "The number of [[Coupon]] payments: $n = \\text{term} \\times m$ where $m$ = payments per year"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "A bond's coupon amount is the coupon rate per period times the par (face) value, and when redeemed at par the redemption value equals the face value.",
+     "concept": "Bond Coupons and Par Value",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Face Value",
+       "quote": "The [[Coupon]] payment each period equals $F \\times r$ where $r$ is the [[Coupon Rate]] per period"
+      },
+      {
+       "page": "Face Value",
+       "quote": "When the bond is redeemed at par, the [[Redemption Value]] $C = F$"
+      }
+     ]
+    }
+   ]
+  },
+  "fm-041": {
+   "path": "questions/exam-fm/fm-041.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:80e901202460a9f5af227b5d839ef1e27598bf7db3d57de2e629d899d190b6ae",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "The price of a bond equals the present value of its coupons plus the present value of its redemption value at the yield rate: P = Fr·a_{n|j} + C·v^n.",
+     "concept": "Bond Pricing",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bond Price",
+       "quote": "$$P = Fr \\cdot a_{\\overline{n}|j} + C \\cdot v^n$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "definition",
+     "statement": "A nominal annual rate convertible semiannually equals twice the effective half-year rate, so the per-period yield is the nominal rate divided by 2.",
+     "concept": "Nominal Interest Rate",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Nominal Interest Rate Convertible m-thly",
+       "quote": "Each period, interest at rate $i^{(m)}/m$ is credited."
+      },
+      {
+       "page": "Nominal Interest Rate",
+       "quote": "Rather than crediting interest once at year-end, the year is divided into $m$ sub-periods each earning a periodic rate of $i^{(m)}/m$."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "definition",
+     "statement": "A callable bond is one the issuer may redeem early at a specified call price on specified call dates prior to maturity, so the investor's redemption date is uncertain.",
+     "concept": "Callable Bonds",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Callable Bond",
+       "quote": "A **callable bond** gives the **issuer** the right (but not the obligation) to redeem the bond before maturity at a specified [[Call Price]] on or after a specified call date."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "When the coupon amount exceeds the yield rate times the call price (coupon rate per period greater than yield), the price at a call date rises as the call is deferred, so the earliest call date gives the lowest price.",
+     "concept": "Callable Bonds",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Callable Bond",
+       "quote": "Within a stretch of dates sharing one call price $K$, the price moves steadily one way (up with $m$ when $Fr > Kj$, down when $Fr < Kj$), so only the two ends of each stretch need checking."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "procedure",
+     "statement": "To guarantee at least a given yield on a callable bond, compute the price for each possible redemption scenario (earliest call and maturity) at that yield and take the minimum as the maximum price to pay.",
+     "concept": "Callable Bonds",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Callable Bond",
+       "quote": "To guarantee a yield of at least $j$ per period, the most the investor will pay is the **smallest** price over all the possible call dates."
+      },
+      {
+       "page": "Callable Bond",
+       "quote": "Price the bond at each possible call date and take the minimum."
+      }
+     ]
+    }
+   ]
+  },
+  "fm-042": {
+   "path": "questions/exam-fm/fm-042.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:c8e36c42a618a1472c4b0ff7d46906b7bbfb9758046ab8909ffb0c4febf6b279",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "The price of a bond equals the present value of its coupons (Fr times an annuity-immediate at the periodic yield rate) plus the present value of the redemption value, Fr·a_n + C·v^n.",
+     "concept": "Bond Pricing",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bond Price",
+       "quote": "$$P = Fr \\cdot a_{\\overline{n}|j} + C \\cdot v^n$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "definition",
+     "statement": "A nominal annual rate convertible semiannually is converted to an effective rate per period by dividing by 2, and the coupon per period is the nominal coupon rate divided by 2 times the par value.",
+     "concept": "Nominal Interest Rate",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Coupon",
+       "quote": "For a bond with an annual coupon rate $r_{annual}$ that pays semi-annually, each coupon is $F \\cdot r_{annual}/2$."
+      },
+      {
+       "page": "Nominal Interest Rate",
+       "quote": "the year is divided into $m$ sub-periods each earning a periodic rate of $i^{(m)}/m$."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "A bond whose coupon rate per period is less than the yield rate per period sells at a discount (price below redemption value).",
+     "concept": "Bond Premium and Discount",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bond Price",
+       "quote": "when $Fr < Cj$ it sells at a **discount** ($P < C$)"
+      },
+      {
+       "page": "Coupon Rate",
+       "quote": "Since the coupon rate ($4.5\\%$) is less than the yield rate ($5\\%$), we have $Fr < Cj$, so the bond sells at a **discount** (price below face value)."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "For a callable bond bought at a discount, the investor's yield is lowest when the bond is redeemed at the latest possible date (maturity), since the discount gain is delayed the longest.",
+     "concept": "Callable Bonds",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Callable Bond",
+       "quote": "If the bond is at a **discount** (price $<$ redemption value): assume the **latest** possible redemption date, which is maturity."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "procedure",
+     "statement": "To find the guaranteed minimum yield on a callable bond, price the bond at the yield rate under the worst-case call date and solve for the unknown redemption value.",
+     "concept": "Callable Bonds",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Callable Bond",
+       "quote": "To guarantee a yield of at least $j$ per period, the most the investor will pay is the **smallest** price over all the possible call dates."
+      },
+      {
+       "page": "Callable Bond",
+       "quote": "$$P = \\min_{m}\\left(Fr\\,a_{\\overline{m}|j} + C_m\\,v_j^{\\,m}\\right)$$"
+      }
+     ]
+    }
+   ]
+  },
+  "fm-043": {
+   "path": "questions/exam-fm/fm-043.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:8bcb7397583b1ae9091cbb6cfe7051f7a9c1ac09137c61dc7c0f0fa869e866ed",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "The price of a bond equals the present value of its coupons (a level annuity) plus the present value of the redemption payment, discounted at the yield rate per period: P = Fr·a_{n|j} + C·v^n.",
+     "concept": "Bond Pricing",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bond Price",
+       "quote": "$$P = Fr \\cdot a_{\\overline{n}|j} + C \\cdot v^n$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "definition",
+     "statement": "The bond coupon equals the coupon rate per period times the face (par) value, not the redemption value.",
+     "concept": "Bond Coupon Rate",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Coupon",
+       "quote": "A **coupon** is the periodic interest payment made by a bond issuer to the bondholder, equal to the face value $F$ multiplied by the coupon rate per period $r$."
+      },
+      {
+       "page": "Face Value",
+       "quote": "The [[Coupon]] payment each period equals $F \\times r$ where $r$ is the [[Coupon Rate]] per period"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "definition",
+     "statement": "A callable bond may be redeemed by the issuer before maturity at a specified call price (here par plus a premium), on specified call dates.",
+     "concept": "Callable Bonds",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Callable Bond",
+       "quote": "A **callable bond** gives the **issuer** the right (but not the obligation) to redeem the bond before maturity at a specified [[Call Price]] on or after a specified call date."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "To find the yield on a callable bond, compute the yield for each possible redemption date (each call date and maturity) by solving the price equation for the periodic rate, then take the minimum for the worst-case yield.",
+     "concept": "Callable Bonds",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Callable Bond",
+       "quote": "Given a price instead, the investor's yield is the smallest of the yields at the possible call dates."
+      },
+      {
+       "page": "Callable Bond",
+       "quote": "Price the bond at each possible call date and take the minimum."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "When the purchase price is below the call price (a discount relative to redemption), the yield is lowest when redemption occurs at the latest possible date, so the investor must compare the latest call date with maturity; yield falls as the redemption is delayed or the redemption amount is lower.",
+     "concept": "Callable Bonds",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Callable Bond",
+       "quote": "If the bond is at a **discount** (price $<$ redemption value): assume the **latest** possible redemption date, which is maturity."
+      }
+     ]
+    },
+    {
+     "id": "r6",
+     "kind": "definition",
+     "statement": "An annual nominal rate convertible m times per year equals m times the effective rate per period, i^(m) = m·j.",
+     "concept": "Nominal Interest Rate",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Nominal Interest Rate",
+       "quote": "Rather than crediting interest once at year-end, the year is divided into $m$ sub-periods each earning a periodic rate of $i^{(m)}/m$."
+      }
+     ]
+    }
+   ]
+  },
+  "fm-044": {
+   "path": "questions/exam-fm/fm-044.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:ee5db9fb0ec4284c0c9c356e11b2d1e3165654b6ed7c91cb025f5ccd57ee36f8",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "The present value of an n-year annuity-immediate of level payments is the payment times a_angle_n = (1 - v^n)/i, with v = 1/(1+i).",
+     "concept": "Annuity-Immediate",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Annuity Immediate",
+       "quote": "$$a_{\\overline{n}|} = \\frac{1-v^n}{i}$$"
+      },
+      {
+       "page": "Level Payment Annuity",
+       "quote": "For a level payment $P$, $n$-period annuity-immediate at rate $i$:"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "definition",
+     "statement": "Macaulay duration of a cash flow series is the present-value-weighted average of the payment times: sum of t*PV(C_t) divided by the total present value.",
+     "concept": "Macaulay Duration",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Macaulay Duration",
+       "quote": "$$= \\frac{\\displaystyle\\sum_{t} t \\cdot \\text{PV}(C_t)}{P}$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "The Macaulay duration of a zero-coupon bond equals its term to maturity.",
+     "concept": "Macaulay Duration",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Term of Bond",
+       "quote": "for a zero-coupon bond the [[Macaulay Duration|Macaulay duration]] equals the term"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "The Macaulay duration of an asset portfolio is the average of the individual assets' durations weighted by their present values (proportion of total value invested).",
+     "concept": "Macaulay Duration",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Portfolio",
+       "quote": "**[[Duration]] of a portfolio**: the weighted average of individual asset durations, weighted by market values"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "procedure",
+     "statement": "To immunize (match) a liability using two assets, set the total asset present value equal to the liability's present value and set the weighted average asset duration equal to the liability's duration, then solve for the amount in each asset.",
+     "concept": "Immunization",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Full Immunization",
+       "quote": "$$A\\,v^{T-a} + B\\,v^{T+b} = L\\,v^{T}$$"
+      },
+      {
+       "page": "Redington Immunization",
+       "quote": "**Condition 2** ($D_{Mac}(A) = D_{Mac}(L) = 4$), multiplying through by the common present value:"
+      }
+     ]
+    }
+   ]
+  },
+  "fm-045": {
+   "path": "questions/exam-fm/fm-045.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:3401fa5bc526e790ba31c7509beec734d82119fb59ac89d8a5751ce5d354157c",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "The present value of a loan equals the present value of its payments at the loan's effective interest rate, so the loan amount is the sum of discounted payments.",
+     "concept": "Loan Amortization",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Amortization",
+       "quote": "Whatever the payment pattern, the loan equals the present value of its payments"
+      },
+      {
+       "page": "Loan Amortization",
+       "quote": "whose present value at the loan rate equals the amount lent"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The present value of an n-payment geometric annuity-immediate with first payment P and ratio (1+k) is (P·v − P(1+k)^n·v^(n+1)) / (1 − (1+k)v), equivalently P(1 − ((1+k)/(1+i))^n)/(i − k).",
+     "concept": "Geometrically Varying Annuity",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Geometric Increasing Annuity",
+       "quote": "$$\\text{PV} = \\frac{1 - \\left(\\frac{1+g}{1+i}\\right)^n}{i-g}$$"
+      },
+      {
+       "page": "Geometric Progression",
+       "quote": "$$= \\frac{1-(1+g)^n(1+i)^{-n}}{i-g}$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "For payments whose pattern changes partway, split the payment stream into segments, value each segment as its own annuity at its start, discount it back to time zero, and add the present values.",
+     "concept": "Geometrically Varying Annuity",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Loan Amortization",
+       "quote": "The loan is the present value of the payments, with $a_{\\overline{4}|5\\%} = 3.545951$ and $v^4 a_{\\overline{4}|5\\%} = 2.917262$:"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "A decreasing geometric annuity is valued with the same formula using a ratio below 1 (1−r for r% decreases), with the first payment of the segment being the prior payment times (1−r).",
+     "concept": "Geometrically Varying Annuity",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Geometric Increasing Annuity",
+       "quote": "A **geometric increasing (or decreasing) annuity** has payments that grow (or shrink) at a constant geometric rate $g$ per period."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "procedure",
+     "statement": "Determine the payment amounts at the segment boundaries by compounding the growth: after m increases of rate k the payment is P(1+k)^m, and the next payment after the switch is that amount times the new ratio.",
+     "concept": "Geometrically Varying Annuity",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Geometric Increasing Annuity",
+       "quote": "For an $n$-payment annuity-immediate with first payment $1$ and growth rate $g$, payments are $1, (1+g), (1+g)^2, \\ldots, (1+g)^{n-1}$."
+      },
+      {
+       "page": "Geometric Progression",
+       "quote": "In the context of annuities, a **geometric progression** refers to a sequence of payments where each payment is a constant multiple $(1+g)$ of the previous one."
+      }
+     ]
+    }
+   ]
+  },
+  "fm-046": {
+   "path": "questions/exam-fm/fm-046.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:3dc59513b7f1648155f6a7a801b9fc49f3c6122da396672e61429c6e4be8cc3d",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "The accumulation function in terms of a force of interest is a(t) = exp(∫_0^t δ_r dr).",
+     "concept": "Force of Interest",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Force of Interest",
+       "quote": "$$a(t) = \\exp\\!\\left(\\int_0^t \\delta(s)\\,ds\\right)$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "To find the time for a deposit to grow to a target value, set the deposit times a(t) equal to the target value and solve for t, i.e., a(t) = target/deposit.",
+     "concept": "Accumulation Function",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Number of Periods",
+       "quote": "Under a [[Variable Force of Interest|variable force]] $\\delta(t)$, solve $\\int_0^n \\delta(t)\\,dt = \\ln(FV/PV)$ for $n$."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "When the integrand is a constant multiple of f'(r)/f(r), its integral is that multiple times ln f(r), so the integral from 0 to t equals the multiple times ln(f(t)/f(0)).",
+     "concept": "Force of Interest",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "fm-047": {
+   "path": "questions/exam-fm/fm-047.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:9e2b79d2516bd83f0d626692aaf0c237b7e7e05848558feda81eb92dd1e78fa4",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "For a bond bought at a discount with annual coupons, the discount amortization (accumulation) in the t-th coupon equals (Ci - Fr)v^(n-t+1), where C is redemption value, F is face value, r is coupon rate, and i is yield rate.",
+     "concept": "Bond Amortization Schedule",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bond Amortization",
+       "quote": "$$PR_t = Fr - I_t = (Fr - Cj)\\,v^{\\,n-t+1}$$"
+      },
+      {
+       "page": "Accumulation of Discount",
+       "quote": "$$= (Cj - Fr) \\cdot v^{n-t+1}$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "The discount accumulation amounts in successive coupons form a geometric sequence with ratio (1+i), so the ratio of two accumulation amounts t-s periods apart equals (1+i)^(t-s) and can be used to solve for the yield rate.",
+     "concept": "Bond Amortization Schedule",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bond Amortization",
+       "quote": "The principal adjustments form a geometric progression with ratio $1 + j$ and add up to the premium or discount, $\\sum_{t=1}^{n} PR_t = P - C$."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "The total discount at purchase (redemption value minus price) equals the sum of all discount accumulations over the bond's life, which is (Ci - Fr) times the present value annuity-immediate factor a_n at the yield rate.",
+     "concept": "Bond Discount and Premium",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Discount",
+       "quote": "$$C - P = (Cj - Fr)\\,a_{\\overline{n}|j}$$"
+      },
+      {
+       "page": "Bond Amortization",
+       "quote": "The principal adjustments form a geometric progression with ratio $1 + j$ and add up to the premium or discount, $\\sum_{t=1}^{n} PR_t = P - C$."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "definition",
+     "statement": "The present value annuity-immediate factor a_{n|i} equals (1 - v^n)/i, where v = 1/(1+i).",
+     "concept": "Annuity-Immediate",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Annuity Immediate",
+       "quote": "$$a_{\\overline{n}|} = \\frac{1-v^n}{i}$$"
+      }
+     ]
+    }
+   ]
+  },
+  "fm-048": {
+   "path": "questions/exam-fm/fm-048.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:add20e021a794edf7a570b8b32b2c3c53373baec8eda40e0cd9042fc828ba53f",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "In a level-payment amortized loan, the principal portions of successive payments grow geometrically by a factor of (1+i) each period.",
+     "concept": "Loan Amortization",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Loan Amortization",
+       "quote": "With level payments $P$, the principal portions grow geometrically: $PR_k = P\\,v^{n-k+1}$, so $PR_{k+1} = PR_k(1+i)$"
+      },
+      {
+       "page": "Amortization Schedule",
+       "quote": "The principal portions form a geometric sequence: $PR_k = PR_1 \\cdot (1+i)^{k-1}$."
+      },
+      {
+       "page": "Payment Amount",
+       "quote": "The principal portions grow by the factor $(1+i)$ each period while the interest portions shrink"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "For a level-payment loan with n payments, the principal repaid in payment t equals P·v^(n-t+1), where P is the level payment and v = 1/(1+i).",
+     "concept": "Loan Amortization",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Amortization",
+       "quote": "Principal in payment $k$: $PR_k = P \\cdot v^{n-k+1}$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "The interest portion of the first payment on a loan equals the initial loan amount times the periodic effective interest rate (I1 = L·i), and each payment equals interest plus principal.",
+     "concept": "Loan Amortization",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Principal",
+       "quote": "It is the basis on which interest is computed in the first period ($\\text{Interest}_1 = L \\times i$)."
+      },
+      {
+       "page": "Loan Amortization",
+       "quote": "$$PR_k = K_k - I_k = B_{k-1} - B_k$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "Total interest paid on a loan equals the sum of all level payments (payment times number of payments) minus the original loan amount (total principal repaid).",
+     "concept": "Loan Amortization",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Loan Amortization",
+       "quote": "Over the whole loan the principal portions add up to $L$, so the total interest is the total of the payments less $L$."
+      }
+     ]
+    }
+   ]
+  },
+  "fm-049": {
+   "path": "questions/exam-fm/fm-049.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:3b27255b533aaea1596b861bbffbff9d6bc0b0a8f72af09e8cd1e045b2c665c0",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "A nominal annual interest rate convertible monthly, i(12), gives an effective monthly rate of i(12)/12.",
+     "concept": "Nominal Interest Rate",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Nominal Interest Rate",
+       "quote": "Rather than crediting interest once at year-end, the year is divided into $m$ sub-periods each earning a periodic rate of $i^{(m)}/m$."
+      },
+      {
+       "page": "Nominal Interest Rate Convertible m-thly",
+       "quote": "Each period, interest at rate $i^{(m)}/m$ is credited."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "definition",
+     "statement": "The outstanding loan balance immediately after a payment is the amount still owed on the loan, equal to the principal remaining after that payment.",
+     "concept": "Outstanding Loan Balance",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Outstanding Balance",
+       "quote": "**Outstanding balance** (or outstanding loan balance) is the amount still owed on a loan at a given time, calculated by either the prospective or retrospective method."
+      },
+      {
+       "page": "Outstanding Balance",
+       "quote": "The **outstanding balance** $OB_k$ is the remaining principal owed immediately after the $k$-th payment on a loan of original amount $L$, level payment $P$, interest rate $i$ per period, and $n$ total payments."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "Retrospective method: the outstanding balance after k payments equals the original loan accumulated with interest for k periods minus the accumulated value of the payments made, i.e. L(1+i)^k - P*s_{k|i}.",
+     "concept": "Outstanding Loan Balance",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Outstanding Balance",
+       "quote": "$$OB_k = L(1+i)^k - P \\cdot s_{\\overline{k}|i}$$"
+      },
+      {
+       "page": "Loans",
+       "quote": "the **retrospective method** (the loan accumulated to that date, less the accumulated value of the payments already made)"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "The accumulated value of an n-period annuity-immediate of 1 per period is s_{n|i} = ((1+i)^n - 1)/i.",
+     "concept": "Annuity-Immediate",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Annuity Immediate",
+       "quote": "$$s_{\\overline{n}|} = \\frac{(1+i)^n - 1}{i}$$"
+      },
+      {
+       "page": "Level Payment Annuity",
+       "quote": "$$= P \\cdot \\frac{(1+i)^n - 1}{i}$$"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "formula",
+     "statement": "The level payment P that amortizes a loan of amount L over n periods at effective rate i satisfies L = P*a_{n|i}, where a_{n|i} = (1-v^n)/i.",
+     "concept": "Loan Amortization",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Amortization",
+       "quote": "$$P = \\frac{L}{a_{\\overline{n}|i}}$$"
+      },
+      {
+       "page": "Annuity Immediate",
+       "quote": "$$a_{\\overline{n}|} = \\frac{1-v^n}{i}$$"
+      }
+     ]
+    },
+    {
+     "id": "r6",
+     "kind": "procedure",
+     "statement": "When a loan is refinanced, the outstanding balance at the refinancing date becomes the principal of the new loan, which is repaid using the new rate and new term.",
+     "concept": "Loan Refinancing",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "fm-050": {
+   "path": "questions/exam-fm/fm-050.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:581e65edb20b117316c5edd17494ce234e03cd6568b1080956c475749f4abd69",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "A bond purchased at par (no premium or discount) has a yield rate per period equal to its coupon rate per period.",
+     "concept": "Bond Pricing",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Coupon Rate",
+       "quote": "When the coupon rate equals the yield rate ($r = j$ for $F = C$), the bond prices at par."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "definition",
+     "statement": "Macaulay duration is the present-value-weighted average of the times of the cash flows, i.e., the sum of t times PV of the payment at t divided by the total present value (price).",
+     "concept": "Macaulay Duration",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Macaulay Duration",
+       "quote": "$$D_{Mac} = \\frac{\\displaystyle\\sum_{t=1}^{n} t \\cdot C_t \\cdot v^t}{\\displaystyle\\sum_{t=1}^{n} C_t \\cdot v^t}$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The present value of an increasing annuity with payments 1, 2, ..., n at the end of each period is (Ia)_{n|} = (ä_{n|} − n v^n)/i.",
+     "concept": "Increasing Annuity",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Increasing Annuity",
+       "quote": "$$(Ia)_{\\overline{n}|} = \\frac{\\ddot{a}_{\\overline{n}|} - nv^n}{i}$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "For a coupon bond, compute Macaulay duration by weighting each coupon and the redemption value by its time, using the coupon as an increasing annuity and the redemption at maturity, then dividing by the bond price; convert per-period duration to years by dividing by the number of periods per year.",
+     "concept": "Macaulay Duration",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Macaulay Duration",
+       "quote": "$$D_{Mac} = \\frac{\\displaystyle\\sum_{t=1}^{n} t \\cdot C_t \\cdot v^t}{\\displaystyle\\sum_{t=1}^{n} C_t \\cdot v^t}$$"
+      },
+      {
+       "page": "Increasing Annuity",
+       "quote": "$$(Ia)_{\\overline{n}|} = \\frac{\\ddot{a}_{\\overline{n}|} - nv^n}{i}$$"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "For a bond bought at par (coupon rate equals yield rate), the Macaulay duration in periods equals the annuity-due value ä_{n|} at the yield rate.",
+     "concept": "Macaulay Duration",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "fm-051": {
+   "path": "questions/exam-fm/fm-051.md",
+   "run": "answerability-20261025-fm",
+   "input_hash": "sha256:a2779572f9ed7fc0371fd4b77ba6c75dae9d27870c7094cc58c09a2f68cdcfc2",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "Modified duration equals Macaulay duration divided by (1+i), where i is the annual effective interest rate.",
+     "concept": "Modified Duration",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Modified Duration",
+       "quote": "$$= \\frac{D_{Mac}}{1+j}$$"
+      },
+      {
+       "page": "Duration",
+       "quote": "$$D_{Mod} = \\frac{D_{Mac}}{1+j} = -\\frac{1}{P}\\frac{dP}{dj}$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The first-order modified approximation estimates the new price as P(i+Δi) ≈ P(i)[1 − Δi × modified duration].",
+     "concept": "Duration Approximation of Bond Price",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Modified Duration",
+       "quote": "$$\\Delta P \\approx -D_{Mod} \\cdot P \\cdot \\Delta j$$"
+      },
+      {
+       "page": "1st-Order Macaulay Approximation",
+       "quote": "$P(i) \\approx P(i_0)\\left[1 - (i - i_0)\\,D_{Mod}\\right]$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "A bond purchased at par has a price equal to its par (face) value at the purchase interest rate, so the starting price P(i) is the par value.",
+     "concept": "Bond Price",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Bond Price",
+       "quote": "when $Fr = Cj$ it sells at **par** ($P = C$)."
+      },
+      {
+       "page": "Coupon Rate",
+       "quote": "When the coupon rate equals the yield rate ($r = j$ for $F = C$), the bond prices at par."
+      }
+     ]
+    }
+   ]
+  }
+ }
+}

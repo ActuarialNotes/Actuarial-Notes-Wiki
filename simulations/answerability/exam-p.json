@@ -1,0 +1,3365 @@
+{
+ "version": 1,
+ "exam": "Exam P-1 (SOA)",
+ "bank": "exam-p",
+ "questions": {
+  "p-004": {
+   "path": "questions/exam-p/p-004.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:1f97bbd7e2a96c62df16bf9da574ba67a299edd6f7d0a50cf8b5d83db3741847",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "The event that two draws have the same color is the union of the mutually exclusive events 'both red' and 'both blue', so its probability is the sum of the two joint probabilities.",
+     "concept": "Probability of Unions and Mutually Exclusive Events",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Mutually Exclusive Events",
+       "quote": "For mutually exclusive events, the [[Probability Addition Rule]] simplifies to $P(A \\cup B) = P(A) + P(B)$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "For independent events (such as draws from separate urns), the probability of their intersection equals the product of their individual probabilities.",
+     "concept": "Independent Events",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Probability Multiplication Rule",
+       "quote": "When $A$ and $B$ are [[Independent Events|independent]], the rule simplifies to $P(A \\cap B) = P(A) \\cdot P(B)$ since $P(B \\mid A) = P(B)$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The probability of drawing a ball of a given color from an urn equals the number of balls of that color divided by the total number of balls in the urn.",
+     "concept": "Basic Probability (Equally Likely Outcomes)",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Probability",
+       "quote": "$$P(E) = \\frac{|E|}{|S|}$$"
+      }
+     ]
+    }
+   ]
+  },
+  "p-005": {
+   "path": "questions/exam-p/p-005.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:258f57d3b27686527196d0509600885b2bc0218f1e12ac674f93b548f9092a2b",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "The count of a set that is in one category and not in another equals the count in the first category minus the count in both categories (set difference: N(A and not B) = N(A) - N(A and B)).",
+     "concept": "Set Operations and Counting",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Venn Diagram",
+       "quote": "The \"Auto Only\" region is actually $70 - 20 = 50$."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "To count elements with a given attribute plus the complement of other attributes (e.g. female, single), subtract counts of elements having the attribute combination (e.g. young and male, young and married) from the count with the base attribute, correcting for overlap by adding back the triple intersection.",
+     "concept": "Inclusion-Exclusion Principle",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Inclusion-Exclusion Principle",
+       "quote": "The signs alternate by intersection size: add single events, subtract pairwise intersections, add triple intersections, and so on."
+      },
+      {
+       "page": "Set Operations",
+       "quote": "$$P(A^c \\cap B) = P(B) - P(A \\cap B) = 0.5 - 0.2 = 0.3$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "In a two-category classification such as male/female or married/single, each member belongs to exactly one category, so 'female' is the complement of 'male' and 'single' is the complement of 'married'.",
+     "concept": "Complement of an Event",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Set Theory",
+       "quote": "The empty set $\\varnothing$ contains no elements; the complement $A^c = S \\setminus A$ is everything in $S$ not in $A$."
+      },
+      {
+       "page": "Sample Space",
+       "quote": "Outcomes in $S$ must be mutually exclusive (no two can occur simultaneously) and collectively exhaustive (together they cover every possibility)"
+      }
+     ]
+    }
+   ]
+  },
+  "p-006": {
+   "path": "questions/exam-p/p-006.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:00484fa9b14f722d7140f7e4b3679c00035d54c6849cf3dd28a6b35773ebe9b4",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "The conditional probability of A given B is P[A | B] = P[A ∩ B] / P[B], for P[B] > 0.",
+     "concept": "Conditional Probability",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Conditional Probability",
+       "quote": "$$P(A \\mid B) = \\frac{P(A \\cap B)}{P(B)}, \\quad P(B) > 0$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "The probability of the complement of an event is 1 minus the probability of the event (equivalently, the count outside the event is the total minus the count in the event).",
+     "concept": "Complement of an Event",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Probability Rules",
+       "quote": "$$P(A^c) = 1 - P(A)$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "To find the probability of A intersect B-complement, partition A into A∩B and A∩B^c, so P[A ∩ B^c] = P[A] - P[A ∩ B].",
+     "concept": "Law of Total Probability",
+     "status": "linked",
+     "places": [
+      {
+       "page": "The Law of Total Probability",
+       "quote": "Every term equals $P(B \\mid A_i)\\,P(A_i) = P(B \\cap A_i)$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "With counts from a finite group where each member is equally likely to be selected, an event's probability equals the number of members in the event divided by the group size.",
+     "concept": "Equally Likely Outcomes (Empirical Probability)",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Probability",
+       "quote": "$$P(E) = \\frac{|E|}{|S|}$$"
+      }
+     ]
+    }
+   ]
+  },
+  "p-007": {
+   "path": "questions/exam-p/p-007.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:1dab0b293928662b213d7ba6397854a92b8891e871613eee2ad29b35874f4cfb",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "The probability of having exactly one of two events (A but not B) equals P(A) minus P(A ∩ B), since A is the disjoint union of A∩B and A∩B^c.",
+     "concept": "Probability of Events (Complement and Partition Rules)",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Set Operations",
+       "quote": "$A^c = S \\setminus A, \\qquad A \\setminus B = A \\cap B^c$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "Partition the population into mutually exclusive groups (only A, only B, both), and compute the overall probability of an outcome by summing, over groups, the group's probability times the conditional probability of the outcome in that group.",
+     "concept": "Law of Total Probability",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "The Law of Total Probability",
+       "quote": "**The Law of Total Probability** states that if $\\{A_1, \\ldots, A_n\\}$ is a partition of the sample space $S$, then the probability of any event $B$ can be expressed as a weighted average of its conditional probabilities given each $A_i$."
+      },
+      {
+       "page": "The Law of Total Probability",
+       "quote": "$$P(B) = \\sum_{i=1}^{n} P(B \\mid A_i)\\,P(A_i)$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "definition",
+     "statement": "The given renewal rates are conditional probabilities of renewing given the policyholder's group (only auto, only homeowners, or both), and the unconditional probability is the group-weighted sum of these.",
+     "concept": "Conditional Probability",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Bayes Theorem",
+       "quote": "$$P(C) = P(C \\mid H)P(H) + P(C \\mid L)P(L) = (0.40)(0.20) + (0.10)(0.80) = 0.08 + 0.08 = 0.16$$"
+      }
+     ]
+    }
+   ]
+  },
+  "p-008": {
+   "path": "questions/exam-p/p-008.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:4e252825f58e3fc06413b613cfe57a96d7c36080b82614dc3e1e4385772d2877",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "The probability that neither of two events occurs equals 1 minus the probability of their union (complement rule, with De Morgan's law: the complement of A union B is A complement intersect B complement).",
+     "concept": "Probability Complement Rule",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Set Operations",
+       "quote": "De Morgan's laws relate them: $(A \\cup B)^c = A^c \\cap B^c$ and $(A \\cap B)^c = A^c \\cup B^c$."
+      },
+      {
+       "page": "Probability Rules",
+       "quote": "$$P(A^c) = 1 - P(A)$$"
+      },
+      {
+       "page": "Probability Rules",
+       "quote": "By the complement rule, $P(\\text{neither}) = 1 - 0.80 = 0.20$."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "For any two events A and B, Pr[A ∪ B] = Pr[A] + Pr[B] − Pr[A ∩ B] (inclusion-exclusion).",
+     "concept": "Inclusion-Exclusion Principle",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Inclusion-Exclusion Principle",
+       "quote": "$$P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "Translate a verbal description of event probabilities (both, neither, one exceeds the other by a constant) into probability equations on events, then substitute into the union formula and solve for the unknown probability.",
+     "concept": "Probability of Events",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "p-009": {
+   "path": "questions/exam-p/p-009.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:9c3807f3cce87e8947ecc77210414feb4f216a80b0aee4abb62fd84ede69f51c",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "Because every customer insures at least one car, the complement of 'insures more than one car' is 'insures exactly one car'.",
+     "concept": "Complement of an Event",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "De Morgan's Law: the intersection of complements equals the complement of the union, so Pr(A^c ∩ B^c) = Pr((A ∪ B)^c).",
+     "concept": "De Morgan's Laws",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Set Theory",
+       "quote": "$$A \\cup B = \\{2, 4, 5, 6\\} \\implies (A \\cup B)^c = \\{1, 3\\}$$"
+      },
+      {
+       "page": "Set Operations",
+       "quote": "De Morgan's laws relate them: $(A \\cup B)^c = A^c \\cap B^c$ and $(A \\cap B)^c = A^c \\cup B^c$."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The probability of a complement is Pr(A^c) = 1 - Pr(A).",
+     "concept": "Complement of an Event",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Axioms of Probability",
+       "quote": "Therefore $P(A^c) = 1 - P(A)$. $\\square$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "Inclusion-exclusion for two events: Pr(A ∪ B) = Pr(A) + Pr(B) - Pr(A ∩ B).",
+     "concept": "Probability of a Union of Events",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Probability Addition Rule",
+       "quote": "$$P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$$"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "formula",
+     "statement": "Multiplication rule: Pr(A ∩ B) = Pr(B | A) Pr(A), where the conditional probability is Pr(B | A) = Pr(A ∩ B)/Pr(A).",
+     "concept": "Conditional Probability",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Conditional Probability",
+       "quote": "$$P(A \\mid B) = \\frac{P(A \\cap B)}{P(B)}, \\quad P(B) > 0$$"
+      },
+      {
+       "page": "Probability Multiplication Rule",
+       "quote": "$$P(A \\cap B) = P(A) \\cdot P(B \\mid A)$$"
+      }
+     ]
+    },
+    {
+     "id": "r6",
+     "kind": "procedure",
+     "statement": "Translate a statement such as 'of those who satisfy A, a fraction p satisfy B' into the conditional probability Pr(B | A) = p.",
+     "concept": "Conditional Probability",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Conditional Probability",
+       "quote": "**Conditional Probability** $P(A \\mid B)$ is the probability that event $A$ occurs given that event $B$ is known to have occurred, restricting the sample space to $B$."
+      }
+     ]
+    }
+   ]
+  },
+  "p-010": {
+   "path": "questions/exam-p/p-010.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:d044d12caf6ad36432c8308d26da6990e9add08327735079220a724558abd083",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "Two events A and B are independent if and only if P(A ∩ B) = P(A)P(B).",
+     "concept": "Independence of Events",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "If events A and B are independent, then their complements are also independent, so P(A^c ∩ B^c) = P(A^c)P(B^c).",
+     "concept": "Independence of Events",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The complement rule states P(A^c) = 1 − P(A).",
+     "concept": "Complement Rule",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Axioms of Probability",
+       "quote": "Therefore $P(A^c) = 1 - P(A)$. $\\square$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "To find the probability of neither of two events occurring, compute P(A^c ∩ B^c), which equals 1 − P(A ∪ B) or the product of complement probabilities when the events are independent.",
+     "concept": "Probability of Union and Intersection of Events",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Set Operations",
+       "quote": "De Morgan's laws relate them: $(A \\cup B)^c = A^c \\cap B^c$ and $(A \\cap B)^c = A^c \\cup B^c$."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "procedure",
+     "statement": "Translate a verbal relationship such as 'X is twice as likely as Y' into the equation P(X) = 2P(Y), and combine it with the independence product equation to solve for the individual probabilities.",
+     "concept": "Probability of an Event",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "p-011": {
+   "path": "questions/exam-p/p-011.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:9c1712ac3229542a551abff6b963c435181b551196b4223619d31daa17aa8001",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "Conditional probability: P(A|B) = P(A ∩ B)/P(B), so a joint probability equals the conditional probability times the probability of the conditioning event.",
+     "concept": "Conditional Probability",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Conditional Probability",
+       "quote": "$$P(A \\mid B) = \\frac{P(A \\cap B)}{P(B)}, \\quad P(B) > 0$$"
+      },
+      {
+       "page": "Probability Multiplication Rule",
+       "quote": "$$P(A \\cap B) = P(A) \\cdot P(B \\mid A)$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "The probabilities of mutually exclusive, exhaustive categories (e.g., high, low, normal blood pressure) sum to 1, so one category's probability is 1 minus the others.",
+     "concept": "Probability Axioms and Complement Rule",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Axioms of Probability",
+       "quote": "Therefore $P(A^c) = 1 - P(A)$."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "Organize two categorical variables in a joint probability table whose cells sum to the row and column totals, and fill in unknown cells by subtracting known cells from the marginal totals.",
+     "concept": "Joint and Marginal Probability Tables",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Set Operations",
+       "quote": "$$P(A^c \\cap B) = P(B) - P(A \\cap B) = 0.5 - 0.2 = 0.3$$"
+      },
+      {
+       "page": "Conditional and Marginal Probability Functions",
+       "quote": "The marginal is found by summing (or integrating, in the continuous case) the [[Joint Probability Function|joint PMF]] over the other variable."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "A marginal probability is the sum of the joint probabilities over the categories of the other variable (law of total probability), so P(regular and low) = P(low) − P(irregular and low).",
+     "concept": "Law of Total Probability",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Set Operations",
+       "quote": "$$P(A^c \\cap B) = P(B) - P(A \\cap B) = 0.5 - 0.2 = 0.3$$"
+      },
+      {
+       "page": "Conditional and Marginal Probability Functions",
+       "quote": "Marginals of $X$: $p_X(0) = 0.3 + 0.1 = 0.4$ and $p_X(1) = 0.2 + 0.4 = 0.6$."
+      }
+     ]
+    }
+   ]
+  },
+  "p-012": {
+   "path": "questions/exam-p/p-012.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:9a03e55fad4181078a20dc0277a0e633b3f83cc2a044d90bc16a7e6d1297c00d",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "The conditional probability of event E given event F is P[E|F] = P[E ∩ F] / P[F], provided P[F] > 0.",
+     "concept": "Conditional Probability",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Conditional Probability",
+       "quote": "$$P(A \\mid B) = \\frac{P(A \\cap B)}{P(B)}, \\quad P(B) > 0$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "Decompose the probability of a union or intersection of events into disjoint Venn-diagram regions (exactly one, exactly two, all three) and add the probabilities of the relevant regions.",
+     "concept": "Venn Diagrams and Disjoint Event Partitions",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Set Operations",
+       "quote": "On [[Mutually Exclusive Events|disjoint]] events $A \\cap B = \\varnothing$, so $P(A \\cup B) = P(A) + P(B)$."
+      },
+      {
+       "page": "Venn Diagram",
+       "quote": "If you just put \"70\" in the Auto circle, you've forgotten that 20 of those people also have Homeowners. The \"Auto Only\" region is actually $70 - 20 = 50$."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "The event that a woman has both A and B is the union of two disjoint events: having exactly A and B only, and having all three A, B and C, so P[A∩B] = P[exactly A and B] + P[A∩B∩C].",
+     "concept": "Venn Diagrams and Disjoint Event Partitions",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "The probability of the union of events equals the sum of the probabilities of the disjoint regions it comprises, and the probability of none of the events is the complement: 1 − P[A∪B∪C].",
+     "concept": "Complement Rule",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Venn Diagram",
+       "quote": "$$P(\\text{Neither}) = 1 - P(A \\cup H) = 1 - 0.90 = 0.10$$"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "The probability of a single event A equals the sum of the probabilities of all disjoint regions inside A (only A, A with each other single event, and all three), and P[A^c] = 1 − P[A].",
+     "concept": "Complement Rule",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Venn Diagram",
+       "quote": "The \"Auto Only\" region is actually $70 - 20 = 50$."
+      }
+     ]
+    },
+    {
+     "id": "r6",
+     "kind": "fact",
+     "statement": "If E is a subset of F (e.g. having none of the factors implies not having A), then P[E ∩ F] = P[E], so P[E|F] = P[E]/P[F].",
+     "concept": "Conditional Probability",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Conditional Probability",
+       "quote": "Since $A \\subseteq B$, we have $A \\cap B = A$."
+      }
+     ]
+    }
+   ]
+  },
+  "p-013": {
+   "path": "questions/exam-p/p-013.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:32fcb7359cfc8a33ab768f476a21533d6e690ff2c714a844ef0cfea9ff1254e1",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "procedure",
+     "statement": "A recursive relation p(n+1) = r·p(n) between successive probabilities can be solved by iterating it to get p(n) = r^n · p(0).",
+     "concept": "Probability Mass Function",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "The probabilities of a discrete distribution over all possible values must sum to 1, which can be used to solve for an unknown probability such as p(0).",
+     "concept": "Probability Mass Function",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Discrete Univariate Distributions",
+       "quote": "The PMF must satisfy $f(k) \\geq 0$ for all $k$ and $\\sum_{k} f(k) = 1$"
+      },
+      {
+       "page": "Probability Mass Function (PMF)",
+       "quote": "It must satisfy $p(x) \\geq 0$ for all $x$ and $\\sum_{\\text{all } x} p(x) = 1$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The sum of an infinite geometric series with first term a and common ratio |r| < 1 equals a/(1 − r).",
+     "concept": "Geometric Series",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "The probability of more than k events equals one minus the cumulative probability of at most k events (complement rule): P(N > k) = 1 − P(N ≤ k).",
+     "concept": "Complement Rule",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Discrete Univariate Distributions",
+       "quote": "For \"at least one\", reach for the complement $1 - P(X=0)$ rather than summing the tail."
+      }
+     ]
+    }
+   ]
+  },
+  "p-014": {
+   "path": "questions/exam-p/p-014.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:bc50037266bb6f16f5ee11fac5bed07885160d0392af524f54af5bd46c065aab",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "The probabilities of a set of mutually exclusive and exhaustive events sum to 1, so the probability of an event's complement equals 1 minus the event's probability.",
+     "concept": "Probability Axioms",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Mutually Exclusive Events",
+       "quote": "The three classes are mutually exclusive and cover every claim, so \"other\" is the complement of $D \\cup B$:"
+      },
+      {
+       "page": "Axioms of Probability",
+       "quote": "Therefore $P(A^c) = 1 - P(A)$."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "Partition the outcomes into disjoint categories (e.g., exactly-two-coverage combinations and no coverage), and express each marginal probability as the sum of the probabilities of the disjoint categories that include it.",
+     "concept": "Partitions of a Sample Space",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "The Law of Total Probability",
+       "quote": "$\\{A_1, A_2, \\ldots, A_n\\}$ must be mutually exclusive and exhaustive events to partition $S$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "When each outcome belongs to exactly two of the listed events, summing the individual event probabilities counts each outcome twice, so the total of the individual probabilities equals twice the probability of the union of the outcomes.",
+     "concept": "Inclusion-Exclusion Principle",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "p-015": {
+   "path": "questions/exam-p/p-015.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:b415f3ff50a97b8a7aae4f5d41ed161f5b445967f00f6cfb6f63ab3320074c1c",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "procedure",
+     "statement": "The distribution of a sum of two independent discrete random variables is found by convolution: P[X+Y=k] = sum over i of P[X=i]·P[Y=k−i], with the sum running over all i from 0 to k when both variables take nonnegative integer values.",
+     "concept": "Convolution of Independent Random Variables",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "For independent random variables, the joint probability factors into the product of the marginal probabilities, so P[N1=a, N2=b] = P[N1=a]·P[N2=b].",
+     "concept": "Independence of Random Variables",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Independent Random Variables",
+       "quote": "Formally, for all values $x$ and $y$, the joint distribution factors into the product of the marginals."
+      },
+      {
+       "page": "Independent Random Variables",
+       "quote": "$$f(x,y) = f_X(x)\\cdot f_Y(y)$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "The event that a sum of nonnegative integer-valued random variables equals k is the disjoint union of the events {N1=i, N2=k−i} for i=0,...,k, so their probabilities can be added.",
+     "concept": "Law of Total Probability",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "p-016": {
+   "path": "questions/exam-p/p-016.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:fcea5a33794673f4189d77b27faa33eaa874372d6fd2f92fcfad3f8e8b9eecec",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "The probability of a complement event is one minus the probability of the event: P(A^c) = 1 - P(A).",
+     "concept": "Complement Rule",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Set Operations",
+       "quote": "$$A^c = S \\setminus A, \\qquad A \\setminus B = A \\cap B^c$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The probability of a union of two events is P(A ∪ B) = P(A) + P(B) - P(A ∩ B) (inclusion-exclusion).",
+     "concept": "Inclusion-Exclusion Principle",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Probability Addition Rule",
+       "quote": "$$P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$$"
+      },
+      {
+       "page": "Inclusion-Exclusion Principle",
+       "quote": "$$P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "definition",
+     "statement": "Two events A and B are independent if and only if P(A ∩ B) = P(A)P(B).",
+     "concept": "Independent Events",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Independent Events",
+       "quote": "Two events $A$ and $B$ are **Independent** if knowing that one occurred provides no information about whether the other occurred. Equivalently, they satisfy the product rule:"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "To find an unknown event probability, translate the verbal statements into probabilities of events (such as a union and a complement), substitute the independence product for the intersection in the union formula, and solve the resulting equation for the unknown.",
+     "concept": "Independent Events",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "p-017": {
+   "path": "questions/exam-p/p-017.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:ed937a6c19603e3cd15f0b747a021079a8c822624ff8757da32afab6236ae6ed",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "A linear combination of independent normal random variables is normally distributed, with mean equal to the same linear combination of the means.",
+     "concept": "Normal Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Normal Distribution",
+       "quote": "Any **linear combination of independent normals is exactly normal**: if $X_i \\sim N(\\mu_i, \\sigma_i^2)$ independently, then $\\sum c_i X_i \\sim N\\!\\left(\\sum c_i\\mu_i,\\ \\sum c_i^2\\sigma_i^2\\right)$."
+      },
+      {
+       "page": "Probabilities for Linear Combinations",
+       "quote": "When the $X_i$ are independent normals, $L$ is itself normal and is handled by standardization."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "For independent random variables, Var(aX + bY) = a^2 Var(X) + b^2 Var(Y), so the variances (not standard deviations) are added, with coefficients squared.",
+     "concept": "Variance of Linear Combinations",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Linear Combinations of Random Variables",
+       "quote": "Coefficients enter the variance **squared**, so $\\text{Var}(X - Y) = \\text{Var}(X) + \\text{Var}(Y)$ for independent $X, Y$"
+      },
+      {
+       "page": "Variance and Standard Deviation",
+       "quote": "Standard deviations do **not** add: $\\text{SD}(X+Y) \\neq \\text{SD}(X) + \\text{SD}(Y)$. Always add variances, then take the square root at the very end."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "Standardize a normal random variable by subtracting its mean and dividing by its standard deviation, Z = (X - mu)/sigma, to compute probabilities using the standard normal table.",
+     "concept": "Normal Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Normal Distribution",
+       "quote": "Its CDF has no closed form and is evaluated via the standard normal $Z = (X - \\mu)/\\sigma \\sim N(0,1)$ using $\\Phi$ tables"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "For a standard normal Z and c > 0, P(-c <= Z <= c) = 2*Phi(c) - 1, by the symmetry of the standard normal distribution about 0.",
+     "concept": "Standard Normal Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Normal Distribution",
+       "quote": "Symmetry gives $\\Phi(-z) = 1 - \\Phi(z)$ — the identity needed for every negative $z$, since standard tables only list $z \\geq 0$"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "definition",
+     "statement": "The normal distribution N(mu, sigma) is parameterized here by its mean and standard deviation (not variance), so the given spread values are standard deviations.",
+     "concept": "Normal Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Normal Distribution",
+       "quote": "The **Normal Distribution** $X \\sim N(\\mu, \\sigma^2)$ is a symmetric, bell-shaped continuous distribution on $(-\\infty, \\infty)$ fully characterized by its mean $\\mu$ and variance $\\sigma^2$."
+      },
+      {
+       "page": "Variance and Standard Deviation",
+       "quote": "$$\\sigma = \\text{SD}(X) = \\sqrt{\\text{Var}(X)}$$"
+      }
+     ]
+    }
+   ]
+  },
+  "p-018": {
+   "path": "questions/exam-p/p-018.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:4837fde4ac9686d0efbb0f8504cabcc7ab98d95ccc25076a2d39754ec8381849",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "Bayes' theorem: for a partition B_1..B_n of the sample space, P(B_i | A) = P(A | B_i)P(B_i) / sum_j P(A | B_j)P(B_j).",
+     "concept": "Bayes' Theorem",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bayes Theorem",
+       "quote": "$$= \\frac{P(E \\mid H)\\,P(H)}{\\displaystyle\\sum_{i} P(E \\mid H_i)\\,P(H_i)}$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "The denominator of Bayes' formula is the total probability P(A) = sum_j P(A | B_j)P(B_j), computed by the law of total probability over a partition.",
+     "concept": "Law of Total Probability",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bayes Theorem",
+       "quote": "The denominator $P(E)$ is computed via [[The Law of Total Probability]] across a partition $\\{H_i\\}$ of the sample space:"
+      },
+      {
+       "page": "The Law of Total Probability",
+       "quote": "$$P(B) = \\sum_{i=1}^{n} P(B \\mid A_i)\\,P(A_i)$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "definition",
+     "statement": "Conditional probability P(A | B) = P(A ∩ B)/P(B), so P(A ∩ B) = P(A | B)P(B); a group's portion of the population serves as its prior probability P(B_i) and the group's accident rate as the conditional probability P(A | B_i).",
+     "concept": "Conditional Probability",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Conditional Probability",
+       "quote": "$$P(A \\mid B) = \\frac{P(A \\cap B)}{P(B)}, \\quad P(B) > 0$$"
+      },
+      {
+       "page": "Probability Multiplication Rule",
+       "quote": "$$P(A \\cap B) = P(A) \\cdot P(B \\mid A)$$"
+      }
+     ]
+    }
+   ]
+  },
+  "p-019": {
+   "path": "questions/exam-p/p-019.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:12b5362c00d2f83afc3f4ac9e8db5f4dab93b78e306f6d3c0feeb999bce444eb",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "Bayes' theorem: P(A|B) = P(B|A)P(A) / P(B), which gives the posterior probability of a cause event A given an observed event B.",
+     "concept": "Bayes' Theorem",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bayes Theorem",
+       "quote": "$$P(H \\mid E) = \\frac{P(E \\mid H)\\,P(H)}{P(E)}$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "Law of total probability: if events B1,...,Bn partition the sample space, then P(A) = sum over i of P(A|Bi)P(Bi).",
+     "concept": "Law of Total Probability",
+     "status": "linked",
+     "places": [
+      {
+       "page": "The Law of Total Probability",
+       "quote": "$$P(B) = \\sum_{i=1}^{n} P(B \\mid A_i)\\,P(A_i)$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "definition",
+     "statement": "Conditional probability P(A|B) is the probability that A occurs given that B has occurred, equal to P(A and B)/P(B); thus P(A and B) = P(A|B)P(B).",
+     "concept": "Conditional Probability",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Conditional Probability",
+       "quote": "$$P(A \\mid B) = \\frac{P(A \\cap B)}{P(B)}, \\quad P(B) > 0$$"
+      },
+      {
+       "page": "Probability Multiplication Rule",
+       "quote": "$$P(A \\cap B) = P(A) \\cdot P(B \\mid A)$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "To find the probability of a category given an outcome, treat the category proportions as prior probabilities and the category-specific outcome rates as conditional probabilities, then compute the category's share of the total outcome probability.",
+     "concept": "Bayes' Theorem",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Posterior Distribution",
+       "quote": "The posterior probabilities are $0.12281/0.20513 = 0.5987$ (good) and $0.08232/0.20513 = 0.4013$ (bad)."
+      }
+     ]
+    }
+   ]
+  },
+  "p-020": {
+   "path": "questions/exam-p/p-020.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:d3f88e65fee7c1c8c2afa15be97b44de6f0edf0971c4c16d8791789e617d2ff0",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "Bayes' theorem: P(A|B) = P(B|A)P(A) / P(B), which gives the posterior probability of a category after observing an event.",
+     "concept": "Bayes' Theorem",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bayes Theorem",
+       "quote": "$$P(H \\mid E) = \\frac{P(E \\mid H)\\,P(H)}{P(E)}$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "Law of total probability: if events partition the sample space, P(B) = sum over i of P(B|A_i)P(A_i).",
+     "concept": "Law of Total Probability",
+     "status": "linked",
+     "places": [
+      {
+       "page": "The Law of Total Probability",
+       "quote": "$$P(B) = \\sum_{i=1}^{n} P(B \\mid A_i)\\,P(A_i)$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "The probability of the complement event is one minus the probability of the event, so P(survive | category) = 1 - P(die | category).",
+     "concept": "Complement Rule",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Probability Rules",
+       "quote": "$$P(A^c) = 1 - P(A)$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "Probabilities of a set of mutually exclusive, exhaustive categories sum to 1, so the unspecified category's probability is 1 minus the sum of the others.",
+     "concept": "Probability Axioms",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Mutually Exclusive Events",
+       "quote": "The three classes are mutually exclusive and cover every claim, so \"other\" is the complement of $D \\cup B$:"
+      }
+     ]
+    }
+   ]
+  },
+  "p-021": {
+   "path": "questions/exam-p/p-021.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:9c82c3cd24506d4d74bc2bc4df12591fe2deaf4f9983a46d7184c5d3bb6b7c9f",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "Bayes' theorem: P[A|B] = P[B|A]P[A] / P[B], giving the posterior probability of a cause A given observed event B.",
+     "concept": "Bayes' Theorem",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bayes Theorem",
+       "quote": "$$P(H \\mid E) = \\frac{P(E \\mid H)\\,P(H)}{P(E)}$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The law of total probability: if events B_1,...,B_n partition the sample space, P[A] = sum over i of P[A|B_i]P[B_i].",
+     "concept": "Law of Total Probability",
+     "status": "linked",
+     "places": [
+      {
+       "page": "The Law of Total Probability",
+       "quote": "$$P(B) = \\sum_{i=1}^{n} P(B \\mid A_i)\\,P(A_i)$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "Translate statements such as 'X is k times as likely as Y to die' into relations between conditional probabilities (P[D|X] = k P[D|Y]), and express all conditional probabilities in terms of a single unknown parameter that cancels in the final ratio.",
+     "concept": "Conditional Probability",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r4",
+     "kind": "definition",
+     "statement": "The initial group percentages (heavy, light, nonsmoker) form a partition of the population and serve as the prior probabilities P[H], P[L], P[N], which sum to 1.",
+     "concept": "Partition of a Sample Space",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bayes Theorem",
+       "quote": "is a formula for reversing conditional probabilities, updating the prior probability $P(H)$ of a hypothesis to the posterior probability $P(H \\mid E)$ after observing evidence $E$."
+      },
+      {
+       "page": "The Law of Total Probability",
+       "quote": "$\\{A_1, A_2, \\ldots, A_n\\}$ must be mutually exclusive and exhaustive events to partition $S$"
+      }
+     ]
+    }
+   ]
+  },
+  "p-022": {
+   "path": "questions/exam-p/p-022.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:99adaa2c7bee1f26bb777d2c9197286c05a28ea0b75873b8dd99d5bfa1eb12c0",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "Bayes' Theorem: P(A|B) = P(B|A)P(A) / P(B), which reverses a conditional probability using the prior probability of A and the likelihood of B given A.",
+     "concept": "Bayes' Theorem",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bayes Theorem",
+       "quote": "$$P(H \\mid E) = \\frac{P(E \\mid H)\\,P(H)}{P(E)}$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "Law of Total Probability: if events partition the sample space, P(B) equals the sum over the partition of P(B|A_i)P(A_i).",
+     "concept": "Law of Total Probability",
+     "status": "linked",
+     "places": [
+      {
+       "page": "The Law of Total Probability",
+       "quote": "$$P(B) = \\sum_{i=1}^{n} P(B \\mid A_i)\\,P(A_i)$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "Treat the percentages of each group as prior probabilities P(A_i) and the group-specific event rates as conditional probabilities P(B|A_i), then compute the posterior probability of a group given the event occurred.",
+     "concept": "Bayes' Theorem",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bayes Theorem",
+       "quote": "20% of policyholders are high-risk ($H$) and 80% are low-risk ($L$). A high-risk policyholder files a claim in year 1 with probability 0.40; a low-risk one with probability 0.10."
+      },
+      {
+       "page": "Bayes Theorem",
+       "quote": "$$P(H \\mid C) = \\frac{P(C \\mid H)\\,P(H)}{P(C)} = \\frac{0.40 \\times 0.20}{0.16} = \\frac{0.08}{0.16} = 0.50$$"
+      },
+      {
+       "page": "The Law of Total Probability",
+       "quote": "A portfolio is 30% young drivers ($A_1$), 50% middle-aged ($A_2$), and 20% senior ($A_3$). Claim probabilities are $P(C \\mid A_1)=0.20$, $P(C \\mid A_2)=0.10$, $P(C \\mid A_3)=0.15$."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "definition",
+     "statement": "Conditional probability P(A|B) is the probability of A given B has occurred, defined as P(A∩B)/P(B), and P(A∩B) = P(B|A)P(A).",
+     "concept": "Conditional Probability",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Conditional Probability",
+       "quote": "$$P(A \\mid B) = \\frac{P(A \\cap B)}{P(B)}, \\quad P(B) > 0$$"
+      },
+      {
+       "page": "Probability Multiplication Rule",
+       "quote": "$$P(A \\cap B) = P(A) \\cdot P(B \\mid A)$$"
+      }
+     ]
+    }
+   ]
+  },
+  "p-023": {
+   "path": "questions/exam-p/p-023.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:a0fb06160666aaf7f8338a5779a2c4685a599bb69a76752449efb0b9ff954cda",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "The conditional probability of event A given event B is P[A | B] = P[A ∩ B] / P[B].",
+     "concept": "Conditional Probability",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Conditional Probability",
+       "quote": "$$P(A \\mid B) = \\frac{P(A \\cap B)}{P(B)}, \\quad P(B) > 0$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "For a discrete random variable, the probability of an event such as a range of values is the sum of the probability mass function over the values in that event.",
+     "concept": "Discrete Probability Mass Function",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Discrete Univariate Distributions",
+       "quote": "$$= \\sum_{k \\leq x} f(k)$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "To evaluate a conditional probability where one event is contained in the other (e.g. N ≥ 1 and N ≤ 4), the intersection is the restricted range (1 ≤ N ≤ 4), so the numerator is the sum of the pmf over that range and the denominator is the sum over the conditioning event.",
+     "concept": "Conditional Probability",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Conditional Probability",
+       "quote": "Since $A \\subseteq B$, we have $A \\cap B = A$."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "A rational term 1/((n+1)(n+2)) can be decomposed by partial fractions into 1/(n+1) − 1/(n+2), so partial sums telescope to a closed form such as P[N ≤ k] = 1 − 1/(k+2).",
+     "concept": "Telescoping Series",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "p-024": {
+   "path": "questions/exam-p/p-024.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:4f20c07f5bd8ee4da2371c6343868faa4edba31c21fe77d7cc6227b7e65815b3",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "Bayes' Theorem: P[A|B] = P[B|A]P[A] / (P[B|A]P[A] + P[B|A^c]P[A^c]), which gives the posterior probability of an event given an observed outcome.",
+     "concept": "Bayes' Theorem",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bayes Theorem",
+       "quote": "$$P(H \\mid E) = \\frac{P(E \\mid H)\\,P(H)}{P(E)}$$"
+      },
+      {
+       "page": "Bayes Theorem",
+       "quote": "$$= \\frac{P(E \\mid H)\\,P(H)}{\\displaystyle\\sum_{i} P(E \\mid H_i)\\,P(H_i)}$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "Translate the stated rates into conditional probabilities: the detection rate when the condition is present is P[positive | condition], the false-positive rate is P[positive | no condition], and the prevalence is the prior P[condition].",
+     "concept": "Conditional Probability",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bayes Theorem",
+       "quote": "20% of policyholders are high-risk ($H$) and 80% are low-risk ($L$). A high-risk policyholder files a claim in year 1 with probability 0.40; a low-risk one with probability 0.10."
+      },
+      {
+       "page": "Bayes Theorem",
+       "quote": "$$P(C) = P(C \\mid H)P(H) + P(C \\mid L)P(L) = (0.40)(0.20) + (0.10)(0.80) = 0.08 + 0.08 = 0.16$$"
+      },
+      {
+       "page": "The Law of Total Probability",
+       "quote": "Claim probabilities are $P(C \\mid A_1)=0.20$, $P(C \\mid A_2)=0.10$, $P(C \\mid A_3)=0.15$."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "The probability of the complement is one minus the probability of the event, so P[no condition] = 1 − P[condition].",
+     "concept": "Complement Rule",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Axioms of Probability",
+       "quote": "Therefore $P(A^c) = 1 - P(A)$. $\\square$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "The denominator of Bayes' Theorem is the total probability of the observed outcome, found by summing P[outcome | partition event] × P[partition event] over a partition (the condition present and the condition absent).",
+     "concept": "Law of Total Probability",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bayes Theorem",
+       "quote": "The denominator $P(E)$ is computed via [[The Law of Total Probability]] across a partition $\\{H_i\\}$ of the sample space:"
+      },
+      {
+       "page": "Bayes Theorem",
+       "quote": "$$P(C) = P(C \\mid H)P(H) + P(C \\mid L)P(L) = (0.40)(0.20) + (0.10)(0.80) = 0.08 + 0.08 = 0.16$$"
+      },
+      {
+       "page": "The Law of Total Probability",
+       "quote": "$$P(B) = \\sum_{i=1}^{n} P(B \\mid A_i)\\,P(A_i)$$"
+      }
+     ]
+    }
+   ]
+  },
+  "p-025": {
+   "path": "questions/exam-p/p-025.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:0950321ed0496965a3a9dd2945b1e04d586be70d3dc21ce5377548737752f3b4",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "Bayes' theorem: P[A|B] = P[B|A]P[A] / P[B], where P[B] is found by summing over a partition of the sample space.",
+     "concept": "Bayes' Theorem",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bayes Theorem",
+       "quote": "$$P(H \\mid E) = \\frac{P(E \\mid H)\\,P(H)}{P(E)}$$"
+      },
+      {
+       "page": "Bayes Theorem",
+       "quote": "The denominator $P(E)$ is computed via [[The Law of Total Probability]] across a partition $\\{H_i\\}$ of the sample space:"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The law of total probability: P[B] = P[B|A]P[A] + P[B|A^c]P[A^c], since an event and its complement partition the sample space.",
+     "concept": "Law of Total Probability",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bayes Theorem",
+       "quote": "$$P(C) = P(C \\mid H)P(H) + P(C \\mid L)P(L) = (0.40)(0.20) + (0.10)(0.80) = 0.08 + 0.08 = 0.16$$"
+      },
+      {
+       "page": "The Law of Total Probability",
+       "quote": "$$P(B) = \\sum_{i=1}^{n} P(B \\mid A_i)\\,P(A_i)$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "The complement rule: P[A^c] = 1 - P[A].",
+     "concept": "Complement Rule",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Axioms of Probability",
+       "quote": "Therefore $P(A^c) = 1 - P(A)$. $\\square$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "Translate a statement that one group is k times as likely to have a trait as another into a conditional probability relation, P[S|C] = k P[S|C^c], and let the common unknown factor cancel in the Bayes ratio.",
+     "concept": "Conditional Probability",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "p-026": {
+   "path": "questions/exam-p/p-026.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:e48802d62581cd3855757c26fc01f992daa7268765db84bc87e38af9553179fc",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "Bayes' theorem: P(B|A) = P(A|B)P(B) / P(A), where P(A) is found by summing P(A|Bi)P(Bi) over a partition of the sample space.",
+     "concept": "Bayes' Theorem",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bayes Theorem",
+       "quote": "$$P(H \\mid E) = \\frac{P(E \\mid H)\\,P(H)}{P(E)}$$"
+      },
+      {
+       "page": "Bayes Theorem",
+       "quote": "$$= \\frac{P(E \\mid H)\\,P(H)}{\\displaystyle\\sum_{i} P(E \\mid H_i)\\,P(H_i)}$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "The law of total probability: P(A) equals the sum over mutually exclusive, exhaustive events Bi of P(A|Bi)P(Bi).",
+     "concept": "Law of Total Probability",
+     "status": "linked",
+     "places": [
+      {
+       "page": "The Law of Total Probability",
+       "quote": "$$P(B) = \\sum_{i=1}^{n} P(B \\mid A_i)\\,P(A_i)$$"
+      },
+      {
+       "page": "The Law of Total Probability",
+       "quote": "$\\{A_1, A_2, \\ldots, A_n\\}$ must be mutually exclusive and exhaustive events to partition $S$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "When told the outcome belongs to a restricted subset of events, restrict the partition in the Bayes denominator to only those events (exclude the other categories), so the conditioning is on accident and membership in the subset.",
+     "concept": "Conditional Probability",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r4",
+     "kind": "definition",
+     "statement": "Conditional probability P(A|B) = P(A∩B)/P(B), and the joint probability is P(A∩B) = P(A|B)P(B).",
+     "concept": "Conditional Probability",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Conditional Probability",
+       "quote": "$$P(A \\mid B) = \\frac{P(A \\cap B)}{P(B)}, \\quad P(B) > 0$$"
+      },
+      {
+       "page": "Probability Multiplication Rule",
+       "quote": "$$P(A \\cap B) = P(A) \\cdot P(B \\mid A)$$"
+      },
+      {
+       "page": "Probability Multiplication Rule",
+       "quote": "$$= P(B) \\cdot P(A \\mid B)$$"
+      }
+     ]
+    }
+   ]
+  },
+  "p-027": {
+   "path": "questions/exam-p/p-027.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:e2a6d4b7ad02f15815a385e53b653ced6e0eb63b4abd175599b46e92fb7a534e",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "Bayes' theorem: P(A|B) = P(B|A)P(A) / [P(B|A)P(A) + P(B|A^c)P(A^c)], giving the posterior probability of a hypothesis after observing an event.",
+     "concept": "Bayes' Theorem",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bayes Theorem",
+       "quote": "$$P(H \\mid E) = \\frac{P(E \\mid H)\\,P(H)}{P(E)}$$"
+      },
+      {
+       "page": "Bayes Theorem",
+       "quote": "$$= \\frac{P(E \\mid H)\\,P(H)}{\\displaystyle\\sum_{i} P(E \\mid H_i)\\,P(H_i)}$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "The law of total probability: the denominator P(B) equals the sum of P(B|partition event) times the probability of each event over a partition (here Company X and all other companies).",
+     "concept": "Law of Total Probability",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bayes Theorem",
+       "quote": "First find $P(\\text{claim})$ by the Law of Total Probability:"
+      },
+      {
+       "page": "The Law of Total Probability",
+       "quote": "$$P(B) = \\sum_{i=1}^{n} P(B \\mid A_i)\\,P(A_i)$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "When a shipment contains a very large number of items, the number of defective items in a fixed-size sample can be modeled as binomial with the defect proportion as the success probability (independent trials).",
+     "concept": "Binomial Distribution",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "Binomial probability mass function: P(X = k) = C(n,k) p^k (1-p)^(n-k) for n trials with success probability p.",
+     "concept": "Binomial Distribution",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Binomial Distribution",
+       "quote": "$$P(X = k) = \\binom{n}{k} p^k (1-p)^{n-k}$$"
+      }
+     ]
+    }
+   ]
+  },
+  "p-028": {
+   "path": "questions/exam-p/p-028.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:9d54eec13e9f924fd8cf0a8b88e01c3797b60e809b0a30c7bd258ea6601b0780",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "For an exponential random variable with rate parameter lambda, the CDF is P[T <= t] = 1 - e^{-lambda t} for t >= 0.",
+     "concept": "Exponential Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Exponential Distribution",
+       "quote": "$E[X] = \\theta$, $\\text{Var}(X) = \\theta^2$, and $F(x) = 1 - e^{-x/\\theta}$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "Calibrate the exponential parameter by setting the CDF at a given time equal to the stated probability (proportion) and solving for lambda, then use that lambda to compute the CDF at another time.",
+     "concept": "Exponential Distribution",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "The probability that a random event time falls within a time period equals the expected portion of the population experiencing the event in that period, so P[T <= t] can be interpreted as the proportion of individuals with the event by time t.",
+     "concept": "Cumulative Distribution Function",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Exponential Distribution",
+       "quote": "About 54.9% of losses exceed the deductible and generate a payment."
+      }
+     ]
+    }
+   ]
+  },
+  "p-029": {
+   "path": "questions/exam-p/p-029.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:df51cd5463f0d4cd63a73f030684af74cc4b98c1ce076f61ad1c37591f71625e",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "A Poisson random variable N with parameter lambda has probability mass function P(N=k) = e^{-lambda} lambda^k / k! for k = 0, 1, 2, ...",
+     "concept": "Poisson Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Poisson Distribution",
+       "quote": "$$P(X = k) = \\frac{e^{-\\lambda}\\lambda^k}{k!}$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "For a Poisson distribution with parameter lambda, the variance equals lambda (equal to the mean).",
+     "concept": "Poisson Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Poisson Distribution",
+       "quote": "A defining property is $E[X] = \\text{Var}(X) = \\lambda$ — the mean and variance are equal"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "To find an unknown distribution parameter from a stated relationship between probabilities (e.g., one probability is a multiple of another), write each probability using the pmf, set up the equation, and solve for the parameter.",
+     "concept": "Poisson Distribution",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "p-030": {
+   "path": "questions/exam-p/p-030.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:e944e38044edeeab8e523ddb9be64342de59576def80dcf91e6ac4eeface95d3",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "A count of independent trials, each with the same success probability, has a binomial distribution with parameters n and p.",
+     "concept": "Binomial Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Binomial Distribution",
+       "quote": "The **Binomial Distribution** $X \\sim \\text{Bin}(n, p)$ models the number of successes in $n$ independent Bernoulli trials, each with probability of success $p$."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "For X ~ Binomial(n, p), P[X = k] = C(n,k) p^k (1-p)^(n-k).",
+     "concept": "Binomial Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Binomial Distribution",
+       "quote": "$$P(X = k) = \\binom{n}{k} p^k (1-p)^{n-k}$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "The fund is inadequate when the total payment (number of qualifying employees times C) exceeds the fund, so the inadequacy probability is P[X > fund/C].",
+     "concept": "Binomial Distribution",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "Find the largest payment amount by computing cumulative probabilities P[X ≤ k] and finding the smallest integer k whose tail P[X > k] is below the threshold, then setting C = fund/k.",
+     "concept": "Cumulative Distribution Function",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "The complement rule: P[X > k] = 1 - P[X ≤ k], and a discrete count's cumulative probability is the sum of its pmf values up to k.",
+     "concept": "Cumulative Distribution Function",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Discrete Univariate Distributions",
+       "quote": "$$= \\sum_{k \\leq x} f(k)$$"
+      },
+      {
+       "page": "Discrete Univariate Distributions",
+       "quote": "For \"at least one\", reach for the complement $1 - P(X=0)$ rather than summing the tail."
+      }
+     ]
+    }
+   ]
+  },
+  "p-031": {
+   "path": "questions/exam-p/p-031.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:75522401c309bfb31038d245f9fa91b519e4e6fb2a98427c624c0271a88ac64f",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "When n independent trials each fall into one of several categories with fixed probabilities, the counts in each category follow a multinomial distribution (trinomial for three categories).",
+     "concept": "Multinomial Distribution",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The multinomial probability of counts (n1,...,nk) in n trials is n!/(n1!...nk!) times p1^n1 ... pk^nk.",
+     "concept": "Multinomial Distribution",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "To find the probability of an event defined by a condition on category counts, enumerate all count outcomes (x,y,z) summing to n that satisfy the condition, compute each outcome's probability, and add them since the outcomes are mutually exclusive.",
+     "concept": "Multinomial Distribution",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Mutually Exclusive Events",
+       "quote": "The addition rule simplification extends to any finite collection: if $A_1, A_2, \\ldots, A_n$ are pairwise mutually exclusive, then $P\\!\\left(\\bigcup_{i=1}^n A_i\\right) = \\sum_{i=1}^n P(A_i)$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "Drawing each individual at random from a large pool makes the draws independent with constant category probabilities equal to the pool proportions.",
+     "concept": "Independence of Random Variables",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "p-032": {
+   "path": "questions/exam-p/p-032.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:13b01324643fc5775bb756d74cabafb6644ff09d06a76b360c1259533a711a15",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "The survival function of a continuous random variable is S(x) = P(X > x), equal to the integral of the density from x to the upper end of the support.",
+     "concept": "Survival Function",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Continuous Univariate Distributions",
+       "quote": "For anything phrased as a tail probability, work from the survival function $S(x) = 1 - F(x)$ instead."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The conditional probability is P(A | B) = P(A ∩ B) / P(B).",
+     "concept": "Conditional Probability",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Conditional Probability",
+       "quote": "$$P(A \\mid B) = \\frac{P(A \\cap B)}{P(B)}, \\quad P(B) > 0$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "For a continuous random variable, P(X > b | X > a) with b > a equals S(b)/S(a), because the event {X > b} is contained in {X > a}.",
+     "concept": "Conditional Probability",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Conditional Probability",
+       "quote": "Let $A = \\{X > 700\\}$ and $B = \\{X > 400\\}$. Since $A \\subseteq B$, we have $A \\cap B = A$."
+      },
+      {
+       "page": "Uniform Continuous Distribution",
+       "quote": "For $\\text{Unif}(0, 10)$, $P(X > 8 \\mid X > 5) = 2/5$, but $P(X > 3) = 7/10$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "A probability density function must be integrated over the specified support (here zero outside the range), so probabilities of tail events use the upper bound of the support as the integration limit.",
+     "concept": "Probability Density Function",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Probability Density Function (PDF)",
+       "quote": "$$P(X > 0.5) = \\int_{0.5}^{1} 3x^2\\, dx = \\left[ x^3 \\right]_{0.5}^{1} = 1 - 0.125 = 0.875$$"
+      }
+     ]
+    }
+   ]
+  },
+  "p-033": {
+   "path": "questions/exam-p/p-033.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:b94ccdb10cd4c57a9557bd25bad2590e232a64ac4c726b3af0b12a8f17df3087",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "A probability density function must integrate to 1 over its support, so a density specified only up to a proportionality constant is normalized by setting its integral over the support equal to 1 and solving for the constant.",
+     "concept": "Probability Density Function",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Continuous Univariate Distributions",
+       "quote": "The probability density function (PDF) $f(x)$ must satisfy $f(x) \\geq 0$ and $\\int_{-\\infty}^{\\infty} f(x)\\,dx = 1$"
+      },
+      {
+       "page": "Joint Probability Density Function",
+       "quote": "A valid joint density satisfies $f(x,y) \\geq 0$ and integrates to 1 over its support. Setting that double integral equal to 1 is how an unknown constant $c$ is found."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "For a continuous random variable with density f, the probability P(a < X < b) equals the integral of f(x) from a to b (equivalently, P(X < b) is the integral from the lower support bound to b).",
+     "concept": "Probability Density Function",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Continuous Univariate Distributions",
+       "quote": "$$P(a \\leq X \\leq b) = \\int_a^b f(x)\\, dx$$"
+      },
+      {
+       "page": "Probability Density Function (PDF)",
+       "quote": "The probability that $X$ falls in an interval $[a, b]$ is the area under $f$ over that interval."
+      }
+     ]
+    }
+   ]
+  },
+  "p-034": {
+   "path": "questions/exam-p/p-034.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:8a682222bbfe66e81e12d12d1ba4dcc3e9a1d722e75da640d91264d9b096826c",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "A probability density function must integrate to 1 over its support, which determines the value of an unknown normalizing constant.",
+     "concept": "Probability Density Function",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Continuous Univariate Distributions",
+       "quote": "The probability density function (PDF) $f(x)$ must satisfy $f(x) \\geq 0$ and $\\int_{-\\infty}^{\\infty} f(x)\\,dx = 1$"
+      },
+      {
+       "page": "Joint Probability Density Function",
+       "quote": "Setting that double integral equal to 1 is how an unknown constant $c$ is found."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "For a continuous random variable with density f, the probability P[a < Y < b] equals the integral of f(y) from a to b, so a survival probability P[Y > a] is the integral of f from a to the upper end of the support.",
+     "concept": "Probability Density Function",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Continuous Univariate Distributions",
+       "quote": "$$P(0.5 < X < 1) = \\int_{0.5}^{1} 3x^2\\, dx = \\left[x^3\\right]_{0.5}^{1} = 1 - (0.5)^3 = 1 - 0.125 = 0.875$$"
+      },
+      {
+       "page": "Probability Density Function (PDF)",
+       "quote": "$$P(X > 0.5) = \\int_{0.5}^{1} 3x^2\\, dx = \\left[ x^3 \\right]_{0.5}^{1} = 1 - 0.125 = 0.875$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "A probability about a linearly transformed variable V = cY (c > 0) is found by rewriting the event in terms of Y, e.g. P[V > v] = P[Y > v/c].",
+     "concept": "Transformation of a Random Variable",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Transformations of Random Variables",
+       "quote": "The reliable way to find its distribution is the **CDF method**: write $F_Y(y) = P(g(X) \\leq y)$, rearrange the inequality into an event about $X$, evaluate with $F_X$, then differentiate to get the density."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "The conditional probability is P[A | B] = P[A ∩ B] / P[B]; when A is a subset of B (e.g., V > 40,000 implies V > 10,000), P[A | B] = P[A] / P[B].",
+     "concept": "Conditional Probability",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Conditional Probability",
+       "quote": "$$P(A \\mid B) = \\frac{P(A \\cap B)}{P(B)}, \\quad P(B) > 0$$"
+      }
+     ]
+    }
+   ]
+  },
+  "p-035": {
+   "path": "questions/exam-p/p-035.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:09f6b91476d99e6707329250c976fcde89c58d679b1460ae9ebb4f95098a0f3f",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "An exponential distribution with mean θ has cumulative distribution function F(t) = 1 - e^{-t/θ} for t ≥ 0.",
+     "concept": "Exponential Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Exponential Distribution",
+       "quote": "$E[X] = \\theta$, $\\text{Var}(X) = \\theta^2$, and $F(x) = 1 - e^{-x/\\theta}$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "The probability that a continuous random variable falls in an interval (a, b] equals F(b) - F(a).",
+     "concept": "Cumulative Distribution Function",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Cumulative Distribution Function (CDF)",
+       "quote": "$$P(2 \\leq X \\leq 4) = F(4) - F(2) = \\frac{4}{5} - \\frac{2}{5} = \\frac{2}{5} = 0.4$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "To find the expected payment under a piecewise payment schedule, multiply each payment amount by the probability of the event that triggers it and sum over the payment tiers.",
+     "concept": "Expected Value of a Discrete Payoff",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Expected Value",
+       "quote": "$$E[X] = 0(0.5) + 100(0.3) + 500(0.2) = 0 + 30 + 100 = 130$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "By linearity of expectation, the expected total over n identical independent items equals n times the expected amount for one item.",
+     "concept": "Linearity of Expectation",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Linear Combinations of Random Variables",
+       "quote": "**Expectation is always linear** — $E[L]$ needs no independence assumption at all."
+      }
+     ]
+    }
+   ]
+  },
+  "p-036": {
+   "path": "questions/exam-p/p-036.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:44bbdace906682c1a02adda1ec30b10307e607c9d34a97f47e6e562a06e023c7",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "The cumulative distribution function F(x) = P[X ≤ x] is obtained by integrating the density function from the lower end of the support up to x.",
+     "concept": "Cumulative Distribution Function",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Cumulative Distribution Function (CDF)",
+       "quote": "For a continuous random variable, $F(x) = \\int_{-\\infty}^{x} f(t)\\, dt$"
+      },
+      {
+       "page": "Continuous Random Variable",
+       "quote": "$$F(x) = P(X \\le x) = \\int_{-\\infty}^{x} f(t)\\,dt$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "Conditional probability: P[A | B] = P[A ∩ B] / P[B].",
+     "concept": "Conditional Probability",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Conditional Probability",
+       "quote": "$$P(A \\mid B) = \\frac{P(A \\cap B)}{P(B)}, \\quad P(B) > 0$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "For a continuous random variable, P[a ≤ X < b] = F(b) − F(a), and P[X ≥ a] = 1 − F(a), since individual points have zero probability.",
+     "concept": "Cumulative Distribution Function",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Continuous Univariate Distributions",
+       "quote": "For anything phrased as a tail probability, work from the survival function $S(x) = 1 - F(x)$ instead."
+      },
+      {
+       "page": "Continuous Random Variable",
+       "quote": "$P(X = c) = 0$ for every $c$, so $P(a < X < b) = P(a \\le X \\le b) = F(b) - F(a)$."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "To find a conditional probability such as P[X < b | X ≥ a] for a continuous variable, express the numerator as the probability of the intersected interval [a, b) and divide by the probability of the conditioning event.",
+     "concept": "Conditional Probability",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Conditional Probability",
+       "quote": "Let $A = \\{X > 700\\}$ and $B = \\{X > 400\\}$. Since $A \\subseteq B$, we have $A \\cap B = A$."
+      }
+     ]
+    }
+   ]
+  },
+  "p-037": {
+   "path": "questions/exam-p/p-037.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:32195355311315da995f7f6211e32d9d4e0e6f396700aa7a7d3dcd077bba8733",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "The number of successes in n independent trials, each with the same success probability p, follows a binomial distribution with parameters n and p.",
+     "concept": "Binomial Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Binomial Distribution",
+       "quote": "The **Binomial Distribution** $X \\sim \\text{Bin}(n, p)$ models the number of successes in $n$ independent Bernoulli trials, each with probability of success $p$."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "For a binomial(n, p) random variable X, P[X = k] = C(n,k) p^k (1-p)^(n-k).",
+     "concept": "Binomial Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Binomial Distribution",
+       "quote": "$$P(X = k) = \\binom{n}{k} p^k (1-p)^{n-k}$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "For a discrete count variable, compute P[X < k] by summing the probabilities of the individual values 0 through k-1.",
+     "concept": "Discrete Random Variable",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Discrete Univariate Distributions",
+       "quote": "$$= \\sum_{k \\leq x} f(k)$$"
+      },
+      {
+       "page": "Discrete Random Variable",
+       "quote": "**Endpoints matter.** $P(X \\le 3)$ and $P(X < 3)$ differ by $p(3)$"
+      }
+     ]
+    }
+   ]
+  },
+  "p-038": {
+   "path": "questions/exam-p/p-038.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:9b6e08fdf0d48a83ed4a4ae25d1df4e48b05d0aff031a9bb4c7aa5c66fdb17ca",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "procedure",
+     "statement": "For a policy with an ordinary deductible d, the payment per loss is Y = 0 when X ≤ d and Y = X − d when X > d.",
+     "concept": "Ordinary Deductible",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Deductible",
+       "quote": "If the loss $X$ is less than or equal to the deductible $d$, the insurer pays nothing; above $d$ it pays the excess $X - d$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "To find a probability about a transformed variable (such as the payment Y = X − d), rewrite the event in terms of the original variable X, e.g., P[X − d < a] = P[X < a + d].",
+     "concept": "Functions of a Random Variable",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Continuous Univariate Distributions",
+       "quote": "Every lognormal probability reduces to a normal one by taking logs of both sides: $P(X > c) = P(\\ln X > \\ln c)$."
+      },
+      {
+       "page": "Transformations of Random Variables",
+       "quote": "The reliable way to find its distribution is the **CDF method**: write $F_Y(y) = P(g(X) \\leq y)$, rearrange the inequality into an event about $X$, evaluate with $F_X$, then differentiate to get the density."
+      },
+      {
+       "page": "Continuous Random Variable",
+       "quote": "P(Y \\le 300) &= P(X \\le 500)"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "For a continuous random variable with density f, the probability P[X < b] is the integral of f(x) from the lower end of the support up to b (the CDF).",
+     "concept": "Continuous Random Variable Density and CDF",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Continuous Univariate Distributions",
+       "quote": "$$P(a \\leq X \\leq b) = \\int_a^b f(x)\\, dx$$"
+      },
+      {
+       "page": "Continuous Random Variable",
+       "quote": "$$F(x) = P(X \\le x) = \\int_{-\\infty}^{x} f(t)\\,dt$$"
+      }
+     ]
+    }
+   ]
+  },
+  "p-039": {
+   "path": "questions/exam-p/p-039.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:d8030c92e80e7f6a1956e50b1d85f00e577074e9404f6fb0e9aa105d679e47da",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "The number of successes in a fixed number of independent trials, each with the same success probability, follows a binomial distribution.",
+     "concept": "Binomial Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Binomial Distribution",
+       "quote": "The **Binomial Distribution** $X \\sim \\text{Bin}(n, p)$ models the number of successes in $n$ independent Bernoulli trials, each with probability of success $p$."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "For a binomial random variable with n trials and success probability p, P(X=k) = C(n,k) p^k (1-p)^(n-k).",
+     "concept": "Binomial Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Binomial Distribution",
+       "quote": "$$P(X = k) = \\binom{n}{k} p^k (1-p)^{n-k}$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "To find the probability of an event like 'at least k' for a discrete random variable, sum the probabilities of the individual outcomes that make up the event.",
+     "concept": "Discrete Random Variables",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Mutually Exclusive Events",
+       "quote": "The addition rule simplification extends to any finite collection: if $A_1, A_2, \\ldots, A_n$ are pairwise mutually exclusive, then $P\\!\\left(\\bigcup_{i=1}^n A_i\\right) = \\sum_{i=1}^n P(A_i)$"
+      },
+      {
+       "page": "Discrete Random Variable",
+       "quote": "$$F(x) = \\sum_{k \\le x} p(k)$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "When an event occurs independently in each of several groups with the same probability P, the probability that it occurs in exactly one of two groups is a binomial probability: 2P(1-P).",
+     "concept": "Binomial Distribution",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "The probability of completing (not dropping out) equals the complement of the dropout probability, 1 minus the dropout probability.",
+     "concept": "Complement Rule",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Mutually Exclusive Events",
+       "quote": "The three classes are mutually exclusive and cover every claim, so \"other\" is the complement of $D \\cup B$:"
+      }
+     ]
+    }
+   ]
+  },
+  "p-040": {
+   "path": "questions/exam-p/p-040.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:6e59d04261afe1ea8fe6f044e20a57382ea142ecd87343b8af2f2384f0ce5996",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "procedure",
+     "statement": "To find the probability of an event involving mixed random variables with a point mass at zero, partition the sample space into disjoint cases (e.g., claim/no claim for each party) and sum the case probabilities, each computed as the case's occurrence probability times the conditional probability of the event.",
+     "concept": "Law of Total Probability",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "The Law of Total Probability",
+       "quote": "$$P(B) = \\sum_{i=1}^{n} P(B \\mid A_i)\\,P(A_i)$$"
+      },
+      {
+       "page": "The Law of Total Probability",
+       "quote": "Every term equals $P(B \\mid A_i)\\,P(A_i) = P(B \\cap A_i)$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "If two random variables are independent, the probability that both events occur equals the product of their individual probabilities.",
+     "concept": "Independence of Random Variables",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Probability Rules",
+       "quote": "The [[Probability Multiplication Rule|multiplication rule]] simplifies to $P(A)\\,P(B)$ exactly when $A$ and $B$ are [[Independent Events|independent]]."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "The probability of the complement of an event equals one minus the probability of the event (e.g., P(at least one claim) = 1 − P(no claim)).",
+     "concept": "Complement Rule",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Probability Rules",
+       "quote": "$$P(A^c) = 1 - P(A)$$"
+      },
+      {
+       "page": "Probability Rules",
+       "quote": "P(\\text{at least one}) &= 1 - P(\\text{no claims})"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "The difference of two independent normal random variables is normal, with mean equal to the difference of the means and variance equal to the sum of the variances.",
+     "concept": "Normal Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Normal Distribution",
+       "quote": "Any **linear combination of independent normals is exactly normal**: if $X_i \\sim N(\\mu_i, \\sigma_i^2)$ independently, then $\\sum c_i X_i \\sim N\\!\\left(\\sum c_i\\mu_i,\\ \\sum c_i^2\\sigma_i^2\\right)$."
+      },
+      {
+       "page": "Normal Distribution",
+       "quote": "Recast the comparison as a single normal variable $D = X - Y$. Means subtract; **variances add**, even for a difference:"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "procedure",
+     "statement": "To compute a normal probability, standardize the variable by subtracting the mean and dividing by the standard deviation, then evaluate using the standard normal table.",
+     "concept": "Normal Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Normal Distribution",
+       "quote": "Its CDF has no closed form and is evaluated via the standard normal $Z = (X - \\mu)/\\sigma \\sim N(0,1)$ using $\\Phi$ tables"
+      },
+      {
+       "page": "Normal Distribution",
+       "quote": "Standardize: $\\sigma = \\sqrt{40{,}000{,}000} \\approx 6{,}324.6$."
+      }
+     ]
+    },
+    {
+     "id": "r6",
+     "kind": "fact",
+     "statement": "For a standard normal variable Z, the upper tail probability P(Z > z) equals 1 − Φ(z).",
+     "concept": "Normal Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Normal Distribution",
+       "quote": "$$P(S > 55{,}000) = P(Z > 0.791) = 1 - \\Phi(0.791) \\approx 1 - 0.7855 = 0.2145$$"
+      }
+     ]
+    }
+   ]
+  },
+  "p-041": {
+   "path": "questions/exam-p/p-041.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:b10e27e772f54987d7a86dfc038ac8ccf866af0f4d3182671e691fae3a02f817",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "procedure",
+     "statement": "Define a Bernoulli trial's success and failure to match the event of interest, and compute the complementary probability for a month with no event as one minus the probability of at least one event.",
+     "concept": "Bernoulli Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Discrete Univariate Distributions",
+       "quote": "For \"at least one\", reach for the complement $1 - P(X=0)$ rather than summing the tail."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "The event that at least r successes occur before the s-th failure in independent trials is equivalent to having at least r successes in the first r+s-1 trials.",
+     "concept": "Negative Binomial Distribution",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r3",
+     "kind": "definition",
+     "statement": "The number of successes in n independent trials, each with success probability p, follows a Binomial(n, p) distribution.",
+     "concept": "Binomial Distribution",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Binomial Distribution",
+       "quote": "The **Binomial Distribution** $X \\sim \\text{Bin}(n, p)$ models the number of successes in $n$ independent Bernoulli trials, each with probability of success $p$."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "For X ~ Binomial(n, p), P(X = k) = C(n,k) p^k (1-p)^(n-k), and a tail probability P(X ≥ k) is found by summing these terms over the relevant values.",
+     "concept": "Binomial Distribution",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Binomial Distribution",
+       "quote": "$$P(X = k) = \\binom{n}{k} p^k (1-p)^{n-k}$$"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "definition",
+     "statement": "The negative binomial distribution counts the number of failures (or successes) occurring before the r-th success (or failure) in independent Bernoulli trials, and probabilities of the form P(K ≥ k) can be computed as 1 − P(K < k).",
+     "concept": "Negative Binomial Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Negative Binomial Distribution",
+       "quote": "The alternative counts *failures before the $r$-th success*, $Y = X - r \\in \\{0,1,2,\\ldots\\}$, with $P(Y=k) = \\binom{k+r-1}{k}p^r(1-p)^k$ and $E[Y] = r(1-p)/p$."
+      }
+     ]
+    }
+   ]
+  },
+  "p-042": {
+   "path": "questions/exam-p/p-042.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:250577375f3d9928e65ef7d4ddc714447d328d6ab3c667716a819090a9c1d8f0",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "The expected value of a function g(X) of a discrete random variable is the sum over all values k of g(k) times P[X=k].",
+     "concept": "Expected Value of a Discrete Random Variable",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Discrete Random Variable",
+       "quote": "Expectations are sums: $E[g(X)] = \\sum_x g(x)\\,p(x)$."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "For a piecewise payment schedule (a rate up to a threshold and a different rate beyond it), compute the payment for each outcome by applying each rate to its portion of the outcome, then treat the payment as a function of the random variable.",
+     "concept": "Insurance Payment Functions (Benefit Schedules)",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Uniform Discrete",
+       "quote": "Each outcome has probability $1/10$. Losses of 1 through 4 pay nothing; losses of 5 through 10 pay $1, 2, \\ldots, 6$:"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "definition",
+     "statement": "A probability function (probability mass function) of a discrete random variable gives P[X=k] for each possible value k, and these probabilities are evaluated by substituting k into the given formula.",
+     "concept": "Probability Mass Function",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Uniform Discrete",
+       "quote": "$$P(X = k) = \\frac{1}{n}, \\quad k = 1, 2, \\ldots, n$$"
+      },
+      {
+       "page": "Probability Mass Function (PMF)",
+       "quote": "A **Probability Mass Function (PMF)** gives the probability that a discrete [[Random Variable]] $X$ equals a specific value $x$."
+      }
+     ]
+    }
+   ]
+  },
+  "p-043": {
+   "path": "questions/exam-p/p-043.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:85a3289e8b694b530e794700012641bc6970a0ffb9ab01d8f10ae991548f3207",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "The expected value of a continuous random variable X with density f is E[X] = the integral of x f(x) dx over the support of X.",
+     "concept": "Expected Value of a Continuous Random Variable",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Expected Value",
+       "quote": "\\int_{-\\infty}^{\\infty} x\\, f(x)\\, dx & \\text{(continuous)}"
+      },
+      {
+       "page": "Moment",
+       "quote": "\\mu_n' = E[X^n] = \\int_{-\\infty}^{\\infty} x^n f(x)\\,dx"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "When the density involves an absolute value, split the integral at the point where the expression inside the absolute value changes sign and replace |x| with -x for x<0 and x for x>0 on the respective pieces.",
+     "concept": "Piecewise Density Functions",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "p-044": {
+   "path": "questions/exam-p/p-044.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:c84ed493c9198f6cd05e176a7579abe67ca7499d238e3fefee00d5608bcc2c4b",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "An exponential random variable with mean θ has density f(t) = (1/θ)e^{-t/θ} for t > 0, and survival function S(t) = e^{-t/θ}.",
+     "concept": "Exponential Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Exponential Distribution",
+       "quote": "$$f(x) = \\frac{1}{\\theta}\\,e^{-x/\\theta}, \\quad x > 0$$"
+      },
+      {
+       "page": "Exponential Distribution",
+       "quote": "Work from the survival function $S(x) = e^{-x/\\theta}$ rather than the CDF; almost every exponential question is a tail probability"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "To find the expectation of a function g(T) of a continuous random variable, integrate g(t) times the density over the support; for a piecewise function such as max(T, c), split the integral at the breakpoint c and use the corresponding form of g on each piece.",
+     "concept": "Expected Value of a Function of a Random Variable",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Transformations of Random Variables",
+       "quote": "If $E[g(X)]$ is all that is wanted, do **not** find $f_Y$ — use $E[g(X)] = \\int g(x) f_X(x)\\,dx$ directly."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "definition",
+     "statement": "max(T, c) equals the constant c when T < c and equals T when T ≥ c, so it is a floor of c applied to T.",
+     "concept": "Maximum of Random Variables",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Deductible",
+       "quote": "If the loss $X$ is less than or equal to the deductible $d$, the insurer pays nothing; above $d$ it pays the excess $X - d$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "The exponential distribution is memoryless: given T > c, the excess T − c is exponential with the same mean, so E[T | T > c] = c + θ.",
+     "concept": "Exponential Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Exponential Distribution",
+       "quote": "A direct consequence: given $X > d$, the excess $X - d$ is again $\\text{Exp}(\\theta)$. So $E[X \\mid X > d] = d + \\theta$"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "procedure",
+     "statement": "Condition on whether T falls below or above a threshold (law of total expectation): E[X] = E[X | T<c]P(T<c) + E[X | T≥c]P(T≥c), where P(T ≥ c) = e^{-c/θ} for an exponential.",
+     "concept": "Law of Total Expectation",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Mixture Distribution",
+       "quote": "Any quantity that is *linear* in the density — a probability, a mean, a second moment — can be found by computing it within each subpopulation and averaging."
+      },
+      {
+       "page": "Variance for Conditional and Marginal Distributions",
+       "quote": "$$E[X] = E\\bigl[E[X \\mid Y]\\bigr]$$"
+      }
+     ]
+    }
+   ]
+  },
+  "p-045": {
+   "path": "questions/exam-p/p-045.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:cdc3ebbd54928125cf3739e36ce084bff1030beb0f3d123d2942fa4b69980110",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "An exponential distribution with mean θ has rate λ = 1/θ and density f(t) = (1/θ)e^{-t/θ} for t ≥ 0.",
+     "concept": "Exponential Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Exponential Distribution",
+       "quote": "$$f(x) = \\frac{1}{\\theta}\\,e^{-x/\\theta}, \\quad x > 0$$"
+      },
+      {
+       "page": "Exponential Distribution",
+       "quote": "Some texts parameterize by **rate** $\\lambda = 1/\\theta$, so $f(x) = \\lambda e^{-\\lambda x}$ and $E[X] = 1/\\lambda$."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "For an exponential distribution with mean θ, P(a < T < b) = e^{-a/θ} − e^{-b/θ}, equal to the integral of the density from a to b.",
+     "concept": "Exponential Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Continuous Univariate Distributions",
+       "quote": "$$P(a \\leq X \\leq b) = \\int_a^b f(x)\\, dx$$"
+      },
+      {
+       "page": "Exponential Distribution",
+       "quote": "$E[X] = \\theta$, $\\text{Var}(X) = \\theta^2$, and $F(x) = 1 - e^{-x/\\theta}$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The expected value of a payment that depends on the outcome of a continuous random variable is the integral of the payment function times the density, which can be split over the intervals where the payment is constant.",
+     "concept": "Expected Value of a Function of a Random Variable",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Transformations of Random Variables",
+       "quote": "If $E[g(X)]$ is all that is wanted, do **not** find $f_Y$ — use $E[g(X)] = \\int g(x) f_X(x)\\,dx$ directly."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "To find a benefit amount giving a target expected payment, write the expected payment as the benefit amount times a sum of payment-fraction-weighted interval probabilities, set it equal to the target, and solve for the amount.",
+     "concept": "Expected Value of a Function of a Random Variable",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "p-046": {
+   "path": "questions/exam-p/p-046.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:a526b9e19716dc9809e74042f519b936ffc1b64e8152fb4c9051f380ee913b90",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "The expected value of a discrete random variable is the sum of each possible value multiplied by its probability.",
+     "concept": "Expected Value of a Discrete Random Variable",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Expected Value",
+       "quote": "$$E[X] = \\begin{cases} \\displaystyle\\sum_{k} k\\, f(k) & \\text{(discrete)} \\\\[6pt] \\displaystyle\\int_{-\\infty}^{\\infty} x\\, f(x)\\, dx & \\text{(continuous)} \\end{cases}$$"
+      },
+      {
+       "page": "Discrete Random Variable",
+       "quote": "Expectations are sums: $E[g(X)] = \\sum_x g(x)\\,p(x)$."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "The probability that failure occurs in year k, given a constant conditional failure probability each year, equals the probability of surviving the first k-1 years times the probability of failing in year k, i.e. (1-q)^(k-1)·q.",
+     "concept": "Geometric Distribution",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Geometric Distribution",
+       "quote": "$$P(X = k) = (1-p)^{k-1}p, \\quad k = 1, 2, 3, \\ldots$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "The probability of surviving several consecutive years is the product of the yearly conditional survival probabilities, because each year's failure probability is conditional on having survived to its start.",
+     "concept": "Multiplication Rule for Conditional Probability",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Probability Multiplication Rule",
+       "quote": "For a chain of events, the rule extends to $P(A_1 \\cap A_2 \\cap \\cdots \\cap A_n) = P(A_1)\\,P(A_2 \\mid A_1)\\,P(A_3 \\mid A_1 \\cap A_2) \\cdots$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "Model a benefit that depends on the year of failure as a random variable by assigning each failure year its benefit amount, with benefit 0 once the schedule has run out, and compute its expectation over the failure years.",
+     "concept": "Expected Value of a Function of a Random Variable",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Uniform Discrete",
+       "quote": "Losses of 1 through 4 pay nothing; losses of 5 through 10 pay $1, 2, \\ldots, 6$:"
+      }
+     ]
+    }
+   ]
+  },
+  "p-047": {
+   "path": "questions/exam-p/p-047.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:957e1f99b3f84fe5af26288653dcdd7eb135780bf8d5b8d8c7c90e987f75f1ff",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "A Poisson random variable with parameter lambda has mean lambda.",
+     "concept": "Poisson Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Poisson Distribution",
+       "quote": "A defining property is $E[X] = \\text{Var}(X) = \\lambda$ — the mean and variance are equal"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The Poisson probability mass function is P(N=n) = lambda^n e^{-lambda} / n! for n = 0, 1, 2, ...; in particular P(N=0) = e^{-lambda}.",
+     "concept": "Poisson Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Poisson Distribution",
+       "quote": "$$P(X = k) = \\frac{e^{-\\lambda}\\lambda^k}{k!}$$"
+      },
+      {
+       "page": "Poisson Distribution",
+       "quote": "$$P(X = 0) = \\frac{e^{-3} \\cdot 3^0}{0!} = e^{-3} \\approx 0.0498$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "Model a payment that is zero for the first event and a fixed amount per event thereafter as a function of the count N: payment = amount × (N−1) when N ≥ 1 and 0 when N = 0, i.e. amount × max(N−1, 0).",
+     "concept": "Expected Value of a Function of a Random Variable",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "The expected value of a function g(N) of a discrete random variable is the sum over n of g(n) P(N=n); expectation is linear, so E[N−1] = E[N] − 1.",
+     "concept": "Expected Value of a Function of a Random Variable",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Expected Value",
+       "quote": "It is linear: $E[aX + b] = aE[X] + b$"
+      },
+      {
+       "page": "Expected Value",
+       "quote": "$$E[X] = \\begin{cases} \\displaystyle\\sum_{k} k\\, f(k) & \\text{(discrete)} \\\\[6pt] \\displaystyle\\int_{-\\infty}^{\\infty} x\\, f(x)\\, dx & \\text{(continuous)} \\end{cases}$$"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "procedure",
+     "statement": "To compute E[max(N−1,0)], extend the sum of (n−1)P(N=n) to include n=0 (equal to E[N−1]) and correct by adding back P(N=0), since E[max(N−1,0)] = E[N] − 1 + P(N=0).",
+     "concept": "Expected Value of a Function of a Random Variable",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "p-048": {
+   "path": "questions/exam-p/p-048.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:219bf82289755af1f9612f48c58471af25afaf3408366fd28214de6d1688bbca",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "With a deductible d, the part of a loss not paid by the insurer is min(X, d), so its mean is the limited expected value E[X ∧ d].",
+     "concept": "Limited Expected Value",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Limited Expected Value",
+       "quote": "It equals the expected value of $\\min(X, u)$."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "For a continuous random variable, E[X ∧ d] = ∫ from lower support to d of x f(x) dx + d·P(X > d), which equals ∫_0^d S(x) dx for a nonnegative X.",
+     "concept": "Limited Expected Value",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Limited Expected Value",
+       "quote": "$$E[X \\wedge u] = \\int_0^u [1 - F(x)]\\,dx \\quad \\text{(for non-negative } X\\text{)}$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "definition",
+     "statement": "The expected value of a continuous random variable with density f is E[X] = ∫ x f(x) dx, and more generally E[g(X)] = ∫ g(x) f(x) dx over the support.",
+     "concept": "Expected Value of a Continuous Random Variable",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Expected Value",
+       "quote": "\\displaystyle\\int_{-\\infty}^{\\infty} x\\, f(x)\\, dx & \\text{(continuous)}"
+      },
+      {
+       "page": "Continuous Random Variable",
+       "quote": "Expectations replace sums with integrals: $E[g(X)] = \\int g(x)\\,f(x)\\,dx$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "For a continuous random variable, P(X > d) is the integral of the density from d to infinity, and the density integrates to 1 over its support.",
+     "concept": "Probability Density Function",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Continuous Random Variable",
+       "quote": "A valid density has $f(x) \\ge 0$ and $\\int_{-\\infty}^{\\infty} f(x)\\,dx = 1$."
+      },
+      {
+       "page": "Probability Density Function (PDF)",
+       "quote": "$$P(a \\leq X \\leq b) = \\int_a^b f(x)\\, dx$$"
+      }
+     ]
+    }
+   ]
+  },
+  "p-049": {
+   "path": "questions/exam-p/p-049.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:82f14f28cb1ab596c7137b50cb1d4a932a70938d8a7dd304733942e0b0123b98",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "The probabilities of all possible outcomes of a discrete probability mass function sum to 1, which can be used to solve for an unknown normalizing constant.",
+     "concept": "Probability Mass Function",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Discrete Univariate Distributions",
+       "quote": "The PMF must satisfy $f(k) \\geq 0$ for all $k$ and $\\sum_{k} f(k) = 1$:"
+      },
+      {
+       "page": "Discrete Univariate Distributions",
+       "quote": "For $f$ to be a valid PMF we need $\\sum_{k=1}^{4} c \\cdot k = 1$, so"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "definition",
+     "statement": "With an ordinary deductible d, the insurer's payment on a loss X is max(0, X - d), i.e., zero if the loss is at or below the deductible and the excess over d otherwise.",
+     "concept": "Deductible",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Deductible",
+       "quote": "If the loss $X$ is less than or equal to the deductible $d$, the insurer pays nothing; above $d$ it pays the excess $X - d$"
+      },
+      {
+       "page": "Deductible",
+       "quote": "$$= \\max(X - d,\\ 0)$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The expected value of a function g of a discrete random variable N is E[g(N)] = sum over n of g(n) P(N=n).",
+     "concept": "Expected Value of a Discrete Random Variable",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Discrete Random Variable",
+       "quote": "Expectations are sums: $E[g(X)] = \\sum_x g(x)\\,p(x)$."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "When a loss occurs only with some probability and its severity has a conditional distribution given a loss, the unconditional expected payment equals the loss probability times the conditional expected payment given a loss (conditioning on whether a loss occurs).",
+     "concept": "Law of Total Expectation",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "p-050": {
+   "path": "questions/exam-p/p-050.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:255c224dc530589be09329fac0a498489b4f3716b6fde64290f8b6c46cec00e7",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "A policy with a benefit limit pays the loss when it is at or below the limit and pays the limit when the loss exceeds it, so the benefit equals min(Y, limit).",
+     "concept": "Policy Limit (Limited Loss Variable)",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Policy Limit",
+       "quote": "the insurer pays the whole loss $X$ when it is below $u$ and pays $u$ when it is not, so the payment is the limited loss variable $X \\wedge u$"
+      },
+      {
+       "page": "Limited Expected Value",
+       "quote": "It equals the expected value of $\\min(X, u)$."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The expected value of a limited loss variable is E[X∧u] = ∫_0^u y f(y) dy + u·P(Y>u), equivalently ∫_0^u S(y) dy.",
+     "concept": "Limited Expected Value",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Policy Limit",
+       "quote": "$$E[X \\wedge u] = \\int_0^u S(x)\\,dx$$"
+      },
+      {
+       "page": "Limited Expected Value",
+       "quote": "$$E[X \\wedge u] = \\int_0^u [1 - F(x)]\\,dx \\quad \\text{(for non-negative } X\\text{)}$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The expected value of a function g(Y) of a continuous random variable with density f is E[g(Y)] = ∫ g(y) f(y) dy over the support.",
+     "concept": "Expected Value of a Continuous Random Variable",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Transformations of Random Variables",
+       "quote": "use $E[g(X)] = \\int g(x) f_X(x)\\,dx$ directly."
+      },
+      {
+       "page": "Continuous Random Variable",
+       "quote": "Expectations replace sums with integrals: $E[g(X)] = \\int g(x)\\,f(x)\\,dx$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "Find the probability that a continuous loss exceeds a value t by integrating the density from t to infinity, P(Y>t) = ∫_t^∞ f(y) dy.",
+     "concept": "Survival Function",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Beta",
+       "quote": "P(X > 0.8) &= \\int_{0.8}^{1} 12\\left(x^2 - x^3\\right) dx"
+      },
+      {
+       "page": "Continuous Random Variable",
+       "quote": "P(X > 4) &= \\int_4^{10} 0.02(10 - x)\\,dx"
+      }
+     ]
+    }
+   ]
+  },
+  "p-051": {
+   "path": "questions/exam-p/p-051.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:36a941d7601e38eb39c7db88969756b381242f03c8518d2c3f806767c67743a5",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "With an ordinary deductible d, the insurer's payment on a loss X is max(0, X - d), i.e., zero if X is below d and X - d otherwise.",
+     "concept": "Deductibles (Ordinary Deductible)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Deductible",
+       "quote": "If the loss $X$ is less than or equal to the deductible $d$, the insurer pays nothing; above $d$ it pays the excess $X - d$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "Compute the expected payment by conditioning on mutually exclusive scenarios (no damage, partial damage, total loss): weight each scenario's expected payment by its probability, with the no-damage probability found as the complement of the others.",
+     "concept": "Law of Total Expectation",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "The Law of Total Probability",
+       "quote": "then the probability of any event $B$ can be expressed as a weighted average of its conditional probabilities given each $A_i$."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The expected value of a function g(X) of a continuous random variable with density f is E[g(X)] = ∫ g(x) f(x) dx over the support; so an expected payment with deductible d is ∫_d^upper (x - d) f(x) dx.",
+     "concept": "Expected Value of a Continuous Random Variable",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Continuous Random Variable",
+       "quote": "Expectations replace sums with integrals: $E[g(X)] = \\int g(x)\\,f(x)\\,dx$"
+      },
+      {
+       "page": "Continuous Random Variable",
+       "quote": "E[Y] &= \\int_{200}^{1{,}000} (x - 200)\\,\\frac{1}{1{,}000}\\,dx"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "A total loss of a vehicle means the damage equals the vehicle's full value, so the payment is the value minus the deductible.",
+     "concept": "Deductibles (Ordinary Deductible)",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r5",
+     "kind": "procedure",
+     "statement": "Integrate a polynomial times an exponential, such as ∫(x - d)e^{-x/2}dx, using integration by parts (or the antiderivative of e^{-ax}) over the given limits.",
+     "concept": "Integration by Parts",
+     "status": "prerequisite",
+     "places": [
+      {
+       "page": "Calculus",
+       "quote": "| Integration by Parts | Product of functions | $\\int u\\,dv = uv - \\int v\\,du$ |"
+      },
+      {
+       "page": "Calculus",
+       "quote": "E[X] = \\int_0^\\infty x\\lambda e^{-\\lambda x}\\,dx = \\left[-xe^{-\\lambda x}\\right]_0^\\infty + \\int_0^\\infty e^{-\\lambda x}\\,dx = 0 + \\frac{1}{\\lambda} = \\frac{1}{\\lambda}"
+      }
+     ]
+    }
+   ]
+  },
+  "p-052": {
+   "path": "questions/exam-p/p-052.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:fbed0ece6f4c613f16874478cb5cd07dedac780a48164e06cd9af3294ba2efee",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "A valid probability density function must integrate to 1 over its support, so a density specified only up to proportionality is normalized by solving for the constant that makes the total integral equal 1.",
+     "concept": "Probability Density Function",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Continuous Univariate Distributions",
+       "quote": "The probability density function (PDF) $f(x)$ must satisfy $f(x) \\geq 0$ and $\\int_{-\\infty}^{\\infty} f(x)\\,dx = 1$"
+      },
+      {
+       "page": "Continuous Random Variable",
+       "quote": "The density must integrate to 1:"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The expected value of a continuous random variable X with density f is E[X] = ∫ x f(x) dx over the support of X.",
+     "concept": "Expected Value of a Continuous Random Variable",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Expected Value",
+       "quote": "\\displaystyle\\int_{-\\infty}^{\\infty} x\\, f(x)\\, dx & \\text{(continuous)}"
+      },
+      {
+       "page": "Continuous Random Variable",
+       "quote": "Expectations replace sums with integrals: $E[g(X)] = \\int g(x)\\,f(x)\\,dx$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "To integrate a function of (1+x), use a change of variables u = 1+x, which shifts the integration limits accordingly and rewrites x as u-1 so the integrand becomes a sum of power terms.",
+     "concept": "Change of Variables (u-Substitution) in Integration",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "p-053": {
+   "path": "questions/exam-p/p-053.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:464a5923949fe1591a2e512910c7c3faf5f8488d0ed2104f97a7151a549dfcc6",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "The mean of a uniform distribution on [a, b] is (a+b)/2.",
+     "concept": "Uniform Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Uniform Continuous Distribution",
+       "quote": "$E[X] = (a+b)/2$, $\\text{Var}(X) = (b-a)^2/12$, and $F(x) = (x-a)/(b-a)$ for $a < x < b$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The density of a uniform distribution on [0, c] is 1/c on that interval.",
+     "concept": "Uniform Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Uniform Continuous Distribution",
+       "quote": "$$f(x) = \\frac{1}{b - a}, \\quad a < x < b$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "definition",
+     "statement": "With an ordinary deductible d, the payment on a loss X is (X - d) if X exceeds d and 0 otherwise, i.e., (X - d)+.",
+     "concept": "Ordinary Deductible",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Deductible",
+       "quote": "If the loss $X$ is less than or equal to the deductible $d$, the insurer pays nothing; above $d$ it pays the excess $X - d$"
+      },
+      {
+       "page": "Deductible",
+       "quote": "$$Y = (X - d)_+$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "The expected payment per loss under a deductible d is E[(X-d)+] = the integral from d to infinity (upper limit of support) of (x-d) f(x) dx, equivalently the integral of the survival function from d onward.",
+     "concept": "Ordinary Deductible",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Mean Excess Loss",
+       "quote": "The cost per loss is $E[(X - d)_+] = e_X(d)\\,S_X(d)$"
+      },
+      {
+       "page": "Mean Excess Loss",
+       "quote": "$$e_X(d) = \\frac{\\int_d^{\\infty} S_X(x)\\,dx}{S_X(d)}$$"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "With no deductible (d = 0), the expected payment equals the mean of the loss, E[X].",
+     "concept": "Ordinary Deductible",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Mean Excess Loss",
+       "quote": "For a positive loss, $e_X(0) = E[X]$."
+      }
+     ]
+    }
+   ]
+  },
+  "p-054": {
+   "path": "questions/exam-p/p-054.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:ad811f13f9f59969443bcbf9bdf74e8eb0f6562a9d70694f90150cafb35d2058",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "The cumulative distribution function F(x) = P(X ≤ x) is obtained by integrating the density function from the lower end of the support up to x.",
+     "concept": "Cumulative Distribution Function",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Continuous Univariate Distributions",
+       "quote": "The CDF and the density are two views of the same object: $F(x) = \\int_{-\\infty}^{x} f(t)\\,dt$ and $f(x) = F'(x)$."
+      },
+      {
+       "page": "Cumulative Distribution Function (CDF)",
+       "quote": "For a continuous random variable, $F(x) = \\int_{-\\infty}^{x} f(t)\\, dt$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "definition",
+     "statement": "The p-th percentile of a continuous random variable is the value x_p satisfying F(x_p) = p.",
+     "concept": "Percentile of a Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Percentile",
+       "quote": "When $F$ is continuous and strictly increasing, it is the value that solves $F(x_p) = p$, found by inverting the CDF."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "To find a percentile, set the CDF equal to p and solve for x, giving a closed-form percentile function that can be evaluated at each required p.",
+     "concept": "Percentile of a Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Percentile",
+       "quote": "Set $F(x_{0.90}) = 0.90$ and solve:"
+      },
+      {
+       "page": "Median",
+       "quote": "Integrate for the CDF, then set it to one half:"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "A density of the form αθ^α / x^(α+1) for x > θ is a Pareto (single-parameter) density with CDF F(x) = 1 − (θ/x)^α, whose p-th percentile is θ(1−p)^(−1/α).",
+     "concept": "Single-Parameter Pareto Distribution",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Single-Parameter Pareto Distribution",
+       "quote": "$$f(x) = \\frac{\\alpha\\,\\theta^{\\alpha}}{x^{\\alpha + 1}}, \\quad x > \\theta$$"
+      },
+      {
+       "page": "Single-Parameter Pareto Distribution",
+       "quote": "$$F(x) = 1 - \\left(\\frac{\\theta}{x}\\right)^{\\alpha}, \\quad x > \\theta$$"
+      }
+     ]
+    }
+   ]
+  },
+  "p-055": {
+   "path": "questions/exam-p/p-055.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:1b8fd6cdcebb743773c197136e0018cbb34c711ae138357391bc339f28989235",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "procedure",
+     "statement": "A percentage increase of p applied to every cost is modeled as multiplying the random variable by the factor (1 + p), i.e., Y = (1 + p)X.",
+     "concept": "Linear Transformation of a Random Variable",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "For a constant a and random variable X, Var(aX) = a^2 Var(X), so the variance scales by the square of the multiplying factor.",
+     "concept": "Variance",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Variance and Standard Deviation",
+       "quote": "$\\text{Var}(aX + b) = a^2\\,\\text{Var}(X)$ and $\\text{SD}(aX + b) = |a|\\,\\text{SD}(X)$ — a shift $b$ moves the distribution without changing its spread."
+      },
+      {
+       "page": "Variance",
+       "quote": "$\\text{Var}(aX + b) = a^2 \\text{Var}(X)$ — scaling changes variance, shifts do not"
+      }
+     ]
+    }
+   ]
+  },
+  "p-056": {
+   "path": "questions/exam-p/p-056.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:1ad9bc887d549a2be9ca095a020896fbd7e39692e9e09d0b71d54748d34da060",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "A jump in the CDF at a point (F(x) greater than its left-hand limit) indicates a point mass there, with probability equal to the size of the jump.",
+     "concept": "Mixed Distributions",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Mixture Distribution",
+       "quote": "The CDF jumps by 0.6 at zero and rises continuously after it — neither a discrete nor a continuous distribution."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "On the continuous portion of a distribution, the density function is the derivative of the CDF.",
+     "concept": "Cumulative Distribution Function",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Continuous Random Variable",
+       "quote": "$$f(x) = F'(x)$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "For a mixed distribution, E[g(X)] equals the sum of g(x) times the point-mass probability at each mass point plus the integral of g(x) f(x) over the continuous portion.",
+     "concept": "Mixed Distributions",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Mixture Distribution",
+       "quote": "Its moments combine a sum over the mass points with an integral over the continuous part."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "Variance equals the second moment minus the square of the mean: Var(X) = E[X^2] - (E[X])^2.",
+     "concept": "Variance",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Variance and Standard Deviation",
+       "quote": "The second form $E[X^2] - \\mu^2$ is the one to use in practice — it needs only two moments and avoids expanding a square."
+      },
+      {
+       "page": "Variance",
+       "quote": "$$\\text{Var}(X) = E[X^2] - (E[X])^2 = 310{,}000 - 500^2 = 310{,}000 - 250{,}000 = 60{,}000$$"
+      }
+     ]
+    }
+   ]
+  },
+  "p-059": {
+   "path": "questions/exam-p/p-059.md",
+   "run": "answerability-20261025-p",
+   "input_hash": "sha256:29d0f27ebe0aedcb8e4d06b6a2f0df4565334a06b601f91a47166e402bc32038",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "procedure",
+     "statement": "With a deductible d, the insurance payment for a loss X is Y = max(0, X - d), which is zero when the loss is below the deductible and X - d otherwise.",
+     "concept": "Deductibles",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Deductible",
+       "quote": "If the loss $X$ is less than or equal to the deductible $d$, the insurer pays nothing; above $d$ it pays the excess $X - d$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The density of a uniform random variable on (a, b) is 1/(b-a) on that interval and 0 elsewhere.",
+     "concept": "Uniform Distribution",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Uniform Continuous Distribution",
+       "quote": "$$f(x) = \\frac{1}{b - a}, \\quad a < x < b$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The expected value of a function g(X) of a continuous random variable is E[g(X)] = ∫ g(x) f(x) dx, integrated over the support of X, and for a payment function that is zero below the deductible the integral is taken only over the region where the payment is positive.",
+     "concept": "Expected Value of a Function of a Random Variable",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Continuous Random Variable",
+       "quote": "Expectations replace sums with integrals: $E[g(X)] = \\int g(x)\\,f(x)\\,dx$"
+      },
+      {
+       "page": "Continuous Random Variable",
+       "quote": "E[Y] &= \\int_{200}^{1{,}000} (x - 200)\\,\\frac{1}{1{,}000}\\,dx"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "The variance of a random variable is Var(Y) = E[Y^2] - (E[Y])^2, and the standard deviation is the square root of the variance.",
+     "concept": "Variance and Standard Deviation",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Variance and Standard Deviation",
+       "quote": "$$\\sigma^2 = \\text{Var}(X) = E\\left[(X - \\mu)^2\\right]$$"
+      },
+      {
+       "page": "Standard Deviation",
+       "quote": "$$= \\sqrt{E[X^2] - (E[X])^2}$$"
+      }
+     ]
+    }
+   ]
+  }
+ }
+}

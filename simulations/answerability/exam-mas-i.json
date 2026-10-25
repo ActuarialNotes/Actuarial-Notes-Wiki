@@ -1,0 +1,3854 @@
+{
+ "version": 1,
+ "exam": "Exam MAS-I (CAS)",
+ "bank": "exam-mas-i",
+ "questions": {
+  "masi-2018f-q1": {
+   "path": "questions/exam-mas-i/masi-2018f-001.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:5e36071586fa65180490a000d081cffb5be937fbe387ce46cdc392c8a5ad6c31",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "A Poisson process has independent increments: counts over non-overlapping time intervals are independent random variables.",
+     "concept": "Poisson Process",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Poisson Process",
+       "quote": "The number of events in non-overlapping intervals are **independent**"
+      },
+      {
+       "page": "Counting Process",
+       "quote": "**Independent increments**: counts in disjoint intervals are independent."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "In a Poisson process with rate lambda, the number of events in an interval of length t is Poisson distributed with mean lambda*t (stationary increments).",
+     "concept": "Poisson Process",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Poisson Process",
+       "quote": "The number of events in any interval of length $t$ has distribution $\\text{Poi}(\\lambda t)$"
+      },
+      {
+       "page": "Stochastic Processes",
+       "quote": "For a Poisson counting process the increments are independent and stationary, giving $N(t) - N(s) \\sim \\text{Poi}(\\lambda(t-s))$ for $s < t$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "To find the expected product of counts at two times s<t, write N(t) = N(s) + [N(t)-N(s)] so the product splits into a second moment of N(s) plus a product of independent increments' expectations.",
+     "concept": "Poisson Process",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "For a Poisson random variable, the mean and variance both equal the parameter.",
+     "concept": "Poisson Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Poisson Distribution",
+       "quote": "A defining property is $E[X] = \\text{Var}(X) = \\lambda$ — the mean and variance are equal"
+      },
+      {
+       "page": "Poisson Process",
+       "quote": "$$E[N(t)] = \\text{Var}(N(t)) = \\lambda t$$"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "formula",
+     "statement": "The second moment of a random variable equals its variance plus the square of its mean: E[X^2] = Var(X) + (E[X])^2.",
+     "concept": "Variance",
+     "status": "prerequisite",
+     "places": [
+      {
+       "page": "Variance",
+       "quote": "Efficient computation formula: $\\text{Var}(X) = E[X^2] - \\mu^2$ where $\\mu = E[X]$"
+      },
+      {
+       "page": "Variance",
+       "quote": "$$\\text{Var}(X) = E[X^2] - (E[X])^2 = 310{,}000 - 500^2 = 310{,}000 - 250{,}000 = 60{,}000$$"
+      }
+     ]
+    },
+    {
+     "id": "r6",
+     "kind": "fact",
+     "statement": "If X and Y are independent, then E[XY] = E[X]E[Y].",
+     "concept": "Independence of Random Variables",
+     "status": "prerequisite",
+     "places": [
+      {
+       "page": "Independent Random Variables",
+       "quote": "For independent random variables: $E[XY] = E[X]\\,E[Y]$ and $\\text{Var}(X + Y) = \\text{Var}(X) + \\text{Var}(Y)$"
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018f-q10": {
+   "path": "questions/exam-mas-i/masi-2018f-010.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:7e39d5ab3fde112f24c259c453b5f543814a829b605f8b294149926fd9076314",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "The gambler's ruin problem models a gambler whose wealth moves as a simple random walk with steps of +1 (probability p) or -1 (probability 1-p), stopping at absorbing barriers at 0 (ruin) and N (target).",
+     "concept": "Gambler's Ruin",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Gambler's Ruin Problem",
+       "quote": "On each independent play the gambler wins one unit with probability $p$ and loses one with probability $q = 1 - p$; starting with $i$ units and stopping at $0$ or $N$, the fortune is a [[Markov Chain]] with absorbing states $0$ and $N$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "A random walk has the Markov property and stationary, independent increments, so the probability of future outcomes depends only on the current wealth; past flips matter only through the current position and the process restarts from that position.",
+     "concept": "Markov Chain",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Gambler's Ruin Problem",
+       "quote": "Play already completed matters only through the current fortune."
+      },
+      {
+       "page": "Markov Chain",
+       "quote": "the next state depends on the past only through the current state"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "To condition on early results, compute the current wealth as the starting wealth plus the number of wins minus the number of losses, and use it as the new starting state for the ruin probability.",
+     "concept": "Gambler's Ruin",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Gambler's Ruin Problem",
+       "quote": "By the Markov property only the current fortune matters: $20 + 7 - 3 = 24$ chips."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "For a fair game (p = 0.5) with absorbing barriers at 0 and N, the probability of reaching 0 before N starting from i is (N - i)/N.",
+     "concept": "Gambler's Ruin",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Gambler's Ruin Problem",
+       "quote": "\\dfrac{i}{N} & p = \\tfrac12"
+      },
+      {
+       "page": "Gambler's Ruin Problem",
+       "quote": "The coin is fair, so $P_i = i/N$ and"
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018f-q11": {
+   "path": "questions/exam-mas-i/masi-2018f-011.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:d4d202bff25b4a0e5efee85a4a8401b07464a0ac82a170cd16eb71f17bc2e7db",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "A branching (Galton–Watson) process models a population in which each individual lives one generation and independently produces a random number of offspring from a fixed offspring distribution, with the next generation being the total offspring of the current generation.",
+     "concept": "Branching Process",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Branching Process",
+       "quote": "A **Branching Process** (Galton–Watson process) models a population in which each individual, by the end of its life, independently produces $j$ offspring with probability $P_j$."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "definition",
+     "statement": "The ultimate extinction probability of a branching process is the probability that the population eventually reaches zero, commonly denoted pi_0.",
+     "concept": "Branching Process",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Branching Process",
+       "quote": "**Extinction probability.** $\\pi_0$ is the probability that the population eventually dies out."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "definition",
+     "statement": "Gambler's ruin is a random walk in which a gambler's fortune moves up or down by 1 each play with fixed probabilities and stops upon reaching 0 or a target value.",
+     "concept": "Gambler's Ruin",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Gambler's Ruin Problem",
+       "quote": "On each independent play the gambler wins one unit with probability $p$ and loses one with probability $q = 1 - p$; starting with $i$ units and stopping at $0$ or $N$, the fortune is a [[Markov Chain]] with absorbing states $0$ and $N$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "definition",
+     "statement": "A periodic Markov chain is one in which return to a state is possible only at multiples of some period d greater than 1; a time-reversible Markov chain satisfies detailed balance, pi_i P_ij = pi_j P_ji.",
+     "concept": "Markov Chain Classification",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Recurrent and Transient States",
+       "quote": "State $i$ has period $d$ if $P^n_{ii} = 0$ whenever $n$ is not a multiple of $d$, and $d$ is the largest integer with that property"
+      },
+      {
+       "page": "Time-Reversible Markov Chain",
+       "quote": "$$\\pi_i P_{ij} = \\pi_j P_{ji} \\quad \\text{for all } i, j$$"
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018f-q12": {
+   "path": "questions/exam-mas-i/masi-2018f-012.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:54d9577f28e6b62f370e38e1759bc2f63756fdaa9762018175c589f7d070c49f",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "procedure",
+     "statement": "Model a warranty or contingent benefit as a multi-year survival model, where the claim is the failure event and the failure probability in a year is q_t = 1 - p_t, the complement of the conditional survival probability.",
+     "concept": "Survival Models",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Survival Model",
+       "quote": "$_{t}p_x = \\dfrac{S(x+t)}{S(x)}$ and $_{t}q_x = 1 - {_t}p_x$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The probability of surviving through t years is the product of the one-year conditional survival probabilities, tp0 = p_0 · p_1 · ... · p_{t-1}.",
+     "concept": "Survival Function",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Life Table",
+       "quote": "Survival probabilities **multiply** across periods: $_{s+t}p_x = {}_{s}p_x \\cdot {}_{t}p_{x+s}$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The probability that failure occurs in year k+1 is the probability of surviving k years times the failure probability in that year, kp0 · q_k.",
+     "concept": "Deferred Mortality Probability",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Life Table",
+       "quote": "$_{t|}q_x = {}_{t}p_x \\cdot q_{x+t}$ is the probability of dying in the year *after* surviving $t$ years (a deferred death probability)"
+      },
+      {
+       "page": "Whole Life Insurance",
+       "quote": "a death in year $k+1$ (survive $k$ years, probability ${_k}p_x$, then die, $q_{x+k}$) is paid at time $k+1$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "The actuarial present value of a benefit is the sum over payment times of the benefit amount times the discount factor v^t = (1+i)^(-t) times the probability of payment.",
+     "concept": "Actuarial Present Value",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Present Value",
+       "quote": "For multiple cash flows $C_t$ at various times $t$, the total present value is $\\displaystyle PV = \\sum_t C_t\\, v^t$."
+      },
+      {
+       "page": "Whole Life Insurance",
+       "quote": "$$A_x = \\sum_{k=0}^{\\infty} v^{k+1}\\,{_k}p_x\\,q_{x+k}$$"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "procedure",
+     "statement": "For a policy with a benefit paid at the end of the year of failure plus a refund paid at the end of the term upon survival, compute the APV of each component separately (a term-insurance-type part and a pure-endowment-type part) and add them.",
+     "concept": "Endowment Insurance",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Endowment Insurance",
+       "quote": "$$A_{x:\\overline{n}|} = A^{1}_{x:\\overline{n}|} + {}_nE_x$$"
+      },
+      {
+       "page": "Pure Endowment",
+       "quote": "An [[Endowment Insurance|endowment insurance]] is a [[Term Life Insurance|term insurance]] plus a pure endowment, $A_{x:\\overline{n}|} = A^{1}_{x:\\overline{n}|} + {}_nE_x$."
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018f-q13": {
+   "path": "questions/exam-mas-i/masi-2018f-013.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:5ddf2e7600924a23ee3558ccfe5f0d73b3e643c20dfa91cd6f423f47546b17e3",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "For independent lives, the probability that one life survives and the other does not is the product of the first life's survival probability and the complement of the second life's survival probability.",
+     "concept": "Independent Lives Joint Survival Probabilities",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The probability that a life aged x survives n years is n_p_x = l_{x+n} / l_x, computed from the life table.",
+     "concept": "Life Table (Survival Function)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Life Table",
+       "quote": "$$_{t}p_x = \\frac{\\ell_{x+t}}{\\ell_x}, \\qquad _{t}q_x = 1 - {}_{t}p_x = \\frac{\\ell_x - \\ell_{x+t}}{\\ell_x}$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "When mortality follows a table up to some age and a constant annual rate afterward, split the survival probability into the table ratio l_{a}/l_{x} up to that age and a product of one-year survival probabilities (1-q)^t for the remaining years.",
+     "concept": "Survival Probability with Piecewise or Modified Mortality",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Life Table",
+       "quote": "$_{s+t}p_x = {}_{s}p_x \\cdot {}_{t}p_{x+s}$"
+      },
+      {
+       "page": "Life Table",
+       "quote": "a **constant force** gives $_{s}p_x = (p_x)^s$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "The probability of death within n years is the complement of the n-year survival probability: n_q_x = 1 - n_p_x.",
+     "concept": "Life Table (Survival Function)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Survival Model",
+       "quote": "$_{t}p_x = \\dfrac{S(x+t)}{S(x)}$ and $_{t}q_x = 1 - {_t}p_x$"
+      },
+      {
+       "page": "Future Lifetime Random Variable",
+       "quote": "${}_tq_x = 1 - {}_tp_x$ is the probability that $(x)$ dies within $t$ years"
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018f-q14": {
+   "path": "questions/exam-mas-i/masi-2018f-014.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:af4c4fd7bb94c3d05bc9dda373d96d90f8722bf0da9a139a0585fb7dc8513a66",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "procedure",
+     "statement": "In the inversion method, simulate a value from a continuous distribution by setting the CDF F(x) equal to a uniform(0,1) random draw u and solving for x = F^{-1}(u).",
+     "concept": "Inverse Transform Method",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Inversion Method",
+       "quote": "**Continuous case:** solve $F(x) = u$ for $x$."
+      },
+      {
+       "page": "Inversion Method",
+       "quote": "$$X = F^{-1}(U), \\quad U \\sim \\text{Unif}(0, 1)$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "definition",
+     "statement": "The cumulative distribution function F(x) of a continuous random variable is the integral of its density function from the lower bound of support up to x.",
+     "concept": "Cumulative Distribution Function",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Cumulative Distribution Function (CDF)",
+       "quote": "For a continuous random variable, $F(x) = \\int_{-\\infty}^{x} f(t)\\, dt$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "If U is uniform on (0,1) and F is a continuous CDF, then F^{-1}(U) has distribution F, which is why inversion produces valid simulated values.",
+     "concept": "Inverse Transform Method",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Inversion Method",
+       "quote": "**Why it works:** $F$ is nondecreasing, so $F^{-1}(U) \\leq x$ exactly when $U \\leq F(x)$, and a uniform falls below $F(x)$ with probability $F(x)$. Hence $P(X \\leq x) = F(x)$."
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018f-q15": {
+   "path": "questions/exam-mas-i/masi-2018f-015.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:bb325d4a74e241e71b7fa9e82c7a62385f592d54fabe46b9e2288672823e5b3a",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "The variance of a Uniform(0, θ) random variable is θ²/12.",
+     "concept": "Uniform Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Uniform Continuous Distribution",
+       "quote": "$E[X] = (a+b)/2$, $\\text{Var}(X) = (b-a)^2/12$, and $F(x) = (x-a)/(b-a)$ for $a < x < b$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "The variance of the sample mean of n independent, identically distributed observations equals the variance of a single observation divided by n.",
+     "concept": "Sample Mean",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Sample Mean",
+       "quote": "$$E[\\bar{X}] = \\mu, \\qquad \\text{Var}(\\bar{X}) = \\frac{\\sigma^2}{n}$$"
+      },
+      {
+       "page": "Linear Combinations of Random Variables",
+       "quote": "For $n$ i.i.d. variables with mean $\\mu$ and finite variance $\\sigma^2$, $\\bar{X}$ has mean $\\mu$ and variance $\\sigma^2/n$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "For a constant c and random variable Y, Var(cY) = c² Var(Y).",
+     "concept": "Variance",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Variance",
+       "quote": "$\\text{Var}(aX + b) = a^2 \\text{Var}(X)$ — scaling changes variance, shifts do not"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "definition",
+     "statement": "The sample mean is the sum of the observations divided by n, so an estimator of the form (2/n)ΣXi equals 2 times the sample mean.",
+     "concept": "Sample Mean",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Sample Mean",
+       "quote": "$$\\bar{X} = \\frac{1}{n}\\sum_{i=1}^{n} X_i$$"
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018f-q16": {
+   "path": "questions/exam-mas-i/masi-2018f-016.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:aea0b7252f24923f9b46ea9e92d16a4a118f0dff0839e17acb29de7863194271",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "The mean square error of an estimator is the expected squared difference between the estimator and the true parameter, equal to its variance plus the square of its bias.",
+     "concept": "Mean Square Error of an Estimator",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Mean Square Error",
+       "quote": "$$= \\text{Var}(\\hat{\\theta}) + \\left(\\text{Bias}(\\hat{\\theta})\\right)^2$$"
+      },
+      {
+       "page": "Bias",
+       "quote": "$$\\text{MSE}(\\hat\\theta) = \\text{Var}(\\hat\\theta) + \\left[\\text{Bias}(\\hat\\theta)\\right]^{2}$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "For an unbiased estimator the mean square error equals the variance of the estimator.",
+     "concept": "Mean Square Error of an Estimator",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Mean Square Error",
+       "quote": "For an **[[Unbiasedness|unbiased]]** estimator, $\\text{MSE}(\\hat{\\theta}) = \\text{Var}(\\hat{\\theta})$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "definition",
+     "statement": "An estimator is unbiased if its expected value equals the parameter being estimated; the sample variance with divisor n-1 is an unbiased estimator of the population variance.",
+     "concept": "Unbiased Estimator",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Sample Variance",
+       "quote": "Dividing the sum of squared deviations by $n - 1$ rather than $n$ makes it an [[Unbiasedness|unbiased]] estimator of the population variance $\\sigma^2$."
+      },
+      {
+       "page": "Unbiasedness",
+       "quote": "An estimator $\\hat{\\theta}$ of a parameter $\\theta$ is **unbiased** if its expected value equals the true parameter value for all $\\theta$."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "For a sample of size 2, the sum of squared deviations from the sample mean equals (X1 - X2)^2 / 2.",
+     "concept": "Sample Variance",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r5",
+     "kind": "formula",
+     "statement": "For independent identically distributed X1 and X2, E[(X1 - X2)^2] = 2 Var(X), since the variance of a difference of independent variables is the sum of their variances.",
+     "concept": "Variance of a Sum of Independent Random Variables",
+     "status": "prerequisite",
+     "places": [
+      {
+       "page": "Linear Combinations of Random Variables",
+       "quote": "so $\\text{Var}(X - Y) = \\text{Var}(X) + \\text{Var}(Y)$ for independent $X, Y$"
+      }
+     ]
+    },
+    {
+     "id": "r6",
+     "kind": "formula",
+     "statement": "The variance of a discrete random variable is Var(X) = E[X^2] - (E[X])^2, where moments are computed as probability-weighted sums over the possible values.",
+     "concept": "Variance and Moments of a Discrete Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Variance",
+       "quote": "Efficient computation formula: $\\text{Var}(X) = E[X^2] - \\mu^2$ where $\\mu = E[X]$"
+      }
+     ]
+    },
+    {
+     "id": "r7",
+     "kind": "procedure",
+     "statement": "To find the distribution of the difference of two independent, identically distributed discrete losses, enumerate all pairs of outcomes, multiply their probabilities, and sum the probabilities for each resulting difference value.",
+     "concept": "Functions of Independent Discrete Random Variables",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r8",
+     "kind": "formula",
+     "statement": "The variance of an estimator W is Var(W) = E[W^2] - (E[W])^2, where E[W^2] is obtained by taking the expectation of the squared estimator over its distribution.",
+     "concept": "Variance and Moments of a Discrete Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Variance",
+       "quote": "Efficient computation formula: $\\text{Var}(X) = E[X^2] - \\mu^2$ where $\\mu = E[X]$"
+      },
+      {
+       "page": "Mixture Distribution",
+       "quote": "compute $E[X^2] - (E[X])^2$ from the mixed moments"
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018f-q17": {
+   "path": "questions/exam-mas-i/masi-2018f-017.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:b0b942ff29fd9120e94fba4525031086dd4c0fad6af9fbc2af7b5bfa20610c3d",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "A minimum variance unbiased estimator (MVUE) is an unbiased estimator of a parameter that has the smallest variance among all unbiased estimators for every value of the parameter.",
+     "concept": "Minimum Variance Unbiased Estimator",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Minimum Variance",
+       "quote": "The **UMVUE** (Uniformly Minimum Variance Unbiased Estimator) achieves minimum variance simultaneously for all $\\theta$ within the class of unbiased estimators"
+      },
+      {
+       "page": "Unbiasedness",
+       "quote": "The **UMVUE** (Uniformly Minimum Variance Unbiased Estimator) is the unbiased estimator with smallest variance for all $\\theta$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "An unbiased estimator that is a function of a complete sufficient statistic is the MVUE (Lehmann-Scheffé theorem).",
+     "concept": "Lehmann-Scheffé Theorem",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Minimum Variance",
+       "quote": "By the Lehmann–Scheffé theorem, an unbiased function of a **complete sufficient statistic** is the UMVUE"
+      },
+      {
+       "page": "Rao-Blackwell Theorem",
+       "quote": "**Lehmann–Scheffé Theorem.** If $T$ is complete and sufficient and $\\varphi(T)$ is unbiased for $\\tau(\\theta)$, then $\\varphi(T)$ is the **uniformly minimum variance unbiased estimator** (UMVUE, or MVUE)"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "For a random sample from a normal distribution with known mean, the sum of squared observations is a complete sufficient statistic for the variance.",
+     "concept": "Sufficient Statistic",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "For a normal sample with known mean mu, the MVUE of the variance is (1/n) times the sum of (X_i - mu)^2; with mu = 0 this is the sum of X_i^2 divided by n.",
+     "concept": "Estimation of Normal Variance",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "An estimator is unbiased if its expected value equals the parameter; since E[X^2] = Var(X) + (E[X])^2 = sigma^2 when the mean is 0, the average of the squared observations is unbiased for sigma^2.",
+     "concept": "Unbiased Estimator",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Unbiasedness",
+       "quote": "An estimator $\\hat{\\theta}$ of a parameter $\\theta$ is **unbiased** if its expected value equals the true parameter value for all $\\theta$."
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018f-q18": {
+   "path": "questions/exam-mas-i/masi-2018f-018.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:af818dab2321f094f0daea6f4d647bb4b8fecc812fce3c1cf38b94da385ffb08",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "procedure",
+     "statement": "Method of moments estimates distribution parameters by setting the theoretical moments (e.g., the mean) of the fitted distribution equal to the corresponding sample moments and solving for the parameters.",
+     "concept": "Method of Moments Estimation",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Method of Moments",
+       "quote": "The **Method of Moments** (MoM) estimates parameters by setting the sample moments equal to the theoretical moments and solving."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "For grouped data with losses assumed uniform within each interval, approximate each observation by its interval midpoint and compute the sample mean as the count-weighted average of the midpoints.",
+     "concept": "Grouped Data Estimation",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "The mean of an exponential distribution with scale parameter theta equals theta, so the method of moments estimate of theta is the sample mean.",
+     "concept": "Exponential Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Exponential Distribution",
+       "quote": "$E[X] = \\theta$, $\\text{Var}(X) = \\theta^2$, and $F(x) = 1 - e^{-x/\\theta}$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "For an exponential distribution with mean theta, the survival function is S(x) = P(X > x) = exp(-x/theta).",
+     "concept": "Exponential Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Exponential Distribution",
+       "quote": "Work from the survival function $S(x) = e^{-x/\\theta}$ rather than the CDF; almost every exponential question is a tail probability"
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018f-q19": {
+   "path": "questions/exam-mas-i/masi-2018f-019.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:d8459bee9070e05b22d2cc79088eb0f1c475c5a28f9d94c7c9ba8839cd9def3c",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "The loglogistic CDF is F(x) = (x/θ)^γ / (1 + (x/θ)^γ), so setting F(π_p) = p gives (π_p/θ)^γ = p/(1-p).",
+     "concept": "Loglogistic Distribution",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "Percentile matching: estimate parameters by setting the model's theoretical percentiles equal to the sample (empirical) percentiles at the chosen percent levels and solving the resulting equations for the parameters.",
+     "concept": "Percentile Matching",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Percentile Matching",
+       "quote": "**Percentile Matching** estimates the parameters of a model by making its [[Percentile|percentiles]] equal the corresponding percentiles of the data: with $p$ unknown parameters, choose $p$ percentile levels $g_1, \\ldots, g_p$ and solve the $p$ equations below."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The smoothed empirical percentile of a sample of size n at level p is found at order-statistic position (n+1)p, interpolating linearly between adjacent order statistics when the position is not an integer.",
+     "concept": "Smoothed Empirical Percentile",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Percentile Matching",
+       "quote": "$\\hat\\pi_g$ is the **smoothed empirical percentile**: locate position $(n+1)g$ among the [[Order Statistics|order statistics]] $x_{(1)} \\le \\cdots \\le x_{(n)}$ and interpolate linearly between the neighbouring observations."
+      },
+      {
+       "page": "Percentile Matching",
+       "quote": "$$j = \\lfloor (n+1)g \\rfloor, \\qquad h = (n+1)g - j$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "With two percentile equations in two unknowns, divide one equation by the other to eliminate the scale parameter θ, solve for the shape parameter γ, then back-substitute to solve for θ.",
+     "concept": "Percentile Matching",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Percentile Matching",
+       "quote": "The exponential, [[Weibull Distribution|Weibull]] and loglogistic give equations that can be solved by hand: for the two-parameter ones, dividing one equation by the other eliminates $\\theta$."
+      },
+      {
+       "page": "Percentile Matching",
+       "quote": "Dividing the second by the first eliminates $\\theta$:"
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018f-q2": {
+   "path": "questions/exam-mas-i/masi-2018f-002.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:288fa954716d34c2c7c649e2ccdd5b69c005c958908c93e6362314dd971ceb13",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "The k-th event time exceeds t exactly when fewer than k events have occurred by time t, i.e., T_k > t if and only if N(t) ≤ k−1.",
+     "concept": "Poisson Process",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Gamma",
+       "quote": "The identity is just a restatement: \"the 3rd claim has not arrived by time 1\" is the same event as \"at most 2 claims occurred in $[0,1]$,\" and that count is $\\text{Poisson}(2)$."
+      },
+      {
+       "page": "Interarrival Time",
+       "quote": "The counting view and the waiting-time view are two descriptions of the same process: $N(t) \\ge n \\iff S_n \\le t$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "definition",
+     "statement": "A non-homogeneous Poisson process has a time-dependent rate function λ(t), and its increments are independent Poisson counts.",
+     "concept": "Non-homogeneous Poisson Process",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Nonhomogeneous Poisson Process",
+       "quote": "A **Nonhomogeneous Poisson Process** (NHPP) is a [[Poisson Process]] whose rate changes with time: events arrive at intensity $\\lambda(t)$ rather than at a constant $\\lambda$. Counts over an interval are still Poisson, but the mean is the **integrated** rate over that interval."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "In a non-homogeneous Poisson process, the number of events in (s, t] is Poisson with mean equal to the integral of λ(u) from s to t, so N(t) has mean m(t) = ∫_0^t λ(u) du.",
+     "concept": "Non-homogeneous Poisson Process",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Nonhomogeneous Poisson Process",
+       "quote": "$$N(b) - N(a) \\sim \\text{Poi}\\!\\left(\\int_a^b \\lambda(u)\\,du\\right)$$"
+      },
+      {
+       "page": "Intensity Function",
+       "quote": "$$N(t+s) - N(s) \\sim \\text{Poi}\\big(m(t+s) - m(s)\\big)$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "For a Poisson random variable with mean μ, Pr[N=n] = e^{-μ} μ^n / n!.",
+     "concept": "Poisson Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Poisson Distribution",
+       "quote": "$$P(X = k) = \\frac{e^{-\\lambda}\\lambda^k}{k!}$$"
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018f-q20": {
+   "path": "questions/exam-mas-i/masi-2018f-020.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:d6029b369df48698e2bab7c38f8e93443f5abf1e973977c722521bbafcb284d8",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "procedure",
+     "statement": "To build a likelihood with censored data, each uncensored observation contributes its density f(x) and each right-censored observation (capped at a limit u) contributes the survival probability S(u); the likelihood is the product of these terms.",
+     "concept": "Maximum Likelihood Estimation with Censored Data",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Maximum Likelihood Estimation",
+       "quote": "**[[Censoring]]**: observation is known to exceed some value $c$; contribute $P(X > c \\mid \\theta) = S(c \\mid \\theta)$ to the likelihood"
+      },
+      {
+       "page": "Censoring",
+       "quote": "$$L(\\theta) = f(2|\\theta)\\cdot f(3|\\theta)\\cdot S(4|\\theta) = \\frac{1}{\\theta}e^{-2/\\theta}\\cdot\\frac{1}{\\theta}e^{-3/\\theta}\\cdot e^{-4/\\theta} = \\frac{1}{\\theta^2}e^{-9/\\theta}$$"
+      },
+      {
+       "page": "Incomplete Data",
+       "quote": "A loss at or above the maximum covered loss is recorded only as \"at least $u$\", so it contributes $S(u)$."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "definition",
+     "statement": "A claim whose payment is capped at the policy limit is right-censored: its true size is known only to be at least the limit.",
+     "concept": "Right Censoring",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Policy Limit",
+       "quote": "A limit right-censors the loss. The variable $X \\wedge u$ has a point mass of $S(u)$ at $u$, and a claim recorded at the limit says only that the loss was at least $u$, which is why such a claim enters a likelihood as $S(u)$"
+      },
+      {
+       "page": "Incomplete Data",
+       "quote": "A loss at or above the maximum covered loss is recorded only as \"at least $u$\", so it contributes $S(u)$."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "An exponential distribution with mean θ has density f(x) = (1/θ)e^{-x/θ} and survival function S(x) = e^{-x/θ}.",
+     "concept": "Exponential Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Exponential Distribution",
+       "quote": "$$f(x) = \\frac{1}{\\theta}\\,e^{-x/\\theta}, \\quad x > 0$$"
+      },
+      {
+       "page": "Exponential Distribution",
+       "quote": "Work from the survival function $S(x) = e^{-x/\\theta}$ rather than the CDF; almost every exponential question is a tail probability"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "The maximum likelihood estimate is found by maximizing the log-likelihood: take its derivative with respect to the parameter, set it to zero, and solve for the parameter.",
+     "concept": "Maximum Likelihood Estimation",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Maximum Likelihood Estimation",
+       "quote": "When the maximum is at an interior point and the log-likelihood is differentiable, the MLE solves the **score equation** $\\ell'(\\hat{\\theta}) = 0$."
+      },
+      {
+       "page": "Maximum Likelihood Estimation",
+       "quote": "Setting $\\ell'(\\theta) = -\\frac{n}{\\theta} + \\frac{\\sum x_i}{\\theta^2} = 0$ gives $\\hat{\\theta} = \\bar{x} = \\frac{2+3+5+4+6}{5} = 4$ (i.e., \\$$4{,}000$)."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "For an exponential distribution with censored data, the MLE of the mean θ equals total observed exposure (sum of uncensored values plus censoring limits of censored claims) divided by the number of uncensored observations.",
+     "concept": "Maximum Likelihood Estimation with Censored Data",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Censoring",
+       "quote": "Taking the log and differentiating: $\\ell(\\theta) = -2\\ln\\theta - 9/\\theta$; $\\ell'(\\theta) = -2/\\theta + 9/\\theta^2 = 0$ gives $\\hat{\\theta} = 9/2 = 4.5$."
+      },
+      {
+       "page": "Incomplete Data",
+       "quote": "For an [[Exponential Distribution|exponential]] model with any mix of truncation and right censoring, $\\hat\\theta = \\dfrac{\\sum_i (x_i - d_i)}{\\text{number of exact observations}}$, summing over *all* observations, censored ones included."
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018f-q21": {
+   "path": "questions/exam-mas-i/masi-2018f-021.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:969def7046e432bea6824a4ab120a7a406deb860b8eec468c9a4ff9783ba47a6",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "The Neyman-Pearson lemma states that for testing a simple null hypothesis against a simple alternative, the most powerful test at a given significance level rejects H0 when the likelihood ratio L(H1)/L(H0) is at least (or at most, depending on how it is defined) a constant k.",
+     "concept": "Neyman-Pearson Lemma",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Neyman-Pearson Lemma",
+       "quote": "reject $H_0$ where the likelihood ratio $L(\\mathbf{x}) = f_0(\\mathbf{x})/f_1(\\mathbf{x})$ is small."
+      },
+      {
+       "page": "Neyman-Pearson Lemma",
+       "quote": "$$C = \\left\\{\\mathbf{x} : \\frac{f_0(\\mathbf{x})}{f_1(\\mathbf{x})} \\le k\\right\\}$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "For independent samples from two populations, form the joint likelihood as the product of the individual densities over all observations in both samples, evaluate it under H0 and H1, and take their ratio.",
+     "concept": "Likelihood Function",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Neyman-Pearson Lemma",
+       "quote": "$f_0$ and $f_1$ are the joint densities (or PMFs) of the sample under each hypothesis; for a [[Random Sample|random sample]] they are products, $f_j(\\mathbf{x}) = \\prod_i f_j(x_i)$."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "Simplify the likelihood ratio, take the natural log (a monotone increasing transformation), and absorb constant terms into the critical value to express the rejection region in terms of a sufficient statistic such as a sum of logs.",
+     "concept": "Neyman-Pearson Lemma",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Neyman-Pearson Lemma",
+       "quote": "**In practice** the inequality $L \\le k$ simplifies to a condition on a [[Sufficient Statistic|sufficient statistic]], such as $\\sum X_i \\ge c$, and $c$ is set from that statistic's distribution under $H_0$."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "Dividing or multiplying an inequality by a positive constant preserves its direction, and ln of a product equals the sum of logs, so the log of a product of powers of observations gives a weighted sum of log observations.",
+     "concept": "Logarithm Properties",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Maximum Likelihood Estimation",
+       "quote": "Taking the log turns the product into a sum and simplifies maximization"
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018f-q22": {
+   "path": "questions/exam-mas-i/masi-2018f-022.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:72a6d4d344c284fa4e768dcda923a2031c52bc4759c71d242180bb5b9b1673bb",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "procedure",
+     "statement": "When observations come in dependent matched pairs, form the within-pair differences and apply a one-sample t-test to those differences (paired t-test).",
+     "concept": "Paired t-test",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The paired t statistic is t = d̄ / (s_d/√n), where d̄ is the mean of the differences, s_d is their sample standard deviation (divisor n−1), and n is the number of pairs.",
+     "concept": "Paired t-test",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Student's t-Distribution",
+       "quote": "for a sample of size $n$ from $N(\\mu, \\sigma^2)$ with [[Sample Mean|sample mean]] $\\bar{X}$ and [[Sample Variance|sample variance]] $S^2$, $\\dfrac{\\bar{X} - \\mu}{S/\\sqrt{n}} \\sim t(n - 1)$."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "Under H0 with normally distributed differences, the paired t statistic follows a t distribution with n−1 degrees of freedom.",
+     "concept": "Student's t Distribution",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Sampling Distribution",
+       "quote": "| $T = \\dfrac{\\bar{X} - \\mu}{S/\\sqrt{n}}$ | $t_{n-1}$ | Mean test, unknown $\\sigma$ |"
+      },
+      {
+       "page": "Student's t-Distribution",
+       "quote": "for a sample of size $n$ from $N(\\mu, \\sigma^2)$ with [[Sample Mean|sample mean]] $\\bar{X}$ and [[Sample Variance|sample variance]] $S^2$, $\\dfrac{\\bar{X} - \\mu}{S/\\sqrt{n}} \\sim t(n - 1)$."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "For a two-sided alternative, the p-value is twice the one-tailed tail probability beyond |t|, which can be bracketed using a t table's critical values.",
+     "concept": "p-value",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "p-Value",
+       "quote": "the two-sided p-value is twice the one-sided one for a symmetric [[Sampling Distribution]]"
+      },
+      {
+       "page": "Student's t-Distribution",
+       "quote": "In the $df = 18$ row the two-sided $0.02$ column is $2.552$ and the $0.01$ column is $2.878$, so the p-value is between 0.01 and 0.02"
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018f-q23": {
+   "path": "questions/exam-mas-i/masi-2018f-023.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:1b5ecf9e7c5c1319a54a65cf0de208767b5cb3f0953fea570092dffcfe32cd49",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "The chi-square goodness-of-fit statistic is the sum over categories of (observed - expected)^2 / expected.",
+     "concept": "Chi-Square Goodness-of-Fit Test",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Chi-Square Goodness-of-Fit Test",
+       "quote": "$$Q = \\sum_{j=1}^{k} \\frac{(O_j - E_j)^2}{E_j}$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "Under a null hypothesis of equally likely outcomes, the expected count in each category equals the total number of trials divided by the number of categories.",
+     "concept": "Chi-Square Goodness-of-Fit Test",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Chi-Square Goodness-of-Fit Test",
+       "quote": "$$E_j = n\\,p_j = n\\left[F(c_j) - F(c_{j-1})\\right]$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "For a chi-square goodness-of-fit test with k categories and no estimated parameters, the degrees of freedom are k - 1.",
+     "concept": "Chi-Square Goodness-of-Fit Test",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Chi-Square Goodness-of-Fit Test",
+       "quote": "A fully specified model ($r = 0$) has $k - 1$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "Reject the null hypothesis when the chi-square statistic exceeds the critical value of the chi-square distribution at the chosen significance level with the appropriate degrees of freedom (upper-tail test).",
+     "concept": "Chi-Square Goodness-of-Fit Test",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Chi-Square Goodness-of-Fit Test",
+       "quote": "Reject $H_0$ at level $\\alpha$ when $Q$ exceeds the upper-$\\alpha$ [[Critical Value|critical value]] of the [[Chi-Squared Distribution|chi-squared distribution]] with $k - 1 - r$ degrees of freedom."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "The observed frequencies across all categories sum to the total number of trials, so an unknown frequency can be found by subtracting the known frequencies from the total.",
+     "concept": "Chi-Square Goodness-of-Fit Test",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Chi-Square Goodness-of-Fit Test",
+       "quote": "One is lost because the counts must sum to $n$"
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018f-q24": {
+   "path": "questions/exam-mas-i/masi-2018f-024.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:440643490ad357f6ab6d515ba1b49327acf9a18a7051bdf07a095f1af2f782ac",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "A distribution function of the form F(y) = 1 - e^{-λy} for y > 0 identifies an exponential distribution with rate λ (mean 1/λ).",
+     "concept": "Exponential Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Exponential Distribution",
+       "quote": "Some texts parameterize by **rate** $\\lambda = 1/\\theta$, so $f(x) = \\lambda e^{-\\lambda x}$ and $E[X] = 1/\\lambda$."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "Expectation is linear: E[aW + b] = aE[W] + b, so the mean of a linear transformation of e^Y can be computed from E[e^Y].",
+     "concept": "Expected Value",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Expected Value",
+       "quote": "It is linear: $E[aX + b] = aE[X] + b$"
+      },
+      {
+       "page": "Transformations of Random Variables",
+       "quote": "A linear transformation $Y = aX + b$ gives $E[Y] = aE[X] + b$ and $\\text{Var}(Y) = a^2\\text{Var}(X)$ directly, with no integration needed."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "definition",
+     "statement": "The moment generating function of a random variable Y is M_Y(t) = E[e^{tY}], so E[e^Y] equals M_Y(1).",
+     "concept": "Moment Generating Function",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Moment",
+       "quote": "Where the moment generating function $M_X(t) = E[e^{tX}]$ exists"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "For an exponential distribution with rate λ, the moment generating function is M(t) = λ/(λ - t) for t < λ.",
+     "concept": "Exponential Distribution",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "masi-2018f-q25": {
+   "path": "questions/exam-mas-i/masi-2018f-025.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:1021258b373432e84c34f268793947f651806b070318abf2a52bb51cf5d03f7c",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "The k-th order statistic of a sample is the k-th smallest value in the sample, so the second smallest value is the k = 2 order statistic.",
+     "concept": "Order Statistics",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Order Statistics",
+       "quote": "the $k$-th order statistic $X_{(k)}$ is the $k$-th smallest value."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "For a sample of size n from Uniform(0, θ), the expected value of the k-th order statistic is kθ/(n+1).",
+     "concept": "Uniform Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Order Statistics",
+       "quote": "For the $\\text{Uniform}(0,1)$ distribution: $E[X_{(k)}] = \\dfrac{k}{n+1}$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "The mean of a Uniform(0, θ) distribution is θ/2.",
+     "concept": "Uniform Distribution",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Parameter Estimation",
+       "quote": "$E[X] = \\theta/2$, so $\\tilde{\\theta} = 2\\bar{x} = 2(5) = 10$."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "definition",
+     "statement": "The bias of an estimator is its expected value minus the true value of the quantity being estimated.",
+     "concept": "Bias of an Estimator",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bias",
+       "quote": "$$\\text{Bias}(\\hat\\theta) = E[\\hat\\theta] - \\theta$$"
+      },
+      {
+       "page": "Bias",
+       "quote": "**Bias** is the systematic error of an estimator: the difference between its expected value and the parameter it estimates."
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018f-q26": {
+   "path": "questions/exam-mas-i/masi-2018f-026.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:1f4835a3b9ca890c87cfbdcdb8861cc53434c67bda8255f41d8f045142deba7f",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "The probit link function is the inverse standard normal CDF, g(π) = Φ^{-1}(π), so the linear predictor η equals Φ^{-1}(π).",
+     "concept": "Probit Link Function",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Link Function",
+       "quote": "| Probit | $\\Phi^{-1}(\\mu)$ | $\\Phi(\\eta)$ | Binary outcomes |"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "Under a probit link, the modeled probability is the standard normal CDF of the linear predictor: π = Φ(η) = Φ(β0 + β1x1 + ... + βpxp).",
+     "concept": "Probit Link Function",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Link Function",
+       "quote": "| Probit | $\\Phi^{-1}(\\mu)$ | $\\Phi(\\eta)$ | Binary outcomes |"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "Compute the linear predictor by summing the intercept and the coefficients for the policy's categorical levels (baseline levels with coefficient 0) plus each continuous variable's coefficient times its value.",
+     "concept": "Linear Predictor in Generalized Linear Models",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Generalized Linear Model",
+       "quote": "$$\\ln\\hat{\\mu} = -2.1 + 0.04(30) = -2.1 + 1.2 = -0.9$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "A categorical level with df = 0 and coefficient 0 is the baseline level; it contributes nothing to the linear predictor, and a policy's characteristic is mapped to the level whose range contains its value.",
+     "concept": "Categorical Predictors and Baseline Levels in GLMs",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Parameter Estimate Tables",
+       "quote": "The **reference level** of a categorical predictor is absorbed into the intercept; other levels are interpreted relative to it"
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018f-q27": {
+   "path": "questions/exam-mas-i/masi-2018f-027.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:5e7a71d7701ffa7be7b2494042d82048aa4ce558bdeccf05462466f702bd316f",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "A link function in a GLM is a function g that relates the mean of the response to the linear predictor, g(μ) = Xβ.",
+     "concept": "Generalized Linear Model Link Function",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Link Function",
+       "quote": "A **Link Function** $g$ is a monotone, differentiable function in a [[Generalized Linear Model]] that connects the **expected value** of the response $\\mu = E[Y]$ to the **linear predictor** $\\eta = \\mathbf{x}^\\top\\boldsymbol{\\beta}$:"
+      },
+      {
+       "page": "Generalized Linear Model",
+       "quote": "3. **Link function**: $g(\\mu_i) = \\eta_i$ connects the mean to the linear predictor"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "A GLM link function must be monotonic (strictly increasing or decreasing) and differentiable so that it is invertible and the mean can be uniquely recovered from the linear predictor.",
+     "concept": "Generalized Linear Model Link Function",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Link Function",
+       "quote": "A **Link Function** $g$ is a monotone, differentiable function in a [[Generalized Linear Model]] that connects the **expected value** of the response $\\mu = E[Y]$ to the **linear predictor** $\\eta = \\mathbf{x}^\\top\\boldsymbol{\\beta}$:"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "A quadratic function is not monotonic over the whole real line, and the absolute value function is V-shaped and not monotonic, so neither is invertible and neither can be a link function.",
+     "concept": "Monotonic Functions",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "A linear function with nonzero slope is strictly monotonic (increasing or decreasing) and invertible, so it is a valid link function even if its slope is negative.",
+     "concept": "Monotonic Functions",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "masi-2018f-q28": {
+   "path": "questions/exam-mas-i/masi-2018f-028.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:e5cf9ac314fa88d818c72ae4299289d1dcc2ab54a3c4b42b8aa6cc12a737d7f9",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "In a multinomial (generalized) logistic regression with a reference category, each non-reference category's log-odds is the log of the ratio of that category's probability to the reference category's probability.",
+     "concept": "Multinomial Logistic Regression",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Multinomial Logistic Regression",
+       "quote": "$$\\ln\\!\\left(\\frac{\\pi_j}{\\pi_J}\\right) = \\beta_{0j} + \\beta_{1j}x_1 + \\cdots + \\beta_{pj}x_p$$"
+      },
+      {
+       "page": "Logistic Regression",
+       "quote": "$$\\ln\\frac{\\Pr(Y = k \\mid x)}{\\Pr(Y = K \\mid x)} = \\eta_k = \\beta_{k0} + \\beta_{k1}x_1 + \\cdots + \\beta_{kp}x_p, \\qquad k = 1, \\ldots, K-1$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "For a multinomial logit with reference category 1 and non-reference log-odds η_j, the probability of non-reference category j is exp(η_j) / (1 + Σ_k exp(η_k)), and the reference category's probability is 1 / (1 + Σ_k exp(η_k)).",
+     "concept": "Multinomial Logistic Regression",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Multinomial Logistic Regression",
+       "quote": "$$\\pi_j = \\frac{e^{\\eta_j}}{1 + \\sum_{k=1}^{J-1} e^{\\eta_k}}$$"
+      },
+      {
+       "page": "Multinomial Logistic Regression",
+       "quote": "$$\\pi_J = \\frac{1}{1 + \\sum_{k=1}^{J-1} e^{\\eta_k}}$$"
+      },
+      {
+       "page": "Logistic Regression",
+       "quote": "$$\\Pr(Y = k \\mid x) = \\frac{e^{\\eta_k}}{1 + \\sum_{l=1}^{K-1} e^{\\eta_l}}, \\qquad \\Pr(Y = K \\mid x) = \\frac{1}{1 + \\sum_{l=1}^{K-1} e^{\\eta_l}}$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "Category probabilities in a multinomial model sum to 1, so the reference category's probability is determined by the other categories' odds relative to it (π_ref = 1 − Σ π_j, with π_j = π_ref · exp(η_j)).",
+     "concept": "Multinomial Logistic Regression",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Multinomial Logistic Regression",
+       "quote": "$\\pi_j = P(Y = j \\mid \\mathbf{x})$, the probabilities sum to $1$"
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018f-q29": {
+   "path": "questions/exam-mas-i/masi-2018f-029.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:27b1e50cdd62e4a42df44665ae979f0225cae9fc6556879b1cd98e23b5dd6a7f",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "In simple linear regression the OLS slope estimate equals the sum of cross-deviations S_xy = Σ(x_i − x̄)(y_i − ȳ) divided by S_xx = Σ(x_i − x̄)².",
+     "concept": "Simple Linear Regression",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Ordinary Least Squares",
+       "quote": "**Simple regression**: $\\hat\\beta_1 = S_{xy}/S_{xx}$ and $\\hat\\beta_0 = \\bar{y} - \\hat\\beta_1\\bar{x}$, where $S_{xy} = \\sum(x_i - \\bar{x})(y_i - \\bar{y})$ and $S_{xx} = \\sum(x_i - \\bar{x})^2$"
+      },
+      {
+       "page": "Linear Regression",
+       "quote": "$$\\hat\\beta_1 = \\frac{S_{xy}}{S_{xx}} = \\frac{400}{250} = 1.6$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The OLS intercept estimate equals the sample mean of y minus the slope estimate times the sample mean of x.",
+     "concept": "Simple Linear Regression",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Ordinary Least Squares",
+       "quote": "**Simple regression**: $\\hat\\beta_1 = S_{xy}/S_{xx}$ and $\\hat\\beta_0 = \\bar{y} - \\hat\\beta_1\\bar{x}$, where $S_{xy} = \\sum(x_i - \\bar{x})(y_i - \\bar{y})$ and $S_{xx} = \\sum(x_i - \\bar{x})^2$"
+      },
+      {
+       "page": "Linear Regression",
+       "quote": "$$\\hat\\beta_0 = \\bar{y} - \\hat\\beta_1\\bar{x} = 45 - 1.6(12) = 25.8$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "definition",
+     "statement": "The fitted value for an observation is the regression line's prediction at that observation's x value, ŷ = β̂0 + β̂1 x.",
+     "concept": "Fitted Values",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Linear Regression",
+       "quote": "$$\\hat{y} = 25.8 + 1.6x \\ \\Longrightarrow\\ \\hat{y}(15) = 25.8 + 24 = 49.8$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "definition",
+     "statement": "A residual is the observed response minus the fitted value, e_i = y_i − ŷ_i.",
+     "concept": "Residuals",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Residual",
+       "quote": "A **residual** is the part of an observation a fitted model does not explain: the observed value minus the [[Fitted Values|fitted value]]."
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018f-q3": {
+   "path": "questions/exam-mas-i/masi-2018f-003.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:b6aa84703c976db7b6e6911f91c1325159c882b7d9df765e72395818c238065e",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "In the superposition of independent Poisson processes, the combined process is Poisson with rate equal to the sum of the rates.",
+     "concept": "Poisson Process",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Poisson Process",
+       "quote": "**Superposition**: two independent Poisson processes with rates $\\lambda_1$ and $\\lambda_2$ combine into a Poisson process with rate $\\lambda_1 + \\lambda_2$"
+      },
+      {
+       "page": "Poisson Superposition",
+       "quote": "**Poisson Superposition** is the result that the sum of independent [[Poisson Process|Poisson processes]] is itself a Poisson process whose rate is the sum of the individual rates"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "In a superposition of independent Poisson processes, each successive event comes from process i with probability equal to its rate divided by the total rate, independently of the other events.",
+     "concept": "Poisson Process",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Poisson Superposition",
+       "quote": "each event of the merged process came from stream $i$ with probability $\\lambda_i/\\lambda$, independently of the other events and of the event times."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "To find the probability that one process reaches n events before another reaches m events, consider the first n+m-1 combined events; the first process wins exactly when at least n of them belong to it.",
+     "concept": "Binomial Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Poisson Superposition",
+       "quote": "this happens exactly when at least $n$ of the first $n+m-1$ merged events are type 1, so with $p = \\lambda_1/(\\lambda_1 + \\lambda_2)$:"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "The binomial probability of exactly k successes in N independent trials with success probability p is C(N,k) p^k (1-p)^(N-k).",
+     "concept": "Binomial Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Binomial Distribution",
+       "quote": "$$P(X = k) = \\binom{n}{k} p^k (1-p)^{n-k}$$"
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018f-q30": {
+   "path": "questions/exam-mas-i/masi-2018f-030.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:42db49e5026fc79fc84dbc2e77e6cd0b066e979f58cb813270aabb1181c2733b",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "Adjusted R^2 equals 1 - (1 - R^2)(n - 1)/(n - p - 1), where n is the number of observations and p the number of predictors (excluding the intercept).",
+     "concept": "Adjusted R-squared",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "R-Squared",
+       "quote": "$$R^2_{\\text{adj}} = 1 - \\frac{\\text{SS}_\\text{Res}/(n-p-1)}{\\text{SS}_\\text{Tot}/(n-1)}$$"
+      },
+      {
+       "page": "R-Squared",
+       "quote": "$$R^2_{\\text{adj}} = 1 - \\frac{(1-0.65)(50-1)}{50-5-1} = 1 - \\frac{0.35 \\times 49}{44} = 1 - \\frac{17.15}{44} = 1 - 0.390 = 0.610$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "In a linear regression with an intercept and p predictors, the residual degrees of freedom equal n - p - 1, so n can be recovered from the residual degrees of freedom and p.",
+     "concept": "Degrees of Freedom in Multiple Linear Regression",
+     "status": "linked",
+     "places": [
+      {
+       "page": "ANOVA",
+       "quote": "| Residual (Error) | $\\text{RSS} = \\sum(y_i - \\hat y_i)^2$ | $n-p-1$ | $\\text{MSE} = \\text{RSS}/(n-p-1)$ | |"
+      },
+      {
+       "page": "Parameter Estimate Tables",
+       "quote": "$\\sigma^2$ is estimated from the residuals, so under Normal errors $\\hat\\beta_j/\\text{SE}(\\hat\\beta_j)$ follows a $t$ distribution with $n-p-1$ degrees of freedom ($p$ predictors plus an intercept)"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "Read the regression software output to identify the number of predictors (numerator DF of the F-statistic), the residual degrees of freedom, and the multiple R-squared.",
+     "concept": "Interpreting Regression Output",
+     "status": "linked",
+     "places": [
+      {
+       "page": "ANOVA",
+       "quote": "$F = \\text{MSR}/\\text{MSE} \\sim F_{p,\\, n-p-1}$ under $H_0: \\beta_1 = \\cdots = \\beta_p = 0$"
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018f-q31": {
+   "path": "questions/exam-mas-i/masi-2018f-031.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:dbadc8ba6d9c9d69e4ac980dae62ee8208e97f15b57209a8515d7f7cb5d4d308",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "Two GLMs are nested when the simpler model's explanatory variables are a subset of the more complex model's variables; models that each contain variables the other lacks are non-nested.",
+     "concept": "Nested Models",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "The likelihood ratio test, deviance comparison (difference in deviances), F-test, and chi-square difference test for comparing GLMs are valid only when the models are nested.",
+     "concept": "Likelihood Ratio Test",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Likelihood Ratio Test",
+       "quote": "Models must be **nested** and fitted to the *same* data; comparing non-nested models needs [[AIC]] or [[BIC]] instead"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "Penalized information criteria such as AIC can be used to compare non-nested models, including models with different numbers of parameters, because they trade off goodness of fit against model complexity.",
+     "concept": "Akaike Information Criterion (AIC)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "AIC",
+       "quote": "AIC does **not** require models to be nested, unlike likelihood ratio tests"
+      },
+      {
+       "page": "Model Selection",
+       "quote": "Non-nested models are compared with AIC/BIC or with cross-validation error."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "AIC = -2 × (log likelihood) + 2 × (number of parameters); the model with the lower AIC is preferred.",
+     "concept": "Akaike Information Criterion (AIC)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "AIC",
+       "quote": "$$\\text{AIC} = -2\\ell(\\hat{\\boldsymbol{\\beta}}) + 2p$$"
+      },
+      {
+       "page": "AIC",
+       "quote": "**Lower AIC** indicates a better model (better fit relative to complexity)"
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018f-q32": {
+   "path": "questions/exam-mas-i/masi-2018f-032.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:4be85830a3fea2f594b4deb946e5e9ab48f6f2358f6571d9a9a4858d6d7464df",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "In a linear regression, the residual (error) sum of squares equals the total sum of squares minus the regression sum of squares (TSS = RegSS + RSS).",
+     "concept": "Analysis of Variance in Regression",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Residual Sum of Squares",
+       "quote": "**Decomposition**: $\\text{SS}_{\\text{Tot}} = \\text{SS}_{\\text{Reg}} + \\text{RSS}$, where $\\text{SS}_{\\text{Tot}} = \\sum(y_i - \\bar{y})^2$ and $\\text{SS}_{\\text{Reg}} = \\sum(\\hat{y}_i - \\bar{y})^2$"
+      },
+      {
+       "page": "ANOVA",
+       "quote": "The sums of squares and the degrees of freedom both add up: $\\text{SS}_\\text{Tot} = \\text{SSR} + \\text{RSS}$ and $(n-1) = p + (n-p-1)$."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The overall F-statistic for testing that all slope coefficients are zero is F = (RegSS/p) / (RSS/(n - p - 1)), where p is the number of predictors and n the number of observations.",
+     "concept": "F-Test for Overall Significance of a Regression",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "ANOVA",
+       "quote": "$F = \\text{MSR}/\\text{MSE} \\sim F_{p,\\, n-p-1}$ under $H_0: \\beta_1 = \\cdots = \\beta_p = 0$ — the overall test that no predictor is related to the response."
+      },
+      {
+       "page": "ANOVA",
+       "quote": "| Regression | $\\text{SSR} = \\sum(\\hat y_i - \\bar y)^2$ | $p$ | $\\text{MSR} = \\text{SSR}/p$ | $\\text{MSR}/\\text{MSE}$ |"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "The residual degrees of freedom in a multiple regression with an intercept and p predictors is n - p - 1, and the regression degrees of freedom is p.",
+     "concept": "Degrees of Freedom in Multiple Linear Regression",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "ANOVA",
+       "quote": "| Residual (Error) | $\\text{RSS} = \\sum(y_i - \\hat y_i)^2$ | $n-p-1$ | $\\text{MSE} = \\text{RSS}/(n-p-1)$ | |"
+      },
+      {
+       "page": "ANOVA",
+       "quote": "| Regression | $\\text{SSR} = \\sum(\\hat y_i - \\bar y)^2$ | $p$ | $\\text{MSR} = \\text{SSR}/p$ | $\\text{MSR}/\\text{MSE}$ |"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "definition",
+     "statement": "The null hypothesis that all slope coefficients equal zero (no predictor has a linear relationship with the response) is tested using the overall F-test against the alternative that at least one slope is nonzero.",
+     "concept": "F-Test for Overall Significance of a Regression",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "ANOVA",
+       "quote": "$F = \\text{MSR}/\\text{MSE} \\sim F_{p,\\, n-p-1}$ under $H_0: \\beta_1 = \\cdots = \\beta_p = 0$ — the overall test that no predictor is related to the response."
+      },
+      {
+       "page": "Linear Regression",
+       "quote": "The overall test that all slopes are zero is the $F$ test in the [[ANOVA]] table"
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018f-q33": {
+   "path": "questions/exam-mas-i/masi-2018f-033.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:59fd0c800313cfaf2ad2b1521185a822cd143b1b99800fcd3892b48429d13cd2",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "procedure",
+     "statement": "In k-fold cross validation, compute each candidate model's average test MSE across the k folds and select the model with the lowest average.",
+     "concept": "Cross-Validation",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Cross-Validation",
+       "quote": "$$\\text{CV}_{(k)} = \\frac{1}{k}\\sum_{j=1}^{k} \\text{MSE}_j$$"
+      },
+      {
+       "page": "Test Error",
+       "quote": "**Model A.** B fits the training data better ($310$ against $380$) but predicts worse."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The predicted value from a multiple linear regression is the intercept plus the sum of each coefficient times its predictor value.",
+     "concept": "Multiple Linear Regression",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Linear Regression",
+       "quote": "$$Y_i = \\beta_0 + \\beta_1 x_{i1} + \\cdots + \\beta_p x_{ip} + \\varepsilon_i, \\qquad \\varepsilon_i \\stackrel{\\text{iid}}{\\sim} N(0, \\sigma^2)$$"
+      },
+      {
+       "page": "Linear Regression",
+       "quote": "$$\\hat{y} = 25.8 + 1.6x \\ \\Longrightarrow\\ \\hat{y}(15) = 25.8 + 24 = 49.8$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "An interaction term in a regression enters the prediction as its coefficient times the product of the two interacting predictors' values.",
+     "concept": "Interaction Terms in Regression",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Interaction",
+       "quote": "$$\\eta = \\beta_0 + \\beta_1 x_1 + \\beta_2 x_2 + \\beta_3 (x_1 \\times x_2)$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "Predictors not included in the selected model do not contribute to its prediction, so their values are ignored.",
+     "concept": "Multiple Linear Regression",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "masi-2018f-q34": {
+   "path": "questions/exam-mas-i/masi-2018f-034.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:97166c411e9b544e86cfd5a486cb8a0ef0f92f1ff639831c8bedc47d14f16f7d",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "The variance inflation factor (VIF) of a regression coefficient measures how much the variance of its estimator is inflated by collinearity with the other predictors, relative to a model in which that predictor is uncorrelated with the others.",
+     "concept": "Variance Inflation Factor",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Multicollinearity",
+       "quote": "$\\text{VIF}_j$ is the factor by which the other predictors inflate it"
+      },
+      {
+       "page": "Multicollinearity",
+       "quote": "The variance of $\\hat\\beta$ for vehicle value is $12.5$ times what it would be if that predictor were uncorrelated with the others"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The VIF of coefficient j equals the ratio of the variance of its estimator in the full multiple regression to the variance in the simple regression on that predictor alone, i.e. the squared ratio of the standard errors: VIF_j = (SE_full / SE_simple)^2.",
+     "concept": "Variance Inflation Factor",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Multicollinearity",
+       "quote": "so $\\sigma^2/S_{jj}$ is $\\text{Var}(\\hat\\beta_j)$ when $x_j$ is the only predictor, and $\\text{VIF}_j$ is the factor by which the other predictors inflate it"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "The variance of a coefficient estimator is the square of its standard error, so variances can be compared by squaring standard errors.",
+     "concept": "Standard Error of Regression Coefficients",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Parameter Estimate Tables",
+       "quote": "Estimated standard deviation of $\\hat{\\beta}$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "A simple regression on a single predictor has no collinearity with other predictors, so its coefficient standard error serves as the no-inflation baseline for the VIF (assuming comparable error variance).",
+     "concept": "Variance Inflation Factor",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Multicollinearity",
+       "quote": "so $\\sigma^2/S_{jj}$ is $\\text{Var}(\\hat\\beta_j)$ when $x_j$ is the only predictor"
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018f-q35": {
+   "path": "questions/exam-mas-i/masi-2018f-035.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:f925dc5eeadea32a3d79d20396ddde9babd5fd03a442c15999bb1f86f436b429",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "The hat matrix is H = X(X^T X)^{-1} X^T, the matrix that projects the response vector onto the column space of the design matrix.",
+     "concept": "Hat Matrix",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Hat Matrix",
+       "quote": "$$\\mathbf{H} = \\mathbf{X}(\\mathbf{X}^\\top\\mathbf{X})^{-1}\\mathbf{X}^\\top$$"
+      },
+      {
+       "page": "Hat Matrix",
+       "quote": "projecting $\\mathbf{y}$ onto the column space of $\\mathbf{X}$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "The fitted values of a linear regression are obtained by multiplying the hat matrix by the response vector, so y-hat = Hy and each fitted value is the corresponding row of H dotted with y.",
+     "concept": "Hat Matrix",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Hat Matrix",
+       "quote": "$$\\hat{\\mathbf{y}} = \\mathbf{H}\\mathbf{y}$$"
+      },
+      {
+       "page": "Fitted Values",
+       "quote": "In OLS, each $\\hat{y}_i = \\sum_j h_{ij}\\,y_j$ is a weighted combination of all the responses"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "definition",
+     "statement": "The residual for an observation is the observed response minus its fitted value, e_i = y_i - y-hat_i.",
+     "concept": "Residuals in Linear Regression",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Residual Plot",
+       "quote": "$$e_i = y_i - \\hat{y}_i \\quad \\text{(raw residual)}$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "The least squares estimator of the coefficient vector is beta-hat = (X^T X)^{-1} X^T y, and fitted values equal X times beta-hat.",
+     "concept": "Ordinary Least Squares Estimation",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Hat Matrix",
+       "quote": "Substituting $\\hat{\\boldsymbol\\beta} = (\\mathbf{X}^\\top\\mathbf{X})^{-1}\\mathbf{X}^\\top\\mathbf{y}$ into $\\hat{\\mathbf{y}} = \\mathbf{X}\\hat{\\boldsymbol\\beta}$ gives the second block"
+      },
+      {
+       "page": "Fitted Values",
+       "quote": "$$\\hat{\\mathbf{y}} = \\mathbf{X}\\hat{\\boldsymbol\\beta} = \\mathbf{H}\\mathbf{y}$$"
+      },
+      {
+       "page": "Ordinary Least Squares",
+       "quote": "$$\\hat{\\boldsymbol\\beta} = (\\mathbf{X}^\\top\\mathbf{X})^{-1}\\mathbf{X}^\\top\\mathbf{y}$$"
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018f-q36": {
+   "path": "questions/exam-mas-i/masi-2018f-036.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:233f7d44d15e25d07963885bc01e5e40a80a3b266ae94a2cfc679d57019b1dbe",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "In local regression (loess), the span s is the fraction of the observations used in each local fit, and it controls the smoothness of the fitted curve.",
+     "concept": "Local Regression",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Local Regression",
+       "quote": "Gather the fraction $s = k/n$ of training points whose $x_i$ are closest to $x_0$."
+      },
+      {
+       "page": "Local Regression",
+       "quote": "The most important choice, though, is the span $s$. It plays the role that $\\lambda$ plays for a [[Smoothing Spline]]."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "A larger span in local regression averages over more data points and gives a smoother, less variable fit, while a smaller span follows local fluctuations and gives a wiggly, higher-variance fit.",
+     "concept": "Local Regression",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Local Regression",
+       "quote": "The smaller $s$ is, the more local and wiggly the fit. A very large $s$ gives a global fit that uses all the training observations."
+      },
+      {
+       "page": "Local Regression",
+       "quote": "A smaller span makes each fit more local, which gives a wigglier, more flexible curve with more degrees of freedom."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "Knots and the order of the piecewise polynomial are tuning features of splines and piecewise polynomial regression, not of local regression, so changing them does not adjust the smoothness of a local regression fit.",
+     "concept": "Regression Splines",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Regression Spline",
+       "quote": "A **regression spline** fits separate low-degree polynomials over regions of $X$ separated by **knots**, constrained so that they join smoothly at the knots."
+      },
+      {
+       "page": "Local Regression",
+       "quote": "Knots and boundary constraints belong to [[Regression Spline|splines]]; local regression has none to adjust."
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018f-q37": {
+   "path": "questions/exam-mas-i/masi-2018f-037.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:96aa38b545b5d0e2833dcc78aa47186546b0e50aa408adfc4c04a35d56e1b59d",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "The lasso estimates regression coefficients by minimizing the residual sum of squares plus a penalty equal to lambda times the sum of the absolute values of the coefficients (an L1 penalty).",
+     "concept": "Lasso Regression",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Regularization",
+       "quote": "$$\\text{Lasso:}\\quad \\min_{\\beta}\\ \\mathrm{RSS} + \\lambda\\sum_{j=1}^{p}\\lvert\\beta_j\\rvert$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "As the lasso tuning parameter lambda increases, coefficients shrink toward (and some become exactly) zero, so the model becomes less flexible; lambda = 0 gives the unpenalized least squares fit.",
+     "concept": "Lasso Regression",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Regularization",
+       "quote": "$\\lambda = 0$ returns least squares; $\\lambda \\to \\infty$ drives every coefficient to zero."
+      },
+      {
+       "page": "Regularization",
+       "quote": "**Lasso** ($\\ell_1$) sets some coefficients exactly to zero, so it performs [[Variable Selection]] as part of the fit"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "Training MSE decreases as model flexibility increases, so as lambda increases (flexibility decreases) the training MSE rises monotonically from its minimum at lambda = 0.",
+     "concept": "Training and Test MSE",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bias-Variance Tradeoff",
+       "quote": "Training error is not a guide — it falls monotonically with complexity."
+      },
+      {
+       "page": "Overfitting",
+       "quote": "Training MSE falls every time flexibility is added, because a model with as many free parameters as observations can reproduce them exactly."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "Test MSE is U-shaped as a function of flexibility (or lambda): it first falls as variance is reduced, then rises as bias grows.",
+     "concept": "Bias-Variance Tradeoff",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Test Error",
+       "quote": "By the [[Bias-Variance Tradeoff|bias-variance tradeoff]], test error is U-shaped in flexibility: bias falls, variance rises."
+      },
+      {
+       "page": "Bias-Variance Tradeoff",
+       "quote": "Adding terms, interactions, or levels lowers bias and raises variance. Removing them does the reverse. The total is U-shaped, and the minimum is the right complexity"
+      },
+      {
+       "page": "Overfitting",
+       "quote": "Test MSE is U-shaped instead: past the minimum, each added parameter fits errors $\\varepsilon_i$ that belong to this sample only and will not recur, so the variance of $\\hat{f}$ rises by more than its squared bias falls."
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018f-q38": {
+   "path": "questions/exam-mas-i/masi-2018f-038.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:b997a9123cad448cafb301649087f4ec58d971212ff5d903550888cf40f31164",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "The first principal component is the linear combination of the variables (direction in variable space) along which the data have maximum variance, i.e., the direction of greatest elongation of the scatter.",
+     "concept": "Principal Components Analysis",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Principal Components Analysis",
+       "quote": "**First principal component** — the direction $\\mathbf{z}_1 = \\mathbf{X}\\boldsymbol{\\phi}_1$ that maximizes $\\text{Var}(\\mathbf{z}_1)$"
+      },
+      {
+       "page": "Principal Components Regression",
+       "quote": "The first component is the direction along which the observations vary the most."
+      },
+      {
+       "page": "Loading Vector",
+       "quote": "It is the direction in predictor space along which the data vary most (subject to being orthogonal to the earlier components)"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "The second principal component is the direction of maximum remaining variance among those uncorrelated with (orthogonal/perpendicular to) the first principal component.",
+     "concept": "Principal Components Analysis",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Principal Components Analysis",
+       "quote": "PCs are **orthogonal** — each successive PC captures the maximum remaining variance"
+      },
+      {
+       "page": "Principal Components Regression",
+       "quote": "Each later component has the largest variance subject to being uncorrelated with the ones before it, which means perpendicular to them."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "Principal components are linear combinations of the original variables, so they are represented as straight lines (directions), not curves.",
+     "concept": "Principal Components Analysis",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Principal Components Regression",
+       "quote": "$$Z_m = \\sum_{j=1}^{p} \\phi_{jm} X_j$$"
+      },
+      {
+       "page": "Loading Vector",
+       "quote": "$$z_{im} = \\phi_{1m}x_{i1} + \\phi_{2m}x_{i2} + \\cdots + \\phi_{pm}x_{ip}$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "To identify principal components on a scatterplot, find the axis along which the cloud is most elongated for PC1, then draw PC2 perpendicular to it, and check that PC1 and PC2 are not swapped.",
+     "concept": "Principal Components Analysis",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Principal Components Analysis",
+       "quote": "PCs are **orthogonal** — each successive PC captures the maximum remaining variance"
+      },
+      {
+       "page": "Principal Components Regression",
+       "quote": "The first component is the direction along which the observations vary the most."
+      },
+      {
+       "page": "Principal Components Regression",
+       "quote": "Each later component has the largest variance subject to being uncorrelated with the ones before it, which means perpendicular to them."
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018f-q39": {
+   "path": "questions/exam-mas-i/masi-2018f-039.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:89b35ed128abbe95e789da8dabe91c2f53abf0c8caf79308a46b3baec26add4f",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "AIC = 2p − 2·(log-likelihood), where p is the number of estimated parameters including the intercept; the model with the lowest AIC is preferred.",
+     "concept": "Akaike Information Criterion (AIC)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "AIC",
+       "quote": "$$\\text{AIC} = -2\\ell(\\hat{\\boldsymbol{\\beta}}) + 2p$$"
+      },
+      {
+       "page": "AIC",
+       "quote": "**Lower AIC** indicates a better model (better fit relative to complexity)"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "Best subset selection fits all possible models of each size k, picks the best model of each size (highest R-squared), then compares the best models across sizes using a criterion such as AIC.",
+     "concept": "Best Subset Selection",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Variable Selection",
+       "quote": "Fit every combination of the $p$ predictors; keep the best model of each size (lowest RSS, or lowest [[Deviance]] for a GLM), then choose among the sizes as in the last row"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "Forward stepwise selection starts with the intercept-only model and at each step adds the one predictor that most improves the fit (highest R-squared among models with one more predictor), keeping previously selected predictors, giving one model per size; the final model is chosen across sizes by a criterion such as AIC.",
+     "concept": "Forward Stepwise Selection",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Variable Selection",
+       "quote": "Start with no predictors; at each step add the one that most improves the fit; choose among the resulting sizes as in the last row"
+      },
+      {
+       "page": "Variable Selection",
+       "quote": "if the best one-predictor model is $\\{x_1\\}$ but the best two-predictor model is $\\{x_2, x_3\\}$, forward stepwise cannot reach it, because every later model must keep $x_1$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "Forward stepwise considers far fewer models than best subset and its path is nested, so it may miss the best model of a given size; best subset's chosen model has AIC no larger than that of forward stepwise.",
+     "concept": "Best Subset Selection",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Variable Selection",
+       "quote": "Best subset selection fits all $2^p$ models; forward and backward stepwise each fit only $1 + p(p+1)/2$."
+      },
+      {
+       "page": "Variable Selection",
+       "quote": "The price is that stepwise selection is not guaranteed to find the best subset: if the best one-predictor model is $\\{x_1\\}$ but the best two-predictor model is $\\{x_2, x_3\\}$, forward stepwise cannot reach it, because every later model must keep $x_1$"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "R-squared never decreases when predictors are added, so it can only be used to compare models with the same number of parameters; AIC is needed to compare models of different sizes.",
+     "concept": "R-squared (Coefficient of Determination)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Variable Selection",
+       "quote": "Compare models with different numbers of predictors via [[AIC]] (or $C_p$), [[BIC]], adjusted $R^2$ or [[Cross-Validation]] error — not by raw RSS, $R^2$ or deviance, which always improve as predictors are added"
+      },
+      {
+       "page": "R-Squared",
+       "quote": "$R^2$ **always increases** (or stays the same) when predictors are added, even if they are irrelevant"
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018f-q4": {
+   "path": "questions/exam-mas-i/masi-2018f-004.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:b0d256c31a6af07925095e6faee96986989ec3200abbb2618400623f3f27402a",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "A compound Poisson aggregate loss is the sum of a Poisson-distributed number of independent, identically distributed claim severities, independent of the claim count.",
+     "concept": "Compound Poisson Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Compound Poisson Process",
+       "quote": "The severities $X_1, X_2, \\ldots$ are i.i.d., independent of the counting process $N(t)$"
+      },
+      {
+       "page": "Aggregate Loss Model",
+       "quote": "$N$ is the **claim count** (frequency) random variable; $X_i$ are i.i.d. **claim severity** random variables independent of $N$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "For a Poisson process with rate per unit time, the number of claims over a period of length t is Poisson with mean equal to the rate times t.",
+     "concept": "Poisson Process",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Poisson Process",
+       "quote": "The number of events in any interval of length $t$ has distribution $\\text{Poi}(\\lambda t)$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "For a compound Poisson sum X with Poisson mean λ and severity W, Var(X) = λ·E[W^2].",
+     "concept": "Compound Poisson Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Compound Poisson Process",
+       "quote": "$$E[S(t)] = \\lambda t\\, E[X], \\qquad \\text{Var}(S(t)) = \\lambda t\\, E[X^2]$$"
+      },
+      {
+       "page": "Aggregate Loss Model",
+       "quote": "When $N \\sim \\text{Poi}(\\lambda)$: $\\text{Var}(S) = \\lambda \\cdot E[X^2]$ (simplification since $\\text{Var}(N) = E[N] = \\lambda$)"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "For a discrete random variable, the k-th raw moment is E[W^k] = Σ p_i · w_i^k, summing over outcome probabilities times outcome values to the k-th power.",
+     "concept": "Moments of a Discrete Random Variable",
+     "status": "prerequisite",
+     "places": [
+      {
+       "page": "Moment",
+       "quote": "For a discrete variable the integral becomes $\\sum_x x^n\\,p(x)$."
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018f-q40": {
+   "path": "questions/exam-mas-i/masi-2018f-040.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:f9aa167ef8e0db213c1e4c93e077f474278aecaf4f83c157a15c99673d077438",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "A cubic spline with knots is a piecewise cubic polynomial, typically written with a global cubic plus truncated power basis terms (x - knot)_+^3, one per knot.",
+     "concept": "Regression Splines",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Regression Spline",
+       "quote": "One way to represent a cubic spline is to start from $X, X^2, X^3$ and add one $h(X, \\xi_k)$ for each knot $\\xi_1, \\dots, \\xi_K$."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "definition",
+     "statement": "The truncated power function (x - xi)_+^3 equals (x - xi)^3 when x > xi and 0 otherwise.",
+     "concept": "Regression Splines",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Regression Spline",
+       "quote": "$$h(x, \\xi) = (x - \\xi)_+^3 = \\begin{cases} (x - \\xi)^3 & \\text{if } x > \\xi \\\\ 0 & \\text{otherwise} \\end{cases}$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "A cubic spline is constrained to have continuous first and second derivatives at each knot, so the function, its first derivative and its second derivative are all continuous there; only the third derivative jumps.",
+     "concept": "Regression Splines",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Regression Spline",
+       "quote": "Adding $\\beta\\,h(x, \\xi)$ to a cubic creates a discontinuity only in the *third* derivative at $\\xi$; the function and its first two derivatives stay continuous."
+      },
+      {
+       "page": "Regression Spline",
+       "quote": "A **cubic spline** is continuous, with continuous first and second derivatives, so it uses $K + 4$ degrees of freedom."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "To check continuity of f and its derivatives at a knot, differentiate the truncated term (3(x-xi)^2, 6(x-xi)) and evaluate each at the knot to see whether it equals zero, matching the value from the other side.",
+     "concept": "Regression Splines",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Regression Spline",
+       "quote": "At $x = 3$ the term $-0.012(x - 3)^3$ is $0$, and so are its first derivative $-0.036(x - 3)^2$ and second derivative $-0.072(x - 3)$."
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018f-q5": {
+   "path": "questions/exam-mas-i/masi-2018f-005.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:ca1806e922363898ada535d006696a2f65980e1fbc85f3c9db40bfa3ad410bfe",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "The survival function S(x) gives the probability that a lifetime exceeds x, i.e., S(x) = Pr[X > x].",
+     "concept": "Survival Function",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Survival Model",
+       "quote": "$$S(t) = P(T > t)$$"
+      },
+      {
+       "page": "Future Lifetime Random Variable",
+       "quote": "$${}_tp_x = \\Pr(T_x > t) = S_x(t)$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The probability that a lifetime falls between ages a and b is S(a) - S(b), since Pr[a < X < b] = Pr[X > a] - Pr[X > b].",
+     "concept": "Survival Function",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Future Lifetime Random Variable",
+       "quote": "$${}_{u|t}q_x = {}_up_x - {}_{u+t}p_x$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The conditional probability of failing between ages a and b given survival to age x is [S(a) - S(b)] / S(x), for x ≤ a.",
+     "concept": "Conditional Survival Probability",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Survival Model",
+       "quote": "$_{t}p_x = \\dfrac{S(x+t)}{S(x)}$"
+      },
+      {
+       "page": "Future Lifetime Random Variable",
+       "quote": "${}_tp_x = S_0(x+t)/S_0(x)$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "Time measured from today must be converted to age by adding the current age, and all time units must be made consistent (e.g., convert months to years by dividing by 12) to match the survival function's units.",
+     "concept": "Age and Time Conversion",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Survival Model",
+       "quote": "$_{t}p_x = \\dfrac{S(x+t)}{S(x)}$ and $_{t}q_x = 1 - {_t}p_x$"
+      },
+      {
+       "page": "Future Lifetime Random Variable",
+       "quote": "so ${}_tp_x = S_0(x+t)/S_0(x)$ and ${}_{t+u}p_x = {}_tp_x\\,{}_up_{x+t}$"
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018f-q6": {
+   "path": "questions/exam-mas-i/masi-2018f-006.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:e4a002df07f4ce4404e5be0f190114a444bb966ba3151a6124db3ccb9d86175c",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "A system's structure function/reliability is the probability that the system functions, expressed as a function of the independent component functioning probabilities.",
+     "concept": "System Reliability",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "System Reliability",
+       "quote": "$$r(\\mathbf{p}) = P\\big(\\phi(\\mathbf{X}) = 1\\big) = E\\big[\\phi(\\mathbf{X})\\big]$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "For independent components in series, system reliability is the product of the component reliabilities.",
+     "concept": "Series Systems",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "System Reliability",
+       "quote": "**Series** (works only if all work): $\\phi = \\prod x_i$ and $r = \\prod p_i$."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "For independent components in parallel, system reliability is one minus the product of the component failure probabilities.",
+     "concept": "Parallel Systems",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "System Reliability",
+       "quote": "**Parallel** (works if any works): $\\phi = 1 - \\prod(1 - x_i)$ and $r = 1 - \\prod(1 - p_i)$."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "Reduce a complex series-parallel system by computing the reliability of each sub-block (series chains and parallel groups) and combining blocks to get the system reliability.",
+     "concept": "System Reliability",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "System Reliability",
+       "quote": "If it works, the system is (1 or 2) in series with (4 or 5); if not, it is $\\{1,4\\}$ in parallel with $\\{2,5\\}$:"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "definition",
+     "statement": "The reliability (Birnbaum) importance of a component is the change in system reliability per unit change in that component's reliability, i.e. the difference between system reliability when the component works and when it fails.",
+     "concept": "Component Reliability Importance",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r6",
+     "kind": "procedure",
+     "statement": "To decide which component to upgrade, compute for each candidate the system reliability after replacing its probability with the new value and choose the one giving the largest increase (improvement equals importance times the change in component reliability).",
+     "concept": "Component Reliability Importance",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "masi-2018f-q7": {
+   "path": "questions/exam-mas-i/masi-2018f-007.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:74d31ff5668ca297be7ad75d72383de25d28cdb40ac7c8e1c3c82140e21ca62d",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "A minimal path set is a set of components whose functioning guarantees the system functions and that has no proper subset with this property.",
+     "concept": "Minimal Path Sets",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "System Reliability",
+       "quote": "A **minimal path set** is a set of components whose working alone makes the system work, with no proper subset doing so;"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "For a k-out-of-n system, the minimal path sets are exactly the subsets of k components, so there are C(n,k) of them.",
+     "concept": "k-out-of-n Systems",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "System Reliability",
+       "quote": "A $k$-out-of-$n$ system has $\\binom{n}{k}$ minimal path sets (every $k$-subset)"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "For systems in series built from disjoint components, a minimal path set of the combined system is the union of one minimal path set from each subsystem, so the number of minimal path sets is the product of the subsystems' counts.",
+     "concept": "Series Systems",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "The binomial coefficient is symmetric: C(n,k) = C(n,n-k).",
+     "concept": "Binomial Coefficient",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Combination",
+       "quote": "The identity $\\binom{n}{k} = \\binom{n}{n-k}$ reflects that choosing $k$ items to include is equivalent to choosing $n-k$ to exclude"
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018f-q8": {
+   "path": "questions/exam-mas-i/masi-2018f-008.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:14bef78a75db8093ed595f97c3eb34a6f5da91445cfab709a9b1ccc1f6b3acaa",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "A parallel system continues to function until all its components have failed, so its lifetime is the maximum of the component lifetimes.",
+     "concept": "Parallel and Series Systems",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "System Reliability",
+       "quote": "**Parallel** (works if any works): $\\phi = 1 - \\prod(1 - x_i)$ and $r = 1 - \\prod(1 - p_i)$."
+      },
+      {
+       "page": "Joint Life",
+       "quote": "The **last survivor** status $T_{\\overline{xy}} = \\max(T_x, T_y)$ lasts until the **second** death."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "For a nonnegative random variable X, E[X] = ∫_0^∞ P(X > t) dt = ∫_0^∞ (1 − F(t)) dt.",
+     "concept": "Expected Value from the Survival Function",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "System Reliability",
+       "quote": "its expected life is $\\int_0^\\infty r(\\bar{\\mathbf{F}}(t))\\,dt$"
+      },
+      {
+       "page": "Future Lifetime Random Variable",
+       "quote": "$$\\mathring{e}_x = E[T_x] = \\int_0^{\\infty} {}_tp_x\\,dt$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "For independent components, the CDF of the maximum is the product of the individual CDFs, so P(max ≤ t) = F1(t)·F2(t).",
+     "concept": "Order Statistics (Maximum of Independent Variables)",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Order Statistics",
+       "quote": "$$P\\bigl(X_{(n)} \\le x\\bigr) = F_1(x)\\,F_2(x)\\cdots F_n(x)$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "A uniform (0,1) random variable has CDF F(t) = t for 0 ≤ t ≤ 1 and F(t) = 1 for t > 1.",
+     "concept": "Uniform Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Uniform Continuous Distribution",
+       "quote": "$F(x) = (x-a)/(b-a)$ for $a < x < b$"
+      },
+      {
+       "page": "Cumulative Distribution Function (CDF)",
+       "quote": "$$F(x) = \\frac{x}{5}, \\quad 0 \\leq x \\leq 5$$"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "An exponential random variable with mean θ has CDF F(t) = 1 − e^{−t/θ} and survival function e^{−t/θ}.",
+     "concept": "Exponential Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Exponential Distribution",
+       "quote": "Work from the survival function $S(x) = e^{-x/\\theta}$ rather than the CDF; almost every exponential question is a tail probability"
+      },
+      {
+       "page": "Exponential Distribution",
+       "quote": "$E[X] = \\theta$, $\\text{Var}(X) = \\theta^2$, and $F(x) = 1 - e^{-x/\\theta}$"
+      }
+     ]
+    },
+    {
+     "id": "r6",
+     "kind": "procedure",
+     "statement": "When a CDF is piecewise, split the integral of the survival function at the breakpoint and simplify the integrand separately on each piece.",
+     "concept": "Expected Value from the Survival Function",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "masi-2018f-q9": {
+   "path": "questions/exam-mas-i/masi-2018f-009.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:441b7e4722a05875c2a72ed6a8784ae54bf03ad414857b1a3ab3679856dd85f8",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "A transition probability matrix P of a homogeneous Markov chain has entry P_ij equal to the probability of moving from state i to state j in one step, and each row sums to 1.",
+     "concept": "Markov Chain Transition Probability Matrix",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Markov Chain",
+       "quote": "$P_{ij} \\geq 0$ is the probability of moving from state $i$ to state $j$ in one step; each row sums to 1"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "The probability of at least one occurrence of an event equals 1 minus the probability that it never occurs (complement rule).",
+     "concept": "Complement Rule",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Probability Rules",
+       "quote": "The complement rule is the workhorse shortcut — \"at least one\" is almost always faster as $1 - P(\\text{none})$."
+      },
+      {
+       "page": "Probability Rules",
+       "quote": "P(\\text{at least one}) &= 1 - P(\\text{no claims}) \\\\"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "The probability of a specific path of states in a Markov chain is the product of the successive one-step transition probabilities along the path, by the Markov property.",
+     "concept": "Markov Property",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Multi-State Model",
+       "quote": "$$P(X_1 = \\cdots = X_n = i \\mid X_0 = i) = (P_{ii})^{n}$$"
+      },
+      {
+       "page": "Multi-State Model",
+       "quote": "Staying healthy throughout has probability $0.85^2 = 0.7225$. The gap $0.7425 - 0.7225 = 0.02$ is the path H $\\to$ D $\\to$ H, $(0.10)(0.20)$: disabled in year 1, recovered by year 2."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "To find the probability of avoiding a set of states over several steps, sum over all paths that stay outside that set, using only transitions into the non-target states at each step.",
+     "concept": "Markov Chain Transition Probability Matrix",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Transition Probability Matrix",
+       "quote": "A claim in year 2 means landing in a state ending in C. From NN, go through NC or NN in year 1:"
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018s-q1": {
+   "path": "questions/exam-mas-i/masi-2018s-001.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:4cb483d21a160da0bd029c7b039de3f7a443e58d05ce81452bb31c3dde598898",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "The exponential distribution is memoryless: Pr[T > s + t | T > s] = Pr[T > t], so the remaining time given survival to any age has the same exponential distribution.",
+     "concept": "Exponential Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Exponential Distribution",
+       "quote": "Its defining property is **memorylessness**: $P(X > s + t \\mid X > s) = P(X > t)$, making it the unique continuous distribution with no aging effect"
+      },
+      {
+       "page": "Exponential Distribution",
+       "quote": "A direct consequence: given $X > d$, the excess $X - d$ is again $\\text{Exp}(\\theta)$."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "For an exponential random variable with mean θ, the survival function is Pr[T > t] = e^{-t/θ}.",
+     "concept": "Exponential Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Exponential Distribution",
+       "quote": "Work from the survival function $S(x) = e^{-x/\\theta}$ rather than the CDF; almost every exponential question is a tail probability"
+      },
+      {
+       "page": "Exponential Distribution",
+       "quote": "$$P(X > 300) = 1 - F(300) = e^{-300/500} = e^{-0.6} \\approx 0.5488$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "To find the probability of exceeding a total time given time already elapsed, apply memorylessness by subtracting the elapsed time from the threshold and computing the unconditional survival probability at the remaining amount.",
+     "concept": "Exponential Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Exponential Distribution",
+       "quote": "Its defining property is **memorylessness**: $P(X > s + t \\mid X > s) = P(X > t)$"
+      },
+      {
+       "page": "Exponential Distribution",
+       "quote": "A direct consequence: given $X > d$, the excess $X - d$ is again $\\text{Exp}(\\theta)$."
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018s-q10": {
+   "path": "questions/exam-mas-i/masi-2018s-010.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:2fee938e6e90e55e6743ff4860478a055f9755a1badbac559716afdb0a6f778e",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "Two states of a Markov chain communicate if each is reachable from the other in some finite number of steps (positive n-step transition probability in both directions).",
+     "concept": "Communicating Classes of Markov Chains",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Recurrent and Transient States",
+       "quote": "State $j$ is *accessible* from $i$ if $P^n_{ij} > 0$ for some $n \\geq 0$, and $i$ and $j$ *communicate* ($i \\leftrightarrow j$) if each is accessible from the other."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "definition",
+     "statement": "A class of a Markov chain is an equivalence class of mutually communicating states; the state space is partitioned into classes, and a state that does not return to itself still forms its own class.",
+     "concept": "Communicating Classes of Markov Chains",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Recurrent and Transient States",
+       "quote": "Communication is an equivalence relation, so it splits the states into **classes**; the chain is **irreducible** if there is only one. Every state communicates with itself ($P^0_{ii} = 1$), so a state that nothing leads back to is a class on its own."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "To find the classes, read the transition matrix for which states can be reached from each state (positive entries, including via multi-step paths), then group states that are mutually reachable and count the groups.",
+     "concept": "Communicating Classes of Markov Chains",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Recurrent and Transient States",
+       "quote": "Read the one-step moves off the nonzero entries: $1 \\to \\{1, 2\\}$, $2 \\to \\{1, 2\\}$, $3 \\to \\{1, 2\\}$, $4 \\to \\{1, 2, 3, 4\\}$, $5 \\to \\{5\\}$."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "definition",
+     "statement": "A state i is absorbing if P_ii = 1, so the chain never leaves it; an absorbing state forms a class by itself.",
+     "concept": "Absorbing State",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Transition Probability Matrix",
+       "quote": "An **absorbing** state has $P_{ii} = 1$ — death in a [[Multi-State Model]], default in [[Credit Rating Migration]]."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "A state that cannot be re-entered after leaving it (no path back to it) is transient and forms a singleton class.",
+     "concept": "Transient and Recurrent States",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Recurrent and Transient States",
+       "quote": "State 3 leads to 1 and 2, but nothing leads back to it — only state 4 enters 3, and 3 cannot reach 4. So $\\{3\\}$ is a class by itself, transient, with $f_3 = 0$."
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018s-q11": {
+   "path": "questions/exam-mas-i/masi-2018s-011.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:41366f3ba62495dc32875b9750605b0404adc7c0a263d2d8751c2e475e6d1099",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "The limiting (stationary) distribution of a Markov chain is a probability vector pi satisfying pi P = pi with entries summing to 1; for an irreducible aperiodic chain it equals the limiting probabilities.",
+     "concept": "Stationary Distribution of a Markov Chain",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Markov Chain",
+       "quote": "A **stationary distribution** $\\boldsymbol{\\pi}$ satisfies $\\boldsymbol{\\pi}P = \\boldsymbol{\\pi}$ with $\\sum_i \\pi_i = 1$; for an irreducible aperiodic chain it is the long-run fraction of time spent in each state"
+      },
+      {
+       "page": "Stationary Distribution",
+       "quote": "The **Stationary Distribution** $\\boldsymbol{\\pi}$ of a [[Markov Chain]] is a probability vector that one transition leaves unchanged: a chain started in $\\boldsymbol{\\pi}$ stays in $\\boldsymbol{\\pi}$."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "Each row of a transition probability matrix sums to 1 because from any state the chain must move to some state.",
+     "concept": "Transition Probability Matrix",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Transition Probability Matrix",
+       "quote": "$$\\sum_{j} P_{ij} = 1 \\quad \\text{for every row } i$$"
+      },
+      {
+       "page": "Markov Chain",
+       "quote": "$P_{ij} \\geq 0$ is the probability of moving from state $i$ to state $j$ in one step; each row sums to 1"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "If the stationary distribution is uniform over all states, then every column of the transition matrix sums to 1 (the matrix is doubly stochastic), and conversely.",
+     "concept": "Doubly Stochastic Matrix",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Transition Probability Matrix",
+       "quote": "A matrix whose columns also sum to one is *doubly stochastic*. For a chain with finitely many states the uniform distribution is then stationary, and it is the chain's unique [[Stationary Distribution|stationary distribution]] when the chain is irreducible."
+      },
+      {
+       "page": "Time-Reversible Markov Chain",
+       "quote": "Each column also sums to 1, so the uniform distribution is stationary: $\\pi_S = \\pi_F = \\pi_H = \\tfrac13$."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "Find unknown transition probabilities by combining row-sum constraints (each row sums to 1) with the column-sum constraints implied by the stationary condition pi P = pi.",
+     "concept": "Stationary Distribution of a Markov Chain",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Stationary Distribution",
+       "quote": "$$\\pi_j = \\sum_i \\pi_i\\, P_{ij} \\quad \\text{for every } j$$"
+      },
+      {
+       "page": "Stationary Distribution",
+       "quote": "A doubly stochastic matrix has a uniform $\\boldsymbol{\\pi}$."
+      },
+      {
+       "page": "Transition Probability Matrix",
+       "quote": "A matrix whose columns also sum to one is *doubly stochastic*."
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018s-q12": {
+   "path": "questions/exam-mas-i/masi-2018s-012.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:1f62f46f48f03525e0e6a87dc6261a5376f49144deb8fbd3fc8cc51b8d19b92e",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "The net level annual premium for a fully discrete unit whole life insurance issued at age x is P_x = A_x / ä_x, the whole life APV divided by the life annuity-due APV (equivalence principle).",
+     "concept": "Net Level Premium for Whole Life Insurance",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Whole Life Insurance",
+       "quote": "$$P = \\frac{A_x}{\\ddot{a}_x}$$"
+      },
+      {
+       "page": "Whole Life Insurance",
+       "quote": "a premium $P$ paid at the start of each year while $(x)$ is alive is a [[Life Annuity|life-annuity-due]], so $A_x = P\\,\\ddot{a}_x$"
+      },
+      {
+       "page": "Equivalence Principle",
+       "quote": "Setting $E[L_0]=0$ gives $P = S\\,A_x/\\ddot{a}_x$."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "definition",
+     "statement": "A_x is the actuarial present value of a unit whole life insurance paying at the end of the year of death, and ä_x is the actuarial present value of a life annuity-due paying 1 at the start of each year while the person is alive.",
+     "concept": "Whole Life Insurance and Life Annuity-Due APVs",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Whole Life Insurance",
+       "quote": "In the life-table model of Exam MAS-I the benefit is paid at the **end of the year of death**, and its actuarial present value (the **net single premium**) for a life aged $x$ is $A_x$."
+      },
+      {
+       "page": "Life Annuity",
+       "quote": "A **life-annuity-due** pays 1 at the start of each year while $(x)$ is alive; its actuarial present value (EPV) is $\\ddot{a}_x$."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "Read A_x and ä_x for a given age from the Illustrative Life Table (at 6% interest) and compute each premium from them before taking the difference.",
+     "concept": "Illustrative Life Table",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Whole Life Insurance",
+       "quote": "The exam's Illustrative Life Table lists $1000A_x$, $1000\\,{}^2\\!A_x$ and $\\ddot{a}_x$ at $i = 0.06$"
+      },
+      {
+       "page": "Whole Life Insurance",
+       "quote": "$$P = \\frac{A_{40}}{\\ddot{a}_{40}} = \\frac{0.16132}{14.8166} = 0.010888$$"
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018s-q13": {
+   "path": "questions/exam-mas-i/masi-2018s-013.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:a088819dfa97c36caccd40db814d05aaa7db52de89f514fd0771ef0e0ad96aca",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "The actuarial present value of a benefit is the expected value of the discounted payment, i.e. the sum over possible payment times of the payment times the discount factor times the probability of that payment.",
+     "concept": "Actuarial Present Value",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Long-Term Insurance Coverage",
+       "quote": "$$\\text{EPV} = \\sum_{k} \\text{CF}_k\\, v^{k}\\,\\Pr(\\text{CF}_k \\text{ is paid})$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The probability of surviving k years from age x is the product of one-year survival probabilities (1 - q) over those years: kp_x = prod_{j=0}^{k-1}(1 - q_{x+j}).",
+     "concept": "Life Table Survival Probabilities",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Life Table",
+       "quote": "Survival probabilities **multiply** across periods: $_{s+t}p_x = {}_{s}p_x \\cdot {}_{t}p_{x+s}$"
+      },
+      {
+       "page": "Term Life Insurance",
+       "quote": "The probabilities of death in each year are $q_{60} = 0.003398$, $0.996602(0.003792) = 0.003779$ and $0.996602(0.996208)(0.004234) = 0.004204$."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The probability of failing (dying) in year k+1 is the probability of surviving k years times the one-year failure rate: k|q_x = kp_x * q_{x+k}.",
+     "concept": "Deferred Mortality Probability",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Life Table",
+       "quote": "$_{t|}q_x = {}_{t}p_x \\cdot q_{x+t}$ is the probability of dying in the year *after* surviving $t$ years (a deferred death probability)"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "The APV of a term insurance paying a benefit at the end of the year of death is the benefit times the sum over years k=1..N of v^k * (k-1)p_x * q_{x+k-1}, with v = 1/(1+i).",
+     "concept": "Term Insurance",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Term Life Insurance",
+       "quote": "$$A^{1}_{x:\\overline{n}|} = \\sum_{k=0}^{n-1} v^{k+1}\\,{}_kp_x\\,q_{x+k}$$"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "The APV of a term benefit increases with the term length, since each added year contributes a nonnegative amount; so the largest term with APV below a threshold is found by accumulating yearly terms until the threshold is exceeded.",
+     "concept": "Term Insurance",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Term Life Insurance",
+       "quote": "$$A^{1}_{x:\\overline{n}|} = \\sum_{k=0}^{n-1} v^{k+1}\\,{}_kp_x\\,q_{x+k}$$"
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018s-q14": {
+   "path": "questions/exam-mas-i/masi-2018s-014.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:0b1b6e4d91e8d525428bea91116ba2335ecda53a91b0ce9d4772a6e79920b490",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "procedure",
+     "statement": "In the acceptance-rejection method, generate a proposal Y from density g and an independent uniform U on (0,1), accept Y (set X = Y) if U ≤ f(Y)/(c·g(Y)), and otherwise repeat.",
+     "concept": "Acceptance-Rejection Method",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Rejection Method",
+       "quote": "(1) generate $Y$ from $g$; (2) generate $U$ from a [[Uniform Continuous Distribution|Uniform]]$(0,1)$ distribution, independent of $Y$; (3) if $U \\leq f(Y)/\\bigl(c\\,g(Y)\\bigr)$, accept and set $X = Y$, otherwise return to step 1."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The rejection constant c is the maximum over the support of f(x)/g(x), so that f(x) ≤ c·g(x) for all x.",
+     "concept": "Acceptance-Rejection Method",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Rejection Method",
+       "quote": "The smallest valid constant, $c = \\max_x f(x)/g(x)$, is therefore the best one"
+      },
+      {
+       "page": "Rejection Method",
+       "quote": "$$c \\geq \\max_x \\frac{f(x)}{g(x)}$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "To find the maximum of a density (or ratio f/g) on an interval, set its derivative equal to zero, solve for the critical point, and evaluate the function there.",
+     "concept": "Optimization of a Function by Derivatives",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Rejection Method",
+       "quote": "$c$ is the maximum of the density, $c = \\max_x f(x)$, found by setting $f'(x) = 0$."
+      },
+      {
+       "page": "Rejection Method",
+       "quote": "(a) Maximise $f$: $f'(x) = 20(1-x)^2(1 - 4x) = 0$ gives $x = \\frac{1}{4}$, so"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "When the proposal density g is uniform on (0,1), g(x) = 1, so the ratio f/g equals f and c equals the maximum of f.",
+     "concept": "Uniform Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Rejection Method",
+       "quote": "**With $g$ uniform on $(0, 1)$:** $g(x) = 1$, so $c$ is the maximum of the density, $c = \\max_x f(x)$, found by setting $f'(x) = 0$. The acceptance test is $U \\leq f(Y)/c$."
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018s-q15": {
+   "path": "questions/exam-mas-i/masi-2018s-015.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:5b58309c8ee55e99774b6b35f4c785c4ffb7c68f017832dd54b0fc5f631d6feb",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "A policy limit right-censors the loss data: a payment equal to the limit indicates only that the underlying loss was at least the limit, while payments below the limit are exact loss values.",
+     "concept": "Censored Data",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Policy Limit",
+       "quote": "A limit right-censors the loss. The variable $X \\wedge u$ has a point mass of $S(u)$ at $u$, and a claim recorded at the limit says only that the loss was at least $u$, which is why such a claim enters a likelihood as $S(u)$"
+      },
+      {
+       "page": "Incomplete Data",
+       "quote": "A loss at or above the maximum covered loss is recorded only as \"at least $u$\", so it contributes $S(u)$."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "The likelihood for censored data is the product of the density at each exact observation and the survival function at each censored observation; maximize it (typically via the log-likelihood) to get the MLE.",
+     "concept": "Maximum Likelihood Estimation",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Maximum Likelihood Estimation",
+       "quote": "**[[Censoring]]**: observation is known to exceed some value $c$; contribute $P(X > c \\mid \\theta) = S(c \\mid \\theta)$ to the likelihood"
+      },
+      {
+       "page": "Censoring",
+       "quote": "$$L(\\theta) = f(2|\\theta)\\cdot f(3|\\theta)\\cdot S(4|\\theta) = \\frac{1}{\\theta}e^{-2/\\theta}\\cdot\\frac{1}{\\theta}e^{-3/\\theta}\\cdot e^{-4/\\theta} = \\frac{1}{\\theta^2}e^{-9/\\theta}$$"
+      },
+      {
+       "page": "Incomplete Data",
+       "quote": "$$L(\\theta) = \\prod_{i=1}^{n} \\frac{f(x_i \\mid \\theta)^{\\delta_i}\\; S(x_i \\mid \\theta)^{1-\\delta_i}}{S(d_i \\mid \\theta)}$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "For an exponential distribution with right-censored data, the MLE of the mean is the sum of all observed values (censored ones at their censoring point) divided by the number of uncensored observations.",
+     "concept": "Exponential Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Censoring",
+       "quote": "Taking the log and differentiating: $\\ell(\\theta) = -2\\ln\\theta - 9/\\theta$; $\\ell'(\\theta) = -2/\\theta + 9/\\theta^2 = 0$ gives $\\hat{\\theta} = 9/2 = 4.5$."
+      },
+      {
+       "page": "Incomplete Data",
+       "quote": "For an [[Exponential Distribution|exponential]] model with any mix of truncation and right censoring, $\\hat\\theta = \\dfrac{\\sum_i (x_i - d_i)}{\\text{number of exact observations}}$, summing over *all* observations, censored ones included."
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018s-q16": {
+   "path": "questions/exam-mas-i/masi-2018s-016.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:a4509716863644aac5d412396d2f12b9d00516bbcfe78f83e7def6e5377a081c",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "The Fisher information of a parameter is the expected value of the negative second derivative of the log-density (log-likelihood) with respect to that parameter, I(θ) = -E[∂² ln f(X;θ)/∂θ²], equivalently the variance of the score.",
+     "concept": "Fisher Information",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Fisher Information",
+       "quote": "$$I(\\theta) = E\\!\\left[\\left(\\frac{\\partial}{\\partial\\theta}\\ln f(X\\mid\\theta)\\right)^{2}\\right] = -E\\!\\left[\\frac{\\partial^{2}}{\\partial\\theta^{2}}\\ln f(X\\mid\\theta)\\right]$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "To compute Fisher information for a single observation, take the log of the density, differentiate twice with respect to the parameter, then take the negative expectation over the random variable.",
+     "concept": "Fisher Information",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Fisher Information",
+       "quote": "$$\\frac{\\partial^2}{\\partial\\lambda^2}\\ln f = -\\frac{x}{\\lambda^2} \\ \\Longrightarrow\\ I(\\lambda) = -E\\!\\left[-\\frac{X}{\\lambda^2}\\right] = \\frac{\\lambda}{\\lambda^2} = \\frac{1}{\\lambda}$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "For a normal distribution with known variance σ², the Fisher information for the mean μ from one observation is 1/σ², since the second derivative of the log-density with respect to μ is the constant -1/σ².",
+     "concept": "Normal Distribution",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "The expectation of a constant is the constant itself, so when the second derivative of the log-density does not depend on x, no integration is needed to take the expectation.",
+     "concept": "Expected Value",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "masi-2018s-q17": {
+   "path": "questions/exam-mas-i/masi-2018s-017.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:58f08d2e225f2e9394f2455010ca259d203a7329ac93e313c9cb65fe770c35c4",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "An estimator is consistent if it converges in probability to the true parameter value as the sample size n goes to infinity.",
+     "concept": "Consistent Estimator",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Consistency",
+       "quote": "An estimator $\\hat{\\theta}_n$ is **consistent** for $\\theta$ if it converges in probability to the true parameter value as the sample size grows without bound"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "An estimator whose bias and variance both go to zero as n goes to infinity is consistent (asymptotically unbiased with vanishing variance implies convergence in probability).",
+     "concept": "Consistent Estimator",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Consistency",
+       "quote": "if $\\text{Bias}(\\hat{\\theta}_n) \\to 0$ and $\\text{Var}(\\hat{\\theta}_n) \\to 0$ as $n \\to \\infty$, then $\\hat{\\theta}_n$ is consistent"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "For a random sample of size n from Uniform(0, θ), the sample maximum has expected value nθ/(n+1).",
+     "concept": "Order Statistics",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Estimator",
+       "quote": "Use $E[X_{(n)}] = \\frac{n\\theta}{n+1}$ and $\\text{Var}(X_{(n)}) = \\frac{n\\theta^2}{(n+1)^2(n+2)}$."
+      },
+      {
+       "page": "Bias",
+       "quote": "the MLE is $\\hat\\theta = X_{(n)}$ with $E[X_{(n)}] = \\frac{n}{n+1}\\theta$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "For a random sample of size n from Uniform(0, θ), the sample maximum has variance nθ²/((n+1)²(n+2)).",
+     "concept": "Order Statistics",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Estimator",
+       "quote": "Use $E[X_{(n)}] = \\frac{n\\theta}{n+1}$ and $\\text{Var}(X_{(n)}) = \\frac{n\\theta^2}{(n+1)^2(n+2)}$."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "The sample maximum of a Uniform(0, θ) sample is a biased but asymptotically unbiased estimator of θ; multiplying or dividing it by a factor that grows or shrinks with n destroys convergence to θ.",
+     "concept": "Bias of an Estimator",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Bias",
+       "quote": "The MLE understates $\\theta$, which makes sense — the largest observation can never exceed the true maximum. Rescaling removes it:"
+      },
+      {
+       "page": "Convergence in Probability",
+       "quote": "so $X_{(n)} \\xrightarrow{p} \\theta$ and the sample maximum is consistent — even though it is biased low for every $n$"
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018s-q18": {
+   "path": "questions/exam-mas-i/masi-2018s-018.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:610c1db5cc8dd5e907f7f2208fc2a7dfc764fdf71e9abbadf422be3694f61a8a",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "For a normal sample of size n with unbiased sample variance s^2, the statistic (n-1)s^2/sigma_0^2 follows a chi-square distribution with n-1 degrees of freedom under H0: sigma^2 = sigma_0^2.",
+     "concept": "Chi-Square Test for a Normal Variance",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Critical Value",
+       "quote": "Use $\\chi^2 = (n-1)S^2/\\sigma_0^2$ against $\\chi^2_{\\alpha,\\,n-1}$."
+      },
+      {
+       "page": "Chi-Squared Distribution",
+       "quote": "for a sample of size $n$ from $N(\\mu, \\sigma^2)$ with [[Sample Variance|sample variance]] $S^2$, $(n - 1)S^2/\\sigma^2 \\sim \\chi^2(n - 1)$."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "For a lower-tailed variance test (H1: sigma^2 < sigma_0^2), reject H0 when the chi-square statistic is smaller than the lower-tail critical value, i.e. the chi-square percentile at level alpha from the left.",
+     "concept": "Chi-Square Test for a Normal Variance",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Critical Value",
+       "quote": "a lower-tailed test rejects when $T \\le c$ with $P(T \\le c \\mid H_0) = \\alpha$"
+      },
+      {
+       "page": "Chi-Squared Distribution",
+       "quote": "The CAS MAS-I table** gives *lower-tail* areas for $n = 1$ to 50: the entry in column $p$ is the value $c$ with $P(V \\leq c) = p$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "Read critical values from a chi-square table with n-1 degrees of freedom and compare the statistic to critical values at several significance levels to determine the smallest level at which H0 is rejected.",
+     "concept": "Hypothesis Testing Critical Values and Significance Level",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Critical Value",
+       "quote": "With $24$ degrees of freedom, $\\chi^2_{0.05,24} = 36.415$ and $\\chi^2_{0.01,24} = 42.980$."
+      },
+      {
+       "page": "Chi-Squared Distribution",
+       "quote": "Compare with $\\chi^2(3)$. The $df = 3$ row gives $7.81$ in the $0.950$ column and $9.35$ in the $0.975$ column."
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018s-q19": {
+   "path": "questions/exam-mas-i/masi-2018s-019.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:01673030cd05d0566eb13f9fec69bfc4cadbd7ffd2dcd2cd1927e768fc737182",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "The likelihood ratio statistic Λ is the ratio of the maximized likelihood under the null hypothesis to the maximized likelihood under the full (unrestricted) parameter space, and it lies between 0 and 1.",
+     "concept": "Likelihood Ratio Test",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Likelihood Ratio Test",
+       "quote": "$$\\Lambda = \\frac{\\sup_{\\theta \\in \\Theta_0} L(\\theta)}{\\sup_{\\theta \\in \\Theta} L(\\theta)}$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "For large samples, -2 ln Λ is approximately chi-squared distributed under the null hypothesis (Wilks' theorem).",
+     "concept": "Likelihood Ratio Test",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Likelihood Ratio Test",
+       "quote": "$$-2\\ln\\Lambda = 2\\left[\\ell(\\hat\\theta) - \\ell(\\hat\\theta_0)\\right] \\ \\dot\\sim\\ \\chi^2_{r}$$"
+      },
+      {
+       "page": "Chi-Squared Distribution",
+       "quote": "for nested models with $p_1 < p_2$ parameters, $-2\\ln\\lambda = 2(\\ell_2 - \\ell_1)$ is approximately $\\chi^2(p_2 - p_1)$ in large samples."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "The degrees of freedom of the chi-squared approximation equal the number of free parameters in the full model minus the number of free parameters under the null hypothesis (here, one parameter fixed gives 1 degree of freedom).",
+     "concept": "Likelihood Ratio Test",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Likelihood Ratio Test",
+       "quote": "$r$ is the number of **restrictions** — the difference in free parameters between the full and reduced models — and the $\\chi^2$ approximation is asymptotic (Wilks' theorem)"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "Reject the null hypothesis in a likelihood ratio test when -2 ln Λ exceeds the chi-squared critical value at the (1 - significance level) percentile; so the rejection region corresponds to small Λ, and the largest Λ that leads to rejection is exp(-critical value / 2).",
+     "concept": "Likelihood Ratio Test",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Likelihood Ratio Test",
+       "quote": "Reject $H_0$ (the reduced model) when $-2\\ln\\Lambda$ exceeds the upper-$\\alpha$ point of $\\chi^2_r$"
+      },
+      {
+       "page": "Likelihood Ratio Test",
+       "quote": "a gap above $3.84/2 = 1.92$ would have rejected."
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018s-q2": {
+   "path": "questions/exam-mas-i/masi-2018s-002.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:7381285f1ba689d82a1cc74c9a1d965d37ecc8f3b6769c76a4bbcbaf57c73974",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "For a Poisson process, conditional on n events occurring in [0, t], the number of events in a subinterval [0, s] with s < t is Binomial with n trials and success probability s/t.",
+     "concept": "Poisson Process",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The binomial probability of exactly k successes in n trials with success probability p is C(n,k) p^k (1-p)^(n-k).",
+     "concept": "Binomial Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Binomial Distribution",
+       "quote": "$$P(X = k) = \\binom{n}{k} p^k (1-p)^{n-k}$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "Given the total number of events in a Poisson process over an interval, the conditional probability of events in a subinterval does not depend on the rate lambda.",
+     "concept": "Poisson Process",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "masi-2018s-q20": {
+   "path": "questions/exam-mas-i/masi-2018s-020.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:e9a65c67ee77bc419701346a2005651ba09bc46802a11e41f58e084cf6ee0e77",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "A Type I error is rejecting the null hypothesis when it is true, and its probability is computed by evaluating the rejection-region probability under the null hypothesis parameter value.",
+     "concept": "Hypothesis Testing",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Type I Error",
+       "quote": "A **Type I Error** occurs when a [[Hypothesis Testing|hypothesis test]] incorrectly **rejects a true null hypothesis** $H_0$."
+      },
+      {
+       "page": "Type I Error",
+       "quote": "The **critical region** is constructed so that $P(\\text{test statistic in critical region} \\mid H_0) = \\alpha$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "A gamma distribution with shape alpha and scale theta has mean alpha*theta and variance alpha*theta^2.",
+     "concept": "Gamma Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Gamma",
+       "quote": "$E[X] = \\alpha\\theta$, $\\text{Var}(X) = \\alpha\\theta^2$, and coefficient of variation $CV = 1/\\sqrt{\\alpha}$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "By the central limit theorem, the sample mean of n independent identically distributed observations is approximately normal with mean mu and standard deviation sigma/sqrt(n).",
+     "concept": "Central Limit Theorem",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Sample Mean",
+       "quote": "By the [[Central Limit Theorem]], $\\bar{X}$ is approximately $N(\\mu, \\sigma^2/n)$ for large $n$ whatever the population shape"
+      },
+      {
+       "page": "Central Limit Theorem (CLT)",
+       "quote": "$$\\frac{\\bar{X} - \\mu}{\\sigma / \\sqrt{n}} \\xrightarrow{d} N(0, 1)$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "Standardize the sample mean by subtracting the mean and dividing by sigma/sqrt(n), then use standard normal tail probabilities to compute the probability of exceeding a cutoff.",
+     "concept": "Normal Distribution",
+     "status": "prerequisite",
+     "places": [
+      {
+       "page": "Normal Approximation",
+       "quote": "$$P(\\bar{X} \\le x) \\approx \\Phi\\!\\left(\\frac{x - \\mu}{\\sigma/\\sqrt{n}}\\right)$$"
+      },
+      {
+       "page": "Sample Mean",
+       "quote": "$$Z = \\frac{5{,}300 - 5{,}000}{150} = 2.00 \\ \\Longrightarrow\\ P(\\bar{X} > 5{,}300) \\approx 1 - 0.9772 = 0.0228$$"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "The standard normal critical value with upper-tail probability 0.025 is 1.96, so a tail probability below 0.025 requires the z-cutoff to exceed 1.96.",
+     "concept": "Normal Distribution",
+     "status": "prerequisite",
+     "places": [
+      {
+       "page": "Normal Distribution",
+       "quote": "Useful percentiles: $z_{0.90} = 1.282$, $z_{0.95} = 1.645$, $z_{0.975} = 1.960$, $z_{0.99} = 2.326$"
+      }
+     ]
+    },
+    {
+     "id": "r6",
+     "kind": "procedure",
+     "statement": "Because sample size must be a whole number, solve the inequality for n and take the smallest integer satisfying it.",
+     "concept": "Hypothesis Testing",
+     "status": "prerequisite",
+     "places": [
+      {
+       "page": "Normal Approximation",
+       "quote": "At least $1{,}083$ policies."
+      },
+      {
+       "page": "Sample Mean",
+       "quote": "$$\\frac{\\sigma}{\\sqrt{n}} \\le 200 \\ \\Longrightarrow\\ \\sqrt{n} \\ge \\frac{4{,}000}{200} = 20 \\ \\Longrightarrow\\ n \\ge 400$$"
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018s-q21": {
+   "path": "questions/exam-mas-i/masi-2018s-021.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:3965d748588bb255d5949b1f1829263d5846d705564a789e1fbd20b5ec6df266",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "A chi-square test of independence tests whether two categorical variables in a contingency table are independent, with the null hypothesis that the row and column classifications are independent.",
+     "concept": "Chi-Square Test of Independence",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Chi-Square Goodness-of-Fit Test",
+       "quote": "The same statistic on a $k \\times m$ contingency table, with $E_{ij} = (\\text{row } i \\text{ total})(\\text{column } j \\text{ total})/n$, tests whether two classifications are independent, on $(k-1)(m-1)$ degrees of freedom."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "Under independence, the expected count for each cell of a contingency table equals (row total) times (column total) divided by the grand total.",
+     "concept": "Chi-Square Test of Independence",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Chi-Square Goodness-of-Fit Test",
+       "quote": "$E_{ij} = (\\text{row } i \\text{ total})(\\text{column } j \\text{ total})/n$"
+      },
+      {
+       "page": "Log-Linear Model",
+       "quote": "Expected counts are row total × column total ÷ $600$: $15$, $85$, $75$ and $425$."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The chi-square statistic is the sum over all cells of (observed - expected)^2 divided by expected.",
+     "concept": "Pearson Chi-Square Statistic",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Chi-Square Goodness-of-Fit Test",
+       "quote": "$$Q = \\sum_{j=1}^{k} \\frac{(O_j - E_j)^2}{E_j}$$"
+      },
+      {
+       "page": "Log-Linear Model",
+       "quote": "Pearson's $X^2 = \\sum (y_{ij} - \\hat\\mu_{ij})^2/\\hat\\mu_{ij}$ is the traditional alternative."
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018s-q22": {
+   "path": "questions/exam-mas-i/masi-2018s-022.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:cef925c36f93c4dcf05106c492f12650b35122e1580ad5c358464d7072cf7f4d",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "For independent normal samples with sample variances s1^2 and s2^2 of sizes n1 and n2, under H0: sigma1^2 = sigma2^2 the ratio s1^2/s2^2 follows an F distribution with (n1-1, n2-1) degrees of freedom.",
+     "concept": "F Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "F-Distribution",
+       "quote": "for independent normal samples of sizes $n_X$ and $n_Y$, $\\dfrac{S_X^2/\\sigma_X^2}{S_Y^2/\\sigma_Y^2} \\sim F(n_X - 1,\\ n_Y - 1)$"
+      },
+      {
+       "page": "F-Distribution",
+       "quote": "Under $H_0$, $s_A^2/s_B^2 \\sim F(10, 8)$, and the observed ratio is $2.4/0.8 = 3.0$."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "For a one-sided test of H1: sigma1^2 < sigma2^2 using s1^2/s2^2, the critical region is the lower tail of the F distribution, with boundary at the significance-level percentile.",
+     "concept": "F Test for Equality of Variances",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Critical Value",
+       "quote": "a lower-tailed test rejects when $T \\le c$ with $P(T \\le c \\mid H_0) = \\alpha$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The lower-alpha point of F with (a,b) degrees of freedom equals the reciprocal of the upper-alpha point of F with (b,a) degrees of freedom: F_{1-alpha,a,b} = 1/F_{alpha,b,a}.",
+     "concept": "F Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "F-Distribution",
+       "quote": "the value below which $F(n, m)$ falls with probability $\\alpha$ is $1/c$, where $c$ is the upper-$\\alpha$ point of $F(m, n)$."
+      },
+      {
+       "page": "Critical Value",
+       "quote": "The lower point comes from $F_{1-\\alpha,\\,\\nu_1,\\,\\nu_2} = 1/F_{\\alpha,\\,\\nu_2,\\,\\nu_1}$."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "Read upper percentage points of the F distribution from an F table using numerator and denominator degrees of freedom.",
+     "concept": "F Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "F-Distribution",
+       "quote": "Find the denominator row, the upper-tail area, then the numerator column."
+      }
+     ]
+    }
+   ]
+  },
+  "masi-2018s-q23": {
+   "path": "questions/exam-mas-i/masi-2018s-023.md",
+   "run": "answerability-20261025-mas-i",
+   "input_hash": "sha256:10d702dd47a562dd960674e85356771a4d66ac95c1135f30c5698cf5dda714bf",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "The maximum of several random variables is less than a value x exactly when every one of the variables is less than x.",
+     "concept": "Order Statistics",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Order Statistics",
+       "quote": "The minimum is $X_{(1)}$ and the maximum is $X_{(n)}$."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "For independent random variables, the probability that all of them satisfy their events equals the product of the individual probabilities.",
+     "concept": "Independence of Random Variables",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Order Statistics",
+       "quote": "$$P\\bigl(X_{(n)} \\le x\\bigr) = F_1(x)\\,F_2(x)\\cdots F_n(x)$$"
+      },
+      {
+       "page": "Joint Cumulative Distribution Function",
+       "quote": "The joint CDF of [[Independent Random Variables]] factors as $F(x,y) = F_X(x)\\cdot F_Y(y)$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "For an exponential distribution with mean mu, the CDF is P(W < x) = 1 - exp(-x/mu).",
+     "concept": "Exponential Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Exponential Distribution",
+       "quote": "$E[X] = \\theta$, $\\text{Var}(X) = \\theta^2$, and $F(x) = 1 - e^{-x/\\theta}$"
+      }
+     ]
+    }
+   ]
+  }
+ }
+}

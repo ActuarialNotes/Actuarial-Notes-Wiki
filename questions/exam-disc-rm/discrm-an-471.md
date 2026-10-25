@@ -13,9 +13,9 @@ answer: "C"
 points: 1
 off_syllabus: true
 verification:
-  status: stale
+  status: in_review
   confidence: null
-  last_checked: 2026-10-10
+  last_checked: 2026-10-25
   last_checked_by: agent:validate-v1
   content_hash: sha256:8fa1e143971ae3e201570efa7879b4e9cd7eb63a5c39b0cf2f81ef2d34a55144
   sources: []

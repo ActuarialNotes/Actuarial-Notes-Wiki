@@ -12,17 +12,17 @@ wiki_link:
   - Concepts/Replicating+Portfolio
   - Concepts/Guaranteed+Minimum+Maturity+Benefit
   - Concepts/Payoff
-points: 4
+points: 0
 verification:
-  status: in_review
-  confidence: null
-  last_checked: 2026-10-23
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-25
   last_checked_by: agent:validate-v1
-  content_hash: sha256:07e92fff24df252ce69222916da3355ff51abdcad3e454e79ca754cc7c36c191
+  content_hash: sha256:f3d60002bbd7926d12b2e9f1866388774f1f93e8fe861a857d5ad1c6fba3b6a0
   sources:
     - "SOA Exam ALTAM Written-Answer Sample Questions (January 2026), Q61, pp.108-109 (question), sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
     - "SOA Exam ALTAM Written-Answer Sample Solutions (January 2026), Q61, pp.117-118 (solution and graders' comments), sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
-  open_findings: 2
+  open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-061.md
 ---
@@ -152,6 +152,9 @@ $$v(1,3) = 18{,}818(0.97)\left[1.09468^2\,e^{-0.04(2)}\,NORM.S.DIST(0.44999,1) -
 Contribution to hedge portfolio is $= {}_{1|}q_{86}\,(4{,}287.93) = 0.067574(4{,}287.93) = 289.76$
 
 Hedge portfolio $= 182.11 + 289.76 = 471.87$
+
+> [!note] Editor's note
+> The SOA's 471.87 assumes the reset restarts a two-year term: it adds a death-in-year-3 term, ${}_{1|}q_{86}(4{,}287.93) = 289.76$. The question's policies are 2-year and it does not say the reset extends the term; on the stated term only the year-2 death benefit remains at time 1, and the hedge portfolio is $q_{86}(2{,}821.02) = 182.11$.
 
 ## Part d
 

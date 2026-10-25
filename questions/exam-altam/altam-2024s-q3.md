@@ -17,10 +17,10 @@ wiki_link:
 points: 11
 verification:
   status: verified
-  confidence: high
-  last_checked: 2026-10-23
+  confidence: medium
+  last_checked: 2026-10-25
   last_checked_by: agent:validate-v1
-  content_hash: sha256:00ad81e3ce4396287e40da8fc7a63507cb9b55b2e45fb2d9e2cf36e6bdc146cf
+  content_hash: sha256:8230b722d79edc32e7c16eba6af1377aa294b9404e156abdb76a3645f806c36c
   sources:
     - "SOA Exam ALTAM Spring 2024 — exam (question paper), Q3, pp.7-9, sha256:7877c415a5859ee881046def4553cc2d714688607058c1d807a069d873320ee5 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/exams/spring-2024-altam-exam.pdf"
     - "SOA Exam ALTAM Spring 2024 — model solutions and examiners' comments, Q3, pp.5-8, sha256:1ff2f7da08ae0d9bf5e542c2cbd87fa4b81ce334e1e47f8b117ecacc1103fb65 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/solutions/spring-2024-altam-solutions.pdf"
@@ -37,6 +37,9 @@ NED Life sells special whole life insurances of 100,000 that include a sickness 
 $$\mu_x^{01} = a_1 + b_1 e^{c_1 x}; \quad \mu_x^{02} = a_2 + b_2 e^{c_2 x}; \quad \mu_x^{10} = b_1 e^{c_1(110-x)}; \quad \mu_x^{12} = 1.4\mu_x^{02}$$
 
 where $a_1 = 4 \times 10^{-4}$; $b_1 = 3.47 \times 10^{-6}$; $c_1 = 0.138$; $a_2 = 5 \times 10^{-4}$; $b_2 = 7.85 \times 10^{-5}$ (as printed); $c_2 = 0.087$
+
+> [!note] Editor's note
+> The SOA's model solution notes that $b_2$ was printed as $7.85 \times 10^{-5}$ when it should have been $7.58 \times 10^{-5}$, the Standard Sickness-Death Model's value; the figures in parts (a) and (b)(i) follow from $7.58 \times 10^{-5}$. With the printed $7.85 \times 10^{-5}$, ${}_{10}V^{(1)}$ is about 161,460, not 162,300.
 
 - Death benefits are payable at the moment of death.
 - Sickness benefits are payable continuously at a rate of 12,000 per year while Sick.

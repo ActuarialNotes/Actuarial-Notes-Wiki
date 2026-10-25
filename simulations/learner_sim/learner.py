@@ -7,7 +7,7 @@ holds it to that.
 
 Staying in character can only be asked of a model, not forced: the persona
 draws an explicit knowledge boundary, and each answer lists the sources it
-relied on — `page: <title>`, `notes` or `prior: <item>` — which the auditor
+relied on — `page: <title>`, `notes`, `prior: <item>` or `guess` — which the auditor
 (auditor.py) then checks. The learner's working is not requested, and
 `trim_reply` keeps nothing of a reply but its action and that action's fields.
 """
@@ -27,7 +27,7 @@ ACTIONS = {
     "update_notes": '{"notes": "<your COMPLETE notes file, markdown, at most %d words>"}  — replaces the file',
     "next_question": '{"focus": "<a concept or topic you want to practise, or empty>"}',
     "answer": '{"answer": <see the question>, "confidence": <0-100>, '
-              '"sources": ["page: <title>", "notes", "prior: <item>"]}  — the answer as you would submit it',
+              '"sources": ["page: <title>", "notes", "prior: <item>", "guess"]}  — the answer as you would submit it',
     "flag_question": '{"reason": "<what is ambiguous, missing or wrong in the question>"}',
     "end_session": '{"reflection": "<what you learned, what still confuses you>"}',
 }
@@ -137,7 +137,7 @@ the wiki, reason from what you have, or guess, as this student would.
 - Your notes are your memory. Between sessions you remember only what your notes say. Anything worth \
 keeping goes into them with update_notes.
 - With each answer, list in `sources` what you used: `page: <title>` for a study page, `notes`, or \
-`prior: <item>`. List only what you actually used. Something you used but did not list counts as knowledge \
+`prior: <item>`, or `guess` if you used nothing. List only what you actually used. Something you used but did not list counts as knowledge \
 you were not supposed to have.
 - Give each answer as you would submit it. You are not asked to show your working.
 - Perform like this student, not better: their misreadings, slips and doubts are the data we need.

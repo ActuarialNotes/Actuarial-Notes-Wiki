@@ -4,7 +4,8 @@ and the edits to the study pages that would have helped.
 It runs only after the simulation, as a separate isolated Claude Code call, and
 it sees the official solutions, the pages, the learner's answers and the sources
 it listed — but never its working, which is not recorded — because its job is to
-compare what the guide teaches with what the question needed. Its output goes into the report; it never edits the vault.
+compare what the guide teaches with what the question needed. Its output goes
+into the report; it never edits the vault.
 """
 
 from __future__ import annotations
@@ -23,9 +24,8 @@ QUESTION_ISSUES = ("too_hard_for_guide", "ambiguous_wording", "answer_key_suspec
 
 SYSTEM = """You are reviewing an actuarial study wiki using evidence from a simulated student. The student \
 studied only the wiki's pages, then attempted practice questions. For each place it got stuck you get: the \
-concept page(s) it read, the answer it gave, the sources it listed, its confidence, and the official
-solution. Decide WHY it got stuck, \
-judging the wiki rather than the student wherever the evidence allows:
+concept page(s) it read, the answer it gave, the sources it listed, its confidence, and the official \
+solution. Decide WHY it got stuck, judging the wiki rather than the student wherever the evidence allows:
 - missing_prerequisite: the question needs knowledge the student lacked and the wiki assumes without teaching or linking
 - unclear_explanation: the page covers it, but in a way this student misread or couldn't follow
 - guide_question_gap: the official solution uses a formula, step or fact that is not on the pages read (or reachable from them)

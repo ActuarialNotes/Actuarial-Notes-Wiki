@@ -49,7 +49,8 @@ proves each one:
 
 Staying in character cannot be enforced, only made visible. The persona draws
 a knowledge boundary, each answer lists the sources it used (`page: …`,
-`notes` or `prior: …`), and the auditor flags what can't be traced to them.
+`notes`, `prior: …`, or `guess` for none), and the auditor flags what can't be
+traced to them.
 Notes are the only memory carried between sessions.
 
 The learner's working is not part of the record. The protocol asks for the
@@ -58,7 +59,11 @@ free-text "thought"; a reply is kept only as its action and that action's own
 fields (`trim_reply`, which `context.jsonl` uses), so prose around the JSON is
 never stored. The reports show the answer, confidence, sources listed, pages
 read and time spent, and the diagnostician and auditor judge from those, not
-from anything the learner wrote about how it got there.
+from anything the learner wrote about how it got there. With no working to
+measure, a question's simulated time is the stem's reading time plus the length
+of the submitted answer, so a multiple-choice question costs little more than
+reading it: compare simulated minutes within the new protocol, not with runs
+made before it.
 
 ## Profiles
 

@@ -20,7 +20,7 @@ from learner_sim.content_loader import ContentLoader, skim, truncate_derivations
 from learner_sim.exams import resolve_exam  # noqa: E402
 from learner_sim.grader import Grader, normalize_choice, numeric_match  # noqa: E402
 from learner_sim.auditor import deterministic_flags  # noqa: E402
-from learner_sim.learner import ACTIONS, build_persona, trim_reply  # noqa: E402
+from learner_sim.learner import ACTIONS, ARG_FIELDS, build_persona, trim_reply  # noqa: E402
 from learner_sim.profiles import ProfileError, load_profile, profile_from_dict  # noqa: E402
 from learner_sim.report import comparison_report, run_report  # noqa: E402
 from learner_sim.scripted import ScriptedPolicy  # noqa: E402
@@ -241,6 +241,7 @@ class WorkingIsNotRecordedTests(unittest.TestCase):
         prof = profile_from_dict({"name": "T", "exam": "FM", "description": "d"})
         persona = build_persona(prof, "Exam FM")
         self.assertIn('"sources"', persona)
+        self.assertIn("`guess`", persona)
         self.assertNotIn("reasoning", persona.lower())
         self.assertNotIn("thought", persona.lower())
 
@@ -257,6 +258,9 @@ class WorkingIsNotRecordedTests(unittest.TestCase):
     def test_trim_reply_without_an_action_stores_no_text(self):
         self.assertEqual(trim_reply("I would rather just explain it in prose."),
                          "(no action in reply; text not kept)")
+
+    def test_every_action_has_its_kept_fields(self):
+        self.assertEqual(set(ARG_FIELDS), set(ACTIONS))
 
     def test_an_answer_with_no_sources_is_flagged(self):
         self.assertIn("no sources listed", deterministic_flags({"sources": []}, set()))

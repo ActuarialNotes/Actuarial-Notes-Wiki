@@ -218,11 +218,11 @@ to §4. Where an item has a former roadmap ID (P0–P4), §4 gives it.
    `.github/dependabot.yml` (weekly, grouped). The `@supabase/supabase-js@2.39.0` pin is
    documented there and kept out of Dependabot. Left: the majors (`react-router` 7,
    `katex`), and lifting the Supabase pin in a PR of its own, tested signed in.
-4. **E10: small cruft.** 🟡 2026-10-17: the stray check moved to `exam-fm`, the `+`
+4. ~~**E10: small cruft.**~~ ✅ 2026-10-25 (from 2026-10-17): the stray check moved to `exam-fm`, the `+`
    encoding is in `CLAUDE.md`, the README is current (G7 ✅), and **lint is at 0 warnings**
    (the 11 `exhaustive-deps` fixed; the 34 `only-export-components` exports moved out of
-   their component files). Left: the 4 stranded question files, which VERIFY can't move or
-   delete (V9, §3.4).
+   their component files). The 4 stranded question files moved by copy-and-withdraw
+   (V9, 2026-10-25).
 5. ~~**E6: golden vectors for the duplication contracts.**~~ ✅ 2026-10-17, pulled from Next:
    `lib/duplicationContracts.test.ts` runs the email edge function's mirrored helpers
    against the same vectors as `dailyEmail.ts`, and evaluates the newest leagues rollover
@@ -242,8 +242,8 @@ to §4. Where an item has a former roadmap ID (P0–P4), §4 gives it.
    in that doc.
 
 **Lane 3, content and Fact Check** (ordered by `content-plan.md`'s phases since 2026-10-18):
-00. **V11, content plan Phase Q: every question file verified** (the lane's current focus,
-   2026-10-23; it goes ahead of everything left in Phases 2–4). 817 served questions are not
+00. ~~**V11, content plan Phase Q: every question file verified**~~ ✅ 2026-10-25 (the lane's focus
+   from 2026-10-23; it goes ahead of everything left in Phases 2–4). 817 served questions are not
    verified; 494 of them are the SOA prelims' banks, transcribed by a model from page images. The
    waves, batched by source document: **Q1**, those 494 (SRM, FAM, ASTAM, ALTAM; 16 packets on 23
    free SOA PDFs); **Q2**, Exam 6C's 13 papers (321 served, 73 off-syllabus); **Q3**, the residue
@@ -255,7 +255,11 @@ to §4. Where an item has a former roadmap ID (P0–P4), §4 gives it.
    report opening paragraphs restored that C13's scorer had missed). **Q4 ✅ and Q3's report re-read ✅
    2026-10-24:** all 156 off-syllabus questions on Exam 9's and 8's papers verified, and every report and
    explanation on Exams 7, 8 and 9 re-read against the printed paper (almost none was CAS's text; all
-   restored). Left: the residue — six held questions, fm-231, four FM retags, Exam P's re-cite, chart crops.
+   restored). **Q5 ✅ 2026-10-25, Phase Q closed: 3,639 of 3,639 served questions verified**, 291 of 293
+   off-syllabus (DISC-RM's two retired ones `in_review` on an unreachable source). Exam P re-cited to the
+   SOA's re-issued sample files; the held questions keep the publisher's text with a marked editor's note
+   beside the error; D10 and 6C's scope calls made; 62 printed figures cropped onto their questions; V9
+   done by copy-and-withdraw. Lane 3 returns to the content plan's phases, Phase 2 first.
 0. ~~**Content plan, Phase 1: ready means ready.**~~ ✅ 2026-10-18: every `ready` exam passes all
    seven gates (P and FM were at 5 and 6, C8); `publication_readiness.py --hold` guards them in CI;
    no open critical finding is left (V6: *MCT*, *Capital Required* and seven more pages, ÷1.5 not
@@ -392,7 +396,7 @@ These are in order within each lane.
 
 _Contributors add items here in a PR. The maintainer ranks them at the next review._
 
-- **V9: a way to move or retire a content file under VERIFY.** P3 (append-only) forbids
+- ~~**V9: a way to move or retire a content file under VERIFY.**~~ ✅ 2026-10-25: `verify_record.py withdraw` already retires a file (the log stays and the gate accepts its missing target), so a move is a copy to the new path plus a withdrawal; E10's four files moved that way (content plan, Phase Q, Q5). P3 (append-only) forbids
   deleting or renaming a `.verify/` log, and `verify_check.py` fails a log whose `target:` no
   longer exists, so a fact-checked file can't be moved or deleted at all. That blocks E10's
   4 stranded question files (`exam-p/probability/`, `exam-p/statistics/`, `exam-fm/interest/`),
@@ -466,7 +470,7 @@ capture (`lib/errorMonitoring.ts`), typed analytics (`lib/analytics.ts`, 31 even
 | E7 | An error collector | ⬜ | Next | `VITE_ERROR_ENDPOINT` or Sentry, through `registerErrorSink` (`analytics-and-monitoring.md`). Where errors are kept (Sentry, a Supabase table behind a service-role endpoint, or Vercel's short-lived logs) and the secret it needs are the maintainer's; a session can build whichever is chosen. |
 | E8 | Accessibility pass | 🟡 reduced motion in 12 files; no audit | Later | Add axe to e2e. Was P3.4. |
 | E9 | Codify `components/ui/` against the style guide | 🟡 | Later | The style guide *is* the design system; the primitives aren't codified against it. Was P3.2. |
-| E10 | Cruft | 🟡 | **Now** | Done: the stray check is in `exam-fm`; the `+` encoding and the one-level `questions/<bank>/` rule are in `CLAUDE.md`; lint at 0 warnings (2026-10-17). Left: the 4 stranded question files (blocked on V9, §3.4). |
+| E10 | Cruft | ✅ | **Now** | Done: the stray check is in `exam-fm`; the `+` encoding and the one-level `questions/<bank>/` rule are in `CLAUDE.md`; lint at 0 warnings (2026-10-17). The 4 stranded question files moved (V9, 2026-10-25). |
 | E11 | `supabase/tests/run.sh` in CI | ⬜ | Later | Today it is run by hand after touching the Actuaria migrations. |
 | E12 | PWA and offline | ⬜ | Later | E3 is done, so nothing blocks it now. Was P1.6. |
 
@@ -554,7 +558,7 @@ Waves 0 and 1 are done. Wave 2 is mostly done.
 | V6 | The 2 open critical findings | ✅ 2026-10-18 | — | Runs `1567`, `dd77`: *MCT*, *Capital Required*, *Supervisory Target Capital Ratio*, *Probable Maximum Loss* verified; the ×1.5 and LICAT's "Base Solvency Buffer" fixed on 20 more pages (now `in_review`); the 6C figure builder fixed. Left: *Registered Reinsurance* F-002 (major), for a writer. |
 | V7 | Run summaries for the Exam 7 and DISC-RM runs | ✅ 2026-10-18 | — | Reconstructed from the per-file logs: `.verify/_runs/2026-10-11T02-10Z-e7.md` and `…-dv14.md`. |
 | V8 | Verify the 363 concept-gap pages | ⬜ | rides V5 | Written in phases A–D; human review required (that plan's D5). |
-| V11 | **Every question file verified** (content plan, Phase Q) | 🟡 Q1 ✅, Q2 ✅, Q4 ✅; Q3's residue left | **Now** | 3,637 of 3,643 served questions verified after Q1 and Q2 (from 2,826; the 6 left held for the maintainer), 287 of 290 off-syllabus (2026-10-24; `generate_validation_status.py` now writes a *Question banks* table). The waves: Q1 SOA prelims (494), Q2 Exam 6C (394), Q3 the residue, Q4 Exam 9's and 8's off-syllabus (156). Takes over the G7 halves of C5 and C9. |
+| V11 | **Every question file verified** (content plan, Phase Q) | ✅ 2026-10-25 | **Now** | 3,639 of 3,639 served questions verified (from 2,826), 291 of 293 off-syllabus (2026-10-25, after Q5; `generate_validation_status.py` now writes a *Question banks* table). The waves: Q1 SOA prelims (494), Q2 Exam 6C (394), Q3 the reports re-read, Q4 Exam 9's and 8's off-syllabus (156), Q5 the residue and the maintainer's calls. Takes over the G7 halves of C5 and C9. |
 
 ### 4.5 A: AI and practitioner products
 
@@ -660,7 +664,7 @@ Where a default is given, sessions build with it until the decision is made.
 | D7 | Is a **medium confidence ceiling** enough for commercial-only sources? | content plan §6 (was CAS D3) | C9, MAS-II | Yes |
 | D8 | 6C's **F-001**, and Exam 5's **v02 outline** findings | content plan §6 (was CAS D4) | C3, C5 | ✅ settled 2026-10-18: transcribe CAS's words, the vault's additions on `*Key concepts:*` lines; 6C's objective filter dropped until CAS's codes agree (content plan §6) |
 | D9 | The **46 orphan concepts** | content plan §6 | V5 | Leave them unverified |
-| D10 | Exam 7 leftovers: questions on dropped readings (Patrik, Brehm/Goldfarb, England & Verrall); 2012 q20 filed under Exam 9 | content plan Appendix A.3 | — | Keep them as they are |
+| D10 | Exam 7 leftovers: questions on dropped readings (Patrik, Brehm/Goldfarb, England & Verrall); 2012 q20 filed under Exam 9 | content plan Appendix A.3 | — | ✅ settled 2026-10-25: `off_syllabus` where most of a question's points rest on a dropped reading (2012 Q9 only); the rest served; 2012 q20 stays |
 | D11 | **Delete** the retired comprehension checks (the folder, the parser, the skill), or keep them parked | `flashcard-collection.md` | R2 | Keep them parked |
 | D12 | Listen: the voice; whether it is Pro-only | `listen-recordings.md` | X4 | The test voice; free |
 | D13 | **The free / Pro boundary** (Cowork after Preview, Tools saved runs, practice packs) | old P4.3, `cowork.md` | G4, A4 | No change |
@@ -733,7 +737,7 @@ Every planning document in the repo, what it is for, and how healthy it is. A do
 | Document | Role | Covers | State | Last touched |
 |---|---|---|---|---|
 | `docs/roadmap.md` | **This file**: governance, priorities, status | Everything | Active | 2026-10-17 |
-| `docs/content-plan.md` | **Subplan: all vault content**: the gates, every exam's standing, the workstreams, the phases, the content decisions, the campaign records | C1–C18, V3–V11 | Active. Phase Q (every question verified) is the current focus | 2026-10-23 |
+| `docs/content-plan.md` | **Subplan: all vault content**: the gates, every exam's standing, the workstreams, the phases, the content decisions, the campaign records | C1–C18, V3–V11 | Active. Phase Q (every question verified) closed 2026-10-25; Phase 2 next | 2026-10-25 |
 | `docs/verification-plan.md` | Method: fact-check packets, tooling, sizing | V5 | Reference. Its waves and decisions moved to the content plan | 2026-10-18 |
 | `CONCEPT_GAPS_PLAN.md` | Record of phases A–D, and the generated gap worklist | C11 | Record; its open items are in the content plan §3.3 | 2026-10-18 |
 | `docs/cas-publication-plan.md` | — | — | 🗑 **Folded into `content-plan.md`** 2026-10-18 | — |
@@ -836,6 +840,13 @@ ls Concepts/*.md | wc -l; ls Resources/Books/*.md | wc -l
 ```
 
 ## Appendix B: Revision history
+
+- **2026-10-25, Phase Q closed.** V11 ✅: every served question file verified (3,639 of 3,639),
+  291 of 293 off-syllabus. The maintainer's pending content calls made with the recommended
+  options: D10 (off-syllabus where a question rests mostly on a dropped reading), the held
+  questions (publisher's text kept, a marked editor's note beside the error), sample sets that
+  print no points (`points: 0`), 6C's scope calls, Exam 9's open calls. V9 and E10 done. Lane 3
+  returns to the content plan's phases.
 
 - **2026-10-23, the question banks first.** V11 added and made lane 3's current focus: content
   plan Phase Q, every question file verified, ahead of the rest of Phases 2–4. 2,826 of 3,643

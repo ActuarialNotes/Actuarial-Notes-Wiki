@@ -1,13 +1,12 @@
 # Content Plan
 
-_Measured **2026-10-18** against `main` @ `ac1b277` with the commands in §7 (MAS-II re-measured after its first round, FAM, ASTAM and ALTAM after their banks (19 Oct), the SOA prelims after Phase 3's linker work, SRM after its bank); the question banks (§2.1) re-measured **2026-10-23** @ `d0a75a8` · Re-measure at every
+_Measured **2026-10-18** against `main` @ `ac1b277` with the commands in §7 (MAS-II re-measured after its first round, FAM, ASTAM and ALTAM after their banks (19 Oct), the SOA prelims after Phase 3's linker work, SRM after its bank); the question banks (§2.1) re-measured **2026-10-25**, after Phase Q closed · Re-measure at every
 roadmap review_
 
-> **Current focus (from 23 Oct 2026): every question file verified.** **Phase Q** (§4) goes
-> ahead of everything left in Phases 2–4. 817 served questions are not yet verified, and 494 of
-> them were transcribed by a model from page images. The other work waits behind it: concept and
-> reading packets, and new banks. The exception is work a question packet carries with it. §2.1
-> has the count, and Phase Q has the waves.
+> **Phase Q is closed (23–25 Oct 2026): every served question file is verified** — 3,639 of
+> 3,639, from 2,826 when it opened, and 291 of the 293 off-syllabus ones (§2.1). Its exit test
+> holds (§4). Work returns to the phases in order, Phase 2 first; the rule Phase Q set stays: no
+> bank grows by unverified files.
 
 This is the **one plan for the vault's content**: the exam pages, concept pages, resource pages
 and question banks, the fact check that stands behind them, and the generated figures and
@@ -104,6 +103,12 @@ Adopted during the DISC, MAS-I and Exam 7 campaigns (Appendix A), and binding on
    *and* its resource page. Mechanical first; the model reads only the residue.
 8. **Nothing a PDF prints is retyped by a model** (`docs/pdf-question-pipeline.md`), and nothing
    is invented — figures, chapters, codes and links are transcribed with their source.
+9. **The publisher's text stays as printed, its errors included.** A slip is marked ` (as
+   printed)` right after it, spelling included, and a transcriber's quiet correction is restored
+   with the marker. Where the publisher's solution is wrong, its text, key and figures still stay,
+   and a marked `> [!note] Editor's note` sits right after the passage, saying in one to three
+   sentences what is correct and why. One agent writes the note and a different one re-derives
+   it and passes the file (Phase Q, Q5).
 
 ---
 
@@ -153,29 +158,31 @@ failures are mostly the syllabus linker's cut-short and noise links (`[[Chain-La
 questions and Exam 6C's page, held behind D8); **2 open critical findings**, both Exam 6C (*MCT*,
 *Capital Required*).
 
-### 2.1 The question banks (2026-10-23)
+### 2.1 The question banks (2026-10-25)
 
 From the *Question banks* table that `generate_validation_status.py` writes into
-`Validation Status.md`, re-measured after waves Q1–Q4 (24 Oct; it opened at 2,826 / 3,643 and 58 / 290). A **served** question is one the quiz can draw. An **off-syllabus** one
+`Validation Status.md`, re-measured after waves Q1–Q5 (25 Oct; it opened at 2,826 / 3,643 and 58 / 290).
+The totals moved with Q5's scope calls: four questions flagged off-syllabus, four nested seed
+questions rehomed into their banks, and fm-231 withdrawn. A **served** question is one the quiz can draw. An **off-syllabus** one
 (`off_syllabus: true`) is kept for the record and out of draws.
 
 | Bank | Served verified / served | Off-syllabus verified / off | What is left |
 |---|---:|---:|---|
-| exam-6c | 343 / 343 | 73 / 73 | ✅ Q2. G7 passes |
-| exam-fam | 273 / 274 | — | ✅ Q1. `fams-109` held (the SOA's key against a recompute) |
-| exam-altam | 93 / 94 | — | ✅ Q1. `altam-061` held (its (c)(ii) reading of a reset term) |
-| exam-srm | 77 / 77 | — | ✅ Q1. G7 passes |
-| exam-astam | 60 / 62 | — | ✅ Q1. `astam-017` and `astam-025` held (the SOA's solutions in error) |
-| exam-9 | 131 / 131 | 149 / 149 | ✅ Q4 (its seven papers) and Q3 (reports re-read) |
-| exam-8 | 143 / 143 | 7 / 7 | ✅ Q4 and Q3 |
-| exam-5 | 356 / 357 | — | Fall 2017 Q19 `in_review` (Q3) |
-| exam-mas-ii | 140 / 141 | 30 / 30 | Fall 2019 Q35 `in_review` (Q3) |
-| exam-fm | 460 / 460 | 1 / 2 | fm-231 `in_review`; four V10 retags (Q3) |
-| exam-disc-rm | 144 / 144 | 0 / 2 | Two retired questions, stale behind V9 (Q3) |
-| exam-7 | 126 / 126 | 18 / 18 | ✅ Q3 (reports re-read) |
-| exam-p | 719 / 719 | 9 / 9 | Cited against superseded sample PDFs (Q3) |
+| exam-6c | 340 / 340 | 76 / 76 | ✅ Q2; Q5 flagged three pre-IFRS 17 questions off-syllabus |
+| exam-fam | 274 / 274 | — | ✅ Q1, Q5 (`fams-109` keeps the SOA's key) |
+| exam-altam | 94 / 94 | — | ✅ Q1, Q5 (`altam-061` and Spring 2024 Q3 carry editor's notes) |
+| exam-srm | 77 / 77 | — | ✅ Q1 |
+| exam-astam | 62 / 62 | — | ✅ Q1, Q5 (`astam-017`, `-025` carry editor's notes) |
+| exam-9 | 131 / 131 | 149 / 149 | ✅ Q4, Q3 |
+| exam-8 | 143 / 143 | 7 / 7 | ✅ Q4, Q3 |
+| exam-5 | 357 / 357 | — | ✅ Q5 (Fall 2017 Q19) |
+| exam-mas-ii | 141 / 141 | 30 / 30 | ✅ Q5 (Fall 2019 Q35) |
+| exam-fm | 460 / 460 | 1 / 1 | ✅ Q5 (fm-231 withdrawn; four retags; `fm-an-001` rehomed) |
+| exam-disc-rm | 144 / 144 | 0 / 2 | ✅ served. The two retired questions stay `in_review`: their one source is unreachable and no second was found |
+| exam-7 | 125 / 125 | 19 / 19 | ✅ Q3, Q5 (D10: 2012 Q9 off-syllabus) |
+| exam-p | 719 / 719 | 9 / 9 | ✅ Q5 (re-cited to the re-issued sample PDFs; `p-an-010`–`012` rehomed) |
 | exam-mas-i, the three DISCs | 572 / 572 | — | — |
-| **All banks** | **3,637 / 3,643** | **287 / 290** | **6 served, all held for the maintainer; 3 off-syllabus (fm-231, DISC-RM's two, Q3)** |
+| **All banks** | **3,639 / 3,639** | **291 / 293** | **None served; the two DISC-RM questions off-syllabus** |
 
 ---
 
@@ -272,7 +279,7 @@ procedure, the sizing); the rules are `docs/verification.md`; a sweep is run by 
 | 3a | FM Q351–Q462 | ✅ V4 (17 Oct). 10 topic-tag findings → V10, Phase 1 |
 | 3b–4b | The exam campaigns — 7 ✅, 8 🟡, then 9, 5, MAS-II, 6C | rides §3.1 |
 | 5 | The rest: 6U, PCPA, FSA and SOA development exams, orphan concepts, timeline pages | rides Phases 3–4 |
-| **Q** | **Every question file**, by source document (Phase Q, §4): the SOA prelims' converted banks, 6C's papers, the residue, the off-syllabus questions | 🟡 **current focus**: Q1 ✅ (490 of 494), Q2 ✅ (394 of 394), Q4 ✅ (156 of 156), Q3's report re-read ✅ (Exam 7, 8, 9); the residue left |
+| **Q** | **Every question file**, by source document (Phase Q, §4): the SOA prelims' converted banks, 6C's papers, the residue, the off-syllabus questions | ✅ 25 Oct: Q1–Q5 done, 3,639 of 3,639 served verified |
 
 Open fact-check items outside the campaigns:
 
@@ -290,10 +297,11 @@ Open fact-check items outside the campaigns:
   Exam P sweep re-cites the new files as a delta, as Wave 1 did after the last re-issue.
 - **V10's leftovers** — fm-370, fm-379, fm-391 and fm-421: a topic paired with another syllabus
   section, or not a syllabus term ("Premium"). Each needs a retag and a delta re-check.
-- **V9** (proposed) — VERIFY can't move or retire a file, so E10's four stranded question files
-  and any mis-named page stay where they are. A rule change; the maintainer's.
-- **Off-syllabus questions** (232 not verified: 229 CAS, DISC-RM's two, fm-231) ride their
-  paper's packet. D6 is settled as *yes* (§6), and they are Phase Q's waves Q2 and Q4.
+- ~~**V9**~~ ✅ 25 Oct — a file moves by a copy to its new path and `verify_record.py withdraw`
+  on the old one (the log stays, and the gate accepts a withdrawn log's missing target). E10's
+  four stranded question files moved that way (Phase Q, Q5).
+- ~~**Off-syllabus questions**~~ ✅ Phase Q (Q2, Q4, Q5): 291 of 293 verified; DISC-RM's two
+  retired questions stay `in_review` on an unreachable source.
 - **Orphan concepts** (46 at the 9 Oct count): link, merge or delete before spending a check (D9).
 
 ### 3.3 Concept pages
@@ -353,8 +361,9 @@ From `docs/syllabus-pipeline-review.md` §5 (packages 1–3 and 9 are done) and 
   every bank by topic string, and ten CAS questions — fifteen with V10's additions (Exam 9's *Yield
   Curve*, *Convexity*, *Real Rate of Interest*) — share a string with a P / FM key. Scope it to the
   P and FM banks before anyone runs it.
-- **Exam 7 leftovers (D10)**: questions on readings no longer on the syllabus (Patrik, Brehm /
-  Goldfarb, England & Verrall), and 2012 q20 filed under Exam 9. Default: keep them as they are.
+- ~~**Exam 7 leftovers (D10)**~~ ✅ 25 Oct (§6): a question resting mostly on a dropped reading is
+  `off_syllabus`. Only 2012 Q9 (England & Verrall) does; the other eleven rest mostly on
+  Stanard-Bühlmann and credibility weighting, which Hürlimann 2009 and Clark still teach.
 - **The converter's printed slips**: open minor findings on the Exam 8 papers are mostly CAS's own
   printed errors the vault repeats untagged; each wants an "(as printed)" note in its paper's
   packet.
@@ -438,7 +447,7 @@ are stale, all held behind decisions (DISC-RM's two retired questions, 6C's page
 Phase 1 left for later is in §3.2 (V10's four retags, Exam P's re-issued samples), §3.5
 (`standardize_questions.py`) and §3.6 (Atkinson & Dallas).
 
-### Phase Q — Every question verified (current focus, from 23 Oct 2026)
+### Phase Q — Every question verified (✅ 23–25 Oct 2026)
 
 **Why now.** A served question is the content a candidate acts on most directly. A wrong figure
 in a stem is learned, trusted and carried into the exam, which is the failure VERIFY exists for.
@@ -469,8 +478,9 @@ reading packets wait, except the delta re-checks a question packet forces.
 |---|---|---:|---|
 | **Q1** | The SOA prelims' converted banks, 16 packets: SRM ×2 (Q1–38, Q39–76); FAM-S ×2 (Q1–55, Q56–110); FAM-L ×5 (by AMLCR chapter: 1–3, 4–5, 6 in two halves, 7); ASTAM ×3 (sample set; 2023–24 sittings; 2025–26 sittings); ALTAM ×4 (sample Q1–28; Q29–61; 2023–24 sittings; 2025–26 sittings) | 494 | ✅ 23 Oct: **490 verified, 4 `in_review`** on an SOA-side conflict (below). G7 passes for SRM |
 | **Q2** | Exam 6C's 13 papers, Fall 2013–Fall 2019, one agent each, with the 73 off-syllabus questions sat on them. Scanned booklets: OCR'd by `verify_paper.py build`, and the `check` / `diverges` pages read as images | 321 + 73 | ✅ 23 Oct: **all 394 verified** (77 high, 317 medium — most keys are essays), none held. G7 passes for 6C |
-| **Q3** | The residue: Exam 5 Fall 2017 Q19 (part b credits case strengthening where CAS's report names a slower settlement rate); MAS-II Fall 2019 Q35 (its explanation wants a writer); fm-231; FM's four V10 retags (fm-370, 379, 391, 421, re-checked as a delta after retagging); DISC-RM's two stale retired questions (V9); the 49 verified Exam 7 and 8 questions owed their report paragraph (`report_gaps.py list`), in delta packets on their papers; the Exam 8 "(as printed)" notes; and Exam P's re-issued sample PDFs (`24980e6d…` / `e10d2649…`). For those, diff the new PDFs against the copies the 719 cite, then re-cite as a delta where a question is unchanged and re-check where it moved. **From Q2:** the 6C scope calls in its progress row, and — since `report_gaps.py`'s scorer misses a missing opening paragraph whose words the part reports reuse — every verified CAS bank's reports re-read against the printed page rather than the scorer's list (Exam 7, 8 and 9's papers, and the off-syllabus questions Q4 loads anyway). **From Q1:** the four questions it held (below), the two *Woolhouse's Formula* tags on questions the SOA solves by UDD's α(12)/β(12) (`faml-6-49`, `faml-7-09`), the sample-set questions whose `points` is a part count because the SOA prints none (ASTAM's 23; ALTAM's Q55, Q56, Q61) — wrong for a practice exam's pacing — and `astam-002`(b)(i)'s parallelogram, described in prose where the SOA prints a figure | ≈ 80, plus Exam P's delta | 🟡 The report re-read is done (24 Oct, below). Left: the six held questions, fm-231, the four FM retags, Exam P's re-cite, the graph crops, and the maintainer's calls. Waiting on a maintainer: Fall 2017 Q19's key, V9, Q1's four held questions, how a sample set's missing point values are set, and the scope calls Q2–Q4 listed |
+| **Q3** | The residue: Exam 5 Fall 2017 Q19 (part b credits case strengthening where CAS's report names a slower settlement rate); MAS-II Fall 2019 Q35 (its explanation wants a writer); fm-231; FM's four V10 retags (fm-370, 379, 391, 421, re-checked as a delta after retagging); DISC-RM's two stale retired questions (V9); the 49 verified Exam 7 and 8 questions owed their report paragraph (`report_gaps.py list`), in delta packets on their papers; the Exam 8 "(as printed)" notes; and Exam P's re-issued sample PDFs (`24980e6d…` / `e10d2649…`). For those, diff the new PDFs against the copies the 719 cite, then re-cite as a delta where a question is unchanged and re-check where it moved. **From Q2:** the 6C scope calls in its progress row, and — since `report_gaps.py`'s scorer misses a missing opening paragraph whose words the part reports reuse — every verified CAS bank's reports re-read against the printed page rather than the scorer's list (Exam 7, 8 and 9's papers, and the off-syllabus questions Q4 loads anyway). **From Q1:** the four questions it held (below), the two *Woolhouse's Formula* tags on questions the SOA solves by UDD's α(12)/β(12) (`faml-6-49`, `faml-7-09`), the sample-set questions whose `points` is a part count because the SOA prints none (ASTAM's 23; ALTAM's Q55, Q56, Q61) — wrong for a practice exam's pacing — and `astam-002`(b)(i)'s parallelogram, described in prose where the SOA prints a figure | ≈ 80, plus Exam P's delta | ✅ The report re-read (24 Oct); the rest, with the maintainer's calls made, ran as Q5 |
 | **Q4** | The off-syllabus questions on papers no earlier wave loads: Exam 9's 149 on its seven Spring 2013–2019 papers, and Exam 8's 7 on their Fall papers | 156 | ✅ 24 Oct: all 156 verified (below) |
+| **Q5** | Q3's residue with the maintainer's calls made (§6): Exam P's 657 re-cites; the held questions' editor's notes (a writer, then a checker); the scope calls (6C, D10); fm-231, the retags, the sample sets' point values, V9's four rehomed files; Exam 9's and 8's open calls; the printed figures cropped into `Media/Attachments` | ≈ 900 | ✅ 25 Oct (below) |
 
 **Exit test.** Measured by `generate_validation_status.py`'s *Question banks* table:
 
@@ -492,6 +502,7 @@ Q2.
 | Q1 (23 Oct) | `f593`, `a752` SRM; `aed4`, `f642` FAM-S; `ef0a`, `e971`, `40bb`, `b65d`, `8d0d` FAM-L; `0b13`, `b1bc`, `f2bf` ASTAM; `e686`, `838e`, `756d`, `fa02` ALTAM | **490 of 494 verified** (SRM 77 / 77, FAM 273 / 274, ASTAM 60 / 62, ALTAM 93 / 94), every keyed answer equal to the SOA's. Found and fixed: **two critical transcription errors** (`srm-041`'s statements II–III were equation debris; `srm-057`'s variable names stripped), three major (`srm-024`'s R², `srm-025`'s α = 0, `faml-6-21`'s pure endowment written with the 1 over the age — the term-insurance symbol — on which the answer turns), and two graders' comments filed under the wrong part (ALTAM Q12, Q21). About 250 SOA slips marked "(as printed)"; **about 20 places where a transcriber had quietly corrected the SOA restored as printed**; prose the SOA doesn't print removed from a few explanations. Appendix A.6's Fall 2024 Q6(b)(i) and A.7's sample Q16(b)(ii) corrected, and A.7 extended. **Held, `in_review`, for the maintainer:** `fams-109` (the SOA divides σ by the sample mean 750 and keys C; a recompute with the class mean 800 lands on B); `astam-017`(e) (the SOA's derivative has + for −: its interval (62.96, 1179.54) should be about (467.4, 775.1)); `astam-025`(d)(ii)–(iii) (the delta-method variance drops the square on (α̂−1), changing both answers); `altam-061`(c)(ii) (471.87 treats the reset as restarting the two-year term; on the stated term 182.11 — AMLCR ch. 17, commercial, would settle it). Also for the maintainer: ALTAM 2024s Q3's stem prints b₂ = 7.85e-5 where the SOA's note says 7.58e-5, so trusting it gives 161,467, not 162,300 (marked; a stem note would be new prose). About 6M tokens across 16 agents. **For Q2's brief:** the SOA's past-sitting *solutions* PDFs don't print the questions — the booklets are separate files on its *Past Exams and Solutions* page; and give each packet its own scratchpad folder (two agents shared a helper script, and one overwrote the other's mid-run) |
 | Q2 (23 Oct) | `2c56` F13; `f138` S14; `ebd4` F14; `1877` S15; `ba9c` F15; `7146` S16; `15e5` F16; `0cb0` S17; `e294` F17; `2c36` S18; `2c7e` F18; `ecef` S19; `d4fb` F19 | **394 of 394 verified**; every stem found on its own paper's booklet (no question filed under the wrong sitting, no fabricated or back-solved exhibit, no invented note — Exam 5's failures did not recur); every keyed calculation reproduces under CAS's conventions; every MCT ratio divides by 1.5. One major fixed: Fall 2015 Q18's "(as printed)" marker sat on a correct line while the file gave CAS's slip as the right figure. **The reports were the bank's real defect**: CAS's question-level opening paragraph was still missing on 194 questions after C13 — `report_gaps.py`'s scorer reads a paragraph whose words the part reports reuse as "paraphrased" or "present" — and all are restored verbatim; the converter kept only two sample answers per part, so dropped samples are restored on most papers; reworded candidate answers, model-written walk-throughs (Fall 2019's seven calculation questions) and glosses CAS never printed replaced by CAS's text; Spring 2015's C13 restoration had also pasted a heading fragment, "(BY PART, AS APPLICABLE)", into 16 reports (removed; none elsewhere); transcribers' quiet corrections of CAS restored as printed on most papers. Fall 2014, which the extractor can't segment, was worked by hand. Building the packets found that the shared source cache served scanned booklets un-OCR'd: `report_gaps.py` had cached every CAS paper with `ocr=False`, and `fetch` returned that copy to every later caller, so every stem read `diverges` — `fetch(ocr=True)` now re-extracts such a copy from disk, and warns if OCR still returns nothing. **For the maintainer** (Q3): Spring 2019 Q18 (c–d on BCAR, which the syllabus excludes; a–b on the MCT); Spring 2018 Q13 (IAS 39 bond classes) and Q14 (CIA MfADs and PfADs), served where the bank flags the same topics off-syllabus; Spring 2017 Q14 (IFRS 4 disclosures), served; Fall 2015 Q16 (verified on CAS's second sample as a printed slip, 216,377 for 216,337 — hold it if you'd rather). About 4M tokens across 13 agents |
 | Q3 and Q4 (24 Oct) | Exam 9: `e281`+`d1c5` S13, `fb1d` S14, `0d74` S15, `41ad` S16, `29c0` S17, `e162` S18, `062c` S19. Exam 8: `a890` F12, `a8d4` F13, `d43f` F14, `9418` F15, `0534` F16, `f375` F17, `b804` F18, `834e` F19. Exam 7: `4f56` 12, `e32b` 13, `f41e` 14, `4960` 15, `dda0` 16, `0358` 17, `1be1` 18, `502d` 19 | **Q4: all 156 off-syllabus questions verified** (Exam 9's 149, Exam 8's 7), each against CAS's answer for its sitting; every stem on its own booklet, every keyed calculation reproducing under CAS's conventions. **Q3: every report and explanation on Exams 7, 8 and 9 re-read against the printed paper** (23 papers, 545 questions, the moved Exam 7 and 8 questions in `exam-9` included) — and the questions the 11–18 Oct campaigns verified turned out to carry the same defect as 6C's: **almost no explanation was CAS's text.** Model-written walk-throughs, glosses, merged or condensed samples and "light copy-edits" stood where CAS printed sample answers, and the converter's two-per-part limit had dropped the rest (Exam 7 2018 Q2a kept 4 of 20). Every figure in them matched CAS; the wording didn't. All are now CAS's samples in CAS's order. About 225 more report opening paragraphs restored that `report_gaps.py` scored present or paraphrased (the 2019 papers print it after the last sample, so the extractor never had them); several reports moved to the part they belong to; transcriber corrections of CAS restored as printed, including figures the 11 Oct Exam 7 campaign had "corrected" as findings (2016 Q1, Q19; 2012 Q10, Q15) and one an Exam 8 pass had "fixed" away (2018 Q3's 29,601). Exam 8's open printed-slip findings closed. No critical or major finding in either wave. **For the maintainer:** Exam 9 2019 Q10 F-003 (CAS's third sample prices the CDO² tranche on a 1,000 notional; the stem gives 500); 2017 Q21 (the report says the rate "would decrease", every sample increases it); 2013 Q8 (equal dollars or one bond each — the stem reads both ways); Exam 7's Patrik and Brehm questions (2012 Q9, Q10; 2013 Q10; 2015 Q13; 2016 Q16, Q17; 2017 Q16; 2018 Q1, Q14, Q16; 2019 Q1, Q13 — keep, split or `off_syllabus`, D10); 2013 Q21, whose correct Basel II table was composed prose and is now only in its log (a writer); Exam 8 2015 Q16's undivided report, split across its parts. About 25 printed charts and diagrams are described, not shown — each wants a crop into `Media/Attachments` (an open nit or minor on its file). Loose topic tags noted in the passes (*Cost of Capital* on CAPM questions, *Loans* on a swap), none retagged. Two agents hit the session limit and were resumed; one corrupted its files with a non-Unicode `sed` and restored them from git before recording. About 8M tokens across 23 agents |
+| Q5 (25 Oct) | `7482` Exam P mechanical re-cite (523); `42ff`, `980f` Exam P residue (134); `4e27` Exam P wording; `505d` SOA residue; `fb9f` CAS resolutions; `c546` 6C and D10 scope; `0282`, `8312` writer; `a780` checker (+ its follow-up); `425a` figures (Exam 7, 9, ASTAM); `4ef2` figures (Exam 8, 5) | **Phase Q's exit test holds: 3,639 of 3,639 served questions verified, 291 of 293 off-syllabus, no open critical, `verify_check` 0 errors.** Exam P: the SOA had replaced both 2026-05 files at the same URLs; 523 questions whose stem, options, key and points matched the new files mechanically were re-cited by batch, the other 134 read against the pages (the re-issue added "using the Central Limit Theorem" to Q241; nothing else changed), and eight stems that paraphrased or renumbered the SOA restored to its wording (Q271's "0,8" as printed). **The held questions:** the SOA's and CAS's text, keys and figures stay as printed, with a marked `> [!note] Editor's note` beside the error — ASTAM 17(e) (interval (467.4, 775.1)), 25(d) (the delta-method square), ALTAM 61(c)(ii) (the reset assumption), ALTAM Spring 2024 Q3 (b₂ = 7.58e-5, as the SOA's own note says; the stem's figure gives about 161,460), Exam 7 2013 Q21 (Basel II's betas), Exam 8 2018 Q6 (F = 35); written by one agent, re-derived and passed by another. Exam 5 Fall 2017 Q19 now carries CAS's sample answers verbatim (CAS's sample 1 does credit case strengthening, so its F-002 was overstated); MAS-II Fall 2019 Q35, for which CAS printed only the key, has its wrong explanation replaced by marked steps. `fams-109` keeps the SOA's key. **Scope:** 6C's three pre-IFRS 17 questions and Exam 7 2012 Q9 off-syllabus; Exam 7 keeps all seven gates. **Points:** ASTAM's 23 sample questions and ALTAM sample Q55, Q56, Q61 carry `points: 0`, the SOA printing none; a timed quiz and a practice exam count such a question as the paper's points per question (`pointsForPace`), and the validators accept 0. **Figures:** 62 printed charts, plots and diagrams cropped from 37 questions' pages at 200 dpi, each the old prose description, corrected against the image, as its alt text. fm-231 (deleted by the SOA) withdrawn; the four nested seed questions rehomed as `p-an-010`–`012` and `fm-an-001` (V9). Left: DISC-RM's two retired questions `in_review` (one rank-3 source, HTTP 503). About 3M tokens across 12 agents |
 
 ### Phase 2 — Fix the converter, then finish the beta exams
 
@@ -577,9 +588,9 @@ New exam pages from §3.0 at ASA level join here.
 | 3. What's still missing | C11 | ✅ ALTAM's one catch-all (*Life Insurance* as "long-term life" in "long-term life and health insurance") cleared 19 Oct by teaching the rename test a shared head noun (*How ALTAM's sets converted*, §3.1a); no page changed. *Total Risk* (GH-101) is not a prelim's |
 | 4. Banks | — | 🟡 **SRM ✅ beta** (18 Oct): the bank wired through (catalogue, label, quiz builder, pace, DEFAULT track, Concept Craft labels for its three boards), the SOA's 72 live sample questions converted (§3.1a has the recipe and what the PDF needed), and five vault-written questions for the concepts the set doesn't reach (*Model Validation*, *Train-Test Split*, *K-Nearest Neighbors*, *Autocorrelation Function*, *ARCH Model*) — each checked by a different agent from its writer and verified (run `7805`; the two on Frees medium, D7). `--check srm-1`: G1, G2, G3, G6 pass. The topic choices await the maintainer's review in the PR, in place of the skill's pilot. **FAM ✅ beta** (19 Oct), the same way: the bank wired through (catalogue, label `Exam FAM`, quiz builder, 34 questions in 3½ hours, DEFAULT track, 236 Concept Craft labels for its eight boards); both sample sets converted, 268 live questions (FAM-S 103, FAM-L 165) — see *How FAM's sets converted* below; 46 concept tags read off the questions for 24 syllabus concepts the topics didn't name; and six vault-written questions for the five concepts no SOA question tests plus TVaR (*Cash Flow*, *Delta Hedging*, *Insurable Interest*, *Defined Benefit Plan*, *Defined Contribution Plan*, *Risk*), checked by a different agent and verified (run `7017`; five medium on open texts, `fam-an-006` high on the SOA's FAM tables; one major fixed — `fam-an-003` had a second defensible answer). `--check fam-1`: G1, G2, G3, G6 pass. Topic choices await the maintainer's review in the PR. **ASTAM ✅ beta** (19 Oct): the bank wired through (catalogue, label `Exam ASTAM`, quiz builder, paced by the point — three hours for 60 — a six-question practice exam, the seven sittings on the past-paper shelf with their model-solution PDFs, DEFAULT track, 150 Concept Craft labels: 96 for its six boards, 54 for connections on other exams' boards that had none, MAS-II's credibility board among them); 60 SOA questions transcribed (*How ASTAM's sets converted*, §3.1a); seven syllabus concepts tagged on the questions that work with them (*Moment*, *Severity*, *Severity Distribution*, *Probability Distributions*, *Continuous Random Variable*, *Probability*, *Bayesian*); two vault-written questions on trend, checked by a different agent and verified (run `f53e`, medium on Werner & Modlin ch. 6, Brown & Lennox being commercial). `--check astam-1`: G1, G2, G3, G6 pass. **ALTAM ✅ beta** (19 Oct), the same way: the bank wired through (catalogue, label `Exam ALTAM`, quiz builder, paced by the point, a six-question practice exam, the seven sittings on the past-paper shelf with their model-solution PDFs, DEFAULT track, 272 Concept Craft labels for its seven boards); 94 SOA questions transcribed and re-checked (*How ALTAM's sets converted*, §3.1a); *Payoff*, *Annuity Contract* and *Valuation* tagged on the questions that work with them, so no vault-written question was needed. `--check altam-1`: G1, G2, G3, G6 pass. Next: PA and ATPA |
 | 4a. SRM's fact-check campaign | — | 🟡 G7 ✅ (Phase Q, wave Q1, 23 Oct). Was: (the 72 converted questions, two packets on the SOA's PDF); G4: 7 concepts; G5: Frees 2010 (commercial, D7; Frees posts an online version of the text) |
-| 4b. FAM's fact-check campaign | — | 🟡 G7 273 / 274 (Phase Q, wave Q1, 23 Oct; `fams-109` held). Was: (268 converted questions against the SOA's four PDFs, seven packets), the ~45 printed slips the transcribers noted each wanting an "(as printed)" note (listed in the PR); G4: 37 concepts; G5: all three readings commercial (D7). The concept pages the transcribers found missing — the (a,b,0)/(a,b,1) class, Burr, Gompertz–Makeham, select-and-ultimate tables, expectation of life, variable annuity, coherent risk measure — are tagged under broader pages for now; FAM's VaR/TVaR line links *Risk*, a definitions page, where *Risk Measure* holds the material |
-| 4c. ASTAM's fact-check campaign | — | 🟡 G7 60 / 62 (Phase Q, wave Q1, 23 Oct; `astam-017`, `-025` held). Was: (60 converted questions against the SOA's eight question/solution pairs, three packets), Appendix A.6's slips each wanting an "(as printed)" note; G4: 22 concepts; G5: Klugman and Brown & Lennox commercial (D7), the two SOA study notes free |
-| 4d. ALTAM's fact-check campaign | — | 🟡 G7 93 / 94 (Phase Q, wave Q1, 23 Oct; `altam-061` held). Was: (94 converted questions against the SOA's eight question/solution pairs, four packets), Appendix A.7's slips each wanting an "(as printed)" note (the sample set's MLC/LTAM originals are a second source for its questions); G4: 50 concepts; G5: AMLCR commercial (D7), ALTAM-21-23 free |
+| 4b. FAM's fact-check campaign | — | 🟡 G7 ✅ (Phase Q, waves Q1 and Q5, 23–25 Oct). Was: (268 converted questions against the SOA's four PDFs, seven packets), the ~45 printed slips the transcribers noted each wanting an "(as printed)" note (listed in the PR); G4: 37 concepts; G5: all three readings commercial (D7). The concept pages the transcribers found missing — the (a,b,0)/(a,b,1) class, Burr, Gompertz–Makeham, select-and-ultimate tables, expectation of life, variable annuity, coherent risk measure — are tagged under broader pages for now; FAM's VaR/TVaR line links *Risk*, a definitions page, where *Risk Measure* holds the material |
+| 4c. ASTAM's fact-check campaign | — | 🟡 G7 ✅ (Phase Q, waves Q1 and Q5, 23–25 Oct). Was: (60 converted questions against the SOA's eight question/solution pairs, three packets), Appendix A.6's slips each wanting an "(as printed)" note; G4: 22 concepts; G5: Klugman and Brown & Lennox commercial (D7), the two SOA study notes free |
+| 4d. ALTAM's fact-check campaign | — | 🟡 G7 ✅ (Phase Q, waves Q1 and Q5, 23–25 Oct). Was: (94 converted questions against the SOA's eight question/solution pairs, four packets), Appendix A.7's slips each wanting an "(as printed)" note (the sample set's MLC/LTAM originals are a second source for its questions); G4: 50 concepts; G5: AMLCR commercial (D7), ALTAM-21-23 free |
 | 5. Fact-check campaigns | — | ⬜ G7 is Phase Q's. G4 and G5 come after it; five of the six prelims' main readings are commercial (D7). PA's and ATPA's banks wait behind Phase Q, then ship with their own packets |
 
 ### Phase 4 — The rest
@@ -626,7 +637,11 @@ build with the default until the decision is made.
 | D7 | CAS plan D3, verification plan §7.6 | Is a medium confidence ceiling enough for a commercial-only source? | Yes |
 | D8 | CAS plan D4, verification plan §7.2 | 6C's F-001 (domain C renumbering), and Exam 5's v02 outline | ✅ settled 18 Oct 2026: **transcribe CAS's words; the vault's additions go on `*Key concepts:*` lines.** 6C: domain C's five tasks as the Fall 2026 outline prints them, in its order; F-002's added scope (litigation environment, funding mechanisms) linked to the nearest existing pages; the shelf's Learning objective filter dropped for 6C until CAS's reading codes match its tasks (6U's precedent). Exam 5: A18 added, every task and the domain B preamble restored to the v02 outline's words, the vault-added clauses' links moved to `*Key concepts:*` lines (the concept set unchanged), and the Werner and Friedland chapter scopes added to Source Material |
 | D9 | verification plan §7.4 | The orphan concepts: link, merge or delete | Leave them unverified |
-| D10 | CAS plan §4.1 | Exam 7's questions on dropped readings; 2012 q20 filed under Exam 9 | Keep as they are |
+| D10 | CAS plan §4.1 | Exam 7's questions on dropped readings; 2012 q20 filed under Exam 9 | ✅ settled 25 Oct 2026: **`off_syllabus` where most of a question's points rest on a reading no longer assigned**, kept served otherwise, never split or moved (a log can't be renamed). Applied to the twelve Patrik / Brehm questions: 2012 Q9 flagged, eleven served on Hürlimann and Clark. 2012 q20 stays where it is |
+| — | Phase Q, Q3 | The questions held on a publisher's error (ASTAM 17, 25; ALTAM 61, Spring 2024 Q3; Exam 7 2013 Q21; Exam 8 2018 Q6) | ✅ settled 25 Oct 2026: **the publisher's text, key and figures stay as printed, with a marked editor's note beside the error**, written by one agent and passed by another. `fams-109` keeps the SOA's key with no note (the solution's reading is defensible) |
+| — | Phase Q, Q1 | A sample set that prints no point values (ASTAM's, ALTAM Q55, Q56, Q61) | ✅ settled 25 Oct 2026: **`points: 0`**, read by the app as *none printed* and paced at the paper's points per question |
+| — | Phase Q, Q2 | 6C's scope calls | ✅ settled 25 Oct 2026: Spring 2018 Q13, Q14 and Spring 2017 Q14 `off_syllabus`; Spring 2019 Q18 and Fall 2015 Q16 as they are |
+| — | Phase Q, Q3–Q4 | Exam 9's open calls (2019 Q10, 2017 Q21, 2013 Q8, Q20) and Exam 8 2015 Q16 | ✅ settled 25 Oct 2026: CAS's slips kept as printed; 2013 Q8 and Q20 `wontfix` (CAS's key and grading settle the reading); 2015 Q16 keeps its split report |
 | D15 | CONCEPT_GAPS §13 | The 9 ambiguous targets and the 21 stubs | Link the proposed pages |
 | D17 | CAS plan D5 | The DISC link design: one page per lettered section | The current design |
 | D18 | syllabus-pipeline-review §4 | The review's owner decisions D1–D4, applied but never written up | As applied |

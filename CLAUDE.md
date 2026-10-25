@@ -219,11 +219,13 @@ before touching that area**:
   content plan's. Read before launching a VERIFY sweep.
 - `docs/content-plan.md` — **the one plan for the vault's content** (it absorbed the CAS
   publication plan, the verification waves, the concept-gap and syllabus-pipeline leftovers):
-  the seven gates `scripts/publication_readiness.py` measures for both bodies (page verified,
+  the eight gates `scripts/publication_readiness.py` measures for both bodies (page verified,
   every objective link lands on a written page, **no catch-all links** — one concept page
   standing in, under other names, for more than two objective lines — concepts verified,
   readings written and verified, a served question for every concept in the exam's own bank,
-  the bank verified), the rules every campaign keeps (read every link first, for the wrong page
+  the bank verified, and **G8 answerable**: every served question's requirements quoted on a page
+  in its reach, re-read in code from the committed answerability record — see the simulated
+  learner below), the rules every campaign keeps (read every link first, for the wrong page
   and the wrong country; the clean-up round's limits; never cite an unauthorized copy), where
   every exam stands, every open content item by workstream, the **phases** they are done in
   (1: ready means ready; 2: the converter, then the beta exams; 3: the SOA ASA prelims; 4: the
@@ -282,7 +284,13 @@ before touching that area**:
   and code checks every quote is really on the page; the report ranks the gaps by the page that
   should hold them. It is the better instrument for content gaps (on MAS-II the control learner,
   unstudied, outscored the studied one): run it before the learner, and fix a gap from the reading,
-  never with the question's own numbers.
+  never with the question's own numbers. Each run is merged into a committed record per bank,
+  `simulations/answerability/<bank>.json`, which `scripts/answerability_lib.py` (standard library)
+  re-reads against the vault as the publication gate **G8**: a quote still on its page, the page
+  still tagged, one link away or on a prerequisite exam's page (the exam page's *Prerequisite
+  knowledge* callout), or the item recorded `not-required`. Items are closed with its `resolve` /
+  `not-required` commands, which refuse a quote that isn't on the page; `status --exam` lists
+  what is open.
 - `docs/analytics-and-monitoring.md` — **Google Analytics** and error capture. GA is not in
   `index.html`: `initAnalytics()` (`lib/analytics.ts`, from `main.tsx`) loads it only on a
   measured visit — the production host, not automation (`navigator.webdriver`, bot user
@@ -624,8 +632,10 @@ Other important `lib/` modules:
 - `wikiParser.ts` / `wikiIndex.ts` / `wikiExtract.ts` — parse wiki pages, build search index, extract syllabus structure
 - `conceptMatch.ts` — resolves concept name variants/aliases to a canonical slug (`slugForLink`)
 - `examStatus.ts` — how far along each exam's material is, keyed by exam_progress key:
-  `ready` (P, FM, MAS-I, the three DISCs — DISC-DA, DISC-RM, DISC-IA — and Exam 7, the CAS ones promoted by
-  `scripts/publication_readiness.py --check`), `beta` (MAS-II, Exams 5, 6C, 8 and 9,
+  `ready` (an exam that passes all eight gates of `scripts/publication_readiness.py --check` —
+  **none today**: P, FM, MAS-I, the three DISCs and Exam 7 went back to beta on 2026-10-25,
+  when answerability became gate G8, and each is promoted again once its bank passes it),
+  `beta` (those seven, then MAS-II, Exams 5, 6C, 8 and 9,
   FAM and SRM — their banks the SOA's sample sets — ASTAM and ALTAM, from their sample sets and
   released papers, and PCPA) or `development` (Exams 6U, 6I and 6T, the other SOA exams past FM —
   PA, ATPA and the FSA pathway's exams, keyed `FSA-GH101` etc. — and the **non-exam

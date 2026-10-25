@@ -153,6 +153,8 @@ def check_answerable(argv: list[str] | None = None) -> int:
     ap.add_argument("--out", default=os.path.join(SIM_DIR, "runs"))
     ap.add_argument("--run-id", help="run directory name (reuse one to continue it)")
     ap.add_argument("--report-only", action="store_true", help="rewrite report.md from results.jsonl, no model calls")
+    ap.add_argument("--no-record", action="store_true",
+                    help="don't merge the results into simulations/answerability/<bank>.json, the record G8 reads")
     args = ap.parse_args(argv)
 
     exam = resolve_exam(args.exam)
@@ -171,6 +173,13 @@ def check_answerable(argv: list[str] | None = None) -> int:
     sittings = {sid: q.sitting for sid, q in bank.items()}
     write(path, report(exam, results, loader, run_id, left_out, sittings))
     print(f"report → {path}")
+    if not args.no_record and not args.report_only:
+        import answerability_lib as AL
+        catalog_exam = {"page": exam.page, "bank": exam.bank, "wiki_id": exam.wiki_id}
+        record = AL.load_record(exam.bank) or AL.new_record(catalog_exam)
+        hashes = {sid: r["input_hash"] for sid, r in results.items() if r.get("input_hash")}
+        AL.merge_results(record, results, run_id, hashes)
+        print(f"record → {AL.save_record(record)}  (python3 scripts/answerability_lib.py status --exam {exam.key})")
     return 0
 
 

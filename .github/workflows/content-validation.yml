@@ -36,6 +36,7 @@ on:
       - 'scripts/resource_*.py'
       - 'scripts/vault_links.py'
       - 'scripts/publication_readiness.py'
+      - 'scripts/answerability_lib.py'
       - 'scripts/generate_coverage_report.py'
       - 'scripts/*.json'
       - '.claude/skills/actuarial-concept-definitions/validate_links.py'
@@ -55,6 +56,7 @@ on:
       - 'scripts/resource_*.py'
       - 'scripts/vault_links.py'
       - 'scripts/publication_readiness.py'
+      - 'scripts/answerability_lib.py'
       - 'scripts/generate_coverage_report.py'
       - 'scripts/*.json'
       - '.claude/skills/actuarial-concept-definitions/validate_links.py'
@@ -102,7 +104,8 @@ jobs:
       # A ready exam keeps its structural gates (docs/content-plan.md, Phase 1):
       # every objective link written, no catch-all, every concept with a served
       # question. The fact-check gates print as warnings — an edit makes a page
-      # stale by design, and verify-check.yml repairs the record.
+      # stale by design, and verify-check.yml repairs the record — and so does
+      # G8, answerability, re-read in code from simulations/answerability/.
       - name: Ready exams hold their gates
         run: python3 scripts/publication_readiness.py --hold
 

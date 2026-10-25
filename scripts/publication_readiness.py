@@ -24,6 +24,12 @@ This script is the one definition of "everything", so the content plan
   G6 questions  every syllabus concept has at least one served question in the
                 exam's own bank (the coverage rule of `generate_coverage_report.py`)
   G7 bank       every served question in the bank is `verified`
+  G8 answerable every served question can be answered from the pages within its
+                reach: checked by `simulations/check-answerable` since its text
+                last changed, and every requirement its solution uses either
+                quoted on a page it is tagged with, one link away or on a
+                prerequisite exam's page — re-read in code, now — or recorded as
+                not required (`answerability_lib.py`, content decision D29)
 
 A syllabus concept is a `[[link]]` inside a learning-objective callout, resolved
 by `vault_links.canonical_page` — the same set the coverage report counts.
@@ -40,6 +46,8 @@ Usage:
 `ready` has passed every gate once; the structural gates (G2 written, G3
 specific, G6 questions) are a fact about the vault's pages, links and bank, so a
 PR that breaks one on a ready exam fails. The fact-check gates (G1, G4, G5, G7)
+and G8 — which an exam promoted before G8 existed has never been held to, and
+which a reworded question re-opens until the model check is run on it again —
 move with every edit — any edit makes a file `stale` (P4), and the record is
 repaired, not authored, in CI — so they are printed as warnings, the re-check a
 ready exam is now owed. A beta exam below the development → beta bar (G2, G3,
@@ -58,6 +66,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+import answerability_lib as AL  # noqa: E402
 import generate_coverage_report as COV  # noqa: E402
 import syllabus_lib as SL  # noqa: E402
 import vault_links as VL  # noqa: E402
@@ -67,7 +76,7 @@ REPO_ROOT = Path(VL.REPO_ROOT)
 STUB_WORDS = 100        # find_concept_gaps.STUB_WORDS
 MAX_ITEMS = 2           # G3: more renamed links than this to one concept page is a catch-all
 
-GATES = ("page", "written", "specific", "checked", "sources", "questions", "bank")
+GATES = ("page", "written", "specific", "checked", "sources", "questions", "bank", "answerable")
 # The gates a page, link or bank edit can break; the rest are the fact check's.
 STRUCTURAL = ("written", "specific", "questions")
 
@@ -79,6 +88,7 @@ GATE_LABELS = {
     "sources": "G5 sources written + verified",
     "questions": "G6 every concept has a question",
     "bank": "G7 bank verified",
+    "answerable": "G8 every question answerable from its pages",
 }
 
 
@@ -250,6 +260,7 @@ def assess(exam: dict, vault: VL.Vault, tables: dict) -> dict:
     bad_sources = {s: st for s, st in sources.items() if st != "verified"}
     bank_status = Counter(status_of(p) for p in bank_paths)
 
+    answerable = AL.assess_bank(exam, REPO_ROOT)
     page_status = status_of(exam["page"])
     failing = {
         "page": page_status != "verified",
@@ -259,6 +270,7 @@ def assess(exam: dict, vault: VL.Vault, tables: dict) -> dict:
         "sources": bool(bad_sources),
         "questions": bool(no_question),
         "bank": bool(bank_paths) and bank_status["verified"] < len(bank_paths),
+        "answerable": not answerable["passes"],
     }
     return {
         "exam": exam["page"][:-3],
@@ -275,6 +287,7 @@ def assess(exam: dict, vault: VL.Vault, tables: dict) -> dict:
         "bad_sources": bad_sources,
         "bank_served": len(bank_paths),
         "bank_status": dict(bank_status),
+        "answerability": answerable,
         "failing": failing,
         "ready": not any(failing.values()),
     }
@@ -283,17 +296,25 @@ def assess(exam: dict, vault: VL.Vault, tables: dict) -> dict:
 def summary_table(results: list[dict]) -> str:
     rows = [
         "| Exam | Status | Page | Concepts | Missing / stub | Catch-alls | Unverified concepts | Concepts w/o question "
-        "| Sources not verified | Bank verified | Gates passed |",
-        "|---|---|---|---:|---:|---:|---:|---:|---:|---|---:|",
+        "| Sources not verified | Bank verified | Answerable | Gates passed |",
+        "|---|---|---|---:|---:|---:|---:|---:|---:|---|---|---:|",
     ]
     for r in results:
         served = r["bank_served"]
         bank = f"{r['bank_status'].get('verified', 0)} / {served}" if served else "no bank"
         passed = sum(not v for v in r["failing"].values())
+        a = r["answerability"]
+        if not served:
+            answerable = "no bank"
+        elif not a["recorded"]:
+            answerable = "not run"
+        else:
+            open_questions = len({i["question"] for i in a["open"]})
+            answerable = f"{a['checked'] - open_questions} / {a['served']}"
         rows.append(
             f"| {r['exam']} | {r['status']} | {r['page_status']} | {r['concepts']} | {len(r['stubs'])} "
             f"| {len(r['catch_alls'])} | {len(r['unchecked'])} | {len(r['no_question'])} "
-            f"| {len(r['bad_sources'])} / {len(r['sources'])} | {bank} | {passed} / {len(GATES)} |"
+            f"| {len(r['bad_sources'])} / {len(r['sources'])} | {bank} | {answerable} | {passed} / {len(GATES)} |"
         )
     return "\n".join(rows)
 
@@ -325,6 +346,8 @@ def detail(r: dict) -> str:
         out += [f"## G6 concepts with no question ({len(r['no_question'])})", *[f"- {c}" for c in r["no_question"]], ""]
     if r["failing"]["bank"]:
         out += ["## G7 bank", *[f"- {s}: {n}" for s, n in sorted(r["bank_status"].items())], ""]
+    if r["failing"]["answerable"]:
+        out += ["## G8 answerability", *AL.describe(r["answerability"]), ""]
     return "\n".join(out)
 
 

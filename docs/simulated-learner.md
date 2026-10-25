@@ -152,14 +152,41 @@ For each question, two isolated calls and a check in code:
    passage is the costly error (it becomes backlog) and the locator misses passages it finds
    on another run.
 
-Each item ends `tagged`, `linked` (one link away), `elsewhere` (in the vault, but neither tagged
-nor linked) or `missing`, and `collapsed` when every place it is taught sits in a folded
-callout. A question is **answerable** (all tagged or linked), **untagged** (all in the vault,
-some of it out of reach) or a **gap**. `report.md` ranks the gaps by the page that should hold
+Each item ends `tagged`, `linked` (one link away), `prerequisite` (on a page of an exam this one
+assumes), `elsewhere` (in the vault, but out of reach) or `missing`, and `collapsed` when every
+place it is taught sits in a folded callout. What an exam assumes is read off its page's
+*Prerequisite knowledge* callout, transitively: a concept page it links, and every
+learning-objective concept of an exam page it links (MAS-II's names MAS-I, MAS-I's names P and
+FM). A question is **answerable** (everything tagged, linked or prerequisite), **untagged** (all
+in the vault, some of it out of reach) or a **gap**. `report.md` ranks the gaps by the page that should hold
 them (`home_page` maps the extractor's free concept names onto pages), lists the tagging gaps
 and the collapsed-only items, and counts verdicts by sitting: a paper whose gaps far outrun the
 rest may be testing a reading the syllabus has dropped. `results.jsonl` keeps every question's
 record, so a run is continued with `--run-id`, and an error is retried.
+
+**The record, and the gate it feeds (G8).** `results.jsonl` stays local, like every run's raw
+log. Each run is also merged into the bank's committed record,
+`simulations/answerability/<bank>.json` (`--no-record` skips it). It holds, per question, the
+hash of the text the check read (the file below its frontmatter), its requirements, and every
+verified place with its quote. `scripts/answerability_lib.py` reads the record against the vault
+as it is now, in code and with no model, and that is the publication gate **G8**
+(`docs/content-plan.md` §1, D29). Every requirement must have a quote that is still on its page,
+on a page still in the question's reach, or a recorded `not-required`. A question whose text has
+changed since its check goes back to the check.
+
+```bash
+python3 scripts/answerability_lib.py status --exam MAS-II        # what G8 still needs
+python3 scripts/answerability_lib.py resolve --exam MAS-II --item <qid>:<rid> \
+    --page "<page>" --quote "<passage, copied exactly>" --note "<what was done>" --run <run>
+python3 scripts/answerability_lib.py not-required --exam MAS-II --item <qid>:<rid> --note "<why>"
+python3 scripts/answerability_lib.py import-report --exam <id> runs/<run>/report.md   # a run with no results.jsonl
+```
+
+`resolve` refuses a quote that isn't on the page, and says whether the page is in the question's
+reach. A retag needs no `resolve`: the gate re-reads the tags. A re-run replaces a question's
+entry and keeps only the `not-required` calls on requirements worded exactly as before.
+`PageIndex`, the quote matcher, lives in `answerability_lib.py`, so the gate reads a quote exactly
+as the check accepted it.
 
 Answerable is necessary, not sufficient: a page can hold the formula and still not teach it.
 And a gap is fixed from the syllabus reading, in general form — never by putting the
@@ -172,7 +199,9 @@ both calls, $31 for 141 questions, about $0.22 each): 62 answerable (44%), 25 un
 54 elsewhere and 113 nowhere. It found both gaps the simulated learner's diagnosis named on
 `masii-2019s-q4` (the Bühlmann-Straub estimators of μ and *a*, and scaling by next period's
 exposure), and showed its third — a missing link to limited fluctuation credibility on
-`masii-an-024` — was wrong: that question is tagged with the page. The rest:
+`masii-an-024` — was wrong: that question is tagged with the page. Rebuilt into the record with
+`import-report` and read under G8, 74 are answerable: 26 of the 54 "elsewhere" items are taught
+on MAS-I pages, which MAS-II's callout puts in reach. The rest:
 
 - **Fall 2018 is 70% gaps** (33 of 47), against 24–34% for the 2019 papers. 16 of them are
   McElreath's Bayesian computation (MCMC, Gibbs and Hamiltonian sampling, WAIC, Gelman-Rubin),
@@ -186,7 +215,7 @@ exposure), and showed its third — a missing link to limited fluctuation credib
 
 ## Status
 
-The offline pipeline and its 70 tests pass (`tests/test_answerability.py` among them), and CI
+The offline pipeline and its 71 tests pass (`tests/test_answerability.py` among them), and CI
 runs them (`content-validation.yml`, job `simulated learner isolation`). The first live run with
 Claude Code (Sonnet) as the learner was refused on its opening turn by the model's safeguards;
 the second, on MAS-II (2026-10-25, profile `mas-ii-analyst`, 3 sessions, $1.82), ran: 86% over

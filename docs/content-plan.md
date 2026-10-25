@@ -69,6 +69,16 @@ Audit* is fine. G3 can't catch a link to the **wrong** page under a plausible na
 page standing in on a U.S. syllabus), so every campaign starts with a person or an agent reading
 each link (§1.2, rule 5).
 
+**What the gates don't measure: answerability.** All seven gates can pass while a question in
+the bank can't be answered from the pages the vault gives for it. G4 checks that each page says
+nothing wrong; G6 checks that each concept has a question. Neither checks that a question's
+official solution uses only what its pages teach. `simulations/check-answerable` (roadmap C20,
+`docs/simulated-learner.md` *Answerability*) measures that. One model lists what each served
+question's solution uses, without seeing any page. A second model quotes where the pages teach
+each item, and code checks every quote is really on the page. On MAS-II, which passes G6 and G7,
+**54 of 141 served questions (38%) need something no page teaches** (§2.2). It is not a gate
+(D29). §4 runs it inside each campaign, and §3.9 holds what it finds.
+
 ### 1.1 Status steps, and holding them
 
 - **development → beta**: once G2, G3 and G6 pass — the material exists, every section has its
@@ -115,6 +125,11 @@ Adopted during the DISC, MAS-I and Exam 7 campaigns (Appendix A), and binding on
    and a marked `> [!note] Editor's note` sits right after the passage, saying in one to three
    sentences what is correct and why. One agent writes the note and a different one re-derives
    it and passes the file (Phase Q, Q5).
+10. **A gap the answerability check finds is closed from the reading, in general form.** Write
+    the method or fact the reading teaches, with its own example. Never put the question's
+    numbers on the page: a page that holds the question's answer makes every later check, and
+    every reader, pass by recall. The writer and the checker are different agents (rule 2), and
+    `check-answerable --ids` is re-run on the questions that named the gap.
 
 ---
 
@@ -200,6 +215,34 @@ questions rehomed into their banks, and fm-231 withdrawn. A **served** question 
 `verification.status` read directly (3,639 served, all `verified`; 291 off-syllabus `verified`, 2
 `in_review`), `verify_check.py --sync` moved no hash (no file edited since its check), and no
 question carries an open critical finding. The claim holds.
+
+### 2.2 Answerability (2026-10-25)
+
+From `simulations/check-answerable --exam MAS-II`, run `answerability-20261025-mas-ii` (its
+`report.md` is committed). It used Sonnet for both calls and cost $31 for 141 questions, about
+$0.22 a question. No other bank has been run.
+
+| Bank | Served | Answerable | Untagged | Gap | Requirements: tagged / linked / elsewhere / missing |
+|---|---:|---:|---:|---:|---|
+| exam-mas-ii | 141 | 62 (44%) | 25 (18%) | 54 (38%) | 444 / 40 / 54 / 113 of 651 |
+
+*Answerable*: every item the solution uses is taught on a page the question is tagged with, or
+one link away. *Untagged*: everything is in the vault, but some of it sits on a page the
+question isn't tagged with or linked to. *Gap*: some item is taught on no page.
+
+By sitting, the **Fall 2018 paper is 70% gaps** (33 of 47). The 2019 papers are 24–34% and the
+undated questions 8%. Sixteen of Fall 2018's gaps turn on McElreath's Bayesian computation (MCMC,
+Gibbs and Hamiltonian sampling, WAIC, Gelman-Rubin), filed under *Introduction to Credibility*.
+That is D24's case. D24 was applied only to the 2019 papers, because its packets listed only
+theirs.
+
+The check is lenient in one direction and strict in the other. A quote it accepts is really on
+the page, but a passage can teach an item loosely and still count. Its misses are the likelier
+error: the locator overlooks a passage it finds on another run, so an item with nothing found
+gets a second look before it is called missing. The spot checks held: *Hierarchical Model* never
+writes out the level 1 and level 2 equations; *Bühlmann-Straub Credibility*'s weighted mean is one
+risk's, not the cross-risk μ̂ an empirical Bayes solution needs. Read a single gap as a strong
+lead, not a finding. It becomes a finding once a checker reads the page.
 
 ---
 
@@ -441,6 +484,37 @@ From `docs/syllabus-pipeline-review.md` §5 (packages 1–3 and 9 are done) and 
 - **Concept Craft's relation labels** (X2) — app data, not vault pages; reviewed in the
   Experiences lane.
 
+### 3.9 Answerability (C20)
+
+What `check-answerable` found on MAS-II (§2.2), and the runs still to do:
+
+- **MAS-II's Fall 2018 McElreath questions.** 16 questions between `masii-2018f-q17` and `q35`
+  turn on McElreath's Bayesian computation. D24's rule makes them `off_syllabus`, because the
+  reading is no longer assigned. Check each against D24's exception first: a question answerable from a
+  current reading (West, or MAS-I, which MAS-II assumes) stays served. Each flag stales the
+  file (P4), so it is re-passed in the same run. Re-run `--check MAS-II` afterwards: D24's first
+  pass left *Credibility* and *Variable Selection* with no served question (G6).
+- **MAS-II's page gaps, by page.** The report ranks them. The largest:
+  - *Linear Mixed Model*, 10 questions, on West's material: the level 1 / level 2 equations and
+    their substitution into one model, the tests for fixed effects, the GLS variance and why it
+    is understated, and which covariates can carry a random effect.
+  - *Principal Components Analysis*, 4 questions: the proportion of variance explained from the
+    scores, biplots, and a zero eigenvalue.
+  - *Bühlmann-Straub Credibility* and *Empirical Bayes Credibility*: the estimators of μ and *a*
+    with unequal exposures, and scaling the estimate by next period's exposure.
+  - Smaller groups under *Hierarchical Model*, *Markov Chain Monte Carlo*, *Correlogram*,
+    *Gini Index* and *K-Nearest Neighbors*.
+
+  Each gap is written from its reading (§1.2 rule 10) in the packet that already has that reading
+  loaded (§4, Phase 2).
+- **MAS-II's 25 tagging gaps.** Each is a page to add to a question's `wiki_link`, or a link to
+  add from a tagged page. A question retagged is stale until re-passed.
+- **The other banks.** Run the check on each beta exam's bank at the start of its campaign
+  (Phase 2), then on the ready exams' banks. At about $0.22 a question, Exam 5 is about $80 and all
+  ~3,600 served questions about $800.
+- **The tooling.** Gaps are grouped by the extractor's free concept name, mapped onto a page
+  (`home_page`), so a few still land under "no page for …" when a page exists under another name.
+
 ---
 
 ## 4. The phases
@@ -566,11 +640,17 @@ and then a resolve run.
 - **What no open source states** is cut or restated in the clean-up round (§1.2 rule 2). It is
   not left `in_review`.
 - **A concept shared between exams** is checked once, in the first packet that reaches it.
+- **Answerability** (C20, §3.9). Run `check-answerable --exam <exam>` before the exam's reading
+  packets. Route each gap to the packet of the reading that should teach it, so the writer
+  closes it with that source already loaded (§1.2 rules 7 and 10), and a different checker
+  passes the edit in the resolve run. Retag the untagged questions in the same run. Re-run
+  `--ids` on the questions that named a gap once it is closed. Under D29's default this doesn't
+  hold a promotion back. The exam's answerability figures go in its promotion PR beside `--check`.
 
 | Step | Exam | Left | Sources | Ends with |
 |---|---|---|---|---|
 | 0 | MAS-I (ready), with MAS-II and SRM | The ISLR and Dobson deltas: the ACIA Capstone lines the CIA commit added | Free (the books and the CIA syllabus) | MAS-I back to 7 / 7 |
-| 1 | MAS-II | 2 concepts restated off Cowpertwait's wording | fpp3, NIST (open) | **ready** |
+| 1 | MAS-II | 2 concepts restated off Cowpertwait's wording. Answerability (§3.9): the Fall 2018 McElreath questions under D24, then the page gaps and retags | fpp3, NIST (open); West, ISLR, Tse for the gaps | **ready** (the gates); the answerability backlog follows in the same campaign |
 | 2 | Exam 9 | *Enterprise Risk Management*; CJS and Cummins 2008 | Open ERM texts; the assigned texts tried again | **ready**, or held on a copy only the maintainer can supply |
 | 3 | SRM | 7 concepts; Frees 2010 | ISLR (free), Frees (commercial; an online version) | **ready** |
 | 4 | Exam 5 | 61 concepts; 4 readings | All free; Friedland split by chapter group | **ready** (and the reserving concepts FAM and ASTAM share) |
@@ -707,7 +787,8 @@ join here.
 
 Not ranked against the campaigns; pulled when a session has room or a campaign touches them:
 C14 (figures), C15 (simulators), C16 and D21 (resource pages), C12 (provenance blocks,
-`page_lint.py`).
+`page_lint.py`). C20's runs on the ready exams' banks (P, FM, MAS-I, the DISCs, Exam 7), once
+Phase 2 has run it on the beta exams.
 
 ---
 
@@ -721,7 +802,10 @@ The roadmap's §0.4, as it applies to a vault change:
   `publication_readiness.py --hold` clean; `generate_validation_status.py` and
   `generate_coverage_report.py` regenerated if the counts moved.
 - A promotion cites `--check`'s output, and its line here and in the roadmap changes in the same
-  PR.
+  PR. It also gives the exam's answerability figures from its latest `check-answerable` run
+  (§2.2), which aren't a gate under D29's default.
+- A page edited to close an answerability gap re-runs `check-answerable --ids` on the questions
+  that named it.
 - Nothing written by a model ships as `verified` on its writer's say-so: a different agent checks
   it against a cited source, and the README's rule holds — no page is published 100% AI-written
   without human review.
@@ -755,6 +839,7 @@ build with the default until the decision is made.
 | D22 | — | Exam 9's unread readings (Brehm, Mildenhall & Major, Grossi & Kunreuther; both Cummins articles; CJS's JEP text): a copy, or a reachable author-posted one | ✅ settled 18 Oct 2026: **verify on open texts at D7's medium ceiling** — each concept against a citable open source that states the same thing (MAS-II's method: Loss Data Analytics, fpp3, NIST), with the assigned reading's contents and catalogue record as the scope check. Only what no open source covers stays `in_review`. The two readings' own pages stay as verified at medium |
 | D27 | — (new, 25 Oct) | Extend D22's open-text method from Exam 9 to every beta exam: commercial readings' pages at medium against contents, catalogue and outline; their concepts at medium against open texts; what no open source states cut or restated rather than left `in_review` | **Yes**, the method Phase 2 runs on. It follows from D7 and D22 and needs no new rule; it is recorded so a sweep doesn't ask exam by exam |
 | D28 | D20, re-asked (25 Oct) | A reading that is **only in the CAS study kit**, with a page that states only what the outline says (citation, assigned pages, the cases or sections it lists) and nothing about the document's content. Verify that page at medium against the outline, the way D22's pages were verified against contents and catalogue, or hold it `in_review` until someone reads the kit. New reason: under D20 this blocks **Exam 8** (the ISO CGL plan) and also **Exam 6C** (Agricultural Programs, Baer & Rendall, KPMG Regulatory Oversight, Landmark Legal, McDonald, Morneau Shepell), so two of the ten beta exams can't reach `ready` without the kit | ✅ settled 25 Oct 2026: **hold.** A study-kit-only reading stays `in_review` until the kit itself is read; P1 is not loosened and the outline is not a substitute. Exam 8 and 6C stay beta on these pages alone, and the rest of both campaigns runs regardless |
+| D29 | — (new, 25 Oct) | Should **answerability** (C20) hold a promotion back? It could be an eighth gate (every served question answerable from its tagged pages or one link away), a bar on the gap share, or a figure the promotion only reports | **Report, don't gate.** The check is one run old and its misses are uneven (§2.2), and adding a gate mid-phase would move Phase 2's finish line. A promotion PR gives the exam's figures. Revisit when three banks have been run and the gap share has been re-measured after their campaigns |
 | — | verification plan §7.5 | Write missing reading pages before their concepts' packets | ✅ settled: write them first (6U's and Exam 8's were) |
 | — | Exam 9 campaign (A.4) | Its three held questions | ✅ settled 18 Oct 2026: **2013 Q15** gets a note naming the two assumptions its key rests on (no investment income on capital; losses at year end), then a re-pass; **2014 Q16b** keeps CAS's ranking (the CDO² tranche safest) with a note that CAS accepted any ranking with a valid explanation, then a re-pass; ***Prepayment Risk*** is cut back to the outline's words; `cas9-an-009` was to be replaced by a C5 question on Panning or CJS, but that would leave *Prepayment Risk* with no served question (G6), so the maintainer kept it, noted as outside the readings |
 | — | CAS plan D6 | Frameworks only The Institutes' course states | ✅ settled 11 Oct 2026: rewritten to open sources (Appendix A.2.6) |
@@ -776,6 +861,8 @@ python3 scripts/report_gaps.py list                      # Q3: verified question
 python3 scripts/find_concept_gaps.py                     # §3.3's counts
 python3 scripts/syllabus_write.py --all --check          # C17: which pages a re-render would change
 grep -rl 'open_critical: [1-9]' Concepts questions Resources Exam*.md
+(cd simulations && ./check-answerable --exam <id>)        # §2.2: costs ~$0.22 a question; --run-id continues a run
+(cd simulations && ./check-answerable --exam <id> --run-id <run> --report-only)   # re-read a run, free
 ```
 
 ---

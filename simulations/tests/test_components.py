@@ -22,7 +22,7 @@ from learner_sim.grader import Grader, normalize_choice, numeric_match  # noqa: 
 from learner_sim.analysis import control_summary  # noqa: E402
 from learner_sim.auditor import beyond_knowledge, deterministic_flags, norm_text, unreached_concepts  # noqa: E402
 from learner_sim.control import control_questions, run_control  # noqa: E402
-from learner_sim.learner import ACTIONS, ARG_FIELDS, build_control_persona, build_persona, trim_reply  # noqa: E402
+from learner_sim.learner import ACTIONS, ARG_FIELDS, action_args, build_control_persona, build_persona, trim_reply  # noqa: E402
 from learner_sim.profiles import ProfileError, load_profile, profile_from_dict  # noqa: E402
 from learner_sim.report import comparison_report, run_report  # noqa: E402
 from learner_sim.scripted import ScriptedPolicy  # noqa: E402
@@ -230,6 +230,39 @@ class RunAndReportTests(unittest.TestCase):
         self.assertIn("| A |", cmp)
 
 
+class EmptyAnswerTests(unittest.TestCase):
+    """A reply with no answer in it is asked again, not graded as wrong."""
+
+    @staticmethod
+    def policy(sent):
+        last = sent[-1]
+        if last.startswith("Question "):
+            return '{"action": "answer", "args": {}}'
+        if 'had no "answer" field' in last:
+            return '{"action": "answer", "args": {"answer": "A", "confidence": 50, "sources": ["guess"]}}'
+        if last.startswith("Result for"):
+            return '{"action": "end_session", "args": {"reflection": "done"}}'
+        return '{"action": "next_question", "args": {"focus": ""}}'
+
+    def test_the_question_stays_open_until_answered(self):
+        tmp = tempfile.mkdtemp(prefix="learner-empty-")
+        try:
+            exam = resolve_exam("FM")
+            prof = profile_from_dict({"name": "E", "exam": "FM", "seed": 3,
+                                      "time_budget": {"steps_per_session": 8, "questions_per_session": 1}})
+            SimulationRun(prof, exam, tmp, RunConfig(sessions=1, audit=False),
+                          lambda: ScriptedSession(self.policy)).run()
+            events = read_events(os.path.join(tmp, "events.jsonl"))
+            types = [e["type"] for e in events]
+            self.assertEqual(types.count("invalid_answer"), 1)
+            graded = [e for e in events if e["type"] == "graded"]
+            self.assertEqual(len(graded), 1)
+            attempt = next(e for e in events if e["type"] == "attempt")
+            self.assertEqual(attempt["answer"], "A")
+        finally:
+            shutil.rmtree(tmp, ignore_errors=True)
+
+
 class WorkingIsNotRecordedTests(unittest.TestCase):
     """The learner's working is never asked for, and never kept."""
 
@@ -256,6 +289,13 @@ class WorkingIsNotRecordedTests(unittest.TestCase):
                                 "args": {"answer": "B", "confidence": 60, "sources": ["notes"]}})
         self.assertNotIn("working", trim_reply(reply))
         self.assertNotIn("Poisson", trim_reply(reply))
+
+    def test_fields_written_beside_args_are_lifted_in(self):
+        reply = '{"action": "answer", "args": {}, "answer": "C", "confidence": 70, "sources": ["notes"], "why": "x"}'
+        self.assertEqual(json.loads(trim_reply(reply)),
+                         {"action": "answer", "args": {"answer": "C", "confidence": 70, "sources": ["notes"]}})
+        self.assertEqual(action_args({"action": "answer", "args": {"answer": "B"}, "answer": "C"}, "answer"),
+                         {"answer": "B"}, "a field inside args wins")
 
     def test_trim_reply_without_an_action_stores_no_text(self):
         self.assertEqual(trim_reply("I would rather just explain it in prose."),

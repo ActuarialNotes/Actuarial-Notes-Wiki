@@ -116,7 +116,7 @@ An item is ✅ only when all of the following are true:
 | **Tutor** (a guided walk through the exam; purely algorithmic) | Exam 5 candidates | 🟡 Phase 1 built, Preview: one approved account | `TUTOR_ENABLED` + `TUTOR_STAGE` / `TUTOR_APPROVED_EMAILS` | `tutor.md` |
 | **Community** (forums, events and places, by topic) | Candidates and practitioners | 🟡 built, Preview: one approved account | `COMMUNITY_ENABLED` + `COMMUNITY_APPROVED_EMAILS` | §4.7 X9; `community.md` |
 | **Listen recordings** | Candidates | 🟡 2 recordings built locally, none uploaded | — | `listen-recordings.md` |
-| **Simulated learner** | Us, for content QA | 🟡 offline pipeline built; no live run has succeeded | — | `simulated-learner.md` |
+| **Simulated learner** | Us, for content QA | 🟡 first live run (MAS-II, 2026-10-25); the answerability check beside it | — | `simulated-learner.md` |
 | **Research tab** (Canadian P&C corpus + AI Ask) | Upper-exam candidates | 🅿️ parked | `RESEARCH_TAB_ENABLED` / `RESEARCH_AI_ENABLED` = false | `research-ai-disabled.md`, `research-corpus-plan.md` |
 | **Actuarial Agent** (an in-app agent) | Practitioners | 🅿️ Phase A shipped *as the connector*; the in-app part waits on decision D2 | — | `actuarial-agent-product-plan.md` |
 
@@ -400,6 +400,19 @@ These are in order within each lane.
 
 _Contributors add items here in a PR. The maintainer ranks them at the next review._
 
+- **C20: answerability as a content check, then a gate.** `simulations/check-answerable`
+  (`docs/simulated-learner.md`, *Answerability*) asks of every served question whether its
+  official solution can be reached from the pages the vault gives for it, every claim of
+  "taught here" backed by a quote checked in code. MAS-II's first run (2026-10-25, $31): 44%
+  answerable, 18% reachable only through an untagged page, 38% with a gap. Three things follow:
+  (1) the **Fall 2018 MAS-II paper's McElreath questions** (16, MCMC and WAIC, filed under
+  *Introduction to Credibility*) look like D24's case — `off_syllabus` — but D24 only reached the
+  2019 papers; (2) the gap backlog by page, led by *Linear Mixed Model* (10 questions) and
+  *Principal Components Analysis* (4), written from West and ISLR, then fact checked; (3) the 25
+  tagging gaps, each a `wiki_link` addition (which stales the question's fact check). Then run
+  it on the other banks, and once the figures settle, consider a G-gate: every served question
+  answerable from its tagged pages. *(Proposed 2026-10-25.)*
+
 - ~~**V9: a way to move or retire a content file under VERIFY.**~~ ✅ 2026-10-25: `verify_record.py withdraw` already retires a file (the log stays and the gate accepts its missing target), so a move is a copy to the new path plus a withdrawal; E10's four files moved that way (content plan, Phase Q, Q5). P3 (append-only) forbids
   deleting or renaming a `.verify/` log, and `verify_check.py` fails a log whose `target:` no
   longer exists, so a fact-checked file can't be moved or deleted at all. That blocks E10's
@@ -613,7 +626,7 @@ Subplans: `daily-plan-email.md`, `leagues.md`, `seo.md`, `analytics-and-monitori
 | X2 | Concept Craft: review the relation labels | ⬜ | Next | 5,598 AI-written labels in `data/craftRelations.json`. The doc's "two analytics events" should say three. Server-synced saves are Later. |
 | X3 | Actuaria: from one account to a cohort | 🟡 phases 0–3 built | Later | With one account, no cohort reaches `CREW_MIN`, so the risk pool and raids lie dormant. Waits on D1. Phase 4 (ranked play) is parked (D16). |
 | X4 | Listen recordings at scale | 🟡 | Later | Upload the first two; split long scripts; fix the numbers stall; choose the voice and the access tier (D12). |
-| X5 | Simulated learner: a first live run | ⬜ refused by the model's safeguards | Later | `simulations/runs/` is empty. Rework the persona prompt, then run it. |
+| X5 | Simulated learner: a first live run | ✅ 2026-10-25, MAS-II | Later | 86% over 21 questions, against 90% for the control learner with no pages: the model knew the material, so studying added nothing measurable. Its real finding came from comparing solutions with pages, which C20 now does for every question. Next: run it only on questions the control learner misses, as a before-and-after for a fixed page. |
 | X6 | Projects: more briefs and exams | ✅ 3 PCPA briefs | Later | Another exam's project is one entry in `data/projects.ts`. |
 | X7 | Store: Amazon prices | 🟢 | Later | Needs the `AMAZON_CREATORS_*` environment variables, or stays `price: null`. |
 | X9 | **Community** | 🟡 built 2026-10-19, Preview | Next | `community.md`. The `/community` tab: r/actuary's newest posts (live, through the Arctic Shift archive, as posted), 26 upcoming meetings and 39 communities (forums, the CAS regional affiliates, local clubs) transcribed from their own pages, followed and browsed by topic, sorted by distance from a chosen city. Next: a refresh routine for the events table, more sources in the feed (GoActuary's Discourse JSON), a server table for follows once it leaves Preview (D26). |
@@ -846,6 +859,10 @@ ls Concepts/*.md | wc -l; ls Resources/Books/*.md | wc -l
 ```
 
 ## Appendix B: Revision history
+
+- **2026-10-25, the first simulated-learner run, and answerability.** X5 ✅: MAS-II, where the
+  control learner (no pages) outscored the studied one, 90% to 86%. C20 proposed: the
+  answerability check that replaces it as the content-gap instrument, first run on MAS-II.
 
 - **2026-10-25, every beta exam to ready.** The maintainer made content plan Phase 2 lane 3's
   first priority. Phase Q's claim was re-checked file by file and holds. The content plan was

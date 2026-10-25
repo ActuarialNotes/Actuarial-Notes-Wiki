@@ -1,0 +1,9 @@
+#!/usr/bin/env python3
+"""check-answerable — can each question be answered from the pages the vault gives for it? See docs/simulated-learner.md."""
+import os
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from learner_sim.cli import check_answerable  # noqa: E402
+
+sys.exit(check_answerable())

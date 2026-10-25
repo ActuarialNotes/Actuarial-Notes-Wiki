@@ -15,7 +15,8 @@ What it enforces (ERRORS — non-zero exit):
   * `answer` present for the answerable types (multiple-choice, free-entry).
   * difficulty in {easy, medium, hard}.
   * type in the known set.
-  * points is a positive number.
+  * points is a positive number, or 0 where the publisher prints no point value
+    (the SOA's ASTAM and ALTAM sample sets; the app paces it by the paper).
   * exam label matches the bank directory it lives in.
   * id is unique across the whole bank.
   * multiple-choice: the answer key matches one of the `- X)` options in the body.
@@ -213,12 +214,13 @@ def validate_question(path: Path, concepts: set[str], report: Report) -> str | N
     elif qtype in OTHER_KNOWN_TYPES:
         report.warn(path, f"type '{qtype}' is not renderable by the app parser — this question will not appear in-app")
 
-    # points must be a positive number.
+    # points must be a positive number, or 0: the publisher printed no point value
+    # (quizTiming.ts's pointsForPace counts it as the paper's points per question).
     pts = data.get("points")
     if pts is not None and pts != "":
         try:
-            if float(str(pts)) <= 0:
-                report.error(path, f"points must be positive, got '{pts}'")
+            if float(str(pts)) < 0:
+                report.error(path, f"points must be positive (or 0 if none is printed), got '{pts}'")
         except ValueError:
             report.error(path, f"points is not a number: '{pts}'")
 

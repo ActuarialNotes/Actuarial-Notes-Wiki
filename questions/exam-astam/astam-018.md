@@ -12,13 +12,13 @@ wiki_link:
   - Concepts/Hypothesis+Testing
   - Concepts/Frequency
   - Concepts/Maximum+Likelihood+Estimation
-points: 5
+points: 0
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-10-23
+  last_checked: 2026-10-25
   last_checked_by: agent:validate-v1
-  content_hash: sha256:65d2f6f59a505bbd6ad66b7e20341bfaa2f2298aac905bd924b20f1e2df2778e
+  content_hash: sha256:f87b4741599c6afff84de7d0b69da85a7befb9ccb2c53e5041baa2750e9571e5
   sources:
     - "SOA ASTAM Sample Questions (version of Feb. 23, 2026), Q18, p.23, sha256:0294cf4e8717191cda2747e7a6bb49fbb5e2d08f2d281ec979e670621de74ab4 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/questions/february-2024-astam-questions.pdf"
     - "SOA ASTAM Solutions to Sample Questions, Q18, p.34, sha256:c4206394603cf205da0668d40333bee5aaa6e3dadcaa241fdb03e5488a1ba4e1 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/solutions/february-2024-astam-solutions.pdf"

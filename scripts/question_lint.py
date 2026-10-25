@@ -65,7 +65,7 @@ def lint_file(path: Path) -> list[str]:
             issues.append(f"part headers out of sequence: {' '.join(labels)}")
         values = [float(points) for _label, points in parts if points]
         total = data.get("points")
-        if len(values) == len(parts) and total not in (None, ""):
+        if len(values) == len(parts) and total not in (None, "") and float(total) != 0:
             if abs(sum(values) - float(total)) > 0.01:
                 issues.append(
                     f"part points sum to {sum(values):g}, frontmatter says {total}"

@@ -8,20 +8,19 @@ type: multiple-choice
 wiki_link:
   - Concepts/Policy+Value
   - Concepts/Endowment+Insurance
-  - Concepts/Woolhouse's+Formula
   - Concepts/Fractional+Age+Assumption
 answer: "A"
 points: 1
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-23
+  last_checked: 2026-10-25
   last_checked_by: agent:validate-v1
-  content_hash: sha256:e803d90401ce73af95f648d6145caa200a2465eebd131ee8bee381b12c3e54c8
+  content_hash: sha256:b963c5f4dc51f7fb3e3ac2f210dbd9bd193f016aef50e3b1a13bcbc4a98227a1
   sources:
     - "SOA Exam FAM-L Sample Questions (October 2024), Q7.9, p.100, sha256:4aaf3469628f2b63a689c187d963857a5a6e749c5eaca9978b264d854f60a28d — https://www.soa.org/globalassets/assets/files/edu/2024/fall/questions/2024-10-exam-fam-l-sample-questions.pdf"
     - "SOA Exam FAM-L Sample Solutions (October 2024), Q7.9, p.69, sha256:9e7f7b03e0252ccb8f69e4f453d443d8d7cb43ef3945d05c935fdf234cae72ab — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/2024-10-exam-fam-l-sample-solutions.pdf"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-fam/faml-7-09.md
 ---

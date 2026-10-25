@@ -12,17 +12,17 @@ wiki_link:
   - Concepts/Black-Scholes+Model
   - Concepts/Profit+Testing
   - Concepts/Profit+Signature
-points: 7
+points: 0
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-23
+  last_checked: 2026-10-25
   last_checked_by: agent:validate-v1
-  content_hash: sha256:d1773b1c0f63d18132442af3a39c6802c4d221004420bbd4c526638fc04a4ccb
+  content_hash: sha256:5365ede97363113d417887921fabe9eb1384e36cf253822e6db1fd52e523b964
   sources:
     - "SOA Exam ALTAM Written-Answer Sample Questions (January 2026), Q55, pp.101-102 (question), sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
     - "SOA Exam ALTAM Written-Answer Sample Solutions (January 2026), Q55, pp.108-110 (solution and graders' comments), sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-055.md
 ---

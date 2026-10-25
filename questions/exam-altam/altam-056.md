@@ -11,17 +11,17 @@ wiki_link:
   - Concepts/Black-Scholes+Model
   - Concepts/Replicating+Portfolio
   - Concepts/Risk-Neutral+Valuation
-points: 4
+points: 0
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-23
+  last_checked: 2026-10-25
   last_checked_by: agent:validate-v1
-  content_hash: sha256:a3747e1d150df63aef5e720cd9d86ae4cfe1cfbdb1a6e31b9bc5afa2e25fad5b
+  content_hash: sha256:2583eeb946638edd9098919596cd6302b919f59b05f54afe68cb7441353dcc9f
   sources:
     - "SOA Exam ALTAM Written-Answer Sample Questions (January 2026), Q56, pp.103 (question), sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
     - "SOA Exam ALTAM Written-Answer Sample Solutions (January 2026), Q56, pp.111-112 (solution and graders' comments), sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-056.md
 ---

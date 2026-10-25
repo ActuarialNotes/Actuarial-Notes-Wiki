@@ -42,6 +42,7 @@ function linkMatchesConcept(link: string, conceptName: string): boolean {
 }
 
 /** The shared filters this page draws as dropdowns; its Exam stays a row of pills. */
+const TYPE_FACET: readonly QuestionFacet[] = ['type']
 const SOURCE_FACET: readonly QuestionFacet[] = ['source']
 const SITTING_FACET: readonly QuestionFacet[] = ['sitting']
 
@@ -285,6 +286,7 @@ export default function Search() {
   const [difficulty, setDifficulty] = useState<Difficulty | ''>('')
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const [conceptFilter, setConceptFilter] = useState(() => searchParams.get('concept') ?? '')
+  const [types, setTypes] = useState<ReadonlySet<string>>(new Set())
   const [sources, setSources] = useState<ReadonlySet<string>>(new Set())
   const [sittings, setSittings] = useState<ReadonlySet<string>>(new Set())
   const [openTopicGroups, setOpenTopicGroups] = useState<Set<string>>(new Set())
@@ -319,12 +321,13 @@ export default function Search() {
       const s = JSON.parse(raw) as {
         topic?: string; selectedSubtopics?: string[]
         difficulty?: Difficulty | ''; conceptFilter?: string; selectedIds?: string[]
-        sources?: string[]; sittings?: string[]
+        types?: string[]; sources?: string[]; sittings?: string[]
       }
       if (s.topic)               setTopic(s.topic)
       if (s.selectedSubtopics?.length) setSelectedSubtopics(s.selectedSubtopics)
       if (s.difficulty)          setDifficulty(s.difficulty)
       if (s.conceptFilter)       setConceptFilter(s.conceptFilter)
+      if (s.types?.length)       setTypes(new Set(s.types))
       if (s.sources?.length)     setSources(new Set(s.sources))
       if (s.sittings?.length)    setSittings(new Set(s.sittings))
       if (s.selectedIds?.length) setSelectedIds(new Set(s.selectedIds))
@@ -372,6 +375,7 @@ export default function Search() {
     setDifficulty('')
     setSelectedIds(new Set())
     setConceptFilter('')
+    setTypes(new Set())
     setSources(new Set())
     setSittings(new Set())
     setTextQuery('')
@@ -509,15 +513,15 @@ export default function Search() {
   // The page's exam rides along as the facet's Exam, so a sitting of a chosen
   // exam means that exam's paper — the shared rule (lib/questionFilters.ts).
   const facetSelection = useMemo(
-    () => ({ ...emptyFacets(), source: sources, exam: new Set(topic ? [topic] : []), sitting: sittings }),
-    [sources, topic, sittings],
+    () => ({ ...emptyFacets(), type: types, source: sources, exam: new Set(topic ? [topic] : []), sitting: sittings }),
+    [types, sources, topic, sittings],
   )
 
   const filtered = useMemo(
-    () => (sources.size === 0 && sittings.size === 0
+    () => (types.size === 0 && sources.size === 0 && sittings.size === 0
       ? filteredBeforeSitting
       : filteredBeforeSitting.filter(q => matchesFacets(q, facetSelection))),
-    [filteredBeforeSitting, sources, sittings, facetSelection],
+    [filteredBeforeSitting, types, sources, sittings, facetSelection],
   )
 
   // How many questions link to each concept, keyed by canonical concept name.
@@ -588,7 +592,7 @@ export default function Search() {
       .slice(0, 30)
   }, [wikiIndex, textQuery, searchType, conceptQuestionCounts, allQuestions])
 
-  const hasFilters = topic || selectedSubtopics.length || difficulty || conceptFilter || sources.size || sittings.size || textQuery
+  const hasFilters = topic || selectedSubtopics.length || difficulty || conceptFilter || types.size || sources.size || sittings.size || textQuery
 
   function handleStartQuiz() {
     trackSearchQuery({ query: textQuery.trim(), exam: topic, difficulty: difficulty })
@@ -597,6 +601,7 @@ export default function Search() {
     try {
       sessionStorage.setItem(SEARCH_STATE_KEY, JSON.stringify({
         topic, selectedSubtopics, difficulty, conceptFilter,
+        types: [...types],
         sources: [...sources],
         sittings: [...sittings],
         selectedIds: [...selectedIds],
@@ -617,9 +622,10 @@ export default function Search() {
       return
     }
 
-    // The quiz URL has no way to name a publisher or several papers, so a list
-    // narrowed to either is started as it stands: its questions are the selection.
-    if ((sources.size > 0 || sittings.size > 0) && filtered.length > 0) {
+    // The quiz URL has no way to name a type, a publisher or several papers, so
+    // a list narrowed to any of them is started as it stands: its questions are
+    // the selection.
+    if ((types.size > 0 || sources.size > 0 || sittings.size > 0) && filtered.length > 0) {
       try {
         sessionStorage.setItem('actuarial_selected_ids', JSON.stringify(filtered.map(q => q.id)))
       } catch { /* ignore */ }
@@ -789,6 +795,17 @@ export default function Search() {
                     </button>
                   ))}
                 </div>
+              </div>
+
+              {/* Type — multiple choice, short answer or written */}
+              <div className="space-y-1.5">
+                <label className="text-sm font-medium">Type</label>
+                <QuestionFilterBar
+                  pool={filteredBeforeSitting}
+                  selection={facetSelection}
+                  onToggle={(facet, value) => setTypes(toggleFacet(facetSelection, facet, value).type)}
+                  facets={TYPE_FACET}
+                />
               </div>
 
               {/* Source — who published the question: SOA, CAS or the vault's own */}

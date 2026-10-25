@@ -1,10 +1,10 @@
-import { isFromAnotherExamsPaper, type Question, type QuestionFilter } from './parser'
+import { isFromAnotherExamsPaper, type Question, type QuestionFilter, type QuestionType } from './parser'
 import { questionSittingLabel, sittingLabel, sittingLabels } from './pastExams'
 import { EXAM_LABEL_TO_ID } from './examIds'
 import { PUBLISHER_ORDER, questionPublisher } from './questionPublisher'
 
-// The filters every list of questions offers — Difficulty, Concepts, Source,
-// Exam and Sitting — as one definition. The quiz builder's search panel, the
+// The filters every list of questions offers — Difficulty, Type, Concepts,
+// Source, Exam and Sitting — as one definition. The quiz builder's search panel, the
 // concept question browser and the concept detail modal each used to own a
 // copy, and the copies drifted: one hid Exam whenever the pool held a single
 // exam, another never offered Exam or Sitting at all.
@@ -13,14 +13,14 @@ import { PUBLISHER_ORDER, questionPublisher } from './questionPublisher'
 //
 // Each facet is OR within itself (nothing chosen matches everything) and the
 // facets are AND'd together. Values are the strings a question is matched
-// back against: a difficulty, a concept label, a publisher (`"SOA"`, `"CAS"`,
+// back against: a difficulty, a question type, a concept label, a publisher (`"SOA"`, `"CAS"`,
 // `"Actuarial Notes"` — `lib/questionPublisher.ts`), the bank's `exam:` label
 // and a sitting's display label (`"Spring 2019"`).
 
-export type QuestionFacet = 'difficulty' | 'concept' | 'source' | 'exam' | 'sitting'
+export type QuestionFacet = 'difficulty' | 'type' | 'concept' | 'source' | 'exam' | 'sitting'
 
 /** Source before Exam before Sitting: each narrows the one after it. */
-export const QUESTION_FACETS: readonly QuestionFacet[] = ['difficulty', 'concept', 'source', 'exam', 'sitting']
+export const QUESTION_FACETS: readonly QuestionFacet[] = ['difficulty', 'type', 'concept', 'source', 'exam', 'sitting']
 
 export type FacetSelection = Readonly<Record<QuestionFacet, ReadonlySet<string>>>
 
@@ -33,11 +33,26 @@ export interface FacetOption {
 
 const DIFFICULTY_ORDER = ['easy', 'medium', 'hard']
 
+/**
+ * A question type as the reader meets it. `free-entry` is a typed answer the
+ * bank keys ("0.57"); `multi-part` is the CAS and SOA written question — most
+ * of them one or more parts marked against the examiners' sample answer, and
+ * a fifth of them no lettered parts at all — so it is named for the writing,
+ * not the parts. The quiz's Info panel names a question's type with these too.
+ */
+export const QUESTION_TYPE_LABELS: Readonly<Record<QuestionType, string>> = {
+  'multiple-choice': 'Multiple choice',
+  'free-entry': 'Short answer',
+  'multi-part': 'Written answer',
+}
+
+const TYPE_ORDER = Object.keys(QUESTION_TYPE_LABELS)
+
 /** The bank's exams in ladder order — Exam P first, Exam 9 last. */
 const EXAM_ORDER = Object.keys(EXAM_LABEL_TO_ID)
 
 export function emptyFacets(): FacetSelection {
-  return { difficulty: new Set(), concept: new Set(), source: new Set(), exam: new Set(), sitting: new Set() }
+  return { difficulty: new Set(), type: new Set(), concept: new Set(), source: new Set(), exam: new Set(), sitting: new Set() }
 }
 
 /** The selection with `value` flipped in or out of `facet`. */
@@ -126,6 +141,7 @@ function sittingOf(q: Question, examNarrowed: boolean): string | null {
 export function questionFacetValues(q: Question, facet: QuestionFacet, examNarrowed = false): string[] {
   switch (facet) {
     case 'difficulty': return [q.difficulty]
+    case 'type': return [q.type]
     case 'concept': return [...new Set(q.wiki_link.map(conceptLabel))]
     case 'source': {
       const publisher = questionPublisher(q)
@@ -160,7 +176,8 @@ export function matchesFacets(q: Question, selection: FacetSelection, except?: Q
  * would leave, plus whatever is already chosen (so it can be un-chosen even
  * when nothing is left under it). Difficulty always offers all three levels.
  *
- * Ordered for reading: difficulty easy → hard, concepts A → Z, publishers and
+ * Ordered for reading: difficulty easy → hard, types multiple choice →
+ * written, concepts A → Z, publishers and
  * exams up the ladder, sittings newest first.
  */
 export function facetOptions(pool: Question[], facet: QuestionFacet, selection: FacetSelection): FacetOption[] {
@@ -177,6 +194,9 @@ export function facetOptions(pool: Question[], facet: QuestionFacet, selection: 
   switch (facet) {
     case 'difficulty':
       values = [...DIFFICULTY_ORDER, ...[...counts.keys()].filter(v => !DIFFICULTY_ORDER.includes(v))]
+      break
+    case 'type':
+      values = TYPE_ORDER.filter(type => counts.has(type))
       break
     case 'concept':
       values = [...counts.keys()].sort((a, b) => a.localeCompare(b))
@@ -204,6 +224,7 @@ export function facetOptions(pool: Question[], facet: QuestionFacet, selection: 
     value,
     label: facet === 'exam' ? examFilterLabel(value)
       : facet === 'difficulty' ? value.charAt(0).toUpperCase() + value.slice(1)
+      : facet === 'type' ? QUESTION_TYPE_LABELS[value as QuestionType] ?? value
       : value,
     count: counts.get(value) ?? 0,
   }))

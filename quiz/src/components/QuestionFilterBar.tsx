@@ -16,7 +16,7 @@ interface QuestionFilterBarProps {
   pool: Question[]
   selection: FacetSelection
   onToggle: (facet: QuestionFacet, value: string) => void
-  /** The facets to offer, in this order. All five by default. */
+  /** The facets to offer, in this order. All six by default. */
   facets?: readonly QuestionFacet[]
   /**
    * A concept every question in the pool is tagged with — the concept whose
@@ -28,6 +28,7 @@ interface QuestionFilterBarProps {
 }
 
 const DROPDOWN_LABEL: Record<Exclude<QuestionFacet, 'difficulty'>, string> = {
+  type: 'Type',
   concept: 'Concepts',
   source: 'Source',
   exam: 'Exam',
@@ -35,6 +36,7 @@ const DROPDOWN_LABEL: Record<Exclude<QuestionFacet, 'difficulty'>, string> = {
 }
 
 const EMPTY_TITLE: Record<Exclude<QuestionFacet, 'difficulty'>, string> = {
+  type: 'No questions to filter by type',
   concept: 'These questions are tagged with no other concept',
   source: 'No questions to filter by source',
   exam: 'No questions to filter by exam',
@@ -43,8 +45,8 @@ const EMPTY_TITLE: Record<Exclude<QuestionFacet, 'difficulty'>, string> = {
 
 /**
  * The filter row every list of questions carries: the Difficulty dropdown (all
- * three levels ticked until one is unticked), then the Concepts, Source, Exam
- * and Sitting dropdowns. What each filter
+ * three levels ticked until one is unticked), then the Type, Concepts, Source,
+ * Exam and Sitting dropdowns. What each filter
  * means — and the counts beside every option — is `lib/questionFilters.ts`;
  * this only draws it, so a list can't offer a different set of filters from
  * the next.

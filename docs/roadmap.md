@@ -256,7 +256,7 @@ to §4. Where an item has a former roadmap ID (P0–P4), §4 gives it.
    - **Steps 8–9:** PCPA and 6C.
 
    It runs on D27's open-text method. About 9–12M tokens, half of it 6C. **Exam 8, and 6C's six
-   study-kit readings, can't pass G5 without the CAS study kit (D20, re-asked as D28).**
+   study-kit readings, stay unverified until the CAS study kit is read (D28, settled: hold).**
 00. ~~**V11, content plan Phase Q: every question file verified**~~ ✅ 2026-10-25 (the lane's focus
    from 2026-10-23; it goes ahead of everything left in Phases 2–4). 817 served questions are not
    verified; 494 of them are the SOA prelims' banks, transcribed by a model from page images. The
@@ -313,8 +313,8 @@ to §4. Where an item has a former roadmap ID (P0–P4), §4 gives it.
    `ontology_map.py`, and SOA's own day-1/day-10 wording on fm-358.
 4. **C1: Exam 8 to ready.** 🟡 6 of 7 gates since 2026-10-18 (*Risk* verified, run `rsk1`). Only
    G5 is left: the ISO CGL rating plan, supplied in the CAS study kit and on the exam, with no
-   public copy. Under **D20** it stays `in_review` until the manual is read. D28 asks the
-   question again, because the same rule now also holds 6C. Then `publication_readiness.py
+   public copy. Under **D20**, re-affirmed as **D28** on 2026-10-25, it stays `in_review` until the
+   manual itself is read. Then `publication_readiness.py
    --check 8`, and the promotion is the maintainer's.
 
 ### 3.2 Next
@@ -525,7 +525,7 @@ gates through `--hold` in CI.
 | ID | Item | Status | Tier | Notes |
 |---|---|---|---|---|
 | C0 | Refresh the generated reports | ✅ 2026-10-17 | — | Both reports regenerated; CONCEPT_GAPS' generated half refreshed (0 missing resources); Exam 8's `source_pages: partial` dropped. Re-run them at each review (Appendix A). |
-| C1 | Exam 8 → ready | 🟡 6 of 7 gates (2026-10-18) | **Now** | Content plan Phase 2. Only G5 is left: the ISO CGL plan, which is in the study kit only. It is held under D20, and D28 asks that again. The papers' printed-slip findings were closed in Phase Q (Q3). |
+| C1 | Exam 8 → ready | 🟡 6 of 7 gates (2026-10-18) | **Now** | Content plan Phase 2. Only G5 is left: the ISO CGL plan, which is in the study kit only. It stays `in_review` until the kit is read (D20, re-affirmed as D28). The papers' printed-slip findings were closed in Phase Q (Q3). |
 | C2 | Exam 9 → ready | 🟡 5 of 7 (2026-10-25) | **Now** | Phase 2, step 2. G7 ✅ (Phase Q). Left: G4, *Enterprise Risk Management* (Brehm's four phases are in no open source: restate or cut); G5, CJS and Cummins 2008 `in_review` (try the assigned texts again, else a copy from the maintainer). |
 | C3 | Exam 5 → ready | 🟡 5 of 7 (2026-10-25) | **Now** | Phase 2, step 4. G1 and G7 ✅ (page re-transcribed per D8; all 357 questions verified). Left: 61 concepts and 4 free readings (Friedland, ASOP 13 and 43, CAS's ratemaking principles). |
 | C4 | MAS-II → ready | 🟡 5 of 7 (2026-10-25) | **Now** | Phase 2, step 1. G1 and G7 ✅. Left: *Backward Shift Operator* and *Correlogram* (they quote Cowpertwait; restate them to an open text) and ISLR's delta (the CIA commit made it stale). |
@@ -685,7 +685,7 @@ Where a default is given, sessions build with it until the decision is made.
 | D26 | Who beyond the one approved account sees **Community**, and whether it stays free | `community/access.ts`, `community.md` | X9 | Approved account only |
 | D25 | The Tutor after Beta: Beta is the approved accounts plus **Pro** (the maintainer's call, 2026-10-18); is the open stage free or Pro, and which exam comes after Exam 5 | `tutor.md` §10 | L8 | Preview: one account. Beta = Pro, when the maintainer moves `TUTOR_STAGE` |
 | D27 | Extend D22's open-text method (commercial readings' pages at medium against contents, catalogue and outline; their concepts against open texts) from Exam 9 to every beta exam | content plan §6 | Phase 2 (C2–C6, C9) | Yes: it follows from D7 and D22 |
-| D28 | A reading only in the **CAS study kit**, whose page states only what the outline says: verify the page at medium against the outline, or hold it `in_review` until the kit is read (D20, re-asked) | content plan §6 | C1, C5: Exam 8's and 6C's G5 | D20 stands: hold. Exam 8, and 6C's six kit-only readings, stay below `ready` |
+| D28 | A reading only in the **CAS study kit**, whose page states only what the outline says: verify the page at medium against the outline, or hold it `in_review` until the kit is read (D20, re-asked) | content plan §6 | C1, C5: Exam 8's and 6C's G5 | ✅ settled 2026-10-25: **hold** until the kit itself is read. Exam 8, and 6C's six kit-only readings, stay below `ready` until then |
 
 ### 6.2 Settled: don't re-open without a new reason
 
@@ -851,8 +851,9 @@ ls Concepts/*.md | wc -l; ls Resources/Books/*.md | wc -l
   first priority. Phase Q's claim was re-checked file by file and holds. The content plan was
   re-measured: 7 ready, 10 beta, 67 in development; 76.9% of files verified. MAS-I is 6 / 7,
   because the CIA commit made ISLR and Dobson stale. C2–C6 moved to Now in Phase 2's new order.
-  D27 was added (D22's open-text method for every beta exam; default yes), and D28 re-asks D20,
-  which now holds Exam 6C's six study-kit readings as well as Exam 8's.
+  D27 was added (D22's open-text method for every beta exam; default yes), and D28 re-asked D20,
+  which now holds Exam 6C's six study-kit readings as well as Exam 8's. The maintainer settled it
+  the same day: they stay unverified until the kit itself is read.
 
 - **2026-10-25, Phase Q closed.** V11 ✅: every served question file verified (3,639 of 3,639),
   291 of 293 off-syllabus. The maintainer's pending content calls made with the recommended

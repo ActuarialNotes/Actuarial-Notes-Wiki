@@ -10,7 +10,8 @@ roadmap review_
 > beta exams and `ready` is the fact check of their **concept pages (G4) and readings (G5)** —
 > 292 concept pages and 95 readings once shared ones are counted once — plus PCPA's bank and
 > 6C's page. Two of the ten, Exam 8 and Exam 6C, also rest on readings only the CAS study kit
-> holds (D20, D28). Phase Q's rule stays: no bank grows by unverified files.
+> holds, and those stay unverified until the kit itself is read (D28, settled 25 Oct). Phase Q's
+> rule stays: no bank grows by unverified files.
 
 This is the **one plan for the vault's content**: the exam pages, concept pages, resource pages
 and question banks, the fact check that stands behind them, and the generated figures and
@@ -548,7 +549,7 @@ The order follows the roadmap's ranking (§0.3):
 
 **Exit test.** Every exam that was `beta` on 25 Oct passes `publication_readiness.py --check`,
 or is blocked only by an outside source named in §6 (today Exam 8, and Exam 6C's six study-kit
-readings, unless D28 is decided otherwise). `--hold` prints no warning, and every ready exam
+readings, held there by D28). `--hold` prints no warning, and every ready exam
 stays 7 / 7. Promotion stays the maintainer's call (§1.1): one PR per exam, citing `--check`,
 with its line here and in the roadmap.
 
@@ -577,7 +578,7 @@ and then a resolve run.
 | 6 | ASTAM | 22 concepts; two SOA study notes | Free notes; the rest done in step 5 | **ready** |
 | 7 | ALTAM | 50 concepts; ALTAM-21-23 | Free note; AMLCR done in step 5 | **ready** |
 | 8 | PCPA | A bank for 29 concepts, written and checked by different agents (D5); 5 concepts; 12 readings | Mostly commercial; ASOP 23 and 56, R4DS and McKinney free | **ready** |
-| 9 | Exam 6C | The page's F-008–F-012; 137 concepts; 67 readings | Free Canadian documents, but six are in the study kit only | **ready** if D28 allows, else held on those six pages alone |
+| 9 | Exam 6C | The page's F-008–F-012; 137 concepts; 67 readings | Free Canadian documents, but six are in the study kit only | Every gate but G5, which stays held on those six pages until the kit is read (D28) |
 | — | Exam 8 | The ISO CGL plan | Study kit only | Held (D20, D28) |
 
 **Sizing.** These numbers come from `verification-plan.md` §6 and the FM and Exam 9 packets:
@@ -753,7 +754,7 @@ build with the default until the decision is made.
 | D24 | — | MAS-II's 2019 papers' ~35 Bayesian/MCMC questions (McElreath, no longer assigned): `off_syllabus` or served | ✅ settled 18 Oct 2026: **`off_syllabus: true`** — kept, found by sitting and search, out of quiz draws, as Exam 9's and 6C's outlived questions are. Applied to 29; five of the 34 the packets listed are answerable from a current reading (2019S Q24 from West; 2019F Q22, 25, 32, 37 from MAS-I, which MAS-II assumes) and stay served |
 | D22 | — | Exam 9's unread readings (Brehm, Mildenhall & Major, Grossi & Kunreuther; both Cummins articles; CJS's JEP text): a copy, or a reachable author-posted one | ✅ settled 18 Oct 2026: **verify on open texts at D7's medium ceiling** — each concept against a citable open source that states the same thing (MAS-II's method: Loss Data Analytics, fpp3, NIST), with the assigned reading's contents and catalogue record as the scope check. Only what no open source covers stays `in_review`. The two readings' own pages stay as verified at medium |
 | D27 | — (new, 25 Oct) | Extend D22's open-text method from Exam 9 to every beta exam: commercial readings' pages at medium against contents, catalogue and outline; their concepts at medium against open texts; what no open source states cut or restated rather than left `in_review` | **Yes**, the method Phase 2 runs on. It follows from D7 and D22 and needs no new rule; it is recorded so a sweep doesn't ask exam by exam |
-| D28 | D20, re-asked (25 Oct) | A reading that is **only in the CAS study kit**, with a page that states only what the outline says (citation, assigned pages, the cases or sections it lists) and nothing about the document's content. Verify that page at medium against the outline, the way D22's pages were verified against contents and catalogue, or hold it `in_review` until someone reads the kit. New reason: under D20 this blocks **Exam 8** (the ISO CGL plan) and also **Exam 6C** (Agricultural Programs, Baer & Rendall, KPMG Regulatory Oversight, Landmark Legal, McDonald, Morneau Shepell), so two of the ten beta exams can't reach `ready` without the kit | **D20 stands: hold.** Exam 8 and 6C stay beta on these pages alone until the maintainer either reads the study kit or answers otherwise. The rest of both campaigns runs regardless |
+| D28 | D20, re-asked (25 Oct) | A reading that is **only in the CAS study kit**, with a page that states only what the outline says (citation, assigned pages, the cases or sections it lists) and nothing about the document's content. Verify that page at medium against the outline, the way D22's pages were verified against contents and catalogue, or hold it `in_review` until someone reads the kit. New reason: under D20 this blocks **Exam 8** (the ISO CGL plan) and also **Exam 6C** (Agricultural Programs, Baer & Rendall, KPMG Regulatory Oversight, Landmark Legal, McDonald, Morneau Shepell), so two of the ten beta exams can't reach `ready` without the kit | ✅ settled 25 Oct 2026: **hold.** A study-kit-only reading stays `in_review` until the kit itself is read; P1 is not loosened and the outline is not a substitute. Exam 8 and 6C stay beta on these pages alone, and the rest of both campaigns runs regardless |
 | — | verification plan §7.5 | Write missing reading pages before their concepts' packets | ✅ settled: write them first (6U's and Exam 8's were) |
 | — | Exam 9 campaign (A.4) | Its three held questions | ✅ settled 18 Oct 2026: **2013 Q15** gets a note naming the two assumptions its key rests on (no investment income on capital; losses at year end), then a re-pass; **2014 Q16b** keeps CAS's ranking (the CDO² tranche safest) with a note that CAS accepted any ranking with a valid explanation, then a re-pass; ***Prepayment Risk*** is cut back to the outline's words; `cas9-an-009` was to be replaced by a C5 question on Panning or CJS, but that would leave *Prepayment Risk* with no served question (G6), so the maintainer kept it, noted as outside the readings |
 | — | CAS plan D6 | Frameworks only The Institutes' course states | ✅ settled 11 Oct 2026: rewritten to open sources (Appendix A.2.6) |

@@ -1,17 +1,17 @@
 # Answerability: Exam FM-2 (SOA)
 
-Run `answerability-20261025-fm` · 132 questions checked of 132 attempted · cost $22.44
+Run `answerability-20261025-fm` · 133 questions checked of 133 attempted · cost $22.66
 
 Each question's official solution was broken into the knowledge it uses (by a model that saw no study page), and each item was looked for on the pages the vault gives for the question. An item counts as taught only if a quote of the teaching passage is really on the page; the check is done in code. *Answerable* is necessary, not sufficient: a page can hold the formula and still not teach it well.
 
 | Verdict | Questions | Share |
 |---|---|---|
 | **Answerable** — everything taught on a tagged page, one link away or on a prerequisite exam's page | 30 | 23% |
-| **Untagged** — everything is in the vault, but some of it on a page neither tagged nor linked | 47 | 36% |
+| **Untagged** — everything is in the vault, but some of it on a page neither tagged nor linked | 48 | 36% |
 | **Gap** — something the solution uses is taught on no page | 54 | 41% |
 | No requirements listed | 1 | |
 
-Requirements: 615 — tagged 344 (56%), linked 82 (13%), prerequisite 0 (0%), elsewhere 112 (18%), missing 77 (13%)
+Requirements: 620 — tagged 347 (56%), linked 83 (13%), prerequisite 0 (0%), elsewhere 113 (18%), missing 77 (12%)
 Not checked: 1 off syllabus.
 
 ## By sitting
@@ -20,7 +20,7 @@ A paper whose gaps far outrun the rest may test a reading the syllabus has since
 
 | Sitting | Questions | Answerable | Untagged | Gap |
 |---|---|---|---|---|
-| Undated (samples and the vault's own) | 132 | 30 | 47 | 54 (41%) |
+| Undated (samples and the vault's own) | 133 | 30 | 48 | 54 (41%) |
 
 ## Gaps, by the page that should teach them
 
@@ -326,6 +326,7 @@ The vault teaches what these questions need, but on a page the question isn't ta
 | `fm-129` | Mortgage Loan |
 | `fm-130` | Annuity Immediate, Nominal Interest Rate |
 | `fm-132` | Annuity Immediate |
+| `fm-134` | Annuity Immediate |
 
 ## Taught only in a collapsed section
 
@@ -2153,6 +2154,20 @@ Tagged pages: Loan Amortization, Loans, Amortization, Principal, Term of Loan, D
 | To find the number of payments n when the loan amount, payment and rate are known, solve L = P·a_{n\|j} for n using logarithms: n = -ln(1 -… | procedure | tagged | Term of Loan (collapsed): “n &= \frac{-\ln(1 - 0.08 \times 5.555556)}{\ln 1.08} \\” |
 | When the computed number of payments is not an integer, the loan is repaid by floor(n) full payments plus one smaller final (drop) payment … | fact | tagged | Drop Payment: “A **drop payment** is a final loan payment that is **smaller** than the regular payment, made one p…” |
 | With payments at the end of each month, the k-th payment falls k months after the date the loan or refinancing started, which gives the dat… | procedure | tagged | Drop Payment: “A **drop payment** is a final loan payment that is **smaller** than the regular payment, made one p…” |
+
+</details>
+
+<details><summary><code>fm-134</code> · untagged</summary>
+
+Tagged pages: Loan Repayment Comparison, Loans, Amortization, Outstanding Balance, Principal, Term of Loan
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The present value of an n-year level annuity-immediate of 1 per year at effective rate i is a_{n\|i} = (1 - v^n)/i, where v = 1/(1+i). | formula | elsewhere | Annuity Immediate: “$$a_{\overline{n}\\|} = \frac{1-v^n}{i}$$” |
+| The outstanding loan balance at any time equals the present value of the remaining payments at the loan's effective interest rate (prospect… | fact | tagged | Loans: “the **prospective method** (present value of the remaining payments)” |
+| After a payment at time k on an n-year loan with level payments, the number of remaining payments is n minus k. | fact | tagged | Outstanding Balance: “$$OB_k = P \cdot a_{\overline{n-k}\\|i}$$” |
+| An extra (additional) payment made at the time of a regular payment reduces the outstanding balance by the amount of the extra payment, dol… | procedure | linked | Loan Amortization: “$$B_k = B_{k-1}(1+i) - K_k$$” |
+| To find a revised level payment over a new term, divide the new outstanding balance by the annuity-immediate factor for the new number of p… | procedure | tagged | Amortization: “$$P = \frac{L}{a_{\overline{n}\\|i}}$$” |
 
 </details>
 

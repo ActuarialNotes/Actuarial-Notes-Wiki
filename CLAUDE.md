@@ -809,7 +809,8 @@ Other important `lib/` modules:
   empty preamble — those rows previewed nothing at all before. Read by
   `components/QuestionSearchRow.tsx` (clamped to three lines) and the Search page.
 - `questionFilters.ts` — the filters **every list of questions** offers — Difficulty,
-  Concepts, Source, Exam and Sitting — as one definition: what each matches, the options each
+  Type (multiple choice, short answer, written — `QUESTION_TYPE_LABELS`, which the quiz's Info
+  panel names a question's type with too), Concepts, Source, Exam and Sitting — as one definition: what each matches, the options each
   offers over a pool (with the count choosing it would leave, the other filters applied),
   and `splitSearchFilter`, which turns the quiz builder's exam and past paper into the
   search panel's *starting* Exam / Sitting choices rather than a narrowed pool (a panel
@@ -817,8 +818,8 @@ Other important `lib/` modules:
   once an exam is chosen, a sitting means that exam's paper, so a question carried over
   (`originally_exam`) is on none of its sittings — `filterQuestions`' rule for the shelf.
   Drawn by `components/QuestionFilterBar.tsx`, the one filter row used by the quiz search
-  panel, the concept question browser, the concept detail modal (Source + Exam + Sitting)
-  and the Search page (Source, Sitting); Source, Exam and Sitting are always on screen,
+  panel, the concept question browser, the concept detail modal (Type + Source + Exam + Sitting)
+  and the Search page (Type, Source, Sitting); Source, Exam and Sitting are always on screen,
   Sitting disabled for an undated pool. Add it to any new surface that lists questions.
   Pure and tested.
 - `questionPublisher.ts` — who published a question, the **Source** filter's values:

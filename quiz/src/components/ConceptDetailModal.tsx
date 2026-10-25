@@ -40,7 +40,7 @@ const DIFFICULTY_COLORS: Record<Difficulty, string> = {
 }
 
 /** The shared filters this list offers beside its own All / New / Attempted. */
-const LIST_FACETS: readonly QuestionFacet[] = ['source', 'exam', 'sitting']
+const LIST_FACETS: readonly QuestionFacet[] = ['type', 'source', 'exam', 'sitting']
 
 export type TabMode = 'definition' | 'questions' | 'syllabus'
 export type FilterMode = 'all' | 'new' | 'attempted'

@@ -14,7 +14,7 @@ sys.path.insert(0, SIM_DIR)
 
 import learner_sim  # noqa: E402
 from learner_sim.answerability import (LOCATE_SYSTEM, REQUIREMENTS_SYSTEM, Candidates, PageIndex,  # noqa: E402
-                                       check_question, merge_found, read_results, report, run_check,
+                                       check_question, home_page, merge_found, read_results, report, run_check,
                                        served_questions, verdict, verify_locations)
 from learner_sim.backends import ScriptedOneShot  # noqa: E402
 from learner_sim.content_loader import ContentLoader  # noqa: E402
@@ -178,6 +178,22 @@ class RealQuestionTests(unittest.TestCase):
             self.assertIn("Bühlmann-Straub Credibility.md` — 1 question(s)", md)
         finally:
             shutil.rmtree(tmp, ignore_errors=True)
+
+    def test_a_freely_named_concept_lands_on_its_page(self):
+        tagged = ["Hierarchical Model", "Linear Mixed Model"]
+        self.assertEqual(home_page("Linear Mixed Models", tagged, self.loader), "Linear Mixed Model")
+        self.assertEqual(home_page("Bühlmann-Straub Credibility (empirical)", [], self.loader),
+                         "Bühlmann-Straub Credibility")
+        self.assertEqual(home_page("Linear Mixed Model Fixed Effects Testing", tagged, self.loader),
+                         "Linear Mixed Model")
+        self.assertIsNone(home_page("Hamiltonian Quux Sampler", tagged, self.loader))
+
+    def test_the_report_counts_verdicts_by_sitting(self):
+        results = {self.SID: {"source_id": self.SID, "path": "p", "verdict": "gap", "requirements": [],
+                              "tagged_pages": []}}
+        md = report(self.exam, results, self.loader, "test", None, {self.SID: "Spring 2019"})
+        self.assertIn("## By sitting", md)
+        self.assertIn("| Spring 2019 | 1 | 0 | 0 | 1 (100%) |", md)
 
     def test_served_questions_leave_out_what_a_quiz_never_draws(self):
         served, left_out = served_questions(self.bank)

@@ -168,7 +168,8 @@ def check_answerable(argv: list[str] | None = None) -> int:
         results = run_check(exam, loader, bank, out_dir, lambda: ClaudeCodeOneShot(args.model), ids=ids,
                             limit=args.limit, parallel=args.parallel, max_cost=args.max_cost)
     path = os.path.join(out_dir, "report.md")
-    write(path, report(exam, results, loader, run_id, left_out))
+    sittings = {sid: q.sitting for sid, q in bank.items()}
+    write(path, report(exam, results, loader, run_id, left_out, sittings))
     print(f"report → {path}")
     return 0
 

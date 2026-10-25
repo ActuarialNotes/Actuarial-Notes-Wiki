@@ -276,7 +276,13 @@ before touching that area**:
   Its working is never asked for or kept; what the guide taught is measured instead, by a **control
   learner** — the same student with no pages and no notes, put to the same questions — whose score
   is subtracted (`control.py`, the report's *What studying added*). Never edits the vault; only the
-  run reports are committed.
+  run reports are committed. Beside it is the **answerability check** (`./check-answerable --exam
+  <exam>`, `learner_sim/answerability.py`): no student — one model lists what each served question's
+  official solution uses without seeing any page, a second quotes where the pages teach each item,
+  and code checks every quote is really on the page; the report ranks the gaps by the page that
+  should hold them. It is the better instrument for content gaps (on MAS-II the control learner,
+  unstudied, outscored the studied one): run it before the learner, and fix a gap from the reading,
+  never with the question's own numbers.
 - `docs/analytics-and-monitoring.md` — **Google Analytics** and error capture. GA is not in
   `index.html`: `initAnalytics()` (`lib/analytics.ts`, from `main.tsx`) loads it only on a
   measured visit — the production host, not automation (`navigator.webdriver`, bot user

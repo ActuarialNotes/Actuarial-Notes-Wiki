@@ -13,8 +13,14 @@ cd simulations
 ./run-learner --profile profiles/career-changer.yaml --control-sample 20  # cap the control learner
 ./run-learner --profile profiles/career-changer.yaml --no-control         # skip it
 ./compare-learners runs/<run-id>
+./check-answerable --exam MAS-II                  # every served question: answerable from its pages?
+./check-answerable --exam MAS-II --ids masii-2019s-q4 --run-id <run-id>   # some, into a run
+./check-answerable --exam MAS-II --run-id <run-id> --report-only          # rewrite report.md, free
 python3 -m unittest discover -s tests -t .
 ```
+
+The same folder holds the **answerability check** (`check-answerable`, below), which needs no
+student: it asks whether each question can be answered from the pages the vault gives for it.
 
 ## Modules
 
@@ -30,6 +36,7 @@ python3 -m unittest discover -s tests -t .
 | `auditor.py` | Flags attempts that use knowledge the profile doesn't have. |
 | `control.py` | The control learner: the same student with no pages and no notes, put to every question the learner attempted, so a report can say what studying added. |
 | `analysis.py`, `diagnostician.py`, `report.py` | Findings, model-written root causes and edit suggestions, and the markdown reports. |
+| `answerability.py` | The answerability check (below). Reads solutions, so trusted code like the grader. |
 
 ## Isolation
 
@@ -117,9 +124,77 @@ committed (`simulations/.gitignore`).
 The question pool leaves out questions that are off-syllabus, have an open
 critical fact-check finding, or need a figure the learner cannot see.
 
+## Answerability
+
+The first live run (MAS-II, below) showed the limit of the simulated learner: a model playing a
+student can't forget what it knows. The control learner, with no pages, scored 90%; the learner
+who studied scored 86%. Where the run did find real gaps, it found them by setting an official
+solution beside the page the student read. `check-answerable` does that directly, for every
+question an exam serves, with no persona.
+
+For each question, two isolated calls and a check in code:
+
+1. **Requirements.** The question and its official solution, and *no* study page, go to a model
+   that lists the knowledge the solution uses — definitions, formulas, procedure steps, facts —
+   in general form, each with the concept it belongs to. Arithmetic, data the question gives
+   and picking among the options are left out. Not seeing the pages keeps it from shaping the
+   list to what they say.
+2. **Location.** The requirements and the candidate pages go to a second call, which copies the
+   passage that teaches each item, character for character, up to three places per item. The
+   candidates are, in this order: the concepts the question is tagged with, the pages a search
+   for each requirement (and the requirement's own concept) turns up, and up to eight pages one
+   link from a tagged page. The exam page is never one: an objective line names a concept, it
+   doesn't teach it.
+3. **Verification.** `PageIndex` normalises a page (frontmatter, `>` markers, emphasis and
+   whitespace dropped) and a quote counts only if it is on a shown page. A model saying "the
+   page covers this" is not evidence; a quote that is there is — VERIFY's P1 again. An item with
+   nothing verified gets one more, targeted look before it is called missing, because a missed
+   passage is the costly error (it becomes backlog) and the locator misses passages it finds
+   on another run.
+
+Each item ends `tagged`, `linked` (one link away), `elsewhere` (in the vault, but neither tagged
+nor linked) or `missing`, and `collapsed` when every place it is taught sits in a folded
+callout. A question is **answerable** (all tagged or linked), **untagged** (all in the vault,
+some of it out of reach) or a **gap**. `report.md` ranks the gaps by the page that should hold
+them (`home_page` maps the extractor's free concept names onto pages), lists the tagging gaps
+and the collapsed-only items, and counts verdicts by sitting: a paper whose gaps far outrun the
+rest may be testing a reading the syllabus has dropped. `results.jsonl` keeps every question's
+record, so a run is continued with `--run-id`, and an error is retried.
+
+Answerable is necessary, not sufficient: a page can hold the formula and still not teach it.
+And a gap is fixed from the syllabus reading, in general form — never by putting the
+question's own numbers on the page, which would make every later check (and the learner) pass
+by recall — and the edited page is fact checked again.
+
+**First run, MAS-II, 2026-10-25** (`runs/answerability-20261025-mas-ii/report.md`, Sonnet for
+both calls, $31 for 141 questions, about $0.22 each): 62 answerable (44%), 25 untagged (18%),
+54 with a gap (38%); of 651 requirements, 444 were taught on a tagged page, 40 one link away,
+54 elsewhere and 113 nowhere. It found both gaps the simulated learner's diagnosis named on
+`masii-2019s-q4` (the Bühlmann-Straub estimators of μ and *a*, and scaling by next period's
+exposure), and showed its third — a missing link to limited fluctuation credibility on
+`masii-an-024` — was wrong: that question is tagged with the page. The rest:
+
+- **Fall 2018 is 70% gaps** (33 of 47), against 24–34% for the 2019 papers. 16 of them are
+  McElreath's Bayesian computation (MCMC, Gibbs and Hamiltonian sampling, WAIC, Gelman-Rubin),
+  filed under *Introduction to Credibility*. D24 marked the 2019 papers' McElreath questions
+  `off_syllabus`; Fall 2018's look like the same case, still served.
+- **Linear Mixed Model** (10 questions): West's material the page doesn't carry — the level 1 /
+  level 2 equations and their substitution into one model, tests for fixed effects, the GLS
+  variance and why it is understated, which covariates can take a random effect.
+- **Principal Components Analysis** (4): the proportion of variance explained from scores,
+  biplots, a zero eigenvalue.
+
 ## Status
 
-The offline pipeline and its 51 tests pass, and CI runs them
-(`content-validation.yml`, job `simulated learner isolation`). The first live
-run with Claude Code (Sonnet) as the learner was refused on its opening turn by
-the model's safeguards. No live results exist yet.
+The offline pipeline and its 70 tests pass (`tests/test_answerability.py` among them), and CI
+runs them (`content-validation.yml`, job `simulated learner isolation`). The first live run with
+Claude Code (Sonnet) as the learner was refused on its opening turn by the model's safeguards;
+the second, on MAS-II (2026-10-25, profile `mas-ii-analyst`, 3 sessions, $1.82), ran: 86% over
+21 questions against the control learner's 90% — studying added nothing measurable, because
+the model knew the material. It also lost one answer written beside `args` rather than in it;
+such a field is now lifted into `args` (`action_args`), and an answer with nothing in it leaves
+the question open instead of being marked wrong.
+
+What the learner is still for: put it only on the questions the control learner gets wrong —
+the only ones its score says anything about the guide on — and re-run it after a page is fixed,
+as a before-and-after.

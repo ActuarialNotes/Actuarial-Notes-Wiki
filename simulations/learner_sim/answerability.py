@@ -35,6 +35,7 @@ diagnostician. It never edits the vault.
 
 from __future__ import annotations
 
+import difflib
 import json
 import os
 import re
@@ -453,6 +454,29 @@ def _cell(text: str, n: int = 160) -> str:
     return text if len(text) <= n else text[: n - 1] + "…"
 
 
+def home_page(concept: str, tagged: list[str], loader: ContentLoader) -> str | None:
+    """The page a missing item belongs on. The extractor names concepts freely ("Linear Mixed Models",
+    "Linear Mixed Model Fixed Effects"), so: the name as a page, its singular, a near-identical page title,
+    then the question's tagged page sharing most words with it — or None for a concept the vault has no
+    page for."""
+    name = re.sub(r"\s*\([^)]*\)", "", concept or "").strip()
+    if not name:
+        return tagged[0] if tagged else None
+    for cand in (name, re.sub(r"s$", "", name), re.sub(r"(\w)s\b", r"\1", name)):
+        t = loader.resolve_title(cand)
+        if t and loader.pages[t][1] != "exam":
+            return t
+    titles = [t for t, (_, kind) in loader.pages.items() if kind == "concept"]
+    close = difflib.get_close_matches(name, titles, n=1, cutoff=0.88)
+    if close:
+        return close[0]
+    words = set(tokens(re.sub(r"(\w)s\b", r"\1", name)))
+    best = max(tagged, key=lambda t: (len(words & set(tokens(t))), -tagged.index(t)), default=None)
+    if best and len(words & set(tokens(best))) >= max(1, min(2, len(set(tokens(best))))):
+        return best
+    return None
+
+
 def summarize(results: dict[str, dict], loader: ContentLoader) -> dict:
     checked = [r for r in results.values() if r.get("verdict") not in ("error", None)]
     verdicts = defaultdict(int)
@@ -466,7 +490,7 @@ def summarize(results: dict[str, dict], loader: ContentLoader) -> dict:
         for req in r.get("requirements") or []:
             statuses[req["status"]] += 1
             if req["status"] == "missing":
-                home = loader.resolve_title(req["concept"]) if req.get("concept") else None
+                home = home_page(req.get("concept") or "", r.get("tagged_pages") or [], loader)
                 key = home or f"(no page) {req.get('concept') or 'unnamed'}"
                 g = gaps.setdefault(key, {"page": home, "concept": req.get("concept"), "questions": set(), "items": []})
                 g["questions"].add(r["source_id"])
@@ -484,7 +508,7 @@ def summarize(results: dict[str, dict], loader: ContentLoader) -> dict:
 
 
 def report(exam: ExamSpec, results: dict[str, dict], loader: ContentLoader, run_id: str,
-           left_out: dict[str, str] | None = None) -> str:
+           left_out: dict[str, str] | None = None, sittings: dict[str, str | None] | None = None) -> str:
     s = summarize(results, loader)
     n = s["checked"]
     v = s["verdicts"]
@@ -515,6 +539,18 @@ def report(exam: ExamSpec, results: dict[str, dict], loader: ContentLoader, run_
         for why in left_out.values():
             reasons[why] += 1
         out.append("Not checked: " + ", ".join(f"{c} {w}" for w, c in sorted(reasons.items())) + ".")
+
+    if sittings:
+        rows: dict[str, dict[str, int]] = defaultdict(lambda: defaultdict(int))
+        for sid, r in results.items():
+            rows[sittings.get(sid) or "Undated (samples and the vault's own)"][r.get("verdict")] += 1
+        out += ["", "## By sitting", "",
+                "A paper whose gaps far outrun the rest may test a reading the syllabus has since dropped.", "",
+                "| Sitting | Questions | Answerable | Untagged | Gap |", "|---|---|---|---|---|"]
+        for sit, c in sorted(rows.items(), key=lambda kv: kv[0]):
+            tot = sum(c.values())
+            out.append(f"| {sit} | {tot} | {c.get('answerable', 0)} | {c.get('untagged', 0)} | "
+                       f"{c.get('gap', 0)} ({_pct(c.get('gap', 0), tot)}) |")
 
     out += ["", "## Gaps, by the page that should teach them", "",
             "Ranked by how many questions each page's gaps cost. The page is the one named for the item's concept; "

@@ -411,7 +411,10 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   *Principal Components Analysis* (4), written from West and ISLR, then fact checked; (3) the 25
   tagging gaps, each a `wiki_link` addition (which stales the question's fact check). Then run
   it on the other banks, and once the figures settle, consider a G-gate: every served question
-  answerable from its tagged pages. *(Proposed 2026-10-25.)*
+  answerable from its tagged pages. *(Proposed 2026-10-25.)* The content plan now carries it:
+  the measure is §2.2, the backlog §3.9, and Phase 2 runs the check at the start of each beta
+  exam's campaign, routing each gap to the packet of the reading that should teach it. Whether
+  it may hold a promotion back is D29 (default: report, don't gate).
 
 - ~~**V9: a way to move or retire a content file under VERIFY.**~~ ✅ 2026-10-25: `verify_record.py withdraw` already retires a file (the log stays and the gate accepts its missing target), so a move is a copy to the new path plus a withdrawal; E10's four files moved that way (content plan, Phase Q, Q5). P3 (append-only) forbids
   deleting or renaming a `.verify/` log, and `verify_check.py` fails a log whose `target:` no
@@ -699,6 +702,7 @@ Where a default is given, sessions build with it until the decision is made.
 | D25 | The Tutor after Beta: Beta is the approved accounts plus **Pro** (the maintainer's call, 2026-10-18); is the open stage free or Pro, and which exam comes after Exam 5 | `tutor.md` §10 | L8 | Preview: one account. Beta = Pro, when the maintainer moves `TUTOR_STAGE` |
 | D27 | Extend D22's open-text method (commercial readings' pages at medium against contents, catalogue and outline; their concepts against open texts) from Exam 9 to every beta exam | content plan §6 | Phase 2 (C2–C6, C9) | Yes: it follows from D7 and D22 |
 | D28 | A reading only in the **CAS study kit**, whose page states only what the outline says: verify the page at medium against the outline, or hold it `in_review` until the kit is read (D20, re-asked) | content plan §6 | C1, C5: Exam 8's and 6C's G5 | ✅ settled 2026-10-25: **hold** until the kit itself is read. Exam 8, and 6C's six kit-only readings, stay below `ready` until then |
+| D29 | Should **answerability** (C20) hold a promotion back: an eighth gate, a bar on the gap share, or a figure the promotion PR only reports | content plan §6 | C20; Phase 2's promotions | Report, don't gate. Revisit once three banks have been run and re-measured after their campaigns |
 
 ### 6.2 Settled: don't re-open without a new reason
 
@@ -859,6 +863,11 @@ ls Concepts/*.md | wc -l; ls Resources/Books/*.md | wc -l
 ```
 
 ## Appendix B: Revision history
+
+- **2026-10-25, answerability in the content plan.** C20's check is written into the content
+  plan: §1 (what the gates don't measure), rule 10 (a gap is closed from the reading, never
+  with the question's numbers), §2.2 (MAS-II's figures), §3.9 (the backlog, led by Fall 2018's
+  McElreath questions under D24) and Phase 2's method. D29 opened.
 
 - **2026-10-25, the first simulated-learner run, and answerability.** X5 ✅: MAS-II, where the
   control learner (no pages) outscored the studied one, 90% to 86%. C20 proposed: the

@@ -14,8 +14,8 @@ sys.path.insert(0, SIM_DIR)
 
 import learner_sim  # noqa: E402
 from learner_sim.answerability import (LOCATE_SYSTEM, REQUIREMENTS_SYSTEM, Candidates, PageIndex,  # noqa: E402
-                                       check_question, home_page, merge_found, read_results, report, run_check,
-                                       served_questions, verdict, verify_locations)
+                                       check_question, home_page, input_hash, merge_found, read_results, report,
+                                       run_check, served_questions, verdict, verify_locations)
 from learner_sim.backends import ScriptedOneShot  # noqa: E402
 from learner_sim.content_loader import ContentLoader  # noqa: E402
 from learner_sim.exams import resolve_exam  # noqa: E402
@@ -102,6 +102,15 @@ class VerifyLocationsTests(unittest.TestCase):
         r3 = verify_locations(self.reqs, found, self.cands, self.idx)[2]
         self.assertEqual((r3["status"], r3["page"], r3["collapsed"]), ("elsewhere", "C", True))
 
+    def test_a_prerequisite_exams_page_is_in_reach_and_every_place_keeps_its_quote(self):
+        cands = Candidates(tagged=["A"], linked={"B"}, shown=["A", "B", "C"], prerequisite={"C"})
+        found = [{"id": "r3", "page": "C", "quote": "Gamma hides the estimator for k inside."}]
+        r3 = verify_locations(self.reqs, found, cands, self.idx)[2]
+        self.assertEqual(r3["status"], "prerequisite")
+        self.assertEqual(verdict([r3]), "answerable")
+        self.assertEqual(r3["places"], [{"page": "C", "collapsed": True,
+                                         "quote": "Gamma hides the estimator for k inside."}])
+
     def test_collapsed_only_if_every_verified_place_is_folded(self):
         found = [{"id": "r1", "places": [{"page": "C", "quote": "Gamma hides the estimator for k inside."},
                                          {"page": "B", "quote": "Beta also teaches the estimator for k here."}]}]
@@ -153,6 +162,8 @@ class RealQuestionTests(unittest.TestCase):
         q = self.bank[self.SID]
         rec = check_question(q, self.loader, "solution text", lambda: ScriptedOneShot(self.reply))
         self.assertEqual(rec["verdict"], "gap")
+        with open(os.path.join(ROOT, q.path), encoding="utf-8") as fh:
+            self.assertEqual(rec["input_hash"], input_hash(fh.read()), "G8 knows what text the check read")
         r1, r2 = rec["requirements"]
         self.assertEqual((r1["status"], r1["page"]), ("tagged", "Bühlmann-Straub Credibility"))
         self.assertEqual(r2["status"], "missing")

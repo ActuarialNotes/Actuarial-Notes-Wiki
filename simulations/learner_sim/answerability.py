@@ -25,9 +25,13 @@ Each requirement ends as `tagged` (taught on a page the question is tagged
 with), `linked` (one link away), `elsewhere` (in the vault, but neither tagged
 nor linked — a tagging or linking gap), or `missing` (no page teaches it). A
 quote inside a collapsed callout is marked `collapsed`: a skimming reader never
-sees it. Results are written per question to `results.jsonl`, so a run can be
-continued, and rolled up into a markdown report ranked by how many questions
-each gap costs.
+sees it. A requirement taught on a page of an exam this one assumes (its
+*Prerequisite knowledge* callout: MAS-II's names MAS-I) is `prerequisite`, and
+counts as in reach. Results are written per question to `results.jsonl`, so a
+run can be continued, and rolled up into a markdown report ranked by how many
+questions each gap costs; the CLI also merges them into the bank's committed
+record, `simulations/answerability/<bank>.json`, which the publication gate G8
+re-reads against the vault in CI (`scripts/answerability_lib.py`).
 
 It reads solutions, so it is trusted code like the grader and the
 diagnostician. It never edits the vault.
@@ -40,12 +44,12 @@ import json
 import os
 import re
 import threading
-from bisect import bisect_right
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Callable
 
+from answerability_lib import MIN_QUOTE_CHARS, PageIndex, Pages, input_hash  # noqa: F401  (re-exported)
 from vault_links import iter_links
 
 from .backends import OneShot, Usage, extract_json
@@ -55,9 +59,8 @@ from .grader import Grader
 from .textmatch import tokens
 from .vault_parse import RawQuestion, split_frontmatter
 
-STATUSES = ("tagged", "linked", "elsewhere", "missing")
+STATUSES = ("tagged", "linked", "prerequisite", "elsewhere", "missing")
 KINDS = ("definition", "formula", "procedure", "fact")
-MIN_QUOTE_CHARS = 12          # a shorter "quote" (a symbol, a name) proves nothing
 MAX_LINKED_PAGES = 8          # one-link-away pages shown to the locator, most relevant first
 SEARCH_HITS = 2               # vault pages a search for each requirement adds
 PAGE_CHAR_BUDGET = 120_000    # all candidate pages together
@@ -97,73 +100,8 @@ RECHECK_NOTE = ("A first reading found no passage for the requirements below. Re
 
 
 # ── matching a quote against a page ────────────────────────────────────────
-
-_CALLOUT_HEAD = re.compile(r"^\[!([^\]]+)\]([+-]?)")
-
-
-def _strip_markers(line: str) -> tuple[int, str]:
-    """A line's callout depth and its text without the `>` markers."""
-    depth = 0
-    s = line.lstrip()
-    while s.startswith(">"):
-        depth += 1
-        s = s[1:].lstrip()
-    return depth, s
-
-
-def _norm(text: str) -> str:
-    text = text.replace("**", "").replace("__", "").replace(" ", " ")
-    text = re.sub(r"\s+", " ", text)
-    return text.strip().lower()
-
-
-@dataclass
-class PageIndex:
-    """A page's text normalised for quote matching, remembering which characters sit in a collapsed callout."""
-    text: str
-    starts: list[int]          # offset of each line in `text`
-    collapsed: list[bool]      # per line
-
-    @classmethod
-    def build(cls, markdown: str) -> "PageIndex":
-        _, body = split_frontmatter(markdown)
-        stack: list[tuple[int, bool]] = []
-        parts: list[str] = []
-        starts: list[int] = []
-        flags: list[bool] = []
-        pos = 0
-        for raw in body.split("\n"):
-            depth, line = _strip_markers(raw)
-            m = _CALLOUT_HEAD.match(line) if depth else None
-            if depth == 0:
-                stack = []
-            elif m:
-                stack = [s for s in stack if s[0] < depth] + [(depth, m.group(2) == "-")]
-                line = line[m.end():]
-            else:
-                stack = [s for s in stack if s[0] <= depth]
-            n = _norm(line)
-            starts.append(pos)
-            flags.append(any(c for _, c in stack))
-            parts.append(n)
-            pos += len(n) + 1
-        return cls(" ".join(parts), starts, flags)
-
-    def find(self, quote: str) -> tuple[bool, bool]:
-        """(found, every piece of it inside a collapsed callout)."""
-        pieces = [_norm(p) for p in re.split(r"…|\.\.\.", quote or "")]
-        pieces = [p for p in pieces if p]
-        if not pieces or sum(len(p) for p in pieces) < MIN_QUOTE_CHARS:
-            return False, False
-        at, hidden = 0, True
-        for p in pieces:
-            i = self.text.find(p, at)
-            if i < 0:
-                return False, False
-            line = bisect_right(self.starts, i) - 1
-            hidden = hidden and self.collapsed[line]
-            at = i + len(p)
-        return True, hidden
+# `PageIndex` lives in scripts/answerability_lib.py, so the CI gate (G8) re-reads a quote exactly as the check
+# accepted it.
 
 
 # ── one question ───────────────────────────────────────────────────────────
@@ -174,6 +112,19 @@ class Candidates:
     tagged: list[str]          # pages the question's concepts open
     linked: set[str]           # every page one link from a tagged page
     shown: list[str]           # the pages the locator is given, in order
+    prerequisite: set[str] = field(default_factory=set)   # pages of the exams this exam assumes
+
+
+_PREREQUISITES: dict[tuple[str, str], set[str]] = {}
+
+
+def prerequisites(loader: ContentLoader) -> set[str]:
+    """The pages the exam's *Prerequisite knowledge* callout puts in reach (`Pages.prerequisite_pages`)."""
+    key = (loader.root, loader.exam.page)
+    if key not in _PREREQUISITES:
+        exam = {"page": loader.exam.page, "wiki_id": loader.exam.wiki_id}
+        _PREREQUISITES[key] = Pages(exam, loader.root).prerequisite_pages()
+    return _PREREQUISITES[key]
 
 
 def _question_text(q: RawQuestion) -> str:
@@ -262,7 +213,7 @@ def candidate_pages(q: RawQuestion, reqs: list[dict], loader: ContentLoader) -> 
             continue
         shown.append(t)
         budget -= n
-    return Candidates(tagged, linked, shown)
+    return Candidates(tagged, linked, shown, prerequisites(loader))
 
 
 def locate_prompt(q: RawQuestion, reqs: list[dict], pages: list[str], loader: ContentLoader) -> str:
@@ -295,12 +246,17 @@ def merge_found(*passes: list[dict]) -> list[dict]:
 
 def verify_locations(reqs: list[dict], found: list[dict], cands: Candidates, indexes: dict[str, PageIndex]) -> list[dict]:
     """Each requirement with its status, checked in code. A quote counts only where it is really on a shown
-    page; of the places that check out, the nearest tier wins (tagged, then linked, then elsewhere), and the
-    item is `collapsed` only if every verified place sits in a folded callout."""
-    rank = {"tagged": 0, "linked": 1, "elsewhere": 2}
+    page; of the places that check out, the nearest tier wins (tagged, then linked, then a prerequisite exam's
+    page, then elsewhere), and the item is `collapsed` only if every verified place sits in a folded callout.
+    Every verified place keeps its quote: the record G8 re-reads is built from them."""
+    rank = {"tagged": 0, "linked": 1, "prerequisite": 2, "elsewhere": 3}
 
     def tier(page: str) -> str:
-        return "tagged" if page in cands.tagged else "linked" if page in cands.linked else "elsewhere"
+        if page in cands.tagged:
+            return "tagged"
+        if page in cands.linked:
+            return "linked"
+        return "prerequisite" if page in cands.prerequisite else "elsewhere"
 
     by_id = {str(f.get("id")): f for f in found}
     out = []
@@ -322,7 +278,7 @@ def verify_locations(reqs: list[dict], found: list[dict], cands: Candidates, ind
             page, quote, status, hidden = None, None, "missing", False
         out.append({**r, "status": status, "page": page, "quote": quote,
                     "claimed_quote": unverified[0] if (unverified and not verified) else None,
-                    "collapsed": hidden, "places": [{"page": v[0], "collapsed": v[1]} for v in verified]})
+                    "collapsed": hidden, "places": [{"page": v[0], "collapsed": v[1], "quote": v[2]} for v in verified]})
     return out
 
 
@@ -342,6 +298,10 @@ def check_question(q: RawQuestion, loader: ContentLoader, solution: str,
     extract, locate = one_shot_factory(), one_shot_factory()
     record = {"source_id": q.source_id, "path": q.path, "type": q.type, "difficulty": q.difficulty,
               "objective": q.objective, "concepts": list(q.concepts)}
+    path = os.path.join(loader.root, q.path)
+    if q.path and os.path.exists(path):
+        with open(path, encoding="utf-8") as fh:
+            record["input_hash"] = input_hash(fh.read())
     try:
         reqs = clean_requirements(_ask_json(extract, REQUIREMENTS_SYSTEM, requirements_prompt(q, solution),
                                             "requirements"))
@@ -520,7 +480,7 @@ def report(exam: ExamSpec, results: dict[str, dict], loader: ContentLoader, run_
            "in code. *Answerable* is necessary, not sufficient: a page can hold the formula and still not "
            "teach it well.", "",
            "| Verdict | Questions | Share |", "|---|---|---|",
-           f"| **Answerable** — everything taught on a tagged page or one link away | {v.get('answerable', 0)} | "
+           f"| **Answerable** — everything taught on a tagged page, one link away or on a prerequisite exam's page | {v.get('answerable', 0)} | "
            f"{_pct(v.get('answerable', 0), n)} |",
            f"| **Untagged** — everything is in the vault, but some of it on a page neither tagged nor linked | "
            f"{v.get('untagged', 0)} | {_pct(v.get('untagged', 0), n)} |",

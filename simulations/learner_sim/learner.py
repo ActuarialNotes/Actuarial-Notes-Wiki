@@ -46,6 +46,17 @@ ARG_FIELDS = {
 NOTES_WORD_LIMIT = 1500
 
 
+def action_args(obj: dict, name: str) -> dict:
+    """An action's args, with any of its own fields written beside "args" rather than in it
+    lifted in — `{"action": "answer", "args": {}, "answer": "C"}` is a slip, not a blank answer."""
+    args = obj.get("args")
+    args = dict(args) if isinstance(args, dict) else {}
+    for k in ARG_FIELDS.get(name, ()):
+        if k not in args and k in obj:
+            args[k] = obj[k]
+    return args
+
+
 def trim_reply(reply: str) -> str:
     """What is kept of a model reply: its action and that action's own fields, as JSON."""
     try:
@@ -53,7 +64,7 @@ def trim_reply(reply: str) -> str:
     except ValueError:
         return "(no action in reply; text not kept)"
     name = str(obj.get("action") or "")
-    args = obj.get("args") if isinstance(obj.get("args"), dict) else {}
+    args = action_args(obj, name)
     return json.dumps({"action": name, "args": {k: args[k] for k in ARG_FIELDS.get(name, ()) if k in args}})
 
 
@@ -211,10 +222,9 @@ class Learner:
                 name = str(obj.get("action") or "").strip()
                 if name not in ACTIONS:
                     raise ValueError(f"unknown action {name!r}")
-                args = obj.get("args") or {}
-                if not isinstance(args, dict):
+                if obj.get("args") is not None and not isinstance(obj.get("args"), dict):
                     raise ValueError("args must be an object")
-                return Action(name, args, failures)
+                return Action(name, action_args(obj, name), failures)
             except ValueError as e:
                 failures += 1
                 if failures > self.max_retries:

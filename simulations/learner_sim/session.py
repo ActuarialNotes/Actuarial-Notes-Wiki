@@ -26,7 +26,7 @@ from .content_loader import ContentLoader
 from .exams import ExamSpec
 from .grader import Grader
 from .guard import ContextGuard, SolutionIndex
-from .learner import NOTES_WORD_LIMIT, Learner
+from .learner import ACTIONS, NOTES_WORD_LIMIT, Learner
 from .profiles import Profile
 from .strategies import PickContext, make_strategy, question_minutes, reading_minutes
 from .textmatch import word_count
@@ -374,6 +374,12 @@ class SimulationRun:
                 return ("You have no open question. Use next_question.", False, pending, 0, None)
             sid, qid = pending["sid"], pending["qid"]
             response = a.get("answer")
+            if response is None or (isinstance(response, str) and not response.strip()):
+                # A reply with no answer in it is a protocol slip, not a wrong answer: the
+                # question stays open and nothing is graded or released.
+                log.write("invalid_answer", qid=qid, source_id=sid)
+                return (f'That answer to {qid} had no "answer" field. Put the answer inside "args": '
+                        + ACTIONS["answer"].split("  —")[0], False, pending, 0, None)
             try:
                 conf = max(0, min(100, int(float(a.get("confidence")))))
             except (TypeError, ValueError):

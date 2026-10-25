@@ -9,9 +9,9 @@ Type: "Textbook"
 ISBN: "978-1-0716-1417-4"
 Available from: "[statlearning.com](https://www.statlearning.com/)"
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-09
+  status: verified
+  confidence: high
+  last_checked: 2026-10-25
   last_checked_by: agent:validate-v1
   content_hash: sha256:022c6afef70fb73c5a32f1e39efa0ba0550ef80da42bfbf0c7e11ac270410140
   sources:
@@ -22,6 +22,7 @@ verification:
     - "An Introduction to Statistical Learning, authors' site (offers the 2nd-edition PDF free: Download the PDFs here — 2nd Edition of ISL with R), html, sha256:26052e3e80e700fce1b0781d69d01cd2fc28ca80b8f4f11310b1027f566f9dad — https://www.statlearning.com/"
     - "SOA Exam PA syllabus, October 2026, Readings, the James et al. table (First and Second Edition rows), sha256:1f1c46424d78ac04c297bf6c121bf9d03aec7d451560335cc9e07c7c533a4d84 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-exam-pa-syllabus.pdf"
     - "SOA Exam SRM syllabus, January 2027, Readings, James et al. Second Edition, sha256:2165c0dec2c26a810a100a504f6a38ac05f02348c1af26e4c8ad71b679eb56af — https://www.soa.org/globalassets/assets/files/edu/2027/spring/syllabi/2027-01-exam-srm-syllabus.pdf"
+    - "CIA Education Syllabus – ACIA Capstone Exam and Modules (CIA, last updated January 19, 2026), section 4 'Topics of predictive analytics and statistics', pp.30-31, rows A5.1-A5.9, sha256:2a0fb1facb47c97a76ac956d86f0514bcb9e5459ecdc0a973bd3f6f155e3d291 — https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=608114&fid=627235 (listed at https://www.cia-ica.ca/publications/997001e/)"
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/An Introduction to Statistical Learning (James et al. - 2021).md

@@ -8,15 +8,16 @@ Edition: "4th"
 Type: "Textbook"
 ISBN: "978-1-138-74151-5"
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-09
+  status: verified
+  confidence: high
+  last_checked: 2026-10-25
   last_checked_by: agent:validate-v1
   content_hash: sha256:d1daa06db416a6fcc17289e948c976bc526845127b785e7a0ba1773b723cb140
   sources:
     - "Dobson & Barnett, An Introduction to Generalized Linear Models, 4th ed. (CRC Press, 2018), publisher eBook preview: title and copyright pages, Contents pp. vii-xiii (PDF pp.8-14), Preface, sha256:40ed0b2549113ee0bea29e41786886ce992ffa29251ad26fb1037385bb51611a — https://api.pageplace.de/preview/DT0400.9781351726221_A37406780/preview-9781351726221_A37406780.pdf"
     - "Routledge product page, An Introduction to Generalized Linear Models 4th ed., Description, fetched 2026-10-05, sha256:17ebb9fececc386c6efcfbb797506166d5e280424b9fceb0508dde85a00a7ef7 — https://www.routledge.com/An-Introduction-to-Generalized-Linear-Models/Dobson-Barnett/p/book/9781138741515"
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06 2026_6_29), Complete Text References p.6 (and Domain readings pp.3-5), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
+    - "CIA Education Syllabus – ACIA Capstone Exam and Modules (CIA, last updated January 19, 2026), section 4 'Topics of predictive analytics and statistics', pp.30-31, rows A5.1-A5.9, sha256:2a0fb1facb47c97a76ac956d86f0514bcb9e5459ecdc0a973bd3f6f155e3d291 — https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=608114&fid=627235 (listed at https://www.cia-ica.ca/publications/997001e/)"
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/An Introduction to Generalized Linear Models (Dobson - 2018).md

@@ -148,11 +148,11 @@ are in Appendix A.
 
 | Bank | Questions | Concepts covered in its own bank | Exam status |
 |---|---:|---|---|
-| Exam P | 716 | 65 / 72 | ready |
-| Exam FM | 461 | 91 / 91 | ready |
-| MAS-I | 281 | 178 / 178 | ready |
-| DISC-DA / RM / IA | 70 / 146 / 221 | 100% each | ready |
-| Exam 7 | 144 | 26 / 29 | ready (2026-10-16) |
+| Exam P | 716 | 65 / 72 | beta (ready until 2026-10-25, G8) |
+| Exam FM | 461 | 91 / 91 | beta (ready until 2026-10-25, G8) |
+| MAS-I | 281 | 178 / 178 | beta (ready until 2026-10-25, G8) |
+| DISC-DA / RM / IA | 70 / 146 / 221 | 100% each | beta (ready until 2026-10-25, G8) |
+| Exam 7 | 144 | 26 / 29 | beta (ready 2026-10-16 to 2026-10-25, G8) |
 | MAS-II | 168 | 98 / 98 | beta |
 | Exam 5 | 349 | 129 / 138 | beta |
 | Exam 6C | 394 (73 off-syllabus) | 137 / 159 | beta |
@@ -248,15 +248,17 @@ to §4. Where an item has a former roadmap ID (P0–P4), §4 gives it.
    and G6 on all but PCPA. What is left is G4 and G5, the fact check of 292 concept pages and
    95 readings once shared ones are counted once, plus PCPA's bank (C6) and 6C's page (C5). And
    since 2026-10-25, **G8** (C20, D29): each bank's answerability check, then its open items
-   closed. In order (content plan §4):
-   - **Step 0:** the ISLR and Dobson deltas, so ready MAS-I is 7 / 8 again (the CIA commit made
-     them stale), and `check-answerable` on the seven ready banks (runs only, about $445).
+   closed. The same day the maintainer moved P, FM, MAS-I, the three DISCs and Exam 7 back to
+   `beta`, since their banks haven't been checked against G8. **No exam is `ready`**, and
+   `--hold` holds none until one is promoted again. In order (content plan §4):
+   - **Step 0:** the ISLR and Dobson deltas, so MAS-I is 7 / 8 (the CIA commit made them
+     stale), and `check-answerable` on the seven demoted exams' banks (runs only, about $445).
    - **Steps 1–3:** MAS-II, Exam 9 and SRM. Each is one packet from ready.
    - **Steps 4–7:** Exam 5, then FAM, ASTAM and ALTAM, loading the shared Klugman, Brown & Lennox
      and AMLCR once.
    - **Steps 8–9:** PCPA and 6C.
-   - **Step 10:** the ready exams' G8 items, from step 0's runs. It comes after the beta exams
-     unless a ready bank turns out worse than MAS-II.
+   - **Step 10:** the seven demoted exams' G8 items, from step 0's runs, then each one promoted
+     again. Each is one gate from ready, so one whose items come back few moves ahead of steps 1–9.
 
    It runs on D27's open-text method. About 9–12M tokens, half of it 6C, before G8. G8 adds about
    $770 of checks and an item backlog that step 0's runs will size (MAS-II: 141 items). **Exam 8, and 6C's six
@@ -708,7 +710,7 @@ Where a default is given, sessions build with it until the decision is made.
 | D25 | The Tutor after Beta: Beta is the approved accounts plus **Pro** (the maintainer's call, 2026-10-18); is the open stage free or Pro, and which exam comes after Exam 5 | `tutor.md` §10 | L8 | Preview: one account. Beta = Pro, when the maintainer moves `TUTOR_STAGE` |
 | D27 | Extend D22's open-text method (commercial readings' pages at medium against contents, catalogue and outline; their concepts against open texts) from Exam 9 to every beta exam | content plan §6 | Phase 2 (C2–C6, C9) | Yes: it follows from D7 and D22 |
 | D28 | A reading only in the **CAS study kit**, whose page states only what the outline says: verify the page at medium against the outline, or hold it `in_review` until the kit is read (D20, re-asked) | content plan §6 | C1, C5: Exam 8's and 6C's G5 | ✅ settled 2026-10-25: **hold** until the kit itself is read. Exam 8, and 6C's six kit-only readings, stay below `ready` until then |
-| D29 | Should **answerability** (C20) hold a promotion back: an eighth gate, a bar on the gap share, or a figure the promotion PR only reports | content plan §6 | C20; Phase 2's promotions | ✅ settled 2026-10-25 by the maintainer: **a gate, G8**, on each item's resolution rather than the check's score. The seven exams already ready keep `ready` while their banks are run and closed (Phase 2, steps 0 and 10); a prerequisite exam's pages count as in reach |
+| D29 | Should **answerability** (C20) hold a promotion back: an eighth gate, a bar on the gap share, or a figure the promotion PR only reports | content plan §6 | C20; Phase 2's promotions | ✅ settled 2026-10-25 by the maintainer: **a gate, G8**, on each item's resolution rather than the check's score; a prerequisite exam's pages count as in reach. The seven exams that were ready were **moved back to `beta`** the same day, each promoted again when `--check` passes all eight (Phase 2, steps 0 and 10) |
 
 ### 6.2 Settled: don't re-open without a new reason
 
@@ -878,8 +880,13 @@ ls Concepts/*.md | wc -l; ls Resources/Books/*.md | wc -l
   prerequisite exam's pages (the exam page's own callout) count as in reach. MAS-II's record was
   rebuilt from its report: 74 of 141 answerable under G8 (62 by the report; 26 of its
   "elsewhere" items are on MAS-I pages). Every exam's gate count moved to /8. The ready exams
-  fail G8 until their banks are run, so `--hold` warns on all seven. Phase 2 gained the runs
-  (step 0) and the ready exams' items (step 10). C20 moved from *Proposed* to §4.
+  fail G8 until their banks are run. Phase 2 gained the runs (step 0) and those exams' items
+  (step 10). C20 moved from *Proposed* to §4.3.
+
+- **2026-10-25, the ready exams back to beta.** At the maintainer's request, P, FM, MAS-I, DISC-DA,
+  DISC-RM, DISC-IA and Exam 7 are `beta` again (`examStatus.ts`, `exam_catalog.json`): their banks
+  have no G8 record. No exam is `ready`, so `--hold` holds none (it errors only for a ready exam)
+  until the first is promoted again. Each carries the Beta tag in the app until then.
 
 - **2026-10-25, answerability in the content plan.** C20's check is written into the content
   plan: §1 (what the gates don't measure), rule 10 (a gap is closed from the reading, never

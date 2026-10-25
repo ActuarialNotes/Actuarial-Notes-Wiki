@@ -15,9 +15,10 @@ roadmap review_
 >
 > **G8, answerability, joined the gates on 25 Oct (D29):** every served question must be
 > answerable from the pages within its reach. Only MAS-II's bank has been checked (74 of 141
-> answerable). Every other bank's check is still to run — the seven ready exams' included, so
-> `--hold` warns on all seven until theirs are run and their items closed (Phase 2, steps 0
-> and 10).
+> answerable). **No exam is `ready` now.** P, FM, MAS-I, the three DISCs and Exam 7 had passed
+> every gate there was; the maintainer moved them back to `beta` the same day, because their banks
+> have not been checked against G8. They are seventeen beta exams in Phase 2, and each comes back
+> to `ready` once its bank is run and its items are closed (steps 0 and 10).
 
 This is the **one plan for the vault's content**: the exam pages, concept pages, resource pages
 and question banks, the fact check that stands behind them, and the generated figures and
@@ -125,10 +126,10 @@ It gates on what has been **done about** each item, which the vault can show (D2
   about the pages, links and bank) fails the PR. A ready exam owed a **fact check** (G1, G4, G5,
   G7 — an edit makes a page stale by design, and `verify-check.yml` repairs the record) and a
   beta exam below the beta bar print as warnings: the first is a re-check the exam is owed, the
-  second its worklist. **G8** prints as a warning on a ready exam too. The seven exams promoted
-  before it existed keep `ready` while their banks are run and their items closed (Phase 2, steps
-  0 and 10), and a reworded question re-opens it until the model check runs on it again, which a
-  PR can't do in CI.
+  second its worklist. **G8** prints as a warning on a ready exam too, since a reworded question
+  re-opens it until the model check runs on it again, which a PR can't do in CI.
+- **Since 25 Oct no exam is `ready`**, so `--hold` raises no error. It holds nothing until an
+  exam is promoted again. A PR that costs P or Exam 7 a structural gate only prints a warning.
 
 ### 1.2 Rules every campaign keeps
 
@@ -172,21 +173,24 @@ Adopted during the DISC, MAS-I and Exam 7 campaigns (Appendix A), and binding on
 
 From `python3 scripts/publication_readiness.py --body all` and `--hold`, after Phase Q closed,
 re-measured with G8 the same day.
-84 exam pages: **7 ready, 10 beta, 67 in development**.
+84 exam pages: **0 ready, 17 beta, 67 in development**.
 
-**Ready (7):**
+**Ready (0).** The seven exams that were ready on 25 Oct went back to beta that day, when G8 joined
+the gates (D29). They lead the beta table:
 
-| Exam | Gates | What fails |
-|---|---:|---|
-| Exam P, Exam FM, DISC-DA, DISC-RM, DISC-IA, Exam 7 | 7 / 8 | G8: the bank has not been checked (Phase 2, step 0) |
-| **MAS-I** | **6 / 8** | G5: *An Introduction to Statistical Learning* and Dobson's *An Introduction to Generalized Linear Models* are `stale`. The CIA commit (`d9b9240c`, 19 Oct) added an ACIA Capstone line to each page's syllabus callout and Sources. A delta re-check of those lines clears it (Phase 2, step 0). G8: the bank has not been checked |
+`--hold`: 0 ready exams, 0 errors, 1 warning (PCPA's G6).
 
-`--hold`: 0 errors, 9 warnings (MAS-I's G5; PCPA's G6; G8 on all seven ready exams).
-
-**Beta (10)**, in Phase 2's order:
+**Beta (17)**: the seven moved back from ready, then the rest in Phase 2's order:
 
 | Exam | Page | Concepts | Unverified concepts | Readings unverified | No question | Bank verified | Answerable | Gates | Fails |
 |---|---|---:|---:|---:|---:|---|---|---:|---|
+| Exam P | verified | 68 | 0 | 0 / 6 | 0 | 719 / 719 | not run | 7 / 8 | G8 |
+| Exam FM | verified | 90 | 0 | 0 / 6 | 0 | 460 / 460 | not run | 7 / 8 | G8 |
+| DISC-DA | verified | 42 | 0 | 0 / 1 | 0 | 70 / 70 | not run | 7 / 8 | G8 |
+| DISC-RM | verified | 65 | 0 | 0 / 1 | 0 | 144 / 144 | not run | 7 / 8 | G8 |
+| DISC-IA | verified | 97 | 0 | 0 / 1 | 0 | 221 / 221 | not run | 7 / 8 | G8 |
+| Exam 7 | verified | 25 | 0 | 0 / 15 | 0 | 125 / 125 | not run | 7 / 8 | G8 |
+| **MAS-I** | verified | 176 | 0 | 2 / 8 | 0 | 281 / 281 | not run | 6 / 8 | G5, G8 |
 | MAS-II | verified | 98 | 2 | 1 / 6 | 0 | 141 / 141 | 74 / 141 | 5 / 8 | G4, G5, G8 |
 | Exam 9 | verified | 60 | 1 | 2 / 9 | 0 | 131 / 131 | not run | 5 / 8 | G4, G5, G8 |
 | SRM | verified | 41 | 7 | 2 / 2 | 0 | 77 / 77 | not run | 5 / 8 | G4, G5, G8 |
@@ -201,8 +205,8 @@ re-measured with G8 the same day.
 G8 passes with no bank, as G7 does: PCPA's is G6's to fail. Its bank is written and checked under
 G8 like any other.
 
-Since 18 Oct, G7 has gone from passing on one beta exam to all nine with a bank, and G1 from
-seven to nine. Counted once each, the ten need **292 concept pages** checked (267 unverified, 25
+Of the ten exams that were beta before 25 Oct, G7 has gone from passing on one to all nine with a
+bank since 18 Oct, and G1 from seven to nine. Counted once each, those ten need **292 concept pages** checked (267 unverified, 25
 in review; 26 of them shared by two or three exams) and **95 readings** (90 unverified, 3 in
 review, ISLR stale). Four readings are shared: Klugman and Brown & Lennox (FAM, ASTAM), AMLCR
 (FAM, ALTAM) and ISLR (MAS-I, MAS-II, SRM).
@@ -320,7 +324,7 @@ Appendix A.
 
 | # | Exam | Gates | What is left | Readings it rests on |
 |---|---|---:|---|---|
-| — | P, FM, MAS-I, the DISCs, Exam 7 | 7 / 8 | Done on the first seven gates (Phase 1; Appendix A). MAS-I is 6 / 8 until ISLR's and Dobson's delta re-check (Phase 2, step 0). G8: each bank's check (step 0), then its items (step 10) | |
+| — | P, FM, MAS-I, the DISCs, Exam 7 (beta again since 25 Oct) | 7 / 8 | The first seven gates done (Phase 1; Appendix A). MAS-I is 6 / 8 until ISLR's and Dobson's delta re-check (Phase 2, step 0). G8: each bank's check (step 0), then its items (step 10), then back to `ready` | Their readings, all verified |
 | 1 | **MAS-II** (C4) | 5 / 8 | G4: *Backward Shift Operator* and *Correlogram* quote Cowpertwait's own wording; restate each to an open text (fpp3, NIST) and verify at medium (D22, D27). G5: the ISLR delta | Cowpertwait commercial; the rest verified |
 | 2 | **Exam 9** (C2) | 5 / 8 | G4: *Enterprise Risk Management* (Brehm's four phases are stated in no open source: restate the page to one that is, such as the CAS ERM Committee's free 2003 *Overview of Enterprise Risk Management*, or cut the claim). G5: CJS (assigned as the JEP text, read as the HBS working paper) and Cummins 2008 (SSRN 1057401), both `in_review`. Try again for the assigned texts; if no session can reach them, the maintainer supplies a copy | Most verified on open texts (D22) |
 | 3 | **SRM** (C9) | 5 / 8 | G4: 7 concepts (*ARCH Model*, *Hyperparameter*, *Model Validation*, *Overfitting*, *Regression Tree*, *Train-Test Split*, *Variable Transformation*). G5: Frees 2010, and the ISLR delta | Frees commercial (D7; Frees posts an online version); ISLR free |
@@ -410,7 +414,7 @@ Open fact-check items outside the campaigns:
   and 421 retagged and re-checked.
 - ~~**V7**~~ ✅ 18 Oct: the 2026-10-11 Exam 7 and DISC-RM run summaries, reconstructed from the logs.
 - **MAS-I's G5** (found 23 Oct): Dobson's *An Introduction to Generalized Linear Models* and
-  ISLR are `stale`, so `--hold` warns on a ready exam. The cause is the CIA commit (`d9b9240c`,
+  ISLR are `stale`, so `--hold` warned on MAS-I while it was ready. The cause is the CIA commit (`d9b9240c`,
   19 Oct), which added an ACIA Capstone line to each page's syllabus callout and Sources without
   the re-check rule 6 asks for. A delta re-check of the added lines against the CIA syllabus
   clears MAS-I, and ISLR's also clears it for MAS-II and SRM. → Phase 2, step 0. The lesson for
@@ -568,8 +572,8 @@ below is a G8 item: it closes only through `answerability_lib.py` (§1), and
   a tagged page. The gate sees a retag at once, since it re-reads the tags; no `resolve` is
   needed. A question retagged is stale until re-passed (G7).
 - **The other banks.** Run the check on each beta exam's bank at the start of its campaign
-  (Phase 2), and on the seven ready banks in step 0. At about $0.22 a question: the eight beta banks
-  not yet run (1,478 served questions) about $325, the ready banks (2,020) about $445, and all
+  (Phase 2), and on the seven banks of the exams moved back from ready in step 0. At about $0.22 a question: the eight beta banks
+  not yet run (1,478 served questions) about $325, the seven moved back (2,020) about $445, and all
   ~3,640 about $800.
 - **The tooling.** Gaps are grouped by the extractor's free concept name, mapped onto a page
   (`home_page`), so a few still land under "no page for …" when a page exists under another name.
@@ -669,24 +673,26 @@ Q2.
 
 ### Phase 2 — Every beta exam to ready (now)
 
-**Why now.** The maintainer set it as the first priority on 25 Oct. Ten exams are `beta`, and
-candidates already study all of them. Phase Q left their banks verified. What separates them from
+**Why now.** The maintainer set it as the first priority on 25 Oct. Seventeen exams are `beta`,
+and candidates already study all of them: ten that have never been ready, and the seven that were
+until G8 joined the gates the same day. Phase Q left their banks verified. What separates them from
 `ready` is almost entirely the fact check of pages a reader already sees, concept pages and
 reading pages, plus one bank (PCPA) and one exam page (6C). Since 25 Oct it is also G8: each bank's
 answerability check, and its items closed.
 
 The order follows the roadmap's ranking (§0.3):
 
-1. A ready exam failing its own gate comes first (step 0).
+1. A ready exam failing its own gate comes first (step 0). None is ready now, so step 0 is MAS-I's
+   deltas (which keep a demoted exam from slipping further) and the runs that size the rest.
 2. Next come the exams one or two packets from `ready`, because each of those unlocks a whole
    exam for little work.
 3. The rest follow by candidates over cost. Exams that share a reading are placed so the reading
    is loaded once.
 
-**Exit test.** Every exam that was `beta` on 25 Oct passes `publication_readiness.py --check`,
+**Exit test.** Every exam that was `beta` on 25 Oct, the seven moved back included, passes
+`publication_readiness.py --check`,
 or is blocked only by an outside source named in §6 (today Exam 8, and Exam 6C's six study-kit
-readings, held there by D28). `--hold` prints no warning, G8 on the seven exams promoted before
-it included, and every ready exam stays 8 / 8. Promotion stays the maintainer's call (§1.1): one PR per exam, citing `--check`,
+readings, held there by D28). `--hold` prints no warning, and every exam promoted stays 8 / 8. Promotion stays the maintainer's call (§1.1): one PR per exam, citing `--check`,
 with its line here and in the roadmap.
 
 **The method.** A packet is one reading and the concepts routed to it (`verify_route.py`). The
@@ -720,7 +726,7 @@ and then a resolve run.
 
 | Step | Exam | Left | Sources | Ends with |
 |---|---|---|---|---|
-| 0 | MAS-I (ready), with MAS-II and SRM; the seven ready banks | The ISLR and Dobson deltas: the ACIA Capstone lines the CIA commit added. Then `check-answerable` on the seven ready banks, 2,020 questions, runs only: it measures what step 10 holds | Free (the books and the CIA syllabus); about $445 of model calls | MAS-I back to 7 / 8; every ready bank with a record, so step 10 is sized |
+| 0 | MAS-I, with MAS-II and SRM; the seven moved back from ready | The ISLR and Dobson deltas: the ACIA Capstone lines the CIA commit added. Then `check-answerable` on the seven banks, 2,020 questions, runs only: it measures what step 10 holds | Free (the books and the CIA syllabus); about $445 of model calls | MAS-I to 7 / 8; every one of the seven with a record, so step 10 is sized and placed |
 | 1 | MAS-II | 2 concepts restated off Cowpertwait's wording. G8 (§3.9): 141 items on 67 questions. The Fall 2018 McElreath questions first, under D24, which takes ESS, WAIC and KL divergence out with their questions; then the page gaps (*Linear Mixed Model* 17 items, *Principal Components Analysis* 8, and 55 smaller pages) and 28 retags | fpp3, NIST (open); West, ISLR, Tse for the gaps | **ready** |
 | 2 | Exam 9 | *Enterprise Risk Management*; CJS and Cummins 2008 | Open ERM texts; the assigned texts tried again | **ready**, or held on a copy only the maintainer can supply |
 | 3 | SRM | 7 concepts; Frees 2010 | ISLR (free), Frees (commercial; an online version) | **ready** |
@@ -731,13 +737,12 @@ and then a resolve run.
 | 8 | PCPA | A bank for 29 concepts, written and checked by different agents (D5); 5 concepts; 12 readings | Mostly commercial; ASOP 23 and 56, R4DS and McKinney free | **ready** |
 | 9 | Exam 6C | The page's F-008–F-012; 137 concepts; 67 readings | Free Canadian documents, but six are in the study kit only | Every gate but G5, which stays held on those six pages until the kit is read (D28) |
 | — | Exam 8 | The ISO CGL plan; G8 | Study kit only; the bank's check and items are free to do now | Held on G5 (D20, D28), with G8 closed |
-| 10 | The seven ready exams (P, FM, MAS-I, the DISCs, Exam 7) | G8's items, from step 0's runs | Their own readings, all verified | Every ready exam 8 / 8, and `--hold` silent |
+| 10 | The seven moved back (P, FM, MAS-I, the DISCs, Exam 7) | G8's items, from step 0's runs | Their own readings, all verified | Each **ready** again, 8 / 8, one promotion PR each |
 
 Steps 2–9 each start with the exam's `check-answerable` run, and each ends at **ready** only with
-G8 passing. Step 10 comes last although §0.3's rule 1 would put a ready exam's failing gate first.
-The ready exams passed every gate there was when they were promoted, and the maintainer's 25 Oct
-priority is the beta exams (D29). Step 0's runs keep that call honest: if a ready bank turns out
-worse than MAS-II, its items move up.
+G8 passing. Step 10 is listed last but is placed by step 0's runs. Each of the seven is one gate
+from ready, so by rule 2 any whose items come back few goes ahead of steps 1–9. One whose bank
+turns out like MAS-II's waits its turn by candidates over cost, like any other beta exam.
 
 **Sizing.** These numbers come from `verification-plan.md` §6 and the FM and Exam 9 packets:
 
@@ -750,13 +755,13 @@ That makes roughly **9–12M tokens with the resolve runs**, about the size of P
 Exam 6C is close to half of it.
 
 **G8 adds to that.** The checks are about $770 of model calls: about $325 for the eight beta banks
-not yet run and about $445 for the ready ones. The items are the larger cost and can't be sized
+not yet run and about $445 for the seven moved back from ready. The items are the larger cost and can't be sized
 until the runs are in. On MAS-II there is one open item per question: 113 gaps over 57 pages, and
 28 retags. If the other banks are like it, they hold about 3,500 items. Most are page edits made inside a reading
 packet that is open anyway, plus a checker's pass on each. Re-measure after step 0.
 
 Steps 0–3 were under 1M tokens before G8; with MAS-II's 141 items, about 1.5–2M. They could still
-promote three exams and restore MAS-I to 7 / 8 in one session, if Exam 9's and SRM's runs come back
+promote three exams and bring MAS-I to 7 / 8 in one session, if Exam 9's and SRM's runs come back
 close to MAS-II's.
 
 **Alongside, and not blocking:**
@@ -874,8 +879,8 @@ join here.
 
 Not ranked against the campaigns; pulled when a session has room or a campaign touches them:
 C14 (figures), C15 (simulators), C16 and D21 (resource pages), C12 (provenance blocks,
-`page_lint.py`). C20's runs on the ready exams' banks have moved into Phase 2 (steps 0 and 10), now
-that G8 holds them.
+`page_lint.py`). C20's runs on P's, FM's, MAS-I's, the DISCs' and Exam 7's banks have moved into
+Phase 2 (steps 0 and 10), now that G8 holds them.
 
 ---
 
@@ -926,7 +931,7 @@ build with the default until the decision is made.
 | D22 | — | Exam 9's unread readings (Brehm, Mildenhall & Major, Grossi & Kunreuther; both Cummins articles; CJS's JEP text): a copy, or a reachable author-posted one | ✅ settled 18 Oct 2026: **verify on open texts at D7's medium ceiling** — each concept against a citable open source that states the same thing (MAS-II's method: Loss Data Analytics, fpp3, NIST), with the assigned reading's contents and catalogue record as the scope check. Only what no open source covers stays `in_review`. The two readings' own pages stay as verified at medium |
 | D27 | — (new, 25 Oct) | Extend D22's open-text method from Exam 9 to every beta exam: commercial readings' pages at medium against contents, catalogue and outline; their concepts at medium against open texts; what no open source states cut or restated rather than left `in_review` | **Yes**, the method Phase 2 runs on. It follows from D7 and D22 and needs no new rule; it is recorded so a sweep doesn't ask exam by exam |
 | D28 | D20, re-asked (25 Oct) | A reading that is **only in the CAS study kit**, with a page that states only what the outline says (citation, assigned pages, the cases or sections it lists) and nothing about the document's content. Verify that page at medium against the outline, the way D22's pages were verified against contents and catalogue, or hold it `in_review` until someone reads the kit. New reason: under D20 this blocks **Exam 8** (the ISO CGL plan) and also **Exam 6C** (Agricultural Programs, Baer & Rendall, KPMG Regulatory Oversight, Landmark Legal, McDonald, Morneau Shepell), so two of the ten beta exams can't reach `ready` without the kit | ✅ settled 25 Oct 2026: **hold.** A study-kit-only reading stays `in_review` until the kit itself is read; P1 is not loosened and the outline is not a substitute. Exam 8 and 6C stay beta on these pages alone, and the rest of both campaigns runs regardless |
-| D29 | — (new, 25 Oct) | Should **answerability** (C20) hold a promotion back? It could be an eighth gate (every served question answerable from its tagged pages or one link away), a bar on the gap share, or a figure the promotion only reports | ✅ settled 25 Oct 2026 by the maintainer: **an eighth gate, G8** (§1). The first default, report and don't gate, was overturned. The check's own score is noisy, so G8 gates on each item's resolution, re-read in code against the vault: a quote on a page in reach (tagged, one link away, or a page of an exam the *Prerequisite knowledge* callout names) or a `not-required` note. Two calls made with it, and reversible: the seven exams promoted before G8 **keep `ready`** while their banks are run (step 0) and their items closed (step 10, after the beta exams, unless step 0's runs show a ready bank worse than MAS-II); and a prerequisite exam's pages count as in reach, read off the callout, never inferred. Moves Phase 2's finish line (§4, *Sizing*) |
+| D29 | — (new, 25 Oct) | Should **answerability** (C20) hold a promotion back? It could be an eighth gate (every served question answerable from its tagged pages or one link away), a bar on the gap share, or a figure the promotion only reports | ✅ settled 25 Oct 2026 by the maintainer: **an eighth gate, G8** (§1). The first default, report and don't gate, was overturned. The check's own score is noisy, so G8 gates on each item's resolution, re-read in code against the vault: a quote on a page in reach (tagged, one link away, or a page of an exam the *Prerequisite knowledge* callout names) or a `not-required` note. A prerequisite exam's pages count as in reach, read off the callout, never inferred. The seven exams promoted before G8 first kept `ready` under this decision's default; **the maintainer moved them back to `beta` the same day** (P, FM, MAS-I, DISC-DA, DISC-RM, DISC-IA, Exam 7: `examStatus.ts` and `exam_catalog.json`). Each is promoted again, one PR each, when `--check` passes all eight (Phase 2, steps 0 and 10). Until then `--hold` holds no exam. Moves Phase 2's finish line (§4, *Sizing*) |
 | — | verification plan §7.5 | Write missing reading pages before their concepts' packets | ✅ settled: write them first (6U's and Exam 8's were) |
 | — | Exam 9 campaign (A.4) | Its three held questions | ✅ settled 18 Oct 2026: **2013 Q15** gets a note naming the two assumptions its key rests on (no investment income on capital; losses at year end), then a re-pass; **2014 Q16b** keeps CAS's ranking (the CDO² tranche safest) with a note that CAS accepted any ranking with a valid explanation, then a re-pass; ***Prepayment Risk*** is cut back to the outline's words; `cas9-an-009` was to be replaced by a C5 question on Panning or CJS, but that would leave *Prepayment Risk* with no served question (G6), so the maintainer kept it, noted as outside the readings |
 | — | CAS plan D6 | Frameworks only The Institutes' course states | ✅ settled 11 Oct 2026: rewritten to open sources (Appendix A.2.6) |

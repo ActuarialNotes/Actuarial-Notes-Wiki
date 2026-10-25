@@ -312,7 +312,7 @@ stack of cards that fold, only the one about what is wrong opened by default.
   title, author, the bibliographic chips, the link to go and get it, and under
   them the chapters and pages the claim was checked on. It sits right under Open
   issues because it is how a reader would go and settle a finding themselves,
-  and it is unfolded by default unless there are open issues to read first.
+  and it starts folded — the count on the card is the summary.
 
   A citation is written for an auditor — the work, the pages, a sha256 of the
   exact file that was read, a version string, a URL — so

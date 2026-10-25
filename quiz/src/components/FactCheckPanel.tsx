@@ -153,13 +153,9 @@ export function FactCheckPanel({
           </FactCheckSection>
         )}
 
-        {/* What the page was read against. Unfolded unless there are open
-            issues to read first — decided from the block, not the log, so
-            the card doesn't change its mind when the log arrives. */}
-        <FactCheckSources
-          sources={verification?.sources ?? []}
-          defaultOpen={!verification?.openFindings}
-        />
+        {/* What the page was read against — folded, like the rest: the
+            count on the card is the summary, the shelf one tap away. */}
+        <FactCheckSources sources={verification?.sources ?? []} />
 
         {state.kind === 'loading' && everChecked && (
           <p className="flex items-center gap-2 px-1 py-2 text-sm text-muted-foreground">

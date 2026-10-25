@@ -183,7 +183,7 @@ export function ExamStatusBanner({ status }: { status: ExamStatus }) {
   }
   if (status === 'beta') {
     return (
-      <div className="bg-emerald-500/10 py-1.5 text-center text-[11px] font-medium tracking-wide text-emerald-600 dark:text-emerald-400">
+      <div className="bg-amber-500/15 py-1.5 text-center text-[11px] font-medium tracking-wide text-amber-600 dark:text-amber-400">
         Beta
       </div>
     )

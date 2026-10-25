@@ -4,6 +4,7 @@ An opt-in morning email that lists the concepts the [study plan](study-plan-gene
 
 ## User experience
 
+- **Pro only**: the email is today's study plan, and the study plan is a Pro feature, so the email is too. A free account's bell opens the same modal with a lock and an **Upgrade** link in place of the toggle, and the sender checks `user_subscriptions` (the same active-Pro rule as `useSubscription.ts`) and skips any account that isn't Pro — an opt-in left over from a lapsed subscription stays stored and resumes if the account subscribes again.
 - **Opt in**: the Dashboard's reminders bell (signed-in only — the email goes to the account address). A toggle turns the email on, and a picker chooses the local send hour (default 8:00 AM). The browser's IANA timezone is stored alongside the hour and refreshed on every save, so the send time follows whichever device last touched the setting.
 - **The email**: one section per exam that has a cached study plan, each with a pacing line (day number, pacing status, days to target), today's concept list (capped at 12, "+N more" beyond that), and the plan's "worth a refresher" concepts. A CTA links to the quiz (with UTM parameters — see *Measuring it*); the footer links to `/dashboard?reminders=1`, which opens the bell's modal, to change the time or turn it off.
 - **Quiet days**: if no exam has anything scheduled or worth reviewing, no email is sent.

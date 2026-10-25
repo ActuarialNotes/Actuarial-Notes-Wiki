@@ -19,7 +19,7 @@ Correct answers move a concept up the ladder. A few rules keep the progression m
 - **New → Level 1**: Any correct answer, no matter the difficulty.
 - **Level 1 → Level 2**: At least 2 total correct answers on the concept.
 - **Level 2 → Level 3**: At least 3 total correct answers. Difficulty does not matter — an earlier version of the ladder also required one hard-difficulty correct answer, but many concepts have no hard question in the bank, which made Level 3 unreachable for them. Question difficulty is still recorded (`hard_correct_count`) as a statistic and still weights XP; it just doesn't gate promotion.
-- **One advance per day**: A concept can only move up one level per calendar day, regardless of how many questions you answer. If you answer a concept correctly multiple times in a session, the later answers still count toward your totals — they just don't trigger another level jump until tomorrow.
+- **One advance per day**: A concept can only move up one level per calendar day — your *local* day, the same one the study plan schedules in — regardless of how many questions you answer. If you answer a concept correctly multiple times in a session, the later answers still count toward your totals — they just don't trigger another level jump until tomorrow.
 
 ## Falling Back: Failures
 

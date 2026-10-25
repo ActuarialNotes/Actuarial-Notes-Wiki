@@ -64,6 +64,10 @@ The plan enforces spacing gaps that mirror the mastery state machine:
 | Level 1 | 1 day after the last correct answer |
 | Level 2 | 2 days after the last correct answer |
 
+"The last correct answer" is read as the learner's **local** day, like every other day key
+(see *Which day is "today"* below) — and mastery's one-advance-per-day rule counts local days
+too, so the plan never schedules an advance the mastery ladder would refuse.
+
 For every brand-new or forgotten concept, the plan pre-schedules all three mastery stages so the full workload is visible from day one:
 
 - **Day D** — Introduce the concept (New → Level 1)
@@ -71,6 +75,29 @@ For every brand-new or forgotten concept, the plan pre-schedules all three maste
 - **Day D+3** — Lock in mastery (Level 2 → Level 3)
 
 The plan reserves 3 days at the end of the runway so the last-introduced concept has room to complete this three-stage pipeline before the target date.
+
+#### An even pace for new concepts
+
+New and forgotten concepts are introduced at an even pace across the *intro days* — every
+day but the last three before the ready date. Concept *i* of *N* is due on day
+`⌊i × introDays / N⌋`, so 10 concepts on a 93-day runway are introduced about every nine
+days, and 100 concepts on 81 days run one or two a day. The pace, not the daily load target
+below, sets an introduction's day: the load target is the average of what the pace
+produces, so holding introductions to it pushed each one into the next one's day and the
+whole run weeks past the ready date.
+
+#### Every session has a deadline
+
+No session is booked on or after the ready date — that is the day the learner means to *be*
+ready, so the last study day is the day before it. Each stage's deadline leaves room for the
+stages after it (an introduction by 3 days before the last study day, its Level 2 review by 2
+days before), and a review is also due before the concept would **decay** out of the level it
+builds on: Level 1 lasts 7 days and Level 2 lasts 14 (`DECAY_DAYS_*` in `lib/mastery.ts`). A
+review booked after that decay would ask for "→ Level 3" on a concept back at Level 1.
+
+Only when a deadline can't be met at all — the pace would need more than 5 new concepts a
+day, or a pipeline is longer than the days left — does a session run past it, and the plan
+then reports **Behind**.
 
 #### Even daily load distribution
 
@@ -80,7 +107,7 @@ Each session (introduction or review) is counted toward a target daily load, com
 targetDailyLoad = ceil(totalRemainingSessions / daysRemaining)
 ```
 
-Sessions are spread so that no day exceeds this target. A concept is assigned to the **earliest available day on or after its eligible date** that still has capacity, rather than always landing on the first eligible day.
+Reviews are spread so that days stay at this target. A review is assigned to the **earliest day on or after its eligible date** that still has capacity — and the target is the softer limit: when every day before the review's deadline is full, it goes on the least-loaded of those days rather than past the deadline.
 
 **Example — convergence pile-up avoided**
 
@@ -91,7 +118,10 @@ With even distribution (61 days remaining):
 totalRemainingSessions = 20    (one L2 → L3 stage each)
 targetDailyLoad = ceil(20 / 61) = 1
 ```
-Instead of 20 concepts on one day, the plan assigns one per day across 20 consecutive days — the same total work, but at a steady, manageable pace.
+Instead of 20 concepts on one day, the plan spreads them across the days the concepts are
+still at Level 2 — from two days after they were earned to the 13th day, before they decay —
+one or two a day: the same total work, at a steady pace, and all of it while it can still
+reach Level 3.
 
 #### Proactive Level 3 maintenance reviews
 
@@ -216,7 +246,7 @@ The plan tells you how your pace compares to what's needed:
 |---|---|
 | **On track** | You're progressing at a rate that will get you to mastery by the target date |
 | **Ahead** | You've mastered more than 15% beyond the expected fraction at this point in the plan |
-| **Behind** | The remaining unmastered concepts can't all fit within the remaining days at the maximum rate of 5 new concepts per day |
+| **Behind** | The remaining unmastered concepts can't all fit within the remaining days — at the maximum rate of 5 new concepts per day, or because some session could only be booked on or after the ready date |
 | **Target passed** | Your target ready date has passed; the plan has fallen back to your exam date |
 | **Review mode** | Every concept is at Level 3 — only spaced review remains |
 

@@ -222,6 +222,18 @@ function renderText(sections: ExamSection[], friendlyDate: string): string {
   return lines.join('\n')
 }
 
+// The email is today's study plan, and the study plan is a Pro feature, so the
+// email is Pro too. Mirror of the client-side isActivePro check
+// (useSubscription.ts); the stored tier value is still `premium` — see the note
+// on SubscriptionTier there. An opt-in kept from a lapsed subscription stays in
+// user_email_prefs and simply isn't sent until the account is Pro again.
+function isActivePro(tier: string, status: string, periodEnd: string | null): boolean {
+  if (tier !== 'premium') return false
+  if (status !== 'active') return false
+  if (!periodEnd) return true
+  return new Date(periodEnd).getTime() > Date.now()
+}
+
 // ── Handler ───────────────────────────────────────────────────────────────────
 
 interface PrefsRow {
@@ -279,6 +291,14 @@ Deno.serve(async (req: Request) => {
       const { date: localDate, hour: localHour } = localDateHour(row.timezone || 'UTC', now)
       if (!force && localHour !== row.send_hour_local) { skipped++; continue }
       if (!force && row.last_sent_date === localDate) { skipped++; continue }
+
+      const { data: sub, error: subErr } = await admin
+        .from('user_subscriptions')
+        .select('tier, status, current_period_end')
+        .eq('user_id', row.user_id)
+        .maybeSingle()
+      if (subErr) throw new Error(subErr.message)
+      if (!sub || !isActivePro(sub.tier, sub.status, sub.current_period_end)) { skipped++; continue }
 
       const { data: examRows, error: examErr } = await admin
         .from('exam_progress')

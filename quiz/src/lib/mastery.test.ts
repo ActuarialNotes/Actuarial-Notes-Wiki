@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, afterEach } from 'vitest'
 import {
   applyAnswer,
   decayIfStale,
@@ -414,3 +414,28 @@ describe('latestMasteryStates', () => {
   })
 })
 
+
+// ── One advance per *local* day ─────────────────────────────────────────────
+
+describe('one level per local calendar day', () => {
+  const realTz = process.env.TZ
+  afterEach(() => { process.env.TZ = realTz })
+
+  // The study plan schedules each stage on the learner's local day; mastery has to
+  // count days the same way or the plan asks for advances it won't grant.
+  const level1At = (iso: string) => rec({ state: 'level1', correct_count: 1, last_correct_at: iso })
+
+  it('does not advance twice in one evening west of Greenwich', () => {
+    // 10am and 9:30pm on Aug 28 in Chicago — the second is already Aug 29 in UTC.
+    process.env.TZ = 'America/Chicago'
+    const r = applyAnswer(level1At('2026-08-28T15:00:00Z'), { isCorrect: true, isHard: false, at: new Date('2026-08-29T02:30:00Z') })
+    expect(r.state).toBe('level1')
+  })
+
+  it('advances the next morning after an evening level-up', () => {
+    // 8pm Aug 28, then 9am Aug 29 in Chicago — the same UTC day, different local days.
+    process.env.TZ = 'America/Chicago'
+    const r = applyAnswer(level1At('2026-08-29T01:00:00Z'), { isCorrect: true, isHard: false, at: new Date('2026-08-29T14:00:00Z') })
+    expect(r.state).toBe('level2')
+  })
+})

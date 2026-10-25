@@ -6,7 +6,7 @@
 
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import type { ConceptMasteryRecord, MasteryState } from '@/lib/mastery'
-import { DECAY_DAYS_LEVEL3 } from '@/lib/mastery'
+import { DECAY_DAYS_LEVEL1, DECAY_DAYS_LEVEL2, DECAY_DAYS_LEVEL3, decayIfStale } from '@/lib/mastery'
 import { buildMasteryLookup, lookupConceptRecord, resolveConceptState } from '@/lib/conceptMatch'
 import { orderConceptsForPlan } from '@/lib/studyPlanOrder'
 import { localDayKey } from '@/lib/streak'
@@ -24,7 +24,10 @@ import { localDayKey } from '@/lib/streak'
 // v6: concepts are introduced in teaching order instead of alphabetically
 // (see lib/studyPlanOrder.ts).
 // v7: 'strong_key' orders by topic weight alone, heaviest first.
-export const PLAN_CACHE_VERSION = 7
+// v8: new concepts are paced evenly over the runway; no session is booked past
+// the last study day or after its concept would decay; last_correct_at is read
+// as a local day.
+export const PLAN_CACHE_VERSION = 8
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -266,7 +269,7 @@ export function generateStudyPlan(input: GenerateInput): StudyPlan {
       .flatMap(c => {
         const rec = lookupConceptRecord(masteryBySlug, c)
         if (!rec?.last_correct_at) return []
-        const daysSinceCorrect = daysBetween(rec.last_correct_at.slice(0, 10), today)
+        const daysSinceCorrect = daysBetween(localDayKey(new Date(rec.last_correct_at)), today)
         const daysUntilDecay = DECAY_DAYS_LEVEL3 - daysSinceCorrect
         if (daysUntilDecay <= 0 || daysUntilDecay >= rmDaysRemaining) return []
         return [{ c, daysUntilDecay }]
@@ -357,43 +360,63 @@ export function generateStudyPlan(input: GenerateInput): StudyPlan {
 
   // ── Spacing-aware scheduling ──────────────────────────────────────────────
   // Rules:
-  //   - new/forgotten: introduce up to MAX_NEW_PER_DAY per calendar day
+  //   - new/forgotten: introduced at an even pace across the runway, at most
+  //     MAX_NEW_PER_DAY on any day
   //   - level1 → level2: earliest after 1 day gap from last_correct_at
   //   - level2 → level3: earliest after 2 day gap from last_correct_at
-  //   - max 1 level advance per concept per session (enforced by mastery.ts)
+  //   - max 1 level advance per concept per day (enforced by mastery.ts)
+  //
+  // Every session also has a *deadline*: the last study day (the day before the
+  // ready date — that date is when the learner means to be ready, not one more
+  // day of work), less the days its later stages still need, and never later
+  // than the day the concept would decay out of the level the session builds on.
+  // A review booked after that decay would target a level the concept no longer
+  // has a footing for — "→ Level 3" on a concept back at Level 1.
+  //
+  // Scheduling works in day offsets from today; `dayAt` turns one into a date.
 
   const MAX_NEW_PER_DAY = 5
 
-  // Spread new/forgotten introductions evenly across available days so that
-  // a small concept count with a long runway isn't front-loaded onto Day 1.
+  const lastStudyDay = daysRemaining - 1
+  // Reserve 3 days at the end for the last introduced concept to complete its
+  // full path (intro→level1 on D, level1→level2 on D+1, level2→level3 on D+3).
+  const introDays = Math.max(1, daysRemaining - 3)
+
   const newAndForgottenCount = sortedUnmastered.filter(
     c => { const s = getState(c); return s === 'new' || s === 'forgotten' },
   ).length
-  // Reserve 3 days at the end for the last introduced concept to complete its
-  // full path (intro→level1 on D, level1→level2 on D+1, level2→level3 on D+3).
   const dailyNewLimit = Math.min(
     MAX_NEW_PER_DAY,
-    Math.max(1, Math.ceil(newAndForgottenCount / Math.max(1, daysRemaining - 3))),
+    Math.max(1, Math.ceil(newAndForgottenCount / introDays)),
   )
 
-  function getEligibleDate(c: ConceptEntry): string {
-    const state = getState(c)
-    const rec = lookupConceptRecord(masteryBySlug, c)
-    if (state === 'level1') {
-      if (!rec?.last_correct_at) return today
-      const eligible = addDays(rec.last_correct_at.slice(0, 10), 1)
-      return eligible > today ? eligible : today
+  const dateCache: string[] = []
+  const dayAt = (offset: number) => (dateCache[offset] ??= addDays(today, offset))
+
+  /** Local day offset of a stored timestamp (negative for the past). */
+  const offsetOfTimestamp = (iso: string) => daysBetween(today, localDayKey(new Date(iso)))
+
+  /** The last day offset (≥ 0) on which a concept still holds the level it is
+   *  at now — decay can land mid-day, so a day only counts if the level lasts
+   *  through to its end. */
+  function lastDayAtCurrentLevel(rec: ConceptMasteryRecord): number {
+    const state = decayIfStale(rec, now).state
+    let last = 0
+    for (let d = 0; d <= DECAY_DAYS_LEVEL3 + 1; d++) {
+      if (decayIfStale(rec, new Date(dayAt(d) + 'T23:59:59')).state !== state) break
+      last = d
     }
-    if (state === 'level2') {
-      if (!rec?.last_correct_at) return today
-      const eligible = addDays(rec.last_correct_at.slice(0, 10), 2)
-      return eligible > today ? eligible : today
-    }
-    return today  // new / forgotten
+    return last
   }
 
-  const assignments: ConceptAssignment[] = []
-  const newIntrosByDay = new Map<string, number>()  // date → count of new introductions
+  function getEligibleDay(c: ConceptEntry): number {
+    const state = getState(c)
+    const rec = lookupConceptRecord(masteryBySlug, c)
+    if (!rec?.last_correct_at) return 0
+    if (state === 'level1') return Math.max(0, offsetOfTimestamp(rec.last_correct_at) + 1)
+    if (state === 'level2') return Math.max(0, offsetOfTimestamp(rec.last_correct_at) + 2)
+    return 0  // new / forgotten
+  }
 
   // Level3 concepts that will cross the decay threshold before the target date must
   // be scheduled for a refresher before they slip. Sort by urgency so the soonest-
@@ -402,8 +425,7 @@ export function generateStudyPlan(input: GenerateInput): StudyPlan {
     .flatMap(c => {
       const rec = lookupConceptRecord(masteryBySlug, c)
       if (!rec?.last_correct_at) return []
-      const daysSinceCorrect = daysBetween(rec.last_correct_at.slice(0, 10), today)
-      const daysUntilDecay = DECAY_DAYS_LEVEL3 - daysSinceCorrect
+      const daysUntilDecay = DECAY_DAYS_LEVEL3 + offsetOfTimestamp(rec.last_correct_at)
       // Only schedule if the concept decays strictly before the target date.
       // A concept that decays on or after the target day doesn't need early intervention.
       if (daysUntilDecay <= 0 || daysUntilDecay >= daysRemaining) return []
@@ -412,7 +434,7 @@ export function generateStudyPlan(input: GenerateInput): StudyPlan {
     .sort((a, b) => a.daysUntilDecay - b.daysUntilDecay)
 
   // Compute how many total sessions (intro + each review stage + maintenance) remain,
-  // then cap each day at that average to prevent pile-ups when many concepts converge
+  // then aim each day at that average to prevent pile-ups when many concepts converge
   // to the same eligible date.
   const totalSessions = sortedUnmastered.reduce((sum, c) => {
     const s = getState(c)
@@ -422,129 +444,96 @@ export function generateStudyPlan(input: GenerateInput): StudyPlan {
     return sum
   }, maintenanceCandidates.length)
   const targetDailyLoad = Math.ceil(totalSessions / Math.max(1, daysRemaining))
-  const sessionsByDay = new Map<string, number>()  // date → total sessions scheduled that day
+  const sessionsByDay: number[] = []   // offset → sessions booked that day
+  const introsByDay: number[] = []     // offset → new introductions booked that day
+  const loadOn = (d: number) => sessionsByDay[d] ?? 0
 
-  // Find the earliest date >= earliestDate that hasn't hit the daily session cap.
-  function nextReviewSlot(earliestDate: string): string {
-    let d = earliestDate
-    while (true) {
-      const count = sessionsByDay.get(d) ?? 0
-      if (count < targetDailyLoad) {
-        sessionsByDay.set(d, count + 1)
-        return d
-      }
-      d = addDays(d, 1)
+  // Book a review on the earliest day in [earliest, latest] still under the daily
+  // load target. The load target is the softer of the two limits: when every day
+  // in the window is full, the review goes on the window's least-loaded day
+  // rather than past its deadline. Only an empty window — the deadline can't be
+  // met at all — sends it past, onto the first day with room.
+  function book(earliest: number, latest: number): number {
+    let fallback = -1
+    for (let d = earliest; d <= latest; d++) {
+      if (loadOn(d) < targetDailyLoad) return take(d)
+      if (fallback === -1 || loadOn(d) < loadOn(fallback)) fallback = d
     }
+    if (fallback !== -1) return take(fallback)
+    let d = Math.max(earliest, latest + 1)
+    while (loadOn(d) >= targetDailyLoad) d++
+    return take(d)
+  }
+  function take(d: number): number {
+    sessionsByDay[d] = loadOn(d) + 1
+    return d
   }
 
-  // Find the earliest available slot in the window [startFrom, deadline]. Reviews are
-  // not shown until they enter their window so concepts with distant deadlines don't
-  // crowd today's plan unnecessarily. If every day in the window is at capacity,
-  // exceed the cap on the deadline — the review must happen before decay regardless.
-  function findMaintenanceSlot(startFrom: string, deadline: string): string {
-    let d = startFrom
-    while (d <= deadline) {
-      const count = sessionsByDay.get(d) ?? 0
-      if (count < targetDailyLoad) {
-        sessionsByDay.set(d, count + 1)
-        return d
-      }
-      d = addDays(d, 1)
-    }
-    sessionsByDay.set(deadline, (sessionsByDay.get(deadline) ?? 0) + 1)
-    return deadline
+  const assignments: ConceptAssignment[] = []
+  let lastBookedDay = 0
+  function assign(c: ConceptEntry, day: number, initialState: MasteryState) {
+    lastBookedDay = Math.max(lastBookedDay, day)
+    assignments.push({
+      conceptName: c.name,
+      topicName: c.topicName,
+      topicWeight: c.topicWeight,
+      scheduledDate: dayAt(day),
+      initialState,
+    })
   }
 
-  function nextSlotForNewIntro(): string {
-    let dayOffset = 0
-    while (true) {
-      const date = addDays(today, dayOffset)
-      const newCount = newIntrosByDay.get(date) ?? 0
-      const sessionCount = sessionsByDay.get(date) ?? 0
-      if (newCount < dailyNewLimit && sessionCount < targetDailyLoad) {
-        newIntrosByDay.set(date, newCount + 1)
-        sessionsByDay.set(date, sessionCount + 1)
-        return date
-      }
-      dayOffset++
-    }
+  // The two review stages of the pipeline, each booked no earlier than `earliest`
+  // and no later than `holdsUntil` — the last day the level it builds on lasts —
+  // or than the stages after it allow. A level earned on a booked day holds for
+  // its decay window from then: through day + DECAY_DAYS - 1 at least.
+  function bookLevel2(c: ConceptEntry, earliest: number, holdsUntil: number) {
+    const day = book(earliest, Math.min(lastStudyDay - 2, holdsUntil))
+    assign(c, day, 'level1')
+    bookLevel3(c, day + 2, day + DECAY_DAYS_LEVEL2 - 1)
+  }
+  function bookLevel3(c: ConceptEntry, earliest: number, holdsUntil: number) {
+    assign(c, book(earliest, Math.min(lastStudyDay, holdsUntil)), 'level2')
   }
 
   // Zero: schedule pre-emptive refreshers for level3 concepts that will decay
   // before the target date, urgency-first so the soonest-to-decay get the
-  // nearest open slots.
+  // nearest open slots. Reviews aren't shown until they enter their 7-day window,
+  // so concepts with distant deadlines don't crowd today's plan unnecessarily.
   for (const { c, daysUntilDecay } of maintenanceCandidates) {
-    const deadline = addDays(today, daysUntilDecay - 1)
-    const windowStart = addDays(today, Math.max(0, daysUntilDecay - 7))
-    const scheduledDate = findMaintenanceSlot(windowStart, deadline)
-    assignments.push({
-      conceptName: c.name,
-      topicName: c.topicName,
-      topicWeight: c.topicWeight,
-      scheduledDate,
-      initialState: 'level3',
-    })
+    assign(c, book(Math.max(0, daysUntilDecay - 7), daysUntilDecay - 1), 'level3')
   }
 
   // First: schedule level1/level2 on their earliest available slot (respecting the
-  // minimum gap), then pre-schedule the next pipeline stage.
+  // minimum gap and the day the concept would decay), then pre-schedule the next
+  // pipeline stage.
   for (const c of sortedUnmastered) {
     const state = getState(c)
     if (state !== 'level1' && state !== 'level2') continue
-    const eligibleDate = getEligibleDate(c)
-    const scheduledDate = nextReviewSlot(eligibleDate)
-    assignments.push({
-      conceptName: c.name,
-      topicName: c.topicName,
-      topicWeight: c.topicWeight,
-      scheduledDate,
-      initialState: state,
-    })
-    if (state === 'level1') {
-      // level2→level3 requires a 2-day gap from when level2 is earned
-      const l3Date = nextReviewSlot(addDays(scheduledDate, 2))
-      assignments.push({
-        conceptName: c.name,
-        topicName: c.topicName,
-        topicWeight: c.topicWeight,
-        scheduledDate: l3Date,
-        initialState: 'level2',
-      })
-    }
+    const rec = lookupConceptRecord(masteryBySlug, c)!
+    if (state === 'level1') bookLevel2(c, getEligibleDay(c), lastDayAtCurrentLevel(rec))
+    else bookLevel3(c, getEligibleDay(c), lastDayAtCurrentLevel(rec))
   }
 
-  // Second: spread new/forgotten introductions evenly, then pre-schedule
-  // all three pipeline stages so the true workload is visible from day one.
+  // Second: introduce new/forgotten concepts at an even pace across the intro
+  // days — concept i is due no earlier than day ⌊i · introDays / N⌋ — so a short
+  // list on a long runway is spread out rather than finished weeks early, then
+  // pre-schedule all three pipeline stages so the true workload is visible from
+  // day one.
+  let introIndex = 0
   for (const c of sortedUnmastered) {
     const state = getState(c)
     if (state !== 'new' && state !== 'forgotten') continue
-    const introDate = nextSlotForNewIntro()
+    // The pace itself sets the day, not the load target: the target is the
+    // average of what the pace produces, so holding intros to it would push each
+    // one into the next one's day and the whole run past the deadline.
+    let introDay = Math.floor((introIndex++ * introDays) / newAndForgottenCount)
+    while ((introsByDay[introDay] ?? 0) >= dailyNewLimit) introDay++
+    introsByDay[introDay] = (introsByDay[introDay] ?? 0) + 1
+    take(introDay)
     // Stage 1: introduce (new/forgotten → level1)
-    assignments.push({
-      conceptName: c.name,
-      topicName: c.topicName,
-      topicWeight: c.topicWeight,
-      scheduledDate: introDate,
-      initialState: state,
-    })
-    // Stage 2: level1 → level2 (requires 1-day gap)
-    const l2Date = nextReviewSlot(addDays(introDate, 1))
-    assignments.push({
-      conceptName: c.name,
-      topicName: c.topicName,
-      topicWeight: c.topicWeight,
-      scheduledDate: l2Date,
-      initialState: 'level1',
-    })
-    // Stage 3: level2 → level3 (requires 2-day gap from level2 earn date)
-    const l3Date = nextReviewSlot(addDays(l2Date, 2))
-    assignments.push({
-      conceptName: c.name,
-      topicName: c.topicName,
-      topicWeight: c.topicWeight,
-      scheduledDate: l3Date,
-      initialState: 'level2',
-    })
+    assign(c, introDay, state)
+    // Stages 2 and 3: level1 → level2 (1-day gap), level2 → level3 (2-day gap)
+    bookLevel2(c, introDay + 1, introDay + DECAY_DAYS_LEVEL1 - 1)
   }
 
   // Deduplicate todaysConcepts — a concept should appear at most once today
@@ -558,30 +547,44 @@ export function generateStudyPlan(input: GenerateInput): StudyPlan {
   // This keeps today's plan grounded in actual quiz progress when the plan regenerates
   // mid-day (e.g. after a config change): the user sees what they actually worked on,
   // not a list of brand-new concepts they haven't touched yet.
-  if (todaysLevelUps && todaysLevelUps.length > 0) {
-    const leveledUpSet = new Set(todaysLevelUps.map(s => s.toLowerCase()))
+  //
+  // A level-up is keyed by the slug mastery is stored under — the concept page's
+  // name, which an aliased syllabus link ([[Bond Price|Price]]) doesn't display —
+  // so each is resolved to this plan's concept by either name. One that isn't on
+  // this syllabus (another exam's) is dropped, and a concept advanced twice today
+  // is listed once.
+  const conceptByAnyName = new Map<string, ConceptEntry>()
+  for (const c of allConcepts) {
+    conceptByAnyName.set(conceptKey(c), c)
+    conceptByAnyName.set(c.name.toLowerCase(), c)
+  }
+  const levelledUpToday = [...new Set(
+    (todaysLevelUps ?? []).flatMap(slug => {
+      const c = conceptByAnyName.get(slug.toLowerCase())
+      return c ? [c.name] : []
+    }),
+  )]
+  if (levelledUpToday.length > 0) {
+    const leveledUpSet = new Set(levelledUpToday.map(s => s.toLowerCase()))
     const originalCount = todaysConcepts.length
-    if (todaysLevelUps.length >= originalCount) {
-      todaysConcepts = todaysLevelUps.slice(0, originalCount)
-    } else {
-      const fresh = todaysConcepts.filter(n => !leveledUpSet.has(n.toLowerCase()))
-      todaysConcepts = [...todaysLevelUps, ...fresh].slice(0, originalCount)
-    }
+    const fresh = todaysConcepts.filter(n => !leveledUpSet.has(n.toLowerCase()))
+    todaysConcepts = [...levelledUpToday, ...fresh].slice(0, originalCount)
   }
 
   // conceptsPerDay = average daily new-concept introductions needed to stay on pace.
   // Using neededNewPerDay (uncapped) so the displayed number reflects the true required
   // rate, not the peak pipeline count which inflates due to staged assignments converging.
-  const neededNewPerDay = Math.ceil(newAndForgottenCount / Math.max(1, daysRemaining - 3))
+  const neededNewPerDay = Math.ceil(newAndForgottenCount / introDays)
   const conceptsPerDay = Math.max(1, neededNewPerDay)
 
   // ── Pacing status ─────────────────────────────────────────────────────────
   // A schedule is "behind" when unmastered concepts can't fit in the remaining
-  // days at a reasonable pace (more than 8 concepts on the busiest day).
+  // days: introducing them would take more than MAX_NEW_PER_DAY a day, or some
+  // session could only be booked after the last study day.
   let status: PacingStatus = 'on_track'
   if (targetPassedFallback) {
     status = 'target_passed'
-  } else if (neededNewPerDay > MAX_NEW_PER_DAY) {
+  } else if (neededNewPerDay > MAX_NEW_PER_DAY || lastBookedDay > lastStudyDay) {
     status = 'behind'
   } else {
     const planStartDate = config.planStartDate ?? today

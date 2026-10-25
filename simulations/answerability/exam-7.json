@@ -1,0 +1,4014 @@
+{
+ "version": 1,
+ "exam": "Exam 7 (CAS)",
+ "bank": "exam-7",
+ "questions": {
+  "cas7-2012-q1": {
+   "path": "questions/exam-7/cas7-2012-q1.md",
+   "run": "answerability-20261025-7",
+   "input_hash": "sha256:5a28c4293af7431bd2b7df772520a85a89e7636886af75b17b936ccbecd9c0d3",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "The chain ladder ultimate loss equals paid (reported) loss to date times the cumulative loss development factor to ultimate.",
+     "concept": "Chain Ladder Method",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Chain Ladder Method",
+       "quote": "$$U_{\\text{AY}} = C_{\\text{AY},\\,n} \\times \\text{CDF}_{n \\to \\text{ult}}$$"
+      },
+      {
+       "page": "Cumulative Development Factor",
+       "quote": "$$\\text{Ultimate} = C_n \\times \\text{CDF}_{n \\to \\text{ult}}$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The Bornhuetter-Ferguson ultimate equals losses to date plus the expected ultimate loss (expected loss ratio times premium) times the percent unpaid (1 - 1/CDF).",
+     "concept": "Bornhuetter-Ferguson Method",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bornhuetter-Ferguson Method",
+       "quote": "$$U_{\\text{BF}} = C + \\left(1 - \\tfrac{1}{\\text{CDF}}\\right) \\times U_{0}$$"
+      },
+      {
+       "page": "Bornhuetter-Ferguson Method",
+       "quote": "$C$ is reported (or paid) losses to date, $U_0 = \\text{ELR} \\times \\text{EP}$ the a priori expectation, and $1 - 1/\\text{CDF}$ the percentage unreported from the [[Development Triangle|development pattern]]."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The Benktander (iterated BF) ultimate equals losses to date plus the BF ultimate times the percent unpaid (q = 1 - 1/CDF); equivalently q^2 times the a priori expected ultimate plus (1 - q^2) times the chain ladder ultimate.",
+     "concept": "Benktander Method",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Benktander Method",
+       "quote": "$$U_{\\text{GB}} = C + \\left(1 - \\tfrac{1}{\\text{CDF}}\\right) U_{\\text{BF}}$$"
+      },
+      {
+       "page": "Benktander Method",
+       "quote": "$$U_{\\text{GB}} = p(2 - p)\\,U_{\\text{CL}} + \\left[1 - p(2-p)\\right] U_{0}$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "definition",
+     "statement": "The percent unpaid (q) equals 1 minus the reciprocal of the cumulative development factor, and the percent paid (p) equals 1/CDF.",
+     "concept": "Cumulative Development Factor",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Benktander Method",
+       "quote": "$C$ is reported (or paid) losses to date, $p = 1/\\text{CDF}$ is the percentage developed, and $q = 1 - p$."
+      },
+      {
+       "page": "Cumulative Development Factor",
+       "quote": "The reciprocal is the **percentage reported** (or paid): $p_n = 1/\\text{CDF}_n$, and $1 - p_n$ is the percentage unreported."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "procedure",
+     "statement": "A cumulative LDF from a later age to ultimate is found by dividing the age-to-ultimate factor at the earlier age by the age-to-age link ratio between the two ages.",
+     "concept": "Loss Development Factors",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Cumulative Development Factor",
+       "quote": "CDFs are built **backwards from the tail**: start with the tail factor, multiply in each successive age-to-age factor moving toward younger ages."
+      }
+     ]
+    },
+    {
+     "id": "r6",
+     "kind": "procedure",
+     "statement": "When re-evaluating one year later, update the paid to date to include the new incremental paid loss and use the CDF for the next age (e.g., 24-ultimate) while keeping the expected ultimate and selected factors unchanged.",
+     "concept": "Loss Development Method Re-evaluation",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "cas7-2012-q10": {
+   "path": "questions/exam-7/cas7-2012-q10.md",
+   "run": "answerability-20261025-7",
+   "input_hash": "sha256:72255ae8ad03e2361afad4a04748a1d2faee7e243010070f6e8840097cd4504f",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "procedure",
+     "statement": "Remove commission, brokerage and internal expenses from treaty premium (multiply by one minus the expense ratio) before using it as the exposure base in the Stanard-Bühlmann method.",
+     "concept": "Stanard-Bühlmann Method",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "Allocate treaty premium to accident years according to the coverage basis (loss occurring vs. policies written) and the policy term and uniform effective dates, to determine the premium exposed in each accident year.",
+     "concept": "Reinsurance Premium Allocation to Accident Years",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Losses-Occurring-During and Risks-Attaching",
+       "quote": "An LOD contract covers every loss that occurs between its inception and expiration dates, whenever the ceding company issued the underlying policy. An RA contract covers only the underlying policies that incept during its term, including their losses after the contract has expired."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The percent reported at a given maturity equals the reciprocal of the age-to-ultimate loss development factor (1/CDF).",
+     "concept": "Loss Development Factors",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Cape Cod Method",
+       "quote": "| $2022$ | $36$ mo | $7{,}000$ | $1{,}750$ | $1.084$ | $92.3\\%$ |"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "Stanard-Bühlmann used-up (on-level) premium is the sum over accident years of premium times the percent reported for that year's maturity; the ELR equals total reported losses divided by used-up premium.",
+     "concept": "Stanard-Bühlmann Method",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Cape Cod Method",
+       "quote": "$$\\text{ELR} = \\frac{\\sum_i C_i}{\\sum_i \\text{EP}_i \\times \\tfrac{1}{\\text{CDF}_i}}$$"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "formula",
+     "statement": "Stanard-Bühlmann IBNR equals ELR times premium times (1 − percent reported), i.e., (1 − 1/CDF); ultimate loss equals reported losses plus IBNR.",
+     "concept": "Stanard-Bühlmann Method",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Cape Cod Method",
+       "quote": "$$\\text{IBNR}_i = \\text{ELR} \\times \\text{EP}_i \\times \\left(1 - \\tfrac{1}{\\text{CDF}_i}\\right)$$"
+      }
+     ]
+    },
+    {
+     "id": "r6",
+     "kind": "procedure",
+     "statement": "Combine multiple treaties by pooling their premiums, used-up premiums and reported losses to estimate a single ELR and IBNR.",
+     "concept": "Stanard-Bühlmann Method",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Cape Cod Method",
+       "quote": "The ELR is estimated as total reported losses over total *used-up* (on-level, developed) premium across all years."
+      }
+     ]
+    },
+    {
+     "id": "r7",
+     "kind": "fact",
+     "statement": "The chain ladder method is preferred over Stanard-Bühlmann when premium is difficult to bring to a common rate level or net of expenses, since Stanard-Bühlmann requires on-level premium.",
+     "concept": "Chain Ladder vs Stanard-Bühlmann",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Cape Cod Method",
+       "quote": "Premium **must be on level** and losses must be trended to a common cost level before the ELR is computed, or the derived ratio blends years written at different rate levels and different cost levels into one number."
+      }
+     ]
+    },
+    {
+     "id": "r8",
+     "kind": "fact",
+     "statement": "Stanard-Bühlmann is preferred over chain ladder when reported losses fluctuate but the expected loss ratio to on-level premium is expected to be stable, since it does not leverage reported losses.",
+     "concept": "Chain Ladder vs Stanard-Bühlmann",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r9",
+     "kind": "fact",
+     "statement": "The key innovation of Stanard-Bühlmann over Bornhuetter-Ferguson is that the expected loss ratio is estimated from the actual loss experience rather than judgmentally selected as an a priori.",
+     "concept": "Stanard-Bühlmann Method",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Cape Cod Method",
+       "quote": "The whole difference between the two methods is **where the a priori comes from**: BF imports it, Cape Cod estimates it."
+      },
+      {
+       "page": "Stochastic Cape Cod Model",
+       "quote": "Stanard and Bühlmann independently proposed estimating the ELR from the data; Bühlmann first presented it at a meeting in Cape Cod."
+      }
+     ]
+    }
+   ]
+  },
+  "cas7-2012-q11": {
+   "path": "questions/exam-7/cas7-2012-q11.md",
+   "run": "answerability-20261025-7",
+   "input_hash": "sha256:70ffb095b9b33303705f20b66468d974b58bb0e73e41fbebdff5b6a27dc00cd9",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "Reinsurers face longer claim reporting lags than primary insurers because claims pass through a long pipeline (cedent claim system, cedent reinsurance accounting, broker, reinsurer) before being recorded.",
+     "concept": "Reinsurance Loss Reserving Problems",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bordereau",
+       "quote": "Bordereau delays are one of Friedland's reasons that reinsurance reporting and payment patterns are longer than primary ones"
+      },
+      {
+       "page": "Reinsurance Reserving",
+       "quote": "Claims reach the reinsurer only after the cedant has reported and assessed them. Excess claims arrive later still, once they approach the retention or a reporting threshold."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "Cedents often do not report a claim to the reinsurer until it reaches a reporting threshold (e.g., a fraction of the attachment point), and they tend to undervalue large claims and ALAE, which lengthens reporting and development.",
+     "concept": "Reinsurance Loss Reserving Problems",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Reinsurance Reserving",
+       "quote": "Excess claims arrive later still, once they approach the retention or a reporting threshold."
+      },
+      {
+       "page": "Ceded Loss Reserve",
+       "quote": "Trend is leveraged into excess layers, reporting thresholds delay notice, and a change in retention makes prior ceded years non-comparable."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "Reinsurance loss data show persistent upward development because of inflation, cedents booking large claims at a modal value when first reported, and underestimation of ALAE.",
+     "concept": "Reinsurance Loss Reserving Problems",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "Reinsurance data are heterogeneous because reporting and development patterns vary by line, contract type and attachment point, so combining them makes traditional reserving methods difficult to apply.",
+     "concept": "Reinsurance Loss Reserving Problems",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Reinsurance Reserving",
+       "quote": "Reporting lags are longer, data are thinner and less homogeneous, contracts are manuscript, results are often aggregated by treaty year, and an attachment point leverages development and trend."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "Industry statistics (e.g., Schedule P, ISO) are of limited use for reinsurance reserving because they are not broken down into homogeneous reinsurance categories and do not reflect the specific treaty terms or attachment points.",
+     "concept": "Reinsurance Loss Reserving Problems",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Reinsurance Reserving",
+       "quote": "External patterns such as RAA data help but mix unlike contracts."
+      }
+     ]
+    },
+    {
+     "id": "r6",
+     "kind": "fact",
+     "statement": "Reports reaching reinsurers often lack key information, such as only summary claim detail or calendar-year or underwriting-year rather than accident-year data, hampering accurate claim reserve estimates.",
+     "concept": "Reinsurance Loss Reserving Problems",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Reinsurance Reserving",
+       "quote": "Data often arrive as summary reports rather than claim detail"
+      },
+      {
+       "page": "Underwriting Year",
+       "quote": "Converting between bases loses information: a UY triangle cannot be re-cut into accident years without claim-level accident dates"
+      }
+     ]
+    },
+    {
+     "id": "r7",
+     "kind": "fact",
+     "statement": "Reinsurers' data coding and IT systems often cannot keep pace with the complex, changing data needs of reinsurance, delaying capture of claims and necessary information.",
+     "concept": "Reinsurance Loss Reserving Problems",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "cas7-2012-q2": {
+   "path": "questions/exam-7/cas7-2012-q2.md",
+   "run": "answerability-20261025-7",
+   "input_hash": "sha256:d2047f0d6954148210711cace3422406a5cdaa0c0adb3ffe4d575bd964922e0c",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "The fitted paid emergence pattern gives the cumulative percentage of ultimate loss expected to be paid by each evaluation date, so the unpaid (unemerged) share is one minus the percentage paid.",
+     "concept": "Loss Emergence Patterns",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Growth Curve",
+       "quote": "giving the expected cumulative proportion of ultimate loss reported (or paid) at age $x$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The Cape Cod (Stanard-Bühlmann) expected loss ratio equals total cumulative paid (or reported) loss divided by total used-up on-level premium, where used-up premium for each year is on-level premium times the percentage emerged.",
+     "concept": "Cape Cod Method",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Cape Cod Method",
+       "quote": "The ELR is estimated as total reported losses over total *used-up* (on-level, developed) premium across all years."
+      },
+      {
+       "page": "Cape Cod Method",
+       "quote": "$$\\text{ELR} = \\frac{\\sum_i C_i}{\\sum_i \\text{EP}_i \\times \\tfrac{1}{\\text{CDF}_i}}$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The Cape Cod reserve (IBNR) for each accident year equals the Cape Cod ELR times on-level premium times (1 minus percent paid); the total reserve is the sum over accident years.",
+     "concept": "Cape Cod Method",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Cape Cod Method",
+       "quote": "$$\\text{IBNR}_i = \\text{ELR} \\times \\text{EP}_i \\times \\left(1 - \\tfrac{1}{\\text{CDF}_i}\\right)$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "In the Clark-type loss development variance framework, the process variance of the reserve equals the scale parameter σ² times the estimated reserve (mean), so the process standard deviation is the square root of that product.",
+     "concept": "Process Variance and Parameter Variance",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Process Risk",
+       "quote": "$$\\mathrm{Var}_{\\text{process}}(R) = \\sigma^2 \\sum \\mu_{AY;x,y}$$"
+      },
+      {
+       "page": "Process Risk",
+       "quote": "Each year's process variance is $\\sigma^2$ times its reserve:"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "Total variance of a reserve estimate equals process variance plus parameter variance; standard deviations are not added directly, so total SD is the square root of the summed variances.",
+     "concept": "Process Variance and Parameter Variance",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Prediction Error",
+       "quote": "$$E\\big[(R - \\hat R)^2\\big] = \\underbrace{\\mathrm{Var}(R)}_{\\text{process}} + \\underbrace{E\\big[(\\hat R - E[R])^2\\big]}_{\\text{parameter}}$$"
+      },
+      {
+       "page": "Variance and Standard Deviation",
+       "quote": "Standard deviations do **not** add: $\\text{SD}(X+Y) \\neq \\text{SD}(X) + \\text{SD}(Y)$. Always add variances, then take the square root at the very end."
+      }
+     ]
+    },
+    {
+     "id": "r6",
+     "kind": "definition",
+     "statement": "The coefficient of variation of a reserve estimate is its standard deviation divided by its mean (the reserve estimate).",
+     "concept": "Coefficient of Variation",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Coefficient of Variation",
+       "quote": "The **Coefficient of Variation** $CV$ is the ratio of the standard deviation to the mean, measuring dispersion as a proportion of the mean."
+      }
+     ]
+    }
+   ]
+  },
+  "cas7-2012-q3": {
+   "path": "questions/exam-7/cas7-2012-q3.md",
+   "run": "answerability-20261025-7",
+   "input_hash": "sha256:c46f72ac20ee29318a84b2f34cadc1ac4b2540ada4e4cfdf7d435ab2bd0e7a99",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "The volume-weighted average age-to-age factor is the sum of cumulative losses at the later age divided by the sum of cumulative losses at the earlier age, over the accident years that have both ages.",
+     "concept": "Age-to-Age Development Factors",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Development Factor",
+       "quote": "**Volume-weighted average**: $\\Sigma(\\text{col }n{+}1) / \\Sigma(\\text{col }n)$ — gives more credibility to larger accident years; the standard default selection"
+      },
+      {
+       "page": "Mack Chain Ladder Model",
+       "quote": "$\\hat f_k = \\sum_j C_{j,k+1} / \\sum_j C_{jk}$ is [[Unbiasedness|unbiased]]."
+      },
+      {
+       "page": "Age to Age Factor",
+       "quote": "f_{n \\to n+1}^{\\text{vol-wtd}} = \\frac{\\sum_{\\text{AY}} C_{\\text{AY},\\,n+1}}{\\sum_{\\text{AY}} C_{\\text{AY},\\,n}}"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "Mack's weighted residual for a development period is (C_{i,k+1} - f_k * C_{ik}) / sqrt(C_{ik}), i.e. actual minus expected next-period cumulative loss divided by the square root of the beginning-of-period cumulative loss.",
+     "concept": "Mack Chain Ladder Residuals",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "Compute the expected next-period cumulative loss for each accident year by multiplying its current cumulative loss by the selected age-to-age factor.",
+     "concept": "Chain Ladder Method",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Chain Ladder Method",
+       "quote": "U_{\\text{AY}} = C_{\\text{AY},\\,n} \\times \\text{CDF}_{n \\to \\text{ult}}"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "To diagnose chain ladder assumptions, plot the weighted residuals on the vertical axis against the cumulative loss at the earlier age (or accident year) on the horizontal axis.",
+     "concept": "Mack Chain Ladder Residuals",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "Mack's chain ladder variance assumption (variance of the next-period loss proportional to the cumulative loss at the prior age) is supported when weighted residuals are randomly scattered around zero with no trend or pattern, such as increasing or decreasing spread, as the earlier-age loss changes.",
+     "concept": "Mack Chain Ladder Assumptions",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "cas7-2012-q4": {
+   "path": "questions/exam-7/cas7-2012-q4.md",
+   "run": "answerability-20261025-7",
+   "input_hash": "sha256:56255b927110837550ded753d3031ab5280e9ffe67c0f59d6a96a8cf40a72cda",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "The least squares estimator for a linear relation y = a + b x fits slope b-hat = (mean(xy) - mean(x)*mean(y)) / (mean(x^2) - mean(x)^2) and intercept a-hat = mean(y) - b-hat*mean(x).",
+     "concept": "Least Squares Regression",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Least Squares Development Method",
+       "quote": "$$b = \\frac{\\overline{xy} - \\bar{x}\\,\\bar{y}}{\\overline{x^2} - \\bar{x}^2}$$"
+      },
+      {
+       "page": "Least Squares Development Method",
+       "quote": "$$a = \\bar{y} - b\\,\\bar{x}$$"
+      },
+      {
+       "page": "Ordinary Least Squares",
+       "quote": "**Simple regression**: $\\hat\\beta_1 = S_{xy}/S_{xx}$ and $\\hat\\beta_0 = \\bar{y} - \\hat\\beta_1\\bar{x}$, where $S_{xy} = \\sum(x_i - \\bar{x})(y_i - \\bar{y})$ and $S_{xx} = \\sum(x_i - \\bar{x})^2$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "To predict the latest accident year's later-age loss ratio by least squares, fit a linear regression of later-age loss ratios on earlier-age loss ratios using prior accident years, then evaluate the fitted line at the latest year's observed earlier-age loss ratio.",
+     "concept": "Least Squares Loss Development Method",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Least Squares Development Method",
+       "quote": "**Least squares development** estimates a later value $y$ of an accident year's losses from its current value $x$ with a straight line $L(x) = a + bx$, fitted by least squares to the $(x, y)$ pairs of earlier accident years."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The link ratio (chain ladder) estimate of a later-age loss ratio is x times the ratio of the average later-age loss ratio to the average earlier-age loss ratio (x times the age-to-age factor), while the budget (expected) loss ratio method uses the average later-age loss ratio as the estimate regardless of x.",
+     "concept": "Link Ratio Method and Budgeted Loss Ratio Method",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Least Squares Development Method",
+       "quote": "$b = 0$ is the budgeted loss method, $L(x) = k$, as in the [[Expected Loss Method|expected loss method]]. $a = 0$ is the link ratio method, $L(x) = cx$, as in the [[Chain Ladder Method|chain ladder]]."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "The least squares estimate equals a credibility-weighted average of the link ratio estimate (weight Z) and the budgeted loss ratio estimate (weight 1-Z), with the best linear approximation to Bayesian credibility giving Z = b-hat divided by the link ratio factor c (mean y / mean x).",
+     "concept": "Least Squares Credibility Weighting of Loss Development Methods",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Least Squares Development Method",
+       "quote": "With $c = \\bar{y}/\\bar{x}$ as the link ratio and $Z = b/c$, the fit is $L(x) = Z\\,(cx) + (1 - Z)\\,\\bar{y}$, a [[Credibility|credibility]] blend of the link ratio estimate and the budgeted loss."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "A simple arithmetic average of two methods corresponds to a credibility weight Z = 1/2, so it is optimal only if the least squares credibility Z equals 1/2; otherwise it is not optimal.",
+     "concept": "Least Squares Credibility Weighting of Loss Development Methods",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "cas7-2012-q5": {
+   "path": "questions/exam-7/cas7-2012-q5.md",
+   "run": "answerability-20261025-7",
+   "input_hash": "sha256:613c5de8474bb0db6dc361bbf318d06e62386ae1cdca3ea8d29acd4c003b323d",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "Mack's first chain ladder assumption: the expected cumulative loss at the next age, given the accident year's prior cumulative losses, equals the cumulative loss to date times an age-specific development factor, so it depends only on the latest cumulative value and not on earlier development.",
+     "concept": "Mack Chain Ladder Assumptions",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Mack Chain Ladder Model",
+       "quote": "$$E(C_{i,k+1} \\mid C_{i1}, \\dots, C_{ik}) = C_{ik}\\,f_k$$"
+      },
+      {
+       "page": "Actuarial Assumptions",
+       "quote": "expected cumulative loss $C_{i,k+1}$ of accident year $i$ is the current cumulative loss $C_{ik}$ times a development factor $f_k$ common to all years"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "Mack's second chain ladder assumption: losses from different accident years are independent of each other.",
+     "concept": "Mack Chain Ladder Assumptions",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Chain Ladder Assumptions",
+       "quote": "The second, independence, says $c(w,d)$ and $c(v,g)$ are independent unless $v = w$; a strong diagonal breaks it."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "Mack's third chain ladder assumption: the variance of the next-period cumulative loss, given prior losses, is proportional to the cumulative loss to date, with an age-dependent proportionality constant (alpha_k squared).",
+     "concept": "Mack Chain Ladder Assumptions",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Mack Chain Ladder Model",
+       "quote": "$$\\text{Var}(C_{i,k+1} \\mid C_{i1}, \\dots, C_{ik}) = C_{ik}\\,\\alpha_k^2$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "Calendar year effects, such as a change in claims processing speed, affect all accident years along a diagonal and so violate Mack's accident year independence assumption.",
+     "concept": "Calendar Year Effects",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Calendar Year Effect",
+       "quote": "is an influence that acts on every accident year in the same calendar period, and so on one diagonal $w + d = \\text{constant}$ of a [[Development Triangle|development triangle]]."
+      },
+      {
+       "page": "Calendar Year Effect",
+       "quote": "It breaks the [[Chain Ladder Method|chain ladder]]'s assumption that accident years are independent."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "Volume-weighted all-year average development factors are the minimum-variance estimators under Mack's variance assumption, so using them is consistent with the Mack assumptions and violates none.",
+     "concept": "Volume-Weighted Average Development Factors",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Mack Chain Ladder Model",
+       "quote": "it weights the individual factors by $C_{jk}$, which gives the [[Minimum Variance|minimum-variance]] unbiased average only if the variance is proportional to $C_{jk}$."
+      }
+     ]
+    },
+    {
+     "id": "r6",
+     "kind": "fact",
+     "statement": "Correlation between successive development factor columns (e.g., a high factor followed by a low one) means development depends on earlier development rather than only on the latest cumulative loss and an age factor, violating Mack's first assumption.",
+     "concept": "Correlation of Development Factors",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Development Factor Correlation Test",
+       "quote": "Under Mack's assumption $E(C_{i,k+1} \\mid C_{i1}, \\dots, C_{ik}) = C_{ik}f_k$, the expected next factor is $f_k$ whatever the previous factor was, so subsequent factors are uncorrelated."
+      },
+      {
+       "page": "Development Factor Correlation Test",
+       "quote": "The chain ladder should not be applied to business where a high factor is usually followed by a low one, or vice versa"
+      }
+     ]
+    }
+   ]
+  },
+  "cas7-2012-q6": {
+   "path": "questions/exam-7/cas7-2012-q6.md",
+   "run": "answerability-20261025-7",
+   "input_hash": "sha256:197ba9a407194dfd3fe9714eec12cb2e0420c067e23336c82aa6364025093d73",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "procedure",
+     "statement": "A multi-period age-to-age development factor is obtained by multiplying the successive age-to-age factors across the interval, done separately for limited and excess (or other layer) factors.",
+     "concept": "Loss Development Factors (Chain Ladder)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Excess Loss Development Factor",
+       "quote": "The relativity ratios telescope, so the 12-to-ultimate factors come straight from the end points:"
+      },
+      {
+       "page": "Cumulative Development Factor",
+       "quote": "**Cumulative Development Factor** (CDF, or age-to-ultimate factor) is the product of all selected [[Age to Age Factor|age-to-age factors]] from a given maturity through to ultimate, including the [[Tail Factor|tail]]."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "definition",
+     "statement": "The limited severity relativity R^L at age t is the ratio of expected limited (below-deductible/retention) losses to total unlimited losses at that age, so 1 − R^L is the excess share.",
+     "concept": "Limited Severity Relativity (Excess Loss Development)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Excess Loss Development Factor",
+       "quote": "$R^L_t = E[X \\wedge L]/E[X]$ is the [[Loss Elimination Ratio|loss elimination ratio]] of the deductible, and $1 - R^L_t$ its excess ratio."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The unlimited development factor from age t to a later age equals the limited LDF weighted by the starting-age relativity R^L plus the excess LDF weighted by (1 − R^L) at the starting age: LDF = LDF^L·R^L_t + LDF^XS·(1 − R^L_t).",
+     "concept": "Limited Severity Relativity (Excess Loss Development)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Excess Loss Development Factor",
+       "quote": "$$\\text{LDF}_t = R^L_t \\, \\text{LDF}^L_t + (1 - R^L_t) \\, \\text{XSLDF}^L_t$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "The limited LDF from age t1 to t2 relates to the unlimited LDF by LDF^L = LDF × R^L_{t2}/R^L_{t1}, so the unlimited LDF = LDF^L × R^L_{t1}/R^L_{t2}.",
+     "concept": "Limited Severity Relativity (Excess Loss Development)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Excess Loss Development Factor",
+       "quote": "$$\\text{LDF}^L_t = \\text{LDF}_t \\times \\frac{R^L}{R^L_t}$$"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "When weighting limited and excess factors over a multi-period interval, the relativity used is the one at the beginning age of the interval (e.g., 36 months for 36-72), applied to the cumulative limited and excess factors.",
+     "concept": "Limited Severity Relativity (Excess Loss Development)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Excess Loss Development Factor",
+       "quote": "The weights in the balance equation are the relativities at the **starting** age $t$."
+      }
+     ]
+    }
+   ]
+  },
+  "cas7-2012-q7": {
+   "path": "questions/exam-7/cas7-2012-q7.md",
+   "run": "answerability-20261025-7",
+   "input_hash": "sha256:257592252cab2f6aa12a3c08924c4f28e28afbaaadcf86a1f6e95f2b4b509da2",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "Retrospective premium = (basic premium + capped (limited) losses × loss conversion factor) × tax multiplier.",
+     "concept": "Retrospective Rating Premium Formula",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Retrospective Rating",
+       "quote": "$$R = \\left(\\text{BP} + L \\times \\text{LCF}\\right) \\times \\text{TM}$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "Standard premium is estimated by dividing expected unlimited loss by the expected loss ratio, and basic premium is the basic premium factor times standard premium.",
+     "concept": "Standard Premium and Basic Premium",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Retrospective Rating",
+       "quote": "It is expressed as a basic premium factor times standard premium."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "Expected capped loss for each retro adjustment period equals expected unlimited loss times the percent of loss emerged in that period times that period's loss capping ratio (capping ratios are incremental, not cumulative).",
+     "concept": "Loss Capping Ratio in Retrospective Rating",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "When no retro adjustment has yet occurred, the total expected capped loss is the sum across all adjustment periods of the emerged-loss-weighted capping ratios, which is multiplied by total expected unlimited loss.",
+     "concept": "Estimating Retrospective Premium Asset",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r5",
+     "kind": "definition",
+     "statement": "The retrospective premium asset (accrual) is the estimated total retrospective premium including all future adjustments minus the premium currently booked.",
+     "concept": "Retrospective Premium Asset",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Retrospective Premium Reserve",
+       "quote": "$$\\text{Premium asset} = \\text{Expected ultimate premium} - \\text{Premium booked}$$"
+      }
+     ]
+    },
+    {
+     "id": "r6",
+     "kind": "formula",
+     "statement": "Paid development loss development (PDLD) factor for the first period is the basic premium component, (BP × TM)/(SP × %loss × ELR), plus capping ratio × LCF × TM; later periods are incremental capping ratio × LCF × TM; the cumulative factor is the loss-emergence-weighted average, applied to expected loss to estimate premium.",
+     "concept": "Premium Development to Loss Development Ratio (PDLD)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Retrospective Premium Reserve",
+       "quote": "$$\\text{PDLD}_1 = \\frac{\\text{BPF} \\times \\text{TM}}{\\text{ELR} \\times \\%L_1} + \\frac{CL_1}{L_1}\\,\\text{LCF} \\times \\text{TM}$$"
+      },
+      {
+       "page": "Retrospective Premium Reserve",
+       "quote": "$\\text{CPDLD}_k$ averages the PDLDs from adjustment $k$ onward, weighted by the expected loss emerging in each: $\\sum_{j \\ge k} \\text{PDLD}_j\\, \\Delta\\%L_j \\,/\\, \\sum_{j \\ge k} \\Delta\\%L_j$."
+      }
+     ]
+    }
+   ]
+  },
+  "cas7-2012-q8": {
+   "path": "questions/exam-7/cas7-2012-q8.md",
+   "run": "answerability-20261025-7",
+   "input_hash": "sha256:7206869b80797fefd5ae985a14b103eb0ee32f83e1275ef2f622e8b9a3d9ba2f",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "In the Bayesian (Verrall/Bayesian-CL-BF credibility) model with over-dispersed Poisson incremental losses, the expected incremental loss is Z times the chain ladder incremental estimate (λ_j − 1)·D_{i,j−1} plus (1 − Z) times the BF-type estimate (λ_j − 1)·x_i/(λ_j λ_{j+1}…λ_n), where x_i is the prior mean ultimate.",
+     "concept": "Bayesian Chain Ladder and Bornhuetter-Ferguson Credibility Model",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The credibility factor is Z = (cumulative proportion of ultimate reported to date) / (β·φ + cumulative proportion reported), where β is the gamma prior parameter and φ is the dispersion parameter.",
+     "concept": "Bayesian Chain Ladder and Bornhuetter-Ferguson Credibility Model",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bayesian Bornhuetter-Ferguson Model",
+       "quote": "$$Z_{ij} = \\frac{\\sum_{k=1}^{j-1} y_k}{\\beta_i\\,\\phi + \\sum_{k=1}^{j-1} y_k}$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "The prior mean of the gamma distribution is α/β, which gives the expected ultimate losses x_i for the accident year (used as the BF a priori ultimate).",
+     "concept": "Gamma Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bayesian Bornhuetter-Ferguson Model",
+       "quote": "$$E[x_i] = M_i = \\frac{\\alpha_i}{\\beta_i}$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "Compute the cumulative development factor to ultimate by multiplying the selected age-to-age link ratios from the given age through the last age (including the tail factor).",
+     "concept": "Chain Ladder Method (Age-to-Age Development Factors)",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Cumulative Development Factor",
+       "quote": "**Cumulative Development Factor** (CDF, or age-to-ultimate factor) is the product of all selected [[Age to Age Factor|age-to-age factors]] from a given maturity through to ultimate, including the [[Tail Factor|tail]]."
+      },
+      {
+       "page": "Cumulative Development Factor",
+       "quote": "CDFs are built **backwards from the tail**: start with the tail factor, multiply in each successive age-to-age factor moving toward younger ages."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "definition",
+     "statement": "The percent of ultimate losses reported at a given age (the cumulative proportion of ultimate emerged) equals the reciprocal of the cumulative development factor to ultimate at that age.",
+     "concept": "Percent Reported (Loss Emergence Pattern)",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Cumulative Development Factor",
+       "quote": "The reciprocal is the **percentage reported** (or paid): $p_n = 1/\\text{CDF}_n$, and $1 - p_n$ is the percentage unreported."
+      }
+     ]
+    },
+    {
+     "id": "r6",
+     "kind": "formula",
+     "statement": "The chain ladder incremental loss estimate for the next period equals cumulative losses to date times (age-to-age factor − 1).",
+     "concept": "Chain Ladder Method (Age-to-Age Development Factors)",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Over-Dispersed Negative Binomial Model",
+       "quote": "$$E[C_{ij} \\mid D_{i,j-1}] = (\\lambda_j - 1)\\,D_{i,j-1}$$"
+      }
+     ]
+    },
+    {
+     "id": "r7",
+     "kind": "fact",
+     "statement": "The Bayesian model is a credibility-weighted average of the chain ladder estimate (weight Z) and the Bornhuetter-Ferguson estimate (weight 1 − Z); Z rises toward chain ladder as more losses are reported, and Z→0 gives pure BF while Z→1 gives pure chain ladder.",
+     "concept": "Bornhuetter-Ferguson Method",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bayesian Bornhuetter-Ferguson Model",
+       "quote": "A small $\\beta_i$, a vague prior, pushes $Z_{ij}$ toward $1$, the chain ladder."
+      },
+      {
+       "page": "Bayesian Bornhuetter-Ferguson Model",
+       "quote": "Each future incremental loss then has a predictive mean that is a [[Credibility|credibility]] weighting of the chain ladder and the Bornhuetter-Ferguson estimates."
+      }
+     ]
+    }
+   ]
+  },
+  "cas7-2013-q1": {
+   "path": "questions/exam-7/cas7-2013-q1.md",
+   "run": "answerability-20261025-7",
+   "input_hash": "sha256:c1b64bbeefb363b9050d4db6a015aee2e70d30eb62d4223f7f994f0ebe53606d",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "A calendar year effect is a change affecting all accident years' development in the same calendar year (a diagonal of the triangle), violating the assumption of independence between calendar years in the chain ladder method.",
+     "concept": "Calendar Year Effects in Loss Development",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Calendar Year Effect",
+       "quote": "**Calendar Year Effect** (diagonal effect) is an influence that acts on every accident year in the same calendar period, and so on one diagonal $w + d = \\text{constant}$ of a [[Development Triangle|development triangle]]."
+      },
+      {
+       "page": "Calendar Year Effect",
+       "quote": "It breaks the [[Chain Ladder Method|chain ladder]]'s assumption that accident years are independent."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "To test for calendar year effects, rank the age-to-age factors within each development column, label each factor as larger (L) or smaller (S) than the column median, and mark factors equal to the median as excluded (*).",
+     "concept": "Calendar Year Effects Test (Randomness Test)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Calendar Year Effect",
+       "quote": "In each column, factors above the [[Median|median]] are L and below it are S; with an odd count the median factor is dropped."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "For each calendar-year diagonal with at least two non-excluded elements, count the S and L labels and set the diagonal's test statistic Z_n as the smaller of the two counts; sum Z across diagonals to get the total statistic.",
+     "concept": "Calendar Year Effects Test (Randomness Test)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Calendar Year Effect",
+       "quote": "$$Z_j = \\min(L_j,\\ S_j)$$"
+      },
+      {
+       "page": "Calendar Year Effect",
+       "quote": "For each diagonal $j$, $L_j$ and $S_j$ are the counts, $n = L_j + S_j$ and $m = \\lfloor (n-1)/2 \\rfloor$."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "For a diagonal with n non-excluded elements, m = floor((n-1)/2), c_n = C(n-1, m)·n/2^n, and E[Z_n] = n/2 − c_n.",
+     "concept": "Calendar Year Effects Test (Randomness Test)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Calendar Year Effect",
+       "quote": "$$E(Z_j) = \\frac{n}{2} - \\binom{n-1}{m}\\frac{n}{2^n}$$"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "formula",
+     "statement": "Var[Z_n] = n(n−1)/4 − (n−1)c_n + E[Z_n] − (E[Z_n])^2.",
+     "concept": "Calendar Year Effects Test (Randomness Test)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Calendar Year Effect",
+       "quote": "$$\\text{Var}(Z_j) = \\frac{n(n-1)}{4} - \\binom{n-1}{m}\\frac{n(n-1)}{2^n} + E(Z_j) - E(Z_j)^2$$"
+      }
+     ]
+    },
+    {
+     "id": "r6",
+     "kind": "procedure",
+     "statement": "Sum E[Z_n] and Var[Z_n] across diagonals to get the total mean and variance (diagonals independent), form a confidence interval of total E[Z] ± z·sqrt(total Var), and accept the null hypothesis of no calendar year effect if the total Z falls inside the interval, otherwise reject.",
+     "concept": "Calendar Year Effects Test (Randomness Test)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Calendar Year Effect",
+       "quote": "$Z$ is treated as Normal, and \"no calendar year effect\" is rejected at 5% if $Z$ falls outside $E(Z) \\pm 2\\sqrt{\\text{Var}(Z)}$."
+      }
+     ]
+    },
+    {
+     "id": "r7",
+     "kind": "fact",
+     "statement": "Calendar year effects can be caused by changes in claim handling or case reserving practices, inflation or trend changes, and legislative or judicial changes that affect all claims in a calendar year.",
+     "concept": "Calendar Year Effects in Loss Development",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Calendar Year Effect",
+       "quote": "Examples are a major change in [[Claims Processing Changes|claims handling]] or [[Case Adequacy|case reserving]], a shift in court decisions, or a change in the [[Inflation|inflation]] rate."
+      }
+     ]
+    }
+   ]
+  },
+  "cas7-2013-q10": {
+   "path": "questions/exam-7/cas7-2013-q10.md",
+   "run": "answerability-20261025-7",
+   "input_hash": "sha256:bd7e039da391be50ef45eb96fc7584adc42bdbd9318c38a7e23b69a70cb47755",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "Used-up premium for an accident year equals its adjusted (on-level, trended) premium multiplied by the percentage of losses reported (the report lag).",
+     "concept": "Stanard-Bühlmann Method",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Cape Cod Method",
+       "quote": "**Used-up premium** $\\text{EP}_i / \\text{CDF}_i$ is the share of each year's premium \"exposed\" to the losses reported so far."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The Stanard-Bühlmann expected loss ratio equals total reported losses across all accident years divided by total used-up premium across all accident years.",
+     "concept": "Stanard-Bühlmann Method",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Cape Cod Method",
+       "quote": "$$\\text{ELR} = \\frac{\\sum_i C_i}{\\sum_i \\text{EP}_i \\times \\tfrac{1}{\\text{CDF}_i}}$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "Stanard-Bühlmann IBNR for an accident year equals the expected loss ratio times adjusted premium times the percentage unreported (1 minus report lag).",
+     "concept": "Stanard-Bühlmann Method",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Cape Cod Method",
+       "quote": "$$\\text{IBNR}_i = \\text{ELR} \\times \\text{EP}_i \\times \\left(1 - \\tfrac{1}{\\text{CDF}_i}\\right)$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "Chain ladder IBNR equals reported loss times (LDF minus 1), where the LDF is the reciprocal of the percentage reported (report lag).",
+     "concept": "Chain Ladder Method (Loss Development)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Chain Ladder Method",
+       "quote": "$$\\text{IBNR} = U_{\\text{AY}} - C_{\\text{AY},\\,n}$$"
+      },
+      {
+       "page": "Long Tail Lines",
+       "quote": "$$\\text{Reported \\%} = \\frac{1}{\\text{CDF}_{n \\to \\text{ult}}}$$"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "procedure",
+     "statement": "Credibility-weighted IBNR equals Z times the chain ladder IBNR plus (1 minus Z) times the Stanard-Bühlmann IBNR, with Z computed for each accident year, and the results summed for the total.",
+     "concept": "Credibility-Weighted Loss Development / Stanard-Bühlmann Blend",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Bornhuetter-Ferguson Method",
+       "quote": "BF is a **credibility weighting** in disguise: it equals $Z \\, U_{\\text{CL}} + (1-Z)\\,U_0$ with $Z = 1/\\text{CDF}$."
+      }
+     ]
+    },
+    {
+     "id": "r6",
+     "kind": "fact",
+     "statement": "When credibility is a linear function of report lag, an accident year's Z equals the given credibility factor times its percentage reported, so more mature years get more weight on the chain ladder estimate.",
+     "concept": "Credibility-Weighted Loss Development / Stanard-Bühlmann Blend",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r7",
+     "kind": "fact",
+     "statement": "Compared with the chain ladder method, Stanard-Bühlmann gives more stable IBNR estimates for immature years because it relies on an expected loss ratio rather than emerged losses, but it is less responsive to actual emerged experience and requires many premium adjustments (on-leveling, trending) that can be difficult.",
+     "concept": "Stanard-Bühlmann Method",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Cape Cod Method",
+       "quote": "Premium **must be on level** and losses must be trended to a common cost level before the ELR is computed"
+      },
+      {
+       "page": "Bornhuetter-Ferguson Method",
+       "quote": "BF does not respond to bad news. If emergence runs far ahead of the a priori, BF holds most of its estimate anchored — which is exactly right when the emergence is noise and exactly wrong when it is signal."
+      }
+     ]
+    }
+   ]
+  },
+  "cas7-2013-q13": {
+   "path": "questions/exam-7/cas7-2013-q13.md",
+   "run": "answerability-20261025-7",
+   "input_hash": "sha256:ed7c9c17ee289fda864c5ba3b9e3caebb1787f09cbc8e83709843b3422ec5bf9",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "Catastrophe events (or changes in catastrophe frequency/severity) increase the uncertainty of property unpaid claim estimates, especially when the event occurs near the valuation date.",
+     "concept": "Sources of Uncertainty in Unpaid Claim Estimates",
+     "status": "linked",
+     "places": [
+      {
+       "page": "External Systemic Risk",
+       "quote": "**Event**: single events causing many claims, material for property and motor, and for medical malpractice or builders' warranty (one doctor, one builder)."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "Changes in costs of materials and replacement costs (e.g., from fuel prices or supply chain changes) make property claim settlement values less predictable and raise reserve uncertainty.",
+     "concept": "Sources of Uncertainty in Unpaid Claim Estimates",
+     "status": "linked",
+     "places": [
+      {
+       "page": "External Systemic Risk",
+       "quote": "**Economic and social**: standard inflation (AWE and CPI), economic conditions, fuel prices, driving patterns, and systemic shifts in short-tail claim frequency."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "Changes in reinsurance protection (such as purchasing excess of loss on some lines or dropping treaties on others) change the net retained volatility of reserves by line.",
+     "concept": "Reinsurance Effects on Reserve Uncertainty",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Net of Reinsurance",
+       "quote": "Net experience is **less volatile** than gross — excess-of-loss reinsurance caps exactly the [[Large Loss|large losses]] that drive volatility"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "Legal or legislative changes (e.g., to benefit levels) are a risk source that can increase uncertainty in long-tailed lines such as workers compensation reserves.",
+     "concept": "Sources of Uncertainty in Unpaid Claim Estimates",
+     "status": "linked",
+     "places": [
+      {
+       "page": "External Systemic Risk",
+       "quote": "**Legislative, political and claims inflation**: legislative change and its erosion, court precedents, medical and legal costs, and shifts in large claims."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "Inflation is a major source of risk for long-tailed lines because claims stay open a long time and inflationary pressure can cause upward development.",
+     "concept": "Sources of Uncertainty in Unpaid Claim Estimates",
+     "status": "linked",
+     "places": [
+      {
+       "page": "External Systemic Risk",
+       "quote": "Event risk tends to dominate property premium liabilities, and legislative, political and claims inflation risk dominates long-tail classes."
+      }
+     ]
+    },
+    {
+     "id": "r6",
+     "kind": "fact",
+     "statement": "Latent exposures (e.g., asbestos) and late-reported claims in the pipeline are risk sources that can cause underestimation of unpaid claim uncertainty for long-tailed lines.",
+     "concept": "Sources of Uncertainty in Unpaid Claim Estimates",
+     "status": "linked",
+     "places": [
+      {
+       "page": "External Systemic Risk",
+       "quote": "**Latent claim**: claims from a source not currently thought to be covered; material mainly for workers compensation and liability ([[Latent Liability|latent liabilities]])."
+      }
+     ]
+    }
+   ]
+  },
+  "cas7-2013-q2": {
+   "path": "questions/exam-7/cas7-2013-q2.md",
+   "run": "answerability-20261025-7",
+   "input_hash": "sha256:70506dac1524d10214aa72cc059faf7d77f8c48ced5d879390e1311a7f5bc1d2",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "In the Individual Loss Ratio (Benktander/Hovinen-type reserving per Mack-style) method, the reserve for an accident year is R_ind = (q_i/p_i) × C_i, where C_i is paid-to-date losses, p_i is the proportion of ultimate paid to date and q_i = 1 − p_i, which is equivalent to C_i/p_i − C_i.",
+     "concept": "Individual Loss Ratio Claims Reserve",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Credible Loss Ratio Reserve",
+       "quote": "$$R_i^{ind} = \\frac{q_i}{p_i}\\,C_{i,n-i+1}$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The incremental loss ratio for development period k is m_k = (sum of incremental losses at that development period across accident years that have it) / (sum of premiums of only those same accident years with an observed value at that period).",
+     "concept": "Incremental Loss Ratio Development Pattern",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Credible Loss Ratio Reserve",
+       "quote": "$m_k$ is the **incremental loss ratio** of development period $k$: the paid claims $S_{ik}$ of that period, summed over the origin periods that have reached it, divided by those periods' premium."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The proportion of ultimate loss developed to date for an accident year is p_i = (sum of m_k for periods observed to date) / (sum of all m_k), and the undeveloped proportion is q_i = 1 − p_i.",
+     "concept": "Loss Development Payment Pattern",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Credible Loss Ratio Reserve",
+       "quote": "$p_i = \\sum_{k \\le n-i+1} m_k \\big/ \\sum_k m_k$ is the **loss ratio payout factor**, the expected share of ultimate paid by now, and $q_i = 1 - p_i$ is the reserve factor."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "Accident years that are fully developed (p = 1, q = 0) contribute zero reserve, and the total reserve is the sum of the accident-year reserves.",
+     "concept": "Individual Loss Ratio Claims Reserve",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Credible Loss Ratio Reserve",
+       "quote": "$p_i = \\sum_{k \\le n-i+1} m_k \\big/ \\sum_k m_k$ is the **loss ratio payout factor**, the expected share of ultimate paid by now, and $q_i = 1 - p_i$ is the reserve factor."
+      },
+      {
+       "page": "Credible Loss Ratio Reserve",
+       "quote": "The totals are $1{,}364.29$ (individual), $1{,}450.00$ (collective)"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "formula",
+     "statement": "The collective loss ratio reserve for an accident year is R_coll = q_i × U_i^BC, where the a priori (budget) ultimate is U_i^BC = premium V_i × expected loss ratio (m_total = sum of all m_k).",
+     "concept": "Collective Loss Ratio Claims Reserve",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Credible Loss Ratio Reserve",
+       "quote": "$$R_i^{coll} = q_i\\,V_i\\sum_{k=1}^{n} m_k$$"
+      }
+     ]
+    },
+    {
+     "id": "r6",
+     "kind": "fact",
+     "statement": "The collective loss ratio method ignores actual paid losses to date and uses only the premium, the expected loss ratio and the unpaid proportion, whereas the individual loss ratio method scales the actual paid losses to date.",
+     "concept": "Collective Loss Ratio Claims Reserve",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Credible Loss Ratio Reserve",
+       "quote": "The **individual** loss ratio reserve grosses up the period's own paid claims, like the [[Chain Ladder Method|chain ladder]]. The **collective** loss ratio reserve applies the whole portfolio's burning cost"
+      }
+     ]
+    }
+   ]
+  },
+  "cas7-2013-q3": {
+   "path": "questions/exam-7/cas7-2013-q3.md",
+   "run": "answerability-20261025-7",
+   "input_hash": "sha256:817fccf5e5b511ebd83629440343c426383ae324f27c43a8f081e6b9d9328a81",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "In the Clark LDF method, the loss emergence growth function G(x) is a parametric curve (e.g., Weibull G(x)=1-exp(-(x/θ)^ω)) giving the expected proportion of ultimate loss emerged by age x.",
+     "concept": "Clark Growth Function Curves",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Growth Curve",
+       "quote": "**Growth curve** $G(x \\mid \\omega, \\theta)$ is a smooth parametric curve, in the form of a cumulative distribution function, giving the expected cumulative proportion of ultimate loss reported (or paid) at age $x$."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "Evaluate the growth function at the average accident date age (mid-point of the period, e.g., 6, 18, 30 months for evaluation ages 12, 24, 36), not at the evaluation age, when applying it to annual accident-year data.",
+     "concept": "Clark Growth Function Curves",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Growth Curve",
+       "quote": "The age $x$ runs from the *average* accident date to the evaluation date, so an [[Accident Year|accident year]] evaluated $t \\ge 12$ months after it starts has $x = t - 6$."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "In the Clark LDF method, the ultimate loss estimate equals cumulative paid loss to date divided by G(x) at the current age (LDF = 1/G(x)), and the reserve is ultimate minus paid to date.",
+     "concept": "Clark LDF Method",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Growth Curve",
+       "quote": "the age-to-ultimate factor is its reciprocal."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "Check whether the LDF should be truncated by evaluating G at a far-out age; if G there is reasonably close to 1, no truncation is needed (otherwise truncate the tail at a finite age).",
+     "concept": "Clark LDF Method",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Growth Curve",
+       "quote": "To avoid relying on a mechanical extrapolation, Clark truncates at a selected age $x_T$ (240 months), using $G(x_T)/G(x)$ in place of $1/G(x)$."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "formula",
+     "statement": "Expected incremental loss in a period from age x to y for an accident year is μ = Ultimate × [G(y) − G(x)], and actual and expected increments (not cumulative amounts) are compared.",
+     "concept": "Clark Expected Incremental Loss",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Growth Curve",
+       "quote": "The expected increment between ages $x$ and $y$ is $\\text{ULT}_{AY}[G(y) - G(x)]$ in Clark's LDF method"
+      }
+     ]
+    },
+    {
+     "id": "r6",
+     "kind": "formula",
+     "statement": "The scale factor is σ² = (1/(n−p)) Σ (c−μ)²/μ, where n is the number of incremental data points and p is the number of parameters (two growth curve parameters plus one ultimate per accident year).",
+     "concept": "Clark Variance Scale Factor and Degrees of Freedom",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Process Risk",
+       "quote": "There are $n$ increments in the data and $p$ fitted parameters: $3$ for Clark's [[Cape Cod Method|Cape Cod]] method, or one ultimate per accident year plus $\\omega$ and $\\theta$ for his LDF method."
+      }
+     ]
+    },
+    {
+     "id": "r7",
+     "kind": "formula",
+     "statement": "Process variance of the total reserve equals reserve × σ², so the process standard deviation is √(R σ²) (the square root must be taken).",
+     "concept": "Clark Process Variance",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Process Risk",
+       "quote": "Each year's process variance is $\\sigma^2$ times its reserve:"
+      }
+     ]
+    },
+    {
+     "id": "r8",
+     "kind": "formula",
+     "statement": "Normalized residual = (actual incremental − expected incremental) / √(σ² × expected incremental).",
+     "concept": "Clark Normalized Residuals",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Process Risk",
+       "quote": "The same $\\sigma^2$ scales the normalized residuals $(c - \\hat\\mu)/\\sqrt{\\sigma^2\\hat\\mu}$ used to check the fit."
+      }
+     ]
+    },
+    {
+     "id": "r9",
+     "kind": "fact",
+     "statement": "If the model fits well, normalized residuals plotted against age of emergence should scatter randomly around zero; a systematic pattern (e.g., positive at early ages, negative at later ages) indicates the curve is inappropriate.",
+     "concept": "Clark Model Diagnostics",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Residual Plot",
+       "quote": "| Random scatter around zero | Model is adequate |"
+      }
+     ]
+    }
+   ]
+  },
+  "cas7-2013-q4": {
+   "path": "questions/exam-7/cas7-2013-q4.md",
+   "run": "answerability-20261025-7",
+   "input_hash": "sha256:6e8e3833c29ca54641d6c886247fa3b1d58dc42cab4949589531b3d0f25d8fd2",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "The Benktander (iterated BF) ultimate equals the case-incurred/paid-to-date amount plus the expected unreported (unpaid) percentage times the prior BF ultimate: U_BT = C + q × U_BF, where q = 1 − 1/CDF.",
+     "concept": "Benktander Method",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Benktander Method",
+       "quote": "$$U_{\\text{GB}} = C + \\left(1 - \\tfrac{1}{\\text{CDF}}\\right) U_{\\text{BF}}$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The Bornhuetter-Ferguson ultimate equals actual reported (paid) loss to date plus the a priori expected ultimate times the percent unreported: U_BF = C + q × U_0.",
+     "concept": "Bornhuetter-Ferguson Method",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bornhuetter-Ferguson Method",
+       "quote": "$$U_{\\text{BF}} = C + \\left(1 - \\tfrac{1}{\\text{CDF}}\\right) \\times U_{0}$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "definition",
+     "statement": "The percent unreported q equals 1 − 1/CDF (where percent reported/paid p = 1/CDF) for the cumulative development factor to ultimate.",
+     "concept": "Cumulative Development Factor",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Cumulative Development Factor",
+       "quote": "The reciprocal is the **percentage reported** (or paid): $p_n = 1/\\text{CDF}_n$, and $1 - p_n$ is the percentage unreported."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "The chain ladder ultimate equals the loss to date multiplied by the cumulative development factor to ultimate: U_CL = C × CDF.",
+     "concept": "Chain Ladder Method",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Chain Ladder Method",
+       "quote": "$$U_{\\text{AY}} = C_{\\text{AY},\\,n} \\times \\text{CDF}_{n \\to \\text{ult}}$$"
+      },
+      {
+       "page": "Benktander Method",
+       "quote": "U_{\\text{CL}} &= \\$600 \\times 2.000 = \\$1{,}200 \\\\[6pt]"
+      },
+      {
+       "page": "Cumulative Development Factor",
+       "quote": "$$\\text{Ultimate} = C_n \\times \\text{CDF}_{n \\to \\text{ult}}$$"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "Iterating the BF method repeatedly (Benktander with more iterations) converges to the chain ladder ultimate as the number of iterations approaches infinity, since the weight on the a priori, q^n, goes to zero.",
+     "concept": "Benktander Method",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Benktander Method",
+       "quote": "Repeating $R = qU$ then $U = C + R$ from $U_0$ gives $U^{(m)} = (1 - q^m)\\,U_{\\text{CL}} + q^m U_0$. BF is $m = 1$, Benktander is $m = 2$, and the limit is the chain ladder."
+      }
+     ]
+    }
+   ]
+  },
+  "cas7-2013-q5": {
+   "path": "questions/exam-7/cas7-2013-q5.md",
+   "run": "answerability-20261025-7",
+   "input_hash": "sha256:cb6a41773a57931889c192ddfd272d6a14533fbac9b2b99ccd345af5eec0e7a0",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "procedure",
+     "statement": "To put claim size distributions from different accident years on a common cost level (Sahasrabuddhe), de-trend the latest-year unlimited mean at each maturity back to each earlier accident year by dividing by the cumulative annual trend factor between the years.",
+     "concept": "Sahasrabuddhe Increased Limits Trending of Loss Development Data",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Layer Development Factor",
+       "quote": "for a scale family such as the [[Exponential Distribution|exponential]], $\\theta_{i,j} = \\theta_{n,j} \\, T_{i,j}/T_{n,j}$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "Adjust each triangle cell to the basic limit at the target (latest accident year) cost level by multiplying the reported unlimited loss by the ratio of the basic-limit limited expected value to the unlimited mean, both taken from the cell's own accident year and maturity (trended-level parameters), then bring the result to the target year's cost level.",
+     "concept": "Sahasrabuddhe Increased Limits Trending of Loss Development Data",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Layer Development Factor",
+       "quote": "Restate each cell of the triangle, observed in layer $L$, to the basic limit at the latest cost level: $C^L_{i,j} \\times LEV(B; \\Phi_{n,j}) / LEV(L; \\Phi_{i,j})$."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The limited expected value of an exponential distribution with mean θ at limit k is E[X∧k] = θ(1 − e^(−k/θ)).",
+     "concept": "Exponential Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Limited Expected Value",
+       "quote": "| Exponential$(\\theta)$ | $\\theta(1 - e^{-u/\\theta})$ |"
+      },
+      {
+       "page": "Exponential Distribution",
+       "quote": "$E[\\min(X,u)] = \\theta\\left(1 - e^{-u/\\theta}\\right)$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "Calendar-period trend at a constant annual rate compounds over the number of years between accident years, so the trend factor between two accident years is (1+trend) raised to the year difference.",
+     "concept": "Loss Trend",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Loss Trend",
+       "quote": "$$\\text{Trend Factor} = (1 + t)^{n}$$"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "The basic-limit LEVs must be computed from the latest accident year's (target cost level) unlimited means at each maturity, not from each accident year's own latest-diagonal parameters, because loss development is applied to the target-year severity distribution at each age.",
+     "concept": "Sahasrabuddhe Increased Limits Trending of Loss Development Data",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Layer Development Factor",
+       "quote": "Sahasrabuddhe derives it from one basic-limit pattern at the latest exposure period's cost level."
+      }
+     ]
+    }
+   ]
+  },
+  "cas7-2013-q6": {
+   "path": "questions/exam-7/cas7-2013-q6.md",
+   "run": "answerability-20261025-7",
+   "input_hash": "sha256:efaa12ea4aad08396be5fa37f760d510b5afe65b3ec982109ed8dd8d7c9557b5",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "The PDLD (premium development to loss development) ratio at the first retrospective adjustment equals the retrospective premium at that adjustment, (basic premium + converted capped losses) × tax multiplier, divided by the expected losses emerged as of that loss age.",
+     "concept": "Premium Development to Loss Development Ratio (Retrospective Rating)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "PDLD Ratio",
+       "quote": "$$\\text{PDLD}_1 = \\frac{\\text{BP} \\times \\text{TM}}{L_1} + \\frac{CL_1}{L_1} \\, \\text{LCF} \\times \\text{TM}$$"
+      },
+      {
+       "page": "Retrospective Premium Reserve",
+       "quote": "$$\\text{PDLD}_1 = \\frac{\\text{BPF} \\times \\text{TM}}{\\text{ELR} \\times \\%L_1} + \\frac{CL_1}{L_1}\\,\\text{LCF} \\times \\text{TM}$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "For later adjustments, the PDLD ratio equals the change in capped losses divided by the change in losses between adjustments (incremental capped/incremental total), multiplied by the loss conversion factor and the tax multiplier; basic premium is not included.",
+     "concept": "Premium Development to Loss Development Ratio (Retrospective Rating)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "PDLD Ratio",
+       "quote": "$$\\text{PDLD}_n = \\frac{CL_n - CL_{n-1}}{L_n - L_{n-1}} \\, \\text{LCF} \\times \\text{TM}$$"
+      },
+      {
+       "page": "Retrospective Premium Reserve",
+       "quote": "$$\\text{PDLD}_n = \\frac{CL_n - CL_{n-1}}{L_n - L_{n-1}}\\,\\text{LCF} \\times \\text{TM}$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "Expected losses emerged at a given loss age equal expected ultimate losses (standard premium × expected loss ratio) divided by the LDF to ultimate at that age; capped losses at that age equal emerged expected losses times the loss capping ratio.",
+     "concept": "Loss Development Factors",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Retrospective Premium Reserve",
+       "quote": "$CL/L$ is the **loss capping ratio**, the share of loss development that the per-accident limit and the retro maximum and minimum let through."
+      },
+      {
+       "page": "Expected Loss Method",
+       "quote": "U = \\text{ELR} \\times \\text{Earned Premium}"
+      },
+      {
+       "page": "Loss Development",
+       "quote": "\\text{Ultimate Losses} = \\text{Losses at age } n \\times \\text{CDF}_{n \\to \\text{ult}}"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "definition",
+     "statement": "The loss capping ratio is the ratio of losses capped by the per-occurrence limit and maximum premium to total (uncapped) losses, and it is cumulative from inception unless explicitly labeled incremental, so incremental capped losses must be derived by differencing cumulative amounts.",
+     "concept": "Loss Capping Ratio (Retrospective Rating)",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Retrospective Premium Reserve",
+       "quote": "$CL/L$ is the **loss capping ratio**, the share of loss development that the per-accident limit and the retro maximum and minimum let through."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "Only losses that remain within the per-occurrence limit and maximum premium generate additional retrospective premium, so premium responsiveness (PDLD) should decline as losses mature and more losses are capped; loss capping ratios should therefore decrease with maturity.",
+     "concept": "Premium Development to Loss Development Ratio (Retrospective Rating)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "PDLD Ratio",
+       "quote": "Later ratios are the incremental loss capping ratio times $\\text{LCF} \\times \\text{TM}$. They are usually **well below 1**, as more new loss lands above the caps."
+      },
+      {
+       "page": "Retrospective Premium Reserve",
+       "quote": "Later PDLDs fall well **below 1** as more of each new dollar of loss lands above a cap."
+      }
+     ]
+    }
+   ]
+  },
+  "cas7-2013-q7": {
+   "path": "questions/exam-7/cas7-2013-q7.md",
+   "run": "answerability-20261025-7",
+   "input_hash": "sha256:ae842a65db1d0a101299ab2f951dbd3cf430edc8207e0047da57cd1da0331c6a",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "procedure",
+     "statement": "To build the GLM bootstrap input, convert the cumulative loss triangle to an incremental triangle by differencing successive cumulative values in each accident year (the first column stays as is).",
+     "concept": "Incremental Loss Triangle",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "With a log link, the expected incremental loss is modeled as ln(m_{w,d}) = eta_{w,d}, so the log-link triangle is formed by taking the natural log of each incremental loss.",
+     "concept": "Generalized Linear Model Bootstrap (Log Link)",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Over-Dispersed Poisson Model",
+       "quote": "$$\\ln m_{w,d} = c + \\alpha_w + \\beta_d$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "The GLM bootstrap model requires non-negative incremental losses because the log of a negative number (or zero) is undefined, so negative incrementals prevent the log-link fit directly.",
+     "concept": "Generalized Linear Model Bootstrap (Negative Incrementals)",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "If a column of incremental losses has a negative sum, the negative-incremental fix of using -ln(|incremental|) fails (it requires the column sum to be positive).",
+     "concept": "Generalized Linear Model Bootstrap (Negative Incrementals)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Data Issues",
+       "quote": "a modified log link handles them unless a whole column sums negative, which needs a constant shift"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "procedure",
+     "statement": "To handle negative incrementals when the -ln(|x|) method fails, shift every incremental value in the whole triangle by subtracting the largest negative (most negative) incremental value, so all values are non-negative, then take logs, setting ln(0) = 0.",
+     "concept": "Generalized Linear Model Bootstrap (Negative Incrementals)",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r6",
+     "kind": "procedure",
+     "statement": "After fitting the GLM to the shifted triangle, undo the shift by subtracting the same shift amount from every fitted incremental value.",
+     "concept": "Generalized Linear Model Bootstrap (Negative Incrementals)",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "cas7-2013-q8": {
+   "path": "questions/exam-7/cas7-2013-q8.md",
+   "run": "answerability-20261025-7",
+   "input_hash": "sha256:302fa00754bb2ba4e9911ee6ba5b51973ab98e281fc4e07675583726e97be26a",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "Independent risk CoV for a combined book, assuming independent risks across lines, is the square root of the sum of squared (reserve-weight × line CoV) terms, with weights equal to each line's share of total central estimate.",
+     "concept": "Aggregating Coefficients of Variation Across Lines",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Independent Risk",
+       "quote": "$$\\mathrm{CoV}_{\\text{ind}} = \\frac{\\sqrt{\\sum_i (w_i\\,\\mathrm{CoV}_i)^2}}{\\sum_i w_i}$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "Internal systemic risk CoV for a combined book is the square root of the double sum over line pairs of correlation × (weight_i × CoV_i)(weight_j × CoV_j), which includes each pair twice (factor of 2) plus the stand-alone squared terms with correlation 1.",
+     "concept": "Aggregating Coefficients of Variation Across Lines",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Internal Systemic Risk",
+       "quote": "$$\\mathrm{CoV}_{\\text{int}} = \\frac{\\sqrt{\\sum_i\\sum_j \\rho_{ij}\\,(w_i c_i)(w_j c_j)}}{\\sum_i w_i}$$"
+      },
+      {
+       "page": "Risk Diversification",
+       "quote": "Each pair appears twice in the double sum, so the cross term is $2\\rho_{ij} C_i C_j$."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "Consolidated CoV across the three sources of risk (independent, internal systemic, external systemic) is the square root of the sum of their squared CoVs, since the sources are assumed uncorrelated.",
+     "concept": "Sources of Uncertainty in Claim Liabilities",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Risk Margin",
+       "quote": "The three sources are taken as independent, so $\\mathrm{CoV}^2 = \\mathrm{CoV}_{\\text{ind}}^2 + \\mathrm{CoV}_{\\text{int}}^2 + \\mathrm{CoV}_{\\text{ext}}^2$."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "With normally distributed liabilities, the risk margin for a target probability of adequacy equals the z-value × total CoV × central estimate (mean).",
+     "concept": "Risk Margin",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Risk Margin",
+       "quote": "Under a normal distribution the margin is $z_p \\times \\mathrm{CoV} \\times$ the central estimate."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "definition",
+     "statement": "Internal systemic risk is the risk internal to the valuation modeling process (data errors, specification error, parameter selection error, same-actuary effect) that affects multiple lines in the same way, which makes lines positively correlated.",
+     "concept": "Internal Systemic Risk",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Internal Systemic Risk",
+       "quote": "**Internal systemic risk** is the uncertainty that arises because the actuarial valuation models are an imperfect representation of the insurance process: risk internal to the valuation process itself, also called model specification risk."
+      },
+      {
+       "page": "Internal Systemic Risk",
+       "quote": "It is correlated between valuation classes, through the \"same actuary\" effect and template models"
+      }
+     ]
+    },
+    {
+     "id": "r6",
+     "kind": "fact",
+     "statement": "A higher correlation between lines raises the combined internal systemic CoV (less diversification), which raises the total CoV and hence the risk margin.",
+     "concept": "Correlation and Diversification",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Risk Margin",
+       "quote": "Under a normal distribution the margin is $z_p \\times \\mathrm{CoV} \\times$ the central estimate."
+      },
+      {
+       "page": "Internal Systemic Risk",
+       "quote": "With nil correlation the CoV would be $\\sqrt{0.003492} = 5.91\\%$; with full correlation, $5.4\\% + 2.4\\% = 7.8\\%$."
+      }
+     ]
+    },
+    {
+     "id": "r7",
+     "kind": "fact",
+     "statement": "Internal benchmarking of selected CoVs by line: independent risk (process and parameter risk) should be higher for more complex or longer-tailed lines (e.g. workers compensation) but lower for larger portfolios via the law of large numbers; internal systemic CoVs reflect model and parameter confidence and line complexity; external systemic CoVs reflect economic, legislative, claims inflation and event risks and tend to be higher for smaller lines.",
+     "concept": "Benchmarking and Validating Selected CoVs",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Independent Risk",
+       "quote": "By the law of large numbers, larger portfolios have lower independent CoVs, and longer run-off leaves more time for random effects."
+      }
+     ]
+    },
+    {
+     "id": "r8",
+     "kind": "definition",
+     "statement": "External systemic risk includes economic and social risk, legislative and political risk, claims inflation, claims management process risk, event risk, expense risk, latent claim risk, and recovery risk, which are outside the valuation process.",
+     "concept": "External Systemic Risk",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "External Systemic Risk",
+       "quote": "**Economic and social**: standard inflation (AWE and CPI), economic conditions, fuel prices, driving patterns, and systemic shifts in short-tail claim frequency."
+      }
+     ]
+    },
+    {
+     "id": "r9",
+     "kind": "fact",
+     "statement": "Constant correlation across the loss distribution fails when lines are correlated mainly in the tails, as with event or catastrophe risk (e.g. a natural catastrophe or economic shock affecting several lines in extreme outcomes).",
+     "concept": "Correlation Between Lines of Business",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Risk Diversification",
+       "quote": "Correlations estimated in normal times tend to rise in a crisis, when a market fall, credit defaults and lapses can come together."
+      }
+     ]
+    },
+    {
+     "id": "r10",
+     "kind": "procedure",
+     "statement": "To incorporate variable correlation into the risk margin, use a copula or scenario-based or mixture approach (e.g. simulation with a tail-dependent copula, or a separate explicit load for the event) rather than a single correlation matrix.",
+     "concept": "Copulas and Variable Correlation",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Risk Diversification",
+       "quote": "A copula joins the marginal distributions and can give the tails more dependence than the body."
+      }
+     ]
+    }
+   ]
+  },
+  "cas7-2013-q9": {
+   "path": "questions/exam-7/cas7-2013-q9.md",
+   "run": "answerability-20261025-7",
+   "input_hash": "sha256:9a7efc1ae761a55997bc549ef06e26970a22bd28becc273d148e732bfc049de3",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "In a Bayesian chain-ladder model, a prior with a large variance is weakly informative, so the posterior parameters are driven mainly by the observed data and the results closely resemble the deterministic chain-ladder (all-years weighted average) outcome.",
+     "concept": "Bayesian Chain Ladder Model",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Predictive Distribution",
+       "quote": "Priors with large variances reproduce the [[Chain Ladder Method|chain ladder]], and priors with very small variances reproduce Bornhuetter-Ferguson."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "To incorporate a judgmental link ratio selection with low confidence, set the mean of that interval's prior link ratio distribution equal to the selection and give it a large variance so the data still influences the result.",
+     "concept": "Bayesian Chain Ladder Model",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Over-Dispersed Negative Binomial Model",
+       "quote": "Its prior mean is the expert's factor, and its variance $W$ is set to reflect the strength of the opinion."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "Using an expert-opinion prior with a large variance pulls the simulated mean for that link ratio toward the selection, and the greater uncertainty in that prior increases the prediction error of the simulated reserve distribution relative to the chain-ladder result.",
+     "concept": "Bayesian Chain Ladder Model",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Over-Dispersed Negative Binomial Model",
+       "quote": "Its prior mean is the expert's factor, and its variance $W$ is set to reflect the strength of the opinion."
+      },
+      {
+       "page": "Over-Dispersed Negative Binomial Model",
+       "quote": "The tight prior pulls it toward $1.5$, and the reserve falls by $6\\%$."
+      },
+      {
+       "page": "Bayesian Bornhuetter-Ferguson Model",
+       "quote": "A small $\\beta_i$, a vague prior, pushes $Z_{ij}$ toward $1$, the chain ladder."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "definition",
+     "statement": "Prediction error is the square root of the mean squared error of prediction (MSEP) of the predictive distribution of the reserve estimate.",
+     "concept": "Prediction Error (MSEP)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Prediction Error",
+       "quote": "**Prediction error** of a reserve is the root mean squared error of the estimate $\\hat R$ as a forecast of the unpaid amount $R$ that will actually be paid."
+      },
+      {
+       "page": "Predictive Distribution",
+       "quote": "Its root mean squared error of prediction is the [[Prediction Error|prediction error]], and prediction variance = process variance + estimation variance."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "Compared with bootstrapping, a Bayesian approach readily allows expert opinion to be incorporated into parameter selection through the prior distributions.",
+     "concept": "Bayesian vs. Bootstrap Reserving Methods",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Predictive Distribution",
+       "quote": "Expert opinion enters through the prior distributions, either on individual development factors or on each accident year's expected ultimate in a stochastic [[Bornhuetter-Ferguson Method|Bornhuetter-Ferguson]] model."
+      }
+     ]
+    },
+    {
+     "id": "r6",
+     "kind": "fact",
+     "statement": "Compared with the Mack method, which gives only the first two moments (mean and variance), a Bayesian approach produces the full predictive distribution of reserve outcomes.",
+     "concept": "Mack Method",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Stochastic Reserving",
+       "quote": "**Mack:** distribution-free. It gives the first two moments of the chain ladder reserve, and no more."
+      },
+      {
+       "page": "Predictive Distribution",
+       "quote": "Bayesian models, simulated by [[Markov Chain Monte Carlo]], give the full predictive distribution of the reserves, and the prediction error is the standard deviation of that distribution."
+      }
+     ]
+    },
+    {
+     "id": "r7",
+     "kind": "procedure",
+     "statement": "To adapt the Bayesian chain-ladder model to the Bornhuetter-Ferguson method, add a row (accident year) parameter for each accident year with a prior mean from the a priori expected ultimate losses and a small variance, so the model relies on the prior expected ultimate for each year while still simulating a predictive distribution.",
+     "concept": "Bornhuetter-Ferguson Method",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Bayesian Bornhuetter-Ferguson Model",
+       "quote": "The row parameters $x_i$ of the [[Over-Dispersed Poisson Model|over-dispersed Poisson]] model, each accident year's expected ultimate loss, are given [[Gamma|gamma]] prior distributions that carry an expert's view of the ultimate."
+      }
+     ]
+    }
+   ]
+  },
+  "cas7-2014-q1": {
+   "path": "questions/exam-7/cas7-2014-q1.md",
+   "run": "answerability-20261025-7",
+   "input_hash": "sha256:ad298003e0c370aa3cf149c8671677277de7e01f94a5511e3d1dbd8e8f8e952b",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "The Bayesian (Bornhuetter-Ferguson/Benktander-style credibility) estimate of ultimate loss from reported loss x is L(x) = Z*(x/d) + (1-Z)*E[Y], where d is the expected reporting percentage and E[Y] is the prior expected ultimate loss.",
+     "concept": "Bayesian Credibility for Loss Development",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Least Squares Development Method",
+       "quote": "$L(x) = Z\\,(cx) + (1 - Z)\\,\\bar{y}$"
+      },
+      {
+       "page": "Least Squares Development Method",
+       "quote": "L(18) &= 0.581\\left(\\frac{18}{0.6}\\right) + 0.419(35) \\\\"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The credibility Z for the Bayesian loss development estimate equals VHM/(VHM+EVPV), the variance of hypothetical means divided by the sum of the variance of hypothetical means and the expected value of process variance.",
+     "concept": "Bayesian Credibility for Loss Development",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Least Squares Development Method",
+       "quote": "Brosius's Development Formula 2 gives the theoretical weight $Z = VHM/(VHM + EVPV)$."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "With reported loss X = D*Y (D the reporting percentage independent of ultimate Y), the variance of hypothetical means is VHM = (E[D])^2 * Var(Y).",
+     "concept": "Bayesian Credibility for Loss Development",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "With reported loss X = D*Y, the expected value of process variance is EVPV = Var(D)*[Var(Y) + (E[Y])^2].",
+     "concept": "Bayesian Credibility for Loss Development",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Least Squares Development Method",
+       "quote": "EVPV &= E\\left[(0.10)^2\\,Y^2\\right] \\\\"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "procedure",
+     "statement": "The prior mean ultimate loss for a year with changed coverage is the average ultimate loss of prior comparable years (with constant exposure) multiplied by the adjustment factor for the coverage change.",
+     "concept": "Bayesian Credibility for Loss Development",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Least Squares Development Method",
+       "quote": "Before it, ultimate losses of $\\$50$M were expected; pricing expects a $30\\%$ saving, so $E(Y) = \\$35$M with $\\sigma(Y) = \\$7$M."
+      }
+     ]
+    },
+    {
+     "id": "r6",
+     "kind": "fact",
+     "statement": "The least squares development method assumes a stable loss distribution and that year-to-year fluctuation is due mainly to random variation; a systematic shift such as a coverage expansion violates this, making the method inappropriate.",
+     "concept": "Least Squares Method for Loss Development",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Least Squares Development Method",
+       "quote": "The method assumes every year shares one pair of loss and reporting distributions, so it suits random fluctuation rather than systematic change."
+      }
+     ]
+    }
+   ]
+  },
+  "cas7-2014-q10": {
+   "path": "questions/exam-7/cas7-2014-q10.md",
+   "run": "answerability-20261025-7",
+   "input_hash": "sha256:78bc260cabca68fc2349dc352815fac36933821122cc3cdd87a358c866f5deca",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "In a stochastic (Bayesian) reserving model, expert opinion can override model-calculated row parameters, such as the a priori expected ultimate loss, e.g. an underwriter's knowledge of a change in the quality of risks written.",
+     "concept": "Stochastic Loss Reserving Framework (Expert Opinion)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Over-Dispersed Negative Binomial Model",
+       "quote": "Intervene in some rows.* If a change in settlement makes an older factor wrong for recent rows, those rows share a separate factor."
+      },
+      {
+       "page": "Bayesian Bornhuetter-Ferguson Model",
+       "quote": "are given [[Gamma|gamma]] prior distributions that carry an expert's view of the ultimate."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "In a stochastic reserving model, expert opinion can override column or diagonal parameters such as loss development factors, e.g. a claims manager's knowledge of claim process changes or a calendar-year effect such as legislative change.",
+     "concept": "Stochastic Loss Reserving Framework (Expert Opinion)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Over-Dispersed Negative Binomial Model",
+       "quote": "If a change in settlement makes an older factor wrong for recent rows, those rows share a separate factor. Its prior mean is the expert's factor, and its variance $W$ is set to reflect the strength of the opinion."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The variance of a gamma distribution with parameters alpha and beta is alpha/beta^2 (mean alpha/beta), so for a fixed mean a larger beta gives a smaller variance.",
+     "concept": "Gamma Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bayesian Bornhuetter-Ferguson Model",
+       "quote": "$$E[x_i] = M_i = \\frac{\\alpha_i}{\\beta_i}$$"
+      },
+      {
+       "page": "Bayesian Bornhuetter-Ferguson Model",
+       "quote": "$$\\mathrm{Var}(x_i) = \\frac{M_i}{\\beta_i}$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "In the Bayesian (Gamma prior) model the Bornhuetter-Ferguson and chain-ladder estimates are combined as a credibility-weighted average, with credibility Z = P/(beta*phi + P) applied to the chain-ladder estimate, where P is the percent developed and beta is the gamma prior parameter.",
+     "concept": "Bayesian Chain-Ladder and Bornhuetter-Ferguson Credibility",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bayesian Bornhuetter-Ferguson Model",
+       "quote": "$$Z_{ij} = \\frac{\\sum_{k=1}^{j-1} y_k}{\\beta_i\\,\\phi + \\sum_{k=1}^{j-1} y_k}$$"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "A larger beta (smaller prior variance, more confidence in the prior) lowers Z and shifts weight toward the Bornhuetter-Ferguson estimate, while a smaller beta (larger prior variance) shifts weight toward the chain-ladder estimate.",
+     "concept": "Bayesian Chain-Ladder and Bornhuetter-Ferguson Credibility",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bayesian Bornhuetter-Ferguson Model",
+       "quote": "For a given $M_i$, a larger $\\beta_i$ is a smaller prior variance and more certainty about $M_i$. That pushes $Z_{ij}$ toward $0$, which is the Bornhuetter-Ferguson method. A small $\\beta_i$, a vague prior, pushes $Z_{ij}$ toward $1$, the chain ladder."
+      }
+     ]
+    }
+   ]
+  },
+  "cas7-2014-q11": {
+   "path": "questions/exam-7/cas7-2014-q11.md",
+   "run": "answerability-20261025-7",
+   "input_hash": "sha256:bab17e8323808bfcbdb621f5135b03dd0c54cabba7e54ae5377c6c195cc411ad",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "Legislative risk is the risk that legislatures change laws or statutes (e.g., statutory benefit levels, what is compensable, caps, statutes of limitations), altering claim frequency, severity and loss costs.",
+     "concept": "External Systemic Risks",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "External Systemic Risk",
+       "quote": "**Legislative, political and claims inflation**: legislative change and its erosion, court precedents, medical and legal costs, and shifts in large claims."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "Legislative risk matters most for long-tail lines such as workers compensation, liability and medical malpractice, because longer claim durations leave claims exposed to law changes longer, and changes can apply retroactively to open claims and many accident years at once, raising reserves.",
+     "concept": "External Systemic Risks",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Long Tail Lines",
+       "quote": "Long-tail reserves are also exposed to **calendar-year** forces that no accident-year pattern anticipates: [[Inflation|social and economic inflation]], legislative reform, judicial reinterpretation. These hit every open accident year at once."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "definition",
+     "statement": "Event risk is the risk that a single event (e.g., hurricane, earthquake) triggers coverage on many policies at once, creating correlated losses across otherwise independent exposures, typically low frequency and high severity (tail).",
+     "concept": "External Systemic Risks",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "External Systemic Risk",
+       "quote": "**Event**: single events causing many claims, material for property and motor, and for medical malpractice or builders' warranty (one doctor, one builder)."
+      },
+      {
+       "page": "Concentration Risk",
+       "quote": "**Geographic** — property exposure concentrated where a single [[Earthquake Exposure Risk Margin|earthquake]], hurricane, wildfire or [[Flood Insurance|flood]] would strike it all at once."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "Event risk is important for property-type lines (property, homeowners, auto physical damage) with geographic concentration of exposures, because a single event can produce many claims, threaten solvency if not diversified or capitalized, and should be assessed using catastrophe models and experts.",
+     "concept": "External Systemic Risks",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "External Systemic Risk",
+       "quote": "Event risk tends to dominate property premium liabilities"
+      },
+      {
+       "page": "External Systemic Risk",
+       "quote": "Quantify with analysis of past systemic episodes, sensitivity tests, [[Catastrophe Modelling|catastrophe models]] and scenarios."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "definition",
+     "statement": "Latent claim risk is the risk that claims arise from exposures unknown or unpriced at policy inception and take a long time to be discovered, typically emerging as low frequency, high severity (e.g., asbestos, occupational disease); slow reporting alone does not make a claim latent.",
+     "concept": "External Systemic Risks",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "External Systemic Risk",
+       "quote": "**Latent claim**: claims from a source not currently thought to be covered; material mainly for workers compensation and liability ([[Latent Liability|latent liabilities]])."
+      },
+      {
+       "page": "Latent Liability",
+       "quote": "**Latent Liability** is liability for injury or damage that surfaces long after the exposure that caused it — occupational disease, toxic contamination, abuse disclosed decades later — so the claims fall on policies written, priced and often long closed years or decades earlier, under wordings that never contemplated them."
+      }
+     ]
+    },
+    {
+     "id": "r6",
+     "kind": "fact",
+     "statement": "Latent claim risk is important for long-tail lines such as workers compensation, medical malpractice and liability, because insurers may be liable for exposures from long ago that were not priced or reserved for, causing adverse financial results.",
+     "concept": "External Systemic Risks",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Latent Liability",
+       "quote": "so the claims fall on policies written, priced and often long closed years or decades earlier, under wordings that never contemplated them."
+      },
+      {
+       "page": "Latent Liability",
+       "quote": "repeated adverse development and reserve strengthening, straining surplus, ratings and sometimes solvency;"
+      }
+     ]
+    }
+   ]
+  },
+  "cas7-2014-q12": {
+   "path": "questions/exam-7/cas7-2014-q12.md",
+   "run": "answerability-20261025-7",
+   "input_hash": "sha256:6024f25b31b1af1656af8df2e553cc92da425447989fb660b714e39a554678f9",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "The premium development to loss development (PDLD) ratio is the incremental retrospective premium at an adjustment divided by the incremental (reported) loss at that adjustment.",
+     "concept": "Retrospective Rating",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "PDLD Ratio",
+       "quote": "$$\\text{PDLD}_n = \\frac{P_n - P_{n-1}}{L_n - L_{n-1}}$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "Retrospective premium equals (basic premium + converted loss, where converted loss is capped loss times the loss conversion factor) times the tax multiplier, subject to minimum and maximum premium.",
+     "concept": "Retrospective Rating Formula",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Retrospective Rating",
+       "quote": "$$R = \\left(\\text{BP} + L \\times \\text{LCF}\\right) \\times \\text{TM}$$"
+      },
+      {
+       "page": "Retrospective Rating",
+       "quote": "$$\\text{Retro Premium} = \\min\\!\\left(\\max(R,\\, R_{\\min}),\\, R_{\\max}\\right)$$"
+      },
+      {
+       "page": "Retrospective Rating",
+       "quote": "**Converted losses** $(L \\times \\text{LCF})$ are the insured's reported losses $L$, limited by any per-accident limit, multiplied by the **loss conversion factor**, which loads them for the ALAE not already in the losses plus ULAE."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "At the first adjustment the incremental premium can exceed incremental losses because it includes the basic premium (charged regardless of losses) and because the loss conversion factor and tax multiplier scale up the losses included in premium.",
+     "concept": "Retrospective Rating Formula",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "PDLD Ratio",
+       "quote": "$\\text{PDLD}_1$ is usually **above 1**. It carries the whole basic premium, and little loss is capped by the first adjustment."
+      },
+      {
+       "page": "Retrospective Premium Reserve",
+       "quote": "**$\\text{PDLD}_1$ is usually above 1.** The whole basic premium is collected at the first adjustment and few losses are capped yet."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "definition",
+     "statement": "Retrospective rating limits the losses that enter the premium calculation through a per-accident loss limit (cap) on each claim, along with an aggregate maximum premium, so only capped losses drive premium.",
+     "concept": "Per-Accident Loss Limit in Retrospective Rating",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Retrospective Rating",
+       "quote": "**Converted losses** $(L \\times \\text{LCF})$ are the insured's reported losses $L$, limited by any per-accident limit, multiplied by the **loss conversion factor**, which loads them for the ALAE not already in the losses plus ULAE."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "Loss development on a claim already at the per-accident limit produces no additional capped loss and thus no incremental premium, whereas development on claims below the limit (e.g., a new claim) does generate incremental premium.",
+     "concept": "Per-Accident Loss Limit in Retrospective Rating",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "PDLD Ratio",
+       "quote": "Later ratios are the incremental loss capping ratio times $\\text{LCF} \\times \\text{TM}$. They are usually **well below 1**, as more new loss lands above the caps."
+      }
+     ]
+    },
+    {
+     "id": "r6",
+     "kind": "fact",
+     "statement": "Incremental premium can be negative while total incremental losses are positive when upward development occurs on claims already capped (no premium effect) and exceeds downward development on claims below the cap (which reduces capped loss and premium), so capped losses fall while total losses rise.",
+     "concept": "Retrospective Rating Formula",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "PDLD Ratio",
+       "quote": "An individual policy quarter's historical ratio can even be negative. That happens when upward development above the limits coincides with downward development within them."
+      },
+      {
+       "page": "PDLD Ratio",
+       "quote": "That happens when losses develop upward above the loss limits, earning no premium, while developing downward within them, returning premium."
+      }
+     ]
+    }
+   ]
+  },
+  "cas7-2014-q13": {
+   "path": "questions/exam-7/cas7-2014-q13.md",
+   "run": "answerability-20261025-7",
+   "input_hash": "sha256:42c78634574c88382918cb9c29201c7de9468e9471a6505e08241bc7651ca8c5",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "Reinsurance claims have longer report lags than primary claims because claims are reported to the reinsurer only once they reach a size threshold, and they pass through the cedant's processing systems and often an intermediary before entering the reinsurer's system.",
+     "concept": "Reinsurance Loss Reserving",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bordereau",
+       "quote": "Bordereau delays are one of Friedland's reasons that reinsurance reporting and payment patterns are longer than primary ones"
+      },
+      {
+       "page": "Reinsurance Reserving",
+       "quote": "Claims reach the reinsurer only after the cedant has reported and assessed them. Excess claims arrive later still, once they approach the retention or a reporting threshold."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "Reinsurance reporting patterns are not homogeneous because contracts span many lines of business, attachment points, contract types (treaty, excess, quota share) and terms (loss corridors, ALAE treatment), making it difficult to form homogeneous exposure groups for reserving.",
+     "concept": "Reinsurance Loss Reserving",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Reinsurance Reserving",
+       "quote": "Reporting lags are longer, data are thinner and less homogeneous, contracts are manuscript, results are often aggregated by treaty year, and an attachment point leverages development and trend."
+      },
+      {
+       "page": "Ceded Loss Reserve",
+       "quote": "frequent changes in attachment points, limits, participation and ALAE treatment"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "Industry statistics such as Schedule P data are of limited use for reinsurance reserving because categories like excess casualty blend many lines of business and attachment points and are inconsistent across companies.",
+     "concept": "Reinsurance Loss Reserving",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "Reinsurance losses tend to show persistent upward development because primary companies often under-reserve for LAE and severity trend affects excess layers more than ground-up losses.",
+     "concept": "Reinsurance Loss Reserving",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Reinsurance Reserving",
+       "quote": "As a result, early development factors and tails are higher than primary, especially for non-proportional covers, and trend is leveraged in excess layers."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "Other challenges of reinsurance reserving include the reinsurer's limited knowledge of exposures (often only summary data from cedants), difficulty coding varied and changing contract data in IT systems, and a high reserve-to-surplus ratio that makes it hard to justify needed reserve levels to management.",
+     "concept": "Reinsurance Loss Reserving",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Reinsurance Reserving",
+       "quote": "Data often arrive as summary reports rather than claim detail"
+      }
+     ]
+    }
+   ]
+  },
+  "cas7-2014-q14": {
+   "path": "questions/exam-7/cas7-2014-q14.md",
+   "run": "answerability-20261025-7",
+   "input_hash": "sha256:73f837ba6164c1229acd693c7f9756196b5410b311086bc855d6881dc4d2947d",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "The percent reported (reporting lag) at a given age equals 1 divided by the reported loss development factor to ultimate at that age.",
+     "concept": "Loss Development Factors",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Cape Cod Method",
+       "quote": "$$\\text{ELR} = \\frac{\\sum_i C_i}{\\sum_i \\text{EP}_i \\times \\tfrac{1}{\\text{CDF}_i}}$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "definition",
+     "statement": "Used-up (on-level) premium for an accident year is its adjusted premium multiplied by the percent reported at its current age; adjusted premium reflects changes in rates, underwriting and exposure affecting loss potential.",
+     "concept": "Stanard-Bühlmann (Cape Cod) Method",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Cape Cod Method",
+       "quote": "**Used-up premium** $\\text{EP}_i / \\text{CDF}_i$ is the share of each year's premium \"exposed\" to the losses reported so far."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The Cape Cod expected loss ratio equals total reported losses across all accident years divided by total used-up premium (sum of adjusted premium times percent reported).",
+     "concept": "Stanard-Bühlmann (Cape Cod) Method",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Cape Cod Method",
+       "quote": "The ELR is estimated as total reported losses over total *used-up* (on-level, developed) premium across all years."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "Cape Cod IBNR for an accident year equals the ELR times adjusted premium times (1 minus percent reported), i.e. a Bornhuetter-Ferguson-style expected unreported amount.",
+     "concept": "Bornhuetter-Ferguson Method",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Cape Cod Method",
+       "quote": "$$\\text{IBNR}_i = \\text{ELR} \\times \\text{EP}_i \\times \\left(1 - \\tfrac{1}{\\text{CDF}_i}\\right)$$"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "procedure",
+     "statement": "Ultimate loss for an accident year equals reported loss plus IBNR, and the ultimate loss ratio is obtained by dividing ultimate loss by the earned risk pure premium of that year (not the adjusted premium).",
+     "concept": "Stanard-Bühlmann (Cape Cod) Method",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Generalized Cape Cod Method",
+       "quote": "$$\\hat U_j = C_j + \\text{IBNR}_j$$"
+      }
+     ]
+    }
+   ]
+  },
+  "cas7-2014-q2": {
+   "path": "questions/exam-7/cas7-2014-q2.md",
+   "run": "answerability-20261025-7",
+   "input_hash": "sha256:3cc918071c5ddcd9afc609b76468e3ace43aaac66d294393182636d2065cd149",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "Mack's chain-ladder assumptions are that expected incremental (next-period) loss is proportional to losses reported to date, that accident years are independent, and that the variance of incremental loss is proportional to losses reported to date (with factor alpha^2 times C).",
+     "concept": "Mack Chain-Ladder Model Assumptions",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Chain Ladder Assumptions",
+       "quote": "The first says expected emergence is proportional to losses emerged to date: a line through the origin, with the same factor for every accident year. The second, independence, says $c(w,d)$ and $c(v,g)$ are independent unless $v = w$"
+      },
+      {
+       "page": "Chain Ladder Assumptions",
+       "quote": "Mack's $a = k(d)\\,c(w,d)$ gives the volume-weighted factor $\\sum q/\\sum c$."
+      },
+      {
+       "page": "Mack Chain Ladder Model",
+       "quote": "$$\\text{Var}(C_{i,k+1} \\mid C_{i1}, \\dots, C_{ik}) = C_{ik}\\,\\alpha_k^2$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "Test the proportionality assumption by plotting next-age cumulative loss against current-age cumulative loss for each accident year; a roughly linear pattern passing through the origin supports the chain-ladder assumption.",
+     "concept": "Testing Chain-Ladder Assumptions with Diagnostic Plots",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Chain Ladder Assumptions",
+       "quote": "The first says expected emergence is proportional to losses emerged to date: a line through the origin, with the same factor for every accident year."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "definition",
+     "statement": "Weighted residuals in the chain-ladder regression are the actual minus fitted next-period losses, divided by the square root of the variance weight (the square root of the loss to date), so they are adjusted for size of accident year loss.",
+     "concept": "Weighted Residuals",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Residual Plot",
+       "quote": "For [[Generalized Linear Model]]s, **Pearson residuals** $r_i^P = (y_i - \\hat{\\mu}_i)/\\sqrt{V(\\hat{\\mu}_i)}$ and **deviance residuals** are used instead of raw residuals"
+      },
+      {
+       "page": "Residual",
+       "quote": "The **Pearson residual** divides by the standard deviation implied by the [[Variance Function|variance function]] $V$."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "If the Mack chain-ladder variance assumption holds, a plot of weighted residuals against loss size should show random scatter around zero with no pattern (no trend or changing spread); a trend or fanning indicates the assumptions are violated.",
+     "concept": "Testing Chain-Ladder Assumptions with Diagnostic Plots",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Residual Plot",
+       "quote": "| Random scatter around zero | Model is adequate |"
+      },
+      {
+       "page": "Residual Plot",
+       "quote": "| Fan shape (spread increases) | **Heteroscedasticity** — variance is not constant |"
+      }
+     ]
+    }
+   ]
+  },
+  "cas7-2014-q3": {
+   "path": "questions/exam-7/cas7-2014-q3.md",
+   "run": "answerability-20261025-7",
+   "input_hash": "sha256:6faa2608b525df5c1da7be17a4034b666c50516f405c4c7cc2770d82303869da",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "In the Clark framework, the scaling factor for process variance is estimated as sigma^2 = (1/(n-p)) * sum over incremental cells of (Actual - Expected)^2 / Expected.",
+     "concept": "Clark Method Process Variance",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Process Risk",
+       "quote": "$$\\sigma^2 = \\frac{1}{n-p}\\sum_{AY,t}\\frac{(c_{AY,t} - \\hat\\mu_{AY,t})^2}{\\hat\\mu_{AY,t}}$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "definition",
+     "statement": "In the sigma^2 estimator, n is the number of incremental loss data points and p is the number of estimated parameters; the Cape Cod method has three parameters (ELR, omega, theta).",
+     "concept": "Clark Method Process Variance",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Process Risk",
+       "quote": "There are $n$ increments in the data and $p$ fitted parameters: $3$ for Clark's [[Cape Cod Method|Cape Cod]] method"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "Process variance of the total reserve equals sigma^2 times the estimated total reserve (variance-to-mean scaling of an over-dispersed Poisson).",
+     "concept": "Clark Method Process Variance",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Process Risk",
+       "quote": "$$\\mathrm{Var}_{\\text{process}}(R) = \\sigma^2 \\sum \\mu_{AY;x,y}$$"
+      },
+      {
+       "page": "Parameter Risk",
+       "quote": "\\text{Process} &= \\sigma^2 \\hat R = 50 \\times 2{,}800 \\\\"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "Total reserve variance is the sum of process variance and parameter variance, so total standard deviation is the square root of their sum.",
+     "concept": "Clark Method Reserve Variability",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Process Risk",
+       "quote": "**Total variance.** Clark adds the two, treating them as independent."
+      },
+      {
+       "page": "Process Risk",
+       "quote": "\\mathrm{SD}_{\\text{total}} &= \\sqrt{400{,}000 + 900^2} \\\\"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "Parameter variance is the square of the parameter standard deviation of the reserve; and sigma^2 must be on the same units as the reserve (losses in thousands must be scaled to dollars).",
+     "concept": "Clark Method Reserve Variability",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Parameter Risk",
+       "quote": "\\text{Parameter} &= (10{,}000 \\times 0.40)^2 \\times 0.05^2 \\\\"
+      }
+     ]
+    }
+   ]
+  },
+  "cas7-2014-q4": {
+   "path": "questions/exam-7/cas7-2014-q4.md",
+   "run": "answerability-20261025-7",
+   "input_hash": "sha256:df0f85b2e428340a33f6026a82bc80c7d9569436e67d46e317c5c4dc0a8e5ef5",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "An age-to-age (link ratio) factor is the ratio of cumulative reported losses at one development age to cumulative losses at the prior age for the same accident year.",
+     "concept": "Age-to-Age Factors",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Age to Age Factor",
+       "quote": "**Age-to-Age Factor** (link ratio) is the ratio of a cohort's cumulative amount at one maturity to its amount at the previous maturity — the observed development between two ages."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "To test independence of adjacent age-to-age factor columns, pair the factors for each accident year that has both (e.g., 12-24 with 24-36) and compute the sample correlation between the two columns, treating each accident year as one observation.",
+     "concept": "Testing Independence of Age-to-Age Factors",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Development Factor Correlation Test",
+       "quote": "computes the sample [[Correlation Coefficient|correlation]] $r$ for *every* pair of columns, over the first $n$ years of both, where $n$ is the length of the shorter column."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The Pearson sample correlation coefficient is r = (E[XY] - E[X]E[Y]) / (σX σY), equivalently Σ(X-X̄)(Y-Ȳ) / sqrt(Σ(X-X̄)² Σ(Y-Ȳ)²).",
+     "concept": "Pearson Correlation Coefficient",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Correlation",
+       "quote": "$$r = \\frac{\\sum_{i=1}^n (x_i - \\bar{x})(y_i - \\bar{y})}{\\sqrt{\\sum_{i=1}^n (x_i - \\bar{x})^2}\\,\\sqrt{\\sum_{i=1}^n (y_i - \\bar{y})^2}}$$"
+      },
+      {
+       "page": "Covariance and Correlation Coefficient",
+       "quote": "$$\\text{Cov}(X, Y) = E[XY] - E[X]\\,E[Y]$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "The test statistic T = r·sqrt((n-2)/(1-r²)) follows a t-distribution with n-2 degrees of freedom, where n is the number of paired observations.",
+     "concept": "Significance Test for Correlation Coefficient",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Development Factor Correlation Test",
+       "quote": "$$T = r\\sqrt{\\frac{n-2}{1-r^2}} \\sim t_{n-2}$$"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "procedure",
+     "statement": "Compare |T| with the critical t-value at n-2 degrees of freedom for the chosen significance level; if |T| exceeds it the correlation is significant and the independence assumption is rejected, otherwise it is not rejected. For a two-tailed 10% test use the 0.95 t-value.",
+     "concept": "Significance Test for Correlation Coefficient",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Development Factor Correlation Test",
+       "quote": "Correlations can be positive or negative, so the test is two-tailed: $r$ is significant at the 10% level when $|T|$ exceeds the $t$-statistic for $0.95$ at $n-2$ degrees of freedom."
+      }
+     ]
+    },
+    {
+     "id": "r6",
+     "kind": "fact",
+     "statement": "The chain-ladder method assumes the expected next-period incremental losses are proportional to cumulative losses to date, via a factor that depends only on age.",
+     "concept": "Chain Ladder Assumptions for Least Squares Optimality",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Chain Ladder Assumptions",
+       "quote": "The first says expected emergence is proportional to losses emerged to date: a line through the origin, with the same factor for every accident year."
+      },
+      {
+       "page": "Actuarial Assumptions",
+       "quote": "expected cumulative loss $C_{i,k+1}$ of accident year $i$ is the current cumulative loss $C_{ik}$ times a development factor $f_k$ common to all years."
+      }
+     ]
+    },
+    {
+     "id": "r7",
+     "kind": "fact",
+     "statement": "For least squares optimality of the chain-ladder factors, the variance of next-period incremental losses is proportional to cumulative losses to date, with a proportionality factor that varies by age.",
+     "concept": "Chain Ladder Assumptions for Least Squares Optimality",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Chain Ladder Assumptions",
+       "quote": "Mack's $a = k(d)\\,c(w,d)$ gives the volume-weighted factor $\\sum q/\\sum c$."
+      },
+      {
+       "page": "Mack Chain Ladder Model",
+       "quote": "it weights the individual factors by $C_{jk}$, which gives the [[Minimum Variance|minimum-variance]] unbiased average only if the variance is proportional to $C_{jk}$."
+      }
+     ]
+    }
+   ]
+  },
+  "cas7-2014-q5": {
+   "path": "questions/exam-7/cas7-2014-q5.md",
+   "run": "answerability-20261025-7",
+   "input_hash": "sha256:ed8c95273fd56c6f35324f27b306a612f3aa66ef588d6e2caa8cc394112e75b8",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "For exposures uniformly distributed over the accident year, the average age of the accident year's losses at evaluation time t months from the start of the year is t minus 6 (half of the 12-month year), i.e., the midpoint of the exposure period.",
+     "concept": "Loglogistic Payment Pattern (Clark Loss Development)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Growth Curve",
+       "quote": "The age $x$ runs from the *average* accident date to the evaluation date, so an [[Accident Year|accident year]] evaluated $t \\ge 12$ months after it starts has $x = t - 6$."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The loglogistic cumulative payment (or reporting) pattern is G(x) = x^ω / (x^ω + θ^ω), where x is the average age of losses and ω, θ are parameters.",
+     "concept": "Loglogistic Payment Pattern (Clark Loss Development)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Growth Curve",
+       "quote": "$$\\text{Loglogistic: } G(x) = \\frac{x^{\\omega}}{x^{\\omega} + \\theta^{\\omega}}$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "Expected paid loss to date equals exposures times the a priori ultimate loss per exposure times the expected cumulative percent paid G at the average age.",
+     "concept": "Expected Loss Method (Clark Cape Cod)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Growth Curve",
+       "quote": "The expected increment between ages $x$ and $y$ is $\\text{ULT}_{AY}[G(y) - G(x)]$ in Clark's LDF method, or $\\text{Premium}_{AY} \\times \\text{ELR} \\times [G(y) - G(x)]$ in his [[Cape Cod Method|Cape Cod]] method."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "The Cape Cod (Bornhuetter-Ferguson-type) ultimate estimate equals actual paid to date plus expected unpaid, where expected unpaid is (1 − G) times the a priori ultimate loss.",
+     "concept": "Cape Cod Method",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Bornhuetter-Ferguson Method",
+       "quote": "$$U_{\\text{BF}} = C + \\left(1 - \\tfrac{1}{\\text{CDF}}\\right) \\times U_{0}$$"
+      },
+      {
+       "page": "Stochastic Cape Cod Model",
+       "quote": "This is the BF structure: actual reported plus expected unreported."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "procedure",
+     "statement": "The LDF (chain ladder) ultimate estimate equals actual paid to date divided by the expected percent paid G, ignoring the a priori estimate.",
+     "concept": "LDF Method (Chain Ladder)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Growth Curve",
+       "quote": "$$\\text{LDF}_x = \\frac{1}{G(x)}$$"
+      },
+      {
+       "page": "Cumulative Development Factor",
+       "quote": "$$\\text{Ultimate} = C_n \\times \\text{CDF}_{n \\to \\text{ult}}$$"
+      }
+     ]
+    },
+    {
+     "id": "r6",
+     "kind": "procedure",
+     "statement": "When the payment pattern has a long tail, truncate the pattern at a finite age (e.g., twice the evaluation age) and use G at the truncation point in place of 1 for the unpaid portion and the LDF ultimate.",
+     "concept": "Truncation of Loss Development Patterns (Clark)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Growth Curve",
+       "quote": "To avoid relying on a mechanical extrapolation, Clark truncates at a selected age $x_T$ (240 months), using $G(x_T)/G(x)$ in place of $1/G(x)$."
+      }
+     ]
+    },
+    {
+     "id": "r7",
+     "kind": "formula",
+     "statement": "The Benktander (Gunnar Benktander) ultimate is a credibility weighted average of the LDF ultimate and the Cape Cod/BF ultimate, with credibility z equal to the percent paid G: U_GB = z×U_LDF + (1−z)×U_CC.",
+     "concept": "Benktander Method",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Benktander Method",
+       "quote": "$$U_{\\text{GB}} = \\tfrac{1}{\\text{CDF}} \\, U_{\\text{CL}} + \\left(1 - \\tfrac{1}{\\text{CDF}}\\right) U_{\\text{BF}}$$"
+      },
+      {
+       "page": "Benktander Method",
+       "quote": "Benktander weights chain ladder against BF with $Z = p$: the more of the year that has emerged, the more the answer leans on the data."
+      }
+     ]
+    },
+    {
+     "id": "r8",
+     "kind": "procedure",
+     "statement": "The reserve (unpaid) estimate equals the ultimate loss estimate minus actual paid losses to date.",
+     "concept": "Loss Reserve (Unpaid Loss) Estimate",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Chain Ladder Method",
+       "quote": "$$\\text{IBNR} = U_{\\text{AY}} - C_{\\text{AY},\\,n}$$"
+      }
+     ]
+    }
+   ]
+  },
+  "cas7-2014-q6": {
+   "path": "questions/exam-7/cas7-2014-q6.md",
+   "run": "answerability-20261025-7",
+   "input_hash": "sha256:3b3c19451d9ae37938e8f25e1413de5f54cc38030663c3247d89336ec8a812c7",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "The limited age-to-age development factor equals the unlimited factor times the ratio of the limited severity relativity at the later age to that at the earlier age: LDF^L_t = LDF_t × R^L_{t+1} / R^L_t.",
+     "concept": "Limited Severity Relativities and Increased Limits Loss Development",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Excess Loss Development Factor",
+       "quote": "$$\\text{LDF}^L_t = \\text{LDF}_t \\times \\frac{R^L}{R^L_t}$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "definition",
+     "statement": "The limited severity relativity R^L_t at age t is the ratio of expected limited (capped) loss and ALAE to expected unlimited loss and ALAE at that maturity, i.e. the share of unlimited losses below the limit.",
+     "concept": "Limited Severity Relativities and Increased Limits Loss Development",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Excess Loss Development Factor",
+       "quote": "$R^L_t$ the limited severity divided by the unlimited severity at age $t$. $R^L$ is the same ratio at the later age."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "Match relativities to the development interval correctly: a factor from age t to t+1 uses the relativity at age t (starting age) and the relativity at age t+1 (ending age), so for the 36-48 factor use the 36-month and 48-month relativities.",
+     "concept": "Limited Severity Relativities and Increased Limits Loss Development",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Excess Loss Development Factor",
+       "quote": "The weights in the balance equation are the relativities at the **starting** age $t$."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "The unlimited development factor is the weighted average of the limited factor and the excess factor, with weights equal to the limited relativity R_t and its complement: LDF_t = R_t × LDF^L_t + (1 − R_t) × LDF^XS_t.",
+     "concept": "Excess Loss Development Factors",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Excess Loss Development Factor",
+       "quote": "$$\\text{LDF}_t = R^L_t \\, \\text{LDF}^L_t + (1 - R^L_t) \\, \\text{XSLDF}^L_t$$"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "Unlimited losses equal limited losses plus excess losses, so the excess layer's share of unlimited losses at age t is 1 − R_t, and the excess LDF can be solved from the unlimited and limited factors and relativities.",
+     "concept": "Excess Loss Development Factors",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Excess Loss Development Factor",
+       "quote": "The limited part is $C_t S_t R^L_t$ and the excess part $C_t S_t (1 - R^L_t)$."
+      },
+      {
+       "page": "Excess Loss Development Factor",
+       "quote": "$$\\text{XSLDF}^L_t = \\text{LDF}_t \\times \\frac{1 - R^L}{1 - R^L_t}$$"
+      }
+     ]
+    }
+   ]
+  },
+  "cas7-2014-q7": {
+   "path": "questions/exam-7/cas7-2014-q7.md",
+   "run": "answerability-20261025-7",
+   "input_hash": "sha256:98e6c9ef4d132785f20634c73cceeb98c47ea0787a389bb2026614cee5d54695",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "Negative incremental losses cause problems in an over-dispersed Poisson bootstrap (e.g., the log of a negative value is undefined in the GLM fit), and one adjustment is to limit negative incremental values to zero.",
+     "concept": "Over-Dispersed Poisson Bootstrap Data Issues",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "ODP Bootstrap Model",
+       "quote": "The remedies there are to remove the extreme iterations, recalibrate the model, or floor the incremental values at zero."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "When fitting a negative-column triangle with the GLM, add the absolute value of the largest negative incremental value to every incremental value, solve the GLM, then subtract that constant from each fitted incremental value.",
+     "concept": "Over-Dispersed Poisson Bootstrap Data Issues",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "Missing or incomplete data in the triangle can be handled by estimating the missing value from surrounding values, or by excluding it from the age-to-age factor calculation so that no residual exists for it.",
+     "concept": "Over-Dispersed Poisson Bootstrap Data Issues",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Data Issues",
+       "quote": "*missing values* (estimate from surrounding cells, or exclude from the factors and residuals)"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "definition",
+     "statement": "Heteroscedasticity in bootstrap residuals means the residuals do not have a common variance across development periods, violating the assumption that residuals are identically distributed.",
+     "concept": "Heteroscedasticity",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Heteroscedasticity",
+       "quote": "In a reserving model it usually means the residuals of some development periods are more variable than those of others."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "procedure",
+     "statement": "To adjust for heteroscedasticity, group development periods into groups with homogeneous variance and either resample residuals only within each group (stratified sampling) or multiply residuals by a hetero-adjustment factor (max standard deviation / group standard deviation), resample, and divide by the factor afterward.",
+     "concept": "Heteroscedasticity",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Heteroscedasticity",
+       "quote": "*Stratified sampling* draws each group's residuals only from that group."
+      },
+      {
+       "page": "Heteroscedasticity",
+       "quote": "The development periods are split into groups $1, \\dots, j$ whose residuals have similar variances. $h_i$ is group $i$'s hetero-adjustment factor: the standard deviation of all the residuals over that of group $i$'s."
+      },
+      {
+       "page": "Data Diagnostic Analysis",
+       "quote": "Each residual is multiplied by its group's $h$, so all groups share a standard deviation of $1.20$ and can be pooled for resampling."
+      }
+     ]
+    },
+    {
+     "id": "r6",
+     "kind": "procedure",
+     "statement": "When exposures change dramatically across accident years, convert the data to pure premiums (loss per exposure) before modeling, and multiply the sampled results by each year's exposures after the process variance step.",
+     "concept": "Over-Dispersed Poisson Bootstrap Data Issues",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Data Issues",
+       "quote": "*exposure changes* (model losses per exposure)"
+      }
+     ]
+    },
+    {
+     "id": "r7",
+     "kind": "procedure",
+     "statement": "Outliers or extreme values can be excluded from the average age-to-age factor and residual calculations, while the corresponding incremental value is still resampled when simulating triangles.",
+     "concept": "Over-Dispersed Poisson Bootstrap Data Issues",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r8",
+     "kind": "procedure",
+     "statement": "Heteroecthesious data (partial-year or interim evaluation periods) can be handled by projecting future incremental values before applying the model, annualizing the data and then de-annualizing the results.",
+     "concept": "Over-Dispersed Poisson Bootstrap Data Issues",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r9",
+     "kind": "procedure",
+     "statement": "If the sum of the residuals is non-zero, add a single constant to all residuals so the adjusted residuals sum to zero.",
+     "concept": "Over-Dispersed Poisson Bootstrap Data Issues",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r10",
+     "kind": "procedure",
+     "statement": "When there are too few residuals to sample from or too few extreme residuals, parameterize a distribution from which to sample residuals.",
+     "concept": "Over-Dispersed Poisson Bootstrap Data Issues",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Deviance Residual",
+       "quote": "a parametric bootstrap in Shibata's sense can replace resampling the actual residuals with draws from a normal distribution"
+      }
+     ]
+    }
+   ]
+  },
+  "cas7-2014-q8": {
+   "path": "questions/exam-7/cas7-2014-q8.md",
+   "run": "answerability-20261025-7",
+   "input_hash": "sha256:c866225eaa2d68678cba9e6e0b261715734d2aa0456abf7fa226ae2fe2439a68",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "Internal systemic risk is the risk arising from within the insurer's own modeling and valuation process (as opposed to external systemic risk), and it has three main components: specification error, parameter selection error, and data error.",
+     "concept": "Internal Systemic Risk",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Risk Margin",
+       "quote": "**[[Internal Systemic Risk|Internal systemic risk]]** is specification error, parameter selection error and data error."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "definition",
+     "statement": "Specification error is the risk that arises because it is not possible to model the insurance process perfectly, so the chosen model form may be wrong.",
+     "concept": "Specification Error",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Internal Systemic Risk",
+       "quote": "**Specification error** is the inability to build a model fully representative of the insurance process."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "definition",
+     "statement": "Parameter selection error is the risk that model parameters, predictors or trends are not estimated or selected correctly, so the chosen parameters are incorrect.",
+     "concept": "Parameter Selection Error",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Internal Systemic Risk",
+       "quote": "**Parameter selection error** arises because the model cannot adequately measure all the predictors of claim cost outcomes, or trends in them."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "definition",
+     "statement": "Data error is the risk arising from inaccurate, untimely or inadequate data and from a lack of knowledge of the portfolio's pricing and underwriting practices; it is not merely the risk of having little data or low credibility.",
+     "concept": "Data Error",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Internal Systemic Risk",
+       "quote": "**Data error** comes from poor or unavailable data, or inadequate knowledge of the portfolio, including its pricing, underwriting and claims processes."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "Typical specification-error risk indicators include the number of models or methods run, the consistency of results across models, and how thoroughly the model has been tested; running several independent models gives checks on each other and is scored more favorably than relying on one model.",
+     "concept": "Internal Systemic Risk Indicators",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Internal Systemic Risk",
+       "quote": "Indicators include the number of independent models, whether claim or payment types are modelled separately, the range of results, reasonableness checks, goodness of fit, subjective adjustments, monitoring, the ability to detect trends, and the sophistication of the superimposed inflation analysis."
+      }
+     ]
+    },
+    {
+     "id": "r6",
+     "kind": "fact",
+     "statement": "Typical parameter-selection-error risk indicators include the stability of predictors over time, the amount of data history and experience in the line of business, variability of results across models, and regular consultation with claims or subject-matter experts; new lines, unstable predictors or failed models score less favorably, while expert consultation scores more favorably.",
+     "concept": "Internal Systemic Risk Indicators",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Internal Systemic Risk",
+       "quote": "Indicators include whether the best predictors have been identified, whether they are stable over time, and whether those used lead rather than lag claim costs."
+      }
+     ]
+    },
+    {
+     "id": "r7",
+     "kind": "fact",
+     "statement": "Typical data-error risk indicators include the timeliness, reliability and consistency of data, the data source (such as a third-party administrator giving less control), system changes or automation, and familiarity with the portfolio; automation reduces input errors, while third-party handoffs and a new line reduce favorability.",
+     "concept": "Internal Systemic Risk Indicators",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Internal Systemic Risk",
+       "quote": "Indicators include knowledge of past processes, information from the business, reconciliations, robust data processes, and past revisions of data."
+      }
+     ]
+    },
+    {
+     "id": "r8",
+     "kind": "procedure",
+     "statement": "Score each risk indicator on a balanced scorecard as more or less favorable by tying it to the facts given for the line of business, with favorable scores implying a lower risk margin and unfavorable scores implying a higher risk margin.",
+     "concept": "Balanced Scorecard for Risk Margins",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Internal Systemic Risk",
+       "quote": "it is assessed by scoring the modelling infrastructure on a balanced scorecard and mapping the score to a [[Coefficient of Variation|CoV]]."
+      }
+     ]
+    }
+   ]
+  },
+  "cas7-2014-q9": {
+   "path": "questions/exam-7/cas7-2014-q9.md",
+   "run": "answerability-20261025-7",
+   "input_hash": "sha256:c4c792836ff5db9418ef579f3a2c21af40e16cec773ffe541e7c42d5adf30c86",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "In a reasonable reserve model, the standard error of unpaid estimates should increase from the oldest to the most recent accident year, because more recent years have larger mean unpaid amounts.",
+     "concept": "Model Diagnostics for Reserve Variability",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Model Output",
+       "quote": "Standard errors should **rise** from older to more recent accident years, and the total SE should exceed that of any single year."
+      },
+      {
+       "page": "Unpaid Claim Distribution",
+       "quote": "the standard error should rise from the oldest to the most recent years;"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "The coefficient of variation of unpaid estimates should generally decrease from older to more recent accident years, since variability is measured against a larger mean and incremental payments diversify; an uptick in the latest year can occur when parameter uncertainty overpowers process uncertainty.",
+     "concept": "Coefficient of Variation",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Model Output",
+       "quote": "The CV of the most recent year or two may rise again. Those estimates lean on the largest, least certain development factors, so [[Parameter Risk|parameter uncertainty]] dominates."
+      },
+      {
+       "page": "Unpaid Claim Distribution",
+       "quote": "the CoV should generally fall, though it may turn up again for the latest years as parameter uncertainty grows;"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "The standard error of the total unpaid across all accident years should be larger than the standard error of any individual accident year.",
+     "concept": "Model Diagnostics for Reserve Variability",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Model Output",
+       "quote": "Standard errors should **rise** from older to more recent accident years, and the total SE should exceed that of any single year."
+      },
+      {
+       "page": "Unpaid Claim Distribution",
+       "quote": "the total's standard error should exceed any single year's, and its CoV should be below any single year's;"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "The coefficient of variation of the total unpaid should be smaller than the CV of any individual accident year because of diversification across years; a year with a lower CV than the total signals a problem to investigate.",
+     "concept": "Coefficient of Variation",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Model Output",
+       "quote": "CVs should **fall** from older to more recent years, and the total CV should be below that of any single year."
+      },
+      {
+       "page": "ODP Bootstrap Model",
+       "quote": "Accident years are independent, so the total's coefficient of variation should be lower than any single year's."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "The mean unpaid estimates should increase from the oldest to the most recent accident year, since less mature years have more unpaid claims remaining.",
+     "concept": "Model Diagnostics for Reserve Variability",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r6",
+     "kind": "definition",
+     "statement": "The coefficient of variation is the standard error divided by the mean, used to compare relative variability across accident years.",
+     "concept": "Coefficient of Variation",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Model Output",
+       "quote": "$$\\mathrm{CV} = \\frac{\\mathrm{SE}(\\text{unpaid})}{\\text{Mean}(\\text{unpaid})}$$"
+      },
+      {
+       "page": "Coefficient of Variation",
+       "quote": "The **Coefficient of Variation** $CV$ is the ratio of the standard deviation to the mean, measuring dispersion as a proportion of the mean."
+      }
+     ]
+    }
+   ]
+  },
+  "cas7-2015-q1": {
+   "path": "questions/exam-7/cas7-2015-q1.md",
+   "run": "answerability-20261025-7",
+   "input_hash": "sha256:4fe9c5d6677ef91a6e97e0a0c60c71c31f380e04442cff78eb5f46dbc52f6022",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "In the Benktander/Neuhaus framework, the incremental paid loss ratio for development period k is m_k = (sum of incremental paid claims in period k over accident years observed) / (sum of the corresponding earned premiums for those same accident years), and the total m_tot is the sum of the m_k over all periods.",
+     "concept": "Neuhaus Credibility Weighting",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Credible Loss Ratio Reserve",
+       "quote": "$m_k$ is the **incremental loss ratio** of development period $k$: the paid claims $S_{ik}$ of that period, summed over the origin periods that have reached it, divided by those periods' premium. $\\sum_k m_k$ is the expected loss ratio."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The expected percent paid to date for an accident year at development age k is p_k = m_1+...+m_k divided by m_tot (for the latest year, the first-period m divided by m_tot), and the percent unpaid is q_k = 1 - p_k.",
+     "concept": "Neuhaus Credibility Weighting",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Credible Loss Ratio Reserve",
+       "quote": "$p_i = \\sum_{k \\le n-i+1} m_k \\big/ \\sum_k m_k$ is the **loss ratio payout factor**, the expected share of ultimate paid by now, and $q_i = 1 - p_i$ is the reserve factor."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The individual reserve estimate is R^ind = (q/p) × cumulative paid claims to date, i.e., paid claims scaled by the ratio of expected unpaid to expected paid percentages (equivalent to paid × (sum of future m)/(paid-period m)).",
+     "concept": "Individual (Chain-Ladder-Type) Reserve Estimate in Credibility Reserving",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Credible Loss Ratio Reserve",
+       "quote": "$$R_i^{ind} = \\frac{q_i}{p_i}\\,C_{i,n-i+1}$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "The collective reserve estimate is R^coll = q × U^BC, where the a priori (budget/Bornhuetter-Ferguson) ultimate U^BC = m_tot × earned premium; equivalently premium times the sum of future m_k.",
+     "concept": "Collective Reserve Estimate (Bornhuetter-Ferguson / Budget Ultimate)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Credible Loss Ratio Reserve",
+       "quote": "$$R_i^{coll} = q_i\\,V_i\\sum_{k=1}^{n} m_k$$"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "formula",
+     "statement": "The Neuhaus credibility weight given to the individual estimate is Z^WN = p × m_tot... more precisely equal to m_1 for the first-period loss ratio, i.e., Z = p_k × ELR; the credibility-weighted reserve is R = Z × R^ind + (1 - Z) × R^coll.",
+     "concept": "Neuhaus Credibility Weighting",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Credible Loss Ratio Reserve",
+       "quote": "$$R_i^{c} = Z_i\\,R_i^{ind} + (1 - Z_i)\\,R_i^{coll}$$"
+      },
+      {
+       "page": "Credible Loss Ratio Reserve",
+       "quote": "Neuhaus's is $Z_i = p_i \\sum_k m_k$."
+      }
+     ]
+    },
+    {
+     "id": "r6",
+     "kind": "formula",
+     "statement": "Hürlimann's optimal (minimum variance) credibility weight for the individual estimate is Z* = p / (p + sqrt(p)), where p is the expected percent paid to date.",
+     "concept": "Hürlimann Optimal Credibility",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Credible Loss Ratio Reserve",
+       "quote": "$$Z_i^{*} = \\frac{p_i}{p_i + \\sqrt{p_i}}$$"
+      }
+     ]
+    },
+    {
+     "id": "r7",
+     "kind": "fact",
+     "statement": "In credibility reserving, the individual estimate R^ind receives the credibility weight Z and the collective estimate R^coll is the complement of credibility (1 - Z), and the result is an estimate of unpaid claims rather than ultimate.",
+     "concept": "Credibility-Weighted Reserve Estimate",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Credible Loss Ratio Reserve",
+       "quote": "$$R_i^{c} = Z_i\\,R_i^{ind} + (1 - Z_i)\\,R_i^{coll}$$"
+      }
+     ]
+    }
+   ]
+  },
+  "cas7-2015-q10": {
+   "path": "questions/exam-7/cas7-2015-q10.md",
+   "run": "answerability-20261025-7",
+   "input_hash": "sha256:998cce38f285725069a9672c6b1518ccc6bff039224b031a18f15b59d01a9054",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "Heteroscedasticity means the residuals do not have constant variance across groups such as accident years, development periods, or calendar periods; homoscedasticity means the variance is constant.",
+     "concept": "Heteroscedasticity",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Heteroscedasticity",
+       "quote": "**Heteroscedasticity** is non-constant variance among a model's [[Residual|residuals]]."
+      },
+      {
+       "page": "Residual Plot",
+       "quote": "| Fan shape (spread increases) | **Heteroscedasticity** — variance is not constant |"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "To check for heteroscedasticity in an ODP bootstrap, plot standardized residuals against accident year, development period, or calendar period, and look for differing spread or systematic trends (such as residuals drifting away from 0) across the groups versus random scatter around 0.",
+     "concept": "Residual Diagnostics for Bootstrap Models",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Heteroscedasticity",
+       "quote": "A [[Residual Plot|residual graph]] by development period shows it: the residuals in some periods spread wider than in others."
+      },
+      {
+       "page": "Residual Plot",
+       "quote": "| Random scatter around zero | Model is adequate |"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "The ODP bootstrap assumes the standardized residuals are independent and identically distributed, so heteroscedasticity violates this assumption and makes sampling residuals from the whole triangle inappropriate.",
+     "concept": "Over-Dispersed Poisson Bootstrap Model",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Heteroscedasticity",
+       "quote": "The [[ODP Bootstrap Model|ODP bootstrap]] assumes the opposite, homoscedasticity: that the standardized [[Pearson Residual|Pearson residuals]] are independent and identically distributed, which is what allows a residual from one cell to be applied to any other."
+      },
+      {
+       "page": "Pearson Residual",
+       "quote": "The residuals are assumed independent and identically distributed, which is what [[Heteroscedasticity|heteroscedasticity]] violates; they need not be normal."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "Stratified sampling adjusts for heteroscedasticity by grouping residuals with similar variances and resampling residuals only from within the same group for the corresponding cells of the triangle.",
+     "concept": "Heteroscedasticity Adjustment in Bootstrap Models",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Heteroscedasticity",
+       "quote": "*Stratified sampling* draws each group's residuals only from that group."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "procedure",
+     "statement": "The hetero-adjustment factor method groups residuals with similar variances, computes each group's standard deviation, and multiplies each group's residuals by the ratio of the largest group's standard deviation to the group's standard deviation. Residuals are then sampled from the full set, and each sampled residual is divided by the factor of the cell it is placed in before building the pseudo-triangle.",
+     "concept": "Heteroscedasticity Adjustment in Bootstrap Models",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Heteroscedasticity",
+       "quote": "$h_i$ is group $i$'s hetero-adjustment factor: the standard deviation of all the residuals over that of group $i$'s. Multiplied by $h_i$, every group's residuals have the same standard deviation, so the adjusted residuals can be sampled freely as one pool. Dividing a sampled $r^*$ by the $h_i$ of the cell being simulated puts that group's variance back."
+      }
+     ]
+    }
+   ]
+  },
+  "cas7-2015-q11": {
+   "path": "questions/exam-7/cas7-2015-q11.md",
+   "run": "answerability-20261025-7",
+   "input_hash": "sha256:d5768f7789c6fc52629d9dd595fe52f0fbc9299966596f95b41757ed325455b0",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "A GLM bootstrap with a log link and over-dispersed Poisson error fails when incremental values are negative (the log of a negative value is undefined, and the quasi-likelihood requires non-negative values, especially when column sums are negative), so negative incrementals must be addressed before modeling.",
+     "concept": "Over-Dispersed Poisson Bootstrap",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Data Issues",
+       "quote": "*negative incremental values* (a modified log link handles them unless a whole column sums negative, which needs a constant shift; or model salvage and subrogation separately)"
+      },
+      {
+       "page": "Over-Dispersed Poisson Model",
+       "quote": "That needs a parameter for every accident and every development period, a common $\\phi$, and positive column sums; a negative column total makes the GLM fail."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "To handle negative incremental values in an ODP/GLM model, add a constant to every cell of the triangle so all values are non-negative, fit the model, then subtract the same constant from the modeled results to avoid bias.",
+     "concept": "Over-Dispersed Poisson Bootstrap",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Data Issues",
+       "quote": "a modified log link handles them unless a whole column sums negative, which needs a constant shift"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "Outliers in the triangle (an unusually large incremental value for one accident year and age) can distort the fitted parameters, residuals and development factors, and so may impact modeling results even if they do not cause model failure.",
+     "concept": "Bootstrap Data Issues and Outliers",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Data Issues",
+       "quote": "in an ODP bootstrap an error left in the triangle becomes an extreme residual that is resampled into every other cell's variability."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "To address outliers, exclude the outlier from the triangle (treat it as missing and estimate it from surrounding values) or exclude it from the age-to-age factor and residual calculations.",
+     "concept": "Bootstrap Data Issues and Outliers",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Data Issues",
+       "quote": "*missing values* (estimate from surrounding cells, or exclude from the factors and residuals); *outliers* (exclude with care — skewed residuals are expected)"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "A change in exposure level, or thin/missing data, in one accident year (e.g., the earliest year) makes that row inconsistent with the others and can bias the model results.",
+     "concept": "Bootstrap Data Issues and Outliers",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r6",
+     "kind": "procedure",
+     "statement": "To adjust for differing exposure levels across accident years, divide the loss triangle by earned exposure and model pure premium (or loss ratio) development instead of total loss development.",
+     "concept": "Exposure Adjustment of Loss Triangles",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Data Issues",
+       "quote": "*exposure changes* (model losses per exposure)"
+      }
+     ]
+    },
+    {
+     "id": "r7",
+     "kind": "procedure",
+     "statement": "To handle a thin or unreliable accident year, remove that entire row from the loss triangle before modeling.",
+     "concept": "Bootstrap Data Issues and Outliers",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r8",
+     "kind": "fact",
+     "statement": "Zeros in the later ages of a triangle (e.g., oldest year at the last ages) are not necessarily missing data; they may reflect claim closure and no further development, and are not by themselves a model-failure issue.",
+     "concept": "Over-Dispersed Poisson Bootstrap",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "cas7-2015-q12": {
+   "path": "questions/exam-7/cas7-2015-q12.md",
+   "run": "answerability-20261025-7",
+   "input_hash": "sha256:050b8eeb0b23ef0ef582141d3ac23558a14bc89f3e0e7a062cf0cdeece995b81",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "Reinsurance claim report lags are generally longer than primary report lags, because the reinsurer is notified only when a claim's reported loss and ALAE reaches a reporting threshold (e.g., a percentage of the retention) or when it is large enough to involve the treaty.",
+     "concept": "Reinsurance Loss Reserving Challenges",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Reinsurance Reserving",
+       "quote": "Claims reach the reinsurer only after the cedant has reported and assessed them. Excess claims arrive later still, once they approach the retention or a reporting threshold."
+      },
+      {
+       "page": "Ceded Loss Reserve",
+       "quote": "Trend is leveraged into excess layers, reporting thresholds delay notice, and a change in retention makes prior ceded years non-comparable."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "Reinsurance reserving is complicated by persistent upward development of most claim reserves, often because primary insurers tend to underestimate (under-reserve) ALAE on reported claims.",
+     "concept": "Reinsurance Loss Reserving Challenges",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "To detect possible ALAE under-reserving in claim data, compute the ratio of ALAE to loss for each claim and compare across claims or accident years, where lower ratios on less mature claims suggest ALAE is understated and will develop upward.",
+     "concept": "Reinsurance Loss Reserving Challenges",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "Reinsurers have heterogeneous exposures and treaty terms (line of business, retentions, limits), and changes in the retention between years make loss patterns from different years not directly comparable, complicating reserving.",
+     "concept": "Reinsurance Loss Reserving Challenges",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Reinsurance Reserving",
+       "quote": "Reporting lags are longer, data are thinner and less homogeneous, contracts are manuscript, results are often aggregated by treaty year, and an attachment point leverages development and trend."
+      },
+      {
+       "page": "Ceded Loss Reserve",
+       "quote": "Trend is leveraged into excess layers, reporting thresholds delay notice, and a change in retention makes prior ceded years non-comparable."
+      },
+      {
+       "page": "Net of Reinsurance",
+       "quote": "A change in attachment point makes prior net years non-comparable, while gross years remain usable."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "definition",
+     "statement": "A per-occurrence excess-of-loss retention is the amount of loss (here combined loss and ALAE) per occurrence that the primary insurer keeps before the reinsurer begins to pay, and claims from the same occurrence are combined when applying it.",
+     "concept": "Excess of Loss Reinsurance",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Excess of Loss",
+       "quote": "is non-proportional reinsurance in which the reinsurer pays the part of each loss — per risk or per occurrence — above the cedant's retention $R$ (the attachment point), up to a limit $L$."
+      }
+     ]
+    }
+   ]
+  },
+  "cas7-2015-q13": {
+   "path": "questions/exam-7/cas7-2015-q13.md",
+   "run": "answerability-20261025-7",
+   "input_hash": "sha256:14a907b390c5fbf0a2bad685869595429f9e20e1c3e6621cb6cbd9416f9abe85",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "Used-up premium for an accident year is its adjusted (on-level) premium multiplied by the percentage of losses reported (the aggregate loss report lag).",
+     "concept": "Stanard-Bühlmann Method",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Cape Cod Method",
+       "quote": "**Used-up premium** $\\text{EP}_i / \\text{CDF}_i$ is the share of each year's premium \"exposed\" to the losses reported so far."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The Stanard-Bühlmann expected loss ratio equals total reported losses across all accident years divided by total used-up premium (sum of adjusted premium times percent reported).",
+     "concept": "Stanard-Bühlmann Method",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Cape Cod Method",
+       "quote": "$$\\text{ELR} = \\frac{\\sum_i C_i}{\\sum_i \\text{EP}_i \\times \\tfrac{1}{\\text{CDF}_i}}$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "Stanard-Bühlmann IBNR for an accident year equals the ELR times adjusted premium times (1 minus the percent reported); total IBNR is the sum over accident years.",
+     "concept": "Stanard-Bühlmann Method",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Cape Cod Method",
+       "quote": "$$\\text{IBNR}_i = \\text{ELR} \\times \\text{EP}_i \\times \\left(1 - \\tfrac{1}{\\text{CDF}_i}\\right)$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "Stanard-Bühlmann IBNR is the expected unreported portion of losses (ELR × premium × percent unreported), not expected ultimate loss minus reported loss, since reported losses are not used in the accident-year IBNR except through the ELR.",
+     "concept": "Stanard-Bühlmann Method",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Cape Cod Method",
+       "quote": "$$\\text{IBNR}_i = \\text{ELR} \\times \\text{EP}_i \\times \\left(1 - \\tfrac{1}{\\text{CDF}_i}\\right)$$"
+      },
+      {
+       "page": "Reinsurance Reserving",
+       "quote": "$$\\text{Ultimate} = \\text{Reported} + \\text{Expected losses} \\times \\%\\,\\text{Unreported}$$"
+      },
+      {
+       "page": "Bornhuetter-Ferguson Method",
+       "quote": "$$\\text{IBNR} = \\left(1 - \\tfrac{1}{\\text{CDF}}\\right) \\times \\text{ELR} \\times \\text{EP}$$"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "procedure",
+     "statement": "Earned premium is adjusted to the current rate level (on-level premium) before use in the Stanard-Bühlmann method, so premiums from all years are comparable.",
+     "concept": "On-Level Premium",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Cape Cod Method",
+       "quote": "Premium **must be on level** and losses must be trended to a common cost level before the ELR is computed, or the derived ratio blends years written at different rate levels and different cost levels into one number."
+      },
+      {
+       "page": "Rate Level Change",
+       "quote": "The [[Cape Cod Method|Cape Cod]] technique is exposed in the same way, because its used-up premium denominator is actual premium: without on-levelling, years written at low rates get too much weight in the derived ELR."
+      }
+     ]
+    },
+    {
+     "id": "r6",
+     "kind": "fact",
+     "statement": "Stanard-Bühlmann assumes a single constant ELR across all accident years, so premiums must be on a common rate level (and cost level) for one ELR to apply, since unreported losses will emerge at current cost levels.",
+     "concept": "Stanard-Bühlmann Method",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Cape Cod Method",
+       "quote": "Premium **must be on level** and losses must be trended to a common cost level before the ELR is computed, or the derived ratio blends years written at different rate levels and different cost levels into one number."
+      },
+      {
+       "page": "Generalized Cape Cod Method",
+       "quote": "Cape Cod assumes one trended, on-level ratio holds for every year."
+      }
+     ]
+    }
+   ]
+  },
+  "cas7-2015-q14": {
+   "path": "questions/exam-7/cas7-2015-q14.md",
+   "run": "answerability-20261025-7",
+   "input_hash": "sha256:c3a20654dccf4a6dbde5570030deb3bea09ad5f988fcba6e67bbfcd804b2d203",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "The premium development to loss development (PDLD) ratio at a retrospective adjustment is the incremental change in premium divided by the incremental change in expected loss, used to project retrospective premium adjustments from loss development.",
+     "concept": "Retrospective Rating PDLD Ratio",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "PDLD Ratio",
+       "quote": "For each retro adjustment it is the premium developed in that adjustment divided by the loss developed over the matching loss valuations."
+      },
+      {
+       "page": "Retrospective Premium Reserve",
+       "quote": "Teng and Perkins** estimate how premium develops *as losses develop*."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "For the first adjustment, PDLD(1) = [Basic premium / (Standard premium × ELR × percent of loss emerged at first adjustment) + (capped loss ratio at first adjustment × loss conversion factor)] × tax multiplier.",
+     "concept": "Retrospective Rating PDLD Ratio",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "PDLD Ratio",
+       "quote": "$\\text{BP}/L_1$ is approximated by $\\text{BPF}/(\\text{ELR} \\times \\%L_1)$, the basic premium factor over the expected loss ratio emerged at the first adjustment."
+      },
+      {
+       "page": "Retrospective Premium Reserve",
+       "quote": "$$\\text{PDLD}_1 = \\frac{\\text{BPF} \\times \\text{TM}}{\\text{ELR} \\times \\%L_1} + \\frac{CL_1}{L_1}\\,\\text{LCF} \\times \\text{TM}$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "For adjustments after the first, PDLD(n) = incremental loss capping ratio × loss conversion factor × tax multiplier, since basic premium is charged only at the first adjustment.",
+     "concept": "Retrospective Rating PDLD Ratio",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "PDLD Ratio",
+       "quote": "Later ratios are the incremental loss capping ratio times $\\text{LCF} \\times \\text{TM}$."
+      },
+      {
+       "page": "Retrospective Premium Reserve",
+       "quote": "$$\\text{PDLD}_n = \\frac{CL_n - CL_{n-1}}{L_n - L_{n-1}}\\,\\text{LCF} \\times \\text{TM}$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "Calculating PDLD ratios from the retrospective rating formula reflects the pricing parameters of policies currently being sold, whereas historical policies may have had different terms.",
+     "concept": "Retrospective Rating PDLD Ratio",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "PDLD Ratio",
+       "quote": "The formula ratios respond to changes in the plan parameters sold."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "PDLD ratios derived from the retrospective rating formula are more stable than those from empirical historical loss data, which can be highly volatile and make development pattern selection difficult.",
+     "concept": "Retrospective Rating PDLD Ratio",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "PDLD Ratio",
+       "quote": "A single negative point is noise to be averaged over as many quarters as possible, or replaced by the formula ratio."
+      }
+     ]
+    },
+    {
+     "id": "r6",
+     "kind": "fact",
+     "statement": "If small claims (below the loss cap/limit) settle faster, early capped-to-unlimited loss ratios rise toward one, so early PDLD ratios increase, while later emerging loss is mainly large claims hitting the cap or limits, so later PDLD ratios decrease.",
+     "concept": "Retrospective Rating PDLD Ratio",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "cas7-2015-q2": {
+   "path": "questions/exam-7/cas7-2015-q2.md",
+   "run": "answerability-20261025-7",
+   "input_hash": "sha256:6856c699d92882e763456bd910ff54f0615d79db120a5a51b75e5abe1f168b2b",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "In Clark's LDF method, the cumulative proportion of ultimate claims paid at a given age is given by a growth curve G(x) (e.g., the loglogistic form x/(x+theta) with the stated parameters), and the fitted LDF at age x is 1/G(x).",
+     "concept": "Clark's LDF Method",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Growth Curve",
+       "quote": "$$\\text{LDF}_x = \\frac{1}{G(x)}$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "Truncate the LDF at a chosen truncation age by using G(truncation age)/G(x) instead of 1/G(x), so that development beyond the truncation point is ignored.",
+     "concept": "Truncated Loss Development Factors",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Growth Curve",
+       "quote": "Clark truncates at a selected age $x_T$ (240 months), using $G(x_T)/G(x)$ in place of $1/G(x)$."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "definition",
+     "statement": "The age x used in G(x) is the average age (time since accident occurrence) at the evaluation date, which for an accident year is the age at year-end minus 6 months (the midpoint of the accident year); the truncation age is converted to months in the same way.",
+     "concept": "Average Age of Accident Year in Clark's Model",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Growth Curve",
+       "quote": "The age $x$ runs from the *average* accident date to the evaluation date, so an [[Accident Year|accident year]] evaluated $t \\ge 12$ months after it starts has $x = t - 6$."
+      },
+      {
+       "page": "Growth Curve",
+       "quote": "The average age is $x = 48 - 6 = 42$ months, and the truncation point is $240 - 6 = 234$."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "Estimated ultimate claims equal paid claims times the truncated LDF, and estimated unpaid claims equal estimated ultimate minus paid claims; total unpaid is the sum over accident years.",
+     "concept": "Clark's LDF Method",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Growth Curve",
+       "quote": "To avoid relying on a mechanical extrapolation, Clark truncates at a selected age $x_T$ (240 months), using $G(x_T)/G(x)$ in place of $1/G(x)$."
+      },
+      {
+       "page": "Loss Development",
+       "quote": "$$\\text{Ultimate Losses} = \\text{Losses at age } n \\times \\text{CDF}_{n \\to \\text{ult}}$$"
+      },
+      {
+       "page": "Unpaid Claims",
+       "quote": "$$\\text{Unpaid} = \\text{Ultimate} - \\text{Paid to date}$$"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "formula",
+     "statement": "Under the over-dispersed Poisson assumption, process variance of the unpaid claims estimate equals the scaling factor sigma^2 times the estimated unpaid claims.",
+     "concept": "Over-Dispersed Poisson Process Variance",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Process Risk",
+       "quote": "Clark assumes each increment is [[Over-Dispersed Poisson Model|over-dispersed Poisson]]: a Poisson count times $\\sigma^2$, so $E[c] = \\mu$ and $\\mathrm{Var}(c) = \\sigma^2\\mu$."
+      },
+      {
+       "page": "Process Risk",
+       "quote": "Each year's process variance is $\\sigma^2$ times its reserve:"
+      }
+     ]
+    },
+    {
+     "id": "r6",
+     "kind": "formula",
+     "statement": "Total variance of the unpaid estimate equals process variance plus parameter variance (parameter variance is the square of the parameter standard deviation), and the coefficient of variation is total standard deviation divided by the unpaid claims estimate.",
+     "concept": "Coefficient of Variation of Reserve Estimate",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Prediction Error",
+       "quote": "Dividing it by the mean gives the [[Coefficient of Variation|coefficient of variation]]."
+      }
+     ]
+    },
+    {
+     "id": "r7",
+     "kind": "fact",
+     "statement": "The Cape Cod method generally yields a lower coefficient of variation than the LDF method because it uses additional information (premium or exposure) and a more stable expected loss ratio for immature years, rather than relying on highly leveraged LDFs, and so has lower parameter variance (and typically similar or slightly lower process variance).",
+     "concept": "Clark's Cape Cod Method",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Process Risk",
+       "quote": "He notes that the Cape Cod method may carry somewhat more process variance than the LDF method but much less estimation error."
+      }
+     ]
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,44 @@
+# The usual MAS-II candidate: passed MAS-I last year, builds GLMs at work, and
+# meets the exam's three new subjects — mixed models, Bayesian credibility and
+# time series — for the first time. Statistical learning is half the exam and
+# half familiar, so that is where an overconfident skim costs marks.
+name: Nadia (pricing analyst, passed MAS-I)
+exam: MAS-II
+description: >
+  Twenty-five-year-old pricing analyst at a P&C insurer, two years out of a
+  statistics degree. Passed P, FM and MAS-I and fits GLMs in R at work every
+  week. Studies two evenings a week and on Saturdays, around month-end close.
+prior_knowledge:
+  calculus: comfortable; rarely needs it at work
+  algebra: fluent, including matrix notation for regression
+  probability: >
+    Exam P level — conditional expectation and variance, the common
+    distributions, the law of total variance
+  statistics: >
+    MAS-I level — maximum likelihood, hypothesis tests, linear regression, GLMs
+    with log and logit links, AIC and BIC; one undergraduate machine-learning
+    elective (trees, k-means, cross-validation)
+  insurance: >
+    works with exposure bases, frequency and severity, lift charts and
+    double-lift charts every month; has heard "credibility" used loosely at work
+  mastered_concepts: [Generalized Linear Model, Linear Regression, Maximum Likelihood Estimation, AIC, BIC, Lift, Double Lift Chart]
+gaps:
+  - Bühlmann and Bühlmann-Straub credibility — EPV and VHM by hand
+  - Bayesian credibility and conjugate priors
+  - Linear mixed models — random effects, covariance structures, BLUPs
+  - Time series — ACF and PACF, identifying ARIMA orders, differencing
+  - Neural networks beyond the vocabulary
+traits:
+  reading_thoroughness: 0.6
+  skim_tendency: 0.35
+  derivation_patience: 0.55
+  math_anxiety: 0.15
+  guess_tendency: 0.15
+  confidence_bias: 0.3
+  reading_speed_wpm: 280
+study_strategy: read-then-practice
+time_budget:
+  steps_per_session: 40
+  questions_per_session: 8
+feedback: solution
+seed: 301

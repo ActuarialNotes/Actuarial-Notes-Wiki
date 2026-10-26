@@ -16,7 +16,7 @@ import learner_sim  # noqa: E402
 from learner_sim.answerability import (LOCATE_SYSTEM, REQUIREMENTS_SYSTEM, Candidates, PageIndex,  # noqa: E402
                                        check_question, home_page, input_hash, merge_found, read_results, report,
                                        run_check, served_questions, verdict, verify_locations)
-from learner_sim.backends import ScriptedOneShot  # noqa: E402
+from learner_sim.backends import BackendError, ScriptedOneShot  # noqa: E402
 from learner_sim.content_loader import ContentLoader  # noqa: E402
 from learner_sim.exams import resolve_exam  # noqa: E402
 from learner_sim.vault_parse import load_bank  # noqa: E402
@@ -187,6 +187,22 @@ class RealQuestionTests(unittest.TestCase):
                             "## Every question"):
                 self.assertIn(heading, md)
             self.assertIn("Bühlmann-Straub Credibility.md` — 1 question(s)", md)
+        finally:
+            shutil.rmtree(tmp, ignore_errors=True)
+
+    def test_a_usage_limit_stops_the_run(self):
+        tmp = tempfile.mkdtemp(prefix="answerability-")
+        try:
+            def limited(system, prompt):
+                raise BackendError("You've hit your session limit · resets 12am (UTC)")
+            served = sorted(served_questions(self.bank)[0])[:3]
+            calls = []
+            results = run_check(self.exam, self.loader, self.bank, tmp,
+                                lambda: calls.append(1) or ScriptedOneShot(limited), ids=served,
+                                progress=lambda _: None)
+            self.assertEqual(results, {}, "a question the limit stopped is not recorded as checked")
+            self.assertEqual(len(calls), 2, "no question is started after the limit is hit")
+            self.assertEqual(read_results(os.path.join(tmp, "results.jsonl")), {})
         finally:
             shutil.rmtree(tmp, ignore_errors=True)
 

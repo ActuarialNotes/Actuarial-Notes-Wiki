@@ -368,6 +368,11 @@ def warm(loader: ContentLoader) -> None:
     loader.search("credibility")
 
 
+# A usage or rate limit fails every call that follows it at no cost, so a run that kept going would race
+# through its whole list marking each question an error. It stops at the first one instead.
+USAGE_LIMIT = re.compile(r"hit your (?:\w+ )?limit|(?:session|usage|rate) limit|rate_limit|overloaded", re.I)
+
+
 def run_check(exam: ExamSpec, loader: ContentLoader, bank: dict[str, RawQuestion], out_dir: str,
               one_shot_factory: Callable[[], OneShot], ids: list[str] | None = None, limit: int | None = None,
               parallel: int = 1, max_cost: float | None = None, retry_errors: bool = True,
@@ -386,11 +391,18 @@ def run_check(exam: ExamSpec, loader: ContentLoader, bank: dict[str, RawQuestion
     spent = [sum(r.get("cost_usd") or 0 for r in done.values())]
     progress(f"{exam.title}: {len(served)} served questions, {len(done)} already checked, {len(todo)} to check")
 
+    limited: list[str] = []
+
     def one(sid: str) -> None:
-        if max_cost is not None and spent[0] >= max_cost:
+        if limited or (max_cost is not None and spent[0] >= max_cost):
             return
         rec = check_question(served[sid], loader, solution_of(served[sid]), one_shot_factory)
         with lock:
+            if rec.get("verdict") == "error" and USAGE_LIMIT.search(rec.get("error") or ""):
+                if not limited:
+                    progress(f"  stopped at {sid}: {rec['error']} — continue the run with --run-id once it resets")
+                limited.append(sid)
+                return
             spent[0] += rec.get("cost_usd") or 0
             done[sid] = rec
             with open(path, "a", encoding="utf-8") as fh:

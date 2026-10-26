@@ -601,7 +601,11 @@ Other important `lib/` modules:
   an exam page it is the same item in the menu the exam's title opens). The panel leads with
   the verdict and one sentence (`factCheckOverview`: checked when, against how many sources,
   what is open), then folding cards — **Open issues** (unfolded), **Checked against**,
-  **Check history** (each pass, `summarizeLog`'s `checks`), Fixed, Notes.
+  **Check history** (each pass, `summarizeLog`'s `checks`), Fixed, Notes, and on a question
+  **Answerability** (`components/AnswerabilitySection.tsx` over `lib/answerability.ts`): the
+  answerability check's history from the bank's committed record, fetched when the panel opens —
+  its verdict, each requirement with where it is taught and the quoted passage, and every
+  `resolve` / `not-required` since.
   `summarizeSource` and `summarizeLog` are what keep it short — the first cuts an auditor's
   citation into the source's name, the chapters/pages checked and its link (the sha256 never
   reaches the screen), the second splits the log into Open / Fixed / Notes and folds each

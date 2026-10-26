@@ -1,17 +1,16 @@
 # Answerability: Exam P-1 (SOA)
 
-Run `answerability-20261025-p` · 454 questions checked of 626 attempted · cost $70.64
+Run `answerability-20261025-p` · 719 questions checked of 719 attempted · cost $110.08
 
 Each question's official solution was broken into the knowledge it uses (by a model that saw no study page), and each item was looked for on the pages the vault gives for the question. An item counts as taught only if a quote of the teaching passage is really on the page; the check is done in code. *Answerable* is necessary, not sufficient: a page can hold the formula and still not teach it well.
 
 | Verdict | Questions | Share |
 |---|---|---|
-| **Answerable** — everything taught on a tagged page, one link away or on a prerequisite exam's page | 80 | 18% |
-| **Untagged** — everything is in the vault, but some of it on a page neither tagged nor linked | 157 | 35% |
-| **Gap** — something the solution uses is taught on no page | 217 | 48% |
-| Error — the check itself failed (re-run to retry) | 172 | |
+| **Answerable** — everything taught on a tagged page, one link away or on a prerequisite exam's page | 145 | 20% |
+| **Untagged** — everything is in the vault, but some of it on a page neither tagged nor linked | 260 | 36% |
+| **Gap** — something the solution uses is taught on no page | 314 | 44% |
 
-Requirements: 1896 — tagged 1011 (53%), linked 151 (8%), prerequisite 2 (0%), elsewhere 424 (22%), missing 308 (16%)
+Requirements: 3010 — tagged 1623 (54%), linked 256 (9%), prerequisite 2 (0%), elsewhere 673 (22%), missing 456 (15%)
 Not checked: 9 off syllabus.
 
 ## By sitting
@@ -20,13 +19,13 @@ A paper whose gaps far outrun the rest may test a reading the syllabus has since
 
 | Sitting | Questions | Answerable | Untagged | Gap |
 |---|---|---|---|---|
-| Undated (samples and the vault's own) | 626 | 80 | 157 | 217 (35%) |
+| Undated (samples and the vault's own) | 719 | 145 | 260 | 314 (44%) |
 
 ## Gaps, by the page that should teach them
 
 Ranked by how many questions each page's gaps cost. The page is the one named for the item's concept; "no page" means the vault has no page by that name.
 
-### `Concepts/Conditional Probability.md` — 19 question(s)
+### `Concepts/Conditional Probability.md` — 24 question(s)
 
 - `p-021` (procedure): Translate statements such as 'X is k times as likely as Y to die' into relations between conditional probabilities (P[D\|X] = k P[D\|Y]), and express all conditional probabilities in terms of a single unknown parameter that cancels in the final ratio.
 - `p-025` (procedure): Translate a statement that one group is k times as likely to have a trait as another into a conditional probability relation, P[S\|C] = k P[S\|C^c], and let the common unknown factor cancel in the Bayes ratio.
@@ -38,6 +37,10 @@ Ranked by how many questions each page's gaps cost. The page is the one named fo
 - `p-135` (fact): A random guess on a true-false question is correct with probability 1/2, while a question whose answer is known is answered correctly with probability 1.
 - `p-172` (procedure): To find the possible values of the conditioning variable, identify which values have nonzero conditional probability of producing the observed outcome (here, the observed K=k requires J to be k, k-1, or k-2 given the offsets 0, +1, +2).
 - `p-233` (procedure): To find a distribution conditional on an event in sampling without replacement, restrict the population to the cards consistent with the condition (removing excluded categories) and treat the draw as sampling from the reduced population.
+- `p-349` (procedure): Translate a statement that one group is k times as likely to succeed as another into a relation between conditional probabilities (P(event \| group 1) = k * P(event \| group 2)), introduce an unknown for the base conditional probability, and solve it using the known marginal probability.
+- `p-353` (procedure): For a conditional event such as {X ≤ b} given {X ≥ a} with a < b, the intersection is the interval {a ≤ X ≤ b}, so the conditional probability is (F(b) − F(a)) / (1 − F(a)).
+- `p-357` (fact): Conditioning on the first roll being a 6 means that roll cannot be a 5, so it counts as a roll without ending the wait for a 5; the two waiting times are therefore dependent.
+- `p-387` (fact): Given that exactly k of d independent, equally likely events occur (each file equally likely to be corrupted), every subset of size k is equally likely, so the set of occurring events is a simple random sample of size k without replacement from the d items.
 - `p-501` (fact): If independent trials share the same success probability, then conditional on the number of successes, the set of successes is equally likely to be any subset of that size, i.e. a simple random sample without replacement from the population.
 - `p-528` (procedure): When two conditional probabilities P[A\|B] and P[B\|A] are related, express both with the common numerator P[A ∩ B] and cancel it (valid when it is nonzero) to get a relationship between the marginal probabilities P[A] and P[B].
 - `p-533` (fact): When independent trials all share the same success probability, conditioning on exactly k successes among n makes the set of k successful trials equally likely to be any of the C(n,k) subsets, i.e. a simple random sample without replacement, and the common probability drops out.
@@ -47,8 +50,9 @@ Ranked by how many questions each page's gaps cost. The page is the one named fo
 - `p-548` (procedure): After transferring chips between urns, update the receiving urn's total count and count of each color given the transfer composition, and take the white fraction as the conditional probability of drawing white.
 - `p-585` (procedure): To simplify a conditional probability involving two overlapping intervals, intersect the intervals so the numerator event becomes the overlap (for example, (a,b) ∩ (c,d) = (c,b) when a < c < b < d).
 - `p-641` (procedure): To find the probability of a specific event together with the condition 'exactly one occurs', note that the joint event reduces to the single case in which that event occurs alone.
+- `p-663` (procedure): When conditioning on X ≥ a and asking for X ≤ b with a < b, the intersection of the two events is the interval a ≤ X ≤ b.
 
-### `Concepts/Binomial Distribution.md` — 12 question(s)
+### `Concepts/Binomial Distribution.md` — 16 question(s)
 
 - `p-027` (fact): When a shipment contains a very large number of items, the number of defective items in a fixed-size sample can be modeled as binomial with the defect proportion as the success probability (independent trials).
 - `p-030` (procedure): The fund is inadequate when the total payment (number of qualifying employees times C) exceeds the fund, so the inadequacy probability is P[X > fund/C].
@@ -57,6 +61,9 @@ Ranked by how many questions each page's gaps cost. The page is the one named fo
 - `p-039` (procedure): When an event occurs independently in each of several groups with the same probability P, the probability that it occurs in exactly one of two groups is a binomial probability: 2P(1-P).
 - `p-178` (fact): When each of n independently selected items falls into one of several categories with fixed probabilities, the items are independent and identically distributed, and the category counts follow a multinomial distribution.
 - `p-190` (procedure): Convert a statement about a percentage of items with a property into a count condition on the number of items with the complementary property (e.g., at most 95% error-free out of n means at least 5% of n have errors).
+- `p-262` (procedure): To find an unknown binomial success probability from a stated relationship between two point probabilities, set up the equation between the two pmf expressions and solve for p, e.g. by taking their ratio so p/(1-p) is isolated.
+- `p-399` (fact): When each independent trial falls into exactly one of several mutually exclusive categories with fixed probabilities, the counts in each category over a fixed number of trials follow a multinomial distribution, and the category probabilities must sum to 1.
+- `p-399` (formula): The multinomial probability of counts n1,...,nk in m trials is m!/(n1!···nk!) · p1^n1 ··· pk^nk, where the coefficient counts the orderings of the outcomes.
 - `p-472` (procedure): To solve for an unknown parameter when one probability is a multiple of another, divide the two probability expressions so common factors cancel, leaving a simple equation in the parameter.
 - `p-570` (fact): If each item independently has the same probability of an event, then conditional on exactly k items having the event, the set of k affected items is equally likely to be any k-subset of the n items (a simple random sample without replacement).
 - `p-608` (procedure): To find an unknown binomial probability from a stated ratio of two binomial probabilities, write the ratio of the two pmf expressions so that common factors cancel, leaving the binomial coefficients and a power of the odds (1-p)/p, then solve for the odds.
@@ -65,8 +72,32 @@ Ranked by how many questions each page's gaps cost. The page is the one named fo
 - `p-645` (fact): Given exactly k successes in n independent identical trials, all C(n,k) sets of success positions are equally likely, independent of p, so conditional probabilities can be found by counting favorable sets.
 - `p-650` (definition): A multinomial distribution with n trials and category probabilities p1,...,pk has joint probability function n!/(x1!...xk!) p1^x1...pk^xk, where x1+...+xk = n and each xi counts the trials resulting in category i.
 - `p-650` (fact): In a multinomial distribution with n trials, the count for category i is marginally binomial, so its expected value is n times pi.
+- `p-656` (formula): The trinomial (multinomial with three categories) joint probability function for n trials is p(i,j) = n!/(i! j! (n-i-j)!) p1^i p2^j p3^(n-i-j), where i and j count outcomes of the first two categories and the remainder fall in the third.
+- `p-656` (fact): Each marginal count in a multinomial distribution is binomial, so the number of trials resulting in a given category is Binomial(n, p) with p the probability of that category; equivalently, independent trials each give that category with probability p.
+- `p-664` (procedure): To find the probability of 'at least k' successes in a discrete distribution, sum the probabilities of every outcome from k up to the maximum n.
 
-### `Concepts/Exponential Distribution.md` — 11 question(s)
+### `Concepts/Normal Distribution.md` — 16 question(s)
+
+- `p-068` (fact): The standard normal cumulative probability P(Z <= 2) is approximately 0.9772.
+- `p-072` (fact): For a standard normal Z, P(-z ≤ Z ≤ z) = 2Φ(z) − 1 by symmetry.
+- `p-140` (procedure): When a z-value falls between table entries, linearly interpolate between the adjacent standard normal table values.
+- `p-206` (procedure): Given two known cumulative probabilities of a normal distribution at two points, set up the two equations x1 = μ + z1σ and x2 = μ + z2σ and solve the system for μ and σ.
+- `p-251` (procedure): Translate the event 'the first quantity is at least p percent higher than the second' into the inequality X1 >= (1+p)·X2, and rewrite it as a linear combination D = X1 - (1+p)·X2 compared with 0.
+- `p-345` (procedure): Convert an absolute-value event \|X\| < c into the interval -c < X < c, and for a symmetric standard normal compute P(-a < Z < a) = 2Φ(a) - 1 using the standard normal table.
+- `p-391` (fact): When two normal distributions share the same standard deviation, a standard deviation found from one can be used in the other, so that the same value x can be tied to different percentiles of the two distributions.
+- `p-432` (procedure): To find an unknown standard deviation of a normal distribution, set the given probability equal to the standard normal CDF at the standardized value (x - mean)/sigma, invert it using the standard normal table, and solve for sigma.
+- `p-509` (fact): The probability that a normal random variable exceeds zero depends only on the ratio of its mean to its standard deviation, P[X>0] = P[Z > -mean/SD]. — *the locator quoted text that isn't on the page:* “P(X < Y) &= P(D < 0) \\ > > &= \Phi\!\left(\frac{0 - 20}{25}\right)”
+- `p-556` (procedure): Find the standard normal percentile z_p for a given probability p by looking up the inverse of the standard normal CDF in the normal table.
+- `p-591` (procedure): To find a symmetric interval around the mean containing probability p, set Phi(z) - Phi(-z) = p, which gives Phi(z) = (1 + p)/2 by symmetry of the standard normal (each tail holds (1 - p)/2).
+- `p-596` (procedure): Two probability statements about a normal variable give two equations in mu and sigma, which can be solved simultaneously (e.g., by dividing one standardized equation by the other to eliminate sigma) to find mu and sigma.
+- `p-598` (procedure): With two unknown parameters (mu and sigma), set up two equations from the given information (a moment and a probability) and solve them simultaneously by substitution.
+- `p-666` (procedure): To find the largest standard deviation meeting a probability requirement for a normal variable, set the probability equal to its threshold value and solve for the standard deviation at that boundary.
+- `p-666` (procedure): Convert a central-interval probability into a cumulative probability at the upper endpoint by adding the lower tail area to the interval probability (equivalently, one minus the upper tail area).
+- `p-666` (fact): For a normal distribution with fixed mean, increasing the standard deviation spreads the distribution and decreases the probability of falling in a fixed interval around the mean.
+- `p-678` (fact): The rule that about 68% of probability lies within one standard deviation of the mean applies to the normal distribution, not to all distributions.
+- `p-911` (formula): For X ~ N(mu, sigma^2) and threshold c, E[(X-c)+] = (mu-c)·Phi((mu-c)/sigma) + sigma·phi((mu-c)/sigma), where Phi and phi are the standard normal CDF and PDF.
+
+### `Concepts/Exponential Distribution.md` — 12 question(s)
 
 - `p-028` (procedure): Calibrate the exponential parameter by setting the CDF at a given time equal to the stated probability (proportion) and solving for lambda, then use that lambda to compute the CDF at another time.
 - `p-142` (procedure): To find the exponential rate parameter from a given tail probability P(X > t) = p, set e^{-λt} = p and solve for λ using the natural logarithm, giving λ = -ln(p)/t.
@@ -75,6 +106,8 @@ Ranked by how many questions each page's gaps cost. The page is the one named fo
 - `p-204` (procedure): To find an unknown endpoint, set the interval probabilities equal, solve for the exponential term e^{-r/θ}, and invert it with the natural logarithm to get r = θ ln(1/value).
 - `p-214` (procedure): Convert an average event count over a multi-year period into an annual rate by dividing the count by the number of years.
 - `p-225` (procedure): To solve an equation of the form 1 - e^{-2λ} = k(1 - e^{-λ}), factor 1 - e^{-2λ} as (1 - e^{-λ})(1 + e^{-λ}) to reduce it to a linear equation in e^{-λ}, then solve for λ.
+- `p-430` (procedure): When two random variables are evaluated at the same unknown time T, solve for T (or the common quantity) using one variable's survival probability, then substitute it into the other variable's survival probability to find its parameter.
+- `p-430` (fact): If the exponential survival probabilities at the same time satisfy S_A(T) = S_B(T)^k, then the mean of B is k times the mean of A, since e^{-T/θ_A} = e^{-kT/θ_B}.
 - `p-492` (procedure): To find an exponential distribution's parameter from a given survival probability at a point, set e^{-λx} equal to the given probability at that point and solve (or substitute) for λ.
 - `p-502` (fact): For an exponential distribution, the survival probability over a multiple of a length equals the survival probability over that length raised to that multiple, since e^{-kλx} = (e^{-λx})^k (memoryless property).
 - `p-557` (procedure): To find an unknown exponential parameter from a given probability, set the CDF at the stated point equal to that probability and solve for the mean using the natural logarithm.
@@ -83,29 +116,51 @@ Ranked by how many questions each page's gaps cost. The page is the one named fo
 - `p-559` (fact): Halving the mean of an exponential distribution doubles its rate, which squares its survival probability at any fixed time.
 - `p-586` (fact): The loss amounts and the deductible must be expressed in the same units (e.g., thousands) before comparing them or computing probabilities.
 
-### `Concepts/Normal Distribution.md` — 9 question(s)
+### `Concepts/Poisson Distribution.md` — 12 question(s)
 
-- `p-068` (fact): The standard normal cumulative probability P(Z <= 2) is approximately 0.9772.
-- `p-072` (fact): For a standard normal Z, P(-z ≤ Z ≤ z) = 2Φ(z) − 1 by symmetry.
-- `p-140` (procedure): When a z-value falls between table entries, linearly interpolate between the adjacent standard normal table values.
-- `p-206` (procedure): Given two known cumulative probabilities of a normal distribution at two points, set up the two equations x1 = μ + z1σ and x2 = μ + z2σ and solve the system for μ and σ.
-- `p-509` (fact): The probability that a normal random variable exceeds zero depends only on the ratio of its mean to its standard deviation, P[X>0] = P[Z > -mean/SD]. — *the locator quoted text that isn't on the page:* “P(X < Y) &= P(D < 0) \\ > > &= \Phi\!\left(\frac{0 - 20}{25}\right)”
-- `p-556` (procedure): Find the standard normal percentile z_p for a given probability p by looking up the inverse of the standard normal CDF in the normal table.
-- `p-591` (procedure): To find a symmetric interval around the mean containing probability p, set Phi(z) - Phi(-z) = p, which gives Phi(z) = (1 + p)/2 by symmetry of the standard normal (each tail holds (1 - p)/2).
-- `p-596` (procedure): Two probability statements about a normal variable give two equations in mu and sigma, which can be solved simultaneously (e.g., by dividing one standardized equation by the other to eliminate sigma) to find mu and sigma.
-- `p-598` (procedure): With two unknown parameters (mu and sigma), set up two equations from the given information (a moment and a probability) and solve them simultaneously by substitution.
+- `p-029` (procedure): To find an unknown distribution parameter from a stated relationship between probabilities (e.g., one probability is a multiple of another), write each probability using the pmf, set up the equation, and solve for the parameter.
+- `p-107` (formula): The second raw moment of a Poisson random variable with parameter lambda is E[X^2] = lambda + lambda^2.
+- `p-137` (fact): For a Poisson distribution with mean λ, if λ is an integer the distribution has two consecutive modes at λ-1 and λ; if λ is not an integer the single mode is floor(λ).
+- `p-342` (procedure): To find a Poisson parameter from a ratio of CDF values, write each CDF value as a sum of Poisson probabilities, cancel the common factor e^{-λ}, and solve the resulting polynomial equation in λ (using the quadratic formula and keeping the positive root).
+- `p-425` (procedure): To find an unknown Poisson mean from a given probability of zero events, set e^{-λ} equal to that probability and solve λ = -ln(probability).
+- `p-434` (procedure): To use a stated relationship between probabilities (e.g., one is a multiple of another), set up an equation between the probability expressions themselves, not between the distribution parameters, and solve for the unknown parameter using the natural logarithm.
+- `p-463` (procedure): To recover the Poisson mean from P[X = 0], set e^{-lambda} equal to that probability and solve lambda = -ln(P[X = 0]).
+- `p-603` (procedure): To find an unknown Poisson mean from a condition on the probability of zero events, set e^{-λ} equal to the stated probability and solve for λ by taking natural logarithms.
+- `p-613` (procedure): Translate a stated relation between two Poisson probabilities of zero events into an equation in the parameters (e.g. e^(-λ2) = k·e^(-λ1)) and solve for the unknown parameter by taking natural logarithms.
+- `p-639` (procedure): A cumulative probability P[N ≤ k] for a discrete distribution is found by summing the pmf over all values 0 through k.
+- `p-639` (procedure): A coverage limit on the number of reimbursed claims means nothing is unreimbursed exactly when the claim count is at most the limit, so the event 'no unreimbursed claims' is {N ≤ limit}.
+- `p-674` (fact): A Poisson distribution is right-skewed, so its cumulative probability at the mean is well below what is needed to cover a high probability level; covering such a level requires a limit above the mean.
+- `p-941` (formula): For N ~ Poisson(λ), the probability that N is even equals (1 + e^{-2λ})/2.
+- `p-941` (procedure): Derive P(N even) by summing the Poisson pmf over even n, using the series cosh(λ) = Σ λ^{2k}/(2k)! (or by averaging e^λ and e^{-λ} Taylor series), giving e^{-λ}cosh(λ).
 
-### `Concepts/Deductible.md` — 7 question(s)
+### **no page for Bernoulli Distribution** — 9 question(s)
 
-- `p-051` (fact): A total loss of a vehicle means the damage equals the vehicle's full value, so the payment is the value minus the deductible.
-- `p-155` (procedure): When the deductible's location relative to the discrete loss amounts is unknown, solve piecewise: assume a range for d between consecutive loss amounts, include only the losses exceeding d, solve for d, and verify the solution lies in the assumed range (otherwise reject the case).
-- `p-181` (fact): A payment variable over all losses has a point mass at 0 equal to P(X <= d), so its CDF jumps to P(X <= d) at y = 0. — *the locator quoted text that isn't on the page:* “$Y = 0$ whenever $X \le 1{,}000$, so the CDF of $Y$ jumps at zero: > > $$F_Y(0) = P(X \le 1{,}000) = 1 - e^{-0.2} = 0.1…”
-- `p-194` (procedure): Translate a condition on total cost into a condition on the discrete count by finding the smallest number of events whose total cost (count times per-event cost) exceeds the deductible.
-- `p-448` (fact): A payment after a deductible has a point mass at zero equal to P[X ≤ d], so its distribution is mixed, and for t ≥ 0 the event {payment ≤ t} equals {X ≤ d + t}.
-- `p-465` (procedure): The probability that a loss exceeds the deductible d by at least some amount y is P[X > d + y], which is evaluated with the survival function at d + y.
-- `p-597` (fact): With a deductible of 0, the expected claim payment equals the expected loss, E[X].
+- `p-177` (formula): A Bernoulli random variable with success probability p has variance p(1-p).
+- `p-177` (procedure): Model a payment that depends on whether each of several events occurs as a linear combination of indicator (Bernoulli) random variables, with each payment amount as the coefficient of its indicator.
+- `p-262` (fact): With independent and identical units, the probability that one randomly selected unit is defective equals the per-trial success probability p of the binomial model.
+- `p-308` (procedure): Model a benefit paid only if an event occurs as a random variable taking the benefit amount with the event's probability and 0 otherwise (a scaled Bernoulli), and assign the probabilities from the event and its complement.
+- `p-319` (definition): The number of purchases among independent customers with different success probabilities is a sum of independent (non-identical) Bernoulli trials, and its distribution is found by conditioning on which customers succeed.
+- `p-347` (fact): A 0/1 indicator variable has a Bernoulli distribution, so its mean equals the probability of the event, E[Y] = p.
+- `p-382` (fact): A random variable taking only the values 0 and 1 is a Bernoulli random variable with success probability p equal to the probability it takes the value 1.
+- `p-382` (formula): The variance of a Bernoulli random variable with success probability p is p(1-p).
+- `p-466` (definition): A Bernoulli random variable (indicator) takes only the values 0 and 1, with P(X=1)=p and mean p.
+- `p-466` (formula): The variance of a Bernoulli random variable with success probability p is p(1-p), so its standard deviation is sqrt(p(1-p)).
+- `p-631` (fact): A Bernoulli random variable with success probability p has mean p and variance p(1−p); a 0/1-valued random variable is Bernoulli.
+- `p-940` (procedure): A claim that occurs with probability p and has fixed size c is modeled as c times a Bernoulli(p) variable, so its raw moments are E[X^k] = c^k p.
 
-### `Concepts/Expected Value.md` — 7 question(s)
+### `Concepts/Cumulative Distribution Function (CDF).md` — 9 question(s)
+
+- `p-030` (procedure): Find the largest payment amount by computing cumulative probabilities P[X ≤ k] and finding the smallest integer k whose tail P[X > k] is below the threshold, then setting C = fund/k.
+- `p-137` (fact): The probability of exceeding K is the complement of the cumulative probability: P(X > K) = 1 - P(X ≤ K), so P(X > K) < p is equivalent to P(X ≤ K) > 1 - p.
+- `p-145` (fact): The probability that a total is less than a threshold is the sum of the probabilities of the disjoint events for each admissible total value (cumulative probability).
+- `p-231` (definition): An annual loss corresponds to the profit random variable being below zero, so the probability of a loss is P(X < 0).
+- `p-295` (procedure): Compute P(N ≤ k) for a discrete random variable by summing the probabilities P(N=j) for all j from the minimum value up to k.
+- `p-600` (fact): For a continuous random variable, P(X < x) equals the CDF F(x), since P(X = x) = 0.
+- `p-665` (procedure): To find an upper-tail probability P[X > n] for a discrete count variable, use the complement: 1 minus the cumulative probability P[X <= n], obtained by summing the pmf from 0 through n.
+- `p-674` (fact): All of a random count of claims or services is covered by a maximum-limit policy exactly when the count is less than or equal to the limit, so the probability of full coverage is the cumulative probability P[X ≤ n].
+- `p-913` (procedure): To find the largest integer K with P(N ≤ K) below a threshold for a discrete distribution, compute successive CDF values and find the last K whose CDF is still below the threshold, which is the one just before the CDF first reaches or exceeds it.
+
+### `Concepts/Expected Value.md` — 9 question(s)
 
 - `p-045` (procedure): To find a benefit amount giving a target expected payment, write the expected payment as the benefit amount times a sum of payment-fraction-weighted interval probabilities, set it equal to the target, and solve for the amount.
 - `p-047` (procedure): Model a payment that is zero for the first event and a fixed amount per event thereafter as a function of the count N: payment = amount × (N−1) when N ≥ 1 and 0 when N = 0, i.e. amount × max(N−1, 0).
@@ -114,52 +169,150 @@ Ranked by how many questions each page's gaps cost. The page is the one named fo
 - `p-162` (procedure): A payment that is zero for the first claim and a fixed amount for each subsequent claim is modeled as the fixed amount times (N-1)+ = max(0, N-1), and its expectation is the fixed amount times E[(N-1)+].
 - `p-216` (procedure): A payment of a fixed amount per event beyond a deductible number of events equals the amount times (N - d)_+, so its expected value is the amount times E[(N - d)_+].
 - `p-216` (formula): For a nonnegative integer-valued N, E[min(N, d)] is computed as the sum over k<d of k·P(N=k) plus d·P(N≥d), or equivalently as the sum over k=0..d-1 of P(N>k).
+- `p-405` (fact): When a bonus prize is stated as additional to a base prize, an entry that earns both receives the sum of the two amounts, and outcomes must be defined as mutually exclusive prize levels (base only vs. base plus bonus) before weighting.
+- `p-415` (procedure): Apply a percentage discount to the combined price of the bundle for customers buying both items, giving the revenue per customer in that group.
 - `p-601` (formula): The expected payout per loss with deductible d is E[(X-d)+] = the integral from d to infinity of (x-d) f(x) dx, which equals the integral from d to infinity of the survival function S(x) dx.
 - `p-650` (fact): Expectation is linear, so E[aX + bY] = aE[X] + bE[Y] regardless of whether X and Y are independent.
 - `p-650` (procedure): To find the expected total loss from counts of event types, express total loss as the sum of each event's loss amount times its count, then take the expectation of that expression.
 
-### `Concepts/Poisson Distribution.md` — 7 question(s)
-
-- `p-029` (procedure): To find an unknown distribution parameter from a stated relationship between probabilities (e.g., one probability is a multiple of another), write each probability using the pmf, set up the equation, and solve for the parameter.
-- `p-107` (formula): The second raw moment of a Poisson random variable with parameter lambda is E[X^2] = lambda + lambda^2.
-- `p-137` (fact): For a Poisson distribution with mean λ, if λ is an integer the distribution has two consecutive modes at λ-1 and λ; if λ is not an integer the single mode is floor(λ).
-- `p-463` (procedure): To recover the Poisson mean from P[X = 0], set e^{-lambda} equal to that probability and solve lambda = -ln(P[X = 0]).
-- `p-603` (procedure): To find an unknown Poisson mean from a condition on the probability of zero events, set e^{-λ} equal to the stated probability and solve for λ by taking natural logarithms.
-- `p-613` (procedure): Translate a stated relation between two Poisson probabilities of zero events into an equation in the parameters (e.g. e^(-λ2) = k·e^(-λ1)) and solve for the unknown parameter by taking natural logarithms.
-- `p-639` (procedure): A cumulative probability P[N ≤ k] for a discrete distribution is found by summing the pmf over all values 0 through k.
-- `p-639` (procedure): A coverage limit on the number of reimbursed claims means nothing is unreimbursed exactly when the claim count is at most the limit, so the event 'no unreimbursed claims' is {N ≤ limit}.
-
-### **no page for Complement Rule** — 5 question(s)
+### **no page for Complement Rule** — 8 question(s)
 
 - `p-132` (fact): The complement rule: the count (or probability) of a category not in a set equals the total minus the count (or probability) in the set, e.g., under 25 = total minus over 25.
 - `p-171` (fact): The probability of the union 'A or B' is 1 minus the probability of its complement, 'not A and not B'; here, 'X=0 or Y=0' is the complement of 'X=1 and Y≥1'.
 - `p-218` (procedure): Compute the probability of 'at least k' events as the complement of the sum of the probabilities of fewer than k events, e.g. P(N ≥ 2) = 1 − P(N=0) − P(N=1).
+- `p-285` (procedure): To find the probability that a fixed value lies strictly between the sample minimum and maximum, take the complement: subtract the probability that all observations are below the value and the probability that all are above it (these two events are mutually exclusive).
+- `p-355` (fact): The probability of an event equals one minus the probability of its complement, so P[X >= k] = 1 - P[X <= k-1] for a nonnegative integer-valued X.
+- `p-389` (procedure): To find the probability that no match occurs, compute the complement: count the permutations with at least one fixed point and subtract that count from the total n!.
 - `p-463` (procedure): To find P[X >= 2] for a count variable, subtract the probabilities of the smaller counts from 1: P[X >= 2] = 1 - P[X=0] - P[X=1].
 - `p-570` (procedure): To find the probability that at least one of each of two categories occurs, take the complement: subtract the probability that at least one category is entirely absent (the union of the 'category absent' events).
 
-### `Concepts/Combination.md` — 5 question(s)
+### `Concepts/Deductible.md` — 8 question(s)
 
-- `p-090` (definition): The binomial coefficient C(n,k) = n!/(k!(n−k)!) counts the number of ways to choose k items from n without regard to order.
-- `p-122` (definition): The binomial coefficient C(n,k) = n!/(k!(n-k)!) counts the number of ways to choose k items from n without regard to order.
-- `p-128` (definition): The binomial coefficient C(n,k) = n!/(k!(n−k)!) counts the number of ways to choose k items from n without regard to order.
-- `p-570` (procedure): Count the selections that avoid a given category by choosing all k items from the remaining items outside that category, and the selections that avoid both categories by choosing all k from the items in neither category.
-- `p-608` (formula): The binomial coefficient is C(n,k) = n! / (k!(n-k)!), so for example C(6,0)=1, C(6,1)=6 and C(6,3)=20.
+- `p-051` (fact): A total loss of a vehicle means the damage equals the vehicle's full value, so the payment is the value minus the deductible.
+- `p-155` (procedure): When the deductible's location relative to the discrete loss amounts is unknown, solve piecewise: assume a range for d between consecutive loss amounts, include only the losses exceeding d, solve for d, and verify the solution lies in the assumed range (otherwise reject the case).
+- `p-181` (fact): A payment variable over all losses has a point mass at 0 equal to P(X <= d), so its CDF jumps to P(X <= d) at y = 0. — *the locator quoted text that isn't on the page:* “$Y = 0$ whenever $X \le 1{,}000$, so the CDF of $Y$ jumps at zero: > > $$F_Y(0) = P(X \le 1{,}000) = 1 - e^{-0.2} = 0.1…”
+- `p-194` (procedure): Translate a condition on total cost into a condition on the discrete count by finding the smallest number of events whose total cost (count times per-event cost) exceeds the deductible.
+- `p-396` (fact): A percentile of losses that exceed a deductible is a conditional percentile of the distribution given X > d, not a percentile of the unconditional distribution; conditioning on exceeding the deductible shifts percentiles upward.
+- `p-448` (fact): A payment after a deductible has a point mass at zero equal to P[X ≤ d], so its distribution is mixed, and for t ≥ 0 the event {payment ≤ t} equals {X ≤ d + t}.
+- `p-465` (procedure): The probability that a loss exceeds the deductible d by at least some amount y is P[X > d + y], which is evaluated with the survival function at d + y.
+- `p-597` (fact): With a deductible of 0, the expected claim payment equals the expected loss, E[X].
 
-### `Concepts/Cumulative Distribution Function (CDF).md` — 5 question(s)
-
-- `p-030` (procedure): Find the largest payment amount by computing cumulative probabilities P[X ≤ k] and finding the smallest integer k whose tail P[X > k] is below the threshold, then setting C = fund/k.
-- `p-137` (fact): The probability of exceeding K is the complement of the cumulative probability: P(X > K) = 1 - P(X ≤ K), so P(X > K) < p is equivalent to P(X ≤ K) > 1 - p.
-- `p-145` (fact): The probability that a total is less than a threshold is the sum of the probabilities of the disjoint events for each admissible total value (cumulative probability).
-- `p-231` (definition): An annual loss corresponds to the profit random variable being below zero, so the probability of a loss is P(X < 0).
-- `p-600` (fact): For a continuous random variable, P(X < x) equals the CDF F(x), since P(X = x) = 0.
-
-### `Concepts/Independent Events.md` — 5 question(s)
+### `Concepts/Independent Events.md` — 8 question(s)
 
 - `p-016` (procedure): To find an unknown event probability, translate the verbal statements into probabilities of events (such as a union and a complement), substitute the independence product for the intersection in the union formula, and solve the resulting equation for the unknown.
 - `p-178` (procedure): To find the joint probability that item 1 is of one type and at least one item is of another type, use independence and mutual exclusivity: item 1 cannot itself supply the other type, so multiply P(item 1 of the first type) by the probability that at least one of the remaining items is of the other…
 - `p-210` (fact): If events E and F are independent, then P[E ∩ F] = P[E]·P[F], and the same product rule holds for any event paired with the complement of another (e.g., P[E ∩ F^c] = P[E]·P[F^c]). — *the locator quoted text that isn't on the page:* “> $$P(A \cap B) = P(A) \cdot P(B)$$”
+- `p-263` (definition): Two events are independent if the probability of both occurring equals the product of their individual probabilities, P(A∩B) = P(A)P(B). — *the locator quoted text that isn't on the page:* “> $$P(A \cap B) = P(A) \cdot P(B)$$”
+- `p-263` (fact): If two events are independent, their complements are also independent of each other and of the original events, so probabilities like P(A and not B) equal P(A)(1-P(B)).
+- `p-369` (definition): Two events A and B are independent if and only if P[A ∩ B] = P[A]·P[B]. — *the locator quoted text that isn't on the page:* “> $$P(A \cap B) = P(A) \cdot P(B)$$”
+- `p-369` (fact): If two events are independent, their complements are also independent, so independence of deaths implies independence of survivals.
+- `p-369` (procedure): Given the joint probability of two independent events and one marginal probability, find the other marginal probability by dividing the joint probability by the known marginal probability.
+- `p-408` (procedure): For a randomly selected coin with a known heads probability, the probability of n heads in n tosses given the coin is p^n by independence; a fair coin has p = 1/2 and a two-headed coin has p = 1.
 - `p-531` (fact): If two events A and B are independent, then P(A∩B) = P(A)P(B), and their complements are also independent. — *the locator quoted text that isn't on the page:* “> $$P(A \cap B) = P(A) \cdot P(B)$$”
 - `p-646` (formula): For mutually independent events, the probability that all occur equals the product of their individual probabilities. — *the locator quoted text that isn't on the page:* “> $$P(A_{i_1} \cap A_{i_2} \cap \cdots \cap A_{i_m}) = P(A_{i_1})\,P(A_{i_2}) \cdots P(A_{i_m})$$”
+
+### `Concepts/Combination.md` — 7 question(s)
+
+- `p-090` (definition): The binomial coefficient C(n,k) = n!/(k!(n−k)!) counts the number of ways to choose k items from n without regard to order.
+- `p-122` (definition): The binomial coefficient C(n,k) = n!/(k!(n-k)!) counts the number of ways to choose k items from n without regard to order.
+- `p-128` (definition): The binomial coefficient C(n,k) = n!/(k!(n−k)!) counts the number of ways to choose k items from n without regard to order.
+- `p-304` (procedure): To find the probability that no selected item is of a given type, count the combinations drawn only from the items not of that type (e.g., choose all k from the n minus m other items).
+- `p-403` (fact): When selecting an unordered set using combinations, no multinomial or ordering coefficient is applied, since it would double count.
+- `p-570` (procedure): Count the selections that avoid a given category by choosing all k items from the remaining items outside that category, and the selections that avoid both categories by choosing all k from the items in neither category.
+- `p-608` (formula): The binomial coefficient is C(n,k) = n! / (k!(n-k)!), so for example C(6,0)=1, C(6,1)=6 and C(6,3)=20.
+
+### `Concepts/Hypergeometric Distribution.md` — 7 question(s)
+
+- `p-122` (formula): The multivariate hypergeometric probability of drawing k1,...,km from groups of sizes N1,...,Nm in a sample of size n is the product of C(Ni,ki) over groups divided by C(N,n).
+- `p-149` (procedure): The event that the k-th success occurs exactly on draw n (sampling without replacement) is equivalent to having exactly k-1 successes in the first n-1 draws and a success on draw n.
+- `p-382` (fact): When sampling without replacement from a finite population divided into categories, the counts of each category in the sample follow a multivariate hypergeometric distribution.
+- `p-382` (formula): The probability of drawing a given combination of category counts without replacement is the product of binomial coefficients for each category's count divided by the binomial coefficient for the total sample from the total population.
+- `p-382` (procedure): Conditioning on the count of one category in a fixed-size sample without replacement leaves the remaining draws to be made from the other categories only, with each remaining draw spread across those categories in proportion to their sizes in the population.
+- `p-387` (procedure): To find an unknown parameter such as the number of items d, set the probability expression equal to the given probability and solve the resulting equation, keeping only the root that is a valid positive integer.
+- `p-403` (fact): Selecting items without replacement from a finite population divided into several types, and asking for specified counts of each type, follows the multivariate hypergeometric distribution.
+- `p-403` (formula): The multivariate hypergeometric probability of drawing k_i items from each type i is the product of C(N_i, k_i) over the types divided by C(N, n), where N is the population size and n the sample size.
+- `p-456` (procedure): When only one category matters, combine all other categories into a single 'other' group to reduce a multi-category problem to a two-category one.
+- `p-594` (formula): Under the multivariate hypergeometric distribution, the probability of drawing k1, k2, ..., km items from groups of sizes K1, ..., Km in a sample of n from N without replacement is the product of C(Ki,ki) divided by C(N,n).
+- `p-594` (procedure): To handle conditions like 'no aces or jacks', partition the deck into categories (kings, excluded cards, all other cards) and choose zero cards from the excluded category, with the remaining cards drawn from the other categories to fill the hand size.
+
+### `Concepts/Uniform Continuous Distribution.md` — 7 question(s)
+
+- `p-257` (formula): For a Uniform[a,b] random variable, the second moment is E[X^2] = (a^2 + ab + b^2)/3.
+- `p-442` (procedure): To find the unknown endpoints of a uniform distribution, write the given tail probabilities as equations in a and b and solve the resulting system simultaneously.
+- `p-473` (formula): For a uniform random variable on [0, a], the mean is a/2 and the second moment is a^2/3.
+- `p-610` (fact): A solution of a quadratic equation that lies outside the support of the loss distribution (e.g., a limit above the maximum possible loss) is not valid and is discarded.
+- `p-616` (formula): The sum of the first n squares 1^2 + 2^2 + ... + n^2 equals n(n+1)(2n+1)/6, and the sum of the first n integers equals n(n+1)/2.
+- `p-668` (fact): The median of a uniform distribution on [a, b] is the midpoint (a+b)/2.
+- `p-914` (fact): A point y with a survival probability strictly between 0 and 1 must lie strictly inside the support [a, b], so the uniform survival formula applies there even if the endpoints are unknown (the support may include negative values).
+
+### `Concepts/Discrete Random Variable.md` — 6 question(s)
+
+- `p-116` (fact): For integer-valued X, P(X > N) equals P(X >= N+1).
+- `p-153` (fact): For integer-valued counts, 'more than one' means at least two, 'one or more' means at least one, and 'at least k' includes k and above; these thresholds distinguish otherwise similar events.
+- `p-159` (fact): For an integer-valued random variable, P(N > x) for non-integer x equals P(N >= ceil(x)), so a strict exceedance of a non-integer mean means at least the next integer.
+- `p-460` (fact): The event 'at least one claim' (N > 0) with a maximum of two claims equals the union of the events N = 1 and N = 2, so the claim amount distribution is only defined for these cases.
+- `p-661` (procedure): Translate verbal events about a discrete count (e.g., 'at least one damaged', 'at least one undamaged' out of a fixed total) into inequalities on the random variable, and find the intersection as the set of values satisfying both.
+- `p-936` (procedure): Translate a verbal condition such as 'operates when at least 5 of 8 components work' into an event on the count of working components, e.g., N ≥ 5.
+
+### `Concepts/Independent Random Variables.md` — 6 question(s)
+
+- `p-031` (fact): Drawing each individual at random from a large pool makes the draws independent with constant category probabilities equal to the pool proportions.
+- `p-187` (procedure): For two independent, identically distributed counts, the probability they are equal is the sum over values k of the squared probability P(N=k)^2.
+- `p-211` (procedure): To find the probability that the sum of two independent discrete variables exceeds a value on an event restricted to the first variable, partition on each value of the first variable and use P(N1=i)·P(N2>k−i), by independence.
+- `p-211` (fact): For independent random variables, the joint probability of events factors into the product of their individual probabilities.
+- `p-653` (procedure): Build the distribution of the sum of two independent discrete random variables by enumerating the outcome combinations that produce each sum and adding their probabilities.
+- `p-910` (fact): If X and Y are independent, then any functions of them are independent, so E[X^2 Y^2] = E[X^2]E[Y^2] (the second moment of a product equals the product of second moments).
+- `p-950` (fact): For independent random variables, the joint probability of specific values equals the product of the marginal probabilities, P(X=x, Y=y) = P(X=x)P(Y=y).
+
+### **no page for Linearity of Expectation** — 5 question(s)
+
+- `p-098` (fact): Expectation is linear: the expected total over several periods or several policyholders is the sum of the individual expected values, even without independence.
+- `p-178` (fact): The expected value of a sum of indicator variables equals the sum of their expectations (linearity of expectation), and E[indicator] equals the probability of the event; this also holds for conditional expectations.
+- `p-299` (procedure): Compute the overall expected total by summing the group totals (group size times group per-policyholder mean) across mutually exclusive groups.
+- `p-929` (procedure): Compute E[X^2] indirectly from a factorial-type moment such as E[X(X+1)] by subtracting E[X], using linearity of expectation.
+- `p-935` (fact): By linearity of expectation, the expected present value of a stream of contingent payments is the sum of the expected present values of the individual payments.
+
+### `Concepts/Joint Probability Function.md` — 5 question(s)
+
+- `p-399` (procedure): To get the joint probability of N and C, count the patients in each category among the first n − 1 trials (n − c with no cancer, c − 5 with cancer but not stage IV, 4 with stage IV) and multiply the independent per-patient probabilities raised to the category counts, including the final stage IV pa…
+- `p-467` (procedure): To compute a joint expectation from a formula for p(x,y), evaluate the formula at every point in the support to build a table of cell probabilities, and check that they sum to 1.
+- `p-467` (fact): In general the expectation of a ratio is not the ratio of expectations, so E[Y/X] must be computed directly from the joint distribution rather than as E[Y]/E[X].
+- `p-514` (procedure): Total revenue from selling all available units is modeled as the product of the number of units and the price per unit, so expected revenue is the expected value of that product.
+- `p-520` (definition): A joint probability mass function gives the probability of each combination of values of discrete random variables; when probabilities are proportional to a given expression, each probability equals that expression's weight divided by the total of all weights.
+- `p-606` (procedure): Evaluate a joint probability function formula at each support point (x,y) to build the table of joint probabilities, using a common denominator.
+
+### `Concepts/Probability Density Function (PDF).md` — 5 question(s)
+
+- `p-143` (fact): A density specified only up to proportionality has a normalizing constant that does not affect the location of its maximum, so the mode can be found by maximizing the unnormalized kernel.
+- `p-144` (fact): A density given only as proportional to a function has a constant of proportionality that does not affect the location of its maximum, so the mode can be found from the unnormalized function.
+- `p-353` (procedure): When a random variable is measured in units (e.g., tens of thousands), convert the stated amounts into those units before evaluating the CDF.
+- `p-374` (fact): A density function is defined as zero outside its stated support, and critical points outside the support cannot be the mode.
+- `p-601` (fact): When the density is zero below a threshold, the integral for the expected payout starts at the larger of the deductible and the threshold; here the deductible exceeds the threshold, so the integration begins at the deductible.
+
+### `Concepts/Probability Mass Function (PMF).md` — 5 question(s)
+
+- `p-013` (procedure): A recursive relation p(n+1) = r·p(n) between successive probabilities can be solved by iterating it to get p(n) = r^n · p(0).
+- `p-343` (fact): A random variable that cannot be negative has P[X ≥ 0] = 1, so the tail probability at the lowest support point is 1.
+- `p-343` (procedure): Recover a discrete probability mass function from tail probabilities by differencing consecutive values: p(x) = P[X ≥ x] − P[X ≥ x+1], with p at the largest support point equal to P[X ≥ that point].
+- `p-413` (procedure): When the number of trials is capped at n, the capped value n has probability equal to the sum of the probability that the target is reached exactly at n and the probability it is never reached; this is found as 1 minus the probabilities of all smaller values.
+- `p-569` (fact): The probability that a count is less than two equals the sum of the probabilities that it equals zero and equals one, since these outcomes are mutually exclusive.
+- `p-602` (procedure): Translate verbal ratio conditions between probabilities of outcomes (e.g., 'P of A is k times P of B') into equations, and express all probabilities in terms of one unknown by chaining the ratios.
+
+### `Concepts/The Law of Total Probability.md` — 5 question(s)
+
+- `p-015` (fact): The event that a sum of nonnegative integer-valued random variables equals k is the disjoint union of the events {N1=i, N2=k−i} for i=0,...,k, so their probabilities can be added.
+- `p-154` (procedure): When conditional probabilities are related by stated multiples, express them all in terms of one unknown base conditional probability, then solve for it using the total probability equation.
+- `p-199` (fact): For mutually exclusive categories, the probability of a union of categories given an event is the sum of the individual categories' conditional probabilities given that event.
+- `p-363` (procedure): Prior probabilities of mutually exclusive, exhaustive groups are found as each group's share of the total population (group size divided by total size).
+- `p-647` (procedure): To find an unknown mixing probability (e.g., P[Heads]), express a given probability or CDF value as a function of that parameter via total probability and solve the resulting equation for it, then substitute it into the target probability.
+
+### **no page for Fundamental Counting Principle** — 4 question(s)
+
+- `p-097` (fact): Multiplication rule: if a selection is made in successive stages with m1, m2, ... choices at each stage, the total number of outcomes is the product m1*m2*....
+- `p-185` (fact): The multiplication principle: when a selection is made in successive stages, the total number of outcomes is the product of the number of choices at each stage.
+- `p-424` (fact): Multiplication (fundamental counting) principle: when a task is built in independent stages, the total number of outcomes is the product of the number of choices at each stage.
+- `p-424` (procedure): To count arrangements under a positional constraint (e.g., the first position must hold a letter), fix the constrained position first, then arrange the remaining items in the remaining positions, then fill the other positions.
+- `p-524` (fact): When selections are made independently from disjoint categories, the total number of selections is the product of the number of ways for each category (multiplication rule).
 
 ### **no page for Geometric Series** — 4 question(s)
 
@@ -168,70 +321,75 @@ Ranked by how many questions each page's gaps cost. The page is the one named fo
 - `p-108` (formula): The sum of a finite geometric series with first term a and ratio r is a(1 - r^N)/(1 - r), for r not equal to 1.
 - `p-148` (formula): A geometric series with common ratio \|r\| < 1 sums to Σ_{k=0}^∞ r^k = 1/(1 - r).
 
-### `Concepts/Discrete Random Variable.md` — 4 question(s)
-
-- `p-116` (fact): For integer-valued X, P(X > N) equals P(X >= N+1).
-- `p-153` (fact): For integer-valued counts, 'more than one' means at least two, 'one or more' means at least one, and 'at least k' includes k and above; these thresholds distinguish otherwise similar events.
-- `p-159` (fact): For an integer-valued random variable, P(N > x) for non-integer x equals P(N >= ceil(x)), so a strict exceedance of a non-integer mean means at least the next integer.
-- `p-460` (fact): The event 'at least one claim' (N > 0) with a maximum of two claims equals the union of the events N = 1 and N = 2, so the claim amount distribution is only defined for these cases.
-
-### `Concepts/Hypergeometric Distribution.md` — 4 question(s)
-
-- `p-122` (formula): The multivariate hypergeometric probability of drawing k1,...,km from groups of sizes N1,...,Nm in a sample of size n is the product of C(Ni,ki) over groups divided by C(N,n).
-- `p-149` (procedure): The event that the k-th success occurs exactly on draw n (sampling without replacement) is equivalent to having exactly k-1 successes in the first n-1 draws and a success on draw n.
-- `p-456` (procedure): When only one category matters, combine all other categories into a single 'other' group to reduce a multi-category problem to a two-category one.
-- `p-594` (formula): Under the multivariate hypergeometric distribution, the probability of drawing k1, k2, ..., km items from groups of sizes K1, ..., Km in a sample of n from N without replacement is the product of C(Ki,ki) divided by C(N,n).
-- `p-594` (procedure): To handle conditions like 'no aces or jacks', partition the deck into categories (kings, excluded cards, all other cards) and choose zero cards from the excluded category, with the remaining cards drawn from the other categories to fill the hand size.
-
-### `Concepts/Independent Random Variables.md` — 4 question(s)
-
-- `p-031` (fact): Drawing each individual at random from a large pool makes the draws independent with constant category probabilities equal to the pool proportions.
-- `p-187` (procedure): For two independent, identically distributed counts, the probability they are equal is the sum over values k of the squared probability P(N=k)^2.
-- `p-211` (procedure): To find the probability that the sum of two independent discrete variables exceeds a value on an event restricted to the first variable, partition on each value of the first variable and use P(N1=i)·P(N2>k−i), by independence.
-- `p-211` (fact): For independent random variables, the joint probability of events factors into the product of their individual probabilities.
-- `p-653` (procedure): Build the distribution of the sum of two independent discrete random variables by enumerating the outcome combinations that produce each sum and adding their probabilities.
-
-### `Concepts/Joint Probability Function.md` — 4 question(s)
-
-- `p-467` (procedure): To compute a joint expectation from a formula for p(x,y), evaluate the formula at every point in the support to build a table of cell probabilities, and check that they sum to 1.
-- `p-467` (fact): In general the expectation of a ratio is not the ratio of expectations, so E[Y/X] must be computed directly from the joint distribution rather than as E[Y]/E[X].
-- `p-514` (procedure): Total revenue from selling all available units is modeled as the product of the number of units and the price per unit, so expected revenue is the expected value of that product.
-- `p-520` (definition): A joint probability mass function gives the probability of each combination of values of discrete random variables; when probabilities are proportional to a given expression, each probability equals that expression's weight divided by the total of all weights.
-- `p-606` (procedure): Evaluate a joint probability function formula at each support point (x,y) to build the table of joint probabilities, using a common denominator.
-
-### `Concepts/The Law of Total Probability.md` — 4 question(s)
-
-- `p-015` (fact): The event that a sum of nonnegative integer-valued random variables equals k is the disjoint union of the events {N1=i, N2=k−i} for i=0,...,k, so their probabilities can be added.
-- `p-154` (procedure): When conditional probabilities are related by stated multiples, express them all in terms of one unknown base conditional probability, then solve for it using the total probability equation.
-- `p-199` (fact): For mutually exclusive categories, the probability of a union of categories given an event is the sum of the individual categories' conditional probabilities given that event.
-- `p-647` (procedure): To find an unknown mixing probability (e.g., P[Heads]), express a given probability or CDF value as a function of that parameter via total probability and solve the resulting equation for it, then substitute it into the target probability.
-
-### `Concepts/Uniform Continuous Distribution.md` — 4 question(s)
-
-- `p-442` (procedure): To find the unknown endpoints of a uniform distribution, write the given tail probabilities as equations in a and b and solve the resulting system simultaneously.
-- `p-473` (formula): For a uniform random variable on [0, a], the mean is a/2 and the second moment is a^2/3.
-- `p-610` (fact): A solution of a quadratic equation that lies outside the support of the loss distribution (e.g., a limit above the maximum possible loss) is not valid and is discarded.
-- `p-616` (formula): The sum of the first n squares 1^2 + 2^2 + ... + n^2 equals n(n+1)(2n+1)/6, and the sum of the first n integers equals n(n+1)/2.
-
-### **no page for Bernoulli Distribution** — 3 question(s)
-
-- `p-177` (formula): A Bernoulli random variable with success probability p has variance p(1-p).
-- `p-177` (procedure): Model a payment that depends on whether each of several events occurs as a linear combination of indicator (Bernoulli) random variables, with each payment amount as the coefficient of its indicator.
-- `p-466` (definition): A Bernoulli random variable (indicator) takes only the values 0 and 1, with P(X=1)=p and mean p.
-- `p-466` (formula): The variance of a Bernoulli random variable with success probability p is p(1-p), so its standard deviation is sqrt(p(1-p)).
-- `p-631` (fact): A Bernoulli random variable with success probability p has mean p and variance p(1−p); a 0/1-valued random variable is Bernoulli.
-
-### **no page for Fundamental Counting Principle** — 3 question(s)
-
-- `p-097` (fact): Multiplication rule: if a selection is made in successive stages with m1, m2, ... choices at each stage, the total number of outcomes is the product m1*m2*....
-- `p-185` (fact): The multiplication principle: when a selection is made in successive stages, the total number of outcomes is the product of the number of choices at each stage.
-- `p-524` (fact): When selections are made independently from disjoint categories, the total number of selections is the product of the number of ways for each category (multiplication rule).
-
-### **no page for Piecewise Density Functions** — 3 question(s)
+### **no page for Piecewise Density Functions** — 4 question(s)
 
 - `p-043` (procedure): When the density involves an absolute value, split the integral at the point where the expression inside the absolute value changes sign and replace \|x\| with -x for x<0 and x for x>0 on the respective pieces.
+- `p-392` (procedure): For a piecewise-defined density, integrate each branch over its own subinterval and add the results; if the interval of interest lies entirely within one piece, integrate only that branch.
 - `p-443` (procedure): To integrate a function against a piecewise-defined density, split the integral at every breakpoint of both the density and the integrand, and on each subinterval use the matching branch of each.
 - `p-571` (procedure): For a density defined with an absolute value, split the integral at the point where the argument changes sign and replace \|x\| with -x on the negative piece and x on the positive piece.
+
+### `Concepts/Inclusion-Exclusion Principle.md` — 4 question(s)
+
+- `p-014` (fact): When each outcome belongs to exactly two of the listed events, summing the individual event probabilities counts each outcome twice, so the total of the individual probabilities equals twice the probability of the union of the outcomes.
+- `p-087` (procedure): Translate 'exactly two of the three products' into the sum of pairwise intersection probabilities when the triple intersection is empty, so that the sum of pairwise intersections equals the given percentage.
+- `p-389` (formula): Inclusion-exclusion: the number of permutations with at least one fixed point is the alternating sum over k of (-1)^(k+1) * C(n,k) * (n-k)!, where C(n,k)(n-k)! counts permutations fixing a chosen set of k items.
+- `p-658` (procedure): Regroup the terms of the three-event inclusion-exclusion expression so that P[A]+P[C]−P[A∩C] is replaced by the given P[A∪C], avoiding the need to know P[A] and P[C] individually.
+
+### `Concepts/Linear Combinations of Random Variables.md` — 4 question(s)
+
+- `p-250` (procedure): Convert miles driven into fuel cost by dividing miles by miles per gallon and multiplying by the price per gallon, then sum across vehicles to get total cost as a linear combination of the mileages.
+- `p-527` (procedure): When given variances of several linear combinations of X and Y, expand each with the variance formula to get a system of equations in the unknown variance and covariance, then solve the system simultaneously.
+- `p-575` (definition): Overall profit being positive over a period means the total (sum) of the period's profits, with losses counted as negative values, exceeds zero.
+- `p-588` (fact): The time until the nth failure when failed items are replaced immediately is the sum of the n individual lifetimes.
+
+### `Concepts/Percentile.md` — 4 question(s)
+
+- `p-384` (procedure): To combine two distributions through a percentile-matching condition, find the common value x from the first distribution's percentile equation, then set the second distribution's CDF at that x equal to its matched probability level, expressed in terms of x.
+- `p-484` (procedure): To find an unknown distribution parameter from a condition equating percentiles of two distributions, compute each percentile as a function of the parameters, set them equal, and solve for the unknown, then substitute it into dependent parameters.
+- `p-523` (procedure): To match percentiles of two distributions, set the two percentile expressions equal (same loss amount), express each in terms of its own mean, standard deviation and z-value, and solve for the unknown percentile, noting that common parameters like k cancel.
+- `p-593` (fact): Percentiles of a normal distribution are not proportional to the values they mark, because the normal cdf is nonlinear.
+
+### `Concepts/Venn Diagram.md` — 4 question(s)
+
+- `p-182` (procedure): Partition the union of several events into disjoint regions of a Venn diagram (only one set, exactly two sets, all three sets) and assign an unknown count to each region.
+- `p-183` (procedure): Partition the union of three sets into seven disjoint regions (only one set, exactly two sets, all three) and express each set's total count as the sum of its regions.
+- `p-183` (procedure): Translate verbal conditions (such as 'x more own only L than only A' and 'total owning exactly one type') into linear equations among the region counts and solve the resulting system.
+- `p-367` (definition): A Venn diagram of three events partitions the sample space into eight disjoint regions: only one event (three regions), exactly two events (three regions), all three events, and none of the events.
+- `p-367` (fact): The total count for one event equals the sum of its 'only' region, the two exactly-two-event regions that include it, and the all-three region.
+- `p-367` (procedure): To find the total number of items in a union-with-complement setting, add the counts of all disjoint Venn regions, including the region outside all events.
+- `p-445` (procedure): Partition the union of three events into seven disjoint Venn regions (only one, exactly two, all three) plus the region outside all events, and set up equations for each event's total as the sum of its regions.
+- `p-445` (fact): The size of each event equals the sum of its 'only' region, the region common to all three events, and the two 'exactly two' regions that overlap it.
+
+### **no page for Binomial Coefficient** — 3 question(s)
+
+- `p-262` (formula): The binomial coefficient is C(n,k) = n!/(k!(n-k)!), so the ratio C(n,k+1)/C(n,k) = (n-k)/(k+1).
+- `p-500` (formula): The binomial coefficient C(n,k) = n!/(k!(n-k)!) counts the number of ways to choose k items from n.
+- `p-929` (fact): Pascal's rule states that C(j+1,k) = C(j,k) + C(j,k-1).
+
+### **no page for Conditional Expectation** — 3 question(s)
+
+- `p-208` (definition): The mean lifetime given survival less than a limit is a conditional expectation E[T \| T < c] = E[T·1(T<c)] / P(T<c).
+- `p-218` (formula): The conditional expectation of N given an event A is E[N \| A] = E[N · 1_A] / P(A); for N ≥ 2 this equals (E[N] − Σ_{k<2} k·P(N=k)) / P(N ≥ 2).
+- `p-218` (procedure): To find the mean of a discrete variable conditioned on N ≥ 2, subtract the contributions of the excluded values (0·P(N=0) + 1·P(N=1)) from the unconditional mean and divide by P(N ≥ 2).
+- `p-950` (formula): The conditional expectation of X given an event A is E[X \| A] = Σ x P(X=x, A) / P(A), i.e., the sum of x times the joint probability of x and A, divided by P(A).
+
+### **no page for Equally Likely Outcomes** — 3 question(s)
+
+- `p-332` (fact): When independent fair dice are thrown, all ordered outcomes are equally likely, so the sample space for n dice has 6^n equally likely outcomes.
+- `p-405` (fact): If one of m equally likely items is designated at random, a designation matches a given target with probability 1/m and misses with probability (m-1)/m.
+- `p-549` (fact): When people are seated randomly, every seat is equally likely for a given person, so the position of one person can be fixed by symmetry and the other person is equally likely to occupy any remaining seat.
+
+### **no page for Survival Function** — 3 question(s)
+
+- `p-091` (definition): The survival function is S(t) = P(T > t) = 1 - F(t), where F is the cumulative distribution function of the lifetime T.
+- `p-343` (definition): The survival (tail) function of a discrete random variable is S(x) = P[X ≥ x] (or P[X > x]), the probability that the variable is at least (or exceeds) a given value.
+- `p-576` (definition): The event that a lifetime fails within t months is {X < t}, and that it is still working after a months is the survival event {X > a}, with survival probability P(X > a) = 1 − F(a).
+
+### `Concepts/Geometric Distribution.md` — 3 question(s)
+
+- `p-360` (procedure): To find the distribution of the 'most recent event' time, split into mutually exclusive cases: the last event occurred in a given year if it occurred that year and no event occurred in any later year; cases with no event in the entire period carry zero surcharge.
+- `p-503` (procedure): To find an unknown success probability from a given probability that the first success occurs on trial k, set the geometric pmf equal to the given value and solve the resulting polynomial equation for p.
+- `p-538` (fact): The geometric probability mass function is strictly decreasing in n, so its mode is always the smallest support value regardless of p.
 
 ### `Concepts/Limited Expected Value.md` — 3 question(s)
 
@@ -239,48 +397,34 @@ Ranked by how many questions each page's gaps cost. The page is the one named fo
 - `p-219` (procedure): To find an unknown deductible, set the expression for E[min(X,d)] equal to the given expected retained amount, solve the resulting quadratic in d, and keep the root lying within the loss support [0, θ].
 - `p-563` (procedure): To compute the expected value of a limited loss, split the expectation at the limit: integrate x·f(x) from 0 to d and add d times the survival probability P(X > d).
 
-### `Concepts/Linear Combinations of Random Variables.md` — 3 question(s)
+### `Concepts/Negative Binomial Distribution.md` — 3 question(s)
 
-- `p-527` (procedure): When given variances of several linear combinations of X and Y, expand each with the variance formula to get a system of equations in the unknown variance and covariance, then solve the system simultaneously.
-- `p-575` (definition): Overall profit being positive over a period means the total (sum) of the period's profits, with losses counted as negative values, exceeds zero.
-- `p-588` (fact): The time until the nth failure when failed items are replaced immediately is the sum of the n individual lifetimes.
+- `p-041` (fact): The event that at least r successes occur before the s-th failure in independent trials is equivalent to having at least r successes in the first r+s-1 trials.
+- `p-558` (fact): In the negative binomial probability, the binomial coefficient counts arrangements only among the first n-1 trials because the final trial must be a success; using C(n, r) instead counts a different event (exactly r successes anywhere in n trials).
+- `p-659` (procedure): The binomial coefficient C(x-1, r-1) counts the placements of the first r-1 successes among the first x-1 trials, because the r-th success is fixed on trial x.
 
-### `Concepts/Percentile.md` — 3 question(s)
+### `Concepts/Order Statistics.md` — 3 question(s)
 
-- `p-484` (procedure): To find an unknown distribution parameter from a condition equating percentiles of two distributions, compute each percentile as a function of the parameters, set them equal, and solve for the unknown, then substitute it into dependent parameters.
-- `p-523` (procedure): To match percentiles of two distributions, set the two percentile expressions equal (same loss amount), express each in terms of its own mean, standard deviation and z-value, and solve for the unknown percentile, noting that common parameters like k cancel.
-- `p-593` (fact): Percentiles of a normal distribution are not proportional to the values they mark, because the normal cdf is nonlinear.
+- `p-079` (fact): The maximum of several random variables is less than or equal to a value x if and only if every one of the variables is less than or equal to x.
+- `p-179` (definition): The second largest of a set of selected integers is the order statistic such that exactly one selected value lies above it and the remaining selected values lie below it.
+- `p-179` (fact): The support of the second largest of four values drawn from 1..n requires at least 2 values below x and at least 1 above, so p(x)>0 only for x from 3 to n-1.
+- `p-344` (definition): The median of a sample of odd size n is the middle order statistic, i.e. the ((n+1)/2)-th smallest value (the second order statistic for a sample of 3).
 
-### `Concepts/Probability Density Function (PDF).md` — 3 question(s)
+### `Concepts/Permutation.md` — 3 question(s)
 
-- `p-143` (fact): A density specified only up to proportionality has a normalizing constant that does not affect the location of its maximum, so the mode can be found by maximizing the unnormalized kernel.
-- `p-144` (fact): A density given only as proportional to a function has a constant of proportionality that does not affect the location of its maximum, so the mode can be found from the unnormalized function.
-- `p-601` (fact): When the density is zero below a threshold, the integral for the expected payout starts at the larger of the deductible and the threshold; here the deductible exceeds the threshold, so the integration begins at the deductible.
-
-### `Concepts/Probability Mass Function (PMF).md` — 3 question(s)
-
-- `p-013` (procedure): A recursive relation p(n+1) = r·p(n) between successive probabilities can be solved by iterating it to get p(n) = r^n · p(0).
-- `p-569` (fact): The probability that a count is less than two equals the sum of the probabilities that it equals zero and equals one, since these outcomes are mutually exclusive.
-- `p-602` (procedure): Translate verbal ratio conditions between probabilities of outcomes (e.g., 'P of A is k times P of B') into equations, and express all probabilities in terms of one unknown by chaining the ratios.
-
-### `Concepts/Venn Diagram.md` — 3 question(s)
-
-- `p-182` (procedure): Partition the union of several events into disjoint regions of a Venn diagram (only one set, exactly two sets, all three sets) and assign an unknown count to each region.
-- `p-183` (procedure): Partition the union of three sets into seven disjoint regions (only one set, exactly two sets, all three) and express each set's total count as the sum of its regions.
-- `p-183` (procedure): Translate verbal conditions (such as 'x more own only L than only A' and 'total owning exactly one type') into linear equations among the region counts and solve the resulting system.
-- `p-445` (procedure): Partition the union of three events into seven disjoint Venn regions (only one, exactly two, all three) plus the region outside all events, and set up equations for each event's total as the sum of its regions.
-- `p-445` (fact): The size of each event equals the sum of its 'only' region, the region common to all three events, and the two 'exactly two' regions that overlap it.
-
-### **no page for Conditional Expectation** — 2 question(s)
-
-- `p-208` (definition): The mean lifetime given survival less than a limit is a conditional expectation E[T \| T < c] = E[T·1(T<c)] / P(T<c).
-- `p-218` (formula): The conditional expectation of N given an event A is E[N \| A] = E[N · 1_A] / P(A); for N ≥ 2 this equals (E[N] − Σ_{k<2} k·P(N=k)) / P(N ≥ 2).
-- `p-218` (procedure): To find the mean of a discrete variable conditioned on N ≥ 2, subtract the contributions of the excluded values (0·P(N=0) + 1·P(N=1)) from the unconditional mean and divide by P(N ≥ 2).
+- `p-097` (procedure): Count sequential choices with restrictions: for each successive column, the number of allowed rows is the total rows minus the rows already used by earlier selections.
+- `p-389` (fact): The number of permutations that fix a specified set of k items is (n-k)!, since the remaining n-k items can be arranged arbitrarily.
+- `p-549` (procedure): To count arrangements where certain items must be adjacent, treat them as a single block, arrange the resulting units, and multiply by the number of internal orderings of the block.
 
 ### **no page for Convolution of Independent Random Variables** — 2 question(s)
 
 - `p-015` (procedure): The distribution of a sum of two independent discrete random variables is found by convolution: P[X+Y=k] = sum over i of P[X=i]·P[Y=k−i], with the sum running over all i from 0 to k when both variables take nonnegative integer values.
 - `p-569` (procedure): To find the probability that a total count across two independent groups equals a given value, enumerate the ways the count can be split between the groups (e.g., one loss total is one from group A and none from B, or none from A and one from B) and add the probabilities of these mutually exclusive…
+
+### **no page for Counting Principles** — 2 question(s)
+
+- `p-097` (fact): Selecting three items with no two sharing a row or column requires them to lie in three distinct columns, so one first chooses which columns are used.
+- `p-332` (procedure): To count outcomes with exactly two matching dice, use the multiplication principle: choose the repeated value, choose which two dice form the pair, then choose a different value for the remaining die, and multiply the counts.
 
 ### **no page for Discrete Uniform Distribution** — 2 question(s)
 
@@ -292,11 +436,6 @@ Ranked by how many questions each page's gaps cost. The page is the one named fo
 - `p-010` (definition): Two events A and B are independent if and only if P(A ∩ B) = P(A)P(B). — *the locator quoted text that isn't on the page:* “> $$P(A \cap B) = P(A) \cdot P(B)$$”
 - `p-010` (fact): If events A and B are independent, then their complements are also independent, so P(A^c ∩ B^c) = P(A^c)P(B^c).
 - `p-120` (definition): Two events A and B are independent if and only if P(A ∩ B) = P(A)P(B). — *the locator quoted text that isn't on the page:* “> $$P(A \cap B) = P(A) \cdot P(B)$$”
-
-### **no page for Linearity of Expectation** — 2 question(s)
-
-- `p-098` (fact): Expectation is linear: the expected total over several periods or several policyholders is the sum of the individual expected values, even without independence.
-- `p-178` (fact): The expected value of a sum of indicator variables equals the sum of their expectations (linearity of expectation), and E[indicator] equals the probability of the event; this also holds for conditional expectations.
 
 ### **no page for Logarithm Properties** — 2 question(s)
 
@@ -318,15 +457,15 @@ Ranked by how many questions each page's gaps cost. The page is the one named fo
 - `p-008` (procedure): Translate a verbal description of event probabilities (both, neither, one exceeds the other by a constant) into probability equations on events, then substitute into the union formula and solve for the unknown probability.
 - `p-643` (fact): The phrase "not more than n" means X ≤ n, so the value n itself is included in the event.
 
+### **no page for Probability of a Union of Events** — 2 question(s)
+
+- `p-312` (procedure): The event 'exactly one of A or B occurs' has probability P(A ∪ B) − P(A ∩ B), i.e., the union excluding the intersection.
+- `p-445` (fact): The total population equals the sum of all disjoint regions: those in exactly one set, exactly two sets, all three sets, and none of the sets.
+
 ### **no page for Sums of Independent Random Variables** — 2 question(s)
 
 - `p-241` (procedure): The ending value of a investment equals the initial value plus the sum of the periodic changes, so a probability about the final value is converted into a probability about the sum of changes.
 - `p-490` (procedure): To find the probability of a total count across independent groups, enumerate the disjoint ways the group counts can sum to that total, and add the probabilities of those cases.
-
-### **no page for Survival Function** — 2 question(s)
-
-- `p-091` (definition): The survival function is S(t) = P(T > t) = 1 - F(t), where F is the cumulative distribution function of the lifetime T.
-- `p-576` (definition): The event that a lifetime fails within t months is {X < t}, and that it is still working after a months is the survival event {X > a}, with survival probability P(X > a) = 1 − F(a).
 
 ### **no page for Symmetric Distributions** — 2 question(s)
 
@@ -338,36 +477,35 @@ Ranked by how many questions each page's gaps cost. The page is the one named fo
 - `p-109` (fact): Dividing a uniform random variable on [0, b] by a constant c gives a uniform random variable on [0, b/c].
 - `p-237` (procedure): Translate a waiting-time condition into a range of arrival times: a vehicle arriving during a blockage waits until the blockage ends, so waiting time exceeding a threshold means arriving in the early part of the blockage window (before the end minus the threshold).
 
-### `Concepts/Geometric Distribution.md` — 2 question(s)
+### `Concepts/Bayes Theorem.md` — 2 question(s)
 
-- `p-503` (procedure): To find an unknown success probability from a given probability that the first success occurs on trial k, set the geometric pmf equal to the given value and solve the resulting polynomial equation for p.
-- `p-538` (fact): The geometric probability mass function is strictly decreasing in n, so its mode is always the smallest support value regardless of p.
+- `p-150` (procedure): Restrict the sum in the denominator to the values of the conditioning variable for which the observed outcome has positive probability, since terms with zero conditional probability contribute nothing.
+- `p-398` (fact): Observing favorable (claim-free) experience shifts the posterior weight toward the lower-risk class, so the conditional probability of further favorable outcomes exceeds the unconditional probability.
 
-### `Concepts/Inclusion-Exclusion Principle.md` — 2 question(s)
+### `Concepts/Mutually Exclusive Events.md` — 2 question(s)
 
-- `p-014` (fact): When each outcome belongs to exactly two of the listed events, summing the individual event probabilities counts each outcome twice, so the total of the individual probabilities equals twice the probability of the union of the outcomes.
-- `p-087` (procedure): Translate 'exactly two of the three products' into the sum of pairwise intersection probabilities when the triple intersection is empty, so that the sum of pairwise intersections equals the given percentage.
-
-### `Concepts/Negative Binomial Distribution.md` — 2 question(s)
-
-- `p-041` (fact): The event that at least r successes occur before the s-th failure in independent trials is equivalent to having at least r successes in the first r+s-1 trials.
-- `p-558` (fact): In the negative binomial probability, the binomial coefficient counts arrangements only among the first n-1 trials because the final trial must be a success; using C(n, r) instead counts a different event (exactly r successes anywhere in n trials).
-
-### `Concepts/Order Statistics.md` — 2 question(s)
-
-- `p-079` (fact): The maximum of several random variables is less than or equal to a value x if and only if every one of the variables is less than or equal to x.
-- `p-179` (definition): The second largest of a set of selected integers is the order statistic such that exactly one selected value lies above it and the remaining selected values lie below it.
-- `p-179` (fact): The support of the second largest of four values drawn from 1..n requires at least 2 values below x and at least 1 above, so p(x)>0 only for x from 3 to n-1.
-
-### `Concepts/Permutation.md` — 2 question(s)
-
-- `p-097` (procedure): Count sequential choices with restrictions: for each successive column, the number of allowed rows is the total rows minus the rows already used by earlier selections.
-- `p-549` (procedure): To count arrangements where certain items must be adjacent, treat them as a single block, arrange the resulting units, and multiply by the number of internal orderings of the block.
+- `p-192` (fact): Events defined by claim counts in different time periods (e.g., different years) can occur together unless dependence or other constraints rule it out, so they are generally not disjoint; only events that put contradictory conditions on the same period are disjoint.
+- `p-346` (fact): If A∩C and B∩C are empty, then A∩B∩C is also empty and has probability zero, since it is a subset of each.
 
 ### `Concepts/Policy Limit.md` — 2 question(s)
 
 - `p-061` (procedure): To find the median of a capped variable Y = X ∧ u, compute the median of X; if it is below u, it is also the median of Y, otherwise the median of Y equals u.
 - `p-131` (procedure): To find the CDF of a capped variable X = min(Y, u), for x below u the event {X ≤ x} equals {Y ≤ x} so F_X(x) = F_Y(x), and for x ≥ u, F_X(x) = 1.
+
+### `Concepts/Probability.md` — 2 question(s)
+
+- `p-189` (procedure): To find the probability of a loss, set total payouts greater than total premium or revenue, and convert this inequality into a condition on the number of winners (payout per winner times W exceeds revenue).
+- `p-935` (fact): The probability of being alive at the end of year k is the product of the conditional one-year survival probabilities for years 1 through k.
+
+### `Concepts/Standard Deviation.md` — 2 question(s)
+
+- `p-058` (procedure): To find the proportion of outcomes within one standard deviation of the mean, form the interval [μ − σ, μ + σ] and add the probabilities of all values of the discrete distribution lying in that interval.
+- `p-326` (procedure): To find the probability that X is within k standard deviations of its mean, rewrite the event \|X-μ\| ≤ kσ as the interval μ-kσ ≤ X ≤ μ+kσ and compute the probability over that interval (restricting to the support of X).
+
+### `Concepts/Transformations of Random Variables.md` — 2 question(s)
+
+- `p-240` (fact): Multiplying a random variable by a constant multiplies its percentiles by that constant, so the total benefit's percentile equals the benefit amount times the percentile of the number of deaths.
+- `p-963` (fact): Applying a decreasing function or multiplying/dividing both sides of an inequality by a negative number reverses the direction of the inequality, so P(g(X) ≤ y) becomes an upper-tail probability for X when g is decreasing.
 
 ### **no page for Absolute Value** — 1 question(s)
 
@@ -377,6 +515,14 @@ Ranked by how many questions each page's gaps cost. The page is the one named fo
 
 - `p-443` (definition): The absolute value \|x - a\| equals a - x when x < a and x - a when x ≥ a, so it is a piecewise function that changes form at x = a.
 
+### **no page for Addition Rule for Mutually Exclusive Events** — 1 question(s)
+
+- `p-323` (procedure): To find the probability that more than m events occur, sum the probabilities of the disjoint cases where the number occurring equals m+1, m+2, and so on up to the total (or subtract the complementary lower-count probabilities from 1).
+
+### **no page for Aggregate Claims (Compound Distributions)** — 1 question(s)
+
+- `p-917` (formula): For a compound distribution S = X_1 + ... + X_N with X_i i.i.d. and independent of N, E[S\|N] = N·E[X] and Var(S\|N) = N·Var(X).
+
 ### **no page for Aggregate Loss Distribution** — 1 question(s)
 
 - `p-544` (procedure): Given N claims, the distribution of aggregate claims is found by enumerating the possible combinations of the independent claim sizes (e.g., via a binomial count of each size) and multiplying their probabilities.
@@ -385,9 +531,17 @@ Ranked by how many questions each page's gaps cost. The page is the one named fo
 
 - `p-513` (fact): The area of a circle centered at the origin is pi times the square of its radius (A = pi r^2), so a random radius gives a random area that is a nonlinear function of the radius.
 
-### **no page for Binomial Coefficient** — 1 question(s)
+### **no page for Arithmetic Series** — 1 question(s)
 
-- `p-500` (formula): The binomial coefficient C(n,k) = n!/(k!(n-k)!) counts the number of ways to choose k items from n.
+- `p-386` (formula): The sum of the first n positive integers 1 + 2 + ... + n equals n(n+1)/2.
+
+### **no page for Bernoulli Trials** — 1 question(s)
+
+- `p-417` (fact): An average rate of one event per k independent trials gives a per-trial event probability of 1/k.
+
+### **no page for Bounds on Probability of Union and Intersection** — 1 question(s)
+
+- `p-657` (fact): When the overlap of two events is not specified, P(A ∩ B) can range from 0 up to min(P(A), P(B)), so P(A ∪ B) ranges from max(P(A), P(B)) to P(A) + P(B) (capped at 1).
 
 ### **no page for Change of Variables (u-Substitution) in Integration** — 1 question(s)
 
@@ -419,9 +573,17 @@ Ranked by how many questions each page's gaps cost. The page is the one named fo
 - `p-468` (fact): If events are independent given a class, the joint probability of both events within that class is the product of their conditional probabilities, so P[A ∩ B] = Σ P[A\|class] P[B\|class] P[class].
 - `p-468` (fact): Events that are independent conditional on a risk class are generally not unconditionally independent, because observing one event updates the probability of each class.
 
+### **no page for Conditioning on Independent Random Variables** — 1 question(s)
+
+- `p-286` (procedure): To find the probability of an event involving two independent continuous random variables, condition on one variable and integrate the conditional probability against its density (law of total probability).
+
 ### **no page for Contingency Tables** — 1 question(s)
 
 - `p-132` (procedure): Build a two-way contingency table (e.g., gender by age group) and fill in missing cells using row and column totals by subtraction, since categories partition the population.
+
+### **no page for Continuous Random Variables and Probability Density Functions** — 1 question(s)
+
+- `p-420` (procedure): Convert the interval endpoints given in real-world units into the units in which the random variable is measured (e.g., if X is in tens of millions of years, 10 million years corresponds to x = 1) before integrating.
 
 ### **no page for Convolution of Discrete Random Variables** — 1 question(s)
 
@@ -431,9 +593,9 @@ Ranked by how many questions each page's gaps cost. The page is the one named fo
 
 - `p-134` (procedure): Count pairs with \|X - Y\| <= k by fixing X and counting the valid Y values in the range, which is 2k+1 for interior X and fewer near the endpoints because the range is truncated at the boundaries.
 
-### **no page for Counting Principles** — 1 question(s)
+### **no page for Counting Principle and Overlapping Sets** — 1 question(s)
 
-- `p-097` (fact): Selecting three items with no two sharing a row or column requires them to lie in three distinct columns, so one first chooses which columns are used.
+- `p-325` (procedure): When each member belongs to exactly k of several groups, the sum of the group participation rates equals k times the fraction of members who participate, so the participation fraction is the sum of rates divided by k.
 
 ### **no page for Counting Principles and Combinations** — 1 question(s)
 
@@ -443,9 +605,17 @@ Ranked by how many questions each page's gaps cost. The page is the one named fo
 
 - `p-524` (procedure): When the specified category counts in a selection sum to less than the group size, the remaining members must be chosen from the leftover category (those with none of the attributes), adding a combination factor for them.
 
+### **no page for Counting with Repetition** — 1 question(s)
+
+- `p-424` (fact): When characters may repeat (not necessarily distinct), each of the m positions independently has n choices, giving n^m arrangements (sampling with replacement).
+
 ### **no page for Deductibles and Conditional Loss Distributions** — 1 question(s)
 
 - `p-222` (procedure): To find a percentile of the conditional distribution given X > d, set P(X>k) = (1-p)·P(X>d) and solve for k, which gives P(X ≤ k) = 1 - (1-p)·P(X>d).
+
+### **no page for Derangement** — 1 question(s)
+
+- `p-389` (definition): A derangement is a permutation of n items in which no item appears in its original position (no fixed points).
 
 ### **no page for Derangements** — 1 question(s)
 
@@ -464,9 +634,9 @@ Ranked by how many questions each page's gaps cost. The page is the one named fo
 
 - `p-109` (procedure): For a rounded (discretized) continuous variable, the probability of each integer value equals the probability that the original variable falls in the interval of width 1 centered at that integer, with endpoint values (0 and the maximum) getting only half-width intervals.
 
-### **no page for Equally Likely Outcomes** — 1 question(s)
+### **no page for Distribution of a Sum of Discrete Random Variables** — 1 question(s)
 
-- `p-549` (fact): When people are seated randomly, every seat is equally likely for a given person, so the position of one person can be fixed by symmetry and the other person is equally likely to occupy any remaining seat.
+- `p-950` (procedure): To find the probability that a sum of discrete nonnegative integer random variables equals a given value, add the joint probabilities of all mutually exclusive combinations of values that yield that sum.
 
 ### **no page for Equally Likely Outcomes (Discrete Sample Space)** — 1 question(s)
 
@@ -504,6 +674,10 @@ Ranked by how many questions each page's gaps cost. The page is the one named fo
 
 - `p-086` (formula): The mean of a function g(X) of a continuous random variable is E[g(X)] = ∫ g(x) f(x) dx, and the second moment is E[g(X)^2] = ∫ g(x)^2 f(x) dx, integrated over the support of X.
 
+### **no page for Exponential Function** — 1 question(s)
+
+- `p-677` (fact): Since e^{-ax} is always positive, only the positive root of the quadratic in y = e^{-ax} is valid.
+
 ### **no page for Functions of Random Variables** — 1 question(s)
 
 - `p-169` (procedure): Express the quantity of interest as a function of the random variables (here, the number of tornadoes with losses below the threshold equals the total count minus the count at or above the threshold, Y − X).
@@ -512,17 +686,33 @@ Ranked by how many questions each page's gaps cost. The page is the one named fo
 
 - `p-474` (fact): The sum of independent exponentials with different means is not gamma distributed; gamma applies only when the exponentials are identically distributed, so the variance must be built from the separate components.
 
+### **no page for Geometric Growth and Compounding** — 1 question(s)
+
+- `p-313` (procedure): A quantity that changes by a fixed percentage each period follows geometric growth or decay, so after n periods it equals the initial value times (1 + r)^n; reaching year k from year 1 requires k-1 periods of change.
+
 ### **no page for Geometric Mean** — 1 question(s)
 
 - `p-485` (procedure): To solve for an unknown percentile level from an equal-ratio condition x/y = y/z, cross-multiply to get y^2 = xz (y is the geometric mean of x and z) and solve for y.
+
+### **no page for Independent and Identically Distributed Random Variables** — 1 question(s)
+
+- `p-286` (fact): For independent identically distributed random variables, the events {X1 > 2X2} and {X2 > 2X1} have equal probability by symmetry.
 
 ### **no page for Indicator Random Variables** — 1 question(s)
 
 - `p-466` (fact): For two indicator variables, the product XY is itself an indicator equal to 1 only when both events occur, so E[XY] = P(X=1, Y=1), the joint probability.
 
+### **no page for Insurance Benefit Functions (Deductibles and Policy Limits)** — 1 question(s)
+
+- `p-289` (procedure): Translate a payment rule (a step payment per full interval of loss above a deductible, subject to a policy maximum) into a payment random variable by mapping each range of the underlying variable to a benefit amount.
+
 ### **no page for Insurance Payout Functions (Deductibles and Policy Limits)** — 1 question(s)
 
 - `p-118` (procedure): Translate a policy payout rule (a fixed amount per full unit of loss above a threshold, subject to a policy maximum) into a payout random variable defined on each range of the underlying variable, using the floor of the excess divided by the unit and capping at the maximum.
+
+### **no page for Integration by Parts** — 1 question(s)
+
+- `p-420` (formula): Integration by parts: the integral of u dv equals uv minus the integral of v du, used for integrals such as the integral of x e^{-x}.
 
 ### **no page for Integration by Substitution** — 1 question(s)
 
@@ -560,6 +750,14 @@ Ranked by how many questions each page's gaps cost. The page is the one named fo
 
 - `p-108` (procedure): To solve an inequality of the form c·r^N < k for the smallest integer N, take logarithms of both sides (reversing the inequality when dividing by ln r < 0 for 0<r<1) and round up to the next integer.
 
+### **no page for Marginal Distributions** — 1 question(s)
+
+- `p-293` (fact): If the joint probability table is symmetric in x and y (p(x,y)=p(y,x)), then X and Y have identical marginal distributions and hence equal means.
+
+### **no page for Mode of a Distribution** — 1 question(s)
+
+- `p-393` (fact): For a constant positive multiple Y = cX, the mode of Y equals c times the mode of X, since the scaling is a one-to-one transformation preserving probabilities.
+
 ### **no page for Moments of a Discrete Random Variable** — 1 question(s)
 
 - `p-629` (fact): Taking a square root of a squared unknown yields two roots, and a stated sign restriction on the parameter (e.g., negative) selects the valid one, since E(Y^2) alone cannot reveal the sign.
@@ -567,6 +765,10 @@ Ranked by how many questions each page's gaps cost. The page is the one named fo
 ### **no page for Multiplication Principle of Counting** — 1 question(s)
 
 - `p-179` (procedure): To count the outcomes where a given value x is the j-th largest, fix x in the selection, choose the required number of values from those greater than x and the required number from those less than x, and multiply the counts (multiplication principle).
+
+### **no page for Natural Logarithm and Exponential Function** — 1 question(s)
+
+- `p-963` (fact): The exponential function is the inverse of the natural log, so ln X ≥ c is equivalent to X ≥ e^c.
 
 ### **no page for Optimization Using Derivatives** — 1 question(s)
 
@@ -604,6 +806,14 @@ Ranked by how many questions each page's gaps cost. The page is the one named fo
 
 - `p-161` (formula): For a density proportional to x^a on (0, b), the CDF is F(x) = (x/b)^(a+1) for 0 < x < b.
 
+### **no page for Power Rule for Integration** — 1 question(s)
+
+- `p-383` (fact): Power rule for integration: the integral of x^a from 0 to b equals b^(a+1)/(a+1) for a > -1; an nth root is x^(1/n). — *the locator quoted text that isn't on the page:* “\int_0^{1/2} \left(4x - 16x^3\right) dx \\ > > &= \left[2x^2 - 4x^4\right]_0^{1/2}”
+
+### **no page for Premium Loading** — 1 question(s)
+
+- `p-416` (definition): The premium with a loading of p percent is (1 + p) times the expected claim payments, i.e. the expected payments plus a safety loading.
+
 ### **no page for Prior Probability** — 1 question(s)
 
 - `p-506` (fact): When the alternating assistants work equally often (alternate days), the prior probability that each is the one working on a given day is 1/2.
@@ -636,6 +846,26 @@ Ranked by how many questions each page's gaps cost. The page is the one named fo
 
 - `p-607` (procedure): To find the probability of a target region that cannot be obtained directly, express it as a set difference of unions of the given intervals (e.g., a large union of disjoint intervals minus a nested union) rather than solving for each individual interval's probability.
 
+### **no page for Probability of Events for a Continuous Random Variable** — 1 question(s)
+
+- `p-925` (procedure): Rewrite an event of the form X^2 < c (c > 0) as the interval event -sqrt(c) < X < sqrt(c).
+
+### **no page for Probability of Exactly One Event** — 1 question(s)
+
+- `p-263` (procedure): To find the probability that exactly one of two events occurs, add the probabilities of the two mutually exclusive cases (A occurs and B does not) and (B occurs and A does not).
+
+### **no page for Probability of Exactly One of Two Events** — 1 question(s)
+
+- `p-346` (formula): The probability that exactly one of two events A or B occurs equals P(A)+P(B) − 2P(A∩B).
+
+### **no page for Probability of Exactly k Events Occurring** — 1 question(s)
+
+- `p-346` (fact): If some pairs of events are mutually exclusive, the only way exactly two of the three events can occur is through the remaining pair, so the probability of exactly two occurring equals the probability of that pair's intersection.
+
+### **no page for Probability of Intersections and Differences of Events** — 1 question(s)
+
+- `p-259` (procedure): To find P(event E and not B), compute P(E) − P(E and B), i.e., subtract the joint probability with B from the probability of E.
+
 ### **no page for Probability of Unions of Disjoint Events** — 1 question(s)
 
 - `p-594` (procedure): An 'at least m' event is computed by summing the probabilities of each disjoint case for the counts m up to the maximum possible (here, exactly 2, 3, and 4 kings).
@@ -644,13 +874,13 @@ Ranked by how many questions each page's gaps cost. The page is the one named fo
 
 - `p-210` (procedure): The event that exactly one of E and F occurs is the union of the two mutually exclusive events (E occurs and F does not) and (F occurs and E does not), so its probability is the sum P[E ∩ F^c] + P[E^c ∩ F].
 
-### **no page for Probability of a Union of Events** — 1 question(s)
-
-- `p-445` (fact): The total population equals the sum of all disjoint regions: those in exactly one set, exactly two sets, all three sets, and none of the sets.
-
 ### **no page for Probability of an Event** — 1 question(s)
 
 - `p-010` (procedure): Translate a verbal relationship such as 'X is twice as likely as Y' into the equation P(X) = 2P(Y), and combine it with the independence product equation to solve for the individual probabilities.
+
+### **no page for Quadratic Inequalities** — 1 question(s)
+
+- `p-371` (fact): An upward-opening parabola (positive leading coefficient) is positive outside its roots and negative between them, so a '> 0' inequality gives two tails and a '< 0' inequality gives the interval between the roots.
 
 ### **no page for Rayleigh Distribution** — 1 question(s)
 
@@ -676,9 +906,25 @@ Ranked by how many questions each page's gaps cost. The page is the one named fo
 
 - `p-487` (procedure): In a sequential process where only those who pass one stage proceed to the next, passing a later stage implies passing all earlier stages, so the probability of passing exams 1 and 2 equals the probability of passing exam 2.
 
+### **no page for Set Operations and Counting** — 1 question(s)
+
+- `p-296` (procedure): Translate verbal count relationships ("X has k more than Y", "total is n") into linear equations in the cell counts and solve the resulting system for the unknown cell.
+
 ### **no page for Single Pareto Distribution** — 1 question(s)
 
 - `p-601` (procedure): Evaluate an improper integral of a power function by finding the antiderivative of x^(-n) and applying limits at the deductible and infinity, where the term at infinity vanishes for n>1.
+
+### **no page for Single-Elimination Tournament** — 1 question(s)
+
+- `p-944` (fact): In a four-player single-elimination tournament, there are two semifinals and a final; a player must win every match they play (two matches) to win the tournament.
+
+### **no page for Solving Equations by Substitution** — 1 question(s)
+
+- `p-677` (procedure): An equation involving e^{-ax} and e^{-2ax} can be converted into a quadratic by substituting y = e^{-ax}, solved with the quadratic formula, then back-transformed by taking a logarithm.
+
+### **no page for Subset Events and Monotonicity of Probability** — 1 question(s)
+
+- `p-657` (fact): If event A is contained in event B, then P(A ∩ B) = P(A) and P(A ∪ B) = P(B); this is the maximum-overlap case.
 
 ### **no page for Subsets of Events** — 1 question(s)
 
@@ -687,6 +933,14 @@ Ranked by how many questions each page's gaps cost. The page is the one named fo
 ### **no page for Sum of Discrete Random Variables** — 1 question(s)
 
 - `p-530` (procedure): To find the probability that the sum of two discrete random variables equals a target value, enumerate the value combinations that add to the target and add the probabilities of those combinations, accounting for which variable can take which value.
+
+### **no page for Sum of Independent Bernoulli Random Variables** — 1 question(s)
+
+- `p-295` (procedure): When trials have unequal success probabilities, find the distribution of the total count by conditioning on or enumerating the outcome of the differing trial and combining it with the binomial probabilities of the identical trials (sum over mutually exclusive cases).
+
+### **no page for Sums of Independent Non-Identical Bernoulli Trials** — 1 question(s)
+
+- `p-351` (procedure): When a group is made up of subgroups with different probabilities, compute the probability of a total count by enumerating the mutually exclusive ways the count can arise across the subgroups (e.g., the one event from subgroup A and none from B, or from B and none from A) and multiplying the indepe…
 
 ### **no page for Sums of Random Variables** — 1 question(s)
 
@@ -700,6 +954,14 @@ Ranked by how many questions each page's gaps cost. The page is the one named fo
 
 - `p-023` (fact): A rational term 1/((n+1)(n+2)) can be decomposed by partial fractions into 1/(n+1) − 1/(n+2), so partial sums telescope to a closed form such as P[N ≤ k] = 1 − 1/(k+2).
 
+### **no page for Telescoping Sum** — 1 question(s)
+
+- `p-929` (procedure): Use Pascal's rule to write each binomial term as a difference of consecutive binomial coefficients, so the sum telescopes (hockey-stick identity: the sum of C(m,k) for m=k..n equals C(n+1,k+1)).
+
+### **no page for Two-Way Probability Table** — 1 question(s)
+
+- `p-423` (procedure): Organize two overlapping events into a two-by-two table of joint probabilities, filling in the given marginals and overlap and obtaining the remaining cells by subtraction from row and column totals.
+
 ### **no page for Union of Events** — 1 question(s)
 
 - `p-183` (fact): The number of elements in the union of three sets equals the sum of the counts of the seven disjoint regions (only-one, exactly-two, and all-three regions).
@@ -708,22 +970,36 @@ Ranked by how many questions each page's gaps cost. The page is the one named fo
 
 - `p-012` (fact): The event that a woman has both A and B is the union of two disjoint events: having exactly A and B only, and having all three A, B and C, so P[A∩B] = P[exactly A and B] + P[A∩B∩C].
 
+### **no page for Venn Diagrams and Set Partitions** — 1 question(s)
+
+- `p-325` (procedure): Partition the participants into mutually exclusive pairwise-intersection regions (e.g., L∩R only, H∩R only, H∩L only) and set up a system of linear equations from each set's total and the overall participant total.
+- `p-325` (fact): If every participant is in exactly two of three sets, there is no triple intersection, and each set's total equals the sum of the two pairwise-only regions that involve it.
+
 ### `Concepts/Arithmetic Progression.md` — 1 question(s)
 
 - `p-085` (formula): The sum of the first k terms of an arithmetic progression with first term a and common difference d is k*a + d*k(k-1)/2 (equivalently, the number of terms times the average of the first and last terms).
 
-### `Concepts/Bayes Theorem.md` — 1 question(s)
+### `Concepts/Coefficient of Variation.md` — 1 question(s)
 
-- `p-150` (procedure): Restrict the sum in the denominator to the values of the conditioning variable for which the observed outcome has positive probability, since terms with zero conditional probability contribute nothing.
+- `p-252` (procedure): Given a coefficient of variation and a mean, recover the standard deviation as CV times mean, and then the variance as its square.
 
 ### `Concepts/Conditional and Marginal Probability Functions.md` — 1 question(s)
 
 - `p-476` (procedure): The probability of the intersection of two events defined on different variables of a joint table is the sum of the joint probabilities of only the cells satisfying both conditions simultaneously.
 
+### `Concepts/Correlation Coefficient.md` — 1 question(s)
+
+- `p-902` (definition): Two random variables are uncorrelated when their covariance (equivalently, their correlation) is zero.
+
 ### `Concepts/Event.md` — 1 question(s)
 
 - `p-153` (fact): Two events are the same exactly when they contain the same outcomes; an event that requires a stricter condition is a proper subset of the broader event and is not equal to it.
 - `p-153` (procedure): To compare a described event with a target event, translate each into conditions on the count of outcomes (e.g., accidents in each period) and check whether the sets of count combinations coincide, including the total across periods.
+
+### `Concepts/Frequency Distribution.md` — 1 question(s)
+
+- `p-397` (procedure): When two groups' frequencies are combined in a table, the frequency for one group at each value equals the combined frequency minus the other group's frequency at that value.
+- `p-397` (procedure): A lower bound on one group's frequency at each value implies an upper bound on the other group's frequency there (combined frequency minus the lower bound), and the maximum possible number of modes is found by comparing these bounds against the largest frequency.
 
 ### `Concepts/Gamma.md` — 1 question(s)
 
@@ -733,17 +1009,21 @@ Ranked by how many questions each page's gaps cost. The page is the one named fo
 
 - `p-238` (procedure): Use a given joint probability value to solve for the unknown parameter, then substitute the parameter into the joint CDF at a different point to compute the requested probability.
 
-### `Concepts/Mutually Exclusive Events.md` — 1 question(s)
+### `Concepts/Mode.md` — 1 question(s)
 
-- `p-192` (fact): Events defined by claim counts in different time periods (e.g., different years) can occur together unless dependence or other constraints rule it out, so they are generally not disjoint; only events that put contradictory conditions on the same period are disjoint.
+- `p-397` (procedure): To determine where a group's modes lie, use the fact that the group's frequency at any value cannot exceed its modal frequency and cannot exceed the combined frequency, so values with combined frequency below the modal frequency cannot be modes.
 
 ### `Concepts/Normal Approximation.md` — 1 question(s)
 
 - `p-116` (procedure): To find an integer threshold N where a tail probability crosses a given level, solve the normal-approximation equation for a continuous N and then choose the integer on the side where the tail probability is still above the level while N+1 gives a value below it (here, round down).
 
-### `Concepts/Probability.md` — 1 question(s)
+### `Concepts/Pareto Distribution.md` — 1 question(s)
 
-- `p-189` (procedure): To find the probability of a loss, set total payouts greater than total premium or revenue, and convert this inequality into a condition on the number of winners (payout per winner times W exceeds revenue).
+- `p-907` (procedure): To compute E[(X-d)_+] for a continuous loss with a given density, integrate (x-d) f(x) from d to infinity, using a substitution such as u = x+1 to handle a Pareto-type density.
+
+### `Concepts/Payment Random Variable.md` — 1 question(s)
+
+- `p-an-002` (formula): The expected payment per loss is the integral of the payment function times the density over the layer where payment varies, plus the maximum payment times the probability the loss exceeds the cap threshold: E[Y] = ∫(x-d)f(x)dx over (d, d+u) + u·P(X > d+u).
 
 ### `Concepts/Probability Distributions.md` — 1 question(s)
 
@@ -753,17 +1033,13 @@ Ranked by how many questions each page's gaps cost. The page is the one named fo
 
 - `p-072` (fact): The difference between the mean of rounded values and the mean of true values equals the sample mean of the individual rounding errors.
 
-### `Concepts/Standard Deviation.md` — 1 question(s)
-
-- `p-058` (procedure): To find the proportion of outcomes within one standard deviation of the mean, form the interval [μ − σ, μ + σ] and add the probabilities of all values of the discrete distribution lying in that interval.
-
-### `Concepts/Transformations of Random Variables.md` — 1 question(s)
-
-- `p-240` (fact): Multiplying a random variable by a constant multiplies its percentiles by that constant, so the total benefit's percentile equals the benefit amount times the percentile of the number of deaths.
-
 ### `Concepts/Variance.md` — 1 question(s)
 
 - `p-247` (procedure): To minimize a variance that is a function of an unknown parameter, express the variance in terms of the parameter and choose its value within the feasible range (probabilities nonnegative) that minimizes it, which for an increasing linear function is the smallest feasible value.
+
+### `Concepts/Variance and Standard Deviation.md` — 1 question(s)
+
+- `p-678` (procedure): To find the probability that a variable lies within one standard deviation of its mean, compute the interval from mean minus SD to mean plus SD and find the probability of that interval under the distribution.
 
 ### `Concepts/Variance for Conditional and Marginal Distributions.md` — 1 question(s)
 
@@ -924,6 +1200,115 @@ The vault teaches what these questions need, but on a page the question isn't ta
 | `p-246` | Binomial Distribution, Poisson Superposition, Variance |
 | `p-247` | Discrete Random Variable |
 | `p-248` | Discrete Random Variable |
+| `p-250` | Linear Combinations of Random Variables |
+| `p-251` | Linear Combinations of Random Variables |
+| `p-252` | Linear Combinations of Random Variables, Variance and Standard Deviation |
+| `p-254` | The Law of Total Probability, Variance |
+| `p-256` | Cumulative Distribution Function (CDF) |
+| `p-257` | Percentile |
+| `p-259` | Probability Rules |
+| `p-260` | Joint Cumulative Distribution Function |
+| `p-261` | Probability Rules |
+| `p-263` | Axioms of Probability |
+| `p-264` | Axioms of Probability, Conditional Probability, Probability Multiplication Rule |
+| `p-265` | Conditional Probability, Mutually Exclusive Events |
+| `p-266` | Independent Events |
+| `p-268` | Limited Expected Value, Policy Limit |
+| `p-269` | Variance and Standard Deviation |
+| `p-270` | Variance and Standard Deviation |
+| `p-284` | Linear Combinations of Random Variables |
+| `p-285` | Random Sample |
+| `p-286` | Mutually Exclusive Events |
+| `p-288` | Axioms of Probability |
+| `p-289` | Discrete Random Variable, Expected Value |
+| `p-290` | Discrete Random Variable, Variance |
+| `p-291` | Covariance and Correlation Coefficient, Discrete Random Variable, Variance and Standard Deviation |
+| `p-293` | Discrete Random Variable, Linear Combinations of Random Variables |
+| `p-295` | Independent Events |
+| `p-296` | Inclusion-Exclusion Principle |
+| `p-297` | Joint Probability Density Function |
+| `p-298` | Discrete Random Variable, Linear Combinations of Random Variables, Normal Approximation, Variance |
+| `p-299` | Poisson Superposition |
+| `p-300` | Cumulative Distribution Function (CDF), Poisson Superposition |
+| `p-301` | Linear Combinations of Random Variables |
+| `p-302` | Poisson Process, Poisson Superposition |
+| `p-303` | Independent Events |
+| `p-304` | Probability Rules |
+| `p-307` | Normal Approximation, Sample Mean |
+| `p-308` | Cumulative Distribution Function (CDF) |
+| `p-310` | Excess and Deductible Rating, Limited Expected Value, Policy Limit |
+| `p-311` | Discrete Random Variable, Expected Value |
+| `p-312` | Axioms of Probability |
+| `p-315` | Creating New Distributions, Order Statistics |
+| `p-317` | Mutually Exclusive Events |
+| `p-318` | Axioms of Probability |
+| `p-319` | Cumulative Distribution Function (CDF), Probability Multiplication Rule, The Law of Total Probability |
+| `p-321` | Discrete Random Variable |
+| `p-323` | Mutually Exclusive Events |
+| `p-325` | Venn Diagram |
+| `p-327` | Sample Mean, Sampling Distribution |
+| `p-328` | Transformations of Random Variables |
+| `p-329` | Conditional Probability, Mutually Exclusive Events |
+| `p-331` | The Law of Total Probability |
+| `p-334` | Probability Multiplication Rule |
+| `p-335` | Hypergeometric Distribution, Mutually Exclusive Events |
+| `p-338` | Conditional Probability, Conditional and Marginal Probability Functions, Joint Probability Function |
+| `p-340` | Cumulative Distribution Function (CDF) |
+| `p-341` | Future Lifetime Random Variable |
+| `p-342` | Cumulative Distribution Function (CDF) |
+| `p-344` | Continuous Random Variable, Cumulative Distribution Function (CDF) |
+| `p-347` | Conditional and Marginal Probability Functions, Variance Function |
+| `p-348` | Probability Rules, Uniform Continuous Distribution |
+| `p-349` | Probability Rules |
+| `p-350` | Policy Limit |
+| `p-351` | Axioms of Probability |
+| `p-352` | Standard Deviation, Variance |
+| `p-358` | Mode |
+| `p-359` | Conditional Probability Function, Probability Rules |
+| `p-360` | Probability Rules |
+| `p-361` | Pure Premium |
+| `p-363` | Probability Rules |
+| `p-364` | Independent and Identically Distributed |
+| `p-365` | Probability Rules |
+| `p-367` | Inclusion-Exclusion Principle |
+| `p-368` | Probability Multiplication Rule |
+| `p-371` | Internal Rate of Return, Mutually Exclusive Events |
+| `p-372` | Scale and Shape Parameters |
+| `p-375` | Cumulative Distribution Function (CDF), Single-Parameter Pareto Distribution |
+| `p-376` | Mutually Exclusive Events |
+| `p-377` | Naive Bayes |
+| `p-381` | Continuous Random Variable |
+| `p-383` | Joint Probability Density Function |
+| `p-384` | Joint Probability Density Function |
+| `p-385` | Percentile Matching |
+| `p-386` | Transformations of Random Variables |
+| `p-388` | Frequency Distribution, Mixture Distribution |
+| `p-390` | Scale and Shape Parameters |
+| `p-393` | Poisson Process |
+| `p-395` | Probability Density Function (PDF) |
+| `p-396` | Probability Density Function (PDF) |
+| `p-398` | Posterior Distribution |
+| `p-399` | Probability Multiplication Rule |
+| `p-400` | Discrete Random Variable, Probability Rules |
+| `p-401` | Variance and Standard Deviation |
+| `p-402` | Poisson Superposition, Probability Rules, Variance |
+| `p-405` | Probability Multiplication Rule |
+| `p-408` | Posterior Distribution |
+| `p-409` | Cumulative Distribution Function (CDF), Percentile, Policy Limit |
+| `p-410` | Independent Events, Joint Cumulative Distribution Function, Probability Rules, Stop-Loss Reinsurance, The Law of Total Probability |
+| `p-411` | Expected Value |
+| `p-412` | Independent Events |
+| `p-413` | Probability Multiplication Rule |
+| `p-414` | Discrete Random Variable |
+| `p-415` | Venn Diagram |
+| `p-416` | Transformations of Random Variables |
+| `p-418` | Mutually Exclusive Events |
+| `p-419` | Survival Model |
+| `p-423` | Probability Rules |
+| `p-425` | Mode |
+| `p-429` | Probability Density Function (PDF) |
+| `p-432` | Variance and Standard Deviation |
+| `p-433` | Variance and Standard Deviation |
 | `p-439` | Normal Approximation, Probability Multiplication Rule |
 | `p-447` | Continuous Random Variable |
 | `p-449` | Joint Cumulative Distribution Function |
@@ -1034,6 +1419,61 @@ The vault teaches what these questions need, but on a page the question isn't ta
 | `p-653` | Uniform Discrete |
 | `p-654` | Continuous Random Variable, Expected Value |
 | `p-655` | Poisson Process |
+| `p-656` | Joint Cumulative Distribution Function |
+| `p-657` | Inclusion-Exclusion Principle |
+| `p-658` | Inclusion-Exclusion Principle, Probability Multiplication Rule |
+| `p-659` | Discrete Random Variable |
+| `p-661` | Discrete Random Variable |
+| `p-662` | Discrete Random Variable |
+| `p-663` | Continuous Random Variable |
+| `p-665` | Poisson Superposition |
+| `p-669` | Independent and Identically Distributed |
+| `p-672` | Median |
+| `p-673` | Correlation Coefficient |
+| `p-674` | Joint Cumulative Distribution Function |
+| `p-675` | Probability Rules |
+| `p-677` | Mixture Distribution |
+| `p-678` | Cumulative Distribution Function (CDF) |
+| `p-679` | Normal Approximation |
+| `p-901` | Linear Combinations of Random Variables |
+| `p-902` | Covariance and Correlation Coefficient |
+| `p-903` | Binomial Distribution, Covariance and Correlation Coefficient |
+| `p-905` | Cumulative Distribution Function (CDF) |
+| `p-913` | Joint Cumulative Distribution Function |
+| `p-915` | Expected Value |
+| `p-917` | Compound Poisson Process, Variance and Standard Deviation |
+| `p-918` | Future Lifetime Random Variable |
+| `p-919` | Continuous Random Variable |
+| `p-920` | Standard Deviation |
+| `p-921` | Linear Combinations of Random Variables, Variance |
+| `p-922` | Variance and Standard Deviation |
+| `p-924` | Mixture Distribution |
+| `p-926` | Interarrival Time |
+| `p-927` | Probability Rules |
+| `p-929` | Discrete Random Variable |
+| `p-931` | Continuous Random Variable |
+| `p-932` | Discrete Random Variable |
+| `p-933` | Compound Poisson Process, Variance and Standard Deviation |
+| `p-934` | Linear Combinations of Random Variables, Standard Deviation |
+| `p-935` | Life Annuity |
+| `p-937` | Covariance and Correlation Coefficient |
+| `p-938` | Hypergeometric Distribution, Mutually Exclusive Events |
+| `p-940` | Mixture Distribution |
+| `p-943` | Mixture Distribution |
+| `p-944` | Probability Rules |
+| `p-946` | Linear Combinations of Random Variables, Moment |
+| `p-947` | Mean Excess Loss, Spliced Distribution |
+| `p-949` | Normal Approximation |
+| `p-957` | Continuous Random Variable |
+| `p-958` | Gamma, Probability Density Function (PDF) |
+| `p-960` | Mean Excess Loss, Scale and Shape Parameters |
+| `p-962` | Limited Expected Value, Policy Limit |
+| `p-963` | Inversion Method |
+| `p-an-003` | Mean Excess Loss |
+| `p-an-004` | Uniform Continuous Distribution |
+| `p-an-006` | Conditional Probability |
+| `p-an-010` | Conditional Probability, Decision Analysis, Probability Rules |
+| `p-an-011` | Probability, Probability Multiplication Rule |
 
 ## Taught only in a collapsed section
 
@@ -1041,52 +1481,65 @@ The passage that teaches these items sits inside a folded callout (a worked exam
 
 | Page | Questions | Items |
 |---|---|---|
-| Conditional Probability | 14 | If E is a subset of F (e.g. having none of the factors implies not having A), t…; To evaluate a conditional probability where one event is contained in the other…; To find a conditional probability such as P[X < b \| X ≥ a] for a continuous va… |
-| Percentile | 14 | To find a percentile, set the CDF equal to p and solve for x, giving a closed-f…; To find a percentile of a normal distribution, look up the z-value in the stand…; To match a percentile across two normal distributions, set the two raw values e… |
-| Axioms of Probability | 11 | The probability of a complement is Pr(A^c) = 1 - Pr(A).; The complement rule states P(A^c) = 1 − P(A).; The probabilities of mutually exclusive, exhaustive categories (e.g., high, low… |
-| Cumulative Distribution Function (CDF) | 10 | The probability that a continuous random variable falls in an interval (a, b] e…; For a continuous random variable, P(a < X ≤ b) = F(b) − F(a), and P(X > a) = 1 …; For a continuous random variable, P(a < T < b) = F(b) - F(a), so the probabilit… |
-| Mutually Exclusive Events | 9 | The probabilities of a set of mutually exclusive and exhaustive events sum to 1…; Probabilities of a set of mutually exclusive, exhaustive categories sum to 1, s…; The probability of completing (not dropping out) equals the complement of the d… |
-| Variance for Conditional and Marginal Distributions | 9 | When a distribution's parameter is itself random, treat the distribution as con…; The conditional expectation of a discrete random variable given an event is the…; For a Bernoulli (0/1) random variable Z, Z² = Z, so E[Z²] = E[Z] = P(Z=1). |
-| Normal Distribution | 8 | For a standard normal variable Z, the upper tail probability P(Z > z) equals 1 …; An upper-tail probability for a standard normal equals one minus the cumulative…; For a continuous random variable, P(a < X <= b) = F(b) - F(a) and P(X > a) = 1 … |
-| Venn Diagram | 6 | The count of a set that is in one category and not in another equals the count …; The probability of the union of events equals the sum of the probabilities of t…; The probability of a single event A equals the sum of the probabilities of all … |
-| Bayes Theorem | 5 | The given renewal rates are conditional probabilities of renewing given the pol…; Treat the percentages of each group as prior probabilities P(A_i) and the group…; Translate the stated rates into conditional probabilities: the detection rate w… |
-| Expected Value | 5 | To find the expected payment under a piecewise payment schedule, multiply each …; The expected payment of a policy paying a fixed benefit B with probability p of…; The expected value of a payment that is made with probability p (and zero other… |
-| Hypergeometric Distribution | 5 | To count outcomes with a specified composition across groups, choose the requir…; For drawing without replacement from a finite population with a special subset,…; To find the probability of a given composition of a sample drawn without replac… |
-| Exponential Distribution | 4 | The probability that a random event time falls within a time period equals the …; The probability of an event equals one minus the probability of its complement,…; For a continuous random variable with density f, the probability P(X > d) equal… |
-| Beta | 3 | Find the probability that a continuous loss exceeds a value t by integrating th…; Compute a moment of a continuous random variable by multiplying the power of x …; To find a tail probability P[X > c] for a continuous random variable, integrate… |
+| Percentile | 25 | To find a percentile, set the CDF equal to p and solve for x, giving a closed-f…; To find a percentile of a normal distribution, look up the z-value in the stand…; To match a percentile across two normal distributions, set the two raw values e… |
+| Conditional Probability | 23 | If E is a subset of F (e.g. having none of the factors implies not having A), t…; To evaluate a conditional probability where one event is contained in the other…; To find a conditional probability such as P[X < b \| X ≥ a] for a continuous va… |
+| Axioms of Probability | 22 | The probability of a complement is Pr(A^c) = 1 - Pr(A).; The complement rule states P(A^c) = 1 − P(A).; The probabilities of mutually exclusive, exhaustive categories (e.g., high, low… |
+| Cumulative Distribution Function (CDF) | 14 | The probability that a continuous random variable falls in an interval (a, b] e…; For a continuous random variable, P(a < X ≤ b) = F(b) − F(a), and P(X > a) = 1 …; For a continuous random variable, P(a < T < b) = F(b) - F(a), so the probabilit… |
+| Normal Distribution | 12 | For a standard normal variable Z, the upper tail probability P(Z > z) equals 1 …; An upper-tail probability for a standard normal equals one minus the cumulative…; For a continuous random variable, P(a < X <= b) = F(b) - F(a) and P(X > a) = 1 … |
+| Venn Diagram | 12 | The count of a set that is in one category and not in another equals the count …; The probability of the union of events equals the sum of the probabilities of t…; The probability of a single event A equals the sum of the probabilities of all … |
+| Mutually Exclusive Events | 11 | The probabilities of a set of mutually exclusive and exhaustive events sum to 1…; Probabilities of a set of mutually exclusive, exhaustive categories sum to 1, s…; The probability of completing (not dropping out) equals the complement of the d… |
+| Variance for Conditional and Marginal Distributions | 10 | When a distribution's parameter is itself random, treat the distribution as con…; The conditional expectation of a discrete random variable given an event is the…; For a Bernoulli (0/1) random variable Z, Z² = Z, so E[Z²] = E[Z] = P(Z=1). |
+| Bayes Theorem | 9 | The given renewal rates are conditional probabilities of renewing given the pol…; Treat the percentages of each group as prior probabilities P(A_i) and the group…; Translate the stated rates into conditional probabilities: the detection rate w… |
+| Discrete Random Variable | 9 | A random variable taking only the values 0 and 1 is a Bernoulli random variable…; To find the probability of an 'at least k' event for a discrete random variable…; A Bernoulli (0/1-valued) random variable with success probability p has mean p … |
+| Exponential Distribution | 9 | The probability that a random event time falls within a time period equals the …; The probability of an event equals one minus the probability of its complement,…; For a continuous random variable with density f, the probability P(X > d) equal… |
+| Hypergeometric Distribution | 8 | To count outcomes with a specified composition across groups, choose the requir…; For drawing without replacement from a finite population with a special subset,…; To find the probability of a given composition of a sample drawn without replac… |
+| Expected Value | 7 | To find the expected payment under a piecewise payment schedule, multiply each …; The expected payment of a policy paying a fixed benefit B with probability p of…; The expected value of a payment that is made with probability p (and zero other… |
+| Normal Approximation | 5 | An expected-value premium is set at the expected claim amount plus a fixed load…; A premium set as a percentage of the expected claim equals that percentage time…; Because the required sample size must be a whole number, round the solved lower… |
+| Variance and Standard Deviation | 5 | The expected value of a function of a discrete random variable is the sum of th…; Compute the moments of a transformed variable Y = g(X) by integrating g(x)^k ti…; The expected value of a discrete random variable is E[Y] = sum of y times p(y) … |
+| Beta | 4 | Find the probability that a continuous loss exceeds a value t by integrating th…; Compute a moment of a continuous random variable by multiplying the power of x …; To find a tail probability P[X > c] for a continuous random variable, integrate… |
+| Posterior Distribution | 4 | To find the probability of a category given an outcome, treat the category prop…; To find the probability of a future event given observed data when the class is…; For a population split into risk classes with given proportions, use the class … |
+| Random Variable | 4 | Ordered outcomes with distinct values (a, b) and (b, a) are different outcomes,…; Build the probability distribution of a function of a discrete random variable …; Translate verbal probability statements such as '1 or 2 events' or 'at least k … |
+| Set Operations | 4 | A marginal probability is the sum of the joint probabilities over the categorie…; An event splits into disjoint parts by another event and its complement: P(H) =…; Partition the population into mutually exclusive groups (only A, only B, both, … |
+| Uniform Discrete | 4 | For a piecewise payment schedule (a rate up to a threshold and a different rate…; Model a benefit that depends on the year of failure as a random variable by ass…; To find the distribution of a benefit that is a function of a continuous variab… |
 | Continuous Random Variable | 3 | With an ordinary deductible d, the claim payment per loss is Y = max(X - d, 0),…; When the payment is zero over part of the loss range, compute the expected paym…; A random variable that is zero with positive probability and otherwise continuo… |
-| Discrete Random Variable | 3 | A random variable taking only the values 0 and 1 is a Bernoulli random variable…; To find the probability of an 'at least k' event for a discrete random variable…; A random variable taking only the values 0 and 1 is a Bernoulli random variable… |
-| Normal Approximation | 3 | An expected-value premium is set at the expected claim amount plus a fixed load…; Given a normal probability, use the inverse standard normal table to find the z…; To solve for an unknown standard deviation, find the z-value from the standard … |
-| Posterior Distribution | 3 | To find the probability of a category given an outcome, treat the category prop…; For a population split into risk classes with given proportions, use the class …; To compute the posterior probability of a risk class given an observed claim co… |
-| Set Operations | 3 | A marginal probability is the sum of the joint probabilities over the categorie…; An event splits into disjoint parts by another event and its complement: P(H) =…; To compute a conditional probability like P(A \| not C), identify the numerator… |
-| Variance and Standard Deviation | 3 | The expected value of a function of a discrete random variable is the sum of th…; Compute the moments of a transformed variable Y = g(X) by integrating g(x)^k ti…; To find the standard deviation of a sum of independent random variables, square… |
+| Gamma | 3 | Fit gamma parameters by method of moments: divide the variance by the mean to g…; The n-th event in a Poisson process has not occurred by time t exactly when at …; To recover gamma parameters from a given mean and variance, divide the variance… |
+| Probability Rules | 3 | The probability of neither of two independent events occurring is the product o…; The probability of neither event occurring equals one minus the probability of …; To find the probability of at least one event over several independent trials, … |
 | Central Limit Theorem | 2 | To approximate a probability for a normal variable, standardize by subtracting …; To approximate P[X > x] with a normal approximation, standardize via Z = (x - m… |
 | Combinatorics | 2 | When all unordered selections of k items from n are equally likely, the probabi…; When choosing a random subset of a fixed size from n distinct items, each possi… |
+| Covariance and Correlation Coefficient | 2 | The expected value of a function of discrete random variables is the sum of tha…; For a joint discrete distribution, E[XY] is the sum of x*y*P(X=x,Y=y) over all … |
 | Discrete Univariate Distributions | 2 | Compute the probability of an event for a discrete random variable (e.g., fewer…; The probability of 'n or fewer' events is the cumulative probability, equal to … |
+| Future Lifetime Random Variable | 2 | To convert a discrete survival function into point probabilities, take successi…; If a random variable has a finite upper limit of support (S(t)=0 beyond it), th… |
+| Independent and Identically Distributed | 2 | The probability of at least one event occurring equals one minus the probabilit…; For independent events, the probability that all occur equals the product of th…; To find the probability that at least one of several events occurs, take the co… |
+| Joint Probability Function | 2 | To obtain the conditional distribution of one variable given an event on the ot…; To find a conditional distribution of one variable given another from a joint d… |
+| Marginal Probability Function | 2 | Fill in a joint probability table from the marginal probabilities and one known…; To find the probability of an event defined on X from a joint probability table… |
 | Mixture Distribution | 2 | A jump in the CDF at a point (F(x) greater than its left-hand limit) indicates …; For a mixed distribution with a point mass at 0 (no loss) and a continuous part… |
+| Multivariate Distribution | 2 | Two discrete random variables are independent if and only if every joint probab…; Two discrete random variables are independent if every joint probability equals… |
 | Order Statistics | 2 | A series system that fails when any one of its independent components fails has…; The minimum of n independent exponential random variables is exponential with r… |
+| Probabilities for Linear Combinations | 2 | To find the probability that exactly k of n independent events with different p…; To find a normal probability, standardize via Z = (x - mean)/SD and evaluate th… |
 | Probability Density Function (PDF) | 2 | A probability density function must be integrated over the specified support (h…; For a continuous random variable, the probability that X lies in an interval (a… |
-| Probability Rules | 2 | The probability of neither of two independent events occurring is the product o…; The probability of neither event occurring equals one minus the probability of …; To find the probability of at least one event over several independent trials, … |
-| Random Variable | 2 | Ordered outcomes with distinct values (a, b) and (b, a) are different outcomes,…; To get the distribution of a count of categories (e.g., number of entertainment… |
-| Uniform Discrete | 2 | For a piecewise payment schedule (a rate up to a threshold and a different rate…; Model a benefit that depends on the year of failure as a random variable by ass… |
+| Probability Multiplication Rule | 2 | When drawing without replacement, the probability that the next item is a succe…; When items are drawn without replacement, the composition of the remaining item… |
+| Scale and Shape Parameters | 2 | For integer shape α = 2, the gamma survival function is S(x) = e^(-x/θ)(1 + x/θ…; A gamma distribution with shape 2 and scale 1 has density t e^{-t} for t > 0, a… |
+| The Law of Total Probability | 2 | For a mixture over discrete classes, compute the unconditional mean and the exp…; When the distribution of a count depends on a discrete conditioning variable (i… |
+| Transformations of Random Variables | 2 | A percentage surcharge applied to one component of a combined claim is modeled …; To find the probability of an event defined by a quadratic inequality in X, rew… |
+| Claim | 1 | The expected total payments equal the number of payments multiplied by the expe… |
+| Conditional and Marginal Probability Functions | 1 | To find the probability of an event defined on one variable (e.g., at most one … |
 | Continuous Univariate Distributions | 1 | For a continuous random variable with density f, the probability P[a < Y < b] e… |
-| Future Lifetime Random Variable | 1 | To convert a discrete survival function into point probabilities, take successi… |
+| Creating New Distributions | 1 | If Y = e^X is a strictly increasing transformation of X, then P(Y > e^c) = P(X … |
+| Decision Analysis | 1 | To find the probability of a condition given a positive test, compute the overa… |
 | Geometric Distribution | 1 | Rolls of a die are independent, so after a fixed number of rolls the remaining … |
-| Independent and Identically Distributed | 1 | For independent events, the probability that all occur equals the product of th…; To find the probability that at least one of several events occurs, take the co… |
-| Joint Probability Function | 1 | To find a conditional distribution of one variable given another from a joint d… |
+| Inflation | 1 | The percentage increase in expected payment is the new expected payment divided… |
+| Interarrival Time | 1 | The waiting time until the first claim exceeds t exactly when zero claims occur… |
+| Internal Rate of Return | 1 | The quadratic formula gives the roots of aX^2 + bX + c = 0 as X = (-b ± sqrt(b^… |
 | Linear Combinations of Random Variables | 1 | For n independent identically distributed components with a total of known stan… |
 | Loss Random Variable | 1 | The expected payment of a discrete loss distribution under a deductible d is th… |
 | Mean Excess Loss | 1 | To obtain the percentile of the loss (not the excess) given that it exceeds a d… |
 | Mode | 1 | The binomial pmf is unimodal: it increases up to the mode and then decreases, s… |
 | Percentile Matching | 1 | To find an unknown parameter from a given percentile, set the percentile formul… |
 | Poisson Distribution | 1 | For a Poisson random variable, P(N≥1)=1-P(N=0)=1-e^{-λ}. |
-| Probabilities for Linear Combinations | 1 | To find the probability that exactly k of n independent events with different p… |
-| Probability Multiplication Rule | 1 | When drawing without replacement, the probability that the next item is a succe… |
-| Scale and Shape Parameters | 1 | A gamma distribution with shape 2 and scale 1 has density t e^{-t} for t > 0, a… |
+| Poisson Process | 1 | To find P(N ≤ k) for a discrete random variable, sum the probabilities of all v…; Rescale a Poisson rate over a longer period by multiplying the per-period mean … |
 | Set Theory | 1 | Translate a verbally described event on a die roll into the set of outcomes it … |
 | Spliced Distribution | 1 | To locate the median of a mixture with components on different intervals, compa… |
-| The Law of Total Probability | 1 | When the distribution of a count depends on a discrete conditioning variable (i… |
-| Transformations of Random Variables | 1 | A percentage surcharge applied to one component of a combined claim is modeled … |
+| Stop-Loss Reinsurance | 1 | The total loss from n events is the sum of n independent individual losses, so … |
 | Uniform Continuous Distribution | 1 | For X uniform on [a,b], P[X > c] = (b - c)/(b - a) for c within the interval. |
 
 ## Every question
@@ -4199,21 +4652,45 @@ Tagged pages: Order Statistics, Exponential Distribution, Expected Value
 
 </details>
 
-<details><summary><code>p-250</code> · error</summary>
+<details><summary><code>p-250</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Probabilities for Linear Combinations, Normal Distribution
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| Convert miles driven into fuel cost by dividing miles by miles per gallon and multiplying by the price per gallon, then sum across vehicles… | procedure | missing |  |
+| For a linear combination of random variables, E[aX + bY] = aE[X] + bE[Y]. | formula | elsewhere | Linear Combinations of Random Variables: “$$E[L] = \sum_{i=1}^{n} c_i\,E[X_i]$$” |
+| For independent random variables X and Y, Var(aX + bY) = a^2 Var(X) + b^2 Var(Y). | formula | elsewhere | Linear Combinations of Random Variables: “$$\text{Var}(L) = \sum_{i=1}^{n} c_i^2\,\text{Var}(X_i) + 2\sum_{i < j} c_i c_j\,\text{Cov}(X_i, X_…” |
+| A linear combination of independent normal random variables is itself normally distributed, with mean and variance given by the linear comb… | fact | tagged | Probabilities for Linear Combinations: “When the $X_i$ are independent normals, $L$ is itself normal and is handled by standardization.” |
+| To find a probability for a normal random variable, standardize by subtracting the mean and dividing by the standard deviation, then evalua… | procedure | tagged | Normal Distribution: “Its CDF has no closed form and is evaluated via the standard normal $Z = (X - \mu)/\sigma \sim N(0,…” |
 
 </details>
 
-<details><summary><code>p-251</code> · error</summary>
+<details><summary><code>p-251</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Probabilities for Linear Combinations, Normal Distribution
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| Translate the event 'the first quantity is at least p percent higher than the second' into the inequality X1 >= (1+p)·X2, and rewrite it as… | procedure | missing |  |
+| A linear combination of independent normal random variables is itself normally distributed. | fact | tagged | Probabilities for Linear Combinations: “When the $X_i$ are independent normals, $L$ is itself normal and is handled by standardization.” |
+| For a linear combination aX + cY, the mean is a·E[X] + c·E[Y]. | formula | elsewhere | Linear Combinations of Random Variables: “$$E[L] = \sum_{i=1}^{n} c_i\,E[X_i]$$” |
+| For independent X and Y, Var(aX + cY) = a²·Var(X) + c²·Var(Y), so subtracting a variable still adds its variance (scaled by the squared coe… | formula | elsewhere | Linear Combinations of Random Variables: “Coefficients enter the variance **squared**, so $\text{Var}(X - Y) = \text{Var}(X) + \text{Var}(Y)$…” |
+| Standardize a normal variable by subtracting its mean and dividing by its standard deviation, Z = (X - μ)/σ, to compute probabilities from … | procedure | tagged | Normal Distribution: “Its CDF has no closed form and is evaluated via the standard normal $Z = (X - \mu)/\sigma \sim N(0,…” |
+| Compute an upper-tail normal probability as P(Z ≥ z) = 1 - Φ(z), using the standard normal table. | procedure | tagged | Normal Distribution (collapsed): “$$P(S > 55{,}000) = P(Z > 0.791) = 1 - \Phi(0.791) \approx 1 - 0.7855 = 0.2145$$” |
 
 </details>
 
-<details><summary><code>p-252</code> · error</summary>
+<details><summary><code>p-252</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Probabilities for Linear Combinations, Coefficient of Variation
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The coefficient of variation of a random variable is its standard deviation divided by its mean. | definition | tagged | Coefficient of Variation: “The **Coefficient of Variation** $CV$ is the ratio of the standard deviation to the mean, measuring…” |
+| The expected value of a linear combination of random variables is the same linear combination of their expected values: E[aX + bY] = aE[X] … | fact | elsewhere | Linear Combinations of Random Variables: “$$E[L] = \sum_{i=1}^{n} c_i\,E[X_i]$$” |
+| For independent random variables X and Y, Var(aX + bY) = a^2 Var(X) + b^2 Var(Y), since the covariance term is zero. | formula | elsewhere | Variance and Standard Deviation: “For a sum, $\text{Var}(X + Y) = \text{Var}(X) + \text{Var}(Y) + 2\,\text{Cov}(X,Y)$; the [[Covarian…” |
+| Given a coefficient of variation and a mean, recover the standard deviation as CV times mean, and then the variance as its square. | procedure | missing |  |
 
 </details>
 
@@ -4229,1017 +4706,2240 @@ Tagged pages: Moments for Linear Combinations, Variance
 
 </details>
 
-<details><summary><code>p-254</code> · error</summary>
+<details><summary><code>p-254</code> · untagged</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Variance for Conditional and Marginal Distributions, Poisson Distribution
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| Law of total variance: Var(X) = E[Var(X\|Y)] + Var(E[X\|Y]). | formula | tagged | Variance for Conditional and Marginal Distributions: “$$\text{Var}(X) = E\bigl[\text{Var}(X \mid Y)\bigr] + \text{Var}\bigl(E[X \mid Y]\bigr)$$” |
+| A Poisson random variable has variance equal to its mean. | fact | tagged | Poisson Distribution: “A defining property is $E[X] = \text{Var}(X) = \lambda$ — the mean and variance are equal” |
+| For a mixture over discrete classes, compute the unconditional mean and the expectation of a conditional quantity by weighting each class's… | procedure | elsewhere | The Law of Total Probability (collapsed): “$$P(C) = (0.20)(0.30) + (0.10)(0.50) + (0.15)(0.20)$$” |
+| Variance of a random variable equals E[X^2] minus (E[X])^2; applied to the conditional mean as a random variable, Var(E[N\|T]) = E[(E[N\|T]… | formula | elsewhere | Variance: “Efficient computation formula: $\text{Var}(X) = E[X^2] - \mu^2$ where $\mu = E[X]$” |
+
 </details>
+
+<details><summary><code>p-255</code> · answerable</summary>
 
-<details><summary><code>p-255</code> · error</summary>
+Tagged pages: Expected Value, Probability
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The expected value of a discrete random variable is the sum of each possible value times its probability. | formula | tagged | Expected Value: “$$E[X] = \begin{cases} \displaystyle\sum_{k} k\, f(k) & \text{(discrete)} \\[6pt] \displaystyle\int…” |
+| Linearity of expectation: the expected value of a constant times a random variable equals the constant times its expected value, and the ex… | fact | tagged | Expected Value: “It is linear: $E[aX + b] = aE[X] + b$” |
+| Expected insurer payment for a coverage type equals the insurer's payment percentage times the unit cost times the expected number of claim… | procedure | tagged | Expected Value: “It is linear: $E[aX + b] = aE[X] + b$” |
 
 </details>
 
-<details><summary><code>p-256</code> · error</summary>
+<details><summary><code>p-256</code> · untagged</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Exponential Distribution, Conditional Probability, Deductible
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The exponential distribution is memoryless: given X > d, the excess X - d is exponential with the same rate as X. | fact | tagged | Exponential Distribution: “A direct consequence: given $X > d$, the excess $X - d$ is again $\text{Exp}(\theta)$.” |
+| The reimbursement under an ordinary deductible d (coverage of loss in excess of d), conditional on the loss exceeding d, is the excess loss… | definition | tagged | Deductible: “above $d$ it pays the excess $X - d$” |
+| For an exponential distribution with rate λ, the CDF is F(x) = 1 - e^{-λx} and the survival function is S(x) = e^{-λx}. | formula | tagged | Exponential Distribution: “Work from the survival function $S(x) = e^{-x/\theta}$ rather than the CDF” |
+| For a continuous random variable, P(a < R < b) = S(a) - S(b) = F(b) - F(a). | formula | elsewhere | Cumulative Distribution Function (CDF) (collapsed): “$$P(2 \leq X \leq 4) = F(4) - F(2) = \frac{4}{5} - \frac{2}{5} = \frac{2}{5} = 0.4$$” |
+
 </details>
 
-<details><summary><code>p-257</code> · error</summary>
+<details><summary><code>p-257</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Uniform Continuous Distribution, Probability
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| For a Uniform[a,b] random variable, the second moment is E[X^2] = (a^2 + ab + b^2)/3. | formula | missing |  |
+| The p-th percentile of a continuous distribution is the value x such that F(x) = p. | definition | elsewhere | Percentile: “When $F$ is continuous and strictly increasing, it is the value that solves $F(x_p) = p$, found by …” |
+| For a Uniform[a,b] random variable, the CDF is F(x) = (x-a)/(b-a) on [a,b], so the p-th percentile is a + p(b-a). | formula | tagged | Uniform Continuous Distribution: “$E[X] = (a+b)/2$, $\text{Var}(X) = (b-a)^2/12$, and $F(x) = (x-a)/(b-a)$ for $a < x < b$” |
+
 </details>
+
+<details><summary><code>p-258</code> · answerable</summary>
 
-<details><summary><code>p-258</code> · error</summary>
+Tagged pages: Probability Addition Rule, Venn Diagram
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| Represent overlapping groups with a Venn diagram that partitions the population into disjoint regions (exactly one set, exactly two sets, a… | procedure | tagged | Venn Diagram (collapsed): “When filling out a Venn Diagram, **always start from the center (the intersection) and work your wa…” |
+| The total count of a set (e.g. everyone with a given risk factor) equals the sum of the counts of all disjoint regions inside its circle: o… | fact | tagged | Venn Diagram (collapsed): “If you just put "70" in the Auto circle, you've forgotten that 20 of those people also have Homeown…” |
+| The total population is the sum of all disjoint regions of the Venn diagram, including the region outside all sets. | fact | tagged | Venn Diagram: “**$S$**: Universal Set — the rectangle representing every possible outcome (Total Probability = 1)” |
 
 </details>
 
-<details><summary><code>p-259</code> · error</summary>
+<details><summary><code>p-259</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Conditional Probability, Probability Multiplication Rule, Probability Addition Rule
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| Conditional probability: P(A and B) = P(A \| B) × P(B), used to get a joint probability from a conditional probability and a marginal proba… | formula | elsewhere | Probability Rules: “$$P(A \cap B) = P(A \mid B)\,P(B)$$” |
+| The complement rule: P(not A) = 1 − P(A), so if all customers insure at least one car, the probability of exactly one car equals 1 minus th… | fact | linked | Mutually Exclusive Events: “The three classes are mutually exclusive and cover every claim, so "other" is the complement of $D …” |
+| Partition an event into mutually exclusive disjoint parts (e.g., sports car = sports car with one car + sports car with more than one car) … | procedure | linked | The Law of Total Probability: “Every term equals $P(B \mid A_i)\,P(A_i) = P(B \cap A_i)$” |
+| To find P(event E and not B), compute P(E) − P(E and B), i.e., subtract the joint probability with B from the probability of E. | procedure | missing |  |
+
 </details>
+
+<details><summary><code>p-260</code> · untagged</summary>
 
-<details><summary><code>p-260</code> · error</summary>
+Tagged pages: Binomial Distribution, Poisson Distribution, Probability
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The number of successes in n independent trials, each with success probability p, follows a Binomial(n, p) distribution. | fact | tagged | Binomial Distribution: “The **Binomial Distribution** $X \sim \text{Bin}(n, p)$ models the number of successes in $n$ indep…” |
+| For large n and small p, a Binomial(n, p) distribution can be approximated by a Poisson distribution with mean lambda = np. | fact | tagged | Poisson Distribution: “It arises as the limit of $\text{Bin}(n, p)$ as $n \to \infty$ and $p \to 0$ with $np = \lambda$ fi…” |
+| For a Poisson random variable with mean lambda, P(X = k) = e^(-lambda) * lambda^k / k!. | formula | tagged | Poisson Distribution: “$$P(X = k) = \frac{e^{-\lambda}\lambda^k}{k!}$$” |
+| To find P(X <= k) for a discrete random variable, sum the probability mass function over all values from the minimum value of X through k. | procedure | elsewhere | Joint Cumulative Distribution Function: “For discrete variables, $F$ adds up the joint probability function over every cell at or below $x$ …” |
 
 </details>
 
-<details><summary><code>p-261</code> · error</summary>
+<details><summary><code>p-261</code> · untagged</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Binomial Distribution, Probability
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The number of successes in a fixed number of independent trials, each with the same success probability, follows a binomial distribution. | fact | tagged | Binomial Distribution: “The **Binomial Distribution** $X \sim \text{Bin}(n, p)$ models the number of successes in $n$ indep…” |
+| For X ~ Binomial(n, p), P(X = k) = C(n,k) p^k (1-p)^(n-k). | formula | tagged | Binomial Distribution: “$$P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}$$” |
+| The probability of at least k successes equals one minus the probability of fewer than k successes (complement rule), so P(X ≥ 2) = 1 − P(X… | fact | elsewhere | Probability Rules: “The complement rule is the workhorse shortcut — "at least one" is almost always faster as $1 - P(\t…” |
+
 </details>
 
-<details><summary><code>p-262</code> · error</summary>
+<details><summary><code>p-262</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Binomial Distribution, Probability
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| When a fixed number of independent trials each have the same success probability, the number of successes follows a binomial distribution. | fact | tagged | Binomial Distribution: “models the number of successes in $n$ independent Bernoulli trials, each with probability of succes…” |
+| For a binomial distribution with n trials and success probability p, P(N=k) = C(n,k) p^k (1-p)^(n-k). | formula | tagged | Binomial Distribution: “$$P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}$$” |
+| The binomial coefficient is C(n,k) = n!/(k!(n-k)!), so the ratio C(n,k+1)/C(n,k) = (n-k)/(k+1). | formula | missing |  |
+| To find an unknown binomial success probability from a stated relationship between two point probabilities, set up the equation between the… | procedure | missing |  |
+| With independent and identical units, the probability that one randomly selected unit is defective equals the per-trial success probability… | fact | missing |  |
+
 </details>
+
+<details><summary><code>p-263</code> · gap</summary>
 
-<details><summary><code>p-263</code> · error</summary>
+Tagged pages: Independent Events, Probability Addition Rule
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| Two events are independent if the probability of both occurring equals the product of their individual probabilities, P(A∩B) = P(A)P(B). | definition | missing |  |
+| The complement rule: the probability that an event does not occur equals 1 minus the probability that it occurs. | fact | elsewhere | Axioms of Probability (collapsed): “Therefore $P(A^c) = 1 - P(A)$. $\square$” |
+| If two events are independent, their complements are also independent of each other and of the original events, so probabilities like P(A a… | fact | missing |  |
+| To find the probability that exactly one of two events occurs, add the probabilities of the two mutually exclusive cases (A occurs and B do… | procedure | missing |  |
 
 </details>
 
-<details><summary><code>p-264</code> · error</summary>
+<details><summary><code>p-264</code> · untagged</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Bayes Theorem, The Law of Total Probability
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The conditional probability of A given B is P(A\|B) = P(A and B) / P(B), the probability of A restricted to outcomes in B. | definition | elsewhere | Conditional Probability: “$$P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \quad P(B) > 0$$” |
+| The joint probability of a group and an attribute is the group's probability times the conditional probability of the attribute given the g… | formula | elsewhere | Probability Multiplication Rule: “$$P(A \cap B) = P(A) \cdot P(B \mid A)$$” |
+| The law of total probability: for a partition A1,...,An, P(B) = sum over i of P(B\|Ai)P(Ai). | formula | tagged | The Law of Total Probability: “$$P(B) = \sum_{i=1}^{n} P(B \mid A_i)\,P(A_i)$$” |
+| Bayes' theorem: P(A\|B) = P(B\|A)P(A) / sum over i of P(B\|Ai)P(Ai), used to reverse the direction of conditioning. | formula | tagged | Bayes Theorem: “$$= \frac{P(E \mid H)\,P(H)}{\displaystyle\sum_{i} P(E \mid H_i)\,P(H_i)}$$” |
+| Complementary events have probabilities summing to 1, so if a fraction are female, the remaining fraction are male (P(male) = 1 - P(female)… | fact | elsewhere | Axioms of Probability (collapsed): “Therefore $P(A^c) = 1 - P(A)$. $\square$” |
+
 </details>
+
+<details><summary><code>p-265</code> · untagged</summary>
 
-<details><summary><code>p-265</code> · error</summary>
+Tagged pages: Bayes Theorem, The Law of Total Probability
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The law of total probability: for a partition of the sample space into events B_i, P(A) = sum of P(A\|B_i)P(B_i); with two groups, the over… | fact | tagged | The Law of Total Probability: “then the probability of any event $B$ can be expressed as a weighted average of its conditional pro…” |
+| When a population consists of exactly two mutually exclusive and exhaustive groups, the probabilities of belonging to each group sum to 1, … | fact | elsewhere | Mutually Exclusive Events (collapsed): “The three classes are mutually exclusive and cover every claim, so "other" is the complement of $D …” |
+| Bayes' theorem: P(A\|B) = P(B\|A)P(A)/P(B), used to reverse a conditional probability, where P(B) is obtained from the law of total probabi… | formula | tagged | Bayes Theorem: “- The denominator $P(E)$ is computed via [[The Law of Total Probability]] across a partition $\{H_i…” |
+| Conditional probability P(A\|B) is the probability of A given that B has occurred, defined as P(A and B)/P(B); statements like '15% of poli… | definition | elsewhere | Conditional Probability: “**Conditional Probability** $P(A \mid B)$ is the probability that event $A$ occurs given that event…” |
 
 </details>
 
-<details><summary><code>p-266</code> · error</summary>
+<details><summary><code>p-266</code> · untagged</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Order Statistics, Continuous Univariate Distributions, Independent Random Variables
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| For a continuous random variable with density f, the probability that X lies below a value c is the integral of the density from the lower … | formula | tagged | Continuous Univariate Distributions: “$$P(a \leq X \leq b) = \int_a^b f(x)\, dx$$” |
+| The maximum of several random variables is less than a value c exactly when every one of the variables is less than c. | fact | tagged | Order Statistics: “$$P\bigl(X_{(n)} \le x\bigr) = F_1(x)\,F_2(x)\cdots F_n(x)$$” |
+| For independent random variables, the probability that all of a set of events occur is the product of the individual probabilities. | fact | elsewhere | Independent Events: “$$P(A \cap B) = P(A) \cdot P(B)$$” |
+
 </details>
 
-<details><summary><code>p-267</code> · error</summary>
+<details><summary><code>p-267</code> · answerable</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Exponential Distribution, Conditional Probability
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The exponential distribution is memoryless: P(T > s + t \| T > s) = P(T > t), so conditioning on survival to time s resets the distribution. | fact | tagged | Exponential Distribution: “Its defining property is **memorylessness**: $P(X > s + t \mid X > s) = P(X > t)$, making it the un…” |
+| The mean of an exponential distribution with rate λ is 1/λ, so the rate equals the reciprocal of the mean. | fact | tagged | Exponential Distribution: “Some texts parameterize by **rate** $\lambda = 1/\theta$, so $f(x) = \lambda e^{-\lambda x}$ and $E…” |
+| For an exponential distribution with rate λ, the survival function is P(T > t) = e^{-λt}. | formula | tagged | Exponential Distribution: “Work from the survival function $S(x) = e^{-x/\theta}$ rather than the CDF; almost every exponentia…” |
+
 </details>
+
+<details><summary><code>p-268</code> · untagged</summary>
 
-<details><summary><code>p-268</code> · error</summary>
+Tagged pages: Binomial Distribution, Expected Value
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The number of successes in a fixed number of independent trials, each with the same success probability, follows a binomial distribution. | fact | tagged | Binomial Distribution: “The **Binomial Distribution** $X \sim \text{Bin}(n, p)$ models the number of successes in $n$ indep…” |
+| For a binomial random variable with n trials and success probability p, P(N=k) = C(n,k) p^k (1-p)^(n-k). | formula | tagged | Binomial Distribution: “$$P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}$$” |
+| A benefit capped at a maximum number of payments is modeled as a payment per event times min(N, cap), where N is the number of events. | procedure | elsewhere | Policy Limit: “the insurer pays the whole loss $X$ when it is below $u$ and pays $u$ when it is not, so the paymen…” |
+| For a nonnegative integer-valued random variable N, E[min(N,m)] = sum over k=0 to m-1 of P(N>k). | formula | elsewhere | Limited Expected Value: “$$E[X \wedge u] = \int_0^u [1 - F(x)]\,dx \quad \text{(for non-negative } X\text{)}$$” |
+| Expected value is linear, so the expected payment equals the per-unit benefit times the expected number of capped payments. | fact | tagged | Expected Value: “It is linear: $E[aX + b] = aE[X] + b$” |
 
 </details>
 
-<details><summary><code>p-269</code> · error</summary>
+<details><summary><code>p-269</code> · untagged</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Probabilities for Linear Combinations, Normal Distribution
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| A sum of independent normal random variables is itself normally distributed. | fact | tagged | Probabilities for Linear Combinations: “When the $X_i$ are independent normals, $L$ is itself normal and is handled by standardization.” |
+| The expected value of a sum of random variables equals the sum of their expected values: E[X+Y] = E[X] + E[Y]. | formula | tagged | Probabilities for Linear Combinations: “$$\mu_L = 100+200 = 300, \qquad \sigma_L = \sqrt{10^2+15^2} = \sqrt{325} \approx 18.03$$” |
+| For independent random variables, the variance of the sum equals the sum of the variances: Var(X+Y) = Var(X) + Var(Y); the standard deviati… | formula | elsewhere | Variance and Standard Deviation: “For a sum, $\text{Var}(X + Y) = \text{Var}(X) + \text{Var}(Y) + 2\,\text{Cov}(X,Y)$; the [[Covarian…” |
+| To find a normal probability P(W ≤ w), standardize with z = (w − mean)/SD and evaluate the standard normal CDF Φ(z). | procedure | tagged | Normal Distribution: “Its CDF has no closed form and is evaluated via the standard normal $Z = (X - \mu)/\sigma \sim N(0,…” |
+| Standard normal CDF values Φ(z) are read from the standard normal table (e.g., Φ(1.4) ≈ 0.9192). | fact | tagged | Normal Distribution: “Its CDF has no closed form and is evaluated via the standard normal $Z = (X - \mu)/\sigma \sim N(0,…” |
+
 </details>
 
-<details><summary><code>p-270</code> · error</summary>
+<details><summary><code>p-270</code> · untagged</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Probabilities for Linear Combinations, Standard Deviation
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The variance of a sum of independent random variables equals the sum of their individual variances. | fact | elsewhere | Variance and Standard Deviation: “For a sum, $\text{Var}(X + Y) = \text{Var}(X) + \text{Var}(Y) + 2\,\text{Cov}(X,Y)$; the [[Covarian…” |
+| The standard deviation of a random variable is the square root of its variance, and variance is the square of the standard deviation. | definition | tagged | Standard Deviation: “**Standard Deviation** $\sigma$ is the positive square root of [[Variance]], measuring the typical …” |
+| Standard deviations of independent random variables do not add directly; one must add variances and then take the square root to get the st… | fact | elsewhere | Variance and Standard Deviation: “Standard deviations do **not** add: $\text{SD}(X+Y) \neq \text{SD}(X) + \text{SD}(Y)$. Always add v…” |
+
 </details>
+
+<details><summary><code>p-284</code> · untagged</summary>
 
-<details><summary><code>p-284</code> · error</summary>
+Tagged pages: Covariance, Variance, Correlation Coefficient, Exponential Distribution
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| An exponential distribution with density (1/θ)e^{-x/θ} for x>0 has mean θ and variance θ². | fact | tagged | Exponential Distribution: “$E[X] = \theta$, $\text{Var}(X) = \theta^2$, and $F(x) = 1 - e^{-x/\theta}$” |
+| The covariance of two random variables equals their correlation times the product of their standard deviations: Cov(X,Y) = Corr(X,Y)·σ_X·σ_… | formula | tagged | Correlation Coefficient: “$$\rho(X, Y) = \frac{\text{Cov}(X, Y)}{\sigma_X \cdot \sigma_Y}$$” |
+| The variance of a sum of two random variables is Var(X+Y) = Var(X) + Var(Y) + 2·Cov(X,Y). | formula | elsewhere | Linear Combinations of Random Variables: “$$\text{Var}(L) = \sum_{i=1}^{n} c_i^2\,\text{Var}(X_i) + 2\sum_{i < j} c_i c_j\,\text{Cov}(X_i, X_…” |
 
 </details>
 
-<details><summary><code>p-285</code> · error</summary>
+<details><summary><code>p-285</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Order Statistics, Uniform Continuous Distribution
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| For a continuous uniform random variable on [a, b], P(X ≤ x) = (x − a)/(b − a) for a ≤ x ≤ b, i.e., probability is proportional to length o… | formula | tagged | Uniform Continuous Distribution: “$F(x) = (x-a)/(b-a)$ for $a < x < b$” |
+| For independent random variables, the probability that all of them satisfy a condition equals the product of the individual probabilities. | fact | tagged | Order Statistics: “$$P\bigl(X_{(n)} \le x\bigr) = F_1(x)\,F_2(x)\cdots F_n(x)$$” |
+| The maximum of a sample is at most x exactly when every observation is at most x, and the minimum is at least x exactly when every observat… | fact | elsewhere | Random Sample: “Their distributions come from counting how many observations fall below $x$ — a binomial$(n, F(x))$…” |
+| To find the probability that a fixed value lies strictly between the sample minimum and maximum, take the complement: subtract the probabil… | procedure | missing |  |
+
 </details>
 
-<details><summary><code>p-286</code> · error</summary>
+<details><summary><code>p-286</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Order Statistics, Exponential Distribution, Probability
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| For an exponential distribution with mean θ, the survival function is P(X > x) = e^{-x/θ} and the density is f(x) = (1/θ)e^{-x/θ} for x ≥ 0. | formula | tagged | Exponential Distribution: “$$f(x) = \frac{1}{\theta}\,e^{-x/\theta}, \quad x > 0$$” |
+| To find the probability of an event involving two independent continuous random variables, condition on one variable and integrate the cond… | procedure | missing |  |
+| For independent identically distributed random variables, the events {X1 > 2X2} and {X2 > 2X1} have equal probability by symmetry. | fact | missing |  |
+| Mutually exclusive events have probabilities that add for their union, so P(A or B) = P(A) + P(B) when A and B cannot occur together (here … | fact | elsewhere | Mutually Exclusive Events: “For mutually exclusive events, the [[Probability Addition Rule]] simplifies to $P(A \cup B) = P(A) …” |
+
 </details>
+
+<details><summary><code>p-288</code> · untagged</summary>
 
-<details><summary><code>p-288</code> · error</summary>
+Tagged pages: Bayes Theorem, Conditional Probability
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The probability of the complement of an event is 1 minus the probability of the event, so P(A^c \| B) = 1 - P(A \| B) for conditional proba… | fact | elsewhere | Axioms of Probability (collapsed): “Therefore $P(A^c) = 1 - P(A)$. $\square$” |
+| Bayes' Theorem: P(A \| B) = P(B \| A) P(A) / [P(B \| A) P(A) + P(B \| A^c) P(A^c)]. | formula | tagged | Bayes Theorem: “$$= \frac{P(E \mid H)\,P(H)}{\displaystyle\sum_{i} P(E \mid H_i)\,P(H_i)}$$” |
+| The law of total probability: P(B) = sum over a partition {A_i} of P(B \| A_i) P(A_i), used to compute the denominator (the unconditional p… | formula | linked | The Law of Total Probability: “$$P(B) = \sum_{i=1}^{n} P(B \mid A_i)\,P(A_i)$$” |
+| Conditional probability P(A \| B) is the probability of A given that B has occurred, equal to P(A and B)/P(B); the joint probability is P(B… | definition | tagged | Conditional Probability: “$$P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \quad P(B) > 0$$” |
 
 </details>
 
-<details><summary><code>p-289</code> · error</summary>
+<details><summary><code>p-289</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Standard Deviation, Variance, Probability
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| Translate a payment rule (a step payment per full interval of loss above a deductible, subject to a policy maximum) into a payment random v… | procedure | missing |  |
+| Build the probability distribution of a function of a discrete random variable by summing the probabilities of all outcomes that map to the… | procedure | linked | Random Variable (collapsed): “$$X(TT) = 0,\quad X(HT) = X(TH) = 1,\quad X(HH) = 2$$” |
+| The expected value of a discrete random variable is E[B] = sum of b times P(B=b) over all values b. | formula | elsewhere | Expected Value: “$$E[X] = \begin{cases} \displaystyle\sum_{k} k\, f(k) & \text{(discrete)} \\[6pt] \displaystyle\int…” |
+| The second moment of a discrete random variable is E[B^2] = sum of b^2 times P(B=b) over all values b. | formula | elsewhere | Discrete Random Variable: “Expectations are sums: $E[g(X)] = \sum_x g(x)\,p(x)$.” |
+| Variance equals the second moment minus the square of the mean, Var(B) = E[B^2] - (E[B])^2, and the standard deviation is its square root. | formula | tagged | Standard Deviation: “$$= \sqrt{E[X^2] - (E[X])^2}$$” |
+
 </details>
+
+<details><summary><code>p-290</code> · untagged</summary>
 
-<details><summary><code>p-290</code> · error</summary>
+Tagged pages: Central Limit Theorem, Normal Distribution, Independent and Identically Distributed
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The expected value of a discrete random variable is the sum of each value times its probability, and E[X^2] is the sum of each squared valu… | formula | elsewhere | Discrete Random Variable: “Expectations are sums: $E[g(X)] = \sum_x g(x)\,p(x)$.” |
+| The variance of a random variable equals E[X^2] minus (E[X])^2. | formula | elsewhere | Variance: “Efficient computation formula: $\text{Var}(X) = E[X^2] - \mu^2$ where $\mu = E[X]$” |
+| For independent random variables, the mean of the sum is the sum of the means and the variance of the sum is the sum of the variances. | fact | tagged | Independent and Identically Distributed: “E[S_n] &= n\mu \\ \text{Var}(S_n) &= n\sigma^2” |
+| By the Central Limit Theorem, the sum of a large number of i.i.d. random variables is approximately normal with mean n*mu and variance n*si… | fact | tagged | Central Limit Theorem: “For large $n$, $S_n$ is approximately $N(n\mu,\, n\sigma^2)$ regardless of the original distribution” |
+| To find a probability for a normal variable, standardize by subtracting the mean and dividing by the standard deviation, then use the stand… | procedure | tagged | Normal Distribution: “Its CDF has no closed form and is evaluated via the standard normal $Z = (X - \mu)/\sigma \sim N(0,…” |
 
 </details>
 
-<details><summary><code>p-291</code> · error</summary>
+<details><summary><code>p-291</code> · untagged</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Correlation Coefficient, Covariance, Joint Probability Function
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| Obtain marginal probabilities of X and Y from a joint probability function by summing the joint probabilities over the values of the other … | procedure | linked | Marginal Probability Function: “$$= \sum_y p(x, y)$$” |
+| The expected value of a function of discrete random variables is the sum of that function times the joint probability, so E[XY] = sum of x*… | formula | elsewhere | Covariance and Correlation Coefficient (collapsed): “$$E[XY] = 1{\cdot}4(0.2) + 1{\cdot}8(0.1) + 3{\cdot}4(0.1) + 3{\cdot}8(0.6) = 17.2$$” |
+| Cov(X,Y) = E[XY] - E[X]E[Y]. | formula | tagged | Covariance: “$$\text{Cov}(X, Y) = E[XY] - E[X] \cdot E[Y]$$” |
+| Corr(X,Y) = Cov(X,Y) / (SD(X) SD(Y)). | formula | tagged | Correlation Coefficient: “$$\rho(X, Y) = \frac{\text{Cov}(X, Y)}{\sigma_X \cdot \sigma_Y}$$” |
+| Var(X) = E[X^2] - (E[X])^2, and SD(X) is its square root. | formula | elsewhere | Variance and Standard Deviation: “$$= E[X^2] - \mu^2$$” |
+| A Bernoulli (0/1-valued) random variable with success probability p has mean p and variance p(1-p), and E[X^2]=E[X] since X^2=X. | fact | elsewhere | Discrete Random Variable (collapsed): “$Y$ is Bernoulli, so $E[Y] = 0.35$ and $\text{Var}(Y) = 0.35(0.65) = 0.2275$.” |
+
 </details>
 
-<details><summary><code>p-292</code> · error</summary>
+<details><summary><code>p-292</code> · answerable</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Joint Probability Function, Variance, Marginal Probability Function
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| Obtain the marginal probability function of one variable from a discrete joint probability function by summing the joint probabilities over… | procedure | tagged | Marginal Probability Function: “Similarly $p_Y(y) = \sum_x p(x,y)$” |
+| The expected value of a discrete random variable is E(Y) = sum of y·p(y), and for a function g, E[g(Y)] = sum of g(y)·p(y), e.g. E(Y^2) = s… | formula | linked | Moments for Joint Distributions: “$$E[Y] = \sum_x \sum_y y\,p(x,y)$$” |
+| The variance of a random variable equals Var(Y) = E(Y^2) - [E(Y)]^2. | formula | tagged | Variance: “Efficient computation formula: $\text{Var}(X) = E[X^2] - \mu^2$ where $\mu = E[X]$” |
+
 </details>
+
+<details><summary><code>p-293</code> · gap</summary>
 
-<details><summary><code>p-293</code> · error</summary>
+Tagged pages: Variance, Standard Deviation, Joint Probability Function
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The expected value of a discrete random variable is the sum of each value times its probability; for a function g of (X,Y) under a joint pr… | formula | elsewhere | Discrete Random Variable: “Expectations are sums: $E[g(X)] = \sum_x g(x)\,p(x)$.” |
+| A marginal probability of X is found by summing the joint probability function over all values of Y (and similarly for Y over X). | procedure | linked | Marginal Probability Function: “The **marginal probability function** of $X$ is obtained from the [[Joint Probability Function]] $p…” |
+| Expectation is linear, so E[X+Y] = E[X] + E[Y] regardless of whether X and Y are independent. | fact | elsewhere | Linear Combinations of Random Variables: “**Expectation is always linear** — $E[L]$ needs no independence assumption at all.” |
+| Variance equals the second moment minus the square of the mean: Var(W) = E[W^2] − (E[W])^2. | formula | tagged | Variance: “Efficient computation formula: $\text{Var}(X) = E[X^2] - \mu^2$ where $\mu = E[X]$” |
+| The standard deviation of a random variable is the square root of its variance. | definition | tagged | Standard Deviation: “**Standard Deviation** $\sigma$ is the positive square root of [[Variance]], measuring the typical …” |
+| If the joint probability table is symmetric in x and y (p(x,y)=p(y,x)), then X and Y have identical marginal distributions and hence equal … | fact | missing |  |
 
 </details>
 
-<details><summary><code>p-294</code> · error</summary>
+<details><summary><code>p-294</code> · answerable</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Variance, Expected Value
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The mean of a discrete random variable is E[X] = sum of x * P(X = x) over all outcomes. | formula | tagged | Expected Value: “$$E[X] = 0(0.5) + 100(0.3) + 500(0.2) = 0 + 30 + 100 = 130$$” |
+| The second moment of a discrete random variable is E[X^2] = sum of x^2 * P(X = x) over all outcomes. | formula | linked | Moment: “For a discrete variable the integral becomes $\sum_x x^n\,p(x)$.” |
+| The variance of a random variable is Var(X) = E[X^2] - (E[X])^2. | formula | tagged | Variance: “Efficient computation formula: $\text{Var}(X) = E[X^2] - \mu^2$ where $\mu = E[X]$” |
+| To compare two random variables defined on the same probability table, compute each one's mean and variance separately and compare the resu… | procedure | tagged | Variance: “Efficient computation formula: $\text{Var}(X) = E[X^2] - \mu^2$ where $\mu = E[X]$” |
+
 </details>
+
+<details><summary><code>p-295</code> · gap</summary>
 
-<details><summary><code>p-295</code> · error</summary>
+Tagged pages: Binomial Distribution, Probability
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| A Bernoulli random variable with success probability p takes value 1 with probability p and 0 with probability 1-p; it can model whether a … | definition | tagged | Binomial Distribution: “The **Binomial Distribution** $X \sim \text{Bin}(n, p)$ models the number of successes in $n$ indep…” |
+| The sum of independent Bernoulli trials with a common success probability n follows a binomial distribution, with P(N=k) = C(n,k) p^k (1-p)… | fact | tagged | Binomial Distribution: “$$P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}$$” |
+| For independent events, the probability of a specific combination of outcomes is the product of the individual probabilities. | fact | elsewhere | Independent Events: “$$P(A \cap B) = P(A) \cdot P(B)$$” |
+| When trials have unequal success probabilities, find the distribution of the total count by conditioning on or enumerating the outcome of t… | procedure | missing |  |
+| Compute P(N ≤ k) for a discrete random variable by summing the probabilities P(N=j) for all j from the minimum value up to k. | procedure | missing |  |
 
 </details>
 
-<details><summary><code>p-296</code> · error</summary>
+<details><summary><code>p-296</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Venn Diagram, Set Function
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| Partition a portfolio into mutually exclusive categories from two cross-classifying attributes (e.g., gender and smoker status), so each to… | procedure | tagged | Venn Diagram (collapsed): “If you just put "70" in the Auto circle, you've forgotten that 20 of those people also have Homeown…” |
+| Translate verbal count relationships ("X has k more than Y", "total is n") into linear equations in the cell counts and solve the resulting… | procedure | missing |  |
+| The size of a union of two disjoint groups equals the sum of their sizes (additivity of counts over disjoint sets), so a total such as all … | fact | elsewhere | Inclusion-Exclusion Principle: “For [[Mutually Exclusive Events\\|disjoint]] events the intersection terms are $0$, so the rule redu…” |
+
 </details>
 
-<details><summary><code>p-297</code> · error</summary>
+<details><summary><code>p-297</code> · untagged</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Continuous Univariate Distributions, Probability
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| A probability density function must integrate to 1 over its support, so a density specified only up to proportionality is normalized by div… | fact | tagged | Continuous Univariate Distributions: “The probability density function (PDF) $f(x)$ must satisfy $f(x) \geq 0$ and $\int_{-\infty}^{\inft…” |
+| For a continuous random variable with density f on (a, b), the probability P(X < x) = F(x) is the integral of f from the lower bound of the… | formula | tagged | Continuous Univariate Distributions: “The CDF and the density are two views of the same object: $F(x) = \int_{-\infty}^{x} f(t)\,dt$ and …” |
+| Find the constant c in a density f(x) = c·g(x) by computing the integral of g over the support and setting c equal to its reciprocal, then … | procedure | elsewhere | Joint Probability Density Function: “A valid joint density satisfies $f(x,y) \geq 0$ and integrates to 1 over its support. Setting that …” |
+
 </details>
+
+<details><summary><code>p-298</code> · untagged</summary>
 
-<details><summary><code>p-298</code> · error</summary>
+Tagged pages: Central Limit Theorem, Normal Distribution
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The expected value of a discrete random variable is E[X] = sum of x·P[X=x], and E[X^2] = sum of x^2·P[X=x]. | formula | elsewhere | Discrete Random Variable: “Expectations are sums: $E[g(X)] = \sum_x g(x)\,p(x)$.” |
+| Variance equals Var(X) = E[X^2] - (E[X])^2. | formula | elsewhere | Variance: “Efficient computation formula: $\text{Var}(X) = E[X^2] - \mu^2$ where $\mu = E[X]$” |
+| For independent random variables, the mean of the sum is the sum of the means and the variance of the sum is the sum of the variances, so f… | fact | elsewhere | Linear Combinations of Random Variables: “For $n$ i.i.d. variables with mean $\mu$ and finite variance $\sigma^2$, $\bar{X}$ has mean $\mu$ a…” |
+| By the Central Limit Theorem, the sum of a large number of iid random variables is approximately normal with mean nμ and variance nσ^2. | fact | tagged | Central Limit Theorem: “For large $n$, $S_n$ is approximately $N(n\mu,\, n\sigma^2)$ regardless of the original distribution” |
+| To find a probability for a normal random variable, standardize via Z = (x - mean)/standard deviation and use the standard normal table, wi… | procedure | tagged | Normal Distribution: “Its CDF has no closed form and is evaluated via the standard normal $Z = (X - \mu)/\sigma \sim N(0,…” |
+| A premium set as a percentage of the expected claim equals that percentage times E[X] per policy; total premium for n policies is n times t… | definition | elsewhere | Normal Approximation (collapsed): “How many i.i.d. policies are needed so that total losses exceed 110% of expected with probability a…” |
 
 </details>
 
-<details><summary><code>p-299</code> · error</summary>
+<details><summary><code>p-299</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Poisson Distribution, The Law of Total Probability, Expected Value
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| For a Poisson random variable with mean lambda, the probability of zero events is P(N=0) = e^{-lambda}. | formula | tagged | Poisson Distribution: “$$P(X = 0) = \frac{e^{-3} \cdot 3^0}{0!} = e^{-3} \approx 0.0498$$” |
+| Recover the Poisson mean from a given probability of zero events by solving e^{-lambda} = p, giving lambda = -ln(p). | procedure | tagged | Poisson Distribution: “$$P(X = 0) = \frac{e^{-3} \cdot 3^0}{0!} = e^{-3} \approx 0.0498$$” |
+| The mean of a Poisson random variable equals its parameter lambda, so each policyholder's expected number of claims is lambda. | fact | tagged | Poisson Distribution: “A defining property is $E[X] = \text{Var}(X) = \lambda$ — the mean and variance are equal” |
+| Expectation is linear: the expected total over a collection of random variables is the sum of their expectations (regardless of independenc… | fact | elsewhere | Poisson Superposition: “a sum of independent Poisson counts is Poisson with the summed mean” |
+| Compute the overall expected total by summing the group totals (group size times group per-policyholder mean) across mutually exclusive gro… | procedure | missing |  |
+
 </details>
+
+<details><summary><code>p-300</code> · untagged</summary>
 
-<details><summary><code>p-300</code> · error</summary>
+Tagged pages: Poisson Distribution, Independent Events, Probability
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The sum of independent Poisson random variables is Poisson with mean equal to the sum of the individual means, so claim counts over several… | fact | elsewhere | Poisson Superposition: “a sum of independent Poisson counts is Poisson with the summed mean.” |
+| For a Poisson random variable with mean λ, the probability mass function is P(N=k) = e^{-λ} λ^k / k!, so P(N=0)=e^{-λ} and P(N=1)=λ e^{-λ}. | formula | tagged | Poisson Distribution: “$$P(X = k) = \frac{e^{-\lambda}\lambda^k}{k!}$$” |
+| To find the probability of 'no more than k' events for a discrete distribution, sum the probabilities of the outcomes 0 through k (the cumu… | procedure | elsewhere | Cumulative Distribution Function (CDF): “The **Cumulative Distribution Function (CDF)** of a random variable $X$ gives the probability that …” |
 
 </details>
 
-<details><summary><code>p-301</code> · error</summary>
+<details><summary><code>p-301</code> · untagged</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Covariance, Variance
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The variance of a sum of two random variables is Var(X+Y) = Var(X) + Var(Y) + 2Cov(X,Y). | formula | elsewhere | Linear Combinations of Random Variables: “$$\text{Var}(L) = \sum_{i=1}^{n} c_i^2\,\text{Var}(X_i) + 2\sum_{i < j} c_i c_j\,\text{Cov}(X_i, X_…” |
+| Covariance measures how two random variables vary together, Cov(X,Y) = E[XY] - E[X]E[Y], and enters the variance of a sum when the variable… | definition | tagged | Covariance: “**Covariance** measures the linear association between two random variables $X$ and $Y$. Positive c…” |
+
 </details>
 
-<details><summary><code>p-302</code> · error</summary>
+<details><summary><code>p-302</code> · untagged</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Poisson Distribution, Probability
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The sum of independent Poisson random variables is Poisson with mean equal to the sum of the individual means. | fact | elsewhere | Poisson Superposition: “a sum of independent Poisson counts is Poisson with the summed mean.” |
+| For a Poisson random variable with mean λ, the probability mass function is P(N=k) = e^{-λ} λ^k / k!. | formula | tagged | Poisson Distribution: “$$P(X = k) = \frac{e^{-\lambda}\lambda^k}{k!}$$” |
+| To find P(N ≤ k) for a discrete random variable, sum the probabilities of all values from the minimum value up to k. | procedure | elsewhere | Poisson Process (collapsed): “$$P(N(3) > 5) = 1 - P(N(3) \leq 5) = 1 - \sum_{k=0}^{5} \frac{e^{-6}6^k}{k!} \approx 1 - 0.4457 = 0…” |
+| Rescale a Poisson rate over a longer period by multiplying the per-period mean by the number of independent periods to get the total-period… | procedure | elsewhere | Poisson Process (collapsed): “Over $t = 3$ months, $N(3) \sim \text{Poi}(2 \times 3) = \text{Poi}(6)$.” |
+
 </details>
+
+<details><summary><code>p-303</code> · untagged</summary>
 
-<details><summary><code>p-303</code> · error</summary>
+Tagged pages: Geometric Distribution, Probability
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| For independent tosses of a fair coin, each outcome of a given sequence has probability (1/2)^n, so the probability of a specific sequence … | fact | elsewhere | Independent Events: “$$P(A_{i_1} \cap A_{i_2} \cap \cdots \cap A_{i_m}) = P(A_{i_1})\,P(A_{i_2}) \cdots P(A_{i_m})$$” |
+| The probability of the union of mutually exclusive events is the sum of their individual probabilities (e.g., all heads or all tails). | fact | linked | Axioms of Probability: “If events are [[Concepts/Mutually Exclusive Events]], the probability of "one or the other" is the …” |
+| The number of independent trials needed to obtain the first success follows a geometric distribution, where P(first success on trial k) = (… | definition | tagged | Geometric Distribution: “$$P(X = k) = (1-p)^{k-1}p, \quad k = 1, 2, 3, \ldots$$” |
+| To find the probability that the first success occurs exactly on trial k, multiply the probability of failure on each of the first k-1 inde… | procedure | tagged | Geometric Distribution: “$$P(X = k) = (1-p)^{k-1}p, \quad k = 1, 2, 3, \ldots$$” |
 
 </details>
 
-<details><summary><code>p-304</code> · error</summary>
+<details><summary><code>p-304</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Combinatorics, Probability
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The probability of at least one occurrence of an event equals one minus the probability of no occurrences (complement rule). | fact | elsewhere | Probability Rules: “The complement rule is the workhorse shortcut — "at least one" is almost always faster as $1 - P(\t…” |
+| The number of ways to choose k items from n without regard to order is the combination C(n,k) = n!/(k!(n-k)!). | formula | linked | Combination: “$$\binom{n}{k} = \frac{n!}{k!\,(n-k)!}$$” |
+| For equally likely random selection without replacement, the probability of an outcome is the number of favorable combinations divided by t… | procedure | tagged | Combinatorics: “In probability, combinatorics determines the sizes of events and sample spaces: $P(A) = \\|A\\| / \\|S…” |
+| To find the probability that no selected item is of a given type, count the combinations drawn only from the items not of that type (e.g., … | procedure | missing |  |
+
 </details>
 
-<details><summary><code>p-305</code> · error</summary>
+<details><summary><code>p-305</code> · answerable</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Independent Events, Poisson Distribution, Normal Distribution, Probability
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| For a Poisson random variable with mean λ, P(N = k) = e^{-λ} λ^k / k!, so P(N ≤ 1) = e^{-λ}(1 + λ). | formula | tagged | Poisson Distribution: “$$P(X = k) = \frac{e^{-\lambda}\lambda^k}{k!}$$” |
+| To find a normal probability, standardize the variable with z = (x − μ)/σ and evaluate the standard normal CDF Φ(z) from the table. | procedure | tagged | Normal Distribution: “Its CDF has no closed form and is evaluated via the standard normal $Z = (X - \mu)/\sigma \sim N(0,…” |
+| If two events or random variables are independent, the probability that both conditions hold equals the product of their individual probabi… | fact | tagged | Independent Events: “$$P(A \cap B) = P(A) \cdot P(B)$$” |
+| The event of passing is the intersection of 'at most a given number of errors' and 'time at most a given limit', whose probability is compu… | definition | tagged | Independent Events: “$$P(A \cap B) = P(A) \cdot P(B)$$” |
+
 </details>
+
+<details><summary><code>p-306</code> · answerable</summary>
 
-<details><summary><code>p-306</code> · error</summary>
+Tagged pages: Bayes Theorem, Exponential Distribution, Conditional Probability
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| For an exponential distribution with mean θ, the survival function is P(T > t) = e^{-t/θ}. | formula | tagged | Exponential Distribution: “Work from the survival function $S(x) = e^{-x/\theta}$ rather than the CDF; almost every exponentia…” |
+| The mean of an exponential distribution equals its scale parameter θ (the reciprocal of the rate), so a stated mean gives the survival func… | fact | tagged | Exponential Distribution: “$$\text{where } \theta > 0 = \text{mean (scale parameter)}$$” |
+| Law of total probability: P(A) = Σ P(A \| B_i) P(B_i) over a partition {B_i}, used to get the overall probability from group-specific proba… | formula | tagged | Bayes Theorem: “First find $P(\text{claim})$ by the Law of Total Probability:” |
+| Bayes' theorem: P(B \| A) = P(A \| B) P(B) / P(A), giving the posterior probability of a group given an observed event. | formula | tagged | Bayes Theorem: “$$P(H \mid E) = \frac{P(E \mid H)\,P(H)}{P(E)}$$” |
+| To find the probability of a group given that a policy is still in force at time t, compute the joint probability of group and survival (gr… | procedure | tagged | Bayes Theorem (collapsed): “$$P(H \mid C) = \frac{P(C \mid H)\,P(H)}{P(C)} = \frac{0.40 \times 0.20}{0.16} = \frac{0.08}{0.16} …” |
 
 </details>
 
-<details><summary><code>p-307</code> · error</summary>
+<details><summary><code>p-307</code> · untagged</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Central Limit Theorem, Normal Distribution
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The sample mean of n independent, identically distributed normal random variables with mean mu and standard deviation sigma is normally dis… | fact | elsewhere | Sample Mean: “For a Normal population the result is exact: $\bar{X} \sim N(\mu, \sigma^2/n)$, and $\bar{X}$ is in…” |
+| To find P(X <= x) for a normal random variable, standardize by subtracting the mean and dividing by the standard deviation, then evaluate t… | procedure | tagged | Normal Distribution: “Its CDF has no closed form and is evaluated via the standard normal $Z = (X - \mu)/\sigma \sim N(0,…” |
+| To satisfy a probability threshold such as Phi(z) >= p, use the inverse standard normal (percentile) value, e.g. the 99th percentile is abo… | procedure | tagged | Normal Distribution: “Useful percentiles: $z_{0.90} = 1.282$, $z_{0.95} = 1.645$, $z_{0.975} = 1.960$, $z_{0.99} = 2.326$” |
+| Because the required sample size must be a whole number, round the solved lower bound on n up to the next integer to guarantee the probabil… | fact | elsewhere | Normal Approximation (collapsed): “At least $1{,}083$ policies.” |
+
 </details>
 
-<details><summary><code>p-308</code> · error</summary>
+<details><summary><code>p-308</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Standard Deviation, Expected Value, Variance
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| For a continuous (or any) random variable, the probability of an interval is the difference of the cumulative distribution function values:… | fact | elsewhere | Cumulative Distribution Function (CDF) (collapsed): “$$P(2 \leq X \leq 4) = F(4) - F(2) = \frac{4}{5} - \frac{2}{5} = \frac{2}{5} = 0.4$$” |
+| Model a benefit paid only if an event occurs as a random variable taking the benefit amount with the event's probability and 0 otherwise (a… | procedure | missing |  |
+| The expected value of a discrete random variable is E[Y] = Σ y·P(Y=y), and E[Y²] = Σ y²·P(Y=y). | formula | tagged | Expected Value: “E[X] = \begin{cases} \displaystyle\sum_{k} k\, f(k) & \text{(discrete)} \\[6pt] \displaystyle\int_{…” |
+| Variance equals the second moment minus the square of the mean: Var(Y) = E[Y²] − (E[Y])², and the standard deviation is its square root. | formula | tagged | Standard Deviation: “$$= \sqrt{E[X^2] - (E[X])^2}$$” |
+
 </details>
+
+<details><summary><code>p-309</code> · answerable</summary>
 
-<details><summary><code>p-309</code> · error</summary>
+Tagged pages: Bayes Theorem, The Law of Total Probability
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| Law of Total Probability: if events B_1,...,B_n partition the sample space, then P(A) = sum over i of P(A \| B_i) P(B_i). | formula | tagged | The Law of Total Probability: “$$P(B) = \sum_{i=1}^{n} P(B \mid A_i)\,P(A_i)$$” |
+| Bayes' Theorem: P(B_j \| A) = P(A \| B_j) P(B_j) / sum over i of P(A \| B_i) P(B_i), which equals P(A and B_j) / P(A). | formula | tagged | Bayes Theorem: “$$= \frac{P(E \mid H)\,P(H)}{\displaystyle\sum_{i} P(E \mid H_i)\,P(H_i)}$$” |
+| Interpret the percentage of policies in each category as the prior (marginal) probability that a randomly chosen policy belongs to that cat… | procedure | tagged | Bayes Theorem (collapsed): “20% of policyholders are high-risk ($H$) and 80% are low-risk ($L$). A high-risk policyholder files…” |
 
 </details>
 
-<details><summary><code>p-310</code> · error</summary>
+<details><summary><code>p-310</code> · untagged</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Continuous Univariate Distributions, Deductible, Expected Value
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The insurer's payment under a policy with a limit u and no deductible is min(X, u), so the expected payment is the limited expected value E… | definition | elsewhere | Limited Expected Value: “It equals the expected value of $\min(X, u)$.” |
+| The insurer's payment under a policy with ordinary deductible d and no limit is (X - d)+ = max(X - d, 0), the excess loss over d, with expe… | definition | tagged | Deductible: “If the loss $X$ is less than or equal to the deductible $d$, the insurer pays nothing; above $d$ it…” |
+| For a continuous loss X with density f, E[min(X,u)] = ∫_0^u x f(x) dx + u·P(X>u), equivalently ∫_0^u S(x) dx. | formula | elsewhere | Policy Limit: “E[X \wedge u] = \int_0^u S(x)\,dx” |
+| A loss splits into the part below a point d and the part above it: min(X,d) + (X-d)+ = X, so E[(X-d)+] = E[X] - E[min(X,d)]. | fact | elsewhere | Excess and Deductible Rating: “& + \left(E[X] - E[X \wedge u]\right)” |
+| The mean of a continuous random variable is E[X] = ∫ x f(x) dx over its support, and P(X>c) is obtained by integrating the density from c u… | formula | tagged | Expected Value: “\displaystyle\int_{-\infty}^{\infty} x\, f(x)\, dx & \text{(continuous)}” |
+
 </details>
+
+<details><summary><code>p-311</code> · untagged</summary>
 
-<details><summary><code>p-311</code> · error</summary>
+Tagged pages: Variance, Joint Probability Function, Covariance
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| A joint probability mass function p(x,y) gives the probability that X = x and Y = y simultaneously, and its values over all (x,y) pairs sum… | definition | tagged | Joint Probability Function: “It satisfies $p(x,y) \geq 0$ for all $(x,y)$ and $\displaystyle\sum_x \sum_y p(x,y) = 1$” |
+| To find the distribution of a function Z = g(X,Y) of two discrete random variables, compute g at each (x,y) point and add the joint probabi… | procedure | elsewhere | Discrete Random Variable (collapsed): “Convolve, summing over the ways each total can occur:” |
+| For a discrete random variable Z, E[Z] = sum of z·p(z) and E[Z^2] = sum of z^2·p(z). | formula | elsewhere | Expected Value: “E[X] = \begin{cases} \displaystyle\sum_{k} k\, f(k) & \text{(discrete)} \\[6pt] \displaystyle\int_{…” |
+| Var(Z) = E[Z^2] − (E[Z])^2. | formula | tagged | Variance: “Efficient computation formula: $\text{Var}(X) = E[X^2] - \mu^2$ where $\mu = E[X]$” |
 
 </details>
 
-<details><summary><code>p-312</code> · error</summary>
+<details><summary><code>p-312</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Conditional Probability, Probability Addition Rule
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| Inclusion-exclusion for two events: P(A ∪ B) = P(A) + P(B) − P(A ∩ B), which can be rearranged to find P(A ∩ B) from the other three quanti… | formula | tagged | Probability Addition Rule: “$$P(A \cup B) = P(A) + P(B) - P(A \cap B)$$” |
+| The event 'exactly one of A or B occurs' has probability P(A ∪ B) − P(A ∩ B), i.e., the union excluding the intersection. | procedure | missing |  |
+| The complement rule: the probability that an event does not occur equals 1 minus its probability, so P(not both A and B) = 1 − P(A ∩ B). | fact | elsewhere | Axioms of Probability (collapsed): “Therefore $P(A^c) = 1 - P(A)$. $\square$” |
+| Conditional probability: P(A \| B) = P(A ∩ B) / P(B); when A is a subset of B, P(A ∩ B) = P(A). | formula | tagged | Conditional Probability: “$$P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \quad P(B) > 0$$” |
+
 </details>
 
-<details><summary><code>p-313</code> · error</summary>
+<details><summary><code>p-313</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Independent Events, Probability Multiplication Rule
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| If two events are independent, the probability that both occur equals the product of their individual probabilities. | fact | tagged | Probability Multiplication Rule: “When $A$ and $B$ are [[Independent Events\\|independent]], the rule simplifies to $P(A \cap B) = P(A…” |
+| A quantity that changes by a fixed percentage each period follows geometric growth or decay, so after n periods it equals the initial value… | procedure | missing |  |
+
 </details>
+
+<details><summary><code>p-314</code> · answerable</summary>
 
-<details><summary><code>p-314</code> · error</summary>
+Tagged pages: Bayes Theorem, Poisson Distribution, The Law of Total Probability
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| For a Poisson random variable with mean λ, P(N = n) = e^(-λ) λ^n / n!, so P(N ≥ 1) = 1 - P(N = 0) = 1 - e^(-λ). | formula | tagged | Poisson Distribution: “$$P(X = k) = \frac{e^{-\lambda}\lambda^k}{k!}$$” |
+| The law of total probability gives the unconditional probability of an event as the sum over mutually exclusive, exhaustive groups of P(gro… | fact | tagged | The Law of Total Probability: “$$P(B) = \sum_{i=1}^{n} P(B \mid A_i)\,P(A_i)$$” |
+| Bayes' theorem: P(A \| B) = P(B \| A) P(A) / P(B), where P(B) is found by summing P(B \| group) P(group) over all groups. | formula | tagged | Bayes Theorem: “$$= \frac{P(E \mid H)\,P(H)}{\displaystyle\sum_{i} P(E \mid H_i)\,P(H_i)}$$” |
+| To find the probability that a randomly chosen policyholder belongs to a given class given an observed claim outcome, weight each class's l… | procedure | tagged | Bayes Theorem (collapsed): “$$P(H \mid C) = \frac{P(C \mid H)\,P(H)}{P(C)} = \frac{0.40 \times 0.20}{0.16} = \frac{0.08}{0.16} …” |
 
 </details>
 
-<details><summary><code>p-315</code> · error</summary>
+<details><summary><code>p-315</code> · untagged</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Normal Distribution, Lognormal Distribution, Independent Events
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| If Y = e^X is a strictly increasing transformation of X, then P(Y > e^c) = P(X > c), so probabilities for a lognormal variable can be compu… | fact | elsewhere | Creating New Distributions (collapsed): “The claim $Y = e^X$ is lognormal, so $\Pr(Y > 5{,}000) = \Pr(X > \ln 5{,}000)$.” |
+| To find a normal probability, standardize by subtracting the mean and dividing by the standard deviation, Z = (X - mu)/sigma, then use the … | procedure | tagged | Normal Distribution: “Its CDF has no closed form and is evaluated via the standard normal $Z = (X - \mu)/\sigma \sim N(0,…” |
+| For a standard normal variable, P(Z > z) = 1 - Phi(z), and P(Z > 0) = 0.5 by symmetry. | fact | tagged | Normal Distribution (collapsed): “$$P(S > 55{,}000) = P(Z > 0.791) = 1 - \Phi(0.791) \approx 1 - 0.7855 = 0.2145$$” |
+| The minimum of random variables exceeds a value c if and only if every one of the variables exceeds c: P(min(Y1,Y2) > c) = P(Y1 > c, Y2 > c… | fact | elsewhere | Order Statistics: “$$P\bigl(X_{(1)} > x\bigr) = \bigl[1 - F_1(x)\bigr]\bigl[1 - F_2(x)\bigr]\cdots\bigl[1 - F_n(x)\big…” |
+| For independent random variables, the joint probability equals the product of the individual probabilities: P(A and B) = P(A)P(B). | fact | tagged | Independent Events: “$$P(A \cap B) = P(A) \cdot P(B)$$” |
+
 </details>
+
+<details><summary><code>p-316</code> · answerable</summary>
 
-<details><summary><code>p-316</code> · error</summary>
+Tagged pages: Bayes Theorem, The Law of Total Probability, Conditional Probability
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The probabilities of a set of mutually exclusive and exhaustive events (a partition) sum to 1, which lets proportional relationships among … | fact | tagged | The Law of Total Probability: “$\{A_1, A_2, \ldots, A_n\}$ must be mutually exclusive and exhaustive events to partition $S$” |
+| Law of total probability: for a partition B_1,...,B_n, P(A) = sum over i of P(A \| B_i) P(B_i). | formula | tagged | The Law of Total Probability: “$$P(B) = \sum_{i=1}^{n} P(B \mid A_i)\,P(A_i)$$” |
+| Bayes' theorem: P(B_j \| A) = P(A \| B_j) P(B_j) / P(A), where P(A) is found via the law of total probability. | formula | tagged | Bayes Theorem: “$$P(H \mid E) = \frac{P(E \mid H)\,P(H)}{P(E)}$$” |
+| Conditional probability P(A \| B) is the probability that A occurs given that B has occurred, equal to P(A and B) / P(B), so P(A and B) = P… | definition | tagged | Conditional Probability: “**Conditional Probability** $P(A \mid B)$ is the probability that event $A$ occurs given that event…” |
 
 </details>
 
-<details><summary><code>p-317</code> · error</summary>
+<details><summary><code>p-317</code> · untagged</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Expected Value, Probability, Geometric Distribution
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| If the probability of death in each year is q given survival to the start of that year, the probability of surviving the first k-1 years is… | fact | tagged | Geometric Distribution: “The survival function is clean: $P(X > n) = (1-p)^n$ — "the first $n$ trials all failed."” |
+| The probability of dying in year k equals the probability of surviving the first k-1 years times the conditional probability of dying in ye… | formula | tagged | Geometric Distribution: “$$P(X = k) = (1-p)^{k-1}p, \quad k = 1, 2, 3, \ldots$$” |
+| The expected value of a discrete random variable is the sum over outcomes of each value times its probability; for a benefit, the expected … | formula | tagged | Expected Value: “$$E[X] = \begin{cases} \displaystyle\sum_{k} k\, f(k) & \text{(discrete)} \\[6pt] \displaystyle\int…” |
+| Because death can occur in only one year, the benefit paid is determined by the year of death, so the death-year events are mutually exclus… | fact | elsewhere | Mutually Exclusive Events: “if $A_1, A_2, \ldots, A_n$ are pairwise mutually exclusive, then $P\!\left(\bigcup_{i=1}^n A_i\righ…” |
+
 </details>
 
-<details><summary><code>p-318</code> · error</summary>
+<details><summary><code>p-318</code> · untagged</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Bayes Theorem, Conditional Probability
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The probability of the complement event is one minus the event's probability, so P(positive \| pregnant) = 1 − P(negative \| pregnant). | fact | elsewhere | Axioms of Probability (collapsed): “Therefore $P(A^c) = 1 - P(A)$.” |
+| The law of total probability gives P(B) = Σ P(B \| A_i) P(A_i) over a partition {A_i} of the sample space. | formula | linked | The Law of Total Probability: “$$P(B) = \sum_{i=1}^{n} P(B \mid A_i)\,P(A_i)$$” |
+| Bayes' theorem: P(A \| B) = P(B \| A) P(A) / P(B), where P(B) is found by the law of total probability. | formula | tagged | Bayes Theorem: “$$P(H \mid E) = \frac{P(E \mid H)\,P(H)}{P(E)}$$” |
+| Conditional probability P(A \| B) = P(A ∩ B) / P(B), and P(A ∩ B) = P(B \| A) P(A). | definition | tagged | Conditional Probability: “$$P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \quad P(B) > 0$$” |
+
 </details>
+
+<details><summary><code>p-319</code> · gap</summary>
 
-<details><summary><code>p-319</code> · error</summary>
+Tagged pages: Binomial Distribution, Probability
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The number of purchases among independent customers with different success probabilities is a sum of independent (non-identical) Bernoulli … | definition | missing |  |
+| For n independent trials each with success probability p, the probability of exactly k successes is C(n,k) p^k (1-p)^(n-k) (binomial pmf). | formula | tagged | Binomial Distribution: “$$P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}$$” |
+| For independent events, the probability that all occur equals the product of their individual probabilities, so the probability of a specif… | fact | elsewhere | Probability Multiplication Rule: “When $A$ and $B$ are [[Independent Events\\|independent]], the rule simplifies to $P(A \cap B) = P(A…” |
+| To get the distribution of a total count from groups with different probabilities, split by how many successes come from each group (e.g., … | procedure | elsewhere | The Law of Total Probability: “$$P(B) = \sum_{i=1}^{n} P(B \mid A_i)\,P(A_i)$$” |
+| The probability of at most k successes is the cumulative sum of the probabilities of 0, 1, ..., k successes, since these outcomes are mutua… | fact | elsewhere | Cumulative Distribution Function (CDF): “$$F(x) = P(X \leq x)$$” |
 
 </details>
 
-<details><summary><code>p-320</code> · error</summary>
+<details><summary><code>p-320</code> · answerable</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Central Limit Theorem, Normal Distribution, Independent and Identically Distributed
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The expected value of a sum of n independent, identically distributed random variables is n times the individual mean. | formula | tagged | Independent and Identically Distributed: “$$\begin{aligned} E[S_n] &= n\mu \\ \text{Var}(S_n) &= n\sigma^2 \end{aligned}$$” |
+| The variance of a sum of n independent random variables is the sum of their variances, so for iid variables the standard deviation of the s… | formula | tagged | Independent and Identically Distributed: “$$\begin{aligned} E[S_n] &= n\mu \\ \text{Var}(S_n) &= n\sigma^2 \end{aligned}$$” |
+| By the Central Limit Theorem, the sum of a large number of iid random variables with finite variance is approximately normally distributed … | fact | tagged | Central Limit Theorem: “For large $n$, $S_n$ is approximately $N(n\mu,\, n\sigma^2)$ regardless of the original distribution” |
+| To find a probability for a normal random variable, standardize by subtracting the mean and dividing by the standard deviation, then evalua… | procedure | tagged | Normal Distribution: “Its CDF has no closed form and is evaluated via the standard normal $Z = (X - \mu)/\sigma \sim N(0,…” |
+
 </details>
+
+<details><summary><code>p-321</code> · untagged</summary>
 
-<details><summary><code>p-321</code> · error</summary>
+Tagged pages: Binomial Distribution, Probability
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The number of successes in a fixed number of independent trials, each with the same success probability, follows a binomial distribution. | fact | tagged | Binomial Distribution: “The **Binomial Distribution** $X \sim \text{Bin}(n, p)$ models the number of successes in $n$ indep…” |
+| Identify the correct success probability for the counted outcome: if the random variable counts non-defective items, the per-trial success … | procedure | tagged | Binomial Distribution: “The **Binomial Distribution** $X \sim \text{Bin}(n, p)$ models the number of successes in $n$ indep…” |
+| For X ~ Binomial(n, q), P(X = k) = C(n,k) q^k (1-q)^(n-k), where C(n,k) = n!/(k!(n-k)!). | formula | tagged | Binomial Distribution: “$$P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}$$” |
+| Compute a probability of the form P(X >= n) for a discrete random variable by summing the probability mass function over all values k from … | procedure | elsewhere | Discrete Random Variable: “$$F(x) = \sum_{k \le x} p(k)$$” |
 
 </details>
 
-<details><summary><code>p-322</code> · error</summary>
+<details><summary><code>p-322</code> · answerable</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Negative Binomial Distribution, Variance
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The number of independent Bernoulli trials needed to obtain r successes, each with success probability p, follows a Negative Binomial distr… | fact | tagged | Negative Binomial Distribution: “The **Negative Binomial Distribution** $X \sim \text{NegBin}(r, p)$ counts the number of independen…” |
+| For the Negative Binomial distribution counting the total number of trials until the r-th success with success probability p, the variance … | formula | tagged | Negative Binomial Distribution: “$$E[X] = \frac{r}{p}, \qquad \text{Var}(X) = \frac{r(1-p)}{p^2}$$” |
+| Identify the parameters of the Negative Binomial from a word problem: r is the required number of successes and p is the probability of suc… | procedure | tagged | Negative Binomial Distribution: “$$\text{where } r = \text{number of successes required},\; p = \text{success probability}$$” |
+
 </details>
 
-<details><summary><code>p-323</code> · error</summary>
+<details><summary><code>p-323</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Independent Events, Probability
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The probability that mutually independent events all occur (or that a specific combination of occurrences and non-occurrences happens) equa… | fact | tagged | Independent Events: “$$P(A_{i_1} \cap A_{i_2} \cap \cdots \cap A_{i_m}) = P(A_{i_1})\,P(A_{i_2}) \cdots P(A_{i_m})$$” |
+| The probability of the complement of an event is one minus the probability of the event, P(E') = 1 - P(E). | formula | linked | Axioms of Probability (collapsed): “Therefore $P(A^c) = 1 - P(A)$.” |
+| To find the probability that exactly k of several independent events occur, enumerate every combination of k events occurring and the rest … | procedure | elsewhere | Mutually Exclusive Events: “if $A_1, A_2, \ldots, A_n$ are pairwise mutually exclusive, then $P\!\left(\bigcup_{i=1}^n A_i\righ…” |
+| To find the probability that more than m events occur, sum the probabilities of the disjoint cases where the number occurring equals m+1, m… | procedure | missing |  |
+
 </details>
+
+<details><summary><code>p-324</code> · answerable</summary>
 
-<details><summary><code>p-324</code> · error</summary>
+Tagged pages: Central Limit Theorem, Poisson Distribution, Normal Distribution
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The sum of independent Poisson random variables is Poisson with mean equal to the sum of the individual means. | fact | linked | Probabilities for Linear Combinations: “independent Poisson variables sum to a Poisson with the means added, so no convolution is needed.” |
+| A Poisson random variable has variance equal to its mean. | fact | tagged | Poisson Distribution: “A defining property is $E[X] = \text{Var}(X) = \lambda$ — the mean and variance are equal” |
+| By the Central Limit Theorem, a sum of many independent identically distributed random variables is approximately normal with mean equal to… | fact | tagged | Central Limit Theorem: “For large $n$, $S_n$ is approximately $N(n\mu,\, n\sigma^2)$ regardless of the original distribution” |
+| To approximate a probability for a normal random variable, standardize by subtracting the mean and dividing by the standard deviation, then… | procedure | tagged | Central Limit Theorem: “$$P(S_{200} > 104{,}000) = P\!\left(Z > \frac{104{,}000 - 100{,}000}{4{,}243}\right) = P(Z > 0.94) …” |
+| For a standard normal Z, P(Z ≥ z) = 1 − Φ(z). | fact | tagged | Normal Distribution: “$$P(S > 55{,}000) = P(Z > 0.791) = 1 - \Phi(0.791) \approx 1 - 0.7855 = 0.2145$$” |
 
 </details>
 
-<details><summary><code>p-325</code> · error</summary>
+<details><summary><code>p-325</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Probability, Axioms of Probability
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| When each member belongs to exactly k of several groups, the sum of the group participation rates equals k times the fraction of members wh… | procedure | missing |  |
+| Partition the participants into mutually exclusive pairwise-intersection regions (e.g., L∩R only, H∩R only, H∩L only) and set up a system o… | procedure | missing |  |
+| If every participant is in exactly two of three sets, there is no triple intersection, and each set's total equals the sum of the two pairw… | fact | missing |  |
+| The fraction of the population in the union of the sets equals the participants' fraction, so those choosing none (lump sum) are excluded f… | fact | elsewhere | Venn Diagram (collapsed): “$$P(\text{Neither}) = 1 - P(A \cup H) = 1 - 0.90 = 0.10$$” |
+
 </details>
 
-<details><summary><code>p-326</code> · error</summary>
+<details><summary><code>p-326</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Exponential Distribution, Probability, Standard Deviation
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| An exponential distribution with density (1/θ)e^{-x/θ} for x>0 has mean θ and standard deviation θ. | fact | tagged | Exponential Distribution: “$E[X] = \theta$, $\text{Var}(X) = \theta^2$, and $F(x) = 1 - e^{-x/\theta}$” |
+| To find the probability that X is within k standard deviations of its mean, rewrite the event \|X-μ\| ≤ kσ as the interval μ-kσ ≤ X ≤ μ+kσ … | procedure | missing |  |
+| For an exponential random variable with mean θ, the survival function is P(X > x) = e^{-x/θ}, so P(a ≤ X ≤ b) = e^{-a/θ} - e^{-b/θ}. | formula | tagged | Exponential Distribution: “Work from the survival function $S(x) = e^{-x/\theta}$ rather than the CDF; almost every exponentia…” |
+
 </details>
+
+<details><summary><code>p-327</code> · untagged</summary>
 
-<details><summary><code>p-327</code> · error</summary>
+Tagged pages: Central Limit Theorem, Normal Distribution
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The mean of a random sample of n independent observations from a normal distribution is itself normally distributed, with the same mean as … | fact | elsewhere | Sampling Distribution: “$$\bar{X} \sim N\!\left(\mu,\, \frac{\sigma^2}{n}\right) \quad \text{if } X_i \stackrel{\text{iid}}…” |
+| The variance of the sample mean of n i.i.d. observations equals the population variance divided by n, so its standard deviation is sigma/sq… | formula | elsewhere | Sample Mean: “$$E[\bar{X}] = \mu, \qquad \text{Var}(\bar{X}) = \frac{\sigma^2}{n}$$” |
+| To find a percentile of a normal random variable, standardize with Z = (X - mu)/sigma, find the standard normal quantile for the given tail… | procedure | tagged | Normal Distribution: “Its CDF has no closed form and is evaluated via the standard normal $Z = (X - \mu)/\sigma \sim N(0,…” |
+| An upper-tail probability P(X > K) = p corresponds to the standard normal quantile at cumulative probability 1 - p (e.g., the 0.99 quantile… | fact | tagged | Normal Distribution: “Useful percentiles: $z_{0.90} = 1.282$, $z_{0.95} = 1.645$, $z_{0.975} = 1.960$, $z_{0.99} = 2.326$” |
 
 </details>
 
-<details><summary><code>p-328</code> · error</summary>
+<details><summary><code>p-328</code> · untagged</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Variance, Moments for Linear Combinations
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| Model a cost increased by an inflation rate r and a fixed added cost c as a linear transformation Y = (1+r)X + c of the original random var… | procedure | elsewhere | Transformations of Random Variables: “$X' = (1+r)X$ under [[Inflation]] all reshape the [[Loss Random Variable]] into the [[Payment Rando…” |
+| For constants a and b, Var(aX + b) = a^2 Var(X). | formula | tagged | Variance: “$\text{Var}(aX + b) = a^2 \text{Var}(X)$ — scaling changes variance, shifts do not” |
+| Adding a constant to a random variable does not change its variance, since a constant has no variability and only shifts the distribution. | fact | tagged | Variance: “$\text{Var}(aX + b) = a^2 \text{Var}(X)$ — scaling changes variance, shifts do not” |
+
 </details>
 
-<details><summary><code>p-329</code> · error</summary>
+<details><summary><code>p-329</code> · untagged</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Bayes Theorem, The Law of Total Probability
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The probabilities of a partition of the sample space (mutually exclusive, exhaustive categories) sum to 1, so the probability of the remain… | fact | elsewhere | Mutually Exclusive Events (collapsed): “The three classes are mutually exclusive and cover every claim, so "other" is the complement of $D …” |
+| Law of total probability: if events B_1,...,B_n partition the sample space, then P(A) = sum over i of P(A \| B_i) P(B_i). | formula | tagged | The Law of Total Probability: “$$P(B) = \sum_{i=1}^{n} P(B \mid A_i)\,P(A_i)$$” |
+| Bayes' theorem: P(B_j \| A) = P(A \| B_j) P(B_j) / P(A), where P(A) is computed by the law of total probability over a partition. | formula | tagged | Bayes Theorem: “$$= \frac{P(E \mid H)\,P(H)}{\displaystyle\sum_{i} P(E \mid H_i)\,P(H_i)}$$” |
+| Conditional probability P(A \| B) = P(A ∩ B) / P(B), so a statement like 'a fraction of children in group B have trait A' gives P(A \| B), … | definition | elsewhere | Conditional Probability: “$$P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \quad P(B) > 0$$” |
+
 </details>
+
+<details><summary><code>p-330</code> · answerable</summary>
 
-<details><summary><code>p-330</code> · error</summary>
+Tagged pages: Moments for Linear Combinations, Variance
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| For constants a, b, c, Var(aX + bY + c) = a^2 Var(X) + b^2 Var(Y) + 2ab Cov(X,Y). | formula | tagged | Moments for Linear Combinations: “$$\text{Var}(W) = \sum_{i=1}^n a_i^2 \,\text{Var}(X_i) + 2\sum_{i < j} a_i a_j \,\text{Cov}(X_i, X_…” |
+| If X and Y are independent, then Cov(X,Y) = 0, so the variance of a sum or difference is the sum of the variances (with coefficients square… | fact | tagged | Moments for Linear Combinations: “When the variables are [[Independent Random Variables]], all covariance terms vanish:” |
+| Adding a constant to a random variable does not change its variance, and the sign of a coefficient is lost because the coefficient is squar… | fact | tagged | Variance: “$\text{Var}(aX + b) = a^2 \text{Var}(X)$ — scaling changes variance, shifts do not” |
 
 </details>
 
-<details><summary><code>p-331</code> · error</summary>
+<details><summary><code>p-331</code> · untagged</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Probability Addition Rule, Venn Diagram
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The probability of an event equals the sum of the probabilities of its disjoint parts, e.g. P(A) = P(A and B) + P(A and not B). | fact | elsewhere | The Law of Total Probability: “Every term equals $P(B \mid A_i)\,P(A_i) = P(B \cap A_i)$” |
+| Translate a survey percentage statement into probabilities of events (including overlap and 'only' categories) by dividing percentages by 1… | procedure | tagged | Venn Diagram: “\\| "$A$ but not $B$" \\| $A \setminus B$ \\| The "crescent moon" of $A$ only. \\|” |
+| Find the probability of the intersection of two events from P(A) and P(A and not B) by subtracting: P(A and B) = P(A) - P(A and not B), the… | procedure | tagged | Venn Diagram (collapsed): “If you just put "70" in the Auto circle, you've forgotten that 20 of those people also have Homeown…” |
+
 </details>
+
+<details><summary><code>p-332</code> · gap</summary>
 
-<details><summary><code>p-332</code> · error</summary>
+Tagged pages: Combinatorics, Probability
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| When independent fair dice are thrown, all ordered outcomes are equally likely, so the sample space for n dice has 6^n equally likely outco… | fact | missing |  |
+| With equally likely outcomes, the probability of an event equals the number of favorable outcomes divided by the total number of outcomes. | formula | tagged | Combinatorics: “In probability, combinatorics determines the sizes of events and sample spaces: $P(A) = \\|A\\| / \\|S…” |
+| The number of ways to choose k items from n distinct items, ignoring order, is the binomial coefficient C(n,k) = n!/(k!(n-k)!). | formula | linked | Combination: “$$\binom{n}{k} = \frac{n!}{k!\,(n-k)!}$$” |
+| To count outcomes with exactly two matching dice, use the multiplication principle: choose the repeated value, choose which two dice form t… | procedure | missing |  |
 
 </details>
 
-<details><summary><code>p-333</code> · error</summary>
+<details><summary><code>p-333</code> · answerable</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Combinatorics, Combination, Probability
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The number of combinations of k items chosen from n, C(n,k) = n!/(k!(n-k)!), counts the unordered selections of k items from n distinct ite… | definition | tagged | Combination: “A **Combination** $\binom{n}{k}$ ("$n$ choose $k$") counts the number of ways to select $k$ objects…” |
+| For sampling without replacement from a population split into groups, the probability of a given group composition is the number of favorab… | procedure | linked | Hypergeometric Distribution: “$$P(X = k) = \frac{\dbinom{K}{k}\dbinom{N-K}{n-k}}{\dbinom{N}{n}}$$” |
+| To get exactly k from one category when drawing n items, choose k from that category and the remaining n-k from all other categories combin… | procedure | linked | Hypergeometric Distribution: “$$P(X = k) = \frac{\dbinom{K}{k}\dbinom{N-K}{n-k}}{\dbinom{N}{n}}$$” |
+
 </details>
 
-<details><summary><code>p-334</code> · error</summary>
+<details><summary><code>p-334</code> · untagged</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Conditional Probability, Bayes Theorem
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The conditional probability of A given B is P(A\|B) = P(A∩B)/P(B). | definition | tagged | Conditional Probability: “$$P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \quad P(B) > 0$$” |
+| The joint probability of two events can be found by multiplying a marginal probability by a conditional probability: P(A∩B) = P(B)·P(A\|B). | formula | elsewhere | Probability Multiplication Rule: “$$P(A \cap B) = P(A) \cdot P(B \mid A)$$” |
+| The total probability of an event equals the sum of its joint probabilities with the categories of a partition (e.g., P(smoke) = P(smoke∩ma… | fact | linked | The Law of Total Probability: “Every term equals $P(B \mid A_i)\,P(A_i) = P(B \cap A_i)$” |
+| To reverse a conditioning, express the known conditional probability as a ratio of joint to marginal probability, solve for the unknown joi… | procedure | tagged | Bayes Theorem: “$$P(H \mid E) = \frac{P(E \mid H)\,P(H)}{P(E)}$$” |
+
 </details>
+
+<details><summary><code>p-335</code> · untagged</summary>
 
-<details><summary><code>p-335</code> · error</summary>
+Tagged pages: Combinatorics, Probability
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The hypergeometric probability of drawing k items of one type in a sample of n drawn without replacement from N items containing K of that … | formula | elsewhere | Hypergeometric Distribution: “$$P(X = k) = \frac{\dbinom{K}{k}\dbinom{N-K}{n-k}}{\dbinom{N}{n}}$$” |
+| The number of ways to choose k items from n distinct items is the binomial coefficient C(n,k) = n!/(k!(n-k)!). | formula | linked | Combination: “$$\binom{n}{k} = \frac{n!}{k!\,(n-k)!}$$” |
+| To find the probability of an event such as 'at least k successes', split it into mutually exclusive cases (exactly k, exactly k+1, ...) an… | procedure | elsewhere | Mutually Exclusive Events: “The addition rule simplification extends to any finite collection: if $A_1, A_2, \ldots, A_n$ are p…” |
+| When every sample of a given size is equally likely, the probability of an event equals the number of favorable samples divided by the tota… | fact | tagged | Probability: “$$P(E) = \frac{\\|E\\|}{\\|S\\|}$$” |
 
 </details>
 
-<details><summary><code>p-336</code> · error</summary>
+<details><summary><code>p-336</code> · answerable</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Uniform Continuous Distribution, Deductible, Expected Value
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The expected claim payment net of a deductible d is the expected payment per loss E[(X-d)_+] = E[max(X-d, 0)], which equals the integral of… | definition | tagged | Deductible: “$$= \max(X - d,\ 0)$$” |
+| For X uniform on [0, M] and deductible d in [0, M], E[(X-d)_+] = (M-d)^2 / (2M). | formula | tagged | Uniform Continuous Distribution: “$$E[(X-300)_+] = P(X > 300) \times E[X - 300 \mid X > 300] = 0.7 \times 350 = 245$$” |
+| The survival function of a Uniform[0, M] random variable is S(x) = (M-x)/M for 0 ≤ x ≤ M, so the expected payment above d is the integral o… | fact | tagged | Uniform Continuous Distribution: “$F(x) = (x-a)/(b-a)$ for $a < x < b$” |
+
 </details>
+
+<details><summary><code>p-337</code> · answerable</summary>
 
-<details><summary><code>p-337</code> · error</summary>
+Tagged pages: Exponential Distribution, Deductible, Expected Value
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The expected payment per loss for a policy with an ordinary deductible d is E[(X-d)_+], where payment is zero when the loss is at or below … | definition | tagged | Deductible: “If the loss $X$ is less than or equal to the deductible $d$, the insurer pays nothing; above $d$ it…” |
+| The exponential distribution is memoryless: given X>d, the excess X-d is exponential with the same mean as X, so E[X-d \| X>d] equals the o… | fact | tagged | Exponential Distribution: “A direct consequence: given $X > d$, the excess $X - d$ is again $\text{Exp}(\theta)$.” |
+| For an exponential distribution with mean θ, the survival function is P(X>x) = e^{-x/θ}. | formula | tagged | Exponential Distribution: “Work from the survival function $S(x) = e^{-x/\theta}$ rather than the CDF; almost every exponentia…” |
+| Compute E[(X-d)_+] by conditioning on exceeding the deductible: multiply P(X>d) by E[X-d \| X>d] (the payment is zero otherwise). | procedure | tagged | Exponential Distribution (collapsed): “The two differ by the factor $P(X > 300) = e^{-0.6} \approx 0.5488$, since $274.4 = 0.5488 \times 5…” |
 
 </details>
 
-<details><summary><code>p-338</code> · error</summary>
+<details><summary><code>p-338</code> · untagged</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Conditional Probability Function, Moments for Joint Distributions
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The conditional expectation of X given an event A is the sum of x times the conditional probability P(X=x \| A), which equals the sum of x·… | definition | linked | Expected Value (collapsed): “$$E[X] = 0(0.5) + 100(0.3) + 500(0.2) = 0 + 30 + 100 = 130$$” |
+| The conditional probability of event B given event A is P(B\|A) = P(A and B) / P(A). | formula | elsewhere | Conditional Probability: “$$P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \quad P(B) > 0$$” |
+| To find the probability of an event defined on one variable (e.g., at most one filling) from a joint probability table, sum the joint proba… | procedure | elsewhere | Conditional and Marginal Probability Functions (collapsed): “Marginals of $X$: $p_X(0) = 0.3 + 0.1 = 0.4$ and $p_X(1) = 0.2 + 0.4 = 0.6$.” |
+| To obtain the conditional distribution of one variable given an event on the other variable, restrict the joint table to cells satisfying t… | procedure | elsewhere | Joint Probability Function (collapsed): “Conditional: fixing $Y = 1$ leaves the slice $(0.20, 0.10)$, which sums to $p_Y(1) = 0.30$, so $P(X…” |
+
 </details>
 
-<details><summary><code>p-339</code> · error</summary>
+<details><summary><code>p-339</code> · answerable</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Binomial Distribution, Standard Deviation
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The number of successes in a fixed number of independent trials, each with the same success probability, follows a binomial distribution. | fact | tagged | Binomial Distribution: “The **Binomial Distribution** $X \sim \text{Bin}(n, p)$ models the number of successes in $n$ indep…” |
+| For a binomial random variable with n trials and success probability p, the variance is np(1-p), so the standard deviation is sqrt(np(1-p)). | formula | tagged | Binomial Distribution: “$E[X] = np$ and $\text{Var}(X) = np(1-p)$” |
+| The standard deviation of a random variable is the positive square root of its variance. | definition | tagged | Standard Deviation: “**Standard Deviation** $\sigma$ is the positive square root of [[Variance]], measuring the typical …” |
+
 </details>
+
+<details><summary><code>p-340</code> · untagged</summary>
 
-<details><summary><code>p-340</code> · error</summary>
+Tagged pages: Continuous Univariate Distributions, Conditional Probability
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The conditional probability of A given B is P(A \| B) = P(A and B) / P(B). | definition | tagged | Conditional Probability: “$$P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \quad P(B) > 0$$” |
+| To find the CDF of a continuous random variable from its density, integrate the density from the lower end of its support up to x. | procedure | elsewhere | Cumulative Distribution Function (CDF): “For a continuous random variable, $F(x) = \int_{-\infty}^{x} f(t)\, dt$” |
+| For a continuous random variable, P(a ≤ X < b) = F(b) − F(a), and endpoints do not affect probabilities (strict and non-strict inequalities… | fact | elsewhere | Cumulative Distribution Function (CDF) (collapsed): “$$P(2 \leq X \leq 4) = F(4) - F(2) = \frac{4}{5} - \frac{2}{5} = \frac{2}{5} = 0.4$$” |
+| The survival probability is P(X ≥ x) = 1 − F(x) for a continuous random variable. | fact | linked | Exponential Distribution: “$$P(X > 300) = 1 - F(300) = e^{-300/500} = e^{-0.6} \approx 0.5488$$” |
+| When conditioning on X ≥ c, the event {X < d and X ≥ c} (with d > c) reduces to the interval {c ≤ X < d}, so the numerator is the probabili… | fact | tagged | Conditional Probability (collapsed): “Let $A = \{X > 700\}$ and $B = \{X > 400\}$. Since $A \subseteq B$, we have $A \cap B = A$.” |
 
 </details>
 
-<details><summary><code>p-341</code> · error</summary>
+<details><summary><code>p-341</code> · untagged</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Continuous Univariate Distributions, Probability
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| A valid probability density function must integrate to 1 over its support, which determines an unknown normalizing constant. | fact | tagged | Continuous Univariate Distributions: “The probability density function (PDF) $f(x)$ must satisfy $f(x) \geq 0$ and $\int_{-\infty}^{\inft…” |
+| For a continuous random variable with density f, P(a < X < b) equals the integral of f(x) from a to b. | formula | tagged | Continuous Univariate Distributions: “P(a \leq X \leq b) = \int_a^b f(x)\, dx” |
+| To find the probability of surviving t years and then dying in a later interval, compute the unconditional probability that time to death X… | procedure | elsewhere | Future Lifetime Random Variable: “${}_{u\\|t}q_x$ is the probability that $(x)$ survives $u$ years and then dies within the following …” |
+
 </details>
+
+<details><summary><code>p-342</code> · gap</summary>
 
-<details><summary><code>p-342</code> · error</summary>
+Tagged pages: Poisson Distribution, Probability
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| A Poisson random variable with mean λ has probability mass function P(X=k) = e^{-λ} λ^k / k! for k = 0, 1, 2, ... | formula | tagged | Poisson Distribution: “$$P(X = k) = \frac{e^{-\lambda}\lambda^k}{k!}$$” |
+| The mean of a Poisson random variable equals its parameter λ, so E(X) = λ. | fact | tagged | Poisson Distribution: “A defining property is $E[X] = \text{Var}(X) = \lambda$ — the mean and variance are equal” |
+| The cumulative distribution function F(x) = P(X ≤ x); for a nonnegative integer-valued variable, F(k) is the sum of the pmf values from 0 t… | definition | elsewhere | Cumulative Distribution Function (CDF): “$$F(x) = P(X \leq x)$$” |
+| To find a Poisson parameter from a ratio of CDF values, write each CDF value as a sum of Poisson probabilities, cancel the common factor e^… | procedure | missing |  |
 
 </details>
 
-<details><summary><code>p-343</code> · error</summary>
+<details><summary><code>p-343</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Expected Value, Probability
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The survival (tail) function of a discrete random variable is S(x) = P[X ≥ x] (or P[X > x]), the probability that the variable is at least … | definition | missing |  |
+| A random variable that cannot be negative has P[X ≥ 0] = 1, so the tail probability at the lowest support point is 1. | fact | missing |  |
+| Recover a discrete probability mass function from tail probabilities by differencing consecutive values: p(x) = P[X ≥ x] − P[X ≥ x+1], with… | procedure | missing |  |
+| The expected value of a discrete random variable is E(X) = Σ x·p(x), summed over all support points. | formula | tagged | Expected Value: “$$E[X] = 0(0.5) + 100(0.3) + 500(0.2) = 0 + 30 + 100 = 130$$” |
+
 </details>
 
-<details><summary><code>p-344</code> · error</summary>
+<details><summary><code>p-344</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Order Statistics, Variance
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The median of a sample of odd size n is the middle order statistic, i.e. the ((n+1)/2)-th smallest value (the second order statistic for a … | definition | missing |  |
+| The density of the k-th order statistic of n iid observations is f_(k)(y) = n!/((k-1)!(n-k)!) [F(y)]^(k-1) [1-F(y)]^(n-k) f(y). | formula | tagged | Order Statistics: “$$f_{X_{(k)}}(x) = \frac{n!}{(k-1)!\,(n-k)!} [F(x)]^{k-1} [1 - F(x)]^{n-k} f(x)$$” |
+| Obtain the CDF F(x) from a density by integrating f from the lower bound of its support up to x. | procedure | elsewhere | Cumulative Distribution Function (CDF): “For a continuous random variable, $F(x) = \int_{-\infty}^{x} f(t)\, dt$” |
+| The expected value of a function of a continuous random variable is E[g(Y)] = ∫ g(y) f(y) dy over the support, giving E[Y] and E[Y^2] as ra… | formula | elsewhere | Continuous Random Variable: “Expectations replace sums with integrals: $E[g(X)] = \int g(x)\,f(x)\,dx$” |
+| The variance of a random variable is Var(Y) = E[Y^2] - (E[Y])^2. | formula | tagged | Variance: “Efficient computation formula: $\text{Var}(X) = E[X^2] - \mu^2$ where $\mu = E[X]$” |
+
 </details>
+
+<details><summary><code>p-345</code> · gap</summary>
 
-<details><summary><code>p-345</code> · error</summary>
+Tagged pages: Probabilities for Linear Combinations, Normal Distribution
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| A linear combination of independent normal random variables is normally distributed, with mean equal to the same linear combination of the … | fact | tagged | Probabilities for Linear Combinations: “When the $X_i$ are independent normals, $L$ is itself normal and is handled by standardization.” |
+| For independent random variables, the variance of a difference equals the sum of the variances: Var(X - Y) = Var(X) + Var(Y). | fact | tagged | Normal Distribution: “Means subtract; **variances add**, even for a difference:” |
+| Standardize a normal random variable by subtracting its mean and dividing by its standard deviation to get a standard normal Z, then expres… | procedure | tagged | Normal Distribution: “Its CDF has no closed form and is evaluated via the standard normal $Z = (X - \mu)/\sigma \sim N(0,…” |
+| Convert an absolute-value event \|X\| < c into the interval -c < X < c, and for a symmetric standard normal compute P(-a < Z < a) = 2Φ(a) -… | procedure | missing |  |
 
 </details>
 
-<details><summary><code>p-346</code> · error</summary>
+<details><summary><code>p-346</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Mutually Exclusive Events, Probability Addition Rule
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| Two events are mutually exclusive (disjoint) if their intersection is empty, so the probability that both occur is zero. | definition | tagged | Mutually Exclusive Events: “$$A \cap B = \emptyset \implies P(A \cap B) = 0$$” |
+| If some pairs of events are mutually exclusive, the only way exactly two of the three events can occur is through the remaining pair, so th… | fact | missing |  |
+| Inclusion-exclusion for three events: P(A∪B∪C) = P(A)+P(B)+P(C) − P(A∩B) − P(A∩C) − P(B∩C) + P(A∩B∩C). | formula | tagged | Probability Addition Rule: “$$P(A \cup B \cup C) = P(A)+P(B)+P(C) - P(A \cap B) - P(A \cap C) - P(B \cap C) + P(A \cap B \cap C…” |
+| The probability that exactly one of two events A or B occurs equals P(A)+P(B) − 2P(A∩B). | formula | missing |  |
+| If A∩C and B∩C are empty, then A∩B∩C is also empty and has probability zero, since it is a subset of each. | fact | missing |  |
+
 </details>
 
-<details><summary><code>p-347</code> · error</summary>
+<details><summary><code>p-347</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Coefficient of Variation, Variance, Standard Deviation
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| To get the marginal distribution of one variable from a joint probability table, sum the joint probabilities over all values of the other v… | procedure | elsewhere | Conditional and Marginal Probability Functions: “The marginal is found by summing (or integrating, in the continuous case) the [[Joint Probability F…” |
+| A 0/1 indicator variable has a Bernoulli distribution, so its mean equals the probability of the event, E[Y] = p. | fact | missing |  |
+| The variance of a Bernoulli random variable with success probability p is p(1-p). | formula | elsewhere | Variance Function: “binomial: $\mu(1 - \mu)$” |
+| The standard deviation of a random variable is the square root of its variance. | definition | tagged | Standard Deviation: “**Standard Deviation** $\sigma$ is the positive square root of [[Variance]], measuring the typical …” |
+| The coefficient of variation of a random variable is its standard deviation divided by its mean, CV = SD/E[Y]. | formula | tagged | Coefficient of Variation: “The **Coefficient of Variation** $CV$ is the ratio of the standard deviation to the mean, measuring…” |
+
 </details>
+
+<details><summary><code>p-348</code> · untagged</summary>
 
-<details><summary><code>p-348</code> · error</summary>
+Tagged pages: Independent Events, Probability, Deductible
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| A policy with a deductible pays a benefit only when the loss exceeds the deductible, so the probability of a benefit equals P(loss > deduct… | fact | tagged | Deductible: “If the loss $X$ is less than or equal to the deductible $d$, the insurer pays nothing; above $d$ it…” |
+| For a loss uniformly distributed on [a, b], P(X ≤ x) = (x − a)/(b − a) for a ≤ x ≤ b, and P(X > x) = (b − x)/(b − a). | formula | elsewhere | Uniform Continuous Distribution: “$F(x) = (x-a)/(b-a)$ for $a < x < b$” |
+| For independent events, the probability that all occur equals the product of their individual probabilities. | fact | tagged | Independent Events: “$$P(A \cap B) = P(A) \cdot P(B)$$” |
+| The probability of at least one event occurring equals 1 minus the probability that none occur (complement rule). | fact | elsewhere | Probability Rules: “$$P(A^c) = 1 - P(A)$$” |
 
 </details>
 
-<details><summary><code>p-349</code> · error</summary>
+<details><summary><code>p-349</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Conditional Probability, Probability Multiplication Rule
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The law of total probability: P(B) = sum over a partition of P(B \| A_i) P(A_i), so a marginal probability is a weighted average of conditi… | formula | linked | The Law of Total Probability: “$$P(B) = \sum_{i=1}^{n} P(B \mid A_i)\,P(A_i)$$” |
+| The multiplication rule: P(A and B) = P(A) P(B \| A), the joint probability equals the probability of one event times the conditional proba… | formula | tagged | Probability Multiplication Rule: “$$P(A \cap B) = P(A) \cdot P(B \mid A)$$” |
+| Translate a statement that one group is k times as likely to succeed as another into a relation between conditional probabilities (P(event … | procedure | missing |  |
+| The probability of the complement of an event is 1 minus its probability, so the fail group has probability 1 minus the pass probability. | fact | elsewhere | Probability Rules: “$$P(A^c) = 1 - P(A)$$” |
+
 </details>
 
-<details><summary><code>p-350</code> · error</summary>
+<details><summary><code>p-350</code> · untagged</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Exponential Distribution, Probability, Benefit Limit
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| With a policy limit, the insurer pays exactly the limit if and only if the loss is greater than or equal to the limit, so the probability o… | fact | elsewhere | Policy Limit: “Under a limit $u$ and no other modification, the insurer pays the whole loss $X$ when it is below $…” |
+| For an exponential distribution with mean θ, the survival function is P(X > x) = e^{-x/θ}. | formula | tagged | Exponential Distribution: “Work from the survival function $S(x) = e^{-x/\theta}$ rather than the CDF; almost every exponentia…” |
+
 </details>
+
+<details><summary><code>p-351</code> · gap</summary>
 
-<details><summary><code>p-351</code> · error</summary>
+Tagged pages: Independent Events, Probability Addition Rule, Binomial Distribution
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| For independent events, the probability that all of them occur equals the product of their individual probabilities. | fact | tagged | Independent Events: “$$P(A \cap B) = P(A) \cdot P(B)$$” |
+| The complement rule: the probability that an event does not occur equals one minus the probability that it occurs. | fact | elsewhere | Axioms of Probability (collapsed): “Therefore $P(A^c) = 1 - P(A)$. $\square$” |
+| To find the probability that exactly k of n independent trials with identical success probability occur, multiply the binomial coefficient … | procedure | tagged | Binomial Distribution: “$$P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}$$” |
+| When a group is made up of subgroups with different probabilities, compute the probability of a total count by enumerating the mutually exc… | procedure | missing |  |
+| The probability of a union of mutually exclusive (disjoint) events is the sum of their probabilities, so P(at most one) = P(zero) + P(exact… | fact | linked | Mutually Exclusive Events: “The addition rule simplification extends to any finite collection: if $A_1, A_2, \ldots, A_n$ are p…” |
 
 </details>
 
-<details><summary><code>p-352</code> · error</summary>
+<details><summary><code>p-352</code> · untagged</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Variance and Standard Deviation, Discrete Univariate Distributions, Payment Random Variable, Expected Value
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| To find the distribution of a benefit that is a function of a continuous variable, map each interval of the underlying variable to its paym… | procedure | linked | Uniform Discrete (collapsed): “Losses of 1 through 4 pay nothing; losses of 5 through 10 pay $1, 2, \ldots, 6$:” |
+| A benefit paid per full step above a deductible-like threshold pays nothing until a step is completed, and a policy maximum caps the paymen… | procedure | linked | Benefit Limit: “Under the payment cap, losses above $d + u/\alpha$ result in the insurer paying exactly $u$ and the…” |
+| For a discrete random variable, the expected value is E[X] = sum of x·P(X=x), and the second moment is E[X^2] = sum of x^2·P(X=x). | formula | linked | Moment: “For a discrete variable the integral becomes $\sum_x x^n\,p(x)$.” |
+| The variance of a random variable is Var(X) = E[X^2] − (E[X])^2. | formula | elsewhere | Variance: “Efficient computation formula: $\text{Var}(X) = E[X^2] - \mu^2$ where $\mu = E[X]$” |
+| The standard deviation of a random variable is the positive square root of its variance. | definition | elsewhere | Standard Deviation: “**Standard Deviation** $\sigma$ is the positive square root of [[Variance]], measuring the typical …” |
+
 </details>
+
+<details><summary><code>p-353</code> · gap</summary>
 
-<details><summary><code>p-353</code> · error</summary>
+Tagged pages: Continuous Univariate Distributions, Conditional Probability
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The cumulative distribution function F(x) = P[X ≤ x] of a continuous random variable is obtained by integrating its density function from t… | definition | tagged | Continuous Univariate Distributions: “The CDF and the density are two views of the same object: $F(x) = \int_{-\infty}^{x} f(t)\,dt$ and …” |
+| Conditional probability: P[A \| B] = P[A ∩ B] / P[B]. | formula | tagged | Conditional Probability: “$$P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \quad P(B) > 0$$” |
+| For a continuous random variable, P[a ≤ X ≤ b] = F(b) − F(a), and P[X ≥ a] = 1 − F(a). | fact | linked | Exponential Distribution (collapsed): “$$P(X > 300) = 1 - F(300) = e^{-300/500} = e^{-0.6} \approx 0.5488$$” |
+| For a conditional event such as {X ≤ b} given {X ≥ a} with a < b, the intersection is the interval {a ≤ X ≤ b}, so the conditional probabil… | procedure | missing |  |
+| When a random variable is measured in units (e.g., tens of thousands), convert the stated amounts into those units before evaluating the CD… | procedure | missing |  |
 
 </details>
 
-<details><summary><code>p-354</code> · error</summary>
+<details><summary><code>p-354</code> · answerable</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Conditional Probability, Probability Rules
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The conditional probability of A given B is P[A \| B] = P[A ∩ B] / P[B], for P[B] > 0. | definition | tagged | Conditional Probability: “$$P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \quad P(B) > 0$$” |
+| To find the probability of an event B from a joint probability and a conditional probability, rearrange the conditional probability definit… | procedure | tagged | Conditional Probability: “P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \quad P(B) > 0” |
+| The probability of a complement is one minus the probability of the event, P[A^c] = 1 - P[A]; for mutually exclusive, exhaustive categories… | fact | tagged | Probability Rules: “$$P(A^c) = 1 - P(A)$$” |
+| A joint probability P[A ∩ B] is the probability that both events occur, while a conditional probability P[A \| B] is the probability of A g… | definition | tagged | Conditional Probability: “**Conditional Probability** $P(A \mid B)$ is the probability that event $A$ occurs given that event…” |
+
 </details>
 
-<details><summary><code>p-355</code> · error</summary>
+<details><summary><code>p-355</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Poisson Distribution, Variance and Standard Deviation
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| For a Poisson distribution with parameter lambda, the mean and the variance are both equal to lambda. | fact | tagged | Poisson Distribution: “A defining property is $E[X] = \text{Var}(X) = \lambda$ — the mean and variance are equal” |
+| The standard deviation of a random variable is the positive square root of its variance, so variance equals the standard deviation squared. | definition | tagged | Variance and Standard Deviation: “$$\sigma = \text{SD}(X) = \sqrt{\text{Var}(X)}$$” |
+| A Poisson random variable with parameter lambda has probability mass function p(x) = e^{-lambda} lambda^x / x! for x = 0, 1, 2, ... | formula | tagged | Poisson Distribution: “$$P(X = k) = \frac{e^{-\lambda}\lambda^k}{k!}$$” |
+| The probability of an event equals one minus the probability of its complement, so P[X >= k] = 1 - P[X <= k-1] for a nonnegative integer-va… | fact | missing |  |
+
 </details>
+
+<details><summary><code>p-357</code> · gap</summary>
 
-<details><summary><code>p-357</code> · error</summary>
+Tagged pages: Geometric Distribution, Conditional Probability, Expected Value
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| A geometric random variable counts the number of independent trials needed to obtain the first success, where each trial succeeds with prob… | definition | tagged | Geometric Distribution: “The **Geometric Distribution** $X \sim \text{Geom}(p)$ counts the number of independent Bernoulli t…” |
+| For a geometric random variable counting trials up to and including the first success with success probability p, the expected value is 1/p. | formula | tagged | Geometric Distribution: “$$E[X] = \frac{1}{p}, \qquad \text{Var}(X) = \frac{1-p}{p^2}$$” |
+| Because successive trials are independent, the process after a failed trial restarts afresh (memoryless property), so the expected addition… | fact | tagged | Geometric Distribution: “shares its **memoryless property**: $P(X > m+n \mid X > m) = P(X > n)$.” |
+| To find the expected number of trials to a first success given that the first trial was a different outcome (a failure for that event), add… | procedure | tagged | Geometric Distribution: “Memorylessness discards the 8 wasted trials entirely:” |
+| Conditioning on the first roll being a 6 means that roll cannot be a 5, so it counts as a roll without ending the wait for a 5; the two wai… | fact | missing |  |
 
 </details>
 
-<details><summary><code>p-358</code> · error</summary>
+<details><summary><code>p-358</code> · untagged</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Poisson Distribution, Discrete Univariate Distributions
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The mode of a discrete distribution is the value of the random variable that has the largest probability mass. | definition | elsewhere | Mode: “The **Mode** of a [[Random Variable]] $X$ is the value at which its [[Probability Mass Function (PM…” |
+| A Poisson random variable with mean lambda has probability mass function P[X=x] = e^{-lambda} lambda^x / x! for x = 0, 1, 2, ... | formula | tagged | Poisson Distribution: “$$P(X = k) = \frac{e^{-\lambda}\lambda^k}{k!}$$” |
+| For a Poisson distribution, successive probabilities satisfy P[X=x+1]/P[X=x] = lambda/(x+1), so probabilities increase while x+1 < lambda a… | fact | elsewhere | Mode: “For the [[Poisson Distribution\\|Poisson]], $p(k)/p(k-1) = \lambda/k$, so probabilities rise while $…” |
+| The Poisson mean parameter lambda is the expected value of the distribution, but the mode need not equal the mean; it is the integer part o… | fact | tagged | Poisson Distribution: “A defining property is $E[X] = \text{Var}(X) = \lambda$ — the mean and variance are equal” |
+
 </details>
+
+<details><summary><code>p-359</code> · untagged</summary>
 
-<details><summary><code>p-359</code> · error</summary>
+Tagged pages: Bayes Theorem, The Law of Total Probability, Conditional Probability
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The conditional probability P[A \| B] is the probability that A occurs given that B has occurred, equal to P[A and B] / P[B]. | definition | tagged | Conditional Probability: “$$P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \quad P(B) > 0$$” |
+| For a two-category split such as male/female, the conditional probabilities within a given group sum to 1, so P[M \| G] = 1 - P[F \| G]. | fact | elsewhere | Conditional Probability Function: “The conditional distribution integrates (or sums) to 1 over its support given the conditioning valu…” |
+| If every member belongs to exactly one of two groups (a partition), the group probabilities sum to 1, so P[X] = 1 - P[Y]. | fact | elsewhere | Probability Rules: “$$P(A^c) = 1 - P(A)$$” |
+| Law of total probability: for a partition B1,...,Bn, P[A] = sum over i of P[A \| Bi] P[Bi]. | formula | tagged | Bayes Theorem: “$$= \frac{P(E \mid H)\,P(H)}{\displaystyle\sum_{i} P(E \mid H_i)\,P(H_i)}$$” |
+| Bayes' theorem: P[B \| A] = P[A \| B] P[B] / (sum over i of P[A \| Bi] P[Bi]), which reverses the direction of conditioning. | formula | tagged | Bayes Theorem: “$$P(H \mid E) = \frac{P(E \mid H)\,P(H)}{P(E)}$$” |
 
 </details>
 
-<details><summary><code>p-360</code> · error</summary>
+<details><summary><code>p-360</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Expected Value, Independent Events, Discrete Univariate Distributions
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The expected value of a discrete random variable is the sum of each possible value multiplied by its probability. | definition | tagged | Expected Value: “$$E[X] = \begin{cases} \displaystyle\sum_{k} k\, f(k) & \text{(discrete)} \\[6pt] \displaystyle\int…” |
+| For independent events, the probability that all occur is the product of their individual probabilities, so the probability of a pattern ac… | fact | linked | Geometric Distribution: “The survival function is clean: $P(X > n) = (1-p)^n$ — "the first $n$ trials all failed."” |
+| The probability of the complement of an event equals one minus the probability of the event, so the probability of no accident in a year is… | fact | elsewhere | Probability Rules: “$$P(A^c) = 1 - P(A)$$” |
+| To find the distribution of the 'most recent event' time, split into mutually exclusive cases: the last event occurred in a given year if i… | procedure | missing |  |
+
 </details>
 
-<details><summary><code>p-361</code> · error</summary>
+<details><summary><code>p-361</code> · untagged</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Deductible, Payment Random Variable, Expected Value
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| With an ordinary deductible d, the insurer's payment per loss is (X - d)+, equal to X - d when the loss exceeds d and 0 otherwise. | definition | tagged | Deductible: “If the loss $X$ is less than or equal to the deductible $d$, the insurer pays nothing; above $d$ it…” |
+| Apply the deductible to each possible loss outcome first to get the payment random variable, then average over the probabilities; do not su… | procedure | tagged | Deductible: “If the loss $X$ is less than or equal to the deductible $d$, the insurer pays nothing; above $d$ it…” |
+| The expected value of a discrete random variable is E[Y] = sum of y times P(Y = y) over all outcomes. | formula | tagged | Expected Value: “$$E[X] = \begin{cases} \displaystyle\sum_{k} k\, f(k) & \text{(discrete)} \\[6pt] \displaystyle\int…” |
+| The premium equals the expected annual payment plus a stated loading for expenses and profit. | definition | elsewhere | Pure Premium: “the portion of the rate that pays claims, before any provision for expenses or profit.” |
+
 </details>
+
+<details><summary><code>p-362</code> · answerable</summary>
 
-<details><summary><code>p-362</code> · error</summary>
+Tagged pages: Normal Distribution, Binomial Distribution, Central Limit Theorem, Normal Approximation
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The number of successes in n independent trials, each with the same success probability p, follows a binomial distribution with parameters … | fact | tagged | Binomial Distribution: “The **Binomial Distribution** $X \sim \text{Bin}(n, p)$ models the number of successes in $n$ indep…” |
+| A binomial random variable with parameters n and p has mean np and standard deviation sqrt(np(1-p)). | formula | tagged | Binomial Distribution: “$E[X] = np$ and $\text{Var}(X) = np(1-p)$” |
+| A binomial random variable can be approximated by a normal distribution with the same mean and standard deviation when n is large. | fact | tagged | Normal Approximation: “A binomial$(n, p)$ is approximately $N\big(np,\ np(1-p)\big)$ and a Poisson$(\lambda)$ approximatel…” |
+| Continuity correction: when approximating a discrete integer-valued variable by a normal, P[X >= k] is computed as the normal probability a… | procedure | tagged | Normal Approximation: “$P(S_n \le k) \approx \Phi\!\left(\frac{k + 0.5 - n\mu}{\sigma\sqrt{n}}\right)$ and $P(S_n \ge k) \…” |
+| Standardize a normal value by subtracting the mean and dividing by the standard deviation, then find the upper-tail probability P[Z > z] fr… | procedure | tagged | Normal Approximation: “The recipe: identify $n$, compute $E[S_n] = n\mu$ and $\text{Var}(S_n) = n\sigma^2$ ([[Moments for …” |
 
 </details>
 
-<details><summary><code>p-363</code> · error</summary>
+<details><summary><code>p-363</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Bayes Theorem, The Law of Total Probability, Conditional Probability
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| Bayes' theorem: P[A\|H] = P[A]P[H\|A] / (P[A]P[H\|A] + P[B]P[H\|B]) for a partition {A, B}, reversing the direction of conditioning. | formula | tagged | Bayes Theorem: “$$= \frac{P(E \mid H)\,P(H)}{\displaystyle\sum_{i} P(E \mid H_i)\,P(H_i)}$$” |
+| The probability of an event's complement is one minus the probability of the event, so the probability of hospitalization is 1 minus the st… | fact | elsewhere | Probability Rules: “$$P(A^c) = 1 - P(A)$$” |
+| Prior probabilities of mutually exclusive, exhaustive groups are found as each group's share of the total population (group size divided by… | procedure | missing |  |
+| The law of total probability gives the overall probability of an event as P[H] = P[A]P[H\|A] + P[B]P[H\|B] over a partition, which is the d… | formula | tagged | The Law of Total Probability: “$$P(B) = \sum_{i=1}^{n} P(B \mid A_i)\,P(A_i)$$” |
+
 </details>
+
+<details><summary><code>p-364</code> · untagged</summary>
 
-<details><summary><code>p-364</code> · error</summary>
+Tagged pages: Exponential Distribution, Conditional Probability, Independent Events
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| An exponential distribution with mean θ has failure rate (hazard) 1/θ. | definition | tagged | Exponential Distribution: “Some texts parameterize by **rate** $\lambda = 1/\theta$, so $f(x) = \lambda e^{-\lambda x}$ and $E…” |
+| For an exponential random variable with rate λ, the survival function is P[X > x] = e^{-λx}. | formula | tagged | Exponential Distribution: “Work from the survival function $S(x) = e^{-x/\theta}$ rather than the CDF; almost every exponentia…” |
+| For independent events, the probability that all occur is the product of their individual probabilities. | fact | tagged | Independent Events: “$$P(A \cap B) = P(A) \cdot P(B)$$” |
+| The probability of at least one event occurring equals one minus the probability that none occur (complement rule), and for independent eve… | fact | elsewhere | Independent and Identically Distributed (collapsed): “One claim stays at or below \$5,000 with probability $F(5{,}000) = 1 - e^{-2.5} = 0.917915$. The ma…” |
+| Conditional probability: P[A \| B] = P[A ∩ B] / P[B]. | formula | tagged | Conditional Probability: “$$P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \quad P(B) > 0$$” |
+| When a statement is given as known information (e.g., the machine functions), treat it as the conditioning event, and when the target event… | procedure | tagged | Conditional Probability (collapsed): “Let $A = \{X > 700\}$ and $B = \{X > 400\}$. Since $A \subseteq B$, we have $A \cap B = A$.” |
 
 </details>
 
-<details><summary><code>p-365</code> · error</summary>
+<details><summary><code>p-365</code> · untagged</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Conditional Probability, Probability Addition Rule, Set Theory
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The conditional probability of A given B is P[A \| B] = P[A ∩ B] / P[B], for P[B] > 0. | definition | tagged | Conditional Probability: “$$P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \quad P(B) > 0$$” |
+| De Morgan's law: the complement of a union equals the intersection of the complements, (A ∪ B)^c = A^c ∩ B^c. | fact | tagged | Set Theory: “Both sides equal $\{1, 3\}$, confirming De Morgan's Law.” |
+| The complement rule: P[A^c] = 1 − P[A], so the probability of neither event occurring is 1 minus the probability of their union. | formula | elsewhere | Probability Rules: “$$P(A^c) = 1 - P(A)$$” |
+| Translate verbal statements such as 'no fillings', 'no root canals', and 'at least one filling or root canal' into events (complements and … | procedure | linked | Set Operations: “Union means "or", intersection means "and", the complement $A^c$ means "not $A$", and the differenc…” |
+
 </details>
 
-<details><summary><code>p-366</code> · error</summary>
+<details><summary><code>p-366</code> · answerable</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Hypergeometric Distribution, Combinatorics
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| When items are drawn without replacement from a finite population divided into two types, the number of items of one type in the sample fol… | fact | tagged | Hypergeometric Distribution: “The **Hypergeometric Distribution** models the number of successes in a sample of size $n$ drawn **…” |
+| For a sample of size n drawn without replacement from N items with K of one type, P[exactly k of that type] = C(K,k)·C(N-K,n-k) / C(N,n). | formula | tagged | Hypergeometric Distribution: “$$P(X = k) = \frac{\dbinom{K}{k}\dbinom{N-K}{n-k}}{\dbinom{N}{n}}$$” |
+| The binomial coefficient C(n,k) = n!/(k!(n-k)!) counts the number of ways to choose k items from n without regard to order. | definition | linked | Combination: “A **Combination** $\binom{n}{k}$ ("$n$ choose $k$") counts the number of ways to select $k$ objects…” |
+| To count outcomes with a specified number of each type in a random sample, multiply the number of ways to choose that many from each type, … | procedure | tagged | Hypergeometric Distribution (collapsed): “$$P(X=2) = \frac{\binom{4}{2}\binom{6}{1}}{\binom{10}{3}} = \frac{6 \cdot 6}{120} = \frac{36}{120} …” |
+
 </details>
+
+<details><summary><code>p-367</code> · gap</summary>
 
-<details><summary><code>p-367</code> · error</summary>
+Tagged pages: Set Theory, Venn Diagram
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| A Venn diagram of three events partitions the sample space into eight disjoint regions: only one event (three regions), exactly two events … | definition | missing |  |
+| The total count for one event equals the sum of its 'only' region, the two exactly-two-event regions that include it, and the all-three reg… | fact | missing |  |
+| To find the total number of items in a union-with-complement setting, add the counts of all disjoint Venn regions, including the region out… | procedure | missing |  |
+| Inclusion-exclusion for three events: \|A∪B∪C\| = \|A\|+\|B\|+\|C\| − \|A∩B\| − \|A∩C\| − \|B∩C\| + \|A∩B∩C\|, where the intersections incl… | formula | elsewhere | Inclusion-Exclusion Principle: “$$\begin{aligned} P(A \cup B \cup C) = {}& P(A) + P(B) + P(C) \\ &- P(A \cap B) - P(A \cap C) - P(B…” |
 
 </details>
 
-<details><summary><code>p-368</code> · error</summary>
+<details><summary><code>p-368</code> · untagged</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Probability Addition Rule, Conditional Probability, Set Theory
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The addition rule for two events states P[A ∪ B] = P[A] + P[B] − P[A ∩ B]. | formula | tagged | Probability Addition Rule: “$$P(A \cup B) = P(A) + P(B) - P(A \cap B)$$” |
+| The intersection probability follows from the conditional probability definition: P[A ∩ B] = P[B \| A]·P[A]. | formula | elsewhere | Probability Multiplication Rule: “$$P(A \cap B) = P(A) \cdot P(B \mid A)$$” |
+| To find an unknown event probability, substitute the given union, single-event, and conditional probabilities into the addition rule (with … | procedure | tagged | Probability Addition Rule: “$$P(A \cup B) = P(A) + P(B) - P(A \cap B)$$” |
+| The event 'smokes or has below normal lung function' is the union of the two events (at least one occurs), and the percentage in a populati… | definition | linked | Set Operations: “Union means "or", intersection means "and", the complement $A^c$ means "not $A$", and the differenc…” |
+
 </details>
 
-<details><summary><code>p-369</code> · error</summary>
+<details><summary><code>p-369</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Independent Events, Probability Rules
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| Two events A and B are independent if and only if P[A ∩ B] = P[A]·P[B]. | definition | missing |  |
+| If two events are independent, their complements are also independent, so independence of deaths implies independence of survivals. | fact | missing |  |
+| The probability of the complement of an event is one minus the probability of the event: P[A^c] = 1 - P[A]. | formula | linked | Axioms of Probability (collapsed): “Therefore $P(A^c) = 1 - P(A)$. $\square$” |
+| Given the joint probability of two independent events and one marginal probability, find the other marginal probability by dividing the joi… | procedure | missing |  |
+
 </details>
+
+<details><summary><code>p-370</code> · answerable</summary>
 
-<details><summary><code>p-370</code> · error</summary>
+Tagged pages: Bayes Theorem, The Law of Total Probability, Conditional Probability
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| Law of Total Probability: if events B_1,...,B_n partition the sample space, then P(A) = sum over i of P(A \| B_i) P(B_i). | formula | tagged | Bayes Theorem: “$$= \frac{P(E \mid H)\,P(H)}{\displaystyle\sum_{i} P(E \mid H_i)\,P(H_i)}$$” |
+| Bayes' theorem: P(B_j \| A) = P(A \| B_j) P(B_j) / P(A), where P(A) is found by the law of total probability over a partition. | formula | tagged | Bayes Theorem: “$$P(H \mid E) = \frac{P(E \mid H)\,P(H)}{P(E)}$$” |
+| The conditional probability P(A \| B) = P(A ∩ B) / P(B), so the joint probability P(A ∩ B) equals P(A \| B) P(B). | definition | tagged | Conditional Probability: “$$P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \quad P(B) > 0$$” |
+| To find the probability that a randomly selected item that has a given outcome belongs to a particular category, compute that category's jo… | procedure | tagged | Bayes Theorem (collapsed): “First find $P(\text{claim})$ by the Law of Total Probability:” |
 
 </details>
 
-<details><summary><code>p-371</code> · error</summary>
+<details><summary><code>p-371</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Normal Distribution, Continuous Univariate Distributions
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| To find the probability of an event defined by a quadratic inequality in X, rewrite the inequality, find the roots of the quadratic, and de… | procedure | linked | Transformations of Random Variables (collapsed): “$g(x) = x^2$ is not monotone on $(-1,1)$, so the shortcut does not apply. Use the CDF method, keepi…” |
+| An upward-opening parabola (positive leading coefficient) is positive outside its roots and negative between them, so a '> 0' inequality gi… | fact | missing |  |
+| The quadratic formula gives the roots of aX^2 + bX + c = 0 as X = (-b ± sqrt(b^2 - 4ac)) / (2a). | formula | elsewhere | Internal Rate of Return (collapsed): “v &= \frac{230 \pm \sqrt{230^2 - 4(132)(100)}}{2(132)} \\” |
+| Standardize a normal random variable X with mean mu and standard deviation sigma using Z = (X - mu)/sigma, then evaluate probabilities with… | procedure | tagged | Normal Distribution: “Its CDF has no closed form and is evaluated via the standard normal $Z = (X - \mu)/\sigma \sim N(0,…” |
+| The probability of a union of disjoint events is the sum of their probabilities, so the probability of two disjoint tails is the sum of the… | fact | elsewhere | Mutually Exclusive Events: “For mutually exclusive events, the [[Probability Addition Rule]] simplifies to $P(A \cup B) = P(A) …” |
+| For a standard normal Z, an upper-tail probability is found as P[Z > z] = 1 - Φ(z), which equals Φ(-z) by symmetry. | fact | tagged | Normal Distribution: “Symmetry gives $\Phi(-z) = 1 - \Phi(z)$ — the identity needed for every negative $z$, since standar…” |
+
 </details>
 
-<details><summary><code>p-372</code> · error</summary>
+<details><summary><code>p-372</code> · untagged</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Percentile, Exponential Distribution, Normal Distribution, Uniform Continuous Distribution
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The median of a continuous distribution is the value m satisfying F(m) = 0.5, where F is the distribution function. | definition | linked | Median: “For a continuous distribution that is the point where $F(m) = 0.5$, splitting the probability in ha…” |
+| For a distribution symmetric about its center (such as the normal or continuous uniform), the median equals the mean. | fact | linked | Median: “For a [[Normal Distribution\\|normal]] distribution the median equals the [[Expected Value\\|mean]]” |
+| The exponential distribution with mean θ has distribution function F(x) = 1 - e^{-x/θ} for x ≥ 0. | formula | tagged | Exponential Distribution: “$E[X] = \theta$, $\text{Var}(X) = \theta^2$, and $F(x) = 1 - e^{-x/\theta}$” |
+| The mean of an exponential distribution equals its scale parameter θ, and its median is θ ln 2, a fixed multiple of the mean. | fact | linked | Median: “For the [[Exponential Distribution\\|exponential]], $m = \theta \ln 2 \approx 0.693\theta$ against a…” |
+| If a distribution's median is a fixed constant multiple of its mean (as with a pure scale parameter family), then scaling the mean by a fac… | fact | elsewhere | Scale and Shape Parameters: “The mean, the standard deviation, every percentile and the limited expected value at a proportional…” |
+
 </details>
+
+<details><summary><code>p-373</code> · answerable</summary>
 
-<details><summary><code>p-373</code> · error</summary>
+Tagged pages: Conditional and Marginal Probability Functions, Joint Probability Function, Variance and Standard Deviation
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The marginal probability function of a discrete random variable X is obtained from the joint probability function by summing over all value… | definition | tagged | Conditional and Marginal Probability Functions: “$$p_X(x) = \sum_y p_{X,Y}(x, y)$$” |
+| The expected value of a discrete random variable is E[X] = sum of x times P[X=x], and more generally E[g(X)] = sum of g(x) times P[X=x] (e.… | formula | tagged | Variance and Standard Deviation: “E[N] &= 0(0.6) + 1(0.3) + 2(0.1) \\” |
+| The variance of a random variable is Var(X) = E[X^2] - (E[X])^2. | formula | tagged | Variance and Standard Deviation: “The second form $E[X^2] - \mu^2$ is the one to use in practice — it needs only two moments and avoi…” |
+| A valid probability function sums to 1 over its support, which can be used to check that the marginal probabilities were computed correctly. | fact | tagged | Joint Probability Function: “It satisfies $p(x,y) \geq 0$ for all $(x,y)$ and $\displaystyle\sum_x \sum_y p(x,y) = 1$” |
 
 </details>
 
-<details><summary><code>p-374</code> · error</summary>
+<details><summary><code>p-374</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Continuous Univariate Distributions, Mode
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The mode of a continuous distribution is the value of x at which the probability density function is maximized. | definition | tagged | Mode: “The **Mode** of a [[Random Variable]] $X$ is the value at which its [[Probability Mass Function (PM…” |
+| To find the mode of a continuous density, differentiate the density, set the derivative equal to zero, and solve for the critical points wi… | procedure | tagged | Mode: “**Interior peak (continuous):** solve $f'(x) = 0$ and confirm it is a maximum.” |
+| To identify the global maximum of the density, compare the density values at all critical points inside the support and at the endpoints of… | procedure | tagged | Mode: “Calculus finds no critical point there, so always check the endpoints.” |
+| A stationary point of the density is not necessarily a maximum; it may be a local minimum or a local maximum, so it must be classified or c… | fact | tagged | Mode: “**Interior peak (continuous):** solve $f'(x) = 0$ and confirm it is a maximum.” |
+| A density function is defined as zero outside its stated support, and critical points outside the support cannot be the mode. | fact | missing |  |
+
 </details>
+
+<details><summary><code>p-375</code> · untagged</summary>
 
-<details><summary><code>p-375</code> · error</summary>
+Tagged pages: Continuous Univariate Distributions, Conditional Probability
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The survival function S(t) = P[T > t] equals 1 minus the cumulative distribution function, and equals the integral of the density from t to… | definition | tagged | Continuous Univariate Distributions: “For anything phrased as a tail probability, work from the survival function $S(x) = 1 - F(x)$ inste…” |
+| Obtain the cumulative distribution function by integrating the density from the lower bound of its support up to t. | procedure | elsewhere | Cumulative Distribution Function (CDF): “For a continuous random variable, $F(x) = \int_{-\infty}^{x} f(t)\, dt$” |
+| For a Pareto-type density f(t) = α β^α / t^(α+1) for t > β, the survival function is P[T > t] = (β/t)^α for t ≥ β. | formula | elsewhere | Single-Parameter Pareto Distribution: “$$F(x) = 1 - \left(\frac{\theta}{x}\right)^{\alpha}, \quad x > \theta$$” |
+| The conditional probability of an event given another is P[A \| B] = P[A ∩ B] / P[B]; for survival, P[T > a+b \| T > a] = P[T > a+b] / P[T … | formula | tagged | Conditional Probability: “$$P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \quad P(B) > 0$$” |
+| To find the probability of no event in the next s time units given none in the first a time units, evaluate the survival ratio at the cumul… | procedure | tagged | Conditional Probability: “$$P(A \mid B) = \frac{P(X > 700)}{P(X > 400)} = \frac{300/1000}{600/1000} = \frac{300}{600} = 0.5$$” |
 
 </details>
 
-<details><summary><code>p-376</code> · error</summary>
+<details><summary><code>p-376</code> · untagged</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Hypergeometric Distribution, Combinatorics
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The hypergeometric distribution models the number of items of one type in a sample drawn without replacement from a finite population conta… | definition | tagged | Hypergeometric Distribution: “The **Hypergeometric Distribution** models the number of successes in a sample of size $n$ drawn **…” |
+| For a sample of size n from N items of which K are of the type of interest, the hypergeometric probability of exactly k such items is C(K,k… | formula | tagged | Hypergeometric Distribution: “$$P(X = k) = \frac{\dbinom{K}{k}\dbinom{N-K}{n-k}}{\dbinom{N}{n}}$$” |
+| The number of ways to choose k items from n without regard to order is the binomial coefficient C(n,k) = n!/(k!(n-k)!). | formula | linked | Combination: “$$\binom{n}{k} = \frac{n!}{k!\,(n-k)!}$$” |
+| To compute the probability of an event such as 'at least k', sum the probabilities of the individual disjoint outcomes (exactly k, k+1, ...… | procedure | elsewhere | Mutually Exclusive Events: “The addition rule simplification extends to any finite collection: if $A_1, A_2, \ldots, A_n$ are p…” |
+
 </details>
 
-<details><summary><code>p-377</code> · error</summary>
+<details><summary><code>p-377</code> · untagged</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Bayes Theorem, Conditional Probability, The Law of Total Probability
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| Bayes' theorem: P[A\|B] = P[B\|A]P[A] / (P[B\|A]P[A] + P[B\|A']P[A']) for a partition of the sample space into A and A'. | formula | tagged | Bayes Theorem: “$$P(H \mid E) = \frac{P(E \mid H)\,P(H)}{P(E)}$$” |
+| The conditional probability P[B\|A] is the probability of B given A, equal to P[A∩B]/P[A]; it can be estimated as the count in A that are a… | definition | tagged | Conditional Probability: “$$P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \quad P(B) > 0$$” |
+| The law of total probability: P[B] = sum over a partition of P[B\|A_i]P[A_i], which gives the denominator of Bayes' theorem as the total pr… | fact | tagged | The Law of Total Probability: “$$P(B) = \sum_{i=1}^{n} P(B \mid A_i)\,P(A_i)$$” |
+| Convert group counts into prior probabilities (group size divided by total) and conditional probabilities (event count in group divided by … | procedure | elsewhere | Naive Bayes: “$\pi_k$ is the **prior** probability of class $k$, usually estimated as the share of training obser…” |
+
 </details>
+
+<details><summary><code>p-378</code> · answerable</summary>
 
-<details><summary><code>p-378</code> · error</summary>
+Tagged pages: Normal Distribution, Percentile
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| To find a probability or percentile for a normal random variable X with mean μ and standard deviation σ, standardize via Z = (X − μ)/σ and … | procedure | tagged | Normal Distribution: “Its CDF has no closed form and is evaluated via the standard normal $Z = (X - \mu)/\sigma \sim N(0,…” |
+| The p-th percentile of a distribution is the value x such that P[X ≤ x] = p. | definition | tagged | Percentile: “When $F$ is continuous and strictly increasing, it is the value that solves $F(x_p) = p$, found by …” |
+| To find a percentile of a normal distribution, look up the corresponding standard normal quantile z_p in the standard normal table (inverse… | procedure | tagged | Percentile (collapsed): “The 95th percentile of the standard normal is $z_{0.95} = 1.645$. Transform back with $\sigma = 15$:” |
+| When the standard deviation of a normal distribution is unknown but one percentile and the mean are given, solve for σ by setting (x − μ)/σ… | procedure | tagged | Normal Distribution: “Its CDF has no closed form and is evaluated via the standard normal $Z = (X - \mu)/\sigma \sim N(0,…” |
 
 </details>
 
-<details><summary><code>p-379</code> · error</summary>
+<details><summary><code>p-379</code> · answerable</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Percentile, Continuous Univariate Distributions
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The median of a continuous random variable is the value m at which the cumulative distribution function equals 0.5, i.e., P(X ≤ m) = 0.5. | definition | linked | Median: “For a continuous distribution that is the point where $F(m) = 0.5$, splitting the probability in ha…” |
+| To find the CDF value at m for a continuous random variable, integrate the probability density function from the lower end of its support u… | procedure | linked | Cumulative Distribution Function (CDF): “For a continuous random variable, $F(x) = \int_{-\infty}^{x} f(t)\, dt$” |
+| Find the median by setting the integral of the density from the lower bound of the support to m equal to 0.5 and solving the resulting equa… | procedure | linked | Median: “solve $F(m) = 0.5$, or equivalently $\int_{-\infty}^{m} f(x)\,dx = 0.5$.” |
+
 </details>
+
+<details><summary><code>p-380</code> · answerable</summary>
 
-<details><summary><code>p-380</code> · error</summary>
+Tagged pages: Linear Combinations of Random Variables, Normal Distribution, Independent Random Variables
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| A linear combination of independent normal random variables (plus a constant) is itself normally distributed. | fact | tagged | Linear Combinations of Random Variables: “A linear combination of independent normals is exactly normal, which is what makes [[Probabilities …” |
+| The expected value of a linear combination is E[aX + bY + c] = aE[X] + bE[Y] + c. | formula | linked | Moments for Linear Combinations: “$$E[W] = a_1 E[X_1] + a_2 E[X_2] + \cdots + a_n E[X_n]$$” |
+| For independent random variables, Var(aX + bY + c) = a^2 Var(X) + b^2 Var(Y); coefficients are squared (so negative signs vanish) and added… | formula | tagged | Linear Combinations of Random Variables: “Coefficients enter the variance **squared**, so $\text{Var}(X - Y) = \text{Var}(X) + \text{Var}(Y)$…” |
+| Standardize a normal random variable by subtracting its mean and dividing by its standard deviation, Z = (X - mu)/sigma, to get a standard … | procedure | tagged | Normal Distribution: “Its CDF has no closed form and is evaluated via the standard normal $Z = (X - \mu)/\sigma \sim N(0,…” |
+| Compute a probability for a standard normal variable using the standard normal table, including upper-tail probabilities and negative z val… | procedure | tagged | Normal Distribution: “Symmetry gives $\Phi(-z) = 1 - \Phi(z)$ — the identity needed for every negative $z$, since standar…” |
 
 </details>
 
-<details><summary><code>p-381</code> · error</summary>
+<details><summary><code>p-381</code> · untagged</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Exponential Distribution, Conditional Probability
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The exponential distribution has density (1/θ)e^{-x/θ} for x>0, with rate 1/θ and mean θ. | definition | tagged | Exponential Distribution: “$$f(x) = \frac{1}{\theta}\,e^{-x/\theta}, \quad x > 0$$” |
+| For an exponential random variable with mean θ, the CDF is P[X<x] = 1 - e^{-x/θ} and the survival function is P[X>x] = e^{-x/θ}. | formula | tagged | Exponential Distribution: “$E[X] = \theta$, $\text{Var}(X) = \theta^2$, and $F(x) = 1 - e^{-x/\theta}$” |
+| Conditional probability: P[A \| B] = P[A ∩ B] / P[B]. | formula | tagged | Conditional Probability: “$$P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \quad P(B) > 0$$” |
+| For a continuous random variable, the probability of an interval is the difference of CDF values: P[a<X<b] = F(b) - F(a); the event {X<b} ∩… | procedure | elsewhere | Continuous Random Variable: “$P(X = c) = 0$ for every $c$, so $P(a < X < b) = P(a \le X \le b) = F(b) - F(a)$.” |
+| The exponential distribution is memoryless: P[X > s+t \| X > s] = P[X > t], so given survival to time s the remaining lifetime has the same… | fact | tagged | Exponential Distribution: “Its defining property is **memorylessness**: $P(X > s + t \mid X > s) = P(X > t)$, making it the un…” |
+
 </details>
 
-<details><summary><code>p-382</code> · error</summary>
+<details><summary><code>p-382</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Variance for Conditional and Marginal Distributions, Hypergeometric Distribution, Conditional Probability Function
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| When sampling without replacement from a finite population divided into categories, the counts of each category in the sample follow a mult… | fact | missing |  |
+| The probability of drawing a given combination of category counts without replacement is the product of binomial coefficients for each cate… | formula | missing |  |
+| The conditional probability of A given B is P[A and B] divided by P[B], and the conditional distribution of a random variable given an even… | definition | tagged | Conditional Probability Function: “$$P(X = x \mid Y = y) = \frac{P(X = x, Y = y)}{P(Y = y)}$$” |
+| Conditioning on the count of one category in a fixed-size sample without replacement leaves the remaining draws to be made from the other c… | procedure | missing |  |
+| A random variable taking only the values 0 and 1 is a Bernoulli random variable with success probability p equal to the probability it take… | fact | missing |  |
+| The variance of a Bernoulli random variable with success probability p is p(1-p). | formula | missing |  |
+
 </details>
+
+<details><summary><code>p-383</code> · gap</summary>
 
-<details><summary><code>p-383</code> · error</summary>
+Tagged pages: Percentile, Continuous Univariate Distributions
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| A density that is proportional to a function g(x) on an interval equals c·g(x) on that interval, where the constant c is determined by requ… | definition | elsewhere | Joint Probability Density Function: “Setting that double integral equal to 1 is how an unknown constant $c$ is found.” |
+| The cumulative distribution function of a continuous random variable is the integral of its density from the lower bound of support up to x… | formula | linked | Cumulative Distribution Function (CDF): “For a continuous random variable, $F(x) = \int_{-\infty}^{x} f(t)\, dt$” |
+| The 100p-th percentile of a continuous distribution is the value x_p satisfying F(x_p) = p. | definition | tagged | Percentile: “When $F$ is continuous and strictly increasing, it is the value that solves $F(x_p) = p$, found by …” |
+| To find a percentile, set the CDF equal to p and solve for x (invert the CDF), giving x_p as a function of p. | procedure | tagged | Percentile (collapsed): “Set $F(x_{0.90}) = 0.90$ and solve:” |
+| Power rule for integration: the integral of x^a from 0 to b equals b^(a+1)/(a+1) for a > -1; an nth root is x^(1/n). | fact | missing |  |
 
 </details>
 
-<details><summary><code>p-384</code> · error</summary>
+<details><summary><code>p-384</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Percentile, Continuous Univariate Distributions
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| To find a density constant, set the integral of the proportional density over its support equal to 1 and solve for the constant. | procedure | elsewhere | Joint Probability Density Function: “A valid joint density satisfies $f(x,y) \geq 0$ and integrates to 1 over its support. Setting that …” |
+| The distribution function is the integral of the density from the lower end of the support up to x: F(x) = ∫ f(t) dt. | formula | tagged | Continuous Univariate Distributions: “The CDF and the density are two views of the same object: $F(x) = \int_{-\infty}^{x} f(t)\,dt$ and …” |
+| The (100p)th percentile of a continuous distribution is the value x at which the distribution function equals p, i.e. F(x) = p. | definition | tagged | Percentile: “When $F$ is continuous and strictly increasing, it is the value that solves $F(x_p) = p$, found by …” |
+| To combine two distributions through a percentile-matching condition, find the common value x from the first distribution's percentile equa… | procedure | missing |  |
+| The density function is the derivative of the distribution function: f(x) = F'(x). | fact | tagged | Continuous Univariate Distributions: “The CDF and the density are two views of the same object: $F(x) = \int_{-\infty}^{x} f(t)\,dt$ and …” |
+
 </details>
+
+<details><summary><code>p-385</code> · untagged</summary>
 
-<details><summary><code>p-385</code> · error</summary>
+Tagged pages: Exponential Distribution, Percentile
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| For an exponential distribution with mean β, the CDF is F(x) = P[X ≤ x] = 1 − e^{−x/β} for x ≥ 0. | formula | tagged | Exponential Distribution: “$E[X] = \theta$, $\text{Var}(X) = \theta^2$, and $F(x) = 1 - e^{-x/\theta}$” |
+| When an exponential distribution's parameter is not given, determine it by setting the CDF at a known point equal to the given probability … | procedure | elsewhere | Percentile Matching: “$$F(\hat\pi_{g_k} \mid \theta) = g_k, \quad k = 1, \ldots, p$$” |
+| To find the time by which a given proportion has failed (a percentile), set the CDF equal to that proportion and solve for x using the natu… | procedure | tagged | Percentile (collapsed): “Set $F(x_{0.90}) = 0.90$ and solve:” |
 
 </details>
 
-<details><summary><code>p-386</code> · error</summary>
+<details><summary><code>p-386</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Expected Value, Poisson Distribution, Variance and Standard Deviation
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The sum of the first n positive integers 1 + 2 + ... + n equals n(n+1)/2. | formula | missing |  |
+| The expectation of a function of a random variable is the expectation of that function, not the function of the mean, so E[g(N)] generally … | fact | elsewhere | Transformations of Random Variables: “If $E[g(X)]$ is all that is wanted, do **not** find $f_Y$ — use $E[g(X)] = \int g(x) f_X(x)\,dx$ di…” |
+| Expectation is linear: E[aX + bY] = aE[X] + bE[Y] for constants a and b. | fact | tagged | Expected Value: “It is linear: $E[aX + b] = aE[X] + b$” |
+| For a Poisson distribution, the variance equals the mean. | fact | tagged | Poisson Distribution: “A defining property is $E[X] = \text{Var}(X) = \lambda$ — the mean and variance are equal” |
+| The second moment of a random variable is E[X^2] = Var(X) + (E[X])^2. | formula | linked | Moment: “The second central moment is the [[Variance]], $\mu_2 = E[X^2] - \mu^2$.” |
+
 </details>
 
-<details><summary><code>p-387</code> · error</summary>
+<details><summary><code>p-387</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Hypergeometric Distribution, Combinatorics, Conditional Probability
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| Given that exactly k of d independent, equally likely events occur (each file equally likely to be corrupted), every subset of size k is eq… | fact | missing |  |
+| The probability that a random sample of size n from N items, containing K designated items, includes exactly x designated items is C(K,x)C(… | formula | tagged | Hypergeometric Distribution: “$$P(X = k) = \frac{\dbinom{K}{k}\dbinom{N-K}{n-k}}{\dbinom{N}{n}}$$” |
+| The number of ways to choose k items from n is the binomial coefficient C(n,k) = n!/(k!(n-k)!), so C(n,2) = n(n-1)/2. | formula | linked | Combination: “$$\binom{n}{k} = \frac{n!}{k!\,(n-k)!}$$” |
+| To find an unknown parameter such as the number of items d, set the probability expression equal to the given probability and solve the res… | procedure | missing |  |
+
 </details>
+
+<details><summary><code>p-388</code> · untagged</summary>
 
-<details><summary><code>p-388</code> · error</summary>
+Tagged pages: Variance for Conditional and Marginal Distributions, Exponential Distribution, Variance and Standard Deviation
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| Law of total variance: Var(X) = Var(E[X\|N]) + E[Var(X\|N)]. | formula | tagged | Variance for Conditional and Marginal Distributions: “$$\text{Var}(X) = E\bigl[\text{Var}(X \mid Y)\bigr] + \text{Var}\bigl(E[X \mid Y]\bigr)$$” |
+| Model a variable that equals zero with some probability and otherwise follows another distribution as a mixture, conditioning on an indicat… | procedure | elsewhere | Mixture Distribution: “**Mixed (discrete–continuous) type.** A mixture of a point mass and a continuous distribution gives…” |
+| An exponential distribution with mean θ has variance θ², and its second moment is 2θ². | fact | tagged | Exponential Distribution: “$E[X] = \theta$, $\text{Var}(X) = \theta^2$, and $F(x) = 1 - e^{-x/\theta}$” |
+| A Bernoulli random variable with success probability p has variance p(1-p). | fact | elsewhere | Frequency Distribution: “$mq$ and $mq(1-q)$ for the binomial” |
+| Var(cY) = c² Var(Y) for a constant c, so scaling a random variable by c multiplies its variance by c². | fact | tagged | Variance and Standard Deviation: “$\text{Var}(aX + b) = a^2\,\text{Var}(X)$ and $\text{SD}(aX + b) = \\|a\\|\,\text{SD}(X)$” |
+| Var(X) = E[X²] − (E[X])², and moments of a mixture are the probability-weighted averages of the component moments. | formula | tagged | Variance and Standard Deviation: “$$= E[X^2] - \mu^2$$” |
 
 </details>
 
-<details><summary><code>p-389</code> · error</summary>
+<details><summary><code>p-389</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Combinatorics, Set Theory
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| A derangement is a permutation of n items in which no item appears in its original position (no fixed points). | definition | missing |  |
+| When items are assigned at random, each of the n! permutations is equally likely, so a probability equals the count of favorable permutatio… | fact | tagged | Combinatorics: “In probability, combinatorics determines the sizes of events and sample spaces: $P(A) = \\|A\\| / \\|S…” |
+| To find the probability that no match occurs, compute the complement: count the permutations with at least one fixed point and subtract tha… | procedure | missing |  |
+| Inclusion-exclusion: the number of permutations with at least one fixed point is the alternating sum over k of (-1)^(k+1) * C(n,k) * (n-k)!… | formula | missing |  |
+| The number of permutations that fix a specified set of k items is (n-k)!, since the remaining n-k items can be arranged arbitrarily. | fact | missing |  |
+
 </details>
 
-<details><summary><code>p-390</code> · error</summary>
+<details><summary><code>p-390</code> · untagged</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Gamma, Continuous Univariate Distributions, Expected Value
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| A gamma distribution with shape α and scale θ has mean αθ and variance αθ². | fact | tagged | Gamma: “$E[X] = \alpha\theta$, $\text{Var}(X) = \alpha\theta^2$, and coefficient of variation $CV = 1/\sqrt…” |
+| Fit gamma parameters by method of moments: divide the variance by the mean to get θ, then divide the mean by θ to get α. | procedure | tagged | Gamma (collapsed): “Divide the variance by the mean to strip out $\alpha$:” |
+| The gamma density with shape α and scale θ is f(x) = x^(α-1) e^(-x/θ) / (θ^α Γ(α)) for x > 0. | formula | tagged | Gamma: “$$f(x) = \frac{x^{\alpha-1}\,e^{-x/\theta}}{\theta^{\alpha}\,\Gamma(\alpha)}$$” |
+| Compute a survival probability P[X > x] by integrating the density from x to infinity, using integration by parts for a gamma density with … | procedure | tagged | Gamma: “For **integer** $\alpha$ the CDF has a closed form via the [[Poisson Distribution\\|Poisson]] link (…” |
+| For integer shape α = 2, the gamma survival function is S(x) = e^(-x/θ)(1 + x/θ). | fact | elsewhere | Scale and Shape Parameters (collapsed): “For $\alpha = 2$, $S(x) = e^{-x/\theta}(1 + x/\theta)$.” |
+
 </details>
+
+<details><summary><code>p-391</code> · gap</summary>
 
-<details><summary><code>p-391</code> · error</summary>
+Tagged pages: Normal Distribution, Percentile
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| To find a normal distribution's parameter from a known percentile, standardize the value as z = (x - mu)/sigma, set P(Z < z) equal to the s… | procedure | tagged | Percentile (collapsed): “The 95th percentile of the standard normal is $z_{0.95} = 1.645$. Transform back with $\sigma = 15$:” |
+| The p-th percentile of a distribution is the value x such that P(X <= x) = p. | definition | tagged | Percentile: “When $F$ is continuous and strictly increasing, it is the value that solves $F(x_p) = p$, found by …” |
+| If X is normal with mean mu and standard deviation sigma, then (X - mu)/sigma follows the standard normal distribution. | fact | tagged | Normal Distribution: “Its CDF has no closed form and is evaluated via the standard normal $Z = (X - \mu)/\sigma \sim N(0,…” |
+| Use the standard normal table in reverse, finding the z-value whose cumulative probability equals a given percentile (e.g., z of about 1.75… | procedure | tagged | Normal Distribution: “Useful percentiles: $z_{0.90} = 1.282$, $z_{0.95} = 1.645$, $z_{0.975} = 1.960$, $z_{0.99} = 2.326$” |
+| When two normal distributions share the same standard deviation, a standard deviation found from one can be used in the other, so that the … | fact | missing |  |
 
 </details>
 
-<details><summary><code>p-392</code> · error</summary>
+<details><summary><code>p-392</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Continuous Univariate Distributions, Probability Rules
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| A valid probability density function must be nonnegative and integrate to 1 over its entire support, which can be used to solve for an unkn… | fact | tagged | Continuous Univariate Distributions: “The probability density function (PDF) $f(x)$ must satisfy $f(x) \geq 0$ and $\int_{-\infty}^{\inft…” |
+| For a continuous random variable with density f, the probability that X lies between a and b is the integral of f(x) from a to b. | formula | tagged | Continuous Univariate Distributions: “$$P(a \leq X \leq b) = \int_a^b f(x)\, dx$$” |
+| For a piecewise-defined density, integrate each branch over its own subinterval and add the results; if the interval of interest lies entir… | procedure | missing |  |
+
 </details>
 
-<details><summary><code>p-393</code> · error</summary>
+<details><summary><code>p-393</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Poisson Distribution, Discrete Univariate Distributions, Independent Random Variables, Mode
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The sum of independent Poisson random variables is Poisson with mean equal to the sum of the individual means. | fact | linked | Discrete Random Variable: “Some families are closed under it — independent Poissons sum to a Poisson with mean $\lambda_1 + \l…” |
+| If events occur on average once every k years, the annual Poisson mean is 1/k, and the Poisson mean over t years is t times the annual mean… | fact | elsewhere | Poisson Process: “The number of events in any interval of length $t$ has distribution $\text{Poi}(\lambda t)$” |
+| The mode of a discrete distribution is the value with the largest probability mass. | definition | tagged | Mode: “The **Mode** of a [[Random Variable]] $X$ is the value at which its [[Probability Mass Function (PM…” |
+| The Poisson pmf is p(n) = e^{-λ} λ^n / n!, and consecutive probabilities satisfy p(n) = (λ/n) p(n-1). | formula | tagged | Poisson Distribution: “$$P(X = k) = \frac{e^{-\lambda}\lambda^k}{k!}$$” |
+| To find the mode of a Poisson variable, use the ratio λ/n of consecutive probabilities: probabilities increase while n < λ and decrease aft… | procedure | tagged | Mode: “For the [[Poisson Distribution\\|Poisson]], $p(k)/p(k-1) = \lambda/k$, so probabilities rise while $…” |
+| For a constant positive multiple Y = cX, the mode of Y equals c times the mode of X, since the scaling is a one-to-one transformation prese… | fact | missing |  |
+
 </details>
+
+<details><summary><code>p-394</code> · answerable</summary>
 
-<details><summary><code>p-394</code> · error</summary>
+Tagged pages: Percentile, Exponential Distribution, Deductible, Mode
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The mode of a continuous distribution is the value of x at which the density function attains its maximum. | definition | tagged | Mode: “The **Mode** of a [[Random Variable]] $X$ is the value at which its [[Probability Mass Function (PM…” |
+| To find the mode of a continuous density, check its derivative: if the density is strictly decreasing on its support, the maximum occurs at… | procedure | tagged | Mode: “**Endpoint peak:** a density that only decreases, such as the [[Exponential Distribution\\|exponenti…” |
+| The 100p-th percentile of a distribution is the value x_p satisfying F(x_p) = p, where F is the cumulative distribution function. | definition | tagged | Percentile: “When $F$ is continuous and strictly increasing, it is the value that solves $F(x_p) = p$, found by …” |
+| The CDF of a continuous random variable is obtained by integrating its density from the lower end of the support up to x. | fact | linked | Cumulative Distribution Function (CDF): “For a continuous random variable, $F(x) = \int_{-\infty}^{x} f(t)\, dt$” |
+| A shifted exponential distribution with density (1/β)e^{-(x-d)/β} for x ≥ d has CDF F(x) = 1 - e^{-(x-d)/β}, and the density is strictly de… | fact | tagged | Exponential Distribution: “$E[X] = \theta$, $\text{Var}(X) = \theta^2$, and $F(x) = 1 - e^{-x/\theta}$” |
 
 </details>
 
-<details><summary><code>p-395</code> · error</summary>
+<details><summary><code>p-395</code> · untagged</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Percentile, Continuous Univariate Distributions
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| A probability density function must integrate to 1 over its support, so a density given only up to a proportionality constant is normalized… | fact | elsewhere | Probability Density Function (PDF): “The PDF must satisfy $f(x) \geq 0$ and $\int_{-\infty}^{\infty} f(x)\, dx = 1$” |
+| The cumulative distribution function of a continuous random variable is the integral of its density from the lower end of the support up to… | formula | tagged | Continuous Univariate Distributions: “The CDF and the density are two views of the same object: $F(x) = \int_{-\infty}^{x} f(t)\,dt$ and …” |
+| The median of a continuous random variable is the value m such that F(m) = 0.5, i.e., the 50th percentile. | definition | tagged | Percentile: “The 50th percentile ($p = 0.5$) is the [[Median\\|median]].” |
+
 </details>
+
+<details><summary><code>p-396</code> · gap</summary>
 
-<details><summary><code>p-396</code> · error</summary>
+Tagged pages: Deductible, Percentile, Conditional Probability
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| A valid density must integrate to 1 over its support, so the normalizing constant is found by setting the integral of the density over its … | procedure | elsewhere | Probability Density Function (PDF): “The PDF must satisfy $f(x) \geq 0$ and $\int_{-\infty}^{\infty} f(x)\, dx = 1$” |
+| The cumulative distribution function is the integral of the density from the lower end of the support up to x: F(x) = ∫ f(t) dt from the lo… | formula | linked | Cumulative Distribution Function (CDF): “For a continuous random variable, $F(x) = \int_{-\infty}^{x} f(t)\, dt$” |
+| The 100p-th percentile of a distribution is the value π such that F(π) = p. | definition | tagged | Percentile: “When $F$ is continuous and strictly increasing, it is the value that solves $F(x_p) = p$, found by …” |
+| For a loss X and deductible d, the conditional distribution given X > d is P[X ≤ x \| X > d] = (F(x) − F(d)) / (1 − F(d)) for x > d. | formula | tagged | Conditional Probability (collapsed): “$$P(A \mid B) = \frac{P(X > 700)}{P(X > 400)} = \frac{300/1000}{600/1000} = \frac{300}{600} = 0.5$$” |
+| A percentile of losses that exceed a deductible is a conditional percentile of the distribution given X > d, not a percentile of the uncond… | fact | missing |  |
 
 </details>
 
-<details><summary><code>p-397</code> · error</summary>
+<details><summary><code>p-397</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Discrete Univariate Distributions, Mode
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The mode of a data set is the value (category) with the highest frequency, and a data set can have more than one mode when several values t… | definition | tagged | Mode: “A mode need not be unique. A uniform distribution has every point of its support as a mode, and a m…” |
+| When two groups' frequencies are combined in a table, the frequency for one group at each value equals the combined frequency minus the oth… | procedure | missing |  |
+| To determine where a group's modes lie, use the fact that the group's frequency at any value cannot exceed its modal frequency and cannot e… | procedure | missing |  |
+| A lower bound on one group's frequency at each value implies an upper bound on the other group's frequency there (combined frequency minus … | procedure | missing |  |
+
 </details>
 
-<details><summary><code>p-398</code> · error</summary>
+<details><summary><code>p-398</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Bayes Theorem, Conditional Probability, The Law of Total Probability
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| Conditional probability of event A given event B is P[A\|B] = P[A ∩ B] / P[B]. | definition | tagged | Conditional Probability: “$$P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \quad P(B) > 0$$” |
+| The law of total probability expresses P[A] as the sum over a partition of classes of P[A\|class]·P[class]. | formula | tagged | The Law of Total Probability: “$$P(B) = \sum_{i=1}^{n} P(B \mid A_i)\,P(A_i)$$” |
+| When outcomes are independent conditional on a class, the probability of several outcomes within that class is the product of their individ… | fact | elsewhere | Posterior Distribution: “The likelihood $f(\mathbf{x} \mid \theta) = \prod f(x_i \mid \theta)$ treats the $x_i$ as independe…” |
+| To find the probability of a future event given observed data when the class is unknown, compute both the joint probability of the observed… | procedure | elsewhere | Posterior Distribution (collapsed): “The posterior probabilities are $0.12281/0.20513 = 0.5987$ (good) and $0.08232/0.20513 = 0.4013$ (b…” |
+| Observing favorable (claim-free) experience shifts the posterior weight toward the lower-risk class, so the conditional probability of furt… | fact | missing |  |
+
 </details>
+
+<details><summary><code>p-399</code> · gap</summary>
 
-<details><summary><code>p-399</code> · error</summary>
+Tagged pages: Joint Probability Function, Combinatorics, Negative Binomial Distribution
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| To find the probability that a patient falls into a nested category, multiply the marginal probability of the outer category by the conditi… | procedure | elsewhere | Probability Multiplication Rule: “$$P(A \cap B) = P(A) \cdot P(B \mid A)$$” |
+| When each independent trial falls into exactly one of several mutually exclusive categories with fixed probabilities, the counts in each ca… | fact | missing |  |
+| The multinomial probability of counts n1,...,nk in m trials is m!/(n1!···nk!) · p1^n1 ··· pk^nk, where the coefficient counts the orderings… | formula | missing |  |
+| When sampling continues until the r-th success, the final trial is fixed to be a success, so the remaining trials before it (n − 1 of them,… | procedure | tagged | Negative Binomial Distribution: “$$P(X = k) = \binom{k-1}{r-1}p^r(1-p)^{k-r}$$” |
+| To get the joint probability of N and C, count the patients in each category among the first n − 1 trials (n − c with no cancer, c − 5 with… | procedure | missing |  |
 
 </details>
 
-<details><summary><code>p-400</code> · error</summary>
+<details><summary><code>p-400</code> · untagged</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Joint Probability Function, Conditional and Marginal Probability Functions
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| A joint probability function p(x,y) gives P(X=x, Y=y) for a pair of discrete random variables, and the probability of any event is the sum … | definition | tagged | Joint Probability Function: “$$p(x,y) = P(X = x,\; Y = y)$$” |
+| To find the probability of an event defined by a function of two random variables (such as their sum), identify the (x,y) pairs in the supp… | procedure | elsewhere | Discrete Random Variable (collapsed): “Convolve, summing over the ways each total can occur:” |
+| The complement rule: P(A) = 1 - P(A^c), which is useful when the complementary event contains far fewer outcomes than the event itself. | fact | elsewhere | Probability Rules: “$$P(A^c) = 1 - P(A)$$” |
+| A valid joint probability function sums to 1 over its entire support, which can be used to check that the support and formula have been rea… | fact | tagged | Joint Probability Function: “It satisfies $p(x,y) \geq 0$ for all $(x,y)$ and $\displaystyle\sum_x \sum_y p(x,y) = 1$” |
+
 </details>
+
+<details><summary><code>p-401</code> · untagged</summary>
 
-<details><summary><code>p-401</code> · error</summary>
+Tagged pages: Normal Distribution, Percentile
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The standard deviation of a random variable is the square root of its variance. | definition | elsewhere | Variance and Standard Deviation: “$$\sigma = \text{SD}(X) = \sqrt{\text{Var}(X)}$$” |
+| To compute probabilities or percentiles for a normal random variable X with mean mu and standard deviation sigma, standardize via Z = (X - … | procedure | tagged | Normal Distribution: “Its CDF has no closed form and is evaluated via the standard normal $Z = (X - \mu)/\sigma \sim N(0,…” |
+| A standard normal probability below one half corresponds to a negative z-value, since the point lies to the left of the mean. | fact | tagged | Normal Distribution: “Symmetry gives $\Phi(-z) = 1 - \Phi(z)$ — the identity needed for every negative $z$, since standar…” |
+| A normal distribution is symmetric about its mean, so its median equals its mean. | fact | linked | Median: “For a [[Normal Distribution\\|normal]] distribution the median equals the [[Expected Value\\|mean]]” |
+| The 90th percentile of the standard normal distribution is z = 1.2816 (a one-sided value, distinct from the two-sided 95% value of 1.96). | fact | tagged | Normal Distribution: “Useful percentiles: $z_{0.90} = 1.282$, $z_{0.95} = 1.645$, $z_{0.975} = 1.960$, $z_{0.99} = 2.326$” |
+| For a normal distribution, the difference between a percentile and the median equals sigma times the corresponding z-value, since the mean … | fact | tagged | Percentile: “x_{0.95} &= \mu + z_{0.95}\,\sigma” |
 
 </details>
 
-<details><summary><code>p-402</code> · error</summary>
+<details><summary><code>p-402</code> · untagged</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Poisson Distribution, Variance and Standard Deviation, Independent Random Variables
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| For a Poisson distribution with parameter lambda, the mean and the variance both equal lambda. | fact | tagged | Poisson Distribution: “A defining property is $E[X] = \text{Var}(X) = \lambda$ — the mean and variance are equal” |
+| The second moment equals the variance plus the square of the mean: E[X^2] = Var(X) + (E[X])^2. | formula | elsewhere | Variance: “Efficient computation formula: $\text{Var}(X) = E[X^2] - \mu^2$ where $\mu = E[X]$” |
+| The sum of independent Poisson random variables is Poisson with parameter equal to the sum of the individual parameters, so a Poisson rate … | fact | elsewhere | Poisson Superposition: “a sum of independent Poisson counts is Poisson with the summed mean.” |
+| The Poisson probability mass function is P(N=k) = e^(-lambda) lambda^k / k!. | formula | tagged | Poisson Distribution: “$$P(X = k) = \frac{e^{-\lambda}\lambda^k}{k!}$$” |
+| To find P(N > n) for a discrete count variable, use the complement: 1 minus the sum of the probabilities of the counts 0 through n. | procedure | elsewhere | Probability Rules: “The complement rule is the workhorse shortcut — "at least one" is almost always faster as $1 - P(\t…” |
+
 </details>
 
-<details><summary><code>p-403</code> · error</summary>
+<details><summary><code>p-403</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Hypergeometric Distribution, Combinatorics, Multivariate Distribution
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| Selecting items without replacement from a finite population divided into several types, and asking for specified counts of each type, foll… | fact | missing |  |
+| The multivariate hypergeometric probability of drawing k_i items from each type i is the product of C(N_i, k_i) over the types divided by C… | formula | missing |  |
+| The binomial coefficient C(n, k) = n!/(k!(n-k)!) counts the number of ways to choose k items from n as an unordered set. | definition | linked | Combination: “$$\binom{n}{k} = \frac{n!}{k!\,(n-k)!}$$” |
+| Count favorable outcomes by choosing the required number from each category independently and multiplying the counts (multiplication princi… | procedure | tagged | Hypergeometric Distribution (collapsed): “$$P(X=2) = \frac{\binom{4}{2}\binom{6}{1}}{\binom{10}{3}} = \frac{6 \cdot 6}{120} = \frac{36}{120} …” |
+| When selecting an unordered set using combinations, no multinomial or ordering coefficient is applied, since it would double count. | fact | missing |  |
+
 </details>
+
+<details><summary><code>p-404</code> · answerable</summary>
 
-<details><summary><code>p-404</code> · error</summary>
+Tagged pages: Conditional and Marginal Probability Functions, Joint Probability Function, Variance and Standard Deviation
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The marginal probability function of one variable in a discrete joint distribution is found by summing the joint probability function over … | definition | tagged | Conditional and Marginal Probability Functions: “$$p_X(x) = \sum_y p_{X,Y}(x, y)$$” |
+| The expected value of a discrete random variable is E[Y] = sum of y times p(y) over all values y. | formula | tagged | Variance and Standard Deviation (collapsed): “E[N] &= 0(0.6) + 1(0.3) + 2(0.1) \\” |
+| The second moment of a discrete random variable is E[Y^2] = sum of y^2 times p(y) over all values y. | formula | tagged | Variance and Standard Deviation (collapsed): “E[N^2] &= 0^2(0.6) + 1^2(0.3) + 2^2(0.1) \\” |
+| The variance of a random variable equals E[Y^2] minus (E[Y])^2. | formula | tagged | Variance and Standard Deviation: “= E[X^2] - \mu^2” |
+| A valid probability function sums to 1 over its whole support, so the marginal probabilities must total 1 (a check on the joint function's … | fact | tagged | Joint Probability Function: “It satisfies $p(x,y) \geq 0$ for all $(x,y)$ and $\displaystyle\sum_x \sum_y p(x,y) = 1$” |
 
 </details>
 
-<details><summary><code>p-405</code> · error</summary>
+<details><summary><code>p-405</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Expected Value, Combinatorics
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The number of ways to choose k distinct items from n without regard to order is the combination C(n,k) = n!/(k!(n-k)!), so the chance a spe… | formula | tagged | Combinatorics: “This is a combination problem (order irrelevant, no replacement):” |
+| Compute the probability of a compound outcome by multiplying the probability of the first stage by the conditional probability of the secon… | procedure | elsewhere | Probability Multiplication Rule: “$$P(A \cap B) = P(A) \cdot P(B \mid A)$$” |
+| If one of m equally likely items is designated at random, a designation matches a given target with probability 1/m and misses with probabi… | fact | missing |  |
+| Expected payout per entry is the sum over mutually exclusive outcomes of payout times probability; total payout is the number of independen… | procedure | tagged | Expected Value: “$$E[X] = 0(0.5) + 100(0.3) + 500(0.2) = 0 + 30 + 100 = 130$$” |
+| When a bonus prize is stated as additional to a base prize, an entry that earns both receives the sum of the two amounts, and outcomes must… | fact | missing |  |
+
 </details>
+
+<details><summary><code>p-406</code> · answerable</summary>
 
-<details><summary><code>p-406</code> · error</summary>
+Tagged pages: Binomial Distribution, Discrete Univariate Distributions, Independent Random Variables
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The probabilities of all possible outcomes of a discrete probability distribution must sum to 1. | fact | tagged | Discrete Univariate Distributions: “The PMF must satisfy $f(k) \geq 0$ for all $k$ and $\sum_{k} f(k) = 1$” |
+| The probability of an event such as 'fewer than k claims' is the sum of the probabilities of the individual outcomes it contains. | fact | tagged | Discrete Univariate Distributions: “$$= \sum_{k \leq x} f(k)$$” |
+| The number of independent trials (policies) that meet a condition with the same probability p each is binomial with parameters n and p. | fact | tagged | Binomial Distribution: “The **Binomial Distribution** $X \sim \text{Bin}(n, p)$ models the number of successes in $n$ indep…” |
+| For a binomial random variable with n trials and success probability p, P[Y = k] = C(n,k) p^k (1-p)^(n-k), so P[Y = n] = p^n. | formula | tagged | Binomial Distribution: “$$P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}$$” |
 
 </details>
 
-<details><summary><code>p-407</code> · error</summary>
+<details><summary><code>p-407</code> · answerable</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Exponential Distribution, Variance and Standard Deviation, Percentile
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The survival function of an exponential distribution with mean β is S(x) = P[X > x] = e^{-x/β}. | formula | tagged | Exponential Distribution: “Work from the survival function $S(x) = e^{-x/\theta}$ rather than the CDF; almost every exponentia…” |
+| The median of a distribution is the value m at which the survival (or cumulative distribution) function equals 0.5, i.e. P[X > m] = 0.5. | definition | linked | Median: “For a continuous distribution that is the point where $F(m) = 0.5$, splitting the probability in ha…” |
+| The variance of an exponential distribution with mean β equals β², the square of its mean. | fact | tagged | Exponential Distribution: “$E[X] = \theta$, $\text{Var}(X) = \theta^2$, and $F(x) = 1 - e^{-x/\theta}$” |
+| The exponential distribution is memoryless: given X > d, the remaining lifetime X − d has the same exponential distribution as X, with the … | fact | tagged | Exponential Distribution: “A direct consequence: given $X > d$, the excess $X - d$ is again $\text{Exp}(\theta)$.” |
+
 </details>
 
-<details><summary><code>p-408</code> · error</summary>
+<details><summary><code>p-408</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Bayes Theorem, Conditional Probability, The Law of Total Probability
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| Repeated tosses of a coin are independent only conditional on which coin was selected; unconditionally they are dependent, because observed… | fact | elsewhere | Posterior Distribution: “The likelihood $f(\mathbf{x} \mid \theta) = \prod f(x_i \mid \theta)$ treats the $x_i$ as independe…” |
+| The law of total probability gives P[A] = sum over a partition of P[A \| B_i] P[B_i], so the probability of an outcome is a weighted averag… | formula | tagged | The Law of Total Probability: “$$P(B) = \sum_{i=1}^{n} P(B \mid A_i)\,P(A_i)$$” |
+| The conditional probability of A given B is P[A \| B] = P[A ∩ B] / P[B]. | formula | tagged | Conditional Probability: “$$P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \quad P(B) > 0$$” |
+| When the event of interest implies the conditioning event (for example, three heads implies two heads), the intersection equals the event o… | fact | tagged | Conditional Probability (collapsed): “Since $A \subseteq B$, we have $A \cap B = A$.” |
+| For a randomly selected coin with a known heads probability, the probability of n heads in n tosses given the coin is p^n by independence; … | procedure | missing |  |
+| Bayes' theorem updates prior coin probabilities after observed data; the posterior probability of each coin is proportional to prior times … | procedure | tagged | Bayes Theorem: “$$P(H \mid E) = \frac{P(E \mid H)\,P(H)}{P(E)}$$” |
+
 </details>
+
+<details><summary><code>p-409</code> · untagged</summary>
 
-<details><summary><code>p-409</code> · error</summary>
+Tagged pages: Benefit Limit, Continuous Univariate Distributions, Payment Random Variable
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| A valid cumulative distribution function of a random variable bounded above by b equals 1 at b, so F(b)=1 can be used to solve for an unkno… | fact | elsewhere | Cumulative Distribution Function (CDF): “$\lim_{x \to -\infty} F(x) = 0$ and $\lim_{x \to \infty} F(x) = 1$” |
+| For a continuous random variable, the survival probability is P[X > x] = 1 - F(x). | formula | tagged | Continuous Univariate Distributions: “For anything phrased as a tail probability, work from the survival function $S(x) = 1 - F(x)$ inste…” |
+| With a policy limit (maximum reimbursement) m, a loss is partially reimbursed exactly when it exceeds m (the payment is capped at m), where… | procedure | elsewhere | Policy Limit: “Under a limit $u$ and no other modification, the insurer pays the whole loss $X$ when it is below $…” |
+| To find a distribution quantile or parameter from a given probability, set the CDF (or survival function) expression equal to that probabil… | procedure | elsewhere | Percentile: “When $F$ is continuous and strictly increasing, it is the value that solves $F(x_p) = p$, found by …” |
 
 </details>
 
-<details><summary><code>p-410</code> · error</summary>
+<details><summary><code>p-410</code> · untagged</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Joint Probability Function, Conditional and Marginal Probability Functions, Independent Random Variables
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The joint cumulative distribution function F(x,y) of two random variables equals P[X ≤ x and Y ≤ y], the probability that both inequalities… | definition | elsewhere | Joint Cumulative Distribution Function: “The **joint cumulative distribution function** (joint CDF) of random variables $X$ and $Y$ gives th…” |
+| To compute a joint probability when one variable depends on another, condition on each value of the driving variable (here the number of ev… | procedure | elsewhere | The Law of Total Probability: “the probability of any event $B$ can be expressed as a weighted average of its conditional probabil…” |
+| The total loss from n events is the sum of n independent individual losses, so its distribution is obtained by enumerating combinations of … | fact | elsewhere | Stop-Loss Reinsurance (collapsed): “Aggregate losses of 2 arise from one claim of 2 or from two claims of 1.” |
+| For independent events, the probability that all occur is the product of their individual probabilities (e.g., two independent losses both … | fact | elsewhere | Independent Events: “$$P(A \cap B) = P(A) \cdot P(B)$$” |
+| The complement rule: the probability of an event equals 1 minus the probability that it does not occur (e.g., P[total ≤ 3] = 1 − P[total > … | fact | elsewhere | Probability Rules: “$$P(A^c) = 1 - P(A)$$” |
+
 </details>
 
-<details><summary><code>p-411</code> · error</summary>
+<details><summary><code>p-411</code> · untagged</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Conditional and Marginal Probability Functions, Joint Probability Function, Variance and Standard Deviation
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The marginal probability mass function of one variable in a joint discrete distribution is obtained by summing the joint pmf over all value… | definition | tagged | Conditional and Marginal Probability Functions: “The marginal is found by summing (or integrating, in the continuous case) the [[Joint Probability F…” |
+| For a discrete random variable, E[Y] = sum of y times p(y) and E[Y^2] = sum of y^2 times p(y) over all values of y. | formula | elsewhere | Expected Value: “$$E[X] = \begin{cases} \displaystyle\sum_{k} k\, f(k) & \text{(discrete)} \\[6pt] \displaystyle\int…” |
+| Var(Y) = E[Y^2] - (E[Y])^2. | formula | tagged | Variance and Standard Deviation: “The second form $E[X^2] - \mu^2$ is the one to use in practice” |
+| If a joint pmf factors into a function of x times a function of y over a rectangular support, the variables are independent and each margin… | fact | linked | Independent Random Variables: “Formally, for all values $x$ and $y$, the joint distribution factors into the product of the margin…” |
+| A valid probability mass function sums to 1 over its support, which can be used to normalize or check marginal probabilities. | fact | tagged | Joint Probability Function: “It satisfies $p(x,y) \geq 0$ for all $(x,y)$ and $\displaystyle\sum_x \sum_y p(x,y) = 1$” |
+
 </details>
+
+<details><summary><code>p-412</code> · untagged</summary>
 
-<details><summary><code>p-412</code> · error</summary>
+Tagged pages: Order Statistics, Uniform Continuous Distribution, Independent Random Variables
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The maximum of a set of random variables is less than a value x if and only if every one of the variables is less than x, so P(max < x) equ… | fact | tagged | Order Statistics: “$$P\bigl(X_{(n)} \le x\bigr) = F_1(x)\,F_2(x)\cdots F_n(x)$$” |
+| For X uniform on [a, b], P(X < x) = (x - a)/(b - a) for x in [a, b]. | formula | tagged | Uniform Continuous Distribution: “$F(x) = (x-a)/(b-a)$ for $a < x < b$” |
+| For independent events or random variables, the probability that all occur equals the product of their individual probabilities. | fact | elsewhere | Independent Events: “$$P(A_{i_1} \cap A_{i_2} \cap \cdots \cap A_{i_m}) = P(A_{i_1})\,P(A_{i_2}) \cdots P(A_{i_m})$$” |
 
 </details>
 
-<details><summary><code>p-413</code> · error</summary>
+<details><summary><code>p-413</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Negative Binomial Distribution, Expected Value, Discrete Univariate Distributions
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| If a policy has a claim with probability p1 and a claim is fraudulent with conditional probability p2, the probability that a policy yields… | fact | elsewhere | Probability Multiplication Rule: “$$P(A \cap B) = P(A) \cdot P(B \mid A)$$” |
+| The negative binomial (waiting-time) pattern counts the trials needed to reach a fixed number r of successes in independent Bernoulli trial… | definition | tagged | Negative Binomial Distribution: “The **Negative Binomial Distribution** $X \sim \text{NegBin}(r, p)$ counts the number of independen…” |
+| The probability that the r-th success occurs on trial x is C(x-1, r-1) p^r (1-p)^(x-r), since the x-th trial is a success and exactly r-1 s… | formula | tagged | Negative Binomial Distribution: “$$P(X = k) = \binom{k-1}{r-1}p^r(1-p)^{k-r}$$” |
+| When the number of trials is capped at n, the capped value n has probability equal to the sum of the probability that the target is reached… | procedure | missing |  |
+| The expected value of a discrete random variable is the sum of each value times its probability, E[X] = sum x*p(x). | formula | tagged | Expected Value: “$$E[X] = \begin{cases} \displaystyle\sum_{k} k\, f(k) & \text{(discrete)} \\[6pt] \displaystyle\int…” |
+
 </details>
 
-<details><summary><code>p-414</code> · error</summary>
+<details><summary><code>p-414</code> · untagged</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Hypergeometric Distribution, Combinatorics
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The hypergeometric distribution gives the number of items of one type in a sample drawn without replacement from a finite population contai… | definition | tagged | Hypergeometric Distribution: “The **Hypergeometric Distribution** models the number of successes in a sample of size $n$ drawn **…” |
+| For a sample of size n from N items of which K are of the type of interest, the hypergeometric probability of exactly k such items is C(K,k… | formula | tagged | Hypergeometric Distribution: “$$P(X = k) = \frac{\dbinom{K}{k}\dbinom{N-K}{n-k}}{\dbinom{N}{n}}$$” |
+| To find the probability of an 'at least k' event for a discrete random variable, sum the probabilities of each disjoint outcome from k up t… | procedure | elsewhere | Discrete Random Variable: “$$F(x) = \sum_{k \le x} p(k)$$” |
+| The number of ways to choose k items from n without regard to order is the binomial coefficient C(n,k) = n!/(k!(n-k)!). | formula | linked | Combination: “$$\binom{n}{k} = \frac{n!}{k!\,(n-k)!}$$” |
+
 </details>
+
+<details><summary><code>p-415</code> · gap</summary>
 
-<details><summary><code>p-415</code> · error</summary>
+Tagged pages: Probability Addition Rule, Set Theory, Expected Value
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| When event percentages overlap (e.g., the percent buying item A and the percent buying item B both include those buying both), the categori… | fact | elsewhere | Venn Diagram (collapsed): “If you just put "70" in the Auto circle, you've forgotten that 20 of those people also have Homeown…” |
+| The probability (or count) of the union of two events equals P(A) + P(B) minus P(A and B); equivalently, the complement (no purchase) plus … | formula | tagged | Probability Addition Rule: “$$P(A \cup B) = P(A) + P(B) - P(A \cap B)$$” |
+| Partition the population into mutually exclusive groups (only A, only B, both, neither), set up equations from the totals and given margina… | procedure | linked | Set Operations (collapsed): “$$P(A^c \cap B) = P(B) - P(A \cap B) = 0.5 - 0.2 = 0.3$$” |
+| Apply a percentage discount to the combined price of the bundle for customers buying both items, giving the revenue per customer in that gr… | procedure | missing |  |
+| Expected total revenue equals the sum over customer groups of (number of customers in the group, or expected count) times the revenue per c… | formula | tagged | Expected Value (collapsed): “$$E[X] = 0(0.5) + 100(0.3) + 500(0.2) = 0 + 30 + 100 = 130$$” |
 
 </details>
 
-<details><summary><code>p-416</code> · error</summary>
+<details><summary><code>p-416</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Central Limit Theorem, Poisson Distribution, Normal Distribution, Normal Approximation
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| For a Poisson random variable the mean equals the variance, so a Poisson with variance 1 has mean 1. | fact | tagged | Poisson Distribution: “A defining property is $E[X] = \text{Var}(X) = \lambda$ — the mean and variance are equal” |
+| The expectation and variance of a sum of independent random variables are the sums of the individual expectations and variances. | fact | linked | Independent and Identically Distributed: “$$\begin{aligned} E[S_n] &= n\mu \\ \text{Var}(S_n) &= n\sigma^2 \end{aligned}$$” |
+| Multiplying a random variable by a constant c multiplies its mean by c and its variance by c squared. | fact | elsewhere | Transformations of Random Variables: “A linear transformation $Y = aX + b$ gives $E[Y] = aE[X] + b$ and $\text{Var}(Y) = a^2\text{Var}(X)…” |
+| The premium with a loading of p percent is (1 + p) times the expected claim payments, i.e. the expected payments plus a safety loading. | definition | missing |  |
+| To approximate the probability that a sum of many independent random variables exceeds a value, treat the sum as normal with the same mean … | procedure | tagged | Normal Approximation: “The recipe: identify $n$, compute $E[S_n] = n\mu$ and $\text{Var}(S_n) = n\sigma^2$ ([[Moments for …” |
+| When approximating a discrete distribution on a lattice by a normal distribution, apply a continuity correction by moving the boundary half… | procedure | tagged | Normal Approximation: “When $S_n$ is integer-valued — a claim count, a [[Binomial Distribution\\|binomial]], a [[Poisson Di…” |
+
 </details>
+
+<details><summary><code>p-417</code> · gap</summary>
 
-<details><summary><code>p-417</code> · error</summary>
+Tagged pages: Negative Binomial Distribution, Discrete Univariate Distributions
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| A negative binomial random variable counts the number of independent Bernoulli trials needed to achieve a fixed number r of successes, each… | definition | tagged | Negative Binomial Distribution: “The **Negative Binomial Distribution** $X \sim \text{NegBin}(r, p)$ counts the number of independen…” |
+| For the negative binomial (trials version), the probability that the r-th success occurs on trial n is C(n-1, r-1) p^r (1-p)^(n-r), for n ≥… | formula | tagged | Negative Binomial Distribution: “$$P(X = k) = \binom{k-1}{r-1}p^r(1-p)^{k-r}$$” |
+| To find the probability that the r-th success occurs on trial n, require the n-th trial to be a success and exactly r-1 successes among the… | procedure | tagged | Negative Binomial Distribution: “$$P(X = k) = \binom{k-1}{r-1}p^r(1-p)^{k-r}$$” |
+| An average rate of one event per k independent trials gives a per-trial event probability of 1/k. | fact | missing |  |
+| The probability of a specific sequence of independent trials is the product of the individual trial probabilities (p for each success, 1-p … | fact | linked | Geometric Distribution: “$$P(X = k) = (1-p)^{k-1}p, \quad k = 1, 2, 3, \ldots$$” |
 
 </details>
 
-<details><summary><code>p-418</code> · error</summary>
+<details><summary><code>p-418</code> · untagged</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Conditional Probability, Independent Random Variables, Discrete Univariate Distributions
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The conditional probability of event A given event B is P(A\|B) = P(A ∩ B) / P(B), provided P(B) > 0. | formula | tagged | Conditional Probability: “$$P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \quad P(B) > 0$$” |
+| For independent random variables, the joint probability equals the product of the marginal probabilities, so P(M=a, N=b) = P(M=a)P(N=b). | fact | tagged | Independent Random Variables: “$$f(x,y) = f_X(x)\cdot f_Y(y)$$” |
+| To find the probability that a sum of discrete random variables equals a given value, enumerate all disjoint outcome combinations (pairs of… | procedure | linked | Random Variable: “$$X(TT) = 0,\quad X(HT) = X(TH) = 1,\quad X(HH) = 2$$” |
+| The probability of a union of mutually exclusive (disjoint) events is the sum of their individual probabilities (additivity). | fact | elsewhere | Mutually Exclusive Events: “if $A_1, A_2, \ldots, A_n$ are pairwise mutually exclusive, then $P\!\left(\bigcup_{i=1}^n A_i\righ…” |
+| The event {M=1, N=1} is a subset of the event {M+N=2}, so P(M=1, N=1 and M+N=2) equals P(M=1, N=1), which serves as the numerator of the co… | fact | tagged | Conditional Probability (collapsed): “Since $A \subseteq B$, we have $A \cap B = A$.” |
+
 </details>
 
-<details><summary><code>p-419</code> · error</summary>
+<details><summary><code>p-419</code> · untagged</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Uniform Continuous Distribution, Conditional Probability
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| For a continuous uniform distribution on [a, b], the probability of an interval is its length divided by (b − a), so P(X > x) = (b − x)/(b … | formula | tagged | Uniform Continuous Distribution: “$F(x) = (x-a)/(b-a)$ for $a < x < b$” |
+| Conditional probability: P(A \| B) = P(A ∩ B) / P(B). | formula | tagged | Conditional Probability: “$$P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \quad P(B) > 0$$” |
+| When event A is a subset of event B, P(A ∩ B) = P(A), so P(A \| B) = P(A)/P(B). | procedure | tagged | Conditional Probability (collapsed): “Since $A \subseteq B$, we have $A \cap B = A$.” |
+| Translate 'no repair within the warranty period / within t years' into the survival event X > t for the time-until-event random variable X. | procedure | elsewhere | Survival Model: “$$S(t) = P(T > t)$$” |
+| A uniform distribution conditioned on exceeding a value c is uniform on [c, b]; it is not memoryless, unlike the exponential distribution. | fact | tagged | Uniform Continuous Distribution: “Conditional distributions on sub-intervals are also uniform: given $X > d$, $X$ is uniform on $(d, …” |
+
 </details>
+
+<details><summary><code>p-420</code> · gap</summary>
 
-<details><summary><code>p-420</code> · error</summary>
+Tagged pages: Continuous Univariate Distributions, Gamma
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| For a continuous random variable, the probability that it falls in an interval (a, b) equals the integral of its probability density functi… | fact | tagged | Continuous Univariate Distributions: “$$P(a \leq X \leq b) = \int_a^b f(x)\, dx$$” |
+| Convert the interval endpoints given in real-world units into the units in which the random variable is measured (e.g., if X is in tens of … | procedure | missing |  |
+| Integration by parts: the integral of u dv equals uv minus the integral of v du, used for integrals such as the integral of x e^{-x}. | formula | missing |  |
 
 </details>
 
-<details><summary><code>p-421</code> · error</summary>
+<details><summary><code>p-421</code> · answerable</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Exponential Distribution, Percentile
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| For an exponential distribution with mean β, the CDF is F(x) = 1 − e^(−x/β), equivalently the survival function is S(x) = e^(−x/β). | formula | tagged | Exponential Distribution: “$E[X] = \theta$, $\text{Var}(X) = \theta^2$, and $F(x) = 1 - e^{-x/\theta}$” |
+| The median of a distribution is the value m with F(m) = 0.5, and the p-th percentile is the value x with F(x) = p. | definition | tagged | Percentile: “When $F$ is continuous and strictly increasing, it is the value that solves $F(x_p) = p$, found by …” |
+| To find an exponential parameter from a given median, set the CDF at the median equal to 0.5 and solve for the mean, giving β = median / ln… | procedure | linked | Median: “$m = \theta \ln 2 \approx 0.693\theta$ against a mean of $\theta$” |
+| To find an exponential percentile, set 1 − e^(−x/β) equal to the percentile level p and solve, giving x = −β ln(1 − p). | procedure | tagged | Percentile (collapsed): “1 - e^{-x_{0.90}/10} &= 0.90 \\ e^{-x_{0.90}/10} &= 0.10 \\ x_{0.90} &= -10 \ln(0.10)” |
+
 </details>
 
-<details><summary><code>p-422</code> · error</summary>
+<details><summary><code>p-422</code> · answerable</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Probability Rules, Set Theory, Probability Addition Rule
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| Two events are mutually exclusive if they cannot occur together (their intersection has probability zero), and they are exhaustive if at le… | definition | linked | Sample Space: “Outcomes in $S$ must be mutually exclusive (no two can occur simultaneously) and collectively exhau…” |
+| A mutually exclusive and exhaustive pair of events forms a partition of the sample space, so any event can be split into the disjoint piece… | fact | linked | The Law of Total Probability: “$\{A_1, A_2, \ldots, A_n\}$ must be mutually exclusive and exhaustive events to partition $S$” |
+| Law of total probability: if events B1,...,Bn partition the sample space, then P[A] = sum over i of P[A ∩ Bi]. | formula | tagged | Probability Rules: “The last identity is [[The Law of Total Probability]], valid when $\{B_i\}$ partitions the [[Sample…” |
+| The probability of a union of disjoint events is the sum of their probabilities (additivity), so P[A] = P[A∩C] + P[A∩D] when C and D are di… | fact | linked | Mutually Exclusive Events: “if $A_1, A_2, \ldots, A_n$ are pairwise mutually exclusive, then $P\!\left(\bigcup_{i=1}^n A_i\righ…” |
+
 </details>
+
+<details><summary><code>p-423</code> · gap</summary>
 
-<details><summary><code>p-423</code> · error</summary>
+Tagged pages: Conditional Probability, Set Theory, Probability Addition Rule
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The conditional probability of A given B is P(A\|B) = P(A and B) / P(B), which restricts attention to outcomes in B. | definition | tagged | Conditional Probability: “$$P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \quad P(B) > 0$$” |
+| The probability of a complement is one minus the probability of the event, so P(not B) = 1 - P(B). | fact | elsewhere | Probability Rules: “$$P(A^c) = 1 - P(A)$$” |
+| An event's probability equals the sum of the probabilities of its intersections with a partition (law of total probability), so P(A and not… | fact | linked | The Law of Total Probability: “Every term equals $P(B \mid A_i)\,P(A_i) = P(B \cap A_i)$” |
+| Organize two overlapping events into a two-by-two table of joint probabilities, filling in the given marginals and overlap and obtaining th… | procedure | missing |  |
 
 </details>
 
-<details><summary><code>p-424</code> · error</summary>
+<details><summary><code>p-424</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Combinatorics
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The number of ways to choose k items from n distinct items when order does not matter is the combination C(n,k) = n!/(k!(n-k)!). | formula | linked | Combination: “A **Combination** $\binom{n}{k}$ ("$n$ choose $k$") counts the number of ways to select $k$ objects…” |
+| The number of ordered arrangements of k distinct items chosen from n is the permutation nPk = n!/(n-k)!, used when position matters. | formula | linked | Permutation: “A **Permutation** $P(n, k)$ counts the number of ways to select and arrange $k$ objects from $n$ di…” |
+| Multiplication (fundamental counting) principle: when a task is built in independent stages, the total number of outcomes is the product of… | fact | missing |  |
+| When characters may repeat (not necessarily distinct), each of the m positions independently has n choices, giving n^m arrangements (sampli… | fact | missing |  |
+| To count arrangements under a positional constraint (e.g., the first position must hold a letter), fix the constrained position first, then… | procedure | missing |  |
+
 </details>
 
-<details><summary><code>p-425</code> · error</summary>
+<details><summary><code>p-425</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Poisson Distribution, Discrete Univariate Distributions
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The Poisson probability mass function is P[X = x] = e^{-λ} λ^x / x! for x = 0, 1, 2, ..., so P[X = 0] = e^{-λ}. | formula | tagged | Poisson Distribution: “$$P(X = k) = \frac{e^{-\lambda}\lambda^k}{k!}$$” |
+| To find an unknown Poisson mean from a given probability of zero events, set e^{-λ} equal to that probability and solve λ = -ln(probability… | procedure | missing |  |
+| For a Poisson distribution, the ratio of consecutive probabilities is P[X = x] / P[X = x-1] = λ / x. | formula | elsewhere | Mode: “For the [[Poisson Distribution\\|Poisson]], $p(k)/p(k-1) = \lambda/k$, so probabilities rise while $…” |
+| The mode of a discrete distribution is the value with the highest probability. | definition | elsewhere | Mode: “The **Mode** of a [[Random Variable]] $X$ is the value at which its [[Probability Mass Function (PM…” |
+| The mode of a Poisson distribution with mean λ is floor(λ) when λ is not an integer (truncate, do not round); when λ is an integer, both λ … | fact | elsewhere | Mode: “For the [[Poisson Distribution\\|Poisson]], $p(k)/p(k-1) = \lambda/k$, so probabilities rise while $…” |
+
 </details>
+
+<details><summary><code>p-426</code> · answerable</summary>
 
-<details><summary><code>p-426</code> · error</summary>
+Tagged pages: Continuous Univariate Distributions, Conditional Probability
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| A valid probability density function must integrate to 1 over its support, which determines an unknown constant in the density. | fact | tagged | Continuous Univariate Distributions: “The probability density function (PDF) $f(x)$ must satisfy $f(x) \geq 0$ and $\int_{-\infty}^{\inft…” |
+| For a continuous random variable with density f, the probability that X lies in an interval (a, b) equals the integral of f from a to b. | formula | tagged | Continuous Univariate Distributions: “$$P(a \leq X \leq b) = \int_a^b f(x)\, dx$$” |
+| The conditional probability of A given B is P(A \| B) = P(A ∩ B) / P(B). | formula | tagged | Conditional Probability: “$$P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \quad P(B) > 0$$” |
+| To find the probability that a lifetime T is at most b given that it exceeds a (a < b), restrict to survivors: divide P(a < T < b) by P(T >… | procedure | tagged | Conditional Probability (collapsed): “Let $A = \{X > 700\}$ and $B = \{X > 400\}$. Since $A \subseteq B$, we have $A \cap B = A$.” |
 
 </details>
 
-<details><summary><code>p-428</code> · error</summary>
+<details><summary><code>p-428</code> · answerable</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Exponential Distribution, Percentile
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The cumulative distribution function of an exponential random variable with mean theta is F(x) = 1 - e^{-x/theta} for x >= 0. | formula | tagged | Exponential Distribution: “$E[X] = \theta$, $\text{Var}(X) = \theta^2$, and $F(x) = 1 - e^{-x/\theta}$” |
+| The parameter theta of an exponential distribution equals its mean, so a stated mean of the exponential lifetime gives theta directly. | fact | tagged | Exponential Distribution: “$$\text{where } \theta > 0 = \text{mean (scale parameter)}$$” |
+| The proportion of items expected to fail within time t (e.g., be replaced under a warranty) equals the probability P[X <= t], so set the CD… | procedure | tagged | Percentile: “When $F$ is continuous and strictly increasing, it is the value that solves $F(x_p) = p$, found by …” |
+| The natural logarithm is the inverse of the exponential function, so e^{y} = c implies y = ln(c), which is used to solve for the variable i… | fact | tagged | Percentile (collapsed): “1 - e^{-x_{0.90}/10} &= 0.90 \\ e^{-x_{0.90}/10} &= 0.10 \\ x_{0.90} &= -10 \ln(0.10)” |
+
 </details>
+
+<details><summary><code>p-429</code> · untagged</summary>
 
-<details><summary><code>p-429</code> · error</summary>
+Tagged pages: Percentile, Continuous Univariate Distributions
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| A probability density function must integrate to 1 over its support, which determines the proportionality constant when the density is give… | fact | elsewhere | Probability Density Function (PDF): “The PDF must satisfy $f(x) \geq 0$ and $\int_{-\infty}^{\infty} f(x)\, dx = 1$” |
+| The 100p-th percentile of a continuous random variable is the value x_p such that P(X ≤ x_p) = p, i.e. the integral of the density from the… | definition | tagged | Percentile: “When $F$ is continuous and strictly increasing, it is the value that solves $F(x_p) = p$, found by …” |
+| To find a probability or the cumulative distribution function for a continuous random variable, integrate the density from the lower bound … | procedure | linked | Cumulative Distribution Function (CDF): “For a continuous random variable, $F(x) = \int_{-\infty}^{x} f(t)\, dt$” |
 
 </details>
 
-<details><summary><code>p-430</code> · error</summary>
+<details><summary><code>p-430</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Exponential Distribution, Variance and Standard Deviation
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| For an exponential distribution with mean θ, the variance equals θ squared (the square of the mean). | fact | tagged | Exponential Distribution: “$E[X] = \theta$, $\text{Var}(X) = \theta^2$, and $F(x) = 1 - e^{-x/\theta}$” |
+| For an exponential random variable with mean θ, the survival function is S(t) = P(X > t) = e^{-t/θ}. | formula | tagged | Exponential Distribution: “Work from the survival function $S(x) = e^{-x/\theta}$ rather than the CDF; almost every exponentia…” |
+| When two random variables are evaluated at the same unknown time T, solve for T (or the common quantity) using one variable's survival prob… | procedure | missing |  |
+| If the exponential survival probabilities at the same time satisfy S_A(T) = S_B(T)^k, then the mean of B is k times the mean of A, since e^… | fact | missing |  |
+| Scaling an exponential's mean by a factor c scales its variance by c squared, since variance is the squared mean. | fact | tagged | Exponential Distribution: “$E[X] = \theta$, $\text{Var}(X) = \theta^2$, and $F(x) = 1 - e^{-x/\theta}$” |
+
 </details>
 
-<details><summary><code>p-431</code> · error</summary>
+<details><summary><code>p-431</code> · answerable</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Linear Combinations of Random Variables, Normal Distribution, Independent Random Variables
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| To find P[X > c] for a normal random variable, standardize by subtracting the mean and dividing by the standard deviation, then use the sta… | procedure | tagged | Normal Distribution (collapsed): “$$Z = \frac{55{,}000 - 50{,}000}{6{,}324.6} \approx 0.791$$” |
+| Given a known normal tail probability, invert the standard normal table to find the z-value (percentile), which yields the ratio of mean to… | procedure | tagged | Normal Distribution: “Useful percentiles: $z_{0.90} = 1.282$, $z_{0.95} = 1.645$, $z_{0.975} = 1.960$, $z_{0.99} = 2.326$” |
+| A sum of independent normal random variables is normal, with mean equal to the sum of the means. | fact | tagged | Normal Distribution: “Any **linear combination of independent normals is exactly normal**: if $X_i \sim N(\mu_i, \sigma_i…” |
+| The variance of a sum of independent random variables is the sum of their variances, so the standard deviation of n iid terms is sqrt(n) ti… | fact | linked | Central Limit Theorem: “For large $n$, $S_n$ is approximately $N(n\mu,\, n\sigma^2)$ regardless of the original distribution” |
+| For a standard normal Z, P[Z > -a] = P[Z < a] = Φ(a), by symmetry of the standard normal distribution. | fact | tagged | Normal Distribution: “Symmetry gives $\Phi(-z) = 1 - \Phi(z)$ — the identity needed for every negative $z$, since standar…” |
+
 </details>
+
+<details><summary><code>p-432</code> · gap</summary>
 
-<details><summary><code>p-432</code> · error</summary>
+Tagged pages: Normal Distribution, Percentile
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| To find an unknown standard deviation of a normal distribution, set the given probability equal to the standard normal CDF at the standardi… | procedure | missing |  |
+| If X is normal with mean mu and standard deviation sigma, then Z = (X - mu)/sigma is standard normal, so P[a < X < b] = Phi((b - mu)/sigma)… | formula | tagged | Normal Distribution: “Its CDF has no closed form and is evaluated via the standard normal $Z = (X - \mu)/\sigma \sim N(0,…” |
+| Scaling a normal random variable's standard deviation by a multiplier k multiplies the standard deviation by k, so the new standard deviati… | fact | elsewhere | Variance and Standard Deviation: “$\text{Var}(aX + b) = a^2\,\text{Var}(X)$ and $\text{SD}(aX + b) = \\|a\\|\,\text{SD}(X)$” |
+| The standard normal distribution is symmetric about 0, so Phi(-z) = 1 - Phi(z), and P[-z < Z < z] = 2*Phi(z) - 1. | fact | tagged | Normal Distribution: “Symmetry gives $\Phi(-z) = 1 - \Phi(z)$ — the identity needed for every negative $z$, since standar…” |
+| Read standard normal probabilities (and z-values for given probabilities) from the standard normal table. | procedure | tagged | Normal Distribution: “Useful percentiles: $z_{0.90} = 1.282$, $z_{0.95} = 1.645$, $z_{0.975} = 1.960$, $z_{0.99} = 2.326$” |
 
 </details>
 
-<details><summary><code>p-433</code> · error</summary>
+<details><summary><code>p-433</code> · untagged</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Linear Combinations of Random Variables, Normal Distribution, Independent Random Variables
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| Standardize a normal random variable by subtracting its mean and dividing by its standard deviation, then use the standard normal table to … | procedure | tagged | Normal Distribution: “Its CDF has no closed form and is evaluated via the standard normal $Z = (X - \mu)/\sigma \sim N(0,…” |
+| The standard normal distribution is symmetric, so P[Z > -z] = P[Z < z] = 1 - P[Z > z]. | fact | tagged | Normal Distribution: “Symmetry gives $\Phi(-z) = 1 - \Phi(z)$ — the identity needed for every negative $z$, since standar…” |
+| If X is normal with mean mu and standard deviation sigma, then cX has mean c*mu and standard deviation c*sigma for a constant c>0 (scaling … | fact | elsewhere | Variance and Standard Deviation: “$\text{Var}(aX + b) = a^2\,\text{Var}(X)$ and $\text{SD}(aX + b) = \\|a\\|\,\text{SD}(X)$ — a shift $…” |
+| The sum of independent normal random variables is normal, with mean equal to the sum of the means and variance equal to the sum of the vari… | fact | tagged | Normal Distribution: “Any **linear combination of independent normals is exactly normal**: if $X_i \sim N(\mu_i, \sigma_i…” |
+| For independent random variables, variances add (Var(X+Y)=Var(X)+Var(Y)), but standard deviations do not add; the standard deviation of the… | fact | tagged | Independent Random Variables: “For independent random variables: $E[XY] = E[X]\,E[Y]$ and $\text{Var}(X + Y) = \text{Var}(X) + \te…” |
+
 </details>
 
-<details><summary><code>p-434</code> · error</summary>
+<details><summary><code>p-434</code> · gap</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Poisson Distribution, Discrete Univariate Distributions
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The Poisson probability mass function with mean lambda is P(N=k) = e^{-lambda} lambda^k / k!. | formula | tagged | Poisson Distribution: “$$P(X = k) = \frac{e^{-\lambda}\lambda^k}{k!}$$” |
+| The probability of at least one event equals one minus the probability of zero events (complement rule), so for a Poisson variable P(N>=1) … | fact | tagged | Discrete Univariate Distributions: “For "at least one", reach for the complement $1 - P(X=0)$ rather than summing the tail.” |
+| To use a stated relationship between probabilities (e.g., one is a multiple of another), set up an equation between the probability express… | procedure | missing |  |
+
 </details>
+
+<details><summary><code>p-435</code> · answerable</summary>
 
-<details><summary><code>p-435</code> · error</summary>
+Tagged pages: Exponential Distribution, Percentile, Variance and Standard Deviation
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| For an exponential distribution with mean θ, the variance equals θ², so the mean equals the square root of the variance. | fact | tagged | Exponential Distribution: “$E[X] = \theta$, $\text{Var}(X) = \theta^2$, and $F(x) = 1 - e^{-x/\theta}$” |
+| The survival function of an exponential distribution with mean θ is S(x) = e^{-x/θ} for x ≥ 0. | formula | tagged | Exponential Distribution: “Work from the survival function $S(x) = e^{-x/\theta}$ rather than the CDF; almost every exponentia…” |
+| The median of a distribution is the value m such that P(X > m) = 0.5 (equivalently F(m) = 0.5); it is found by setting the survival or dist… | definition | linked | Median: “For a continuous distribution that is the point where $F(m) = 0.5$, splitting the probability in ha…” |
+| The median of an exponential distribution is θ ln 2 ≈ 0.693 times its mean, so it is always below the mean because of the long right tail (… | fact | linked | Median: “For the [[Exponential Distribution\\|exponential]], $m = \theta \ln 2 \approx 0.693\theta$ against a…” |
 
 </details>
 
-<details><summary><code>p-436</code> · error</summary>
+<details><summary><code>p-436</code> · answerable</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Exponential Distribution, Conditional Probability
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| For an exponential distribution the mean equals the standard deviation (both equal θ, the scale parameter). | fact | tagged | Exponential Distribution: “$E[X] = \theta$, $\text{Var}(X) = \theta^2$, and $F(x) = 1 - e^{-x/\theta}$” |
+| For an exponential distribution with mean θ, the survival function is P[X > x] = e^{-x/θ}. | formula | tagged | Exponential Distribution: “Work from the survival function $S(x) = e^{-x/\theta}$ rather than the CDF; almost every exponentia…” |
+| The exponential distribution is memoryless: given X > d, the excess X − d is exponential with the same mean, so P[X > d + x \| X > d] = P[X… | fact | tagged | Exponential Distribution: “Its defining property is **memorylessness**: $P(X > s + t \mid X > s) = P(X > t)$, making it the un…” |
+| The conditional probability of an event A given event B is P[A \| B] = P[A ∩ B] / P[B]; for nested tail events X > a and X > b with a > b t… | formula | tagged | Conditional Probability: “$$P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \quad P(B) > 0$$” |
+
 </details>
 
-<details><summary><code>p-437</code> · error</summary>
+<details><summary><code>p-437</code> · answerable</summary>
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+Tagged pages: Probability Rules, Set Theory, Discrete Univariate Distributions
 
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| Translate verbal probability statements such as '1 or 2 events' or 'at least k events' into sums of probabilities of individual outcomes of… | procedure | linked | Random Variable (collapsed): “So the distribution is $P(X=0)=\tfrac{1}{4}$, $P(X=1)=\tfrac{1}{2}$, $P(X=2)=\tfrac{1}{4}$.” |
+| The probability of a union of mutually exclusive (disjoint) events equals the sum of their individual probabilities, so the probability of … | fact | linked | Mutually Exclusive Events: “The addition rule simplification extends to any finite collection: if $A_1, A_2, \ldots, A_n$ are p…” |
+| Solve for an unknown outcome probability by building a system of equations from overlapping unions of disjoint events and substituting know… | procedure | linked | Mutually Exclusive Events: “if $A_1, A_2, \ldots, A_n$ are pairwise mutually exclusive, then $P\!\left(\bigcup_{i=1}^n A_i\righ…” |
+
 </details>
+
+<details><summary><code>p-438</code> · answerable</summary>
 
-<details><summary><code>p-438</code> · error</summary>
+Tagged pages: Hypergeometric Distribution, Combinatorics
 
-Error: BackendError: You've hit your session limit · resets 12am (UTC)
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| When items are brought in random order, the first k items form an unordered random sample of size k drawn without replacement from the popu… | procedure | tagged | Hypergeometric Distribution: “The **Hypergeometric Distribution** models the number of successes in a sample of size $n$ drawn **…” |
+| The number of ways to choose k items from n distinct items, ignoring order, is the binomial coefficient C(n,k) = n!/(k!(n-k)!). | formula | linked | Combination: “A **Combination** $\binom{n}{k}$ ("$n$ choose $k$") counts the number of ways to select $k$ objects…” |
+| When drawing n items without replacement from a population of N containing K items of one type, the probability of exactly k of that type i… | formula | tagged | Hypergeometric Distribution: “$$P(X = k) = \frac{\dbinom{K}{k}\dbinom{N-K}{n-k}}{\dbinom{N}{n}}$$” |
+| For equally likely outcomes, probability equals the number of favorable outcomes divided by the total number of outcomes; the multiplicatio… | procedure | tagged | Combinatorics: “In probability, combinatorics determines the sizes of events and sample spaces: $P(A) = \\|A\\| / \\|S…” |
 
 </details>
 
@@ -8102,6 +9802,1226 @@ Tagged pages: Poisson Distribution, Variance and Standard Deviation
 | A Poisson rate is proportional to the length of the exposure period, so the rate for a new period equals the given rate per unit time multi… | procedure | elsewhere | Poisson Process: “The number of events in any interval of length $t$ has distribution $\text{Poi}(\lambda t)$” |
 | For a Poisson distribution with parameter lambda, the mean and the variance both equal lambda. | fact | tagged | Poisson Distribution: “A defining property is $E[X] = \text{Var}(X) = \lambda$ — the mean and variance are equal” |
 | The standard deviation of a random variable is the positive square root of its variance. | definition | tagged | Variance and Standard Deviation: “$$\sigma = \text{SD}(X) = \sqrt{\text{Var}(X)}$$” |
+
+</details>
+
+<details><summary><code>p-656</code> · gap</summary>
+
+Tagged pages: Joint Probability Function, Probability Rules
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The trinomial (multinomial with three categories) joint probability function for n trials is p(i,j) = n!/(i! j! (n-i-j)!) p1^i p2^j p3^(n-i… | formula | missing |  |
+| To find the probability of an event for a discrete joint distribution, identify all (i,j) cells satisfying the event condition and sum the … | procedure | elsewhere | Joint Cumulative Distribution Function: “For discrete variables, $F$ adds up the joint probability function over every cell at or below $x$ …” |
+| The probability of an event equals one minus the probability of its complement, so P(at least one) = 1 - P(none). | fact | tagged | Probability Rules: “The complement rule is the workhorse shortcut — "at least one" is almost always faster as $1 - P(\t…” |
+| Each marginal count in a multinomial distribution is binomial, so the number of trials resulting in a given category is Binomial(n, p) with… | fact | missing |  |
+
+</details>
+
+<details><summary><code>p-657</code> · gap</summary>
+
+Tagged pages: Probability Addition Rule, Set Theory and Venn Diagrams
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The probability that neither of two events occurs is one minus the probability of their union: P(neither) = 1 - P(A ∪ B). | formula | linked | Venn Diagram (collapsed): “$$P(\text{Neither}) = 1 - P(A \cup H) = 1 - 0.90 = 0.10$$” |
+| The probability of a union is P(A ∪ B) = P(A) + P(B) - P(A ∩ B), the inclusion-exclusion rule. | formula | elsewhere | Inclusion-Exclusion Principle: “The **Inclusion-Exclusion Principle** is a counting rule for the probability (or size) of a union o…” |
+| Two events are mutually exclusive (disjoint) if they cannot occur together, so P(A ∩ B) = 0 and P(A ∪ B) = P(A) + P(B). | definition | linked | Mutually Exclusive Events: “Two events $A$ and $B$ are **Mutually Exclusive** (disjoint) if they cannot both occur simultaneous…” |
+| When the overlap of two events is not specified, P(A ∩ B) can range from 0 up to min(P(A), P(B)), so P(A ∪ B) ranges from max(P(A), P(B)) t… | fact | missing |  |
+| If event A is contained in event B, then P(A ∩ B) = P(A) and P(A ∪ B) = P(B); this is the maximum-overlap case. | fact | missing |  |
+
+</details>
+
+<details><summary><code>p-658</code> · gap</summary>
+
+Tagged pages: Probability Addition Rule, Conditional Probability
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| Inclusion-exclusion for three events: P[A∪B∪C] = P[A]+P[B]+P[C] − P[A∩B] − P[A∩C] − P[B∩C] + P[A∩B∩C]. | formula | tagged | Probability Addition Rule: “$$P(A \cup B \cup C) = P(A)+P(B)+P(C) - P(A \cap B) - P(A \cap C) - P(B \cap C) + P(A \cap B \cap C…” |
+| Two events are mutually exclusive (disjoint) if they cannot occur together, so the probability of their intersection is zero. | definition | linked | Mutually Exclusive Events: “Two events $A$ and $B$ are **Mutually Exclusive** (disjoint) if they cannot both occur simultaneous…” |
+| If two events are disjoint, any triple intersection involving them is a subset of their empty intersection, so its probability is zero (mon… | fact | elsewhere | Inclusion-Exclusion Principle: “For [[Mutually Exclusive Events\\|disjoint]] events the intersection terms are $0$, so the rule redu…” |
+| Multiplication rule: P[A∩B] = P[B]·P[A\|B], where P[A\|B] is the conditional probability of A given B. | formula | elsewhere | Probability Multiplication Rule: “$$= P(B) \cdot P(A \mid B)$$” |
+| Regroup the terms of the three-event inclusion-exclusion expression so that P[A]+P[C]−P[A∩C] is replaced by the given P[A∪C], avoiding the … | procedure | missing |  |
+
+</details>
+
+<details><summary><code>p-659</code> · gap</summary>
+
+Tagged pages: Negative Binomial Distribution
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The negative binomial distribution models the trial number X_r on which the r-th success occurs in independent Bernoulli trials with consta… | definition | tagged | Negative Binomial Distribution: “The **Negative Binomial Distribution** $X \sim \text{NegBin}(r, p)$ counts the number of independen…” |
+| For the negative binomial (trials-until-r-th-success form), P[X_r = x] = C(x-1, r-1) p^r (1-p)^(x-r) for x = r, r+1, ... | formula | tagged | Negative Binomial Distribution: “$$P(X = k) = \binom{k-1}{r-1}p^r(1-p)^{k-r}$$” |
+| The binomial coefficient C(x-1, r-1) counts the placements of the first r-1 successes among the first x-1 trials, because the r-th success … | procedure | missing |  |
+| The probability that a discrete random variable falls in an inclusive range is found by summing its pmf over every integer in that range. | procedure | elsewhere | Discrete Random Variable: “$$F(x) = \sum_{k \le x} p(k)$$” |
+
+</details>
+
+<details><summary><code>p-660</code> · answerable</summary>
+
+Tagged pages: Exponential Distribution
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| For an exponential distribution, the rate parameter λ is the reciprocal of the mean (λ = 1/mean). | fact | tagged | Exponential Distribution: “Some texts parameterize by **rate** $\lambda = 1/\theta$, so $f(x) = \lambda e^{-\lambda x}$ and $E…” |
+| The survival function of an exponential random variable with rate λ is P(X > x) = e^{-λx} for x ≥ 0. | formula | tagged | Exponential Distribution: “Work from the survival function $S(x) = e^{-x/\theta}$ rather than the CDF; almost every exponentia…” |
+| The survival function P(X > x) is the probability that the random variable exceeds x, which equals 1 minus the cdf; 'lasts at least x' corr… | definition | tagged | Exponential Distribution (collapsed): “$$P(X > 300) = 1 - F(300) = e^{-300/500} = e^{-0.6} \approx 0.5488$$” |
+
+</details>
+
+<details><summary><code>p-661</code> · gap</summary>
+
+Tagged pages: Conditional Probability
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The conditional probability of event A given event B is P(A\|B) = P(A ∩ B) / P(B), provided P(B) > 0. | definition | tagged | Conditional Probability: “$$P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \quad P(B) > 0$$” |
+| Translate verbal events about a discrete count (e.g., 'at least one damaged', 'at least one undamaged' out of a fixed total) into inequalit… | procedure | missing |  |
+| The probability of an event defined on a discrete distribution is the sum of the probabilities of the outcomes in that event; the complemen… | fact | elsewhere | Discrete Random Variable (collapsed): “The four probabilities sum to 1, and $P(S \ge 2) = 0.14 + 0.04 = 0.18$: an 18% chance the pair prod…” |
+
+</details>
+
+<details><summary><code>p-662</code> · untagged</summary>
+
+Tagged pages: Independent Events, Discrete Univariate Distributions
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| If random variables are independent, the joint probability of a specific pair of outcomes equals the product of their individual (marginal)… | fact | tagged | Independent Events: “$$P(A \cap B) = P(A) \cdot P(B)$$” |
+| To find the probability that the sum of two discrete random variables meets a threshold (e.g., at least k), enumerate all ordered outcome p… | procedure | elsewhere | Discrete Random Variable (collapsed): “Convolve, summing over the ways each total can occur:” |
+| Ordered outcome pairs such as (a,b) and (b,a) are distinct joint outcomes when the two variables belong to different individuals, so both m… | fact | elsewhere | Discrete Random Variable (collapsed): “$P(S = 1)$: $(0.7)(0.4) + (0.2)(0.6) = 0.40$” |
+| The probability mass function of a discrete random variable gives the probability of each possible value, and probabilities of mutually exc… | definition | elsewhere | Discrete Random Variable: “A valid PMF has $p(x) \ge 0$ and $\sum_x p(x) = 1$.” |
+
+</details>
+
+<details><summary><code>p-663</code> · gap</summary>
+
+Tagged pages: Normal Distribution, Conditional Probability
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The conditional probability of A given B is P(A \| B) = P(A ∩ B) / P(B). | formula | tagged | Conditional Probability: “$$P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \quad P(B) > 0$$” |
+| When conditioning on X ≥ a and asking for X ≤ b with a < b, the intersection of the two events is the interval a ≤ X ≤ b. | procedure | missing |  |
+| To find probabilities for a normal random variable X with mean μ and standard deviation σ, standardize via Z = (X − μ)/σ and use the standa… | procedure | tagged | Normal Distribution: “Its CDF has no closed form and is evaluated via the standard normal $Z = (X - \mu)/\sigma \sim N(0,…” |
+| The normal distribution is symmetric about its mean, so P(X ≥ μ) = P(X ≤ μ) = 0.5. | fact | tagged | Normal Distribution: “Symmetry gives $\Phi(-z) = 1 - \Phi(z)$” |
+| For a continuous random variable, P(a ≤ X ≤ b) = P(X ≤ b) − P(X ≤ a), which for standard normal gives Φ(z_b) − Φ(z_a). | fact | elsewhere | Continuous Random Variable: “$P(X = c) = 0$ for every $c$, so $P(a < X < b) = P(a \le X \le b) = F(b) - F(a)$.” |
+
+</details>
+
+<details><summary><code>p-664</code> · gap</summary>
+
+Tagged pages: Binomial Distribution, Exponential Distribution
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The survival function of an exponential distribution with mean theta is S(x) = P[X > x] = e^{-x/theta}. | formula | tagged | Exponential Distribution: “Work from the survival function $S(x) = e^{-x/\theta}$ rather than the CDF; almost every exponentia…” |
+| For a fixed number of independent trials with the same success probability p, the number of successes follows a binomial distribution with … | fact | tagged | Binomial Distribution: “The **Binomial Distribution** $X \sim \text{Bin}(n, p)$ models the number of successes in $n$ indep…” |
+| The binomial probability of exactly k successes in n trials is C(n,k) p^k (1-p)^(n-k). | formula | tagged | Binomial Distribution: “$$P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}$$” |
+| To find the probability of 'at least k' successes in a discrete distribution, sum the probabilities of every outcome from k up to the maxim… | procedure | missing |  |
+
+</details>
+
+<details><summary><code>p-665</code> · gap</summary>
+
+Tagged pages: Poisson Distribution
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The sum of independent Poisson random variables is Poisson with mean equal to the sum of the individual means. | fact | elsewhere | Poisson Superposition: “a sum of independent Poisson counts is Poisson with the summed mean.” |
+| For a Poisson random variable with mean lambda, P[X = k] = e^{-lambda} lambda^k / k!. | formula | tagged | Poisson Distribution: “$$P(X = k) = \frac{e^{-\lambda}\lambda^k}{k!}$$” |
+| To find an upper-tail probability P[X > n] for a discrete count variable, use the complement: 1 minus the cumulative probability P[X <= n],… | procedure | missing |  |
+
+</details>
+
+<details><summary><code>p-666</code> · gap</summary>
+
+Tagged pages: Normal Distribution
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| To find the largest standard deviation meeting a probability requirement for a normal variable, set the probability equal to its threshold … | procedure | missing |  |
+| The normal distribution is symmetric about its mean, so an interval centred on the mean leaves equal probability in the two tails, each equ… | fact | tagged | Normal Distribution: “Symmetry gives $\Phi(-z) = 1 - \Phi(z)$ — the identity needed for every negative $z$, since standar…” |
+| Convert a central-interval probability into a cumulative probability at the upper endpoint by adding the lower tail area to the interval pr… | procedure | missing |  |
+| A normal random variable X with mean mu and standard deviation sigma is standardized as Z = (X - mu)/sigma, which follows the standard norm… | formula | tagged | Normal Distribution: “Its CDF has no closed form and is evaluated via the standard normal $Z = (X - \mu)/\sigma \sim N(0,…” |
+| Use the standard normal table inversely: find the z-value (percentile) whose cumulative probability equals a given value, e.g., the 90th pe… | procedure | tagged | Normal Distribution: “Useful percentiles: $z_{0.90} = 1.282$, $z_{0.95} = 1.645$, $z_{0.975} = 1.960$, $z_{0.99} = 2.326$” |
+| For a normal distribution with fixed mean, increasing the standard deviation spreads the distribution and decreases the probability of fall… | fact | missing |  |
+
+</details>
+
+<details><summary><code>p-667</code> · answerable</summary>
+
+Tagged pages: Normal Distribution, Exponential Distribution, Moment
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The exponential distribution with mean θ has CDF F(x) = 1 - e^{-x/θ}, so its p-th percentile is -θ ln(1-p). | formula | tagged | Exponential Distribution: “$E[X] = \theta$, $\text{Var}(X) = \theta^2$, and $F(x) = 1 - e^{-x/\theta}$” |
+| The p-th percentile of a distribution is the value x at which the CDF equals p, i.e. F(x) = p. | definition | linked | Percentile: “When $F$ is continuous and strictly increasing, it is the value that solves $F(x_p) = p$, found by …” |
+| To find the percentile of a normal distribution with mean μ and standard deviation σ, standardize via z = (x - μ)/σ and use the standard no… | procedure | tagged | Normal Distribution: “Its CDF has no closed form and is evaluated via the standard normal $Z = (X - \mu)/\sigma \sim N(0,…” |
+| The mean of a normal distribution is its parameter μ and its variance is σ², so the standard deviation can be solved from a known percentil… | fact | tagged | Normal Distribution: “$$\text{where } \mu = \text{mean},\quad \sigma^2 = \text{variance}$$” |
+| The second raw moment of a random variable equals its variance plus the square of its mean: E[X²] = Var(X) + (E[X])². | formula | tagged | Moment: “The second central moment is the [[Variance]], $\mu_2 = E[X^2] - \mu^2$.” |
+
+</details>
+
+<details><summary><code>p-668</code> · gap</summary>
+
+Tagged pages: Uniform Continuous Distribution, Percentile, Moment
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The median of a uniform distribution on [a, b] is the midpoint (a+b)/2. | fact | missing |  |
+| The p-th percentile of a uniform distribution on [a, b] is found by linear interpolation between the endpoints, a + p(b - a) = (1-p)a + p b… | procedure | tagged | Uniform Continuous Distribution: “$E[X] = (a+b)/2$, $\text{Var}(X) = (b-a)^2/12$, and $F(x) = (x-a)/(b-a)$ for $a < x < b$” |
+| A uniform distribution on [a, b] has density 1/(b-a) on that interval. | formula | tagged | Uniform Continuous Distribution: “$$f(x) = \frac{1}{b - a}, \quad a < x < b$$” |
+| The second moment of a continuous random variable is E[X^2] = integral of x^2 f(x) dx over the support; equivalently E[X^2] = Var(X) + (E[X… | formula | tagged | Moment: “$$\mu_n' = E[X^n] = \int_{-\infty}^{\infty} x^n f(x)\,dx$$” |
+| A uniform distribution on [a, b] has mean (a+b)/2 and variance (b-a)^2/12. | formula | tagged | Uniform Continuous Distribution: “$E[X] = (a+b)/2$, $\text{Var}(X) = (b-a)^2/12$, and $F(x) = (x-a)/(b-a)$ for $a < x < b$” |
+
+</details>
+
+<details><summary><code>p-669</code> · untagged</summary>
+
+Tagged pages: Normal Distribution, Independent Events
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The probability that at least one of several events occurs equals 1 minus the probability that none occurs, so for independent years P(at l… | fact | elsewhere | Independent and Identically Distributed: “the minimum has $P(X_{(1)} > x) = [1 - F(x)]^n$” |
+| The probability of an intersection of independent events is the product of their individual probabilities. | fact | tagged | Independent Events: “$$P(A \cap B) = P(A) \cdot P(B)$$” |
+| A normal distribution is symmetric about its mean, so P(X < mean + d) = P(X > mean - d), and points equally far above and below the mean ha… | fact | tagged | Normal Distribution: “Symmetry gives $\Phi(-z) = 1 - \Phi(z)$ — the identity needed for every negative $z$, since standar…” |
+| Standardize a normal random variable via z = (x - mu)/sigma, and use the standard normal table or inverse CDF to find the z-value correspon… | procedure | tagged | Normal Distribution: “Its CDF has no closed form and is evaluated via the standard normal $Z = (X - \mu)/\sigma \sim N(0,…” |
+| To find an unknown standard deviation of a normal variable, equate the distance between a value and the mean to z times sigma and solve for… | procedure | tagged | Normal Distribution: “Its CDF has no closed form and is evaluated via the standard normal $Z = (X - \mu)/\sigma \sim N(0,…” |
+
+</details>
+
+<details><summary><code>p-670</code> · answerable</summary>
+
+Tagged pages: Normal Distribution, Percentile
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The p-th percentile of a distribution is the value x such that P(X ≤ x) = p; a 5% probability of exceeding x makes x the 95th percentile. | definition | tagged | Percentile: “When $F$ is continuous and strictly increasing, it is the value that solves $F(x_p) = p$, found by …” |
+| To find a percentile of a normal random variable, look up the standard normal z-value for the given probability and compute x = μ + zσ. | procedure | tagged | Percentile (collapsed): “The 95th percentile of the standard normal is $z_{0.95} = 1.645$. Transform back with $\sigma = 15$:” |
+| The 95th percentile of the standard normal distribution is approximately 1.645. | fact | tagged | Normal Distribution: “Useful percentiles: $z_{0.90} = 1.282$, $z_{0.95} = 1.645$, $z_{0.975} = 1.960$, $z_{0.99} = 2.326$” |
+| The normal distribution is symmetric about its mean, so its median equals its mean. | fact | linked | Median: “For a [[Normal Distribution\\|normal]] distribution the median equals the [[Expected Value\\|mean]]” |
+| The median of a distribution is its 50th percentile, the value m with P(X ≤ m) = 0.5. | definition | linked | Median: “The **Median** $m$ of a [[Random Variable]] $X$ is its 50th [[Percentile\\|percentile]]: the smalles…” |
+
+</details>
+
+<details><summary><code>p-671</code> · answerable</summary>
+
+Tagged pages: Linear Combinations of Random Variables, Normal Distribution
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The expected value of a sum of random variables equals the sum of their expected values, and scaling a random variable by a constant scales… | fact | tagged | Linear Combinations of Random Variables: “$$E[L] = \sum_{i=1}^{n} c_i\,E[X_i]$$” |
+| The variance of a sum of independent random variables equals the sum of their variances (standard deviations do not add). | fact | linked | Moments for Linear Combinations: “$$\text{Var}(W) = \sum_{i=1}^n a_i^2 \,\text{Var}(X_i)$$” |
+| Multiplying a random variable by a constant c multiplies its standard deviation by \|c\| (variance by c^2), so the average of n independent… | fact | tagged | Linear Combinations of Random Variables: “So $\text{SD}(\bar{X}) = 20$. Averaging leaves the mean alone but divides the standard deviation by…” |
+| A sum or linear combination of independent normal random variables is itself normally distributed. | fact | tagged | Normal Distribution: “Any **linear combination of independent normals is exactly normal**: if $X_i \sim N(\mu_i, \sigma_i…” |
+| To find a normal probability, standardize via Z = (x - mean)/SD and evaluate the tail probability P[Z > z] using the standard normal table … | procedure | linked | Probabilities for Linear Combinations (collapsed): “$$P(L > 340) = P\!\left(Z > \frac{340-300}{18.03}\right) = P(Z > 2.22) \approx 0.0132$$” |
+
+</details>
+
+<details><summary><code>p-672</code> · untagged</summary>
+
+Tagged pages: Exponential Distribution, Variance and Standard Deviation
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The exponential distribution with mean θ has survival function S(x) = e^{-x/θ} for x ≥ 0. | formula | tagged | Exponential Distribution: “Work from the survival function $S(x) = e^{-x/\theta}$ rather than the CDF; almost every exponentia…” |
+| The median m of a continuous distribution is the value satisfying P[X ≥ m] = P[X ≤ m] = 0.5, i.e. the 50th percentile. | definition | elsewhere | Median: “The **Median** $m$ of a [[Random Variable]] $X$ is its 50th [[Percentile\\|percentile]]: the smalles…” |
+| The median of an exponential distribution equals its mean times ln 2, so the mean exceeds the median by mean × (1 − ln 2). | fact | elsewhere | Median: “For the [[Exponential Distribution\\|exponential]], $m = \theta \ln 2 \approx 0.693\theta$ against a…” |
+| The variance of an exponential distribution equals the square of its mean (θ²). | fact | tagged | Exponential Distribution: “$E[X] = \theta$, $\text{Var}(X) = \theta^2$, and $F(x) = 1 - e^{-x/\theta}$” |
+
+</details>
+
+<details><summary><code>p-673</code> · untagged</summary>
+
+Tagged pages: Covariance and Correlation Coefficient, Linear Combinations of Random Variables
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The covariance of two random variables equals their correlation times the product of their standard deviations: Cov(X,Y) = ρ·σ_X·σ_Y. | formula | elsewhere | Correlation Coefficient: “$$\rho(X, Y) = \frac{\text{Cov}(X, Y)}{\sigma_X \cdot \sigma_Y}$$” |
+| Two random variables are uncorrelated when their covariance (equivalently their correlation) is zero. | definition | tagged | Linear Combinations of Random Variables: “variables are always uncorrelated, but zero covariance does not by itself imply independence.” |
+| Covariance is bilinear: Cov(aU+bV, cW+dZ) expands into the sum of the constant-weighted covariances of each pair of terms, and Cov(U,U)=Var… | fact | tagged | Covariance and Correlation Coefficient: “Covariance is bilinear: $\text{Cov}(aX + bY,\, Z) = a\,\text{Cov}(X, Z) + b\,\text{Cov}(Y, Z)$, add…” |
+
+</details>
+
+<details><summary><code>p-674</code> · gap</summary>
+
+Tagged pages: Poisson Distribution
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| All of a random count of claims or services is covered by a maximum-limit policy exactly when the count is less than or equal to the limit,… | fact | missing |  |
+| A Poisson random variable with mean λ has probability mass function P[X = k] = e^{-λ} λ^k / k! for k = 0, 1, 2, ... | formula | tagged | Poisson Distribution: “$$P(X = k) = \frac{e^{-\lambda}\lambda^k}{k!}$$” |
+| To find the cumulative probability of a discrete distribution, sum the pmf values from the lowest support point up to the threshold, and te… | procedure | elsewhere | Joint Cumulative Distribution Function: “For discrete variables, $F$ adds up the joint probability function over every cell at or below $x$ …” |
+| A Poisson distribution is right-skewed, so its cumulative probability at the mean is well below what is needed to cover a high probability … | fact | missing |  |
+
+</details>
+
+<details><summary><code>p-675</code> · untagged</summary>
+
+Tagged pages: Poisson Distribution, Expected Value, Moment
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The Poisson pmf with mean λ is P[X = k] = e^{-λ} λ^k / k!, so P[X = 0] = e^{-λ}. | formula | tagged | Poisson Distribution: “$$P(X = k) = \frac{e^{-\lambda}\lambda^k}{k!}$$” |
+| The probability of at least one event equals one minus the probability of zero events (complement rule). | fact | elsewhere | Probability Rules: “$$P(A^c) = 1 - P(A)$$” |
+| For a Poisson random variable with parameter λ, both the mean and the variance equal λ. | fact | tagged | Poisson Distribution: “A defining property is $E[X] = \text{Var}(X) = \lambda$ — the mean and variance are equal” |
+| The second moment about the origin equals the variance plus the square of the mean: E[X^2] = Var(X) + (E[X])^2. | formula | linked | Variance: “Efficient computation formula: $\text{Var}(X) = E[X^2] - \mu^2$ where $\mu = E[X]$” |
+
+</details>
+
+<details><summary><code>p-676</code> · answerable</summary>
+
+Tagged pages: Linear Combinations of Random Variables, Poisson Distribution
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The variance of a sum of independent random variables equals the sum of their individual variances. | fact | linked | Independent Random Variables: “For independent random variables: $E[XY] = E[X]\,E[Y]$ and $\text{Var}(X + Y) = \text{Var}(X) + \te…” |
+| For a Poisson distribution, the variance equals the mean. | fact | tagged | Poisson Distribution: “A defining property is $E[X] = \text{Var}(X) = \lambda$ — the mean and variance are equal” |
+| To find the variance of a total over multiple periods with independent identically distributed period counts, treat the total as a sum of t… | procedure | tagged | Linear Combinations of Random Variables: “For $n$ i.i.d. variables with mean $\mu$ and finite variance $\sigma^2$, $\bar{X}$ has mean $\mu$ a…” |
+
+</details>
+
+<details><summary><code>p-677</code> · gap</summary>
+
+Tagged pages: Percentile, Exponential Distribution
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The median m of a continuous random variable is the value satisfying F(m) = 0.5, i.e., the integral of the density from the lower support b… | definition | linked | Median: “For a continuous distribution that is the point where $F(m) = 0.5$, splitting the probability in ha…” |
+| To find the cumulative distribution function (or probability up to a point) from a density, integrate the density from the lower end of the… | procedure | linked | Cumulative Distribution Function (CDF): “For a continuous random variable, $F(x) = \int_{-\infty}^{x} f(t)\, dt$” |
+| The integral of e^{-ax} over x from 0 to m equals (1 - e^{-am})/a for a > 0. | formula | tagged | Exponential Distribution: “$E[X] = \theta$, $\text{Var}(X) = \theta^2$, and $F(x) = 1 - e^{-x/\theta}$” |
+| An equation involving e^{-ax} and e^{-2ax} can be converted into a quadratic by substituting y = e^{-ax}, solved with the quadratic formula… | procedure | missing |  |
+| Since e^{-ax} is always positive, only the positive root of the quadratic in y = e^{-ax} is valid. | fact | missing |  |
+| The median of a mixture distribution is not the mixture of the component medians; only the cdf (or density) of a mixture is the weighted av… | fact | elsewhere | Mixture Distribution: “Its density (and its [[Cumulative Distribution Function (CDF)\\|CDF]]) is the weighted average of th…” |
+
+</details>
+
+<details><summary><code>p-678</code> · gap</summary>
+
+Tagged pages: Uniform Continuous Distribution, Variance and Standard Deviation
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| For a uniform distribution on [a, b], the mean is (a + b)/2. | formula | tagged | Uniform Continuous Distribution: “$E[X] = (a+b)/2$, $\text{Var}(X) = (b-a)^2/12$, and $F(x) = (x-a)/(b-a)$ for $a < x < b$” |
+| For a uniform distribution on [a, b], the variance is (b - a)^2 / 12. | formula | tagged | Uniform Continuous Distribution: “$E[X] = (a+b)/2$, $\text{Var}(X) = (b-a)^2/12$, and $F(x) = (x-a)/(b-a)$ for $a < x < b$” |
+| The standard deviation of a random variable is the square root of its variance. | definition | tagged | Variance and Standard Deviation: “standard deviation is its square root, restored to the original units of $X$.” |
+| For a uniform distribution, the probability of an interval within the support equals the interval's length divided by the total length of t… | fact | elsewhere | Cumulative Distribution Function (CDF) (collapsed): “$$P(2 \leq X \leq 4) = F(4) - F(2) = \frac{4}{5} - \frac{2}{5} = \frac{2}{5} = 0.4$$” |
+| To find the probability that a variable lies within one standard deviation of its mean, compute the interval from mean minus SD to mean plu… | procedure | missing |  |
+| The rule that about 68% of probability lies within one standard deviation of the mean applies to the normal distribution, not to all distri… | fact | missing |  |
+
+</details>
+
+<details><summary><code>p-679</code> · untagged</summary>
+
+Tagged pages: Deductible, Normal Distribution
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| With an ordinary deductible d applied to each loss, the claim payment is X - d, so a payment exceeding a threshold t occurs exactly when th… | fact | tagged | Deductible: “If the loss $X$ is less than or equal to the deductible $d$, the insurer pays nothing; above $d$ it…” |
+| Standardize a normal random variable X with mean mu and standard deviation sigma by Z = (X - mu)/sigma, so that P(X > x) = P(Z > (x - mu)/s… | procedure | tagged | Normal Distribution: “Its CDF has no closed form and is evaluated via the standard normal $Z = (X - \mu)/\sigma \sim N(0,…” |
+| To find a cutoff for a given tail probability, use the standard normal table inversely to find the z-value whose right-tail area equals the… | procedure | elsewhere | Normal Approximation: “Inverted, it sets a fund: the total exceeded with probability $\alpha$ is about $n\mu + z_{1-\alpha…” |
+
+</details>
+
+<details><summary><code>p-680</code> · answerable</summary>
+
+Tagged pages: Percentile, Exponential Distribution
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| A shifted exponential with threshold d (density (1/β)e^{-(x-d)/β} for x ≥ d) is an exponential with mean β translated to start at d, so its… | fact | tagged | Exponential Distribution: “A direct consequence: given $X > d$, the excess $X - d$ is again $\text{Exp}(\theta)$. So $E[X \mid…” |
+| The cdf of an exponential with mean β shifted by d is F(x) = 1 - e^{-(x-d)/β} for x ≥ d. | formula | tagged | Percentile (collapsed): “1 - e^{-(y + 1{,}000)/5{,}000} &= 0.90” |
+| The 100p-th percentile of a continuous random variable is the value x such that F(x) = p. | definition | tagged | Percentile: “When $F$ is continuous and strictly increasing, it is the value that solves $F(x_p) = p$, found by …” |
+| To find a percentile, set the cdf equal to p, isolate the exponential term, take the natural log of both sides, and solve for x, adding bac… | procedure | tagged | Percentile (collapsed): “Set $F(x_{0.90}) = 0.90$ and solve:” |
+
+</details>
+
+<details><summary><code>p-901</code> · untagged</summary>
+
+Tagged pages: Exponential Distribution, Deductible, Expected Value
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| A piecewise benefit that is zero below a deductible d, equals X-d between d and a limit u, and is capped at u-d above u can be written as t… | fact | tagged | Exponential Distribution (collapsed): “The payment is $Y = \min\bigl((X-200)_+,\ 800\bigr)$, which pays out only for $200 < X < 1000$ and …” |
+| (X-d)_+ is the excess-loss variable equal to X-d when X exceeds d and 0 otherwise; its expectation is the expected payment per loss with de… | definition | tagged | Deductible: “If the loss $X$ is less than or equal to the deductible $d$, the insurer pays nothing; above $d$ it…” |
+| For an exponential random variable with mean θ, the expected payment per loss above a deductible d is E[(X-d)_+] = θ e^{-d/θ}. | formula | tagged | Exponential Distribution: “So $E[X \mid X > d] = d + \theta$ and $E[(X-d)_+] = \theta e^{-d/\theta}$” |
+| Expectation is linear, so the expected value of a difference of random variables equals the difference of their expected values. | fact | elsewhere | Linear Combinations of Random Variables: “$$E[L] = \sum_{i=1}^{n} c_i\,E[X_i]$$” |
+| The exponential distribution is memoryless: given X exceeds d, the excess X-d is again exponential with the same mean. | fact | tagged | Exponential Distribution: “A direct consequence: given $X > d$, the excess $X - d$ is again $\text{Exp}(\theta)$.” |
+
+</details>
+
+<details><summary><code>p-902</code> · gap</summary>
+
+Tagged pages: Covariance, Variance
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| Covariance is bilinear: the covariance of a sum of random variables with another sum equals the sum of the covariances of all pairwise term… | fact | elsewhere | Covariance and Correlation Coefficient: “Covariance is bilinear: $\text{Cov}(aX + bY,\, Z) = a\,\text{Cov}(X, Z) + b\,\text{Cov}(Y, Z)$” |
+| The covariance of a random variable with itself equals its variance, Cov(X,X) = Var(X). | fact | elsewhere | Covariance and Correlation Coefficient: “$\text{Cov}(X, X) = \text{Var}(X)$” |
+| Two random variables are uncorrelated when their covariance (equivalently, their correlation) is zero. | definition | missing |  |
+
+</details>
+
+<details><summary><code>p-903</code> · untagged</summary>
+
+Tagged pages: Covariance, Variance
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The number of successes in n independent trials, each with success probability p, follows a Binomial(n, p) distribution; a count of heads i… | fact | elsewhere | Binomial Distribution: “The **Binomial Distribution** $X \sim \text{Bin}(n, p)$ models the number of successes in $n$ indep…” |
+| For a Binomial(n, p) random variable, Var(X) = n p (1 - p). | formula | elsewhere | Binomial Distribution: “$E[X] = np$ and $\text{Var}(X) = np(1-p)$” |
+| Covariance is bilinear and the covariance of a random variable with a constant is zero, so Cov(X, a + bX) = b Var(X). | fact | elsewhere | Covariance and Correlation Coefficient: “Covariance is bilinear: $\text{Cov}(aX + bY,\, Z) = a\,\text{Cov}(X, Z) + b\,\text{Cov}(Y, Z)$, add…” |
+| Cov(X, X) = Var(X). | fact | elsewhere | Covariance and Correlation Coefficient: “and $\text{Cov}(X, X) = \text{Var}(X)$.” |
+| When two random variables are deterministically related (such as counts of heads and tails summing to the number of tosses), express one as… | procedure | elsewhere | Covariance and Correlation Coefficient: “Covariance is bilinear: $\text{Cov}(aX + bY,\, Z) = a\,\text{Cov}(X, Z) + b\,\text{Cov}(Y, Z)$, add…” |
+
+</details>
+
+<details><summary><code>p-904</code> · answerable</summary>
+
+Tagged pages: Expected Value, Discrete Univariate Distributions
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The expected value of a discrete random variable (or of a function of it) is the sum over outcomes of the function value times the outcome'… | formula | tagged | Expected Value: “$$E[X] = 0(0.5) + 100(0.3) + 500(0.2) = 0 + 30 + 100 = 130$$” |
+| To find the expected payment under a piecewise-defined benefit, evaluate the benefit separately at each outcome by applying the rule that m… | procedure | linked | Uniform Discrete (collapsed): “Each outcome has probability $1/10$. Losses of 1 through 4 pay nothing; losses of 5 through 10 pay …” |
+
+</details>
+
+<details><summary><code>p-905</code> · untagged</summary>
+
+Tagged pages: Poisson Distribution, Expected Value, Variance
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The CDF F(x) = P(N ≤ x), so for a discrete nonnegative integer random variable P(N=0) = F(0) and P(N=k) = F(k) − F(k−1). | definition | elsewhere | Cumulative Distribution Function (CDF): “$$F(x) = P(X \leq x)$$” |
+| A Poisson random variable with mean λ has probability mass function P(N=k) = e^{-λ} λ^k / k!, so P(N=0) = e^{-λ} and P(N=1) = λ e^{-λ}. | formula | tagged | Poisson Distribution: “$$P(X = k) = \frac{e^{-\lambda}\lambda^k}{k!}$$” |
+| For a Poisson distribution with parameter λ, the mean and the variance both equal λ. | fact | tagged | Poisson Distribution: “A defining property is $E[X] = \text{Var}(X) = \lambda$ — the mean and variance are equal” |
+| The second moment equals the variance plus the square of the mean: E[N^2] = Var(N) + (E[N])^2. | formula | tagged | Variance: “Efficient computation formula: $\text{Var}(X) = E[X^2] - \mu^2$ where $\mu = E[X]$” |
+
+</details>
+
+<details><summary><code>p-906</code> · answerable</summary>
+
+Tagged pages: Normal Distribution, Probability
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| For a continuous random variable, the probabilities of an interval and its complementary regions sum to 1, so P[a < X < b] = 1 - P[X < a] -… | fact | linked | Axioms of Probability (collapsed): “Therefore $P(A^c) = 1 - P(A)$.” |
+
+</details>
+
+<details><summary><code>p-907</code> · gap</summary>
+
+Tagged pages: Continuous Univariate Distributions, Deductible, Expected Value
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The expected payment per loss for a policy with deductible d is E[(X-d)_+], the integral of (x-d) f(x) over x > d, where (X-d)_+ equals X-d… | definition | tagged | Deductible: “If the loss $X$ is less than or equal to the deductible $d$, the insurer pays nothing; above $d$ it…” |
+| With a deductible d and maximum covered loss u, the benefit per loss is min{(X-d)_+, u-d}, which equals (X-d)_+ - (X-u)_+. | fact | linked | Exponential Distribution (collapsed): “The payment is $Y = \min\bigl((X-200)_+,\ 800\bigr)$, which pays out only for $200 < X < 1000$ and …” |
+| By linearity of expectation, the expected benefit with a deductible and maximum covered loss is the difference of the expected values E[(X-… | fact | linked | Exponential Distribution (collapsed): “E[Y] &= E[(X-200)_+] - E[(X-1000)_+]” |
+| To compute E[(X-d)_+] for a continuous loss with a given density, integrate (x-d) f(x) from d to infinity, using a substitution such as u =… | procedure | missing |  |
+
+</details>
+
+<details><summary><code>p-910</code> · gap</summary>
+
+Tagged pages: Variance, Independent Events, Covariance
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The variance of a random variable X equals E[X^2] minus (E[X])^2. | formula | tagged | Variance: “Efficient computation formula: $\text{Var}(X) = E[X^2] - \mu^2$ where $\mu = E[X]$” |
+| If X and Y are independent, then E[XY] = E[X]E[Y]. | fact | linked | Independent Random Variables: “For independent random variables: $E[XY] = E[X]\,E[Y]$ and $\text{Var}(X + Y) = \text{Var}(X) + \te…” |
+| If X and Y are independent, then any functions of them are independent, so E[X^2 Y^2] = E[X^2]E[Y^2] (the second moment of a product equals… | fact | missing |  |
+
+</details>
+
+<details><summary><code>p-911</code> · gap</summary>
+
+Tagged pages: Normal Distribution, Expected Value
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| A payment of max(X - c, 0), written (X - c)+, is a call-option-like payoff whose expectation is the expected excess of X over a threshold c… | definition | linked | Random Variable: “A payment under a [[Deductible]], $Y = (X - d)_+$ with $X$ continuous, takes a continuum of values …” |
+| For X ~ N(mu, sigma^2) and threshold c, E[(X-c)+] = (mu-c)·Phi((mu-c)/sigma) + sigma·phi((mu-c)/sigma), where Phi and phi are the standard … | formula | missing |  |
+| Standardize a normal variable by z = (c - mu)/sigma, then evaluate the standard normal CDF Phi(z) and PDF phi(z) at that value using the st… | procedure | tagged | Normal Distribution: “Its CDF has no closed form and is evaluated via the standard normal $Z = (X - \mu)/\sigma \sim N(0,…” |
+| The standard normal density is phi(z) = exp(-z^2/2)/sqrt(2*pi), and Phi(z) is the standard normal cumulative distribution function. | definition | tagged | Normal Distribution: “$$f(x) = \frac{1}{\sigma\sqrt{2\pi}}\,\exp\!\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)$$” |
+
+</details>
+
+<details><summary><code>p-913</code> · gap</summary>
+
+Tagged pages: Poisson Distribution, Probability
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The Poisson distribution with mean λ has probability mass function P(N=n) = e^{-λ} λ^n / n! for n = 0, 1, 2, ... | formula | tagged | Poisson Distribution: “$$P(X = k) = \frac{e^{-\lambda}\lambda^k}{k!}$$” |
+| The cumulative distribution function P(N ≤ K) is the sum of the probabilities P(N=n) for n from 0 through K. | definition | elsewhere | Joint Cumulative Distribution Function: “For discrete variables, $F$ adds up the joint probability function over every cell at or below $x$ …” |
+| To find the largest integer K with P(N ≤ K) below a threshold for a discrete distribution, compute successive CDF values and find the last … | procedure | missing |  |
+
+</details>
+
+<details><summary><code>p-914</code> · gap</summary>
+
+Tagged pages: Uniform Continuous Distribution, Probability, Expected Value
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| For Y uniformly distributed on [a, b], the survival function for y in [a, b] is P(Y > y) = (b - y)/(b - a), so probabilities of intervals w… | fact | tagged | Uniform Continuous Distribution: “$F(x) = (x-a)/(b-a)$ for $a < x < b$” |
+| The mean of a uniform distribution on [a, b] is (a + b)/2. | formula | tagged | Uniform Continuous Distribution: “$E[X] = (a+b)/2$” |
+| To find the parameters of a uniform distribution from given tail probabilities, set up equations from P(Y > y) = (b - y)/(b - a) at the giv… | procedure | tagged | Uniform Continuous Distribution: “$E[X] = (a+b)/2$, $\text{Var}(X) = (b-a)^2/12$, and $F(x) = (x-a)/(b-a)$ for $a < x < b$” |
+| A point y with a survival probability strictly between 0 and 1 must lie strictly inside the support [a, b], so the uniform survival formula… | fact | missing |  |
+| Expectation is linear: E[cY] = c E[Y] for a constant c. | fact | tagged | Expected Value: “It is linear: $E[aX + b] = aE[X] + b$” |
+
+</details>
+
+<details><summary><code>p-915</code> · untagged</summary>
+
+Tagged pages: Uniform Continuous Distribution, Probability
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The mean of a Uniform distribution on [0, b] is b/2. | fact | tagged | Uniform Continuous Distribution: “$E[X] = (a+b)/2$, $\text{Var}(X) = (b-a)^2/12$, and $F(x) = (x-a)/(b-a)$ for $a < x < b$” |
+| Expectation is linear: for constants a and c, E[aX + c] = a E[X] + c. | fact | elsewhere | Expected Value: “It is linear: $E[aX + b] = aE[X] + b$” |
+
+</details>
+
+<details><summary><code>p-916</code> · answerable</summary>
+
+Tagged pages: Variance, Moments for Linear Combinations
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The expected value of a discrete random variable is E[X] = Σ x·P[X=x], and E[g(X)] = Σ g(x)·P[X=x]. | formula | linked | Expected Value: “$$E[X] = \begin{cases} \displaystyle\sum_{k} k\, f(k) & \text{(discrete)} \\[6pt] \displaystyle\int…” |
+| The variance of a random variable is Var(X) = E[X^2] − (E[X])^2. | formula | tagged | Variance: “Efficient computation formula: $\text{Var}(X) = E[X^2] - \mu^2$ where $\mu = E[X]$” |
+| For constants a and b, Var(aX + b) = a^2 Var(X); adding a constant does not change the variance and a multiplicative constant is squared. | fact | tagged | Variance: “$\text{Var}(aX + b) = a^2 \text{Var}(X)$ — scaling changes variance, shifts do not” |
+
+</details>
+
+<details><summary><code>p-917</code> · gap</summary>
+
+Tagged pages: Variance for Conditional and Marginal Distributions, Poisson Distribution, Exponential Distribution
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| For a compound distribution S = X_1 + ... + X_N with X_i i.i.d. and independent of N, E[S\|N] = N·E[X] and Var(S\|N) = N·Var(X). | formula | missing |  |
+| The law of total variance states Var(S) = E[Var(S\|N)] + Var(E[S\|N]). | formula | tagged | Variance for Conditional and Marginal Distributions: “$$\text{Var}(X) = E\bigl[\text{Var}(X \mid Y)\bigr] + \text{Var}\bigl(E[X \mid Y]\bigr)$$” |
+| For a compound distribution, Var(S) = E[N]·Var(X) + Var(N)·E[X]^2. | formula | elsewhere | Compound Poisson Process: “this falls out of the compound-variance formula $\text{Var}(S) = E[N]\text{Var}(X) + \text{Var}(N)E…” |
+| A Poisson random variable has mean equal to its variance, both equal to the Poisson parameter λ. | fact | tagged | Poisson Distribution: “A defining property is $E[X] = \text{Var}(X) = \lambda$ — the mean and variance are equal” |
+| An exponential distribution with mean θ has variance θ^2 and second moment E[X^2] = 2θ^2. | fact | tagged | Exponential Distribution: “$E[X] = \theta$, $\text{Var}(X) = \theta^2$, and $F(x) = 1 - e^{-x/\theta}$” |
+| Var(X) = E[X^2] − (E[X])^2, and the standard deviation is the square root of the variance. | formula | elsewhere | Variance and Standard Deviation: “$$\sigma^2 = \text{Var}(X) = E\left[(X - \mu)^2\right]$$” |
+
+</details>
+
+<details><summary><code>p-918</code> · untagged</summary>
+
+Tagged pages: Continuous Univariate Distributions, Expected Value
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| For a non-negative continuous random variable T, the expected value equals the integral of the survival function from 0 to infinity: E[T] =… | formula | elsewhere | Future Lifetime Random Variable: “\mathring{e}_x = E[T_x] = \int_0^{\infty} {}_tp_x\,dt” |
+| If a random variable has a finite upper limit of support (S(t)=0 beyond it), the integral of the survival function need only be taken over … | fact | elsewhere | Future Lifetime Random Variable (collapsed): “\mathring{e}_{40} &= \int_0^{60}\left(1 - \tfrac{t}{60}\right)^{1/2}dt” |
+
+</details>
+
+<details><summary><code>p-919</code> · untagged</summary>
+
+Tagged pages: Exponential Distribution, Expected Value
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| An exponential random variable with mean θ has density f(x) = (1/θ)e^{-x/θ} for x > 0. | formula | tagged | Exponential Distribution: “$$f(x) = \frac{1}{\theta}\,e^{-x/\theta}, \quad x > 0$$” |
+| The expected value of a function g(X) of a continuous random variable is E[g(X)] = ∫ g(x) f(x) dx over the support of X. | formula | elsewhere | Continuous Random Variable: “Expectations replace sums with integrals: $E[g(X)] = \int g(x)\,f(x)\,dx$ (see [[Expected Value]] a…” |
+
+</details>
+
+<details><summary><code>p-920</code> · untagged</summary>
+
+Tagged pages: Moments for Linear Combinations, Variance
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The expected value of a discrete random variable is the sum of each value times its probability, E[X] = Σ x·P(X=x); likewise E[X^2] = Σ x^2… | formula | linked | Expected Value: “$$E[X] = \begin{cases} \displaystyle\sum_{k} k\, f(k) & \text{(discrete)} \\[6pt] \displaystyle\int…” |
+| The variance of a random variable equals E[X^2] minus (E[X])^2. | formula | tagged | Variance: “Efficient computation formula: $\text{Var}(X) = E[X^2] - \mu^2$ where $\mu = E[X]$” |
+| The variance of a sum of independent random variables equals the sum of their variances, so n i.i.d. variables with variance σ² have a sum … | fact | linked | Independent Random Variables: “For independent random variables: $E[XY] = E[X]\,E[Y]$ and $\text{Var}(X + Y) = \text{Var}(X) + \te…” |
+| The standard deviation of a random variable is the square root of its variance. | definition | elsewhere | Standard Deviation: “**Standard Deviation** $\sigma$ is the positive square root of [[Variance]], measuring the typical …” |
+
+</details>
+
+<details><summary><code>p-921</code> · untagged</summary>
+
+Tagged pages: Variance for Conditional and Marginal Distributions, Expected Value, Poisson Distribution
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The mean and the variance of a Poisson distribution both equal its parameter λ. | fact | tagged | Poisson Distribution: “A defining property is $E[X] = \text{Var}(X) = \lambda$ — the mean and variance are equal” |
+| The second moment of a random variable equals its variance plus the square of its mean: E[Y^2] = Var(Y) + (E[Y])^2, and this also applies c… | formula | elsewhere | Variance: “Efficient computation formula: $\text{Var}(X) = E[X^2] - \mu^2$ where $\mu = E[X]$” |
+| Law of total expectation: E[X] = E[E[X\|N]], so E[X^2] can be found by taking the expectation of the conditional second moment E[X^2\|N] ov… | formula | tagged | Variance for Conditional and Marginal Distributions: “$$E[X] = E\bigl[E[X \mid Y]\bigr]$$” |
+| Expectation is linear, so E[a + b] = E[a] + E[b] for random variables, including E[N + N^2] = E[N] + E[N^2]. | fact | elsewhere | Linear Combinations of Random Variables: “**Expectation is always linear** — $E[L]$ needs no independence assumption at all.” |
+
+</details>
+
+<details><summary><code>p-922</code> · untagged</summary>
+
+Tagged pages: Standard Deviation, Variance, Expected Value
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The expected value of a discrete random variable is the sum of each outcome multiplied by its probability, E[X] = Σ x·P(X=x). | formula | elsewhere | Variance and Standard Deviation (collapsed): “E[N] &= 0(0.6) + 1(0.3) + 2(0.1) \\” |
+| The second moment of a discrete random variable is E[X^2] = Σ x^2·P(X=x), the probability-weighted sum of squared outcomes. | formula | linked | Moment: “For a discrete variable the integral becomes $\sum_x x^n\,p(x)$.” |
+| The variance of a random variable equals the second moment minus the square of the mean, Var(X) = E[X^2] - (E[X])^2. | formula | tagged | Variance: “Efficient computation formula: $\text{Var}(X) = E[X^2] - \mu^2$ where $\mu = E[X]$” |
+| The standard deviation of a random variable is the positive square root of its variance. | definition | tagged | Standard Deviation: “**Standard Deviation** $\sigma$ is the positive square root of [[Variance]], measuring the typical …” |
+
+</details>
+
+<details><summary><code>p-923</code> · answerable</summary>
+
+Tagged pages: Geometric Distribution, Conditional Probability
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| A geometric random variable counts the number of trials (here years) until the first success, with success probability p on each independen… | definition | tagged | Geometric Distribution: “The **Geometric Distribution** $X \sim \text{Geom}(p)$ counts the number of independent Bernoulli t…” |
+| The geometric distribution is memoryless: P(X > s + t \| X > s) = P(X > t), so past failures do not affect the remaining waiting time. | fact | tagged | Geometric Distribution: “shares its **memoryless property**: $P(X > m+n \mid X > m) = P(X > n)$.” |
+| For a geometric random variable with success probability p (trials starting at 1), the survival function is P(X > n) = (1-p)^n, the probabi… | formula | tagged | Geometric Distribution: “The survival function is clean: $P(X > n) = (1-p)^n$ — "the first $n$ trials all failed."” |
+
+</details>
+
+<details><summary><code>p-924</code> · untagged</summary>
+
+Tagged pages: Bayes Theorem, Exponential Distribution, Conditional Probability
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| For an exponential distribution with mean θ, the survival function is P(X > t) = e^{-t/θ}. | formula | tagged | Exponential Distribution: “Work from the survival function $S(x) = e^{-x/\theta}$ rather than the CDF; almost every exponentia…” |
+| Law of total probability: P(A) = Σ P(A \| B_i) P(B_i) over a partition {B_i}, used to compute the overall probability from a mixture of sub… | formula | linked | The Law of Total Probability: “$$P(B) = \sum_{i=1}^{n} P(B \mid A_i)\,P(A_i)$$” |
+| Bayes' theorem: P(B \| A) = P(A \| B) P(B) / P(A), giving the posterior probability of a group given an observed event. | formula | tagged | Bayes Theorem: “$$P(H \mid E) = \frac{P(E \mid H)\,P(H)}{P(E)}$$” |
+| A population drawn from subgroups with different lifetime distributions is a mixture, where a randomly selected member belongs to each subg… | definition | elsewhere | Mixture Distribution: “A **Mixture Distribution** describes a variable $X$ drawn from a population made of subpopulations …” |
+
+</details>
+
+<details><summary><code>p-925</code> · gap</summary>
+
+Tagged pages: Normal Distribution, Independent Events, Conditional Probability
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| If X and Y are independent, conditioning on Y does not change the distribution of X, so P[X in A \| Y = y] = P[X in A]. | fact | tagged | Conditional Probability: “If $A$ and $B$ are independent, then $P(A \mid B) = P(A)$” |
+| Rewrite an event of the form X^2 < c (c > 0) as the interval event -sqrt(c) < X < sqrt(c). | procedure | missing |  |
+| For a standard normal Z with CDF Phi, P[-a < Z < a] = Phi(a) - Phi(-a) = 2*Phi(a) - 1, using the symmetry Phi(-a) = 1 - Phi(a). | formula | tagged | Normal Distribution: “Symmetry gives $\Phi(-z) = 1 - \Phi(z)$ — the identity needed for every negative $z$, since standar…” |
+| Evaluate Phi(a) for a standard normal by looking up the value in the standard normal distribution table. | procedure | tagged | Normal Distribution: “Its CDF has no closed form and is evaluated via the standard normal $Z = (X - \mu)/\sigma \sim N(0,…” |
+
+</details>
+
+<details><summary><code>p-926</code> · untagged</summary>
+
+Tagged pages: Poisson Distribution, Probability
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The waiting time until the first claim exceeds t exactly when zero claims occur in the interval (0, t], so the events {T > t} and {N(t) = 0… | fact | elsewhere | Interarrival Time (collapsed): “Equivalently, $P(T > 1) = P(N(1) = 0)$ — no claims in the month is the same event as a wait longer …” |
+| For a Poisson random variable with mean λ, P(N = 0) = e^{-λ}; for a Poisson process with rate λ, the number of claims in a period of length… | formula | tagged | Poisson Distribution: “$$P(X = 0) = \frac{e^{-3} \cdot 3^0}{0!} = e^{-3} \approx 0.0498$$” |
+
+</details>
+
+<details><summary><code>p-927</code> · untagged</summary>
+
+Tagged pages: Independent Events, Probability
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The probability of at least one occurrence of an event equals one minus the probability of no occurrences (complement rule). | fact | elsewhere | Probability Rules: “$$P(A^c) = 1 - P(A)$$” |
+| For independent events, the probability that all occur equals the product of their individual probabilities. | fact | tagged | Independent Events: “$$P(A_{i_1} \cap A_{i_2} \cap \cdots \cap A_{i_m}) = P(A_{i_1})\,P(A_{i_2}) \cdots P(A_{i_m})$$” |
+| To find the probability of no claims over several independent periods, raise the single-period no-claim probability to the power of the num… | procedure | elsewhere | Probability Rules (collapsed): “&= 1 - (0.90)^5 \\” |
+
+</details>
+
+<details><summary><code>p-928</code> · answerable</summary>
+
+Tagged pages: Hypergeometric Distribution, Expected Value
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| For a hypergeometric random variable counting the successes in n draws without replacement from a population of N items containing K succes… | formula | tagged | Hypergeometric Distribution: “$$E[X] = \frac{nK}{N}$$” |
+| The hypergeometric distribution models the number of items of a given type obtained when drawing a fixed number of items at random without … | definition | tagged | Hypergeometric Distribution: “The **Hypergeometric Distribution** models the number of successes in a sample of size $n$ drawn **…” |
+| By linearity of expectation, the expected count of selected items of a type equals the sum of indicator expectations, each equal to the pro… | fact | tagged | Hypergeometric Distribution: “$$E[X] = \frac{nK}{N}$$” |
+
+</details>
+
+<details><summary><code>p-929</code> · gap</summary>
+
+Tagged pages: Order Statistics, Variance, Combinatorics
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The variance of a random variable equals E[X^2] minus the square of E[X]. | formula | tagged | Variance: “Efficient computation formula: $\text{Var}(X) = E[X^2] - \mu^2$ where $\mu = E[X]$” |
+| The expected value of a function g of a discrete random variable is the sum of g(x) times P[X=x] over all support points. | formula | elsewhere | Discrete Random Variable: “Expectations are sums: $E[g(X)] = \sum_x g(x)\,p(x)$.” |
+| A product of k consecutive descending integers m(m-1)...(m-k+1) equals k! times the binomial coefficient C(m,k), so polynomial sums can be … | fact | linked | Permutation: “$$= n \times (n-1) \times \cdots \times (n-k+1)$$” |
+| Pascal's rule states that C(j+1,k) = C(j,k) + C(j,k-1). | fact | missing |  |
+| Use Pascal's rule to write each binomial term as a difference of consecutive binomial coefficients, so the sum telescopes (hockey-stick ide… | procedure | missing |  |
+| Compute E[X^2] indirectly from a factorial-type moment such as E[X(X+1)] by subtracting E[X], using linearity of expectation. | procedure | missing |  |
+
+</details>
+
+<details><summary><code>p-930</code> · answerable</summary>
+
+Tagged pages: Continuous Univariate Distributions, Probability, Percentile
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The cumulative distribution function F(x) of a continuous random variable is the integral of its density from the lower bound of support up… | definition | tagged | Continuous Univariate Distributions: “The CDF and the density are two views of the same object: $F(x) = \int_{-\infty}^{x} f(t)\,dt$ and …” |
+| The p-th percentile of a distribution is the value x such that F(x) = p. | definition | tagged | Percentile: “When $F$ is continuous and strictly increasing, it is the value that solves $F(x_p) = p$, found by …” |
+| To find a percentile of a continuous random variable, compute the CDF from the density, set it equal to the percentile level, and solve for… | procedure | tagged | Percentile (collapsed): “Set $F(x_{0.90}) = 0.90$ and solve:” |
+
+</details>
+
+<details><summary><code>p-931</code> · untagged</summary>
+
+Tagged pages: Uniform Continuous Distribution, Expected Value, Deductible
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The expected value of a function g(X) of a continuous random variable X with density f is the integral of g(x)f(x) over the support of X. | formula | elsewhere | Continuous Random Variable: “Expectations replace sums with integrals: $E[g(X)] = \int g(x)\,f(x)\,dx$” |
+| A Uniform[a, b] random variable has constant density 1/(b-a) on [a, b], and the probability of an interval within [a, b] is its length divi… | fact | tagged | Uniform Continuous Distribution: “$$f(x) = \frac{1}{b - a}, \quad a < x < b$$” |
+| For a payment that is piecewise in the loss, compute the expected payment by splitting into regions: integrate the payment function times t… | procedure | elsewhere | Continuous Random Variable: “Expectations replace sums with integrals: $E[g(X)] = \int g(x)\,f(x)\,dx$” |
+
+</details>
+
+<details><summary><code>p-932</code> · untagged</summary>
+
+Tagged pages: Correlation Coefficient, Covariance, Joint Probability Function
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| Fill in a joint probability table from the marginal probabilities and one known joint probability by subtracting known cells from the margi… | procedure | linked | Marginal Probability Function (collapsed): “$$p_X(1) = p(1,1) + p(1,2) = 0.2 + 0.3 = 0.5$$” |
+| Two discrete random variables are independent if and only if every joint probability equals the product of the corresponding marginal proba… | fact | linked | Multivariate Distribution (collapsed): “Since $P(0,0) = 0.1 \neq P(X=0)P(Y=0) = 0.20$, $X$ and $Y$ are not independent.” |
+| Cov(X,Y) = E[XY] - E[X]E[Y]. | formula | tagged | Covariance: “$$\text{Cov}(X, Y) = E[XY] - E[X] \cdot E[Y]$$” |
+| Corr(X,Y) = Cov(X,Y) / (SD(X) SD(Y)). | formula | tagged | Correlation Coefficient: “$$\rho(X, Y) = \frac{\text{Cov}(X, Y)}{\sigma_X \cdot \sigma_Y}$$” |
+| If X and Y are independent, then Cov(X,Y) = 0 and hence Corr(X,Y) = 0. | fact | tagged | Covariance: “If $X$ and $Y$ are [[Independent Random Variables\\|independent]], $\text{Cov}(X, Y) = 0$ (but the c…” |
+| For indicator (0/1) random variables, E[XY] equals the probability that both equal 1, and E[X] equals P(X=1). | procedure | elsewhere | Discrete Random Variable (collapsed): “$Y$ is Bernoulli, so $E[Y] = 0.35$ and $\text{Var}(Y) = 0.35(0.65) = 0.2275$. The only nonzero prod…” |
+
+</details>
+
+<details><summary><code>p-933</code> · untagged</summary>
+
+Tagged pages: Moments for Linear Combinations, Variance for Conditional and Marginal Distributions
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| For a compound Poisson random variable S with Poisson mean λ and claim size X, Var(S) = λ·E[X^2]. | formula | elsewhere | Compound Poisson Process: “$$E[S(t)] = \lambda t\, E[X], \qquad \text{Var}(S(t)) = \lambda t\, E[X^2]$$” |
+| The second moment of a random variable equals its variance plus the square of its mean: E[X^2] = Var(X) + (E[X])^2. | formula | linked | Variance: “Efficient computation formula: $\text{Var}(X) = E[X^2] - \mu^2$ where $\mu = E[X]$” |
+| A Poisson random variable with parameter λ has mean λ and variance λ. | fact | linked | Poisson Distribution: “A defining property is $E[X] = \text{Var}(X) = \lambda$ — the mean and variance are equal” |
+| The standard deviation of a random variable is the square root of its variance. | definition | elsewhere | Variance and Standard Deviation: “$$\sigma = \text{SD}(X) = \sqrt{\text{Var}(X)}$$” |
+
+</details>
+
+<details><summary><code>p-934</code> · untagged</summary>
+
+Tagged pages: Variance for Conditional and Marginal Distributions, Binomial Distribution
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The variance of a sum of independent random variables equals the sum of their variances. | fact | elsewhere | Linear Combinations of Random Variables: “$$\text{Var}(L) = \sum_{i=1}^{n} c_i^2\,\text{Var}(X_i) + 2\sum_{i < j} c_i c_j\,\text{Cov}(X_i, X_…” |
+| Law of total variance: Var(X) = E[Var(X\|Y)] + Var(E[X\|Y]). | formula | tagged | Variance for Conditional and Marginal Distributions: “$$\text{Var}(X) = E\bigl[\text{Var}(X \mid Y)\bigr] + \text{Var}\bigl(E[X \mid Y]\bigr)$$” |
+| A Bernoulli random variable with success probability q has mean q and variance q(1-q). | formula | tagged | Binomial Distribution: “$E[X] = np$ and $\text{Var}(X) = np(1-p)$” |
+| To compute E[Var(X\|Y)] and Var(E[X\|Y]) for a discrete mixing variable, take the probability-weighted average of the conditional variances… | procedure | tagged | Variance for Conditional and Marginal Distributions (collapsed): “With $Y \in \{10, 20\}$ equally likely, $E[Y] = 15$, $E[Y^2] = \tfrac{100 + 400}{2} = 250$.” |
+| The standard deviation of a random variable is the square root of its variance. | fact | elsewhere | Standard Deviation: “$$\sigma = \sqrt{\text{Var}(X)}$$” |
+
+</details>
+
+<details><summary><code>p-935</code> · gap</summary>
+
+Tagged pages: Expected Value, Geometric Distribution, Probability
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The probability of being alive at the end of year k is the product of the conditional one-year survival probabilities for years 1 through k. | fact | missing |  |
+| A payment contingent on survival has an expected present value equal to the payment's present value multiplied by the probability that the … | procedure | elsewhere | Life Annuity: “\ddot{a}_x = \sum_{k=0}^{\infty} v^k\,{_k}p_x” |
+| By linearity of expectation, the expected present value of a stream of contingent payments is the sum of the expected present values of the… | fact | missing |  |
+| A temporary (n-year) annuity-immediate pays 1 at the end of each year while the annuitant is alive, up to a maximum of n years, so its paym… | definition | elsewhere | Life Annuity: “**Temporary** annuity (pays until death or $n$ years, whichever comes first)” |
+
+</details>
+
+<details><summary><code>p-936</code> · gap</summary>
+
+Tagged pages: Binomial Distribution, Probability
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The number of successes in a fixed number of independent trials, each with the same success probability, follows a binomial distribution. | fact | tagged | Binomial Distribution: “The **Binomial Distribution** $X \sim \text{Bin}(n, p)$ models the number of successes in $n$ indep…” |
+| For N ~ Binomial(n, p), P(N = k) = C(n,k) p^k (1-p)^(n-k), where C(n,k) = n!/(k!(n-k)!). | formula | tagged | Binomial Distribution: “$$P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}$$” |
+| To find the probability of at least k successes, sum the probability mass function over all values from k to n (or subtract the complement … | procedure | linked | Axioms of Probability (collapsed): “Therefore $P(A^c) = 1 - P(A)$.” |
+| Translate a verbal condition such as 'operates when at least 5 of 8 components work' into an event on the count of working components, e.g.… | procedure | missing |  |
+
+</details>
+
+<details><summary><code>p-937</code> · untagged</summary>
+
+Tagged pages: Correlation Coefficient, Covariance, Joint Probability Function
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| Obtain marginal probabilities of each variable from a joint probability table by summing the joint probabilities over the other variable's … | procedure | linked | Marginal Probability Function: “$$= \sum_y p(x, y)$$” |
+| The covariance of X and Y equals E[XY] minus E[X]E[Y]. | formula | tagged | Covariance: “$$\text{Cov}(X, Y) = E[XY] - E[X] \cdot E[Y]$$” |
+| For a joint discrete distribution, E[XY] is the sum of x*y*P(X=x,Y=y) over all pairs; for 0/1 indicator variables, E[XY] equals P(X=1,Y=1). | formula | elsewhere | Covariance and Correlation Coefficient (collapsed): “$$E[XY] = 1{\cdot}4(0.2) + 1{\cdot}8(0.1) + 3{\cdot}4(0.1) + 3{\cdot}8(0.6) = 17.2$$” |
+| The correlation of X and Y equals Cov(X,Y) divided by the product of their standard deviations, so zero covariance gives zero correlation. | formula | tagged | Correlation Coefficient: “$$\rho(X, Y) = \frac{\text{Cov}(X, Y)}{\sigma_X \cdot \sigma_Y}$$” |
+| Two discrete random variables are independent if every joint probability equals the product of the corresponding marginal probabilities. | fact | linked | Multivariate Distribution (collapsed): “Since $P(0,0) = 0.1 \neq P(X=0)P(Y=0) = 0.20$, $X$ and $Y$ are not independent.” |
+| If two random variables are independent, their covariance and correlation are zero. | fact | tagged | Covariance: “If $X$ and $Y$ are [[Independent Random Variables\\|independent]], $\text{Cov}(X, Y) = 0$ (but the c…” |
+
+</details>
+
+<details><summary><code>p-938</code> · untagged</summary>
+
+Tagged pages: Combinatorics, Conditional Probability
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The conditional probability of A given B is P(A\|B) = P(A and B)/P(B), which restricts the sample space to outcomes in B. | definition | tagged | Conditional Probability: “$$P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \quad P(B) > 0$$” |
+| When drawing without replacement from a finite population with all subsets equally likely, the number of equally likely samples of size n f… | fact | tagged | Combinatorics: “This is a combination problem (order irrelevant, no replacement):” |
+| For a multicolor urn drawn without replacement, count the outcomes with a specified color composition as the product of binomial coefficien… | procedure | elsewhere | Hypergeometric Distribution (collapsed): “$$P(X=2) = \frac{\binom{4}{2}\binom{6}{1}}{\binom{10}{3}} = \frac{6 \cdot 6}{120} = \frac{36}{120} …” |
+| To handle a condition like 'at least one of each color' in a fixed-size sample, enumerate the allowed color-count compositions that sum to … | procedure | elsewhere | Mutually Exclusive Events: “if $A_1, A_2, \ldots, A_n$ are pairwise mutually exclusive, then $P\!\left(\bigcup_{i=1}^n A_i\righ…” |
+| If event A is contained in event B, then P(A and B) = P(A); here the event 'at least two red' combined with 'each color present' reduces to… | fact | tagged | Conditional Probability (collapsed): “Since $A \subseteq B$, we have $A \cap B = A$.” |
+
+</details>
+
+<details><summary><code>p-940</code> · gap</summary>
+
+Tagged pages: Standard Deviation, Variance for Conditional and Marginal Distributions
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The variance of a random variable equals E[X^2] minus the square of E[X], and the standard deviation is the square root of the variance. | formula | tagged | Standard Deviation: “$$= \sqrt{E[X^2] - (E[X])^2}$$” |
+| The expected value of a mixture (unconditional expectation) is the probability-weighted average of the conditional expectations over the gr… | fact | tagged | Variance for Conditional and Marginal Distributions: “$$E[X] = E\bigl[E[X \mid Y]\bigr]$$” |
+| The second moment of a mixture is found as the probability-weighted average of the conditional second moments of each group, E[X^2] = sum P… | procedure | elsewhere | Mixture Distribution: “$$E[X^m] = \sum_{i=1}^{k} a_i\, E[X_i^m] = E\big[E[X^m \mid \Theta]\big]$$” |
+| A claim that occurs with probability p and has fixed size c is modeled as c times a Bernoulli(p) variable, so its raw moments are E[X^k] = … | procedure | missing |  |
+
+</details>
+
+<details><summary><code>p-941</code> · gap</summary>
+
+Tagged pages: Poisson Distribution, Conditional Probability
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The Poisson(λ) probability mass function is P(N=n) = e^{-λ} λ^n / n!, so P(N=0) = e^{-λ}. | formula | tagged | Poisson Distribution: “$$P(X = k) = \frac{e^{-\lambda}\lambda^k}{k!}$$” |
+| For N ~ Poisson(λ), the probability that N is even equals (1 + e^{-2λ})/2. | formula | missing |  |
+| Derive P(N even) by summing the Poisson pmf over even n, using the series cosh(λ) = Σ λ^{2k}/(2k)! (or by averaging e^λ and e^{-λ} Taylor s… | procedure | missing |  |
+| Conditional probability: P(A \| B) = P(A ∩ B) / P(B). | formula | tagged | Conditional Probability: “$$P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \quad P(B) > 0$$” |
+| The event N=0 is a subset of the event N is even (0 is even), so P(N=0 and N even) = P(N=0). | fact | tagged | Conditional Probability (collapsed): “Since $A \subseteq B$, we have $A \cap B = A$.” |
+
+</details>
+
+<details><summary><code>p-942</code> · answerable</summary>
+
+Tagged pages: Binomial Distribution, Expected Value
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The number of successes in a fixed number of independent trials, each with the same success probability, follows a binomial distribution. | fact | tagged | Binomial Distribution: “The **Binomial Distribution** $X \sim \text{Bin}(n, p)$ models the number of successes in $n$ indep…” |
+| For a binomial distribution with n trials and success probability p, the expected value is E[N] = np. | formula | tagged | Binomial Distribution: “$E[X] = np$ and $\text{Var}(X) = np(1-p)$” |
+
+</details>
+
+<details><summary><code>p-943</code> · untagged</summary>
+
+Tagged pages: Median, Percentile, Exponential Distribution
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The median of a distribution is the smallest value m such that the CDF F(m) = P(X ≤ m) is at least 0.50. | definition | tagged | Median: “the smallest value $m$ with $F(m) \ge 0.5$” |
+| A mixed distribution has a discrete point mass (e.g., at zero) combined with a continuous part on the remaining values, so its CDF jumps at… | definition | elsewhere | Mixture Distribution: “**Mixed (discrete–continuous) type.** A mixture of a point mass and a continuous distribution gives…” |
+| If a distribution has a point mass at a value exceeding 0.50 at the lower end of its support (e.g., at 0), the CDF at that value already ex… | fact | tagged | Percentile (collapsed): “Since $F_Y(0) = 0.1813 \ge 0.10$, the 10th percentile is $y_{0.10} = 0$, even though $F_Y(y) = 0.10…” |
+
+</details>
+
+<details><summary><code>p-944</code> · gap</summary>
+
+Tagged pages: Probability Multiplication Rule, Independent Events
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| In a four-player single-elimination tournament, there are two semifinals and a final; a player must win every match they play (two matches)… | fact | missing |  |
+| For independent events, the probability that all occur equals the product of their individual probabilities, P(A and B) = P(A)·P(B). | formula | tagged | Probability Multiplication Rule: “When $A$ and $B$ are [[Independent Events\\|independent]], the rule simplifies to $P(A \cap B) = P(A…” |
+| The probability of an event equals one minus the probability of its complement, P(E) = 1 − P(E^c). | formula | elsewhere | Probability Rules: “The complement rule is the workhorse shortcut — "at least one" is almost always faster as $1 - P(\t…” |
+| To find the probability that a given group wins when only one participant is from the other group, compute the single participant's probabi… | procedure | elsewhere | Probability Rules: “$$P(A^c) = 1 - P(A)$$” |
+
+</details>
+
+<details><summary><code>p-945</code> · answerable</summary>
+
+Tagged pages: Variance for Conditional and Marginal Distributions, Poisson Distribution, Exponential Distribution, Compound Poisson Process
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| For a compound Poisson aggregate loss S with Poisson mean λ and individual claim size X, E[S] = λ·E[X]. | formula | tagged | Compound Poisson Process: “$$E[S(t)] = \lambda t\, E[X], \qquad \text{Var}(S(t)) = \lambda t\, E[X^2]$$” |
+| For a compound Poisson aggregate loss S with Poisson mean λ and individual claim size X, Var(S) = λ·E[X²] (the second raw moment of the cla… | formula | tagged | Compound Poisson Process: “The variance uses the **second moment** $E[X^2]$, not the variance of $X$ — this falls out of the c…” |
+| For an exponential distribution with mean β, the second raw moment is E[X²] = 2β² (variance β²). | formula | tagged | Exponential Distribution: “$E[X] = \theta$, $\text{Var}(X) = \theta^2$, and $F(x) = 1 - e^{-x/\theta}$” |
+
+</details>
+
+<details><summary><code>p-946</code> · untagged</summary>
+
+Tagged pages: Variance, Independent Events, Standard Deviation
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The expected value of a discrete random variable is the sum of each value times its probability, E[X] = Σ x·P(X=x). | formula | elsewhere | Moment: “For a discrete variable the integral becomes $\sum_x x^n\,p(x)$.” |
+| The second moment of a discrete random variable is E[X^2] = Σ x^2·P(X=x). | formula | elsewhere | Moment: “For a discrete variable the integral becomes $\sum_x x^n\,p(x)$.” |
+| Variance equals the second moment minus the square of the mean: Var(X) = E[X^2] − (E[X])^2. | formula | tagged | Variance: “Efficient computation formula: $\text{Var}(X) = E[X^2] - \mu^2$ where $\mu = E[X]$” |
+| For independent random variables, the variance of the sum equals the sum of the variances. | fact | elsewhere | Linear Combinations of Random Variables: “so $\text{Var}(X - Y) = \text{Var}(X) + \text{Var}(Y)$ for independent $X, Y$” |
+| The standard deviation of a random variable is the positive square root of its variance. | definition | tagged | Standard Deviation: “**Standard Deviation** $\sigma$ is the positive square root of [[Variance]], measuring the typical …” |
+
+</details>
+
+<details><summary><code>p-947</code> · untagged</summary>
+
+Tagged pages: Uniform Continuous Distribution, Conditional Probability, Expected Value
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The expected remaining lifetime given survival to age x is the mean residual life E[T - x \| T > x], which equals E[T \| T > x] - x. | definition | elsewhere | Mean Excess Loss: “$$e_X(d) = E[X - d \mid X > d]$$” |
+| The conditional density of X given X > d is f(x)/P(X > d) for x > d, and zero otherwise. | formula | elsewhere | Spliced Distribution: “$$f_j(x) = \frac{g_j(x)}{G_j(c_j) - G_j(c_{j-1})}, \quad c_{j-1} < x < c_j$$” |
+| If X is uniform on [a, b], then conditioned on X > c (with a ≤ c < b), X is uniform on [c, b]. | fact | tagged | Uniform Continuous Distribution: “Conditional distributions on sub-intervals are also uniform: given $X > d$, $X$ is uniform on $(d, …” |
+| The mean of a uniform distribution on [a, b] is (a + b)/2, equivalently the integral of t/(b - a) from a to b. | formula | tagged | Uniform Continuous Distribution: “$E[X] = (a+b)/2$, $\text{Var}(X) = (b-a)^2/12$, and $F(x) = (x-a)/(b-a)$ for $a < x < b$” |
+| For a continuous random variable with density f, the expected value of X is the integral of x f(x) dx over its support, and for a condition… | formula | tagged | Expected Value: “\displaystyle\int_{-\infty}^{\infty} x\, f(x)\, dx & \text{(continuous)}” |
+
+</details>
+
+<details><summary><code>p-948</code> · answerable</summary>
+
+Tagged pages: Lognormal Distribution, Order Statistics, Probability
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| A random variable X has a lognormal distribution if ln X is normally distributed; the parameters are the mean and standard deviation of ln … | definition | tagged | Lognormal Distribution: “The **Lognormal Distribution** $X \sim \text{Lognormal}(\mu, \sigma^2)$ applies when $\ln X \sim N(…” |
+| To find a probability for a lognormal X, take logs of both sides of the inequality, then standardize ln X by subtracting its mean and divid… | procedure | tagged | Lognormal Distribution: “$$F(x) = \Phi\!\left(\frac{\ln x - \mu}{\sigma}\right)$$” |
+| The maximum of independent random variables is at most x exactly when every variable is at most x, so for n i.i.d. variables P(max ≤ x) = [… | fact | tagged | Order Statistics: “$$P\bigl(X_{(n)} \le x\bigr) = F_1(x)\,F_2(x)\cdots F_n(x)$$” |
+| The probability of an upper-tail event is the complement of the CDF: P(M > x) = 1 − P(M ≤ x). | fact | linked | Axioms of Probability (collapsed): “Therefore $P(A^c) = 1 - P(A)$.” |
+
+</details>
+
+<details><summary><code>p-949</code> · untagged</summary>
+
+Tagged pages: Normal Distribution, Probability
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| Standardize a normal random variable by subtracting its mean and dividing by its standard deviation, Z = (X − μ)/σ, so that probabilities a… | procedure | tagged | Normal Distribution: “Its CDF has no closed form and is evaluated via the standard normal $Z = (X - \mu)/\sigma \sim N(0,…” |
+| Given a tail probability for a normal variable, find the unknown parameter by setting the standardized value equal to the corresponding sta… | procedure | elsewhere | Normal Approximation: “Inverted, it sets a fund: the total exceeded with probability $\alpha$ is about $n\mu + z_{1-\alpha…” |
+| The 95th percentile of the standard normal distribution is approximately 1.645, so Φ^{-1}(0.95) ≈ 1.645. | fact | tagged | Normal Distribution: “Useful percentiles: $z_{0.90} = 1.282$, $z_{0.95} = 1.645$, $z_{0.975} = 1.960$, $z_{0.99} = 2.326$” |
+| By symmetry of the standard normal distribution, P(Z > −z) = Φ(z) and P(Z > z) = 1 − Φ(z). | fact | tagged | Normal Distribution: “Symmetry gives $\Phi(-z) = 1 - \Phi(z)$ — the identity needed for every negative $z$, since standar…” |
+| Evaluate a standard normal probability by looking up Φ(z) in the standard normal table (rounding z to the table's precision). | procedure | tagged | Normal Distribution (collapsed): “$$P(S > 55{,}000) = P(Z > 0.791) = 1 - \Phi(0.791) \approx 1 - 0.7855 = 0.2145$$” |
+
+</details>
+
+<details><summary><code>p-950</code> · gap</summary>
+
+Tagged pages: Conditional Probability, Poisson Distribution, Bayes Theorem
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| A Poisson(λ) random variable N has pmf P(N=n) = e^{-λ} λ^n / n!, so P(N=0)=e^{-λ} and P(N=1)=λ e^{-λ}. | formula | tagged | Poisson Distribution: “$$P(X = k) = \frac{e^{-\lambda}\lambda^k}{k!}$$” |
+| For independent random variables, the joint probability of specific values equals the product of the marginal probabilities, P(X=x, Y=y) = … | fact | missing |  |
+| To find the probability that a sum of discrete nonnegative integer random variables equals a given value, add the joint probabilities of al… | procedure | missing |  |
+| The conditional expectation of X given an event A is E[X \| A] = Σ x P(X=x, A) / P(A), i.e., the sum of x times the joint probability of x … | formula | missing |  |
+
+</details>
+
+<details><summary><code>p-955</code> · answerable</summary>
+
+Tagged pages: Gamma, Poisson Distribution, Exponential Distribution
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The waiting time until the n-th event of a Poisson process with rate λ follows a gamma distribution with shape n and scale 1/λ. | fact | tagged | Gamma: “Claims arrive in a Poisson process at 2 per year, so the waiting time to the 3rd claim is $T \sim \…” |
+| For integer shape α, the gamma survival function is P(T > t) = sum_{k=0}^{α-1} e^{-t/θ}(t/θ)^k / k!. | formula | tagged | Gamma: “$$P(X > x) = \sum_{k=0}^{\alpha-1} \frac{e^{-x/\theta}(x/\theta)^k}{k!}$$” |
+| The n-th event in a Poisson process has not occurred by time t exactly when at most n-1 events occurred in [0,t], and the count of events i… | fact | tagged | Gamma (collapsed): “The identity is just a restatement: "the 3rd claim has not arrived by time 1" is the same event as …” |
+| The Poisson probability mass function is P(N = k) = e^{-μ} μ^k / k!, where μ is the mean. | formula | tagged | Poisson Distribution: “$$P(X = k) = \frac{e^{-\lambda}\lambda^k}{k!}$$” |
+
+</details>
+
+<details><summary><code>p-956</code> · answerable</summary>
+
+Tagged pages: Gamma, Variance
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| For a gamma distribution with shape α and scale θ, the mean is αθ and the variance is αθ². | formula | tagged | Gamma: “$E[X] = \alpha\theta$, $\text{Var}(X) = \alpha\theta^2$, and coefficient of variation $CV = 1/\sqrt…” |
+| To recover gamma parameters from a given mean and variance, divide the variance by the mean to get θ, then divide the mean by θ to get α. | procedure | tagged | Gamma (collapsed): “Divide the variance by the mean to strip out $\alpha$:” |
+| For a gamma distribution with integer shape α, the survival function is P(X > x) = Σ_{k=0}^{α-1} e^{-x/θ}(x/θ)^k / k!, i.e. the probability… | formula | tagged | Gamma: “$$P(X > x) = \sum_{k=0}^{\alpha-1} \frac{e^{-x/\theta}(x/\theta)^k}{k!}$$” |
+
+</details>
+
+<details><summary><code>p-957</code> · untagged</summary>
+
+Tagged pages: Beta
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The beta distribution with parameters a and b has density f(x) = x^(a-1)(1-x)^(b-1)/B(a,b) on 0 < x < 1. | formula | tagged | Beta: “$$f(x) = \frac{x^{\alpha - 1}(1-x)^{\beta - 1}}{B(\alpha,\, \beta)}$$” |
+| The beta function is B(a,b) = Γ(a)Γ(b)/Γ(a+b), and it is the normalizing constant of the beta density. | formula | tagged | Beta: “$$\text{where } B(\alpha, \beta) = \frac{\Gamma(\alpha)\,\Gamma(\beta)}{\Gamma(\alpha + \beta)}$$” |
+| For a positive integer n, Γ(n) = (n-1)!. | fact | tagged | Beta (collapsed): “\frac{\Gamma(3)\Gamma(2)}{\Gamma(5)} = \frac{2! \cdot 1!}{4!} = \frac{2}{24} = \frac{1}{12}” |
+| For a continuous random variable, the upper-tail probability P(X > c) is found by integrating the density from c to the upper end of the su… | procedure | elsewhere | Continuous Random Variable: “$P(X = c) = 0$ for every $c$, so $P(a < X < b) = P(a \le X \le b) = F(b) - F(a)$.” |
+
+</details>
+
+<details><summary><code>p-958</code> · untagged</summary>
+
+Tagged pages: Beta
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| A beta random variable with parameters alpha and beta has density f(x) = x^(alpha-1)(1-x)^(beta-1)/B(alpha,beta) on 0 < x < 1. | formula | tagged | Beta: “$$f(x) = \frac{x^{\alpha - 1}(1-x)^{\beta - 1}}{B(\alpha,\, \beta)}$$” |
+| The beta function is B(a,b) = Gamma(a)Gamma(b)/Gamma(a+b), the normalizing constant of the beta density. | formula | tagged | Beta: “$$\text{where } B(\alpha, \beta) = \frac{\Gamma(\alpha)\,\Gamma(\beta)}{\Gamma(\alpha + \beta)}$$” |
+| For a positive integer n, Gamma(n) = (n-1)!, so Gamma(1)=Gamma(2)=1 and Gamma(4)=6. | fact | elsewhere | Gamma: “$\Gamma(\alpha) = (\alpha-1)!$ for integer $\alpha$, and $\Gamma(\alpha+1) = \alpha\,\Gamma(\alpha)…” |
+| The probability that a continuous random variable lies in an interval (a,b) is the integral of its density over that interval. | procedure | elsewhere | Probability Density Function (PDF): “$$P(a \leq X \leq b) = \int_a^b f(x)\, dx$$” |
+| A beta distribution with alpha = beta is symmetric about 0.5, and with alpha, beta > 1 it concentrates mass toward the center relative to t… | fact | tagged | Beta: “The distribution is skewed right when $\alpha < \beta$, left when $\alpha > \beta$, and symmetric w…” |
+
+</details>
+
+<details><summary><code>p-959</code> · answerable</summary>
+
+Tagged pages: Uniform Discrete, Variance
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| A discrete uniform distribution assigns equal probability to each of a finite set of values, such as consecutive integers from a to b. | definition | tagged | Uniform Discrete: “The **Discrete Uniform Distribution** $X \sim \text{Unif}\{1, \ldots, n\}$ assigns equal probabilit…” |
+| The number of equally likely consecutive integers from a to b inclusive is n = b - a + 1. | procedure | tagged | Uniform Discrete: “Over a general integer range $\{a, a+1, \ldots, b\}$ there are $n = b - a + 1$ values” |
+| For a discrete uniform distribution over n consecutive integers, the variance is (n^2 - 1)/12. | formula | tagged | Uniform Discrete: “$E[X] = (n+1)/2$ and $\text{Var}(X) = (n^2 - 1)/12$” |
+| Shifting a random variable by a constant changes its mean but not its variance, so the variance of a uniform distribution over consecutive … | fact | tagged | Uniform Discrete: “The variance depends only on **how many** values there are, not where the range sits — shifting a d…” |
+
+</details>
+
+<details><summary><code>p-960</code> · untagged</summary>
+
+Tagged pages: Inflation, Deductible, Exponential Distribution, Payment Random Variable
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The expected payment per loss under an ordinary deductible d is the expected value of the loss in excess of d, E[(X-d)+], which is the limi… | definition | elsewhere | Mean Excess Loss: “The cost per loss is $E[(X - d)_+] = e_X(d)\,S_X(d)$” |
+| For an exponential distribution with mean θ, the expected payment per loss with ordinary deductible d is E[(X-d)+] = θ·e^(-d/θ). | formula | tagged | Exponential Distribution: “$E[X \mid X > d] = d + \theta$ and $E[(X-d)_+] = \theta e^{-d/\theta}$” |
+| Multiplying an exponential random variable by a constant factor yields an exponential random variable whose mean is scaled by the same fact… | fact | elsewhere | Scale and Shape Parameters: “multiplying the loss by a positive constant $c$ multiplies $\theta$ by $c$ and leaves every other p…” |
+| To model uniform inflation of losses by rate r, replace the loss X with (1+r)X, recompute the expected payment under the unchanged deductib… | procedure | tagged | Inflation: “$$E[(X' - d)_+] = (1+r)\,E\!\left[\left(X - \tfrac{d}{1+r}\right)_+\right]$$” |
+| Because a deductible is a fixed dollar amount, inflation has a leveraged effect: the insurer's expected payment grows by a larger percentag… | fact | tagged | Inflation: “A fixed deductible **leverages** it, raising the insurer's expected payment by more than $r$” |
+
+</details>
+
+<details><summary><code>p-961</code> · answerable</summary>
+
+Tagged pages: Coinsurance Percentage, Deductible, Benefit Limit, Payment Random Variable, Policy Information, Loss Random Variable
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| An ordinary deductible d reduces each loss by d, so the insurer pays only the excess (X - d)+ and nothing when the loss is below d. | definition | tagged | Deductible: “If the loss $X$ is less than or equal to the deductible $d$, the insurer pays nothing; above $d$ it…” |
+| Coinsurance with factor alpha means the insurer pays the fraction alpha of the loss amount that remains after the deductible. | definition | tagged | Coinsurance Percentage: “**Exam P ($\alpha$):** the fraction of the covered loss (after any deductible) that the insurer agr…” |
+| A maximum payment (policy limit on the insurer's payment) caps the amount paid on a claim, so the payment is the minimum of the computed pa… | definition | tagged | Benefit Limit: “A **Benefit Limit** ($u$) is the maximum amount an insurer will pay on a single claim, capping the …” |
+| When a policy has a deductible, coinsurance and a maximum payment, apply them in order: subtract the deductible, multiply by the coinsuranc… | procedure | tagged | Benefit Limit: “The formula caps the insurer's **payment**: the deductible comes off first, coinsurance $\alpha$ ap…” |
+| To find the smallest loss at which the maximum payment is reached, set the post-coinsurance payment equal to the maximum payment and solve … | procedure | tagged | Benefit Limit: “Under the payment cap, losses above $d + u/\alpha$ result in the insurer paying exactly $u$ and the…” |
+| A maximum payment limits the insurer's payment Y, whereas a maximum covered loss limits the loss X before coinsurance; these are different … | fact | tagged | Payment Random Variable: “The first form applies the deductible, caps the amount above it at $u$ and then pays the share $\al…” |
+
+</details>
+
+<details><summary><code>p-962</code> · untagged</summary>
+
+Tagged pages: Benefit Limit, Exponential Distribution, Payment Random Variable
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| A policy with a per-claim limit u pays Y = min(X, u), so the payment equals the loss up to u and is capped at u for larger losses. | definition | elsewhere | Policy Limit: “Under a limit $u$ and no other modification, the insurer pays the whole loss $X$ when it is below $…” |
+| The limited expected value is E[min(X,u)] = integral from 0 to u of the survival function S(x) dx. | formula | elsewhere | Policy Limit: “$$E[X \wedge u] = \int_0^u S(x)\,dx$$” |
+| For an exponential distribution with mean θ, E[min(X,u)] = θ(1 − e^{−u/θ}). | formula | tagged | Exponential Distribution: “Capped at a [[Benefit Limit\\|limit]] $u$: $E[\min(X,u)] = \theta\left(1 - e^{-u/\theta}\right)$” |
+| The expected loss splits into the limited part and the excess part: E[X] = E[min(X,u)] + E[(X−u)+]. | fact | elsewhere | Limited Expected Value: “$$E[X \wedge u] = E[X] - E[\max(X - u, 0)] = E[X] - e(u)\cdot[1-F(u)]$$” |
+| For an exponential distribution with mean θ, the expected excess over u, E[(X−u)+], equals θ e^{−u/θ} (memoryless property). | fact | tagged | Exponential Distribution: “A direct consequence: given $X > d$, the excess $X - d$ is again $\text{Exp}(\theta)$. So $E[X \mid…” |
+
+</details>
+
+<details><summary><code>p-963</code> · gap</summary>
+
+Tagged pages: Transformations of Random Variables, Uniform Continuous Distribution, Exponential Distribution
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| To find the distribution of a transformed random variable Y = g(X), write the CDF of Y as a probability about X, rewrite the event in terms… | procedure | tagged | Transformations of Random Variables: “write $F_Y(y) = P(g(X) \leq y)$, rearrange the inequality into an event about $X$, evaluate with $F…” |
+| Applying a decreasing function or multiplying/dividing both sides of an inequality by a negative number reverses the direction of the inequ… | fact | missing |  |
+| For X uniform on (0,1), the CDF is F(x) = x for 0 < x < 1, so P(X ≥ a) = 1 − a for 0 < a < 1. | formula | tagged | Uniform Continuous Distribution: “$E[X] = (a+b)/2$, $\text{Var}(X) = (b-a)^2/12$, and $F(x) = (x-a)/(b-a)$ for $a < x < b$” |
+| The exponential function is the inverse of the natural log, so ln X ≥ c is equivalent to X ≥ e^c. | fact | missing |  |
+| An exponential distribution with mean θ has CDF F(y) = 1 − e^{−y/θ} and survival function P(Y > y) = e^{−y/θ} for y > 0. | formula | tagged | Exponential Distribution: “$E[X] = \theta$, $\text{Var}(X) = \theta^2$, and $F(x) = 1 - e^{-x/\theta}$” |
+| If X is uniform on (0,1), then −θ ln X follows an exponential distribution with mean θ (inverse-CDF method). | fact | elsewhere | Inversion Method: “For an [[Exponential Distribution\\|exponential]] with mean $\theta$, $x = -\theta \ln(1-u)$” |
+
+</details>
+
+<details><summary><code>p-964</code> · answerable</summary>
+
+Tagged pages: Variance for Conditional and Marginal Distributions, Poisson Distribution, Uniform Continuous Distribution
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| For a Poisson distribution, the mean and the variance both equal the Poisson parameter, so E[N\|Λ] = Var(N\|Λ) = Λ. | fact | tagged | Poisson Distribution: “A defining property is $E[X] = \text{Var}(X) = \lambda$ — the mean and variance are equal” |
+| Law of total variance: Var(N) = E[Var(N\|Λ)] + Var(E[N\|Λ]). | formula | tagged | Variance for Conditional and Marginal Distributions: “$$\text{Var}(X) = E\bigl[\text{Var}(X \mid Y)\bigr] + \text{Var}\bigl(E[X \mid Y]\bigr)$$” |
+| For a Uniform(a, b) distribution, the mean is (a+b)/2 and the variance is (b−a)^2/12. | formula | tagged | Uniform Continuous Distribution: “$E[X] = (a+b)/2$, $\text{Var}(X) = (b-a)^2/12$, and $F(x) = (x-a)/(b-a)$ for $a < x < b$” |
+| When the parameter of a conditional distribution is itself random, compute the unconditional variance by taking the expectation of the cond… | procedure | tagged | Variance for Conditional and Marginal Distributions: “Read the decomposition as *(average within-group variance) + (variance of the group means)*.” |
+
+</details>
+
+<details><summary><code>p-an-001</code> · answerable</summary>
+
+Tagged pages: Policyholder, Insurer, Claim, Deductible, Coinsurance Percentage, Benefit Limit, Policy Information
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| An ordinary deductible d per loss means the insurer pays only the part of the loss exceeding d, i.e. (X - d)^+, and the policyholder bears … | definition | tagged | Deductible: “If the loss $X$ is less than or equal to the deductible $d$, the insurer pays nothing; above $d$ it…” |
+| Coinsurance factor α means the insurer pays the fraction α of the covered loss amount (after any deductible) and the policyholder pays the … | definition | tagged | Coinsurance Percentage: “**Exam P ($\alpha$):** the fraction of the covered loss (after any deductible) that the insurer agr…” |
+| A maximum payment (policy limit on payment) u caps the insurer's payment on a loss, so the payment is min(computed payment, u). | definition | tagged | Benefit Limit: “A **Benefit Limit** ($u$) is the maximum amount an insurer will pay on a single claim, capping the …” |
+| With a deductible, coinsurance and a maximum payment combined, compute the insurer's payment by first subtracting the deductible, then mult… | procedure | tagged | Benefit Limit: “The formula caps the insurer's **payment**: the deductible comes off first, coinsurance $\alpha$ ap…” |
+| The amount the policyholder retains on a loss equals the loss minus the insurer's payment, X - Y. | fact | tagged | Policyholder: “$X$ is the ground-up [[Loss Random Variable\\|loss]], $Y$ the insurer's [[Payment\\|payment]], and $X…” |
+
+</details>
+
+<details><summary><code>p-an-002</code> · gap</summary>
+
+Tagged pages: Insurer, Inflation, Deductible, Benefit Limit, Payment Random Variable, Uniform Continuous Distribution, Expected Value
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| With an ordinary deductible d and maximum payment u, the insurer's payment per loss is zero when the loss is below d, equals loss minus d w… | definition | tagged | Deductible: “If the loss $X$ is less than or equal to the deductible $d$, the insurer pays nothing; above $d$ it…” |
+| The expected payment per loss is the integral of the payment function times the density over the layer where payment varies, plus the maxim… | formula | missing |  |
+| A Uniform(0, θ) loss has constant density 1/θ on (0, θ), so P(X > c) = (θ - c)/θ for 0 ≤ c ≤ θ. | fact | tagged | Uniform Continuous Distribution: “$$f(x) = \frac{1}{b - a}, \quad a < x < b$$” |
+| Uniform inflation of losses by a factor (1+r) scales the upper bound of a uniform loss distribution by (1+r), while a fixed deductible and … | fact | tagged | Inflation: “Many deductibles and benefit limits are stated in **fixed dollars** that do not rise with inflation…” |
+| The percentage increase in expected payment is the new expected payment divided by the old expected payment, minus one. | procedure | tagged | Inflation (collapsed): “$$\frac{698.2}{606.5} - 1 = +15.1\%$$” |
+
+</details>
+
+<details><summary><code>p-an-003</code> · untagged</summary>
+
+Tagged pages: Claim, Insurer, Deductible, Payment Random Variable, Uniform Continuous Distribution
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The expected payment per payment is the mean excess loss E[X - d \| X > d], the expected amount paid given that the loss exceeds the deduct… | definition | elsewhere | Mean Excess Loss: “The **Mean Excess Loss** $e_X(d)$ is the expected amount by which a loss exceeds $d$, given that it…” |
+| If X is uniform on (0, M) and X > d, then conditionally X is uniform on (d, M), so the excess X - d is uniform on (0, M - d) with mean (M -… | fact | tagged | Uniform Continuous Distribution: “Conditional distributions on sub-intervals are also uniform: given $X > d$, $X$ is uniform on $(d, …” |
+| The expected total payments equal the number of payments multiplied by the expected payment per payment, since a count of claims that excee… | procedure | tagged | Claim (collapsed): “The trap is mixing them, for example multiplying a count of *losses* by the mean per *payment*.” |
+| The probability that a loss exceeds the deductible is P(X > d) = 1 - F(d), which for a uniform (0, M) loss is (M - d)/M; the expected payme… | formula | tagged | Claim: “The payment per loss $Y^L$ includes zeros. The payment per payment $Y^P$ is conditional on $X > d$,…” |
+
+</details>
+
+<details><summary><code>p-an-004</code> · untagged</summary>
+
+Tagged pages: Random Variable, Payment Random Variable, Continuous Random Variable, Discrete Random Variable, Cumulative Distribution Function (CDF), Deductible, Benefit Limit
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| A random variable is continuous if no single value carries positive probability, discrete if all probability sits on isolated points, and m… | definition | tagged | Random Variable: “$X$ is **discrete** if its possible values form a finite or countably infinite set, and **continuou…” |
+| A function of a continuous random variable need not be continuous; truncating or capping (such as a deductible or policy limit) maps ranges… | fact | tagged | Random Variable: “A payment under a [[Deductible]], $Y = (X - d)_+$ with $X$ continuous, takes a continuum of values …” |
+| To find the point mass of a payment variable at a value, translate the event into the loss variable (e.g., payment is zero when loss is at … | procedure | tagged | Payment Random Variable: “$Y$ has a mixed distribution: a probability mass at $Y = 0$ (when $X \leq d$) and a continuous or d…” |
+| For a loss uniformly distributed on (a, b), the probability of an interval (c, d) within it is (d − c)/(b − a), and the density is 1/(b − a… | formula | elsewhere | Uniform Continuous Distribution: “$$f(x) = \frac{1}{b - a}, \quad a < x < b$$” |
+| A jump in the distribution function at a point equals the probability mass there; a mixed variable's CDF has jumps at its point masses and … | fact | tagged | Discrete Random Variable: “The [[Cumulative Distribution Function (CDF)\\|CDF]] is a step function that jumps by $p(x)$ at each…” |
+
+</details>
+
+<details><summary><code>p-an-005</code> · answerable</summary>
+
+Tagged pages: Random Variable, Cumulative Distribution Function (CDF), Conditional Probability
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The cumulative distribution function F(x) = P(X ≤ x) is non-decreasing and right-continuous, and a jump in F at a point equals the probabil… | definition | tagged | Cumulative Distribution Function (CDF): “The CDF is non-decreasing and right-continuous” |
+| A mixed random variable has both discrete point masses (jumps in the CDF) and a continuous part where the CDF increases smoothly. | definition | tagged | Random Variable: “takes a continuum of values yet puts probability $P(X \le d) > 0$ on the single value 0: it is a **…” |
+| For a random variable X, P(a ≤ X ≤ b) = F(b) − F(a⁻), where F(a⁻) is the left limit of F at a, which equals F(a) if F is continuous at a. | formula | linked | Continuous Random Variable: “$P(a < X < b) = P(a \le X \le b) = F(b) - F(a)$” |
+| Conditional probability: P(A \| B) = P(A ∩ B) / P(B). | formula | tagged | Conditional Probability: “$$P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \quad P(B) > 0$$” |
+| To compute P(X ≥ a \| X ≤ b) with a < b, intersect the events to get P(a ≤ X ≤ b) as the numerator and divide by P(X ≤ b) = F(b), including… | procedure | tagged | Conditional Probability: “$$P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \quad P(B) > 0$$” |
+
+</details>
+
+<details><summary><code>p-an-006</code> · untagged</summary>
+
+Tagged pages: Discrete Random Variable, Joint Probability Function, Marginal Probability Function, Conditional Probability Function
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The conditional expectation of Y given an event A is E[Y \| A] = (sum over outcomes in A of y·p(x,y)) / P(A). | formula | tagged | Discrete Random Variable: “The marginal is $p_Y(1) = 0.10 + 0.15 + 0.10 = 0.35$. Dividing each $Y = 1$ cell by it gives $p(x \…” |
+| Conditional probability of an event B given event A is P(B \| A) = P(A and B) / P(A), so conditioning restricts the sample space to A and r… | definition | elsewhere | Conditional Probability: “$$P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \quad P(B) > 0$$” |
+| To find the probability of an event defined on X from a joint probability table, sum the joint probabilities over all cells (rows) whose X-… | procedure | tagged | Marginal Probability Function (collapsed): “$$p_X(1) = p(1,1) + p(1,2) = 0.2 + 0.3 = 0.5$$” |
+| The expected value of a discrete random variable is the sum of each value times its probability; for a joint distribution, E[Y] = sum over … | definition | tagged | Discrete Random Variable: “Expectations are sums: $E[g(X)] = \sum_x g(x)\,p(x)$.” |
+
+</details>
+
+<details><summary><code>p-an-007</code> · answerable</summary>
+
+Tagged pages: Discrete Random Variable, Continuous Random Variable, Random Variable, Probability Density Function (PDF)
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| A discrete random variable takes countably many values and assigns positive probability to individual points via its probability mass funct… | definition | tagged | Discrete Random Variable: “A **Discrete Random Variable** $X$ is a [[Random Variable]] whose possible values form a finite or …” |
+| For a discrete random variable, P(N ≤ k) = P(N < k) + P(N = k), so including or excluding an endpoint changes the probability by the point … | fact | tagged | Discrete Random Variable: “**Endpoints matter.** $P(X \le 3)$ and $P(X < 3)$ differ by $p(3)$” |
+| A continuous random variable has a density function f(x) and puts probability 0 on every single value, so P(X = a) = 0 and inclusion of end… | definition | tagged | Continuous Random Variable: “$P(X = c) = 0$ for every $c$, so $P(a < X < b) = P(a \le X \le b) = F(b) - F(a)$. Strict and weak i…” |
+| A probability density function is not a probability: probabilities are areas under the density, and the density only needs to be nonnegativ… | fact | tagged | Continuous Random Variable: “A valid density has $f(x) \ge 0$ and $\int_{-\infty}^{\infty} f(x)\,dx = 1$. It is a *rate*, not a …” |
+| A uniform distribution on (a, b) has constant density 1/(b − a), which exceeds 1 when the interval length is less than 1. | fact | tagged | Continuous Random Variable: “$\text{Uniform}(0, 0.5)$ has $f(x) = 2$” |
+| A mixed random variable has both a continuous part and discrete point masses; it can take all values in an interval yet not be continuous. | definition | tagged | Random Variable: “The two classes do not cover every case. A payment under a [[Deductible]], $Y = (X - d)_+$ with $X$…” |
+| The payment under a deductible d, (X − d)+, for continuous X has a point mass at 0 equal to P(X ≤ d) and is continuous above 0, so it is a … | fact | tagged | Random Variable: “A payment under a [[Deductible]], $Y = (X - d)_+$ with $X$ continuous, takes a continuum of values …” |
+
+</details>
+
+<details><summary><code>p-an-008</code> · answerable</summary>
+
+Tagged pages: Continuous Random Variable, Cumulative Distribution Function (CDF), Probability Density Function (PDF), Expected Value
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| For a continuous random variable, the probability density function is the derivative of the cumulative distribution function: f(x) = F'(x). | fact | tagged | Continuous Random Variable: “$$f(x) = F'(x)$$” |
+| The expected value of a continuous random variable is E[X] = ∫ x f(x) dx over its support. | formula | tagged | Expected Value: “\displaystyle\int_{-\infty}^{\infty} x\, f(x)\, dx & \text{(continuous)}” |
+| For a nonnegative random variable, E[X] = ∫_0^∞ S(x) dx = ∫_0^∞ [1 - F(x)] dx, where S is the survival function. | formula | tagged | Continuous Random Variable: “For $X \ge 0$ the survival shortcut $E[X] = \int_0^\infty [1 - F(x)]\,dx$ often avoids integration …” |
+| The survival function is S(x) = P(X > x) = 1 - F(x), where F is the distribution function. | definition | linked | Continuous Univariate Distributions: “For anything phrased as a tail probability, work from the survival function $S(x) = 1 - F(x)$ inste…” |
+
+</details>
+
+<details><summary><code>p-an-009</code> · answerable</summary>
+
+Tagged pages: Continuous Random Variable, Probability Density Function (PDF), Cumulative Distribution Function (CDF), Percentile
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The p-th percentile of a continuous random variable is the value x_p at which the cumulative distribution function equals p, i.e. F(x_p) = … | definition | tagged | Percentile: “When $F$ is continuous and strictly increasing, it is the value that solves $F(x_p) = p$, found by …” |
+| The probability that a continuous random variable exceeds t is the complement of the CDF, P(X > t) = 1 - F(t). | fact | linked | Continuous Univariate Distributions: “For anything phrased as a tail probability, work from the survival function $S(x) = 1 - F(x)$ inste…” |
+| To obtain the CDF from a density, integrate the density from the lower end of its support up to t, so that F(t) = the integral of f(x) dx f… | procedure | tagged | Continuous Random Variable: “$$F(x) = P(X \le x) = \int_{-\infty}^{x} f(t)\,dt$$” |
+| For a continuous random variable, probability is the area under the density over an interval, not the height of the density at a point. | fact | tagged | Probability Density Function (PDF): “The probability that $X$ falls in an interval $[a, b]$ is the area under $f$ over that interval.” |
+| To find a percentile, set the CDF equal to the target probability, solve for t, and select the root lying within the support of the distrib… | procedure | tagged | Percentile (collapsed): “Set $F(x_{0.90}) = 0.90$ and solve:” |
+
+</details>
+
+<details><summary><code>p-an-010</code> · untagged</summary>
+
+Tagged pages: Bayes Theorem, The Law of Total Probability
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| A conditional probability P(A\|B) is the probability that A occurs given that B has occurred, equal to P(A and B) / P(B). | definition | elsewhere | Conditional Probability: “**Conditional Probability** $P(A \mid B)$ is the probability that event $A$ occurs given that event…” |
+| The complement of an event has probability one minus the probability of the event, so P(D^c) = 1 - P(D). | fact | elsewhere | Probability Rules: “$$P(A^c) = 1 - P(A)$$” |
+| Law of total probability: if events B_1,...,B_n partition the sample space, then P(A) = sum over i of P(A\|B_i) P(B_i). | formula | tagged | The Law of Total Probability: “$$P(B) = \sum_{i=1}^{n} P(B \mid A_i)\,P(A_i)$$” |
+| Bayes' theorem: P(B\|A) = P(A\|B) P(B) / P(A), where P(A) is often computed with the law of total probability. | formula | tagged | Bayes Theorem: “$$P(H \mid E) = \frac{P(E \mid H)\,P(H)}{P(E)}$$” |
+| To find the probability of a condition given a positive test, compute the overall positive-test probability by weighting the test's positiv… | procedure | elsewhere | Decision Analysis (collapsed): “P(+) &= 0.80(0.40) + 0.20(0.60) \\” |
+
+</details>
+
+<details><summary><code>p-an-011</code> · untagged</summary>
+
+Tagged pages: Combinatorics
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| When drawing without replacement, the probability that several specified outcomes all occur is found by multiplying the probability of the … | procedure | elsewhere | Probability Multiplication Rule: “For a chain of events, the rule extends to $P(A_1 \cap A_2 \cap \cdots \cap A_n) = P(A_1)\,P(A_2 \m…” |
+| The probability of the intersection of two events is P(A and B) = P(A) × P(B \| A). | formula | elsewhere | Probability Multiplication Rule: “$$P(A \cap B) = P(A) \cdot P(B \mid A)$$” |
+| When items are drawn without replacement, the composition of the remaining items changes after each draw, so the count of items of the favo… | fact | elsewhere | Probability Multiplication Rule (collapsed): “$$P(A \cap B) = P(A) \cdot P(B \mid A) = \frac{4}{10} \times \frac{3}{9} = \frac{12}{90} = \frac{2}…” |
+| The probability of drawing an item of a given type from a collection equals the number of items of that type divided by the total number of… | fact | elsewhere | Probability: “If all outcomes in a finite sample space $S$ are equally likely, then $P$ can be calculated as:” |
+
+</details>
+
+<details><summary><code>p-an-012</code> · answerable</summary>
+
+Tagged pages: Expected Value
+
+| Item | Kind | Status | Where |
+|---|---|---|---|
+| The expected value of a discrete random variable is the sum over all values x of x times P(X = x). | formula | tagged | Expected Value: “$$E[X] = \begin{cases} \displaystyle\sum_{k} k\, f(k) & \text{(discrete)} \\[6pt] \displaystyle\int…” |
 
 </details>
 

@@ -182,6 +182,13 @@ python3 scripts/answerability_lib.py not-required --exam MAS-II --item <qid>:<ri
 python3 scripts/answerability_lib.py import-report --exam <id> runs/<run>/report.md   # a run with no results.jsonl
 ```
 
+A reader sees the record too: the question's Fact Check panel ends in an **Answerability** card
+(`quiz/src/components/AnswerabilitySection.tsx`, `lib/answerability.ts`) that fetches the bank's
+record when the panel opens and lays out the question's history — the check (its date from the run
+id, its verdict, each requirement with where it is taught and the passage quoted for it) and every
+`resolve` / `not-required` written since, newest first. It reports the record as of the check; G8,
+not the panel, re-reads the quotes against the vault.
+
 `resolve` refuses a quote that isn't on the page, and says whether the page is in the question's
 reach. A retag needs no `resolve`: the gate re-reads the tags. A re-run replaces a question's
 entry and keeps only the `not-required` calls on requirements worded exactly as before.

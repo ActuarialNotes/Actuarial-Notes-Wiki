@@ -18,6 +18,7 @@ import { PdfLinkButton } from '@/components/PdfLinkButton'
 import { ReportIssueModal } from '@/components/ReportIssueModal'
 import { FactCheckSection } from '@/components/FactCheckSection'
 import { FactCheckSources } from '@/components/FactCheckSources'
+import { AnswerabilitySection } from '@/components/AnswerabilitySection'
 import { cn } from '@/lib/utils'
 import {
   FACT_CHECK_DIFF,
@@ -63,6 +64,9 @@ import {
  *     card a resource page leads with) and **Check history** (each pass, newest
  *     first: its date, the status it set and what it concluded, with what it
  *     actually compared one tap further). **Fixed** and **Notes** follow.
+ *  4. For a question, **can I answer it from the notes?** — **Answerability**
+ *     (`components/AnswerabilitySection.tsx`), the history of the check behind
+ *     publication gate G8, last because it is about the notes, not the page.
  *
  * Every section is a card of one shape (`components/FactCheckSection.tsx`)
  * that names what it holds and how many, so the folded stack is itself the
@@ -170,6 +174,10 @@ export function FactCheckPanel({
         )}
 
         {summary && <RecordSections summary={summary} />}
+
+        {/* A question's other check: whether the notes teach what its
+            solution uses. Draws nothing for a page or an unchecked question. */}
+        <AnswerabilitySection contentPath={contentPath} />
       </div>
 
       <div className="flex items-center justify-between gap-2 border-t border-border pt-4">

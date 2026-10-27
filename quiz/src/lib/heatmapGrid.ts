@@ -107,3 +107,45 @@ export function scheduleStripRange(input: ScheduleStripInput): { start: string; 
     : shiftIso(today, STRIP_OPEN_ENDED_DAYS)
   return { start, end: maxIso(end, today, targetReadyDate) }
 }
+
+// ── The week view ────────────────────────────────────────────────────────────
+//
+// The strip's other view: the same days, a week of them across the card at a
+// time, and the rest a horizontal scroll away. A day is wide enough there to
+// carry its own label, which the whole-run view has no room for.
+
+/** Days across the card in the week view. */
+export const WEEK_VIEW_DAYS = 7
+
+export interface WeekScrollInput {
+  /** The day to bring into view, as an index along the strip. */
+  index: number
+  /** Days on the strip. */
+  dayCount: number
+  /** The scroller's visible width, in css px. */
+  viewport: number
+  /** The gutter between days, in css px. */
+  gap: number
+  /**
+   * `start` — the day opens the view (a week's Monday, at rest). `center` —
+   * the day sits in the middle of it, which is what the schedule-forming sweep
+   * follows, so the days either side of the lit one stay on screen.
+   */
+  align: 'start' | 'center'
+}
+
+/**
+ * The `scrollLeft` that brings a day into the week view, clamped to the
+ * strip's ends. Days are laid out on an even pitch — `WEEK_VIEW_DAYS` days and
+ * their gutters fill the viewport — so the pitch is (viewport + gap) / 7.
+ */
+export function weekViewScrollLeft(input: WeekScrollInput): number {
+  const { index, dayCount, viewport, gap, align } = input
+  if (dayCount <= 0 || viewport <= 0) return 0
+  const pitch = (viewport + gap) / WEEK_VIEW_DAYS
+  const max = Math.max(0, dayCount * pitch - gap - viewport)
+  const raw = align === 'start'
+    ? index * pitch
+    : index * pitch + (pitch - gap) / 2 - viewport / 2
+  return Math.min(max, Math.max(0, raw))
+}

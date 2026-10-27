@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { dayCellAt, scheduleStripRange } from './heatmapGrid'
+import { dayCellAt, scheduleStripRange, weekViewScrollLeft } from './heatmapGrid'
 
 // A phone-sized strip: 17 week columns across ~334px, 7 rows of 14px.
 const BOX = { width: 334, height: 110, columns: 17, rows: 7, gap: 2 }
@@ -101,5 +101,30 @@ describe('scheduleStripRange', () => {
     expect(scheduleStripRange({
       today: '2026-12-20', firstSession: '2026-12-03', examDate: '2026-12-28',
     })).toEqual({ start: '2026-11-26', end: '2027-01-04' })
+  })
+})
+
+describe('weekViewScrollLeft', () => {
+  // 7 days of 48px and 6 gutters of 2px fill a 348px viewport: a 50px pitch.
+  const base = { dayCount: 70, viewport: 348, gap: 2 }
+
+  it('opens the view on the day at rest', () => {
+    expect(weekViewScrollLeft({ ...base, index: 14, align: 'start' })).toBe(700)
+  })
+
+  it('centres the day the sweep is on', () => {
+    // Day 14 spans 700–748; its middle, 724, sits at the viewport's, 174.
+    expect(weekViewScrollLeft({ ...base, index: 14, align: 'center' })).toBe(550)
+  })
+
+  it('never scrolls past either end of the strip', () => {
+    expect(weekViewScrollLeft({ ...base, index: 1, align: 'center' })).toBe(0)
+    // 70 days span 3498px; the last view starts at 3498 − 348.
+    expect(weekViewScrollLeft({ ...base, index: 69, align: 'start' })).toBe(3150)
+  })
+
+  it('stays put on a degenerate box', () => {
+    expect(weekViewScrollLeft({ ...base, viewport: 0, index: 5, align: 'start' })).toBe(0)
+    expect(weekViewScrollLeft({ ...base, dayCount: 0, index: 5, align: 'start' })).toBe(0)
   })
 })

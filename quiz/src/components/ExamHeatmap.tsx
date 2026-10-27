@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent } from 'react'
 import { Calendar, X } from 'lucide-react'
-import { dayCellAt, scheduleStripRange } from '@/lib/heatmapGrid'
+import { WEEK_VIEW_DAYS, dayCellAt, scheduleStripRange, weekViewScrollLeft } from '@/lib/heatmapGrid'
 import { examAccent } from '@/lib/examColors'
 import type { QuizSession } from '@/lib/supabase'
 import { ExamSittingsList } from '@/components/ExamSittingsList'
@@ -8,6 +8,7 @@ import { LOCALIZED_EXAMS, type ExamWindow } from '@/data/examSittings'
 
 const DAY_LABELS = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
 const MONTH_ABBR = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+const WEEKDAY_ABBR = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
 
 function cellStyle(pct: number | null): { backgroundColor: string } | undefined {
   if (pct === null) return undefined
@@ -88,10 +89,11 @@ interface Props {
   dayPlanPct?: Map<string, number>
   highlightedDay?: string | null
   /**
-   * Day the "schedule forming" playback is currently on. The whole timeline is
-   * on screen at once, so the sweep needs nothing scrolled into view: the day
-   * it names lights up in place and the one it just left fades out behind it,
-   * which is what makes the highlight read as moving along the schedule.
+   * Day the "schedule forming" playback is currently on. The day it names
+   * lights up in place and the one it just left fades out behind it, which is
+   * what makes the highlight read as moving along the schedule. In the
+   * overview the whole timeline is on screen at once; in the week view the
+   * strip scrolls to keep the lit day in the middle.
    */
   playbackDay?: string | null
   /** How long each day stays lit — the beat the flare and its fade are timed to. */
@@ -104,6 +106,14 @@ interface Props {
    * exactly the stretch those two words describe.
    */
   layout?: 'grid' | 'linear'
+  /**
+   * How much of the linear strip is across the card at once. `overview` — every
+   * day, nothing scrolls. `week` — seven days across, each labelled with its
+   * date, and the rest of the run a horizontal scroll away: it opens on the
+   * current week, and the schedule-forming sweep scrolls the strip along with
+   * the day it is on.
+   */
+  linearView?: 'week' | 'overview'
   /**
    * Whether the exam-date row under the strip is drawn. The readiness card
    * prints that date above the strip already, so it turns this off and keeps
@@ -158,7 +168,8 @@ const MIN_LABELLED_MONTH_DAYS = 7
 
 /**
  * The Study Schedule timeline: one cell per day, every day between today and
- * the exam on screen at once — nothing scrolls — so the schedule-forming sweep
+ * the exam on screen at once (the linear strip's `week` view is the exception:
+ * seven days across, the rest a scroll away), so the schedule-forming sweep
  * plays out right here. The grid runs from a fortnight before the first session
  * to a fortnight past exam day, in whole weeks; the linear strip is tighter —
  * a week before the first session to a week past the exam's sitting window
@@ -198,6 +209,7 @@ export function ExamHeatmap({
   playbackDay,
   playbackStepMs = 60,
   layout = 'grid',
+  linearView = 'overview',
   showExamDateRow = true,
 }: Props) {
   const [editing, setEditing] = useState(false)
@@ -208,6 +220,7 @@ export function ExamHeatmap({
   const inputRef = useRef<HTMLInputElement>(null)
   const inputReadyRef = useRef<HTMLInputElement>(null)
   const gridRef = useRef<HTMLDivElement>(null)
+  const scrollerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (editing) inputRef.current?.focus()
@@ -365,18 +378,55 @@ export function ExamHeatmap({
   // The strip opens on whatever day falls a week before the first session, so
   // its opening month can have only a few days on it — too few to hold a label
   // without running into the next one. Those days go unlabelled instead.
+  //
+  // The week view scrolls, so a label only on the 1st is off screen for most of
+  // a month: there every Monday carries its month too, and any seven days on
+  // screen include one.
   const linearMonthLabels = useMemo(() => {
     let prevMonth = -1
+    const weekView = linearView === 'week'
     const labels = linearDays.map(day => {
       const month = Number(day.key.slice(5, 7)) - 1
-      const label = month !== prevMonth ? MONTH_ABBR[month] : null
+      const isMonday = new Date(day.key + 'T00:00:00').getDay() === 1
+      const label = month !== prevMonth || (weekView && isMonday) ? MONTH_ABBR[month] : null
       prevMonth = month
       return label
     })
+    if (weekView) return labels
     const next = labels.findIndex((label, i) => i > 0 && label !== null)
     if (next > 0 && next < MIN_LABELLED_MONTH_DAYS) labels[0] = null
     return labels
-  }, [linearDays])
+  }, [linearDays, linearView])
+
+  // ── Week view scrolling ─────────────────────────────────────────────────────
+  //
+  // At rest the week view opens on the current week, Monday first. While the
+  // schedule-forming sweep runs it follows the lit day, keeping it in the
+  // middle of the view — the sweep steps a day at a time, so jumping the scroll
+  // with it reads as the strip gliding under the highlight. When the sweep lets
+  // go it eases back to the current week.
+  const isWeekView = layout === 'linear' && linearView === 'week'
+  const restIndex = useMemo(() => {
+    const monday = isoKey(mondayOf(today))
+    return Math.max(0, linearDays.findIndex(d => d.key === monday))
+  }, [linearDays, today])
+  const playbackIndex = playbackDay ? linearDays.findIndex(d => d.key === playbackDay) : -1
+  const wasPlayingRef = useRef(false)
+
+  useLayoutEffect(() => {
+    const scroller = scrollerRef.current
+    if (!isWeekView || !scroller) { wasPlayingRef.current = false; return }
+    const gap = gridRef.current ? parseFloat(getComputedStyle(gridRef.current).columnGap) : NaN
+    const measure = { dayCount: linearDays.length, viewport: scroller.clientWidth, gap: Number.isFinite(gap) ? gap : LINEAR_GAP }
+    if (playbackIndex >= 0) {
+      wasPlayingRef.current = true
+      scroller.scrollTo({ left: weekViewScrollLeft({ ...measure, index: playbackIndex, align: 'center' }), behavior: 'instant' })
+      return
+    }
+    const easeBack = wasPlayingRef.current
+    wasPlayingRef.current = false
+    scroller.scrollTo({ left: weekViewScrollLeft({ ...measure, index: restIndex, align: 'start' }), behavior: easeBack ? 'smooth' : 'instant' })
+  }, [isWeekView, playbackIndex, restIndex, linearDays.length])
 
   const daysLeft = targetDate ? daysUntil(targetDate) : null
   const examDateLabel = targetDate
@@ -543,14 +593,23 @@ export function ExamHeatmap({
   // the bar is literally the stretch those two words name — how much of it is
   // green is the answer to "and what have I done with it".
   if (layout === 'linear') {
-    const stripMaxWidth = linearDays.length * (LINEAR_MAX_CELL_PX + LINEAR_WIDE_GAP) - LINEAR_WIDE_GAP
     const dayCount = linearDays.length
-    return (
+    // The overview stops widening once its days are square; the week view's
+    // run is as wide as seven-day pages of the scroller it sits in.
+    const stripMaxWidth = isWeekView ? undefined : dayCount * (LINEAR_MAX_CELL_PX + LINEAR_WIDE_GAP) - LINEAR_WIDE_GAP
+    const weekWidth = isWeekView
+      ? `calc((100% + var(--strip-gap)) * ${dayCount / WEEK_VIEW_DAYS} - var(--strip-gap))`
+      : undefined
+    const todayKey = isoKey(today)
+    const strip = (
       // `--strip-gap` is the gutter between days: a hairline on a phone, where
       // a season divides down to a few px a day, and 2px once there's room for
       // the days to read as squares. The month row, the strip, the window band
       // and the tap resolution all read it, so they stay over the same days.
-      <div className="space-y-1.5 [--strip-gap:1px] sm:[--strip-gap:2px]">
+      <div
+        className={`space-y-1.5 ${isWeekView ? '[--strip-gap:2px] schedule-strip-week' : '[--strip-gap:1px] sm:[--strip-gap:2px]'}`}
+        style={{ width: weekWidth }}
+      >
         {/* Month ticks, over the days they name. */}
         <div className="flex gap-[var(--strip-gap)]" style={{ height: 11, maxWidth: stripMaxWidth }}>
           {linearMonthLabels.map((label, i) => (
@@ -563,6 +622,26 @@ export function ExamHeatmap({
             </div>
           ))}
         </div>
+
+        {/* In the week view a day is wide enough to name: its weekday and date,
+            today's in full strength. */}
+        {isWeekView && (
+          <div className="flex gap-[var(--strip-gap)]" aria-hidden="true">
+            {linearDays.map(day => {
+              const d = new Date(day.key + 'T00:00:00')
+              return (
+                <div
+                  key={day.key}
+                  className={`flex-1 min-w-0 truncate text-[10px] leading-none ${
+                    day.key === todayKey ? 'font-semibold text-foreground' : 'text-muted-foreground'
+                  }`}
+                >
+                  {WEEKDAY_ABBR[d.getDay()]} {d.getDate()}
+                </div>
+              )
+            })}
+          </div>
+        )}
 
         {/* The strip itself. Days share the width, so a season of them divides
             down to a few css px on a phone — the marked days (today, exam day,
@@ -612,6 +691,7 @@ export function ExamHeatmap({
             }`
             if (isClickable && !playbackDay) cls += ' cursor-pointer transition-[opacity,box-shadow] hover:z-[1] hover:opacity-90 hover:ring-2 hover:ring-foreground/70'
             if (playbackDay) cls += ' transition-all'
+            if (isWeekView && !playbackDay) cls += ' snap-start'
             if (cell.key === playbackDay) cls += ' schedule-playback-day'
             else if (cell.key === highlightedDay) cls += ' ring-2 ring-white/90'
             else if (cell.isToday) cls += ' ring-1 ring-inset ring-foreground/70 dark:ring-white/80'
@@ -632,13 +712,28 @@ export function ExamHeatmap({
                     + (cell.inExamWindow && !cell.isExamDay ? ' (exam window)' : '')
                   : undefined}
                 onClick={isClickable ? () => onDayClick!(cell.key) : undefined}
-                style={isMarked ? { minWidth: LINEAR_MARKED_MIN_PX, ...style } : style}
+                style={isMarked && !isWeekView ? { minWidth: LINEAR_MARKED_MIN_PX, ...style } : style}
                 className={cls}
               />
             )
           })}
         </div>
-
+      </div>
+    )
+    if (!isWeekView) return <div className="space-y-1.5">{strip}{dateRows}</div>
+    // The scroller pads itself vertically (and hands the room back with a
+    // negative margin) so the lit day's flare and the exam window's wash aren't
+    // clipped by the overflow a horizontal scroll forces on both axes.
+    return (
+      <div className="space-y-1.5">
+        <div
+          ref={scrollerRef}
+          // At rest a scroll settles on a day's edge; the sweep drives the
+          // scroll itself, so snapping is off while it runs.
+          className={`-my-2 overflow-x-auto overscroll-x-contain py-2 ${playbackDay ? '' : 'snap-x snap-mandatory'}`}
+        >
+          {strip}
+        </div>
         {dateRows}
       </div>
     )

@@ -61,6 +61,7 @@ import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/hooks/useAuth'
 import { questionExamLabel } from '@/lib/examIds'
 import { daysLeftLabel } from '@/lib/examMenu'
+import { SegmentedControl } from '@/components/ui/SegmentedControl'
 
 
 // ── Study Guide Radial ─────────────────────────────────────────────────────────
@@ -351,6 +352,9 @@ interface Props {
   actions?: ReactNode
 }
 
+type ScheduleView = 'week' | 'overview'
+const SCHEDULE_VIEW_KEY = 'actuarial_schedule_view'
+
 export function ReadinessCard({
   syllabus, masteryRecords, sessions, plan, masteryStateByName,
   config, loading, masteryLoading = false, examDate, onConfigChange, onRegenerate, onReplaceConcepts, onExamDateChange,
@@ -414,6 +418,15 @@ export function ReadinessCard({
   // the new schedule — the strip sweeps from exam day back to today and the day
   // panel below shows each day's concepts as it passes.
   const playback = useSchedulePlayback()
+  // The strip's view — a week across the card, or the whole run to the exam —
+  // remembered per browser. A week is the default: it is where today's work is.
+  const [scheduleView, setScheduleView] = useState<ScheduleView>(() => {
+    try { return localStorage.getItem(SCHEDULE_VIEW_KEY) === 'overview' ? 'overview' : 'week' } catch { return 'week' }
+  })
+  const changeScheduleView = (view: ScheduleView) => {
+    setScheduleView(view)
+    try { localStorage.setItem(SCHEDULE_VIEW_KEY, view) } catch { /* private window */ }
+  }
   const studyScheduleCardRef = useRef<HTMLDivElement>(null)
   const planRef = useRef(plan)
   useEffect(() => { planRef.current = plan }, [plan])
@@ -1192,17 +1205,31 @@ export function ReadinessCard({
   const examScheduleBlock = (
     <div ref={studyScheduleCardRef} className="space-y-1">
       <div className="space-y-2">
-        {/* Schedule-forming status — only while the sweep is running */}
-        {playback.active && (
-          <p className="text-xs font-medium text-primary" aria-live="polite">
-            {playback.landed && playback.summary
+        {/* The view toggle, with the schedule-forming status beside it while
+            the sweep runs. */}
+        <div className="flex items-center justify-between gap-3">
+          <p className="min-w-0 text-xs font-medium text-primary" aria-live="polite">
+            {playback.active && (playback.landed && playback.summary
               ? `Schedule locked in — ${playback.summary.concepts} concept${playback.summary.concepts === 1 ? '' : 's'} across ${playback.summary.studyDays} study day${playback.summary.studyDays === 1 ? '' : 's'}`
-              : 'Building your schedule…'}
+              : 'Building your schedule…')}
           </p>
-        )}
+          <SegmentedControl
+            label="Schedule view"
+            size="xs"
+            pill
+            value={scheduleView}
+            onChange={changeScheduleView}
+            options={[
+              { value: 'week', label: 'Week' },
+              { value: 'overview', label: 'Overview' },
+            ]}
+            className="shrink-0"
+          />
+        </div>
 
         <ExamHeatmap
           layout="linear"
+          linearView={scheduleView}
           showExamDateRow={false}
           sessions={examSessions}
           examProgressKey={progressKey}

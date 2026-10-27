@@ -41,7 +41,10 @@ jobs:
 
           deploy stripe-create-checkout
           deploy stripe-create-portal
-          deploy stripe-webhook
+          # Called by Stripe, which sends no Supabase JWT: the function verifies the
+          # stripe-signature header against STRIPE_WEBHOOK_SECRET instead, so the
+          # gateway's JWT check must be off or every event is refused with 401.
+          deploy stripe-webhook --no-verify-jwt
           deploy delete-account
           deploy redeem-beta-code
           deploy research-ingest-url

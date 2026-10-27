@@ -1597,6 +1597,32 @@ export function ReadinessCard({
                   )
                 })}
               </div>
+
+              {/* The sections syllabus coverage is made of, in syllabus order —
+                  the same sections the ring's arcs are grouped into. */}
+              {readiness.sections.some(s => s.total > 0) && (
+                <ul className="mt-4 space-y-2.5 border-l border-border pl-3" aria-label="Coverage by section">
+                  {readiness.sections.filter(s => s.total > 0).map(section => {
+                    const pct = Math.round(section.readinessPct)
+                    return (
+                      <li key={section.name} className="space-y-1" aria-label={`${section.name}: ${pct}%`}>
+                        <div className="flex items-baseline justify-between gap-2">
+                          <span className="min-w-0 truncate text-xs text-muted-foreground" title={section.name}>
+                            {section.name}
+                          </span>
+                          <span className="text-xs tabular-nums text-muted-foreground">{pct}%</span>
+                        </div>
+                        <div className="h-1 w-full overflow-hidden rounded-full bg-secondary">
+                          <div
+                            className="h-full rounded-full transition-all"
+                            style={{ width: `${section.readinessPct}%`, backgroundColor: LEVEL3_TEXT }}
+                          />
+                        </div>
+                      </li>
+                    )
+                  })}
+                </ul>
+              )}
             </div>
           </div>
         </div>

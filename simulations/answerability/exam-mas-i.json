@@ -49,7 +49,15 @@
      "statement": "To find the expected product of counts at two times s<t, write N(t) = N(s) + [N(t)-N(s)] so the product splits into a second moment of N(s) plus a product of independent increments' expectations.",
      "concept": "Poisson Process",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Counting Process",
+      "quote": "in terms of **non-overlapping increments** — $N(1)$ and $N(3) - N(1)$ — so that independence lets it factor",
+      "note": "passage on Counting Process: the exam technique of rewriting a quantity in non-overlapping increments so independence lets it factor, which is the decomposition N(t) = N(s) + [N(t)-N(s)]; the check's miss.",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r4",
@@ -329,7 +337,15 @@
      "statement": "For independent lives, the probability that one life survives and the other does not is the product of the first life's survival probability and the complement of the second life's survival probability.",
      "concept": "Independent Lives Joint Survival Probabilities",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Independent Events",
+      "quote": "If $A$ and $B$ are independent, then so are $A$ and $B^c$, $A^c$ and $B$, and $A^c$ and $B^c$, so $P(A \\cap B^c) = P(A)\\,(1 - P(B))$.",
+      "note": "passage on Independent Events: complements of independent events are independent, so P(A and not B) = P(A)(1 - P(B)); the check's miss (Exam P prerequisite page).",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r2",
@@ -554,7 +570,13 @@
      "statement": "For a sample of size 2, the sum of squared deviations from the sample mean equals (X1 - X2)^2 / 2.",
      "concept": "Sample Variance",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "algebra: substituting the sample mean (X1+X2)/2 into the sum of squared deviations gives (X1-X2)^2/2; the rule used is the definition of the sample variance on Sample Variance.",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r5",
@@ -588,7 +610,15 @@
      "statement": "To find the distribution of the difference of two independent, identically distributed discrete losses, enumerate all pairs of outcomes, multiply their probabilities, and sum the probabilities for each resulting difference value.",
      "concept": "Functions of Independent Discrete Random Variables",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Joint Probability Function",
+      "quote": "The probability of any event about the pair is the sum of the joint PMF over every pair",
+      "note": "passage on Joint Probability Function (Exam P prerequisite): an event about (X, Y) has probability the sum of the joint PMF over its pairs, with the joint PMF the product of marginals under independence (Independent Random Variables); the check's miss.",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r8",
@@ -1388,7 +1418,13 @@
      "statement": "A quadratic function is not monotonic over the whole real line, and the absolute value function is V-shaped and not monotonic, so neither is invertible and neither can be a link function.",
      "concept": "Monotonic Functions",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "precalculus: recognising that a quadratic and |y| are not monotonic on the real line; the rule used is that a link function is monotone and differentiable, on Link Function.",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r4",
@@ -1396,7 +1432,13 @@
      "statement": "A linear function with nonzero slope is strictly monotonic (increasing or decreasing) and invertible, so it is a valid link function even if its slope is negative.",
      "concept": "Monotonic Functions",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "precalculus: a line with nonzero slope, even a negative one, is strictly monotone and invertible; the rule used is that a link function is monotone and differentiable, on Link Function.",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     }
    ]
   },
@@ -1844,7 +1886,13 @@
      "statement": "Predictors not included in the selected model do not contribute to its prediction, so their values are ignored.",
      "concept": "Multiple Linear Regression",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "reading the stem: the selected model's equation simply has no bathrooms term; the rule used is the prediction as intercept plus coefficient times predictor value (r2) on the linked regression page.",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     }
    ]
   },
@@ -2462,7 +2510,15 @@
        "page": "Future Lifetime Random Variable",
        "quote": "$${}_{u|t}q_x = {}_up_x - {}_{u+t}p_x$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Conditional Probability",
+      "quote": "P(X \\le b \\mid X > a) = \\frac{P(a < X \\le b)}{P(X > a)} = \\frac{F(b) - F(a)}{1 - F(a)}",
+      "note": "passage on Conditional Probability (Exam P prerequisite): P(a < X ≤ b) = F(b) − F(a), which with S = 1 − F is S(a) − S(b) over S(a); the check's miss.",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r3",
@@ -2724,7 +2780,13 @@
      "statement": "When a CDF is piecewise, split the integral of the survival function at the breakpoint and simplify the integrand separately on each piece.",
      "concept": "Expected Value from the Survival Function",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "calculus: integrating a piecewise integrand by splitting at its breakpoint; the rule used is E[X] = ∫ S(t) dt for the parallel system's maximum, which is another item of this question.",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     }
    ]
   },
@@ -2762,7 +2824,15 @@
        "page": "Probability Rules",
        "quote": "P(\\text{at least one}) &= 1 - P(\\text{no claims}) \\\\"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Axioms of Probability",
+      "quote": "Therefore $P(A^c) = 1 - P(A)$",
+      "note": "passage on Axioms of Probability (Exam P prerequisite): the complement rule P(A^c) = 1 - P(A), with 'at least one' the complement of 'none'; the check's miss.",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r3",
@@ -3144,7 +3214,13 @@
        "page": "Term Life Insurance",
        "quote": "$$A^{1}_{x:\\overline{n}|} = \\sum_{k=0}^{n-1} v^{k+1}\\,{}_kp_x\\,q_{x+k}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "a step of this solution's plan: each added year adds a nonnegative term, so accumulate until the threshold is passed; the rule used is the term-insurance EPV sum (r4) on Term Life Insurance.",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     }
    ]
   },
@@ -3317,7 +3393,13 @@
      "statement": "For a normal distribution with known variance σ², the Fisher information for the mean μ from one observation is 1/σ², since the second derivative of the log-density with respect to μ is the constant -1/σ².",
      "concept": "Normal Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "differentiation: the question asks for this information, found by twice differentiating the normal log-density with respect to μ; the rule used is I(θ) = −E[∂² ln f/∂θ²] on Fisher Information.",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r4",
@@ -3325,7 +3407,15 @@
      "statement": "The expectation of a constant is the constant itself, so when the second derivative of the log-density does not depend on x, no integration is needed to take the expectation.",
      "concept": "Expected Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Expected Value",
+      "quote": "It is linear: $E[aX + b] = aE[X] + b$",
+      "note": "passage on Expected Value: linearity E[aX + b] = aE[X] + b, which with a = 0 gives the expectation of a constant; the check's miss.",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     }
    ]
   },
@@ -3570,7 +3660,15 @@
      "statement": "Given the total number of events in a Poisson process over an interval, the conditional probability of events in a subinterval does not depend on the rate lambda.",
      "concept": "Poisson Process",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Counting Process",
+      "quote": "Conditioning on the total turns a Poisson question into a binomial one, and $\\lambda$ no longer matters.",
+      "note": "passage on Counting Process (on MAS-I's syllabus): conditioning on the total makes the rate drop out; the check's miss.",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     }
    ]
   },
@@ -4452,7 +4550,13 @@
      "statement": "A bootstrap resample mean is bounded by the smallest and largest observed values, attained when the resample consists entirely of the minimum or entirely of the maximum observation.",
      "concept": "Bootstrap",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "step of this one solution's plan: a mean lies between the smallest and largest values, and the all-minimum and all-maximum resamples are possible because bootstrap samples are drawn with replacement, the rule on Bootstrap.",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     }
    ]
   },
@@ -4849,7 +4953,13 @@
      "statement": "To find coefficients under a new coding, set the new model's cell sums equal to the known cell means and solve, with the new baseline cell giving the intercept and the main effects being differences from it.",
      "concept": "Indicator (Dummy) Variables in Linear Regression",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "a step of this solution's plan (algebra): solve the recoded model's cell sums against the cell means; the rules used are r1-r3 (intercept = base cell mean, cell value = sum of coefficients, recoding leaves fitted cell means unchanged).",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     }
    ]
   },
@@ -5184,7 +5294,15 @@
      "statement": "The information function does not have a special feature (such as a zero or extremum) at the MLE, so it cannot be used to locate the MLE visually.",
      "concept": "Fisher Information",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Fisher Information",
+      "quote": "measures how sharply the likelihood identifies a parameter — the expected curvature of the log-likelihood",
+      "note": "passage on Fisher Information: information is the curvature of the log-likelihood, i.e. the precision of the estimate, not the location of its maximum (unlike the score's zero or the deviance's minimum); the check's miss.",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     }
    ]
   },
@@ -5366,7 +5484,13 @@
      "statement": "A p% reduction in the probability of a payment means the new probability equals (1 - p) times the original probability.",
      "concept": "Ordinary Deductible",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "translating the stem: '75% fewer claims' means the payment probability becomes 25% of its old value; the rule used is P(X > d) = e^{-d/theta} on Exponential Distribution.",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     }
    ]
   },
@@ -5659,7 +5783,13 @@
      "statement": "To find the effect of switching mortality tables, compute the premium under each table and take the difference (new minus original).",
      "concept": "Equivalence Principle",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "a step of this solution's plan: the effect of a table switch is the premium under each table differenced; the rule used is the equivalence-principle premium P = face x A_x / a-due_x (r1) on the tagged pages.",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     }
    ]
   },
@@ -6336,7 +6466,13 @@
      "statement": "Under a null hypothesis specified as ratios among categories, each category's expected count equals the total observed count times its ratio divided by the sum of the ratios.",
      "concept": "Chi-Square Goodness-of-Fit Test",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "arithmetic: turning the stem's ratios 12:8:6:4:1 into proportions p_j = ratio/sum; the rule used is E_j = n p_j on Chi-Square Goodness-of-Fit Test.",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     }
    ]
   },
@@ -6504,7 +6640,15 @@
        "page": "Mean Excess Loss",
        "quote": "The **Mean Excess Loss** $e_X(d)$ is the expected amount by which a loss exceeds $d$, given that it does exceed $d$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Limited Expected Value",
+      "quote": "is the mean excess loss at $u$: $e(u) = \\dfrac{E[X] - E[X \\wedge u]}{1 - F(u)}$",
+      "note": "passage on Limited Expected Value (linked from Deductible): the mean excess loss at the deductible, the per-payment mean; the check's miss.",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r2",
@@ -6690,7 +6834,13 @@
      "statement": "Because the logistic function is strictly increasing in η, a probability threshold p > c is equivalent to the linear predictor exceeding the log-odds of the threshold, η > ln(c/(1-c)).",
      "concept": "Logistic Regression",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "algebra: inverting the logistic function turns a probability threshold into a linear-predictor threshold, a shortcut; computing p = 1/(1+e^{-eta}) for each client (r2) answers it on Logistic Regression.",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     }
    ]
   },
@@ -7774,7 +7924,13 @@
      "statement": "The range between the first and last failure equals the maximum minus the minimum, so its expectation is E[max] − E[min] by linearity of expectation.",
      "concept": "Order Statistics",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "adds no rule beyond masi-2019f-q4:r3: the range max - min is the sum of the later spacings, and E[max] - E[min] is linearity of expectation (Expected Value).",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     }
    ]
   },
@@ -7948,7 +8104,13 @@
      "statement": "Applying inclusion-exclusion to the cut-set failure events: an upper bound on failure probability (the first bound) gives a lower bound on system reliability, and a lower bound on failure probability gives an upper bound on reliability.",
      "concept": "Method of Inclusion and Exclusion",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "algebra: reliability is 1 minus the failure probability, so an upper bound on failure is a lower bound on reliability; the rules used are r2 (failure = union of cut-set events) and r4 (alternating bounds on Inclusion-Exclusion Principle, to be written).",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     }
    ]
   },
@@ -8299,7 +8461,13 @@
      "statement": "To maximize a function of a single variable, set its derivative to zero and verify it is a maximum (e.g., a downward-opening parabola attains its maximum at its vertex).",
      "concept": "Optimization of a Function",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "calculus: maximising a quadratic in one variable at its vertex; the rule used is the gambler's ruin probability on Gambler's Ruin Problem.",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     }
    ]
   },
@@ -8440,7 +8608,13 @@
        "page": "Annuity Contract",
        "quote": "$$\\text{Deferred: } \\text{EPV} = B\\;{}_nE_x\\;\\ddot{a}_{x+n}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "arithmetic: a level benefit of B is B unit annuities, so its APV and any change scale by B (linearity of expectation); the rule used is the annuity-due recursion (r1, r4) on Life Annuity.",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     }
    ]
   },
@@ -10609,7 +10783,13 @@
      "statement": "When the hazard rate is zero below a threshold, no probability mass lies there, so the cumulative hazard starts accumulating at the threshold and S(x)=1 below it.",
      "concept": "Hazard Rate Function",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "adds no rule beyond the cumulative-hazard relation S = exp(-integral of the hazard) on Hazard Rate: the integral of a zero hazard is zero, so S = 1 below the threshold and the integral starts there.",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     }
    ]
   },
@@ -10740,7 +10920,13 @@
      "statement": "To reach a target parallel-system reliability with the fewest components, use the most reliable components first, since each added component multiplies the failure probability by (1 - r) and a smaller factor reduces it more.",
      "concept": "Parallel System Reliability",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "step of this one solution's plan: choosing the most reliable components first to minimise their number; the rule used is the parallel reliability 1 − ∏(1 − r_i) on System Reliability.",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     }
    ]
   },
@@ -10820,7 +11006,15 @@
      "statement": "When each of N games is won independently with probability p, the expected number of wins is p times the expected number of games (linearity of expectation).",
      "concept": "Linearity of Expectation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Aggregate Loss Model",
+      "quote": "E[S] = E[N] \\cdot E[X]",
+      "note": "passage on Aggregate Loss Model (MAS-I syllabus): E[S] = E[N] E[X], here with Bernoulli(p) win indicators as the X_i, so expected wins = p E[games]; the check's miss.",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     }
    ]
   },
@@ -11530,7 +11724,15 @@
        "page": "Mean Excess Loss",
        "quote": "The cost per loss is $E[(X - d)_+] = e_X(d)\\,S_X(d)$, which is the [[Payment Random Variable|per-loss]] counterpart of this per-payment quantity."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Limited Expected Value",
+      "quote": "E[X \\wedge u] = E[X] - E[\\max(X - u, 0)] = E[X] - e(u)\\cdot[1-F(u)]",
+      "note": "passage on Limited Expected Value (linked from Deductible): E[(X - u)_+] = e(u)[1 - F(u)], per loss = per payment x P(X > u); the check's miss.",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r3",
@@ -13129,7 +13331,15 @@
        "page": "Estimator",
        "quote": "\\text{MSE} &= \\left(\\tfrac{5}{4}\\right)^2 (0.02667\\,\\theta^2)"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Variance",
+      "quote": "\\text{Var}(aX + b) = a^2 \\text{Var}(X)",
+      "note": "passage on Variance (linked): Var(aX + b) = a^2 Var(X); the check's miss.",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r5",
@@ -13305,7 +13515,15 @@
      "statement": "For a compound (aggregate) model with claim amounts independent of N and identically distributed with mean E[X], the conditional mean of aggregate losses given N is E[S | N] = N·E[X].",
      "concept": "Aggregate Loss Compound Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Claim",
+      "quote": "conditioning on the count gives $E[S \\mid N] = N\\,E[X]$",
+      "note": "passage on Claim (MAS-I syllabus): given N = n, S is a sum of n iid claims, so E[S | N] = N E[X]; the check's miss.",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r3",
@@ -13364,7 +13582,13 @@
      "statement": "In a compound model where severities are independent of the claim count and have mean E[X], Cov(N, S) = E[X]·Var(N).",
      "concept": "Aggregate Loss Compound Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "adds no rule beyond r2: Cov(N, S) = E[N·E[S|N]] − E[N]E[S] = E[X]Var(N) follows from r2 and Cov = E[XY] − E[X]E[Y] on Covariance; it is the question's answer, derived.",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     }
    ]
   },
@@ -13461,7 +13685,15 @@
      "statement": "The number of successes and the number of failures among n fixed Bernoulli trials sum to n, so they are perfectly negatively correlated (negative covariance) when the success probability is strictly between 0 and 1.",
      "concept": "Binomial Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Covariance and Correlation Coefficient",
+      "quote": "Covariance is bilinear: $\\text{Cov}(aX + bY,\\, Z) = a\\,\\text{Cov}(X, Z) + b\\,\\text{Cov}(Y, Z)$, adding a constant to either variable leaves it unchanged, and $\\text{Cov}(X, X) = \\text{Var}(X)$",
+      "note": "passage on Covariance and Correlation Coefficient (linked): bilinearity, constants drop out and Cov(X, X) = Var(X) give Cov(X, n - X) = -Var(X); Y = n - X is the stem's own setup; the check's miss.",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     }
    ]
   },
@@ -14309,7 +14541,13 @@
      "statement": "The whole sample is always a sufficient statistic, and conditioning an estimator on it returns the estimator unchanged.",
      "concept": "Sufficient Statistic",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "a step of this solution's argument: the whole sample is trivially sufficient by the definition (its conditional distribution given itself is free of theta); the rule used is that a complete sufficient statistic is needed for the UMVUE (Lehmann-Scheffe) on Sufficient Statistic.",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     }
    ]
   },
@@ -16615,7 +16853,13 @@
        "page": "Loss Trend",
        "quote": "**Loss Trend** is the annual rate of change in loss cost over time — driven by inflation, the legal environment, technology, safety and mix — applied to bring historical losses from the cost level of the experience period to the cost level of the **future policy period**."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "translating the stem: it says the rating plan will not vary by accident year, which rules D out; the rule used is r3 (fit accident year as a control and drop it from the rates).",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     }
    ]
   },
@@ -17742,7 +17986,15 @@
        "page": "Variable Transformation",
        "quote": "A linear term forces the effect to move in one direction, so it cannot capture a **U-shape**; it will understate the risk at both ends."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Marginal Model Plot",
+      "quote": "The divergence between the two smooths at the extremes of vehicle age indicates the linear term is **misspecified** — severity is not linear in vehicle age",
+      "note": "passage on Marginal Model Plot (tagged): a single linear term that cannot follow a bending data smooth is misspecified, fixed by a quadratic or banded term; the check's miss.",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r4",
@@ -18702,7 +18954,13 @@
      "statement": "When most observations are zero, the quartiles and median are all zero, so the box plot collapses to a line with IQR 0 and every nonzero value is flagged as an outlier, making it uninformative for such data.",
      "concept": "Box Plot",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "applying the definitions to the stem's data: with 88% zeros Q1, the median and Q3 are all 0, so IQR = 0 and the fences flag every nonzero value; the rules used, IQR = Q3 − Q1 and the 1.5 IQR fences, are on Box Plot.",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r6",
@@ -18723,7 +18981,13 @@
      "statement": "A scatter plot of a variable against an arbitrary index such as a policy number shows nothing about the variable's distribution, because the index is only a label.",
      "concept": "Scatter Plot",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "reading the stem: policy number is an arbitrary label, so plotting against it relates the count to nothing; the rule used, that a scatter plot shows the relationship between two variables, is on Scatter Plot (in reach).",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     }
    ]
   },
@@ -20339,7 +20603,15 @@
        "page": "Model Training and Evaluation",
        "quote": "Training error keeps falling as a model gets more flexible, while error on new data falls and then rises, a U-shape."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "R-Squared",
+      "quote": "always increases** (or stays the same) when predictors are added, even if they are irrelevant",
+      "note": "passage on R-Squared (linked): R^2 never falls as predictors are added, i.e. training RSS never rises when the degree-4 model is nested in degree 12; the check's miss.",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r3",
@@ -20658,7 +20930,15 @@
      "statement": "The number of pairwise comparisons among k groups is k(k-1)/2, and this is the value of g used in the Bonferroni adjustment when all pairwise differences are compared.",
      "concept": "Bonferroni Multiple Comparisons",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Combination",
+      "quote": "counts the number of ways to select $k$ objects from $n$ distinct objects when order does not matter",
+      "note": "passage on Combination (Exam P prerequisite): the number of pairs among k groups is k choose 2; g in the Bonferroni adjustment is that count by r2; the check's miss.",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r4",

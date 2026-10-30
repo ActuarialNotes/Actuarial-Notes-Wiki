@@ -83,6 +83,20 @@ No unresolved critical findings.
 
 | Page | Checked | Sources |
 |---|---|---:|
+| `questions/exam-fm/fm-004.md` | 2026-10-30 | 2 |
+| `questions/exam-fm/fm-031.md` | 2026-10-30 | 2 |
+| `questions/exam-fm/fm-079.md` | 2026-10-30 | 2 |
+| `questions/exam-fm/fm-102.md` | 2026-10-30 | 3 |
+| `questions/exam-fm/fm-122.md` | 2026-10-30 | 2 |
+| `questions/exam-fm/fm-126.md` | 2026-10-30 | 2 |
+| `questions/exam-fm/fm-165.md` | 2026-10-30 | 3 |
+| `questions/exam-fm/fm-168.md` | 2026-10-30 | 2 |
+| `questions/exam-fm/fm-191.md` | 2026-10-30 | 2 |
+| `questions/exam-fm/fm-201.md` | 2026-10-30 | 2 |
+| `questions/exam-fm/fm-236.md` | 2026-10-30 | 2 |
+| `questions/exam-fm/fm-298.md` | 2026-10-30 | 2 |
+| `questions/exam-fm/fm-447.md` | 2026-10-30 | 2 |
+| `questions/exam-fm/fm-459.md` | 2026-10-30 | 2 |
 | `questions/exam-p/p-050.md` | 2026-10-30 | 2 |
 | `questions/exam-p/p-054.md` | 2026-10-30 | 2 |
 | `questions/exam-p/p-057.md` | 2026-10-30 | 2 |
@@ -94,20 +108,6 @@ No unresolved critical findings.
 | `questions/exam-p/p-388.md` | 2026-10-30 | 2 |
 | `questions/exam-p/p-564.md` | 2026-10-30 | 2 |
 | `questions/exam-p/p-633.md` | 2026-10-30 | 2 |
-| `questions/exam-p/p-655.md` | 2026-10-30 | 2 |
-| `questions/exam-p/p-917.md` | 2026-10-30 | 2 |
-| `questions/exam-p/p-947.md` | 2026-10-30 | 2 |
-| `questions/exam-p/p-962.md` | 2026-10-30 | 3 |
-| `Concepts/Bayes Theorem.md` | 2026-10-30 | 4 |
-| `Concepts/Benefit Limit.md` | 2026-10-30 | 6 |
-| `Concepts/Binomial Distribution.md` | 2026-10-30 | 8 |
-| `Concepts/Calculus.md` | 2026-10-30 | 9 |
-| `Concepts/Claim.md` | 2026-10-30 | 14 |
-| `Concepts/Combination.md` | 2026-10-30 | 5 |
-| `Concepts/Combinatorics.md` | 2026-10-30 | 5 |
-| `Concepts/Conditional Probability Function.md` | 2026-10-30 | 4 |
-| `Concepts/Conditional Probability.md` | 2026-10-30 | 6 |
-| `Concepts/Continuous Univariate Distributions.md` | 2026-10-30 | 7 |
 
 ---
 

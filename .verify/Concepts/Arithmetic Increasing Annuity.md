@@ -46,3 +46,14 @@ created: 2026-09-28
 - confidence: medium
 - checks_run: Re-checked on the new bytes: (Ia)_n=(ä_n-nv^n)/i vs SOA solution Q4 p.4 (page image) and Finan (26.5) p.235; (Is)_n=(1+i)^n(Ia)_n vs Finan p.235; P,Q form PV=P a_n+(Q/i)(a_n-nv^n) vs Finan (26.3) p.234 (P=Q=100 gives 1,214.69 = 100(Ia)_5). Example recomputed in python: v^5=0.747258, ä_5=4.465106, (Ia)_5=12.146912, PV=1,214.69, brute-force sum 1,214.691. KaTeX typesets every math node; links and figure resolve.
 - sources_checked: SOA Exam FM Sample Solutions (rev. Aug 2026), Q 4, solutions PDF p.4, sha256:ae4ec6082b43944a0c44cefaf02cdc24cf2e011dcd57366ea5f9cb32d3323f69 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf; Finan, A Basic Course in the Theory of Interest and Derivatives Markets, p.234-235, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf
+
+## [C-003] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-30T19:35Z/57a4
+- date: 2026-10-30
+- status_set: verified
+- confidence: medium
+- checks_run: Diff vs HEAD additions only (section "Increasing annuity as a stack of level annuities"); prior bytes unchanged. (Ia)_n=Σ_{k=1}^n v^{k-1}a_{n-k+1} vs Finan Ex 26.2 Σ_{t=0}^{n-1} v^t a_{n-t} (reindexed); (Is)_n=Σ s_{n-k+1} = (1+i)^n times that (algebra); (Is)_n=(s̈_n-n)/i vs Finan p.235. No question numbers; LaTeX well-formed.
+- sources_checked: SOA Exam FM Sample Solutions (rev. Aug 2026), Q 4, solutions PDF p.4, sha256:ae4ec6082b43944a0c44cefaf02cdc24cf2e011dcd57366ea5f9cb32d3323f69 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf; Finan, A Basic Course in the Theory of Interest and Derivatives Markets, p.234-235, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf; Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §26 Example 26.2 and (Is)_n, PDF p.235-236, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf
+- note: G8 re-check after writer addition: Arithmetic Increasing Annuity (Exam FM answerability gaps)

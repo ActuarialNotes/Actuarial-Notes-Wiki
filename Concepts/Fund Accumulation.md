@@ -2,15 +2,17 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-09-29
+  last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:fec3c9ad2fd79bd51c3b937bd1224c7b8f7837f8f4fbf20b220cd23db3b98c78
+  content_hash: sha256:c2ff244e4d0eeed9666aae68da1002adf55158057c71ca312f6d97f1e09a9ffa
   sources:
     - "SOA, Notation and terminology used for Exam FM, p.1, sha256:f6cfa778c3c08d8118ff41f1cda86eda553cf5542b73ade914082fa55a292a0c — https://www.soa.org/globalassets/assets/Files/Edu/2019/exam-fm-notation-terminology2.pdf"
     - "SOA, Notation and terminology used for Exam FM, p.2, sha256:f6cfa778c3c08d8118ff41f1cda86eda553cf5542b73ade914082fa55a292a0c — https://www.soa.org/globalassets/assets/Files/Edu/2019/exam-fm-notation-terminology2.pdf"
     - "Finan, A Basic Course in the Theory of Interest and Derivatives Markets, p.41, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf"
     - "SOA Exam FM Sample Questions (rev. Aug 2026), Q 403, questions PDF pp.170-171, sha256:d20b5cf2b78cb4cddb3dc556e0df62c40b7d510b7941b546809cc58c4b71a069 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-questions.pdf"
     - "SOA Exam FM Sample Solutions (rev. Aug 2026), Q 403, solutions PDF p.106, sha256:ae4ec6082b43944a0c44cefaf02cdc24cf2e011dcd57366ea5f9cb32d3323f69 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf"
+    - "Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §32 interest reinvested at a different rate, PDF p.292-293, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf"
+    - "Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §26 (Is)_n, PDF p.235, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Fund Accumulation.md
@@ -24,6 +26,15 @@ verification:
 - When the deposits are a level $C$ at the end of each period — times $t = 1, \ldots, n$ — $\sum_t C_t(1+i)^{n-t}$ reduces to $C\cdot s_{\overline{n}|i}$, the [[Annuity Immediate|annuity-immediate]] accumulated value. Level deposits at the start of each period ($t = 0, \ldots, n-1$) give $C\cdot \ddot{s}_{\overline{n}|i}$ instead (an [[Annuity Due]]).
 - A common Exam FM scenario: amounts withdrawn from one fund are immediately deposited into and accumulate within a **second** fund earning a different rate — the accumulated value in the second fund uses its own rate, even though the deposits originated from the first fund's activity.
 - Directly related to [[Accumulated Value]] and [[Future Value]].
+
+### Interest paid out on level deposits and reinvested
+
+- With level deposits $D$ and the fund's interest at rate $i$ paid out each period and reinvested at rate $j$, the balance after $k$ deposits is $kD$, so the interest paid out is the arithmetic increasing stream $iD, 2iD, 3iD, \ldots$
+- Deposits at the end of each period: the interest stream starts one period after the first deposit, so $n$ deposits produce $n-1$ interest payments and $AV_n = nD + iD\,(Is)_{\overline{n-1}|j}$.
+- Deposits at the start of each period: the interest stream starts at the end of the first period, so $n$ deposits produce $n$ interest payments and $AV_n = nD + iD\,(Is)_{\overline{n}|j}$.
+- The accumulated value is the deposits themselves plus $iD$ times the increasing annuity $(Is)$ at the reinvestment rate $j$, where $(Is)_{\overline{m}|j} = (\ddot{s}_{\overline{m}|j} - m)/j$.
+
+> $$AV_n = nD + iD\,(Is)_{\overline{n-1}|j}$$
 
 ![[Media/Figures/Fund_Accumulation.svg|340]]
 

@@ -46,3 +46,14 @@ created: 2026-09-28
 - confidence: medium
 - checks_run: Re-checked on the new bytes: definition and ä/s̈ symbols vs notation note p.1; ä_n=(1+i)a_n=(1-v^n)/d and s̈_n=(1+i)s_n=((1+i)^n-1)/d vs Finan p.158-160; d=i/(1+i) vs notation note p.1. Example recomputed in python: v^4=0.822702, a_4=3.545951, ä_4=3.723248, PV=2,978.60 (brute-force sum 2,978.598). 11 math nodes typeset in KaTeX; links and figure resolve.
 - sources_checked: SOA, Notation and terminology used for Exam FM, p.1, sha256:f6cfa778c3c08d8118ff41f1cda86eda553cf5542b73ade914082fa55a292a0c — https://www.soa.org/globalassets/assets/Files/Edu/2019/exam-fm-notation-terminology2.pdf; Finan, A Basic Course in the Theory of Interest and Derivatives Markets, p.157-160, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf
+
+## [C-003] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-30T19:35Z/57a4
+- date: 2026-10-30
+- status_set: verified
+- confidence: medium
+- checks_run: Diff vs HEAD additions only (section "Annuity-due as a payment now plus an annuity-immediate"); prior bytes unchanged. ä_n=1+a_{n-1} vs Finan Thm 16.3(a) p.161; s̈_n=s_{n+1}-1 vs Thm 16.3(b) s_n=s̈_{n-1}+1 (index shifted). No question numbers; LaTeX well-formed.
+- sources_checked: SOA, Notation and terminology used for Exam FM, p.1, sha256:f6cfa778c3c08d8118ff41f1cda86eda553cf5542b73ade914082fa55a292a0c — https://www.soa.org/globalassets/assets/Files/Edu/2019/exam-fm-notation-terminology2.pdf; Finan, A Basic Course in the Theory of Interest and Derivatives Markets, p.157-160, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf; Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §16 Theorem 16.3, PDF p.161, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf
+- note: G8 re-check after writer addition: Annuity Due (Exam FM answerability gaps)

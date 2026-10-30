@@ -406,6 +406,17 @@ These are in order within each lane.
 
 _Contributors add items here in a PR. The maintainer ranks them at the next review._
 
+- **P1: make Pro compelling (the offer, not a feature list).** The Upgrade page sells four tools
+  and no outcome. The proposal, `docs/pro-proposal.md`, ranks twelve candidates by expected
+  effect on paid conversion, around one promise ("Know you're ready before you sit"): a readiness
+  forecast with a date, a 14-day reverse trial, a Sitting Pass with an employer-reimbursable
+  invoice, a pass promise (only once an exam is `ready`), a **Study Group** per exam (chat with
+  others sitting the same exam, anonymous by default, moderated), the Tutor for Pro (kept), examiner
+  marking for CAS written answers, and a comeback plan after a fail. It also proposes making a
+  learner's own mastery levels free. Eight decisions (D-P1–D-P8) are the maintainer's; each has a
+  default until decided. Ranking under §0.3: items 1–4 are packaging over existing code; the Study
+  Group is a new surface, so Later until its privacy and moderation design exists. *(Proposed 2026-10-30.)*
+
 - ~~**C20: answerability as a content check, then a gate.**~~ Ranked 2026-10-25 and built as G8:
   see C20 in §4.3 and D29. The proposal as written: `simulations/check-answerable`
   (`docs/simulated-learner.md`, *Answerability*) asks of every served question whether its
@@ -871,6 +882,8 @@ ls Concepts/*.md | wc -l; ls Resources/Books/*.md | wc -l
 ```
 
 ## Appendix B: Revision history
+
+- **2026-10-30, Pro proposal (P1).** `docs/pro-proposal.md` added and listed in §3.4 *Proposed*. Nothing ranked, no price or access changed; decisions D-P1–D-P8 open.
 
 - **2026-10-25, answerability becomes G8.** The maintainer overturned D29's default (report, don't
   gate): answerability is now the eighth publication gate. G8 doesn't gate on the check's noisy

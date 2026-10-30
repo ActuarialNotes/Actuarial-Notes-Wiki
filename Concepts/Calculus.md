@@ -2,9 +2,9 @@
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-09-28
+  last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:0c084389db17d3b662e2431ef276eb48f0fc1efd179fb3d1caa9a95a98bcf970
+  content_hash: sha256:49b69289b86953fd5d5925415e4ba535d4ea73e39442bf69098f0e0bb139bda0
   sources:
     - "OpenStax, Calculus Volume 1 (Strang, Herman et al., 2016), Thm 2.5 p.161 (PDF p.169); continuity def. p.180 (PDF p.188); derivative def. eqs. 3.5-3.6 p.220 (PDF p.228); Thm 3.3 p.249, Thm 3.5 p.253, Thm 3.6 p.255 (PDF pp.257-263); chain rule eq. 3.17 p.288 (PDF p.296); Thms 3.15-3.16 pp.324-327 (PDF pp.332-335); Thms 4.12-4.13 pp.455, 457 (PDF pp.463, 465); antiderivative ln|x| + C p.486 (PDF p.494); Thm 4.15 p.488 (PDF p.496); Thm 5.5 p.555 (PDF p.563); Thm 5.7 p.584 (PDF p.592), sha256:202c86537285adf7e5abeb64057c39ee7333ad8c8473b6dd6a9ddf3e72443286 — https://assets.openstax.org/oscms-prodcms/media/documents/CalculusVolume1-OP.pdf"
     - "OpenStax, Calculus Volume 2 (Strang, Herman et al., web PDF), Thm 3.1 p.232 (PDF p.240, page image); §3.4 partial fractions, strategy step 2 p.267 (PDF p.275); §3.7 Def. eq. 3.16 p.288 (PDF p.296, page image); §5.2 geometric series Def. eq. 5.7 p.401 (PDF p.409, page image); §6.3 Taylor/Maclaurin Def. eq. 6.5 p.498 (PDF p.506), sha256:f6ac06038088711766e5b664a8114c8fcb0b7b88cfb38e92bbaf56ba2df43f4a — https://assets.openstax.org/oscms-prodcms/media/documents/calculus-volume-2_-_WEB.pdf"
@@ -12,6 +12,9 @@ verification:
     - "NIST Digital Library of Mathematical Functions, §4.6 Power Series, eqs. 4.6.1 and 4.6.7 (HTML fetched 2026-09-27), sha256:dda80a4ebca6bab85fc738f032fe4fe06100a976a0728f2a8651715903addec6 — https://dlmf.nist.gov/4.6"
     - "NIST Digital Library of Mathematical Functions, §4.2 eq. 4.2.19 exp series (HTML fetched 2026-09-27), sha256:7b3a39ea2b1dc72440b0469070ef5d9e857ad09673e010036c06580d450bd50c — https://dlmf.nist.gov/4.2"
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §4.2 Def. 4.6 joint cumulative distribution (p.165, PDF p.173), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "OpenStax, Calculus Volume 1 (Strang, Herman et al., 2016), §4.3 Problem-Solving Strategy: Locating Absolute Extrema over a Closed Interval p.372 (PDF p.380); Thm 4.11 Second Derivative Test p.400 (PDF p.408); §4.7 Problem-Solving Strategy: Solving Optimization Problems, steps 4-5 (use the constraint to write the quantity as a function of one variable; identify the domain of consideration) p.441 (PDF p.449); §5.2 eq. 5.14 p.538 (PDF p.546), sha256:202c86537285adf7e5abeb64057c39ee7333ad8c8473b6dd6a9ddf3e72443286 — https://assets.openstax.org/oscms-prodcms/media/documents/CalculusVolume1-OP.pdf"
+    - "OpenStax, Calculus Volume 2 (Strang, Herman et al., web PDF), §5.2 Geometric Series, S_k=a(1-r^k)/(1-r) for r != 1 and S_k -> a/(1-r) for |r|<1, p.401 (PDF p.409, page image read), sha256:f6ac06038088711766e5b664a8114c8fcb0b7b88cfb38e92bbaf56ba2df43f4a — https://assets.openstax.org/oscms-prodcms/media/documents/calculus-volume-2_-_WEB.pdf"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Theorem 1.1 (P(E)>=0, P(Omega)=1, monotonicity), p.22 (PDF p.30), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Calculus.md

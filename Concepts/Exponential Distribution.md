@@ -2,13 +2,18 @@
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-09-28
+  last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:d2bfc9ea20a54d5e1a284bbb7dbaf18b7659436b318b528a36915c724757f087
+  content_hash: sha256:929390c8e2816f5c8d076613575d548c4599da0b8e4e3930bacab5c3fad04669
   sources:
     - "SOA, Tables for Exam C (Fall 2009), sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf; A.3.3.1 Exponential, printed p.6 (PDF p.11)"
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), 2.2 Example 2.17 p.68 (PDF p.76) and 5.2 p.206 (PDF p.214), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "SOA, Exam P Sample Solutions (Aug 2026 revision), Q44 (PDF p.16) and Q101 (PDF pp.30-31), sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"
+    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, 14.2 The Exponential Distribution: memoryless property equivalent to the law of exponents F^c(t+s)=F^c(s)F^c(t), F^c(q)=a^q with a=F^c(1) and r=-ln(a); quantile function F^{-1}(p)=-ln(1-p)/r and median ln(2)/r; The Scaling Property (scale family, cX exponential with rate r/c) (HTML fetched 2026-10-30), sha256:db0eebaa01377dfc5e07ca838f9ae6c3b06b9653e6d10032de301cb07c4aad63 — https://www.randomservices.org/random/poisson/Exponential.html"
+    - "Siegrist, 3.5 Conditional Distributions: law of total probability (P a mixture of the conditional measures with mixing density g) and Simple Mixed Distributions, light-bulb exercise mixing exponentials with rates 1-5, P(T>1)=0.1156 (HTML fetched 2026-10-30), sha256:ad76250f09b0c4438869894ebb75a07a5cf0465944d7b5ff2b3c270fcc3b369e — https://www.randomservices.org/random/dist/Conditional.html"
+    - "Wikipedia, Hyperexponential distribution: X is exponential with rate lambda_i with probability p_i; the standard deviation exceeds the mean except in the degenerate case of all lambdas equal, so the coefficient of variation is greater than 1, the exponential's (HTML fetched 2026-10-30), sha256:a1aed37cdf13e0bd2aa78b43f3290aec80d42011784a4c737eaf85fcdcc0e214 — https://en.wikipedia.org/wiki/Hyperexponential_distribution"
+    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, 4.2.2 Exponential Distribution: F_X(x)=1-e^{-lambda x} (HTML fetched 2026-10-30), sha256:a9018783f1ab95a89f7422c96671d35be3c541e7f3dc1692368351d8617149fe — https://www.probabilitycourse.com/chapter4/4_2_2_exponential.php"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), 5.2 Exponential density, simulation Y=-(1/lambda)log(rnd): P(Y<=y)=P(rnd>=e^{-lambda y})=1-e^{-lambda y}, p.208 (PDF p.216), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Exponential Distribution.md

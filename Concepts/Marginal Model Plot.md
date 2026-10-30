@@ -1,14 +1,13 @@
 ---
 verification:
   status: verified
-  confidence: medium
-  last_checked: 2026-10-05
+  confidence: high
+  last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:c0f0bffa0811d8afac9d426d7400b5d0d412cfdcd77b7b8ca71a1ac118090c53
+  content_hash: sha256:0e7fc3d27b873354e0d300ca4e9065888451fd1c3a6db1bf4e4faaeba13c51e9
   sources:
-    - "Fox & Weisberg, R package 'car' 3.1-5 reference manual (2026), mmps 'Marginal Model Plotting' pp.89-91: response on the vertical axis vs a linear combination u of the regressors, with a smooth of the data and a smooth of the fitted values on u; drawn versus each term and versus the fitted values (linear predictor for a GLM); GLM smoother a GAM with the model's family, link and weights, sha256:5471a6e3292bcc8fcd9a83bf8f912989ce46de55e4a323595bcbb91a9d591cd3 — https://cran.r-project.org/web/packages/car/car.pdf"
-    - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, 2nd ed. (CAS Monograph 5; rank 3 for MAS-I), §5.4.1-5.4.3 pp.48-51 (non-linearity remedied by binning or polynomial terms), sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
-    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), Domain C tasks 4 and 8 (p.5), 'Parameter and Diagnostic Tables' (PDF p.7: tables/plots 'of the type shown in the texts'; a language 'such as R'; 'candidates will not be asked to write or interpret R code'), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
+    - "Fox & Weisberg, R package 'car' 3.1-5 reference manual (2026), mmps 'Marginal Model Plotting' pp.89-91: response on the vertical axis vs a linear combination u of the regressors, with a smooth of the data and a smooth of the fitted values on u; drawn versus each term and versus the fitted values (linear predictor for a GLM); GLM smoother a GAM with the model's family, link and weights, sha256:5471a6e3292bcc8fcd9a83bf8f912989ce46de55e4a323595bcbb91a9d591cd3 — https://cran.r-project.org/web/packages/car/car.pdf; Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, 2nd ed. (CAS Monograph 5; rank 3 for MAS-I), §5.4.1-5.4.3 pp.48-51 (non-linearity remedied by binning or polynomial terms), sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf; CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), Domain C tasks 4 and 8 (p.5), 'Parameter and Diagnostic Tables' (PDF p.7: tables/plots 'of the type shown in the texts'; a language 'such as R'; 'candidates will not be asked to write or interpret R code'), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
+    - "Lindsey & Sheather, 'Model fit assessment via marginal model plots', Stata Journal 10(2) 2010, pp.215-217 (k+1 plots, one per predictor and one for the linear form; good fit if lines match in each plot, not if significant disparity in any; model line E_M(y|a'x) = E{E_M(y|x)|a'x}), sha256:72fdd15b952940164d31d7bd8fee1562d37f145642ab5d67611d493d4b3d5189 — https://ageconsearch.umn.edu/record/152305/files/sjart_st0189.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Marginal Model Plot.md
@@ -21,6 +20,7 @@ A **Marginal Model Plot** is a regression diagnostic that overlays a smooth curv
 - Unlike a [[Residual Plot]], which plots residuals, a marginal model plot directly compares two **fitted curves** — one nonparametric smooth of the data and one implied by the model — on the original response scale
 - Close agreement between the two smooths across the range of $x$ indicates the model adequately captures the relationship; systematic gaps indicate missing [[Model Structure]] (e.g., a missing [[Interaction]] or a needed transformation)
 - Marginal model plots can be drawn against any predictor, or against the fitted values to check overall calibration
+- **One plot is not enough.** The model is judged a good fit only when the two smooths agree in every plot, against each predictor and against the fitted values (the linear predictor); a clear disparity in any one plot means it is not. The model line in the plot against the linear predictor is the model's mean response given that one combination of the predictors, averaged over everything else, so that plot checks the fit along one direction only, and agreement in it does not show that every term is right
 - The same plot serves a GLM: the response stays on the vertical axis, the smoother is a generalized additive model with the model's own family, link and weights (the default in R's `car::mmps`), and the overall plot is drawn against the linear predictor
 
 ![[Media/Figures/Marginal_Model_Plot.svg|340]]

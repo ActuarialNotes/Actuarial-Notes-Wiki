@@ -1756,7 +1756,15 @@
      "statement": "Two GLMs are nested when the simpler model's explanatory variables are a subset of the more complex model's variables; models that each contain variables the other lacks are non-nested.",
      "concept": "Nested Models",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Model Selection",
+      "quote": "Two models are nested when the smaller one uses a subset of the larger one's predictors",
+      "note": "written from Goldburd, Khare, Tevet & Guller, CAS Monograph 5, 2nd ed., §6.2.1 printed p.64 ('Where a model uses a subset of the predictors of a larger model, the smaller model is said to be a nested model') and §6.2.2 printed p.66 ('non-nested models—that is, models having different variables, where one does not contain a subset of the variables of the other'); same data: §6.1.3 — https://www.casact.org/sites; checked by 2026-10-30T22:10Z/g8C-chk",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r2",
@@ -4754,7 +4762,15 @@
      "statement": "The overall F-statistic for testing that all slope coefficients are zero can be written in terms of R^2 as F = (R^2/p) / ((1 - R^2)/(n - p - 1)), where p is the number of predictors and n the number of observations.",
      "concept": "F-Test in Multiple Linear Regression",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "R-Squared",
+      "quote": "gives $F = \\dfrac{R^2/p}{(1 - R^2)/(n - p - 1)}$ on $p$ and $n - p - 1$ degrees of freedom",
+      "note": "written from James, Witten, Hastie & Tibshirani, ISLR 2nd ed. (2021), eq. (3.23) printed p.76 (F = ((TSS-RSS)/p)/(RSS/(n-p-1))) and eq. (3.17) printed p.70 (R^2 = 1 - RSS/TSS; TSS the total variance before the regression) — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf; the R^2 form is the algebra of dividing (3.23) by TSS; checked by 2026-10-30T22:10Z/g8C-chk",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r2",
@@ -7079,7 +7095,15 @@
        "page": "Over-Dispersed Poisson Model",
        "quote": "Its maximum likelihood equations equate each row sum and each column sum of fitted values with the actual ones"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Link Function",
+      "quote": "When the model has an intercept, the column of ones gives $\\sum_i \\hat{\\mu}_i = \\sum_i y_i$: the fitted values sum to the observed values, so the model is unbiased in aggregate",
+      "note": "written from Rodriguez, GLM notes Ch.4 Poisson Models for Count Data, §4.2.1, PDF pp.6-7 (estimating equations X'y = X'mu-hat in any GLM with canonical link, not for probit; a constant matches the sum of observed and fitted; a discrete factor matches observed and fitted marginals; A+B reproduces both margins) — https://grodri.github.io/glms/notes/c4.pdf; Larsen, GLM CAS Study Note, p.2 (canonical link -> unbia; checked by 2026-10-30T22:10Z/g8C-chk",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r2",
@@ -10489,7 +10513,15 @@
      "statement": "In simple linear regression, the 95% confidence interval for the mean response E(Y) at x0 is ŷ0 ± t(0.025, n-2)·s·sqrt(1/n + (x0 - x̄)²/Sxx).",
      "concept": "Confidence Interval for Mean Response in Linear Regression",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Prediction Interval",
+      "quote": "The confidence interval for the mean response $E(Y)$ at $x_0$ is $\\hat{y}_0 \\pm t_{\\alpha/2,\\,n-2}\\, s \\sqrt{1/n + (x_0 - \\bar{x})^2/S_{xx}}$",
+      "note": "written from Peng, HKBU Math3805 Lecture Note 3 (simple linear regression), slides 12-14 (CI for mean response Y0-hat +/- t_{n-2;1-alpha/2} sigma-hat sqrt(1/n + (x0-xbar)^2/Cxx); PI adds 1; prediction SE always larger; both smallest at x0 = xbar) — https://www.math.hkbu.edu.hk/~hpeng/Math3805/Lecture_Note3.pdf; Shalizi, CMU 36-401 Lecture 9 (2015) pp.2-3 (Var of m-hat(x) grows away from the centre of the data;; checked by 2026-10-30T22:10Z/g8C-chk",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r2",
@@ -10510,7 +10542,15 @@
      "statement": "Confidence and prediction intervals in simple linear regression are both centered on the fitted line and are narrowest at x0 = x̄, widening symmetrically toward the ends of the data range.",
      "concept": "Confidence Interval for Mean Response in Linear Regression",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Prediction Interval",
+      "quote": "both are narrowest at $x_0 = \\bar{x}$ and widen symmetrically as $x_0$ moves away from it",
+      "note": "written from Peng, HKBU Math3805 Lecture Note 3, slide 14 ('both of them will take their smallest values at x0 = xbar'; prediction SE always larger) — https://www.math.hkbu.edu.hk/~hpeng/Math3805/Lecture_Note3.pdf; symmetry follows from the (x0 - xbar)^2 term; Shalizi Lecture 9 p.2; checked by 2026-10-30T22:10Z/g8C-chk",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r4",
@@ -16906,7 +16946,15 @@
      "statement": "In R, log() is the natural logarithm, so log(x) in a model formula uses ln(x) and the coefficient multiplies ln of the variable in the units the data are measured in.",
      "concept": "R GLM Output Interpretation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Statistical Software",
+      "quote": "So a model term `log(x)` enters $\\ln x$, computed on $x$ in whatever units it is stored in",
+      "note": "written from R documentation, base 'Logarithms and Exponentials' (?log): 'log computes logarithms, by default natural logarithms, log10 computes common (i.e., base 10) logarithms, and log2 ...'; usage log(x, base = exp(1)) — https://stat.ethz.ch/R-manual/R-devel/library/base/html/Log.html; checked by 2026-10-30T22:10Z/g8C-chk",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r5",
@@ -17161,7 +17209,15 @@
      "statement": "In a Poisson GLM with log link and an exposure offset, a single categorical predictor yields fitted frequencies equal to each level's observed frequency (claims divided by exposure), so relativities are ratios of one-way observed frequencies.",
      "concept": "Poisson GLM for Claim Frequency",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Link Function",
+      "quote": "With a single categorical predictor, each level's fitted claims equal its observed claims on the same exposure, so each level's fitted frequency equals its observed frequency (claims divided by exposure)",
+      "note": "written from Rodriguez, GLM notes Ch.4, PDF pp.6-7 (factor marginals reproduced) and §4.3 PDF p.10 (log of exposure as an offset in the linear predictor) — https://grodri.github.io/glms/notes/c4.pdf; Goldburd et al., CAS Monograph 5, §2.6 Offsets (coefficient constrained to 1, ln(exposure) in a claim-count model); checked by 2026-10-30T22:10Z/g8C-chk",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r2",
@@ -17190,7 +17246,15 @@
      "statement": "A main-effects (no interaction) log-link model is multiplicative, and if the observed cell frequencies are exactly multiplicative across the two variables, the model fits every cell exactly and its MLE relativities equal the within-level frequency ratios.",
      "concept": "Poisson GLM for Claim Frequency",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Link Function",
+      "quote": "the main-effects model can reproduce every cell, which is the most any model can attain (deviance zero), so its fit is exact and its relativities equal the ratios of observed frequencies within any one level of the other variable",
+      "note": "written from Rodriguez, GLM notes Ch.4 PDF pp.6-7 (additive A+B model reproduces both marginals) — https://grodri.github.io/glms/notes/c4.pdf; App. B §B.3 PDF pp.6-7 (saturated model mu-tilde = y; deviance compares a model with the saturated one) — https://grodri.github.io/glms/notes/a2.pdf. The 'exact fit when cells are multiplicative' step is the writer's derivation: a main-effects log-link model can then se; checked by 2026-10-30T22:10Z/g8C-chk",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r4",
@@ -18318,7 +18382,15 @@
      "statement": "A marginal model plot against the linear predictor summarizes fit averaged over all predictors, so errors in individual terms can cancel and agreement there does not prove every term is correct; plots against each predictor are also needed.",
      "concept": "Marginal Model Plots",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Marginal Model Plot",
+      "quote": "so that plot checks the fit along one direction only, and agreement in it does not show that every term is right",
+      "note": "written from Lindsey & Sheather, 'Model fit assessment via marginal model plots', Stata Journal 10(2) 2010, pp.215-217 (k+1 plots, one per predictor and one for the linear form; good fit if lines match in each plot, not a good fit if significant disparity in any; E_M(y|a'x) = E{E_M(y|x)|a'x}, the model line averages over the other directions) — https://ageconsearch.umn.edu/record/152305/files/sjart_st0189.pdf;; checked by 2026-10-30T22:10Z/g8C-chk",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     }
    ]
   },
@@ -18738,7 +18810,15 @@
      "statement": "Actual-to-predicted ratios that fall from above 1 in low-prediction groups to below 1 in high-prediction groups mean the model's relativities are too extreme (overfit or misspecified), so it predicts more variation than exists on new data.",
      "concept": "Model Overfitting and Holdout Validation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Overfitting",
+      "quote": "Actual-to-predicted ratios that run from above 1 in the lowest-predicted buckets to below 1 in the highest mean the predictions are too extreme",
+      "note": "written from Van Calster, McLernon, van Smeden, Wynants & Steyerberg, 'Calibration: the Achilles heel of predictive analytics', BMC Medicine 17:230 (2019), sections 'How to assess calibration?' (slope < 1: estimated risks too extreme, too high for high risk and too low for low risk), 'Why may an algorithm give poorly calibrated risk predictions?' (overfitted algorithm gives predicted risks that are too extreme; checked by 2026-10-30T22:10Z/g8C-chk",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r5",
@@ -19623,7 +19703,15 @@
      "statement": "Two parallel bands of points with the same slope but different levels indicate a missing categorical variable, which is added as a categorical predictor that shifts the intercept for one group.",
      "concept": "Categorical Predictors",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Scatter Plot",
+      "quote": "two parallel bands indicate a missing categorical variable, which is added as an indicator that shifts the intercept for one group",
+      "note": "written from ISLR 2nd ed., §3.3.2, eq. (3.34) and Figure 3.7, printed p.90 ('this amounts to fitting two parallel lines to the data ... different intercepts ... but the same slope'); dummy variables §3.3.1 printed pp.83-84 — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf; checked by 2026-10-30T22:10Z/g8C-chk",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r4",
@@ -19631,7 +19719,15 @@
      "statement": "A shapeless cloud with no trend in the centre or spread of the response across the predictor indicates no association between the response and the predictor.",
      "concept": "Exploratory Data Analysis for Regression",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Scatter Plot",
+      "quote": "with no trend in its centre or its spread, means there is no relationship",
+      "note": "written from NIST/SEMATECH e-Handbook of Statistical Methods, §1.3.3.26.1 'Scatter Plot: No Relationship' (Y ranges all over the place for a given X; amorphous, non-structured appearance -> no relationship) — https://www.itl.nist.gov/div898/handbook/eda/section3/scatter1.htm; checked by 2026-10-30T22:10Z/g8C-chk",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r5",
@@ -20363,7 +20459,15 @@
      "statement": "In a hierarchical log-linear model for a three-way table, the absence of a term linking two variables (e.g. no XY term in XZ + YZ) means X and Y are conditionally independent given the third variable Z.",
      "concept": "Conditional Independence in Log-Linear Models",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Log-Linear Model",
+      "quote": "in a model with no AB term but both AC and BC, A and B are conditionally independent given C",
+      "note": "written from Rodriguez, GLM notes Ch.5 Log-Linear Models, §5.2.5 Partial Independence, PDF p.14 (SE + SP: no direct link between E and P; conditional on S they are independent; Pr{E,P|S} = Pr{E|S}Pr{P|S}; two-way table appears associated through common dependency on S) — https://grodri.github.io/glms/notes/c5.pdf; checked by 2026-10-30T22:10Z/g8C-chk",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r6",
@@ -21559,7 +21663,15 @@
      "statement": "An interaction between two categorical predictors with k and m levels adds (k-1)(m-1) parameters.",
      "concept": "Interaction Terms in GLMs",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Interaction",
+      "quote": "a k-level factor crossed with an m-level factor adds (k - 1)(m - 1) interaction parameters",
+      "note": "written from Rodriguez, Lecture Notes on GLMs (Princeton), Ch.2 Linear Models for Continuous Data, two-factor model with interaction, PDF p.40 ('a set of R-1 dummy variables representing the row effects, a set of C-1 ... and a set of (R-1)(C-1) dummy variables representing the interactions'; interaction dummies as products of row and column dummies) and p.41 (a dummy dropped for an empty cell; F-test for the i; checked by 2026-10-30T22:10Z/g8C-chk",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r5",

@@ -2,13 +2,13 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-10-05
+  last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:618a0ccab4b0c191153d6162f2e172bd4383c17b92906f0194af1b90dcf5aea1
+  content_hash: sha256:0dc5507c19db3eb82eff01729a15bf821d7abe117a323b5c5a4de249e65a30dc
   sources:
-    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), §3.3.3 'Collinearity' (correlation matrix detects pairwise collinearity; multicollinearity among three or more variables with no high pairwise correlation; VIF = 1/(1 - R^2_{Xj|X-j})), printed p.102 (PDF p.112), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
-    - "NIST/SEMATECH e-Handbook of Statistical Methods, §1.3.3.26.11 'Scatterplot Matrix' (purpose: check pairwise relationships between variables), fetched 2026-10-05 (per-request Cloudflare token makes the hash fetch-specific), sha256:471a44f7e196205e2a95fb6e3a52bbf4c450be12163411f0a9791101bd9de043 — https://www.itl.nist.gov/div898/handbook/eda/section3/scatterb.htm"
-    - "NIST/SEMATECH e-Handbook of Statistical Methods, §1.3.3.26 'Scatter Plot', fetched 2026-10-05, sha256:0828907b442403df9720ca82f9ed00c3b60431f45af818a4ee9d70970eee5de3 — https://www.itl.nist.gov/div898/handbook/eda/section3/scatterp.htm"
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), §3.3.3 'Collinearity' (correlation matrix detects pairwise collinearity; multicollinearity among three or more variables with no high pairwise correlation; VIF = 1/(1 - R^2_{Xj|X-j})), printed p.102 (PDF p.112), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf; NIST/SEMATECH e-Handbook of Statistical Methods, §1.3.3.26.11 'Scatterplot Matrix' (purpose: check pairwise relationships between variables), fetched 2026-10-05 (per-request Cloudflare token makes the hash fetch-specific), sha256:471a44f7e196205e2a95fb6e3a52bbf4c450be12163411f0a9791101bd9de043 — https://www.itl.nist.gov/div898/handbook/eda/section3/scatterb.htm; NIST/SEMATECH e-Handbook of Statistical Methods, §1.3.3.26 'Scatter Plot', fetched 2026-10-05, sha256:0828907b442403df9720ca82f9ed00c3b60431f45af818a4ee9d70970eee5de3 — https://www.itl.nist.gov/div898/handbook/eda/section3/scatterp.htm"
+    - "ISLR 2nd ed., §3.3.1 dummy variables printed pp.83-84 and §3.3.2 eq.(3.34) and Figure 3.7 printed p.90 (a two-level qualitative predictor amounts to two parallel lines with different intercepts and the same slope), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "NIST/SEMATECH e-Handbook of Statistical Methods, §1.3.3.26.1 'Scatter Plot: No Relationship' (Y ranges all over the place for a given X, at every X; conclusion: no relationship), fetched 2026-10-30 — https://www.itl.nist.gov/div898/handbook/eda/section3/scatter1.htm"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Scatter Plot.md
@@ -21,6 +21,8 @@ A **Scatter Plot** is an [[Exploratory Data Analysis]] display of two variables 
 - What to read off it: **direction** (up or down), **form** (straight or curved), **strength** (tight or diffuse), and **outliers** that sit away from the cloud
 - Strength in the *linear* direction is summarized by the [[Correlation]] coefficient $r$ — but $r$ near $0$ only rules out a linear trend, not a U-shape
 - Systematic curvature says the predictor needs a transformation ($\ln x$, $x^2$, or banding) in the [[Model Structure]]; a fan that widens to the right says the variance grows with the mean, which is an argument for a [[Generalized Linear Model]] rather than [[Linear Regression]]
+- **Two parallel bands** of points, with the same slope but at different levels, are what a regression with a two-level categorical predictor draws: one line per group, with different intercepts and a common slope. Seen before modelling, two parallel bands indicate a missing categorical variable, which is added as an indicator that shifts the intercept for one group
+- **A shapeless cloud**, where the response ranges just as widely at every value of the predictor, with no trend in its centre or its spread, means there is no relationship: the predictor tells nothing about the response
 - A point far out in $x$ has **high leverage** — on its own it can bend the fitted line, so it deserves a look before it is left in
 - With many overlapping points, plot on a log scale, add transparency, or bin the $x$-axis and plot group means; a solid black blob shows nothing
 - A **scatter plot matrix** (all pairs of predictors) screens for *pairwise* collinearity, as the correlation matrix does — but it can miss [[Multicollinearity]], collinearity among three or more predictors when no pair is highly correlated; ISLR assesses that with the **variance inflation factor**, $\text{VIF}(\hat\beta_j) = 1/(1 - R^2_{X_j \mid X_{-j}})$, from regressing each predictor on all the others

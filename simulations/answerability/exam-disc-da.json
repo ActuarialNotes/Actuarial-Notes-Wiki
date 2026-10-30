@@ -244,7 +244,15 @@
        "page": "Frequency",
        "quote": "$$\\text{Frequency} = \\frac{\\text{Number of Claims}}{\\text{Earned Exposures}}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Earned Exposure",
+      "quote": "Earned exposures are also the weights in classification analysis and the denominator of [[Frequency|claim frequency]]",
+      "note": "Earned Exposure (linked from tagged Data Documentation) gives claim frequency as claims over earned exposure",
+      "date": "2026-10-30",
+      "run": "g8-discda-sort"
+     }
     },
     {
      "id": "r2",
@@ -483,7 +491,13 @@
        "page": "Earned Exposure",
        "quote": "A $12$-month policy contributes **one** earned car-year in total, spread pro rata over its term: written the day it is issued, earned $1/12$ per month, in force from effective date to expiry."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The question's own setup gives the policy as 1.00 car-year and says exposure is earned evenly by month; proration is arithmetic on stated data",
+      "date": "2026-10-30",
+      "run": "g8-discda-sort"
+     }
     }
    ]
   },
@@ -707,7 +721,15 @@
        "page": "External Information in Reserving",
        "quote": "**Never use external data unadjusted.** It must be reconciled to the subject book on the dimensions that actually drive development"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Statistical Plan",
+      "quote": "A small insurer's own data are too thin for credible class and territory relativities, so the industry statistics give it a starting point.",
+      "note": "Tagged page: a small insurer's own data cannot give credible class/territory relativities, which rules out treating its other-state data as fully credible",
+      "date": "2026-10-30",
+      "run": "g8-discda-sort"
+     }
     },
     {
      "id": "r5",
@@ -1517,7 +1539,13 @@
      "statement": "To include a default value for nulls in an aggregate, apply the null-replacement function to the column inside the aggregate so the substitution happens row by row before aggregating; wrapping the aggregate result does not change the per-row nulls.",
      "concept": "SQL Aggregate Functions and NULL Handling",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Follows directly from definitions on tagged pages: Missing Data says COALESCE(column, value) substitutes a default where the value is missing and AVG uses only non-null values; SQL says an aggregate returns null only when no rows are selected, so a COALESCE around AVG changes nothing. Order-of-evaluation reasoning, not a further fact",
+      "date": "2026-10-30",
+      "run": "g8-discda-sort"
+     }
     }
    ]
   },
@@ -2494,7 +2522,13 @@
      "statement": "Enlarging plotted points increases overlap and therefore worsens overplotting.",
      "concept": "Overplotting in Scatter Plots",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Distractor elimination from the definition of overplotting on tagged Exploratory Data Visualization (points overplot into a solid mass): larger points overlap more; plain reasoning, not a separate fact",
+      "date": "2026-10-30",
+      "run": "g8-discda-sort"
+     }
     },
     {
      "id": "r5",
@@ -2502,7 +2536,15 @@
      "statement": "Summarizing two variables with a single overall mean discards the relationship between them, which a scatter plot is meant to display.",
      "concept": "Scatter Plots for Relationships Between Variables",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Scatter Plot",
+      "quote": "display of two variables at once",
+      "note": "A scatter plot is defined as a display of two variables at once; one overall mean of a single variable cannot show that relationship",
+      "date": "2026-10-30",
+      "run": "g8-discda-sort"
+     }
     },
     {
      "id": "r6",
@@ -2510,7 +2552,15 @@
      "statement": "A dense cluster of points in a plot reflects where most of the data lie (typical values), not outliers, and removing it hides the bulk of the data.",
      "concept": "Outliers",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Scatter Plot",
+      "quote": "that sit away from the cloud",
+      "note": "Scatter Plot reads outliers as points away from the cloud, so the dense cloud is the bulk of the data, not outliers",
+      "date": "2026-10-30",
+      "run": "g8-discda-sort"
+     }
     }
    ]
   },
@@ -2586,7 +2636,15 @@
        "page": "Univariate Plot",
        "quote": "The histogram is right about the shape, and the two modes usually mean a missing [[Categorical Predictor|categorical variable]] (two classes of risk mixed in one column) that should be split out."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Types of Plots",
+      "quote": "a bar chart, histogram or density plot for one variable; a box plot, scatter plot, stacked bar chart or heat map for two",
+      "note": "Tagged page: a histogram shows one variable; comparing a numerical variable across groups needs a two-variable plot such as side-by-side box plots",
+      "date": "2026-10-30",
+      "run": "g8-discda-sort"
+     }
     },
     {
      "id": "r5",
@@ -2624,7 +2682,15 @@
        "page": "Frequency",
        "quote": "**Frequency** is the number of claims per unit of exposure"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Types of Plots",
+      "quote": "Each tile shows claims per car-year.",
+      "note": "Tagged page's heat-map-of-claim-frequency example defines each tile's frequency as claims per car-year",
+      "date": "2026-10-30",
+      "run": "g8-discda-sort"
+     }
     },
     {
      "id": "r2",
@@ -2714,7 +2780,15 @@
        "page": "Univariate Plot",
        "quote": "the box draws nothing between them, so a box plot cannot show two humps."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Types of Plots",
+      "quote": "a line chart for a variable over time",
+      "note": "Tagged page assigns change over time to the line chart (values in time order); a box plot summarizes median, quartiles and outliers with no time order",
+      "date": "2026-10-30",
+      "run": "g8-discda-sort"
+     }
     },
     {
      "id": "r5",
@@ -2727,7 +2801,15 @@
        "page": "Scatter Plot",
        "quote": "A **Scatter Plot** is an [[Exploratory Data Analysis]] display of two variables at once: each observation is one point at $(x_i, y_i)$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Types of Plots",
+      "quote": "Each observation as a point: direction, form and strength of a relationship",
+      "note": "Tagged page: a scatter plot shows the relationship between two numerical variables, not change over time",
+      "date": "2026-10-30",
+      "run": "g8-discda-sort"
+     }
     }
    ]
   },
@@ -4131,7 +4213,15 @@
      "statement": "A cybersecurity event is an event resulting in unauthorized access to, disruption of, or misuse of an information system or the nonpublic information stored on it, and the model law's notification duty is triggered when the licensee determines such an event has occurred.",
      "concept": "Cybersecurity Event",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Insurance Data Regulation",
+      "quote": "After a licensee determines that a cybersecurity event has occurred, it must notify the state's commissioner within 72 hours",
+      "note": "The tagged page states the trigger of the notification duty; an intruder accessing nonpublic data is a cybersecurity event in plain reading",
+      "date": "2026-10-30",
+      "run": "g8-discda-sort"
+     }
     }
    ]
   },
@@ -4732,7 +4822,13 @@
      "statement": "To predict with a fitted model, express each predictor in the units used in the model's definition (e.g., convert dollars to thousands of dollars) before substituting it into the equation.",
      "concept": "Multiple Linear Regression",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The question's own setup states x1 is in thousands of dollars; substituting 20 for $20,000 is reading the question, not course content",
+      "date": "2026-10-30",
+      "run": "g8-discda-sort"
+     }
     }
    ]
   },
@@ -5086,7 +5182,15 @@
      "statement": "A risk characteristic is shown to be related to expected outcomes when variation in actual or reasonably anticipated experience correlates with the characteristic.",
      "concept": "ASOP No. 12 Risk Classification",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Rating Variable",
+      "quote": "It must be statistically related to expected losses; a causal story strengthens the case, but ASOP No. 12 does not require one.",
+      "note": "Tagged page teaches ASOP 12's test: a statistical relationship to expected losses, no causality required",
+      "date": "2026-10-30",
+      "run": "g8-discda-sort"
+     }
     },
     {
      "id": "r3",
@@ -5455,7 +5559,15 @@
        "page": "Unsupervised Learning",
        "quote": "**Unsupervised learning** looks for structure in predictors $X$ when there is no response $Y$ to predict."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Predictive Analytics",
+      "quote": "methods (GLMs, trees) learn from a known target;",
+      "note": "Tagged page: supervised methods learn from a known target, unsupervised find structure with no target",
+      "date": "2026-10-30",
+      "run": "g8-discda-sort"
+     }
     },
     {
      "id": "r2",

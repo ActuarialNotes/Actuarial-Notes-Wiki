@@ -5,6 +5,8 @@ import { X, CalendarDays, Sparkles, BookOpen, Lock } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ExamSittingsList } from '@/components/ExamSittingsList'
 import { SittingDateGrid } from '@/components/SittingDateGrid'
+import { MonthCalendar } from '@/components/MonthCalendar'
+import { addDaysISO } from '@/lib/monthCalendar'
 import { getSittingsForExam, formatSittingDate, sittingContains, LOCALIZED_EXAMS, type ExamSitting } from '@/data/examSittings'
 import {
   QUICK_SET_PRESETS,
@@ -261,7 +263,12 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
             <div className="space-y-4">
               <p className="text-lg font-semibold">When is your exam?</p>
 
-              {localExamDate && examDaysOut !== null && examDaysOut > 0 && (
+              {/* With no sittings to pick from, the calendar below is the way to change the day. */}
+              {!hasSittings && localExamDate && examDaysOut !== null && examDaysOut > 0 && (
+                <p className="text-4xl font-bold tracking-tight">{formatReadableDate(localExamDate)}</p>
+              )}
+
+              {hasSittings && localExamDate && examDaysOut !== null && examDaysOut > 0 && (
                 <button
                   type="button"
                   onClick={() => { examDateInputRef.current?.showPicker?.() ?? examDateInputRef.current?.click() }}
@@ -290,17 +297,13 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
                     onSelect={handleExamSittingSelect}
                   />
                 )
-              ) : !localExamDate ? (
-                <div className="overflow-hidden rounded-md border border-input shadow-sm focus-within:ring-1 focus-within:ring-ring">
-                  <input
-                    type="date"
-                    value={localExamDate}
-                    min={today}
-                    onChange={e => handleExamDateChange(e.target.value)}
-                    className="block w-full bg-background px-3 py-2 text-base transition-colors focus:outline-none"
-                  />
-                </div>
-              ) : null}
+              ) : (
+                <MonthCalendar
+                  value={localExamDate}
+                  min={addDaysISO(today, 1)}
+                  onSelect={handleExamDateChange}
+                />
+              )}
 
               {localExamDate && examDaysOut !== null && examDaysOut <= 0 && (
                 <p className="text-xs text-destructive">Date must be in the future</p>

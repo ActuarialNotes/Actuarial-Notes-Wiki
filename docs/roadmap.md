@@ -723,6 +723,8 @@ Where a default is given, sessions build with it until the decision is made.
 | D27 | Extend D22's open-text method (commercial readings' pages at medium against contents, catalogue and outline; their concepts against open texts) from Exam 9 to every beta exam | content plan §6 | Phase 2 (C2–C6, C9) | Yes: it follows from D7 and D22 |
 | D28 | A reading only in the **CAS study kit**, whose page states only what the outline says: verify the page at medium against the outline, or hold it `in_review` until the kit is read (D20, re-asked) | content plan §6 | C1, C5: Exam 8's and 6C's G5 | ✅ settled 2026-10-25: **hold** until the kit itself is read. Exam 8, and 6C's six kit-only readings, stay below `ready` until then |
 | D29 | Should **answerability** (C20) hold a promotion back: an eighth gate, a bar on the gap share, or a figure the promotion PR only reports | content plan §6 | C20; Phase 2's promotions | ✅ settled 2026-10-25 by the maintainer: **a gate, G8**, on each item's resolution rather than the check's score; a prerequisite exam's pages count as in reach. The seven exams that were ready were **moved back to `beta`** the same day, each promoted again when `--check` passes all eight (Phase 2, steps 0 and 10) |
+| D30 | G8's reach: should a page the exam's **own** learning objectives link count as in reach, as a prerequisite exam's pages already do | content plan §6 | C20; Phase 2's G8 items | ✅ settled 2026-10-30 by the maintainer: **yes** (tier `syllabus`). Exam P's out-of-reach items fell from 673 to 227 and FM's from 358 to 59, with no edit |
+| D31 | Re-run `check-answerable --ids` after a page edit closes an item? | content plan §6 | C20 | ✅ settled 2026-10-30 by the maintainer: **no**; `resolve` proves the item closed in code. A question is re-run only when its own text changes |
 
 ### 6.2 Settled: don't re-open without a new reason
 
@@ -883,6 +885,15 @@ ls Concepts/*.md | wc -l; ls Resources/Books/*.md | wc -l
 ```
 
 ## Appendix B: Revision history
+
+- **2026-10-30, cheaper G8.** A review of the readiness workflow found most of Phase 2's remaining
+  cost in closing G8's items, not in the checks. Settled: D30 (the exam's own syllabus pages are in
+  reach) and D31 (no re-run after a resolve), plus two campaign rules (content plan §1.2, 11 and
+  12): sort a bank's items before anyone writes, and edit each page once for every bank that
+  reaches it, up the prerequisite chain. `check-answerable` sends the pages first, takes its
+  second look on Sonnet, runs the locator on Haiku and no longer lists a solution's own plan as a
+  requirement: on 20 Exam P questions, $1.18 and 11 gaps where the old code took $3.35 and found 20.
+  Phase 2's step 10 (P, FM, MAS-I, the DISCs, Exam 7) is placed first.
 
 - **2026-10-30, Pro proposal (P1).** `docs/pro-proposal.md` added and listed in §3.4 *Proposed*. Nothing ranked, no price or access changed; decisions D-P1–D-P8 open.
 

@@ -15,8 +15,10 @@ against the vault *as it is now* (docs/content-plan.md §1, G8):
 
   - **taught within reach**: a quote of the teaching passage is on a page, now,
     and that page is one the question is tagged with, one link from such a
-    page, or a page of an exam this exam's *Prerequisite knowledge* callout
-    names (transitively — MAS-II's names MAS-I, MAS-I's names P and FM), or
+    page, a page this exam's own learning objectives link (its syllabus — a
+    candidate studies every one of them, as they study a prerequisite exam's),
+    or a page of an exam this exam's *Prerequisite knowledge* callout names
+    (transitively — MAS-II's names MAS-I, MAS-I's names P and FM), or
   - **not required**: a reviewer recorded why the item isn't course content
     the vault must teach (the extractor listed arithmetic, or data the
     question gives), with a note.
@@ -54,7 +56,7 @@ import os
 import re
 import sys
 from bisect import bisect_right
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -66,10 +68,11 @@ RECORD_DIR = REPO_ROOT / "simulations" / "answerability"
 MIN_QUOTE_CHARS = 12          # a shorter "quote" (a symbol, a name) proves nothing
 RECORD_VERSION = 1
 
-# Where a requirement is taught, nearest first. `elsewhere` is in the vault but out of the question's
-# reach — a tagging or linking gap; `missing` is on no page.
-TIERS = ("tagged", "linked", "prerequisite", "elsewhere", "missing")
-IN_REACH = ("tagged", "linked", "prerequisite")
+# Where a requirement is taught, nearest first. `syllabus` is a page the exam's own learning objectives link
+# (content decision D30); `elsewhere` is in the vault but out of the question's reach — a tagging or linking
+# gap; `missing` is on no page.
+TIERS = ("tagged", "linked", "syllabus", "prerequisite", "elsewhere", "missing")
+IN_REACH = ("tagged", "linked", "syllabus", "prerequisite")
 
 
 # ── a page's text, for quote matching ──────────────────────────────────────
@@ -334,27 +337,30 @@ class Reach:
     tagged: list[str]
     linked: set[str]
     prerequisite: set[str]
+    syllabus: set[str] = field(default_factory=set)
 
     def tier(self, page: str) -> str:
         if page in self.tagged:
             return "tagged"
         if page in self.linked:
             return "linked"
+        if page in self.syllabus:
+            return "syllabus"
         if page in self.prerequisite:
             return "prerequisite"
         return "elsewhere"
 
 
-def reach(pages: Pages, tags: list[str], prerequisite: set[str]) -> Reach:
+def reach(pages: Pages, tags: list[str], prerequisite: set[str], syllabus: set[str] | None = None) -> Reach:
     """Tagged pages and the pages one link from them — the exam page itself is neither (an objective line
-    names a concept, it doesn't teach it)."""
+    names a concept, it doesn't teach it) — with the exam's own syllabus pages and its prerequisites'."""
     tagged: list[str] = []
     for slug in tags:
         t = pages.resolve_tag(slug)
         if t and pages.kind[t] != "exam" and t not in tagged:
             tagged.append(t)
     linked = {t for page in tagged for t in pages.links(page) if pages.kind[t] != "exam" and t not in tagged}
-    return Reach(tagged, linked, prerequisite)
+    return Reach(tagged, linked, prerequisite, set(syllabus or ()))
 
 
 # ── the record ─────────────────────────────────────────────────────────────
@@ -463,6 +469,7 @@ def assess_bank(exam: dict, root: Path = REPO_ROOT, record: dict | None = None) 
     out["recorded"] = True
     pages = Pages(exam, root)
     prereq = pages.prerequisite_pages()
+    syllabus = set(pages.objective_concepts(pages.exam_title))
     for sid, (rel, text) in sorted(files.items()):
         entry = record["questions"].get(sid)
         if not entry:
@@ -475,7 +482,7 @@ def assess_bank(exam: dict, root: Path = REPO_ROOT, record: dict | None = None) 
             out["errors"].append(sid)
             continue
         out["checked"] += 1
-        where = reach(pages, question_tags(text), prereq)
+        where = reach(pages, question_tags(text), prereq, syllabus)
         for req in entry.get("requirements") or []:
             state, _ = requirement_state(req, pages, where)
             if state in IN_REACH or state == "not-required":
@@ -493,7 +500,8 @@ def assess_bank(exam: dict, root: Path = REPO_ROOT, record: dict | None = None) 
 
 WHY = {
     "missing": "taught on no page — write it from the reading, on the page it belongs on",
-    "elsewhere": "taught, but on a page the question neither tags nor reaches by a link — retag it or link it",
+    "elsewhere": "taught, but on a page the question neither tags nor reaches by a link, and not on the exam's "
+                 "syllabus — retag it or link it",
     "gone": "the quoted passage is no longer on its page — re-quote it, or re-run the check on this question",
 }
 
@@ -686,7 +694,8 @@ def main(argv: list[str] | None = None) -> int:
     pages = Pages(exam)
     path = REPO_ROOT / record["questions"][args.item.partition(":")[0]]["path"]
     text = path.read_text(encoding="utf-8")
-    state, page = requirement_state(req, pages, reach(pages, question_tags(text), pages.prerequisite_pages()))
+    where = reach(pages, question_tags(text), pages.prerequisite_pages(), set(pages.objective_concepts(pages.exam_title)))
+    state, page = requirement_state(req, pages, where)
     print(f"{args.item}: {state}" + (f" on {page}" if page else ""))
     if state == "elsewhere":
         print("  the page is out of the question's reach — tag it on the question, or link it from a tagged page")

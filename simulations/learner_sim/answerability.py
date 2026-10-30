@@ -59,7 +59,7 @@ from .grader import Grader
 from .textmatch import tokens
 from .vault_parse import RawQuestion, split_frontmatter
 
-STATUSES = ("tagged", "linked", "prerequisite", "elsewhere", "missing")
+STATUSES = ("tagged", "linked", "syllabus", "prerequisite", "elsewhere", "missing")
 KINDS = ("definition", "formula", "procedure", "fact")
 MAX_LINKED_PAGES = 8          # one-link-away pages shown to the locator, most relevant first
 SEARCH_HITS = 2               # vault pages a search for each requirement adds
@@ -73,8 +73,13 @@ had to learn beforehand:
 - procedure: a step of a method that is not plain arithmetic (e.g. "scale the per-exposure estimate by next \
 period's exposure")
 - fact: a rule, property or result the solution relies on (e.g. "a larger VHM raises Z")
-Leave out: data the question gives; arithmetic, algebra and calculus manipulation; how to pick among the options \
-(e.g. choosing "none of the above" when no option fits) — that is test-taking, not course content. Write \
+Leave out: data the question gives; arithmetic, algebra and calculus manipulation (a substitution, solving an \
+equation, iterating a recursion); how to pick among the options (e.g. choosing "none of the above" when no option \
+fits) — that is test-taking, not course content. Leave out, too, the plan of this particular solution: which \
+unknown it solves for first, what it substitutes where, the order of its steps, when each step only applies \
+knowledge already on your list; reading the question's own wording ("at least", "exactly", "no more than"); and \
+counting the question's own setup (two dice give 36 outcomes). List what a study page on the concept would \
+teach, not the moves of this solution. Write \
 each item in general form, without the question's numbers, as one sentence a study page could contain. Give \
 the concept it belongs to — the most basic concept page that would define it, titled as such a page would be \
 (e.g. "Uniform Distribution", not "uniform prior") — and 3-6 search words. Split \
@@ -82,8 +87,8 @@ compound items; merge duplicates. Usually 2-8 items. Reply with ONE JSON object 
 {"requirements": [{"id": "r1", "kind": "definition|formula|procedure|fact", "statement": "...", \
 "concept": "...", "search": ["...", "..."]}]}"""
 
-LOCATE_SYSTEM = """You check whether an actuarial study wiki teaches what a question needs. You get a list of \
-requirements and the full text of some study pages. For each requirement, find the passages that teach it and \
+LOCATE_SYSTEM = """You check whether an actuarial study wiki teaches what a question needs. You get the full \
+text of some study pages, then a question and a list of requirements. For each requirement, find the passages that teach it and \
 copy each EXACTLY, character for character from the page text (LaTeX included): the shortest complete \
 sentence, formula or table row that does the teaching, at most about 300 characters. Give up to three places \
 for an item, on different pages, earliest-listed page first. It teaches the item only if a student who had not \
@@ -97,6 +102,10 @@ never invent a quote. Reply with ONE JSON object and nothing else:
 
 RECHECK_NOTE = ("A first reading found no passage for the requirements below. Read every page again, worked "
                 "examples and tables included, before concluding that none teaches them.\n\n")
+# The same, as a follow-up turn of the conversation whose first turn held the pages: they aren't sent again.
+RECHECK_FOLLOW_UP = ("A first reading found no passage for the requirements below. Read every page above again, "
+                     "worked examples and tables included, before concluding that none teaches them. Reply in the "
+                     "same JSON shape, for these requirements only.\n\nREQUIREMENTS:\n")
 
 
 # ── matching a quote against a page ────────────────────────────────────────
@@ -113,9 +122,11 @@ class Candidates:
     linked: set[str]           # every page one link from a tagged page
     shown: list[str]           # the pages the locator is given, in order
     prerequisite: set[str] = field(default_factory=set)   # pages of the exams this exam assumes
+    syllabus: set[str] = field(default_factory=set)       # pages this exam's own learning objectives link
 
 
 _PREREQUISITES: dict[tuple[str, str], set[str]] = {}
+_SYLLABUS: dict[tuple[str, str], set[str]] = {}
 
 
 def prerequisites(loader: ContentLoader) -> set[str]:
@@ -125,6 +136,15 @@ def prerequisites(loader: ContentLoader) -> set[str]:
         exam = {"page": loader.exam.page, "wiki_id": loader.exam.wiki_id}
         _PREREQUISITES[key] = Pages(exam, loader.root).prerequisite_pages()
     return _PREREQUISITES[key]
+
+
+def syllabus(loader: ContentLoader) -> set[str]:
+    """The concept pages the exam page's own learning objectives link (`Pages.objective_concepts`, D30)."""
+    key = (loader.root, loader.exam.page)
+    if key not in _SYLLABUS:
+        exam = {"page": loader.exam.page, "wiki_id": loader.exam.wiki_id}
+        _SYLLABUS[key] = set(Pages(exam, loader.root).objective_concepts(loader.exam.title))
+    return _SYLLABUS[key]
 
 
 def _question_text(q: RawQuestion) -> str:
@@ -213,15 +233,25 @@ def candidate_pages(q: RawQuestion, reqs: list[dict], loader: ContentLoader) -> 
             continue
         shown.append(t)
         budget -= n
-    return Candidates(tagged, linked, shown, prerequisites(loader))
+    return Candidates(tagged, linked, shown, prerequisites(loader), syllabus(loader))
 
 
-def locate_prompt(q: RawQuestion, reqs: list[dict], pages: list[str], loader: ContentLoader) -> str:
-    out = ["QUESTION (for context only — do not quote it):", _clip(_question_text(q), 2000), "", "REQUIREMENTS:"]
-    out += [f"- {r['id']} ({r['kind']}): {r['statement']}" for r in reqs]
+def requirement_lines(reqs: list[dict]) -> list[str]:
+    return [f"- {r['id']} ({r['kind']}): {r['statement']}" for r in reqs]
+
+
+def locate_prompt(q: RawQuestion, reqs: list[dict], pages: list[str], loader: ContentLoader, note: str = "") -> str:
+    """The pages first, then the question and its requirements: questions shown the same pages, and a second
+    look at the same question, share the prompt's long, cacheable opening."""
+    out: list[str] = []
     for t in pages:
         _, body = split_frontmatter(loader.source(t))
-        out += ["", f"=== PAGE: {t} ===", body.strip()]
+        out += [f"=== PAGE: {t} ===", body.strip(), ""]
+    out += ["=== END OF PAGES ===", ""]
+    if note:
+        out += [note.strip(), ""]
+    out += ["QUESTION (for context only — do not quote it):", _clip(_question_text(q), 2000), "", "REQUIREMENTS:"]
+    out += requirement_lines(reqs)
     return "\n".join(out)
 
 
@@ -246,16 +276,19 @@ def merge_found(*passes: list[dict]) -> list[dict]:
 
 def verify_locations(reqs: list[dict], found: list[dict], cands: Candidates, indexes: dict[str, PageIndex]) -> list[dict]:
     """Each requirement with its status, checked in code. A quote counts only where it is really on a shown
-    page; of the places that check out, the nearest tier wins (tagged, then linked, then a prerequisite exam's
+    page; of the places that check out, the nearest tier wins (tagged, then linked, then the exam's own syllabus,
+    then a prerequisite exam's
     page, then elsewhere), and the item is `collapsed` only if every verified place sits in a folded callout.
     Every verified place keeps its quote: the record G8 re-reads is built from them."""
-    rank = {"tagged": 0, "linked": 1, "prerequisite": 2, "elsewhere": 3}
+    rank = {"tagged": 0, "linked": 1, "syllabus": 2, "prerequisite": 3, "elsewhere": 4}
 
     def tier(page: str) -> str:
         if page in cands.tagged:
             return "tagged"
         if page in cands.linked:
             return "linked"
+        if page in cands.syllabus:
+            return "syllabus"
         return "prerequisite" if page in cands.prerequisite else "elsewhere"
 
     by_id = {str(f.get("id")): f for f in found}
@@ -294,8 +327,15 @@ def verdict(reqs: list[dict]) -> str:
 
 
 def check_question(q: RawQuestion, loader: ContentLoader, solution: str,
-                   one_shot_factory: Callable[[], OneShot]) -> dict:
-    extract, locate = one_shot_factory(), one_shot_factory()
+                   one_shot_factory: Callable[[], OneShot],
+                   locate_factory: Callable[[], OneShot] | None = None,
+                   recheck_factory: Callable[[], OneShot] | None = None) -> dict:
+    """One question. `one_shot_factory` makes the requirements call, `locate_factory` the locator (default: the
+    same) and `recheck_factory` the second look at items with nothing found (default: the locator again). A
+    locator that `continues` its conversation takes the second look as a follow-up turn, with the pages already
+    in its context, instead of being sent them again."""
+    extract, locate = one_shot_factory(), (locate_factory or one_shot_factory)()
+    recheck = recheck_factory() if recheck_factory else locate
     record = {"source_id": q.source_id, "path": q.path, "type": q.type, "difficulty": q.difficulty,
               "objective": q.objective, "concepts": list(q.concepts)}
     path = os.path.join(loader.root, q.path)
@@ -313,15 +353,22 @@ def check_question(q: RawQuestion, loader: ContentLoader, solution: str,
         # backlog), so items with nothing verified get one more, targeted look before they are called missing.
         missing = [r for r in reqs if next(c for c in checked if c["id"] == r["id"])["status"] == "missing"]
         if missing:
-            again = _ask_json(locate, LOCATE_SYSTEM, RECHECK_NOTE + locate_prompt(q, missing, cands.shown, loader),
-                              "found")
+            if recheck is locate and getattr(locate, "continues", False):
+                prompt = RECHECK_FOLLOW_UP + "\n".join(requirement_lines(missing))
+            else:
+                prompt = locate_prompt(q, missing, cands.shown, loader, note=RECHECK_NOTE)
+            again = _ask_json(recheck, LOCATE_SYSTEM, prompt, "found")
             checked = verify_locations(reqs, merge_found(found, again), cands, indexes)
         record.update(tagged_pages=cands.tagged, pages_shown=cands.shown, requirements=checked,
                       verdict=verdict(checked))
     except Exception as e:  # one question's failure is recorded, not fatal to the run
         record.update(verdict="error", error=f"{type(e).__name__}: {e}")
+    agents = [extract, locate] + ([recheck] if recheck is not locate else [])
+    for agent in agents:
+        if hasattr(agent, "close"):
+            agent.close()
     usage = Usage()
-    for agent in (extract, locate):
+    for agent in agents:
         if getattr(agent, "usage", None):
             usage.add(agent.usage)
     record["cost_usd"] = round(usage.cost_usd, 5)
@@ -375,6 +422,7 @@ USAGE_LIMIT = re.compile(r"hit your (?:\w+ )?limit|(?:session|usage|rate) limit|
 
 def run_check(exam: ExamSpec, loader: ContentLoader, bank: dict[str, RawQuestion], out_dir: str,
               one_shot_factory: Callable[[], OneShot], ids: list[str] | None = None, limit: int | None = None,
+              locate_factory: Callable[[], OneShot] | None = None, recheck_factory: Callable[[], OneShot] | None = None,
               parallel: int = 1, max_cost: float | None = None, retry_errors: bool = True,
               progress: Callable[[str], None] = print) -> dict[str, dict]:
     os.makedirs(out_dir, exist_ok=True)
@@ -396,7 +444,8 @@ def run_check(exam: ExamSpec, loader: ContentLoader, bank: dict[str, RawQuestion
     def one(sid: str) -> None:
         if limited or (max_cost is not None and spent[0] >= max_cost):
             return
-        rec = check_question(served[sid], loader, solution_of(served[sid]), one_shot_factory)
+        rec = check_question(served[sid], loader, solution_of(served[sid]), one_shot_factory,
+                             locate_factory, recheck_factory)
         with lock:
             if rec.get("verdict") == "error" and USAGE_LIMIT.search(rec.get("error") or ""):
                 if not limited:
@@ -492,7 +541,7 @@ def report(exam: ExamSpec, results: dict[str, dict], loader: ContentLoader, run_
            "in code. *Answerable* is necessary, not sufficient: a page can hold the formula and still not "
            "teach it well.", "",
            "| Verdict | Questions | Share |", "|---|---|---|",
-           f"| **Answerable** — everything taught on a tagged page, one link away or on a prerequisite exam's page | {v.get('answerable', 0)} | "
+           f"| **Answerable** — everything taught on a tagged page, one link away, on the exam's syllabus or on a prerequisite exam's page | {v.get('answerable', 0)} | "
            f"{_pct(v.get('answerable', 0), n)} |",
            f"| **Untagged** — everything is in the vault, but some of it on a page neither tagged nor linked | "
            f"{v.get('untagged', 0)} | {_pct(v.get('untagged', 0), n)} |",

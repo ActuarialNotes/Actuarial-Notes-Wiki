@@ -221,6 +221,37 @@ class ClaudeCodeOneShot:
             self.usage.add(s.usage)
 
 
+class ClaudeCodeConversation:
+    """Successive questions in one headless conversation: the first call starts it with its system prompt, and
+    each later call is a follow-up turn. What the first turn sent (a locator's study pages) is then read back
+    from the prompt cache rather than sent and paid for again. `close()` ends it."""
+
+    continues = True
+
+    def __init__(self, model: str | None = None, effort: str | None = None, timeout: float = 900,
+                 claude_bin: str = "claude"):
+        self.model, self.effort, self.timeout, self.claude_bin = model, effort, timeout, claude_bin
+        self.usage = Usage()
+        self._session: ClaudeCodeSession | None = None
+        self._system: str | None = None
+
+    def __call__(self, system_prompt: str, prompt: str) -> str:
+        if self._session is None:
+            self._session = ClaudeCodeSession(self.model, self.effort, self.timeout, self.claude_bin)
+            self._session.start(system_prompt)
+            self._system = system_prompt
+        elif system_prompt != self._system:
+            raise BackendError("a conversation keeps the system prompt it started with")
+        return self._session.send(prompt)
+
+    def close(self) -> None:
+        """End the conversation; its usage is counted here, once."""
+        if self._session is not None:
+            self._session.close()
+            self.usage.add(self._session.usage)
+            self._session = None
+
+
 class ScriptedSession:
     """A stand-in learner model for tests and `--backend scripted` dry runs.
 

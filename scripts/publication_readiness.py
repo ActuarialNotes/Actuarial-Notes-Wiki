@@ -27,8 +27,9 @@ This script is the one definition of "everything", so the content plan
   G8 answerable every served question can be answered from the pages within its
                 reach: checked by `simulations/check-answerable` since its text
                 last changed, and every requirement its solution uses either
-                quoted on a page it is tagged with, one link away or on a
-                prerequisite exam's page — re-read in code, now — or recorded as
+                quoted on a page it is tagged with, one link away, on the
+                exam's own syllabus or on a prerequisite exam's page — re-read
+                in code, now — or recorded as
                 not required (`answerability_lib.py`, content decision D29)
 
 A syllabus concept is a `[[link]]` inside a learning-objective callout, resolved

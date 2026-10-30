@@ -47,6 +47,7 @@ EXAM = """# Exam T
 
 > [!example]- A. Credibility {100%}
 > 1. [[Credibility Weight]]
+> 2. [[Loss Ratio]]
 """
 
 EXAM_S = """# Exam S
@@ -68,6 +69,7 @@ class Vault:
             "Concepts/Buhlmann Credibility.md": "The **Bühlmann k** is the ratio EPV / VHM of the risks.\n",
             "Concepts/Expected Value.md": "The **expected value** is the probability-weighted mean of X.\n",
             "Concepts/Calculus.md": "An **integral** sums a function's values over an interval.\n",
+            "Concepts/Loss Ratio.md": "The **loss ratio** is incurred losses divided by earned premium.\n",
             "Concepts/Unrelated.md": "A **pure premium** is losses divided by exposure units.\n",
             "Guides/How to Study.md": "Read the pages.\n",
             "questions/exam-t/t-1.md": QUESTION,
@@ -126,6 +128,7 @@ class GateTests(unittest.TestCase):
                 requirement("r3", "prerequisite", [("Expected Value", "probability-weighted mean of X")]),
                 requirement("r4", "elsewhere", [("Unrelated", "losses divided by exposure units")]),
                 requirement("r5", "missing"),
+                requirement("r6", "syllabus", [("Loss Ratio", "incurred losses divided by earned premium")]),
             ]}
 
     def tearDown(self):
@@ -137,7 +140,16 @@ class GateTests(unittest.TestCase):
     def test_prerequisites_are_read_off_the_callout_transitively(self):
         pages = al.Pages(self.v.exam, self.v.root)
         self.assertEqual(pages.prerequisite_pages(), {"Expected Value", "Calculus"})
-        self.assertEqual(pages.objective_concepts("Exam T (CAS)"), ["Credibility Weight"])
+        self.assertEqual(pages.objective_concepts("Exam T (CAS)"), ["Credibility Weight", "Loss Ratio"])
+
+    def test_a_page_on_the_exams_own_syllabus_is_in_reach(self):
+        # Loss Ratio is neither tagged nor linked from a tagged page, but Exam T's objectives link it (D30).
+        self.assertNotIn("t-1:r6", [i["item"] for i in self.assess()["open"]])
+        pages = al.Pages(self.v.exam, self.v.root)
+        where = al.reach(pages, ["Credibility Weight"], pages.prerequisite_pages(),
+                         set(pages.objective_concepts("Exam T (CAS)")))
+        self.assertEqual(where.tier("Loss Ratio"), "syllabus")
+        self.assertEqual(where.tier("Unrelated"), "elsewhere")
 
     def test_items_in_reach_pass_and_the_rest_stay_open(self):
         r = self.assess()

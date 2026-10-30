@@ -974,8 +974,40 @@ function xmlEscape(text: string): string {
     .replace(/'/g, '&apos;')
 }
 
-/** A sitemap of absolute URLs, one per path. */
-export function sitemapXml(paths: string[]): string {
-  const urls = paths.map(p => `  <url><loc>${xmlEscape(absoluteUrl(p))}</loc></url>`)
+/** One sitemap entry: a path, and the day its page last changed when that is known. */
+export type SitemapEntry = string | { path: string; lastmod?: string }
+
+/** A sitemap of absolute URLs, one per path, each with its `lastmod` if it has one. */
+export function sitemapXml(entries: SitemapEntry[]): string {
+  const urls = entries.map(e => {
+    const { path, lastmod } = typeof e === 'string' ? { path: e, lastmod: undefined } : e
+    const mod = lastmod ? `<lastmod>${xmlEscape(lastmod)}</lastmod>` : ''
+    return `  <url><loc>${xmlEscape(absoluteUrl(path))}</loc>${mod}</url>`
+  })
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join('\n')}\n</urlset>\n`
+}
+
+/**
+ * The day each file last changed, read off `git log --format=%x01%H %cs
+ * --name-only` (newest first). A commit in `boundary` — the edge of a shallow
+ * clone, which is how Vercel checks the repo out — shows every file as added
+ * on that day, so it dates nothing: a file last touched there gets no
+ * `lastmod` rather than a wrong one. Google ignores a sitemap's dates once
+ * they prove unreliable, so an absent date is the safe answer.
+ */
+export function lastModifiedFromGitLog(log: string, boundary: ReadonlySet<string> = new Set()): Map<string, string> {
+  const dates = new Map<string, string>()
+  const seen = new Set<string>()
+  for (const commit of log.split('\x01').slice(1)) {
+    const [header = '', ...files] = commit.split('\n')
+    const [hash = '', date = ''] = header.trim().split(' ')
+    const dated = !boundary.has(hash) && /^\d{4}-\d{2}-\d{2}$/.test(date)
+    for (const file of files) {
+      const name = file.trim()
+      if (!name || seen.has(name)) continue
+      seen.add(name)
+      if (dated) dates.set(name, date)
+    }
+  }
+  return dates
 }

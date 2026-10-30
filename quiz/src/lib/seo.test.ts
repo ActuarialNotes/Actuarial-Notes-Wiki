@@ -23,6 +23,7 @@ import {
   pageHead,
   resourceSeo,
   sitemapXml,
+  lastModifiedFromGitLog,
   type SeoPage,
 } from './seo'
 
@@ -256,6 +257,39 @@ describe('serialisation', () => {
     expect(sitemapXml(['/wiki/concept/Bayes\'+Theorem', '/a&b'])).toContain(
       "<loc>https://quiz.actuarialnotes.com/wiki/concept/Bayes&apos;+Theorem</loc>",
     )
+  })
+
+  it('dates a sitemap entry only when its day is known', () => {
+    const xml = sitemapXml(['/', { path: '/wiki/concept/Severity', lastmod: '2026-10-29' }, { path: '/wiki' }])
+    expect(xml).toContain('<loc>https://quiz.actuarialnotes.com/</loc></url>')
+    expect(xml).toContain('<loc>https://quiz.actuarialnotes.com/wiki/concept/Severity</loc><lastmod>2026-10-29</lastmod></url>')
+    expect(xml).toContain('<loc>https://quiz.actuarialnotes.com/wiki</loc></url>')
+  })
+
+  it("takes each file's newest commit, and dates nothing from a shallow clone's edge", () => {
+    const log = [
+      '\x01aaa 2026-10-29', '', 'Concepts/Severity.md', '',
+      '\x01bbb 2026-10-20', '', 'Concepts/Severity.md', 'Concepts/Frequency.md', '',
+      '\x01ccc 2026-09-01', '', 'Concepts/Frequency.md', 'Exam P-1 (SOA).md', '',
+    ].join('\n')
+    expect(lastModifiedFromGitLog(log)).toEqual(new Map([
+      ['Concepts/Severity.md', '2026-10-29'],
+      ['Concepts/Frequency.md', '2026-10-20'],
+      ['Exam P-1 (SOA).md', '2026-09-01'],
+    ]))
+    // ccc is the boundary: the exam page was only "added" there, so it has no date.
+    expect(lastModifiedFromGitLog(log, new Set(['ccc'])).has('Exam P-1 (SOA).md')).toBe(false)
+  })
+
+  it("serves a missing page's URL as a 404, not the SPA, and every other route as the SPA", () => {
+    const config = JSON.parse(readFileSync(path.join(QUIZ_ROOT, 'vercel.json'), 'utf-8'))
+    const [rewrite] = config.rewrites
+    expect(rewrite.destination).toBe('/index.html')
+    const spa = new RegExp(`^${rewrite.source}$`)
+    for (const route of ['/', '/quiz', '/wiki', '/wiki/resources', '/store/gems', '/review'])
+      expect(spa.test(route), route).toBe(true)
+    for (const route of ['/api/mcp', '/wiki/concept/No+Such+Page', '/wiki/exam/Exam+X', '/wiki/resource/Nothing'])
+      expect(spa.test(route), route).toBe(false)
   })
 
   it("index.html's default head is exactly what headTagsHtml writes for the site", () => {

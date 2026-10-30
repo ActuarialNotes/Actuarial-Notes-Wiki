@@ -605,9 +605,12 @@ Other important `lib/` modules:
   what is open), then folding cards — **Open issues** (unfolded), **Checked against**,
   **Check history** (each pass, `summarizeLog`'s `checks`), Fixed, Notes, and on a question
   **Answerability** (`components/AnswerabilitySection.tsx` over `lib/answerability.ts`): the
-  answerability check's history from the bank's committed record, fetched when the panel opens —
-  its verdict, each requirement with where it is taught and the quoted passage, and every
-  `resolve` / `not-required` since.
+  answerability check's history from the bank's committed record, fetched when the panel opens.
+  It leads with where the question stands **now** — the verdict in its header, each requirement's
+  state today (`requirementNow`: closed by a resolution, or brought into reach since by a retag or
+  the exam's own syllabus pages, D30) — then the check as it found things, and every
+  `resolve` / `not-required` since. `answerability.test.ts` holds it to the gate: on every ready
+  exam, every served question reads Answerable.
   `summarizeSource` and `summarizeLog` are what keep it short — the first cuts an auditor's
   citation into the source's name, the chapters/pages checked and its link (the sha256 never
   reaches the screen), the second splits the log into Open / Fixed / Notes and folds each

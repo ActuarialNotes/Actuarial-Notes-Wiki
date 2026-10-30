@@ -199,8 +199,14 @@ A reader sees the record too: the question's Fact Check panel ends in an **Answe
 (`quiz/src/components/AnswerabilitySection.tsx`, `lib/answerability.ts`) that fetches the bank's
 record when the panel opens and lays out the question's history — the check (its date from the run
 id, its verdict, each requirement with where it is taught and the passage quoted for it) and every
-`resolve` / `not-required` written since, newest first. It reports the record as of the check; G8,
-not the panel, re-reads the quotes against the vault.
+`resolve` / `not-required` written since, newest first. Above the history it says where the
+question stands **now**: the header's verdict and each requirement's state today
+(`requirementNow`) — a resolution first, then the tier the check recorded, then a page that has come
+into reach since without a `resolve`: one the question is now tagged with (read off its file) or
+one its exam's learning objectives link (D30, read off the bundled exam page). The check's own row
+keeps what the check found. G8, not the panel, re-reads the quotes against the vault, and a page a
+new link brings one step closer shows as the check found it until it is resolved;
+`answerability.test.ts` holds the panel to the gate on every ready exam.
 
 `resolve` refuses a quote that isn't on the page, and says whether the page is in the question's
 reach. A retag needs no `resolve`: the gate re-reads the tags. A re-run replaces a question's

@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { AnswerabilityHistory } from './AnswerabilitySection'
-import type { AnswerabilityEntry } from '@/lib/answerability'
+import { reachNow, type AnswerabilityEntry } from '@/lib/answerability'
 
 const ENTRY: AnswerabilityEntry = {
   id: 'p-004',
@@ -21,5 +21,13 @@ describe('AnswerabilityHistory', () => {
     expect(html).toContain('Out of reach · Latest 25 Oct 2026')
     // Folded: the history is one tap away.
     expect(html).not.toContain('Independent events multiply.')
+  })
+
+  it('leads with where it stands now, and keeps the check as it was', () => {
+    // The page came into reach after the check — the exam's syllabus (D30).
+    const html = renderToStaticMarkup(
+      <AnswerabilityHistory entry={ENTRY} reach={reachNow([], ['Probability Multiplication Rule'])} />)
+    expect(html).toContain('Answerable · Latest 25 Oct 2026')
+    expect(html).not.toContain('Out of reach')
   })
 })

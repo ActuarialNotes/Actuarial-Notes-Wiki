@@ -12,14 +12,19 @@ import type { FactCheckTone } from '@/lib/verification'
  * requirement with what closed it — so a question's history is its check and
  * the resolutions written on it since, which is what this module lays out.
  *
- * It reports what the record says, as of the check: whether a quote is still
- * on its page is G8's question, answered in CI against the vault, not here.
+ * The record keeps what the check found, as of the check; the gate reads it
+ * against the vault as it is *now*. So the panel shows both: the history as
+ * recorded, and each requirement's state today (`requirementNow`) — what a
+ * resolution closed, and what has come into reach since without one: a page
+ * the question has been tagged with, or a page the exam's own learning
+ * objectives link (D30). Whether a quote is still on its page, and a page
+ * brought one link closer, stay G8's to check in CI against the vault.
  * The records are not bundled (they run to half a megabyte a bank); the panel
  * fetches one when it opens. Pure and tested.
  */
 
 /** Where a requirement is taught, nearest first — `TIERS` in answerability_lib.py. */
-export type AnswerabilityTier = 'tagged' | 'linked' | 'prerequisite' | 'elsewhere' | 'missing'
+export type AnswerabilityTier = 'tagged' | 'linked' | 'syllabus' | 'prerequisite' | 'elsewhere' | 'missing'
 
 export interface AnswerabilityPlace {
   page: string
@@ -165,6 +170,7 @@ export function verdictLabel(verdict: string): Label {
 export const TIER_LABEL: Record<AnswerabilityTier, Label> = {
   tagged: { label: 'Tagged page', tone: 'green' },
   linked: { label: 'One link away', tone: 'green' },
+  syllabus: { label: 'On the syllabus', tone: 'green' },
   prerequisite: { label: 'Prerequisite', tone: 'green' },
   elsewhere: { label: 'Out of reach', tone: 'amber' },
   missing: { label: 'Not taught', tone: 'red' },
@@ -177,7 +183,7 @@ export function requirementLabel(req: AnswerabilityRequirement): Label {
   return TIER_LABEL[req.status as AnswerabilityTier] ?? { label: req.status || 'Unknown', tone: 'grey' }
 }
 
-const IN_REACH = new Set(['tagged', 'linked', 'prerequisite'])
+const IN_REACH = new Set(['tagged', 'linked', 'syllabus', 'prerequisite'])
 
 /**
  * One sentence on what the check found: how much the solution uses, and how
@@ -235,3 +241,117 @@ export function answerabilityHistory(entry: AnswerabilityEntry): AnswerabilityEv
 export function quoteText(quote: string): string {
   return quote.replace(/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g, (_, page: string, text?: string) => text ?? page)
 }
+
+// ── Where each requirement stands now ──────────────────────────────────────
+
+/**
+ * What a question can reach today, beyond what the check recorded: the pages
+ * it is tagged with (its `wiki_link`, read off the question as it is now) and
+ * the pages its exam's learning objectives link (D30). Page titles, compared
+ * without case — a `[[link]]` opens its page by exact or case-folded title.
+ */
+export interface ReachNow {
+  tagged: ReadonlySet<string>
+  syllabus: ReadonlySet<string>
+}
+
+export function reachNow(tags: Iterable<string>, syllabus: Iterable<string>): ReachNow {
+  const fold = (xs: Iterable<string>) => new Set([...xs].map((x) => x.trim().toLowerCase()).filter(Boolean))
+  return { tagged: fold(tags), syllabus: fold(syllabus) }
+}
+
+/**
+ * A question file's concept tags as page titles: each `wiki_link` entry's last
+ * path segment, `+` read as a space (`Concepts/Bayes+Theorem` → `Bayes Theorem`),
+ * the way `question_tags` in answerability_lib.py reads them.
+ */
+export function questionTagTitles(raw: string): string[] {
+  const fm = /^---\s*\n([\s\S]*?)\n---\s*$/m.exec(raw)?.[1]
+  if (!fm) return []
+  const out: string[] = []
+  let inList = false
+  const add = (entry: string) => {
+    const title = entry.trim().replace(/^["']|["']$/g, '').split('/').pop()!.replace(/\+/g, ' ').replace(/\.md$/, '').trim()
+    if (title && !out.includes(title)) out.push(title)
+  }
+  for (const line of fm.split('\n')) {
+    if (/^wiki_link:\s*$/.test(line)) { inList = true; continue }
+    const inline = /^wiki_link:\s*\[(.*)\]\s*$/.exec(line)
+    if (inline) { inline[1].split(',').forEach(add); inList = false; continue }
+    const item = inList ? /^\s*-\s*(.+?)\s*$/.exec(line) : null
+    if (item) add(item[1])
+    else inList = false
+  }
+  return out
+}
+
+/** A requirement's state today: what closed it, or the nearest tier it is taught in. */
+export type RequirementState = AnswerabilityTier | 'resolved' | 'not-required'
+
+export interface RequirementNow {
+  state: RequirementState
+  /** The page it is taught on, when the state names one. */
+  page?: string
+}
+
+/**
+ * Where a requirement stands now. A resolution wins (it was proved in code when
+ * it was written); else a place the check recorded is in reach as recorded;
+ * else a place on a page the question is now tagged with, or on the exam's
+ * syllabus, brings it into reach; else it stands as the check found it.
+ */
+export function requirementNow(req: AnswerabilityRequirement, reach?: ReachNow): RequirementNow {
+  if (req.resolution?.kind === 'not-required') return { state: 'not-required' }
+  if (req.resolution?.kind === 'taught') return { state: 'resolved', page: req.resolution.page }
+  if (IN_REACH.has(req.status)) return { state: req.status as AnswerabilityTier, page: req.places[0]?.page }
+  if (reach) {
+    for (const tier of ['tagged', 'syllabus'] as const) {
+      const pages = tier === 'tagged' ? reach.tagged : reach.syllabus
+      const hit = req.places.find((p) => pages.has(p.page.toLowerCase()))
+      if (hit) return { state: tier, page: hit.page }
+    }
+  }
+  const status = req.status === 'missing' || req.status === 'elsewhere' ? req.status : 'missing'
+  return { state: status, page: status === 'elsewhere' ? req.places[0]?.page : undefined }
+}
+
+/** True when a requirement no longer keeps the question from being answerable. */
+export function isClosed(now: RequirementNow): boolean {
+  return now.state === 'resolved' || now.state === 'not-required' || IN_REACH.has(now.state)
+}
+
+/** The label of a requirement's state today. */
+export function stateLabel(now: RequirementNow): Label {
+  if (now.state === 'not-required') return { label: 'Not required', tone: 'grey' }
+  if (now.state === 'resolved') return { label: 'Resolved', tone: 'green' }
+  return TIER_LABEL[now.state]
+}
+
+/**
+ * The question's verdict today: answerable once every requirement is closed,
+ * a gap while any is taught on no page, else out of reach. A check that failed,
+ * or found nothing required, keeps its own verdict.
+ */
+export function verdictNow(entry: AnswerabilityEntry, reach?: ReachNow): string {
+  if (entry.verdict === 'error' || entry.requirements.length === 0) return entry.verdict
+  const states = entry.requirements.map((r) => requirementNow(r, reach))
+  if (states.every(isClosed)) return 'answerable'
+  return states.some((s) => s.state === 'missing') ? 'gap' : 'untagged'
+}
+
+/** One sentence on where the question stands today. */
+export function nowSentence(entry: AnswerabilityEntry, reach?: ReachNow): string {
+  const reqs = entry.requirements
+  if (reqs.length === 0) return checkSentence(entry)
+  const states = reqs.map((r) => requirementNow(r, reach))
+  const open = states.filter((s) => !isClosed(s)).length
+  const notRequired = states.filter((s) => s.state === 'not-required').length
+  const things = `${reqs.length} ${reqs.length === 1 ? 'thing' : 'things'}`
+  if (open === 0) {
+    if (notRequired === 0) return 'Everything the solution uses is taught within its reach.'
+    if (notRequired === reqs.length) return 'Nothing the solution uses needs to be taught in the notes.'
+    return `Everything the solution uses is taught within its reach, but for ${notRequired} ${notRequired === 1 ? 'step' : 'steps'} the notes needn’t teach.`
+  }
+  return `${open} of the ${things} the solution uses ${open === 1 ? 'is' : 'are'} still open.`
+}
+

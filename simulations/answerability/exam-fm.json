@@ -3818,7 +3818,15 @@
      "statement": "For a bond bought at par (coupon rate equals yield rate), the Macaulay duration in periods equals the annuity-due value ä_{n|} at the yield rate.",
      "concept": "Macaulay Duration",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Macaulay Duration",
+      "quote": "A bond bought at par (coupon rate equal to the yield rate, $Fr = Cj$, so $P = C$) has a Macaulay duration of $\\ddot{a}_{\\overline{n}|j}$ coupon periods, since $j\\,(Ia)_{\\overline{n}|j} + n\\,v^n = \\ddot{a}_{\\overline{n}|j}$.",
+      "note": "written from SOA Exam FM Sample Solutions (rev. Aug 2026), Q50/Q53 pp.15-16 (par bond duration = annuity-due) and Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §26 eq. (26.5) p.235: par bond D_Mac = ä_n at the yield; fact checked run 2026-10-30T19:34Z/bd53",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -3986,7 +3994,15 @@
      "statement": "For a bond bought at par (coupon rate equals yield rate), the price equals par and the Macaulay duration equals the annuity-due present value factor at the yield rate for the remaining term.",
      "concept": "Macaulay Duration",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Macaulay Duration",
+      "quote": "A bond bought at par (coupon rate equal to the yield rate, $Fr = Cj$, so $P = C$) has a Macaulay duration of $\\ddot{a}_{\\overline{n}|j}$ coupon periods, since $j\\,(Ia)_{\\overline{n}|j} + n\\,v^n = \\ddot{a}_{\\overline{n}|j}$.",
+      "note": "written from SOA Exam FM Sample Solutions (rev. Aug 2026), Q50/Q53 pp.15-16 and Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §26 eq. (26.5) p.235: par bond D_Mac = ä_n at the yield; fact checked run 2026-10-30T19:34Z/bd53",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r3",
@@ -4011,7 +4027,15 @@
      "statement": "Just before a coupon is paid, the remaining cash flows are those of the bond one period earlier, each occurring one year sooner, so the Macaulay duration equals the earlier duration minus one year (yield unchanged).",
      "concept": "Macaulay Duration",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Macaulay Duration",
+      "quote": "At an unchanged yield, the duration of the remaining cash flows falls one-for-one with time elapsed between payment dates: $s$ periods later, provided no payment has been made in between (up to just before the next payment), it is the earlier duration minus $s$.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §54 pp.468-469 (d as PV-weighted average time) and SOA Exam FM Sample Solutions (rev. Aug 2026), Q53 p.16: duration falls one-for-one with time while no payment is made (wording tightened by checker); fact checked run 2026-10-30T19:34Z/bd53",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -4019,7 +4043,15 @@
      "statement": "Immediately after a coupon is paid, the bond is a par bond with one fewer period remaining, and its duration is computed from the remaining cash flows only (the paid coupon is excluded).",
      "concept": "Bond Valuation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Macaulay Duration",
+      "quote": "Immediately after a payment is made, that payment drops out and the duration is recomputed from the remaining cash flows only, so it jumps up — a payment due now adds to the price but nothing to the numerator.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §54 pp.468-469 and §44 p.396 (book value = PV of remaining payments); SOA Exam FM Sample Solutions (rev. Aug 2026), Q53 p.16: after a payment it drops out and duration jumps up; fact checked run 2026-10-30T19:34Z/bd53",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -8022,7 +8054,15 @@
      "statement": "For a perpetuity-due paying 1 per year, the Macaulay duration (starting at time 0) equals 1/i, so the interest rate can be found as the reciprocal of the duration.",
      "concept": "Macaulay Duration",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Macaulay Duration",
+      "quote": "A level perpetuity-due (first payment now) pays each amount one period sooner than the perpetuity-immediate, so its Macaulay duration is $1/d - 1 = 1/j$ periods.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §54 Ex 54.7 p.472 and Prob 54.7 p.476: perpetuity-due D_Mac = 1/d - 1 = 1/i; fact checked run 2026-10-30T19:34Z/bd53",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -8055,7 +8095,15 @@
      "statement": "The need for immunization does not depend on the shape or slope of the yield curve (e.g., long-term rates being lower than short-term rates does not reduce the need), since interest rate changes can still affect asset and liability values.",
      "concept": "Immunization",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Immunization",
+      "quote": "The need to immunize comes from the chance that interest rates change, which exists whatever the current shape of the yield curve: an upward-sloping, flat or inverted curve does not reduce it.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §55 p.479 (interest rate risk from rate changes) and SOA Exam FM Sample Solutions (rev. Aug 2026), Q103 p.29 ('yield curve structure is not relevant'): need to immunize independent of curve shape; fact checked run 2026-10-30T19:34Z/bd53",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r3",
@@ -11697,7 +11745,15 @@
      "statement": "Redington immunization and full immunization are developed under the assumption of a flat yield curve, where a single interest rate discounts all cash flows and interest rate changes move that single rate.",
      "concept": "Immunization Assumptions",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Immunization",
+      "quote": "Redington and full immunization are developed under a flat yield curve: one rate discounts the cash flows at every term, and a change in interest rates moves that single rate (a parallel shift of the curve).",
+      "note": "written from SOA study note FM-24-17 (Alps, 2017) §1 p.3 ('predicated on a flat yield curve') and Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §55 limitation (c) p.480: flat-curve, single-rate assumption; fact checked run 2026-10-30T19:34Z/bd53",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -11718,7 +11774,15 @@
      "statement": "Full immunization gives no guarantee under non-parallel shifts of the yield curve.",
      "concept": "Full Immunization",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Immunization",
+      "quote": "Neither gives any guarantee when the yield curve shifts in a non-parallel way, for example when short-term rates move more than long-term rates.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §55 limitations (b)-(c) p.480 and §56 p.486: no guarantee under non-parallel shifts; fact checked run 2026-10-30T19:34Z/bd53",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r7",
@@ -14701,7 +14765,15 @@
      "statement": "For a bond with fixed term and yield, a higher coupon rate puts more present-value weight on earlier coupon payments relative to the final redemption payment, which lowers Macaulay duration.",
      "concept": "Macaulay Duration",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Macaulay Duration",
+      "quote": "For bonds of the same term and yield, a higher coupon rate puts more present-value weight on the early coupons and less on the redemption payment, so it lowers the Macaulay duration; a zero-coupon bond, the extreme, has duration equal to its term.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §54 Ex 54.1, 54.3, 54.4 pp.468-470: higher coupon lowers Macaulay duration; zero-coupon = term; fact checked run 2026-10-30T19:34Z/bd53",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -15859,7 +15931,15 @@
      "statement": "Redington immunization assumes a flat yield curve, so all maturities share the same yield rate.",
      "concept": "Redington Immunization",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Immunization",
+      "quote": "Redington and full immunization are developed under a flat yield curve: one rate discounts the cash flows at every term, and a change in interest rates moves that single rate (a parallel shift of the curve).",
+      "note": "written from SOA study note FM-24-17 (Alps, 2017) §1 p.3 and Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §55 (c) p.480: Redington assumes a flat yield curve (quote changed by checker from the non-parallel line to the flat-curve line); fact checked run 2026-10-30T19:34Z/bd53",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r3",
@@ -28042,7 +28122,15 @@
      "statement": "Compute the Macaulay duration of a coupon bond as [Fr·(Ia)_n + n·C·v^n] divided by its price, where Fr is the coupon and C the redemption value.",
      "concept": "Macaulay Duration",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Macaulay Duration",
+      "quote": "For a coupon bond with coupon $Fr$, redemption value $C$ and price $P$, $D_{Mac} = \\left[Fr\\,(Ia)_{\\overline{n}|j} + n\\,C\\,v^n\\right] / P$ coupon periods.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §54 Ex 54.3, 54.5 pp.469-472 and §26 eq. (26.5) p.235: bond D_Mac = [Fr(Ia)_n + nCv^n]/P (quote changed by checker to the bond-formula line); fact checked run 2026-10-30T19:34Z/bd53",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r7",
@@ -29882,7 +29970,15 @@
      "statement": "The Macaulay duration of an n-year level annuity-immediate is (Ia)_{n|} / a_{n|}, since the payments at times 1..n have present values proportional to v^t.",
      "concept": "Annuity-Immediate",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Macaulay Duration",
+      "quote": "For a level annuity-immediate of $n$ payments the payment cancels, so $D_{Mac} = (Ia)_{\\overline{n}|} / a_{\\overline{n}|}$ periods.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §54 Ex 54.6 p.472: level annuity-immediate D_Mac = (Ia)_n/a_n; fact checked run 2026-10-30T19:34Z/bd53",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -30848,7 +30944,15 @@
      "statement": "Deferring all payments of a cash flow set by k years increases its Macaulay duration by exactly k years, since every payment time shifts by k in the weighted average.",
      "concept": "Macaulay Duration",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Macaulay Duration",
+      "quote": "Deferring every cash flow by $k$ periods adds exactly $k$ to the Macaulay duration (and $k/(1+j)$ to the modified duration), because every time in the weighted average shifts by $k$ while the weights stay the same.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §54 pp.468-471 (d, modified duration = vd) and SOA Exam FM Sample Solutions (rev. Aug 2026), Q389 p.103: deferring by k adds k to Macaulay duration; fact checked run 2026-10-30T19:34Z/bd53",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -32311,7 +32415,15 @@
      "statement": "When cash flows are level, the payment amount cancels in the numerator and denominator of the Macaulay duration, so duration does not depend on the loan size.",
      "concept": "Macaulay Duration",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Macaulay Duration",
+      "quote": "For a level annuity-immediate of $n$ payments the payment cancels, so $D_{Mac} = (Ia)_{\\overline{n}|} / a_{\\overline{n}|}$ periods.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §54 Ex 54.6 p.472 ('independent of the rate... depends on the pattern of the level payments and not their amount'): the level payment cancels; fact checked run 2026-10-30T19:34Z/bd53",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -32319,7 +32431,15 @@
      "statement": "The Macaulay duration of an n-year level annuity-immediate at interest rate i equals (Ia)_{n|i} / a_{n|i}.",
      "concept": "Increasing Annuity",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Macaulay Duration",
+      "quote": "For a level annuity-immediate of $n$ payments the payment cancels, so $D_{Mac} = (Ia)_{\\overline{n}|} / a_{\\overline{n}|}$ periods.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §54 Ex 54.6 p.472: level annuity-immediate D_Mac = (Ia)_n/a_n; fact checked run 2026-10-30T19:34Z/bd53",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -32552,7 +32672,15 @@
      "statement": "In the Macaulay duration of a level-payment stream, the common payment amount cancels from numerator and denominator, so only the discount factors matter.",
      "concept": "Macaulay Duration",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Macaulay Duration",
+      "quote": "For a level annuity-immediate of $n$ payments the payment cancels, so $D_{Mac} = (Ia)_{\\overline{n}|} / a_{\\overline{n}|}$ periods.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §54 Ex 54.6 p.472: in a level stream the payment cancels; fact checked run 2026-10-30T19:34Z/bd53",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -33835,7 +33963,15 @@
      "statement": "To compute the duration of a coupon bond, the numerator is the coupon rate times (Ia)_n plus n times v^n (for the redemption payment at time n), and the denominator is the bond price.",
      "concept": "Macaulay Duration",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Macaulay Duration",
+      "quote": "For a coupon bond with coupon $Fr$, redemption value $C$ and price $P$, $D_{Mac} = \\left[Fr\\,(Ia)_{\\overline{n}|j} + n\\,C\\,v^n\\right] / P$ coupon periods.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §54 Ex 54.3, 54.5 pp.469-472: bond D_Mac numerator Fr(Ia)_n + nCv^n over price (quote changed by checker to the bond-formula line); fact checked run 2026-10-30T19:34Z/bd53",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -34448,7 +34584,15 @@
      "statement": "The book value of a discount bond just after coupon t equals the purchase price plus the accumulated discount, which is the first-period discount amount times the accumulation annuity-immediate factor s_{t|i}.",
      "concept": "Bond Book Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Accumulation of Discount",
+      "quote": "The total accumulated over the first $t$ coupons is the first coupon's amount times $s_{\\overline{t}|j}$, so the book value just after coupon $t$ is the price plus that total:",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §44 pp.396-397 (P_t = C(g-i)v^(n-t+1), B_t = B_0 - sum P_k): total discount accumulated = first amount x s_t, B_t = P + that total; fact checked run 2026-10-30T19:34Z/bd53",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r3",
@@ -35221,7 +35365,15 @@
      "statement": "Scaling all cash flows by a constant factor (e.g., changing the level payment amount) does not change the Macaulay or modified duration, since the factor cancels in the ratio.",
      "concept": "Macaulay Duration",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Macaulay Duration",
+      "quote": "Scaling every cash flow by the same constant leaves the Macaulay duration unchanged, because the constant cancels between the numerator and the price.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §54 Ex 54.6 p.472: scaling every cash flow leaves duration unchanged (quote changed by checker to the scaling line); fact checked run 2026-10-30T19:34Z/bd53",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r3",
@@ -35870,7 +36022,15 @@
      "statement": "The total accumulation of discount over the first t coupons equals the first-period accumulation times the accumulated value annuity-immediate factor s_{t|i}, i.e., P1 * ((1+i)^t - 1)/i.",
      "concept": "Annuity-Immediate Accumulated Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Accumulation of Discount",
+      "quote": "The total accumulated over the first $t$ coupons is the first coupon's amount times $s_{\\overline{t}|j}$, so the book value just after coupon $t$ is the price plus that total:",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §44 pp.396-397: total discount accumulated over t coupons = first amount x s_t; fact checked run 2026-10-30T19:34Z/bd53",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",

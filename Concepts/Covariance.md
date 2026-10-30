@@ -22,6 +22,8 @@ verification:
 > $$= E[(X - \mu_X)(Y - \mu_Y)]$$
 
 - If $X$ and $Y$ are [[Independent Random Variables|independent]], $\text{Cov}(X, Y) = 0$ (but the converse is not necessarily true)
+- $X$ and $Y$ are **uncorrelated** when $\text{Cov}(X, Y) = 0$, equivalently when their correlation coefficient is 0. Independence implies uncorrelated, but not conversely.
+- Covariance is bilinear and $\text{Cov}(X, X) = \text{Var}(X)$ — see [[Covariance and Correlation Coefficient]].
 
 ![[Media/Figures/Covariance.svg|340]]
 

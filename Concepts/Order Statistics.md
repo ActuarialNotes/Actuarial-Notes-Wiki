@@ -33,6 +33,12 @@ verification:
 
 > $$f_{j,k}(x,y) = \frac{n!}{(j-1)!\,(k-j-1)!\,(n-k)!} [F(x)]^{j-1} [F(y) - F(x)]^{k-j-1} [1 - F(y)]^{n-k} f(x)\, f(y), \quad x < y$$
 
+- **Sampling without replacement.** When $n$ distinct values are drawn without replacement from $\{1, 2, \ldots, N\}$, all $\binom{N}{n}$ subsets are equally likely. $X_{(k)} = x$ exactly when $x$ is chosen, $k - 1$ of the chosen values lie below $x$ and $n - k$ lie above it, so by the multiplication principle fix $x$ in the selection and choose the rest from the $x - 1$ values below it and the $N - x$ values above it:
+
+> $$P\bigl(X_{(k)} = x\bigr) = \frac{\binom{x-1}{k-1}\binom{N-x}{n-k}}{\binom{N}{n}}, \quad k \le x \le N - n + k$$
+
+- The $j$-th largest of the $n$ is $X_{(n-j+1)}$: fix $x$, then choose $j - 1$ values from those greater than $x$ and $n - j$ from those less than $x$.
+
 ![[Media/Figures/Order_Statistics.svg|340]]
 
 > [!example]- Expected Maximum of Three Uniform Observations {Example}

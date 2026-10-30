@@ -22,6 +22,8 @@ A **Conditional Probability Function** gives the distribution of one random vari
 
 > $$P(X = x \mid Y = y) = \frac{P(X = x, Y = y)}{P(Y = y)}$$
 
+- The denominator $p_Y(y)$ does not depend on $x$, so the conditional PMF is proportional to the joint PMF with $y$ held fixed. Drop every factor that does not involve $x$, recognize what is left (the kernel) as a known family, and its normalizing constant follows.
+
 ![[Media/Figures/Conditional_Probability_Function.svg|340]]
 
 > [!example]- Conditional PDF from a Joint Density {Example}

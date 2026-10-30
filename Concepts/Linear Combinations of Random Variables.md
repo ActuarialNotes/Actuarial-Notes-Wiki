@@ -24,6 +24,7 @@ verification:
 - Coefficients enter the variance **squared**, so $\text{Var}(X - Y) = \text{Var}(X) + \text{Var}(Y)$ for independent $X, Y$ — a difference has a *larger* variance than either term, never a smaller one.
 - A linear combination of independent normals is exactly normal, which is what makes [[Probabilities for Linear Combinations]] computable in closed form.
 - For $n$ i.i.d. variables with mean $\mu$ and finite variance $\sigma^2$, $\bar{X}$ has mean $\mu$ and variance $\sigma^2/n$, and for large $n$ the [[Central Limit Theorem]] makes the sum $X_1 + \cdots + X_n$ and the mean $\bar{X}$ approximately normal, whatever their common distribution.
+- A payment that depends on which of several events occur is a linear combination of indicators: $\text{Payment} = \sum_i a_i I_i$, where $I_i$ is 1 if event $A_i$ occurs and 0 otherwise, and the amount $a_i$ paid for event $i$ is its coefficient. Each $I_i$ is Bernoulli with $E[I_i] = P(A_i)$ and $\text{Var}(I_i) = P(A_i)\,[1 - P(A_i)]$, so the formulas above give the payment's mean and variance, with covariance terms unless the events are independent.
 
 ![[Media/Figures/Linear_Combinations_of_Random_Variables.svg|340]]
 

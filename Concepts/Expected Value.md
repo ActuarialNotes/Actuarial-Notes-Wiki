@@ -25,6 +25,23 @@ verification:
 
 ![[Media/Figures/Expected_Value.svg|340]]
 
+### Other ways to compute it
+
+- **Symmetry.** If a density is symmetric about a point $c$, that is $f(c + t) = f(c - t)$ for all $t$, and $E[X]$ exists, then $E[X] = c$.
+- **Tail sum.** For $N$ taking values $0, 1, 2, \ldots$, the mean is the sum of the survival probabilities:
+
+> $$E[N] = \sum_{k=0}^{\infty} P(N > k) = \sum_{k=1}^{\infty} P(N \ge k)$$
+
+- For a count capped at $m$, $P(\min(N, m) > k)$ is $P(N > k)$ for $k < m$ and $0$ for $k \ge m$, so the tail sum stops at $m - 1$: $E[\min(N, m)] = \sum_{k=0}^{m-1} P(N > k)$.
+- **Expected excess of a count.** For an integer $c \ge 1$, $\max(N - c, 0) = (N - c) + \sum_{n=0}^{c-1} (c - n)\,1\{N = n\}$: extending the sum over $n \ge c$ to all $n$ gives $E[N - c]$, and the terms $n < c$ it subtracted are added back.
+
+> $$E[\max(N - c, 0)] = E[N] - c + \sum_{n=0}^{c-1} (c - n)\, P(N = n)$$
+
+- For $c = 1$ this is $E[\max(N - 1, 0)] = E[N] - 1 + P(N = 0)$.
+- **Mean given an event.** For an event $A$ with $P(A) > 0$, the conditional mean uses the conditional density $f(x)/P(A)$ on $A$ (and 0 off it), so $E[X \mid A] = E[X \cdot 1_A] / P(A)$. For $A = \{X < c\}$ the numerator integrates $x f(x)$ over the restricted range only:
+
+> $$E[X \mid X < c] = \frac{\int_{-\infty}^{c} x\, f(x)\, dx}{F(c)}$$
+
 > [!example]- Expected Payout on a Simple Policy {Example}
 > A discrete random variable $X$ (claim size) has PMF: $P(X=0)=0.5$, $P(X=100)=0.3$, $P(X=500)=0.2$. Find $E[X]$.
 >

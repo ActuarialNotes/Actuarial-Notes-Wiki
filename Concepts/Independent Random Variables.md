@@ -23,6 +23,8 @@ verification:
 - Independence implies [[Covariance]] is zero ($\text{Cov}(X,Y) = 0$), though the converse is not always true
 - For independent random variables: $E[XY] = E[X]\,E[Y]$ and $\text{Var}(X + Y) = \text{Var}(X) + \text{Var}(Y)$
 - The [[Central Limit Theorem]] applies to sums of independent and identically distributed (i.i.d.) random variables
+- If $X$ and $Y$ are independent, so are $g(X)$ and $h(Y)$ for any functions $g$ and $h$; hence $E[g(X)\,h(Y)] = E[g(X)]\,E[h(Y)]$, for example $E[X^2 Y^2] = E[X^2]\,E[Y^2]$.
+- **A sum of i.i.d. discrete variables by patterns.** To find $P(X_1 + \cdots + X_n = s)$, list every pattern of individual values that adds to $s$. By independence one assignment of a pattern to the individuals has probability equal to the product of the PMF values; multiply it by the number of ways to assign those values to the individuals, a binomial or multinomial coefficient: $\binom{n}{1}$ for one variable at a value and the rest at 0, $\binom{n}{2}$ for two at one value and the rest at 0.
 
 ![[Media/Figures/Independent_Random_Variables.svg|340]]
 
@@ -31,3 +33,16 @@ verification:
 >
 > > [!answer]-
 > > The marginal densities are $f_X(x) = 2(1-x)$ and $f_Y(y) = 2y$. Their product is $4y(1-x)$, but $f(x,y) = 2 \neq 4y(1-x)$ in general, so **$X$ and $Y$ are not independent**.
+
+> [!example]- Total Claims from Three Policies {Example}
+> Three policies have independent claim counts with common PMF $p(0) = 0.5$, $p(1) = 0.3$, $p(2) = 0.2$. Find the probability that the total is 2.
+>
+> > [!answer]-
+> > The patterns adding to 2 are one policy at 2 with the others at 0, and two policies at 1 with the third at 0. Each can be assigned in $\binom{3}{1} = 3$ ways:
+> > $$
+> > \begin{align*}
+> > P(S = 2) &= 3(0.2)(0.5)^2 + 3(0.3)^2(0.5) \\
+> >          &= 0.150 + 0.135 \\
+> >          &= 0.285
+> > \end{align*}
+> > $$

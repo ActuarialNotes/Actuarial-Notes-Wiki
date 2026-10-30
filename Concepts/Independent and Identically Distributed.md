@@ -27,6 +27,8 @@ Random variables $X_1, X_2, \ldots, X_n$ are **Independent and Identically Distr
 - The version of the [[Central Limit Theorem]] on Exam P assumes i.i.d. summands with finite variance; it is what licenses the [[Normal Approximation]] $S_n \approx N(n\mu,\ n\sigma^2)$.
 - The [[Order Statistics]] formulas rely on it too: the maximum has $P(X_{(n)} \le x) = F(x)^n$ and the minimum has $P(X_{(1)} > x) = [1 - F(x)]^n$.
 - Some i.i.d. sums are known exactly: Bernoulli$(p)$ terms sum to a [[Binomial Distribution|binomial]]$(n, p)$, Poisson$(\lambda)$ terms to a Poisson$(n\lambda)$, and [[Exponential Distribution|exponentials]] with mean $\theta$ to a [[Gamma]]$(n, \theta)$.
+- **Symmetry.** The joint density $f(x_1)\,f(x_2)$ is unchanged when $x_1$ and $x_2$ swap, so $(X_1, X_2)$ has the same joint distribution as $(X_2, X_1)$, and an event and its mirror image with the roles swapped have equal probability: $P(X_1 > g(X_2)) = P(X_2 > g(X_1))$ for any function $g$, for example $P(X_1 > 3X_2) = P(X_2 > 3X_1)$ and $P(X_1 < X_2) = P(X_2 < X_1)$.
+- The symmetry survives conditioning on an event $C$ that treats the items alike (such as "at least one item is of type E"): every item has the same conditional probability $P(\text{item } i \text{ has } A \mid C)$. Writing the number of items with property $A$ as a sum of indicators, linearity gives $E[\text{count} \mid C] = n \cdot P(\text{item 1 has } A \mid C)$.
 
 > [!example]- Fifty Policies versus One Large Policy {Example}
 > Each of 50 independent policies has an annual loss with mean \$1,000 and standard deviation \$400. Compare the total $S = X_1 + \cdots + X_{50}$ with a single risk $T = 50X_1$ that has the same expected loss.

@@ -25,6 +25,25 @@ The **joint probability function** (joint PMF) of discrete random variables $X$ 
 
 ![[Media/Figures/Joint_Probability_Function.svg|340]]
 
+### Events, sums and the multinomial
+
+- The probability of any event about the pair is the sum of the joint PMF over every pair $(x, y)$ in the event: $P((X, Y) \in A) = \sum_{(x,y) \in A} p(x, y)$.
+- From a joint table, an event on one variable (such as $X < k$) takes every cell in the rows that satisfy it, across all columns; an event on both variables takes only the cells that satisfy both conditions at once.
+- For a sum, list every pair that adds to $s$ and add their joint probabilities:
+
+> $$P(X + Y = s) = \sum_x p(x,\, s - x)$$
+
+- When the joint PMF is given as a marginal times a conditional, each term is $p_X(x)\, p(s - x \mid x)$. Conditioning on the sum then divides by this total: $P(X = x \mid X + Y = s) = p(x, s - x) / P(X + Y = s)$.
+- **Multinomial distribution.** When each of $n$ independent trials falls into exactly one of $k$ categories with fixed probabilities $p_1, \ldots, p_k$ (which sum to 1), the category counts $(N_1, \ldots, N_k)$ have the joint probability function
+
+> $$P(N_1 = n_1, \ldots, N_k = n_k) = \frac{n!}{n_1!\, n_2! \cdots n_k!}\, p_1^{n_1} p_2^{n_2} \cdots p_k^{n_k}, \quad n_1 + \cdots + n_k = n$$
+
+- Each ordering of the outcomes with those counts has probability $p_1^{n_1} \cdots p_k^{n_k}$, and the coefficient $n!/(n_1! \cdots n_k!)$ counts the orderings. The multinomial extends the [[Binomial Distribution|binomial]] to more than two outcomes. For three categories, with $i$ and $j$ the counts in the first two:
+
+> $$p(i, j) = \frac{n!}{i!\, j!\, (n - i - j)!}\, p_1^{i}\, p_2^{j}\, p_3^{\,n - i - j}$$
+
+- Each category's count on its own is binomial: every trial lands in category $i$ with probability $p_i$ or not, so $N_i \sim \text{Binomial}(n, p_i)$, $E[N_i] = n p_i$ and $P(N_i \ge 1) = 1 - (1 - p_i)^n$.
+
 > [!example]- Number of Claims and Policies Lapsed {Example}
 > Let $X$ = number of claims (0 or 1) and $Y$ = policies lapsed (0 or 1). Joint PMF:
 >

@@ -27,6 +27,7 @@ The **marginal probability function** of $X$ is obtained from the [[Joint Probab
 > $$f_X(x) = \int_{-\infty}^{\infty} f(x,y)\,dy$$
 
 - Marginal distributions are the starting point for computing [[Moments for Joint Distributions]] and assessing [[Independent Random Variables|independence]]
+- The sum runs only over the joint PMF's support. When that support is not a rectangle, say $y = 0, 1, \ldots, x$, the marginal is $p_X(x) = \sum_{y=0}^{x} p(x, y)$: the number of terms changes with $x$, and a $y$ outside the support at that $x$ contributes 0.
 
 ![[Media/Figures/Marginal_Probability_Function.svg|340]]
 

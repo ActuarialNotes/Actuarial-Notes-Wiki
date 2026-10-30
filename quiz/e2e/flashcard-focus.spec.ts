@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test'
 
 // Focus mode locks the page behind a black backdrop. The study card used to sit
 // in normal flow under that lock, so a revealed card taller than a phone —
-// Lift, with its definition and four formula boxes — could never be scrolled:
+// Lift, with its definition and formula boxes — could never be scrolled:
 // the rest of the card and the Again / Got it buttons stayed out of reach
 // under the Previous / Next footer. The study area now brings its own scroller.
 const VAULT_ROOT = new URL('../../', import.meta.url)
@@ -36,7 +36,7 @@ test.describe('flashcard focus mode on a phone', () => {
     await card.click()
     const gotIt = page.getByRole('button', { name: /Got it/ })
     await expect(gotIt).toBeVisible()
-    await expect(card).toContainText('Cumulative Lift')
+    await expect(card).toContainText('economic value')
 
     // The revealed card runs past the bottom of the screen.
     const before = (await card.boundingBox())!
@@ -53,13 +53,19 @@ test.describe('flashcard focus mode on a phone', () => {
 
     await expect.poll(async () => (await card.boundingBox())!.y).toBeLessThan(before.y - 100)
     // Still the same card, still in focus mode.
-    await expect(card).toContainText('Cumulative Lift')
+    await expect(card).toContainText('economic value')
     const exit = page.getByTitle('Exit focus mode (Esc)')
     await expect(exit).toBeVisible()
 
-    // Got it is now above the footer rather than under it.
+    // At the end of the scroll, Got it is above the footer rather than under it.
+    // (The drag above proves a finger scrolls; how far one drag goes depends on
+    // how tall the card's content is, so finish the scroll directly.)
+    await page.evaluate(() => {
+      const scroller = document.querySelector('[data-tour="flip-card"]')?.closest<HTMLElement>('.overflow-y-auto')
+      if (scroller) scroller.scrollTop = scroller.scrollHeight
+    })
+    await expect.poll(async () => { const b = (await gotIt.boundingBox())!; return b.y + b.height }).toBeLessThan(ABOVE_FOOTER)
     const got = (await gotIt.boundingBox())!
-    expect(got.y + got.height).toBeLessThan(ABOVE_FOOTER)
 
     // The empty space below the card is still the backdrop.
     await page.mouse.click(195, got.y + got.height + 40)

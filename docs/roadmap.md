@@ -203,14 +203,16 @@ to §4. Where an item has a former roadmap ID (P0–P4), §4 gives it.
 ### 3.1 Now
 
 **Lane 1, engineering health (fix the gate first):**
-1. **E1: get CI green, then enforce it.** 🟡 2026-10-17: the e2e suite passes locally
-   (`tour.spec.ts` follows `TOUR_ENABLED`; the other failures were tests behind the UI).
-   **New blocker, the maintainer's:** the Actions API lists **no workflow run of any kind
-   after 2026-10-10 09:07 UTC** (#1613's merge), though all five workflows are `active` and
-   about 20 PRs have merged since. CI isn't red; it isn't running. Check the repository's
-   Actions settings and billing/minutes. Left after that: see CI go green on `main`, then
-   **D14**: make the CI checks required on `main`. Until both are done, every other "✅
-   with tests" in this file is weaker than it looks.
+1. **E1: get CI green, then enforce it.** 🟡 2026-10-30: Actions run again, and the lint ·
+   typecheck · test · build job was green, but `main` merged red for days on the e2e job
+   (10 of 130). One was a real regression: the Study Guides page lost Exam P's
+   `data-tour="exam-p"` marker when its SOA track began to be drawn in chunks. The other
+   nine were tests behind the content and the UI (Exam 5 now has multiple-choice questions
+   and races; renamed and re-verified questions; a rewritten Lift page; the CIA's third
+   body on the Study Guides picker). Fixed, and the suite passes as CI runs it. Left: see CI
+   go green on `main`, then **D14**: make the CI checks required on `main`, which is what
+   keeps a red e2e job from merging again. Until then, every other "✅ with tests" in this
+   file is weaker than it looks.
 2. ~~**E3: move the question bank out of the entry chunk, and add a size budget to CI.**~~
    ✅ 2026-10-17: `fetchAllQuestions` dynamic-imports the bank; the entry is 730 kB gzip
    (from 3,667), and `npm run size` holds first paint to 900 kB in CI. E12 is unblocked.
@@ -887,6 +889,10 @@ ls Concepts/*.md | wc -l; ls Resources/Books/*.md | wc -l
 ```
 
 ## Appendix B: Revision history
+
+- **2026-10-30, the e2e job green again (E1).** Actions run again; `main`'s e2e job had been red
+  (10 failures). Exam P's tour marker restored on the chunked Study Guides list, and nine tests
+  brought up to the content and UI they test. D14 (required checks) is the maintainer's next step.
 
 - **2026-10-30, cheaper G8.** A review of the readiness workflow found most of Phase 2's remaining
   cost in closing G8's items, not in the checks. Settled: D30 (the exam's own syllabus pages are in

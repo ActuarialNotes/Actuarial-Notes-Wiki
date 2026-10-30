@@ -66,7 +66,7 @@ test.describe('actuaria', () => {
     await expect(panel.getByTestId('actuaria-battle-sector')).toBeVisible()
     await expect(panel.getByRole('link', { name: 'Open study guide' })).toHaveAttribute('href', /\/wiki\/exam\//)
     // An exam whose bank is written, not multiple choice, trains in a quiz instead.
-    await page.getByTestId('actuaria-sector-CAS-5').click()
+    await page.getByTestId('actuaria-sector-ASTAM').click()
     await expect(panel.getByTestId('actuaria-train-sector')).toBeVisible()
   })
 

@@ -414,6 +414,15 @@
   to   { opacity: 1; }
 }
 
+/* In the dark theme the reader is black, not the card grey: long-form text
+   reads best at full contrast. Everything inside that sat on `--background`
+   (formula boxes, the footer) is lifted to the card step so it still stands
+   off the page; `--card` surfaces inside keep their grey. */
+.dark .concept-popup-aside {
+  background-color: hsl(0 0% 0%);
+  --background: var(--card);
+}
+
 /* Concept popup: left edge tracks the sidebar width exactly.
    --sidebar-width is set by Sidebar.tsx (16rem expanded, 3.5rem collapsed).
    On mobile the popup spans full width so we skip this rule. */

@@ -47,3 +47,14 @@ created: 2026-10-10
 - confidence: high
 - checks_run: Delta re-check of example (b): limit 300,000 ≥ 257,500, no coinsurance penalty, mortgageholder paid 150,000 under §F.2.d–e; rest unchanged since this run's earlier pass.
 - sources_checked: ISO CP 00 10 10 12 Building and Personal Property Coverage Form (specimen), §D, F.1, F.2.d–e (delta re-check of example (b)), sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf; ISO CP 00 10 10 12 Building and Personal Property Coverage Form (specimen), §E.1–E.7, F.1 (Examples 1–3), F.2 pp.10–14, sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf
+
+## [C-003] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-30T22:59Z/f5d8
+- date: 2026-10-30
+- status_set: verified
+- confidence: high
+- checks_run: Delta check of commit 2ed7cc73: renewal-option sentence in the valuation and symbols bullets matches §E.7.e(2) ('If your lease contains a renewal option, the expiration of the renewal option period will replace the expiration of the lease in this procedure'); the procedure's (a) and (b) both run to 'the expiration of the lease', so 'in both counts' is correct. Example arithmetic recomputed: 90,000 x (730+730)/(1,825+730) = 90,000 x 1,460/2,555 = 90,000 x 4/7 = 51,428.57. Example numbers differ from discia-an-621's (120,000; 2,190; 1,095) — no leak. git diff confirms nothing else changed since C-002.
+- sources_checked: ISO CP 00 10 10 12 Building and Personal Property Coverage Form (specimen), §D, F.1, F.2.d–e (delta re-check of example (b)), sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf; ISO CP 00 10 10 12 Building and Personal Property Coverage Form (specimen), §E.1–E.7, F.1 (Examples 1–3), F.2 pp.10–14, sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf; ISO CP 00 10 10 12 Building and Personal Property Coverage Form (specimen), §E.7.e(2) incl. the renewal-option sentence, p.13 (delta re-check of the valuation bullet, symbols bullet and Unrepaired Tenant Improvements example), sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf
+- note: Prior sources carried for the unchanged lines; the specimen re-read this run for the new text. Confidence high, as before (the form itself).

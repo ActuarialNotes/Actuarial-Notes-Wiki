@@ -1,13 +1,14 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-10
+  status: verified
+  confidence: high
+  last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
   content_hash: sha256:03dfc0482d70dc403809b94804e79bb0c7a60d0e24b42b2f64dc0769f557e9e6
   sources:
     - "ISO CP 00 10 10 12 Building and Personal Property Coverage Form (specimen), §D, F.1, F.2.d–e (delta re-check of example (b)), sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf"
     - "ISO CP 00 10 10 12 Building and Personal Property Coverage Form (specimen), §E.1–E.7, F.1 (Examples 1–3), F.2 pp.10–14, sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf"
+    - "ISO CP 00 10 10 12 Building and Personal Property Coverage Form (specimen), §E.7.e(2) incl. the renewal-option sentence, p.13 (delta re-check of the valuation bullet, symbols bullet and Unrepaired Tenant Improvements example), sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/BPP Loss Conditions and Additional Conditions.md

@@ -5917,7 +5917,15 @@
      "statement": "Public disclosure of private facts is a privacy tort in which a true but private fact, not of legitimate public concern, is made public in a way that would be highly offensive to a reasonable person.",
      "concept": "Public Disclosure of Private Facts",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Intentional Tort",
+      "quote": "*Public disclosure of private facts* is giving publicity to a true matter concerning another's private life when the matter would be highly offensive to a reasonable person and is not of legitimate concern to the public.",
+      "note": "Written from Restatement (Second) §652D as quoted in Lake v. Wal-Mart; 'true' added by the checker from Chemerinsky (Chapman L. Rev.). Covers every element of the requirement: true, private, not of public concern, highly offensive.",
+      "date": "2026-10-30",
+      "run": "g8-discia-chk"
+     }
     },
     {
      "id": "r3",
@@ -5951,7 +5959,15 @@
      "statement": "False light is a privacy tort in which the defendant publicizes information that places the plaintiff in a misleading or false light that would be highly offensive to a reasonable person.",
      "concept": "False Light",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Intentional Tort",
+      "quote": "*False light* is giving publicity to a matter that places another before the public in a false light that would be highly offensive to a reasonable person, where the defendant knew the matter was false or acted in reckless disregard of its falsity.",
+      "note": "Written from Restatement (Second) §652E as quoted in Lake v. Wal-Mart, and Wex 'false light'; checked this run.",
+      "date": "2026-10-30",
+      "run": "g8-discia-chk"
+     }
     }
    ]
   },
@@ -12306,7 +12322,15 @@
      "statement": "When the lease has a renewal option, the expiration of the renewal period is used as the lease expiration in the improvements and betterments proportion, in both the remaining-days numerator and total-days denominator.",
      "concept": "Tenant's Improvements and Betterments",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "BPP Loss Conditions and Additional Conditions",
+      "quote": "If the lease contains a renewal option, the expiration of the renewal option period replaces the expiration of the lease in both counts.",
+      "note": "Transcribes ISO CP 00 10 10 12 §E.7.e(2), p.13; both counts in the procedure run to the lease's expiration, so the replacement applies to numerator and denominator. Page example uses its own figures, not the question's.",
+      "date": "2026-10-30",
+      "run": "g8-discia-chk"
+     }
     }
    ]
   },

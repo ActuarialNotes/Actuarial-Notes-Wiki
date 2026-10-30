@@ -13,3 +13,14 @@ created: 2026-10-10
 - checks_run: Blind recompute from the stem with key and explanation hidden: 0 + 400,000 + min(1.3M, 1.0M) = 1,400,000 — agrees with the key. Key, every distractor's rationale and the explanation's arithmetic then checked against the cited text; learning_objective matches the DISC-IA page's section title; wiki_link targets exist and are U.S.-framed.
 - sources_checked: NAIC, Accounting Practices and Procedures Manual, as of March 2025, Part 1 (Indiana DOI copy), SSAP No. 62R ¶31-32 (PDF pp.441-442), sha256:a29e7223b53854eff1beb79c3fd6a969c54529d2dacc74510ea122a5c7b4ad13 — https://www.in.gov/idoi/files/INDAP25-Pt-1.pdf
 - note: Vault-written question; no publisher key, so medium per the MAS-I/Exam P precedent.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-30T22:59Z/f5d8
+- date: 2026-10-30
+- status_set: verified
+- confidence: medium
+- checks_run: Retag only: one wiki_link entry (Concepts/Excess+of+Loss) added in cffb3ebb, nothing else changed (git diff). The concept is used by the solution: per-occurrence XL of 1,000,000 xs 500,000 — each claim's recoverable is min(max(X-500,000,0),1,000,000), the layer E[Y] the Excess of Loss page defines. Stem, options, key and explanation unchanged since the prior verified pass (C-001).
+- sources_checked: NAIC, Accounting Practices and Procedures Manual, as of March 2025, Part 1 (Indiana DOI copy), SSAP No. 62R ¶31-32 (PDF pp.441-442), sha256:a29e7223b53854eff1beb79c3fd6a969c54529d2dacc74510ea122a5c7b4ad13 — https://www.in.gov/idoi/files/INDAP25-Pt-1.pdf
+- note: Sources and confidence carried from the prior verified pass; vault-written question, so medium.

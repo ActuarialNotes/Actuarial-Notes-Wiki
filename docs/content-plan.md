@@ -18,8 +18,8 @@ roadmap review_
 > answerable). P, FM, MAS-I, the three DISCs and Exam 7 had passed every gate there was; the
 > maintainer moved them back to `beta` the same day, because their banks had not been checked
 > against G8. Each comes back to `ready` once its bank is run and its items are closed (steps 0
-> and 10). **Exams P and FM are `ready` again (30 Oct)**, 8 / 8; the other fifteen are beta exams in
-> Phase 2.
+> and 10). **Exams P and FM are `ready` again (30 Oct)**, and **MAS-I (31 Oct)**, 8 / 8; the other
+> fourteen are beta exams in Phase 2.
 
 This is the **one plan for the vault's content**: the exam pages, concept pages, resource pages
 and question banks, the fact check that stands behind them, and the generated figures and
@@ -189,9 +189,9 @@ Adopted during the DISC, MAS-I and Exam 7 campaigns (Appendix A), and binding on
 
 From `python3 scripts/publication_readiness.py --body all` and `--hold`, after Phase Q closed,
 re-measured with G8 the same day.
-84 exam pages: **2 ready, 15 beta, 67 in development** (Exams P and FM promoted 30 Oct).
+84 exam pages: **3 ready, 14 beta, 67 in development** (Exams P and FM promoted 30 Oct, MAS-I 31 Oct).
 
-**Ready (2).** The seven exams that were ready on 25 Oct went back to beta that day, when G8 joined
+**Ready (3).** The seven exams that were ready on 25 Oct went back to beta that day, when G8 joined
 the gates (D29). **Exam P** is ready again since 30 Oct: page verified, 68 concepts verified, 6 / 6
 readings verified, every concept with a question, 719 / 719 served questions verified, and 719 / 719
 answerable (G8: 683 items closed — 254 passages the check missed, 19 by retagging 15 questions, 220
@@ -200,10 +200,14 @@ by passages written onto 43 concept pages and fact checked, 190 not required). P
 verified, every concept with a question, 460 / 460 served questions verified, and 460 / 460
 answerable (G8: 300 items closed — 80 passages the check missed, 15 by retagging 14 questions, 70
 by passages written onto 13 concept pages from Finan and fact checked, 135 not required).
+**MAS-I** is ready again since 31 Oct: page verified, 176 concepts verified, 8 / 8 readings
+verified, every concept with a question, 281 / 281 served questions verified, and 281 / 281
+answerable (G8: 92 items closed — 17 passages the check missed, 9 by retagging 8 questions, 41 by
+passages written onto 29 concept pages from open texts and fact checked, 25 not required).
 
-`--hold` (30 Oct): 2 ready exams, 0 errors, 1 warning (PCPA's G6).
+`--hold` (31 Oct): 3 ready exams, 0 errors, 1 warning (PCPA's G6).
 
-**Beta (15)**: the five moved back from ready, then the rest in Phase 2's order:
+**Beta (14)**: the four moved back from ready, then the rest in Phase 2's order:
 
 | Exam | Page | Concepts | Unverified concepts | Readings unverified | No question | Bank verified | Answerable | Gates | Fails |
 |---|---|---:|---:|---:|---:|---|---|---:|---|
@@ -211,7 +215,6 @@ by passages written onto 13 concept pages from Finan and fact checked, 135 not r
 | DISC-RM | verified | 65 | 0 | 0 / 1 | 0 | 144 / 144 | not run | 7 / 8 | G8 |
 | DISC-IA | verified | 97 | 0 | 0 / 1 | 0 | 221 / 221 | not run | 7 / 8 | G8 |
 | Exam 7 | verified | 25 | 0 | 0 / 15 | 0 | 125 / 125 | not run | 7 / 8 | G8 |
-| **MAS-I** | verified | 176 | 0 | 0 / 8 | 0 | 281 / 281 | **281 / 281 ✅ (30 Oct)** | **8 / 8** | — (promotion is the maintainer's call) |
 | MAS-II | verified | 98 | 2 | 1 / 6 | 0 | 141 / 141 | 74 / 141 | 5 / 8 | G4, G5, G8 |
 | Exam 9 | verified | 60 | 1 | 2 / 9 | 0 | 131 / 131 | not run | 5 / 8 | G4, G5, G8 |
 | SRM | verified | 41 | 7 | 2 / 2 | 0 | 77 / 77 | not run | 5 / 8 | G4, G5, G8 |
@@ -345,7 +348,7 @@ Appendix A.
 
 | # | Exam | Gates | What is left | Readings it rests on |
 |---|---|---:|---|---|
-| — | P, FM, MAS-I, the DISCs, Exam 7 (beta again since 25 Oct; **P and FM ready again 30 Oct, 8 / 8**) | 7 / 8 | The first seven gates done (Phase 1; Appendix A). MAS-I is 6 / 8 until ISLR's and Dobson's delta re-check (Phase 2, step 0). G8: each bank's check (step 0), then its items (step 10), then back to `ready` | Their readings, all verified |
+| — | P, FM, MAS-I, the DISCs, Exam 7 (beta again since 25 Oct; **P and FM ready again 30 Oct, MAS-I 31 Oct, 8 / 8**) | 7 / 8 | The first seven gates done (Phase 1; Appendix A). MAS-I is 6 / 8 until ISLR's and Dobson's delta re-check (Phase 2, step 0). G8: each bank's check (step 0), then its items (step 10), then back to `ready` | Their readings, all verified |
 | 1 | **MAS-II** (C4) | 5 / 8 | G4: *Backward Shift Operator* and *Correlogram* quote Cowpertwait's own wording; restate each to an open text (fpp3, NIST) and verify at medium (D22, D27). G5: the ISLR delta | Cowpertwait commercial; the rest verified |
 | 2 | **Exam 9** (C2) | 5 / 8 | G4: *Enterprise Risk Management* (Brehm's four phases are stated in no open source: restate the page to one that is, such as the CAS ERM Committee's free 2003 *Overview of Enterprise Risk Management*, or cut the claim). G5: CJS (assigned as the JEP text, read as the HBS working paper) and Cummins 2008 (SSRN 1057401), both `in_review`. Try again for the assigned texts; if no session can reach them, the maintainer supplies a copy | Most verified on open texts (D22) |
 | 3 | **SRM** (C9) | 5 / 8 | G4: 7 concepts (*ARCH Model*, *Hyperparameter*, *Model Validation*, *Overfitting*, *Regression Tree*, *Train-Test Split*, *Variable Transformation*). G5: Frees 2010, and the ISLR delta | Frees commercial (D7; Frees posts an online version); ISLR free |
@@ -765,7 +768,7 @@ and then a resolve run.
 | 8 | PCPA | A bank for 29 concepts, written and checked by different agents (D5); 5 concepts; 12 readings | Mostly commercial; ASOP 23 and 56, R4DS and McKinney free | **ready** |
 | 9 | Exam 6C | The page's F-008–F-012; 137 concepts; 67 readings | Free Canadian documents, but six are in the study kit only | Every gate but G5, which stays held on those six pages until the kit is read (D28) |
 | — | Exam 8 | The ISO CGL plan; G8 | Study kit only; the bank's check and items are free to do now | Held on G5 (D20, D28), with G8 closed |
-| 10 | The seven moved back (P, FM, MAS-I, the DISCs, Exam 7) | G8's items, from step 0's runs | Their own readings, all verified | Each **ready** again, 8 / 8, one promotion PR each. **P ✅ and FM ✅ ready 30 Oct** (8 / 8) |
+| 10 | The seven moved back (P, FM, MAS-I, the DISCs, Exam 7) | G8's items, from step 0's runs | Their own readings, all verified | Each **ready** again, 8 / 8, one promotion PR each. **P ✅ and FM ✅ ready 30 Oct, MAS-I ✅ 31 Oct** (8 / 8) |
 
 Steps 2–9 each start with the exam's `check-answerable` run, and each ends at **ready** only with
 G8 passing. Step 10 is listed last but is placed by step 0's runs. Each of the seven is one gate
@@ -794,7 +797,7 @@ gap, P's and FM's fixed pages already in reach. Its 92 items are **closed (30 Oc
 missed, 9 by retagging 8 questions (re-verified, run `e53d`), 25 not required, and 41 by passages
 written onto 29 concept pages from open texts, each page fact checked by a different agent from its
 writer (runs `a2ck`, `g8-masi-check-A1-2026-10-30`, `chkB`, `g8C-chk`; four minor findings fixed).
-`--check MAS-I` passes **8 / 8**; promoting it is the maintainer's call (§1.1). *Overfitting*, edited
+`--check MAS-I` passes **8 / 8**, and MAS-I is **ready** again (31 Oct). *Overfitting*, edited
 but never fact checked before, is `in_review` (only its new bullet checked); it is not a MAS-I page. Exam 7 and the DISCs reach none of those pages and
 are short lists: finish their runs and close them alongside. Steps 2–9 follow as listed.
 

@@ -9,6 +9,7 @@ import { ResourceMetaCard } from '@/components/wiki/ResourceMetaCard'
 import { extractSyllabusAssignments, isNumberedOutline, OUTLINE_ARTICLE_CLASS, parseResourceMeta, preprocessResourceMarkdown } from '@/lib/resourceMeta'
 import { ResourceSyllabusCard } from '@/components/wiki/ResourceSyllabusCard'
 import { ListenView } from '@/components/wiki/ListenView'
+import { listenCarriesOver, setListenReading } from '@/hooks/useListenCarry'
 import { ImageGalleryModal } from '@/components/wiki/ImageGalleryModal'
 import { ConceptImageBanner } from '@/components/wiki/ConceptImageBanner'
 import { ConceptActionMenu } from '@/components/ConceptActionMenu'
@@ -83,7 +84,9 @@ export function ConceptPagePanel({
   const [images, setImages] = useState<Array<{ src: string; alt: string; caption: string }>>([])
   const [showGallery, setShowGallery] = useState(false)
   const [galleryIndex, setGalleryIndex] = useState(0)
-  const [listenView, setListenView] = useState(false)
+  // A page opened while the last one was being read aloud opens in Listen and
+  // reads on — see hooks/useListenCarry.ts.
+  const [listenView, setListenView] = useState(listenCarriesOver)
   const [figuresCollapsed, setFiguresCollapsed] = useFiguresCollapsed()
   const titleBtnRef = useRef<HTMLButtonElement>(null)
   const bodyRef = useRef<HTMLDivElement>(null)
@@ -249,7 +252,10 @@ export function ConceptPagePanel({
             Listen is on. */}
         <button
           type="button"
-          onClick={() => setListenView(!listenView)}
+          onClick={() => {
+            if (listenView) setListenReading(false)
+            setListenView(!listenView)
+          }}
           aria-pressed={listenView}
           className={`${HEADER_BUTTON} ${listenView ? 'rainbow-glow text-foreground' : HEADER_BUTTON_IDLE}`}
           title={listenView ? 'Exit Listen' : 'Listen'}

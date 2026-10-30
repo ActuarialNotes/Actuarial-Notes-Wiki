@@ -5,6 +5,7 @@ import { buildListenContent, toSegments, type InlineToken, type ListenBlock } fr
 import { useListenSpeech } from '@/hooks/useListenSpeech'
 import { useListenRecording } from '@/hooks/useListenRecording'
 import { listenSlug } from '@/lib/listenNarration'
+import { listenRate, setListenRate, setListenReading } from '@/hooks/useListenCarry'
 
 interface Props {
   markdown: string
@@ -21,8 +22,9 @@ const RATE_SETTLE_MS = 250
 export function ListenView({ markdown, recordingFor }: Props) {
   const { blocks, tokens } = useMemo(() => buildListenContent(markdown), [markdown])
   const segments = useMemo(() => toSegments(blocks), [blocks])
-  const [rate, setRate] = useState(1)
-  const [rateDraft, setRateDraft] = useState(1)
+  // The speed the last page was read at, so paging on keeps it.
+  const [rate, setRate] = useState(listenRate)
+  const [rateDraft, setRateDraft] = useState(listenRate)
   const recording = useListenRecording(recordingFor ? listenSlug(recordingFor) : undefined, segments)
   const { status, activeIndex, engine, play, pause, resume, rewind, applyRate, skipForward } = useListenSpeech(
     segments,
@@ -58,9 +60,17 @@ export function ListenView({ markdown, recordingFor }: Props) {
     return () => clearTimeout(t)
   }, [rateDraft, rate])
 
+  // Whether the voice is reading is what the next page opened reads on from —
+  // recorded here, not on unmount, which is the page being left mid-sentence.
+  useEffect(() => {
+    if (status === 'playing' || status === 'loading') setListenReading(true)
+    else if (status === 'paused' || status === 'ended') setListenReading(false)
+  }, [status])
+
   // Changing speed carries on from the word being read. Skip the initial mount
   // so this doesn't double-trigger with the segments effect.
   useEffect(() => {
+    setListenRate(rate)
     if (!didMountRef.current) { didMountRef.current = true; return }
     applyRate()
     // Only a new speed applies it; applyRate changes with the play status.

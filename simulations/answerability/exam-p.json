@@ -403,7 +403,15 @@
      "statement": "If events A and B are independent, then their complements are also independent, so P(A^c ∩ B^c) = P(A^c)P(B^c).",
      "concept": "Independence of Events",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Independent Events",
+      "quote": "If $A$ and $B$ are independent, then so are $A$ and $B^c$, $A^c$ and $B$, and $A^c$ and $B^c$, so $P(A \\cap B^c) = P(A)\\,(1 - P(B))$.",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §1.4.1 Independence (Lemma: A,B independent ⇒ A,B^c; A^c,B; A^c,B^c independent, P(A∩B^c)=P(A)(1-P(B)); P(∪A_i)=1-Π(1-P(A_i)); flight example 1-(1-p_c)^N) — https://www.probabilitycourse.com/chapter1/1_4_1_independence.php; checked in the w1 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w1"
+     }
     },
     {
      "id": "r3",
@@ -1107,7 +1115,15 @@
        "page": "Probability Rules",
        "quote": "$$P(A^c) = 1 - P(A)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Conditional Probability",
+      "quote": "The complement rule holds conditionally: the probability of the complement of an event given $B$ is 1 minus the probability of the event given $B$.",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §1.4.0 Conditional Probability (conditional probability is a probability measure; P(A^c|C)=1-P(A|C); Axiom 3) — https://www.probabilitycourse.com/chapter1/1_4_0_conditional_probability.php; checked in the w1 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w1"
+     }
     },
     {
      "id": "r4",
@@ -1517,7 +1533,15 @@
      "statement": "When told the outcome belongs to a restricted subset of events, restrict the partition in the Bayes denominator to only those events (exclude the other categories), so the conditioning is on accident and membership in the subset.",
      "concept": "Conditional Probability",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Bayes Theorem",
+      "quote": "When the evidence is an event $E$ together with the information that the outcome lies in a subset $H_1, \\ldots, H_k$ of the hypotheses, condition on both: the denominator of Bayes' theorem sums over only the hypotheses in that subset.",
+      "note": "written from Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL), §4.1 Bayes probabilities, eqs. (4.2)-(4.3), pp.145-146 (PDF pp.153-154) — https://math.dartmouth.edu/~prob/prob/prob.pdf ; Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §1.4.3 Bayes' Rule — https://www.probabilitycourse.com/chapter1/1_4_3_bayes_rule.php; checked in the w1 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w1"
+     }
     },
     {
      "id": "r4",
@@ -5826,7 +5850,15 @@
      "statement": "Translate 'exactly two of the three products' into the sum of pairwise intersection probabilities when the triple intersection is empty, so that the sum of pairwise intersections equals the given percentage.",
      "concept": "Inclusion-Exclusion Principle",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Probability Addition Rule",
+      "quote": "When the triple intersection is empty, the probability that exactly two occur is the sum of the pairwise intersection probabilities.",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, §2.3 Probability Measures, three-event exercise (exactly two = (A∩B∩C^c)∪(A∩B^c∩C)∪(A^c∩B∩C)), difference rule — https://www.randomservices.org/random/prob/Probability.html; checked in the w0 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w0"
+     }
     },
     {
      "id": "r5",
@@ -6105,7 +6137,15 @@
      "statement": "Interpret a policy on a person aged x as conditional on survival to x: the probability of death within n years is P(T < x+n | T > x), not P(T < x+n).",
      "concept": "Conditional Probability",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Conditional Probability",
+      "quote": "A person known to be alive at age $x$, such as one insured at age $x$, is conditioned on survival: with lifetime $T$ from birth, the probability of death within $n$ years is $P(T \\le x + n \\mid T > x)$, not $P(T \\le x + n)$.",
+      "note": "written from Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL), §4.1 Example 4.2, p.133 (PDF p.141): given a woman is 60, the probability she lives to 80 is a conditional probability — https://math.dartmouth.edu/~prob/prob/prob.pdf ; Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §5.2.3 Conditioning and Independence (F_{X|A}(x)=(F_X(x)-F_X(a))/(F_X(b)-F_X(a)) for A={a<X<b}, b possibly ∞; endpoints immaterial for continuous X) — https://www.probabilitycourse.com/chapter5/5_2_3_conditioning_independence.php; checked in the",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w1"
+     }
     },
     {
      "id": "r5",
@@ -7171,7 +7211,15 @@
      "statement": "Rolling two fair dice gives 36 equally likely ordered outcomes (6 × 6), each with probability 1/36.",
      "concept": "Discrete Uniform Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Sample Space",
+      "quote": "Rolling two fair dice gives $6 \\times 6 = 36$ equally likely ordered outcomes, each with probability $1/36$.",
+      "note": "written from Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL), §3.1 A Counting Technique (p.76, PDF p.84: N = n1·n2·…·nr); §1.2 Example 1.11 (p.26, PDF p.34: two dice, 36 ordered outcomes each 1/36) — https://math.dartmouth.edu/~prob/prob/prob.pdf; checked in the w0 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w0"
+     }
     },
     {
      "id": "r2",
@@ -8442,7 +8490,15 @@
      "statement": "Build a two-way contingency table (e.g., gender by age group) and fill in missing cells using row and column totals by subtraction, since categories partition the population.",
      "concept": "Contingency Tables",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Conditional Probability",
+      "quote": "each row or column total is the sum of its cells because the categories partition the population … A missing cell is found by subtraction: its row or column total minus the other cells of that row or column.",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §1.4.0 (P(A|B)=|A∩B|/|B| for equally likely outcomes) and §1.4.2 Law of Total Probability (P(A)=Σ P(A∩B_i) over a partition) — https://www.probabilitycourse.com/chapter1/1_4_0_conditional_probability.php ; https://www.probabilitycourse.com/chapter1/1_4_2_total_probability.php; checked in the w1 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w1"
+     }
     },
     {
      "id": "r4",
@@ -8555,7 +8611,15 @@
      "statement": "When each of two independent choices is made uniformly at random from n integers, all n^2 ordered pairs are equally likely, so the probability of an event is the number of favorable pairs divided by n^2.",
      "concept": "Discrete Uniform Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Sample Space",
+      "quote": "When each of two independent choices is made uniformly at random from the same $n$ values, all $n^2$ ordered pairs are equally likely, each with probability $1/n^2$, so the probability of an event is the number of favourable ordered pairs divided by $n^2$.",
+      "note": "written from Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL), §3.1 A Counting Technique (p.76, PDF p.84: N = n1·n2·…·nr); §1.2 Example 1.11 (p.26, PDF p.34: two dice, 36 ordered outcomes each 1/36) — https://math.dartmouth.edu/~prob/prob/prob.pdf; checked in the w0 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w0"
+     }
     },
     {
      "id": "r2",
@@ -8857,7 +8921,15 @@
      "statement": "When two fair dice are tossed, the 36 ordered pairs of outcomes are equally likely, so probabilities can be found by counting favorable pairs.",
      "concept": "Equally Likely Outcomes (Discrete Sample Space)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Probability",
+      "quote": "When fair dice are rolled independently, every ordered outcome is equally likely, so $n$ dice have $6^n$ equally likely ordered outcomes; two dice have $6 \\times 6 = 36$.",
+      "note": "written from Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL), §1.2 Example 1.11 (p.26, PDF p.34: ordered pairs, 36 equally likely outcomes); §3.1 A Counting Technique (p.76, PDF p.84); Example 3.14 (p.107, PDF p.115: ordered description is the right one) — https://math.dartmouth.edu/~prob/prob/prob.pdf; checked in the w0 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w0"
+     }
     },
     {
      "id": "r3",
@@ -9963,7 +10035,15 @@
      "statement": "Two events are the same exactly when they contain the same outcomes; an event that requires a stricter condition is a proper subset of the broader event and is not equal to it.",
      "concept": "Events and Subsets",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Set Theory",
+      "quote": "If $A \\subseteq B$ but some outcome of $B$ is not in $A$, then $A$ is a proper subset of $B$ and $A \\neq B$: an event defined by a stricter condition is a proper subset of the broader event, not the same event.",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.2.0 Review of Set Theory (\"Two sets are equal if they have the exact same elements. Thus, A=B if and only if A⊂B and B⊂A\") — https://www.probabilitycourse.com/chapter1/1_2_0_review_set_theory.php; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, §1.1 Sets (equality, subset) — https://www.randomservices.org/random/foundations/Sets.html; checked in the w0 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w0"
+     }
     },
     {
      "id": "r3",
@@ -11709,7 +11789,15 @@
        "page": "Probability Rules",
        "quote": "P(\\text{at least one}) &= 1 - P(\\text{no claims}) \\\\"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Independent Events",
+      "quote": "If $n$ independent trials each produce an event with probability $p$, the probability that at least one produces it is $1 - (1 - p)^n$, the complement of no occurrences",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §1.4.1 Independence (Lemma: A,B independent ⇒ A,B^c; A^c,B; A^c,B^c independent, P(A∩B^c)=P(A)(1-P(B)); P(∪A_i)=1-Π(1-P(A_i)); flight example 1-(1-p_c)^N) — https://www.probabilitycourse.com/chapter1/1_4_1_independence.php; checked in the w1 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w1"
+     }
     },
     {
      "id": "r3",
@@ -12022,7 +12110,15 @@
      "statement": "Partition the union of several events into disjoint regions of a Venn diagram (only one set, exactly two sets, all three sets) and assign an unknown count to each region.",
      "concept": "Venn Diagrams",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Venn Diagram",
+      "quote": "A Venn diagram of three events $A$, $B$, $C$ splits the sample space into eight disjoint regions: three \"only one event\" regions, three \"exactly two events\" regions, the region in all three events, and the region outside all three. … To solve a three-event problem, give each unknown region a symbol, write every given total (an event, an intersection, \"only one\", \"exactly two\", the overall total) as a sum of regions, and solve the resulting linear equations, working from the centre out.",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, §2.3 Probability Measures, exercise on three events (exactly one / exactly two written as unions of A∩B∩C^c-type regions), the partition rule — https://www.randomservices.org/random/prob/Probability.html; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, §1.1 Sets (a partition of S induces a partition of B) — https://www.randomservices.org/random/foundations/Sets.html; Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL), Thm 1.2 finite additivity (p.23, PDF p.3",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w0"
+     }
     },
     {
      "id": "r2",
@@ -12077,7 +12173,15 @@
      "statement": "Partition the union of three sets into seven disjoint regions (only one set, exactly two sets, all three) and express each set's total count as the sum of its regions.",
      "concept": "Venn Diagram and Inclusion-Exclusion for Three Events",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Venn Diagram",
+      "quote": "The seven regions inside the circles partition $A \\cup B \\cup C$ … Each event's total is the sum of its \"only\" region, the two \"exactly two\" regions that include it, and the all-three region.",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, §2.3 Probability Measures, exercise on three events (exactly one / exactly two written as unions of A∩B∩C^c-type regions), the partition rule — https://www.randomservices.org/random/prob/Probability.html; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, §1.1 Sets (a partition of S induces a partition of B) — https://www.randomservices.org/random/foundations/Sets.html; Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL), Thm 1.2 finite additivity (p.23, PDF p.3",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w0"
+     }
     },
     {
      "id": "r2",
@@ -12307,7 +12411,15 @@
      "statement": "For two independent, identically distributed counts, the probability they are equal is the sum over values k of the squared probability P(N=k)^2.",
      "concept": "Independent Random Variables",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "The Law of Total Probability",
+      "quote": "For two independent, identically distributed discrete variables, the probability that they are equal is the sum over values of the squared probabilities, $\\sum_x P(X = x)^2$.",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §5.1.3 (P(X∈A)=Σ_j P(X∈A|Y=y_j)P_Y(y_j)) and §5.2.3 eq. (5.16) P(A)=∫P(A|X=x)f_X(x)dx with the example P(X^3+Y>1)=∫P(Y>1-x^3)dx by independence — https://www.probabilitycourse.com/chapter5/5_1_3_conditioning_independence.php ; https://www.probabilitycourse.com/chapter5/5_2_3_conditioning_independence.php; checked in the w1 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w1"
+     }
     },
     {
      "id": "r2",
@@ -12422,7 +12534,15 @@
      "statement": "To find the probability of exactly one of several coverages or events, decompose it into mutually exclusive 'only A' and 'only B' cases and add their probabilities, computing each 'only' probability as P(A)P(not B) when independent.",
      "concept": "Exactly One Event Occurring",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Probability Addition Rule",
+      "quote": "\"Exactly one of $A$ and $B$\" is the union of the two mutually exclusive events ($A$ occurs and $B$ does not) and ($B$ occurs and $A$ does not), so its probability is the sum of the two \"only\" probabilities. … When $A$ and $B$ are independent, so are $A$ and $B^c$, and each \"only\" probability is a product",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.4.1 Independence (A, B independent ⇒ A and B^c independent; P(A∩B^c)=P(A)P(B^c)) — https://www.probabilitycourse.com/chapter1/1_4_1_independence.php; Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.3.3 Finding Probabilities, Example 1.11 (either but not both = P(A−B)+P(B−A)) — https://www.probabilitycourse.com/chapter1/1_3_3_finding_probabilities.php; checked in the w0 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w0"
+     }
     }
    ]
   },
@@ -12629,7 +12749,15 @@
      "statement": "If A∩C is empty, then any intersection that also includes A and C, such as A∩B∩C, is a subset of it and has probability 0.",
      "concept": "Probability of Events (Subset Property)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Mutually Exclusive Events",
+      "quote": "If $A$ and $C$ are mutually exclusive, every intersection that contains both of them is empty: $A \\cap B \\cap C \\subseteq A \\cap C = \\emptyset$ for any event $B$, so $P(A \\cap B \\cap C) = 0$.",
+      "note": "written from Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL), Thm 1.1 property 3 (if E ⊂ F then P(E) ≤ P(F)) and property 1 (pp.22-23, PDF pp.30-31) — https://math.dartmouth.edu/~prob/prob/prob.pdf; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, §2.3 Probability Measures, increasing property — https://www.randomservices.org/random/prob/Probability.html; checked in the w0 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w0"
+     }
     }
    ]
   },
@@ -13115,7 +13243,15 @@
      "statement": "For mutually exclusive categories, the probability of a union of categories given an event is the sum of the individual categories' conditional probabilities given that event.",
      "concept": "Additivity of Probability for Mutually Exclusive Events",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Conditional Probability",
+      "quote": "For mutually exclusive $A_1$ and $A_2$, the probability of their union given $B$ is the sum of their conditional probabilities given $B$.",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §1.4.0 Conditional Probability (conditional probability is a probability measure; P(A^c|C)=1-P(A|C); Axiom 3) — https://www.probabilitycourse.com/chapter1/1_4_0_conditional_probability.php; checked in the w1 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w1"
+     }
     }
    ]
   },
@@ -13713,7 +13849,15 @@
      "statement": "If events E and F are independent, then P[E ∩ F] = P[E]·P[F], and the same product rule holds for any event paired with the complement of another (e.g., P[E ∩ F^c] = P[E]·P[F^c]).",
      "concept": "Independent Events",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Independent Events",
+      "quote": "If $A$ and $B$ are independent, then so are $A$ and $B^c$, $A^c$ and $B$, and $A^c$ and $B^c$, so $P(A \\cap B^c) = P(A)\\,(1 - P(B))$.",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §1.4.1 Independence (Lemma: A,B independent ⇒ A,B^c; A^c,B; A^c,B^c independent, P(A∩B^c)=P(A)(1-P(B)); P(∪A_i)=1-Π(1-P(A_i)); flight example 1-(1-p_c)^N) — https://www.probabilitycourse.com/chapter1/1_4_1_independence.php; checked in the w1 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w1"
+     }
     },
     {
      "id": "r2",
@@ -13734,7 +13878,15 @@
      "statement": "The event that exactly one of E and F occurs is the union of the two mutually exclusive events (E occurs and F does not) and (F occurs and E does not), so its probability is the sum P[E ∩ F^c] + P[E^c ∩ F].",
      "concept": "Probability of Unions of Mutually Exclusive Events",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Probability Addition Rule",
+      "quote": "\"Exactly one of $A$ and $B$\" is the union of the two mutually exclusive events ($A$ occurs and $B$ does not) and ($B$ occurs and $A$ does not), so its probability is the sum of the two \"only\" probabilities.",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.3.3 Finding Probabilities, Example 1.11 (rain today or tomorrow but not both = P(A−B)+P(B−A); P(A−B)=P(A)−P(A∩B)) — https://www.probabilitycourse.com/chapter1/1_3_3_finding_probabilities.php; Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL), Thm 1.4 (p.24, PDF p.32) — https://math.dartmouth.edu/~prob/prob/prob.pdf; checked in the w0 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w0"
+     }
     }
    ]
   },
@@ -13789,7 +13941,15 @@
      "statement": "To find the probability that the sum of two independent discrete variables exceeds a value on an event restricted to the first variable, partition on each value of the first variable and use P(N1=i)·P(N2>k−i), by independence.",
      "concept": "Sum of Independent Random Variables",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "The Law of Total Probability",
+      "quote": "To find the probability that the sum of two independent discrete variables exceeds a value on an event restricted to the first variable, partition on each value of the first variable and use $P(X = x)\\,P(Y > s - x)$ by independence.",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §5.1.3 (P(X∈A)=Σ_j P(X∈A|Y=y_j)P_Y(y_j)) and §5.2.3 eq. (5.16) P(A)=∫P(A|X=x)f_X(x)dx with the example P(X^3+Y>1)=∫P(Y>1-x^3)dx by independence — https://www.probabilitycourse.com/chapter5/5_1_3_conditioning_independence.php ; https://www.probabilitycourse.com/chapter5/5_2_3_conditioning_independence.php; checked in the w1 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w1"
+     }
     },
     {
      "id": "r5",
@@ -14227,7 +14387,15 @@
      "statement": "The conditional expectation of N given an event A is E[N | A] = E[N · 1_A] / P(A); for N ≥ 2 this equals (E[N] − Σ_{k<2} k·P(N=k)) / P(N ≥ 2).",
      "concept": "Conditional Expectation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Conditional Probability",
+      "quote": "E[X \\mid A] = \\sum_x x \\, \\frac{P(X = x,\\ A)}{P(A)} = \\frac{E[X \\cdot 1_A]}{P(A)}",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §5.1.3 Conditioning and Independence (conditional PMF P_{X|A}(x_i)=P(X=x_i and A)/P(A); E[X|A]=Σ x_i P_{X|A}(x_i)) — https://www.probabilitycourse.com/chapter5/5_1_3_conditioning_independence.php; checked in the w1 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w1"
+     }
     },
     {
      "id": "r3",
@@ -15323,7 +15491,15 @@
      "statement": "To find a distribution conditional on an event in sampling without replacement, restrict the population to the cards consistent with the condition (removing excluded categories) and treat the draw as sampling from the reduced population.",
      "concept": "Conditional Probability",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Conditional Probability",
+      "quote": "When $n$ items are drawn without replacement and we condition on no item of one category being drawn, every $n$-item draw from the other items is equally likely, so the conditional distribution is that of drawing $n$ without replacement from the population with that category removed.",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §1.4.0 Conditional Probability (given B the outcome must be in B; equally likely: P(A|B)=|A∩B|/|B|) — https://www.probabilitycourse.com/chapter1/1_4_0_conditional_probability.php; checked in the w1 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w1"
+     }
     },
     {
      "id": "r2",
@@ -17005,7 +17181,15 @@
      "statement": "To find P(event E and not B), compute P(E) − P(E and B), i.e., subtract the joint probability with B from the probability of E.",
      "concept": "Probability of Intersections and Differences of Events",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Probability Addition Rule",
+      "quote": "\"$A$ but not $B$\" has probability $P(A \\cap B^c) = P(A) - P(A \\cap B)$: subtract the joint probability with $B$ from the probability of $A$.",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.3.3 Finding Probabilities, Example 1.11 (rain today or tomorrow but not both = P(A−B)+P(B−A); P(A−B)=P(A)−P(A∩B)) — https://www.probabilitycourse.com/chapter1/1_3_3_finding_probabilities.php; Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL), Thm 1.4 (p.24, PDF p.32) — https://math.dartmouth.edu/~prob/prob/prob.pdf; checked in the w0 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w0"
+     }
     }
    ]
   },
@@ -17239,7 +17423,15 @@
      "statement": "If two events are independent, their complements are also independent of each other and of the original events, so probabilities like P(A and not B) equal P(A)(1-P(B)).",
      "concept": "Independent Events",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Independent Events",
+      "quote": "If $A$ and $B$ are independent, then so are $A$ and $B^c$, $A^c$ and $B$, and $A^c$ and $B^c$, so $P(A \\cap B^c) = P(A)\\,(1 - P(B))$.",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §1.4.1 Independence (Lemma: A,B independent ⇒ A,B^c; A^c,B; A^c,B^c independent, P(A∩B^c)=P(A)(1-P(B)); P(∪A_i)=1-Π(1-P(A_i)); flight example 1-(1-p_c)^N) — https://www.probabilitycourse.com/chapter1/1_4_1_independence.php; checked in the w1 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w1"
+     }
     },
     {
      "id": "r4",
@@ -17247,7 +17439,15 @@
      "statement": "To find the probability that exactly one of two events occurs, add the probabilities of the two mutually exclusive cases (A occurs and B does not) and (B occurs and A does not).",
      "concept": "Probability of Exactly One Event",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Probability Addition Rule",
+      "quote": "\"Exactly one of $A$ and $B$\" is the union of the two mutually exclusive events ($A$ occurs and $B$ does not) and ($B$ occurs and $A$ does not), so its probability is the sum of the two \"only\" probabilities.",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.3.3 Finding Probabilities, Example 1.11 (rain today or tomorrow but not both = P(A−B)+P(B−A); P(A−B)=P(A)−P(A∩B)) — https://www.probabilitycourse.com/chapter1/1_3_3_finding_probabilities.php; Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL), Thm 1.4 (p.24, PDF p.32) — https://math.dartmouth.edu/~prob/prob/prob.pdf; checked in the w0 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w0"
+     }
     }
    ]
   },
@@ -17900,7 +18100,15 @@
      "statement": "To find the probability of an event involving two independent continuous random variables, condition on one variable and integrate the conditional probability against its density (law of total probability).",
      "concept": "Conditioning on Independent Random Variables",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "The Law of Total Probability",
+      "quote": "For an event involving two independent continuous random variables, condition on one variable and integrate the conditional probability against its density.",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §5.1.3 (P(X∈A)=Σ_j P(X∈A|Y=y_j)P_Y(y_j)) and §5.2.3 eq. (5.16) P(A)=∫P(A|X=x)f_X(x)dx with the example P(X^3+Y>1)=∫P(Y>1-x^3)dx by independence — https://www.probabilitycourse.com/chapter5/5_1_3_conditioning_independence.php ; https://www.probabilitycourse.com/chapter5/5_2_3_conditioning_independence.php; checked in the w1 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w1"
+     }
     },
     {
      "id": "r3",
@@ -19739,7 +19947,15 @@
      "statement": "The event 'exactly one of A or B occurs' has probability P(A ∪ B) − P(A ∩ B), i.e., the union excluding the intersection.",
      "concept": "Probability of a Union of Events",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Probability Addition Rule",
+      "quote": "Equivalently, the probability that exactly one of $A$ or $B$ occurs is $P(A \\cup B) - P(A \\cap B)$: the union with the intersection taken out.",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.3.3 Finding Probabilities, Example 1.11 (rain today or tomorrow but not both = P(A−B)+P(B−A); P(A−B)=P(A)−P(A∩B)) — https://www.probabilitycourse.com/chapter1/1_3_3_finding_probabilities.php; Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL), Thm 1.4 (p.24, PDF p.32) — https://math.dartmouth.edu/~prob/prob/prob.pdf; checked in the w0 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w0"
+     }
     },
     {
      "id": "r3",
@@ -20602,7 +20818,15 @@
      "statement": "Partition the participants into mutually exclusive pairwise-intersection regions (e.g., L∩R only, H∩R only, H∩L only) and set up a system of linear equations from each set's total and the overall participant total.",
      "concept": "Venn Diagrams and Set Partitions",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Venn Diagram",
+      "quote": "A Venn diagram of three events $A$, $B$, $C$ splits the sample space into eight disjoint regions: three \"only one event\" regions, three \"exactly two events\" regions, the region in all three events, and the region outside all three. … To solve a three-event problem, give each unknown region a symbol, write every given total (an event, an intersection, \"only one\", \"exactly two\", the overall total) as a sum of regions, and solve the resulting linear equations, working from the centre out.",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, §2.3 Probability Measures, exercise on three events (exactly one / exactly two written as unions of A∩B∩C^c-type regions), the partition rule — https://www.randomservices.org/random/prob/Probability.html; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, §1.1 Sets (a partition of S induces a partition of B) — https://www.randomservices.org/random/foundations/Sets.html; Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL), Thm 1.2 finite additivity (p.23, PDF p.3",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w0"
+     }
     },
     {
      "id": "r3",
@@ -21018,7 +21242,15 @@
      "statement": "When independent fair dice are thrown, all ordered outcomes are equally likely, so the sample space for n dice has 6^n equally likely outcomes.",
      "concept": "Equally Likely Outcomes",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Probability",
+      "quote": "When fair dice are rolled independently, every ordered outcome is equally likely, so $n$ dice have $6^n$ equally likely ordered outcomes",
+      "note": "written from Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL), §1.2 Example 1.11 (p.26, PDF p.34: ordered pairs, 36 equally likely outcomes); §3.1 A Counting Technique (p.76, PDF p.84); Example 3.14 (p.107, PDF p.115: ordered description is the right one) — https://math.dartmouth.edu/~prob/prob/prob.pdf; checked in the w0 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w0"
+     }
     },
     {
      "id": "r2",
@@ -21929,7 +22161,15 @@
      "statement": "If some pairs of events are mutually exclusive, the only way exactly two of the three events can occur is through the remaining pair, so the probability of exactly two occurring equals the probability of that pair's intersection.",
      "concept": "Probability of Exactly k Events Occurring",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Probability Addition Rule",
+      "quote": "When some pairs are mutually exclusive, only the remaining pairs contribute: if $A \\cap C = B \\cap C = \\emptyset$, exactly two of the three can occur only as $A \\cap B$, so the probability that exactly two occur is $P(A \\cap B)$.",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, §2.3 Probability Measures, three-event exercise (exactly two = (A∩B∩C^c)∪(A∩B^c∩C)∪(A^c∩B∩C)), difference rule — https://www.randomservices.org/random/prob/Probability.html; checked in the w0 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w0"
+     }
     },
     {
      "id": "r3",
@@ -21950,7 +22190,15 @@
      "statement": "The probability that exactly one of two events A or B occurs equals P(A)+P(B) − 2P(A∩B).",
      "concept": "Probability of Exactly One of Two Events",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Venn Diagram",
+      "quote": "$$P(\\text{exactly one of } A, B) = P(A) + P(B) - 2P(A \\cap B)$$",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.3.3 Finding Probabilities, Example 1.11 (rain today or tomorrow but not both = P(A−B)+P(B−A); P(A−B)=P(A)−P(A∩B)) — https://www.probabilitycourse.com/chapter1/1_3_3_finding_probabilities.php; Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL), Thm 1.4 (p.24, PDF p.32) — https://math.dartmouth.edu/~prob/prob/prob.pdf; checked in the w0 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w0"
+     }
     },
     {
      "id": "r5",
@@ -21958,7 +22206,15 @@
      "statement": "If A∩C and B∩C are empty, then A∩B∩C is also empty and has probability zero, since it is a subset of each.",
      "concept": "Mutually Exclusive Events",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Mutually Exclusive Events",
+      "quote": "If $C$ is mutually exclusive with both $A$ and $B$, then $A \\cap B \\cap C$ is a subset of each of $A \\cap C$ and $B \\cap C$, so it is empty too and has probability 0.",
+      "note": "written from Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL), Thm 1.1 property 3 (if E ⊂ F then P(E) ≤ P(F)) and property 1 (pp.22-23, PDF pp.30-31) — https://math.dartmouth.edu/~prob/prob/prob.pdf; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, §2.3 Probability Measures, increasing property — https://www.randomservices.org/random/prob/Probability.html; checked in the w0 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w0"
+     }
     }
    ]
   },
@@ -22457,7 +22713,15 @@
      "statement": "For a conditional event such as {X ≤ b} given {X ≥ a} with a < b, the intersection is the interval {a ≤ X ≤ b}, so the conditional probability is (F(b) − F(a)) / (1 − F(a)).",
      "concept": "Conditional Probability",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Conditional Probability",
+      "quote": "When conditioning on $X \\ge a$ and asking for $X \\le b$ with $a < b$, the intersection of the two events is the interval $a \\le X \\le b$, so for a continuous $X$ the conditional probability is $(F(b) - F(a))/(1 - F(a))$.",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §5.2.3 Conditioning and Independence (F_{X|A}(x)=(F_X(x)-F_X(a))/(F_X(b)-F_X(a)) for A={a<X<b}, b possibly ∞; endpoints immaterial for continuous X) — https://www.probabilitycourse.com/chapter5/5_2_3_conditioning_independence.php; checked in the w1 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w1"
+     }
     },
     {
      "id": "r5",
@@ -23400,7 +23664,15 @@
      "statement": "A Venn diagram of three events partitions the sample space into eight disjoint regions: only one event (three regions), exactly two events (three regions), all three events, and none of the events.",
      "concept": "Venn Diagrams",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Venn Diagram",
+      "quote": "A Venn diagram of three events $A$, $B$, $C$ splits the sample space into eight disjoint regions: three \"only one event\" regions, three \"exactly two events\" regions, the region in all three events, and the region outside all three.",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, §2.3 Probability Measures, exercise on three events (exactly one / exactly two written as unions of A∩B∩C^c-type regions), the partition rule — https://www.randomservices.org/random/prob/Probability.html; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, §1.1 Sets (a partition of S induces a partition of B) — https://www.randomservices.org/random/foundations/Sets.html; Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL), Thm 1.2 finite additivity (p.23, PDF p.3",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w0"
+     }
     },
     {
      "id": "r2",
@@ -23408,7 +23680,15 @@
      "statement": "The total count for one event equals the sum of its 'only' region, the two exactly-two-event regions that include it, and the all-three region.",
      "concept": "Venn Diagrams",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Venn Diagram",
+      "quote": "Each event's total is the sum of its \"only\" region, the two \"exactly two\" regions that include it, and the all-three region.",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, §2.3 Probability Measures, exercise on three events (exactly one / exactly two written as unions of A∩B∩C^c-type regions), the partition rule — https://www.randomservices.org/random/prob/Probability.html; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, §1.1 Sets (a partition of S induces a partition of B) — https://www.randomservices.org/random/foundations/Sets.html; Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL), Thm 1.2 finite additivity (p.23, PDF p.3",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w0"
+     }
     },
     {
      "id": "r3",
@@ -23533,7 +23813,15 @@
      "statement": "If two events are independent, their complements are also independent, so independence of deaths implies independence of survivals.",
      "concept": "Independent Events",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Independent Events",
+      "quote": "For example, if two lives die independently of each other, their survivals are independent too.",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §1.4.1 Independence (Lemma: A,B independent ⇒ A,B^c; A^c,B; A^c,B^c independent, P(A∩B^c)=P(A)(1-P(B)); P(∪A_i)=1-Π(1-P(A_i)); flight example 1-(1-p_c)^N) — https://www.probabilitycourse.com/chapter1/1_4_1_independence.php; checked in the w1 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w1"
+     }
     },
     {
      "id": "r3",
@@ -25717,7 +26005,15 @@
        "page": "Posterior Distribution",
        "quote": "The likelihood $f(\\mathbf{x} \\mid \\theta) = \\prod f(x_i \\mid \\theta)$ treats the $x_i$ as independent *given* $\\theta$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Bayes Theorem",
+      "quote": "Events that are independent given each class are in general not independent unconditionally when the class is unknown, because observing one event updates the probability of each class.",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §1.4.4 Conditional Independence (definition (1.8); two-coin example: P(A∩B)=Σ P(A|C)P(B|C)P(C) by LTP, A and B not independent, first head makes the biased coin more likely and raises P(B)) — https://www.probabilitycourse.com/chapter1/1_4_4_conditional_independence.php; checked in the w1 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w1"
+     }
     },
     {
      "id": "r4",
@@ -25730,7 +26026,15 @@
        "page": "Posterior Distribution",
        "quote": "The posterior probabilities are $0.12281/0.20513 = 0.5987$ (good) and $0.08232/0.20513 = 0.4013$ (bad)."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Bayes Theorem",
+      "quote": "The second formula is a Bayesian update of the class probabilities, $P(B \\mid A) = \\sum_i P(B \\mid C_i)\\,P(C_i \\mid A)$: compute the joint probability and the probability of the observed event by conditioning on each class, then divide.",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §1.4.4 Conditional Independence (definition (1.8); two-coin example: P(A∩B)=Σ P(A|C)P(B|C)P(C) by LTP, A and B not independent, first head makes the biased coin more likely and raises P(B)) — https://www.probabilitycourse.com/chapter1/1_4_4_conditional_independence.php; checked in the w1 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w1"
+     }
     },
     {
      "id": "r5",
@@ -25738,7 +26042,15 @@
      "statement": "Observing favorable (claim-free) experience shifts the posterior weight toward the lower-risk class, so the conditional probability of further favorable outcomes exceeds the unconditional probability.",
      "concept": "Bayes' Theorem",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Bayes Theorem",
+      "quote": "Observing $A$ shifts weight toward the classes under which $A$ is more likely; with two classes, when $A$ and $B$ are both more likely in the same class, this raises the probability of $B$, so $P(B \\mid A) > P(B)$.",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §1.4.4 Conditional Independence (definition (1.8); two-coin example: P(A∩B)=Σ P(A|C)P(B|C)P(C) by LTP, A and B not independent, first head makes the biased coin more likely and raises P(B)) — https://www.probabilitycourse.com/chapter1/1_4_4_conditional_independence.php; checked in the w1 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w1"
+     }
     }
    ]
   },
@@ -26448,7 +26760,15 @@
        "page": "Posterior Distribution",
        "quote": "The likelihood $f(\\mathbf{x} \\mid \\theta) = \\prod f(x_i \\mid \\theta)$ treats the $x_i$ as independent *given* $\\theta$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Bayes Theorem",
+      "quote": "Repeated tosses of a coin chosen at random are independent only given which coin was chosen; unconditionally they are dependent, because each toss gives information about the coin.",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §1.4.4 Conditional Independence (definition (1.8); two-coin example: P(A∩B)=Σ P(A|C)P(B|C)P(C) by LTP, A and B not independent, first head makes the biased coin more likely and raises P(B)) — https://www.probabilitycourse.com/chapter1/1_4_4_conditional_independence.php; checked in the w1 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w1"
+     }
     },
     {
      "id": "r2",
@@ -28971,7 +29291,15 @@
      "statement": "Partition the union of three events into seven disjoint Venn regions (only one, exactly two, all three) plus the region outside all events, and set up equations for each event's total as the sum of its regions.",
      "concept": "Venn Diagram",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Venn Diagram",
+      "quote": "A Venn diagram of three events $A$, $B$, $C$ splits the sample space into eight disjoint regions: three \"only one event\" regions, three \"exactly two events\" regions, the region in all three events, and the region outside all three. … Each event's total is the sum of its \"only\" region, the two \"exactly two\" regions that include it, and the all-three region.",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, §2.3 Probability Measures, exercise on three events (exactly one / exactly two written as unions of A∩B∩C^c-type regions), the partition rule — https://www.randomservices.org/random/prob/Probability.html; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, §1.1 Sets (a partition of S induces a partition of B) — https://www.randomservices.org/random/foundations/Sets.html; Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL), Thm 1.2 finite additivity (p.23, PDF p.3",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w0"
+     }
     },
     {
      "id": "r2",
@@ -28979,7 +29307,15 @@
      "statement": "The size of each event equals the sum of its 'only' region, the region common to all three events, and the two 'exactly two' regions that overlap it.",
      "concept": "Venn Diagram",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Venn Diagram",
+      "quote": "Each event's total is the sum of its \"only\" region, the two \"exactly two\" regions that include it, and the all-three region.",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, §2.3 Probability Measures, exercise on three events (exactly one / exactly two written as unions of A∩B∩C^c-type regions), the partition rule — https://www.randomservices.org/random/prob/Probability.html; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, §1.1 Sets (a partition of S induces a partition of B) — https://www.randomservices.org/random/foundations/Sets.html; Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL), Thm 1.2 finite additivity (p.23, PDF p.3",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w0"
+     }
     },
     {
      "id": "r3",
@@ -30591,7 +30927,15 @@
      "statement": "If events are independent given a class, the joint probability of both events within that class is the product of their conditional probabilities, so P[A ∩ B] = Σ P[A|class] P[B|class] P[class].",
      "concept": "Conditional Independence",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Bayes Theorem",
+      "quote": "P(A \\cap B) = \\sum_i P(A \\mid C_i)\\,P(B \\mid C_i)\\,P(C_i)",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §1.4.4 Conditional Independence (definition (1.8); two-coin example: P(A∩B)=Σ P(A|C)P(B|C)P(C) by LTP, A and B not independent, first head makes the biased coin more likely and raises P(B)) — https://www.probabilitycourse.com/chapter1/1_4_4_conditional_independence.php; checked in the w1 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w1"
+     }
     },
     {
      "id": "r4",
@@ -30599,7 +30943,15 @@
      "statement": "Events that are independent conditional on a risk class are generally not unconditionally independent, because observing one event updates the probability of each class.",
      "concept": "Conditional Independence",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Bayes Theorem",
+      "quote": "Events that are independent given each class are in general not independent unconditionally when the class is unknown, because observing one event updates the probability of each class.",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §1.4.4 Conditional Independence (definition (1.8); two-coin example: P(A∩B)=Σ P(A|C)P(B|C)P(C) by LTP, A and B not independent, first head makes the biased coin more likely and raises P(B)) — https://www.probabilitycourse.com/chapter1/1_4_4_conditional_independence.php; checked in the w1 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w1"
+     }
     }
    ]
   },
@@ -35069,7 +35421,15 @@
      "statement": "If two events A and B are independent, then P(A∩B) = P(A)P(B), and their complements are also independent.",
      "concept": "Independent Events",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Independent Events",
+      "quote": "If $A$ and $B$ are independent, then so are $A$ and $B^c$, $A^c$ and $B$, and $A^c$ and $B^c$",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §1.4.1 Independence (Lemma: A,B independent ⇒ A,B^c; A^c,B; A^c,B^c independent, P(A∩B^c)=P(A)(1-P(B)); P(∪A_i)=1-Π(1-P(A_i)); flight example 1-(1-p_c)^N) — https://www.probabilitycourse.com/chapter1/1_4_1_independence.php; checked in the w1 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w1"
+     }
     },
     {
      "id": "r2",
@@ -35082,7 +35442,15 @@
        "page": "Probability Rules",
        "quote": "1 - (0.90)^5"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Independent Events",
+      "quote": "The probability that neither of two independent events occurs is the product of the complement probabilities",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §1.4.1 Independence (Lemma: A,B independent ⇒ A,B^c; A^c,B; A^c,B^c independent, P(A∩B^c)=P(A)(1-P(B)); P(∪A_i)=1-Π(1-P(A_i)); flight example 1-(1-p_c)^N) — https://www.probabilitycourse.com/chapter1/1_4_1_independence.php; checked in the w1 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w1"
+     }
     },
     {
      "id": "r3",
@@ -35419,7 +35787,15 @@
      "statement": "If one event is a subset of another, their union equals the larger event, so the probability of the union equals the probability of the larger event.",
      "concept": "Subsets of Events",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Set Theory",
+      "quote": "If $B \\subseteq A$, then $A \\cup B = A$ and $A \\cap B = B$, so $P(A \\cup B) = P(A)$ and $P(A \\cap B) = P(B)$: the union of an event with a subset of it is the larger event.",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, §2.3 Probability Measures — the difference rule, proper difference rule (A ⊆ B ⇒ P(B∖A)=P(B)−P(A)), increasing property — https://www.randomservices.org/random/prob/Probability.html; Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.3.3 Finding Probabilities (P(A−B)=P(A)−P(A∩B); if A⊂B then A∩B=A) — https://www.probabilitycourse.com/chapter1/1_3_3_finding_probabilities.php; checked in the w0 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w0"
+     }
     },
     {
      "id": "r3",
@@ -36182,7 +36558,15 @@
        "page": "Probability Rules",
        "quote": "$$P(A^c) = 1 - P(A)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Conditional Probability",
+      "quote": "P(A^c \\mid B) = 1 - P(A \\mid B)",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §1.4.0 Conditional Probability (conditional probability is a probability measure; P(A^c|C)=1-P(A|C); Axiom 3) — https://www.probabilitycourse.com/chapter1/1_4_0_conditional_probability.php; checked in the w1 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w1"
+     }
     },
     {
      "id": "r5",
@@ -36254,7 +36638,15 @@
        "page": "Probability Rules",
        "quote": "$$P(A^c) = 1 - P(A)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Conditional Probability",
+      "quote": "So when a signal sent as $s$ is either received correctly or not, $P(\\text{received wrongly} \\mid s \\text{ sent}) = 1 - P(\\text{received correctly} \\mid s \\text{ sent})$; and when only the symbols 0 and 1 can be sent, $P(1 \\text{ sent}) = 1 - P(0 \\text{ sent})$.",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §1.4.0 Conditional Probability (conditional probability is a probability measure; P(A^c|C)=1-P(A|C); Axiom 3) — https://www.probabilitycourse.com/chapter1/1_4_0_conditional_probability.php; checked in the w1 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w1"
+     }
     },
     {
      "id": "r4",
@@ -38866,7 +39258,15 @@
      "statement": "To simplify a conditional probability involving two overlapping intervals, intersect the intervals so the numerator event becomes the overlap (for example, (a,b) ∩ (c,d) = (c,b) when a < c < b < d).",
      "concept": "Conditional Probability",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Conditional Probability",
+      "quote": "For overlapping intervals with $a < c < b < d$, the overlap is $(a, b) \\cap (c, d) = (c, b)$, which becomes the numerator event.",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §5.2.3 Conditioning and Independence (F_{X|A}(x)=(F_X(x)-F_X(a))/(F_X(b)-F_X(a)) for A={a<X<b}, b possibly ∞; endpoints immaterial for continuous X) — https://www.probabilitycourse.com/chapter5/5_2_3_conditioning_independence.php; checked in the w1 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w1"
+     }
     },
     {
      "id": "r3",
@@ -40471,7 +40871,15 @@
      "statement": "If event B is a subset of event A, then P(A \\ B) = P(A) - P(B).",
      "concept": "Probability of Complement and Set Difference",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Set Theory",
+      "quote": "If $B \\subseteq A$, then $P(B) \\leq P(A)$, and since $A$ is the disjoint union of $B$ and $A \\setminus B$, the difference rule gives $P(A \\setminus B) = P(A) - P(B)$.",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, §2.3 Probability Measures — the difference rule, proper difference rule (A ⊆ B ⇒ P(B∖A)=P(B)−P(A)), increasing property — https://www.randomservices.org/random/prob/Probability.html; Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.3.3 Finding Probabilities (P(A−B)=P(A)−P(A∩B); if A⊂B then A∩B=A) — https://www.probabilitycourse.com/chapter1/1_3_3_finding_probabilities.php; checked in the w0 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w0"
+     }
     },
     {
      "id": "r3",
@@ -44061,7 +44469,15 @@
      "statement": "When the overlap of two events is not specified, P(A ∩ B) can range from 0 up to min(P(A), P(B)), so P(A ∪ B) ranges from max(P(A), P(B)) to P(A) + P(B) (capped at 1).",
      "concept": "Bounds on Probability of Union and Intersection",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Probability Addition Rule",
+      "quote": "$$\\max(0,\\ P(A) + P(B) - 1) \\leq P(A \\cap B) \\leq \\min(P(A),\\ P(B))$$ … So $P(A \\cup B)$ ranges from $\\max(P(A), P(B))$, when one event contains the other, up to $\\min(1, P(A) + P(B))$",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, §2.3 Probability Measures, increasing property and Bonferroni's inequality (P(∩A_i) ≥ 1 − Σ[1 − P(A_i)]), inclusion-exclusion for two events — https://www.randomservices.org/random/prob/Probability.html; checked in the w0 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w0"
+     }
     },
     {
      "id": "r5",
@@ -44069,7 +44485,15 @@
      "statement": "If event A is contained in event B, then P(A ∩ B) = P(A) and P(A ∪ B) = P(B); this is the maximum-overlap case.",
      "concept": "Subset Events and Monotonicity of Probability",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Set Theory",
+      "quote": "Containment is the case of largest overlap and smallest union: if $A \\subseteq B$, then $P(A \\cap B) = P(A)$ and $P(A \\cup B) = P(B)$, the most the intersection and the least the union can be.",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, §2.3 Probability Measures — the difference rule, proper difference rule (A ⊆ B ⇒ P(B∖A)=P(B)−P(A)), increasing property — https://www.randomservices.org/random/prob/Probability.html; Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.3.3 Finding Probabilities (P(A−B)=P(A)−P(A∩B); if A⊂B then A∩B=A) — https://www.probabilitycourse.com/chapter1/1_3_3_finding_probabilities.php; checked in the w0 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w0"
+     }
     }
    ]
   },
@@ -44408,7 +44832,15 @@
      "statement": "When conditioning on X ≥ a and asking for X ≤ b with a < b, the intersection of the two events is the interval a ≤ X ≤ b.",
      "concept": "Conditional Probability",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Conditional Probability",
+      "quote": "When conditioning on $X \\ge a$ and asking for $X \\le b$ with $a < b$, the intersection of the two events is the interval $a \\le X \\le b$",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §5.2.3 Conditioning and Independence (F_{X|A}(x)=(F_X(x)-F_X(a))/(F_X(b)-F_X(a)) for A={a<X<b}, b possibly ∞; endpoints immaterial for continuous X) — https://www.probabilitycourse.com/chapter5/5_2_3_conditioning_independence.php; checked in the w1 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w1"
+     }
     },
     {
      "id": "r3",
@@ -48640,7 +49072,15 @@
      "statement": "The conditional expectation of X given an event A is E[X | A] = Σ x P(X=x, A) / P(A), i.e., the sum of x times the joint probability of x and A, divided by P(A).",
      "concept": "Conditional Expectation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Conditional Probability",
+      "quote": "The conditional expectation of $X$ given an event $A$ is the sum of $x$ times the joint probability of $x$ and $A$, divided by $P(A)$.",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §5.1.3 Conditioning and Independence (conditional PMF P_{X|A}(x_i)=P(X=x_i and A)/P(A); E[X|A]=Σ x_i P_{X|A}(x_i)) — https://www.probabilitycourse.com/chapter5/5_1_3_conditioning_independence.php; checked in the w1 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w1"
+     }
     }
    ]
   },

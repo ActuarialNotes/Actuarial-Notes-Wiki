@@ -26,6 +26,24 @@ A **Sample Space** $S$ (or $\Omega$) is the set of all possible outcomes of a ra
 
 ![[Media/Figures/Sample_Space.svg|340]]
 
+### Ordered pairs: the multiplication principle
+
+- If an experiment is carried out in two stages, with $n_1$ outcomes at the first stage and, for each of them, $n_2$ outcomes at the second, the sample space has $n_1 \times n_2$ ordered outcomes.
+
+> $$|S| = n_1 \times n_2$$
+
+- Rolling two fair dice gives $6 \times 6 = 36$ equally likely ordered outcomes, each with probability $1/36$.
+- When each of two independent choices is made uniformly at random from the same $n$ values, all $n^2$ ordered pairs are equally likely, each with probability $1/n^2$, so the probability of an event is the number of favourable ordered pairs divided by $n^2$.
+
+> $$P(E) = \frac{\text{number of favourable ordered pairs}}{n^2}$$
+
+> [!example]- Two Random Digits {Example}
+> Two people each pick a digit from 0 to 9, independently and uniformly at random. Find the probability that they pick the same digit.
+>
+> > [!answer]-
+> > The sample space is the $10 \times 10 = 100$ equally likely ordered pairs. The favourable pairs are $(0, 0), (1, 1), \ldots, (9, 9)$, ten of them:
+> > $$P(\text{same digit}) = \frac{10}{100} = 0.10$$
+
 > [!example]- Sample Space for Claim Occurrence and Size {Example}
 > An experiment records whether a policyholder files a claim and, if so, classifies the loss as small ($\le$ \$$1{,}000$) or large ($>$ \$$1{,}000$). Write the sample space.
 >

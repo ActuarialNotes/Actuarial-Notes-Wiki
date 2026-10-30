@@ -24,6 +24,45 @@ The **Probability Addition Rule** gives the probability that at least one of two
 
 ![[Media/Figures/Probability_Addition_Rule.svg|340]]
 
+### Only one, exactly one, exactly two
+
+- "$A$ but not $B$" has probability $P(A \cap B^c) = P(A) - P(A \cap B)$: subtract the joint probability with $B$ from the probability of $A$.
+- "Exactly one of $A$ and $B$" is the union of the two mutually exclusive events ($A$ occurs and $B$ does not) and ($B$ occurs and $A$ does not), so its probability is the sum of the two "only" probabilities.
+
+> $$
+> \begin{align*}
+> P(\text{exactly one of } A, B) &= P(A \cap B^c) + P(A^c \cap B) \\
+> &= P(A) + P(B) - 2P(A \cap B)
+> \end{align*}
+> $$
+
+- Equivalently, the probability that exactly one of $A$ or $B$ occurs is $P(A \cup B) - P(A \cap B)$: the union with the intersection taken out.
+- When $A$ and $B$ are independent, so are $A$ and $B^c$, and each "only" probability is a product: exactly one has probability $P(A)(1 - P(B)) + (1 - P(A))P(B)$.
+- For three events, each "exactly two" region is a pairwise intersection less the triple intersection, so:
+
+> $$P(\text{exactly two of } A, B, C) = P(A \cap B) + P(A \cap C) + P(B \cap C) - 3P(A \cap B \cap C)$$
+
+- When the triple intersection is empty, the probability that exactly two occur is the sum of the pairwise intersection probabilities.
+- When some pairs are mutually exclusive, only the remaining pairs contribute: if $A \cap C = B \cap C = \emptyset$, exactly two of the three can occur only as $A \cap B$, so the probability that exactly two occur is $P(A \cap B)$.
+
+### When the overlap is not given
+
+- If $P(A \cap B)$ is not given, it is only bounded: $A \cap B$ lies inside both events, and $P(A \cup B) \leq 1$ forces $P(A \cap B) \geq P(A) + P(B) - 1$.
+
+> $$\max(0,\ P(A) + P(B) - 1) \leq P(A \cap B) \leq \min(P(A),\ P(B))$$
+
+- So $P(A \cup B)$ ranges from $\max(P(A), P(B))$, when one event contains the other, up to $\min(1, P(A) + P(B))$, and $P(\text{neither}) = 1 - P(A \cup B)$ ranges accordingly.
+
+> [!example]- Only, Exactly One, and Bounds {Example}
+> (a) $P(A) = 0.5$, $P(B) = 0.4$ and $P(A \cap B) = 0.15$. Find the probability that exactly one of $A$, $B$ occurs. (b) If instead only $P(A) = 0.5$ and $P(B) = 0.7$ are known, what values can $P(A \cup B)$ take?
+>
+> > [!answer]-
+> > (a) The two "only" probabilities are $0.5 - 0.15 = 0.35$ and $0.4 - 0.15 = 0.25$, so
+> > $$P(\text{exactly one}) = 0.35 + 0.25 = 0.60$$
+> > Check: $P(A \cup B) = 0.5 + 0.4 - 0.15 = 0.75$, and $0.75 - 0.15 = 0.60$.
+> >
+> > (b) $P(A \cap B)$ lies between $0.5 + 0.7 - 1 = 0.2$ and $\min(0.5, 0.7) = 0.5$, so $P(A \cup B) = 1.2 - P(A \cap B)$ lies between $0.7$ and $1$, and $P(\text{neither})$ between $0$ and $0.3$.
+
 > [!example]- Probability of at Least One Coverage Trigger {Example}
 > For a commercial policy, the probability of a fire loss is 0.05, a flood loss is 0.03, and both losses in the same year is 0.01. What is the probability of at least one loss?
 >

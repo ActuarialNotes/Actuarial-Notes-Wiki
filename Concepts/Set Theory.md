@@ -27,6 +27,30 @@ verification:
 
 ![[Media/Figures/Set_Theory.svg|340]]
 
+### Equal sets and subsets
+
+- Two sets are equal, $A = B$, exactly when they contain the same elements, that is, when $A \subseteq B$ and $B \subseteq A$.
+
+> $$A = B \iff (A \subseteq B \text{ and } B \subseteq A)$$
+
+- If $A \subseteq B$ but some outcome of $B$ is not in $A$, then $A$ is a proper subset of $B$ and $A \neq B$: an event defined by a stricter condition is a proper subset of the broader event, not the same event.
+- If $B \subseteq A$, then $A \cup B = A$ and $A \cap B = B$, so $P(A \cup B) = P(A)$ and $P(A \cap B) = P(B)$: the union of an event with a subset of it is the larger event.
+- If $B \subseteq A$, then $P(B) \leq P(A)$, and since $A$ is the disjoint union of $B$ and $A \setminus B$, the difference rule gives $P(A \setminus B) = P(A) - P(B)$.
+
+> $$B \subseteq A \implies P(A \setminus B) = P(A) - P(B)$$
+
+- Containment is the case of largest overlap and smallest union: if $A \subseteq B$, then $P(A \cap B) = P(A)$ and $P(A \cup B) = P(B)$, the most the intersection and the least the union can be.
+
+> [!example]- An Event and a Subset of It {Example}
+> A fair die is rolled. Let $A = \{2, 4, 6\}$ (even) and $B = \{6\}$. Find $P(A \cup B)$, $P(A \cap B)$ and $P(A \setminus B)$.
+>
+> > [!answer]-
+> > Every outcome of $B$ is in $A$, so $B \subseteq A$ (a proper subset: 2 and 4 are in $A$ but not $B$). Then $A \cup B = A$ and $A \cap B = B$:
+> > $$P(A \cup B) = P(A) = \frac{3}{6}$$
+> > $$P(A \cap B) = P(B) = \frac{1}{6}$$
+> > $$P(A \setminus B) = P(A) - P(B) = \frac{2}{6}$$
+> > Check: $A \setminus B = \{2, 4\}$, which has probability $2/6$.
+
 > [!example]- Union, Intersection, and Difference of Two Sets {Example}
 > Given $A = \{1, 2, 3, 4\}$ and $B = \{3, 4, 5, 6\}$, find $A \cup B$, $A \cap B$, and $A \setminus B$.
 >

@@ -22,6 +22,15 @@ Two events $A$ and $B$ are **Mutually Exclusive** (disjoint) if they cannot both
 
 ![[Media/Figures/Mutually_Exclusive_Events.svg|340]]
 
+### Three or more events
+
+- If $A$ and $C$ are mutually exclusive, every intersection that contains both of them is empty: $A \cap B \cap C \subseteq A \cap C = \emptyset$ for any event $B$, so $P(A \cap B \cap C) = 0$.
+
+> $$A \cap C = \emptyset \implies P(A \cap B \cap C) = 0$$
+
+- So in the three-event addition rule, the $P(A \cap C)$ and $P(A \cap B \cap C)$ terms both vanish when $A$ and $C$ are mutually exclusive.
+- If $C$ is mutually exclusive with both $A$ and $B$, then $A \cap B \cap C$ is a subset of each of $A \cap C$ and $B \cap C$, so it is empty too and has probability 0.
+
 > [!example]- Insurance Claim Type {Example}
 > Each claim is classified as exactly one of property damage ($D$), bodily injury ($B$), or other. $P(D) = 0.60$ and $P(B) = 0.35$. Find the probability that a claim is property damage or bodily injury, and the probability that it is classified as other.
 >

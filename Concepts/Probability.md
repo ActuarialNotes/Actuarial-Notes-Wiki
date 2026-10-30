@@ -22,6 +22,25 @@ A **Probability** $P$ is a measure of how likely an event $E$ is to occur. It is
 
 ![[Media/Figures/Probability.svg|340]]
 
+### Dice and coins: count ordered outcomes
+
+- When fair dice are rolled independently, every ordered outcome is equally likely, so $n$ dice have $6^n$ equally likely ordered outcomes; two dice have $6 \times 6 = 36$.
+- Treat the dice as distinguishable (a first die and a second die) even when they look alike, and count ordered outcomes: the unordered result "a 1 and a 2" is two ordered outcomes, $(1, 2)$ and $(2, 1)$, while "two 1s" is only one, $(1, 1)$.
+- Fair coins work the same way: $n$ tosses have $2^n$ equally likely ordered sequences.
+
+> $$P(E) = \frac{\text{number of ordered outcomes in } E}{6^n} \quad \text{for } n \text{ fair dice}$$
+
+> [!example]- A Sum of 4 on Two Dice {Example}
+>
+> Two fair dice are rolled. What is the probability that the sum is 4?
+>
+> > [!answer]-
+> > Count ordered pairs (first die, second die). A sum of 4 is $\{(1, 3), (3, 1), (2, 2)\}$: three of the 36 equally likely ordered outcomes.
+> >
+> > $$P(\text{sum} = 4) = \frac{3}{36} = \frac{1}{12}$$
+> >
+> > Counting unordered results instead ($\{1, 3\}$ and $\{2, 2\}$) would undercount, because $\{1, 3\}$ can happen two ways and $\{2, 2\}$ only one.
+
 > [!example]- Probability of a Fair Die? {Example}
 > 
 > What is the probability of rolling an even number on a fair 6-sided die?

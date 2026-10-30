@@ -23,6 +23,26 @@ verification:
 
 ![[Media/Figures/The_Law_of_Total_Probability.svg|340]]
 
+### Conditioning on the value of a random variable
+
+The events $\{X = x\}$ partition the sample space, so the law can condition on the value of a random variable; for a continuous $Y$ with density $f_Y$, the sum becomes an integral.
+
+> $$P(A) = \sum_x P(A \mid X = x)\,P(X = x)$$
+
+> $$P(A) = \int_{-\infty}^{\infty} P(A \mid Y = y)\,f_Y(y)\,dy$$
+
+- When $X$ and $Y$ are independent, conditioning on one leaves the other with its own distribution, so each term becomes a product of the two variables' probabilities.
+
+> $$P(X + Y > s,\ X \in B) = \sum_{x \in B} P(X = x)\,P(Y > s - x)$$
+
+> $$P(X = Y) = \sum_x P(X = x)\,P(Y = x)$$
+
+> $$P(X > g(Y)) = \int_{-\infty}^{\infty} P(X > g(y))\,f_Y(y)\,dy$$
+
+- To find the probability that the sum of two independent discrete variables exceeds a value on an event restricted to the first variable, partition on each value of the first variable and use $P(X = x)\,P(Y > s - x)$ by independence.
+- For two independent, identically distributed discrete variables, the probability that they are equal is the sum over values of the squared probabilities, $\sum_x P(X = x)^2$.
+- For an event involving two independent continuous random variables, condition on one variable and integrate the conditional probability against its density.
+
 > [!example]- Overall Claim Probability Across Risk Classes {Example}
 > A portfolio is 30% young drivers ($A_1$), 50% middle-aged ($A_2$), and 20% senior ($A_3$). Claim probabilities are $P(C \mid A_1)=0.20$, $P(C \mid A_2)=0.10$, $P(C \mid A_3)=0.15$. Find the overall probability of a claim.
 >

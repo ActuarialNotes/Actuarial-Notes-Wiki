@@ -26,6 +26,37 @@ verification:
 
 ![[Media/Figures/Bayes_Theorem.svg|340]]
 
+### Evidence restricted to a subset of hypotheses
+
+When the evidence is an event $E$ together with the information that the outcome lies in a subset $H_1, \ldots, H_k$ of the hypotheses, condition on both: the denominator of Bayes' theorem sums over only the hypotheses in that subset.
+
+> $$P\big(H_j \mid E \cap (H_1 \cup \cdots \cup H_k)\big) = \frac{P(E \mid H_j)\,P(H_j)}{\sum_{i=1}^{k} P(E \mid H_i)\,P(H_i)}, \quad j \le k$$
+
+- This is Bayes' theorem with the evidence $E' = E \cap (H_1 \cup \cdots \cup H_k)$: $P(E' \mid H_i) = P(E \mid H_i)$ for $i \le k$ and $0$ for every other hypothesis, so the other categories drop out of the denominator.
+
+### Conditionally independent events
+
+Events $A$ and $B$ are conditionally independent given each class $C_i$ of a partition when $P(A \cap B \mid C_i) = P(A \mid C_i)\,P(B \mid C_i)$: within a class, the probability of several outcomes is the product of their conditional probabilities.
+
+> $$P(A \cap B) = \sum_i P(A \mid C_i)\,P(B \mid C_i)\,P(C_i)$$
+
+> $$P(B \mid A) = \frac{\sum_i P(A \mid C_i)\,P(B \mid C_i)\,P(C_i)}{\sum_i P(A \mid C_i)\,P(C_i)}$$
+
+- Events that are independent given each class are in general not independent unconditionally when the class is unknown, because observing one event updates the probability of each class.
+- Repeated tosses of a coin chosen at random are independent only given which coin was chosen; unconditionally they are dependent, because each toss gives information about the coin.
+- The second formula is a Bayesian update of the class probabilities, $P(B \mid A) = \sum_i P(B \mid C_i)\,P(C_i \mid A)$: compute the joint probability and the probability of the observed event by conditioning on each class, then divide.
+- Observing $A$ shifts weight toward the classes under which $A$ is more likely; with two classes, when $A$ and $B$ are both more likely in the same class, this raises the probability of $B$, so $P(B \mid A) > P(B)$.
+
+> [!example]- Two tosses of an unknown coin {Example}
+> A bag holds a fair coin and a coin that lands heads with probability 0.8. One coin is drawn at random and tossed twice. Find the probability that the second toss is heads given that the first is.
+>
+> > [!answer]-
+> > **Plan:** the tosses are independent given the coin, so condition on the coin for both numerator and denominator.
+> > $$P(H_1) = 0.5(0.5) + 0.5(0.8) = 0.65$$
+> > $$P(H_1 \cap H_2) = 0.5(0.5)^2 + 0.5(0.8)^2 = 0.125 + 0.32 = 0.445$$
+> > $$P(H_2 \mid H_1) = \frac{0.445}{0.65} \approx 0.685$$
+> > A first head makes the biased coin more likely, so the second head is more likely than the unconditional 0.65.
+
 > [!example]- Identifying a High-Risk Policyholder After a Claim {Example}
 > 20% of policyholders are high-risk ($H$) and 80% are low-risk ($L$). A high-risk policyholder files a claim in year 1 with probability 0.40; a low-risk one with probability 0.10. A randomly selected policyholder files a claim. What is the probability they are high-risk?
 >

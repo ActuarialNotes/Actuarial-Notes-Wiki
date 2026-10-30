@@ -25,6 +25,18 @@ Two events $A$ and $B$ are **Independent** if knowing that one occurred provides
 
 > $$P(A_{i_1} \cap A_{i_2} \cap \cdots \cap A_{i_m}) = P(A_{i_1})\,P(A_{i_2}) \cdots P(A_{i_m})$$
 
+### Complements and "at least one"
+
+- If $A$ and $B$ are independent, then so are $A$ and $B^c$, $A^c$ and $B$, and $A^c$ and $B^c$, so $P(A \cap B^c) = P(A)\,(1 - P(B))$.
+- For example, if two lives die independently of each other, their survivals are independent too.
+- The probability that neither of two independent events occurs is the product of the complement probabilities:
+
+> $$P(A^c \cap B^c) = (1 - P(A))\,(1 - P(B))$$
+
+- If $n$ independent trials each produce an event with probability $p$, the probability that at least one produces it is $1 - (1 - p)^n$, the complement of no occurrences:
+
+> $$P(\text{at least one}) = 1 - (1 - p)^n$$
+
 > [!example]- Testing Independence of Two Claim Events {Example}
 > For two policyholders, $P(\text{A claims}) = 0.4$, $P(\text{B claims}) = 0.3$, and $P(\text{both claim}) = 0.12$. Are their claim events independent?
 >

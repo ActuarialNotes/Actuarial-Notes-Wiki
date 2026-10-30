@@ -24,6 +24,12 @@ A **Permutation** $P(n, k)$ counts the number of ways to select and arrange $k$ 
 
 ![[Media/Figures/Permutation.svg|340]]
 
+### Permutations with restrictions
+
+- **Fixing a set of items:** the number of permutations of $n$ distinct items that leave a specified set of $k$ items in their original positions is $(n-k)!$, since the remaining $n-k$ items can be arranged arbitrarily. There are $\binom{n}{k}$ such sets, which gives the term $\binom{n}{k}(n-k)!$ in [[Inclusion-Exclusion Principle|inclusion-exclusion]] counts of permutations with fixed points (derangements, on [[Combinatorics]]).
+- **Circular permutations:** the number of distinct arrangements of $n$ distinct objects around a circle, counting arrangements that differ only by a rotation as the same, is $(n-1)!$. Seat one object anywhere and arrange the other $n-1$ relative to it: 7 people at a round table can be seated in $6! = 720$ ways.
+- **Items that must be adjacent:** to count arrangements in which certain items must be adjacent, glue them into a single block, count the arrangements of the block together with the other items, and multiply by the number of orderings inside the block ($k!$ for a block of $k$). Five books in a row with two particular books together: $4! \times 2! = 48$ arrangements.
+
 > [!example]- Assigning Ranked Prizes to Adjusters {Example}
 > From 8 adjusters, an insurer awards a 1st, 2nd, and 3rd place performance bonus. How many distinct award outcomes are possible?
 >

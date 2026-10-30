@@ -23,6 +23,15 @@ A **multivariate distribution** describes the joint probabilistic behavior of tw
 
 ![[Media/Figures/Multivariate_Distribution.svg|340]]
 
+### The multinomial distribution
+
+When each of $n$ independent trials falls into exactly one of $k$ categories with fixed probabilities $p_1, \ldots, p_k$ (summing to 1), the category counts $(N_1, \ldots, N_k)$ have a **multinomial distribution** (a trinomial for $k = 3$), the multivariate extension of the [[Binomial Distribution|binomial]]:
+
+> $$P(N_1 = n_1, \ldots, N_k = n_k) = \frac{n!}{n_1! \cdots n_k!}\,p_1^{n_1} \cdots p_k^{n_k}$$
+
+- where $n_1 + \cdots + n_k = n$;
+- the multinomial coefficient $n!/(n_1! \cdots n_k!)$ counts the orders in which those counts can occur, and each order has probability $p_1^{n_1} \cdots p_k^{n_k}$.
+
 > [!example]- Joint vs. Marginal Distribution {Example}
 > $X$ and $Y$ each take values $\{0, 1\}$ with joint PMF: $P(0,0)=0.1$, $P(0,1)=0.4$, $P(1,0)=0.3$, $P(1,1)=0.2$.
 >

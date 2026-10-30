@@ -24,6 +24,44 @@ verification:
 
 ![[Media/Figures/Combinatorics.svg|340]]
 
+### Counting rules
+
+- **Multiplication principle:** if an outcome is built in stages, with $m_1$ choices at the first stage, $m_2$ at the second (whatever was chosen before), and so on, the number of outcomes is the product of the number of choices at each stage, $m_1 \times m_2 \times \cdots$. It is the rule behind $n!$, $P(n, k)$ and $\binom{n}{k}\,k!$.
+- A count with one repeated value is built in stages too: choose the repeated value, then choose which positions hold it, then fill the remaining positions with different values, and multiply the counts.
+- **With replacement:** when repetition is allowed (sampling with replacement, items not necessarily distinct), each of the $m$ positions independently has $n$ choices, giving $n^m$ ordered arrangements. When the items must be distinct the count is $P(n, m) = n!/(n-m)!$ instead.
+- **Symmetry in a random arrangement:** in a uniformly random seating or ordering, each person is equally likely to be in any position, so one person's position can be fixed without loss of generality; another given person is then equally likely to occupy each of the remaining positions.
+
+### Derangements
+
+A **derangement** is a permutation of $n$ items with no fixed point: no item stays in its original position. The number of derangements of $n$ items is written $D_n$.
+
+- A [[Permutation]] that fixes a chosen set of $k$ items arranges the other $n-k$ freely, so there are $\binom{n}{k}(n-k)!$ of them. By [[Inclusion-Exclusion Principle|inclusion-exclusion]] over the set of fixed items, the number of permutations with at least one fixed point is the alternating sum
+
+> $$\sum_{k=1}^{n} (-1)^{k+1}\binom{n}{k}(n-k)!$$
+
+- Subtracting that from $n!$ gives the number of derangements:
+
+> $$D_n = n!\sum_{k=0}^{n}\frac{(-1)^k}{k!}$$
+
+- For example, $D_3 = 3!\left(1 - 1 + \tfrac{1}{2} - \tfrac{1}{6}\right) = 2$: of the six orderings of three items, only the two cyclic shifts move every item.
+- The probability that a random permutation of $n$ items has no fixed point is $D_n/n!$, which is about $1/e \approx 0.368$ once $n$ is moderately large.
+
+> [!example]- Counting strings with exactly one pair {Example}
+> How many 4-digit strings (digits 0 to 9, leading zeros allowed) contain one digit exactly twice and two other digits once each?
+>
+> > [!answer]-
+> > Build the string in stages and multiply:
+> > $$
+> > \begin{align*}
+> > \text{repeated digit} &: 10 \\
+> > \text{positions for it} &: \binom{4}{2} = 6 \\
+> > \text{other two positions} &: 9 \times 8 = 72 \\
+> > \text{total} &= 10 \times 6 \times 72 \\
+> > &= 4{,}320
+> > \end{align*}
+> > $$
+> > The last two positions use $9 \times 8$, not $\binom{9}{2}$, because the positions are already fixed and the two digits in them are ordered.
+
 > [!example]- Counting Equally Likely Outcomes for a Lottery {Example}
 > A lottery draws 3 numbers from $\{1, 2, 3, 4, 5\}$ without replacement. How many equally likely outcomes are there if order does not matter?
 >

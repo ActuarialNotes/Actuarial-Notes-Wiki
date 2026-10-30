@@ -29,6 +29,11 @@ The **Gamma Distribution** $X \sim \text{Gamma}(\alpha, \theta)$ is a flexible c
 > $$P(X > x) = \sum_{k=0}^{\alpha-1} \frac{e^{-x/\theta}(x/\theta)^k}{k!}$$
 
 - Some texts parameterize by **rate** $\beta = 1/\theta$, giving $E[X] = \alpha/\beta$. Read which one a problem uses before substituting.
+- **Recognising a gamma from its kernel.** A density known only up to a constant, $f(x) = c\,x^{a}e^{-x/b}$ for $x > 0$, is $\text{Gamma}(\alpha = a + 1,\ \theta = b)$: match it to the kernel $x^{\alpha-1}e^{-x/\theta}$. Its moments then come straight from $E[X] = \alpha\theta$ and $\text{Var}(X) = \alpha\theta^2$, and the constant need not be computed, since it can only be $c = 1/(\theta^{\alpha}\Gamma(\alpha))$:
+
+> $$\int_0^\infty x^{\alpha-1}e^{-x/\theta}\,dx = \theta^{\alpha}\,\Gamma(\alpha)$$
+
+- For instance, $f(x) = c\,x^{3}e^{-x/2}$ on $x > 0$ is $\text{Gamma}(4, 2)$, so $E[X] = 8$ and $\text{Var}(X) = 16$ (and $c = 1/(2^4 \cdot 3!) = 1/96$, never needed)
 
 ![[Media/Gamma_distribution_pdf.svg|500]]
 

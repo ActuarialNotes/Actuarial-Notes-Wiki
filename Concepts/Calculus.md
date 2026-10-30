@@ -62,6 +62,14 @@ $$\frac{\partial f}{\partial x}(x,y) \quad \text{holds } y \text{ fixed}$$
 > > $$S'(t) = -\lambda e^{-\lambda t}$$
 > > $$\mu(t) = -\frac{-\lambda e^{-\lambda t}}{e^{-\lambda t}} = \lambda$$
 
+### Optimization
+To maximize or minimize a differentiable function $g(a)$ on its feasible interval, solve $g'(a) = 0$, confirm the type with the second derivative, and compare with the endpoints.
+
+- A positive second derivative at a critical point confirms a minimum, and a negative one a maximum: $g''(a) > 0$ is a minimum, $g''(a) < 0$ a maximum. An upward-opening quadratic $g(a) = pa^2 + qa + r$ with $p > 0$ is minimized at its vertex $a = -q/(2p)$
+- Over a closed interval the extremes occur at critical points or at the endpoints, so a function monotone on the interval (such as an increasing linear one) has its minimum and maximum at the endpoints
+- When the parameter is a probability, the feasible interval is where every probability in the model stays in $[0, 1]$
+- With a constraint (a budget or a fixed total), substitute it first, so the objective is a function of one variable, then differentiate. For instance, to maximize $xy$ with $x + y = 12$, maximize $g(x) = x(12 - x)$: $g'(x) = 12 - 2x = 0$ gives $x = 6$, and $g''(x) = -2 < 0$ confirms a maximum of 36
+
 ### Integration
 The **definite integral** gives the net signed area under $f$ from $a$ to $b$. If $f$ is continuous on $[a, b]$ and $F$ is any antiderivative of $f$:
 
@@ -86,6 +94,12 @@ $$\int_0^\infty f(x)\,dx = \lim_{b\to\infty}\int_0^b f(x)\,dx$$
 
 $$P(X \leq a,\, Y \leq b) = \int_{-\infty}^a \int_{-\infty}^b f(x,y)\,dy\,dx$$
 
+**Splitting an integral.** Integrals are additive over intervals: the integral from $a$ to $b$ equals the integral from $a$ to $c$ plus the integral from $c$ to $b$.
+
+> $$\int_a^b f(x)\,dx = \int_a^c f(x)\,dx + \int_c^b f(x)\,dx$$
+
+To integrate a piecewise integrand, such as one containing $\lvert x \rvert$ or $\max(x, c)$, split at each breakpoint and use the formula that holds on each piece: $\lvert x \rvert = -x$ for $x < 0$ and $\lvert x \rvert = x$ for $x \geq 0$. For instance, $\int_{-1}^{2} \lvert x \rvert\,dx = \int_{-1}^{0} (-x)\,dx + \int_{0}^{2} x\,dx = \tfrac{1}{2} + 2 = \tfrac{5}{2}$.
+
 > [!example]- Expected Value of the Exponential Distribution {Example}
 > Let $X \sim \text{Exp}(\lambda)$ with $f(x) = \lambda e^{-\lambda x}$, $x > 0$. Find $E[X]$.
 >
@@ -99,6 +113,10 @@ A **series** is the sum of the terms of a sequence. Two families appear constant
 **Geometric Series** — forms the basis of present-value annuity formulas:
 
 > $$\sum_{k=0}^{\infty} r^k = \frac{1}{1-r}, \quad |r| < 1$$
+
+A **finite** geometric series with first term $a$ and ratio $r$ sums in closed form; letting $N \to \infty$ with $|r| < 1$ recovers $a/(1 - r)$:
+
+> $$a + ar + ar^2 + \cdots + ar^{N-1} = \frac{a\,(1 - r^N)}{1 - r}, \quad r \neq 1$$
 
 **Taylor / Maclaurin Series** — approximates a function as an infinite polynomial near $a = 0$:
 

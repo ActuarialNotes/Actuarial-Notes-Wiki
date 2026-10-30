@@ -21,6 +21,8 @@ The **Continuous Uniform Distribution** $X \sim \text{Unif}(a, b)$ assigns equal
 - $E[X] = (a+b)/2$, $\text{Var}(X) = (b-a)^2/12$, and $F(x) = (x-a)/(b-a)$ for $a < x < b$
 - Conditional distributions on sub-intervals are also uniform: given $X > d$, $X$ is uniform on $(d, b)$
 - The uniform is **not** memoryless — the exponential is the only continuous density that is. For $\text{Unif}(0, 10)$, $P(X > 8 \mid X > 5) = 2/5$, but $P(X > 3) = 7/10$
+- **Linear functions stay uniform.** If $X \sim \text{Unif}(a, b)$, $c > 0$ and $k$ is any constant, then $cX + k \sim \text{Unif}(ca + k,\ cb + k)$. In particular, dividing a uniform on $[0, b]$ by a positive constant $c$ gives a uniform on $[0, b/c]$: a loss uniform on $[0, 500]$, measured in hundreds, is uniform on $[0, 5]$
+- **Two independent uniforms: probability is area.** If $X$ and $Y$ are independent and each $\text{Unif}(0, 1)$, the pair is uniform on the unit square with joint density $f(x, y) = 1$, so $P\bigl((X, Y) \in R\bigr)$ is simply the area of the part of $R$ inside the square. For independent uniforms on any rectangle, divide the area of $R$ within it by the rectangle's area. For instance, $P(Y > 2X)$ is the triangle with corners $(0, 0)$, $(0, 1)$ and $(1/2, 1)$, area $1/4$
 
 ![[Media/Figures/Uniform_Continuous_Distribution.svg|340]]
 

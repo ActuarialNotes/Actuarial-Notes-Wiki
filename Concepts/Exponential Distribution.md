@@ -26,6 +26,23 @@ The **Exponential Distribution** $X \sim \text{Exp}(\theta)$ is a continuous dis
 - Capped at a [[Benefit Limit|limit]] $u$: $E[\min(X,u)] = \theta\left(1 - e^{-u/\theta}\right)$
 - Work from the survival function $S(x) = e^{-x/\theta}$ rather than the CDF; almost every exponential question is a tail probability
 - Some texts parameterize by **rate** $\lambda = 1/\theta$, so $f(x) = \lambda e^{-\lambda x}$ and $E[X] = 1/\lambda$. Check which convention a problem uses before substituting
+- **One known probability fixes $\theta$.** Set the survival function at the given point equal to the given probability and take natural logs: from $S(x_0) = e^{-x_0/\theta} = s$ (equivalently $F(x_0) = 1 - s$), $\theta = -x_0/\ln s$ and the rate is $\lambda = -\ln s / x_0$. Every other probability or percentile then follows from that $\theta$
+
+> $$\theta = \frac{-x_0}{\ln S(x_0)} = \frac{-x_0}{\ln\bigl(1 - F(x_0)\bigr)}, \qquad \lambda = \frac{1}{\theta}$$
+
+- A percentile works the same way: the $100p$-th percentile is $\pi_p = -\theta\ln(1-p)$ (the median is $\theta\ln 2$), so a known percentile gives $\theta = -\pi_p/\ln(1-p)$, and with it any other percentile
+- **Survival powers.** Because $e^{-kx/\theta} = \left(e^{-x/\theta}\right)^k$, the survival probability at a multiple of a point is that point's survival probability raised to the multiple, so a known $S(x_0)$ carries to any other point without solving for $\theta$:
+
+> $$S(kx) = S(x)^k, \qquad S(x) = S(x_0)^{x/x_0}$$
+
+- The same law of exponents compares two exponentials at one point: an exponential with mean $\theta/k$ has survival $e^{-kx/\theta} = S(x)^k$. Halving the mean doubles the rate and squares the survival probability at every fixed point, and if $S_A(x) = S_B(x)^k$ at the same $x$, then $\theta_B = k\,\theta_A$
+- **From a uniform.** If $U \sim \text{Unif}(0,1)$ and $\theta > 0$, then $Y = -\theta \ln U$ is exponential with mean $\theta$, since $P(Y \leq y) = P\left(U \geq e^{-y/\theta}\right) = 1 - e^{-y/\theta}$. This is the inverse-CDF method of simulating an exponential
+- **A mixture of exponentials is not exponential.** When $X$ is $\text{Exp}(\theta_1)$ with probability $w$ and $\text{Exp}(\theta_2)$ otherwise (a [[Mixture Distribution|mixture]]), compute a probability within each component and weight by the mixing probabilities, never from one exponential with the weighted-average mean:
+
+> $$P(a < X < b) = w\left(e^{-a/\theta_1} - e^{-b/\theta_1}\right) + (1-w)\left(e^{-a/\theta_2} - e^{-b/\theta_2}\right)$$
+
+- For instance, with means 1 and 3 equally weighted, $P(X > 2) = 0.5e^{-2} + 0.5e^{-2/3} \approx 0.324$, while a single exponential with the average mean 2 would give $e^{-1} \approx 0.368$
+- $\theta$ is a [[Scale and Shape Parameters|scale parameter]]: for $c > 0$, $cX$ is exponential with mean $c\theta$, and the median and every other percentile move in proportion to $\theta$
 
 ![[Media/Exponential_pdf.svg|500]]
 
@@ -69,3 +86,17 @@ The **Exponential Distribution** $X \sim \text{Exp}(\theta)$ is a continuous dis
 > > \end{align*}
 > > $$
 > > Layering as a difference of excess-loss expectations avoids splitting the integral into three pieces, and works for any severity distribution — not just the exponential.
+
+> [!example]- Calibrating $\theta$ from One Probability {Example}
+> A waiting time is exponential, and 25% of waits end within 20 minutes. Find $\theta$, the probability a wait exceeds 50 minutes, and the median wait.
+>
+> > [!answer]-
+> > Set $S(20) = 0.75$ and take logs:
+> > $$
+> > \begin{align*}
+> > e^{-20/\theta} &= 0.75 \\
+> > \theta &= \frac{-20}{\ln 0.75} \\
+> >        &\approx 69.52
+> > \end{align*}
+> > $$
+> > Then $P(X > 50) = e^{-50/69.52} \approx 0.487$. The survival power gives the same without $\theta$: $S(50) = S(20)^{50/20} = 0.75^{2.5} \approx 0.487$. The median is $\theta \ln 2 \approx 48.19$ minutes.

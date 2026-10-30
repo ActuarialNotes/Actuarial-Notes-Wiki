@@ -28,6 +28,17 @@ The **Normal Distribution** $X \sim N(\mu, \sigma^2)$ is a symmetric, bell-shape
 - Any **linear combination of independent normals is exactly normal**: if $X_i \sim N(\mu_i, \sigma_i^2)$ independently, then $\sum c_i X_i \sim N\!\left(\sum c_i\mu_i,\ \sum c_i^2\sigma_i^2\right)$. No approximation and no CLT required — see [[Probabilities for Linear Combinations]]
 - Useful percentiles: $z_{0.90} = 1.282$, $z_{0.95} = 1.645$, $z_{0.975} = 1.960$, $z_{0.99} = 2.326$
 - When approximating a **discrete** variable (a [[Binomial Distribution|binomial]] or [[Poisson Distribution|Poisson]] count) by a normal, apply the continuity correction: $P(X \leq k) \approx \Phi\!\left(\frac{k + 0.5 - \mu}{\sigma}\right)$
+- **Solving for a parameter.** Read the standard normal table in reverse: if $P(X \leq x) = p$, then $(x - \mu)/\sigma = z_p$, where $z_p = \Phi^{-1}(p)$, so
+
+> $$x = \mu + z_p\,\sigma$$
+
+- For an upper tail $P(X > x) = q$, use $z_{1-q}$. One such condition fixes one unknown, e.g. $\sigma = (x - \mu)/z_p$ when $\mu$ is known. Two conditions (two percentiles or tail probabilities, or one of them plus a moment such as $E[X^2] = \mu^2 + \sigma^2$) give two equations, solved together for both $\mu$ and $\sigma$: subtracting $x_1 = \mu + z_1\sigma$ from $x_2 = \mu + z_2\sigma$ gives $\sigma = (x_2 - x_1)/(z_2 - z_1)$
+- An interval centred on the mean has probability $P(\mu - a < X < \mu + a) = 2\Phi(a/\sigma) - 1$, which falls as $\sigma$ grows with $\mu$ and $a$ fixed: a larger standard deviation spreads the distribution and leaves less probability in a fixed interval around the mean. A requirement that this probability be at least $p$ therefore holds exactly when $\sigma \leq a/z_{(1+p)/2}$, and the largest admissible $\sigma$ is that boundary value
+- **Expected excess over a threshold.** For a threshold $c$, with $\phi$ the standard normal density:
+
+> $$E\left[(X - c)_+\right] = (\mu - c)\,\Phi\!\left(\frac{\mu - c}{\sigma}\right) + \sigma\,\phi\!\left(\frac{\mu - c}{\sigma}\right)$$
+
+- It follows by writing $X = \mu + \sigma Z$ and integrating $(\mu - c + \sigma z)\,\phi(z)$ over $z > z_0 = (c - \mu)/\sigma$, using $\phi'(z) = -z\,\phi(z)$, so that $\int_{z_0}^{\infty} z\,\phi(z)\,dz = \phi(z_0)$, and then the symmetry $1 - \Phi(z_0) = \Phi(-z_0)$ and $\phi(z_0) = \phi(-z_0)$. For instance, with $\mu = 50$, $\sigma = 10$ and $c = 40$, it is $10\,\Phi(1) + 10\,\phi(1) \approx 8.413 + 2.420 = 10.83$
 
 ![[Media/Normal_distribution_pdf.svg|500]]
 
@@ -66,3 +77,17 @@ The **Normal Distribution** $X \sim N(\mu, \sigma^2)$ is a symmetric, bell-shape
 > > \end{align*}
 > > $$
 > > Subtracting the variances to get 175 is the standard trap — a difference is *more* variable than either component, not less.
+
+> [!example]- Finding $\mu$ and $\sigma$ from Two Percentiles {Example}
+> A normal random variable $X$ has $P(X \leq 60) = 0.8413$ and $P(X \leq 80) = 0.9772$. Find $\mu$ and $\sigma$.
+>
+> > [!answer]-
+> > The table read in reverse gives $z = 1$ and $z = 2$, so $60 = \mu + \sigma$ and $80 = \mu + 2\sigma$. Subtracting:
+> > $$
+> > \begin{align*}
+> > \sigma &= \frac{80 - 60}{2 - 1} \\
+> >        &= 20 \\
+> > \mu &= 60 - 20 \\
+> >     &= 40
+> > \end{align*}
+> > $$

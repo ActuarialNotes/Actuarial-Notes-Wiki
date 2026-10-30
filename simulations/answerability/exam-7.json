@@ -457,7 +457,15 @@
      "statement": "Mack's weighted residual for a development period is (C_{i,k+1} - f_k * C_{ik}) / sqrt(C_{ik}), i.e. actual minus expected next-period cumulative loss divided by the square root of the beginning-of-period cumulative loss.",
      "concept": "Mack Chain Ladder Residuals",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Mack Chain Ladder Model",
+      "quote": "plot the weighted residuals $(C_{i,k+1} - C_{ik}\\hat f_k)/\\sqrt{C_{ik}}$",
+      "note": "Mack Chain Ladder Model (Mack §3, printed p.124): the weighted residual",
+      "date": "2026-10-30",
+      "run": "g8-cas7-chk-bs"
+     }
     },
     {
      "id": "r3",
@@ -494,7 +502,15 @@
      "statement": "Mack's chain ladder variance assumption (variance of the next-period loss proportional to the cumulative loss at the prior age) is supported when weighted residuals are randomly scattered around zero with no trend or pattern, such as increasing or decreasing spread, as the earlier-age loss changes.",
      "concept": "Mack Chain Ladder Assumptions",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Mack Chain Ladder Model",
+      "quote": "is supported if they show no specific trend and appear purely random",
+      "note": "Mack Chain Ladder Model (Mack §3, printed pp.124-125): the variance assumption holds when the weighted residuals plotted against C_ik show no trend",
+      "date": "2026-10-30",
+      "run": "g8-cas7-chk-bs"
+     }
     }
    ]
   },
@@ -3226,7 +3242,15 @@
      "statement": "Outliers or extreme values can be excluded from the average age-to-age factor and residual calculations, while the corresponding incremental value is still resampled when simulating triangles.",
      "concept": "Over-Dispersed Poisson Bootstrap Data Issues",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "ODP Bootstrap Model",
+      "quote": "exclude it from the average factors (numerator, denominator or both) and from the residuals but still resample its cell when the pseudo triangles are built",
+      "note": "ODP Bootstrap Model (Shapland §4.5): an outlier excluded from the factors and residuals but its cell still resampled",
+      "date": "2026-10-30",
+      "run": "g8-cas7-chk-bs"
+     }
     },
     {
      "id": "r8",
@@ -3234,7 +3258,15 @@
      "statement": "Heteroecthesious data (partial-year or interim evaluation periods) can be handled by projecting future incremental values before applying the model, annualizing the data and then de-annualizing the results.",
      "concept": "Over-Dispersed Poisson Bootstrap Data Issues",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "ODP Bootstrap Model",
+      "quote": "Annualize the last diagonal so it is consistent with the rest of the triangle, and fit and compute residuals from the annualized triangle",
+      "note": "ODP Bootstrap Model (Shapland §4.7.1-4.7.2): both heteroecthesious cases, annualize / de-annualize and the exposure reduction of the latest year",
+      "date": "2026-10-30",
+      "run": "g8-cas7-chk-bs"
+     }
     },
     {
      "id": "r9",
@@ -3467,7 +3499,15 @@
      "statement": "The mean unpaid estimates should increase from the oldest to the most recent accident year, since less mature years have more unpaid claims remaining.",
      "concept": "Model Diagnostics for Reserve Variability",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "ODP Bootstrap Model",
+      "quote": "because they follow the size of the mean unpaid, which grows from the oldest accident year, typically with only a few incremental payments left, to the most recent",
+      "note": "ODP Bootstrap Model (Shapland §5.5.1): mean unpaid grows from oldest to most recent, the reason standard errors rise",
+      "date": "2026-10-30",
+      "run": "g8-cas7-chk-bs"
+     }
     },
     {
      "id": "r6",
@@ -3773,7 +3813,15 @@
      "statement": "To handle a thin or unreliable accident year, remove that entire row from the loss triangle before modeling.",
      "concept": "Bootstrap Data Issues and Outliers",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "ODP Bootstrap Model",
+      "quote": "can be removed from the triangle if it causes extreme results and does not improve the model's parameterization",
+      "note": "ODP Bootstrap Model (Shapland §4.1.1): a sparse accident year removed from the triangle",
+      "date": "2026-10-30",
+      "run": "g8-cas7-chk-bs"
+     }
     },
     {
      "id": "r8",
@@ -6395,7 +6443,15 @@
      "statement": "Mack's weighted residual for an accident year is (actual cumulative loss at the next age minus the age-to-age factor times cumulative loss at the current age) divided by the square root of the cumulative loss at the current age.",
      "concept": "Mack Chain-Ladder Residual Analysis",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Mack Chain Ladder Model",
+      "quote": "plot the weighted residuals $(C_{i,k+1} - C_{ik}\\hat f_k)/\\sqrt{C_{ik}}$",
+      "note": "Mack Chain Ladder Model (Mack §3, printed p.124): the weighted residual",
+      "date": "2026-10-30",
+      "run": "g8-cas7-chk-bs"
+     }
     },
     {
      "id": "r3",
@@ -6952,7 +7008,15 @@
      "statement": "When the first development period is a partial year (e.g., the latest accident year has only a half year of exposure), annualize the partial-period losses (or estimate the full-year equivalent), compute development factors, then de-annualize the results for that accident year.",
      "concept": "Over-Dispersed Poisson Bootstrap Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "ODP Bootstrap Model",
+      "quote": "reduce the latest accident year's to remove the exposure beyond the evaluation date (by half for annual data at June 30)",
+      "note": "ODP Bootstrap Model (Shapland §4.7.1): partial first development period — residuals unadjusted, latest accident year's projected values reduced for exposure beyond the evaluation date, as the sample answer's 'divide AY 2016 in half'",
+      "date": "2026-10-30",
+      "run": "g8-cas7-chk-bs"
+     }
     },
     {
      "id": "r3",
@@ -6960,7 +7024,15 @@
      "statement": "When the latest diagonal is only a partial calendar year, the latest diagonal's incremental amounts cover a shorter period; adjust by annualizing that diagonal for fitting and residuals, and after simulation re-adjust the simulated latest-diagonal claims back to a partial-year basis.",
      "concept": "Over-Dispersed Poisson Bootstrap Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "ODP Bootstrap Model",
+      "quote": "Then de-annualize the pseudo triangle's last diagonal, reversing the annualization, and project it with the interpolated factors",
+      "note": "ODP Bootstrap Model (Shapland §4.7.2): partial last diagonal annualized for fitting and residuals, de-annualized after simulation",
+      "date": "2026-10-30",
+      "run": "g8-cas7-chk-bs"
+     }
     },
     {
      "id": "r4",
@@ -8045,7 +8117,15 @@
      "statement": "An empirical-limits confidence interval for ultimate loss applies the minimum and maximum observed individual age-to-age factors for each remaining development period (multiplying them across periods) to the latest cumulative loss to give the lower and upper bounds.",
      "concept": "Mack Method Empirical Limits",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Mack Chain Ladder Model",
+      "quote": "the ultimate from the chain ladder with every remaining age-to-age factor replaced by the minimum, or the maximum, individual factor",
+      "note": "Mack Chain Ladder Model (Mack printed p.133): empirical limits from the min/max observed individual factors",
+      "date": "2026-10-30",
+      "run": "g8-cas7-chk-bs"
+     }
     },
     {
      "id": "r6",
@@ -10229,7 +10309,15 @@
      "statement": "A state-space model tests stability by comparing the volatility of observations around the mean with the volatility of the mean itself over time.",
      "concept": "State-Space Model for Development Factors",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Chain Ladder Assumptions",
+      "quote": "compares the instability of the observations around the current mean with the instability of the mean itself over time",
+      "note": "Chain Ladder Assumptions (Venter printed p.832): the state-space model's comparison",
+      "date": "2026-10-30",
+      "run": "g8-cas7-chk-bs"
+     }
     },
     {
      "id": "r7",

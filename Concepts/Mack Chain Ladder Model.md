@@ -1,11 +1,12 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-10-30
+  last_checked_by: agent:validate-v1
   content_hash: sha256:211b52490e6b722381cfd5f105e176bbce19313b4d4afff387fd6cafc8f663c7
-  sources: []
+  sources:
+    - "Mack, Measuring the Variability of Chain Ladder Reserve Estimates (CAS Forum, Spring 1994), §3 regression view, printed pp.122-125 (PDF pp.22-25: f_k0 = sum C_ik C_i,k+1 / sum C_ik^2, f_k2 simple average, the two plots and Plots 0/1/2, 'replace ... with f_k0 or f_k2'), and the empirical limits, printed pp.133-134 (PDF pp.33-34); printed = PDF + 100, sha256:f20a3d7ff26247fb26839073418b918b9823e6908829f9ae8f889f636e1a9da5 — https://www.casact.org/sites/default/files/2021-03/7_Mack_1994.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Mack Chain Ladder Model.md

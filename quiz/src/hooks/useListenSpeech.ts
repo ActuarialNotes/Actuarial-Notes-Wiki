@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useSubscription } from '@/hooks/useSubscription'
 import { supabase } from '@/lib/supabase'
-import { segmentsToSsml, type SpeechSegment } from '@/lib/listenTokens'
+import { segmentFrom, segmentsToSsml, type SpeechSegment } from '@/lib/listenTokens'
 import { segmentStartTime, tokenAt } from '@/lib/listenNarration'
 import type { RecordedVoice } from '@/hooks/useListenRecording'
 
@@ -18,8 +18,8 @@ export interface ListenSpeech {
   stop: () => void
   /** Replay from the start of the previous paragraph (rewind). */
   rewind: () => void
-  /** Replay from the start of the paragraph currently being read. */
-  restartCurrent: () => void
+  /** Take up a new speed from the word being read (on Resume, when paused). */
+  applyRate: () => void
   /** Skip to the start of the next paragraph. */
   skipForward: () => void
 }
@@ -85,6 +85,8 @@ export function useListenSpeech(segments: SpeechSegment[], rate: number, recorde
   const recordedRef = useRef(recorded)
   const engineRef = useRef<ListenEngine>('browser')
   const frameRef = useRef(0)
+  // A live voice paused through a speed change carries on at the new speed on Resume.
+  const rerateOnResumeRef = useRef(false)
 
   recordedRef.current = recorded
   segmentsRef.current = segments
@@ -133,9 +135,8 @@ export function useListenSpeech(segments: SpeechSegment[], rate: number, recorde
   }, [synth, teardownAudio])
 
   // --- Browser Web Speech path ---
-  const speakSegment = useCallback((segIdx: number, runId: number) => {
+  const speakSegment = useCallback((segs: SpeechSegment[], segIdx: number, runId: number) => {
     if (runId !== runIdRef.current || !synth) return
-    const segs = segmentsRef.current
     if (segIdx >= segs.length) {
       setActive(null)
       setStatus('ended')
@@ -154,20 +155,20 @@ export function useListenSpeech(segments: SpeechSegment[], rate: number, recorde
       const fallback = exact ?? [...seg.ranges].reverse().find(r => r.start <= ci)
       if (fallback) setActive(fallback.index)
     }
-    utter.onend = () => speakSegment(segIdx + 1, runId)
-    utter.onerror = () => speakSegment(segIdx + 1, runId)
+    utter.onend = () => speakSegment(segs, segIdx + 1, runId)
+    utter.onerror = () => speakSegment(segs, segIdx + 1, runId)
     // Highlight the segment's first token immediately so browsers that don't
     // fire boundary events still show progress at segment granularity.
     if (seg.ranges[0]) setActive(seg.ranges[0].index)
     synth.speak(utter)
   }, [synth, setActive])
 
-  const startBrowser = useCallback((runId: number, fromSeg: number) => {
+  const startBrowser = useCallback((runId: number, queue: SpeechSegment[]) => {
     if (!synth) { setStatus('unsupported'); return }
     engineRef.current = 'browser'
     setEngine('browser')
     setStatus('playing')
-    speakSegment(fromSeg, runId)
+    speakSegment(queue, 0, runId)
   }, [synth, speakSegment])
 
   // --- Pro cloud path ---
@@ -210,18 +211,18 @@ export function useListenSpeech(segments: SpeechSegment[], rate: number, recorde
     setStatus('playing')
   }, [teardownAudio, setActive])
 
-  const startCloud = useCallback(async (runId: number, fromSeg: number) => {
+  const startCloud = useCallback(async (runId: number, queue: SpeechSegment[]) => {
     engineRef.current = 'pro'
     setEngine('pro')
     setStatus('loading')
     try {
-      const chunks = chunkSegments(segmentsRef.current.slice(fromSeg), MAX_SSML_CHARS)
+      const chunks = chunkSegments(queue, MAX_SSML_CHARS)
       await playCloudChunk(chunks, 0, runId)
     } catch (err) {
       console.warn('Listen: cloud TTS failed, falling back to browser voice:', err)
       if (runId !== runIdRef.current) return
       teardownAudio()
-      startBrowser(runId, fromSeg)
+      startBrowser(runId, queue)
     }
   }, [playCloudChunk, startBrowser, teardownAudio])
 
@@ -229,7 +230,7 @@ export function useListenSpeech(segments: SpeechSegment[], rate: number, recorde
   // One audio file for the whole page; the highlight is read off its clock. The
   // clock is polled every frame rather than taken from `timeupdate`, which
   // fires about four times a second — slower than a short word.
-  const startRecorded = useCallback((runId: number, fromSeg: number, fallback: () => void) => {
+  const startRecorded = useCallback((runId: number, fromSeg: number, fromToken: number | null, fallback: () => void) => {
     const voice = recordedRef.current
     if (!voice) { fallback(); return }
     engineRef.current = 'studio'
@@ -270,7 +271,8 @@ export function useListenSpeech(segments: SpeechSegment[], rate: number, recorde
       fallback()
     }
 
-    const start = segmentStartTime(marks, voice.narration, fromSeg)
+    const tokenMark = fromToken == null ? undefined : marks.find(([index]) => index === fromToken)
+    const start = tokenMark ? tokenMark[1] : segmentStartTime(marks, voice.narration, fromSeg)
     const go = () => {
       if (runId !== runIdRef.current) return
       if (start > 0) audio.currentTime = start
@@ -284,26 +286,34 @@ export function useListenSpeech(segments: SpeechSegment[], rate: number, recorde
   }, [setActive, teardownAudio])
 
   // --- Public controls ---
-  // Stop everything and (re)start playback from a given paragraph index.
-  const begin = useCallback((fromSeg: number) => {
+  // Stop everything and (re)start playback from a given paragraph index — or,
+  // given one of its tokens, from that word.
+  const begin = useCallback((fromSeg: number, fromToken: number | null = null) => {
     hardStop()
+    rerateOnResumeRef.current = false
     const runId = runIdRef.current
     const segs = segmentsRef.current
     if (segs.length === 0) { setActive(null); setStatus('ended'); return }
     const clamped = Math.max(0, Math.min(fromSeg, segs.length - 1))
-    setActive(segs[clamped].ranges[0]?.index ?? null)
-    const live = () => (isProRef.current ? startCloud(runId, clamped) : startBrowser(runId, clamped))
-    if (recordedRef.current) startRecorded(runId, clamped, live)
+    const first = fromToken == null ? segs[clamped] : segmentFrom(segs[clamped], fromToken)
+    const queue = [first, ...segs.slice(clamped + 1)]
+    setActive(first.ranges[0]?.index ?? null)
+    const live = () => (isProRef.current ? startCloud(runId, queue) : startBrowser(runId, queue))
+    if (recordedRef.current) startRecorded(runId, clamped, fromToken, live)
     else live()
   }, [hardStop, startCloud, startBrowser, startRecorded, setActive])
 
   const play = useCallback(() => begin(0), [begin])
-  const restartCurrent = useCallback(() => {
-    // A recording changes speed in place; the live voices must replay the paragraph.
+  // Carry on from the word being read at the new speed.
+  const continueFromWord = useCallback(() => begin(currentSegmentIndex(), activeIndexRef.current), [begin, currentSegmentIndex])
+  const applyRate = useCallback(() => {
+    // A recording changes speed in place; a live voice can't re-rate an
+    // utterance, so it is re-read from the current word — now, or on Resume.
     const audio = audioRef.current
     if (engineRef.current === 'studio' && audio) { audio.playbackRate = rateRef.current; return }
-    begin(currentSegmentIndex())
-  }, [begin, currentSegmentIndex])
+    if (status === 'paused') { rerateOnResumeRef.current = true; return }
+    if (status === 'playing' || status === 'loading') continueFromWord()
+  }, [status, continueFromWord])
   const rewind = useCallback(() => begin(currentSegmentIndex() - 1), [begin, currentSegmentIndex])
   const skipForward = useCallback(() => begin(currentSegmentIndex() + 1), [begin, currentSegmentIndex])
 
@@ -314,10 +324,11 @@ export function useListenSpeech(segments: SpeechSegment[], rate: number, recorde
   }, [engine, synth])
 
   const resume = useCallback(() => {
+    if (rerateOnResumeRef.current) { continueFromWord(); return }
     if (engine !== 'browser') void audioRef.current?.play()
     else synth?.resume()
     setStatus('playing')
-  }, [engine, synth])
+  }, [engine, synth, continueFromWord])
 
   const stop = useCallback(() => {
     hardStop()
@@ -328,5 +339,5 @@ export function useListenSpeech(segments: SpeechSegment[], rate: number, recorde
   // Stop any audio when the hook unmounts (popup close / mode exit / navigation).
   useEffect(() => () => { hardStop() }, [hardStop])
 
-  return { status, activeIndex, engine, play, pause, resume, stop, rewind, restartCurrent, skipForward }
+  return { status, activeIndex, engine, play, pause, resume, stop, rewind, applyRate, skipForward }
 }

@@ -12,14 +12,19 @@ interface Props {
   recordingFor?: string
 }
 
-const RATES = [0.75, 1, 1.25] as const
+const RATE_MIN = 0.5
+const RATE_MAX = 2.5
+const RATE_STEP = 0.25
+// A drag across the slider passes several speeds; only the one it rests on is applied.
+const RATE_SETTLE_MS = 250
 
 export function ListenView({ markdown, recordingFor }: Props) {
   const { blocks, tokens } = useMemo(() => buildListenContent(markdown), [markdown])
   const segments = useMemo(() => toSegments(blocks), [blocks])
   const [rate, setRate] = useState(1)
+  const [rateDraft, setRateDraft] = useState(1)
   const recording = useListenRecording(recordingFor ? listenSlug(recordingFor) : undefined, segments)
-  const { status, activeIndex, engine, play, pause, resume, rewind, restartCurrent, skipForward } = useListenSpeech(
+  const { status, activeIndex, engine, play, pause, resume, rewind, applyRate, skipForward } = useListenSpeech(
     segments,
     rate,
     recording.status === 'ready' ? recording : null,
@@ -47,13 +52,20 @@ export function ListenView({ markdown, recordingFor }: Props) {
     play()
   }, [segments, play, checking])
 
-  // Changing speed continues from the current paragraph (Web Speech can't
-  // re-rate a live utterance, so we replay the current one at the new speed).
-  // Skip the initial mount so this doesn't double-trigger with the segments effect.
+  useEffect(() => {
+    if (rateDraft === rate) return
+    const t = setTimeout(() => setRate(rateDraft), RATE_SETTLE_MS)
+    return () => clearTimeout(t)
+  }, [rateDraft, rate])
+
+  // Changing speed carries on from the word being read. Skip the initial mount
+  // so this doesn't double-trigger with the segments effect.
   useEffect(() => {
     if (!didMountRef.current) { didMountRef.current = true; return }
-    restartCurrent()
-  }, [rate, restartCurrent])
+    applyRate()
+    // Only a new speed applies it; applyRate changes with the play status.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rate])
 
   // Keep the spoken word in view.
   useEffect(() => {
@@ -80,7 +92,7 @@ export function ListenView({ markdown, recordingFor }: Props) {
   return (
     <div>
       {/* Control bar */}
-      <div className="sticky top-0 z-10 -mx-4 sm:-mx-6 px-4 sm:px-6 py-2 mb-3 flex items-center gap-2 bg-card/95 backdrop-blur">
+      <div className="sticky top-0 z-10 px-2 py-1.5 mb-3 flex items-center gap-2 rounded-full bg-muted/80 backdrop-blur">
         <button
           type="button"
           onClick={onToggle}
@@ -97,7 +109,7 @@ export function ListenView({ markdown, recordingFor }: Props) {
         <button
           type="button"
           onClick={() => rewind()}
-          className="inline-flex items-center justify-center h-8 w-8 rounded-md bg-background hover:bg-accent text-foreground shrink-0"
+          className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-background hover:bg-accent text-foreground shrink-0"
           title="Previous paragraph"
           aria-label="Previous paragraph"
         >
@@ -106,28 +118,27 @@ export function ListenView({ markdown, recordingFor }: Props) {
         <button
           type="button"
           onClick={() => skipForward()}
-          className="inline-flex items-center justify-center h-8 w-8 rounded-md bg-background hover:bg-accent text-foreground shrink-0"
+          className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-background hover:bg-accent text-foreground shrink-0"
           title="Next paragraph"
           aria-label="Next paragraph"
         >
           <SkipForward className="h-4 w-4" />
         </button>
-        <div className="flex items-center gap-1 ml-1">
-          {RATES.map(r => (
-            <button
-              key={r}
-              type="button"
-              onClick={() => setRate(r)}
-              className={`text-xs px-1.5 py-1 rounded-md tabular-nums transition-colors ${
-                rate === r ? 'bg-accent font-semibold text-foreground' : 'text-muted-foreground hover:bg-accent/60'
-              }`}
-              title={`Speed ${r}×`}
-            >
-              {r}×
-            </button>
-          ))}
-        </div>
-        <span className="ml-auto inline-flex items-center gap-1 text-[11px] text-muted-foreground shrink-0">
+        <label className="flex items-center gap-2 ml-1 min-w-0">
+          <input
+            type="range"
+            min={RATE_MIN}
+            max={RATE_MAX}
+            step={RATE_STEP}
+            value={rateDraft}
+            onChange={e => setRateDraft(Number(e.target.value))}
+            className="w-24 sm:w-32 accent-primary cursor-pointer"
+            aria-label="Speed"
+            aria-valuetext={`${rateDraft}×`}
+          />
+          <span className="text-xs font-semibold tabular-nums text-foreground w-9 shrink-0">{rateDraft}×</span>
+        </label>
+        <span className="ml-auto pr-2 inline-flex items-center gap-1 text-[11px] text-muted-foreground shrink-0">
           {engine === 'studio'
             ? <><Sparkles className="h-3 w-3" /> Studio voice</>
             : engine === 'pro'

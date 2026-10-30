@@ -2,14 +2,15 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-09-28
+  last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:86ecab683e2245d4421a21481b1737ad774a577fe29cf58d8ae16aef4dbf6f65
+  content_hash: sha256:4c99d00390928022ddf212eea3bcff01b95702a4b43f20dc832d7167f26d969d
   sources:
     - "Siegrist, Random (randomservices.org), Random Samples > Order Statistics (F_k and f_k for an i.i.d. sample; joint pdf f_jk of two order statistics and f_1n of min and max; standard uniform X_(k) beta(k, n-k+1)), sha256:19ff485c600d4294e888c1b3d05ff7eb9196449f958d3325fd72b416aca56d63 — https://www.randomservices.org/random/sample/OrderStatistics.html"
     - "Siegrist, Random (randomservices.org), Distributions > Transformations > Minimum and Maximum (independent X_i with distribution functions F_i: max has F_1...F_n, min has 1 - product of (1 - F_i)), sha256:827bba81a7f85933f2ba982a09155f5277f5ec19838e2ffe70ac0563a56aca69 — https://www.randomservices.org/random/dist/Transformations.html"
     - "SOA Exam P Sample Solutions (Aug 2026 revision), Q249 (min of two independent exponentials by multiplying survival functions, PDF pp.73-74), Q497 (min of three i.i.d. losses, 1 - [1 - F(x)]^3, PDF p.137), sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"
     - "SOA, Probability Exam (Exam P) Syllabus, November 2026, Topic 3 Multivariate Random Variables, learning objective and outcomes a)-i), PDF p.4, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
+    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), 12.4 Order Statistics (finite sampling models): P[X_(i) = x] = C(x-1,i-1) C(m-x,n-i)/C(m,n), x in {i,...,m-n+i}, by the multiplication principle (m here is the page's N), HTML fetched 2026-10-30, sha256:8b4b38e1ca6a79fcc598b1bebf75fc7b9694f0592411d2ef539a6c727f139c77 — https://www.randomservices.org/random/urn/OrderStatistics.html"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Order Statistics.md

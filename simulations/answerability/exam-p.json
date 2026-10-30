@@ -2924,7 +2924,15 @@
      "statement": "To compute E[max(N−1,0)], extend the sum of (n−1)P(N=n) to include n=0 (equal to E[N−1]) and correct by adding back P(N=0), since E[max(N−1,0)] = E[N] − 1 + P(N=0).",
      "concept": "Expected Value of a Function of a Random Variable",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Expected Value",
+      "quote": "For $c = 1$ this is $E[\\max(N - 1, 0)] = E[N] - 1 + P(N = 0)$.",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), 4.1 Definitions and Basic Properties: Symmetry ('If E(X) exists, then E(X) = a'; f(a+x)=f(a-x)), Linearity, Extensions (conditional expected value E(X|A) given event A), E(1_A)=P(A) — https://www.randomservices.org/random/expect/Properties.html; derivation by linearity; checked in the w6 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w6"
+     }
     }
    ]
   },
@@ -5997,7 +6005,15 @@
      "statement": "To identify a conditional distribution, fix the conditioning variable in the joint pmf, drop factors that do not depend on the remaining variable (treating them as a normalizing constant), and recognize the remaining kernel as a known distribution.",
      "concept": "Conditional Distributions",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Conditional Probability Function",
+      "quote": "Drop every factor that does not involve $x$, recognize what is left (the kernel) as a known family, and its normalizing constant follows.",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), 3.5 Conditional Distributions: 'the denominator g(x) is simply the normalizing constant for y -> f(x,y)' — https://www.randomservices.org/random/dist/Conditional.html; checked in the w6 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w6"
+     }
     },
     {
      "id": "r3",
@@ -7012,7 +7028,15 @@
      "statement": "To find the probability that a sum of two discrete random variables equals a given value, enumerate all pairs of outcomes that sum to that value and add their joint probabilities.",
      "concept": "Joint Distribution of Discrete Random Variables",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Joint Probability Function",
+      "quote": "For a sum, list every pair that adds to $s$ and add their joint probabilities:",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §5.1.1 Joint PMF: P((X,Y) in A) = sum over (x_i,y_j) in A of P_XY; R_XY subset of R_X x R_Y with some P_XY zero; marginal eq. (5.1) — https://www.probabilitycourse.com/chapter5/5_1_1_joint_pmf.php; checked in the w6 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w6"
+     }
     },
     {
      "id": "r2",
@@ -9495,7 +9519,15 @@
      "statement": "To find the probability that a sum of independent discrete variables equals a value, enumerate all combinations of individual outcomes that sum to it, and count the ways to assign outcomes to specific individuals using binomial coefficients (multinomial counting).",
      "concept": "Convolution of Discrete Random Variables",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Independent Random Variables",
+      "quote": "multiply it by the number of ways to assign those values to the individuals, a binomial or multinomial coefficient",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §5.1.1 Joint PMF: P((X,Y) in A) = sum over (x_i,y_j) in A of P_XY; R_XY subset of R_X x R_Y with some P_XY zero; marginal eq. (5.1) — https://www.probabilitycourse.com/chapter5/5_1_1_joint_pmf.php; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), 11.5 The Multinomial Distribution: joint PMF with multinomial coefficient (each sequence has prob p1^j1...pk^jk, the number of sequences is the multinomial coefficient); Y_i ~ binomial(n, p_i) —",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w6"
+     }
     },
     {
      "id": "r6",
@@ -11454,7 +11486,15 @@
      "statement": "To condition on a sum of two discrete random variables taking a given value, list all joint outcome pairs whose components add to that value and sum their joint probabilities to get the probability of the conditioning event.",
      "concept": "Joint Distributions of Discrete Random Variables",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Joint Probability Function",
+      "quote": "Conditioning on the sum then divides by this total: $P(X = x \\mid X + Y = s) = p(x, s - x) / P(X + Y = s)$.",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §5.1.1 Joint PMF: P((X,Y) in A) = sum over (x_i,y_j) in A of P_XY; R_XY subset of R_X x R_Y with some P_XY zero; marginal eq. (5.1) — https://www.probabilitycourse.com/chapter5/5_1_1_joint_pmf.php; Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §5.2.3 Conditioning and Independence: f_{X|A}(x) = f_X(x)/P(A) on A, E[X|A] = integral x f_{X|A}(x) dx; independent X,Y give E[g(X)h(Y)] = E[g(X)]E[h(Y)] — https://www.probabilitycourse.com/c",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w6"
+     }
     },
     {
      "id": "r3",
@@ -11779,7 +11819,15 @@
      "statement": "Model a payment that depends on whether each of several events occurs as a linear combination of indicator (Bernoulli) random variables, with each payment amount as the coefficient of its indicator.",
      "concept": "Bernoulli Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Linear Combinations of Random Variables",
+      "quote": "A payment that depends on which of several events occur is a linear combination of indicators",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), 4.3 Variance: indicator with p = P(X=1) has E(X)=p, var(X)=p(1-p) — https://www.randomservices.org/random/expect/Variance.html; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), 4.1 Definitions and Basic Properties: Symmetry ('If E(X) exists, then E(X) = a'; f(a+x)=f(a-x)), Linearity, Extensions (conditional expected value E(X|A) given event A), E(1_A)=P(A) — https://www.randomservices.org/random/expect/Properties.html; checked in the w6 fact",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w6"
+     }
     },
     {
      "id": "r5",
@@ -11812,7 +11860,15 @@
      "statement": "When each of n independently selected items falls into one of several categories with fixed probabilities, the items are independent and identically distributed, and the category counts follow a multinomial distribution.",
      "concept": "Multinomial Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Joint Probability Function",
+      "quote": "When each of $n$ independent trials falls into exactly one of $k$ categories with fixed probabilities $p_1, \\ldots, p_k$ (which sum to 1), the category counts $(N_1, \\ldots, N_k)$ have the joint probability function",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), 11.5 The Multinomial Distribution: joint PMF with multinomial coefficient (each sequence has prob p1^j1...pk^jk, the number of sequences is the multinomial coefficient); Y_i ~ binomial(n, p_i) — https://www.randomservices.org/random/bernoulli/Multinomial.html; checked in the w6 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w6"
+     }
     },
     {
      "id": "r2",
@@ -11874,7 +11930,15 @@
      "statement": "By symmetry among exchangeable identical independent items, each item has the same conditional probability of an event given a symmetric conditioning event, so the conditional expected count equals n times the conditional probability for one item.",
      "concept": "Exchangeability and Symmetry",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Independent and Identically Distributed",
+      "quote": "linearity gives $E[\\text{count} \\mid C] = n \\cdot P(\\text{item 1 has } A \\mid C)$.",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), 4.1 Definitions and Basic Properties: Symmetry ('If E(X) exists, then E(X) = a'; f(a+x)=f(a-x)), Linearity, Extensions (conditional expected value E(X|A) given event A), E(1_A)=P(A) — https://www.randomservices.org/random/expect/Properties.html; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), 2.5 Independence: if {X_i} independent then {g_i(X_i)} independent; i.i.d. indicator sequence exchangeable (permuting does not change the probability)",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w6"
+     }
     },
     {
      "id": "r6",
@@ -11946,7 +12010,15 @@
      "statement": "To count the outcomes where a given value x is the j-th largest, fix x in the selection, choose the required number of values from those greater than x and the required number from those less than x, and multiply the counts (multiplication principle).",
      "concept": "Multiplication Principle of Counting",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Order Statistics",
+      "quote": "The $j$-th largest of the $n$ is $X_{(n-j+1)}$: fix $x$, then choose $j - 1$ values from those greater than $x$ and $n - j$ from those less than $x$.",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), 12.4 Order Statistics (finite sampling): P[X_(i)=x] = C(x-1,i-1)C(m-x,n-i)/C(m,n), x in {i,...,m-n+i}, by the multiplication principle — https://www.randomservices.org/random/urn/OrderStatistics.html; checked in the w6 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w6"
+     }
     },
     {
      "id": "r5",
@@ -13494,7 +13566,15 @@
      "statement": "To find the probability that the second smallest of four integers drawn without replacement from 1..N equals x, count the selections by choosing 1 value from those below x and 2 values from those above x, with x included.",
      "concept": "Counting Principles and Combinations",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Order Statistics",
+      "quote": "P\\bigl(X_{(k)} = x\\bigr) = \\frac{\\binom{x-1}{k-1}\\binom{N-x}{n-k}}{\\binom{N}{n}}, \\quad k \\le x \\le N - n + k",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), 12.4 Order Statistics (finite sampling): P[X_(i)=x] = C(x-1,i-1)C(m-x,n-i)/C(m,n), x in {i,...,m-n+i}, by the multiplication principle — https://www.randomservices.org/random/urn/OrderStatistics.html; checked in the w6 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w6"
+     }
     },
     {
      "id": "r3",
@@ -13770,7 +13850,15 @@
      "statement": "The mean lifetime given survival less than a limit is a conditional expectation E[T | T < c] = E[T·1(T<c)] / P(T<c).",
      "concept": "Conditional Expectation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Expected Value",
+      "quote": "so $E[X \\mid A] = E[X \\cdot 1_A] / P(A)$",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §5.2.3 Conditioning and Independence: f_{X|A}(x) = f_X(x)/P(A) on A, E[X|A] = integral x f_{X|A}(x) dx; independent X,Y give E[g(X)h(Y)] = E[g(X)]E[h(Y)] — https://www.probabilitycourse.com/chapter5/5_2_3_conditioning_independence.php; checked in the w6 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w6"
+     }
     },
     {
      "id": "r2",
@@ -17796,7 +17884,15 @@
        "page": "Limited Expected Value",
        "quote": "$$E[X \\wedge u] = \\int_0^u [1 - F(x)]\\,dx \\quad \\text{(for non-negative } X\\text{)}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Expected Value",
+      "quote": "$E[\\min(N, m)] = \\sum_{k=0}^{m-1} P(N > k)$",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), 4.2 Additional Properties: N on N has E(N) = sum_{n>=0} P(N>n) = sum_{n>=1} P(N>=n) — https://www.randomservices.org/random/expect/Properties2.html; checked in the w6 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w6"
+     }
     },
     {
      "id": "r5",
@@ -18164,7 +18260,15 @@
      "statement": "For independent identically distributed random variables, the events {X1 > 2X2} and {X2 > 2X1} have equal probability by symmetry.",
      "concept": "Independent and Identically Distributed Random Variables",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Independent and Identically Distributed",
+      "quote": "an event and its mirror image with the roles swapped have equal probability: $P(X_1 > g(X_2)) = P(X_2 > g(X_1))$ for any function $g$",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §5.2.3 Conditioning and Independence: f_{X|A}(x) = f_X(x)/P(A) on A, E[X|A] = integral x f_{X|A}(x) dx; independent X,Y give E[g(X)h(Y)] = E[g(X)]E[h(Y)] — https://www.probabilitycourse.com/chapter5/5_2_3_conditioning_independence.php (product joint density); Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), 2.5 Independence: if {X_i} independent then {g_i(X_i)} independent; i.i.d. indicator sequence exchangeable (permuting does not change",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w6"
+     }
     },
     {
      "id": "r4",
@@ -21721,7 +21825,15 @@
        "page": "Conditional and Marginal Probability Functions",
        "quote": "Marginals of $X$: $p_X(0) = 0.3 + 0.1 = 0.4$ and $p_X(1) = 0.2 + 0.4 = 0.6$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Joint Probability Function",
+      "quote": "an event on one variable (such as $X < k$) takes every cell in the rows that satisfy it, across all columns",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §5.1.1 Joint PMF: P((X,Y) in A) = sum over (x_i,y_j) in A of P_XY; R_XY subset of R_X x R_Y with some P_XY zero; marginal eq. (5.1) — https://www.probabilitycourse.com/chapter5/5_1_1_joint_pmf.php; checked in the w6 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w6"
+     }
     },
     {
      "id": "r4",
@@ -26207,7 +26319,15 @@
      "statement": "When each independent trial falls into exactly one of several mutually exclusive categories with fixed probabilities, the counts in each category over a fixed number of trials follow a multinomial distribution, and the category probabilities must sum to 1.",
      "concept": "Multinomial Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Joint Probability Function",
+      "quote": "When each of $n$ independent trials falls into exactly one of $k$ categories with fixed probabilities $p_1, \\ldots, p_k$ (which sum to 1), the category counts $(N_1, \\ldots, N_k)$ have the joint probability function",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), 11.5 The Multinomial Distribution: joint PMF with multinomial coefficient (each sequence has prob p1^j1...pk^jk, the number of sequences is the multinomial coefficient); Y_i ~ binomial(n, p_i) — https://www.randomservices.org/random/bernoulli/Multinomial.html; checked in the w6 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w6"
+     }
     },
     {
      "id": "r3",
@@ -26215,7 +26335,15 @@
      "statement": "The multinomial probability of counts n1,...,nk in m trials is m!/(n1!···nk!) · p1^n1 ··· pk^nk, where the coefficient counts the orderings of the outcomes.",
      "concept": "Multinomial Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Joint Probability Function",
+      "quote": "the coefficient $n!/(n_1! \\cdots n_k!)$ counts the orderings",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), 11.5 The Multinomial Distribution: joint PMF with multinomial coefficient (each sequence has prob p1^j1...pk^jk, the number of sequences is the multinomial coefficient); Y_i ~ binomial(n, p_i) — https://www.randomservices.org/random/bernoulli/Multinomial.html; checked in the w6 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w6"
+     }
     },
     {
      "id": "r4",
@@ -31712,7 +31840,15 @@
        "page": "Future Lifetime Random Variable",
        "quote": "$$e_x = E[K_x] = \\sum_{k=1}^{\\infty} {}_kp_x$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Expected Value",
+      "quote": "E[N] = \\sum_{k=0}^{\\infty} P(N > k) = \\sum_{k=1}^{\\infty} P(N \\ge k)",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), 4.2 Additional Properties: N on N has E(N) = sum_{n>=0} P(N>n) = sum_{n>=1} P(N>=n) — https://www.randomservices.org/random/expect/Properties2.html; checked in the w6 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w6"
+     }
     }
    ]
   },
@@ -31758,7 +31894,15 @@
      "statement": "The probability of the intersection of two events defined on different variables of a joint table is the sum of the joint probabilities of only the cells satisfying both conditions simultaneously.",
      "concept": "Joint and Marginal Distributions",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Joint Probability Function",
+      "quote": "an event on both variables takes only the cells that satisfy both conditions at once.",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §5.1.1 Joint PMF: P((X,Y) in A) = sum over (x_i,y_j) in A of P_XY; R_XY subset of R_X x R_Y with some P_XY zero; marginal eq. (5.1) — https://www.probabilitycourse.com/chapter5/5_1_1_joint_pmf.php; checked in the w6 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w6"
+     }
     },
     {
      "id": "r4",
@@ -33040,7 +33184,15 @@
      "statement": "If a density is symmetric about a point c (and has finite mean), then the mean of the distribution equals c.",
      "concept": "Symmetric Distributions",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Expected Value",
+      "quote": "If a density is symmetric about a point $c$, that is $f(c + t) = f(c - t)$ for all $t$, and $E[X]$ exists, then $E[X] = c$.",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), 4.1 Definitions and Basic Properties: Symmetry ('If E(X) exists, then E(X) = a'; f(a+x)=f(a-x)), Linearity, Extensions (conditional expected value E(X|A) given event A), E(1_A)=P(A) — https://www.randomservices.org/random/expect/Properties.html; checked in the w6 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w6"
+     }
     },
     {
      "id": "r4",
@@ -42543,7 +42695,15 @@
      "statement": "To find the probability of an event defined on X (such as X < k) from a joint probability table, sum the joint probabilities over all X values in the event, giving P(A) and the combined joint probabilities for each y.",
      "concept": "Joint Probability Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Joint Probability Function",
+      "quote": "an event on one variable (such as $X < k$) takes every cell in the rows that satisfy it, across all columns",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §5.1.1 Joint PMF: P((X,Y) in A) = sum over (x_i,y_j) in A of P_XY; R_XY subset of R_X x R_Y with some P_XY zero; marginal eq. (5.1) — https://www.probabilitycourse.com/chapter5/5_1_1_joint_pmf.php; checked in the w6 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w6"
+     }
     },
     {
      "id": "r3",
@@ -44192,7 +44352,15 @@
      "statement": "A multinomial distribution with n trials and category probabilities p1,...,pk has joint probability function n!/(x1!...xk!) p1^x1...pk^xk, where x1+...+xk = n and each xi counts the trials resulting in category i.",
      "concept": "Multinomial Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Joint Probability Function",
+      "quote": "P(N_1 = n_1, \\ldots, N_k = n_k) = \\frac{n!}{n_1!\\, n_2! \\cdots n_k!}\\, p_1^{n_1} p_2^{n_2} \\cdots p_k^{n_k}, \\quad n_1 + \\cdots + n_k = n",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), 11.5 The Multinomial Distribution: joint PMF with multinomial coefficient (each sequence has prob p1^j1...pk^jk, the number of sequences is the multinomial coefficient); Y_i ~ binomial(n, p_i) — https://www.randomservices.org/random/bernoulli/Multinomial.html; checked in the w6 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w6"
+     }
     },
     {
      "id": "r3",
@@ -44200,7 +44368,15 @@
      "statement": "In a multinomial distribution with n trials, the count for category i is marginally binomial, so its expected value is n times pi.",
      "concept": "Multinomial Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Joint Probability Function",
+      "quote": "$E[N_i] = n p_i$",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), 11.5 The Multinomial Distribution: joint PMF with multinomial coefficient (each sequence has prob p1^j1...pk^jk, the number of sequences is the multinomial coefficient); Y_i ~ binomial(n, p_i) — https://www.randomservices.org/random/bernoulli/Multinomial.html; checked in the w6 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w6"
+     }
     },
     {
      "id": "r4",
@@ -44343,7 +44519,15 @@
        "page": "Joint Probability Density Function",
        "quote": "The [[Marginal Probability Function|marginal]] $f_X(x)$ integrates $y$ **out** — the limits on that inner integral depend on $x$ whenever the support is not a rectangle."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Marginal Probability Function",
+      "quote": "The sum runs only over the joint PMF's support.",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §5.1.1 Joint PMF: P((X,Y) in A) = sum over (x_i,y_j) in A of P_XY; R_XY subset of R_X x R_Y with some P_XY zero; marginal eq. (5.1) — https://www.probabilitycourse.com/chapter5/5_1_1_joint_pmf.php; checked in the w6 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w6"
+     }
     },
     {
      "id": "r3",
@@ -44616,7 +44800,15 @@
      "statement": "The trinomial (multinomial with three categories) joint probability function for n trials is p(i,j) = n!/(i! j! (n-i-j)!) p1^i p2^j p3^(n-i-j), where i and j count outcomes of the first two categories and the remainder fall in the third.",
      "concept": "Multinomial Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Joint Probability Function",
+      "quote": "p(i, j) = \\frac{n!}{i!\\, j!\\, (n - i - j)!}\\, p_1^{i}\\, p_2^{j}\\, p_3^{\\,n - i - j}",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), 11.5 The Multinomial Distribution: joint PMF with multinomial coefficient (each sequence has prob p1^j1...pk^jk, the number of sequences is the multinomial coefficient); Y_i ~ binomial(n, p_i) — https://www.randomservices.org/random/bernoulli/Multinomial.html; checked in the w6 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w6"
+     }
     },
     {
      "id": "r2",
@@ -44662,7 +44854,15 @@
      "statement": "Each marginal count in a multinomial distribution is binomial, so the number of trials resulting in a given category is Binomial(n, p) with p the probability of that category; equivalently, independent trials each give that category with probability p.",
      "concept": "Multinomial Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Joint Probability Function",
+      "quote": "Each category's count on its own is binomial: every trial lands in category $i$ with probability $p_i$ or not, so $N_i \\sim \\text{Binomial}(n, p_i)$",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), 11.5 The Multinomial Distribution: joint PMF with multinomial coefficient (each sequence has prob p1^j1...pk^jk, the number of sequences is the multinomial coefficient); Y_i ~ binomial(n, p_i) — https://www.randomservices.org/random/bernoulli/Multinomial.html; checked in the w6 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w6"
+     }
     }
    ]
   },
@@ -46482,7 +46682,15 @@
        "page": "Covariance and Correlation Coefficient",
        "quote": "Covariance is bilinear: $\\text{Cov}(aX + bY,\\, Z) = a\\,\\text{Cov}(X, Z) + b\\,\\text{Cov}(Y, Z)$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Covariance and Correlation Coefficient",
+      "quote": "Covariance is bilinear: $\\text{Cov}(aX + bY,\\, Z) = a\\,\\text{Cov}(X, Z) + b\\,\\text{Cov}(Y, Z)$",
+      "note": "link from Covariance; checked in the w6 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w6"
+     }
     },
     {
      "id": "r2",
@@ -46495,7 +46703,15 @@
        "page": "Covariance and Correlation Coefficient",
        "quote": "$\\text{Cov}(X, X) = \\text{Var}(X)$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Covariance and Correlation Coefficient",
+      "quote": "and $\\text{Cov}(X, X) = \\text{Var}(X)$",
+      "note": "link from Covariance; checked in the w6 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w6"
+     }
     },
     {
      "id": "r3",
@@ -46503,7 +46719,15 @@
      "statement": "Two random variables are uncorrelated when their covariance (equivalently, their correlation) is zero.",
      "concept": "Correlation Coefficient",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Covariance",
+      "quote": "$X$ and $Y$ are **uncorrelated** when $\\text{Cov}(X, Y) = 0$, equivalently when their correlation coefficient is 0.",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), 4.5 Covariance and Correlation: 'If cov(X,Y)=0 then X and Y are uncorrelated'; 'If X and Y are independent, then they are uncorrelated'; converse fails; cor = cov/(sd sd) — https://www.randomservices.org/random/expect/Covariance.html; checked in the w6 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w6"
+     }
     }
    ]
   },
@@ -46550,7 +46774,15 @@
        "page": "Covariance and Correlation Coefficient",
        "quote": "Covariance is bilinear: $\\text{Cov}(aX + bY,\\, Z) = a\\,\\text{Cov}(X, Z) + b\\,\\text{Cov}(Y, Z)$, adding a constant to either variable leaves it unchanged, and $\\text{Cov}(X, X) = \\text{Var}(X)$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Covariance and Correlation Coefficient",
+      "quote": "Covariance is bilinear: $\\text{Cov}(aX + bY,\\, Z) = a\\,\\text{Cov}(X, Z) + b\\,\\text{Cov}(Y, Z)$",
+      "note": "link from Covariance; checked in the w6 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w6"
+     }
     },
     {
      "id": "r4",
@@ -46563,7 +46795,15 @@
        "page": "Covariance and Correlation Coefficient",
        "quote": "and $\\text{Cov}(X, X) = \\text{Var}(X)$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Covariance and Correlation Coefficient",
+      "quote": "and $\\text{Cov}(X, X) = \\text{Var}(X)$",
+      "note": "link from Covariance; checked in the w6 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w6"
+     }
     },
     {
      "id": "r5",
@@ -46810,7 +47050,15 @@
      "statement": "If X and Y are independent, then any functions of them are independent, so E[X^2 Y^2] = E[X^2]E[Y^2] (the second moment of a product equals the product of second moments).",
      "concept": "Independence of Random Variables",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Independent Random Variables",
+      "quote": "If $X$ and $Y$ are independent, so are $g(X)$ and $h(Y)$ for any functions $g$ and $h$; hence $E[g(X)\\,h(Y)] = E[g(X)]\\,E[h(Y)]$, for example $E[X^2 Y^2] = E[X^2]\\,E[Y^2]$.",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), 2.5 Independence: if {X_i} independent then {g_i(X_i)} independent; i.i.d. indicator sequence exchangeable (permuting does not change the probability) — https://www.randomservices.org/random/prob/Independence.html; Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §5.2.3 Conditioning and Independence: f_{X|A}(x) = f_X(x)/P(A) on A, E[X|A] = integral x f_{X|A}(x) dx; independent X,Y give E[g(X)h(Y)] = E[g(X)]E[h(Y)] — https://www.probabilit",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w6"
+     }
     }
    ]
   },

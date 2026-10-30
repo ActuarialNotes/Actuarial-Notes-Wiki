@@ -419,6 +419,17 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   default until decided. Ranking under §0.3: items 1–4 are packaging over existing code; the Study
   Group is a new surface, so Later until its privacy and moderation design exists. *(Proposed 2026-10-30.)*
 
+- **A7: the tools a Cowork agent needs.** `docs/cowork-agent-tools.md` reviews the connector's
+  10 MCP tools and 37 calculators against Cowork: six tools are the core (`search`, `fetch`,
+  `get_concept`, `list_tools`, `describe_tool`, `run_tool`), but the connector exposes nothing of
+  Cowork. Proposed, in order: the source catalogue over MCP (`list_sources`, `get_source`,
+  `get_document`, samples labelled and table figures blank), workflows over MCP (`run_workflow`
+  on the bundled engine, `check_workflow`, the templates), a practitioner skill with the three
+  prompts §7.1 of `actuarial-tools.md` plans, then Triangle from Claim Listing and `map_table`,
+  then Phase 2 tools led by Tail Factor and Credibility Weighting. The first three keep the
+  connector read-only, public and keyless; the reader's own library waits on A1. *(Proposed
+  2026-10-30.)*
+
 - ~~**C20: answerability as a content check, then a gate.**~~ Ranked 2026-10-25 and built as G8:
   see C20 in §4.3 and D29. The proposal as written: `simulations/check-answerable`
   (`docs/simulated-learner.md`, *Answerability*) asks of every served question whether its
@@ -607,6 +618,7 @@ Subplans:
 - `ai-connector.md`
 - `actuarial-tools.md` (§15 next, §16 built)
 - `cowork.md`, `workflows.md`, `cowork-source-inventory.md`
+- `cowork-agent-tools.md` (proposed, A7)
 - `actuarial-agent-product-plan.md`
 
 Shipped:
@@ -790,6 +802,7 @@ Every planning document in the repo, what it is for, and how healthy it is. A do
 | `docs/cas-publication-plan.md` | — | — | 🗑 **Folded into `content-plan.md`** 2026-10-18 | — |
 | `docs/actuarial-tools.md` | Subplan: Tools | A2 | Active. **Needs refresh** (A6) | 2026-10-10 |
 | `docs/cowork-source-inventory.md` | Queue: Cowork sources | A3 | Active. **§4 counts are stale** | 2026-09-20 |
+| `docs/cowork-agent-tools.md` | Proposal: the tools a Cowork agent needs | A7 (§3.4) | Proposed | 2026-10-30 |
 | `docs/actuaria-online.md` | Build spec: Actuaria | X3 | Phases 0–3 built; Phase 4 parked | 2026-10-05 |
 | `docs/tutor.md` | Plan and build spec: the Tutor | L8 | Phase 1 built; Preview | 2026-10-18 |
 | `docs/community.md` | Build spec: the Community tab | X9 | Built; Preview | 2026-10-19 |

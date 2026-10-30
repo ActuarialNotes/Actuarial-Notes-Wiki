@@ -693,7 +693,15 @@
      "statement": "For a random sample from a normal distribution with known mean, the sum of squared observations is a complete sufficient statistic for the variance.",
      "concept": "Sufficient Statistic",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Sufficient Statistic",
+      "quote": "With the mean known, $U = \\sum_{i=1}^n (X_i - \\mu)^2$ is a complete sufficient statistic for the variance $\\sigma^2$",
+      "note": "written from Siegrist, Random, §6.6 Sufficient, Complete and Ancillary Statistics: Normal example (b) 'If mu is known then U = sum (X_i - mu)^2 is sufficient for sigma^2'; exponential-family theorem (natural statistic minimally sufficient, 'It turns out that U is complete ... as well') — https://www.randomservices.org/random/point/Sufficient.html. The one-parameter exponential-family form for fixed mu is read ; checked by 2026-10-30T22:00Z/chkB",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r4",
@@ -701,7 +709,15 @@
      "statement": "For a normal sample with known mean mu, the MVUE of the variance is (1/n) times the sum of (X_i - mu)^2; with mu = 0 this is the sum of X_i^2 divided by n.",
      "concept": "Estimation of Normal Variance",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Sufficient Statistic",
+      "quote": "The special sample variance $W^2 = \\frac{1}{n}\\sum_{i=1}^n (X_i - \\mu)^2$ is unbiased for $\\sigma^2$",
+      "note": "written from Siegrist, Random, §6.5 Best Unbiased Estimators, Normal: '2 sigma^4/n is the Cramer-Rao lower bound'; 'If mu is known, then the special sample variance W^2 attains the lower bound and hence is an UMVUE of sigma^2' — https://www.randomservices.org/random/point/Unbiased.html; §5.8 Normal samples: 'U = n/sigma^2 W^2 has the chi-square distribution with n degrees of freedom' — https://www.randomservic; checked by 2026-10-30T22:00Z/chkB",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r5",
@@ -743,7 +759,15 @@
      "statement": "For grouped data with losses assumed uniform within each interval, approximate each observation by its interval midpoint and compute the sample mean as the count-weighted average of the midpoints.",
      "concept": "Grouped Data Estimation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Method of Moments",
+      "quote": "the count-weighted average of the midpoints is the mean of the grouped distribution",
+      "note": "written from Siegrist, Random, §5.2 The Sample Mean, 'Approximating the Mean' ('An approximate value of the sample mean is (1/n) sum n_j t_j = sum p_j t_j ... based on the hope that the mean of the data values in each class is close to the midpoint of that class') and 'Histograms' (midpoints are class marks) — https://www.randomservices.org/random/sample/Mean.html; checked by 2026-10-30T22:00Z/chkB",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r3",
@@ -1085,7 +1109,15 @@
      "statement": "When observations come in dependent matched pairs, form the within-pair differences and apply a one-sample t-test to those differences (paired t-test).",
      "concept": "Paired t-test",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Hypothesis Testing",
+      "quote": "When observations come in dependent matched pairs, form the within-pair differences and apply a one-sample",
+      "note": "written from NIST e-Handbook §7.3.1.1, https://itl.nist.gov/div898/handbook/prc/section3/prc311.htm; OpenStax Intro Stats 2e §10.7 (LibreTexts); checked by 2026-10-30T22:00Z/chkB",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r2",
@@ -6413,7 +6445,15 @@
      "statement": "Points where the alternative density is zero add Type I error without adding power, so they are excluded from the best critical region; where the likelihood ratio is constant, any subset of the needed probability mass is equally good.",
      "concept": "Neyman-Pearson Lemma",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Neyman-Pearson Lemma",
+      "quote": "such points add Type I error without adding power, so they are excluded from the best critical region",
+      "note": "written from Mackey, Stanford STATS 300A (Fall 2015) Lecture 13, Theorem 1 (Neyman-Pearson Lemma, TSH 3.2.1): phi = 1 if p1/p0 > k, 0 if p1/p0 < k; (ii) sufficiency (any phi of that form with size alpha is MP; proof case (c) p1 = k p0 integrand zero); (iii) necessity (MP tests agree except possibly where p1/p0 = k), pp.13-1–13-3,; checked by 2026-10-30T22:00Z/chkB",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r5",
@@ -6566,7 +6606,15 @@
      "statement": "A paired t-test reduces two matched samples to a single sample of within-pair differences and tests whether the mean difference equals zero.",
      "concept": "Paired t-Test",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Hypothesis Testing",
+      "quote": "reduces two matched samples to a single sample of within-pair differences",
+      "note": "written from NIST e-Handbook §7.3.1.1, https://itl.nist.gov/div898/handbook/prc/section3/prc311.htm; OpenStax Intro Stats 2e §10.7 (LibreTexts); checked by 2026-10-30T22:00Z/chkB",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r2",
@@ -13053,7 +13101,15 @@
      "statement": "Jensen's inequality: for a concave function g and a non-degenerate random variable Y, E[g(Y)] < g(E[Y)]; hence E[S] < sqrt(E[S^2]) = sigma, so S is biased low.",
      "concept": "Jensen's Inequality",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Unbiasedness",
+      "quote": "The sample standard deviation $S$ is a negatively biased estimator that tends to underestimate $\\sigma$",
+      "note": "written from Siegrist, Random, §5.5 The Sample Variance, 'A Special Sample Variance' (E(W) = E(sqrt(W^2)) <= sqrt(E(W^2)) = sigma, square root concave, Jensen) and 'The Standard Sample Variance' ('S is a negatively biased estimator ... tends to underestimate sigma', E(S) <= sigma) — https://www.randomservices.org/random/sample/Variance.html; checked by 2026-10-30T22:00Z/chkB",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r3",
@@ -13640,7 +13696,15 @@
      "statement": "Unbiasedness matters when estimates are averaged or pooled, since bias does not average away, and when the estimate is used in procedures built on the unbiased sample variance.",
      "concept": "Bias of an Estimator",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Unbiasedness",
+      "quote": "Bias does not average away, so an unbiased estimator is wanted when estimates from many small samples are averaged or pooled",
+      "note": "written from Siegrist, Random, §5.3 The Law of Large Numbers, Moments (E(M) = mu, var(M) = sigma^2/n) and weak law — https://www.randomservices.org/random/sample/LLN.html (applied to k independent estimates as the sample); Siegrist §5.8 Special Properties of Normal Samples, 'The Sample Variance' ((n-1)S^2/sigma^2 chi-square n-1) and 'The T Variable' (t with n-1) — https://www.randomservices.org/random/sample/N; checked by 2026-10-30T22:00Z/chkB",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     }
    ]
   },
@@ -14402,7 +14466,15 @@
      "statement": "The sample median converges in probability to the population median when the density is positive at the median.",
      "concept": "Sample Median",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Consistency",
+      "quote": "The sample median is a consistent estimator of the population median",
+      "note": "written from Slud, UMD STAT 701 HW3(C) Handout, Step 1, https://math.umd.edu/~slud/s701/HW3(C)Handout.pdf; Ramachandramurty & Rao, Canad. Math. Bull. 16(2) 1973 §1, https://doi.org/10.4153/CMB-1973-048-1; checked by 2026-10-30T22:00Z/chkB",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r6",
@@ -19715,7 +19787,15 @@
      "statement": "Correlation or regression association does not imply causation.",
      "concept": "Sample Correlation Coefficient",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Correlation",
+      "quote": "Correlation or regression association does not imply causation.",
+      "note": "written from Foster et al., An Introduction to Psychological Statistics (CC BY-NC-SA 4.0), §12.7 Correlation versus Causation ('Correlations DO NOT prove causation'; 'no correlational analysis can demonstrate causality'; lurking/confound third variables; spurious correlation by chance; 'The ONLY way to demonstrate a causal relation is with a properly designed and controlled experiment', random assignment) — ht; checked by 2026-10-30T22:00Z/chkB",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r6",

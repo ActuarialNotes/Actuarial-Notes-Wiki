@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:5e9fc655962e18b1bbbfc825fc60cdc9663312c25617ce8586d2820b7eeed877
+  content_hash: sha256:03dfc0482d70dc403809b94804e79bb0c7a60d0e24b42b2f64dc0769f557e9e6
   sources:
     - "ISO CP 00 10 10 12 Building and Personal Property Coverage Form (specimen), §D, F.1, F.2.d–e (delta re-check of example (b)), sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf"
     - "ISO CP 00 10 10 12 Building and Personal Property Coverage Form (specimen), §E.1–E.7, F.1 (Examples 1–3), F.2 pp.10–14, sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf"
@@ -21,14 +21,14 @@ verification:
 
 > $$\text{TIB} = K \times \frac{n_{\text{remaining}}}{n_{\text{total}}}$$
 
-- **Symbols:** $C$ is the limit of insurance, $p$ the coinsurance percentage, $V$ the value of the covered property at the time of loss, $L$ the loss before the deductible and $D$ the deductible. The first block applies when $pV > C$; otherwise the loss less the deductible is paid, up to the limit. The vacancy factor applies to covered causes of loss other than the six the vacancy condition removes. In the last block, $K$ is the original cost of a tenant's improvements and betterments, $n_{\text{remaining}}$ the days from the loss to the lease's expiration and $n_{\text{total}}$ the days from installation to expiration.
+- **Symbols:** $C$ is the limit of insurance, $p$ the coinsurance percentage, $V$ the value of the covered property at the time of loss, $L$ the loss before the deductible and $D$ the deductible. The first block applies when $pV > C$; otherwise the loss less the deductible is paid, up to the limit. The vacancy factor applies to covered causes of loss other than the six the vacancy condition removes. In the last block, $K$ is the original cost of a tenant's improvements and betterments, $n_{\text{remaining}}$ the days from the loss to the lease's expiration and $n_{\text{total}}$ the days from installation to expiration. If the lease contains a renewal option, the expiration of the renewal option period replaces the expiration of the lease in both counts.
 - **Abandonment:** The insured cannot abandon damaged property to the insurer.
 - **Appraisal:** If the parties disagree on the value of the property or the amount of loss, either may demand an appraisal in writing. Each picks a competent and impartial appraiser, the two pick an umpire (or a judge does if they cannot agree), and a decision agreed by any two is binding. Each party pays its own appraiser and they share the umpire's and other costs equally. Appraisal settles the amount only: the insurer keeps its right to deny the claim.
 - **Duties in the event of loss or damage:** The insured must notify the police if a law may have been broken; give prompt notice and a description of the property; describe how, when and where the loss happened; take reasonable steps to protect the property from further damage and keep a record of the expense; give inventories of damaged and undamaged property on request; allow inspection, sampling and examination of books and records; send a signed, sworn proof of loss within 60 days after the insurer's request; and cooperate. The insurer may examine any insured under oath, separately from other insureds.
 - **Loss payment:** The insurer may pay the value of the property, pay the cost to repair or replace it, take all or part of it at an agreed or appraised value, or repair, rebuild or replace it with property of like kind and quality. The cost to repair does not include the increased cost of complying with an ordinance or law. The insurer gives notice of its intentions within 30 days after receiving the sworn proof of loss, pays within 30 days after receiving it once the amount is agreed or appraised, never pays more than the insured's financial interest, may adjust losses directly with the owners of others' property, and pays a share of a damaged party wall in proportion to the insured's interest.
 - **Recovered property:** Whichever party recovers property after settlement must tell the other. At the insured's option the property is returned to it and it repays what the insurer paid for it; the insurer pays the cost to recover and repair the property, subject to the limit.
 - **Vacancy:** A tenant's unit is vacant when it does not contain enough business personal property to conduct customary operations. An owner's or general lessee's building is vacant unless at least 31% of its total square footage is rented and used by tenants for their customary operations or used by the owner for its own. Buildings under construction or renovation are not vacant. Once the building has been vacant for more than 60 consecutive days before the loss, the insurer pays nothing for vandalism, sprinkler leakage (unless the system was protected against freezing), building glass breakage, water damage, theft or attempted theft, and reduces payment for any other covered loss by 15%.
-- **Valuation:** Property is valued at actual cash value at the time of loss, except that building repairs costing \$2,500 or less are paid at replacement cost if the building limit satisfies coinsurance (awnings, floor coverings, appliances and outdoor equipment stay at actual cash value); stock sold but not delivered is valued at the selling price less discounts and unincurred expenses; glass at the cost of safety glazing where the law requires it; and a tenant's improvements and betterments at actual cash value if repaired promptly, at a proportion of original cost if not, and at nothing if others pay for the repair. The [[BPP Optional Coverages|replacement cost optional coverage]] substitutes replacement cost for actual cash value ([[Actual Cash Value]], [[Replacement Cost]]).
+- **Valuation:** Property is valued at actual cash value at the time of loss, except that building repairs costing \$2,500 or less are paid at replacement cost if the building limit satisfies coinsurance (awnings, floor coverings, appliances and outdoor equipment stay at actual cash value); stock sold but not delivered is valued at the selling price less discounts and unincurred expenses; glass at the cost of safety glazing where the law requires it; and a tenant's improvements and betterments at actual cash value if repaired promptly, at a proportion of original cost if not, and at nothing if others pay for the repair. In that proportion, when the lease contains a renewal option, the expiration of the renewal option period replaces the expiration of the lease. The [[BPP Optional Coverages|replacement cost optional coverage]] substitutes replacement cost for actual cash value ([[Actual Cash Value]], [[Replacement Cost]]).
 - **Coinsurance:** If the value of covered property at the time of loss times the coinsurance percentage exceeds the limit, the insurer divides the limit by that product, multiplies the loss before the deductible by the result, subtracts the deductible and pays that or the limit, whichever is less. When one limit covers several items, the test uses the total value of all of them ([[Blanket Insurance]]). The reasoning behind the clause is on [[Insurance to Value]].
 - **Mortgageholders:** The insurer pays covered building losses to each mortgageholder in the declarations, in order of precedence, as interests may appear, even if the mortgageholder has started foreclosure. If the owner's claim is denied for its own acts or noncompliance, the mortgageholder is still paid if it pays any premium due at the insurer's request, submits a sworn proof of loss within 60 days after notice of the owner's failure, and has told the insurer of changes in ownership, occupancy or substantial changes in risk it knew of. The insurer then takes over the mortgageholder's rights against the owner to the extent of its payment, or may pay off the whole mortgage and take an assignment of it. The mortgageholder gets 10 days' notice of cancellation for nonpayment, 30 days for any other reason, and 10 days' notice of nonrenewal.
 
@@ -47,7 +47,7 @@ verification:
 > > The insurer pays \$97,500, which is less than the limit. With a limit of at least \$540,000 it would have paid \$117,500, so the penalty costs the owner \$20,000 on top of the deductible.
 
 > [!example]- Unrepaired Tenant Improvements {Example}
-> A tenant spent \$90,000 on improvements and betterments when it moved in. The lease runs 1,825 days from the installation, with no renewal option. A fire destroys the improvements with 730 days left on the lease, and the tenant decides not to repair them. How are they valued? What if the landlord pays to restore them?
+> A tenant spent \$90,000 on improvements and betterments when it moved in. The lease runs 1,825 days from the installation, with no renewal option. A fire destroys the improvements with 730 days left on the lease, and the tenant decides not to repair them. How are they valued? What if the lease had instead carried an option to renew for a further 730 days? What if the landlord pays to restore them?
 >
 > > [!answer]-
 > > Because the tenant does not repair promptly, the improvements are valued at the proportion of original cost that matches the remaining lease term.
@@ -55,6 +55,14 @@ verification:
 > > \begin{align*}
 > > \text{TIB} &= 90{,}000 \times \frac{730}{1{,}825} \\
 > > &= 36{,}000
+> > \end{align*}
+> > $$
+> > With a 730-day renewal option, both counts run to the end of the renewal option period instead of the lease's expiration.
+> > $$
+> > \begin{align*}
+> > \text{TIB} &= 90{,}000 \times \frac{730 + 730}{1{,}825 + 730} \\
+> > &= 90{,}000 \times \frac{1{,}460}{2{,}555} \\
+> > &= 51{,}428.57
 > > \end{align*}
 > > $$
 > > If the tenant repaired promptly, they would be valued at actual cash value instead. If the landlord pays for the repairs, the tenant has lost nothing and the valuation is zero.

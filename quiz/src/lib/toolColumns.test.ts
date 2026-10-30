@@ -18,6 +18,8 @@ describe('formatCell', () => {
     expect(formatCell('1700', 'money')).toBe('1,700')
     expect(formatCell(1234.5, 'money')).toBe('1,234.5')
     expect(formatCell('1.6995', 'factor')).toBe('1.6995')
+    expect(formatCell(1, 'factor')).toBe('1.000')
+    expect(formatCell(1.5151515152, 'factor')).toBe('1.5152')
     expect(formatCell(0.05, 'percent')).toBe('5%')
     expect(formatCell('1700*1.05', 'money')).toBe('1,785')
   })

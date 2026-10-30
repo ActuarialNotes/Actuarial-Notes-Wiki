@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { fieldVisible, fromMode, groupSources, initialDraft, parseClipboardBlock, shortSource, toMode } from './toolDraft'
+import { draftFromStore, draftToStore, fieldVisible, fromMode, groupSources, initialDraft, parseClipboardBlock, pastedTriangle, shortSource, toMode, withoutHeader } from './toolDraft'
 import { checksFor } from './tools'
 import { toolResultSheets, runToolCall } from './toolExport'
 import { runTool, toolById, type ToolSpec } from './tools'
@@ -70,6 +70,50 @@ describe('pasting from Excel', () => {
     expect(parseClipboardBlock('1\t2\r\n3\t4\n')).toEqual([['1', '2'], ['3', '4']])
     expect(parseClipboardBlock('1\n2')).toEqual([['1'], ['2']])
     expect(parseClipboardBlock('1,200')).toBeNull()
+  })
+})
+
+describe('a whole triangle, pasted', () => {
+  const fallback = { origins: ['2021', '2022'], ages: [12, 24] }
+
+  it('takes the origins and ages from a block laid out with them', () => {
+    const block = parseClipboardBlock('AY\t12\t24\t36\n2019\t100\t150\t165\n2020\t110\t170\n2021\t120')!
+    expect(pastedTriangle(block, fallback)).toEqual({
+      origins: ['2019', '2020', '2021'],
+      ages: [12, 24, 36],
+      values: [['100', '150', '165'], ['110', '170', ''], ['120', '', '']],
+    })
+  })
+
+  it('keeps the triangle\'s own labels for values alone, and extends them', () => {
+    const block = parseClipboardBlock('100\t150\t165\n110\t170\n120')!
+    expect(pastedTriangle(block, fallback)).toEqual({
+      origins: ['2021', '2022', '2023'],
+      ages: [12, 24, 36],
+      values: [['100', '150', '165'], ['110', '170', ''], ['120', '', '']],
+    })
+  })
+
+  it('drops a header row of column names from a table', () => {
+    expect(withoutHeader([['AY', 'Latest'], ['2021', '1,650']])).toEqual([['2021', '1,650']])
+    expect(withoutHeader([['2021', '1,650'], ['2022', '1,700']])).toHaveLength(2)
+  })
+})
+
+describe('inputs kept between visits', () => {
+  const bf = spec('reserving.bornhuetter_ferguson')
+
+  it('stores nothing for the starting draft, and a changed one', () => {
+    expect(draftToStore(bf, initialDraft(bf))).toBeNull()
+    const changed = { ...initialDraft(bf), basis: 'paid' }
+    expect(draftFromStore(bf, draftToStore(bf, changed))).toEqual(changed)
+  })
+
+  it('reads nothing back from a broken or foreign value', () => {
+    expect(draftFromStore(bf, null)).toBeNull()
+    expect(draftFromStore(bf, '{oops')).toBeNull()
+    expect(draftFromStore(bf, '[1,2]')).toBeNull()
+    expect(draftFromStore(bf, '{"nonsense":1}')).toEqual(initialDraft(bf))
   })
 })
 

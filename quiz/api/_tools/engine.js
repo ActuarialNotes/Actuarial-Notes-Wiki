@@ -1795,7 +1795,7 @@ var capeCod = {
 var example = (values2) => ({ origins: ["2021", "2022", "2023"], ages: [12, 24, 36], values: values2 });
 var ratioTriangle = {
   id: "reserving.ratio_triangle",
-  version: "1.0.0",
+  version: "1.1.0",
   name: "Ratio Triangle",
   area: "reserving",
   answers: "How does one triangle compare with another, cell by cell?",
@@ -1805,6 +1805,7 @@ var ratioTriangle = {
       kind: "triangle",
       key: "numerator",
       label: "Numerator",
+      symbol: "A",
       description: "The triangle on top: paid claims for paid-to-reported, closed counts for closed-to-reported, case outstanding for the average case.",
       default: example([[400, 1e3, 1500], [450, 1100, null], [500, null, null]])
     },
@@ -1812,12 +1813,14 @@ var ratioTriangle = {
       kind: "triangle",
       key: "denominator",
       label: "Denominator",
+      symbol: "B",
       description: "The triangle beneath, of the same shape: reported claims, reported counts, open counts.",
       default: example([[1e3, 1500, 1650], [1100, 1700, null], [1200, null, null]])
     }
   ],
   notation: () => "R\u1D62\u2C7C = A\u1D62\u2C7C / B\u1D62\u2C7C",
   view: "table",
+  resultLabel: "Ratios, A / B",
   compute: (input) => {
     const A = input.numerator;
     const B = input.denominator;
@@ -1843,7 +1846,7 @@ var ratioTriangle = {
       ...A.ages.map((age) => ({ key: ageKey(age), label: String(age), kind: "number", unit: "factor" }))
     ];
     const rows = A.origins.map((origin, i) => Object.assign({ origin }, Object.fromEntries(A.ages.map((age, j) => [ageKey(age), ratios[i][j]]))));
-    const pooled = A.ages.map((_, j) => {
+    const sums = A.ages.map((_, j) => {
       let a = 0;
       let b = 0;
       A.values.forEach((row2, i) => {
@@ -1852,12 +1855,15 @@ var ratioTriangle = {
           b += B.values[i][j];
         }
       });
-      return b === 0 ? null : a / b;
+      return { a, b };
     });
+    const pooled = sums.map(({ a, b }) => b === 0 ? null : a / b);
     const latest = ratios.map((row2) => [...row2].reverse().find((r) => r !== null) ?? null);
+    const last2 = A.origins.length - 1;
+    const lastAge = A.ages[Math.max(0, ratios[last2].findLastIndex((r) => r !== null))];
     return {
       tiles: [
-        { symbol: "R", label: `Latest, ${A.origins[A.origins.length - 1]}`, value: latest[latest.length - 1] ?? NaN, unit: "factor" },
+        { symbol: "R", label: `Newest origin, ${A.origins[last2]} at ${lastAge}`, value: latest[last2] ?? NaN, unit: "factor" },
         { symbol: "R\u0304", label: `All origins at ${A.ages[0]}`, value: pooled[0] ?? NaN, unit: "factor" }
       ],
       table: {
@@ -1865,7 +1871,12 @@ var ratioTriangle = {
         rows,
         footer: Object.assign({ origin: "All origins" }, Object.fromEntries(A.ages.map((age, j) => [ageKey(age), pooled[j]])))
       },
-      trace: A.ages.map((age, j) => ({ label: `All origins at ${age}`, formula: "\u03A3 A / \u03A3 B down the column", result: pooled[j] ?? NaN, unit: "factor" })),
+      trace: A.ages.map((age, j) => ({
+        label: `All origins at ${age}`,
+        formula: `\u03A3 A / \u03A3 B = ${formatValue(sums[j].a, "count")} / ${formatValue(sums[j].b, "count")}`,
+        result: pooled[j] ?? NaN,
+        unit: "factor"
+      })),
       warnings,
       values: { ratios, pooled, latest },
       summary: `Ratio triangle of ${A.origins.length} origins; the latest origin's ratio is ${formatValue(latest[latest.length - 1] ?? NaN, "factor")}.`
@@ -2260,7 +2271,7 @@ function studentTQuantile(p2, df) {
 // src/lib/tools/ratemaking/trendFit.ts
 var PERIOD = { key: "period", label: "Period", kind: "text" };
 var VALUE = { key: "value", label: "Value", kind: "number", unit: "plain" };
-var MARK = { key: "mark", label: "Mark", kind: "text", optional: true };
+var MARK = { key: "mark", label: "Mark", kind: "text", optional: true, placeholder: "exclude\u2026" };
 var LEVEL = 0.95;
 var FEW_DF = 4;
 var LOW_R2 = 0.5;

@@ -128,3 +128,79 @@ export function fromMode(values: unknown[][], mode: TriangleMode): unknown[][] {
     })
   })
 }
+
+/**
+ * A pasted block read as a whole triangle. With a header row (a blank or
+ * worded corner over the ages) the first column is taken as the origins and
+ * the first row as the ages, the way a triangle is laid out in Excel; without
+ * one the block is values alone, and the triangle's own labels are kept where
+ * there are enough of them (`fallback`), extended where there aren't.
+ */
+export function pastedTriangle(
+  block: string[][],
+  fallback: { origins: unknown[]; ages: unknown[] },
+): { origins: string[]; ages: number[]; values: string[][] } | null {
+  const rows = block.filter(r => r.some(c => c !== ''))
+  if (!rows.length) return null
+  const header = labelledTriangle(rows)
+  let origins: string[]
+  let ages: number[]
+  let values: string[][]
+  if (header) {
+    ages = rows[0].slice(1).map(c => readNumber(c, false) ?? NaN)
+    const data = rows.slice(1)
+    origins = data.map(r => r[0])
+    values = data.map(r => r.slice(1))
+  } else {
+    values = rows
+    const width = Math.max(...rows.map(r => r.length))
+    origins = rows.map((_, i) => String(fallback.origins[i] ?? nextLabel(fallback.origins, i)))
+    ages = Array.from({ length: width }, (_, j) => Number(fallback.ages[j] ?? (Number(fallback.ages[fallback.ages.length - 1]) || 0) + 12 * (j - fallback.ages.length + 1)))
+  }
+  if (ages.some(a => !Number.isFinite(a))) return null
+  const width = ages.length
+  return { origins, ages, values: values.map(r => Array.from({ length: width }, (_, j) => r[j] ?? '')) }
+}
+
+/** Whether a block leads with a header row of ages under a blank or worded corner (and so has origins down its side). */
+export function labelledTriangle(block: string[][]): boolean {
+  const isNum = (c: string | undefined) => !!c && readNumber(c, false) !== null
+  return block.length > 1 && !isNum(block[0][0]) && block[0].slice(1).some(isNum)
+}
+
+/** The label after a run of origins: the year after the last, or the next count. */
+function nextLabel(origins: unknown[], i: number): string {
+  const last = Number(origins[origins.length - 1])
+  return Number.isFinite(last) ? String(last + (i - origins.length + 1)) : String(i + 1)
+}
+
+/** A pasted block's rows, less a header row of column names (no number in it) when one leads it. */
+export function withoutHeader(block: string[][]): string[][] {
+  if (block.length > 1 && block[0].every(c => c === '' || readNumber(c, false) === null) && block.slice(1).some(r => r.some(c => readNumber(c, false) !== null))) {
+    return block.slice(1)
+  }
+  return block
+}
+
+/**
+ * The tool page keeps the reader's inputs between visits (localStorage, on
+ * this device only — R7): what's stored for a draft, or null when it is the
+ * tool's own starting draft and there is nothing to keep.
+ */
+export function draftToStore(spec: ToolSpec, draft: Draft): string | null {
+  const text = JSON.stringify(draft)
+  return text === JSON.stringify(initialDraft(spec)) ? null : text
+}
+
+/** A stored draft read back over the tool's starting draft, or null for nothing usable. */
+export function draftFromStore(spec: ToolSpec, stored: string | null): Draft | null {
+  if (!stored) return null
+  try {
+    const parsed: unknown = JSON.parse(stored)
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return null
+    // Judgments stay out unless the reader chose them, as `initialDraft` keeps them.
+    return initialDraft(spec, parsed)
+  } catch {
+    return null
+  }
+}

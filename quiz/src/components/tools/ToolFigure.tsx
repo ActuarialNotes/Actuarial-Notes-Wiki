@@ -156,19 +156,50 @@ export function ToolFigure({
       break
     }
     case 'heat': {
+      // A triangle shaded by size, with its origins down the side and its ages
+      // across the top, and each cell's value printed where there is room — an
+      // unlabelled grid of grey blocks said nothing about which cell was which.
       const rows = figure.rows
       const all = rows.flat().filter((v): v is number => v != null && Number.isFinite(v))
       const lo = Math.min(...all)
       const hi = Math.max(...all)
       const cols = Math.max(...rows.map(r => r.length), 1)
-      const cw = (W - pad.l - pad.r) / cols
-      const ch = (H - pad.t - pad.b + (compact ? 0 : 12)) / Math.max(rows.length, 1)
-      body = rows.map((row, r) =>
-        row.map((v, c) =>
-          v == null ? null : (
-            <rect key={`${r}:${c}`} x={pad.l + c * cw + 1} y={pad.t + r * ch + 1} width={cw - 2} height={ch - 2} rx={1.5} fill="hsl(var(--primary))" fillOpacity={0.12 + 0.78 * (hi > lo ? (v - lo) / (hi - lo) : 0.5)} {...name(formatValue(v, 'factor'))} />
-          ),
-        ),
+      const labelled = !compact && W >= 160 && !!figure.rowLabels && !!figure.colLabels
+      const left = labelled ? 34 : 0
+      const topPad = labelled ? 14 : 0
+      const cw = (W - pad.l - pad.r - left) / cols
+      // The figure's own edges, less the column labels: a heat triangle has no axis under it.
+      const top = (compact ? pad.t : 4) + topPad
+      const ch = (H - top - (compact ? pad.b : 4)) / Math.max(rows.length, 1)
+      const x0 = pad.l + left
+      const y0 = top
+      const share = (v: number) => 0.12 + 0.78 * (hi > lo ? (v - lo) / (hi - lo) : 0.5)
+      const printed = labelled && cw >= 42 && ch >= 14
+      body = (
+        <>
+          {labelled && figure.colLabels!.slice(0, cols).map((lab, c) => (
+            <text key={`c${c}`} x={x0 + c * cw + cw / 2} y={y0 - 4} textAnchor="middle" fontSize={9} fill="currentColor" fillOpacity={0.6}>{lab}</text>
+          ))}
+          {labelled && figure.rowLabels!.slice(0, rows.length).map((lab, r) => (
+            <text key={`r${r}`} x={pad.l} y={y0 + r * ch + ch / 2 + 3} fontSize={9} fill="currentColor" fillOpacity={0.6}>{truncate(lab, 6)}</text>
+          ))}
+          {rows.map((row, r) =>
+            row.map((v, c) => {
+              if (v == null) return null
+              const where = labelled ? `${figure.rowLabels![r]} at ${figure.colLabels![c]}: ` : ''
+              return (
+                <g key={`${r}:${c}`} {...name(`${where}${formatValue(v, 'factor')}`)}>
+                  <rect x={x0 + c * cw + 1} y={y0 + r * ch + 1} width={cw - 2} height={ch - 2} rx={1.5} fill="hsl(var(--primary))" fillOpacity={share(v)} />
+                  {printed && (
+                    <text x={x0 + c * cw + cw / 2} y={y0 + r * ch + ch / 2 + 3.5} textAnchor="middle" fontSize={10} className="tabular-nums" fill={share(v) > 0.55 ? 'hsl(var(--primary-foreground))' : 'currentColor'}>
+                      {formatValue(v, 'factor')}
+                    </text>
+                  )}
+                </g>
+              )
+            }),
+          )}
+        </>
       )
       break
     }
@@ -304,10 +335,33 @@ export function ToolFigure({
       >
         {body}
       </svg>
+      {!compact && figure.kind === 'bars' && <BarsLegend figure={figure} />}
       {!compact && label && (
         <p className="pointer-events-none absolute left-1 top-0 max-w-full truncate text-[11px] leading-4 text-muted-foreground tabular-nums" aria-live="polite">{label}</p>
       )}
     </div>
+  )
+}
+
+/**
+ * What a bar chart's marks are, in one line under it: which part of a bar is
+ * the latest diagonal and which the IBNR, what the dashed outline and the line
+ * stand for. Drawn only where there is more than one kind of mark to tell apart.
+ */
+function BarsLegend({ figure }: { figure: Extract<FigureSpec, { kind: 'bars' }> }) {
+  const items: { name: string; swatch: ReactNode }[] = figure.stacks.map(st => ({
+    name: st.name,
+    swatch: <span className="inline-block h-2.5 w-2.5 rounded-sm" style={{ background: st.role === 'result' ? 'hsl(var(--primary))' : 'currentColor', opacity: st.role === 'result' ? 0.9 : st.role === 'base' ? 0.35 : 0.18 }} />,
+  }))
+  if (figure.outline) items.push({ name: figure.outline.name, swatch: <span className="inline-block h-2.5 w-2.5 rounded-sm border border-dashed border-current opacity-60" /> })
+  if (figure.line) items.push({ name: figure.line.name, swatch: <span className="inline-block w-3 border-t-2 border-dashed border-current opacity-60" /> })
+  if (items.length < 2) return null
+  return (
+    <ul className="flex flex-wrap justify-center gap-x-3 gap-y-0.5 text-[11px] leading-4 text-muted-foreground" data-testid="figure-legend">
+      {items.map(i => (
+        <li key={i.name} className="inline-flex items-center gap-1">{i.swatch}{i.name}</li>
+      ))}
+    </ul>
   )
 }
 

@@ -168,7 +168,7 @@ function ToolPage({ slug }: { slug: string }) {
       <ToolsSearchBar kind="tool" title={spec.name} back={back} />
       <div className="container mx-auto max-w-2xl space-y-3 px-4 py-4">
         {/* Keyed by the run, so a Send to… or a pasted link starts the card afresh. */}
-        <ToolCard key={`${slug}${location.hash}`} spec={spec} initialInput={decodeRunInput(location.hash) ?? undefined} onOpenMethod={open} />
+        <ToolCard key={`${slug}${location.hash}`} spec={spec} initialInput={decodeRunInput(location.hash) ?? undefined} onOpenMethod={open} persist />
       </div>
     </>
   )

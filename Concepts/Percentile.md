@@ -31,6 +31,38 @@ The **Percentile** (or quantile) $x_p$ of a [[Random Variable]] $X$ is the small
 
 ![[Media/Figures/Percentile.svg|340]]
 
+### Percentiles of transformed and conditional losses
+
+Percentiles move with increasing transformations: if $Y = g(X)$ with $g$ continuous and increasing, then $y_p = g(x_p)$. For $Y = a + bX$ with $b > 0$:
+
+> $$y_p = a + b\,x_p$$
+
+- In particular, multiplying a random variable by a constant $c > 0$ multiplies its percentiles by that constant: the $p$-th percentile of $cX$ is $c\,x_p$.
+- A percentile of the losses that exceed a deductible $d$ is a conditional percentile: a percentile of the distribution of $X$ given $X > d$, not of $X$ itself. For $x > d$ the conditional CDF is
+
+> $$P(X \leq x \mid X > d) = \frac{F(x) - F(d)}{1 - F(d)}$$
+
+- Setting it equal to $p$: the $100p$-th percentile $k$ of $X$ given $X > d$ solves $P(X > k) = (1 - p)\,P(X > d)$, that is
+
+> $$F(k) = 1 - (1 - p)\,[1 - F(d)]$$
+
+- Since $F(k) = p + (1 - p)\,F(d) \geq p$, the conditional percentile is at least the unconditional one, $F^{-1}(p)$, and larger whenever $F(d) > 0$ and $F$ is strictly increasing: conditioning removes the losses below $d$, which shifts percentiles upward.
+- Equivalently, it is $d$ plus the $100p$-th percentile of the excess $X - d$ given $X > d$: compute the percentile of the excess amount and add $d$ back to get the percentile of the loss.
+
+> [!example]- Percentile of the Losses Above a Deductible {Example}
+> Losses are uniform on $[0, 1{,}000]$ and a deductible of $200$ applies. Find the 75th percentile of the losses that exceed the deductible, and compare it with the 75th percentile of all losses.
+>
+> > [!answer]-
+> > Solve $F(k) = 1 - (1 - p)[1 - F(d)]$ with $F(200) = 0.2$:
+> > $$
+> > \begin{align*}
+> > \frac{k}{1{,}000} &= 1 - 0.25(0.8) \\
+> > &= 0.8 \\
+> > k &= 800
+> > \end{align*}
+> > $$
+> > Check through the excess: given $X > 200$, the excess $X - 200$ is uniform on $[0, 800]$, whose 75th percentile is $600$; adding the deductible back gives $800$. The 75th percentile of all losses is only $750$, because conditioning dropped the losses below $200$.
+
 > [!example]- 90th Percentile of an Exponential Distribution {Example}
 > Claim sizes follow an [[Exponential Distribution]] with CDF $F(x) = 1 - e^{-x/10}$ for $x \geq 0$. Find the 90th percentile.
 >

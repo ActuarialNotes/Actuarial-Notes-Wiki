@@ -35,6 +35,22 @@ verification:
 - **The claim's life.** A claim is reported, given a [[Case Reserves|case reserve]], paid in one or more instalments and closed. Some close without payment and some reopen. Claims that have occurred but not yet been reported are [[IBNR]]. Counts at each stage feed the [[Claim Count Triangle|claim count triangles]] used in reserving.
 - **Property damage claims.** A claim is a demand to recover, under a policy, for a loss that may come within it. On a property policy the insured claims for damage to its own property, a first-party claim; on a liability policy a third party claims for injury or damage it says the insured caused. The ISO homeowners form (HO 00 03 05 11) sets out the property claim's steps: the insured submits a signed, sworn proof of loss; the insurer may, by written notice within 30 days of receiving it, choose to repair or replace the damaged property with property of like kind and quality; and loss is payable 60 days after the proof of loss once the parties agree, a final judgment is entered or an appraisal award is filed. The amount turns on the policy's valuation basis, [[Actual Cash Value|actual cash value]], [[Replacement Cost|replacement cost]] or another of the [[Loss Settlement Provisions|loss settlement provisions]], and then on the limit and deductible ([[Property Insurance Limits and Deductibles]]).
 
+### Moments of aggregate claims
+
+For $S = X_1 + \cdots + X_N$ with the $X_i$ i.i.d. and independent of $N$: given $N = n$, $S$ is a sum of $n$ i.i.d. claims, so conditioning on the count gives $E[S \mid N] = N\,E[X]$ and $\text{Var}(S \mid N) = N\,\text{Var}(X)$.
+
+> $$E[S \mid N] = N\,E[X]$$
+
+> $$\text{Var}(S \mid N) = N\,\text{Var}(X)$$
+
+- The laws of total expectation and total variance then give $E[S] = E[N]\,E[X]$ and the compound variance:
+
+> $$\text{Var}(S) = E[N]\,\text{Var}(X) + \text{Var}(N)\,E[X]^2$$
+
+- With $N \sim \text{Poisson}(\lambda)$, $E[N] = \text{Var}(N) = \lambda$, so the two terms combine into the second moment of a claim: for a compound Poisson $S$, $\text{Var}(S) = \lambda\,E[X^2]$.
+
+> $$\text{Var}(S) = \lambda\,E[X^2]$$
+
 > [!example]- Per Loss or Per Payment {Example}
 > Losses are exponential with mean $\$2{,}000$, and a $\$500$ deductible applies.
 >

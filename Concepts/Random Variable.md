@@ -28,6 +28,18 @@ A **Random Variable** $X$ is a function that assigns a real number to each outco
 
 ![[Media/Figures/Random_Variable.svg|340]]
 
+### Point masses and mixed expectations
+
+A jump in the CDF at $x$ — $F(x)$ greater than its left-hand limit $F(x^-) = P(X < x)$ — is a point mass: the single value $x$ has probability equal to the size of the jump.
+
+> $$P(X = x) = F(x) - F(x^-)$$
+
+- For a mixed random variable with point masses at $x_1, x_2, \ldots$ and density $f$ on its continuous part, take each mass point at its probability and integrate over the rest: $E[g(X)]$ is the sum of $g(x_i)\,P(X = x_i)$ plus the integral of $g(x) f(x)$ over the continuous portion.
+
+> $$E[g(X)] = \sum_i g(x_i)\,P(X = x_i) + \int g(x)\,f(x)\,dx$$
+
+- Here $f$ integrates to $1 - \sum_i P(X = x_i)$, not to 1. With $g(x) = x$ this gives the mean, and with $g(x) = x^2$ the second moment for the variance.
+
 > [!example]- Defining a Random Variable for Coin Flips {Example}
 > Two fair coins are flipped. Define a random variable $X$ as the number of heads. List the values $X$ can take and their probabilities.
 >

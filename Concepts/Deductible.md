@@ -28,6 +28,61 @@ A **Deductible** is the initial amount of a loss that the policyholder must pay 
 
 ![[Media/Figures/Deductible.svg|340]]
 
+### The retained part and the expected payment
+
+Under an ordinary deductible $d$ the loss splits in two: the part the policyholder keeps (is not reimbursed for) is the loss capped at the deductible, $\min(X, d) = X \wedge d$, and the insurer pays the excess $(X - d)_+$.
+
+> $$X = (X \wedge d) + (X - d)_+$$
+
+- The mean of the retained part is the [[Limited Expected Value|limited expected value]] $E[X \wedge d]$, so the insurer's expected payment per loss is the expected loss less the limited expected value.
+
+> $$E[(X - d)_+] = E[X] - E[X \wedge d]$$
+
+- For a continuous loss with density $f$, integrate only where the payment is positive: losses below $d$ contribute nothing. For a nonnegative loss with survival function $S(x) = 1 - F(x)$ this equals the integral of $S$ above $d$.
+
+> $$E[(X - d)_+] = \int_d^\infty (x - d)\,f(x)\,dx$$
+
+> $$E[(X - d)_+] = \int_d^\infty S(x)\,dx$$
+
+- For a discrete loss with probability function $p(x)$, the payment sums over the loss amounts above $d$, and the retained part takes each amount below $d$ at its value and every other at $d$.
+
+> $$E[(X - d)_+] = \sum_{x > d} (x - d)\,p(x)$$
+
+> $$E[X \wedge d] = \sum_{x < d} x\,p(x) + d\,P(X \geq d)$$
+
+- For a count $N$ taking the values $0, 1, 2, \ldots$ (a policy paying per event above $d$ events, with $d$ a whole number), the capped count also has a tail-sum form, $E[\min(N, d)] = \sum_{k=0}^{d-1} P(N > k)$:
+
+> $$E[N \wedge d] = \sum_{k=0}^{d-1} [1 - F(k)]$$
+
+- As a function of $d$, the expected payment $E[(X - d)_+]$ is continuous and decreasing, with slope $-P(X > d)$. For a discrete loss it is piecewise linear in $d$, the slope changing at each possible loss amount.
+- To find the deductible that gives a target expected payment on a discrete loss, solve piecewise: assume $d$ lies between two consecutive loss amounts, keep only the losses above it, solve for $d$, and check that the answer lies in the assumed range; if it doesn't, reject that case and try the next range.
+
+> [!example]- Choosing a Deductible for a Target Expected Payment {Example}
+> A loss is $0$, $100$, $400$ or $1{,}000$ with probabilities $0.4$, $0.3$, $0.2$ and $0.1$. Find the deductible $d$ that makes the expected payment per loss $100$.
+>
+> > [!answer]-
+> > Plan: guess the range of $d$, keep only the losses above it, solve, then check the range.
+> >
+> > Case $0 \leq d < 100$: all three positive losses exceed $d$.
+> > $$
+> > \begin{align*}
+> > 0.3(100 - d) + 0.2(400 - d) + 0.1(1{,}000 - d) &= 210 - 0.6d \\
+> > 210 - 0.6d &= 100 \\
+> > d &= 183.3
+> > \end{align*}
+> > $$
+> > That is not below $100$, so reject this case.
+> >
+> > Case $100 \leq d < 400$: only $400$ and $1{,}000$ exceed $d$.
+> > $$
+> > \begin{align*}
+> > 0.2(400 - d) + 0.1(1{,}000 - d) &= 180 - 0.3d \\
+> > 180 - 0.3d &= 100 \\
+> > d &= 266.67
+> > \end{align*}
+> > $$
+> > It lies in $[100, 400)$, so $d = 266.67$. The slope in this range, $-0.3$, is $-P(X > d)$: each extra unit of deductible saves the insurer $0.3$ in expected payment.
+
 > [!example]- Expected Payment with an Ordinary Deductible {Example}
 > Ground-up losses $X \sim \text{Exponential}(\theta = 1000)$. An ordinary deductible of $d = 200$ applies. Find $E[Y]$ where $Y = (X - 200)_+$.
 >

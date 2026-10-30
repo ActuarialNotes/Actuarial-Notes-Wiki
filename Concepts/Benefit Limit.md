@@ -28,6 +28,35 @@ A **Benefit Limit** ($u$) is the maximum amount an insurer will pay on a single 
 
 ![[Media/Figures/Benefit_Limit.svg|340]]
 
+### Moments of a limited loss
+
+With no deductible or coinsurance the payment is the limited loss $X \wedge u = \min(X, u)$, which equals $X$ below the limit and $u$ above it. So split the expectation at the limit: integrate up to $u$ against the density, and add $u$ times the probability that the loss exceeds it.
+
+> $$E[(X \wedge u)^k] = \int_0^u x^k f(x)\,dx + u^k\,P(X > u)$$
+
+- where $f$ is the density of the nonnegative loss $X$ and $k = 1, 2, \ldots$ For $k = 1$ this is the [[Limited Expected Value|limited expected value]]: integrate $x f(x)$ from $0$ to $u$ and add $u$ times the survival probability $P(X > u)$.
+- For $k = 1$ it also equals the integral of the survival function $S(x) = 1 - F(x)$ up to the limit, $E[X \wedge u] = \int_0^u S(x)\,dx$.
+- The variance of the limited loss is $E[(X \wedge u)^2] - E[X \wedge u]^2$, from the $k = 2$ and $k = 1$ moments.
+
+> [!example]- Mean and Variance of a Limited Uniform Loss {Example}
+> A loss is uniform on $[0, 1{,}000]$ and a policy pays it up to a limit of $600$. Find the mean and variance of the payment.
+>
+> > [!answer]-
+> > Split each moment at $600$, where $P(X > 600) = 0.4$:
+> > $$
+> > \begin{align*}
+> > E[X \wedge 600] &= \int_0^{600} \frac{x}{1{,}000}\,dx + 600(0.4) \\
+> > &= 180 + 240 \\
+> > &= 420 \\[6pt]
+> > E[(X \wedge 600)^2] &= \int_0^{600} \frac{x^2}{1{,}000}\,dx + 600^2(0.4) \\
+> > &= 72{,}000 + 144{,}000 \\
+> > &= 216{,}000 \\[6pt]
+> > \text{Var}(X \wedge 600) &= 216{,}000 - 420^2 \\
+> > &= 39{,}600
+> > \end{align*}
+> > $$
+> > Check the mean with the survival function: $\int_0^{600} (1 - x/1{,}000)\,dx = 600 - 180 = 420$. The $40\%$ of losses above the limit each pay exactly $600$, which is why the second term is there.
+
 > [!example]- Payment with Deductible and Benefit Limit {Example}
 > A policy has deductible $d = 100$ and benefit limit $u = 400$ with no coinsurance. If $X = 600$, what does the insurer pay?
 >

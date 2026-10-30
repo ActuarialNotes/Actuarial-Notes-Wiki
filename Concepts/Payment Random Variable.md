@@ -27,6 +27,9 @@ The **Payment Random Variable** ($Y$) is the amount the insurer actually pays on
 - When the [[Benefit Limit|benefit limit]] caps the insurer's payment instead (P-21-05 defines a benefit limit as an upper bound on how much the insurer will pay for any loss, and SOA's sample questions apply limits to the benefit itself), the second form holds and the most the insurer pays is $u$. The policy wording decides which applies; with no coinsurance the two agree
 - $Y$ has a mixed distribution: a probability mass at $Y = 0$ (when $X \leq d$) and a continuous or discrete component for positive payments
 - Its mean and variance differ from those of $X$ due to the truncation and censoring imposed by the policy
+- **Under a deductible alone.** The per-loss payment $Y = (X - d)_+$ is a function of the loss, so its distribution is found from that of $X$ ([[Transformations of Random Variables]]). It has a point mass at zero, $P(Y = 0) = P(X \leq d) = F_X(d)$, so it has a [[Mixture Distribution|mixed distribution]] when $X$ is continuous. For $t \geq 0$ the event $\{Y \leq t\}$ is the event $\{X \leq d + t\}$, so $F_Y(t) = P(X \leq d + t) = F_X(d + t)$.
+
+> $$F_Y(t) = F_X(d + t), \quad t \geq 0$$
 
 ![[Media/Figures/Payment_Random_Variable.svg|340]]
 

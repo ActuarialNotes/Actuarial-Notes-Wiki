@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:046b4fcd3ae5918876fb165e398d794ed082576a72727d6f25830f36bfe7ab3d
+  content_hash: sha256:175756a9f09cda773e7c45d86421da80637582c2300bf127b95631357879e88c
   sources: []
   open_findings: 0
   open_critical: 0
@@ -29,6 +29,7 @@ verification:
 > $$Z_{ij} = \frac{\sum_{k=1}^{j-1} y_k}{\beta_i\,\phi + \sum_{k=1}^{j-1} y_k}$$
 
 - $C_{ij}$ is the incremental and $D_{ij}$ the cumulative loss of accident year $i$ at development year $j$, and $\lambda_j$ are the chain ladder factors. $M_i$ is the expert's ultimate, for example from the premium calculation. $y_k$ is the share of ultimate emerging in period $k$, so $\sum_{k<j} y_k = 1/(\lambda_j\cdots\lambda_n)$ is the share emerged to date. $\phi$ is the over-dispersion parameter, which Verrall plugs in from the ODP model rather than giving it a prior.
+- **Beyond the next period.** The mean above is for the next increment, given the data $C_{i1}, \dots, C_{i,j-1}$. To project further out, $D_{i,j-1}$ is the latest cumulative plus the increments already projected for the periods in between, and $Z_{ij}$, $\lambda_j$ and the BF share are each taken at the age being projected.
 - **The prior sets the credibility.** For a given $M_i$, a larger $\beta_i$ is a smaller prior variance and more certainty about $M_i$. That pushes $Z_{ij}$ toward $0$, which is the Bornhuetter-Ferguson method. A small $\beta_i$, a vague prior, pushes $Z_{ij}$ toward $1$, the chain ladder. Everything between is a complete spectrum of models. In Verrall's Taylor and Ashe illustration, a prior standard deviation of $1{,}000$ on means of $5.5$–$6$ million reproduced BF, and $1{,}000{,}000$ gave reserves between the two.
 - **Credibility grows with maturity.** $Z_{ij}$ rises with the share emerged, as BF's own weight $1/\text{CDF}$ does, but the prior's variance and $\phi$ now decide how fast. The gamma prior is [[Conjugate Prior|conjugate]] to the ODP likelihood. The [[Posterior Distribution|posterior]] mean of $x_i$ is $Z \cdot D_{i,j-1}/\sum_{k<j} y_k + (1 - Z) M_i$, and every future cell is $y_j$ times it. So the same $Z$ blends the chain ladder and BF *reserves* for the whole accident year.
 - **Implementation.** The column parameters get improper priors and are estimated first, so they are the chain ladder's. The model is then rewritten as an [[Over-Dispersed Negative Binomial Model|over-dispersed negative binomial]] recursive down the rows, with mean $(\gamma_i - 1)\sum_{m<i} C_{m,j}$. Verrall's equation (5.4), as corrected in the errata, converts the prior values of $x_i$ into the $\gamma_i$. [[Markov Chain Monte Carlo|MCMC]] simulation in winBUGS gives the full [[Predictive Distribution|predictive distribution]], whose standard deviation is the [[Prediction Error|prediction error]].

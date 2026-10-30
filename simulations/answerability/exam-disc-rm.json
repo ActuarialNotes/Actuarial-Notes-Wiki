@@ -656,7 +656,13 @@
      "statement": "Orientation (training) sessions introduce team members to the plan and their roles but do not test the plan.",
      "concept": "Business Continuity Plan Exercises",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Option A's own wording ('walks new team members through the plan') describes the orientation; the answer is fixed by tagged Business Continuity Plan's definition of a full-scale exercise as failing a system over to the alternate site.",
+      "date": "2026-10-30",
+      "run": "g8-discrm-sort"
+     }
     },
     {
      "id": "r5",
@@ -800,7 +806,15 @@
        "page": "Benefit Limit",
        "quote": "The insurer pays \\$400; the insured absorbs the first \\$100 (deductible) and the last \\$100 (excess above limit)."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Treatment",
+      "quote": "the loss above the limit retained again, whether the organization meant to keep it or not",
+      "note": "The tagged page's treatment program states that the loss above the limit is retained by the organization, with the insurer paying only up to the limit.",
+      "date": "2026-10-30",
+      "run": "g8-discrm-sort"
+     }
     },
     {
      "id": "r3",
@@ -817,7 +831,15 @@
        "page": "Policy Limit",
        "quote": "With a deductible, a policy limit of $L$ caps the payment, so the loss is capped at $d + L$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Treatment",
+      "quote": "is the limit of insurance above it",
+      "note": "The tagged page defines the limit as sitting above the retained deductible layer, and its formula max(S - d - l, 0) puts the top of coverage at deductible plus limit.",
+      "date": "2026-10-30",
+      "run": "g8-discrm-sort"
+     }
     },
     {
      "id": "r4",
@@ -1917,7 +1939,15 @@
        "page": "Probability Rules",
        "quote": "Enumerating one, two, three... claims is slow. Complement instead:"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Identification",
+      "quote": "is the probability that at least one of the $n$ reviewers or methods finds it",
+      "note": "The tagged page's formula P(found) = 1 - prod(1 - p_i) is the complement rule for at least one reviewer finding the exposure, and this symbol line names it so.",
+      "date": "2026-10-30",
+      "run": "g8-discrm-sort"
+     }
     },
     {
      "id": "r2",
@@ -1934,7 +1964,15 @@
        "page": "Probability Multiplication Rule",
        "quote": "When $A$ and $B$ are [[Independent Events|independent]], the rule simplifies to $P(A \\cap B) = P(A) \\cdot P(B)$ since $P(B \\mid A) = P(B)$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Identification",
+      "quote": "The formula assumes the reviewers miss things independently",
+      "note": "The tagged page's formula multiplies the individual miss probabilities (1 - p_i), and this sentence states that the product rests on independence.",
+      "date": "2026-10-30",
+      "run": "g8-discrm-sort"
+     }
     },
     {
      "id": "r3",
@@ -2872,7 +2910,15 @@
        "page": "Insurable Interest",
        "quote": "Owners, co-owners, mortgage lenders (to the loan balance), tenants for improvements they made, and bailees for customers' goods in their care, in property"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Property Loss Exposure",
+      "quote": "The owner is not the only party who can lose. A mortgagee or other secured lender loses when the collateral behind its loan is destroyed, a tenant can lose the improvements it paid for and the use of the premises",
+      "note": "The tagged page teaches that owner, lender and tenant each hold an interest in the same property at once; the owner keeping hers while a loan is outstanding is the plain sense of 'not the only party'.",
+      "date": "2026-10-30",
+      "run": "g8-discrm-sort"
+     }
     }
    ]
   },
@@ -3378,7 +3424,15 @@
      "statement": "Claims handling data (loss information) helps risk control identify where and why losses occur, but claims handling does not set premiums or decide whether to accept an account.",
      "concept": "Claims Handling",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Underwriting",
+      "quote": "deciding whether to accept each one, on what terms and at what premium",
+      "note": "The tagged page puts acceptance, terms and premium with underwriting, which is why option C (claims setting the premium) is wrong; the scenario itself involves no claims function.",
+      "date": "2026-10-30",
+      "run": "g8-discrm-sort"
+     }
     },
     {
      "id": "r5",
@@ -3779,7 +3833,13 @@
      "statement": "Producer activities occur in sequence: prospecting for customers, then reviewing exposures and needs, then selling and binding coverage once a quote is accepted; claims assistance applies only after a loss occurs.",
      "concept": "Insurance Producer",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Elimination step of this solution from the question's setup ('before preparing a quote', no loss has occurred) and the plain meaning of the function names; the function list itself is r2, left open.",
+      "date": "2026-10-30",
+      "run": "g8-discrm-sort"
+     }
     }
    ]
   },
@@ -5304,7 +5364,13 @@
      "statement": "Only one or two sprinkler heads are usually needed to control a fire, so head density is not the main driver of sprinkler system failure.",
      "concept": "Automatic Sprinkler Systems",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Distractor commentary only: the answer is fixed by tagged COPE's passage that 64% of sprinkler failures were systems shut off and the underwriter asks how valves are supervised; head density need not be known to reject B.",
+      "date": "2026-10-30",
+      "run": "g8-discrm-sort"
+     }
     },
     {
      "id": "r5",
@@ -5312,7 +5378,13 @@
      "statement": "Wet pipe sprinkler systems operate somewhat more often than dry pipe systems, but the difference is smaller than the effect of a shut-off system.",
      "concept": "Wet Pipe and Dry Pipe Sprinkler Systems",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Distractor commentary only: tagged COPE's shut-off passage (the stem's 'one reason') settles the answer, so the wet/dry pipe operating rates are not needed to reject D.",
+      "date": "2026-10-30",
+      "run": "g8-discrm-sort"
+     }
     }
    ]
   },
@@ -5354,7 +5426,15 @@
        "page": "Blanket Insurance",
        "quote": "**Blanket Insurance** is property insurance in which one limit covers several locations, several classes of property, or both… Specific insurance is the alternative: each building, location or class of property has its own limit, and a loss at one location can draw only on that location's limit."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Commercial Property Insurance",
+      "quote": "the limits and whether they are specific to one building or blanket over several",
+      "note": "The tagged page lists specific-or-blanket limits among the provisions affecting the amount of loss, which is the fact the question turns on.",
+      "date": "2026-10-30",
+      "run": "g8-discrm-sort"
+     }
     },
     {
      "id": "r3",
@@ -5497,7 +5577,13 @@
      "statement": "Normal loss expectancy (NLE) is the loss expected from a fire when all fire protection is in place and operating as intended.",
      "concept": "Normal Loss Expectancy",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The question's stem gives this definition verbatim (its NLE/PML/MFL bullet list); the solution only applies the given definitions to the three figures.",
+      "date": "2026-10-30",
+      "run": "g8-discrm-sort"
+     }
     },
     {
      "id": "r2",
@@ -5505,7 +5591,13 @@
      "statement": "Probable maximum loss (PML) is the loss expected from a fire with some impairment of protection, normally one sprinkler system out of service, but not a failure of all protection.",
      "concept": "Probable Maximum Loss",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The question's stem gives this definition verbatim (its NLE/PML/MFL bullet list); the solution only applies the given definitions to the three figures.",
+      "date": "2026-10-30",
+      "run": "g8-discrm-sort"
+     }
     },
     {
      "id": "r3",
@@ -5513,7 +5605,13 @@
      "statement": "Maximum foreseeable loss (MFL) is the loss from a worst-case fire with no sprinkler system working and no effective fire department response, stopped only by fire walls or space separation.",
      "concept": "Maximum Foreseeable Loss",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The question's stem gives this definition verbatim (its NLE/PML/MFL bullet list); the solution only applies the given definitions to the three figures.",
+      "date": "2026-10-30",
+      "run": "g8-discrm-sort"
+     }
     },
     {
      "id": "r4",
@@ -5521,7 +5619,13 @@
      "statement": "Loss estimates rise as less protection is assumed to work: NLE is smaller than PML, which is smaller than MFL, and MFL can be less than the maximum possible loss (total destruction) when fire walls or separation stop the fire.",
      "concept": "Property Loss Estimates",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Follows directly from the three definitions the stem supplies (each assumes less protection works); the maximum-possible-loss remark is explanation, not needed to match the figures.",
+      "date": "2026-10-30",
+      "run": "g8-discrm-sort"
+     }
     }
    ]
   },
@@ -6704,7 +6808,15 @@
      "statement": "An insurer benefits from providing risk control because improving the accounts it writes lowers their losses, supporting profitability and helping it retain good accounts.",
      "concept": "Risk Control",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Insurance Operations",
+      "quote": "Risk control representatives inspect accounts and recommend loss-reducing measures, which lowers expected losses.",
+      "note": "On the exam's syllabus and linked from tagged Risk Control: risk control lowers the losses of accounts the insurer writes, which serves the insurer's profit goal stated on the same page.",
+      "date": "2026-10-30",
+      "run": "g8-discrm-sort"
+     }
     },
     {
      "id": "r3",
@@ -6746,7 +6858,15 @@
      "statement": "There is no general legal requirement that insurers provide risk control to every policyholder; some jurisdictions mandate specific inspections such as boilers, and service level depends on account size and line.",
      "concept": "Risk Control",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Control",
+      "quote": "Some insurers, primarily for commercial clients, offer engineering and loss control",
+      "note": "The tagged page says only some insurers offer risk control, mainly to commercial clients and especially for workers compensation and boiler exposures, so there is no general duty to every policyholder.",
+      "date": "2026-10-30",
+      "run": "g8-discrm-sort"
+     }
     }
    ]
   },
@@ -6958,7 +7078,13 @@
      "statement": "Florida's biennial (every other year) physical audit provision applies to per capita policies, not to ordinary payroll-rated policies.",
      "concept": "Workers Compensation Premium Audit",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Distractor commentary: tagged Premium Audit's Florida passage says the physical audit is required 'every year' at $10,000 or more, which rules out D; the per capita biennial provision is not needed.",
+      "date": "2026-10-30",
+      "run": "g8-discrm-sort"
+     }
     }
    ]
   },
@@ -7089,7 +7215,13 @@
      "statement": "Total paid dollars reflect the number of claims closed and their sizes, not the quality of claim handling, so it is not a valid performance measure by itself.",
      "concept": "Claims Handling Performance Measures",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Plain reading: a total paid grows with the number of claims closed; the answer D is fixed by tagged Claims Handling's closure rate and its point that the measures have to be read together.",
+      "date": "2026-10-30",
+      "run": "g8-discrm-sort"
+     }
     },
     {
      "id": "r5",
@@ -8797,7 +8929,13 @@
      "statement": "When several basic classifications apply and none has payroll assigned, the highest-rated basic classification governs; this is not the general rule for choosing the governing class.",
      "concept": "Workers Compensation Governing Classification",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Follows directly from tagged Workers Compensation Underwriting's definition that the governing classification is the basic classification with the most payroll, which rules out D's 'highest-rated' rule; the no-payroll exception is distractor commentary.",
+      "date": "2026-10-30",
+      "run": "g8-discrm-sort"
+     }
     }
    ]
   },

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-11
   last_checked_by: agent:validate-v1
-  content_hash: sha256:9f0c2ca285e9297a6385ca0b54e3e53a74dca0433d11c2c60b2ec5b237bb6cb2
+  content_hash: sha256:36e1879e23a9c06dce1c2de12fe0e0ab0b012d479e9135f5e5a124cc6f8cdd82
   sources:
     - "Teng and Perkins, Estimating the Premium Asset on Retrospectively Rated Policies (PCAS LXXXIII, 1996, pp.611-647), PDF pp.1-13 (definition, EBNR, retro reserve, formulas 2.1-2.4, empirical lags, CPDLD), 17 (incremental capping ratio, eq. 5.2), 18 (collectibility), sha256:30efb7917ebbc6361393f76652a21d97e1915032f94667699904248d1bd900f1 — https://www.casact.org/sites/default/files/2021-03/7_Teng_and_Perkins.pdf"
     - "Feldblum, Discussion of Estimating the Premium Asset on Retrospectively Rated Policies (PCAS LXXXV, 1998, pp.274-315), PDF pp.1-2, 21-24, sha256:1c572191d2239553f306dc29ba1186f3c3477e06b1652562ab55acd4c8bc04ed — https://www.casact.org/sites/default/files/2021-03/7_Teng_and_Perkins_Discussion_of_Paper.pdf"
@@ -30,7 +30,7 @@ verification:
   - ELR is the expected loss ratio to standard premium, and $\%L_1$ the share of losses emerged at the first adjustment;
   - $CL/L$ is the **loss capping ratio**, the share of loss development that the per-accident limit and the retro maximum and minimum let through.
 - **$\text{PDLD}_1$ is usually above 1.** The whole basic premium is collected at the first adjustment and few losses are capped yet. Later PDLDs fall well **below 1** as more of each new dollar of loss lands above a cap. Assuming premium tracks losses one-for-one overstates the asset.
-- **Cumulative ratios.** $\text{CPDLD}_k$ averages the PDLDs from adjustment $k$ onward, weighted by the expected loss emerging in each: $\sum_{j \ge k} \text{PDLD}_j\, \Delta\%L_j \,/\, \sum_{j \ge k} \Delta\%L_j$. It is the premium expected per dollar of loss still to emerge.
+- **Cumulative ratios.** $\text{CPDLD}_k$ averages the PDLDs from adjustment $k$ onward, weighted by the expected loss emerging in each: $\sum_{j \ge k} \text{PDLD}_j\, \Delta\%L_j \,/\, \sum_{j \ge k} \Delta\%L_j$. It is the premium expected per dollar of loss still to emerge. Loss that emerges after the last retro adjustment brings in no premium, so its PDLD is zero: it stays in the denominator's loss emergence but adds nothing to the numerator, which pulls every CPDLD down.
 - **Formula or empirical.** PDLDs can come from the plan parameters sold, which respond to changes in plan design, or from history, dividing booked premium by reported loss. Premium is booked with a lag: in Teng and Perkins' example, premium at 27 months reflects losses valued at 18 months, the first adjustment. Capping ratios are estimated with Table M charges and a loss elimination ratio for the per-accident limit.
 - **Tie it to the loss reserve.** Future loss emergence should come from the same analysis that sets IBNR, so a reserve increase raises the premium asset consistently. The asset is collected from insureds after the fact, so collectability and collateral matter. See [[Premium Reserve]] for the other premium-sensitive reserves.
 

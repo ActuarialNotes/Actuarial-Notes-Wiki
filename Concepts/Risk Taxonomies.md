@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:ae5536bf0eeb75418b29b58ee55c70a98fb671058ac7b6db599fc1fc62001e92
+  content_hash: sha256:0f8670dd2b4cdf61fe88cc2a0bf1910cf95a2e7b750f3123146e93ff6b345c4c
   sources:
     - "CAS Exam 9 Content Outline, Fall 2026 (v01, 2026-03-18), PDF pp.3-7: Domains B, C and D tasks and readings; complete text references (Brehm et al.: D1-D6, Chapters 1, 2 excl. 2.6, 3 excl. 3.4, 4, 5.4; source SK), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
     - "CAS Enterprise Risk Management Committee, Overview of Enterprise Risk Management (CAS Forum, Summer 2003), pp.109-114 (PDF pp.11-16: definition, four risk types and lists, process steps, treat/exploit: avoid, retain, reduce, transfer, exploit); pp.117-118 (PDF pp.19-20: solvency- and performance-related measures); PDF pp.23, 25 (DFA as structural simulation model; ESG linking interest rates and inflation; natural hedge), sha256:f433c8300785640b2f4fd168d3b38878d1bfbc9b9f8f74c08e43de8e98982efd — https://www.casact.org/sites/default/files/database/forum_03sforum_03sf099.pdf"
@@ -41,6 +41,7 @@ verification:
 - **Pure versus speculative risk:** A pure risk offers only a chance of loss or no loss, such as fire, flood or a liability claim. A speculative risk offers a chance of gain as well as loss, such as an investment, a new product or a change in exchange rates. Traditional risk management and insurance deal with pure risk ([[Insurable Risk]]); [[Enterprise Risk Management|ERM]] considers both. Some risks can be slotted either way depending on how narrowly they are defined, such as operational risk.
 - **Diversifiable versus nondiversifiable risk:** A diversifiable, or idiosyncratic, risk is particular to one firm or exposure, so holding many independent exposures makes the average loss predictable, as with fires at homes in different places. A nondiversifiable, or systemic, risk is shared by every exposure, such as an economy-wide recession or inflation, and adding more exposures does not reduce it.
 - **Fundamental versus particular risk:** A fundamental risk, such as a flood or hurricane striking many homes in one area, affects a large number of exposures at once and is generally systemic; private insurers often cannot take it on alone. A particular risk, such as a single house fire, affects one exposure accidentally and is usually insurable.
+- **Why insurers actually fail.** A.M. Best's study of property/casualty financial impairments from 1969 to 2009 names as primary causes deficient loss reserves (inadequate pricing), rapid growth, alleged fraud, investment problems (overstated assets), significant change in business, reinsurance failure, catastrophe losses and affiliate problems. Deficient reserves and inadequate pricing, then rapid growth, are the major causes. The causes are rarely independent: mismanagement, often cited, shows itself as deficient reserves and inadequate pricing.
 - A taxonomy is the first step in choosing a [[Risk Measure|risk measure]] and a model for each category — the "diverse risks" that [[Risk Modeling]] must integrate.
 
 > [!example]- Selecting a Model for Each Category {Example}

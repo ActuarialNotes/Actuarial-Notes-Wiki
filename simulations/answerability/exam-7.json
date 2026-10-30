@@ -96,7 +96,13 @@
      "statement": "When re-evaluating one year later, update the paid to date to include the new incremental paid loss and use the CDF for the next age (e.g., 24-ultimate) while keeping the expected ultimate and selected factors unchanged.",
      "concept": "Loss Development Method Re-evaluation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Re-valuing one year later is applying the tagged BF/Benktander formulas at the next age with the new paid to date; a step of this solution's plan, not a separate method",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     }
    ]
   },
@@ -472,7 +478,15 @@
      "statement": "To diagnose chain ladder assumptions, plot the weighted residuals on the vertical axis against the cumulative loss at the earlier age (or accident year) on the horizontal axis.",
      "concept": "Mack Chain Ladder Residuals",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Chain Ladder Assumptions",
+      "quote": "The model is linear: no runs of same-signed",
+      "note": "Chain Ladder Assumptions (tagged) tests the chain ladder by its residuals plotted against the cumulative loss c(w,d) at the earlier age (and against time for stability)",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     },
     {
      "id": "r5",
@@ -556,7 +570,13 @@
      "statement": "A simple arithmetic average of two methods corresponds to a credibility weight Z = 1/2, so it is optimal only if the least squares credibility Z equals 1/2; otherwise it is not optimal.",
      "concept": "Least Squares Credibility Weighting of Loss Development Methods",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "An equal-weight average is a credibility blend with Z = 1/2, so it is optimal only when the optimal Z is 1/2; follows directly from the credibility-weighting form on the tagged Least Squares Development Method page (L = Z(cx) + (1-Z) y-bar)",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     }
    ]
   },
@@ -773,7 +793,15 @@
      "statement": "Expected capped loss for each retro adjustment period equals expected unlimited loss times the percent of loss emerged in that period times that period's loss capping ratio (capping ratios are incremental, not cumulative).",
      "concept": "Loss Capping Ratio in Retrospective Rating",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Retrospective Premium Reserve",
+      "quote": "is the **loss capping ratio**, the share of loss development that the per-accident limit and the retro maximum and minimum let through",
+      "note": "Retrospective Premium Reserve (tagged) defines the incremental loss capping ratio as the share of each period's loss development let through the caps, so capped loss per period = expected loss x share emerging x that period's ratio",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     },
     {
      "id": "r4",
@@ -781,7 +809,15 @@
      "statement": "When no retro adjustment has yet occurred, the total expected capped loss is the sum across all adjustment periods of the emerged-loss-weighted capping ratios, which is multiplied by total expected unlimited loss.",
      "concept": "Estimating Retrospective Premium Asset",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Retrospective Premium Reserve",
+      "quote": "is the **loss capping ratio**, the share of loss development that the per-accident limit and the retro maximum and minimum let through",
+      "note": "Retrospective Premium Reserve (tagged) defines the incremental capping ratio per period; summing each period's capped share over all adjustments (none yet made) is arithmetic",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     },
     {
      "id": "r5",
@@ -827,7 +863,15 @@
      "statement": "In the Bayesian (Verrall/Bayesian-CL-BF credibility) model with over-dispersed Poisson incremental losses, the expected incremental loss is Z times the chain ladder incremental estimate (λ_j − 1)·D_{i,j−1} plus (1 − Z) times the BF-type estimate (λ_j − 1)·x_i/(λ_j λ_{j+1}…λ_n), where x_i is the prior mean ultimate.",
      "concept": "Bayesian Chain Ladder and Bornhuetter-Ferguson Credibility Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Bayesian Bornhuetter-Ferguson Model",
+      "quote": "E[C_{ij}] ={}& Z_{ij}\\,(\\lambda_j - 1)\\,D_{i,j-1}",
+      "note": "Bayesian Bornhuetter-Ferguson Model (tagged) gives Verrall's predictive mean: Z times the chain ladder increment plus (1-Z) times the BF increment from the prior mean M_i",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     },
     {
      "id": "r2",
@@ -1169,7 +1213,13 @@
        "page": "Net of Reinsurance",
        "quote": "Net experience is **less volatile** than gross — excess-of-loss reinsurance caps exactly the [[Large Loss|large losses]] that drive volatility"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "One alternative sample answer's argument for this scenario (buying excess cover on casualty or dropping property treaties); full credit answers rest on catastrophe activity, and that reinsurance changes retained volatility follows from what reinsurance is (Net of Reinsurance)",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     },
     {
      "id": "r4",
@@ -1690,7 +1740,13 @@
      "statement": "To build the GLM bootstrap input, convert the cumulative loss triangle to an incremental triangle by differencing successive cumulative values in each accident year (the first column stays as is).",
      "concept": "Incremental Loss Triangle",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Forming incremental from cumulative values by differencing within an accident year is triangle arithmetic, not a reading's content; the incremental-triangle setup is on the tagged ODP Bootstrap Model page",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     },
     {
      "id": "r2",
@@ -1711,7 +1767,15 @@
      "statement": "The GLM bootstrap model requires non-negative incremental losses because the log of a negative number (or zero) is undefined, so negative incrementals prevent the log-link fit directly.",
      "concept": "Generalized Linear Model Bootstrap (Negative Incrementals)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Data Issues",
+      "quote": "a modified log link handles them unless a whole column sums negative, which needs a constant shift",
+      "note": "Data Issues (tagged) teaches that negative incrementals need a modified log link or a shift under the GLM's log link; that the log of a negative number is undefined is algebra",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     },
     {
      "id": "r4",
@@ -1732,7 +1796,15 @@
      "statement": "To handle negative incrementals when the -ln(|x|) method fails, shift every incremental value in the whole triangle by subtracting the largest negative (most negative) incremental value, so all values are non-negative, then take logs, setting ln(0) = 0.",
      "concept": "Generalized Linear Model Bootstrap (Negative Incrementals)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Data Issues",
+      "quote": "a modified log link handles them unless a whole column sums negative, which needs a constant shift",
+      "note": "Data Issues (tagged): when the modified log link fails (a column sums negative) the triangle is shifted by a constant so every incremental is non-negative",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     },
     {
      "id": "r6",
@@ -1740,7 +1812,15 @@
      "statement": "After fitting the GLM to the shifted triangle, undo the shift by subtracting the same shift amount from every fitted incremental value.",
      "concept": "Generalized Linear Model Bootstrap (Negative Incrementals)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Data Issues",
+      "quote": "a modified log link handles them unless a whole column sums negative, which needs a constant shift",
+      "note": "Data Issues (tagged) teaches the constant shift; removing the same constant from the fitted values is what undoing a shift means",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     }
    ]
   },
@@ -1877,7 +1957,15 @@
        "page": "Risk Diversification",
        "quote": "Correlations estimated in normal times tend to rise in a crisis, when a market fall, credit defaults and lapses can come together."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Diversification",
+      "quote": "Correlations estimated in normal times tend to rise in a crisis",
+      "note": "Risk Diversification (retagged) teaches that correlation rises in the tail, so one matrix calibrated to the body misstates it; event risk across home and motor is that case",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     },
     {
      "id": "r10",
@@ -1890,7 +1978,15 @@
        "page": "Risk Diversification",
        "quote": "A copula joins the marginal distributions and can give the tails more dependence than the body."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Diversification",
+      "quote": "A copula joins the marginal distributions and can give the tails more dependence than the body.",
+      "note": "Risk Diversification (retagged) gives the copula (and stressed correlations / tail dependence) as the way to let dependence vary across the distribution",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     }
    ]
   },
@@ -2051,7 +2147,15 @@
      "statement": "With reported loss X = D*Y (D the reporting percentage independent of ultimate Y), the variance of hypothetical means is VHM = (E[D])^2 * Var(Y).",
      "concept": "Bayesian Credibility for Loss Development",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Least Squares Development Method",
+      "quote": "measures noise in loss occurrence",
+      "note": "Least Squares Development Method (tagged) defines Brosius's VHM as Var(E[X|Y]); with X = DY and D independent of Y, E[X|Y] = E[D]Y gives E[D]^2 Var(Y) (algebra; the page's worked example computes Var(0.6 Y))",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     },
     {
      "id": "r4",
@@ -2205,7 +2309,15 @@
        "page": "Long Tail Lines",
        "quote": "Long-tail reserves are also exposed to **calendar-year** forces that no accident-year pattern anticipates: [[Inflation|social and economic inflation]], legislative reform, judicial reinterpretation. These hit every open accident year at once."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "External Systemic Risk",
+      "quote": "legislative, political and claims inflation risk dominates long-tail classes",
+      "note": "External Systemic Risk (tagged) teaches that legislative risk dominates long-tail classes, whose claims stay open long enough to be caught by law changes and court precedents",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     },
     {
      "id": "r3",
@@ -2732,7 +2844,15 @@
        "page": "Covariance and Correlation Coefficient",
        "quote": "$$\\text{Cov}(X, Y) = E[XY] - E[X]\\,E[Y]$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Correlation Coefficient",
+      "quote": "obtained by dividing the [[Covariance]] by the product of the standard deviations",
+      "note": "The tagged Correlation Coefficient page defines Pearson's coefficient as covariance over the product of standard deviations; the sample version uses sample moments (Cov = E[XY]-E[X]E[Y] on the linked Covariance page)",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     },
     {
      "id": "r4",
@@ -3022,7 +3142,15 @@
      "statement": "When fitting a negative-column triangle with the GLM, add the absolute value of the largest negative incremental value to every incremental value, solve the GLM, then subtract that constant from each fitted incremental value.",
      "concept": "Over-Dispersed Poisson Bootstrap Data Issues",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Data Issues",
+      "quote": "a modified log link handles them unless a whole column sums negative, which needs a constant shift",
+      "note": "Data Issues (tagged): a negative-sum column needs a constant shift of every incremental before the GLM fit (removed again from the fitted values)",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     },
     {
      "id": "r3",
@@ -3106,7 +3234,15 @@
      "statement": "If the sum of the residuals is non-zero, add a single constant to all residuals so the adjusted residuals sum to zero.",
      "concept": "Over-Dispersed Poisson Bootstrap Data Issues",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "ODP Bootstrap Model",
+      "quote": "adjusts for a non-zero mean of the residuals",
+      "note": "ODP Bootstrap Model (tagged) lists Shapland's adjustment for a non-zero residual mean; centring the residuals with one constant is that adjustment",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     },
     {
      "id": "r10",
@@ -3119,7 +3255,15 @@
        "page": "Deviance Residual",
        "quote": "a parametric bootstrap in Shibata's sense can replace resampling the actual residuals with draws from a normal distribution"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "ODP Bootstrap Model",
+      "quote": "a parametric bootstrap from a distribution fitted to the residuals",
+      "note": "ODP Bootstrap Model (tagged) lists Shapland's parametric bootstrap, sampling from a distribution fitted to the residuals",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     }
    ]
   },
@@ -3592,7 +3736,15 @@
      "statement": "A change in exposure level, or thin/missing data, in one accident year (e.g., the earliest year) makes that row inconsistent with the others and can bias the model results.",
      "concept": "Bootstrap Data Issues and Outliers",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Data Issues",
+      "quote": "exposure changes* (model losses per exposure)",
+      "note": "Data Issues (tagged) lists Shapland's exposure changes among the stochastic-triangle data issues; a year at a different exposure level or with thin data is inconsistent with the other rows",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     },
     {
      "id": "r6",
@@ -3621,7 +3773,13 @@
      "statement": "Zeros in the later ages of a triangle (e.g., oldest year at the last ages) are not necessarily missing data; they may reflect claim closure and no further development, and are not by themselves a model-failure issue.",
      "concept": "Over-Dispersed Poisson Bootstrap",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Reading this question's triangle: zeros at the oldest year's last ages are claim closure (the examiner's report's point for this data), which follows from what an incremental value is; no reading rule is needed",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     }
    ]
   },
@@ -3891,7 +4049,15 @@
      "statement": "If small claims (below the loss cap/limit) settle faster, early capped-to-unlimited loss ratios rise toward one, so early PDLD ratios increase, while later emerging loss is mainly large claims hitting the cap or limits, so later PDLD ratios decrease.",
      "concept": "Retrospective Rating PDLD Ratio",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "PDLD Ratio",
+      "quote": "Later ratios are the incremental loss capping ratio times",
+      "note": "PDLD Ratio (tagged) makes each PDLD the period's incremental capping ratio times LCF x TM; small claims settling early raise early capping ratios and leave mostly capped large-loss development for later periods",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     }
    ]
   },
@@ -4223,7 +4389,15 @@
        "page": "Correlation",
        "quote": "$$r = \\frac{\\sum_{i=1}^n (x_i - \\bar{x})(y_i - \\bar{y})}{\\sqrt{\\sum_{i=1}^n (x_i - \\bar{x})^2}\\,\\sqrt{\\sum_{i=1}^n (y_i - \\bar{y})^2}}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Correlation Coefficient",
+      "quote": "obtained by dividing the [[Covariance]] by the product of the standard deviations",
+      "note": "The tagged Correlation Coefficient page defines Pearson's coefficient as covariance over the product of standard deviations; the sample version uses sample moments (Cov = E[XY]-E[X]E[Y] on the linked Covariance page)",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     },
     {
      "id": "r3",
@@ -4351,7 +4525,13 @@
      "statement": "The ratio of reported losses at the lower limit to those at the higher limit at a given maturity is the ultimate ratio times e^(b·t), where t is the time remaining to ultimate maturity (e.g., 3 years at 12 months when ultimate is 48 months).",
      "concept": "Siewert's Layer Loss Development Methods",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The question states the formula (ratio = ultimate ratio x e^(0.177t), t the years to ultimate); applying it with t read off the stated 48-month ultimate is the question's own setup",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     },
     {
      "id": "r7",
@@ -4452,7 +4632,15 @@
      "statement": "Differences in policy limits (and sometimes deductibles) lead to different claim development, with higher-limit policies developing more slowly, so they may warrant separate classes.",
      "concept": "Segmentation of Claims Data for Reserving",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Data Segmentation",
+      "quote": "policy limits are another useful cut",
+      "note": "Friedland's reserving segmentation criteria on the page name policy limits as a cut, alongside similar reporting and settlement patterns; retagged Data Segmentation",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     },
     {
      "id": "r5",
@@ -4465,7 +4653,15 @@
        "page": "Data Segmentation",
        "quote": "group claims that share coverage (the same laws, policy terms and claims handling)"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Data Segmentation",
+      "quote": "group claims that share coverage (the same laws, policy terms and claims handling)",
+      "note": "Friedland's criterion: segments share the same laws and claims handling, and similar settlement patterns; regions differing in those are split; retagged Data Segmentation",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     },
     {
      "id": "r6",
@@ -4905,7 +5101,15 @@
      "statement": "Valuation classes should be homogeneous yet large enough to be credible; many small classes make data more volatile and raise internal systemic risk, and grouping non-homogeneous claims together also raises it.",
      "concept": "Valuation Classes",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Reserving Data Organization",
+      "quote": "Split into groups that balance",
+      "note": "Reserving Data Organization (syllabus page) teaches splitting into groups that balance homogeneity against credibility; the effect on internal systemic risk (specification/data error) is on the tagged Internal Systemic Risk page",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     }
    ]
   },
@@ -5049,7 +5253,15 @@
      "statement": "Convert a cumulative loss triangle to an incremental triangle by differencing successive cumulative values within each accident year, then check the sign of each development column's sum of incrementals to choose the modification.",
      "concept": "Incremental Loss Triangle",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Data Issues",
+      "quote": "a modified log link handles them unless a whole column sums negative, which needs a constant shift",
+      "note": "Data Issues (tagged) teaches Shapland's rule: check whether a whole column of incrementals sums negative to choose between the modified log link and a constant shift; forming incrementals from the cumulative triangle is plain differencing",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     }
    ]
   },
@@ -5569,7 +5781,13 @@
      "statement": "Expected future loss emergence for a policy period is ultimate loss minus losses reported as of the prior retro adjustment.",
      "concept": "Retrospective Rating Premium Asset",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Future loss emergence after an adjustment is ultimate less the losses already valued at it, which follows from the term on the tagged Retrospective Premium Reserve page (Ult. premium = P_last adj + CPDLD x future loss emergence); arithmetic",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     },
     {
      "id": "r5",
@@ -5910,7 +6128,15 @@
        "page": "Stochastic Cape Cod Model",
        "quote": "The SCC fits accident year $1$ but must give accident year $7$ the same $0.668$. Its Estimate for that year is $4{,}645$, against an actual $5{,}684$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "A **decay-weighted** variant (generalized Cape Cod) weights recent years more heavily in the ELR estimate, recognizing that the loss ratio level genuinely drifts.",
+      "note": "Cape Cod Method (tagged) estimates one ELR from all years and names the decay-weighted variant for a loss ratio that drifts; a trend in the years' loss ratios breaks the single-ELR assumption, over- and under-reserving at the two ends",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     }
    ]
   },
@@ -6047,7 +6273,15 @@
        "page": "Correlation",
        "quote": "$$r = \\frac{\\sum_{i=1}^n (x_i - \\bar{x})(y_i - \\bar{y})}{\\sqrt{\\sum_{i=1}^n (x_i - \\bar{x})^2}\\,\\sqrt{\\sum_{i=1}^n (y_i - \\bar{y})^2}}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Correlation Coefficient",
+      "quote": "obtained by dividing the [[Covariance]] by the product of the standard deviations",
+      "note": "The tagged Correlation Coefficient page defines Pearson's coefficient as covariance over the product of standard deviations; the sample version uses sample moments (Cov = E[XY]-E[X]E[Y] on the linked Covariance page)",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     },
     {
      "id": "r3",
@@ -6276,7 +6510,13 @@
      "statement": "The choice of basic limit does not affect the difference between modeled and unadjusted factors, because the adjustment is a ratio of LEVs applied to data already at the basic limit, so the basic limit cancels out.",
      "concept": "Sahasrabuddhe Claim Size Model for Loss Development",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The question fixes the same basic limit for both actuaries, and no sample answer uses this; an inference about this scenario's setup, not a reading's rule (Layer Development Factor, syllabus page, in fact notes the adjustment grows when the basic limit sits in the working layer)",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     },
     {
      "id": "r6",
@@ -6552,7 +6792,15 @@
      "statement": "A calendar year trend such as inflation not captured by the model appears in a residual-versus-calendar-year plot as residuals trending upward, negative in early calendar years and positive in later ones, meaning the model over-predicts early years and under-predicts recent years.",
      "concept": "Calendar Year Effects in Bootstrap Models",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Data Diagnostic Analysis",
+      "quote": "Plot residuals against development period, accident period, calendar period and fitted value. They should be patternless and have a common variance.",
+      "note": "Data Diagnostic Analysis (tagged) teaches plotting residuals against calendar period and expecting no pattern; residuals rising across calendar years are the pattern an uncaptured calendar trend leaves (fitted too high early, too low late)",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     },
     {
      "id": "r4",
@@ -6972,7 +7220,15 @@
      "statement": "A risk load is an explicit margin added to the reserve estimate to provide protection against adverse deviation from uncertainty in the reserve.",
      "concept": "Risk Load in Loss Reserves",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Margin",
+      "quote": "an amount held on top of a best (central) estimate to allow for the uncertainty in an insurance liability",
+      "note": "The risk margin's definition is the risk load the question asks to define (syllabus page)",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     },
     {
      "id": "r6",
@@ -7128,7 +7384,15 @@
        "page": "Cumulative Development Factor",
        "quote": "The reciprocal is the **percentage reported** (or paid): $p_n = 1/\\text{CDF}_n$, and $1 - p_n$ is the percentage unreported."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Reasonableness Testing",
+      "quote": "$p_t = 1/\\text{CDF}_t$ is the expected percentage reported (or paid) at age $t$",
+      "note": "Reasonableness Testing (syllabus page) states the percentage reported at an age is the reciprocal of its CDF",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     },
     {
      "id": "r4",
@@ -7188,7 +7452,15 @@
        "page": "Linear Regression",
        "quote": "$$Y_i = \\beta_0 + \\beta_1 x_{i1} + \\cdots + \\beta_p x_{ip} + \\varepsilon_i, \\qquad \\varepsilon_i \\stackrel{\\text{iid}}{\\sim} N(0, \\sigma^2)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "PDLD Ratio",
+      "quote": "That is what lets the method track emerging experience where Fitzgibbon's single regression line cannot.",
+      "note": "PDLD Ratio (tagged) contrasts Feldblum's segments with Fitzgibbon's single regression line of premium on loss, one slope and intercept for every adjustment",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     },
     {
      "id": "r4",
@@ -7537,7 +7809,15 @@
        "page": "Generalized Cape Cod Method",
        "quote": "The used-up premiums are 7,272.7, 6,720.0, 5,500.0 and 3,680.0, and the developed loss ratios are 80.0%, 75.0%, 70.0% and 66.0%, so the loss ratio has been falling."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "A **decay-weighted** variant (generalized Cape Cod) weights recent years more heavily in the ELR estimate, recognizing that the loss ratio level genuinely drifts.",
+      "note": "Cape Cod Method (tagged) uses one ELR for every year and names the variant for a drifting loss ratio; checking each year's implied loss ratio (ultimate over premium) for a trend tests that assumption directly",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     },
     {
      "id": "r6",
@@ -8131,7 +8411,15 @@
        "page": "Cost of Capital",
        "quote": "$$k_E = r_f + \\beta_E\\,\\bigl(E[r_m] - r_f\\bigr)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cost of Capital",
+      "quote": "is the cost of equity by the capital asset pricing model",
+      "note": "Cost of Capital (retagged) gives the CAPM cost of equity, risk-free rate plus beta times the market risk premium",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     },
     {
      "id": "r4",
@@ -8224,7 +8512,15 @@
      "statement": "A change in claims settlement rate alters the pattern of payments, raising parameter risk because historical development no longer reflects the future, and affecting process risk by changing the volatility and timing of ultimate payments.",
      "concept": "Process Risk and Parameter Risk",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loss Reserving",
+      "quote": "change, making historical paid factors too large",
+      "note": "Loss Reserving (syllabus page) teaches that a settlement rate change makes historical development factors unrepresentative of the future, which is parameter risk (tagged Parameter Risk); the process-risk effect follows from the change in the size and timing of what is still unpaid",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     },
     {
      "id": "r11",
@@ -8484,7 +8780,13 @@
        "page": "Catastrophe Loss",
        "quote": "Catastrophe losses are **removed** from the experience period and replaced with a long-run expected load. A five-year experience period either contains the hurricane or does not, and neither answer is the expected cost."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The scenario's own argument (one hurricane in five years fitted without adjustment, R-squared over 99%); what the reading supplies, specification/parameter error and reading a biased-high retrospective histogram, is on the tagged Internal Systemic Risk and PP Plot pages",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     }
    ]
   },
@@ -8543,7 +8845,13 @@
        "page": "Case Outstanding Development Method",
        "quote": "AY 2023 at $24$ months: paid to date $\\$800{,}000$, case outstanding $\\$500{,}000$, so reported is $\\$1{,}300{,}000$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Uses the question's own data: reported = paid + case, with case reserves given per open claim by maturity; converting is arithmetic on the definition of reported loss, not a reading's method",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     },
     {
      "id": "r4",
@@ -8551,7 +8859,13 @@
      "statement": "Convert a cumulative paid triangle to incremental paid by differencing successive maturities in each accident year.",
      "concept": "Incremental Loss Triangle",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Differencing a cumulative paid triangle into incrementals is triangle arithmetic, a step of this solution's plan",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     },
     {
      "id": "r5",
@@ -8559,7 +8873,15 @@
      "statement": "For a log-link GLM, the response triangle is built by taking the natural log of each incremental paid cell, which is then used to solve for the GLM parameters.",
      "concept": "GLM Bootstrap Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Generalized Linear Model",
+      "quote": "Log: $g(\\mu) = \\ln\\mu$",
+      "note": "The tagged GLM page gives the log link, g(mu) = ln mu: the linear predictor is fitted to the log of each incremental mean",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     },
     {
      "id": "r6",
@@ -8715,7 +9037,15 @@
        "page": "Catastrophe Loss",
        "quote": "In **reserving**, catastrophe claims are triangulated separately: they report fast and settle in a distinctive pattern (rapid initial payment, then a long tail of disputed and litigated claims), quite unlike ordinary property claims."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Reinsurance Reserving",
+      "quote": "Catastrophe losses are estimated event by event and removed from the triangles.",
+      "note": "Reinsurance Reserving (syllabus page) teaches separating catastrophe losses from the triangles and estimating them event by event, because they do not follow the attritional pattern",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     },
     {
      "id": "r5",
@@ -9160,7 +9490,15 @@
        "page": "Claim Count Triangle",
        "quote": "\\text{Severity} = \\frac{\\text{Ultimate Losses}}{\\text{Ultimate Counts}}"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Excess Loss Development Factor",
+      "quote": "Write losses at age $t$ as counts times severity",
+      "note": "Excess Loss Development Factor (tagged) writes Siewert's losses as counts times severity, so the factor includes count development C/C_t; a limited severity at 36 months with counts still developing leaves that factor out",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     }
    ]
   },
@@ -9246,7 +9584,15 @@
        "page": "Mean Square Error",
        "quote": "For $n > 1$, $\\text{MSE}(\\hat{\\sigma}^2) < \\text{MSE}(S^2)$, so the biased MLE has smaller MSE despite being biased."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Credible Loss Ratio Reserve",
+      "quote": "all three credible reserves are close to one another and well ahead of either extreme on mean squared error",
+      "note": "Credible Loss Ratio Reserve (tagged) ranks Hurlimann's reserves by mean squared error, the lower the better; near-equal MSEs mean near-equally good methods",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     }
    ]
   },
@@ -9377,7 +9723,13 @@
      "statement": "Cumulative paid loss at the next evaluation equals the prior cumulative paid plus incremental paid in the period, and the BF and Benktander methods are then applied at that later age using the later-age percent unreported.",
      "concept": "Incremental vs Cumulative Paid Losses",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Cumulative paid at the next evaluation is the prior cumulative plus the period's increment (arithmetic), and the tagged BF and Benktander formulas are then applied at that age; a step of this solution's plan",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     },
     {
      "id": "r5",
@@ -9471,7 +9823,15 @@
        "page": "Generalized Cape Cod Method",
        "quote": "The used-up premiums are 7,272.7, 6,720.0, 5,500.0 and 3,680.0, and the developed loss ratios are 80.0%, 75.0%, 70.0% and 66.0%, so the loss ratio has been falling."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "A **decay-weighted** variant (generalized Cape Cod) weights recent years more heavily in the ELR estimate, recognizing that the loss ratio level genuinely drifts.",
+      "note": "Cape Cod Method (tagged) uses one ELR for every year and names the variant for a drifting loss ratio; checking each year's implied loss ratio (ultimate over premium) for a trend tests that assumption directly",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     },
     {
      "id": "r5",
@@ -9488,7 +9848,15 @@
        "page": "Stochastic Cape Cod Model",
        "quote": "The SCC fits accident year $1$ but must give accident year $7$ the same $0.668$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "A **decay-weighted** variant (generalized Cape Cod) weights recent years more heavily in the ELR estimate, recognizing that the loss ratio level genuinely drifts.",
+      "note": "Cape Cod Method (tagged) estimates one ELR from all years and names the decay-weighted variant for a loss ratio that drifts; a trend in the years' loss ratios breaks the single-ELR assumption, over- and under-reserving at the two ends",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     },
     {
      "id": "r6",
@@ -10024,7 +10392,15 @@
      "statement": "Operational risk is the risk of loss from inadequate or failed internal processes, people, systems or external events (such as vendor reliance), and a key risk indicator (KRI) is a metric monitored to give early warning of a specific risk.",
      "concept": "Operational Risk",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Operational Risk",
+      "quote": "is the risk of loss resulting from inadequate or failed internal processes, people and systems, or from external events",
+      "note": "Operational Risk (retagged) defines it; the Key Risk Indicator page (retagged) defines a KRI as a regularly measured metric giving early warning against thresholds",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     }
    ]
   },
@@ -10129,7 +10505,15 @@
      "statement": "Sample the expected loss (a priori ultimate) for a stochastic BF by using a random number against the given cumulative distribution function of expected losses, with linear interpolation between the CDF points.",
      "concept": "Stochastic Bornhuetter-Ferguson Method",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Inversion Method",
+      "quote": "by generating $U$ from a [[Uniform Continuous Distribution|Uniform]]$(0, 1)$ distribution and returning the value $x$ at which the CDF reaches $U$",
+      "note": "Inversion Method (retagged) is how the a priori is drawn: a uniform random number read against the given CDF; interpolating linearly between the CDF points is the question's own rule",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     },
     {
      "id": "r7",
@@ -10641,7 +11025,15 @@
        "page": "Excess Loss Development Factor",
        "quote": "Development still to come is $1 - 1/\\text{LDF}_t$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Reasonableness Testing",
+      "quote": "$p_t = 1/\\text{CDF}_t$ is the expected percentage reported (or paid) at age $t$",
+      "note": "Reasonableness Testing (syllabus page) gives percent reported = 1/CDF; the share emerging between adjustments is the difference of successive percentages (arithmetic)",
+      "date": "2026-10-30",
+      "run": "g8-cas7-sort"
+     }
     },
     {
      "id": "r5",

@@ -213,6 +213,7 @@ export function placeLabel(path: string): string {
       return 'Study Guides'
     }
   }
+  if (pathname.startsWith('/wiki/question/')) return 'Question'
   if (pathname.startsWith('/project/')) return 'Project'
   if (pathname.startsWith('/craft/')) return 'Concept Craft'
   if (pathname.startsWith('/cowork/sources/')) return 'Source'

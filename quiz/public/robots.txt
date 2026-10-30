@@ -2,5 +2,7 @@ User-agent: *
 Disallow: /auth/callback
 Disallow: /settings
 Disallow: /review
+# A quiz launched from a question page — the page itself is the result to index.
+Disallow: /quiz?
 
 Sitemap: https://quiz.actuarialnotes.com/sitemap.xml

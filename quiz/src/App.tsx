@@ -84,6 +84,7 @@ const { Component: WikiExam, preload: loadWikiExam } = lazyRoute(() => import('@
 const { Component: WikiConcept, preload: loadWikiConcept } = lazyRoute(() => import('@/pages/wiki/WikiConcept'))
 const { Component: WikiResource, preload: loadWikiResource } = lazyRoute(() => import('@/pages/wiki/WikiResource'))
 const { Component: WikiResources, preload: loadWikiResources } = lazyRoute(() => import('@/pages/wiki/WikiResources'))
+const { Component: WikiQuestion, preload: loadWikiQuestion } = lazyRoute(() => import('@/pages/wiki/WikiQuestion'))
 
 /**
  * Warm the chunks a path needs before navigating to it, or null when it needs
@@ -109,6 +110,7 @@ function preloadRoute(path: string): Promise<unknown> | null {
   if (route.startsWith('/wiki/exam/')) return Promise.all([loadWikiLayout(), loadWikiExam()])
   if (route.startsWith('/wiki/concept/')) return Promise.all([loadWikiLayout(), loadWikiConcept()])
   if (route.startsWith('/wiki/resource/')) return Promise.all([loadWikiLayout(), loadWikiResource()])
+  if (route.startsWith('/wiki/question/')) return Promise.all([loadWikiLayout(), loadWikiQuestion()])
   return null
 }
 
@@ -487,6 +489,13 @@ export default function App({ initialSession }: { initialSession: Session | null
                 <Route path="/wiki/resource/:slug" element={
                   <Suspense fallback={<WikiFallback />}>
                     <WikiLayout><WikiResource /></WikiLayout>
+                  </Suspense>
+                } />
+                {/* One practice question, for the search that lands on it —
+                    its answer is behind a click into the quiz. */}
+                <Route path="/wiki/question/:id" element={
+                  <Suspense fallback={<WikiFallback />}>
+                    <WikiLayout><WikiQuestion /></WikiLayout>
                   </Suspense>
                 } />
                 <Route path="*" element={<NotFound />} />

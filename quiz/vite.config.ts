@@ -23,6 +23,9 @@ import { buildZip } from './src/lib/xlsx'
 import { VAULT_MEDIA_DIR, vaultMediaUrl } from './src/lib/vaultAssets'
 import { buildSeoPages, countQuestionsByExam, lastModifiedFromGitLog, NOT_FOUND_HEAD, pageHead, sitemapXml, SITEMAP_APP_PATHS, type SeoPage } from './src/lib/seo'
 import { renderStaticPage, staticBody } from './src/lib/seoPrerender'
+import { buildQuestionSeoPages, questionMarkdown, questionNeighbours, questionRuns } from './src/lib/seoQuestions'
+import { parseAllQuestions } from './src/lib/parser'
+import { contentPathFromVerification } from './src/lib/verification'
 
 const REPO_ROOT = path.resolve(__dirname, '..')
 
@@ -763,7 +766,7 @@ function pdfjsAssetsPlugin(): Plugin {
 async function vaultLastModified(): Promise<Map<string, string>> {
   const git = (...args: string[]) => promisify(execFile)('git', ['-C', REPO_ROOT, ...args], { maxBuffer: 64 * 1024 * 1024 })
   try {
-    const { stdout: log } = await git('-c', 'core.quotePath=false', 'log', '--format=%x01%H %cs', '--name-only', '--', 'Concepts', 'Resources/Books', 'Exam*.md')
+    const { stdout: log } = await git('-c', 'core.quotePath=false', 'log', '--format=%x01%H %cs', '--name-only', '--', 'Concepts', 'Resources/Books', 'Exam*.md', 'questions')
     const { stdout: shallowFile } = await git('rev-parse', '--git-path', 'shallow')
     const shallow = await readFile(path.resolve(REPO_ROOT, shallowFile.trim()), 'utf-8').catch(() => '')
     return lastModifiedFromGitLog(log, new Set(shallow.split('\n').map(l => l.trim()).filter(Boolean)))
@@ -778,11 +781,12 @@ function seoPagesPlugin(): Plugin {
   let outDir = ''
   let isBuild = false
   let logger: Logger | undefined
-  let site: Promise<{ files: Record<string, string>; pages: SeoPage[] }> | null = null
+  let site: Promise<{ files: Record<string, string>; pages: SeoPage[]; rawQuestions: string[] }> | null = null
   const loadSite = () => (site ??= (async () => {
     const { files } = await collectWikiContent()
-    const pages = buildSeoPages(files, countQuestionsByExam(await collectQuestions()))
-    return { files, pages }
+    const rawQuestions = await collectQuestions()
+    const pages = buildSeoPages(files, countQuestionsByExam(rawQuestions))
+    return { files, pages, rawQuestions }
   })())
 
   return {
@@ -802,7 +806,7 @@ function seoPagesPlugin(): Plugin {
     async closeBundle() {
       if (!isBuild) return
       const template = await readFile(path.join(outDir, 'index.html'), 'utf-8')
-      const { files, pages } = await loadSite()
+      const { files, pages, rawQuestions } = await loadSite()
       const indexable = pages.filter(p => !p.noindex)
       const canonical = new Map(indexable.map(p => [p.path.toLowerCase(), p.path]))
       const resolve = (route: string) => canonical.get(route.toLowerCase())
@@ -825,6 +829,35 @@ function seoPagesPlugin(): Plugin {
         await mkdir(path.dirname(file), { recursive: true })
         await writeFile(file, renderStaticPage(template, pageHead(page), body))
       }
+      // A page per practice question — stem, options and parts, never the
+      // answer (lib/seoQuestions.ts) — each linking the questions either side
+      // of it on its paper, so a crawler can walk a whole paper from one.
+      const questions = parseAllQuestions(rawQuestions)
+      const examByBank = new Map<string, SeoPage>()
+      for (const p of pages) if (p.kind === 'exam' && p.bank && !examByBank.has(p.bank)) examByBank.set(p.bank, p)
+      const questionPages = buildQuestionSeoPages(questions, q => {
+        const exam = examByBank.get(q.exam)
+        return exam ? crumb(exam) : undefined
+      })
+      const questionPath = new Map(questionPages.map(({ question, page }) => [question.id, page]))
+      const runs = questionRuns(questions)
+      for (const { question, page } of questionPages) {
+        const { previous, next } = questionNeighbours(runs, question)
+        const either = [previous, next]
+          .map(q => q && questionPath.get(q.id))
+          .filter((p): p is SeoPage => Boolean(p))
+          .map(p => crumb(p))
+        const body = staticBody({
+          page,
+          markdown: questionMarkdown(question),
+          resolve,
+          sections: [{ heading: 'More questions from this set', links: either }],
+        })
+        const file = path.join(outDir, ...decodeURIComponent(page.path).split('/'), 'index.html')
+        if (!file.startsWith(outDir + path.sep)) throw new Error(`SEO page would be written outside dist: ${page.path}`)
+        await mkdir(path.dirname(file), { recursive: true })
+        await writeFile(file, renderStaticPage(template, pageHead(page), body))
+      }
       // Any other path under a page kind has no file, and is a real 404 — not
       // the SPA rewrite (quiz/vercel.json). Vercel serves this for it: the app
       // still boots and handles the path (an alias, an old link it redirects),
@@ -834,10 +867,14 @@ function seoPagesPlugin(): Plugin {
       const listed = [
         ...SITEMAP_APP_PATHS,
         ...indexable.map(p => ({ path: p.path, lastmod: p.source ? modified.get(p.source) : undefined })),
+        ...questionPages.map(({ question, page }) => {
+          const source = contentPathFromVerification(question.verification)
+          return { path: page.path, lastmod: source ? modified.get(source) : undefined }
+        }),
       ]
       await writeFile(path.join(outDir, 'sitemap.xml'), sitemapXml(listed))
       const dated = listed.filter(e => typeof e !== 'string' && e.lastmod).length
-      logger?.info(`seo: ${pages.length} static pages (${pages.length - indexable.length} noindex stubs), ${listed.length} URLs in sitemap.xml (${dated} dated)`)
+      logger?.info(`seo: ${pages.length} static pages (${pages.length - indexable.length} noindex stubs), ${questionPages.length} question pages, ${listed.length} URLs in sitemap.xml (${dated} dated)`)
     },
   }
 }

@@ -1,6 +1,6 @@
 # SEO — how each page is found
 
-Every exam, concept and resource page is meant to be a search result of its own:
+Every exam, concept, resource and question page is meant to be a search result of its own:
 its own URL, its own title, its own description. This is how that is done, and the
 few rules that keep it true.
 
@@ -83,7 +83,7 @@ The details that make the derived text read cleanly:
    file as added that day, so a file last touched there gets **no** date rather
    than a wrong one — Google stops trusting a sitemap whose dates are wrong.
 4. **`dist/404.html`**, the built `index.html` with `NOT_FOUND_HEAD`. A path
-   under `/wiki/exam/`, `/wiki/concept/` or `/wiki/resource/` that has no static
+   under `/wiki/exam/`, `/wiki/concept/`, `/wiki/resource/` or `/wiki/question/` that has no static
    file is not rewritten to the SPA (`quiz/vercel.json`), so Vercel answers it
    **404** with this file. Every real page has a file, so only a page that
    doesn't exist gets the 404 — and it is still the app, which boots and does
@@ -115,6 +115,36 @@ wiki chunk loads would only make the rendered head flicker. A route that names
 nothing — `NotFound`, a wiki page that fails to load — writes `NOT_FOUND_HEAD`,
 which is `noindex`. Outside the three page kinds the app still answers every
 path 200, so without it a typo'd URL would be indexed as a page.
+
+## Question pages — `lib/seoQuestions.ts`
+
+Every question in the bank has a page, `/wiki/question/<id>`: what a search for
+*SOA Exam P sample question 123* or *CAS Exam 5 Fall 2013 question 4* should
+land on. Its name is the one a candidate types — *CAS Exam 5 Fall 2013,
+Question 4* (named by the paper it was sat on, `originally_exam` included),
+*SOA Exam P Sample Question 123*, *Exam MAS-I Practice Question 12* for the
+vault's own — with its topic in the title when it fits, and its description is
+the stem's own opening (`questionPreview`, read to text, display math dropped).
+
+**The page is the question, never its answer.** It shows the stem, the options
+and each part with its points, the concepts it is tagged with, and the questions
+either side of it on its paper (`questionRuns` — one paper in paper order, a
+sample set in its numbering), and one button: *Answer this question*, a
+one-question quiz (`/quiz?ids=<id>`) that marks the answer and then shows the
+solution. Neither the static file nor `pages/wiki/WikiQuestion.tsx` carries the
+answer key, the explanation or the examiner's report — `seoQuestions.test.ts`
+holds every question in the bank to that. `robots.txt` disallows `/quiz?`, so a
+crawler indexes the page rather than the quiz behind it.
+
+A question with an open **critical** finding has no page, as it has no quiz
+(`hasQuestionPage` → `hasCriticalFinding`): its URL is a 404.
+
+Question records are not in `virtual:seo-pages` — there are thousands. The build
+writes each page's static file and sitemap entry (`lastmod` from its own file);
+the app derives the same record from the question once the bank has loaded
+(`buildQuestionSeoPages`, which also makes a clashing title unique by its id).
+The parent breadcrumb is the study guide whose bank holds the question
+(`SeoPage.bank` on an exam page, set from `bankLabelFor`).
 
 ## Concept URLs: shown to whoever lands on them
 

@@ -53,7 +53,7 @@ const HUB_PATH = '/wiki'
 export const SITEMAP_APP_PATHS = ['/', '/quiz', '/flashcards', '/wiki/resources', '/upgrade', '/store']
 const HUB_NAME = 'Study Guides'
 
-export type SeoPageKind = 'hub' | 'exam' | 'concept' | 'resource'
+export type SeoPageKind = 'hub' | 'exam' | 'concept' | 'resource' | 'question'
 
 export interface SeoCrumb {
   name: string
@@ -90,6 +90,8 @@ export interface SeoPage {
   /** An unwritten stub: served, but kept out of the index and the sitemap. */
   noindex?: boolean
   work?: SeoWork
+  /** An exam page's question bank, by the bank's `exam:` label — a question page's parent. */
+  bank?: string
 }
 
 /** Everything the document head says about a page. */
@@ -709,7 +711,7 @@ export function buildSeoPages(files: Record<string, string>, questionCounts: Rec
     const meta = parseExamMetadata(markdown)
     if (meta) syllabi.push(parseExamSyllabus(markdown, meta.examId, meta.examLabel, meta.examTopic, fileName))
     const label = meta ? bankLabelFor(meta) : undefined
-    const page = { ...examSeo({ fileName, markdown, questions: label ? questionCounts[label] ?? 0 : 0 }), source: `${fileName}.md` }
+    const page = { ...examSeo({ fileName, markdown, questions: label ? questionCounts[label] ?? 0 : 0 }), source: `${fileName}.md`, ...(label ? { bank: label } : {}) }
     exams.push(page)
     examCrumbs.set(page.name, { name: page.name, path: page.path })
   }
@@ -814,6 +816,7 @@ function pageJsonLd(page: SeoPage, url: string): object[] {
     url,
     inLanguage: 'en',
     ...(page.kind === 'exam' ? { learningResourceType: 'Study guide', educationalUse: 'Exam preparation' } : {}),
+    ...(page.kind === 'question' ? { learningResourceType: 'Practice problem', educationalUse: 'Exam preparation' } : {}),
     ...(about ? { about } : {}),
     isPartOf: website,
     publisher: ORGANIZATION,
@@ -880,6 +883,15 @@ export function fallbackHead(pathname: string): PageHead {
       title: kind === 'exam' ? `${examDisplayName(name)} Study Guide & Syllabus | ${SITE_NAME}` : `${name} | ${SITE_NAME}`,
       description: DEFAULT_DESCRIPTION,
       canonical: absoluteUrl(wikiRoute({ kind, name })),
+      ogType: 'article',
+    }
+  }
+  const question = /^\/wiki\/question\/([a-z0-9-]+)$/i.exec(path)
+  if (question) {
+    return {
+      title: `Practice Question ${question[1]} | ${SITE_NAME}`,
+      description: DEFAULT_DESCRIPTION,
+      canonical: absoluteUrl(path),
       ogType: 'article',
     }
   }

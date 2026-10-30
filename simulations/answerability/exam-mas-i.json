@@ -785,7 +785,15 @@
      "statement": "The loglogistic CDF is F(x) = (x/θ)^γ / (1 + (x/θ)^γ), so setting F(π_p) = p gives (π_p/θ)^γ = p/(1-p).",
      "concept": "Loglogistic Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Percentile Matching",
+      "quote": "Setting $F(x) = g$ and solving for the bracketed term gives $(x/\\theta)^{\\gamma} = g/(1 - g)$, the odds of $g$",
+      "note": "written from Frees et al., Loss Data Analytics ch.4 §4.1.3.2 Example 4.1.11, https://openacttexts.github.io/Loss-Data-Analytics/ChapModelSelection.html; checked by 2026-10-30T21:37Z/a2ck",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r2",
@@ -2628,7 +2636,15 @@
      "statement": "The reliability (Birnbaum) importance of a component is the change in system reliability per unit change in that component's reliability, i.e. the difference between system reliability when the component works and when it fails.",
      "concept": "Component Reliability Importance",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "System Reliability",
+      "quote": "The reliability (Birnbaum) importance of component $i$ is the probability that it is critical",
+      "note": "written from Huseby & Dahl, STK3405 Lecture 8 slides 3, 12-14, 21-22, https://www.uio.no/studier/emner/matnat/math/STK3405/h21/forelesningsnotater/lecture-8.pdf; checked by 2026-10-30T21:37Z/a2ck",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r6",
@@ -2636,7 +2652,15 @@
      "statement": "To decide which component to upgrade, compute for each candidate the system reliability after replacing its probability with the new value and choose the one giving the largest increase (improvement equals importance times the change in component reliability).",
      "concept": "Component Reliability Importance",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "System Reliability",
+      "quote": "raising component $i$'s reliability by $\\Delta$ raises system reliability by exactly $I_i \\Delta$",
+      "note": "written from Huseby & Dahl, STK3405 Lecture 8 slides 3, 12-14, 21-22, https://www.uio.no/studier/emner/matnat/math/STK3405/h21/forelesningsnotater/lecture-8.pdf; checked by 2026-10-30T21:37Z/a2ck",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     }
    ]
   },
@@ -2678,7 +2702,13 @@
      "statement": "For systems in series built from disjoint components, a minimal path set of the combined system is the union of one minimal path set from each subsystem, so the number of minimal path sets is the product of the subsystems' counts.",
      "concept": "Series Systems",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "follows from the definitions on System Reliability: a series system works only if every subsystem works, and a minimal path set is a set whose working alone makes the system work with no proper subset doing so; so with subsystems on disjoint components a minimal path set of the whole is exactly one minimal path set of each subsystem together, and the counts multiply (the page already counts a k-out-of-n system's minimal path sets as C(n,k))",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r4",
@@ -3671,7 +3701,15 @@
      "statement": "For a Poisson process, conditional on n events occurring in [0, t], the number of events in a subinterval [0, s] with s < t is Binomial with n trials and success probability s/t.",
      "concept": "Poisson Process",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Poisson Process",
+      "quote": "is binomial with $n$ trials and success probability $s/t$, whatever the rate $\\lambda$",
+      "note": "written from Siegrist, Random, The Poisson Process, 'The Poisson Distribution', https://www.randomservices.org/random/poisson/Poisson.html; checked by 2026-10-30T21:37Z/a2ck",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r2",
@@ -7948,7 +7986,15 @@
      "statement": "To find the expected time of the k-th order statistic of independent exponentials, decompose it into successive spacings between failures, where each spacing is exponential with rate equal to the number of components still operating times the individual rate, and sum the spacing means.",
      "concept": "Order Statistics",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Order Statistics",
+      "quote": "the spacing between successive order statistics is exponential with rate equal to the number still surviving times $\\lambda$",
+      "note": "written from Sheffield, MIT OCW 18.440 Lecture 20 slide 15, https://ocw.mit.edu/courses/18-440-probability-and-random-variables-spring-2014/9c364e256bcc2b34ba6dd73025e8bcb2_MIT18_440S14_Lecture20.pdf, and Wikipedia Order statistic (Rényi representation); checked by 2026-10-30T21:37Z/a2ck",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r4",
@@ -8128,7 +8174,15 @@
      "statement": "Inclusion-exclusion bounds on a union alternate: the first bound (sum of individual event probabilities) is an upper bound on the union, the second (subtracting pairwise intersections) is a lower bound, and so on.",
      "concept": "Method of Inclusion and Exclusion",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Inclusion-Exclusion Principle",
+      "quote": "The first bound, the sum of the individual probabilities, is an upper bound; subtracting the pairwise intersections gives a lower bound",
+      "note": "written from Siegrist, Random, Probability Measures (Boole and Bonferroni inequalities), https://www.randomservices.org/random/prob/Probability.html; checked by 2026-10-30T21:37Z/a2ck",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r5",
@@ -9614,7 +9668,15 @@
      "statement": "For n iid exponentials with mean mu, the expected k-th order statistic is the sum of the mean gaps mu/n + mu/(n-1) + ... + mu/(n-k+1), since each gap between successive order statistics is exponential with mean mu/(number still surviving).",
      "concept": "Order Statistics of Exponential Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Order Statistics",
+      "quote": "So the expected k-th order statistic of n i.i.d. exponentials is the sum of the mean gaps, each gap's mean being the individual mean divided by the number still surviving.",
+      "note": "written from Sheffield, MIT OCW 18.440 Lecture 20 slide 15, https://ocw.mit.edu/courses/18-440-probability-and-random-variables-spring-2014/9c364e256bcc2b34ba6dd73025e8bcb2_MIT18_440S14_Lecture20.pdf, and Wikipedia Order statistic (Rényi representation); checked by 2026-10-30T21:37Z/a2ck",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r5",
@@ -14376,7 +14438,15 @@
      "statement": "For the loglogistic distribution with CDF F(x) = (x/θ)^γ / (1 + (x/θ)^γ), setting F(x) = g gives (x/θ)^γ = g/(1 - g), i.e. the odds of g.",
      "concept": "Loglogistic Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Percentile Matching",
+      "quote": "Setting $F(x) = g$ and solving for the bracketed term gives $(x/\\theta)^{\\gamma} = g/(1 - g)$, the odds of $g$",
+      "note": "written from Frees et al., Loss Data Analytics ch.4 §4.1.3.2 Example 4.1.11, https://openacttexts.github.io/Loss-Data-Analytics/ChapModelSelection.html; checked by 2026-10-30T21:37Z/a2ck",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     }
    ]
   },

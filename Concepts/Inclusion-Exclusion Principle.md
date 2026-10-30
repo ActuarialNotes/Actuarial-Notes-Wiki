@@ -2,12 +2,13 @@
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-09-27
+  last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:2022035461f97d1a5a1097c99bb420f5c60bd545ab325d894be3ac57c36f65db
+  content_hash: sha256:3f54272fdcf84c8d1cf39e0ee1842661eceb0fcf860b6441c9e40841b8a12345
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Thm 1.4 p.24 (PDF p.32), Thm 3.8 Inclusion-Exclusion Principle p.104 (PDF p.112), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "SOA Exam P Sample Solutions (Aug 2026 revision), Q1 p.2 and Q100 p.30, sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"
+    - "Siegrist, Random (randomservices.org, HTML fetched 2026-10-30), Probability Spaces > Probability Measures: Boole's inequality P(union A_i) <= sum P(A_i); general Bonferroni inequalities — the inclusion-exclusion sum truncated after m terms is an upper bound for P(union) if m is odd and a lower bound if m is even — https://www.randomservices.org/random/prob/Probability.html"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Inclusion-Exclusion Principle.md
@@ -20,6 +21,12 @@ The **Inclusion-Exclusion Principle** is a counting rule for the probability (or
 > $$\begin{aligned} P(A \cup B \cup C) = {}& P(A) + P(B) + P(C) \\ &- P(A \cap B) - P(A \cap C) - P(B \cap C) \\ &+ P(A \cap B \cap C) \end{aligned}$$
 
 - The signs alternate by intersection size: add single events, subtract pairwise intersections, add triple intersections, and so on.
+- **Truncated sums are bounds** (the Bonferroni inequalities): stopping the sum after a positive term gives an upper bound on the union, and stopping after a negative term gives a lower bound. The first bound, the sum of the individual probabilities, is an upper bound; subtracting the pairwise intersections gives a lower bound; adding back the triples gives an upper bound again, and so on:
+
+> $$P\Big(\bigcup_i A_i\Big) \le \sum_i P(A_i)$$
+
+> $$P\Big(\bigcup_i A_i\Big) \ge \sum_i P(A_i) - \sum_{i<j} P(A_i \cap A_j)$$
+
 - For [[Mutually Exclusive Events|disjoint]] events the intersection terms are $0$, so the rule reduces to $P(A \cup B) = P(A) + P(B)$.
 - It is the general form of the addition rule of [[Probability]] and relies on [[Set Operations]] for the union and intersection.
 

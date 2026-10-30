@@ -774,7 +774,15 @@
      "statement": "Interest earned over a period equals the fund balance at the end of the period minus the balance at the start of the period (including any deposits made at the start, but excluding deposits made during the period).",
      "concept": "Interest Earned",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Accumulation Function",
+      "quote": "- More generally, a balance $B$ held from $t_1$ to $t_2$, with nothing added or withdrawn, earns $B\\left[a(t_2)/a(t_1) - 1\\right]$ in interest over the interval.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets, §2 p.17 (I[s,t] = k[a(t) - a(s)]) and §33 p.302: interest earned by a balance over an interval is its growth B[a(t2)/a(t1) - 1]; fact checked run 2026-10-30T19:34Z/c79e",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -1607,7 +1615,15 @@
      "statement": "The interest earned during the nth year equals the accumulated value at time n minus the accumulated value at time n-1, i.e., A(n) - A(n-1).",
      "concept": "Amount of Interest Earned in a Period",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Accumulation Function",
+      "quote": "- The interest earned in period $n$ is the growth of the amount function over it, $I_n = A(n) - A(n-1)$, which is $k\\,[a(n) - a(n-1)]$ for an investment of $k$.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets, §2 p.17: interest earned in the nth period is I_n = A(n) - A(n-1); fact checked run 2026-10-30T19:34Z/c79e",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r2",
@@ -4736,7 +4752,15 @@
      "statement": "When interest is credited only at the end of each conversion period, the account value is a step function, so a threshold is first met at the next conversion date at or after the continuous-time solution, which is the next multiple of the conversion period length.",
      "concept": "Interest Credited at Conversion Dates",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Nominal Interest Rate Convertible m-thly",
+      "quote": "- When interest is credited only at the end of each conversion period, the balance stays level between credit dates and jumps on each one (a step function), so a target that $(1 + i^{(m)}/m)^{mt}$ first reaches at a time $t$ between credit dates is actually reached at the first conversion date on or after $t$.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets, §2 (P3) p.15 and §9 p.66: with interest credited only at conversion dates a(t) is a step function, so a target is met at the first conversion date on or after the continuous-formula time; fact checked run 2026-10-30T19:34Z/c79e",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -5989,7 +6013,15 @@
      "statement": "When the interest rate changes over time, split the deposits by rate regime: accumulate each segment's annuity to the time of the rate change using that segment's rate, then accumulate that value forward at the later rate, and add the contributions of the remaining deposits.",
      "concept": "Varying Interest Rates",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Accumulation Function",
+      "quote": "- Accumulating runs the same chain forward: accumulate the payments made before $k$ to time $k$ at the earlier rate and carry that value on to the end at the later rate, accumulate the payments after $k$ at the later rate alone, and add.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets, §21 Example 21.1 pp.202-203: under a rate change, accumulate the earlier payments to the change date at the earlier rate, carry that value on at the later rate, accumulate later payments at the later rate, and add; fact checked run 2026-10-30T19:34Z/c79e",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -6147,7 +6179,15 @@
        "page": "Geometric Increasing Perpetuity",
        "quote": "Value the growing part at time 3, one period before its first payment, then discount it to time 0:"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Accumulation Function",
+      "quote": "- When the rate changes at time $k$, split the cash flows at $k$: value the payments after $k$ at time $k$ at the later rate, then discount that single value to time 0 at the earlier rate; value the payments up to $k$ at the earlier rate alone; and add the pieces.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets, §21 Example 21.2 p.203 and §11 p.93: value payments after the change at the later rate as of the change date, discount to 0 at the earlier rate, add the earlier payments at the earlier rate; fact checked run 2026-10-30T19:34Z/c79e",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -6168,7 +6208,15 @@
      "statement": "To value an annuity under a rate change, take the annuity-due at the initial rate for the payments before the change and add the annuity-due at the later rate for the remaining payments, discounted to time 0 using the initial rate for the years before the change.",
      "concept": "Varying Interest Rates",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Accumulation Function",
+      "quote": "- When the rate changes at time $k$, split the cash flows at $k$: value the payments after $k$ at time $k$ at the later rate, then discount that single value to time 0 at the earlier rate; value the payments up to $k$ at the earlier rate alone; and add the pieces.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets, §21 Example 21.2 p.203: annuity at the earlier rate for payments before the change plus the later-rate annuity discounted to 0 at the earlier rate; fact checked run 2026-10-30T19:34Z/c79e",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r6",
@@ -6646,7 +6694,15 @@
      "statement": "For a period with changing interest (a different rate in each period), the overall accumulation factor is the product of the accumulation factors for each consecutive period.",
      "concept": "Accumulation Function",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Accumulation Function",
+      "quote": "- Accumulation factors over successive intervals multiply, each interval at the rate in force over it: $a(t_2)/a(t_0) = [a(t_1)/a(t_0)] \\cdot [a(t_2)/a(t_1)]$.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets, §11 p.93 (11.1) and Example 11.3 pp.93-94: the accumulation factor over successive intervals is the product of each interval's factor; fact checked run 2026-10-30T19:34Z/c79e",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -10149,7 +10205,15 @@
      "statement": "When the interest rate changes over time, split the timeline at the rate change: accumulate the earlier payments to the change date at the first rate, then accumulate that value at the new rate for the remaining period.",
      "concept": "Varying Interest Rates",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Accumulation Function",
+      "quote": "- Accumulating runs the same chain forward: accumulate the payments made before $k$ to time $k$ at the earlier rate and carry that value on to the end at the later rate, accumulate the payments after $k$ at the later rate alone, and add.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets, §21 Example 21.1 pp.202-203: accumulate earlier payments to the change date at the first rate, then carry that value on at the new rate; fact checked run 2026-10-30T19:34Z/c79e",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -10157,7 +10221,15 @@
      "statement": "Payments made after the rate change are accumulated separately as their own annuity at the new rate, and the two accumulated values are added to get the total balance.",
      "concept": "Varying Interest Rates",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Accumulation Function",
+      "quote": "- Accumulating runs the same chain forward: accumulate the payments made before $k$ to time $k$ at the earlier rate and carry that value on to the end at the later rate, accumulate the payments after $k$ at the later rate alone, and add.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets, §21 Example 21.1 pp.202-203: payments after the change are accumulated at the new rate alone and the pieces added; fact checked run 2026-10-30T19:34Z/c79e",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -10746,7 +10818,15 @@
      "statement": "When proceeds from a maturing bond are reinvested at a new yield rate, accumulate them at the new rate for the new term, chaining accumulation periods at different rates.",
      "concept": "Reinvestment of Proceeds",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Accumulation Function",
+      "quote": "- Accumulation factors over successive intervals multiply, each interval at the rate in force over it: $a(t_2)/a(t_0) = [a(t_1)/a(t_0)] \\cdot [a(t_2)/a(t_1)]$.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets, §11 p.93 (11.1) and Example 11.2: accumulating through successive periods at different rates multiplies the factors for each period; fact checked run 2026-10-30T19:34Z/c79e",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -18253,7 +18333,15 @@
      "statement": "With a changing interest rate, discount a cash flow across successive rate periods by multiplying the discount factors for each period (e.g., the full years at the first rate, then the remaining years at the second rate).",
      "concept": "Varying Interest Rates",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Accumulation Function",
+      "quote": "- The intervals need not use the same kind of rate: a stretch at effective rate $i$ contributes $(1+i)^{t_2 - t_1}$, a stretch under a force of interest contributes $\\exp\\!\\left(\\int_{t_1}^{t_2} \\delta_t\\,dt\\right)$, and a stretch at a nominal rate contributes $(1 + i^{(m)}/m)^{m(t_2 - t_1)}$; discounting multiplies the reciprocals.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets, §11 pp.93-94 (11.2, Example 11.3): discounting across successive rate periods multiplies the reciprocal factors for each period; fact checked run 2026-10-30T19:34Z/c79e",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -18261,7 +18349,15 @@
      "statement": "A cash flow occurring before the rate changes is discounted only at the first rate, while one occurring after the change is discounted at the first rate for the initial years and at the second rate for the years beyond.",
      "concept": "Varying Interest Rates",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Accumulation Function",
+      "quote": "- When the rate changes at time $k$, split the cash flows at $k$: value the payments after $k$ at time $k$ at the later rate, then discount that single value to time 0 at the earlier rate; value the payments up to $k$ at the earlier rate alone; and add the pieces.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets, §21 Example 21.2 p.203: payments up to the change are discounted at the earlier rate alone; later payments at the later rate to the change date, then at the earlier rate to 0; fact checked run 2026-10-30T19:34Z/c79e",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -18993,7 +19089,15 @@
      "statement": "When the interest rate changes over time, split the cash flows at the rate-change time, value the later payments at that time using the later rate, then discount that value back using the earlier rate.",
      "concept": "Varying Interest Rates",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Accumulation Function",
+      "quote": "- When the rate changes at time $k$, split the cash flows at $k$: value the payments after $k$ at time $k$ at the later rate, then discount that single value to time 0 at the earlier rate; value the payments up to $k$ at the earlier rate alone; and add the pieces.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets, §21 Example 21.2 p.203: split at the change date, value later payments at the later rate there, discount that value back at the earlier rate; fact checked run 2026-10-30T19:34Z/c79e",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -19018,7 +19122,15 @@
      "statement": "A payment at time t is discounted over the time interval between the payment and the valuation date using the interest rate in effect during that interval; payments up to and including the rate-change time are valued with the earlier rate.",
      "concept": "Present Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Accumulation Function",
+      "quote": "- When the rate changes at time $k$, split the cash flows at $k$: value the payments after $k$ at time $k$ at the later rate, then discount that single value to time 0 at the earlier rate; value the payments up to $k$ at the earlier rate alone; and add the pieces.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets, §21 Example 21.2 p.203 and §11 p.93 (11.2): each interval is discounted at the rate in force over it; payments up to the change use the earlier rate; fact checked run 2026-10-30T19:34Z/c79e",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -23862,7 +23974,15 @@
      "statement": "Interest earned over a period equals the ending fund balance minus the total deposits (principal) made during the period.",
      "concept": "Interest Earned",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Accumulation Function",
+      "quote": "- When money is deposited or withdrawn during the interval, the interest a fund earns is its end value less its start value less the net deposits made during it; each deposit earns interest only from the date it is made.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets, §33 p.302 (B = A + C + I): interest a fund earns is end value less start value less net deposits made during the period; fact checked run 2026-10-30T19:34Z/c79e",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -25516,7 +25636,15 @@
      "statement": "The annual effective rate of interest in year n is i_n = a(n)/a(n-1) - 1, i.e., the growth over the interval from time n-1 to n.",
      "concept": "Effective Rate of Interest",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Accumulation Function",
+      "quote": "- The effective rate of interest for period $n$ is the interest earned divided by the balance at the start of the period, $i_n = I_n / A(n-1) = a(n)/a(n-1) - 1$.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets, §3 p.22: effective rate in period n is i_n = I_n/A(n-1) = a(n)/a(n-1) - 1; fact checked run 2026-10-30T19:34Z/c79e",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r3",
@@ -26000,7 +26128,15 @@
      "statement": "The interest earned during year n on an investment of amount P is P[a(n) − a(n−1)], the difference in accumulated values at the end and start of that year.",
      "concept": "Interest Earned in a Period",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Accumulation Function",
+      "quote": "- The interest earned in period $n$ is the growth of the amount function over it, $I_n = A(n) - A(n-1)$, which is $k\\,[a(n) - a(n-1)]$ for an investment of $k$.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets, §2 p.17: interest earned in period n on an investment of k is k[a(n) - a(n-1)]; fact checked run 2026-10-30T19:34Z/c79e",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r3",
@@ -28744,7 +28880,15 @@
      "statement": "When the interest rate changes over time, accumulate over each period separately (using an effective rate for one segment and the force of interest for another) and multiply the accumulation factors.",
      "concept": "Accumulated Value with Varying Interest",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Accumulation Function",
+      "quote": "- The intervals need not use the same kind of rate: a stretch at effective rate $i$ contributes $(1+i)^{t_2 - t_1}$, a stretch under a force of interest contributes $\\exp\\!\\left(\\int_{t_1}^{t_2} \\delta_t\\,dt\\right)$, and a stretch at a nominal rate contributes $(1 + i^{(m)}/m)^{m(t_2 - t_1)}$; discounting multiplies the reciprocals.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets, §11 pp.93-94 (11.1, Example 11.3 mixing nominal, discount and force): multiply the accumulation factors of each stretch, whatever kind of rate applies in it; fact checked run 2026-10-30T19:34Z/c79e",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r3",
@@ -31028,7 +31172,15 @@
        "page": "Geometric Increasing Perpetuity",
        "quote": "Value the growing part at time 3, one period before its first payment, then discount it to time 0:"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Accumulation Function",
+      "quote": "- When the rate changes at time $k$, split the cash flows at $k$: value the payments after $k$ at time $k$ at the later rate, then discount that single value to time 0 at the earlier rate; value the payments up to $k$ at the earlier rate alone; and add the pieces.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets, §21 Example 21.2 p.203: value each segment at its own rate as of its start, discount to 0 at the earlier rate, add; fact checked run 2026-10-30T19:34Z/c79e",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -35643,7 +35795,15 @@
        "page": "Internal Rate of Return",
        "quote": "The NPV at $r$ is then positive exactly when $j > r$, and the NPV and IRR give the same decision."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Net Present Value",
+      "quote": "- So comparing a trial rate with the yield rate needs only the sign of the NPV at the trial rate: a positive NPV means the yield rate is above the trial rate, a negative NPV means it is below.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets, §31 Theorem 31.1 and proof pp.286-287: with outlays before receipts the sign of NPV at a trial rate says which side of it the yield rate lies; fact checked run 2026-10-30T19:34Z/c79e",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -35656,7 +35816,15 @@
        "page": "Internal Rate of Return",
        "quote": "When the signature is negative at issue and positive afterward, the NPV falls steadily as the rate rises, so there is exactly one IRR."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Net Present Value",
+      "quote": "- When every outlay comes before every receipt, the yield rate is unique, and the NPV is positive at every rate below the yield rate and negative at every rate above it.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets, §31 Theorem 31.1 and proof pp.286-287: (1+i)^k NPV(i) is decreasing, so NPV is positive below the unique yield rate and negative above it; fact checked run 2026-10-30T19:34Z/c79e",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },

@@ -11,6 +11,7 @@ wiki_link:
   - Concepts/Generalized+Linear+Model
   - Concepts/Offset+Variable
   - Concepts/Rating+Variable
+  - Concepts/Variance+Function
 answer: "A"
 points: 1
 verification:

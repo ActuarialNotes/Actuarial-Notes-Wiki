@@ -12,6 +12,7 @@ wiki_link:
   - Concepts/Order+Statistics
   - Concepts/Uniform+Continuous+Distribution
   - Concepts/Sample+Mean
+  - Concepts/Estimator
 answer: "C"
 points: 1
 verification:

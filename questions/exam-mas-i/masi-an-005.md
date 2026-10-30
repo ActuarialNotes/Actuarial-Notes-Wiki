@@ -12,6 +12,7 @@ wiki_link:
   - Concepts/Deductible
   - Concepts/Policy+Limit
   - Concepts/Inflation
+  - Concepts/Scale+and+Shape+Parameters
 points: 3
 verification:
   status: verified

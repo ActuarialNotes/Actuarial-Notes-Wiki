@@ -11,6 +11,7 @@ wiki_link:
   - Concepts/Mixed+Poisson+Process
   - Concepts/Mixing+Distribution
   - Concepts/Gamma
+  - Concepts/Scale+and+Shape+Parameters
 answer: "D"
 points: 1
 verification:

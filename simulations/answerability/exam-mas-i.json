@@ -321,7 +321,15 @@
        "page": "Pure Endowment",
        "quote": "An [[Endowment Insurance|endowment insurance]] is a [[Term Life Insurance|term insurance]] plus a pure endowment, $A_{x:\\overline{n}|} = A^{1}_{x:\\overline{n}|} + {}_nE_x$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Endowment Insurance",
+      "quote": "is the sum of the term insurance and pure endowment present values",
+      "note": "retagged Endowment Insurance; passage on Endowment Insurance: its PV is the term insurance plus pure endowment parts (A = A^1 + nE); the question (failure benefit plus survival refund) is an endowment-type contract, so the page belongs to its subject but is untagged.",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     }
    ]
   },
@@ -3158,7 +3166,15 @@
        "page": "Long-Term Insurance Coverage",
        "quote": "$$\\text{EPV} = \\sum_{k} \\text{CF}_k\\, v^{k}\\,\\Pr(\\text{CF}_k \\text{ is paid})$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Term Life Insurance",
+      "quote": "its present value random variable is $Z$ and its expected present value (EPV), the net single premium, is",
+      "note": "retagged Term Life Insurance; Term Life Insurance (out of reach; Whole Life links it but is itself only linked) defines the benefit's value as the expected present value of its PV random variable; one tag closes r1 and r4.",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r2",
@@ -3201,7 +3217,15 @@
        "page": "Term Life Insurance",
        "quote": "$$A^{1}_{x:\\overline{n}|} = \\sum_{k=0}^{n-1} v^{k+1}\\,{}_kp_x\\,q_{x+k}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Term Life Insurance",
+      "quote": "A^{1}_{x:\\overline{n}|} = \\sum_{k=0}^{n-1} v^{k+1}\\,{}_kp_x\\,q_{x+k}",
+      "note": "retagged Term Life Insurance; the warranty is an N-year term insurance paid at the end of the year of failure; Term Life Insurance states its EPV formula; same tag as r1.",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r5",
@@ -3479,7 +3503,15 @@
        "page": "Estimator",
        "quote": "Use $E[X_{(n)}] = \\frac{n\\theta}{n+1}$ and $\\text{Var}(X_{(n)}) = \\frac{n\\theta^2}{(n+1)^2(n+2)}$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Estimator",
+      "quote": "\\text{Var}(X_{(n)}) = \\frac{n\\theta^2}{(n+1)^2(n+2)}",
+      "note": "retagged Estimator; Estimator states Var(X_(n)) for Uniform(0, theta); the question is on consistency of estimators of theta, so the page is its subject; same retag as masi-an-035:r5.",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r5",
@@ -8190,7 +8222,15 @@
        "page": "Parametric Survival Model",
        "quote": "De Moivre's law has $\\mu_x = 1/(\\omega - x)$, so $T_x$ is [[Uniform Continuous Distribution|uniform]] on $(0, \\omega - x)$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Parametric Survival Model",
+      "quote": "De Moivre's law has $\\mu_x = 1/(\\omega - x)$, so $T_x$ is",
+      "note": "retagged Parametric Survival Model; the question works from a hazard rate of a survival model, and Parametric Survival Model states that de Moivre's force 1/(ω − x) makes T_x uniform on (0, ω − x).",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r5",
@@ -11491,7 +11531,15 @@
        "page": "Scale and Shape Parameters",
        "quote": "A **scale parameter** $\\theta$ sets the units: multiplying the loss by a positive constant $c$ multiplies $\\theta$ by $c$ and leaves every other parameter unchanged."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Scale and Shape Parameters",
+      "quote": "In the exam tables, $\\theta$ is the scale parameter of the exponential, gamma, Weibull and Pareto families",
+      "note": "retagged Scale and Shape Parameters; the question inflates a Pareto severity; Scale and Shape Parameters defines a scale parameter as one the multiplication multiplies while changing no other, names θ as the Pareto's, and says inflation is handled by changing θ alone.",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r4",
@@ -12359,7 +12407,15 @@
        "page": "Scale and Shape Parameters",
        "quote": "A **scale parameter** $\\theta$ sets the units: multiplying the loss by a positive constant $c$ multiplies $\\theta$ by $c$ and leaves every other parameter unchanged."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Scale and Shape Parameters",
+      "quote": "if that multiplication multiplies it by the same constant and changes no other parameter. In the first two blocks, $X_1$ is the member with $\\theta = 1$ and the same shape. In the exam tables, $\\theta$ is the scale parameter of the exponential, gamma, Weibull and Pareto families",
+      "note": "retagged Scale and Shape Parameters; Scale and Shape Parameters (out of reach) defines a scale parameter as the one multiplied by the constant with every other parameter unchanged and names theta as the gamma's scale; the question's gamma rate scaled by time is exactly that.",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r3",
@@ -13352,7 +13408,15 @@
        "page": "Estimator",
        "quote": "Use $E[X_{(n)}] = \\frac{n\\theta}{n+1}$ and $\\text{Var}(X_{(n)}) = \\frac{n\\theta^2}{(n+1)^2(n+2)}$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Estimator",
+      "quote": "\\text{Var}(X_{(n)}) = \\frac{n\\theta^2}{(n+1)^2(n+2)}",
+      "note": "retagged Estimator; Estimator states Var(X_(n)) for Uniform(0, theta); the question compares estimators by efficiency and unbiasedness, so the page is its subject; same retag as masi-2018s-q17:r4.",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     }
    ]
   },
@@ -16840,7 +16904,15 @@
        "page": "Variance Function",
        "quote": "A GLM's estimating equations weight each residual $y_i - \\mu_i$ by $w_i/V(\\mu_i)$, along with a factor from the link."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Variance Function",
+      "quote": "\\mathrm{Var}(Y_i) = \\frac{\\phi\\,V(\\mu_i)}{w_i}",
+      "note": "retagged Variance Function; Variance Function (out of reach) shows the prior weight entering the variance, phi V(mu)/w, and not the mean; it belongs to the question's GLM subject.",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r6",

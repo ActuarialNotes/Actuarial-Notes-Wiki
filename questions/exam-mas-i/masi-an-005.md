@@ -12,13 +12,14 @@ wiki_link:
   - Concepts/Deductible
   - Concepts/Policy+Limit
   - Concepts/Inflation
+  - Concepts/Scale+and+Shape+Parameters
 points: 3
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-10-10
+  last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:3d50a741bb5ba58110da2d2716798e69f74012093f595a6882b55a93c5b18784
+  content_hash: sha256:2ff57cd40466eacc0b002276003e81c5fdd2b7839e42e9c1bb55ab9b4ee528f0
   sources:
     - "CAS Exam MAS-I Tables (excerpts from the appendices to Loss Models, 2nd ed.), A.2.4.1 Pareto: F(x), E[X^x] = theta/(alpha-1)[1-(theta/(x+theta))^(alpha-1)], PDF p.10, sha256:cb5674138a67f7a498b8cc90357144fd121cbcbbc7487f214557b105611a69b4 — https://www.casact.org/sites/default/files/2021-03/masi_tables.pdf"
     - "Frees et al., Loss Data Analytics (open text), ch.3 Modeling Loss Severity, 3.3.2 (scale distributions: multiplying by a constant changes only the scale parameter; inflation), 3.4.3 (Y^L = (X^u) - (X^d); inflation with fixed d and u), sha256:263021bf543b04b2881284b38b7dcbd0586b78daec371b88a1eefcd362dff732 — https://openacttexts.github.io/Loss-Data-Analytics/ChapSeverity.html"

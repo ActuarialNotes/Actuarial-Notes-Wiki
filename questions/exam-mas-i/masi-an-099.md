@@ -11,14 +11,15 @@ wiki_link:
   - Concepts/Generalized+Linear+Model
   - Concepts/Offset+Variable
   - Concepts/Rating+Variable
+  - Concepts/Variance+Function
 answer: "A"
 points: 1
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-10-10
+  last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:e91f2128ceb96b41b4ba90093125f27bad593be5fcb1da575fc5739001da72bc
+  content_hash: sha256:a83eb248e35f174d0b7047303cb80f8ee8402345833de4aa0831a3918c962d64
   sources:
     - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed. (rank 3 for MAS-I), §5.1, PDF p.56 (a temporal variable such as year included as a 'control variable' so that trend and development effects do not influence the rating variables' estimates), sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
     - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed. (rank 3 for MAS-I), §2.9 Correlation Among Predictors, PDF p.37 (the GLM sorts out each variable's unique effect from correlated variables; two-way correlation tables before modeling), sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"

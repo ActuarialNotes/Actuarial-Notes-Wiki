@@ -11,14 +11,15 @@ wiki_link:
   - Concepts/Mixed+Poisson+Process
   - Concepts/Mixing+Distribution
   - Concepts/Gamma
+  - Concepts/Scale+and+Shape+Parameters
 answer: "D"
 points: 1
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-10
+  last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:b4358ccbee7dde985b68ed88713ad9419ef3d417de97cda1f94a354117a9ad7d
+  content_hash: sha256:e8955eb41b32fc32182158f79711a0a732ab1bc37457f87e9fe482d84532a68e
   sources:
     - "Daniel, \"Poisson processes (and mixture distributions)\", CAS Study Note (June 2008), MAS-I reading, Def. & Properties 1.20 property 6 (C*Gamma is gamma with scale C theta), PDF p.11; Def. & Properties 1.21 (negative binomial pmf), PDF p.11; Example 1.24 (mixed Poisson over 2 years: 2 lambda gamma, mixture negative binomial r=alpha, beta=2 theta), PDF p.12, sha256:e345451e9daae82b400aed77f2da0c96c361ed4fbdfd22456b8f711ca0d50888 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Daniel_1.pdf"
     - "CAS Exam MAS-I Tables (excerpts from the appendices to Loss Models, 2nd ed.), B.2.1.4 negative binomial pmf, PDF p.15, sha256:cb5674138a67f7a498b8cc90357144fd121cbcbbc7487f214557b105611a69b4 — https://www.casact.org/sites/default/files/2021-03/masi_tables.pdf"

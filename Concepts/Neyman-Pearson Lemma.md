@@ -2,14 +2,15 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-10-05
+  last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:804279c52526991bf08cf40b432d8aab3874d2d318ff769259362321713703d7
+  content_hash: sha256:17dcbba3af380d77e784d49d7ba42df1ce8165f7de2302b885302d859ceb4e9c
   sources:
     - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random), ch.8 §5 Likelihood Ratio Tests (fetched 2026-10-05): L = f0/f1, reject iff L <= l; random-sample product form; Neyman-Pearson Lemma (P0(R) >= P0(A) implies P1(R) >= P1(A)); exponential scale and Bernoulli models: tests do not depend on the alternative's value, UMP for the usual one-sided tests; only certain alpha attainable for discrete data; normal-model one-sided tests UMP, none of the two-sided tests UMP; generalised LR = sup over Theta_0 / sup over T, sha256:60b047835a3f644cd2317c8ab984b8d41ae7669f53c1d32a79705942670b9b04 — https://www.randomservices.org/random/hypothesis/Likelihood.html"
     - "CAS Exam MAS-I Tables (version 01/15/2018), p.3 normal table: Phi(0.35) = 0.6368, Phi(0.36) = 0.6406; selected values z = 1.645 at 0.950, sha256:cb5674138a67f7a498b8cc90357144fd121cbcbbc7487f214557b105611a69b4 — https://www.casact.org/sites/default/files/2021-03/masi_tables.pdf"
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), reading list PDF p.6: Hogg Domain B §§8.1, 8.2, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
     - "Hogg, McKean & Craig, Introduction to Mathematical Statistics 8th ed. (Global Ed.), publisher preview, contents PDF p.8: §8.1 Most Powerful Tests (p.483), §8.2 Uniformly Most Powerful Tests (p.493) (contents only), sha256:7fd80607a820477e03ff2c8f3469f5cfa57d095d766cbc29d39d723ef5a69a99 — https://api.pageplace.de/preview/DT0400.9781292264783_A39514650/preview-9781292264783_A39514650.pdf"
+    - "Mackey, Stanford STATS 300A (Fall 2015) Lecture 13, Theorem 1 Neyman-Pearson Lemma (TSH 3.2.1): (i) phi = 1 if p1/p0 > k, 0 if p1/p0 < k, size alpha; (ii) sufficiency; (iii) necessity (MP test satisfies (b) for some k), pp. 13-1 to 13-3, sha256:c3693500bac6f3afd2f5acdf10bc74bbd6cf6759ad6976916c8af3ed5d711c7b — https://web.stanford.edu/~lmackey/stats300a/doc/stats300a-fall15-lecture13.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Neyman-Pearson Lemma.md
@@ -25,6 +26,8 @@ The **Neyman-Pearson Lemma** says how to build the **most powerful test** of a s
 - **The guarantee:** if any other critical region $A$ has $P_0(A) \le P_0(C)$, then $P_1(A) \le P_1(C)$.
 - **In practice** the inequality $L \le k$ simplifies to a condition on a [[Sufficient Statistic|sufficient statistic]], such as $\sum X_i \ge c$, and $c$ is set from that statistic's distribution under $H_0$. With discrete data only certain sizes $\alpha$ can be attained exactly.
 - **Uniformly most powerful (UMP) tests.** If the best critical region for $\theta_0$ against $\theta_1$ is the *same* for every $\theta_1$ in a composite alternative, it is most powerful against each of them, and so is UMP. The one-sided tests for an exponential mean, a binomial $p$, or a normal mean or variance are UMP; the two-sided tests are not, because the best region for $\theta_1 > \theta_0$ is the opposite tail from the best region for $\theta_1 < \theta_0$.
+- **Points the alternative rules out.** Written without the division, the lemma rejects where $f_1(\mathbf{x}) > f_0(\mathbf{x})/k$ and accepts where $f_1(\mathbf{x}) < f_0(\mathbf{x})/k$, with the same $k > 0$. A point with $f_1(\mathbf{x}) = 0 < f_0(\mathbf{x})$, where the ratio $f_0/f_1$ is infinite, is therefore never rejected: such points add Type I error without adding power, so they are excluded from the best critical region.
+- **Ties.** On the set where $f_1(\mathbf{x}) = f_0(\mathbf{x})/k$, the ratio is constant and the lemma leaves the test free there: any test that follows the rule off that set and has size exactly $\alpha$ is most powerful, and, conversely, every most powerful test has this form for some $k$, leaving it free only where the ratio equals that $k$. So where the ratio is constant over a region, any part of the region carrying the required probability under $H_0$ gives the same size and the same power.
 - The [[Likelihood Ratio Test]] generalizes the ratio to composite hypotheses by maximizing each likelihood over its parameter set.
 
 > [!example]- Most Powerful Test for an Exponential Claim Size {Example}

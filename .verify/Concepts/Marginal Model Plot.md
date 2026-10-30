@@ -48,3 +48,36 @@ created: 2026-10-04
 - checks_run: Re-verified after resolving F-001: bullet 4 now says only what car::mmps documents for a GLM (response stays on the vertical axis, GAM smoother with the model's family, link and weights, overall plot against the linear predictor) - re-read against car pp.89-91 this session. Rest of page re-read: definition and formula line (two smooths, data vs model, same axes), bullets 1-3 (car mmps), example (linear vehicle-age term missing curvature -> quadratic or banded term: Goldburd §5.4.2-5.4.3). Links resolve; figure embed Media/Figures/Marginal_Model_Plot.svg exists (generated; not re-reviewed in this phase).
 - sources_checked: Fox & Weisberg, R package 'car' 3.1-5 reference manual (2026), mmps 'Marginal Model Plotting' pp.89-91: response on the vertical axis vs a linear combination u of the regressors, with a smooth of the data and a smooth of the fitted values on u; drawn versus each term and versus the fitted values (linear predictor for a GLM); GLM smoother a GAM with the model's family, link and weights, sha256:5471a6e3292bcc8fcd9a83bf8f912989ce46de55e4a323595bcbb91a9d591cd3 — https://cran.r-project.org/web/packages/car/car.pdf; Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, 2nd ed. (CAS Monograph 5; rank 3 for MAS-I), §5.4.1-5.4.3 pp.48-51 (non-linearity remedied by binning or polynomial terms), sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf; CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), Domain C tasks 4 and 8 (p.5), 'Parameter and Diagnostic Tables' (PDF p.7: tables/plots 'of the type shown in the texts'; a language 'such as R'; 'candidates will not be asked to write or interpret R code'), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf
 - note: No open findings. Medium: the plot itself rests on the car reference manual (rank 3); no freely available MAS-I reading covers marginal model plots (Dobson's body not checked; Cook & Weisberg 1997 is paywalled).
+
+## [F-002] Averaging-out claim not stated by the source
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-30T22:10Z/g8C-chk
+- date: 2026-10-30
+- severity: minor
+- status: open
+- locus: body, bullet 'One plot is not enough', last sentence
+- claim: The plot against the linear predictor shows the mean response along that one direction, averaged over everything else, so misfits in individual terms can average out there
+- evidence: Lindsey & Sheather, Stata Journal 10(2) 2010, pp.215-217 (https://ageconsearch.umn.edu/record/152305/files/sjart_st0189.pdf, sha256:72fdd15b952940164d31d7bd8fee1562d37f145642ab5d67611d493d4b3d5189) state only that fit is good if the lines match in each plot and not good if there is significant disparity in any, and that the model line estimates E_M(y|a'x) = E{E_M(y|x)|a'x}; no source read says term misfits 'average out'. Restated to what the source supports: the linear-predictor plot checks the fit along one direction only.
+- source_rank: 3
+- applied: true
+- fingerprint: e2bfd71f9de6
+
+## [F-002/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-30T22:10Z/g8C-chk
+- date: 2026-10-30
+- resolves: F-002
+- status: resolved
+- note: Restated in this run to what Lindsey & Sheather state: the linear-predictor plot's model line is the model's mean given that one combination of the predictors, averaged over everything else, so it checks the fit along one direction only; the 'average out' clause was cut.
+
+## [C-003] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-30T22:10Z/g8C-chk
+- date: 2026-10-30
+- status_set: verified
+- confidence: high
+- checks_run: Diff check: git diff against HEAD (last verified bytes) confined to the body, frontmatter untouched; question files read, no numbers, scenario or answer on the page; page keeps the concept-definitions shape. G8: MAS-I. Added bullet checked against Lindsey & Sheather pp.215-217; finding F-002 (averaging-out clause not in the source) restated in this run.
+- sources_checked: Fox & Weisberg, R package 'car' 3.1-5 reference manual (2026), mmps 'Marginal Model Plotting' pp.89-91: response on the vertical axis vs a linear combination u of the regressors, with a smooth of the data and a smooth of the fitted values on u; drawn versus each term and versus the fitted values (linear predictor for a GLM); GLM smoother a GAM with the model's family, link and weights, sha256:5471a6e3292bcc8fcd9a83bf8f912989ce46de55e4a323595bcbb91a9d591cd3 — https://cran.r-project.org/web/packages/car/car.pdf; Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, 2nd ed. (CAS Monograph 5; rank 3 for MAS-I), §5.4.1-5.4.3 pp.48-51 (non-linearity remedied by binning or polynomial terms), sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf; CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), Domain C tasks 4 and 8 (p.5), 'Parameter and Diagnostic Tables' (PDF p.7: tables/plots 'of the type shown in the texts'; a language 'such as R'; 'candidates will not be asked to write or interpret R code'), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf; Lindsey & Sheather, 'Model fit assessment via marginal model plots', Stata Journal 10(2) 2010, pp.215-217 (k+1 plots, one per predictor and one for the linear form; good fit if lines match in each plot, not if significant disparity in any; model line E_M(y|a'x) = E{E_M(y|x)|a'x}), sha256:72fdd15b952940164d31d7bd8fee1562d37f145642ab5d67611d493d4b3d5189 — https://ageconsearch.umn.edu/record/152305/files/sjart_st0189.pdf

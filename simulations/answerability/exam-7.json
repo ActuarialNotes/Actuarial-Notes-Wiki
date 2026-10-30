@@ -2537,7 +2537,15 @@
      "statement": "Industry statistics such as Schedule P data are of limited use for reinsurance reserving because categories like excess casualty blend many lines of business and attachment points and are inconsistent across companies.",
      "concept": "Reinsurance Loss Reserving",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Reinsurance Reserving",
+      "quote": "The lines are not split finely enough by major line of business or type of reinsurance. The combined experience may not reflect any one reinsurer's markets, terms and operations.",
+      "note": "Friedland PDF p.48: Schedule P's reinsurance segments are too coarse by line and type of reinsurance and blend experience that fits no single reinsurer, which is why industry statistics are of limited use. The item's 'blend of attachment points' is not in Friedland, but the core fact is taught.",
+      "date": "2026-10-30",
+      "run": "g8-cas7-chk-ri"
+     }
     },
     {
      "id": "r4",
@@ -8969,7 +8977,15 @@
      "statement": "Diverse coding and handling requirements for heterogeneous reinsurance business strain data coding and IT systems, causing backlogs and processing errors that hamper reserving.",
      "concept": "Reinsurance Reserving Challenges",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Reinsurance Reserving",
+      "quote": "Every cedant and broker has different IT systems and reports. Turning their bordereaux into the format actuarial work needs is hard to do efficiently and accurately, and remains manually intensive.",
+      "note": "Friedland (PDF pp.32-33, 40-41): data coding at the reinsurer and heterogeneous cedant/broker IT systems make absorbing reinsurance data hard to do efficiently and accurately, a manual process; that is the item's strain on coding and IT systems leading to delays and errors.",
+      "date": "2026-10-30",
+      "run": "g8-cas7-chk-ri"
+     }
     }
    ]
   },

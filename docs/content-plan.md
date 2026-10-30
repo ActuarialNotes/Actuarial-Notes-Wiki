@@ -62,7 +62,7 @@ script is the single definition, for both bodies, so the plan is measured rather
 | **G5 sources** | Every Source Material reading has a `Resources/` page, and it is `verified`. |
 | **G6 questions** | Every syllabus concept has at least one question the quiz serves, in the exam's own bank. |
 | **G7 bank** | Every question the quiz serves from that bank is `verified`. |
-| **G8 answerable** | Every served question has been through `check-answerable` since its text last changed, and everything its official solution uses is either quoted — re-read in code, against the page as it is now — on a page the question is tagged with, one link from one, or a page of an exam its exam assumes, or recorded as not required, with a note. |
+| **G8 answerable** | Every served question has been through `check-answerable` since its text last changed, and everything its official solution uses is either quoted — re-read in code, against the page as it is now — on a page the question is tagged with, one link from one, a page the exam's own learning objectives link, or a page of an exam its exam assumes, or recorded as not required, with a note. |
 
 The rules underneath are `docs/verification.md`'s: nothing reaches `verified` without a citable
 external source read in that run (P1), and any edit drops a file back to `stale` (P4). Questions
@@ -95,9 +95,10 @@ It gates on what has been **done about** each item, which the vault can show (D2
 - **Re-read in code, now.** `publication_readiness.py` reads the record against the vault on every
   run (`scripts/answerability_lib.py`, standard library, so CI runs it). Each quote must still be on
   its page, and the page must still be in the question's reach: tagged, one link from a tagged
-  page, or a page of an exam that the exam page's *Prerequisite knowledge* callout names. That
-  last rule is transitive and read off the pages: MAS-II's callout names MAS-I, whose callout names
-  P and FM. A passage deleted or a tag dropped re-opens the item.
+  page, a page the exam page's own learning objectives link (its syllabus, D30), or a page of an
+  exam that the exam page's *Prerequisite knowledge* callout names. That last rule is transitive
+  and read off the pages: MAS-II's callout names MAS-I, whose callout names P and FM. A passage
+  deleted, a tag dropped or a page taken off the syllabus re-opens the item.
 - **An item closes by an edit.** The passage is written from the reading (§1.2 rule 10), the
   question is retagged or a link is added, or a passage the check missed is found. Each ends the
   same way: `answerability_lib.py resolve` with a quote on a page in reach, which it refuses if the
@@ -105,9 +106,12 @@ It gates on what has been **done about** each item, which the vault can show (D2
   again, so G4 holds the edit to its source. An item that isn't course content (arithmetic, data
   the question gives) closes with `not-required` and a note saying why. A question moved
   off-syllabus leaves the count.
-- **A reworded question goes back to the check.** The record keeps a hash of each question's text
-  below its frontmatter (stem, options, solution). A question whose text changed is re-run with
-  `--ids`; a retag or a fact-check sync doesn't change it.
+- **A reworded question goes back to the check, and nothing else does.** The record keeps a hash
+  of each question's text below its frontmatter (stem, options, solution). A question whose text
+  changed is re-run with `--ids`; a retag or a fact-check sync doesn't change it. A page edit
+  doesn't send its questions back either (D31): `resolve` has already proved the item closed, in
+  code, and a fresh model run would list the question's requirements differently and open new
+  items for work already done.
 
 `python3 scripts/answerability_lib.py status --exam <exam>` lists what G8 still needs, and
 `publication_readiness.py --exam <exam>` lists it under the other gates.
@@ -165,7 +169,18 @@ Adopted during the DISC, MAS-I and Exam 7 campaigns (Appendix A), and binding on
     the method or fact the reading teaches, with its own example. Never put the question's
     numbers on the page: a page that holds the question's answer makes every later check, and
     every reader, pass by recall. The writer and the checker are different agents (rule 2), and
-    `check-answerable --ids` is re-run on the questions that named the gap.
+    the checker closes the item with `answerability_lib.py resolve`, quoting the new passage. The
+    question isn't re-run (D31).
+11. **Sort a bank's open items before anyone writes.** One checker pass per bank, grouped by the
+    page each item belongs on, closes with `not-required` what isn't course content (a step of
+    this one solution's plan, the question's own wording or setup, arithmetic), and merges the
+    near-duplicates, before a writer sees the list. On a random 14 of Exam P's items, about 9
+    were not course content.
+12. **Edit a page once, for every bank that reaches it.** Group the open items by page across
+    banks, so a page gets one edit and one fact check. Work up the prerequisite chain: P and FM
+    first, since a fix on their pages also closes items in MAS-I and MAS-II, which reach them;
+    and run a bank's check *after* the pages it reaches are fixed, so it doesn't open items that
+    are already closed.
 
 ---
 
@@ -575,6 +590,13 @@ below is a G8 item: it closes only through `answerability_lib.py` (§1), and
   (Phase 2), and on the seven banks of the exams moved back from ready in step 0. At about $0.22 a question: the eight beta banks
   not yet run (1,478 served questions) about $325, the seven moved back (2,020) about $445, and all
   ~3,640 about $800.
+- **The check's own cost (30 Oct).** P's run cost $110 for 719 questions and FM's $76 for 460. The
+  locator is now sent the pages first and takes its second look as a follow-up turn, with the
+  pages already in its context, so a question that needs a second look no longer pays for its
+  pages twice. The locator runs on Haiku and the second look on Sonnet, and the requirements prompt
+  leaves out the plan of one solution. On 20 of P's questions with gaps, the old code cost $3.35
+  and found 20 items missing; the new one $1.18 and 11 (`docs/simulated-learner.md`). At that rate
+  the ~2,000 questions still to check cost about $120, not $400.
 - **The tooling.** Gaps are grouped by the extractor's free concept name, mapped onto a page
   (`home_page`), so a few still land under "no page for …" when a page exists under another name.
   A rebuilt record (`import-report`) carries the concept only for a gap the report listed under its
@@ -744,6 +766,25 @@ G8 passing. Step 10 is listed last but is placed by step 0's runs. Each of the s
 from ready, so by rule 2 any whose items come back few goes ahead of steps 1–9. One whose bank
 turns out like MAS-II's waits its turn by candidates over cost, like any other beta exam.
 
+**Placed (30 Oct): step 10 goes first, up the prerequisite chain** (§1.2 rules 11 and 12). Step 0's
+runs are complete for P and FM and partial for the other five. Under D30 the open items are:
+
+| Bank | Answerable | Taught on no page | Out of reach | Not yet checked |
+|---|---:|---:|---:|---:|
+| exam-p | 284 / 719 | 456 | 227 | 0 |
+| exam-fm | 253 / 460 | 241 | 59 | 0 |
+| exam-mas-i | 35 / 281 | 22 | 7 | 225 |
+| exam-mas-ii | 80 / 141 | 113 | 17 | 0 |
+| exam-7 | 21 / 125 | 30 | 7 | 83 |
+| exam-disc-da | 48 / 70 | 8 | 7 | 11 |
+| exam-disc-rm | 53 / 144 | 5 | 6 | 84 |
+| exam-disc-ia | 54 / 221 | 5 | 7 | 159 |
+
+The order: P's and FM's items sorted (rule 11), then their pages written, one edit per page; then
+MAS-I's last 225 questions checked, so they meet P's and FM's pages already fixed; then MAS-I's
+items, then MAS-II (step 1) on the same rule. Exam 7 and the DISCs reach none of those pages and
+are short lists: finish their runs and close them alongside. Steps 2–9 follow as listed.
+
 **Sizing.** These numbers come from `verification-plan.md` §6 and the FM and Exam 9 packets:
 
 - **Concepts:** about 15k tokens each, about 4.5M for the 292.
@@ -896,8 +937,8 @@ The roadmap's §0.4, as it applies to a vault change:
 - A promotion cites `--check`'s output, and its line here and in the roadmap changes in the same
   PR. It also gives the exam's answerability figures from its latest `check-answerable` run
   (§2.2), which aren't a gate under D29's default.
-- A page edited to close an answerability gap re-runs `check-answerable --ids` on the questions
-  that named it.
+- A page edited to close an answerability gap closes the item with `resolve`, quoting the new
+  passage; the question isn't re-run (D31). A reworded question is.
 - Nothing written by a model ships as `verified` on its writer's say-so: a different agent checks
   it against a cited source, and the README's rule holds — no page is published 100% AI-written
   without human review.
@@ -932,6 +973,8 @@ build with the default until the decision is made.
 | D27 | — (new, 25 Oct) | Extend D22's open-text method from Exam 9 to every beta exam: commercial readings' pages at medium against contents, catalogue and outline; their concepts at medium against open texts; what no open source states cut or restated rather than left `in_review` | **Yes**, the method Phase 2 runs on. It follows from D7 and D22 and needs no new rule; it is recorded so a sweep doesn't ask exam by exam |
 | D28 | D20, re-asked (25 Oct) | A reading that is **only in the CAS study kit**, with a page that states only what the outline says (citation, assigned pages, the cases or sections it lists) and nothing about the document's content. Verify that page at medium against the outline, the way D22's pages were verified against contents and catalogue, or hold it `in_review` until someone reads the kit. New reason: under D20 this blocks **Exam 8** (the ISO CGL plan) and also **Exam 6C** (Agricultural Programs, Baer & Rendall, KPMG Regulatory Oversight, Landmark Legal, McDonald, Morneau Shepell), so two of the ten beta exams can't reach `ready` without the kit | ✅ settled 25 Oct 2026: **hold.** A study-kit-only reading stays `in_review` until the kit itself is read; P1 is not loosened and the outline is not a substitute. Exam 8 and 6C stay beta on these pages alone, and the rest of both campaigns runs regardless |
 | D29 | — (new, 25 Oct) | Should **answerability** (C20) hold a promotion back? It could be an eighth gate (every served question answerable from its tagged pages or one link away), a bar on the gap share, or a figure the promotion only reports | ✅ settled 25 Oct 2026 by the maintainer: **an eighth gate, G8** (§1). The first default, report and don't gate, was overturned. The check's own score is noisy, so G8 gates on each item's resolution, re-read in code against the vault: a quote on a page in reach (tagged, one link away, or a page of an exam the *Prerequisite knowledge* callout names) or a `not-required` note. A prerequisite exam's pages count as in reach, read off the callout, never inferred. The seven exams promoted before G8 first kept `ready` under this decision's default; **the maintainer moved them back to `beta` the same day** (P, FM, MAS-I, DISC-DA, DISC-RM, DISC-IA, Exam 7: `examStatus.ts` and `exam_catalog.json`). Each is promoted again, one PR each, when `--check` passes all eight (Phase 2, steps 0 and 10). Until then `--hold` holds no exam. Moves Phase 2's finish line (§4, *Sizing*) |
+| D30 | — (new, 30 Oct) | G8's reach left out the exam's **own** syllabus pages while counting every page of a prerequisite exam: a requirement taught on *Poisson Distribution* was out of reach for an Exam P question not tagged with it, though every P candidate studies that page and every MAS-I candidate reaches it as a prerequisite. On 30 Oct, 420 of Exam P's 673 out-of-reach items and 294 of FM's 358 sat on their exam's own syllabus pages | ✅ settled 30 Oct 2026 by the maintainer: **a page the exam page's learning objectives link is in reach** (tier `syllabus`, between `linked` and `prerequisite`), read off the page in code like the prerequisites. Every quote is still re-read against its page. Retagging stays the fix for what is left `elsewhere`; a retag still stales the question (P4 unchanged) |
+| D31 | — (new, 30 Oct) | Rule 10 re-ran `check-answerable --ids` on every question whose gap a page edit closed | ✅ settled 30 Oct 2026 by the maintainer: **no re-run after a resolve.** `resolve` proves the item closed in code; a re-run only lists the requirements afresh and opens new items. A question is re-run only when its own text changes, which G8 already enforces |
 | — | verification plan §7.5 | Write missing reading pages before their concepts' packets | ✅ settled: write them first (6U's and Exam 8's were) |
 | — | Exam 9 campaign (A.4) | Its three held questions | ✅ settled 18 Oct 2026: **2013 Q15** gets a note naming the two assumptions its key rests on (no investment income on capital; losses at year end), then a re-pass; **2014 Q16b** keeps CAS's ranking (the CDO² tranche safest) with a note that CAS accepted any ranking with a valid explanation, then a re-pass; ***Prepayment Risk*** is cut back to the outline's words; `cas9-an-009` was to be replaced by a C5 question on Panning or CJS, but that would leave *Prepayment Risk* with no served question (G6), so the maintainer kept it, noted as outside the readings |
 | — | CAS plan D6 | Frameworks only The Institutes' course states | ✅ settled 11 Oct 2026: rewritten to open sources (Appendix A.2.6) |

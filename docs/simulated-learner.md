@@ -152,12 +152,25 @@ For each question, two isolated calls and a check in code:
    passage is the costly error (it becomes backlog) and the locator misses passages it finds
    on another run.
 
-Each item ends `tagged`, `linked` (one link away), `prerequisite` (on a page of an exam this one
+**Models and cost.** `--model` (Sonnet) lists the requirements; `--locate-model` (Haiku) finds the
+passages, sent the pages first so the long part of the prompt can come from the cache; and
+`--recheck-model` (Sonnet) takes the second look at items with nothing found. Pass the same model
+for both and the second look is a follow-up turn of the locator's conversation, with the pages
+already in its context. Measured on 20 Exam P questions with open gaps (30 Oct): the old code
+listed 80 requirements, 20 missing, for $3.35; the requirements prompt that leaves out the plan of
+one solution (which unknown is solved for, a substitution, the question's own wording) listed 71,
+9 missing, for $2.11 with Sonnet locating; and $1.18 with Haiku locating and Sonnet rechecking.
+Handed the same 71 requirements, Haiku with a Sonnet recheck put none of Sonnet's in-reach items
+out of reach and found two that Sonnet missed. The gaps the old prompt listed and the new one
+doesn't are almost all "translate the condition into an equation and solve".
+
+Each item ends `tagged`, `linked` (one link away), `syllabus` (on a page the exam page's own
+learning objectives link, content decision D30), `prerequisite` (on a page of an exam this one
 assumes), `elsewhere` (in the vault, but out of reach) or `missing`, and `collapsed` when every
 place it is taught sits in a folded callout. What an exam assumes is read off its page's
 *Prerequisite knowledge* callout, transitively: a concept page it links, and every
 learning-objective concept of an exam page it links (MAS-II's names MAS-I, MAS-I's names P and
-FM). A question is **answerable** (everything tagged, linked or prerequisite), **untagged** (all
+FM). A question is **answerable** (everything tagged, linked, syllabus or prerequisite), **untagged** (all
 in the vault, some of it out of reach) or a **gap**. `report.md` ranks the gaps by the page that should hold
 them (`home_page` maps the extractor's free concept names onto pages), lists the tagging gaps
 and the collapsed-only items, and counts verdicts by sitting: a paper whose gaps far outrun the

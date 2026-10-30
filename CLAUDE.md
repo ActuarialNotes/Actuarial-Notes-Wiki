@@ -288,8 +288,9 @@ before touching that area**:
   never with the question's own numbers. Each run is merged into a committed record per bank,
   `simulations/answerability/<bank>.json`, which `scripts/answerability_lib.py` (standard library)
   re-reads against the vault as the publication gate **G8**: a quote still on its page, the page
-  still tagged, one link away or on a prerequisite exam's page (the exam page's *Prerequisite
-  knowledge* callout), or the item recorded `not-required`. Items are closed with its `resolve` /
+  still tagged, one link away, on the exam's own syllabus (a page its learning objectives link) or
+  on a prerequisite exam's page (the exam page's *Prerequisite knowledge* callout), or the item
+  recorded `not-required`. Items are closed with its `resolve` /
   `not-required` commands, which refuse a quote that isn't on the page; `status --exam` lists
   what is open.
 - `docs/analytics-and-monitoring.md` — **Google Analytics** and error capture. GA is not in

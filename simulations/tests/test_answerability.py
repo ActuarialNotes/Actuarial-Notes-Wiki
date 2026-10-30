@@ -14,7 +14,7 @@ sys.path.insert(0, SIM_DIR)
 
 import learner_sim  # noqa: E402
 from learner_sim.answerability import (LOCATE_SYSTEM, REQUIREMENTS_SYSTEM, Candidates, PageIndex,  # noqa: E402
-                                       check_question, home_page, input_hash, merge_found, read_results, report,
+                                       check_question, home_page, input_hash, locate_prompt, merge_found, read_results, report,
                                        run_check, served_questions, verdict, verify_locations)
 from learner_sim.backends import BackendError, ScriptedOneShot  # noqa: E402
 from learner_sim.content_loader import ContentLoader  # noqa: E402
@@ -111,6 +111,14 @@ class VerifyLocationsTests(unittest.TestCase):
         self.assertEqual(r3["places"], [{"page": "C", "collapsed": True,
                                          "quote": "Gamma hides the estimator for k inside."}])
 
+    def test_the_exams_own_syllabus_is_in_reach_ahead_of_a_prerequisite(self):
+        cands = Candidates(tagged=["A"], linked=set(), shown=["A", "B", "C"], prerequisite={"B", "C"}, syllabus={"B"})
+        found = [{"id": "r2", "places": [{"page": "C", "quote": "Gamma hides the estimator for k inside."},
+                                         {"page": "B", "quote": "Beta also teaches the estimator for k here."}]}]
+        r2 = verify_locations(self.reqs, found, cands, self.idx)[1]
+        self.assertEqual((r2["status"], r2["page"]), ("syllabus", "B"))
+        self.assertEqual(verdict([r2]), "answerable")
+
     def test_collapsed_only_if_every_verified_place_is_folded(self):
         found = [{"id": "r1", "places": [{"page": "C", "quote": "Gamma hides the estimator for k inside."},
                                          {"page": "B", "quote": "Beta also teaches the estimator for k here."}]}]
@@ -169,6 +177,58 @@ class RealQuestionTests(unittest.TestCase):
         self.assertEqual(r2["status"], "missing")
         self.assertEqual(self.locates, 2, "a missing item gets one more look")
         self.assertNotIn(self.loader.exam.title, rec["pages_shown"], "the exam page is never a candidate")
+
+    def test_the_pages_open_the_locators_prompt(self):
+        q = self.bank[self.SID]
+        prompt = locate_prompt(q, [{"id": "r1", "kind": "fact", "statement": "s"}], ["Bühlmann-Straub Credibility"],
+                               self.loader)
+        self.assertTrue(prompt.startswith("=== PAGE: Bühlmann-Straub Credibility ==="),
+                        "the long, shared part comes first, so it can be read from the prompt cache")
+        self.assertLess(prompt.index("=== END OF PAGES ==="), prompt.index("REQUIREMENTS:"))
+
+    def test_a_continuing_locator_takes_the_second_look_without_the_pages(self):
+        self.locates = 0
+        prompts = []
+
+        def reply(system, prompt):
+            if system == LOCATE_SYSTEM:
+                prompts.append(prompt)
+                if len(prompts) == 2:
+                    return json.dumps({"found": [{"id": "r2", "places": []}]})
+            return self.reply(system, prompt)
+
+        class Continuing(ScriptedOneShot):
+            continues = True
+            closed = False
+
+            def close(self):
+                Continuing.closed = True
+
+        made = []
+        rec = check_question(self.bank[self.SID], self.loader, "solution text", lambda: ScriptedOneShot(reply),
+                             locate_factory=lambda: made.append(Continuing(reply)) or made[-1])
+        self.assertEqual(len(prompts), 2)
+        self.assertIn("=== PAGE:", prompts[0])
+        self.assertNotIn("=== PAGE:", prompts[1], "the pages are already in the conversation")
+        self.assertIn("- r2 (procedure)", prompts[1])
+        self.assertNotIn("- r1 ", prompts[1], "only the items with nothing found are asked about again")
+        self.assertTrue(Continuing.closed)
+        self.assertEqual(rec["verdict"], "gap")
+
+    def test_a_separate_recheck_model_is_sent_the_pages_again(self):
+        self.locates = 0
+        rechecks = []
+
+        def recheck(system, prompt):
+            rechecks.append(prompt)
+            return json.dumps({"found": [{"id": "r2", "places": []}]})
+
+        check_question(self.bank[self.SID], self.loader, "solution text", lambda: ScriptedOneShot(self.reply),
+                       recheck_factory=lambda: ScriptedOneShot(recheck))
+        self.assertEqual(self.locates, 1, "the locator looks once; the recheck model takes the second look")
+        self.assertEqual(len(rechecks), 1)
+        self.assertTrue(rechecks[0].startswith("=== PAGE:"))
+        self.assertIn("A first reading found no passage", rechecks[0])
 
     def test_run_and_report(self):
         tmp = tempfile.mkdtemp(prefix="answerability-")

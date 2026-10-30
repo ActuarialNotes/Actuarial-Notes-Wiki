@@ -12,7 +12,7 @@ from collections import defaultdict
 
 from . import REPO_ROOT, SIM_DIR
 from .analysis import analyze
-from .backends import ClaudeCodeOneShot, ClaudeCodeSession, ScriptedSession
+from .backends import ClaudeCodeConversation, ClaudeCodeOneShot, ClaudeCodeSession, ScriptedSession
 from .content_loader import ContentLoader
 from .control import run_control
 from .diagnostician import diagnose
@@ -147,7 +147,14 @@ def check_answerable(argv: list[str] | None = None) -> int:
     ap.add_argument("--exam", required=True, help="exam whose bank to check (P, FM, MAS-I, MAS-II, 5, 6C, 7, 8, 9 …)")
     ap.add_argument("--ids", help="comma-separated question ids (default: every served question)")
     ap.add_argument("--limit", type=int, help="check at most this many questions this time")
-    ap.add_argument("--model", default="sonnet", help="model for both calls")
+    ap.add_argument("--model", default="sonnet", help="model that lists each solution's requirements")
+    # Haiku finds what Sonnet finds when it is handed the same requirements, at a fraction of the cost; every
+    # quote is checked in code, and the items it finds nothing for get Sonnet's second look (simulated-learner.md).
+    ap.add_argument("--locate-model", default="haiku",
+                    help="model that looks for each requirement's passage (default: haiku)")
+    ap.add_argument("--recheck-model", default="sonnet",
+                    help="model for the second look at items with nothing found (default: sonnet; the same model as "
+                         "the locator takes it as a follow-up turn, with the pages already in context)")
     ap.add_argument("--parallel", type=int, default=4, help="questions checked at once")
     ap.add_argument("--max-cost", type=float, help="stop starting new questions once the run has cost this many USD")
     ap.add_argument("--out", default=os.path.join(SIM_DIR, "runs"))
@@ -167,8 +174,15 @@ def check_answerable(argv: list[str] | None = None) -> int:
         results = read_results(os.path.join(out_dir, "results.jsonl"))
     else:
         ids = [s.strip() for s in args.ids.split(",")] if args.ids else None
+        locate_model, recheck_model = args.locate_model, args.recheck_model
+        if recheck_model == locate_model:
+            locate_factory, recheck_factory = (lambda: ClaudeCodeConversation(locate_model)), None
+        else:
+            locate_factory = lambda: ClaudeCodeOneShot(locate_model)  # noqa: E731
+            recheck_factory = lambda: ClaudeCodeOneShot(recheck_model)  # noqa: E731
         results = run_check(exam, loader, bank, out_dir, lambda: ClaudeCodeOneShot(args.model), ids=ids,
-                            limit=args.limit, parallel=args.parallel, max_cost=args.max_cost)
+                            limit=args.limit, parallel=args.parallel, max_cost=args.max_cost,
+                            locate_factory=locate_factory, recheck_factory=recheck_factory)
     path = os.path.join(out_dir, "report.md")
     sittings = {sid: q.sitting for sid, q in bank.items()}
     write(path, report(exam, results, loader, run_id, left_out, sittings))

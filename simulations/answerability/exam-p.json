@@ -2494,7 +2494,15 @@
      "statement": "The event that at least r successes occur before the s-th failure in independent trials is equivalent to having at least r successes in the first r+s-1 trials.",
      "concept": "Negative Binomial Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Negative Binomial Distribution",
+      "quote": "The event \"at least $r$ successes occur before the $s$-th failure\" is the same as \"at least $r$ successes in the first $r+s-1$ trials\" (otherwise the $s$-th failure has already occurred)",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), §11.4 The Negative Binomial Distribution, The Problem of Points: A wins n points before B wins m iff Y_(n+m-1) >= n — https://www.randomservices.org/random/bernoulli/NegativeBinomial.html; checked in the w3 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w3"
+     }
     },
     {
      "id": "r3",
@@ -9320,7 +9328,15 @@
      "statement": "A density specified only up to proportionality has a normalizing constant that does not affect the location of its maximum, so the mode can be found by maximizing the unnormalized kernel.",
      "concept": "Probability Density Function",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Mode",
+      "quote": "so the mode of a density given only up to proportionality is the maximizer of $g$ over the support, and $c$ never needs to be found.",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §9.1.2 MAP estimation: f_Y(y) does not depend on x, so equivalently maximize f_{Y|X}(y|x)f_X(x) — https://www.probabilitycourse.com/chapter9/9_1_2_MAP_estimation.php; checked in the w3 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w3"
+     }
     }
    ]
   },
@@ -9366,7 +9382,15 @@
      "statement": "A density given only as proportional to a function has a constant of proportionality that does not affect the location of its maximum, so the mode can be found from the unnormalized function.",
      "concept": "Probability Density Function",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Mode",
+      "quote": "so the mode of a density given only up to proportionality is the maximizer of $g$ over the support, and $c$ never needs to be found.",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §9.1.2 MAP estimation: f_Y(y) does not depend on x, so equivalently maximize f_{Y|X}(y|x)f_X(x) — https://www.probabilitycourse.com/chapter9/9_1_2_MAP_estimation.php; checked in the w3 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w3"
+     }
     },
     {
      "id": "r4",
@@ -10654,7 +10678,15 @@
        "page": "Limited Expected Value",
        "quote": "E[X \\wedge u] = E[X] - E[\\max(X - u, 0)]"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Discrete Random Variable",
+      "quote": "E[(N-1)_+] = E[N] - E[\\min(N, 1)] = E[N] - P(N \\ge 1)",
+      "note": "written from SOA Exam C Sample Solutions (C-09-15), Q#209: 'For any deductible d … E[(X-d)+] = E(X) - E(X ∧ d)', PDF p.74, sha256:de58b71716cce5fbbe82cd3b31d1533db67686a86cabe407844ae403534a9a4a — https://www.soa.org/globalassets/assets/files/edu/edu-exam-c-sample-sol.pdf; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org) §11.1 Introduction, an indicator with P(X=1)=p has mean p — https://www.randomservices.org/random/bernoulli/Introduction.html; checked in the w3 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w3"
+     }
     }
    ]
   },
@@ -11697,7 +11729,15 @@
      "statement": "A Bernoulli random variable with success probability p has variance p(1-p).",
      "concept": "Bernoulli Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Binomial Distribution",
+      "quote": "Since $X^2 = X$, $E[X] = E[X^2] = p$, so $\\text{Var}(X) = p - p^2 = p(1-p)$ and $\\text{SD}(X) = \\sqrt{p(1-p)}$.",
+      "note": "written from Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL 2006), §6.2 Bernoulli Trials, E(Xj)=p, E(Xj^2)=p, V(Xj)=pq, p.261 (PDF p.269) — https://math.dartmouth.edu/~prob/prob/prob.pdf; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), Bernoulli Trials §11.1 Introduction, indicator X^n = X, var(X) = p(1-p) — https://www.randomservices.org/random/bernoulli/Introduction.html; checked in the w3 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w3"
+     }
     },
     {
      "id": "r2",
@@ -17362,7 +17402,15 @@
      "statement": "To find an unknown binomial success probability from a stated relationship between two point probabilities, set up the equation between the two pmf expressions and solve for p, e.g. by taking their ratio so p/(1-p) is isolated.",
      "concept": "Binomial Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Binomial Distribution",
+      "quote": "So when one point probability is stated as a multiple of another, divide the two pmf expressions and solve the simple equation left for the odds $p/(1-p)$ (or for $n$).",
+      "note": "written from Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL 2006), §5.1 Poisson distribution, b(n,p,k)/b(n,p,k-1) = (λ-(k-1)p)/(kq), p.189 (PDF p.197) — https://math.dartmouth.edu/~prob/prob/prob.pdf; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), §11.2 The Binomial Distribution, f_n(k) > f_n(k-1) iff p/k > (1-p)/(n-k+1) — https://www.randomservices.org/random/bernoulli/Binomial.html; checked in the w3 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w3"
+     }
     },
     {
      "id": "r5",
@@ -18771,7 +18819,15 @@
      "statement": "When trials have unequal success probabilities, find the distribution of the total count by conditioning on or enumerating the outcome of the differing trial and combining it with the binomial probabilities of the identical trials (sum over mutually exclusive cases).",
      "concept": "Sum of Independent Bernoulli Random Variables",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Binomial Distribution",
+      "quote": "If independent trials do not share one $p$, their total count is not binomial. Condition on the outcome of the differing trial and add the mutually exclusive cases (the law of total probability).",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §1.4.2 Law of Total Probability, P(A)=Σ P(A|B_i)P(B_i) — https://www.probabilitycourse.com/chapter1/1_4_2_total_probability.php; checked in the w3 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w3"
+     }
     },
     {
      "id": "r5",
@@ -20385,7 +20441,15 @@
      "statement": "The number of purchases among independent customers with different success probabilities is a sum of independent (non-identical) Bernoulli trials, and its distribution is found by conditioning on which customers succeed.",
      "concept": "Bernoulli Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Binomial Distribution",
+      "quote": "With several differing trials, enumerate which of them succeed, multiply by the binomial probability for the identical trials in each case, and sum over the cases.",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §1.4.2 Law of Total Probability, P(A)=Σ P(A|B_i)P(B_i) — https://www.probabilitycourse.com/chapter1/1_4_2_total_probability.php; checked in the w3 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w3"
+     }
     },
     {
      "id": "r2",
@@ -21968,7 +22032,15 @@
      "statement": "Recover a discrete probability mass function from tail probabilities by differencing consecutive values: p(x) = P[X ≥ x] − P[X ≥ x+1], with p at the largest support point equal to P[X ≥ that point].",
      "concept": "Probability Mass Function",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Discrete Random Variable",
+      "quote": "the PMF is recovered by differencing tail probabilities, $p(x) = P(X \\ge x) - P(X \\ge x + 1)$, with $p(n) = P(X \\ge n)$ at the largest value.",
+      "note": "written from Pishro-Nik §3.2.1 Cumulative distribution function: F_X(x_k) - F_X(x_k - ε) = P_X(x_k) — https://www.probabilitycourse.com/chapter3/3_2_1_cdf.php; Pishro-Nik §1.3.2 Axiom 3 (additivity of disjoint events) — https://www.probabilitycourse.com/chapter1/1_3_2_probability.php; checked in the w3 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w3"
+     }
     },
     {
      "id": "r4",
@@ -22255,7 +22327,15 @@
      "statement": "A 0/1 indicator variable has a Bernoulli distribution, so its mean equals the probability of the event, E[Y] = p.",
      "concept": "Bernoulli Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Binomial Distribution",
+      "quote": "A random variable taking only the values 0 and 1 (an indicator) is Bernoulli with success probability $p = P(X = 1)$, i.e. $\\text{Bin}(1, p)$. … Since $X^2 = X$, $E[X] = E[X^2] = p$, so $\\text{Var}(X) = p - p^2 = p(1-p)$ and $\\text{SD}(X) = \\sqrt{p(1-p)}$.",
+      "note": "written from Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL 2006), §6.2 Bernoulli Trials, E(Xj)=p, E(Xj^2)=p, V(Xj)=pq, p.261 (PDF p.269) — https://math.dartmouth.edu/~prob/prob/prob.pdf; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), Bernoulli Trials §11.1 Introduction, indicator X^n = X, var(X) = p(1-p) — https://www.randomservices.org/random/bernoulli/Introduction.html; checked in the w3 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w3"
+     }
     },
     {
      "id": "r3",
@@ -22268,7 +22348,15 @@
        "page": "Variance Function",
        "quote": "binomial: $\\mu(1 - \\mu)$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Binomial Distribution",
+      "quote": "Since $X^2 = X$, $E[X] = E[X^2] = p$, so $\\text{Var}(X) = p - p^2 = p(1-p)$ and $\\text{SD}(X) = \\sqrt{p(1-p)}$.",
+      "note": "written from Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL 2006), §6.2 Bernoulli Trials, E(Xj)=p, E(Xj^2)=p, V(Xj)=pq, p.261 (PDF p.269) — https://math.dartmouth.edu/~prob/prob/prob.pdf; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), Bernoulli Trials §11.1 Introduction, indicator X^n = X, var(X) = p(1-p) — https://www.randomservices.org/random/bernoulli/Introduction.html; checked in the w3 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w3"
+     }
     },
     {
      "id": "r4",
@@ -24230,7 +24318,15 @@
      "statement": "A density function is defined as zero outside its stated support, and critical points outside the support cannot be the mode.",
      "concept": "Probability Density Function",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Mode",
+      "quote": "A density is 0 outside its stated support, so a root of $f'(x) = 0$ that falls outside the support is discarded",
+      "note": "written from Pishro-Nik §4.1.1, range R_X = {x | f_X(x) > 0} — https://www.probabilitycourse.com/chapter4/4_1_1_pdf.php; OpenStax Calculus Vol. 1 §4.3 Problem-Solving Strategy: Locating Absolute Extrema over a Closed Interval (endpoints and critical points in the interval) — https://openstax.org/books/calculus-volume-1/pages/4-3-maxima-and-minima; checked in the w3 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w3"
+     }
     }
    ]
   },
@@ -24821,7 +24917,15 @@
      "statement": "A random variable taking only the values 0 and 1 is a Bernoulli random variable with success probability p equal to the probability it takes the value 1.",
      "concept": "Bernoulli Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Binomial Distribution",
+      "quote": "A random variable taking only the values 0 and 1 (an indicator) is Bernoulli with success probability $p = P(X = 1)$, i.e. $\\text{Bin}(1, p)$.",
+      "note": "written from Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL 2006), §6.2 Bernoulli Trials, E(Xj)=p, E(Xj^2)=p, V(Xj)=pq, p.261 (PDF p.269) — https://math.dartmouth.edu/~prob/prob/prob.pdf; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), Bernoulli Trials §11.1 Introduction, indicator X^n = X, var(X) = p(1-p) — https://www.randomservices.org/random/bernoulli/Introduction.html; checked in the w3 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w3"
+     }
     },
     {
      "id": "r6",
@@ -24829,7 +24933,15 @@
      "statement": "The variance of a Bernoulli random variable with success probability p is p(1-p).",
      "concept": "Bernoulli Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Binomial Distribution",
+      "quote": "Since $X^2 = X$, $E[X] = E[X^2] = p$, so $\\text{Var}(X) = p - p^2 = p(1-p)$ and $\\text{SD}(X) = \\sqrt{p(1-p)}$.",
+      "note": "written from Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL 2006), §6.2 Bernoulli Trials, E(Xj)=p, E(Xj^2)=p, V(Xj)=pq, p.261 (PDF p.269) — https://math.dartmouth.edu/~prob/prob/prob.pdf; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), Bernoulli Trials §11.1 Introduction, indicator X^n = X, var(X) = p(1-p) — https://www.randomservices.org/random/bernoulli/Introduction.html; checked in the w3 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w3"
+     }
     }
    ]
   },
@@ -25288,7 +25400,15 @@
        "page": "Frequency Distribution",
        "quote": "$mq$ and $mq(1-q)$ for the binomial"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Binomial Distribution",
+      "quote": "Since $X^2 = X$, $E[X] = E[X^2] = p$, so $\\text{Var}(X) = p - p^2 = p(1-p)$ and $\\text{SD}(X) = \\sqrt{p(1-p)}$.",
+      "note": "written from Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL 2006), §6.2 Bernoulli Trials, E(Xj)=p, E(Xj^2)=p, V(Xj)=pq, p.261 (PDF p.269) — https://math.dartmouth.edu/~prob/prob/prob.pdf; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), Bernoulli Trials §11.1 Introduction, indicator X^n = X, var(X) = p(1-p) — https://www.randomservices.org/random/bernoulli/Introduction.html; checked in the w3 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w3"
+     }
     },
     {
      "id": "r5",
@@ -25685,7 +25805,15 @@
      "statement": "For a constant positive multiple Y = cX, the mode of Y equals c times the mode of X, since the scaling is a one-to-one transformation preserving probabilities.",
      "concept": "Mode of a Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Mode",
+      "quote": "For a constant $c > 0$, the mode of $Y = cX$ is $c$ times the mode of $X$",
+      "note": "written from Pishro-Nik §4.1.3 Functions of continuous random variables, Theorem: for strictly monotonic g, f_Y(y) = f_X(x1)/|g'(x1)| where g(x1)=y — https://www.probabilitycourse.com/chapter4/4_1_3_functions_continuous_var.php; checked in the w3 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w3"
+     }
     }
    ]
   },
@@ -26108,7 +26236,15 @@
      "statement": "To get the joint probability of N and C, count the patients in each category among the first n − 1 trials (n − c with no cancer, c − 5 with cancer but not stage IV, 4 with stage IV) and multiply the independent per-patient probabilities raised to the category counts, including the final stage IV patient.",
      "concept": "Joint Probability Function",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Negative Binomial Distribution",
+      "quote": "the first $k-1$ trials are arranged by a multinomial coefficient and each category's probability is raised to its count",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), §11.4 The Negative Binomial Distribution, PDF of V_k (V_k = n iff X_n = 1 and Y_(n-1) = k-1) — https://www.randomservices.org/random/bernoulli/NegativeBinomial.html; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), §11.5 The Multinomial Distribution, multinomial coefficient n!/(j1!...jk!) and sequence probability p1^j1...pk^jk — https://www.randomservices.org/random/bernoulli/Multinomial.html; checked in the w3 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w3"
+     }
     }
    ]
   },
@@ -27212,7 +27348,15 @@
      "statement": "When the number of trials is capped at n, the capped value n has probability equal to the sum of the probability that the target is reached exactly at n and the probability it is never reached; this is found as 1 minus the probabilities of all smaller values.",
      "concept": "Probability Mass Function",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Discrete Random Variable",
+      "quote": "when trials stop at $n$ whether or not the target was reached, $Y = n$ includes both reaching it on trial $n$ and never reaching it.",
+      "note": "written from Pishro-Nik §1.3.2 Axiom 3 (additivity of disjoint events) — https://www.probabilitycourse.com/chapter1/1_3_2_probability.php; checked in the w3 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w3"
+     }
     },
     {
      "id": "r5",
@@ -28083,7 +28227,15 @@
      "statement": "To find an unknown Poisson mean from a given probability of zero events, set e^{-λ} equal to that probability and solve λ = -ln(probability).",
      "concept": "Poisson Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Poisson Distribution",
+      "quote": "Because $P(X = 0) = e^{-\\lambda}$, a given probability of no events (or of at least one event, $1 - e^{-\\lambda}$) fixes the mean",
+      "note": "written from Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL 2006), §5.1 Poisson distribution P(X=k) = λ^k e^-λ / k!, eq. 5.2, p.189 (PDF p.197) — https://math.dartmouth.edu/~prob/prob/prob.pdf; OpenStax Calculus Vol. 1 §1.5 natural logarithm as inverse of e^x — https://openstax.org/books/calculus-volume-1/pages/1-5-exponential-and-logarithmic-functions; checked in the w3 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w3"
+     }
     },
     {
      "id": "r3",
@@ -28686,7 +28838,15 @@
      "statement": "To use a stated relationship between probabilities (e.g., one is a multiple of another), set up an equation between the probability expressions themselves, not between the distribution parameters, and solve for the unknown parameter using the natural logarithm.",
      "concept": "Poisson Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Poisson Distribution",
+      "quote": "is an equation between the probabilities, not between the means: write it in the probability expressions and solve for the unknown mean by taking natural logarithms.",
+      "note": "written from Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL 2006), §5.1 Poisson distribution P(X=k) = λ^k e^-λ / k!, eq. 5.2, p.189 (PDF p.197) — https://math.dartmouth.edu/~prob/prob/prob.pdf; OpenStax Calculus Vol. 1 §1.5 natural logarithm as inverse of e^x — https://openstax.org/books/calculus-volume-1/pages/1-5-exponential-and-logarithmic-functions; checked in the w3 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w3"
+     }
     }
    ]
   },
@@ -30592,7 +30752,15 @@
      "statement": "To recover the Poisson mean from P[X = 0], set e^{-lambda} equal to that probability and solve lambda = -ln(P[X = 0]).",
      "concept": "Poisson Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Poisson Distribution",
+      "quote": "Because $P(X = 0) = e^{-\\lambda}$, a given probability of no events (or of at least one event, $1 - e^{-\\lambda}$) fixes the mean",
+      "note": "written from Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL 2006), §5.1 Poisson distribution P(X=k) = λ^k e^-λ / k!, eq. 5.2, p.189 (PDF p.197) — https://math.dartmouth.edu/~prob/prob/prob.pdf; OpenStax Calculus Vol. 1 §1.5 natural logarithm as inverse of e^x — https://openstax.org/books/calculus-volume-1/pages/1-5-exponential-and-logarithmic-functions; checked in the w3 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w3"
+     }
     },
     {
      "id": "r4",
@@ -30765,7 +30933,15 @@
      "statement": "A Bernoulli random variable (indicator) takes only the values 0 and 1, with P(X=1)=p and mean p.",
      "concept": "Bernoulli Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Binomial Distribution",
+      "quote": "A random variable taking only the values 0 and 1 (an indicator) is Bernoulli with success probability $p = P(X = 1)$, i.e. $\\text{Bin}(1, p)$. … Since $X^2 = X$, $E[X] = E[X^2] = p$, so $\\text{Var}(X) = p - p^2 = p(1-p)$ and $\\text{SD}(X) = \\sqrt{p(1-p)}$.",
+      "note": "written from Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL 2006), §6.2 Bernoulli Trials, E(Xj)=p, E(Xj^2)=p, V(Xj)=pq, p.261 (PDF p.269) — https://math.dartmouth.edu/~prob/prob/prob.pdf; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), Bernoulli Trials §11.1 Introduction, indicator X^n = X, var(X) = p(1-p) — https://www.randomservices.org/random/bernoulli/Introduction.html; checked in the w3 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w3"
+     }
     },
     {
      "id": "r2",
@@ -30773,7 +30949,15 @@
      "statement": "The variance of a Bernoulli random variable with success probability p is p(1-p), so its standard deviation is sqrt(p(1-p)).",
      "concept": "Bernoulli Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Binomial Distribution",
+      "quote": "Since $X^2 = X$, $E[X] = E[X^2] = p$, so $\\text{Var}(X) = p - p^2 = p(1-p)$ and $\\text{SD}(X) = \\sqrt{p(1-p)}$.",
+      "note": "written from Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL 2006), §6.2 Bernoulli Trials, E(Xj)=p, E(Xj^2)=p, V(Xj)=pq, p.261 (PDF p.269) — https://math.dartmouth.edu/~prob/prob/prob.pdf; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), Bernoulli Trials §11.1 Introduction, indicator X^n = X, var(X) = p(1-p) — https://www.randomservices.org/random/bernoulli/Introduction.html; checked in the w3 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w3"
+     }
     },
     {
      "id": "r3",
@@ -31239,7 +31423,15 @@
      "statement": "To solve for an unknown parameter when one probability is a multiple of another, divide the two probability expressions so common factors cancel, leaving a simple equation in the parameter.",
      "concept": "Binomial Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Binomial Distribution",
+      "quote": "Dividing two binomial probabilities cancels the common powers of $p$ and $1-p$, leaving the binomial coefficients and a power of the odds $p/(1-p)$ … So when one point probability is stated as a multiple of another, divide the two pmf expressions and solve the simple equation left for the odds $p/(1-p)$ (or for $n$).",
+      "note": "written from Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL 2006), §5.1 Poisson distribution, b(n,p,k)/b(n,p,k-1) = (λ-(k-1)p)/(kq), p.189 (PDF p.197) — https://math.dartmouth.edu/~prob/prob/prob.pdf; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), §11.2 The Binomial Distribution, f_n(k) > f_n(k-1) iff p/k > (1-p)/(n-k+1) — https://www.randomservices.org/random/bernoulli/Binomial.html; checked in the w3 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w3"
+     }
     }
    ]
   },
@@ -31461,7 +31653,15 @@
        "page": "Future Lifetime Random Variable",
        "quote": "The survival probabilities are $p_{97} = 0.7$, ${}_2p_{97} = 0.7(0.5) = 0.35$ and ${}_3p_{97} = 0$. So $K_{97}$ takes the values 0, 1 and 2 with probabilities $0.30$, $0.35$ and $0.35$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Discrete Univariate Distributions",
+      "quote": "f(k) = P(X \\geq k) - P(X \\geq k+1) = F(k) - F(k-1) … At the largest possible value $m$, $f(m) = P(X \\geq m)$, and for a non-negative $X$, $f(0) = 1 - P(X \\geq 1)$.",
+      "note": "written from Pishro-Nik §3.2.1 Cumulative distribution function: F_X(x_k) - F_X(x_k - ε) = P_X(x_k) — https://www.probabilitycourse.com/chapter3/3_2_1_cdf.php; Pishro-Nik §1.3.2 Axiom 3 (additivity of disjoint events) — https://www.probabilitycourse.com/chapter1/1_3_2_probability.php; checked in the w3 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w3"
+     }
     },
     {
      "id": "r3",
@@ -37363,7 +37563,15 @@
      "statement": "In the negative binomial probability, the binomial coefficient counts arrangements only among the first n-1 trials because the final trial must be a success; using C(n, r) instead counts a different event (exactly r successes anywhere in n trials).",
      "concept": "Negative Binomial Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Negative Binomial Distribution",
+      "quote": "The $r$-th success ends the count on trial $k$, so only the first $k-1$ trials are arranged: they hold the other $r-1$ successes, which is why the coefficient is $\\binom{k-1}{r-1}$. Using $\\binom{k}{r}$ instead counts $r$ successes anywhere in $k$ trials, a different event.",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), §11.4 The Negative Binomial Distribution, PDF of V_k (V_k = n iff X_n = 1 and Y_(n-1) = k-1) — https://www.randomservices.org/random/bernoulli/NegativeBinomial.html; checked in the w3 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w3"
+     }
     }
    ]
   },
@@ -40566,7 +40774,15 @@
      "statement": "To find an unknown Poisson mean from a condition on the probability of zero events, set e^{-λ} equal to the stated probability and solve for λ by taking natural logarithms.",
      "concept": "Poisson Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Poisson Distribution",
+      "quote": "Because $P(X = 0) = e^{-\\lambda}$, a given probability of no events (or of at least one event, $1 - e^{-\\lambda}$) fixes the mean",
+      "note": "written from Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL 2006), §5.1 Poisson distribution P(X=k) = λ^k e^-λ / k!, eq. 5.2, p.189 (PDF p.197) — https://math.dartmouth.edu/~prob/prob/prob.pdf; OpenStax Calculus Vol. 1 §1.5 natural logarithm as inverse of e^x — https://openstax.org/books/calculus-volume-1/pages/1-5-exponential-and-logarithmic-functions; checked in the w3 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w3"
+     }
     },
     {
      "id": "r3",
@@ -40951,7 +41167,15 @@
      "statement": "To find an unknown binomial probability from a stated ratio of two binomial probabilities, write the ratio of the two pmf expressions so that common factors cancel, leaving the binomial coefficients and a power of the odds (1-p)/p, then solve for the odds.",
      "concept": "Binomial Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Binomial Distribution",
+      "quote": "Dividing two binomial probabilities cancels the common powers of $p$ and $1-p$, leaving the binomial coefficients and a power of the odds $p/(1-p)$",
+      "note": "written from Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL 2006), §5.1 Poisson distribution, b(n,p,k)/b(n,p,k-1) = (λ-(k-1)p)/(kq), p.189 (PDF p.197) — https://math.dartmouth.edu/~prob/prob/prob.pdf; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), §11.2 The Binomial Distribution, f_n(k) > f_n(k-1) iff p/k > (1-p)/(n-k+1) — https://www.randomservices.org/random/bernoulli/Binomial.html; checked in the w3 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w3"
+     }
     },
     {
      "id": "r4",
@@ -41286,7 +41510,15 @@
      "statement": "Translate a stated relation between two Poisson probabilities of zero events into an equation in the parameters (e.g. e^(-λ2) = k·e^(-λ1)) and solve for the unknown parameter by taking natural logarithms.",
      "concept": "Poisson Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Poisson Distribution",
+      "quote": "is an equation between the probabilities, not between the means: write it in the probability expressions and solve for the unknown mean by taking natural logarithms.",
+      "note": "written from Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL 2006), §5.1 Poisson distribution P(X=k) = λ^k e^-λ / k!, eq. 5.2, p.189 (PDF p.197) — https://math.dartmouth.edu/~prob/prob/prob.pdf; OpenStax Calculus Vol. 1 §1.5 natural logarithm as inverse of e^x — https://openstax.org/books/calculus-volume-1/pages/1-5-exponential-and-logarithmic-functions; checked in the w3 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w3"
+     }
     }
    ]
   },
@@ -42632,7 +42864,15 @@
      "statement": "A Bernoulli random variable with success probability p has mean p and variance p(1−p); a 0/1-valued random variable is Bernoulli.",
      "concept": "Bernoulli Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Binomial Distribution",
+      "quote": "A random variable taking only the values 0 and 1 (an indicator) is Bernoulli with success probability $p = P(X = 1)$, i.e. $\\text{Bin}(1, p)$. … Since $X^2 = X$, $E[X] = E[X^2] = p$, so $\\text{Var}(X) = p - p^2 = p(1-p)$ and $\\text{SD}(X) = \\sqrt{p(1-p)}$.",
+      "note": "written from Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL 2006), §6.2 Bernoulli Trials, E(Xj)=p, E(Xj^2)=p, V(Xj)=pq, p.261 (PDF p.269) — https://math.dartmouth.edu/~prob/prob/prob.pdf; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), Bernoulli Trials §11.1 Introduction, indicator X^n = X, var(X) = p(1-p) — https://www.randomservices.org/random/bernoulli/Introduction.html; checked in the w3 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w3"
+     }
     }
    ]
   },
@@ -43637,7 +43877,15 @@
      "statement": "To find the probability that the first success occurs in a given trial together with a total success count, require all earlier trials to be failures, the given trial a success, and the remaining required successes to be distributed among the later trials using a binomial count.",
      "concept": "Binomial Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Binomial Distribution",
+      "quote": "The first success comes on trial $j$ with $k$ successes in all exactly when trials $1, \\ldots, j-1$ all fail, trial $j$ succeeds, and the other $k-1$ successes fall among the $n-j$ later trials; by independence the pieces multiply",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), §11.4 The Negative Binomial Distribution, PDF of V_k: V_k = n iff X_n = 1 and Y_(n-1) = k-1, product by independence and the binomial distribution — https://www.randomservices.org/random/bernoulli/NegativeBinomial.html; checked in the w3 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w3"
+     }
     },
     {
      "id": "r5",
@@ -43645,7 +43893,15 @@
      "statement": "Given exactly k successes in n independent identical trials, all C(n,k) sets of success positions are equally likely, independent of p, so conditional probabilities can be found by counting favorable sets.",
      "concept": "Binomial Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Binomial Distribution",
+      "quote": "Given $X = k$, every one of the $\\binom{n}{k}$ sets of success positions has the same conditional probability $1/\\binom{n}{k}$, whatever $p$ is, so a conditional probability about where the successes fell is the number of favourable position sets divided by $\\binom{n}{k}$.",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), §11.2 The Binomial Distribution, P[(X1..Xn)=(x1..xn) | Y_n = k] = 1/C(n,k), independent of p — https://www.randomservices.org/random/bernoulli/Binomial.html; checked in the w3 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w3"
+     }
     }
    ]
   },
@@ -44623,7 +44879,15 @@
      "statement": "The binomial coefficient C(x-1, r-1) counts the placements of the first r-1 successes among the first x-1 trials, because the r-th success is fixed on trial x.",
      "concept": "Negative Binomial Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Negative Binomial Distribution",
+      "quote": "The $r$-th success ends the count on trial $k$, so only the first $k-1$ trials are arranged: they hold the other $r-1$ successes, which is why the coefficient is $\\binom{k-1}{r-1}$. Using $\\binom{k}{r}$ instead counts $r$ successes anywhere in $k$ trials, a different event.",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), §11.4 The Negative Binomial Distribution, PDF of V_k (V_k = n iff X_n = 1 and Y_(n-1) = k-1) — https://www.randomservices.org/random/bernoulli/NegativeBinomial.html; checked in the w3 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w3"
+     }
     },
     {
      "id": "r4",
@@ -48421,7 +48685,15 @@
      "statement": "For N ~ Poisson(λ), the probability that N is even equals (1 + e^{-2λ})/2.",
      "concept": "Poisson Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Poisson Distribution",
+      "quote": "P(X \\text{ even}) = e^{-\\lambda}\\cosh\\lambda = \\frac{1 + e^{-2\\lambda}}{2}",
+      "note": "written from Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL 2006), §5.1 Poisson distribution eq. 5.2, p.189 (PDF p.197) — https://math.dartmouth.edu/~prob/prob/prob.pdf; OpenStax Calculus Vol. 2 §6.3 Example 6.17, Maclaurin series of e^x = Σ x^n/n! — https://openstax.org/books/calculus-volume-2/pages/6-3-taylor-and-maclaurin-series; OpenStax Calculus Vol. 1 §1.5 Hyperbolic Functions, cosh x = (e^x + e^-x)/2 — https://openstax.org/books/calculus-volume-1/pages/1-5-exponential-and-logarithmic-functions; checked in the w3 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w3"
+     }
     },
     {
      "id": "r3",
@@ -48429,7 +48701,15 @@
      "statement": "Derive P(N even) by summing the Poisson pmf over even n, using the series cosh(λ) = Σ λ^{2k}/(2k)! (or by averaging e^λ and e^{-λ} Taylor series), giving e^{-λ}cosh(λ).",
      "concept": "Poisson Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Poisson Distribution",
+      "quote": "so the even terms sum to $\\sum_k \\lambda^{2k}/(2k)! = (e^{\\lambda} + e^{-\\lambda})/2 = \\cosh\\lambda$. Summing the pmf over even $n$ then gives",
+      "note": "written from Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL 2006), §5.1 Poisson distribution eq. 5.2, p.189 (PDF p.197) — https://math.dartmouth.edu/~prob/prob/prob.pdf; OpenStax Calculus Vol. 2 §6.3 Example 6.17, Maclaurin series of e^x = Σ x^n/n! — https://openstax.org/books/calculus-volume-2/pages/6-3-taylor-and-maclaurin-series; OpenStax Calculus Vol. 1 §1.5 Hyperbolic Functions, cosh x = (e^x + e^-x)/2 — https://openstax.org/books/calculus-volume-1/pages/1-5-exponential-and-logarithmic-functions; checked in the w3 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w3"
+     }
     },
     {
      "id": "r4",

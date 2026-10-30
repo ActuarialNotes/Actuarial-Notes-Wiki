@@ -2,12 +2,14 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-09-28
+  last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:00a9ffc3cc5a9de81e7acb44edd1e10faacd4181958d20c3586c7ddf947927a1
+  content_hash: sha256:4884263d2cfeb2a28c88c4f7ac6ca01f449722582b474d32815cfd01a96ac5ab
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), 5.1 geometric p.185 (PDF p.193), negative binomial pp.186-187 (PDF pp.194-195), hypergeometric p.193 (PDF p.201); 6.2 Exercise 11 p.264 (PDF p.272), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "SOA, Tables for Exam C (Fall 2009), Appendix B.2 (a,b,0) class: B.2.1.1 Poisson (PDF p.14); B.2.1.2 geometric, B.2.1.3 binomial, B.2.1.4 negative binomial (PDF p.15, page image), sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf"
+    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com, HTML fetched 2026-10-30), §3.2.1 CDF: F_X(x_k) - F_X(x_k - eps) = P_X(x_k), sha256:1684aa6588e7d87737c1d625bd7a606c6f1a6954681ff1a3cd02b084eec1a151 — https://www.probabilitycourse.com/chapter3/3_2_1_cdf.php"
+    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com, HTML fetched 2026-10-30), §1.3.2 Axiom 3 (additivity over disjoint events), sha256:f8ea87ae887db4bef1c3ff1b41879371f1573edb8d70c80df361acd52f45fb1d — https://www.probabilitycourse.com/chapter1/1_3_2_probability.php"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Discrete Univariate Distributions.md

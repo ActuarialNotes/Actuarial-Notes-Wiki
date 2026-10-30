@@ -5,11 +5,17 @@ import { fileURLToPath } from 'url'
 import {
   copySources,
   extractSyllabusAssignments,
-  isNumberedOutline,
+  OUTLINE_ITEM_CLASS,
+  OUTLINE_LIST_CLASS,
   librarySearchUrl,
   parseResourceMeta,
   preprocessResourceMarkdown,
+  rehypeOutlineItems,
 } from './resourceMeta'
+import type { Element, Root } from 'hast'
+import { unified } from 'unified'
+import remarkParse from 'remark-parse'
+import remarkRehype from 'remark-rehype'
 
 const OUTLINE = `## 1 Interest Rate Measurement
 
@@ -27,30 +33,77 @@ const PROSE = `## Scope
 - Trending here means adjusting historical data for changes over time
 `
 
-describe('isNumberedOutline', () => {
-  it('detects a table of contents whose items carry section numbers', () => {
-    expect(isNumberedOutline(OUTLINE)).toBe(true)
+/** The markdown rendered to hast and run through the plugin. */
+function outline(md: string): Root {
+  const processor = unified().use(remarkParse).use(remarkRehype)
+  const tree = processor.runSync(processor.parse(md)) as Root
+  rehypeOutlineItems()(tree)
+  return tree
+}
+
+/** A row's own words, without the lists under it. */
+function rowText(el: Element): string {
+  return el.children
+    .map(c => (c.type === 'text' ? c.value : c.type === 'element' && c.tagName !== 'ul' ? rowText(c) : ''))
+    .join('')
+    .trim()
+}
+
+function classed(tree: Root, tagName: string, cls: string): string[] {
+  const out: string[] = []
+  const walk = (node: Root | Element) => {
+    for (const child of node.children) {
+      if (child.type !== 'element') continue
+      const list = child.properties.className
+      if (child.tagName === tagName && Array.isArray(list) && list.includes(cls)) {
+        out.push(rowText(child))
+      }
+      walk(child)
+    }
+  }
+  walk(tree)
+  return out
+}
+
+describe('rehypeOutlineItems', () => {
+  it('marks every self-numbered row of a table of contents, and its lists', () => {
+    const tree = outline(OUTLINE)
+    expect(classed(tree, 'li', OUTLINE_ITEM_CLASS)).toHaveLength(5)
+    expect(classed(tree, 'ul', OUTLINE_LIST_CLASS)).toHaveLength(2)
   })
 
   it('leaves prose bullet lists alone', () => {
-    expect(isNumberedOutline(PROSE)).toBe(false)
+    const tree = outline(PROSE)
+    expect(classed(tree, 'li', OUTLINE_ITEM_CLASS)).toEqual([])
+    expect(classed(tree, 'ul', OUTLINE_LIST_CLASS)).toEqual([])
   })
 
   it('accepts lettered and zero-based section labels', () => {
-    expect(isNumberedOutline('- 0.1 Basic Operations\n- 0.2 Time Value\n- A.1 Tables\n')).toBe(true)
+    const tree = outline('- 0.1 Basic Operations\n- 0.2 Time Value\n- A.1 Tables\n')
+    expect(classed(tree, 'li', OUTLINE_ITEM_CLASS)).toHaveLength(3)
   })
 
-  it('ignores pages with only a stray item or two', () => {
-    expect(isNumberedOutline('- 1.1 Introduction\n- 1.2 Counting\n')).toBe(false)
+  it('reads a lone letter or a year as a word, not a label', () => {
+    const tree = outline('- A trending procedure is not development\n- 2009 revision adopted in June\n')
+    expect(classed(tree, 'li', OUTLINE_ITEM_CLASS)).toEqual([])
   })
 
-  it('tolerates a minority of unnumbered entries', () => {
-    const mixed = `- 1.1 Introduction
-- 1.2 Counting
-- 1.3 Permutations
-- Appendix: tables of the normal distribution
-`
-    expect(isNumberedOutline(mixed)).toBe(true)
+  it('decides row by row: numbered sections keep descriptions as bullets', () => {
+    const tree = outline(`- 1.1 Purpose
+- 1.2 Scope
+    - Applies to all property/casualty coverages.
+    - Does not encompass development.
+- 1.3 Cross References
+`)
+    expect(classed(tree, 'li', OUTLINE_ITEM_CLASS)).toEqual(['1.1 Purpose', '1.2 Scope', '1.3 Cross References'])
+    // The outer list is flush; the descriptions under 1.2 are a bulleted list.
+    expect(classed(tree, 'ul', OUTLINE_LIST_CLASS)).toHaveLength(1)
+  })
+
+  it('marks no list flush when an unnumbered entry sits in it', () => {
+    const tree = outline('- 1.1 Introduction\n- 1.2 Counting\n- Appendix: tables\n')
+    expect(classed(tree, 'li', OUTLINE_ITEM_CLASS)).toHaveLength(2)
+    expect(classed(tree, 'ul', OUTLINE_LIST_CLASS)).toEqual([])
   })
 })
 

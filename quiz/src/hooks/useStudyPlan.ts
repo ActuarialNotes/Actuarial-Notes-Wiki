@@ -41,6 +41,13 @@ const DEFAULT_CONFIG: StudyPlanConfig = {
   planStartDate: null,
 }
 
+function sameConfig(a: StudyPlanConfig, b: StudyPlanConfig): boolean {
+  return a.targetReadyDate === b.targetReadyDate &&
+    a.targetStrengthLevel === b.targetStrengthLevel &&
+    a.planStartDate === b.planStartDate &&
+    (a.examVariant ?? null) === (b.examVariant ?? null)
+}
+
 export function useStudyPlan(
   syllabus: WikiExamSyllabus | null,
   masteryRecords: ConceptMasteryRecord[],
@@ -59,7 +66,7 @@ export function useStudyPlan(
   // Use optional chaining in case a plan cached before the `config` field existed
   // has config: undefined at runtime — accessing it directly would crash on render.
   const serverPlanKey = serverPlan
-    ? `${serverPlan.generatedDate}|${serverPlan.config?.targetReadyDate ?? ''}|${serverPlan.config?.targetStrengthLevel ?? ''}`
+    ? `${serverPlan.generatedDate}|${serverPlan.config?.targetReadyDate ?? ''}|${serverPlan.config?.targetStrengthLevel ?? ''}|${serverPlan.examDate ?? ''}`
     : ''
 
   const [config, setConfig] = useState<StudyPlanConfig>(() =>
@@ -84,7 +91,10 @@ export function useStudyPlan(
     const row = examRows.find(r => r.exam_id === examId)
     const dbConfig = row?.study_plan_config ?? null
     if (dbConfig) {
-      setConfig(dbConfig)
+      // Keep the current object when nothing changed: every row refresh (a plan
+      // cache write, another exam's row) would otherwise hand the plan effect a
+      // "new" config and send it back through the caches.
+      setConfig(prev => sameConfig(prev, dbConfig) ? prev : dbConfig)
       // Keep localStorage in sync so offline / anonymous fallback stays fresh
       saveStudyPlanConfig(examId, dbConfig)
     } else {
@@ -101,7 +111,8 @@ export function useStudyPlan(
     const handleStorage = (e: StorageEvent) => {
       if (e.key !== key || !e.newValue) return
       try {
-        setConfig(JSON.parse(e.newValue) as StudyPlanConfig)
+        const next = JSON.parse(e.newValue) as StudyPlanConfig
+        setConfig(prev => sameConfig(prev, next) ? prev : next)
       } catch { /* ignore */ }
     }
     window.addEventListener('storage', handleStorage)
@@ -128,9 +139,15 @@ export function useStudyPlan(
     setLoading(true)
 
     const today = todayISO()
-    const configMatches = (c: StudyPlanConfig) =>
-      c.targetReadyDate === config.targetReadyDate &&
-      c.targetStrengthLevel === config.targetStrengthLevel
+    // A cached plan is today's only if it was built from this config and this
+    // exam date — the date sets the pace whenever no ready date is chosen, so a
+    // plan built for the old date is the wrong schedule. A plan cached before
+    // the date was recorded (examDate undefined) is taken as it stands.
+    const planMatches = (p: StudyPlan) =>
+      !!p.config &&
+      p.config.targetReadyDate === config.targetReadyDate &&
+      p.config.targetStrengthLevel === config.targetStrengthLevel &&
+      (p.examDate === undefined || p.examDate === examDate)
 
     // Explicit regenerate() bypasses every cache and rebuilds from scratch.
     const force = forceRegenRef.current
@@ -138,7 +155,7 @@ export function useStudyPlan(
 
     // 1. Server plan wins — it's the cross-device source of truth. Mirror it to
     //    localStorage so offline refreshes stay consistent with other devices.
-    if (!force && serverPlan && serverPlan.planVersion === PLAN_CACHE_VERSION && serverPlan.generatedDate === today && serverPlan.config && configMatches(serverPlan.config)) {
+    if (!force && serverPlan && serverPlan.planVersion === PLAN_CACHE_VERSION && serverPlan.generatedDate === today && planMatches(serverPlan)) {
       saveCachedStudyPlan(serverPlan)
       setPlan(serverPlan)
       setLoading(false)
@@ -148,7 +165,7 @@ export function useStudyPlan(
     // 2. Local cache (same-day stability when the server has no plan yet).
     //    Push it up so other devices converge on this plan.
     const cached = loadCachedStudyPlan(examId)
-    if (!force && cached && cached.generatedDate === today && cached.config && configMatches(cached.config)) {
+    if (!force && cached && cached.generatedDate === today && planMatches(cached)) {
       setPlan(cached)
       setLoading(false)
       updateStudyPlanCache(examId, cached).catch(() => { /* best-effort */ })

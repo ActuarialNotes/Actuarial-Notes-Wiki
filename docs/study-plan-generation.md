@@ -287,7 +287,18 @@ When you open the app on a different device, the cloud copy is used. When the cl
 The plan is automatically rebuilt when:
 - A new calendar day begins.
 - You change the target ready date or study strategy.
+- You change the exam date (a plan records the date it was built against, `StudyPlan.examDate`, and a cached plan for another date is not reused).
 - You tap **Regenerate** to force a fresh rebuild.
+
+A change made on this device is applied to the local exam rows at once, before
+its write reaches Supabase (`ExamProgressContext`'s `writeColumn`), so the study
+plan modal's Save — config and exam date together — rebuilds the plan once. Each
+write also fires a realtime event that refetches the rows; a refetch that could
+predate a local write (one still in flight, or one made since the fetch began) is
+dropped, and a single fresh fetch follows the last write. Applying such a stale
+response used to put the old config back for a moment, which regenerated and
+pushed the old plan, fired another event, and flashed the schedule between the
+two versions.
 
 ## Plan Version
 

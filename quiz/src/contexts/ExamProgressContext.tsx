@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo, type ReactNode } from 'react'
+import { useState, useEffect, useCallback, useMemo, useRef, type ReactNode } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/hooks/useAuth'
 import type { ItemStatus } from '@/data/tracks'
@@ -54,13 +54,33 @@ export function ExamProgressProvider({ children }: { children: ReactNode }) {
 
   const userId = user?.id
 
+  // A refetch must never undo a local write. Every write below fires a realtime
+  // event, and each event refetches the rows — so a refetch that started before
+  // a write committed can resolve after it, with the old value. Applied, it put
+  // the old study-plan config (or exam date) back for a moment: the plan
+  // regenerated from it, was pushed up, fired another event, and the schedule
+  // flashed between two versions. So a response is dropped when a newer fetch
+  // has started, when a write is in flight, or when one happened since the
+  // fetch began; once the last write lands, one fresh fetch makes up for it.
+  const fetchSeq = useRef(0)
+  const writeSeq = useRef(0)
+  const pendingWrites = useRef(0)
+  const missedFetch = useRef(false)
+
   const fetchExamRows = useCallback(() => {
     if (!userId) return
+    const seq = ++fetchSeq.current
+    const writesAtStart = writeSeq.current
     supabase
       .from('exam_progress')
       .select('*')
       .eq('user_id', userId)
       .then(({ data, error }: { data: ExamProgressRow[] | null; error: { message: string } | null }) => {
+        if (seq !== fetchSeq.current) return
+        if (pendingWrites.current > 0 || writeSeq.current !== writesAtStart) {
+          missedFetch.current = true
+          return
+        }
         if (error) {
           console.warn('ExamProgressContext: failed to load exam_progress:', error.message)
         } else if (data) {
@@ -179,56 +199,53 @@ export function ExamProgressProvider({ children }: { children: ReactNode }) {
   // default status, `not_started`, and the local copy must say the same —
   // saving a date or a plan is not adding the exam. Only the exams popout's
   // Add (and a first quiz) marks an exam in progress.
-  const updateTargetDate = useCallback(async (examId: string, date: string | null): Promise<boolean> => {
+  //
+  // Each applies its value locally first, so a change made together with
+  // another (the study-plan modal saves the config and the exam date at once)
+  // reaches the plan in one render rather than one per round trip.
+  const writeColumn = useCallback(async (
+    examId: string,
+    column: Partial<ExamProgressRow>,
+    label: string,
+  ): Promise<boolean> => {
     if (!userId) return false
-    const payload: Record<string, unknown> = {
-      user_id: userId,
-      exam_id: examId,
-      updated_at: new Date().toISOString(),
-    }
-    payload.target_date = date
-    const { error } = await supabase.from('exam_progress').upsert(payload, { onConflict: 'user_id,exam_id' })
-    if (error) {
-      console.warn('updateTargetDate: failed:', error.message)
-      return false
-    }
+    writeSeq.current++
+    pendingWrites.current++
     setExamRows(prev => prev.some(r => r.exam_id === examId)
-      ? prev.map(r => r.exam_id === examId ? { ...r, target_date: date } : r)
-      : [...prev, { exam_id: examId, status: 'not_started' as ItemStatus, target_date: date }])
-    return true
-  }, [userId])
-
-  const updateStudyPlanConfig = useCallback(async (examId: string, config: StudyPlanConfig): Promise<boolean> => {
-    if (!userId) return false
+      ? prev.map(r => r.exam_id === examId ? { ...r, ...column } : r)
+      : [...prev, { exam_id: examId, status: 'not_started' as ItemStatus, target_date: null, ...column }])
     const { error } = await supabase.from('exam_progress').upsert(
-      { user_id: userId, exam_id: examId, study_plan_config: config, updated_at: new Date().toISOString() },
+      { user_id: userId, exam_id: examId, ...column, updated_at: new Date().toISOString() },
       { onConflict: 'user_id,exam_id' },
     )
+    writeSeq.current++
+    pendingWrites.current--
     if (error) {
-      console.warn('updateStudyPlanConfig: failed:', error.message)
-      return false
+      console.warn(`${label}: failed:`, error.message)
+      // The local copy is ahead of the server; the refetch below puts it back.
+      missedFetch.current = true
     }
-    setExamRows(prev => prev.some(r => r.exam_id === examId)
-      ? prev.map(r => r.exam_id === examId ? { ...r, study_plan_config: config } : r)
-      : [...prev, { exam_id: examId, status: 'not_started' as ItemStatus, target_date: null, study_plan_config: config }])
-    return true
-  }, [userId])
+    if (pendingWrites.current === 0 && missedFetch.current) {
+      missedFetch.current = false
+      fetchExamRows()
+    }
+    return !error
+  }, [userId, fetchExamRows])
 
-  const updateStudyPlanCache = useCallback(async (examId: string, plan: StudyPlan): Promise<boolean> => {
-    if (!userId) return false
-    const { error } = await supabase.from('exam_progress').upsert(
-      { user_id: userId, exam_id: examId, study_plan_cache: plan, updated_at: new Date().toISOString() },
-      { onConflict: 'user_id,exam_id' },
-    )
-    if (error) {
-      console.warn('updateStudyPlanCache: failed:', error.message)
-      return false
-    }
-    setExamRows(prev => prev.some(r => r.exam_id === examId)
-      ? prev.map(r => r.exam_id === examId ? { ...r, study_plan_cache: plan } : r)
-      : [...prev, { exam_id: examId, status: 'not_started' as ItemStatus, target_date: null, study_plan_cache: plan }])
-    return true
-  }, [userId])
+  const updateTargetDate = useCallback(
+    (examId: string, date: string | null) => writeColumn(examId, { target_date: date }, 'updateTargetDate'),
+    [writeColumn],
+  )
+
+  const updateStudyPlanConfig = useCallback(
+    (examId: string, config: StudyPlanConfig) => writeColumn(examId, { study_plan_config: config }, 'updateStudyPlanConfig'),
+    [writeColumn],
+  )
+
+  const updateStudyPlanCache = useCallback(
+    (examId: string, plan: StudyPlan) => writeColumn(examId, { study_plan_cache: plan }, 'updateStudyPlanCache'),
+    [writeColumn],
+  )
 
   const progress = useMemo(() => {
     const p: Record<string, string> = {}

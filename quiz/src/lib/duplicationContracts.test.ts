@@ -127,6 +127,12 @@ describe('daily email: the edge function mirrors lib/dailyEmail.ts', () => {
   it('MAX_EMAIL_CONCEPTS agrees', () => {
     expect(mirror.MAX_EMAIL_CONCEPTS).toBe(MAX_EMAIL_CONCEPTS)
   })
+
+  it('mails only the exams being studied, as the Dashboard shows them', () => {
+    // A removed or passed exam keeps its cached plan; the status keeps it out.
+    const query = EDGE.slice(EDGE.indexOf(".from('exam_progress')"), EDGE.indexOf('.not(\'study_plan_cache\''))
+    expect(query).toContain(".eq('status', 'in_progress')")
+  })
 })
 
 // ── The leagues rollover ────────────────────────────────────────────────────

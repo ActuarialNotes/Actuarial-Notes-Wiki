@@ -2953,7 +2953,15 @@
        "page": "Limited Expected Value",
        "quote": "It equals the expected value of $\\min(X, u)$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Deductible",
+      "quote": "The mean of the retained part is the [[Limited Expected Value|limited expected value]] $E[X \\wedge d]$",
+      "note": "written from Anderson & Brown, Risk and Insurance (SOA study note P-21-05, 2005), §VI Deductibles (PDF p.7) and §VIII Y = max(0, X - 5) with its three cases (PDF p.13) — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), §3.1 Definitions and Basic Properties, change of variables theorem (discrete and continuous) and additive property — https://www.randomservices.org/random/expect/Properties.html; checked in the w5 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w5"
+     }
     },
     {
      "id": "r2",
@@ -2966,7 +2974,15 @@
        "page": "Limited Expected Value",
        "quote": "$$E[X \\wedge u] = \\int_0^u [1 - F(x)]\\,dx \\quad \\text{(for non-negative } X\\text{)}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Limited Expected Value",
+      "quote": "$$E[X \\wedge u] = \\int_0^u [1 - F(x)]\\,dx \\quad \\text{(for non-negative } X\\text{)}$$",
+      "note": "link from Deductible; checked in the w5 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w5"
+     }
     },
     {
      "id": "r3",
@@ -3540,7 +3556,15 @@
        "page": "Mixture Distribution",
        "quote": "The CDF jumps by 0.6 at zero and rises continuously after it — neither a discrete nor a continuous distribution."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Random Variable",
+      "quote": "is a point mass: the single value $x$ has probability equal to the size of the jump.",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), §2.7 Distribution and Quantile Functions: F(x^-) = P(X < x); f(x) = F(x) - F(x^-) (discrete), g(x) = F(x) - F(x^-) on the discrete part of a mixed distribution — https://www.randomservices.org/random/dist/CDF.html; Pishro-Nik §4.3.1 Mixed Random Variables (amount of jump = P(Y = 1/2)) — https://www.probabilitycourse.com/chapter4/4_3_1_mixed.php; checked in the w5 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w5"
+     }
     },
     {
      "id": "r2",
@@ -3566,7 +3590,15 @@
        "page": "Mixture Distribution",
        "quote": "Its moments combine a sum over the mass points with an integral over the continuous part."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Random Variable",
+      "quote": "$$E[g(X)] = \\sum_i g(x_i)\\,P(X = x_i) + \\int g(x)\\,f(x)\\,dx$$",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), §3.1 (mixed distribution: E(X) = Σ_D x g(x) + ∫_C x h(x) dx) and §3.9 Expected Value as an Integral (change of variables E[g(X)] = ∫ g dP) — https://www.randomservices.org/random/expect/Properties.html, https://www.randomservices.org/random/expect/Integral.html; Pishro-Nik §4.3.1 Mixed Random Variables, EY = ∫ y c(y) dy + Σ y_k P(Y = y_k) — https://www.probabilitycourse.com/chapter4/4_3_1_mixed.php; checked in the w5 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w5"
+     }
     },
     {
      "id": "r4",
@@ -3624,7 +3656,15 @@
      "statement": "For a capped variable Y = min(X, u), the k-th moment is E[Y^k] = ∫_0^u x^k f(x) dx + u^k P(X > u).",
      "concept": "Limited Expected Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Benefit Limit",
+      "quote": "$$E[(X \\wedge u)^k] = \\int_0^u x^k f(x)\\,dx + u^k\\,P(X > u)$$",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), §3.1 Definitions and Basic Properties, change of variables theorem (discrete and continuous) and additive property — https://www.randomservices.org/random/expect/Properties.html (change of variables with r(x) = min(x, u)^k, split at u); checked in the w5 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w5"
+     }
     },
     {
      "id": "r3",
@@ -3970,7 +4010,15 @@
      "statement": "To find the median of a capped variable Y = X ∧ u, compute the median of X; if it is below u, it is also the median of Y, otherwise the median of Y equals u.",
      "concept": "Policy Limit (Limited Loss Variable)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Median",
+      "quote": "its median is the loss median capped at the limit, $\\min(m,\\ u)$. If the median loss is below the limit, it is also the median payment; otherwise the median payment equals the limit $u$.",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), §2.7 Distribution and Quantile Functions: quantile of order p is x with P(X < x) ≤ p ≤ P(X ≤ x) — https://www.randomservices.org/random/dist/CDF.html (for non-decreasing g, {X ≤ x} ⊆ {g(X) ≤ g(x)} and {g(X) < g(x)} ⊆ {X < x}, so g of a quantile is a quantile); checked in the w5 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w5"
+     }
     }
    ]
   },
@@ -4038,7 +4086,15 @@
        "page": "Mean Excess Loss",
        "quote": "so the average size of a loss that exceeds $d$ is $d + e_X(d)$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Percentile",
+      "quote": "compute the percentile of the excess amount and add $d$ back to get the percentile of the loss.",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §1.4.0 Conditional Probability, P(A|B) = P(A ∩ B)/P(B) — https://www.probabilitycourse.com/chapter1/1_4_0_conditional_probability.php; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), Ch. 4 Special Distributions, Location-Scale Families: if z is a quantile of order p for Z then a + bz is a quantile of order p for X = a + bZ — https://www.randomservices.org/random/special/LocationScale.html (shift by d); checked in the w5 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w5"
+     }
     }
    ]
   },
@@ -10238,7 +10294,15 @@
      "statement": "When the deductible's location relative to the discrete loss amounts is unknown, solve piecewise: assume a range for d between consecutive loss amounts, include only the losses exceeding d, solve for d, and verify the solution lies in the assumed range (otherwise reject the case).",
      "concept": "Ordinary Deductible",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Deductible",
+      "quote": "solve piecewise: assume $d$ lies between two consecutive loss amounts, keep only the losses above it, solve for $d$, and check that the answer lies in the assumed range",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), §3.1 Definitions and Basic Properties, change of variables theorem (discrete and continuous) and additive property — https://www.randomservices.org/random/expect/Properties.html (discrete: E[(X-d)_+] = Σ_{x>d} (x-d) p(x), linear in d on each interval between loss amounts); checked in the w5 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w5"
+     }
     },
     {
      "id": "r4",
@@ -10255,7 +10319,15 @@
        "page": "Limited Expected Value",
        "quote": "$$E[X \\wedge u] = \\int_0^u [1 - F(x)]\\,dx \\quad \\text{(for non-negative } X\\text{)}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Deductible",
+      "quote": "As a function of $d$, the expected payment $E[(X - d)_+]$ is continuous and decreasing, with slope $-P(X > d)$. For a discrete loss it is piecewise linear in $d$, the slope changing at each possible loss amount.",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), §3.2 Additional Properties, Right Distribution Function: E(X) = ∫_0^∞ P(X > x) dx for nonnegative X and E(N) = Σ_{n≥0} P(N > n) for N in ℕ — https://www.randomservices.org/random/expect/Properties2.html; OpenStax Calculus Volume 1, §5.3 The Fundamental Theorem of Calculus, Part 1 — https://openstax.org/books/calculus-volume-1/pages/5-3-the-fundamental-theorem-of-calculus (d/dd ∫_d^∞ S(x) dx = -S(d)); checked in the w5 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w5"
+     }
     }
    ]
   },
@@ -10739,7 +10811,15 @@
        "page": "Limited Expected Value",
        "quote": "The **Limited Expected Value** (LEV) of a random variable $X$ at limit $u$ is the expected value of the payment under a policy that pays $X$ up to a maximum of $u$. It equals the expected value of $\\min(X, u)$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Deductible",
+      "quote": "the part the policyholder keeps (is not reimbursed for) is the loss capped at the deductible, $\\min(X, d) = X \\wedge d$",
+      "note": "written from Anderson & Brown, Risk and Insurance (SOA study note P-21-05, 2005), §VI Deductibles (PDF p.7) and §VIII Y = max(0, X - 5) with its three cases (PDF p.13) — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf; checked in the w5 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w5"
+     }
     },
     {
      "id": "r2",
@@ -10765,7 +10845,15 @@
        "page": "Limited Expected Value",
        "quote": "$$E[X \\wedge u] = \\int_0^u [1 - F(x)]\\,dx \\quad \\text{(for non-negative } X\\text{)}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Limited Expected Value",
+      "quote": "$$E[X \\wedge u] = \\int_0^u [1 - F(x)]\\,dx \\quad \\text{(for non-negative } X\\text{)}$$",
+      "note": "link from Deductible; checked in the w5 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w5"
+     }
     }
    ]
   },
@@ -14393,7 +14481,15 @@
        "page": "Limited Expected Value",
        "quote": "$$E[X \\wedge u] = E[X] - E[\\max(X - u, 0)] = E[X] - e(u)\\cdot[1-F(u)]$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Deductible",
+      "quote": "$$E[(X - d)_+] = E[X] - E[X \\wedge d]$$",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), §3.1 Definitions and Basic Properties, change of variables theorem (discrete and continuous) and additive property — https://www.randomservices.org/random/expect/Properties.html (additivity applied to X = (X ∧ d) + (X - d)_+); checked in the w5 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w5"
+     }
     },
     {
      "id": "r3",
@@ -14401,7 +14497,15 @@
      "statement": "For a nonnegative integer-valued N, E[min(N, d)] is computed as the sum over k<d of k·P(N=k) plus d·P(N≥d), or equivalently as the sum over k=0..d-1 of P(N>k).",
      "concept": "Limited Expected Value and Excess Loss",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Deductible",
+      "quote": "$$E[X \\wedge d] = \\sum_{x < d} x\\,p(x) + d\\,P(X \\geq d)$$…the capped count also has a tail-sum form, $E[\\min(N, d)] = \\sum_{k=0}^{d-1} P(N > k)$",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), §3.1 Definitions and Basic Properties, change of variables theorem (discrete and continuous) and additive property — https://www.randomservices.org/random/expect/Properties.html; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), §3.2 Additional Properties, Right Distribution Function: E(X) = ∫_0^∞ P(X > x) dx for nonnegative X and E(N) = Σ_{n≥0} P(N > n) for N in ℕ — https://www.randomservices.org/random/expect/Properties2.html; checked in the",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w5"
+     }
     },
     {
      "id": "r4",
@@ -14439,7 +14543,15 @@
        "page": "Stop-Loss Reinsurance",
        "quote": "$I_d$ is the reinsurer's payment, and the insurer keeps $S \\wedge d$, so the retention caps the insurer's total cost for the period."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Deductible",
+      "quote": "the part the policyholder keeps (is not reimbursed for) is the loss capped at the deductible, $\\min(X, d) = X \\wedge d$",
+      "note": "written from Anderson & Brown, Risk and Insurance (SOA study note P-21-05, 2005), §VI Deductibles (PDF p.7) and §VIII Y = max(0, X - 5) with its three cases (PDF p.13) — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf; checked in the w5 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w5"
+     }
     },
     {
      "id": "r2",
@@ -14456,7 +14568,15 @@
        "page": "Limited Expected Value",
        "quote": "$$E[X \\wedge u] = \\int_0^u [1 - F(x)]\\,dx \\quad \\text{(for non-negative } X\\text{)}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Deductible",
+      "quote": "the capped count also has a tail-sum form, $E[\\min(N, d)] = \\sum_{k=0}^{d-1} P(N > k)$:…$$E[N \\wedge d] = \\sum_{k=0}^{d-1} [1 - F(k)]$$",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), §3.2 Additional Properties, Right Distribution Function: E(X) = ∫_0^∞ P(X > x) dx for nonnegative X and E(N) = Σ_{n≥0} P(N > n) for N in ℕ — https://www.randomservices.org/random/expect/Properties2.html (applied to min(N, d), whose tail P(min(N,d) > k) is P(N > k) for k < d and 0 after); checked in the w5 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w5"
+     }
     },
     {
      "id": "r3",
@@ -14574,7 +14694,15 @@
        "page": "Limited Expected Value",
        "quote": "It equals the expected value of $\\min(X, u)$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Deductible",
+      "quote": "the part the policyholder keeps (is not reimbursed for) is the loss capped at the deductible, $\\min(X, d) = X \\wedge d$",
+      "note": "written from Anderson & Brown, Risk and Insurance (SOA study note P-21-05, 2005), §VI Deductibles (PDF p.7) and §VIII Y = max(0, X - 5) with its three cases (PDF p.13) — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf; checked in the w5 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w5"
+     }
     },
     {
      "id": "r2",
@@ -14587,7 +14715,15 @@
        "page": "Limited Expected Value",
        "quote": "$$E[X \\wedge u] = \\int_0^u [1 - F(x)]\\,dx \\quad \\text{(for non-negative } X\\text{)}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Limited Expected Value",
+      "quote": "$$E[X \\wedge u] = \\int_0^u [1 - F(x)]\\,dx \\quad \\text{(for non-negative } X\\text{)}$$",
+      "note": "link from Deductible; checked in the w5 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w5"
+     }
     },
     {
      "id": "r3",
@@ -14833,7 +14969,15 @@
      "statement": "To find a percentile of the conditional distribution given X > d, set P(X>k) = (1-p)·P(X>d) and solve for k, which gives P(X ≤ k) = 1 - (1-p)·P(X>d).",
      "concept": "Deductibles and Conditional Loss Distributions",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Percentile",
+      "quote": "the $100p$-th percentile $k$ of $X$ given $X > d$ solves $P(X > k) = (1 - p)\\,P(X > d)$, that is",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §1.4.0 Conditional Probability, P(A|B) = P(A ∩ B)/P(B) — https://www.probabilitycourse.com/chapter1/1_4_0_conditional_probability.php; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), §2.7 Distribution and Quantile Functions: quantile of order p is x with P(X < x) ≤ p ≤ P(X ≤ x) — https://www.randomservices.org/random/dist/CDF.html; checked in the w5 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w5"
+     }
     },
     {
      "id": "r4",
@@ -15948,7 +16092,15 @@
      "statement": "Multiplying a random variable by a constant multiplies its percentiles by that constant, so the total benefit's percentile equals the benefit amount times the percentile of the number of deaths.",
      "concept": "Linear Transformation of Random Variables",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Percentile",
+      "quote": "multiplying a random variable by a constant $c > 0$ multiplies its percentiles by that constant",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), Ch. 4 Special Distributions, Location-Scale Families: if z is a quantile of order p for Z then a + bz is a quantile of order p for X = a + bZ — https://www.randomservices.org/random/special/LocationScale.html; checked in the w5 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w5"
+     }
     }
    ]
   },
@@ -19984,7 +20136,15 @@
        "page": "Limited Expected Value",
        "quote": "E[X \\wedge u] = \\int_0^u [1 - F(x)]\\,dx"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Limited Expected Value",
+      "quote": "$$E[X \\wedge u] = \\int_0^u [1 - F(x)]\\,dx \\quad \\text{(for non-negative } X\\text{)}$$",
+      "note": "link from Deductible; checked in the w5 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w5"
+     }
     },
     {
      "id": "r4",
@@ -19997,7 +20157,15 @@
        "page": "Excess and Deductible Rating",
        "quote": "& + \\left(E[X] - E[X \\wedge u]\\right)"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Limited Expected Value",
+      "quote": "$$E[X \\wedge u] = E[X] - E[\\max(X - u, 0)] = E[X] - e(u)\\cdot[1-F(u)]$$",
+      "note": "link from Deductible; checked in the w5 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w5"
+     }
     },
     {
      "id": "r5",
@@ -26133,7 +26301,15 @@
      "statement": "A percentile of losses that exceed a deductible is a conditional percentile of the distribution given X > d, not a percentile of the unconditional distribution; conditioning on exceeding the deductible shifts percentiles upward.",
      "concept": "Deductibles",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Percentile",
+      "quote": "A percentile of the losses that exceed a deductible $d$ is a conditional percentile: a percentile of the distribution of $X$ given $X > d$, not of $X$ itself.",
+      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §1.4.0 Conditional Probability, P(A|B) = P(A ∩ B)/P(B) — https://www.probabilitycourse.com/chapter1/1_4_0_conditional_probability.php; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), §2.7 Distribution and Quantile Functions: quantile of order p is x with P(X < x) ≤ p ≤ P(X ≤ x) — https://www.randomservices.org/random/dist/CDF.html; checked in the w5 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w5"
+     }
     }
    ]
   },
@@ -29826,7 +30002,15 @@
      "statement": "A payment after a deductible has a point mass at zero equal to P[X ≤ d], so its distribution is mixed, and for t ≥ 0 the event {payment ≤ t} equals {X ≤ d + t}.",
      "concept": "Ordinary Deductible",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Payment Random Variable",
+      "quote": "It has a point mass at zero, $P(Y = 0) = P(X \\leq d) = F_X(d)$, so it has a [[Mixture Distribution|mixed distribution]] when $X$ is continuous. For $t \\geq 0$ the event $\\{Y \\leq t\\}$ is the event $\\{X \\leq d + t\\}$",
+      "note": "written from Anderson & Brown, Risk and Insurance (SOA study note P-21-05, 2005), §VI Deductibles (PDF p.7) and §VIII Y = max(0, X - 5) with its three cases (PDF p.13) — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf; Pishro-Nik §4.1.3 Functions of Continuous Random Variables (CDF method) — https://www.probabilitycourse.com/chapter4/4_1_3_functions_continuous_var.php; Pishro-Nik §4.3.1 Mixed Random Variables; checked in the w5 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w5"
+     }
     },
     {
      "id": "r5",
@@ -30145,7 +30329,15 @@
        "page": "Transformations of Random Variables",
        "quote": "The reliable way to find its distribution is the **CDF method**: write $F_Y(y) = P(g(X) \\leq y)$, rearrange the inequality into an event about $X$, evaluate with $F_X$, then differentiate to get the density."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Transformations of Random Variables",
+      "quote": "The reliable way to find its distribution is the **CDF method**: write $F_Y(y) = P(g(X) \\leq y)$, rearrange the inequality into an event about $X$, evaluate with $F_X$, then differentiate to get the density.",
+      "note": "link from Payment Random Variable; checked in the w5 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w5"
+     }
     },
     {
      "id": "r4",
@@ -30171,7 +30363,15 @@
        "page": "Mixture Distribution",
        "quote": "Its moments combine a sum over the mass points with an integral over the continuous part."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Mixture Distribution",
+      "quote": "A mixture of a point mass and a continuous distribution gives a CDF with a jump, such as an annual loss that is $0$ with positive probability and continuous otherwise. Its moments combine a sum over the mass points with an integral over the continuous part.",
+      "note": "link from Payment Random Variable; checked in the w5 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w5"
+     }
     },
     {
      "id": "r6",
@@ -34597,7 +34797,15 @@
        "page": "Policy Limit",
        "quote": "Under a limit $u$ and no other modification, the insurer pays the whole loss $X$ when it is below $u$ and pays $u$ when it is not, so the payment is the limited loss variable $X \\wedge u$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Median",
+      "quote": "its median is the loss median capped at the limit, $\\min(m,\\ u)$. If the median loss is below the limit, it is also the median payment; otherwise the median payment equals the limit $u$.",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), §2.7 Distribution and Quantile Functions: quantile of order p is x with P(X < x) ≤ p ≤ P(X ≤ x) — https://www.randomservices.org/random/dist/CDF.html (for non-decreasing g, {X ≤ x} ⊆ {g(X) ≤ g(x)} and {g(X) < g(x)} ⊆ {X < x}, so g of a quantile is a quantile); checked in the w5 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w5"
+     }
     }
    ]
   },
@@ -38030,7 +38238,15 @@
      "statement": "To compute the expected value of a limited loss, split the expectation at the limit: integrate x·f(x) from 0 to d and add d times the survival probability P(X > d).",
      "concept": "Limited Expected Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Benefit Limit",
+      "quote": "For $k = 1$ this is the [[Limited Expected Value|limited expected value]]: integrate $x f(x)$ from $0$ to $u$ and add $u$ times the survival probability $P(X > u)$.",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), §3.1 Definitions and Basic Properties, change of variables theorem (discrete and continuous) and additive property — https://www.randomservices.org/random/expect/Properties.html; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), §3.2 Additional Properties, Right Distribution Function: E(X) = ∫_0^∞ P(X > x) dx for nonnegative X and E(N) = Σ_{n≥0} P(N > n) for N in ℕ — https://www.randomservices.org/random/expect/Properties2.html; checked in the",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w5"
+     }
     },
     {
      "id": "r4",
@@ -40794,7 +41010,15 @@
      "statement": "The expected payout per loss with deductible d is E[(X-d)+] = the integral from d to infinity of (x-d) f(x) dx, which equals the integral from d to infinity of the survival function S(x) dx.",
      "concept": "Expected Value of a Continuous Random Variable",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Deductible",
+      "quote": "$$E[(X - d)_+] = \\int_d^\\infty (x - d)\\,f(x)\\,dx$$…$$E[(X - d)_+] = \\int_d^\\infty S(x)\\,dx$$",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), §3.1 Definitions and Basic Properties, change of variables theorem (discrete and continuous) and additive property — https://www.randomservices.org/random/expect/Properties.html; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), §3.2 Additional Properties, Right Distribution Function: E(X) = ∫_0^∞ P(X > x) dx for nonnegative X and E(N) = Σ_{n≥0} P(N > n) for N in ℕ — https://www.randomservices.org/random/expect/Properties2.html (applied to (X-",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w5"
+     }
     },
     {
      "id": "r3",
@@ -42901,7 +43125,15 @@
        "page": "Mean Excess Loss",
        "quote": "e_X(d) = \\frac{\\int_d^{\\infty} S_X(x)\\,dx}{S_X(d)}…The cost per loss is $E[(X - d)_+] = e_X(d)\\,S_X(d)$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Deductible",
+      "quote": "$$E[(X - d)_+] = \\int_d^\\infty (x - d)\\,f(x)\\,dx$$…$$E[(X - d)_+] = \\int_d^\\infty S(x)\\,dx$$",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), §3.1 Definitions and Basic Properties, change of variables theorem (discrete and continuous) and additive property — https://www.randomservices.org/random/expect/Properties.html; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), §3.2 Additional Properties, Right Distribution Function: E(X) = ∫_0^∞ P(X > x) dx for nonnegative X and E(N) = Σ_{n≥0} P(N > n) for N in ℕ — https://www.randomservices.org/random/expect/Properties2.html (applied to (X-",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w5"
+     }
     },
     {
      "id": "r3",
@@ -47344,7 +47576,15 @@
      "statement": "For a compound distribution S = X_1 + ... + X_N with X_i i.i.d. and independent of N, E[S|N] = N·E[X] and Var(S|N) = N·Var(X).",
      "concept": "Aggregate Claims (Compound Distributions)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Claim",
+      "quote": "conditioning on the count gives $E[S \\mid N] = N\\,E[X]$ and $\\text{Var}(S \\mid N) = N\\,\\text{Var}(X)$.",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), §3.7 Conditional Expected Value, Random Sums of Random Variables: E(Y_N|N) = Nμ, var(Y_N|N) = Nσ², var(Y_N) = E(N)σ² + var(N)μ² — https://www.randomservices.org/random/expect/Conditional.html; checked in the w5 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w5"
+     }
     },
     {
      "id": "r2",
@@ -48373,7 +48613,15 @@
        "page": "Compound Poisson Process",
        "quote": "$$E[S(t)] = \\lambda t\\, E[X], \\qquad \\text{Var}(S(t)) = \\lambda t\\, E[X^2]$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Claim",
+      "quote": "for a compound Poisson $S$, $\\text{Var}(S) = \\lambda\\,E[X^2]$.",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), §13.6 Compound Poisson Processes: var(V_t) = (μ² + σ²) r t, E(N_t) = var(N_t) = r t; compound Poisson variable with parameter a — https://www.randomservices.org/random/poisson/Compound.html; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), §3.7 Conditional Expected Value, Random Sums of Random Variables: E(Y_N|N) = Nμ, var(Y_N|N) = Nσ², var(Y_N) = E(N)σ² + var(N)μ² — https://www.randomservices.org/random/expect/Conditional.html; checked in th",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w5"
+     }
     },
     {
      "id": "r2",

@@ -9,8 +9,10 @@ import { slugForLink } from '@/lib/conceptMatch'
 import { EXAM_LABEL_TO_ID } from '@/lib/examIds'
 import { sanitizeMasteryState } from '@/lib/mastery'
 import type { MasteryState, ConceptMasteryRecord } from '@/lib/mastery'
-import { conceptLevelHistory, levelAtTime } from '@/lib/learningHistory'
+import { conceptLevelHistory, levelAtTime, mergeLoggedEvents } from '@/lib/learningHistory'
 import type { LevelEvent, MasteryTrack } from '@/lib/learningHistory'
+
+type LevelRow = { exam_id: string; concept_slug: string; from_state: string; to_state: string; at: string }
 
 export type { LevelEvent } from '@/lib/learningHistory'
 
@@ -77,6 +79,11 @@ export function useConceptLearningHistory(conceptName: string): ConceptLearningH
         { event: 'INSERT', schema: 'public', table: 'question_responses', filter: `user_id=eq.${userId}` },
         () => setVersion(v => v + 1),
       )
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'concept_level_events', filter: `user_id=eq.${userId}` },
+        () => setVersion(v => v + 1),
+      )
       .subscribe()
     return () => { supabase.removeChannel(channel) }
   }, [userId, conceptName])
@@ -123,13 +130,22 @@ export function useConceptLearningHistory(conceptName: string): ConceptLearningH
       const slugs = [...slugSet]
 
       // Fetch level events and current mastery records for those slugs in parallel.
-      const [levelResult, masteryResult] = await Promise.all([
+      // The level log (concept_level_events) holds every change since it began;
+      // daily_completions holds the climbs from before it, one per day.
+      const [levelResult, logResult, masteryResult] = await Promise.all([
         supabase
           .from('daily_completions')
           .select('exam_id, concept_slug, from_state, to_state, at')
           .eq('user_id', userId)
           .in('concept_slug', slugs)
           .order('at', { ascending: true }),
+        supabase
+          .from('concept_level_events')
+          .select('exam_id, concept_slug, from_state, to_state, at')
+          .eq('user_id', userId)
+          .in('concept_slug', slugs)
+          .order('at', { ascending: true })
+          .order('id', { ascending: true }),
         supabase
           .from('concept_mastery')
           .select('state, last_correct_at, last_attempted_at, incorrect_streak, correct_count, hard_correct_count, user_id, exam_id, concept_slug')
@@ -149,18 +165,31 @@ export function useConceptLearningHistory(conceptName: string): ConceptLearningH
         const key = `${examId}::${slug.toLowerCase()}`
         let track = tracks.get(key)
         if (!track) {
-          track = { events: [], record: null, lastAttemptAt: null }
+          track = { events: [], record: null, lastAttemptAt: null, correctAts: [] }
           tracks.set(key, track)
         }
         return track
       }
+      const toEvent = (r: LevelRow): LevelEvent => ({
+        at: new Date(r.at),
+        from: sanitizeMasteryState(r.from_state),
+        to: sanitizeMasteryState(r.to_state),
+      })
 
-      for (const r of (levelResult.data ?? []) as Array<{ exam_id: string; concept_slug: string; from_state: string; to_state: string; at: string }>) {
-        trackFor(r.exam_id, r.concept_slug).events.push({
-          at: new Date(r.at),
-          from: sanitizeMasteryState(r.from_state),
-          to: sanitizeMasteryState(r.to_state),
-        })
+      // A missing table (migration not applied yet) leaves the climbs alone.
+      if (logResult.error) console.warn('concept_level_events read failed:', logResult.error.message)
+      const logged = new Map<string, LevelEvent[]>()
+      for (const r of (logResult.error ? [] : logResult.data ?? []) as LevelRow[]) {
+        trackFor(r.exam_id, r.concept_slug)
+        const key = `${r.exam_id}::${r.concept_slug.toLowerCase()}`
+        logged.set(key, [...(logged.get(key) ?? []), toEvent(r)])
+      }
+      for (const r of (levelResult.data ?? []) as LevelRow[]) {
+        trackFor(r.exam_id, r.concept_slug).events.push(toEvent(r))
+      }
+      for (const [key, events] of logged) {
+        const track = tracks.get(key)!
+        track.events = mergeLoggedEvents(track.events, events)
       }
       for (const r of (masteryResult.data ?? []) as ConceptMasteryRecord[]) {
         trackFor(r.exam_id, r.concept_slug).record = { ...r, state: sanitizeMasteryState(r.state) }
@@ -198,7 +227,9 @@ export function useConceptLearningHistory(conceptName: string): ConceptLearningH
         const at = new Date(r.answered_at)
         for (const key of trackKeysByQuestion.get(r.question_id) ?? []) {
           const track = tracks.get(key)
-          if (track && (!track.lastAttemptAt || at > track.lastAttemptAt)) track.lastAttemptAt = at
+          if (!track) continue
+          if (!track.lastAttemptAt || at > track.lastAttemptAt) track.lastAttemptAt = at
+          if (r.is_correct) track.correctAts?.push(at)
         }
       }
 

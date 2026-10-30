@@ -2,8 +2,9 @@
 // every exam at once. Used by the "Progress & Data" controls in Settings.
 //
 // quiz_sessions cascades to question_responses; concept_mastery and
-// daily_completions are the source of the "Learning Progress" view and the
-// heatmap's plan-completion coloring, so both must be cleared for the heatmap
+// daily_completions, with the concept_level_events log, are the source of the
+// "Learning Progress" view and the heatmap's plan-completion coloring, so all
+// three must be cleared for the heatmap
 // and mastery state to reset. study_plan_cache is derived from mastery, so
 // it's cleared (not the whole exam_progress row, which also holds the user's
 // manually-set exam status/target date).
@@ -38,11 +39,13 @@ export async function resetProgressData(userId: string, examId: string | null): 
 
   let masteryQuery = supabase.from('concept_mastery').delete().eq('user_id', userId)
   let completionsQuery = supabase.from('daily_completions').delete().eq('user_id', userId)
+  let levelEventsQuery = supabase.from('concept_level_events').delete().eq('user_id', userId)
   let progressQuery = supabase.from('exam_progress').update({ study_plan_cache: null }).eq('user_id', userId)
 
   if (examId !== null) {
     masteryQuery = masteryQuery.eq('exam_id', examId)
     completionsQuery = completionsQuery.eq('exam_id', examId)
+    levelEventsQuery = levelEventsQuery.eq('exam_id', examId)
     progressQuery = progressQuery.eq('exam_id', examId)
   }
 
@@ -60,6 +63,10 @@ export async function resetProgressData(userId: string, examId: string | null): 
 
   const { error: completionsError } = await completionsQuery
   if (completionsError) return completionsError.message
+
+  // Before the migration is applied the table is missing; that leaves nothing to clear.
+  const { error: levelEventsError } = await levelEventsQuery
+  if (levelEventsError && !['42P01', 'PGRST205'].includes(levelEventsError.code ?? '')) return levelEventsError.message
 
   const { error: progressError } = await progressQuery
   if (progressError) return progressError.message

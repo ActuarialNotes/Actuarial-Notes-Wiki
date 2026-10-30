@@ -4361,7 +4361,15 @@
      "statement": "Title insurance is expressly excluded from Colorado SB21-169 (C.R.S. §10-3-1104.9).",
      "concept": "Colorado SB21-169 External Consumer Data Regulation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Insurance Data Regulation",
+      "quote": "The section does not apply to title insurance",
+      "note": "Added in 84c9f0bc from SB21-169 §10-3-1104.9(6)(a), PDF p.6; checked against the signed bill.",
+      "date": "2026-10-30",
+      "run": "g8-discda-chk"
+     }
     },
     {
      "id": "r4",
@@ -4374,7 +4382,15 @@
        "page": "Insurance Data Regulation",
        "quote": "Commercial insurance is outside the law except businessowners and commercial general liability policies with annual premiums of \\$10,000 or less."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Insurance Data Regulation",
+      "quote": "or to insurers issuing commercial insurance policies, except that it does apply to insurers issuing businessowners or commercial general liability policies with annual premiums of \\$10,000 or less",
+      "note": "Re-quoted: 84c9f0bc rewrote the sentence this item was quoted from; the new wording states §10-3-1104.9(6)(c), PDF p.6, checked against the signed bill.",
+      "date": "2026-10-30",
+      "run": "g8-discda-chk"
+     }
     },
     {
      "id": "r5",
@@ -4382,7 +4398,15 @@
      "statement": "Bonds executed by qualified surety companies are expressly excluded from Colorado SB21-169 (C.R.S. §10-3-1104.9).",
      "concept": "Colorado SB21-169 External Consumer Data Regulation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Insurance Data Regulation",
+      "quote": "to bonds executed by qualified surety companies",
+      "note": "Added in 84c9f0bc from SB21-169 §10-3-1104.9(6)(b), PDF p.6; checked against the signed bill.",
+      "date": "2026-10-30",
+      "run": "g8-discda-chk"
+     }
     }
    ]
   },

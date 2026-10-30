@@ -9,14 +9,15 @@ bloom: apply
 wiki_link:
   - Concepts/Reinsurance+Accounting
   - Concepts/Unpaid+Claims
+  - Concepts/Excess+of+Loss
 answer: "D"
 points: 1
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:4a3f560402482802bc5ccde04f1a65847133faeb1a2b6d81f8f4255e811dc42a
+  content_hash: sha256:5e0e10da90d0cbcd6fa2f9e8447071a3ab0761136162025046d065c6469a34e0
   sources:
     - "NAIC, Accounting Practices and Procedures Manual, as of March 2025, Part 1 (Indiana DOI copy), SSAP No. 62R ¶31-32 (PDF pp.441-442), sha256:a29e7223b53854eff1beb79c3fd6a969c54529d2dacc74510ea122a5c7b4ad13 — https://www.in.gov/idoi/files/INDAP25-Pt-1.pdf"
   open_findings: 0

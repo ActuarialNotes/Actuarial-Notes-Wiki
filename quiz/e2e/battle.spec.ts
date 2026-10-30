@@ -343,7 +343,7 @@ test.describe('quiz battle', () => {
     await host.getByTestId('battle-mode-host').click()
     await host.getByTestId('battle-name-0').fill('Ada')
     // The exam is picked as a sector; a written paper is listed, and can't be raced.
-    await expect(host.getByTestId('battle-exam-Exam 5')).toBeDisabled()
+    await expect(host.getByTestId('battle-exam-Exam ASTAM')).toBeDisabled()
     await host.getByTestId('battle-exam-Financial Mathematics').click()
     await chooseThreeQuestions(host)
     await host.getByTestId('battle-begin').click()

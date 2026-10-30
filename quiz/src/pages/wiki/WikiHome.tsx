@@ -96,11 +96,15 @@ function ChunkHeading({ children }: { children: ReactNode }) {
  * heading over a grid of them, each pathway its own small list, so they read
  * as alternatives rather than as more requirements.
  */
+// The tour's marker (and the e2e suite's handle) on Exam P's row, whether its
+// credential is drawn as one list or in chunks.
+const examTourId = (model: ExamCardModel) => (model.examId === 'P' ? 'exam-p' : undefined)
+
 function ChunkedList({ chunks, cardModels }: { chunks: ExamChunk[]; cardModels: Map<string, ExamCardModel> }) {
   const rows = (exams: WikiIndexItem[]) => exams.map(exam => {
     const model = cardModels.get(exam.path)
     if (!model) return null
-    return <ExamGuideRow key={exam.path} model={model} />
+    return <ExamGuideRow key={exam.path} model={model} tourId={examTourId(model)} />
   })
   const shared = chunks.filter(c => !c.pathway)
   const pathways = chunks.filter(c => c.pathway)
@@ -433,7 +437,7 @@ export default function WikiHome() {
                         <ExamGuideRow
                           key={exam.path}
                           model={model}
-                          tourId={model.examId === 'P' ? 'exam-p' : undefined}
+                          tourId={examTourId(model)}
                         />
                       )
                     })}

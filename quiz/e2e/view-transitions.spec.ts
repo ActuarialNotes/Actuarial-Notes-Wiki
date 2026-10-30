@@ -39,11 +39,14 @@ function shell(page: Page) {
     const input = document.querySelector('input[type="text"]')
     const h1 = document.querySelector('h1')
     const picker = document.querySelector('[aria-label="Examining body"]')
+    // The picker is anchored by its right edge: Study Guides offers a third
+    // body (the CIA), so its picker is wider than the Quiz tab's.
+    const anchored = (r: DOMRect) => ({ right: Math.round(r.right), y: Math.round(r.y), h: Math.round(r.height) })
     return {
       bar: bar ? round(bar.getBoundingClientRect()) : null,
       input: input ? round(input.getBoundingClientRect()) : null,
       title: h1 ? round(h1.getBoundingClientRect()) : null,
-      picker: picker ? round(picker.getBoundingClientRect()) : null,
+      picker: picker ? anchored(picker.getBoundingClientRect()) : null,
     }
   })
 }

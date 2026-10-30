@@ -44,7 +44,7 @@ test.describe('quiz', () => {
 test.describe('open-answer carryover', () => {
   test('clears the entry and the self-grade when moving to the next question', async ({ page }) => {
     // Two consecutive multi-part CAS questions, each with a free-entry part a.
-    await page.goto('/quiz?ids=cas5-2018-q3,cas5-2018-q4')
+    await page.goto('/quiz?ids=cas5-2018f-q3,cas5-2018f-q4')
 
     const startQuiz = page.getByRole('button', { name: 'Start Quiz' })
     const partAInput = page.getByPlaceholder('Enter your answer…').first()
@@ -95,7 +95,7 @@ test.describe('open-answer carryover', () => {
 // without grading asks for the grade in a popup, which takes it there and then.
 test.describe('written-answer grading', () => {
   test('shows each sample as its own card and asks for the grade before moving on', async ({ page }) => {
-    // cas6c-2014s-q10: one written part, two sample answers ("Alternatively:").
+    // cas6c-2014s-q10: one written part, four sample answers ("Alternatively:").
     await page.goto('/quiz?ids=cas6c-2014s-q10')
 
     const startQuiz = page.getByRole('button', { name: 'Start Quiz' })
@@ -111,8 +111,8 @@ test.describe('written-answer grading', () => {
     // The sample answer is one panel holding a card per sample; the
     // examiner's report is a card of its own.
     const samples = page.getByRole('region', { name: 'Sample answer' })
-    await expect(samples.getByRole('listitem', { name: /^Sample \d+ of \d+$/ })).toHaveCount(2)
-    await expect(samples.getByRole('listitem', { name: 'Sample 2 of 2' })).toContainText('Foreign parent failure')
+    await expect(samples.getByRole('listitem', { name: /^Sample \d+ of \d+$/ })).toHaveCount(4)
+    await expect(samples.getByRole('listitem', { name: 'Sample 2 of 4' })).toContainText('Foreign parent failure')
     await expect(page.getByRole('region', { name: "Examiner's report" })).toContainText('open ended nature')
 
     // Finishing without a grade: the popup holds the move until one is given.

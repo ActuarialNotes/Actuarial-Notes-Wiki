@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:850a72cc72f86b3adff9b17c3d0ae6031e62e01605b35190cac92d8395849d28
+  content_hash: sha256:2561711a838f4f88c49a6ffedb4e70b4608898e26b32130f82455d642f5b3875
   sources:
     - "Rejda & McNamara, Principles of Risk Management and Insurance, 12th ed. (Pearson 2014), Ch.3 pp.46, 54, sha256:d287eea5870c8b2d7dcfd205f5c26283d5c3cb4f536965eb8c21a344c428aed0"
     - "Risk & Insurance Education Alliance, Risk Identification (ELR course reading), pp.1-5, sha256:1592f41132ab2c9854a94b3de7c237a84442678d065a545621991fda4d6148cc — https://riskeducation.org/pub/media/elr/Risk-Identification.pdf"
@@ -24,7 +24,7 @@ verification:
 - **Document analysis:** Risk assessment questionnaires and checklists list the exposures common to similar organizations. Financial statements and accounting records point to exposures, since each asset on the balance sheet can be damaged or lost and each item of revenue or expense on the income statement can fall or rise. Contracts, insurance policies, loss histories, organizational policies, flowcharts and organizational charts each show where an exposure is created, assumed or concentrated.
 - **Other methods:** A compliance review checks the organization against the laws and regulations that apply to it, which reveals legal exposures. Personal inspections of facilities and operations find hazards that documents never mention. Expertise within the organization, such as plant managers and engineers, and beyond it, such as lawyers, consultants and insurers' risk control staff, fills in what the risk manager does not know.
 - **Structured techniques:** Brainstorming, interviews, workshops and scenario analysis draw out risks that have no loss history, including emerging and strategic risks.
-- **Identification as a team:** A cross-functional team brings operations, finance, legal, sales, IT and frontline staff together, because the people closest to a process know where it fails. A team also guards against blind spots and [[Bias|bias]].
+- **Identification as a team:** A cross-functional team brings operations, finance, legal, sales, IT and frontline staff together, because the people closest to a process know where it fails. A team also guards against blind spots and [[Bias|bias]]. A group session such as a brainstorming workshop has its own failure: when a senior or dominant member states a view, the others tend to defer to it or go along to avoid conflict, which is called groupthink, and the list narrows to what that member already sees. A facilitator guards against it by asking every member for input and keeping the leader from announcing an opinion first, and anonymous methods such as the Delphi technique, in which a panel answers anonymously over several rounds, keep any one participant's authority from dominating the rest.
 - **Output:** Identification documents the conditions and events that represent material threats to the organization's objectives, or areas to exploit for competitive advantage. That record is the input to [[Risk Assessment|risk assessment]], which measures each risk, and to treatment through [[Risk Control|risk control]] and risk financing ([[Risk Mitigation]]). It is updated as the organization and its environment change, and a [[Risk Aware Culture|risk-aware culture]] keeps new risks reaching it.
 
 > [!example]- Why the Team Finds More {Example}

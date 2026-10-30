@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:8aa6ac18d288e3aa4fef3719b8670ad379b443aa89a0fd70165952698c4eec64
+  content_hash: sha256:65358403505598280866a25a4f1f46c4f481904b53a852bbb0163b820d9a25b0
   sources:
     - "Baranoff et al., Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012), s11-01 agents vs brokers; binding; x-date, sha256:9abf601a8c7e62c112667b15df20471c0a07e5e32ff1dea40448eec0afdccf7e — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s11-01-insurance-operations-marketing.html"
     - "Baranoff et al., Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012), s12-02 licensing; unfair practices; misappropriation, sha256:d6b9f53c3fd3c106c652f9ef8b46b21ee9199f1fda6e8951f64e4cf4b09bb021 — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s12-02-insurance-regulation.html"
@@ -27,7 +27,7 @@ An **Insurance Producer** is a licensed person or firm that sells, solicits or n
 - **Independent agency and brokerage system:** Independent agents and brokers are independent businesses that represent several unrelated insurers. They own the expirations, the records of their customers and the right to solicit them at renewal, so they can move an account to another insurer.
 - **Exclusive agency system:** Exclusive agents represent one insurer or a group of insurers under common ownership. They are usually independent contractors, but they typically have limited or no ownership of expirations.
 - **Direct writers and direct response:** A direct writer sells through its own employees, and the insurer owns the expirations. Direct response insurers sell by telephone, mail or the internet without a producer, and the insurer keeps the customer relationship entirely. Many insurers combine several of these channels, which is called a mixed marketing system.
-- **Functions of producers:** Producers sell the insurer's policies: agents who sell insurance are called producers because no business is produced until a policy is sold. Using the insurer's forms, an independent agent binds the insurer, sends underwriting information to it and later delivers the policy, and may or may not collect premiums. Brokers place business for their clients, and modern brokerage firms also provide risk management surveys and administrative and claim services to self-insurers.
+- **Functions of producers:** Producers sell the insurer's policies: agents who sell insurance are called producers because no business is produced until a policy is sold. The work runs from prospecting, finding and contacting prospects (potential buyers of insurance), through reviewing each prospect's loss exposures and helping it determine its insurance needs, to selling the coverage, selecting the insurer and binding it where the producer has the authority, and later to assisting the insured in filing and adjusting claims. In the review the producer acts as a consultant on the customer's risk management and insurance program, and it can find exposures the customer did not know it had: a review of the customer's non-insurance contracts, such as leases and hold-harmless or indemnification agreements, shows liability the customer has taken on by contract, and an inspection of its premises can find unreported hazards and assets. Using the insurer's forms, an independent agent binds the insurer, sends underwriting information to it and later delivers the policy, and may or may not collect premiums. Brokers place business for their clients, and modern brokerage firms also provide risk management surveys and administrative and claim services to self-insurers.
 - **Licensing:** State insurance laws require agents, brokers and claims adjusters to be licensed, and the commissioner can grant, deny or suspend licenses; unfair practices and misappropriation of premium can cost a producer its license. Insurers themselves must be licensed in each state where they do business. In Canada, the provinces license agents, brokers and adjusters as part of [[Market Conduct Regulation|market conduct regulation]].
 - **Why it matters to actuaries:** The distribution system drives the [[Expense Ratio|expense ratio]] and the persistency of the book. Commissions are a [[Variable Expenses|variable expense]] in the rate, and contingent commissions depend on the book's results, so they are accrued as the loss ratio develops.
 

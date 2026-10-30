@@ -4,7 +4,7 @@
     { "page": "Exam VEE-MS (SOA).md", "exam_id": "VEE-MS", "wiki_id": "vee-ms", "progress_key": "VEE-MS", "body": "SOA", "bank": null, "status": "development", "weighted": false },
     { "page": "Exam VEE-ECON (SOA).md", "exam_id": "VEE-ECON", "wiki_id": "vee-econ", "progress_key": "VEE-ECON", "body": "SOA", "bank": null, "status": "development", "weighted": false },
     { "page": "Exam VEE-AF (SOA).md", "exam_id": "VEE-AF", "wiki_id": "vee-af", "progress_key": "VEE-AF", "body": "SOA", "bank": null, "status": "development", "weighted": false },
-    { "page": "Exam P-1 (SOA).md",    "exam_id": "P-1",    "wiki_id": "p-1",    "progress_key": "P",      "body": "SOA", "bank": "exam-p",      "status": "beta" },
+    { "page": "Exam P-1 (SOA).md",    "exam_id": "P-1",    "wiki_id": "p-1",    "progress_key": "P",      "body": "SOA", "bank": "exam-p",      "status": "ready" },
     { "page": "Exam FM-2 (SOA).md",   "exam_id": "FM-2",   "wiki_id": "fm-2",   "progress_key": "FM",     "body": "SOA", "bank": "exam-fm",     "status": "beta" },
     { "page": "Exam PAF (SOA).md", "exam_id": "PAF", "wiki_id": "paf-1", "progress_key": "PAF", "body": "SOA", "bank": null, "status": "development", "weighted": false },
     { "page": "Exam FAM (SOA).md", "exam_id": "FAM", "wiki_id": "fam-1", "progress_key": "FAM", "body": "SOA", "bank": "exam-fam", "status": "beta" },

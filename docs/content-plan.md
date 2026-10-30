@@ -15,10 +15,10 @@ roadmap review_
 >
 > **G8, answerability, joined the gates on 25 Oct (D29):** every served question must be
 > answerable from the pages within its reach. Only MAS-II's bank has been checked (74 of 141
-> answerable). **No exam is `ready` now.** P, FM, MAS-I, the three DISCs and Exam 7 had passed
-> every gate there was; the maintainer moved them back to `beta` the same day, because their banks
-> have not been checked against G8. They are seventeen beta exams in Phase 2, and each comes back
-> to `ready` once its bank is run and its items are closed (steps 0 and 10).
+> answerable). P, FM, MAS-I, the three DISCs and Exam 7 had passed every gate there was; the
+> maintainer moved them back to `beta` the same day, because their banks had not been checked
+> against G8. Each comes back to `ready` once its bank is run and its items are closed (steps 0
+> and 10). **Exam P is `ready` again (30 Oct)**, 8 / 8; the other sixteen are beta exams in Phase 2.
 
 This is the **one plan for the vault's content**: the exam pages, concept pages, resource pages
 and question banks, the fact check that stands behind them, and the generated figures and
@@ -188,18 +188,20 @@ Adopted during the DISC, MAS-I and Exam 7 campaigns (Appendix A), and binding on
 
 From `python3 scripts/publication_readiness.py --body all` and `--hold`, after Phase Q closed,
 re-measured with G8 the same day.
-84 exam pages: **0 ready, 17 beta, 67 in development**.
+84 exam pages: **1 ready, 16 beta, 67 in development** (Exam P promoted 30 Oct).
 
-**Ready (0).** The seven exams that were ready on 25 Oct went back to beta that day, when G8 joined
-the gates (D29). They lead the beta table:
+**Ready (1).** The seven exams that were ready on 25 Oct went back to beta that day, when G8 joined
+the gates (D29). **Exam P** is ready again since 30 Oct: page verified, 68 concepts verified, 6 / 6
+readings verified, every concept with a question, 719 / 719 served questions verified, and 719 / 719
+answerable (G8: 683 items closed — 254 passages the check missed, 19 by retagging 15 questions, 220
+by passages written onto 43 concept pages and fact checked, 190 not required). Phase 2 step 10.
 
-`--hold`: 0 ready exams, 0 errors, 1 warning (PCPA's G6).
+`--hold` (30 Oct): 1 ready exam, 0 errors, 1 warning (PCPA's G6).
 
-**Beta (17)**: the seven moved back from ready, then the rest in Phase 2's order:
+**Beta (16)**: the six moved back from ready, then the rest in Phase 2's order:
 
 | Exam | Page | Concepts | Unverified concepts | Readings unverified | No question | Bank verified | Answerable | Gates | Fails |
 |---|---|---:|---:|---:|---:|---|---|---:|---|
-| Exam P | verified | 68 | 0 | 0 / 6 | 0 | 719 / 719 | not run | 7 / 8 | G8 |
 | Exam FM | verified | 90 | 0 | 0 / 6 | 0 | 460 / 460 | not run | 7 / 8 | G8 |
 | DISC-DA | verified | 42 | 0 | 0 / 1 | 0 | 70 / 70 | not run | 7 / 8 | G8 |
 | DISC-RM | verified | 65 | 0 | 0 / 1 | 0 | 144 / 144 | not run | 7 / 8 | G8 |
@@ -339,7 +341,7 @@ Appendix A.
 
 | # | Exam | Gates | What is left | Readings it rests on |
 |---|---|---:|---|---|
-| — | P, FM, MAS-I, the DISCs, Exam 7 (beta again since 25 Oct) | 7 / 8 | The first seven gates done (Phase 1; Appendix A). MAS-I is 6 / 8 until ISLR's and Dobson's delta re-check (Phase 2, step 0). G8: each bank's check (step 0), then its items (step 10), then back to `ready` | Their readings, all verified |
+| — | P, FM, MAS-I, the DISCs, Exam 7 (beta again since 25 Oct; **P ready again 30 Oct, 8 / 8**) | 7 / 8 | The first seven gates done (Phase 1; Appendix A). MAS-I is 6 / 8 until ISLR's and Dobson's delta re-check (Phase 2, step 0). G8: each bank's check (step 0), then its items (step 10), then back to `ready` | Their readings, all verified |
 | 1 | **MAS-II** (C4) | 5 / 8 | G4: *Backward Shift Operator* and *Correlogram* quote Cowpertwait's own wording; restate each to an open text (fpp3, NIST) and verify at medium (D22, D27). G5: the ISLR delta | Cowpertwait commercial; the rest verified |
 | 2 | **Exam 9** (C2) | 5 / 8 | G4: *Enterprise Risk Management* (Brehm's four phases are stated in no open source: restate the page to one that is, such as the CAS ERM Committee's free 2003 *Overview of Enterprise Risk Management*, or cut the claim). G5: CJS (assigned as the JEP text, read as the HBS working paper) and Cummins 2008 (SSRN 1057401), both `in_review`. Try again for the assigned texts; if no session can reach them, the maintainer supplies a copy | Most verified on open texts (D22) |
 | 3 | **SRM** (C9) | 5 / 8 | G4: 7 concepts (*ARCH Model*, *Hyperparameter*, *Model Validation*, *Overfitting*, *Regression Tree*, *Train-Test Split*, *Variable Transformation*). G5: Frees 2010, and the ISLR delta | Frees commercial (D7; Frees posts an online version); ISLR free |
@@ -759,7 +761,7 @@ and then a resolve run.
 | 8 | PCPA | A bank for 29 concepts, written and checked by different agents (D5); 5 concepts; 12 readings | Mostly commercial; ASOP 23 and 56, R4DS and McKinney free | **ready** |
 | 9 | Exam 6C | The page's F-008–F-012; 137 concepts; 67 readings | Free Canadian documents, but six are in the study kit only | Every gate but G5, which stays held on those six pages until the kit is read (D28) |
 | — | Exam 8 | The ISO CGL plan; G8 | Study kit only; the bank's check and items are free to do now | Held on G5 (D20, D28), with G8 closed |
-| 10 | The seven moved back (P, FM, MAS-I, the DISCs, Exam 7) | G8's items, from step 0's runs | Their own readings, all verified | Each **ready** again, 8 / 8, one promotion PR each |
+| 10 | The seven moved back (P, FM, MAS-I, the DISCs, Exam 7) | G8's items, from step 0's runs | Their own readings, all verified | Each **ready** again, 8 / 8, one promotion PR each. **P ✅ ready 30 Oct** (8 / 8) |
 
 Steps 2–9 each start with the exam's `check-answerable` run, and each ends at **ready** only with
 G8 passing. Step 10 is listed last but is placed by step 0's runs. Each of the seven is one gate
@@ -771,7 +773,7 @@ runs are complete for P and FM and partial for the other five. Under D30 the ope
 
 | Bank | Answerable | Taught on no page | Out of reach | Not yet checked |
 |---|---:|---:|---:|---:|
-| exam-p | 284 / 719 | 456 | 227 | 0 |
+| exam-p | 284 / 719 → **719 / 719 ✅ (30 Oct)** | 456 → 0 | 227 → 0 | 0 |
 | exam-fm | 253 / 460 | 241 | 59 | 0 |
 | exam-mas-i | 35 / 281 | 22 | 7 | 225 |
 | exam-mas-ii | 80 / 141 | 113 | 17 | 0 |

@@ -260,16 +260,48 @@ const BUILDERS: Record<string, Builder> = {
 
   'ratemaking.trend_fit': r => {
     const rows = r.table?.rows ?? []
+    const left = new Set(r.values.excluded as string[])
     return {
       kind: 'lines',
       series: [{ name: 'Fitted', points: rows.map((row, k) => ({ x: k, y: num(row.fitted) })), role: 'result' }],
-      dots: rows.map((row, k) => ({ x: k, y: num(row.value), role: 'base' as Role, name: String(row.period) })),
+      // A point left out of the fit, or outside its window, is drawn muted.
+      dots: rows.map((row, k) => ({ x: k, y: num(row.value), role: (row.fitted == null || left.has(String(row.period)) ? 'muted' : 'base') as Role, name: String(row.period) })),
       xUnit: 'plain',
       yUnit: 'plain',
     }
   },
 
   'ratemaking.trend_factor': r => ({ kind: 'span', from: String(r.values.from), to: String(r.values.to), years: num(r.values.period) }),
+
+  // The trend factor's path through time: the past trend's slope to the latest point, then the future's.
+  'ratemaking.two_step_trend': r => {
+    const p1 = num(r.values.past_period)
+    const p2 = num(r.values.future_period)
+    const f1 = num(r.values.past_factor)
+    const total = num(r.values.factor)
+    return {
+      kind: 'lines',
+      series: [
+        { name: 'Past', points: [{ x: 0, y: 1 }, { x: p1, y: f1 }], role: 'base' },
+        { name: 'Future', points: [{ x: p1, y: f1 }, { x: p1 + p2, y: total }], role: 'result' },
+      ],
+      dots: [{ x: p1, y: f1, role: 'base' as Role, name: String(r.values.pivot) }],
+      xTicks: [{ x: 0, label: String(r.values.from) }, { x: p1, label: String(r.values.pivot) }, { x: p1 + p2, label: String(r.values.to) }],
+      xUnit: 'years',
+      yUnit: 'factor',
+    }
+  },
+
+  'ratemaking.combined_trend': r => ({
+    kind: 'axis',
+    ticks: [
+      { name: 'Frequency', value: num(r.values.frequency), role: 'muted' },
+      { name: 'Severity', value: num(r.values.severity), role: 'muted' },
+      ...(r.values.direct == null ? [] : [{ name: 'Direct', value: num(r.values.direct), role: 'base' as Role }]),
+      { name: 'Combined', value: num(r.values.trend), role: 'result' },
+    ],
+    unit: 'percent',
+  }),
 
   'ratemaking.expense_ratios': r => {
     const F = num(r.values.fixed_provision)

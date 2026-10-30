@@ -500,6 +500,27 @@ describe('the calculators — list_tools, describe_tool, run_tool', () => {
     ])
   })
 
+  it('runs a batch: one comparison row per run, each run short, a bad one marked', async () => {
+    const quarters = (rate: number) => Array.from({ length: 8 }, (_, k) => ({ period: `Q${k + 1}`, value: 100 * (1 + rate) ** (k / 4) }))
+    const out = JSON.parse((await tool('run_tool', {
+      tool: 'ratemaking.trend_fit',
+      input: { per_year: 4 },
+      runs: [
+        { label: 'Frequency', input: { points: quarters(-0.01) } },
+        { label: 'Severity', input: { points: quarters(0.06) } },
+        { label: 'Bad', input: { points: 'none' } },
+      ],
+    })).text)
+    expect(out.comparison.rows.map((r: { label: string }) => r.label)).toEqual(['Frequency', 'Severity', 'Bad'])
+    expect(out.comparison.rows[1].trend).toBeCloseTo(0.06, 10)
+    expect(out.runs[0].app_url).toMatch(/\/tools\/trend-fit#input=/)
+    expect(out.runs[0].trace).toBeUndefined()
+    expect(out.runs[0].defaulted_judgments).toEqual(['latest', 'seasonal'])
+    expect(out.runs[2].error).toMatch(/array of rows/)
+    expect((await tool('run_tool', { tool: 'ratemaking.trend_fit', runs: 'x' })).isError).toBe(true)
+    expect((await tool('run_tool', { tool: 'ratemaking.trend_fit', runs: [] })).isError).toBe(true)
+  })
+
   it('still calculates when the knowledge base cannot be loaded, just without page links', async () => {
     const broken = createActuarialNotesServer({ loadIndex: async () => { throw new Error('offline') } })
     const out = (await broken.methods['tools/call']({ name: 'run_tool', arguments: { tool: 'finance.annuity' } }, ctx)) as ToolResult

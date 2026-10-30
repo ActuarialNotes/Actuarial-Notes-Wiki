@@ -1,8 +1,9 @@
 # Actuarial Tools — plan
 
-_Last updated: 2026-10-10 · Status: **Phase 1 nearly built; V2 built** — thirty-five tools on
-the Tools page and in the MCP connector: thirty-two calculators, each checked against a published
-source, and three Data Sources. §16 says what is built and §15 what is next. **§18 is the V2
+_Last updated: 2026-10-30 · Status: **Phase 1 nearly built; V2 built** — thirty-seven tools on
+the Tools page and in the MCP connector: thirty-four calculators, all but one checked against a
+published source, and three Data Sources. **§16.2** is the trend review (batch runs, fit
+diagnostics, marks, two-step and frequency × severity trend). §16 says what is built and §15 what is next. **§18 is the V2
 review**: what the first build looked like on a phone, and the four changes it led to —
 assumptions picked rather than typed (§6.6), a live figure on every card (§6.7), **Data Sources**
 as a practice area (§4.11) and a search bar on the Tools page (§6.2). §16.1 says what of V2 was
@@ -205,8 +206,10 @@ cash-flow PV.
 | **Earned Premium** | How much of this premium is earned in a period? | Written premium (or exposure) by period, policy term, CY or PY basis → earned and unearned, with the parallelogram drawn | Earned Premium, Earned Exposure; W&M Ch. 4–5 | 1 |
 | **On-Level Factors** | What brings each year's premium to current rates? | Rate changes (date, %), policy term, CY or PY basis → on-level factor by year, with the parallelogram's areas drawn | Parallelogram Method, On-Leveling; W&M Ch. 5 | 1 |
 | **Extension of Exposures** | What would each policy pay at current rates? | Policies with their rating characteristics, current rate manual → on-level premium | On Level Premium; W&M Ch. 5 | 2 |
-| **Trend Fit** | What annual trend do these data show? | Points by period (frequency, severity, pure premium or average premium), exponential or linear, latest *n* → annual trend and R², with the fit drawn | Exponential Trend, Linear Trend; ASOP 13 | 1 |
+| **Trend Fit** | What annual trend do these data show? | Points by period (frequency, severity, pure premium or average premium), each optionally marked exclude / start / end / shift / break; exponential or linear, latest *n*, seasons → annual trend with its standard error, p-value and 95% interval, R², level shifts and the trend before a break, with the fit drawn and warnings on few points, a low R², a trend indistinguishable from zero and an unmarked level shift | Exponential Trend, Linear Trend; ASOP 13 | 1 ✓ (§16.2) |
+| **Frequency × Severity Trend** | What pure premium trend do these frequency and severity trends make? | Frequency trend, severity trend, optionally a direct pure premium fit → (1 + t_f)(1 + t_s) − 1 and its gap to the direct fit | Loss Trend; W&M Ch. 6 | 1 ✓ (§16.2) |
 | **Trend Factor** | How far do these amounts trend to the future period? | Annual trend, experience period, effective date, policy term, rates-in-effect length → trend period and factor | Loss Trend, Premium Trend; W&M Ch. 5–6 | 1 |
+| **Two-Step Loss Trend** | How far do these losses trend when the past and the future trend differ? | Past and future trend, accident year, the latest data point's date, the future average accident date → the two periods and factors and their product | Loss Trend; W&M Ch. 6 | 1 ✓ (§16.2) |
 | **Two-Step Trend Factor** | How far does premium trend when the latest year isn't current? | Average premium history, current average premium, projected trend, dates → the two-step factor | Premium Trend; W&M Ch. 5 | 2 |
 | **Expense Ratios** | What are the fixed and variable expense ratios? | Expenses by type and year, premium; all-variable or premium-based fixed → fixed and variable ratios | Expense Provisions, Fixed Expenses; W&M Ch. 7 | 1 |
 | **Permissible Loss Ratio** | What loss ratio do the rates allow? | Variable expense ratio, profit and contingency → permissible loss ratio | Permissible Loss Ratio; W&M Ch. 7 | 1 |
@@ -1214,14 +1217,15 @@ In order, each step shippable alone:
 
 ## 16. What's built (2026-10-10)
 
-**Thirty-two tools**, each in its own file under `quiz/src/lib/tools/<area>/`, every one
-reproducing a published worked example or exam question in CI (§17):
+**Thirty-four calculators and three Data Sources**, each in its own file under
+`quiz/src/lib/tools/<area>/`, every calculator but Frequency × Severity Trend (§16.2) reproducing a published worked example or exam question in CI
+(§17):
 
 | Area | Tools |
 |---|---|
 | Data Sources (V2, §16.1) | Life Table, Price Index, Yield Curve — these read published tables rather than compute, so they carry no "Tested against" mark |
 | Reserving | Ratio Triangle, Age-to-Age Factors, Development to Ultimate, Chain Ladder, Expected Claims, Bornhuetter-Ferguson, Benktander, Cape Cod |
-| Ratemaking | Earned Premium, On-Level Factors, Trend Fit, Trend Factor, Expense Ratios, Permissible Loss Ratio, Loss Ratio Method, Pure Premium Method |
+| Ratemaking | Earned Premium, On-Level Factors, Trend Fit, Frequency × Severity Trend, Trend Factor, Two-Step Loss Trend, Expense Ratios, Permissible Loss Ratio, Loss Ratio Method, Pure Premium Method |
 | Loss distributions | Distribution, Limited Expected Value, Expected Payment |
 | Credibility | Full Credibility Standard, Partial Credibility, Bühlmann Credibility |
 | Financial mathematics | Interest Converter, Annuity, Present Value, Internal Rate of Return, Loan Schedule, Bond Price, Bond Yield, Bond Amortization, Duration & Convexity, Redington Immunization |
@@ -1233,7 +1237,8 @@ source can check:
 - **Earned Premium** takes policies with their effective dates, as Werner & Modlin's Chapter 4
   examples do, and aggregates by calendar or policy year as of a year end.
 - **Trend Factor** is the one-step trend from an accident or policy year's average accident date
-  to the future one; the two-step trend is Phase 2's.
+  to the future one; **Two-Step Loss Trend** is its own tool (§16.2), since the two trends and the
+  latest data point would take Trend Factor past six inputs.
 - **Limited Expected Value** and **Expected Payment** run seven loss models in closed form
   (`distributions/lossModels.ts`: exponential, uniform, Pareto, single-parameter Pareto, gamma,
   lognormal, Weibull), each tested against ∫ S(x) dx. Coinsurance multiplies both expected
@@ -1351,9 +1356,46 @@ with no result; block selection and undo in the grid; **From a run** (the saved 
 §8.5's); Loss Development Data, the SOA tables and the Bank of Canada curves (§14); Statistics
 Canada's construction price indexes; a scheduled dataset refresh.
 
+### 16.2 Trend review (2026-10-30)
+
+Recalculating FSRA's private passenger auto loss trends with the tools (eight coverages, plus
+frequency and severity) found the trend tools too thin for real work. What changed:
+
+- **Batch runs.** `run_tool` takes `runs: [{label, input}]` beside a shared `input` and answers
+  with one comparison table — a row per run, the columns the spec's `compare` names (else its
+  tiles) — and each run short: summary, values, warnings, defaulted judgments, `app_url`
+  (`runBatch` in `lib/tools/run.ts`, at most 50 runs; a run whose input can't be read carries an
+  error and the rest still run). Fourteen `trend_fit` calls become one; a trend factor per
+  accident year is one call. It is many runs of one tool, not a bigger tool (R9).
+- **Diagnostics.** Trend Fit is a least-squares fit with its errors (`lib/tools/regression.ts`):
+  the slope's standard error, a two-sided p-value and a 95% interval on Student's t, mapped
+  through e^(m·b) − 1, beside R² and adjusted R². It warns on fewer than four residual degrees of
+  freedom (a 3-point R² of 0.99999 means nothing), on R² under 0.5, on a trend whose interval
+  spans zero, and on a **level shift nobody marked** — every place with three fitted points each
+  side is tried with a step, and the best one is reported only if it still clears 5% after a
+  Bonferroni allowance for the places tried. Werner's 16- and 20-point frequency fits (Appendix A)
+  trip it, at 2012 Q3–Q4: the series does step down there.
+- **Fitting options**, as a **Mark** column on the points rather than more scalar inputs (R9's
+  six): `exclude` (a pandemic quarter, kept in its place in time), `start` / `end` (the window;
+  *latest n* counts back from the end), `shift` (a level-shift parameter from that period on — a
+  reform), `break` (the trend changes from that period on; the trend reported is the one after,
+  the one before is in `values.trend_before`). **Seasons** (one level per period of the year) is a
+  judgment for figures that aren't year-ending.
+- **Two-Step Loss Trend** (`ratemaking.two_step_trend`): the past trend from the accident year's
+  middle to the latest data point, then the future trend on to the future average accident date
+  (Trend Factor's `to`, handed over by its hand-off). Tested against both Werner two-step
+  exhibits, row by row. Accident years only: a policy year would need the term, a seventh input.
+- **Frequency × Severity Trend** (`ratemaking.combined_trend`): (1 + t_f)(1 + t_s) − 1, and
+  optionally its gap to a direct pure premium fit, warning beyond one point. It is an identity, and
+  no source prints the product as such: Werner's Loss Trend - 1 fits frequency, severity and pure
+  premium separately, from points rounded to four figures, so their fits disagree by up to 0.1
+  point (4 quarters: 1.81% combined, 1.9% direct). It therefore carries no "Tested against" mark
+  yet; a test holds it to the direct fit on unrounded data instead.
+
 ## 17. Tested against (R6)
 
-All thirty-two tools reproduce published work in CI: 495 printed values across 33 exhibits of the
+Thirty-three of the thirty-four calculators reproduce published work in CI (Frequency × Severity
+Trend is the exception, §16.2): 545 printed values across 33 exhibits of the
 two Exam 5 texts, and 46 published exam questions. One pair of lists — `CHECKS` in
 `quiz/src/lib/tools/checks.ts` and `QUESTION_CHECKS` in `questionChecks.ts` — is both what
 `checks.test.ts` runs and what the card's ⋯ menu, the catalogue's tick and the connector's
@@ -1381,6 +1423,7 @@ pattern, not typed. The output is `quiz/src/lib/tools/fixtures/*.json`, committe
 | On-Level Factors | Appendix A, Current Rate Level - 1 and - 2 | 35 shares of earned premium by rate level group, 5 average rate levels, 5 on-level factors |
 | Trend Fit | Appendix A, Premium Trend - 1; Loss Trend - 1 | 24 exponential fits: average premium, frequency, severity and pure premium over 20, 16, 12, 8, 6 and 4 points |
 | Trend Factor | Appendix A, Loss Trend - 5; Appendix B, Loss Trend - 3 | the projected trend periods (2.25 and 2.5 years) and factors |
+| Two-Step Loss Trend | Appendix A, Loss Trend - 5; Appendix B, Loss Trend - 3 | every accident year's current trend period and factor, projected period and factor, and total: 50 values |
 | Expense Ratios | Appendix A, Expense | each type's three-year ratio, fixed and variable share, and the 11.3% and 17.0% provisions |
 | Permissible Loss Ratio | Appendices A-7, B-5, C-7 | the (variable) permissible loss ratio of each indication |
 | Loss Ratio Method | Appendix A, LR Indication; Appendix C, LR Indication | the variable permissible loss ratio and indicated change, with and without a fixed provision |

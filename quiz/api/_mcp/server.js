@@ -27,7 +27,9 @@ import {
   AREAS as TOOL_AREAS,
   TOOLS as CALCULATORS,
   ToolInputError as CalculatorInputError,
+  MAX_BATCH_RUNS,
   describeTool,
+  runBatch,
   runPath,
   runTool,
   toolById,
@@ -55,7 +57,7 @@ export const INSTRUCTIONS = `Actuarial Notes is a study wiki for the SOA and CAS
 - Every result carries a fact-check status. Most pages are "Not fact checked" — community-written and not yet checked against the source text — so when an exact figure, formula or rule matters, say that and point to the official reading. A "Known issue" or "Disputed" page has an unresolved problem: say so before relying on it.
 - To quiz someone, get_practice_questions returns questions without their answers. Ask one at a time, wait for the student's answer, then call check_answer to mark it and show the official solution. Never reveal or hint at an answer first.
 - An exam marked "in development" has a syllabus outline, few written concept pages and little or no question bank.
-- For any actuarial calculation the calculators cover (development factors, chain ladder, Bornhuetter-Ferguson, Benktander, Cape Cod, on-level factors, trend fits and factors, expense provisions, indicated rates, deductibles and limited expected values, distribution probabilities, credibility, interest, annuities, loans, bonds, duration and immunization), use list_tools / describe_tool / run_tool rather than doing the arithmetic yourself. For published figures — US and Canadian life tables, CPI and wage indexes, US Treasury yield curves — the Data Sources tools (area "data") read the publisher's own table and name its edition and licence; never quote such a figure from memory. Each tool does one thing; chain them by passing one result into the next. A result's judgments are choices the user owns: say which were left at their default and ask before treating a default as a selection. Quote its warnings, and give the user its app_url to open the same run.
+- For any actuarial calculation the calculators cover (development factors, chain ladder, Bornhuetter-Ferguson, Benktander, Cape Cod, on-level factors, trend fits (with intervals, exclusions, level shifts and breaks), frequency × severity and two-step trends, trend factors, expense provisions, indicated rates, deductibles and limited expected values, distribution probabilities, credibility, interest, annuities, loans, bonds, duration and immunization), use list_tools / describe_tool / run_tool rather than doing the arithmetic yourself. For published figures — US and Canadian life tables, CPI and wage indexes, US Treasury yield curves — the Data Sources tools (area "data") read the publisher's own table and name its edition and licence; never quote such a figure from memory. Each tool does one thing; chain them by passing one result into the next. A result's judgments are choices the user owns: say which were left at their default and ask before treating a default as a selection. Quote its warnings, and give the user its app_url to open the same run.
 - This is study material, not professional actuarial advice.`
 
 const STATUS_WORDS = {
@@ -683,12 +685,26 @@ TOOLS.push(
     name: 'run_tool',
     title: 'Run a calculator',
     description:
-      'Run one calculator on the user\'s data. Returns JSON: summary, tiles (the headline results), table, values (typed, to pass into the next tool), judgments (each with default: true/false — surface the defaulted ones to the user), warnings, trace (each step\'s formula and result), method (concept pages with their fact check), input_hash and app_url, which opens the same run in the app for the user to check. Deterministic: the same input gives the same result.',
+      'Run one calculator on the user\'s data. Returns JSON: summary, tiles (the headline results), table, values (typed, to pass into the next tool), judgments (each with default: true/false — surface the defaulted ones to the user), warnings, trace (each step\'s formula and result), method (concept pages with their fact check), input_hash and app_url, which opens the same run in the app for the user to check. Deterministic: the same input gives the same result. '
+      + 'To run the same calculator over several inputs at once — eight coverages\' trend fits, one trend factor per accident year — pass "runs": [{label, input}] (up to ' + MAX_BATCH_RUNS + '); "input" is then shared by every run, each run\'s own input laid over it. A batch returns a comparison table (one row per run) and each run\'s summary, values, warnings, defaulted judgments and app_url, without its trace or table; run one alone for those. A run whose input can\'t be read carries an error instead, and the others still run.',
     inputSchema: {
       type: 'object',
       properties: {
         tool: { type: 'string', description: 'The tool id from list_tools.' },
-        input: { type: 'object', description: 'The input, keyed by the field names describe_tool gives. Omitted fields take their defaults.' },
+        input: { type: 'object', description: 'The input, keyed by the field names describe_tool gives. Omitted fields take their defaults. With "runs", the input every run shares.' },
+        runs: {
+          type: 'array',
+          minItems: 1,
+          maxItems: MAX_BATCH_RUNS,
+          description: 'Several runs of the same calculator, each {label, input}: its input is laid over the shared "input".',
+          items: {
+            type: 'object',
+            properties: {
+              label: { type: 'string', description: 'What this run is, e.g. "Collision frequency" or "AY 2021".' },
+              input: { type: 'object', description: 'This run\'s own fields.' },
+            },
+          },
+        },
       },
       required: ['tool'],
     },
@@ -698,6 +714,7 @@ TOOLS.push(
     run(args, ix, { site }) {
       const spec = calculator(args)
       if (args.input !== undefined && !isObject(args.input)) throw new ToolInputError('"input" must be an object keyed by field name.')
+      if (args.runs !== undefined) return result(JSON.stringify(batch(spec, args, site)))
       let run
       try {
         run = runTool(spec, args.input ?? {})
@@ -717,6 +734,35 @@ TOOLS.push(
     },
   },
 )
+
+/** run_tool over several inputs: the comparison first, then each run, short. */
+function batch(spec, args, site) {
+  if (!Array.isArray(args.runs) || args.runs.some(r => !isObject(r))) throw new ToolInputError('"runs" must be an array of {label, input} objects.')
+  let out
+  try {
+    out = runBatch(spec, args.input ?? {}, args.runs)
+  } catch (err) {
+    if (err instanceof CalculatorInputError) throw new ToolInputError(`${err.message} Call describe_tool for "${spec.id}" to see its fields.`)
+    throw err
+  }
+  return {
+    tool: out.tool,
+    version: out.version,
+    comparison: out.comparison,
+    runs: out.runs.map(({ label, result: run, error }) => (run
+      ? {
+          label,
+          summary: run.summary,
+          values: run.values,
+          warnings: run.warnings,
+          defaulted_judgments: run.judgments.filter(j => j.default).map(j => j.field),
+          input_hash: run.inputHash,
+          app_url: `${site}${runPath(toolSlug(spec), run.input)}`,
+        }
+      : { label, error })),
+    tested_against: toolSummary(spec).tested_against,
+  }
+}
 
 const TOOLS_BY_NAME = new Map(TOOLS.map(t => [t.name, t]))
 

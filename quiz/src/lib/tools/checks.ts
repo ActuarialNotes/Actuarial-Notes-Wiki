@@ -502,6 +502,26 @@ CHECKS.push(
       }],
     }
   }),
+  // The same exhibits whole: every year's current trend to the latest point's
+  // average date, then the projected trend on to the future one.
+  ...[
+    { exhibit: W.a19_loss_trend_periods, periodTolerance: 0.005 + 1e-9 },
+    { exhibit: W.b12_loss_trend_periods, periodTolerance: 0.05 + 1e-9 },
+  ].map(({ exhibit, periodTolerance }) => ({
+    tool: 'ratemaking.two_step_trend',
+    source: wernerRef(exhibit),
+    cases: exhibit.rows.map(y => ({
+      name: `Columns (2)–(7) for accident year ${y.year}, from ${exhibit.projected_from} to ${exhibit.projected_to}`,
+      input: { past_trend: y.current_trend, future_trend: y.projected_trend, year: Number(y.year), trend_to: exhibit.projected_from, future: exhibit.projected_to },
+      expect: [
+        { what: 'current trend period', printed: y.current_period, tolerance: periodTolerance, actual: (r: ToolResult) => Number(r.values.past_period) },
+        { what: 'current trend factor', printed: y.current_factor, tolerance: FOUR, actual: (r: ToolResult) => Number(r.values.past_factor) },
+        { what: 'projected trend period', printed: y.projected_period, tolerance: periodTolerance, actual: (r: ToolResult) => Number(r.values.future_period) },
+        { what: 'projected trend factor', printed: y.projected_factor, tolerance: FOUR, actual: (r: ToolResult) => Number(r.values.future_factor) },
+        { what: 'total trend factor', printed: y.total, tolerance: FOUR, actual: (r: ToolResult) => Number(r.values.factor) },
+      ],
+    })),
+  })),
   {
     tool: 'ratemaking.on_level_factors',
     source: wernerRef(W.a10_rate_level_factors),

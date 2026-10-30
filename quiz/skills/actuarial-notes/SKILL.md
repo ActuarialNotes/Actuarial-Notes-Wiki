@@ -60,6 +60,9 @@ Don't do the arithmetic yourself. `list_tools` finds the calculator (search it
 by the question you want answered), `describe_tool` gives its inputs (rates are
 decimals: 0.05 for 5%), and `run_tool` runs it. Each tool does one thing, so a
 bigger job is a chain: pass one result's `values` into the next tool's input.
+The same tool over several inputs (several coverages' trends, a factor per
+accident year) is one `run_tool` call with `runs: [{label, input}]`, which
+answers with a comparison table.
 A result's `judgments` are the user's to make — say which were left at their
 default and ask before treating a default as their choice. Quote its
 `warnings`, show the key steps from its `trace`, and give the user its

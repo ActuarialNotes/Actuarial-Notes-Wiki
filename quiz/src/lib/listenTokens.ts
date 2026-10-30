@@ -233,6 +233,21 @@ export function toSegments(blocks: ListenBlock[]): SpeechSegment[] {
   return segments
 }
 
+/**
+ * The rest of a segment from one of its tokens on, its ranges shifted to the
+ * cut text — what a voice reads to carry on from that word rather than from
+ * the top of the paragraph. A token the segment doesn't hold returns it whole.
+ */
+export function segmentFrom(seg: SpeechSegment, tokenIndex: number): SpeechSegment {
+  const at = seg.ranges.findIndex(r => r.index === tokenIndex)
+  if (at <= 0) return seg
+  const offset = seg.ranges[at].start
+  return {
+    text: seg.text.slice(offset),
+    ranges: seg.ranges.slice(at).map(r => ({ index: r.index, start: r.start - offset, end: r.end - offset })),
+  }
+}
+
 // XML-escape for SSML payloads.
 function xmlEscape(s: string): string {
   return s

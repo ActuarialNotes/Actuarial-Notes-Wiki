@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { buildListenContent, toSegments, segmentsToSsml } from './listenTokens'
+import { buildListenContent, toSegments, segmentsToSsml, segmentFrom } from './listenTokens'
 
 const MACAULAY = `**Macaulay duration** $D_{Mac}$ is the weighted-average time to receipt of a bond's cash flows, where each cash flow is weighted by its [[Present Value]] as a fraction of total price:
 
@@ -78,5 +78,23 @@ describe('spoken punctuation', () => {
     const md = '> > First step:\n> > $$a = b$$\n> > Now the next step.\n'
     const segs = toSegments(buildListenContent(md).blocks).map(s => s.text)
     expect(segs).toEqual(['First step: a equals b. Now the next step.'])
+  })
+})
+
+describe('segmentFrom', () => {
+  const seg = { text: 'one two three', ranges: [
+    { index: 4, start: 0, end: 3 }, { index: 5, start: 4, end: 7 }, { index: 6, start: 8, end: 13 },
+  ] }
+
+  it('cuts the segment at a token and shifts its ranges', () => {
+    const tail = segmentFrom(seg, 5)
+    expect(tail.text).toBe('two three')
+    expect(tail.ranges).toEqual([{ index: 5, start: 0, end: 3 }, { index: 6, start: 4, end: 9 }])
+    expect(tail.ranges.map(r => tail.text.slice(r.start, r.end))).toEqual(['two', 'three'])
+  })
+
+  it('returns the segment whole from its first token or a token it lacks', () => {
+    expect(segmentFrom(seg, 4)).toBe(seg)
+    expect(segmentFrom(seg, 99)).toBe(seg)
   })
 })

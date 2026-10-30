@@ -11,6 +11,7 @@ import { PageStackBar } from '@/components/wiki/PageStackBar'
 import { ProBadge } from '@/components/ProBadge'
 import { pdfPage, samePage, type StackPageRef } from '@/lib/pageStack'
 import { clearPageScrollMemory } from '@/lib/pageScrollMemory'
+import { setListenReading } from '@/hooks/useListenCarry'
 import { useAuth } from '@/hooks/useAuth'
 import { useSoundEffects, useSoundOnToggle } from '@/hooks/useSoundEffects'
 import { useSubscription } from '@/hooks/useSubscription'
@@ -216,6 +217,7 @@ export function ConceptPopup() {
     if (!open) {
       setFocusMode(false)
       clearPageScrollMemory()
+      setListenReading(false)
     }
   }, [open])
 

@@ -1468,7 +1468,7 @@ export function ReadinessCard({
               {readinessMoveToday !== 0 && (
                 <span
                   className={
-                    'ml-auto flex shrink-0 items-center rounded-full px-1.5 py-0.5 text-xs font-semibold tabular-nums ' +
+                    'ml-auto flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-base font-semibold leading-none tabular-nums sm:px-3 sm:py-1.5 sm:text-xl ' +
                     (readinessMoveToday > 0
                       ? 'bg-green-500/10 text-green-600 dark:text-green-400'
                       : 'bg-red-500/10 text-red-600 dark:text-red-400')
@@ -1476,8 +1476,8 @@ export function ReadinessCard({
                   title={`Readiness ${readinessMoveToday > 0 ? 'up' : 'down'} ${Math.abs(readinessMoveToday)} point${Math.abs(readinessMoveToday) === 1 ? '' : 's'} today`}
                 >
                   {readinessMoveToday > 0
-                    ? <ArrowUp className="h-3 w-3" aria-hidden="true" />
-                    : <ArrowDown className="h-3 w-3" aria-hidden="true" />}
+                    ? <ArrowUp className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden="true" />
+                    : <ArrowDown className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden="true" />}
                   {Math.abs(readinessMoveToday)}
                 </span>
               )}

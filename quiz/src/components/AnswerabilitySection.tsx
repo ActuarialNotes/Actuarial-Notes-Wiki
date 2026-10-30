@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { ChevronDown, ListChecks } from 'lucide-react'
-import { fetchWikiFile } from '@/lib/github'
+import { fetchAllQuestions, fetchWikiFile } from '@/lib/github'
+import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { formatCheckedDate } from '@/lib/verification'
 import { FACT_CHECK_TONE_CLASSES } from '@/lib/factCheckTone'
 import { FactCheckSection } from '@/components/FactCheckSection'
@@ -11,15 +12,24 @@ import {
   answerabilityHistory,
   answerabilityRecordPath,
   checkSentence,
+  nowSentence,
   parseAnswerabilityRecord,
+  questionTagTitles,
   quoteText,
+  reachNow,
   requirementLabel,
+  requirementNow,
+  stateLabel,
   verdictLabel,
+  verdictNow,
+  TIER_LABEL,
   type AnswerabilityEntry,
   type AnswerabilityEvent,
   type AnswerabilityRecord,
   type AnswerabilityRequirement,
+  type AnswerabilityTier,
   type Label,
+  type ReachNow,
 } from '@/lib/answerability'
 
 /**
@@ -31,6 +41,13 @@ import {
  * It is one more folding card under the record, in the same shape as *Check
  * history*: each pass a row, its date and verdict folded, and opened, what the
  * solution needs, one item at a time, with the passage that teaches it.
+ *
+ * The card leads with where the question stands **now** — its verdict in the
+ * header, and each requirement with its state today (`requirementNow`): closed
+ * by a resolution, or brought into reach since by a retag or by the exam's own
+ * syllabus pages (D30) — because the check's own rows stay as the check found
+ * them, and an item the gate has long since closed would otherwise still read
+ * "Out of reach" under a "Gap".
  *
  * A question whose bank has no record, or that the check hasn't reached,
  * draws nothing — the same as a page with no log.
@@ -52,28 +69,43 @@ function loadRecord(path: string): Promise<AnswerabilityRecord | null> {
   return pending
 }
 
+/** A question's tags as they are now, read off its file in the bundled bank. */
+async function loadTags(id: string): Promise<string[]> {
+  const idLine = new RegExp(`^id:\\s*["']?${id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}["']?\\s*$`, 'm')
+  const raw = (await fetchAllQuestions()).find((q) => idLine.test(q))
+  return raw ? questionTagTitles(raw) : []
+}
+
 export function AnswerabilitySection({ contentPath }: { contentPath: string }) {
   const recordPath = answerabilityRecordPath(contentPath)
-  const [entry, setEntry] = useState<AnswerabilityEntry | null>(null)
+  const { syllabi } = useWikiSyllabus()
+  const [found, setFound] = useState<{ entry: AnswerabilityEntry; exam: string; tags: string[] } | null>(null)
 
   useEffect(() => {
     let cancelled = false
-    setEntry(null)
+    setFound(null)
     if (!recordPath) return
-    loadRecord(recordPath).then((record) => {
-      if (!cancelled) setEntry(record ? answerabilityEntry(record, contentPath) : null)
+    loadRecord(recordPath).then(async (record) => {
+      const entry = record ? answerabilityEntry(record, contentPath) : null
+      if (!entry || cancelled) return
+      // Without its tags the card still draws, from the record and the syllabus.
+      const tags = await loadTags(entry.id).catch(() => [])
+      if (!cancelled) setFound({ entry, exam: record!.exam, tags })
     })
     return () => { cancelled = true }
   }, [recordPath, contentPath])
 
-  if (!entry) return null
-  return <AnswerabilityHistory entry={entry} />
+  if (!found) return null
+  // The exam's syllabus pages: what its learning objectives link (D30).
+  const syllabus = syllabi.find((s) => s.fileName === found.exam)
+  const reach = reachNow(found.tags, syllabus?.topics.flatMap((t) => t.concepts.map((c) => c.name)) ?? [])
+  return <AnswerabilityHistory entry={found.entry} reach={reach} />
 }
 
-/** The card itself, given the question's entry. Exported for its test. */
-export function AnswerabilityHistory({ entry }: { entry: AnswerabilityEntry }) {
+/** The card itself, given the question's entry and what it reaches now. Exported for its test. */
+export function AnswerabilityHistory({ entry, reach }: { entry: AnswerabilityEntry; reach?: ReachNow }) {
   const history = answerabilityHistory(entry)
-  const verdict = verdictLabel(entry.verdict)
+  const verdict = verdictLabel(verdictNow(entry, reach))
   const latest = formatCheckedDate(history[0]?.date ?? null)
   return (
     <FactCheckSection
@@ -83,6 +115,14 @@ export function AnswerabilityHistory({ entry }: { entry: AnswerabilityEntry }) {
       tone={verdict.tone}
       icon={<ListChecks className="h-4 w-4" aria-hidden />}
     >
+      {entry.requirements.length > 0 && (
+        <div className="space-y-3 border-b border-border px-3 py-3">
+          <p className="break-words text-sm leading-relaxed">{nowSentence(entry, reach)}</p>
+          <ol className="space-y-2">
+            {entry.requirements.map((req) => <RequirementRow key={req.id} req={req} reach={reach} />)}
+          </ol>
+        </div>
+      )}
       <ul className="divide-y divide-border">
         {history.map((event) => <EventRow key={event.key} event={event} />)}
       </ul>
@@ -134,7 +174,7 @@ function EventRow({ event }: { event: AnswerabilityEvent }) {
               <p className="break-words text-sm leading-relaxed">{checkSentence(event.entry)}</p>
               {event.entry.requirements.length > 0 && (
                 <ol className="space-y-2">
-                  {event.entry.requirements.map((req) => <RequirementRow key={req.id} req={req} />)}
+                  {event.entry.requirements.map((req) => <RequirementRow key={req.id} req={req} asChecked />)}
                 </ol>
               )}
             </>
@@ -159,12 +199,27 @@ function EventRow({ event }: { event: AnswerabilityEvent }) {
  * One thing the solution uses. Folded, the statement and where it is taught;
  * opened, the passages the check quoted for it — the evidence, one tap away.
  */
-function RequirementRow({ req }: { req: AnswerabilityRequirement }) {
+function RequirementRow({ req, reach, asChecked = false }: {
+  req: AnswerabilityRequirement
+  reach?: ReachNow
+  /** In the check's own row: the requirement as the check found it, before any resolution. */
+  asChecked?: boolean
+}) {
   const [open, setOpen] = useState(false)
-  const places = req.resolution?.kind === 'taught' && req.resolution.page && req.resolution.quote
-    ? [{ page: req.resolution.page, quote: req.resolution.quote }, ...req.places]
+  const now = requirementNow(req, reach)
+  const label = asChecked
+    ? TIER_LABEL[req.status as AnswerabilityTier] ?? { label: req.status || 'Unknown', tone: 'grey' as const }
+    : stateLabel(now)
+  const resolved = !asChecked && req.resolution?.kind === 'taught' && req.resolution.page && req.resolution.quote
+    ? [{ page: req.resolution.page, quote: req.resolution.quote }]
+    : []
+  // The passage that puts it in reach now leads.
+  const recorded = !asChecked && now.page
+    ? [...req.places.filter((p) => p.page === now.page), ...req.places.filter((p) => p.page !== now.page)]
     : req.places
-  const canOpen = places.length > 0 || Boolean(req.resolution?.note)
+  const places = [...resolved, ...recorded]
+  const note = asChecked ? '' : req.resolution?.note ?? ''
+  const canOpen = places.length > 0 || Boolean(note)
 
   return (
     <li className="overflow-hidden rounded-lg border border-border">
@@ -179,7 +234,7 @@ function RequirementRow({ req }: { req: AnswerabilityRequirement }) {
         {/* The pill rides the concept's line, so the statement gets the full width. */}
         <span className="flex items-center gap-2.5">
           <span className="min-w-0 flex-1 truncate text-xs font-medium text-muted-foreground">{req.concept}</span>
-          <Pill label={requirementLabel(req)} />
+          <Pill label={label} />
           {canOpen && (
             <ChevronDown
               className={cn('h-4 w-4 shrink-0 text-muted-foreground transition-transform', open && 'rotate-180')}
@@ -191,9 +246,7 @@ function RequirementRow({ req }: { req: AnswerabilityRequirement }) {
       </button>
       {open && (
         <div className="space-y-2 border-t border-border px-3 py-2.5">
-          {req.resolution?.note && (
-            <p className="break-words text-sm leading-relaxed text-muted-foreground">{req.resolution.note}</p>
-          )}
+          {note && <p className="break-words text-sm leading-relaxed text-muted-foreground">{note}</p>}
           {places.map((p, i) => <Passage key={`${p.page}:${i}`} page={p.page} quote={p.quote} />)}
         </div>
       )}

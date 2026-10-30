@@ -6,12 +6,19 @@ import {
   answerabilityHistory,
   answerabilityRecordPath,
   checkSentence,
+  nowSentence,
   parseAnswerabilityRecord,
+  questionTagTitles,
   quoteText,
+  reachNow,
   requirementLabel,
+  requirementNow,
   runDate,
+  stateLabel,
   verdictLabel,
+  verdictNow,
 } from './answerability'
+import { parseExamMetadata, parseExamSyllabus } from './wikiParser'
 
 const RECORD = JSON.stringify({
   version: 1,
@@ -97,6 +104,73 @@ describe('the history', () => {
     expect(quoteText('the [[Probability Addition Rule]] and [[Independent Events|independent]]'))
       .toBe('the Probability Addition Rule and independent')
   })
+})
+
+describe('where a requirement stands now', () => {
+  const entry = parseAnswerabilityRecord(RECORD)!.questions['p-004']
+  const [linked, elsewhere, notRequired] = entry.requirements
+
+  it('keeps a recorded tier in reach, and a resolution over everything', () => {
+    expect(requirementNow(linked)).toEqual({ state: 'linked', page: 'Mutually Exclusive Events' })
+    expect(requirementNow(notRequired).state).toBe('not-required')
+    const resolved = { ...elsewhere, resolution: { kind: 'taught' as const, note: 'x', date: '2026-10-30', page: 'Set Theory', quote: 'q' } }
+    expect(requirementNow(resolved)).toEqual({ state: 'resolved', page: 'Set Theory' })
+  })
+
+  it('brings an out-of-reach item in when its page is now tagged or on the exam’s syllabus (D30)', () => {
+    expect(requirementNow(elsewhere).state).toBe('elsewhere')
+    expect(requirementNow(elsewhere, reachNow([], ['probability multiplication rule'])))
+      .toEqual({ state: 'syllabus', page: 'Probability Multiplication Rule' })
+    expect(requirementNow(elsewhere, reachNow(['Probability Multiplication Rule'], []))).toEqual(
+      { state: 'tagged', page: 'Probability Multiplication Rule' })
+    expect(stateLabel({ state: 'syllabus' })).toEqual({ label: 'On the syllabus', tone: 'green' })
+  })
+
+  it('reads the verdict and the sentence from the states, not the stored verdict', () => {
+    expect(verdictNow(entry)).toBe('untagged')
+    expect(nowSentence(entry)).toBe('1 of the 3 things the solution uses is still open.')
+    const reach = reachNow([], ['Probability Multiplication Rule'])
+    expect(verdictNow(entry, reach)).toBe('answerable')
+    expect(nowSentence(entry, reach)).toBe(
+      'Everything the solution uses is taught within its reach, but for 1 step the notes needn’t teach.')
+    const gap = { ...entry, requirements: [{ ...elsewhere, status: 'missing', places: [] }] }
+    expect(verdictNow(gap, reach)).toBe('gap')
+  })
+
+  it('reads a question’s tags as page titles, as answerability_lib.py does', () => {
+    const raw = '---\nid: "p-1"\nwiki_link:\n  - Concepts/Bayes+Theorem\n  - "Concepts/Set+Theory"\nanswer: "B"\n---\nBody'
+    expect(questionTagTitles(raw)).toEqual(['Bayes Theorem', 'Set Theory'])
+    expect(questionTagTitles('---\nwiki_link: [Concepts/Mode, Concepts/Median]\n---\n')).toEqual(['Mode', 'Median'])
+    expect(questionTagTitles('no frontmatter')).toEqual([])
+  })
+})
+
+// The panel agrees with the gate: on an exam G8 passes, every question it
+// serves reads Answerable from the record, its own tags and its exam's
+// syllabus — what the panel has (`scripts/answerability_lib.py` reads the same).
+describe('the panel against the gate', () => {
+  const root = join(__dirname, '../../..')
+  const catalog = JSON.parse(readFileSync(join(root, 'scripts/exam_catalog.json'), 'utf8'))
+  const ready = (catalog.exams as { page: string; bank: string | null; status: string }[])
+    .filter((e) => e.status === 'ready' && e.bank)
+  for (const exam of ready) {
+    it(`${exam.page}: every served question reads Answerable`, () => {
+      const page = readFileSync(join(root, exam.page), 'utf8')
+      const meta = parseExamMetadata(page)!
+      const syllabus = parseExamSyllabus(page, meta.examId, meta.examLabel, meta.examTopic)
+      const pages = syllabus.topics.flatMap((t) => t.concepts.map((c) => c.name))
+      const record = parseAnswerabilityRecord(
+        readFileSync(join(root, `simulations/answerability/${exam.bank}.json`), 'utf8'))!
+      const open: string[] = []
+      for (const entry of Object.values(record.questions)) {
+        const raw = readFileSync(join(root, entry.path!), 'utf8')
+        if (/^off_syllabus:\s*true\s*$/m.test(raw) || /^\s+open_critical:\s*[1-9]/m.test(raw)) continue
+        const reach = reachNow(questionTagTitles(raw), pages)
+        if (verdictNow(entry, reach) !== 'answerable') open.push(entry.id)
+      }
+      expect(open).toEqual([])
+    })
+  }
 })
 
 // Every committed record is one the panel can read, and every question in it

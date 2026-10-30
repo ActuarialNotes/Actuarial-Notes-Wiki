@@ -633,7 +633,8 @@ Subplans: `daily-plan-email.md`, `leagues.md`, `seo.md`, `analytics-and-monitori
 | ID | Item | Status | Tier | Notes |
 |---|---|---|---|---|
 | G1 | Confirm the daily email sends | 🟢 built; live state unknown | **Now** | Maintainer: Resend, the secrets, the smoke test. Record the outcome in the doc. |
-| G2 | SEO outside the repo | ⬜ | Next | A path-preserving `wiki.actuarialnotes.com` redirect (today it sends every path to the home page); submitting the sitemap. |
+| G2 | SEO outside the repo | ⬜ | Next | A path-preserving `wiki.actuarialnotes.com` redirect (today it sends every path to the home page); submitting the sitemap.  Also `VERCEL_DEEP_CLONE=true` on the Vercel project, so every sitemap entry gets its `lastmod` (a shallow clone dates only the last few commits' pages). |
+| G8 | Search: question pages, real 404s, a dated sitemap | ✅ 2026-10-30 | — | Every served question has a page of its own, `/wiki/question/<id>` (stem, options, parts — the answer behind a click into the quiz; `lib/seoQuestions.ts`); a missing exam, concept, resource or question URL answers 404, not a 200 soft 404; sitemap entries carry `lastmod` from git. See `seo.md`. |
 | G3 | The GA4 admin checklist | ⬜ checked 2026-10-19: steps 1, 2, 5, 6 not done | Next | 8 manual steps in `analytics-and-monitoring.md`. The audit (`analytics-audit-2026-10-19.md`) found history-change page views still on (~47% of page views are duplicates), the Internal Traffic filter in Testing (internal devices are 66% of engagement time), and no custom definitions or key events. Steps 3, 4, 7, 8 can't be read through the API. |
 | G4 | Monetization packaging | 🟡 "Pro" rename; Today's Study Plan is Pro-only | Later | Stripe hasn't changed since July. Waits on D13. Rule: never paywall the core retrieval loop. Was P4.3. |
 | G5 | Referrals | 🅿️ | Parked | Was P4.2. Comes back once the gem economy's metrics (§7) are actually read. |

@@ -1662,7 +1662,15 @@
      "statement": "Calibrate the exponential parameter by setting the CDF at a given time equal to the stated probability (proportion) and solving for lambda, then use that lambda to compute the CDF at another time.",
      "concept": "Exponential Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exponential Distribution",
+      "quote": "Set the survival function at the given point equal to the given probability and take natural logs",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, Ch.14 The Poisson Process, 14.2 The Exponential Distribution: characterization proof (law of exponents F^c(t+s)=F^c(s)F^c(t), F^c(q)=a^q with a=F^c(1), r=-ln a) and the quantile function F^{-1}(p)=-ln(1-p)/r, median ln2/r — https://www.randomservices.org/random/poisson/Exponential.html; Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, 4.2.2 Exponential Distribution (CDF 1-e^{-λx}) — https://www.probabilitycourse.com/chapter4/4_2_2_exponential.php; checked in the w4 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w4"
+     }
     },
     {
      "id": "r3",
@@ -2641,7 +2649,15 @@
      "statement": "When the density involves an absolute value, split the integral at the point where the expression inside the absolute value changes sign and replace |x| with -x for x<0 and x for x>0 on the respective pieces.",
      "concept": "Piecewise Density Functions",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Calculus",
+      "quote": "$\\lvert x \\rvert = -x$ for $x < 0$ and $\\lvert x \\rvert = x$ for $x \\geq 0$",
+      "note": "written from OpenStax Calculus Volume 1, 5.2 The Definite Integral, Properties of the Definite Integral (∫_a^b f = ∫_a^c f + ∫_c^b f) and total area ∫|f| — https://openstax.org/books/calculus-volume-1/pages/5-2-the-definite-integral; checked in the w4 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w4"
+     }
     }
    ]
   },
@@ -6518,7 +6534,15 @@
        "page": "Region of Integration",
        "quote": "**Constant density** (independent uniforms): no integral needed. $P(A) = \\text{area}(R)/\\text{area}(\\text{support})$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Uniform Continuous Distribution",
+      "quote": "so $P\\bigl((X, Y) \\in R\\bigr)$ is simply the area of the part of $R$ inside the square",
+      "note": "written from Siegrist, 5.20 General Uniform Distributions: P(X∈A)=λ(A)/λ(S); (X,Y) uniform on S×T iff X, Y independent uniforms — https://www.randomservices.org/random/special/Uniform.html; checked in the w4 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w4"
+     }
     },
     {
      "id": "r5",
@@ -7014,7 +7038,15 @@
      "statement": "The sum of a finite geometric series with first term a and ratio r is a(1 - r^N)/(1 - r), for r not equal to 1.",
      "concept": "Geometric Series",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Calculus",
+      "quote": "a + ar + ar^2 + \\cdots + ar^{N-1} = \\frac{a\\,(1 - r^N)}{1 - r}, \\quad r \\neq 1",
+      "note": "written from OpenStax Calculus Volume 2, 5.2 Infinite Series, Geometric Series: S_k = a(1-r^k)/(1-r) for r≠1, → a/(1-r) for |r|<1 — https://openstax.org/books/calculus-volume-2/pages/5-2-infinite-series; checked in the w4 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w4"
+     }
     },
     {
      "id": "r4",
@@ -7044,7 +7076,15 @@
      "statement": "Dividing a uniform random variable on [0, b] by a constant c gives a uniform random variable on [0, b/c].",
      "concept": "Uniform Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Uniform Continuous Distribution",
+      "quote": "dividing a uniform on $[0, b]$ by a positive constant $c$ gives a uniform on $[0, b/c]$",
+      "note": "written from Siegrist, 5.21 The Uniform Distribution on an Interval, Related Distributions: Y=c+dX uniform with location c+da and scale dw — https://www.randomservices.org/random/special/UniformContinuous.html; checked in the w4 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w4"
+     }
     },
     {
      "id": "r2",
@@ -9386,7 +9426,15 @@
      "statement": "To find the exponential rate parameter from a given tail probability P(X > t) = p, set e^{-λt} = p and solve for λ using the natural logarithm, giving λ = -ln(p)/t.",
      "concept": "Exponential Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exponential Distribution",
+      "quote": "Set the survival function at the given point equal to the given probability and take natural logs",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, Ch.14 The Poisson Process, 14.2 The Exponential Distribution: characterization proof (law of exponents F^c(t+s)=F^c(s)F^c(t), F^c(q)=a^q with a=F^c(1), r=-ln a) and the quantile function F^{-1}(p)=-ln(1-p)/r, median ln2/r — https://www.randomservices.org/random/poisson/Exponential.html; checked in the w4 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w4"
+     }
     },
     {
      "id": "r5",
@@ -9394,7 +9442,15 @@
      "statement": "Exponent rules allow rewriting e^{-λx} as (e^{-λt})^{x/t}, so a known value of e^{-λt} = p gives e^{-λx} = p^{x/t}.",
      "concept": "Exponential Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exponential Distribution",
+      "quote": "S(kx) = S(x)^k, \\qquad S(x) = S(x_0)^{x/x_0}",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, Ch.14 The Poisson Process, 14.2 The Exponential Distribution: characterization proof (law of exponents F^c(t+s)=F^c(s)F^c(t), F^c(q)=a^q with a=F^c(1), r=-ln a) and the quantile function F^{-1}(p)=-ln(1-p)/r, median ln2/r — https://www.randomservices.org/random/poisson/Exponential.html; checked in the w4 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w4"
+     }
     }
    ]
   },
@@ -11474,7 +11530,15 @@
      "statement": "To maximize a differentiable function of a parameter, set its first derivative to zero, solve for the parameter, and check that the solution lies in the feasible range (probabilities nonnegative).",
      "concept": "Optimization Using Derivatives",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Calculus",
+      "quote": "solve $g'(a) = 0$, confirm the type with the second derivative, and compare with the endpoints",
+      "note": "written from OpenStax Calculus Volume 1, 4.3 Maxima and Minima (Locating Absolute Extrema over a Closed Interval), 4.5 Derivatives and the Shape of a Graph (Second Derivative Test), 4.7 Applied Optimization Problems (Problem-Solving Strategy: use the constraint to write the objective as a function of one variable) — https://openstax.org/books/calculus-volume-1/pages/4-3-maxima-and-minima ; .../4-5-derivatives-and-the-shape-of-a-graph ; .../4-7-applied-optimization-problems; checked in the w4 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w4"
+     }
     },
     {
      "id": "r6",
@@ -13917,7 +13981,15 @@
      "statement": "Given two known cumulative probabilities of a normal distribution at two points, set up the two equations x1 = μ + z1σ and x2 = μ + z2σ and solve the system for μ and σ.",
      "concept": "Normal Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Normal Distribution",
+      "quote": "subtracting $x_1 = \\mu + z_1\\sigma$ from $x_2 = \\mu + z_2\\sigma$ gives $\\sigma = (x_2 - x_1)/(z_2 - z_1)$",
+      "note": "written from Pishro-Nik, 4.2.3 Normal Distribution: F_X(x)=Φ((x-μ)/σ), norminv=Φ^{-1}, P(-7<X<-3)=Φ(1)-Φ(-1)=2Φ(1)-1 — https://www.probabilitycourse.com/chapter4/4_2_3_normal.php; Siegrist, 5.6 The Normal Distribution: φ'(z)=-zφ(z); F^{-1}(p)=μ+σΦ^{-1}(p); Φ(-z)=1-Φ(z) — https://www.randomservices.org/random/special/Normal.html; checked in the w4 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w4"
+     }
     },
     {
      "id": "r4",
@@ -15176,7 +15248,15 @@
      "statement": "If a density is symmetric about a point m, then f(m+x)=f(m-x), so the density on the far side is the reflection of the density on the near side and exactly half the probability lies on each side of m.",
      "concept": "Symmetric Distributions",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Continuous Univariate Distributions",
+      "quote": "the density on one side of $m$ is the mirror image of the density on the other",
+      "note": "written from Siegrist, 3.6 Distribution and Quantile Functions: distribution symmetric about a has F(a-t)=1-F(a+t) (differentiating gives f(a-t)=f(a+t); t=0 gives F(a)=1/2) — https://www.randomservices.org/random/dist/CDF.html; checked in the w4 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w4"
+     }
     },
     {
      "id": "r4",
@@ -16727,7 +16807,15 @@
      "statement": "To minimize a variance that is a function of an unknown parameter, express the variance in terms of the parameter and choose its value within the feasible range (probabilities nonnegative) that minimizes it, which for an increasing linear function is the smallest feasible value.",
      "concept": "Variance",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Calculus",
+      "quote": "a function monotone on the interval (such as an increasing linear one) has its minimum and maximum at the endpoints",
+      "note": "written from OpenStax Calculus Volume 1, 4.3 Maxima and Minima (Locating Absolute Extrema over a Closed Interval), 4.5 Derivatives and the Shape of a Graph (Second Derivative Test), 4.7 Applied Optimization Problems (Problem-Solving Strategy: use the constraint to write the objective as a function of one variable) — https://openstax.org/books/calculus-volume-1/pages/4-3-maxima-and-minima ; .../4-5-derivatives-and-the-shape-of-a-graph ; .../4-7-applied-optimization-problems; checked in the w4 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w4"
+     }
     }
    ]
   },
@@ -24526,7 +24614,15 @@
        "page": "Scale and Shape Parameters",
        "quote": "The mean, the standard deviation, every percentile and the limited expected value at a proportionally scaled limit all move in proportion to $\\theta$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Scale and Shape Parameters",
+      "quote": "The mean, the standard deviation, every percentile and the limited expected value at a proportionally scaled limit all move in proportion to $\\theta$.",
+      "note": "link from Exponential Distribution; checked in the w4 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w4"
+     }
     }
    ]
   },
@@ -25533,7 +25629,15 @@
        "page": "Percentile Matching",
        "quote": "1 - e^{-485/\\theta} &= 0.5 \\\\"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exponential Distribution",
+      "quote": "Set the survival function at the given point equal to the given probability and take natural logs",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, Ch.14 The Poisson Process, 14.2 The Exponential Distribution: characterization proof (law of exponents F^c(t+s)=F^c(s)F^c(t), F^c(q)=a^q with a=F^c(1), r=-ln a) and the quantile function F^{-1}(p)=-ln(1-p)/r, median ln2/r — https://www.randomservices.org/random/poisson/Exponential.html; Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, 4.2.2 Exponential Distribution (CDF 1-e^{-λx}) — https://www.probabilitycourse.com/chapter4/4_2_2_exponential.php; checked in the w4 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w4"
+     }
     },
     {
      "id": "r3",
@@ -26116,7 +26220,15 @@
      "statement": "For a piecewise-defined density, integrate each branch over its own subinterval and add the results; if the interval of interest lies entirely within one piece, integrate only that branch.",
      "concept": "Piecewise Density Functions",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Continuous Univariate Distributions",
+      "quote": "A probability is the sum of the integrals over the pieces the interval covers (an interval inside one piece needs only that branch)",
+      "note": "written from OpenStax Calculus Volume 1, 5.2 The Definite Integral, Properties of the Definite Integral (∫_a^b f = ∫_a^c f + ∫_c^b f) and total area ∫|f| — https://openstax.org/books/calculus-volume-1/pages/5-2-the-definite-integral; Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, 4.1 Continuous random variables, P(a<X≤b)=∫_a^b f — https://www.probabilitycourse.com/chapter4/4_1_1_pdf.php; checked in the w4 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w4"
+     }
     }
    ]
   },
@@ -28997,7 +29109,15 @@
      "statement": "If the exponential survival probabilities at the same time satisfy S_A(T) = S_B(T)^k, then the mean of B is k times the mean of A, since e^{-T/θ_A} = e^{-kT/θ_B}.",
      "concept": "Exponential Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exponential Distribution",
+      "quote": "if $S_A(x) = S_B(x)^k$ at the same $x$, then $\\theta_B = k\\,\\theta_A$",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, Ch.14 The Poisson Process, 14.2 The Exponential Distribution: characterization proof (law of exponents F^c(t+s)=F^c(s)F^c(t), F^c(q)=a^q with a=F^c(1), r=-ln a) and the quantile function F^{-1}(p)=-ln(1-p)/r, median ln2/r — https://www.randomservices.org/random/poisson/Exponential.html; checked in the w4 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w4"
+     }
     },
     {
      "id": "r5",
@@ -29119,7 +29239,15 @@
      "statement": "To find an unknown standard deviation of a normal distribution, set the given probability equal to the standard normal CDF at the standardized value (x - mean)/sigma, invert it using the standard normal table, and solve for sigma.",
      "concept": "Normal Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Normal Distribution",
+      "quote": "One such condition fixes one unknown, e.g. $\\sigma = (x - \\mu)/z_p$ when $\\mu$ is known",
+      "note": "written from Pishro-Nik, 4.2.3 Normal Distribution: F_X(x)=Φ((x-μ)/σ), norminv=Φ^{-1}, P(-7<X<-3)=Φ(1)-Φ(-1)=2Φ(1)-1 — https://www.probabilitycourse.com/chapter4/4_2_3_normal.php; Siegrist, 5.6 The Normal Distribution: φ'(z)=-zφ(z); F^{-1}(p)=μ+σΦ^{-1}(p); Φ(-z)=1-Φ(z) — https://www.randomservices.org/random/special/Normal.html; checked in the w4 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w4"
+     }
     },
     {
      "id": "r2",
@@ -29852,7 +29980,15 @@
      "statement": "To integrate a function against a piecewise-defined density, split the integral at every breakpoint of both the density and the integrand, and on each subinterval use the matching branch of each.",
      "concept": "Piecewise Density Functions",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Continuous Univariate Distributions",
+      "quote": "split every integral at each breakpoint of both, use the matching branch on each subinterval and add",
+      "note": "written from OpenStax Calculus Volume 1, 5.2 The Definite Integral, Properties of the Definite Integral (∫_a^b f = ∫_a^c f + ∫_c^b f) and total area ∫|f| — https://openstax.org/books/calculus-volume-1/pages/5-2-the-definite-integral; checked in the w4 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w4"
+     }
     }
    ]
   },
@@ -30877,7 +31013,15 @@
      "statement": "To minimize a variance that is a function of an allocation variable, express the total as a function of one variable (using the budget constraint), differentiate, set the derivative to zero, and solve.",
      "concept": "Optimization of a Single-Variable Function",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Calculus",
+      "quote": "With a constraint (a budget or a fixed total), substitute it first, so the objective is a function of one variable, then differentiate",
+      "note": "written from OpenStax Calculus Volume 1, 4.3 Maxima and Minima (Locating Absolute Extrema over a Closed Interval), 4.5 Derivatives and the Shape of a Graph (Second Derivative Test), 4.7 Applied Optimization Problems (Problem-Solving Strategy: use the constraint to write the objective as a function of one variable) — https://openstax.org/books/calculus-volume-1/pages/4-3-maxima-and-minima ; .../4-5-derivatives-and-the-shape-of-a-graph ; .../4-7-applied-optimization-problems; checked in the w4 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w4"
+     }
     },
     {
      "id": "r4",
@@ -30885,7 +31029,15 @@
      "statement": "A positive second derivative at a critical point confirms it is a minimum (an upward-opening quadratic has its minimum at its vertex).",
      "concept": "Second Derivative Test",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Calculus",
+      "quote": "An upward-opening quadratic $g(a) = pa^2 + qa + r$ with $p > 0$ is minimized at its vertex $a = -q/(2p)$",
+      "note": "written from OpenStax Calculus Volume 1, 4.3 Maxima and Minima (Locating Absolute Extrema over a Closed Interval), 4.5 Derivatives and the Shape of a Graph (Second Derivative Test), 4.7 Applied Optimization Problems (Problem-Solving Strategy: use the constraint to write the objective as a function of one variable) — https://openstax.org/books/calculus-volume-1/pages/4-3-maxima-and-minima ; .../4-5-derivatives-and-the-shape-of-a-graph ; .../4-7-applied-optimization-problems; checked in the w4 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w4"
+     }
     },
     {
      "id": "r5",
@@ -33303,7 +33455,15 @@
      "statement": "For a piecewise-defined density, compute the expected value by integrating x f(x) over each piece on its own interval and summing the results.",
      "concept": "Piecewise Probability Density Function",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Continuous Univariate Distributions",
+      "quote": "so $E[X]$ is the sum of $\\int x\\,f(x)\\,dx$ over each piece",
+      "note": "written from OpenStax Calculus Volume 1, 5.2 The Definite Integral, Properties of the Definite Integral (∫_a^b f = ∫_a^c f + ∫_c^b f) and total area ∫|f| — https://openstax.org/books/calculus-volume-1/pages/5-2-the-definite-integral; checked in the w4 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w4"
+     }
     },
     {
      "id": "r4",
@@ -33362,7 +33522,15 @@
      "statement": "To find an exponential distribution's parameter from a given survival probability at a point, set e^{-λx} equal to the given probability at that point and solve (or substitute) for λ.",
      "concept": "Exponential Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exponential Distribution",
+      "quote": "Set the survival function at the given point equal to the given probability and take natural logs",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, Ch.14 The Poisson Process, 14.2 The Exponential Distribution: characterization proof (law of exponents F^c(t+s)=F^c(s)F^c(t), F^c(q)=a^q with a=F^c(1), r=-ln a) and the quantile function F^{-1}(p)=-ln(1-p)/r, median ln2/r — https://www.randomservices.org/random/poisson/Exponential.html; checked in the w4 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w4"
+     }
     }
    ]
   },
@@ -34025,7 +34193,15 @@
      "statement": "For an exponential distribution, the survival probability over a multiple of a length equals the survival probability over that length raised to that multiple, since e^{-kλx} = (e^{-λx})^k (memoryless property).",
      "concept": "Exponential Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exponential Distribution",
+      "quote": "the survival probability at a multiple of a point is that point's survival probability raised to the multiple",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, Ch.14 The Poisson Process, 14.2 The Exponential Distribution: characterization proof (law of exponents F^c(t+s)=F^c(s)F^c(t), F^c(q)=a^q with a=F^c(1), r=-ln a) and the quantile function F^{-1}(p)=-ln(1-p)/r, median ln2/r — https://www.randomservices.org/random/poisson/Exponential.html; checked in the w4 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w4"
+     }
     }
    ]
   },
@@ -34333,7 +34509,15 @@
      "statement": "Identify a distribution from a density with an unknown constant by matching its kernel (the x-power and exponential term) to a known family, so the normalizing constant need not be computed.",
      "concept": "Gamma Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Gamma",
+      "quote": "A density known only up to a constant, $f(x) = c\\,x^{a}e^{-x/b}$ for $x > 0$, is $\\text{Gamma}(\\alpha = a + 1,\\ \\theta = b)$: match it to the kernel $x^{\\alpha-1}e^{-x/\\theta}$",
+      "note": "written from Pishro-Nik, 4.2.4 Gamma Distribution: property ∫_0^∞ x^{α-1}e^{-λx}dx = Γ(α)/λ^α and the Gamma(α,λ) PDF — https://www.probabilitycourse.com/chapter4/4_2_4_Gamma_distribution.php; checked in the w4 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w4"
+     }
     },
     {
      "id": "r3",
@@ -37797,7 +37981,15 @@
        "page": "Percentile Matching",
        "quote": "The position is $(10 + 1)(0.5) = 5.5$, halfway between $x_{(5)} = 410$ and $x_{(6)} = 560$, so $\\hat\\pi_{0.5} = 485$. Match the exponential median:"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exponential Distribution",
+      "quote": "so a known percentile gives $\\theta = -\\pi_p/\\ln(1-p)$, and with it any other percentile",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, Ch.14 The Poisson Process, 14.2 The Exponential Distribution: characterization proof (law of exponents F^c(t+s)=F^c(s)F^c(t), F^c(q)=a^q with a=F^c(1), r=-ln a) and the quantile function F^{-1}(p)=-ln(1-p)/r, median ln2/r — https://www.randomservices.org/random/poisson/Exponential.html; checked in the w4 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w4"
+     }
     },
     {
      "id": "r4",
@@ -38054,7 +38246,15 @@
      "statement": "To find an unknown exponential parameter from a given probability, set the CDF at the stated point equal to that probability and solve for the mean using the natural logarithm.",
      "concept": "Exponential Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exponential Distribution",
+      "quote": "Set the survival function at the given point equal to the given probability and take natural logs",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, Ch.14 The Poisson Process, 14.2 The Exponential Distribution: characterization proof (law of exponents F^c(t+s)=F^c(s)F^c(t), F^c(q)=a^q with a=F^c(1), r=-ln a) and the quantile function F^{-1}(p)=-ln(1-p)/r, median ln2/r — https://www.randomservices.org/random/poisson/Exponential.html; Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, 4.2.2 Exponential Distribution (CDF 1-e^{-λx}) — https://www.probabilitycourse.com/chapter4/4_2_2_exponential.php; checked in the w4 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w4"
+     }
     },
     {
      "id": "r3",
@@ -38201,7 +38401,15 @@
      "statement": "To compare two exponential random variables with related means, use the given survival probability to solve for the unknown mean by taking the natural logarithm, then substitute the derived mean (scaled by the stated ratio) into the other variable's survival function.",
      "concept": "Exponential Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exponential Distribution",
+      "quote": "Set the survival function at the given point equal to the given probability and take natural logs",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, Ch.14 The Poisson Process, 14.2 The Exponential Distribution: characterization proof (law of exponents F^c(t+s)=F^c(s)F^c(t), F^c(q)=a^q with a=F^c(1), r=-ln a) and the quantile function F^{-1}(p)=-ln(1-p)/r, median ln2/r — https://www.randomservices.org/random/poisson/Exponential.html; checked in the w4 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w4"
+     }
     },
     {
      "id": "r4",
@@ -38209,7 +38417,15 @@
      "statement": "For an exponential distribution, the probability of surviving past time t is the t-th power of the survival probability at time 1, so survival probabilities over k times the horizon equal the k-th power of the base survival probability (S(kt) = S(t)^k).",
      "concept": "Exponential Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exponential Distribution",
+      "quote": "S(kx) = S(x)^k, \\qquad S(x) = S(x_0)^{x/x_0}",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, Ch.14 The Poisson Process, 14.2 The Exponential Distribution: characterization proof (law of exponents F^c(t+s)=F^c(s)F^c(t), F^c(q)=a^q with a=F^c(1), r=-ln a) and the quantile function F^{-1}(p)=-ln(1-p)/r, median ln2/r — https://www.randomservices.org/random/poisson/Exponential.html; checked in the w4 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w4"
+     }
     },
     {
      "id": "r5",
@@ -38217,7 +38433,15 @@
      "statement": "Halving the mean of an exponential distribution doubles its rate, which squares its survival probability at any fixed time.",
      "concept": "Exponential Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exponential Distribution",
+      "quote": "Halving the mean doubles the rate and squares the survival probability at every fixed point",
+      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, Ch.14 The Poisson Process, 14.2 The Exponential Distribution: characterization proof (law of exponents F^c(t+s)=F^c(s)F^c(t), F^c(q)=a^q with a=F^c(1), r=-ln a) and the quantile function F^{-1}(p)=-ln(1-p)/r, median ln2/r — https://www.randomservices.org/random/poisson/Exponential.html; checked in the w4 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w4"
+     }
     }
    ]
   },
@@ -38563,7 +38787,15 @@
        "page": "Mixture Distribution",
        "quote": "This Pareto has moments only of order below $3$, so its tail is heavier than any single exponential's, which has every moment."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exponential Distribution",
+      "quote": "never from one exponential with the weighted-average mean",
+      "note": "written from Siegrist, 3.5 Conditional Distributions: law of total probability / mixture with mixing density, and the 'Simple Mixed Distributions' light-bulb exercise (exponential lifetimes with rates 1..5 mixed, P(T>1)=0.1156) — https://www.randomservices.org/random/dist/Conditional.html; checked in the w4 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w4"
+     }
     }
    ]
   },
@@ -40913,7 +41145,15 @@
      "statement": "Two probability statements about a normal variable give two equations in mu and sigma, which can be solved simultaneously (e.g., by dividing one standardized equation by the other to eliminate sigma) to find mu and sigma.",
      "concept": "Normal Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Normal Distribution",
+      "quote": "give two equations, solved together for both $\\mu$ and $\\sigma$",
+      "note": "written from Pishro-Nik, 4.2.3 Normal Distribution: F_X(x)=Φ((x-μ)/σ), norminv=Φ^{-1}, P(-7<X<-3)=Φ(1)-Φ(-1)=2Φ(1)-1 — https://www.probabilitycourse.com/chapter4/4_2_3_normal.php; Siegrist, 5.6 The Normal Distribution: φ'(z)=-zφ(z); F^{-1}(p)=μ+σΦ^{-1}(p); Φ(-z)=1-Φ(z) — https://www.randomservices.org/random/special/Normal.html; checked in the w4 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w4"
+     }
     },
     {
      "id": "r5",
@@ -41077,7 +41317,15 @@
      "statement": "With two unknown parameters (mu and sigma), set up two equations from the given information (a moment and a probability) and solve them simultaneously by substitution.",
      "concept": "Normal Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Normal Distribution",
+      "quote": "or one of them plus a moment such as $E[X^2] = \\mu^2 + \\sigma^2$) give two equations, solved together for both $\\mu$ and $\\sigma$",
+      "note": "written from Pishro-Nik, 4.2.3 Normal Distribution: F_X(x)=Φ((x-μ)/σ), norminv=Φ^{-1}, P(-7<X<-3)=Φ(1)-Φ(-1)=2Φ(1)-1 — https://www.probabilitycourse.com/chapter4/4_2_3_normal.php; Siegrist, 5.6 The Normal Distribution: φ'(z)=-zφ(z); F^{-1}(p)=μ+σΦ^{-1}(p); Φ(-z)=1-Φ(z) — https://www.randomservices.org/random/special/Normal.html; checked in the w4 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w4"
+     }
     }
    ]
   },
@@ -46035,7 +46283,15 @@
      "statement": "For a normal distribution with fixed mean, increasing the standard deviation spreads the distribution and decreases the probability of falling in a fixed interval around the mean.",
      "concept": "Normal Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Normal Distribution",
+      "quote": "a larger standard deviation spreads the distribution and leaves less probability in a fixed interval around the mean",
+      "note": "written from Pishro-Nik, 4.2.3 Normal Distribution: F_X(x)=Φ((x-μ)/σ), norminv=Φ^{-1}, P(-7<X<-3)=Φ(1)-Φ(-1)=2Φ(1)-1 — https://www.probabilitycourse.com/chapter4/4_2_3_normal.php; checked in the w4 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w4"
+     }
     }
    ]
   },
@@ -47571,7 +47827,15 @@
      "statement": "For X ~ N(mu, sigma^2) and threshold c, E[(X-c)+] = (mu-c)·Phi((mu-c)/sigma) + sigma·phi((mu-c)/sigma), where Phi and phi are the standard normal CDF and PDF.",
      "concept": "Normal Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Normal Distribution",
+      "quote": "E\\left[(X - c)_+\\right] = (\\mu - c)\\,\\Phi\\!\\left(\\frac{\\mu - c}{\\sigma}\\right) + \\sigma\\,\\phi\\!\\left(\\frac{\\mu - c}{\\sigma}\\right)",
+      "note": "written from Siegrist, 5.6 The Normal Distribution: φ'(z)=-zφ(z); F^{-1}(p)=μ+σΦ^{-1}(p); Φ(-z)=1-Φ(z) — https://www.randomservices.org/random/special/Normal.html; Pishro-Nik, 4.2.3 Normal Distribution: F_X(x)=Φ((x-μ)/σ), norminv=Φ^{-1}, P(-7<X<-3)=Φ(1)-Φ(-1)=2Φ(1)-1 — https://www.probabilitycourse.com/chapter4/4_2_3_normal.php (derived on the page from these); checked in the w4 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w4"
+     }
     },
     {
      "id": "r3",
@@ -50503,7 +50767,15 @@
        "page": "Severity Distribution",
        "quote": "**Inflation** multiplies the scale parameter: if losses rise by $r$, then $\\theta$ becomes $\\theta(1+r)$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Scale and Shape Parameters",
+      "quote": "A **scale parameter** $\\theta$ sets the units: multiplying the loss by a positive constant $c$ multiplies $\\theta$ by $c$ and leaves every other parameter unchanged.",
+      "note": "link from Exponential Distribution; checked in the w4 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w4"
+     }
     },
     {
      "id": "r4",
@@ -50832,7 +51104,15 @@
        "page": "Inversion Method",
        "quote": "For an [[Exponential Distribution|exponential]] with mean $\\theta$, $x = -\\theta \\ln(1-u)$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exponential Distribution",
+      "quote": "then $Y = -\\theta \\ln U$ is exponential with mean $\\theta$, since $P(Y \\leq y) = P\\left(U \\geq e^{-y/\\theta}\\right) = 1 - e^{-y/\\theta}$",
+      "note": "written from Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL), 5.2 Important Densities, Exponential density: Y = -(1/λ) log(rnd), P(Y<=y)=P(rnd>=e^{-λy})=1-e^{-λy}, printed p.208 (PDF p.216) — https://math.dartmouth.edu/~prob/prob/prob.pdf; Siegrist, 5.21 The Uniform Distribution on an Interval, Random quantile method X=F^{-1}(U) — https://www.randomservices.org/random/special/UniformContinuous.html; checked in the w4 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w4"
+     }
     }
    ]
   },

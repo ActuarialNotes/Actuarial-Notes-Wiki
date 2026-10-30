@@ -70,6 +70,9 @@ export interface StudyPlan {
   planVersion?: number           // PLAN_CACHE_VERSION at generation; older/absent => invalid
   generatedDate: string          // YYYY-MM-DD — used to detect stale cache
   config: StudyPlanConfig
+  /** The exam date the plan was built against. A cached plan is only reused for
+   *  the same date; absent on plans cached before it was recorded. */
+  examDate?: string | null
   todaysConcepts: string[]       // concept names assigned today
   assignments: ConceptAssignment[]  // all upcoming assignments (today + future)
   dayNumber: number              // 1-indexed position in the overall plan
@@ -307,6 +310,7 @@ export function generateStudyPlan(input: GenerateInput): StudyPlan {
       planVersion: PLAN_CACHE_VERSION,
       generatedDate: today,
       config,
+      examDate,
       todaysConcepts,
       assignments: maintenanceAssignments,
       dayNumber: 1,
@@ -619,6 +623,7 @@ export function generateStudyPlan(input: GenerateInput): StudyPlan {
     planVersion: PLAN_CACHE_VERSION,
     generatedDate: today,
     config,
+    examDate,
     todaysConcepts,
     assignments,
     dayNumber,

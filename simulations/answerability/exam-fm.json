@@ -1079,7 +1079,15 @@
      "statement": "Decompose a payment stream with a step increase in level into a sum of level annuities covering different time spans (e.g., a stream of 2P over a later period equals P over the whole period plus P over the later period).",
      "concept": "Annuity-Immediate",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Non-level Annuities",
+      "quote": "Overlapping level layers also work: a step up from $P$ to $2P$ after $k$ periods is $P$ over the whole term plus a deferred $P$ over the later payments, valued as $P\\,a_{\\overline{n}|} + P\\,v^k a_{\\overline{n-k}|}$.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §16 Example 16.5 (p.160); §17 deferred annuities (pp.168-169): Overlapping level layers also work: a step up from $P$ to $2P$ after $k$ periods is $P$ over the whole term plus a deferred $P$ over the later payments, valued as $P\\,a_{\\overline{n}|} + P\\,v^k a_{\\overline{n-k}|}$.; fact checked run 2026-10-30T19:35Z/57a4",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r3",
@@ -2388,7 +2396,15 @@
      "statement": "For cash flows growing at a constant rate g discounted at rate i, rewrite the discount factor as the product v(1+g) = 1/(1+j), giving an equivalent level-payment problem at modified rate j = (i-g)/(1+g).",
      "concept": "Geometrically Increasing Annuity",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Geometric Increasing Annuity",
+      "quote": "Because $v(1+g) = \\dfrac{1+g}{1+i} = \\dfrac{1}{1+j}$ with $j = \\dfrac{i-g}{1+g}$, payments growing at rate $g$ and discounted at rate $i$ are valued as level payments at the modified rate $j$.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §26 geometric progression (pp.238-239; the sum of v^t(1+k)^(t-1)), rewritten at 1+j=(1+i)/(1+k); Macaulay duration defined p.468: Because $v(1+g) = \\dfrac{1+g}{1+i} = \\dfrac{1}{1+j}$ with $j = \\dfrac{i-g}{1+g}$, payments growing at rate $g$ and discounted at rate $i$ are valued as level payments at the modified rate $j$.; fact checked run 2026-10-30T19:35Z/57a4",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r3",
@@ -3411,7 +3427,15 @@
        "page": "Loan Amortization",
        "quote": "The loan is the present value of the payments, with $a_{\\overline{4}|5\\%} = 3.545951$ and $v^4 a_{\\overline{4}|5\\%} = 2.917262$:"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Non-level Annuities",
+      "quote": "A stream whose pattern changes partway is split into pieces of standard form; value each later piece one period before its first payment, then move that value to the valuation date by discounting with $v^k$, or by accumulating with $(1+i)^k$ when that point lies before the valuation date.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §17 Annuity values on any date: deferred annuity (pp.168-169); §27 Example 27.5 (p.252): A stream whose pattern changes partway is split into pieces of standard form; value each later piece one period before its first payment, then move that value to the valuation date by discounting with $v^k$, or by accumulating with $(1+i)^k$ when that point lies before the valuation date.; fact checked run 2026-10-30T19:35Z/57a4",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -5738,7 +5762,15 @@
      "statement": "Payments that are level within each year but step up annually can be grouped into annual blocks, each valued as a single payment at year-end (its accumulated value at the end of the year) and discounted at the effective annual rate.",
      "concept": "Annuity Payable More Frequently Than Interest Is Convertible",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Payable m-thly",
+      "quote": "When payments are level within each year but change from year to year, replace each year's $m$ payments of $P$ by their value at the end of that year, $P\\,s_{\\overline{m}|j}$ at the per-period rate $j = i^{(m)}/m$, then value the resulting annual series at the effective annual rate $i$.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §28 (p.259: k/m · s_{m|j} = k·i/i^(m), j = i^(m)/m): When payments are level within each year but change from year to year, replace each year's $m$ payments of $P$ by their value at the end of that year, $P\\,s_{\\overline{m}|j}$ at the per-period rate $j = i^{(m)}/m$, then value the resulting annual series at the effective annual rate $i$.; fact checked run 2026-10-30T19:35Z/57a4",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -6468,7 +6500,15 @@
      "statement": "The accumulated value at the end of n periods of a geometrically increasing annuity-immediate with first payment P is P[(1+i)^n-(1+g)^n]/(i-g).",
      "concept": "Geometrically Increasing Annuity",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Geometric Increasing Annuity",
+      "quote": "The accumulated value at the last payment is $(1+i)^n$ times the present value: with first payment $P$, growth $g$ and $i \\neq g$, it is $P\\,\\dfrac{(1+i)^n - (1+g)^n}{i-g}$, and $n P (1+i)^{n-1}$ when $i = g$.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §26 geometric progression PV (p.238), AV = (1+i)^n PV (p.234, eq. 26.4); §27 geometric annuity-due (p.251): The accumulated value at the last payment is $(1+i)^n$ times the present value: with first payment $P$, growth $g$ and $i \\neq g$, it is $P\\,\\dfrac{(1+i)^n - (1+g)^n}{i-g}$, and $n P (1+i)^{n-1}$ when $i = g$.; fact checked run 2026-10-30T19:35Z/57a4",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r3",
@@ -6667,7 +6707,15 @@
      "statement": "A continuous perpetuity whose payment rate grows geometrically as (1+g)^s has present value 1/(δ - ln(1+g)) at its start, obtained from the integral of e^{-(δ-ln(1+g))s} over 0 to infinity (requires δ > ln(1+g)).",
      "concept": "Geometrically Increasing Perpetuity",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Continuous Annuity",
+      "quote": "A continuous payment stream at rate $(1+g)^t$ discounted at force $\\delta$ is a level continuous annuity at the reduced force $\\delta - \\ln(1+g)$, since $(1+g)^t e^{-\\delta t} = e^{-(\\delta - \\ln(1+g))t}$.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §29 Continuous varying annuities (p.268, eq. 29.1): A continuous payment stream at rate $(1+g)^t$ discounted at force $\\delta$ is a level continuous annuity at the reduced force $\\delta - \\ln(1+g)$, since $(1+g)^t e^{-\\delta t} = e^{-(\\delta - \\ln(1+g))t}$.; fact checked run 2026-10-30T19:35Z/57a4",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r6",
@@ -13061,7 +13109,15 @@
      "statement": "The present value of an n-payment annuity-due equals one payment plus the present value of an (n-1)-payment annuity-immediate: a-double-dot angle n = 1 + a angle (n-1).",
      "concept": "Annuity-Immediate and Annuity-Due",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Annuity Due",
+      "quote": "An $n$-payment annuity-due is a payment of 1 now plus an $(n-1)$-payment annuity-immediate, so $\\ddot{a}_{\\overline{n}|} = 1 + a_{\\overline{n-1}|}$.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §16 Theorem 16.3 (p.161): An $n$-payment annuity-due is a payment of 1 now plus an $(n-1)$-payment annuity-immediate, so $\\ddot{a}_{\\overline{n}|} = 1 + a_{\\overline{n-1}|}$.; fact checked run 2026-10-30T19:35Z/57a4",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -13674,7 +13730,15 @@
      "statement": "With level deposits at year-end and interest paid out each year, the interest credited at the end of year k equals i times the deposits made before that time, i·D(k-1), so the interest payments form an arithmetic increasing sequence beginning at the end of year 2.",
      "concept": "Reinvestment Rate (Different Interest Rates)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Fund Accumulation",
+      "quote": "Deposits at the end of each period: the interest stream starts one period after the first deposit, so $n$ deposits produce $n-1$ interest payments and $AV_n = nD + iD\\,(Is)_{\\overline{n-1}|j}$.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §32 Interest reinvested at a different rate (pp.292-293: AV = n + i(Is)_{n-1 j}); §26 (Is)_n (p.235): Deposits at the end of each period: the interest stream starts one period after the first deposit, so $n$ deposits produce $n-1$ interest payments and $AV_n = nD + iD\\,(Is)_{\\overline{n-1}|j}$.; fact checked run 2026-10-30T19:35Z/57a4",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -14208,7 +14272,15 @@
      "statement": "For level deposits at the beginning of each year, a deposit made at time k-1 earns interest at times k through n, so the interest payments across deposits form an increasing stream of 1, 2, ..., n payments at each time.",
      "concept": "Annuity-Due",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Fund Accumulation",
+      "quote": "Deposits at the start of each period: the interest stream starts at the end of the first period, so $n$ deposits produce $n$ interest payments and $AV_n = nD + iD\\,(Is)_{\\overline{n}|j}$.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §32 Interest reinvested at a different rate (pp.292-293: AV = n + i(Is)_{n-1 j}); §26 (Is)_n (p.235): Deposits at the start of each period: the interest stream starts at the end of the first period, so $n$ deposits produce $n$ interest payments and $AV_n = nD + iD\\,(Is)_{\\overline{n}|j}$.; fact checked run 2026-10-30T19:35Z/57a4",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -16706,7 +16778,15 @@
      "statement": "Interest paid on a level deposit at rate i at the end of each year forms an increasing annuity of payments i·D, 2i·D, 3i·D, ... when each deposit's interest is paid for each year since deposit, so the interest accumulates as i·D·(Is) at the reinvestment rate.",
      "concept": "Increasing Annuity",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Fund Accumulation",
+      "quote": "With level deposits $D$ and the fund's interest at rate $i$ paid out each period and reinvested at rate $j$, the balance after $k$ deposits is $kD$, so the interest paid out is the arithmetic increasing stream $iD, 2iD, 3iD, \\ldots$",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §32 Interest reinvested at a different rate (pp.292-293: AV = n + i(Is)_{n-1 j}); §26 (Is)_n (p.235): With level deposits $D$ and the fund's interest at rate $i$ paid out each period and reinvested at rate $j$, the balance after $k$ deposits is $kD$, so the interest paid out is the arithmetic increasing stream $iD, 2iD, 3iD, \\ldots$; fact checked run 2026-10-30T19:35Z/57a4",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r3",
@@ -20512,7 +20592,15 @@
      "statement": "Decompose an arithmetically increasing payment stream (each payment rising by a constant amount) into a sum of level annuities, one starting at each payment time, and accumulate each to the common valuation date.",
      "concept": "Increasing Annuities",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Arithmetic Increasing Annuity",
+      "quote": "Accumulating each layer to time $n$ gives $(Is)_{\\overline{n}|} = \\sum_{k=1}^{n} s_{\\overline{n-k+1}|}$; valuing each layer one period before its first payment and discounting to time 0 gives $(Ia)_{\\overline{n}|} = \\sum_{k=1}^{n} v^{k-1} a_{\\overline{n-k+1}|}$.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §26 Example 26.2 (pp.235-236: (Ia)_n = sum of v^t a_{n-t}): Accumulating each layer to time $n$ gives $(Is)_{\\overline{n}|} = \\sum_{k=1}^{n} s_{\\overline{n-k+1}|}$; valuing each layer one period before its first payment and discounting to time 0 gives $(Ia)_{\\overline{n}|} = \\sum_{k=1}^{n} v^{k-1} a_{\\overline{n-k+1}|}$.; fact checked run 2026-10-30T19:35Z/57a4",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r3",
@@ -21858,7 +21946,15 @@
        "page": "Geometric Increasing Perpetuity",
        "quote": "Value the growing part at time 3, one period before its first payment, then discount it to time 0:"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Non-level Annuities",
+      "quote": "Value a non-level stream by splitting it into standard pieces — level, arithmetic increasing or decreasing, geometric, perpetuity — each valued one period before its own first payment (or as an annuity-due at its first payment), then discounted to time 0 and summed.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §17 (pp.168-169); §26 varying annuity-immediate (pp.234-237); §27 Example 27.5 (p.252): Value a non-level stream by splitting it into standard pieces — level, arithmetic increasing or decreasing, geometric, perpetuity — each valued one period before its own first payment (or as an annuity-due at its first payment), then discounted to time 0 and summed.; fact checked run 2026-10-30T19:35Z/57a4",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r2",
@@ -21981,7 +22077,15 @@
      "statement": "The accumulated value at time n of an annuity-immediate with first payment P, payments growing at rate g, and effective interest rate i (g ≠ i) is P·[(1+i)^n − (1+g)^n]/(i − g).",
      "concept": "Geometric Annuity",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Geometric Increasing Annuity",
+      "quote": "The accumulated value at the last payment is $(1+i)^n$ times the present value: with first payment $P$, growth $g$ and $i \\neq g$, it is $P\\,\\dfrac{(1+i)^n - (1+g)^n}{i-g}$, and $n P (1+i)^{n-1}$ when $i = g$.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §26 geometric progression PV (p.238), AV = (1+i)^n PV (p.234, eq. 26.4); §27 geometric annuity-due (p.251): The accumulated value at the last payment is $(1+i)^n$ times the present value: with first payment $P$, growth $g$ and $i \\neq g$, it is $P\\,\\dfrac{(1+i)^n - (1+g)^n}{i-g}$, and $n P (1+i)^{n-1}$ when $i = g$.; fact checked run 2026-10-30T19:35Z/57a4",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -21997,7 +22101,15 @@
      "statement": "The accumulated value at the end of one year of payments of 1/m made m times per year (an m-thly annuity-immediate) is the symbol s_{1|}^{(m)}, which equals ((1+i)-1)/i^{(m)}.",
      "concept": "Annuities Payable m-thly",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Payable m-thly",
+      "quote": "One year's $m$ payments of $1/m$ are worth $s^{(m)}_{\\overline{1}|} = \\dfrac{i}{i^{(m)}}$ at the end of that year, so replacing each year's payments by that year-end amount gives $a^{(m)}_{\\overline{n}|} = s^{(m)}_{\\overline{1}|}\\, a_{\\overline{n}|}$ and $s^{(m)}_{\\overline{n}|} = s^{(m)}_{\\overline{1}|}\\, s_{\\overline{n}|}$.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §24 Annuities payable more frequently than interest is convertible (pp.218-220): One year's $m$ payments of $1/m$ are worth $s^{(m)}_{\\overline{1}|} = \\dfrac{i}{i^{(m)}}$ at the end of that year, so replacing each year's payments by that year-end amount gives $a^{(m)}_{\\overline{n}|} = s^{(m)}_{\\overline{1}|}\\, a_{\\overline{n}|}$ and $s^{(m)}_{\\overline{n}|} = s^{(m)}_{\\overline{1}|}\\, s_{\\overline{n}|}$.; fact checked run 2026-10-30T19:35Z/57a4",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r2",
@@ -22005,7 +22117,15 @@
      "statement": "The present value of an m-thly annuity-immediate of 1 per year for n years equals the one-year accumulated value of the m-thly payments (s_{1|}^{(m)}) times the annual annuity-immediate a_{n|}, since each year's payments can be replaced by an equivalent lump sum at year end.",
      "concept": "Annuities Payable m-thly",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Payable m-thly",
+      "quote": "One year's $m$ payments of $1/m$ are worth $s^{(m)}_{\\overline{1}|} = \\dfrac{i}{i^{(m)}}$ at the end of that year, so replacing each year's payments by that year-end amount gives $a^{(m)}_{\\overline{n}|} = s^{(m)}_{\\overline{1}|}\\, a_{\\overline{n}|}$ and $s^{(m)}_{\\overline{n}|} = s^{(m)}_{\\overline{1}|}\\, s_{\\overline{n}|}$.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §24 Annuities payable more frequently than interest is convertible (pp.218-220): One year's $m$ payments of $1/m$ are worth $s^{(m)}_{\\overline{1}|} = \\dfrac{i}{i^{(m)}}$ at the end of that year, so replacing each year's payments by that year-end amount gives $a^{(m)}_{\\overline{n}|} = s^{(m)}_{\\overline{1}|}\\, a_{\\overline{n}|}$ and $s^{(m)}_{\\overline{n}|} = s^{(m)}_{\\overline{1}|}\\, s_{\\overline{n}|}$.; fact checked run 2026-10-30T19:35Z/57a4",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r3",
@@ -23991,7 +24111,15 @@
      "statement": "The accumulated value at time n of a geometric annuity-immediate with first payment P is P[(1+i)^n - (1+g)^n]/(i - g), obtained by summing a geometric series of accumulated payments.",
      "concept": "Geometric Annuity",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Geometric Increasing Annuity",
+      "quote": "The accumulated value at the last payment is $(1+i)^n$ times the present value: with first payment $P$, growth $g$ and $i \\neq g$, it is $P\\,\\dfrac{(1+i)^n - (1+g)^n}{i-g}$, and $n P (1+i)^{n-1}$ when $i = g$.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §26 geometric progression PV (p.238), AV = (1+i)^n PV (p.234, eq. 26.4); §27 geometric annuity-due (p.251): The accumulated value at the last payment is $(1+i)^n$ times the present value: with first payment $P$, growth $g$ and $i \\neq g$, it is $P\\,\\dfrac{(1+i)^n - (1+g)^n}{i-g}$, and $n P (1+i)^{n-1}$ when $i = g$.; fact checked run 2026-10-30T19:35Z/57a4",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r6",
@@ -24640,7 +24768,15 @@
      "statement": "A level-pattern perpetuity with payments that repeat in a cycle can be split into separate perpetuities, one for each position in the cycle, each with payments spaced one cycle apart.",
      "concept": "Perpetuities with Non-Level Payments",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Non-level Annuities",
+      "quote": "A stream whose payments repeat in a cycle of $k$ periods splits into $k$ streams, each paying once every $k$ periods and valued at the $k$-period effective rate $(1+i)^k - 1$, then discounted from its own start.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §22 (p.206: rate at the payment frequency); §23 annuities payable less frequently than interest is convertible (p.210): A stream whose payments repeat in a cycle of $k$ periods splits into $k$ streams, each paying once every $k$ periods and valued at the $k$-period effective rate $(1+i)^k - 1$, then discounted from its own start.; fact checked run 2026-10-30T19:35Z/57a4",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -24899,11 +25035,11 @@
      ],
      "resolution": {
       "kind": "taught",
-      "page": "Geometric Increasing Perpetuity",
-      "quote": "Value the growing part at time 3, one period before its first payment, then discount it to time 0",
-      "note": "retagged with Geometric Increasing Perpetuity; passage on that page: the question values a perpetuity whose payments grow geometrically after an initial stretch; Geometric Increasing Perpetuity is that page, and its worked exampl",
+      "page": "Non-level Annuities",
+      "quote": "Value a non-level stream by splitting it into standard pieces — level, arithmetic increasing or decreasing, geometric, perpetuity — each valued one period before its own first payment (or as an annuity-due at its first payment), then discounted to time 0 and summed.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §17 (pp.168-169); §26 varying annuity-immediate (pp.234-237); §27 Example 27.5 (p.252): Value a non-level stream by splitting it into standard pieces — level, arithmetic increasing or decreasing, geometric, perpetuity — each valued one period before its own first payment (or as an annuity-due at its first payment), then discounted to time 0 and summed.; fact checked run 2026-10-30T19:35Z/57a4",
       "date": "2026-10-30",
-      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
      }
     },
     {
@@ -28555,7 +28691,15 @@
      "statement": "A block of payments within a year can be replaced by a single equivalent value at the start of that year (its present value there), reducing the stream to an annual-period cash flow series.",
      "concept": "Present Value of Cash Flows",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Non-level Annuities",
+      "quote": "When payments are level within each year but change from year to year, value each year's payments as one amount at the start or end of that year at the per-payment-period rate, then value those yearly amounts as an annual stream at the annual effective rate.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §28 Varying annuities payable more frequently than interest is convertible (pp.259-260): When payments are level within each year but change from year to year, value each year's payments as one amount at the start or end of that year at the per-payment-period rate, then value those yearly amounts as an annual stream at the annual effective rate.; fact checked run 2026-10-30T19:35Z/57a4",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -28563,7 +28707,15 @@
      "statement": "If each year's payments are 5% larger than the previous year's, their value at the start of each year is also 5% larger, so the annual block values form a geometric progression with ratio 1+g.",
      "concept": "Geometric Annuity",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Non-level Annuities",
+      "quote": "The yearly amounts follow the payments' pattern: a $g\\%$ change in the payments changes each yearly amount by the same $g\\%$, so the annual stream is level, arithmetic or geometric as the payments are.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §28 Varying annuities payable more frequently than interest is convertible (p.259); §26 geometric progression (p.238): The yearly amounts follow the payments' pattern: a $g\\%$ change in the payments changes each yearly amount by the same $g\\%$, so the annual stream is level, arithmetic or geometric as the payments are.; fact checked run 2026-10-30T19:35Z/57a4",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -29066,7 +29218,15 @@
      "statement": "A level-varying payment stream can be decomposed into a base level annuity plus additional level annuities starting later, each valued separately and summed (e.g., 100 for all years plus an extra 50 for the last three years).",
      "concept": "Annuity-Due",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Non-level Annuities",
+      "quote": "Overlapping level layers also work: a step up from $P$ to $2P$ after $k$ periods is $P$ over the whole term plus a deferred $P$ over the later payments, valued as $P\\,a_{\\overline{n}|} + P\\,v^k a_{\\overline{n-k}|}$.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §16 Example 16.5 (p.160); §17 deferred annuities (pp.168-169): Overlapping level layers also work: a step up from $P$ to $2P$ after $k$ periods is $P$ over the whole term plus a deferred $P$ over the later payments, valued as $P\\,a_{\\overline{n}|} + P\\,v^k a_{\\overline{n-k}|}$.; fact checked run 2026-10-30T19:35Z/57a4",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r3",
@@ -31539,7 +31699,15 @@
      "statement": "To value a repeating pattern of payments within each year, first compute the present value of one year's pattern at the start of that year using the periodic rate, then treat these values as a level annuity of annual payments valued at the effective annual rate.",
      "concept": "Annuity-Immediate",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Non-level Annuities",
+      "quote": "When payments are level within each year but change from year to year, value each year's payments as one amount at the start or end of that year at the per-payment-period rate, then value those yearly amounts as an annual stream at the annual effective rate.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §28 Varying annuities payable more frequently than interest is convertible (pp.259-260): When payments are level within each year but change from year to year, value each year's payments as one amount at the start or end of that year at the per-payment-period rate, then value those yearly amounts as an annual stream at the annual effective rate.; fact checked run 2026-10-30T19:35Z/57a4",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -33254,7 +33422,15 @@
        "page": "Geometric Increasing Perpetuity",
        "quote": "Value the growing part at time 3, one period before its first payment, then discount it to time 0:"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Non-level Annuities",
+      "quote": "Value a non-level stream by splitting it into standard pieces — level, arithmetic increasing or decreasing, geometric, perpetuity — each valued one period before its own first payment (or as an annuity-due at its first payment), then discounted to time 0 and summed.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §17 (pp.168-169); §26 varying annuity-immediate (pp.234-237); §27 Example 27.5 (p.252): Value a non-level stream by splitting it into standard pieces — level, arithmetic increasing or decreasing, geometric, perpetuity — each valued one period before its own first payment (or as an annuity-due at its first payment), then discounted to time 0 and summed.; fact checked run 2026-10-30T19:35Z/57a4",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -33271,7 +33447,15 @@
        "page": "Geometric Increasing Perpetuity",
        "quote": "PV &= 100\\,a_{\\overline{3}|0.08} + 2{,}060\\,(1.08)^{-3}"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Non-level Annuities",
+      "quote": "A stream whose pattern changes partway is split into pieces of standard form; value each later piece one period before its first payment, then move that value to the valuation date by discounting with $v^k$, or by accumulating with $(1+i)^k$ when that point lies before the valuation date.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §17 Annuity values on any date: deferred annuity (pp.168-169); §27 Example 27.5 (p.252): A stream whose pattern changes partway is split into pieces of standard form; value each later piece one period before its first payment, then move that value to the valuation date by discounting with $v^k$, or by accumulating with $(1+i)^k$ when that point lies before the valuation date.; fact checked run 2026-10-30T19:35Z/57a4",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -33872,7 +34056,15 @@
        "page": "Geometric Increasing Perpetuity",
        "quote": "Value the growing part at time 3, one period before its first payment, then discount it to time 0:"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Non-level Annuities",
+      "quote": "A stream whose pattern changes partway is split into pieces of standard form; value each later piece one period before its first payment, then move that value to the valuation date by discounting with $v^k$, or by accumulating with $(1+i)^k$ when that point lies before the valuation date.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §17 Annuity values on any date: deferred annuity (pp.168-169); §27 Example 27.5 (p.252): A stream whose pattern changes partway is split into pieces of standard form; value each later piece one period before its first payment, then move that value to the valuation date by discounting with $v^k$, or by accumulating with $(1+i)^k$ when that point lies before the valuation date.; fact checked run 2026-10-30T19:35Z/57a4",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -34376,7 +34568,15 @@
        "page": "Deferred Annuity",
        "quote": "$${}_{k|}a_{\\overline{n}|} = v^k \\cdot a_{\\overline{n}|}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Non-level Annuities",
+      "quote": "A stream whose pattern changes partway is split into pieces of standard form; value each later piece one period before its first payment, then move that value to the valuation date by discounting with $v^k$, or by accumulating with $(1+i)^k$ when that point lies before the valuation date.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §17 Annuity values on any date: deferred annuity (pp.168-169); §27 Example 27.5 (p.252): A stream whose pattern changes partway is split into pieces of standard form; value each later piece one period before its first payment, then move that value to the valuation date by discounting with $v^k$, or by accumulating with $(1+i)^k$ when that point lies before the valuation date.; fact checked run 2026-10-30T19:35Z/57a4",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r6",
@@ -35042,7 +35242,15 @@
      "statement": "For payments made monthly with annual step increases, value each year's level monthly payments as an annuity-due at the monthly rate to get one lump-sum value at the start of that year, then treat these yearly values as annual payments forming a geometric annuity at the annual effective rate.",
      "concept": "Geometric Annuity",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Non-level Annuities",
+      "quote": "When payments are level within each year but change from year to year, value each year's payments as one amount at the start or end of that year at the per-payment-period rate, then value those yearly amounts as an annual stream at the annual effective rate.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §28 Varying annuities payable more frequently than interest is convertible (pp.259-260): When payments are level within each year but change from year to year, value each year's payments as one amount at the start or end of that year at the per-payment-period rate, then value those yearly amounts as an annual stream at the annual effective rate.; fact checked run 2026-10-30T19:35Z/57a4",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -35658,7 +35866,15 @@
        "page": "Deferred Annuity",
        "quote": "$${}_{k|}a_{\\overline{n}|} = v^k \\cdot a_{\\overline{n}|}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Non-level Annuities",
+      "quote": "A stream whose pattern changes partway is split into pieces of standard form; value each later piece one period before its first payment, then move that value to the valuation date by discounting with $v^k$, or by accumulating with $(1+i)^k$ when that point lies before the valuation date.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §17 Annuity values on any date: deferred annuity (pp.168-169); §27 Example 27.5 (p.252): A stream whose pattern changes partway is split into pieces of standard form; value each later piece one period before its first payment, then move that value to the valuation date by discounting with $v^k$, or by accumulating with $(1+i)^k$ when that point lies before the valuation date.; fact checked run 2026-10-30T19:35Z/57a4",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r6",
@@ -35853,7 +36069,15 @@
        "page": "Increasing Annuity",
        "quote": "A first payment $P$ rising by $Q$ a period is a level annuity of $P - Q$ plus $Q\\,(Ia)_{\\overline{n}|}$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Non-level Annuities",
+      "quote": "A stream whose pattern changes partway is split into pieces of standard form; value each later piece one period before its first payment, then move that value to the valuation date by discounting with $v^k$, or by accumulating with $(1+i)^k$ when that point lies before the valuation date.",
+      "note": "written from Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §17 Annuity values on any date: deferred annuity (pp.168-169); §27 Example 27.5 (p.252): A stream whose pattern changes partway is split into pieces of standard form; value each later piece one period before its first payment, then move that value to the valuation date by discounting with $v^k$, or by accumulating with $(1+i)^k$ when that point lies before the valuation date.; fact checked run 2026-10-30T19:35Z/57a4",
+      "date": "2026-10-30",
+      "run": "G8 writer + fact check, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",

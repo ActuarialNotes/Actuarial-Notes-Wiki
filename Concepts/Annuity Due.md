@@ -2,12 +2,13 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-09-29
+  last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:1ecee74fa23ccc0a3c7ea91c81a01d474197efe05eb976f05a378d968234d0ba
+  content_hash: sha256:a0c2474f6880e9b4eb6ef7801dd30743308b0e73d08b02f25d6d080a7eae9605
   sources:
     - "SOA, Notation and terminology used for Exam FM, p.1, sha256:f6cfa778c3c08d8118ff41f1cda86eda553cf5542b73ade914082fa55a292a0c — https://www.soa.org/globalassets/assets/Files/Edu/2019/exam-fm-notation-terminology2.pdf"
     - "Finan, A Basic Course in the Theory of Interest and Derivatives Markets, p.157-160, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf"
+    - "Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §16 Theorem 16.3, PDF p.161, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Annuity Due.md
@@ -27,6 +28,13 @@ An **annuity-due** is a series of $n$ level payments of 1 made at the **beginnin
 
 - Here $d = i/(1+i)$ is the effective annual [[Discount Rate]].
 - Annuities-due arise naturally when payments are made at the start of a period, such as lease payments, insurance premiums paid in advance, or tuition fees.
+
+### Annuity-due as a payment now plus an annuity-immediate
+
+- An $n$-payment annuity-due is a payment of 1 now plus an $(n-1)$-payment annuity-immediate, so $\ddot{a}_{\overline{n}|} = 1 + a_{\overline{n-1}|}$.
+- At the other end, an $n$-payment annuity-due accumulated one period after its last payment is an $(n+1)$-payment annuity-immediate less its final payment, so $\ddot{s}_{\overline{n}|} = s_{\overline{n+1}|} - 1$.
+
+> $$\ddot{a}_{\overline{n}|} = 1 + a_{\overline{n-1}|} \qquad \ddot{s}_{\overline{n}|} = s_{\overline{n+1}|} - 1$$
 
 ![[Media/Figures/Annuity_Due.svg|340]]
 

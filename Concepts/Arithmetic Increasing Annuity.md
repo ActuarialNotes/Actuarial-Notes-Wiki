@@ -2,12 +2,13 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-09-29
+  last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:de2502c8705b5fec9413820d9ca176910ac6ec2e71608429a289f57e30f109d4
+  content_hash: sha256:bfa3467e79e99b80afb3eaa1ab6da8483866a638d0d4205632447e072c85df8e
   sources:
     - "SOA Exam FM Sample Solutions (rev. Aug 2026), Q 4, solutions PDF p.4, sha256:ae4ec6082b43944a0c44cefaf02cdc24cf2e011dcd57366ea5f9cb32d3323f69 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf"
     - "Finan, A Basic Course in the Theory of Interest and Derivatives Markets, p.234-235, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf"
+    - "Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §26 Example 26.2 and (Is)_n, PDF p.235-236, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Arithmetic Increasing Annuity.md
@@ -22,6 +23,14 @@ An **arithmetic increasing annuity** has payments $1, 2, 3, \ldots, n$ at the en
 - For the more general case with first payment $P$ and constant increase $Q$ per period (payments $P,\, P+Q,\, P+2Q,\, \ldots,\, P+(n-1)Q$), the present value is:
 
 > $$PV = P \cdot a_{\overline{n}|} + \frac{Q}{i}\!\left(a_{\overline{n}|} - nv^n\right)$$
+
+### Increasing annuity as a stack of level annuities
+
+- Payments $1, 2, \ldots, n$ at the ends of periods $1, \ldots, n$ are the sum of $n$ level annuities-immediate of 1: the $k$-th layer starts at the end of period $k$ and runs to period $n$, so it has $n-k+1$ payments.
+- Accumulating each layer to time $n$ gives $(Is)_{\overline{n}|} = \sum_{k=1}^{n} s_{\overline{n-k+1}|}$; valuing each layer one period before its first payment and discounting to time 0 gives $(Ia)_{\overline{n}|} = \sum_{k=1}^{n} v^{k-1} a_{\overline{n-k+1}|}$.
+- Summing the layers in closed form gives the accumulated value directly:
+
+> $$(Is)_{\overline{n}|} = \frac{\ddot{s}_{\overline{n}|} - n}{i}$$
 
 ![[Media/Figures/Arithmetic_Increasing_Annuity.svg|340]]
 

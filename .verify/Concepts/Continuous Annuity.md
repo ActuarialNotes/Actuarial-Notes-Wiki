@@ -70,3 +70,14 @@ created: 2026-09-28
 - confidence: medium
 - checks_run: Re-checked on the new bytes: ā_n = ∫_0^n v^t dt = (1-v^n)/δ = (1-e^{-nδ})/δ and ā_n = (i/δ)a_n vs Finan p.228; s̄_n = ((1+i)^n-1)/δ and s̄_n = (1+i)^n ā_n vs Finan p.229-230 and SOA solution Q115; δ symbol vs notation note p.1. Examples recomputed in python: e^-0.6 = 0.5488116, ā_10@δ=0.06 = 7.519807, PV = 7,519.81; δ = ln1.05 = 0.04879016, 1.05^8 = 1.4774554, s̄_8 = 9.785895, AV = 4,892.95. 25 math nodes typeset in KaTeX; links and figure resolve.
 - sources_checked: Finan, A Basic Course in the Theory of Interest and Derivatives Markets, p.228-230, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf; SOA Exam FM Sample Solutions (rev. Aug 2026), Q 115, solutions PDF p.33, sha256:ae4ec6082b43944a0c44cefaf02cdc24cf2e011dcd57366ea5f9cb32d3323f69 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf; SOA, Notation and terminology used for Exam FM, p.1, sha256:f6cfa778c3c08d8118ff41f1cda86eda553cf5542b73ade914082fa55a292a0c — https://www.soa.org/globalassets/assets/Files/Edu/2019/exam-fm-notation-terminology2.pdf
+
+## [C-003] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-30T19:35Z/57a4
+- date: 2026-10-30
+- status_set: verified
+- confidence: medium
+- checks_run: Diff vs HEAD additions only (section "Payments growing continuously"); prior bytes unchanged. PV=∫f(t)e^{-δt}dt vs Finan eq 29.1 p.268 (constant force); (1+g)^t e^{-δt}=e^{-(δ-ln(1+g))t} and closed form (1-e^{-(δ-ln(1+g))n})/(δ-ln(1+g)), perpetuity 1/(δ-ln(1+g)) finite iff δ>ln(1+g): integrated by hand. No question numbers; LaTeX well-formed.
+- sources_checked: Finan, A Basic Course in the Theory of Interest and Derivatives Markets, p.228-230, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf; SOA Exam FM Sample Solutions (rev. Aug 2026), Q 115, solutions PDF p.33, sha256:ae4ec6082b43944a0c44cefaf02cdc24cf2e011dcd57366ea5f9cb32d3323f69 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf; SOA, Notation and terminology used for Exam FM, p.1, sha256:f6cfa778c3c08d8118ff41f1cda86eda553cf5542b73ade914082fa55a292a0c — https://www.soa.org/globalassets/assets/Files/Edu/2019/exam-fm-notation-terminology2.pdf; Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §29 continuous varying annuities eq. 29.1, PDF p.268, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf
+- note: G8 re-check after writer addition: Continuous Annuity (Exam FM answerability gaps)

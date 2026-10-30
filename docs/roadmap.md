@@ -432,6 +432,19 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   connector read-only, public and keyless; the reader's own library waits on A1. *(Proposed
   2026-10-30.)*
 
+- **A8: an eval of the connector, the tools and the skill (INS-ActBench).**
+  `docs/ins-actbench.md` reviews INS-ActBench (Fudan; 12,050 items from 16 associations' exams:
+  Know / Case / Practice). It finds frontier models strong on knowledge and 25–35 points behind
+  human experts on case reasoning and spreadsheet/R work. It also finds Claude 10.5 points weaker
+  on numerical items than on conceptual ones. The data isn't released and the repo has no licence,
+  so nothing of it enters the vault. Proposed, in order: a connector mode that withholds questions
+  (otherwise `fetch` hands the assistant the key); a connector eval beside the learner, comparing
+  the same model with nothing, with the connector and with the skill, on our own vault-written
+  questions (never published, so no contamination) and the 2025–26 sittings, scored the way the
+  benchmark scores; two skill lines taken from its findings; then the benchmark itself, if the
+  authors grant access, with the Practice items no tool answers ranked as a tools backlog.
+  Three decisions (D-B1–D-B3). *(Proposed 2026-10-30.)*
+
 - ~~**C20: answerability as a content check, then a gate.**~~ Ranked 2026-10-25 and built as G8:
   see C20 in §4.3 and D29. The proposal as written: `simulations/check-answerable`
   (`docs/simulated-learner.md`, *Answerability*) asks of every served question whether its
@@ -805,6 +818,7 @@ Every planning document in the repo, what it is for, and how healthy it is. A do
 | `docs/actuarial-tools.md` | Subplan: Tools | A2 | Active. **Needs refresh** (A6) | 2026-10-10 |
 | `docs/cowork-source-inventory.md` | Queue: Cowork sources | A3 | Active. **§4 counts are stale** | 2026-09-20 |
 | `docs/cowork-agent-tools.md` | Proposal: the tools a Cowork agent needs | A7 (§3.4) | Proposed | 2026-10-30 |
+| `docs/ins-actbench.md` | Proposal: evaluating the connector, tools and skill (INS-ActBench) | A8 (§3.4) | Proposed | 2026-10-30 |
 | `docs/actuaria-online.md` | Build spec: Actuaria | X3 | Phases 0–3 built; Phase 4 parked | 2026-10-05 |
 | `docs/tutor.md` | Plan and build spec: the Tutor | L8 | Phase 1 built; Preview | 2026-10-18 |
 | `docs/community.md` | Build spec: the Community tab | X9 | Built; Preview | 2026-10-19 |

@@ -2188,31 +2188,136 @@ var onLevelFactors = {
   }
 };
 
+// src/lib/tools/regression.ts
+function invert(a) {
+  const p2 = a.length;
+  const m = a.map((row2, i) => [...row2, ...Array.from({ length: p2 }, (_, j) => i === j ? 1 : 0)]);
+  const scale = Math.max(...a.map((row2, i) => Math.abs(row2[i])), 1e-300);
+  for (let c = 0; c < p2; c++) {
+    let pivot = c;
+    for (let r = c + 1; r < p2; r++) if (Math.abs(m[r][c]) > Math.abs(m[pivot][c])) pivot = r;
+    if (Math.abs(m[pivot][c]) < 1e-10 * scale) return null;
+    [m[c], m[pivot]] = [m[pivot], m[c]];
+    const d = m[c][c];
+    for (let j = 0; j < 2 * p2; j++) m[c][j] /= d;
+    for (let r = 0; r < p2; r++) {
+      if (r === c) continue;
+      const f = m[r][c];
+      if (f !== 0) for (let j = 0; j < 2 * p2; j++) m[r][j] -= f * m[c][j];
+    }
+  }
+  return m.map((row2) => row2.slice(p2));
+}
+function ols(X, y) {
+  const n = y.length;
+  const p2 = X[0]?.length ?? 0;
+  const xtx = Array.from({ length: p2 }, (_, i) => Array.from({ length: p2 }, (_2, j) => X.reduce((s, row2) => s + row2[i] * row2[j], 0)));
+  const xty = Array.from({ length: p2 }, (_, i) => X.reduce((s, row2, k) => s + row2[i] * y[k], 0));
+  const inv = invert(xtx);
+  if (!inv) return null;
+  const coef = inv.map((row2) => row2.reduce((s, v, j) => s + v * xty[j], 0));
+  const my = y.reduce((s, v) => s + v, 0) / n;
+  let sse = 0;
+  let sst = 0;
+  for (let k = 0; k < n; k++) {
+    const fit = X[k].reduce((s, v, j) => s + v * coef[j], 0);
+    sse += (y[k] - fit) ** 2;
+    sst += (y[k] - my) ** 2;
+  }
+  const df = n - p2;
+  const s2 = df > 0 ? sse / df : NaN;
+  const exact = sse <= 1e-24 * Math.max(sst, 1);
+  return {
+    coef,
+    cov: inv.map((row2) => row2.map((v) => exact && df > 0 ? 0 : v * s2)),
+    sse: exact ? 0 : sse,
+    sst,
+    df,
+    r2: sst === 0 ? 1 : exact ? 1 : 1 - sse / sst,
+    adjR2: sst === 0 || df <= 0 ? NaN : exact ? 1 : 1 - sse / df / (sst / (n - 1))
+  };
+}
+function combinationVariance(cov, g) {
+  return g.reduce((s, gi, i) => s + gi * g.reduce((t, gj, j) => t + cov[i][j] * gj, 0), 0);
+}
+function studentTCdf(t, df) {
+  if (!Number.isFinite(t)) return t > 0 ? 1 : 0;
+  const tail = 0.5 * regularizedIncompleteBeta(df / 2, 0.5, df / (df + t * t));
+  return t > 0 ? 1 - tail : tail;
+}
+function twoSidedP(t, df) {
+  if (!Number.isFinite(t)) return 0;
+  return regularizedIncompleteBeta(df / 2, 0.5, df / (df + t * t));
+}
+function studentTQuantile(p2, df) {
+  if (p2 === 0.5) return 0;
+  let hi = 1;
+  while (studentTCdf(hi, df) < Math.max(p2, 1 - p2)) hi *= 2;
+  const q = bisect((t) => studentTCdf(t, df) - Math.max(p2, 1 - p2), 0, hi);
+  return p2 > 0.5 ? q : -q;
+}
+
 // src/lib/tools/ratemaking/trendFit.ts
 var PERIOD = { key: "period", label: "Period", kind: "text" };
 var VALUE = { key: "value", label: "Value", kind: "number", unit: "plain" };
-function leastSquares(x, y) {
-  const n = x.length;
-  const mx = x.reduce((s, v) => s + v, 0) / n;
-  const my = y.reduce((s, v) => s + v, 0) / n;
-  let sxy = 0;
-  let sxx = 0;
-  let syy = 0;
-  for (let k = 0; k < n; k++) {
-    sxy += (x[k] - mx) * (y[k] - my);
-    sxx += (x[k] - mx) ** 2;
-    syy += (y[k] - my) ** 2;
+var MARK = { key: "mark", label: "Mark", kind: "text", optional: true };
+var LEVEL = 0.95;
+var FEW_DF = 4;
+var LOW_R2 = 0.5;
+var MARK_WORDS = {
+  exclude: "exclude",
+  excluded: "exclude",
+  out: "exclude",
+  drop: "exclude",
+  x: "exclude",
+  start: "start",
+  from: "start",
+  end: "end",
+  to: "end",
+  shift: "shift",
+  level: "shift",
+  step: "shift",
+  break: "break",
+  hinge: "break",
+  kink: "break"
+};
+function readMarks(raw, row2) {
+  const words = String(raw ?? "").toLowerCase().split(/[\s,;+/]+/).filter(Boolean);
+  const marks = /* @__PURE__ */ new Set();
+  for (const w of words) {
+    const mark = MARK_WORDS[w];
+    if (!mark) throw new ToolInputError("points", `Row ${row2 + 1}'s mark "${w}" isn't one of: exclude, start, end, shift, break.`);
+    marks.add(mark);
   }
-  const slope = sxy / sxx;
-  return { intercept: my - slope * mx, slope, r2: syy === 0 ? 1 : sxy * sxy / (sxx * syy) };
+  return marks;
+}
+var pct = (v) => formatValue(v, "percent");
+var pText = (p2) => p2 < 1e-3 ? "< 0.001" : `= ${p2.toFixed(3)}`;
+function designRow(k, end, m, d) {
+  const t = k - end;
+  return [
+    1,
+    t,
+    ...d.shifts.map((s) => k >= s ? 1 : 0),
+    ...d.breaks.map((b) => Math.max(0, k - b)),
+    ...d.seasons.map((s) => (k % m + m) % m === s ? 1 : 0)
+  ];
 }
 var trendFit = {
   id: "ratemaking.trend_fit",
-  version: "1.0.0",
+  version: "1.1.0",
   name: "Trend Fit",
   area: "ratemaking",
   answers: "What annual trend do these data show?",
-  aka: ["exponential trend", "linear trend", "loss trend", "premium trend"],
+  aka: ["exponential trend", "linear trend", "loss trend", "premium trend", "level shift", "breakpoint", "piecewise trend"],
+  compare: [
+    { key: "trend", label: "Annual trend", unit: "percent" },
+    { key: "ci_low", label: "CI low", unit: "percent" },
+    { key: "ci_high", label: "CI high", unit: "percent" },
+    { key: "p_value", label: "p-value", unit: "plain" },
+    { key: "r2", label: "R\xB2", unit: "plain" },
+    { key: "points", label: "Points", unit: "count" }
+  ],
   fields: [
     {
       kind: "choice",
@@ -2222,7 +2327,7 @@ var trendFit = {
       options: [{ value: "exponential", label: "Exponential" }, { value: "linear", label: "Linear" }],
       default: "exponential"
     },
-    { kind: "number", key: "per_year", label: "Points a year", symbol: "m", unit: "count", integer: true, min: 1, max: 365, sliderMax: 12, step: 1, default: 4, description: "How many points make a year: 4 for quarters (year-ending quarterly figures), 1 for years." },
+    { kind: "number", key: "per_year", label: "Points a year", symbol: "m", unit: "count", integer: true, min: 1, max: 365, sliderMax: 12, step: 1, default: 4, description: "How many points make a year: 4 for quarters (year-ending quarterly figures), 2 for half-years, 1 for years." },
     {
       kind: "number",
       key: "latest",
@@ -2237,7 +2342,16 @@ var trendFit = {
       step: 1,
       default: 0,
       zeroLabel: "All",
-      description: "Fit only the latest n points (0 for all of them): a judgment of how far back the trend still holds."
+      description: "Fit only the latest n periods, counting back from the end of the window (0 for all of them): a judgment of how far back the trend still holds. Excluded points inside those n still count as periods."
+    },
+    {
+      kind: "choice",
+      key: "seasonal",
+      label: "Seasons",
+      judgment: true,
+      description: "Whether each period of the year (each quarter or half-year) gets its own level, for points that are not year-ending (rolling) figures. Year-ending figures have no season to fit.",
+      options: [{ value: "none", label: "None" }, { value: "period", label: "By period of year" }],
+      default: "none"
     },
     {
       kind: "table",
@@ -2245,17 +2359,17 @@ var trendFit = {
       label: "Points",
       minRows: 2,
       maxRows: 1e3,
-      description: "The series, oldest first, evenly spaced: each period's label and its value (average premium, frequency, severity or pure premium).",
-      columns: [PERIOD, VALUE],
+      description: `The series, oldest first, evenly spaced: each period's label, its value (average premium, frequency, severity or pure premium) and an optional mark. Marks: "exclude" leaves the point out of the fit (a pandemic period) while keeping its place in time; "start" and "end" fit only the points from and through that period; "shift" lets the level jump from that period on (a reform, a coverage change); "break" lets the trend change from that period on, and the annual trend reported is the one after it. Several marks may be combined, "shift, break".`,
+      columns: [PERIOD, VALUE, MARK],
       default: [
-        { period: "2022 Q1", value: 100 },
-        { period: "2022 Q2", value: 101.2 },
-        { period: "2022 Q3", value: 101.9 },
-        { period: "2022 Q4", value: 103.1 },
-        { period: "2023 Q1", value: 104 },
-        { period: "2023 Q2", value: 104.9 },
-        { period: "2023 Q3", value: 106.2 },
-        { period: "2023 Q4", value: 107.1 }
+        { period: "2022 Q1", value: 100, mark: "" },
+        { period: "2022 Q2", value: 101.2, mark: "" },
+        { period: "2022 Q3", value: 101.9, mark: "" },
+        { period: "2022 Q4", value: 103.1, mark: "" },
+        { period: "2023 Q1", value: 104, mark: "" },
+        { period: "2023 Q2", value: 104.9, mark: "" },
+        { period: "2023 Q3", value: 106.2, mark: "" },
+        { period: "2023 Q4", value: 107.1, mark: "" }
       ]
     }
   ],
@@ -2266,36 +2380,132 @@ var trendFit = {
     const points = input.points;
     const m = Number(input.per_year);
     const exponential2 = input.model !== "linear";
-    const n = Number(input.latest) === 0 ? points.length : Math.min(Number(input.latest), points.length);
-    if (n < 2) throw new ToolInputError("latest", "Fit at least two points.");
-    const first = points.length - n;
-    const fitted = points.slice(first);
-    const x = fitted.map((_, k) => k);
-    const ys = fitted.map((r) => Number(r.value));
+    const marks = points.map((r, k) => readMarks(r.mark, k));
+    const warnings = [];
+    const starts = marks.flatMap((s, k) => s.has("start") ? [k] : []);
+    const ends = marks.flatMap((s, k) => s.has("end") ? [k] : []);
+    if (starts.length > 1) throw new ToolInputError("points", 'Mark one point "start", not several.');
+    if (ends.length > 1) throw new ToolInputError("points", 'Mark one point "end", not several.');
+    const end = ends[0] ?? points.length - 1;
+    let start = starts[0] ?? 0;
+    if (start > end) throw new ToolInputError("points", 'The "start" mark comes after the "end" mark.');
+    const latest = Number(input.latest);
+    if (latest > 0) start = Math.max(start, end - latest + 1);
+    const inWindow = (k) => k >= start && k <= end;
+    const used = points.map((_, k) => inWindow(k) && !marks[k].has("exclude"));
+    const fittedIdx = used.flatMap((u, k) => u ? [k] : []);
+    const n = fittedIdx.length;
+    if (n < 2) throw new ToolInputError(latest > 0 ? "latest" : "points", "Fit at least two points.");
+    const ys = fittedIdx.map((k) => Number(points[k].value));
     if (exponential2 && ys.some((y) => !(y > 0))) throw new ToolInputError("points", "An exponential fit needs every value above zero; fit these linearly instead.");
-    const fit = leastSquares(x, exponential2 ? ys.map(Math.log) : ys);
-    const at2 = (k) => exponential2 ? Math.exp(fit.intercept + fit.slope * k) : fit.intercept + fit.slope * k;
-    const trend = exponential2 ? Math.exp(m * fit.slope) - 1 : m * fit.slope / at2(n - 1);
-    const rows = points.map((r, k) => Object.assign({}, r, { fitted: k >= first ? at2(k - first) : null }));
+    const first = fittedIdx[0];
+    const last2 = fittedIdx[n - 1];
+    const placed = (mark) => marks.flatMap((s, k) => {
+      if (!s.has(mark)) return [];
+      if (k <= first || k > last2) {
+        warnings.push(`The "${mark}" mark on ${points[k].period || `row ${k + 1}`} is ignored: it has to fall after the first point fitted and no later than the last.`);
+        return [];
+      }
+      return [k];
+    });
+    const seasonal = input.seasonal === "period" && m > 1;
+    if (input.seasonal === "period" && m === 1) warnings.push("Seasons need more than one point a year; the fit has none.");
+    const baseSeason = last2 % m;
+    const design = {
+      shifts: placed("shift"),
+      breaks: placed("break"),
+      seasons: seasonal ? Array.from({ length: m }, (_, s) => s).filter((s) => s !== baseSeason && fittedIdx.some((k) => k % m === s)) : []
+    };
+    const X = fittedIdx.map((k) => designRow(k, end, m, design));
+    const yy = exponential2 ? ys.map(Math.log) : ys;
+    const fit = ols(X, yy);
+    if (!fit) throw new ToolInputError("points", "The marks leave too few points to fit: each shift, break and season needs points of its own on either side.");
+    const p2 = X[0].length;
+    const slopeAt = 1 + 1 + design.shifts.length;
+    const g = Array.from({ length: p2 }, (_, j) => j === 1 || j >= slopeAt && j < slopeAt + design.breaks.length ? 1 : 0);
+    const slope = g.reduce((s, gj, j) => s + gj * fit.coef[j], 0);
+    const se = fit.df > 0 ? Math.sqrt(Math.max(0, combinationVariance(fit.cov, g))) : NaN;
+    const tStat = se > 0 ? slope / se : se === 0 ? slope === 0 ? 0 : Infinity * Math.sign(slope) : NaN;
+    const pValue = Number.isNaN(tStat) ? NaN : twoSidedP(tStat, fit.df);
+    const tq = fit.df > 0 ? studentTQuantile(0.5 + LEVEL / 2, fit.df) : NaN;
+    const predict = (k) => {
+      const v = designRow(k, end, m, design).reduce((s, x, j) => s + x * fit.coef[j], 0);
+      return exponential2 ? Math.exp(v) : v;
+    };
+    const latestFit = predict(end);
+    const annual = (b) => exponential2 ? Math.exp(m * b) - 1 : m * b / latestFit;
+    const trend = annual(slope);
+    const ciLow = Number.isNaN(tq) ? NaN : annual(slope - tq * se);
+    const ciHigh = Number.isNaN(tq) ? NaN : annual(slope + tq * se);
+    const trendBefore = design.breaks.length ? annual(fit.coef[1]) : null;
+    const label = (k) => String(points[k].period || `row ${k + 1}`);
+    const shifts = design.shifts.map((s, j) => {
+      const d = fit.coef[2 + j];
+      return { period: label(s), change: exponential2 ? Math.exp(d) - 1 : d };
+    });
+    const seasons = design.seasons.map((s, j) => {
+      const d = fit.coef[slopeAt + design.breaks.length + j];
+      return { season: s + 1, relative: exponential2 ? Math.exp(d) : d };
+    });
+    if (fit.df === 0) warnings.push(`${n} points for ${p2} parameters is an exact fit: there is nothing left to estimate an error from, so no interval or p-value.`);
+    else if (fit.df < FEW_DF) warnings.push(`Only ${n} points for ${p2} parameters (${fit.df} degree${fit.df === 1 ? "" : "s"} of freedom): an R\xB2 near 1 means little here, and the 95% interval (${pct(ciLow)} to ${pct(ciHigh)}) is the better guide.`);
+    if (fit.df > 0 && fit.r2 < LOW_R2) warnings.push(`R\xB2 is ${formatValue(fit.r2, "plain")}: the fit explains little of how the points move.`);
+    if (fit.df > 0 && pValue > 1 - LEVEL) warnings.push(`The trend isn't distinguishable from zero at 95% (p ${pText(pValue)}; interval ${pct(ciLow)} to ${pct(ciHigh)}).`);
+    const shift = design.shifts.length || design.breaks.length ? null : likelyShift(fittedIdx, yy, end, m, design);
+    if (shift) {
+      warnings.push(`The points look to shift level at ${label(shift.at)}: a step of ${exponential2 ? pct(Math.exp(shift.step) - 1) : formatValue(shift.step, "plain")} there leaves ${pct(shift.remaining)} of the unexplained variation (p ${pText(shift.p)} after allowing for ${shift.tried} places it could have been). If something changed then, mark it "shift", or fit from there with "start".`);
+    }
+    const excluded = points.flatMap((_, k) => inWindow(k) && marks[k].has("exclude") ? [label(k)] : []);
+    const rows = points.map((r, k) => Object.assign({}, r, { fitted: inWindow(k) ? predict(k) : null }));
+    const ciText = Number.isNaN(ciLow) ? "" : ` (95% CI ${pct(ciLow)} to ${pct(ciHigh)}, p ${pText(pValue)})`;
+    const trendLabel = exponential2 ? "Annual trend" : "Annual change \xF7 latest fit";
     return {
       tiles: [
-        { symbol: "\u0394", label: exponential2 ? "Annual trend" : "Annual change \xF7 latest fit", value: trend, unit: "percent" },
-        ...exponential2 ? [] : [{ symbol: "m\xB7b", label: "Annual change", value: m * fit.slope, unit: "plain" }],
+        { symbol: "\u0394", label: Number.isNaN(ciLow) ? trendLabel : `${trendLabel}, 95% ${pct(ciLow)} to ${pct(ciHigh)}`, value: trend, unit: "percent" },
+        ...exponential2 ? [] : [{ symbol: "m\xB7b", label: "Annual change", value: m * slope, unit: "plain" }],
         { symbol: "R\xB2", label: `${n}-point fit`, value: fit.r2, unit: "plain" }
       ],
       table: {
-        columns: [PERIOD, VALUE, { key: "fitted", label: "Fitted", kind: "number", unit: "plain", computed: true }],
+        columns: [PERIOD, VALUE, MARK, { key: "fitted", label: "Fitted", kind: "number", unit: "plain", computed: true }],
         rows
       },
       trace: [
-        { label: "Points fitted", formula: `the latest ${n} of ${points.length}`, result: n, unit: "count" },
-        { label: "Slope per period", formula: exponential2 ? "least squares of ln y on t" : "least squares of y on t", result: fit.slope, unit: "plain" },
+        { label: "Points fitted", formula: `${label(first)} to ${label(last2)}${excluded.length ? `, leaving out ${excluded.join(", ")}` : ""}`, result: n, unit: "count" },
+        { label: "Parameters", formula: ["level", "slope", ...shifts.map((s) => `a shift at ${s.period}`), ...design.breaks.map((b) => `a change of trend at ${label(b)}`), ...seasons.length ? [`${seasons.length} season${seasons.length === 1 ? "" : "s"}`] : []].join(", "), result: p2, unit: "count" },
+        ...shifts.map((s) => ({ label: `Level shift at ${s.period}`, formula: exponential2 ? "e^d \u2212 1" : "d", result: s.change, unit: exponential2 ? "percent" : "plain" })),
+        ...trendBefore === null ? [] : [{ label: `Annual trend before ${design.breaks.map(label).join(", ")}`, formula: exponential2 ? `e^(${m} \xD7 b\u2080) \u2212 1` : `${m} \xD7 b\u2080 / \u0177`, result: trendBefore, unit: "percent" }],
+        { label: design.breaks.length ? "Slope per period, after the change" : "Slope per period", formula: exponential2 ? "least squares of ln y on t" : "least squares of y on t", result: slope, unit: "plain" },
+        { label: "Standard error of the slope", formula: `\u221A(g\u1D40 \u03C3\xB2(X\u1D40X)\u207B\xB9 g), ${fit.df} degrees of freedom`, result: se, unit: "plain" },
         { label: exponential2 ? "Annual trend" : "Annual change as a share of the latest fitted value", formula: exponential2 ? `e^(${m} \xD7 b) \u2212 1` : `${m} \xD7 b / \u0177`, result: trend, unit: "percent" },
+        { label: "95% interval, low", formula: exponential2 ? `e^(${m} \xD7 (b \u2212 t\xB7se)) \u2212 1` : `${m} \xD7 (b \u2212 t\xB7se) / \u0177`, result: ciLow, unit: "percent" },
+        { label: "95% interval, high", formula: exponential2 ? `e^(${m} \xD7 (b + t\xB7se)) \u2212 1` : `${m} \xD7 (b + t\xB7se) / \u0177`, result: ciHigh, unit: "percent" },
+        { label: "p-value", formula: `two-sided, t = b / se = ${formatValue(tStat, "plain")}`, result: pValue, unit: "plain" },
         { label: "R\xB2", formula: "share of the variation the fit explains", result: fit.r2, unit: "plain" }
       ],
-      warnings: [],
-      values: { trend, slope: fit.slope, intercept: fit.intercept, r2: fit.r2, points: n, annual_change: exponential2 ? null : m * fit.slope },
-      summary: `${n}-point ${exponential2 ? "exponential" : "linear"} fit: ${exponential2 ? "annual trend" : "annual change"} ${formatValue(trend, "percent")}${exponential2 ? "" : " of the latest fitted value"}, R\xB2 ${formatValue(fit.r2, "plain")}.`
+      warnings,
+      values: {
+        trend,
+        slope,
+        intercept: fit.coef[0],
+        r2: fit.r2,
+        adj_r2: nullable(fit.adjR2),
+        points: n,
+        parameters: p2,
+        df: fit.df,
+        se: nullable(se),
+        t_stat: nullable(tStat),
+        p_value: nullable(pValue),
+        ci_level: LEVEL,
+        ci_low: nullable(ciLow),
+        ci_high: nullable(ciHigh),
+        annual_change: exponential2 ? null : m * slope,
+        trend_before: trendBefore,
+        shifts,
+        seasons,
+        window: { from: label(first), to: label(last2) },
+        excluded
+      },
+      summary: `${n}-point ${exponential2 ? "exponential" : "linear"} fit: ${exponential2 ? "annual trend" : "annual change"} ${pct(trend)}${exponential2 ? "" : " of the latest fitted value"}${ciText}, R\xB2 ${formatValue(fit.r2, "plain")}.`
     };
   },
   method: {
@@ -2306,6 +2516,27 @@ var trendFit = {
     { tool: "ratemaking.trend_factor", label: "Trend Factor", build: (_input, output) => ({ trend: output.values.trend }) }
   ]
 };
+var nullable = (v) => Number.isFinite(v) ? v : null;
+function likelyShift(idx, y, end, m, base) {
+  if (idx.length < 8) return null;
+  const fitWith = (s) => ols(idx.map((k) => designRow(k, end, m, { ...base, shifts: [s] })), y);
+  const without = ols(idx.map((k) => designRow(k, end, m, base)), y);
+  if (!without || without.sse === 0) return null;
+  let best = null;
+  let tried = 0;
+  for (let j = 3; j <= idx.length - 3; j++) {
+    const at2 = idx[j];
+    const f = fitWith(at2);
+    if (!f || f.df < 1) continue;
+    tried++;
+    const se = Math.sqrt(f.cov[2][2]);
+    const p2 = se > 0 ? twoSidedP(f.coef[2] / se, f.df) : 0;
+    if (!best || p2 < best.p) best = { at: at2, step: f.coef[2], p: p2, remaining: f.sse / without.sse };
+  }
+  if (!best || tried === 0) return null;
+  const adjusted = Math.min(1, best.p * tried);
+  return adjusted < 0.05 ? { ...best, p: adjusted, tried } : null;
+}
 
 // src/lib/tools/ratemaking/trendFactor.ts
 var trendFactor = {
@@ -2358,10 +2589,158 @@ var trendFactor = {
       summary: `Trend factor ${formatValue(factor, "factor")} over ${formatValue(period, "years")} years, from ${dateOfYear(from)} to ${dateOfYear(to)}.`
     };
   },
+  compare: [
+    { key: "from", label: "From", unit: "text" },
+    { key: "to", label: "To", unit: "text" },
+    { key: "period", label: "Years", unit: "years" },
+    { key: "factor", label: "Trend factor", unit: "factor" }
+  ],
+  method: {
+    concepts: ["Loss Trend"],
+    readings: [{ resource: "Basic Ratemaking (Werner - 2016)", locator: "Ch. 6" }]
+  },
+  next: [
+    {
+      tool: "ratemaking.two_step_trend",
+      label: "Two-Step Loss Trend",
+      // An accident year's future end is the same date either way; the reader then picks where the past trend stops.
+      build: (input, output) => input.basis === "accident" ? { past_trend: Number(input.trend), future_trend: Number(input.trend), year: Number(input.year), future: String(output.values.to) } : { past_trend: Number(input.trend), future_trend: Number(input.trend), future: String(output.values.to) }
+    }
+  ]
+};
+
+// src/lib/tools/ratemaking/twoStepTrend.ts
+var twoStepTrend = {
+  id: "ratemaking.two_step_trend",
+  version: "1.0.0",
+  name: "Two-Step Loss Trend",
+  area: "ratemaking",
+  answers: "How far do these losses trend when the past and the future trend differ?",
+  aka: ["two-step trend", "current trend", "projected trend", "experience trend"],
+  fields: [
+    { kind: "number", key: "past_trend", label: "Past trend", symbol: "t\u2081", unit: "percent", judgment: true, min: -0.5, max: 1, sliderMax: 0.15, step: 25e-4, default: 0.03, description: "The trend from the experience period to the latest data point (the current, or experience, trend), as a decimal." },
+    { kind: "number", key: "future_trend", label: "Future trend", symbol: "t\u2082", unit: "percent", judgment: true, min: -0.5, max: 1, sliderMax: 0.15, step: 25e-4, default: 0.03, description: "The trend from the latest data point to the period the rates cover (the projected, or prospective, trend), as a decimal." },
+    { kind: "number", key: "year", label: "Accident year", symbol: "Y", unit: "count", integer: true, min: 1900, max: 2200, sliderMin: 2e3, sliderMax: 2030, step: 1, default: 2023, description: "The accident year being trended; its losses occur, on average, mid-year." },
+    { kind: "date", key: "trend_to", label: "Latest data point", symbol: "L", default: "2024-07-01", description: "Where the past trend ends and the future one begins: the average accident date of the latest point in the trend data (the middle of the latest year-ending period)." },
+    { kind: "date", key: "future", label: "Future average date", symbol: "F", default: "2026-01-01", description: 'The average accident date under the new rates: the effective date plus half the time the rates are in effect and half a policy term. Trend Factor works it out (its "to").' }
+  ],
+  notation: () => "TF = (1 + t\u2081)^(L \u2212 (Y + \xBD)) \xD7 (1 + t\u2082)^(F \u2212 L)",
+  view: "none",
+  compute: (input) => {
+    const t1 = Number(input.past_trend);
+    const t2 = Number(input.future_trend);
+    const Y = Number(input.year);
+    const from = Y + 0.5;
+    const pivot = decimalYear(parseDate(input.trend_to));
+    const to = decimalYear(parseDate(input.future));
+    const p1 = pivot - from;
+    const p2 = to - pivot;
+    const f1 = (1 + t1) ** p1;
+    const f2 = (1 + t2) ** p2;
+    const factor = f1 * f2;
+    const warnings = [];
+    if (p1 < 0) warnings.push(`The latest data point (${dateOfYear(pivot)}) is before accident year ${Y}'s average date: the past trend runs backwards.`);
+    if (p2 < 0) warnings.push(`The future average date (${dateOfYear(to)}) is before the latest data point: the future trend runs backwards.`);
+    return {
+      tiles: [
+        { symbol: "TF", label: "Total trend factor", value: factor, unit: "factor" },
+        { symbol: "TF\u2081", label: `Past, ${formatValue(p1, "years")} yrs`, value: f1, unit: "factor" },
+        { symbol: "TF\u2082", label: `Future, ${formatValue(p2, "years")} yrs`, value: f2, unit: "factor" }
+      ],
+      trace: [
+        { label: `Average accident date, accident year ${Y}`, formula: `${dateOfYear(from)}: mid-year`, result: from, unit: "years" },
+        { label: "Past trend period", formula: `${dateOfYear(from)} to the latest data point, ${dateOfYear(pivot)}`, result: p1, unit: "years" },
+        { label: "Past trend factor", formula: `(1 + ${t1})^${formatValue(p1, "years")}`, result: f1, unit: "factor" },
+        { label: "Future trend period", formula: `${dateOfYear(pivot)} to ${dateOfYear(to)}`, result: p2, unit: "years" },
+        { label: "Future trend factor", formula: `(1 + ${t2})^${formatValue(p2, "years")}`, result: f2, unit: "factor" },
+        { label: "Total trend factor", formula: `${formatValue(f1, "factor")} \xD7 ${formatValue(f2, "factor")}`, result: factor, unit: "factor" }
+      ],
+      warnings,
+      values: { factor, past_factor: f1, future_factor: f2, past_period: p1, future_period: p2, from: dateOfYear(from), pivot: dateOfYear(pivot), to: dateOfYear(to) },
+      summary: `Two-step trend factor ${formatValue(factor, "factor")}: ${formatValue(f1, "factor")} over ${formatValue(p1, "years")} years at ${formatValue(t1, "percent")}, then ${formatValue(f2, "factor")} over ${formatValue(p2, "years")} years at ${formatValue(t2, "percent")}.`
+    };
+  },
+  compare: [
+    { key: "past_period", label: "Past years", unit: "years" },
+    { key: "past_factor", label: "Past factor", unit: "factor" },
+    { key: "future_period", label: "Future years", unit: "years" },
+    { key: "future_factor", label: "Future factor", unit: "factor" },
+    { key: "factor", label: "Total factor", unit: "factor" }
+  ],
   method: {
     concepts: ["Loss Trend"],
     readings: [{ resource: "Basic Ratemaking (Werner - 2016)", locator: "Ch. 6" }]
   }
+};
+
+// src/lib/tools/ratemaking/combinedTrend.ts
+var WIDE = 0.01;
+var combinedTrend = {
+  id: "ratemaking.combined_trend",
+  version: "1.0.0",
+  name: "Frequency \xD7 Severity Trend",
+  area: "ratemaking",
+  answers: "What pure premium trend do these frequency and severity trends make?",
+  aka: ["pure premium trend", "loss cost trend", "frequency severity trend", "combined trend"],
+  fields: [
+    { kind: "number", key: "frequency", label: "Frequency trend", symbol: "t_f", unit: "percent", judgment: true, min: -0.5, max: 1, sliderMin: -0.1, sliderMax: 0.1, step: 25e-4, default: 0, description: "The selected annual frequency trend, as a decimal (from Trend Fit)." },
+    { kind: "number", key: "severity", label: "Severity trend", symbol: "t_s", unit: "percent", judgment: true, min: -0.5, max: 1, sliderMax: 0.15, step: 25e-4, default: 0.05, description: "The selected annual severity trend, as a decimal (from Trend Fit)." },
+    {
+      kind: "choice",
+      key: "compare",
+      label: "Compare with",
+      description: "Whether to set the combined trend beside a pure premium (loss cost) trend fitted directly.",
+      options: [{ value: "none", label: "Nothing" }, { value: "direct", label: "A direct fit" }],
+      default: "none"
+    },
+    { kind: "number", key: "direct", label: "Direct pure premium trend", symbol: "t_pp", unit: "percent", min: -0.5, max: 1, sliderMax: 0.15, step: 25e-4, default: 0.05, showWhen: { field: "compare", in: ["direct"] }, description: 'The annual trend of a fit to the pure premiums (loss costs) themselves, as a decimal (from Trend Fit). Read only when compare is "direct".' }
+  ],
+  notation: () => "1 + t_pp = (1 + t_f)(1 + t_s)",
+  view: "none",
+  compute: (input) => {
+    const f = Number(input.frequency);
+    const s = Number(input.severity);
+    const combined = (1 + f) * (1 + s) - 1;
+    const comparing = input.compare === "direct";
+    const direct = Number(input.direct);
+    const gap = comparing ? combined - direct : null;
+    const warnings = [];
+    if (gap !== null && Math.abs(gap) > WIDE) {
+      warnings.push(`The combined trend is ${formatValue(Math.abs(gap) * 100, "plain")} points ${gap > 0 ? "above" : "below"} the direct fit. On the same points, window and marks the two agree; a gap this wide usually means the fits differ in window, exclusions or weighting, or that the pure premiums aren't the frequencies times the severities.`);
+    }
+    return {
+      tiles: [
+        { symbol: "t_pp", label: "Combined trend", value: combined, unit: "percent" },
+        ...comparing ? [
+          { symbol: "t_pp", label: "Direct fit", value: direct, unit: "percent" },
+          { symbol: "\u0394", label: "Combined \u2212 direct", value: gap, unit: "percent" }
+        ] : []
+      ],
+      trace: [
+        { label: "Frequency factor", formula: `1 + ${f}`, result: 1 + f, unit: "factor" },
+        { label: "Severity factor", formula: `1 + ${s}`, result: 1 + s, unit: "factor" },
+        { label: "Combined trend", formula: `(1 + ${f})(1 + ${s}) \u2212 1`, result: combined, unit: "percent" },
+        ...comparing ? [{ label: "Combined less direct", formula: `${formatValue(combined, "percent")} \u2212 ${formatValue(direct, "percent")}`, result: gap, unit: "percent" }] : []
+      ],
+      warnings,
+      values: { trend: combined, frequency: f, severity: s, direct: comparing ? direct : null, difference: gap },
+      summary: `(1 + ${formatValue(f, "percent")})(1 + ${formatValue(s, "percent")}) \u2212 1 = ${formatValue(combined, "percent")}${comparing ? `, ${formatValue(Math.abs(gap) * 100, "plain")} points ${gap >= 0 ? "above" : "below"} the direct fit's ${formatValue(direct, "percent")}` : ""}.`
+    };
+  },
+  compare: [
+    { key: "frequency", label: "Frequency", unit: "percent" },
+    { key: "severity", label: "Severity", unit: "percent" },
+    { key: "trend", label: "Combined", unit: "percent" },
+    { key: "direct", label: "Direct", unit: "percent" },
+    { key: "difference", label: "Combined \u2212 direct", unit: "percent" }
+  ],
+  method: {
+    concepts: ["Loss Trend"],
+    readings: [{ resource: "Basic Ratemaking (Werner - 2016)", locator: "Ch. 6" }]
+  },
+  next: [
+    { tool: "ratemaking.trend_factor", label: "Trend Factor", build: (_input, output) => ({ trend: output.values.trend }) }
+  ]
 };
 
 // src/lib/tools/ratemaking/expenseRatios.ts
@@ -3778,7 +4157,9 @@ var TOOLS = [
   earnedPremium,
   onLevelFactors,
   trendFit,
+  combinedTrend,
   trendFactor,
+  twoStepTrend,
   expenseRatios,
   permissibleLossRatio,
   lossRatioMethod,
@@ -4156,6 +4537,47 @@ function runTool(spec, raw) {
     warnings: [...notes, ...output.warnings],
     trace: output.trace,
     method: spec.method
+  };
+}
+var MAX_BATCH_RUNS = 50;
+function runBatch(spec, base, runs) {
+  if (base != null && (typeof base !== "object" || Array.isArray(base))) throw new ToolInputError("input", "The shared input must be an object keyed by field name.");
+  if (!Array.isArray(runs) || runs.length === 0) throw new ToolInputError("runs", "Give at least one run: [{label, input}].");
+  if (runs.length > MAX_BATCH_RUNS) throw new ToolInputError("runs", `At most ${MAX_BATCH_RUNS} runs in one batch; got ${runs.length}.`);
+  const out = runs.map((run, i) => {
+    const label = run && typeof run === "object" && run.label != null && String(run.label).trim() ? String(run.label).trim() : `Run ${i + 1}`;
+    const own = run && typeof run === "object" ? run.input : void 0;
+    if (own != null && (typeof own !== "object" || Array.isArray(own))) return { label, error: `"input" must be an object keyed by field name.` };
+    try {
+      return { label, result: runTool(spec, { ...base ?? {}, ...own ?? {} }) };
+    } catch (err) {
+      if (err instanceof ToolInputError) return { label, error: err.message };
+      throw err;
+    }
+  });
+  const firstTiles = out.find((r) => r.result)?.result?.tiles ?? [];
+  const cols = spec.compare ?? firstTiles.map((t, i) => ({ key: `tile_${i}`, label: t.label === "Total" ? t.symbol : t.label, unit: t.unit }));
+  const cell = (r, key, i) => {
+    const v = spec.compare ? r.values[key] : r.tiles[i]?.value;
+    return typeof v === "number" && Number.isFinite(v) || typeof v === "string" ? v : null;
+  };
+  return {
+    tool: spec.id,
+    version: spec.version,
+    runs: out,
+    comparison: {
+      columns: [
+        { key: "label", label: "Run", kind: "text" },
+        ...cols.map((c) => c.unit === "text" ? { key: c.key, label: c.label, kind: "text", computed: true } : { key: c.key, label: c.label, kind: "number", unit: c.unit, computed: true }),
+        { key: "warnings", label: "Warnings", kind: "number", unit: "count" }
+      ],
+      rows: out.map((r) => ({
+        label: r.label,
+        ...Object.fromEntries(cols.map((c, i) => [c.key, r.result ? cell(r.result, c.key, i) : null])),
+        warnings: r.result ? r.result.warnings.length : null,
+        ...r.error ? { error: r.error } : {}
+      }))
+    }
   };
 }
 
@@ -9623,6 +10045,24 @@ CHECKS.push(
       }]
     };
   }),
+  ...[
+    { exhibit: W.a19_loss_trend_periods, periodTolerance: 5e-3 + 1e-9 },
+    { exhibit: W.b12_loss_trend_periods, periodTolerance: 0.05 + 1e-9 }
+  ].map(({ exhibit, periodTolerance }) => ({
+    tool: "ratemaking.two_step_trend",
+    source: wernerRef(exhibit),
+    cases: exhibit.rows.map((y) => ({
+      name: `Columns (2)\u2013(7) for accident year ${y.year}, from ${exhibit.projected_from} to ${exhibit.projected_to}`,
+      input: { past_trend: y.current_trend, future_trend: y.projected_trend, year: Number(y.year), trend_to: exhibit.projected_from, future: exhibit.projected_to },
+      expect: [
+        { what: "current trend period", printed: y.current_period, tolerance: periodTolerance, actual: (r) => Number(r.values.past_period) },
+        { what: "current trend factor", printed: y.current_factor, tolerance: FOUR, actual: (r) => Number(r.values.past_factor) },
+        { what: "projected trend period", printed: y.projected_period, tolerance: periodTolerance, actual: (r) => Number(r.values.future_period) },
+        { what: "projected trend factor", printed: y.projected_factor, tolerance: FOUR, actual: (r) => Number(r.values.future_factor) },
+        { what: "total trend factor", printed: y.total, tolerance: FOUR, actual: (r) => Number(r.values.factor) }
+      ]
+    }))
+  })),
   {
     tool: "ratemaking.on_level_factors",
     source: wernerRef(W.a10_rate_level_factors),
@@ -9839,6 +10279,7 @@ export {
   CHECKS,
   DATASETS,
   ENGINE_VERSION,
+  MAX_BATCH_RUNS,
   QUESTION_CHECKS,
   TOOLS,
   ToolInputError,
@@ -9854,6 +10295,7 @@ export {
   inputSchema,
   normalizeInput,
   readNumber,
+  runBatch,
   runPath,
   runQuestionCheck,
   runTool,

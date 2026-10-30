@@ -155,7 +155,7 @@ All tools are read-only (`readOnlyHint: true`) and deterministic apart from the 
 | `check_answer` | `question_id`, `answer` or `parts` | The verdict (MC letters however written; numbers compared as the app does, with a "close" for rounding slips), then the official solution and examiner's report. Written parts come back to be graded against the model answer |
 | `list_tools` | optional `area`, `query` | The Actuarial Tools calculators (`docs/actuarial-tools.md`): id, name, area, the one question each answers |
 | `describe_tool` | `tool` | Its input JSON Schema, judgments, notation, method pages and the tools its result feeds |
-| `run_tool` | `tool`, `input` | The run's envelope — results, judgments marked `default`, warnings, trace, method pages with fact checks, `input_hash` and an `app_url` to the same run. Runs the bundled engine (`api/_tools/engine.js`), the app's own code; answers even when the knowledge base can't be loaded |
+| `run_tool` | `tool`, `input`, optional `runs` | The run's envelope — results, judgments marked `default`, warnings, trace, method pages with fact checks, `input_hash` and an `app_url` to the same run. With `runs: [{label, input}]` (≤ 50, each laid over the shared `input`), a batch: one comparison table and each run's summary, values, warnings and `app_url`. Runs the bundled engine (`api/_tools/engine.js`), the app's own code; answers even when the knowledge base can't be loaded |
 
 A bad argument returns a tool result with `isError: true` and a message the model can act on.
 An unknown tool is a protocol error (-32602).

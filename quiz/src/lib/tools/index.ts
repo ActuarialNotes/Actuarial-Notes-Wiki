@@ -6,7 +6,7 @@
  */
 
 export { TOOLS, AREAS, ENGINE_VERSION, toolById, toolBySlug, toolSearchText, toolSlug } from './registry'
-export { runTool } from './run'
+export { MAX_BATCH_RUNS, runBatch, runTool, type BatchResult, type BatchRunResult } from './run'
 export { describeTool, inputSchema, sourceLine, toolSummary } from './schema'
 export { CHECKS, checksFor, checkedValueCount, runQuestionCheck, verifyCheck, type SourceRef } from './checks'
 export { QUESTION_CHECKS, type QuestionCheck } from './questionChecks'

@@ -22,6 +22,8 @@ import { earnedPremium } from './ratemaking/earnedPremium'
 import { onLevelFactors } from './ratemaking/onLevelFactors'
 import { trendFit } from './ratemaking/trendFit'
 import { trendFactor } from './ratemaking/trendFactor'
+import { twoStepTrend } from './ratemaking/twoStepTrend'
+import { combinedTrend } from './ratemaking/combinedTrend'
 import { expenseRatios } from './ratemaking/expenseRatios'
 import { permissibleLossRatio } from './ratemaking/permissibleLossRatio'
 import { purePremiumMethod } from './ratemaking/purePremiumMethod'
@@ -65,7 +67,9 @@ export const TOOLS: ToolSpec[] = [
   earnedPremium,
   onLevelFactors,
   trendFit,
+  combinedTrend,
   trendFactor,
+  twoStepTrend,
   expenseRatios,
   permissibleLossRatio,
   lossRatioMethod,

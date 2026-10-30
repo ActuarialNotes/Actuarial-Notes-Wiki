@@ -479,7 +479,7 @@ before touching that area**:
   hash no longer matches the page is ignored. Read before touching `useListenSpeech`, `mathSpeech.ts` or that script.
 - `docs/actuarial-tools.md` — **Actuarial Tools**, the plan and what's built (§16): the Tools
   page (`/tools`, a sidebar row between Projects and the Shop, `TOOLS_ENABLED`) of actuarial
-  calculators — thirty-two so far across reserving, ratemaking, loss distributions, credibility
+  calculators — thirty-four so far across reserving, ratemaking, loss distributions, credibility
   and financial maths, plus three Data Sources —
   that people use as a card (`components/tools/ToolCard.tsx`) and AI agents use through the
   MCP connector (`list_tools` / `describe_tool` / `run_tool`), all running one pure engine in

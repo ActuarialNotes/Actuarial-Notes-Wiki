@@ -253,11 +253,17 @@ const FROM_YIELD_CURVE: ScalarSource = {
   take: effectiveFromParYield,
 }
 
+const FROM_TREND_FIT: ScalarSource = { tool: 'ratemaking.trend_fit', how: 'The fitted annual trend.', take: r => Number(r.values.trend) }
+const FROM_PRICE_INDEX: ScalarSource = { tool: 'data.price_index', how: 'The index’s annualised change over the window chosen.', take: r => Number(r.values.annual_change) }
+const FROM_COMBINED: ScalarSource = { tool: 'ratemaking.combined_trend', how: 'Frequency and severity trends, combined.', take: r => Number(r.values.trend) }
+
 export const SCALAR_SOURCES: Record<string, ScalarSource[]> = {
-  'ratemaking.trend_factor:trend': [
-    { tool: 'ratemaking.trend_fit', how: 'The fitted annual trend.', take: r => Number(r.values.trend) },
-    { tool: 'data.price_index', how: 'The index’s annualised change over the window chosen.', take: r => Number(r.values.annual_change) },
-  ],
+  'ratemaking.trend_factor:trend': [FROM_TREND_FIT, FROM_PRICE_INDEX, FROM_COMBINED],
+  'ratemaking.two_step_trend:past_trend': [FROM_TREND_FIT, FROM_PRICE_INDEX, FROM_COMBINED],
+  'ratemaking.two_step_trend:future_trend': [FROM_TREND_FIT, FROM_PRICE_INDEX, FROM_COMBINED],
+  'ratemaking.combined_trend:frequency': [FROM_TREND_FIT],
+  'ratemaking.combined_trend:severity': [FROM_TREND_FIT],
+  'ratemaking.combined_trend:direct': [FROM_TREND_FIT],
   'finance.present_value:i': [FROM_YIELD_CURVE],
   'finance.duration_convexity:i': [FROM_YIELD_CURVE],
   'finance.redington_immunization:i': [FROM_YIELD_CURVE],

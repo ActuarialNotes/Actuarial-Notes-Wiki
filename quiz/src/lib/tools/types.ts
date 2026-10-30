@@ -61,7 +61,7 @@ export interface TableColumn {
   label: string
   kind: 'text' | 'number'
   unit?: NumberUnit
-  /** A number column that may be left blank. */
+  /** A column that may be left blank (a text one reads as '', a number one as null). */
   optional?: boolean
 }
 
@@ -174,6 +174,12 @@ export interface ToolSpec {
     readings: { resource: string; locator: string }[]
   }
   next?: ToolHandoff[]
+  /**
+   * The values a batch run lays side by side, one row per run (`runBatch`):
+   * keys of the output's `values` (a `text` one a date or a label). Absent,
+   * the comparison takes the tiles.
+   */
+  compare?: { key: string; label: string; unit: NumberUnit | 'text' }[]
 }
 
 /** The result of one run, as every surface receives it (§5). */

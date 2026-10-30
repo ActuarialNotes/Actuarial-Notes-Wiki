@@ -206,7 +206,8 @@ export function guessMapping(table: CsvTable, spec: ToolSpec): CsvMapping {
     for (const c of field.columns) {
       const names = [words(c.key), words(c.label)].filter(Boolean)
       let j = headers.findIndex((h, k) => !used.has(k) && names.some(n => h === n || h.includes(n) || n.includes(h)))
-      if (j < 0) j = kinds.findIndex((k, idx) => !used.has(idx) && (c.kind === 'text' ? k === 'date' || k === 'text' : k === 'number'))
+      // An optional column is filled by name only: a stray column shouldn't land in it by its kind.
+      if (j < 0 && !c.optional) j = kinds.findIndex((k, idx) => !used.has(idx) && (c.kind === 'text' ? k === 'date' || k === 'text' : k === 'number'))
       if (j < 0) {
         if (!c.optional) complete = false
         continue

@@ -48,8 +48,24 @@ export const trendFactor: ToolSpec = {
       summary: `Trend factor ${formatValue(factor, 'factor')} over ${formatValue(period, 'years')} years, from ${dateOfYear(from)} to ${dateOfYear(to)}.`,
     }
   },
+  compare: [
+    { key: 'from', label: 'From', unit: 'text' },
+    { key: 'to', label: 'To', unit: 'text' },
+    { key: 'period', label: 'Years', unit: 'years' },
+    { key: 'factor', label: 'Trend factor', unit: 'factor' },
+  ],
   method: {
     concepts: ['Loss Trend'],
     readings: [{ resource: 'Basic Ratemaking (Werner - 2016)', locator: 'Ch. 6' }],
   },
+  next: [
+    {
+      tool: 'ratemaking.two_step_trend',
+      label: 'Two-Step Loss Trend',
+      // An accident year's future end is the same date either way; the reader then picks where the past trend stops.
+      build: (input, output) => (input.basis === 'accident'
+        ? { past_trend: Number(input.trend), future_trend: Number(input.trend), year: Number(input.year), future: String(output.values.to) }
+        : { past_trend: Number(input.trend), future_trend: Number(input.trend), future: String(output.values.to) }),
+    },
+  ],
 }

@@ -83,31 +83,31 @@ No unresolved critical findings.
 
 | Page | Checked | Sources |
 |---|---|---:|
-| `questions/exam-5/cas5-2014f-q10.md` | 2026-10-25 | 2 |
-| `questions/exam-5/cas5-2017f-011.md` | 2026-10-25 | 2 |
-| `questions/exam-5/cas5-2017f-019.md` | 2026-10-25 | 1 |
-| `questions/exam-5/cas5-2018f-009.md` | 2026-10-25 | 2 |
-| `questions/exam-5/cas5-2019-009.md` | 2026-10-25 | 2 |
-| `questions/exam-6c/cas6c-2017s-q14.md` | 2026-10-25 | 2 |
-| `questions/exam-6c/cas6c-2018s-q13.md` | 2026-10-25 | 2 |
-| `questions/exam-6c/cas6c-2018s-q14.md` | 2026-10-25 | 2 |
-| `questions/exam-7/cas7-2012-q3.md` | 2026-10-25 | 1 |
-| `questions/exam-7/cas7-2012-q9.md` | 2026-10-25 | 3 |
-| `questions/exam-7/cas7-2015-q3.md` | 2026-10-25 | 1 |
-| `questions/exam-7/cas7-2016-q11.md` | 2026-10-25 | 1 |
-| `questions/exam-7/cas7-2016-q7.md` | 2026-10-25 | 1 |
-| `questions/exam-7/cas7-2018-q11.md` | 2026-10-25 | 1 |
-| `questions/exam-7/cas7-2018-q12.md` | 2026-10-25 | 1 |
-| `questions/exam-8/cas8-2012-q12.md` | 2026-10-25 | 2 |
-| `questions/exam-8/cas8-2012-q22.md` | 2026-10-25 | 2 |
-| `questions/exam-8/cas8-2013-q12.md` | 2026-10-25 | 2 |
-| `questions/exam-8/cas8-2013-q13.md` | 2026-10-25 | 2 |
-| `questions/exam-8/cas8-2013-q15.md` | 2026-10-25 | 2 |
-| `questions/exam-8/cas8-2013-q16.md` | 2026-10-25 | 2 |
-| `questions/exam-8/cas8-2013-q17.md` | 2026-10-25 | 1 |
-| `questions/exam-8/cas8-2013-q7.md` | 2026-10-25 | 2 |
-| `questions/exam-8/cas8-2014-q12.md` | 2026-10-25 | 2 |
-| `questions/exam-8/cas8-2014-q18.md` | 2026-10-25 | 2 |
+| `questions/exam-p/p-050.md` | 2026-10-30 | 2 |
+| `questions/exam-p/p-054.md` | 2026-10-30 | 2 |
+| `questions/exam-p/p-057.md` | 2026-10-30 | 2 |
+| `questions/exam-p/p-112.md` | 2026-10-30 | 2 |
+| `questions/exam-p/p-220.md` | 2026-10-30 | 2 |
+| `questions/exam-p/p-228.md` | 2026-10-30 | 2 |
+| `questions/exam-p/p-246.md` | 2026-10-30 | 2 |
+| `questions/exam-p/p-375.md` | 2026-10-30 | 2 |
+| `questions/exam-p/p-388.md` | 2026-10-30 | 2 |
+| `questions/exam-p/p-564.md` | 2026-10-30 | 2 |
+| `questions/exam-p/p-633.md` | 2026-10-30 | 2 |
+| `questions/exam-p/p-655.md` | 2026-10-30 | 2 |
+| `questions/exam-p/p-917.md` | 2026-10-30 | 2 |
+| `questions/exam-p/p-947.md` | 2026-10-30 | 2 |
+| `questions/exam-p/p-962.md` | 2026-10-30 | 3 |
+| `Concepts/Bayes Theorem.md` | 2026-10-30 | 4 |
+| `Concepts/Benefit Limit.md` | 2026-10-30 | 6 |
+| `Concepts/Binomial Distribution.md` | 2026-10-30 | 8 |
+| `Concepts/Calculus.md` | 2026-10-30 | 9 |
+| `Concepts/Claim.md` | 2026-10-30 | 14 |
+| `Concepts/Combination.md` | 2026-10-30 | 5 |
+| `Concepts/Combinatorics.md` | 2026-10-30 | 5 |
+| `Concepts/Conditional Probability Function.md` | 2026-10-30 | 4 |
+| `Concepts/Conditional Probability.md` | 2026-10-30 | 6 |
+| `Concepts/Continuous Univariate Distributions.md` | 2026-10-30 | 7 |
 
 ---
 

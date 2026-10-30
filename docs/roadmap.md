@@ -363,7 +363,7 @@ These are in order within each lane.
 **AI and practitioner:**
 - **A2:** the rest of Tools §15 items 0–1: the Search page's Tools pill, grid undo, Tail
   Factor, and Annuity solving for any unknown.
-- **A3:** replace Cowork's 24 sample entries with real documents.
+- **A3:** Cowork's corpus — the IFRS 17 page (blocked on reading the standard), and entities for the 106 publishers whose 121 practice pages Cowork doesn't list yet.
 
 **Growth:**
 - **G2:** a path-preserving redirect from `wiki.actuarialnotes.com`, and Search Console.
@@ -640,7 +640,7 @@ Shipped:
 - **The MCP connector:** search, fetch, syllabi, concepts, practice and marking, prompts,
   and the Agent Skill. It speaks both protocol eras.
 - **Actuarial Tools:** 35 tools, each reproducing published work in CI, and run over MCP.
-- **Cowork Sources:** 22 publishers, 50 documents, 26 of them real.
+- **Cowork Sources:** 50 publishers, 430 documents, one of them a sample. 380 are derived from the vault's resource pages at build time (`lib/coworkVault.ts`).
 - **Workflows:** the library, sub-workflows, CSV data, source tables, and *Run in Claude*.
 
 A standing rule: **the app calls no model and holds no key** (see the decision log, §6.2).
@@ -649,7 +649,7 @@ A standing rule: **the app calls no model and holds no key** (see the decision l
 |---|---|---|---|---|
 | A1 | Connector: personal progress (OAuth) and directory listings | ⬜ | Later | `ai-connector.md`, "Not yet". The listings happen outside the repo. |
 | A2 | Tools: the rest of V2, then Phase 1 | 🟡 | Next | The Search page's Tools pill; grid undo; "From a saved run"; Tail Factor; Annuity solving for whichever of PV, payment, *n* or *i* is unknown; yield-to-worst. After that: the MCP prompts, the `%%tool%%` marker, saved runs, HTTP/OpenAPI, and analytics (§8.6). Phase 2 tools and later are **Later**. Blocked datasets wait on D3. |
-| A3 | Cowork: fill the corpus | 🟡 P1 inventory done | Next | Replace the 24 samples with real documents. 703 `Resources/Books/` pages aren't listed in Cowork (the inventory's §4 count is stale). The P2 rows are open (IFRS 17 needs its vault page first). |
+| A3 | Cowork: fill the corpus | 🟡 most done, 2026-10-30 | Next | Done: every practice resource page (papers, reports, guidelines, educational notes, standards, statutes, returns, datasets — not textbooks, study notes, courses or syllabi) is derived into Cowork under its publisher (`virtual:cowork-vault`); 28 new entities; 23 of 24 samples replaced by real pages (MSA Researcher, a subscription database, stays a sample); every `Resources/` folder bundled; new pages go in type folders (`resource-pages.md` §0). Open: `IFRS 17 Insurance Contracts` (ifrs.org serves the standard only to signed-in users); entities for 106 one-off publishers (121 pages); the AMF capital guideline page is the January 2025 revision, not the one in force; whether `CIA CSOP` is the CIA's or the Canadian ASB's (the page says CIA). |
 | A4 | Cowork: who can see it | 🅿️ one account | — | Waits on D1. After Preview, Cowork is planned to be Pro-only (D13). |
 | A5 | An in-app Actuarial Agent | 🅿️ | Parked | Phase A was delivered *outside* the app, by the connector. Phases B–D (the ontology layer, an eval harness, task assistants) wait on D2. |
 | A6 | Doc hygiene in the AI plans | 🟡 | Next | §16's "not built … all of V2" line is fixed (2026-10-17). Still to fix: §11 says "tools mode". The datasets are bundled into `engine.js`, not under `ai/datasets/`. Workflows overtook Phase 4's "Analyses". |
@@ -706,7 +706,8 @@ Subplans: `daily-plan-email.md`, `leagues.md`, `seo.md`, `analytics-and-monitori
 - **`lib/tools/` → `quiz/api/_tools/engine.js` (`npm run tools:bundle`) → the connector →
   Workflows' *Run in Claude*.** Tool names are public API.
 - **Cowork's growth is resource-page growth.** A real document enters Cowork only as a
-  `Resources/Books/` page.
+  resource page (in the folder its type names), and a practice page whose publisher has an
+  entity joins Cowork by being written.
 - **Actuaria → Quiz Battle.** It uses one reducer, so Actuaria's Phase 4 would change Quiz
   Battle's "nothing saved" rule.
 - **The approved-email lists.** The same one address is the whole of the Cowork list, the
@@ -912,10 +913,16 @@ python3 scripts/generate_validation_status.py --check # exit 1 = Validation Stat
 python3 scripts/generate_coverage_report.py --check   # exit 1 = the coverage report is stale
 python3 scripts/find_concept_gaps.py                  # --check exits 1 while a pinned gap is open
 for d in questions/*/; do echo "$d $(find "$d" -name '*.md' | wc -l)"; done
-ls Concepts/*.md | wc -l; ls Resources/Books/*.md | wc -l
+ls Concepts/*.md | wc -l; python3 -c "import sys; sys.path.insert(0, 'scripts'); import resource_folders as rf; print(len(rf.resource_pages('.')))"  # resource pages, every folder
 ```
 
 ## Appendix B: Revision history
+
+- **2026-10-30, Cowork's corpus from the vault (A3).** Every practice resource page is listed in
+  Cowork under its publisher, derived at build time; 28 new entities; 23 of the 24 samples
+  replaced with real pages. New resource pages go in the folder their type names (`Papers/`,
+  `Reports/`, `Standards/`, `Regulation/`, `Data/`, `Benchmarks/`, `Books/`), and every
+  `Resources/` folder is bundled.
 
 - **2026-10-30, the e2e job green again (E1).** Actions run again; `main`'s e2e job had been red
   (10 failures). Exam P's tour marker restored on the chunked Study Guides list, and nine tests

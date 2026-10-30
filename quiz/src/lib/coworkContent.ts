@@ -19,21 +19,19 @@
  *     renders it, its `[[wiki links]]` resolve into the vault, and the page
  *     stack works over it exactly as it works over a concept.
  *
- * One gap worth knowing: `virtual:wiki-content` carries `Concepts/`,
- * `Resources/Books/`, the exam pages and `Guides/` — but not
- * `Resources/Regulation/`. A Cowork resource pointing there still falls back to
- * a GitHub fetch, which is what the Research tab's timeline cards already do.
+ * `virtual:wiki-content` carries every folder under `Resources/` — the type
+ * folders a resource page lives in (`lib/resourceFolders.ts`) and the
+ * timeline and data pages beside them — so any of them opens offline.
  *
  * Imported for its side effects, once, at the top of the Cowork page.
  */
 
 import wikiBundle from 'virtual:wiki-content'
-import { registerVirtualWikiFiles, setWikiContentLookup } from '@/lib/github'
-import { setWikiIndexBundle } from '@/lib/wikiIndex'
+import { registerVirtualWikiFiles } from '@/lib/github'
+import { installWikiBundle } from '@/lib/wikiBundle'
 import { COWORK_DOCS } from '@/data/coworkDocs'
 
-setWikiContentLookup((path: string) => wikiBundle.files[path])
-setWikiIndexBundle(wikiBundle.index)
+installWikiBundle(wikiBundle)
 registerVirtualWikiFiles(COWORK_DOCS)
 
 export { COWORK_DOCS }

@@ -25,8 +25,7 @@ import { ToolCard } from '@/components/tools/ToolCard'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { usePageHead } from '@/hooks/usePageHead'
-import { setWikiContentLookup } from '@/lib/github'
-import { setWikiIndexBundle } from '@/lib/wikiIndex'
+import { installWikiBundle } from '@/lib/wikiBundle'
 import { TOOLS_HEAD, toolHead } from '@/lib/seo'
 
 const AREA_ICON: Record<PracticeArea, LucideIcon> = {
@@ -45,8 +44,7 @@ const AREA_ICON: Record<PracticeArea, LucideIcon> = {
  */
 async function openMethod(concepts: string[]) {
   const { default: bundle } = await import('virtual:wiki-content')
-  setWikiContentLookup((path: string) => bundle.files[path])
-  setWikiIndexBundle(bundle.index)
+  installWikiBundle(bundle)
   const refs = concepts.filter(name => bundle.files[`Concepts/${name}.md`] !== undefined).map(name => ({ kind: 'concept' as const, name }))
   if (refs.length) useConceptPopup.getState().openAt(refs, 0, null, null, null, { walk: 'corpus' })
 }

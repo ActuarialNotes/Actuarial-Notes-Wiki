@@ -53,9 +53,8 @@ import { relationOf, relationSentence, type Placement, type Relation, type Writt
 import { medalPlan, medalStanding, medalsWon, type MedalProgress } from '@/lib/craftMedals'
 import writtenRelations from '@/data/craftRelations.json'
 import { examAccentStyle } from '@/lib/examColors'
-import { setWikiContentLookup } from '@/lib/github'
+import { installWikiBundle } from '@/lib/wikiBundle'
 import { filterQuestions } from '@/lib/parser'
-import { setWikiIndexBundle } from '@/lib/wikiIndex'
 import { examDisplayName } from '@/lib/wikiRoutes'
 import { trackCraftCombined, trackCraftMedalWon, trackCraftTopicCompleted } from '@/lib/analytics'
 import { cn } from '@/lib/utils'
@@ -64,8 +63,7 @@ import { cn } from '@/lib/utils'
 // it opens shows them — and must not depend on the network to do it: install
 // the wiki bundle's lookup, as Cowork does (lib/coworkContent.ts) for the same
 // reason. Idempotent.
-setWikiContentLookup((path: string) => wikiBundle.files[path])
-setWikiIndexBundle(wikiBundle.index)
+installWikiBundle(wikiBundle)
 
 // ─── The vault, as the game reads it ─────────────────────────────────────────
 

@@ -26,6 +26,7 @@ import { examDisplayName, fromSlug, wikiRoute } from './wikiRoutes'
 import { findSyllabiForConcept, parseExamMetadata, parseExamSyllabus, type WikiExamSyllabus } from './wikiParser'
 import { bankLabelFor } from './examIds'
 import { buildResourceExamMap, compareExamLabels, examsForResource } from './resourceExams'
+import { isResourcePage, splitResourcePath } from './resourceFolders'
 
 export const SITE_ORIGIN = 'https://quiz.actuarialnotes.com'
 export const SITE_NAME = 'Actuarial Notes'
@@ -694,7 +695,8 @@ export function countQuestionsByExam(rawQuestions: string[]): Record<string, num
 
 /**
  * Every public page the vault makes, described: the study-guide hub, each exam,
- * each concept and each resource (`Resources/Books/`). `files` is the wiki
+ * each concept and each resource page, in whichever `Resources/` folder it
+ * sits (`lib/resourceFolders.ts`). `files` is the wiki
  * bundle's file map (vault path → markdown).
  */
 export function buildSeoPages(files: Record<string, string>, questionCounts: Record<string, number>): SeoPage[] {
@@ -728,7 +730,7 @@ export function buildSeoPages(files: Record<string, string>, questionCounts: Rec
       concepts.push({ ...conceptSeo({ name: concept, markdown, exams: on }), source: filePath })
       continue
     }
-    const resource = /^Resources\/Books\/([^/]+)\.md$/.exec(filePath)?.[1]
+    const resource = isResourcePage(filePath, markdown) ? splitResourcePath(filePath)?.name : undefined
     if (resource) {
       const on = examsForResource(resourceExams, resource).map(label => examCrumbs.get(label)).filter((c): c is SeoCrumb => Boolean(c))
       resources.push({ ...resourceSeo({ name: resource, markdown, exams: on }), source: filePath })

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Draw a cover image for every `Resources/Books/*.md` page that lacks one.
+"""Draw a cover image for every resource page (`Resources/<folder>/*.md`) that lacks one.
 
 A resource page's metadata card (`quiz/src/components/wiki/ResourceMetaCard.tsx`)
 shows the first image embedded in the page body as the source's cover, and the
@@ -35,6 +35,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from cover_kit import (H, W, Cover, balance, darken, fit, jacket_for, mix,
                        text_width)
 from cover_motifs import MOTIFS
+import resource_folders  # noqa: E402
 
 REPO = Path(__file__).resolve().parent.parent
 BOOKS = REPO / "Resources" / "Books"
@@ -326,8 +327,8 @@ def process(page: Path, force: bool) -> tuple[str, dict[str, str]] | None:
     embed = existing_embed(body)
     if embed and not embed.endswith(OURS):
         return None  # a real cover, or a figure the page opens with
-    if embed and not force:
-        return None
+    if embed and not force and (ATTACHMENTS / embed).exists():
+        return None  # drawn already; a page naming a cover that isn't there gets it
 
     name = cover_filename(page)
     writes = {str(ATTACHMENTS / name): draw(attrs)}
@@ -348,7 +349,7 @@ def main() -> int:
     pending: dict[str, str] = {}
     drawn: list[str] = []
 
-    for page in sorted(BOOKS.glob("*.md")):
+    for page in sorted(REPO / rel for rel in resource_folders.resource_pages(str(REPO))):
         result = process(page, force=args.force or args.check)
         if not result:
             continue

@@ -9,6 +9,8 @@ import { mkdir, readdir, readFile, writeFile } from 'fs/promises'
 import fm from 'front-matter'
 import { buildResourceExamMap, examsForResource } from './src/lib/resourceExams'
 import { buildStoreBooks, type BookPageSource } from './src/lib/storeBooks'
+import { isResourcePage, RESOURCE_FOLDERS, SHARED_RESOURCE_FOLDERS } from './src/lib/resourceFolders'
+import { readVaultDocument, type VaultDocument } from './src/lib/coworkVault'
 import { examDisplayName, examIdFromFile } from './src/lib/wikiRoutes'
 import { resourcePdfUrl } from './src/lib/examPdf'
 import {
@@ -101,13 +103,20 @@ async function collectWikiContent(): Promise<WikiBundleData> {
     index.push({ category: 'concept', name: name.replace(/\.md$/i, ''), path: `Concepts/${name}` })
   }
 
-  // Resources/Books/
-  const bookEntries = await readdir(path.join(REPO_ROOT, 'Resources/Books')).catch(() => [] as string[])
-  for (const name of bookEntries) {
-    if (!name.endsWith('.md')) continue
-    const text = await readFile(path.join(REPO_ROOT, 'Resources/Books', name), 'utf-8').catch(() => null)
+  // Resources/ — every folder. A resource page (docs/resource-pages.md) can
+  // sit in any of the type folders (`lib/resourceFolders.ts`), and is indexed
+  // as a `document` wherever it is; the timeline entries and Tools data pages
+  // that share some of those folders ride along in `files` only, so a page
+  // that links or opens one never needs the network.
+  const resourceFiles = await readdir(path.join(REPO_ROOT, 'Resources'), { recursive: true }).catch(() => [] as string[])
+  for (const entry of resourceFiles.map(f => f.split(path.sep).join('/')).sort()) {
+    if (!entry.endsWith('.md')) continue
+    const rel = `Resources/${entry}`
+    const text = await readFile(path.join(REPO_ROOT, rel), 'utf-8').catch(() => null)
     if (text == null) continue
-    files[`Resources/Books/${name}`] = text
+    files[rel] = text
+    if (!isResourcePage(rel, text)) continue
+    const name = rel.slice(rel.lastIndexOf('/') + 1)
     const attrs = (fm<Record<string, unknown>>(text).attributes ?? {}) as Record<string, unknown>
     const yearNum = attrs['Year'] ? parseInt(String(attrs['Year']), 10) : undefined
     const bare = name.replace(/\.md$/i, '')
@@ -115,7 +124,7 @@ async function collectWikiContent(): Promise<WikiBundleData> {
     index.push({
       category: 'document',
       name: bare,
-      path: `Resources/Books/${name}`,
+      path: rel,
       exams: exams.length > 0 ? exams : undefined,
       author: (attrs['Authors'] || attrs['Author']) ? String(attrs['Authors'] || attrs['Author']) : undefined,
       year: Number.isFinite(yearNum) ? yearNum : undefined,
@@ -232,6 +241,42 @@ async function collectStoreBooks() {
   return buildStoreBooks(examPages, books)
 }
 
+// ── Cowork's vault documents ─────────────────────────────────────────────────
+// Every resource page a practitioner would cite, read for Cowork's catalogue
+// (`lib/coworkVault.ts`): title, publisher, type, year, link, the lead's first
+// sentence and the exams that read it. `data/coworkSources.ts` files each under
+// its publisher's entity. A few hundred small records, in Cowork's own chunk.
+async function collectCoworkVault() {
+  const examFiles = await collectExamPages()
+  const examMap = buildResourceExamMap(Object.entries(examFiles).map(([name, markdown]) => ({ name: name.replace(/\.md$/i, ''), markdown })))
+  const documents: VaultDocument[] = []
+  for (const folder of RESOURCE_FOLDERS) {
+    const names = await readdir(path.join(REPO_ROOT, 'Resources', folder)).catch(() => [] as string[])
+    for (const name of names.sort()) {
+      if (!name.endsWith('.md')) continue
+      const rel = `Resources/${folder}/${name}`
+      const text = await readFile(path.join(REPO_ROOT, rel), 'utf-8').catch(() => null)
+      if (text == null || !isResourcePage(rel, text)) continue
+      const doc = readVaultDocument(rel, text, examsForResource(examMap, name.replace(/\.md$/i, '')))
+      if (doc) documents.push(doc)
+    }
+  }
+  return documents
+}
+
+function coworkVaultPlugin(): Plugin {
+  const VIRTUAL_ID = 'virtual:cowork-vault'
+  const RESOLVED_ID = '\0' + VIRTUAL_ID
+  return {
+    name: 'cowork-vault',
+    resolveId: (id) => id === VIRTUAL_ID ? RESOLVED_ID : undefined,
+    load: async (id) => {
+      if (id !== RESOLVED_ID) return
+      return `export default ${JSON.stringify(await collectCoworkVault())}`
+    },
+  }
+}
+
 function storeBooksPlugin(): Plugin {
   const VIRTUAL_ID = 'virtual:store-books'
   const RESOLVED_ID = '\0' + VIRTUAL_ID
@@ -257,6 +302,9 @@ type TimelineKind = 'book' | 'event' | 'regulation' | 'benchmark'
 
 const TIMELINE_SOURCES: { dir: string; kind: TimelineKind }[] = [
   { dir: 'Resources/Books', kind: 'book' },
+  // The type folders that hold nothing but resource pages read as books do.
+  ...RESOURCE_FOLDERS.filter(f => f !== 'Books' && !SHARED_RESOURCE_FOLDERS.includes(f))
+    .map(f => ({ dir: `Resources/${f}`, kind: 'book' as const })),
   { dir: 'Resources/Events', kind: 'event' },
   { dir: 'Resources/Regulation', kind: 'regulation' },
   { dir: 'Resources/Benchmarks', kind: 'benchmark' },
@@ -766,7 +814,7 @@ function pdfjsAssetsPlugin(): Plugin {
 async function vaultLastModified(): Promise<Map<string, string>> {
   const git = (...args: string[]) => promisify(execFile)('git', ['-C', REPO_ROOT, ...args], { maxBuffer: 64 * 1024 * 1024 })
   try {
-    const { stdout: log } = await git('-c', 'core.quotePath=false', 'log', '--format=%x01%H %cs', '--name-only', '--', 'Concepts', 'Resources/Books', 'Exam*.md', 'questions')
+    const { stdout: log } = await git('-c', 'core.quotePath=false', 'log', '--format=%x01%H %cs', '--name-only', '--', 'Concepts', 'Resources', 'Exam*.md', 'questions')
     const { stdout: shallowFile } = await git('rev-parse', '--git-path', 'shallow')
     const shallow = await readFile(path.resolve(REPO_ROOT, shallowFile.trim()), 'utf-8').catch(() => '')
     return lastModifiedFromGitLog(log, new Set(shallow.split('\n').map(l => l.trim()).filter(Boolean)))
@@ -880,7 +928,7 @@ function seoPagesPlugin(): Plugin {
 }
 
 export default defineConfig({
-  plugins: [react(), examPagesPlugin(), wikiContentPlugin(), storeBooksPlugin(), resourceTimelinePlugin(), questionsContentPlugin(), comprehensionChecksPlugin(), examGuidesPlugin(), pdfjsAssetsPlugin(), vaultMediaPlugin(), seoPagesPlugin(), aiConnectorAssetsPlugin()],
+  plugins: [react(), examPagesPlugin(), wikiContentPlugin(), storeBooksPlugin(), coworkVaultPlugin(), resourceTimelinePlugin(), questionsContentPlugin(), comprehensionChecksPlugin(), examGuidesPlugin(), pdfjsAssetsPlugin(), vaultMediaPlugin(), seoPagesPlugin(), aiConnectorAssetsPlugin()],
   resolve: {
     alias: { '@': path.resolve(__dirname, 'src') },
   },

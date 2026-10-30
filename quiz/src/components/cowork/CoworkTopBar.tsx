@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { BookOpen, FileText, Gavel, Landmark, Newspaper, Scale, Table2 } from 'lucide-react'
+import { BookOpen, FileText, Gavel, Landmark, Newspaper, Scale, ScrollText, Table2 } from 'lucide-react'
 import {
   FloatingSearchBar,
   FloatingSearchInput,
@@ -53,6 +53,7 @@ const KIND_ICON: Record<ResourceKind, typeof FileText> = {
   bulletin: FileText,
   filing: FileText,
   report: FileText,
+  paper: ScrollText,
   news: Newspaper,
   dataset: Table2,
 }

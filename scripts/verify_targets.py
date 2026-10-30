@@ -50,6 +50,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+import resource_folders as RF  # noqa: E402
 import verify_lib as V  # noqa: E402
 
 REPO_ROOT = V.REPO_ROOT
@@ -314,7 +315,7 @@ def packet_of(rel: str, text: str, links: dict, routes: dict | None,
             return f"concepts ({info['state']}): {(info['exams'] or ['no exam'])[0]}", ""
         exams = (exams_of or {}).get(Path(rel).stem) or ["no exam"]
         return f"concepts: {exams[0]}", ""
-    if rel.startswith("Resources/Books/"):
+    if rel.startswith("Resources/") and RF.is_resource_page(rel, (REPO_ROOT / rel).read_text(encoding="utf-8") if (REPO_ROOT / rel).is_file() else ""):
         for packet in (routes or {}).get("packets", []):
             if packet.get("resource") == rel:
                 return f"reading: {packet['reading']}", packet.get("url", "")

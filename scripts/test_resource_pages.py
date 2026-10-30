@@ -12,6 +12,7 @@ import unittest
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import resource_extract as rx  # noqa: E402
+import resource_folders as rf  # noqa: E402
 import resource_lint as rl  # noqa: E402
 import vault_links as vl  # noqa: E402
 
@@ -219,6 +220,32 @@ class VaultTest(unittest.TestCase):
             rl.lint_page(os.path.relpath(path, rl.ROOT), report, listings, VAULT)
         errors = [f"{p}:{ln}: [{c}] {m}" for sev, p, ln, c, m in report.items if sev == "error"]
         self.assertEqual(errors, [], f"{len(errors)} resource-lint error(s); run scripts/resource_lint.py")
+
+
+class FolderTest(unittest.TestCase):
+    def test_every_type_has_a_folder(self):
+        self.assertEqual(set(rl.TYPES), set(rf.TYPE_FOLDER))
+
+    def test_the_app_keeps_the_same_table(self):
+        import re
+        path = os.path.join(rl.ROOT, "quiz", "src", "lib", "resourceFolders.ts")
+        with open(path, encoding="utf-8") as fh:
+            src = fh.read()
+        block = src[src.index("RESOURCE_TYPE_FOLDER"):src.index("}", src.index("RESOURCE_TYPE_FOLDER"))]
+        ts = dict(re.findall(r"^\s*'?([A-Za-z ]+?)'?: '(\w+)',", block, re.M))
+        self.assertEqual(ts, rf.TYPE_FOLDER)
+
+    def test_a_page_outside_books_must_match_its_type(self):
+        report = rl.Report()
+        page = rl.parse_page("Resources/Reports/X.md", '---\nTitle: "X"\nType: "Paper"\n---\n')
+        rl.lint_folder(page, report)
+        self.assertEqual([c for _, _, _, c, _ in report.by("error")], ["folder"])
+
+    def test_a_timeline_entry_is_not_a_resource_page(self):
+        self.assertFalse(rf.is_resource_page("Resources/Regulation/X.md", "---\nid: x\ntype: regulation\n---\n"))
+        self.assertTrue(rf.is_resource_page("Resources/Regulation/X.md", '---\nTitle: "X"\n---\n'))
+        self.assertTrue(rf.is_resource_page("Resources/Books/X.md", ""))
+        self.assertFalse(rf.is_resource_page("Resources/Events/X.md", '---\nTitle: "X"\n---\n'))
 
 
 if __name__ == "__main__":

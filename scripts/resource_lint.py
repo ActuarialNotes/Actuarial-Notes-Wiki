@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""The CI gate for resource pages (`Resources/Books/*.md`) — see docs/resource-pages.md.
+"""The CI gate for resource pages (`Resources/<folder>/*.md`) — see docs/resource-pages.md.
 
 A resource page describes one real document: a textbook, a study note, a
 standard, a guideline, a return. It is read in the wiki, in the concept popup,
@@ -31,6 +31,9 @@ fails it for:
                document, and study notes belong on concept pages
   links        every `[[link]]` lands exactly (vault_links.Vault — Obsidian
                forgives case, the app does not)
+  folder       a page outside `Resources/Books/` sits in the folder its `Type`
+               names (resource_folders.TYPE_FOLDER), and no two resource pages
+               share a filename — a page is addressed by its name alone
 
 A page the vault wrote itself (`Publisher: "Actuarial Notes"`, e.g. the
 distribution reference sheet) describes no external document, so it is exempt
@@ -66,6 +69,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import syllabus_lib as sl  # noqa: E402
 import vault_links as vl  # noqa: E402
+import resource_folders as rf  # noqa: E402
 import verify_lib  # noqa: E402
 
 ROOT = vl.REPO_ROOT
@@ -100,6 +104,7 @@ TYPES = (
     "Educational Note",       # CIA educational notes
     "Standard of Practice",   # ASB ASOPs, the CIA's Standards of Practice
     "Statement of Principles",
+    "Accounting Standard",    # IFRS, IAS — an accounting standard-setter's standard
     "Guideline",              # a regulator's guideline or guidance
     "Regulatory Return",      # a return's forms (a workbook, usually)
     "Instructions",           # filing instructions, a return's instructions, filing guidelines
@@ -109,6 +114,8 @@ TYPES = (
     "Guide",                  # a guide to a plan or program, for policyholders or insurers
     "Glossary",
     "Reference Sheet",        # the vault's own reference pages
+    "Dataset",                # a published table or statistical series
+    "Benchmark",              # a regulator's or industry body's published benchmarks
 )
 
 VAULT_PUBLISHER = "Actuarial Notes"
@@ -503,7 +510,8 @@ def lint_body(page: Page, report: Report, listings: dict[str, list[str]], vault:
                 if not re.match(r"^-\s", line):
                     continue
                 links = list(vl.iter_links(line))
-                ok = links and line.startswith("- [[") and (vault.resolve(links[0].target)[1] or "").startswith(BOOKS + "/")
+                ok = links and line.startswith("- [[") and (vault.resolve(links[0].target)[1] or "").startswith("Resources/") and rf.is_resource_page(
+                    vault.resolve(links[0].target)[1] or "", _read(vault.resolve(links[0].target)[1]))
                 if not ok:
                     report.error(rel, bln, "related", f"a related reading is another resource page: `{line[:60]}`")
         elif section is not None and kind == "paragraph" and not vault_page:
@@ -528,9 +536,42 @@ def lint_body(page: Page, report: Report, listings: dict[str, list[str]], vault:
             report.error(rel, line, "link", f"[[{lk.target}]] — {'wrong case' if status == 'case' else 'no such page'}")
 
 
+def _read(rel: str | None) -> str:
+    if not rel:
+        return ""
+    try:
+        with open(os.path.join(ROOT, rel), encoding="utf-8") as fh:
+            return fh.read()
+    except OSError:
+        return ""
+
+
+def lint_folder(page, report: Report) -> None:
+    """A page outside Books/ sits in the folder its Type names."""
+    folder = page.rel.split("/")[1] if page.rel.count("/") == 2 else ""
+    if not folder or folder == "Books":
+        return
+    type_ = page.get("Type")
+    want = rf.folder_for_type(type_) if type_ else None
+    if want and want != folder:
+        report.error(page.rel, 1, "folder", f"a `Type: {type_}` page belongs in `Resources/{want}/`, not `Resources/{folder}/`")
+
+
+def lint_names(pages: list[str], report: Report) -> None:
+    """No two resource pages share a filename: `[[Name]]` and /wiki/resource/Name name one page."""
+    seen: dict[str, str] = {}
+    for rel in pages:
+        name = rel.rsplit("/", 1)[-1]
+        if name in seen:
+            report.error(rel, 1, "folder", f"`{name}` is also `{seen[name]}` — a resource page's name is its address")
+        else:
+            seen[name] = rel
+
+
 def lint_page(rel: str, report: Report, listings: dict[str, list[str]], vault: vl.Vault) -> None:
     page = parse_page(rel)
     lint_frontmatter(page, report)
+    lint_folder(page, report)
     lint_body(page, report, listings, vault)
 
 
@@ -569,13 +610,13 @@ def fix_page(rel: str) -> bool:
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("pages", nargs="*", help=f"pages to lint (default: every page in {BOOKS}/)")
+    ap.add_argument("pages", nargs="*", help="pages to lint (default: every resource page, in every folder)")
     ap.add_argument("--quiet", action="store_true", help="print errors only")
     ap.add_argument("--fix", action="store_true", help="canonicalise the frontmatter before linting")
     args = ap.parse_args(argv)
 
-    pages = [os.path.relpath(os.path.abspath(p), ROOT).replace(os.sep, "/") for p in args.pages] or sorted(
-        os.path.relpath(p, ROOT).replace(os.sep, "/") for p in glob.glob(os.path.join(ROOT, BOOKS, "*.md")))
+    every = rf.resource_pages(ROOT)
+    pages = [os.path.relpath(os.path.abspath(p), ROOT).replace(os.sep, "/") for p in args.pages] or every
     if args.fix:
         changed = [rel for rel in pages if fix_page(rel)]
         print(f"resource-lint --fix: rewrote the frontmatter of {len(changed)} page(s)")
@@ -584,6 +625,7 @@ def main(argv: list[str] | None = None) -> int:
     report = Report()
     for rel in pages:
         lint_page(rel, report, listings, vault)
+    lint_names(every, report)
 
     shown = report.items if not args.quiet else report.by("error")
     for severity, path, line, code, msg in shown:

@@ -1,6 +1,6 @@
 ---
 name: cowork-sources
-description: Add a publisher or a document to the Cowork source catalogue (quiz/src/data/coworkSources.ts) — the entities a Cowork reader follows and the documents they take into a library. Use when asked to add, extend, populate or fix a Cowork source, publisher, entity or document ("add OSFI to Cowork", "add the CIA's educational notes as a Cowork source", "put the MCT guideline in the Cowork catalogue", "replace the Intact sample with the real annual report", "populate the Cowork corpus"), and whenever a new Resources/Books page should also be reachable from Cowork. Not for Study-mode wiki pages on their own — writing the Resources/Books page itself is resource-pages, and its chapter outline is textbook-toc.
+description: Add a publisher or a document to the Cowork source catalogue (quiz/src/data/coworkSources.ts) — the entities a Cowork reader follows and the documents they take into a library. Use when asked to add, extend, populate or fix a Cowork source, publisher, entity or document ("add OSFI to Cowork", "add the CIA's educational notes as a Cowork source", "put the MCT guideline in the Cowork catalogue", "replace the Intact sample with the real annual report", "populate the Cowork corpus"), and whenever a new resource page should also be reachable from Cowork. Not for Study-mode wiki pages on their own — writing the resource page itself is resource-pages, and its chapter outline is textbook-toc.
 ---
 
 # Cowork Source Catalogue
@@ -15,7 +15,9 @@ Read `docs/cowork.md` once for the design. This file is the operating procedure.
 The catalogue is authored seed data, not vault content:
 
 ```
-quiz/src/data/coworkSources.ts   COWORK_ENTITIES (publishers) + COWORK_RESOURCES (documents)
+quiz/src/data/coworkSources.ts   COWORK_ENTITIES (publishers), the authored documents, and
+                                 PUBLISHER_ENTITY (a page's Publisher: → its entity)
+quiz/src/lib/coworkVault.ts      the vault's resource pages read as documents (derived)
 quiz/src/data/coworkDocs.ts      COWORK_DOCS — the markdown body of each sample document
 quiz/src/lib/coworkSources.ts    the types, the closed category/kind lists
 quiz/src/lib/coworkContent.test.ts   the integrity checks every entry has to pass
@@ -54,7 +56,8 @@ both ways. There are exactly two:
 entry is `sample: true` and that no `wikiRef` entry is a sample. So:
 
 > **To add a real, citable document to Cowork, it has to be a vault page.**
-> Author the `Resources/Books/*.md` page first — to the standard in
+> Author the resource page first, in the folder its `Type` names
+> (`Resources/<folder>/*.md` — `docs/resource-pages.md` §0) — to the standard in
 > `docs/resource-pages.md`, written from the extracted document
 > (`scripts/resource_extract.py`; the `resource-pages` skill, with
 > `textbook-toc` for a book's outline) — then point a `wikiRef` at it here.
@@ -63,23 +66,37 @@ That is the intended path and it is what "replacing a sample with real documents
 means in `docs/cowork.md`. Do **not** work around it by inventing a `docPath`
 document with a date on it.
 
+### Most real documents need no entry at all
+
+Every resource page whose `Type` is practice rather than exam preparation — a
+paper, a report, a guideline, an educational note, a standard, a statute, a return,
+a dataset — is **derived** into Cowork at build time (`virtual:cowork-vault`,
+`lib/coworkVault.ts`): its title, year, `Available from` link and the first sentence
+of its lead, filed under the entity `PUBLISHER_ENTITY` maps its `Publisher:` to, with
+practice areas and functions read off the exams that list it. Textbooks, study notes,
+courses and syllabi stay out. So for a new page the work is usually:
+
+1. Write the page (the `resource-pages` skill).
+2. If its `Publisher:` string isn't in `PUBLISHER_ENTITY`, add it — mapped to an
+   existing entity, or to a new one (Step 2).
+
+Author an entry by hand (Step 3) only when the document deserves more than the
+derived card: **assumptions** rows, a **table**, a better summary, or a different
+kind. An authored entry with the same page wins over the derived one.
+
 ### Addressing a vault page
 
 `wikiRef` is resolved by `entryRefToRepoPath` (`lib/wikiRoutes.ts`), and `name` is
-the **filename without `.md`**, not the authored `Title:`:
+the **filename without `.md`**, not the authored `Title:`. Use `kind: 'resource'`
+for a resource page in any folder; give `path` too for a page outside `Books/` —
+the app also finds it by name from the bundle (`resourceRepoPath`), but the path
+keeps the entry readable and the test exact:
 
-| `kind` | resolves to | in the wiki bundle? |
-|---|---|---|
-| `resource` | `Resources/Books/<name>.md` | **yes** — opens offline |
-| `regulation` | `Resources/Regulation/<name>.md` | no — falls back to a GitHub fetch |
-| `event` | `Resources/Events/<name>.md` | no |
-| `concept` | `Concepts/<name>.md` | yes |
+```ts
+wikiRef: { kind: 'resource', name: 'Intact Annual Report (2025)', path: 'Resources/Reports/Intact Annual Report (2025).md' }
+```
 
-**Prefer `kind: 'resource'`.** `virtual:wiki-content` carries only
-`Resources/Books/` out of the `Resources/` tree, so a `regulation` or `event` ref
-opens over the network — which is the one gap `docs/cowork.md` §4 names, and it
-fails for a reader behind a rate limit or offline. ASOPs, OSFI guidelines and
-statements of principles all live in `Resources/Books/` for exactly this reason.
+Every `Resources/` folder is in the wiki bundle, so every page opens offline.
 
 A ref that does not resolve to a real file fails the test suite, so a renamed vault
 page breaks the build rather than quietly opening an empty panel. That is
@@ -163,7 +180,7 @@ outcome, not a degraded one. A logo that 404s later falls back the same way.
 ```
 
 **`kind`** is one of `textbook`, `standard`, `regulation`, `guideline`, `bulletin`,
-`filing`, `report`, `news`, `dataset` (`RESOURCE_KINDS`). It sets the card's icon
+`filing`, `report`, `paper`, `news`, `dataset` (`RESOURCE_KINDS`). It sets the card's icon
 and the type filter, and it is a pill on the card — so pick the one a reader would
 filter by, not the one closest to the title.
 
@@ -309,8 +326,9 @@ friction.
 
 - [ ] Real document → it is a vault page with a `wikiRef`; sample → `sample: true`,
       `docPath`, no date, no link
-- [ ] `kind: 'resource'` (`Resources/Books/`) wherever the page can live there, so
-      it opens from the bundle rather than the network
+- [ ] The page's `Publisher:` is in `PUBLISHER_ENTITY` (or the page is meant to
+      stay out of Cowork until its publisher has an entity)
+- [ ] An authored entry's `wikiRef` is `kind: 'resource'` with the page's `path`
 - [ ] Entity has at least one document, a 2–6 char `short`, and a transcribed
       `established` or none
 - [ ] `logo` came from `fetch_logo.py` against the publisher's own site, or is absent

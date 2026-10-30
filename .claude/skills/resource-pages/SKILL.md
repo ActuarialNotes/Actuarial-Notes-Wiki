@@ -1,15 +1,15 @@
 ---
 name: resource-pages
-description: Write or edit a Resources/Books source-material page — one real document (a textbook, study note, ASOP, OSFI guideline, paper) described only by what the document itself says, with the canonical frontmatter, a cover, an "On the syllabus" callout, the document's own divisions as headings and a Sources section. Use when the user asks to add, write, fix or restructure a resource page, a syllabus reading's page, or a Source Material entry's target page ("add a page for ASOP 43", "write the Friedland resource page", "the Werner & Modlin page is missing chapters"). Not for concept pages (actuarial-concept-definitions), for a book's table of contents on its own (textbook-toc), or for registering the page in Cowork (cowork-sources).
+description: Write or edit a resource page (Resources/<folder>/*.md) — a source-material page — one real document (a textbook, study note, ASOP, OSFI guideline, paper) described only by what the document itself says, with the canonical frontmatter, a cover, an "On the syllabus" callout, the document's own divisions as headings and a Sources section. Use when the user asks to add, write, fix or restructure a resource page, a syllabus reading's page, or a Source Material entry's target page ("add a page for ASOP 43", "write the Friedland resource page", "the Werner & Modlin page is missing chapters"). Not for concept pages (actuarial-concept-definitions), for a book's table of contents on its own (textbook-toc), or for registering the page in Cowork (cowork-sources).
 ---
 
-# Resource Pages (`Resources/Books/`)
+# Resource Pages (`Resources/<folder>/`)
 
 The full standard, the review that produced it and the pipeline are
 `docs/resource-pages.md` — read it before writing or editing a page. This skill
 is the working summary.
 
-A `Resources/Books/` page serves two products: it is a syllabus reading in
+A resource page serves two products: it is a syllabus reading in
 Study mode *and* the only way a real, citable document enters **Cowork's** source
 catalogue. Registering it there is the `cowork-sources` skill.
 
@@ -60,9 +60,9 @@ The pipeline, in order:
    bullets read from the division, every source under `## Sources`. Never from memory;
    commentary ("why it is on the syllabus", "the exam angles") belongs on concept pages.
 4. **Cover** — `python3 scripts/generate_resource_covers.py` (see below).
-5. **Lint** — `python3 scripts/resource_lint.py "Resources/Books/<page>.md"` (CI runs it on
+5. **Lint** — `python3 scripts/resource_lint.py "Resources/<folder>/<page>.md"` (CI runs it on
    every page) and `validate_links.py`.
-6. **Sync** — `python3 scripts/verify_check.py --sync "Resources/Books/<page>.md"`.
+6. **Sync** — `python3 scripts/verify_check.py --sync "Resources/<folder>/<page>.md"`.
 
 Details that matter:
 
@@ -76,7 +76,7 @@ Details that matter:
   page without one, then run from the repo root:
 
   ```bash
-  python3 scripts/verify_check.py --sync "Resources/Books/<your page>.md"
+  python3 scripts/verify_check.py --sync "Resources/<folder>/<your page>.md"
   ```
 
   which backfills the whole block and owns its derived fields. Hand-writing it is
@@ -105,21 +105,32 @@ Details that matter:
 
 ## Which `Resources/` directory
 
-`Resources/Books/` is the only one `virtual:wiki-content` bundles, so a page there
-opens from the bundle — offline, rate-limited, or not. **ASOPs, OSFI guidelines and
-statements of principles all live in `Resources/Books/`** for that reason, despite
-the folder's name.
+**A new page goes in the folder its `Type` names** (`docs/resource-pages.md` §0;
+the table is `scripts/resource_folders.py`, and the lint fails a page in the wrong
+folder):
 
-The vault's other `Resources/` directories — `Regulation/`, `Events/`,
-`Benchmarks/` — are dated pages that feed the Resources timeline/heatmap and use a
-different frontmatter schema (`date`/`type`, `source_url`, `source_type`,
-`pdf_url`; see `docs/research-corpus-plan.md`). They are **not** in the wiki
-bundle, so a page there is fetched from GitHub at runtime. Put a *reading* in
-`Books/`; put a dated *event or instrument* in the timeline directories.
+| Folder | `Type` |
+| --- | --- |
+| `Books/` | `Textbook`, `Casebook`, `Monograph`, `Course`, `Syllabus`, `Guide`, `Glossary`, `Reference Sheet` |
+| `Papers/` | `Paper`, `Study Note` |
+| `Reports/` | `Report` |
+| `Standards/` | `Standard of Practice`, `Accounting Standard`, `Statement of Principles`, `Educational Note`, `Code of Conduct` |
+| `Regulation/` | `Guideline`, `Instructions`, `Regulatory Return`, `Legislation`, `Case Law` |
+| `Data/` | `Dataset` |
+| `Benchmarks/` | `Benchmark` |
+
+The pages already in `Books/` — papers, ASOPs, guidelines among them — stay there;
+don't move one. A page's filename is its address and must be unique across every
+folder (`ls Resources/*/ | grep -i <name>`), and it must not clash with a concept
+page's name either, or `[[Name]]` becomes ambiguous. Every folder is bundled, so a
+page in any of them opens offline. `Regulation/`, `Data/` and `Benchmarks/` also hold
+the Research tab's dated timeline entries (a different schema —
+`docs/research-corpus-plan.md`); a resource page there carries `Title:` frontmatter,
+which is how the tooling tells the two apart.
 
 ## These pages are also Cowork's source catalogue
 
-A `Resources/Books/` page is not only a syllabus reading. Cowork — the app's second
+A resource page is not only a syllabus reading. Cowork — the app's second
 product (`docs/cowork.md`) — lists documents an actuary works *from*, and a vault
 page is the **only** way a real, citable document gets into that catalogue: a
 Cowork entry either points at a vault page with a `wikiRef`, or it is a dateless,

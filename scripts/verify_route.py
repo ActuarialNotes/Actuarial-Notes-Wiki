@@ -56,6 +56,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import resource_extract as RE  # noqa: E402
 import syllabus_lib as SL  # noqa: E402
 import vault_links as VL  # noqa: E402
+import resource_folders as RF  # noqa: E402
 import verify_lib as V  # noqa: E402
 import verify_sources as S  # noqa: E402
 
@@ -190,7 +191,8 @@ def concept_exams(catalog: list[dict]) -> dict[str, list[str]]:
 
 def reading_source(name: str) -> tuple[str, str]:
     """(resource page, `Available from:` URL) for a reading, either possibly empty."""
-    page = BOOKS / f"{name}.md"
+    found = RF.find_resource(str(REPO_ROOT), name)
+    page = REPO_ROOT / found if found else BOOKS / f"{name}.md"
     if not page.is_file():
         return "", ""
     return V.rel_path(page), RE.page_link(V.rel_path(page)) or ""

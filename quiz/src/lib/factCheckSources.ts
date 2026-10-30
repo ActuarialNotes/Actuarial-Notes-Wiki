@@ -22,6 +22,7 @@
 import { summarizeSource } from '@/lib/verification'
 import { pathToEntryRef, entryRefToRepoPath } from '@/lib/wikiRoutes'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
+import { resourceRepoPath } from '@/lib/resourceFolders'
 
 export interface SourcePage {
   /** The page's name, as a syllabus links it: `Basic Ratemaking (Werner - 2016)`. */
@@ -45,15 +46,15 @@ export interface CitedSource {
 
 /**
  * Where a source-material link's page lives. A bare `[[Basic Ratemaking …]]`
- * is a `Resources/Books` page — that is where every syllabus reading is
- * authored — while a link written as a path says so itself.
+ * is a resource page, found in whichever `Resources/` folder it sits
+ * (`resourceRepoPath`) — while a link written as a path says so itself.
  */
 export function resourcePagePath(target: string, name: string): string {
   if (target.includes('/')) {
     const ref = pathToEntryRef(target.endsWith('.md') ? target : `${target}.md`)
     if (ref) return entryRefToRepoPath(ref)
   }
-  return `Resources/Books/${name}.md`
+  return resourceRepoPath(name)
 }
 
 /** Every reading named by every exam page, once each, in syllabus order. */

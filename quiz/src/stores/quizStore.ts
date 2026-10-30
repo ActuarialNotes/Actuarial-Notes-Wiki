@@ -8,6 +8,7 @@ import { slugForLink } from '@/lib/conceptMatch'
 import { appendTodayLevelUps, addDailyGems, addDailyQuizStats, appendTodayAnsweredIds } from '@/lib/dailyProgressStore'
 import { recordStreakActivity } from '@/lib/streakStore'
 import { todayISO } from '@/lib/studyPlan'
+import { dailyCompletionRows, levelEventRows, type LevelChange } from '@/lib/levelEvents'
 import { xpForAnswers } from '@/lib/xp'
 import { recordXp } from '@/lib/xpStore'
 import { recordQuestProgress } from '@/lib/questStore'
@@ -226,10 +227,15 @@ async function upsertMasteryFromResponses(
     preStates.set(key, decayIfStale(byKey.get(key)!, now).state)
   }
 
+  // Every state each row passes through, so a quiz that forgets a concept and
+  // relearns it logs both steps rather than a net Level 3 → Level 1.
+  const paths = new Map<string, MasteryState[]>()
   for (const ev of events) {
     const key = `${ev.examId}::${ev.conceptSlug}`
     const prev = byKey.get(key)!
-    byKey.set(key, applyAnswer(prev, { isCorrect: ev.isCorrect, isHard: ev.isHard, at: now }))
+    const next = applyAnswer(prev, { isCorrect: ev.isCorrect, isHard: ev.isHard, at: now })
+    byKey.set(key, next)
+    appendStep(paths, key, preStates.get(key)!, next.state)
   }
 
   const rows = [...byKey.entries()]
@@ -251,16 +257,25 @@ async function upsertMasteryFromResponses(
     const fromState = preStates.get(key)!
     const afterRecord = byKey.get(key)!
     if (fromState !== afterRecord.state) {
-      transitions.push({ conceptSlug: afterRecord.concept_slug, from: fromState, to: afterRecord.state })
+      transitions.push({
+        conceptSlug: afterRecord.concept_slug,
+        examId: afterRecord.exam_id,
+        from: fromState,
+        to: afterRecord.state,
+        path: paths.get(key),
+      })
     }
   }
   return transitions
 }
 
-export interface MasteryTransition {
-  conceptSlug: string
-  from: MasteryState
-  to: MasteryState
+function appendStep(paths: Map<string, MasteryState[]>, key: string, start: MasteryState, state: MasteryState): void {
+  const path = paths.get(key) ?? []
+  if ((path[path.length - 1] ?? start) !== state) path.push(state)
+  paths.set(key, path)
+}
+
+export interface MasteryTransition extends LevelChange {
   /**
    * This level-up is what collected the concept's flashcard (its first
    * new → level1). Set by `collectLevelledConcepts`; the level-up ceremony
@@ -364,6 +379,7 @@ function computeMasteryTransitions(
 
   // Simulate answers in question order, accumulating state per concept
   const simulated = new Map<string, ConceptMasteryRecord>()
+  const paths = new Map<string, MasteryState[]>()
   const now = new Date()
 
   for (const q of questions) {
@@ -377,7 +393,10 @@ function computeMasteryTransitions(
     for (const conceptSlug of conceptsForQuestion(q)) {
       const key = conceptSlug.toLowerCase()
       const current = simulated.get(key) ?? bySlug.get(key) ?? emptyRecord('', examId, conceptSlug)
-      simulated.set(key, applyAnswer(current, { isCorrect, isHard, at: now }))
+      const next = applyAnswer(current, { isCorrect, isHard, at: now })
+      simulated.set(key, next)
+      const raw = bySlug.get(key)
+      appendStep(paths, key, raw ? decayIfStale(raw, now).state : 'new', next.state)
     }
   }
 
@@ -391,7 +410,13 @@ function computeMasteryTransitions(
     const rawRecord = bySlug.get(key)
     const fromState: MasteryState = rawRecord ? decayIfStale(rawRecord, now).state : 'new'
     if (fromState !== after.state) {
-      transitions.push({ conceptSlug: after.concept_slug, from: fromState, to: after.state })
+      transitions.push({
+        conceptSlug: after.concept_slug,
+        examId: after.exam_id || undefined,
+        from: fromState,
+        to: after.state,
+        path: paths.get(key),
+      })
     }
   }
   return transitions
@@ -416,27 +441,29 @@ interface PersistableSession {
 // user signs in).
 async function persistSessionToCloud(userId: string, params: PersistableSession): Promise<{ error: string | null }> {
   const { questions, responses, mode, correctCount, totalSeconds, masteryTransitions, manualGrades = {} } = params
-  const upward = masteryTransitions.filter(
-    t => t.to === 'level1' || t.to === 'level2' || t.to === 'level3',
-  )
+  // A transition saved before transitions carried their exam (a pending guest
+  // session) falls back to the quiz's first question's exam.
+  const fallbackExamId = EXAM_LABEL_TO_ID[questions[0]?.exam ?? ''] ?? null
+  const changedAt = new Date()
+
+  // Every level change, falls included, to the append-only history the
+  // Learning Progress graph draws. Wrapped like the write below.
+  try {
+    const eventRows = levelEventRows(userId, masteryTransitions, fallbackExamId, changedAt)
+    if (eventRows.length > 0) {
+      const { error: eventsError } = await supabase.from('concept_level_events').insert(eventRows)
+      if (eventsError) console.warn('concept_level_events insert failed:', eventsError.message)
+    }
+  } catch (err) {
+    console.warn('concept_level_events insert threw:', err)
+  }
 
   // Persist the level-ups to daily_completions so the "completed today"
   // checkmark syncs across devices (localStorage above is device-local only).
   // Wrapped in try-catch so any failure here cannot abort the quiz_sessions insert below.
   try {
-    const completionExamId = EXAM_LABEL_TO_ID[questions[0]?.exam ?? '']
-    if (completionExamId && upward.length > 0) {
-      const day = todayISO()
-      const nowIso = new Date().toISOString()
-      const completionRows = upward.map(t => ({
-        user_id: userId,
-        exam_id: completionExamId,
-        concept_slug: t.conceptSlug,
-        day,
-        from_state: t.from,
-        to_state: t.to,
-        at: nowIso,
-      }))
+    const completionRows = dailyCompletionRows(userId, masteryTransitions, fallbackExamId, todayISO(), changedAt)
+    if (completionRows.length > 0) {
       const { error: completionError } = await supabase
         .from('daily_completions')
         .upsert(completionRows, { onConflict: 'user_id,exam_id,concept_slug,day' })

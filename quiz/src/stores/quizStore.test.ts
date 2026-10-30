@@ -95,7 +95,7 @@ describe('completeQuiz collects a card on reaching Level 1 (guest)', () => {
     // The stored session marks the level-up as the collection, so /review's
     // ceremony plays the collect animation for it.
     expect(readLastSession()?.masteryTransitions).toEqual([
-      { conceptSlug: 'Accumulation Function', from: 'new', to: 'level1', collected: true },
+      expect.objectContaining({ conceptSlug: 'Accumulation Function', from: 'new', to: 'level1', path: ['level1'], collected: true }),
     ])
   })
 

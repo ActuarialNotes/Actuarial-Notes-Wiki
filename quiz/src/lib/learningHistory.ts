@@ -138,6 +138,51 @@ export interface MasteryTrack {
   record: ConceptMasteryRecord | null
   /** The latest answer that fed this row, if known — where a run of failures lands. */
   lastAttemptAt: Date | null
+  /** When this row was answered correctly, if known — where decay is counted from. */
+  correctAts?: Date[]
+}
+
+/**
+ * A track's recorded events: the concept_level_events log, and before the log
+ * began, the daily_completions climbs (all that was kept until then).
+ */
+export function mergeLoggedEvents(completions: LevelEvent[], logged: LevelEvent[]): LevelEvent[] {
+  if (logged.length === 0) return completions
+  const start = logged[0].at
+  return [...completions.filter(ev => ev.at < start), ...logged]
+}
+
+/**
+ * Put back the steps a record skipped — wherever an event starts from a level
+ * the one before it didn't end at. daily_completions kept climbs only, so a
+ * forgotten concept relearned read Level 3 → (Forgotten → Level 1) and the
+ * line stepped straight from 3 to 1. Neither table records decay. A fall the
+ * clock explains is drawn where decay would have stepped down; any rest of it
+ * (three misses) just before the event that shows it.
+ */
+export function fillLevelGaps(events: readonly LevelEvent[], correctAts: readonly Date[] = []): LevelEvent[] {
+  const out: LevelEvent[] = []
+  for (const ev of events) {
+    const prev = out[out.length - 1]
+    if (prev && prev.to !== ev.from) {
+      let level = prev.to
+      if (LEVEL_RANK[ev.from] < LEVEL_RANK[level] && isLearned(level)) {
+        // Decay counts from the last correct answer before the fall showed.
+        const lastCorrect = latest(prev.at, ...correctAts.filter(at => at < ev.at))!
+        for (const step of syntheticDecayEvents(level, lastCorrect, ev.at)) {
+          if (LEVEL_RANK[step.to] < LEVEL_RANK[ev.from]) break
+          out.push(step)
+          level = step.to
+        }
+      }
+      if (level !== ev.from) {
+        const at = new Date(Math.max(ev.at.getTime() - 1, out[out.length - 1].at.getTime()))
+        out.push({ at, from: level, to: ev.from })
+      }
+    }
+    out.push(ev)
+  }
+  return out
 }
 
 /**
@@ -188,7 +233,8 @@ function dateOf(iso: string | null | undefined): Date | null {
  * event recorded (a lost daily_completions write) is drawn when it was earned.
  */
 export function trackLevelTimeline(track: MasteryTrack, now: Date): LevelEvent[] {
-  const { events, record, lastAttemptAt } = track
+  const { record, lastAttemptAt } = track
+  const events = fillLevelGaps(track.events, track.correctAts)
   const current = trackCurrentLevel(track, now)
   const last = events[events.length - 1]
   let level: MasteryState = last?.to ?? 'new'

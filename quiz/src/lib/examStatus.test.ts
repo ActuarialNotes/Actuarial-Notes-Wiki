@@ -5,8 +5,8 @@ import { wikiExamIdToProgressKey } from './wikiParser'
 describe('examStatus', () => {
   it('marks an exam ready only once it passes every gate, G8 included', () => {
     expect(EXAM_STATUS_LABEL.ready).toBeNull()
-    // P and FM passed all eight on 2026-10-30, MAS-I, DISC-DA and DISC-IA on 2026-10-31.
-    for (const key of ['P', 'FM', 'MAS-I', 'CAS-DA', 'CAS-IA']) {
+    // P and FM passed all eight on 2026-10-30, MAS-I and the three DISCs on 2026-10-31.
+    for (const key of ['P', 'FM', 'MAS-I', 'CAS-DA', 'CAS-RM', 'CAS-IA']) {
       expect(examStatus(key)).toBe('ready')
       expect(isExamBeta(key)).toBe(false)
       expect(isExamInDevelopment(key)).toBe(false)
@@ -14,8 +14,8 @@ describe('examStatus', () => {
   })
 
   it('treats the exams that are usable but unfinished as beta', () => {
-    // DISC-RM and Exam 7 went back to beta when G8 joined the gates.
-    for (const key of ['CAS-RM', 'CAS-7',
+    // Exam 7 went back to beta when G8 joined the gates.
+    for (const key of ['CAS-7',
       'MAS-II', 'CAS-5', 'CAS-PCPA', 'CAS-6', 'CAS-8', 'CAS-9']) {
       expect(examStatus(key)).toBe('beta')
       expect(isExamBeta(key)).toBe(true)

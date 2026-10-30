@@ -1,4 +1,5 @@
 import fm from 'front-matter'
+import type { Element, ElementContent, Root } from 'hast'
 import { rawGithubUrl } from '@/lib/github'
 import { vaultMediaUrl } from '@/lib/vaultAssets'
 
@@ -255,27 +256,62 @@ export function preprocessResourceMarkdown(raw: string): string {
   return extractSyllabusAssignments(stripFirstCoverImage(raw)).markdown
 }
 
-const LIST_ITEM_RE = /^\s*[-*+]\s+\S/
-// "1", "1.4", "1.4.2", "0.1", "1.01", "A.2" — a chapter/section label.
-const SECTION_LABEL_RE = /^\s*[-*+]\s+(?:\d+|[A-Z])(?:\.\d+)*\.?\s+\S/
+// "1", "1.4", "1.4.2", "0.1", "1.01", "A.2", "1." — a chapter/section label.
+// A lone letter isn't one ("A trending procedure…"), nor is a year ("2009 …").
+const SECTION_LABEL_RE = /^(?:\d{1,3}(?:\.\d+)*|[A-Z](?:\.\d+)+)\.?\s+\S/
 
-// A book's table of contents already numbers itself ("1.4.2 Accumulated Value…"),
-// so list markers next to those lines are a second, conflicting numbering.
-// Detect that shape here; the outline styling below hides the markers and lets
-// the indent carry the hierarchy. Prose pages (the ASOPs, whose lists are real
-// bullets) fall through and keep their discs.
-export function isNumberedOutline(md: string): boolean {
-  const items = md.split('\n').filter(line => LIST_ITEM_RE.test(line))
-  if (items.length < 3) return false
-  const labelled = items.filter(line => SECTION_LABEL_RE.test(line)).length
-  return labelled / items.length >= 0.6
+/** A list item that numbers itself — drawn without a marker. */
+export const OUTLINE_ITEM_CLASS = 'outline-item'
+/** A list every item of which numbers itself — drawn flush, without indent. */
+export const OUTLINE_LIST_CLASS = 'outline-list'
+
+/** An item's own words, without the lists nested under it. */
+function ownText(node: Element | ElementContent): string {
+  if (node.type === 'text') return node.value
+  if (node.type !== 'element' || node.tagName === 'ul' || node.tagName === 'ol') return ''
+  return node.children.map(ownText).join('')
 }
 
-// Applied to the WikiArticle of a resource page whose body is a numbered
-// outline: no list markers, tighter rows, and chapter headings sized closer to
-// the entries they head.
-export const OUTLINE_ARTICLE_CLASS =
+function addClass(el: Element, name: string) {
+  const cls = el.properties.className
+  const list = Array.isArray(cls) ? cls.map(String) : typeof cls === 'string' ? cls.split(/\s+/) : []
+  el.properties.className = [...list, name]
+}
+
+function markOutline(node: Root | Element) {
+  for (const child of node.children) {
+    if (child.type !== 'element') continue
+    markOutline(child)
+    if (child.tagName !== 'ul' && child.tagName !== 'ol') continue
+    const items = child.children.filter((c): c is Element => c.type === 'element' && c.tagName === 'li')
+    let labelled = 0
+    for (const li of items) {
+      if (!SECTION_LABEL_RE.test(ownText(li).trimStart())) continue
+      addClass(li, OUTLINE_ITEM_CLASS)
+      labelled++
+    }
+    if (items.length > 0 && labelled === items.length) addClass(child, OUTLINE_LIST_CLASS)
+  }
+}
+
+/**
+ * A book's table of contents already numbers itself ("1.4.2 Accumulated
+ * Value…"), so a list marker beside such a row is a second, conflicting
+ * numbering. This rehype plugin marks each row that carries its own section
+ * label, and each list made only of such rows, so `RESOURCE_ARTICLE_CLASS`
+ * can drop their markers. It decides row by row, not page by page: an ASOP's
+ * numbered sections and the description bullets under them sit on one page,
+ * and both are drawn the way they are on every other resource page.
+ */
+export function rehypeOutlineItems() {
+  return (tree: Root) => markOutline(tree)
+}
+
+// Applied to the WikiArticle of every resource page, so one page's headings
+// and lists look like the next one's: chapter headings sized closer to the
+// entries they head, and a self-numbered row (rehypeOutlineItems) drawn
+// without a marker, its nesting carried by the indent.
+export const RESOURCE_ARTICLE_CLASS =
   'prose-h2:text-lg prose-h2:mt-5 prose-h2:mb-1 ' +
-  'prose-ul:list-none prose-ul:pl-0 prose-ul:my-1.5 ' +
-  'prose-li:my-1 prose-li:pl-0 prose-li:leading-snug ' +
-  '[&_li>ul]:mt-1 [&_li>ul]:pl-4'
+  '[&_li.outline-item]:list-none [&_li.outline-item]:pl-0 ' +
+  '[&_.outline-list]:pl-0 [&_li>.outline-list]:pl-4'

@@ -13,7 +13,7 @@ import { parseVerification } from '@/lib/verification'
 import { ResourceMetaCard } from '@/components/wiki/ResourceMetaCard'
 import { RESTORE_SCROLL } from '@/lib/routeScrollMemory'
 import { backLabel, useBack } from '@/hooks/useBack'
-import { extractSyllabusAssignments, isNumberedOutline, OUTLINE_ARTICLE_CLASS, parseResourceMeta, preprocessResourceMarkdown } from '@/lib/resourceMeta'
+import { extractSyllabusAssignments, parseResourceMeta, RESOURCE_ARTICLE_CLASS, preprocessResourceMarkdown } from '@/lib/resourceMeta'
 import { ResourceSyllabusCard } from '@/components/wiki/ResourceSyllabusCard'
 
 export default function WikiResource() {
@@ -101,7 +101,8 @@ export default function WikiResource() {
       {processedContent !== null && (
         <WikiArticle
           markdown={processedContent}
-          className={isNumberedOutline(processedContent) ? OUTLINE_ARTICLE_CLASS : undefined}
+          className={RESOURCE_ARTICLE_CLASS}
+          outlineItems
           sourcePath={`Resources/Books/${resourceName}.md`}
           titleBadge={
             content && (

@@ -6,7 +6,7 @@ import { recallPageScroll, rememberPageScroll } from '@/lib/pageScrollMemory'
 import { WikiArticle } from '@/components/wiki/WikiArticle'
 import { extractImages } from '@/lib/wikiMarkdown'
 import { ResourceMetaCard } from '@/components/wiki/ResourceMetaCard'
-import { extractSyllabusAssignments, isNumberedOutline, OUTLINE_ARTICLE_CLASS, parseResourceMeta, preprocessResourceMarkdown } from '@/lib/resourceMeta'
+import { extractSyllabusAssignments, parseResourceMeta, RESOURCE_ARTICLE_CLASS, preprocessResourceMarkdown } from '@/lib/resourceMeta'
 import { ResourceSyllabusCard } from '@/components/wiki/ResourceSyllabusCard'
 import { ListenView } from '@/components/wiki/ListenView'
 import { listenCarriesOver, setListenReading } from '@/hooks/useListenCarry'
@@ -331,11 +331,8 @@ export function ConceptPagePanel({
               )}
               <WikiArticle
                 markdown={processedContent ?? content}
-                className={
-                  resourceMeta && isNumberedOutline(processedContent ?? content)
-                    ? OUTLINE_ARTICLE_CLASS
-                    : undefined
-                }
+                className={resourceMeta ? RESOURCE_ARTICLE_CLASS : undefined}
+                outlineItems={!!resourceMeta}
                 sourcePath={sourcePath}
                 hideImages
                 onWikiLink={ref => {

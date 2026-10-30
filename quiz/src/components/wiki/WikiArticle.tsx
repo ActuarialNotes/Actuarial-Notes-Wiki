@@ -17,6 +17,7 @@ import { hrefToEntryRef, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { isInWikiIndex } from '@/lib/wikiIndex'
 import { distributionForImage } from '@/lib/distributions'
 import { normalizeVaultMath } from '@/lib/vaultMath'
+import { rehypeOutlineItems } from '@/lib/resourceMeta'
 import { themedFigureSrc } from '@/lib/figureTheme'
 import { useTheme } from '@/hooks/useTheme'
 import { refKey, useConceptHighlight } from '@/hooks/useConceptHighlight'
@@ -42,6 +43,11 @@ export interface WikiArticleProps {
    * menu here). The host owns the menu; the article only draws the trigger.
    */
   titleAction?: WikiTitleAction
+  /**
+   * A resource page: mark the list rows that number themselves, so the
+   * page's class can draw them without markers (`rehypeOutlineItems`).
+   */
+  outlineItems?: boolean
 }
 
 export interface WikiTitleAction {
@@ -57,6 +63,9 @@ export interface WikiTitleAction {
 // `components` map: react-markdown treats a new component function as a new
 // element type, so a map rebuilt every time the menu opened or closed would
 // remount the whole article.
+const REHYPE_PLUGINS = [rehypeKatex]
+const OUTLINE_REHYPE_PLUGINS = [rehypeKatex, rehypeOutlineItems]
+
 const TitleActionContext = createContext<WikiTitleAction | null>(null)
 
 /**
@@ -103,7 +112,7 @@ function stripHtmlBlocks(md: string): string {
     .replace(/^> *<div\b.*?<\/div> *\n?/gm, '')
 }
 
-export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, className, titleBadge, titleAction }: WikiArticleProps) {
+export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, className, titleBadge, titleAction, outlineItems }: WikiArticleProps) {
   const navigate = useNavigate()
   const articleRef = useRef<HTMLDivElement | null>(null)
   const { theme } = useTheme()
@@ -252,7 +261,7 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
       <TitleActionContext.Provider value={titleAction ?? null}>
         <ReactMarkdown
           remarkPlugins={[remarkGfm, remarkMath]}
-          rehypePlugins={[rehypeKatex]}
+          rehypePlugins={outlineItems ? OUTLINE_REHYPE_PLUGINS : REHYPE_PLUGINS}
           components={components}
         >
           {processed}

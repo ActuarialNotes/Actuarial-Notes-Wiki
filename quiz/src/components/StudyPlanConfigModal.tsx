@@ -5,7 +5,7 @@ import { X, CalendarDays, Sparkles, BookOpen, Lock } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ExamSittingsList } from '@/components/ExamSittingsList'
 import { SittingDateGrid } from '@/components/SittingDateGrid'
-import { getSittingsForExam, LOCALIZED_EXAMS } from '@/data/examSittings'
+import { getSittingsForExam, formatSittingDate, sittingContains, LOCALIZED_EXAMS, type ExamSitting } from '@/data/examSittings'
 import {
   QUICK_SET_PRESETS,
   applyPreset,
@@ -20,13 +20,20 @@ import { emitPlanLocked } from '@/lib/planForming'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
 import { OverlayPortal } from '@/components/ui/OverlayPortal'
 
-const HEADLINE_PRESETS: QuickSetPreset[] = ['1w', '2w', '1m']
+const HEADLINE_PRESETS = ['1d', '1w', '2w'] as const
 
 // Compact chip labels for the ready-date buffer presets (the hero date shows the resolved day)
-const HEADLINE_PRESET_LABELS: Record<'1w' | '2w' | '1m', string> = {
+const HEADLINE_PRESET_LABELS: Record<typeof HEADLINE_PRESETS[number], string> = {
+  '1d': '1 day',
   '1w': '1 week',
   '2w': '2 weeks',
-  '1m': '1 month',
+}
+
+type StepKey = 'version' | 'examDate' | 'examDay' | 'ready' | 'strategy'
+
+/** A window short enough to lay out as a grid of days gets a page of its own for picking the day. */
+function hasDayPicker(s: ExamSitting | null): s is ExamSitting & { endDate: string } {
+  return !!s?.endDate && s.endDate !== s.startDate && daysBetween(s.startDate, s.endDate) <= 35
 }
 
 interface Props {
@@ -49,18 +56,14 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
   const variants = examId ? (LOCALIZED_EXAMS[examId] ?? null) : null
   const hasVariants = variants !== null && variants.length > 0
 
-  const EXAM_DATE_STEP = hasVariants ? 2 : 1
-  const READY_DATE_STEP = hasVariants ? 3 : 2
-  const STRATEGY_STEP = hasVariants ? 4 : 3
-  const TOTAL_STEPS = hasVariants ? 4 : 3
-  const STEP_LABELS = hasVariants
-    ? ['Version', 'Exam Date', 'Ready Date', 'Study Strategy']
-    : ['Exam Date', 'Ready Date', 'Study Strategy']
-
-  const [step, setStep] = useState<number>(() => {
-    if (initialStep !== undefined) return initialStep
-    if (hasVariants && !config.examVariant) return 1
-    return EXAM_DATE_STEP
+  // `initialStep` counts the steps every plan has (version when localized,
+  // exam date, ready date, strategy) — the exam-day page comes and goes with
+  // the sitting picked, so callers never address it.
+  const [chosenStep, setStep] = useState<StepKey>(() => {
+    const fixed: StepKey[] = hasVariants ? ['version', 'examDate', 'ready', 'strategy'] : ['examDate', 'ready', 'strategy']
+    if (initialStep !== undefined) return fixed[initialStep - 1] ?? 'examDate'
+    if (hasVariants && !config.examVariant) return 'version'
+    return 'examDate'
   })
   const [localExamVariant, setLocalExamVariant] = useState<string>(config.examVariant ?? '')
   const [localExamDate, setLocalExamDate] = useState(examDate ?? '')
@@ -82,6 +85,24 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
   })
   const readyDateInputRef = useRef<HTMLInputElement>(null)
   const examDateInputRef = useRef<HTMLInputElement>(null)
+  const [paperDay, setPaperDay] = useState(false)
+
+  const sittings = examId ? getSittingsForExam(examId) : []
+  const hasSittings = sittings.length > 0
+  const selectedSitting = sittings.find(s => sittingContains(s, localExamDate)) ?? null
+  // SOA's paper day falls inside its CBT window; a reader who picked the paper row has no day to choose.
+  const daySitting = !paperDay && hasDayPicker(selectedSitting) ? selectedSitting : null
+
+  const steps: StepKey[] = [
+    ...(hasVariants ? ['version' as const] : []),
+    'examDate',
+    ...(daySitting ? ['examDay' as const] : []),
+    'ready',
+    'strategy',
+  ]
+  // A step that left the list (a single-day sitting picked) falls back to the exam date.
+  const step: StepKey = steps.includes(chosenStep) ? chosenStep : 'examDate'
+  const stepIndex = steps.indexOf(step)
 
   function selectPreset(preset: QuickSetPreset) {
     const base = localExamDate || examDate
@@ -104,12 +125,17 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
     }
   }
 
-  function handleExamSittingSelect(value: string) {
-    if (value === localExamDate) {
-      if (step < TOTAL_STEPS) setStep(step + 1)
-    } else {
-      handleExamDateChange(value)
-    }
+  // Picking the sitting already picked moves on, without resetting a day chosen inside it.
+  function handleExamSittingSelect(value: string, picked: ExamSitting) {
+    const again = paperDay === !picked.endDate && (value === localExamDate || sittingContains(picked, localExamDate))
+    setPaperDay(!picked.endDate)
+    if (again) goNext()
+    else handleExamDateChange(value)
+  }
+
+  function handleExamDaySelect(value: string) {
+    if (value === localExamDate) goNext()
+    else handleExamDateChange(value)
   }
 
   function handleSave() {
@@ -132,19 +158,15 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
   const readyDateValid = !readyDate || (daysOut !== null && daysOut > 0)
   const examDateValid = !localExamDate || (examDaysOut !== null && examDaysOut > 0)
 
-  const sittings = examId ? getSittingsForExam(examId) : []
-  const hasSittings = sittings.length > 0
-  const selectedSitting = sittings.find(s => {
-    if (!localExamDate) return false
-    if (s.endDate) return localExamDate >= s.startDate && localExamDate <= s.endDate
-    return localExamDate === s.startDate
-  }) ?? null
-
   function isNextDisabled(): boolean {
-    if (step === 1 && hasVariants) return !localExamVariant
-    if (step === EXAM_DATE_STEP) return !localExamDate || !examDateValid
-    if (step === READY_DATE_STEP) return !!readyDate && !readyDateValid
+    if (step === 'version') return !localExamVariant
+    if (step === 'examDate' || step === 'examDay') return !localExamDate || !examDateValid
+    if (step === 'ready') return !!readyDate && !readyDateValid
     return false
+  }
+
+  function goNext() {
+    if (stepIndex < steps.length - 1 && !isNextDisabled()) setStep(steps[stepIndex + 1])
   }
 
   return (
@@ -177,11 +199,10 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
 
         {/* Progress — minimal segmented bar */}
         <div className="flex items-center gap-1.5 px-6 pt-4">
-          {STEP_LABELS.map((_, i) => {
-            const s = i + 1
-            const isActive = step === s
-            const isDone = step > s
-            const isStrategyLocked = s === STRATEGY_STEP && !isPro
+          {steps.map((s, i) => {
+            const isActive = stepIndex === i
+            const isDone = stepIndex > i
+            const isStrategyLocked = s === 'strategy' && !isPro
             return (
               <button
                 key={s}
@@ -189,14 +210,11 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
                 disabled={isStrategyLocked}
                 onClick={() => {
                   if (isStrategyLocked) return
-                  if (s === step) {
-                    if (step < TOTAL_STEPS && !isNextDisabled()) setStep(step + 1)
-                  } else {
-                    setStep(s)
-                  }
+                  if (isActive) goNext()
+                  else setStep(s)
                 }}
                 className="group flex-1 py-2 focus:outline-none disabled:cursor-not-allowed"
-                aria-label={`Step ${s} of ${TOTAL_STEPS}`}
+                aria-label={`Step ${i + 1} of ${steps.length}`}
                 aria-current={isActive ? 'step' : undefined}
               >
                 <div
@@ -216,7 +234,7 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
         <div className="px-6 pb-2 pt-5 space-y-5">
 
           {/* Step: Version selection (localized exams only) */}
-          {step === 1 && hasVariants && (
+          {step === 'version' && (
             <div className="space-y-4">
               <p className="text-lg font-semibold">Which version are you taking?</p>
               <div className="space-y-2">
@@ -239,7 +257,7 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
           )}
 
           {/* Exam Date step */}
-          {step === EXAM_DATE_STEP && (
+          {step === 'examDate' && (
             <div className="space-y-4">
               <p className="text-lg font-semibold">When is your exam?</p>
 
@@ -265,24 +283,13 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
               )}
 
               {hasSittings ? (
-                <>
-                  {examId && (
-                    <ExamSittingsList
-                      examId={examId}
-                      selectedDate={localExamDate}
-                      onSelect={handleExamSittingSelect}
-                    />
-                  )}
-                  {selectedSitting?.endDate && selectedSitting.endDate !== selectedSitting.startDate
-                    && daysBetween(selectedSitting.startDate, selectedSitting.endDate) <= 35 && (
-                    <SittingDateGrid
-                      startDate={selectedSitting.startDate}
-                      endDate={selectedSitting.endDate}
-                      selectedDate={localExamDate}
-                      onSelect={handleExamDateChange}
-                    />
-                  )}
-                </>
+                examId && (
+                  <ExamSittingsList
+                    examId={examId}
+                    selectedDate={localExamDate}
+                    onSelect={handleExamSittingSelect}
+                  />
+                )
               ) : !localExamDate ? (
                 <div className="overflow-hidden rounded-md border border-input shadow-sm focus-within:ring-1 focus-within:ring-ring">
                   <input
@@ -301,8 +308,35 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
             </div>
           )}
 
+          {/* Exam Day step — the exact day inside a CBT window */}
+          {step === 'examDay' && daySitting && (
+            <div className="space-y-4">
+              <div>
+                <p className="text-lg font-semibold">Which day is your exam?</p>
+                <p className="mt-0.5 text-xs text-muted-foreground/70">
+                  The {formatSittingDate(daySitting)} window. Pick the day you booked, or your best guess.
+                </p>
+              </div>
+
+              {localExamDate && (
+                <p className="text-4xl font-bold tracking-tight">{formatReadableDate(localExamDate)}</p>
+              )}
+
+              <SittingDateGrid
+                startDate={daySitting.startDate}
+                endDate={daySitting.endDate}
+                selectedDate={localExamDate}
+                onSelect={handleExamDaySelect}
+              />
+
+              {localExamDate && examDaysOut !== null && examDaysOut <= 0 && (
+                <p className="text-xs text-destructive">Date must be in the future</p>
+              )}
+            </div>
+          )}
+
           {/* Ready Date step */}
-          {step === READY_DATE_STEP && (
+          {step === 'ready' && (
             <div className="space-y-4">
               <p className="text-lg font-semibold">When do you want to be exam-ready?</p>
 
@@ -344,7 +378,7 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
                             : 'bg-muted/40 text-muted-foreground hover:text-foreground'
                         }`}
                       >
-                        {HEADLINE_PRESET_LABELS[p as '1w' | '2w' | '1m']}
+                        {HEADLINE_PRESET_LABELS[p]}
                       </button>
                     )
                   })}
@@ -370,7 +404,7 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
           )}
 
           {/* Study Strategy step */}
-          {step === STRATEGY_STEP && (
+          {step === 'strategy' && (
             <div className="space-y-4">
               <p className="text-lg font-semibold">How do you want to study?</p>
 
@@ -428,22 +462,22 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
         {/* Footer */}
         <div className="px-6 pb-6 pt-3 flex gap-2 justify-between">
           <div>
-            {step > 1 && (
-              <Button variant="outline" size="sm" onClick={() => setStep(step - 1)}>
+            {stepIndex > 0 && (
+              <Button variant="outline" size="sm" onClick={() => setStep(steps[stepIndex - 1])}>
                 Back
               </Button>
             )}
           </div>
           <div className="flex gap-2">
-            {step === 1 && (
+            {stepIndex === 0 && (
               <Button variant="outline" size="sm" onClick={onClose}>
                 Cancel
               </Button>
             )}
-            {step < TOTAL_STEPS && !(step === READY_DATE_STEP && !isPro) ? (
+            {stepIndex < steps.length - 1 && !(step === 'ready' && !isPro) ? (
               <Button
                 size="sm"
-                onClick={() => setStep(step + 1)}
+                onClick={goNext}
                 disabled={isNextDisabled()}
               >
                 Next

@@ -14,9 +14,11 @@ export interface ExamSitting {
 // rows for the exams the vault covers (P, FM, MAS-I, MAS-II, CAS 5–9, PCPA)
 // checked against the publishers on 2026-09-27 — CAS's 2026 Syllabus of Basic
 // Education and registration notices, SOA's exam schedule and per-sitting
-// applications — and corrected where they disagreed. SOA's 2027 sittings are
-// transcribed from its exam schedule, which runs through December 2027; CAS
-// has published no 2027 dates. What each sitting's publisher says beyond the
+// applications — and corrected where they disagreed. SOA's 2027 sittings (ASA
+// and FSA tabs) and its November 2026 FSA days are transcribed from its exam
+// schedule, which runs through December 2027 (read 2026-10-30). CAS's 2027
+// windows are from "CAS Announces 2027 Exam Schedule" (2026-10-06), which
+// leaves registration to be announced — those deadlines are null until it is. What each sitting's publisher says beyond the
 // window (registration opening, refund deadlines, results) is in
 // `examSittingDetails.ts`, with its sources.
 // examId values match the app's canonical IDs from tracks.ts.
@@ -131,24 +133,27 @@ export const EXAM_SITTINGS: ExamSitting[] = [
   { examId: 'ASTAM', format: 'CBT', startDate: '2026-10-22', endDate: null,         registrationDeadline: '2026-09-14' },
   { examId: 'FAM',   format: 'P/P', startDate: '2026-10-23', endDate: null,         registrationDeadline: null },
   { examId: 'P',     format: 'CBT', startDate: '2026-11-04', endDate: '2026-11-15', registrationDeadline: '2026-09-30' },
-  // FSA November sitting
-  { examId: 'FSA-CFE101', format: 'CBT', startDate: '2026-11-06', endDate: null, registrationDeadline: '2026-10-13' },
-  { examId: 'FSA-INV201', format: 'CBT', startDate: '2026-11-06', endDate: null, registrationDeadline: '2026-10-13' },
-  { examId: 'FSA-GH101',  format: 'CBT', startDate: '2026-11-07', endDate: null, registrationDeadline: '2026-10-13' },
-  { examId: 'FSA-ILA101', format: 'CBT', startDate: '2026-11-07', endDate: null, registrationDeadline: '2026-10-13' },
-  { examId: 'FSA-GH201',  format: 'CBT', startDate: '2026-11-08', endDate: null, registrationDeadline: '2026-10-13' }, // GH 201-C
-  { examId: 'FSA-GH201',  format: 'CBT', startDate: '2026-11-08', endDate: null, registrationDeadline: '2026-10-13' }, // GH 201-U — deduped
-  { examId: 'FSA-GH301',  format: 'CBT', startDate: '2026-11-08', endDate: null, registrationDeadline: '2026-10-13' },
-  { examId: 'FSA-ILA201', format: 'CBT', startDate: '2026-11-08', endDate: null, registrationDeadline: '2026-10-13' }, // ILA 201-I
-  { examId: 'FSA-ILA201', format: 'CBT', startDate: '2026-11-08', endDate: null, registrationDeadline: '2026-10-13' }, // ILA 201-U — deduped
-  { examId: 'FSA-CP351',  format: 'CBT', startDate: '2026-11-09', endDate: null, registrationDeadline: '2026-10-13' },
-  { examId: 'FSA-RET101', format: 'CBT', startDate: '2026-11-09', endDate: null, registrationDeadline: '2026-10-13' },
-  { examId: 'FSA-RET301', format: 'CBT', startDate: '2026-11-09', endDate: null, registrationDeadline: '2026-10-13' },
-  { examId: 'FSA-CP312',  format: 'CBT', startDate: '2026-11-20', endDate: null, registrationDeadline: '2026-10-13' },
+  // FSA November sitting — dates per SOA's exam schedule (read 2026-10-30,
+  // which corrected the CSV's Nov 6–29 days). The page shows registration as
+  // "Closed"; the deadline is the CSV's.
+  { examId: 'FSA-CFE101', format: 'CBT', startDate: '2026-11-16', endDate: null, registrationDeadline: '2026-10-13' },
+  { examId: 'FSA-INV201', format: 'CBT', startDate: '2026-11-16', endDate: null, registrationDeadline: '2026-10-13' },
+  { examId: 'FSA-GH101',  format: 'CBT', startDate: '2026-11-17', endDate: null, registrationDeadline: '2026-10-13' },
+  { examId: 'FSA-ILA101', format: 'CBT', startDate: '2026-11-17', endDate: null, registrationDeadline: '2026-10-13' },
+  { examId: 'FSA-GH201',  format: 'CBT', startDate: '2026-11-18', endDate: null, registrationDeadline: '2026-10-13' }, // GH 201-C
+  { examId: 'FSA-GH201',  format: 'CBT', startDate: '2026-11-18', endDate: null, registrationDeadline: '2026-10-13' }, // GH 201-U — deduped
+  { examId: 'FSA-GH301',  format: 'CBT', startDate: '2026-11-18', endDate: null, registrationDeadline: '2026-10-13' },
+  { examId: 'FSA-ILA201', format: 'CBT', startDate: '2026-11-18', endDate: null, registrationDeadline: '2026-10-13' }, // ILA 201-I
+  { examId: 'FSA-ILA201', format: 'CBT', startDate: '2026-11-18', endDate: null, registrationDeadline: '2026-10-13' }, // ILA 201-U — deduped
+  { examId: 'FSA-CP311',  format: 'CBT', startDate: '2026-11-19', endDate: null, registrationDeadline: '2026-10-13' },
+  { examId: 'FSA-CP312',  format: 'CBT', startDate: '2026-11-19', endDate: null, registrationDeadline: '2026-10-13' },
+  { examId: 'FSA-CP321',  format: 'CBT', startDate: '2026-11-19', endDate: null, registrationDeadline: '2026-10-13' },
+  { examId: 'FSA-CP351',  format: 'CBT', startDate: '2026-11-19', endDate: null, registrationDeadline: '2026-10-13' },
+  { examId: 'FSA-RET101', format: 'CBT', startDate: '2026-11-19', endDate: null, registrationDeadline: '2026-10-13' },
+  { examId: 'FSA-RET301', format: 'CBT', startDate: '2026-11-19', endDate: null, registrationDeadline: '2026-10-13' },
+  { examId: 'FSA-GI101',  format: 'CBT', startDate: '2026-11-20', endDate: null, registrationDeadline: '2026-10-13' },
   { examId: 'FSA-GI201',  format: 'CBT', startDate: '2026-11-20', endDate: null, registrationDeadline: '2026-10-13' },
   { examId: 'FSA-INV101', format: 'CBT', startDate: '2026-11-20', endDate: null, registrationDeadline: '2026-10-13' },
-  { examId: 'FSA-CP311',  format: 'CBT', startDate: '2026-11-29', endDate: null, registrationDeadline: '2026-10-13' },
-  { examId: 'FSA-CP321',  format: 'CBT', startDate: '2026-11-29', endDate: null, registrationDeadline: '2026-10-13' },
   { examId: 'FM', format: 'CBT', startDate: '2026-12-03', endDate: '2026-12-14', registrationDeadline: '2026-11-04' },
 
   // ── SOA 2027 — the exam schedule's ASA tab, "through December 2027" ───────
@@ -170,6 +175,119 @@ export const EXAM_SITTINGS: ExamSitting[] = [
   { examId: 'FM', format: 'P/P', startDate: '2027-10-01', endDate: null,         registrationDeadline: '2027-08-31' },
   { examId: 'P',  format: 'CBT', startDate: '2027-11-03', endDate: '2027-11-14', registrationDeadline: '2027-10-05' },
   { examId: 'FM', format: 'CBT', startDate: '2027-12-02', endDate: '2027-12-13', registrationDeadline: '2027-11-02' },
+
+  // ── SOA 2027 — the other ASA exams (exam schedule, read 2026-10-30) ─────
+  { examId: 'SRM',   format: 'CBT', startDate: '2027-01-05', endDate: '2027-01-11', registrationDeadline: '2026-12-08' },
+  { examId: 'SRM',   format: 'P/P', startDate: '2027-01-05', endDate: null,         registrationDeadline: '2026-12-08' },
+  { examId: 'FAM',   format: 'CBT', startDate: '2027-02-18', endDate: '2027-02-24', registrationDeadline: '2027-01-19' },
+  { examId: 'FAM',   format: 'P/P', startDate: '2027-02-18', endDate: null,         registrationDeadline: '2027-01-19' },
+  { examId: 'PA',    format: 'CBT', startDate: '2027-04-13', endDate: '2027-04-16', registrationDeadline: '2027-03-16' },
+  { examId: 'ALTAM', format: 'CBT', startDate: '2027-04-20', endDate: null,         registrationDeadline: '2027-03-22' },
+  { examId: 'ASTAM', format: 'CBT', startDate: '2027-04-21', endDate: null,         registrationDeadline: '2027-03-22' },
+  { examId: 'SRM',   format: 'CBT', startDate: '2027-05-21', endDate: '2027-05-27', registrationDeadline: '2027-04-20' },
+  { examId: 'SRM',   format: 'P/P', startDate: '2027-05-21', endDate: null,         registrationDeadline: '2027-04-20' },
+  { examId: 'FAM',   format: 'CBT', startDate: '2027-07-13', endDate: '2027-07-19', registrationDeadline: '2027-06-15' },
+  { examId: 'FAM',   format: 'P/P', startDate: '2027-07-13', endDate: null,         registrationDeadline: '2027-06-15' },
+  { examId: 'SRM',   format: 'CBT', startDate: '2027-09-07', endDate: '2027-09-13', registrationDeadline: '2027-08-10' },
+  { examId: 'SRM',   format: 'P/P', startDate: '2027-09-07', endDate: null,         registrationDeadline: '2027-08-10' },
+  { examId: 'PA',    format: 'CBT', startDate: '2027-10-12', endDate: '2027-10-15', registrationDeadline: '2027-09-14' },
+  { examId: 'ALTAM', format: 'CBT', startDate: '2027-10-19', endDate: null,         registrationDeadline: '2027-09-20' },
+  { examId: 'ASTAM', format: 'CBT', startDate: '2027-10-20', endDate: null,         registrationDeadline: '2027-09-20' },
+  { examId: 'FAM',   format: 'CBT', startDate: '2027-10-22', endDate: '2027-10-28', registrationDeadline: '2027-09-21' },
+  { examId: 'FAM',   format: 'P/P', startDate: '2027-10-22', endDate: null,         registrationDeadline: '2027-09-21' },
+
+  // ── SOA 2027 — the exam schedule's FSA tab (read 2026-10-30) ────────────
+  // FSA March sitting
+  { examId: 'FSA-CFE101', format: 'CBT', startDate: '2027-03-15', endDate: null, registrationDeadline: '2027-02-15' },
+  { examId: 'FSA-CFE201', format: 'CBT', startDate: '2027-03-15', endDate: null, registrationDeadline: '2027-02-15' },
+  { examId: 'FSA-INV201', format: 'CBT', startDate: '2027-03-15', endDate: null, registrationDeadline: '2027-02-15' },
+  { examId: 'FSA-GH101',  format: 'CBT', startDate: '2027-03-16', endDate: null, registrationDeadline: '2027-02-15' },
+  { examId: 'FSA-ILA101', format: 'CBT', startDate: '2027-03-16', endDate: null, registrationDeadline: '2027-02-15' },
+  { examId: 'FSA-GH201',  format: 'CBT', startDate: '2027-03-17', endDate: null, registrationDeadline: '2027-02-15' }, // GH 201-C
+  { examId: 'FSA-GH201',  format: 'CBT', startDate: '2027-03-17', endDate: null, registrationDeadline: '2027-02-15' }, // GH 201-U — deduped
+  { examId: 'FSA-GH301',  format: 'CBT', startDate: '2027-03-17', endDate: null, registrationDeadline: '2027-02-15' },
+  { examId: 'FSA-ILA201', format: 'CBT', startDate: '2027-03-17', endDate: null, registrationDeadline: '2027-02-15' }, // ILA 201-I
+  { examId: 'FSA-ILA201', format: 'CBT', startDate: '2027-03-17', endDate: null, registrationDeadline: '2027-02-15' }, // ILA 201-U — deduped
+  { examId: 'FSA-CP311',  format: 'CBT', startDate: '2027-03-18', endDate: null, registrationDeadline: '2027-02-15' },
+  { examId: 'FSA-CP312',  format: 'CBT', startDate: '2027-03-18', endDate: null, registrationDeadline: '2027-02-15' },
+  { examId: 'FSA-CP341',  format: 'CBT', startDate: '2027-03-18', endDate: null, registrationDeadline: '2027-02-15' },
+  { examId: 'FSA-CP351',  format: 'CBT', startDate: '2027-03-18', endDate: null, registrationDeadline: '2027-02-15' },
+  { examId: 'FSA-GI301',  format: 'CBT', startDate: '2027-03-18', endDate: null, registrationDeadline: '2027-02-15' },
+  { examId: 'FSA-RET101', format: 'CBT', startDate: '2027-03-18', endDate: null, registrationDeadline: '2027-02-15' },
+  { examId: 'FSA-RET201', format: 'CBT', startDate: '2027-03-18', endDate: null, registrationDeadline: '2027-02-15' },
+  { examId: 'FSA-GI101',  format: 'CBT', startDate: '2027-03-19', endDate: null, registrationDeadline: '2027-02-15' },
+  { examId: 'FSA-GI201',  format: 'CBT', startDate: '2027-03-19', endDate: null, registrationDeadline: '2027-02-15' },
+  { examId: 'FSA-INV101', format: 'CBT', startDate: '2027-03-19', endDate: null, registrationDeadline: '2027-02-15' },
+  // FSA July sitting
+  { examId: 'FSA-CFE101', format: 'CBT', startDate: '2027-07-26', endDate: null, registrationDeadline: '2027-06-28' },
+  { examId: 'FSA-CFE201', format: 'CBT', startDate: '2027-07-26', endDate: null, registrationDeadline: '2027-06-28' },
+  { examId: 'FSA-INV201', format: 'CBT', startDate: '2027-07-26', endDate: null, registrationDeadline: '2027-06-28' },
+  { examId: 'FSA-GH101',  format: 'CBT', startDate: '2027-07-27', endDate: null, registrationDeadline: '2027-06-28' },
+  { examId: 'FSA-ILA101', format: 'CBT', startDate: '2027-07-27', endDate: null, registrationDeadline: '2027-06-28' },
+  { examId: 'FSA-GH201',  format: 'CBT', startDate: '2027-07-28', endDate: null, registrationDeadline: '2027-06-28' }, // GH 201-C
+  { examId: 'FSA-GH201',  format: 'CBT', startDate: '2027-07-28', endDate: null, registrationDeadline: '2027-06-28' }, // GH 201-U — deduped
+  { examId: 'FSA-GH301',  format: 'CBT', startDate: '2027-07-28', endDate: null, registrationDeadline: '2027-06-28' },
+  { examId: 'FSA-ILA201', format: 'CBT', startDate: '2027-07-28', endDate: null, registrationDeadline: '2027-06-28' }, // ILA 201-I
+  { examId: 'FSA-ILA201', format: 'CBT', startDate: '2027-07-28', endDate: null, registrationDeadline: '2027-06-28' }, // ILA 201-U — deduped
+  { examId: 'FSA-CP321',  format: 'CBT', startDate: '2027-07-29', endDate: null, registrationDeadline: '2027-06-28' },
+  { examId: 'FSA-CP341',  format: 'CBT', startDate: '2027-07-29', endDate: null, registrationDeadline: '2027-06-28' },
+  { examId: 'FSA-CP351',  format: 'CBT', startDate: '2027-07-29', endDate: null, registrationDeadline: '2027-06-28' },
+  { examId: 'FSA-GI301',  format: 'CBT', startDate: '2027-07-29', endDate: null, registrationDeadline: '2027-06-28' },
+  { examId: 'FSA-GI302',  format: 'CBT', startDate: '2027-07-29', endDate: null, registrationDeadline: '2027-06-28' },
+  { examId: 'FSA-RET101', format: 'CBT', startDate: '2027-07-29', endDate: null, registrationDeadline: '2027-06-28' },
+  { examId: 'FSA-RET201', format: 'CBT', startDate: '2027-07-29', endDate: null, registrationDeadline: '2027-06-28' },
+  { examId: 'FSA-RET301', format: 'CBT', startDate: '2027-07-29', endDate: null, registrationDeadline: '2027-06-28' },
+  { examId: 'FSA-GI101',  format: 'CBT', startDate: '2027-07-30', endDate: null, registrationDeadline: '2027-06-28' },
+  { examId: 'FSA-INV101', format: 'CBT', startDate: '2027-07-30', endDate: null, registrationDeadline: '2027-06-28' },
+  // FSA November sitting
+  { examId: 'FSA-CFE101', format: 'CBT', startDate: '2027-11-15', endDate: null, registrationDeadline: '2027-10-18' },
+  { examId: 'FSA-CFE201', format: 'CBT', startDate: '2027-11-15', endDate: null, registrationDeadline: '2027-10-18' },
+  { examId: 'FSA-INV201', format: 'CBT', startDate: '2027-11-15', endDate: null, registrationDeadline: '2027-10-18' },
+  { examId: 'FSA-GH101',  format: 'CBT', startDate: '2027-11-16', endDate: null, registrationDeadline: '2027-10-18' },
+  { examId: 'FSA-ILA101', format: 'CBT', startDate: '2027-11-16', endDate: null, registrationDeadline: '2027-10-18' },
+  { examId: 'FSA-GH201',  format: 'CBT', startDate: '2027-11-17', endDate: null, registrationDeadline: '2027-10-18' }, // GH 201-C
+  { examId: 'FSA-GH201',  format: 'CBT', startDate: '2027-11-17', endDate: null, registrationDeadline: '2027-10-18' }, // GH 201-U — deduped
+  { examId: 'FSA-GH301',  format: 'CBT', startDate: '2027-11-17', endDate: null, registrationDeadline: '2027-10-18' },
+  { examId: 'FSA-ILA201', format: 'CBT', startDate: '2027-11-17', endDate: null, registrationDeadline: '2027-10-18' }, // ILA 201-I
+  { examId: 'FSA-ILA201', format: 'CBT', startDate: '2027-11-17', endDate: null, registrationDeadline: '2027-10-18' }, // ILA 201-U — deduped
+  { examId: 'FSA-CP311',  format: 'CBT', startDate: '2027-11-18', endDate: null, registrationDeadline: '2027-10-18' },
+  { examId: 'FSA-CP312',  format: 'CBT', startDate: '2027-11-18', endDate: null, registrationDeadline: '2027-10-18' },
+  { examId: 'FSA-CP321',  format: 'CBT', startDate: '2027-11-18', endDate: null, registrationDeadline: '2027-10-18' },
+  { examId: 'FSA-CP341',  format: 'CBT', startDate: '2027-11-18', endDate: null, registrationDeadline: '2027-10-18' },
+  { examId: 'FSA-CP351',  format: 'CBT', startDate: '2027-11-18', endDate: null, registrationDeadline: '2027-10-18' },
+  { examId: 'FSA-GI302',  format: 'CBT', startDate: '2027-11-18', endDate: null, registrationDeadline: '2027-10-18' },
+  { examId: 'FSA-RET101', format: 'CBT', startDate: '2027-11-18', endDate: null, registrationDeadline: '2027-10-18' },
+  { examId: 'FSA-RET301', format: 'CBT', startDate: '2027-11-18', endDate: null, registrationDeadline: '2027-10-18' },
+  { examId: 'FSA-GI101',  format: 'CBT', startDate: '2027-11-19', endDate: null, registrationDeadline: '2027-10-18' },
+  { examId: 'FSA-GI201',  format: 'CBT', startDate: '2027-11-19', endDate: null, registrationDeadline: '2027-10-18' },
+  { examId: 'FSA-INV101', format: 'CBT', startDate: '2027-11-19', endDate: null, registrationDeadline: '2027-10-18' },
+
+  // ── CAS 2027 — "CAS Announces 2027 Exam Schedule" (2026-10-06) ──────────
+  // Registration windows are "to be announced in the Syllabus of Basic
+  // Education in the coming months", so no deadline is set yet.
+  { examId: 'MAS-I',    format: 'CBT', startDate: '2027-01-27', endDate: '2027-02-02', registrationDeadline: null },
+  { examId: 'MAS-II',   format: 'CBT', startDate: '2027-01-27', endDate: '2027-02-02', registrationDeadline: null },
+  // PCPA rows are the *project* windows; the exam half is sat on demand.
+  { examId: 'CAS-PCPA', format: 'Project', startDate: '2027-03-16', endDate: '2027-03-31', registrationDeadline: null },
+  { examId: 'CAS-5',    format: 'CBT', startDate: '2027-04-13', endDate: '2027-04-20', registrationDeadline: null },
+  { examId: 'CAS-6',    format: 'CBT', startDate: '2027-04-13', endDate: '2027-04-20', registrationDeadline: null }, // 6C, 6U — Exam 6I is sat in the fall only
+  { examId: 'CAS-7',    format: 'CBT', startDate: '2027-04-13', endDate: '2027-04-20', registrationDeadline: null },
+  { examId: 'CAS-8',    format: 'CBT', startDate: '2027-04-13', endDate: '2027-04-20', registrationDeadline: null },
+  { examId: 'CAS-9',    format: 'CBT', startDate: '2027-04-13', endDate: '2027-04-20', registrationDeadline: null },
+  { examId: 'MAS-I',    format: 'CBT', startDate: '2027-04-21', endDate: '2027-05-03', registrationDeadline: null },
+  { examId: 'MAS-II',   format: 'CBT', startDate: '2027-04-21', endDate: '2027-05-03', registrationDeadline: null },
+  { examId: 'CAS-PCPA', format: 'Project', startDate: '2027-06-15', endDate: '2027-06-30', registrationDeadline: null },
+  { examId: 'MAS-I',    format: 'CBT', startDate: '2027-07-28', endDate: '2027-08-03', registrationDeadline: null },
+  { examId: 'MAS-II',   format: 'CBT', startDate: '2027-07-28', endDate: '2027-08-03', registrationDeadline: null },
+  { examId: 'CAS-PCPA', format: 'Project', startDate: '2027-09-15', endDate: '2027-09-30', registrationDeadline: null },
+  { examId: 'CAS-5',    format: 'CBT', startDate: '2027-10-18', endDate: '2027-10-26', registrationDeadline: null },
+  { examId: 'CAS-6',    format: 'CBT', startDate: '2027-10-18', endDate: '2027-10-26', registrationDeadline: null }, // 6C, 6I, 6U
+  { examId: 'CAS-7',    format: 'CBT', startDate: '2027-10-18', endDate: '2027-10-26', registrationDeadline: null },
+  { examId: 'CAS-8',    format: 'CBT', startDate: '2027-10-18', endDate: '2027-10-26', registrationDeadline: null },
+  { examId: 'CAS-9',    format: 'CBT', startDate: '2027-10-18', endDate: '2027-10-26', registrationDeadline: null },
+  { examId: 'MAS-I',    format: 'CBT', startDate: '2027-10-27', endDate: '2027-11-04', registrationDeadline: null },
+  { examId: 'MAS-II',   format: 'CBT', startDate: '2027-10-27', endDate: '2027-11-04', registrationDeadline: null },
+  { examId: 'CAS-PCPA', format: 'Project', startDate: '2027-12-16', endDate: '2027-12-31', registrationDeadline: null },
 ]
 
 /**

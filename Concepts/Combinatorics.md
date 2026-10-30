@@ -2,12 +2,15 @@
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-09-27
+  last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:43997ee99a992611bab52dac4e7920c82aca9d866a959fea78cd6956020574c0
+  content_hash: sha256:ed7c38e69596655409769c9c82963d237fa6d7de02f96cff2b2a4f5bc74cbb61
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Def. 1.3 p.25 (PDF p.33); §3.1 Def. 3.2, Thms 3.1-3.2 p.80 (PDF p.88); §3.2 Thm 3.5 and n!/(j!(n-j)!) pp.94-95 (PDF pp.102-103), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "SOA, Probability Exam (Exam P) syllabus, November 2026, p.1 learning outcome 1b, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.1 A Counting Technique p.76 (PDF p.84); Ex. 3.6 Poker Hands p.95 (PDF p.103); Historical Remarks, derangements w_1=0, w_2=1 (PDF pp.93-94), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "H. Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), fetched 2026-10-30, §2.1.0 Counting (multiplication principle) sha256:342319616112f470d1ff3cef050a29341a88a548e285cb6a328a2729d52b50df — https://www.probabilitycourse.com/chapter2/2_1_0_counting.php; §2.1.1 Ordered Sampling with Replacement (n options for each of k positions) sha256:fa301b74fb68f1fa983074b20a905e02c78520c4d5881b98cef798b9b9fce90a — https://www.probabilitycourse.com/chapter2/2_1_1_ordered_with_replacement.php; §2.1.2 Ordered Sampling without Replacement sha256:ea03a74b8351fba96d351a027350a67fa84dbc937f05aa938c98ea34ee33cdb0 — https://www.probabilitycourse.com/chapter2/2_1_2_ordered_without_replacement.php"
+    - "K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), fetched 2026-10-30, Finite Sampling Models §6 The Matching Problem (derangements; b_n(0) = n! Σ (-1)^j/j! by inclusion-exclusion with #{X_i=i, i∈J} = (n-j)! and C(n,j) sets J) sha256:6c44b9152bd3fe3f4e53e442c55bb21d299ee229e7ae996e5bb893b424b2857f — https://www.randomservices.org/random/urn/Matching.html; §1 Introduction (X_i uniformly distributed on D for each i) sha256:32cb2b68070d4a61c61ff3772b9eb371ed582196aa3d7ec4ad65c254056d22fe — https://www.randomservices.org/random/urn/Introduction.html; §4 Order Statistics (given X_i = x, X_j uniform on D∖{x}) sha256:8b4b38e1ca6a79fcc598b1bebf75fc7b9694f0592411d2ef539a6c727f139c77 — https://www.randomservices.org/random/urn/OrderStatistics.html; Foundations §1.8 Combinatorial Structures, round-table exercise ('Seat one, distinguished person arbitrarily') sha256:63ef90fd651593defb33d7772ecbe92f6198b6b655219a5cb726c76cdc393ccb — https://www.randomservices.org/random/foundations/Structures.html"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Combinatorics.md
@@ -44,7 +47,7 @@ A **derangement** is a permutation of $n$ items with no fixed point: no item sta
 > $$D_n = n!\sum_{k=0}^{n}\frac{(-1)^k}{k!}$$
 
 - For example, $D_3 = 3!\left(1 - 1 + \tfrac{1}{2} - \tfrac{1}{6}\right) = 2$: of the six orderings of three items, only the two cyclic shifts move every item.
-- The probability that a random permutation of $n$ items has no fixed point is $D_n/n!$, which is about $1/e \approx 0.368$ once $n$ is moderately large.
+- The probability that a random permutation of $n$ items has no fixed point is $D_n/n!$.
 
 > [!example]- Counting strings with exactly one pair {Example}
 > How many 4-digit strings (digits 0 to 9, leading zeros allowed) contain one digit exactly twice and two other digits once each?

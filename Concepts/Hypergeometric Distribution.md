@@ -2,13 +2,16 @@
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-09-28
+  last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:443b7b3712706f9080db1bdacc62f91591c91c6ced5995ec945560083a1f5be8
+  content_hash: sha256:f035130a5a83e87bfb5f494ede6d4d0ac85a801e69781f8563ab4288a3217988
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), 5.1 hypergeometric h(N,k,n,x)=C(k,x)C(N-k,n-x)/C(N,n) p.193 (PDF p.201), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services, UAH), The Hypergeometric Distribution, Moments section: E(Y) = n r/m, var(Y) = n (r/m)(1 - r/m)(m - n)/(m - 1), fetched 2026-09-27, sha256:56414fcd41140fbad38e3e39034536cd06144012f8457ed797740bec97e44487 — https://www.randomservices.org/random/urn/Hypergeometric.html"
     - "H. Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), fetched 2026-09-27, 3.1.5 hypergeometric range max(0,k-r)..min(k,b), sha256:bccbfaa60f1813544eb18810fd601ea98e2e89e80c5d50f76aa6ea10a6096a72 — https://www.probabilitycourse.com/chapter3/3_1_5_special_discrete_distr.php; 3.2.5 EX=kb/(b+r), sha256:71f926e8d746785af219018a406d4b28b9aac9e283a7c501119fc6c94584f86e — https://www.probabilitycourse.com/chapter3/3_2_5_solved3_2.php"
+    - "K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), fetched 2026-10-30, Finite Sampling Models §3 The Multivariate Hypergeometric Distribution (joint pdf; grouping 'preserved when the counting variables are combined'; conditional distribution given (Y_j: j∈B) multivariate hypergeometric with (m_i: i∈A) and z) sha256:ce429ccb0682c9be25603fb52bab837daa32b2910c2aeba0603daf193a8cf978 — https://www.randomservices.org/random/urn/MultiHypergeometric.html"
+    - "K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), fetched 2026-10-30, Finite Sampling Models §8 Pólya's Urn Process ('c = -1 corresponds to sampling without replacement'; P(X_{n+1}=1 | k reds in n) = (a+kc)/(a+b+nc); trial number of the kth red ball: 'V_k = n if and only if Y_{n-1} = k-1 and X_n = 1', P(V_k=n) = P(Y_{n-1}=k-1)P(X_n=1 | Y_{n-1}=k-1)) sha256:5353056b0885451d1520fc843eeddc037e28d2d364bf019e780d2878e5e64918 — https://www.randomservices.org/random/urn/Polya.html"
+    - "K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), fetched 2026-10-30, Bernoulli Trials §2 The Binomial Distribution (given Y_n = k, P[(X_1..X_n)=x | Y_n=k] = 1/C(n,k), 'does not depend on p'; successes 'a random sample of size k chosen without replacement') sha256:223ab179871c6da69d1e68811192935c2f12d9762a62de02336f446dd47b10b9 — https://www.randomservices.org/random/bernoulli/Binomial.html"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Hypergeometric Distribution.md

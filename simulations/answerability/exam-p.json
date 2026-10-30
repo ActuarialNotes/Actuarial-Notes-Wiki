@@ -1820,7 +1820,15 @@
      "statement": "When n independent trials each fall into one of several categories with fixed probabilities, the counts in each category follow a multinomial distribution (trinomial for three categories).",
      "concept": "Multinomial Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Multivariate Distribution",
+      "quote": "the category counts $(N_1, \\ldots, N_k)$ have a multinomial distribution (a trinomial for $k = 3$)",
+      "note": "written from H. Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), fetched 2026-10-30, §2.1.3 Multinomial Coefficients and the multinomial formula (n!/(n_1!...n_r!) p_1^n_1...p_r^n_r for n independent trials) sha256:79bf0f32ecb9598045e409b9da0c99549342938e45c43ee75fbea7fc47c52911 — https://www.probabilitycourse.com/chapter2/2_1_3_unordered_without_replacement.php; K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), fetched 2026-10-30, Bernoulli Trials, The Multinomial Distribution (independent trials wit",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w2"
+     }
     },
     {
      "id": "r2",
@@ -1828,7 +1836,15 @@
      "statement": "The multinomial probability of counts (n1,...,nk) in n trials is n!/(n1!...nk!) times p1^n1 ... pk^nk.",
      "concept": "Multinomial Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Multivariate Distribution",
+      "quote": "P(N_1 = n_1, \\ldots, N_k = n_k) = \\frac{n!}{n_1! \\cdots n_k!}\\,p_1^{n_1} \\cdots p_k^{n_k}",
+      "note": "written from H. Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), fetched 2026-10-30, §2.1.3 Multinomial Coefficients and the multinomial formula (n!/(n_1!...n_r!) p_1^n_1...p_r^n_r for n independent trials) sha256:79bf0f32ecb9598045e409b9da0c99549342938e45c43ee75fbea7fc47c52911 — https://www.probabilitycourse.com/chapter2/2_1_3_unordered_without_replacement.php; K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), fetched 2026-10-30, Bernoulli Trials, The Multinomial Distribution (independent trials wit",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w2"
+     }
     },
     {
      "id": "r3",
@@ -6644,7 +6660,15 @@
      "statement": "Multiplication rule: if a selection is made in successive stages with m1, m2, ... choices at each stage, the total number of outcomes is the product m1*m2*....",
      "concept": "Fundamental Counting Principle",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Combinatorics",
+      "quote": "the number of outcomes is the product of the number of choices at each stage",
+      "note": "written from Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.1 'A Counting Technique' p.76 (PDF p.84), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf; H. Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), fetched 2026-10-30, §2.1 Counting, Multiplication Principle, sha256:342319616112f470d1ff3cef050a29341a88a548e285cb6a328a2729d52b50df — https://www.probabilitycourse.com/chapter2/2_1_0_counting.php; checked in the w2 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w2"
+     }
     }
    ]
   },
@@ -8001,7 +8025,15 @@
      "statement": "The multivariate hypergeometric probability of drawing k1,...,km from groups of sizes N1,...,Nm in a sample of size n is the product of C(Ni,ki) over groups divided by C(N,n).",
      "concept": "Hypergeometric Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Hypergeometric Distribution",
+      "quote": "is the product of the binomial coefficients for each type's count divided by the binomial coefficient for the whole sample",
+      "note": "written from K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), fetched 2026-10-30, Finite Sampling Models §3 The Multivariate Hypergeometric Distribution (joint PDF prod C(m_i,y_i)/C(m,n); grouping: 'preserved when the counting variables are combined', marginal Y_i hypergeometric with m, m_i, n) sha256:ce429ccb0682c9be25603fb52bab837daa32b2910c2aeba0603daf193a8cf978 — https://www.randomservices.org/random/urn/MultiHypergeometric.html; Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version) §5.1 hypergeometric p.193 (PDF p",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w2"
+     }
     },
     {
      "id": "r3",
@@ -9853,7 +9885,15 @@
      "statement": "The event that the k-th success occurs exactly on draw n (sampling without replacement) is equivalent to having exactly k-1 successes in the first n-1 draws and a success on draw n.",
      "concept": "Negative Hypergeometric Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Hypergeometric Distribution",
+      "quote": "the $k$-th success occurs exactly on draw $n$ if and only if the first $n-1$ draws contain exactly $k-1$ successes and draw $n$ is a success",
+      "note": "written from Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version) §5.1 hypergeometric h(N,k,n,x) p.193 (PDF p.201), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf; K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), fetched 2026-10-30, Finite Sampling Models §1 Introduction (sampling without replacement: ordered sample uniform on permutations, exchangeable) sha256:32cb2b68070d4a61c61ff3772b9eb371ed582196aa3d7ec4ad65c254056d22fe — https://www.random",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w2"
+     }
     },
     {
      "id": "r2",
@@ -12508,7 +12548,15 @@
      "statement": "The multiplication principle: when a selection is made in successive stages, the total number of outcomes is the product of the number of choices at each stage.",
      "concept": "Fundamental Counting Principle",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Combinatorics",
+      "quote": "the number of outcomes is the product of the number of choices at each stage",
+      "note": "written from Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.1 'A Counting Technique' p.76 (PDF p.84), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf; H. Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), fetched 2026-10-30, §2.1 Counting, Multiplication Principle, sha256:342319616112f470d1ff3cef050a29341a88a548e285cb6a328a2729d52b50df — https://www.probabilitycourse.com/chapter2/2_1_0_counting.php; checked in the w2 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w2"
+     }
     },
     {
      "id": "r3",
@@ -13046,7 +13094,15 @@
      "statement": "A derangement is a permutation of n items in which no item remains in its original position; the number of derangements of n items is denoted D_n (e.g., D_4 = 9).",
      "concept": "Derangements",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Combinatorics",
+      "quote": "A derangement is a permutation of $n$ items with no fixed point: no item stays in its original position. The number of derangements of $n$ items is written $D_n$.",
+      "note": "written from K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), fetched 2026-10-30, Finite Sampling Models §5 The Matching Problem (derangements; b_n(0) = n! sum_(j=0..n) (-1)^j/j! by inclusion-exclusion, #{X_i=i for i in J} = (n-j)!, C(n,j) subsets) sha256:6c44b9152bd3fe3f4e53e442c55bb21d299ee229e7ae996e5bb893b424b2857f — https://www.randomservices.org/random/urn/Matching.html; Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.1 Historical Remarks (derangements, w_1=0, w_2=1, p_n ~ 1/e) pp.85-86 (PDF pp.93-94) a",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w2"
+     }
     },
     {
      "id": "r2",
@@ -13054,7 +13110,15 @@
      "statement": "The number of derangements of n items is D_n = n! * sum_{k=0}^{n} (-1)^k / k!, so the probability that a random permutation of n items has no fixed point is D_n / n!.",
      "concept": "Derangements",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Combinatorics",
+      "quote": "D_n = n!\\sum_{k=0}^{n}\\frac{(-1)^k}{k!}",
+      "note": "written from K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), fetched 2026-10-30, Finite Sampling Models §5 The Matching Problem (derangements; b_n(0) = n! sum_(j=0..n) (-1)^j/j! by inclusion-exclusion, #{X_i=i for i in J} = (n-j)!, C(n,j) subsets) sha256:6c44b9152bd3fe3f4e53e442c55bb21d299ee229e7ae996e5bb893b424b2857f — https://www.randomservices.org/random/urn/Matching.html; Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.1 Historical Remarks (derangements, w_1=0, w_2=1, p_n ~ 1/e) pp.85-86 (PDF pp.93-94) a",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w2"
+     }
     },
     {
      "id": "r3",
@@ -21620,7 +21684,15 @@
      "statement": "To count outcomes with exactly two matching dice, use the multiplication principle: choose the repeated value, choose which two dice form the pair, then choose a different value for the remaining die, and multiply the counts.",
      "concept": "Counting Principles",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Combinatorics",
+      "quote": "choose the repeated value, then choose which positions hold it, then fill the remaining positions with different values, and multiply the counts",
+      "note": "written from Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.1 'A Counting Technique' p.76 (PDF p.84) and §3.2 Ex. 3.6 Poker Hands (value, then cards of that value, then the rest, multiplied) p.95 (PDF p.103), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf; checked in the w2 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w2"
+     }
     }
    ]
   },
@@ -25156,7 +25228,15 @@
      "statement": "When sampling without replacement from a finite population divided into categories, the counts of each category in the sample follow a multivariate hypergeometric distribution.",
      "concept": "Multivariate Hypergeometric Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Hypergeometric Distribution",
+      "quote": "When sampling without replacement from a finite population divided into categories, the counts of each category in the sample follow a multivariate hypergeometric distribution.",
+      "note": "written from K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), fetched 2026-10-30, Finite Sampling Models §3 The Multivariate Hypergeometric Distribution (joint PDF prod C(m_i,y_i)/C(m,n); grouping: 'preserved when the counting variables are combined', marginal Y_i hypergeometric with m, m_i, n) sha256:ce429ccb0682c9be25603fb52bab837daa32b2910c2aeba0603daf193a8cf978 — https://www.randomservices.org/random/urn/MultiHypergeometric.html; Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version) §5.1 hypergeometric p.193 (PDF p",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w2"
+     }
     },
     {
      "id": "r2",
@@ -25164,7 +25244,15 @@
      "statement": "The probability of drawing a given combination of category counts without replacement is the product of binomial coefficients for each category's count divided by the binomial coefficient for the total sample from the total population.",
      "concept": "Hypergeometric Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Hypergeometric Distribution",
+      "quote": "is the product of the binomial coefficients for each type's count divided by the binomial coefficient for the whole sample",
+      "note": "written from K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), fetched 2026-10-30, Finite Sampling Models §3 The Multivariate Hypergeometric Distribution (joint PDF prod C(m_i,y_i)/C(m,n); grouping: 'preserved when the counting variables are combined', marginal Y_i hypergeometric with m, m_i, n) sha256:ce429ccb0682c9be25603fb52bab837daa32b2910c2aeba0603daf193a8cf978 — https://www.randomservices.org/random/urn/MultiHypergeometric.html; Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version) §5.1 hypergeometric p.193 (PDF p",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w2"
+     }
     },
     {
      "id": "r3",
@@ -25189,7 +25277,15 @@
      "statement": "Conditioning on the count of one category in a fixed-size sample without replacement leaves the remaining draws to be made from the other categories only, with each remaining draw spread across those categories in proportion to their sizes in the population.",
      "concept": "Conditional Distribution of Hypergeometric Counts",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Hypergeometric Distribution",
+      "quote": "given that $k_1$ of the $n$ draws fell in type 1, the other $n - k_1$ draws are a sample without replacement from the $N - K_1$ items outside type 1",
+      "note": "written from K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), fetched 2026-10-30, Finite Sampling Models §3 The Multivariate Hypergeometric Distribution (conditional distribution given (Y_j = y_j: j in B) is multivariate hypergeometric with parameters (m_i: i in A) and z = n - sum y_j) sha256:ce429ccb0682c9be25603fb52bab837daa32b2910c2aeba0603daf193a8cf978 — https://www.randomservices.org/random/urn/MultiHypergeometric.html; checked in the w2 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w2"
+     }
     },
     {
      "id": "r5",
@@ -25560,7 +25656,15 @@
      "statement": "Given that exactly k of d independent, equally likely events occur (each file equally likely to be corrupted), every subset of size k is equally likely, so the set of occurring events is a simple random sample of size k without replacement from the d items.",
      "concept": "Conditional Probability",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Hypergeometric Distribution",
+      "quote": "So the affected set is a simple random sample of size $k$ drawn without replacement from the $n$ items",
+      "note": "written from K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), fetched 2026-10-30, Bernoulli Trials §2 The Binomial Distribution (P[(X_1..X_n)=(x_1..x_n) | Y_n=k] = 1/C(n,k), 'does not depend on p'; 'Given Y_n = k, the trial numbers of the successes form a random sample of size k chosen without replacement from {1,...,n}'; Y_m given Y_n=k hypergeometric with population n, type 1 size m, sample size k) sha256:223ab179871c6da69d1e68811192935c2f12d9762a62de02336f446dd47b10b9 — https://www.randomservices.org/random/bernoulli/Binomial.html; checked in th",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w2"
+     }
     },
     {
      "id": "r2",
@@ -25734,7 +25838,15 @@
      "statement": "A derangement is a permutation of n items in which no item appears in its original position (no fixed points).",
      "concept": "Derangement",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Combinatorics",
+      "quote": "A derangement is a permutation of $n$ items with no fixed point: no item stays in its original position.",
+      "note": "written from K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), fetched 2026-10-30, Finite Sampling Models §5 The Matching Problem (derangements; b_n(0) = n! sum_(j=0..n) (-1)^j/j! by inclusion-exclusion, #{X_i=i for i in J} = (n-j)!, C(n,j) subsets) sha256:6c44b9152bd3fe3f4e53e442c55bb21d299ee229e7ae996e5bb893b424b2857f — https://www.randomservices.org/random/urn/Matching.html; Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.1 Historical Remarks (derangements, w_1=0, w_2=1, p_n ~ 1/e) pp.85-86 (PDF pp.93-94) a",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w2"
+     }
     },
     {
      "id": "r2",
@@ -25771,7 +25883,15 @@
      "statement": "Inclusion-exclusion: the number of permutations with at least one fixed point is the alternating sum over k of (-1)^(k+1) * C(n,k) * (n-k)!, where C(n,k)(n-k)! counts permutations fixing a chosen set of k items.",
      "concept": "Inclusion-Exclusion Principle",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Combinatorics",
+      "quote": "the number of permutations with at least one fixed point is the alternating sum",
+      "note": "written from K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), fetched 2026-10-30, Finite Sampling Models §5 The Matching Problem (derangements; b_n(0) = n! sum_(j=0..n) (-1)^j/j! by inclusion-exclusion, #{X_i=i for i in J} = (n-j)!, C(n,j) subsets) sha256:6c44b9152bd3fe3f4e53e442c55bb21d299ee229e7ae996e5bb893b424b2857f — https://www.randomservices.org/random/urn/Matching.html; Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.1 Historical Remarks (derangements, w_1=0, w_2=1, p_n ~ 1/e) pp.85-86 (PDF pp.93-94) a",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w2"
+     }
     },
     {
      "id": "r5",
@@ -25779,7 +25899,15 @@
      "statement": "The number of permutations that fix a specified set of k items is (n-k)!, since the remaining n-k items can be arranged arbitrarily.",
      "concept": "Permutations",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Permutation",
+      "quote": "the number of permutations of $n$ distinct items that leave a specified set of $k$ items in their original positions is $(n-k)!$, since the remaining $n-k$ items can be arranged arbitrarily",
+      "note": "written from K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), fetched 2026-10-30, Finite Sampling Models §5 The Matching Problem ('if J subset D_n with #(J)=j then #{X_i=i for all i in J} = (n-j)!'; number of such J is C(n,j)) sha256:6c44b9152bd3fe3f4e53e442c55bb21d299ee229e7ae996e5bb893b424b2857f — https://www.randomservices.org/random/urn/Matching.html; Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version) §3.2 Ex. 3.12 p.105 (PDF p.113), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w2"
+     }
     }
    ]
   },
@@ -26827,7 +26955,15 @@
      "statement": "Selecting items without replacement from a finite population divided into several types, and asking for specified counts of each type, follows the multivariate hypergeometric distribution.",
      "concept": "Hypergeometric Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Hypergeometric Distribution",
+      "quote": "When sampling without replacement from a finite population divided into categories, the counts of each category in the sample follow a multivariate hypergeometric distribution.",
+      "note": "written from K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), fetched 2026-10-30, Finite Sampling Models §3 The Multivariate Hypergeometric Distribution (joint PDF prod C(m_i,y_i)/C(m,n); grouping: 'preserved when the counting variables are combined', marginal Y_i hypergeometric with m, m_i, n) sha256:ce429ccb0682c9be25603fb52bab837daa32b2910c2aeba0603daf193a8cf978 — https://www.randomservices.org/random/urn/MultiHypergeometric.html; Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version) §5.1 hypergeometric p.193 (PDF p",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w2"
+     }
     },
     {
      "id": "r2",
@@ -26835,7 +26971,15 @@
      "statement": "The multivariate hypergeometric probability of drawing k_i items from each type i is the product of C(N_i, k_i) over the types divided by C(N, n), where N is the population size and n the sample size.",
      "concept": "Hypergeometric Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Hypergeometric Distribution",
+      "quote": "the probability of exactly $k_1, \\ldots, k_m$ of each type ($k_1 + \\cdots + k_m = n$) is the product of the binomial coefficients for each type's count divided by the binomial coefficient for the whole sample",
+      "note": "written from K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), fetched 2026-10-30, Finite Sampling Models §3 The Multivariate Hypergeometric Distribution (joint PDF prod C(m_i,y_i)/C(m,n); grouping: 'preserved when the counting variables are combined', marginal Y_i hypergeometric with m, m_i, n) sha256:ce429ccb0682c9be25603fb52bab837daa32b2910c2aeba0603daf193a8cf978 — https://www.randomservices.org/random/urn/MultiHypergeometric.html; Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version) §5.1 hypergeometric p.193 (PDF p",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w2"
+     }
     },
     {
      "id": "r3",
@@ -28476,7 +28620,15 @@
      "statement": "Multiplication (fundamental counting) principle: when a task is built in independent stages, the total number of outcomes is the product of the number of choices at each stage.",
      "concept": "Fundamental Counting Principle",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Combinatorics",
+      "quote": "the number of outcomes is the product of the number of choices at each stage",
+      "note": "written from Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.1 'A Counting Technique' p.76 (PDF p.84), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf; H. Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), fetched 2026-10-30, §2.1 Counting, Multiplication Principle, sha256:342319616112f470d1ff3cef050a29341a88a548e285cb6a328a2729d52b50df — https://www.probabilitycourse.com/chapter2/2_1_0_counting.php; checked in the w2 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w2"
+     }
     },
     {
      "id": "r4",
@@ -28484,7 +28636,15 @@
      "statement": "When characters may repeat (not necessarily distinct), each of the m positions independently has n choices, giving n^m arrangements (sampling with replacement).",
      "concept": "Counting with Repetition",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Combinatorics",
+      "quote": "each of the $m$ positions independently has $n$ choices, giving $n^m$ ordered arrangements",
+      "note": "written from H. Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), fetched 2026-10-30, §2.1.1 Ordered Sampling with Replacement (n^k) sha256:fa301b74fb68f1fa983074b20a905e02c78520c4d5881b98cef798b9b9fce90a — https://www.probabilitycourse.com/chapter2/2_1_1_ordered_with_replacement.php; §2.1.2 P^n_k = n!/(n-k)! sha256:ea03a74b8351fba96d351a027350a67fa84dbc937f05aa938c98ea34ee33cdb0 — https://www.probabilitycourse.com/chapter2/2_1_2_ordered_without_replacement.php; checked in the w2 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w2"
+     }
     },
     {
      "id": "r5",
@@ -30562,7 +30722,15 @@
      "statement": "When only one category matters, combine all other categories into a single 'other' group to reduce a multi-category problem to a two-category one.",
      "concept": "Hypergeometric Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Hypergeometric Distribution",
+      "quote": "when only one category matters, combine all the other categories into a single \"other\" group",
+      "note": "written from K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), fetched 2026-10-30, Finite Sampling Models §3 The Multivariate Hypergeometric Distribution (joint PDF prod C(m_i,y_i)/C(m,n); grouping: 'preserved when the counting variables are combined', marginal Y_i hypergeometric with m, m_i, n) sha256:ce429ccb0682c9be25603fb52bab837daa32b2910c2aeba0603daf193a8cf978 — https://www.randomservices.org/random/urn/MultiHypergeometric.html; Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version) §5.1 hypergeometric p.193 (PDF p",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w2"
+     }
     },
     {
      "id": "r4",
@@ -33760,7 +33928,15 @@
      "statement": "If independent trials share the same success probability, then conditional on the number of successes, the set of successes is equally likely to be any subset of that size, i.e. a simple random sample without replacement from the population.",
      "concept": "Conditional Probability",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Hypergeometric Distribution",
+      "quote": "So the affected set is a simple random sample of size $k$ drawn without replacement from the $n$ items",
+      "note": "written from K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), fetched 2026-10-30, Bernoulli Trials §2 The Binomial Distribution (P[(X_1..X_n)=(x_1..x_n) | Y_n=k] = 1/C(n,k), 'does not depend on p'; 'Given Y_n = k, the trial numbers of the successes form a random sample of size k chosen without replacement from {1,...,n}'; Y_m given Y_n=k hypergeometric with population n, type 1 size m, sample size k) sha256:223ab179871c6da69d1e68811192935c2f12d9762a62de02336f446dd47b10b9 — https://www.randomservices.org/random/bernoulli/Binomial.html; checked in th",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w2"
+     }
     },
     {
      "id": "r2",
@@ -35509,7 +35685,15 @@
      "statement": "When selections are made independently from disjoint categories, the total number of selections is the product of the number of ways for each category (multiplication rule).",
      "concept": "Fundamental Counting Principle",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Combination",
+      "quote": "the number of such selections is the product of the number of ways for each category",
+      "note": "written from K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), fetched 2026-10-30, Finite Sampling Models §3 The Multivariate Hypergeometric Distribution (C(m_i,y_i) subsets of type i, multiplication principle, divided by C(m,n)) sha256:ce429ccb0682c9be25603fb52bab837daa32b2910c2aeba0603daf193a8cf978 — https://www.randomservices.org/random/urn/MultiHypergeometric.html; K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), fetched 2026-10-30, Foundations, Combinatorial Structures (committee with exactly j men",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w2"
+     }
     },
     {
      "id": "r5",
@@ -35517,7 +35701,15 @@
      "statement": "When the specified category counts in a selection sum to less than the group size, the remaining members must be chosen from the leftover category (those with none of the attributes), adding a combination factor for them.",
      "concept": "Counting with Constrained Selections",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Combination",
+      "quote": "when the counts asked for sum to less than the selection size, the remaining members are chosen from the leftover category (those with none of the attributes), which adds a combination factor for them",
+      "note": "written from K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), fetched 2026-10-30, Finite Sampling Models §3 The Multivariate Hypergeometric Distribution (C(m_i,y_i) subsets of type i, multiplication principle, divided by C(m,n)) sha256:ce429ccb0682c9be25603fb52bab837daa32b2910c2aeba0603daf193a8cf978 — https://www.randomservices.org/random/urn/MultiHypergeometric.html; K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), fetched 2026-10-30, Foundations, Combinatorial Structures (committee with exactly j men",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w2"
+     }
     }
    ]
   },
@@ -36132,7 +36324,15 @@
      "statement": "When independent trials all share the same success probability, conditioning on exactly k successes among n makes the set of k successful trials equally likely to be any of the C(n,k) subsets, i.e. a simple random sample without replacement, and the common probability drops out.",
      "concept": "Conditional Probability",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Hypergeometric Distribution",
+      "quote": "given that exactly $k$ of them have it, every one of the $\\binom{n}{k}$ subsets of size $k$ is equally likely to be the affected set",
+      "note": "written from K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), fetched 2026-10-30, Bernoulli Trials §2 The Binomial Distribution (P[(X_1..X_n)=(x_1..x_n) | Y_n=k] = 1/C(n,k), 'does not depend on p'; 'Given Y_n = k, the trial numbers of the successes form a random sample of size k chosen without replacement from {1,...,n}'; Y_m given Y_n=k hypergeometric with population n, type 1 size m, sample size k) sha256:223ab179871c6da69d1e68811192935c2f12d9762a62de02336f446dd47b10b9 — https://www.randomservices.org/random/bernoulli/Binomial.html; checked in th",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w2"
+     }
     },
     {
      "id": "r2",
@@ -37300,7 +37500,15 @@
      "statement": "When people are seated randomly, every seat is equally likely for a given person, so the position of one person can be fixed by symmetry and the other person is equally likely to occupy any remaining seat.",
      "concept": "Equally Likely Outcomes",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Combinatorics",
+      "quote": "one person's position can be fixed without loss of generality; another given person is then equally likely to occupy each of the remaining positions",
+      "note": "written from K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), fetched 2026-10-30, Finite Sampling Models §1 Introduction, The Exchangeable Property ('X_i is uniformly distributed on D for each i') sha256:32cb2b68070d4a61c61ff3772b9eb371ed582196aa3d7ec4ad65c254056d22fe — https://www.randomservices.org/random/urn/Introduction.html; §4 Order Statistics ('given X_i = x, X_j is uniformly distributed on D \\ {x}') sha256:8b4b38e1ca6a79fcc598b1bebf75fc7b9694f0592411d2ef539a6c727f139c77 — https://www.randomservices.org/random/urn/OrderStatistics.html; Found",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w2"
+     }
     },
     {
      "id": "r2",
@@ -37322,7 +37530,15 @@
      "statement": "The number of distinct arrangements of n distinct objects around a circle, counted up to rotation, is (n-1)!.",
      "concept": "Circular Permutations",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Permutation",
+      "quote": "the number of distinct arrangements of $n$ distinct objects around a circle, counting arrangements that differ only by a rotation as the same, is $(n-1)!$",
+      "note": "written from K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), fetched 2026-10-30, Foundations, Combinatorial Structures, Arrangements exercise ('n people ... seated at a round table ... (n-1)!. Seat one, distinguished person arbitrarily') sha256:63ef90fd651593defb33d7772ecbe92f6198b6b655219a5cb726c76cdc393ccb — https://www.randomservices.org/random/foundations/Structures.html; checked in the w2 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w2"
+     }
     },
     {
      "id": "r4",
@@ -37330,7 +37546,15 @@
      "statement": "To count arrangements where certain items must be adjacent, treat them as a single block, arrange the resulting units, and multiply by the number of internal orderings of the block.",
      "concept": "Permutations",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Permutation",
+      "quote": "glue them into a single block, count the arrangements of the block together with the other items, and multiply by the number of orderings inside the block",
+      "note": "written from K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), fetched 2026-10-30, Foundations, Combinatorial Structures, Arrangements exercises (four couples in a row, 'the men must sit together': 2880 = 5!·4!; twelve books, 'the math books must be together': 4,838,400 = 8!·5!) sha256:63ef90fd651593defb33d7772ecbe92f6198b6b655219a5cb726c76cdc393ccb — https://www.randomservices.org/random/foundations/Structures.html; checked in the w2 fact check",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w2"
+     }
     },
     {
      "id": "r5",
@@ -38697,7 +38921,15 @@
      "statement": "If each item independently has the same probability of an event, then conditional on exactly k items having the event, the set of k affected items is equally likely to be any k-subset of the n items (a simple random sample without replacement).",
      "concept": "Binomial Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Hypergeometric Distribution",
+      "quote": "given that exactly $k$ of them have it, every one of the $\\binom{n}{k}$ subsets of size $k$ is equally likely to be the affected set",
+      "note": "written from K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), fetched 2026-10-30, Bernoulli Trials §2 The Binomial Distribution (P[(X_1..X_n)=(x_1..x_n) | Y_n=k] = 1/C(n,k), 'does not depend on p'; 'Given Y_n = k, the trial numbers of the successes form a random sample of size k chosen without replacement from {1,...,n}'; Y_m given Y_n=k hypergeometric with population n, type 1 size m, sample size k) sha256:223ab179871c6da69d1e68811192935c2f12d9762a62de02336f446dd47b10b9 — https://www.randomservices.org/random/bernoulli/Binomial.html; checked in th",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w2"
+     }
     },
     {
      "id": "r2",
@@ -40533,7 +40765,15 @@
      "statement": "Under the multivariate hypergeometric distribution, the probability of drawing k1, k2, ..., km items from groups of sizes K1, ..., Km in a sample of n from N without replacement is the product of C(Ki,ki) divided by C(N,n).",
      "concept": "Hypergeometric Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Hypergeometric Distribution",
+      "quote": "the probability of exactly $k_1, \\ldots, k_m$ of each type ($k_1 + \\cdots + k_m = n$) is the product of the binomial coefficients for each type's count divided by the binomial coefficient for the whole sample",
+      "note": "written from K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), fetched 2026-10-30, Finite Sampling Models §3 The Multivariate Hypergeometric Distribution (joint PDF prod C(m_i,y_i)/C(m,n); grouping: 'preserved when the counting variables are combined', marginal Y_i hypergeometric with m, m_i, n) sha256:ce429ccb0682c9be25603fb52bab837daa32b2910c2aeba0603daf193a8cf978 — https://www.randomservices.org/random/urn/MultiHypergeometric.html; Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version) §5.1 hypergeometric p.193 (PDF p",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w2"
+     }
     },
     {
      "id": "r4",
@@ -44184,7 +44424,15 @@
      "statement": "For independent identical trials, given exactly k successes among n, every subset of k trials is equally likely to be the set of successes, so the conditional probability does not depend on p.",
      "concept": "Binomial Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Hypergeometric Distribution",
+      "quote": "given that exactly $k$ of them have it, every one of the $\\binom{n}{k}$ subsets of size $k$ is equally likely to be the affected set",
+      "note": "written from K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), fetched 2026-10-30, Bernoulli Trials §2 The Binomial Distribution (P[(X_1..X_n)=(x_1..x_n) | Y_n=k] = 1/C(n,k), 'does not depend on p'; 'Given Y_n = k, the trial numbers of the successes form a random sample of size k chosen without replacement from {1,...,n}'; Y_m given Y_n=k hypergeometric with population n, type 1 size m, sample size k) sha256:223ab179871c6da69d1e68811192935c2f12d9762a62de02336f446dd47b10b9 — https://www.randomservices.org/random/bernoulli/Binomial.html; checked in th",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w2"
+     }
     },
     {
      "id": "r4",
@@ -48368,7 +48616,15 @@
      "statement": "Pascal's rule states that C(j+1,k) = C(j,k) + C(j,k-1).",
      "concept": "Binomial Coefficient",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Combination",
+      "quote": "\\binom{n+1}{k} = \\binom{n}{k} + \\binom{n}{k-1}",
+      "note": "written from Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.2 Thm 3.4 (C(n,j) = C(n-1,j) + C(n-1,j-1), 0<j<n, with the include/exclude-u proof) pp.93-94 (PDF pp.101-102), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf; H. Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), fetched 2026-10-30, §2.1.3 (C(n+1,k+1) = C(n,k+1) + C(n,k)) sha256:79bf0f32ecb9598045e409b9da0c99549342938e45c43ee75fbea7fc47c52911 — https://www.probabilitycourse.",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w2"
+     }
     },
     {
      "id": "r5",
@@ -48376,7 +48632,15 @@
      "statement": "Use Pascal's rule to write each binomial term as a difference of consecutive binomial coefficients, so the sum telescopes (hockey-stick identity: the sum of C(m,k) for m=k..n equals C(n+1,k+1)).",
      "concept": "Telescoping Sum",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Combination",
+      "quote": "It follows from Pascal's rule written as $\\binom{m}{k} = \\binom{m+1}{k+1} - \\binom{m}{k+1}$, which makes the sum telescope",
+      "note": "written from K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), fetched 2026-10-30, Foundations, Combinatorial Structures (sum_(j=n..m) C(j,n) = C(m+1,n+1); sum_(j=1..m) j = C(m+1,2)) sha256:63ef90fd651593defb33d7772ecbe92f6198b6b655219a5cb726c76cdc393ccb — https://www.randomservices.org/random/foundations/Structures.html; telescoping from Pascal's rule, Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version) §3.2 Thm 3.4 PDF p.102, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dart",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30/w2"
+     }
     },
     {
      "id": "r6",

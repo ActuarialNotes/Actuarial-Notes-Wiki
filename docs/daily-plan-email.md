@@ -6,7 +6,7 @@ An opt-in morning email that lists the concepts the [study plan](study-plan-gene
 
 - **Pro only**: the email is today's study plan, and the study plan is a Pro feature, so the email is too. A free account's bell opens the same modal with a lock and an **Upgrade** link in place of the toggle, and the sender checks `user_subscriptions` (the same active-Pro rule as `useSubscription.ts`) and skips any account that isn't Pro — an opt-in left over from a lapsed subscription stays stored and resumes if the account subscribes again.
 - **Opt in**: the Dashboard's reminders bell (signed-in only — the email goes to the account address). A toggle turns the email on, and a picker chooses the local send hour (default 8:00 AM). The browser's IANA timezone is stored alongside the hour and refreshed on every save, so the send time follows whichever device last touched the setting.
-- **The email**: one section per exam that has a cached study plan, each with a pacing line (day number, pacing status, days to target), today's concept list (capped at 12, "+N more" beyond that), and the plan's "worth a refresher" concepts. A CTA links to the quiz (with UTM parameters — see *Measuring it*); the footer links to `/dashboard?reminders=1`, which opens the bell's modal, to change the time or turn it off.
+- **The email**: one section per exam the reader is studying (`status = 'in_progress'`, the exams the Dashboard shows) that has a cached study plan, each with a pacing line (day number, pacing status, days to target), today's concept list (capped at 12, "+N more" beyond that), and the plan's "worth a refresher" concepts. A CTA links to the quiz (with UTM parameters — see *Measuring it*); the footer links to `/dashboard?reminders=1`, which opens the bell's modal, to change the time or turn it off.
 - **Quiet days**: if no exam has anything scheduled or worth reviewing, no email is sent.
 
 ## Architecture
@@ -35,7 +35,7 @@ pg_cron fires the edge function **hourly** (on the hour) with an `x-cron-secret`
 1. Loads all `user_email_prefs` rows with `daily_plan_email = true`.
 2. For each row, computes the user's current local date and hour from the stored timezone (invalid timezones fall back to UTC rather than failing the run). Skips unless the local hour equals `send_hour_local`.
 3. Skips if `last_sent_date` already equals the local date — this makes retried or double-fired runs idempotent.
-4. Loads the user's `exam_progress` rows with a non-null `study_plan_cache`, derives each exam's section, and skips the user if every section is empty.
+4. Loads the user's `exam_progress` rows that are `in_progress` and have a non-null `study_plan_cache` (a removed or passed exam keeps its cached plan, so the status is what keeps it out), derives each exam's section, and skips the user if every section is empty.
 5. Fetches the account email via the admin auth API, sends through Resend, then stamps `last_sent_date`.
 
 Per-user failures are collected and reported in the response JSON (`{ checked, sent, skipped, errors }`) without aborting the run. A `{ "force": true }` body (still behind the cron secret) bypasses the hour match and the `last_sent_date` dedupe for manual testing; add `"user_id": "<uuid>"` to limit the run to one account, or a smoke test emails every opted-in user.

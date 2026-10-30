@@ -300,10 +300,14 @@ Deno.serve(async (req: Request) => {
       if (subErr) throw new Error(subErr.message)
       if (!sub || !isActivePro(sub.tier, sub.status, sub.current_period_end)) { skipped++; continue }
 
+      // Only the exams the reader is studying — the ones the Dashboard shows.
+      // A plan stays cached on the row after an exam is removed or passed, so
+      // a cached plan alone would mail every exam the account ever had.
       const { data: examRows, error: examErr } = await admin
         .from('exam_progress')
         .select('exam_id, study_plan_cache')
         .eq('user_id', row.user_id)
+        .eq('status', 'in_progress')
         .not('study_plan_cache', 'is', null)
       if (examErr) throw new Error(examErr.message)
 

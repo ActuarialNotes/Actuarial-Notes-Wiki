@@ -151,7 +151,7 @@ are in Appendix A.
 | Exam P | 716 | 65 / 72 | **ready** (again since 2026-10-30, 8 / 8; beta 2026-10-25 to 30 for G8) |
 | Exam FM | 461 | 91 / 91 | **ready** (again since 2026-10-30, 8 / 8; beta 2026-10-25 to 30 for G8) |
 | MAS-I | 281 | 178 / 178 | **ready** (again since 2026-10-31, 8 / 8; beta 2026-10-25 to 31 for G8) |
-| DISC-DA / RM / IA | 70 / 146 / 221 | 100% each | beta (ready until 2026-10-25, G8) |
+| DISC-DA / RM / IA | 70 / 146 / 221 | 100% each | DA **ready** again since 2026-10-31 (8 / 8); RM and IA beta (ready until 2026-10-25, G8) |
 | Exam 7 | 144 | 26 / 29 | beta (ready 2026-10-16 to 2026-10-25, G8) |
 | MAS-II | 168 | 98 / 98 | beta |
 | Exam 5 | 349 | 129 / 138 | beta |
@@ -252,8 +252,8 @@ to §4. Where an item has a former roadmap ID (P0–P4), §4 gives it.
    since 2026-10-25, **G8** (C20, D29): each bank's answerability check, then its open items
    closed. The same day the maintainer moved P, FM, MAS-I, the three DISCs and Exam 7 back to
    `beta`, since their banks hadn't been checked against G8. **Exams P and FM are `ready` again
-   since 2026-10-30, and MAS-I since 2026-10-31** (all eight gates; `--hold` now holds them); the
-   other four wait on their G8 items.
+   since 2026-10-30, and MAS-I and DISC-DA since 2026-10-31** (all eight gates; `--hold` now
+   holds them); the other three wait on their G8 items.
    In order (content plan §4):
    - **Step 0:** the ISLR and Dobson deltas, so MAS-I is 7 / 8 (the CIA commit made them
      stale), and `check-answerable` on the seven demoted exams' banks (runs only, about $445).
@@ -929,6 +929,10 @@ ls Concepts/*.md | wc -l; ls Resources/Books/*.md | wc -l
   second look on Sonnet, runs the locator on Haiku and no longer lists a solution's own plan as a
   requirement: on 20 Exam P questions, $1.18 and 11 gaps where the old code took $3.35 and found 20.
   Phase 2's step 10 (P, FM, MAS-I, the DISCs, Exam 7) is placed first.
+
+- **2026-10-31, DISC-DA ready again (Phase 2 step 10).** Its last 11 questions checked ($0.50) and
+  its 17 G8 items closed (content plan §2); `--check DISC-DA` 8 / 8, in `READY_EXAMS` and
+  `exam_catalog.json` again.
 
 - **2026-10-31, Exam MAS-I ready again (Phase 2 step 10).** `publication_readiness.py --check MAS-I`:
   8 / 8, its 92 G8 items closed (content plan §2). MAS-I is in `READY_EXAMS` and `exam_catalog.json`

@@ -26,6 +26,12 @@ The **Negative Binomial Distribution** $X \sim \text{NegBin}(r, p)$ counts the n
 - **Check the parameterization first.** As written, $X$ counts *trials* and starts at $r$. The alternative counts *failures before the $r$-th success*, $Y = X - r \in \{0,1,2,\ldots\}$, with $P(Y=k) = \binom{k+r-1}{k}p^r(1-p)^k$ and $E[Y] = r(1-p)/p$. Same variance, means differing by $r$ — the same trap as the [[Geometric Distribution|geometric]].
 - **The exam tables' form.** SOA's *Tables for Exam C* (the Loss Models appendix) write the failures count as $\text{NegBin}(r, \beta)$ with $p = 1/(1+\beta)$: $P(Y=k) = \dfrac{r(r+1)\cdots(r+k-1)\,\beta^k}{k!\,(1+\beta)^{r+k}}$, $E[Y] = r\beta$ and $\text{Var}(Y) = r\beta(1+\beta)$. Unlike the binomial's $m$, $r$ is not required to be a whole number there.
 - **Overdispersion belongs to the failures form.** $\text{Var}(Y)/E[Y] = 1/p = 1+\beta > 1$ always, where the binomial's ratio is below 1 and the Poisson's is exactly 1 — which is what makes $Y$ the **overdispersed** alternative to the [[Poisson Distribution|Poisson]] for counts. The trials count $X$ does not share it: $\text{Var}(X)/E[X] = (1-p)/p$, below 1 whenever $p > 1/2$ (with $r = 3$, $p = 0.75$: $E[X] = 4$ but $\text{Var}(X) = 4/3$).
+- **The last trial is fixed.** The $r$-th success ends the count on trial $k$, so only the first $k-1$ trials are arranged: they hold the other $r-1$ successes, which is why the coefficient is $\binom{k-1}{r-1}$. Using $\binom{k}{r}$ instead counts $r$ successes anywhere in $k$ trials, a different event.
+- **More than two outcomes.** When the trials before the $r$-th success fall into several categories, with probabilities $q_1, \ldots, q_m$ and counts $n_1, \ldots, n_m$ (so $n_1 + \cdots + n_m + r - 1 = k - 1$), the first $k-1$ trials are arranged by a multinomial coefficient and each category's probability is raised to its count:
+
+> $$P = \frac{(k-1)!}{n_1!\cdots n_m!\,(r-1)!}\;q_1^{n_1}\cdots q_m^{n_m}\,p^{r}$$
+
+- **Successes before the $s$-th failure.** The event "at least $r$ successes occur before the $s$-th failure" is the same as "at least $r$ successes in the first $r+s-1$ trials" (otherwise the $s$-th failure has already occurred), so its probability is $P(\text{Bin}(r+s-1, p) \ge r)$. This is the classical problem of points.
 
 ![[Media/Negative_binomial_pmf.svg|500]]
 

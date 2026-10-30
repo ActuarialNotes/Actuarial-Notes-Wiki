@@ -26,6 +26,9 @@ The **Mode** of a [[Random Variable]] $X$ is the value at which its [[Probabilit
 - A mode need not be unique. A uniform distribution has every point of its support as a mode, and a mixture of two claim populations can be bimodal.
 - Standard results: [[Normal Distribution|normal]] $\mu$; [[Gamma]] $(\alpha - 1)\theta$ for $\alpha \ge 1$; [[Lognormal Distribution|lognormal]] $e^{\mu - \sigma^2}$. For a right-skewed severity, mode < [[Median|median]] < [[Expected Value|mean]] is typical, and the lognormal always obeys it: $e^{\mu - \sigma^2} < e^{\mu} < e^{\mu + \sigma^2/2}$.
 - The mode ignores the tail entirely. It describes the most common claim, not the cost of claims — pricing is done on the mean.
+- **The normalizing constant never matters.** If $f(x) = c\,g(x)$ with $c > 0$, then $f$ and $g$ are largest at the same $x$, so the mode of a density given only up to proportionality is the maximizer of $g$ over the support, and $c$ never needs to be found.
+- **Only the support counts.** A density is 0 outside its stated support, so a root of $f'(x) = 0$ that falls outside the support is discarded; compare the critical points inside it with the values at its endpoints.
+- **Scale and shift.** For a constant $c > 0$, the mode of $Y = cX$ is $c$ times the mode of $X$, and the mode of $X + b$ is the mode of $X$ plus $b$. The density of $Y = cX$ is $f_Y(y) = f_X(y/c)/c$, which is largest where $y/c$ is the mode of $X$.
 
 > [!example]- Most Likely Claim Size under a Gamma Severity {Example}
 > Claim sizes have density $f(x) = \dfrac{x\,e^{-x/2{,}000}}{2{,}000^2}$ for $x > 0$ (a gamma with $\alpha = 2$, $\theta = 2{,}000$). Find the mode and compare it with the mean.

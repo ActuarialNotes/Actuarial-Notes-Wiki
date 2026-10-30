@@ -27,6 +27,17 @@ A **Discrete Random Variable** $X$ is a [[Random Variable]] whose possible value
 - With two variables, the [[Joint Probability Function]] $p(x,y)$ is a table. [[Marginal Probability Function|Marginals]] are its row and column totals; a [[Conditional Probability Function|conditional]] PMF is one row divided by its total, $p(y \mid x) = p(x,y)/p_X(x)$.
 - [[Moments for Joint Distributions|Joint moments]], [[Variance for Conditional and Marginal Distributions|conditional and marginal variances]], [[Covariance]] and the [[Correlation Coefficient]] are all sums over the cells of that table.
 - The PMF of a sum of independent discrete variables is a **convolution**, $P(X + Y = s) = \sum_x p_X(x)\,p_Y(s - x)$. Some families are closed under it — independent Poissons sum to a Poisson with mean $\lambda_1 + \lambda_2$. See [[Probabilities for Linear Combinations]].
+- **From tail probabilities.** For $X$ taking values $0, 1, \ldots, n$, the PMF is recovered by differencing tail probabilities, $p(x) = P(X \ge x) - P(X \ge x + 1)$, with $p(n) = P(X \ge n)$ at the largest value.
+- **A capped count.** If $Y = \min(X, n)$, then $P(Y = k) = P(X = k)$ for $k < n$, and all the rest sits on the cap:
+
+> $$P(Y = n) = P(X \ge n) = 1 - \sum_{k < n} P(X = k)$$
+
+- The cap's value covers every outcome that would have gone past it: when trials stop at $n$ whether or not the target was reached, $Y = n$ includes both reaching it on trial $n$ and never reaching it.
+- **The excess over 1.** For a non-negative integer $N$, $N = \min(N, 1) + (N-1)_+$, and $\min(N, 1)$ is the indicator of $N \ge 1$, so its mean is $P(N \ge 1)$:
+
+> $$E[(N-1)_+] = E[N] - E[\min(N, 1)] = E[N] - P(N \ge 1)$$
+
+- This is the deductible identity $E[(X-d)_+] = E[X] - E[X \wedge d]$ with $d = 1$.
 
 The first two examples use one table. A policyholder's annual auto claims $X$ and home claims $Y$ have joint PMF $p(0,0) = 0.40$, $p(0,1) = 0.10$, $p(1,0) = 0.20$, $p(1,1) = 0.15$, $p(2,0) = 0.05$, $p(2,1) = 0.10$.
 

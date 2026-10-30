@@ -25,6 +25,12 @@ A **Discrete Univariate Distribution** describes the probability law of a single
 
 > $$= \sum_{k \leq x} f(k)$$
 
+- **Back from tail or cumulative probabilities.** For an integer-valued $X$ the PMF is recovered by differencing:
+
+> $$f(k) = P(X \geq k) - P(X \geq k+1) = F(k) - F(k-1)$$
+
+- At the largest possible value $m$, $f(m) = P(X \geq m)$, and for a non-negative $X$, $f(0) = 1 - P(X \geq 1)$.
+
 ## Choosing the right one
 
 Most of the difficulty is identification, not computation. Read the question for **what is being counted** and **whether the trial count is fixed**:

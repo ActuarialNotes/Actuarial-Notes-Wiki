@@ -25,6 +25,14 @@ The **Poisson Distribution** $X \sim \text{Poi}(\lambda)$ models the number of e
 - A defining property is $E[X] = \text{Var}(X) = \lambda$ — the mean and variance are equal
 - It arises as the limit of $\text{Bin}(n, p)$ as $n \to \infty$ and $p \to 0$ with $np = \lambda$ fixed
 - It is the standard model for claim counts in actuarial science
+- **Recovering $\lambda$ from a zero probability.** Because $P(X = 0) = e^{-\lambda}$, a given probability of no events (or of at least one event, $1 - e^{-\lambda}$) fixes the mean:
+
+> $$\lambda = -\ln P(X = 0)$$
+
+- A stated relation between such probabilities of two Poisson variables, such as $e^{-\lambda_2} = c\,e^{-\lambda_1}$ or $1 - e^{-\lambda_2} = c\,(1 - e^{-\lambda_1})$, is an equation between the probabilities, not between the means: write it in the probability expressions and solve for the unknown mean by taking natural logarithms.
+- **Even or odd counts.** Adding the series $e^{\lambda} = \sum_n \lambda^n/n!$ and $e^{-\lambda} = \sum_n (-\lambda)^n/n!$ cancels the odd terms, so the even terms sum to $\sum_k \lambda^{2k}/(2k)! = (e^{\lambda} + e^{-\lambda})/2 = \cosh\lambda$. Summing the pmf over even $n$ then gives:
+
+> $$P(X \text{ even}) = e^{-\lambda}\cosh\lambda = \frac{1 + e^{-2\lambda}}{2}, \qquad P(X \text{ odd}) = \frac{1 - e^{-2\lambda}}{2}$$
 
 ![[Media/Poisson_pmf.svg|500]]
 

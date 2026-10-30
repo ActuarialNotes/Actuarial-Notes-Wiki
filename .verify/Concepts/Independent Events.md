@@ -70,3 +70,14 @@ created: 2026-09-27
 - confidence: high
 - checks_run: Re-verified after resolving F-001, F-002: product rule iff independence = G&S Thm 4.1; conditional form for positive probabilities and probability-0 case = Def. 4.1 (symmetric in the two events); every-subset product for mutual independence = Def. 4.2; example recomputed 0.4 × 0.3 = 0.12 = P(both), so the events are independent.
 - sources_checked: Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §4.1 Def. 4.1 (p.139, PDF p.147), Thm 4.1 (p.140, PDF p.148), Def. 4.2 (p.141, PDF p.149), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf; SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 1 General Probability, learning outcome 1a (PDF p.2), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf
+
+## [C-003] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-30T18:35Z/14ca
+- date: 2026-10-30
+- status_set: verified
+- confidence: high
+- checks_run: diff vs 0287511f is add-only (one ### subsection); complement lemma, P(A∩B^c), P(A^c∩B^c) and 1-(1-p)^n checked against PN §1.4.1 Lemma and flight example; no item question's numbers on page; prior content unchanged
+- sources_checked: Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §4.1 Def. 4.1 (p.139, PDF p.147), Thm 4.1 (p.140, PDF p.148), Def. 4.2 (p.141, PDF p.149), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf; SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 1 General Probability, learning outcome 1a (PDF p.2), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf; Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §1.4.1 Independence (Lemma: A,B independent ⇒ A,B^c; A^c,B; A^c,B^c independent, proof P(A∩B^c)=P(A)(1-P(B)); flight example P(A)=1-(1-p_c)^N), sha256:d3a628b19b7630f57b78839bd1c92defb3988d4897dcdab840d5811dc5522dbd — https://www.probabilitycourse.com/chapter1/1_4_1_independence.php
+- note: G8 w1 re-check after writer addition: complements and at-least-one.

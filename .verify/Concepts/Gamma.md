@@ -46,3 +46,13 @@ created: 2026-09-28
 - confidence: medium
 - checks_run: Re-verified after resolving F-001: E = alpha theta and Var = alpha theta^2 from A.3.2.1 moments (k = 1, 2), CV = 1/sqrt(alpha); uniform and Pareto counterexamples recomputed from A.6.1.2 and A.2.3.1; examples recomputed: 1000, 250000, CV 0.50; P(T > 1) = 5e^-2 = 0.677; theta = 400, alpha = 2. Chi-squared and sum-of-exponentials lines not re-read this session, hence medium.
 - sources_checked: SOA, Tables for Exam C (Fall 2009), A.2.3.1 Pareto printed p.3 (PDF p.8, page image), A.3.2.1 Gamma printed p.4 (PDF p.9, page image), A.6.1.2 beta printed p.8 (PDF p.13), sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf
+
+## [C-003] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-30T18:41Z/6d53
+- date: 2026-10-30
+- status_set: verified
+- confidence: medium
+- checks_run: Diff vs 0287511f is additions only (no existing line changed or removed); earlier content unchanged and its prior sources re-cited; every added claim/formula read against the cited section; every added example recomputed (incl. numeric quadrature where relevant); no question's numbers, scenario or wording on the page (compared with the item question files); kernel c x^a e^{-x/b} -> Gamma(a+1,b) and c=1/(theta^alpha Gamma(alpha)) from Pishro-Nik's integral property with lambda=1/theta; example Gamma(4,2) mean 8, var 16, c=1/96 recomputed
+- sources_checked: SOA, Tables for Exam C (Fall 2009), A.2.3.1 Pareto printed p.3 (PDF p.8, page image), A.3.2.1 Gamma printed p.4 (PDF p.9, page image), A.6.1.2 beta printed p.8 (PDF p.13), sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf; Pishro-Nik, 4.2.4 Gamma Distribution: integral of x^{alpha-1}e^{-lambda x} over (0,inf) = Gamma(alpha)/lambda^alpha, Gamma(alpha,lambda) PDF integrating to 1 (HTML fetched 2026-10-30), sha256:9e53a37b3665363206e1bd3e0befdf07703b4c70e17da404ee85aee95afb7640 — https://www.probabilitycourse.com/chapter4/4_2_4_Gamma_distribution.php

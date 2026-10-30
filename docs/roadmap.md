@@ -148,7 +148,7 @@ are in Appendix A.
 
 | Bank | Questions | Concepts covered in its own bank | Exam status |
 |---|---:|---|---|
-| Exam P | 716 | 65 / 72 | beta (ready until 2026-10-25, G8) |
+| Exam P | 716 | 65 / 72 | **ready** (again since 2026-10-30, 8 / 8; beta 2026-10-25 to 30 for G8) |
 | Exam FM | 461 | 91 / 91 | beta (ready until 2026-10-25, G8) |
 | MAS-I | 281 | 178 / 178 | beta (ready until 2026-10-25, G8) |
 | DISC-DA / RM / IA | 70 / 146 / 221 | 100% each | beta (ready until 2026-10-25, G8) |
@@ -249,8 +249,9 @@ to §4. Where an item has a former roadmap ID (P0–P4), §4 gives it.
    95 readings once shared ones are counted once, plus PCPA's bank (C6) and 6C's page (C5). And
    since 2026-10-25, **G8** (C20, D29): each bank's answerability check, then its open items
    closed. The same day the maintainer moved P, FM, MAS-I, the three DISCs and Exam 7 back to
-   `beta`, since their banks haven't been checked against G8. **No exam is `ready`**, and
-   `--hold` holds none until one is promoted again. In order (content plan §4):
+   `beta`, since their banks hadn't been checked against G8. **Exam P is `ready` again since
+   2026-10-30** (all eight gates; `--hold` now holds it); the other six wait on their G8 items.
+   In order (content plan §4):
    - **Step 0:** the ISLR and Dobson deltas, so MAS-I is 7 / 8 (the CIA commit made them
      stale), and `check-answerable` on the seven demoted exams' banks (runs only, about $445).
    - **Steps 1–3:** MAS-II, Exam 9 and SRM. Each is one packet from ready.
@@ -894,6 +895,14 @@ ls Concepts/*.md | wc -l; ls Resources/Books/*.md | wc -l
   second look on Sonnet, runs the locator on Haiku and no longer lists a solution's own plan as a
   requirement: on 20 Exam P questions, $1.18 and 11 gaps where the old code took $3.35 and found 20.
   Phase 2's step 10 (P, FM, MAS-I, the DISCs, Exam 7) is placed first.
+
+- **2026-10-30, Exam P ready again (Phase 2 step 10).** `publication_readiness.py --check P-1`: 8 / 8.
+  G8's 683 open items closed: 254 by passages the locator missed (most on the exam's own syllabus
+  pages, D30), 19 by retagging 15 questions (re-passed against the same SOA files), 220 by passages
+  written onto 43 concept pages from open texts (Grinstead & Snell, Pishro-Nik, Siegrist, the SOA's
+  *Risk and Insurance* note, OpenStax) and fact checked by different agents, and 190 `not-required`
+  under one ruling (rule 11). Two passages that held a question's answer were cut (rule 10). P is in
+  `READY_EXAMS` and `exam_catalog.json` again; `--hold` holds it.
 
 - **2026-10-30, Pro proposal (P1).** `docs/pro-proposal.md` added and listed in §3.4 *Proposed*. Nothing ranked, no price or access changed; decisions D-P1–D-P8 open.
 

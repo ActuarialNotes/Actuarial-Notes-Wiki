@@ -8,12 +8,12 @@ import type { ItemStatus } from '@/data/tracks'
 //   'ready'       — a mature syllabus page plus a full question bank, all of it
 //                   fact checked and every question answerable from its pages:
 //                   every gate of `scripts/publication_readiness.py` passes.
-//                   No exam is ready today. P, FM, MAS-I, the three DISCs and
-//                   Exam 7 were, and went back to beta on 2026-10-25 when
-//                   answerability (G8) became a gate their banks have not
-//                   yet been checked against
-//   'beta'        — usable, still being filled out (P, FM, MAS-I, the DISCs
-//                   and Exam 7, everything checked but G8; MAS-II, Exams 5,
+//                   Exam P (ready again 2026-10-30, all eight gates). FM,
+//                   MAS-I, the three DISCs and Exam 7 were ready too, and went
+//                   back to beta on 2026-10-25 when answerability (G8) became a
+//                   gate their banks have not yet passed
+//   'beta'        — usable, still being filled out (FM, MAS-I, the DISCs and
+//                   Exam 7, everything checked but G8; MAS-II, Exams 5,
 //                   6C, 8 and 9 — their banks converted from the released
 //                   papers — FAM and SRM, from the SOA's sample sets, ALTAM and
 //                   ASTAM from their sample sets and released papers, and
@@ -36,9 +36,9 @@ import type { ItemStatus } from '@/data/tracks'
 // `WikiFloatingSearch`).
 export type ExamStatus = 'ready' | 'beta' | 'development'
 
-/** Exams whose material is finished enough to carry no status label at all. Empty since G8
- * (2026-10-25): an exam comes back here when `publication_readiness.py --check` passes all eight. */
-const READY_EXAMS = new Set<string>([])
+/** Exams whose material is finished enough to carry no status label at all: each passes all eight
+ * gates of `publication_readiness.py --check` (P again since 2026-10-30, after G8 emptied it on 2026-10-25). */
+const READY_EXAMS = new Set<string>(['P'])
 
 /**
  * Exams that exist only as a syllabus outline so far. Greyed out wherever they

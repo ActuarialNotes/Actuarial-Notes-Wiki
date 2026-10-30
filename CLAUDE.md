@@ -639,9 +639,10 @@ Other important `lib/` modules:
 - `conceptMatch.ts` — resolves concept name variants/aliases to a canonical slug (`slugForLink`)
 - `examStatus.ts` — how far along each exam's material is, keyed by exam_progress key:
   `ready` (an exam that passes all eight gates of `scripts/publication_readiness.py --check` —
-  **none today**: P, FM, MAS-I, the three DISCs and Exam 7 went back to beta on 2026-10-25,
-  when answerability became gate G8, and each is promoted again once its bank passes it),
-  `beta` (those seven, then MAS-II, Exams 5, 6C, 8 and 9,
+  **Exam P**, ready again since 2026-10-30: P, FM, MAS-I, the three DISCs and Exam 7 went back to
+  beta on 2026-10-25, when answerability became gate G8, and each is promoted again once its bank
+  passes it),
+  `beta` (the other six of those seven, then MAS-II, Exams 5, 6C, 8 and 9,
   FAM and SRM — their banks the SOA's sample sets — ASTAM and ALTAM, from their sample sets and
   released papers, and PCPA) or `development` (Exams 6U, 6I and 6T, the other SOA exams past FM —
   PA, ATPA and the FSA pathway's exams, keyed `FSA-GH101` etc. — and the **non-exam

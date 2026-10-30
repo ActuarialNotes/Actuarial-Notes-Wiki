@@ -2,11 +2,12 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-09-28
+  last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:5690801c686c33b1d9ec05f47b5943cdeb09d78d83bcea1096ea44ee3aeae949
+  content_hash: sha256:508472a11f8324bda4ac7e2fc50bd44af922908d50fd7c0e4edaca22f1493b1b
   sources:
     - "SOA, Tables for Exam C (Fall 2009), A.2.3.1 Pareto printed p.3 (PDF p.8, page image), A.3.2.1 Gamma printed p.4 (PDF p.9, page image), A.6.1.2 beta printed p.8 (PDF p.13), sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf"
+    - "Pishro-Nik, 4.2.4 Gamma Distribution: integral of x^{alpha-1}e^{-lambda x} over (0,inf) = Gamma(alpha)/lambda^alpha, Gamma(alpha,lambda) PDF integrating to 1 (HTML fetched 2026-10-30), sha256:9e53a37b3665363206e1bd3e0befdf07703b4c70e17da404ee85aee95afb7640 — https://www.probabilitycourse.com/chapter4/4_2_4_Gamma_distribution.php"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Gamma.md
@@ -29,6 +30,11 @@ The **Gamma Distribution** $X \sim \text{Gamma}(\alpha, \theta)$ is a flexible c
 > $$P(X > x) = \sum_{k=0}^{\alpha-1} \frac{e^{-x/\theta}(x/\theta)^k}{k!}$$
 
 - Some texts parameterize by **rate** $\beta = 1/\theta$, giving $E[X] = \alpha/\beta$. Read which one a problem uses before substituting.
+- **Recognising a gamma from its kernel.** A density known only up to a constant, $f(x) = c\,x^{a}e^{-x/b}$ for $x > 0$, is $\text{Gamma}(\alpha = a + 1,\ \theta = b)$: match it to the kernel $x^{\alpha-1}e^{-x/\theta}$. Its moments then come straight from $E[X] = \alpha\theta$ and $\text{Var}(X) = \alpha\theta^2$, and the constant need not be computed, since it can only be $c = 1/(\theta^{\alpha}\Gamma(\alpha))$:
+
+> $$\int_0^\infty x^{\alpha-1}e^{-x/\theta}\,dx = \theta^{\alpha}\,\Gamma(\alpha)$$
+
+- For instance, $f(x) = c\,x^{3}e^{-x/2}$ on $x > 0$ is $\text{Gamma}(4, 2)$, so $E[X] = 8$ and $\text{Var}(X) = 16$ (and $c = 1/(2^4 \cdot 3!) = 1/96$, never needed)
 
 ![[Media/Gamma_distribution_pdf.svg|500]]
 

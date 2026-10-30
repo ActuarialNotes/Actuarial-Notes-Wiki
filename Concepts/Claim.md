@@ -2,9 +2,9 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-10-10
+  last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:e17cc04edadc658bfd9839ad54a1dab9b238798bc5d3d48f89c1bb9266fab8f1
+  content_hash: sha256:09cb181ed62f0fccbe48cecd9c0e6442c474fb53c5090153856a516774363441
   sources:
     - "IRMI Insurance Glossary, 'claim' (fetched 2026-10-10), sha256:38c7e60380b2dc016b204eaa95c17228c89cf89e57152e7dcc4a37e300651b0b — https://www.irmi.com/term/insurance-definitions/claim"
     - "IRMI Insurance Glossary, 'proof of loss' (fetched 2026-10-10), sha256:4a15c05bdb1431633d387a74200419f35393f5ab6c054c4bcdd72de6782d79f2 — https://www.irmi.com/term/insurance-definitions/proof-of-loss"
@@ -18,6 +18,8 @@ verification:
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §11.1.3 (fetched 2026-10-10), Poisson splitting — re-fetched; HTML hash differs from run 919b's copy, sha256:ee6db1bea6bec9eb05fbf1b8ec21a67b5b37ba380a8b425f8c99576739c86c0f — https://www.probabilitycourse.com/chapter11/11_1_3_merging_and_splitting_poisson_processes.php"
     - "SOA, Tables for Exam C (Fall 2009), exponential E[X^x], PDF p.11 — re-fetched, hash unchanged, sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf"
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), PDF pp.14, 20, 66 — re-fetched, hash unchanged, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+    - "Conditional Expected Value, §3.7 Conditional Expected Value, Random Sums of Random Variables: E(Y_N|N) = N mu, E(Y_N) = E(N) mu, var(Y_N|N) = N sigma^2, var(Y_N) = E(N) sigma^2 + var(N) mu^2, sha256:23e328f9ee55e32522905aba62841f2920eef0d32fb68d7fbb1f4e0b0eaf62f6 — https://www.randomservices.org/random/expect/Conditional.html"
+    - "Compound Poisson Processes, §13.6 Compound Poisson Processes: E(N_t) = var(N_t) = rt, var(V_t) = (mu^2 + sigma^2) rt; same with rt replaced by a for a compound Poisson variable, sha256:6c5a27a1dc417fbb651a6271f8bb72c6e6f9790ae3c59c781f8f51c29961afd6 — https://www.randomservices.org/random/poisson/Compound.html"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Claim.md
@@ -34,6 +36,22 @@ verification:
 - **Per loss or per payment.** Under a [[Deductible|deductible]], a loss doesn't always produce a payment. The payment per loss $Y^L$ includes zeros. The payment per payment $Y^P$ is conditional on $X > d$, and $E[Y^L] = P(X > d)\,E[Y^P]$. The number of payments is a thinned count: if losses are Poisson with rate $\lambda$, payments are Poisson with rate $\lambda\,P(X > d)$ ([[Poisson Thinning]]).
 - **The claim's life.** A claim is reported, given a [[Case Reserves|case reserve]], paid in one or more instalments and closed. Some close without payment and some reopen. Claims that have occurred but not yet been reported are [[IBNR]]. Counts at each stage feed the [[Claim Count Triangle|claim count triangles]] used in reserving.
 - **Property damage claims.** A claim is a demand to recover, under a policy, for a loss that may come within it. On a property policy the insured claims for damage to its own property, a first-party claim; on a liability policy a third party claims for injury or damage it says the insured caused. The ISO homeowners form (HO 00 03 05 11) sets out the property claim's steps: the insured submits a signed, sworn proof of loss; the insurer may, by written notice within 30 days of receiving it, choose to repair or replace the damaged property with property of like kind and quality; and loss is payable 60 days after the proof of loss once the parties agree, a final judgment is entered or an appraisal award is filed. The amount turns on the policy's valuation basis, [[Actual Cash Value|actual cash value]], [[Replacement Cost|replacement cost]] or another of the [[Loss Settlement Provisions|loss settlement provisions]], and then on the limit and deductible ([[Property Insurance Limits and Deductibles]]).
+
+### Moments of aggregate claims
+
+For $S = X_1 + \cdots + X_N$ with the $X_i$ i.i.d. and independent of $N$: given $N = n$, $S$ is a sum of $n$ i.i.d. claims, so conditioning on the count gives $E[S \mid N] = N\,E[X]$ and $\text{Var}(S \mid N) = N\,\text{Var}(X)$.
+
+> $$E[S \mid N] = N\,E[X]$$
+
+> $$\text{Var}(S \mid N) = N\,\text{Var}(X)$$
+
+- The laws of total expectation and total variance then give $E[S] = E[N]\,E[X]$ and the compound variance:
+
+> $$\text{Var}(S) = E[N]\,\text{Var}(X) + \text{Var}(N)\,E[X]^2$$
+
+- With $N \sim \text{Poisson}(\lambda)$, $E[N] = \text{Var}(N) = \lambda$, so the two terms combine into the second moment of a claim: for a compound Poisson $S$, $\text{Var}(S) = \lambda\,E[X^2]$.
+
+> $$\text{Var}(S) = \lambda\,E[X^2]$$
 
 > [!example]- Per Loss or Per Payment {Example}
 > Losses are exponential with mean $\$2{,}000$, and a $\$500$ deductible applies.

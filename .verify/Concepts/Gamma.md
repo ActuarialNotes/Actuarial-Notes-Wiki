@@ -56,3 +56,37 @@ created: 2026-09-28
 - confidence: medium
 - checks_run: Diff vs 0287511f is additions only (no existing line changed or removed); earlier content unchanged and its prior sources re-cited; every added claim/formula read against the cited section; every added example recomputed (incl. numeric quadrature where relevant); no question's numbers, scenario or wording on the page (compared with the item question files); kernel c x^a e^{-x/b} -> Gamma(a+1,b) and c=1/(theta^alpha Gamma(alpha)) from Pishro-Nik's integral property with lambda=1/theta; example Gamma(4,2) mean 8, var 16, c=1/96 recomputed
 - sources_checked: SOA, Tables for Exam C (Fall 2009), A.2.3.1 Pareto printed p.3 (PDF p.8, page image), A.3.2.1 Gamma printed p.4 (PDF p.9, page image), A.6.1.2 beta printed p.8 (PDF p.13), sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf; Pishro-Nik, 4.2.4 Gamma Distribution: integral of x^{alpha-1}e^{-lambda x} over (0,inf) = Gamma(alpha)/lambda^alpha, Gamma(alpha,lambda) PDF integrating to 1 (HTML fetched 2026-10-30), sha256:9e53a37b3665363206e1bd3e0befdf07703b4c70e17da404ee85aee95afb7640 — https://www.probabilitycourse.com/chapter4/4_2_4_Gamma_distribution.php
+
+## [F-002] Gamma hazard limit and mean-excess limit unsourced
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: g8-masi-check-A1-2026-10-30
+- date: 2026-10-30
+- severity: minor
+- status: open
+- locus: Hazard Rate and tail bullet; Sums with a common scale bullet
+- claim: Hazard 'levels off at 1/theta' by a L'Hopital derivation; mean excess loss decreases toward theta (alpha>1) and increases toward theta (alpha<1), tail 'behaves like an exponential's'; 'gammas with different scales do not add to a gamma'.
+- evidence: Brunner, STA312 (U. Toronto, CC BY-SA) p.12 states only: alpha=1 constant at lambda; alpha>1 increasing and bounded above by lambda; alpha<1 decreasing and bounded below by lambda. Bassan, Kochar & Spizzichino, J. Appl. Prob. 39 (2002) p.535: DMRL is implied by IFR (supports decreasing MEL for alpha>1 only). Siegrist 5.8 gives the sum result for a common scale only. No fetched source states the limits, the alpha<1 MEL direction, or the different-scale negative; the L'Hopital step is rank-5 reasoning and cannot confirm (P1); the earlier support was the vault's own unverified Mean Excess Loss page (rank 4).
+- source_rank: 3
+- proposed_action: Cut the limit derivation, the limits toward theta and the alpha<1 MEL claim; keep the Brunner-sourced bounds and IFR=>DMRL for alpha>1; restate the scale caveat as 'the result needs the scales to match'.
+- applied: true
+- fingerprint: c90f7778024c
+
+## [F-002/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: g8-masi-check-A1-2026-10-30
+- date: 2026-10-30
+- resolves: F-002
+- status: resolved
+- note: Fixed in this pass: limit derivation, limits toward theta and the alpha<1 mean-excess claim cut; bullet now states only Brunner's bounds and IFR implies DMRL (Bassan, Kochar & Spizzichino 2002) for alpha>1; scale caveat restated to 'the result needs the scales to match'.
+
+## [C-004] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: g8-masi-check-A1-2026-10-30
+- date: 2026-10-30
+- status_set: verified
+- confidence: high
+- checks_run: diff check: MGF bullet + block, common-scale sum bullet, hazard-and-tail bullet added, frontmatter untouched; MGF against SOA A.3.2.1 and Siegrist 5.8; sum rule against Siegrist 5.8, example 1.5 + 2.5 = 4 checked; hazard bounds against Brunner p.12; alpha>1 decreasing MEL from IFR implies DMRL (Bassan et al. 2002). F-002: unsourced limit derivation / limits toward theta / alpha<1 MEL / different-scale negative cut or restated in this pass. No numbers of masi-2019f-022, masi-an-073, masi-an-072 on the page. G8: MAS-I.
+- sources_checked: SOA, Tables for Exam C (Fall 2009), A.2.3.1 Pareto printed p.3 (PDF p.8, page image), A.3.2.1 Gamma printed p.4 (PDF p.9, page image), A.6.1.2 beta printed p.8 (PDF p.13), sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf; Pishro-Nik, 4.2.4 Gamma Distribution: integral of x^{alpha-1}e^{-lambda x} over (0,inf) = Gamma(alpha)/lambda^alpha, Gamma(alpha,lambda) PDF integrating to 1 (HTML fetched 2026-10-30), sha256:9e53a37b3665363206e1bd3e0befdf07703b4c70e17da404ee85aee95afb7640 — https://www.probabilitycourse.com/chapter4/4_2_4_Gamma_distribution.php; Siegrist, 5.8 The Gamma Distribution: MGF 1/(1 - bt)^k for t < 1/b; X1 + X2 gamma with shape k1 + k2 and scale b for independent gammas with common scale b (HTML fetched 2026-10-30) — https://www.randomservices.org/random/special/Gamma.html; SOA, Tables for Exam C (Fall 2009), A.3.2.1 Gamma M(t) = (1 - theta t)^-alpha, t < 1/theta (PDF p.9); A.3.3.1 Exponential M(t) = (1 - theta t)^-1 and A.5.1.1 Lognormal E[(X ^ x)^k] = exp(k mu + k^2 sigma^2/2) Phi((ln x - mu - k sigma^2)/sigma) + x^k[1 - F(x)] (PDF p.11), sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf; Brunner, Exploring the hazard function of the gamma distribution, STA312 Fall 2023, U. Toronto (CC BY-SA), p.12: alpha=1 constant at lambda; alpha>1 increasing and bounded above by lambda; alpha<1 decreasing and bounded below by lambda, sha256:af161497b7e389ccd381754c64741ddf7ef2209e9702094ce9c08906a6572428 — https://utstat.utoronto.ca/~brunner/oldclass/312f23/lectures/312f23Hazardplots.pdf; Bassan, Kochar & Spizzichino, Some bivariate notions of IFR and DMRL and related properties, J. Appl. Prob. 39 (2002) 533-544, p.535: 'decreasing mean residual life (DMRL), which is implied by IFR', sha256:eb6dc52f07bbbd9498063da405611adb9a7921e1c8246657b9e9473f9d8af706 — https://web.pdx.edu/~kochar/Papers/d_papers/JAP2002.pdf

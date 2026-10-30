@@ -1264,7 +1264,15 @@
      "statement": "For an exponential distribution with rate λ, the moment generating function is M(t) = λ/(λ - t) for t < λ.",
      "concept": "Exponential Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exponential Distribution",
+      "quote": "in the rate form it is $M(t) = \\lambda/(\\lambda - t)$ for $t < \\lambda$",
+      "note": "written from Siegrist 14.2 The Exponential Distribution (MGF), https://www.randomservices.org/random/poisson/Exponential.html, and SOA Tables for Exam C A.3.3.1; checked by g8-masi-check-A1-2026-10-30",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     }
    ]
   },
@@ -6663,7 +6671,15 @@
      "statement": "The sum of independent gamma random variables sharing a common scale parameter is gamma with the same scale and shape equal to the sum of the individual shapes.",
      "concept": "Gamma Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Gamma",
+      "quote": "The sum of independent gamma random variables sharing a common scale parameter is gamma with the same scale and shape equal to the sum of the shapes",
+      "note": "written from Siegrist 5.8 The Gamma Distribution (sums with common scale), https://www.randomservices.org/random/special/Gamma.html; checked by g8-masi-check-A1-2026-10-30",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r2",
@@ -6743,7 +6759,15 @@
      "statement": "For a lognormal(mu, sigma) loss, E[X | X > d] = exp(mu + sigma^2/2) * Phi(sigma - (ln d - mu)/sigma) / (1 - Phi((ln d - mu)/sigma)).",
      "concept": "Lognormal Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Lognormal Distribution",
+      "quote": "E[X \\mid X > d] = \\frac{e^{\\mu + \\sigma^2/2}\\,\\Phi\\!\\left(\\sigma - \\frac{\\ln d - \\mu}{\\sigma}\\right)}{1 - \\Phi\\!\\left(\\frac{\\ln d - \\mu}{\\sigma}\\right)}",
+      "note": "written from SOA Tables for Exam C (Loss Models App. A) A.5.1.1 Lognormal, https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf; checked by g8-masi-check-A1-2026-10-30",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r4",
@@ -11504,7 +11528,15 @@
      "statement": "Expectation preserves inequalities: if one random variable is no greater than another for every outcome, its expected value is no greater either.",
      "concept": "Expected Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Expected Value",
+      "quote": "Expectation preserves inequalities, so a random variable that never exceeds a constant $c$ has a mean of at most $c$",
+      "note": "written from Siegrist, 4.1 Definitions and Basic Properties, increasing and positive properties, https://www.randomservices.org/random/expect/Properties.html; checked by g8-masi-check-A1-2026-10-30",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r4",
@@ -13777,7 +13809,15 @@
      "statement": "For a distribution symmetric about 0 (such as uniform on (-a, a)), E[X] = 0 and all odd moments E[X^k] are 0.",
      "concept": "Uniform Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Moment",
+      "quote": "All odd central moments of a symmetric distribution equal zero, if they exist",
+      "note": "written from Joyce, Math 217 Moments notes (Clark U.), https://mathcs.clarku.edu/~djoyce/ma217/moment.pdf, and Siegrist 4.4 Skewness and Kurtosis; checked by g8-masi-check-A1-2026-10-30",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r5",
@@ -15559,7 +15599,15 @@
      "statement": "A gamma distribution with shape alpha > 1 has an increasing hazard rate that is bounded above by 1/theta (levelling off), and a decreasing mean excess loss that approaches a constant theta.",
      "concept": "Gamma Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Gamma",
+      "quote": "A gamma with shape $\\alpha > 1$ has an increasing hazard rate bounded above by $1/\\theta$",
+      "note": "written from Brunner, STA312 'Exploring the hazard function of the gamma distribution' p.12, https://utstat.utoronto.ca/~brunner/oldclass/312f23/lectures/312f23Hazardplots.pdf, and Bassan, Kochar & Spizzichino (2002) p.535 (IFR implies DMRL); checked by g8-masi-check-A1-2026-10-30",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r5",
@@ -15597,7 +15645,15 @@
      "statement": "To check a Weibull fit graphically, plot ln[-ln S(x)] against ln x; since S(x)=exp(-(x/theta)^tau), this is a straight line with slope tau and intercept -tau ln theta, so the slope estimates the shape.",
      "concept": "Weibull Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Weibull Distribution",
+      "quote": "To check a Weibull fit graphically, plot $\\ln[-\\ln S_n(x)]$ against $\\ln x$",
+      "note": "written from NIST/SEMATECH e-Handbook 8.2.2.1 Weibull probability plotting, https://www.itl.nist.gov/div898/handbook/apr/section2/apr221.htm; checked by g8-masi-check-A1-2026-10-30",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     }
    ]
   },
@@ -15626,7 +15682,15 @@
      "statement": "The gamma distribution with shape α and scale θ has MGF M(t) = (1 - θt)^{-α} for t < 1/θ, for every α > 0.",
      "concept": "Gamma Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Gamma",
+      "quote": "The gamma MGF is $M(t) = (1 - \\theta t)^{-\\alpha}$ for $t < 1/\\theta$, for every shape $\\alpha > 0$",
+      "note": "written from Siegrist 5.8 The Gamma Distribution (MGF), https://www.randomservices.org/random/special/Gamma.html, and SOA Tables for Exam C A.3.2.1; checked by g8-masi-check-A1-2026-10-30",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r3",
@@ -15634,7 +15698,15 @@
      "statement": "A distribution has a finite MGF for some t > 0 only if its tail decays at least exponentially fast; an exponentially decaying tail e^{-x/θ} overpowers e^{tx} for t < 1/θ.",
      "concept": "Moment Generating Function",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Tail Weight",
+      "quote": "A distribution has a finite MGF $M(t) = E[e^{tX}]$ for some $t > 0$ only if its tail decays at least exponentially fast",
+      "note": "written from Pishro-Nik 6.2.3 Chernoff Bounds, https://www.probabilitycourse.com/chapter6/6_2_3_chernoff_bounds.php; Siegrist 5.8 Gamma MGF; Loss Data Analytics ch.10 §10.2; checked by g8-masi-check-A1-2026-10-30",
+      "date": "2026-10-30",
+      "run": "g8-exam-mas-i-2026-10-30"
+     }
     },
     {
      "id": "r4",

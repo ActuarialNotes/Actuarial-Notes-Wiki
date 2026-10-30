@@ -369,7 +369,13 @@
      "statement": "Investors, lenders and other creditors are the primary users of general purpose financial reports because they cannot require reporting entities to give them information directly and must rely on these reports.",
      "concept": "FASB Conceptual Framework (Concepts Statement No. 8)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The FASB's reason why investors and creditors are the primary users is not needed: the question asks only to whom the reports are directed, which r1 answers on the tagged Accounting Frameworks page.",
+      "date": "2026-10-30",
+      "run": "g8-discia-sort"
+     }
     },
     {
      "id": "r3",
@@ -1338,7 +1344,15 @@
        "page": "Pro Rata Reinsurance",
        "quote": "The reinsurer pays the cedant a ceding commission to compensate it for the underwriting and acquisition expenses it incurred to write the business."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Reinsurance Accounting",
+      "quote": "Ceded premium payable is a liability net of the ceding commission",
+      "note": "Reinsurance Accounting is linked by the exam's objective 12 (D30): the ceding commission is netted against ceded premium payable, an allowance from the reinsurer, not premium written.",
+      "date": "2026-10-30",
+      "run": "g8-discia-sort"
+     }
     }
    ]
   },
@@ -1673,7 +1687,15 @@
        "page": "Ceded Loss Reserve",
        "quote": "applies $\\min(\\max(X - R, 0), L)$ to projected ultimates of large claims"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Excess of Loss",
+      "quote": "pays the part of each loss — per risk or per occurrence — above the cedant's retention",
+      "note": "Retagged: the solution applies the XL layer, min(max(X - R, 0), L); the page defines the layer as the part of each loss above the retention, up to the limit.",
+      "date": "2026-10-30",
+      "run": "g8-discia-sort"
+     }
     },
     {
      "id": "r3",
@@ -1686,7 +1708,15 @@
        "page": "Ceded Loss Reserve",
        "quote": "applies $\\min(\\max(X - R, 0), L)$ to projected ultimates of large claims"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Reinsurance Accounting",
+      "quote": "The first claim is below",
+      "note": "The tagged page's XL example applies the layer claim by claim (no recoverable below the attachment on one claim, the excess on the next) and nets the recoverable on unpaid losses against the reserve.",
+      "date": "2026-10-30",
+      "run": "g8-discia-sort"
+     }
     },
     {
      "id": "r4",
@@ -3683,7 +3713,13 @@
      "statement": "Match the term length of a term policy to the period of the insurable need (e.g., a mortgage or dependent years) so coverage lasts exactly as long as the need.",
      "concept": "Term Life Insurance",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "A step of this solution's plan from the question's own setup (a 20-year mortgage): the tagged Term Life page teaches term buys a large death benefit for a fixed period; picking a period that matches the stated need is plain reading.",
+      "date": "2026-10-30",
+      "run": "g8-discia-sort"
+     }
     },
     {
      "id": "r3",
@@ -3700,7 +3736,15 @@
        "page": "Term Conversion",
        "quote": "The new policy is issued at the attained age, at the permanent product's standard premium rates, and generally in the original underwriting class."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Term Life Insurance",
+      "quote": "convertible to permanent insurance without new evidence of health",
+      "note": "The tagged term page teaches the conversion privilege: exchange for permanent insurance without new evidence of health.",
+      "date": "2026-10-30",
+      "run": "g8-discia-sort"
+     }
     },
     {
      "id": "r4",
@@ -3760,7 +3804,15 @@
        "page": "Nonforfeiture Benefit",
        "quote": "**A Nonforfeiture Benefit** is the value a life insurance or deferred annuity policyholder keeps when they stop paying premiums or surrender the contract, so that the reserve built up by the early level premiums is not forfeited to the insurer."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Whole Life Insurance",
+      "quote": "If premiums stop, state nonforfeiture laws require the policy to give a paid-up benefit",
+      "note": "The tagged whole life page states that nonforfeiture laws keep a lapsing policy's value from being forfeited.",
+      "date": "2026-10-30",
+      "run": "g8-discia-sort"
+     }
     },
     {
      "id": "r2",
@@ -3798,7 +3850,13 @@
      "statement": "A specified paid-up nonforfeiture benefit takes effect automatically unless the owner elects another nonforfeiture option within 60 days of default.",
      "concept": "Nonforfeiture Law",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The 60-day election is an aside in the explanation, not needed to choose C: what the policy must provide (a paid-up benefit, or a cash value after three years) is on the tagged Whole Life page.",
+      "date": "2026-10-30",
+      "run": "g8-discia-sort"
+     }
     },
     {
      "id": "r5",
@@ -3849,7 +3907,15 @@
        "page": "Premium Persistency",
        "quote": "A UL policy can stop premiums and stay in force for years on its account value, so a premium shortfall today becomes a lapse later, when the account can no longer pay the charges."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Universal Life Insurance",
+      "quote": "premiums are credited to the account, expense and cost-of-insurance charges are deducted, and interest is credited at a declared rate",
+      "note": "The tagged UL page's definition says expense and COI charges come out of the account each period, premium or not.",
+      "date": "2026-10-30",
+      "run": "g8-discia-sort"
+     }
     },
     {
      "id": "r3",
@@ -3857,7 +3923,13 @@
      "statement": "To estimate how long a universal life policy stays in force with no premiums, divide the account value by the periodic charges (adjusting for interest credited), giving the number of periods until the account is exhausted.",
      "concept": "Universal Life Insurance",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Arithmetic of this solution (account value divided by monthly charges); the account mechanics it rests on are in the tagged UL page's definition and lapse rule.",
+      "date": "2026-10-30",
+      "run": "g8-discia-sort"
+     }
     },
     {
      "id": "r4",
@@ -4155,7 +4227,13 @@
      "statement": "A refund annuity (cash or installment refund) returns the unpaid portion of the premium to the beneficiary at death, whereas a period certain guarantees a number of payments rather than return of premium.",
      "concept": "Refund Annuity",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Distractor B is eliminated by r2 on the tagged Types of Annuities page (death in the period certain continues the regular payments); what a refund annuity pays is not needed to answer.",
+      "date": "2026-10-30",
+      "run": "g8-discia-sort"
+     }
     },
     {
      "id": "r5",
@@ -4270,7 +4348,15 @@
        "page": "Deductible",
        "quote": "A **Deductible** is the initial amount of a loss that the policyholder must pay before insurance coverage begins."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Health Insurance Plans",
+      "quote": "plan typically pays, after a deductible, a percentage of covered expenses",
+      "note": "The tagged page teaches the member pays the deductible before the plan pays, and its cost-sharing formula takes min(A, D) first.",
+      "date": "2026-10-30",
+      "run": "g8-discia-sort"
+     }
     },
     {
      "id": "r2",
@@ -4936,7 +5022,13 @@
        "page": "Salvage and Subrogation",
        "quote": "are the two recoveries that reduce an insurer's net cost after it has paid a claim"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Distractor D is ruled out once A is known: the tagged Aircraft Insurance page's New York no-causation pilot rule decides coverage; the insurer's subrogation prospects are not a step of the solution.",
+      "date": "2026-10-30",
+      "run": "g8-discia-sort"
+     }
     }
    ]
   },
@@ -5098,7 +5190,15 @@
        "page": "Policy Limit",
        "quote": "Under a limit $u$ and no other modification, the insurer pays the whole loss $X$ when it is below $u$ and pays $u$ when it is not"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "International Insurance",
+      "quote": "paying above a local limit up to the master limit",
+      "note": "The tagged page's DIC/DIL rule and its formula P_m = min(X_m, L_m) - P_loc: the master pays the covered loss up to its limit, not the limit.",
+      "date": "2026-10-30",
+      "run": "g8-discia-sort"
+     }
     }
    ]
   },
@@ -6839,7 +6939,15 @@
        "page": "Insurance Marketing",
        "quote": "Under the NAIC Producer Licensing Model Act, a person may not sell, solicit or negotiate insurance in a state without a license for that line of authority, and a resident applicant must pass a written examination ([[Insurance Licensing]])."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Insurance Licensing",
+      "quote": "A producer licensed and in good standing in the home state receives a nonresident license in another state on application and payment",
+      "note": "The tagged licensing page teaches each state licenses its own sales and a home-state producer gets a nonresident license there, without moving.",
+      "date": "2026-10-30",
+      "run": "g8-discia-sort"
+     }
     }
    ]
   },
@@ -7405,7 +7513,15 @@
      "statement": "Boycott, coercion and intimidation under the Unfair Trade Practices Act means concerted action that unreasonably restrains competition in the business of insurance.",
      "concept": "Unfair Trade Practices Act (NAIC Model)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "State Market Conduct Regulation",
+      "quote": "any agreement or concerted act of boycott, coercion or intimidation",
+      "note": "The tagged page lists boycott, coercion and intimidation as a concerted act, which is what rules out C.",
+      "date": "2026-10-30",
+      "run": "g8-discia-sort"
+     }
     }
    ]
   },
@@ -7677,7 +7793,13 @@
      "statement": "Giving required notice of non-renewal is a procedural requirement and does not make a substantively prohibited, unfairly discriminatory non-renewal lawful.",
      "concept": "Nonrenewal and Cancellation Regulation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Follows directly from r1 on the tagged State Market Conduct Regulation page: the Act forbids refusing to renew solely on property age, with no exception for giving notice.",
+      "date": "2026-10-30",
+      "run": "g8-discia-sort"
+     }
     }
    ]
   },
@@ -7889,7 +8011,15 @@
        "page": "Specialty Insurance Coverage",
        "quote": "In the first line, $X$ is the loss, $A$ is the attachment point (the underlying limit or a [[Self-Insured Retention|self-insured retention]]) and $L$ is the layer's limit, which is how excess and umbrella coverage pay."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "PAP Liability Coverage",
+      "quote": "it is a vehicle she does not own, so her PAP is excess over the dealer's policy",
+      "note": "The tagged page's Primary, Excess and Pro Rata example works the excess: the dealer's policy pays to its limit and the PAP pays the rest.",
+      "date": "2026-10-30",
+      "run": "g8-discia-sort"
+     }
     },
     {
      "id": "r5",
@@ -9586,7 +9716,13 @@
      "statement": "In the HO-3 policy, \"you\" and \"your\" refer to the named insured shown in the Declarations and the named insured's spouse if a resident of the same household.",
      "concept": "Homeowners Policy Definitions",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Plain reading: 'the insured' in option D is the named insured, whom the tagged HO-3 Liability Coverages page excludes from Coverage F by name; the policy's definition of 'you' is not needed.",
+      "date": "2026-10-30",
+      "run": "g8-discia-sort"
+     }
     }
    ]
   },
@@ -15778,7 +15914,13 @@
        "page": "Guaranty Funds",
        "quote": "pay the claims of an insolvent insurer's policyholders, up to defined limits"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Distractor A is not needed to answer: the correct source, MAIF's Uninsured Division, is identified directly from the tagged Personal Auto Insurance Laws page; what a guaranty association pays is only the distractor's error.",
+      "date": "2026-10-30",
+      "run": "g8-discia-sort"
+     }
     },
     {
      "id": "r4",

@@ -103,12 +103,17 @@ export default function WikiConcept() {
         setContent(raw)
         setStatus('ready')
       })
-      .catch(() => {
+      .catch(async () => {
+        // A syllabus reading reached at a concept URL — an old link from
+        // before resources had a route of their own — is sent to its page.
+        const resource = `Resources/Books/${conceptName}.md`
+        const isResource = await fetchWikiFile(resource).then(() => true, () => false)
         if (cancelled) return
-        setStatus('error')
+        if (isResource) navigate(wikiRoute({ kind: 'resource', name: conceptName }), { replace: true })
+        else setStatus('error')
       })
     return () => { cancelled = true }
-  }, [conceptName, shouldShowConcept])
+  }, [conceptName, shouldShowConcept, navigate])
 
   const pageRefs = useMemo(
     () => (content ? extractWikiLinksFromText(content) : []),

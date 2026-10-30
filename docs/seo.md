@@ -55,7 +55,7 @@ The details that make the derived text read cleanly:
   (`docs/verification.md`, P4). Improving the page's opening sentence is usually the
   better fix, and it improves the page too.
 
-## Three places the record is used
+## Four places the record is used
 
 `seoPagesPlugin` in `vite.config.ts` builds the records once per build and uses them:
 
@@ -77,7 +77,22 @@ The details that make the derived text read cleanly:
    which includes the Resources shelf, `/wiki/resources` — a filterable list with no
    static file of its own; the hub's static file links every reading) and every
    indexable page. It can't fall behind the vault again. `public/robots.txt`
-   points to it.
+   points to it. Each page's `<lastmod>` is the day its vault file last changed,
+   read from `git log` at build time (`vaultLastModified` → `lastModifiedFromGitLog`).
+   Vercel checks the repo out shallow, and the clone's edge commit shows every
+   file as added that day, so a file last touched there gets **no** date rather
+   than a wrong one — Google stops trusting a sitemap whose dates are wrong.
+4. **`dist/404.html`**, the built `index.html` with `NOT_FOUND_HEAD`. A path
+   under `/wiki/exam/`, `/wiki/concept/` or `/wiki/resource/` that has no static
+   file is not rewritten to the SPA (`quiz/vercel.json`), so Vercel answers it
+   **404** with this file. Every real page has a file, so only a page that
+   doesn't exist gets the 404 — and it is still the app, which boots and does
+   what it can with the path: a concept named by a syllabus with no page of its
+   own is sent to its study guide, and a syllabus reading reached at a concept
+   URL (`/wiki/concept/Basics+of+Reinsurance+Pricing+(Clark+-+2014)`, an old
+   link) is sent to its resource page. Before this, every made-up URL answered
+   200 with the site's home-page head: soft 404s, which cost a site crawl and
+   standing.
 
 ### The crawlable copy is never seen
 
@@ -98,8 +113,8 @@ last. On the very first render of a page served from its static file, the fallba
 is skipped — the head already carries the full record, and blanking it while the
 wiki chunk loads would only make the rendered head flicker. A route that names
 nothing — `NotFound`, a wiki page that fails to load — writes `NOT_FOUND_HEAD`,
-which is `noindex`: the app answers every path 200, so without it a typo'd URL
-would be indexed as a page.
+which is `noindex`. Outside the three page kinds the app still answers every
+path 200, so without it a typo'd URL would be indexed as a page.
 
 ## Concept URLs: shown to whoever lands on them
 

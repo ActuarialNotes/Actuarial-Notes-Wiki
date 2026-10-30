@@ -3,6 +3,8 @@ import { defineConfig, loadEnv, type Logger, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import { PDFJS_ASSET_DIRS } from './src/lib/pdfjsAssets'
 import path from 'path'
+import { execFile } from 'child_process'
+import { promisify } from 'util'
 import { mkdir, readdir, readFile, writeFile } from 'fs/promises'
 import fm from 'front-matter'
 import { buildResourceExamMap, examsForResource } from './src/lib/resourceExams'
@@ -19,7 +21,7 @@ import {
 import { PUBLIC_SITE_URL, SKILL_ASSET, connectorUrl, skillUrl } from './src/lib/aiConnector'
 import { buildZip } from './src/lib/xlsx'
 import { VAULT_MEDIA_DIR, vaultMediaUrl } from './src/lib/vaultAssets'
-import { buildSeoPages, countQuestionsByExam, pageHead, sitemapXml, SITEMAP_APP_PATHS, type SeoPage } from './src/lib/seo'
+import { buildSeoPages, countQuestionsByExam, lastModifiedFromGitLog, NOT_FOUND_HEAD, pageHead, sitemapXml, SITEMAP_APP_PATHS, type SeoPage } from './src/lib/seo'
 import { renderStaticPage, staticBody } from './src/lib/seoPrerender'
 
 const REPO_ROOT = path.resolve(__dirname, '..')
@@ -753,6 +755,23 @@ function pdfjsAssetsPlugin(): Plugin {
 //   - `dist/sitemap.xml` lists every page worth indexing — generated, so it
 //     can't fall behind the vault the way a hand-kept one did.
 // See docs/seo.md.
+/**
+ * The day each vault file last changed, by its repo-relative path — the
+ * sitemap's `lastmod`. Empty when git isn't there to ask (a tarball deploy),
+ * which leaves the sitemap undated rather than failing the build.
+ */
+async function vaultLastModified(): Promise<Map<string, string>> {
+  const git = (...args: string[]) => promisify(execFile)('git', ['-C', REPO_ROOT, ...args], { maxBuffer: 64 * 1024 * 1024 })
+  try {
+    const { stdout: log } = await git('-c', 'core.quotePath=false', 'log', '--format=%x01%H %cs', '--name-only', '--', 'Concepts', 'Resources/Books', 'Exam*.md')
+    const { stdout: shallowFile } = await git('rev-parse', '--git-path', 'shallow')
+    const shallow = await readFile(path.resolve(REPO_ROOT, shallowFile.trim()), 'utf-8').catch(() => '')
+    return lastModifiedFromGitLog(log, new Set(shallow.split('\n').map(l => l.trim()).filter(Boolean)))
+  } catch {
+    return new Map()
+  }
+}
+
 function seoPagesPlugin(): Plugin {
   const VIRTUAL_ID = 'virtual:seo-pages'
   const RESOLVED_ID = '\0' + VIRTUAL_ID
@@ -806,9 +825,19 @@ function seoPagesPlugin(): Plugin {
         await mkdir(path.dirname(file), { recursive: true })
         await writeFile(file, renderStaticPage(template, pageHead(page), body))
       }
-      const listed = [...SITEMAP_APP_PATHS, ...indexable.map(p => p.path)]
+      // Any other path under a page kind has no file, and is a real 404 — not
+      // the SPA rewrite (quiz/vercel.json). Vercel serves this for it: the app
+      // still boots and handles the path (an alias, an old link it redirects),
+      // but a crawler is told there is no such page.
+      await writeFile(path.join(outDir, '404.html'), renderStaticPage(template, NOT_FOUND_HEAD, ''))
+      const modified = await vaultLastModified()
+      const listed = [
+        ...SITEMAP_APP_PATHS,
+        ...indexable.map(p => ({ path: p.path, lastmod: p.source ? modified.get(p.source) : undefined })),
+      ]
       await writeFile(path.join(outDir, 'sitemap.xml'), sitemapXml(listed))
-      logger?.info(`seo: ${pages.length} static pages (${pages.length - indexable.length} noindex stubs), ${listed.length} URLs in sitemap.xml`)
+      const dated = listed.filter(e => typeof e !== 'string' && e.lastmod).length
+      logger?.info(`seo: ${pages.length} static pages (${pages.length - indexable.length} noindex stubs), ${listed.length} URLs in sitemap.xml (${dated} dated)`)
     },
   }
 }

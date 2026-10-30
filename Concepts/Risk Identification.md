@@ -1,11 +1,14 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-10
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
   content_hash: sha256:2561711a838f4f88c49a6ffedb4e70b4608898e26b32130f82455d642f5b3875
   sources:
+    - "OpenStax, Psychology 2e, §12.4 Conformity, Compliance, and Obedience, 'Groupthink' (definition after Janis 1972; a directive leader who makes his opinions known discourages disagreement; avoided by having the leader withhold position statements until all members have voiced their views), sha256:5914f63d41db5de7312cd568348f5906146e72c954ae67e5d0aed3254878a3a8 — https://openstax.org/books/psychology-2e/pages/12-4-conformity-compliance-and-obedience"
+    - "Organizational Behavior v1.1 (Saylor Academy; the Saylor edition names no author), §11.4 Decision Making in Groups: groupthink symptoms (self-censorship, pressure on dissenters); OB Toolbox — leaders remain impartial and refrain from stating preferences at the outset, anonymous feedback channel; nominal group technique ensures all members participate; Delphi technique by a series of questionnaires, responses can be kept anonymous, sha256:fa2d788adacb2018496b786a0657da851cf4dba2c10fce60791f3a5917cad996 — https://saylordotorg.github.io/text_organizational-behavior-v1.1/s15-04-decision-making-in-groups.html"
+    - "RAND Corporation, Delphi Method (topic page): developed by RAND in the 1950s; experts anonymously answer questionnaires, receive the group response and revise their answers, sha256:2f94c661dbd733626b95ae4e85a552a61d7167424377078581b8b6b94f4425da — https://www.rand.org/topics/delphi-method.html"
     - "Rejda & McNamara, Principles of Risk Management and Insurance, 12th ed. (Pearson 2014), Ch.3 pp.46, 54, sha256:d287eea5870c8b2d7dcfd205f5c26283d5c3cb4f536965eb8c21a344c428aed0"
     - "Risk & Insurance Education Alliance, Risk Identification (ELR course reading), pp.1-5, sha256:1592f41132ab2c9854a94b3de7c237a84442678d065a545621991fda4d6148cc — https://riskeducation.org/pub/media/elr/Risk-Identification.pdf"
     - "CAS Enterprise Risk Management Committee, Overview of Enterprise Risk Management (CAS Forum, Summer 2003), pp.111-112 (PDF pp.13-14), sha256:f433c8300785640b2f4fd168d3b38878d1bfbc9b9f8f74c08e43de8e98982efd — https://www.casact.org/sites/default/files/database/forum_03sforum_03sf099.pdf"

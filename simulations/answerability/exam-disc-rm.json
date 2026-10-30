@@ -2176,7 +2176,15 @@
        "page": "Emerging Risk",
        "quote": "so that opinions converge without one dominant voice anchoring the rest."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Identification",
+      "quote": "A group session such as a brainstorming workshop has its own failure: when a senior or dominant member states a view, the others tend to defer to it or go along to avoid conflict, which is called groupthink, and the list narrows to what that member already sees.",
+      "note": "Teaches the dominant-voice/groupthink failure in group identification; the next sentence on the page gives the facilitator's guard. Checked against OpenStax Psychology 2e §12.4 and Saylor OB §11.4 (verified, run g8-discrm-chk).",
+      "date": "2026-10-30",
+      "run": "g8-discrm-chk"
+     }
     }
    ]
   },
@@ -3817,7 +3825,15 @@
      "statement": "Producers' functions include prospecting for new customers, reviewing prospects' loss exposures and risk management needs, selling and binding coverage, and assisting with claims.",
      "concept": "Insurance Producer",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Insurance Producer",
+      "quote": "The work runs from prospecting, finding and contacting prospects (potential buyers of insurance), through reviewing each prospect's loss exposures and helping it determine its insurance needs, to selling the coverage, selecting the insurer and binding it where the producer has the authority, and later to assisting the insured in filing and adjusting claims.",
+      "note": "Teaches the function list (prospecting, exposure/needs review, selling and binding, claims assistance); checked against NAIC pp.25-26 and IRMI 'prospect' (verified, run g8-discrm-chk).",
+      "date": "2026-10-30",
+      "run": "g8-discrm-chk"
+     }
     },
     {
      "id": "r3",
@@ -3825,7 +3841,15 @@
      "statement": "In reviewing loss exposures and needs, a producer identifies exposures the customer may not have considered (such as liability exposures from contracts or leases) and often acts as a consultant on the customer's insurance program.",
      "concept": "Insurance Producer",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Insurance Producer",
+      "quote": "In the review the producer acts as a consultant on the customer's risk management and insurance program, and it can find exposures the customer did not know it had: a review of the customer's non-insurance contracts, such as leases and hold-harmless or indemnification agreements, shows liability the customer has taken on by contract, and an inspection of its premises can find unreported hazards and assets.",
+      "note": "Teaches the consultant role and finding unconsidered exposures, including contract/lease liability; checked against NAIC fn 7 and p.27, RIEA pp.3-4, IRMI hold harmless (verified, run g8-discrm-chk).",
+      "date": "2026-10-30",
+      "run": "g8-discrm-chk"
+     }
     },
     {
      "id": "r4",

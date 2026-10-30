@@ -1,12 +1,16 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-10
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
   content_hash: sha256:65358403505598280866a25a4f1f46c4f481904b53a852bbb0163b820d9a25b0
   sources:
-    - "Baranoff et al., Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012), s11-01 agents vs brokers; binding; x-date, sha256:9abf601a8c7e62c112667b15df20471c0a07e5e32ff1dea40448eec0afdccf7e — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s11-01-insurance-operations-marketing.html"
+    - "NAIC, A Regulator's Introduction to the Insurance Industry (2005), §C Production and Distribution, printed pp.25-27 incl. fn 7 (PDF pp.39-41): producer contacts or is contacted by potential buyers, assists them in determining insurance needs and selecting insurer and coverages, may bind, assists in filing and adjusting claims; agents may advise consumers; brokers provide risk-management advice, sha256:7d6e4fce110253b59c6c38f3abfa4e38c561d4f521c24fdc65e0884718e0f264 — https://content.naic.org/sites/default/files/inline-files/prod_serv_marketreg_rii_zb.pdf"
+    - "IRMI Glossary, \"prospect\", definition (a potential buyer of insurance), sha256:ba3067383315c28ee5ccfb0286327ec51b2dce3095962d2a19723ad253ae7217 — https://www.irmi.com/term/insurance-definitions/prospect"
+    - "IRMI Glossary, \"hold harmless agreement\", definition (one contracting party responds to the other's legal liabilities), sha256:0fd9ef7429c6ef8f70faf6da387394ec48b8df30513beffb85d5ee0b4ac51a70 — https://www.irmi.com/term/insurance-definitions/hold-harmless-agreement"
+    - "Risk & Insurance Education Alliance, Risk Identification (ELR course reading), pp.3-4: physical inspections, which agents can provide, may find unreported hazards and assets; non-insurance contract review of leases and hold-harmless or indemnification agreements reveals exposures, sha256:1592f41132ab2c9854a94b3de7c237a84442678d065a545621991fda4d6148cc — https://riskeducation.org/pub/media/elr/Risk-Identification.pdf"
+    - "Baranoff et al., Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012), s11-01 agents vs brokers; binding; x-date; brokerage firms' risk management surveys, sha256:9abf601a8c7e62c112667b15df20471c0a07e5e32ff1dea40448eec0afdccf7e — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s11-01-insurance-operations-marketing.html"
     - "Baranoff et al., Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012), s12-02 licensing; unfair practices; misappropriation, sha256:d6b9f53c3fd3c106c652f9ef8b46b21ee9199f1fda6e8951f64e4cf4b09bb021 — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s12-02-insurance-regulation.html"
     - "Rejda & McNamara, Principles of Risk Management and Insurance, 12th ed. (Pearson 2014), Ch.5 pp.93-99; Ch.6 p.108; Ch.8 pp.145-146, sha256:d287eea5870c8b2d7dcfd205f5c26283d5c3cb4f536965eb8c21a344c428aed0"
     - "IRMI Glossary, \"producer\", definition, sha256:ab86f978b17bbaa40dcb8086817cd5a3fa812fc527a86b508f7d5412ecdeb1ea — https://www.irmi.com/term/insurance-definitions/producer"

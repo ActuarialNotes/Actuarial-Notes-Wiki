@@ -87,7 +87,13 @@
      "statement": "To find the accumulated value of level deposits made at the start of each k-year period, accumulate each deposit at the effective rate for its remaining time and sum the resulting terms, which form a geometric series with ratio (1+i)^k.",
      "concept": "Annuity-Due",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "summing the deposits' accumulated values as a geometric series is algebra; the rule used is valuing payments every k years at the rate per k-year period (r4)",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r2",
@@ -125,7 +131,15 @@
      "statement": "Payments made every k years can be treated as an annuity whose effective rate per k-year period is (1+i)^k - 1, so the accumulated value equals the payment times s_angle(n)/a_angle(k) evaluated at the annual rate i (for payments at the start of each k-year period).",
      "concept": "Annuity with Payment Period Longer than Interest Period",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Payment Period",
+      "quote": "The same conversion works when payments are *less* frequent than compounding",
+      "note": "passage on Payment Period (syllabus page): annuity factors use the effective rate per payment interval, converted the same way when payments are less frequent than compounding; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -133,7 +147,13 @@
      "statement": "A polynomial equation in a power of (1+i), such as x^2 - 5x + 4 = 0 with x = (1+i)^n, is solved by substitution and factoring; reject non-positive or non-meaningful roots (e.g., x = 1 giving i = 0, which fails the stated condition) and recover i from the valid root.",
      "concept": "Solving for the Interest Rate",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "solving the quadratic in (1+i)^n and rejecting the root i = 0 is algebra; the rule used is the accumulated value of payments every k years (r4)",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -187,7 +207,15 @@
      "statement": "Interest earned during a single period equals the balance at the end of the previous period times the periodic rate (equivalently, the difference of consecutive accumulated values).",
      "concept": "Compound Interest",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Interest",
+      "quote": "where $i$ is the periodic [[Interest Rate]] and $B_{t-1}$ is the [[Outstanding Balance]] at the start of the period.",
+      "note": "passage on Interest (syllabus page): interest in a period is the periodic rate times the balance at the start of the period; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -208,7 +236,13 @@
      "statement": "The last 6 months of the 8th year is the 16th semiannual period, so interest in it is earned on the balance after 15 semiannual periods.",
      "concept": "Time Periods and Timeline",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "identifying the last six months of year 8 as the 16th semiannual period is translating the stem's timing; the rule used is interest on the opening balance (r3)",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -242,7 +276,15 @@
        "page": "Deferred Annuity",
        "quote": "{}_{k|}a_{\\overline{n}|} = v^k \\cdot a_{\\overline{n}|}"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Deferred Annuity",
+      "quote": "{}_{k|}a_{\\overline{n}|} = v^k \\cdot a_{\\overline{n}|}",
+      "note": "retagged with Deferred Annuity; passage on that page: passage on Annuity Immediate (syllabus page): an annuity's value falls one period before its first payment, so a stream starting at time 2 is valued at time 1 a",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r3",
@@ -305,7 +347,15 @@
      "statement": "When a loan or fund earning interest is reduced by a level principal amount each period, the interest paid each period forms an arithmetic decreasing sequence, falling by the interest rate times the principal reduction each period.",
      "concept": "Decreasing Annuity",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Interest",
+      "quote": "where $i$ is the periodic [[Interest Rate]] and $B_{t-1}$ is the [[Outstanding Balance]] at the start of the period.",
+      "note": "passage on Interest (syllabus page): interest each period is i times the opening balance, so a balance falling by a level principal amount gives interest falling by i times that amount; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r2",
@@ -419,7 +469,15 @@
      "statement": "When each payment is a fixed multiple m of the interest due, the balance is reduced by the factor (1 - (m-1)i) each period, so the balance after n periods is the original loan times (1 - (m-1)i)^n.",
      "concept": "Loan Amortization",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loan Amortization",
+      "quote": "B_k = B_{k-1}(1+i) - K_k",
+      "note": "passage on Loan Amortization (tagged): the balance recursion; substituting a payment equal to m times the interest due gives the balance factor; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -559,7 +617,15 @@
      "statement": "The value of a perpetuity immediately after a payment is the same as its value at time zero, because the remaining payments form an identical perpetuity-immediate starting one period later.",
      "concept": "Perpetuity",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Perpetuity",
+      "quote": "holds because the perpetuity-due can be seen as an immediate payment of 1 followed by a perpetuity-immediate",
+      "note": "passage on Perpetuity (tagged): what remains of a perpetuity after a payment is again a perpetuity-immediate; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r3",
@@ -716,7 +782,13 @@
      "statement": "To find an unknown deposit, set up an equation of value in which the interest earned over a period, computed as the opening balance (prior deposits accumulated plus the new deposit) times [a(t2)/a(t1) - 1], equals the stated amount, then solve for the unknown.",
      "concept": "Equation of Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "setting the stated interest equal to the opening balance times the period's growth and solving for the deposit is setting up and solving this question's equation; the rule used is interest earned over an interval (r3)",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -1024,7 +1096,13 @@
      "statement": "Powers of the accumulation factor combine multiplicatively: if (1+i)^n = k, then (1+i)^{jn} = k^j.",
      "concept": "Compound Interest",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "(1+i)^{jn} = ((1+i)^n)^j is an exponent rule, algebra",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -1083,7 +1161,15 @@
      "statement": "The annuity-due present value factor is ä_{n|i} = (1 − v^n)/d = (1 − v^n)·(1+i)/i, where v = 1/(1+i).",
      "concept": "Annuity-Due",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Annuity Due",
+      "quote": "= \\frac{1-v^n}{d}",
+      "note": "passage on Annuity Due (linked/syllabus page): ä_n = (1 − v^n)/d; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -1133,7 +1219,13 @@
      "statement": "Powers of the discount factor combine by exponent rules, so v^(2n) = (v^n)^2, allowing known v^n to determine v^(2n).",
      "concept": "Discount Factor",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "v^{2n} = (v^n)^2 is an exponent rule, algebra",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -1523,7 +1615,15 @@
      "statement": "With a deposit P at time 0 and annual effective rate i, the interest earned in year n equals P(1+i)^(n-1) * i.",
      "concept": "Annual Effective Interest Rate",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Interest",
+      "quote": "where $i$ is the periodic [[Interest Rate]] and $B_{t-1}$ is the [[Outstanding Balance]] at the start of the period.",
+      "note": "passage on Interest (tagged): interest in a period is the rate times the opening balance, here P(1+i)^{n−1}; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r3",
@@ -1531,7 +1631,13 @@
      "statement": "To find an unknown effective rate from two equations that share the same unknown quantity, divide one equation by the other to eliminate the common amount, then solve for (1+i) by taking a root and subtract 1 to obtain i.",
      "concept": "Solving for the Effective Interest Rate",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "dividing one equation by the other and taking a root to solve for i is algebra",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -1611,7 +1717,15 @@
      "statement": "The effective discount rate d equals 1 − v (equivalently i·v), the relationship used to rewrite 1 − v as d.",
      "concept": "Effective Rate of Discount",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Discount Rate",
+      "quote": "satisfies $\\left(1 - \\frac{d^{(m)}}{m}\\right)^m = 1 - d = v$",
+      "note": "passage on Discount Rate (syllabus page), whose defining block also gives d = 1 − v: 1 − d = v; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -1644,7 +1758,15 @@
      "statement": "For a perpetuity with payments every k years, treat it as a sum of payments discounted by v^k, 2k, 3k,... and sum the geometric series to get payment times v^k/(1-v^k), then solve for v^k.",
      "concept": "Perpetuity",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Payment Period",
+      "quote": "The same conversion works when payments are *less* frequent than compounding",
+      "note": "passage on Payment Period (syllabus page): payments every k years are valued at the effective rate per k-year interval, so the perpetuity is 1/((1+i)^k − 1); the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r3",
@@ -1796,7 +1918,13 @@
      "statement": "When payments grow with inflation from today's level, the first payment at time 1 equals the current amount times (1 + inflation rate), and payment t equals the current amount times (1 + inflation rate)^t.",
      "concept": "Increasing Annuities",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "that a cost of C today inflated at rate r is C(1+r)^t at time t is translating the stem's inflation assumption; the rule used is the geometric increasing annuity",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r2",
@@ -1928,7 +2056,15 @@
        "page": "Economic Value",
        "quote": "Funds after 2 years} &= 130(1.04)^2 \\\\"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Reinvestment of Coupons",
+      "quote": "investing each periodic coupon payment at a reinvestment rate $r_i$, which may differ from the original [[Yield Rate]] $j$",
+      "note": "passage on Reinvestment of Coupons (tagged): cash flows are accumulated at a reinvestment rate that can differ from the valuation rate; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -2084,7 +2220,15 @@
      "statement": "Macaulay duration equals the negative of the derivative of price with respect to yield, divided by price, times one plus the effective annual yield: D = -(dP/di)/P × (1+i).",
      "concept": "Macaulay Duration",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Duration",
+      "quote": "D_{Mod} = \\frac{D_{Mac}}{1+j} = -\\frac{1}{P}\\frac{dP}{dj}",
+      "note": "passage on Duration (tagged): D_Mac = (1+j)·D_Mod = −(1+j)(dP/dj)/P; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r2",
@@ -2165,7 +2309,15 @@
        "page": "Increasing Annuity",
        "quote": "With no end date, the increasing [[Perpetuity|perpetuity]]-immediate $1, 2, 3, \\ldots$ is worth $(Ia)_{\\overline{\\infty}|} = 1/i + 1/i^2$, and the perpetuity-due $(I\\ddot{a})_{\\overline{\\infty}|} = 1/d^2$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Increasing Annuity",
+      "quote": "increasing [[Perpetuity|perpetuity]]-immediate $1, 2, 3, \\ldots$ is worth $(Ia)_{\\overline{\\infty}|} = 1/i + 1/i^2$",
+      "note": "retagged with Increasing Annuity; passage on that page: the question's duration is a ratio of (Ia)∞ to a∞ for an increasing perpetuity; Increasing Annuity gives (Ia)∞ = 1/i + 1/i² = 1/(id)",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -2466,7 +2618,13 @@
      "statement": "To find the fund needed at retirement, divide the desired periodic income by the income rate per unit of fund (e.g. income per 1000 of fund) and scale up by the unit size.",
      "concept": "Life Annuity Income Conversion",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "dividing the desired income by the stated income per 1000 of fund is translating the stem's annuity-rate data; arithmetic",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r2",
@@ -2727,7 +2885,15 @@
      "statement": "To fund a liability at time 3 using a bond maturing at time 2, the proceeds at time 2 are reinvested at the forward rate for one year, so the needed amount at time 2 is the liability divided by (1 + forward rate).",
      "concept": "Reinvestment at Forward Rates",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Forward Rate",
+      "quote": "is the interest rate agreed upon today for an investment (or loan) beginning at a future time $t_1$ and maturing at time $t_2$",
+      "note": "passage on Forward Rate (tagged): money reinvested from time 2 to 3 earns the forward rate, so the amount needed at time 2 is the liability over (1 + f); the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -3301,7 +3467,13 @@
      "statement": "When the integrand is a constant multiple of f'(r)/f(r), its integral is that multiple times ln f(r), so the integral from 0 to t equals the multiple times ln(f(t)/f(0)).",
      "concept": "Force of Interest",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "integrating a multiple of f'(r)/f(r) to a log is calculus; the rule used is a(t) = exp(∫δ)",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -3542,7 +3714,15 @@
      "statement": "When a loan is refinanced, the outstanding balance at the refinancing date becomes the principal of the new loan, which is repaid using the new rate and new term.",
      "concept": "Loan Refinancing",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Refinancing",
+      "quote": "The new loan's principal is the old loan's [[Outstanding Balance|outstanding balance]] at the refinancing date",
+      "note": "passage on Refinancing (syllabus page); the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -3589,7 +3769,15 @@
        "page": "Increasing Annuity",
        "quote": "$$(Ia)_{\\overline{n}|} = \\frac{\\ddot{a}_{\\overline{n}|} - nv^n}{i}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Arithmetic Increasing Annuity",
+      "quote": "(Ia)_{\\overline{n}|} = \\frac{\\ddot{a}_{\\overline{n}|} - nv^n}{i}",
+      "note": "passage on Arithmetic Increasing Annuity (syllabus page); the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -4047,7 +4235,13 @@
      "statement": "The derivative with respect to i of a cash flow C at time distance t from the focal date, valued as C(1+i)^(-t), is -tC(1+i)^(-t-1), so a payment before the focal date (negative t) contributes with the opposite sign to a payment after it.",
      "concept": "Present Value of Cash Flows",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "differentiating C(1+i)^{-t} is calculus; the rule used is the full-immunization PV and duration conditions taught on Full Immunization",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -4810,7 +5004,15 @@
      "statement": "The present value of a perpetuity-immediate paying 1 every k periods (first payment at time k) at effective rate i per period is 1/((1+i)^k - 1).",
      "concept": "Perpetuities",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Payment Period",
+      "quote": "The same conversion works when payments are *less* frequent than compounding",
+      "note": "passage on Payment Period (syllabus page): payments every k periods are valued at the rate per k-period interval, (1+i)^k − 1, giving 1/((1+i)^k − 1) for the perpetuity; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r2",
@@ -4848,7 +5050,13 @@
      "statement": "A payment due at the beginning of year two occurs at time 1, so a perpetuity paying every three years starting then has payments at times 1, 4, 7, ...",
      "concept": "Timing of Payments",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "placing a payment at the beginning of year two at time 1 is translating the stem's timing",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -5072,7 +5280,15 @@
      "statement": "To reamortize a loan at a new interest rate, treat the current outstanding balance as a new loan over the remaining number of payments (maturity unchanged) and compute the new level payment as balance divided by the annuity factor at the new rate.",
      "concept": "Loan Reamortization",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Refinancing",
+      "quote": "**Lower payment**: keep the remaining term and solve for $P'$",
+      "note": "passage on Refinancing (syllabus page), with its formula P' = L'/a_{n'|i'}; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -5542,7 +5758,13 @@
      "statement": "When cash flows occur at times t and 2t, substitute x = v^t so that the equation of value becomes a quadratic in x, then solve it with the quadratic formula and take the positive root.",
      "concept": "Equation of Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "substituting x = v^t and solving the quadratic is algebra; the rule used is the equation of value",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -5563,7 +5785,13 @@
      "statement": "Delaying deposits reduces their accumulated value at a fixed future date, so the largest n meeting the accumulation requirement is the floor of the solved n.",
      "concept": "Time Value of Money",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "taking the largest whole n from the solved value is rounding to the stem's condition",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -5673,7 +5901,13 @@
      "statement": "Count only the level payments that occur on or before the valuation date (complete periods elapsed), so payments falling after the evaluation date are excluded from the equation.",
      "concept": "Annuity-Immediate",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "counting which payments fall on or before the valuation date is reading the stem's timeline",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -5694,7 +5928,13 @@
      "statement": "Measure the time between two calendar dates in months and use the matching period rate (months with the monthly rate) when discounting a balance, e.g. Jan 1 to May 1 ten years later is 124 months.",
      "concept": "Time Measurement in Interest Problems",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "counting months between two calendar dates is arithmetic; matching the rate to the period is the payment-period rule taught on Payment Period",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -5757,7 +5997,13 @@
      "statement": "To find the yield rate for a deposit annuity with a known accumulated value, set the annuity accumulation s-double-dot_{n|j} times the deposit equal to the final fund value and solve for j numerically or by iteration, then convert j to the annual effective rate via (1+j)^(1/k) - 1.",
      "concept": "Yield Rate (Internal Rate of Return)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "solving the accumulation equation for j is a calculator (iteration) step, and converting a per-period rate to an annual one is the conversion on Payment Period",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -5825,7 +6071,15 @@
        "page": "Deferred Annuity",
        "quote": "$$\\begin{align*} {}_{3|}a_{\\overline{5}|} &= v^3 \\cdot a_{\\overline{5}|0.05} \\\\ &= (1.05)^{-3} \\cdot \\frac{1 - (1.05)^{-5}}{0.05} \\\\ &= 0.86384 \\times 4.3295 \\\\ &\\approx 3.7403 \\end{align*}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Deferred Annuity",
+      "quote": "{}_{k|}a_{\\overline{n}|} = v^k \\cdot a_{\\overline{n}|}",
+      "note": "retagged with Deferred Annuity; passage on that page: passage on Annuity Immediate (linked/syllabus page): an annuity is valued one period before its first payment, then discounted; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -6097,7 +6351,15 @@
        "page": "Loan Amortization",
        "quote": "the borrower makes a series of payments $K_1, K_2, \\ldots, K_n$ whose present value at the loan rate equals the amount lent"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Amortization",
+      "quote": "Whatever the payment pattern, the loan equals the present value of its payments",
+      "note": "passage on Amortization (syllabus page); the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -6160,7 +6422,15 @@
      "statement": "The account balance just before the first withdrawal equals the accumulated value of all prior deposits at that time, which also equals the present value at that time of all future withdrawals.",
      "concept": "Equation of Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Equation of Value",
+      "quote": "sets the value of all payments in equal to the value of all payments out",
+      "note": "passage on Equation of Value (syllabus page): at the retirement date the deposits' accumulated value equals the withdrawals' present value; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -6401,7 +6671,13 @@
      "statement": "The integral of 1/(t+1) is ln(t+1), so exp of the integral from a to b equals (b+1)/(a+1).",
      "concept": "Force of Interest",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "∫ 1/(t+1) dt = ln(t+1) is calculus; the rule used is a(t2)/a(t1) = exp(∫δ) (Variable Force of Interest)",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -6622,7 +6898,15 @@
        "page": "Mortgage Loan",
        "quote": "$B_t$ is the [[Outstanding Balance|outstanding balance]] after $t$ payments, the [[Present Value|present value]] of the payments still due."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Outstanding Balance",
+      "quote": "**Prospective method** (present value of future payments):",
+      "note": "passage on Outstanding Balance (tagged): the balance is the PV of the payments still due, so the regular payments must have PV equal to the loan less the PV of the extra payments; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -6668,7 +6952,13 @@
      "statement": "Convert a count of end-of-month payment periods to a calendar date by counting forward from the first payment date, with the k-th payment occurring k-1 months after the first payment date.",
      "concept": "Loan Amortization",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "converting a payment count to a calendar date is date arithmetic",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -6731,7 +7021,13 @@
      "statement": "Rounding a payment up to the next multiple of a given amount means taking the smallest multiple of that amount that is at least the computed payment.",
      "concept": "Amortization with Rounded Payments",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "rounding up to the next multiple of a stated amount is arithmetic following the stem's instruction",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -6781,7 +7077,13 @@
      "statement": "A zero-coupon bond bought at a price expressed as a fraction of redemption value grows to a redemption value equal to the reciprocal of that price per unit invested.",
      "concept": "Zero-Coupon Bond",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "a zero-coupon bond bought at fraction p of redemption returns 1/p per unit invested is arithmetic",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r3",
@@ -6789,7 +7091,13 @@
      "statement": "A deposit made at the beginning of month k is invested in a bond maturing at the end of the accumulation horizon, so its term is the remaining months and its price is the one for that maturity (e.g., the first deposit uses the longest maturity, the last deposit uses a 1-month bond).",
      "concept": "Zero-Coupon Bond",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "matching each deposit to the bond maturing at the horizon is translating the stem's investment plan",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -6886,7 +7194,13 @@
      "statement": "To find the interest rate from two pieces of amortization information, divide the two expressions to eliminate the payment P, solve for v^n (or v^5) from the ratio, then obtain i from v = 1/(1+i).",
      "concept": "Loan Amortization",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "dividing the two amortization expressions to eliminate P and solve for v is algebra",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -7000,7 +7314,13 @@
      "statement": "Compute the investor's net periodic cash flow when borrowing to invest by subtracting the interest-only loan payment from the investment income, and compute the net terminal cash flow by subtracting loan principal repayment from the investment's redemption proceeds.",
      "concept": "Leveraged Investment (Borrowing to Invest)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "netting loan interest and principal against investment income is translating the stem's borrowing arrangement into cash flows",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r3",
@@ -7097,7 +7417,13 @@
      "statement": "Solve the bond price equation for the coupon rate to get r = (P/F)(1/a_{n|}) − v^n/a_{n|}, showing r is a linear function of 1/F when price, term and yield are held fixed.",
      "concept": "Bond Pricing",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "solving the bond price formula for the coupon rate is algebra; the rule used is the bond price formula (Bond Price)",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r3",
@@ -7105,7 +7431,13 @@
      "statement": "When bonds share the same term, price and yield, the slope and intercept constants in the linear relation r = x(1/F) + y are the same for all bonds, so they can be determined from two bonds and then applied to a third.",
      "concept": "Bond Pricing",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "applying the fitted linear relation to a third bond adds no rule beyond r2; algebra",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -7266,7 +7598,13 @@
      "statement": "To find the number of remaining periods of a bond from a known book value, substitute the known coupon, redemption value and yield into the prospective formula and solve for the discount factor v^(n−t), then take logarithms to get the remaining term; add the elapsed periods t to get total term n.",
      "concept": "Bond Pricing (Prospective Book Value)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "solving the prospective book value for v^{n−t} with logarithms is algebra; the rule used is the prospective book value formula (Book Value)",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -7329,7 +7667,13 @@
      "statement": "To find the term of a bond, solve the prospective book value equation for the remaining number of periods using logarithms, then add the elapsed periods and convert periods to years (divide by the number of periods per year).",
      "concept": "Bond Valuation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "solving the prospective book value for the remaining periods with logarithms and converting periods to years is algebra; the rule used is the prospective book value formula (Book Value)",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -7464,7 +7808,13 @@
      "statement": "Given a known Macaulay duration, solve the duration equation for the discount factor v (and hence the yield rate), then reuse that same v when computing the duration of another cash flow stream at the same yield rate.",
      "concept": "Macaulay Duration",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "solving for v from the given duration and reusing it is a step of this solution's plan; the rule used is the Macaulay duration formula",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -7600,7 +7950,15 @@
        "page": "Increasing Annuity",
        "quote": "the perpetuity-due $(I\\ddot{a})_{\\overline{\\infty}|} = 1/d^2$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Increasing Annuity",
+      "quote": "increasing [[Perpetuity|perpetuity]]-immediate $1, 2, 3, \\ldots$ is worth $(Ia)_{\\overline{\\infty}|} = 1/i + 1/i^2$",
+      "note": "retagged with Increasing Annuity; passage on that page: the question's duration uses Σ n v^n, the increasing perpetuity (the n = 0 term is zero), which Increasing Annuity values as 1/i + 1/i² = (1+i)/i²",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -7704,7 +8062,15 @@
      "statement": "To find unknown asset cash flows, define the net present value function P(i) as assets minus liabilities and solve P(i0)=0 and P'(i0)=0 simultaneously at the valuation interest rate.",
      "concept": "Redington Immunization",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Redington Immunization",
+      "quote": "$PV(A) = PV(L)$ — asset and liability present values are equal (surplus $S = 0$)",
+      "note": "passage on Redington Immunization (tagged): equal PVs and equal durations, i.e. surplus and its derivative zero at the valuation rate; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r3",
@@ -7729,7 +8095,15 @@
      "statement": "If the second derivative of the asset-minus-liability present value at the valuation rate is negative (a local maximum rather than minimum), the full immunization (Redington) conditions fail because a rate change need not leave assets exceeding liabilities.",
      "concept": "Redington Immunization",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Redington Immunization",
+      "quote": "$\\text{Convexity}(A) > \\text{Convexity}(L)$ — asset [[Convexity]] exceeds liability convexity",
+      "note": "passage on Redington Immunization (tagged): asset convexity must exceed liability convexity, so a negative second derivative of the surplus fails; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -7788,7 +8162,13 @@
      "statement": "The derivative with respect to (1+i) of a cash flow term C(1+i)^k is k·C(1+i)^(k−1), used to obtain the slope condition P'(i)=0.",
      "concept": "Present Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "differentiating C(1+i)^k is calculus; the rule used is the immunization duration condition (Full Immunization)",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -8076,7 +8456,13 @@
      "statement": "Express the total cost of the portfolio as a function of one bond's face amount using the matching constraints, and minimize it by taking the bond with the lowest cost per unit of cash flow as large as feasible (non-negativity bounds the quantities).",
      "concept": "Cash Flow Matching",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "minimising the portfolio cost subject to the two matching equations is algebra on this question's data; the rule used is cash flow matching of each liability date (Cash Flow Matching)",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r6",
@@ -8084,7 +8470,13 @@
      "statement": "Profit is the initial deposit minus the cost of the matching portfolio.",
      "concept": "Cash Flow Matching",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "profit as the deposit left after buying the bonds is the stem's own definition (\"any portion ... not needed ... is retained as profit\")",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -8221,7 +8613,15 @@
        "page": "Geometric Increasing Perpetuity",
        "quote": "Value the growing part at time 3, one period before its first payment, then discount it to time 0:"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Deferred Annuity",
+      "quote": "discounts the annuity-immediate value back over the",
+      "note": "passage on Deferred Annuity (linked page): a payment stream deferred k periods is valued by v^k times its undeferred value; with a perpetuity, v^n/i; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -8242,7 +8642,13 @@
      "statement": "To solve for an unknown number of periods in an equation involving v^n, isolate the discount factor (1+i)^(-n) and take logarithms of both sides.",
      "concept": "Solving for Time Using Logarithms",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "taking logarithms to solve v^n = c for n is algebra",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -8522,7 +8928,13 @@
      "statement": "To solve for an unknown interest rate from an annuity equation, substitute X = e^{-kδ} (a power of the discount factor) so that e^{-2kδ} = X^2 and the equation becomes a polynomial in X, then cancel the common factor (1 - X) since X ≠ 1 when the interest rate is positive.",
      "concept": "Force of Interest",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "substituting X = e^{-k delta} to turn the equation into a polynomial and cancelling (1 - X) is algebra; the rule used is the continuous annuity value",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -8564,7 +8976,13 @@
      "statement": "The sum of a finite geometric series with first term a, ratio r and n terms is a(1 - r^n)/(1 - r).",
      "concept": "Geometric Series",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "summing a finite geometric series is prerequisite algebra; the rule used is the present value of the payments",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r3",
@@ -8640,7 +9058,15 @@
      "statement": "For payments made every n years (not every year), find the present value of the perpetuity-immediate by using the effective rate per n-year period, (1+i)^n - 1, so PV = payment / ((1+i)^n - 1) = payment * v^n/(1 - v^n).",
      "concept": "Perpetuity",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Payment Period",
+      "quote": "so $i$ must be the effective rate for that interval and $n$ the number of such intervals",
+      "note": "passage on Payment Period (syllabus page): value an annuity at the effective rate per payment interval, including payments less frequent than compounding ((1+i)^n - 1 for an n-year interval); the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -8648,7 +9074,13 @@
      "statement": "To solve for an unknown quantity defined by two equivalent expressions, set the expressions equal and solve for the common term (here (1+i)^n - 1) without needing to determine n itself.",
      "concept": "Equation of Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "equating two expressions and solving for the common term (1+i)^n - 1 is algebra; the rules used are the perpetuity values at the per-period rate (r3)",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -8928,7 +9360,13 @@
      "statement": "The sum of a finite geometric series with first term 1, ratio r and n+1 terms is (1 - r^(n+1))/(1 - r).",
      "concept": "Geometric Series",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "summing a finite geometric series is prerequisite algebra; the rule used is the present value of the geometrically increasing investments",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -8936,7 +9374,13 @@
      "statement": "When 1+i = (1+g)^2, the ratio (1+g)/(1+i) equals 1/(1+g), so a growing annuity with growth rate g reduces to a level annuity-due-type sum discounted at rate g.",
      "concept": "Geometric Annuity",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "noting (1.05)/(1.1025) = 1/1.05 is arithmetic on this question's rates; the rule used is the geometric annuity value",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -8987,7 +9431,15 @@
        "page": "Geometric Increasing Perpetuity",
        "quote": "PV &= 100\\,a_{\\overline{3}|0.08} + 2{,}060\\,(1.08)^{-3}"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Geometric Increasing Perpetuity",
+      "quote": "Value the growing part at time 3, one period before its first payment, then discount it to time 0",
+      "note": "retagged with Geometric Increasing Perpetuity; passage on that page: the question is a perpetuity whose payments start growing geometrically after a level stretch; Geometric Increasing Perpetuity works exactly that case (level pa",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -9004,7 +9456,15 @@
        "page": "Geometric Increasing Perpetuity",
        "quote": "For a first payment $P$, multiply by $P$. Paid at the start of each period (a perpetuity-due, first payment now), each payment comes one period earlier, so the value is $(1+i)/(i-g)$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Geometric Increasing Annuity",
+      "quote": "with $i > g$: $\\text{PV} = 1/(i-g)$",
+      "note": "passage on Geometric Increasing Annuity (syllabus page): PV of a geometric perpetuity, 1/(i-g), the closed form of first term over (1 - ratio); the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -9029,7 +9489,15 @@
        "page": "Geometric Increasing Perpetuity",
        "quote": "For a first payment $P$, multiply by $P$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Geometric Increasing Annuity",
+      "quote": "with $i > g$: $\\text{PV} = 1/(i-g)$",
+      "note": "passage on Geometric Increasing Annuity (syllabus page): geometric perpetuity PV 1/(i-g), equal to v/(1-rv) with r = 1+g; the page covers growing or shrinking payments; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r2",
@@ -9148,7 +9616,15 @@
        "page": "Capital Budgeting",
        "quote": "The governing rule is to accept the projects whose [[Net Present Value|net present value]], discounted at a rate reflecting each project's risk, is positive, and to choose the set with the largest total NPV when projects compete for the same capital."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Net Present Value",
+      "quote": "A positive NPV means the investment creates value at rate",
+      "note": "passage on Net Present Value (tagged page): a project is worth taking when its NPV is positive; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -9161,7 +9637,13 @@
        "page": "Capital Budgeting",
        "quote": "\\text{NPV}_{B-A} &= 850{,}000(2.486852) - 2{,}000{,}000"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "discounting only the differing cash flows is a shortcut of this solution adding no rule beyond NPV (r4)",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -9280,7 +9762,15 @@
        "page": "Deferred Annuity",
        "quote": "$${}_{k|}a_{\\overline{n}|} = v^k \\cdot a_{\\overline{n}|}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Deferred Annuity",
+      "quote": "discounts the annuity-immediate value back over the",
+      "note": "retagged with Deferred Annuity; passage on that page: Deferred Annuity teaches v^k a_n for payments deferred k periods; the loan is repaid by payments that begin after a deferral, so the page is what the solution u",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r3",
@@ -9471,7 +9961,13 @@
      "statement": "Powers of the discount factor are related by v^16 = (v^8)^2, so an equation in v^8 and v^16 becomes a quadratic in v^8 that can be solved with the quadratic formula.",
      "concept": "Discount Factor",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "writing v^16 = (v^8)^2 and solving the quadratic in v^8 is algebra; the rule used is the loan equation of value",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r6",
@@ -9669,7 +10165,15 @@
      "statement": "With no repayments, the loan balance equals the accumulated value of all borrowed amounts, including the final amount received at that time; the interest-free wait after year four is irrelevant to the balance at that date.",
      "concept": "Loan Balance",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Outstanding Balance",
+      "quote": "accumulated value of loan minus accumulated payments",
+      "note": "passage on Outstanding Balance (syllabus page): retrospective balance = accumulated borrowings minus accumulated payments (none here); the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -10170,7 +10674,13 @@
      "statement": "A bond callable at par on any of the last k coupon dates can be redeemed at times n-k+1 through n, so the earliest call date is n-k+1.",
      "concept": "Callable Bonds",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "counting which coupon dates are \"the last k\" is reading the stem; the rule used is pricing a callable bond at its worst call date",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r6",
@@ -10203,7 +10713,15 @@
      "statement": "A zero-coupon bond pays a single lump sum at maturity and no interim coupons, so its maturity value equals the purchase price accumulated at the yield rate for the full term.",
      "concept": "Zero-Coupon Bond",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Spot Rate",
+      "quote": "a single cash flow received at time $n$ with no intermediate payments",
+      "note": "passage on Spot Rate (syllabus page): a zero-coupon bond is a single cash flow at maturity with no intermediate payments, so its maturity value is the price accumulated at its yield; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r2",
@@ -10266,7 +10784,13 @@
      "statement": "The gain on an investment is the total proceeds (maturity value plus sale price) minus the initial amount invested.",
      "concept": "Investment Gain",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "the gain as proceeds minus the amount invested is arithmetic on the stem's definition",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -10618,7 +11142,13 @@
      "statement": "When two bond price equations share unknowns (the coupon rate and the price), write both equations and subtract one from the other to eliminate the common term and solve for the price, then back-substitute to find the coupon rate.",
      "concept": "Bond Valuation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "subtracting the two price equations to eliminate the common term is algebra; the rule used is the bond price formula",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -10810,7 +11340,13 @@
        "page": "Internal Rate of Return",
        "quote": "A short signature may reduce to a quadratic in $v$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "solving the yield equation as a quadratic in (1+i)^2 with the quadratic formula is algebra; the rule used is the equation of value for the yield rate",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -10865,7 +11401,15 @@
        "page": "Increasing Annuity",
        "quote": "With no end date, the increasing [[Perpetuity|perpetuity]]-immediate $1, 2, 3, \\ldots$ is worth $(Ia)_{\\overline{\\infty}|} = 1/i + 1/i^2$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Arithmetic Progression",
+      "quote": "-immediate is worth $P/i + Q/i^2$",
+      "note": "passage on Arithmetic Progression (syllabus page): the increasing perpetuity-immediate P, P+Q, ... is worth P/i + Q/i^2; with P = Q = 1 that is (Ia)_inf = (1+i)/i^2; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -11170,7 +11714,15 @@
      "statement": "An investment can be used in an exact-matching portfolio only if its cash flows do not exceed the liability at any time. Investments with a cash flow at a time when the liability is already covered would cause over-matching.",
      "concept": "Cash Flow Matching",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cash Flow Matching",
+      "quote": "asset cash flows are structured to exactly equal liability cash flows at every future date",
+      "note": "passage on Cash Flow Matching (tagged page): exact matching means asset cash flows equal the liability on every date, so an asset that over-pays on some date cannot be used; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -11411,7 +11963,15 @@
      "statement": "A zero-coupon bond pays a single face amount at maturity and no interim coupons, so its price is the present value of the face amount at the bond's yield.",
      "concept": "Zero-Coupon Bond",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Spot Rate",
+      "quote": "a single cash flow received at time $n$ with no intermediate payments",
+      "note": "passage on Spot Rate (syllabus page): a zero-coupon bond is a single cash flow at maturity, priced by discounting it at its yield; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r3",
@@ -11419,7 +11979,15 @@
      "statement": "The present value of a payment F due in n years at annual effective yield i is F/(1+i)^n.",
      "concept": "Present Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Present Value",
+      "quote": "A payment of $FV$ due in $n$ periods at effective rate $i$ has present value",
+      "note": "passage on Present Value (tagged page): PV = FV(1+i)^-n; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -11656,7 +12224,15 @@
      "statement": "The total price of a portfolio of bonds at a given interest rate is the sum of the individual bond prices, and a portfolio can be treated as a single asset with its aggregate price and portfolio duration.",
      "concept": "Bond Portfolio Valuation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Portfolio",
+      "quote": "the weighted average of individual asset durations, weighted by market values",
+      "note": "passage on Portfolio (syllabus page): a portfolio is valued as the sum of its assets and its duration is the market-value-weighted average; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -11838,7 +12414,13 @@
      "statement": "When two bond price equations share the same annuity (coupon) term and differ only in the redemption term, subtract them to isolate the present value of the redemption amount, then substitute back to solve for the annuity value.",
      "concept": "Bond Pricing",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "subtracting the two price equations to isolate the redemption term is algebra; the rule used is the bond price formula",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -12130,7 +12712,15 @@
      "statement": "A loan's outstanding balance at a later date is a cash outflow whose present value must be included in the equation of value (discounted from that date), alongside the payments, with the initial balance and new borrowings as inflows.",
      "concept": "Loan Outstanding Balance",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Outstanding Balance",
+      "quote": "accumulated value of loan minus accumulated payments",
+      "note": "passage on Outstanding Balance (linked page): retrospective method — the balance at a date is the accumulated borrowings less the accumulated payments, which discounted to time 0 is the stated equation of value; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r3",
@@ -12168,7 +12758,13 @@
      "statement": "Beginning of month k is time k-1 months, and the middle of month k is time k-0.5 months, measured from the start of month 1.",
      "concept": "Timing of Payments Within a Period",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "placing the beginning and middle of month k at times k-1 and k-0.5 is translating the stem's timing; the rule used is the equation of value (r2)",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r6",
@@ -12248,7 +12844,13 @@
      "statement": "The price of a portfolio of bonds is the sum of the individual bond prices, so the combined price can be written as a sum of the two bonds' present value expressions at the same yield rate.",
      "concept": "Bond Pricing",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "adding the two bonds' prices to price the pair adds no rule beyond the bond price formula",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -12396,7 +12998,15 @@
        "page": "Deferred Annuity",
        "quote": "$${}_{k|}\\ddot{a}_{\\overline{n}|} = v^k \\cdot \\ddot{a}_{\\overline{n}|}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Deferred Annuity",
+      "quote": "discounts the annuity-immediate value back over the",
+      "note": "retagged with Deferred Annuity; passage on that page: Deferred Annuity teaches v^k a_n for payments deferred k periods; the duration is of a payment stream that begins after a deferral, so the page is what the solu",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -12417,7 +13027,13 @@
      "statement": "Compute the time-weighted present value of a payment stream with irregular or step-changing payments by decomposing the t times payment sequence into a combination (sums and differences) of standard increasing annuities.",
      "concept": "Increasing Annuity",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "decomposing this stream's time-weighted values into standard increasing annuities is a step of this solution's plan; the rules used are the increasing annuity values and Macaulay duration",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r6",
@@ -12425,7 +13041,15 @@
      "statement": "For payments made at the beginning of each year starting today, the payment in year k is received at time k-1, so the time weights are 0, 1, 2, ... rather than 1, 2, 3, ....",
      "concept": "Annuity-Due",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Annuity Due",
+      "quote": "made at the **beginning** of each period",
+      "note": "passage on Annuity Due (tagged page): annuity-due payments are at the start of each period, so year k's payment is at time k-1; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -12475,7 +13099,15 @@
      "statement": "Interest credited during a time interval equals the account balance at the end of the interval minus the balance at the start, so interest in year k is A(k) - A(k-1).",
      "concept": "Interest Earned in a Period",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Rate of Return",
+      "quote": "and $I = B - A - C$ the interest earned",
+      "note": "passage on Rate of Return (syllabus page): interest earned over a period is the end balance less the start balance less net deposits; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -12483,7 +13115,15 @@
      "statement": "When interest is credited more than once per year, the interest in a given year is the sum over its compounding periods, or equivalently the beginning-of-year balance times the year's effective growth factor minus one, (1+j)^m - 1.",
      "concept": "Nominal Interest Rate",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Interest Rate",
+      "quote": "is the interest earned over a year per unit invested at the start of the year, however often interest is credited during the year",
+      "note": "passage on Interest Rate (syllabus page): a year's interest is the start-of-year balance times the effective annual rate, however often credited (with Effective Rate's (1+i^(m)/m)^m - 1); the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -12644,7 +13284,15 @@
        "page": "Deferred Annuity",
        "quote": "$v = (1+i)^{-1}$ discounts the annuity-immediate value back over the $k$-period deferral."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Deferred Annuity",
+      "quote": "discounts the annuity-immediate value back over the",
+      "note": "retagged with Deferred Annuity; passage on that page: Deferred Annuity teaches v^k a_n for payments deferred k periods; the loan payments run in years k+1 to k+n, a deferred annuity, so the page is what the solutio",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -12768,7 +13416,15 @@
        "page": "Loan Amortization",
        "quote": "$$I_k = i\\,B_{k-1}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Interest",
+      "quote": "I_t = i \\cdot B_{t-1}",
+      "note": "passage on Interest (syllabus page): each period's interest is the rate times the balance at the start of the period; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r2",
@@ -12887,7 +13543,15 @@
        "page": "Increasing Annuity",
        "quote": "$$(Is)_{\\overline{n}|} = \\frac{\\ddot{s}_{\\overline{n}|} - n}{i}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Arithmetic Increasing Annuity",
+      "quote": "The corresponding accumulated value is $(Is)_{\\overline{n}|} = (1+i)^n (Ia)_{\\overline{n}|}$.",
+      "note": "passage on Arithmetic Increasing Annuity (syllabus page): (Is)_n = (1+i)^n (Ia)_n, which with the (Ia)_n formula on the same page is (s-double-dot_n - n)/i; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -12984,7 +13648,15 @@
      "statement": "To handle payments made every k years, convert the annual effective rate i to the k-year effective rate by computing (1+i)^k - 1 and treat each k-year period as one payment period.",
      "concept": "Effective Interest Rate",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Payment Period",
+      "quote": "so $i$ must be the effective rate for that interval and $n$ the number of such intervals",
+      "note": "passage on Payment Period (syllabus page): value at the effective rate per payment interval, (1+i)^k - 1 for payments every k years; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r2",
@@ -13077,7 +13749,15 @@
      "statement": "The present value of an increasing perpetuity-immediate with payments of 1, 2, 3, ... starting one period later is v(Ia)∞, since the pattern 0 (first period), 1, 2, ... shifts by one period and is discounted by v.",
      "concept": "Increasing Perpetuity",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Increasing Annuity",
+      "quote": "-immediate $1, 2, 3, \\ldots$ is worth $(Ia)_{\\overline{\\infty}|} = 1/i + 1/i^2$",
+      "note": "passage on Increasing Annuity (tagged page): (Ia)_inf, deferred one period by v; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -13157,7 +13837,13 @@
      "statement": "An equation in v^(2n) and v^n is a quadratic in u = v^n, which can be solved with the quadratic formula; the positive root with 0 < v < 1 is chosen, and then i = v^(-1) - 1 is recovered from u = v^n.",
      "concept": "Present Value Factor (Discount Factor)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "solving the quadratic in u = v^n and recovering i is algebra; the rule used is the annuity/perpetuity equation of value",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -13241,7 +13927,13 @@
      "statement": "The interest rate charged by the lender on the loan (which determines balance accumulation) can differ from the lender's yield rate (used for present value of payments), when rates vary by period.",
      "concept": "Yield Rate (Internal Rate of Return)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "the stem states both the rates the lender charges and the lender's yield; using each where the stem says is translating the stem, and the rules used are the equation of value and the outstanding-balance recursion",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -13385,7 +14077,15 @@
        "page": "Increasing Annuity",
        "quote": "$$(Is)_{\\overline{n}|} = \\frac{\\ddot{s}_{\\overline{n}|} - n}{i}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Arithmetic Increasing Annuity",
+      "quote": "The corresponding accumulated value is $(Is)_{\\overline{n}|} = (1+i)^n (Ia)_{\\overline{n}|}$.",
+      "note": "passage on Arithmetic Increasing Annuity (syllabus page): (Is)_n = (1+i)^n (Ia)_n, which with the (Ia)_n formula on the same page is (s-double-dot_n - n)/i; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -13749,7 +14449,13 @@
      "statement": "For level end-of-period payments, the payment amount cancels in the Macaulay duration ratio, so duration equals (Ia) divided by a at the loan's interest rate over the term.",
      "concept": "Macaulay Duration",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "the level payment cancelling from the duration ratio is algebra; the rule used is the Macaulay duration formula with (Ia) and a",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r3",
@@ -14407,7 +15113,15 @@
        "page": "Deferred Annuity",
        "quote": "$v = (1+i)^{-1}$ discounts the annuity-immediate value back over the $k$-period deferral."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Deferred Annuity",
+      "quote": "discounts the annuity-immediate value back over the",
+      "note": "retagged with Deferred Annuity; passage on that page: Deferred Annuity teaches v^k a_n for payments deferred k periods; the make-up payments are a deferred annuity, so the page is what the solution uses",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r6",
@@ -14424,7 +15138,15 @@
        "page": "Time Value of Money",
        "quote": "For $t > s$ the amount is accumulated ([[Accumulated Value]])"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Equation of Value",
+      "quote": "Cash flows before $t_0$ are accumulated to it; cash flows on or after $t_0$ are discounted to it.",
+      "note": "passage on Equation of Value (syllabus page): an amount moved to a later date is accumulated at the rate, so a missed payment made up later is its accumulated value; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -14771,7 +15493,15 @@
        "page": "Increasing Annuity",
        "quote": "With no end date, the increasing [[Perpetuity|perpetuity]]-immediate $1, 2, 3, \\ldots$ is worth $(Ia)_{\\overline{\\infty}|} = 1/i + 1/i^2$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Arithmetic Progression",
+      "quote": "-immediate is worth $P/i + Q/i^2$",
+      "note": "passage on Arithmetic Progression (syllabus page): with P = Q = 1, (Ia)_inf = 1/i + 1/i^2 = (1+i)/i^2; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -14779,7 +15509,13 @@
      "statement": "For a deferred level perpetuity, the time-weighted PV of payments at times k+1, k+2, ... is computed by writing each time as k plus the index (t = k + s), giving v^k[k·a_∞ + (Ia)_∞].",
      "concept": "Increasing Annuities",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "writing t = k + s and splitting the sum is algebra; the rules used are (Ia)_inf (r4) and the level perpetuity",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r6",
@@ -14864,7 +15600,13 @@
      "statement": "To solve for an unknown coupon rate, write the price of the original bond and of the changed-term bond at the same yield, relate them using the stated price difference, and solve the resulting equation for the coupon rate.",
      "concept": "Bond Pricing",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "writing the two price equations, relating them by the stated difference and solving for the coupon rate is algebra; the rule used is the bond price formula",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -14932,7 +15674,15 @@
        "page": "Asset-Liability Management",
        "quote": "Redington immunization]] adds that the assets' convexity exceed the liabilities', and [[Immunization|immunization]] has to be rebalanced as time passes and rates move."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Redington Immunization",
+      "quote": "It requires three conditions to be satisfied simultaneously at the current yield rate",
+      "note": "passage on Redington Immunization (tagged page): all three conditions must hold at once, so failing any one rules it out; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -15220,7 +15970,15 @@
        "page": "Geometric Increasing Perpetuity",
        "quote": "For a first payment $P$, multiply by $P$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Geometric Increasing Annuity",
+      "quote": "with $i > g$: $\\text{PV} = 1/(i-g)$",
+      "note": "passage on Geometric Increasing Annuity (syllabus page): geometric perpetuity-immediate PV 1/(i-g) for g < i; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -15237,7 +15995,15 @@
        "page": "Geometric Increasing Perpetuity",
        "quote": "PV &= 100\\,a_{\\overline{3}|0.08} + 2{,}060\\,(1.08)^{-3} \\"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Geometric Increasing Perpetuity",
+      "quote": "Value the growing part at time 3, one period before its first payment, then discount it to time 0",
+      "note": "retagged with Geometric Increasing Perpetuity; passage on that page: the question is a level stretch followed by a geometrically growing perpetuity; Geometric Increasing Perpetuity works exactly that decomposition",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r6",
@@ -15641,7 +16407,15 @@
      "statement": "Interest credited during a given year equals the accumulated value at the end of that year minus the accumulated value at the start of that year (the difference of the compound-interest accumulations at times n and n-1).",
      "concept": "Compound Interest",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Rate of Return",
+      "quote": "and $I = B - A - C$ the interest earned",
+      "note": "passage on Rate of Return (syllabus page): interest earned over a period is the end balance less the start balance (no deposits); the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -15691,7 +16465,15 @@
      "statement": "An equivalent effective rate for a shorter period is found by raising 1+i to the fractional power of the period length (e.g., semiannual rate j = (1+i)^0.5 - 1).",
      "concept": "Effective Interest Rate",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Payment Period",
+      "quote": "j = (1+i)^{1/m} - 1",
+      "note": "passage on Payment Period (syllabus page): the effective rate per sub-annual period is (1+i)^(1/m) - 1; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r3",
@@ -15699,7 +16481,13 @@
      "statement": "Decompose a stream of payments made twice a year with annual step increases into two annual-payment perpetuities, one with payments at mid-year points and one at year-ends, each increasing annually.",
      "concept": "Increasing Perpetuity",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "splitting the semiannual payments into a mid-year and a year-end annual perpetuity is a step of this solution's plan; the rules used are the increasing perpetuity and the equivalent sub-annual rate (r2)",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -15771,7 +16559,15 @@
        "page": "Increasing Annuity",
        "quote": "$$(Is)_{\\overline{n}|} = \\frac{\\ddot{s}_{\\overline{n}|} - n}{i}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Arithmetic Increasing Annuity",
+      "quote": "The corresponding accumulated value is $(Is)_{\\overline{n}|} = (1+i)^n (Ia)_{\\overline{n}|}$.",
+      "note": "passage on Arithmetic Increasing Annuity (syllabus page): (Is)_n = (1+i)^n (Ia)_n, which with the (Ia)_n formula on the same page is (s-double-dot_n - n)/i; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -15856,7 +16652,15 @@
        "page": "Loan Amortization",
        "quote": "Over the whole loan the principal portions add up to $L$, so the total interest is the total of the payments less $L$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Rate of Return",
+      "quote": "and $I = B - A - C$ the interest earned",
+      "note": "passage on Rate of Return (syllabus page): interest earned = end balance - start balance - net deposits, i.e. accumulated value minus the deposits; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -16319,7 +17123,15 @@
      "statement": "When the redemption value is unknown, set the bond price equal to the premium/discount formula with C as the unknown, with Fr and Ci both expressed as multiples of C (here face equals redemption), and solve for C.",
      "concept": "Bond Pricing (Premium/Discount Formula)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Bond Price",
+      "quote": "An equivalent form is the **premium/discount formula**",
+      "note": "passage on Bond Price (linked page): the premium/discount formula P = C + (Fr - Cj)a_n, here solved for C; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -16340,7 +17152,15 @@
        "page": "Increasing Annuity",
        "quote": "$$(Is)_{\\overline{n}|} = \\frac{\\ddot{s}_{\\overline{n}|} - n}{i}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Arithmetic Increasing Annuity",
+      "quote": "The corresponding accumulated value is $(Is)_{\\overline{n}|} = (1+i)^n (Ia)_{\\overline{n}|}$.",
+      "note": "passage on Arithmetic Increasing Annuity (syllabus page): (Is)_n = (1+i)^n (Ia)_n, which with the (Ia)_n formula on the same page is (s-double-dot_n - n)/i; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r2",
@@ -16361,7 +17181,15 @@
      "statement": "The price of an investment equals the present value of its payments at the valuation rate, so a purchase made with an account balance sets the accumulated deposits equal to the perpetuity's present value.",
      "concept": "Equation of Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Equation of Value",
+      "quote": "An **equation of value** sets the value of all payments in equal to the value of all payments out",
+      "note": "passage on Equation of Value (syllabus page): the price paid equals the value of the payments bought; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -16386,7 +17214,13 @@
      "statement": "To find an unknown effective interest rate from an annuity equation that cannot be solved algebraically, solve numerically (e.g., with a financial calculator's N, PV/FV, PMT, I/Y keys or iteration).",
      "concept": "Solving for the Interest Rate",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "solving the annuity equation for i numerically (calculator or iteration) is a calculator step",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -16522,7 +17356,13 @@
      "statement": "In the Macaulay duration of equal-amount cash flows, the common amount X cancels from the numerator and denominator, so the duration depends only on timing and discount factors.",
      "concept": "Macaulay Duration",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "the common amount X cancelling from the duration ratio is algebra; the rule used is the Macaulay duration formula",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -16649,7 +17489,13 @@
      "statement": "In cash-flow matching with reinvestment risk, the surplus from an asset maturing before a liability payment (maturity proceeds minus the payment due) is reinvested at the reinvestment rate until the next liability date.",
      "concept": "Reinvestment Risk",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "reinvesting what is left of the first bond's proceeds after the first payment until the second is translating the stem's setup; the rule used is accumulation at the reinvestment rate",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -16657,7 +17503,13 @@
      "statement": "To find the break-even reinvestment rate, set the accumulated assets (reinvested surplus plus later maturity proceeds) equal to the final liability payment and solve for the rate.",
      "concept": "Asset-Liability Matching (Cash Flow Matching)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "setting the reinvested surplus plus the second bond's proceeds equal to the final payment and solving for the rate is this solution's plan and algebra; the rule used is the equation of value",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -17351,7 +18203,15 @@
      "statement": "A deposit made at the beginning of year n (annuity-due timing) occurs at time n-1, so deposits for years 1 through N occur at times 0 through N-1.",
      "concept": "Annuity-Due",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Annuity Due",
+      "quote": "made at the **beginning** of each period",
+      "note": "passage on Annuity Due (tagged page): annuity-due payments are at the start of each period, so year n's deposit is at time n-1; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r2",
@@ -17377,7 +18237,15 @@
        "page": "Time Value of Money",
        "quote": "for $t < s$ it is discounted by $v^{s-t}$, where $v = 1/(1+i)$ is the [[Discount Factor]] ([[Present Value]])."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Present Value",
+      "quote": "A payment of $FV$ due in $n$ periods at effective rate $i$ has present value",
+      "note": "passage on Present Value (syllabus page): PV = FV(1+i)^-n; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -17460,7 +18328,13 @@
      "statement": "To find an unknown coupon rate when two bonds have equal prices at the same yield rate, compute the first bond's price, set the second bond's price formula equal to it, and solve for the second bond's coupon amount, then divide by its face value to get the rate.",
      "concept": "Bond Valuation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "setting the second bond's price equal to the first's and dividing the coupon by face is algebra on the stem's condition; the rule used is the bond price formula",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -17561,7 +18435,13 @@
      "statement": "To compare two bonds with the same term and yield rate, write each price with the bond formula and subtract; terms common to both (such as a shared redemption value) cancel, leaving a difference in coupon annuities and redemption values to solve for the unknown.",
      "concept": "Bond Pricing",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "subtracting the two price equations so common terms cancel is algebra; the rule used is the bond price formula",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -17612,7 +18492,15 @@
        "page": "Geometric Increasing Perpetuity",
        "quote": "PV &= 100\\,a_{\\overline{3}|0.08} + 2{,}060\\,(1.08)^{-3} \\\\"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Geometric Increasing Perpetuity",
+      "quote": "Value the growing part at time 3, one period before its first payment, then discount it to time 0",
+      "note": "retagged with Geometric Increasing Perpetuity; passage on that page: the question values a perpetuity whose payments grow geometrically after an initial stretch; Geometric Increasing Perpetuity is that page, and its worked exampl",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -17625,7 +18513,15 @@
        "page": "Geometric Increasing Perpetuity",
        "quote": "Value the growing part at time 3, one period before its first payment, then discount it to time 0:"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Geometric Increasing Perpetuity",
+      "quote": "Value the growing part at time 3, one period before its first payment, then discount it to time 0",
+      "note": "retagged with Geometric Increasing Perpetuity; passage on that page: the question values a perpetuity whose payments grow geometrically after an initial stretch; Geometric Increasing Perpetuity is that page, and its worked exampl",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -17854,7 +18750,13 @@
      "statement": "When a price changes by a percentage (e.g. 7% less), the new price equals the old price times one minus that percentage, which allows setting up an equation linking the two bond prices at the same yield rate.",
      "concept": "Bond Pricing",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "'7% less' meaning 0.93 times the price is reading the stem; the rule used is the bond price formula",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -18336,7 +19238,13 @@
      "statement": "To find an unknown payment increment, set the present value formula for the increasing annuity equal to the given price and solve for the increment.",
      "concept": "Arithmetically Increasing Annuity",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "setting the increasing-annuity value equal to the price and solving for the increment is algebra; the rule used is the arithmetic increasing annuity formula",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -18454,7 +19362,13 @@
      "statement": "Divide the expressions for two principal or balance quantities to cancel R and solve for v^k, then obtain v and the effective interest rate i = 1/v - 1.",
      "concept": "Amortization Schedule (Principal Repaid)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "dividing two expressions to cancel R and solving for v^k, then i = 1/v − 1, is algebra; the rules used are the principal-repaid and balance formulas",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -18547,7 +19461,13 @@
      "statement": "For the same numerical rate and a multi-year term (n>1), the present value factors are ordered: simple discount < compound discount < compound interest < simple interest (i.e., (1−ni) < (1−i)^n < (1+i)^−n < (1+ni)^−1).",
      "concept": "Comparison of Interest and Discount Methods",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "the ordering follows from evaluating the four accumulation/discount factors at a trial rate, as the solution does; the factors themselves are on Simple vs Compound Interest and are the rule used",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r6",
@@ -18928,7 +19848,13 @@
      "statement": "To find a fund's value at another time when two funds are equal at one time, equate the two accumulation functions at that time to determine (1+i)^n, then raise to the appropriate power to get the value at the other time.",
      "concept": "Equation of Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "equating the two funds at one time to get (1+i)^n and raising it to a power is algebra on the stem's condition; the rules used are the accumulation functions",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -18987,7 +19913,13 @@
      "statement": "To solve for an unknown interest rate when two cash flow streams have equal present values, equate the present values and reduce to an equation in v^n (a quadratic in v^10 when powers v^10 and v^20 appear), then solve for v and convert to i = 1/v - 1.",
      "concept": "Equation of Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "reducing the equation of value to a quadratic in v^10 and solving is algebra; the rule used is the equation of value with the annuity formulas",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -18995,7 +19927,13 @@
      "statement": "Since i > 0 and v = 1/(1+i), the discount factor v^n must be positive and less than 1, so any negative root of the quadratic in v^n is rejected.",
      "concept": "Discount Factor",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "rejecting a negative root because v^n lies in (0,1) is algebra on v = 1/(1+i); it adds no course rule",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -19050,7 +19988,13 @@
      "statement": "When solving a quadratic equation for the interest rate, the root consistent with the constraint i > 0 is the valid one.",
      "concept": "Effective Annual Interest Rate",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "choosing the quadratic root with i > 0 is algebra; the rule used is the equation of value",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -19177,7 +20121,13 @@
      "statement": "To find the payment where principal and interest portions are equal, set the two portion formulas equal, solve for v^(n-t+1)=0.5, and take logarithms to solve for t, rounding to the nearest integer payment number.",
      "concept": "Loan Amortization",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "equating the principal and interest portions and solving v^(n−t+1) = 0.5 with logarithms is algebra; the rule used is the principal-repaid formula",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -19227,7 +20177,13 @@
      "statement": "The roots of a quadratic equation ax^2 + bx + c = 0 are x = (-b ± sqrt(b^2 - 4ac)) / (2a), and two distinct roots give two possible values of v.",
      "concept": "Quadratic Formula",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "the quadratic formula is algebra; the rule used is the equation of value in v",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -19329,7 +20285,13 @@
      "statement": "When two bonds have the same purchase price, set their price expressions equal and solve for the unknown quantity.",
      "concept": "Bond Pricing",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "setting two equal prices equal and solving is algebra on the stem's condition; the rule used is the bond price formula",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -19515,7 +20477,13 @@
      "statement": "Count the number of payments in a series running from one birthday/age to another inclusive (last age minus first age plus 1), and measure elapsed time between the start and end dates as last age minus first age.",
      "concept": "Annuity-Immediate",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "counting payments from one age to another inclusive (last minus first plus one) is reading the stem's timeline; the rule used is the annuity-due accumulated value",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -19672,7 +20640,13 @@
      "statement": "When two bonds share the same face value, coupon rate, and yield rate but differ in term, use the first bond's price to solve for v^n (or v at a given term), then use that to find the unknown term via v^n = target and n = ln(v^n)/ln(v).",
      "concept": "Bond Pricing",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "solving the first bond's price for v^n and taking n = ln(v^n)/ln v is algebra; the rule used is the bond price formula",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -19680,7 +20654,13 @@
      "statement": "The discount factor satisfies v^(kn) = (v^n)^k, so powers of v can be related by exponent rules (e.g., v^18 = 0.8^3 implies v^6 = 0.8 and v^12 = 0.64).",
      "concept": "Present Value and Discount Factor",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "v^(kn) = (v^n)^k is the law of exponents; it adds no course rule",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -19752,7 +20732,13 @@
      "statement": "Use the first bond's price equation to solve for the unknown annual coupon amount, then take half of it as the second bond's semiannual coupon.",
      "concept": "Bond Pricing",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "solving one bond's price for its coupon and halving it for a semiannual coupon is algebra on the stem's data; the rule used is the bond price formula",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -19866,7 +20852,15 @@
      "statement": "The accumulation factor from time m to time n can be expressed using zero-coupon bond prices as the ratio P(0,m)/P(0,n), since the price ratio of two zero-coupon bonds gives the forward growth factor.",
      "concept": "Zero-Coupon Bond",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Spot Rates and Forward Rates",
+      "quote": "Either set determines the other, because investing for $n$ years and then at the forward rate for $k$ more must accumulate to the same amount as investing at the $(n+k)$-year spot rate",
+      "note": "passage on Spot Rates and Forward Rates (tagged): the growth from time n to n+k is the ratio of the spot accumulations, i.e. of the zero-coupon prices P(0,n)/P(0,n+k); the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -19929,7 +20923,13 @@
      "statement": "To find the number of remaining payments when a loan is paid off early, subtract the years saved from the original term and count payments from the change point; the balance at the change point is equated to the PV of the new payments over the shortened remaining term and also to the PV of the original payments over the original remaining term.",
      "concept": "Loan Amortization with Changed Payments",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "counting the remaining payments and equating the balance to both payment streams is this solution's plan; the rule used is the prospective outstanding balance",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -20064,7 +21064,13 @@
      "statement": "When two bonds share the same yield, term and coupon payments but have different face amounts, scale one price equation and subtract the other to eliminate the redemption-value term v^n and solve for the coupon annuity value.",
      "concept": "Bond Valuation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "scaling one price equation and subtracting to eliminate v^n is algebra; the rule used is the bond price formula",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -20455,7 +21461,13 @@
      "statement": "Sale proceeds are reinvested as the purchase price of the new bond, so the new bond's price equals the old bond's sale price; solve the bond price equation for the unknown coupon.",
      "concept": "Bond Pricing",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "the sale proceeds becoming the new bond's price is reading the stem; solving for the coupon is algebra on the bond price formula",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -20809,7 +21821,15 @@
      "statement": "The present value of level payments made every k years (e.g., at times 2, 4, ..., 10) is a geometric series in v^k, with value P(v^k + v^{2k} + ... + v^{nk}) = P·a_{nk|}/s_{k|}.",
      "concept": "Annuities with Payment Period Longer than Interest Period",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Payment Period",
+      "quote": "The same conversion works when payments are *less* frequent than compounding",
+      "note": "passage on Payment Period (syllabus page): payments less frequent than compounding are valued at the effective rate for the payment interval, which gives a_{nk}/s_k; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -20915,7 +21935,13 @@
      "statement": "For annual deposits at the start of each year, each deposit earns a constant interest amount (rate times principal) at each year-end, so the interest payments form an increasing stream of 1, 2, ..., n times that amount when accumulated, with n deposits yielding interest of k payments for the k-th oldest deposit.",
      "concept": "Annuity-Due",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "reading that the k-th oldest deposit's interest makes the yearly interest 1, 2, …, n times rate × deposit is translating the stem; the rules used are reinvesting withdrawn interest in a second fund and (Is) (r3)",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r3",
@@ -20928,7 +21954,15 @@
        "page": "Increasing Annuity",
        "quote": "$$(Is)_{\\overline{n}|} = \\frac{\\ddot{s}_{\\overline{n}|} - n}{i}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Arithmetic Increasing Annuity",
+      "quote": "The corresponding accumulated value is $(Is)_{\\overline{n}|} = (1+i)^n (Ia)_{\\overline{n}|}$.",
+      "note": "passage on Arithmetic Increasing Annuity (syllabus page): (Is) = (1+i)^n (Ia) with (Ia) = (ä − nv^n)/i, which is (s̈ − n)/i; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -21103,7 +22137,13 @@
        "page": "Internal Rate of Return",
        "quote": "Write $v = 1/(1+j)$ and solve the quadratic $-100 + 230v - 132v^2 = 0$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "solving the quadratic in v for the root in (0,1) and taking i = 1/v − 1 is algebra; the rule used is the equation of value",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -21221,7 +22261,13 @@
      "statement": "Model a penalty of losing the last m months' interest as accumulating the original deposit at the stated rate only for the withdrawal time minus m/12 years.",
      "concept": "Accumulation Function",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "modelling 'loss of the last nine months' interest' as accumulating for the withdrawal time less 0.75 years is translating the stem; the rule used is compound accumulation",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r3",
@@ -21476,7 +22522,15 @@
      "statement": "To find the balance after payment t, take the remaining payments, whose first (payment t+1) equals the original first payment times (1+g)^t, and value them as a geometric annuity of n-t payments starting one period after time t.",
      "concept": "Geometric Annuity",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Outstanding Balance",
+      "quote": "Prospective method (present value of future payments):",
+      "note": "passage on Outstanding Balance (tagged): the balance is the present value of the remaining payments, here valued with the geometric annuity formula; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -21552,7 +22606,13 @@
      "statement": "An extra (additional) payment made at a payment date reduces the outstanding balance dollar for dollar at that time.",
      "concept": "Outstanding Loan Balance",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "an extra payment reducing the balance by its amount follows from the balance being what is still owed (retrospective method: loan accumulated less payments made); it adds no rule",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r6",
@@ -21798,7 +22858,13 @@
        "page": "Internal Rate of Return",
        "quote": "Write $v = 1/(1+j)$ and solve the quadratic $-100 + 230v - 132v^2 = 0$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "the quadratic formula and taking the positive root for v is algebra; the rule used is the equation of value",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -21955,7 +23021,13 @@
      "statement": "The derivative of c(1+i)^{-n} with respect to i is -n c (1+i)^{-(n+1)}, so differentiating a present value term-by-term multiplies each term by -n and raises the discount exponent magnitude by one.",
      "concept": "Present Value of Cash Flows",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "differentiating c(1+i)^(−n) term by term is calculus; the rule used is D_mod = −P'(i)/P(i)",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -22247,7 +23319,15 @@
      "statement": "A zero-coupon bond pays only the face value at maturity, so its price is F·v^n.",
      "concept": "Zero-Coupon Bond",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Spot Rate",
+      "quote": "representing the market's required return for a single cash flow received at time $n$ with no intermediate payments",
+      "note": "passage on Spot Rate (syllabus page): a zero-coupon bond is a single cash flow at maturity with no intermediate payments, so its price is that payment times v^n (Discount Factor); the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -22255,7 +23335,13 @@
      "statement": "When the coupon rate is a multiple k of the yield rate, the coupon-bond price simplifies to F[k(1 - v^n) + v^n], which can be solved for v^n and then for the yield rate i.",
      "concept": "Bond Pricing",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "substituting a coupon rate k times the yield into the bond price formula to get F[k(1 − v^n) + v^n] is algebra; the rule used is the bond price formula",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -22276,7 +23362,15 @@
        "page": "Geometric Increasing Perpetuity",
        "quote": "Value the growing part at time 3, one period before its first payment, then discount it to time 0:"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Geometric Increasing Perpetuity",
+      "quote": "Value the growing part at time 3, one period before its first payment, then discount it to time 0",
+      "note": "retagged with Geometric Increasing Perpetuity; passage on that page: the question values a perpetuity whose payments grow geometrically after an initial stretch; Geometric Increasing Perpetuity is that page, and its worked exampl",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r2",
@@ -22306,7 +23400,15 @@
        "page": "Geometric Increasing Perpetuity",
        "quote": "Paid at the end of each period, with the first payment one period from now, its present value at an effective rate $i$ greater than $g$ is"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Geometric Increasing Annuity",
+      "quote": "For a geometric [[Perpetuity]] with $i > g$: $\\text{PV} = 1/(i-g)$.",
+      "note": "passage on Geometric Increasing Annuity (tagged): the geometric perpetuity-immediate is worth 1/(i − g); the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -22768,7 +23870,13 @@
      "statement": "To find an unknown deposit, express the total accumulated balance at the end date as the sum of each deposit accumulated to that date, subtract total deposits to get interest, and set it equal to the given interest condition.",
      "concept": "Equation of Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "accumulating each deposit to the end date, subtracting deposits and equating to the stem's interest condition is this solution's plan; the rules used are the accumulation factor and interest earned (r3)",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -23048,7 +24156,15 @@
      "statement": "Full immunization requires the present value of assets to equal the present value of liabilities and the first derivatives of these present values with respect to the interest rate to be equal (h(i)=0 and h'(i)=0), with the asset convexity exceeding the liability convexity (h''(i)>0).",
      "concept": "Full Immunization",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Full Immunization",
+      "quote": "The [[Duration]] of the assets equals the duration of the liability ([[Duration Matching]])",
+      "note": "passage on Full Immunization (tagged): equal present values and equal durations (equivalently h(i) = 0 and h'(i) = 0), with the two-zero-coupon equations set out; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r3",
@@ -23226,7 +24342,13 @@
      "statement": "To value an annuity at a time after some payments have been made, take the present value at that time of only the remaining payments, using the number of payments still outstanding.",
      "concept": "Annuity-Immediate",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "valuing only the payments still to come is reading the exchange in the stem; the rule used is the annuity-immediate formula",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r3",
@@ -23302,7 +24424,15 @@
      "statement": "The effective rate over a k-year period equals (1+i)^k - 1, where i is the annual effective rate, so a perpetuity with payments every k years uses this rate per period.",
      "concept": "Effective Interest Rate",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Payment Period",
+      "quote": "The same conversion works when payments are *less* frequent than compounding",
+      "note": "passage on Payment Period (syllabus page): payments less frequent than compounding use the effective rate for the payment interval, (1+i)^k − 1 for a k-year interval; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r3",
@@ -23390,7 +24520,13 @@
      "statement": "Convert the timing of cash flows to years from the valuation date: a flow at the middle of month n occurs at time (n-0.5)/12 and a flow at the end of month n occurs at time n/12 when time 0 is the start of month 1.",
      "concept": "Timeline of Cash Flows",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "placing mid-month and end-of-month flows at (n − 0.5)/12 and n/12 years is translating the stem's timeline",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -23415,7 +24551,13 @@
      "statement": "The number of terms in the sum is determined by the number of periods through the stated balance date, and the terminal balance is discounted by the time of the last payment (e.g., 15 months = 15/12 = 5/4 years).",
      "concept": "Equation of Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "counting the terms through the stated date and discounting the balance over 15/12 years is translating the stem's timeline",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -23461,7 +24603,15 @@
      "statement": "The balance of an account at a given time with multiple deposits equals the sum of each deposit multiplied by its accumulation factor from its deposit time to that time.",
      "concept": "Accumulated Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Accumulated Value",
+      "quote": "each cash flow is carried forward by its own accumulation factor",
+      "note": "passage on Accumulated Value (tagged): a balance from several deposits is the sum of each deposit times its accumulation factor a(t)/a(t_k); the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -23546,7 +24696,15 @@
        "page": "Geometric Increasing Perpetuity",
        "quote": "PV &= 100\\,a_{\\overline{3}|0.08} + 2{,}060\\,(1.08)^{-3} \\\\"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Geometric Increasing Perpetuity",
+      "quote": "Value the growing part at time 3, one period before its first payment, then discount it to time 0",
+      "note": "retagged with Geometric Increasing Perpetuity; passage on that page: the question values a perpetuity whose payments grow geometrically after an initial stretch; Geometric Increasing Perpetuity is that page, and its worked exampl",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r6",
@@ -23597,7 +24755,13 @@
        "page": "Time Value of Money",
        "quote": "it is discounted by $v^{s-t}$, where $v = 1/(1+i)$ is the [[Discount Factor]]"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "converting a month into a fraction of a half-year and allowing a fractional exponent is unit conversion; the rule used is discounting at the period rate",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r3",
@@ -23669,7 +24833,15 @@
      "statement": "A zero-coupon bond pays no coupons, so its price equals its redemption value times v^n.",
      "concept": "Zero-Coupon Bond",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Spot Rate",
+      "quote": "representing the market's required return for a single cash flow received at time $n$ with no intermediate payments",
+      "note": "passage on Spot Rate (syllabus page): a zero-coupon bond is a single cash flow at maturity with no intermediate payments, so its price is that payment times v^n (Discount Factor); the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r3",
@@ -23690,7 +24862,13 @@
      "statement": "Bonds with the same term and the same yield rate share the same v^n and a_angle(n), so these values found from one bond can be reused to price another.",
      "concept": "Bond Valuation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "reusing v^n and a_n across bonds of the same term and yield is algebra; the rule used is the bond price formula",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -23997,7 +25175,13 @@
        "page": "Annuity Contract",
        "quote": "the refund is a fraction of the premium being solved for, so $G$ appears on both sides and the answer divides by $1 - A^1$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "writing the redemption value as a multiple of the unknown price and solving for P is translating the stem and algebra; the rule used is the bond price formula",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -24018,7 +25202,13 @@
      "statement": "The coupon amount Fr equals j times the quantity Fr/j, so the coupon annuity can be written as (Fr/j)(1 - v^n), which lets the price equation be rewritten as Fr/j + (C - Fr/j)v^n.",
      "concept": "Bond Pricing",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "rewriting Fr·a_n as (Fr/j)(1 − v^n) is algebra on the bond price formula; it adds no rule",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -24145,7 +25335,15 @@
        "page": "Nominal Discount Rate",
        "quote": "$$a(t) = \\left(1 - \\frac{d^{(m)}}{m}\\right)^{-mt}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Nominal Discount Rate Convertible m-thly",
+      "quote": "is an annual discount rate under which interest is paid at the **beginning** of each of $m$ sub-periods per year at rate $d^{(m)}/m$",
+      "note": "passage on Nominal Discount Rate Convertible m-thly (linked): the per-period discount rate is d^(m)/m, and the page gives (1 − d^(m)/m)^m = v; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -24326,7 +25524,13 @@
      "statement": "Year n corresponds to the time interval from t = n-1 to t = n, so year 5 runs from time 4 to time 5.",
      "concept": "Effective Rate of Interest",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "year 5 running from time 4 to 5 adds no rule beyond the effective rate in period n (r2)",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -24817,7 +26021,13 @@
      "statement": "To find an unknown deposit, set the interest earned in the specified year on one account equal to that on the other account and solve for the unknown.",
      "concept": "Equation of Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "equating the two accounts' interest and solving for the deposit is the stem's condition and algebra; the rule used is interest earned in a year (r2)",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -25156,7 +26366,15 @@
      "statement": "The present value of an n-period annuity-immediate at effective rate i is a_angle(n) = (1 - v^n)/i.",
      "concept": "Annuity-Immediate",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Annuity Immediate",
+      "quote": "$$a_{\\overline{n}|} = \\frac{1-v^n}{i}$$",
+      "note": "passage on Annuity Immediate (syllabus page): a_n = (1 − v^n)/i; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -25224,7 +26442,15 @@
      "statement": "The accumulated value of an increasing annuity-immediate is (Is)_{n|i} = (s̈_{n|i} − n)/i.",
      "concept": "Increasing Annuities",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Increasing Annuity",
+      "quote": "(Is)_{\\overline{n}|} = \\frac{\\ddot{s}_{\\overline{n}|} - n}{i}",
+      "note": "passage on Increasing Annuity (tagged): (Is)_n = (s̈_n − n)/i; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -25232,7 +26458,15 @@
      "statement": "The accumulated value of an annuity-due is s̈_{n|i} = ((1+i)^n − 1)/d, where d = i/(1+i), equivalently (1+i)·s_{n|i}.",
      "concept": "Annuity-Due",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Annuity Due",
+      "quote": "$$= \\frac{(1+i)^n - 1}{d}$$",
+      "note": "passage on Annuity Due (linked): s̈_n = (1+i)s_n = ((1+i)^n − 1)/d; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -25499,7 +26733,13 @@
      "statement": "Solve for an unknown asset maturity by dividing the duration (time-weighted PV) equation by the PV-match equation, which cancels the unknown maturity value and yields the time offset directly.",
      "concept": "Immunization",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "dividing the duration equation by the PV equation to cancel the unknown is algebra; the rules used are Redington's PV and duration conditions",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -25592,7 +26832,13 @@
      "statement": "To find an unknown first payment, write the price equation as a linear function of that payment (annuity factor times payment plus PV of redemption) and solve for it.",
      "concept": "Bond Valuation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "solving a price equation linear in the first payment is algebra; the rule used is the bond (geometric coupon) price",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -25680,7 +26926,15 @@
      "statement": "With a constant force of interest δ, the accumulation factor over t years is e^{δt} and the present value (discount) factor is e^{-δt}.",
      "concept": "Force of Interest",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Force of Interest",
+      "quote": "a(t) = e^{\\delta t}",
+      "note": "passage on Force of Interest (tagged): the constant-force accumulation function e^{δt}, whose reciprocal is the discount factor; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r2",
@@ -25701,7 +26955,13 @@
      "statement": "For a nominal or annual force of interest δ and payments m times per year, the force of interest over each 1/m-year period is δ/m, so the nth payment at time n/m has present value equal to the payment times e^{-(δ/m)n}.",
      "concept": "Force of Interest",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "writing e^{-0.045·n/2} as e^{-0.0225n} is algebra; the rule used is the constant-force discount factor e^{-δt} (r1)",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -25722,7 +26982,13 @@
      "statement": "The account balance immediately after the last deposit is a value at the final deposit time (time of the term end), so its present value is the balance times the discount factor over the full term.",
      "concept": "Equation of Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "placing the balance at the last deposit's time and discounting it is the stem's setup; the rule is the equation of value with the constant-force discount factor (r1)",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -25785,7 +27051,15 @@
      "statement": "To find the loan interest payment due at a given time, subtract the cost of the bond purchased at that time from the total cash outlay, then divide the interest payment by the principal to get the interest rate.",
      "concept": "Interest-Only Loan (Sinking Fund Method)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Interest",
+      "quote": "I_t = i \\cdot B_{t-1}",
+      "note": "passage on Interest (linked): interest in a period is the rate times the balance, so an interest-only payment is L·i; the subtraction is the stem's data; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -26482,7 +27756,13 @@
      "statement": "When two bonds share the same price, term and yield, use the first bond's relation (v^n = Price/Face) to get v^n for the second bond's price equation, and solve that equation for the unknown face value.",
      "concept": "Bond Pricing",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "substituting v^n from the zero-coupon bond into the second bond's price equation is algebra; the rules are the zero-coupon price and the bond price formula",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -27489,7 +28769,13 @@
      "statement": "The integral of 1/(1+t) dt is ln(1+t), so exp(∫_a^b 1/(1+t) dt) = (1+b)/(1+a).",
      "concept": "Force of Interest",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "integrating 1/(1+t) to ln(1+t) is calculus; the rule used is the accumulation factor exp(∫δ) under a variable force",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -27574,7 +28860,15 @@
        "page": "Time Value of Money",
        "quote": "$$C(1+i)^{t-s}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Compound Interest",
+      "quote": "is the **accumulation factor** — the value at time $n$ of 1 invested now",
+      "note": "passage on Compound Interest (linked): (1+i)^n is the accumulation factor over n periods; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -28015,7 +29309,15 @@
      "statement": "The price of a zero-coupon bond with face amount F and term t is F(1+s_t)^(-t), where s_t is the spot rate (yield rate) for term t.",
      "concept": "Spot Rates",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Spot Rate",
+      "quote": "is the yield to maturity on a zero-coupon bond that matures in exactly $n$ years",
+      "note": "passage on Spot Rate (tagged): the n-year spot rate is the zero-coupon bond's yield, so its price is F(1+s_t)^{-t}; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r3",
@@ -28049,7 +29351,13 @@
      "statement": "To determine the yield curve shape from zero-coupon bond prices, solve for the implied spot rate at each term as s_t = (F/P)^(1/t) - 1 and compare the rates across terms.",
      "concept": "Spot Rates",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "inverting each price for s_t and comparing the rates is algebra on the zero-coupon price (r2)",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -28531,7 +29839,13 @@
      "statement": "Solve for the unknown annual coupon by setting the observed price equal to the bond's present value at the given yield and isolating the coupon in the annuity term.",
      "concept": "Bond Pricing",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "isolating the coupon in the price equation is algebra; the rule is the bond price formula",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -28620,7 +29934,13 @@
      "statement": "A balance remaining immediately after a withdrawal at the end of the horizon is equivalent to an additional final cash outflow of that amount at that time, so its present value is included on the withdrawal side of the equation of value.",
      "concept": "Account Balance and Cash Flows",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "treating the remaining balance as a final withdrawal is the stem's setup; the rule is the equation of value",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -28891,7 +30211,13 @@
      "statement": "Given a Macaulay duration and the cash flow amounts and times, set up the duration formula as an equation in v = 1/(1+i) and solve it to recover the effective annual yield rate.",
      "concept": "Macaulay Duration",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "solving the duration equation for v is algebra; the rule is the Macaulay duration formula",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r3",
@@ -28899,7 +30225,13 @@
      "statement": "A cash flow occurring at time 0 has a time weight of 0 and a present value equal to its face amount, so it contributes to the denominator but not the numerator of the duration formula.",
      "concept": "Macaulay Duration",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "a time-0 flow entering with weight t=0 is the Macaulay duration formula applied directly",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -28996,7 +30328,13 @@
      "statement": "The difference of consecutive annuity-immediate values satisfies a_{n|} − a_{n-1|} = v^n, and v^n − v^{n-1} = −i·v^n.",
      "concept": "Annuity-Immediate",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "a_n − a_{n−1} = v^n and v^n − v^{n−1} = −i·v^n are algebra on the annuity formula; the rule is the book-value change between coupons",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -29114,7 +30452,13 @@
      "statement": "Count the number of payments from the timing of the first and last payments (last time minus first time, divided by the payment interval, plus one) and express payment times in consistent periods.",
      "concept": "Annuity Payment Timing",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "counting the payments from the first and last payment times is arithmetic on the stem",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -29368,7 +30712,13 @@
      "statement": "A payment at time 0 contributes its amount to present value but contributes nothing to the derivative of present value with respect to the interest rate, since it does not depend on the rate.",
      "concept": "Present Value of Cash Flows",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "a payment at time 0 having zero derivative in i is calculus; the rule is D_Mod = −P'/P",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r6",
@@ -29376,7 +30726,15 @@
      "statement": "To find the duration of a combined or altered set of cash flows, add the present values and the present value derivatives of the components, then compute duration from the totals.",
      "concept": "Modified Duration",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Portfolio",
+      "quote": "the weighted average of individual asset durations, weighted by market values",
+      "note": "passage on Portfolio (syllabus page): duration of combined cash flows is the PV-weighted average, equivalent to summing PVs and derivatives; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -29507,7 +30865,13 @@
      "statement": "When cash flows occur at even times, the equation of value can be written as a quadratic in v^2 (a substitution such as w = v^2), after dividing out the common factor.",
      "concept": "Equation of Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "rewriting the equation of value as a quadratic in v² is algebra; the rule used is the equation of value",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -29515,7 +30879,13 @@
      "statement": "The quadratic formula gives the roots of ax^2 + bx + c = 0 as x = (-b ± sqrt(b^2 - 4ac)) / (2a).",
      "concept": "Quadratic Formula",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "the quadratic formula is algebra",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -29523,7 +30893,13 @@
      "statement": "Since v = 1/(1+i), the interest rate is recovered by inverting the solved value of v^2 to get (1+i)^2, taking the square root to get 1+i, and subtracting 1.",
      "concept": "Annual Effective Interest Rate",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "recovering i from v² is algebra (v = 1/(1+i))",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -29539,7 +30915,13 @@
      "statement": "For an investment where each beginning-of-year payment earns simple interest at rate i paid at year end and the interest is reinvested at another rate, the principal held during year k is k times the payment, so the interest paid at the end of year k is k times the payment times i.",
      "concept": "Increasing Annuity",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "the interest paid in year k being k·200·i is translating the stem's setup; the rule used is the increasing annuity (Is)",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r2",
@@ -29705,7 +31087,13 @@
      "statement": "The n-th year of an investment corresponds to the time interval from t = n−1 to t = n.",
      "concept": "Effective Rate of Interest",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "identifying the 5th year as t = 4 to 5 is reading the stem's time scale; the rule is the accumulation factor under a variable force",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -29954,7 +31342,13 @@
      "statement": "Decompose a payment pattern with changing slopes into a sum of increasing perpetuities started at different times, with each multiple (e.g. -2 at the peak, +1 at the next break) chosen to change the slope of the payments at that time and produce the desired level pattern.",
      "concept": "Increasing Annuities",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "building the payment pattern from deferred copies of (Ia)∞ is this solution's plan; the rules are the increasing perpetuity and discounting by v^k",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -30331,7 +31725,13 @@
      "statement": "To find an unknown interest rate from a given annuity accumulated value, set deposit times s_{n|i} equal to the value and solve numerically for i, e.g., by trial using the answer options or interpolation.",
      "concept": "Solving for the Interest Rate",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "solving s_{n|i} = value for i is a calculator step",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -30671,7 +32071,15 @@
      "statement": "The equivalent (single) annual effective interest rate for a set of payments is the constant rate i at which the present value of the payments equals their present value computed using the spot rates.",
      "concept": "Yield Rate / Equivalent Level Interest Rate",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Yield Rate",
+      "quote": "the interest rate per period at which the present value of all future cash flows equals the current price",
+      "note": "passage on Yield Rate (tagged): the single rate equating the cash flows' PV to their price (here the spot-rate PV); the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -31076,7 +32484,15 @@
      "statement": "When scheduled payments are missed, compute the balance by taking the accumulated value of the full payment schedule and subtracting the accumulated value of the missed payments, each accumulated at (1+i)^(t - payment time).",
      "concept": "Outstanding Loan Balance",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loans",
+      "quote": "the loan accumulated to that date, less the accumulated value of the payments already made",
+      "note": "passage on Loans (syllabus page): the retrospective balance counts only payments actually made; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -31266,7 +32682,13 @@
      "statement": "When the coupon rate is a fixed fraction k of the yield rate and face equals redemption, the bond price simplifies to F[k + (1-k)v^n], so the unknown v^n can be solved from the given price and then reused with a different term via v^{jn} = (v^n)^j.",
      "concept": "Bond Pricing",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "simplifying the price to F[k + (1−k)v^n] and cubing v^m is algebra on the bond price formula",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -31367,7 +32789,13 @@
      "statement": "Place each cash flow at its correct time in years: an immediate purchase at t=0, annual fees at t=1 and t=2, monthly end-of-month payments at t=k/12 for k=1,…,24, and the balance at the start of year three at t=2.",
      "concept": "Cash Flow Timing",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "placing each cash flow at its time is translating the stem; the rule is the equation of value under a constant force",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -31817,7 +33245,15 @@
      "statement": "A payment that is a given percentage less than the previous payment corresponds to a negative growth rate g (e.g., 2% less means g = -0.02, ratio 1+g = 0.98).",
      "concept": "Perpetuity with Geometric Growth",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Geometric Increasing Annuity",
+      "quote": "has payments that grow (or shrink) at a constant geometric rate $g$ per period",
+      "note": "passage on Geometric Increasing Annuity (syllabus page): a shrinking stream is the same formula with negative g; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r3",
@@ -31825,7 +33261,13 @@
      "statement": "To find a corrected payment when the price is fixed, compute the price as the present value using the erroneous rate and payment, then set it equal to the present value formula at the correct rate and solve for the payment.",
      "concept": "Present Value of Annuities",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "setting the PV at the wrong rate equal to the PV at the right rate and solving is this solution's plan; the rule is the geometric perpetuity PV 1/(i−g)",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -31867,7 +33309,13 @@
      "statement": "When present values of assets and liabilities are equal, matching durations is equivalent to matching the derivatives of the present values with respect to the interest rate, so the derivative of the net present value (liabilities minus assets) equals zero.",
      "concept": "Duration",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "with equal present values, equal durations −P'/P is the same as equal P' — algebra on the definition; the rule is Redington's conditions (taught on Redington Immunization)",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -32157,7 +33605,13 @@
        "page": "Time Value of Money",
        "quote": "An [[Equation of Value]] equates the values of two sets of payments at one comparison date."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "setting the two present values equal and solving is the stem's setup and algebra",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -32305,7 +33759,13 @@
      "statement": "When two bonds share the same price, term, and yield, the quantity v^n found from one bond's price equation can be substituted into the other bond's price equation, so that the yield rate i cancels and the unknown face value can be solved for.",
      "concept": "Bond Valuation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "substituting v^n from the first bond into the second bond's price equation is algebra; the rules are the zero-coupon price and the bond price formula",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -32636,7 +34096,13 @@
      "statement": "Two bonds yielding the same annual nominal rate share the same periodic yield rate, so the yield found from one bond can be used to price the other.",
      "concept": "Bond Pricing",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "using the yield found from bond A for bond B is the stem's setup (the same stated yield)",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -33085,7 +34551,13 @@
      "statement": "Immediately before a payment of a perpetuity-due, the remaining payments (including that one) form a new perpetuity-due identical to the original, so its price at the original rate equals the original price.",
      "concept": "Perpetuity",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "the remaining payments before the second payment being a perpetuity-due is applying the perpetuity-due definition at a later date; this solution's plan",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -33093,7 +34565,13 @@
      "statement": "Compute the relative error of an approximation as (approximate price − actual price)/actual price, where the actual price is the exact present value at the new yield rate.",
      "concept": "Modified Duration",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "the relative error (approximate − actual)/actual is arithmetic",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -33182,7 +34660,13 @@
      "statement": "Map a calendar year to a time interval measured from the stated time origin: the year beginning n years after the origin runs from t=n to t=n+1.",
      "concept": "Force of Interest",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "mapping the calendar year 2024 to t = 4 to 5 is reading the stem's time origin",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -33190,7 +34674,13 @@
      "statement": "The antiderivative of 1/(c+t) with respect to t is ln(c+t), so the integral of the force of interest 1/(c+t) from a to b equals ln((c+b)/(c+a)).",
      "concept": "Force of Interest",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "integrating 1/(c+t) to ln(c+t) is calculus; the rule is the accumulation factor exp(∫δ) under a variable force",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -33240,7 +34730,15 @@
      "statement": "The present value of an annuity-immediate whose payments grow geometrically at rate g, with interest rate i, over n periods is [1 - ((1+g)/(1+i))^n] / (i - g).",
      "concept": "Geometric Annuity",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Geometric Increasing Annuity",
+      "quote": "\\text{PV} = \\frac{1 - \\left(\\frac{1+g}{1+i}\\right)^n}{i-g}",
+      "note": "passage on Geometric Increasing Annuity (syllabus page): the geometric annuity-immediate PV formula; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -33379,7 +34877,13 @@
      "statement": "Solve for an unknown coupon amount by setting the bond price equal to the coupon annuity PV plus redemption PV and isolating the coupon.",
      "concept": "Bond Pricing",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "isolating the coupon in the price equation is algebra; the rule is the bond price formula",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -33442,7 +34946,13 @@
      "statement": "When the current rate is unknown, use one bond's known approximated present value to solve for the common rate-ratio factor (1+i0)/(1+i) raised to its exponent, then raise that result to the ratio of the other bond's duration to the first bond's duration to get the other bond's factor.",
      "concept": "Macaulay Duration",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "raising the factor to the ratio of the durations is algebra; the rule is the first-order Macaulay approximation",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -33492,7 +35002,15 @@
      "statement": "A payment stream with repeated payments can be split into several interleaved sub-streams (e.g. payments every two periods) and each is valued separately at the matching longer-period effective rate, then the values are summed.",
      "concept": "Annuity Decomposition",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Payment Period",
+      "quote": "The same conversion works when payments are *less* frequent than compounding",
+      "note": "passage on Payment Period (syllabus page): a stream paid every two months is valued at the two-month effective rate; splitting into two sub-streams is this solution's plan; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -33585,7 +35103,15 @@
        "page": "Increasing Annuity",
        "quote": "With no end date, the increasing [[Perpetuity|perpetuity]]-immediate $1, 2, 3, \\ldots$ is worth $(Ia)_{\\overline{\\infty}|} = 1/i + 1/i^2$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Increasing Annuity",
+      "quote": "is worth $(Ia)_{\\overline{\\infty}|} = 1/i + 1/i^2$",
+      "note": "retagged with Increasing Annuity; passage on that page: Increasing Annuity states the increasing perpetuity-immediate (Ia)∞ = 1/i + 1/i², which is the time-weighted PV in this perpetuity's duration",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -33610,7 +35136,13 @@
      "statement": "For a perpetuity-due, the payment at time 0 has weight 0 in the time-weighted present value, so the numerator is the same as for the perpetuity-immediate, while the denominator (total present value) includes the time-0 payment.",
      "concept": "Macaulay Duration",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "the time-0 payment having weight 0 is the Macaulay duration formula applied directly",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r7",
@@ -34178,7 +35710,13 @@
      "statement": "To find the yield rate from two cumulative accumulation amounts at times t and 2t, divide the two expressions and use (1+i)^{2t}-1 = [(1+i)^t+1][(1+i)^t-1] to solve for (1+i)^t and then i.",
      "concept": "Bond Yield Rate Determination",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "dividing the two accumulations and factoring (1+i)^{2t} − 1 is algebra; the rule is the accumulation of discount (r3)",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -34527,7 +36065,15 @@
      "statement": "Modified duration of a cash flow stream is the negative of the derivative of the present value with respect to the interest rate divided by the present value, -P'(i)/P(i).",
      "concept": "Modified Duration",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Modified Duration",
+      "quote": "D_{Mod} = -\\frac{1}{P}\\frac{dP}{dj}",
+      "note": "passage on Modified Duration (tagged): D_Mod = −P'/P; the check's miss",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r2",
@@ -34561,7 +36107,13 @@
      "statement": "Given a target modified duration, set -P'(i)/P(i) equal to the target and solve for the unknown cash flow amount.",
      "concept": "Modified Duration",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "setting −P'/P equal to the target and solving for the cash flow is algebra; the rule is D_Mod = −P'/P (r1)",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r5",
@@ -34569,7 +36121,13 @@
      "statement": "Once the unknown cash flow is found, apply it to the second investment's timing, compute its present value and -P'(i), and divide to get its modified duration.",
      "concept": "Modified Duration",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "recomputing −P'/P for the second investment repeats r1 with no new rule",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -34616,7 +36174,15 @@
        "page": "Increasing Annuity",
        "quote": "With no end date, the increasing [[Perpetuity|perpetuity]]-immediate $1, 2, 3, \\ldots$ is worth $(Ia)_{\\overline{\\infty}|} = 1/i + 1/i^2$, and the perpetuity-due $(I\\ddot{a})_{\\overline{\\infty}|} = 1/d^2$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Increasing Annuity",
+      "quote": "is worth $(Ia)_{\\overline{\\infty}|} = 1/i + 1/i^2$",
+      "note": "retagged with Increasing Annuity; passage on that page: Increasing Annuity states (Ia)∞ = 1/i + 1/i², the numerator of the perpetuity-due's Macaulay duration the solution uses",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     },
     {
      "id": "r4",
@@ -34722,7 +36288,13 @@
      "statement": "The percentage error of an estimate E of the true value P is (E - P)/P.",
      "concept": "Duration Approximation of Price",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "the percentage error (E − P)/P is arithmetic",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },
@@ -34781,7 +36353,13 @@
      "statement": "The percentage error of an estimate E of a true value P is (E−P)/P.",
      "concept": "Percentage Error",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "the percentage error (E − P)/P is arithmetic",
+      "date": "2026-10-30",
+      "run": "G8 sort, FM promotion (claude/exciting-shannon-bwp0od)"
+     }
     }
    ]
   },

@@ -25,6 +25,7 @@ import { SellerLogo } from '@/components/store/SellerLogo'
 import { useStoreDialog } from '@/components/store/useStoreDialog'
 import { CALCULATOR_POLICIES, STORE_SELLERS } from '@/data/storeCatalog'
 import { sittingDetailsFor } from '@/data/examSittingDetails'
+import { formatSittingDate } from '@/data/examSittings'
 import { dollars } from '@/data/examFees'
 import { sittingTimeline } from '@/lib/sittingTimeline'
 import {
@@ -451,7 +452,10 @@ function registrationBody(item: Extract<StoreItem, { type: 'registration' }>, to
             <>
               {status.state === 'closed' && (
                 <p className="text-sm text-muted-foreground">
-                  Registration for this sitting has closed, and the {registration.body} hasn’t published the one after it yet.
+                  Registration for this sitting has closed
+                  {status.later
+                    ? `. The next one is ${formatSittingDate(status.later)}.`
+                    : `, and the ${registration.body} hasn’t published the one after it yet.`}
                 </p>
               )}
               <SittingTimeline steps={steps} today={today} />

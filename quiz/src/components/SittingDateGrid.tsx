@@ -74,32 +74,29 @@ export function SittingDateGrid({ startDate, endDate, selectedDate, onSelect }: 
   }, [startDate, endDate])
 
   return (
-    <div className="space-y-1.5">
-      <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
-        Pick your exact day
-      </p>
-      <div className="flex items-start gap-1 overflow-x-auto pb-1">
+    <div>
+      <div className="flex items-start gap-1.5 overflow-x-auto pb-1">
         <div className="flex flex-col shrink-0">
           <div className="h-3.5" />
-          <div className="flex flex-col gap-1 mt-1">
+          <div className="flex flex-col gap-1.5 mt-1">
             {DAY_LABELS.map((label, i) => (
-              <div key={i} className="h-8 w-4 flex items-center justify-center text-[9px] leading-none text-muted-foreground">
+              <div key={i} className="h-10 w-4 flex items-center justify-center text-[9px] leading-none text-muted-foreground">
                 {label}
               </div>
             ))}
           </div>
         </div>
-        <div className="flex gap-1">
+        <div className="flex gap-1.5">
           {columns.map((col, wi) => (
             <div key={wi} className="flex flex-col items-center">
-              <div className="h-3.5 text-[9px] leading-none text-muted-foreground whitespace-nowrap">
+              <div className="h-3.5 text-[10px] leading-none text-muted-foreground whitespace-nowrap">
                 {col.monthLabel ?? ''}
               </div>
-              <div className="flex flex-col gap-1 mt-1">
+              <div className="flex flex-col gap-1.5 mt-1">
                 {col.cells.map(cell => {
                   const isSelected = cell.key === selectedDate
                   if (!cell.inRange) {
-                    return <div key={cell.key} className="h-8 w-8" />
+                    return <div key={cell.key} className="h-10 w-10" />
                   }
                   return (
                     <button
@@ -108,7 +105,7 @@ export function SittingDateGrid({ startDate, endDate, selectedDate, onSelect }: 
                       onClick={() => onSelect(cell.key)}
                       aria-pressed={isSelected}
                       aria-label={cell.key}
-                      className={`h-8 w-8 rounded-md flex items-center justify-center text-xs font-semibold transition-all duration-150 ${
+                      className={`h-10 w-10 rounded-lg flex items-center justify-center text-sm font-semibold transition-all duration-150 ${
                         isSelected
                           ? 'bg-primary text-primary-foreground ring-2 ring-primary/40 scale-105'
                           : 'bg-muted/40 text-foreground hover:bg-accent'

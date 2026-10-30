@@ -342,7 +342,10 @@ export type RegistrationState =
   | 'opens'
   /** Registration for the next published sitting has closed. */
   | 'closed'
-  /** No upcoming sitting has been published. */
+  /**
+   * No registration to point to: no upcoming sitting has been published, or
+   * the next one has (`sitting`) but its registration dates haven't.
+   */
   | 'unscheduled'
 
 export interface RegistrationStatus {
@@ -353,6 +356,8 @@ export interface RegistrationStatus {
   deadline?: string
   /** The time on that deadline, as the body prints it — "10:00 AM U.S. Central". */
   deadlineNote?: string
+  /** While `closed`: the sitting after it, when one is published. */
+  later?: ExamSitting
   /** Whole days left to register, while `open`. */
   daysLeft?: number
   /** When registration opens, while `opens`. */
@@ -395,17 +400,21 @@ function registrationDates(
 /**
  * Where an exam's registration stands on `today` (ISO): the first published
  * sitting whose deadline hasn't passed — open, or not open yet — else the next
- * sitting (closed), else nothing published. Read from the sittings tables: a
- * deadline is the body's, never estimated from a pattern.
+ * sitting: closed, or unscheduled (with the sitting) while its deadline is
+ * unpublished — else nothing published. Read from the
+ * sittings tables: a deadline is the body's, never estimated from a pattern.
  */
 export function registrationStatus(examKey: string, today: string): RegistrationStatus {
   const todayDate = new Date(`${today}T12:00:00`)
   const dated = windows(getSittingsForExam(examKey, todayDate)).map(sitting => ({ sitting, ...registrationDates(examKey, sitting) }))
   const live = dated.find(d => d.deadline && d.deadline >= today)
+  // CAS publishes a year's windows months before their registration dates.
+  if (!live && dated[0] && !dated[0].deadline) return { state: 'unscheduled', sitting: dated[0].sitting }
   const pick = live ?? dated[0]
   if (!pick) return { state: 'unscheduled' }
 
   const status: RegistrationStatus = { state: 'closed', sitting: pick.sitting }
+  if (!live && dated[1]) status.later = dated[1].sitting
   if (pick.deadline) status.deadline = pick.deadline
   if (pick.deadlineNote) status.deadlineNote = pick.deadlineNote
   if (live) {

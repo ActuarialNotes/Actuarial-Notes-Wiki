@@ -242,12 +242,16 @@ function FreeSticker({ label }: { label: string }) {
 /**
  * Where an exam's registration stands, as one line: "Register by Dec 15 · in
  * 74 days" (amber in the last fortnight), "Registration closed Sep 29", or
- * that no next sitting is published.
+ * that the next sitting — or its registration dates — isn't published.
  */
 export function RegistrationLine({ examKey, today, className }: { examKey: string; today: string; className?: string }) {
   const status = registrationStatus(examKey, today)
   if (status.state === 'unscheduled') {
-    return <span className={cn('text-xs text-muted-foreground', className)}>Next sitting not published yet</span>
+    return (
+      <span className={cn('text-xs text-muted-foreground', className)}>
+        {status.sitting ? 'Registration dates not out yet' : 'Next sitting not published yet'}
+      </span>
+    )
   }
   if (status.state === 'opens') {
     // "Registration opens week of October 26" is how the SOA dates it: a week, not a day.

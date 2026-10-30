@@ -142,6 +142,7 @@ describe('registrationStatus', () => {
     expect(status.state).toBe('closed')
     expect(status.sitting?.startDate).toBe('2026-10-19')
     expect(status.daysLeft).toBeUndefined()
+    expect(status.later?.startDate).toBe('2027-04-13')
   })
 
   it('takes a deadline the body published for the sitting over a sittings row that has none', () => {
@@ -162,8 +163,16 @@ describe('registrationStatus', () => {
   })
 
   it('says nothing is scheduled rather than guessing a date', () => {
-    expect(registrationStatus('CAS-5', '2027-06-01').state).toBe('unscheduled')
+    expect(registrationStatus('CAS-5', '2028-01-01')).toEqual({ state: 'unscheduled' })
     expect(registrationStatus('CAS-DA', '2026-10-02').state).toBe('unscheduled')
+  })
+
+  it('names a published sitting whose registration dates are not out, rather than calling it closed', () => {
+    // CAS announced its 2027 windows on 2026-10-06, registration to follow.
+    const status = registrationStatus('CAS-5', '2026-10-30')
+    expect(status.state).toBe('unscheduled')
+    expect(status.sitting?.startDate).toBe('2027-04-13')
+    expect(status.deadline).toBeUndefined()
   })
 })
 

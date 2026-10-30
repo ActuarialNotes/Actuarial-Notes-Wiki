@@ -6,8 +6,8 @@ interface Props {
   examId: string
   /** Currently selected exam date (ISO YYYY-MM-DD) — highlights matching sitting */
   selectedDate?: string
-  /** Called with the end date (or start date for single-day sittings) when a row is clicked */
-  onSelect: (date: string) => void
+  /** Called with the end date (or start date for single-day sittings) when a row is clicked, and the row's sitting */
+  onSelect: (date: string, sitting: ExamSitting) => void
 }
 
 function isSelected(sitting: ExamSitting, selectedDate: string | undefined): boolean {
@@ -37,7 +37,7 @@ export function ExamSittingsList({ examId, selectedDate, onSelect }: Props) {
             <button
               key={i}
               type="button"
-              onClick={() => onSelect(selectDate)}
+              onClick={() => onSelect(selectDate, s)}
               className={`w-full text-left rounded-lg px-3 py-2.5 transition-all duration-150 ${
                 active
                   ? 'bg-primary/10 text-foreground shadow-sm'

@@ -211,7 +211,7 @@ by passages written onto 13 concept pages from Finan and fact checked, 135 not r
 | DISC-RM | verified | 65 | 0 | 0 / 1 | 0 | 144 / 144 | not run | 7 / 8 | G8 |
 | DISC-IA | verified | 97 | 0 | 0 / 1 | 0 | 221 / 221 | not run | 7 / 8 | G8 |
 | Exam 7 | verified | 25 | 0 | 0 / 15 | 0 | 125 / 125 | not run | 7 / 8 | G8 |
-| **MAS-I** | verified | 176 | 0 | 2 / 8 | 0 | 281 / 281 | not run | 6 / 8 | G5, G8 |
+| **MAS-I** | verified | 176 | 0 | 0 / 8 | 0 | 281 / 281 | **281 / 281 ✅ (30 Oct)** | **8 / 8** | — (promotion is the maintainer's call) |
 | MAS-II | verified | 98 | 2 | 1 / 6 | 0 | 141 / 141 | 74 / 141 | 5 / 8 | G4, G5, G8 |
 | Exam 9 | verified | 60 | 1 | 2 / 9 | 0 | 131 / 131 | not run | 5 / 8 | G4, G5, G8 |
 | SRM | verified | 41 | 7 | 2 / 2 | 0 | 77 / 77 | not run | 5 / 8 | G4, G5, G8 |
@@ -779,7 +779,7 @@ runs are complete for P and FM and partial for the other five. Under D30 the ope
 |---|---:|---:|---:|---:|
 | exam-p | 284 / 719 → **719 / 719 ✅ (30 Oct)** | 456 → 0 | 227 → 0 | 0 |
 | exam-fm | 253 / 460 → **460 / 460 ✅ (30 Oct)** | 241 → 0 | 59 → 0 | 0 |
-| exam-mas-i | 35 / 281 → 203 / 281 (30 Oct) | 22 → 72 | 7 → 20 | 225 → **0 ✅ (30 Oct)** |
+| exam-mas-i | 35 / 281 → **281 / 281 ✅ (30 Oct)** | 22 → 72 → 0 | 7 → 20 → 0 | 225 → 0 |
 | exam-mas-ii | 80 / 141 | 113 | 17 | 0 |
 | exam-7 | 21 / 125 | 30 | 7 | 83 |
 | exam-disc-da | 48 / 70 | 8 | 7 | 11 |
@@ -790,9 +790,12 @@ The order: P's and FM's items sorted (rule 11), then their pages written, one ed
 MAS-I's last 225 questions checked, so they meet P's and FM's pages already fixed; then MAS-I's
 items, then MAS-II (step 1) on the same rule. **MAS-I's run is done (30 Oct,
 `answerability-20261030-mas-i`, $15.43):** of the 225, 176 answerable, 9 untagged and 40 with a
-gap, P's and FM's fixed pages already in reach. Its 92 items (`answerability_lib.py status --exam
-MAS-I`) are next: sorted first (passages the check missed, retags, not required), then the pages
-written from MAS-I's readings. Exam 7 and the DISCs reach none of those pages and
+gap, P's and FM's fixed pages already in reach. Its 92 items are **closed (30 Oct)**: 17 on passages the check
+missed, 9 by retagging 8 questions (re-verified, run `e53d`), 25 not required, and 41 by passages
+written onto 29 concept pages from open texts, each page fact checked by a different agent from its
+writer (runs `a2ck`, `g8-masi-check-A1-2026-10-30`, `chkB`, `g8C-chk`; four minor findings fixed).
+`--check MAS-I` passes **8 / 8**; promoting it is the maintainer's call (§1.1). *Overfitting*, edited
+but never fact checked before, is `in_review` (only its new bullet checked); it is not a MAS-I page. Exam 7 and the DISCs reach none of those pages and
 are short lists: finish their runs and close them alongside. Steps 2–9 follow as listed.
 
 **Sizing.** These numbers come from `verification-plan.md` §6 and the FM and Exam 9 packets:

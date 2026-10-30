@@ -47,3 +47,14 @@ created: 2026-10-11
 - checks_run: edited stem re-read against the working; sweep checks stand: definition and sign convention, every formula, both examples recomputed blind (PDLD 1.5296/0.6864/0.4576; CPDLD 1.3427/0.5949/0.4576; asset 1.43 + 0.97 = 2.40)
 - sources_checked: Teng and Perkins, Estimating the Premium Asset on Retrospectively Rated Policies (PCAS LXXXIII, 1996, pp.611-647), PDF pp.1-13 (definition, EBNR, retro reserve, formulas 2.1-2.4, empirical lags, CPDLD), 17 (incremental capping ratio, eq. 5.2), 18 (collectibility), sha256:30efb7917ebbc6361393f76652a21d97e1915032f94667699904248d1bd900f1 — https://www.casact.org/sites/default/files/2021-03/7_Teng_and_Perkins.pdf; Feldblum, Discussion of Estimating the Premium Asset on Retrospectively Rated Policies (PCAS LXXXV, 1998, pp.274-315), PDF pp.1-2, 21-24, sha256:1c572191d2239553f306dc29ba1186f3c3477e06b1652562ab55acd4c8bc04ed — https://www.casact.org/sites/default/files/2021-03/7_Teng_and_Perkins_Discussion_of_Paper.pdf
 - note: The page's mention of Table M and the per-accident loss elimination ratio for capping ratios is Teng and Perkins Section 5, which Exam 7 and GI-301 both exclude; it is correct as stated.
+
+## [C-003] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: g8-cas7-chk-rp
+- date: 2026-10-30
+- status_set: verified
+- confidence: high
+- checks_run: Delta check of commit 8c2964a7: the one added sentence (loss after the last retro adjustment brings in no premium, PDLD zero, stays in the CPDLD denominator, pulls every CPDLD down) against Teng & Perkins printed p.618 (PDF p.8: 'The PDLD ratio after the sixth retro adjustment is selected at zero, which assumes that there are no further retro adjustments') and p.622 (PDF p.12: both CPDLD computations carry the final 0.4% emergence in the denominator only). git diff confirms nothing else on the page changed since the prior verified pass (C-002, 2026-10-11). No numbers from cas7-an-001 on the page.
+- sources_checked: Teng and Perkins, Estimating the Premium Asset on Retrospectively Rated Policies (PCAS LXXXIII, 1996, pp.611-647), PDF pp.1-13 (definition, EBNR, retro reserve, formulas 2.1-2.4, empirical lags, CPDLD), 17 (incremental capping ratio, eq. 5.2), 18 (collectibility), sha256:30efb7917ebbc6361393f76652a21d97e1915032f94667699904248d1bd900f1 — https://www.casact.org/sites/default/files/2021-03/7_Teng_and_Perkins.pdf; Feldblum, Discussion of Estimating the Premium Asset on Retrospectively Rated Policies (PCAS LXXXV, 1998, pp.274-315), PDF pp.1-2, 21-24, sha256:1c572191d2239553f306dc29ba1186f3c3477e06b1652562ab55acd4c8bc04ed — https://www.casact.org/sites/default/files/2021-03/7_Teng_and_Perkins_Discussion_of_Paper.pdf
+- note: Sources carried unchanged from the prior verified pass; the Teng & Perkins line already cites PDF pp.1-13 at the same sha256, which covers the two pages re-read this session. Confidence high, as before.

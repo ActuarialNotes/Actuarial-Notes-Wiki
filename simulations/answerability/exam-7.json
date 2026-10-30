@@ -7519,7 +7519,15 @@
        "page": "Premium Accounting",
        "quote": "Ten percent of EBUB above collateral held for the specific policy is nonadmitted."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "PDLD Ratio",
+      "quote": "A premium chain ladder would wait until at least nine months after expiry and update only annually. The loss-based method updates every quarter.",
+      "note": "Part a asks for one disadvantage, and CAS's sample answers (2017 report PDF p.75) accept 'any of the following', the first being the ~9-month premium lag given that premium depends on losses (the examiner wants the lag linked). The page teaches that disadvantage (with 'retro premium depends on losses' on the line above, from Feldblum pp.276-277); business-mix volatility is not on the page but is not needed for credit.",
+      "date": "2026-10-30",
+      "run": "g8-cas7-chk-rp"
+     }
     },
     {
      "id": "r3",
@@ -8486,7 +8494,15 @@
      "statement": "Primary causes of P&C insurer impairment and insolvency include deficient loss reserves, inadequate pricing, rapid growth, catastrophe events, reinsurance failure, external fraud, overstated assets, reckless management and insolvency of a subsidiary or affiliate.",
      "concept": "Causes of Insurer Insolvency",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Taxonomies",
+      "quote": "A.M. Best's study of property/casualty financial impairments from 1969 to 2009 names as primary causes deficient loss reserves (inadequate pricing), rapid growth, alleged fraud, investment problems (overstated assets), significant change in business, reinsurance failure, catastrophe losses and affiliate problems.",
+      "note": "Lists the primary causes the sample answers use (A.M. Best's chart via the Academy's 2010 paper, PDF pp.7-8, 10); the question is now tagged Risk Taxonomies.",
+      "date": "2026-10-30",
+      "run": "g8-cas7-chk-rp"
+     }
     },
     {
      "id": "r3",
@@ -12065,7 +12081,15 @@
      "statement": "Loss emerging after the last allowable retro adjustment generates no additional premium, so it is included in the CPDLD denominator with a PDLD ratio of zero.",
      "concept": "Retrospective Rating PDLD Method",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Retrospective Premium Reserve",
+      "quote": "Loss that emerges after the last retro adjustment brings in no premium, so its PDLD is zero: it stays in the denominator's loss emergence but adds nothing to the numerator, which pulls every CPDLD down.",
+      "note": "Teaches the requirement in general form, checked against Teng & Perkins printed pp.618 and 622 (PDLD after the last adjustment selected at zero; final emergence in the CPDLD denominator only).",
+      "date": "2026-10-30",
+      "run": "g8-cas7-chk-rp"
+     }
     },
     {
      "id": "r4",

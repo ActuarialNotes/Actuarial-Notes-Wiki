@@ -63,6 +63,8 @@ export interface TableColumn {
   unit?: NumberUnit
   /** A column that may be left blank (a text one reads as '', a number one as null). */
   optional?: boolean
+  /** What an empty cell of it shows, faintly: the words it takes ("exclude…"). */
+  placeholder?: string
 }
 
 /** Rows of named columns: origins with their figures, cash flows with their times. */
@@ -162,6 +164,8 @@ export interface ToolSpec {
   compute: (input: ToolInput) => ToolOutput
   /** `table` draws the result table as the view; `none` leaves the tiles alone. */
   view: 'table' | 'none'
+  /** The result table's name, where it is drawn under the grids it is computed from ("Ratios, A / B"). */
+  resultLabel?: string
   /**
    * For a table tool: the input field the result table extends. The card
    * draws that field's columns as editable and the computed ones beside them,

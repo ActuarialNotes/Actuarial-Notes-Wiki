@@ -2,7 +2,7 @@
 // the answer or an input — copy, share, export, and Send to… the next tool.
 
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
-import { ArrowRight, Bot, Braces, Check, Download, Link2, MoreHorizontal } from 'lucide-react'
+import { ArrowRight, BookOpen, Bot, Braces, Check, Download, Link2, MoreHorizontal } from 'lucide-react'
 import { OverlayPortal } from '@/components/ui/OverlayPortal'
 import { placeMenu, type MenuPlacement } from '@/lib/menuPlacement'
 import { cn } from '@/lib/utils'
@@ -10,13 +10,13 @@ import { cn } from '@/lib/utils'
 export interface ToolMenuItem {
   key: string
   label: string
-  icon: 'link' | 'ai' | 'json' | 'download' | 'next'
+  icon: 'method' | 'link' | 'ai' | 'json' | 'download' | 'next'
   /** Returns text to put on the clipboard, or nothing for an action that does its own thing. */
   run: () => string | void
   disabled?: boolean
 }
 
-const ICONS = { link: Link2, ai: Bot, json: Braces, download: Download, next: ArrowRight }
+const ICONS = { method: BookOpen, link: Link2, ai: Bot, json: Braces, download: Download, next: ArrowRight }
 const MENU_WIDTH = 232
 
 async function copy(text: string): Promise<boolean> {

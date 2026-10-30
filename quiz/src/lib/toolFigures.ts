@@ -57,7 +57,7 @@ export type FigureSpec =
       /** The y values are log10 of the quantity (a mortality curve): labels print 10^y. */
       yLog?: boolean
     }
-  | { kind: 'heat'; rows: (number | null)[][] }
+  | { kind: 'heat'; rows: (number | null)[][]; rowLabels?: string[]; colLabels?: string[] }
   | { kind: 'flows'; items: { t: number; amount: number; pv: number }[] }
   | { kind: 'split'; bars: { name: string; parts: { name: string; value: number; role: Role }[] }[]; unit: NumberUnit }
   | { kind: 'axis'; ticks: { name: string; value: number; role: Role }[]; unit: NumberUnit }
@@ -178,7 +178,10 @@ const BUILDERS: Record<string, Builder> = {
   },
 
   // ── Reserving ────────────────────────────────────────────────────────────
-  'reserving.ratio_triangle': r => ({ kind: 'heat', rows: r.values.ratios as (number | null)[][] }),
+  'reserving.ratio_triangle': r => {
+    const t = r.input.numerator as { origins: string[]; ages: number[] }
+    return { kind: 'heat', rows: r.values.ratios as (number | null)[][], rowLabels: t.origins.map(String), colLabels: t.ages.map(String) }
+  },
 
   'reserving.age_to_age_factors': r => {
     const intervals = r.values.intervals as string[]

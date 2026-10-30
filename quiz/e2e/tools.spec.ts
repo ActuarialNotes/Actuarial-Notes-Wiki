@@ -5,6 +5,9 @@ import { test, expect } from '@playwright/test'
 // catalogue lists the tools, a card recomputes as an input changes (no Run
 // button), a result can be sent on to the next tool, a run link opens the run
 // it names, and a scalar card fits a phone without scrolling (R10).
+/** A factor as a grid cell prints it once it isn't being edited: 1.000, 1.5152 (every digit is kept). */
+const factor = (n: number) => n.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 4, useGrouping: false })
+
 test.describe('tools', () => {
   test('opens from the sidebar and lists the tools by area', async ({ page }) => {
     await page.goto('/store')
@@ -48,8 +51,7 @@ test.describe('tools', () => {
     await page.getByRole('menuitem', { name: 'Send to Development to Ultimate' }).click()
     await expect(page).toHaveURL(/\/tools\/development-to-ultimate#input=/)
     // The averages arrive as the selected factors: 12–24 is 1,500 + 1,700 + 1,800 over 1,000 + 1,100 + 1,200.
-    // (A cell prints its number to ten decimals once it isn't being edited.)
-    await expect(page.getByLabel('Factor to next, row 1')).toHaveValue(String(Math.round((1500 + 1700 + 1800) / (1000 + 1100 + 1200) * 1e10) / 1e10))
+    await expect(page.getByLabel('Factor to next, row 1')).toHaveValue(factor((1500 + 1700 + 1800) / (1000 + 1100 + 1200)))
   })
 
   test('opens the run a link names', async ({ page }) => {
@@ -170,7 +172,7 @@ test.describe('tools', () => {
     await card.getByRole('button', { name: 'CDF column' }).click()
     await page.getByLabel('Every row').fill('1.1')
     await page.getByRole('button', { name: 'Set', exact: true }).click()
-    await expect(card.getByLabel('CDF, row 1')).toHaveValue('1.1')
+    await expect(card.getByLabel('CDF, row 1')).toHaveValue('1.100')
   })
 
   test('selects the factors from the averages and sends the selections on', async ({ page }) => {
@@ -182,6 +184,30 @@ test.describe('tools', () => {
     await expect(page).toHaveURL(/\/tools\/development-to-ultimate#input=/)
     // 12–24, the simple mean: (1.5 + 1700/1100 + 1.5) / 3.
     const simple = (1.5 + 1700 / 1100 + 1.5) / 3
-    await expect(page.getByLabel('Factor to next, row 1')).toHaveValue(String(Math.round(simple * 1e10) / 1e10))
+    await expect(page.getByLabel('Factor to next, row 1')).toHaveValue(factor(simple))
+  })
+
+  test('keeps the reader\'s inputs between visits, and a reset can be undone', async ({ page }) => {
+    await page.goto('/tools/ratio-triangle')
+    const card = page.getByTestId('tool-card')
+    const latest = card.getByTestId('tool-tile').first()
+    await card.getByRole('region', { name: 'Numerator' }).getByLabel('Origin 2023, age 12').fill('600')
+    await expect(latest).toHaveText('0.5000')
+    await page.reload()
+    await expect(latest).toHaveText('0.5000')
+    await card.getByRole('button', { name: 'Reset to the example' }).click()
+    await expect(latest).toHaveText('0.4167')
+    await card.getByTestId('tool-undo-reset').click()
+    await expect(latest).toHaveText('0.5000')
+  })
+
+  test('says what is wrong with an input under that input', async ({ page }) => {
+    await page.goto('/tools/ratio-triangle')
+    const card = page.getByTestId('tool-card')
+    const denominator = card.getByRole('region', { name: 'Denominator' })
+    await denominator.getByLabel('Origin 2023, age 12').fill('')
+    await expect(denominator.getByRole('alert')).toContainText('row 3')
+    await denominator.getByRole('button', { name: 'Clear every cell' }).click()
+    await expect(denominator.getByLabel('Origin 2021, age 12')).toHaveValue('')
   })
 })

@@ -7,7 +7,8 @@ diagnostics, marks, two-step and frequency × severity trend). §16 says what is
 review**: what the first build looked like on a phone, and the four changes it led to —
 assumptions picked rather than typed (§6.6), a live figure on every card (§6.7), **Data Sources**
 as a practice area (§4.11) and a search bar on the Tools page (§6.2). §16.1 says what of V2 was
-built and where the build departs from the plan._
+built and where the build departs from the plan. **§16.3** is the ease-of-use review: what
+each card says it's for, inputs that look like inputs, paste / clear, kept inputs and undo._
 
 **Actuarial Tools** is a new section of the app: a catalogue of actuarial calculators that
 people and AI agents both use. A person uses a tool card. An agent uses the same tool through
@@ -571,9 +572,11 @@ because that's the design this section is copying:
 - **A default says so in place.** An input left at its default carries a small dot, with
   "default" in its accessible name. That's R3 on screen. There's no separate judgments
   list in the card; the full list is in the export and the agent envelope.
-- **No explanatory text.** Units go in the labels, and the notation is the explanation. A
-  warning is one line under the tiles, shown only when there is one
-  (`docs/visual-noise-review.md`).
+- **One line of purpose, no other explanatory text.** Under the title sits the one question
+  the tool answers (`spec.answers`), then the notation; on a phone each is one line and a tap
+  shows the rest (§16.3). Units go in the labels. A warning is one line under the tiles, shown
+  only when there is one (`docs/visual-noise-review.md`); a problem with an input is said under
+  that input, which is ringed.
 - **The working is one fold.** "Show working" opens the trace as KaTeX steps, so math focus
   works on it unchanged.
 - **The title is the way to the method.** It opens the concept page in the concept popup,
@@ -1391,6 +1394,52 @@ frequency and severity) found the trend tools too thin for real work. What chang
   premium separately, from points rounded to four figures, so their fits disagree by up to 0.1
   point (4 quarters: 1.81% combined, 1.9% direct). It therefore carries no "Tested against" mark
   yet; a test holds it to the direct fit on unrounded data instead.
+
+### 16.3 Ease-of-use review (2026-10-30)
+
+A review of every card at phone width, starting from Ratio Triangle, found the tools hard to pick
+up cold: nothing said what a card was for, nothing said which cells could be typed into, and a
+reader's own figures were easy to lose. What changed (`ToolCard.tsx`, `ToolGrid.tsx`,
+`ToolFigure.tsx`; the pure halves in `lib/toolDraft.ts`):
+
+- **The card says what it's for.** The question the tool answers, which only the ⋯ menu used to
+  show, is under the title (`Lead`). The title carries a book icon, so a reader can see it opens
+  the method, and the ⋯ menu gains *Read about the method*.
+- **Inputs look like inputs.** A cell that takes typing is drawn as a well (recessed and ringed),
+  and a computed cell is shaded and bold. Ratio Triangle's two input triangles and its result
+  used to be three identical tables. A scalar's value box is drawn as a field too.
+- **Inputs are named against the notation.** A grid input carries the notation's symbol
+  ("A — Numerator", "B — Denominator"). A result table drawn under its input grids is named
+  (`spec.resultLabel`, "Ratios, A / B") so it isn't read as a third input.
+- **Tiles say their whole label.** A tile label wraps to two lines instead of being cut off
+  ("e40 Life exp…", "ELR Cape Co…"). A barred symbol is drawn with a rule over the letter
+  (`Sym`): fonts that set the combining macron badly showed "R̄" as a second "R".
+- **Getting data in.** Every grid ends in one row of moves: − / + for its rows (a triangle's
+  origins and ages), **Paste**, which reads a whole block from the clipboard in one tap, and
+  **Clear**, which empties every cell and keeps the shape. A pasted block laid out with its ages
+  across the top and origins down the side replaces the whole triangle, labels included
+  (`pastedTriangle`); a table drops a leading header row (`withoutHeader`). Triangle cells now
+  print and take arithmetic the way table cells do (`1,000`), and Enter and the arrow keys move
+  between them. The per-row × column went (it took the width the answer column needed, and on
+  Trend Fit it read as part of *Mark*), and a column of fixed words shows them faintly when
+  empty (`TableColumn.placeholder`: Mark's "exclude…").
+- **Factors read down their decimal points**: 1.000 over 1.030 over 1.6995 (`formatCell`). A
+  cell still keeps every digit typed, and shows them when focused.
+- **Nothing is lost by accident.** The tool page keeps the reader's inputs on this device between
+  visits (`persist`, `draftToStore` / `draftFromStore`, localStorage, R7). A run link still opens
+  its own run. **Reset** goes back to the example and offers **Undo** for eight seconds.
+- **Problems are said where they are.** An input the engine refuses is ringed, with the
+  message under it (`ToolInputError.field`), instead of in a line at the top of the card.
+- **Sources say what they do.** A scalar's way in from another tool was a bare ↓ icon, which read
+  as "download", and Trend Factor's three of them squeezed its label onto three lines. It's now
+  one **From…** pill, which opens a choice when there are several sources.
+- **Figures say what they show.** Ratio Triangle's heat triangle has its origins and ages, and
+  each cell's ratio where there's room. Every bar chart with more than one kind of mark has a
+  legend (Latest / IBNR / Used-up premium × ELR).
+
+R10 still holds: every scalar card fits a 390 × 844 screen (the e2e check). Each card section's
+gap is 2.5 rather than 3 on a phone, a figure is shorter on a card with four or more inputs, and
+the question and notation are one line each until tapped.
 
 ## 17. Tested against (R6)
 

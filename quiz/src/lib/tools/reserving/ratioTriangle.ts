@@ -5,25 +5,26 @@ const example = (values: (number | null)[][]): Triangle => ({ origins: ['2021', 
 
 export const ratioTriangle: ToolSpec = {
   id: 'reserving.ratio_triangle',
-  version: '1.0.0',
+  version: '1.1.0',
   name: 'Ratio Triangle',
   area: 'reserving',
   answers: 'How does one triangle compare with another, cell by cell?',
   aka: ['paid to reported', 'closed to reported', 'average case'],
   fields: [
     {
-      kind: 'triangle', key: 'numerator', label: 'Numerator',
+      kind: 'triangle', key: 'numerator', label: 'Numerator', symbol: 'A',
       description: 'The triangle on top: paid claims for paid-to-reported, closed counts for closed-to-reported, case outstanding for the average case.',
       default: example([[400, 1000, 1500], [450, 1100, null], [500, null, null]]),
     },
     {
-      kind: 'triangle', key: 'denominator', label: 'Denominator',
+      kind: 'triangle', key: 'denominator', label: 'Denominator', symbol: 'B',
       description: 'The triangle beneath, of the same shape: reported claims, reported counts, open counts.',
       default: example([[1000, 1500, 1650], [1100, 1700, null], [1200, null, null]]),
     },
   ],
   notation: () => 'Rᵢⱼ = Aᵢⱼ / Bᵢⱼ',
   view: 'table',
+  resultLabel: 'Ratios, A / B',
   compute: input => {
     const A = input.numerator as Triangle
     const B = input.denominator as Triangle
@@ -50,7 +51,7 @@ export const ratioTriangle: ToolSpec = {
     ]
     const rows: TableRow[] = A.origins.map((origin, i) => Object.assign({ origin }, Object.fromEntries(A.ages.map((age, j) => [ageKey(age), ratios[i][j]]))))
     // The all-origin ratio at each age: the column totals' ratio, so each origin weighs by its size.
-    const pooled = A.ages.map((_, j) => {
+    const sums = A.ages.map((_, j) => {
       let a = 0
       let b = 0
       A.values.forEach((row, i) => {
@@ -59,12 +60,15 @@ export const ratioTriangle: ToolSpec = {
           b += B.values[i][j]!
         }
       })
-      return b === 0 ? null : a / b
+      return { a, b }
     })
+    const pooled = sums.map(({ a, b }) => (b === 0 ? null : a / b))
     const latest = ratios.map(row => [...row].reverse().find(r => r !== null) ?? null)
+    const last = A.origins.length - 1
+    const lastAge = A.ages[Math.max(0, ratios[last].findLastIndex(r => r !== null))]
     return {
       tiles: [
-        { symbol: 'R', label: `Latest, ${A.origins[A.origins.length - 1]}`, value: latest[latest.length - 1] ?? NaN, unit: 'factor' },
+        { symbol: 'R', label: `Newest origin, ${A.origins[last]} at ${lastAge}`, value: latest[last] ?? NaN, unit: 'factor' },
         { symbol: 'R̄', label: `All origins at ${A.ages[0]}`, value: pooled[0] ?? NaN, unit: 'factor' },
       ],
       table: {
@@ -72,7 +76,12 @@ export const ratioTriangle: ToolSpec = {
         rows,
         footer: Object.assign({ origin: 'All origins' }, Object.fromEntries(A.ages.map((age, j) => [ageKey(age), pooled[j]]))),
       },
-      trace: A.ages.map((age, j) => ({ label: `All origins at ${age}`, formula: 'Σ A / Σ B down the column', result: pooled[j] ?? NaN, unit: 'factor' as const })),
+      trace: A.ages.map((age, j) => ({
+        label: `All origins at ${age}`,
+        formula: `Σ A / Σ B = ${formatValue(sums[j].a, 'count')} / ${formatValue(sums[j].b, 'count')}`,
+        result: pooled[j] ?? NaN,
+        unit: 'factor' as const,
+      })),
       warnings,
       values: { ratios, pooled, latest },
       summary: `Ratio triangle of ${A.origins.length} origins; the latest origin's ratio is ${formatValue(latest[latest.length - 1] ?? NaN, 'factor')}.`,

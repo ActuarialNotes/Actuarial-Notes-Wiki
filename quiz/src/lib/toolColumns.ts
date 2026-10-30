@@ -24,6 +24,10 @@ export function formatCell(raw: unknown, unit: NumberUnit | undefined): string {
       return n.toLocaleString('en-US', { maximumFractionDigits: 6 })
     case 'percent':
       return formatValue(n, 'percent')
+    case 'factor':
+      // A column of factors reads down its decimal points: 1.000 over 1.030 over
+      // 1.6995. The cell keeps every digit typed; focusing it shows them.
+      return n.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 4, useGrouping: false })
     default:
       return String(Math.round(n * 1e10) / 1e10)
   }

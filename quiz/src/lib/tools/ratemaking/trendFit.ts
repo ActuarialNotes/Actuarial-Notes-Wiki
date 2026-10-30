@@ -4,7 +4,7 @@ import { ToolInputError, type TableRow, type ToolSpec } from '../types'
 
 const PERIOD = { key: 'period', label: 'Period', kind: 'text' as const }
 const VALUE = { key: 'value', label: 'Value', kind: 'number' as const, unit: 'plain' as const }
-const MARK = { key: 'mark', label: 'Mark', kind: 'text' as const, optional: true }
+const MARK = { key: 'mark', label: 'Mark', kind: 'text' as const, optional: true, placeholder: 'exclude…' }
 
 /** The confidence level of the trend's interval. */
 const LEVEL = 0.95

@@ -779,7 +779,7 @@ runs are complete for P and FM and partial for the other five. Under D30 the ope
 |---|---:|---:|---:|---:|
 | exam-p | 284 / 719 → **719 / 719 ✅ (30 Oct)** | 456 → 0 | 227 → 0 | 0 |
 | exam-fm | 253 / 460 → **460 / 460 ✅ (30 Oct)** | 241 → 0 | 59 → 0 | 0 |
-| exam-mas-i | 35 / 281 | 22 | 7 | 225 |
+| exam-mas-i | 35 / 281 → 203 / 281 (30 Oct) | 22 → 72 | 7 → 20 | 225 → **0 ✅ (30 Oct)** |
 | exam-mas-ii | 80 / 141 | 113 | 17 | 0 |
 | exam-7 | 21 / 125 | 30 | 7 | 83 |
 | exam-disc-da | 48 / 70 | 8 | 7 | 11 |
@@ -788,7 +788,11 @@ runs are complete for P and FM and partial for the other five. Under D30 the ope
 
 The order: P's and FM's items sorted (rule 11), then their pages written, one edit per page; then
 MAS-I's last 225 questions checked, so they meet P's and FM's pages already fixed; then MAS-I's
-items, then MAS-II (step 1) on the same rule. Exam 7 and the DISCs reach none of those pages and
+items, then MAS-II (step 1) on the same rule. **MAS-I's run is done (30 Oct,
+`answerability-20261030-mas-i`, $15.43):** of the 225, 176 answerable, 9 untagged and 40 with a
+gap, P's and FM's fixed pages already in reach. Its 92 items (`answerability_lib.py status --exam
+MAS-I`) are next: sorted first (passages the check missed, retags, not required), then the pages
+written from MAS-I's readings. Exam 7 and the DISCs reach none of those pages and
 are short lists: finish their runs and close them alongside. Steps 2–9 follow as listed.
 
 **Sizing.** These numbers come from `verification-plan.md` §6 and the FM and Exam 9 packets:

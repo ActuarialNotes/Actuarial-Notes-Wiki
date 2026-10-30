@@ -3081,7 +3081,15 @@
        "page": "Limited Expected Value",
        "quote": "$$E[X \\wedge u] = \\int_0^u [1 - F(x)]\\,dx \\quad \\text{(for non-negative } X\\text{)}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Limited Expected Value",
+      "quote": "$$E[X \\wedge u] = \\int_0^u [1 - F(x)]\\,dx \\quad \\text{(for non-negative } X\\text{)}$$",
+      "note": "retagged with Limited Expected Value; passage on that page",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30"
+     }
     },
     {
      "id": "r3",
@@ -3422,7 +3430,15 @@
        "page": "Single-Parameter Pareto Distribution",
        "quote": "$$F(x) = 1 - \\left(\\frac{\\theta}{x}\\right)^{\\alpha}, \\quad x > \\theta$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Single-Parameter Pareto Distribution",
+      "quote": "$$F(x) = 1 - \\left(\\frac{\\theta}{x}\\right)^{\\alpha}, \\quad x > \\theta$$",
+      "note": "retagged with Single-Parameter Pareto Distribution; passage on that page",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30"
+     }
     }
    ]
   },
@@ -3552,7 +3568,15 @@
        "page": "Limited Expected Value",
        "quote": "the **limited loss variable** is $Y = \\min(X, u)$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Limited Expected Value",
+      "quote": "the **limited loss variable** is $Y = \\min(X, u)$",
+      "note": "retagged with Limited Expected Value; passage on that page",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30"
+     }
     },
     {
      "id": "r2",
@@ -7072,7 +7096,15 @@
        "page": "Mixture Distribution",
        "quote": "The CDF jumps by 0.6 at zero and rises continuously after it — neither a discrete nor a continuous distribution."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Mixture Distribution",
+      "quote": "A mixture of a point mass and a continuous distribution gives a CDF with a jump",
+      "note": "retagged with Mixture Distribution; passage on that page",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30"
+     }
     },
     {
      "id": "r2",
@@ -7115,7 +7147,15 @@
        "page": "Mixture Distribution",
        "quote": "E[X] &= 0.6(0) + 0.4(500)"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Mixture Distribution",
+      "quote": "Its moments combine a sum over the mass points with an integral over the continuous part.",
+      "note": "retagged with Mixture Distribution; passage on that page",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30"
+     }
     }
    ]
   },
@@ -14316,7 +14356,15 @@
        "page": "Mixture Distribution",
        "quote": "Its density (and its [[Cumulative Distribution Function (CDF)|CDF]]) is the weighted average of the component densities"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Mixture Distribution",
+      "quote": "Its density (and its [[Cumulative Distribution Function (CDF)|CDF]]) is the weighted average of the component densities",
+      "note": "retagged with Mixture Distribution; passage on that page",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30"
+     }
     },
     {
      "id": "r3",
@@ -14342,7 +14390,15 @@
        "page": "Spliced Distribution",
        "quote": "A percentile or a Value at Risk is found by first using the cumulative weights to decide which interval it falls in, and then inverting that piece alone."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Spliced Distribution",
+      "quote": "is found by first using the cumulative weights to decide which interval it falls in, and then inverting that piece alone",
+      "note": "retagged with Spliced Distribution; passage on that page",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30"
+     }
     },
     {
      "id": "r5",
@@ -14355,7 +14411,15 @@
        "page": "Mixture Distribution",
        "quote": "$$E[X^m] = \\sum_{i=1}^{k} a_i\\, E[X_i^m] = E\\big[E[X^m \\mid \\Theta]\\big]$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Mixture Distribution",
+      "quote": "Any quantity that is *linear* in the density — a probability, a mean, a second moment — can be found by computing it within each subpopulation and averaging.",
+      "note": "retagged with Mixture Distribution; passage on that page",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30"
+     }
     }
    ]
   },
@@ -14916,7 +14980,15 @@
        "page": "Frequency Distribution",
        "quote": "A zero-truncated distribution has $p_0^T = 0$ and $p_k^T = p_k/(1 - p_0)$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Frequency Distribution",
+      "quote": "A zero-truncated distribution has $p_0^T = 0$ and $p_k^T = p_k/(1 - p_0)$.",
+      "note": "retagged with Frequency Distribution; passage on that page",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30"
+     }
     },
     {
      "id": "r4",
@@ -16015,7 +16087,15 @@
        "page": "Poisson Thinning",
        "quote": "given $N(t) = n$, $N_1(t)$ is [[Binomial Distribution|binomial]]$(n, p)$ and the two counts are negatively dependent."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Poisson Superposition",
+      "quote": "Given $N(t) = n$ merged events, the number from stream $i$ is [[Binomial Distribution|binomial]]$(n, \\lambda_i/\\lambda)$",
+      "note": "retagged with Poisson Superposition; passage on that page",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30"
+     }
     },
     {
      "id": "r2",
@@ -23909,7 +23989,15 @@
        "page": "Single-Parameter Pareto Distribution",
        "quote": "$$F(x) = 1 - \\left(\\frac{\\theta}{x}\\right)^{\\alpha}, \\quad x > \\theta$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Single-Parameter Pareto Distribution",
+      "quote": "$$F(x) = 1 - \\left(\\frac{\\theta}{x}\\right)^{\\alpha}, \\quad x > \\theta$$",
+      "note": "retagged with Single-Parameter Pareto Distribution; passage on that page",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30"
+     }
     },
     {
      "id": "r4",
@@ -24874,7 +24962,15 @@
        "page": "Mixture Distribution",
        "quote": "$X$ mixes a point mass at 0 (weight 0.6) with an exponential (weight 0.4):"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Mixture Distribution",
+      "quote": "A mixture of a point mass and a continuous distribution gives a CDF with a jump, such as an annual loss that is $0$ with positive probability and continuous otherwise.",
+      "note": "retagged with Mixture Distribution; passage on that page",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30"
+     }
     },
     {
      "id": "r3",
@@ -37233,7 +37329,15 @@
        "page": "Mixture Distribution",
        "quote": "A **Mixture Distribution** describes a variable $X$ drawn from a population made of subpopulations with different distributions: first a subpopulation is chosen at random, then $X$ is drawn from it."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Mixture Distribution",
+      "quote": "first a subpopulation is chosen at random, then $X$ is drawn from it",
+      "note": "retagged with Mixture Distribution; passage on that page",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30"
+     }
     },
     {
      "id": "r3",
@@ -42290,7 +42394,15 @@
        "page": "Poisson Superposition",
        "quote": "Each of the $8$ claims is collision with probability $3/6 = 0.5$, independently, so the collision count is $\\text{Binomial}(8, 0.5)$ with mean $4$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Poisson Superposition",
+      "quote": "Given $N(t) = n$ merged events, the number from stream $i$ is [[Binomial Distribution|binomial]]$(n, \\lambda_i/\\lambda)$",
+      "note": "retagged with Poisson Superposition; passage on that page",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30"
+     }
     },
     {
      "id": "r6",
@@ -43782,7 +43894,15 @@
        "page": "Poisson Process",
        "quote": "Over $t = 3$ months, $N(3) \\sim \\text{Poi}(2 \\times 3) = \\text{Poi}(6)$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Poisson Process",
+      "quote": "The number of events in any interval of length $t$ has distribution $\\text{Poi}(\\lambda t)$",
+      "note": "retagged with Poisson Process; passage on that page",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30"
+     }
     },
     {
      "id": "r2",
@@ -46306,7 +46426,15 @@
        "page": "Compound Poisson Process",
        "quote": "this falls out of the compound-variance formula $\\text{Var}(S) = E[N]\\text{Var}(X) + \\text{Var}(N)E[X]^2$ with $E[N] = \\text{Var}(N) = \\lambda t$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Compound Poisson Process",
+      "quote": "the compound-variance formula $\\text{Var}(S) = E[N]\\text{Var}(X) + \\text{Var}(N)E[X]^2$",
+      "note": "retagged with Compound Poisson Process; passage on that page",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30"
+     }
     },
     {
      "id": "r4",
@@ -48232,7 +48360,15 @@
        "page": "Mean Excess Loss",
        "quote": "$$e_X(d) = E[X - d \\mid X > d]$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Mean Excess Loss",
+      "quote": "is the expected amount by which a loss exceeds $d$, given that it does exceed $d$",
+      "note": "retagged with Mean Excess Loss; passage on that page",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30"
+     }
     },
     {
      "id": "r2",
@@ -49065,7 +49201,15 @@
        "page": "Limited Expected Value",
        "quote": "$$E[X \\wedge u] = \\int_0^u [1 - F(x)]\\,dx \\quad \\text{(for non-negative } X\\text{)}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Limited Expected Value",
+      "quote": "$$E[X \\wedge u] = \\int_0^u [1 - F(x)]\\,dx \\quad \\text{(for non-negative } X\\text{)}$$",
+      "note": "retagged with Limited Expected Value; passage on that page",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30"
+     }
     },
     {
      "id": "r3",
@@ -49095,7 +49239,15 @@
        "page": "Limited Expected Value",
        "quote": "$$E[X \\wedge u] = E[X] - E[\\max(X - u, 0)] = E[X] - e(u)\\cdot[1-F(u)]$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Limited Expected Value",
+      "quote": "$$E[X \\wedge u] = E[X] - E[\\max(X - u, 0)] = E[X] - e(u)\\cdot[1-F(u)]$$",
+      "note": "retagged with Limited Expected Value; passage on that page",
+      "date": "2026-10-30",
+      "run": "g8-exam-p-2026-10-30"
+     }
     },
     {
      "id": "r5",

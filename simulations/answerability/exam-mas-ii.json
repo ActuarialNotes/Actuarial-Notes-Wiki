@@ -4202,7 +4202,15 @@
      "statement": "The Kenward-Roger adjustment matters most for small samples; as the sample size grows the bias becomes negligible and the adjusted denominator degrees of freedom converge to the naive ones.",
      "concept": "Kenward-Roger Adjustment",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Linear Mixed Model",
+      "quote": "It matters most in small samples: with large samples the statistics are close to their asymptotic normal and $\\chi^2$ distributions, and for fairly well-balanced data the inflation tends to be small.",
+      "note": "The page (verified medium in run 2026-10-31T05:03Z/b549, SAS PROC MIXED pp.5321-5323, pbkrtest s.4) teaches what statement III needs: the adjustment matters most in small samples and large-sample statistics approach their asymptotic chi-square forms (an F with unbounded denominator df). The solution's extra clause that the KR df converge to the naive ones is that same limit, not a further fact the candidate must know.",
+      "date": "2026-10-31",
+      "run": "mas-ii-coordinator-2026-10-31"
+     }
     }
    ],
    "imported_from": "report.md"

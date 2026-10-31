@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:c9760db9706a4dcf72de48b50dac69577325b3dc5cf8d14e790eb07ce2e26cc0
+  content_hash: sha256:9758c88fced3df155251673b456f69b15ab87521c076212b8e85b9031f7bf909
   sources:
     - "OSFI, Minimum Capital Test Guideline (2024), Guideline A, §1.1.1, §1.1.2, §1.2.1, sha256:ec08c0d9b998c17749d099bdc0e96aeb4508a912b9a5d4eb390335602b03fd0e — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/minimum-capital-test-guideline-2024"
     - "OSFI Guideline A-4, Regulatory Capital and Internal Capital Targets (December 2017), p.3, sha256:f68346b481f701b9a9ccac13cac872c8e7c009c96d2a7a51b66e523c00e6b1fa — https://www.casact.org/sites/default/files/2021-03/6C_OSFI_Target_Capital.pdf"
@@ -25,6 +25,7 @@ verification:
 - **In property underwriting the term is used per location.** Underwriters and loss control staff use probable maximum loss for one location: the largest loss expected there from a fire, stated in dollars or as a percentage of the location's total values. It sits between two neighbours: the maximum foreseeable loss (MFL), the worst loss likely from a single event, and the maximum possible loss (MPL), the worst that could possibly occur. DISC-RM uses it to determine the potential loss severity of a commercial property, and for business income it is the income lost over the longest probable [[Period of Restoration|period of restoration]] ([[Business Income Coverage]], [[COPE]]).
 - **It is a modelled quantity, not an observed one.** PMLs come from catastrophe models built on hazard science (fault maps, ground motion, wind fields), an exposure database (location, construction, occupancy, height, age), a vulnerability function linking hazard intensity to damage, and the financial terms (limits, deductibles, reinsurance).
 - **Return period language is often misread.** A $1$-in-$500$ event has a $0.2\%$ annual probability; over $30$ years the probability of at least one such event is $1 - 0.998^{30} \approx 5.8\%$. "Once in $500$ years" does not mean "not in our lifetime."
+- **Reading a PML between the tabulated points.** An exceedance probability curve is a continuous curve, and a table or graph gives only some of its points. To read the PML at a return period that isn't listed, convert the return period to an exceedance probability ($1/\text{RP}$) and interpolate linearly *in exceedance probability* between the two bracketing points; don't pick the nearer plotted point, and don't interpolate on the return-period years — CAS's examiners list each of these as a common mistake. For example, with points at exceedance probability $0.010$ (loss $\$40$M) and $0.004$ (loss $\$70$M), the $1$-in-$200$ PML at $0.005$ is $40 + \frac{0.010 - 0.005}{0.010 - 0.004}(70 - 40) = \$65$M; interpolating on return periods $100$ and $250$ would give $40 + \frac{200 - 100}{250 - 100}(30) = \$60$M instead. The exception is a *discrete* loss distribution, such as a short list of events each with a fixed loss: there the loss at a given probability is the step the probability falls on, the losses in between can't occur, and interpolating is wrong (the reading in the [[Catastrophe Model Output]] example).
 - **Gross and net PML are different questions.** Gross PML sizes the reinsurance programme; net PML — after reinsurance and after any reinstatement premiums — is what actually hits capital. OSFI's earthquake requirements test whether the insurer's financial resources cover the net exposure.
 - **Model uncertainty is large.** Different vendor models produce materially different PMLs for the same portfolio, and all are sensitive to exposure data quality. Using a single model's output as a precise figure is a [[Model Risk]] failure; the defensible practice is multiple models, sensitivity testing, and disclosure of the basis.
 - **Exposure data quality dominates.** A PML computed on unmapped or mis-coded locations is wrong regardless of the model's sophistication — one of the most common and least visible errors in catastrophe management.

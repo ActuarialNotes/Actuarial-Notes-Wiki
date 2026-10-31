@@ -15,7 +15,7 @@ history — but nothing on screen says "mock" any more. Two labels replace it, b
 | Label | Where | When |
 |---|---|---|
 | `examSourceLabel(rows)` → **Past Papers** | The source tab on the quiz builder | The exam has released sittings (Exam 5, Exam 7, MAS-I, MAS-II) |
-| `examSourceLabel(rows)` → **Samples** | The same tab | It has none — Exam P and FM draw on the SOA's rolling sample set, so their shelf is the Mix row and the sample set's PDFs |
+| `examSourceLabel(rows)` → **By Source** | The same tab | It has none — Exam P and FM draw on the SOA's rolling sample set, so their shelf is the Mix row and the sample set's PDFs |
 | `PRACTICE_EXAM_LABEL` → **Practice Exam** | The builder's format choice, the Start button, the in-quiz mode pill, the quit dialog, the completion heading | The session is sat as a practice exam — whatever source it was drawn from |
 
 **The source and the format are two choices.** The tab says where the questions come from

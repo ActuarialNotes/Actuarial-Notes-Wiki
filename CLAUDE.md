@@ -580,7 +580,7 @@ before touching that area**:
   leaves it alone forever.
 - `docs/mock-exam-browser.md` — the **past-paper browser** on the quiz builder (the mode id is
   still `mock-exam`, and it is now the *format*, not the source: the builder asks where the
-  questions come from — the tab reads **Past Papers**, or **Samples** for an exam with no released
+  questions come from — the tab reads **Past Papers**, or **By Source** for an exam with no released
   sittings (`examSourceLabel`) — and, separately beside Start, whether to sit them as a **Quiz** or a
   **Practice Exam** (`PRACTICE_EXAM_LABEL` in `lib/pastExams.ts`); any source either way): the
   authored sitting catalogue (`data/pastExams.ts`), how `lib/pastExams.ts` merges it with the

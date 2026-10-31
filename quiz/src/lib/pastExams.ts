@@ -243,7 +243,8 @@ export const PRACTICE_EXAM_LABEL = 'Practice Exam'
  * (`Examiner's Report` vs `Exam & Answer Key`): an exam whose body released its
  * papers offers **Past Papers**, and one with none — Exam P and FM draw on the
  * SOA's rolling sample set, so their shelf is the generated Mix row and the
- * sample set's PDFs — offers **Samples**. Naming the Mix "past papers" would
+ * sample set's PDFs — offers **By Source**, the shelf's sources (the Mix and the
+ * sample set) without claiming a paper. Naming the Mix "past papers" would
  * overstate it.
  *
  * It names a *source* of questions and nothing else. It used to fall back to
@@ -252,7 +253,7 @@ export const PRACTICE_EXAM_LABEL = 'Practice Exam'
  * any source can be sat as either.
  */
 export function examSourceLabel(rows: PastExamRow[]): string {
-  return rows.length > 0 ? 'Past Papers' : 'Samples'
+  return rows.length > 0 ? 'Past Papers' : 'By Source'
 }
 
 /** A percentage for display: `40` → `"40%"`, `40.6` → `"40.6%"`, nothing → `null`. */

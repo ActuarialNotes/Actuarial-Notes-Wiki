@@ -1706,7 +1706,15 @@
      "statement": "Under the Basel II basic indicator approach, operational risk capital equals a single fixed percentage α (15%) times the average annual positive gross income over the previous three years, excluding years with zero or negative gross income from the average (dividing by the number of positive years).",
      "concept": "Basel II Basic Indicator Approach",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Operational Risk",
+      "quote": "capital equals a single fixed percentage $\\alpha = 15\\%$ of positive annual gross income, averaged over the previous three years",
+      "note": "BCBS Basel II (June 2006) para 649 (alpha 15%, negative or zero years excluded from numerator and denominator)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r2",
@@ -1714,7 +1722,15 @@
      "statement": "Under the Basel II standardized approach, capital equals the three-year average of the annual sum across business lines of β_j times gross income_j, with each year's total floored at zero and the average always divided by three.",
      "concept": "Basel II Standardized Approach",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Operational Risk",
+      "quote": "Capital is $K_{\\text{TSA}} = \\sum_{\\text{years }1\\text{ to }3} \\max\\big(\\sum_j \\beta_j \\text{GI}_j,\\ 0\\big) / 3$",
+      "note": "BCBS Basel II (June 2006) para 654 (K_TSA = sum over years 1-3 of max(sum beta GI, 0) / 3)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r3",
@@ -1722,7 +1738,15 @@
      "statement": "The standardized approach assigns different β factors (12%, 15%, 18%) to different business lines, such as retail banking at 12% and commercial banking at 15%, so capital depends on the firm's mix of business, whereas the basic indicator approach uses one α for the whole firm and ignores business mix.",
      "concept": "Basel II Standardized Approach",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Operational Risk",
+      "quote": "One $\\alpha$ for the whole firm, so the mix of business has no effect",
+      "note": "BCBS Basel II (June 2006) paras 649, 652-654 (one alpha; eight business lines with betas 12/15/18%)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r4",
@@ -1730,7 +1754,15 @@
      "statement": "Under the standardized approach, negative gross income in one business line can offset positive gross income in other lines within the same year, and a negative annual total is floored at zero but still counted in the divisor of three, which can yield lower capital than the basic indicator approach for a firm with a loss year or loss-making lines.",
      "concept": "Basel II Standardized Approach",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Operational Risk",
+      "quote": "a negative charge in one business line offsets positive charges in other lines *within the same year* without limit; a year whose total is negative enters as zero but the divisor stays three",
+      "note": "BCBS Basel II (June 2006) para 654 (negative charges offset without limit; negative aggregate year input zero; three-year average); 2013 Q21b sample answers",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     }
    ]
   },
@@ -3091,7 +3123,15 @@
      "statement": "A copula is a function that joins marginal distributions into a joint distribution, capturing the dependence structure separately from the marginals.",
      "concept": "Copulas",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Copula",
+      "quote": "used to join the marginal distributions of two random variables $X$ and $Y$ into a joint distribution. It describes their dependence separately from the marginals",
+      "note": "Venter 2002 pp.68, 70 (copula separates the marginals from their interdependency; F(x,y) = C(F_X(x), F_Y(y)))",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r2",
@@ -3099,7 +3139,15 @@
      "statement": "A copula can join marginal distributions of any family, and can represent dependence without revealing the underlying marginal distributions.",
      "concept": "Copulas",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Copula",
+      "quote": "so the dependence can be described, fitted or reported on its own, without disclosing the loss distributions it joins",
+      "note": "CAS Exam 7 2015 Q21a accepted responses p.82 (join any two distributions without disclosing them); Venter 2002 p.69 (marginals inverted separately, any family)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r3",
@@ -3107,7 +3155,15 @@
      "statement": "Copulas allow correlation to vary across the distribution, e.g. stronger dependence in the tails than in the body, so tail dependence can be modeled and quantified.",
      "concept": "Copulas",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Copula",
+      "quote": "**Copulas let the strength of dependence vary across the distribution.** Copulas with the same $\\tau$ differ mainly in *where* the association is strongest",
+      "note": "Venter 2002 abstract p.68 (copulas differ in which part of the distributions the association is strongest; large losses, right tails)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r4",
@@ -3147,7 +3203,15 @@
      "statement": "Frank's copula does not have a heavier tail than the normal copula, so it is not a suitable choice for heavy tail dependence.",
      "concept": "Frank Copula",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Copula",
+      "quote": "Frank's copula does not have a heavier tail than the normal copula, so it understates how lines move together in extreme events",
+      "note": "Venter 2002 pp.74, 85 (normal heavier in the right tail than Frank; away from the limits normal shows more tail concentration than Frank); 2015 Q21b report p.83",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     }
    ]
   },
@@ -3303,7 +3367,15 @@
        "page": "Development Factor Correlation Test",
        "quote": "$r_{ik}$ ranks the $I-k$ factors $C_{i,k+1}/C_{ik}$ of column $k$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Rank Correlation",
+      "quote": "rank each variable's $n$ observations separately, by size, the smallest getting rank $1$; for each pair take $d_i$, the difference between its two ranks; square and sum",
+      "note": "Mack 1994 Appendix G pp.156-157 (rank by size, smallest rank one; sum of squared rank differences)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r3",
@@ -3316,7 +3388,15 @@
        "page": "Development Factor Correlation Test",
        "quote": "$$T_k = 1 - \\frac{6\\sum_{i=1}^{I-k}(r_{ik} - s_{ik})^2}{(I-k)^3 - (I-k)}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Rank Correlation",
+      "quote": "the same formula reads $\\rho_S = 1 - S\\big/\\big[n(n^2-1)/6\\big]$",
+      "note": "Mack 1994 (G4) p.157: T_k = 1 - 6 sum(r-s)^2/((I-k)^3 - (I-k)); 2015 Q23b sample answers p.87",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r4",
@@ -3324,7 +3404,15 @@
      "statement": "Pearson's correlation is a cardinal measure that depends on the actual values (deviations from the mean, squared), so it is sensitive to outliers, whereas Spearman's is ordinal, depending only on ranks, and is not affected by the magnitude of extreme values.",
      "concept": "Pearson vs Spearman Correlation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Rank Correlation",
+      "quote": "Pearson's correlation is a *cardinal* measure: it uses each value's deviation from the mean, multiplied together and squared, so the size of the values matters and a few extreme ones can dominate it",
+      "note": "CAS Exam 7 2015 Q23c sample answers and report pp.87-88 (Pearson cardinal, outlier-sensitive; Spearman ordinal); Embrechts et al. pp.16-17",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r5",
@@ -3332,7 +3420,15 @@
      "statement": "A pair of extreme values that are both the largest in their series (an outlier pair) can inflate Pearson's correlation well above Spearman's, producing a discrepancy between the two measures.",
      "concept": "Pearson vs Spearman Correlation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Rank Correlation",
+      "quote": "When Pearson is high and the rank measures are near zero, look for one pair that is extreme in both series. It drives the Pearson figure",
+      "note": "CAS Exam 7 2015 Q23c report p.88 (outlier year skewing Pearson; mention needed for full credit)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     }
    ]
   },
@@ -4046,7 +4142,15 @@
      "statement": "Default avoidance as a capital reference point requires a capital level deep in the tail of the loss distribution, where the ERM model is least reliable and least credible.",
      "concept": "Default Avoidance Reference Point for Capital Requirements",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Capital",
+      "quote": "it places the requirement deep in the tail of the loss distribution, where a risk model has the least data and is least reliable",
+      "note": "CAS Exam 7 2016 Q23a sample answers and report pp.92-93 (far tail where the ERM model is least reliable)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r2",
@@ -4054,7 +4158,15 @@
      "statement": "Default avoidance mainly protects policyholders, whereas shareholders and other stakeholders can be harmed by large partial losses of capital well before default, so a more likely, less extreme reference point may be more meaningful.",
      "concept": "Default Avoidance Reference Point for Capital Requirements",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Capital",
+      "quote": "shareholders and other stakeholders are hurt by large partial losses of capital well before default, so a more likely, less extreme event can be the more meaningful standard",
+      "note": "CAS Exam 7 2016 Q23a sample answers and report pp.92-93 (default avoidance mainly protects policyholders; partial losses matter to shareholders)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r3",
@@ -4092,7 +4204,15 @@
      "statement": "To build a minimum capital requirement from a reference point, choose a maximum tolerable fraction of capital lost in a 1-in-y-year event, express that event's average loss as TV@R at the corresponding percentile, and set capital equal to TV@R divided by the tolerated fraction (a multiple of TV@R).",
      "concept": "Capital Requirement Based on TV@R Multiple",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Capital",
+      "quote": "choose the largest fraction $k$ of capital the firm will tolerate losing in a 1-in-$y$-year event, measure that event's average loss as the TVaR at the matching percentile",
+      "note": "CAS Exam 7 2016 Q23c report pp.93-94 (maximum capital loss tolerance as a 1-in-y event, capital a multiple of TV@R); Venter 2003 pp.283-284 (capital a multiple of a risk measure)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     }
    ]
   },
@@ -4134,7 +4254,15 @@
      "statement": "TVaR weights all tail losses linearly, so it does not treat a loss twice as large as more than twice as bad, which is inconsistent with risk aversion.",
      "concept": "Tail Value at Risk (TVaR)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Measure",
+      "quote": "so every tail dollar counts the same and a loss twice as large counts exactly twice as bad",
+      "note": "Kreps 2005 pp.44-45 (TVAR riskiness leverage zero up to a point then constant); Venter 2003 p.286 (tail measures linear, 'an underweighting'); 2016 Q24 sample answers and report pp.95-96",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r4",
@@ -4155,7 +4283,15 @@
      "statement": "Weighted (transformed-probability) TVaR is suitable for portfolios with heavy-tailed, skewed losses (e.g., catastrophe property, excess casualty) because it counts a loss twice as large as more than twice as bad.",
      "concept": "Transformed Probabilities Risk Measures",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Measure",
+      "quote": "a loss twice as large counts as more than twice as bad, which suits a portfolio with heavy-tailed, skewed losses",
+      "note": "CAS Exam 7 2016 Q24a sample answers p.95 (TVaR on transformed probabilities treats a loss 2x as large as more than 2x as bad; best for skewed losses)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r6",
@@ -4163,7 +4299,15 @@
      "statement": "Other suitable risk measures for capital allocation include expected policyholder deficit (EPD) on transformed probabilities, the value of a put option, and the exponential moment, each capturing tail or skewness behavior and risk aversion.",
      "concept": "Risk Measures for Capital Allocation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Measure",
+      "quote": "the value of the **default put option** — limited liability lets an insurer put its default costs to policyholders",
+      "note": "Venter 2003 p.283 (Table 1; cost of default option as a risk measure); 2016 Q24b sample answer 2 p.95 accepts the value of a put option; EPD (also accepted) is on the same line",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     }
    ]
   },
@@ -4179,7 +4323,15 @@
      "statement": "The right-tail concentration function R(z) is the probability that both variables exceed their z-th quantiles, given that one exceeds its z-th quantile: R(z) = P(U > z, V > z) / (1 - z) = (1 - 2z + C(z,z)) / (1 - z).",
      "concept": "Tail Concentration Functions",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Copula",
+      "quote": "R(z) = \\Pr(U > z \\mid V > z) = \\frac{1 - 2z + C(z,z)}{1 - z}",
+      "note": "Venter 2002 p.83 (R(z) = Pr(U>z,V>z)/(1-z) = [1-2z+C(z,z)]/(1-z) = Pr(U>z | V>z))",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r2",
@@ -4213,7 +4365,15 @@
      "statement": "A right-tail concentration graph can be misleading because a copula may have significant tail dependence even when R(1) = 0 (R may decline rapidly), and because it shows only the right tail and reduces a two-dimensional dependence to a one-dimensional curve.",
      "concept": "Tail Concentration Functions",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Copula",
+      "quote": "**$R(1) = 0$ does not mean no tail association.** The normal copula has $R(1) = 0$ yet shows more concentration than the Frank short of the limit",
+      "note": "Venter 2002 pp.84-86 (normal and Frank show no tail dependence in the limit, normal more concentration away from it; R hard to estimate from sparse tail data, fit R(z) not just R); 2016 Q25b sample answers p.97",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r5",
@@ -4221,7 +4381,15 @@
      "statement": "To address the limitations of the right-tail concentration graph, examine R(z) at values somewhat below 1, combine it with the left-tail concentration function L(z) (using L for z ≤ 0.5 and R for z ≥ 0.5), and/or supplement with other measures such as Kendall's tau or industry data.",
      "concept": "Tail Concentration Functions",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Copula",
+      "quote": "Pair it with $L(z)$ — Venter plots $L$ for $z < \\tfrac12$ and $R$ above — and with Kendall's $\\tau$ when choosing a copula",
+      "note": "Venter 2002 pp.84, 86 (LR function: L below 1/2, R above; target pair (tau, R)); 2016 Q25b sample answers p.97",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     }
    ]
   },
@@ -4889,7 +5057,15 @@
      "statement": "The Frank copula has little or no tail dependence, so it understates correlation among lines in extreme events such as clash and accumulation.",
      "concept": "Copulas",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Copula",
+      "quote": "It has less tail concentration than the normal copula. For clash and accumulation events, choose a copula with right-tail dependence.",
+      "note": "Venter 2002 p.85 (Frank: no tail dependence, less concentration than the normal); 2017 Q23c sample answers and report pp.91-92",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r7",
@@ -5295,7 +5471,15 @@
      "statement": "To compute a 1-in-N WTVaR from simulations, take the worst scenarios in descending order, weight each by its transformed probability f*(x) obtained as differences in F*, cap the last scenario's weight so total weight equals the tail probability 1/N, and divide the weighted sum by 1/N.",
      "concept": "Weighted Tail Value at Risk (WTVaR)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Measure",
+      "quote": "read each one's transformed probability $f^*$ as the difference between successive values of the transformed CDF $F^*$",
+      "note": "CAS Exam 7 2018 Q21b sample answers and report p.99 (weights f*, not F*; cap the last simulation's probability; divide by 0.01)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     }
    ]
   },
@@ -5413,7 +5597,15 @@
      "statement": "ERM models need dedicated, full-time staff or a dedicated ERM function; staff doing ERM part-time alongside regular duties creates scheduling conflicts and delays in implementation and maintenance.",
      "concept": "ERM Governance and Implementation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Modeling",
+      "quote": "It needs dedicated, full-time staff — or a dedicated ERM function — because people building and maintaining it alongside their regular duties face scheduling conflicts",
+      "note": "CAS Exam 7 2018 Q23 characteristic i sample answers and report p.104",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r2",
@@ -5438,7 +5630,15 @@
      "statement": "Correlation assumptions between lines of business require broad knowledge of the whole firm and are politically sensitive, so individual line leaders may be inexperienced or biased; the assumptions should be owned or reviewed at the corporate level (CRO, ERM department) or set by consensus among leaders.",
      "concept": "Correlation Assumptions in ERM Models",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Modeling",
+      "quote": "they belong at the corporate level, owned or reviewed by the CRO or the ERM department, or agreed by consensus among the line leaders",
+      "note": "CAS Exam 7 2018 Q23 characteristic iii sample answers and report pp.104-105",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r4",
@@ -5662,7 +5862,15 @@
      "statement": "A weakness of TV@R is that it weights all tail losses equally (linearly), so it does not reflect risk-averse attitudes toward increasingly large losses; WTV@R corrects this by giving greater weight to more extreme losses.",
      "concept": "Weighted Tail Value at Risk (WTVaR)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Measure",
+      "quote": "a risk-averse management wants the weight to grow as losses start to impair capital",
+      "note": "Kreps 2005 p.49 (leverage should become much larger for excess significantly impacting capital); 2019 Q19d-e report p.88",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     }
    ]
   },
@@ -5678,7 +5886,15 @@
      "statement": "The Normal copula is symmetric and has no strong tail dependence, so its scatter plot looks more uniform with weaker clustering in the corners, especially the upper-right tail.",
      "concept": "Normal Copula",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Copula",
+      "quote": "a symmetric copula (normal, Frank) looks the same near $(0,0)$ as near $(1,1)$; an HRT copula is asymmetric, its points scattered near $(0,0)$ and bunched along the diagonal near $(1,1)$",
+      "note": "CAS Exam 7 2019 Q20a sample answers p.89 (normal more symmetric, more uniform; HRT points bunched in the upper right); Venter 2002 pp.72-73 (Gumbel and HRT asymmetric, heavier right tail)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r2",
@@ -5686,7 +5902,15 @@
      "statement": "The HRT (heavy right tail) copula has dependence concentrated in the right tail, so its scatter plot shows points bunched in the upper-right corner and is asymmetric.",
      "concept": "Heavy Right Tail (HRT) Copula",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Copula",
+      "quote": "a symmetric copula (normal, Frank) looks the same near $(0,0)$ as near $(1,1)$; an HRT copula is asymmetric, its points scattered near $(0,0)$ and bunched along the diagonal near $(1,1)$",
+      "note": "Venter 2002 p.73 (HRT: less correlation in the left tail, high in the right); 2019 Q20a sample answers p.89",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r3",
@@ -5694,7 +5918,15 @@
      "statement": "The HRT copula suits lines of business that are largely uncorrelated normally but become highly dependent in extreme events such as catastrophes, because it puts heavy dependence in the right tail.",
      "concept": "Heavy Right Tail (HRT) Copula",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Copula",
+      "quote": "Two property lines may be almost unrelated in ordinary years and lose together when one hurricane hits both — a copula with a heavy right tail can say exactly that",
+      "note": "Venter 2002 pp.69, 73 (lines correlated in the extreme tails but not elsewhere; HRT for large losses); 2019 Q20b sample answers p.89",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r4",
@@ -5702,7 +5934,15 @@
      "statement": "The Normal copula extends easily to more than two lines of business (via a correlation matrix) and is easy to simulate from and invert, whereas the HRT copula is harder to generalize beyond two variables.",
      "concept": "Normal Copula",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Copula",
+      "quote": "Easy to simulate, and it extends to many variables through a correlation matrix.",
+      "note": "Venter 2002 pp.74, 101 (normal copula useful for easy simulation and generalised to multi-dimensions; only normal and partial perfect fully generalise); 2019 Q20b sample answers p.89",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r5",
@@ -5710,7 +5950,15 @@
      "statement": "A copula only specifies the dependence between variables and not their marginal distributions, so the expected value of the aggregate (sum) is unchanged by the choice of copula, while measures of variability and tail risk do change.",
      "concept": "Copulas",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Copula",
+      "quote": "Changing the copula never changes the expected value of the sum: each marginal is unchanged",
+      "note": "CAS Exam 7 2019 Q20c sample answers pp.89-90 (copula should not change the expected value; it affects variability); Venter 2002 p.70 (marginals described separately)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r6",

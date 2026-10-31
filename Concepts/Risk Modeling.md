@@ -1,8 +1,8 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-18
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
   content_hash: sha256:b8d31d3b28ebe9d41de0fab715442533a66065587b2a0a1aefcc1ca4518e8c8f
   sources:
@@ -14,6 +14,8 @@ verification:
     - "CAS Exam 7 Spring 2016 - exam and sample answers/examiner's report, Q21 PDF pp.25, 88-89 (ERM program: monitoring, operational and strategic risk, materiality per 'the Brehm text', upside, dependencies); Q22 PDF pp.90-92 (cycle and asset strategy; reinsurance reduces volatility); Q23 PDF p.92 (capital reference points); Q26 PDF pp.99-100 (operational vs underwriting risk); Q27 PDF pp.101-103 (agency theory, cycle management); Q28 PDF pp.104-105 (soft and technical cycle models), sha256:e07f38dd81edc9715ef2528c1861e75c609c85b598b51b723d665cf63b745b84 — https://www.casact.org/sites/default/files/2021-03/16-7.pdf"
     - "CAS Exam 7 Spring 2017 - sample answers/examiner's report, Q22 PDF pp.86-88 (process vs parameter risk; parameter risk does not diversify; accepted aspects: estimation, projection, event, systematic, model risk; reduce over-parameterization); Q24 PDF pp.93-95 (scenario planning vs unilateral plan); Q25 PDF pp.96-98 (behavioral cycle models), sha256:c32697af25fff52e2c5e1e49de12dacd66662b78644bbb28fba827da035c03c4 — https://www.casact.org/sites/default/files/2021-01/17-7.PDF"
     - "CAS Exam 7 Spring 2018 - exam and sample answers/examiner's report, Q1 PDF pp.6, 34-37 (strategic risk types; deficient loss reserves a primary cause of insolvency, impairment causes 'as mentioned in Brehm'; process vs parameter risk); Q20 PDF p.25 (reduce insurance hazard risk by reinsurance; capital set by 1-in-100 TVaR), sha256:b5f6e6454919cfb04da8295ac4a70c89af58e770707daa4faf575bdca8a4fa6b — https://www.casact.org/sites/default/files/2021-03/18-7_0.pdf"
+    - "Venter, Tails of Copulas, PCAS LXXXIX (2002), pp.68-75 (copula definition and separation of marginals; any joint distribution; C(u,v) = Pr(U<=u,V<=v); simulation by inverting marginals; Kendall tau = 4E[C]-1, constant of the copula, Pearson not; Frank, Gumbel (tau 1-1/a, asymmetric, more right-tail weight than Frank), HRT (formula, tau 1/(2a+1)), normal (tau 2arcsin(a)/pi, easy simulation, multi-dimensional, lighter right tail than Gumbel/HRT, heavier than Frank)), p.77 and p.69 (Kreps's partial perfect copulas), pp.83-86 (L(z), R(z) and their conditional forms, R(1) and L(0) as tail dependence; LR function L below 1/2, R above; Gumbel, HRT, PP have R > 0; HRT heavier than Gumbel; normal and Frank no tail dependence in the limit, normal more concentration away from it; R values 2-2^(1/a), 2^(-a); target (tau, R); R hard to estimate, fit R(z) not just R), p.90 (HRT is the flipped Clayton), p.94 (sample Kendall tau as average sign over pairs), pp.100-101 (only normal and partial perfect copulas fully generalise to multivariate with all pairwise correlations), sha256:fd0251da893a2eddee0e67a44fe11fca86636686a81b3c14bac1815a4956dc06 — https://www.casact.org/sites/default/files/database/proceed_proceed02_02068.pdf"
+    - "CAS Exam 7 Spring 2018 — sample answers and examiner's report, Q21b PDF p.99 (WTV@R weights f*, not F*; cap the last simulation's probability), Q23 PDF pp.104-105 (dedicated full-time ERM staff; correlation assumptions need whole-firm knowledge, politically sensitive, LOB leaders inexperienced or biased, owned at corporate level / CRO / ERM department or by consensus), sha256:b5f6e6454919cfb04da8295ac4a70c89af58e770707daa4faf575bdca8a4fa6b — https://www.casact.org/sites/default/files/2021-03/18-7_0.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Risk Modeling.md

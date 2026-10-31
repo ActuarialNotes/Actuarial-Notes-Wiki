@@ -1,8 +1,8 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-18
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
   content_hash: sha256:2b83b2ee72b989ef991532ad395cab10c592114692281014967c943051c130b8
   sources:
@@ -17,6 +17,9 @@ verification:
     - "Mildenhall & Major, Pricing Insurance Risk (Wiley 2022), Chapter 1 excerpt, pp.4-11, sha256:af37057d34a0c9b927fa8d0246eaf121a500e385c6902a8f8db8b08e6a55fe2c — https://media.wiley.com/product_data/excerpt/70/11197556/1119755670-5.pdf"
     - "CAS Exam 9 Content Outline, Fall 2026, pp.4-5, 7 (Domains B and C; text references), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
     - "Mildenhall & Major, Pricing Insurance Risk (Wiley 2022), Index excerpt, pp.523-546, sha256:4e7a560b390d357308ca1274a4c35f13e03d3d7c36555455dd25125f675f3517 — https://media.wiley.com/product_data/excerpt/70/11197556/1119755670-10.pdf"
+    - "Kreps, Riskiness Leverage Models, PCAS XCII (2005), pp.44-45 (TVAR riskiness leverage zero up to a point then constant; only the high end relevant), pp.49-50 (sources of risk incl. downgrade and regulatory notice; leverage should become much larger for excess significantly impacting capital; appetite 'not more than a 0.1% chance of losing all our capital, and not more than a 10% chance of losing 20% of capital'), sha256:2b0e080348c973b4f47244618f1b6d46231b50b494fae810639d0186da3fe81c — https://www.casact.org/sites/default/files/database/proceed_proceed05_05041.pdf"
+    - "Venter, Capital Allocation: An Opinionated Survey, CAS Forum Summer 2003, pp.283-286 (Table 1 risk measures: VaR, EPD incl. beyond a target b, TVaR, XTVaR E[X-m|X>b], SD, variance, semi-variance, cost of default option, mean of transformed loss; limited liability = option to put default costs to policyholders; capital as a multiple of a risk measure, average 1-in-100 or worse year using no more than premium plus 1/3 of capital = 3 x 99% XTVaR, renewal business has a value; Table 2 allocation methods incl. proportional, marginal, Shapley, Myers-Read adds up, co-TVaR additive; VaR shareholder view, EPD/default option/XTVaR/TVaR sensitive to the degree of default; tail measures linear 'which many consider to be an underweighting'; transformed loss 'can get around the problems of the tail methods'), pp.304-305 (XTVaR; mean loss already collected in premium), sha256:cc0de1226cc0b4a4e2ef8dfb7ae41e4ef17ded76e45c19edbcf4db9e38ff3148 — https://casact.org/sites/default/files/database/forum_03sforum_03sf279.pdf"
+    - "CAS Exam 7 Spring 2016 — sample answers and examiner's report, Q23 PDF pp.92-94 (default avoidance: far tail where the ERM model is least reliable, mainly protects policyholders, partial losses matter to shareholders; other reference points: renewals, thrive after a catastrophe, rating; capital as a multiple of TV@R from a 1-in-y loss tolerance), Q24 PDF pp.95-96 (TVaR linear in the tail, inconsistent with risk aversion; TVaR on transformed probabilities treats a loss 2x as large as more than 2x as bad; part b: EPD on transformed probabilities, value of put option, exponential moment), Q25 PDF p.97 (R(z): tail dependence with R(1) = 0, look a bit below 1; only the right tail, combine with L(z) for z <= 0.5; sparse tail data; one-dimensional), sha256:e07f38dd81edc9715ef2528c1861e75c609c85b598b51b723d665cf63b745b84 — https://www.casact.org/sites/default/files/2021-03/16-7.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Risk Capital.md

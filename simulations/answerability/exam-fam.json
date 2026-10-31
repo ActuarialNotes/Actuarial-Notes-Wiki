@@ -1593,11 +1593,78 @@
   },
   "faml-3-02": {
    "path": "questions/exam-fam/faml-3-02.md",
-   "run": "answerability-20261031-fam",
+   "run": "answerability-20261031-fam-rerun",
    "input_hash": "sha256:413dc5a74caccc001dafcf89ae7e4fff7df7c70315e90d8af71ece9fe82039be",
-   "verdict": "error",
-   "requirements": [],
-   "error": "ValueError: no usable 'found' list in the reply"
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "In a select mortality table with a one-year select period, l_[x] is the number of lives at select age x, and after the select period the table is ultimate so l_{x+1} (ultimate) equals l_[x] minus d_[x].",
+     "concept": "Select and Ultimate Mortality Tables",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Life Table",
+       "quote": "$d_x = \\ell_x - \\ell_{x+1}$, the number dying between ages $x$ and $x+1$"
+      },
+      {
+       "page": "Standard Actuarial Notation",
+       "quote": "Square brackets mark the age at selection, so $q_{[x]+t}$ is the mortality rate at age $x+t$ for a life selected (underwritten) at age $x$, $t$ years ago."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "Expand select curtate/complete expectation of life across the select period by splitting into the first-year integral, plus the one-year survival probability times the next-year integral, plus the product of survival probabilities times the ultimate expectation at the later age: e_[x] = ∫0^1 tp_[x] dt + p_[x] ∫0^1 tp_{x+1} dt + p_[x] p_{x+1} e_{x+2}.",
+     "concept": "Complete Expectation of Life",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "Under the uniform distribution of deaths assumption over each year of age, ∫0^1 tp_x dt = 1 - 0.5 q_x.",
+     "concept": "Uniform Distribution of Deaths (UDD)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Life Table",
+       "quote": "**UDD** gives $_{s}q_x = s\\,q_x$"
+      },
+      {
+       "page": "Fractional Age Assumption",
+       "quote": "$\\ell_{x+s}$ is linear in $s$, so the density ${}_sp_x\\,\\mu_{x+s} = q_x$ is flat over the year."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "The complete expectation of life satisfies the one-year recursion e_x = ∫0^1 tp_x dt + p_x e_{x+1}, and for a select life e_[x] = ∫0^1 tp_[x] dt + p_[x] e_{x+1}.",
+     "concept": "Complete Expectation of Life",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r5",
+     "kind": "formula",
+     "statement": "The one-year survival probability from a life table is p = l_{x+1}/l_x (for select, p_[x] = l_{x+1}/l_[x]) and q = d/l.",
+     "concept": "Life Table Survival Probabilities",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Life Table",
+       "quote": "_{t}p_x = \\frac{\\ell_{x+t}}{\\ell_x}, \\qquad _{t}q_x = 1 - {}_{t}p_x = \\frac{\\ell_x - \\ell_{x+t}}{\\ell_x}"
+      },
+      {
+       "page": "Standard Actuarial Notation",
+       "quote": "{}_2p_{[60]} &= \\frac{\\ell_{62}}{\\ell_{[60]}}"
+      }
+     ]
+    }
+   ]
   },
   "faml-3-03": {
    "path": "questions/exam-fam/faml-3-03.md",
@@ -3387,11 +3454,92 @@
   },
   "faml-4-12": {
    "path": "questions/exam-fam/faml-4-12.md",
-   "run": "answerability-20261031-fam",
+   "run": "answerability-20261031-fam-rerun2",
    "input_hash": "sha256:b3aee67116bba4f5f99f9a2cf0eae6c9559e04ddc7920676f6f24ca3cf2232ce",
-   "verdict": "error",
-   "requirements": [],
-   "error": "ValueError: no usable 'found' list in the reply"
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "A whole life insurance equals a n-year term insurance plus an n-year deferred whole life insurance, so the present value random variable of a whole life benefit is the sum of the term and deferred present value random variables (scaled by their benefit amounts).",
+     "concept": "Deferred Insurance",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Term Life Insurance",
+       "quote": "The last block splits a [[Whole Life Insurance|whole life]] insurance into term cover for $n$ years and a whole life insurance deferred $n$ years, where ${}_nE_x = v^n\\,{}_np_x$ is the [[Pure Endowment|pure endowment]] factor."
+      },
+      {
+       "page": "Pure Endowment",
+       "quote": "and how a [[Whole Life Insurance|whole life]] value splits, $A_x = A^{1}_{x:\\overline{n}|} + {}_nE_x\\,A_{x+n}$."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "For random variables X and Y and constants a and b, Var(aX + bY) = a^2 Var(X) + b^2 Var(Y) + 2ab Cov(X, Y).",
+     "concept": "Variance of a Linear Combination of Random Variables",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Linear Combinations of Random Variables",
+       "quote": "$$\\text{Var}(L) = \\sum_{i=1}^{n} c_i^2\\,\\text{Var}(X_i) + 2\\sum_{i < j} c_i c_j\\,\\text{Cov}(X_i, X_j)$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "Cov(X, Y) = E[XY] - E[X]E[Y].",
+     "concept": "Covariance",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Covariance",
+       "quote": "$$\\text{Cov}(X, Y) = E[XY] - E[X] \\cdot E[Y]$$"
+      },
+      {
+       "page": "Covariance and Correlation Coefficient",
+       "quote": "$$\\text{Cov}(X, Y) = E[XY] - E[X]\\,E[Y]$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "The present value random variables of an n-year term insurance and an n-year deferred insurance on the same life have product zero, because the term benefit is paid only if death occurs within n years and the deferred benefit only if death occurs after n years, so E[Z1 Z2] = 0.",
+     "concept": "Deferred Insurance",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Endowment Insurance",
+       "quote": "They can never both be positive, so $E[Z_1 Z_2] = 0$ and $\\text{Cov}(Z_1, Z_2) = -A^{1}_{x:\\overline{n}|}\\,{}_nE_x$."
+      },
+      {
+       "page": "Pure Endowment",
+       "quote": "The two parts can never both pay, so their present values have covariance $-A^{1}_{x:\\overline{n}|}\\,{}_nE_x$."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "Multiplying a random variable by a constant c scales its present value (benefit amount), so a benefit of c units has present value c times that of a unit benefit and its variance scales by c^2.",
+     "concept": "Variance of a Linear Combination of Random Variables",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Variance",
+       "quote": "$\\text{Var}(aX + b) = a^2 \\text{Var}(X)$ — scaling changes variance, shifts do not"
+      },
+      {
+       "page": "Transformations of Random Variables",
+       "quote": "A linear transformation $Y = aX + b$ gives $E[Y] = aE[X] + b$ and $\\text{Var}(Y) = a^2\\text{Var}(X)$ directly, with no integration needed."
+      }
+     ]
+    }
+   ]
   },
   "faml-4-13": {
    "path": "questions/exam-fam/faml-4-13.md",
@@ -5456,11 +5604,87 @@
   },
   "faml-6-03": {
    "path": "questions/exam-fam/faml-6-03.md",
-   "run": "answerability-20261031-fam",
+   "run": "answerability-20261031-fam-rerun",
    "input_hash": "sha256:9b854e38465882e8efd3c071f50850d655df1ac3b3d886ae6242d0180151ab4b",
-   "verdict": "error",
-   "requirements": [],
-   "error": "ValueError: no usable 'found' list in the reply"
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "The equivalence principle sets the expected present value of premiums equal to the expected present value of benefits; for a deferred whole life annuity-due paid by level premiums over the deferral period, the premium is P = (n|ä_x) / ä_{x:n|} = nE_x · ä_{x+n} / ä_{x:n|}.",
+     "concept": "Equivalence Principle",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Equivalence Principle",
+       "quote": "**The Equivalence Principle** sets a [[Insurance Premium|premium]] so that the expected present value of the future loss random variable $L_0$ at issue is zero: the expected present value (EPV) of the premiums equals the EPV of the benefits, plus the EPV of the expenses when a gross premium is being set."
+      },
+      {
+       "page": "Pure Endowment",
+       "quote": "That is how a deferred annuity is valued, ${}_{n|}\\ddot{a}_x = {}_nE_x\\,\\ddot{a}_{x+n}$"
+      },
+      {
+       "page": "Annuity Contract",
+       "quote": "$$G = \\text{EPV(benefits)} + \\text{EPV(expenses)}$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "definition",
+     "statement": "The actuarial accumulated value at the end of the deferral period of premiums paid for n years is the premium times ä_{x:n|} divided by nE_x, i.e. accumulation with interest and survivorship.",
+     "concept": "Actuarial Accumulated Value",
+     "status": "syllabus",
+     "places": [
+      {
+       "page": "Pure Endowment",
+       "quote": "Dividing by ${}_nE_x$ accumulates instead, so the actuarial accumulated value of an annuity is $\\ddot{s}_{x:\\overline{n}|} = \\ddot{a}_{x:\\overline{n}|}/{}_nE_x$."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The present value of a whole life annuity-due for a life (x) is the random variable Y = ä_{K_x+1|} (annuity-certain over K_x+1 years), where K_x is the curtate future lifetime, and its expected value is ä_x.",
+     "concept": "Whole Life Annuity-Due",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Life Annuity",
+       "quote": "A **life-annuity-due** pays 1 at the start of each year while $(x)$ is alive; its actuarial present value (EPV) is $\\ddot{a}_x$."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "The annuity-certain ä_{n|} is increasing in n, so the event that ä_{K+1|} is below a threshold corresponds to K+1 being at or below a cutoff number of years, found by comparing the threshold with annuity-certain values.",
+     "concept": "Annuity-Certain",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r5",
+     "kind": "formula",
+     "statement": "The probability that a life aged x survives k years is kp_x = l_{x+k}/l_x, and the probability of dying within k years (K_x ≤ k−1) is 1 − kp_x, computed from a life table such as the Standard Ultimate Life Table.",
+     "concept": "Survival Probability and Life Table",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Future Lifetime Random Variable",
+       "quote": "${}_tq_x = 1 - {}_tp_x$ is the probability that $(x)$ dies within $t$ years"
+      },
+      {
+       "page": "Life Table",
+       "quote": "$_{t}p_x = \\frac{\\ell_{x+t}}{\\ell_x}, \\qquad _{t}q_x = 1 - {}_{t}p_x = \\frac{\\ell_x - \\ell_{x+t}}{\\ell_x}$"
+      },
+      {
+       "page": "Survival Model",
+       "quote": "$_{t}p_x = \\dfrac{S(x+t)}{S(x)}$ and $_{t}q_x = 1 - {_t}p_x$"
+      }
+     ]
+    }
+   ]
   },
   "faml-6-04": {
    "path": "questions/exam-fam/faml-6-04.md",
@@ -8318,11 +8542,75 @@
   },
   "faml-6-40": {
    "path": "questions/exam-fam/faml-6-40.md",
-   "run": "answerability-20261031-fam",
+   "run": "answerability-20261031-fam-rerun",
    "input_hash": "sha256:d72d659a938951001dd7f1cc1cefc04c4d9565566e8867275e2072ab4c430f98",
-   "verdict": "error",
-   "requirements": [],
-   "error": "ValueError: no usable 'found' list in the reply"
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "In a fully discrete insurance, the net premium is set by the equivalence principle: premium times the life annuity-due equals the expected present value of the death benefits.",
+     "concept": "Equivalence Principle (Net Premium)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Equivalence Principle",
+       "quote": "Setting $E[L_0]=0$ gives $P = S\\,A_x/\\ddot{a}_x$."
+      },
+      {
+       "page": "Whole Life Insurance",
+       "quote": "a premium $P$ paid at the start of each year while $(x)$ is alive is a [[Life Annuity|life-annuity-due]], so $A_x = P\\,\\ddot{a}_x$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The expected present value of a discrete insurance paying b_{k+1} at the end of year k+1 for death in that year is the sum over k of b_{k+1} v^{k+1} times the deferred death probability k|q_x = _kp_x q_{x+k}.",
+     "concept": "Discrete Whole Life Insurance Actuarial Present Value",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Whole Life Insurance",
+       "quote": "$$A_x = \\sum_{k=0}^{\\infty} v^{k+1}\\,{_k}p_x\\,q_{x+k}$$"
+      },
+      {
+       "page": "Life Insurance",
+       "quote": "$$A^{1}_{x:\\overline{n}|} = \\sum_{k=0}^{n-1} v^{k+1}\\;{}_kp_x\\,q_{x+k}$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The life annuity-due satisfies the one-year recursion ä_x = 1 + v p_x ä_{x+1}.",
+     "concept": "Life Annuity-Due",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Life Annuity",
+       "quote": "$$\\ddot{a}_x = 1 + v\\,p_x\\,\\ddot{a}_{x+1}$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "The insurance EPV at age x can be decomposed by conditioning on the first year: pay the first-year benefit discounted if death occurs in year 1, otherwise continue with the insurance at age x+1 discounted with survival probability; for a benefit growing at a constant rate, the benefit at x+1 is rescaled to the new issue-age pattern as the growth factor is built into the first-year benefit.",
+     "concept": "Recursive Relations for Insurance Present Values",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Whole Life Insurance",
+       "quote": "**Recursion:** either $(x)$ dies in the first year and 1 is paid in a year, or $(x)$ survives and holds, one year from now, a whole life policy on $(x+1)$"
+      },
+      {
+       "page": "Term Life Insurance",
+       "quote": "The recursion $A^{1}_{x:\\overline{n}|} = v\\,q_x + v\\,p_x\\,A^{1}_{x+1:\\overline{n-1}|}$ gives the same values one year at a time."
+      }
+     ]
+    }
+   ]
   },
   "faml-6-41": {
    "path": "questions/exam-fam/faml-6-41.md",
@@ -18451,11 +18739,76 @@
   },
   "fams-084": {
    "path": "questions/exam-fam/fams-084.md",
-   "run": "answerability-20261031-fam",
+   "run": "answerability-20261031-fam-rerun",
    "input_hash": "sha256:49791ea61d79ea432417d2a3e0e5bd9259e521b9089f52399af36d9a507582f6",
-   "verdict": "error",
-   "requirements": [],
-   "error": "ValueError: no usable 'found' list in the reply"
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "The (a, b, 1) class consists of claim count distributions whose probabilities satisfy p_k/p_{k-1} = a + b/k for k = 2, 3, 4, ..., with p_0 free to be set arbitrarily (zero-modified).",
+     "concept": "(a, b, 1) Class of Distributions",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Frequency Distribution",
+       "quote": "Its members follow the same relation only from $k = 2$, so $p_0$ is free."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "A recursion ratio p_n/p_m = m!/n! (equivalently p_k/p_{k-1} = 1/k) corresponds to a = 0 and b = λ, the Poisson recursion with λ = 1, so for k ≥ 1 the probabilities are proportional to Poisson probabilities.",
+     "concept": "Poisson Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Frequency Distribution",
+       "quote": "| Poisson $(\\lambda)$ | $e^{-\\lambda}$ | $0$ | $\\lambda$ |"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "definition",
+     "statement": "A zero-modified distribution has an arbitrary specified probability p_0^M at zero, with the remaining probabilities equal to the base distribution's probabilities rescaled so that the total is one.",
+     "concept": "Zero-Modified Distributions",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Frequency Distribution",
+       "quote": "A zero-modified one puts an arbitrary $p_0^M$ at zero and scales the rest as in the second block"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "For a zero-modified distribution, p_k^M = (1 - p_0^M)/(1 - p_0) × p_k for k ≥ 1, where p_k and p_0 are the base distribution's probabilities.",
+     "concept": "Zero-Modified Distributions",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Frequency Distribution",
+       "quote": "$$p_k^M = \\frac{1 - p_0^M}{1 - p_0}\\,p_k, \\quad k = 1, 2, 3, \\ldots$$"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "formula",
+     "statement": "The Poisson probability mass function is P(L = k) = e^{-λ} λ^k / k!, so P(L = 0) = e^{-λ} and P(L = 1) = λ e^{-λ}.",
+     "concept": "Poisson Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Poisson Distribution",
+       "quote": "$$P(X = k) = \\frac{e^{-\\lambda}\\lambda^k}{k!}$$"
+      }
+     ]
+    }
+   ]
   },
   "fams-085": {
    "path": "questions/exam-fam/fams-085.md",

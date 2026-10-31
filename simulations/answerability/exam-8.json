@@ -105,7 +105,15 @@
        "page": "Excess Loss Development Factor",
        "quote": "Measured on the severity distribution at that maturity, $R^L_t = E[X \\wedge L]/E[X]$ is the [[Loss Elimination Ratio|loss elimination ratio]] of the deductible, and $1 - R^L_t$ its excess ratio."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Excess and Deductible Rating",
+      "quote": "The excess ratio at a per-occurrence limit $L$ is the expected loss above the limit divided by the total expected loss: $R(L) = E[(X-L)_+]/E[X] = (E[X] - E[X \\wedge L])/E[X] = 1 - E[X \\wedge L]/E[X]$, where $E[(X-L)_+] = \\int_L^\\infty S(x)\\,dx$.",
+      "note": "Defines R(L)=E[(X-L)+]/E[X] with the survival-integral form (Bahnemann eq.5.1; Fisher Formula 3.8).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:18Z/81e2"
+     }
     },
     {
      "id": "r2",
@@ -725,7 +733,15 @@
      "statement": "When a per-occurrence limit is used with an aggregate limit, the charge relative to total unlimited losses equals the LER plus the share of losses eliminated by the aggregate cap on limited losses expressed relative to unlimited total losses; at entry ratios above the maximum limited aggregate, the charge equals the LER.",
      "concept": "Table L (Aggregate Loss Charges)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Table L",
+      "quote": "Exam solutions often call $k$ the \"LER\" … The $k$ term is the per-occurrence excess; the integral is the additional effect of the aggregate limit beyond the occurrence limit. … At and above the largest limited entry ratio the aggregate part is 0, and $\\phi^*_D(r) = k$.",
+      "note": "Table L charge = LER + aggregate excess on limited losses, equal to the LER at the top (Fisher p.84, Exhibit 3.26).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:20Z/be9b"
+     }
     },
     {
      "id": "r6",
@@ -733,7 +749,15 @@
      "statement": "The adjustment factor (1 − k), where k is the LER, is applied to the aggregate charge only when the charge is expressed as a ratio to expected limited losses, not when expressed relative to total unlimited losses.",
      "concept": "Table L (Aggregate Loss Charges)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Table L",
+      "quote": "A charge $\\phi_{\\text{lim}}$ read from a Table M$_D$, which is a ratio to *expected limited* loss, converts to a ratio to unlimited loss, for the same aggregate limit, by $\\phi^* = \\phi_{\\text{lim}}(1 - k) + k$. When the aggregate charge is already a ratio to expected unlimited loss, as the integral in Table L is, no $(1 - k)$ factor is applied",
+      "note": "When the (1-k) factor applies and when it does not.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:20Z/be9b"
+     }
     }
    ]
   },
@@ -813,7 +837,15 @@
      "statement": "Retrospective development premium = loss conversion factor × standard premium × retrospective development factor, charged to cover expected future loss development at the adjustment.",
      "concept": "Retrospective Development Premium",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Retrospective Rating",
+      "quote": "Under both the NCCI's and ISO's plans the provision for IBNR is made through factors applied to standard premium and then multiplied by the loss conversion factor and the tax multiplier",
+      "note": "Retro development premium = factor x standard premium x c (x T) (Fisher p.31 fn.12).",
+      "date": "2026-10-31",
+      "run": "validate-lee-2026-10-31T12:21Z/714a"
+     }
     },
     {
      "id": "r6",
@@ -834,7 +866,15 @@
      "statement": "Retrospective development factors stabilize premium adjustments: without them early adjustments are usually refunds because losses are still immature, and the insured must repay as losses develop, so including them brings early premium closer to ultimate, reducing back-and-forth payments and the insurer's credit risk (and lost investment income).",
      "concept": "Retrospective Development Factor",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Retrospective Rating",
+      "quote": "so the insured typically receives a partial refund at the first adjustment, and then pays additional premium as losses develop upward — which creates [[Credit Risk|credit risk]] for the insurer. … The development premium brings early adjustments nearer the final premium, so less is refunded and later recouped.",
+      "note": "Why retro development factors: immature early adjustments refund then recoup, credit risk; the factors bring early premium nearer ultimate (Fisher pp.26, 31).",
+      "date": "2026-10-31",
+      "run": "validate-lee-2026-10-31T12:21Z/714a"
+     }
     }
    ]
   },
@@ -948,7 +988,15 @@
      "statement": "Missing data coded as an 'unknown' level can be perfectly correlated across factors (extrinsic aliasing); remedies include removing those records, reclassifying them to an appropriate level, or dropping the unknown level from one factor.",
      "concept": "Data Preparation for GLMs",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Generalized Linear Model",
+      "quote": "most fitting software detects this and drops one of them…Removing those few records, or reclassifying them, makes the two columns identical…Missing data can create an alias: where the same records are missing in two fields and each field gets its own \"unknown\" level or error flag, the two flags are identical columns, and so are aliased.",
+      "note": "Teaches that unknown levels coded for the same records in two factors are aliased, and the remedies: remove or reclassify the records, or drop one of the aliased columns.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:23Z/2047"
+     }
     }
    ]
   },
@@ -1041,7 +1089,15 @@
      "statement": "Total expected loss and ALAE for a large deductible policy with an aggregate equals expected excess losses plus the insurance charge times expected limited losses, with the charge applied only to limited losses.",
      "concept": "Large Dollar Deductible Policies",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Large Deductible Policy",
+      "quote": "The aggregate charge applies only to the limited losses: total expected loss is the expected excess of the deductible plus the insurance charge times the expected limited losses",
+      "note": "LDD total expected loss = excess + charge x limited loss (Fisher pp.89-90, 117).",
+      "date": "2026-10-31",
+      "run": "validate-lee-2026-10-31T12:21Z/714a"
+     }
     }
    ]
   },
@@ -1397,7 +1453,15 @@
      "statement": "The correlation of years test for parameter shift pairs average frequencies separated by t years, computes the correlation of the pairs for each separation t, and concludes the parameter is shifting if correlation decreases as t increases.",
      "concept": "Correlation of Years Test",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Experience",
+      "quote": "Compute the [[Correlation|correlation]] between the results for all of the risks for pairs of years, then average the correlations for the pairs of years with the same difference in time (the lag: 1 year, 2 years, and so on), and examine how the average correlation depends on the lag. … An average correlation that decreases as the lag increases means the parameters of the risk process are shifting over time.",
+      "note": "Mahler p.235 and p.239: average correlations by lag; a decrease with lag means shifting parameters.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:19Z/4af0"
+     }
     }
    ]
   },
@@ -1502,7 +1566,13 @@
      "statement": "A rating variable should be constant in relation to the risk (constancy), so a characteristic that changes substantially from year to year is a poor classification variable.",
      "concept": "Risk Classification Statement of Principles",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The AAA Risk Classification Statement of Principles (1980), a former reading, states it; ASOP 12 names that document only as background (App.1, PDF p.14); 'constancy' and 'stable' occur 0 times in ASOP 12, and Chalk et al. §10.4 is about model coefficients drifting, not a rating variable's constancy; no reading on Exam 8's current syllabus does (maintainer, 31 Oct)",
+      "date": "2026-10-31",
+      "run": "g8-cas8-dropped"
+     }
     },
     {
      "id": "r7",
@@ -1628,7 +1698,15 @@
      "statement": "Bailey and Simon use earned premium at present rates as the exposure base in the territory/class analysis (for credibility) to eliminate maldistribution caused by high-frequency territories having more non-accident-free risks and higher territorial relativities.",
      "concept": "Credibility Exposure Base in Merit Rating (Bailey and Simon)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Merit Rating",
+      "quote": "Bailey and Simon calculate relative claim frequency on the basis of premium rather than car years. This avoids the maldistribution created by having higher claim frequency territories produce more X, Y and B risks and also produce higher territorial premiums.",
+      "note": "Bailey & Simon p.159's stated reason for premium as the exposure base.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:19Z/4af0"
+     }
     },
     {
      "id": "r2",
@@ -1986,7 +2064,15 @@
      "statement": "Compute the insurance charge recursively: φ(r_i) = φ(r_{i+1}) + (r_{i+1} − r_i) × (proportion of risks with entry ratio above r_i), working downward from the largest entry ratio where φ = 0; the table must include rows at every observed entry ratio.",
      "concept": "Insurance Charge (Table M)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Table M",
+      "quote": "start with a charge of 0 at the largest entry ratio and work upward: … $$\\phi(r_i) = \\phi(r_{i+1}) + (r_{i+1} - r_i) \\times \\Pr(\\text{entry ratio} > r_i)$$ … The two methods give the same charges when horizontal slices are taken at every data point",
+      "note": "The recursion from phi=0 at the top, and slices at every observed entry ratio (Fisher p.72-73).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:20Z/be9b"
+     }
     },
     {
      "id": "r5",
@@ -2032,7 +2118,15 @@
      "statement": "At an entry ratio of zero the Table L charge equals 1 for every premium size, since all expected loss is in excess of zero.",
      "concept": "Table L (Aggregate Loss Distribution) Insurance Charge",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Table L",
+      "quote": "$\\phi^*_D(0) = 1$, because all of the expected unlimited loss is either above $D$ or above zero",
+      "note": "Charge 1 at entry ratio 0.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:20Z/be9b"
+     }
     },
     {
      "id": "r3",
@@ -2040,7 +2134,15 @@
      "statement": "For a fixed premium size, the Table L charge is a decreasing, convex (concave up) function of entry ratio.",
      "concept": "Table L (Aggregate Loss Distribution) Insurance Charge",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Table L",
+      "quote": "$\\phi^*_D(r) - k$ is a Table M charge of the limited distribution, so $\\phi^*_D$ is decreasing and convex in $r$",
+      "note": "Decreasing and convex in r.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:20Z/be9b"
+     }
     },
     {
      "id": "r4",
@@ -2048,7 +2150,15 @@
      "statement": "As the entry ratio goes to infinity, the Table L charge approaches the loss elimination ratio k (the charge never falls below k) when the table reflects per-occurrence loss limits.",
      "concept": "Loss Elimination Ratio",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Table L",
+      "quote": "Exam solutions often call $k$ the \"LER\" … It never falls below $k$: losses above the per-occurrence limit are always the insurer's, however high the aggregate. At and above the largest limited entry ratio the aggregate part is 0, and $\\phi^*_D(r) = k$.",
+      "note": "Floor at k (the LER) as the entry ratio grows.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:20Z/be9b"
+     }
     },
     {
      "id": "r5",
@@ -2158,7 +2268,15 @@
      "statement": "A Lee diagram plots the aggregate loss distribution in entry-ratio (loss divided by expected loss) space as a unit square, where areas between the curve and the aggregate minimum/maximum entry-ratio lines represent expected insurance charge and savings.",
      "concept": "Lee Diagram",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Lee Diagram",
+      "quote": "Plotted on the entry-ratio scale, the area under the curve is 1. The insurance charge $\\phi(r)$ is the area above the horizontal line at $r$ and below the curve; the insurance savings $\\psi(r)$ is the area below the line and above the curve",
+      "note": "Entry-ratio Lee diagram of unit area, with the charge and savings as the areas cut off by the max/min entry-ratio lines (Fisher Ch.3 pp.57-58).",
+      "date": "2026-10-31",
+      "run": "validate-lee-2026-10-31T12:21Z/714a"
+     }
     },
     {
      "id": "r2",
@@ -2222,7 +2340,15 @@
      "statement": "An increase in the most severe losses raises total losses but barely changes limited losses, since those losses are already capped by the per-accident limit, so the LER increases and the gap between the total and limited curves widens, especially at high aggregate loss levels.",
      "concept": "Effect of Per-Accident Limits on Severity Changes",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Lee Diagram",
+      "quote": "If the most severe losses grow, the unlimited curve rises at its right end, but those losses are already capped at $D$, so the limited curve barely moves. The gap between the curves — the per-occurrence excess $k$ — widens",
+      "note": "Severe-loss increase widens the gap between total and limited curves, at the high end (Fisher pp.84-85, 120 Q20).",
+      "date": "2026-10-31",
+      "run": "validate-lee-2026-10-31T12:21Z/714a"
+     }
     },
     {
      "id": "r7",
@@ -2320,7 +2446,15 @@
      "statement": "A Lee diagram graphs the loss (as a ratio to the mean) against cumulative share of premium/claims, with the insurance charge represented by the area above the entry-ratio line and below the loss curve.",
      "concept": "Lee Diagram",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Lee Diagram",
+      "quote": "The insurance charge $\\phi(r)$ is the area above the horizontal line at $r$ and below the curve",
+      "note": "The charge as the area above the entry-ratio line and below the curve (Fisher Exhibit 3.8).",
+      "date": "2026-10-31",
+      "run": "validate-lee-2026-10-31T12:21Z/714a"
+     }
     },
     {
      "id": "r7",
@@ -2362,7 +2496,13 @@
      "statement": "For an LDD policy, the excess loss ratio above a retention above the empirical cut-off is estimated by blending empirical and fitted data: the empirical excess ratio at the cut-off multiplied by the fitted-curve excess ratio for losses truncated and shifted at the cut-off.",
      "concept": "Large Dollar Deductible Pricing",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "NCCI's excess-loss-factor method (the 1997 ELF paper and Mahler's 1998 discussion; Fisher cites the latter only in fn.36, PDF p.75) states the empirical-times-fitted excess ratio above a truncation point; Bahnemann gives only the pieces (truncated-and-shifted X_a, mean residual life, PDF pp.155-157), with 0 occurrences of 'truncation', 'cutoff', 'excess ratio'; no reading on Exam 8's current syllabus does (maintainer, 31 Oct)",
+      "date": "2026-10-31",
+      "run": "g8-cas8-dropped"
+     }
     },
     {
      "id": "r2",
@@ -2400,7 +2540,13 @@
      "statement": "The entry ratio for a fitted truncated and shifted distribution equals the (retention minus cut-off) divided by the average truncated and shifted loss; it is used to look up the excess ratio.",
      "concept": "Entry Ratio",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "NCCI's excess-loss-factor method (the 1997 ELF paper and Mahler's 1998 discussion; Fisher cites the latter only in fn.36, PDF p.75) states the entry ratio (retention minus cutoff) over the mean truncated-and-shifted loss; Bahnemann gives only the pieces (truncated-and-shifted X_a, mean residual life, PDF pp.155-157), with 0 occurrences of 'truncation', 'cutoff', 'excess ratio'; no reading on Exam 8's current syllabus does (maintainer, 31 Oct)",
+      "date": "2026-10-31",
+      "run": "g8-cas8-dropped"
+     }
     },
     {
      "id": "r5",
@@ -2474,7 +2620,15 @@
      "statement": "The LUGS adjustment factor F = (1 + 0.8·LER)/(1 − LER) is applied to expected unlimited loss, along with the state hazard group relativity, to obtain adjusted losses used to select the Table M expected loss group.",
      "concept": "Insurance Charge Reflecting Loss Limitation (ICRLL)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Insurance Charge Reflecting Loss Limitation (ICRLL)",
+      "quote": "Exam solutions often call $k$ the \"LER\" … (1) Multiply the expected unlimited loss by the state/hazard group relativity and by the loss group adjustment factor, and use the result to choose the Expected Loss Group.",
+      "note": "LUGS factor (1+0.8k)/(1-k) with the relativity on expected unlimited loss selects the ELG (Fisher p.89, Formula 3.10).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:20Z/be9b"
+     }
     },
     {
      "id": "r4",
@@ -2509,7 +2663,15 @@
      "statement": "Under ICRLL, expected loss cost equals the insurance charge times expected limited loss plus expected excess loss; dividing by standard premium expresses it as a percent of standard premium.",
      "concept": "Insurance Charge Reflecting Loss Limitation (ICRLL)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Insurance Charge Reflecting Loss Limitation (ICRLL)",
+      "quote": "The aggregate charge is $\\phi(r) \\times \\mathrm{E}\\{A_D\\}$, and the per-occurrence charge is $E - \\mathrm{E}\\{A_D\\}$; their sum is the total expected loss cost. Divided by standard premium, it is expressed as a percent of standard premium.",
+      "note": "Total ICRLL loss cost and its ratio to standard premium (Fisher p.90).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:20Z/be9b"
+     }
     },
     {
      "id": "r7",
@@ -2517,7 +2679,15 @@
      "statement": "ICRLL gives reasonably accurate insurance charges because the per-loss limit or deductible reduces losses counting toward the aggregate limit, so using the unadjusted charge would double count (overlap) the losses removed by the per-loss limit and aggregate limit; the LUGS adjustment selects a larger, less skewed, more stable expected loss group with lower charges that approximates the limited loss distribution actually acting on the risk.",
      "concept": "Insurance Charge Reflecting Loss Limitation (ICRLL)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Insurance Charge Reflecting Loss Limitation (ICRLL)",
+      "quote": "so ICRLL enters Table M at a larger ELG, whose aggregate distribution is less variable, with lower charges above an entry ratio of 1, to approximate the limited distribution … An unlimited Table M charge counts those losses again whenever they push the aggregate over its limit — the overlap of the two limits.",
+      "note": "Overlap/double count, and the larger, less variable ELG approximating the limited distribution (Fisher pp.78-79, 84).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:20Z/be9b"
+     }
     }
    ]
   },
@@ -2902,7 +3072,15 @@
        "page": "Excess Loss Development Factor",
        "quote": "Measured on the severity distribution at that maturity, $R^L_t = E[X \\wedge L]/E[X]$ is the [[Loss Elimination Ratio|loss elimination ratio]] of the deductible, and $1 - R^L_t$ its excess ratio."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Excess and Deductible Rating",
+      "quote": "The excess ratio at a per-occurrence limit $L$ is the expected loss above the limit divided by the total expected loss: $R(L) = E[(X-L)_+]/E[X] = (E[X] - E[X \\wedge L])/E[X] = 1 - E[X \\wedge L]/E[X]$, where $E[(X-L)_+] = \\int_L^\\infty S(x)\\,dx$.",
+      "note": "Defines the excess ratio as expected loss above L over total expected loss (Bahnemann eq.5.1; Fisher Formula 3.8).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:18Z/81e2"
+     }
     },
     {
      "id": "r2",
@@ -3162,7 +3340,15 @@
      "statement": "Workers compensation losses are highly skewed, so a linear credibility estimate differs from the optimal estimate; splitting losses into primary and excess components reduces skewness and improves predictive accuracy.",
      "concept": "Split Experience Rating Plans",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Experience Rating",
+      "quote": "Many real loss distributions are skewed with extremely heavy tails, so the most predictive estimate might come from normalising the losses … A split rating plan, which gives much more weight to the primary portion of losses than to the excess portion, is a linear approximation to assigning credibility to the log of the loss amount … The split plan has been found to produce empirically better results for the NCCI workers compensation plan than a total or limited loss plan",
+      "note": "Fisher p.12: heavy-tailed WC losses; split plan approximates credibility on log losses and predicts better than a total-loss plan.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:18Z/46f7"
+     }
     },
     {
      "id": "r8",
@@ -3170,7 +3356,13 @@
      "statement": "A constant K implies loss ratio variance falls with risk size, which is not necessarily true; letting K increase with risk size keeps credibility of large risks below 1 and avoids large risks being essentially self-rated.",
      "concept": "Experience Rating Credibility",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Gillam 1992 ('Parametrizing the WC Experience Rating Plan', a former reading; Fisher cites it only for the split-plan result, fn.2, PDF p.12) states it; Fisher gives only Z=E/(E+K) with K constant and the properties of Z (PDF pp.10-11); no reading on Exam 8's current syllabus does (maintainer, 31 Oct)",
+      "date": "2026-10-31",
+      "run": "g8-cas8-dropped"
+     }
     }
    ]
   },
@@ -3220,7 +3412,15 @@
      "statement": "If the predicted-to-actual ratio decreases across quintiles (predictions too high for low-risk groups and too low for high-risk groups), the predictions are not reacting enough to the raw data, so credibility is understated; the reverse pattern indicates overstated credibility.",
      "concept": "Credibility Overstated vs Understated",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Multi-Dimensional Credibility",
+      "quote": "So predictions that are too flat — staying too close to the hazard-group average, with the ratio of predicted to holdout relativity falling from the first quintile to the fifth — mean the credibility is understated. Predictions that are too steep — too extreme, like the raw data, with that ratio rising across the quintiles — mean the credibility is overstated.",
+      "note": "Reads the quintile slope as Couret & Venter p.82-83 compare HG (no credibility) and raw (full).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:19Z/4af0"
+     }
     },
     {
      "id": "r4",
@@ -3228,7 +3428,15 @@
      "statement": "Overstated credibility makes predictions too extreme (like the raw data), while understated credibility makes predictions stay too close to the countrywide average, so the credibility-weighted prediction should be compared with the holdout, not with the raw test data.",
      "concept": "Credibility Overstated vs Understated",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Multi-Dimensional Credibility",
+      "quote": "The predictions are compared with the holdout, not with the even-year data they were estimated from. … So predictions that are too flat — staying too close to the hazard-group average, with the ratio of predicted to holdout relativity falling from the first quintile to the fifth — mean the credibility is understated. Predictions that are too steep — too extreme, like the raw data, with that ratio rising across the quintiles — mean the credibility is overstated.",
+      "note": "Overstated = too extreme, understated = too flat, judged against the holdout (Couret & Venter pp.80, 82-83).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:19Z/4af0"
+     }
     },
     {
      "id": "r5",
@@ -3245,7 +3453,15 @@
        "page": "Model Validation",
        "quote": "$$\\text{MSE}_{\\text{val}} = \\frac{1}{n_v}\\sum_{i \\in \\text{val}}\\left(y_i - \\hat{f}(x_i)\\right)^2$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Multi-Dimensional Credibility",
+      "quote": "The sum of squared prediction errors (SSE) is the sum of the squared differences between the predictions and the holdout values; the predictor with the lower SSE is the better one.",
+      "note": "Couret & Venter pp.80, 82-83: SSE against the holdout, lower is better.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:19Z/4af0"
+     }
     },
     {
      "id": "r6",
@@ -3312,7 +3528,13 @@
      "statement": "Medical-only losses are a small share of total losses and mostly small claims, so increasing their weight has little effect on predictive accuracy, unless it causes widespread underreporting.",
      "concept": "Experience Rating Plan Goals",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "NCCI's medical-only (ERA) weighting, from the earlier syllabus's WC experience rating readings, states it; Fisher et al. mentions Med-only claims only as drivers of claim-count uncertainty (PDF p.12), never their weight in the mod; no reading on Exam 8's current syllabus does (maintainer, 31 Oct)",
+      "date": "2026-10-31",
+      "run": "g8-cas8-dropped"
+     }
     },
     {
      "id": "r4",
@@ -3421,7 +3643,13 @@
      "statement": "Empirical NCCI studies show that loss ratio variance does not decline as fast with risk size as the law of large numbers predicts, because some sources of variation (changing conditions, parameter risk, long-tailed losses, heterogeneous operations in large risks) do not diminish with size; hence B and K should increase with size and no risk should be fully self-rated.",
      "concept": "Experience Rating Credibility and Risk Size",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Gillam 1992 ('Parametrizing the WC Experience Rating Plan', a former reading; Fisher cites it only for the split-plan result, fn.2, PDF p.12) states it; Fisher gives only Z=E/(E+K) with K constant and the properties of Z (PDF pp.10-11); no reading on Exam 8's current syllabus does (maintainer, 31 Oct)",
+      "date": "2026-10-31",
+      "run": "g8-cas8-dropped"
+     }
     },
     {
      "id": "r4",
@@ -3519,7 +3747,15 @@
      "statement": "Loss elimination ratio (LER) from the per-accident limit equals 1 − (expected limited losses / expected unlimited losses), and the expected loss ratio is the average loss ratio across the risks.",
      "concept": "Loss Elimination Ratio",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Table L",
+      "quote": "Exam solutions often call $k$ the \"LER\" … Compute $k$ from the averages: $k = 1 - (\\text{average limited})/(\\text{average unlimited})$.",
+      "note": "LER = 1 - average limited / average unlimited (Fisher p.86).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:20Z/be9b"
+     }
     },
     {
      "id": "r5",
@@ -3527,7 +3763,15 @@
      "statement": "For limited losses, the entry ratio is the limited loss ratio divided by the unlimited expected loss ratio, and the charge at that ratio is φ* = φ(1 − k) + k, where φ is the partial charge computed from the limited distribution and k is the LER.",
      "concept": "Table L with Per-Occurrence Limits (Lee Diagram)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Table L",
+      "quote": "The entry ratio is limited loss over unlimited expected loss. … converts to a ratio to unlimited loss, for the same aggregate limit, by $\\phi^* = \\phi_{\\text{lim}}(1 - k) + k$",
+      "note": "Limited over unlimited expected entry ratio, and phi* = phi(1-k)+k.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:20Z/be9b"
+     }
     },
     {
      "id": "r6",
@@ -3548,7 +3792,15 @@
      "statement": "The Table L charge at zero entry ratio equals 1, and the charge at the highest entry ratio of the limited data equals the LER (k), since limited losses cannot all be eliminated.",
      "concept": "Table L (Aggregate Loss Distribution Tables)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Table L",
+      "quote": "$\\phi^*_D(0) = 1$ … At and above the largest limited entry ratio the aggregate part is 0, and $\\phi^*_D(r) = k$.",
+      "note": "Table L charge is 1 at r=0 and k at the top limited entry ratio (Exhibits 3.26-3.27).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:20Z/be9b"
+     }
     }
    ]
   },
@@ -3577,7 +3829,15 @@
      "statement": "The entry ratio is a risk's aggregate loss ratio divided by the average loss ratio of all risks in the table, so entry ratio r corresponds to a loss ratio of r times the mean.",
      "concept": "Table M (Excess Loss Charges)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Table M",
+      "quote": "a risk's entry ratio is its actual aggregate loss ratio divided by the expected loss ratio of its group, typically the group's average loss ratio, so an entry ratio of $r$ is a loss ratio of $r$ times the average",
+      "note": "Entry ratio as loss ratio over the group's average loss ratio, r times the mean (Fisher p.67, Q7).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:20Z/be9b"
+     }
     },
     {
      "id": "r3",
@@ -3602,7 +3862,15 @@
      "statement": "Alternatively, compute the charge by horizontal slicing: cumulate, over entry ratio intervals, the interval width times the fraction of risks whose entry ratio exceeds the interval, to get the charge as the integral of the survival function above r.",
      "concept": "Table M (Excess Loss Charges)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Table M",
+      "quote": "Horizontal slicing* (per layer): for each entry ratio, find the percentage of risks whose entry ratio exceeds it. Then start with a charge of 0 at the largest entry ratio and work upward",
+      "note": "Horizontal slicing: width times the share of risks above, cumulated from the top (Fisher pp.72-73).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:20Z/be9b"
+     }
     },
     {
      "id": "r5",
@@ -3637,7 +3905,15 @@
        "page": "Excess Loss Development Factor",
        "quote": "Measured on the severity distribution at that maturity, $R^L_t = E[X \\wedge L]/E[X]$ is the [[Loss Elimination Ratio|loss elimination ratio]] of the deductible, and $1 - R^L_t$ its excess ratio."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Excess and Deductible Rating",
+      "quote": "The excess ratio at a per-occurrence limit $L$ is the expected loss above the limit divided by the total expected loss: $R(L) = E[(X-L)_+]/E[X] = (E[X] - E[X \\wedge L])/E[X] = 1 - E[X \\wedge L]/E[X]$, where $E[(X-L)_+] = \\int_L^\\infty S(x)\\,dx$.",
+      "note": "Same definition of the excess ratio at a limit (Bahnemann eq.5.1; Fisher Formula 3.8).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:18Z/81e2"
+     }
     },
     {
      "id": "r2",
@@ -3645,7 +3921,13 @@
      "statement": "For a layer attached above the empirical truncation point t, the excess ratio is the product of the empirical excess ratio at t and the fitted (truncated and shifted, unity-mean) excess ratio at the remaining amount: R(a) = R(t) * R_hat(a - t).",
      "concept": "Excess Loss Pure Premium Factors",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "NCCI's excess-loss-factor method (the 1997 ELF paper and Mahler's 1998 discussion; Fisher cites the latter only in fn.36, PDF p.75) states the empirical-times-fitted excess ratio above a truncation point; Bahnemann gives only the pieces (truncated-and-shifted X_a, mean residual life, PDF pp.155-157), with 0 occurrences of 'truncation', 'cutoff', 'excess ratio'; no reading on Exam 8's current syllabus does (maintainer, 31 Oct)",
+      "date": "2026-10-31",
+      "run": "g8-cas8-dropped"
+     }
     },
     {
      "id": "r3",
@@ -3738,7 +4020,15 @@
      "statement": "Determine the Aggregate Expected Loss as standard premium × expected loss ratio × state/hazard group differential.",
      "concept": "Expected Loss in Retrospective Rating",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Table M",
+      "quote": "the expected loss $E$ (standard premium times the expected loss ratio) is first multiplied by the state/hazard group relativity",
+      "note": "Standard premium x ELR x state/hazard relativity for ELG selection (Fisher pp.89, 119).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:20Z/be9b"
+     }
     },
     {
      "id": "r4",
@@ -3746,7 +4036,15 @@
      "statement": "Assign the risk to an Expected Loss Group (ELG) by finding the expected loss size range in the Retrospective Rating Manual table containing its expected loss; then look up Φ(r_G) and Ψ(r_H) from the Table of Insurance Charges for that ELG and the entry ratios.",
      "concept": "Expected Loss Groups and Table of Insurance Charges",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Table M",
+      "quote": "To find the column, the expected loss $E$ (standard premium times the expected loss ratio) is first multiplied by the state/hazard group relativity … The adjusted figure only selects the ELG",
+      "note": "Choose the ELG from the range table, then read that column's charges and savings (Fisher pp.89-90).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:20Z/be9b"
+     }
     },
     {
      "id": "r5",
@@ -3754,7 +4052,15 @@
      "statement": "When expected loss size ranges are inflated, a risk's expected loss may fall in a different (higher-numbered) ELG, which changes the insurance charge and savings used; failing to update ranges therefore misstates retro premium.",
      "concept": "Expected Loss Groups and Table of Insurance Charges",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Table M",
+      "quote": "The ELG table's dollar ranges change over time with inflation (grouping by expected claim count is less subject to inflation). If the ranges are not updated, an inflated expected loss falls in a larger ELG than the risk's claim count warrants, and the risk is given the charge of a larger risk.",
+      "note": "Effect of un-updated ELG ranges under inflation (Fisher p.66 fn31, p.90 fn50).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:20Z/be9b"
+     }
     },
     {
      "id": "r6",
@@ -3837,7 +4143,15 @@
      "statement": "A Lee diagram plots loss size (as a ratio to expected loss) against the cumulative percentage of claims or probability, so that the area represents expected loss and the effects of the occurrence and aggregate limits can be shown as the portions cut off.",
      "concept": "Lee Diagram",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Lee Diagram",
+      "quote": "graphs a loss distribution with size on the vertical axis — severity, aggregate loss, or entry ratio — against the cumulative probability $F$, from 0 to 1, on the horizontal axis … The area under the curve is the expected loss. … For a coverage with limit $L$, every vertical strip is cut off at height $L$",
+      "note": "Axes, area = expected loss, and limits as the portions cut off (Fisher pp.52-55).",
+      "date": "2026-10-31",
+      "run": "validate-lee-2026-10-31T12:21Z/714a"
+     }
     },
     {
      "id": "r5",
@@ -3930,7 +4244,15 @@
      "statement": "Balance equations with a per-occurrence limit: compute the difference between max and min entry ratios as (G - H)/(c·Ê·T) and the difference in table values X̂_H - X̂_G as (e + E - H/T)/(c·Ê), using the limited expected loss Ê (unlimited E less the excess loss factor); then find the entry ratio pair in the ELG column of Table M that satisfies both.",
      "concept": "Retrospective Rating Balance Equations",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Retrospective Rating",
+      "quote": "use the expected limited loss $\\mathrm{E}\\{A_D\\}$ in place of $E$ in both denominators, while $e + E$ keeps the total expected loss. In table terms, $r_G - r_H = (G - H)/(c\\,\\mathrm{E}\\{A_D\\}\\,T)$ and $\\phi_D(r_H) - \\phi_D(r_G) = (e + E - H/T)/(c\\,\\mathrm{E}\\{A_D\\})$.",
+      "note": "Balance equations with a per-occurrence limit, limited expected loss in the denominators (Formulas 3.4-3.5 on limited losses), and the Table M search.",
+      "date": "2026-10-31",
+      "run": "validate-lee-2026-10-31T12:21Z/714a"
+     }
     },
     {
      "id": "r5",
@@ -4010,7 +4332,15 @@
      "statement": "The difference between the entropy-type loss ratios at the maximum and minimum premium points is r_G - r_H = (G - H)/(c E), where G is maximum premium, H is minimum premium, c is the loss conversion factor and E is expected losses.",
      "concept": "Retrospective Rating Balance Equations",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Retrospective Rating",
+      "quote": "$$r_G - r_H = \\frac{G - H}{c\\,E\\,T}$$",
+      "note": "Formula 3.5 balance equation (Fisher p.63); with no tax T = 1.",
+      "date": "2026-10-31",
+      "run": "validate-lee-2026-10-31T12:21Z/714a"
+     }
     },
     {
      "id": "r3",
@@ -4141,7 +4471,13 @@
      "statement": "For an excess WC policy, the premium covers only losses above the deductible (ELPPF plus insurance charge) with ULAE applied to the whole excess loss, and it excludes the credit risk and loss-based assessment loads that apply to LDD policies; only general overhead is based on standard premium.",
      "concept": "Excess Workers Compensation Policy Pricing",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Teng, 'Pricing Workers Compensation Large Deductible and Excess Insurance' (CAS Forum Winter 1994, sha256:2237c08e...; PDF p.17) states it (Excess WC: ULAE and general overhead charged on excess claims only, not subject to residual market assessments); Fisher ch.2 §5 covers LDD vs SIR only (PDF pp.27-28), with 0 occurrences of 'overhead', 'excess WC', 'compete'; no reading on Exam 8's current syllabus does (maintainer, 31 Oct)",
+      "date": "2026-10-31",
+      "run": "g8-cas8-dropped"
+     }
     },
     {
      "id": "r5",
@@ -4158,7 +4494,15 @@
        "page": "Permissible Loss Ratio",
        "quote": "\\text{VPLR} = 1 - V - Q_T"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Expenses",
+      "quote": "a negative profit load is added back, which increases the denominator $1 - v$ and lowers the premium.",
+      "note": "Bahnemann p.175 (profit may be negative) with eq.6.5: a negative load enlarges 1-v.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:18Z/81e2"
+     }
     },
     {
      "id": "r6",
@@ -4188,7 +4532,13 @@
        "page": "Profit and Contingency Provision",
        "quote": "[[Long Tail Lines|Long-tail lines]] hold reserves for years and earn substantial investment income on them, so they can support a low or even negative underwriting provision and still return the target on equity"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Teng, 'Pricing Workers Compensation Large Deductible and Excess Insurance' (CAS Forum Winter 1994, sha256:2237c08e...; PDF p.17) states it (LDD competes on price and service, Excess WC almost only on price; Excess WC taxed at General Liability rates); Fisher ch.2 §5 covers LDD vs SIR only (PDF pp.27-28), with 0 occurrences of 'overhead', 'excess WC', 'compete'; no reading on Exam 8's current syllabus does (maintainer, 31 Oct)",
+      "date": "2026-10-31",
+      "run": "g8-cas8-dropped"
+     }
     }
    ]
   },
@@ -4293,7 +4643,15 @@
      "statement": "For a retention GLM with binomial errors, the prior weight ω_i is set to the number of trials, such as the number of policies up for renewal in the cell (or 1 for individual policy records).",
      "concept": "Prior Weights in GLMs",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Generalized Linear Model",
+      "quote": "A row for a single risk carries weight 1, and in a renewal (binomial) model a row giving the share of $n$ policies that renewed carries weight $n$.",
+      "note": "Goldburd §2.5: the weight is the number of records an aggregated row represents; a renewal-share row is the mean of n binary outcomes, so its weight is the n policies up for renewal, 1 for a single policy.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:23Z/2047"
+     }
     }
    ]
   },
@@ -4398,7 +4756,15 @@
      "statement": "Merit rating plans that use earned premium as the exposure base implicitly assume that high-frequency territories are also high-premium territories.",
      "concept": "Merit Rating Plans",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Merit Rating",
+      "quote": "Bailey and Simon's reason for premium rests on the higher claim frequency territories also producing the higher territorial premiums.",
+      "note": "The implicit assumption that high-frequency territories are high-premium territories, from Bailey & Simon p.159.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:19Z/4af0"
+     }
     },
     {
      "id": "r2",
@@ -4414,7 +4780,15 @@
      "statement": "Claim frequency for a merit rating class group is incurred claims divided by the exposure base (earned premium, not car years), cumulated over the classes in the group (e.g., 2 or more accident-free years combines the 3+ and 2 year classes).",
      "concept": "Merit Rating Plans",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Merit Rating",
+      "quote": "The classes are cumulative. … A group's claims and its premium are the sums over the classes it includes. … calculate relative claim frequency on the basis of premium rather than car years.",
+      "note": "Frequency per unit of earned premium, claims and premium cumulated across the classes in the group (Bailey & Simon p.159, Table 1).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:19Z/4af0"
+     }
     },
     {
      "id": "r4",
@@ -4422,7 +4796,15 @@
      "statement": "The merit rating modification factor for a group equals the group's claim frequency divided by the overall (total) claim frequency.",
      "concept": "Merit Rating Plans",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Merit Rating",
+      "quote": "The modification is the group's relative claim frequency: the group's claim frequency divided by the claim frequency of all risks.",
+      "note": "States the group's modification as its frequency over the all-risks frequency (Bailey & Simon p.159, Table 1).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:19Z/4af0"
+     }
     },
     {
      "id": "r5",
@@ -4430,7 +4812,15 @@
      "statement": "The credibility (premium credit) of a merit rating group equals 1 minus its modification factor.",
      "concept": "Merit Rating Plans",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Merit Rating",
+      "quote": "For accident-free risks $R = 0$, so the credibility equals $1 -$ Modification.",
+      "note": "Credibility of an accident-free group = 1 - modification (Bailey & Simon p.159).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:19Z/4af0"
+     }
     },
     {
      "id": "r6",
@@ -4754,7 +5144,15 @@
      "statement": "In a single-split experience rating plan, the experience modification is M = [Zp*Ap + Ze*Ae + (1-Zp)*Ep + (1-Ze)*Ee] / E, where Ap, Ae are actual primary and excess losses, Ep, Ee are expected primary and excess losses, Zp, Ze are primary and excess credibilities, and E = Ep + Ee.",
      "concept": "Experience Rating Modification Formula",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Experience Rating",
+      "quote": "$$M = \\frac{Z_p A_p + (1-Z_p)E_p + Z_e A_e + (1-Z_e)E_e}{E} = 1 + Z_p\\frac{A_p - E_p}{E} + Z_e\\frac{A_e - E_e}{E}$$",
+      "note": "The single-split credibility mod formula, Fisher p.13.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:18Z/46f7"
+     }
     },
     {
      "id": "r2",
@@ -4814,7 +5212,15 @@
      "statement": "Using car-years as the exposure base in a merit rating plan can create maldistribution, because risks in different classes or territories have different claim frequencies, so merit-rating groups reflect those non-merit differences.",
      "concept": "Merit Rating Plans",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Merit Rating",
+      "quote": "With car years as the base, the X, Y and B classes would be concentrated in the high-frequency territories. Their claim frequencies would then differ from the A class's partly because of territory, not merit alone.",
+      "note": "Explains the maldistribution car years would create, from Bailey & Simon p.159.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:19Z/4af0"
+     }
     },
     {
      "id": "r2",
@@ -4897,7 +5303,15 @@
      "statement": "In a single-split experience rating plan, the experience mod equals unity (the manual premium/class-plan starting point) plus a primary credibility-weighted deviation of actual from expected primary losses divided by total expected loss, plus an excess credibility-weighted deviation of actual from expected excess losses divided by total expected loss.",
      "concept": "Experience Rating Modification Formula",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Experience Rating",
+      "quote": "In words, the split-plan mod is unity (the manual premium) plus the primary credibility times the primary deviation (actual minus expected primary losses) divided by total expected losses, plus the excess credibility times the excess deviation (actual minus expected excess losses) divided by total expected losses.",
+      "note": "The 1 + Zp(Ap-Ep)/E + Ze(Ae-Ee)/E form in words, Fisher p.13.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:18Z/46f7"
+     }
     },
     {
      "id": "r2",
@@ -4905,7 +5319,15 @@
      "statement": "Primary losses are the first layer of each claim's loss (up to the split point) and excess losses are the portion above the split point; primary and excess actual and expected losses are measured in dollars, not claim counts.",
      "concept": "Split Point in Experience Rating",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Experience Rating",
+      "quote": "the claim's primary loss is the lesser of the claim's loss and the split point, and its excess loss is the remainder above the split point … Primary and excess losses are dollar amounts, each summed over the risk's claims, not claim counts.",
+      "note": "Per-claim layers and that they are measured in dollars, not counts (Fisher p.12 dollar table).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:18Z/46f7"
+     }
     },
     {
      "id": "r3",
@@ -4939,7 +5361,15 @@
        "page": "Partial Credibility",
        "quote": "$Z$ is capped at 1: extra data beyond the standard never earns more than full weight"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Experience Rating",
+      "quote": "$Z$ is a value between 0 and 1: credibility can be neither negative nor more than 100%.",
+      "note": "Fisher p.10: credibility bounded 0 <= Z <= 1, stated as the item states it.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:18Z/46f7"
+     }
     },
     {
      "id": "r5",
@@ -5252,7 +5682,15 @@
        "page": "Excess Loss Development Factor",
        "quote": "Development still to come is $1 - 1/\\text{LDF}_t$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Retrospective Rating",
+      "quote": "so the future development of limited losses it provides for is $U(1 - 1/f)$",
+      "note": "The development provision on limited losses as ultimate limited loss times (1 - 1/LDF), derived from a factor to ultimate (finding F-005).",
+      "date": "2026-10-31",
+      "run": "validate-lee-2026-10-31T12:21Z/714a"
+     }
     },
     {
      "id": "r6",
@@ -5377,7 +5815,15 @@
      "statement": "Construct a Lee diagram (loss size on the vertical axis, cumulative probability on the horizontal axis) and read expected values as areas: the area under the curve is the expected loss, and area between the limited and unlimited curves gives excess losses; the area above the aggregate limit under the limited curve gives the insurance charge.",
      "concept": "Lee Diagram",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Lee Diagram",
+      "quote": "The area under the curve is the expected loss. … The area between the two curves is the per-occurrence excess, of total area $k$. The area under the lower curve is the limited loss, $1 - k$. The area under the lower curve and above the line $r$ is the aggregate excess of the limited losses.",
+      "note": "Reading expected, excess and aggregate-charge areas off a two-curve Lee diagram (Fisher Exhibit 3.23, p.85).",
+      "date": "2026-10-31",
+      "run": "validate-lee-2026-10-31T12:21Z/714a"
+     }
     },
     {
      "id": "r6",
@@ -5385,7 +5831,15 @@
      "statement": "If the limited loss distribution changes but the unlimited distribution does not, any increase in the insurance charge area is offset by an equal decrease in the excess loss area, so total loss cost and hence the LDD premium are unchanged.",
      "concept": "Large Dollar Deductible Policy Pricing",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Lee Diagram",
+      "quote": "If the limited distribution changes while the unlimited one does not, and the change lies above the aggregate line (so the insured's retained area under both the lower curve and the line is unchanged), any increase in the aggregate excess area is matched by an equal decrease in the area between the curves. The total loss cost the insurer bears — per-occurrence excess plus aggregate excess, $1$ minus the insured's retained area — is unchanged.",
+      "note": "Offsetting excess and charge areas when only the limited curve changes; total loss cost (and so premium) unchanged (Fisher Exhibit 3.23 areas).",
+      "date": "2026-10-31",
+      "run": "validate-lee-2026-10-31T12:21Z/714a"
+     }
     },
     {
      "id": "r7",
@@ -5544,7 +5998,15 @@
      "statement": "With no specified minimum premium, the minimum premium is H = bT (the basic premium times the tax multiplier), so ψ(r_H) = 0, not H = 0.",
      "concept": "Minimum Premium in Retrospective Rating",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Retrospective Rating",
+      "quote": "So with no stated minimum, $H = BT$, the minimum entry ratio is $r_H = 0$, and the savings term is $\\psi(0) = 0$.",
+      "note": "Minimum premium B x T with no stated minimum (Fisher p.25), psi(0) = 0.",
+      "date": "2026-10-31",
+      "run": "validate-lee-2026-10-31T12:21Z/714a"
+     }
     },
     {
      "id": "r4",
@@ -5552,7 +6014,15 @@
      "statement": "When there is no specified minimum premium, the balance equation reduces to ψ(r_G) = (G/T − (E + e)) / (cE).",
      "concept": "Retrospective Rating Balance Equation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Retrospective Rating",
+      "quote": "so the balance equation reduces to $\\psi(r_G) = \\big(G/T - (E + e)\\big)/(cE)$",
+      "note": "The no-minimum balance equation, derived from Fisher Formulas 3.1-3.3 (checked).",
+      "date": "2026-10-31",
+      "run": "validate-lee-2026-10-31T12:21Z/714a"
+     }
     },
     {
      "id": "r5",
@@ -5679,7 +6149,15 @@
      "statement": "In a retrospectively rated policy the premium discount is implicit, reflected as a reduction of expenses within the basic premium, whereas in a guaranteed cost policy it is explicitly deducted from the standard premium.",
      "concept": "Premium Discount",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Retrospective Rating",
+      "quote": "That expense ratio already reflects the premium discount (expenses are a lower percentage of premium for large accounts), so in a retro plan the premium discount is implicit in the basic premium rather than a separate step.",
+      "note": "Premium discount implicit in the retro basic premium via e (Fisher p.23), versus a separate step otherwise.",
+      "date": "2026-10-31",
+      "run": "validate-lee-2026-10-31T12:21Z/714a"
+     }
     }
    ]
   },
@@ -5831,7 +6309,13 @@
      "statement": "Large dollar deductible insurers service claims from the ground up and so compete on both price and claim service quality, whereas excess insurers (with the deductible layer handled by a TPA or the insured) compete mainly on price, which can allow higher profit loads for large dollar deductible policies.",
      "concept": "Large Dollar Deductible vs Excess Policies",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Teng, 'Pricing Workers Compensation Large Deductible and Excess Insurance' (CAS Forum Winter 1994, sha256:2237c08e...; PDF p.17) states it (LDD competes on price and service, Excess WC almost only on price, which drives down its profit margin); Fisher ch.2 §5 covers LDD vs SIR only (PDF pp.27-28), with 0 occurrences of 'overhead', 'excess WC', 'compete'; no reading on Exam 8's current syllabus does (maintainer, 31 Oct)",
+      "date": "2026-10-31",
+      "run": "g8-cas8-dropped"
+     }
     },
     {
      "id": "r5",
@@ -5839,7 +6323,13 @@
      "statement": "Large dollar deductible policies have a shorter average payout period because they pay from the first dollar, whereas excess policies pay only once the layer is reached, giving more time to earn investment income and so supporting a smaller profit load for the same target return on surplus.",
      "concept": "Large Dollar Deductible vs Excess Policies",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Teng, 'Pricing Workers Compensation Large Deductible and Excess Insurance' (CAS Forum Winter 1994, sha256:2237c08e...) is the reading this rests on: payout duration (PDF p.14) and the profit-margin argument (PDF p.17); Fisher ch.2 §5 covers LDD vs SIR only (PDF pp.27-28), with 0 occurrences of 'overhead', 'excess WC', 'compete'; no reading on Exam 8's current syllabus does (maintainer, 31 Oct)",
+      "date": "2026-10-31",
+      "run": "g8-cas8-dropped"
+     }
     }
    ]
   },
@@ -5868,7 +6358,15 @@
      "statement": "Extrinsic aliasing is perfect dependence between covariates that comes from the nature of the data rather than the variable definitions, e.g. all observations in one level of one factor fall in one level of another factor, so the two parameters are identical.",
      "concept": "Aliasing in GLMs",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Generalized Linear Model",
+      "quote": "Where two predictors are perfectly correlated they are aliased, and the GLM has no unique solution; most fitting software detects this and drops one of them.",
+      "note": "Goldburd §2.9 teaches aliasing from perfectly correlated predictors (a data pattern such as one level falling wholly in one level of another) and that software drops one; the reading has no 'extrinsic' label.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:23Z/2047"
+     }
     },
     {
      "id": "r3",
@@ -5932,7 +6430,15 @@
      "statement": "To remove near aliasing, remove or reclassify the few offending observations that cause the near-perfect correlation; this can then turn the near aliasing into extrinsic aliasing, which is addressed by dropping one of the aliased parameters.",
      "concept": "Aliasing in GLMs",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Generalized Linear Model",
+      "quote": "Removing those few records, or reclassifying them, makes the two columns identical, so the near alias becomes an exact alias, which the software resolves by dropping one predictor.",
+      "note": "States the remedy: deal with the few offending records, turning near aliasing into exact aliasing, which is handled by dropping one parameter.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:23Z/2047"
+     }
     }
    ]
   },
@@ -6084,7 +6590,15 @@
        "page": "Hypothesis Testing",
        "quote": "Reject $H_0$ if the test statistic falls in the **rejection region** (critical region); otherwise, fail to reject $H_0$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Experience",
+      "quote": "A value above the critical value rejects the hypothesis that the mean is the same over time, in favour of shifting risk parameters; a value below it does not reject it.",
+      "note": "Mahler pp.235-236: chi-squared test of the hypothesis of the same mean over time; reject in favour of shifting parameters.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:19Z/4af0"
+     }
     },
     {
      "id": "r4",
@@ -6109,7 +6623,15 @@
      "statement": "The correlation test for shifting parameters: compute the correlation between frequencies for all pairs of years separated by the same lag, average these correlations for each lag (1-year, 2-year, etc.), and conclude the parameters are shifting if average correlation decreases as the lag increases.",
      "concept": "Lagged Correlation Test for Shifting Parameters",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Experience",
+      "quote": "Compute the [[Correlation|correlation]] between the results for all of the risks for pairs of years, then average the correlations for the pairs of years with the same difference in time (the lag: 1 year, 2 years, and so on), and examine how the average correlation depends on the lag. … An average correlation that decreases as the lag increases means the parameters of the risk process are shifting over time.",
+      "note": "Mahler p.235 and p.239: the lagged correlation test as the item states it.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:19Z/4af0"
+     }
     }
    ]
   },
@@ -6125,7 +6647,15 @@
      "statement": "In multi-dimensional credibility for workers compensation injury-type ratios, the estimate for a class's ratio of one injury type to another is the hazard group's overall ratio plus weighted adjustments: each weight times the difference between the class's and the hazard group's ratio of another injury type (e.g. fatal, permanent total) relative to temporary total, i.e. E[w] = E[W] + b(V - E[V]) + c(W - E[W]).",
      "concept": "Multi-Dimensional Credibility for Workers Compensation Excess Loss Ratios",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Multi-Dimensional Credibility",
+      "quote": "The estimate of a class's ratio for one injury type is the hazard group's ratio for that type plus, for every injury type including the one being estimated, its coefficient times the difference between the class's and the hazard group's ratio for that type.",
+      "note": "Couret & Venter p.77's estimator Ew + b(V-EV) + c(W-EW) + ...",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:19Z/4af0"
+     }
     },
     {
      "id": "r2",
@@ -6133,7 +6663,15 @@
      "statement": "Compute each injury-type ratio (e.g. permanent total claims per temporary total claim) for a class and for the hazard group by pooling claim counts across all experience years, as total claims of the injury type divided by total temporary total claims.",
      "concept": "Multi-Dimensional Credibility for Workers Compensation Excess Loss Ratios",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Multi-Dimensional Credibility",
+      "quote": "Each injury-type ratio for a class is its sample mean over all the years of observation, weighted by the TT claim counts. That equals the class's total claims of that type over all the years divided by its total TT claims.",
+      "note": "Couret & Venter p.77: W_i = sum m_it W_it / sum m_it = pooled counts.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:19Z/4af0"
+     }
     },
     {
      "id": "r3",
@@ -6171,7 +6709,15 @@
      "statement": "An individual class SSE test is noisy because individual classes are small and volatile relative to the hazard group; grouping classes into quintiles diversifies away class-specific random variation and gives a more credible evaluation of the credibility procedure.",
      "concept": "Quintiles Test",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Multi-Dimensional Credibility",
+      "quote": "The individual class-state ratios are quite volatile and the holdout is only a proxy for the true mean … Grouping classes into quintiles diversifies away most of the class-specific random variation, as portfolios do in tests of the CAPM, so the test can show an improvement that the noisy single-class comparison cannot.",
+      "note": "Couret & Venter pp.80-81: volatile single classes, quintiles diversify class-specific noise.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:19Z/4af0"
+     }
     }
    ]
   },
@@ -6493,7 +7039,15 @@
      "statement": "The credibility implied by experience is Z = 1 minus the relative frequency of the group with that experience (compared to the overall average frequency).",
      "concept": "Credibility from Claim-Free Experience",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Merit Rating",
+      "quote": "So the credibility of an accident-free group is $1$ minus its relative claim frequency.",
+      "note": "Bailey & Simon p.159: with R = 0 for accident-free risks, credibility = 1 - modification = 1 - relative claim frequency.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:19Z/4af0"
+     }
     },
     {
      "id": "r4",
@@ -6501,7 +7055,15 @@
      "statement": "If an insured's underlying chance of accident is stable over time, credibility is proportional to the number of years of experience, so the ratio of the n-year credibility to the 1-year credibility is approximately n.",
      "concept": "Shifting Risk Parameters",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Merit Rating",
+      "quote": "If an individual insured's chance for an accident remained constant from one year to the next, and no risks left or entered the class, the credibilities for experience periods of one, two and three years would vary approximately in proportion to the number of years. The relative credibilities would then be about 2 and 3.",
+      "note": "Bailey & Simon p.160: stable accident chance gives credibility proportional to years, relative credibilities 2 and 3.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:19Z/4af0"
+     }
     },
     {
      "id": "r5",
@@ -6522,7 +7084,15 @@
      "statement": "Alternative test: compute correlations between class distributions (or frequencies) at different time lags and average them by lag; correlation that decreases as lag increases indicates risk parameters are changing over time.",
      "concept": "Shifting Risk Parameters",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Experience",
+      "quote": "Compute the [[Correlation|correlation]] between the results for all of the risks for pairs of years, then average the correlations for the pairs of years with the same difference in time (the lag: 1 year, 2 years, and so on), and examine how the average correlation depends on the lag. … An average correlation that decreases as the lag increases means the parameters of the risk process are shifting over time.",
+      "note": "Mahler p.235 and p.239: the alternative (correlation) test for shifting risk parameters.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:19Z/4af0"
+     }
     }
    ]
   },
@@ -6538,7 +7108,13 @@
      "statement": "Expected losses equal payroll divided by 100 times the class expected loss rate (ELR), summed across classes; expected primary losses are expected losses times the D-ratio, and expected excess losses are expected losses minus expected primary losses.",
      "concept": "NCCI Experience Rating Plan",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "NCCI's Experience Rating Plan Manual mechanics, taught by the earlier syllabus's WC experience rating readings, state it; Fisher et al. 2019 gives only the w/B and credibility forms (PDF p.13) and has 0 occurrences of 'ERA', 'D-ratio', 'payroll'; no reading on Exam 8's current syllabus does (maintainer, 31 Oct)",
+      "date": "2026-10-31",
+      "run": "g8-cas8-dropped"
+     }
     },
     {
      "id": "r2",
@@ -6546,7 +7122,15 @@
      "statement": "The NCCI experience rating modification (split-plan form) is Mod = (Ap + w*Ae + (1-w)*Ee + B) / (E + B), where Ap and Ae are actual primary and excess losses, Ee is expected excess losses, E is expected losses, w is the weighting value and B is the ballast value.",
      "concept": "NCCI Experience Rating Plan",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Experience Rating",
+      "quote": "written with an excess loss weighting factor $w$ and a ballast value $B$: … = \\frac{A_p + wA_e + (1-w)E_e + B}{E + B}$$",
+      "note": "The NCCI weight-and-ballast mod formula, Fisher p.13.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:18Z/46f7"
+     }
     },
     {
      "id": "r3",
@@ -6568,7 +7152,15 @@
      "statement": "Primary losses are the first portion of each claim's loss up to the split point; excess losses are the part of each claim's loss above the split point.",
      "concept": "Primary and Excess Losses (Split Point)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Experience Rating",
+      "quote": "Apply the split point to each claim separately: the claim's primary loss is the lesser of the claim's loss and the split point, and its excess loss is the remainder above the split point",
+      "note": "Defines primary as each claim's loss up to the split point and excess as the part above (Fisher p.12 table).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:18Z/46f7"
+     }
     },
     {
      "id": "r5",
@@ -6576,7 +7168,13 @@
      "statement": "Medical-only claims are reduced to 30% (ratable at the ERA factor) of their value before being split into primary and excess losses; indemnity claims are included at full value.",
      "concept": "Experience Rating Plan Medical-Only Claims (ERA)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "NCCI's Experience Rating Plan Manual mechanics, taught by the earlier syllabus's WC experience rating readings, state the 30% medical-only (ERA) reduction; Fisher et al. 2019 gives only the w/B and credibility forms (PDF p.13) and has 0 occurrences of 'ERA', 'D-ratio', 'payroll'; no reading on Exam 8's current syllabus does (maintainer, 31 Oct)",
+      "date": "2026-10-31",
+      "run": "g8-cas8-dropped"
+     }
     },
     {
      "id": "r6",
@@ -6584,7 +7182,15 @@
      "statement": "Apply the split point to each claim separately: primary loss is the lesser of the (adjusted) claim loss and the split point, and excess loss is the remainder, which is zero when the claim is below the split point.",
      "concept": "Primary and Excess Losses (Split Point)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Experience Rating",
+      "quote": "Apply the split point to each claim separately: the claim's primary loss is the lesser of the claim's loss and the split point, and its excess loss is the remainder above the split point, which is zero for a claim at or below the split point.",
+      "note": "The per-claim split procedure, min(loss, split) and remainder, zero below the split (Fisher p.12 table).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:18Z/46f7"
+     }
     },
     {
      "id": "r7",
@@ -6592,7 +7198,15 @@
      "statement": "The credibility form of the modification is Mod = [Ap*Zp + Ep*(1-Zp) + Ae*Ze + Ee*(1-Ze)] / E, with Zp = E/(E+B) and Ze = w*Zp.",
      "concept": "NCCI Experience Rating Plan",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Experience Rating",
+      "quote": "$$M = \\frac{Z_p A_p + (1-Z_p)E_p + Z_e A_e + (1-Z_e)E_e}{E} = 1 + Z_p\\frac{A_p - E_p}{E} + Z_e\\frac{A_e - E_e}{E}$$ … Matching the two forms, the primary credibility is $Z_p = E/(E+B)$ and the excess credibility is $Z_e = wZ_p = wE/(E+B)$.",
+      "note": "Credibility form plus Zp=E/(E+B), Ze=wZp, derived by matching Fisher's two equivalent forms (p.13).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:18Z/46f7"
+     }
     }
    ]
   },
@@ -6707,7 +7321,13 @@
      "statement": "Tests of experience rating plans are applied to all risks in a single class together (separated by premium size), not split by subgroups within the class.",
      "concept": "Experience Rating Plan Evaluation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Gillam 1992 / Venter 1987 (former readings) state that plan tests are run within a single class; Fisher's quintile and efficiency tests (PDF pp.14-17) speak only of 'the set of risks subject to the plan'; no reading on Exam 8's current syllabus does (maintainer, 31 Oct)",
+      "date": "2026-10-31",
+      "run": "g8-cas8-dropped"
+     }
     }
    ]
   },
@@ -6940,7 +7560,15 @@
      "statement": "When a retrospective rating plan has both a per-occurrence loss limit and a maximum premium, the charges for the two overlap, because capping individual losses makes it less likely that aggregate losses reach the maximum premium, so the maximum premium charge partly double counts what the loss limit charge already covers.",
      "concept": "Retrospective Rating Insurance Charges",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Lee Diagram",
+      "quote": "When a plan has both a per-occurrence limit and an aggregate limit (or maximum premium), the area that lies between the two curves and above the line $r$ belongs to both … Capping individual losses makes it less likely that aggregate losses reach the maximum, so the two charges are not additive",
+      "note": "The overlap of the loss-limit and maximum-premium charges and why (Fisher pp.84, 116-117).",
+      "date": "2026-10-31",
+      "run": "validate-lee-2026-10-31T12:21Z/714a"
+     }
     },
     {
      "id": "r2",
@@ -6948,7 +7576,15 @@
      "statement": "On a Lee diagram, the charge for the maximum premium is the area between the unlimited aggregate loss curve and the entry ratio at the maximum premium, the charge for the loss limit is the area between the unlimited and limited loss curves, and the overlap is the area common to both.",
      "concept": "Lee Diagram",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Lee Diagram",
+      "quote": "The unlimited Table M charge at $r$ is the area under the upper curve and above $r$. … the area that lies between the two curves and above the line $r$ belongs to both: the charge for the maximum read from the unlimited curve and the charge for the loss limit both contain it.",
+      "note": "Max-premium charge, loss-limit charge (between the curves) and the overlap as areas (Fisher Exhibit 3.23).",
+      "date": "2026-10-31",
+      "run": "validate-lee-2026-10-31T12:21Z/714a"
+     }
     },
     {
      "id": "r3",
@@ -6956,7 +7592,15 @@
      "statement": "Table M handles the overlap approximately: the Aggregate Excess Loss (AEL) procedure and the Increased Limits Ratio for Retrospective Loss Limitation (ICRLL) adjustment use the charge for a larger expected loss size, which has a less skewed, flatter aggregate distribution, to approximate the limited aggregate loss curve and the overlap correction.",
      "concept": "Table M",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Insurance Charge Reflecting Loss Limitation (ICRLL)",
+      "quote": "Table M$_D$ is indexed by size, deductible and entry ratio; ICRLL maps those three indices onto the two of the unlimited table … so ICRLL enters Table M at a larger ELG, whose aggregate distribution is less variable, with lower charges above an entry ratio of 1, to approximate the limited distribution",
+      "note": "ICRLL as Table M's approximate handling of the overlap via a larger ELG (Fisher p.84).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:20Z/be9b"
+     }
     },
     {
      "id": "r4",
@@ -7001,7 +7645,13 @@
      "statement": "Excess workers compensation premium = [expected excess loss × (1 + ULAE ratio) + standard premium × general overhead] / (1 − acquisition − taxes − profit).",
      "concept": "Excess Workers Compensation Insurance Pricing",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Teng, 'Pricing Workers Compensation Large Deductible and Excess Insurance' (CAS Forum Winter 1994, sha256:2237c08e...; PDF p.17) states the Excess WC premium with general overhead on standard premium (PDF pp.16-17); Fisher ch.2 §5 covers LDD vs SIR only (PDF pp.27-28), with 0 occurrences of 'overhead', 'excess WC', 'compete'; no reading on Exam 8's current syllabus does (maintainer, 31 Oct)",
+      "date": "2026-10-31",
+      "run": "g8-cas8-dropped"
+     }
     },
     {
      "id": "r2",
@@ -7039,7 +7689,15 @@
      "statement": "Use a Lee diagram (loss distribution as ordered loss sizes with equal probability) to find expected excess loss above a retention: sum the layer width above the retention times the probability mass of losses exceeding each level, and search for the retention that gives a target excess loss.",
      "concept": "Lee Diagram",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Lee Diagram",
+      "quote": "With equally likely ordered losses, the expected loss above a retention is the sum, over the layers above the retention, of each layer's width times the probability that a loss exceeds the bottom of that layer.",
+      "note": "The layer-method sum for expected excess over a retention on equally likely ordered losses (Fisher pp.54-57); finding the retention for a target is arithmetic on it.",
+      "date": "2026-10-31",
+      "run": "validate-lee-2026-10-31T12:21Z/714a"
+     }
     },
     {
      "id": "r5",
@@ -7064,7 +7722,13 @@
      "statement": "The profit load on LDD policies is generally higher than on excess workers compensation policies because LDD insurers compete on both price and service (full claim service), whereas excess insurers compete mainly on price, which drives down profit.",
      "concept": "Large Dollar Deductible Policy Pricing",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Teng, 'Pricing Workers Compensation Large Deductible and Excess Insurance' (CAS Forum Winter 1994, sha256:2237c08e...; PDF p.17) states it (LDD competes on price and service, Excess WC almost only on price); Fisher ch.2 §5 covers LDD vs SIR only (PDF pp.27-28), with 0 occurrences of 'overhead', 'excess WC', 'compete'; no reading on Exam 8's current syllabus does (maintainer, 31 Oct)",
+      "date": "2026-10-31",
+      "run": "g8-cas8-dropped"
+     }
     }
    ]
   },
@@ -7208,7 +7872,15 @@
        "page": "Excess Loss Development Factor",
        "quote": "Measured on the severity distribution at that maturity, $R^L_t = E[X \\wedge L]/E[X]$ is the [[Loss Elimination Ratio|loss elimination ratio]] of the deductible, and $1 - R^L_t$ its excess ratio."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Excess and Deductible Rating",
+      "quote": "The excess ratio at a per-occurrence limit $L$ is the expected loss above the limit divided by the total expected loss: $R(L) = E[(X-L)_+]/E[X] = (E[X] - E[X \\wedge L])/E[X] = 1 - E[X \\wedge L]/E[X]$, where $E[(X-L)_+] = \\int_L^\\infty S(x)\\,dx$.",
+      "note": "Gives R(L) = 1 - E[X^L]/E[X], the item's form (Bahnemann eq.5.1).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:18Z/81e2"
+     }
     },
     {
      "id": "r2",
@@ -7246,7 +7918,13 @@
      "statement": "For a limit above the truncation point T, the overall excess ratio equals the empirical excess ratio at T times the fitted-curve excess ratio at entry ratio (L−T)/mean of truncated and shifted losses.",
      "concept": "Excess Loss Ratio",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "NCCI's excess-loss-factor method (the 1997 ELF paper and Mahler's 1998 discussion; Fisher cites the latter only in fn.36, PDF p.75) states the empirical-times-fitted excess ratio above a truncation point; Bahnemann gives only the pieces (truncated-and-shifted X_a, mean residual life, PDF pp.155-157), with 0 occurrences of 'truncation', 'cutoff', 'excess ratio'; no reading on Exam 8's current syllabus does (maintainer, 31 Oct)",
+      "date": "2026-10-31",
+      "run": "g8-cas8-dropped"
+     }
     },
     {
      "id": "r5",
@@ -7370,7 +8048,13 @@
      "statement": "The AAA Risk Classification Statement of Principles lists considerations for a classification system: homogeneity, credibility, expense, predictive stability, availability of coverage, avoidance of extreme discontinuities, and public acceptability.",
      "concept": "Risk Classification Statement of Principles",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The AAA Risk Classification Statement of Principles (1980), a former reading, states it; ASOP 12 names that document only as background (App.1, PDF p.14) as one list; ASOP 12 has homogeneity, credibility, practicality/acceptability (§3.2-3.3) and availability (App.1) in other words, but predictive stability and avoidance of extreme discontinuities occur in no current reading; no reading on Exam 8's current syllabus does (maintainer, 31 Oct)",
+      "date": "2026-10-31",
+      "run": "g8-cas8-dropped"
+     }
     },
     {
      "id": "r6",
@@ -7505,7 +8189,13 @@
      "statement": "Hazard reduction incentive (a social consideration) means a classification system should encourage insureds to reduce their hazard exposure, which requires the variable to be linked to controllable losses.",
      "concept": "Risk Classification Statement of Principles",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The AAA Risk Classification Statement of Principles (1980), a former reading, states it; ASOP 12 names that document only as background (App.1, PDF p.14); 'hazard' occurs 0 times in ASOP 12, whose 'incentives' (App.1) are insurers' economic incentives; no reading on Exam 8's current syllabus does (maintainer, 31 Oct)",
+      "date": "2026-10-31",
+      "run": "g8-cas8-dropped"
+     }
     },
     {
      "id": "r8",
@@ -7849,7 +8539,15 @@
      "statement": "Variable stability (consistency of a coefficient estimate across data subsets or samples, or over time) is distinct from variable significance and from penalized fit measures like AIC and BIC.",
      "concept": "GLM Model Refinement",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Generalized Linear Model",
+      "quote": "Stability is a separate check from a variable's significance and from penalized measures of fit such as [[AIC]] and [[BIC]]. Model stability is the sensitivity of the model to changes in the modelling data.",
+      "note": "Defines stability (Goldburd §6.4) and says it is distinct from significance and from AIC/BIC.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:23Z/2047"
+     }
     }
    ]
   },
@@ -8068,7 +8766,15 @@
      "statement": "If experience rating is appropriate and rates are equitable, modified loss ratios should be similar for credit-mod and debit-mod risks, so all risks are expected to be equally profitable after the mod is applied.",
      "concept": "Experience Rating in Workers Compensation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Experience Rating",
+      "quote": "A good experience rating plan will have no discernible trend in the modified loss ratios, so that risks with credit mods and risks with debit mods are equally profitable after the mod is applied",
+      "note": "Fisher p.17: no trend in modified loss ratios, all risks equal in profit potential.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:18Z/46f7"
+     }
     },
     {
      "id": "r4",
@@ -8110,7 +8816,13 @@
      "statement": "An overall credit mod can result from manual rates being set too high or from insureds having higher-than-average wages (more expected losses in the class), and a credit mod does not predict future plan performance since the mod equalizes risks.",
      "concept": "Experience Rating in Workers Compensation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Venter 1987 / Gillam 1992 (former readings) state that high wages or high manual rates produce credit mods; Fisher ch.1 §1-§10 has no such statement (0 occurrences of 'wage', 'too high'); no reading on Exam 8's current syllabus does (maintainer, 31 Oct)",
+      "date": "2026-10-31",
+      "run": "g8-cas8-dropped"
+     }
     }
    ]
   },
@@ -8226,7 +8938,15 @@
        "page": "Permissible Loss Ratio",
        "quote": "fixed expenses sit in the numerator with the losses"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Expenses",
+      "quote": "If variable expenses plus the loads for profit and risk are the fraction $v$ of the final premium, and fixed expenses are $f$ per exposure unit, the premium for $m$ exposure units with pure premium $p$ is $P = m(p + f)/(1 - v)$.",
+      "note": "Bahnemann eq.6.5: premium = (loss + fixed)/(1 - variable %).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:18Z/81e2"
+     }
     },
     {
      "id": "r8",
@@ -8496,7 +9216,15 @@
      "statement": "A Lee diagram plots size of loss on the vertical axis against the cumulative probability (0 to 1) on the horizontal axis, so that areas represent expected loss amounts, with the area to the left of the curve and under a given loss size representing expected loss up to that size.",
      "concept": "Lee Diagram",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Lee Diagram",
+      "quote": "graphs a loss distribution with size on the vertical axis — severity, aggregate loss, or entry ratio — against the cumulative probability $F$, from 0 to 1, on the horizontal axis … the expected payment is the area under the curve and below the line at $L$",
+      "note": "Axes, and expected loss up to a size as the area under the curve below that line (Fisher pp.52-55).",
+      "date": "2026-10-31",
+      "run": "validate-lee-2026-10-31T12:21Z/714a"
+     }
     },
     {
      "id": "r2",
@@ -8955,7 +9683,15 @@
      "statement": "To build an empirical Table M, group insureds with similar loss potential, compute each risk's entry ratio from its aggregate loss and the group's average aggregate loss, and sort the entry ratios in increasing order.",
      "concept": "Table M (Aggregate Excess Loss Factors)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Table M",
+      "quote": "Group** risks expected to have similar aggregate loss distributions … divide its actual aggregate loss by the group's expected loss, typically the group's average actual aggregate loss … Sort the entry ratios.",
+      "note": "Grouping, entry ratios on the group's average, sorted (Fisher pp.67-68).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:20Z/be9b"
+     }
     },
     {
      "id": "r4",
@@ -8963,7 +9699,15 @@
      "statement": "For each entry ratio r, determine the percentage of risks whose entry ratio exceeds r.",
      "concept": "Table M (Aggregate Excess Loss Factors)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Table M",
+      "quote": "for each entry ratio, find the percentage of risks whose entry ratio exceeds it",
+      "note": "The percent-over column of horizontal slicing (Fisher p.72).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:20Z/be9b"
+     }
     },
     {
      "id": "r5",
@@ -8971,7 +9715,15 @@
      "statement": "Charge(r_i) = Charge(r_{i+1}) + (r_{i+1} − r_i) × (percent of risks with entry ratio above r_i), starting with charge 0 at the highest entry ratio and working down.",
      "concept": "Table M (Aggregate Excess Loss Factors)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Table M",
+      "quote": "start with a charge of 0 at the largest entry ratio and work upward: … $$\\phi(r_i) = \\phi(r_{i+1}) + (r_{i+1} - r_i) \\times \\Pr(\\text{entry ratio} > r_i)$$",
+      "note": "The recursion exactly as the item states it (Fisher p.72).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:20Z/be9b"
+     }
     },
     {
      "id": "r6",
@@ -9013,7 +9765,15 @@
      "statement": "The ICRLL procedure adjusts for a per-occurrence limit by inflating the expected unlimited losses (multiplied by the state/hazard group differential and an adjustment factor based on the excess ratio) and using the result to select the expected loss group, so the Table M column reflects the lower variance of limited losses.",
      "concept": "Insurance Charge Reflecting Loss Limitation (ICRLL)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Insurance Charge Reflecting Loss Limitation (ICRLL)",
+      "quote": "(1) Multiply the expected unlimited loss by the state/hazard group relativity and by the loss group adjustment factor, and use the result to choose the Expected Loss Group. … so ICRLL enters Table M at a larger ELG, whose aggregate distribution is less variable",
+      "note": "Inflated expected loss selects an ELG reflecting the limited losses' lower variance.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:20Z/be9b"
+     }
     },
     {
      "id": "r2",
@@ -9021,7 +9781,15 @@
      "statement": "Adjusted expected losses for ELG selection = expected unlimited aggregate losses × hazard group differential × (1 + D·k)/(1 − k), where k = 1 − limited expected losses/unlimited expected losses is the excess ratio due to the per-occurrence limit and D is the aggregate deductible-to-expected-loss relationship used in the solution.",
      "concept": "Insurance Charge Reflecting Loss Limitation (ICRLL)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Insurance Charge Reflecting Loss Limitation (ICRLL)",
+      "quote": "$$E_{\\text{ELG}} = E \\times (\\text{state/hazard group relativity}) \\times \\frac{1 + 0.8\\,k}{1 - k}$$",
+      "note": "Adjusted expected loss for ELG selection (Formula 3.10, p.89 example); k defined on the page as 1 - E{A_D}/E.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:20Z/be9b"
+     }
     },
     {
      "id": "r3",
@@ -9080,7 +9848,15 @@
      "statement": "Total expected loss cost with a per-occurrence limit and aggregate deductible/limit = expected unlimited losses minus expected limited losses (excess of per-occurrence limit) plus expected limited losses × insurance charge at the entry ratio (aggregate limit / limited expected losses).",
      "concept": "Aggregate Loss Limits and Retrospective Rating Insurance Charge",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Insurance Charge Reflecting Loss Limitation (ICRLL)",
+      "quote": "The aggregate charge is $\\phi(r) \\times \\mathrm{E}\\{A_D\\}$, and the per-occurrence charge is $E - \\mathrm{E}\\{A_D\\}$; their sum is the total expected loss cost.",
+      "note": "Total = excess + limited x charge at agg limit / limited expected (Fisher p.90).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:20Z/be9b"
+     }
     },
     {
      "id": "r7",
@@ -9088,7 +9864,15 @@
      "statement": "A per-occurrence limit reduces the variance of the severity and aggregate loss distributions, which is equivalent to a policy with larger expected losses (lower relative variance); hence the ICRLL uses a larger adjusted expected loss to select the Table M column (loss group).",
      "concept": "Insurance Charge Reflecting Loss Limitation (ICRLL)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Insurance Charge Reflecting Loss Limitation (ICRLL)",
+      "quote": "A per-occurrence limit reduces the variance of the severity distribution — much of it comes from the few largest losses — and so the variance of the limited aggregate loss. Less variance means a lower charge at entry ratios above 1, just as a larger risk (more expected claims) has a lower charge.",
+      "note": "Variance reduction treated as a larger risk (Fisher pp.78-79, 95).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:20Z/be9b"
+     }
     },
     {
      "id": "r8",
@@ -9144,7 +9928,15 @@
      "statement": "The credibility of an accident-free class is estimated as Z = 1 minus the class's relative claim frequency, since relative frequency = Z*R + (1-Z) with R the relativity under full credibility being zero for the accident-free class.",
      "concept": "Credibility of Merit Rating Classes",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Merit Rating",
+      "quote": "For accident-free risks $R = 0$, so the credibility equals $1 -$ Modification. … So the credibility of an accident-free group is $1$ minus its relative claim frequency.",
+      "note": "Derives Z = 1 - relative frequency from Mod = ZR + (1-Z) with R = 0, as Bailey & Simon p.159.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:19Z/4af0"
+     }
     },
     {
      "id": "r4",
@@ -9152,7 +9944,15 @@
      "statement": "Accident-free classes are cumulative: the 'n or more years' class pools all classes with at least n accident-free years (sum claims and sum exposures across those classes) before computing its frequency.",
      "concept": "Merit Rating Plans",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Merit Rating",
+      "quote": "The classes are cumulative. A + X is the experience for two or more accident-free years, and A + X + Y is the experience for one or more accident-free years. A group's claims and its premium are the sums over the classes it includes.",
+      "note": "Cumulative accident-free groups pool claims and exposure before computing frequency (Bailey & Simon p.159).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:19Z/4af0"
+     }
     },
     {
      "id": "r5",
@@ -9160,7 +9960,15 @@
      "statement": "Relative credibility of one class is the ratio of its credibility to the credibility of a base class (e.g., 3+ years accident-free credibility divided by 1+ years or 0+ years credibility).",
      "concept": "Credibility of Merit Rating Classes",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Merit Rating",
+      "quote": "Relative credibility is the credibility for a two- or three-year experience period divided by the credibility for one year.",
+      "note": "Defines relative credibility as the ratio to the base (one-year) credibility, as Bailey & Simon Table 3.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:19Z/4af0"
+     }
     }
    ]
   },
@@ -9825,7 +10633,15 @@
        "page": "Excess Loss Development Factor",
        "quote": "Measured on the severity distribution at that maturity, $R^L_t = E[X \\wedge L]/E[X]$ is the [[Loss Elimination Ratio|loss elimination ratio]] of the deductible, and $1 - R^L_t$ its excess ratio."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Excess and Deductible Rating",
+      "quote": "The share of expected loss that stays under the cap is $E[X \\wedge L]/E[X] = 1 - R(L)$",
+      "note": "Percent of losses kept under a cap = limited expected value / unlimited mean (Bahnemann eq.5.1).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:18Z/81e2"
+     }
     },
     {
      "id": "r3",
@@ -10316,7 +11132,15 @@
      "statement": "Convert the adjusted expected loss to the unadjusted expected loss by dividing by the state/hazard group differential, then use that expected loss and the entry ratios to look up the insurance charge and savings from the NCCI table of expected loss ranges.",
      "concept": "NCCI Table of Expected Loss Ranges",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Table M",
+      "quote": "the expected loss $E$ (standard premium times the expected loss ratio) is first multiplied by the state/hazard group relativity … The adjusted figure only selects the ELG; the charge in dollars is the table's factor times the unadjusted expected loss.",
+      "note": "Adjusted = E x relativity, so E = adjusted / relativity prices the charge.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:20Z/be9b"
+     }
     },
     {
      "id": "r4",
@@ -10415,7 +11239,15 @@
        "page": "Large Deductible Policy",
        "quote": "$$\\text{Premium} = \\frac{\\text{Excess Losses} + \\text{ALAE} + F + \\text{CR} + \\text{RM}}{1 - V - Q}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Expenses",
+      "quote": "premium equals expected loss plus fixed expense, divided by one minus the sum of the variable expense, commission, tax, profit and risk percentages. With no fixed expense the premium is the expected loss times the loss-cost multiplier $1/(1 - v)$.",
+      "note": "Bahnemann eqs.6.5-6.6: with no fixed expense, premium = loss x 1/(1-v).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:18Z/81e2"
+     }
     },
     {
      "id": "r3",
@@ -10457,7 +11289,15 @@
      "statement": "A franchise deductible pays the full loss amount if the loss exceeds the deductible and nothing if the loss is at or below it (no reduction of the amount paid once it is exceeded).",
      "concept": "Franchise Deductible",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Excess and Deductible Rating",
+      "quote": "A franchise deductible eliminates all claims less than or equal to the deductible amount $d$, and claims in excess of $d$ are paid in full: a claim of $x > d$ costs the insurer $x$, not $x - d$.",
+      "note": "Bahnemann p.190 definition of the franchise deductible, nothing at or below d, full loss above.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:18Z/81e2"
+     }
     },
     {
      "id": "r6",
@@ -10554,7 +11394,15 @@
      "statement": "When no prior-year data are available, the relative claim frequency of the zero-claim-free-years (newly claim-involved) group under Poisson claims with parameter lambda is approximated as R = 1/(1 - e^(-lambda)), the inverse of the probability of at least one claim.",
      "concept": "Merit Rating Credibility",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Merit Rating",
+      "quote": "their relative claim frequency is $R = 1/(1 - e^{-m})$",
+      "note": "Bailey & Simon Appendix II: B risks average m/(1-e^-m) claims, so R = 1/(1-e^-m) under Poisson.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:19Z/4af0"
+     }
     },
     {
      "id": "r3",
@@ -10562,7 +11410,15 @@
      "statement": "To put earned premium at a common (base group) rate level, divide each group's earned premium by its current merit rating factor to get premium at base-class (factor 1.00) rates; premium at current rates is not already at base rates.",
      "concept": "On-Level Premium (Merit Rating Exposure)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Merit Rating",
+      "quote": "Dividing a class's earned premium at present rates by its merit factor relative to B puts it at B rates.",
+      "note": "Premium at present rates over the merit factor gives premium at base-class (B) rates (Bailey & Simon p.159, 65:80:90:100).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:19Z/4af0"
+     }
     },
     {
      "id": "r4",
@@ -11205,7 +12061,15 @@
      "statement": "The multi-dimensional credibility estimate for a quantity is the complement of credibility (storm zone/overall) mean for that quantity plus the sum over each type of its coefficient times (sector mean minus zone mean) for that type, including the type being estimated.",
      "concept": "Multi-Dimensional Credibility",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Multi-Dimensional Credibility",
+      "quote": "The estimate of a class's ratio for one injury type is the hazard group's ratio for that type plus, for every injury type including the one being estimated, its coefficient times the difference between the class's and the hazard group's ratio for that type.",
+      "note": "Same estimator; the zone and sector stand in for hazard group and class (Couret & Venter p.77).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:19Z/4af0"
+     }
     },
     {
      "id": "r2",
@@ -11247,7 +12111,15 @@
      "statement": "In multi-dimensional credibility, a sector whose other-type frequencies exceed the zone's raises the estimate above the complement mean (positive coefficient times positive deviation), which can outweigh a negative deviation in the target type and make the estimate higher than the single-dimensional one.",
      "concept": "Multi-Dimensional Credibility",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Multi-Dimensional Credibility",
+      "quote": "Because the estimate uses the deviations of all the types, a positive coefficient times a class's positive deviation in another type raises the estimate above the hazard group's ratio. That can outweigh a negative deviation in the type being estimated, putting the multi-dimensional estimate above the single-dimensional one.",
+      "note": "Follows directly from the estimator (Couret & Venter p.77); the item's sign argument.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:19Z/4af0"
+     }
     }
    ]
   },
@@ -11507,7 +12379,15 @@
      "statement": "The insurance charge is zero at a retention at or above the maximum possible aggregate loss, since no losses exceed it.",
      "concept": "Table M (Insurance Charge)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Table M",
+      "quote": "$\\phi(r) = 0$ at and above the largest possible entry ratio, since no aggregate loss exceeds it",
+      "note": "Zero charge at or above the maximum aggregate loss.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:20Z/be9b"
+     }
     },
     {
      "id": "r4",
@@ -11713,7 +12593,15 @@
      "statement": "A per-occurrence limit reduces the variance of the aggregate loss distribution and the likelihood of reaching the maximum premium, so the insurance charge φ(r_G) is lower than an unlimited Table M charge.",
      "concept": "Retrospective Rating Per-Occurrence Loss Limits",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Insurance Charge Reflecting Loss Limitation (ICRLL)",
+      "quote": "A plan with a per-occurrence limit therefore usually has a lower aggregate charge $\\phi(r_G)$ at entry ratios above 1 than the unlimited Table M charge at the same entry ratio for the same risk.",
+      "note": "Per-occurrence limit lowers phi(r_G) against the unlimited charge (Fisher pp.78-79).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:20Z/be9b"
+     }
     },
     {
      "id": "r6",
@@ -11856,7 +12744,15 @@
      "statement": "A high R² and close visual fit support fitting a linear excess severity line for a Pareto, but the regression slope is sensitive to the few largest claims, so the estimated parameters can change substantially with small changes in large losses.",
      "concept": "Pareto Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Excess and Deductible Rating",
+      "quote": "A high $R^2$ supports the linear shape, but the slope of the regression line is sensitive to the size of the largest claims, and the calculated distribution parameters could be significantly affected by changes in just a few of these numbers.",
+      "note": "Bahnemann p.160 caution on fitting a Pareto from the excess-severity regression, with the R^2 support of Example 5.4.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:18Z/81e2"
+     }
     }
    ]
   },
@@ -11932,7 +12828,15 @@
      "statement": "A guaranteed cost policy has a fixed premium known at inception, giving stable cash flow, but it does not adjust for good loss experience and typically costs more upfront because the insurer bears all loss variability.",
      "concept": "Guaranteed Cost Plan",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loss Sensitive Rating",
+      "quote": "Under a guaranteed-cost policy the premium is fixed up front and the insured does not share in its own risk, except perhaps through a small deductible: its cost is certain and its cash flow stable, but good loss experience is not reflected, and the insurer bears all of the variability.",
+      "note": "Guaranteed cost: fixed premium, stable cost, no reflection of good experience, insurer bears the variability (Fisher pp.21, 100, 121).",
+      "date": "2026-10-31",
+      "run": "validate-lee-2026-10-31T12:21Z/714a"
+     }
     },
     {
      "id": "r6",
@@ -12102,7 +13006,15 @@
        "page": "Frequency Distribution",
        "quote": "A zero-truncated distribution has $p_0^T = 0$ and $p_k^T = p_k/(1 - p_0)$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Merit Rating",
+      "quote": "In general, the relative frequency of the risks with at least one claim is $R = 1/(1 - \\Pr(N = 0))$, because the risks with no claim contribute none of the claims.",
+      "note": "Generalises Bailey & Simon Appendix II to any count distribution: E(N|N>=1)/E(N) = 1/(1 - Pr(N=0)).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:19Z/4af0"
+     }
     },
     {
      "id": "r4",
@@ -12344,7 +13256,15 @@
      "statement": "To center a continuous predictor at its base level, add the predictor's main-effect coefficient times the base value (here ln of base AOI) to the original intercept; the main-effect and interaction coefficients are unchanged and the interaction is not included in the adjustment.",
      "concept": "Centering Variables in a GLM",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Generalized Linear Model",
+      "quote": "Since $\\beta_0 + \\beta_1 \\ln x = (\\beta_0 + \\beta_1 \\ln b) + \\beta_1 \\ln(x/b)$, the new intercept is the old intercept plus the predictor's main-effect coefficient times $\\ln b$…The slope of $\\ln x$ and the interaction coefficient, their standard errors and the number of parameters are unchanged.",
+      "note": "Gives the centering adjustment to the intercept (main-effect slope times ln of the base) with the slope and interaction coefficients unchanged; the interaction goes into the interacted variable's main effect, not the intercept.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:23Z/2047"
+     }
     },
     {
      "id": "r5",
@@ -12352,7 +13272,15 @@
      "statement": "After centering at base levels, the intercept represents the predicted value (base rate) for a risk at all base levels, making it directly interpretable.",
      "concept": "Centering Variables in a GLM",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Generalized Linear Model",
+      "quote": "after centering the intercept gives the prediction for a risk at every base level.",
+      "note": "Says the centered intercept gives the prediction for a base risk, which is what makes it interpretable as the base rate.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:23Z/2047"
+     }
     },
     {
      "id": "r6",
@@ -12360,7 +13288,15 @@
      "statement": "Centering makes coefficients of variables involved in interactions more intuitive, avoiding counterintuitive signs (e.g., a positive sprinklered coefficient) that arise when the continuous variable is zero outside the data's range; it does not change the continuous variable's own coefficient or significance, nor the number of parameters.",
      "concept": "Centering Variables in a GLM",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Generalized Linear Model",
+      "quote": "For $\\ln(\\text{AOI})$, that is an amount of insurance of \\$1, far outside the data, so such a coefficient can come out with a counterintuitive sign that no real policy would pay.…The slope of $\\ln x$ and the interaction coefficient, their standard errors and the number of parameters are unchanged.",
+      "note": "Explains the counterintuitive sign of an interacted coefficient at x = 0 outside the data, which centering removes, and that the continuous variable's coefficient, its significance and the parameter count are unchanged.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:23Z/2047"
+     }
     }
    ]
   },
@@ -12479,7 +13415,15 @@
        "page": "Loss Ratio",
        "quote": "\\text{Loss Ratio} = \\frac{\\text{Losses} + \\text{LAE}}{\\text{Earned Premium}}"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Expenses",
+      "quote": "A load stated as a percentage of premium goes in the denominator; LAE stated as a percentage of loss multiplies the loss in the numerator",
+      "note": "Bahnemann Example 6.3: ALAE at 20% of indemnity multiplies loss, variable expenses divide.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:18Z/81e2"
+     }
     },
     {
      "id": "r8",
@@ -12593,7 +13537,15 @@
        "page": "Loss Ratio Method",
        "quote": "$$\\text{Indicated Change} = \\frac{\\text{Projected Loss \\& LAE Ratio} + F\\%}{1 - V - Q_T} - 1$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Expenses",
+      "quote": "premium equals expected loss plus fixed expense, divided by one minus the sum of the variable expense, commission, tax, profit and risk percentages.",
+      "note": "Bahnemann eq.6.5 with v including the profit and risk loads as % of premium; LAE in the loss per the next sentence's rule.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:18Z/81e2"
+     }
     }
    ]
   },
@@ -13007,7 +13959,15 @@
      "statement": "In a severity model a deductible removes many small claims, so average claim size rises with the deductible; a positive severity coefficient is therefore a distortion and not the cost of the coverage.",
      "concept": "Severity Modeling",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Generalized Linear Model",
+      "quote": "In a severity model a positive deductible coefficient is to be expected: the deductible lowers severity's numerator by eliminating part of each loss, but it also eliminates many small claims, lowering the denominator (the claim count), and the second effect is usually the stronger, so average claim size most often rises with the deductible. It is not the cost of the coverage.",
+      "note": "Goldburd §9.1 fn.19: a deductible eliminates many small claims, so severity rises with it; the coefficient is not the coverage's cost.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:23Z/2047"
+     }
     }
    ]
   },
@@ -13023,7 +13983,15 @@
      "statement": "In a single-feature Gaussian identity-link penalized (ridge-type) regression on a high-cardinality categorical feature, the coefficient for level k is the level's deviation from the overall mean divided by (lambda/n_k + 1): beta_k = (ybar_k - ybar)/(lambda/n_k + 1).",
      "concept": "Penalized Regression for High-Cardinality Categorical Features",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "High Dimensional Variables",
+      "quote": "the ridge estimate for level $j$ is $\\hat{\\beta}_j = \\frac{n_j}{n_j + \\lambda}\\,\\bar{y}_j = \\bar{y}_j/(1 + \\lambda/n_j)$",
+      "note": "With y_i the deviation from the grand average (defined just before), gives the ridge coefficient for a level as its mean deviation over (1 + lambda/n_j) (Holmes & Casotto App. A).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:23Z/2047"
+     }
     },
     {
      "id": "r2",
@@ -13211,7 +14179,15 @@
        "page": "Clash Cover",
        "quote": "It is penetrated when several policies (or lines) are involved in the same occurrence, when extra-contractual obligations (ECO) or awards in excess of policy limits (XPL) are paid, or when ALAE added to loss pushes an occurrence over the retention."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loss Sensitive Rating",
+      "quote": "One occurrence that triggers retentions on several lines can be capped by a single combined retention on the sum of retained losses from that occurrence, a *clash deductible* or *clash aggregate*.",
+      "note": "Fisher's clash coverage, one retention on the sum of retained losses from an occurrence across lines (pp.29-30).",
+      "date": "2026-10-31",
+      "run": "validate-lee-2026-10-31T12:21Z/714a"
+     }
     },
     {
      "id": "r3",
@@ -13511,7 +14487,15 @@
      "statement": "To check consistency of assumptions in a loss-sensitive pricing model, add the predicted primary, per-occurrence excess and aggregate excess losses across the plans and accounts the plan might write and compare the sum with the predicted total losses; if they do not compare reasonably, investigate the assumptions behind the excess estimates.",
      "concept": "Loss-Sensitive Rating Plan Consistency of Assumptions",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loss Sensitive Rating",
+      "quote": "The sum of the predicted primary, per-occurrence excess and aggregate excess losses should compare reasonably with the predicted total losses, for the various plans that might be written on various accounts; if it does not, the assumptions behind the excess estimates need investigating.",
+      "note": "Fisher Ch.4 §3 consistency check (p.105).",
+      "date": "2026-10-31",
+      "run": "validate-lee-2026-10-31T12:21Z/714a"
+     }
     },
     {
      "id": "r2",
@@ -13541,7 +14525,15 @@
        "page": "Pure Premium",
        "quote": "is expected loss and LAE per unit of exposure — the portion of the rate that pays claims, before any provision for expenses or profit."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loss Sensitive Rating",
+      "quote": "A rating bureau's \"pure premium\" is sometimes loaded with non-loss items such as LAE and loss-based assessments, so it can be larger than a loss-only estimate.",
+      "note": "Bureau pure premium loaded with non-loss items (Fisher p.105).",
+      "date": "2026-10-31",
+      "run": "validate-lee-2026-10-31T12:21Z/714a"
+     }
     },
     {
      "id": "r4",
@@ -13549,7 +14541,15 @@
      "statement": "Applying unadjusted bureau excess factors, which are ratios to the bureau pure premium, to a loss-only estimate that excludes items in the pure premium (e.g., LAE) understates excess losses, so the bureau pure premium basis should be checked first when parts sum below the total.",
      "concept": "Excess Loss Factors",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loss Sensitive Rating",
+      "quote": "Unadjusted bureau excess factors multiplied by a loss estimate that excludes those items understate excess losses, sometimes substantially.",
+      "note": "Unadjusted bureau excess factors on a loss-only estimate understate excess (Fisher p.105).",
+      "date": "2026-10-31",
+      "run": "validate-lee-2026-10-31T12:21Z/714a"
+     }
     }
    ]
   }

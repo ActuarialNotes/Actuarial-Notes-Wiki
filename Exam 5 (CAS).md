@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:b28530b62d599012b3dc9d4543dedcafd977cc18e333349576cb42451543b6e3
+  content_hash: sha256:85d9f5ce684cb0a381532c1e858ae93ae2835dd6e10b3cfcccffce24a8406a9e
   sources:
     - "CAS, Exam Content Outline — Basic Techniques for Ratemaking and Estimating Claim Liabilities (Exam 5), Fall 2026 (Exam_5_CO_2026_F v02 2026_09_15, 6 pp.; https://www.casact.org/sites/default/files/2026-03/Exam_5_CO_2026_Fall.pdf, sha256:fd8373ae9bbe7e56b93f99cee304c76c1d29a9d0dc7f07e6ed500bd647f41795), pp.1-6"
     - "Werner, G. and Modlin, C., Basic Ratemaking, CAS, Fifth Edition, May 2016 (https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c), bookmark outline and full-text search for each Key concepts term"

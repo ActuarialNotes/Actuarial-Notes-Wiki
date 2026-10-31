@@ -17,12 +17,12 @@ verification:
 
 > $$\text{Damages} = \underbrace{\text{Pecuniary}}_{\text{income, care, cost}} + \underbrace{\text{Non-pecuniary}}_{\text{pain and suffering}}$$
 
-- **What must be proved:** a duty of care, breach of the standard of care, causation, and damages. Failure on any element defeats the claim entirely, which is why liability is contested rather than conceded.
-- **Contributory negligence** apportions the loss: a plaintiff $30\%$ responsible for their own injury recovers $70\%$ of assessed damages. Canada uses apportionment rather than the old bar to recovery.
+- **What must be proved:** a duty of care, breach of the standard of care, causation, and damages. Failure on any element defeats the claim entirely.
+- **Contributory negligence** apportions the loss: a plaintiff $30\%$ responsible for their own injury recovers $70\%$ of assessed damages. Canada uses apportionment.
 - **The non-pecuniary cap.** Since the Supreme Court's 1978 trilogy, Canadian awards for pain and suffering are capped at an inflation-indexed ceiling (roughly $\$100{,}000$ in 1978 dollars). This is the structural reason Canadian bodily injury severities are far below American ones, and candidates should cite it whenever asked to compare the two systems.
 - **Costs follow the event** in Canada: the losing party generally pays a portion of the winner's legal costs. This discourages weak claims and weak defences alike, and is another significant difference from the American rule.
-- **Actuarial consequences:** tort claims are **long-tailed** (years from accident to resolution), **severity-driven**, and sensitive to judicial trend, so they carry the largest reserve uncertainty in a P&C book. Development patterns depend on court backlogs, limitation periods and settlement practice as much as on injury severity.
-- Tort damages are reduced by [[Collateral Benefits]] already received, and future losses are converted to present value using court-prescribed or evidence-based discount rates.
+- **Actuarial consequences:** tort claims are **long-tailed** (years from accident to resolution) and sensitive to judicial trend. Development patterns depend on court backlogs, limitation periods and settlement practice.
+- Future losses are converted to present value using court-prescribed or evidence-based discount rates.
 
 ![[Media/Figures/Tort_Litigation.svg|340]]
 
@@ -55,4 +55,4 @@ verification:
 > >
 > > $$\$1{,}477{,}288 - \$95{,}000 = \$1{,}382{,}288$$
 > >
-> > Observe where the money is: $74\%$ of the award is **future income loss**, a discounted annuity. That is why the prescribed discount rate is one of the most consequential numbers in the Canadian tort system, and why a $1\%$ change in it moves liability reserves far more than a change in claim frequency does.
+> > Observe where the money is: $74\%$ of the award is **future income loss**, a discounted annuity.

@@ -11,14 +11,15 @@ wiki_link:
   - Concepts/Correlation
   - Concepts/Risk+Modeling
   - Concepts/Risk+Capital
+  - Concepts/Risk+Diversification
 answer: "D"
 points: 1
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-10-18
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:eed29c4bd4d562985cb33fcf92996dd4429470c6f9eff5c73f13d21c347c0ad3
+  content_hash: sha256:a5ef1b46e7a50c97c2b085ba793c60556bf0fb6ae9467178195ced4b0c545444
   sources:
     - "Directive 2009/138/EC (Solvency II), Annex IV §1 Basic SCR formula and correlation matrix (Market-Default 0.25, Market-Non-life 0.25, Default-Non-life 0.5), as published by legislation.gov.uk (original as adopted), sha256:4ebfc6d5b0e76219fd253e976fc953a7e86c88ddb09e4ae9bcce0f2a88cb1d4b — https://www.legislation.gov.uk/eudr/2009/138/annex/IV"
     - "CAS Exam 9 Content Outline, Fall 2026 (v01 2026-03-18), Domains A-D tasks pp.3-6 and text references pp.7-8, sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"

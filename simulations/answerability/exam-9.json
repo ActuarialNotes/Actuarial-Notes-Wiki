@@ -9124,7 +9124,15 @@
        "page": "Mortgage-Backed Security",
        "quote": "A **Mortgage-Backed Security** (MBS) is a bond whose cash flows come from a pool of [[Mortgage Loan|mortgage loans]]: the borrowers' interest, scheduled principal and prepayments are collected by a servicer and passed to the investors."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Securitization",
+      "quote": "Whether the classes are pro-rata (a *pass-through*) or prioritised tranches ([[Structured Finance]]), investors collectively receive exactly what the pool produces",
+      "note": "Securitization (tagged) defines a pass-through as pro-rata shares of the pool's cash flows, as opposed to prioritised tranches — the requirement. A second supporting quote on Structured Finance (tagged): 'A pass-through (a pro-rata share of the pool) simply inherits the pool's average rating.' No retag of Mortgage-Backed Security needed.",
+      "date": "2026-10-31",
+      "run": "g9-sort-ex9"
+     }
     },
     {
      "id": "r3",
@@ -9196,7 +9204,13 @@
        "page": "Residual Market",
        "quote": "**The Residual Market** is the mechanism that provides coverage to risks the voluntary market will not write at approved rates."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "One of eight alternative sample analogies in part (b) (NFIP/Citizens/FHCF); the examiner accepted any analogous mechanism, and the CAT bond / reinsurance analogies the other sample answers give are taught on the tagged pages.",
+      "date": "2026-10-31",
+      "run": "g9-sort-ex9"
+     }
     }
    ]
   },
@@ -9536,7 +9550,13 @@
      "statement": "When premium is raised, the expense ratio and loss ratio assumptions determine how expenses and losses scale with the added premium; if the loss and expense ratios are held constant, the added premium is multiplied by (1 − expense ratio − loss ratio) plus investment return on (1 − expense ratio).",
      "concept": "Economic Profit",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "A step of this solution's plan: holding the given loss and expense ratios fixed as premium changes is arithmetic on the question's own data.",
+      "date": "2026-10-31",
+      "run": "g9-sort-ex9"
+     }
     }
    ]
   },
@@ -9552,7 +9572,15 @@
      "statement": "The discounted loss ratio equals the undiscounted loss ratio divided by (1 + interest rate) raised to the loss reserve duration, since losses are paid at the end of the period, on average at the duration.",
      "concept": "Risk-Adjusted Return on Capital (RAROC)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Insurance Cash Flows",
+      "quote": "$L$ is the nominal (undiscounted) expected loss, $p_t$ the **payout pattern** — the share of $L$ paid at time $t$, summing to $1$ — and $v = 1/(1+r)$ the [[Discount Factor|discount factor]] at a risk-free rate $r$.",
+      "note": "Insurance Cash Flows (tagged) teaches discounting nominal losses by their payout timing at v = 1/(1+r); the question's given loss reserve duration collapses the pattern to one payment at that time. Coordinator may prefer not-required (time value of money on given data).",
+      "date": "2026-10-31",
+      "run": "g9-sort-ex9"
+     }
     },
     {
      "id": "r2",
@@ -10187,7 +10215,13 @@
      "statement": "Franchise value of a book of identical policies is the per-policy value scaled by the number of policies.",
      "concept": "Franchise Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Arithmetic: the question says the book is 100 identical policies, so the total is 100 × the per-policy value.",
+      "date": "2026-10-31",
+      "run": "g9-sort-ex9"
+     }
     },
     {
      "id": "r5",
@@ -10272,7 +10306,15 @@
      "statement": "Catastrophe bonds exposed to different perils (e.g., hurricane and earthquake) are essentially uncorrelated, so a CDO pool mixing perils is more diversified than separate single-peril pools.",
      "concept": "Catastrophe Bonds",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Structured Finance",
+      "quote": "a senior tranche's needs the probability that *many* assets default together, so it is acutely sensitive to **default [[Correlation|correlation]]** and to errors in default probabilities and recoveries.",
+      "note": "Structured Finance (tagged) teaches that a senior tranche's quality depends on default correlation in the pool — mixing uncorrelated perils is the question's application of it; that hurricane and earthquake bonds are uncorrelated is the scenario's own reasoning.",
+      "date": "2026-10-31",
+      "run": "g9-sort-ex9"
+     }
     },
     {
      "id": "r4",
@@ -10335,7 +10377,13 @@
      "statement": "Rate on line (ROL) is reinsurance premium divided by the policy limit; loss on line (LOL) is expected loss divided by the policy limit.",
      "concept": "Catastrophe Reinsurance Pricing",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Restates the question: ROL and LOL are defined in the stem.",
+      "date": "2026-10-31",
+      "run": "g9-sort-ex9"
+     }
     },
     {
      "id": "r2",
@@ -10356,7 +10404,13 @@
      "statement": "ROL/LOL equals premium divided by expected loss for a reinsurance layer, so it is directly comparable to the CAT bond spread as a price per dollar of expected loss.",
      "concept": "Catastrophe Reinsurance Pricing",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Follows by arithmetic from the stem's two definitions (ROL/LOL = premium/expected loss); that a cat bond spread is a multiple of EL is already on CAT Bonds (tagged).",
+      "date": "2026-10-31",
+      "run": "g9-sort-ex9"
+     }
     },
     {
      "id": "r4",
@@ -10364,7 +10418,13 @@
      "statement": "To compare CAT bond and reinsurance costs, match the reinsurance LOL layer to the bond's expected loss percent of principal in the same year and compare the premium-to-expected-loss ratios; a lower ratio means cheaper coverage for the same expected loss.",
      "concept": "Catastrophe Bonds",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "A step of this solution's plan: match the LOL row to the bond's EL in the same year and compare the given ratios.",
+      "date": "2026-10-31",
+      "run": "g9-sort-ex9"
+     }
     },
     {
      "id": "r5",
@@ -10372,7 +10432,13 @@
      "statement": "Reinsurance ROL/LOL multiples rise as layers become higher and less likely to be hit (lower LOL), so high excess layers are expensive per dollar of expected loss, and these multiples are volatile year to year.",
      "concept": "Catastrophe Reinsurance Pricing",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Read directly off the question's table (the part says 'Using the above information'): multiples rise at low LOL and change sharply between 2005 and 2006.",
+      "date": "2026-10-31",
+      "run": "g9-sort-ex9"
+     }
     },
     {
      "id": "r6",
@@ -10473,7 +10539,15 @@
      "statement": "Using the exceedance probability curve at a chosen exceedance probability, read off the ratio of (expected loss plus capital) to expected loss for each line, and solve for the line's allocated capital C.",
      "concept": "VaR Exceedance Probability Curves",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Capital",
+      "quote": "**VaR or EPD by line** — size each line to the firm's ruin probability or EPD ratio as if it stood alone.",
+      "note": "Risk Capital (tagged, and on the syllabus) teaches sizing each line's capital to a chosen exceedance/ruin probability standalone — Cummins's exceedance-probability allocation; reading the ratio off the given curve and solving for C is the question's data. Coordinator: if this is judged too thin, write one line on Risk Capital from Cummins 2000's exceedance-probability method (assigned, not readable — use Merton-Perold/Myers-Read open texts) and group it with nothing else.",
+      "date": "2026-10-31",
+      "run": "g9-sort-ex9"
+     }
     },
     {
      "id": "r6",
@@ -11534,7 +11608,15 @@
        "page": "Financial Economics",
        "quote": "$$\\text{UPM} = -k\\,R_f + \\beta_u\\big[E(R_m) - R_f\\big]$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Financial Economics",
+      "quote": "$$\\text{UPM} = -k\\,R_f + \\beta_u\\big[E(R_m) - R_f\\big]$$",
+      "note": "Financial Economics teaches the insurance CAPM, UPM = −k R_f + β_u[E(R_m) − R_f]; with k = L/P this is Cummins's corrected r_i = −(k_i/s_i)r_F + β_i(r_M − r_F). Retag done, fact check re-passed (F-001). The record's existing quote closes it.",
+      "date": "2026-10-31",
+      "run": "g9-sort-ex9"
+     }
     },
     {
      "id": "r2",
@@ -11542,7 +11624,13 @@
      "statement": "The ratio k_i/s_i equals liabilities divided by premium (L_i/P_i), so the risk-free interest credit on policyholder-supplied funds must be expressed per dollar of premium rather than per dollar of equity.",
      "concept": "Insurance CAPM",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Algebra on the question's own definitions: liabilities/equity divided by premium/equity is liabilities/premium.",
+      "date": "2026-10-31",
+      "run": "g9-sort-ex9"
+     }
     },
     {
      "id": "r3",
@@ -11559,7 +11647,15 @@
        "page": "Underwriting Profit",
        "quote": "In long-tailed lines (personal auto bodily injury, workers compensation) years may pass between the premium and the settlement of all claims, and the investment income can be large enough to accept an underwriting loss and still achieve the target total return;"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Financial Economics",
+      "quote": "Fairley's model gives the insurer the risk-free rate on the premium it holds, $-k\\,R_f$, plus a premium for systematic underwriting risk, $\\beta_u\\big[E(R_m) - R_f\\big]$.",
+      "note": "Same retag: Financial Economics states the risk-free credit on held premium enters negatively and a large k lowers the indicated UPM.",
+      "date": "2026-10-31",
+      "run": "g9-sort-ex9"
+     }
     },
     {
      "id": "r4",
@@ -11657,7 +11753,15 @@
        "page": "Risk Diversification",
        "quote": "$$C = \\sqrt{\\sum_i \\sum_j \\rho_{ij}\\, C_i\\, C_j}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Diversification",
+      "quote": "$$C = \\sqrt{\\sum_i \\sum_j \\rho_{ij}\\, C_i\\, C_j}$$",
+      "note": "Risk Diversification teaches square-root correlation-matrix aggregation and the diversification credit — exactly what the question tests. Retag done, fact check re-passed (F-003); the record's existing quote closes it.",
+      "date": "2026-10-31",
+      "run": "g9-sort-ex9"
+     }
     },
     {
      "id": "r2",
@@ -11670,7 +11774,15 @@
        "page": "Risk Diversification",
        "quote": "Each pair appears twice in the double sum, so the cross term is $2\\rho_{ij} C_i C_j$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Diversification",
+      "quote": "Each pair appears twice in the double sum, so the cross term is $2\\rho_{ij} C_i C_j$.",
+      "note": "Risk Diversification teaches square-root correlation-matrix aggregation and the diversification credit — exactly what the question tests. Retag done, fact check re-passed (F-003); the record's existing quote closes it.",
+      "date": "2026-10-31",
+      "run": "g9-sort-ex9"
+     }
     },
     {
      "id": "r3",
@@ -11687,7 +11799,15 @@
        "page": "Diversification Credit",
        "quote": "Adding the margins together assumes perfect correlation; the credit removes part of that over-statement."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Diversification",
+      "quote": "A simple sum assumes every correlation is one, which gives no benefit and an upper bound.",
+      "note": "Risk Diversification teaches square-root correlation-matrix aggregation and the diversification credit — exactly what the question tests. Retag done, fact check re-passed (F-003); the record's existing quote closes it.",
+      "date": "2026-10-31",
+      "run": "g9-sort-ex9"
+     }
     },
     {
      "id": "r4",

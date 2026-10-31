@@ -317,7 +317,15 @@
      "statement": "The asset-share model evaluates the long-term profitability of a policy cohort, recognizing that a short-term loss on new business can be offset by profitable renewals, which have better loss experience and lower acquisition costs.",
      "concept": "Asset Share Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Lifetime Value",
+      "quote": "LTV justifies first-year pricing below full cost where acquisition costs are large and renewal margins are reliable",
+      "note": "Lifetime Value (on Exam 5's syllabus) teaches the long-term (asset-share/lifetime) view: a first-year loss is justified by profitable renewals.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort1"
+     }
     },
     {
      "id": "r5",
@@ -427,7 +435,15 @@
        "page": "Territorial Rating",
        "quote": "**Flattening a territory differential** has the effect Werner & Modlin describe for any rating variable: risks with different expected costs pay the same rate, so the low-cost risks subsidise the high-cost ones"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Coinsurance Rating",
+      "quote": "On an underinsured home, the payment doesn't cover the whole loss when one exceeds the face value, and a rate set for full ITV collects too little premium for its expected payments",
+      "note": "Tagged page teaches that a rate not reflecting ITV leaves the underinsured undercharged (inequitable); the subsidy between territories follows.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort1"
+     }
     },
     {
      "id": "r6",
@@ -582,7 +598,15 @@
      "statement": "Average paid claim (paid severity) equals cumulative paid losses divided by cumulative closed claim counts at each age.",
      "concept": "Claim Severity Diagnostics",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Close Year",
+      "quote": "This is Werner & Modlin's paid severity — \"paid losses on closed claims divided by closed claims\"",
+      "note": "Syllabus page defines paid severity as paid losses divided by closed claim counts.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort1"
+     }
     },
     {
      "id": "r4",
@@ -777,7 +801,13 @@
      "statement": "Claim count and dollar triangles must be treated consistently as either cumulative or incremental when applying the frequency-severity method.",
      "concept": "Frequency-Severity Method",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Examiner's grading note on how to read this question's ambiguous data (counts and dollars both cumulative or both incremental); not course content.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort1"
+     }
     }
    ]
   },
@@ -1005,7 +1035,15 @@
      "statement": "The case outstanding development method is best suited to claims-made coverages and is not appropriate for occurrence coverages such as workers compensation.",
      "concept": "Case Outstanding Development Method",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Case Outstanding Development Method",
+      "quote": "That holds only where most claims are reported within the accident period — claims-made coverages and report-year analysis — which limits its use",
+      "note": "The method page states it suits claims-made / report-year data, not occurrence coverage with material IBNR.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort1"
+     }
     },
     {
      "id": "r8",
@@ -1207,7 +1245,15 @@
      "statement": "The expense fee is a flat per-policy amount that earns pro-rata over the policy term along with the rest of the premium, so it is not fully earned at inception.",
      "concept": "Expense Fee Earning",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Earned Premium",
+      "quote": "the premium it has earned the right to keep, recognized pro rata as the policy term elapses",
+      "note": "Tagged page: premium (fee included, as Extension of Exposures re-rates it) earns pro rata over the term.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort1"
+     }
     }
    ]
   },
@@ -1486,7 +1532,15 @@
        "page": "Ceded Loss Reserve",
        "quote": "Typically per-occurrence excess comes off first, then the quota share applies to what remains, and the stop-loss applies last to protect the final net result."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Reinsurance",
+      "quote": "Aggregate stop loss — responds when the whole year's losses exceed a threshold.",
+      "note": "Tagged page defines the aggregate stop loss; its order after the quota share is given in the question.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort1"
+     }
     },
     {
      "id": "r3",
@@ -1537,7 +1591,15 @@
        "page": "Ceded Loss Reserve",
        "quote": "On a quota share the gross, ceded and net factors are identical."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Ceded Losses",
+      "quote": "Under quota share, ceded is a fixed share $c$ of gross, so the ceded triangle is a scalar multiple of the gross one and develops identically",
+      "note": "Linked page: a quota share leaves the development pattern (and so the tail) unchanged.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort1"
+     }
     },
     {
      "id": "r6",
@@ -2096,7 +2158,15 @@
      "statement": "If a growing book writes more premium late in the year, the even-earning assumption understates the portion of earned premium at new rates, so on-level factors and on-level premium are overstated, the loss ratio is understated, and the indicated rate increase is too low.",
      "concept": "On-Level Premium (Parallelogram Method)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Parallelogram Method",
+      "quote": "It assumes uniform writing — false for seasonal business such as boat owners, whose policies are bought ahead of the season; refining to quarters or months, or weighting by the actual distribution of writings, helps",
+      "note": "Tagged page names the uniform-writing assumption and its failure; the direction of the error for a book writing more late in the year follows from it.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort1"
+     }
     }
    ]
   },
@@ -2291,7 +2361,15 @@
        "page": "Berquist-Sherman Method",
        "quote": "$$\\text{Adjusted Case}_{\\text{AY},n} = \\text{Case}_{\\text{latest},n} \\times \\left(1 + t\\right)^{-(\\text{years before latest})}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Berquist-Sherman Method",
+      "quote": "Trend the latest diagonal's average case outstanding backwards at…to restate each historical cell at today's adequacy level.",
+      "note": "Re-quote after today's edit: the case adequacy adjustment de-trends the latest diagonal's average case outstanding.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort1"
+     }
     },
     {
      "id": "r3",
@@ -2651,7 +2729,15 @@
        "page": "Balancing Back",
        "quote": "A class's rate change is $(1 + \\Delta)\\,\\text{OBF}\\,r_i^{\\text{new}}/r_i^{\\text{old}} - 1$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Considerations for Implementing Rates",
+      "quote": "applied to the current distribution of exposures, the new relativities alone would produce",
+      "note": "Tagged page: the relativity change (new over current relativities), weighted over the current distribution, gives the premium effect of the revision.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort1"
+     }
     },
     {
      "id": "r2",
@@ -2664,7 +2750,15 @@
        "page": "Balancing Back",
        "quote": "$$\\text{OBF} = \\frac{\\sum_i w_i\\, r_i^{\\text{old}}}{\\sum_i w_i\\, r_i^{\\text{new}}}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Considerations for Implementing Rates",
+      "quote": "must be off-balanced against any simultaneous change in relativities so the two together deliver the intended effect",
+      "note": "Tagged page teaches the off-balance of relativity changes against the overall change.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort1"
+     }
     },
     {
      "id": "r3",
@@ -2720,7 +2814,15 @@
        "page": "Balancing Back",
        "quote": "The base class's relativity stays at 1.00, but its rate still changes, because the base rate carries the off-balance."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Considerations for Implementing Rates",
+      "quote": "a cap on the change for any level of a rating variable is made up by adjusting the base rate and the other relativities",
+      "note": "Tagged page: a cap on one level (the base included) is made up through the base rate and the other relativities (Werner Ch.14 pp.280-283).",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort1"
+     }
     },
     {
      "id": "r7",
@@ -2733,7 +2835,13 @@
        "page": "Balancing Back",
        "quote": "$B$ is the base rate, which is the rate charged to the base class, whose relativity is 1.00."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Assembling the final relativities from this solution's own factors (shortfall recovery over the base-rate cap adjustment) is a step of this solution's plan; the method is closed by r4-r6.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort1"
+     }
     }
    ]
   },
@@ -3336,7 +3444,15 @@
      "statement": "Capping can worsen adverse selection because high-risk insureds with capped increases stay while low-risk insureds who receive decreases or shop elsewhere leave, worsening the portfolio mix.",
      "concept": "Adverse Selection",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Adverse Selection",
+      "quote": "low risks find the price poor value and leave; the remaining pool is worse",
+      "note": "Linked page teaches the mechanism (good risks leave, the pool worsens) that capping triggers when decreases are capped or underpriced risks stay.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort1"
+     }
     },
     {
      "id": "r5",
@@ -3853,7 +3969,15 @@
      "statement": "Accident year data affected by an unusual event (such as a temporary slowdown in claim opening) is unreliable for selecting frequency and should be excluded from the selection, while severity, being a per-claim average, may be unaffected and justified separately.",
      "concept": "Frequency-Severity Development Technique",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Age to Age Factor",
+      "quote": "judgmental selection, documented — the honest answer when the column contains a known one-off",
+      "note": "Syllabus page: a period distorted by a known one-off is excluded or handled by documented judgment in the selection.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort1"
+     }
     },
     {
      "id": "r5",
@@ -4116,7 +4240,15 @@
        "page": "Actual vs Expected Analysis",
        "quote": "$$\\text{Expected emergence} = U_{\\text{prior}} \\times \\left(\\frac{1}{\\text{CDF}_{n+1}} - \\frac{1}{\\text{CDF}_{n}}\\right)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Actual vs Expected Analysis",
+      "quote": "The expected figure comes from the prior ultimate and the emergence pattern: the share of ultimate the pattern says should report (or be paid) between the two valuations.",
+      "note": "Re-quote after today's edit: expected emergence = ultimate times the change in percent reported (paid).",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort1"
+     }
     },
     {
      "id": "r2",
@@ -4333,7 +4465,15 @@
        "page": "Berquist-Sherman Method",
        "quote": "$$\\text{Adjusted Case}_{\\text{AY},n} = \\text{Case}_{\\text{latest},n} \\times \\left(1 + t\\right)^{-(\\text{years before latest})}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Berquist-Sherman Method",
+      "quote": "Trend the latest diagonal's average case outstanding backwards at…to restate each historical cell at today's adequacy level.",
+      "note": "Re-quote after today's edit: the case adequacy adjustment de-trends the latest diagonal's average case outstanding.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort1"
+     }
     },
     {
      "id": "r3",
@@ -4359,7 +4499,15 @@
        "page": "Berquist-Sherman Method",
        "quote": "$$\\text{Adjusted Reported}_{\\text{AY},n} = \\text{Paid}_{\\text{AY},n} + \\text{Adjusted Case}_{\\text{AY},n}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Berquist-Sherman Method",
+      "quote": "Multiply the restated averages by the open claim counts to get adjusted case reserves, add paid, and rebuild the reported triangle.",
+      "note": "Re-quote after today's edit: adjusted reported = paid + adjusted case outstanding.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort1"
+     }
     },
     {
      "id": "r5",
@@ -4987,7 +5135,15 @@
      "statement": "Age-to-age development factors are ratios of reported losses at successive evaluation ages for each accident year, and a selected factor (e.g., an average) is chosen for each age interval.",
      "concept": "Loss Development Method",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Age to Age Factor",
+      "quote": "Selecting a factor from the column of observations is the central judgment of the",
+      "note": "Syllabus page defines age-to-age factors and their selection.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort1"
+     }
     },
     {
      "id": "r2",
@@ -5093,7 +5249,15 @@
      "statement": "When variable expenses change during the future rate period (e.g., a commission cut), compute the permissible loss ratio for each sub-period and weight them by the portion of the rate period (time) each covers.",
      "concept": "Permissible Loss Ratio",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Variable Expenses",
+      "quote": "must be reflected prospectively rather than from historical ratios",
+      "note": "Page teaches that a commission change is reflected prospectively in V; weighting the two sub-periods by time is this solution's own step.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort1"
+     }
     },
     {
      "id": "r9",
@@ -5385,7 +5549,15 @@
      "statement": "Determine an accident year's maturity in months at the evaluation date (months from the start of the accident year to the valuation date) to select the correct development factor.",
      "concept": "Loss Development Method",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Development Triangle",
+      "quote": "maturities as columns (age in months since the start of the cohort)",
+      "note": "Syllabus page: maturity is the age in months since the start of the accident year.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort1"
+     }
     },
     {
      "id": "r4",
@@ -5808,7 +5980,15 @@
      "statement": "Indicated relativities are computed by dividing each class's pure premium by the overall (total) pure premium, normalizing so the exposure-weighted average relativity is 1.",
      "concept": "Pure Premium Method for Territory Ratemaking",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Territory Ratemaking",
+      "quote": "$$\\text{Territory Relativity}_i = \\frac{\\text{Pure Premium}_i}{\\text{Pure Premium}_{\\text{base}}}$$",
+      "note": "Tagged page: relativity = pure premium over the base's; using the total as the base is the question's choice.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort1"
+     }
     },
     {
      "id": "r4",
@@ -5978,7 +6158,13 @@
        "page": "Return on Capital",
        "quote": "$$\\iota = \\frac{M}{Q}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Return on equity on required surplus (premium-to-surplus ratio) comes from Feldblum's asset share paper, which is no longer on Exam 5's syllabus; Werner Ch.13 measures lifetime profit only as a percent of premium.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort1"
+     }
     },
     {
      "id": "r6",
@@ -6421,7 +6607,15 @@
      "statement": "To adjust for changing closure rates, project future incremental closed counts for the accident year by applying the incremental disposal rates from the latest calendar-year diagonal to the ultimate counts (remaining unclosed share), instead of averaging historical disposal rates.",
      "concept": "Frequency-Severity Method (Berquist-Sherman)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Frequency-Severity Method",
+      "quote": "Project the number of claims closing in each future period from historical disposal rates",
+      "note": "Tagged page teaches projecting future closed counts from disposal rates; choosing the latest diagonal's rates is this question's judgment given its changing closure rates.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort1"
+     }
     },
     {
      "id": "r3",
@@ -6705,7 +6899,15 @@
        "page": "Implied Development Method",
        "quote": "Limited factors are more stable than excess ones."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Ceded Losses",
+      "quote": "and the pattern is entirely different — later, steeper, and far more volatile",
+      "note": "Syllabus page: losses above a retention/basic limit develop later and more volatilely than ground-up, so historical (basic-limits) factors understate them.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort1"
+     }
     },
     {
      "id": "r7",
@@ -7119,7 +7321,15 @@
        "page": "Actual vs Expected Analysis",
        "quote": "$$\\text{Expected emergence} = U_{\\text{prior}} \\times \\left(\\frac{1}{\\text{CDF}_{n+1}} - \\frac{1}{\\text{CDF}_{n}}\\right)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Actual vs Expected Analysis",
+      "quote": "$$\\text{Expected emergence} = \\frac{U_{\\text{prior}} - \\text{Reported}_{n}}{1 - 1/\\text{CDF}_{n}} \\times \\left(\\frac{1}{\\text{CDF}_{n+1}} - \\frac{1}{\\text{CDF}_{n}}\\right)$$",
+      "note": "Re-quote after today's edit: the page's formula is the unreported amount divided by percent unreported times percent emerging (Friedland p.351).",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort1"
+     }
     },
     {
      "id": "r4",
@@ -8137,7 +8347,13 @@
        "page": "Business-Level Strategy",
        "quote": "$$\\Pi = q \\times (P - C)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Profit comparison of two candidate prices is arithmetic on the question's own costs, prices and switching probabilities.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort1"
+     }
     },
     {
      "id": "r2",
@@ -8145,7 +8361,13 @@
      "statement": "Compute the switching probability from the formula given for a risk, based on the difference between the competitor's offered rate and the new insurer's rate relative to true expected cost; risks switch only when offered a lower price.",
      "concept": "Adverse Selection",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The switching-probability formula is given in the question.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort1"
+     }
     },
     {
      "id": "r3",
@@ -8259,7 +8481,15 @@
      "statement": "For in-force premium at a date, weight the rate levels by the share of policies in force at that date that were written under each rate level, looking back one policy term from that date.",
      "concept": "In-Force Premium On-Leveling",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "In-Force",
+      "quote": "In-force premium is the full-term premium of each policy in effect at the date",
+      "note": "Tagged page: in-force premium is that of the policies in effect at the date (written within one term before it), each at its own rate level.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort1"
+     }
     },
     {
      "id": "r5",
@@ -8267,7 +8497,15 @@
      "statement": "When a fraction of policies is written on a single date (a special writing pattern), allocate that fraction entirely to the rate level in effect on that date and spread the remaining fraction uniformly across the period, then combine the weighted rate levels.",
      "concept": "Parallelogram Method",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Parallelogram Method",
+      "quote": "refining to quarters or months, or weighting by the actual distribution of writings, helps",
+      "note": "Tagged page: where writing isn't uniform, weight the rate levels by the actual distribution of writings; the special pattern itself is given in the question.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort1"
+     }
     },
     {
      "id": "r6",
@@ -9143,7 +9381,13 @@
      "statement": "Alternative approach: compute the ratio of trended ultimate excess counts to trended ultimate ground-up counts for undistorted years, average the ratios, and apply it to the projection year's ultimate ground-up counts to get excess counts.",
      "concept": "Ratio of Excess to Ground-Up Claim Counts",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "An alternative plan for this question (a ratio of excess to ground-up counts) accepted by the examiners; the method being tested (frequency projection from undistorted years, r3) is already closed.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort1"
+     }
     },
     {
      "id": "r6",
@@ -9602,7 +9846,13 @@
      "statement": "Projected ultimate medical-only claims are already at ultimate and are not subject to indemnity benefit level changes, so they are added to indemnity losses without development or trend.",
      "concept": "Workers Compensation Medical-Only Claims",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The medical-only figures are given as projected ultimates and the question states that only indemnity benefit changes inflate losses.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort1"
+     }
     },
     {
      "id": "r7",
@@ -9860,7 +10110,15 @@
      "statement": "Expected claims emerging over a period equal the prior unreported (or unpaid) amount, ultimate minus actual to date, times the percent emerging in the period divided by the percent still unreported (or unpaid) at the start; adding this to the actual to date gives the cumulative expected.",
      "concept": "Actual vs. Expected Claim Emergence (Bornhuetter-Ferguson)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Actual vs Expected Analysis",
+      "quote": "$$\\text{Expected emergence} = \\frac{U_{\\text{prior}} - \\text{Reported}_{n}}{1 - 1/\\text{CDF}_{n}} \\times \\left(\\frac{1}{\\text{CDF}_{n+1}} - \\frac{1}{\\text{CDF}_{n}}\\right)$$",
+      "note": "Tagged page's formula: prior unreported amount over percent unreported, times percent emerging in the period.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort1"
+     }
     },
     {
      "id": "r4",
@@ -9873,7 +10131,15 @@
        "page": "Actual vs Expected Analysis",
        "quote": "$$\\text{Expected emergence} = U_{\\text{prior}} \\times \\left(\\frac{1}{\\text{CDF}_{n+1}} - \\frac{1}{\\text{CDF}_{n}}\\right)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Actual vs Expected Analysis",
+      "quote": "The expected figure comes from the prior ultimate and the emergence pattern: the share of ultimate the pattern says should report (or be paid) between the two valuations.",
+      "note": "Re-quote after today's edit: expected emergence = ultimate times the change in percent reported (paid).",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort1"
+     }
     },
     {
      "id": "r5",
@@ -9950,7 +10216,15 @@
        "page": "Actual vs Expected Analysis",
        "quote": "$$\\text{Expected emergence} = U_{\\text{prior}} \\times \\left(\\frac{1}{\\text{CDF}_{n+1}} - \\frac{1}{\\text{CDF}_{n}}\\right)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Actual vs Expected Analysis",
+      "quote": "$$\\text{Expected emergence} = \\frac{U_{\\text{prior}} - \\text{Reported}_{n}}{1 - 1/\\text{CDF}_{n}} \\times \\left(\\frac{1}{\\text{CDF}_{n+1}} - \\frac{1}{\\text{CDF}_{n}}\\right)$$",
+      "note": "Re-quote after today's edit: current IBNR over percent unreported times percent emerging (syllabus page).",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort1"
+     }
     },
     {
      "id": "r3",
@@ -9958,7 +10232,13 @@
      "statement": "Update reported and paid claims at the new evaluation date by adding the period's expected (or actual) emergence to the prior cumulative reported and paid claims.",
      "concept": "Actual vs. Expected Claim Development",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Adding the period's emergence to the prior cumulative amount is the definition of a cumulative figure (arithmetic), not separate course content.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort1"
+     }
     },
     {
      "id": "r4",

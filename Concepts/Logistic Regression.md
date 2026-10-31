@@ -1,17 +1,15 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-05
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
   content_hash: sha256:fb0a20dc900dc789b12f4a5a5a2edd6dddd21fcac93fde65fad1983412a923f4
   sources:
-    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021; MAS-I reading), secs.4.2-4.3.5 (eqs.4.2-4.4, 4.10-4.12; PDF pp.142-150) and sec.4.4 (separation, PDF p.151), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
-    - "Larsen, 'Generalized Linear Models', CAS Study Note (Dec 2015, rev. June 2016; MAS-I reading), pp.1, 3, sha256:5c4ed4e8eacf72624f38c5313eb6903f57d627b6ac81ce52e0a5a69404af90bd — https://www.casact.org/sites/default/files/2021-03/MAS-I_Larsen.pdf"
-    - "Dobson & Barnett, An Introduction to Generalized Linear Models, 4th ed. (CRC 2018; MAS-I reading) — publisher eBook preview, printed contents Ch.8 (PDF p.11) and sec.1.2 Scope (PDF p.22), sha256:40ed0b2549113ee0bea29e41786886ce992ffa29251ad26fb1037385bb51611a — https://api.pageplace.de/preview/DT0400.9781351726221_A37406780/preview-9781351726221_A37406780.pdf"
-    - "Rodriguez, GLM lecture notes (Princeton), App. B secs.B.2-B.4.3 (PDF pp.4-11), sha256:92bc67a6a2fc52a0ffa2babfd7a13e175b2babb52dd28f778d5e307cc65aa286 — https://grodri.github.io/glms/notes/a2.pdf"
-    - "Rodriguez, GLM lecture notes (Princeton), ch.3 Logit Models for Binary Data, sec.3.2.2 (PDF p.11), sha256:2243f2c49c0e15545740a0b4fb8d98ad8a5b3e37653c13feee545195801efedc — https://grodri.github.io/glms/notes/c3.pdf"
-    - "Rodriguez, GLM lecture notes (Princeton), ch.6 Multinomial Response Models, secs.6.2.1, 6.5.2-6.5.3 (PDF pp.3-4, 15-19), sha256:f559d07ae73bdf381de5c19a9f0621419c635e5c6495c0135af940ae36807cbb — https://grodri.github.io/glms/notes/c6.pdf"
+    - "Rodríguez, Lecture Notes on Generalized Linear Models (Princeton), Ch. 3 Logit Models for Binary Data, §3.2.1 Maximum Likelihood Estimation (PDF p.10): log L(β) = Σ{y_i log π_i + (n_i − y_i) log(1 − π_i)} except for a constant; §3.2.2 grouped-data deviance → χ²(n−p) as n_i → ∞, not with individual data (PDF pp.11–12); exp(β_j) an odds ratio; §3.7 Other Choices of Link (PDF pp.41–43): 'The logit and probit transformations are almost linear functions of each other for values of π_i in the range from 0.1 to 0.9, and therefore tend to give very similar results… coefficients in a logit model should be standardized dividing by π/√3', sha256:2243f2c49c0e15545740a0b4fb8d98ad8a5b3e37653c13feee545195801efedc — https://grodri.github.io/glms/notes/c3.pdf"
+    - "Rodríguez, GLM notes, Ch. 6 Multinomial Response Models, §6.2.1 baseline-category multinomial logit (PDF p.3); §6.5 ordered logit / proportional odds (PDF pp.18–19), sha256:f559d07ae73bdf381de5c19a9f0621419c635e5c6495c0135af940ae36807cbb — https://grodri.github.io/glms/notes/c6.pdf"
+    - "Larsen, 'Generalized Linear Models', CAS Study Note (MAS-I reading), p.1 Quasi-Likelihood (a constant of proportionality between mean and variance solved alongside the betas; binomial over-dispersion); p.3 canonical links, sha256:5c4ed4e8eacf72624f38c5313eb6903f57d627b6ac81ce52e0a5a69404af90bd — https://www.casact.org/sites/default/files/2021-03/MAS-I_Larsen.pdf"
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), eq.(3.17) TSS = Σ(y_i − ȳ)², 'the amount of variability inherent in the response before the regression is performed' (PDF p.80); §3.2.2 'adding another variable always results in a decrease in the residual sum of squares on the training data… R² must increase' (PDF p.90); §4.4 'When there is substantial separation… parameter estimates for the logistic regression model are surprisingly unstable' (PDF p.151), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Logistic Regression.md

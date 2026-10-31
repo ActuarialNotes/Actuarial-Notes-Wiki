@@ -2528,7 +2528,15 @@
      "statement": "The logit and probit functions are very similar in shape and give similar fitted results; they are not substantially different.",
      "concept": "Logistic Regression",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Logistic Regression",
+      "quote": "The two curves are both S-shaped and almost linear functions of each other for probabilities between about $0.1$ and $0.9$, so they tend to give very similar fitted results.",
+      "note": "Teaches that logit and probit are both S-shaped, almost linear in each other for π in 0.1–0.9, and give very similar fits. Source: Rodríguez, GLM notes Ch.3 §3.7 'Other Choices of Link' (PDF pp.41–43), sha256:2243f2c4…, https://grodri.github.io/glms/notes/c3.pdf. Checked by a different agent from the writer (VALIDATE run 2026-10-31T19:16Z/23c2).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T19:16Z/23c2"
+     }
     }
    ]
   },
@@ -2714,7 +2722,15 @@
      "statement": "Double exponential smoothing computes a second smoothed series by applying the smoothing recursion to the first smoothed series: s_t^(2) = (1-w) s_t^(1) + w s_{t-1}^(2).",
      "concept": "Double Exponential Smoothing",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exponential Smoothing",
+      "quote": "$$\\hat{s}^{(2)}_t = (1-w)\\,\\hat{s}^{(1)}_t + w\\,\\hat{s}^{(2)}_{t-1}$$",
+      "note": "Teaches the second smoothing pass of Brown's double exponential smoothing in Frees' w notation (w = 1 − α). Source: Wikipedia 'Exponential smoothing' §Brown's LES (s''_t = αs'_t + (1−α)s''_{t−1}) and Nau (Duke) 411avg, with w = 1 − α; Frees 2010 index 'double smoothing, 274'. Checked by a different agent from the writer (VALIDATE run 2026-10-31T19:16Z/23c2).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T19:16Z/23c2"
+     }
     },
     {
      "id": "r4",
@@ -2722,7 +2738,15 @@
      "statement": "In double exponential smoothing the trend estimate is b_T = ((1-w)/w)(s_T^(1) - s_T^(2)).",
      "concept": "Double Exponential Smoothing",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exponential Smoothing",
+      "quote": "$$b_T = \\frac{1-w}{w}\\left(\\hat{s}^{(1)}_T - \\hat{s}^{(2)}_T\\right)$$",
+      "note": "Teaches the double-smoothing slope b_T = (1−w)/w (s^(1)_T − s^(2)_T). Source: Wikipedia 'Exponential smoothing' §Brown's LES b_t = α/(1−α)(s'_t − s''_t) and Nau (Duke) 411avg T_t, with w = 1 − α (Nau's S''_{t−1} subscript is an internal typo — logged on the page's fact-check log). Checked by a different agent from the writer (VALIDATE run 2026-10-31T19:16Z/23c2).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T19:16Z/23c2"
+     }
     },
     {
      "id": "r5",
@@ -2730,7 +2754,15 @@
      "statement": "In double exponential smoothing the level (intercept) at time T is a_T = 2 s_T^(1) - s_T^(2).",
      "concept": "Double Exponential Smoothing",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exponential Smoothing",
+      "quote": "At the last time $T$, the intercept (level) and slope estimates and the $l$-step forecast are: … $$a_T = 2\\hat{s}^{(1)}_T - \\hat{s}^{(2)}_T$$",
+      "note": "Teaches the double-smoothing level a_T = 2s^(1)_T − s^(2)_T. Source: Wikipedia 'Exponential smoothing' §Brown's LES a_t = 2s'_t − s''_t and Nau (Duke) 411avg L_t. Checked by a different agent from the writer (VALIDATE run 2026-10-31T19:16Z/23c2).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T19:16Z/23c2"
+     }
     },
     {
      "id": "r6",
@@ -2738,7 +2770,15 @@
      "statement": "The double exponential smoothing forecast l steps ahead is the level plus the trend times l: ŷ_{T+l} = a_T + b_T · l.",
      "concept": "Double Exponential Smoothing",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exponential Smoothing",
+      "quote": "$$\\hat{y}_{T+l} = a_T + b_T\\, l$$",
+      "note": "Teaches the l-step double-smoothing forecast ŷ_{T+l} = a_T + b_T l. Source: Wikipedia 'Exponential smoothing' §Brown's LES F_{t+m} = a_t + m b_t and Nau (Duke) 411avg Ŷ_{t+k} = L_t + kT_t. Checked by a different agent from the writer (VALIDATE run 2026-10-31T19:16Z/23c2).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T19:16Z/23c2"
+     }
     }
    ]
   },
@@ -3246,7 +3286,15 @@
      "statement": "The mean error (ME) is the average of the forecast errors: ME = (1/m) \\sum e_t.",
      "concept": "Forecast Error Measures",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Time Series Forecast",
+      "quote": "Mean error $\\text{ME} = \\frac{1}{m}\\sum e_t$ and mean percentage error $\\text{MPE} = \\frac{1}{m}\\sum p_t = \\frac{100}{m}\\sum e_t / y_t$ are signed: they measure bias",
+      "note": "Teaches ME = (1/m)Σe_t (and MPE) as signed measures of forecast bias. Source: Nau (Duke) 'How to compare models' — ME and MPE 'are signed measures of error which indicate whether the forecasts are biased', sha256:fd3d4ff8…; FPP3 §5.8 for e_t and p_t = 100e_t/y_t, sha256:3f114823…. Checked by a different agent from the writer (VALIDATE run 2026-10-31T19:16Z/23c2).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T19:16Z/23c2"
+     }
     },
     {
      "id": "r4",
@@ -3429,7 +3477,15 @@
      "statement": "The fitted value for an AR(1) model at time t is b0 + b1*y_{t-1}, and the residual e_t is the observed y_t minus this fitted value, defined for t = 2 through T.",
      "concept": "Autoregressive Model of Order One (AR(1))",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Autoregressive Model",
+      "quote": "The fitted value at time $t$ is $\\hat{y}_t = b_0 + b_1 y_{t-1}$ and the residual is $e_t = y_t - \\hat{y}_t$. The first observation has no predecessor, so there are residuals only for $t = 2, \\dots, T$",
+      "note": "Teaches the AR(1) fitted value b0 + b1 y_{t−1} and residuals e_t = y_t − ŷ_t, which exist only for t = 2..T. Source: Frees's own posted Chapter 8 R script (ind = index[-1], e = ind − fitted), sha256:b308455a…, https://instruction.bus.wisc.edu/jfrees/jfreesbooks/Regression%20Modeling/BookWebDec2010/RScripts/Chap8RCode.txt. Checked by a different agent from the writer (VALIDATE run 2026-10-31T19:16Z/23c2).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T19:16Z/23c2"
+     }
     },
     {
      "id": "r4",
@@ -3437,7 +3493,15 @@
      "statement": "For an AR(1) model fit to T observations, the mean square error is s^2 = the sum of squared deviations of the residuals from their average divided by (T - 3), which estimates Var(epsilon_t) = sigma^2.",
      "concept": "Mean Squared Error in Time Series Regression",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Autoregressive Model",
+      "quote": "The mean square error estimates $\\sigma^2$ from those residuals, centred on their own average $\\bar{e}$ … the divisor is $T - 3$: … $$s^2 = \\frac{1}{T - 3}\\sum_{t=2}^{T}(e_t - \\bar{e})^2$$",
+      "note": "Teaches the AR(1) mean square error s² = Σ_{t=2}^T (e_t − ē)²/(T − 3), residuals centred on their mean. Source: Frees's own posted Chapter 8 R script, s = sqrt(sum((e − mean(e))^2)/(length(ind) − 2)) with length(ind) = T − 1, sha256:b308455a…, https://instruction.bus.wisc.edu/jfrees/jfreesbooks/Regression%20Modeling/BookWebDec2010/RScripts/Chap8RCode.txt. Checked by a different agent from the writer (VALIDATE run 2026-10-31T19:16Z/23c2).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T19:16Z/23c2"
+     }
     }
    ]
   },
@@ -3848,7 +3912,15 @@
      "statement": "The loglikelihood of a logistic regression (binary response) model is the sum over observations of ln(p_i) for successes and ln(1 - p_i) for failures, where p_i is the model's fitted success probability for that observation.",
      "concept": "Logistic Regression",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Logistic Regression",
+      "quote": "the log-likelihood that is maximized is $\\ell = \\sum_i \\left[ y_i \\ln \\pi_i + (1 - y_i) \\ln(1 - \\pi_i) \\right]$: each success contributes $\\ln \\pi_i$ and each failure $\\ln(1 - \\pi_i)$",
+      "note": "Teaches the 0/1 logistic log-likelihood Σ[y ln π + (1−y) ln(1−π)] (success contributes ln π, failure ln(1−π)), which the LRT statistic is built from. Source: Rodríguez, GLM notes Ch.3 §3.2.1 (PDF p.10), log L = Σ{y_i log π_i + (n_i − y_i) log(1 − π_i)} with n_i = 1, sha256:2243f2c4…, https://grodri.github.io/glms/notes/c3.pdf. Checked by a different agent from the writer (VALIDATE run 2026-10-31T19:16Z/23c2).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T19:16Z/23c2"
+     }
     },
     {
      "id": "r2",

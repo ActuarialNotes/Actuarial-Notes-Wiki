@@ -1,13 +1,16 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-18
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
   content_hash: sha256:2250e9ee4f719b0e05432f44a25c28395444030799486f45ecf9c64e6dcc8d9c
   sources:
-    - "Hyndman & Athanasopoulos, Forecasting: Principles and Practice, 3rd ed. (OTexts, open online text), §9.3 Autoregressive models (AR(1) cases, stationarity constraints), §9.4 (AR(1) as MA(∞) with weights phi^j), §9.5 identification, read 2026-10-18, sha256:35587d5a25830d81dcb41d6196d18eaee424556c40cae948bf52a5a1d1a79650 — https://otexts.com/fpp3/arima.html"
-    - "Hyndman & Athanasopoulos, Forecasting: Principles and Practice, 3rd ed. (OTexts, open online text), §5.5 prediction intervals, read 2026-10-18, sha256:d72117b50768eed014ba8ec8bc835940cdfa2b34ca7ec76b22ce2b0484877f9a — https://otexts.com/fpp3/toolbox.html"
+    - "Hyndman & Athanasopoulos, Forecasting: Principles and Practice, 3rd ed. (OTexts, open online text), Ch.9 §9.3 AR(p), §9.4 AR(1) as MA(∞) with weights φ1^j, §9.5 eq.(9.4) c = μ(1 − φ1 − … − φp), §9.8 Forecasting (point-forecast recursion; MA(q) interval σ²[1+Σθ²]; AR(1) via MA(∞); stationary intervals converge; intervals too narrow — parameter and order uncertainty not included), §9.10 ETS(A,N,N) = ARIMA(0,1,1), read 2026-10-31, sha256:5f778f68d8dcb368933b34ee303bb1bc883425b2da4a801a7d5622a98a7ffa47 — https://otexts.com/fpp3/arima.html"
+    - "Hyndman & Athanasopoulos, Forecasting: Principles and Practice, 3rd ed. (OTexts, open online text), Ch.2 §2.8 Autocorrelation: r_k = Σ_{t=k+1}^T (y_t − ȳ)(y_{t−k} − ȳ) / Σ_{t=1}^T (y_t − ȳ)², read 2026-10-31, sha256:9ac4109a793cf41388d4d737c2b457334d63fe527f8276ded8ebe829b8e1d72c — https://otexts.com/fpp3/acf.html"
+    - "Wikipedia, 'Autoregressive model', §Calculation of the AR parameters, Yule–Walker equations, p = 1: γ1 = φ1γ0, hence ρ1 = φ1; AR(1) variance σ²/(1−φ²), autocovariance ∝ φ^|n|, sha256:f63c5614c92d1ccc852634c1cf08c9e59f3ece7ad5a4f78d96eed080185391f8 — https://en.wikipedia.org/wiki/Autoregressive_model"
+    - "Frees, Regression Modeling with Actuarial and Financial Applications (Cambridge 2010) — the author's posted Chapter 8 R script (free, book website), 'Fit AR1 model' block: lagind=index[-51], ind=index[-1], e=ind-fitted, s=sqrt(sum((e-mean(e))^2)/(length(ind)-2)) — residuals for t = 2..T, centred on their mean, divisor (T−1)−2 = T−3, sha256:b308455a8cf8b10e777ade3982e3a883edabb5ffc11aafe87ff8db6af5bc07d5 — https://instruction.bus.wisc.edu/jfrees/jfreesbooks/Regression%20Modeling/BookWebDec2010/RScripts/Chap8RCode.txt"
+    - "Frees (2010), Regression Modeling with Actuarial and Financial Applications — publisher's index (Cambridge), index entries 'double smoothing, 274', 'exponential smoothed estimate, 276', 'lag k autocorrelation, 253', explanatory variable 'omitted, 197, 201' — locates the syllabus text's treatment (the book itself is commercial and was not read), sha256:1b66298471851d67b5963ff635a7aea743e34afb4ed76006e0b99fc77ad379de — https://assets.cambridge.org/97805217/60119/index/9780521760119_index.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Autoregressive Model.md

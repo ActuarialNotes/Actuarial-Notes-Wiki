@@ -555,7 +555,15 @@
        "page": "Life Insurance Distribution",
        "quote": "Direct response and online sales reach customers without an agent, usually for simple term products with simplified or accelerated [[Underwriting|underwriting]]."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Life Insurance",
+      "quote": "the distribution method affects how much underwriting is done. A direct-marketed product with a low face amount may have very limited underwriting. The actuary then assumes higher than normal mortality, which the low expense of selling the business partly offsets.",
+      "note": "Distribution method affects underwriting; direct-marketed low face amounts: limited underwriting, higher mortality partly offset by low selling expense; SOA FAM sample solution Q1.1(B) p.2; checked by a different agent from the writer (VALIDATE run 2026-10-31T19:40Z/7d25)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T19:40Z/7d25"
+     }
     },
     {
      "id": "r5",
@@ -584,7 +592,15 @@
      "statement": "Life insurance products and their risk management have become more complex over recent decades because policyholders are more sophisticated, competition among insurers has increased, and computational power has grown.",
      "concept": "Evolution of Life Insurance Products and Risk Management",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Life Insurance",
+      "quote": "over the last few decades life insurance products, and the way insurers manage their risks, have changed radically and grown more complex. The reasons given are more sophisticated policyholders, more competition among life insurers and more computing power, together with more complex risk management techniques.",
+      "note": "Reasons products changed (more sophisticated policyholders, competition, computing power, complex risk management); SOA FAM sample question Q1.2 p.3 and solution p.2; checked by a different agent from the writer (VALIDATE run 2026-10-31T19:40Z/7d25)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T19:40Z/7d25"
+     }
     },
     {
      "id": "r2",
@@ -10457,7 +10473,15 @@
      "statement": "Expense policy value at time t is the expected present value of future expenses minus the expected present value of future expense premiums (the portion of the gross premium that funds expenses).",
      "concept": "Expense Policy Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Policy Value",
+      "quote": "The expense policy value ${}_tV^e$ is the EPV at $t$ of future expenses less the EPV of future expense premiums.",
+      "note": "Defines the expense policy value as EPV future expenses less EPV future expense premiums; SOA FAM sample solution Q7.6 p.67 states it in these words, Hartman Stat344 ch.7 slide 19 likewise; checked by a different agent from the writer (VALIDATE run 2026-10-31T19:40Z/7d25)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T19:40Z/7d25"
+     }
     },
     {
      "id": "r3",
@@ -10465,7 +10489,15 @@
      "statement": "Gross premium policy value equals net premium policy value plus expense policy value, so the expense policy value is the gross premium policy value (gross premium, original assumptions) minus the net premium policy value.",
      "concept": "Gross Premium Policy Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Policy Value",
+      "quote": "The expense premium, or expense loading, is the gross premium less the net premium, $P^e = G - P$. When the gross premium is the equivalence principle premium and both policy values use the same basis, the gross premium policy value is the net premium policy value plus the expense policy value, ${}_tV^g = {}_tV^n + {}_tV^e$.",
+      "note": "P^e = G - P and V^g = V^n + V^e on one basis with equivalence-principle G; SOA FAM sample solutions Q7.6 p.67 and Q7.10 p.70 (both routes), Hartman ch.7 slide 19; checked by a different agent from the writer (VALIDATE run 2026-10-31T19:40Z/7d25)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T19:40Z/7d25"
+     }
     },
     {
      "id": "r4",
@@ -10494,7 +10526,15 @@
      "statement": "The expense premium is the level premium (per year, payable at the beginning of each year) whose actuarial present value equals the actuarial present value of all expenses at issue: PV of expenses / ä_x.",
      "concept": "Expense Premium",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Policy Value",
+      "quote": "Applying the equivalence principle to the expenses alone, the level expense premium is the EPV at issue of all the expenses, initial and renewal, divided by the premium annuity factor: $P^e = \\text{EPV}_0(\\text{expenses})/\\ddot{a}_{x:\\overline{n}|}$, or $\\ddot{a}_x$ for premiums payable for life.",
+      "note": "Level expense premium = EPV0(all expenses)/premium annuity; SOA FAM sample solutions Q7.6 p.67 (251.97/17.8162) and Q7.10 p.70; checked by a different agent from the writer (VALIDATE run 2026-10-31T19:40Z/7d25)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T19:40Z/7d25"
+     }
     },
     {
      "id": "r6",
@@ -10502,7 +10542,15 @@
      "statement": "Expenses that are level in every policy year produce no expense policy value because the level expense premium equals the actual expense; only the extra first-year expenses create a (negative) expense policy value after issue.",
      "concept": "Expense Policy Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Policy Value",
+      "quote": "Expenses that are level throughout create no expense policy value, because the level expense premium equals the actual expenses. When the only expense that is not level is the extra expense at issue, the expense policy value is created entirely by that extra, which the loadings repay over the premium term.",
+      "note": "Level expenses create no expense policy value; with only the first-year extra non-level it creates the whole expense policy value; restated by the checker to SOA FAM sample solution Q7.6 p.68 and Hartman ch.7 slide 19 (finding F-004); checked by a different agent from the writer (VALIDATE run 2026-10-31T19:40Z/7d25)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T19:40Z/7d25"
+     }
     },
     {
      "id": "r7",
@@ -10848,7 +10896,15 @@
      "statement": "The expense policy value is the actuarial present value of future expenses minus the actuarial present value of future expense premiums, where the expense premium is the portion of the gross premium that covers expenses (gross premium minus net premium).",
      "concept": "Expense Policy Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Policy Value",
+      "quote": "The expense policy value ${}_tV^e$ is the EPV at $t$ of future expenses less the EPV of future expense premiums.",
+      "note": "Defines the expense policy value as EPV future expenses less EPV future expense premiums; SOA FAM sample solution Q7.6 p.67 states it in these words, Hartman Stat344 ch.7 slide 19 likewise; checked by a different agent from the writer (VALIDATE run 2026-10-31T19:40Z/7d25)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T19:40Z/7d25"
+     }
     },
     {
      "id": "r2",
@@ -10856,7 +10912,15 @@
      "statement": "The level expense premium equals the present value of expenses (first-year commission and administrative expenses plus renewal expenses times the annuity-due factor) divided by the life annuity-due factor at issue.",
      "concept": "Expense Premium",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Policy Value",
+      "quote": "Applying the equivalence principle to the expenses alone, the level expense premium is the EPV at issue of all the expenses, initial and renewal, divided by the premium annuity factor: $P^e = \\text{EPV}_0(\\text{expenses})/\\ddot{a}_{x:\\overline{n}|}$, or $\\ddot{a}_x$ for premiums payable for life.",
+      "note": "Level expense premium = EPV0(all expenses)/premium annuity; SOA FAM sample solutions Q7.6 p.67 (251.97/17.8162) and Q7.10 p.70; checked by a different agent from the writer (VALIDATE run 2026-10-31T19:40Z/7d25)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T19:40Z/7d25"
+     }
     },
     {
      "id": "r3",
@@ -10864,7 +10928,15 @@
      "statement": "The gross premium policy value equals the net premium policy value plus the expense policy value, and the expense premium equals the gross premium minus the net premium.",
      "concept": "Gross Premium Policy Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Policy Value",
+      "quote": "The expense premium, or expense loading, is the gross premium less the net premium, $P^e = G - P$. When the gross premium is the equivalence principle premium and both policy values use the same basis, the gross premium policy value is the net premium policy value plus the expense policy value, ${}_tV^g = {}_tV^n + {}_tV^e$.",
+      "note": "P^e = G - P and V^g = V^n + V^e on one basis with equivalence-principle G; SOA FAM sample solutions Q7.6 p.67 and Q7.10 p.70 (both routes), Hartman ch.7 slide 19; checked by a different agent from the writer (VALIDATE run 2026-10-31T19:40Z/7d25)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T19:40Z/7d25"
+     }
     },
     {
      "id": "r4",
@@ -10889,7 +10961,15 @@
      "statement": "At duration t, the prospective expense policy value is (renewal expense per year minus the expense premium) times ä_{x+t}, using only renewal-year expenses because first-year expenses are already incurred.",
      "concept": "Prospective Policy Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Policy Value",
+      "quote": "At a duration $t \\ge 1$ only renewal expenses remain. If the expense at each remaining premium date is $e$ (a fixed amount plus a percentage of $G$) and nothing is paid on a claim, then ${}_tV^e = (e - P^e)\\,\\ddot{a}_{x+t:\\overline{n-t}|}$. One year before the end of an $n$-year premium term only the last premium date remains, so ${}_{n-1}V^e = e - P^e$.",
+      "note": "tV^e = (e - P^e) times the remaining premium annuity, and (e - P^e) one year before the end; SOA FAM sample solutions Q7.10 p.70 (whole life at t=5) and Q7.31 p.80 (3-year, last year) apply exactly these; checked by a different agent from the writer (VALIDATE run 2026-10-31T19:40Z/7d25)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T19:40Z/7d25"
+     }
     },
     {
      "id": "r6",
@@ -12187,7 +12267,15 @@
      "statement": "When the death benefit equals a fixed amount plus the end-of-year policy value, the net amount at risk is just the fixed amount, so the policy value term cancels out of the recursion: (kV + P)(1+i) = (fixed amount)·q + (k+1)V.",
      "concept": "Net Amount at Risk",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Policy Value",
+      "quote": "When the death benefit is a fixed amount $b$ plus the end-of-year policy value and no claim expense is paid, the net amount at risk is just $b$, so the policy value drops out of the death term and the recursion is $({}_tV + P_t - e_t)(1+i_t) = {}_{t+1}V + q_{x+t}\\,b$.",
+      "note": "Benefit b + t+1V makes the NAAR b, recursion with q b; Valdez STT456 Weeks2-4 slide 26 (NAAR form), SOA FAM sample solution Q7.26 p.77; condition 'no claim expense' added by the checker (F-005); checked by a different agent from the writer (VALIDATE run 2026-10-31T19:40Z/7d25)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T19:40Z/7d25"
+     }
     },
     {
      "id": "r3",
@@ -12267,7 +12355,15 @@
      "statement": "The expense policy value is the expected present value of future expenses minus the expected present value of future expense premiums (the portion of the gross premium net of the benefit premium that funds expenses).",
      "concept": "Expense Policy Value (Gross Premium Policy Value)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Policy Value",
+      "quote": "The expense policy value ${}_tV^e$ is the EPV at $t$ of future expenses less the EPV of future expense premiums.",
+      "note": "Defines the expense policy value as EPV future expenses less EPV future expense premiums; SOA FAM sample solution Q7.6 p.67 states it in these words, Hartman Stat344 ch.7 slide 19 likewise; checked by a different agent from the writer (VALIDATE run 2026-10-31T19:40Z/7d25)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T19:40Z/7d25"
+     }
     },
     {
      "id": "r3",
@@ -12275,7 +12371,15 @@
      "statement": "The gross premium policy value equals the net (benefit) policy value plus the expense policy value, so the expense premium is the gross premium minus the benefit premium.",
      "concept": "Gross Premium Policy Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Policy Value",
+      "quote": "The expense premium, or expense loading, is the gross premium less the net premium, $P^e = G - P$. When the gross premium is the equivalence principle premium and both policy values use the same basis, the gross premium policy value is the net premium policy value plus the expense policy value, ${}_tV^g = {}_tV^n + {}_tV^e$.",
+      "note": "P^e = G - P and V^g = V^n + V^e on one basis with equivalence-principle G; SOA FAM sample solutions Q7.6 p.67 and Q7.10 p.70 (both routes), Hartman ch.7 slide 19; checked by a different agent from the writer (VALIDATE run 2026-10-31T19:40Z/7d25)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T19:40Z/7d25"
+     }
     },
     {
      "id": "r4",
@@ -12508,7 +12612,15 @@
      "statement": "The gross premium policy value equals the net premium policy value plus an expense policy value, where the expense reserve is the EPV of future expenses minus the EPV of future expense-loading premiums (level expense premium = excess first-year expense / ä_x).",
      "concept": "Expense Policy Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Policy Value",
+      "quote": "The expense policy value ${}_tV^e$ is the EPV at $t$ of future expenses less the EPV of future expense premiums.",
+      "note": "Defines the expense policy value as EPV future expenses less EPV future expense premiums; SOA FAM sample solution Q7.6 p.67 states it in these words, Hartman Stat344 ch.7 slide 19 likewise; checked by a different agent from the writer (VALIDATE run 2026-10-31T19:40Z/7d25)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T19:40Z/7d25"
+     }
     }
    ]
   },
@@ -12592,7 +12704,15 @@
      "statement": "The expense policy value at time t is the actuarial present value of future expenses minus the actuarial present value of future expense loadings (the expense portion of the gross premium).",
      "concept": "Expense Policy Value (Gross Premium Reserve Decomposition)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Policy Value",
+      "quote": "The expense policy value ${}_tV^e$ is the EPV at $t$ of future expenses less the EPV of future expense premiums.",
+      "note": "Defines the expense policy value as EPV future expenses less EPV future expense premiums; SOA FAM sample solution Q7.6 p.67 states it in these words, Hartman Stat344 ch.7 slide 19 likewise; checked by a different agent from the writer (VALIDATE run 2026-10-31T19:40Z/7d25)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T19:40Z/7d25"
+     }
     },
     {
      "id": "r2",
@@ -12617,7 +12737,15 @@
      "statement": "At the end of year n-1 of an n-year contract, only the final year's expenses (percent of premium times G plus per-policy amount, paid at start of that year) remain, and the expense loading P^e is paid once, so the expense policy value is that expense minus P^e.",
      "concept": "Expense Policy Value (Gross Premium Reserve Decomposition)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Policy Value",
+      "quote": "At a duration $t \\ge 1$ only renewal expenses remain. If the expense at each remaining premium date is $e$ (a fixed amount plus a percentage of $G$) and nothing is paid on a claim, then ${}_tV^e = (e - P^e)\\,\\ddot{a}_{x+t:\\overline{n-t}|}$. One year before the end of an $n$-year premium term only the last premium date remains, so ${}_{n-1}V^e = e - P^e$.",
+      "note": "tV^e = (e - P^e) times the remaining premium annuity, and (e - P^e) one year before the end; SOA FAM sample solutions Q7.10 p.70 (whole life at t=5) and Q7.31 p.80 (3-year, last year) apply exactly these; checked by a different agent from the writer (VALIDATE run 2026-10-31T19:40Z/7d25)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T19:40Z/7d25"
+     }
     }
    ]
   },
@@ -13005,7 +13133,15 @@
      "statement": "To find the effect of a changed assumption on a policy value, write the recursion under both assumptions and subtract them, so that terms unaffected by the change (premium and expenses) cancel and the change in policy value is found from the differences in q, p and the unchanged next-year policy value.",
      "concept": "Gross Premium Policy Values (Recursion)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Policy Value",
+      "quote": "Write the recursion for that year under each basis and subtract. The premium and expense terms cancel, leaving ${}_tV' - {}_tV = v\\,(q'_{x+t} - q_{x+t})(S_{t+1} + E_{t+1} - {}_{t+1}V)$: the change in the death probability times the discounted net amount at risk.",
+      "note": "One-year change of basis: later V unchanged, subtract the two recursions, P - e cancels, change = v (q' - q)(NAAR); SOA FAM sample solution Q7.36 p.81 states each step for its instance, recursion form Valdez slide 26; checked by a different agent from the writer (VALIDATE run 2026-10-31T19:40Z/7d25)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T19:40Z/7d25"
+     }
     }
    ]
   },

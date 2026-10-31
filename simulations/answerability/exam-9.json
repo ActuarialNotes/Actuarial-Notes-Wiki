@@ -861,7 +861,15 @@
      "statement": "Firms with high market-to-book ratios or high R&D spending have many growth opportunities, need capital for capital-intensive, long-payout investments with unstable cash flows, and have few tangible assets, so distress is costlier and raising capital is more expensive; risk management that keeps them financially sound thus adds more value.",
      "concept": "Value of Risk Management",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Insurance Market Imperfections",
+      "quote": "Firms with many growth opportunities — high market-to-book ratios or heavy R&D spending — need capital for capital-intensive investments with long payouts and unstable cash flows",
+      "note": "CAS Exam 7 Spring 2012 Q21(c) sample answers PDF p.86; Froot, Scharfstein & Stein NBER w4084 PDF pp.5, 13 (growth options, costly external capital, intangibles with no liquidation value)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     }
    ]
   },
@@ -2555,7 +2563,15 @@
      "statement": "A bridging model projects loss ratios for recent, immature years by starting from mature older-year loss ratios and adjusting them for loss cost trend and rate level changes, using them as expected loss ratios (e.g., in a Bornhuetter-Ferguson method).",
      "concept": "Loss Ratio Planning Bridging Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "Plan loss ratios for the coming year, and expected loss ratios for recent immature years, are projected from the loss ratios of older, mature years, adjusted for loss cost trend and rate level changes since",
+      "note": "CAS Exam 7 Spring 2014 report Q25 PDF pp.95-96 (bridging model definition; trend and rate-level adjustments; BF)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r2",
@@ -2563,7 +2579,15 @@
      "statement": "A bridging model creates autocorrelation between loss ratios of different years, so errors or deterioration in older-year loss ratios carry forward into plan and recent-year loss ratios, which can cause reserve problems, especially for long-tailed lines.",
      "concept": "Loss Ratio Planning Bridging Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "Its operational problem is **autocorrelation**: every recent year inherits the older years' estimates",
+      "note": "CAS Exam 7 Spring 2014 report Q25 PDF pp.95-96 (autocorrelation; deterioration carried forward in a long-tailed line)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r3",
@@ -2571,7 +2595,15 @@
      "statement": "A firm's franchise value comes mainly from intellectual property (talent, systems, databases, reputation, market relationships), so effective cycle management requires continuing to invest in and retain it throughout the underwriting cycle, especially in soft markets, to avoid obsolete systems and talent loss.",
      "concept": "Underwriting Cycle Management",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "A firm's franchise value lies mostly in its intellectual property: underwriting and actuarial talent, proprietary systems, databases and models, its reputation and its market relationships.",
+      "note": "CAS Exam 7 Spring 2014 report Q25 PDF pp.95-96 part b sample answers (intellectual property, majority of franchise value, invest through the cycle)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r4",
@@ -2579,7 +2611,15 @@
      "statement": "Underwriter incentives should be flexible and aligned with portfolio goals, so underwriters are not penalized for reducing or ceasing new business when market prices are inadequate in a soft market.",
      "concept": "Underwriting Cycle Management",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "Incentives should be flexible and tied to the portfolio's profitability goals rather than to growth alone, so that an underwriter is not penalized",
+      "note": "CAS Exam 7 Spring 2014 report Q25 PDF pp.95-96 (underwriter incentives flexible, aligned to portfolio goals); 2016 Q27(c) PDF p.102",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r5",
@@ -2587,7 +2627,15 @@
      "statement": "Owner and management education about the underwriting cycle helps them understand that deteriorating ratios (e.g., expense ratio) in a soft market stem from the cycle, preventing mistaken responses such as cutting prices to gain market share.",
      "concept": "Underwriting Cycle Management",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "Owners, not just management, need to understand that a soft market brings lower premium volume and a higher expense ratio (fixed costs spread over less premium) as a result of the cycle",
+      "note": "CAS Exam 7 Spring 2014 report Q25 PDF pp.95-96 (owner education); 2018 Q24(b) PDF p.106",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     }
    ]
   },
@@ -3006,7 +3054,15 @@
        "page": "Risk Transfer",
        "quote": "Risk transfer is assessed on the **contract as a whole**, including side letters and undocumented understandings"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Mitigation",
+      "quote": "An excess-of-loss recovery is a non-linear function of the underlying loss — nothing below the retention, dollar for dollar within the layer, nothing more above the limit",
+      "note": "CAS Exam 7 Spring 2015 Q20(c) PDF p.80 (complexity; XS not linear; tax-motivated contracts warrant no credit); Clark 2014 pp.46-47 finite risk",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r7",
@@ -3933,7 +3989,15 @@
      "statement": "To smooth earnings across the underwriting cycle, shift the asset mix toward higher-yielding, riskier assets (equities, high-yield bonds) in soft markets to offset weak underwriting income, and toward conservative lower-yield assets (treasuries) in hard markets when underwriting profit is high.",
      "concept": "Asset Management Strategy and the Underwriting Cycle",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "when underwriting income is weak (a soft market), take more investment risk for higher yield — equities, high-yield bonds, taxable bonds — to offset it",
+      "note": "CAS Exam 7 Spring 2016 report Q22 PDF pp.90-91 (asset strategy across the cycle)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r3",
@@ -3941,7 +4005,15 @@
      "statement": "Tax-exempt bonds have lower pre-tax yields than taxable bonds but reduce tax on investment income, making them more valuable when the insurer has taxable profits (e.g., underwriting profit in a hard market).",
      "concept": "Investment Portfolio Taxation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "Tax-exempt municipal bonds pay lower interest than comparable taxable securities because their interest is excluded from federal gross income, so they are worth most to an insurer with taxable profits to shelter",
+      "note": "MSRB Municipal Bond Basics (Tax Status); CAS Exam 7 Spring 2016 report Q22 sample answer 3 PDF p.90",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r4",
@@ -4272,7 +4344,15 @@
      "statement": "Management incentive plans tied to short-term measures such as top line growth and calendar year combined ratio can encourage managers to pursue short-term results (aggressive growth, underpricing, writing wrong risks) at the expense of the owners' long-term interests.",
      "concept": "Agency Theory",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "An incentive plan paid on short-term measures, such as top-line growth and the calendar-year combined ratio, rewards aggressive growth, underpricing and writing the wrong risks",
+      "note": "CAS Exam 7 Spring 2016 report Q27(b) PDF pp.101-103 (short-term vs long-term)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r3",
@@ -4293,7 +4373,15 @@
      "statement": "Effective underwriting cycle management includes maintaining intellectual property (retaining key talent, investing in systems, models and data, and keeping presence in core markets and distribution channels) during soft markets.",
      "concept": "Underwriting Cycle Management",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "Effective cycle management keeps investing in it throughout the cycle — retaining key people, maintaining systems and data, keeping a presence in core markets and distribution channels during a soft market",
+      "note": "CAS Exam 7 Spring 2016 report Q27(c) PDF p.102 (intellectual property sample answers)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r5",
@@ -4301,7 +4389,15 @@
      "statement": "Effective underwriting cycle management includes setting underwriting incentives that support portfolio profitability goals rather than growth alone, so underwriters are not penalized for missing growth targets in bad markets.",
      "concept": "Underwriting Cycle Management",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "Incentives should be flexible and tied to the portfolio's profitability goals rather than to growth alone, so that an underwriter is not penalized",
+      "note": "CAS Exam 7 Spring 2016 report Q27(c) sample answer 5 PDF p.102",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r6",
@@ -4346,7 +4442,15 @@
      "statement": "Competitor analysis is a soft approach that combines trade publications, rate filings, agents and financial statements to detect whether many competitors are financially distressed or unusually profitable, in order to predict a turn in the underwriting cycle.",
      "concept": "Underwriting Cycle Modeling: Soft Approaches",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "In **competitor analysis**, information from trade publications, rate filings, agents and financial statements is combined to see whether an unusually large number of competitors look financially distressed, or unusually profitable",
+      "note": "CAS Exam 7 Spring 2016 report Q28(a) sample answer 2 PDF p.104",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r3",
@@ -4354,7 +4458,15 @@
      "statement": "Scenario testing is a soft approach that uses written descriptions of possible future states of the insurance environment to prepare management to think about responses.",
      "concept": "Underwriting Cycle Modeling: Soft Approaches",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "**Scenario testing** writes out descriptions of possible future states of the insurance environment, to prepare management to think through its responses.",
+      "note": "CAS Exam 7 Spring 2016 report Q28(a) sample answer 3 PDF p.104",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r4",
@@ -4375,7 +4487,15 @@
      "statement": "The general factor model for the underwriting cycle has a latent factor Z_t = a + b Z_{t-1} + sigma*epsilon_t, and the observed combined ratio X_t = d + c (Z_{t-1} - X_{t-1}) + tau*delta_t, so X adjusts toward the prior latent factor value.",
      "concept": "General Factor Model of the Underwriting Cycle",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "Z_t = a + b\\,Z_{t-1} + \\sigma\\,\\varepsilon_t \\qquad X_t = d + c\\,(Z_{t-1} - X_{t-1}) + \\tau\\,\\delta_t",
+      "note": "CAS Exam 7 Spring 2016 report Q28(b) sample answer 2 PDF p.104 (printed 'd + d x', a slip; written with c for the adjustment coefficient, notation variants accepted per report p.105)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r6",
@@ -4383,7 +4503,15 @@
      "statement": "Econometric modeling of the underwriting cycle resembles soft approaches in that it needs a large quantity, variety and complexity of data and incorporates structural and human factors that influence the cycle.",
      "concept": "Econometric Models of the Underwriting Cycle",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "Like the soft approaches, an econometric model needs a large quantity, variety and complexity of data and builds in the structural and human factors behind the cycle",
+      "note": "CAS Exam 7 Spring 2016 report Q28(c) PDF p.104",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r7",
@@ -4391,7 +4519,15 @@
      "statement": "Econometric modeling of the underwriting cycle resembles technical models in that both use mathematical formalism and statistical rigor and can be tested for statistical validity, to a greater degree than soft approaches.",
      "concept": "Econometric Models of the Underwriting Cycle",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "like the technical models, it uses mathematical formalism and statistical rigor and can be tested for statistical validity, to a greater degree than a soft approach can",
+      "note": "CAS Exam 7 Spring 2016 report Q28(c) PDF p.104",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     }
    ]
   },
@@ -4674,7 +4810,15 @@
      "statement": "A cost/benefit diagram plots the benefit of a reinsurance program (on the vertical axis) against its cost (on the horizontal axis) at selected return periods, with the bare (no reinsurance) program at the origin.",
      "concept": "Reinsurance Cost/Benefit Analysis",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Mitigation",
+      "quote": "plots each programme's cost (horizontal axis) against its net result at a selected probability level (vertical axis), one line per level",
+      "note": "Venter, Measuring Value in Reinsurance, CAS Forum Summer 2001 p.187 (cost/benefit diagram, efficiency rule); CAS Exam 7 Spring 2017 report Q23 PDF pp.89-90 (bare at 0 cost)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r2",
@@ -4699,7 +4843,15 @@
      "statement": "The benefit of a reinsurance program at a given percentile equals the net premium minus net loss under the program minus that under the bare program at the same percentile.",
      "concept": "Reinsurance Cost/Benefit Analysis",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Mitigation",
+      "quote": "The benefit of a programme at a probability level is its percentile of that distribution minus the bare position's percentile at the same level.",
+      "note": "Venter 2001 p.186 (difference in percentiles of the distributions); CAS Exam 7 Spring 2017 report Q23 sample 3 PDF p.90",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r4",
@@ -4783,7 +4935,15 @@
      "statement": "A drawback of a single fixed plan is that underwriters pressured to 'make plan' may write business at inadequate prices when market conditions worsen (e.g., a soft market), harming long-term underwriting results.",
      "concept": "Scenario Planning",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "Underwriters pressured to \"make plan\" when conditions worsen may write business at inadequate prices, harming long-term results",
+      "note": "CAS Exam 7 Spring 2017 report Q24(a) PDF p.93",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r3",
@@ -4791,7 +4951,15 @@
      "statement": "A drawback of a single fixed plan is organizational inertia: management is reluctant to revise plan loss ratio estimates when actual results deviate, so booked losses drift from reality and optimistic plan loss ratios feed into reserving (e.g., Bornhuetter-Ferguson).",
      "concept": "Scenario Planning",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "organizational inertia — management's reluctance to revise the plan's loss ratios when actual results deviate — lets booked losses drift from reality",
+      "note": "CAS Exam 7 Spring 2017 report Q24(a) PDF p.93",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r4",
@@ -4799,7 +4967,15 @@
      "statement": "Scenario planning steps: define a set of plausible future scenarios (e.g., market conditions, possibly with likelihoods), develop pre-agreed action plans and targets (premium volume and loss ratio by line) for each scenario, then monitor the environment and implement the plan of the scenario that emerges.",
      "concept": "Scenario Planning",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "define a set of plausible future scenarios for the market (possibly with likelihoods); agree in advance, for each, on action plans and targets — premium volume and loss ratio by line",
+      "note": "CAS Exam 7 Spring 2017 report Q24(b) PDF pp.93-94 (three steps)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r5",
@@ -4807,7 +4983,15 @@
      "statement": "Scenario planning lets management respond quickly to changing conditions because responses were agreed in advance rather than devised on the fly.",
      "concept": "Scenario Planning",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "Because the responses were agreed beforehand, management can act quickly rather than devise a strategy on the fly",
+      "note": "CAS Exam 7 Spring 2017 report Q24(c) PDF p.94",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r6",
@@ -4815,7 +4999,15 @@
      "statement": "Scenario planning reduces pressure to make plan at all costs and overcomes organizational inertia, since alternative plans and incentives are already sanctioned when the environment changes, supporting long-term profitability.",
      "concept": "Scenario Planning",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "the pressure to make plan at all costs and the organizational inertia both fall away, which supports long-term profitability",
+      "note": "CAS Exam 7 Spring 2017 report Q24(c) PDF p.94",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     }
    ]
   },
@@ -4831,7 +5023,15 @@
      "statement": "A behavioral (econometric) approach to modeling the underwriting cycle is a middle ground between soft and technical approaches, combining human/economic behavior with mathematical rigor.",
      "concept": "Underwriting Cycle Modeling Approaches",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "**Behavioral (econometric) approaches** are the middle ground between soft and technical ones: individual components of the process are built on economic and behavioral theory",
+      "note": "CAS Exam 7 Spring 2017 report Q25(a) PDF p.96",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r2",
@@ -4839,7 +5039,15 @@
      "statement": "A behavioral model of the underwriting cycle represents insurance supply and demand curves, varies key inputs (capital, shock events, inflation, capital flows) to shift the curves, and uses the resulting equilibrium prices to model cycle turns.",
      "concept": "Underwriting Cycle Modeling Approaches",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "varying the key inputs — capital, shock events, inflation, capital flows — and re-solving traces out the price path and its turns",
+      "note": "CAS Exam 7 Spring 2017 report Q25(a) sample answers 4-5 PDF p.96",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r3",
@@ -4847,7 +5055,15 @@
      "statement": "Insurance supply and demand graphs plot price on the vertical axis and quantity of insurance on the horizontal axis, with a downward-sloping demand curve and an upward-sloping supply curve meeting at the equilibrium price and quantity.",
      "concept": "Insurance Supply and Demand Curves",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "A supply and demand graph puts price on the vertical axis and quantity on the horizontal; demand slopes down from left to right, supply slopes up, and the equilibrium is the point where they cross.",
+      "note": "OpenStax Principles of Economics 3e §3.1",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r4",
@@ -4885,7 +5101,15 @@
      "statement": "After a capital infusion shifts both supply and demand outward, equilibrium quantity increases while the equilibrium price may rise or fall depending on the relative size of the shifts.",
      "concept": "Insurance Supply and Demand Curves",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "after an industry-wide capital infusion moves both curves out, the equilibrium quantity rises, while the equilibrium price may rise or fall depending on the relative size of the two shifts",
+      "note": "CAS Exam 7 Spring 2017 report Q25(b) report PDF p.98 (price either way, quantity higher); OpenStax 3e §3.3",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     }
    ]
   },
@@ -5087,7 +5311,15 @@
      "statement": "The annual cost of a surplus note is the principal times the difference between the coupon rate and the bond yield (the coupon paid minus the investment income earned on the proceeds at the bond yield).",
      "concept": "Surplus Notes",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Mitigation",
+      "quote": "its annual cost is the coupon paid less the investment income earned on the proceeds: principal times (coupon rate minus investment yield)",
+      "note": "CAS Exam 7 Spring 2018 report Q22(a) PDF pp.100, 102; NAIC CIPR Surplus Notes",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r2",
@@ -5095,7 +5327,15 @@
      "statement": "The annual cost of quota-share reinsurance is the ceded premium (cession percentage times gross earned premium) times the economic margin on the contract.",
      "concept": "Quota Share Reinsurance",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Mitigation",
+      "quote": "The annual cost of a **quota share** is the margin ceded on it: ceded premium (cession percentage times subject premium) times the contract's economic margin",
+      "note": "CAS Exam 7 Spring 2018 report Q22(a) PDF pp.100, 102",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r3",
@@ -5116,7 +5356,15 @@
      "statement": "The return of surplus note principal at maturity is not counted as a cost of the surplus note strategy, since only the net financing cost (coupon minus yield) is the cost.",
      "concept": "Surplus Notes",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Mitigation",
+      "quote": "Returning the principal at maturity is not a cost of the strategy — it is the borrowed money going back — so only the net financing cost counts.",
+      "note": "CAS Exam 7 Spring 2018 report Q22(b) report PDF p.102 (common mistake: principal repayment as a cost)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r5",
@@ -5124,7 +5372,15 @@
      "statement": "The three paradigms for measuring the value of a reinsurance structure are: (1) stabilizing results, (2) freeing up or replacing required capital/surplus, and (3) adding value to the firm (equity/market value).",
      "concept": "Reinsurance Value Paradigms",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Mitigation",
+      "quote": "reinsurance (1) **stabilizes results**; (2) **frees up or replaces capital**",
+      "note": "CAS Exam 7 Spring 2018 report Q22(c) PDF pp.101-103; Venter 2001 pp.181-182",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r6",
@@ -5241,7 +5497,15 @@
      "statement": "A 'maintain market share' (naive) underwriting cycle strategy keeps premium volume or plan targets constant through the cycle by cutting prices or loosening terms to avoid losing customers.",
      "concept": "Underwriting Cycle Management Strategies",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "A firm that keeps its premium volume, or its plan target, constant through the cycle does it by cutting prices or loosening terms so as not to lose customers.",
+      "note": "CAS Exam 7 Spring 2018 report Q24(a) PDF p.106; Feldblum PCAS 2001 pp.34-35",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r3",
@@ -5266,7 +5530,15 @@
      "statement": "Effective cycle management aligns underwriter incentives and management goals with owner objectives (agency theory), rewarding underwriting discipline over premium growth, and educates owners to expect lower volume and higher expense ratios in soft markets.",
      "concept": "Underwriting Cycle Management Strategies",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "the goal of agency theory is to align management's interests with the owners'",
+      "note": "CAS Exam 7 Spring 2018 report Q24(b) PDF pp.106-107 (agency theory, incentives, owner education); 2016 Q27(a) PDF p.102",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r5",
@@ -5287,7 +5559,15 @@
      "statement": "Effective cycle management includes scenario planning with pre-determined responses to market changes and investment strategy adjusted to the cycle (e.g., taxable bonds in soft markets, tax-exempt bonds in hard markets).",
      "concept": "Underwriting Cycle Management Strategies",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "A firm that shrinks in the soft market keeps the surplus to write aggressively at higher prices when the market hardens; scenario planning (below) gives it pre-agreed responses to the turn.",
+      "note": "CAS Exam 7 Spring 2018 report Q24(b) PDF p.107 (market overreaction, scenario planning, investment strategy)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     }
    ]
   },
@@ -5530,7 +5810,15 @@
      "statement": "An econometric model of the underwriting cycle combines components such as capital, supply, demand, and profit flows, whose interactions determine the equilibrium price and quantity of insurance; it blends technical (statistical) modeling with soft (human-factor) modeling.",
      "concept": "Econometric Model of the Underwriting Cycle",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "individual components of the process are built on economic and behavioral theory — capital, the supply of insurance, the demand for it, and profit flows",
+      "note": "CAS Exam 7 Spring 2019 report Q21(b) PDF pp.93-94",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r6",

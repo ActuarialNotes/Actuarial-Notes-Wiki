@@ -29,7 +29,7 @@ verification:
   - The [[Gini Index|Gini index]] of each approach on the same data.
 - **What each plot cannot show.**
   - A simple quantile plot shows one model at a time: comparing two takes a separate plot for each, sorted on that model's own predictions.
-  - A double lift chart compares the two directly, but each quantity is divided by its overall average, so it shows relative loss costs, not dollar levels. The monograph's point in favour of loss ratio charts is that they are simple to understand and explain, which the quantile plots and double lift charts are not.
+  - A double lift chart compares the two directly, but each quantity is divided by its overall average, so it shows relative loss costs, not dollar levels. The monograph's point in favour of loss ratio charts is that they are simpler to understand and explain than quantile plots and double lift charts.
   - A loss ratio chart plots only the actual loss ratio in each quantile. It shows how well the model separates the plan's low and high loss ratio segments, not how closely the model's own predictions match actual losses.
   - A Gini index does not quantify the profitability of a rating plan, only its ability to differentiate the best and worst risks.
 - **Where it sits (Exam 8).** Benchmarking is one step in evaluating a model. The model may then be **recalibrated**, meaning refitted on newer data between full rebuilds, and taken into [[Model Implementation|implementation]].

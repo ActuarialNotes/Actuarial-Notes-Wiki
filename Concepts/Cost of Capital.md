@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:61fa2d65ccd7984c073fde5d7e2b184e012e0697932a1e223fd03e270cc6aac7
+  content_hash: sha256:b0a6ebd8b1f042d3f496c7948093f8a7e6fd962d03d29455ce77312c94149d0b
   sources:
     - "D'Arcy, Capital Allocation in the Property-Liability Insurance Industry (Variance 5:2), pp.141-146 (PDF pp.1-6), sha256:e7a4dc616cf02bf9721fd906a35cdd3c2a017ae92921b058a6a932555c955612 — https://www.casact.org/sites/default/files/2021-07/Capital-Allocation-Darcy.pdf"
     - "Damodaran, The Cost of Capital: The Swiss Army Knife of Finance (April 2016), pp.2, 5, 17, sha256:5213c261bc05b5e8920f6a2feba1687c1f424fa1155b20789b6848a3e4223f90 — https://pages.stern.nyu.edu/~adamodar/pdfiles/papers/costofcapital.pdf"
@@ -33,7 +33,7 @@ verification:
 - **Allocating the cost.** $C_i$ is the capital allocated to unit $i$, so the allocation method (see [[Risk Capital]]) decides each unit's charge. The charge is due for every year the capital is held, which is why long-tailed lines carry far more of it than their first-year capital suggests.
 - **Line-specific rates.** One could instead estimate a beta for each line and charge each line its own CAPM rate. In practice underwriting betas are hard to estimate, and the CAPM prices only systematic risk, whereas an insurer's frictional costs depend on *total* risk — including the diversifiable risk the CAPM treats as free.
 - **Frictional costs.** Capital inside an insurer costs more than the same capital held by investors directly: investment income on it is taxed at the corporate level before it reaches shareholders ([[Insurance Income Tax|double taxation]]), surplus capital invites agency costs, and replacing capital after a large loss is expensive. The part pricing must recover is the required return **less** what the capital earns while it is held.
-- **The discount rate in a valuation multiple.** The cost of equity is also the discount rate $k$ that ties the price-to-book value multiple to a firm's fundamentals: with constant ROE and book value growing at $g$, $\text{P/BV} = 1 + (\text{ROE} - k)/(k - g)$. Firms with similar ROE, growth and discount rates should therefore trade at similar multiples. A shortcut valuation applies the P-BV multiples of such comparable firms, or of comparable past acquisitions and IPOs (**transaction multiples**), to the firm's book value (or tangible book value), giving a range of values. Transaction prices avoid the day-to-day swings of market prices, but can carry a control premium or an acquirer's overpayment, IPOs tend to be underpriced, and a past deal reflects the interest rates and outlook of its own time.
+- **The discount rate in a valuation multiple.** The cost of equity is also the discount rate $k$ that ties the price-to-book value multiple to a firm's fundamentals: with constant ROE and book value growing at $g$, $\text{P/BV} = 1 + (\text{ROE} - k)/(k - g)$. Firms with similar ROE, growth and discount rates should therefore trade at similar multiples. A shortcut valuation applies the P-BV multiples of such comparable firms, or of comparable past acquisitions and IPOs (**transaction multiples**), to the firm's book value (or tangible book value), giving a range of values. Book value is the reported book value of the firm's equity, resting on the asset and liability values its balance sheet reports; tangible book value is that reported book value adjusted to remove the impact of intangible assets such as goodwill. Transaction prices avoid the day-to-day swings of market prices, but can carry a control premium or an acquirer's overpayment, IPOs tend to be underpriced, and a past deal reflects the interest rates and outlook of its own time.
 - **Cost versus return.** The hurdle $k$ is compared with the unit's [[Return on Capital]] (RAROC), or subtracted from its income to give EVA — see [[Risk-Adjusted Performance]]. In Mildenhall and Major's notation the cost of capital $\iota$ is margin divided by capital, and it sets the premium in [[Risk-Adjusted Pricing]].
 
 > [!example]- Cost of Equity and the Charge to Each Line {Example}

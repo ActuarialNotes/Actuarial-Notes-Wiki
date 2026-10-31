@@ -8,12 +8,18 @@ Edition: "3rd"
 Type: "Textbook"
 ISBN: "978-1-108-47808-3"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:aedbb36cc80cd101af35cd0a3bc06cb111a23daa58637c97d0b455b54c4136e9
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:5c28e8043cd4750564171a1640eaa62cb00bcc617cc6378022d9c4cb698c597f
+  sources:
+    - "Cambridge University Press, Actuarial Mathematics for Life Contingent Risks, 3rd ed., publisher's book page, Overview (key features, description, 3rd edition, hardback ISBN 9781108478083, 30 January 2020, 782 pages) and Contents tab (C1-C19, Appendices A-D), sha256:f4c31b143f6563789d7539db1e16f9027b352037a21f6f46b8757d59188abd81 — https://www.cambridge.org/highereducation/books/actuarial-mathematics-for-life-contingent-risks/281DA4E8D523A6B23280ADC3D165AFDA"
+    - "Cambridge University Press, Errata Sheet for Actuarial Mathematics for Life Contingent Risks, 3rd Edition, pp.1-2 (last updated 18 August 2024), sha256:d24c02c762df5e0041acbec305f25b1020e99585e70109dbd632b1f3e08f99ed — https://www.cambridge.org/highereducation/api/resources/C378270E398166C6F8732D8F09F101C3"
+    - "SOA Exam FAM syllabus, October 2026, Topics 8-10 learning outcomes pp.6-7; Readings p.8 (AMLCR chapters), sha256:90172025d8bd9d69e18e974fdee447963e54258e5f0e419aa3ef5b7d3e55a00e — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-fam-syllabus.pdf"
+    - "SOA Exam ALTAM syllabus, October 2026, Topic 1 p.2, Topic 3 p.3; Resources p.7 (AMLCR chapters), sha256:44b64a78219337f43387cb52837c7c2ce590ae2b97321d6e8e4e29ab2cd38c5e — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-altam-syllabus.pdf"
+    - "CIA Education Syllabus - ACIA Capstone Exam and Modules (last updated January 19, 2026), section 2 Topics of long-term actuarial mathematics, p.27, rows A4.1-A4.6, sha256:2a0fb1facb47c97a76ac956d86f0514bcb9e5459ecdc0a973bd3f6f155e3d291 — https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=608114&fid=627235"
+    - "SOA ALTAM-21-23: Variable Annuity Guarantees, Introduction p.1, sha256:995033045fafcbfbeb02cd375a7b8548ad9e87089bfee4e37af6bf3493b127e6 — https://www.soa.org/globalassets/assets/files/edu/2023/2023-07-altam-21-23.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Actuarial Mathematics for Life Contingent Risks (Dickson - 2020).md

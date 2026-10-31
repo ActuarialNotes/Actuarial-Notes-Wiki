@@ -1,8 +1,8 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-30
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
   content_hash: sha256:b0a6ebd8b1f042d3f496c7948093f8a7e6fd962d03d29455ce77312c94149d0b
   sources:
@@ -17,7 +17,7 @@ verification:
     - "CAS Exam 9 Working Group, Note to Allocation of Capital in the Insurance Industry (Cummins), January 2026, pp.1-3, sha256:b5768e1c98dd51f4bc86b133f9da30de2cb0497d65f0e34af4861cb122c305fc — https://www.casact.org/sites/default/files/2026-01/Exam_9_Erratum_Cummins_Capital-1.pdf"
     - "CAS Exam 9 Content Outline, Fall 2026, pp.4-5, 7 (Domains B and C; text references), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
     - "CAS abstract record, Cummins, Allocation of Capital in the Insurance Industry (RMIR 3(1), 2000), abstract, sha256:e794f5454cd27647fe926819fa474a13934475e091a93c69aa752413e234b2f8 — https://www.casact.org/abstract/allocation-capital-insurance-industry"
-    - "Goldfarb, P&C Insurance Company Valuation (CAS study note, rev. Oct 2010), pp.30 (tangible book value), 35-39 (6.1.3 shortcut to valuation and comparable firms; 6.2 P-BV or price to tangible book; 6.2.1 P-BV = 1 + (ROE - k)/(k - g), formula image read from text layer; 6.4 market vs transaction multiples and cautions: control premiums, M&A overpricing, IPO underpricing, reported variables, underlying economic assumptions), sha256:2402ab80aaa255b46db5da92a48324890c2f990776b4852c549515f4e4de5ba4 — https://www.casact.org/sites/default/files/2021-03/7_Goldfarb.pdf"
+    - "Goldfarb, P&C Insurance Company Valuation (CAS study note, rev. Oct 2010), pp.27 and fn 28 (book value as the firm's equity capital; assets and liabilities fairly stated on the balance sheet), 30 (book value: reported book value of the firm's equity; tangible book value), 35-39 (6.1.3 shortcut to valuation and comparable firms; 6.2 P-BV or price to tangible book; 6.2.1 P-BV = 1 + (ROE - k)/(k - g), formula image read from text layer; 6.4 market vs transaction multiples and cautions: control premiums, M&A overpricing, IPO underpricing, reported variables, underlying economic assumptions), sha256:2402ab80aaa255b46db5da92a48324890c2f990776b4852c549515f4e4de5ba4 — https://www.casact.org/sites/default/files/2021-03/7_Goldfarb.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Cost of Capital.md

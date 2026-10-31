@@ -6949,7 +6949,13 @@
      "statement": "To project multiple future periods, use the expected incremental loss from the prior period added to cumulative losses as D_{i,j−1} for the next period's chain ladder component, while the Z and the BF percent emerging are taken at each age.",
      "concept": "Bayesian Chain Ladder / Bornhuetter-Ferguson Credibility Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "A step of this solution's plan, not course content the vault must teach. Verrall 2007 §5 (Variance 1:1, p.62, eqs 5.2-5.3) gives the Bayesian mean for 'the next observation' C_ij given C_i1..C_i,j-1, defined at every age j with D_{i,j-1} the cumulative to date; he never describes a multi-period roll-forward in words. The tagged page carries that per-age formula (E[C_ij] = Z_ij(lambda_j - 1)D_{i,j-1} + (1 - Z_ij)(lambda_j - 1)M_i/(lambda_j...lambda_n), with Z_ij at each age and 'The next period. The mean above is for the next increment') and its 'Credibility grows with maturity' bullet teaches the whole-year projection directly: 'The posterior mean of x_i is Z D_{i,j-1}/sum y_k + (1 - Z) M_i, and every future cell is y_j times it' -- the route of the sample answer's third and fourth alternatives. Rolling the expected increment into D and re-taking Z at the next age gives the same number by gamma-Poisson conjugacy ((alpha phi + D + y_j mu)/(beta phi + p + y_j) = mu), so the stepwise plan follows from the page's formula; 3931.9 vs 3931.3 in the sample answers is rounding.",
+      "date": "2026-10-31",
+      "run": "g8-cas7-chk-cc"
+     }
     },
     {
      "id": "r5",
@@ -8531,7 +8537,15 @@
      "statement": "To value an acquisition target with transaction multiples, select comparable transactions with similar ROE, growth rate and discount rate, then multiply the target's book value (assets less liabilities, excluding intangible assets) by their price-to-book multiples to get a range of values.",
      "concept": "Price-to-Book Value Transaction Multiples",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cost of Capital",
+      "quote": "A shortcut valuation applies the P-BV multiples of such comparable firms, or of comparable past acquisitions and IPOs (**transaction multiples**), to the firm's book value (or tangible book value), giving a range of values. Book value is the reported book value of the firm's equity, resting on the asset and liability values its balance sheet reports; tangible book value is that reported book value adjusted to remove the impact of intangible assets such as goodwill.",
+      "note": "The bullet teaches the whole procedure: comparables chosen for similar ROE, growth and discount rate (preceding sentence), transaction multiples from past acquisitions and IPOs applied to book value or tangible book value for a range of values (Goldfarb 6.1.3, 6.2, 6.4, pp.35-39), and now what book value and tangible book value are (Goldfarb p.30; p.27 fn 28). 'Assets less liabilities' is the plain-accounting meaning of equity book value that the sample answer itself writes out.",
+      "date": "2026-10-31",
+      "run": "g8-cas7-chk-cc"
+     }
     },
     {
      "id": "r5",

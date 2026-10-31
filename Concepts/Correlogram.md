@@ -20,11 +20,11 @@ verification:
 >
 > $$c_k = \frac{1}{n}\sum_{t=1}^{n-k}(x_t - \bar{x})(x_{t+k} - \bar{x})$$
 >
-> $$\text{bounds} = -\frac{1}{n} \pm \frac{2}{\sqrt{n}}$$
+> $$\text{bounds} = \pm\frac{1.96}{\sqrt{n}} \approx \pm\frac{2}{\sqrt{n}}$$
 
-- Lag $k$ runs along the horizontal axis and $r_k$ up the vertical. The first bar is always $r_0 = 1$. When the true $\rho_k = 0$, $r_k$ is approximately normal with mean $-1/n$ and variance $1/n$. That gives the bounds Cowpertwait draws. The simpler $\pm 1.96/\sqrt{n}$ used elsewhere in this vault differs from them by about $0.01$ when $n$ is around $100$.
+- Lag $k$ runs along the horizontal axis and $r_k$ up the vertical. The first bar is always $r_0 = 1$. For a white-noise series and large $n$, each $r_k$ is approximately normal with mean $0$ and standard deviation $1/\sqrt{n}$, so about $95\%$ of the bars should fall within $\pm 1.96/\sqrt{n}$, usually rounded to two standard errors, $\pm 2/\sqrt{n}$. If a question prints its own bounds, use the ones it gives.
 - **Patterns to recognise:**
-  - slow, near-linear decay from close to $1$ means a trend or other non-stationarity; [[Differencing|difference]] before reading anything else
+  - slow, near-linear decay from close to $1$ means a trend or other non-stationarity; [[Differencing|difference]] before reading anything else. It shows that a trend is there, not which way it runs: a rising and a falling trend give the same slow decay, since $r_k$ is unchanged when every $x_t$ is replaced by $-x_t$ (each deviation from $\bar{x}$ changes sign, so their products do not)
   - peaks at lags $s, 2s, \ldots$ ($s = 12$ for monthly data, $s = 4$ for quarterly) mean [[Seasonality|seasonality]]
   - geometric decay, alternating in sign if $\phi < 0$, suggests AR behaviour; spikes up to lag $q$ and nothing after suggest MA($q$)
   - everything inside the bounds looks like [[White Noise|white noise]]
@@ -39,9 +39,8 @@ verification:
 > > [!answer]-
 > > $$
 > > \begin{align*}
-> > \text{bounds} &= -\frac{1}{96} \pm \frac{2}{\sqrt{96}} \\
-> > &= -0.010 \pm 0.204 \\
-> > &= (-0.215,\ 0.194)
+> > \text{bounds} &= \pm \frac{2}{\sqrt{96}} \\
+> > &= \pm 0.204
 > > \end{align*}
 > > $$
 > > Every bar is far outside. The **slow decay** says the series is not stationary (a trend in claim volume), and the **peaks at 12 and 24** say there is an annual cycle.
@@ -49,16 +48,15 @@ verification:
 > > No AR or MA order can be read from this plot. Remove the trend and the seasonal pattern first (a first difference and a lag-12 seasonal difference, or a decomposition), then re-plot the ACF and PACF of what remains.
 
 > [!example]- Residual Correlogram After an AR(1) Fit {Example}
-> An AR(1) is fitted to $120$ months of claim frequency. The residual correlogram, plotted to lag $24$, shows $r_1 = 0.04$, $r_2 = -0.07$, $r_5 = 0.18$ and $r_{12} = 0.31$. All other lags lie within $\pm 0.10$. Is the model adequate?
+> An AR(1) is fitted to $120$ months of claim frequency. The residual correlogram, plotted to lag $24$, shows $r_1 = 0.04$, $r_2 = -0.07$, $r_5 = 0.19$ and $r_{12} = 0.31$. All other lags lie within $\pm 0.10$. Is the model adequate?
 >
 > > [!answer]-
 > > $$
 > > \begin{align*}
-> > \text{bounds} &= -\frac{1}{120} \pm \frac{2}{\sqrt{120}} \\
-> > &= -0.008 \pm 0.183 \\
-> > &= (-0.191,\ 0.174)
+> > \text{bounds} &= \pm \frac{2}{\sqrt{120}} \\
+> > &= \pm 0.183
 > > \end{align*}
 > > $$
-> > $r_5 = 0.18$ is only just outside, at an unremarkable lag. With $24$ lags plotted, about $1.2$ breaches are expected by chance, so it is not evidence on its own.
+> > $r_5 = 0.19$ is only just outside, at an unremarkable lag. With $24$ lags plotted, about $1.2$ breaches are expected by chance, so it is not evidence on its own.
 > >
 > > $r_{12} = 0.31$ is well outside, **and at the seasonal lag**. The AR(1) has left the annual pattern in the residuals. **Not adequate:** add a seasonal term (a seasonal AR or MA at lag $12$, or a seasonal difference), refit, and check the correlogram again.

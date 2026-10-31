@@ -35,6 +35,10 @@ verification:
 - **Basel's seven event types:** internal fraud; external fraud; employment practices and workplace safety; clients, products and business practices; damage to physical assets; business disruption and system failures; execution, delivery and process management.
 - **In an insurer** these look like claims leakage and fraud, underwriting outside authority, a policy or claims system outage, a cyber attack, mis-selling or bad-faith claims handling, a data or [[Model Risk|model]] error in pricing or reserving, and failure of an outsourced provider.
 - **Determining operational risks** is mostly identification and control: process mapping, risk and control self-assessment, a loss-event database, **key risk indicators** that give early warning (system downtime, staff turnover), and internal controls — for U.S. public companies, the [[Sarbanes-Oxley]] regime over financial reporting. Capital regimes charge for it too: the [[Operational Risk Margin|operational risk margin]] in Canada's MCT, a separate capital requirement in Solvency II (Art. 107), and a component of the NAIC [[Risk-Based Capital|RBC]] formula.
+- **Basel II's simpler capital charges** (BCBS, June 2006, paras 649–654) use gross income as a proxy for the scale of operational exposure:
+  - *Basic indicator approach:* capital equals a single fixed percentage $\alpha = 15\%$ of positive annual gross income, averaged over the previous three years, $K_{\text{BIA}} = \alpha \sum \text{GI}_{+} / n$. A year with zero or negative gross income is excluded from both the numerator and the denominator, so $n$ is the number of the three years with positive income. One $\alpha$ for the whole firm, so the mix of business has no effect.
+  - *Standardised approach:* activities are split into eight business lines, each with its own factor $\beta$: $18\%$ for corporate finance, trading and sales, and payment and settlement; $15\%$ for commercial banking and agency services; $12\%$ for retail banking, asset management and retail brokerage. Capital is $K_{\text{TSA}} = \sum_{\text{years }1\text{ to }3} \max\big(\sum_j \beta_j \text{GI}_j,\ 0\big) / 3$, so it depends on the firm's mix of business.
+  - Under the standardised approach a negative charge in one business line offsets positive charges in other lines *within the same year* without limit; a year whose total is negative enters as zero but the divisor stays three. A firm with a loss year, or a loss-making line, can therefore hold less capital than under the basic indicator approach.
 - It is largely **incidental** risk: an insurer earns nothing for bearing it, so the aim is to reduce it cost-effectively rather than to exploit it. It also tends to arrive alongside other risks — the catastrophe that floods the claims office.
 
 > [!example]- Which of These Losses Are Operational? {Example}
@@ -71,3 +75,35 @@ verification:
 > > $$
 > >
 > > The control saves $\$250{,}000$ a year in expectation for a cost of $\$200{,}000$, and cuts the standard deviation by $13\%$ — worth doing. If the concern were the tail rather than the mean, a control capping severity (a payment limit) would do more than one reducing frequency.
+
+> [!example]- Basic Indicator Against Standardised Capital {Example}
+> A bank's gross income (\$M) by business line over the last three years:
+>
+> | Year | Retail banking | Corporate finance | Total |
+> |---|---|---|---|
+> | 1 | $100$ | $50$ | $150$ |
+> | 2 | $80$ | $-120$ | $-40$ |
+> | 3 | $120$ | $60$ | $180$ |
+>
+> Find the operational risk capital under the basic indicator and standardised approaches.
+>
+> > [!answer]-
+> > **Basic indicator.** Year 2's total is negative, so it is dropped from the numerator *and* the denominator:
+> >
+> > $$
+> > \begin{align*}
+> > K_{\text{BIA}} &= 0.15 \times \frac{150 + 180}{2} \\
+> > &= 24.75
+> > \end{align*}
+> > $$
+> >
+> > **Standardised.** Retail banking takes $\beta = 12\%$, corporate finance $18\%$. Year by year: $12 + 9 = 21$; $9.6 - 21.6 = -12$, floored at $0$; $14.4 + 10.8 = 25.2$.
+> >
+> > $$
+> > \begin{align*}
+> > K_{\text{TSA}} &= \frac{21 + 0 + 25.2}{3} \\
+> > &= 15.4
+> > \end{align*}
+> > $$
+> >
+> > The standardised charge is lower for two reasons: the retail book carries a smaller factor than $15\%$, and the loss year counts as zero over three years rather than vanishing and leaving the good years to be averaged over two.

@@ -47,6 +47,11 @@ A **Risk Measure** $\rho$ assigns a single number $\rho(X)$ to a random loss $X$
 - **Two families.** The CAS's 2003 ERM overview splits ERM measures into *solvency-related* measures, which look at the adverse tail (probability of ruin, shortfall risk, VaR, EPD, TVaR) and concern customers and their proxies, regulators and rating agencies; and *performance-related* measures, which look at volatility near the mean (variance, standard deviation, semi-variance, below-target risk) and concern owners and their proxies, such as stock analysts.
 - **Strategic effect.** The measure adopted for capital, limits and reinsurance shapes behaviour: a target at one return period can be met by piling risk just beyond it, while TVaR charges for the whole tail. Solvency II uses a 99.5% one-year VaR ([[Solvency II]]); the Swiss Solvency Test uses 99% TVaR. See [[Risk Taxonomies]], [[Risk Modeling]] and [[Risk Capital]].
 
+- **TVaR's weakness: it is linear in the tail.** Kreps writes a risk measure as a *riskiness leverage* applied to each outcome; TVaR's leverage is zero up to the quantile and constant above it, so every tail dollar counts the same and a loss twice as large counts exactly twice as bad. Venter notes that the tail measures evaluate the risk above their threshold linearly, "which many consider to be an underweighting" — a risk-averse management wants the weight to grow as losses start to impair capital.
+- **Weighted TVaR (WTVaR)** is TVaR calculated on transformed probabilities — for example from the Wang transform — that shift weight towards the larger losses. Because extreme outcomes get more than their share of probability, a loss twice as large counts as more than twice as bad, which suits a portfolio with heavy-tailed, skewed losses such as catastrophe-exposed property or high-limit excess casualty. Taking the mean of a transformed loss distribution is a risk measure in its own right, and Venter suggests it can get around the problems of the tail methods.
+- **Computing WTVaR from equally likely simulations:** sort the scenarios from worst down; read each one's transformed probability $f^*$ as the difference between successive values of the transformed CDF $F^*$; take scenarios from the worst until their $f^*$ add up to the tail probability $1 - p$, cutting the last one's weight so the total is exactly $1 - p$; then divide the weighted sum of losses by $1 - p$. Plain TVaR is the same calculation with each scenario weighted $1/n$.
+- **Other measures for allocating capital** (Venter's survey): VaR; the EPD, which can be taken beyond a chosen target level rather than beyond default; TVaR; excess TVaR, $E[X - \mu \mid X > b]$, which charges nothing for the mean loss already funded by premium; standard deviation, variance and semi-variance; the value of the **default put option** — limited liability lets an insurer put its default costs to policyholders, and the option's value measures that risk; and the mean of a transformed loss distribution. VaR leaves out how far capital is exhausted, while the EPD, the default option, TVaR and excess TVaR are sensitive to the degree of default.
+
 > [!example]- VaR, TVaR and CTE for a Catastrophe Portfolio {Example}
 > An insurer's annual catastrophe loss $X$ (\$ millions) is $0$ with probability $0.80$, $10$ with probability $0.12$, $50$ with probability $0.06$ and $100$ with probability $0.02$. Compute $E[X]$, $\sigma(X)$, $\text{VaR}_{0.95}$, $\text{TVaR}_{0.95}$ and $\text{CTE}_{0.95}$.
 >
@@ -149,6 +154,43 @@ A **Risk Measure** $\rho$ assigns a single number $\rho(X)$ to a random loss $X$
 > > \end{align*}
 > > $$
 > > Location B's standard deviation is almost three times A's, but its average loss is twice as large. The coefficient of variation adjusts for that: 0.20 against 0.14, so B's losses are still relatively more variable, and harder to budget for as a share of their expected cost.
+
+> [!example]- TVaR and WTVaR From Simulations {Example}
+> A model produced $200$ equally likely scenarios. The five worst losses and the transformed CDF at each are:
+>
+> | Rank | Loss | $F^*$ |
+> |---|---|---|
+> | 1 | $30$ | $1.000$ |
+> | 2 | $20$ | $0.990$ |
+> | 3 | $15$ | $0.982$ |
+> | 4 | $12$ | $0.976$ |
+> | 5 | $9$ | $0.971$ |
+>
+> Find the 1-in-50 TVaR and WTVaR.
+>
+> > [!answer]-
+> > The tail probability is $1/50 = 0.02$.
+> >
+> > **TVaR:** each scenario has probability $1/200 = 0.005$, so the worst $4$ fill the tail.
+> >
+> > $$
+> > \begin{align*}
+> > \text{TVaR} &= \frac{30 + 20 + 15 + 12}{4} \\
+> > &= 19.25
+> > \end{align*}
+> > $$
+> >
+> > **WTVaR:** the transformed probabilities are differences of $F^*$: $1 - 0.990 = 0.010$, $0.990 - 0.982 = 0.008$, then $0.982 - 0.976 = 0.006$, of which only $0.002$ fits before the total reaches $0.02$.
+> >
+> > $$
+> > \begin{align*}
+> > \text{WTVaR} &= \frac{0.010(30) + 0.008(20) + 0.002(15)}{0.02} \\
+> > &= \frac{0.49}{0.02} \\
+> > &= 24.5
+> > \end{align*}
+> > $$
+> >
+> > The transform gives the worst scenario twice its plain weight, so WTVaR exceeds TVaR. Weighting by $F^*$ itself instead of its differences, or forgetting to cut the last weight, are the two slips that break this calculation.
 
 > [!tip]- How it appears on the exam
 > - **DISC-RM:** The introduction to risk management covers basic risk measures. Questions ask what a measure shows, such as why the coefficient of variation is used to compare exposures of different sizes, which measure looks only at unfavourable outcomes, or what a VaR figure means, and may ask for a simple calculation of a mean, a standard deviation or a coefficient of variation.

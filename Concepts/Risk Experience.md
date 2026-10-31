@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:e3e40ef0ec8401b83e7f68f63c7612e02d32fecedca4bcf4cc475c664d15c6e2
+  content_hash: sha256:ec3d1a0a6a7c29c1df3276a2755a465c6bb219bb4ff2a747606e4d6b3b9d143f
   sources:
     - "Werner & Modlin, Basic Ratemaking, 5th ed. (CAS, 2016), Ch.15 experience rating, PDF pp.301-305, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
     - "Fisher, McTaggart, Petker & Pettingell, Individual Risk Rating (CAS Study Note, v3 Oct 2019), Ch.1 §1-5, Ch.2 §3, PDF pp.8-9, 26, sha256:3182cd5d8ebccc92be67a246e61a527acda5b304b823448d99f8a2546ca07b81 — https://www.casact.org/sites/default/files/2021-03/8_Fisher_et_al.pdf"
@@ -23,7 +23,7 @@ verification:
 > $$Z_i = \frac{m_i}{m_i + \hat{v}/\hat{a}}$$
 
 - $\bar X_i$ is risk $i$'s observed mean (loss per exposure, or claim frequency) over exposure $m_i$, and $\hat\mu$ is the class or collective mean. $\hat v$ is the [[Expected Value of Process Variance|expected process variance]] and $\hat a$ the [[Variance of Hypothetical Means|variance of the hypothetical means]].
-- **In experience rating (Exam 8)** the risk's own experience $A$ is usually three completed policy years, excluding the most recent immature one. It is capped per claim, or split into primary and excess. It has to be on the **same basis** as the expected losses $E$ — same limits, same maturity, same exposure — because the mod measures only how far the record shows the risk to differ from others in its [[Rating Class|class]]. The mod is not a charge-back for past losses ([[Experience Rating]]).
+- **In experience rating (Exam 8)** the risk's own experience $A$ usually covers two to five policy years, ending with the last complete year. It is capped per claim, or split into primary and excess. It has to be on the **same basis** as the expected losses $E$ — same limits, same maturity, same exposure — because the mod measures only how far the record shows the risk to differ from others in its [[Rating Class|class]]. The mod is not a charge-back for past losses ([[Experience Rating]]).
 - **In retrospective and loss-sensitive rating** the "actual loss" is the current policy's own losses, limited per occurrence and bounded by the minimum and maximum. Incurred plans first value them about 18 months after inception and then annually, so the premium follows development ([[Loss Sensitive Rating]]).
 - **In credibility estimation (MAS-II)** experience does double duty. It supplies each risk's own mean, and pooled across risks it is the data the structural parameters are estimated from. $\hat v$ comes from year-to-year variation within risks, and $\hat a$ from how much the risk means spread beyond what $\hat v$ explains (*non-parametric*). Alternatively, an assumed family supplies one of them — for Poisson counts $\hat v = \bar X$ (*semi-parametric*). See [[Empirical Bayes Credibility]].
 - **Limits on what experience says.** Mahler showed that risk parameters shift over time, so older years predict less. Bailey and Simon found that adding a second year raised credibility by only about two-fifths, not double. A change in operations can make the record out of date, which is where [[Schedule Rating|schedule rating]] comes in. Bailey and Simon's method is on [[Merit Rating]].

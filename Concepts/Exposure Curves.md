@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:37557a74e876d0c23cd3fd3206edc3ddb26a137c45a18375631911b80b11578e
+  content_hash: sha256:638766a663f7eb2aeccc511207247187f60f4d6b56c63f5e7e1281d7741e66eb
   sources:
     - "Bernegger, The Swiss Re Exposure Curves and the MBBEFD Distribution Class (ASTIN Bulletin 27(1), 1997), pp.99-111 (§2.1-2.3 eqs (2.1)-(2.6), §3.2 eq (3.3), §4.1, §4.3 eqs (4.5)-(4.6), Fig. 4.2), sha256:5c07f557257622c9dd5f1886705a55de9f368fef1839dd405c87a8550f8a7c89 — https://www.casact.org/sites/default/files/2021-03/8_Bernegger.pdf"
     - "Clark, Basics of Reinsurance Pricing (CAS Study Note, revised 2014), pp.17-19 (exposure curve P(p), layer = P((R+L)/IV) - P(R/IV)), pp.27-29 (casualty ILFs / exposure factor), sha256:1c4429fee538cc8d90157c1849ca689a3a2173a2670fc57f212d866b493e2c63 — https://www.casact.org/sites/default/files/old/studynotes_clark_2014.pdf"
@@ -66,7 +66,7 @@ verification:
 > > \end{align*}
 > > $$
 > >
-> > The layer from $20\%$ to $50\%$ of MPL carries $37\%$ of expected loss. A mean damage ratio of $55\%$ is far heavier than real property experience, which is why fitted curves such as the Swiss Re family are much more concave.
+> > The layer from $20\%$ to $50\%$ of MPL carries $37\%$ of expected loss.
 
 > [!example]- Exposure Rating a Per-Risk Layer {Example}
 > A per-risk treaty covers $\$3$M xs $\$2$M, with an ELR of $60\%$ and the Swiss Re $c = 3$ curve, where $G(0.10) = 0.4056$, $G(0.25) = 0.6002$ and $G(0.40) = 0.7163$. Band A has MPL $\$5$M and $\$400{,}000$ of premium. Band B has MPL $\$20$M and $\$600{,}000$ of premium. Find the expected layer loss.

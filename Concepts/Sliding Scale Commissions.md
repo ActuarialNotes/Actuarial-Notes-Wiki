@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:8cce5337a3afb4698a6d524d95547ac7c61a4b4d520a2a4636131f9ec9f7aae8
+  content_hash: sha256:65efdac0073de173892315b929186ad67e88a23348a67342bc1bd21d4a904fcf
   sources:
     - "Clark, Basics of Reinsurance Pricing (CAS Study Note, revised 2014), pp.9-12 (sliding scale terms and table, balanced plan, 31.0% expected commission and 96% technical ratio, historical check, carryforward approaches), sha256:1c4429fee538cc8d90157c1849ca689a3a2173a2670fc57f212d866b493e2c63 — https://www.casact.org/sites/default/files/old/studynotes_clark_2014.pdf"
     - "CAS Exam 9 Content Outline, Fall 2026, pp.3, 7 (task A1-A3, readings Clark and Bernegger), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
@@ -25,7 +25,7 @@ verification:
 - Historical adjusted loss ratios make a reasonability check. They are distorted by past catastrophes and thin years, and they miss outcomes the history does not contain.
 - **Carryforward.** Past deficits above the minimum-commission loss ratio can be carried into the current year. Priced for a single year, this simply shifts the slide by the carryforward. Priced over a multi-year block, it cuts the variance roughly in proportion to the number of years. Neither view is standard. See [[Reinsurance Contract Provisions]], and compare [[Profit Commission]] and [[Loss Corridors]].
   - *Clark's objections.* The single-year approach ignores the potential for carryforward beyond the current year: in the first year the price is the same with or without the provision, as though the program would be cancelled at year end. The long-run approach has two problems: the method for reducing the variance is not obvious (Clark's example divides the standard deviation by $\sqrt 5$ for a five-year block), and it ignores the fact that the contract may not renew the following year, potentially leaving the reinsured with no carryforward benefit. The question is harder still when a deficit can be carried forward but not a credit, and Clark knows of no standard method.
-  - *Smoothing and the aggregate distribution.* Because of these objections, the aggregate loss distribution used to price the scale is normally left to show the full volatility of the underlying business, with the carryforward's smoothing not built into it; reducing its variance assumes the treaty will be renewed, which is uncertain. CAS's examiners accept either position on this, so long as it is argued from the volatility the distribution must keep and the chance that the treaty is cancelled or not renewed.
+  - *Smoothing and the aggregate distribution.* Whether to build the carryforward's smoothing into the aggregate loss distribution used to price the scale has no standard answer. Leaving it out keeps the full volatility of the underlying business in the distribution; reducing its variance assumes the treaty will be renewed, which is uncertain. CAS's examiners accept either position on this, so long as it is argued from the volatility the distribution must keep and the chance that the treaty is cancelled or not renewed.
 
 > [!example]- Reading a Two-Slope Scale {Example}
 > Terms: minimum commission $22\%$ at a $68\%$ loss ratio or higher; sliding $1{:}1$ to $30\%$ at $60\%$; then sliding $0.5{:}1$ to a maximum of $36\%$ at $48\%$ or lower. Find the commission at loss ratios of $75\%$, $64\%$, $55\%$ and $40\%$.

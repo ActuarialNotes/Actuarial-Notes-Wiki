@@ -34,6 +34,53 @@ verification:
 - **How ERM relates to it.** Some risks *are* the business: underwriting risk is what the insurer is paid to take, and ERM's job is to take it efficiently and exploit it. Others are incidental — most [[Operational Risk|operational risk]] — and should simply be reduced. ERM's contribution is to see them together, so strategy is chosen with its risk known.
 - **ERM tools change business risk, and therefore strategy.** [[Reinsurance]], hedging and diversification lower $\sigma_{\text{ROA}}$; more capital lowers $A/E$. Either creates room to grow, to hold price, or to take a risk the firm could not previously afford. Each has a cost and may create another risk — reinsurance swaps insurance risk for [[Credit Risk|credit risk]]. See [[Risk Mitigation]] and [[Business Strategy]].
 
+## The underwriting cycle as a strategic risk
+
+The [[Underwriting Cycle|underwriting cycle]] is the strategic risk a P&C insurer lives with most visibly. Feldblum traces it to competition rather than to ratemaking: since an insurer's capacity is limited only by financial and psychological constraints, not by plant and equipment, supply expands quickly when profits look good and contracts when capital is lost. Managing the cycle, modelling it and planning around it are the three halves of the problem (CAS's examiners credit the elements below).
+
+### Managing the cycle
+
+- **The naive strategy — "maintain market share".** A firm that keeps its premium volume, or its plan target, constant through the cycle does it by cutting prices or loosening terms so as not to lose customers. In a soft market that means writing more business at inadequate rates, and the losses only show when that business develops. Feldblum's reading of the cycle is that following rates downward is no remedy: at the nadir, prices cascade to well below marginal cost, and rapid growth "can realistically only be accomplished by pricing below cost" — he cites Best's finding that about 81% of insolvencies occurred in companies growing outside industry norms.
+- **Agency theory.** Managers are the agents of the owners, and the two can want different things; the goal of agency theory is to align management's interests with the owners'. An incentive plan paid on short-term measures, such as top-line growth and the calendar-year combined ratio, rewards aggressive growth, underpricing and writing the wrong risks, while the cost — adverse development, especially in long-tailed lines — falls on the owners years later.
+- **Intellectual property.** A firm's franchise value lies mostly in its intellectual property: underwriting and actuarial talent, proprietary systems, databases and models, its reputation and its market relationships. Effective cycle management keeps investing in it throughout the cycle — retaining key people, maintaining systems and data, keeping a presence in core markets and distribution channels during a soft market — so that systems do not go obsolete and talent does not leave, and the firm can write again when prices recover.
+- **Underwriter incentives.** Incentives should be flexible and tied to the portfolio's profitability goals rather than to growth alone, so that an underwriter is not penalized — no lost job or bonus — for writing less, or ceasing to write new business, when market prices are inadequate.
+- **Owner education.** Owners, not just management, need to understand that a soft market brings lower premium volume and a higher expense ratio (fixed costs spread over less premium) as a result of the cycle, so that they do not push for the mistaken response of cutting prices to win back share.
+- **Avoid market overreaction and plan ahead.** A firm that shrinks in the soft market keeps the surplus to write aggressively at higher prices when the market hardens; scenario planning (below) gives it pre-agreed responses to the turn.
+- **Investment strategy across the cycle.** The asset mix can be tilted against the cycle to smooth earnings: when underwriting income is weak (a soft market), take more investment risk for higher yield — equities, high-yield bonds, taxable bonds — to offset it; when underwriting profit is high (a hard market), move toward conservative, lower-yield assets such as Treasuries. Tax-exempt municipal bonds pay lower interest than comparable taxable securities because their interest is excluded from federal gross income, so they are worth most to an insurer with taxable profits to shelter — typically hard-market underwriting profit. The price of the strategy is more asset risk in the years it takes it.
+
+### Modelling the cycle
+
+- **Soft approaches** rest on judgment. In **competitor analysis**, information from trade publications, rate filings, agents and financial statements is combined to see whether an unusually large number of competitors look financially distressed, or unusually profitable — a sign that the cycle is about to turn. **Scenario testing** writes out descriptions of possible future states of the insurance environment, to prepare management to think through its responses.
+- **Technical approaches** are time-series models of an industry measure such as the combined ratio. In the **general factor model**, a latent market factor $Z_t$ follows its own autoregression and the observed combined ratio $X_t$ adjusts toward the factor's previous value:
+
+> $$Z_t = a + b\,Z_{t-1} + \sigma\,\varepsilon_t \qquad X_t = d + c\,(Z_{t-1} - X_{t-1}) + \tau\,\delta_t$$
+
+- Here $\varepsilon_t$ and $\delta_t$ are independent standard normal disturbances, $\sigma$ and $\tau$ their scales, $b$ sets how persistent the latent factor is and $c$ how fast the combined ratio closes the gap to it.
+- **Behavioral (econometric) approaches** are the middle ground between soft and technical ones: individual components of the process are built on economic and behavioral theory — capital, the supply of insurance, the demand for it, and profit flows — and their interactions determine the equilibrium price and quantity. Like the soft approaches, an econometric model needs a large quantity, variety and complexity of data and builds in the structural and human factors behind the cycle; like the technical models, it uses mathematical formalism and statistical rigor and can be tested for statistical validity, to a greater degree than a soft approach can.
+- **How the components link.** Profits and capital infusions raise industry capital, and losses, shocks and exits lower it. More capital means more capacity, so the supply curve shifts out; customers who value a lower probability of default also demand more from better-capitalized insurers, so demand shifts out too (usually by less). The intersection of the curves sets the equilibrium price and quantity, and varying the key inputs — capital, shock events, inflation, capital flows — and re-solving traces out the price path and its turns.
+- **Reading the graph.** A supply and demand graph puts price on the vertical axis and quantity on the horizontal; demand slopes down from left to right, supply slopes up, and the equilibrium is the point where they cross. When both curves shift, typically the effect on one of price or quantity can be determined but not on both: after an industry-wide capital infusion moves both curves out, the equilibrium quantity rises, while the equilibrium price may rise or fall depending on the relative size of the two shifts.
+
+### Planning: the bridging model and scenario planning
+
+- **The bridging model.** Plan loss ratios for the coming year, and expected loss ratios for recent immature years, are projected from the loss ratios of older, mature years, adjusted for loss cost trend and rate level changes since; the results are used as the expected loss ratios in a [[Bornhuetter-Ferguson Method|Bornhuetter-Ferguson]] estimate for the recent years. Its operational problem is **autocorrelation**: every recent year inherits the older years' estimates, so an optimistic old loss ratio makes the plan optimistic, and a deterioration in the older years, discovered late, carries forward into the plan and the recent years' reserves at once — in a long-tailed line, a reserve problem across many years.
+- **A single, unilateral plan** has two characteristic drawbacks. Underwriters pressured to "make plan" when conditions worsen may write business at inadequate prices, harming long-term results; and organizational inertia — management's reluctance to revise the plan's loss ratios when actual results deviate — lets booked losses drift from reality, while optimistic plan loss ratios feed straight into reserving through the Bornhuetter-Ferguson method.
+- **Scenario planning** replaces it in three steps: define a set of plausible future scenarios for the market (possibly with likelihoods); agree in advance, for each, on action plans and targets — premium volume and loss ratio by line — in enough detail to implement; then monitor the environment and put into effect the plan of the scenario that emerges. Because the responses were agreed beforehand, management can act quickly rather than devise a strategy on the fly, and because the alternative plans and incentives are already sanctioned, the pressure to make plan at all costs and the organizational inertia both fall away, which supports long-term profitability.
+
+> [!example]- Bridging a Plan Loss Ratio {Example}
+> An insurer's accident year 2021 has matured at a $64\%$ loss ratio. Loss costs trend at $5\%$ a year, and rates rose $3\%$ in 2022 and $2\%$ in 2023. Bridge 2021 to a 2023 expected loss ratio, then redo it after 2021 develops to $70\%$.
+>
+> > [!answer]-
+> > $$
+> > \begin{align*}
+> > \text{ELR}_{2023} &= \frac{0.64 \times 1.05^2}{1.03 \times 1.02} \\
+> > &= 67.2\% \\[4pt]
+> > \text{ELR}_{2023}' &= \frac{0.70 \times 1.05^2}{1.03 \times 1.02} \\
+> > &= 73.5\%
+> > \end{align*}
+> > $$
+> >
+> > Six points of development in an old year become six points of plan loss ratio — and the same shift reaches 2022 and every other year bridged from 2021, and their Bornhuetter-Ferguson reserves. That is the autocorrelation the bridging model builds in.
+
 > [!example]- Growth, Leverage and Reinsurance {Example}
 > An insurer has assets of $\$1{,}000$ million and equity of $\$300$ million; the standard deviation of its operating return on assets is $3.0\%$. A growth plan would take assets to $\$1{,}200$ million with equity unchanged. Find $\sigma_{\text{ROE}}$ before and after, and the $\sigma_{\text{ROA}}$ that would keep equity risk at today's level.
 >

@@ -39,6 +39,15 @@ verification:
   - **Co-measures and margin allocation** — co-TVaR allocates by each unit's average loss in the tail; Mildenhall and Major allocate margin directly (the *natural allocation*) and let the implied capital follow.
 - **Allocation is a device.** All capital stands behind every policy; the allocation exists to set [[Risk-Adjusted Pricing|prices]] and judge [[Risk-Adjusted Performance|performance]], and marginal methods that recognise diversification are the ones that support good decisions.
 
+- **Capital reference points.** Before it can be allocated, total capital has to be tied to an event the firm wants to survive. *Default avoidance* — enough capital to keep the probability of ruin small — mainly protects policyholders, and it has two drawbacks:
+  - it places the requirement deep in the tail of the loss distribution, where a risk model has the least data and is least reliable; and
+  - shareholders and other stakeholders are hurt by large partial losses of capital well before default, so a more likely, less extreme event can be the more meaningful standard.
+
+  Other reference points look at the firm as a going concern: keeping enough capital to continue writing and servicing the renewal book after an adverse year, to come through a catastrophe and still operate strongly afterwards, to keep the target rating, or to avoid regulatory action. Kreps gives management appetites of the form "not more than a 10% chance of losing 20% of capital", and Venter notes that because renewal business has a value, the goal can be enough capital to keep operating even in the identified adverse situation.
+- **From a reference point to a capital requirement:** choose the largest fraction $k$ of capital the firm will tolerate losing in a 1-in-$y$-year event, measure that event's average loss as the TVaR at the matching percentile, and require
+  $$C_{\min} = \frac{\text{TVaR}_{1 - 1/y}}{k}$$
+  — a multiple, $1/k$, of the TVaR. Venter's example is a goal that the average 1-in-100 or worse year use up no more than premium plus one third of capital, which makes required capital three times the 99% excess TVaR (measured above the mean, since the mean is funded by premium).
+
 > [!example]- Four Allocations of the Same Capital {Example}
 > Two lines have loss standard deviations $\sigma_A = 30$ and $\sigma_B = 50$ with correlation $0.5$. The insurer holds capital equal to twice the standard deviation of its total loss. Allocate total capital by (a) standalone proportions, (b) Merton–Perold, (c) Shapley, (d) covariance (Euler).
 >

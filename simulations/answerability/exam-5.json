@@ -506,7 +506,15 @@
      "statement": "To build an incremental triangle, sum the payments made during each calendar year for the claims in each row (by accident or report year) and place them at the development age corresponding to that calendar year; a cumulative triangle sums the incremental payments through each evaluation age.",
      "concept": "Incremental and Cumulative Loss Triangles",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Development Triangle",
+      "quote": "Friedland builds the incremental paid triangle from claim transactions by placing each payment in the row of its accident year and the column for the calendar period in which it was made",
+      "note": "Incremental vs cumulative cells and how each is built; Friedland Ch.5 pp.55-56",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write5"
+     }
     },
     {
      "id": "r4",
@@ -548,7 +556,15 @@
      "statement": "Quarterly triangles can be more appropriate for a growing book because changing exposure volume shifts the average accident date within each annual period and distorts annual development factors.",
      "concept": "Triangle Time Period Selection (Annual vs Quarterly)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Development Triangle",
+      "quote": "Berquist and Sherman's remedy is to substitute accident quarters for accident years when the rate of growth of earned exposures changes markedly, because a quarter is too short for its average accident date to drift far from its midpoint",
+      "note": "Interval choice and exposure growth shifting the average accident date; Friedland Ch.5 p.61, Ch.7 pp.96-97, Ch.13 p.283",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write5"
+     }
     }
    ]
   },
@@ -1106,7 +1122,15 @@
      "statement": "The Wendy Johnson (classical-type) ULAE method is based on claim counts and transactions (openings and closings), assuming ULAE per transaction is independent of claim size, so it is not affected by errors in the dollar amount of ultimate losses (unlike percent-of-loss ULAE methods).",
      "concept": "Unallocated Loss Adjustment Expense (ULAE) Methods",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Unallocated Loss Adjustment Expenses ULAE",
+      "quote": "A key assumption of count-based techniques is that the same kind of transaction costs the same amount of ULAE regardless of the claim size, so the estimate does not move with the dollar value of the claims.",
+      "note": "Count-based techniques and the Johnson technique; Friedland Ch.17 pp.387, 402-404",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write5"
+     }
     },
     {
      "id": "r4",
@@ -3695,7 +3719,15 @@
      "statement": "With rapidly growing exposures, the average accident date within a full accident year shifts away from the midpoint; shorter accident periods keep the average accident date closer to the midpoint, making development more comparable across periods.",
      "concept": "Average Accident Date",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Development Triangle",
+      "quote": "Berquist and Sherman's remedy is to substitute accident quarters for accident years when the rate of growth of earned exposures changes markedly, because a quarter is too short for its average accident date to drift far from its midpoint",
+      "note": "Average accident date and shorter periods; Friedland Ch.7 pp.96-97, Ch.13 p.283",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write5"
+     }
     }
    ]
   },
@@ -6929,7 +6961,15 @@
      "statement": "Rapid growth in written premium during the year shifts the average accident date of the latest accident year later, so that year is less mature than prior years at the same evaluation date, and the reported development technique understates ultimate claims.",
      "concept": "Effect of Changing Exposure Volume on Development Techniques",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Development Triangle",
+      "quote": "When exposures grow during the year, more of the year's accidents happen late in it, so its average accident date falls later and the year is less mature at each age than the history its factors came from; applying those factors understates its ultimate, and shrinking exposures do the reverse.",
+      "note": "Growth shifts the latest year's average accident date; Friedland Ch.7 pp.96-97",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write5"
+     }
     },
     {
      "id": "r5",
@@ -10023,7 +10063,15 @@
      "statement": "Convert incremental paid claims and incremental received salvage and subrogation into cumulative amounts by summing across development ages.",
      "concept": "Loss Development Triangles",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Development Triangle",
+      "quote": "The cumulative triangle is the running sum of the incremental cells along each row: the first column is the same in both triangles, and each later cumulative cell is the cumulative cell before it plus the incremental cell at its own age.",
+      "note": "Cumulating incrementals along a row; Friedland Ch.5 p.56",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write5"
+     }
     },
     {
      "id": "r3",
@@ -12837,7 +12885,15 @@
        "page": "Ceded Loss Reserve",
        "quote": "**Order matters.** Covers inure in a stated sequence. Typically per-occurrence excess comes off first, then the quota share applies to what remains, and the stop-loss applies last to protect the final net result."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Ceded Loss Reserve",
+      "quote": "Typically per-occurrence excess comes off first, then the quota share applies to what remains, and the stop-loss applies last to protect the final net result.",
+      "note": "Linked from Net of Reinsurance and Reinsurance (order of inuring covers)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write5"
+     }
     },
     {
      "id": "r4",
@@ -12854,7 +12910,15 @@
        "page": "Ceded Loss Reserve",
        "quote": "**Stop-loss:** the ceded ultimate is $3{,}220 - 3{,}000 = 220$, and nothing is ceded on paid because $2{,}100 < 3{,}000$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Net of Reinsurance",
+      "quote": "the same covers apply to ultimate, reported and paid alike, so net stays consistent across them",
+      "note": "Stop-loss applied consistently to ultimate, reported, paid; via Ceded Loss Reserve",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write5"
+     }
     },
     {
      "id": "r5",
@@ -12964,7 +13028,15 @@
      "statement": "The additive development technique computes age-to-age differences in the ratio (later minus earlier), sums them from a given age to the last age to get the additive age-to-ultimate amount, and adds that to the current ratio.",
      "concept": "Additive Development Technique",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Allocated Loss Adjustment Expense",
+      "quote": "In the additive version, each age-to-age factor is the difference between the ratios at successive ages (the later ratio minus the earlier one), and the factors are averaged and selected as in the standard development technique.",
+      "note": "Additive ratio development; Friedland Ch.16 pp.373-374",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write5"
+     }
     },
     {
      "id": "r7",
@@ -18665,7 +18737,13 @@
      "statement": "Test the same-inflation assumption by comparing trends in loss cost per exposure (ultimate claims ÷ exposures) with trends in paid ULAE; differing trends mean the assumption is violated and the ratio will misstate future ULAE.",
      "concept": "Classical Paid-to-Paid ULAE Technique",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "A test comparing the paid ULAE trend with the loss-cost-per-exposure trend is in no Exam 5 reading (Friedland Ch. 17 states Kittel's same-inflation assumption, now on the ULAE page, but no such test); checker run 2026-10-31T17:32Z/4562 removed the sentence.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write5"
+     }
     },
     {
      "id": "r6",
@@ -21226,7 +21304,15 @@
      "statement": "In the paid ALAE-to-paid claims development technique, compute the ratio of cumulative paid ALAE to cumulative paid claims for each accident year at each age, then project each accident year's ratio to its ultimate ratio (additively via differences between ages, or multiplicatively via ratio link factors).",
      "concept": "Ratio Development of ALAE to Claims",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Allocated Loss Adjustment Expense",
+      "quote": "Build a triangle of the ratio of cumulative paid ALAE to cumulative paid claims for each accident year at each age, and develop it to an ultimate ratio like any other triangle",
+      "note": "Paid ALAE to paid claims ratio technique; Friedland Ch.16 pp.371-374",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write5"
+     }
     },
     {
      "id": "r2",
@@ -21281,7 +21367,15 @@
      "statement": "Advantage of the paid ALAE-to-paid claims method: it uses the inherent relationship between ALAE and claims, and its ratio development is less leveraged/more stable than developing ALAE alone, with ratios able to be judgmentally selected.",
      "concept": "Ratio Development of ALAE to Claims",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Allocated Loss Adjustment Expense",
+      "quote": "Advantages: the ratio method recognizes the relationship between ALAE and claims; its development factors tend not to be as highly leveraged as development factors based on paid ALAE dollars",
+      "note": "Advantages of the ratio method; Friedland Ch.16 p.373",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write5"
+     }
     },
     {
      "id": "r6",
@@ -23886,7 +23980,15 @@
      "statement": "Calendar year payments are incremental paid amounts: the latest diagonal of the cumulative paid triangle minus the prior diagonal, with the first-age cell of the latest accident year counted in full.",
      "concept": "Calendar Year vs Accident Year Claims",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Development Triangle",
+      "quote": "so the incremental cells along a diagonal add up to that calendar period's payments: each cohort's latest cumulative value minus its value on the previous diagonal, with the newest cohort's first cell counted in full.",
+      "note": "A diagonal's incrementals are the calendar period's payments; Friedland Ch.5 pp.55-57",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write5"
+     }
     }
    ]
   },
@@ -23961,7 +24063,15 @@
      "statement": "A change in the speed of claim reporting (faster reporting with unchanged payment pace) distorts reported development factors and reported ultimates but not paid ultimates.",
      "concept": "Reported Claim Development Technique",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loss Development",
+      "quote": "If claims come to be reported faster while the pace of payment is unchanged, recent years are further along at each age than the history the reported factors came from, so the reported factors overstate their remaining development and the reported projection overstates ultimate; the paid projection is unaffected.",
+      "note": "Unchanged reporting lags assumption; Friedland Ch.7 p.97",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write5"
+     }
     },
     {
      "id": "r5",
@@ -24377,7 +24487,15 @@
        "page": "Unallocated Loss Adjustment Expenses ULAE",
        "quote": "Drops the $50/50$ assumption entirely: ULAE is allocated to claim events (opening, maintenance, closing) with selected weights, and the resulting ratio is applied to the corresponding unpaid counts or dollars."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Unallocated Loss Adjustment Expenses ULAE",
+      "quote": "for a long-tail professional liability portfolio with substantial claims-handling work during the life of the claim, one actuary assumes 25% of ULAE is spent opening claims and 75% closing them, implying 75% of the ratio applied to case outstanding and 100% to IBNR",
+      "note": "Classical 50/50 failing for long-tail lines; Friedland Ch.17 pp.388, 390-391 and Errata p.451 (75% on case outstanding, not 50%)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write5"
+     }
     },
     {
      "id": "r8",
@@ -26465,7 +26583,15 @@
      "statement": "Reported claim counts excluding claims closed with no payment can develop downward because claims counted at early maturities are removed when later closed without payment, and this outweighs newly reported claims.",
      "concept": "Claim Count Development / Closed Without Payment",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Claim Count Triangle",
+      "quote": "more claims can close without payment in later valuations than are newly reported, so reported count age-to-age factors fall below",
+      "note": "Downward reported count development when CNP excluded; Friedland Ch.11 p.196",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write5"
+     }
     },
     {
      "id": "r7",
@@ -27434,7 +27560,15 @@
        "page": "Aggregate Excess of Loss",
        "quote": "**Aggregate Excess of Loss** reinsurance responds to the **total** of the cedant's losses over a period, usually a year, rather than to any single loss."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Ceded Loss Reserve",
+      "quote": "Typically per-occurrence excess comes off first, then the quota share applies to what remains, and the stop-loss applies last to protect the final net result.",
+      "note": "Linked from Reinsurance and Net of Reinsurance (order of inuring covers)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write5"
+     }
     },
     {
      "id": "r5",
@@ -27455,7 +27589,15 @@
        "page": "Ceded Loss Reserve",
        "quote": "**Stop-loss:** the ceded ultimate is $3{,}220 - 3{,}000 = 220$, and nothing is ceded on paid because $2{,}100 < 3{,}000$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Net of Reinsurance",
+      "quote": "A stop-loss that caps retained losses at a stated amount makes net the lesser of what the earlier covers leave and that amount, on paid claims as well as on ultimate; a year with no stop-loss has no cap.",
+      "note": "Stop-loss cap on net ultimate and paid; Friedland reinsurance study note via Ceded Loss Reserve",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write5"
+     }
     },
     {
      "id": "r6",
@@ -27527,7 +27669,15 @@
      "statement": "Calendar year paid claims are obtained by summing incremental payments (differences between successive cumulative values) along each diagonal of the accident year triangle.",
      "concept": "Loss Development Triangle",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Development Triangle",
+      "quote": "Every incremental cell on one diagonal was paid in the same calendar period, so the incremental cells along a diagonal add up to that calendar period's payments",
+      "note": "Calendar-year paid as the sum of a diagonal's incrementals; Friedland Ch.5 pp.55-57",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write5"
+     }
     },
     {
      "id": "r5",
@@ -30334,7 +30484,15 @@
      "statement": "Update a cumulative paid triangle's latest diagonal by adding each accident year's calendar-year payments to its prior cumulative value at the preceding age (the same accident year's previous diagonal entry).",
      "concept": "Loss Development Triangles",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Development Triangle",
+      "quote": "each cohort's new cumulative value is its value on the previous diagonal plus what was paid on it during the new calendar period",
+      "note": "Adding a new diagonal to a cumulative paid triangle; Friedland Ch.5 pp.56-57",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write5"
+     }
     },
     {
      "id": "r2",
@@ -30355,7 +30513,15 @@
      "statement": "Additive development factors are the differences between successive-age ALAE-to-claims ratios, and are cumulated by summing selected differences to give an age-to-ultimate additive factor.",
      "concept": "Ratio Methods for ALAE",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Allocated Loss Adjustment Expense",
+      "quote": "The age-to-ultimate factor is the cumulative sum of the selected differences from that age to the last one",
+      "note": "Additive factors summed to ultimate; Friedland Ch.16 pp.373-374",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write5"
+     }
     },
     {
      "id": "r4",
@@ -30363,7 +30529,15 @@
      "statement": "The projected ultimate ALAE-to-claims ratio equals the current ratio plus the age-to-ultimate additive factor.",
      "concept": "Ratio Methods for ALAE",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Allocated Loss Adjustment Expense",
+      "quote": "the projected ultimate ratio is the ratio on the latest diagonal plus that age-to-ultimate factor.",
+      "note": "Ultimate ratio = latest ratio + additive age-to-ultimate; Friedland Ch.16 p.374",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write5"
+     }
     },
     {
      "id": "r5",
@@ -32318,7 +32492,15 @@
      "statement": "Adjust the selected severity for a law change such as tort reform by multiplying by (1 minus the percentage reduction) when all claims in the projected accident year occur after the effective date; the adjustment applies to severity, not to claim counts or reporting.",
      "concept": "Law Change Adjustment",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Tort Reform",
+      "quote": "In a frequency-severity projection the reform adjustment goes on the severities, beside the severity trend, while the frequencies are adjusted for frequency trend and rate level",
+      "note": "Reform adjustment on severity; Friedland Ch.11 pp.204, 211",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write5"
+     }
     }
    ]
   },
@@ -33153,7 +33335,15 @@
      "statement": "In the ratio of paid ALAE to paid claims technique with additive factors, the development factor from one age to the next is the average change (difference) in the paid ALAE-to-paid claims ratio, and the ultimate ratio equals the latest ratio plus the sum of the additive development through the final age.",
      "concept": "Ratio of Paid ALAE to Paid Claims Development Technique",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Allocated Loss Adjustment Expense",
+      "quote": "In the additive version, each age-to-age factor is the difference between the ratios at successive ages (the later ratio minus the earlier one), and the factors are averaged and selected as in the standard development technique.",
+      "note": "Additive ratio development; Friedland Ch.16 pp.373-374",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write5"
+     }
     },
     {
      "id": "r4",
@@ -33174,7 +33364,15 @@
      "statement": "The ratio technique depends on the selected ultimate claims and carries forward the latest observed ratio, so distortions in an accident year's paid claims (e.g., unusually low early paid claims inflating the ratio) or in the selected ultimate claims overstate ultimate ALAE; the paid ALAE technique relies only on ALAE data and is unaffected by claim data distortions.",
      "concept": "ALAE Development Technique Selection",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Allocated Loss Adjustment Expense",
+      "quote": "because the projection starts from the latest observed ratio, whatever distorts that ratio, in the ALAE or in the claims paid to date, carries through as well",
+      "note": "Disadvantages of the ratio method vs ALAE-only development; Friedland Ch.16 p.373",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write5"
+     }
     },
     {
      "id": "r6",
@@ -34733,7 +34931,15 @@
      "statement": "Cumulative reported claim counts can decrease over time when claims that were reported are later closed without payment (e.g. found fraudulent, outside coverage, or otherwise not payable) and removed from the count.",
      "concept": "Claims Closed Without Payment",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Claim Count Triangle",
+      "quote": "When the reported counts exclude claims closed with no payment, a claim counted while open drops out of the count if it later closes without payment.",
+      "note": "Why reported counts can fall; Friedland Ch.11 p.196",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write5"
+     }
     }
    ]
   },
@@ -35795,7 +36001,15 @@
      "statement": "The additive ratio approach is preferred over the multiplicative approach when ALAE ratios are very small (especially at early maturities), because multiplicative link ratios then become highly leveraged while additive differences are less leveraged and more stable.",
      "concept": "Additive vs Multiplicative Ratio Development",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Allocated Loss Adjustment Expense",
+      "quote": "Wiser notes that if the ratios are very small at early maturities, the additive approach seems to be more stable.",
+      "note": "Additive preferred for small ratios; Friedland Ch.16 p.371",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write5"
+     }
     },
     {
      "id": "r6",
@@ -35803,7 +36017,15 @@
      "statement": "Advantages of ratio techniques: they recognize the relationship between losses and ALAE, provide diagnostics (unreasonable year ratios can be excluded), and give less leveraged, more stable factors than developing paid ALAE dollars directly.",
      "concept": "Ratio Techniques for Developing ALAE",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Allocated Loss Adjustment Expense",
+      "quote": "Advantages: the ratio method recognizes the relationship between ALAE and claims; its development factors tend not to be as highly leveraged as development factors based on paid ALAE dollars",
+      "note": "Advantages incl. judgment on recent ratios; Friedland Ch.16 p.373",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write5"
+     }
     },
     {
      "id": "r7",
@@ -39924,7 +40146,15 @@
      "statement": "Accident-year data occur within a shorter time frame and are useful for isolating and tracking the effect of a single event such as a catastrophe or a court ruling, whereas policy-year data make such effects difficult to isolate because the claims are spread across many cohorts.",
      "concept": "Accident Year Aggregation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Accident Year",
+      "quote": "Friedland adds that tracking claims by accident year is valuable when economic or regulatory forces (such as inflation or law amendments) or major claim events (such as atypical weather or a major catastrophe) change claims experience",
+      "note": "Advantages of AY aggregation and PY spread over 24 months; Friedland Ch.3 p.41",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write5"
+     }
     }
    ]
   },
@@ -40169,7 +40399,15 @@
        "page": "Automobile Insurance Reform",
        "quote": "So historical loss costs are multiplied by $1 - 0.11 = 0.89$ to restate them at the post-reform benefit level, **before** trending forward."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Tort Reform",
+      "quote": "claims from years before the reform are multiplied by a reform adjustment factor of one minus the estimated reduction in claim cost",
+      "note": "Reform adjustment factor in expected claims; Friedland Ch.8 pp.133-134",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write5"
+     }
     },
     {
      "id": "r3",

@@ -47,7 +47,7 @@ A **Generalized Linear Model (GLM)** extends ordinary linear regression to allow
 - **Frequency** is modelled Poisson with a log link and exposures as an offset; **severity** is modelled Gamma with a log link, weighted by claim counts. Multiplying the two gives the pure premium. A single [[Tweedie Distribution|Tweedie]] model on pure premium is the one-step alternative.
 - The **log link makes the model multiplicative**, so $e^{\beta}$ is a relativity and the fitted coefficients drop straight into a multiplicative [[Rating Algorithm|rating algorithm]].
 - Output is judged on more than significance: consistency of the pattern across levels, standard errors, the effect of removing the variable (analysis of deviance), and validation on a holdout period.
-- Model relativities are still [[Credibility|credibility]]-weighted and are still subject to the operational, social and legal criteria for a rating variable — statistical significance alone does not make a variable usable.
+- Model relativities are still subject to the operational, social and legal criteria for a rating variable — statistical significance alone does not make a variable usable.
 
 **Judging the output (Exam 5, Werner & Modlin Ch. 10 and Appendix F).**
 

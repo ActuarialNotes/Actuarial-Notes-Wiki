@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:f6b349fd6e527f333da9d864d5c7734fef17d463830fb6abbe148fd9aaa70db6
+  content_hash: sha256:ee4edf10157d8a2ecc0dc83db100056dcae6a0555528bee37012ca55e9ec9b77
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,6 +19,7 @@ The **Catastrophe Expected Loss Cost** is the long-run expected annual catastrop
 
 - $\lambda_i$ is the annual rate of event $i$ in the model's event loss table and $\bar{L}_i$ the mean loss it causes to the book after policy terms (deductibles, limits, coinsurance). Summed over the stochastic event set, this is the area under the aggregate exceedance probability curve — see [[Catastrophe Risk]].
 - **Why a model.** For hurricane and earthquake the return periods far exceed any usable history, and the insurer's exposure has moved since the historical events. A model runs a simulated event catalogue against the *current* book through its hazard, inventory (exposure), vulnerability and loss modules, so the loss cost does not depend on which storms happened to occur. The Exam 5 mechanics of removing observed catastrophes and loading the expectation are on [[Catastrophe Loss]].
+- **Order of adjustments.** A catastrophe model typically outputs the *ultimate* catastrophe losses expected in the future policy period, already at that period's cost level. That provision is added to non-catastrophe losses that have already been trended and developed to ultimate; adding it first and then trending and developing the sum over-adjusts the expected catastrophe losses (Werner & Modlin).
 - **Rating detail.** Because the AAL is computed location by location, it can vary with construction, occupancy, age, mitigation features and deductible, which supports catastrophe rating territories, mitigation credits and deductible credits.
 - **Risk load.** The AAL is only the expectation. Catastrophe business also consumes a great deal of capital, so a separate [[Risk Loads|risk load]] is added — commonly tied to the modelled volatility or to the capital (the [[Probable Maximum Loss|PML]] or tail measure) the exposure draws on.
 - **Adjustments and uncertainty.** Demand surge, loss adjustment expense, coverages or perils the model omits (fire following earthquake, business interruption) and secondary uncertainty may need explicit treatment. Vendor models disagree, so results are tested against each other or blended ([[Model Risk]]), and poor exposure data corrupts everything ([[Data Quality]]). Regulators review models used in rate filings: Florida's Commission on Hurricane Loss Projection Methodology reviews the hurricane models insurers may use in residential rate filings.

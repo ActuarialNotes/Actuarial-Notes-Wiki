@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:a980d91a0026a31e512c4e1debdf396b820d01a4a34340b94855d9cfd2532492
+  content_hash: sha256:cd6bc4c246269bbace7c2e211a1cfa1bff2dc252ba64fcdf34522b48f553895e
   sources:
     - "U.S. GAO, Catastrophe Insurance Risks: The Role of Risk-Linked Securities (GAO-02-941, 2002), pp.16–23, App. II p.36: SPRV and trust, basis risk, minimal credit risk, CBOT catastrophe options ceased 1999, sha256:14de86f282f00ef14b4382979e503f0a202138d57bc482017228da5d9a200d24 — https://www.gao.gov/assets/gao-02-941.pdf"
     - "Blanchet, Lam, Tang & Yuan, Mitigating Extreme Risks Through Securitization (SOA research report, Mar 2017), §§1.2–1.4 pp.2–7: ILS, CAT bond triggers, basis risk vs moral hazard, dual-trigger ILWs, sha256:674f956d74f5f5bae9ad9f92126ebf0a8c47693af78dfbf2bd12454f5d9b3d66 — https://www.soa.org/globalassets/assets/files/research/projects/2017-03-mitigating-risks-through-securitization.pdf"
@@ -23,6 +23,7 @@ verification:
   - **Cat bonds** — notes issued by a special purpose reinsurer, tradable among institutional investors, typically multi-year, with indemnity, industry-index, modelled-loss or parametric triggers.
   - **Sidecars** — special purpose vehicles through which a (re)insurer cedes premium and risk on a defined book, for example by a [[Quota Share|quota share]], to outside investors whose funds are held as collateral. They are tactical instruments of limited duration, used in a hard market, and became very popular after Hurricane Katrina.
   - **Industry loss warranties** (ILWs) — pay a fixed limit if an industry loss index exceeds a trigger. Written as reinsurance they add a second trigger on the buyer's own loss, which supplies the indemnity.
+  - **Catastrophe risk swaps** — instead of turning a catastrophe exposure into a premium, two parties with "peak" exposures in different parts of the world exchange them directly, for example units of European windstorm exposure for units of Japanese earthquake exposure over a set period, at an "exchange rate" both accept, usually from catastrophe models. Pairing uncorrelated exposures diversifies both parties' books, which a cat bond — protection on the issuer's own risk — does not do for its issuer. A swap is not prefunded: it is only an agreement to pay if the covered event occurs, so each party carries counterparty default risk, reduced by choosing a financially strong counterparty; its basis risk depends, as a cat bond's does, on the trigger chosen.
   - **Other risk-linked instruments** — contingent capital such as a catastrophe equity put, an option to raise additional equity capital if losses exceed a predetermined level; the instruments have also spread to life insurance and annuities. Exchange-traded catastrophe options, offered on the Chicago Board of Trade from 1995, were among the first attempts, and trading ceased in 1999 for lack of demand.
 - **Against traditional [[Reinsurance|reinsurance]]:** collateral replaces a reinsurer's promise, so there is no [[Reinsurance Credit Risk|credit risk]] on the limit; capacity comes from capital markets; and index or parametric triggers trade moral hazard for **basis risk**. Cummins concludes that ILS complement reinsurance rather than replace it. See [[Securitization]] for the economic case.
 

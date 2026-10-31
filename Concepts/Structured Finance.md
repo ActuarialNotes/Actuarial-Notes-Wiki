@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:62a8625a7ec917873f6cd06ccf76ba21a722f27410d6ec29e8059063a2cff167
+  content_hash: sha256:62c84e8bb32dcdf12cfd442854c49237bcdae556bf5939fe53bd6b49b2b2c350
   sources:
     - "Coval, Jurek & Stafford, The Economics of Structured Finance, Harvard Business School Working Paper 09-060 (2008, the authors' institution's copy), printed pp.1-28 (PDF pp.1-37) with Tables 1-3: pooling and tranching tailor cash-flow risk; SPV separate from the originator's balance sheet; pass-through; joint distribution and correlation; amplification and CDO-squared; senior tranches as economic catastrophe bonds, ratings silent on the state of default; catastrophe bonds the opposite case, sha256:887b5c53aeb5367b127322c6972a1c41176e96dc613bc52eee296002b971c551 — https://www.hbs.edu/ris/Publication%20Files/09-060.pdf"
     - "Board of Governors of the Federal Reserve System, Report to the Congress on Risk Retention (October 2010), printed pp.2, 6, 8-15 (securitization defined; funding, liquidity, securities with differing risk profiles for a broad range of investors, credit risk transfer; on-balance-sheet capital consequences; rating agencies engaged; bankruptcy-remote entity and SPV; pass-through vs senior-subordinate waterfall, losses absorbed by the equity tranche first; same assets, same cash flows; adverse selection; holding the junior tranche reduces the incentive to securitize bad loans; vertical and horizontal retention), sha256:da618c157b7cc5129c05bee978d0fb6b376adb221d006155226ff093af3b238b — https://www.federalreserve.gov/boarddocs/rptcongress/securitization/riskretention.pdf"
@@ -24,6 +24,7 @@ verification:
 - **Pooling alone achieves nothing.** A pass-through (a pro-rata share of the pool) simply inherits the pool's average rating. The credit enhancement comes from *prioritisation*: the junior claims beneath a senior tranche set how large a pool loss it survives. The same arithmetic prices an [[Excess of Loss|excess-of-loss]] [[Layer of Insurance|layer]] — a reinsurance layer is a tranche of the cedant's loss distribution.
 - **A tranche's rating depends on the joint distribution.** A single bond's rating needs only its own default probability; a senior tranche's needs the probability that *many* assets default together, so it is acutely sensitive to **default [[Correlation|correlation]]** and to errors in default probabilities and recoveries. Coval, Jurek & Stafford's first point is that tranching **amplifies** those errors, and re-tranching tranches (the CDO-squared) amplifies them again.
 - **Senior tranches are economic catastrophe bonds.** Idiosyncratic defaults diversify away in a large pool, so a senior tranche is impaired only in a severe, economy-wide downturn. A rating measures default probability or expected loss, not *when* the loss occurs, so a AAA tranche deserves a far larger spread than a AAA corporate bond — their second point. A [[CAT Bonds|cat bond]], whose losses are unrelated to the economy, is the opposite case.
+- **Pricing a tranche.** A tranche that pays a fixed amount $X$ at maturity $T$, or nothing if it defaults, is worth its expected payoff discounted to today: $\text{Price} = X(1 - p_D)/(1+r)^T$, where $p_D$ is the tranche's own default probability — worked out from the pool's joint default distribution, as in the examples below — and $r$ the discount rate. Its yield is $(X/\text{Price})^{1/T} - 1$, and its **default premium** is that yield less the risk-free rate, the measure CAS's examiners credit. Coval, Jurek & Stafford's *yield spread* is the same idea against a Treasury of the same duration, and their point is that a senior tranche, bearing systematic risk, should earn a larger one than a single-name bond with the same rating.
 - See [[Securitization]] for the process and its incentive problems, and [[Credit Risk]] for default modelling.
 
 > [!example]- Two-Bond Pool: The Senior Tranche Lives on Correlation {Example}
@@ -69,3 +70,23 @@ verification:
 > > - Senior: $0.10\% \to 1.28\%$ (about $12.4\times$)
 > >
 > > The more senior the tranche, the larger the *relative* error. A doubling of $p$ that would move a single bond a notch or two moves the senior tranche across many rating categories — and adding correlation would make it worse.
+
+> [!example]- Price, Yield and Default Premium of a Zero-Coupon Tranche {Example}
+> A senior tranche promises $\$1{,}000$ in $3$ years and pays nothing if it defaults. Its probability of default over the term is $4\%$, and the discount rate and the risk-free rate are both $3\%$. Find its price, yield and default premium.
+>
+> > [!answer]-
+> > **Plan:** expected payoff, discounted over the full term; then the yield that turns the price back into the promised payment.
+> >
+> > $$
+> > \begin{align*}
+> > \text{Price} &= \frac{1{,}000\,(1 - 0.04)}{1.03^{3}} \\
+> > &= \frac{960}{1.09273} \\
+> > &= \$878.54 \\
+> > \text{Yield} &= \left(\frac{1{,}000}{878.54}\right)^{1/3} - 1 \\
+> > &= 4.41\% \\
+> > \text{Default premium} &= 4.41\% - 3.00\% \\
+> > &= 1.41\%
+> > \end{align*}
+> > $$
+> >
+> > The default premium is what the promised yield must exceed the risk-free rate by to cover the expected default loss alone; it is spread over the term, so a $4\%$ default chance over three years adds about $1.4\%$ a year. A rating that measures only $p_D$ would class this tranche with any bond of the same default probability, though its defaults, coming in a severe downturn, deserve a higher return.

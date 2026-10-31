@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:360137e112588684c903f646e003dc92b5aba78d055f5f4bf4bc780d93b8fb0c
+  content_hash: sha256:0234741259260a2c92d9b76c030e0af1e07172b237f2d5b92b6cab3fae03df16
   sources:
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch.13 Berquist-Sherman Techniques, PDF pp.289-296 (printed 283-290): data selection, case adequacy detection and adjustment, settlement-rate adjustment, disposal rates, Thorne's caveats, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch.11, PDF p.212 (printed 206): disposal rate definition, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
@@ -30,9 +30,14 @@ verification:
 **The settlement rate adjustment** (for a *paid* triangle):
 
 1. Compute **disposal rates** — closed claims ÷ ultimate claims — at each accident year and maturity.
-2. Select the current disposal rate pattern as the target.
-3. For each historical cell, interpolate the paid losses that *would* have been paid had that year closed claims at the current rate — reading along the row's paid-versus-disposal-rate relationship.
+2. Select the disposal rates on the latest diagonal as the basis, and multiply the selected disposal rate at each age by each accident year's ultimate claim counts to get the adjusted closed claim counts. The latest diagonal is then unchanged, in both the closed counts and the paid claims.
+3. For each historical cell, estimate the paid losses that *would* have been paid had that year closed claims at the current rate. Berquist and Sherman fit an exponential curve, Y = a × e^(bX), to cumulative paid claims Y against cumulative closed claim counts X between each pair of successive ages in an accident year, and read the adjusted paid claims off the curve at the adjusted closed counts: by interpolation when the adjusted count lies between two actual counts, otherwise by extrapolation from the pair with the closest range (Friedland, Ch. 13, p. 289).
 4. Rebuild the paid triangle at the common disposal pattern and select factors from it.
+
+**Both adjustments together** (Friedland, Ch. 13, p. 292): when case adequacy and settlement rate have both changed, the two adjustments are combined into a single adjusted reported triangle, which gives one projection in place of two.
+
+- Adjusted open claim counts are reported claim counts minus adjusted closed claim counts.
+- Adjusted reported claims are the adjusted average case outstanding times the adjusted open claim counts, plus the adjusted paid claims from the settlement rate adjustment.
 
 Further points:
 

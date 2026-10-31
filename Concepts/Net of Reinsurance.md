@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:a5bcc97e384495a416a92f63e979c81ff6e3d76ba665c8e20045c4d36f0f18a6
+  content_hash: sha256:ac01e1c8cf57ebd0cc196b93e123f3e3cd68e0fac5f6526de11f8e866417e682
   sources:
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.6 p.99 (PDF p.111), Ch.7 p.137 (PDF p.149), Appendix B pp.B-3, B-8 (PDF pp.361, 366), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch.4 p.44 (PDF p.50), Ch.7 p.96 (PDF p.102), Ch.14 pp.330-332 (PDF pp.336-338), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
@@ -20,7 +20,7 @@ verification:
 > $$\text{Net Loss Ratio} = \frac{\text{Gross Losses} - \text{Ceded Losses}}{\text{Gross Premium} - \text{Ceded Premium}}$$
 
 - Gross, [[Ceded Losses|ceded]] and [[Net Losses|net]] must each be internally consistent: net losses belong over net premium. Mixing bases — gross losses over net premium is the classic error — overstates the loss ratio. A first check on the data is that net losses and net premium are no greater than gross.
-- With several covers, net is reached by applying them in the order they inure — typically per-occurrence excess first and a stop-loss last, on what the earlier covers leave — and the same covers apply to ultimate, reported and paid alike, so net stays consistent across them; see [[Ceded Loss Reserve]].
+- With several covers, net is reached by applying them in the order they inure — typically per-occurrence excess first and a stop-loss last, on what the earlier covers leave — and the same covers apply to ultimate, reported and paid alike, so net stays consistent across them; see [[Ceded Loss Reserve]]. A stop-loss that caps retained losses at a stated amount makes net the lesser of what the earlier covers leave and that amount, on paid claims as well as on ultimate; a year with no stop-loss has no cap.
 - Ratemaking was historically done on a direct basis, but some analyses are now performed net. Werner gives two treatments of **non-proportional** reinsurance: reduce the projected losses by the expected recoveries and the premium by the amount ceded, or include the *net cost of reinsurance* — the cost of the reinsurance minus the expected recoveries — as an expense item in the indication, alongside the other [[Expense Provisions|expense provisions]]. Proportional reinsurance cedes premium and losses in the same proportion and may need no explicit treatment.
 - Rating net directly is defensible only when the reinsurance structure is stable, because the net experience embeds the treaty terms of each historical year. A change in attachment point makes prior net years non-comparable, while gross years remain usable.
 - Net experience is **less volatile** than gross — excess-of-loss reinsurance caps exactly the [[Large Loss|large losses]] that drive volatility — so net development patterns are frequently at or below gross ones, and a net tail factor larger than the gross one is generally not reasonable.

@@ -29,6 +29,17 @@ verification:
 - **Social** — privacy, causality, controllability and affordability; these are where public and regulatory objections arise.
 - **Legal** — some variables are prohibited outright in some jurisdictions.
 
+**The criteria in more detail** (Werner & Modlin, Ch. 9, pp. 155–158):
+
+- **Statistical significance.** The expected cost estimates should vary across the levels of the variable, the estimated differences should be within an acceptable level of statistical confidence, and they should be relatively stable from one year to the next. A variable whose levels show no variation in loss experience may not be useful, and one whose estimated differences are volatile leaves it unclear whether the variable improves equity.
+- **Objective definitions.** The levels of a variable should be objectively defined, so that classifying a risk does not rest on a subjective judgment. A surgeon's skill level plausibly affects malpractice costs but is difficult to determine and somewhat subjective, so insurers rate instead on objective proxies such as board certification, years of experience and prior malpractice claims.
+- **Affordability.** It is desirable for insurance to be affordable for all risks, especially where it is required by law (auto liability) or by a third party (a lender requiring homeowners coverage). A variable that isolates a small group of very high risks can make that group's premium unaffordable, and insurers may choose, or be required by regulators, to combine classes and accept a subsidy.
+- **Causality.** Some characteristics are only correlated with expected losses, while others directly affect them, and it is socially preferable for rating variables to be causal. A discount for a sump pump, which directly reduces water damage losses, is readily accepted. [[Credit-Based Insurance Scoring|Insurance credit scores]], despite their strong statistical power in predicting losses, met a consumer backlash from a belief that they lack an obvious causal link to losses.
+- **Controllability.** It is preferable if insureds have some ability to control the class they belong to, and so to affect the premium they are charged. A workers compensation insured can implement approved loss control programs to reduce its expected losses and its premium; insureds cannot control their age or gender. Controllability is not the manipulation the operational criteria guard against: it means the insured is motivated to improve the risk itself, which often brings broader benefits, such as cars bought with safety devices that earn discounts.
+- **Privacy.** Telematics can show where and how safely a car is driven, but such data is used only with the insured's express consent.
+
+ASOP 12 asks that risk characteristics be related to expected outcomes, and a relationship is demonstrated if the variation in actual or reasonably anticipated experience correlates to the characteristic. The actuary need not establish a cause-and-effect relationship to use a characteristic (ASOP 12 §3.2.1–3.2.2), so causality is a social preference, not an actuarial requirement.
+
 **Considerations in establishing risk classes** ([[ASOP 12 - Risk Classification (ASB - 2005)|ASOP 12]] §3.3.2). Once risk characteristics are chosen, the actuary forming the classes weighs three considerations, which are often interrelated:
 
 - **[[Adverse Selection|Adverse selection]]** — if the variation in expected outcomes within a risk class is too great, adverse selection is likely, so each class should be homogeneous enough with respect to expected outcomes for the system's purpose.
@@ -43,7 +54,13 @@ ASOP 12 also asks the actuary to comply with applicable law, consider industry a
 - **Minimum bias** procedures were the historical bridge; modern practice uses a [[Generalized Linear Model|GLM]], which estimates all variables simultaneously and reports each net of the others.
 - The loss ratio method for relativities has an advantage over the pure premium method: because its denominator is premium, it is already adjusted for the *other* rating variables in force, so it measures the residual effect.
 
-**Off-balance.** Relativity changes almost always change the average rate. The base rate must be adjusted so that the combined effect equals the intended [[Overall Rate Level Indication|overall indication]] — see [[Rate Change]].
+**The one-way approaches in practice** (Werner & Modlin, Ch. 9, pp. 161–168, and App. E):
+
+- **Pure premium approach.** A level's indicated relativity is first computed as its pure premium (loss and ALAE per exposure) divided by the pure premium of all levels combined, its relativity to the total. Dividing each of these by the base level's value then rebases the set so the base level is 1.00. The interim step is kept because companies compare current, indicated and competitors' relativities with each set normalized so that its exposure-weighted average relativity is 1.00, which puts them on a consistent basis, and that basis is also needed when indicated relativities are credibility-weighted (p. 163). The adjustment for the other rating variables is under [[Pure Premium Method]].
+- **Credibility-weighting the relativities.** In Werner's appendix example the complement of credibility is the current relativities, normalized the same way: each current relativity is divided by the exposure-weighted average current relativity, so that it is on the same basis as the indicated relativity to the total (premium adjusted to the base class is the preferable weight, with exposures a proxy). Each level's indicated relativity is credibility-weighted with its normalized current relativity, and the blended relativities are then divided by the base level's blended value to put the base level back at 1.00 (App. E).
+- **Loss ratio approach.** Each level's loss and ALAE ratio, on premium brought to current rate level for that level, divided by the loss ratio of all levels combined is the indicated change to that level's current relativity, and the current relativity times that change is the indicated relativity (p. 165).
+
+**Off-balance.** Relativity changes almost always change the average rate. The base rate must be adjusted so that the combined effect equals the intended [[Overall Rate Level Indication|overall indication]] — see [[Rate Change]]. The off-balance factor, the adjusted exposures it is weighted by, and each class's resulting rate change are worked through on [[Balancing Back]].
 
 ![[Media/Figures/Classification_Ratemaking.svg|340]]
 

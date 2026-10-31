@@ -7,12 +7,14 @@ date: "1988"
 Type: "Statement of Principles"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-05/Statement-Of-Principles-Ratemaking.pdf)"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:a2b984571e6329c413e1c88d4b302fb7e9535594d9d0e73100c0072427a28093
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:55d1c2889717747a5007bb78412a17c396cec1aa95dd1673a04c289fd84a0b0b
+  sources:
+    - "CAS Statement of Principles Regarding Property and Casualty Insurance Ratemaking (adopted May 1988; rescinded Dec 2020, reinstated May 2021), pp.1-5, sha256:f240ea62dd033aac827c2073e56c0a4061d5c84531e5cf6be02d333a8f9f2140 — https://www.casact.org/sites/default/files/2021-05/Statement-Of-Principles-Ratemaking.pdf"
+    - "CAS, Exam 5 Content Outline, Fall 2026 (Exam_5_CO_2026_F), p.4 (A16 and the domain A readings) and p.6 (reading table: CAS Ratemaking Principles, A4, A16), sha256:fd8373ae9bbe7e56b93f99cee304c76c1d29a9d0dc7f07e6ed500bd647f41795 — https://www.casact.org/sites/default/files/2026-03/Exam_5_CO_2026_Fall.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Statement of Principles Regarding Property and Casualty Insurance Ratemaking (CAS - 1988).md
@@ -59,7 +61,7 @@ The CAS statement identifying and describing the principles that apply to the de
 - Individual Risk Rating
     - When an [[Individual Risk Rating|individual risk's]] experience is sufficiently credible, its premium should be modified to reflect that experience.
 - Risk
-    - The rate should include a charge for the risk of random variation from expected costs, reflected in the underwriting profit provision, and a charge for systematic variation of estimated from expected costs, reflected in the contingency provision.
+    - The rate should include a charge for the risk of random variation from expected costs, reflected in the appropriate total return consistent with the cost of capital and so influencing the underwriting profit provision, and a charge for systematic variation of estimated from expected costs, reflected in the contingency provision.
 - Investment and Other Income
 - Actuarial Judgment
 

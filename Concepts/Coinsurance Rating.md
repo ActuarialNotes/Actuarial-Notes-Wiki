@@ -1,12 +1,13 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:2b27ecadaf7b4cb154cf3580b5460a8bf42336a00cc06755ca83c7ee4418d7a1
-  sources: []
-  open_findings: 0
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:6a6951867a7fd4bb1467110b3d243649849a9c332363a4cbb9bb68d62a44d781
+  sources:
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 11 pp.188, 206-215 (PDF pp.200, 218-227), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+  open_findings: 3
   open_critical: 0
   log: .verify/Concepts/Coinsurance Rating.md
 ---
@@ -15,14 +16,14 @@ verification:
 
 > $$\text{Loss Cost}_{\text{participation}} = c \times \text{Full-Coverage Loss Cost}$$
 
-> $$\text{Recovery}_{\text{clause}} = \min\!\left(\frac{\text{Insurance Carried}}{\text{Coinsurance \% } \times \text{Value}},\, 1\right) \times \text{Loss}$$
+> $$\text{Recovery}_{\text{clause}} = \min\!\left(\frac{\text{Insurance Carried}}{\text{Coinsurance \% } \times \text{Value}} \times \text{Loss},\, \text{Insurance Carried}\right)$$
 
 **Percentage participation** (an $80/20$ plan, common in health and some property covers): the insurer pays share $c$ of every covered dollar above any deductible.
 
 - Because the insurer's share is a constant fraction of each loss, the loss cost scales directly by $c$ — unlike a [[Deductible Rating|deductible]], which removes small losses entirely and so requires a [[Loss Elimination Ratio|loss elimination ratio]] rather than a simple proportion.
 - The saving is slightly less than $(1-c)$ in practice, because the insurer still investigates and adjusts the whole claim: claim-handling cost does not fall with the payment share, and [[Fixed Expenses|fixed expenses]] do not fall at all.
 
-**Coinsurance clause** (standard commercial property): the insured agrees to carry limits of at least, say, $80\%$ of the property's value. Fall short and every partial loss is settled at the ratio of insurance carried to insurance required.
+**Coinsurance clause** (standard commercial property): the insured agrees to carry limits of at least, say, $80\%$ of the property's value. Fall short and every loss smaller than the insurance required is settled at the ratio of insurance carried to insurance required.
 
 - Its purpose is **insurance-to-value**. Because most property losses are partial, an insured carrying $50\%$ of value would otherwise pay half the premium for nearly the same expected recovery, and the rate per $\$1{,}000$ would have to rise for everyone.
 - The clause applies only up to the policy limit, and full limits are still paid on total losses up to that limit.

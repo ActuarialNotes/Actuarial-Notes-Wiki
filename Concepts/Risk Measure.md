@@ -2,9 +2,9 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-10-18
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:93408006904e62d651cd02273ec7aafa51a804bb4496a30af8f772d7e2fa479a
+  content_hash: sha256:bcb4760ef69f3cd91a085c6cb53a77d3963c6b537affa4734171601e6fd3cc78
   sources:
     - "CAS Exam 9 Content Outline, Fall 2026 (v01, 2026-03-18), PDF pp.3-7: Domains B, C and D tasks and readings; complete text references (Brehm et al.: D1-D6, Chapters 1, 2 excl. 2.6, 3 excl. 3.4, 4, 5.4; source SK), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
     - "Mildenhall & Major, Pricing Insurance Risk (Wiley 2022), Chapter 1 excerpt (publisher's free sample), pp.1-6 (risk margin to afford capital a return; capital vs pricing risk measures; VaR or TVaR at 99.5%; Artzner et al. 1999; SRMs as distortions; SRM calibrated to cat bond pricing; Constant Cost of Capital SRM), sha256:af37057d34a0c9b927fa8d0246eaf121a500e385c6902a8f8db8b08e6a55fe2c — https://media.wiley.com/product_data/excerpt/70/11197556/1119755670-5.pdf"
@@ -19,6 +19,12 @@ verification:
     - "FOPI/FINMA, Technical Document on the Swiss Solvency Test (2006), PDF pp.9-11 (expected shortfall, synonymous with TailVaR, at 99%), sha256:fdcde2ada75dc3ad2b1dd6d379ccf94af4a58f53c97d54f020c8ea06695d8137 — https://finma.ch/FinmaArchiv/bpv/download/e/SST_techDok_061002_E_wo_Li_20070118.pdf"
     - "CAS Exam 7 Spring 2012 - exam and sample answers/examiner's report, Q18 PDF pp.78-79 (risk measures for hurricane and price adequacy); Q22 PDF pp.26, 87 (operational risk definition; business disruption, external fraud, execution/delivery in a claims-system project), sha256:e38b20bb58b4c7dbd208b14d350fe3c9c6bc48b789aef61118d8cdae0566582a — https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam7_12-7.pdf"
     - "CAS Exam 7 Spring 2013 - exam and sample answers/examiner's report, Q15 PDF p.68 (cat models, ESGs, copulas); Q19 PDF pp.75-76 (TVaR, EPD, subadditivity); Q20 PDF pp.77-78 (efficient frontier, cost allocation); Q21 PDF pp.25, 79-80 (Basel II basic indicator and standardized approaches); Q22 PDF pp.26, 81-82 (pricing risk, claim variability, market risk, correlation; inflation raises liabilities and lowers bond values), sha256:b10657555e3da0116f715810c94b20afbcb50b86a4ba6b2fa3b9f771f2ab9d99 — https://www.casact.org/sites/default/files/2021-03/13-7.pdf"
+    - "Kreps, Riskiness Leverage Models, PCAS XCII (2005), pp.44-45 (TVAR riskiness leverage zero up to a point then constant; only the high end relevant), pp.49-50 (sources of risk incl. downgrade and regulatory notice; leverage should become much larger for excess significantly impacting capital; appetite 'not more than a 0.1% chance of losing all our capital, and not more than a 10% chance of losing 20% of capital'), sha256:2b0e080348c973b4f47244618f1b6d46231b50b494fae810639d0186da3fe81c — https://www.casact.org/sites/default/files/database/proceed_proceed05_05041.pdf"
+    - "Venter, Capital Allocation: An Opinionated Survey, CAS Forum Summer 2003, pp.283-286 (Table 1 risk measures: VaR, EPD incl. beyond a target b, TVaR, XTVaR E[X-m|X>b], SD, variance, semi-variance, cost of default option, mean of transformed loss; limited liability = option to put default costs to policyholders; capital as a multiple of a risk measure, average 1-in-100 or worse year using no more than premium plus 1/3 of capital = 3 x 99% XTVaR, renewal business has a value; Table 2 allocation methods incl. proportional, marginal, Shapley, Myers-Read adds up, co-TVaR additive; VaR shareholder view, EPD/default option/XTVaR/TVaR sensitive to the degree of default; tail measures linear 'which many consider to be an underweighting'; transformed loss 'can get around the problems of the tail methods'), pp.304-305 (XTVaR; mean loss already collected in premium), sha256:cc0de1226cc0b4a4e2ef8dfb7ae41e4ef17ded76e45c19edbcf4db9e38ff3148 — https://casact.org/sites/default/files/database/forum_03sforum_03sf279.pdf"
+    - "CAS Exam 7 Spring 2016 — sample answers and examiner's report, Q23 PDF pp.92-94 (default avoidance: far tail where the ERM model is least reliable, mainly protects policyholders, partial losses matter to shareholders; other reference points: renewals, thrive after a catastrophe, rating; capital as a multiple of TV@R from a 1-in-y loss tolerance), Q24 PDF pp.95-96 (TVaR linear in the tail, inconsistent with risk aversion; TVaR on transformed probabilities treats a loss 2x as large as more than 2x as bad; part b: EPD on transformed probabilities, value of put option, exponential moment), Q25 PDF p.97 (R(z): tail dependence with R(1) = 0, look a bit below 1; only the right tail, combine with L(z) for z <= 0.5; sparse tail data; one-dimensional), sha256:e07f38dd81edc9715ef2528c1861e75c609c85b598b51b723d665cf63b745b84 — https://www.casact.org/sites/default/files/2021-03/16-7.pdf"
+    - "CAS Exam 7 Spring 2018 — sample answers and examiner's report, Q21b PDF p.99 (WTV@R weights f*, not F*; cap the last simulation's probability), Q23 PDF pp.104-105 (dedicated full-time ERM staff; correlation assumptions need whole-firm knowledge, politically sensitive, LOB leaders inexperienced or biased, owned at corporate level / CRO / ERM department or by consensus), sha256:b5f6e6454919cfb04da8295ac4a70c89af58e770707daa4faf575bdca8a4fa6b — https://www.casact.org/sites/default/files/2021-03/18-7_0.pdf"
+    - "CAS Exam 7 Spring 2019 — sample answers and examiner's report, Q19d-e PDF p.88 (WTVaR = TVaR on transformed probabilities; TVaR does not reflect risk aversion), Q20 PDF pp.89-90 (normal symmetric and uniform, HRT bunched in the upper right; HRT for lines uncorrelated except in extreme events; normal extends beyond two lines, easy to simulate; copula does not change the expected value, changes variability and VaR), sha256:f6c6d52b71498f5c65eae5da824d1f74f31bf531f5059dcc64f0bfcf7c4b8416 — https://www.casact.org/sites/default/files/2021-03/19-7_0.pdf"
+    - "Directive 2009/138/EC (Solvency II), Art.101(3) SCR calibrated to a 99.5% one-year Value-at-Risk, legislation.gov.uk copy (revised version), sha256:01828fe1d6cbf212d3f7509e5fc7da86f52b5ee833b7773ec507bcc58a8bcc20 — https://www.legislation.gov.uk/eudr/2009/138/article/101"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Risk Measure.md
@@ -46,6 +52,11 @@ A **Risk Measure** $\rho$ assigns a single number $\rho(X)$ to a random loss $X$
 - **Basic measures for any organization.** Before tail measures come the descriptive ones. [[Frequency]] is how often losses occur and [[Severity]] how large they are; the [[Expected Value|expected value]] is the central tendency. The *range*, highest outcome minus lowest, is a rough measure that ignores how likely the extremes are. [[Variance]] and [[Standard Deviation|standard deviation]] average the deviations from the mean, treating favourable and unfavourable surprises alike. The [[Coefficient of Variation|coefficient of variation]], $\sigma / \mu$, compares risk between distributions with different means. *Semivariance* and downside standard deviation count only unfavourable deviations, and *shortfall risk* is the probability of falling below a target, with the probability of ruin the case where the target is the point capital runs out.
 - **Two families.** The CAS's 2003 ERM overview splits ERM measures into *solvency-related* measures, which look at the adverse tail (probability of ruin, shortfall risk, VaR, EPD, TVaR) and concern customers and their proxies, regulators and rating agencies; and *performance-related* measures, which look at volatility near the mean (variance, standard deviation, semi-variance, below-target risk) and concern owners and their proxies, such as stock analysts.
 - **Strategic effect.** The measure adopted for capital, limits and reinsurance shapes behaviour: a target at one return period can be met by piling risk just beyond it, while TVaR charges for the whole tail. Solvency II uses a 99.5% one-year VaR ([[Solvency II]]); the Swiss Solvency Test uses 99% TVaR. See [[Risk Taxonomies]], [[Risk Modeling]] and [[Risk Capital]].
+
+- **TVaR's weakness: it is linear in the tail.** Kreps writes a risk measure as a *riskiness leverage* applied to each outcome; TVaR's leverage is zero up to the quantile and constant above it, so every tail dollar counts the same and a loss twice as large counts exactly twice as bad. Venter notes that the tail measures evaluate the risk above their threshold linearly, "which many consider to be an underweighting" — a risk-averse management wants the weight to grow as losses start to impair capital.
+- **Weighted TVaR (WTVaR)** is TVaR calculated on transformed probabilities — for example from the Wang transform — that shift weight towards the larger losses. Because extreme outcomes get more than their share of probability, a loss twice as large counts as more than twice as bad, which suits a portfolio with heavy-tailed, skewed losses. Taking the mean of a transformed loss distribution is a risk measure in its own right, and Venter suggests it can get around the problems of the tail methods.
+- **Computing WTVaR from equally likely simulations:** sort the scenarios from worst down; read each one's transformed probability $f^*$ as the difference between successive values of the transformed CDF $F^*$; take scenarios from the worst until their $f^*$ add up to the tail probability $1 - p$, cutting the last one's weight so the total is exactly $1 - p$; then divide the weighted sum of losses by $1 - p$. Plain TVaR is the same calculation with each scenario weighted $1/n$.
+- **Other measures for allocating capital** (Venter's survey): VaR; the EPD, which can be taken beyond a chosen target level rather than beyond default; TVaR; excess TVaR, $E[X - \mu \mid X > b]$, which charges nothing for the mean loss already funded by premium; standard deviation, variance and semi-variance; the value of the **default put option** — limited liability lets an insurer put its default costs to policyholders, and the option's value measures that risk; and the mean of a transformed loss distribution. VaR leaves out how far capital is exhausted, while the EPD, the default option, TVaR and excess TVaR are sensitive to the degree of default.
 
 > [!example]- VaR, TVaR and CTE for a Catastrophe Portfolio {Example}
 > An insurer's annual catastrophe loss $X$ (\$ millions) is $0$ with probability $0.80$, $10$ with probability $0.12$, $50$ with probability $0.06$ and $100$ with probability $0.02$. Compute $E[X]$, $\sigma(X)$, $\text{VaR}_{0.95}$, $\text{TVaR}_{0.95}$ and $\text{CTE}_{0.95}$.
@@ -149,6 +160,43 @@ A **Risk Measure** $\rho$ assigns a single number $\rho(X)$ to a random loss $X$
 > > \end{align*}
 > > $$
 > > Location B's standard deviation is almost three times A's, but its average loss is twice as large. The coefficient of variation adjusts for that: 0.20 against 0.14, so B's losses are still relatively more variable, and harder to budget for as a share of their expected cost.
+
+> [!example]- TVaR and WTVaR From Simulations {Example}
+> A model produced $200$ equally likely scenarios. The five worst losses and the transformed CDF at each are:
+>
+> | Rank | Loss | $F^*$ |
+> |---|---|---|
+> | 1 | $30$ | $1.000$ |
+> | 2 | $20$ | $0.990$ |
+> | 3 | $15$ | $0.982$ |
+> | 4 | $12$ | $0.976$ |
+> | 5 | $9$ | $0.971$ |
+>
+> Find the 1-in-50 TVaR and WTVaR.
+>
+> > [!answer]-
+> > The tail probability is $1/50 = 0.02$.
+> >
+> > **TVaR:** each scenario has probability $1/200 = 0.005$, so the worst $4$ fill the tail.
+> >
+> > $$
+> > \begin{align*}
+> > \text{TVaR} &= \frac{30 + 20 + 15 + 12}{4} \\
+> > &= 19.25
+> > \end{align*}
+> > $$
+> >
+> > **WTVaR:** the transformed probabilities are differences of $F^*$: $1 - 0.990 = 0.010$, $0.990 - 0.982 = 0.008$, then $0.982 - 0.976 = 0.006$, of which only $0.002$ fits before the total reaches $0.02$.
+> >
+> > $$
+> > \begin{align*}
+> > \text{WTVaR} &= \frac{0.010(30) + 0.008(20) + 0.002(15)}{0.02} \\
+> > &= \frac{0.49}{0.02} \\
+> > &= 24.5
+> > \end{align*}
+> > $$
+> >
+> > The transform gives the worst scenario twice its plain weight, so WTVaR exceeds TVaR. Weighting by $F^*$ itself instead of its differences, or forgetting to cut the last weight, are the two slips that break this calculation.
 
 > [!tip]- How it appears on the exam
 > - **DISC-RM:** The introduction to risk management covers basic risk measures. Questions ask what a measure shows, such as why the coefficient of variation is used to compare exposures of different sizes, which measure looks only at unfavourable outcomes, or what a VaR figure means, and may ask for a simple calculation of a mean, a standard deviation or a coefficient of variation.

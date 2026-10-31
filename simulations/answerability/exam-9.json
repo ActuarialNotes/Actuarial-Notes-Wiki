@@ -20,7 +20,13 @@
        "page": "Expected Loss",
        "quote": "**Expected loss** is the mean of the loss that an insurer, or one layer of its coverage, will bear over a period: the expected number of claims times the expected amount each claim contributes."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Arithmetic on the question's own data: count x severity summed over lines; the question supplies every input.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm1"
+     }
     },
     {
      "id": "r2",
@@ -253,7 +259,13 @@
        "page": "Variance and Standard Deviation",
        "quote": "$$= E[X^2] - \\mu^2$$ … $$\\sigma = \\text{SD}(X) = \\sqrt{\\text{Var}(X)}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "A step of one sample answer's route to Pearson's rho; the tagged Correlation page gives the sum-of-deviations formula for r that the alternative answer uses, so no separate SD formula is needed.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm1"
+     }
     },
     {
      "id": "r3",
@@ -430,7 +442,15 @@
        "page": "Variance and Standard Deviation",
        "quote": "**Variance** $\\sigma^2$ and **Standard Deviation** $\\sigma$ both measure how far a [[Random Variable]] spreads around its mean. Variance is the expected squared deviation; standard deviation is its square root, restored to the original units of $X$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Measure",
+      "quote": "[[Variance]] and [[Standard Deviation|standard deviation]] average the deviations from the mean, treating favourable and unfavourable surprises alike.",
+      "note": "Risk Measure (tagged) teaches standard deviation as a whole-distribution, mean-based measure counting favourable and adverse deviations alike.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm1"
+     }
     },
     {
      "id": "r2",
@@ -456,7 +476,15 @@
        "page": "Basic Risk Measures",
        "quote": "the variance, the standard deviation and the semivariance, which counts only unfavourable deviations"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Measure",
+      "quote": "*Semivariance* and downside standard deviation count only unfavourable deviations",
+      "note": "Risk Measure (tagged) teaches that semi-standard deviation counts only adverse deviations.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm1"
+     }
     },
     {
      "id": "r4",
@@ -833,7 +861,15 @@
      "statement": "Firms with high market-to-book ratios or high R&D spending have many growth opportunities, need capital for capital-intensive, long-payout investments with unstable cash flows, and have few tangible assets, so distress is costlier and raising capital is more expensive; risk management that keeps them financially sound thus adds more value.",
      "concept": "Value of Risk Management",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Insurance Market Imperfections",
+      "quote": "Firms with many growth opportunities — high market-to-book ratios or heavy R&D spending — need capital for capital-intensive investments with long payouts and unstable cash flows",
+      "note": "CAS Exam 7 Spring 2012 Q21(c) sample answers PDF p.86; Froot, Scharfstein & Stein NBER w4084 PDF pp.5, 13 (growth options, costly external capital, intangibles with no liquidation value)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     }
    ]
   },
@@ -909,7 +945,13 @@
      "statement": "Mitigate external fraud and data-security risk from outsourcing to third parties through access controls such as passwords and heightened security.",
      "concept": "Operational Risk Mitigation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The examiner's mitigation for this project's outsourcing (passwords, heightened security) is a scenario-specific answer; the event type itself (external fraud) is on Operational Risk.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm1"
+     }
     },
     {
      "id": "r6",
@@ -917,7 +959,13 @@
      "statement": "Mitigate execution, delivery and process management risk from vendors by clearly communicating expectations between internal staff and vendor personnel and by funding or reserving for the risk of errors.",
      "concept": "Operational Risk Mitigation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Communicating expectations with the vendor and funding for errors is a scenario-specific mitigation; the event type (execution, delivery and process management) is on Operational Risk.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm1"
+     }
     }
    ]
   },
@@ -1139,7 +1187,15 @@
        "page": "Risk Diversification",
        "quote": "$$C = \\sqrt{C_1^2 + C_2^2 + 2\\rho\\, C_1 C_2}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Management Process",
+      "quote": "it shows the CAS principle that portfolio risk is not the simple sum of the individual risks: the total equals $\\sigma_A + \\sigma_B$ only when $\\rho = 1$.",
+      "note": "Risk Management Process (linked from tagged Risk Management) teaches that aggregated risk equals the simple sum only under perfect correlation, with the square-root formula above it.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm1"
+     }
     },
     {
      "id": "r7",
@@ -1147,7 +1203,13 @@
      "statement": "Bonds from the same issuer are treated as perfectly correlated (correlation of 1, diversification parameter α = 0), so no diversification benefit applies.",
      "concept": "Credit Risk Solvency Capital Requirement Aggregation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "That one issuer's two bonds default together (correlation 1) is the inference the question's own 'same issuer' setup calls for; the aggregation rule itself is r6.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm1"
+     }
     }
    ]
   },
@@ -1239,7 +1301,13 @@
      "statement": "Loss ratios of a large, stable book of business tend to be positively correlated across years because the same policyholders remain and the book performs similarly over time, and a large book has high credibility so its loss ratio does not swing widely.",
      "concept": "Insurance Risk Model Correlation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "A reason specific to this book (large and stable, same policyholders); the examiner accepted any well-explained reason.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm1"
+     }
     },
     {
      "id": "r2",
@@ -1247,7 +1315,13 @@
      "statement": "Personal auto is highly regulated and has low catastrophe exposure, so rate levels change slowly and results are consistent, which makes loss ratios positively correlated from year to year.",
      "concept": "Insurance Risk Model Correlation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "A reason specific to the scenario's line (personal auto regulated, little cat exposure); the examiner accepted any well-explained reason.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm1"
+     }
     },
     {
      "id": "r3",
@@ -1496,7 +1570,13 @@
        "page": "Convolution",
        "quote": "- **Forgetting the order count.** $f_X^{*2}(3) = 2(0.6)(0.4)$, not $(0.6)(0.4)$: $3 = 1+2 = 2+1$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The question states the perils are independent; tabulating the combined distribution by multiplying probabilities and adding losses is arithmetic on its data.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm1"
+     }
     }
    ]
   },
@@ -1546,7 +1626,13 @@
        "page": "Investment Income",
        "quote": "In the projection, $A_{t-1}$ is the assets at the start of year $t$, $P_t$ the premiums received and $C_t$ the claims, expenses and commissions paid during the year, and $i_t$ the earned rate."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The question states when premiums, expenses and claims are paid; investment income on the beginning assets is arithmetic from that setup.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm1"
+     }
     },
     {
      "id": "r5",
@@ -1579,7 +1665,15 @@
      "statement": "The efficient frontier approach plots expected underwriting profit against a risk measure (e.g., VaR or TVaR) for reinsurance options; preferred options have higher profit for lower risk (upper left).",
      "concept": "Efficient Frontier for Reinsurance Evaluation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Mitigation",
+      "quote": "Brehm puts reinsurance programmes on an **efficient frontier** of expected return against risk: a programme below the frontier is dominated, and the choice along it is a question of appetite.",
+      "note": "Risk Mitigation (syllabus) teaches the efficient frontier of return against risk for reinsurance programmes, dominated options below it.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm1"
+     }
     },
     {
      "id": "r8",
@@ -1612,7 +1706,15 @@
      "statement": "Under the Basel II basic indicator approach, operational risk capital equals a single fixed percentage α (15%) times the average annual positive gross income over the previous three years, excluding years with zero or negative gross income from the average (dividing by the number of positive years).",
      "concept": "Basel II Basic Indicator Approach",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Operational Risk",
+      "quote": "capital equals a single fixed percentage $\\alpha = 15\\%$ of positive annual gross income, averaged over the previous three years",
+      "note": "BCBS Basel II (June 2006) para 649 (alpha 15%, negative or zero years excluded from numerator and denominator)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r2",
@@ -1620,7 +1722,15 @@
      "statement": "Under the Basel II standardized approach, capital equals the three-year average of the annual sum across business lines of β_j times gross income_j, with each year's total floored at zero and the average always divided by three.",
      "concept": "Basel II Standardized Approach",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Operational Risk",
+      "quote": "Capital is $K_{\\text{TSA}} = \\sum_{\\text{years }1\\text{ to }3} \\max\\big(\\sum_j \\beta_j \\text{GI}_j,\\ 0\\big) / 3$",
+      "note": "BCBS Basel II (June 2006) para 654 (K_TSA = sum over years 1-3 of max(sum beta GI, 0) / 3)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r3",
@@ -1628,7 +1738,15 @@
      "statement": "The standardized approach assigns different β factors (12%, 15%, 18%) to different business lines, such as retail banking at 12% and commercial banking at 15%, so capital depends on the firm's mix of business, whereas the basic indicator approach uses one α for the whole firm and ignores business mix.",
      "concept": "Basel II Standardized Approach",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Operational Risk",
+      "quote": "One $\\alpha$ for the whole firm, so the mix of business has no effect",
+      "note": "BCBS Basel II (June 2006) paras 649, 652-654 (one alpha; eight business lines with betas 12/15/18%)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r4",
@@ -1636,7 +1754,15 @@
      "statement": "Under the standardized approach, negative gross income in one business line can offset positive gross income in other lines within the same year, and a negative annual total is floored at zero but still counted in the divisor of three, which can yield lower capital than the basic indicator approach for a firm with a loss year or loss-making lines.",
      "concept": "Basel II Standardized Approach",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Operational Risk",
+      "quote": "a negative charge in one business line offsets positive charges in other lines *within the same year* without limit; a year whose total is negative enters as zero but the divisor stays three",
+      "note": "BCBS Basel II (June 2006) para 654 (negative charges offset without limit; negative aggregate year input zero; three-year average); 2013 Q21b sample answers",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     }
    ]
   },
@@ -1678,7 +1804,13 @@
        "page": "Market Risk Margin",
        "quote": "applies a factor to common share holdings, and it is high — equities are volatile and their fall correlates with the economic conditions in which insurers also suffer underwriting losses."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The examiner's argument about these two companies' investment strategies and how each should price; specific to the scenario.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm1"
+     }
     },
     {
      "id": "r3",
@@ -1716,7 +1848,15 @@
        "page": "Social Inflation",
        "quote": "Short-tail property lines are barely affected, because they involve little litigation."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Long Tail Lines",
+      "quote": "Long-tail reserves are also exposed to **calendar-year** forces that no accident-year pattern anticipates",
+      "note": "Done: Long Tail Lines added. The elsewhere places were Claim Reserve / Social Inflation, so this item needs the resolve with the Long Tail Lines quote (social and economic inflation, legislative reform, judicial reinterpretation).",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm1"
+     }
     },
     {
      "id": "r5",
@@ -2020,7 +2160,15 @@
      "statement": "Lines of insurance that are normally uncorrelated (different perils, policyholders, industries, geography) can become correlated when a single extreme event, such as a hurricane or economic recession, simultaneously drives losses in both lines.",
      "concept": "Correlation and Dependency Between Lines of Insurance",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Modeling",
+      "quote": "common drivers such as inflation acting on claims and asset values together, catastrophes crossing lines, the cycle moving lines together, and tail dependence",
+      "note": "Risk Modeling (syllabus) teaches that common drivers - a catastrophe crossing lines, inflation, the cycle - make otherwise separate lines move together.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm1"
+     }
     },
     {
      "id": "r2",
@@ -2028,7 +2176,15 @@
      "statement": "Correlation between risks often increases in the tails of the loss distributions, so a single constant correlation coefficient understates joint extreme outcomes.",
      "concept": "Tail Dependence",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Model Selection",
+      "quote": "Correlation alone does not fix how risks combine — two dependence structures with the same marginals and the same correlation can differ sharply in how often extreme losses occur together",
+      "note": "Model Selection (syllabus) teaches that one correlation number misses how often extremes coincide. If the coordinator finds this too thin, fold it into the copula-basics write.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm1"
+     }
     },
     {
      "id": "r3",
@@ -2139,7 +2295,15 @@
        "page": "Coefficient of Variation",
        "quote": "The **Coefficient of Variation** $CV$ is the ratio of the standard deviation to the mean, measuring dispersion as a proportion of the mean."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Measure",
+      "quote": "The [[Coefficient of Variation|coefficient of variation]], $\\sigma / \\mu$, compares risk between distributions with different means.",
+      "note": "Risk Measure (syllabus) gives CV = sigma/mu, so sigma = CV x mean.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm1"
+     }
     },
     {
      "id": "r2",
@@ -2372,7 +2536,13 @@
        "page": "Profit Testing",
        "quote": "Each year the insurer starts with the reserve released from the year before, receives the premium, pays the expenses and earns interest on the balance."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Investable assets = beginning surplus + premium - up-front expenses (net of ceded premium, plus commission) is arithmetic from the question's stated payment timing.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm1"
+     }
     },
     {
      "id": "r4",
@@ -2425,7 +2595,15 @@
      "statement": "A bridging model projects loss ratios for recent, immature years by starting from mature older-year loss ratios and adjusting them for loss cost trend and rate level changes, using them as expected loss ratios (e.g., in a Bornhuetter-Ferguson method).",
      "concept": "Loss Ratio Planning Bridging Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "Plan loss ratios for the coming year, and expected loss ratios for recent immature years, are projected from the loss ratios of older, mature years, adjusted for loss cost trend and rate level changes since",
+      "note": "CAS Exam 7 Spring 2014 report Q25 PDF pp.95-96 (bridging model definition; trend and rate-level adjustments; BF)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r2",
@@ -2433,7 +2611,15 @@
      "statement": "A bridging model creates autocorrelation between loss ratios of different years, so errors or deterioration in older-year loss ratios carry forward into plan and recent-year loss ratios, which can cause reserve problems, especially for long-tailed lines.",
      "concept": "Loss Ratio Planning Bridging Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "Its operational problem is **autocorrelation**: every recent year inherits the older years' estimates",
+      "note": "CAS Exam 7 Spring 2014 report Q25 PDF pp.95-96 (autocorrelation; deterioration carried forward in a long-tailed line)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r3",
@@ -2441,7 +2627,15 @@
      "statement": "A firm's franchise value comes mainly from intellectual property (talent, systems, databases, reputation, market relationships), so effective cycle management requires continuing to invest in and retain it throughout the underwriting cycle, especially in soft markets, to avoid obsolete systems and talent loss.",
      "concept": "Underwriting Cycle Management",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "A firm's franchise value lies mostly in its intellectual property: underwriting and actuarial talent, proprietary systems, databases and models, its reputation and its market relationships.",
+      "note": "CAS Exam 7 Spring 2014 report Q25 PDF pp.95-96 part b sample answers (intellectual property, majority of franchise value, invest through the cycle)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r4",
@@ -2449,7 +2643,15 @@
      "statement": "Underwriter incentives should be flexible and aligned with portfolio goals, so underwriters are not penalized for reducing or ceasing new business when market prices are inadequate in a soft market.",
      "concept": "Underwriting Cycle Management",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "Incentives should be flexible and tied to the portfolio's profitability goals rather than to growth alone, so that an underwriter is not penalized",
+      "note": "CAS Exam 7 Spring 2014 report Q25 PDF pp.95-96 (underwriter incentives flexible, aligned to portfolio goals); 2016 Q27(c) PDF p.102",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r5",
@@ -2457,7 +2659,15 @@
      "statement": "Owner and management education about the underwriting cycle helps them understand that deteriorating ratios (e.g., expense ratio) in a soft market stem from the cycle, preventing mistaken responses such as cutting prices to gain market share.",
      "concept": "Underwriting Cycle Management",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "Owners, not just management, need to understand that a soft market brings lower premium volume and a higher expense ratio (fixed costs spread over less premium) as a result of the cycle",
+      "note": "CAS Exam 7 Spring 2014 report Q25 PDF pp.95-96 (owner education); 2018 Q24(b) PDF p.106",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     }
    ]
   },
@@ -2603,7 +2813,13 @@
        "page": "Cumulative Distribution Function (CDF)",
        "quote": "For a continuous random variable, $F(x) = \\int_{-\\infty}^{x} f(t)\\, dt$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Drawn from the examiner's remark that candidates confused pdf and cdf; neither sample answer uses the pdf-cdf relationship.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm1"
+     }
     }
    ]
   },
@@ -2870,7 +3086,15 @@
        "page": "Risk Transfer",
        "quote": "Risk transfer is assessed on the **contract as a whole**, including side letters and undocumented understandings"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Mitigation",
+      "quote": "An excess-of-loss recovery is a non-linear function of the underlying loss — nothing below the retention, dollar for dollar within the layer, nothing more above the limit",
+      "note": "CAS Exam 7 Spring 2015 Q20(c) PDF p.80 (complexity; XS not linear; tax-motivated contracts warrant no credit); Clark 2014 pp.46-47 finite risk",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r7",
@@ -2899,7 +3123,15 @@
      "statement": "A copula is a function that joins marginal distributions into a joint distribution, capturing the dependence structure separately from the marginals.",
      "concept": "Copulas",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Copula",
+      "quote": "used to join the marginal distributions of two random variables $X$ and $Y$ into a joint distribution. It describes their dependence separately from the marginals",
+      "note": "Venter 2002 pp.68, 70 (copula separates the marginals from their interdependency; F(x,y) = C(F_X(x), F_Y(y)))",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r2",
@@ -2907,7 +3139,15 @@
      "statement": "A copula can join marginal distributions of any family, and can represent dependence without revealing the underlying marginal distributions.",
      "concept": "Copulas",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Copula",
+      "quote": "so the dependence can be described, fitted or reported on its own, without disclosing the loss distributions it joins",
+      "note": "CAS Exam 7 2015 Q21a accepted responses p.82 (join any two distributions without disclosing them); Venter 2002 p.69 (marginals inverted separately, any family)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r3",
@@ -2915,7 +3155,15 @@
      "statement": "Copulas allow correlation to vary across the distribution, e.g. stronger dependence in the tails than in the body, so tail dependence can be modeled and quantified.",
      "concept": "Copulas",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Copula",
+      "quote": "**Copulas let the strength of dependence vary across the distribution.** Copulas with the same $\\tau$ differ mainly in *where* the association is strongest",
+      "note": "Venter 2002 abstract p.68 (copulas differ in which part of the distributions the association is strongest; large losses, right tails)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r4",
@@ -2923,7 +3171,15 @@
      "statement": "The normal copula has light tails with little tail dependence, so it understates the joint extreme-loss correlation seen in insurance losses.",
      "concept": "Normal Copula",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Model Selection",
+      "quote": "The normal copula has no tail dependence: at any correlation below 1, extreme losses in the two lines become nearly independent far enough into the tail.",
+      "note": "Model Selection (Exam 9 syllabus page, written from Embrechts-McNeil-Straumann) teaches that the normal copula has no tail dependence, so it understates joint extremes",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm2"
+     }
     },
     {
      "id": "r5",
@@ -2931,7 +3187,15 @@
      "statement": "Copulas with heavy right-tail dependence, such as the Gumbel copula or the Heavy Right Tail (HRT) copula, better reflect increased correlation of insurance losses in extreme events and the skewness of losses than the normal copula.",
      "concept": "Gumbel Copula",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Model Selection",
+      "quote": "The Gumbel copula has upper-tail dependence: extreme losses in the two lines tend to occur together, so with the same marginals and correlation it produces more large combined losses",
+      "note": "teaches the Gumbel copula's right-tail dependence and why it suits insurance losses better than the normal (the HRT is the other accepted answer; the copula write group adds it)",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm2"
+     }
     },
     {
      "id": "r6",
@@ -2939,7 +3203,15 @@
      "statement": "Frank's copula does not have a heavier tail than the normal copula, so it is not a suitable choice for heavy tail dependence.",
      "concept": "Frank Copula",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Copula",
+      "quote": "Frank's copula does not have a heavier tail than the normal copula, so it understates how lines move together in extreme events",
+      "note": "Venter 2002 pp.74, 85 (normal heavier in the right tail than Frank; away from the limits normal shows more tail concentration than Frank); 2015 Q21b report p.83",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     }
    ]
   },
@@ -2994,7 +3266,15 @@
        "page": "Risk Assessment",
        "quote": "$X_0$ is the severity observed in the base period, $g$ is the annual trend, and $X_t$ is the severity projected $t$ years ahead."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Insurance Risk",
+      "quote": "parameter risk, subdivided into *estimation* (too little data), *projection* (trend and development, often driven by [[Inflation|inflation]]), *event* (a court ruling, a latent exposure, a new cause of loss)",
+      "note": "Insurance Risk (Exam 9 syllabus page) names Brehm's projection risk (trend, inflation) and event risk (a court ruling), which together are the structural/projection element the answer describes",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm2"
+     }
     },
     {
      "id": "r4",
@@ -3087,7 +3367,15 @@
        "page": "Development Factor Correlation Test",
        "quote": "$r_{ik}$ ranks the $I-k$ factors $C_{i,k+1}/C_{ik}$ of column $k$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Rank Correlation",
+      "quote": "rank each variable's $n$ observations separately, by size, the smallest getting rank $1$; for each pair take $d_i$, the difference between its two ranks; square and sum",
+      "note": "Mack 1994 Appendix G pp.156-157 (rank by size, smallest rank one; sum of squared rank differences)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r3",
@@ -3100,7 +3388,15 @@
        "page": "Development Factor Correlation Test",
        "quote": "$$T_k = 1 - \\frac{6\\sum_{i=1}^{I-k}(r_{ik} - s_{ik})^2}{(I-k)^3 - (I-k)}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Rank Correlation",
+      "quote": "the same formula reads $\\rho_S = 1 - S\\big/\\big[n(n^2-1)/6\\big]$",
+      "note": "Mack 1994 (G4) p.157: T_k = 1 - 6 sum(r-s)^2/((I-k)^3 - (I-k)); 2015 Q23b sample answers p.87",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r4",
@@ -3108,7 +3404,15 @@
      "statement": "Pearson's correlation is a cardinal measure that depends on the actual values (deviations from the mean, squared), so it is sensitive to outliers, whereas Spearman's is ordinal, depending only on ranks, and is not affected by the magnitude of extreme values.",
      "concept": "Pearson vs Spearman Correlation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Rank Correlation",
+      "quote": "Pearson's correlation is a *cardinal* measure: it uses each value's deviation from the mean, multiplied together and squared, so the size of the values matters and a few extreme ones can dominate it",
+      "note": "CAS Exam 7 2015 Q23c sample answers and report pp.87-88 (Pearson cardinal, outlier-sensitive; Spearman ordinal); Embrechts et al. pp.16-17",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r5",
@@ -3116,7 +3420,15 @@
      "statement": "A pair of extreme values that are both the largest in their series (an outlier pair) can inflate Pearson's correlation well above Spearman's, producing a discrepancy between the two measures.",
      "concept": "Pearson vs Spearman Correlation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Rank Correlation",
+      "quote": "When Pearson is high and the rank measures are near zero, look for one pair that is extreme in both series. It drives the Pearson figure",
+      "note": "CAS Exam 7 2015 Q23c report p.88 (outlier year skewing Pearson; mention needed for full credit)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     }
    ]
   },
@@ -3399,7 +3711,13 @@
      "statement": "Market capital reactions to an insurer entering distress tend to be a multiple of the actual drop in book value that caused the distress.",
      "concept": "Financial Distress Costs for Insurers",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "One of four alternative consequences the solution accepts; a candidate needed two, and the other three (devalued promise, costly capital, agency risk-taking: r1, r2, r4) are taught on the tagged Insurance Market Imperfections page.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm2"
+     }
     },
     {
      "id": "r4",
@@ -3500,7 +3818,13 @@
      "statement": "Industry risk is a type of strategic risk, including capital intensiveness, overcapacity, commoditization, deregulation, and cycle volatility, all significant for insurers.",
      "concept": "Strategic Risk",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "One accepted example of a strategic risk among several; the examiner says naming any strategic risk earned credit, competitor risk (r5) is taught on Business Risk and Risk Taxonomies lists the others (reputation, competition, capital availability, regulatory trends); the industry-risk breakdown is one sample's elaboration.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm2"
+     }
     },
     {
      "id": "r5",
@@ -3534,7 +3858,15 @@
        "page": "ALM Risk",
        "quote": "Assets in one currency backing liabilities in another expose the surplus to exchange rates unless hedged."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Financial Risk",
+      "quote": "economic value or earnings fall because of movements in financial markets or the failure of a financial counterparty — [[Interest Rate Risk|interest rates]], equity prices, credit spreads and exchange rates",
+      "note": "Financial Risk (Exam 9 syllabus page) names exchange-rate movements as a source of loss in value; the domestic-only contrast is the question's own data",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm2"
+     }
     },
     {
      "id": "r2",
@@ -3577,7 +3909,15 @@
        "page": "ALM Risk",
        "quote": "Funding liquidity risk is the risk of not having cash to meet obligations when they fall due, and market liquidity risk is the risk of being able to sell assets only at a deep discount."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Financial Risk",
+      "quote": "*liquidity risk* — being forced to sell assets at a loss to pay claims.",
+      "note": "Financial Risk (syllabus page) defines liquidity risk as not having cash for claims without forced sales; the catastrophe and downgrade triggers are the question's scenario",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm2"
+     }
     },
     {
      "id": "r5",
@@ -3745,7 +4085,15 @@
      "statement": "To smooth earnings across the underwriting cycle, shift the asset mix toward higher-yielding, riskier assets (equities, high-yield bonds) in soft markets to offset weak underwriting income, and toward conservative lower-yield assets (treasuries) in hard markets when underwriting profit is high.",
      "concept": "Asset Management Strategy and the Underwriting Cycle",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "when underwriting income is weak (a soft market), take more investment risk for higher yield — equities, high-yield bonds, taxable bonds — to offset it",
+      "note": "CAS Exam 7 Spring 2016 report Q22 PDF pp.90-91 (asset strategy across the cycle)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r3",
@@ -3753,7 +4101,15 @@
      "statement": "Tax-exempt bonds have lower pre-tax yields than taxable bonds but reduce tax on investment income, making them more valuable when the insurer has taxable profits (e.g., underwriting profit in a hard market).",
      "concept": "Investment Portfolio Taxation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "Tax-exempt municipal bonds pay lower interest than comparable taxable securities because their interest is excluded from federal gross income, so they are worth most to an insurer with taxable profits to shelter",
+      "note": "MSRB Municipal Bond Basics (Tax Status); CAS Exam 7 Spring 2016 report Q22 sample answer 3 PDF p.90",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r4",
@@ -3786,7 +4142,15 @@
      "statement": "Default avoidance as a capital reference point requires a capital level deep in the tail of the loss distribution, where the ERM model is least reliable and least credible.",
      "concept": "Default Avoidance Reference Point for Capital Requirements",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Capital",
+      "quote": "it places the requirement deep in the tail of the loss distribution, where a risk model has the least data and is least reliable",
+      "note": "CAS Exam 7 2016 Q23a sample answers and report pp.92-93 (far tail where the ERM model is least reliable)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r2",
@@ -3794,7 +4158,15 @@
      "statement": "Default avoidance mainly protects policyholders, whereas shareholders and other stakeholders can be harmed by large partial losses of capital well before default, so a more likely, less extreme reference point may be more meaningful.",
      "concept": "Default Avoidance Reference Point for Capital Requirements",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Capital",
+      "quote": "shareholders and other stakeholders are hurt by large partial losses of capital well before default, so a more likely, less extreme event can be the more meaningful standard",
+      "note": "CAS Exam 7 2016 Q23a sample answers and report pp.92-93 (default avoidance mainly protects policyholders; partial losses matter to shareholders)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r3",
@@ -3832,7 +4204,15 @@
      "statement": "To build a minimum capital requirement from a reference point, choose a maximum tolerable fraction of capital lost in a 1-in-y-year event, express that event's average loss as TV@R at the corresponding percentile, and set capital equal to TV@R divided by the tolerated fraction (a multiple of TV@R).",
      "concept": "Capital Requirement Based on TV@R Multiple",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Capital",
+      "quote": "choose the largest fraction $k$ of capital the firm will tolerate losing in a 1-in-$y$-year event, measure that event's average loss as the TVaR at the matching percentile",
+      "note": "CAS Exam 7 2016 Q23c report pp.93-94 (maximum capital loss tolerance as a 1-in-y event, capital a multiple of TV@R); Venter 2003 pp.283-284 (capital a multiple of a risk measure)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     }
    ]
   },
@@ -3874,7 +4254,15 @@
      "statement": "TVaR weights all tail losses linearly, so it does not treat a loss twice as large as more than twice as bad, which is inconsistent with risk aversion.",
      "concept": "Tail Value at Risk (TVaR)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Measure",
+      "quote": "so every tail dollar counts the same and a loss twice as large counts exactly twice as bad",
+      "note": "Kreps 2005 pp.44-45 (TVAR riskiness leverage zero up to a point then constant); Venter 2003 p.286 (tail measures linear, 'an underweighting'); 2016 Q24 sample answers and report pp.95-96",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r4",
@@ -3895,7 +4283,15 @@
      "statement": "Weighted (transformed-probability) TVaR is suitable for portfolios with heavy-tailed, skewed losses (e.g., catastrophe property, excess casualty) because it counts a loss twice as large as more than twice as bad.",
      "concept": "Transformed Probabilities Risk Measures",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Measure",
+      "quote": "a loss twice as large counts as more than twice as bad, which suits a portfolio with heavy-tailed, skewed losses",
+      "note": "CAS Exam 7 2016 Q24a sample answers p.95 (TVaR on transformed probabilities treats a loss 2x as large as more than 2x as bad; best for skewed losses)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r6",
@@ -3903,7 +4299,15 @@
      "statement": "Other suitable risk measures for capital allocation include expected policyholder deficit (EPD) on transformed probabilities, the value of a put option, and the exponential moment, each capturing tail or skewness behavior and risk aversion.",
      "concept": "Risk Measures for Capital Allocation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Measure",
+      "quote": "the value of the **default put option** — limited liability lets an insurer put its default costs to policyholders",
+      "note": "Venter 2003 p.283 (Table 1; cost of default option as a risk measure); 2016 Q24b sample answer 2 p.95 accepts the value of a put option; EPD (also accepted) is on the same line",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     }
    ]
   },
@@ -3919,7 +4323,15 @@
      "statement": "The right-tail concentration function R(z) is the probability that both variables exceed their z-th quantiles, given that one exceeds its z-th quantile: R(z) = P(U > z, V > z) / (1 - z) = (1 - 2z + C(z,z)) / (1 - z).",
      "concept": "Tail Concentration Functions",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Copula",
+      "quote": "R(z) = \\Pr(U > z \\mid V > z) = \\frac{1 - 2z + C(z,z)}{1 - z}",
+      "note": "Venter 2002 p.83 (R(z) = Pr(U>z,V>z)/(1-z) = [1-2z+C(z,z)]/(1-z) = Pr(U>z | V>z))",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r2",
@@ -3953,7 +4365,15 @@
      "statement": "A right-tail concentration graph can be misleading because a copula may have significant tail dependence even when R(1) = 0 (R may decline rapidly), and because it shows only the right tail and reduces a two-dimensional dependence to a one-dimensional curve.",
      "concept": "Tail Concentration Functions",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Copula",
+      "quote": "**$R(1) = 0$ does not mean no tail association.** The normal copula has $R(1) = 0$ yet shows more concentration than the Frank short of the limit",
+      "note": "Venter 2002 pp.84-86 (normal and Frank show no tail dependence in the limit, normal more concentration away from it; R hard to estimate from sparse tail data, fit R(z) not just R); 2016 Q25b sample answers p.97",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r5",
@@ -3961,7 +4381,15 @@
      "statement": "To address the limitations of the right-tail concentration graph, examine R(z) at values somewhat below 1, combine it with the left-tail concentration function L(z) (using L for z ≤ 0.5 and R for z ≥ 0.5), and/or supplement with other measures such as Kendall's tau or industry data.",
      "concept": "Tail Concentration Functions",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Copula",
+      "quote": "Pair it with $L(z)$ — Venter plots $L$ for $z < \\tfrac12$ and $R$ above — and with Kendall's $\\tau$ when choosing a copula",
+      "note": "Venter 2002 pp.84, 86 (LR function: L below 1/2, R above; target pair (tau, R)); 2016 Q25b sample answers p.97",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     }
    ]
   },
@@ -3977,7 +4405,13 @@
      "statement": "A plan (planned) loss ratio is often used as the expected loss ratio (ELR) in reserving methods such as Bornhuetter-Ferguson and Expected Loss Ratio, so an optimistic plan loss ratio understates selected ultimate losses and unpaid claim estimates.",
      "concept": "Plan Loss Ratio",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The question's own setup: it states that the plan loss ratio is used as the expected loss ratio in the reserve review; the consequence (reserve deficiency) is r2, already taught.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm2"
+     }
     },
     {
      "id": "r2",
@@ -4078,7 +4512,15 @@
      "statement": "Management incentive plans tied to short-term measures such as top line growth and calendar year combined ratio can encourage managers to pursue short-term results (aggressive growth, underpricing, writing wrong risks) at the expense of the owners' long-term interests.",
      "concept": "Agency Theory",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "An incentive plan paid on short-term measures, such as top-line growth and the calendar-year combined ratio, rewards aggressive growth, underpricing and writing the wrong risks",
+      "note": "CAS Exam 7 Spring 2016 report Q27(b) PDF pp.101-103 (short-term vs long-term)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r3",
@@ -4099,7 +4541,15 @@
      "statement": "Effective underwriting cycle management includes maintaining intellectual property (retaining key talent, investing in systems, models and data, and keeping presence in core markets and distribution channels) during soft markets.",
      "concept": "Underwriting Cycle Management",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "Effective cycle management keeps investing in it throughout the cycle — retaining key people, maintaining systems and data, keeping a presence in core markets and distribution channels during a soft market",
+      "note": "CAS Exam 7 Spring 2016 report Q27(c) PDF p.102 (intellectual property sample answers)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r5",
@@ -4107,7 +4557,15 @@
      "statement": "Effective underwriting cycle management includes setting underwriting incentives that support portfolio profitability goals rather than growth alone, so underwriters are not penalized for missing growth targets in bad markets.",
      "concept": "Underwriting Cycle Management",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "Incentives should be flexible and tied to the portfolio's profitability goals rather than to growth alone, so that an underwriter is not penalized",
+      "note": "CAS Exam 7 Spring 2016 report Q27(c) sample answer 5 PDF p.102",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r6",
@@ -4136,7 +4594,15 @@
      "statement": "The Delphi method is a soft approach to the underwriting cycle in which experts answer questionnaires, responses are aggregated and fed back to participants who may revise or justify their views, and the process repeats until consensus is reached.",
      "concept": "Underwriting Cycle Modeling: Soft Approaches",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Identification",
+      "quote": "anonymous methods such as the Delphi technique, in which a panel answers anonymously over several rounds, keep any one participant's authority from dominating the rest.",
+      "note": "Risk Identification (linked from the tagged Risk Management page; written from RAND's Delphi page) describes the Delphi method — an expert panel answering over repeated rounds; its use as a soft cycle approach is in the cycle-modeling write group",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm2"
+     }
     },
     {
      "id": "r2",
@@ -4144,7 +4610,15 @@
      "statement": "Competitor analysis is a soft approach that combines trade publications, rate filings, agents and financial statements to detect whether many competitors are financially distressed or unusually profitable, in order to predict a turn in the underwriting cycle.",
      "concept": "Underwriting Cycle Modeling: Soft Approaches",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "In **competitor analysis**, information from trade publications, rate filings, agents and financial statements is combined to see whether an unusually large number of competitors look financially distressed, or unusually profitable",
+      "note": "CAS Exam 7 Spring 2016 report Q28(a) sample answer 2 PDF p.104",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r3",
@@ -4152,7 +4626,15 @@
      "statement": "Scenario testing is a soft approach that uses written descriptions of possible future states of the insurance environment to prepare management to think about responses.",
      "concept": "Underwriting Cycle Modeling: Soft Approaches",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "**Scenario testing** writes out descriptions of possible future states of the insurance environment, to prepare management to think through its responses.",
+      "note": "CAS Exam 7 Spring 2016 report Q28(a) sample answer 3 PDF p.104",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r4",
@@ -4173,7 +4655,15 @@
      "statement": "The general factor model for the underwriting cycle has a latent factor Z_t = a + b Z_{t-1} + sigma*epsilon_t, and the observed combined ratio X_t = d + c (Z_{t-1} - X_{t-1}) + tau*delta_t, so X adjusts toward the prior latent factor value.",
      "concept": "General Factor Model of the Underwriting Cycle",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "Z_t = a + b\\,Z_{t-1} + \\sigma\\,\\varepsilon_t \\qquad X_t = d + c\\,(Z_{t-1} - X_{t-1}) + \\tau\\,\\delta_t",
+      "note": "CAS Exam 7 Spring 2016 report Q28(b) sample answer 2 PDF p.104 (printed 'd + d x', a slip; written with c for the adjustment coefficient, notation variants accepted per report p.105)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r6",
@@ -4181,7 +4671,15 @@
      "statement": "Econometric modeling of the underwriting cycle resembles soft approaches in that it needs a large quantity, variety and complexity of data and incorporates structural and human factors that influence the cycle.",
      "concept": "Econometric Models of the Underwriting Cycle",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "Like the soft approaches, an econometric model needs a large quantity, variety and complexity of data and builds in the structural and human factors behind the cycle",
+      "note": "CAS Exam 7 Spring 2016 report Q28(c) PDF p.104",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r7",
@@ -4189,7 +4687,15 @@
      "statement": "Econometric modeling of the underwriting cycle resembles technical models in that both use mathematical formalism and statistical rigor and can be tested for statistical validity, to a greater degree than soft approaches.",
      "concept": "Econometric Models of the Underwriting Cycle",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "like the technical models, it uses mathematical formalism and statistical rigor and can be tested for statistical validity, to a greater degree than a soft approach can",
+      "note": "CAS Exam 7 Spring 2016 report Q28(c) PDF p.104",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     }
    ]
   },
@@ -4472,7 +4978,15 @@
      "statement": "A cost/benefit diagram plots the benefit of a reinsurance program (on the vertical axis) against its cost (on the horizontal axis) at selected return periods, with the bare (no reinsurance) program at the origin.",
      "concept": "Reinsurance Cost/Benefit Analysis",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Mitigation",
+      "quote": "plots each programme's cost (horizontal axis) against its net result at a selected probability level (vertical axis), one line per level",
+      "note": "Venter, Measuring Value in Reinsurance, CAS Forum Summer 2001 p.187 (cost/benefit diagram, efficiency rule); CAS Exam 7 Spring 2017 report Q23 PDF pp.89-90 (bare at 0 cost)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r2",
@@ -4497,7 +5011,15 @@
      "statement": "The benefit of a reinsurance program at a given percentile equals the net premium minus net loss under the program minus that under the bare program at the same percentile.",
      "concept": "Reinsurance Cost/Benefit Analysis",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Mitigation",
+      "quote": "The benefit of a programme at a probability level is its percentile of that distribution minus the bare position's percentile at the same level.",
+      "note": "Venter 2001 p.186 (difference in percentiles of the distributions); CAS Exam 7 Spring 2017 report Q23 sample 3 PDF p.90",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r4",
@@ -4535,7 +5057,15 @@
      "statement": "The Frank copula has little or no tail dependence, so it understates correlation among lines in extreme events such as clash and accumulation.",
      "concept": "Copulas",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Copula",
+      "quote": "It has less tail concentration than the normal copula. For clash and accumulation events, choose a copula with right-tail dependence.",
+      "note": "Venter 2002 p.85 (Frank: no tail dependence, less concentration than the normal); 2017 Q23c sample answers and report pp.91-92",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r7",
@@ -4543,7 +5073,15 @@
      "statement": "The Gumbel (heavy right tail) copula has strong right-tail dependence, making it a better choice for correlating lines in large loss events.",
      "concept": "Copulas",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Model Selection",
+      "quote": "The Gumbel copula has upper-tail dependence: extreme losses in the two lines tend to occur together, so with the same marginals and correlation it produces more large combined losses",
+      "note": "teaches the Gumbel copula's strong right-tail dependence, making it the better choice for large-loss (clash, accumulation) correlation",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm2"
+     }
     }
    ]
   },
@@ -4559,7 +5097,13 @@
      "statement": "Traditional unilateral planning sets a single version of the plan (one point estimate of premium volume and loss ratio by line) that is used as the target for the year regardless of how conditions evolve.",
      "concept": "Scenario Planning",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Restates the question's wording ('one version of the plan is set'); the drawbacks and the scenario-planning alternative are the course content, written under scenario-planning.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm2"
+     }
     },
     {
      "id": "r2",
@@ -4567,7 +5111,15 @@
      "statement": "A drawback of a single fixed plan is that underwriters pressured to 'make plan' may write business at inadequate prices when market conditions worsen (e.g., a soft market), harming long-term underwriting results.",
      "concept": "Scenario Planning",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "Underwriters pressured to \"make plan\" when conditions worsen may write business at inadequate prices, harming long-term results",
+      "note": "CAS Exam 7 Spring 2017 report Q24(a) PDF p.93",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r3",
@@ -4575,7 +5127,15 @@
      "statement": "A drawback of a single fixed plan is organizational inertia: management is reluctant to revise plan loss ratio estimates when actual results deviate, so booked losses drift from reality and optimistic plan loss ratios feed into reserving (e.g., Bornhuetter-Ferguson).",
      "concept": "Scenario Planning",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "organizational inertia — management's reluctance to revise the plan's loss ratios when actual results deviate — lets booked losses drift from reality",
+      "note": "CAS Exam 7 Spring 2017 report Q24(a) PDF p.93",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r4",
@@ -4583,7 +5143,15 @@
      "statement": "Scenario planning steps: define a set of plausible future scenarios (e.g., market conditions, possibly with likelihoods), develop pre-agreed action plans and targets (premium volume and loss ratio by line) for each scenario, then monitor the environment and implement the plan of the scenario that emerges.",
      "concept": "Scenario Planning",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "define a set of plausible future scenarios for the market (possibly with likelihoods); agree in advance, for each, on action plans and targets — premium volume and loss ratio by line",
+      "note": "CAS Exam 7 Spring 2017 report Q24(b) PDF pp.93-94 (three steps)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r5",
@@ -4591,7 +5159,15 @@
      "statement": "Scenario planning lets management respond quickly to changing conditions because responses were agreed in advance rather than devised on the fly.",
      "concept": "Scenario Planning",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "Because the responses were agreed beforehand, management can act quickly rather than devise a strategy on the fly",
+      "note": "CAS Exam 7 Spring 2017 report Q24(c) PDF p.94",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r6",
@@ -4599,7 +5175,15 @@
      "statement": "Scenario planning reduces pressure to make plan at all costs and overcomes organizational inertia, since alternative plans and incentives are already sanctioned when the environment changes, supporting long-term profitability.",
      "concept": "Scenario Planning",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "the pressure to make plan at all costs and the organizational inertia both fall away, which supports long-term profitability",
+      "note": "CAS Exam 7 Spring 2017 report Q24(c) PDF p.94",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     }
    ]
   },
@@ -4615,7 +5199,15 @@
      "statement": "A behavioral (econometric) approach to modeling the underwriting cycle is a middle ground between soft and technical approaches, combining human/economic behavior with mathematical rigor.",
      "concept": "Underwriting Cycle Modeling Approaches",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "**Behavioral (econometric) approaches** are the middle ground between soft and technical ones: individual components of the process are built on economic and behavioral theory",
+      "note": "CAS Exam 7 Spring 2017 report Q25(a) PDF p.96",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r2",
@@ -4623,7 +5215,15 @@
      "statement": "A behavioral model of the underwriting cycle represents insurance supply and demand curves, varies key inputs (capital, shock events, inflation, capital flows) to shift the curves, and uses the resulting equilibrium prices to model cycle turns.",
      "concept": "Underwriting Cycle Modeling Approaches",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "varying the key inputs — capital, shock events, inflation, capital flows — and re-solving traces out the price path and its turns",
+      "note": "CAS Exam 7 Spring 2017 report Q25(a) sample answers 4-5 PDF p.96",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r3",
@@ -4631,7 +5231,15 @@
      "statement": "Insurance supply and demand graphs plot price on the vertical axis and quantity of insurance on the horizontal axis, with a downward-sloping demand curve and an upward-sloping supply curve meeting at the equilibrium price and quantity.",
      "concept": "Insurance Supply and Demand Curves",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "A supply and demand graph puts price on the vertical axis and quantity on the horizontal; demand slopes down from left to right, supply slopes up, and the equilibrium is the point where they cross.",
+      "note": "OpenStax Principles of Economics 3e §3.1",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r4",
@@ -4669,7 +5277,15 @@
      "statement": "After a capital infusion shifts both supply and demand outward, equilibrium quantity increases while the equilibrium price may rise or fall depending on the relative size of the shifts.",
      "concept": "Insurance Supply and Demand Curves",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "after an industry-wide capital infusion moves both curves out, the equilibrium quantity rises, while the equilibrium price may rise or fall depending on the relative size of the two shifts",
+      "note": "CAS Exam 7 Spring 2017 report Q25(b) report PDF p.98 (price either way, quantity higher); OpenStax 3e §3.3",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     }
    ]
   },
@@ -4855,7 +5471,15 @@
      "statement": "To compute a 1-in-N WTVaR from simulations, take the worst scenarios in descending order, weight each by its transformed probability f*(x) obtained as differences in F*, cap the last scenario's weight so total weight equals the tail probability 1/N, and divide the weighted sum by 1/N.",
      "concept": "Weighted Tail Value at Risk (WTVaR)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Measure",
+      "quote": "read each one's transformed probability $f^*$ as the difference between successive values of the transformed CDF $F^*$",
+      "note": "CAS Exam 7 2018 Q21b sample answers and report p.99 (weights f*, not F*; cap the last simulation's probability; divide by 0.01)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     }
    ]
   },
@@ -4871,7 +5495,15 @@
      "statement": "The annual cost of a surplus note is the principal times the difference between the coupon rate and the bond yield (the coupon paid minus the investment income earned on the proceeds at the bond yield).",
      "concept": "Surplus Notes",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Mitigation",
+      "quote": "its annual cost is the coupon paid less the investment income earned on the proceeds: principal times (coupon rate minus investment yield)",
+      "note": "CAS Exam 7 Spring 2018 report Q22(a) PDF pp.100, 102; NAIC CIPR Surplus Notes",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r2",
@@ -4879,7 +5511,15 @@
      "statement": "The annual cost of quota-share reinsurance is the ceded premium (cession percentage times gross earned premium) times the economic margin on the contract.",
      "concept": "Quota Share Reinsurance",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Mitigation",
+      "quote": "The annual cost of a **quota share** is the margin ceded on it: ceded premium (cession percentage times subject premium) times the contract's economic margin",
+      "note": "CAS Exam 7 Spring 2018 report Q22(a) PDF pp.100, 102",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r3",
@@ -4900,7 +5540,15 @@
      "statement": "The return of surplus note principal at maturity is not counted as a cost of the surplus note strategy, since only the net financing cost (coupon minus yield) is the cost.",
      "concept": "Surplus Notes",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Mitigation",
+      "quote": "Returning the principal at maturity is not a cost of the strategy — it is the borrowed money going back — so only the net financing cost counts.",
+      "note": "CAS Exam 7 Spring 2018 report Q22(b) report PDF p.102 (common mistake: principal repayment as a cost)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r5",
@@ -4908,7 +5556,15 @@
      "statement": "The three paradigms for measuring the value of a reinsurance structure are: (1) stabilizing results, (2) freeing up or replacing required capital/surplus, and (3) adding value to the firm (equity/market value).",
      "concept": "Reinsurance Value Paradigms",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Mitigation",
+      "quote": "reinsurance (1) **stabilizes results**; (2) **frees up or replaces capital**",
+      "note": "CAS Exam 7 Spring 2018 report Q22(c) PDF pp.101-103; Venter 2001 pp.181-182",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r6",
@@ -4941,7 +5597,15 @@
      "statement": "ERM models need dedicated, full-time staff or a dedicated ERM function; staff doing ERM part-time alongside regular duties creates scheduling conflicts and delays in implementation and maintenance.",
      "concept": "ERM Governance and Implementation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Modeling",
+      "quote": "It needs dedicated, full-time staff — or a dedicated ERM function — because people building and maintaining it alongside their regular duties face scheduling conflicts",
+      "note": "CAS Exam 7 2018 Q23 characteristic i sample answers and report p.104",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r2",
@@ -4966,7 +5630,15 @@
      "statement": "Correlation assumptions between lines of business require broad knowledge of the whole firm and are politically sensitive, so individual line leaders may be inexperienced or biased; the assumptions should be owned or reviewed at the corporate level (CRO, ERM department) or set by consensus among leaders.",
      "concept": "Correlation Assumptions in ERM Models",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Modeling",
+      "quote": "they belong at the corporate level, owned or reviewed by the CRO or the ERM department, or agreed by consensus among the line leaders",
+      "note": "CAS Exam 7 2018 Q23 characteristic iii sample answers and report pp.104-105",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r4",
@@ -5025,7 +5697,15 @@
      "statement": "A 'maintain market share' (naive) underwriting cycle strategy keeps premium volume or plan targets constant through the cycle by cutting prices or loosening terms to avoid losing customers.",
      "concept": "Underwriting Cycle Management Strategies",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "A firm that keeps its premium volume, or its plan target, constant through the cycle does it by cutting prices or loosening terms so as not to lose customers.",
+      "note": "CAS Exam 7 Spring 2018 report Q24(a) PDF p.106; Feldblum PCAS 2001 pp.34-35",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r3",
@@ -5050,7 +5730,15 @@
      "statement": "Effective cycle management aligns underwriter incentives and management goals with owner objectives (agency theory), rewarding underwriting discipline over premium growth, and educates owners to expect lower volume and higher expense ratios in soft markets.",
      "concept": "Underwriting Cycle Management Strategies",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "the goal of agency theory is to align management's interests with the owners'",
+      "note": "CAS Exam 7 Spring 2018 report Q24(b) PDF pp.106-107 (agency theory, incentives, owner education); 2016 Q27(a) PDF p.102",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r5",
@@ -5071,7 +5759,15 @@
      "statement": "Effective cycle management includes scenario planning with pre-determined responses to market changes and investment strategy adjusted to the cycle (e.g., taxable bonds in soft markets, tax-exempt bonds in hard markets).",
      "concept": "Underwriting Cycle Management Strategies",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "A firm that shrinks in the soft market keeps the surplus to write aggressively at higher prices when the market hardens; scenario planning (below) gives it pre-agreed responses to the turn.",
+      "note": "CAS Exam 7 Spring 2018 report Q24(b) PDF p.107 (market overreaction, scenario planning, investment strategy)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     }
    ]
   },
@@ -5100,7 +5796,13 @@
      "statement": "When comparing reinsurance options by their CDF curves, an option whose curve lies to the left (lower combined ratio) at high percentiles performs better in the tail, so a tail-concerned actuary prefers it even if it performs worse at lower percentiles.",
      "concept": "Reinsurance Program Evaluation Using Risk Measures",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Reading the question's own chart: for an actuary concerned with the tail, the option with the lower combined ratio at high percentiles is preferred — a step of this solution, not a separate fact.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm2"
+     }
     },
     {
      "id": "r3",
@@ -5160,7 +5862,15 @@
      "statement": "A weakness of TV@R is that it weights all tail losses equally (linearly), so it does not reflect risk-averse attitudes toward increasingly large losses; WTV@R corrects this by giving greater weight to more extreme losses.",
      "concept": "Weighted Tail Value at Risk (WTVaR)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Measure",
+      "quote": "a risk-averse management wants the weight to grow as losses start to impair capital",
+      "note": "Kreps 2005 p.49 (leverage should become much larger for excess significantly impacting capital); 2019 Q19d-e report p.88",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     }
    ]
   },
@@ -5176,7 +5886,15 @@
      "statement": "The Normal copula is symmetric and has no strong tail dependence, so its scatter plot looks more uniform with weaker clustering in the corners, especially the upper-right tail.",
      "concept": "Normal Copula",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Copula",
+      "quote": "a symmetric copula (normal, Frank) looks the same near $(0,0)$ as near $(1,1)$; an HRT copula is asymmetric, its points scattered near $(0,0)$ and bunched along the diagonal near $(1,1)$",
+      "note": "CAS Exam 7 2019 Q20a sample answers p.89 (normal more symmetric, more uniform; HRT points bunched in the upper right); Venter 2002 pp.72-73 (Gumbel and HRT asymmetric, heavier right tail)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r2",
@@ -5184,7 +5902,15 @@
      "statement": "The HRT (heavy right tail) copula has dependence concentrated in the right tail, so its scatter plot shows points bunched in the upper-right corner and is asymmetric.",
      "concept": "Heavy Right Tail (HRT) Copula",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Copula",
+      "quote": "a symmetric copula (normal, Frank) looks the same near $(0,0)$ as near $(1,1)$; an HRT copula is asymmetric, its points scattered near $(0,0)$ and bunched along the diagonal near $(1,1)$",
+      "note": "Venter 2002 p.73 (HRT: less correlation in the left tail, high in the right); 2019 Q20a sample answers p.89",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r3",
@@ -5192,7 +5918,15 @@
      "statement": "The HRT copula suits lines of business that are largely uncorrelated normally but become highly dependent in extreme events such as catastrophes, because it puts heavy dependence in the right tail.",
      "concept": "Heavy Right Tail (HRT) Copula",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Copula",
+      "quote": "Two property lines may be almost unrelated in ordinary years and lose together when one hurricane hits both — a copula with a heavy right tail can say exactly that",
+      "note": "Venter 2002 pp.69, 73 (lines correlated in the extreme tails but not elsewhere; HRT for large losses); 2019 Q20b sample answers p.89",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r4",
@@ -5200,7 +5934,15 @@
      "statement": "The Normal copula extends easily to more than two lines of business (via a correlation matrix) and is easy to simulate from and invert, whereas the HRT copula is harder to generalize beyond two variables.",
      "concept": "Normal Copula",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Copula",
+      "quote": "Easy to simulate, and it extends to many variables through a correlation matrix.",
+      "note": "Venter 2002 pp.74, 101 (normal copula useful for easy simulation and generalised to multi-dimensions; only normal and partial perfect fully generalise); 2019 Q20b sample answers p.89",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r5",
@@ -5208,7 +5950,15 @@
      "statement": "A copula only specifies the dependence between variables and not their marginal distributions, so the expected value of the aggregate (sum) is unchanged by the choice of copula, while measures of variability and tail risk do change.",
      "concept": "Copulas",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Copula",
+      "quote": "Changing the copula never changes the expected value of the sum: each marginal is unchanged",
+      "note": "CAS Exam 7 2019 Q20c sample answers pp.89-90 (copula should not change the expected value; it affects variability); Venter 2002 p.70 (marginals described separately)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:06Z/a5e7"
+     }
     },
     {
      "id": "r6",
@@ -5216,7 +5966,15 @@
      "statement": "A copula with stronger right-tail dependence makes large losses across lines more likely to occur together, which gives a higher VaR at high percentiles of the aggregate loss distribution.",
      "concept": "Value at Risk",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Model Selection",
+      "quote": "The Gumbel copula has upper-tail dependence: extreme losses in the two lines tend to occur together, so with the same marginals and correlation it produces more large combined losses",
+      "note": "stronger upper-tail dependence with the same marginals gives more large combined losses, i.e. a higher high-percentile VaR of the aggregate",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm2"
+     }
     }
    ]
   },
@@ -5300,7 +6058,15 @@
      "statement": "An econometric model of the underwriting cycle combines components such as capital, supply, demand, and profit flows, whose interactions determine the equilibrium price and quantity of insurance; it blends technical (statistical) modeling with soft (human-factor) modeling.",
      "concept": "Econometric Model of the Underwriting Cycle",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Business Risk",
+      "quote": "individual components of the process are built on economic and behavioral theory — capital, the supply of insurance, the demand for it, and profit flows",
+      "note": "CAS Exam 7 Spring 2019 report Q21(b) PDF pp.93-94",
+      "date": "2026-10-31",
+      "run": "2026-10-31T14:07Z/1623"
+     }
     },
     {
      "id": "r6",
@@ -5346,7 +6112,15 @@
      "statement": "To test scale independence in a book, compare pure premium divided by insured value (using range midpoints) across insured value ranges; roughly constant ratios support combining the ranges into one exposure curve.",
      "concept": "Exposure Curves",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exposure Curves",
+      "quote": "So divide each band's pure premium per location by the band's midpoint insured value: roughly equal ratios across bands support pooling the bands into one curve",
+      "note": "Clark 2014 §2A p.19 (scale independence: one curve regardless of insured value), with the Fall 2012 Q10(a) sample answers (PP/IV at midpoints).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:54Z/2103"
+     }
     },
     {
      "id": "r3",
@@ -5354,7 +6128,15 @@
      "statement": "Scale independence is less appropriate for commercial property than for homeowners, because commercial risks are heterogeneous in construction and occupancy across sizes, whereas homeowner risks are fairly homogeneous.",
      "concept": "Exposure Curves",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exposure Curves",
+      "quote": "Clark says this assumption may be appropriate for homeowners business, for which the technique was first developed, but may be a serious problem when applied to large commercial risks.",
+      "note": "Clark 2014 §2A p.19, verbatim; the homogeneity reason is the Fall 2012 Q10(a) sample answer.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:54Z/2103"
+     }
     },
     {
      "id": "r4",
@@ -5362,7 +6144,15 @@
      "statement": "An exposure curve applied to a limits profile requires the profile to be on the same basis (per location vs per risk) as the data used to build the curve; a per-risk profile may include varying numbers of locations and so skews results for a per-location curve.",
      "concept": "Exposure Curves",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exposure Curves",
+      "quote": "Clark warns that it must be checked to verify that the size-of-risk ranges are on a per location basis",
+      "note": "Clark 2014 §2A p.18: limits profile on a per location basis, else distortions.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:54Z/2103"
+     }
     },
     {
      "id": "r5",
@@ -5636,7 +6426,15 @@
      "statement": "To read a loss level off an exceedance probability curve given only some plotted points, treat the curve as continuous and linearly interpolate between the adjacent points rather than choosing a plotted point.",
      "concept": "Exceedance Probability Curve",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Probable Maximum Loss",
+      "quote": "convert the return period to an exceedance probability ($1/\\text{RP}$) and interpolate linearly *in exceedance probability* between the two bracketing points",
+      "note": "CAS examiners' reports, Fall 2012 Q9(b) (linear interpolation, not eyeballing or a discrete reading) and Fall 2013 Q24(a).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:54Z/2103"
+     }
     },
     {
      "id": "r4",
@@ -6072,7 +6870,15 @@
      "statement": "To find the loss at an exceedance probability not listed on an OEP curve, linearly interpolate between the two adjacent curve points (probability, loss).",
      "concept": "Occurrence Exceedance Probability Curve",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Probable Maximum Loss",
+      "quote": "convert the return period to an exceedance probability ($1/\\text{RP}$) and interpolate linearly *in exceedance probability* between the two bracketing points",
+      "note": "Fall 2013 Q24(a) report: the 1/250 PML by linear interpolation between OEP points.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:54Z/2103"
+     }
     },
     {
      "id": "r4",
@@ -6136,7 +6942,13 @@
        "page": "Ceded Loss Reserve",
        "quote": "$$\\text{Ceded unpaid} = \\text{Gross unpaid} - \\text{Net unpaid}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Arithmetic of this solution: net retained = gross − ceded is a definition, and the unplaced shares of each layer (100% / 90% / 75% placed) are the question's own data.",
+      "date": "2026-10-31",
+      "run": "g9-sort-reins"
+     }
     }
    ]
   },
@@ -6174,7 +6986,15 @@
        "page": "Frequency-Severity Models",
        "quote": "**Frequency-Severity Models** build a [[Pure Premium|pure premium]] from separate component models — one for claim [[Frequency|frequency]] (claims per exposure) and one for claim [[Severity|severity]] (loss per claim) — and combine them, rather than modelling pure premium in a single step."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Severity Distribution",
+      "quote": "Paired with a claim-count distribution, it prices anything that depends on how large claims are: deductibles, limits, excess layers and [[Exposure Curves|exposure curves]].",
+      "note": "Taught on Severity Distribution, one link from the tag added in run 0add; recorded so the panel, which reads no links, agrees with the gate.",
+      "date": "2026-10-31",
+      "run": "g9-sort-reins"
+     }
     },
     {
      "id": "r3",
@@ -6221,7 +7041,15 @@
        "page": "Poisson Distribution",
        "quote": "A defining property is $E[X] = \\text{Var}(X) = \\lambda$ — the mean and variance are equal"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Frequency Distribution",
+      "quote": "The variance is below the mean for the binomial, equal to it for the Poisson and above it for the negative binomial, because $\\text{Var}(N)/E[N] = 1/(1-a)$ and $a$ is negative, zero and positive in turn.",
+      "note": "Taught on Frequency Distribution, one link from the tag added in run 0add; recorded so the panel, which reads no links, agrees with the gate.",
+      "date": "2026-10-31",
+      "run": "g9-sort-reins"
+     }
     }
    ]
   },
@@ -6305,7 +7133,15 @@
      "statement": "Policy limits and attachment points drift upward over time, so applying current limits and attachment points to historical losses misstates the ground-up loss implied by a historical layer payment, because past attachment points were lower.",
      "concept": "Limit and Attachment Point Drift",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Excess of Loss",
+      "quote": "Underlying limits and attachment points rise over time as well, so an old excess payment came from a ground-up loss above the attachment *then in force*.",
+      "note": "Clark 2014 §3A p.24 (insureds raise limits over time; limits drift) and §3B(a) p.32 (umbrella trended with the underlying limit); Fall 2014 Q20(b) report.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:54Z/2103"
+     }
     },
     {
      "id": "r6",
@@ -6313,7 +7149,15 @@
      "statement": "If a historical claim is converted to ground-up using the current (higher) attachment point rather than the lower historical one, the ground-up loss is overstated, so the trended layer claim is overstated.",
      "concept": "Limit and Attachment Point Drift",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Excess of Loss",
+      "quote": "Rebuilding it with today's higher attachment overstates the ground-up loss, and the trended layer loss with it.",
+      "note": "Fall 2014 Q20(b) report (the 2004 attachment likely lower, so the ground-up loss lower), on Clark 2014 pp.24, 32.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:54Z/2103"
+     }
     }
    ]
   },
@@ -6359,7 +7203,15 @@
      "statement": "Ranking of umbrella cost by ALAE treatment: ALAE inside underlying and outside umbrella is most expensive; ALAE outside both is least expensive; ALAE inside both is in between, since lowered attachment outweighs uncapped ALAE above the umbrella limit when most expected loss lies in lower portions of the layer.",
      "concept": "Treatment of ALAE in Increased Limits and Umbrella Pricing",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Excess of Loss",
+      "quote": "For an excess layer, ALAE inside the underlying limit and outside its own costs the most (both effects raise it) and ALAE outside both the least",
+      "note": "Clark 2014 §3A pp.24-25, 29 (ALAE added to loss with the limit on the sum; attachment AP/(1+e) in the exposure factor) for the two effects; the ranking as the Fall 2014 Q21(a) report credits it.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:54Z/2103"
+     }
     },
     {
      "id": "r4",
@@ -6601,7 +7453,15 @@
      "statement": "An aggregate loss distribution model should reflect the true volatility and potential loss cost of the underlying business, so contract smoothing features like carryforwards are generally not built into it, partly because renewal or cancellation of the treaty in later years is uncertain.",
      "concept": "Aggregate Loss Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Sliding Scale Commissions",
+      "quote": "Leaving it out keeps the full volatility of the underlying business in the distribution; reducing its variance assumes the treaty will be renewed, which is uncertain.",
+      "note": "Clark 2014 §1B(a) pp.11-12 (long-run approach reduces variance; contract may not renew; no standard method); Fall 2014 Q23(c) report (either position, argued from volatility and renewal).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:54Z/2103"
+     }
     }
    ]
   },
@@ -6977,7 +7837,13 @@
      "statement": "With a cedent termination option, a trial in which the interim profit commission is positive is terminated at that point and pays only that commission; trials not terminated continue and use cumulative full-term ceded premium and ceded loss to determine the final commission.",
      "concept": "Termination Provisions of Finite Reinsurance Contracts",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The termination option and both profit-commission formulas are given in the stem, with the instruction that the cedant terminates only when the commission is positive; evaluating that rule trial by trial is this solution's plan.",
+      "date": "2026-10-31",
+      "run": "g9-sort-reins"
+     }
     }
    ]
   },
@@ -7019,7 +7885,15 @@
        "page": "Discrete Random Variable",
        "quote": "Convolve, summing over the ways each total can occur:"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Catastrophe Model Output",
+      "quote": "Each combination's probability is the product of $p_i$ over the events that occur and $1 - p_i$ over those that don't, and its loss is the sum of the occurring events' losses.",
+      "note": "CAS errata to Grossi & Kunreuther (2021) pp.2-3 (independent Bernoulli events, at most once, loss 0 if not occurring); SOA GI-301 study note (2025) p.2; Fall 2015 Q22(a) sample answers.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:54Z/2103"
+     }
     },
     {
      "id": "r3",
@@ -7040,7 +7914,15 @@
      "statement": "To simulate a loss from a discrete aggregate distribution with a uniform random number, find the interval of the cumulative distribution F(x) (or of 1 − random number on the exceedance curve) that contains the number and select the corresponding discrete loss amount, without interpolating.",
      "concept": "Simulation of Discrete Distributions (Inverse Transform)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Inversion Method",
+      "quote": "lay the probabilities end to end on $(0, 1)$ and return the value whose interval contains $u$",
+      "note": "Part b simulates the year's loss from U = 0.86 on a discrete distribution; Inversion Method's discrete-case bullet teaches exactly that (pick the value whose interval contains u, no interpolation). Retagged; quote tested with Pages.index().find (True, tier tagged).",
+      "date": "2026-10-31",
+      "run": "g9-sort-reins"
+     }
     }
    ]
   },
@@ -7276,7 +8158,15 @@
      "statement": "With pro-rata ALAE in an excess treaty, ALAE is shared in the same proportion as the ceded loss is to the total loss on each claim (ceded loss / total claim loss times ALAE).",
      "concept": "Excess of Loss Reinsurance",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Excess of Loss",
+      "quote": "*Pro rata with loss*: the ALAE in the layer is allocated in proportion to losses, claim by claim — the layer takes ALAE $\\times$ (layer loss $\\div$ total loss) on each claim",
+      "note": "Clark 2014 §3A p.24 ('ALAE in the layer allocated in proportion to losses') and Example 1-2, p.25; per-claim as Clark Step 3.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:54Z/2103"
+     }
     },
     {
      "id": "r3",
@@ -7348,7 +8238,13 @@
      "statement": "A quota share with a maximum ceded loss ratio caps the reinsurer's recovery at that ratio times ceded premium, so the capital reduction from the quota share is limited to that cap rather than the full cession percentage of the gross loss.",
      "concept": "Quota Share Reinsurance",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The 150% maximum ceded loss ratio is a contract term the question states; applying it (ceded loss capped at max LR x ceded premium, so capital falls by the cap) is the question's own term plus arithmetic. No reading teaches a QS loss-ratio cap (Clark 2014 §1A-1B pp.3-13 re-read); the writer's passage on Quota Share was cut (F-002).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:54Z/2103"
+     }
     }
    ]
   },
@@ -7500,7 +8396,15 @@
      "statement": "For a range of insured values, assume insured values are evenly distributed and use the midpoint (average insured value) to compute the ratio of loss size to insured value and the exposure factors, rather than the range's maximum.",
      "concept": "Exposure Curves",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exposure Curves",
+      "quote": "Clark's exposure-rating example assumes that all locations within a range are exactly equal to the midpoint of the range, so a band's exposure factor is read at",
+      "note": "Clark 2014 §2A p.18 (locations at the midpoint of the range); Fall 2016 Q21 report cites Clark for it.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:54Z/2103"
+     }
     },
     {
      "id": "r4",
@@ -7601,7 +8505,15 @@
      "statement": "To build an exposure curve from an exposure distribution by loss-as-percent-of-MPL, restate it as a distribution of loss sizes among exposures with positive loss (divide each probability by 1 minus the probability of zero loss) to get the conditional loss distribution.",
      "concept": "Exposure Curves",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exposure Curves",
+      "quote": "An exposure distribution that includes risks with no loss is restated first: divide each positive loss degree's probability by $1 - P(\\text{no loss})$.",
+      "note": "Bernegger 1997 §2.2 eqs (2.2)-(2.3) (F(0)=0, G'(0)=1/E[x]); Fall 2017 Q18(a) report requires the restatement.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:54Z/2103"
+     }
     },
     {
      "id": "r2",
@@ -7856,7 +8768,15 @@
      "statement": "Uncertainty in the intensity experienced at the site, given an earthquake (e.g., from an initial estimate of intensity), is represented by a probability distribution over intensity (secondary uncertainty in hazard).",
      "concept": "Catastrophe Model Hazard Module",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Catastrophe Modelling",
+      "quote": "So for one event a site has a *distribution* of intensity, not a single value.",
+      "note": "USGS OFR 2014-1091 p.120 (ground motion models: mean and SD of a normal density for log spectral acceleration); Fall 2017 Q20(a) report (curve C, uncertainty of the forces the structure experiences).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:54Z/2103"
+     }
     },
     {
      "id": "r4",
@@ -7890,7 +8810,15 @@
        "page": "Standard Deviation",
        "quote": "$$= \\sqrt{E[X^2] - (E[X])^2}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Loads",
+      "quote": "\\text{Var}(X) &= 0.06(25) + 0.04(100) - 0.70^2",
+      "note": "Risk Loads (tagged) works the standard deviation of a discrete layer loss with the no-loss outcome contributing zero: Var = Σ p·x² − E[X]², then σ = √Var on the next line, for the standard-deviation risk load the question applies. Quote tested (True, tier tagged).",
+      "date": "2026-10-31",
+      "run": "g9-sort-reins"
+     }
     },
     {
      "id": "r6",
@@ -7941,7 +8869,15 @@
        "page": "Chi-Square Goodness-of-Fit Test",
        "quote": "$$Q = \\sum_{j=1}^{k} \\frac{(O_j - E_j)^2}{E_j}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Chi-Square Goodness-of-Fit Test",
+      "quote": "$$Q = \\sum_{j=1}^{k} \\frac{(O_j - E_j)^2}{E_j}$$",
+      "note": "Taught on Chi-Square Goodness-of-Fit Test, one link from the tag added in run 0add; recorded so the panel, which reads no links, agrees with the gate.",
+      "date": "2026-10-31",
+      "run": "g9-sort-reins"
+     }
     },
     {
      "id": "r2",
@@ -7954,7 +8890,15 @@
        "page": "Chi-Square Goodness-of-Fit Test",
        "quote": "Reject $H_0$ at level $\\alpha$ when $Q$ exceeds the upper-$\\alpha$ [[Critical Value|critical value]] of the [[Chi-Squared Distribution|chi-squared distribution]] with $k - 1 - r$ degrees of freedom."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Chi-Square Goodness-of-Fit Test",
+      "quote": "Reject $H_0$ at level $\\alpha$ when $Q$ exceeds the upper-$\\alpha$ [[Critical Value|critical value]] of the [[Chi-Squared Distribution|chi-squared distribution]] with $k - 1 - r$ degrees of freedom.",
+      "note": "Taught on Chi-Square Goodness-of-Fit Test, one link from the tag added in run 0add; recorded so the panel, which reads no links, agrees with the gate.",
+      "date": "2026-10-31",
+      "run": "g9-sort-reins"
+     }
     },
     {
      "id": "r3",
@@ -7962,7 +8906,13 @@
      "statement": "When exposures are not given, use earned premium as the exposure base, test each line separately, and compute expected counts as each group's premium times the overall claim frequency per premium.",
      "concept": "Exposure Base for Frequency",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The question's own data: earned premium is the only exposure measure given (the examiner's report: 'as it was the only option available'), so using it and testing each line separately is this solution's setup.",
+      "date": "2026-10-31",
+      "run": "g9-sort-reins"
+     }
     },
     {
      "id": "r4",
@@ -7970,7 +8920,15 @@
      "statement": "To evaluate a credibility weight Z with the MSE criterion, form for each past period a prediction as Z/2 times each of the two prior periods' frequencies plus (1-Z) times the cumulative overall frequency up to that point, then average the squared differences between actual and predicted frequencies; choose the Z with the lowest MSE.",
      "concept": "Mean-Squared-Error Criterion for Credibility",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Experience",
+      "quote": "for a trial $Z$, predict each past period from the periods before it, square each prediction's difference from what then happened, average the squares, and choose the $Z$ with the smallest mean.",
+      "note": "Mahler 1990 §6.4-6.5 and §7.1 (retrospective tests; Z/N to the N latest years; least squared error), printed pp.241-242; Fall 2018 Q1(b) report (cumulative frequency to date as the complement).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:54Z/2103"
+     }
     },
     {
      "id": "r5",
@@ -8117,7 +9075,15 @@
      "statement": "To find the reassumed corridor percentage, set the expected loss ratio net of corridor recoveries (expected unadjusted loss ratio minus the expected corridor loss ratio times the share) equal to the target loss ratio, and solve for the share, equivalently dividing the required loss ratio reduction by the expected loss ratio within the corridor.",
      "concept": "Loss Corridor",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loss Corridors",
+      "quote": "Plugging in the expected loss ratio would value it at zero. Evaluate the probability and average loss ratio below, within and above the corridor (Clark).",
+      "note": "Loss Corridors (tagged) teaches the corridor's expected effect from the loss-ratio distribution, with LR_net = LR − c·min(max(LR − a, 0), b − a) above it; setting that expectation equal to the target loss ratio and solving for c is algebra on what the page teaches. Quote tested (True, tier tagged).",
+      "date": "2026-10-31",
+      "run": "g9-sort-reins"
+     }
     }
    ]
   },
@@ -8150,7 +9116,15 @@
      "statement": "To find a PML at a return period not listed in the table, convert return periods to exceedance probabilities and linearly interpolate between the bracketing points on exceedance probability, not on return period years.",
      "concept": "Exceedance Probability Curve",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Probable Maximum Loss",
+      "quote": "don't pick the nearer plotted point, and don't interpolate on the return-period years — CAS's examiners list each of these as a common mistake.",
+      "note": "Fall 2018 Q16(a) report: interpolate the exceedance probabilities; common mistake 'using return period years for interpolation'.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:54Z/2103"
+     }
     },
     {
      "id": "r3",
@@ -8320,7 +9294,15 @@
      "statement": "A logic tree incorporates uncertainty by assigning probability weights (based on expert opinion) to alternative parameter values or model branches and combining the results as a weighted average; it is easy to trace and communicate but relies on subjective, simplified opinions and does not scale well to many scenarios.",
      "concept": "Logic Trees",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Catastrophe Modelling",
+      "quote": "Alternative parameter values or alternative models are set out as branches, each given a weight from expert judgement, and the results are combined as a weighted average.",
+      "note": "USGS OFR 2014-1091 p.41 (Mmax weights 0.1/0.3/0.5/0.1, weighted average 7.44); Fall 2018 Q17(c) sample answers and report.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:54Z/2103"
+     }
     },
     {
      "id": "r7",
@@ -8333,7 +9315,15 @@
        "page": "Parameter Risk",
        "quote": "A simulation draws the parameter and *then* the outcome for each iteration, and ranks the outcomes."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Catastrophe Modelling",
+      "quote": "Parameter values are drawn at random from probability distributions over many trials, giving a distribution of outcomes rather than a weighted point estimate.",
+      "note": "Fall 2018 Q17(c) sample answers and report (simulation: randomly sampled alternatives, complex situations, computationally intensive, black box).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:54Z/2103"
+     }
     }
    ]
   },
@@ -8511,7 +9501,15 @@
        "page": "Complement of Credibility",
        "quote": "$$\\text{Estimate} = Z \\times \\text{Experience} + (1 - Z) \\times \\text{Complement}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loss Cost",
+      "quote": "It can also come from **exposure rating**, which applies [[Exposure Curves|exposure curves]] or ILFs to the risk profile. The two are credibility-weighted.",
+      "note": "Loss Cost (tagged): experience (burning-cost) and exposure loss costs for an excess layer are credibility-weighted, Z × experience + (1 − Z) × exposure. Quote tested (True, tier tagged).",
+      "date": "2026-10-31",
+      "run": "g9-sort-reins"
+     }
     },
     {
      "id": "r5",
@@ -8545,7 +9543,13 @@
        "page": "Pro Rata Reinsurance",
        "quote": "$$\\text{Commission} = c \\times \\text{Ceded premium}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "A step of this solution's plan: it assembles the profit from the question's own premiums, commission, ceded loss ratio and expense ratio (gross premium = net ÷ (1 − 25%) is algebra on the stated 25% quota share and the stated basis 'net of the Quota Share').",
+      "date": "2026-10-31",
+      "run": "g9-sort-reins"
+     }
     },
     {
      "id": "r7",
@@ -8799,7 +9803,15 @@
      "statement": "A catastrophe risk swap is an unfunded agreement to pay on a covered event, so each party is exposed to counterparty default risk that can be reduced by choosing a financially strong counterparty.",
      "concept": "Catastrophe Risk Swaps",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Insurance-Linked Securities",
+      "quote": "A swap is not prefunded: it is only an agreement to pay if the covered event occurs, so each party carries counterparty default risk, reduced by choosing a financially strong counterparty",
+      "note": "CAS Exam 9 Spring 2013 Q13 model solutions PDF p.46 (source of last resort); IAA Risk Book Reinsurance 11.3",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:40Z/c56a"
+     }
     },
     {
      "id": "r3",
@@ -8862,7 +9874,15 @@
      "statement": "A catastrophe risk swap exchanges uncorrelated catastrophe exposures (e.g., different regions or perils) between two parties, giving each risk diversification.",
      "concept": "Catastrophe Risk Swaps",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Insurance-Linked Securities",
+      "quote": "Pairing uncorrelated exposures diversifies both parties' books, which a cat bond — protection on the issuer's own risk — does not do for its issuer.",
+      "note": "IAA Risk Book Reinsurance 11.3 printed pp.21-22 (peak exposures in different parts of the world swapped); CAS 2013 Q13 report PDF p.95",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:40Z/c56a"
+     }
     }
    ]
   },
@@ -8998,7 +10018,15 @@
        "page": "Lifetime Value",
        "quote": "${}_{t}p$ is the probability the customer is still on the books at time $t$ and $r$ the discount rate."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Franchise Value",
+      "quote": "F = \\left[P - E - \\frac{L}{1+y}\\right]\\frac{d}{1-d}",
+      "note": "Panning 2006 p.7: F = [P-E-L/(1+y)]*d/(1-d), d = cr/(1+y)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:40Z/c56a"
+     }
     },
     {
      "id": "r4",
@@ -9006,7 +10034,15 @@
      "statement": "Panning's franchise value formula is F = c·s·(a + b·y) / ((1+y)(1+y−c_r)), where c_r is the client retention rate, s is surplus, y is the risk-free rate, and a and b describe how the target return depends on the interest rate.",
      "concept": "Franchise Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Franchise Value",
+      "quote": "Then $F = \\dfrac{cr\\cdot S\\,\\big(a + (b-1)\\,y\\big)}{(1+y)(1+y-cr)}$, which, for any $a$ and $b$ giving the same $k$ today, is the same franchise value.",
+      "note": "Panning 2006 p.8 closed form (numerator a+(b-1)y as Panning prints it; the item's a+b*y is the paper's misreading, identical at b=0 as in this question)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:40Z/c56a"
+     }
     },
     {
      "id": "r5",
@@ -9061,7 +10097,15 @@
      "statement": "Franchise value F = c·r·S·(a + b·y − y) / [(1 + y)(1 + y − c·r)] when the target return on surplus is k = a + b·y, where cr is the client retention rate, S is surplus and y is the risk-free rate.",
      "concept": "Franchise Value (Panning)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Franchise Value",
+      "quote": "Then $F = \\dfrac{cr\\cdot S\\,\\big(a + (b-1)\\,y\\big)}{(1+y)(1+y-cr)}$, which, for any $a$ and $b$ giving the same $k$ today, is the same franchise value.",
+      "note": "Panning 2006 p.8 closed form under k = a + b*y",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:40Z/c56a"
+     }
     },
     {
      "id": "r3",
@@ -9069,7 +10113,15 @@
      "statement": "Duration of franchise value D_F = (a − b + 1) / [(1 + y)(a + b·y − y)] + 1 / (1 + y − c·r), measuring the sensitivity of franchise value to changes in interest rates.",
      "concept": "Duration of Franchise Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Franchise Value",
+      "quote": "is $D_F = \\dfrac{a - b + 1}{(1+y)(a + b\\,y - y)} + \\dfrac{1}{1 + y - cr}$",
+      "note": "Panning 2006 p.9 duration of franchise value (rendered page)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:40Z/c56a"
+     }
     },
     {
      "id": "r4",
@@ -9111,7 +10163,15 @@
      "statement": "Fannie Mae and Freddie Mac purchased whole mortgages from originators to free lenders' balance sheets, increasing mortgage credit availability and liquidity and removing regional imbalances in funding, effectively nationalizing the home mortgage market.",
      "concept": "Mortgage Market Innovations (Fannie Mae and Freddie Mac)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Securitization",
+      "quote": "To ensure a continuous supply of credit to home buyers, government-sponsored enterprises such as Fannie Mae, Freddie Mac and Ginnie Mae were chartered to buy mortgages originated by local banks, provided the loans meet size and credit-quality requirements.",
+      "note": "CJS 09-060 printed p.16; the Spring 2014 Q13 examiner's report gives full credit for 'increased mortgage availability or improved liquidity in local markets', which this teaches; regional-imbalance and balance-sheet wording is one sample answer's, not required",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:40Z/c56a"
+     }
     },
     {
      "id": "r2",
@@ -9124,7 +10184,15 @@
        "page": "Mortgage-Backed Security",
        "quote": "A **Mortgage-Backed Security** (MBS) is a bond whose cash flows come from a pool of [[Mortgage Loan|mortgage loans]]: the borrowers' interest, scheduled principal and prepayments are collected by a servicer and passed to the investors."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Securitization",
+      "quote": "Whether the classes are pro-rata (a *pass-through*) or prioritised tranches ([[Structured Finance]]), investors collectively receive exactly what the pool produces",
+      "note": "Securitization (tagged) defines a pass-through as pro-rata shares of the pool's cash flows, as opposed to prioritised tranches — the requirement. A second supporting quote on Structured Finance (tagged): 'A pass-through (a pro-rata share of the pool) simply inherits the pool's average rating.' No retag of Mortgage-Backed Security needed.",
+      "date": "2026-10-31",
+      "run": "g9-sort-ex9"
+     }
     },
     {
      "id": "r3",
@@ -9196,7 +10264,13 @@
        "page": "Residual Market",
        "quote": "**The Residual Market** is the mechanism that provides coverage to risks the voluntary market will not write at approved rates."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "One of eight alternative sample analogies in part (b) (NFIP/Citizens/FHCF); the examiner accepted any analogous mechanism, and the CAT bond / reinsurance analogies the other sample answers give are taught on the tagged pages.",
+      "date": "2026-10-31",
+      "run": "g9-sort-ex9"
+     }
     }
    ]
   },
@@ -9536,7 +10610,13 @@
      "statement": "When premium is raised, the expense ratio and loss ratio assumptions determine how expenses and losses scale with the added premium; if the loss and expense ratios are held constant, the added premium is multiplied by (1 − expense ratio − loss ratio) plus investment return on (1 − expense ratio).",
      "concept": "Economic Profit",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "A step of this solution's plan: holding the given loss and expense ratios fixed as premium changes is arithmetic on the question's own data.",
+      "date": "2026-10-31",
+      "run": "g9-sort-ex9"
+     }
     }
    ]
   },
@@ -9552,7 +10632,15 @@
      "statement": "The discounted loss ratio equals the undiscounted loss ratio divided by (1 + interest rate) raised to the loss reserve duration, since losses are paid at the end of the period, on average at the duration.",
      "concept": "Risk-Adjusted Return on Capital (RAROC)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Insurance Cash Flows",
+      "quote": "$L$ is the nominal (undiscounted) expected loss, $p_t$ the **payout pattern** — the share of $L$ paid at time $t$, summing to $1$ — and $v = 1/(1+r)$ the [[Discount Factor|discount factor]] at a risk-free rate $r$.",
+      "note": "Insurance Cash Flows (tagged) teaches discounting nominal losses by their payout timing at v = 1/(1+r); the question's given loss reserve duration collapses the pattern to one payment at that time. Coordinator may prefer not-required (time value of money on given data).",
+      "date": "2026-10-31",
+      "run": "g9-sort-ex9"
+     }
     },
     {
      "id": "r2",
@@ -9671,7 +10759,15 @@
      "statement": "Under a fixed target return on surplus, franchise value equals (P - E - L/(1+y)) times d/(1-d), where d is the discount factor reflecting retention and the risk-free rate.",
      "concept": "Franchise Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Franchise Value",
+      "quote": "F = \\left[P - E - \\frac{L}{1+y}\\right]\\frac{d}{1-d}",
+      "note": "Panning 2006 p.7 franchise value formula",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:40Z/c56a"
+     }
     },
     {
      "id": "r4",
@@ -9679,7 +10775,15 @@
      "statement": "The retention-based discount factor d equals the client retention rate cr divided by (1+y), so cr = d(1+y).",
      "concept": "Franchise Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Franchise Value",
+      "quote": "The multiplier inverts directly: $cr = d(1+y)$.",
+      "note": "Panning 2006 p.7 d = cr/(1+y), inverted",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:40Z/c56a"
+     }
     },
     {
      "id": "r5",
@@ -9687,7 +10791,15 @@
      "statement": "When target return on surplus varies with the risk-free rate as k = a + b·y, franchise value equals cr·S·[a + y(b-1)] / (1+y) / (1+y-cr).",
      "concept": "Variable Target Return on Surplus Pricing",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Franchise Value",
+      "quote": "Then $F = \\dfrac{cr\\cdot S\\,\\big(a + (b-1)\\,y\\big)}{(1+y)(1+y-cr)}$, which, for any $a$ and $b$ giving the same $k$ today, is the same franchise value.",
+      "note": "Panning 2006 p.8 closed form",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:40Z/c56a"
+     }
     },
     {
      "id": "r6",
@@ -9695,7 +10807,15 @@
      "statement": "Premium under a target return on surplus k is P = [S(k - y) + L]/(1+y) + E, with k = a + b·y under the variable strategy.",
      "concept": "Variable Target Return on Surplus Pricing",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Franchise Value",
+      "quote": "so $P = [S(k-y) + L]/(1+y) + E$. Its current economic value is $C = S + P - E - L/(1+y)$.",
+      "note": "Panning 2006 p.6 premium to target return k (k = a + b*y on p.8, same page bullet)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:40Z/c56a"
+     }
     },
     {
      "id": "r7",
@@ -9703,7 +10823,15 @@
      "statement": "Duration of franchise value under variable target return pricing is D_f = (a-b+1)/(1+y)/(a+b·y-y) + 1/(1+y-cr).",
      "concept": "Duration of Franchise Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Franchise Value",
+      "quote": "is $D_F = \\dfrac{a - b + 1}{(1+y)(a + b\\,y - y)} + \\dfrac{1}{1 + y - cr}$",
+      "note": "Panning 2006 p.9 duration formula",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:40Z/c56a"
+     }
     },
     {
      "id": "r8",
@@ -10162,7 +11290,15 @@
      "statement": "For constant client retention cr and risk-free rate y, franchise value = [P - E - L/(1+y)] * d/(1-d), where d = cr/(1+y) and the bracket is the per-policy present value of profit for one policy year.",
      "concept": "Franchise Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Franchise Value",
+      "quote": "F = \\left[P - E - \\frac{L}{1+y}\\right]\\frac{d}{1-d}",
+      "note": "Panning 2006 p.7 franchise value formula",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:40Z/c56a"
+     }
     },
     {
      "id": "r3",
@@ -10179,7 +11315,15 @@
        "page": "Lifetime Value",
        "quote": "With retention $p$, the year-$t$ profit is received with probability $p^{t}$:"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Franchise Value",
+      "quote": "The later renewals are a perpetuity at the steady retention, but they start from the clients who survived the first renewal, so the whole tail is scaled by $0.75$ and discounted one more year",
+      "note": "Panning 2006 p.7 series P(d+d^2+...) applied with a different first-year retention; method matches the Spring 2017 Q12 examiner's report",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:40Z/c56a"
+     }
     },
     {
      "id": "r4",
@@ -10187,7 +11331,13 @@
      "statement": "Franchise value of a book of identical policies is the per-policy value scaled by the number of policies.",
      "concept": "Franchise Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Arithmetic: the question says the book is 100 identical policies, so the total is 100 × the per-policy value.",
+      "date": "2026-10-31",
+      "run": "g9-sort-ex9"
+     }
     },
     {
      "id": "r5",
@@ -10272,7 +11422,15 @@
      "statement": "Catastrophe bonds exposed to different perils (e.g., hurricane and earthquake) are essentially uncorrelated, so a CDO pool mixing perils is more diversified than separate single-peril pools.",
      "concept": "Catastrophe Bonds",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Structured Finance",
+      "quote": "a senior tranche's needs the probability that *many* assets default together, so it is acutely sensitive to **default [[Correlation|correlation]]** and to errors in default probabilities and recoveries.",
+      "note": "Structured Finance (tagged) teaches that a senior tranche's quality depends on default correlation in the pool — mixing uncorrelated perils is the question's application of it; that hurricane and earthquake bonds are uncorrelated is the scenario's own reasoning.",
+      "date": "2026-10-31",
+      "run": "g9-sort-ex9"
+     }
     },
     {
      "id": "r4",
@@ -10335,7 +11493,13 @@
      "statement": "Rate on line (ROL) is reinsurance premium divided by the policy limit; loss on line (LOL) is expected loss divided by the policy limit.",
      "concept": "Catastrophe Reinsurance Pricing",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Restates the question: ROL and LOL are defined in the stem.",
+      "date": "2026-10-31",
+      "run": "g9-sort-ex9"
+     }
     },
     {
      "id": "r2",
@@ -10356,7 +11520,13 @@
      "statement": "ROL/LOL equals premium divided by expected loss for a reinsurance layer, so it is directly comparable to the CAT bond spread as a price per dollar of expected loss.",
      "concept": "Catastrophe Reinsurance Pricing",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Follows by arithmetic from the stem's two definitions (ROL/LOL = premium/expected loss); that a cat bond spread is a multiple of EL is already on CAT Bonds (tagged).",
+      "date": "2026-10-31",
+      "run": "g9-sort-ex9"
+     }
     },
     {
      "id": "r4",
@@ -10364,7 +11534,13 @@
      "statement": "To compare CAT bond and reinsurance costs, match the reinsurance LOL layer to the bond's expected loss percent of principal in the same year and compare the premium-to-expected-loss ratios; a lower ratio means cheaper coverage for the same expected loss.",
      "concept": "Catastrophe Bonds",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "A step of this solution's plan: match the LOL row to the bond's EL in the same year and compare the given ratios.",
+      "date": "2026-10-31",
+      "run": "g9-sort-ex9"
+     }
     },
     {
      "id": "r5",
@@ -10372,7 +11548,13 @@
      "statement": "Reinsurance ROL/LOL multiples rise as layers become higher and less likely to be hit (lower LOL), so high excess layers are expensive per dollar of expected loss, and these multiples are volatile year to year.",
      "concept": "Catastrophe Reinsurance Pricing",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Read directly off the question's table (the part says 'Using the above information'): multiples rise at low LOL and change sharply between 2005 and 2006.",
+      "date": "2026-10-31",
+      "run": "g9-sort-ex9"
+     }
     },
     {
      "id": "r6",
@@ -10473,7 +11655,15 @@
      "statement": "Using the exceedance probability curve at a chosen exceedance probability, read off the ratio of (expected loss plus capital) to expected loss for each line, and solve for the line's allocated capital C.",
      "concept": "VaR Exceedance Probability Curves",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Capital",
+      "quote": "**VaR or EPD by line** — size each line to the firm's ruin probability or EPD ratio as if it stood alone.",
+      "note": "Risk Capital (tagged, and on the syllabus) teaches sizing each line's capital to a chosen exceedance/ruin probability standalone — Cummins's exceedance-probability allocation; reading the ratio off the given curve and solving for C is the question's data. Coordinator: if this is judged too thin, write one line on Risk Capital from Cummins 2000's exceedance-probability method (assigned, not readable — use Merton-Perold/Myers-Read open texts) and group it with nothing else.",
+      "date": "2026-10-31",
+      "run": "g9-sort-ex9"
+     }
     },
     {
      "id": "r6",
@@ -10665,7 +11855,15 @@
        "page": "Binomial Option Pricing Model",
        "quote": "$$C = e^{-rh}\\left[p^*C_u + (1 - p^*)\\,C_d\\right]$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Structured Finance",
+      "quote": "A tranche that pays a fixed amount $X$ at maturity $T$, or nothing if it defaults, is worth its expected payoff discounted to today: $\\text{Price} = X(1 - p_D)/(1+r)^T$",
+      "note": "CAS Exam 9 Spring 2018 Q12 sample answer PDF p.67 (price = 100(1-p)/1.05); CJS 09-060 p.19 ratings reflect expected payoffs",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:40Z/c56a"
+     }
     },
     {
      "id": "r6",
@@ -10741,7 +11939,15 @@
      "statement": "Price of a risky zero-coupon-type tranche = promised payment × (1 − default probability) discounted at the discount rate over the number of years to maturity: P = Payoff × (1−PD)/(1+r)^T.",
      "concept": "Pricing of Defaultable Securities",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Structured Finance",
+      "quote": "A tranche that pays a fixed amount $X$ at maturity $T$, or nothing if it defaults, is worth its expected payoff discounted to today: $\\text{Price} = X(1 - p_D)/(1+r)^T$",
+      "note": "CAS Exam 9 Spring 2019 Q10 sample answer PDF p.58 (500(1-p)/1.05^2)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:40Z/c56a"
+     }
     },
     {
      "id": "r5",
@@ -10754,7 +11960,15 @@
        "page": "Yield Rate",
        "quote": "the interest rate per period at which the present value of all future cash flows equals the current price $P$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Structured Finance",
+      "quote": "Its yield is $(X/\\text{Price})^{1/T} - 1$, and its **default premium** is that yield less the risk-free rate, the measure CAS's examiners credit.",
+      "note": "CAS Exam 9 Spring 2019 Q10 part b sample answer PDF p.58 (yield = (500/price)^(1/2) - 1)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:40Z/c56a"
+     }
     },
     {
      "id": "r6",
@@ -10767,7 +11981,15 @@
        "page": "Corporate Bond",
        "quote": "$$s = y_{\\text{corp}} - y_{\\text{govt}}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Structured Finance",
+      "quote": "Its yield is $(X/\\text{Price})^{1/T} - 1$, and its **default premium** is that yield less the risk-free rate, the measure CAS's examiners credit.",
+      "note": "CAS Exam 9 Spring 2019 Q10 examiner's report PDF p.59 (default premium = CDO2 return less risk-free rate)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:40Z/c56a"
+     }
     },
     {
      "id": "r7",
@@ -10843,7 +12065,15 @@
      "statement": "Franchise value (value of future new and renewal business) with retention ratio cr is F = cr·S·(a + b·y − y) / [(1+y)(1+y−cr)].",
      "concept": "Franchise Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Franchise Value",
+      "quote": "Then $F = \\dfrac{cr\\cdot S\\,\\big(a + (b-1)\\,y\\big)}{(1+y)(1+y-cr)}$, which, for any $a$ and $b$ giving the same $k$ today, is the same franchise value.",
+      "note": "Panning 2006 p.8 closed form",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:40Z/c56a"
+     }
     },
     {
      "id": "r5",
@@ -10864,7 +12094,15 @@
      "statement": "Duration of franchise value is D_F = (a − b + 1)/[(1+y)(a + b·y − y)] + 1/(1+y−cr).",
      "concept": "Duration of Franchise Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Franchise Value",
+      "quote": "is $D_F = \\dfrac{a - b + 1}{(1+y)(a + b\\,y - y)} + \\dfrac{1}{1 + y - cr}$",
+      "note": "Panning 2006 p.9 duration formula",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:40Z/c56a"
+     }
     },
     {
      "id": "r7",
@@ -11041,7 +12279,15 @@
      "statement": "A catastrophe model provision already stated at the future policy period's cost level must not be developed or trended again.",
      "concept": "Catastrophe Model Loss Provision",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Catastrophe Expected Loss Cost",
+      "quote": "That provision is added to non-catastrophe losses that have already been trended and developed to ultimate; adding it first and then trending and developing the sum over-adjusts the expected catastrophe losses (Werner & Modlin).",
+      "note": "Werner & Modlin 5th ed. Ch.6 printed p.94 (order of adjustments, over-adjusted)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:40Z/c56a"
+     }
     },
     {
      "id": "r4",
@@ -11534,7 +12780,15 @@
        "page": "Financial Economics",
        "quote": "$$\\text{UPM} = -k\\,R_f + \\beta_u\\big[E(R_m) - R_f\\big]$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Financial Economics",
+      "quote": "$$\\text{UPM} = -k\\,R_f + \\beta_u\\big[E(R_m) - R_f\\big]$$",
+      "note": "Financial Economics teaches the insurance CAPM, UPM = −k R_f + β_u[E(R_m) − R_f]; with k = L/P this is Cummins's corrected r_i = −(k_i/s_i)r_F + β_i(r_M − r_F). Retag done, fact check re-passed (F-001). The record's existing quote closes it.",
+      "date": "2026-10-31",
+      "run": "g9-sort-ex9"
+     }
     },
     {
      "id": "r2",
@@ -11542,7 +12796,13 @@
      "statement": "The ratio k_i/s_i equals liabilities divided by premium (L_i/P_i), so the risk-free interest credit on policyholder-supplied funds must be expressed per dollar of premium rather than per dollar of equity.",
      "concept": "Insurance CAPM",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Algebra on the question's own definitions: liabilities/equity divided by premium/equity is liabilities/premium.",
+      "date": "2026-10-31",
+      "run": "g9-sort-ex9"
+     }
     },
     {
      "id": "r3",
@@ -11559,7 +12819,15 @@
        "page": "Underwriting Profit",
        "quote": "In long-tailed lines (personal auto bodily injury, workers compensation) years may pass between the premium and the settlement of all claims, and the investment income can be large enough to accept an underwriting loss and still achieve the target total return;"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Financial Economics",
+      "quote": "Fairley's model gives the insurer the risk-free rate on the premium it holds, $-k\\,R_f$, plus a premium for systematic underwriting risk, $\\beta_u\\big[E(R_m) - R_f\\big]$.",
+      "note": "Same retag: Financial Economics states the risk-free credit on held premium enters negatively and a large k lowers the indicated UPM.",
+      "date": "2026-10-31",
+      "run": "g9-sort-ex9"
+     }
     },
     {
      "id": "r4",
@@ -11657,7 +12925,15 @@
        "page": "Risk Diversification",
        "quote": "$$C = \\sqrt{\\sum_i \\sum_j \\rho_{ij}\\, C_i\\, C_j}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Diversification",
+      "quote": "$$C = \\sqrt{\\sum_i \\sum_j \\rho_{ij}\\, C_i\\, C_j}$$",
+      "note": "Risk Diversification teaches square-root correlation-matrix aggregation and the diversification credit — exactly what the question tests. Retag done, fact check re-passed (F-003); the record's existing quote closes it.",
+      "date": "2026-10-31",
+      "run": "g9-sort-ex9"
+     }
     },
     {
      "id": "r2",
@@ -11670,7 +12946,15 @@
        "page": "Risk Diversification",
        "quote": "Each pair appears twice in the double sum, so the cross term is $2\\rho_{ij} C_i C_j$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Diversification",
+      "quote": "Each pair appears twice in the double sum, so the cross term is $2\\rho_{ij} C_i C_j$.",
+      "note": "Risk Diversification teaches square-root correlation-matrix aggregation and the diversification credit — exactly what the question tests. Retag done, fact check re-passed (F-003); the record's existing quote closes it.",
+      "date": "2026-10-31",
+      "run": "g9-sort-ex9"
+     }
     },
     {
      "id": "r3",
@@ -11687,7 +12971,15 @@
        "page": "Diversification Credit",
        "quote": "Adding the margins together assumes perfect correlation; the credit removes part of that over-statement."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Diversification",
+      "quote": "A simple sum assumes every correlation is one, which gives no benefit and an upper bound.",
+      "note": "Risk Diversification teaches square-root correlation-matrix aggregation and the diversification credit — exactly what the question tests. Retag done, fact check re-passed (F-003); the record's existing quote closes it.",
+      "date": "2026-10-31",
+      "run": "g9-sort-ex9"
+     }
     },
     {
      "id": "r4",

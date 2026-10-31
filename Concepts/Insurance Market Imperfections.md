@@ -2,9 +2,9 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-10-18
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:8e29857589a2e5d2c4ce819fd9277f03fb0863453d733d4b4e19d45e1560f6c9
+  content_hash: sha256:92553e45bca2a26503552c23a08662422b978c220174e20a3e2c21aab08ecb11
   sources:
     - "Froot, Risk Management, Capital Budgeting and Capital Structure Policy for Insurers and Reinsurers (NBER WP 10184, 2003), pp.2-10, 16, sha256:0de3a439eb286ea2a5ed225fcfa4cbb2ed62d964dc2485dbb79239dabfb6383e — https://www.nber.org/system/files/working_papers/w10184/w10184.pdf"
     - "Myers & Read, Capital Allocation for Insurance Companies (Brattle working paper, Aug 2001), pp.2-9, 22, 44-45, sha256:681450625dce92c765b9fb1762de4d299d060bb852906e79b3233bb6e4aa7a9b — https://www.brattle.com/wp-content/uploads/2017/10/Capital-Allocation-for-Insurance-Companies.pdf"
@@ -17,6 +17,8 @@ verification:
     - "CAS Exam 9 Content Outline, Fall 2026, pp.4-5, 7 (Domains B and C; text references), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
     - "CAS abstract record, Cummins, Allocation of Capital in the Insurance Industry (RMIR 3(1), 2000), abstract, sha256:e794f5454cd27647fe926819fa474a13934475e091a93c69aa752413e234b2f8 — https://www.casact.org/abstract/allocation-capital-insurance-industry"
     - "Mildenhall & Major, Pricing Insurance Risk (Wiley 2022), Index excerpt, pp.523-546, sha256:4e7a560b390d357308ca1274a4c35f13e03d3d7c36555455dd25125f675f3517 — https://media.wiley.com/product_data/excerpt/70/11197556/1119755670-10.pdf"
+    - "Froot, Scharfstein & Stein, Risk Management: Coordinating Corporate Investment and Financing Policies, NBER WP 4084 (1992), PDF p.5 (risk management at the interface of investment and financing; Lessard on funding growth options such as R&D when external capital is costly), p.13 fn. (intangibles such as R&D have no value in liquidation) (OCR), sha256:1e9b795ecb03d60a0027b3c19faf67cee69a726718d6da0c4785349ef9c29bcd — https://www.nber.org/system/files/working_papers/w4084/w4084.pdf"
+    - "CAS Exam 7 Spring 2012 - exam and sample answers, Q21(c) PDF pp.25, 86 (firms with higher market-to-book or R&D: capital-intensive, long payout, unstable cash flow, few tangible assets, costlier distress and capital), sha256:e38b20bb58b4c7dbd208b14d350fe3c9c6bc48b789aef61118d8cdae0566582a — https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam7_12-7.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Insurance Market Imperfections.md
@@ -31,6 +33,7 @@ verification:
 - **Financial distress.** Policyholders — customers who, unlike investors, find it costly to diversify their insurer's default risk — pay less for, or buy less from, a weaker insurer: higher-[[Rating Agency|rated]] insurers get higher premiums and grow faster, and a failing insurer leaves its customers cancelling policies, pursuing claims and finding new cover. The cost reaches future business through reputation as well as the business in place.
 - **Agency costs.** Managers may spend surplus capital on low-return growth or acquisitions instead of returning it. Shareholders, protected by limited liability, gain from taking more asset or underwriting risk once premiums are collected — at the policyholders' expense.
 - **Asymmetric information.** Outsiders know less than management about reserve adequacy and exposure, so new equity raised after a large loss is sold at a discount, if at all. When external capital is costly the firm should act risk-averse toward risks it cannot hedge (the Froot–Stein argument). On the underwriting side the same problem appears as [[Adverse Selection]] and [[Moral Hazard]].
+- **Which firms gain most from risk management.** When external finance is costly, hedging is worth most to the firms whose investment it protects: Froot, Scharfstein and Stein put risk management at the interface of investment and financing policy, quoting Lessard that its strongest case is to ensure a firm can fund the exercise prices of its growth options, such as its R&D budget, when raising outside capital after a shortfall would be costly. Firms with many growth opportunities — high market-to-book ratios or heavy R&D spending — need capital for capital-intensive investments with long payouts and unstable cash flows, and have few tangible assets of value in liquidation, so financial distress costs them more and raising capital is more expensive; risk management that keeps them financially sound adds more value to them than to other firms.
 - **Competition.** The market is very competitive, and competing classification plans make the winning quote biased low (the winner's curse), which justifies a margin over expected loss even when the estimates are unbiased. When capacity is plentiful, insurers cut prices relative to competitors to buy market share, and an insurer that misallocates its capital writes unprofitable business and loses profitable business to competitors.
 - **Regulation.** Minimum capital standards ([[Risk-Based Capital]], the [[MCT]]), and rate regulation impose costs of their own, and a regulatory or rating-agency capital model is often the binding constraint on how much capital the insurer holds.
 - **Consequences.** Insurers price in a cost of capital, diversify, buy reinsurance at more than its expected loss, manage [[Financial Risk]], and after a catastrophe find capital scarce and prices rising — the hard-market side of the underwriting cycle.

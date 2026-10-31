@@ -2,11 +2,12 @@
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-18
-  last_checked_by: agent:validate-v1
-  content_hash: sha256:f7acb858cbd26e222c711b932249378ed0b59b32d952ddccc64c62456ca88b23
+  last_checked: 2026-10-31
+  last_checked_by: agent:checker-islr-a
+  content_hash: sha256:df305da3abc0fef71064901e1d4e6c87c18fcbbe1bfad8b4b0f789b6bacb32f6
   sources:
-    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), CAS-hosted copy, §8.1, printed pp.327-340 (PDF pp.335-348; printed = PDF - 8), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), CAS-hosted copy, §8.1.1 incl. 'Tree Pruning' eq. (8.4) and Algorithm 8.1, printed pp.331-333 (PDF pp.339-341), §8.1.2 printed pp.335-336, §8.2.1 printed p.343, sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "Klusowski, J. M., 'Sparse Learning with CART', NeurIPS 2020, arXiv:2006.04266, §2 p.3 (a pruned subtree is obtained by merging internal nodes; weakest-link pruning successively collapses the internal node that increases the error least), sha256:f3a445d99ff3fd14569958486963c74793308e94017451b94843f10a23ac451a — https://arxiv.org/pdf/2006.04266"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Tree Pruning.md
@@ -20,6 +21,7 @@ verification:
 
 - **Grow first, prune second.** Stopping early on a "no split improves RSS enough" rule is short-sighted — a weak split can unlock a strong one below it
 - $\alpha = 0$ keeps the full tree; raising $\alpha$ makes leaves progressively too expensive, collapsing the tree from the bottom up to a single node
+- **Pruning at an internal node** collapses the whole subtree below it into a single terminal node: that node's own RSS replaces the summed RSS of the leaves it absorbs, and $\lvert T\rvert$ falls by the number of those leaves minus one. So pruning a node lowers the criterion exactly when the RSS it adds is less than $\alpha$ times the number of terminal nodes it removes
 - The sequence of subtrees as $\alpha$ increases is **nested and finite**, so [[Cross-Validation]] over $\alpha$ picks the size and the tree is refit on the full data at that $\alpha$
 - For classification the loss is the misclassification rate, [[Gini Index]] or [[Entropy]]; Gini and entropy are preferred for *growing* because they are sensitive to node purity, misclassification rate for *pruning* when prediction accuracy of the final pruned tree is the goal
 - Pruning is the single-tree answer to variance; [[Bagging]] and [[Random Forest]] attack the same problem by averaging instead, and their trees are typically left unpruned

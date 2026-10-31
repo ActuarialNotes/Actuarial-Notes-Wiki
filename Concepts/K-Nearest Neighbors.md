@@ -2,12 +2,13 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-10-18
-  last_checked_by: agent:validate-v1
-  content_hash: sha256:b667c6e92ce7ca4650a60eefd924eb0850e546c79e1dc86b140cdea73df117ca
+  last_checked: 2026-10-31
+  last_checked_by: agent:checker-islr-a
+  content_hash: sha256:0c694b68072ecae62c634ada7e89bf6ca77894058d7de17168846244847c3ddb
   sources:
-    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), CAS-hosted copy, §2.2.3 'K-Nearest Neighbors', printed pp.39-42 (PDF pp.50-53); §3.5, printed pp.105-108 (PDF pp.115-118); §4.7.6, printed p.183 (PDF p.193), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
-  open_findings: 1
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), CAS-hosted copy, §2.2.3 'The Classification Setting' and 'K-Nearest Neighbors', printed pp.37-42 (PDF pp.48-53) incl. eqs. (2.11)-(2.12); §3.5, printed pp.105-108 (PDF pp.115-118); §4.7.6, printed p.183 (PDF p.193), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "MIT OpenCourseWare 15.062 Data Mining (Spring 2003), 'k-Nearest Neighbor Algorithms for Classification and Prediction' notes, §1 p.2 (k = n predicts the training majority for all observations, oversmoothing) and §3 p.4 (no time to estimate parameters; finding neighbors in a large training set slow), sha256:ab47cf9500c44d5dc75dfb2c76f58cd5431810f39c3da5b0d085284cde7cb746 — https://ocw.mit.edu/courses/15-062-data-mining-spring-2003/c58922a0bfc2261ec849ebdbfdae9bf9_knn3.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/K-Nearest Neighbors.md
 ---
@@ -21,7 +22,10 @@ verification:
 - $\mathcal{N}_K(x_0)$ is the **neighborhood** of the $K$ nearest training points to $x_0$
 - **Distance metric**: Euclidean distance is standard; predictors should be **standardized** first since KNN is scale-sensitive
 - **Choosing $K$**: small $K$ = low bias, high variance (flexible); large $K$ = high bias, low variance (smooth); optimal $K$ selected by cross-validation
-- KNN is a **lazy learner** — it stores all training data and does computation at prediction time (no explicit training phase)
+- **$K = n$**: when $K$ equals the number of training observations, every neighborhood $\mathcal{N}_K(x_0)$ is the whole training set, so KNN predicts the class that has the majority in the training data for every observation, whatever its predictor values — the extreme of oversmoothing
+- The **Bayes classifier** is the unattainable benchmark: it assigns $x_0$ to the class $j$ with the largest true $\Pr(Y = j \mid X = x_0)$, so its error probability at $x_0$ is $1 - \max_j \Pr(Y = j \mid X = x_0)$, which for two classes with $p = \Pr(Y = 1 \mid X = x_0)$ is $\min\{p,\ 1-p\}$
+- The **Bayes error rate** $1 - E\left[\max_j \Pr(Y = j \mid X)\right]$ is the lowest possible test error rate; the expectation averages over the values of $X$. On a given set of test points, the Bayes classifier's expected error rate is the average of the per-point error probabilities $1 - \max_j \Pr(Y = j \mid X = x_i)$ over those $x_i$, worked from the true conditional probabilities rather than by checking the test labels
+- KNN estimates **no parameters**: it keeps the training data and does its work at prediction time, finding each new point's nearest neighbors, which can be slow in a large training set
 - **Curse of dimensionality**: KNN degrades in high dimensions as distances become uninformative
 
 ![[Media/Figures/K-Nearest_Neighbors.svg|340]]

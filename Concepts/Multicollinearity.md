@@ -2,14 +2,16 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-10-05
-  last_checked_by: agent:validate-v1
-  content_hash: sha256:57d20253f104d402c18f34fb87d0cba25c96ae4993fd7fbccd8204c44f8bf58c
+  last_checked: 2026-10-31
+  last_checked_by: agent:checker-islr-a
+  content_hash: sha256:d40c3fca4327ffc84462775521ab67d6d2069bd9a80b2bcfce2abac1f0d48bf7
   sources:
-    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning (2nd ed., Springer 2021), §3.3.3 item 6 'Collinearity': inflated SEs, correlation matrix, multicollinearity, VIF = 1/(1 - R²_Xj|X-j), 5-10 rule, drop or combine, printed pp.99-103 (PDF pp.109-113), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
-    - "Penn State STAT 501 Regression Methods (online course notes), Lesson 12 §12.3 predictions within scope unaffected, interpretation lost; §12.4 Var(b_k) = sigma²/sum_i(x_ik - xbar_k)² x 1/(1 - R_k²), Var(b_k)_min with x_k the only predictor, VIF_k = 1/(1-R_k²), sha256:f67694d5ded5e449996b5fde9068686e916b9c1c5cd9245c02badb257c72bc8e — https://online.stat.psu.edu/stat501/Lesson12.html"
-    - "Penn State STAT 501 Regression Methods (online course notes), Lesson 5 §5.4 linear dependence: X'X not invertible, sha256:c7eb1ac675fffa3493ca7644a47f8a36e96fa53d301d2f8191c7ac4ca82edec6 — https://online.stat.psu.edu/stat501/Lesson05.html"
-    - "Rodríguez, G., Lecture Notes on Generalized Linear Models (Princeton WWS 509), Ch.2 'Linear Models for Continuous Data', §2.2.1 full column rank required for (X'X)^-1, PDF pp.6-7, sha256:b9fae913696a54bb97a9a0f60cdddd8a5c72c9e9cf0451e503a0043d888edf1f — https://grodri.github.io/glms/notes/c2.pdf"
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), CAS-hosted copy, §3.3.3 item 6 'Collinearity' incl. Figures 3.14-3.15 and Table 3.11, inflated SEs, failure to reject H0, masked importance, VIF, printed pp.99-103 (PDF pp.109-113), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "Shalizi, C. R., CMU 36-401 Modern Regression, Lecture 17 'Multicollinearity' (Fall 2015), §2 eq. (6) p.5 Var[beta-hat] = sigma^2 (x'x)^-1 and §2.1 p.6 the inverse of n^-1 x'x for p = 2, whose beta1-beta2 entry is -Cov[X1,X2]/det, sha256:d8115efaaad92aacf470b4ba842b184c2906aba30816c4f6ae2a13b8c1327380 — https://www.stat.cmu.edu/~cshalizi/mreg/15/lectures/lecture-17.pdf"
+    - "Shalizi, C. R., Advanced Data Analysis from an Elementary Point of View, ch. 2 'The Truth about Linear Regression' §2.1.1 Collinearity (CMU 36-402, 2015), sha256:1440d81067548f5e0c922470a6e0e8dc6c8ab1bace12b06eb70e279fbf97bc8a — https://www.stat.cmu.edu/~cshalizi/uADA/15/lectures/02.pdf"
+    - "Penn State STAT 501 Regression Methods, Lesson 12 §12.3-12.4 (wider confidence intervals, predictions within scope unaffected, Var(b_k) and VIF, overall F significant with non-significant t-tests), sha256:f67694d5ded5e449996b5fde9068686e916b9c1c5cd9245c02badb257c72bc8e — https://online.stat.psu.edu/stat501/Lesson12.html"
+    - "Penn State STAT 501 Regression Methods, Lesson 5 §5.4 linear dependence: X'X not invertible, sha256:c7eb1ac675fffa3493ca7644a47f8a36e96fa53d301d2f8191c7ac4ca82edec6 — https://online.stat.psu.edu/stat501/Lesson05.html"
+    - "Rodríguez, G., Lecture Notes on Generalized Linear Models (Princeton WWS 509), Ch.2 §2.2.1 full column rank required for (X'X)^-1, PDF pp.6-7, sha256:b9fae913696a54bb97a9a0f60cdddd8a5c72c9e9cf0451e503a0043d888edf1f — https://grodri.github.io/glms/notes/c2.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Multicollinearity.md
@@ -24,6 +26,8 @@ verification:
 - $S_{jj} = \sum_{i=1}^{n} (x_{ij} - \bar{x}_j)^2$ is the centred sum of squares of predictor $x_j$ (not the uncentred diagonal entry of $\mathbf{X}^\top\mathbf{X}$), so $\sigma^2/S_{jj}$ is $\text{Var}(\hat\beta_j)$ when $x_j$ is the only predictor, and $\text{VIF}_j$ is the factor by which the other predictors inflate it
 - $R_j^2$ is from regressing predictor $x_j$ on all the *other* predictors. A **variance inflation factor** above $5$–$10$ is the usual flag
 - Symptoms: a significant overall $F$ test with no significant individual coefficients, coefficients that flip sign when a variable is added or a few rows change, and standard errors that are implausibly large
+- **Correlated predictors give correlated estimates.** The RSS contours for two collinear coefficients run along a narrow valley: a wide range of individual values fits almost equally well, so each coefficient is poorly determined and its interval is wide (it can include zero even when both predictors are strongly related to the response), yet the pair is held to the valley. With positively correlated predictors ($x_1 \approx x_2$) the fit depends essentially on $\beta_1 + \beta_2$, so the sum is well determined while raising one coefficient means lowering the other — the valley slopes downward and the estimates are negatively correlated. With negatively correlated predictors ($x_1 \approx -x_2$) it is the difference $\beta_1 - \beta_2$ that is determined, and the valley slopes upward
+- Keep the two apart: correlation between the **coefficient estimates** is the symptom, while the property of the data is the correlation between the **predictors**, and for two predictors the two have opposite signs
 - What it does **not** hurt is prediction inside the observed range of the predictors — fitted values and [[R-Squared]] are unaffected. It damages *interpretation*, which is fatal for a rating model where each relativity must stand on its own
 - **Perfect** collinearity (the dummy-variable trap: including every level of a [[Categorical Predictor]] plus an intercept) makes $\mathbf{X}^\top\mathbf{X}$ singular and the fit impossible; drop one level as the base
 - Remedies: drop one of the pair, combine them into a single variable, centre the variables before adding polynomial or [[Interaction]] terms, or shrink with a penalized fit. Collecting data that breaks the association is the real fix
@@ -43,4 +47,4 @@ verification:
 > A severity model includes both vehicle age and vehicle value, which correlate at $-0.94$. Alone, vehicle age has coefficient $-0.08$; together with value it becomes $+0.05$. Is the positive sign a real effect?
 >
 > > [!answer]-
-> > Almost certainly not. With $r = -0.94$ the two variables carry nearly the same information, so the fit can trade a large coefficient on one against a large opposite coefficient on the other with little change in the likelihood — the split between them is essentially arbitrary. Keep **one** of the two (or build a single derived variable such as value-per-year-of-age) and choose between the candidate models on holdout error or [[AIC]], not on the sign of an unstable coefficient.
+> > Almost certainly not. With $r = -0.94$ the two variables carry nearly the same information, so the fit can raise one coefficient and offset it through the other with little change in the likelihood — the split between them is essentially arbitrary. Keep **one** of the two (or build a single derived variable such as value-per-year-of-age) and choose between the candidate models on holdout error or [[AIC]], not on the sign of an unstable coefficient.

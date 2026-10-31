@@ -41,7 +41,15 @@
      "statement": "A correlogram does not reveal the direction (positive or negative) of a trend, since rising and falling series can produce the same autocorrelation pattern.",
      "concept": "Correlogram",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Correlogram",
+      "quote": "It shows that a trend is there, not which way it runs: a rising and a falling trend give the same slow decay, since $r_k$ is unchanged when every $x_t$ is replaced by $-x_t$ (each deviation from $\\bar{x}$ changes sign, so their products do not)",
+      "note": "Correlogram teaches it; checked against fpp3 §2.8 (r_k formula; sign-invariance verified as an algebraic identity on it) in run 2026-10-31T04:58Z/1486",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:58Z/1486"
+     }
     },
     {
      "id": "r4",
@@ -84,7 +92,15 @@
      "statement": "For a linear trend plus noise model x_t = α_0 + α_1 t + z_t, the first difference equals α_1 + (z_t - z_{t-1}), so the intercept cancels and the slope remains as a constant.",
      "concept": "Linear Trend Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Differencing",
+      "quote": "One difference removes a linear trend",
+      "note": "The tagged Differencing page states the fact; writing it out for x_t = a0 + a1 t + z_t is algebra.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:42Z/2782"
+     }
     },
     {
      "id": "r3",
@@ -92,7 +108,13 @@
      "statement": "Estimate model parameters by writing the observed differences and observed values as equations in the unknown parameters and noise terms, then solving the resulting simultaneous equations.",
      "concept": "Linear Trend Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "A step of this solution's plan: solving the question's own given differences and values as simultaneous equations is algebra.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:42Z/2782"
+     }
     },
     {
      "id": "r4",
@@ -118,7 +140,15 @@
        "page": "Linear Trend",
        "quote": "$$\\hat{y}_t = a + b\\,t$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Deterministic and Stochastic Trend",
+      "quote": "Long-horizon forecast | the trend line",
+      "note": "The tagged page's table gives a deterministic trend's forecast as the trend line; plugging t in is arithmetic.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:42Z/2782"
+     }
     }
    ],
    "imported_from": "report.md"
@@ -196,7 +226,15 @@
      "statement": "With positive serial correlation in the errors, ordinary least squares standard errors of the regression coefficients are biased downward (underestimated), making estimates look more precise than they are.",
      "concept": "Correlation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Deterministic and Stochastic Trend",
+      "quote": "Errors at adjacent times are often positively correlated, and then the OLS standard errors tend to underestimate the true ones: confidence intervals are too narrow and p-values too small, so a coefficient can look significant when it is not",
+      "note": "Deterministic and Stochastic Trend teaches it; checked against ISLR §3.3.3 and fpp3 §10.1 in run 2026-10-31T04:58Z/1486",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:58Z/1486"
+     }
     },
     {
      "id": "r2",
@@ -217,7 +255,15 @@
      "statement": "GLS provides more appropriate (better) estimates of the standard errors of regression coefficients when residuals are autocorrelated, improving on OLS in that setting.",
      "concept": "Generalized Least Squares",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Deterministic and Stochastic Trend",
+      "quote": "so its standard errors account for the autocorrelation that the OLS formula $\\sigma^2(X'X)^{-1}$ ignores",
+      "note": "Deterministic and Stochastic Trend teaches it; checked against Fox & Weisberg time-series appendix §1-2 and Shumway & Stoffer EZ §3.9 in run 2026-10-31T04:58Z/1486",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:58Z/1486"
+     }
     },
     {
      "id": "r4",
@@ -225,7 +271,15 @@
      "statement": "GLS's advantage over OLS comes from modeling the residual correlation structure, not from maximizing a likelihood under white noise residuals.",
      "concept": "Generalized Least Squares",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Deterministic and Stochastic Trend",
+      "quote": "Its advantage comes from that correlation structure: GLS is the maximum likelihood estimator under correlated normal errors, not under white noise, where it reduces to OLS.",
+      "note": "Deterministic and Stochastic Trend teaches it; checked against Fox & Weisberg time-series appendix §1 (GLS maximizes the N(0, Σ) likelihood) in run 2026-10-31T04:58Z/1486",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:58Z/1486"
+     }
     }
    ],
    "imported_from": "report.md"
@@ -343,7 +397,15 @@
        "page": "Correlogram",
        "quote": "When the true $\\rho_k = 0$, $r_k$ is approximately normal with mean $-1/n$ and variance $1/n$. That"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Correlogram",
+      "quote": "so about $95\\%$ of the bars should fall within $\\pm 1.96/\\sqrt{n}$, usually rounded to two standard errors, $\\pm 2/\\sqrt{n}$. If a question prints its own bounds, use the ones it gives.",
+      "note": "Re-quoted after Correlogram was restated off Cowpertwait (run 2026-10-31T04:58Z/1486, verified medium against fpp3 2.9 and Shumway & Stoffer Property 1.2): the page teaches that a bar outside the bounds is significant, and to use a question's printed bounds; this question prints -1/n +/- 2/sqrt(n) in its own stem.",
+      "date": "2026-10-31",
+      "run": "mas-ii-coordinator-2026-10-31"
+     }
     },
     {
      "id": "r3",
@@ -743,7 +805,13 @@
      "statement": "Common factors shared by the AR and MA polynomials can be cancelled to reduce the model (for example to an ARIMA form), which does not change the stationarity or invertibility conclusions here.",
      "concept": "Parameter Redundancy in ARMA Models",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "An aside in the solution: the options count (p,q) as written and the stationarity/invertibility answers come from the roots (taught); cancelling the common factor is not needed to answer.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:42Z/2782"
+     }
     }
    ],
    "imported_from": "report.md"
@@ -1104,7 +1172,15 @@
      "statement": "Short-term extrapolation of a deterministic trend can be justified because underlying trends usually change slowly relative to the forecast lead time.",
      "concept": "Deterministic and Stochastic Trend",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Deterministic and Stochastic Trend",
+      "quote": "That assumption is easiest to defend a short way ahead, where the trend has little time to change; a stochastic trend is the safer forecast over longer horizons, because its intervals allow for the growth rate to change",
+      "note": "Deterministic and Stochastic Trend teaches it; checked against fpp3 §10.4 in run 2026-10-31T04:58Z/1486",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:58Z/1486"
+     }
     }
    ],
    "imported_from": "report.md"
@@ -1295,7 +1371,15 @@
      "statement": "A t-test can be used to test a hypothesis about a single fixed-effect parameter in a Linear Mixed Model.",
      "concept": "Linear Mixed Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Linear Mixed Model",
+      "quote": "A single fixed-effect parameter (one row of $\\mathbf{L}$ in $H_0\\colon \\mathbf{L}\\boldsymbol\\beta = 0$) is tested with a $t$ statistic",
+      "note": "Linear Mixed Model teaches it; checked against SAS/STAT 13.1 PROC MIXED docs pp.5322-5323 in run 2026-10-31T05:03Z/b549",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:03Z/b549"
+     }
     },
     {
      "id": "r3",
@@ -1303,7 +1387,15 @@
      "statement": "Type I (sequential) and Type III (conditional) F-tests can be used to test linear hypotheses involving multiple fixed effects in a Linear Mixed Model.",
      "concept": "Linear Mixed Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Linear Mixed Model",
+      "quote": "a linear hypothesis on several fixed effects (rank of $\\mathbf{L}$ above 1) with an $F$ statistic, built from Type 1 (sequential) or Type 3 (partial) $\\mathbf{L}$ matrices.",
+      "note": "Linear Mixed Model teaches it; checked against SAS/STAT 13.1 PROC MIXED docs pp.5323, 5340 in run 2026-10-31T05:03Z/b549",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:03Z/b549"
+     }
     },
     {
      "id": "r4",
@@ -1311,7 +1403,15 @@
      "statement": "An omnibus Wald test tests a general linear hypothesis H0: Lβ = 0 about the fixed effects using a chi-square statistic.",
      "concept": "Wald Test",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Linear Mixed Model",
+      "quote": "The **omnibus Wald test** of $H_0\\colon \\mathbf{L}\\boldsymbol\\beta = 0$ compares the numerator of that $F$ statistic with a $\\chi^2$ distribution whose degrees of freedom are the rank of $\\mathbf{L}$.",
+      "note": "Linear Mixed Model teaches it; checked against SAS/STAT 13.1 PROC MIXED docs p.5341 in run 2026-10-31T05:03Z/b549",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:03Z/b549"
+     }
     },
     {
      "id": "r5",
@@ -1319,7 +1419,15 @@
      "statement": "A Wald z-test for a covariance (variance) parameter is not recommended because the normal approximation requires very large samples for skewed variance estimates and fails when the null value lies on the boundary of the parameter space.",
      "concept": "Wald Test",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Linear Mixed Model",
+      "quote": "is valid for large samples, but it can be unreliable for small data sets and for parameters such as variance components, which have a skewed or bounded sampling distribution.",
+      "note": "Linear Mixed Model teaches it; checked against SAS/STAT 13.1 PROC MIXED docs p.5322 in run 2026-10-31T05:03Z/b549",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:03Z/b549"
+     }
     },
     {
      "id": "r6",
@@ -1375,7 +1483,15 @@
      "statement": "The estimated variance of the generalized least squares estimator of the fixed effects is (X' V-hat^{-1} X)^{-1}, which plugs in the estimated covariance matrix V-hat as if it were the true known matrix.",
      "concept": "Linear Mixed Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Linear Mixed Model",
+      "quote": "the estimated variance of $\\hat{\\boldsymbol\\beta}$ is the GLS formula $(\\mathbf{X}^\\top\\hat{\\mathbf{V}}^{-1}\\mathbf{X})^{-1}$ with $\\hat{\\mathbf{V}}$ treated as if it were the true $\\mathbf{V}$",
+      "note": "Linear Mixed Model teaches it; checked against SAS/STAT 13.1 PROC MIXED docs pp.5320-5321 in run 2026-10-31T05:03Z/b549",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:03Z/b549"
+     }
     },
     {
      "id": "r4",
@@ -1383,7 +1499,15 @@
      "statement": "Because the variance of the fixed-effect estimates ignores the uncertainty in estimating the covariance parameters, it is biased (understated) under both ML and REML estimation; REML does not make it unbiased.",
      "concept": "Linear Mixed Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Linear Mixed Model",
+      "quote": "and that is so whichever method estimated them: REML corrects the bias of the variance components, not this one.",
+      "note": "Linear Mixed Model teaches it; checked against SAS/STAT 13.1 PROC MIXED docs pp.5321, 5357 in run 2026-10-31T05:03Z/b549",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:03Z/b549"
+     }
     }
    ],
    "imported_from": "report.md"
@@ -1400,7 +1524,15 @@
      "statement": "In a linear mixed model with repeated measures per subject, a random coefficient on a covariate can only be identified if that covariate varies within a subject; a covariate constant within a subject has a random effect confounded with the random intercept.",
      "concept": "Linear Mixed Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Random Intercept and Slope",
+      "quote": "A random slope needs its predictor to vary within the group.",
+      "note": "Random Intercept and Slope teaches it; checked against Barr et al. 2013 (PMC3881361) in run 2026-10-31T05:07Z/9044",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:07Z/9044"
+     }
     },
     {
      "id": "r2",
@@ -1421,7 +1553,15 @@
      "statement": "A time-invariant subject characteristic such as sex can enter a linear mixed model as a fixed effect but not as a random effect when each subject is observed repeatedly.",
      "concept": "Linear Mixed Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Random Intercept and Slope",
+      "quote": "A characteristic that is constant for each subject (a between-subject variable, such as a policyholder's territory) can enter as a fixed effect but not with a by-subject random slope",
+      "note": "Random Intercept and Slope teaches it; checked against Barr et al. 2013 (PMC3881361) in run 2026-10-31T05:07Z/9044",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:07Z/9044"
+     }
     },
     {
      "id": "r4",
@@ -1429,7 +1569,15 @@
      "statement": "An interaction between a time-invariant covariate and a time-varying covariate (e.g., sex × age) is, within a subject, either zero or a copy of the time-varying covariate, so its random coefficient is redundant with the random slope on the time-varying covariate and cannot be identified.",
      "concept": "Linear Mixed Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Random Intercept and Slope",
+      "quote": "across one subject's rows $z_i x_{ij}$ is either all zeros or an exact copy of $x_{ij}$, so a random coefficient on it duplicates the random slope on $x_{ij}$ and cannot be identified",
+      "note": "Random Intercept and Slope teaches it; checked against Barr et al. 2013 (PMC3881361) in run 2026-10-31T05:07Z/9044",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:07Z/9044"
+     }
     },
     {
      "id": "r5",
@@ -1437,7 +1585,13 @@
      "statement": "To choose the specification with the most random effects, include the random intercept plus random coefficients only for covariates (or terms) that vary within subjects and are not redundant with other included random terms.",
      "concept": "Linear Mixed Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "This solution's plan: combining the identification facts (r1, r3, r4, left open) to pick among the question's options.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:42Z/2782"
+     }
     }
    ],
    "imported_from": "report.md"
@@ -1576,7 +1730,15 @@
      "statement": "To convert a two-level hierarchical (multilevel) model to its equivalent single-equation linear mixed model, substitute the Level 2 equation(s) for the Level 1 coefficients into the Level 1 equation and combine terms.",
      "concept": "Hierarchical Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Hierarchical Model",
+      "quote": "Substitute the Level 2 equations for the coefficients in the Level 1 equation and collect terms",
+      "note": "Hierarchical Model teaches it; checked against Adolph UW POLS 510 slides 22, 75-78 and Rodriguez c8 in run 2026-10-31T05:07Z/9044",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:07Z/9044"
+     }
     },
     {
      "id": "r2",
@@ -1584,7 +1746,15 @@
      "statement": "In a hierarchical model, each level's equation includes only covariates measured at that level; group-level (e.g., classroom) covariates enter the Level 2 equation for the group-specific coefficient, while individual-level covariates enter the Level 1 equation.",
      "concept": "Hierarchical Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Hierarchical Model",
+      "quote": "The **Level 2** equations describe each coefficient with the group-level covariates and the group random effects",
+      "note": "Hierarchical Model teaches it; checked against Adolph UW POLS 510 slides 22, 75-78 and Rodriguez c8 in run 2026-10-31T05:07Z/9044",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:07Z/9044"
+     }
     },
     {
      "id": "r3",
@@ -1605,7 +1775,13 @@
      "statement": "The group random effect u_j should appear only once in the hierarchical specification (in the Level 2 intercept equation); including it in both levels double-counts it, giving 2u_j with variance 4 times the group variance, and the student-level residual epsilon_ij must remain in Level 1.",
      "concept": "Linear Mixed Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Distractor analysis for this question's options: once the level placement (r2) and substitution (r1) are known, double-counting u_j and Var(2u)=4Var(u) are algebra.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:42Z/2782"
+     }
     }
    ],
    "imported_from": "report.md"
@@ -1870,7 +2046,15 @@
      "statement": "A model that pools or groups categories (equal coefficients for several levels) is nested within the model that estimates a separate coefficient for each level, since grouping only imposes equality constraints.",
      "concept": "Nested Models",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Likelihood Ratio Test",
+      "quote": "the difference in free parameters between the full and reduced models",
+      "note": "The tagged LRT page defines nesting by restrictions on the full model's parameters; pooling levels is such an equality restriction.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:42Z/2782"
+     }
     },
     {
      "id": "r4",
@@ -2077,7 +2261,15 @@
      "statement": "In a Bayesian regression with multicollinear predictors, the marginal posteriors of the individual coefficients are wide (intervals may include zero) even when each predictor is strongly related to the response.",
      "concept": "Multicollinearity",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Multicollinearity",
+      "quote": "so each coefficient is poorly determined and its interval is wide (it can include zero even when both predictors are strongly related to the response), yet the pair is held to the valley",
+      "note": "Multicollinearity teaches it; checked against ISLR 2nd ed. §3.3.3 pp.100-102 in run 2026-10-31T05:10Z/8e26",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:10Z/8e26"
+     }
     },
     {
      "id": "r3",
@@ -2085,7 +2277,15 @@
      "statement": "Diagnose multicollinearity from posterior plots by checking for wide marginal intervals, a thin ridge in the joint posterior of two coefficients, and a tightly determined sum (or difference) of the coefficients.",
      "concept": "Linear Regression",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Multicollinearity",
+      "quote": "The RSS contours for two collinear coefficients run along a narrow valley: a wide range of individual values fits almost equally well, so each coefficient is poorly determined and its interval is wide",
+      "note": "Multicollinearity teaches it; checked against ISLR 2nd ed. §3.3.3 Fig. 3.15 pp.100-101 in run 2026-10-31T05:10Z/8e26",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:10Z/8e26"
+     }
     },
     {
      "id": "r4",
@@ -2093,7 +2293,15 @@
      "statement": "If two predictors are strongly positively correlated (x1 ≈ x2), only the sum of their coefficients is identified, so the posterior of the coefficients shows a negative correlation (downward-sloping ridge).",
      "concept": "Multicollinearity",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Multicollinearity",
+      "quote": "With positively correlated predictors ($x_1 \\approx x_2$) the fit depends essentially on $\\beta_1 + \\beta_2$, so the sum is well determined while raising one coefficient means lowering the other",
+      "note": "Multicollinearity teaches it; checked against ISLR 2nd ed. Fig. 3.15 and Shalizi 36-401 Lecture 17 p.6 in run 2026-10-31T05:10Z/8e26",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:10Z/8e26"
+     }
     },
     {
      "id": "r5",
@@ -2101,7 +2309,15 @@
      "statement": "If two predictors are strongly negatively correlated (x1 ≈ -x2), only the difference of their coefficients is identified, so the posterior of the coefficients has a positive correlation (upward-sloping ridge).",
      "concept": "Multicollinearity",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Multicollinearity",
+      "quote": "With negatively correlated predictors ($x_1 \\approx -x_2$) it is the difference $\\beta_1 - \\beta_2$ that is determined, and the valley slopes upward",
+      "note": "Multicollinearity teaches it; checked against Shalizi 36-401 Lecture 17 p.6 ((X'X)^-1 off-diagonal -Cov[X1,X2]) in run 2026-10-31T05:10Z/8e26",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:10Z/8e26"
+     }
     },
     {
      "id": "r6",
@@ -2109,7 +2325,15 @@
      "statement": "Correlation between coefficients in the posterior is a symptom of multicollinearity, not a property of the data; the data property is the correlation between the predictors.",
      "concept": "Multicollinearity",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Multicollinearity",
+      "quote": "correlation between the **coefficient estimates** is the symptom, while the property of the data is the correlation between the **predictors**, and for two predictors the two have opposite signs",
+      "note": "Multicollinearity teaches it; checked against Shalizi 36-401 Lecture 17 p.6 and ISLR 2nd ed. §3.3.3 in run 2026-10-31T05:10Z/8e26",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:10Z/8e26"
+     }
     }
    ],
    "imported_from": "report.md"
@@ -2354,7 +2578,15 @@
      "statement": "A flat (uniform) prior is constant over its support, so the posterior is proportional to the likelihood there and has its peak where the likelihood peaks.",
      "concept": "Uniform Continuous Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Posterior Distribution",
+      "quote": "inside its support the posterior is proportional to the likelihood alone, and outside its support the posterior is zero, because the prior is a factor of the product",
+      "note": "Posterior Distribution teaches it; checked against Gelman BDA3 §2.1 p.30, §4.3 p.90 and LDA Ex. 4.4.5 in run 2026-10-31T04:56Z/9cfd",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:56Z/9cfd"
+     }
     },
     {
      "id": "r4",
@@ -2479,7 +2711,15 @@
      "statement": "The variance of the hypothetical means (VHM) equals the probability-weighted mean of the squared hypothetical means minus the square of the overall expected mean.",
      "concept": "Bühlmann Credibility",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Variance of Hypothetical Means",
+      "quote": "VHM is the variance of that quantity across the population",
+      "note": "The tagged VHM page defines VHM as Var(mu(Theta)); E[mu^2] - mu^2 is the standard variance identity.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:42Z/2782"
+     }
     },
     {
      "id": "r5",
@@ -2947,7 +3187,15 @@
      "statement": "When k equals the size of the training set, every point's neighborhood is the entire training set, so KNN predicts the same class (the most common training class) for every point.",
      "concept": "K-Nearest Neighbors",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "K-Nearest Neighbors",
+      "quote": "every neighborhood $\\mathcal{N}_K(x_0)$ is the whole training set, so KNN predicts the class that has the majority in the training data for every observation, whatever its predictor values",
+      "note": "K-Nearest Neighbors teaches it; checked against MIT OCW 15.062 kNN notes p.2 and ISLR 2nd ed. §2.2.3 in run 2026-10-31T05:10Z/8e26",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:10Z/8e26"
+     }
     },
     {
      "id": "r4",
@@ -2973,7 +3221,13 @@
        "page": "Model Training and Evaluation",
        "quote": "Flagging nothing would be right on all 704 legitimate claims, for an accuracy of $704 / 813 = 0.866$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Arithmetic on the question's setup (three equal classes); the course fact (k = n predicts one class) is r3, left open.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:42Z/2782"
+     }
     }
    ],
    "imported_from": "report.md"
@@ -3016,7 +3270,15 @@
      "statement": "Pruning a tree at an internal node collapses the entire subtree below it into a single terminal node, whose RSS replaces the RSS of the subtree's terminal nodes and reduces the terminal node count accordingly.",
      "concept": "Tree Pruning",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Tree Pruning",
+      "quote": "**Pruning at an internal node** collapses the whole subtree below it into a single terminal node: that node's own RSS replaces the summed RSS of the leaves it absorbs",
+      "note": "Tree Pruning teaches it; checked against ISLR 2nd ed. §8.1.1 eq. (8.4) and Klusowski (2020) §2 in run 2026-10-31T05:10Z/8e26",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:10Z/8e26"
+     }
     },
     {
      "id": "r4",
@@ -3246,7 +3508,13 @@
      "statement": "For a given node, cross-entropy is at least the Gini index, which is at least the classification error rate, with all three equal at zero for a pure node. For a two-class node with p = 1/2 the error rate and Gini index are equal, and in other impure nodes Gini exceeds the error rate.",
      "concept": "Gini Index",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The ordering is the question's answer, found by computing the three measures (each taught: Node Impurity, Gini Index, Entropy) on its nodes; not a fact to teach.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:42Z/2782"
+     }
     }
    ],
    "imported_from": "report.md"
@@ -3276,7 +3544,15 @@
      "statement": "The proportion of variance explained by the m-th principal component equals the sum of squared m-th component scores divided by the total sum of squares of all (centered) variables, sum_i z_im^2 / sum_j sum_i x_ij^2.",
      "concept": "Principal Components Analysis",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Proportion of Variance Explained",
+      "quote": "so $\\mathrm{PVE}_m = \\sum_{i} z_{im}^2 \\big/ \\sum_{j}\\sum_{i} x_{ij}^2$ and the $\\frac{1}{n}$ cancels",
+      "note": "Proportion of Variance Explained teaches it; checked against ISLR 2nd ed. §12.2.3 eqs. (12.8)-(12.10), PDF pp.511-512 in run 2026-10-31T05:08Z/61e8",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:08Z/61e8"
+     }
     },
     {
      "id": "r3",
@@ -3284,7 +3560,13 @@
      "statement": "When the data are centered (column means zero), the total variance is the sum of squares of all entries, and any common 1/n or 1/(n-1) factor cancels in the PVE ratio.",
      "concept": "Principal Components Analysis",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Arithmetic: a common 1/n factor cancels in a ratio; centred columns make sum of squares the variance numerator.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:42Z/2782"
+     }
     },
     {
      "id": "r4",
@@ -3714,7 +3996,15 @@
      "statement": "With q random covariates, u_i is q×1 and its covariance matrix D is q×q; the number of fixed covariates and the number of observations do not affect the dimensions of D.",
      "concept": "Linear Mixed Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Covariance Structure",
+      "quote": "With $q$ random-effect columns, $\\mathbf{u}_i$ is $q \\times 1$ and $\\mathbf{D}$ is $q \\times q$",
+      "note": "Covariance Structure teaches it; checked against lme4 (Bates et al. 2015) §2.3, App. A.1 and SAS/STAT 13.1 PROC MIXED p.5316 in run 2026-10-31T05:07Z/9044",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:07Z/9044"
+     }
     }
    ],
    "imported_from": "report.md"
@@ -3731,7 +4021,15 @@
      "statement": "When covariance parameter estimation in a linear mixed model fails (non-convergence, nonpositive-definite D matrix, boundary estimates), remedies include fitting the implied marginal model, fitting a marginal model with an unstructured covariance matrix, and choosing alternative starting values for…",
      "concept": "Linear Mixed Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Restricted Maximum Likelihood",
+      "quote": "or fit a marginal model instead — the implied marginal model, or one with an unstructured residual covariance matrix — which models $\\mathbf{V}_i$ directly without the random effects",
+      "note": "Restricted Maximum Likelihood teaches it; checked against SAS/STAT 13.1 PROC MIXED pp.5316, 5352-5354 and The Analysis Factor in run 2026-10-31T05:07Z/9044",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:07Z/9044"
+     }
     },
     {
      "id": "r2",
@@ -3739,7 +4037,15 @@
      "statement": "The implied marginal model of a linear mixed model omits the random effects and directly fits the marginal covariance matrix V_i = Z_i D Z_i' + R_i, without requiring D to be positive-definite.",
      "concept": "Implied Marginal Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Covariance Structure",
+      "quote": "drops the random effects and models the marginal covariance $\\mathbf{V}_i = \\mathbf{Z}_i\\mathbf{D}\\mathbf{Z}_i^\\top + \\mathbf{R}_i$ directly as a structure on the residuals",
+      "note": "Covariance Structure teaches it; checked against SAS/STAT 13.1 PROC MIXED pp.5315-5316 in run 2026-10-31T05:07Z/9044",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:07Z/9044"
+     }
     },
     {
      "id": "r3",
@@ -3760,7 +4066,15 @@
      "statement": "Iterative ML/REML estimation can fail from poor starting values, so choosing alternative starting values for the covariance parameters is a standard first remedy for convergence failure.",
      "concept": "REML and ML Estimation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Restricted Maximum Likelihood",
+      "quote": "Remedies: supply alternative starting values for the covariance parameters (SAS's `PARMS` statement, which also runs a grid search over the likelihood surface)",
+      "note": "Restricted Maximum Likelihood teaches it; checked against SAS/STAT 13.1 PROC MIXED pp.5352-5354 in run 2026-10-31T05:07Z/9044",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:07Z/9044"
+     }
     }
    ],
    "imported_from": "report.md"
@@ -3816,7 +4130,15 @@
      "statement": "The exponential variance function is Var(e_ij) = sigma^2 exp(2 delta v_ij) and the power variance function is Var(e_ij) = sigma^2 |v_ij|^…",
      "concept": "",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Variance Function",
+      "quote": "the **exponential** form $\\mathrm{Var}(\\varepsilon_{ij}) = \\sigma^2\\exp(2\\delta v_{ij})$ (`nlme`'s `varExp`) and the **power** form $\\mathrm{Var}(\\varepsilon_{ij}) = \\sigma^2\\lvert v_{ij}\\rvert^{2\\delta}$ (`varPower`)",
+      "note": "Variance Function teaches it; checked against nlme varExp.Rd / varPower.Rd in run 2026-10-31T05:07Z/9044",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:07Z/9044"
+     }
     },
     {
      "id": "r5",
@@ -3946,7 +4268,15 @@
      "statement": "Observation-level covariates and the residual error term belong in the Level 1 equation, while group-level covariates and the group random effect belong in the Level 2 equations for the coefficients.",
      "concept": "Linear Mixed Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Hierarchical Model",
+      "quote": "The **Level 1** equation describes an observation with group-specific coefficients, and it holds only the observation-level covariates and the residual",
+      "note": "Hierarchical Model teaches it; checked against Adolph UW POLS 510 slides 22, 75-78 and Rodriguez c8 in run 2026-10-31T05:07Z/9044",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:07Z/9044"
+     }
     },
     {
      "id": "r3",
@@ -3954,7 +4284,15 @@
      "statement": "To convert a hierarchical model into the general (composite) form, substitute the Level 2 equations for the coefficients into the Level 1 equation and expand; the result should match the general specification term by term.",
      "concept": "Linear Mixed Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Hierarchical Model",
+      "quote": "Substitute the Level 2 equations for the coefficients in the Level 1 equation and collect terms",
+      "note": "Hierarchical Model teaches it; checked against Adolph UW POLS 510 slides 22, 75-78 and Rodriguez c8 in run 2026-10-31T05:07Z/9044",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:07Z/9044"
+     }
     },
     {
      "id": "r4",
@@ -3984,7 +4322,15 @@
      "statement": "The standard estimated covariance matrix of the fixed-effect estimates treats the estimated covariance parameters as if they were the true values, ignoring the uncertainty from estimating them, so it underestimates the variance of the fixed-effect estimates (standard errors too small, tests anti-co…",
      "concept": "Kenward-Roger Adjustment",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Linear Mixed Model",
+      "quote": "It tends to underestimate the true sampling variability of $\\hat{\\boldsymbol\\beta}$ because no account is made for the uncertainty in estimating $\\mathbf{G}$ and $\\mathbf{R}$",
+      "note": "Linear Mixed Model teaches it; checked against SAS/STAT 13.1 PROC MIXED docs p.5321 in run 2026-10-31T05:03Z/b549",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:03Z/b549"
+     }
     },
     {
      "id": "r2",
@@ -3992,7 +4338,15 @@
      "statement": "The Kenward-Roger method inflates the estimated covariance matrix of the fixed-effect estimates to correct its downward bias and approximates the denominator degrees of freedom for the F-test in a linear mixed model.",
      "concept": "Kenward-Roger Adjustment",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Linear Mixed Model",
+      "quote": "inflates the estimated covariance matrix of the fixed effects to reduce its small-sample bias and then computes Satterthwaite-type denominator degrees of freedom for the $F$ test",
+      "note": "Linear Mixed Model teaches it; checked against SAS/STAT 13.1 PROC MIXED docs pp.5276-5277 and Kenward & Roger 1997 in run 2026-10-31T05:03Z/b549",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:03Z/b549"
+     }
     },
     {
      "id": "r3",
@@ -4000,7 +4354,15 @@
      "statement": "The Kenward-Roger adjustment is designed for linear mixed models, where random effects and correlated residuals make observations neither independent nor equally weighted, so a standard F-test with naive degrees of freedom is not appropriate.",
      "concept": "Kenward-Roger Adjustment",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Linear Mixed Model",
+      "quote": "The **Kenward–Roger** method, built for REML fits of mixed models in small samples, inflates the estimated covariance matrix of the fixed effects",
+      "note": "Linear Mixed Model teaches it; checked against Kenward & Roger 1997 abstract, SAS/STAT 13.1 PROC MIXED docs pp.5276-5277, 5323 in run 2026-10-31T05:03Z/b549",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:03Z/b549"
+     }
     },
     {
      "id": "r4",
@@ -4008,7 +4370,15 @@
      "statement": "The Kenward-Roger adjustment matters most for small samples; as the sample size grows the bias becomes negligible and the adjusted denominator degrees of freedom converge to the naive ones.",
      "concept": "Kenward-Roger Adjustment",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Linear Mixed Model",
+      "quote": "It matters most in small samples: with large samples the statistics are close to their asymptotic normal and $\\chi^2$ distributions, and for fairly well-balanced data the inflation tends to be small.",
+      "note": "The page (verified medium in run 2026-10-31T05:03Z/b549, SAS PROC MIXED pp.5321-5323, pbkrtest s.4) teaches what statement III needs: the adjustment matters most in small samples and large-sample statistics approach their asymptotic chi-square forms (an F with unbounded denominator df). The solution's extra clause that the KR df converge to the naive ones is that same limit, not a further fact the candidate must know.",
+      "date": "2026-10-31",
+      "run": "mas-ii-coordinator-2026-10-31"
+     }
     }
    ],
    "imported_from": "report.md"
@@ -4160,7 +4530,15 @@
      "statement": "The marginal covariance matrix ZDZ' + R implied by a linear mixed model is positive-definite by construction (D and R are positive-definite), so a marginal model can be fit in cases where the corresponding mixed model cannot, such as when the marginal covariance is nonpositive-definite or has negat…",
      "concept": "Implied Marginal Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Covariance Structure",
+      "quote": "So a marginal model can be fitted where the mixed model cannot, for instance when the data call for a negative within-subject correlation.",
+      "note": "Covariance Structure teaches it; checked against SAS/STAT 13.1 PROC MIXED p.5316 and The Analysis Factor in run 2026-10-31T05:07Z/9044",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:07Z/9044"
+     }
     },
     {
      "id": "r4",
@@ -4190,7 +4568,13 @@
      "statement": "In a grid approximation, the prior is a discrete set of candidate parameter values with probabilities obtained by normalizing the given weights so they sum to 1.",
      "concept": "Grid Approximation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The question's own setup: it says to weight responses by 1/years; normalizing weights to sum to 1 is arithmetic. Grid approximation itself is not this item.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:42Z/2782"
+     }
     },
     {
      "id": "r2",
@@ -4346,7 +4730,13 @@
      "statement": "A log-transformed predictor equals zero when the original variable equals 1, so the intercept corresponds to the original variable being 1, not its mean, unless the log variable is centered.",
      "concept": "Log Transformation of Predictors",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Application of the intercept rule (r1, taught on Linear Regression) with ln 1 = 0; arithmetic, not a separate fact.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:42Z/2782"
+     }
     },
     {
      "id": "r3",
@@ -4729,7 +5119,15 @@
        "page": "Bayesian Estimation",
        "quote": "Each loss contributes $1/\\theta$ to the likelihood, which is 0 unless $\\theta \\ge 1{,}500$, the lar"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Posterior Distribution",
+      "quote": "If the uniform prior covers only an interval, the posterior is the likelihood cut off at the ends of that interval and renormalised, so its mode is the value inside the interval where the likelihood is largest",
+      "note": "Posterior Distribution teaches it; checked against Gelman BDA3 §4.1 pp.85–86, §4.3 p.90 and LDA Ex. 4.4.5 in run 2026-10-31T04:56Z/9cfd",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:56Z/9cfd"
+     }
     },
     {
      "id": "r6",
@@ -4933,7 +5331,15 @@
      "statement": "If one variable is an exact linear function of another (correlation of ±1), the correlation matrix is singular, so at least one eigenvalue equals zero and the rank is reduced.",
      "concept": "Singular Matrix and Rank",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Scree Plot",
+      "quote": "the matrix is singular and $p - r$ eigenvalues are exactly zero: the scree plot falls to zero and the cumulative PVE reaches 100% before the last component, then stays flat",
+      "note": "Scree Plot teaches it; checked against Minitab PCA Methods and formulas, Shalizi 36-401 Lecture 17, NIST 6.5.5.2, ISLR p.506 in run 2026-10-31T05:08Z/61e8",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:08Z/61e8"
+     }
     },
     {
      "id": "r4",
@@ -4941,7 +5347,15 @@
      "statement": "A principal component with a zero eigenvalue explains no additional variance, so the cumulative proportional variance reaches 100% at the component before it and stays flat afterward.",
      "concept": "Principal Components Analysis",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Principal Components Analysis",
+      "quote": "\\text{PVE}_m = \\frac{\\lambda_m}{\\sum_{j=1}^p \\lambda_j}",
+      "note": "PVE is the eigenvalue's share; a zero eigenvalue adds zero, so the cumulative PVE is flat from there.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:42Z/2782"
+     }
     },
     {
      "id": "r5",
@@ -4949,7 +5363,15 @@
      "statement": "A variable that is nearly uncorrelated with the other variables is captured by its own principal component with an eigenvalue near 1 (for standardized variables), while a group of highly correlated variables is absorbed mostly into a single dominant component.",
      "concept": "Principal Components Analysis",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Scree Plot",
+      "quote": "A group of highly correlated variables loads together on one dominant component, while a variable nearly uncorrelated with the rest is left largely to a component of its own",
+      "note": "Scree Plot teaches it; checked against ISLR 2nd ed. §12.2.1 USArrests, PDF pp.507-509 (the eigenvalue-near-1 clause was cut as unsourced; the page teaches the shared/own-component structure the solution uses) in run 2026-10-31T05:08Z/61e8",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:08Z/61e8"
+     }
     }
    ],
    "imported_from": "report.md"
@@ -5114,7 +5536,15 @@
      "statement": "Principal component scores of centred (mean-zero) predictors have mean zero, so the sample variance of the scores is the sum of squared scores divided by n, with no mean subtraction.",
      "concept": "Principal Components Analysis",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Proportion of Variance Explained",
+      "quote": "Because every variable is centred to mean zero, the scores $z_{1m}, \\dots, z_{nm}$ average zero as well, so their variance is simply $\\frac{1}{n}\\sum_i z_{im}^2$, with no mean to subtract",
+      "note": "Proportion of Variance Explained teaches it; checked against ISLR 2nd ed. §12.2.1 p.500 (PDF 506) and (12.9) in run 2026-10-31T05:08Z/61e8",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:08Z/61e8"
+     }
     },
     {
      "id": "r4",
@@ -5392,7 +5822,15 @@
      "statement": "A hierarchical (multilevel) linear mixed model is converted to a single-equation LMM by substituting the Level 2 equations for the Level 1 coefficients and collecting terms.",
      "concept": "Linear Mixed Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Hierarchical Model",
+      "quote": "A random effect in a slope's equation comes out multiplied by that slope's covariate (a random slope, not a second random intercept)",
+      "note": "Hierarchical Model teaches it; checked against Adolph UW POLS 510 slides 22, 75-78 and Rodriguez c8 in run 2026-10-31T05:07Z/9044",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:07Z/9044"
+     }
     },
     {
      "id": "r2",
@@ -5413,7 +5851,13 @@
      "statement": "Level 2 fixed-effect terms and coefficients carry over unchanged into the fixed-effects part of the combined LMM: group-level covariates (such as indicator variables) stay in the intercept part, while the time-varying covariate keeps its own coefficient.",
      "concept": "Linear Mixed Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Follows algebraically from the substitution procedure (r1, left open): the Level 2 terms carry over when substituted.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:42Z/2782"
+     }
     },
     {
      "id": "r4",
@@ -5443,7 +5887,13 @@
      "statement": "The variance-covariance matrix D of the random effects in a linear mixed model is always symmetric because Cov(u_j, u_k) = Cov(u_k, u_j).",
      "concept": "Linear Mixed Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Cov(u_j,u_k) = Cov(u_k,u_j) is prerequisite probability (the exam page's Prerequisite knowledge callout), not MAS-II course content.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:42Z/2782"
+     }
     },
     {
      "id": "r2",
@@ -5756,7 +6206,15 @@
      "statement": "The generalized least squares estimator of the fixed effects with known covariance is the best linear unbiased estimator (BLUE) by the Gauss-Markov result.",
      "concept": "Best Linear Unbiased Estimator",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Linear Mixed Model",
+      "quote": "If $\\mathbf{G}$ and $\\mathbf{R}$ are known, $\\hat{\\boldsymbol\\beta}$ is the best linear unbiased estimator (BLUE) of $\\boldsymbol\\beta$.",
+      "note": "Linear Mixed Model teaches it; checked against SAS/STAT 13.1 PROC MIXED docs p.5321 in run 2026-10-31T05:03Z/b549",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:03Z/b549"
+     }
     },
     {
      "id": "r3",
@@ -5825,7 +6283,15 @@
      "statement": "A consistent shift in the same direction across all subjects as the treatment changes indicates a fixed treatment effect.",
      "concept": "Linear Mixed Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Linear Mixed Model",
+      "quote": "parameters that apply to the entire population",
+      "note": "The tagged LMM page defines fixed effects as population-wide; a shift common to every subject is read off a profile plot as one.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:42Z/2782"
+     }
     },
     {
      "id": "r3",
@@ -6116,7 +6582,13 @@
      "statement": "In a hierarchical model, the posterior of theta given omega uses the conditional prior of theta given omega, and normalization integrates over theta across the range allowed by that prior.",
      "concept": "Bayesian",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "A step of this solution: Bayes' theorem (taught) normalized over the support the question's own prior gives theta.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:42Z/2782"
+     }
     }
    ],
    "imported_from": "report.md"
@@ -6355,7 +6827,15 @@
      "statement": "An improper prior is a prior density that does not integrate to a finite value over the parameter space, such as the Haldane prior pi^-1(1-pi)^-1 (the Beta(0,0) kernel).",
      "concept": "Improper Prior Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Posterior Distribution",
+      "quote": "A prior is improper when its integral over the parameter space is infinite, so it cannot be normalised into a distribution",
+      "note": "Posterior Distribution teaches it; checked against LDA §4.4.2 and Gelman BDA3 §2.8 pp.51–53 in run 2026-10-31T04:56Z/9cfd",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:56Z/9cfd"
+     }
     },
     {
      "id": "r4",
@@ -6376,7 +6856,15 @@
      "statement": "With an improper prior, the posterior can still be proper or improper depending on the data; if the posterior is improper, it has no valid distribution and no posterior mean exists.",
      "concept": "Improper Prior Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Posterior Distribution",
+      "quote": "the result is a usable posterior only if it has a finite integral, and whether it does depends on the data",
+      "note": "Posterior Distribution teaches it; checked against Gelman BDA3 §2.8 pp.52–53 and §4.3 p.90 in run 2026-10-31T04:56Z/9cfd",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:56Z/9cfd"
+     }
     }
    ],
    "imported_from": "report.md"
@@ -6424,7 +6912,15 @@
        "page": "Bayesian Bornhuetter-Ferguson Model",
        "quote": "For a given $M_i$, a larger $\\beta_i$ is a smaller prior variance and more certainty about $M_i$. T"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Credibility",
+      "quote": "Credibility rises when risks genuinely differ from one another (large VHM)",
+      "note": "The tagged Credibility page: a small between-group (prior) variance means low credibility for the data, i.e. more weight on the prior mean.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:42Z/2782"
+     }
     },
     {
      "id": "r4",
@@ -6707,7 +7203,15 @@
        "page": "Classification Tree",
        "quote": "For two classes $G = 2\\hat{p}(1-\\hat{p})$ and $E = \\min(\\hat{p}, 1-\\hat{p})$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "K-Nearest Neighbors",
+      "quote": "so its error probability at $x_0$ is $1 - \\max_j \\Pr(Y = j \\mid X = x_0)$, which for two classes with $p = \\Pr(Y = 1 \\mid X = x_0)$ is $\\min\\{p,\\ 1-p\\}$",
+      "note": "K-Nearest Neighbors teaches it; checked against ISLR 2nd ed. §2.2.3 pp.38-39 in run 2026-10-31T05:10Z/8e26",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:10Z/8e26"
+     }
     },
     {
      "id": "r5",
@@ -6715,7 +7219,15 @@
      "statement": "The Bayes error rate on a test set is computed by averaging the Bayes error probabilities min{p, 1-p} evaluated at the test x values (the expected error rate at those points), rather than comparing to observed test labels.",
      "concept": "Bayes Error Rate",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "K-Nearest Neighbors",
+      "quote": "On a given set of test points, the Bayes classifier's expected error rate is the average of the per-point error probabilities $1 - \\max_j \\Pr(Y = j \\mid X = x_i)$ over those $x_i$",
+      "note": "K-Nearest Neighbors teaches it; checked against ISLR 2nd ed. §2.2.3 eq. (2.11) in run 2026-10-31T05:10Z/8e26",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:10Z/8e26"
+     }
     }
    ],
    "imported_from": "report.md"
@@ -6806,7 +7318,15 @@
      "statement": "In the Bühlmann-Straub model, the overall mean is estimated as the exposure-weighted average of the risks' sample means: mu-hat = sum m_i x-bar_i / m.",
      "concept": "Bühlmann-Straub Credibility",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Bühlmann-Straub Credibility",
+      "quote": "The overall mean is the exposure-weighted average of the risks' means, $\\hat{\\mu} = \\bar{X} = \\frac{1}{m}\\sum_{i=1}^{r} m_i \\bar{X}_i$",
+      "note": "Bühlmann-Straub Credibility teaches it; checked against LDA §9.6.2 in run 2026-10-31T04:56Z/9cfd",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:56Z/9cfd"
+     }
     },
     {
      "id": "r4",
@@ -6814,7 +7334,15 @@
      "statement": "The variance of the hypothetical means is estimated as a-hat = [sum m_i (x-bar_i - mu-hat)^2 - (r-1) v-hat] / [m - sum m_i^2 / m], where r is the number of risks.",
      "concept": "Empirical Bayes Nonparametric Estimation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Bühlmann-Straub Credibility",
+      "quote": "the unbiased VHM estimate with unequal exposures is $\\hat{a} = \\frac{\\sum_{i=1}^{r} m_i(\\bar{X}_i - \\bar{X})^2 - (r-1)\\hat{v}}{m - \\frac{1}{m}\\sum_{i=1}^{r} m_i^2}$, where $r$ is the number of risks",
+      "note": "Bühlmann-Straub Credibility teaches it; checked against LDA §9.6.2 in run 2026-10-31T04:56Z/9cfd",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:56Z/9cfd"
+     }
     },
     {
      "id": "r5",
@@ -6835,7 +7363,13 @@
      "statement": "To predict aggregate losses for a future period, multiply the credibility-estimated per-exposure mean by the future period's exposure.",
      "concept": "Bühlmann-Straub Credibility",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Plain arithmetic in this solution: per-exposure estimate times the question's future exposure.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:42Z/2782"
+     }
     }
    ],
    "imported_from": "report.md"
@@ -6852,7 +7386,15 @@
      "statement": "In a PCA biplot of standardized (scaled) variables, the angle between two variables' loading arrows approximates their correlation: a small angle means high positive correlation, a right angle means near-zero correlation, and opposite directions mean negative correlation.",
      "concept": "Principal Components Analysis",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loading Vector",
+      "quote": "the cosine of the angle between two arrows approximates the correlation between those variables — a small angle, highly positively correlated; a right angle, nearly uncorrelated; opposite directions, negatively correlated",
+      "note": "Loading Vector teaches it; checked against Greenacre, Biplots in Practice ch.6 p.63 in run 2026-10-31T05:08Z/61e8",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:08Z/61e8"
+     }
     },
     {
      "id": "r2",
@@ -6886,7 +7428,15 @@
      "statement": "PCA is performed on centered data, so a biplot score shows an observation's deviation from each variable's mean; it shows whether a value is above or below average but not whether the raw value is positive or negative.",
      "concept": "Principal Components Analysis",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loading Vector",
+      "quote": "A point far out along a variable's arrow is well above that variable's average, and a point near the origin is near average on both components; the plot cannot say whether the raw value itself is positive or negative",
+      "note": "Loading Vector teaches it; checked against ISLR 2nd ed. pp.500, 503 (PDF 506, 509) in run 2026-10-31T05:08Z/61e8",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:08Z/61e8"
+     }
     },
     {
      "id": "r5",
@@ -6894,7 +7444,15 @@
      "statement": "A biplot displays both observations (as principal component scores) and variables (as loading vectors) on the same axes for the first two principal components.",
      "concept": "Principal Components Analysis",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loading Vector",
+      "quote": "A **biplot** draws both on one pair of axes for the first two components: each observation as a point at its scores $(z_{i1}, z_{i2})$ and each variable as an arrow to its loadings $(\\phi_{j1}, \\phi_{j2})$",
+      "note": "Loading Vector teaches it; checked against ISLR 2nd ed. Fig. 12.1 caption, PDF p.508 in run 2026-10-31T05:08Z/61e8",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:08Z/61e8"
+     }
     }
    ],
    "imported_from": "report.md"
@@ -8300,7 +8858,15 @@
      "statement": "The squared-error objective for one observation is R_i(θ) = ½(y_i − f_θ(x_i))², where the ½ is included so the derivative has no factor of 2.",
      "concept": "Neural Network",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Backpropagation",
+      "quote": "differentiating the square brings down a 2 that cancels it, so $\\partial R_i/\\partial f_\\theta(x_i) = -\\left(y_i - f_\\theta(x_i)\\right)$",
+      "note": "Backpropagation teaches it; checked against ISLR 2nd ed. §10.7 eqs. (10.25), (10.28)-(10.29) in run 2026-10-31T05:10Z/8e26",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:10Z/8e26"
+     }
     },
     {
      "id": "r3",
@@ -8704,7 +9270,15 @@
      "statement": "A model whose predictions exceed actuals at the high end and fall short at the low end has overly extreme predictions, indicating poorer accuracy; a narrow range of predictions does not imply accuracy.",
      "concept": "Quantile Plot",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Quantile Plot",
+      "quote": "A model whose predictions are too extreme — above the actuals in the top buckets and below them in the bottom ones — scores poorly on predictive accuracy",
+      "note": "Quantile Plot teaches it; checked against Goldburd et al. §7.2.1 p.77 and Van Calster et al. (2019) in run 2026-10-31T05:10Z/8e26",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:10Z/8e26"
+     }
     },
     {
      "id": "r7",

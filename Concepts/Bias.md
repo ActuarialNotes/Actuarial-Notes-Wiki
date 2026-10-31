@@ -29,6 +29,7 @@ verification:
 - Bias does **not** invert through nonlinear functions: if $\hat\theta$ is unbiased for $\theta$, $g(\hat\theta)$ is generally biased for $g(\theta)$ (by Jensen's inequality)
 - Accepting a little bias to remove a lot of variance is the whole point of shrinkage, credibility weighting, and the [[Bias-Variance Tradeoff]] that governs model complexity
 - In modelling, bias also arises from the *model* rather than the estimator — an omitted predictor, an ignored [[Interaction]], or fitting a straight line to a curved relationship all bias the fitted values regardless of sample size
+- **Omitting an important explanatory variable** underfits the regression (Frees 2010, Ch. 6, on the effects of model misspecification). The fitted values are biased, and so are the coefficients of the included variables that are correlated with the omitted one. The variation the omitted variable would have explained stays in the residuals, so the residual sum of squares is larger and $s^2$ overestimates the error variance $\sigma^2$. Standard errors and prediction intervals built from that $s^2$ are wider than they need be. The total sum of squares depends only on the response, so it does not change; the larger residual share simply lowers $R^2$
 
 ![[Media/Figures/Bias.svg|340]]
 

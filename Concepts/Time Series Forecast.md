@@ -24,7 +24,9 @@ A **time series forecast** is the conditional expectation of a future value give
 - The $\psi_j$ are the coefficients of the infinite MA representation; for an AR(1), $\psi_j = \phi^{j}$, so the $h$-step variance is $\sigma^{2}\dfrac{1-\phi^{2h}}{1-\phi^{2}}$
 - **Where each model converges:** a stationary [[Autoregressive Model|AR]] decays to the mean with a bounded interval; an [[Moving Average Model|MA($q$)]] hits the mean exactly at $h > q$; a [[Random Walk]] stays flat at the last value with an interval widening as $\sqrt{h}$
 - The intervals assume the model and its parameters are **correct** — they carry process variance only, no parameter or model uncertainty, so they are optimistic in practice
-- Assess a forecast on a held-out tail of the series, not on the fitted data, using MAE, RMSE or MAPE
+- Assess a forecast on a held-out tail of the series, not on the fitted data. With $m$ out-of-sample forecast errors $e_t = y_t - \hat{y}_t$ and percentage errors $p_t = 100\,e_t / y_t$, the comparison statistics are averages of them:
+  - **Mean error** $\text{ME} = \frac{1}{m}\sum e_t$ and **mean percentage error** $\text{MPE} = \frac{1}{m}\sum p_t = \frac{100}{m}\sum e_t / y_t$ are signed: they measure **bias**, whether the forecasts run too high or too low, and errors of opposite sign cancel
+  - **Mean squared error** $\text{MSE} = \frac{1}{m}\sum e_t^2$ (or its root, RMSE), **mean absolute error** $\text{MAE} = \frac{1}{m}\sum |e_t|$ and **mean absolute percentage error** $\text{MAPE} = \frac{1}{m}\sum |p_t|$ measure size, so they never cancel. ME, MSE and MAE are in the data's units; MPE and MAPE are unit-free but break down when some $y_t$ is zero or near it
 
 ![[Media/Figures/Time_Series_Forecast.svg|340]]
 

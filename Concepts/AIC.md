@@ -28,6 +28,11 @@ The **Akaike Information Criterion (AIC)** is a model selection measure that bal
 - Derived from an information-theoretic perspective (Kullback–Leibler divergence)
 - For small samples, use the **corrected AIC**: $\text{AIC}_c = \text{AIC} + \dfrac{2p(p+1)}{n-p-1}$
 - Compare with [[BIC]], which uses a stronger penalty $\ln(n)$ instead of 2, favoring simpler models more aggressively for large $n$
+- **For least squares with Gaussian errors** (James et al., §6.1.3), maximum likelihood and least squares coincide, and for a model with $d$ predictors fitted to $n$ observations AIC takes the form below, up to irrelevant constants. It is proportional to Mallows' $C_p$, so the two choose the same model:
+
+> $$\text{AIC} = \frac{1}{n}\left(\text{RSS} + 2d\,\hat\sigma^2\right)$$
+
+- Here $\hat\sigma^2$ is an estimate of the error variance obtained **once, from the full model containing all the predictors** (the square of its residual standard error), and the **same value is used for every candidate**. The form comes from the likelihood one with $\sigma^2$ treated as known: then $-2\ell = \text{RSS}/\sigma^2$ plus a constant, so $-2\ell + 2p$ is $(\text{RSS} + 2p\sigma^2)/\sigma^2$ plus a constant, and multiplying by $\sigma^2/n$ gives the form above (counting the intercept or not shifts every model equally). Re-estimating $\hat\sigma^2$ from each candidate's own fit would change the scale of the criterion from model to model and break the comparison. James et al. note a second least-squares formula, for when $\sigma^2$ is not to be estimated, with a $\log(\text{RSS})$ term in place of $\text{RSS}$
 
 ![[Media/Figures/AIC.svg|340]]
 
@@ -39,3 +44,20 @@ The **Akaike Information Criterion (AIC)** is a model selection measure that bal
 > > $$\text{AIC}_1 = -2(-120) + 2(4) = 240 + 8 = 248$$
 > > $$\text{AIC}_2 = -2(-124) + 2(2) = 248 + 4 = 252$$
 > > The 3-predictor model has lower AIC (248 < 252), so it is preferred — the improvement in fit outweighs the added complexity.
+
+> [!example]- Least-Squares AIC With a Fixed Error Variance {Example}
+> Regressions are fitted to $n = 50$ observations. The full model, with every available predictor, has residual standard error $2$. Model A has $d = 2$ predictors and $\text{RSS} = 230$; model B has $d = 4$ and $\text{RSS} = 210$. Which has the lower AIC?
+>
+> > [!answer]-
+> > **Plan.** Take $\hat\sigma^2 = 2^2 = 4$ from the full model and use it for both candidates.
+> >
+> > $$
+> > \begin{align*}
+> > \text{AIC}_A &= \frac{230 + 2(2)(4)}{50} \\
+> > &= 4.92 \\
+> > \text{AIC}_B &= \frac{210 + 2(4)(4)}{50} \\
+> > &= 4.84
+> > \end{align*}
+> > $$
+> >
+> > Model B is preferred: its two extra predictors cut the RSS by $20$, more than the $16$ they add to the penalty. Using each model's own residual variance instead of the full model's would put the two numbers on different scales.

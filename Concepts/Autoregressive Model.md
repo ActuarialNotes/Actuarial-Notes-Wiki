@@ -25,6 +25,17 @@ An **autoregressive model of order $p$**, AR($p$), regresses a [[Time Series]] o
 - $\phi$ near 1 means slow mean reversion; $\phi$ near 0 means the series is nearly [[White Noise]]. Negative $\phi$ gives an alternating, oscillating series
 - Forecasts decay geometrically back to the mean: $\hat Y_{t+h} = \mu + \phi^{h}(Y_t - \mu)$
 
+**Fitting an AR(1) quickly** (Frees 2010, Ch. 8, the AR(1) model). Writing the model as $y_t = \beta_0 + \beta_1 y_{t-1} + \varepsilon_t$ with $\mathrm{Var}(\varepsilon_t) = \sigma^2$, the approximation to conditional least squares takes the slope from the lag-1 [[Autocorrelation Function|autocorrelation]] $r_1$ of the $T$ observations:
+
+> $$b_1 = r_1 = \frac{\sum_{t=2}^{T}(y_{t-1} - \bar{y})(y_t - \bar{y})}{\sum_{t=1}^{T}(y_t - \bar{y})^2}$$
+
+> $$b_0 = \bar{y}\,(1 - b_1)$$
+
+- The fitted value at time $t$ is $\hat{y}_t = b_0 + b_1 y_{t-1}$ and the residual is $e_t = y_t - \hat{y}_t$. The first observation has no predecessor, so there are residuals only for $t = 2, \dots, T$: $T - 1$ of them
+- The mean square error estimates $\sigma^2$ from those residuals, centred on their own average $\bar{e}$ (which need not be zero under this approximation). Two parameters were estimated from $T - 1$ residuals, so the divisor is $T - 3$:
+
+> $$s^2 = \frac{1}{T - 3}\sum_{t=2}^{T}(e_t - \bar{e})^2$$
+
 ![[Media/Figures/Autoregressive_Model.svg|340]]
 
 > [!example]- AR(1) Mean, Variance and Two-Step Forecast {Example}
@@ -35,3 +46,31 @@ An **autoregressive model of order $p$**, AR($p$), regresses a [[Time Series]] o
 > > $$\hat Y_{21} = 0.24 + 0.70(0.92) = 0.884$$
 > > $$\hat Y_{22} = 0.24 + 0.70(0.884) = 0.859$$
 > > Equivalently $\hat Y_{22} = 0.80 + 0.70^{2}(0.92 - 0.80) = 0.80 + 0.0588 = 0.859$ ✓ — the deviation from the mean shrinks by a factor $\phi$ each step.
+
+> [!example]- Fitting an AR(1) by the Lag-1 Autocorrelation {Example}
+> A series has $T = 5$ observations: $10, 11, 13, 12, 14$. Fit an AR(1) with $b_1 = r_1$ and estimate $\sigma^2$.
+>
+> > [!answer]-
+> > **Plan.** Compute $r_1$ from deviations about the mean, then $b_0$, then the four residuals and their spread.
+> >
+> > The mean is $\bar{y} = 12$, so the deviations are $-2, -1, 1, 0, 2$, with squares summing to $10$. The lagged products are $(-2)(-1) + (-1)(1) + (1)(0) + (0)(2) = 1$.
+> >
+> > $$
+> > \begin{align*}
+> > b_1 &= \frac{1}{10} \\
+> > &= 0.1 \\
+> > b_0 &= 12(1 - 0.1) \\
+> > &= 10.8
+> > \end{align*}
+> > $$
+> >
+> > The fitted values for $t = 2, \dots, 5$ are $11.8, 11.9, 12.1, 12.0$, so the residuals are $-0.8, 1.1, -0.1, 2.0$, with average $\bar{e} = 0.55$. Their squared deviations from $0.55$ sum to $4.65$:
+> >
+> > $$
+> > \begin{align*}
+> > s^2 &= \frac{4.65}{5 - 3} \\
+> > &= 2.325
+> > \end{align*}
+> > $$
+> >
+> > A small $r_1$ makes $b_0$ close to $\bar{y}$: the fit is nearly a constant mean, as it should be for a series with little lag-1 dependence.

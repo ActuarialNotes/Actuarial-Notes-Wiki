@@ -29,6 +29,7 @@ A **Decision Tree** is a [[Statistical Learning]] method that partitions the pre
 - Trees are grown by **greedy, top-down recursive binary splitting** until a stopping criterion is met (e.g., minimum node size)
 - **Pruning** uses **cost-complexity pruning**: minimize $\sum_m \text{RSS}(R_m) + \alpha |T|$, where $|T|$ is the number of terminal nodes and $\alpha \geq 0$ is a complexity penalty tuned by cross-validation
 - Decision trees are **highly interpretable** but have high variance — small data changes can produce very different trees
+- **Advantages and disadvantages** (James et al., §8.1.4). For: trees are very easy to explain, even easier than linear regression; some believe they mirror human decision-making more closely than regression and classification methods do; they can be **displayed graphically as a tree diagram and are easily interpreted even by a non-expert**, especially when small; and they handle qualitative predictors without dummy variables. Against: they generally predict less accurately than other regression and classification approaches, and they are non-robust, a small change in the data causing a large change in the final tree
 - [[Tree Ensemble]] methods (bagging, random forests, boosting) reduce variance
 
 ![[Media/Figures/Decision_Tree.svg|340]]

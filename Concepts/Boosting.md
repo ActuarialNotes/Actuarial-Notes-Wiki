@@ -19,6 +19,12 @@ verification:
 >
 > $$\hat{f}(x) = \sum_{b=1}^{B}\lambda\hat{f}^{b}(x)$$
 
+**The algorithm for regression trees** (James et al., §8.2.3, Algorithm 8.2):
+
+1. **Start from nothing.** Set $\hat{f}(x) = 0$ and $r_i = y_i$ for every observation in the training set, so the first tree is fitted to the responses themselves
+2. For $b = 1, 2, \dots, B$: fit a tree $\hat{f}^{b}$ with $d$ splits to the data $(X, r)$, add $\lambda \hat{f}^{b}$ to $\hat{f}$, and subtract $\lambda \hat{f}^{b}(x_i)$ from each residual $r_i$, as in the update above
+3. Output the boosted model $\hat{f}(x) = \sum_{b=1}^{B}\lambda\hat{f}^{b}(x)$
+
 **The three tuning parameters:**
 
 | Parameter | Meaning | Typical |

@@ -9,14 +9,15 @@ wiki_link:
   - Concepts/Term+Life+Insurance
   - Concepts/Present+Value
   - Concepts/Fractional+Age+Assumption
+  - Concepts/Nominal+Interest+Rate+Convertible+m-thly
 answer: "D"
 points: 1
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-23
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:b98bf17f9f9de58074509a9c28fe8d98b4ab1b28acc7e76d99119211cd82e440
+  content_hash: sha256:6db5280bc9aa061d7149b429b5bce503d8977287c38f88d20687cab2e842f0e4
   sources:
     - "SOA Exam FAM-L Sample Questions (Topics 7-10, Aug 2026 version), Q4.2, p.27 (question), sha256:4aaf3469628f2b63a689c187d963857a5a6e749c5eaca9978b264d854f60a28d — https://www.soa.org/globalassets/assets/files/edu/2024/fall/questions/2024-10-exam-fam-l-sample-questions.pdf"
     - "SOA Exam FAM-L Sample Solutions (Topics 7-10), Q4.2, p.18 (solution and key), sha256:9e7f7b03e0252ccb8f69e4f453d443d8d7cb43ef3945d05c935fdf234cae72ab — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/2024-10-exam-fam-l-sample-solutions.pdf"

@@ -9,14 +9,15 @@ wiki_link:
   - Concepts/Future+Loss+Random+Variable
   - Concepts/Percentile
   - Concepts/Life+Table
+  - Concepts/Annuity+Due
 answer: "C"
 points: 1
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-23
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:053c986c6422e47d2a462b791d5f9b14b8ee57c6f8b5672389842a1ec98a4c50
+  content_hash: sha256:dfbeadf57d51fa1f2755cbfc178e8d59ab596c142c8d69745a025cafbdde6f77
   sources:
     - "SOA Exam FAM-L Sample Questions (October 2024), Q7.41, p.125, sha256:4aaf3469628f2b63a689c187d963857a5a6e749c5eaca9978b264d854f60a28d — https://www.soa.org/globalassets/assets/files/edu/2024/fall/questions/2024-10-exam-fam-l-sample-questions.pdf"
     - "SOA Exam FAM-L Sample Solutions (October 2024), Q7.41, p.82, sha256:9e7f7b03e0252ccb8f69e4f453d443d8d7cb43ef3945d05c935fdf234cae72ab — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/2024-10-exam-fam-l-sample-solutions.pdf"

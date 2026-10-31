@@ -118,7 +118,15 @@
      "statement": "Remove commission, brokerage and internal expenses from treaty premium (multiply by one minus the expense ratio) before using it as the exposure base in the Stanard-Bühlmann method.",
      "concept": "Stanard-Bühlmann Method",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "The premium is each year's earned **risk pure premium**: the treaty premium net of reinsurance commissions, brokerage fees and internal expenses, adjusted to remove rate-level differences between years.",
+      "note": "Patrik p.454 (earlier Exam 7 reading, D-decision 31 Oct): the SB exposure base is premium net of commissions, brokerage and internal expenses.",
+      "date": "2026-10-31",
+      "run": "g8-cas7-chk-pk"
+     }
     },
     {
      "id": "r2",
@@ -204,7 +212,15 @@
      "statement": "Stanard-Bühlmann is preferred over chain ladder when reported losses fluctuate but the expected loss ratio to on-level premium is expected to be stable, since it does not leverage reported losses.",
      "concept": "Chain Ladder vs Stanard-Bühlmann",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "As long as those rate-relativity adjustments are reasonably accurate, Stanard-Bühlmann gives more accurate estimates than the chain ladder for the recent, immature years and overall.",
+      "note": "Patrik p.458 (with the next bullet's 'green years, where the chain ladder estimate has high variance'): SB is preferred over the chain ladder where reported losses are volatile, provided the on-level premium supports one ELR - the substance of CAS's sample answer, in Patrik's words.",
+      "date": "2026-10-31",
+      "run": "g8-cas7-chk-pk"
+     }
     },
     {
      "id": "r9",
@@ -271,7 +287,15 @@
      "statement": "Reinsurance loss data show persistent upward development because of inflation, cedents booking large claims at a modal value when first reported, and underestimation of ALAE.",
      "concept": "Reinsurance Loss Reserving Problems",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Reinsurance Reserving",
+      "quote": "**Persistent upward development.** Most reinsurance claim reserves develop upward. Economic and social inflation cause it. So does the cedant's claims staff reserving at modal values",
+      "note": "Patrik Problem 2, p.436: inflation, modal reserving and ALAE under-reserving drive persistent upward development (ALAE in the same bullet: 'ALAE also tends to be under-reserved.').",
+      "date": "2026-10-31",
+      "run": "g8-cas7-chk-pk"
+     }
     },
     {
      "id": "r4",
@@ -322,7 +346,15 @@
      "statement": "Reinsurers' data coding and IT systems often cannot keep pace with the complex, changing data needs of reinsurance, delaying capture of claims and necessary information.",
      "concept": "Reinsurance Loss Reserving Problems",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Reinsurance Reserving",
+      "quote": "**Data coding and IT systems.** The business, and the level of data detail expected of it, have grown faster than reinsurers' systems can handle and produce the reports marketing, underwriting, claims, accounting and actuarial staff ask for.",
+      "note": "Patrik Problem 6, pp.439-440.",
+      "date": "2026-10-31",
+      "run": "g8-cas7-chk-pk"
+     }
     }
    ]
   },
@@ -1165,7 +1197,15 @@
      "statement": "When credibility is a linear function of report lag, an accident year's Z equals the given credibility factor times its percentage reported, so more mature years get more weight on the chain ladder estimate.",
      "concept": "Credibility-Weighted Loss Development / Stanard-Bühlmann Blend",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "With report lag $\\text{Rlag}_k$ and a credibility factor $0 \\le CF \\le 1$, the weight on the chain ladder is $Z_k = CF \\times \\text{Rlag}_k$, and $\\text{IBNR}_k = Z_k \\cdot \\text{IBNR}^{CL}_k + (1 - Z_k) \\cdot \\text{IBNR}^{SB}_k$.",
+      "note": "Patrik Formula 7.66, p.458: Z = CF x report lag on the chain ladder IBNR, 1 - Z on the SB IBNR.",
+      "date": "2026-10-31",
+      "run": "g8-cas7-chk-pk"
+     }
     },
     {
      "id": "r7",
@@ -3868,7 +3908,15 @@
      "statement": "Reinsurance reserving is complicated by persistent upward development of most claim reserves, often because primary insurers tend to underestimate (under-reserve) ALAE on reported claims.",
      "concept": "Reinsurance Loss Reserving Challenges",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Reinsurance Reserving",
+      "quote": "ALAE also tends to be under-reserved.",
+      "note": "Patrik Problem 2, p.436, in the bullet headed 'Persistent upward development. Most reinsurance claim reserves develop upward.'",
+      "date": "2026-10-31",
+      "run": "g8-cas7-chk-pk"
+     }
     },
     {
      "id": "r3",
@@ -3876,7 +3924,13 @@
      "statement": "To detect possible ALAE under-reserving in claim data, compute the ratio of ALAE to loss for each claim and compare across claims or accident years, where lower ratios on less mature claims suggest ALAE is understated and will develop upward.",
      "concept": "Reinsurance Loss Reserving Challenges",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "CAS's answer asks for two of three issues; issues 1 (report lag, r1) and 3 (heterogeneity / retention change, r4) earn full credit without it. The ALAE-to-loss ratio table only demonstrates issue 2 from the given data, one route among the credited alternatives; it is in neither Patrik nor Friedland.",
+      "date": "2026-10-31",
+      "run": "g8-cas7-chk-pk"
+     }
     },
     {
      "id": "r4",
@@ -5710,7 +5764,15 @@
      "statement": "In Patrik's credibility weighting, the weight on the chain ladder IBNR is Z = (percent reported) × (selected credibility factor), and the final IBNR is Z × chain ladder IBNR + (1 − Z) × Stanard-Bühlmann IBNR for that year.",
      "concept": "Patrik Credibility Weighting of IBNR",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "With report lag $\\text{Rlag}_k$ and a credibility factor $0 \\le CF \\le 1$, the weight on the chain ladder is $Z_k = CF \\times \\text{Rlag}_k$, and $\\text{IBNR}_k = Z_k \\cdot \\text{IBNR}^{CL}_k + (1 - Z_k) \\cdot \\text{IBNR}^{SB}_k$.",
+      "note": "Patrik Formula 7.66, p.458: Z = CF x report lag on the chain ladder IBNR, 1 - Z on the SB IBNR.",
+      "date": "2026-10-31",
+      "run": "g8-cas7-chk-pk"
+     }
     }
    ]
   },
@@ -6188,10 +6250,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Cape Cod Method",
-      "quote": "A **decay-weighted** variant (generalized Cape Cod) weights recent years more heavily in the ELR estimate, recognizing that the loss ratio level genuinely drifts.",
-      "note": "Cape Cod Method (tagged) estimates one ELR from all years and names the decay-weighted variant for a loss ratio that drifts; a trend in the years' loss ratios breaks the single-ELR assumption, over- and under-reserving at the two ends",
-      "date": "2026-10-30",
-      "run": "g8-cas7-sort"
+      "quote": "A **decay-weighted** variant (generalized Cape Cod) estimates a separate ELR for each year, weighting the other years less the further they lie from it, recognizing that the loss ratio level drifts.",
+      "note": "Re-quote of the g8-cas7-sort resolution: this run restated the bullet it quoted (Cape Cod F-004, to Gluck 1997 p.495 - the old text said 'weights recent years more heavily', which is wrong). The page still uses one ELR for every year and names the per-year variant for a drifting loss ratio, which is what the earlier resolution relied on.",
+      "date": "2026-10-31",
+      "run": "g8-cas7-chk-pk"
      }
     }
    ]
@@ -7183,7 +7245,15 @@
      "statement": "Reinsurers experience persistent upward loss development because cedants tend to reserve at modal values and understate ALAE, and claims reaching the reinsurance layer tend to be larger than the modal claim.",
      "concept": "Reinsurance Loss Reserving Uncertainty",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Reinsurance Reserving",
+      "quote": "faced with too little information on a potentially serious claim, a claims person tends to reserve to \"expectation\", read as the mode of the distribution. That is enough for most claims, but the few that blow up above the mode are the ones the excess reinsurer covers.",
+      "note": "Patrik Problems 1-2, pp.435-436: modal reserving, upward development, ALAE under-reserved (same bullet).",
+      "date": "2026-10-31",
+      "run": "g8-cas7-chk-pk"
+     }
     },
     {
      "id": "r3",
@@ -7907,10 +7977,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Cape Cod Method",
-      "quote": "A **decay-weighted** variant (generalized Cape Cod) weights recent years more heavily in the ELR estimate, recognizing that the loss ratio level genuinely drifts.",
-      "note": "Cape Cod Method (tagged) uses one ELR for every year and names the variant for a drifting loss ratio; checking each year's implied loss ratio (ultimate over premium) for a trend tests that assumption directly",
-      "date": "2026-10-30",
-      "run": "g8-cas7-sort"
+      "quote": "A **decay-weighted** variant (generalized Cape Cod) estimates a separate ELR for each year, weighting the other years less the further they lie from it, recognizing that the loss ratio level drifts.",
+      "note": "Re-quote of the g8-cas7-sort resolution: this run restated the bullet it quoted (Cape Cod F-004, to Gluck 1997 p.495 - the old text said 'weights recent years more heavily', which is wrong). The page still uses one ELR for every year and names the per-year variant for a drifting loss ratio, which is what the earlier resolution relied on.",
+      "date": "2026-10-31",
+      "run": "g8-cas7-chk-pk"
      }
     },
     {
@@ -9045,7 +9115,15 @@
      "statement": "Reserving a potentially serious claim to the mode (which is low because most claims are small) consistently under-reserves loss and ALAE, and reinsurance claims tend to show persistent upward development, so modal case reserves are inadequate as initial reserves.",
      "concept": "Reinsurance Reserving Challenges",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Reinsurance Reserving",
+      "quote": "faced with too little information on a potentially serious claim, a claims person tends to reserve to \"expectation\", read as the mode of the distribution. That is enough for most claims, but the few that blow up above the mode are the ones the excess reinsurer covers.",
+      "note": "Patrik Problems 1-2, pp.435-436: modal reserving, upward development, ALAE under-reserved (same bullet).",
+      "date": "2026-10-31",
+      "run": "g8-cas7-chk-pk"
+     }
     },
     {
      "id": "r3",
@@ -9953,10 +10031,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Cape Cod Method",
-      "quote": "A **decay-weighted** variant (generalized Cape Cod) weights recent years more heavily in the ELR estimate, recognizing that the loss ratio level genuinely drifts.",
-      "note": "Cape Cod Method (tagged) uses one ELR for every year and names the variant for a drifting loss ratio; checking each year's implied loss ratio (ultimate over premium) for a trend tests that assumption directly",
-      "date": "2026-10-30",
-      "run": "g8-cas7-sort"
+      "quote": "A **decay-weighted** variant (generalized Cape Cod) estimates a separate ELR for each year, weighting the other years less the further they lie from it, recognizing that the loss ratio level drifts.",
+      "note": "Re-quote of the g8-cas7-sort resolution: this run restated the bullet it quoted (Cape Cod F-004, to Gluck 1997 p.495 - the old text said 'weights recent years more heavily', which is wrong). The page still uses one ELR for every year and names the per-year variant for a drifting loss ratio, which is what the earlier resolution relied on.",
+      "date": "2026-10-31",
+      "run": "g8-cas7-chk-pk"
      }
     },
     {
@@ -9978,10 +10056,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Cape Cod Method",
-      "quote": "A **decay-weighted** variant (generalized Cape Cod) weights recent years more heavily in the ELR estimate, recognizing that the loss ratio level genuinely drifts.",
-      "note": "Cape Cod Method (tagged) estimates one ELR from all years and names the decay-weighted variant for a loss ratio that drifts; a trend in the years' loss ratios breaks the single-ELR assumption, over- and under-reserving at the two ends",
-      "date": "2026-10-30",
-      "run": "g8-cas7-sort"
+      "quote": "A **decay-weighted** variant (generalized Cape Cod) estimates a separate ELR for each year, weighting the other years less the further they lie from it, recognizing that the loss ratio level drifts.",
+      "note": "Re-quote of the g8-cas7-sort resolution: this run restated the bullet it quoted (Cape Cod F-004, to Gluck 1997 p.495 - the old text said 'weights recent years more heavily', which is wrong). The page still uses one ELR for every year and names the per-year variant for a drifting loss ratio, which is what the earlier resolution relied on.",
+      "date": "2026-10-31",
+      "run": "g8-cas7-chk-pk"
      }
     },
     {
@@ -10987,7 +11065,15 @@
      "statement": "In the credibility-weighted combination of the Stanard-Bühlmann and chain ladder methods, the weight on the chain ladder is Z equal to the selected credibility factor times the report lag, and the remaining 1 − Z goes to Stanard-Bühlmann; the IBNR is the weighted average of the two IBNR estimates.",
      "concept": "Credibility-Weighted Combination of Chain Ladder and Stanard-Bühlmann",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "With report lag $\\text{Rlag}_k$ and a credibility factor $0 \\le CF \\le 1$, the weight on the chain ladder is $Z_k = CF \\times \\text{Rlag}_k$, and $\\text{IBNR}_k = Z_k \\cdot \\text{IBNR}^{CL}_k + (1 - Z_k) \\cdot \\text{IBNR}^{SB}_k$.",
+      "note": "Patrik Formula 7.66, p.458: Z = CF x report lag on the chain ladder IBNR, 1 - Z on the SB IBNR.",
+      "date": "2026-10-31",
+      "run": "g8-cas7-chk-pk"
+     }
     },
     {
      "id": "r6",
@@ -11041,7 +11127,15 @@
      "statement": "Reinsurance reserves show persistent upward development of reported losses, caused by primary insurers under-reserving ALAE, setting case reserves at modal values, and social and economic inflation.",
      "concept": "Reinsurance Loss Reserving",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Reinsurance Reserving",
+      "quote": "**Persistent upward development.** Most reinsurance claim reserves develop upward. Economic and social inflation cause it. So does the cedant's claims staff reserving at modal values",
+      "note": "Patrik Problem 2, p.436: inflation, modal reserving and ALAE under-reserving drive persistent upward development (ALAE in the same bullet: 'ALAE also tends to be under-reserved.').",
+      "date": "2026-10-31",
+      "run": "g8-cas7-chk-pk"
+     }
     },
     {
      "id": "r3",
@@ -11079,7 +11173,15 @@
      "statement": "Reinsurer IT and data-coding systems struggle to keep up with constantly changing information requirements across varied contract types, so reserve data may be outdated or erroneous.",
      "concept": "Reinsurance Loss Reserving",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Reinsurance Reserving",
+      "quote": "**Data coding and IT systems.** The business, and the level of data detail expected of it, have grown faster than reinsurers' systems can handle and produce the reports marketing, underwriting, claims, accounting and actuarial staff ask for.",
+      "note": "Patrik Problem 6, pp.439-440.",
+      "date": "2026-10-31",
+      "run": "g8-cas7-chk-pk"
+     }
     },
     {
      "id": "r6",
@@ -11087,7 +11189,15 @@
      "statement": "Greater uncertainty in reinsurance reserves gives reinsurers a higher reserve-to-surplus ratio than primary insurers, so management may be reluctant to accept the higher indicated reserves and must be convinced.",
      "concept": "Reinsurance Loss Reserving",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Reinsurance Reserving",
+      "quote": "**Reserve to surplus.** An adequate loss reserve is larger relative to surplus for a reinsurer, and the other problems make it both larger and more uncertain.",
+      "note": "Patrik Problem 7, p.440; the same bullet carries management's disbelief and the need to persuade them.",
+      "date": "2026-10-31",
+      "run": "g8-cas7-chk-pk"
+     }
     }
    ]
   },
@@ -11368,7 +11478,15 @@
        "page": "Credible Loss Ratio Reserve",
        "quote": "Neuhaus's is $Z_i = p_i \\sum_k m_k$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Credible Loss Ratio Reserve",
+      "quote": "Neuhaus's is $Z_i = p_i \\sum_k m_k$",
+      "note": "Re-quote: commit 822d12c4 extended the sentence (': the payout factor times a constant ...'), so the old quote with its full stop no longer matched. Hürlimann eq. 3.3.",
+      "date": "2026-10-31",
+      "run": "g8-cas7-chk-pk"
+     }
     },
     {
      "id": "r4",

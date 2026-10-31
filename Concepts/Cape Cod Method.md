@@ -1,11 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:a1f32c4782eb28851814e1469bbe57aaa55907bb9eba99f1a1d8e9e6a0dfcc7d
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:b691de0d2a524b7f3bcad65ba16c4fcf22d6273a2cc9ec668f0bffc75848ad1e
+  sources:
+    - "Patrik, Reinsurance, Ch.7 of Foundations of Casualty Actuarial Science (4th ed., CAS 2001) — Exam 7's reading before Friedland (2022), printed pp.451-458 (PDF pp.109-116: CL and BF disadvantages; Stanard-Bühlmann method, earned risk pure premium net of commissions, brokerage and internal expenses, Formula 7.64, used-up premium, Table 7.65 and the accuracy comparison; Credibility IBNR, Formula 7.66), sha256:26f2fc8441b1a2f8b335a9bfc9e20f0c742fa340c4b7f6eff93376c3c340cf06 — https://www.casact.org/sites/default/files/database/studynotes_ch7.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, Version 3, 2010), Ch.10 Cape Cod Technique, PDF pp.180-185 (printed 174-179: Cape Cod = reported BF with the expected claim ratio from reported experience; used-up premium = EP x % reported; % reported = 1/CDF; not as appropriate as BF for thin or volatile data; on-level premium and trended claims required in theory; Scenario 3 case-strength overstatement), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+    - "Gluck, Balancing Development and Trend in Loss Reserve Analysis (PCAS LXXXIV, 1997), printed pp.482, 494-496 (PDF pp.1, 13-15: Generalized Cape Cod; Cape Cod gives excessive weight to out-of-date results; decay weight D^|i-j| decreases with the trending period, so each year of origin gets its own drifting expected pure premium, eq. 6.1), sha256:98aa10a8d79b378de986f403150d498778088c48a9d0d5f4f18689e664a9da1c — https://casact.org/sites/default/files/database/proceed_proceed97_97482.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Cape Cod Method.md
@@ -19,13 +22,13 @@ verification:
 
 - **Used-up premium** $\text{EP}_i / \text{CDF}_i$ is the share of each year's premium "exposed" to the losses reported so far. Weighting by it puts each accident year on a common maturity footing, so an immature year contributes little to the ELR estimate — as it should, having reported little.
 - Once the ELR is in hand, the IBNR formula is identical to BF. The whole difference between the two methods is **where the a priori comes from**: BF imports it, Cape Cod estimates it.
-- That makes Cape Cod the right choice when **no credible external ELR exists** — a new programme, a book whose pricing history is unreliable — and it removes the single largest source of BF error. The cost is that the estimate is no longer independent of the data: a systematically distorted triangle now corrupts the a priori as well as the development.
-- Premium **must be on level** and losses must be trended to a common cost level before the ELR is computed, or the derived ratio blends years written at different rate levels and different cost levels into one number. This is Cape Cod's most-missed requirement.
+- That makes Cape Cod the right choice when **no credible external ELR exists** — a book whose pricing history is unreliable — and it removes BF's dependence on a judgmentally selected loss ratio. The cost is that the estimate is no longer independent of the data: a systematically distorted triangle now corrupts the a priori as well as the development.
+- Premium **must be on level** and losses must be trended to a common cost level before the ELR is computed, or the derived ratio blends years written at different rate levels and different cost levels into one number.
 - Cape Cod converges to the [[Chain Ladder Method|chain ladder]] as cohorts mature and to the [[Expected Loss Method|expected claims]] technique for very immature ones — the same limiting behaviour as BF.
-- A **decay-weighted** variant (generalized Cape Cod) weights recent years more heavily in the ELR estimate, recognizing that the loss ratio level genuinely drifts.
+- A **decay-weighted** variant (generalized Cape Cod) estimates a separate ELR for each year, weighting the other years less the further they lie from it, recognizing that the loss ratio level drifts.
 - **Patrik's chapter, Exam 7's reading before Friedland (2022), adds** (not on the current outline), for reinsurance:
   - **Exposure base.** The premium is each year's earned **risk pure premium**: the treaty premium net of reinsurance commissions, brokerage fees and internal expenses, adjusted to remove rate-level differences between years. Commissions and brokerage are easy to net out, being coded by contract. Internal expenses are harder, and if they cannot be netted out they can be left in, since only a relative exposure base is needed.
-  - **Against the chain ladder.** The ELR comes from the overall reported experience rather than from judgment, though each year's IBNR then depends heavily on its rate-level adjusted premium. As long as those rate-relativity adjustments are reasonably accurate, Stanard-Bühlmann gives more accurate estimates than the chain ladder for the recent, immature years and overall.
+  - **Against the chain ladder.** The ELR comes from the overall reported experience rather than being selected judgmentally, as in Bornhuetter-Ferguson, though each year's IBNR then depends heavily on its rate-level adjusted premium. As long as those rate-relativity adjustments are reasonably accurate, Stanard-Bühlmann gives more accurate estimates than the chain ladder for the recent, immature years and overall.
   - **Credibility IBNR.** When the rate-level adjustments are not fully trusted, the two estimates are weighted together: more weight on Stanard-Bühlmann for green years, where the chain ladder estimate has high variance, and more on the chain ladder for older years, where the cumulative rate-level adjustments are trusted less. With report lag $\text{Rlag}_k$ and a credibility factor $0 \le CF \le 1$, the weight on the chain ladder is $Z_k = CF \times \text{Rlag}_k$, and $\text{IBNR}_k = Z_k \cdot \text{IBNR}^{CL}_k + (1 - Z_k) \cdot \text{IBNR}^{SB}_k$.
 
 ![[Media/Figures/Cape_Cod_Method.svg|340]]

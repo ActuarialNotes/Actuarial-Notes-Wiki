@@ -1,11 +1,12 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
   content_hash: sha256:e45b3b626ffce46a709b7abc5368c5a5a9e00f7132138396a0b94225f2e78974
-  sources: []
+  sources:
+    - "Hürlimann, Credible Loss Ratio Claims Reserves: The Benktander, Neuhaus and Mack Methods Revisited (ASTIN Bulletin 39(1), 2009), printed pp.81-94 (PDF pp.1-14: eqs 2.1-2.8, 3.1-3.5, 4.4-4.7, 4.11, 6.1-6.14, Theorem 6.1, abstract and Section 1 conclusions), sha256:83ebe8ec5758fdb800e168175d6b7f2a6862a2d85bf8314875fcc7d5d1453c28 — https://www.casact.org/sites/default/files/2021-03/7_Hurlimann.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Credible Loss Ratio Reserve.md

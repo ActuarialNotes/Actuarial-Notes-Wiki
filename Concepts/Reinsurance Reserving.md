@@ -1,14 +1,15 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-30
+  status: verified
+  confidence: high
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
   content_hash: sha256:6be9e458ce42eac4a7e763551d1aca205bdba97f3ea07d39490ef400c61b0068
   sources:
     - "Friedland, Reserving for Reinsurance (CAS Study Note — Exam 7, (c)2023 CAS; cited by the outline as 2022), PDF pp.10, 26-28, 32-33, 35-41, 43, 45-48, 50-56, 66, 69-72, sha256:6da495a26206ececf40a3c3fc8fb3db04556c940242f5bcffe2b21b7e4445ceb — https://www.casact.org/sites/default/files/2022-11/Exam7_Study_Note_Friedland.pdf"
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, Version 3, 2010), PDF pp.159-160 (Ch.9: % unreported = 1.00 minus the inverse of the reported CDF), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
     - "CAS, Exam 7 Content Outline, Fall 2026 (Exam_7_CO_2026_F v04 2026_9_16), PDF pp.3-6 (tasks A.ii.4 = 5, A.v.1-3 = 15-17; Teng and Perkins excluding Section 5 with Feldblum Sections 1-2; Friedland A.v.1-A.v.3), sha256:be1833c4f35a9344e33b1c48336dca9724d6556890997b3d8715f9de709ca5ed — https://www.casact.org/sites/default/files/2026-03/Exam_7_CO_2026_Fall.pdf"
+    - "Patrik, Reinsurance, Ch.7 of Foundations of Casualty Actuarial Science (4th ed., CAS 2001) — Exam 7's reading before Friedland (2022), printed pp.434-440 (PDF pp.92-98: Problems 1, 2, 6 and 7 of the seven reinsurance loss reserving problems), sha256:26f2fc8441b1a2f8b335a9bfc9e20f0c742fa340c4b7f6eff93376c3c340cf06 — https://www.casact.org/sites/default/files/database/studynotes_ch7.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Reinsurance Reserving.md

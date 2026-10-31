@@ -22061,7 +22061,15 @@
        "page": "Territorial Rating",
        "quote": "**Flattening a territory differential** has the effect Werner & Modlin describe for any rating variable: risks with different expected costs pay the same rate, so the low-cost risks subsidise the high-cost ones, and a company doing this while competitors differentiate faces [[Adverse Selection|adverse selection]]"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Classification Ratemaking",
+      "quote": "an insurer that charges one average rate to a heterogeneous group loses the better risks to competitors that price them properly, and retains the worse ones",
+      "note": "Classification Ratemaking (one link from Territory Ratemaking) teaches the subsidy and adverse selection that inaccurate relativities cause (Werner Ch.9).",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort3"
+     }
     }
    ]
   },
@@ -22077,7 +22085,15 @@
      "statement": "The homeowners rate per $1,000 of coverage equals expected frequency times expected severity limited to the amount of insurance (pure premium), divided by the amount of insurance in thousands.",
      "concept": "Homeowners Insurance Rating by Amount of Insurance",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Coinsurance Rating",
+      "quote": "is set by the face amount chosen, as expected indemnity divided by face value",
+      "note": "Taught on the tagged Coinsurance Rating page: rate per amount of insurance = f x E[min(L,F)] / F (Werner Ch.11 p.212); the check missed it.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort3"
+     }
     },
     {
      "id": "r2",
@@ -22284,7 +22300,15 @@
      "statement": "Compute age-to-age development factors as ratios of reported loss at successive maturities from a loss triangle, and select a factor for each interval by averaging the observed factors.",
      "concept": "Loss Development Method",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Age to Age Factor",
+      "quote": "is the ratio of a cohort's cumulative amount at one maturity to its amount at the previous maturity",
+      "note": "Age to Age Factor (a syllabus page) defines the factor and its selection by averaging the column; the check missed it.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort3"
+     }
     },
     {
      "id": "r2",
@@ -22867,7 +22891,13 @@
      "statement": "A law limiting benefits changes claim severity but not claim counts, so the claim count triangle needs no adjustment for it.",
      "concept": "Claim Counts vs Severity Effects",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Data the question gives: it states the law's expected impact is a 25% reduction in claim severity, so the count triangle needs no adjustment.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort3"
+     }
     },
     {
      "id": "r6",
@@ -22875,7 +22905,13 @@
      "statement": "With no development beyond the last observed maturity, the tail factor is 1.000, and with no loss trend severities need no trend adjustment across accident years.",
      "concept": "Tail Factor and Loss Trend",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Data the question gives: it states there is no development after 36 months and no loss trend.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort3"
+     }
     }
    ]
   },
@@ -23035,7 +23071,15 @@
      "statement": "The expected incremental claims in a given calendar year equal the difference between projected cumulative amounts at the end and the start of the development period that falls in that calendar year (a diagonal of the triangle), not the projection to ultimate.",
      "concept": "Calendar Year Incremental Development",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Actual vs Expected Analysis",
+      "quote": "the share of ultimate the pattern says should report (or be paid) between the two valuations",
+      "note": "Actual vs Expected Analysis (syllabus page) teaches expected emergence between two valuations from the pattern (Friedland Ch.15 pp.350-351).",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort3"
+     }
     },
     {
      "id": "r3",
@@ -23802,7 +23846,15 @@
        "page": "Unallocated Loss Adjustment Expenses ULAE",
        "quote": "Drops the $50/50$ assumption entirely: ULAE is allocated to claim events (opening, maintenance, closing) with selected weights, and the resulting ratio is applied to the corresponding unpaid counts or dollars."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Unallocated Loss Adjustment Expenses ULAE",
+      "quote": "ULAE is allocated to claim events (opening, maintenance, closing) with selected weights, and the resulting ratio is applied to the corresponding unpaid dollars",
+      "note": "Stale: the tagged ULAE page was reworded; the Conger-Nolibos teaching is still there (Friedland Ch.16).",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort3"
+     }
     }
    ]
   },
@@ -23869,7 +23921,15 @@
      "statement": "In the paid ALAE to paid claims ratio technique, the development factor is the ultimate ALAE-to-claims ratio divided by the paid ALAE-to-paid claims ratio.",
      "concept": "Ratio of Paid ALAE to Paid Claims Technique",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Allocated Loss Adjustment Expense",
+      "quote": "develop a ratio of ALAE to loss and apply it to projected losses",
+      "note": "The tagged ALAE page teaches developing the ratio of ALAE to loss (Friedland Ch.16); a development factor on that ratio is ultimate ratio over current ratio, as for any triangle.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort3"
+     }
     },
     {
      "id": "r5",
@@ -24373,7 +24433,13 @@
      "statement": "To decide whether to implement a rate change, net the one-time implementation cost against only the scenario that implements the change, then compare it to the profit of the alternative scenario.",
      "concept": "Cost-Benefit of Rate Implementation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "A step of this solution's plan: netting the one-time cost the question gives against the scenario that incurs it and comparing profits.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort3"
+     }
     },
     {
      "id": "r6",
@@ -24966,7 +25032,15 @@
        "page": "Rating Variable",
        "quote": "It must be statistically related to expected losses; a causal story strengthens the case, but ASOP No. 12 does not require one."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Generalized Linear Model",
+      "quote": "Output is judged on more than significance: consistency of the pattern across levels, standard errors",
+      "note": "The GLM page (tagged, syllabus) teaches judging a variable by the consistency of its pattern across levels (Werner Ch.10 p.179).",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort3"
+     }
     },
     {
      "id": "r4",
@@ -25785,7 +25859,13 @@
      "statement": "Severity is an average, so severities of sub-periods (e.g., half-years) cannot be summed to get an annual severity; compute ultimate claims for each sub-period and add the dollars.",
      "concept": "Frequency-Severity Technique",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Arithmetic: a severity is an average, so sub-period severities are not summed; ultimate dollars are added instead.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort3"
+     }
     },
     {
      "id": "r3",
@@ -25810,7 +25890,13 @@
      "statement": "When development factors differ systematically by season (e.g., first versus second half of the year), select separate development patterns for each season rather than averaging across all periods.",
      "concept": "Seasonality in Development Patterns",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "A selection judgment on the question's own half-year data; Friedland gives no seasonal rule (Development Triangle, in reach, notes finer periods show seasonality).",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort3"
+     }
     },
     {
      "id": "r5",
@@ -25902,7 +25988,15 @@
      "statement": "A tail factor (the oldest age-to-ultimate factor) can be derived from the ultimate claims already estimated for the oldest accident year divided by its latest reported claims.",
      "concept": "Tail Factor",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Chain Ladder Method",
+      "quote": "projects each cohort to ultimate by multiplying its latest cumulative amount by a",
+      "note": "The chain-ladder relation U = C x CDF (syllabus page), read backwards with the question's own ultimate for the oldest year, gives the tail.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort3"
+     }
     },
     {
      "id": "r4",
@@ -26271,7 +26365,15 @@
        "page": "Generalized Cape Cod Method",
        "quote": "Weighting the developed loss ratios by full premium gives immature years far too much say."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "is the share of each year's premium \"exposed\" to the losses reported so far.",
+      "note": "The tagged Cape Cod page teaches that used-up premium pairs with reported (undeveloped) losses (Friedland Ch.10).",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort3"
+     }
     },
     {
      "id": "r5",
@@ -26490,7 +26592,13 @@
      "statement": "The tail severity at age m equals the count-weighted average of the severity of claims closing at age m and the tail severity at the next age, which allows building tail severities recursively from a later-age tail severity.",
      "concept": "Frequency-Severity Method (Disposal Rate Technique)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Arithmetic: a pooled average severity is the count-weighted average of its parts; the tail-severity definition itself is the write item r1/r2.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort3"
+     }
     },
     {
      "id": "r5",
@@ -26582,7 +26690,15 @@
        "page": "Berquist-Sherman Method",
        "quote": "$$\\text{Adjusted Case}_{\\text{AY},n} = \\text{Case}_{\\text{latest},n} \\times \\left(1 + t\\right)^{-(\\text{years before latest})}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Berquist-Sherman Method",
+      "quote": "Trend the latest diagonal's average case outstanding backwards at",
+      "note": "Stale: the tagged Berquist-Sherman page still teaches de-trending the latest diagonal's average case outstanding (Friedland Ch.13), now as a numbered step.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort3"
+     }
     },
     {
      "id": "r5",
@@ -26595,7 +26711,15 @@
        "page": "Berquist-Sherman Method",
        "quote": "$$\\text{Adjusted Reported}_{\\text{AY},n} = \\text{Paid}_{\\text{AY},n} + \\text{Adjusted Case}_{\\text{AY},n}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Berquist-Sherman Method",
+      "quote": "Multiply the restated averages by the open claim counts to get adjusted case reserves, add paid, and rebuild the reported triangle.",
+      "note": "Stale: the tagged Berquist-Sherman page still teaches adjusted reported = paid + adjusted average case x open counts (Friedland Ch.13).",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort3"
+     }
     },
     {
      "id": "r6",
@@ -26835,7 +26959,13 @@
      "statement": "A multi-year weighted average ULAE ratio equals total paid ULAE divided by total paid claims over the period, so total ULAE equals ratio times total paid claims and a missing year's ULAE can be found by subtracting known years.",
      "concept": "Classical ULAE Technique",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Arithmetic: a multi-year weighted ULAE ratio is total paid ULAE over total paid claims, with the ratio given by the question; the classical ratio is on the tagged ULAE page.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort3"
+     }
     },
     {
      "id": "r6",
@@ -27843,7 +27973,13 @@
      "statement": "To measure the effect of price-based switching, compare the insurer's rate to the competitor's rate for each risk class: the class where the insurer is cheaper gains a share of the competitor's policies and the class where it is more expensive loses that share of its own, then recompute the portfolio mix and profit as premium minus expected losses.",
      "concept": "Adverse Selection",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "A step of this solution's plan on the switching shares the question gives; adverse selection itself is on the tagged Adverse Selection page.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort3"
+     }
     }
    ]
   },
@@ -27907,7 +28043,13 @@
        "page": "Liability Loss Exposure",
        "quote": "any condition or situation that presents the possibility of a claim alleging that a person or organization is legally responsible for injury or damage suffered by another party."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Applying the proportionality criterion (taught on the tagged Exposure Base page, Werner p.49) to the liability coverage the question describes.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort3"
+     }
     },
     {
      "id": "r5",
@@ -27920,7 +28062,13 @@
        "page": "Property Loss Exposure",
        "quote": "$\\Delta V$ is the reduction in the value of the property, measured on whichever valuation basis applies."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Applying the proportionality criterion (taught on the tagged Exposure Base page, Werner p.49) to the physical damage coverage the question describes.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort3"
+     }
     },
     {
      "id": "r6",
@@ -28238,7 +28386,13 @@
        "page": "Territorial Rating",
        "quote": "With, say, $Z = 0.45$, the credibility-weighted relativity is $0.45(1.56) + 0.55(1.00) = 1.25$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Arithmetic on the question's own instruction to move a stated fraction of the way from current to indicated.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort3"
+     }
     },
     {
      "id": "r5",
@@ -28314,7 +28468,13 @@
        "page": "Uniform Continuous Distribution",
        "quote": "$E[X] = (a+b)/2$, $\\text{Var}(X) = (b-a)^2/12$, and $F(x) = (x-a)/(b-a)$ for $a < x < b$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Prerequisite probability, not Exam 5 course content: a uniform distribution's mean is its midpoint, and the question states losses are uniform within each layer.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort3"
+     }
     },
     {
      "id": "r2",
@@ -28327,7 +28487,15 @@
        "page": "Layer of Insurance",
        "quote": "$E[\\text{layer loss}] = E[N]\\left(E[X \\wedge b] - E[X \\wedge a]\\right)$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Coinsurance Rating",
+      "quote": "is set by the face amount chosen, as expected indemnity divided by face value",
+      "note": "Taught on the tagged Coinsurance Rating page: rate per amount of insurance = f x E[min(L,F)] / F (Werner Ch.11 p.212); the check missed it.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort3"
+     }
     },
     {
      "id": "r3",
@@ -28500,7 +28668,15 @@
      "statement": "Investors use reserve levels, through their effect on reported earnings and surplus, to assess the dividends a company can sustainably pay.",
      "concept": "Importance of Unpaid Claim Estimates",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Reserve Communication",
+      "quote": "reserve development history, volatility, and the effect on reported earnings",
+      "note": "The tagged Reserve Communication page teaches what investors take from reserves (Friedland Ch.1 pp.4-5); the dividend example is the sample answer's own illustration, not in Friedland.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort3"
+     }
     },
     {
      "id": "r5",
@@ -28602,7 +28778,15 @@
        "page": "Types of Reinsurance",
        "quote": "$$\\text{Ceded}_{\\text{QS}} = a\\,X$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Ceded Losses",
+      "quote": "Under quota share, ceded is a fixed share",
+      "note": "Ceded Losses (one link from the tagged Net of Reinsurance) teaches quota share cession as a fixed share of gross.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort3"
+     }
     },
     {
      "id": "r5",
@@ -28619,7 +28803,15 @@
        "page": "Pro Rata Reinsurance",
        "quote": "[[Excess of Loss|Excess of loss]] reinsurance, by contrast, pays only the part of a loss above the retention."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Ceded Losses",
+      "quote": "Under excess of loss, ceded responds only to claims piercing retention",
+      "note": "Ceded Losses (one link from the tagged Net of Reinsurance) teaches per-claim excess of loss cession above the retention.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort3"
+     }
     },
     {
      "id": "r6",
@@ -28627,7 +28819,15 @@
      "statement": "For net reported (incurred) claims under excess of loss, the ceded amount in a calendar year is the change in cumulative ceded incurred (cumulative paid plus case above retention) from the prior year-end to the current year-end, and net reported equals gross reported minus that cession.",
      "concept": "Per-Claim Excess of Loss Reinsurance",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Calendar Year",
+      "quote": "Werner & Modlin and Friedland both define calendar-year reported losses as paid losses plus the change in case reserves.",
+      "note": "The tagged Calendar Year page teaches CY reported = paid + change in case; applied to the ceded layer it gives the CY cession.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort3"
+     }
     }
    ]
   },
@@ -29663,7 +29863,13 @@
      "statement": "To get the expected pattern at an age between evaluation points, assume linear emergence and linearly interpolate the percent reported/paid between the adjacent evaluation ages, not the development factors.",
      "concept": "Interpolating Development Patterns",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Data the question gives: it states loss emergence between evaluation points is linear, which is the interpolation of percent reported; the percent-reported mechanics are on Actual vs Expected Analysis (in reach).",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort3"
+     }
     },
     {
      "id": "r3",
@@ -29949,7 +30155,13 @@
      "statement": "When no loss development occurs after a given maturity, losses at or beyond that maturity are already ultimate and need no development factor.",
      "concept": "Loss Development (Ultimate Losses)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Data the question gives: it states there is no development after 36 months, so AY 2015 is at ultimate.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort3"
+     }
     },
     {
      "id": "r2",

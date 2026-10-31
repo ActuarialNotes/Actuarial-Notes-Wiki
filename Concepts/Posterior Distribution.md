@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:732b36d5b052a89f58f0f70dcf28cbbcfa47ca004ab979d8bec99c7ca5fb4203
+  content_hash: sha256:0e5403334dca37dd707667a581ba9b5b155fe5f2652f126ba8500e3f4d5cc267
   sources:
     - "Frees et al., Loss Data Analytics (open text), Ch. 9 Experience Rating Using Credibility Theory, Ch. 9 §§9.2–9.6, sha256:35a840449990c8fda61687ebde4646508b6296ffac3daba18f0181eb2511fa36 — https://openacttexts.github.io/Loss-Data-Analytics/ChapCredibility.html"
     - "Frees et al., Loss Data Analytics (open text), Ch. 4, §4.4.4 Conjugate Distributions, sha256:c5fe1ff26cec4dee6f8bcc285b75c840202c947246f7b5d5598f9b837ccad021 — https://openacttexts.github.io/Loss-Data-Analytics/ChapModelSelection.html"
@@ -27,6 +27,8 @@ verification:
 - **What it is used for.** The Bayesian premium is the posterior mean of the hypothetical mean, $E[\mu(\Theta) \mid \mathbf{x}]$, the estimator that minimises expected squared error. The [[Predictive Distribution|predictive distribution]] of the next observation integrates $f(x_{n+1} \mid \theta)$ against the posterior.
 - **Prior versus data.** With little data the posterior stays near the prior. As $n$ grows, the likelihood dominates and the posterior concentrates near the [[Maximum Likelihood Estimation|MLE]]. That movement *is* credibility. When the posterior mean is linear in $\bar{x}$ it equals the [[Bühlmann Credibility|Bühlmann]] estimate exactly — see [[Exact Credibility]].
 - Updating is **sequential**: this year's posterior is next year's prior, and processing the years one at a time gives the same result as processing them together.
+- **A flat (uniform) prior.** A uniform prior is constant wherever it is positive, so inside its support the posterior is proportional to the likelihood alone, and outside its support the posterior is zero, because the prior is a factor of the product. The prior cannot move the posterior's peak: under a uniform prior the posterior mode is the maximum likelihood estimate. If the uniform prior covers only an interval, the posterior is the likelihood cut off at the ends of that interval and renormalised, so its mode is the value inside the interval where the likelihood is largest, and an MLE outside the interval cannot be the posterior mode.
+- **Improper priors.** A prior is improper when its integral over the parameter space is infinite, so it cannot be normalised into a distribution; a constant density on the whole real line is one, and $\pi^{-1}(1-\pi)^{-1}$ on $(0,1)$, the improper Beta$(0,0)$ kernel, is another. The algebra still runs — multiply prior by likelihood — but the result is a usable posterior only if it has a finite integral, and whether it does depends on the data: with the Beta$(0,0)$ prior and binomial data the posterior is improper when every trial is a success or every trial is a failure. An improper posterior is not a probability distribution, so it has no posterior mean or any other summary to report; always check that the posterior integrates to a finite value.
 
 > [!example]- Updating a Two-Class Driver Prior {Example}
 > A portfolio is $75\%$ good drivers, whose annual claim counts are Poisson with mean $0.2$, and $25\%$ bad drivers, Poisson with mean $0.6$. A driver chosen at random has $1$ claim in a year. Find the posterior class probabilities and the expected number of claims next year.

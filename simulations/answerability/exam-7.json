@@ -2700,7 +2700,15 @@
        "page": "Generalized Cape Cod Method",
        "quote": "$$\\hat U_j = C_j + \\text{IBNR}_j$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "each year's estimated ultimate loss is then its reported loss plus that IBNR, and its estimated ultimate loss ratio is stated over the year's earned risk pure premium, not the adjusted premium",
+      "note": "Cape Cod Method (tagged by the question) now teaches it in the Patrik exposure-base sub-bullet, checked against Patrik printed p.457 and Table 7.65 col. (6) = (reported + SB IBNR)/ERPP in run g8-cas7-chk-last",
+      "date": "2026-10-31",
+      "run": "g8-cas7-chk-last"
+     }
     }
    ]
   },

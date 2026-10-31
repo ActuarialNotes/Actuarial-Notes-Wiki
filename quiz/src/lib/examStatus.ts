@@ -12,8 +12,9 @@ import type { ItemStatus } from '@/data/tracks'
 //                   and MAS-I, the three DISCs and Exam 7 (2026-10-31). All
 //                   seven were ready before, and went back to beta from
 //                   2026-10-25 until their banks passed answerability (G8).
-//                   MAS-II, the first beta exam to pass all eight (2026-10-31)
-//   'beta'        — usable, still being filled out (Exams 5,
+//                   MAS-II, the first beta exam to pass all eight (2026-10-31),
+//                   and Exam 5 (2026-10-31)
+//   'beta'        — usable, still being filled out (Exams
 //                   6C, 8 and 9 — their banks converted from the released
 //                   papers — FAM and SRM, from the SOA's sample sets, ALTAM and
 //                   ASTAM from their sample sets and released papers, and
@@ -37,8 +38,8 @@ import type { ItemStatus } from '@/data/tracks'
 export type ExamStatus = 'ready' | 'beta' | 'development'
 
 /** Exams whose material is finished enough to carry no status label at all: each passes all eight
- * gates of `publication_readiness.py --check` (P and FM again since 2026-10-30, MAS-I, the DISCs and Exam 7 since 2026-10-31, after G8 emptied it on 2026-10-25; MAS-II since 2026-10-31). */
-const READY_EXAMS = new Set<string>(['P', 'FM', 'MAS-I', 'CAS-DA', 'CAS-RM', 'CAS-IA', 'CAS-7', 'MAS-II'])
+ * gates of `publication_readiness.py --check` (P and FM again since 2026-10-30, MAS-I, the DISCs and Exam 7 since 2026-10-31, after G8 emptied it on 2026-10-25; MAS-II and Exam 5 since 2026-10-31). */
+const READY_EXAMS = new Set<string>(['P', 'FM', 'MAS-I', 'CAS-DA', 'CAS-RM', 'CAS-IA', 'CAS-7', 'MAS-II', 'CAS-5'])
 
 /**
  * Exams that exist only as a syllabus outline so far. Greyed out wherever they

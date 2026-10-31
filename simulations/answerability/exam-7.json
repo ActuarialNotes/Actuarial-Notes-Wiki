@@ -9202,7 +9202,15 @@
        "page": "Case Adequacy",
        "quote": "**Strengthening** raises reported losses immediately, so recent age-to-age factors fall (more of the ultimate is already booked)."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Case Adequacy",
+      "quote": "Strengthening raises reported losses immediately. Applying historical factors — built under weaker reserving — to a strengthened diagonal over-states ultimate, because the strengthening is developed a second time.",
+      "note": "Re-quoted after Exam 5's fact check (run 2026-10-31T13-31Z-75be) cut 'so recent age-to-age factors fall' as contrary to Friedland Ch. 7 p. 102: a strengthening books more of the ultimate at once, so the historical (weaker-reserving) development overstates what is left to emerge.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-final"
+     }
     },
     {
      "id": "r2",
@@ -11958,7 +11966,15 @@
        "page": "Case Adequacy",
        "quote": "**Strengthening** raises reported losses immediately, so recent age-to-age factors fall (more of the ultimate is already booked)."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Case Adequacy",
+      "quote": "Strengthening raises reported losses immediately. Applying historical factors — built under weaker reserving — to a strengthened diagonal over-states ultimate, because the strengthening is developed a second time.",
+      "note": "Re-quoted after Exam 5's fact check (run 2026-10-31T13-31Z-75be) cut 'so recent age-to-age factors fall' as contrary to Friedland Ch. 7 p. 102: a strengthening books more of the ultimate at once, so the historical (weaker-reserving) development overstates what is left to emerge.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-final"
+     }
     },
     {
      "id": "r6",

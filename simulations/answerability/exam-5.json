@@ -130,7 +130,15 @@
        "page": "Balancing Back",
        "quote": "When other rating variables also apply, each class's exposures are first multiplied by their average relativity for those other variables, so that the factor measures only this variable's effect on the average premium."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Balancing Back",
+      "quote": "When other rating variables also apply, each class's exposures are first multiplied by their average relativity for those other variables, so that the factor measures only this variable's effect on the average premium.",
+      "note": "Brought into reach by a [[Balancing Back]] link written in Exam 5's G8 round (writers 1-5, pages fact checked in runs d9a2, cde6, 4562, b3a4, ceab); the check's own passage.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-links"
+     }
     },
     {
      "id": "r4",
@@ -395,7 +403,15 @@
        "page": "Property Insurance",
        "quote": "- **Insurance to value:** Under a coinsurance clause, an insured who carries less than the required percentage of value recovers only the share $R$ of each partial loss."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Insurance to Value",
+      "quote": "**Insurance to Value** (ITV) means insuring property for its full value, or close to it, so that the amount of insurance, which is the base a property premium is charged on, reflects the exposure.",
+      "note": "Brought into reach by a [[Insurance to Value]] link written in Exam 5's G8 round (writers 1-5, pages fact checked in runs d9a2, cde6, 4562, b3a4, ceab); the check's own passage.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-links"
+     }
     },
     {
      "id": "r2",
@@ -412,7 +428,15 @@
        "page": "Property Insurance",
        "quote": "The limit caps the payment, per item, per location or blanket over several, and sublimits cap particular kinds of property."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Insurance to Value",
+      "quote": "Most property losses are partial, so an insured who carries a low limit would otherwise pay a smaller premium for nearly the same expected recovery.",
+      "note": "Brought into reach by a [[Insurance to Value]] link written in Exam 5's G8 round (writers 1-5, pages fact checked in runs d9a2, cde6, 4562, b3a4, ceab); the check's own passage.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-links"
+     }
     },
     {
      "id": "r3",
@@ -6054,7 +6078,15 @@
        "page": "Regression Tree",
        "quote": "A **regression tree** is a [[Decision Tree|decision tree]] for a quantitative [[Response Variable|response]]: recursive binary splitting divides the predictor space into regions $R_1, \\ldots, R_J$, and every observation that falls in region $R_j$ is predicted by the mean response $\\hat{y}_{R_j}$ of the training observations in that region."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Regression Tree",
+      "quote": "A **regression tree** is a [[Decision Tree|decision tree]] for a quantitative [[Response Variable|response]]: recursive binary splitting divides the predictor space into regions $R_1, \\ldots, R_J$, and every observation that falls in region $R_j$ is predicted by the mean response $\\hat{y}_{R_j}$ of the training observations in that region.",
+      "note": "Brought into reach by a [[Regression Tree]] link written in Exam 5's G8 round (writers 1-5, pages fact checked in runs d9a2, cde6, 4562, b3a4, ceab); the check's own passage.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-links"
+     }
     },
     {
      "id": "r5",
@@ -6067,7 +6099,15 @@
        "page": "Regression Tree",
        "quote": "The tree has built an interaction between vehicle age and garaging, which a linear model would include only if an interaction term were specified."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Regression Tree",
+      "quote": "The tree has built an interaction between vehicle age and garaging, which a linear model would include only if an interaction term were specified.",
+      "note": "Brought into reach by a [[Regression Tree]] link written in Exam 5's G8 round (writers 1-5, pages fact checked in runs d9a2, cde6, 4562, b3a4, ceab); the check's own passage.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-links"
+     }
     },
     {
      "id": "r6",
@@ -11196,7 +11236,15 @@
        "page": "Balancing Back",
        "quote": "When other rating variables also apply, each class's exposures are first multiplied by their average relativity for those other variables, so that the factor measures only this variable's effect on the average premium."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Balancing Back",
+      "quote": "When other rating variables also apply, each class's exposures are first multiplied by their average relativity for those other variables, so that the factor measures only this variable's effect on the average premium.",
+      "note": "Brought into reach by a [[Balancing Back]] link written in Exam 5's G8 round (writers 1-5, pages fact checked in runs d9a2, cde6, 4562, b3a4, ceab); the check's own passage.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-links"
+     }
     },
     {
      "id": "r2",
@@ -11209,7 +11257,15 @@
        "page": "Balancing Back",
        "quote": "When other rating variables also apply, each class's exposures are first multiplied by their average relativity for those other variables, so that the factor measures only this variable's effect on the average premium."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Balancing Back",
+      "quote": "When other rating variables also apply, each class's exposures are first multiplied by their average relativity for those other variables, so that the factor measures only this variable's effect on the average premium.",
+      "note": "Brought into reach by a [[Balancing Back]] link written in Exam 5's G8 round (writers 1-5, pages fact checked in runs d9a2, cde6, 4562, b3a4, ceab); the check's own passage.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-links"
+     }
     },
     {
      "id": "r3",
@@ -11239,7 +11295,15 @@
        "page": "Balancing Back",
        "quote": "A class's rate change is $(1 + \\Delta)\\,\\text{OBF}\\,r_i^{\\text{new}}/r_i^{\\text{old}} - 1$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Balancing Back",
+      "quote": "A class's rate change is $(1 + \\Delta)\\,\\text{OBF}\\,r_i^{\\text{new}}/r_i^{\\text{old}} - 1$.",
+      "note": "Brought into reach by a [[Balancing Back]] link written in Exam 5's G8 round (writers 1-5, pages fact checked in runs d9a2, cde6, 4562, b3a4, ceab); the check's own passage.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-links"
+     }
     },
     {
      "id": "r5",
@@ -14065,7 +14129,15 @@
        "page": "Balancing Back",
        "quote": "Under the [[Loss Ratio Method|loss ratio method]], a class's indicated relativity is its current relativity times its loss ratio divided by the base class's loss ratio, with premiums at current rates."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Balancing Back",
+      "quote": "Under the [[Loss Ratio Method|loss ratio method]], a class's indicated relativity is its current relativity times its loss ratio divided by the base class's loss ratio, with premiums at current rates.",
+      "note": "Brought into reach by a [[Balancing Back]] link written in Exam 5's G8 round (writers 1-5, pages fact checked in runs d9a2, cde6, 4562, b3a4, ceab); the check's own passage.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-links"
+     }
     },
     {
      "id": "r3",
@@ -14625,7 +14697,15 @@
        "page": "Balancing Back",
        "quote": "When other rating variables also apply, each class's exposures are first multiplied by their average relativity for those other variables, so that the factor measures only this variable's effect on the average premium."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Balancing Back",
+      "quote": "When other rating variables also apply, each class's exposures are first multiplied by their average relativity for those other variables, so that the factor measures only this variable's effect on the average premium.",
+      "note": "Brought into reach by a [[Balancing Back]] link written in Exam 5's G8 round (writers 1-5, pages fact checked in runs d9a2, cde6, 4562, b3a4, ceab); the check's own passage.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-links"
+     }
     },
     {
      "id": "r5",
@@ -17407,7 +17487,15 @@
        "page": "Balancing Back",
        "quote": "$$\\text{OBF} = \\frac{\\sum_i w_i\\, r_i^{\\text{old}}}{\\sum_i w_i\\, r_i^{\\text{new}}}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Balancing Back",
+      "quote": "$$\\text{OBF} = \\frac{\\sum_i w_i\\, r_i^{\\text{old}}}{\\sum_i w_i\\, r_i^{\\text{new}}}$$",
+      "note": "Brought into reach by a [[Balancing Back]] link written in Exam 5's G8 round (writers 1-5, pages fact checked in runs d9a2, cde6, 4562, b3a4, ceab); the check's own passage.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-links"
+     }
     },
     {
      "id": "r8",
@@ -19983,7 +20071,15 @@
        "page": "Balancing Back",
        "quote": "Under the [[Loss Ratio Method|loss ratio method]], a class's indicated relativity is its current relativity times its loss ratio divided by the base class's loss ratio, with premiums at current rates."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Balancing Back",
+      "quote": "Under the [[Loss Ratio Method|loss ratio method]], a class's indicated relativity is its current relativity times its loss ratio divided by the base class's loss ratio, with premiums at current rates.",
+      "note": "Brought into reach by a [[Balancing Back]] link written in Exam 5's G8 round (writers 1-5, pages fact checked in runs d9a2, cde6, 4562, b3a4, ceab); the check's own passage.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-links"
+     }
     },
     {
      "id": "r3",
@@ -20377,7 +20473,15 @@
        "page": "Balancing Back",
        "quote": "OBF, the off-balance factor, is the average relativity before the change divided by the average relativity after it."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Balancing Back",
+      "quote": "$$\\text{OBF} = \\frac{\\sum_i w_i\\, r_i^{\\text{old}}}{\\sum_i w_i\\, r_i^{\\text{new}}}$$",
+      "note": "Brought into reach by a [[Balancing Back]] link written in Exam 5's G8 round (writers 1-5, pages fact checked in runs d9a2, cde6, 4562, b3a4, ceab); the check's own passage.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-links"
+     }
     },
     {
      "id": "r7",
@@ -20390,7 +20494,15 @@
        "page": "Balancing Back",
        "quote": "A class's rate change is $(1 + \\Delta)\\,\\text{OBF}\\,r_i^{\\text{new}}/r_i^{\\text{old}} - 1$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Balancing Back",
+      "quote": "A class's rate change is $(1 + \\Delta)\\,\\text{OBF}\\,r_i^{\\text{new}}/r_i^{\\text{old}} - 1$.",
+      "note": "Brought into reach by a [[Balancing Back]] link written in Exam 5's G8 round (writers 1-5, pages fact checked in runs d9a2, cde6, 4562, b3a4, ceab); the check's own passage.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-links"
+     }
     }
    ]
   },
@@ -25971,7 +26083,15 @@
        "page": "Balancing Back",
        "quote": "When other rating variables also apply, each class's exposures are first multiplied by their average relativity for those other variables, so that the factor measures only this variable's effect on the average premium."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Balancing Back",
+      "quote": "When other rating variables also apply, each class's exposures are first multiplied by their average relativity for those other variables, so that the factor measures only this variable's effect on the average premium.",
+      "note": "Brought into reach by a [[Balancing Back]] link written in Exam 5's G8 round (writers 1-5, pages fact checked in runs d9a2, cde6, 4562, b3a4, ceab); the check's own passage.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-links"
+     }
     },
     {
      "id": "r5",
@@ -26313,7 +26433,15 @@
        "page": "Balancing Back",
        "quote": "A class's rate change is $(1 + \\Delta)\\,\\text{OBF}\\,r_i^{\\text{new}}/r_i^{\\text{old}} - 1$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Balancing Back",
+      "quote": "A class's rate change is $(1 + \\Delta)\\,\\text{OBF}\\,r_i^{\\text{new}}/r_i^{\\text{old}} - 1$.",
+      "note": "Brought into reach by a [[Balancing Back]] link written in Exam 5's G8 round (writers 1-5, pages fact checked in runs d9a2, cde6, 4562, b3a4, ceab); the check's own passage.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-links"
+     }
     },
     {
      "id": "r2",
@@ -26343,7 +26471,15 @@
        "page": "Balancing Back",
        "quote": "A class's rate change is $(1 + \\Delta)\\,\\text{OBF}\\,r_i^{\\text{new}}/r_i^{\\text{old}} - 1$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Balancing Back",
+      "quote": "A class's rate change is $(1 + \\Delta)\\,\\text{OBF}\\,r_i^{\\text{new}}/r_i^{\\text{old}} - 1$.",
+      "note": "Brought into reach by a [[Balancing Back]] link written in Exam 5's G8 round (writers 1-5, pages fact checked in runs d9a2, cde6, 4562, b3a4, ceab); the check's own passage.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-links"
+     }
     },
     {
      "id": "r4",
@@ -26373,7 +26509,15 @@
        "page": "Balancing Back",
        "quote": "Relative to class A, the new relativities are $1.25(0.660/0.600) = 1.375$ for B and $1.60(0.750/0.600) = 2.000$ for C."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Balancing Back",
+      "quote": "Relative to class A, the new relativities are $1.25(0.660/0.600) = 1.375$ for B and $1.60(0.750/0.600) = 2.000$ for C.",
+      "note": "Brought into reach by a [[Balancing Back]] link written in Exam 5's G8 round (writers 1-5, pages fact checked in runs d9a2, cde6, 4562, b3a4, ceab); the check's own passage.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-links"
+     }
     }
    ]
   },
@@ -29511,7 +29655,15 @@
        "page": "Balancing Back",
        "quote": "When other rating variables also apply, each class's exposures are first multiplied by their average relativity for those other variables, so that the factor measures only this variable's effect on the average premium."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Balancing Back",
+      "quote": "When other rating variables also apply, each class's exposures are first multiplied by their average relativity for those other variables, so that the factor measures only this variable's effect on the average premium.",
+      "note": "Brought into reach by a [[Balancing Back]] link written in Exam 5's G8 round (writers 1-5, pages fact checked in runs d9a2, cde6, 4562, b3a4, ceab); the check's own passage.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-links"
+     }
     },
     {
      "id": "r2",
@@ -29581,7 +29733,15 @@
        "page": "Rating Variable",
        "quote": "$$B_{\\text{new}} = B_{\\text{old}} \\times \\frac{\\bar{R}_{\\text{old}}}{\\bar{R}_{\\text{new}}}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Balancing Back",
+      "quote": "$$\\text{OBF} = \\frac{\\sum_i w_i\\, r_i^{\\text{old}}}{\\sum_i w_i\\, r_i^{\\text{new}}}$$",
+      "note": "Brought into reach by a [[Balancing Back]] link written in Exam 5's G8 round (writers 1-5, pages fact checked in runs d9a2, cde6, 4562, b3a4, ceab); the check's own passage.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-links"
+     }
     },
     {
      "id": "r6",
@@ -32406,7 +32566,15 @@
        "page": "Balancing Back",
        "quote": "\\text{OBF} = \\frac{\\sum_i w_i\\, r_i^{\\text{old}}}{\\sum_i w_i\\, r_i^{\\text{new}}}"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Balancing Back",
+      "quote": "\\text{OBF} = \\frac{\\sum_i w_i\\, r_i^{\\text{old}}}{\\sum_i w_i\\, r_i^{\\text{new}}}",
+      "note": "Brought into reach by a [[Balancing Back]] link written in Exam 5's G8 round (writers 1-5, pages fact checked in runs d9a2, cde6, 4562, b3a4, ceab); the check's own passage.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-links"
+     }
     },
     {
      "id": "r6",
@@ -34141,7 +34309,15 @@
        "page": "Insurer Operational Data",
        "quote": "It is the main source for pricing and modelling an existing product, because it describes the insurer's own book at the level of the individual policy and claim."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Insurer Operational Data",
+      "quote": "It is the main source for pricing and modelling an existing product, because it describes the insurer's own book at the level of the individual policy and claim.",
+      "note": "Brought into reach by a [[Insurer Operational Data]] link written in Exam 5's G8 round (writers 1-5, pages fact checked in runs d9a2, cde6, 4562, b3a4, ceab); the check's own passage.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-links"
+     }
     },
     {
      "id": "r4",

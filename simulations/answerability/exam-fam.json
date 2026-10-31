@@ -7845,17 +7845,69 @@
   },
   "faml-6-29": {
    "path": "questions/exam-fam/faml-6-29.md",
-   "run": "answerability-20261031-fam",
+   "run": "answerability-20261031-fam-rerun3",
    "input_hash": "sha256:1a95875157fbe4e782db74158426e91cb0a3ee39520501ef6c720a23a4359b4f",
-   "verdict": "gap",
+   "verdict": "answerable",
    "requirements": [
     {
      "id": "r1",
      "kind": "fact",
-     "statement": "placeholder",
-     "concept": "placeholder",
-     "status": "missing",
-     "places": []
+     "statement": "Under the equivalence principle, the gross premium is set so that the expected present value of gross premiums equals the expected present value of benefits plus expenses (at issue, expected loss is zero).",
+     "concept": "Equivalence Principle",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Equivalence Principle",
+       "quote": "The **Equivalence Principle** sets a [[Insurance Premium|premium]] so that the expected present value of the future loss random variable $L_0$ at issue is zero: the expected present value (EPV) of the premiums equals the EPV of the benefits, plus the EPV of the expenses when a gross premium is being set."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "Expenses incurred at the beginning of each policy year (percent of premium and per-policy amounts) are valued as an annuity-due, with first-year expenses counted at time 0 and renewal expenses as an annuity-due over all years, adjusted by subtracting the renewal portion for year 1 (i.e., first-year excess over renewal is added as a lump sum).",
+     "concept": "Gross Premium Calculation with Expenses",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Equivalence Principle",
+       "quote": "If the initial expense replaces the renewal expense at time 0, renewals run over $\\ddot{a}-1$. Using $\\ddot{a}$ adds one extra renewal expense."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "For a fully discrete whole life insurance, the expected present value of the benefit is the face amount times A_x, and the premium stream has expected present value G times the whole life annuity-due.",
+     "concept": "Fully Discrete Whole Life Insurance",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Equivalence Principle",
+       "quote": "Setting $E[L_0]=0$ gives $P = S\\,A_x/\\ddot{a}_x$."
+      },
+      {
+       "page": "Whole Life Insurance",
+       "quote": "its actuarial present value (the **net single premium**) for a life aged $x$ is $A_x$."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "The whole life insurance and annuity-due are related by A_x = 1 - d * ä_x, where d = i/(1+i) is the effective discount rate.",
+     "concept": "Relationship Between Insurance and Annuity-Due",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Life Annuity",
+       "quote": "$d\\,\\ddot{a}_x + A_x = 1$, where $d = 1 - v = i/(1+i)$ is the effective rate of discount"
+      },
+      {
+       "page": "Life Insurance",
+       "quote": "Insurance and [[Life Annuity|annuity]] EPVs are linked by $A_{x:\\overline{n}|} = 1 - d\\,\\ddot{a}_{x:\\overline{n}|}$"
+      }
+     ]
     }
    ]
   },

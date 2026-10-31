@@ -1,6 +1,6 @@
 // Daily study-plan email — pure core.
 //
-// A morning email that lists what the study plan has scheduled for today is
+// A daily email that lists what the study plan has scheduled for today is
 // sent server-side by the `daily-plan-email` Supabase edge function
 // (supabase/functions/daily-plan-email/index.ts), driven by an hourly pg_cron
 // job (supabase/migrations/20260721_daily_plan_email.sql). The edge function

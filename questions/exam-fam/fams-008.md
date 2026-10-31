@@ -10,6 +10,7 @@ wiki_link:
   - Concepts/Full+Credibility+Standard
   - Concepts/Negative+Binomial+Distribution
   - Concepts/Aggregate+Loss+Model
+  - Concepts/Mixed+Poisson+Process
 answer: "B"
 points: 1
 verification:

@@ -9,6 +9,7 @@ wiki_link:
   - Concepts/Aggregate+Loss+Model
   - Concepts/Normal+Approximation
   - Concepts/Poisson+Distribution
+  - Concepts/Compound+Poisson+Process
 answer: "C"
 points: 1
 verification:

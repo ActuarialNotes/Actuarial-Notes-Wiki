@@ -9,6 +9,7 @@ wiki_link:
   - Concepts/Expected+Loss+Method
   - Concepts/Loss+Reserving
   - Concepts/Unpaid+Claims
+  - Concepts/Development+Triangle
 answer: "A"
 points: 1
 verification:

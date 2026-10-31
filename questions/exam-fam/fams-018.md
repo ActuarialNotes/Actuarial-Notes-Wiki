@@ -10,6 +10,7 @@ wiki_link:
   - Concepts/Normal+Approximation
   - Concepts/Coinsurance
   - Concepts/Poisson+Distribution
+  - Concepts/Discrete+Random+Variable
 answer: "B"
 points: 1
 verification:

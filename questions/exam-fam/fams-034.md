@@ -9,6 +9,8 @@ wiki_link:
   - Concepts/Aggregate+Loss+Model
   - Concepts/Normal+Approximation
   - Concepts/Poisson+Distribution
+  - Concepts/Uniform+Continuous+Distribution
+  - Concepts/Independent+Random+Variables
 answer: "A"
 points: 1
 verification:

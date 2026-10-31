@@ -8,6 +8,7 @@ type: multiple-choice
 wiki_link:
   - Concepts/Trend
   - Concepts/Loss+Cost
+  - Concepts/Loss+Trend
 answer: "D"
 points: 1
 verification:

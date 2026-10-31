@@ -10,6 +10,7 @@ wiki_link:
   - Concepts/Deductible
   - Concepts/Poisson+Thinning
   - Concepts/Variance
+  - Concepts/Uniform+Continuous+Distribution
 answer: "C"
 points: 1
 verification:

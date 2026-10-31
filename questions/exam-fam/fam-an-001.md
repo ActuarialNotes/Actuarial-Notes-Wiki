@@ -10,6 +10,7 @@ wiki_link:
   - Concepts/Cash+Flow
   - Concepts/Payoff
   - Concepts/European+Option
+  - Concepts/Option+Trading+Strategy
 answer: "B"
 points: 1
 verification:

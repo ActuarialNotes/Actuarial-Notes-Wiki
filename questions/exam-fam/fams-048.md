@@ -10,6 +10,7 @@ wiki_link:
   - Concepts/Truncation
   - Concepts/Censoring
   - Concepts/Pareto+Distribution
+  - Concepts/Incomplete+Data
 answer: "C"
 points: 1
 verification:

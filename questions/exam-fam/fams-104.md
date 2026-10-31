@@ -7,6 +7,7 @@ difficulty: medium
 type: multiple-choice
 wiki_link:
   - Concepts/Lognormal+Distribution
+  - Concepts/Guaranteed+Minimum+Maturity+Benefit
 answer: "D"
 points: 1
 verification:

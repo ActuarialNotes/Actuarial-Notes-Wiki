@@ -8,6 +8,7 @@ type: multiple-choice
 wiki_link:
   - Concepts/Deductible
   - Concepts/Truncation
+  - Concepts/Cumulative+Distribution+Function+(CDF)
 answer: "C"
 points: 1
 verification:

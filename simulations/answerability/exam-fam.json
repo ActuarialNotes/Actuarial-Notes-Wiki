@@ -54,7 +54,15 @@
        "page": "Option Trading Strategy",
        "quote": "Selling a call must bring in at least \\$4.02."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Option Trading Strategy",
+      "quote": "A covered call is long the stock and short a call, with payoff $\\min(S_T, K)$. It earns the premium",
+      "note": "retagged Option Trading Strategy: the writer of a call earns the premium (the holder pays it); quote replaces the check's weaker spread quotes",
+      "date": "2026-10-31",
+      "run": "sort-fams-20261031"
+     }
     },
     {
      "id": "r4",
@@ -13293,7 +13301,13 @@
      "statement": "When observations come from different groups whose distributions share a common parameter through scaling (e.g., mean a·θ), each observation uses its own group's density in the likelihood, and groups with no observations contribute no factor.",
      "concept": "Maximum Likelihood Estimation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "a step of this solution's plan: the likelihood is the product of each observation's own density, which the MLE pages already teach; applying it per group is the question's setup.",
+      "date": "2026-10-31",
+      "run": "sort-fams-20261031"
+     }
     }
    ]
   },
@@ -13480,7 +13494,13 @@
        "page": "Exponential Distribution",
        "quote": "$E[X] = \\theta$, $\\text{Var}(X) = \\theta^2$, and $F(x) = 1 - e^{-x/\\theta}$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "a value the exam's tables supply: the FAM distribution tables (Loss Models appendices) print this — the exponential's moments E[X^k] (variance follows).",
+      "date": "2026-10-31",
+      "run": "sort-fams-20261031"
+     }
     },
     {
      "id": "r5",
@@ -13773,7 +13793,13 @@
        "page": "Negative Binomial Distribution",
        "quote": "write the failures count as $\\text{NegBin}(r, \\beta)$ with $p = 1/(1+\\beta)$: … $E[Y] = r\\beta$ and $\\text{Var}(Y) = r\\beta(1+\\beta)$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "a value the exam's tables supply: the FAM distribution tables (Loss Models appendices) print this — the negative binomial's mean and variance.",
+      "date": "2026-10-31",
+      "run": "sort-fams-20261031"
+     }
     },
     {
      "id": "r2",
@@ -13786,7 +13812,13 @@
        "page": "Pareto Distribution",
        "quote": "$$\\text{Var}(X) = \\frac{\\alpha\\,\\theta^2}{(\\alpha - 1)^2(\\alpha - 2)}, \\quad \\alpha > 2$$ … The mean is $E[X] = \\theta/(\\alpha - 1)$ for $\\alpha > 1$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "a value the exam's tables supply: the FAM distribution tables (Loss Models appendices) print this — the Pareto's raw moments (mean and variance follow).",
+      "date": "2026-10-31",
+      "run": "sort-fams-20261031"
+     }
     },
     {
      "id": "r3",
@@ -14196,7 +14228,13 @@
      "statement": "A piecewise linear density read from a graph is expressed as separate linear functions on each interval (slope and intercept from points on the graph), and integrals are computed piece by piece.",
      "concept": "Probability Density Function",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "the question's own setup and arithmetic: reading line segments off the given graph and integrating piece by piece.",
+      "date": "2026-10-31",
+      "run": "sort-fams-20261031"
+     }
     }
    ]
   },
@@ -14424,7 +14462,13 @@
      "statement": "With a fixed claim amount, aggregate loss S takes values equal to the claim count times the amount, so the distribution of S is the claim count distribution scaled by the amount.",
      "concept": "Aggregate Loss Models",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "trivially implied: with every claim the same fixed amount, S is that amount times the claim count.",
+      "date": "2026-10-31",
+      "run": "sort-fams-20261031"
+     }
     }
    ]
   },
@@ -15073,7 +15117,13 @@
        "page": "Panjer Recursion",
        "quote": "The recursion must start from $f_S(0)$, the probability that every claim is zero, which is $\\sum_k p_k\\,f_X(0)^k = P_N(f_X(0))$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "trivially implied: with independent losses, the aggregate is zero exactly when every loss is zero, so its probability is the product.",
+      "date": "2026-10-31",
+      "run": "sort-fams-20261031"
+     }
     }
    ]
   },
@@ -15574,7 +15624,13 @@
        "page": "Poisson Distribution",
        "quote": "A defining property is $E[X] = \\text{Var}(X) = \\lambda$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "a value the exam's tables supply: the FAM distribution tables (Loss Models appendices) print this — the Poisson's mean.",
+      "date": "2026-10-31",
+      "run": "sort-fams-20261031"
+     }
     }
    ]
   },
@@ -16066,7 +16122,13 @@
        "page": "Poisson Distribution",
        "quote": "$$P(X = k) = \\frac{e^{-\\lambda}\\lambda^k}{k!}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "a value the exam's tables supply: the FAM distribution tables (Loss Models appendices) print this — the Poisson pmf.",
+      "date": "2026-10-31",
+      "run": "sort-fams-20261031"
+     }
     }
    ]
   },
@@ -16138,7 +16200,13 @@
      "statement": "If a Poisson (or geometric-type) recursion forces a = b = 0 with p_0 < 1, all later probabilities are zero and the probabilities fail to sum to 1, so that distribution is not valid.",
      "concept": "(a, b, 0) Class of Distributions",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "a step of this solution's plan: eliminating candidate (a,b,0) members because their probabilities would not sum to 1.",
+      "date": "2026-10-31",
+      "run": "sort-fams-20261031"
+     }
     }
    ]
   },
@@ -16375,7 +16443,15 @@
        "page": "Mixture Distribution",
        "quote": "compute $E[X^2] - (E[X])^2$ from the mixed moments"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Discrete Random Variable",
+      "quote": "Expectations are sums: $E[g(X)] = \\sum_x g(x)\\,p(x)$.",
+      "note": "retagged Discrete Random Variable (the probability-weighted sums); Variance's E[X^2] - mu^2 is on FAM's syllabus",
+      "date": "2026-10-31",
+      "run": "sort-fams-20261031"
+     }
     },
     {
      "id": "r4",
@@ -16647,7 +16723,13 @@
      "statement": "A reinsurance layer with a fixed deductible applied to the insurer's payments (after the insurance deductible) is equivalent to a deductible on ground-up losses equal to the insurance deductible plus the reinsurance deductible.",
      "concept": "Reinsurance Deductibles",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "trivially implied: (Y - d2)+ with Y = (X - d)+ is (X - d - d2)+, a composition of the deductible definition the pages teach.",
+      "date": "2026-10-31",
+      "run": "sort-fams-20261031"
+     }
     },
     {
      "id": "r5",
@@ -16655,7 +16737,13 @@
      "statement": "A premium equal to (1+loading) times expected claims is the expected claims plus a proportional (relative security) loading.",
      "concept": "Premium Principles",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "the question's own wording: it defines the premium as (1 + loading) times expected claims.",
+      "date": "2026-10-31",
+      "run": "sort-fams-20261031"
+     }
     },
     {
      "id": "r6",
@@ -16757,7 +16845,13 @@
        "page": "Poisson Distribution",
        "quote": "A defining property is $E[X] = \\text{Var}(X) = \\lambda$ — the mean and variance are equal"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "a value the exam's tables supply: the FAM distribution tables (Loss Models appendices) print this — the Poisson's mean and variance.",
+      "date": "2026-10-31",
+      "run": "sort-fams-20261031"
+     }
     }
    ]
   },
@@ -16773,7 +16867,15 @@
      "statement": "The density is the negative derivative of the survival function: f(x) = -S'(x).",
      "concept": "Survival Function",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Survival Model",
+      "quote": "f(t) = -S'(t)",
+      "note": "taught on Survival Model, on FAM's syllabus (in reach); the check missed it",
+      "date": "2026-10-31",
+      "run": "sort-fams-20261031"
+     }
     },
     {
      "id": "r2",
@@ -17073,7 +17175,13 @@
        "page": "Approximate Confidence Interval",
        "quote": "Apart from a constant, the log-likelihood is $\\ell(\\alpha) = 10\\ln\\alpha - 4\\alpha$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "trivially implied: a factor that does not depend on the parameter cannot move the maximiser of the likelihood.",
+      "date": "2026-10-31",
+      "run": "sort-fams-20261031"
+     }
     },
     {
      "id": "r4",
@@ -17233,7 +17341,13 @@
      "statement": "The k-th raw moment of a Burr distribution with parameters α, θ, γ is E[X^k] = θ^k Γ(1+k/γ) Γ(α−k/γ) / Γ(α), valid for −γ < k < αγ (from the exam table).",
      "concept": "Burr Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "a value the exam's tables supply: the FAM distribution tables (Loss Models appendices) print this — the Burr's raw moments (the item itself says 'from the exam table').",
+      "date": "2026-10-31",
+      "run": "sort-fams-20261031"
+     }
     }
    ]
   },
@@ -17581,7 +17695,13 @@
      "statement": "The percentage reduction in loss cost from moving from deductible d1 to a higher deductible d2 is (payments at d1 - payments at d2) / payments at d1.",
      "concept": "Deductible Impact on Loss Costs",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "arithmetic: a percentage reduction is (old - new)/old; the deductible loss costs themselves are taught.",
+      "date": "2026-10-31",
+      "run": "sort-fams-20261031"
+     }
     }
    ]
   },
@@ -19413,7 +19533,13 @@
      "statement": "The computed full credibility standard for the expected number of claims is rounded up to the next integer.",
      "concept": "Limited Fluctuation Credibility",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "the question's own convention (rounding up an expected claim count), not course content.",
+      "date": "2026-10-31",
+      "run": "sort-fams-20261031"
+     }
     }
    ]
   },
@@ -20328,7 +20454,13 @@
        "page": "Equity-Linked Insurance",
        "quote": "$P_t$ is the premium paid at the start of year $t$, of which the fraction $a_t$ is allocated to the fund"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "the question's own setup: (ii) states the insurer keeps 2.5% and invests the remainder.",
+      "date": "2026-10-31",
+      "run": "sort-fams-20261031"
+     }
     }
    ]
   },

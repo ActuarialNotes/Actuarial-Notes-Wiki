@@ -10,6 +10,7 @@ wiki_link:
   - Concepts/Frequency+Distribution
   - Concepts/Deductible
   - Concepts/Poisson+Distribution
+  - Concepts/Uniform+Continuous+Distribution
 answer: "D"
 points: 1
 verification:

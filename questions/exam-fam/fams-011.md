@@ -9,6 +9,7 @@ wiki_link:
   - Concepts/Maximum+Likelihood+Estimation
   - Concepts/Truncation
   - Concepts/Exponential+Distribution
+  - Concepts/Sample+Mean
 answer: "A"
 points: 1
 verification:

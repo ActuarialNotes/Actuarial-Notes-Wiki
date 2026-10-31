@@ -8,6 +8,7 @@ type: multiple-choice
 wiki_link:
   - Concepts/Aggregate+Loss+Model
   - Concepts/Normal+Approximation
+  - Concepts/Uniform+Discrete
 answer: "E"
 points: 1
 verification:

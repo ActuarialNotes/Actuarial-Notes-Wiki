@@ -9,6 +9,7 @@ wiki_link:
   - Concepts/Limited+Fluctuation+Credibility
   - Concepts/Full+Credibility+Standard
   - Concepts/Coefficient+of+Variation
+  - Concepts/Discrete+Random+Variable
 answer: "D"
 points: 1
 verification:

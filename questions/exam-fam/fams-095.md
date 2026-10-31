@@ -9,6 +9,7 @@ wiki_link:
   - Concepts/Trend
   - Concepts/Loss+Trend
   - Concepts/Loss+Cost
+  - Concepts/Exponential+Trend
 answer: "D"
 points: 1
 verification:

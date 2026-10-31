@@ -10,6 +10,7 @@ wiki_link:
   - Concepts/Full+Credibility+Standard
   - Concepts/Negative+Binomial+Distribution
   - Concepts/Aggregate+Loss+Model
+  - Concepts/Discrete+Random+Variable
 answer: "E"
 points: 1
 verification:

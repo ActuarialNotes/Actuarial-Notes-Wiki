@@ -22,6 +22,8 @@ verification:
 
 **Why classify at all.** In a competitive market an insurer that charges one average rate to a heterogeneous group loses the better risks to competitors that price them properly, and retains the worse ones — the **adverse selection spiral**. Classification is what keeps the pool viable, and [[Principles of Ratemaking|Principle 3]] requires the rate to reflect the individual risk transfer.
 
+**What risk classification is used for** ([[ASOP 12 - Risk Classification (ASB - 2005)|ASOP 12]], Appendix 1, which is background and not part of the standard). ASOP 12 states that risk classification is generally used for three purposes: to treat participants with similar risk characteristics in a consistent manner, to permit economic incentives to operate and thereby encourage widespread availability of coverage, and to protect the soundness of the system. Ignoring differences in risk characteristics can leave lower risk individuals underusing the system, and so without coverage, while higher risk individuals are covered at insufficient rates, which threatens the viability of the entire system. ASOP 12 cites the American Academy of Actuaries' 1980 *Risk Classification Statement of Principles* as background on the subject.
+
 **Criteria for a rating variable** (Werner, after Finger's *Risk Classification*):
 
 - **Statistical** — statistical significance, [[Homogeneity|homogeneity]] within levels, and [[Credibility|credibility]].

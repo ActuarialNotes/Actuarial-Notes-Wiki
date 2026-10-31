@@ -15,9 +15,9 @@ points: 1
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-23
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:b122121b83bf7edcedfac3b8e9fa79bcb2a41d51c2cc3e9be64b0cd4f6adb208
+  content_hash: sha256:98eff32358b09f95e899d7a47435d9457dbb84238ae29e840e98d5c35388175e
   sources:
     - "SOA Exam FAM Sample Questions, Syllabus Topics 1-6 (June 15, 2026), Q95, p.77, sha256:ef535e2198444052082114642e5884d8fe279975ebe7059abb363c5ecfcfd4de — https://www.soa.org/globalassets/assets/files/edu/2024/fall/questions/2024-10-exam-fam-s-sample-questions.pdf"
     - "SOA Exam FAM Sample Solutions, Syllabus Topics 1-6 (July 17, 2026), Q95, p.37, sha256:7b3f61d8c385f486f3dbc586cdaab035fe9c45a055710e8327d213c4d3e71b48 — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/2024-10-exam-fam-s-sample-solutions.pdf"

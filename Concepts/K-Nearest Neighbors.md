@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:b667c6e92ce7ca4650a60eefd924eb0850e546c79e1dc86b140cdea73df117ca
+  content_hash: sha256:fa912feb42a32ae63eba4eb0c664a10329e01fa29f6957b2e83cbf1d210b017a
   sources:
     - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), CAS-hosted copy, §2.2.3 'K-Nearest Neighbors', printed pp.39-42 (PDF pp.50-53); §3.5, printed pp.105-108 (PDF pp.115-118); §4.7.6, printed p.183 (PDF p.193), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
   open_findings: 1
@@ -21,6 +21,9 @@ verification:
 - $\mathcal{N}_K(x_0)$ is the **neighborhood** of the $K$ nearest training points to $x_0$
 - **Distance metric**: Euclidean distance is standard; predictors should be **standardized** first since KNN is scale-sensitive
 - **Choosing $K$**: small $K$ = low bias, high variance (flexible); large $K$ = high bias, low variance (smooth); optimal $K$ selected by cross-validation
+- **$K = n$**: when $K$ equals the number of training observations, every neighborhood $\mathcal{N}_K(x_0)$ is the whole training set, so KNN predicts the class that has the majority in the training data for every observation, whatever its predictor values — the extreme of oversmoothing
+- The **Bayes classifier** is the unattainable benchmark: it assigns $x_0$ to the class $j$ with the largest true $\Pr(Y = j \mid X = x_0)$, so its error probability at $x_0$ is $1 - \max_j \Pr(Y = j \mid X = x_0)$, which for two classes with $p = \Pr(Y = 1 \mid X = x_0)$ is $\min\{p,\ 1-p\}$
+- The **Bayes error rate** $1 - E\left[\max_j \Pr(Y = j \mid X)\right]$ is the lowest possible test error rate; the expectation averages over the values of $X$, so for a given set of test points it is the average of $1 - \max_j \Pr(Y = j \mid X = x_i)$ over those $x_i$, worked from the true conditional probabilities rather than by checking the test labels
 - KNN is a **lazy learner** — it stores all training data and does computation at prediction time (no explicit training phase)
 - **Curse of dimensionality**: KNN degrades in high dimensions as distances become uninformative
 

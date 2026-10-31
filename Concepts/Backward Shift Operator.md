@@ -1,12 +1,13 @@
 ---
 verification:
-  status: in_review
-  confidence: null
-  last_checked: 2026-10-18
-  last_checked_by: agent:validate-v1
-  content_hash: sha256:568b4e65afdbc6a2c1812df3ee3fbbc0f8309fcab720e5f953ea5323fd1a4482
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
+  last_checked_by: agent:checker-ts
+  content_hash: sha256:cc50c52f1ef6675afe5ed4c4dd32e00f3bc595b86a7a1f2a1eeffe92f4e4c750
   sources:
-    - "Hyndman & Athanasopoulos, Forecasting: Principles and Practice, 3rd ed. (OTexts, open online text), §9.2 Backshift notation, §9.4 AR(1) as MA(∞), §9.5 ARIMA in backshift form, §9.8 ARIMA(3,1,1) expansion and forecasting steps, read 2026-10-18, sha256:35587d5a25830d81dcb41d6196d18eaee424556c40cae948bf52a5a1d1a79650 — https://otexts.com/fpp3/arima.html"
+    - "Hyndman & Athanasopoulos, Forecasting: Principles and Practice, 3rd ed. (OTexts, open online text), Ch. 9, §9.1 unit-root tests, §9.2 Backshift notation, §9.3 AR(1) as MA(∞), §9.5 ARIMA in backshift form (eq. 9.2), roots outside unit circle, ACF/PACF patterns for AR/MA identification, §9.8 forecasting steps and prediction intervals, read 2026-10-31, sha256:5f778f68d8dcb368933b34ee303bb1bc883425b2da4a801a7d5622a98a7ffa47 — https://otexts.com/fpp3/backshift.html"
+    - "Shumway & Stoffer, Time Series Analysis and Its Applications Using R, EZ Edition (CC BY-NC 4.0, version 2016.12.30), Property 1.2 (PDF p.24: white-noise sample ACF approx N(0,1/n), ±2/√n), §1.5 CCF Def. 1.5/1.11, §3.2 eqs (3.3), (3.9), (3.13) (PDF pp.57-61: φ(B)x_t = θ(B)w_t), §3.7 overdifferencing (PDF p.88), §3.9 Regression with Autocorrelated Errors (PDF pp.94-96), §5.2 Unit Root Testing (PDF p.161: DF null H0: φ = 1), sha256:a0fd39387167c0c6b618f4bd853e99782e418ba4679b42542a4fb664b4aa463d — http://www.math-evry.cnrs.fr/_media/members/aguilloux/enseignements/timeseries_light_free.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Backward Shift Operator.md

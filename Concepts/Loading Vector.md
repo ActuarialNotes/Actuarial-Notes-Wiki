@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:f5e90b52658ce3f2de8f9feacf20af52a0caf4e04fd843c694ff2f0139b91d1e
+  content_hash: sha256:7fd231f97eb9fd3f456ce97e8c1a138679014b385849ed1087eed37c1063d313
   sources:
     - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer 2021, CAS-hosted copy), §6.3.1 eq. 6.19 loadings both positive and similar size, 'almost an average' (PDF p.262), §12.2.1 eqs. 12.1-12.4, unit-norm constraint and 'arbitrarily large variance' (PDF pp.505-506), orthogonality, footnote 2 eigenvectors, first loading vector as 'overall' measure (PDF p.507), §12.2.4 uniqueness up to a sign flip for loadings and scores (PDF p.515), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
     - "CAS Exam MAS-II Content Outline 2026 (MASII_CO_S_2026 v06), Domain C tasks 5-6 (PDF p.3) and James reading list Ch 12 (PDF p.4), sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf"
@@ -24,6 +24,9 @@ A **loading vector** $\boldsymbol{\phi}_m$ holds the weights that define the $m$
 - The unit-norm constraint is what makes the maximization well posed — without it the variance could be inflated without bound by scaling
 - **Sign is arbitrary**: $\boldsymbol{\phi}_m$ and $-\boldsymbol{\phi}_m$ describe the same component, so two software packages may report opposite signs (the scores flip with the loadings)
 - Interpretation comes from the pattern of signs and magnitudes: all-same-sign loadings read as an overall "size" component, mixed signs as a contrast
+- A **biplot** draws both on one pair of axes for the first two components: each observation as a point at its scores $(z_{i1}, z_{i2})$ and each variable as an arrow to its loadings $(\phi_{j1}, \phi_{j2})$
+- **Reading the arrows** (scaled variables): the angle between two arrows approximates the correlation between those variables — a small angle, highly positively correlated; a right angle, nearly uncorrelated; opposite directions, negatively correlated
+- **Reading the points**: PCA works on centred data, so a score measures an observation's departure from each variable's mean. A point far out along a variable's arrow is well above that variable's average, and a point near the origin is near average on both components; the plot cannot say whether the raw value itself is positive or negative
 
 ![[Media/Figures/Loading_Vector.svg|340]]
 

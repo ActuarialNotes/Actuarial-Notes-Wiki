@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:0f36cbfe84aa3bbe2e45ca6f5cc5f06770c3e2f8e2ec4df5b92ff3b49268e936
+  content_hash: sha256:d449c7bfd806ac4ba2071c937166340b9cedee3c6dd2e13fd070c29b5ebd3c74
   sources:
     - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), CAS-hosted copy, §10.1-10.2, pp.404-410 (PDF 411-417); §10.7, pp.434-439 (PDF 441-446), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
     - "Goodfellow, Bengio & Courville, Deep Learning (MIT Press 2016), author-hosted Ch.6 Deep Feedforward Networks, Ch.6 §6.5 back-propagation (cost of the same order as forward propagation), sha256:14d53b99e734892233699b5814588592cb38a24c5437e811a012b135ba510ad2 — https://www.deeplearningbook.org/contents/mlp.html"
@@ -24,6 +24,7 @@ verification:
 - $\eta$ is the **learning rate**: too large and the loss oscillates or diverges, too small and training crawls
 - **Stochastic gradient descent** applies the update on mini-batches rather than the full dataset; it is the state of the art for fitting deep networks, and it naturally enforces its own form of approximately quadratic regularization
 - The loss surface is **non-convex** — different random starting weights give different fits, so results are not reproducible without a fixed seed
+- The squared-error objective is usually written with a $\tfrac12$, $R(\theta) = \tfrac12\sum_i \left(y_i - f_\theta(x_i)\right)^2$: differentiating the square brings down a 2 that cancels it, so $\partial R_i/\partial f_\theta(x_i) = -\left(y_i - f_\theta(x_i)\right)$ and each weight's gradient is the residual times what feeds that weight. Without the $\tfrac12$ (as in the example below) every gradient doubles
 - Regularization comes as a weight-decay penalty ([[Regularization|ridge]] on the weights), early stopping, or dropout
 
 ![[Media/Figures/Backpropagation.svg|340]]

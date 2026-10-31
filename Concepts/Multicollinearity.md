@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:57d20253f104d402c18f34fb87d0cba25c96ae4993fd7fbccd8204c44f8bf58c
+  content_hash: sha256:46a8eaedf278a9fdfc17445d267abe736609bd59201d41cc02cfa2846491f95c
   sources:
     - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning (2nd ed., Springer 2021), §3.3.3 item 6 'Collinearity': inflated SEs, correlation matrix, multicollinearity, VIF = 1/(1 - R²_Xj|X-j), 5-10 rule, drop or combine, printed pp.99-103 (PDF pp.109-113), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
     - "Penn State STAT 501 Regression Methods (online course notes), Lesson 12 §12.3 predictions within scope unaffected, interpretation lost; §12.4 Var(b_k) = sigma²/sum_i(x_ik - xbar_k)² x 1/(1 - R_k²), Var(b_k)_min with x_k the only predictor, VIF_k = 1/(1-R_k²), sha256:f67694d5ded5e449996b5fde9068686e916b9c1c5cd9245c02badb257c72bc8e — https://online.stat.psu.edu/stat501/Lesson12.html"
@@ -24,6 +24,8 @@ verification:
 - $S_{jj} = \sum_{i=1}^{n} (x_{ij} - \bar{x}_j)^2$ is the centred sum of squares of predictor $x_j$ (not the uncentred diagonal entry of $\mathbf{X}^\top\mathbf{X}$), so $\sigma^2/S_{jj}$ is $\text{Var}(\hat\beta_j)$ when $x_j$ is the only predictor, and $\text{VIF}_j$ is the factor by which the other predictors inflate it
 - $R_j^2$ is from regressing predictor $x_j$ on all the *other* predictors. A **variance inflation factor** above $5$–$10$ is the usual flag
 - Symptoms: a significant overall $F$ test with no significant individual coefficients, coefficients that flip sign when a variable is added or a few rows change, and standard errors that are implausibly large
+- **Correlated predictors give correlated estimates.** The RSS contours for two collinear coefficients run along a narrow valley: a wide range of individual values fits almost equally well, so each coefficient is poorly determined and its interval is wide (it can include zero even when both predictors are strongly related to the response), yet the pair is held to the valley. With positively correlated predictors ($x_1 \approx x_2$) the fit depends essentially on $\beta_1 + \beta_2$, so the sum is well determined while raising one coefficient means lowering the other — the valley slopes downward and the estimates are negatively correlated. With negatively correlated predictors ($x_1 \approx -x_2$) it is the difference $\beta_1 - \beta_2$ that is determined, and the valley slopes upward
+- Keep the two apart: correlation between the **coefficient estimates** is the symptom, while the property of the data is the correlation between the **predictors**, and for two predictors the two have opposite signs
 - What it does **not** hurt is prediction inside the observed range of the predictors — fitted values and [[R-Squared]] are unaffected. It damages *interpretation*, which is fatal for a rating model where each relativity must stand on its own
 - **Perfect** collinearity (the dummy-variable trap: including every level of a [[Categorical Predictor]] plus an intercept) makes $\mathbf{X}^\top\mathbf{X}$ singular and the fit impossible; drop one level as the base
 - Remedies: drop one of the pair, combine them into a single variable, centre the variables before adding polynomial or [[Interaction]] terms, or shrink with a penalized fit. Collecting data that breaks the association is the real fix

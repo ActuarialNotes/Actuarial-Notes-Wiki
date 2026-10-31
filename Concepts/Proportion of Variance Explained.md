@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:b070218ed26858c000b099cdcaf2459ada24e53f61ca2cd7d0a1df2cbb2d8262
+  content_hash: sha256:953d2872411a99b205b73abb08219116bba326579ac91b8853e35ac62bfb23ac
   sources:
     - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), CAS-hosted copy, §12.2.3-12.2.4, pp.504-508 (PDF 511-515), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
   open_findings: 1
@@ -19,6 +19,8 @@ The **proportion of variance explained (PVE)** is the share of the total varianc
 > $$\text{cumulative: } \sum_{m=1}^{M}\mathrm{PVE}_m$$
 
 - $\lambda_m$ is the variance of the $m$-th score vector — the eigenvalue attached to the $m$-th [[Loading Vector]]
+- **From the scores.** For centred data the total variance is $\sum_{j}\frac{1}{n}\sum_{i} x_{ij}^2$ and the variance explained by component $m$ is $\frac{1}{n}\sum_{i} z_{im}^2$, so $\mathrm{PVE}_m = \sum_{i} z_{im}^2 \big/ \sum_{j}\sum_{i} x_{ij}^2$ and the $\frac{1}{n}$ cancels
+- Because every variable is centred to mean zero, the scores $z_{1m}, \dots, z_{nm}$ average zero as well, so their variance is simply $\frac{1}{n}\sum_i z_{im}^2$, with no mean to subtract
 - On **standardized** data $\sum_j \lambda_j = p$, so $\mathrm{PVE}_m = \lambda_m/p$ and a component with $\lambda_m > 1$ carries more than one variable's worth of variance (the Kaiser rule of thumb)
 - PVE is **decreasing in $m$** by construction, and the cumulative curve rises to 1 at the last component, $m = \min(n-1, p)$
 - "Explained" means variance, **not** predictive power: a high-PVE component need not relate to the response at all, which is why PCA is [[Unsupervised Learning]]

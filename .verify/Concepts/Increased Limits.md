@@ -109,3 +109,14 @@ created: 2026-09-13
 - checks_run: ILF definition against Werner p.193 and Palmer pp.3-4 (LAS ratio under the frequency assumptions); basic limit of $100K now attributed to ISO per Palmer p.3; estimation bullet rewritten to Werner pp.194-198 (layer-by-layer LAS under censoring, lognormal/Pareto/truncated Pareto, ISO mixed exponential, GLMs) and Palmer p.3 (ILFs from broader experience applied to detailed basic-limit loss costs) — unsourced 'usually taken from ISO' removed; leveraged inflation against Werner p.197 and Palmer p.14 (+3.5%/+16.1%/+23.3% layers); consistency derived from Palmer's LAS integral; assumptions per Werner p.193. Examples recomputed: 800 x 1.35 = 1,080; 800 x 0.10 = 80; 800 x 0.25 = 200; marginals 0.00200/0.00060/0.00060 — flat now described as possible only if S(x) is constant from 250K to 1M; closing paragraphs on fixed expense and risk load rewritten to Werner's assumption and Palmer's risk load.
 - sources_checked: Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.11 pp.192-198 (PDF pp.204-210); Ch.6 pp.116-117 (PDF pp.128-129); Ch.9 p.161 (PDF p.173), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf; Palmer, Increased Limits Ratemaking for Liability Insurance (CAS study note, 2006), PDF pp.3-4, 13-14, 18, 27-28, sha256:44fcc71dbf33647fd07be04e515239989907eb894fc8df5fb18b541ebe301cf7 — https://www.casact.org/sites/default/files/database/studynotes_palmer.pdf
 - note: Three findings fixed, F-004 found and fixed. Medium: examples are vault-authored.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T12:18Z/81e2
+- date: 2026-10-31
+- status_set: verified
+- confidence: medium
+- checks_run: delta of commit c7887a25 only (one link bullet); the rest of the page verified 2026-10-09 against Werner & Modlin and Palmer, unchanged; link target Loss and Loss Adjustment Expense resolves
+- sources_checked: Bahnemann, Distributions for Actuaries, CAS Monograph 2 (2015), §6.2 increased limit factors built on loss plus ALAE, Example 6.3 and Table 6.1, PDF p.179, sha256:d4d172f9646852ab018ae3f0df95e5fbdbfabda4db55d6d4596977ed2eaa3ef8 — https://www.casact.org/sites/default/files/2021-03/8_Bahnemann.pdf
+- note: The added bullet says the page's ILFs are on loss and LAE and points to Loss and Loss Adjustment Expense for the loading; that restates the page's own Werner bullet ('ratio of losses and LAE at the two limits') and Palmer's formula with ALAE(L) and ULAE(L), and Bahnemann's Example 6.3 builds ILFs on indemnity plus ALAE. Navigation only; no new fact.

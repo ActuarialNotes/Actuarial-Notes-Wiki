@@ -2,14 +2,15 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-09-28
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:e1f199323fee5738627b710ff140312f48528427e5785b9d26d6391c6ea249ec
+  content_hash: sha256:fab70e52f66a08433629858129a40d1583892b7c84b1ecfa855af8c683450039
   sources:
     - "SOA, Tables for Exam C (Fall 2009), A.3.3.1 Exponential (PDF p.11) and A.2.3.1 Pareto incl. alpha = 1 (PDF p.8), sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf"
     - "SOA Exam C Sample Solutions (C-09-15), Q#101 mean excess loss (PDF p.37), E[(X-d)+] = E(X) - E(X ^ d) (PDF p.74), sha256:de58b71716cce5fbbe82cd3b31d1533db67686a86cabe407844ae403534a9a4a — https://www.soa.org/globalassets/assets/files/edu/edu-exam-c-sample-sol.pdf"
     - "SOA Exam P Sample Solutions (Aug 2026 revision), Q50 (PDF p.17), sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"
     - "Werner & Modlin, Basic Ratemaking (CAS, 2016), Ch.11 Increased Limits, LAS(H) and ILF(H) = LAS(H)/LAS(B) (PDF p.205), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Fisher, McTaggart, Petker & Pettingell, Individual Risk Rating (CAS Study Note, v3 Oct 2019), Ch.3 §2.1 'Limits', PDF p.55, sha256:3182cd5d8ebccc92be67a246e61a527acda5b304b823448d99f8a2546ca07b81 — https://www.casact.org/sites/default/files/2021-03/8_Fisher_et_al.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Limited Expected Value.md
@@ -24,8 +25,9 @@ The **Limited Expected Value** (LEV) of a random variable $X$ at limit $u$ is th
 - Also written $E[\min(X, u)]$; the **limited loss variable** is $Y = \min(X, u)$
 - $e(u)$ is the mean excess loss at $u$: $e(u) = \dfrac{E[X] - E[X \wedge u]}{1 - F(u)}$
 - As $u \to \infty$, $E[X \wedge u] \to E[X]$
-- Used to price **policy limits** and **excess-of-loss reinsurance**: the insurer pays $E[X \wedge u]$ and the reinsurer pays $E[X] - E[X \wedge u]$
+- Used to price **[[Policy Limit|policy limits]]** and **excess-of-loss reinsurance**: the insurer pays $E[X \wedge u]$ and the reinsurer pays $E[X] - E[X \wedge u]$
 - Exam 5 (Werner & Modlin) writes the limit as $H$ and calls $E[X \wedge H]$ the **limited average severity** $\text{LAS}(H)$. Under its simplifying assumptions, the increased limit factor for limit $H$ over basic limit $B$ is $\text{ILF}(H) = \text{LAS}(H)/\text{LAS}(B)$ (see [[Increased Limits]])
+- **As an area.** $E[X \wedge u]$ is the area under a [[Lee Diagram]]'s curve below the horizontal line at $u$.
 
 **Common formulas:**
 

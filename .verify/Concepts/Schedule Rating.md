@@ -37,3 +37,14 @@ created: 2026-09-13
 - checks_run: Purpose and the double-counting caution against Werner p.297 (unsourced 'new operation with no experience' removed); cap and documentation p.297-298; order of application rewritten to Werner's 'manual rate as modified by experience rating' — unsourced sequencing/reproducibility claim removed; consistency bullet rewritten to Werner's objective vs subjective characteristics — unsourced regulator-review claim removed; rate-leakage bullet tied to Werner Ch.5 p.73 (subjective credits complicate on-level; review distributions of credits). Examples recomputed: 20,000 x 0.95 x 0.90 = 17,100 (14.5% off manual); 1.08 x 0.87/0.94 = 0.9996.
 - sources_checked: Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.15 pp.289, 297-298, 323 (PDF pp.301, 309-310, 335); Ch.5 p.73 (PDF p.85); Ch.2 p.16 (PDF p.28), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf
 - note: F-001 fixed. Medium: examples are vault-authored.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T12:18Z/46f7
+- date: 2026-10-31
+- status_set: verified
+- confidence: high
+- checks_run: delta check of the one c7887a25 bullet (avoiding overlap with experience rating) against Fisher Ch.1 §9; unchanged text not re-checked (verified 2026-10-09 against Werner, C-001)
+- sources_checked: Fisher, McTaggart, Petker & Pettingell, Individual Risk Rating (CAS Study Note, v3 Oct 2019), Ch.1 §9, PDF pp.13-14, sha256:3182cd5d8ebccc92be67a246e61a527acda5b304b823448d99f8a2546ca07b81 — https://www.casact.org/sites/default/files/2021-03/8_Fisher_et_al.pdf; Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.15 pp.289, 297-298, 323 (PDF pp.301, 309-310, 335); Ch.5 p.73 (PDF p.85); Ch.2 p.16 (PDF p.28), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf
+- note: Fisher pp.13-14: a recent change warrants a schedule credit/debit; a risk that always had a full-time safety manager would be double-counted, first by the schedule credit and second by the experience mod; a risk too small for fully credible experience may get some credit, but less, since the mod partially credits it. The bullet transcribes this; its closing sentence ('credit or debit only the part ... the experience mod does not already carry') is a plain restatement. Fisher gives no sizing rule (fraction of experience period x maximum modification), so cas8-2017-q10:r4 is not closed by this page.

@@ -1,11 +1,12 @@
 ---
 verification:
   status: verified
-  confidence: medium
-  last_checked: 2026-10-17
+  confidence: high
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:04ef6425db7d7b03ad4f21ab9aafb42189a69d4b349457034c21087ff32a09f3
+  content_hash: sha256:69ae8050a252a74be231e3858fc4abad7129c735847dd817d81f0bc7b43d7903
   sources:
+    - "Holmes & Casotto, Penalized Regression and Lasso Credibility, CAS Monograph 13 (2025 revision), §3.1.2 p.16 (PDF 26); App. A.1-A.2 pp.86-91 (PDF 96-101, eq. A.1), sha256:f6978accbd2bcd43284ec939dd90966430a3e36fc126aab4584241a13d7a28cd — https://www.casact.org/sites/default/files/2025-08/CAS_Monograph_13_2025_revision.pdf"
     - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed. (2025 revision), §5.5, §9.2, §10.1, PDF pp.65, 100-101, 103-106, sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
     - "Chalk et al., From GLMs to Comprehensive Insurance Pricing: Techniques and Challenges, CAS Monograph 16, 1st ed., Ch.6 §6.1-6.7, Ch.8 §8.2, PDF pp.85-105, 143, sha256:0b293634c3d6320eac9aca5d2f8ba4ca7954f20db8a462b24771c60b5e046d74 — https://www.casact.org/sites/default/files/2026-02/CAS_Monograph-16_From_GLMs.pdf"
     - "Couret & Venter, Using Multi-Dimensional Credibility to Estimate Class Frequency Vectors in Workers Compensation (ASTIN Bulletin 38(1), 2008), abstract, §2, PDF pp.1-2, 7-11, sha256:ce50d8a0fbc395621d29dd153836b0303a269d94697bb1932b5f334b47ebba18 — https://www.casact.org/sites/default/files/2021-03/8_Couret_Venter.pdf"
@@ -25,7 +26,7 @@ verification:
 - **Approaches (Exam 8).**
   1. **Group the levels**, by banding indicated relativities or by clustering on loss characteristics. WC classes are grouped into hazard groups this way for excess pricing. Grouping on the response itself overfits unless it is checked on holdout data.
   2. **Replace the level's identity with its characteristics**: vehicle weight, price and safety features, or a territory's density and weather. A model on characteristics extends to thin and brand-new levels.
-  3. **Shrink toward the complement.** A GLMM treats the variable as a [[Random Effects|random effect]]. The [[Generalized Linear Models for Insurance Rating (Goldburd et al. - 2020)|GLM monograph]] notes that its estimates land between the GLM's full-credibility value and the grand mean, just as in Bühlmann-Straub. Elastic net and ridge penalties ([[Regularization]]) shrink in a similar way.
+  3. **Shrink toward the complement.** A GLMM treats the variable as a [[Random Effects|random effect]]. The [[Generalized Linear Models for Insurance Rating (Goldburd et al. - 2020)|GLM monograph]] notes that its estimates land between the GLM's full-credibility value and the grand mean, just as in Bühlmann-Straub. Elastic net and ridge penalties ([[Regularization]]) shrink in a similar way. [[Penalized Regression and Lasso Credibility (Holmes and Casotto - 2025)|Holmes and Casotto]] show that the ridge penalty is [[Bühlmann Credibility|Bühlmann credibility]] in another form. Take one categorical feature (a WC class code), a normal distribution with the identity link, and as the target each observation's deviation from the grand average, $y_i = Y_i - \bar{Y}$. With $\bar{y}_j$ the average deviation in level $j$ and $n_j$ its number of observations, the ridge estimate for level $j$ is $\hat{\beta}_j = \frac{n_j}{n_j + \lambda}\,\bar{y}_j = \bar{y}_j/(1 + \lambda/n_j)$. That is the Bühlmann estimator, with the penalty $\lambda$ in the place of Bühlmann's $k = \sigma^2/\tau^2$, the within-class variance over the between-class variance. The fewer the observations in a level, the more its coefficient is shrunk toward zero, that is, toward the grand average. The unpenalized GLM ($\lambda = 0$) returns $\bar{y}_j$ itself, full credibility.
   4. **Build a separate model and enter it as an offset.** This is the monograph's approach for territories. A standalone territory model (for example, spatial smoothing) supplies loss costs, which enter the classification GLM as an [[Offset Variable|offset]]. The territory model is in turn offset for the class plan, and the two are iterated toward convergence.
   5. **Borrow strength across outcomes.** Couret and Venter estimate each WC class's vector of claim frequencies by injury type with multi-dimensional credibility, so each injury type's estimate draws on the class's other injury counts. On holdout data this added information beyond the standard seven hazard groups.
 - See [[Territorial Rating]], [[Vehicle Make and Model]] and [[Workers Compensation Classification]] for the three standard cases.

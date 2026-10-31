@@ -2,12 +2,13 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-10-09
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:be017e2fc352116dac8987d81f6fda83e0705949d44163061a8bb64771eb7699
+  content_hash: sha256:25acdefe9366a0b49de63e6c4b499aea8f82a0675f142211bc1b6dd7bb42b37d
   sources:
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.15 pp.303-304 (PDF pp.315-316); Ch.11 p.197 (PDF p.209), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch.1 p.13 (PDF p.19); Ch.3 p.35 (PDF p.41); Ch.5 p.73 (PDF p.79); Ch.7 pp.84, 96 (PDF pp.90, 102); Ch.13 p.268 (PDF p.274); Ch.15 p.332 (PDF p.338); App. A p.426 (PDF p.432), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+    - "Fisher, McTaggart, Petker & Pettingell, Individual Risk Rating (CAS study note, 2019), §5 Self-Insured Retentions, pp.23-24 (PDF 28-29: insurer reimburses only after the insured has paid), sha256:3182cd5d8ebccc92be67a246e61a527acda5b304b823448d99f8a2546ca07b81 — https://www.casact.org/sites/default/files/2021-03/8_Fisher_et_al.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Self-Insured Retention.md
@@ -19,7 +20,7 @@ verification:
 
 > $$\text{Excess Loss} = \sum_i \max(X_i - R, 0)$$
 
-- **SIR vs. deductible.** Under an SIR the entity itself bears the retained layer and excess coverage attaches above it — Friedland's self-insurance pool of municipalities retains $\$500{,}000$ per occurrence beneath its excess of loss cover. Under a large [[Deductible|deductible]] policy the insurer may instead pay the whole claim and seek reimbursement below the deductible from the insured, and either party may handle the claims inside the deductible. The economics are similar; the cash flow and the claims-handling duty are not.
+- **SIR vs. deductible.** Under an SIR the entity itself bears the retained layer and excess coverage attaches above it — Friedland's self-insurance pool of municipalities retains $\$500{,}000$ per occurrence beneath its excess of loss cover. Under a large [[Deductible|deductible]] policy the insurer may instead pay the whole claim and seek reimbursement below the deductible from the insured, and either party may handle the claims inside the deductible. The economics are similar; the cash flow, and with it the exposure to [[Interest Rate Risk|interest rate risk]], and the claims-handling duty are not.
 - **Reserving for a retained layer.** Retained losses are censored at $R$, and larger claims often develop differently from smaller ones, so a [[Development Triangle]] of capped losses develops differently from a gross triangle; retentions also distort severities. Friedland's self-insurance pool projects ultimate claims from reported and paid claims limited to its per-occurrence retention, and the development technique assumes stable retention limits over the experience period — so factors must be built on data capped at the *same* retention (see the loss-limitation issues in [[Large Loss]]).
 - **Data volume is often the binding constraint.** Where an entity's own development data is not sufficiently [[Credibility|credible]], actuaries typically rely on [[External Information in Reserving|benchmark]] patterns from comparable lines or industry data — Friedland's self-insurer examples use industry reporting and payment patterns. Self-insurers collect no premium in the insurer's sense, so exposure bases such as payroll, vehicles or property values stand in for it.
 - **ALAE treatment must be pinned down.** A deductible may apply to losses alone or to losses plus [[Allocated Loss Adjustment Expense|ALAE]], and the data used must be consistent with the policy's treatment of ALAE.

@@ -2,9 +2,9 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-10-05
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:8f62bb440001aba2e3da33d6040727cf036e45613bdc1e696a3553c6e573adca
+  content_hash: sha256:0cb55de834d6d798d7e669b8c0fc4e9500c8516d5288594d076b627c3c47482d
   sources:
     - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer 2021), §5.1.2-5.1.4 printed pp.202-206 (PDF pp.211-215); §6.1.3 printed p.232 (PDF p.240); §6.5.3 lab printed p.271 (PDF p.279), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
     - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed. (2025 revision), §4.3.1 Train and Test PDF p.50; §4.3.4 Cross Validation PDF pp.51-52, sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
@@ -24,7 +24,7 @@ verification:
 - Cross-validation is what turns the [[Bias-Variance Tradeoff]] into a decision: training error falls monotonically with complexity, while CV error is U-shaped, and its minimum marks the right model size
 - It compares **non-nested** models freely (a GLM against a tree, different link functions, different sets of predictors) where a [[Likelihood Ratio Test]] cannot
 - Every step that touches the response — [[Variable Selection]], banding a variable by its indicated relativities, tuning a penalty — must sit **inside** the fold, or the held-out data has already influenced the fit and the CV error is optimistic
-- With time-ordered data, random folds leak the future into the past; use a rolling-origin split, and for grouped data (repeated policies) hold out whole groups
+- With time-ordered data, random folds leak the future into the past; use a rolling-origin split or an out-of-time test set ([[Model Training and Evaluation]]), and for grouped data (repeated policies) hold out whole groups
 
 ![[Media/Figures/Cross-Validation.svg|340]]
 

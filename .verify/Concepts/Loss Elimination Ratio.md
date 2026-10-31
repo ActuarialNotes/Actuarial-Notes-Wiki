@@ -37,3 +37,14 @@ created: 2026-09-13
 - checks_run: Definition and LEV formula against Werner p.202 continuous LER; relativity 1 - LER p.200; data bullet rewritten to Werner p.201 (empirical when ground-up known; net-loss data cannot use higher-deductible policies) — 'gamma' and 'empirical preferred' removed as unsourced; inflation bullet against Werner p.202 and Palmer's leveraged effect; expense bullet rewritten to Werner's all-variable assumption, Ch.9 fixed-expense flattening and the large-deductible claim-handling point (p.303) — the unsourced 'still investigates claims below the deductible in many lines' replaced. Examples recomputed: (100,000 + 600 x 500)/1,500,000 = 26.7%; 1 - e^-0.25 = 22.1%, 1 - e^-0.2083 = 18.8%, relativities 0.779/0.812, excess growth +25.1%.
 - sources_checked: Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.11 pp.199-202 (PDF pp.211-214); Ch.9 p.161 (PDF p.173); Ch.15 p.303 (PDF p.315), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf; Palmer, Increased Limits Ratemaking for Liability Insurance (CAS study note, 2006), PDF pp.13-14, sha256:44fcc71dbf33647fd07be04e515239989907eb894fc8df5fb18b541ebe301cf7 — https://www.casact.org/sites/default/files/database/studynotes_palmer.pdf
 - note: F-001 closed. Medium: examples are vault-authored.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T12:23Z/2047
+- date: 2026-10-31
+- status_set: verified
+- confidence: medium
+- checks_run: delta check of the link-only edit in c7887a25 against the target page and the cited reading; rest of the page unchanged since its prior pass
+- sources_checked: Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.11 pp.199-202 (PDF pp.211-214); Ch.9 p.161 (PDF p.173); Ch.15 p.303 (PDF p.315), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf; Palmer, Increased Limits Ratemaking for Liability Insurance (CAS study note, 2006), PDF pp.13-14, sha256:44fcc71dbf33647fd07be04e515239989907eb894fc8df5fb18b541ebe301cf7 — https://www.casact.org/sites/default/files/database/studynotes_palmer.pdf; D. R. Clark, Basics of Reinsurance Pricing (CAS study note, rev. 2014), p.27 (truncated Pareto severity for excess loss factors, closed-form E[x;L]), sha256:1c4429fee538cc8d90157c1849ca689a3a2173a2670fc57f212d866b493e2c63 — https://www.casact.org/sites/default/files/2021-03/8_Clark.pdf
+- note: Delta pass for one link: 'or from a fitted continuous distribution, such as a [[Pareto Distribution|Pareto]], whose limited expected value has a closed form'. Clark p.27 gives the closed form of E[x;L] for the truncated Pareto, and the target page carries the Pareto LEV formula. Rest of the page unchanged.

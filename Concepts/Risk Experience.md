@@ -2,14 +2,15 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-10-17
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:8fb9a82c6ef73404e2d22f42bc17c9676d789071d59f57006d779eaa42e95199
+  content_hash: sha256:e3e40ef0ec8401b83e7f68f63c7612e02d32fecedca4bcf4cc475c664d15c6e2
   sources:
     - "Werner & Modlin, Basic Ratemaking, 5th ed. (CAS, 2016), Ch.15 experience rating, PDF pp.301-305, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
     - "Fisher, McTaggart, Petker & Pettingell, Individual Risk Rating (CAS Study Note, v3 Oct 2019), Ch.1 §1-5, Ch.2 §3, PDF pp.8-9, 26, sha256:3182cd5d8ebccc92be67a246e61a527acda5b304b823448d99f8a2546ca07b81 — https://www.casact.org/sites/default/files/2021-03/8_Fisher_et_al.pdf"
     - "Mahler, An Example of Credibility and Shifting Risk Parameters (PCAS LXXVII, 1990), §4.2, PDF pp.10-12, sha256:101593b055845cf0882738352dde247da6c40bb5f029f394b5c1ebc597dfdb58 — https://www.casact.org/sites/default/files/database/proceed_proceed90_90225.pdf"
     - "Bailey & Simon, An Actuarial Note on the Credibility of Experience of a Single Private Passenger Car (PCAS XLVI, 1959), conclusion (3), PDF p.3, sha256:3e44bb5b3d17e96aaae61b27b0d72889043c44feb049a3ca3444095101f456e2 — https://www.casact.org/sites/default/files/2021-03/8_Bailey_Simon.pdf"
+    - "AN EXAMPLE OF CREDIBILITY AND SHIFTING RISK PARAMETERS, Mahler, An Example of Credibility and Shifting Risk Parameters (PCAS 1990), pp.235-236, 239 (PDF pp.11-12, 15), Table 4, sha256:101593b055845cf0882738352dde247da6c40bb5f029f394b5c1ebc597dfdb58 — https://www.casact.org/sites/default/files/database/proceed_proceed90_90225.pdf"
   open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Risk Experience.md
@@ -25,7 +26,11 @@ verification:
 - **In experience rating (Exam 8)** the risk's own experience $A$ is usually three completed policy years, excluding the most recent immature one. It is capped per claim, or split into primary and excess. It has to be on the **same basis** as the expected losses $E$ — same limits, same maturity, same exposure — because the mod measures only how far the record shows the risk to differ from others in its [[Rating Class|class]]. The mod is not a charge-back for past losses ([[Experience Rating]]).
 - **In retrospective and loss-sensitive rating** the "actual loss" is the current policy's own losses, limited per occurrence and bounded by the minimum and maximum. Incurred plans first value them about 18 months after inception and then annually, so the premium follows development ([[Loss Sensitive Rating]]).
 - **In credibility estimation (MAS-II)** experience does double duty. It supplies each risk's own mean, and pooled across risks it is the data the structural parameters are estimated from. $\hat v$ comes from year-to-year variation within risks, and $\hat a$ from how much the risk means spread beyond what $\hat v$ explains (*non-parametric*). Alternatively, an assumed family supplies one of them — for Poisson counts $\hat v = \bar X$ (*semi-parametric*). See [[Empirical Bayes Credibility]].
-- **Limits on what experience says.** Mahler showed that risk parameters shift over time, so older years predict less. Bailey and Simon found that adding a second year raised credibility by only about two-fifths, not double. A change in operations can make the record out of date, which is where [[Schedule Rating|schedule rating]] comes in.
+- **Limits on what experience says.** Mahler showed that risk parameters shift over time, so older years predict less. Bailey and Simon found that adding a second year raised credibility by only about two-fifths, not double. A change in operations can make the record out of date, which is where [[Schedule Rating|schedule rating]] comes in. Bailey and Simon's method is on [[Merit Rating]].
+- **Testing whether risk parameters shift (Mahler).** Mahler demonstrates two methods, which can be applied to insurance data as well as to his baseball data.
+  - *The chi-squared test.* For each risk, average the results over separate periods (Mahler uses 5-year segments), and use the standard [[Chi-Square Goodness-of-Fit Test|chi-squared test]] of the hypothesis that every segment was drawn from a distribution with the same mean. With 12 segments the statistic has 11 degrees of freedom. A value above the critical value rejects the hypothesis that the mean is the same over time, in favour of shifting risk parameters; a value below it does not reject it.
+  - *The correlation test.* Compute the [[Correlation|correlation]] between the results for all of the risks for pairs of years, then average the correlations for the pairs of years with the same difference in time (the lag: 1 year, 2 years, and so on), and examine how the average correlation depends on the lag. If the parameters were reasonably constant over time, the correlations would not depend on the length of time between the pair of years. An average correlation that decreases as the lag increases means the parameters of the risk process are shifting over time.
+  - A correlation different from zero is not necessarily [[Statistical Significance|statistically significant]]; Mahler found the correlation fell with the lag until about ten years, when there was no longer a significant correlation. A significant correlation between years close in time means recent years can be usefully employed to predict the future.
 
 > [!example]- Putting Experience on the Same Basis as Expected {Example}
 > A risk's policy year is valued 18 months after inception at $\$120{,}000$ of reported limited losses. Expected *ultimate* limited losses for a risk of its class and size are $\$200{,}000$, of which $55\%$ is expected to be reported by 18 months. How does its experience compare with expectation?

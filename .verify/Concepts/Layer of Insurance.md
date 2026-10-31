@@ -28,3 +28,14 @@ created: 2026-10-17
 - proposed_action: Check the sentence in an Exam 7 pass against its reading and cite it.
 - applied: false
 - fingerprint: fc056e3cbc81
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T12:21Z/714a
+- date: 2026-10-31
+- status_set: verified
+- confidence: medium
+- checks_run: Delta only (older content verified 2026-10-17, unchanged; F-001 stays open). New bullet: a layer's expected cost is the band between two horizontal lines under the Lee curve, the layer method summing horizontal strips S(x)dx and the size method vertical strips x dF (PDF pp.56-57).
+- sources_checked: Bahnemann, Distributions for Actuaries, CAS Monograph 2 (2015), §5.1, Ch.5 inflation, Ch.6, PDF pp.154-155, 165-167, 181-182, sha256:d4d172f9646852ab018ae3f0df95e5fbdbfabda4db55d6d4596977ed2eaa3ef8 — https://www.casact.org/sites/default/files/2021-03/8_Bahnemann.pdf; Fisher, McTaggart, Petker & Pettingell, Individual Risk Rating (CAS Study Note, v3 Oct 2019), Ch.3 §2.1, PDF p.56, sha256:3182cd5d8ebccc92be67a246e61a527acda5b304b823448d99f8a2546ca07b81 — https://www.casact.org/sites/default/files/2021-03/8_Fisher_et_al.pdf; Fisher, McTaggart, Petker & Pettingell, Individual Risk Rating (CAS Study Note, v3 Oct 2019), Ch.3 §2.1 size and layer methods, PDF pp.56-57, sha256:3182cd5d8ebccc92be67a246e61a527acda5b304b823448d99f8a2546ca07b81 — https://www.casact.org/sites/default/files/2021-03/8_Fisher_et_al.pdf
+- note: Link bullet added for Exam 8; checked against Fisher.

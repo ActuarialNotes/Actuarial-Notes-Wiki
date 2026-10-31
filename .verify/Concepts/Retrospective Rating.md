@@ -71,3 +71,97 @@ created: 2026-09-13
 - checks_run: Formula and min/max against Werner p.306-308; basic premium contents p.307; LCF loads ALAE not in losses plus ULAE p.307 (page made specific); tax multiplier now 'premium taxes and related assessments' as Werner says — unsourced 'licences, fees' and 'payable on the premium collected' removed; insurance charge/savings and loss limitation p.308; unsourced 'credit risk' sentence replaced with Werner's 'similar to self-insurance' remark p.305. Examples recomputed: 499,550; 216,300 -> 300,000; 1,122,700 -> 800,000; 1.133 per dollar; band 173.9K-615.2K.
 - sources_checked: Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.15 pp.305-309 (PDF pp.317-321), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf
 - note: Both findings fixed. Medium: the second example's framing is vault-authored.
+
+## [F-003] Raising the per-occurrence limit: all the moved loss sent to ratable losses
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-31T12:21Z/714a
+- date: 2026-10-31
+- severity: minor
+- status: open
+- locus: The formula in full, 'Moving the per-occurrence limit' bullet
+- claim: Raising the per-occurrence limit moves expected loss out of the per-occurrence excess charge in B and into the expected ratable losses, dollar for dollar, and both carry the same c.
+- evidence: Fisher et al. Ch.2 PDF p.26: total expected loss = expected per-occurrence excess + expected aggregate excess (net of savings) + expected ratable losses. With a maximum, the loss a higher limit brings under the limit is split between ratable losses and the aggregate excess (the aggregate charge is priced on limited losses, PDF pp.84-85, 89-90), so not all of it reaches ratable losses; only the total is dollar for dollar. Both the aggregate and per-occurrence charges carry c (PDF p.24). Consistent with CAS Exam 8 2014 Q17(c) examiner's report: 'a decrease in the ELF, and an increase in both the limited expected loss and insurance charge'.
+- source_rank: 2
+- proposed_action: Say the moved loss goes into the expected ratable losses and the aggregate excess charge, dollar for dollar in total, all carrying c.
+- applied: true
+- fingerprint: 6b52933e2845
+
+## [F-003/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-31T12:21Z/714a
+- date: 2026-10-31
+- resolves: F-003
+- status: resolved
+- note: Restated: 'moves expected loss out of the per-occurrence excess charge in B and into the expected ratable losses and the aggregate excess charge, dollar for dollar in total, and all of them carry the same c' (Fisher PDF pp.24, 26).
+
+## [F-004] LER link bullet ambiguous about which share is the LER
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-31T12:21Z/714a
+- date: 2026-10-31
+- severity: minor
+- status: open
+- locus: opening bullets, last bullet
+- claim: The per-accident limit's share of expected loss is its Loss Elimination Ratio.
+- evidence: Read as the share the limit removes, this is Fisher's excess ratio k = (E - E{A_D})/E (Fisher PDF p.84, Formula 3.8), which is 1 - LER, not the LER. The linked page defines LER(d) = E[X ^ d]/E[X], the share below the limit; for a retro per-accident limit that is the share entering ratable losses, E{A_D}/E = 1 - k.
+- source_rank: 2
+- proposed_action: Name the share below the limit, the part that enters ratable losses.
+- applied: true
+- fingerprint: 3e310a641626
+
+## [F-004/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-31T12:21Z/714a
+- date: 2026-10-31
+- resolves: F-004
+- status: resolved
+- note: Restated: 'The share of expected loss below the per-accident limit, the part that enters ratable losses, is the limit's Loss Elimination Ratio' (= E{A_D}/E = 1 - k, Fisher PDF p.84).
+
+## [F-005] Retro development provision U(1 - 1/f) presented as if from the reading
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-31T12:21Z/714a
+- date: 2026-10-31
+- severity: minor
+- status: open
+- locus: Retrospective development, third bullet
+- claim: If the development factor to ultimate is f and the ultimate limited loss is U, the reported loss is U/f, so the provision for future development of limited losses is U(1 - 1/f).
+- evidence: Fisher et al. full-text search: 'development factor' and 'retrospective development' occur zero times; PDF p.31 says only that the insurer can apply loss development factors to the losses in the retro formula, and fn.12 that the NCCI and ISO plans provide for IBNR through factors applied to standard premium, times c and T. The U(1 - 1/f) step is plain arithmetic on the meaning of a factor to ultimate (reported x f = ultimate), not a formula Fisher prints, and the sentence did not say so.
+- source_rank: 2
+- proposed_action: Say Fisher gives no formula and give the step as what a factor to ultimate implies.
+- applied: true
+- fingerprint: ea9a4a1d655d
+
+## [F-005/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-31T12:21Z/714a
+- date: 2026-10-31
+- resolves: F-005
+- status: resolved
+- note: Restated: 'Fisher et al. give no formula for the provision itself. A development factor to ultimate f takes reported limited losses U/f to the ultimate limited loss U, so the future development of limited losses it provides for is U(1 - 1/f).' Kept as a derivation from the factor's meaning; Fisher's mechanism (LDFs applied to the losses, PDF p.31; NCCI/ISO factors on standard premium, fn.12) is in the bullet before.
+
+## [C-003] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T12:21Z/714a
+- date: 2026-10-31
+- status_set: verified
+- confidence: medium
+- checks_run: Delta only (the Werner content was verified 2026-10-09 and is unchanged). Formula R=(B+cL)T and contents of B, fn.6 excess loss premium, c applied to the charges, expense part e-(c-1)E with e reflecting the premium discount (pp.22-24); minimum premium B x T with no minimum (p.25); three loss components (p.26); 18-month first adjustment, refund then additional premium, credit risk (p.26); LDFs, fn.12 NCCI/ISO factors on standard premium x c x T for 3/4 adjustments, none for paid plans (p.31); Formula 3.3 B = e-(c-1)E+cI and balance equations 3.4/3.5 (pp.62-63), tax version re-derived dividing premiums by T; per-occurrence-limit version re-derived from Formula 3.8 and the ICRLL pricing (e+E total, E{A_D} in denominators); psi(r_G) = (G/T-(E+e))/(cE) re-derived from Formulas 3.1-3.3 with r_H=0 — kept, plain derivation. Three findings fixed (F-003 dollar-for-dollar split, F-004 LER share, F-005 U(1-1/f) restated). Rule 10: no 2012-q19, 2014-q17/18, 2015-q13/16/17 figures on the page.
+- sources_checked: Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.15 pp.305-309 (PDF pp.317-321), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf; Fisher, McTaggart, Petker & Pettingell, Individual Risk Rating (CAS Study Note, v3 Oct 2019), Ch.2 §3 and §7, PDF pp.22-26, 31 incl. fn.6 and fn.12; Ch.3 §2.2 Formulas 3.1-3.5, PDF pp.58-63; Table L PDF p.84; ICRLL PDF pp.89-90; answers PDF pp.116-117, sha256:3182cd5d8ebccc92be67a246e61a527acda5b304b823448d99f8a2546ca07b81 — https://www.casact.org/sites/default/files/2021-03/8_Fisher_et_al.pdf
+- note: Medium: three sentences are derivations from Fisher's formulas rather than its words, each re-derived.
+
+## [C-004] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T12:58Z/2de4
+- date: 2026-10-31
+- status_set: verified
+- confidence: high
+- checks_run: Delta only: 'Balanced plans' bullet against Ch.4 p.95 (expected premium the same regardless of the retrospective provisions; actual premium varies if actual losses are more or less than expected; not necessary to balance premium for most policy types, expected losses still balanced) and Ch.2 p.21 (balance principle required under some US filed plans, does not make sense given the difference in risk transfer and capital). ELG bullet against PDF p.89 (1998 Table M by ELG with a State/Hazard Group adjustment) and the p.89-90 example (adjusted figure selects ELG 29; entry ratio 750,000/490,000 and charge 0.1583 x 490,000 on unadjusted amounts). r_G bullet derived from psi = phi + r - 1 (Fisher p.52, PDF p.57) and the page's no-minimum equation, which I re-derived from B = e - (c-1)E + c phi(r_G) E and G/T = B + c r_G E. No question's numbers.
+- sources_checked: Fisher, McTaggart, Petker & Pettingell, Individual Risk Rating (CAS Study Note, v3 Oct 2019), Ch.2 p.21 (PDF p.26); Ch.3 §5.2 p.84-85 (PDF pp.89-90); Ch.4 p.95 (PDF p.100), sha256:3182cd5d8ebccc92be67a246e61a527acda5b304b823448d99f8a2546ca07b81 — https://www.casact.org/sites/default/files/2021-03/8_Fisher_et_al.pdf
+- note: Older content verified this morning (run be9b/714a); only the delta re-checked.

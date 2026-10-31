@@ -28,3 +28,14 @@ created: 2026-10-17
 - proposed_action: Decide whether the page should note the life-contingencies sense or the SOA links should point elsewhere; check in an SOA pass.
 - applied: false
 - fingerprint: 37579b5c6876
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T12:18Z/81e2
+- date: 2026-10-31
+- status_set: verified
+- confidence: medium
+- checks_run: delta of commit c7887a25 only (the 'Loading a premium' bullet); older text verified 2026-10-17 against Fisher et al. and Werner & Modlin, unchanged; open F-001 untouched
+- sources_checked: Bahnemann, Distributions for Actuaries, CAS Monograph 2 (2015), §6.1 eqs.6.1-6.7, PDF pp.175-176; Example 6.3 and ILF eq.6.15 with ALAE factor (1+u), PDF p.179, sha256:d4d172f9646852ab018ae3f0df95e5fbdbfabda4db55d6d4596977ed2eaa3ef8 — https://www.casact.org/sites/default/files/2021-03/8_Bahnemann.pdf
+- note: P = m(p+f)/(1-v) is Bahnemann eq.6.5 with v = variable expenses plus profit and risk loads as a fraction of premium (p.176) and f fixed expense per exposure; loss-cost multiplier 1/(1-v) is eq.6.6. Bahnemann p.175: general expenses include commission, taxes and fees, so the words version is a faithful restatement. LAE in the numerator: Example 6.3 (p.179) loads ALAE at 20% of indemnity as E[X;l](1.20) inside the severity while variable expenses (35% of premium) divide; the page's sentence restates that, and the writer's flag on it is cleared. Profit zero or negative in anticipation of investment income is p.175 verbatim; that a negative load lowers v, enlarges 1-v and lowers P follows from eq.6.5. No question numbers on the page.

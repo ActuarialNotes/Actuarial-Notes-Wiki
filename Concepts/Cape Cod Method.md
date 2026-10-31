@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:b691de0d2a524b7f3bcad65ba16c4fcf22d6273a2cc9ec668f0bffc75848ad1e
+  content_hash: sha256:0691f4f4db9442a4c88ef9cb3f196bc8bbf1c3e062c71e553a7e134bfb1bbb39
   sources:
     - "Patrik, Reinsurance, Ch.7 of Foundations of Casualty Actuarial Science (4th ed., CAS 2001) — Exam 7's reading before Friedland (2022), printed pp.451-458 (PDF pp.109-116: CL and BF disadvantages; Stanard-Bühlmann method, earned risk pure premium net of commissions, brokerage and internal expenses, Formula 7.64, used-up premium, Table 7.65 and the accuracy comparison; Credibility IBNR, Formula 7.66), sha256:26f2fc8441b1a2f8b335a9bfc9e20f0c742fa340c4b7f6eff93376c3c340cf06 — https://www.casact.org/sites/default/files/database/studynotes_ch7.pdf"
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, Version 3, 2010), Ch.10 Cape Cod Technique, PDF pp.180-185 (printed 174-179: Cape Cod = reported BF with the expected claim ratio from reported experience; used-up premium = EP x % reported; % reported = 1/CDF; not as appropriate as BF for thin or volatile data; on-level premium and trended claims required in theory; Scenario 3 case-strength overstatement), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
@@ -27,7 +27,7 @@ verification:
 - Cape Cod converges to the [[Chain Ladder Method|chain ladder]] as cohorts mature and to the [[Expected Loss Method|expected claims]] technique for very immature ones — the same limiting behaviour as BF.
 - A **decay-weighted** variant (generalized Cape Cod) estimates a separate ELR for each year, weighting the other years less the further they lie from it, recognizing that the loss ratio level drifts.
 - **Patrik's chapter, Exam 7's reading before Friedland (2022), adds** (not on the current outline), for reinsurance:
-  - **Exposure base.** The premium is each year's earned **risk pure premium**: the treaty premium net of reinsurance commissions, brokerage fees and internal expenses, adjusted to remove rate-level differences between years. Commissions and brokerage are easy to net out, being coded by contract. Internal expenses are harder, and if they cannot be netted out they can be left in, since only a relative exposure base is needed.
+  - **Exposure base.** The premium is each year's earned **risk pure premium**: the treaty premium net of reinsurance commissions, brokerage fees and internal expenses, adjusted to remove rate-level differences between years. Commissions and brokerage are easy to net out, being coded by contract. Internal expenses are harder, and if they cannot be netted out they can be left in, since only a relative exposure base is needed. The rate-level adjusted premium is what goes into the Stanard-Bühlmann calculation of the ELR and the IBNR; each year's estimated ultimate loss is then its reported loss plus that IBNR, and its estimated ultimate loss ratio is stated over the year's earned risk pure premium, not the adjusted premium.
   - **Against the chain ladder.** The ELR comes from the overall reported experience rather than being selected judgmentally, as in Bornhuetter-Ferguson, though each year's IBNR then depends heavily on its rate-level adjusted premium. As long as those rate-relativity adjustments are reasonably accurate, Stanard-Bühlmann gives more accurate estimates than the chain ladder for the recent, immature years and overall.
   - **Credibility IBNR.** When the rate-level adjustments are not fully trusted, the two estimates are weighted together: more weight on Stanard-Bühlmann for green years, where the chain ladder estimate has high variance, and more on the chain ladder for older years, where the cumulative rate-level adjustments are trusted less. With report lag $\text{Rlag}_k$ and a credibility factor $0 \le CF \le 1$, the weight on the chain ladder is $Z_k = CF \times \text{Rlag}_k$, and $\text{IBNR}_k = Z_k \cdot \text{IBNR}^{CL}_k + (1 - Z_k) \cdot \text{IBNR}^{SB}_k$.
 

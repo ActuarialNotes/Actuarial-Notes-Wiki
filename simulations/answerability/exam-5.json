@@ -3263,7 +3263,15 @@
        "page": "Confidence Interval",
        "quote": "The interval excludes $1.00$, so the effect is significant at $5\\%$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Generalized Linear Model",
+      "quote": "a level whose band includes the base level's 1.00 cannot be told apart from the base",
+      "note": "Standard-errors bullet: ±2 SE ≈ 95% CI; band including 1.00 not distinguishable from base. Werner & Modlin Ch.10 p.179 (PDF 191)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     },
     {
      "id": "r2",
@@ -3326,7 +3334,13 @@
      "statement": "When a GLM indication for a sparse or counterintuitive level is unreliable, select a factor judgmentally that fits a smooth monotone pattern relative to neighboring levels (for example, interpolating between reliable levels or continuing the trend), rather than collapsing levels or reweighting GLM output.",
      "concept": "Judgmental Adjustment of GLM Indications",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Werner & Modlin Ch. 10 and App. F give no procedure for choosing a sparse level's factor by interpolation or a monotone pattern; that is the examiners' model answer. What the reading does teach (thin levels' wide standard errors, anomalous results calling for further analysis, judgment) is on Generalized Linear Model, fact checked in run 2026-10-31T17:34Z/ceab.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-final"
+     }
     },
     {
      "id": "r6",
@@ -3339,7 +3353,15 @@
        "page": "Statistical Significance",
        "quote": "Either combine it with the base or credibility-weight its indication."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Generalized Linear Model",
+      "quote": "so the variable is removed from the model (App. F)",
+      "note": "Judgment bullet: unpredictive variable (levels near 1.00, wide SE at thin level, chi-square not rejecting) removed from the model; models refined until only significant variables remain. W&M App. F (PDF 417-419), Ch.10 p.179",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     }
    ]
   },
@@ -5995,7 +6017,15 @@
      "statement": "Consistency test: compare a variable's indicated relativities across individual years; if the yearly curves follow similar patterns and direction, the variable's results are stable and pass the consistency test.",
      "concept": "GLM Model Diagnostics and Variable Selection",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Generalized Linear Model",
+      "quote": "When each year's line has roughly the same shape and direction, apart from random differences, the variable's predictive power is stable over time.",
+      "note": "Consistency bullet. Werner & Modlin Ch.10 p.180 & fn.36 (PDF 192), App. F (PDF 416)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     },
     {
      "id": "r3",
@@ -6003,7 +6033,15 @@
      "statement": "Levels with few exposures have volatile, less credible results, so disparities at those levels do not invalidate the stable results at well-populated levels.",
      "concept": "Credibility",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Generalized Linear Model",
+      "quote": "a level with little exposure has wide standard errors mainly because of its small volume, and that does not invalidate strong results at the levels where most of the business is",
+      "note": "Standard-errors bullet. Werner & Modlin Ch.10 p.179 (PDF 191), symbol 17 example in general form",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     },
     {
      "id": "r4",
@@ -6050,7 +6088,15 @@
      "statement": "A neural network can enhance a GLM analysis by identifying missing predictive variables not yet included in the GLM.",
      "concept": "Data Mining Techniques",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Generalized Linear Model",
+      "quote": "The results of a [[Neural Network|neural network]] can be fed into a GLM (or vice versa), which helps highlight areas of improvement in the GLM, such as a missing interaction.",
+      "note": "Data-mining bullet. Werner & Modlin Ch.10 p.185 (PDF 197)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     }
    ]
   },
@@ -10986,7 +11032,15 @@
        "page": "Rating Variable",
        "quote": "It must be statistically related to expected losses; a causal story strengthens the case, but ASOP No. 12 does not require one."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Classification Ratemaking",
+      "quote": "Some characteristics are only correlated with expected losses, while others directly affect them, and it is socially preferable for rating variables to be causal.",
+      "note": "Criteria-in-detail, causality (+ ASOP 12 §3.2.2 no cause-and-effect needed). W&M Ch.9 p.157 (PDF 169)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     },
     {
      "id": "r5",
@@ -10999,7 +11053,15 @@
        "page": "Rating Variable",
        "quote": "- **Social:** it passes. The variable is controllable by the insured, causally intuitive and not a proxy for a protected class."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Classification Ratemaking",
+      "quote": "It is preferable if insureds have some ability to control the class they belong to, and so to affect the premium they are charged.",
+      "note": "Criteria-in-detail, controllability. W&M Ch.9 pp.157-158 (PDF 169-170)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     },
     {
      "id": "r6",
@@ -11219,7 +11281,15 @@
        "page": "Approximate Confidence Interval",
        "quote": "The usual one is the normal interval, the estimate plus or minus a normal percentile times a standard error taken from the [[Fisher Information|Fisher information]]."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Generalized Linear Model",
+      "quote": "An upward pattern with narrow standard errors suggests the variable is statistically significant.",
+      "note": "Standard-errors bullet. Werner & Modlin Ch.10 p.179 (PDF 191)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     },
     {
      "id": "r2",
@@ -11329,7 +11399,15 @@
        "page": "Credit-Based Insurance Scoring",
        "quote": "It is one of the most predictive [[Rating Variable|rating variables]] U.S. insurers use and one of the most contested, because its predictive power is well documented while its causal link to loss and its effect on protected groups are disputed."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Classification Ratemaking",
+      "quote": "despite their strong statistical power in predicting losses, met a consumer backlash from a belief that they lack an obvious causal link to losses",
+      "note": "Criteria-in-detail, causality (credit scores). W&M Ch.9 p.157 (PDF 169)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     }
    ]
   },
@@ -11469,7 +11547,15 @@
        "page": "Rating Variable",
        "quote": "A categorical one uses the levels of a [[Categorical Predictor|categorical predictor]], possibly with [[Interaction|interactions]]."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Classification Ratemaking",
+      "quote": "The expected cost estimates should vary across the levels of the variable, the estimated differences should be within an acceptable level of statistical confidence",
+      "note": "Criteria-in-detail, statistical significance. W&M Ch.9 p.155 (PDF 167)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     },
     {
      "id": "r2",
@@ -11482,7 +11568,15 @@
        "page": "Rating Variable",
        "quote": "Models lose accuracy as the world changes, so they are also rebuilt periodically."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Classification Ratemaking",
+      "quote": "and they should be relatively stable from one year to the next",
+      "note": "Criteria-in-detail, statistical significance (stability). W&M Ch.9 p.155 (PDF 167)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     },
     {
      "id": "r3",
@@ -11495,7 +11589,15 @@
        "page": "Confidence Interval",
        "quote": "Urban risks are estimated to have $12\\%$ to $80\\%$ higher frequency. The interval excludes $1.00$, so the effect is significant at $5\\%$ — but it is wide enough that the indicated relativity is far from precisely known."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Generalized Linear Model",
+      "quote": "Two standard errors either side of a parameter estimate are akin to a 95% confidence interval",
+      "note": "Standard-errors bullet (+ band including 1.00 not distinguishable from base). Werner & Modlin Ch.10 p.179 (PDF 191)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     },
     {
      "id": "r4",
@@ -11559,7 +11661,15 @@
        "page": "Rating Variable",
        "quote": "Adopt it only in a verifiable form — odometer readings at renewal or telematics — or with a moderated factor and audit rights. A strong model coefficient does not by itself make a usable rating variable."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Generalized Linear Model",
+      "quote": "Model relativities are still subject to the operational, social and legal criteria for a rating variable — statistical significance alone does not make a variable usable.",
+      "note": "Re-quoted after run 2026-10-31T17:34Z/ceab cut the credibility clause (Werner Ch.12 p.236).",
+      "date": "2026-10-31",
+      "run": "g8-cas5-chk1"
+     }
     }
    ]
   },
@@ -12786,7 +12896,15 @@
        "page": "Close Year",
        "quote": "The trade-off is severe selection bias: within any recent accident year the claims that close first are the small, simple ones."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Berquist-Sherman Method",
+      "quote": "read the adjusted paid claims off the curve at the adjusted closed counts",
+      "note": "Re-quoted after writer 4 rewrote step 3 (checked, run 2026-10-31T17:32Z/cde6): Berquist and Sherman fit cumulative paid claims against cumulative closed counts and read the adjusted paid claims off the curve at the adjusted closed counts (Friedland Ch. 13 pp. 288-289).",
+      "date": "2026-10-31",
+      "run": "g8-cas5-final"
+     }
     },
     {
      "id": "r5",
@@ -16931,7 +17049,15 @@
        "page": "Professional Responsibilities of the Actuary",
        "quote": "ASOP 12 (*Risk Classification*: risk characteristics must be related to expected outcomes, though a cause-and-effect relationship need not be shown, and applicable law can limit the choice)"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Classification Ratemaking",
+      "quote": "ASOP 12 asks that risk characteristics be related to expected outcomes, and a relationship is demonstrated if the variation in actual or reasonably anticipated experience correlates to the characteristic.",
+      "note": "ASOP 12 §3.2.1-3.2.2 paragraph (ASOP 12 PDF p.9)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     },
     {
      "id": "r2",
@@ -17210,7 +17336,15 @@
        "page": "Territorial Rating",
        "quote": "$$\\text{Territory relativity} = \\frac{\\text{Territory pure premium}}{\\text{Overall pure premium}}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Classification Ratemaking",
+      "quote": "A level's indicated relativity is first computed as its pure premium (loss and ALAE per exposure) divided by the pure premium of all levels combined, its relativity to the total.",
+      "note": "One-way approaches, pure premium. W&M Ch.9 p.163 (PDF 175)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     },
     {
      "id": "r4",
@@ -17218,7 +17352,15 @@
      "statement": "Normalize current territorial relativities by dividing each by the exposure-weighted average current relativity, so that they are on the same average-rating-factor basis as the indicated relativities before credibility weighting.",
      "concept": "Credibility Weighting of Territorial Relativities",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Classification Ratemaking",
+      "quote": "each current relativity is divided by the exposure-weighted average current relativity, so that it is on the same basis as the indicated relativity to the total",
+      "note": "One-way approaches, credibility-weighting. W&M App. E (PDF 411, 413), Ch.12 p.236 (PDF 248)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     },
     {
      "id": "r5",
@@ -20911,7 +21053,15 @@
        "page": "Frequency-Severity Method",
        "quote": "The method needs **consistent count definitions** across the whole triangle, and it is sensitive to [[Large Loss|large losses]] in the severity series, so severities are usually capped and the excess layer added back separately."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Frequency-Severity Method",
+      "quote": "to avoid distortions from spurious large claims the actuary may cap claims at a predetermined value or exclude large claims entirely, and must then add a provision for large claims to the estimate of unpaid claims",
+      "note": "Re-quoted after run 2026-10-31T17:32Z/cde6 restated the capping sentence to Friedland Ch. 11 p. 210; the same page teaches building a known change in claim cost into the selected severities.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-final"
+     }
     },
     {
      "id": "r4",
@@ -25303,7 +25453,15 @@
        "page": "Territorial Rating",
        "quote": "$$\\text{Territory relativity} = \\frac{\\text{Territory pure premium}}{\\text{Overall pure premium}}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Classification Ratemaking",
+      "quote": "companies compare current, indicated and competitors' relativities with each set normalized so that its exposure-weighted average relativity is 1.00",
+      "note": "One-way approaches, pure premium (relativity to total, normalized). W&M Ch.9 p.163 (PDF 175)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     },
     {
      "id": "r2",
@@ -25311,7 +25469,15 @@
      "statement": "When the complement of credibility is 'no change', current relativities must be rebased by dividing each by their exposure-weighted average so they are on the same normalized basis as the indicated relativities, and used as the complement.",
      "concept": "Credibility Complement for Class Relativities",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Classification Ratemaking",
+      "quote": "In Werner's appendix example the complement of credibility is the current relativities, normalized the same way",
+      "note": "One-way approaches, credibility-weighting. W&M App. E (PDF 411, 413)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     },
     {
      "id": "r3",
@@ -25430,7 +25596,15 @@
        "page": "Chi-Squared Distribution",
        "quote": "Since $9.4 > 7.81$, reject the smaller model at 5%: the variable is significant."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Generalized Linear Model",
+      "quote": "A chi-square percentage of less than 5% generally suggests rejecting it and keeping the model with the variable",
+      "note": "Deviance-tests bullet. W&M App. F (PDF 416-417); Goldburd §2.3.2",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     },
     {
      "id": "r4",
@@ -25472,7 +25646,15 @@
      "statement": "Multivariate methods are discouraged in heavily regulated markets where the regulator mandates a different ratemaking method (e.g. California private passenger auto using univariate sequential factor selection and adjusted pure premium), whereas merely restricting allowable variables does not preclude multivariate methods.",
      "concept": "Multivariate Methods: Regulatory Environment",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Generalized Linear Model",
+      "quote": "California mandates sequential analysis, a one-pass form of the adjusted one-way approach, as the only classification ratemaking method allowed for voluntary private passenger auto",
+      "note": "Adoption bullet (+ a prohibited variable restricts variables, not method, Ch.9 p.158). Werner & Modlin Ch.10 p.173 (PDF 185)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     },
     {
      "id": "r7",
@@ -25480,7 +25662,15 @@
      "statement": "Multivariate methods are discouraged when data is insufficient (new line or territory) or too heterogeneous (large commercial, large-deductible or retrospectively rated, individually underwritten risks) to build a credible model dataset.",
      "concept": "Multivariate Methods: Data Limitations",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Generalized Linear Model",
+      "quote": "so data too thin (a new line or a new territory) or too heterogeneous make a model hard to build",
+      "note": "Adoption bullet: modelling dataset with suitable number of observations; homogeneous body of claims. Werner & Modlin Ch.10 p.177 (PDF 189)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     },
     {
      "id": "r8",
@@ -25488,7 +25678,15 @@
      "statement": "Multivariate methods may also be discouraged by operational constraints (lack of systems, data infrastructure or expertise where cost exceeds benefit) or by little competitive pressure (no adverse selection threat from rivals).",
      "concept": "Multivariate Methods: Operational and Competitive Environment",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Generalized Linear Model",
+      "quote": "An insurer without the computing resources, data or modelling expertise, or one facing little competitive pressure, has correspondingly less reason to adopt them.",
+      "note": "Adoption bullet: adoption drivers computing power, data warehouses, competitive pressure. Werner & Modlin Ch.10 p.174 (PDF 186)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     }
    ]
   },
@@ -25832,7 +26030,15 @@
        "page": "Statistical Significance",
        "quote": "With a log link, a class coefficient $\\hat{\\beta}$ is a relativity of $e^{\\hat{\\beta}}$, and the [[p-Value|p-value]] behind $z$ is the chance of an estimate that far from zero if the class truly had no effect."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Generalized Linear Model",
+      "quote": "A chi-square percentage of less than 5% generally suggests rejecting it and keeping the model with the variable, so the variable is statistically significant.",
+      "note": "Deviance-tests bullet. W&M Ch.10 p.180 (PDF 192), App. F (PDF 416-417)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     },
     {
      "id": "r2",
@@ -25845,7 +26051,15 @@
        "page": "Statistical Significance",
        "quote": "A sparse base widens every other level's interval, so the [[Generalized Linear Models for Insurance Rating (Goldburd et al. - 2020)|GLM monograph]] advises a base level with plenty of data."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Generalized Linear Model",
+      "quote": "A level with many exposures and a narrow band is a reliable estimate, while a level with little exposure has wide standard errors mainly because of its small volume",
+      "note": "Standard-errors bullet. Werner & Modlin Ch.10 p.179 (PDF 191)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     },
     {
      "id": "r3",
@@ -28873,7 +29087,15 @@
        "page": "Rating Variable",
        "quote": "**Social:** it passes. The variable is controllable by the insured, causally intuitive and not a proxy for a protected class."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Classification Ratemaking",
+      "quote": "Some characteristics are only correlated with expected losses, while others directly affect them, and it is socially preferable for rating variables to be causal.",
+      "note": "Criteria-in-detail, causality and controllability (insureds cannot control age or gender). W&M Ch.9 pp.157-158 (PDF 169-170)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     },
     {
      "id": "r4",
@@ -29107,7 +29329,15 @@
      "statement": "Basic geographic units such as zip codes are granular but their boundaries change over time, whereas counties are stable but coarser, so unit choice trades off granularity against stability.",
      "concept": "Territorial Ratemaking",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Territory Ratemaking",
+      "quote": "Zip codes have the advantage of being the most readily available, but they change over time.",
+      "note": "Geographic-unit bullet (counties static but heterogeneous; census blocks static but need mapping). W&M Ch.11 p.189 (PDF 201)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     },
     {
      "id": "r5",
@@ -29389,7 +29619,15 @@
      "statement": "Affordability means premiums should remain affordable, especially for compulsory coverage; controllability means the insured can influence the rating characteristic and thereby their premium, encouraging loss control.",
      "concept": "Criteria for Evaluating Rating Variables",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Classification Ratemaking",
+      "quote": "It is desirable for insurance to be affordable for all risks, especially where it is required by law",
+      "note": "Criteria-in-detail, affordability and controllability. W&M Ch.9 p.157 (PDF 169)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     }
    ]
   },
@@ -31649,7 +31887,15 @@
        "page": "Chi-Square Goodness-of-Fit Test",
        "quote": "Reject $H_0$ at level $\\alpha$ when $Q$ exceeds the upper-$\\alpha$ [[Critical Value|critical value]] of the [[Chi-Squared Distribution|chi-squared distribution]] with $k - 1 - r$ degrees of freedom."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Generalized Linear Model",
+      "quote": "treats percentages between 5% and 30% as often inconclusive on this test alone",
+      "note": "Deviance-tests bullet: <5% significant, 5-30% inconclusive, >30% not significant, so the question's 10% does not establish significance. W&M App. F (PDF 416-419)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     },
     {
      "id": "r2",
@@ -31666,7 +31912,15 @@
        "page": "Confidence Interval",
        "quote": "The interval excludes $1.00$, so the effect is significant at $5\\%$ — but it is wide enough that the indicated relativity is far from precisely known."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Generalized Linear Model",
+      "quote": "Wide standard errors, often straddling unity, suggest the variable is detecting mostly noise and is worth removing from the model",
+      "note": "Standard-errors bullet. Werner & Modlin Ch.10 p.179 (PDF 191)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     },
     {
      "id": "r3",
@@ -31674,7 +31928,15 @@
      "statement": "The consistency test compares GLM-indicated relativities across time periods (e.g., years); a variable passes only if the indications move in a consistent pattern, and fails if years diverge or move in opposite directions.",
      "concept": "GLM Variable Predictive Quality Tests",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Generalized Linear Model",
+      "quote": "A level whose yearly lines diverge or jump about, typically one with little data, is volatile, and its indication is mostly noise",
+      "note": "Consistency bullet. Werner & Modlin Ch.10 p.180 fn.36 (PDF 192), App. F (PDF 419)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     },
     {
      "id": "r4",
@@ -31691,7 +31953,15 @@
        "page": "Rating Variable",
        "quote": "A strong model coefficient does not by itself make a usable rating variable."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Generalized Linear Model",
+      "quote": "The tests are read together, and the actuary also evaluates whether the model and diagnostic results are reasonable given knowledge of the claims experience being modelled.",
+      "note": "Judgment bullet. W&M App. F (PDF 417-419)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     },
     {
      "id": "r5",
@@ -31716,7 +31986,15 @@
      "statement": "Loss ratios have no natural error distribution or a priori expected shape (unlike Poisson-family for frequency and Gamma for severity), making distribution and link function choice difficult.",
      "concept": "GLM Challenges with Loss Ratio Data",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Generalized Linear Model",
+      "quote": "Actuaries have an a priori expectation of frequency and severity patterns, whereas loss ratio patterns depend on the current rates",
+      "note": "Loss-ratio bullet (+ no commonly accepted distribution for loss ratios). Werner & Modlin Ch.10 p.177 (PDF 189)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     },
     {
      "id": "r7",
@@ -31741,7 +32019,15 @@
      "statement": "Univariate analysis can be preferable to GLM because it is simpler and more transparent to explain to management, underwriters and regulators, and it suits thin data or limited software, computing power or expertise.",
      "concept": "Univariate vs Multivariate Classification Analysis",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Generalized Linear Model",
+      "quote": "so where software or expertise is lacking the simpler, more transparent method can still serve",
+      "note": "One-way bullet. Werner & Modlin Ch.10 pp.175, 183 (PDF 187, 195)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     }
    ]
   },
@@ -31881,7 +32167,15 @@
      "statement": "A rating variable satisfies the objective definition criterion when its categories are clear and unambiguous, so that different people classify the same risk identically.",
      "concept": "Objective Definition of Rating Variables",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Classification Ratemaking",
+      "quote": "The levels of a variable should be objectively defined, so that classifying a risk does not rest on a subjective judgment.",
+      "note": "Criteria-in-detail, objective definitions. W&M Ch.9 p.156 (PDF 168)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     },
     {
      "id": "r4",
@@ -31923,7 +32217,15 @@
      "statement": "A variable is controllable if the insured can change it to reduce their risk and premium; a variable that is costly to change or does not affect risk gives the insured no real incentive to reduce losses.",
      "concept": "Controllability as a Social Criterion",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Classification Ratemaking",
+      "quote": "Controllability is not the manipulation the operational criteria guard against: it means the insured is motivated to improve the risk itself",
+      "note": "Criteria-in-detail, controllability. W&M Ch.9 pp.157-158 & fn.29 (PDF 169-170)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     }
    ]
   },
@@ -32066,7 +32368,15 @@
      "statement": "Normalize current relativities by dividing each by the exposure-weighted average current relativity, so they are on the same basis as the indicated relativities (relativity to the total) and can serve as the credibility complement.",
      "concept": "Normalizing Current Relativities",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Classification Ratemaking",
+      "quote": "each current relativity is divided by the exposure-weighted average current relativity, so that it is on the same basis as the indicated relativity to the total",
+      "note": "One-way approaches, credibility-weighting. W&M App. E (PDF 411, 413), Ch.12 p.236 (PDF 248)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     },
     {
      "id": "r4",
@@ -32126,7 +32436,15 @@
        "page": "Balancing Back",
        "quote": "When other rating variables also apply, each class's exposures are first multiplied by their average relativity for those other variables, so that the factor measures only this variable's effect on the average premium."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Pure Premium Method",
+      "quote": "the pure premium approach can be performed using exposures adjusted by the exposure-weighted average relativity of all the other rating variables",
+      "note": "Classification section, adjusted PP (minimizes distributional bias). W&M Ch.9 pp.166-168 (PDF 178-180)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     }
    ]
   },
@@ -32142,7 +32460,15 @@
      "statement": "Assess GLM relativity credibility from diagnostic charts by comparing exposure volume at each level and the width of the standard-error bounds: many exposures and narrow bands indicate a credible estimate, while few exposures and wide bands indicate an unreliable one.",
      "concept": "GLM Diagnostics",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Generalized Linear Model",
+      "quote": "A level with many exposures and a narrow band is a reliable estimate",
+      "note": "Standard-errors bullet: read bands against exposure bars. Werner & Modlin Ch.10 p.179 (PDF 191)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     },
     {
      "id": "r2",
@@ -34614,7 +34940,15 @@
      "statement": "To test for exposure correlation, compare the percentage mix of one variable's levels (e.g., driver type) across each level of the other variable (e.g., territory); identical mixes mean no correlation and differing mixes mean correlation.",
      "concept": "Exposure Correlation in Univariate Analysis",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Pure Premium Method",
+      "quote": "Compare the distribution of one variable's exposures within each level of the other",
+      "note": "Classification section, exposure-correlation test. W&M Ch.9 p.164 (PDF 176)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     },
     {
      "id": "r4",
@@ -34622,7 +34956,15 @@
      "statement": "When two rating variables are not exposure correlated, no exposure adjustment is needed and the simple univariate relativities can be used for both.",
      "concept": "Exposure Correlation in Univariate Analysis",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Pure Premium Method",
+      "quote": "the variables are not exposure-correlated and the one-way relativities are not distorted by it, so they need no adjustment",
+      "note": "Classification section, exposure-correlation test. W&M Ch.9 p.164 (PDF 176)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     },
     {
      "id": "r5",
@@ -34630,7 +34972,15 @@
      "statement": "To adjust for exposure correlation in sequential univariate analysis, first compute relativities for one variable, then compute adjusted exposures for the other variable's levels by weighting each exposure by the first variable's relativity, and compute pure premiums and relativities from losses divided by those adjusted exposures.",
      "concept": "Sequential Analysis (Exposure Adjustment)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Pure Premium Method",
+      "quote": "chains the adjustment: a one-way analysis of the first variable, then the second variable's relativities from exposures adjusted for the first variable's results",
+      "note": "Classification section, adjusted PP + sequential analysis. W&M Ch.9 pp.166-168 (PDF 178-180), Ch.10 pp.173-174 (PDF 185-186)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     },
     {
      "id": "r6",
@@ -34638,7 +34988,15 @@
      "statement": "The exposure adjustment must use exposure tables (not loss tables) for the weights and pure premium relativities (not loss relativities) for the factors.",
      "concept": "Sequential Analysis (Exposure Adjustment)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Pure Premium Method",
+      "quote": "the weights come from the exposure distribution and the factors are the other variable's relativities, while the losses enter only as the numerator",
+      "note": "Classification section, adjusted PP. W&M Ch.9 pp.166-168 (PDF 178-180)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     }
    ]
   },
@@ -35069,7 +35427,15 @@
      "statement": "Average case outstanding can exceed average reported values because small claims close early, leaving larger claims open; also an average paid triangle cannot be derived without claim count information on a consistent basis.",
      "concept": "Average Claim Triangles",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Data Diagnostic Analysis",
+      "quote": "because the average reported claim also counts the smaller claims already closed, average case outstanding can sit well above it",
+      "note": "Faster-settlement bullet (+ averages need consistent counts bullet). Friedland Ch.6 pp.72-73, 75-76 (PDF 78-79, 81-82)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     }
    ]
   },
@@ -37055,7 +37421,15 @@
        "page": "Overfitting",
        "quote": "Sort the holdout records by predicted value, group them into buckets of equal weight (quintiles, deciles), and compare the average actual with the average predicted in each."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Generalized Linear Model",
+      "quote": "The most common overall test compares the model's predictions with actual results on a hold-out sample, data set aside and not used to build the model.",
+      "note": "Validation bullet (+ ordered ten-group comparison, link to Quantile Plot). Werner & Modlin Ch.10 p.181 (PDF 193), App. F (PDF 420-421)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     },
     {
      "id": "r2",
@@ -37130,7 +37504,15 @@
      "statement": "Predictions that are flat and fail to match the amplitude of actual differences across deciles (underestimating high deciles, overestimating low ones) may indicate the model is missing predictive variables.",
      "concept": "Model Lift and Decile Plots",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Generalized Linear Model",
+      "quote": "so predictions that are flatter than the actual results across the ordered groups suggest predictive variables are missing",
+      "note": "Validation bullet: under-fitting misses significant effects; extreme case predicts the mean. Werner & Modlin Ch.10 p.182 (PDF 194), App. F (PDF 420)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     }
    ]
   },
@@ -37267,7 +37649,15 @@
      "statement": "The consistency test fits the same GLM separately to each year of experience and plots the resulting relativities for a variable side by side to check whether the variable's signal is stable over time.",
      "concept": "GLM Model Validation: Consistency Test",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Generalized Linear Model",
+      "quote": "fit the model to each year of a multi-year dataset separately (or to random subsets of the data) and plot each year's relativities for the variable side by side",
+      "note": "Consistency bullet. Werner & Modlin Ch.10 p.180 & fn.36 (PDF 192), App. F (PDF 416)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     },
     {
      "id": "r2",
@@ -37275,7 +37665,15 @@
      "statement": "A variable whose fitted relativities keep the same direction, shape and slope across years passes the consistency test and is a stable predictor to retain; relativities that jump around or reverse direction indicate noise.",
      "concept": "GLM Model Validation: Consistency Test",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Generalized Linear Model",
+      "quote": "When each year's line has roughly the same shape and direction, apart from random differences, the variable's predictive power is stable over time.",
+      "note": "Consistency bullet. Werner & Modlin Ch.10 p.180 (PDF 192), App. F (PDF 416, 419)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     },
     {
      "id": "r3",
@@ -37326,7 +37724,15 @@
        "page": "Confidence Interval",
        "quote": "for a GLM coefficient it is $\\hat\\beta_j \\pm z_{\\alpha/2}\\text{SE}(\\hat\\beta_j)$, and exponentiating both endpoints gives an interval for the multiplicative rating factor"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Generalized Linear Model",
+      "quote": "Wide standard errors, often straddling unity, suggest the variable is detecting mostly noise",
+      "note": "Standard-errors bullet. Werner & Modlin Ch.10 p.179 (PDF 191)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     },
     {
      "id": "r6",
@@ -37393,7 +37799,15 @@
      "statement": "In both one-way analyses and GLMs the base level of a variable is conventionally chosen as the level with the most exposures, since it is the most stable and credible reference, so the two methods' relativities necessarily agree there.",
      "concept": "Base Level",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Generalized Linear Model",
+      "quote": "which is typically chosen as one with a fairly large, if not the largest, volume of exposure",
+      "note": "Base-level bullet (+ link to Rating Factors). Werner & Modlin Ch.10 p.178 (PDF 190)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write1"
+     }
     },
     {
      "id": "r3",

@@ -22,6 +22,7 @@ verification:
 
 > $$\hat{\boldsymbol\beta} = (\mathbf{X}^{\top}\mathbf{X})^{-1}\mathbf{X}^{\top}\mathbf{y}$$
 
+- **Population line and least squares line** (James et al., §3.1.2): in simple regression, $Y = \beta_0 + \beta_1 X + \varepsilon$ defines the **population regression line**, the best linear approximation to the true relationship between $X$ and $Y$. Its coefficients are unknown and the line is unobserved. The **least squares line** $\hat{y} = \hat\beta_0 + \hat\beta_1 x$ is computed from one sample and estimates it: different samples from the same population give slightly different least squares lines, scattered around the one population line, the way sample means scatter around a population mean
 - The four assumptions — **linearity, independence, constant variance, normality of errors** — are exactly what the diagnostic plots check: a [[Residual Plot]] for the first and third, a [[QQ Plot]] for the fourth
 - $\hat\beta_j$ is the change in $E[Y]$ per unit of $x_j$ **holding the other predictors fixed**; with [[Multicollinearity]] present that clause is what makes coefficients unstable
 - Fit is summarized by [[R-Squared]] $= 1 - \text{RSS}/\text{SS}_{\text{Tot}}$, with $\hat\sigma^2 = \text{RSS}/(n - p - 1)$ estimating the error variance

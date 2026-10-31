@@ -26,6 +26,24 @@ verification:
 - The recursion needs no history in storage — only the current level (and slope, and seasonals)
 - It is a **model-free** method: no [[Stationarity]] requirement and no [[Autocorrelation Function|ACF]]/PACF identification, but also no prediction intervals without an underlying state-space model
 
+**Double exponential smoothing (Brown's linear method)** handles a series with a linear trend using one smoothing parameter: smooth the series, then smooth the smoothed series again, and read a level and a slope off the two. Frees (2010, Ch. 9) writes it with $w$, the weight on the *past*, so $w = 1 - \alpha$ in the notation above. In Frees' notation, simple smoothing is $\hat{s}_t = (1-w)\,y_t + w\,\hat{s}_{t-1}$, and the double-smoothing recursions are:
+
+> $$\hat{s}^{(1)}_t = (1-w)\,y_t + w\,\hat{s}^{(1)}_{t-1}$$
+
+> $$\hat{s}^{(2)}_t = (1-w)\,\hat{s}^{(1)}_t + w\,\hat{s}^{(2)}_{t-1}$$
+
+At the last time $T$, the intercept (level) and slope estimates and the $l$-step forecast are:
+
+> $$a_T = 2\hat{s}^{(1)}_T - \hat{s}^{(2)}_T$$
+
+> $$b_T = \frac{1-w}{w}\left(\hat{s}^{(1)}_T - \hat{s}^{(2)}_T\right)$$
+
+> $$\hat{y}_{T+l} = a_T + b_T\, l$$
+
+- With $\alpha = 1 - w$ these are the usual $a_T = 2s'_T - s''_T$ and $b_T = \frac{\alpha}{1-\alpha}(s'_T - s''_T)$. Check which convention a source uses before plugging in: a $w$ of $0.9$ is an $\alpha$ of $0.1$
+- The doubly smoothed series lags the singly smoothed one when the series trends, and the gap between them measures the trend. Simple smoothing's forecast stays flat at $\hat{s}^{(1)}_T$ at every horizon; the double-smoothing forecast continues the line
+- Brown's method is not Holt's: Holt smooths the level and the slope with two separate parameters, while Brown's uses one parameter for both
+
 ![[Media/Figures/Exponential_Smoothing.svg|340]]
 
 > [!example]- Two Steps of Simple Smoothing {Example}
@@ -35,3 +53,31 @@ verification:
 > > $$\hat Y_{11} = 0.3(470) + 0.7(420) = 141 + 294 = 435$$
 > > $$\hat Y_{12} = 0.3(440) + 0.7(435) = 132 + 304.5 = 436.5$$
 > > The 3-step forecast is also **436.5** — simple exponential smoothing gives a flat forecast at every horizon. In error-correction form, $\hat Y_{11} = 420 + 0.3(470-420)$: the update is $\alpha$ times the last forecast error.
+
+> [!example]- Double Exponential Smoothing {Example}
+> A trending series is smoothed with $w = 0.75$. At time $T - 1$ the smoothed values are $\hat{s}^{(1)}_{T-1} = 48$ and $\hat{s}^{(2)}_{T-1} = 44$, and then $y_T = 56$ is observed. Forecast $y_{T+2}$ by double smoothing and by simple smoothing.
+>
+> > [!answer]-
+> > **Plan.** Update both smoothed series, then read off the level and slope. The weight on each new value is $1 - w = 0.25$.
+> >
+> > $$
+> > \begin{align*}
+> > \hat{s}^{(1)}_T &= 0.25(56) + 0.75(48) \\
+> > &= 50 \\
+> > \hat{s}^{(2)}_T &= 0.25(50) + 0.75(44) \\
+> > &= 45.5
+> > \end{align*}
+> > $$
+> >
+> > $$
+> > \begin{align*}
+> > a_T &= 2(50) - 45.5 \\
+> > &= 54.5 \\
+> > b_T &= \frac{0.25}{0.75}(50 - 45.5) \\
+> > &= 1.5 \\
+> > \hat{y}_{T+2} &= 54.5 + 1.5(2) \\
+> > &= 57.5
+> > \end{align*}
+> > $$
+> >
+> > Simple smoothing forecasts $\hat{s}^{(1)}_T = 50$ for every horizon. Double smoothing sits above the last smoothed value and keeps climbing, because the gap of $4.5$ between the two smoothed series says the series is trending upward.

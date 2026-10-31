@@ -22,7 +22,7 @@ verification:
 > $$q(x, t) = q(x, t-1)\,\big(1 - \phi(x, t)\big)$$
 
 - The second block is **Makeham's law** ($A = 0$ gives Gompertz): an age-independent term plus a term rising exponentially with age. The Standard Ultimate Life Table used on FAM and ALTAM is Makeham with $A = 0.00022$, $B = 2.7\times10^{-6}$, $c = 1.124$, for which ${}_tp_x = \exp\!\big(-At - Bc^x(c^t - 1)/\ln c\big)$
-- A typical **mortality curve** falls after high infant mortality, shows an accident hump in the late teens and twenties, then rises roughly exponentially through adult ages and decelerates at the oldest ages; **heterogeneity** (sex, smoking, socioeconomic group, select versus ultimate) makes a population a mix of such curves
+- A typical **mortality curve** falls after high infant mortality, shows an accident hump in the late teens and twenties, then rises roughly exponentially through adult ages; **heterogeneity** (sex, smoking, socioeconomic group, select versus ultimate) makes a population a mix of such curves
 - **Extra risk** for substandard lives is modelled by an **age rating** (use the table at $x + k$), a **constant addition** $\theta$ to the force (third block, so ${}_tp^*_x = e^{-\theta t}\,{}_tp_x$) or a **constant multiple** of the rate, $q^*_x = k\,q_x$; the fourth block is **mortality improvement**, with $\phi(x, t)$ the proportional fall in $q$ at age $x$ from year $t-1$ to $t$
 - Lighter mortality than assumed hurts an annuity writer (**longevity risk**) and helps an insurer, so a company writing both has a partial natural offset; [[Life Table|table]] values and a [[Fractional Age Assumption|fractional age assumption]] fill in between integer ages
 

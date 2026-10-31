@@ -27,15 +27,59 @@ A textbook on the modern mathematics of life insurance, suitable for advanced un
 > - [[Exam ALTAM (SOA)|Exam ALTAM]] — Chapter 3 (Sections 4 and 10); Chapter 7 (Sections 2.4 and 4); Chapter 8; Chapter 9; Chapter 10; Chapter 11 (except section 12); Chapter 13 (except section 8); Chapter 14; Chapter 15 (sections 1-3); Chapter 17; Chapter 18 (Sections 5 and 6) [Note: sections 1 through 3 are background only]. Exercises are considered part of the required readings.
 > - [[Exam ACIA-CAPSTONE (CIA)|ACIA Capstone Exam]] — A4.1 Long-term insurance coverages (C, SLT): Chapter 1; A4.2 Survival models and their estimation (C, SLT): Chapters 2, 3 and 18; A4.3 Present value random variables (C, SLT): Chapters 4, 5, 8, 9 and 10; A4.4 Long-term insurance premium calculation (C, SLT): Chapters 6, 8, 9, 10, 13 and 14; A4.5 Long-term insurance reserves (SLT): Chapters 7-10; A4.6 Pension plans and retirement benefits (SLT): Chapter 11.
 
-> [!note] Contents unavailable
-> The book's full table of contents could not be read: Cambridge's front-matter PDF could not be fetched, and its book pages and Google Books list only some of the chapter titles, without chapter numbers. This page records its citation and assignment from the syllabus, and its description from the publisher.
+## 1 Introduction to life and long-term health insurance
+
+## 2 Survival models
+
+## 3 Life tables and selection
+
+## 4 Insurance benefits
+
+## 5 Annuities
+
+## 6 Premium calculation
+
+## 7 Policy values
+
+## 8 Multiple state models
+
+## 9 Multiple decrement models
+
+## 10 Joint life and last survivor benefits
+
+## 11 Pension mathematics
+
+## 12 Yield curves and non-diversifiable risk
+
+## 13 Emerging costs for traditional life insurance
+
+## 14 Universal life insurance
+
+## 15 Emerging costs for equity-linked insurance
+
+## 16 Option pricing
+
+## 17 Embedded options
+
+## 18 Estimating survival models
+
+## 19 Stochastic longevity models
+
+## Appendix A Probability and statistics
+
+## Appendix B Numerical techniques
+
+## Appendix C Monte Carlo simulation
+
+## Appendix D Tables
 
 ## Related readings
 - [[ALTAM-21-23 - Variable Annuity Guarantees]] — written to be read with Chapter 15 of this book
 
 ## Sources
-- [Actuarial Mathematics for Life Contingent Risks, 3rd edition (Cambridge University Press)](https://www.cambridge.org/highereducation/books/actuarial-mathematics-for-life-contingent-risks/281DA4E8D523A6B23280ADC3D165AFDA) — the publisher's record: authors, edition, hardback ISBN 9781108478083, publication date 30 January 2020, 782 pages, 300 exercises and 160 worked examples, and the description of the book as the required text for the SOA's LTAM exam
+- [Actuarial Mathematics for Life Contingent Risks, 3rd edition (Cambridge University Press)](https://www.cambridge.org/highereducation/books/actuarial-mathematics-for-life-contingent-risks/281DA4E8D523A6B23280ADC3D165AFDA) — the publisher's record: authors, edition, hardback ISBN 9781108478083, publication date 30 January 2020, 782 pages, 300 exercises and 160 worked examples, and the description of the book as the required text for the SOA's LTAM exam; and its Contents tab, which lists the nineteen chapters (C1–C19) and Appendices A–D with their titles, from which the headings on this page are taken (the book's sections are not listed there)
 - [Actuarial Mathematics for Life Contingent Risks (Google Books)](https://books.google.com/books/about/Actuarial_Mathematics_for_Life_Contingen.html?id=WoHCDwAAQBAJ) — the publisher's description of the third edition and its topics; the chapter titles it shows are incomplete and were not used
+- [Errata 3e, 18 August 2024 (Cambridge University Press, the book's Resources page)](https://www.cambridge.org/highereducation/books/actuarial-mathematics-for-life-contingent-risks/281DA4E8D523A6B23280ADC3D165AFDA/resources/errata/9FAA87A3E970A4103EA8910FE7E80239) — the publisher's errata sheet for the third edition, last updated 18 August 2024
 - [SOA Exam FAM syllabus, October 2026](https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-fam-syllabus.pdf) — the citation (Third Edition, Dickson, Hardy and Waters, 2020) and the chapters and sections assigned for FAM
 - [SOA Exam ALTAM syllabus, October 2026](https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-altam-syllabus.pdf) — the chapters and sections assigned for ALTAM
 - [ALTAM-21-23: Variable Annuity Guarantees (SOA)](https://www.soa.org/globalassets/assets/files/edu/2023/2023-07-altam-21-23.pdf) — its statement that it is to be read with Chapter 15 of this book

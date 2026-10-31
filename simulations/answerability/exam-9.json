@@ -3059,7 +3059,15 @@
      "statement": "The normal copula has light tails with little tail dependence, so it understates the joint extreme-loss correlation seen in insurance losses.",
      "concept": "Normal Copula",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Model Selection",
+      "quote": "The normal copula has no tail dependence: at any correlation below 1, extreme losses in the two lines become nearly independent far enough into the tail.",
+      "note": "Model Selection (Exam 9 syllabus page, written from Embrechts-McNeil-Straumann) teaches that the normal copula has no tail dependence, so it understates joint extremes",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm2"
+     }
     },
     {
      "id": "r5",
@@ -3067,7 +3075,15 @@
      "statement": "Copulas with heavy right-tail dependence, such as the Gumbel copula or the Heavy Right Tail (HRT) copula, better reflect increased correlation of insurance losses in extreme events and the skewness of losses than the normal copula.",
      "concept": "Gumbel Copula",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Model Selection",
+      "quote": "The Gumbel copula has upper-tail dependence: extreme losses in the two lines tend to occur together, so with the same marginals and correlation it produces more large combined losses",
+      "note": "teaches the Gumbel copula's right-tail dependence and why it suits insurance losses better than the normal (the HRT is the other accepted answer; the copula write group adds it)",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm2"
+     }
     },
     {
      "id": "r6",
@@ -3130,7 +3146,15 @@
        "page": "Risk Assessment",
        "quote": "$X_0$ is the severity observed in the base period, $g$ is the annual trend, and $X_t$ is the severity projected $t$ years ahead."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Insurance Risk",
+      "quote": "parameter risk, subdivided into *estimation* (too little data), *projection* (trend and development, often driven by [[Inflation|inflation]]), *event* (a court ruling, a latent exposure, a new cause of loss)",
+      "note": "Insurance Risk (Exam 9 syllabus page) names Brehm's projection risk (trend, inflation) and event risk (a court ruling), which together are the structural/projection element the answer describes",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm2"
+     }
     },
     {
      "id": "r4",
@@ -3535,7 +3559,13 @@
      "statement": "Market capital reactions to an insurer entering distress tend to be a multiple of the actual drop in book value that caused the distress.",
      "concept": "Financial Distress Costs for Insurers",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "One of four alternative consequences the solution accepts; a candidate needed two, and the other three (devalued promise, costly capital, agency risk-taking: r1, r2, r4) are taught on the tagged Insurance Market Imperfections page.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm2"
+     }
     },
     {
      "id": "r4",
@@ -3636,7 +3666,13 @@
      "statement": "Industry risk is a type of strategic risk, including capital intensiveness, overcapacity, commoditization, deregulation, and cycle volatility, all significant for insurers.",
      "concept": "Strategic Risk",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "One accepted example of a strategic risk among several; the examiner says naming any strategic risk earned credit, competitor risk (r5) is taught on Business Risk and Risk Taxonomies lists the others (reputation, competition, capital availability, regulatory trends); the industry-risk breakdown is one sample's elaboration.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm2"
+     }
     },
     {
      "id": "r5",
@@ -3670,7 +3706,15 @@
        "page": "ALM Risk",
        "quote": "Assets in one currency backing liabilities in another expose the surplus to exchange rates unless hedged."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Financial Risk",
+      "quote": "economic value or earnings fall because of movements in financial markets or the failure of a financial counterparty — [[Interest Rate Risk|interest rates]], equity prices, credit spreads and exchange rates",
+      "note": "Financial Risk (Exam 9 syllabus page) names exchange-rate movements as a source of loss in value; the domestic-only contrast is the question's own data",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm2"
+     }
     },
     {
      "id": "r2",
@@ -3713,7 +3757,15 @@
        "page": "ALM Risk",
        "quote": "Funding liquidity risk is the risk of not having cash to meet obligations when they fall due, and market liquidity risk is the risk of being able to sell assets only at a deep discount."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Financial Risk",
+      "quote": "*liquidity risk* — being forced to sell assets at a loss to pay claims.",
+      "note": "Financial Risk (syllabus page) defines liquidity risk as not having cash for claims without forced sales; the catastrophe and downgrade triggers are the question's scenario",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm2"
+     }
     },
     {
      "id": "r5",
@@ -4113,7 +4165,13 @@
      "statement": "A plan (planned) loss ratio is often used as the expected loss ratio (ELR) in reserving methods such as Bornhuetter-Ferguson and Expected Loss Ratio, so an optimistic plan loss ratio understates selected ultimate losses and unpaid claim estimates.",
      "concept": "Plan Loss Ratio",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The question's own setup: it states that the plan loss ratio is used as the expected loss ratio in the reserve review; the consequence (reserve deficiency) is r2, already taught.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm2"
+     }
     },
     {
      "id": "r2",
@@ -4272,7 +4330,15 @@
      "statement": "The Delphi method is a soft approach to the underwriting cycle in which experts answer questionnaires, responses are aggregated and fed back to participants who may revise or justify their views, and the process repeats until consensus is reached.",
      "concept": "Underwriting Cycle Modeling: Soft Approaches",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Identification",
+      "quote": "anonymous methods such as the Delphi technique, in which a panel answers anonymously over several rounds, keep any one participant's authority from dominating the rest.",
+      "note": "Risk Identification (linked from the tagged Risk Management page; written from RAND's Delphi page) describes the Delphi method — an expert panel answering over repeated rounds; its use as a soft cycle approach is in the cycle-modeling write group",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm2"
+     }
     },
     {
      "id": "r2",
@@ -4679,7 +4745,15 @@
      "statement": "The Gumbel (heavy right tail) copula has strong right-tail dependence, making it a better choice for correlating lines in large loss events.",
      "concept": "Copulas",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Model Selection",
+      "quote": "The Gumbel copula has upper-tail dependence: extreme losses in the two lines tend to occur together, so with the same marginals and correlation it produces more large combined losses",
+      "note": "teaches the Gumbel copula's strong right-tail dependence, making it the better choice for large-loss (clash, accumulation) correlation",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm2"
+     }
     }
    ]
   },
@@ -4695,7 +4769,13 @@
      "statement": "Traditional unilateral planning sets a single version of the plan (one point estimate of premium volume and loss ratio by line) that is used as the target for the year regardless of how conditions evolve.",
      "concept": "Scenario Planning",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Restates the question's wording ('one version of the plan is set'); the drawbacks and the scenario-planning alternative are the course content, written under scenario-planning.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm2"
+     }
     },
     {
      "id": "r2",
@@ -5236,7 +5316,13 @@
      "statement": "When comparing reinsurance options by their CDF curves, an option whose curve lies to the left (lower combined ratio) at high percentiles performs better in the tail, so a tail-concerned actuary prefers it even if it performs worse at lower percentiles.",
      "concept": "Reinsurance Program Evaluation Using Risk Measures",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Reading the question's own chart: for an actuary concerned with the tail, the option with the lower combined ratio at high percentiles is preferred — a step of this solution, not a separate fact.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm2"
+     }
     },
     {
      "id": "r3",
@@ -5352,7 +5438,15 @@
      "statement": "A copula with stronger right-tail dependence makes large losses across lines more likely to occur together, which gives a higher VaR at high percentiles of the aggregate loss distribution.",
      "concept": "Value at Risk",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Model Selection",
+      "quote": "The Gumbel copula has upper-tail dependence: extreme losses in the two lines tend to occur together, so with the same marginals and correlation it produces more large combined losses",
+      "note": "stronger upper-tail dependence with the same marginals gives more large combined losses, i.e. a higher high-percentile VaR of the aggregate",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm2"
+     }
     }
    ]
   },

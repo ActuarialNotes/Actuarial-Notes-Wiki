@@ -890,7 +890,13 @@
      "statement": "When the dependent variable can be zero, add a constant (e.g. one) before taking the logarithm, since the log of zero is undefined (negative infinity).",
      "concept": "Response Variable Transformations",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Mathematical fact, not course content: ln(0) is undefined, so log(1+y) is defined where log y is not. The course content (a concave transform of Y to steady an increasing variance) is a separate item, r3, sent to a writer.",
+      "date": "2026-10-31",
+      "run": "sort-srm-20261031"
+     }
     },
     {
      "id": "r3",
@@ -906,7 +912,13 @@
      "statement": "The logit transformation, ln(p/(1-p)), is defined only for values strictly between 0 and 1.",
      "concept": "Logit Function",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Mathematical fact implied by the logit's definition ln(p/(1-p)), which the tagged pages' link function material gives: it needs 0<p<1, so it cannot apply to a response observed 0 to 100.",
+      "date": "2026-10-31",
+      "run": "sort-srm-20261031"
+     }
     }
    ]
   },
@@ -1181,7 +1193,13 @@
        "page": "Chi-Squared Distribution",
        "quote": "The $df = 3$ row gives $7.81$ in the $0.950$ column and $9.35$ in the $0.975$ column."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "A table lookup: the exam supplies the chi-square percentile table (7.81 at 3 df, 95th percentile).",
+      "date": "2026-10-31",
+      "run": "sort-srm-20261031"
+     }
     }
    ]
   },
@@ -1248,7 +1266,13 @@
      "statement": "Removing observations or truncating/altering predicted values to force them into a range is inappropriate because it biases the model estimates rather than fixing the model form.",
      "concept": "Linear Probability Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "This solution's reasoning for rejecting distractors A and B (dropping or truncating data biases the fit); the course content, that a logit link keeps fitted probabilities in (0,1), is item r1-r3 of the question.",
+      "date": "2026-10-31",
+      "run": "sort-srm-20261031"
+     }
     }
    ]
   },
@@ -1430,7 +1454,13 @@
      "statement": "If all data points lie exactly on a straight line, the least squares regression line is that line (residuals are zero).",
      "concept": "Simple Linear Regression",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Trivially implied: points exactly on a line give that line RSS = 0, the least possible, so least squares returns it.",
+      "date": "2026-10-31",
+      "run": "sort-srm-20261031"
+     }
     },
     {
      "id": "r3",
@@ -2371,7 +2401,13 @@
      "statement": "With m of p predictors chosen at random at each split, the probability that a given predictor (such as the strongest) is not among those considered is (p - m)/p.",
      "concept": "Random Forest",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Elementary probability from what the Random Forest page teaches (a random subset of m of the p predictors at each split): the chance a given predictor is left out is (p-m)/p.",
+      "date": "2026-10-31",
+      "run": "sort-srm-20261031"
+     }
     },
     {
      "id": "r4",
@@ -3212,7 +3248,13 @@
      "statement": "Different candidate regression models generally produce different predictions for the same new observation, so predictions depend on the model chosen.",
      "concept": "Prediction in Regression",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Trivially implied, and this solution's reason for rejecting distractor A: different fitted models generally give different predictions.",
+      "date": "2026-10-31",
+      "run": "sort-srm-20261031"
+     }
     },
     {
      "id": "r3",
@@ -3704,7 +3746,13 @@
      "statement": "Successive splits on the same predictor along a path combine into an interval, such as a lower bound from a right branch and an upper bound from a later left branch.",
      "concept": "Regression Trees",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Reading the question's own tree diagram: a path's split conditions intersect into one region (5 < X1 <= 10). The page teaches that a split sends each side to a region; intersecting two inequalities is logic, not course content.",
+      "date": "2026-10-31",
+      "run": "sort-srm-20261031"
+     }
     }
    ]
   },
@@ -3783,7 +3831,13 @@
      "statement": "When the indicator variable's coefficient is set to zero (null hypothesis beta_1 = 0), the model reduces to an intercept-only model with a single common fitted probability for all observations.",
      "concept": "Logistic Regression",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Trivially implied: setting beta_1 = 0 leaves only the intercept, so every observation has the same fitted probability. A step of this one solution's plan.",
+      "date": "2026-10-31",
+      "run": "sort-srm-20261031"
+     }
     }
    ]
   },

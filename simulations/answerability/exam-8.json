@@ -331,7 +331,15 @@
      "statement": "When a risk's first policy is written on a claims-made basis, the experience rating plan uses prior occurrence policies as the experience period, with the three most recent complete policy years (ending at least six months before the evaluation date) included, and applies claims-made-specific adjustments to the loss costs.",
      "concept": "Experience Rating Plan Experience Period",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Experience Rating",
+      "quote": "The plan uses the three most recent complete policy years, or as few as one complete policy year when no more data exists. Those years end no later than six months before the rating date … So a risk whose first claims-made policy is being rated still uses its prior occurrence policies as its experience period, and the change of policy type is handled by the policy adjustment factors.",
+      "note": "Rule 4's three complete policy years ending six months before rating, and the PAFs that handle a first claims-made policy rated off prior occurrence years (BattleActs pp.3).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:57Z/ad84"
+     }
     },
     {
      "id": "r2",
@@ -339,7 +347,15 @@
      "statement": "Expected loss cost for each experience year is the basic limit premium times the expected loss ratio, then adjusted by the premium adjustment factors (PAFs) and detrended to give the subject (expected) loss cost.",
      "concept": "Experience Rating Expected Losses",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Experience Rating",
+      "quote": "the basic limits expected losses (BLEL), which include allocated loss adjustment expense, are the company expected loss ratio times the annual basic limits company premium. … multiply the basic limits expected losses by policy adjustment factor 13B, policy adjustment factor 13C and the detrend factor from Rule 14. The company subject loss cost (CSLC) is the sum of these products",
+      "note": "BLEL = ELR x basic limits premium, then x PAFs 13B/13C x detrend gives the subject loss cost (BattleActs p.3, Rule 5B).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:57Z/ad84"
+     }
     },
     {
      "id": "r3",
@@ -361,7 +377,15 @@
      "statement": "Expected reported unlimited losses (ARULL) for each year equal the subject loss cost times the expected experience ratio (EER) times the loss development factor for that year's maturity; the totals across years are used in the modification.",
      "concept": "Actual Reported Unlimited Loss Layer (ARULL)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Experience Rating",
+      "quote": "the expected future development is that row's company subject loss cost times the expected experience ratio times a loss development factor from Rule 15, and the rows are summed. The expected future development is also called the Adjustment to Reflect Ultimate Level of Losses (ARULL).",
+      "note": "ARULL per year = CSLC x EER x LDF, summed across years (BattleActs p.4, Rules 5D/5E).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:57Z/ad84"
+     }
     },
     {
      "id": "r5",
@@ -1042,7 +1066,15 @@
      "statement": "Loss group size used to select the expected loss group is the expected unlimited loss times the hazard group/state differential m, times (1 + 0.8 × ELPPF)/(1 − ELPPF).",
      "concept": "Expected Loss Groups for Aggregate Deductible Insurance Charges",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Insurance Charge Reflecting Loss Limitation (ICRLL)",
+      "quote": "E_{\\text{ELG}} = E \\times (\\text{state/hazard group relativity}) \\times \\frac{1 + 0.8\\,k}{1 - k}",
+      "note": "The ELG-selection size: E x state/hazard relativity x (1+0.8k)/(1-k) (Fisher p.84 Formula 3.10 and example). 'ELPPF' is the name the NCCI manual/solution uses for k; no reading gives it (Fisher calls k the excess ratio, 'ER').",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:58Z/2de4"
+     }
     },
     {
      "id": "r4",
@@ -1064,7 +1096,15 @@
      "statement": "The aggregate deductible ratio r equals the aggregate deductible divided by expected limited losses (expected unlimited loss × (1 − ELPPF)).",
      "concept": "Aggregate Deductible Insurance Charge",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Insurance Charge Reflecting Loss Limitation (ICRLL)",
+      "quote": "So the entry ratio is the aggregate limit divided by $E(1 - k)$, the expected unlimited loss times one minus $k$.",
+      "note": "Entry ratio = aggregate limit / expected limited loss E(1-k) (Fisher p.84-85 example, k per fn.49). 'ELPPF' is the manual's name for k; no reading gives it.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:58Z/2de4"
+     }
     },
     {
      "id": "r6",
@@ -3217,7 +3257,15 @@
        "page": "Claims Made Coverage",
        "quote": "Because the trigger is the report date, a claims-made policy has **no pure IBNR** — only IBNER on claims already reported — so the risk of reserve inadequacy is greatly reduced relative to the [[Occurrence Coverage|occurrence]] form."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Experience Rating",
+      "quote": "In the ISO plan a claims-made policy always has a loss development factor of 0, so a claims-made year in the experience period adds no expected future development",
+      "note": "Claims-made LDF of 0, so only occurrence years add development to ARULL (BattleActs p.4).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:57Z/ad84"
+     }
     },
     {
      "id": "r6",
@@ -4236,7 +4284,15 @@
      "statement": "With a per-occurrence limit, the adjusted expected loss used to select the expected loss group is E times (1 + 0.8·LER)/(1 - LER), where LER is the excess loss factor divided by the unlimited expected loss ratio, so the adjusted expected losses determine the ELG in Table M.",
      "concept": "ICRLL Procedure",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Insurance Charge Reflecting Loss Limitation (ICRLL)",
+      "quote": "E_{\\text{ELG}} = E \\times (\\text{state/hazard group relativity}) \\times \\frac{1 + 0.8\\,k}{1 - k} … When that per-occurrence charge is given as a ratio to standard premium, dividing it by the expected loss ratio gives $k$.",
+      "note": "The ELG is chosen from E x (1+0.8k)/(1-k) (with the state/hazard relativity), and k is the per-occurrence charge as a ratio to premium divided by the expected loss ratio (arithmetic on Fisher p.18/p.21 definitions).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:58Z/2de4"
+     }
     },
     {
      "id": "r4",
@@ -4303,7 +4359,15 @@
      "statement": "Raising the per-occurrence limit lowers the excess loss factor (and the basic premium charge) but raises the limited expected losses included in the converted loss portion; these offset dollar for dollar. Actual retro premium only falls if actual losses are lower than expected.",
      "concept": "Retrospective Premium Formula",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Retrospective Rating",
+      "quote": "Raising the per-occurrence limit moves expected loss out of the per-occurrence excess charge in $B$ and into the expected ratable losses and the aggregate excess charge, dollar for dollar in total … The actual premium can still vary: it is lower only if actual losses come in lower than expected, and higher if they come in higher.",
+      "note": "Raising the limit shifts expected loss from the excess charge in B into converted ratable losses dollar for dollar (Fisher p.21); under a balanced plan the actual premium is lower only if actual losses are lower than expected (Fisher Ch.4 p.95).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:58Z/2de4"
+     }
     }
    ]
   },
@@ -4772,7 +4836,15 @@
      "statement": "Using earned premium as the exposure base in a merit rating plan assumes that territorial differentials are proper/adequate, so premium at base-rate level reflects territorial risk differences.",
      "concept": "Merit Rating Plans",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Merit Rating",
+      "quote": "a premium base eliminates maldistribution only if two conditions hold. First, high frequency territories must also be high premium territories. Second, the territorial differentials must be proper.",
+      "note": "Hazam (PCAS XLVII p.151): the premium base assumes proper territorial differentials.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:57Z/ad84"
+     }
     },
     {
      "id": "r3",
@@ -5128,7 +5200,15 @@
      "statement": "Company subject loss costs are already detrended, so no further trend or detrend factors are applied to them in the experience rating calculation.",
      "concept": "Company Subject Loss Costs",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Experience Rating",
+      "quote": "Because the detrend factor is one of the factors in every row of the company subject loss cost, the CSLC is already at the level of the historical experience, and no further trend or detrend factor is applied to it.",
+      "note": "CSLC already includes the detrend factor (BattleActs p.3, Rule 5B), so no further trend or detrend is applied.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:57Z/ad84"
+     }
     }
    ]
   },
@@ -6043,7 +6123,15 @@
      "statement": "Find the expected loss group (ELG) from the expected loss adjusted by the state/hazard group differential (adjusted E = E × differential), and use the NCCI table for that ELG to find the entry ratio r_G and φ(r_G) satisfying the required value of φ(r_G)+r_G; use the unadjusted E in the premium formulas.",
      "concept": "NCCI Table of Aggregate Excess Loss Factors (Expected Loss Groups)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Retrospective Rating",
+      "quote": "Choose the column from the expected loss times the state/hazard group relativity; the adjusted figure selects the column only, and the entry ratios and charges are applied to the unadjusted $E$ in the premium formulas. … Search that ELG's column for the entry ratio $r_G$ whose $r_G + \\phi(r_G)$ equals it",
+      "note": "ELG from E x state/hazard differential, unadjusted E in the premium formulas (Fisher p.84-85 and its example), and searching the ELG column for the r_G giving the required phi(r_G)+r_G (psi = phi + r - 1, Fisher p.52).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:58Z/2de4"
+     }
     }
    ]
   },
@@ -6892,7 +6980,15 @@
      "statement": "Basic limits expected loss (and ALAE) for each policy year equals annual basic limits premium times the expected loss and ALAE ratio.",
      "concept": "ISO Commercial General Liability Experience Rating Plan",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Experience Rating",
+      "quote": "the basic limits expected losses (BLEL), which include allocated loss adjustment expense, are the company expected loss ratio times the annual basic limits company premium.",
+      "note": "Basic limits expected loss and ALAE per year = annual basic limits premium x expected loss ratio (BattleActs p.3).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:57Z/ad84"
+     }
     },
     {
      "id": "r2",
@@ -6900,7 +6996,15 @@
      "statement": "Company subject loss cost (CSLC) for each year is the basic limits expected loss multiplied by the present-adjustment factors (PAF, e.g. exhibits 13B and 13C) and the loss cost detrend factor for that year.",
      "concept": "Company Subject Loss Cost",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Experience Rating",
+      "quote": "For each experience year and sub-line, multiply the basic limits expected losses by policy adjustment factor 13B, policy adjustment factor 13C and the detrend factor from Rule 14.",
+      "note": "CSLC per year = BLEL x PAF 13B x PAF 13C x detrend (BattleActs p.3, Rule 5B).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:57Z/ad84"
+     }
     },
     {
      "id": "r3",
@@ -10508,7 +10612,15 @@
      "statement": "Company subject loss costs (expected basic limits losses) for each year equal basic limit premium times the expected loss ratio (ELR) times the premium adjustment factors (Table 13B and 13C) times the detrend factor.",
      "concept": "ISO Commercial General Liability Experience Rating Plan",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Experience Rating",
+      "quote": "are the company expected loss ratio times the annual basic limits company premium. … multiply the basic limits expected losses by policy adjustment factor 13B, policy adjustment factor 13C and the detrend factor from Rule 14.",
+      "note": "CSLC per year = basic limits premium x ELR x PAFs 13B and 13C x detrend (BattleActs p.3).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:57Z/ad84"
+     }
     },
     {
      "id": "r3",
@@ -10565,7 +10677,15 @@
      "statement": "Claims-made policies require no loss development (IBNR) in the actual experience ratio, so reported limited losses are used directly.",
      "concept": "ISO Commercial General Liability Experience Rating Plan",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Experience Rating",
+      "quote": "In the ISO plan a claims-made policy always has a loss development factor of 0, so a claims-made year in the experience period adds no expected future development and only its reported losses enter the actual experience.",
+      "note": "Claims-made LDF of 0 (BattleActs p.4): no development, reported limited losses used directly.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:57Z/ad84"
+     }
     },
     {
      "id": "r7",
@@ -11439,7 +11559,15 @@
      "statement": "Using earned premium as an exposure base corrects for maldistribution only if high-frequency (high-loss) classes or territories are also high-average-premium ones and the rate differentials are proper; it fails when high-claim-frequency territories are not high-average-premium territories.",
      "concept": "Maldistribution and Exposure Base",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Merit Rating",
+      "quote": "a premium base eliminates maldistribution only if two conditions hold. First, high frequency territories must also be high premium territories. Second, the territorial differentials must be proper.",
+      "note": "Hazam's two conditions (p.151); premium fails to correct maldistribution when high-frequency territories are not high-premium ones.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:57Z/ad84"
+     }
     },
     {
      "id": "r6",
@@ -11447,7 +11575,15 @@
      "statement": "Earned premium as an exposure base also fails to correct for maldistribution when the rate differentials (e.g., territorial) are improper, i.e., loss ratios after applying differentials are not approximately equal across classes.",
      "concept": "Maldistribution and Exposure Base",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Merit Rating",
+      "quote": "If the territorial differentials are not proper, the premium base does not eliminate the maldistribution.",
+      "note": "Hazam's second condition (p.151): improper differentials defeat the premium base; the report's LR gloss is an alternative answer, not required.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T12:57Z/ad84"
+     }
     }
    ]
   },

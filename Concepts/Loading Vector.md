@@ -1,13 +1,13 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-05
-  last_checked_by: agent:validate-v1
-  content_hash: sha256:7fd231f97eb9fd3f456ce97e8c1a138679014b385849ed1087eed37c1063d313
+  status: verified
+  confidence: high
+  last_checked: 2026-10-31
+  last_checked_by: agent:checker-islr-b
+  content_hash: sha256:68f6ded60e09d026f16c22a06824903a3dd387bd0a75321425b21922e6d0df8b
   sources:
-    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer 2021, CAS-hosted copy), §6.3.1 eq. 6.19 loadings both positive and similar size, 'almost an average' (PDF p.262), §12.2.1 eqs. 12.1-12.4, unit-norm constraint and 'arbitrarily large variance' (PDF pp.505-506), orthogonality, footnote 2 eigenvectors, first loading vector as 'overall' measure (PDF p.507), §12.2.4 uniqueness up to a sign flip for loadings and scores (PDF p.515), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
-    - "CAS Exam MAS-II Content Outline 2026 (MASII_CO_S_2026 v06), Domain C tasks 5-6 (PDF p.3) and James reading list Ch 12 (PDF p.4), sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf"
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), CAS-hosted copy, sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf, §12.2.1 eqs. (12.1)-(12.4), unit norm and 'arbitrarily large variance' p.500 (PDF 506), orthogonality, footnote 2, biplot and Fig. 12.1 caption (scores as points, loadings as arrows, Rape at (0.54, 0.17)) pp.501-502 (PDF 507-508), p.503 (PDF 509: Indiana near zero = approximately average; large positive PC1 scores = high crime), §12.2.4 sign flip p.509 (PDF 515); §6.3.1 p.256 (PDF 262)"
+    - "Greenacre, Biplots in Practice (Fundación BBVA 2010), ch.6 'Principal Component Analysis Biplots', p.63, sha256:21939dfc3106f33ec287d0a15dfa3f3e394908f52aca39e368487a9d917d3362 — https://www.fbbva.es/wp-content/uploads/2017/05/dat/greenacre_c06_2010.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Loading Vector.md
@@ -25,7 +25,7 @@ A **loading vector** $\boldsymbol{\phi}_m$ holds the weights that define the $m$
 - **Sign is arbitrary**: $\boldsymbol{\phi}_m$ and $-\boldsymbol{\phi}_m$ describe the same component, so two software packages may report opposite signs (the scores flip with the loadings)
 - Interpretation comes from the pattern of signs and magnitudes: all-same-sign loadings read as an overall "size" component, mixed signs as a contrast
 - A **biplot** draws both on one pair of axes for the first two components: each observation as a point at its scores $(z_{i1}, z_{i2})$ and each variable as an arrow to its loadings $(\phi_{j1}, \phi_{j2})$
-- **Reading the arrows** (scaled variables): the angle between two arrows approximates the correlation between those variables — a small angle, highly positively correlated; a right angle, nearly uncorrelated; opposite directions, negatively correlated
+- **Reading the arrows** (scaled variables): the cosine of the angle between two arrows approximates the correlation between those variables — a small angle, highly positively correlated; a right angle, nearly uncorrelated; opposite directions, negatively correlated
 - **Reading the points**: PCA works on centred data, so a score measures an observation's departure from each variable's mean. A point far out along a variable's arrow is well above that variable's average, and a point near the origin is near average on both components; the plot cannot say whether the raw value itself is positive or negative
 
 ![[Media/Figures/Loading_Vector.svg|340]]

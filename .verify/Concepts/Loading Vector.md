@@ -114,3 +114,38 @@ created: 2026-10-05
 - checks_run: whole log read; F-003 (figure) closed this run by fixing the builder and regenerating - the page's bytes are unchanged, so this pass confirms the same content C-003 checked, now with the figure agreeing; page re-read in full: z_im and unit norm vs eqs. 12.2-12.4, eigenvector statement vs footnote 2, well-posedness vs p.506, sign bullet vs p.515, same-sign 'overall/size' reading vs pp.262 and 507 (mixed-sign 'contrast' follows from eq. 12.2); example recomputed in numpy (eigenvectors of the F-001/R correlation matrix round to phi_1 = (0.52, 0.50, 0.50, 0.48), phi_2 = (0.42, 0.55, -0.43, -0.58); rounded dot product 0; norms^2 1.0008 / 1.0002; z_1 = 2.00); regenerated SVG compared with the example bar by bar; link and figure embed resolve
 - sources_checked: James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer 2021, CAS-hosted copy), §6.3.1 eq. 6.19 loadings both positive and similar size, 'almost an average' (PDF p.262), §12.2.1 eqs. 12.1-12.4, unit-norm constraint and 'arbitrarily large variance' (PDF pp.505-506), orthogonality, footnote 2 eigenvectors, first loading vector as 'overall' measure (PDF p.507), §12.2.4 uniqueness up to a sign flip for loadings and scores (PDF p.515), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf; CAS Exam MAS-II Content Outline 2026 (MASII_CO_S_2026 v06), Domain C tasks 5-6 (PDF p.3) and James reading list Ch 12 (PDF p.4), sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf
 - note: Supersedes C-003's medium, which rested on the figure disagreeing with the example. The example's numbers are the vault's own (recomputed, rank 5); every rule they illustrate is ISLR's.
+
+## [F-004] It is the cosine of the angle that approximates the correlation
+- entry_type: finding
+- author: agent:checker-islr-b
+- run_id: 2026-10-31T05:08Z/61e8
+- date: 2026-10-31
+- severity: minor
+- status: open
+- locus: bullet 'Reading the arrows'
+- claim: The angle between two arrows approximates the correlation between those variables.
+- evidence: Greenacre, Biplots in Practice (Fundación BBVA 2010), ch.6 'Principal Component Analysis Biplots', p.63, sha256:21939dfc3106f33ec287d0a15dfa3f3e394908f52aca39e368487a9d917d3362 — https://www.fbbva.es/wp-content/uploads/2017/05/dat/greenacre_c06_2010.pdf : 'the cosines of the angles between vectors approximate the correlations between the variables'. The angle itself is not a correlation; the bullet's readings (small angle positive, right angle uncorrelated, opposite negative) are right for the cosine.
+- source_rank: 2
+- proposed_action: Say 'the cosine of the angle'.
+- applied: true
+- fingerprint: aba46d0dc4e5
+
+## [F-004/R] Correction applied
+- entry_type: resolution
+- author: agent:checker-islr-b
+- run_id: 2026-10-31T05:08Z/61e8
+- date: 2026-10-31
+- resolves: F-004
+- status: resolved
+- note: Restated to 'the cosine of the angle between two arrows approximates the correlation' in this run.
+
+## [C-005] Validation pass — verified
+- entry_type: comment
+- author: agent:checker-islr-b
+- run_id: 2026-10-31T05:08Z/61e8
+- date: 2026-10-31
+- status_set: verified
+- confidence: high
+- checks_run: whole page re-read; biplot bullet vs Fig. 12.1 caption; arrow-reading bullet vs Greenacre p.63 — restated to the cosine of the angle (F-004 applied); point-reading bullet vs ISLR pp.500, 503 (centring; Indiana near zero = average); earlier bullets re-checked against eqs. 12.2-12.4, footnote 2, p.509; example recomputed (‖φ1‖²=1.0008, φ1·φ2=0, z1=2.00); rule 10: no number from masii-2019s-q40
+- sources_checked: James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), CAS-hosted copy, sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf, §12.2.1 eqs. (12.1)-(12.4), unit norm and 'arbitrarily large variance' p.500 (PDF 506), orthogonality, footnote 2, biplot and Fig. 12.1 caption (scores as points, loadings as arrows, Rape at (0.54, 0.17)) pp.501-502 (PDF 507-508), p.503 (PDF 509: Indiana near zero = approximately average; large positive PC1 scores = high crime), §12.2.4 sign flip p.509 (PDF 515); §6.3.1 p.256 (PDF 262); Greenacre, Biplots in Practice (Fundación BBVA 2010), ch.6 'Principal Component Analysis Biplots', p.63, sha256:21939dfc3106f33ec287d0a15dfa3f3e394908f52aca39e368487a9d917d3362 — https://www.fbbva.es/wp-content/uploads/2017/05/dat/greenacre_c06_2010.pdf
+- note: High: every claim is stated by ISLR (the MAS-II reading) or Greenacre's open biplot text; the example's numbers are the vault's own and recomputed. Only MAS-II links this page.

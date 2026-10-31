@@ -1,12 +1,13 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-18
-  last_checked_by: agent:validate-v1
+  status: verified
+  confidence: high
+  last_checked: 2026-10-31
+  last_checked_by: agent:checker-islr-a
   content_hash: sha256:df305da3abc0fef71064901e1d4e6c87c18fcbbe1bfad8b4b0f789b6bacb32f6
   sources:
-    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), CAS-hosted copy, §8.1, printed pp.327-340 (PDF pp.335-348; printed = PDF - 8), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), CAS-hosted copy, §8.1.1 incl. 'Tree Pruning' eq. (8.4) and Algorithm 8.1, printed pp.331-333 (PDF pp.339-341), §8.1.2 printed pp.335-336, §8.2.1 printed p.343, sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "Klusowski, J. M., 'Sparse Learning with CART', NeurIPS 2020, arXiv:2006.04266, §2 p.3 (a pruned subtree is obtained by merging internal nodes; weakest-link pruning successively collapses the internal node that increases the error least), sha256:f3a445d99ff3fd14569958486963c74793308e94017451b94843f10a23ac451a — https://arxiv.org/pdf/2006.04266"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Tree Pruning.md

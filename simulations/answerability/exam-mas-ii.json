@@ -2253,7 +2253,15 @@
      "statement": "In a Bayesian regression with multicollinear predictors, the marginal posteriors of the individual coefficients are wide (intervals may include zero) even when each predictor is strongly related to the response.",
      "concept": "Multicollinearity",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Multicollinearity",
+      "quote": "so each coefficient is poorly determined and its interval is wide (it can include zero even when both predictors are strongly related to the response), yet the pair is held to the valley",
+      "note": "Multicollinearity teaches it; checked against ISLR 2nd ed. §3.3.3 pp.100-102 in run 2026-10-31T05:10Z/8e26",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:10Z/8e26"
+     }
     },
     {
      "id": "r3",
@@ -2261,7 +2269,15 @@
      "statement": "Diagnose multicollinearity from posterior plots by checking for wide marginal intervals, a thin ridge in the joint posterior of two coefficients, and a tightly determined sum (or difference) of the coefficients.",
      "concept": "Linear Regression",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Multicollinearity",
+      "quote": "The RSS contours for two collinear coefficients run along a narrow valley: a wide range of individual values fits almost equally well, so each coefficient is poorly determined and its interval is wide",
+      "note": "Multicollinearity teaches it; checked against ISLR 2nd ed. §3.3.3 Fig. 3.15 pp.100-101 in run 2026-10-31T05:10Z/8e26",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:10Z/8e26"
+     }
     },
     {
      "id": "r4",
@@ -2269,7 +2285,15 @@
      "statement": "If two predictors are strongly positively correlated (x1 ≈ x2), only the sum of their coefficients is identified, so the posterior of the coefficients shows a negative correlation (downward-sloping ridge).",
      "concept": "Multicollinearity",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Multicollinearity",
+      "quote": "With positively correlated predictors ($x_1 \\approx x_2$) the fit depends essentially on $\\beta_1 + \\beta_2$, so the sum is well determined while raising one coefficient means lowering the other",
+      "note": "Multicollinearity teaches it; checked against ISLR 2nd ed. Fig. 3.15 and Shalizi 36-401 Lecture 17 p.6 in run 2026-10-31T05:10Z/8e26",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:10Z/8e26"
+     }
     },
     {
      "id": "r5",
@@ -2277,7 +2301,15 @@
      "statement": "If two predictors are strongly negatively correlated (x1 ≈ -x2), only the difference of their coefficients is identified, so the posterior of the coefficients has a positive correlation (upward-sloping ridge).",
      "concept": "Multicollinearity",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Multicollinearity",
+      "quote": "With negatively correlated predictors ($x_1 \\approx -x_2$) it is the difference $\\beta_1 - \\beta_2$ that is determined, and the valley slopes upward",
+      "note": "Multicollinearity teaches it; checked against Shalizi 36-401 Lecture 17 p.6 ((X'X)^-1 off-diagonal -Cov[X1,X2]) in run 2026-10-31T05:10Z/8e26",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:10Z/8e26"
+     }
     },
     {
      "id": "r6",
@@ -2285,7 +2317,15 @@
      "statement": "Correlation between coefficients in the posterior is a symptom of multicollinearity, not a property of the data; the data property is the correlation between the predictors.",
      "concept": "Multicollinearity",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Multicollinearity",
+      "quote": "correlation between the **coefficient estimates** is the symptom, while the property of the data is the correlation between the **predictors**, and for two predictors the two have opposite signs",
+      "note": "Multicollinearity teaches it; checked against Shalizi 36-401 Lecture 17 p.6 and ISLR 2nd ed. §3.3.3 in run 2026-10-31T05:10Z/8e26",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:10Z/8e26"
+     }
     }
    ],
    "imported_from": "report.md"
@@ -3139,7 +3179,15 @@
      "statement": "When k equals the size of the training set, every point's neighborhood is the entire training set, so KNN predicts the same class (the most common training class) for every point.",
      "concept": "K-Nearest Neighbors",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "K-Nearest Neighbors",
+      "quote": "every neighborhood $\\mathcal{N}_K(x_0)$ is the whole training set, so KNN predicts the class that has the majority in the training data for every observation, whatever its predictor values",
+      "note": "K-Nearest Neighbors teaches it; checked against MIT OCW 15.062 kNN notes p.2 and ISLR 2nd ed. §2.2.3 in run 2026-10-31T05:10Z/8e26",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:10Z/8e26"
+     }
     },
     {
      "id": "r4",
@@ -3214,7 +3262,15 @@
      "statement": "Pruning a tree at an internal node collapses the entire subtree below it into a single terminal node, whose RSS replaces the RSS of the subtree's terminal nodes and reduces the terminal node count accordingly.",
      "concept": "Tree Pruning",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Tree Pruning",
+      "quote": "**Pruning at an internal node** collapses the whole subtree below it into a single terminal node: that node's own RSS replaces the summed RSS of the leaves it absorbs",
+      "note": "Tree Pruning teaches it; checked against ISLR 2nd ed. §8.1.1 eq. (8.4) and Klusowski (2020) §2 in run 2026-10-31T05:10Z/8e26",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:10Z/8e26"
+     }
     },
     {
      "id": "r4",
@@ -7139,7 +7195,15 @@
        "page": "Classification Tree",
        "quote": "For two classes $G = 2\\hat{p}(1-\\hat{p})$ and $E = \\min(\\hat{p}, 1-\\hat{p})$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "K-Nearest Neighbors",
+      "quote": "so its error probability at $x_0$ is $1 - \\max_j \\Pr(Y = j \\mid X = x_0)$, which for two classes with $p = \\Pr(Y = 1 \\mid X = x_0)$ is $\\min\\{p,\\ 1-p\\}$",
+      "note": "K-Nearest Neighbors teaches it; checked against ISLR 2nd ed. §2.2.3 pp.38-39 in run 2026-10-31T05:10Z/8e26",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:10Z/8e26"
+     }
     },
     {
      "id": "r5",
@@ -7147,7 +7211,15 @@
      "statement": "The Bayes error rate on a test set is computed by averaging the Bayes error probabilities min{p, 1-p} evaluated at the test x values (the expected error rate at those points), rather than comparing to observed test labels.",
      "concept": "Bayes Error Rate",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "K-Nearest Neighbors",
+      "quote": "On a given set of test points, the Bayes classifier's expected error rate is the average of the per-point error probabilities $1 - \\max_j \\Pr(Y = j \\mid X = x_i)$ over those $x_i$",
+      "note": "K-Nearest Neighbors teaches it; checked against ISLR 2nd ed. §2.2.3 eq. (2.11) in run 2026-10-31T05:10Z/8e26",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:10Z/8e26"
+     }
     }
    ],
    "imported_from": "report.md"
@@ -8778,7 +8850,15 @@
      "statement": "The squared-error objective for one observation is R_i(θ) = ½(y_i − f_θ(x_i))², where the ½ is included so the derivative has no factor of 2.",
      "concept": "Neural Network",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Backpropagation",
+      "quote": "differentiating the square brings down a 2 that cancels it, so $\\partial R_i/\\partial f_\\theta(x_i) = -\\left(y_i - f_\\theta(x_i)\\right)$",
+      "note": "Backpropagation teaches it; checked against ISLR 2nd ed. §10.7 eqs. (10.25), (10.28)-(10.29) in run 2026-10-31T05:10Z/8e26",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:10Z/8e26"
+     }
     },
     {
      "id": "r3",
@@ -9182,7 +9262,15 @@
      "statement": "A model whose predictions exceed actuals at the high end and fall short at the low end has overly extreme predictions, indicating poorer accuracy; a narrow range of predictions does not imply accuracy.",
      "concept": "Quantile Plot",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Quantile Plot",
+      "quote": "A model whose predictions are too extreme — above the actuals in the top buckets and below them in the bottom ones — scores poorly on predictive accuracy",
+      "note": "Quantile Plot teaches it; checked against Goldburd et al. §7.2.1 p.77 and Van Calster et al. (2019) in run 2026-10-31T05:10Z/8e26",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:10Z/8e26"
+     }
     },
     {
      "id": "r7",

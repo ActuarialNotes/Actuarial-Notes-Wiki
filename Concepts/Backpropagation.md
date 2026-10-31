@@ -1,13 +1,14 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-18
-  last_checked_by: agent:validate-v1
-  content_hash: sha256:d449c7bfd806ac4ba2071c937166340b9cedee3c6dd2e13fd070c29b5ebd3c74
+  status: verified
+  confidence: high
+  last_checked: 2026-10-31
+  last_checked_by: agent:checker-islr-a
+  content_hash: sha256:e834419a6bb863300eeeff0fa1520851d0bb284adf4405b6bda1589f715a3b47
   sources:
-    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), CAS-hosted copy, §10.1-10.2, pp.404-410 (PDF 411-417); §10.7, pp.434-439 (PDF 441-446), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
-    - "Goodfellow, Bengio & Courville, Deep Learning (MIT Press 2016), author-hosted Ch.6 Deep Feedforward Networks, Ch.6 §6.5 back-propagation (cost of the same order as forward propagation), sha256:14d53b99e734892233699b5814588592cb38a24c5437e811a012b135ba510ad2 — https://www.deeplearningbook.org/contents/mlp.html"
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), CAS-hosted copy, §10.1-10.2, printed pp.404-410 (PDF 411-417); §10.7 incl. eqs. (10.23)-(10.31), printed pp.434-439 (PDF 441-446), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "Goodfellow, Bengio & Courville, Deep Learning (MIT Press 2016), author-hosted Ch.6 §6.5 (back-propagation cost of the same order as forward propagation), sha256:14d53b99e734892233699b5814588592cb38a24c5437e811a012b135ba510ad2 — https://www.deeplearningbook.org/contents/mlp.html"
+    - "Goodfellow, Bengio & Courville, Deep Learning, author-hosted Ch.8 §8.3.1 SGD (learning rate too large: violent oscillations, cost increasing; too low: learning proceeds slowly), sha256:95f2810d0ab10e3934ad7dd858e816572b6a30893e7fca19163b211f6dfe91a1 — https://www.deeplearningbook.org/contents/optimization.html"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Backpropagation.md

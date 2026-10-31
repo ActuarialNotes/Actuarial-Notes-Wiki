@@ -1,12 +1,13 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-18
-  last_checked_by: agent:validate-v1
-  content_hash: sha256:a5f403ea41a229c080fa0cfc16f17e432b3c405572f7bcc14773e502f53275b0
+  status: verified
+  confidence: high
+  last_checked: 2026-10-31
+  last_checked_by: agent:checker-islr-a
+  content_hash: sha256:49f7d9073fe99eac33681111852aa794ae95e6391defb90591f6f41ff679b280
   sources:
-    - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed., Chapter 7, §7.1-7.3.1 incl. fn 17, pp.75-85 (PDF pp.85-95), sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
+    - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed., §7.2 and §7.2.1 'Simple Quantile Plots' incl. the three criteria, printed pp.76-78 (PDF pp.86-88), §7.2.2, sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
+    - "Van Calster, McLernon, van Smeden, Wynants & Steyerberg, 'Calibration: the Achilles heel of predictive analytics', BMC Medicine 17:230 (2019), open access, PMC6912996, sections on overfitting and the calibration slope ('estimated risks are too extreme, i.e., too high ... at high risk and too low ... at low risk'), Europe PMC full-text XML sha256:c31e3eb24e490682a92af5c5ff1b197579a09122c867354392e9edce63c1ffaf — https://bmcmedicine.biomedcentral.com/articles/10.1186/s12916-019-1466-7"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Quantile Plot.md

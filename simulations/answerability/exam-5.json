@@ -11140,7 +11140,15 @@
      "statement": "The coinsurance penalty as a function of loss rises linearly from the origin to its maximum at L = F (where the indemnity reaches the face amount), then falls linearly to zero at L = cV, and is zero for larger losses.",
      "concept": "Coinsurance Penalty",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Coinsurance Rating",
+      "quote": "It arises only when $L > 0$, $F < cV$ and $L < cV$, rises linearly to its largest at $L = F$, falls back to zero at $L = cV$",
+      "note": "The penalty-versus-loss shape (rises to its maximum at L = F, falls to zero at cV) is stated on the tagged page.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort2"
+     }
     },
     {
      "id": "r4",
@@ -11148,7 +11156,13 @@
      "statement": "For a loss distribution mixing a point mass at total loss with a uniform distribution on the remaining losses, the probability of each segment is found by scaling the uniform portion by (1 − point mass probability) and the interval's share of the range, with the remaining probability going to the segment above the cap.",
      "concept": "Mixed Loss Distributions",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The point mass and uniform distribution are given by the question; finding each segment probability is probability arithmetic (Exam P), not Exam 5 course content.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort2"
+     }
     },
     {
      "id": "r5",
@@ -11190,7 +11204,15 @@
      "statement": "The rate per $1000 of insurance equals the pure premium divided by the amount of insurance in thousands.",
      "concept": "Insurance Rate",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Coinsurance Rating",
+      "quote": "the rate per amount of insurance is set by the face amount chosen, as expected indemnity divided by face value",
+      "note": "Rate per amount of insurance = expected indemnity / face value; per $1000 is the unit.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort2"
+     }
     }
    ]
   },
@@ -11219,7 +11241,15 @@
      "statement": "The minimum and maximum retrospective premiums equal the minimum and maximum retro premium ratios multiplied by the standard premium.",
      "concept": "Retrospective Rating",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Commercial Lines Rating",
+      "quote": "is the standard premium on which the basic premium factor, the minimum and the maximum are all computed",
+      "note": "Syllabus page: the retro minimum and maximum are computed on standard premium.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort2"
+     }
     },
     {
      "id": "r3",
@@ -13014,7 +13044,13 @@
      "statement": "In a frequency-severity projection, select an ultimate frequency and severity (e.g., a recent-years average when there is a clear shift, an all-year average when there is no pattern) and justify the choice based on the pattern in the trended data.",
      "concept": "Frequency-Severity Method",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Choosing which years to average is a selection from the question's own data, judged from its pattern.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort2"
+     }
     },
     {
      "id": "r2",
@@ -13022,7 +13058,15 @@
      "statement": "To restate trended-to-latest-year frequency and severity selections to an earlier accident year, de-trend them by dividing by one plus the annual trend rate raised to the number of years between the years.",
      "concept": "Trending Frequency and Severity",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loss Trend",
+      "quote": "$t$ is the selected annual trend and $n$ the trend period, measured from the average date of loss in the experience period to the average date of loss in the forecast period",
+      "note": "Trend factor (1+t)^n over the trend period; de-trending divides by it.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort2"
+     }
     },
     {
      "id": "r3",
@@ -13227,7 +13271,13 @@
        "page": "Law of Large Numbers",
        "quote": "It is the formal reason risk pooling works: the average loss per policy becomes predictable as an insurer writes more independent policies."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "One of ten alternative acceptable answers (two needed for credit); not a fact the question requires.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort2"
+     }
     }
    ]
   },
@@ -13286,7 +13336,13 @@
      "statement": "To apply a cap on the maximum-to-minimum relativity ratio, set the capped territory's relativity at the cap multiple of the lowest territory's relativity, rebasing the lowest territory to 1.000.",
      "concept": "Capping Relativity Changes",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The max-to-min cap is the question's own constraint; applying it is arithmetic on the given relativities.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort2"
+     }
     },
     {
      "id": "r5",
@@ -13345,7 +13401,13 @@
        "page": "Business Auto Coverage",
        "quote": "The manual adds the secondary factor to the primary factor to give each vehicle's combined rating factor, rather than multiplying by it (for example Rule 53 of the CAR Commercial Automobile Insurance Manual)."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "ISO Personal Automobile Manual classification plan (primary + secondary factors added): that manual is no longer an Exam 5 reading; Werner & Modlin do not teach it.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort2"
+     }
     },
     {
      "id": "r2",
@@ -13358,7 +13420,13 @@
        "page": "Personal Auto Underwriting",
        "quote": "When a household has more than one driver and car, the insurer's principal operator rule decides which driver rates each car: some insurers use the driver who uses the car most, and others the highest-risk driver, usually the youngest."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "ISO Personal Automobile Manual principal-operator rule: that manual is no longer an Exam 5 reading.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort2"
+     }
     },
     {
      "id": "r3",
@@ -13366,7 +13434,13 @@
      "statement": "The primary classification is based on auto usage (e.g., work commute distance, pleasure, farm, business), and the secondary classification is based on the driver's age, SDIP driving record points and licensing experience.",
      "concept": "ISO Personal Automobile Classification Plan",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "ISO Personal Automobile Manual primary/secondary classification definitions: that manual is no longer an Exam 5 reading; the question also gives the factor tables.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort2"
+     }
     },
     {
      "id": "r4",
@@ -13400,7 +13474,15 @@
        "page": "Premium Accounting",
        "quote": "$$\\text{UPR}_{\\text{policy}} = \\text{WP} \\times \\frac{\\text{Days unexpired}}{\\text{Days in term}}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Earned Premium",
+      "quote": "recognized pro rata as the policy term elapses",
+      "note": "Pro rata on time for the remaining term.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort2"
+     }
     }
    ]
   },
@@ -13937,7 +14019,15 @@
        "page": "Excess and Deductible Rating",
        "quote": "Few claims reach the upper layers, so pricing leans on fitted curves and industry data, and the tail fit drives the answer. Data are [[Truncation|truncated]] below deductibles and [[Censoring|censored]] at policy limits."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Deductible Rating",
+      "quote": "When the data hold only losses net of the deductible, policies with a deductible",
+      "note": "Truncation of deductible data and the fitted-distribution remedy are on the tagged page (with Increased Limits on censoring).",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort2"
+     }
     },
     {
      "id": "r7",
@@ -14022,7 +14112,15 @@
        "page": "Development Triangle",
        "quote": "**Development Triangle** is the fundamental data structure of reserving: cumulative amounts arranged with **cohorts as rows** (usually [[Accident Year|accident years]]), **maturities as columns** (age in months since the start of the cohort), and **valuation dates as diagonals**."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Development Triangle",
+      "quote": "maturities as columns (age in months since the start of the cohort), and valuation dates as diagonals",
+      "note": "Re-quoted after the page was edited today: cohorts by row, ages by column, valuations by diagonal.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort2"
+     }
     },
     {
      "id": "r5",
@@ -14242,7 +14340,15 @@
      "statement": "Pure premium changes from the most immature accident year are highly leveraged and unreliable, so they may be excluded when selecting a trend; select a trend consistent with the more stable mature-year changes.",
      "concept": "Claims Trend Estimation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cumulative Development Factor",
+      "quote": "At a CDF of $4$, a dollar of distortion on the diagonal becomes four dollars of ultimate",
+      "note": "Leverage of immature years is taught on a linked page; excluding the leveraged point is the selection judgment.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort2"
+     }
     },
     {
      "id": "r5",
@@ -14284,7 +14390,13 @@
      "statement": "Cape Cod can be done on an exposure basis instead of on-level premium, because premium cancels in the IBNR calculation and gives the same IBNR.",
      "concept": "Cape Cod Method",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Algebra of the Cape Cod formula on the tagged page: premium appears in both the ELR and the IBNR, so any proportional exposure base gives the same IBNR.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort2"
+     }
     }
    ]
   },
@@ -15132,7 +15244,13 @@
      "statement": "The S&S-to-paid ratio can keep developing after S&S payments stop developing, because the paid claims in the denominator are still developing.",
      "concept": "Salvage and Subrogation Estimation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Follows from the definition of the S&S-to-paid ratio on the tagged page (the denominator still develops); Friedland Ch.13 does not state it separately.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort2"
+     }
     },
     {
      "id": "r3",
@@ -15282,7 +15400,15 @@
        "page": "Unallocated Loss Adjustment Expenses ULAE",
        "quote": "Drops the $50/50$ assumption entirely: ULAE is allocated to claim events (opening, maintenance, closing) with selected weights, and the resulting ratio is applied to the corresponding unpaid counts or dollars."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Unallocated Loss Adjustment Expenses ULAE",
+      "quote": "ULAE is allocated to claim events (opening, maintenance, closing) with selected weights, and the resulting ratio is applied to the corresponding unpaid dollars",
+      "note": "Re-quoted after the page was edited today: the generalized (Conger-Nolibos) approach.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort2"
+     }
     }
    ]
   },
@@ -15345,7 +15471,13 @@
      "statement": "To estimate renewals in a period, subtract new business from total written exposure; exposure eligible to renew is obtained from the prior policies' expirations (e.g., six-month policies written in a period expire and become eligible to renew, so the eligible exposure equals the written exposure of the prior period over the term-length adjustment), and new business under uniform writing is spread evenly across the year.",
      "concept": "Retention Ratio",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Counting renewals as written less new business, and eligible exposure from the prior period's expirations, is this solution's plan on the question's data (retention ratio itself is tagged).",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort2"
+     }
     },
     {
      "id": "r5",
@@ -15353,7 +15485,15 @@
      "statement": "Changing the policy term from six months to annual means renewals of the converted policies occur only once a year (concentrated in the first half of the year), so writings in the year after the change are not spread evenly across the year; a uniform-writing assumption is reasonable only when applied over short periods without strong growth/shrinkage or concentrated renewals.",
      "concept": "Uniform Writing Assumption",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "On-Leveling",
+      "quote": "Seasonal writing (Werner's example: boat owners policies, bought before the boating season) or a mid-year term change breaks it",
+      "note": "Syllabus page: the uniform-writing assumption fails under a mid-year term change.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort2"
+     }
     }
    ]
   },
@@ -15903,7 +16043,13 @@
      "statement": "Combine the current year's excess ratio with the historical excess ratio by weighting (by losses, limited losses, claim counts, or years) rather than simply averaging the two ratios.",
      "concept": "Excess Loss Ratio",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Whether to weight the current year's excess ratio into the long-run average is a selection step of this solution; the long-run excess ratio is taught on Extraordinary Losses.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort2"
+     }
     },
     {
      "id": "r5",
@@ -16505,7 +16651,15 @@
        "page": "Property Insurance",
        "quote": "Under a coinsurance clause, an insured who carries less than the required percentage of value recovers only the share $R$ of each partial loss."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Coinsurance Rating",
+      "quote": "either a coinsurance clause cuts the loss payment of an insured who carries less than a required share of value",
+      "note": "Re-quoted after the page was edited today: the coinsurance requirement as a required share of value.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort2"
+     }
     },
     {
      "id": "r2",
@@ -16543,7 +16697,15 @@
      "statement": "The maximum coinsurance penalty occurs when the loss is at or above the policy face amount (the insurer pays up to the limit), so the maximum penalty is face amount × (1 − apportionment ratio).",
      "concept": "Coinsurance",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Coinsurance Rating",
+      "quote": "It arises only when $L > 0$, $F < cV$ and $L < cV$, rises linearly to its largest at $L = F$, falls back to zero at $L = cV$",
+      "note": "The page gives the penalty and that it is largest at L = F, i.e. F - aF.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort2"
+     }
     },
     {
      "id": "r5",
@@ -16569,7 +16731,15 @@
        "page": "Coinsurance Rating",
        "quote": "The clause applies only up to the policy limit, and full limits are still paid on total losses up to that limit."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Coinsurance Rating",
+      "quote": "On an underinsured home, the payment doesn't cover the whole loss when one exceeds the face value",
+      "note": "Re-quoted after the page was edited today: underinsurance leaves losses above the face value unpaid.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort2"
+     }
     },
     {
      "id": "r7",
@@ -17091,7 +17261,13 @@
      "statement": "For an accident year beyond the oldest age in the triangle, use the benchmark tail (ultimate) CDFs at the age after the last development column, applying the case outstanding technique to the case reserve.",
      "concept": "Case Outstanding Development Technique",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Picking the benchmark factor at the next age for the oldest year is applying the question's given benchmark table.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort2"
+     }
     },
     {
      "id": "r3",
@@ -17641,7 +17817,15 @@
        "page": "Berquist-Sherman Method",
        "quote": "$$\\text{Adjusted Reported}_{\\text{AY},n} = \\text{Paid}_{\\text{AY},n} + \\text{Adjusted Case}_{\\text{AY},n}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Berquist-Sherman Method",
+      "quote": "Multiply the restated averages by the open claim counts to get adjusted case reserves, add paid, and rebuild the reported triangle.",
+      "note": "Re-quoted after the page was edited today: adjusted reported = adjusted average case x open counts + paid.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort2"
+     }
     },
     {
      "id": "r4",
@@ -18065,7 +18249,15 @@
        "page": "Actual vs Expected Analysis",
        "quote": "$$\\text{Expected emergence} = U_{\\text{prior}} \\times \\left(\\frac{1}{\\text{CDF}_{n+1}} - \\frac{1}{\\text{CDF}_{n}}\\right)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Actual vs Expected Analysis",
+      "quote": "\\text{Expected emergence} = \\frac{U_{\\text{prior}} - \\text{Reported}_{n}}{1 - 1/\\text{CDF}_{n}}",
+      "note": "Re-quoted after the page was edited today: expected emergence = unreported x (change in % reported)/(1 - % reported at start).",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort2"
+     }
     },
     {
      "id": "r3",
@@ -18331,7 +18523,13 @@
      "statement": "After trending each accident year's ultimate losses to the future period, average the trended ultimate losses across the selected years to get the projected losses (exposures constant).",
      "concept": "Trended Ultimate Losses",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Averaging the trended ultimates across the selected years is a step of this solution's plan.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort2"
+     }
     },
     {
      "id": "r7",
@@ -19752,7 +19950,15 @@
      "statement": "The case outstanding development technique projects development only on reported claims, so it is appropriate only when most or all claims are reported in the first period; it is not appropriate when significant pure IBNR (unreported claims) exists.",
      "concept": "Case Outstanding Development Technique",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Case Outstanding Development Method",
+      "quote": "That holds only where most claims are reported within the accident period",
+      "note": "Tagged page: the technique suits books where most claims are reported early (claims-made, report year).",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort2"
+     }
     },
     {
      "id": "r6",
@@ -19984,7 +20190,15 @@
        "page": "Frequency-Severity Method",
        "quote": "**Counts and trended severity.** Develop counts, but estimate severity by **trending** a mature year's severity forward rather than developing an immature one — useful where severity development is unstable but severity trend is well understood."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Frequency-Severity Method",
+      "quote": "select severity from developed severities trended to the latest year's cost level",
+      "note": "Re-quoted after the page was edited today: severity selected by trending rather than developing.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort2"
+     }
     },
     {
      "id": "r5",
@@ -20636,7 +20850,15 @@
        "page": "Actual vs Expected Analysis",
        "quote": "$$\\text{Expected emergence} = U_{\\text{prior}} \\times \\left(\\frac{1}{\\text{CDF}_{n+1}} - \\frac{1}{\\text{CDF}_{n}}\\right)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Actual vs Expected Analysis",
+      "quote": "\\text{Expected emergence} = \\frac{U_{\\text{prior}} - \\text{Reported}_{n}}{1 - 1/\\text{CDF}_{n}}",
+      "note": "Re-quoted after the page was edited today: expected emergence from IBNR and the change in % reported.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort2"
+     }
     },
     {
      "id": "r5",

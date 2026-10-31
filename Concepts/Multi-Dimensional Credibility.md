@@ -1,11 +1,12 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:231781da8db932d2a5cc49c99fa8926172001f06cdf10e88fcffaa1c4e770eb7
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:fc74473f86423e578f63f5810a91d6cb255db7fe987bb027fe73d5ca31cf7d00
+  sources:
+    - "Couret & Venter, Using Multi-Dimensional Credibility to Estimate Class Frequency Vectors in Workers Compensation (ASTIN Bulletin 38(1), 2008), pp.75-83 (PDF pp.3-11), eqs (1)-(4), Tables C-D, sha256:ce50d8a0fbc395621d29dd153836b0303a269d94697bb1932b5f334b47ebba18 — https://www.casact.org/sites/default/files/2021-03/8_Couret_Venter.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Multi-Dimensional Credibility.md
@@ -32,7 +33,7 @@ verification:
 > A class has too few fatal and permanent total claims for its own counts to say much, but the same physical circumstances produce fatal, permanent total and major claims — slight differences in an accident decide which. So a class with many major claims is likely to have more fatal and permanent total claims too, and the estimate of each type borrows strength from the others, the way a multiple regression weighs several variables.
 
 > [!example]- Estimating a Class's PT Ratio from Two Injury Types {Example}
-> In a hazard group the PT-to-TT ratio is $0.006$ and the major-to-TT ratio is $0.080$. A class had $300$, $500$ and $700$ TT claims over three years, with $2$, $1$ and $3$ PT claims, and its pooled major-to-TT ratio is $0.120$. The credibility coefficients for estimating the PT ratio are $0.30$ on the PT deviation and $0.02$ on the major deviation. Estimate the class's PT ratio, and compare it with the single-dimensional estimate.
+> In a hazard group the PT-to-TT ratio is $0.006$ and the major-to-TT ratio is $0.080$. A class had $300$, $500$ and $700$ TT claims over three years, with $2$, $1$ and $3$ PT claims, and its pooled major-to-TT ratio is $0.120$. The credibility coefficients for estimating the PT ratio are $0.30$ on the PT deviation and $0.02$ on the major deviation, and the single-dimensional credibility factor, fitted on the PT ratio alone, is also $0.30$. Estimate the class's PT ratio, and compare it with the single-dimensional estimate.
 >
 > > [!answer]-
 > > Pool the class's PT ratio over the years first, then add each type's coefficient times its deviation to the hazard group's PT ratio.
@@ -51,7 +52,7 @@ verification:
 > > \end{align*}
 > > $$
 > >
-> > The single-dimensional estimate uses only the PT deviation: $0.006 - 0.0006 = 0.0054$.
+> > The single-dimensional estimate uses only the PT deviation, with its own factor $0.30$: $0.006 - 0.0006 = 0.0054$.
 > >
 > > *Why is the multi-dimensional estimate above the hazard group's, when the class's own PT ratio is below it?* Its major ratio is $50\%$ above the hazard group's, and major claims arise from the same kinds of accident. Averaging the three annual ratios instead ($0.0043$) would give the small year as much weight as the large one.
 

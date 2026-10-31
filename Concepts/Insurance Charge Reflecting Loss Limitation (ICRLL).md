@@ -4,9 +4,9 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:7fe9675890f4ca9367f504ef85a714a8e2470927b85fd9f7ea2aa8516139fc07
+  content_hash: sha256:7bd11bfb2a0c979dd528bd03917852a926fdecf8836436e16a60d6784807f58a
   sources: []
-  open_findings: 0
+  open_findings: 2
   open_critical: 0
   log: .verify/Concepts/Insurance Charge Reflecting Loss Limitation (ICRLL).md
 ---
@@ -21,10 +21,10 @@ The **Insurance Charge Reflecting Loss Limitation (ICRLL)** procedure prices an 
 
 > $$\text{Total expected loss cost} = \big(E - \mathrm{E}\{A_D\}\big) + \phi(r) \times \mathrm{E}\{A_D\}$$
 
-- $E$ is the expected unlimited aggregate loss, $\mathrm{E}\{A_D\}$ the expected loss limited per occurrence to $D$, and $k = (E - \mathrm{E}\{A_D\})/E$ the fraction of losses expected above the per-occurrence limit (called "ER" in the pre-2019 NCCI manual; it is the per-occurrence [[Loss Elimination Ratio|loss elimination ratio]] of the retention).
+- $E$ is the expected unlimited aggregate loss, $\mathrm{E}\{A_D\}$ the expected loss limited per occurrence to $D$, and $k = (E - \mathrm{E}\{A_D\})/E$ the fraction of losses expected above the per-occurrence limit (called "ER" in the pre-2019 NCCI manual). Exam solutions often call $k$ the "LER": the share of loss the per-occurrence limit eliminates from the insured's losses. That is $1 - \text{LER}$ in the deductible sense of [[Loss Elimination Ratio]], whose LER is the share *below* the deductible.
 - **The procedure.** (1) Multiply the expected unlimited loss by the state/hazard group relativity and by the loss group adjustment factor, and use the result to choose the Expected Loss Group. (2) Compute the entry ratio as the aggregate limit over the expected *limited* loss. (3) Read $\phi(r)$ from that ELG's column of the unlimited Table M. (4) The aggregate charge is $\phi(r) \times \mathrm{E}\{A_D\}$, and the per-occurrence charge is $E - \mathrm{E}\{A_D\}$; their sum is the total expected loss cost. Divided by standard premium, it is expressed as a percent of standard premium.
 - **Both indices of Table M are modified.** Table M$_D$ is indexed by size, deductible and entry ratio; ICRLL maps those three indices onto the two of the unlimited table, by changing the entry ratio and the size category.
-- **Why the size is adjusted upward.** A per-occurrence limit reduces the variance of the severity distribution — much of it comes from the few largest losses — and so the variance of the limited aggregate loss. Less variance means a lower charge at entry ratios above 1, just as a larger risk (more expected claims) has a lower charge. The adjustment factor exceeds 1 and grows with $k$, so ICRLL enters Table M at a larger ELG, whose column is flatter and less skewed, to approximate the limited distribution. A plan with a per-occurrence limit therefore has a lower aggregate charge $\phi(r_G)$ than the unlimited Table M charge at the same entry ratio for the same risk.
+- **Why the size is adjusted upward.** A per-occurrence limit reduces the variance of the severity distribution — much of it comes from the few largest losses — and so the variance of the limited aggregate loss. Less variance means a lower charge at entry ratios above 1, just as a larger risk (more expected claims) has a lower charge. The adjustment factor exceeds 1 and grows with $k$, so ICRLL enters Table M at a larger ELG, whose aggregate distribution is less variable, with lower charges above an entry ratio of 1, to approximate the limited distribution. A plan with a per-occurrence limit therefore usually has a lower aggregate charge $\phi(r_G)$ at entry ratios above 1 than the unlimited Table M charge at the same entry ratio for the same risk.
 - **Why not just use the unlimited charge.** Losses above the per-occurrence limit are already priced in the per-occurrence charge. An unlimited Table M charge counts those losses again whenever they push the aggregate over its limit — the **overlap** of the two limits. Pricing the aggregate on limited losses, as ICRLL approximates, removes the double count.
 - **Advantages:** a single unlimited Table M gives reasonable charges that would otherwise need a large number of Tables M$_D$, and it can adapt a Table M from one book of business to a similar book without enough data for its own tables. **Disadvantage:** it is only an approximation to Table M$_D$ and may add error to the aggregate charge. Where electronic Tables M$_D$ or a [[Table L]] are available, the adjustment is not needed.
 

@@ -4,9 +4,9 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:30e8ccb9e987cc40ca64257781d9b7a96d766e1f03e73540fe6bb6f3f97b6e20
+  content_hash: sha256:0348a6e676d3b84b90bf1fe6c280eb646f465304c94f4723c7904a2a77f6d94c
   sources: []
-  open_findings: 0
+  open_findings: 3
   open_critical: 0
   log: .verify/Concepts/Table L.md
 ---
@@ -21,14 +21,14 @@ verification:
 
 > $$\psi^*_D(r) = \int_0^{r} (r - y)\, dF_D(y) = \phi^*_D(r) + r - 1$$
 
-- $E$ is the expected unlimited aggregate loss, $A_D$ the actual aggregate loss with each occurrence limited to $D$, and $F_D$ the distribution of $A_D/E$. $k$ is the **excess ratio for the per-occurrence limit** — the fraction of expected loss above $D$ (called "ER" in the pre-2019 NCCI retro manual; it is the per-occurrence [[Loss Elimination Ratio|loss elimination ratio]] of the insured's retention).
+- $E$ is the expected unlimited aggregate loss, $A_D$ the actual aggregate loss with each occurrence limited to $D$, and $F_D$ the distribution of $A_D/E$. $k$ is the **excess ratio for the per-occurrence limit** — the fraction of expected loss above $D$ (called "ER" in the pre-2019 NCCI retro manual). Exam solutions often call $k$ the "LER": the share of loss the per-occurrence limit eliminates from the insured's losses. That is $1 - \text{LER}$ in the deductible sense of [[Loss Elimination Ratio]], whose LER is the share *below* the deductible.
 - **The entry ratio is limited loss over unlimited expected loss.** The Table L charge is the average difference between a risk's unlimited and limited loss, plus its limited loss in excess of $rE$, all as a ratio to expected unlimited loss. The $k$ term is the per-occurrence excess; the integral is the additional effect of the aggregate limit beyond the occurrence limit.
-- **From a limited table.** A charge $\phi_{\text{lim}}$ read from a Table M$_D$, which is a ratio to *expected limited* loss, converts to a ratio to unlimited loss by $\phi^* = \phi_{\text{lim}}(1 - k) + k$. When the aggregate charge is already a ratio to expected unlimited loss, as the integral in Table L is, no $(1 - k)$ factor is applied: $\phi^* = (\text{that charge}) + k$.
+- **From a limited table.** A charge $\phi_{\text{lim}}$ read from a Table M$_D$, which is a ratio to *expected limited* loss, converts to a ratio to unlimited loss, for the same aggregate limit, by $\phi^* = \phi_{\text{lim}}(1 - k) + k$. When the aggregate charge is already a ratio to expected unlimited loss, as the integral in Table L is, no $(1 - k)$ factor is applied: $\phi^* = (\text{that charge}) + k$.
 - **Shape.** $\phi^*_D(0) = 1$, because all of the expected unlimited loss is either above $D$ or above zero. $\phi^*_D(r) - k$ is a Table M charge of the limited distribution, so $\phi^*_D$ is decreasing and convex in $r$. It never falls below $k$: losses above the per-occurrence limit are always the insurer's, however high the aggregate. At and above the largest limited entry ratio the aggregate part is 0, and $\phi^*_D(r) = k$.
 - With no loss limit, $k = 0$, $F_D = F$, and Table L reduces to [[Table M]]. Using the limited distribution $F_D$ in the integral is what keeps the per-occurrence and aggregate limits from double counting the losses they overlap on (see [[Lee Diagram]]); the alternative way of pricing a limited aggregate from an unlimited Table M is [[Insurance Charge Reflecting Loss Limitation (ICRLL)|ICRLL]].
 
 > [!idea] The idea
-> Table L asks one question — of every dollar of expected loss, how much does the insurer keep after both limits act? — and answers it per occurrence first. The fraction $k$ above the occurrence limit is gone before the aggregate is even counted, so the charge has a floor at $k$ and only the limited losses can pile up past the aggregate.
+> Table L asks one question — of every dollar of expected loss, how much falls to the insurer after both limits act? — and answers it per occurrence first. The fraction $k$ above the occurrence limit is gone before the aggregate is even counted, so the charge has a floor at $k$ and only the limited losses can pile up past the aggregate.
 
 ## Building Table L from data
 

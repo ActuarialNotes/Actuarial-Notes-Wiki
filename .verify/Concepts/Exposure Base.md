@@ -106,3 +106,14 @@ created: 2026-09-12
 - checks_run: delta check: git diff since the 2026-10-09 verified pass (commit 90f8c02d7) adds one bullet ('In underwriting (DISC-RM)'); its IRMI list (payroll, receipts, sales, square footage, area, man-hours for GL; per unit auto; per $1,000 property) diffed against IRMI 'exposure base', and premium audit verifying the base against IRMI 'premium audit'; Werner re-fetched, sha256 6b214d4d... unchanged
 - sources_checked: IRMI Glossary, 'exposure base', entry, sha256:47e94e12e79df29163b37da0ab98b8194ba29990c124768a2200b11b65f9b3d0 — https://www.irmi.com/term/insurance-definitions/exposure-base; IRMI Glossary, 'premium audit', entry, sha256:4d303e9e2670eb03ca6e5050b336726d99d40c4294ec4a273a9a9f79a6b79909 — https://www.irmi.com/term/insurance-definitions/premium-audit; Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.4 pp.49-51 (PDF pp.61-63) — hash reconfirmed, unchanged since the 2026-10-09 pass, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf
 - note: Only the DISC-RM bullet changed since the last pass, and it matches IRMI word for word in substance. The rest of the page stands on the 2026-10-09 pass against Werner. Medium, as before.
+
+## [C-004] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T12:19Z/4af0
+- date: 2026-10-31
+- status_set: verified
+- confidence: medium
+- checks_run: delta only: the added 'Premium as the base' bullet read against Bailey & Simon p.159 and Table 1 (claim frequency per $1000 of premium)
+- sources_checked: IRMI Glossary, 'exposure base', entry, sha256:47e94e12e79df29163b37da0ab98b8194ba29990c124768a2200b11b65f9b3d0 — https://www.irmi.com/term/insurance-definitions/exposure-base; IRMI Glossary, 'premium audit', entry, sha256:4d303e9e2670eb03ca6e5050b336726d99d40c4294ec4a273a9a9f79a6b79909 — https://www.irmi.com/term/insurance-definitions/premium-audit; Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.4 pp.49-51 (PDF pp.61-63) — hash reconfirmed, unchanged since the 2026-10-09 pass, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf; AN ACTUARIAL NOTE ON THE CREDIBILITY OF EXPERIENCE OF A SINGLE PRIVATE PASSENGER CAR, Bailey & Simon, An Actuarial Note on the Credibility of Experience of a Single Private Passenger Car (PCAS 1959), pp.159-164 (PDF pp.1-6): Table 1-3, Appendix I-II, sha256:3e44bb5b3d17e96aaae61b27b0d72889043c44feb049a3ca3444095101f456e2 — https://www.casact.org/sites/default/files/2021-03/8_Bailey_Simon.pdf
+- note: Only the new bullet was checked; the rest was verified 2026-10-10 (medium) against the sources already listed and is unchanged, so the earlier confidence stands.

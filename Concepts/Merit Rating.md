@@ -1,17 +1,18 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:8b2c971e1061789344efe6f37396cd2d6356afcd6e5820428c16fcd0f9612ef7
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:da7724dada025387a8ea9d2f65fc7dfe83a0944cbf555484e6767ec4fe090559
+  sources:
+    - "AN ACTUARIAL NOTE ON THE CREDIBILITY OF EXPERIENCE OF A SINGLE PRIVATE PASSENGER CAR, Bailey & Simon, An Actuarial Note on the Credibility of Experience of a Single Private Passenger Car (PCAS 1959), pp.159-164 (PDF pp.1-6): Table 1-3, Appendix I-II, sha256:3e44bb5b3d17e96aaae61b27b0d72889043c44feb049a3ca3444095101f456e2 — https://www.casact.org/sites/default/files/2021-03/8_Bailey_Simon.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Merit Rating.md
 ---
 
-**Merit Rating** is [[Experience Rating|experience rating]] for a risk too small for its own losses to be weighed directly — a single private passenger car — by placing it in a class according to the number of full years since its most recent accident (or since the insured became licensed). Bailey and Simon used the Canadian merit rating plan's experience to measure the credibility $Z$ of one car's experience.
+**Merit Rating** is [[Experience Rating|experience rating]] of a single private passenger car by placing it in a class according to the number of full years since its most recent accident (or since the insured became licensed). Bailey and Simon used the Canadian merit rating plan's experience to measure the credibility $Z$ of one car's experience.
 
 > $$\text{Modification} = ZR + (1 - Z)$$
 
@@ -23,7 +24,7 @@ verification:
 - **Experience periods.** A + X + Y gives the credibility of a one-year experience period, A + X of a two-year period and A of a three-year period.
 - **Working the data.** Earned premiums are converted to a common rate basis by use of the relationship in the rate structure that A:X:Y:B = 65:80:90:100. Dividing a class's earned premium at present rates by its merit factor relative to B puts it at B rates. Claim frequency is the number of claims incurred per \$1,000 of premium at B rates. Each group's relative claim frequency is its frequency divided by the frequency of the total of all classes.
 - **Premium, not car years, as the exposure base.** Bailey and Simon calculate relative claim frequency on the basis of premium rather than car years. This avoids the maldistribution created by having higher claim frequency territories produce more X, Y and B risks and also produce higher territorial premiums. With car years as the base, the X, Y and B classes would be concentrated in the high-frequency territories. Their claim frequencies would then differ from the A class's partly because of territory, not merit alone.
-- **When premium corrects the maldistribution.** Premium removes that distortion only because the high claim frequency territories are also the high premium territories. If they are not, or if the territorial rate differentials do not reflect the territories' differences in claim frequency, premium does not correct the maldistribution and is not necessarily a better exposure base than car years. Whether the premise holds can be checked territory by territory: compare each territory's relative claim frequency (claims per car year) with its relative average premium (premium per car year), and see whether the high-frequency territories are the high-average-premium territories.
+- **What the premium base assumes.** Bailey and Simon's reason for premium rests on the higher claim frequency territories also producing the higher territorial premiums. Where they do not, premium would not remove that distortion.
 - **Credibility and years of experience.** Relative credibility is the credibility for a two- or three-year experience period divided by the credibility for one year. If an individual insured's chance for an accident remained constant from one year to the next, and no risks left or entered the class, the credibilities for experience periods of one, two and three years would vary approximately in proportion to the number of years. The relative credibilities would then be about 2 and 3.
 - **What Bailey and Simon found.** The relative credibilities for two and three years were much less than 2.00 and 3.00. Risks entering and leaving the class explain this only partly. It can be fully accounted for only if an individual insured's chance for an accident changes from time to time within a year and from one year to the next, or if the risk distribution of individual insureds is markedly skewed by accident proneness. Adding a second year to one year's experience increased the credibility by roughly two-fifths, and a third year by one-sixth of its two-year value — the shifting risk parameters that Mahler tests for ([[Risk Experience]]).
 - **Credibility and the class plan.** If the variation of individual insureds' chances for an accident were the same within each class, the credibility would vary approximately in proportion to the class's average claim frequency. The more narrowly defined classes had lower credibility relative to their frequency, because there is less variation of individual hazards within them. Credibility for experience rating depends not only on the volume of data but also on the amount of variation of individual hazards within the class ([[Rating Class]]).
@@ -31,7 +32,7 @@ verification:
 - Compared with a [[Bonus-Malus System]]: both price a car by its claim record, but a bonus-malus system moves the policyholder between premium levels by fixed transition rules, while Bailey and Simon read the credibility of the record off how the merit classes go on to perform.
 
 > [!idea] The idea
-> If the record were worthless, accident-free drivers would go on to have the same claim frequency as everyone else; if it were fully credible, they would have none. Where they actually land between those two says how much the record is worth: an accident-free group running at 90% of the average frequency means one car's clean record earns 10% credibility. The record adds less than proportionally with each extra year because drivers' accident chances themselves change over time.
+> If the record were worthless, accident-free drivers would go on to have the same claim frequency as everyone else; if it were fully credible, they would have none. Where they actually land between those two says how much the record is worth: an accident-free group running at 90% of the average frequency means one car's clean record earns 10% credibility. The record adds less than proportionally with each extra year partly because risks enter and leave the class, and otherwise only if drivers' accident chances change over time or accident proneness is markedly skewed.
 
 > [!example]- Credibility of One, Two and Three Accident-Free Years {Example}
 > A merit rating plan uses the Canadian relativities A:X:Y:B = 65:80:90:100. A year's data:

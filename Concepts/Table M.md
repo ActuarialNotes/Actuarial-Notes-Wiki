@@ -4,9 +4,9 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:77a17507b0b628f3751b655780dc7aed211258b8887f801236b7e4cb86e2e2dd
+  content_hash: sha256:5e19bf6848a5ad2e6357711ceb3eeae3de030166111a0d99c22d970bb63bf53a
   sources: []
-  open_findings: 0
+  open_findings: 2
   open_critical: 0
   log: .verify/Concepts/Table M.md
 ---
@@ -23,7 +23,7 @@ verification:
 - Entry ratios can be computed from aggregate loss ratios instead of dollars: a risk's entry ratio is its actual aggregate loss ratio divided by the expected loss ratio of its group, typically the group's average loss ratio, so an entry ratio of $r$ is a loss ratio of $r$ times the average.
 - **Properties of the charge.** $\phi(0) = 1$, because all of the expected loss lies above zero. $\phi(r)$ is decreasing in $r$, with slope $\phi'(r) = -S(r)$, and convex, with $\phi''(r) = f(r) \geq 0$. $\phi(r) = 0$ at and above the largest possible entry ratio, since no aggregate loss exceeds it. The savings $\psi(r)$ starts at $0$ and increases without bound.
 - **Size of risk.** Table M is entered by size, because the distribution of entry ratios depends on it. The higher the expected number of claims, the lower the variance of the entry ratio and the smaller the Table M charge for entry ratios above 1. So a smaller risk (fewer expected claims) has a larger charge above $r = 1$ than a larger risk at the same entry ratio.
-- **Expected loss groups.** The NCCI's Table M has been published by **Expected Loss Group (ELG)** rather than by expected claim count. To find the column, the expected loss $E$ (standard premium times the expected loss ratio) is first multiplied by the **state/hazard group relativity**: a risk expected to have more severe claims is treated as having fewer expected claims, and so as a smaller, more variable risk than one with the same expected loss. The adjusted figure only selects the ELG; the charge in dollars is the table's factor times the unadjusted expected loss. The ELG table's dollar ranges change over time with inflation (grouping by expected claim count is less subject to inflation). If the ranges are not updated, an inflated expected loss falls in a larger ELG than the risk's claim count warrants, and the risk is given the charge of a larger risk.
+- **Expected loss groups.** The NCCI's 1998 Table M was published by **Expected Loss Group (ELG)** rather than by expected claim count. To find the column, the expected loss $E$ (standard premium times the expected loss ratio) is first multiplied by the **state/hazard group relativity**: a risk expected to have more severe claims is treated as having fewer expected claims, and so as a smaller, more variable risk than one with the same expected loss. The adjusted figure only selects the ELG; the charge in dollars is the table's factor times the unadjusted expected loss. The ELG table's dollar ranges change over time with inflation (grouping by expected claim count is less subject to inflation). If the ranges are not updated, an inflated expected loss falls in a larger ELG than the risk's claim count warrants, and the risk is given the charge of a larger risk.
 - With a per-occurrence loss limit, "Table M" means the unlimited table. The table for limited losses is Table M$_D$, the combined per-occurrence and aggregate table is [[Table L]], and the NCCI's adjustment of the unlimited table for a loss limit is [[Insurance Charge Reflecting Loss Limitation (ICRLL)|ICRLL]]. The pictures behind every one of these formulas are [[Lee Diagram|Lee diagrams]].
 
 > [!idea] The idea
@@ -44,7 +44,7 @@ verification:
 
 ## Table M compared with Table L
 
-- **Table M** (the NCCI's countrywide Table of Aggregate Loss Factors) is built on unlimited aggregate losses and indexed by size and entry ratio. It is updated for inflation by updating its ELG table, and through ICRLL a single unlimited table gave reasonable charges for any per-occurrence loss limit — charges that would otherwise have needed a large number of Tables M$_D$. ICRLL is only an approximation to Table M$_D$, though.
+- **Table M** (the NCCI's countrywide Table of Aggregate Loss Factors) is built on unlimited aggregate losses and indexed by size and entry ratio. When it was entered by ELG, it was kept current for inflation by updating the ELG table, and through ICRLL a single unlimited table gave reasonable charges for any per-occurrence loss limit — charges that would otherwise have needed a large number of Tables M$_D$. ICRLL is only an approximation to Table M$_D$, though.
 - **[[Table L]]**, named for Skurnick's California Table L, prices the per-occurrence excess and the aggregate excess together as one factor of expected unlimited loss. It needs one table for each per-occurrence limit, and it is calculated directly from the limited loss distribution, so it does not double count the losses the two limits overlap on.
 
 > [!example]- Horizontal Slicing of Ten Risks {Example}
@@ -76,7 +76,7 @@ verification:
 > > Check one value by vertical slicing: at $r = 1.2$ only the risks at $1.5$ and $3.0$ are above the line, so $\phi(1.2) = (0.3 + 1.8)/10 = 0.21$. *(Fisher et al., Exhibits 3.12–3.20.)*
 
 > [!example]- Choosing the Expected Loss Group {Example}
-> A workers compensation risk has expected aggregate losses of $\$760{,}000$ and a state/hazard group relativity of $0.9$, and buys a maximum at an entry ratio of $1.5$. In the ELG table, $\$630{,}001$–$\$720{,}000$ is ELG 31 and $\$720{,}001$–$\$830{,}000$ is ELG 30. Which column is used, and what is the dollar charge if that column's $\phi(1.5)$ is $0.19$ (an illustrative value)?
+> A workers compensation risk has expected aggregate losses of $\$760{,}000$ and a state/hazard group relativity of $0.9$, and buys a maximum at an entry ratio of $1.5$. In the ELG table, $\$630{,}000$–$\$720{,}000$ is ELG 31 and $\$720{,}001$–$\$830{,}000$ is ELG 30. Which column is used, and what is the dollar charge if that column's $\phi(1.5)$ is $0.19$ (an illustrative value)?
 >
 > > [!answer]-
 > > $$

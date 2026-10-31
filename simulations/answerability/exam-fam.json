@@ -826,7 +826,15 @@
      "statement": "The multi-year survival probability is the product of the successive one-year survival probabilities: 2p_x = p_x * p_{x+1}, where p = 1 - q.",
      "concept": "Survival Probability",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Life Table",
+      "quote": "$$_{t}p_x = \\frac{\\ell_{x+t}}{\\ell_x}, \\qquad _{t}q_x = 1 - {}_{t}p_x … Survival probabilities **multiply** across periods: $_{s+t}p_x = {}_{s}p_x \\cdot {}_{t}p_{x+s}$",
+      "note": "Multi-year survival as the product of one-year survivals, and p = 1 - q, on Life Table (FAM syllabus page).",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     },
     {
      "id": "r3",
@@ -898,7 +906,13 @@
        "page": "Standard Deviation",
        "quote": "$$\\sigma = \\sqrt{\\text{Var}(X)}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Trivially implied: the standard deviation is by definition the square root of the variance (Exam P prerequisite), not FAM reading content.",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     }
    ]
   },
@@ -1175,7 +1189,15 @@
      "statement": "The expected number of survivors from a group at time t equals the initial number times the t-year survival probability; the expected population composition at a later time is the ratio of these expected survivor counts by subgroup.",
      "concept": "Expected Survivors in a Population",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Life Table",
+      "quote": "records $\\ell_x$, the expected number still alive at age $x$ … $$_{t}p_x = \\frac{\\ell_{x+t}}{\\ell_x}",
+      "note": "Expected survivors = initial number times tpx is the life-table reading of l_x; the composition ratio is the question's own setup.",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     },
     {
      "id": "r3",
@@ -1582,7 +1604,15 @@
        "page": "Mortality Table Construction",
        "quote": "A table therefore gives select rates $q_{[x]+t}$ for durations within the select period and ultimate rates $q_{x+t}$ after it"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Standard Actuarial Notation",
+      "quote": "Square brackets mark the age at selection, so $q_{[x]+t}$ is the mortality rate at age $x+t$ for a life selected (underwritten) at age $x$, $t$ years ago. After the select period ends the brackets drop and the ultimate rate $q_{x+t}$ applies. … A life selected at 60 reads along the first row, and after two years it joins the ultimate column at age 62.",
+      "note": "Select-and-ultimate structure (select rates within the select period, ultimate rates by attained age after it) is taught on Standard Actuarial Notation, a page on FAM's syllabus; the check quoted only Mortality Table Construction (ILA-101).",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     },
     {
      "id": "r4",
@@ -1945,7 +1975,15 @@
        "page": "Mortality Table Construction",
        "quote": "A table therefore gives select rates $q_{[x]+t}$ for durations within the select period and ultimate rates $q_{x+t}$ after it"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Standard Actuarial Notation",
+      "quote": "Square brackets mark the age at selection, so $q_{[x]+t}$ is the mortality rate at age $x+t$ for a life selected (underwritten) at age $x$, $t$ years ago. After the select period ends the brackets drop and the ultimate rate $q_{x+t}$ applies. … A life selected at 60 reads along the first row, and after two years it joins the ultimate column at age 62.",
+      "note": "Select-and-ultimate structure (select rates within the select period, ultimate rates by attained age after it) is taught on Standard Actuarial Notation, a page on FAM's syllabus; the check quoted only Mortality Table Construction (ILA-101).",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     },
     {
      "id": "r4",
@@ -1983,7 +2021,15 @@
        "page": "Mortality Table Construction",
        "quote": "A table therefore gives select rates $q_{[x]+t}$ for durations within the select period and ultimate rates $q_{x+t}$ after it"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Standard Actuarial Notation",
+      "quote": "Square brackets mark the age at selection, so $q_{[x]+t}$ is the mortality rate at age $x+t$ for a life selected (underwritten) at age $x$, $t$ years ago. After the select period ends the brackets drop and the ultimate rate $q_{x+t}$ applies.",
+      "note": "Select-and-ultimate structure (select rates within the select period, ultimate rates by attained age after it) is taught on Standard Actuarial Notation, a page on FAM's syllabus; the check quoted only Mortality Table Construction (ILA-101).",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     },
     {
      "id": "r2",
@@ -2265,7 +2311,15 @@
        "page": "Mortality Table Construction",
        "quote": "A table therefore gives select rates $q_{[x]+t}$ for durations within the select period and ultimate rates $q_{x+t}$ after it"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Standard Actuarial Notation",
+      "quote": "Square brackets mark the age at selection, so $q_{[x]+t}$ is the mortality rate at age $x+t$ for a life selected (underwritten) at age $x$, $t$ years ago. After the select period ends the brackets drop and the ultimate rate $q_{x+t}$ applies.",
+      "note": "Select-and-ultimate structure (select rates within the select period, ultimate rates by attained age after it) is taught on Standard Actuarial Notation, a page on FAM's syllabus; the check quoted only Mortality Table Construction (ILA-101).",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     },
     {
      "id": "r2",
@@ -2295,7 +2349,15 @@
        "page": "Mortality Table Construction",
        "quote": "Mortality is low just after underwriting and rises with duration as the effect of selection wears off."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Standard Actuarial Notation",
+      "quote": "Square brackets mark the age at selection, so $q_{[x]+t}$ is the mortality rate at age $x+t$ for a life selected (underwritten) at age $x$, $t$ years ago. After the select period ends the brackets drop and the ultimate rate $q_{x+t}$ applies.",
+      "note": "Select-and-ultimate structure (select rates within the select period, ultimate rates by attained age after it) is taught on Standard Actuarial Notation, a page on FAM's syllabus; the check quoted only Mortality Table Construction (ILA-101).",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     },
     {
      "id": "r4",
@@ -2396,7 +2458,15 @@
        "page": "Mortality Table Construction",
        "quote": "A table therefore gives select rates $q_{[x]+t}$ for durations within the select period and ultimate rates $q_{x+t}$ after it"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Standard Actuarial Notation",
+      "quote": "Square brackets mark the age at selection, so $q_{[x]+t}$ is the mortality rate at age $x+t$ for a life selected (underwritten) at age $x$, $t$ years ago. After the select period ends the brackets drop and the ultimate rate $q_{x+t}$ applies. … A life selected at 60 reads along the first row, and after two years it joins the ultimate column at age 62.",
+      "note": "Select-and-ultimate structure (select rates within the select period, ultimate rates by attained age after it) is taught on Standard Actuarial Notation, a page on FAM's syllabus; the check quoted only Mortality Table Construction (ILA-101).",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     },
     {
      "id": "r5",
@@ -2536,7 +2606,15 @@
        "page": "Mortality Table Construction",
        "quote": "A table therefore gives select rates $q_{[x]+t}$ for durations within the select period and ultimate rates $q_{x+t}$ after it, and each select column should grade smoothly into the ultimate column."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Standard Actuarial Notation",
+      "quote": "Square brackets mark the age at selection, so $q_{[x]+t}$ is the mortality rate at age $x+t$ for a life selected (underwritten) at age $x$, $t$ years ago. After the select period ends the brackets drop and the ultimate rate $q_{x+t}$ applies.",
+      "note": "Select-and-ultimate structure (select rates within the select period, ultimate rates by attained age after it) is taught on Standard Actuarial Notation, a page on FAM's syllabus; the check quoted only Mortality Table Construction (ILA-101).",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     },
     {
      "id": "r3",
@@ -2544,7 +2622,15 @@
      "statement": "To build a select life table from select and ultimate q values, start with an arbitrary radix l_{[x]} at the selected age and recursively compute l_{[x]+k+1} = l_{[x]+k}(1 - q_{[x]+k}), continuing into the ultimate part using the ultimate rates q_{x+k} and the equivalence l_{[x]+k} = l_{x+k} once past the select period.",
      "concept": "Select and Ultimate Mortality Tables",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Life Table",
+      "quote": "starting from a radix $\\ell_0$ of newborns, it records $\\ell_x$ … _{t}q_x = 1 - {}_{t}p_x = \\frac{\\ell_x - \\ell_{x+t}}{\\ell_x}",
+      "note": "Building l values from a radix and q's is the life-table identity on Life Table; the select/ultimate columns are read as on Standard Actuarial Notation.",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     },
     {
      "id": "r4",
@@ -2569,7 +2655,15 @@
      "statement": "Survivor counts at fractional ages within the select period are interpolated between the adjacent select survivor values l_{[x]+k} and l_{[x]+k+1}, and past the select period between l_{x+k} and l_{x+k+1}, so a fractional age crossing from select to ultimate part uses the corresponding integer-age survivor values.",
      "concept": "Select and Ultimate Mortality Tables",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Fractional Age Assumption",
+      "quote": "What UDD means. $\\ell_{x+s}$ is linear in $s$",
+      "note": "Interpolating survivors linearly between adjacent integer-duration l values is UDD, on Fractional Age Assumption (tagged); which column (select or ultimate) is read as on Standard Actuarial Notation.",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     }
    ]
   },
@@ -2598,7 +2692,13 @@
      "statement": "The Standard Ultimate Life Table gives the one-year mortality rate q_x at each integer age (e.g., q_100), which must be read from the table to evaluate survival and mortality quantities.",
      "concept": "Standard Ultimate Life Table",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "A value the exam's tables supply: q_x is read off the SOA's Standard Ultimate Life Table provided with FAM.",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     }
    ]
   },
@@ -3773,7 +3873,15 @@
      "statement": "With a constant force of mortality μ, the survival probability is t_p_x = e^{-μt}, and the discount factor is v^t = e^{-δt}.",
      "concept": "Constant Force of Mortality",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Parametric Survival Model",
+      "quote": "The exponential model has a constant force $\\mu$, so ${}_tp_x = e^{-\\mu t}$ at every age.",
+      "note": "Constant force survival on Parametric Survival Model (FAM syllabus page); v^t = e^{-delta t} is the definition of the force of interest.",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     }
    ]
   },
@@ -4617,7 +4725,13 @@
      "statement": "By the Fundamental Theorem of Calculus, the derivative with respect to the upper limit t of an integral from 0 to t of a function equals the integrand evaluated at t (e.g., t · {}_t p_x · v^t).",
      "concept": "Fundamental Theorem of Calculus",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Calculus (the Fundamental Theorem of Calculus), a step of this solution, not FAM reading content.",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     },
     {
      "id": "r3",
@@ -4692,7 +4806,15 @@
      "statement": "Under a constant force of mortality mu, the complete expectation of life is 1/mu.",
      "concept": "Constant Force of Mortality",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Parametric Survival Model",
+      "quote": "Under a constant force, $\\mathring{e}_x = 1/\\mu$",
+      "note": "On Parametric Survival Model (FAM syllabus page).",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     },
     {
      "id": "r2",
@@ -5077,7 +5199,13 @@
      "statement": "To find the probability that the total undiscounted payments of a life annuity-due exceed a given amount, determine the smallest number of payments k that exceeds it, then compute the probability the annuitant survives to the date of the k-th payment (age x+k−1 for an annuity-due).",
      "concept": "Annuity-Due Payment Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "A step of this solution's plan: counting how many payments exceed the stated total and reading the survival probability to that payment date.",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     }
    ]
   },
@@ -5183,7 +5311,13 @@
        "page": "Types of Annuities",
        "quote": "The period certain option pays \\$112,800 in total, the full 120 payments, because death fell inside the 10-year period."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "A step of this solution's plan: undiscounted payments are the count times the amount; find the smallest count exceeding the stated total.",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     },
     {
      "id": "r4",
@@ -5669,7 +5803,13 @@
      "statement": "The annuity-certain ä_{n|} is increasing in n, so the event that ä_{K+1|} is below a threshold corresponds to K+1 being at or below a cutoff number of years, found by comparing the threshold with annuity-certain values.",
      "concept": "Annuity-Certain",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "A step of this solution's plan, trivially implied: an annuity-certain value grows with its term, so the threshold is located by comparing tabulated values.",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     },
     {
      "id": "r5",
@@ -6101,7 +6241,13 @@
      "statement": "A payment stream that is level over different durations (e.g., amounts changing at certain years) is decomposed into a sum of level temporary annuity-dues, each with an amount equal to the incremental change, and its EPV is the sum of the amount times ä_{x:n} for each piece.",
      "concept": "Temporary Life Annuity-Due",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "A step of this solution's plan: layering a stepped payment pattern into level temporary annuities is arithmetic on the annuity values the pages teach.",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     },
     {
      "id": "r4",
@@ -6503,7 +6649,15 @@
      "statement": "Commissions that are a higher percentage of the first-year premium and a lower percentage of renewal premiums are modeled as a renewal percentage of every premium (an annuity-due) plus an extra (first-year minus renewal) percentage of one premium at time 0.",
      "concept": "Gross Premium Expenses and Commissions",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Equivalence Principle",
+      "quote": "Renewal expenses run over $\\ddot{a}_{45:\\overline{20}|} - 1$, because the first year carries the initial expense instead.",
+      "note": "Valuing a heavier first-year expense against renewal ones is taught on Equivalence Principle (linked); splitting it as renewal-on-every-premium plus the first-year excess is the same EPV, rearranged.",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     },
     {
      "id": "r4",
@@ -7290,7 +7444,15 @@
        "page": "Continuous Annuity",
        "quote": "$$= \\frac{1 - v^n}{\\delta}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Payable Continuously",
+      "quote": "The present value of a continuous $n$-year annuity is denoted $\\bar{a}_{\\overline{n}|}$ … $$= \\frac{1-v^n}{\\delta}$$",
+      "note": "Continuous annuity-certain (1-v^T)/delta on Payable Continuously (FAM syllabus page); Ybar = (1 - Zbar)/delta follows with n = T.",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     },
     {
      "id": "r3",
@@ -7942,7 +8104,15 @@
      "statement": "The EPV of premiums for a level premium payable m times per year is the annual premium amount (m times the per-payment premium) times ä^(m)_x.",
      "concept": "Net Premium Equivalence Principle",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Standard Actuarial Notation",
+      "quote": "A superscript $(m)$ means $m$ payments a year, as in $\\ddot{a}^{(12)}_x$, each of $1/m$",
+      "note": "An m-thly annuity symbol pays 1/m per payment, so a premium of P a year paid m-thly is valued as P times the m-thly annuity; on Standard Actuarial Notation (FAM syllabus page).",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     },
     {
      "id": "r5",
@@ -7972,7 +8142,15 @@
        "page": "Force of Interest",
        "quote": "$$\\delta = \\ln(1+i)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Standard Actuarial Notation",
+      "quote": "$\\delta = \\ln(1+i)$ the [[Force of Interest|force of interest]]",
+      "note": "On Standard Actuarial Notation (FAM syllabus page).",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     }
    ]
   },
@@ -8366,7 +8544,13 @@
      "statement": "An expense paid at the end of the year of death (as well as at the end of each year survived) has APV e times A_x for the death-year payment, so total expenses payable through year of death are e*(a_x + A_x).",
      "concept": "Expenses in Gross Premium Valuation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "A step of this solution's plan: an expense at the end of each year survived and at the end of the year of death is an annuity-immediate plus a whole life insurance, both taught on their pages.",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     }
    ]
   },
@@ -8527,7 +8711,13 @@
        "page": "In-Force",
        "quote": "\\text{Avg premium 2023} &= \\frac{\\$52{,}000{,}000}{40{,}000} = \\$1{,}300"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Arithmetic in the question's own setup: an average premium is total premium divided by policies in force.",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     },
     {
      "id": "r5",
@@ -8895,7 +9085,15 @@
        "page": "Continuous Annuity",
        "quote": "$$= \\frac{1 - v^n}{\\delta}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Payable Continuously",
+      "quote": "The present value of a continuous $n$-year annuity is denoted $\\bar{a}_{\\overline{n}|}$ … $$= \\frac{1-v^n}{\\delta}$$",
+      "note": "Continuous annuity-certain on Payable Continuously (FAM syllabus page).",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     },
     {
      "id": "r3",
@@ -9038,7 +9236,15 @@
        "page": "Annuity Contract",
        "quote": "\\text{Deferred: } \\text{EPV} = B\\;{}_nE_x\\;\\ddot{a}_{x+n}"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Pure Endowment",
+      "quote": "That is how a deferred annuity is valued, ${}_{n|}\\ddot{a}_x = {}_nE_x\\,\\ddot{a}_{x+n}$",
+      "note": "On Pure Endowment (FAM syllabus page); the check quoted only Annuity Contract.",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     },
     {
      "id": "r3",
@@ -9232,7 +9438,15 @@
      "statement": "Premiums payable m-thly for a maximum of n years are valued with a temporary m-thly annuity-due, and the annual premium equals the annual payment rate; each monthly premium is the annual amount divided by 12.",
      "concept": "Annuity-Due Payable m-thly",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Standard Actuarial Notation",
+      "quote": "A superscript $(m)$ means $m$ payments a year, as in $\\ddot{a}^{(12)}_x$, each of $1/m$",
+      "note": "m-thly annuity convention (1/m per payment) on Standard Actuarial Notation (FAM syllabus page); the temporary term is the question's setup.",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     }
    ]
   },
@@ -9300,7 +9514,13 @@
        "page": "Cash Flow Statement",
        "quote": "**Cash from operations** ($\\text{CF}_{\\text{ops}}$): premiums collected net of reinsurance, net investment income and miscellaneous income received, less benefit and loss-related payments, commissions and expenses paid, policyholder dividends paid, and federal income taxes paid."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The question's own setup and plan: net cash flow is premiums received less benefits paid at the stated times.",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     },
     {
      "id": "r5",
@@ -10341,7 +10561,15 @@
        "page": "Mortality Table Construction",
        "quote": "A table therefore gives select rates $q_{[x]+t}$ for durations within the select period and ultimate rates $q_{x+t}$ after it, and each select column should grade smoothly into the ultimate column."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Standard Actuarial Notation",
+      "quote": "Square brackets mark the age at selection, so $q_{[x]+t}$ is the mortality rate at age $x+t$ for a life selected (underwritten) at age $x$, $t$ years ago. After the select period ends the brackets drop and the ultimate rate $q_{x+t}$ applies.",
+      "note": "Select-and-ultimate structure (select rates within the select period, ultimate rates by attained age after it) is taught on Standard Actuarial Notation, a page on FAM's syllabus; the check quoted only Mortality Table Construction (ILA-101).",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     },
     {
      "id": "r2",
@@ -10515,7 +10743,15 @@
        "page": "Payable m-thly",
        "quote": "The payments total $1{,}200$ a year, so $\\text{PV} = 1{,}200\\,a^{(12)}_{\\overline{10}|}$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Standard Actuarial Notation",
+      "quote": "A superscript $(m)$ means $m$ payments a year, as in $\\ddot{a}^{(12)}_x$, each of $1/m$",
+      "note": "m-thly annuity convention on Standard Actuarial Notation (FAM syllabus page); the check quoted only Payable m-thly (FM).",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     },
     {
      "id": "r7",
@@ -10640,7 +10876,15 @@
        "page": "Annuity Due",
        "quote": "$$= \\frac{1-v^n}{d}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Annuities",
+      "quote": "$$a_{\\overline{n}|} = \\frac{1-v^n}{i}$$ … $$\\ddot{a}_{\\overline{n}|} = (1+i)\\,a_{\\overline{n}|}$$",
+      "note": "Annuity-certain values on Annuities (FAM syllabus page); with d = i/(1+i) (Standard Actuarial Notation) this is (1 - v^n)/d.",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     },
     {
      "id": "r3",
@@ -10754,7 +10998,15 @@
        "page": "Commissioners Reserve Valuation Method",
        "quote": "$c_x = S\\,v\\,q_x$ is the net premium for one year of term cover"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Modified Net Premium Policy Value",
+      "quote": "One particular method is **full preliminary term** (FPT): the first-year net premium only pays for one year of term cover, and the renewal net premium is that of a policy issued one year older for one year shorter. … which gives ${}_1V^{FPT} = 0$",
+      "note": "FPT is now taught on Modified Net Premium Policy Value (tagged), rewritten since the check ran.",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     },
     {
      "id": "r2",
@@ -11369,7 +11621,15 @@
        "page": "Commissioners Reserve Valuation Method",
        "quote": "CRVM is full preliminary term ($\\alpha = c_x$) unless the FPT renewal premium is larger than the 19-pay life premium at $x+1$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Modified Net Premium Policy Value",
+      "quote": "One particular method is **full preliminary term** (FPT): the first-year net premium only pays for one year of term cover, and the renewal net premium is that of a policy issued one year older for one year shorter. … $$P^{FPT}_0 = S\\,v\\,q_x$$",
+      "note": "FPT is now taught on Modified Net Premium Policy Value (tagged), rewritten since the check ran.",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     },
     {
      "id": "r4",
@@ -11746,7 +12006,15 @@
        "page": "Commissioners Reserve Valuation Method",
        "quote": "$\\beta^{FPT}$ is the full preliminary term renewal premium (the net level premium for the same plan on $(x+1)$ for one year less)"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Modified Net Premium Policy Value",
+      "quote": "One particular method is **full preliminary term** (FPT): the first-year net premium only pays for one year of term cover, and the renewal net premium is that of a policy issued one year older for one year shorter.",
+      "note": "FPT is now taught on Modified Net Premium Policy Value (tagged), rewritten since the check ran; select status at x+1 is read as on Standard Actuarial Notation.",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     },
     {
      "id": "r2",
@@ -11759,7 +12027,15 @@
        "page": "Commissioners Reserve Valuation Method",
        "quote": "${}_tV^{\\text{CRVM}} = S\\,A_{x+t} - \\beta\\,\\ddot{a}_{x+t:\\overline{n-t}|}$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Modified Net Premium Policy Value",
+      "quote": "$$P^{FPT} = \\frac{S\\,A_{x+1}}{\\ddot{a}_{x+1}}$$ … $${}_tV^{FPT}_{x} = {}_{t-1}V_{x+1}, \\quad t \\geq 1$$",
+      "note": "FPT renewal premium and policy value on Modified Net Premium Policy Value (tagged).",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     },
     {
      "id": "r3",
@@ -11806,7 +12082,15 @@
        "page": "Mortality Table Construction",
        "quote": "A table therefore gives select rates $q_{[x]+t}$ for durations within the select period and ultimate rates $q_{x+t}$ after it"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Standard Actuarial Notation",
+      "quote": "Square brackets mark the age at selection, so $q_{[x]+t}$ is the mortality rate at age $x+t$ for a life selected (underwritten) at age $x$, $t$ years ago. After the select period ends the brackets drop and the ultimate rate $q_{x+t}$ applies.",
+      "note": "Select-and-ultimate structure (select rates within the select period, ultimate rates by attained age after it) is taught on Standard Actuarial Notation, a page on FAM's syllabus; the check quoted only Mortality Table Construction (ILA-101).",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     }
    ]
   },
@@ -12185,7 +12469,15 @@
      "statement": "For a limited-pay whole life policy that has passed its premium-paying period, no future premiums remain, so the future loss equals the present value of the death benefit, i.e. benefit times the whole life insurance APV at the attained age.",
      "concept": "Limited-Pay Whole Life Insurance",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Policy Value",
+      "quote": "the expected present value (EPV) at $t$ of the future benefits and expenses, less the EPV of the future premiums",
+      "note": "Policy Value's definition (tagged): past the premium term no premiums remain, so the policy value is the EPV of the benefit.",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     },
     {
      "id": "r3",
@@ -12210,7 +12502,13 @@
      "statement": "At an interest rate of 0%, there is no discounting, so the present value of a whole life death benefit equals the full benefit amount with certainty (A_x = 1).",
      "concept": "Present Value and Discounting",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Trivially implied: at 0% interest v = 1, so a benefit certain to be paid has present value equal to itself.",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     }
    ]
   },
@@ -12289,7 +12587,15 @@
        "page": "Continuous Annuity",
        "quote": "Equivalent forms: $\\bar{a}_{\\overline{n}|} = \\dfrac{1 - e^{-\\delta n}}{\\delta}$ and $\\bar{s}_{\\overline{n}|} = \\dfrac{e^{\\delta n} - 1}{\\delta}$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Payable Continuously",
+      "quote": "The present value of a continuous $n$-year annuity is denoted $\\bar{a}_{\\overline{n}|}$ … $$= \\frac{1-v^n}{\\delta}$$",
+      "note": "Continuous annuity-certain on Payable Continuously (FAM syllabus page).",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     },
     {
      "id": "r3",
@@ -12488,7 +12794,15 @@
        "page": "Analysis of Surplus",
        "quote": "$q$ and $p = 1 - q$ the probabilities of death and survival in the year"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Future Lifetime Random Variable",
+      "quote": "${}_tq_x = 1 - {}_tp_x$ is the probability that $(x)$ dies within $t$ years",
+      "note": "On Future Lifetime Random Variable (FAM syllabus page), for any t.",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     },
     {
      "id": "r4",
@@ -12522,7 +12836,15 @@
        "page": "Modified Net Premium Policy Value",
        "quote": "**A Modified Net Premium Policy Value** is a net premium [[Policy Value|policy value]] calculated with a net premium that is lower in the first year and higher afterwards, so that the policy value allows for the insurer's initial expenses."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Modified Net Premium Policy Value",
+      "quote": "calculated with net premiums that are not level but follow some other specified pattern; the actual premiums paid are unchanged",
+      "note": "Re-quoted: the page was rewritten after the check (fact-check commit ebf1f6d2b) and still teaches it.",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     },
     {
      "id": "r2",
@@ -12813,7 +13135,13 @@
      "statement": "When no death benefit is payable during the deferral period of a deferred annuity, the death benefit term in the policy value recursion is zero, so only survivors carry a future policy value.",
      "concept": "Deferred Life Annuity",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Trivially implied: with no death benefit the death term of the policy value recursion (on Policy Value) is zero.",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     },
     {
      "id": "r3",
@@ -12826,7 +13154,15 @@
        "page": "Conditional Probability",
        "quote": "The complement rule holds conditionally: the probability of the complement of an event given $B$ is 1 minus the probability of the event given $B$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Future Lifetime Random Variable",
+      "quote": "${}_tq_x = 1 - {}_tp_x$ is the probability that $(x)$ dies within $t$ years",
+      "note": "On Future Lifetime Random Variable (FAM syllabus page), with t = 1.",
+      "date": "2026-10-31",
+      "run": "sort-faml-20261031"
+     }
     },
     {
      "id": "r4",

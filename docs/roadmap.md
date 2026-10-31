@@ -158,6 +158,8 @@ are in Appendix A.
 | Exam 6C | 394 (73 off-syllabus) | 137 / 159 | beta |
 | Exam 8 | 139 | 32 / 38 | beta |
 | Exam 9 | 280 (179 off-syllabus) | 56 / 66 | **ready** (since 2026-10-31, 8 / 8) |
+| SRM | 77 | 41 / 41 | **ready** (since 2026-10-31, 8 / 8) |
+| FAM | 274 | 80 / 80 | beta (7 / 8: G8's items being closed) |
 | PCPA, 6U | none | 0 / 30, 0 / 80 | beta, development |
 | SOA past FM (29 exams) | none | — | development |
 | Exam 6I, Exam 6T | none | — | development |

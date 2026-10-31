@@ -191,9 +191,9 @@ Adopted during the DISC, MAS-I and Exam 7 campaigns (Appendix A), and binding on
 
 From `python3 scripts/publication_readiness.py --body all` and `--hold`, after Phase Q closed,
 re-measured with G8 the same day.
-84 exam pages: **10 ready, 7 beta, 67 in development** (Exams P and FM promoted 30 Oct, MAS-I, the three DISCs, Exam 7, MAS-II, Exam 9 and Exam 5 31 Oct).
+84 exam pages: **11 ready, 6 beta, 67 in development** (Exams P and FM promoted 30 Oct, MAS-I, the three DISCs, Exam 7, MAS-II, Exam 9, Exam 5 and SRM 31 Oct).
 
-**Ready (10).** The seven exams that were ready on 25 Oct went back to beta that day, when G8 joined
+**Ready (11).** The seven exams that were ready on 25 Oct went back to beta that day, when G8 joined
 the gates (D29). **Exam P** is ready again since 30 Oct: page verified, 68 concepts verified, 6 / 6
 readings verified, every concept with a question, 719 / 719 served questions verified, and 719 / 719
 answerable (G8: 683 items closed — 254 passages the check missed, 19 by retagging 15 questions, 220
@@ -237,17 +237,27 @@ question, 357 / 357 served questions verified, and 357 / 357 answerable (G8, run
 missed, 49 not required, about 160 by passages written onto 42 pages from Werner & Modlin and
 Friedland by five writers and fact checked by five other agents, and about 20 by links). Details in
 §4, step 4.
+**SRM** is ready since 31 Oct (Phase 2 step 3, C9), 8 / 8: page verified (against the January 2027
+syllabus, the newest the SOA posts), 41 concepts verified (the last six — *ARCH Model*, *Hyperparameter*,
+*Model Validation*, *Train-Test Split*, *Variable Transformation*, *Overfitting* — at medium on ISLR,
+Monograph 5, ASOP 56 and open notes, run `b6f9`), Frees 2010's page verified at medium on Cambridge's
+printed contents (D7, D27), every concept with a question, 77 / 77 served questions verified, and
+77 / 77 answerable (G8, run `answerability-20261031-srm`, $5.56: 38 items — 9 not required, 6 by
+retagging 5 questions, 23 by passages written onto 13 pages from ISLR, FPP3, Rodríguez, Penn State
+STAT 501 and Frees's posted R scripts, each fact checked by a different agent, runs `e10e`, `23c2`).
+Twelve of the 13 pages are shared with MAS-I, MAS-II or DISC-DA, and those passes were their re-check;
+all three still pass G8. One Exam 5 item quoted a *Trend* bullet the FAM packet restated (run `3416`)
+and was re-quoted on the restated bullet.
 
 
-`--hold` (31 Oct): 10 ready exams, 0 errors, 1 warning (PCPA's G6).
+`--hold` (31 Oct): 11 ready exams, 0 errors, 1 warning (PCPA's G6).
 
-**Beta (7)**, in Phase 2's order:
+**Beta (6)**, in Phase 2's order:
 
 | Exam | Page | Concepts | Unverified concepts | Readings unverified | No question | Bank verified | Answerable | Gates | Fails |
 |---|---|---:|---:|---:|---:|---|---|---:|---|
 | MAS-II | verified | 98 | 2 | 1 / 6 | 0 | 141 / 141 | 74 / 141 | 5 / 8 | G4, G5, G8 |
-| SRM | verified | 41 | 7 | 2 / 2 | 0 | 77 / 77 | not run | 5 / 8 | G4, G5, G8 |
-| FAM | verified | 80 | 37 | 3 / 3 | 0 | 274 / 274 | not run | 5 / 8 | G4, G5, G8 |
+| FAM | verified | 80 | 0 | 0 / 3 | 0 | 274 / 274 | 170 / 274 at first (139 items; sort under way) | 7 / 8 | G8 |
 | ASTAM | verified | 56 | 22 | 4 / 4 | 0 | 62 / 62 | not run | 5 / 8 | G4, G5, G8 |
 | ALTAM | verified | 61 | 50 | 2 / 2 | 0 | 94 / 94 | not run | 5 / 8 | G4, G5, G8 |
 | PCPA | verified | 29 | 5 | 12 / 13 | 29 | no bank | no bank | 5 / 8 | G4, G5, G6 |
@@ -790,7 +800,7 @@ and then a resolve run.
 | 0 | MAS-I, with MAS-II and SRM; the seven moved back from ready | The ISLR and Dobson deltas: the ACIA Capstone lines the CIA commit added. Then `check-answerable` on the seven banks, 2,020 questions, runs only: it measures what step 10 holds | Free (the books and the CIA syllabus); about $445 of model calls | MAS-I to 7 / 8; every one of the seven with a record, so step 10 is sized and placed |
 | 1 | MAS-II | 2 concepts restated off Cowpertwait's wording. G8 (§3.9): 141 items on 67 questions. The Fall 2018 McElreath questions first, under D24, which takes ESS, WAIC and KL divergence out with their questions; then the page gaps (*Linear Mixed Model* 17 items, *Principal Components Analysis* 8, and 55 smaller pages) and 28 retags | fpp3, NIST (open); West, ISLR, Tse for the gaps | **ready ✅ (31 Oct)**, 8 / 8 |
 | 2 | Exam 9 | *Enterprise Risk Management*; CJS and Cummins 2008. G8: 248 items on 88 questions | Open ERM texts; the assigned texts tried again | **ready ✅ (31 Oct)**, 8 / 8. G4/G5 (run `69a5`, D22): *Enterprise Risk Management* restated to the CAS ERM Committee's 2003 overview, Brehm's four phases and implementation issues (in no open source) cut; CJS verified on the HBS working paper, the JEP text still unreachable; Cummins 2008's callout restated. G8: the sort (rule 11) closed 83 items (not-required, passages the check missed, 20 questions retagged); D10 applied to the 2012–2015 Exam 7 ERM questions from CAS's 2012–2015 syllabi, 30 `off_syllabus` (every point on Brooks, IAA 2004, Feldblum or Venter's papers; 2016–2019's one ERM reading is Brehm, today's), 2012 Q14, Q21 and 2014 Q18 kept served for G6 though D10 would flag them; the rest written onto 21 pages (new: *Franchise Value* from Panning, *Copula* and *Rank Correlation* from Venter 2002, Embrechts et al. and Mack) from open texts, with CAS's examiners' reports as last resort where Brehm alone states it, and fact checked by different agents (runs `c56a`, `2103`, `a5e7` and brehmB's). Bank serves 101 of 280 |
-| 3 | SRM | 7 concepts; Frees 2010 | ISLR (free), Frees (commercial; an online version) | **ready** |
+| 3 | SRM | 7 concepts; Frees 2010 | ISLR (free), Frees (commercial; an online version) | **ready ✅ (31 Oct)**, 8 / 8 (§2) |
 | 4 | Exam 5 | 61 concepts; 4 readings | All free; Friedland split by chapter group | **ready ✅ (31 Oct)**, 8 / 8: seven reading packets, then G8's 314 items (sort, five writers, five checkers). Record: §4, step 4 |
 | 5 | FAM | 37 concepts; Klugman, Brown & Lennox, AMLCR | Commercial (D7, D27); open texts for the concepts (Loss Data Analytics, the SOA's own notes) | **ready** (and the three readings ASTAM and ALTAM share) |
 | 6 | ASTAM | 22 concepts; two SOA study notes | Free notes; the rest done in step 5 | **ready** |

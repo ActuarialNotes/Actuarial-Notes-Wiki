@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
+import { lazy, Suspense, useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import { usePageLabel } from '@/hooks/useBack'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Loader2 } from 'lucide-react'
@@ -68,6 +68,9 @@ import { countOptions as buildCountOptions, sourceOptions as buildSourceOptions 
 // the builder decides — the exams, the syllabus order, today's plan's pool,
 // the draw's size and each launch's address — is lib/quizBuilder.ts; what it
 // draws is components/landing/. This page holds the state that joins them.
+
+// Lazy: it reads the Store's registration tables, which stay out of first paint.
+const RegistrationNudge = lazy(() => import('@/components/RegistrationNudge'))
 
 export default function Landing() {
   const navigate = useNavigate()
@@ -571,6 +574,12 @@ export default function Landing() {
       />
 
       {!hasTopic && <QuizGamesPanel />}
+
+      {hasTopic && currentExam?.progressKey && (
+        <Suspense fallback={null}>
+          <RegistrationNudge examKey={currentExam.progressKey} />
+        </Suspense>
+      )}
 
       <div className="space-y-6">
           {!hasTopic && (

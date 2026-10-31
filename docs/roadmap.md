@@ -411,6 +411,17 @@ These are in order within each lane.
 
 _Contributors add items here in a PR. The maintainer ranks them at the next review._
 
+- **L2: show a reader they're improving (from a reader's review, built 2026-10-31).** An FM
+  candidate wrote that they *estimated* their hit rate climbing from 20% to 70%, only learned a
+  perfect quiz was all Hard by opening each question, and were weighing December against February
+  four days before registration closed. Three changes, all built: an **Accuracy** card on the
+  Dashboard (this week against last, by difficulty, a 30-day chart — `lib/accuracyTrend.ts`, from
+  `question_responses`, signed-in only, lazy); the results screen's score **by difficulty**, with
+  a line for a perfect quiz on hard questions (`lib/difficultyBreakdown.ts`); and a
+  **registration deadline nudge** on the quiz builder and the Dashboard within 14 days of the
+  exam's deadline, dismissible per sitting (`lib/registrationNudge.ts` over the Store's
+  `registrationStatus`, lazy). Flows in `e2e/accuracy.spec.ts`. *(Built 2026-10-31.)*
+
 - **P1: make Pro compelling (the offer, not a feature list).** The Upgrade page sells four tools
   and no outcome. The proposal, `docs/pro-proposal.md`, ranks twelve candidates by expected
   effect on paid conversion, around one promise ("Know you're ready before you sit"): a readiness

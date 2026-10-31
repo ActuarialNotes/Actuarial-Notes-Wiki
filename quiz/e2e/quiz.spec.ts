@@ -134,3 +134,21 @@ test.describe('written-answer grading', () => {
     await expect(page).toHaveURL(/\/review/)
   })
 })
+
+// The results screen scores the quiz by difficulty, and says so when every
+// question was right and hard (lib/difficultyBreakdown.ts) — a reader with a
+// perfect quiz shouldn't have to open each question to learn it wasn't a fluke.
+test.describe('score by difficulty', () => {
+  test('a perfect quiz of hard questions says they were hard', async ({ page }) => {
+    await page.goto('/quiz?ids=p-027')
+    const startQuiz = page.getByRole('button', { name: 'Start Quiz' })
+    const optionA = page.getByRole('button', { name: 'Option A' })
+    await expect(startQuiz.or(optionA).first()).toBeVisible()
+    if (await startQuiz.isVisible()) await startQuiz.click()
+    await optionA.click()
+    await page.getByRole('button', { name: 'Confirm Answer' }).click()
+    await page.getByRole('button', { name: /Finish Quiz/i }).click()
+    await expect(page).toHaveURL(/\/review/)
+    await expect(page.getByText('It was rated Hard.')).toBeVisible()
+  })
+})

@@ -2,6 +2,8 @@
 // Replaces the old external URL builder (wikiUrl.ts) that pointed at
 // wiki.actuarialnotes.com; everything now resolves to /wiki/... routes.
 
+import { SHARED_RESOURCE_FOLDERS, resourceRepoPath, splitResourcePath } from './resourceFolders'
+
 export type WikiEntryKind = 'concept' | 'resource' | 'exam' | 'event' | 'regulation' | 'guide'
 
 export interface WikiEntryRef {
@@ -60,6 +62,12 @@ export function pathToEntryRef(path: string): WikiEntryRef | null {
   if (p.toLowerCase().startsWith('resources/books/')) {
     return { kind: 'resource', name: p.slice('resources/books/'.length) }
   }
+  // A resource page in one of the type folders (Standards/, Reports/, …) — or a
+  // shared one, once the bundle has registered it as a resource page there.
+  const split = splitResourcePath(`${p}.md`)
+  if (split && (!SHARED_RESOURCE_FOLDERS.includes(split.folder) || resourceRepoPath(split.name) === `${p}.md`)) {
+    return { kind: 'resource', name: split.name, path: `${p}.md` }
+  }
   if (p.toLowerCase().startsWith('resources/events/')) {
     return { kind: 'event', name: p.slice('resources/events/'.length), path: `${p}.md` }
   }
@@ -88,7 +96,7 @@ export function entryRefToRepoPath(ref: WikiEntryRef): string {
     case 'concept':
       return `Concepts/${ref.name}.md`
     case 'resource':
-      return `Resources/Books/${ref.name}.md`
+      return resourceRepoPath(ref.name)
     case 'exam':
       return `${ref.name}.md`
     case 'event':
@@ -137,6 +145,11 @@ export function hrefToEntryRef(href: string): WikiEntryRef | null {
   const decoded = decodeURIComponent(clean)
   const asPath = pathToEntryRef(decoded)
   if (asPath) return asPath
+
+  // A resource page in a type folder the bundle has registered
+  // (`[[IFRS 17]]` → Resources/Standards/IFRS 17.md).
+  const resourcePath = resourceRepoPath(decoded)
+  if (!resourcePath.startsWith('Resources/Books/')) return { kind: 'resource', name: decoded, path: resourcePath }
 
   // Otherwise assume it's a bare concept name (the common [[Expected Value]] case).
   return { kind: 'concept', name: decoded }

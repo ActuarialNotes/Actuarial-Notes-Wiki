@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { ChevronLeft, Loader2 } from 'lucide-react'
 import { fetchWikiFile } from '@/lib/github'
+import { resourceRepoPath } from '@/lib/resourceFolders'
 import { fromSlug, RESOURCES_ROUTE, wikiRoute } from '@/lib/wikiRoutes'
 import { extractWikiLinksFromText } from '@/lib/wikiExtract'
 import { useWikiPage } from '@/hooks/useWikiPage'
@@ -31,7 +32,7 @@ export default function WikiResource() {
     let cancelled = false
     setStatus('loading')
     setContent(null)
-    fetchWikiFile(`Resources/Books/${resourceName}.md`)
+    fetchWikiFile(resourceRepoPath(resourceName))
       .then(raw => {
         if (cancelled) return
         setContent(raw)
@@ -103,12 +104,12 @@ export default function WikiResource() {
           markdown={processedContent}
           className={RESOURCE_ARTICLE_CLASS}
           outlineItems
-          sourcePath={`Resources/Books/${resourceName}.md`}
+          sourcePath={resourceRepoPath(resourceName)}
           titleBadge={
             content && (
               <FactCheckBadge
                 verification={parseVerification(content)}
-                contentPath={`Resources/Books/${resourceName}.md`}
+                contentPath={resourceRepoPath(resourceName)}
                 contentName={resourceName}
               />
             )
@@ -125,7 +126,7 @@ export default function WikiResource() {
             openAt(
               conceptList.length > 0 ? conceptList : [ref],
               idx >= 0 ? idx : 0,
-              `Resources/Books/${resourceName}.md`,
+              resourceRepoPath(resourceName),
             )
             return true
           }}

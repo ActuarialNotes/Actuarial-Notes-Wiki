@@ -26,8 +26,7 @@ import { useCoworkLibrary } from '@/hooks/useCoworkLibrary'
 import { COWORK_ENTITIES, COWORK_RESOURCES } from '@/data/coworkSources'
 import { entityById, resourceEntryRef, type SourceResource } from '@/lib/coworkSources'
 import { craftTopics } from '@/lib/conceptCraft'
-import { setWikiContentLookup } from '@/lib/github'
-import { setWikiIndexBundle } from '@/lib/wikiIndex'
+import { installWikiBundle } from '@/lib/wikiBundle'
 import { examDisplayName } from '@/lib/wikiRoutes'
 import {
   CSV_DATA,
@@ -86,8 +85,7 @@ function useNotes(): Notes | null {
     if (notesRead) return
     let live = true
     void Promise.all([import('virtual:wiki-content'), import('@/lib/coworkContent')]).then(([{ default: bundle }]) => {
-      setWikiContentLookup((path: string) => bundle.files[path])
-      setWikiIndexBundle(bundle.index)
+      installWikiBundle(bundle)
       const pages = new Map(bundle.index.filter(i => i.category === 'concept').map(i => [i.name.toLowerCase(), i.name] as const))
       const examPages = Object.fromEntries(Object.entries(bundle.files).filter(([path]) => /^Exam\b[^/]*\.md$/i.test(path)))
       const shelves: ConceptShelf[] = []

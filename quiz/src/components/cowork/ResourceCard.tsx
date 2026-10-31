@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { BookOpen, Check, FileText, Gavel, Landmark, Newspaper, Plus, Scale, Table2 } from 'lucide-react'
+import { BookOpen, Check, FileText, Gavel, Landmark, Newspaper, Plus, Scale, ScrollText, Table2 } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import { MetaPill } from '@/components/wiki/ResourcePills'
 import {
@@ -47,6 +47,7 @@ const KIND_ICON: Record<ResourceKind, typeof FileText> = {
   bulletin: FileText,
   filing: FileText,
   report: FileText,
+  paper: ScrollText,
   news: Newspaper,
   dataset: Table2,
 }

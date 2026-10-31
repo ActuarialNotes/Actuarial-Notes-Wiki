@@ -47,6 +47,7 @@ import re
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import resource_folders as rf  # noqa: E402
 import syllabus_lib as sl  # noqa: E402
 import vault_links as vl  # noqa: E402
 
@@ -251,8 +252,16 @@ def _norm_words(text: str) -> str:
     return " " + " ".join(re.findall(r"[a-z0-9]+", text.lower())) + " "
 
 
+def _head(path: str) -> str:
+    """The first few KB of a vault file — enough to read its frontmatter."""
+    if not path.startswith("Resources/"):
+        return ""
+    with open(os.path.join(ROOT, path), encoding="utf-8") as fh:
+        return fh.read(4000)
+
+
 class Shelf:
-    """The `Resources/Books/` pages, matched to a citation the strict way
+    """The resource pages (every `Resources/` folder — resource_folders.py), matched to a citation the strict way
     `quiz/src/lib/factCheckSources.ts` matches a fact-check source: the page's
     whole title must appear in the citation (here as a run of words, which is
     stricter still — `Risk and Insurance` doesn't match a citation that merely
@@ -261,7 +270,7 @@ class Shelf:
     def __init__(self, vault: vl.Vault):
         self.pages = []
         for name, path in vault.by_name.items():
-            if path.startswith("Resources/Books/"):
+            if rf.is_resource_page(path, _head(path)):
                 title = re.sub(r"\s*\([^)]*\)\s*$", "", name)
                 words = _norm_words(title)
                 if len(words.split()) >= 2:
@@ -447,11 +456,11 @@ def cia_source_page(data: dict) -> str:
 
 
 def isbn_shelf(vault: vl.Vault) -> dict[str, str]:
-    """`Resources/Books/` pages by the ISBN their frontmatter carries, digits
+    """Resource pages by the ISBN their frontmatter carries, digits
     only — how a CIA reading, which prints its ISBN, finds its edition's page."""
     out: dict[str, str] = {}
     for name, path in vault.by_name.items():
-        if not path.startswith("Resources/Books/"):
+        if not rf.is_resource_page(path, _head(path)):
             continue
         with open(os.path.join(ROOT, path), encoding="utf-8") as fh:
             m = re.search(r'^ISBN:\s*"?([\d-]+X?)"?\s*$', fh.read(4000), re.M)

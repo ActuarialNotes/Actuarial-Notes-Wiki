@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, useLocation, useParams, useSearchParams, useNavigate } from 'react-router-dom'
 import { GraduationCap, Loader2 } from 'lucide-react'
 import { fetchWikiFile } from '@/lib/github'
+import { resourceRepoPath } from '@/lib/resourceFolders'
 import { examDisplayName, fromSlug, wikiRoute } from '@/lib/wikiRoutes'
 import { extractWikiLinksFromText } from '@/lib/wikiExtract'
 import { findSyllabiForConcept } from '@/lib/conceptMatch'
@@ -106,7 +107,7 @@ export default function WikiConcept() {
       .catch(async () => {
         // A syllabus reading reached at a concept URL — an old link from
         // before resources had a route of their own — is sent to its page.
-        const resource = `Resources/Books/${conceptName}.md`
+        const resource = resourceRepoPath(conceptName)
         const isResource = await fetchWikiFile(resource).then(() => true, () => false)
         if (cancelled) return
         if (isResource) navigate(wikiRoute({ kind: 'resource', name: conceptName }), { replace: true })

@@ -6,11 +6,9 @@ import { WikiFloatingSearch } from '@/components/wiki/WikiFloatingSearch'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { WikiPageContext } from '@/hooks/useWikiPage'
 import wikiBundle from 'virtual:wiki-content'
-import { setWikiContentLookup } from '@/lib/github'
-import { setWikiIndexBundle } from '@/lib/wikiIndex'
+import { installWikiBundle } from '@/lib/wikiBundle'
 
-setWikiContentLookup((path: string) => wikiBundle.files[path])
-setWikiIndexBundle(wikiBundle.index)
+installWikiBundle(wikiBundle)
 
 export function WikiLayout({ children }: { children: ReactNode }) {
   const [pageRefs, setPageRefsState] = useState<WikiEntryRef[]>([])

@@ -190,9 +190,15 @@ Cowork ships with a seed catalogue while the corpus is built out
 (`data/coworkSources.ts`). Two kinds of resource live in it and the difference is
 load-bearing:
 
-- A resource with a **`wikiRef`** *is* a vault page. Its title, content and fact-check record
-  are the wiki's. There are ~20 of them and `lib/coworkContent.test.ts` asserts every one
-  resolves to a file that is actually in the vault — a renamed page would otherwise leave a
+- A resource with a **`wikiRef`** *is* a vault page — a resource page in whichever
+  `Resources/` folder its type puts it (`docs/resource-pages.md` §0). Its title, content and
+  fact-check record are the wiki's. About fifty are authored, with the assumptions and tables
+  a workflow reads; the rest — every practice document in the vault, some 380 — are
+  **derived** at build time (`virtual:cowork-vault`, `lib/coworkVault.ts`): title, year,
+  link and the lead's first sentence read off the page, filed under the entity
+  `PUBLISHER_ENTITY` maps its `Publisher:` to. Textbooks, study notes, courses and syllabi
+  stay out; a page whose publisher has no entity stays out until one is authored.
+  `lib/coworkContent.test.ts` asserts every `wikiRef` resolves to a file that is actually in the vault — a renamed page would otherwise leave a
   Cowork row quietly opening an empty panel.
 - A resource with **`sample: true`** illustrates the shape of the catalogue for a publisher
   whose corpus Cowork does not carry yet. It carries **no date and no link**, because it
@@ -205,11 +211,12 @@ load-bearing:
 Tests enforce the contract both ways: every `docPath` has a body, every body is referenced,
 every sample is dateless and linkless, and no wiki-backed page is marked a sample.
 
-**Replacing a sample with real documents is the shape of the next phase.**
+All but one sample has been replaced with a real document (2026-10-30). The one left,
+**MSA Researcher**, is a subscription database with no public document to read; it stays a
+sample. A real document enters Cowork by being written as a resource page.
 
 Which publisher comes next, and why, is kept in `docs/cowork-source-inventory.md` — the
-prioritised backlog behind this catalogue, including the vault pages that are already
-citable and only need a `wikiRef`.
+prioritised backlog behind this catalogue.
 
 ---
 
@@ -223,7 +230,7 @@ concept in, with the same page stack, the same action menu, the same fact-check 
 the same Previous/Next walk. Cowork's own sample documents are registered as **virtual vault
 files** at vault-shaped paths (`lib/coworkContent.ts` → `registerVirtualWikiFiles` in
 `lib/github.ts`), so `ConceptPagePanel` fetches one, `WikiArticle` renders it, and its
-`[[wiki links]]` resolve into the vault. They are authored with `Resources/Books`-style front
+`[[wiki links]]` resolve into the vault. They are authored with resource-page front
 matter so they get the same `ResourceMetaCard` a vault resource page leads with.
 
 Anything that would need a bespoke viewer should become a page at a vault-shaped path
@@ -235,9 +242,10 @@ the wiki routes, but Cowork never mounts `WikiLayout` — without it a source ca
 same failure `virtual:exam-pages` exists to prevent. Both callers hand over the same bundle,
 so the two registrations are idempotent.
 
-One known gap: `virtual:wiki-content` carries `Concepts/`, `Resources/Books/`, the exam pages
-and `Guides/` — **not** `Resources/Regulation/` or `Resources/Benchmarks/`. A Cowork resource pointing there still falls
-back to a GitHub fetch, exactly as the Research tab's timeline cards already do.
+`virtual:wiki-content` carries every folder under `Resources/`, so a Cowork resource opens
+from the bundle wherever its page sits; `installWikiBundle` (`lib/wikiBundle.ts`) also
+registers where each resource page outside `Books/` lives, which is how a `[[Name]]` link or
+`/wiki/resource/<name>` finds it.
 
 ### The walk kind
 

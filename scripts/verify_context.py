@@ -36,6 +36,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+import resource_folders as RF  # noqa: E402
 import verify_lib as V  # noqa: E402
 
 REPO_ROOT = V.REPO_ROOT
@@ -229,12 +230,13 @@ def syllabus_url_for(exam_page: Path) -> tuple[str, str]:
 
 
 def resource_note(reading: str, assignment: str) -> tuple[str, str]:
-    """The `Resources/Books` page for a reading, plus where to actually find it."""
+    """The resource page for a reading, plus where to actually find it."""
     name = reading.split("/")[-1].strip()
-    page = REPO_ROOT / "Resources" / "Books" / f"{name}.md"
+    found = RF.find_resource(str(REPO_ROOT), name)
+    page = REPO_ROOT / (found or f"Resources/Books/{name}.md")
     detail = f"reading assignment: {assignment}" if assignment else "syllabus reading"
     if not page.is_file():
-        return "", f"{detail} (no Resources/Books page)"
+        return "", f"{detail} (no resource page)"
     fm_text, _body = V.split_frontmatter(page.read_text(encoding="utf-8"))
     where = _fm_scalar(fm_text or "", "Available from") or _fm_scalar(fm_text or "", "Find at your local library at")
     if where:

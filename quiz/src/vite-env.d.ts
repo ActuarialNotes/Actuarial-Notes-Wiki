@@ -52,6 +52,12 @@ declare module 'virtual:wiki-content' {
   export default content
 }
 
+declare module 'virtual:cowork-vault' {
+  import type { VaultDocument } from '@/lib/coworkVault'
+  const documents: VaultDocument[]
+  export default documents
+}
+
 declare module 'virtual:exam-pages' {
   /** Every root `Exam *.md` syllabus page, keyed by file name. */
   const examPages: Record<string, string>

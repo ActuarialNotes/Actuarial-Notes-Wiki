@@ -42,11 +42,17 @@ the repo root is the "database" the app is built on top of.
 ```
 Exam *.md, Concepts/*.md                          — wiki content (Obsidian [[wiki-links]])
 .syllabus/<wiki id>/syllabus.json                 — a syllabus PDF, extracted (docs/syllabus-pipeline.md)
-Resources/Books/*.md                              — resource pages: one real document each, written to
-                                                    the standard in docs/resource-pages.md
+Resources/<folder>/*.md                           — resource pages: one real document each, written to
+                                                    the standard in docs/resource-pages.md. Books/ holds
+                                                    every page written before 2026-10-30 (papers, ASOPs,
+                                                    guidelines too — never move one); a NEW page goes in
+                                                    the folder its `Type` names: Books/ Papers/ Reports/
+                                                    Standards/ Regulation/ Data/ Benchmarks/
+                                                    (scripts/resource_folders.py; the lint enforces it)
 Resources/{Regulation,Events,Benchmarks,Data}/*.md
-                                                  — dated timeline entries for the flag-gated
-                                                    Research tab (frontmatter w/ source links)
+                                                  — also: dated timeline entries for the flag-gated
+                                                    Research tab (lower-case frontmatter w/ source links)
+                                                    and Tools data pages; a resource page there has `Title:`
 questions/<exam-id>/*.md                          — question bank (YAML frontmatter + markdown)
 Guides/<Exam page>/*.md                           — study tips, one page per tip (frontmatter: exam,
                                                     section, order). Bundled but no longer rendered —
@@ -69,9 +75,13 @@ supabase/migrations/, supabase/functions/         — DB schema + edge functions
 quiz/                                             — the React app (this is where most code changes go)
 ```
 
-Cowork's source catalogue is **not** in the vault: it is authored as seed data in
-`quiz/src/data/cowork*.ts`, and its sample documents are registered as *virtual* vault files
-so they open in the same popup viewer as a real page. See `docs/cowork.md`.
+Cowork's source catalogue is mostly **derived** from the vault: every practice resource page
+(not a textbook, study note, course or syllabus) is listed under the entity its `Publisher:`
+maps to (`PUBLISHER_ENTITY` in `quiz/src/data/coworkSources.ts`, `lib/coworkVault.ts`,
+`virtual:cowork-vault`). The entities, and the documents that carry assumptions or a table,
+are authored as seed data in `quiz/src/data/cowork*.ts`; the one remaining sample document is
+registered as a *virtual* vault file so it opens in the same popup viewer as a real page. See
+`docs/cowork.md`.
 
 
 ### Inside `quiz/src/`
@@ -552,7 +562,7 @@ before touching that area**:
   in the `alt` text. Read before editing a figure — they are generated, so a hand edit
   to an SVG is lost on the next run.
 - `docs/resource-pages.md` — **the resource-page standard** and the pipeline behind it. A
-  `Resources/Books/` page describes one real document and **says only what the document
+  resource page (`Resources/<folder>/`, the folder its `Type` names — §0) describes one real document and **says only what the document
   says, naming where it read it**: the canonical frontmatter (keys, order, the `Type`
   vocabulary, `Available from` only for an official copy — a book for sale carries its
   `ISBN`), then cover → lead → `> [!info] On the syllabus` (one bullet per exam whose
@@ -1548,7 +1558,12 @@ compile — don't "clean up" the flagged code as dead.
 - Dated resource pages (`Resources/Regulation|Events|Benchmarks/*.md`) carry frontmatter
   with a `date`/`type` and source links (`source_url`, `source_type`, `pdf_url`) — these feed
   the Resources timeline/heatmap. See `docs/research-corpus-plan.md` for the full schema.
-- `Resources/Books/*.md` follow `docs/resource-pages.md`: frontmatter `Title`, `Authors`,
+- Resource pages (`Resources/<folder>/*.md`) follow `docs/resource-pages.md`. **A new one goes in
+  the folder its `Type` names** — `Papers/` (Paper, Study Note), `Reports/`, `Standards/`
+  (standards of practice, accounting standards, educational notes), `Regulation/` (guidelines,
+  instructions, returns, legislation), `Data/`, `Benchmarks/`, `Books/` (books, guides) — and its
+  filename (its address) is unique across every folder and doesn't clash with a concept page.
+  Existing `Books/` pages stay put. Frontmatter `Title`, `Authors`,
   `Publisher`, `Year`, `date`, `Edition`, `Type`, `Code`, `ISBN`, `Available from` — in that
   order, every value double-quoted — then the body's fixed shape ending in `## Sources`.
   `python3 scripts/resource_lint.py` checks it (CI: `content-validation.yml`).
@@ -1598,8 +1613,8 @@ compile — don't "clean up" the flagged code as dead.
   contents pages, page text, images of pages with no text layer; an HTML page's headings
   and citation tags; a workbook's sheets), the second is the CI lint for the page shape
   (`--fix` canonicalises the frontmatter). Tests: `scripts/test_resource_pages.py`, which
-  also holds every page in `Resources/Books/` to zero lint errors.
-- `generate_resource_covers.py` (+ `cover_kit.py`) draws the `Resources/Books/` cover
+  also holds every resource page, in every folder, to zero lint errors.
+- `generate_resource_covers.py` (+ `cover_kit.py`) draws the resource pages' cover
   images in `Media/Attachments/… - Cover.svg` and inserts their embeds, skipping any page
   that already has a real jacket. Also **generated** — edit the builder.
   See `docs/resource-covers.md`.
@@ -1627,7 +1642,11 @@ modules that read directly from the repo root:
   runtime, so a rate-limit or outage left the app with no exams at all — an account
   could add one and never see it appear. **Which exams exist is a build-time fact; keep
   it off the network.**
-- `virtual:wiki-content` — `Exam*.md`, `Concepts/`, `Resources/Books/`
+- `virtual:wiki-content` — `Exam*.md`, `Concepts/`, every folder under `Resources/` (resource
+  pages in any folder are indexed as documents; `installWikiBundle` in `lib/wikiBundle.ts`
+  registers where each lives — `lib/resourceFolders.ts`, `resourceRepoPath`)
+- `virtual:cowork-vault` — the practice resource pages read for Cowork's catalogue
+  (`lib/coworkVault.ts`): title, publisher, type, year, link, the lead's first sentence
 - `virtual:questions-content` — `questions/`, as a chunk of its own: `fetchAllQuestions`
   (`lib/github.ts`) dynamic-imports it the first time anything asks for a question. It is
   ~11 MB, and it used to be imported eagerly in `main.tsx`, which put it in the entry chunk

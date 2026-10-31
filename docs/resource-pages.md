@@ -1,6 +1,6 @@
 # Resource pages — the standard, and the pipeline that grounds them
 
-A **resource page** (`Resources/Books/*.md`) describes one real document: a textbook, a
+A **resource page** (`Resources/<folder>/*.md` — §0) describes one real document: a textbook, a
 study note, an actuarial standard, a regulator's guideline, a return. It is read in more
 places than any other page type — the wiki's resource route, the concept popup, the Source
 Material shelf on an exam page, the Fact Check panel's *Checked against* shelf, Cowork's
@@ -16,11 +16,40 @@ shape (`scripts/resource_lint.py`, in CI). §1 is the review that led here.
 
 Cowork's *sample* documents (`quiz/src/data/coworkDocs.ts`) borrow the same frontmatter
 so they get the same card, but they are virtual pages that name no particular document
-(`docs/cowork.md`) and are not held to this standard. The dated pages under
-`Resources/{Regulation,Events,Benchmarks,Data}/` are a different
-thing — timeline entries for the flag-gated Research tab, with their own schema
-(`docs/research-corpus-plan.md`). The app never opens them as resource pages
-(`WikiResource` reads `Resources/Books/` only), and nothing here applies to them.
+(`docs/cowork.md`) and are not held to this standard.
+
+---
+
+## 0. Folders
+
+Every resource page began in `Resources/Books/`, which is why that folder holds papers,
+ASOPs, guidelines and statutes as well as books. Those pages stay where they are (moving
+one would move its URL, its `.verify/` log and every `[[link]]` to it), and any `Type` is
+allowed there. **A new page goes in the folder its `Type` names:**
+
+| Folder | `Type` |
+| --- | --- |
+| `Books/` | `Textbook`, `Casebook`, `Monograph`, `Course`, `Syllabus`, `Guide`, `Glossary`, `Reference Sheet` |
+| `Papers/` | `Paper`, `Study Note` |
+| `Reports/` | `Report` |
+| `Standards/` | `Standard of Practice`, `Accounting Standard`, `Statement of Principles`, `Educational Note`, `Code of Conduct` |
+| `Regulation/` | `Guideline`, `Instructions`, `Regulatory Return`, `Legislation`, `Case Law` |
+| `Data/` | `Dataset` |
+| `Benchmarks/` | `Benchmark` |
+
+The table is `TYPE_FOLDER` in `scripts/resource_folders.py`, kept in step with
+`quiz/src/lib/resourceFolders.ts` by `test_resource_pages.py`; `resource_lint.py` fails a
+page outside `Books/` that sits in the wrong folder. A page is addressed by its **name**
+(`[[IFRS 17 Insurance Contracts]]`, `/wiki/resource/<name>`), never its folder, so a name
+is unique across every folder — the lint fails a duplicate — and the app looks the folder
+up from the wiki bundle (`resourceRepoPath`). Every folder is bundled
+(`virtual:wiki-content`), so a page in any of them opens offline.
+
+`Regulation/`, `Data/` and `Benchmarks/` also hold pages in other shapes: the dated
+timeline entries of the flag-gated Research tab (lower-case `id:` / `type:` frontmatter —
+`docs/research-corpus-plan.md`) and the Actuarial Tools data pages. A page there is a
+resource page when its frontmatter carries `Title:`; nothing here applies to the others.
+`Resources/Events/` is timeline entries only.
 
 ---
 
@@ -153,6 +182,7 @@ cover.
 | `Educational Note` | a CIA educational note |
 | `Standard of Practice` | an ASB ASOP; the CIA's Standards of Practice |
 | `Statement of Principles` | the CAS statements of principles |
+| `Accounting Standard` | an accounting standard-setter's standard — IFRS 17, a FASB update |
 | `Guideline` | a regulator's guideline or guidance |
 | `Regulatory Return` | a return's forms (usually a workbook) |
 | `Instructions` | filing instructions, a return's instructions, filing guidelines, technical notes |
@@ -161,10 +191,13 @@ cover.
 | `Code of Conduct` | an industry code |
 | `Guide` | a guide to a plan or program, written for policyholders or insurers |
 | `Glossary` | a glossary or legend of terms |
+| `Dataset` | a published table or statistical series — a yield curve, a price index, an exhibit |
+| `Benchmark` | a regulator's or industry body's published benchmarks |
 | `Reference Sheet` | the vault's own reference pages |
 
-The list lives in `TYPES` in `scripts/resource_lint.py`; add a kind there (and here)
-rather than writing a new value on one page.
+The list lives in `TYPES` in `scripts/resource_lint.py`; add a kind there (and here, and
+its folder in `scripts/resource_folders.py` and `quiz/src/lib/resourceFolders.ts`) rather
+than writing a new value on one page.
 
 ### 2.3 The body
 

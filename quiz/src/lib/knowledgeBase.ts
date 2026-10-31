@@ -37,6 +37,7 @@ import {
   type VerificationStatus,
 } from './verification'
 import { examDisplayName, wikiRoute } from './wikiRoutes'
+import { isResourcePage } from './resourceFolders'
 
 /** Bumped whenever the shape below changes; the connector refuses a version it doesn't know. */
 export const KNOWLEDGE_BASE_VERSION = 2
@@ -422,6 +423,9 @@ const RESOURCE_CATEGORY: Record<string, string> = {
   events: 'event',
   benchmarks: 'benchmark',
   data: 'data',
+  papers: 'paper',
+  reports: 'report',
+  standards: 'standard',
 }
 
 /** `Concepts/Conditional+Probability` → `Conditional Probability`. */
@@ -612,7 +616,8 @@ export function buildKnowledgeBase(sources: KnowledgeBaseSources): KnowledgeBase
       const folder = path.split('/')[1]?.toLowerCase() ?? ''
       const declared = String(attrs.type ?? '').toLowerCase()
       const category = declared === 'event' || declared === 'regulation' ? declared : (RESOURCE_CATEGORY[folder] ?? 'resource')
-      const isBook = folder === 'books' && path.split('/').length === 3
+      // A resource page — in Books or any type folder — has a page in the app.
+      const isBook = isResourcePage(path, markdown)
       docs.push({
         ...base,
         id: uniqueId(`resource/${file}`, `resource/${path.replace(/\.md$/i, '')}`),

@@ -10,9 +10,11 @@
  * first (you cannot use a document from a publisher you don't follow), which is
  * why `addResource` below adds the entity too.
  *
- * Some resources already exist in the vault: a textbook has a
- * `Resources/Books/` page, an ASOP has one under `Resources/Regulation/`. Those
- * carry a `wikiRef` and open as the wiki page they are. The rest are Cowork's
+ * Most resources are vault pages — a resource page in whichever `Resources/`
+ * folder its type puts it (`lib/resourceFolders.ts`): an ASOP, a guideline, a
+ * paper, an annual report. Those carry a `wikiRef` and open as the wiki page
+ * they are; most are derived from the vault rather than authored
+ * (`lib/coworkVault.ts`). The rest are Cowork's
  * own seed documents, authored as markdown in `data/coworkSources.ts` and
  * registered as virtual vault files (`lib/coworkContent.ts`) so *both* kinds
  * open in the same popup viewer, with the same page stack and the same actions.
@@ -69,6 +71,7 @@ export type ResourceKind =
   | 'bulletin'
   | 'filing'
   | 'report'
+  | 'paper'
   | 'news'
   | 'dataset'
 
@@ -87,6 +90,7 @@ export const RESOURCE_KINDS: ResourceKindSpec[] = [
   { id: 'bulletin', label: 'Bulletin', plural: 'bulletins' },
   { id: 'filing', label: 'Filing', plural: 'filings' },
   { id: 'report', label: 'Report', plural: 'reports' },
+  { id: 'paper', label: 'Paper', plural: 'papers' },
   { id: 'news', label: 'News', plural: 'news items' },
   { id: 'dataset', label: 'Dataset', plural: 'datasets' },
 ]

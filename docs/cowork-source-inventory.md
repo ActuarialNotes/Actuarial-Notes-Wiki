@@ -36,9 +36,9 @@ the one that invents least:
 
 | Cost | Means | When |
 |---|---|---|
-| **Free** | The vault already has the page. Add an entity and a `wikiRef` resource. | §4 lists 51 such pages. |
+| **Free** | The vault already has the page. It is derived into Cowork once its `Publisher:` maps to an entity (`PUBLISHER_ENTITY`); add the entity if there is none. | §4. |
 | **Sample** | No vault page. Add a `sample: true` resource naming a *class* of document, with a body in `coworkDocs.ts` — **no date, no link**. | The publisher's corpus isn't carried yet. |
-| **Vault first** | The document is one specific, citable work that deserves a real page. Author `Resources/Books/<name>.md` first, then point a `wikiRef` at it. | IFRS 17, a named ASOP, a textbook. |
+| **Vault first** | The document is one specific, citable work that deserves a real page. Author the resource page first, in the folder its `Type` names (`docs/resource-pages.md` §0); it is then derived, or an authored entry points a `wikiRef` at it. | IFRS 17, a named ASOP, a textbook. |
 
 **A real document can only enter Cowork as a vault page.** The tests enforce it both ways, and
 the reason is the rule the whole product rests on: a `sample` carries no date and no link
@@ -72,16 +72,16 @@ They are kept here because the inventory is the record of why.
 
 | Publisher | Jur. | Category | Why | Cost |
 |---|---|---|---|---|
-| IFRS Foundation / IASB | Global | standards | IFRS 17 is the measurement standard the four CIA notes in the catalogue *interpret*. The catalogue currently has the interpretations and not the standard. | **vault first** — `Resources/Books/IFRS 17.md` |
-| Government of Alberta | AB | regulator | `Alberta Auto Reform` (2020) and `CFAI` are already vault pages; Alberta's reform programme is live and drives filings. | free ×2 |
-| International Actuarial Association | Global | standards | `IAA Climate` is already a vault page; the IAA's climate and ERM papers are the international layer above the CIA's. | free |
-| Actuarial Standards Board (Canada) | CA | standards | `CIA CSOP` is *published* by the Canadian ASB, not the CIA — the catalogue currently attributes it to the CIA. Splitting it fixes an attribution, not just a gap. | free (re-attribution) |
+| IFRS Foundation / IASB *(entity added; page blocked — ifrs.org serves the standard only to signed-in users. Name it `IFRS 17 Insurance Contracts`: `Concepts/IFRS 17.md` holds the bare name)* | Global | standards | IFRS 17 is the measurement standard the four CIA notes in the catalogue *interpret*. The catalogue currently has the interpretations and not the standard. | **vault first** — `Resources/Standards/IFRS 17 Insurance Contracts.md` |
+| ~~Government of Alberta~~ | AB | regulator | `Alberta Auto Reform` (2020) and `CFAI` are already vault pages; Alberta's reform programme is live and drives filings. | free ×2 |
+| ~~International Actuarial Association~~ | Global | standards | `IAA Climate` is already a vault page; the IAA's climate and ERM papers are the international layer above the CIA's. | free |
+| Actuarial Standards Board (Canada) *(open: `CIA CSOP`'s own frontmatter names the CIA as publisher — read the document's imprint before re-attributing)* | CA | standards | `CIA CSOP` is *published* by the Canadian ASB, not the CIA — the catalogue currently attributes it to the CIA. Splitting it fixes an attribution, not just a gap. | free (re-attribution) |
 | Insurance Corporation of British Columbia | BC | insurer | A public auto insurer's revenue-requirements evidence filed with the BCUC is the most detailed public actuarial work in the country. | sample ×2 |
 | Groupement des assureurs automobiles | QC | industry-data | Québec auto statistics. GISA does not cover Québec, so the catalogue's auto data stops at the border. | sample |
 | CPA Canada | CA | standards | The accounting and assurance handbook an insurer's statements are audited against, beside IFRS. | sample |
 | Department of Finance Canada | CA | regulator | Federal financial-sector legislative review — where changes to the ICA start. | sample |
-| Guy Carpenter / Aon (reinsurance broker) | Global | consulting | Renewal conditions and rate-on-line. The catalogue has a reinsurance *guideline* and no reinsurance *price*. | sample |
-| Financial Services Commission of Ontario | ON | regulator | `FSCO Coverages`, `FSCO Private Auto`, `FSCO Tech Notes` are vault pages. FSCO is FSRA's predecessor — worth listing as its own entity so a pre-2019 citation is attributed correctly. | free ×3 |
+| ~~Guy Carpenter / Aon (reinsurance broker)~~ *(entities added; their vault pages are derived)* | Global | consulting | Renewal conditions and rate-on-line. The catalogue has a reinsurance *guideline* and no reinsurance *price*. | sample |
+| ~~Financial Services Commission of Ontario~~ | ON | regulator | `FSCO Coverages`, `FSCO Private Auto`, `FSCO Tech Notes` are vault pages. FSCO is FSRA's predecessor — worth listing as its own entity so a pre-2019 citation is attributed correctly. | free ×3 |
 
 ### P3 — worth having, no urgency
 
@@ -124,73 +124,42 @@ is where a reader looks for them.
 
 ---
 
-## 4. The cheapest work available: vault pages with no Cowork row
+## 4. The cheapest work available: publishers with no entity
 
-> **Counts stale (re-measured 2026-10-17).** `Resources/Books/` now holds **729** pages and
-> Cowork links **26** of them, so about **703** have no Cowork row — by publisher, SOA 189,
-> CIA 55, CAS 38, NAIC 26, AAA 20, IAA 20, ASB 15, OSFI 13. None of the 51 pages named below
-> has been added yet, and all still exist. The reasoning below holds; re-run the count before
-> working from its numbers. Roadmap item **A3**.
+Since 2026-10-30 the vault's practice pages are **derived** into Cowork
+(`lib/coworkVault.ts`, `virtual:cowork-vault`): every resource page whose `Type` isn't exam
+preparation (textbook, study note, course, syllabus) is listed under the entity
+`PUBLISHER_ENTITY` in `quiz/src/data/coworkSources.ts` maps its `Publisher:` to. So the
+cheapest work left is an **entity** — one record, sourced from the publisher's own site
+(the cowork-sources skill, Step 2) and one line in `PUBLISHER_ENTITY` — and every page
+that publisher has joins Cowork.
 
-After the P1 pass, **73** of the vault's 97 `Resources/Books/` pages have no Cowork resource
-pointing at them. 22 of those are out of scope or need fixing first — 18 exam-preparation
-texts from academic publishers, and 4 pages carrying no `Publisher:` front matter at all
-(`Agricultural Programs`, `Davidson`, `Landmark Legal`, `Probability Distributions
-Reference`; fix the front matter before listing them, not after).
+At that date 539 practice pages were read and 380 derived, under 50 entities; **121 pages
+from 106 publishers** had no entity. Almost all are one page each: journals and their
+publishers (*ASTIN Bulletin*, Taylor & Francis, Wiley), law firms, newspapers, central banks
+and consultancies. Two kinds of fix come before an entity:
 
-That leaves **51** pages that are a `wikiRef` entry and nothing else — no body to write, no
-date to transcribe, nothing to invent. This is the highest-yield item in this file, and most
-of it is **documents for entities the catalogue already has**:
+- **A journal is not its publisher.** *ASTIN Bulletin* (Cambridge University Press for the
+  IAA) and the *North American Actuarial Journal* (Taylor & Francis for the SOA) should be
+  filed under the actuarial body only if the page's `Publisher:` says so — correct the page
+  from its imprint, never map a printer to a society.
+- **Spellings of one publisher** go in `PUBLISHER_ENTITY` as separate keys
+  (`KPMG`, `KPMG LLP`, `KPMG IFRG Limited` → `kpmg`), not by editing the pages.
 
-| Entity | Unlisted pages | |
-|---|---:|---|
-| CIA | 16 | `CIA Bias`, `CIA Duration`, `CIA FCT 1`, `CIA FCT 2`, `CIA IFRS 1`, `CIA IFRS 2`, `CIA IFRS 17 - Comparison`, `CIA Materiality`, `CIA Models`, `CIA PAA`, `CIA Reinsurance Treatment`, `CIA Reliance`, `CIA Runoff`, `CIA Subsequent Events`, `CIA Territories`, `CIA Valuation` |
-| CAS | 9 | `CAS Financial Reporting`, `Dutil`, `Feldblum`, `Freihaut and Vendetti`, `Generalized Linear Models (Larsen - 2015)`, `Generalized Linear Models for Insurance Rating (Goldburd et al. - 2020)`, `Government Insurers Study Note`, `Life Contingencies (Struppeck - 2014)`, `Poisson Processes and Mixture Distributions (Daniel - 2008)` |
-| OSFI | 9 | `OSFI AA`, `OSFI Concentration`, `OSFI Core Return`, `OSFI Corporate Governance`, `OSFI Earthquake`, `OSFI Memorandum`, `OSFI Minimum Capital`, `OSFI Quarterly Return`, `OSFI Target Capital` |
-| IBC | 1 | `IBC IFRS 17 Metrics Discussion` |
-| PACICC | 1 | `KPMG PACICC` |
-| Canadian Underwriter | 1 | `Harris` |
-
-The remaining 14 need a new entity first, which is what the P2/P3 rows above are for:
-
-| New entity | Pages |
-|---|---|
-| Financial Services Commission of Ontario | `FSCO Coverages`, `FSCO Private Auto`, `FSCO Tech Notes` |
-| Government of Alberta | `Alberta Auto Reform`, `CFAI` |
-| International Actuarial Association | `IAA Climate` |
-| KPMG | `KPMG Regulatory Oversight` |
-| Institute and Faculty of Actuaries | `IFOA` |
-| Ministry of Finance (Ontario) | `Marshall` |
-| King's Printer for Ontario | `Ontario Reg. 664` |
-| U.S. Government Accountability Office | `GAO` |
-| Carswell | `Baer and Rendall` |
-| LexisNexis Canada | `Morneau Shepell` |
-| Life Underwriters Association of Canada | `McDonald` |
-
-Two cautions before working the list. A page's Cowork `wikiRef` `name` is its **filename**,
-not its authored `Title:` — `CIA PAA` is the ref, "Application of IFRS 17 … premium allocation
-approach" is the title. And several CAS entries are syllabus texts rather than practice
-documents; list the ones an actual deliverable cites (Goldburd, `CAS Financial Reporting`,
-`Government Insurers Study Note`) and leave the exam texts.
-
-Counts here are current as of this file's revision. Recompute rather than trusting them:
+Recompute rather than trusting these numbers (from `quiz/`):
 
 ```bash
-python3 - <<'EOF'
-import re, os, collections
-src = open('quiz/src/data/coworkSources.ts').read()
-used = {n for b in re.findall(r"wikiRef: \{.*?\}", src, re.S)
-          for n in re.findall(r"name: '([^']+)'", b)}
-by = collections.defaultdict(list)
-for f in sorted(os.listdir('Resources/Books')):
-    name = f[:-3]
-    if name in used: continue
-    pub = next((l.split(':',1)[1].strip().strip('"')
-                for l in open(f'Resources/Books/{f}') if l.startswith('Publisher:')), '')
-    by[pub].append(name)
-for pub in sorted(by, key=lambda p: -len(by[p])):
-    print(f'{len(by[pub]):3d}  {pub or "(no Publisher: front matter)"}')
-EOF
+cat > src/lib/zz.test.ts <<'TS'
+import { it } from 'vitest'
+import vault from 'virtual:cowork-vault'
+import { PUBLISHER_ENTITY } from '@/data/coworkSources'
+it('unmapped', () => {
+  const by = new Map<string, number>()
+  for (const d of vault) if (!PUBLISHER_ENTITY[d.publisher]) by.set(d.publisher, (by.get(d.publisher) ?? 0) + 1)
+  console.log([...by].sort((a, b) => b[1] - a[1]).map(([p, n]) => `${n} ${p}`).join('\n'))
+})
+TS
+npx vitest run src/lib/zz.test.ts; rm src/lib/zz.test.ts
 ```
 
 ---

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:6b358fa31f395aa0d67474ec92b7cdb313876de0214c44afb631a7ea69c26fbe
+  content_hash: sha256:a8ce321729dc5747a81131fcd3902e6c6290a59f30f7ca5eebd5c8b382a52632
   sources:
     - "CAS Exam 9 Content Outline, Fall 2026 (v01, 2026-03-18), PDF pp.3-7: Domains B, C and D tasks and readings; complete text references (Brehm et al.: D1-D6, Chapters 1, 2 excl. 2.6, 3 excl. 3.4, 4, 5.4; source SK), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
     - "Teall, Chapter 8 Leverage (Cornell course notes), PDF pp.1-2 (business risk from operating, independent of financing; financial risk from borrowing; leverage magnifies ROE variability), sha256:4aed4d4d3f23e66f1d14076055f2976f33d33dafd79d6ac9a715163688a2df96 — https://courses.cit.cornell.edu/jteall/000308.pdf"
@@ -79,7 +79,7 @@ The [[Underwriting Cycle|underwriting cycle]] is the strategic risk a P&C insure
 > > \end{align*}
 > > $$
 > >
-> > Six points of development in an old year become six points of plan loss ratio — and the same shift reaches 2022 and every other year bridged from 2021, and their Bornhuetter-Ferguson reserves. That is the autocorrelation the bridging model builds in.
+> > Six points of development in an old year become 6.3 points of plan loss ratio — and the same shift reaches 2022 and every other year bridged from 2021, and their Bornhuetter-Ferguson reserves. That is the autocorrelation the bridging model builds in.
 
 > [!example]- Growth, Leverage and Reinsurance {Example}
 > An insurer has assets of $\$1{,}000$ million and equity of $\$300$ million; the standard deviation of its operating return on assets is $3.0\%$. A growth plan would take assets to $\$1{,}200$ million with equity unchanged. Find $\sigma_{\text{ROE}}$ before and after, and the $\sigma_{\text{ROA}}$ that would keep equity risk at today's level.

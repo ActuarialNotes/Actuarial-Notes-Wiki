@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:fb50ac1ea420fc83017c426c1d43d8ee1a6479d83bd1a194d0c55d7544d4afdb
+  content_hash: sha256:6f2e2a72324d0dec5e627afd33294e197ea7dc36adf7ba4a6896b87390eae8a7
   sources:
     - "CAS Exam 9 Content Outline, Fall 2026 (v01, 2026-03-18), PDF pp.3-7: Domains B, C and D tasks and readings; complete text references (Brehm et al.: D1-D6, Chapters 1, 2 excl. 2.6, 3 excl. 3.4, 4, 5.4; source SK), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
     - "Basel Committee on Banking Supervision, Principles for the Sound Management of Operational Risk (BIS, June 2011), para 10 and fn 5 (PDF p.11: definition, includes legal risk, excludes strategic and reputational); para 39(a)-(f) (PDF pp.19-20: loss data, external data, RCSA, business process mapping, KRIs), sha256:d9491f870b4d8ffafa78b45923ada75b3e93223fca2f0ca069e8e3b708a108fc — https://www.bis.org/publications/201106-guidelines-principles-sound-management-operational-risk.pdf"

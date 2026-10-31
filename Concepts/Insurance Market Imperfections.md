@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:8e29857589a2e5d2c4ce819fd9277f03fb0863453d733d4b4e19d45e1560f6c9
+  content_hash: sha256:92553e45bca2a26503552c23a08662422b978c220174e20a3e2c21aab08ecb11
   sources:
     - "Froot, Risk Management, Capital Budgeting and Capital Structure Policy for Insurers and Reinsurers (NBER WP 10184, 2003), pp.2-10, 16, sha256:0de3a439eb286ea2a5ed225fcfa4cbb2ed62d964dc2485dbb79239dabfb6383e — https://www.nber.org/system/files/working_papers/w10184/w10184.pdf"
     - "Myers & Read, Capital Allocation for Insurance Companies (Brattle working paper, Aug 2001), pp.2-9, 22, 44-45, sha256:681450625dce92c765b9fb1762de4d299d060bb852906e79b3233bb6e4aa7a9b — https://www.brattle.com/wp-content/uploads/2017/10/Capital-Allocation-for-Insurance-Companies.pdf"
@@ -31,6 +31,7 @@ verification:
 - **Financial distress.** Policyholders — customers who, unlike investors, find it costly to diversify their insurer's default risk — pay less for, or buy less from, a weaker insurer: higher-[[Rating Agency|rated]] insurers get higher premiums and grow faster, and a failing insurer leaves its customers cancelling policies, pursuing claims and finding new cover. The cost reaches future business through reputation as well as the business in place.
 - **Agency costs.** Managers may spend surplus capital on low-return growth or acquisitions instead of returning it. Shareholders, protected by limited liability, gain from taking more asset or underwriting risk once premiums are collected — at the policyholders' expense.
 - **Asymmetric information.** Outsiders know less than management about reserve adequacy and exposure, so new equity raised after a large loss is sold at a discount, if at all. When external capital is costly the firm should act risk-averse toward risks it cannot hedge (the Froot–Stein argument). On the underwriting side the same problem appears as [[Adverse Selection]] and [[Moral Hazard]].
+- **Which firms gain most from risk management.** When external finance is costly, hedging is worth most to the firms whose investment it protects: Froot, Scharfstein and Stein put risk management at the interface of investment and financing policy, quoting Lessard that its strongest case is to ensure a firm can fund the exercise prices of its growth options, such as its R&D budget, when raising outside capital after a shortfall would be costly. Firms with many growth opportunities — high market-to-book ratios or heavy R&D spending — need capital for capital-intensive investments with long payouts and unstable cash flows, and have few tangible assets of value in liquidation, so financial distress costs them more and raising capital is more expensive; risk management that keeps them financially sound adds more value to them than to other firms.
 - **Competition.** The market is very competitive, and competing classification plans make the winning quote biased low (the winner's curse), which justifies a margin over expected loss even when the estimates are unbiased. When capacity is plentiful, insurers cut prices relative to competitors to buy market share, and an insurer that misallocates its capital writes unprofitable business and loses profitable business to competitors.
 - **Regulation.** Minimum capital standards ([[Risk-Based Capital]], the [[MCT]]), and rate regulation impose costs of their own, and a regulatory or rating-agency capital model is often the binding constraint on how much capital the insurer holds.
 - **Consequences.** Insurers price in a cost of capital, diversify, buy reinsurance at more than its expected loss, manage [[Financial Risk]], and after a catastrophe find capital scarce and prices rising — the hard-market side of the underwriting cycle.

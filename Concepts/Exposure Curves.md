@@ -1,15 +1,18 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-18
+  status: verified
+  confidence: high
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
   content_hash: sha256:638766a663f7eb2aeccc511207247187f60f4d6b56c63f5e7e1281d7741e66eb
   sources:
-    - "Bernegger, The Swiss Re Exposure Curves and the MBBEFD Distribution Class (ASTIN Bulletin 27(1), 1997), pp.99-111 (§2.1-2.3 eqs (2.1)-(2.6), §3.2 eq (3.3), §4.1, §4.3 eqs (4.5)-(4.6), Fig. 4.2), sha256:5c07f557257622c9dd5f1886705a55de9f368fef1839dd405c87a8550f8a7c89 — https://www.casact.org/sites/default/files/2021-03/8_Bernegger.pdf"
-    - "Clark, Basics of Reinsurance Pricing (CAS Study Note, revised 2014), pp.17-19 (exposure curve P(p), layer = P((R+L)/IV) - P(R/IV)), pp.27-29 (casualty ILFs / exposure factor), sha256:1c4429fee538cc8d90157c1849ca689a3a2173a2670fc57f212d866b493e2c63 — https://www.casact.org/sites/default/files/old/studynotes_clark_2014.pdf"
-    - "CAS Exam 9 Content Outline, Fall 2026, pp.3, 7 (task A1-A3, readings Clark and Bernegger), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
-  open_findings: 1
+    - "Bernegger, The Swiss Re Exposure Curves and the MBBEFD Distribution Class (ASTIN Bulletin 27(1), 1997), pp.99-111 read from page images (OCR): §2.1 eq (2.1), §2.2 eqs (2.2)-(2.3) 'With F(0) = 0 and G'(0) = 1/E[x]', §2.3 eq (2.4), §3 (3.10)-(3.12), §4.1 iterative b, §4.2 first two moments, §4.3 eqs (4.5)-(4.6), c = 0, 1.5-4 (Y1-Y4), 5 (Lloyd's industrial), sha256:5c07f557257622c9dd5f1886705a55de9f368fef1839dd405c87a8550f8a7c89 — https://www.casact.org/sites/default/files/2021-03/8_Bernegger.pdf"
+    - "Clark, Basics of Reinsurance Pricing (CAS Study Note, revised 2014), §2A pp.17-19 (exposure curve P(p); layer P((R+L)/IV) - P(R/IV); limits profile per location basis, else distortions; all locations at the midpoint of the range; scale independence, homeowners vs large commercial risks), pp.27-29 (casualty ILFs as exposure factors), sha256:1c4429fee538cc8d90157c1849ca689a3a2173a2670fc57f212d866b493e2c63 — https://www.casact.org/sites/default/files/old/studynotes_clark_2014.pdf"
+    - "CAS Exam 8 Fall 2012 — sample answers and examiner's report, Q10(a)-(b), PDF pp.53-54 (PP/IV at band midpoints; homogeneity of homes vs commercial construction and occupancy; per-risk profile vs per-location curve), sha256:f0a8a4e1060ad54d4a69208dd574d53dbcafc29ceddbabe7be0a2da2e0f9232b — https://www.casact.org/sites/default/files/2021-03/f12-8.pdf"
+    - "CAS Exam 8 Fall 2016 — sample answers and examiner's report, Q21, PDF p.80 (even distribution of insured values, midpoint, citing Clark; G(8/8)-G(4/8) overstates), sha256:ad67f56b0e090f8c283c58e728d656f4685a6e2b3ff8219144ecb46facbeac2e — https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam8_16-8.pdf"
+    - "CAS Exam 8 Fall 2017 — sample answers and examiner's report, Q18(a)-(b), PDF p.88 (exposure distribution restated to a loss distribution; g = 1/p; Sample 2 computes the same G points without the restatement), sha256:9496e4d8e8eeea922abcb05728d8df22b73ca717b8bde0ee5e877f6d33bc3a65 — https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam8_17-8.pdf"
+    - "CAS Exam 9 Content Outline, Fall 2026, pp.3, 7 (tasks A1-A5, readings Clark, Bernegger, Grossi & Kunreuther), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Exposure Curves.md
 ---

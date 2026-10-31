@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:47fe0100385f7b2e718b403aa3630a7060cb1b16a392e851fce3e29b1ceaf6cd
+  content_hash: sha256:b8d31d3b28ebe9d41de0fab715442533a66065587b2a0a1aefcc1ca4518e8c8f
   sources:
     - "CAS Exam 9 Content Outline, Fall 2026 (v01, 2026-03-18), PDF pp.3-7: Domains B, C and D tasks and readings; complete text references (Brehm et al.: D1-D6, Chapters 1, 2 excl. 2.6, 3 excl. 3.4, 4, 5.4; source SK), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
     - "CAS Enterprise Risk Management Committee, Overview of Enterprise Risk Management (CAS Forum, Summer 2003), pp.109-114 (PDF pp.11-16: definition, four risk types and lists, process steps, treat/exploit: avoid, retain, reduce, transfer, exploit); pp.117-118 (PDF pp.19-20: solvency- and performance-related measures); PDF pp.23, 25 (DFA as structural simulation model; ESG linking interest rates and inflation; natural hedge), sha256:f433c8300785640b2f4fd168d3b38878d1bfbc9b9f8f74c08e43de8e98982efd — https://www.casact.org/sites/default/files/database/forum_03sforum_03sf099.pdf"
@@ -30,6 +30,9 @@ verification:
 - **Selecting models for diverse risks.** Each category needs a model suited to its nature, data and materiality — see [[Risk Taxonomies]] for the mapping and [[Model Selection]] for the statistical criteria. Parsimony matters: every added parameter adds estimation error and [[Model Risk|model risk]].
 - **The effect on strategic management.** An IRM answers strategic questions: how much capital a target rating or ruin probability requires, how to allocate it ([[Risk Capital]]), which reinsurance programme or asset mix sits on the **efficient frontier** of return against risk, and whether the business plan fits [[Risk Appetite|appetite]].
 - **The choice of risk measure is itself strategic.** VaR reads one quantile; TVaR averages the tail beyond it; they can rank the same strategies differently. Brehm recommends looking at several metrics rather than one.
+
+- **Modelling the dependencies.** A single correlation coefficient says how strongly lines move together overall, but not where; a [[Copula|copula]] joins each line's own distribution and can concentrate the dependence in the tail, where catastrophes and clash events put lines in loss together. Kendall's and Spearman's [[Rank Correlation|rank correlations]] depend only on the copula, and matching Kendall's tau is one way to fit one.
+- **Implementing and owning the model.** CAS's examiners credit two governance points about an internal model. It needs dedicated, full-time staff — or a dedicated ERM function — because people building and maintaining it alongside their regular duties face scheduling conflicts and delay its implementation and upkeep. And the correlation assumptions between lines need knowledge of the whole firm and are politically sensitive, so a leader setting them for one line may be inexperienced in the others or biased towards a favourable answer: they belong at the corporate level, owned or reviewed by the CRO or the ERM department, or agreed by consensus among the line leaders.
 
 > [!example]- VaR and TVaR Pick Different Growth Plans {Example}
 > An insurer's model gives next year's net loss (in $\$$M) under two growth plans with the same premium.

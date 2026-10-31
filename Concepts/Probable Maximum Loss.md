@@ -1,18 +1,22 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-18
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
   content_hash: sha256:bdd8ef5becff418f6545a40d8f8022f4b9813d261ea99e68bd591b38b25285ed
   sources:
-    - "OSFI, Minimum Capital Test Guideline (2024), Guideline A, §1.1.1, §1.1.2, §1.2.1, sha256:ec08c0d9b998c17749d099bdc0e96aeb4508a912b9a5d4eb390335602b03fd0e — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/minimum-capital-test-guideline-2024"
-    - "OSFI Guideline A-4, Regulatory Capital and Internal Capital Targets (December 2017), p.3, sha256:f68346b481f701b9a9ccac13cac872c8e7c009c96d2a7a51b66e523c00e6b1fa — https://www.casact.org/sites/default/files/2021-03/6C_OSFI_Target_Capital.pdf"
-    - "OSFI, Guideline B-9 Earthquake Exposure Sound Practices (PML500, gross/net PML, models), definitions of PML, PML500, gross/net PML; models, sha256:e826e5e04f4c4170671288527ae7bebd0ace06ac940254e7d5ecd3adbe92f37e — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/earthquake-exposure-sound-practices"
-    - "OSFI, Minimum Capital Test Guideline (2026), ch.1 (100% minimum, 150% supervisory target), ch.1 100% minimum, 150% supervisory target, sha256:80450516aa1bb0a7534ceedcf50e39966406ecdcd52d0109af4a94d3439959ce — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/minimum-capital-test-guideline-2026"
-    - "IRMI Glossary, 'probable maximum loss (PML)', entry, sha256:f5a52026910edc505ad6eca7e31f08994d2ab6ffd9b55e16685b3e6d2cd4e8ee — https://www.irmi.com/term/insurance-definitions/probable-maximum-loss"
-    - "IRMI Glossary, 'maximum foreseeable loss (MFL)', entry, sha256:ac6a852f104fe279e0909ec10a83934963490673519be7caa5ceef6192b7151c — https://www.irmi.com/term/insurance-definitions/maximum-foreseeable-loss"
-    - "IRMI Glossary, 'maximum possible loss (MPL)', entry, sha256:5216b2a4bb6e2fd2293be9003732c8549708b87e7e3be408b39de7a8a93e50e9 — https://www.irmi.com/term/insurance-definitions/maximum-possible-loss"
+    - "OSFI, Guideline B-9 Earthquake Exposure Sound Practices (2013), current web text: Principle 2 data quality, Principle 3 models (significant uncertainty, wide range of results from model to model, consider more than one model), Principle 4 PML estimates (data quality, non-modelled exposures, model uncertainty, multiple regions), financial resources against gross PML, FCT earthquake scenario, definitions (PML as return period loss for probabilistic models; gross and net PML), sha256:0421fe099975731fb9a3d9d47c1b484be4fd79f8891b7c54c5edc3c15efc03fd — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/earthquake-exposure-sound-practices-guideline-2013"
+    - "OSFI, Earthquake Exposure Sound Practices — Letter (2013), Appendix A (PML250 and PML500 at return periods, gross and net PML definitions), sha256:64484c9bebbdb759294daf5cf7cadcb550b00028793dc69e2441c3c5567dbade — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/earthquake-exposure-sound-practices"
+    - "IRMI Glossary, 'probable maximum loss (PML)' (a property loss control term: the maximum loss expected at a given location from a fire, in dollars or as a percentage of total values), sha256:571dfca5c63cde057b827d8cb7f28c3b8071793b5076b6dcf5d191a89e3da739 — https://www.irmi.com/term/insurance-definitions/probable-maximum-loss; 'maximum foreseeable loss (MFL)' and 'maximum possible loss (MPL)' entries, same site, read this run"
+    - "SOA, An Overview of Catastrophe Modeling Output (GI-301 study note, May 2025), pp.1-3 (printed): OEP/AEP/CEP; AAL = sum p_i L_i; independent Bernoulli events at most once; OEP(L_i) = 1 - prod(1 - p_j); return period = 1/OEP; RPL = PML; TVaR the average loss above a return period; ground-up, gross, net and final net (plus reinstatements) losses; demand surge; secondary uncertainty, sha256:e3826f24e743ccb668df1033fd90465e42c77f1c751682e0805edd748c2ce95e — https://www.soa.org/globalassets/assets/files/edu/2025/fall/study-note/2025-11-gi-301-study-note-catastrophe-output.pdf"
+    - "Lloyd's Market Association, Catastrophe Modelling: Guidance for Non-Catastrophe Modellers (June 2013), PDF pp.7-9 (ELT from the financial module; EP curve; OEP and AEP; VaR and TVaR; ELT; CoV; ground-up, gross, net and final net losses; RMS weighting academic models into a blended frequency), sha256:a09d4b5333c2e7e3a2f0c7b28a1c083cf66f274ef65f79b07e7d876bfb88fbb9 — https://web.actuaries.ie/sites/default/files/erm-resources/catastrophe_modelling_guidance_for_non_catastrophe_modellers.pdf"
+    - "CAS Exam 8 Fall 2012 — sample answers and examiner's report, Q9(b), PDF p.51 (1/25 = 0.04; linearly interpolate; eyeballing the graph and treating the curve as discrete (selecting 5M or 10M) are errors), sha256:f0a8a4e1060ad54d4a69208dd574d53dbcafc29ceddbabe7be0a2da2e0f9232b — https://www.casact.org/sites/default/files/2021-03/f12-8.pdf"
+    - "CAS Exam 8 Fall 2013 — sample answers and examiner's report, Q24(a), PDF pp.90-91 (1/250 = 0.004; linear interpolation between OEP points 0.002 and 0.005), sha256:8e644179a5722b0d1968c3d9caa38514a01ca4cded397441dd1d9af00d3cc9dc — https://www.casact.org/sites/default/files/2021-03/13-8.pdf"
+    - "CAS Exam 8 Fall 2015 — sample answers and examiner's report, Q22(b), PDF p.94 (discrete distribution: select the loss amount rather than interpolate), sha256:02718b9e95a9c4fc0203158467fe573920d774e0498460bb2dee0d6b4db1a0df — https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam8_15-8.pdf"
+    - "CAS Exam 8 Fall 2018 — sample answers and examiner's report, Q16(a), PDF pp.86-87 (interpolate the exceedance probabilities; common mistakes: using return period years for interpolation), sha256:7993ff15f4c6aae538bde337a57fbbf775aab27f3a232b8a828458ac52a330c4 — https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam8_18-8.pdf"
+    - "OSFI, Minimum Capital Test Guideline (2026), ch.1 (100% minimum, 150% supervisory target), sha256:80450516aa1bb0a7534ceedcf50e39966406ecdcd52d0109af4a94d3439959ce — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/minimum-capital-test-guideline-2026 (carried from C-002, not re-read)"
+    - "OSFI Guideline A-4 (December 2017), p.3 (minimum capital required for P&C), sha256:f68346b481f701b9a9ccac13cac872c8e7c009c96d2a7a51b66e523c00e6b1fa — https://www.casact.org/sites/default/files/2021-03/6C_OSFI_Target_Capital.pdf (carried from C-002, not re-read)"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Probable Maximum Loss.md

@@ -1,12 +1,15 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-10
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
   content_hash: sha256:1d68735576c40b1aada1a87578dd404fd4fd5f23782442d3f4982bd57e1529de
   sources:
-    - "Clark, Basics of Reinsurance Pricing (CAS study note, rev. 2014), §1A pp.3–4, §1B pp.9–12, §2A pp.14–15, casualty layers pp.22–23, 27, sha256:1c4429fee538cc8d90157c1849ca689a3a2173a2670fc57f212d866b493e2c63 — https://www.casact.org/sites/default/files/2021-03/8_Clark.pdf"
+    - "Clark, Basics of Reinsurance Pricing (CAS Study Note, revised 2014), §1B p.9 (loss occurrence limit), §2A-2B pp.16-20 (experience and exposure rating, credibility, free cover), §3A pp.22-25 (working, exposed excess and clash layers; ALAE method may expose the clash layer; trend then cap; no generally accepted solution; historical limit leaves out that insureds raise limits; uncapped trend assumes limits drift with inflation and needs premium adjusted; pro-rata with loss vs ALAE as part of loss; Examples 1-2; 'not necessarily higher or lower for either method'; excess development), pp.27-30 (casualty exposure factor with ILFs; ALAE included with loss, attachment and limit divided by 1+e), §3B(a) pp.31-32 (umbrella over another carrier: (Loss + Underlying limit) x Trend - Underlying limit), §5 (reinstatements, rate on line, payback), sha256:1c4429fee538cc8d90157c1849ca689a3a2173a2670fc57f212d866b493e2c63 — https://www.casact.org/sites/default/files/old/studynotes_clark_2014.pdf"
+    - "CAS Exam 8 Fall 2014 — sample answers and examiner's report, Q20(b) and Q21(a), PDF pp.90, 91-93 (2004 attachment likely lower, so the ground-up loss lower; ALAE inside the underlying lowers the umbrella attachment; outside/outside least and inside/outside most; lowered attachment outweighs uncapped ALAE as most expected loss sits low in the layer), sha256:305e1211892c48fd58bd8be8038483992fba1100023d37422a2bca209f90ada1 — https://www.casact.org/sites/default/files/2021-03/14-8_0.pdf"
+    - "CAS Exam 8 Fall 2016 — sample answers and examiner's report, Q19, PDF p.75 (pro-rata ALAE in proportion to ceded loss, claim by claim; common mistake: the wrong ratio), sha256:ad67f56b0e090f8c283c58e728d656f4685a6e2b3ff8219144ecb46facbeac2e — https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam8_16-8.pdf"
+    - "CAS Exam 9 Content Outline, Fall 2026, pp.3, 7 (tasks A1-A5, readings Clark, Bernegger, Grossi & Kunreuther), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Excess of Loss.md

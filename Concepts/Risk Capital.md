@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:223d1af61693abb44aadb459bc9e04b14990ac8a79aa267fb66533fded418358
+  content_hash: sha256:2b83b2ee72b989ef991532ad395cab10c592114692281014967c943051c130b8
   sources:
     - "Erel, Myers & Read, A Theory of Risk Capital (JFE-2013-0394 revised, Oct 2013), abstract p.1; p.7 (Merton and Perold's definition of risk capital), sha256:1fb728de691bf9eed3c3443629227c8c0b6040fb83145ef2690f4a0c5ed815cf — https://web.actuaries.ie/sites/default/files/erm-resources/a_theory_of_risk_capital.pdf"
     - "Goldfarb, Risk-Adjusted Performance Measurement for P&C Insurers (CAS study note, rev. Oct 2010), pp.3-5, 9-11, 31-44, sha256:b0ee2f3239c7f53d07401d4c56828d9a1129d5c1f7b660603d811a50019d7b8e — https://www.casact.org/sites/default/files/database/studynotes_goldfarb8.2.pdf"
@@ -44,9 +44,7 @@ verification:
   - shareholders and other stakeholders are hurt by large partial losses of capital well before default, so a more likely, less extreme event can be the more meaningful standard.
 
   Other reference points look at the firm as a going concern: keeping enough capital to continue writing and servicing the renewal book after an adverse year, to come through a catastrophe and still operate strongly afterwards, to keep the target rating, or to avoid regulatory action. Kreps gives management appetites of the form "not more than a 10% chance of losing 20% of capital", and Venter notes that because renewal business has a value, the goal can be enough capital to keep operating even in the identified adverse situation.
-- **From a reference point to a capital requirement:** choose the largest fraction $k$ of capital the firm will tolerate losing in a 1-in-$y$-year event, measure that event's average loss as the TVaR at the matching percentile, and require
-  $$C_{\min} = \frac{\text{TVaR}_{1 - 1/y}}{k}$$
-  — a multiple, $1/k$, of the TVaR. Venter's example is a goal that the average 1-in-100 or worse year use up no more than premium plus one third of capital, which makes required capital three times the 99% excess TVaR (measured above the mean, since the mean is funded by premium).
+- **From a reference point to a capital requirement:** choose the largest fraction $k$ of capital the firm will tolerate losing in a 1-in-$y$-year event, measure that event's average loss as the TVaR at the matching percentile, and require $C_{\min} = \text{TVaR}_{1 - 1/y} / k$, a multiple $1/k$ of the TVaR. For instance, a firm that will lose no more than a quarter of its capital in its average 1-in-20 bad year holds four times its 95% TVaR. Venter's example is a goal that the average 1-in-100 or worse year use up no more than premium plus one third of capital, which makes required capital three times the 99% excess TVaR (measured above the mean, since the mean is funded by premium).
 
 > [!example]- Four Allocations of the Same Capital {Example}
 > Two lines have loss standard deviations $\sigma_A = 30$ and $\sigma_B = 50$ with correlation $0.5$. The insurer holds capital equal to twice the standard deviation of its total loss. Allocate total capital by (a) standalone proportions, (b) Merton–Perold, (c) Shapley, (d) covariance (Euler).

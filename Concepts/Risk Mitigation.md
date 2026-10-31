@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:6f4dbec8041f8e929db98e1d92efe8e4a413e1f80753ee084358d51e84842f8e
+  content_hash: sha256:aa262742f42cbb16ed8e71a3ba0f304792c4063b62829b5abb0dbf71922bce9a
   sources:
     - "CAS Exam 9 Content Outline, Fall 2026 (v01, 2026-03-18), PDF pp.3-7: Domains B, C and D tasks and readings; complete text references (Brehm et al.: D1-D6, Chapters 1, 2 excl. 2.6, 3 excl. 3.4, 4, 5.4; source SK), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
     - "CAS Enterprise Risk Management Committee, Overview of Enterprise Risk Management (CAS Forum, Summer 2003), pp.109-114 (PDF pp.11-16: definition, four risk types and lists, process steps, treat/exploit: avoid, retain, reduce, transfer, exploit); pp.117-118 (PDF pp.19-20: solvency- and performance-related measures); PDF pp.23, 25 (DFA as structural simulation model; ESG linking interest rates and inflation; natural hedge), sha256:f433c8300785640b2f4fd168d3b38878d1bfbc9b9f8f74c08e43de8e98982efd — https://www.casact.org/sites/default/files/database/forum_03sforum_03sf099.pdf"
@@ -34,6 +34,34 @@ verification:
   - *Retain* — keep the risk and hold [[Risk Capital|capital]]: right when the risk is the business the firm is paid for, or when transfer costs more than the capital it saves.
 - **Assessing effectiveness** means checking the change in the risk measure against the net cost; the **residual** risk against appetite; **basis risk**, where the hedge pays on something other than the actual loss; **counterparty risk**, since transfer swaps the original risk for [[Reinsurance Credit Risk|credit risk]], concentrated in the scenario the cover exists for; changed behaviour ([[Moral Hazard|moral hazard]]); and whether the answer survives a different risk measure or model.
 - **Mitigation shapes strategy.** Capital released can support growth or be returned. Brehm puts reinsurance programmes on an **efficient frontier** of expected return against risk: a programme below the frontier is dominated, and the choice along it is a question of appetite. See [[Reinsurance Strategy]] and [[Business Risk]].
+
+## Measuring the value of reinsurance
+
+- **Cost is not ceded premium.** Venter's point: adding up ceded premium and setting it against recoveries over the years almost always shows reinsurance "losing", because reinsurers have expenses and must make money. The cost of a programme is the expected income foregone by buying it — ceded premium less expected recoveries, including expense recoveries such as ceding commission — and its benefit is the **stability** gained: protection of surplus against adverse fluctuations, more predictable earnings, and assurance to customers that their losses will be paid.
+- **Three paradigms for its value** (CAS's examiners credit these three): reinsurance (1) **stabilizes results**; (2) **frees up or replaces capital** — the surplus no longer needed, valued at the cost of capital, together with cheaper financing of the rest through better ratings; and (3) **adds value to the firm** — market valuation, ratings, access to customers and the ability to get adequate premiums. Venter treats the second and third as the two directions in which stability turns into earnings and value.
+- **Compare distributions, not differences.** Simulate the net result — net premium less net loss — under the bare position (no reinsurance) and under each programme. The benefit of a programme at a probability level is its percentile of that distribution minus the bare position's percentile at the same level. That is the difference between the percentiles of two distributions, not the percentile of the difference between programmes, and it is the right comparison because the company ends up with the distribution of the one programme it buys.
+- **The cost/benefit diagram** plots each programme's cost (horizontal axis) against its net result at a selected probability level (vertical axis), one line per level — say 1-in-10, 1-in-100 and 1-in-250. The bare position, with no cost, sits at the origin of the cost axis. A more expensive programme is efficient at a level only if it gives a better (less adverse) result there than the cheaper ones. Standard deviation is a poor benefit measure, since a programme can lower it by giving up the good years, and combined-ratio measures distort the comparison because ceded premium sits in the denominator.
+- **Reinsurance against the cost of capital.** One way to price the benefit is the capital a loss at a chosen level would absorb with and without the programme: the capital saved, times the cost of capital, against the programme's net cost. The same arithmetic compares reinsurance with raising capital outright:
+  - The annual cost of a **quota share** is the margin ceded on it: ceded premium (cession percentage times subject premium) times the contract's economic margin — ceded premium less expected recoveries and commission.
+  - A **surplus note** is an unsecured note an insurer issues that statutory accounting treats as surplus, and whose interest and principal can be paid only with the domiciliary regulator's approval. Its proceeds are invested, so its annual cost is the coupon paid less the investment income earned on the proceeds: principal times (coupon rate minus investment yield). Returning the principal at maturity is not a cost of the strategy — it is the borrowed money going back — so only the net financing cost counts.
+  - Over several years, compare the present values of each strategy's annual costs.
+- **Reinsurance in a risk model.** Assessing what a programme does to the risk profile has its own difficulties. Contracts are complex. An excess-of-loss recovery is a non-linear function of the underlying loss — nothing below the retention, dollar for dollar within the layer, nothing more above the limit — unlike a quota share's fixed percentage, so its effect on a tail measure has to be modelled loss by loss rather than scaled. And some contracts do not warrant full risk credit: finite risk covers, with multi-year and loss-sensitive features that can greatly reduce the reinsurer's downside, count as reinsurance only if the reinsurer assumes significant insurance risk and may reasonably realize a significant loss, and a contract bought for tax reasons may transfer little risk at all.
+
+> [!example]- A Cost/Benefit Comparison {Example}
+> Simulated net results (net premium less net loss, $\$$M) for a bare position and two programmes, with each programme's cost (ceded premium less expected recoveries):
+>
+> | | Cost | 1-in-10 | 1-in-100 |
+> |---|---|---|---|
+> | Bare | 0.0 | $-4.0$ | $-30.0$ |
+> | Programme A | 0.6 | $-4.5$ | $-18.0$ |
+> | Programme B | 1.4 | $-3.0$ | $-19.0$ |
+>
+> Which programmes are efficient at each level?
+>
+> > [!answer]-
+> > Benefit is each programme's result less the bare result at the same level: at 1-in-10, A $-0.5$ and B $+1.0$; at 1-in-100, A $+12.0$ and B $+11.0$.
+> >
+> > At 1-in-100, B costs more than A and protects less, so B is **not efficient** there; A is. At 1-in-10 the order flips: A costs more than the bare position and does worse, so A is not efficient there, while B, dearer still, gives the best result and is. Neither programme wins at every level, so the choice turns on which level management manages to — and if that is the tail, A is better and cheaper.
 
 > [!example]- Before and After an Excess-of-Loss Treaty {Example}
 > Annual gross loss (in $\$$M): $100$ with probability $70\%$, $150$ with $20\%$, $250$ with $8\%$, $400$ with $1.5\%$, $700$ with $0.5\%$. The insurer can buy $250$ xs $250$ for a premium of $7.0$. Capital is $\text{TVaR}_{99\%} - E[L]$ and the cost of capital is $10\%$. Does the treaty add value?

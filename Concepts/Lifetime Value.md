@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-09-12
   last_checked_by: agent:validate-v1
-  content_hash: sha256:92a154318bdb3e37ef07b67275eb8ddc0460c957a1c0d721ee29d4f39591bddd
+  content_hash: sha256:bb4bdf44f2a6ad6482621918b73cedc291a46ba469a84c13947540a805f1ef18
   sources:
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 13 p.257 and Tables 13.16-13.17 with their column notes (PDF pp.269-270), and Ch. 1 p.10 (PDF p.22), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
   open_findings: 0
@@ -21,6 +21,7 @@ verification:
 - ${}_{t}p$ is the probability the customer is still on the books at time $t$ and $r$ the discount rate. Retention is what makes the sum finite: a book renewing at $85\%$ has an average customer life of about $1/(1-0.85) \approx 6.7$ years, at $90\%$ about ten years.
 - LTV justifies **first-year pricing below full cost** where acquisition costs are large and renewal margins are reliable — but only if the retention and loss-improvement assumptions hold. The "seasoning" effect (a policy's loss ratio improving with tenure) is real in personal lines and is one of the strongest arguments for the approach.
 - The corresponding risk is **adverse selection on price**: a below-cost new-business rate attracts the most price-sensitive shoppers, who are also the least likely to renew. If the customers acquired are not the ones the retention assumption describes, the LTV never materializes.
+- **Werner's lifetime value table** (Werner & Modlin, Ch. 13) runs one row per policy year. Profit is premium less losses less expenses. Cumulative persistency is the year's renewal probability times the prior year's cumulative persistency. The adjusted profit is the profit times the cumulative persistency — profit adjusted to reflect that not all customers will renew. The present value of premium is the premium times the cumulative persistency, discounted; in Werner's table each year is discounted from its start, so the first policy year is not discounted. Lifetime profit as a percentage of premium is the sum of the present values of the persistency-adjusted profits divided by the sum of the present values of the persistency-adjusted premiums.
 - **Price elasticity and retention modelling** are what make LTV operational. Modelling renewal probability as a function of the rate change offered lets an insurer see the trade-off directly: a larger increase raises premium per policy and lowers the number of policies, and the optimum is rarely at either extreme.
 - The professional boundary matters: the **indication** is an actuarial estimate of expected cost; LTV is a **business decision layer** applied to it. Departing from the indication for retention reasons is legitimate and must be documented as a departure ([[Rate Change]], [[Ratemaking Constraints]]) — not folded back into the cost estimate.
 

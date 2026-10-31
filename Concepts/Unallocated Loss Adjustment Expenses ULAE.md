@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:a30da84be291cd006f6735dfbb1ae252b2f230878b00716002ac3759fd235f5a
+  content_hash: sha256:431d04a17ced976ab0314eb397a38514888b880f0f5449bb2b38411ad2839ba4
   sources:
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, Version 3, July 30 2010), Ch.17 pp.386-404 (PDF 392-410), Errata (PDF p.451), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. 2016), Ch.6 'Loss Adjustment Expenses', pp.121-122 (PDF 133-134), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
@@ -28,6 +28,17 @@ Friedland's four dollar-based techniques:
 
 - **Conger-Nolibos generalized approach.** Drops the $50/50$ assumption entirely: ULAE is allocated to claim events (opening, maintenance, closing) with selected weights, and the resulting ratio is applied to the corresponding unpaid dollars. This is the method for books whose growth rate or claim mix is changing materially.
 - **Mango-Allen refinement.** Where calendar-year paid losses are volatile, replace them with *expected* losses — apply reporting and payment patterns to accident-year ultimate estimates — so the denominator is smoothed rather than driven by one year's payment timing.
+
+When the classical technique fails (Friedland Ch.17, pp.388–391):
+
+- **Long-tail lines.** The $50/50$ split assumes ULAE is spent when a claim is opened and when it is closed. Johnson finds the classical technique gives good results only for very short-tailed, stable lines, and Rahardjo that the open-and-close assumption is definitely not true for liability claims, which keep incurring claims-handling expense while they stay open. Some actuaries respond by changing the percentages: for a long-tail professional liability portfolio with substantial claims-handling work during the life of the claim, one actuary applies 25% of the ratio to case outstanding and 75% to IBNR, which includes development on case outstanding.
+- **Inflation.** Kittel notes that the classical technique accounts for inflation only if the costs underlying ULAE inflate at the same rate as claim costs; if different rates of inflation underlie the claims experience and ULAE, the estimated unpaid ULAE may not be predictive of future experience. Mango and Allen add that the paid-to-paid ratio is distorted upward under inflation, because most claims paid in a calendar year were incurred in earlier years, so inflation reaches the denominator later than the numerator. The assumption is tested by comparing how fast ULAE costs have grown with how fast claim costs have grown, for instance the trend in paid ULAE against the trend in loss cost per exposure; Friedland's selection of a classical ratio weighs the relationship between claim and salary inflation (p.388).
+
+Count-based techniques (Friedland Ch.17, pp.387, 402–404):
+
+- Dollar-based techniques assume ULAE tracks claim dollars in timing and amount, so a $\$1{,}000$ claim requires ten times as much ULAE as a $\$100$ claim. Mango and Allen object that ULAE depends on the average claim size, not only on the claim dollars, and that a dollar-based estimate of unpaid ULAE becomes a rider on the estimate of unpaid claims, responding to whatever volatility is present in the estimate of ultimate claims.
+- A key assumption of count-based techniques is that the same kind of transaction costs the same amount of ULAE regardless of the claim size, so the estimate does not move with the dollar value of the claims.
+- **Wendy Johnson's technique** focuses on two transactions, reporting a new claim and maintaining a pending one, with an explicit relative weight on each. The cost per weighted claim count is historical ULAE divided by the weighted claim counts of the same period, and unpaid ULAE is that cost applied to the projected weighted counts (claims newly reported, and claims pending, in each future year) for claims that occurred before the valuation date.
 
 Further points:
 

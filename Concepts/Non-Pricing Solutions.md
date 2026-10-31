@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:2121a30c6eb7134b94d6b4135c35bbf3ff9ba26fb3e965e6c466ebd790af592c
+  content_hash: sha256:ebb3fea95334a8bc8802e10c623a78f6b8376aa0947498e3598d3f37585e5e1f
   sources:
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 14 pp.263-264, 287-288 (PDF pp.275-276, 299-300), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 13 p.256 (PDF p.268), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
@@ -24,6 +24,7 @@ verification:
   - *Change the portfolio* — tighten underwriting criteria, or non-renew policies whose premium is grossly inadequate. Premium leaves along with the losses, so it helps only if the loss reduction exceeds the premium reduction.
   - *Reduce coverage* — a coverage level change such as excluding mold from homeowners. Removing previously covered loss without lowering the rate is equivalent to a rate increase.
   - *Better loss control* — for example, medical management and return-to-work programs that stop workers compensation disability claims escalating.
+  - *Better [[Claims Handling|claims handling]]* — Werner & Modlin's workers compensation example (App. D) expects lower losses than the industry's from a company's more stringent underwriting and claims handling practices.
 - **When they are used:** where rates are promulgated or increases are hard to obtain, companies often run the indication but act on it through non-pricing levers; where a full increase would damage retention and new business (see [[Ratemaking Constraints]], [[Lifetime Value]]), they supplement a partial increase. Catastrophe concentration is managed the same way — restricting new business in exposed areas, requiring higher catastrophe deductibles, buying [[Reinsurance|reinsurance]].
 - After any such action the losses, expenses and premium are re-projected and the [[Overall Rate Level Indication|indication]] recomputed. Underwriting and coverage changes act only as policies renew, so they take a full term to earn in.
 

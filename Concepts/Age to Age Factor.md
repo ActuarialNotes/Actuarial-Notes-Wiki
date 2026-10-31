@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:e7131e4ee67da84c8c62bd4fa294767c57a108c617b87d77a163e4ee06fa9272
+  content_hash: sha256:17ca0e19e0bfbe3f7c174b9f59206fa869f12a09f0efe5e693b909d3b9248b7d
   sources:
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch.7, PDF pp.91-95 (printed 85-89): age-to-age factors, averages (simple, medial, volume-weighted, geometric), selection criteria, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch.9, PDF p.162 (printed 156): development factors below 1.00, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
@@ -32,6 +32,8 @@ Further points:
 - Factors need **not** exceed $1.000$. Salvage and subrogation recoveries, conservative initial case reserving, and claims closing below their reserves all produce downward development. Flooring factors at $1.000$ because "losses only go up" is a standard error.
 - Look at the column **before** averaging it. A steady column supports a volume-weighted all-year selection; a column trending over time is a signal, not noise, and calls for the latest years or an investigation.
 - A factor that moves along the **diagonal** rather than down the column is a calendar-year effect ([[Development Triangle]]) and should be addressed by restating the triangle, not by averaging it away.
+- **Seasonality.** With accident periods shorter than a year (half-years, quarters), factors can differ systematically with the part of the year a period covers. In Friedland's auto collision example, accident half-years ending in December close a smaller share of their claims by six months than half-years ending in June, so their 6–12 month closed count factors run higher (Friedland, Ch. 11, pp. 197–198). An average across all periods then blends two patterns and fits neither. When factors show seasonality, select the factor for each season by averaging only the factors of accident periods from that season, and apply to each period the factor for its own season.
+- Each accident period is projected to ultimate from its own latest value with its own season's factors; an accident year's ultimate is the sum of the projected ultimates of the periods within it.
 - The same selection process runs on paid, reported, count and ALAE triangles, and the selections should be mutually consistent — a paid factor implying faster emergence than the reported factor at the same age needs an explanation.
 
 ![[Media/Figures/Age_to_Age_Factor.svg|340]]

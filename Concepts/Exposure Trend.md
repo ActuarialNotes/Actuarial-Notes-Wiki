@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-09-12
   last_checked_by: agent:validate-v1
-  content_hash: sha256:847d0dba490e61c18f75c0089e873cd80d515c4271d73812a2184d092ec788a5
+  content_hash: sha256:ea20e1b647036d03f89d4d8c80ed7ef57b1d570f95082bc81a66f53d77a3809f
   sources:
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 4 pp. 61-62 (PDF pp. 73-74), EXPOSURE TREND, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 6 pp. 119-120 (PDF pp. 131-132), Coordinating Exposure, Premium and Loss Trends, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
@@ -23,6 +23,7 @@ verification:
 
 > $$1 + t_{\text{net}} = \frac{1 + t_L}{1 + t_E}$$
 
+- **Workers compensation premium (Werner & Modlin, App. D).** Historical loss cost premium, already at current rate level, is brought to the current payroll level by multiplying each accident year by the cumulative product of the annual payroll level changes in the years after it, so the most recent year's factor is 1.000 and a year's own change is not applied to it. It is then multiplied by one plus the wage increase expected between the most recent historical period and the time the rates will be in effect, giving a composite exposure trend factor.
 - Ignoring exposure trend on an inflating base understates the future denominator, overstates the projected pure premium, and produces an indicated increase the insurer does not need — because the same inflation that drives the losses is already raising the premium base automatically.
 - Under the [[Loss Ratio Method]] the effect enters through [[Premium Trend|premium trend]] instead: the premium at current rates grows with the exposure base even with no rate change, so the two methods handle the same phenomenon in different places and must not both be applied.
 

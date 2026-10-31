@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:70916af850c833770407fbad3600f3ff3f589b973960e93e365545fde902606d
+  content_hash: sha256:1b987a3a5b93b4cb185370273b6e8798a5690358dc153b952aa0f0c1e4e29135
   sources:
     - "Frees et al., Loss Data Analytics (open text), Ch. 9 Experience Rating Using Credibility Theory, Ch. 9 §§9.2–9.6, sha256:35a840449990c8fda61687ebde4646508b6296ffac3daba18f0181eb2511fa36 — https://openacttexts.github.io/Loss-Data-Analytics/ChapCredibility.html"
     - "Tse, Nonlife Actuarial Models (Cambridge 2009), publisher preview, Contents pp. ix–x (PDF pp.11–12), sha256:f6d009afdd1776907db090b41b72dd5a76d0b5ba3f0ee42e8b07279d5763b404 — https://api.pageplace.de/preview/DT0400.9780511630231_A24404031/preview-9780511630231_A24404031.pdf"
@@ -28,6 +28,9 @@ $$n_{\text{full}} = \left(\frac{z_{\alpha/2}}{r}\right)^2 \cdot \frac{\text{Var}
 - For **claim severity**: $n_{\text{full}}$ depends on the coefficient of variation $\text{CV} = \sigma/\mu$
 - For **aggregate losses**: $n_{\text{full}}$ combines frequency and severity CVs: $\text{CV}^2_S = \text{CV}^2_N + \text{CV}^2_X / E[N]$
 - Partial credibility uses the **square root rule**: $Z = \sqrt{n/n_{\text{full}}}$ when $n < n_{\text{full}}$
+- **The simplifying assumptions.** In Werner & Modlin's derivation of the basic claim-count standard (Ch. 12), exposures are homogeneous, claim occurrence follows a Poisson distribution and there is no variation in the size of loss (constant severity).
+- **Advantages** (Werner & Modlin, Ch. 12). It is the most commonly used approach and so generally accepted, the data it needs is readily available, and the computations are very straightforward.
+- **Disadvantages.** The derivation makes simplifying assumptions that may not be true in practice, such as no variation in the size of losses. It uses a selected complement but does not take into account the quality of that complement compared with the latest observation, so judgment is required. And the standard itself rests on choices: full credibility is defined by a probability p that the observed experience stays within a range k of its expected value, and Werner calls that range an arbitrary amount.
 
 ![[Media/Figures/Limited_Fluctuation_Credibility.svg|340]]
 

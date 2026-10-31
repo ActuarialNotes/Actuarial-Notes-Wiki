@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:a679598f0c7a46b4602268feecc7be08a5a3388cb5e8fbb02d9106ca3b7f1eb1
+  content_hash: sha256:932a22265060bc70b2d55b0515d764b4ab9f77c4014f96202c642d3a4317e3cd
   sources:
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch. 4 p. 44 fn 20 (definition of tort reform); Ch. 7 p. 96; Ch. 10 p. 177, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
     - "Cappelletti, Tort Law: Topics for General Insurance Actuaries (SOA GI-201 study note, rev. May 2025), PDF pp. 5, 8, 10-15, 31, 33, 60-66 (printed pp. 3, 6, 8-13, 29, 31, 58-64), sha256:5316698581bb73d51dbcfb9a74ea92254fed6fc2b018253e2b26abc346ca2a6f — https://www.soa.org/globalassets/assets/files/edu/2025/fall/study-note/2025-11-gi-201-study-note-tort-law.pdf"
@@ -28,6 +28,7 @@ verification:
 - **The trade-off is explicit and should be stated as such.** Reform lowers premiums by lowering compensation. Whether that is desirable depends on whether one values affordability of a compulsory product above full restitution of the seriously injured — an allocation question, not a technical one.
 - **Distributional effect:** thresholds and deductibles bite hardest on the *moderately* injured, who lose all or most of their claim, while the catastrophically injured lose proportionally little.
 - The reverse also happens: a reform can be **rolled back**, and courts can widen a definition.
+- **Reflecting a reform in an unpaid-claims estimate** (Friedland). When a reform changes the legal environment, historical claims need to be restated as if they had occurred in the new legal environment: claims from years before the reform are multiplied by a reform adjustment factor of one minus the estimated reduction in claim cost, a year in which the reform took effect part-way through gets a pro rata factor, and years wholly after it are left alone (Ch.8, pp.133–134, the expected claims technique). In a frequency-severity projection the reform adjustment goes on the severities, beside the severity trend, while the frequencies are adjusted for frequency trend and rate level (Ch.11, pp.204, 211). A reform also undermines the development technique's assumption that historical development will be predictive, so the actuary considers other techniques or at least adjusts the selected development factors (Ch.7, p.96).
 
 ![[Media/Figures/Tort_Reform.svg|340]]
 

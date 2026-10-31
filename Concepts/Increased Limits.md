@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:fe5b6c843fc37b1a50b577ec19db4731320072ea3508bbf883e1e07d7eb76593
+  content_hash: sha256:367a587c6fecdac063843f9a7997e70f1422ba4e34749c5aae0dae044fe0776d
   sources:
     - "Bahnemann, Distributions for Actuaries, CAS Monograph 2 (2015), §6.2 increased limit factors built on loss plus ALAE, Example 6.3 and Table 6.1, PDF p.179, sha256:d4d172f9646852ab018ae3f0df95e5fbdbfabda4db55d6d4596977ed2eaa3ef8 — https://www.casact.org/sites/default/files/2021-03/8_Bahnemann.pdf"
   open_findings: 0
@@ -21,6 +21,11 @@ verification:
 - $B$ is the basic limit (ISO uses $\$100{,}000$ for general liability and commercial auto liability), so $\text{ILF}(B) = 1.000$ by construction and $\text{ILF}(L) > 1$ for $L > B$. $E[X \wedge L]$ is the **limited expected value**, the expected loss capped at $L$.
 - Werner's indicated ILF is the ratio of losses and LAE at the two limits, assuming all underwriting expenses are variable and the variable expense and profit provisions do not vary by limit. Actuaries may vary the profit provision by limit for the volatility of high limits — a departure Werner notes from that assumption, not part of his formula. Palmer's fuller formulation puts it inside the factor: $\text{ILF}(L) = \dfrac{\text{LAS}(L) + \text{ALAE}(L) + \text{ULAE}(L) + \text{RL}(L)}{\text{LAS}(B) + \text{ALAE}(B) + \text{ULAE}(B) + \text{RL}(B)}$, where the **risk load** covers process and parameter risk, both of which vary by limit.
 - ILFs are estimated from a **size-of-loss distribution** — empirically, building the limited average severity layer by layer so that losses censored at policy limits introduce no bias, or from a fitted curve (lognormal, Pareto, truncated Pareto); ISO's mixed exponential method and GLMs are also used. Data at high limits is sparse and volatile, which is why ILFs are calculated from a broader body of experience (class group, state group or countrywide) and applied to class-, state- and territory-specific basic limit loss costs.
+- **Layer by layer from censored data** (Werner & Modlin, Ch. 11). Claim data is usually censored at each policy's limit, so the limited average severity of each layer is based only on loss data from policies with limits as high as or higher than the top of the layer. The limited average severities of the layers are then stacked, like the layers of a [[Layer of Insurance|tower]].
+- The limited average severity at the basic limit uses the claims from all policies, whatever their limits, each capped at the basic limit, and divides the total by the total number of claims.
+- A layer's losses are what each claim puts into it: the claim capped at the top of the layer minus the bottom of the layer, or zero for a claim below the bottom, so a claim above the top contributes the full width of the layer.
+- The average severity of a layer is its losses divided by the number of claims reaching the layer (those exceeding its bottom), using only the policies whose limits reach the top of the layer. Before it is added to the limited average severity below it, it is multiplied by the probability that a claim exceeds the bottom of the layer, estimated from the same policies. That is the same as dividing the layer's losses by the total claim count of those policies.
+- The limited average severity at a higher limit is the limited average severity at the lower limit plus that weighted layer severity, and each further layer is added the same way. The ILF is then the ratio of the limited average severities.
 - **Consistency.** Since $\text{LAS}(k) = \int_0^k S(x)\,dx$ (Palmer), each additional dollar of limit at $x$ adds $S(x)$ — the probability a loss exceeds $x$ — which cannot rise as $x$ rises. So the *marginal* indemnity cost per dollar of additional limit must not increase as the limit rises; an indemnity ILF table whose marginal cost increases is not consistent with any size-of-loss distribution.
 - ILFs are **leveraged by inflation**. As losses grow, more of them pierce the basic limit and the excess layers grow faster than the ground-up trend — so ILF tables must be reviewed, not left in place, through inflationary periods.
 - The **assumptions** behind Werner's ILF matter: all underwriting expenses are variable and the variable expense and profit provisions do not vary by limit; frequency and severity are independent; and frequency is the same whatever limit is chosen. The last fails for some lines — personal auto insureds who choose very high limits tend to have lower accident frequencies — which is one reason a GLM, which does not assume equal frequency, can give different (even counter-intuitive) factors.

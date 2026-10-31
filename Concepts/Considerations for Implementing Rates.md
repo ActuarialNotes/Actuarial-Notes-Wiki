@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:d0ed567d96ab1068444bcd2196e9971887296b8687178f2c2452e251caed07fa
+  content_hash: sha256:355dfd8d5c597638d7ba2e480e88d14adea96fca17e4857d3969d3f61de782b8
   sources:
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.14 pp.263-264, 276-285 (PDF pp.275-276, 288-297); Ch.13 pp.241-243, 256 (PDF pp.253-255, 268); Ch.6 p.113 (PDF p.125), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
   open_findings: 0
@@ -28,7 +28,10 @@ verification:
 
 - The overall change is implemented through the [[Rating Algorithm|rating algorithm]], normally as a base rate adjustment, and must be **off-balanced** against any simultaneous change in relativities so the two together deliver the intended effect.
 - A [[Minimum Premium|minimum premium]] and expense fees interact with the base rate; a percentage change to the base does not flow through evenly to policies sitting at the minimum.
-- **Capping** limits how much premium can move: a cap on the change for any level of a rating variable is made up by adjusting the base rate and the other relativities, and a **premium transition rule** caps any one renewal's change (at $15\%$, an insured due $+20\%$ gets $+15\%$ now and $1.20/1.15 - 1 = 4.3\%$ at the next renewal). The base rate must reflect the transition — the actuary decides whether the target average premium is reached over the whole period or by its end — and long transitions risk overlapping the next rate change.
+- **Capping** limits how much premium can move: a cap on the change for any level of a rating variable is made up by adjusting the base rate and the other relativities, and a **premium transition rule** caps any one renewal's change (at $15\%$, an insured due $+20\%$ gets $+15\%$ now and $1.20/1.15 - 1 = 4.3\%$ at the next renewal). The base rate must reflect the transition — the actuary decides whether the target average premium is reached over the whole period or by its end — and long transitions risk overlapping the next rate change. A company may limit any one insured's premium change to reduce the chance that the insured shops for a better deal, and in some jurisdictions a regulation or law limits the increase an insurer may offer a renewing insured, so the cap is required rather than chosen (Werner & Modlin, Ch. 14).
+- **Approximated average rate differential.** Where the detailed data for extension of exposures isn't available, the proposed base rate is the proposed average premium, less the average fixed fee, divided by the weighted average proposed rate differential across all rating variables. For a purely multiplicative rating algorithm that average differential is approximated as the product of each rating variable's exposure-weighted average differential; an additive discount enters as one minus its exposure-weighted average discount. Turned around, the average premium is approximately the base rate times that product of average differentials, plus the fee. Its shortcoming is that weighting each variable's differentials independently ignores the dependence of one variable's exposure distribution on the levels of another — the distributional bias between variables (Werner & Modlin, Ch. 14).
+
+**Competitive comparisons.** Companies study their competitive position by comparing their premium with competitors' premium on the same risks: for a set of sample risks (a market basket), for all quoted risks (new business), or for all existing insureds (renewal competitiveness). They look at two levels — how competitive their rates are on average for all risks combined (the base rate advantage), and how competitive they are for individual risks or groups of risks (Werner & Modlin, Ch. 13).
 
 **Practical constraints.** Regulatory filing and approval, systems changes when the structure of the rating algorithm changes, and communication of the expected effect to management, regulators and the sales and customer-service functions all stand between the analysis and the proposed effective date — and the [[Loss Trend|trend period]] runs forward to the policies written from that date.
 

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:92699e7865a20f6cf42723cfec21b8052b00c0c68df9a6fa19882dac701e3103
+  content_hash: sha256:7d90cdc58fc7da4c95bbeefc2fb9ea3b09b607abf0153043f3d4b097bcec4bdd
   sources:
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 7 pp.125-139 (PDF pp.137-151), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 1 p.9 (PDF p.21), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
@@ -28,6 +28,21 @@ verification:
 - The **variable permissible loss ratio** is what is left after the variable expense and profit provisions, $\text{VPLR} = 1 - V - Q_T$, and pays for loss, LAE and fixed expenses; the **total permissible loss ratio** also takes out the fixed expense ratio, $\text{PLR} = 1 - F - V - Q_T$, and pays for loss and LAE alone. The two are equal when all expenses are treated as variable (see [[Permissible Loss Ratio]], [[Loss Ratio Method]]).
 - **Reinsurance costs** can enter the [[Overall Rate Level Indication]] too. Proportional reinsurance may need no explicit treatment; for non-proportional reinsurance the projected losses are reduced for expected recoveries and the premium reduced by the amount ceded — or the net cost (cost of the reinsurance less expected recoveries) is included as an expense item.
 - Expense **trend**: a variable expense ratio needs none, since it changes with premium automatically. A fixed expense *ratio* (premium-based method) needs none if average fixed expense and average premium change at the same rate; a fixed expense *per exposure* on a base that does not inflate (car-years, house-years) or per policy is expected to change and is trended (see [[Loss Trend]], [[Premium Trend]]).
+
+## Selecting the provisions
+
+Werner & Modlin, Ch. 7:
+
+- **Year by year, then a selection.** The actuary calculates the historical expense ratio for each expense category and each year (or, in the exposure/policy-based method, the fixed expense per exposure or per policy), usually with a multi-year average beside them. The selection for each category is either the latest year's ratio or a multi-year average, balanced with management input, prior expense loads and judgment. Where the ratios are stable the multi-year average is selected; where they show a trend over time the actuary may select the most recent year's ratio or some other value.
+- **Select the total, then split it.** In the premium-based method the selection is made on each category's total expense ratio, and the selected ratio is then divided into its fixed and variable parts.
+- **A prospective estimate.** Because ratemaking projects future costs, the selected ratio should be consistent with the expenses expected in the future, which may differ from history: an expected commission percentage where the commission structure is changing, the expected expense level after a staffing reduction from productivity gains, and higher fixed costs in the short term where a growing company adds capacity (a new call centre) ahead of its planned growth.
+- **Non-recurring and extraordinary items.** Non-recurring expense items, one-time changes in expense levels, or anticipated changes in expenses should be considered in making the selection. An extraordinary expense is examined for its materiality and nature: the actuary may reflect it in the rates, spreading it over several years where what it pays for (a new policy-issuance system, say) will be used for a significant length of time, or leave it out of the rates, in which case it is basically funded by existing surplus. A year inflated by such an extraordinary item is therefore not simply averaged in with the others. Some states do not allow certain expenses, such as charitable contributions or lobbying, in the rates at all.
+- **Countrywide or state data.** Other acquisition costs and general expenses are usually assumed to be uniform across locations, so their ratios use countrywide expenses over countrywide premium. Taxes, licenses and fees vary by state, so their ratios are based on the state's own data, and commissions use state or countrywide data depending on whether the commission plan varies by location. A countrywide ratio therefore may not fit a single state's taxes, licenses and fees or commissions.
+
+## Distortions in the projection methods
+
+- **Premium-based method.** Since fixed expenses do not vary with premium, the fixed expense ratio is distorted when historical and projected premium levels differ. Rate increases not fully reflected in the historical premium make the method overstate the expected fixed expenses (decreases understate them); the remedy is to restate historical premium at current rate level. A shift in mix that raises the average premium without affecting expenses (higher amounts of insurance) makes the method overstate the fixed expense ratio, and one that lowers it (higher deductibles) understate it; the remedy is to trend historical premium to the projected level. Applying a countrywide fixed expense ratio to state premium allocates fixed expenses by premium, overstating them in high-premium states and understating them in low-premium states. The exposure/policy-based method avoids all three.
+- **Exposure/policy-based method.** Its shortcomings are that the split into fixed and variable is still largely judgmental; that it allocates countrywide fixed expenses to states by exposure or policy count although fixed expense levels may vary by location; that some expenses treated as fixed actually vary by characteristic, such as new versus renewal business; and that economies of scale in a growing or shrinking book make the average fixed expense per exposure decline or rise.
 
 ![[Media/Figures/Expense_Provisions.svg|340]]
 

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:680fe3052e9e25dcd525bf09d5cfae1fdc8c6e962dc5f9dca17885e606accc57
+  content_hash: sha256:bc11b8abab3ef37652e208f01776740748519507cc0a0a1384b4d8e864f55a67
   sources:
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ver. July 2010), Ch.15 pp.345-353 (PDF pp.351-359), Ch.7 p.93 (PDF p.99), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
     - "CAS Exam 5 Content Outline, Fall 2026, pp.3-6 (tasks A3, B16-B20; Complete Text References), sha256:fd8373ae9bbe7e56b93f99cee304c76c1d29a9d0dc7f07e6ed500bd647f41795 — https://www.casact.org/sites/default/files/2026-03/Exam_5_CO_2026_Fall.pdf"
@@ -23,6 +23,9 @@ verification:
 - A/E is run **by accident year and by maturity**, on paid and reported separately. Where the deviation sits is as informative as its size: concentrated in recent years points at the current diagonal; spread across all years points at a calendar-year effect; concentrated at old maturities points at the [[Tail Factor|tail]].
 - Paid and reported A/E together diagnose the cause. Reported running high with paid on track suggests [[Case Adequacy|case strengthening]]; paid running high with reported on track suggests faster [[Settlement Rate|settlement]].
 - **One period's deviation is noise; a run of them is a signal.** Emergence is volatile, so a single A/E of $1.15$ means little. Four consecutive quarters above $1.0$, in the same direction, is evidence the assumptions are wrong.
+- Comparing actual with expected claims lets the actuary judge whether prior selections were appropriate and revise them where claims do not emerge as expected (Friedland, Ch. 15). When the excess is real additional claim dollars, such as a large claim reported in the period, those dollars stay in that accident year's ultimate, which therefore rises: this is Hugh White's second option as Friedland quotes it, leaving the IBNR at the same level of expected claims because the excess is a random fluctuation such as a large loss. Friedland adds that none of White's three responses is satisfactory without investigating what drove the difference.
+- **Between evaluation points.** For a valuation that falls between two ages of the pattern (a monthly or quarterly check against an annual or quarterly pattern), the expected percentage reported or paid is found by interpolating the pattern at the accident period's age in months at the valuation date. Linear interpolation assumes the change between the two known ages happens evenly over the interval: the percentage at the earlier age plus the fraction of the interval elapsed times the change over the whole interval. For example, with 60% reported at 24 months and 80% at 36 months, linear interpolation gives 60% + (3/12)(20%) = 65% at 27 months.
+- Linear interpolation between quarterly points is likely sufficient for monthly monitoring, but linear interpolation of annual development patterns is usually not appropriate, particularly for the most immature accident years, because claims do not emerge evenly within a year (Friedland, Ch. 15). Bornhuetter and Ferguson suggest that the most recent accident year's development by quarter is skewed toward the early quarters, for instance 40%, 70%, 85% and 100% of the year's development at three, six, nine and twelve months, rather than the uniform 25%, 50%, 75%, 100% a straight line assumes.
 - A/E is the mechanism that would have caught the drifting ultimates on [[Ultimate Loss]] in year one instead of year four, and it feeds directly into whether factors, the tail or the a priori ELR need re-selection.
 
 ![[Media/Figures/Actual_vs_Expected_Analysis.svg|340]]

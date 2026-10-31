@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:c3cb9510935391fc3c8f4fc5a1792beecd8f81dc807614404258fa51edff7def
+  content_hash: sha256:867e462d9bb21b573cc5da275058654663649057ab542f7e58af2e1a484ce6a6
   sources:
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, Version 3, July 30 2010), Ch.5 pp.60-62 (PDF 66-68); Ch.6 pp.69-77 (PDF 75-83); Ch.11 pp.195-212 (PDF 201-218); Ch.13 p.288 (PDF 294); Ch.17 p.389 (PDF 395), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 1
@@ -29,6 +29,7 @@ Further points:
 
 - Count factors are **smaller** than dollar factors at the same age, because a claim is counted as soon as it is reported while its dollars accrue for years afterward.
 - Counts must be **defined consistently**: per claim or per claimant, counting claims closed without payment or not, treating reopened claims as new or as continuing. A definition change mid-triangle looks exactly like a frequency trend.
+- **Reported counts can develop downward.** When the reported counts exclude claims closed with no payment, a claim counted while open drops out of the count if it later closes without payment. In a fast-reporting, fast-settling coverage such as private passenger collision, more claims can close without payment in later valuations than are newly reported, so reported count age-to-age factors fall below $1.00$ (Friedland Ch.11, p.196).
 - Counts split broad IBNR into its two parts: **pure IBNR** (unreported claims, valued at an expected severity) and **IBNER** (development on known claims). Dollar triangles alone cannot separate them.
 - Counts are the input to the [[Frequency-Severity Method]] and the disposal-rate variant of [[Berquist-Sherman Method|Berquist-Sherman]].
 

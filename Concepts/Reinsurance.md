@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:2f3fb9494bac8830c2fad1147aa883865cb743c7caa6003375d9e16e5d0aae4f
+  content_hash: sha256:45a475c31abd8975756e052db6c7f67c2f406fc23887989f9ccc7ad7593235b0
   sources:
     - "Myers, Reinsurance Overview (NAMIC Directors' Education, 9 May 2017), slides pp.6–17 (functions, types, facultative uses, pro rata, per-risk/cat XOL, types of reinsurers, marketing), sha256:c8c7fe0c3bbd0f5d327147142f007ff9d13af260c71da725eb9973a0700121a4 — https://www.namic.org/pdf/reinsuranceRe/17dbc_ReinsuranceOverview.pdf"
     - "Baranoff, Brockett & Kahane, Risk Management for Enterprises and Individuals (Saylor, CC BY-NC-SA), §7.3 'Claims Adjusting', sha256:85078f2f0eb5eeae7a77d336f6f5ff14be25519272bfc27d528e037c21424877 — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s11-03-insurance-operations-reinsuran.html"
@@ -29,6 +29,8 @@ verification:
 - **Per-risk XOL** — responds to a single large claim above retention $R$, up to limit $L$.
 - **Per-occurrence / catastrophe XOL** — responds to the accumulation from one event, which is how [[Catastrophe Loss|catastrophe]] exposure is managed.
 - **Aggregate stop loss** — responds when the whole year's losses exceed a threshold.
+
+Where several treaties apply, they inure in a stated order — typically the per-occurrence excess comes off first and the stop-loss applies last, to what the other covers leave; see [[Ceded Loss Reserve]].
 
 Further points:
 

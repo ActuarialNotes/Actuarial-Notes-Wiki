@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:35363c20bcbec155bfd967f75524be73158562b9eac27a6c4b3e395ae5d154b9
+  content_hash: sha256:5390161fa1fc33ec1f6b63fe776e43b42029457e47ed7ed49141eb6bbf214679
   sources:
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 6 pp.105-109 and 120-121 (PDF pp.117-121, 132-133), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch. 2 p.14 (PDF p.20); Ch. 6 p.68 (PDF p.74); Ch. 7 pp.90-91, 97, 105 (PDF pp.96-97, 103, 111); Ch. 9 p.153 (PDF p.159), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
@@ -21,6 +21,7 @@ verification:
 
 - Development has two drivers: **pure IBNR** (claims that occurred but have not yet been reported) and **IBNER** (incurred but not enough reported — development on claims already known, as [[Case Reserves|case reserves]] are re-estimated toward settlement). Reported triangles capture both; paid triangles also capture the lag between a case reserve being set and the cheque clearing.
 - **Reported (incurred) development** is normally faster than **paid development**, because claims are reported sooner than they are paid, so cumulative reported CDFs are usually smaller than paid ones at the same age. Comparing the two is a standard diagnostic: a change in the paid-to-reported ratio signals a change in settlement patterns or in case adequacy — a rising ratio is consistent with faster settlement or weaker case reserves, a falling one with slower settlement or stronger case reserves — and the actuary must investigate which (see [[Case Adequacy]], [[Settlement Rate]]).
+- The development technique also assumes that the claim reporting lags, the time between the date of occurrence and the date of report, have not changed (Friedland Ch.7, p.97). If claims come to be reported faster while the pace of payment is unchanged, recent years are further along at each age than the history the reported factors came from, so the reported factors overstate their remaining development and the reported projection overstates ultimate; the paid projection is unaffected.
 - Development can be **downward**. Lines dominated by salvage/subrogation recoveries or by conservative initial case reserving produce age-to-age factors below $1.000$; capping factors at $1.000$ because "losses only go up" is a classic error.
 - **Long-tail lines** ([[Long Tail Lines|liability, workers compensation]]) have large CDFs at early maturities and need a [[Tail Factor]] beyond the observed triangle; **short-tail lines** ([[Short Tail Insurance|property, auto physical damage]]) are close to ultimate within a year or two.
 - The mechanics live in the [[Development Triangle]] → [[Age to Age Factor]] → [[Cumulative Development Factor]] chain; the [[Chain Ladder Method]] applies them directly, while the [[Bornhuetter-Ferguson Method]] uses the *complement* $(1 - 1/\text{CDF})$ to weight an a priori expectation.

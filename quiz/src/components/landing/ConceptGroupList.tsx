@@ -37,7 +37,6 @@ export function ConceptGroupList({
   onToggle,
   onSelectAll,
   levels,
-  isPro,
 }: {
   /** Still loading, with no concepts to show yet. */
   loading: boolean
@@ -48,7 +47,6 @@ export function ConceptGroupList({
   onToggle: (concept: string) => void
   onSelectAll: (group: { subtopics: string[] }, e: React.MouseEvent) => void
   levels: Map<string, MasteryState>
-  isPro: boolean
 }) {
   return (
     <div className="space-y-2">
@@ -64,8 +62,7 @@ export function ConceptGroupList({
               todaySubtopics={today}
               onToggle={onToggle}
               onSelectAll={onSelectAll}
-              conceptLevelMap={isPro ? levels : undefined}
-              isPro={isPro}
+              conceptLevelMap={levels}
             />
           ))}
         </>
@@ -81,7 +78,6 @@ function GroupSection({
   onToggle,
   onSelectAll,
   conceptLevelMap,
-  isPro,
 }: {
   group: { name: string; weight?: string; subtopics: string[] }
   selectedSubtopics: string[]
@@ -89,7 +85,6 @@ function GroupSection({
   onToggle: (subtopic: string) => void
   onSelectAll: (group: { subtopics: string[] }, e: React.MouseEvent) => void
   conceptLevelMap?: Map<string, MasteryState>
-  isPro?: boolean
 }) {
   const selectedCount = group.subtopics.filter(s => selectedSubtopics.includes(s)).length
   const allSelected = selectedCount === group.subtopics.length
@@ -206,7 +201,7 @@ function GroupSection({
                     every concept — so a Pro user, the only kind with a
                     study plan, could never see which concepts were in it. */}
                 {isToday && <TodayChip />}
-                {isPro && conceptLevel !== undefined && (
+                {conceptLevel !== undefined && (
                   <MasteryBadge state={conceptLevel} compact />
                 )}
               </button>

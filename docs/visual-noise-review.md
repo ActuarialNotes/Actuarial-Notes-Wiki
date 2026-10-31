@@ -97,11 +97,12 @@ is a different feature (the **Replace** button) and belongs next to that button,
 - `components/ReadinessCard.tsx` ~L1393 and `components/TodayCard.tsx` ~L331 both render
   "Custom Study Plan" + "A daily plan tailored to you" + **Upgrade**. The subtitle is the
   title paraphrased. Test 1.
-- `components/wiki/LearningProgressModal.tsx` ~L107: "Learning Progress" + "Track your mastery
-  journey over time". Same shape, same fix.
-- These three are near-identical markup in three files. Extract one `LockedFeatureCard`
+- ~~`components/wiki/LearningProgressModal.tsx` ~L107: "Learning Progress" + "Track your mastery
+  journey over time".~~ Gone: Learning Progress is free since 2026-10-31, so the lock card
+  was removed.
+- These two are near-identical markup in two files. Extract one `LockedFeatureCard`
   (lock tile + name + single action) and let the absence of a subtitle be structural rather
-  than a decision three separate authors have to keep making.
+  than a decision separate authors have to keep making.
 
 ### 3.4 Instructions that should be affordances
 

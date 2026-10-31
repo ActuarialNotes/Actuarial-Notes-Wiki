@@ -1,7 +1,8 @@
 # Pro: a proposal to make the offer compelling
 
-**Status:** Proposed, not yet ranked (`docs/roadmap.md` §3.4). Nothing here changes price,
-access or the Upgrade page until the maintainer decides the §6 questions.
+**Status:** Proposed, not yet ranked (`docs/roadmap.md` §3.4). §3's page changes are done
+(2026-10-31, D-P1 decided): the outcome headline, levels free, the funding card gone. The rest
+waits on the §6 questions.
 
 **Why this exists.** The Pro offer on `/upgrade` sells four tools: a daily plan, a study
 strategy, mastery levels and the PCPA simulator. Each answers "what does it do?" and none
@@ -136,7 +137,7 @@ it, and probably a different product with its own price. Keep it out of the stud
   purchase is enough.
 - **Change the headline** to the outcome in §1.
 - **Show the forecast, not a feature list.** The first screen answers "when am I ready?" with the
-  reader's own number if they have one.
+  reader's own number if they have one. *Waits on item 1: there is no forecast to show yet.*
 
 ---
 
@@ -177,7 +178,7 @@ last column applies.
 
 | ID | Decision | Default until decided |
 |---|---|---|
-| D-P1 | Headline and the outcome-first copy on `/upgrade` | Keep current copy |
+| D-P1 | Headline and the outcome-first copy on `/upgrade` | **Decided 2026-10-31:** the §3 headline, levels free, no funding card |
 | D-P2 | Trial length and whether it is offered to every account that sets an exam date | Not offered |
 | D-P3 | The Sitting Pass: price, duration and whether it replaces or sits beside monthly | Not offered |
 | D-P4 | Study Group: separate from Actuaria cohorts, or the same mechanism | Separate |

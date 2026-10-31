@@ -10,19 +10,20 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { ProBadge } from '@/components/ProBadge'
 import { CheckMark } from '@/components/CheckMark'
-import { FundArt, ProgressArt, ProjectArt, StrategyArt, StudyPlanArt } from '@/components/ProBenefitArt'
+import { ProjectArt, StrategyArt, StudyPlanArt } from '@/components/ProBenefitArt'
 import { trackUpgradeClicked } from '@/lib/analytics'
 import { cn } from '@/lib/utils'
 
 // What Pro unlocks — each one a thing the app actually gates on `isPro`
 // today, told as what it does for the reader. Keep this list honest: a
 // benefit belongs here only once a surface checks for it (natural-voice
-// Listen and Cowork are off it until they ship). The copy follows the
-// app-copy skill (.claude/skills/app-copy/).
+// Listen and Cowork are off it until they ship), and a reader's own mastery
+// levels are free, so they are not on it (docs/pro-proposal.md §3). The copy
+// follows the app-copy skill (.claude/skills/app-copy/).
 const HEADLINE_BENEFITS = [
   'A study plan for every day until your exam',
   'Study in syllabus order, or the heaviest topics first',
-  'See which concepts you know and which are slipping',
+  'Each day’s list in your inbox every morning',
   'Rehearse the PCPA project from start to finish',
 ]
 
@@ -40,19 +41,9 @@ const BENEFITS: { title: string; body: string; Art: () => React.JSX.Element }[] 
     Art: StrategyArt,
   },
   {
-    title: 'Track Learning Progress',
-    body: 'Each concept moves up from New to Level 3 as you answer questions on it, and you can see which questions moved it. Leave one too long and it drops back a level, so you find out in time to review it.',
-    Art: ProgressArt,
-  },
-  {
     title: 'Rehearse the PCPA Project',
     body: 'Pick a case, get a data set and build your model in R or Python in the browser. Write the report under the real 1,250-word limit, then see how your model does on data it hasn\'t seen.',
     Art: ProjectArt,
-  },
-  {
-    title: 'Fund New Exams and Questions',
-    body: 'Your subscription pays for the hours that go into adding exams, writing questions and checking them against the source material.',
-    Art: FundArt,
   },
 ]
 
@@ -142,7 +133,7 @@ export default function Upgrade() {
   ) : isPro ? (
     <div className="space-y-2">
       <div className="rounded-md bg-green-500/10 px-3 py-2 text-sm text-green-700 dark:text-green-400">
-        You're on Pro. Thank you for supporting the site.
+        You're on Pro. Thank you.
       </div>
       <Button variant="outline" className="w-full" onClick={back.go}>
         Back to {back.label}
@@ -178,11 +169,11 @@ export default function Upgrade() {
           <ProBadge size="md" />
         </div>
         <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-balance">
-          Pass exams and have fun doing it.
+          Know you’re ready before you sit.
         </h1>
         <p className="mx-auto max-w-md text-muted-foreground text-balance">
-          Pro tells you what to study each day until your exam, and keeps track of
-          what you've learned and what you're starting to forget.
+          Pro plans what to study each day until your exam, and changes the plan
+          when you fall behind or start to forget.
         </p>
       </div>
 

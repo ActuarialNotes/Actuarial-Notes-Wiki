@@ -98,6 +98,11 @@ on one is.
 Each entry: the date, the screen, what the maintainer said, and the rule it
 implies. Newest first.
 
+- 2026-10-31 · Upgrade page · Removed the "Track Learning Progress" card and
+  bullet because levels are free now, and the "Fund New Exams and Questions" card
+  (the proposal says it read as a donation appeal). Headline is now "Know you're
+  ready before you sit." → A free feature never appears on the Upgrade page, and
+  the page sells what Pro does, not what the money pays for.
 - 2026-10-24 · Upgrade page · Cut "Actuarial Notes is made by one person."
   from the funding card. → Don't lead with who makes the app; say what the
   money pays for.

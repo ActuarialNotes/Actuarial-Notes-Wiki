@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:502c50d4e974fe8d64a40081289bdd36be09d43aba664a49daa5169f210e81ed
+  content_hash: sha256:50845118250bc20c44c69c3238bb01b5efc98342b19cb44132d6e45bd9ac75f7
   sources:
     - "Hyndman & Athanasopoulos, Forecasting: Principles and Practice, 3rd ed. (OTexts, open online text), §9.8 Forecasting (three-step recursion; one-step interval ±1.96 sigma; MA(q) forecast variance; AR(1) via MA(∞); intervals too narrow because parameter and order variation are excluded), read 2026-10-18, sha256:35587d5a25830d81dcb41d6196d18eaee424556c40cae948bf52a5a1d1a79650 — https://otexts.com/fpp3/arima.html"
     - "Hyndman & Athanasopoulos, Forecasting: Principles and Practice, 3rd ed. (OTexts, open online text), §5.8 Evaluating point forecast accuracy (test set, MAE, RMSE, MAPE), read 2026-10-18, sha256:d72117b50768eed014ba8ec8bc835940cdfa2b34ca7ec76b22ce2b0484877f9a — https://otexts.com/fpp3/toolbox.html"

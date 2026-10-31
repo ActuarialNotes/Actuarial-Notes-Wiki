@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:599c32925d805e95dd189fbb83027d2b47a4de0f94116e9117e7ca505689a5d2
+  content_hash: sha256:a1003069de796be76b1def861878e050e2cfd058e9932361938a75aff3dbc7ad
   sources:
     - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer 2021, CAS-hosted copy), §6.3 eqs. 6.16-6.18 and §6.3.1 (PDF pp.259-261), §6.3.1-6.3.2 PCR M by cross-validation, unsupervised directions, PLS as supervised alternative (PDF pp.267-268), §12.2.1 eqs. 12.1-12.4 and footnote 2 (PDF pp.505-507), §12.2.3 PVE eq. 12.10 and scree plot (PDF pp.511-513), scaling (PDF pp.513-514), number of components/scree (PDF p.515), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), James reading list Chapters 1-7 incl. Ch 6 (PDF p.6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"

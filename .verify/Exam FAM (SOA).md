@@ -68,3 +68,14 @@ created: 2026-10-09
 - checks_run: Delta re-check after a link-only re-render (syllabus_write.py: catch-all links retargeted — mortality probabilities to Mortality, future lifetime distributions to Survival Model, preparing data to Data Preparation, internal consistency to Data Validation — and "state" read as a noun inside "multiple state models"; content plan Phase 3, C17). Last verified at HEAD 5ba410c2. 3 line(s) changed; with links reduced to their text and *Key concepts:* lines set aside, the page is byte-identical to the verified version. Syllabus PDF re-fetched today: sha256 identical to the page's syllabus block. syllabus_lint fidelity (every topic, weight, objective, outcome and sub-item word for word vs .syllabus JSON): 0 errors; syllabus_write --all --check clean.
 - sources_checked: SOA, October 2026 syllabus PDF for FAM, all pages, sha256:90172025d8bd9d69e18e974fdee447963e54258e5f0e419aa3ef5b7d3e55a00e — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-fam-syllabus.pdf
 - note: Verified high. Words unchanged; only link markup changed. Concept-link targets were not judged.
+
+## [C-007] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T19:05Z/d6a7
+- date: 2026-10-31
+- status_set: verified
+- confidence: high
+- checks_run: Fetched the February 2027 FAM syllabus (sha256 da98474b…, a new document vs the page's October 2026 one, 90172025…). Ran syllabus_extract.extract() on it into a scratch dir (not .syllabus/) and diffed the JSON against the committed .syllabus/fam-1/syllabus.json: the only differing fields are sitting (October 2026 -> February 2027), source_url, source_sha256 and extracted_at; title, intro, every topic, weight range, objective, outcome, sub-item and every reading with its chapter scope are identical. syllabus_lint on the page: 0 errors (fidelity to the committed JSON holds, so the page matches the February 2027 text word for word).
+- sources_checked: SOA, February 2027 syllabus PDF for FAM, all pages, sha256:da98474b74b0a9e9153b8ce198f30195dfbe394b3e300e785e58f12663b447e4 — https://www.soa.org/globalassets/assets/files/edu/2027/spring/syllabi/2027-2-fam-syllabus.pdf; SOA FAM exam study page (https://www.soa.org/education/exam-req/edu-exam-fam/study/), read 2026-10-31: lists the October 2026 and February 2027 syllabi
+- note: Verified high against the February 2027 syllabus, the next sitting a candidate can sit (the October 2026 FAM window closed 2026-10-29). Page not regenerated, per instruction: its syllabus: block and the pipeline's SOURCES / examPdfLinks.ts still name the October 2026 PDF; a re-extract + re-render for the new sitting would update only that metadata.

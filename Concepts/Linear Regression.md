@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:feace85b1d0a2b45fd6161aa732763bd72bd5a515ce0203eebd491bf4929f713
+  content_hash: sha256:fd7a37b971b5f91054e1a7c1eca3bbdf6b2c6af51526b0fe6c97672cae6df323
   sources:
     - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021, CAS-hosted copy), §3.2 PDF p.82 (delta: beta_j holding all other predictors fixed); prior-pass sections §3.1-3.3, sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
     - "Rodriguez, Lecture Notes on GLMs (Princeton WWS 509), ch.2, §2.2.1-2.2.3, sha256:b9fae913696a54bb97a9a0f60cdddd8a5c72c9e9cf0451e503a0043d888edf1f — https://grodri.github.io/glms/notes/c2.pdf"

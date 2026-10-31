@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:9067cc2d7502d82cfe60773669810061b054f6928d3581fabde43fe933f26a4f
+  content_hash: sha256:60d63606de7288fc4e37ce4224a94534be810158399b4c9015700ef89d93ea5e
   sources:
     - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021, CAS-hosted copy), §12.4.2-12.4.3 PDF pp.532, 536-538 (delta: small decisions, validating clusters, balanced linkage, scaling); prior-pass sections §12.4, Table 12.3, sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
     - "R documentation stats::hclust, Details, sha256:328952439ed3b589585f167660963e8541969526986dce52e95d1b661585cec4 — https://stat.ethz.ch/R-manual/R-devel/library/stats/html/hclust.html"

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:b011bcecf50e71216f916a53a21d61ecdc72b391fab17c3f1c80a30def61a9b2
+  content_hash: sha256:5acb6dd298ecdfe2e11d107354b3127e59172b44e455de0cd42a6ed37007466f
   sources:
     - "Hyndman & Athanasopoulos, Forecasting: Principles and Practice, 3rd ed. (OTexts, open online text), Ch.8 §8.1 Simple exponential smoothing (weighted average, component form, flat forecasts, SSE estimation), §8.2-8.3 Holt and Holt-Winters, §8.5-8.7 state space models and prediction intervals, read 2026-10-18, sha256:be59a506b32748ede644be78b4509e9660d3920d21dea766901d5e9b3af71749 — https://otexts.com/fpp3/exponential-smoothing.html"
     - "Hyndman & Athanasopoulos, Forecasting: Principles and Practice, 3rd ed. (OTexts, open online text), §9.10 Table 9.4 ETS(A,N,N) = ARIMA(0,1,1), read 2026-10-18, sha256:35587d5a25830d81dcb41d6196d18eaee424556c40cae948bf52a5a1d1a79650 — https://otexts.com/fpp3/arima.html"

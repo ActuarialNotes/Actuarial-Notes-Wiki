@@ -35,3 +35,14 @@ created: 2026-10-09
 - checks_run: Delta re-check after a link-only re-render (syllabus_write.py: reading links kept as the page chose them, cut-short phrases grown to the page they name, noise links dropped; content plan Phase 3, C17). The verified version is the one at 3a78434d. 23 line(s) changed; with links reduced to their text and *Key concepts:* lines set aside, the page is byte-identical to the verified version. 2 `*Key concepts:*` line(s) added — editorial links to existing concept pages for objectives whose own words name no concept; they carry no syllabus text and fidelity ignores them. Syllabus PDF re-fetched today: sha256 identical to the page's syllabus block. syllabus_lint fidelity (every topic, weight, objective, outcome and sub-item word for word vs .syllabus JSON): 0 errors; syllabus_write --all --check clean.
 - sources_checked: SOA, January 2027 syllabus PDF for SRM, all pages, sha256:2165c0dec2c26a810a100a504f6a38ac05f02348c1af26e4c8ad71b679eb56af — https://www.soa.org/globalassets/assets/files/edu/2027/spring/syllabi/2027-01-exam-srm-syllabus.pdf
 - note: Verified high. Words unchanged; only link markup changed. Concept-link targets were not judged.
+
+## [C-004] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T19:05Z/d6a7
+- date: 2026-10-31
+- status_set: verified
+- confidence: high
+- checks_run: Re-fetched the January 2027 SRM syllabus 2026-10-31: sha256 identical to the page's syllabus block (2165c0de…). Re-extracted with syllabus_extract.extract() into a scratch dir and diffed against the committed .syllabus/srm-1/syllabus.json: only extracted_at differs. syllabus_lint on the page: 0 errors.
+- sources_checked: SOA, January 2027 syllabus PDF for SRM, all pages, sha256:2165c0dec2c26a810a100a504f6a38ac05f02348c1af26e4c8ad71b679eb56af — https://www.soa.org/globalassets/assets/files/edu/2027/spring/syllabi/2027-01-exam-srm-syllabus.pdf; SOA SRM exam study page (https://www.soa.org/education/exam-req/edu-exam-srm-detail/study/), read 2026-10-31: lists the September 2026 and January 2027 syllabi; January 2027 is the newest
+- note: Verified high. The page was already generated from the January 2027 syllabus, which is still the newest the SOA posts; nothing to change.

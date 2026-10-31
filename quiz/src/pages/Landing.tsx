@@ -616,7 +616,6 @@ export default function Landing() {
                     onToggle={toggleConcept}
                     onSelectAll={selectAllInGroup}
                     levels={conceptLevelMap}
-                    isPro={isPro}
                   />
                 )}
 

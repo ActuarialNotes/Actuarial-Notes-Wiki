@@ -417,7 +417,7 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   invoice, a pass promise (only once an exam is `ready`), a **Study Group** per exam (chat with
   others sitting the same exam, anonymous by default, moderated), the Tutor for Pro (kept), examiner
   marking for CAS written answers, and a comeback plan after a fail. It also proposes making a
-  learner's own mastery levels free. Eight decisions (D-P1–D-P8) are the maintainer's; each has a
+  learner's own mastery levels free. **The Upgrade page's §3 changes are done (2026-10-31):** the headline is "Know you're ready before you sit", Learning Progress and the concept levels on the quiz builder are free, and the funding card is gone; the forecast it would show is item 1. Eight decisions (D-P1–D-P8) are the maintainer's; each has a
   default until decided. Ranking under §0.3: items 1–4 are packaging over existing code; the Study
   Group is a new surface, so Later until its privacy and moderation design exists. *(Proposed 2026-10-30.)*
 

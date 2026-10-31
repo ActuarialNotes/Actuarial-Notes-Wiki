@@ -1,9 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { ChevronDown, Lock, Loader2, X } from 'lucide-react'
-import { buttonVariants } from '@/components/ui/buttonVariants'
-import { ProBadge } from '@/components/ProBadge'
-import { useSubscription } from '@/hooks/useSubscription'
+import { ChevronDown, Loader2, X } from 'lucide-react'
 import { useConceptLearningHistory, type ConceptLearningHistory } from '@/hooks/useConceptLearningHistory'
 import type { MasteryState } from '@/lib/mastery'
 import { summarizeAttemptedQuestions } from '@/lib/learningHistory'
@@ -62,7 +58,6 @@ export function LearningProgressPanelView({
   collapsible = false,
   onLevelChange,
 }: PanelProps & { history: ConceptLearningHistory }) {
-  const { isPro, isBetaTester, loading: subLoading } = useSubscription()
   const { levelEvents, attemptDots, questions, currentLevel, loading, error } = history
   const [hoveredLevel, setHoveredLevel] = useState<MasteryState | null>(null)
   const [graphOpen, setGraphOpen] = useState(false)
@@ -80,11 +75,10 @@ export function LearningProgressPanelView({
     setSelectedQuestionId(null)
   }, [questions])
 
-  const isAccessible = isPro || isBetaTester
-  const isLoading = loading || subLoading
-  const isEmpty = !isLoading && isAccessible && levelEvents.length === 0 && attemptDots.length === 0
+  const isLoading = loading
+  const isEmpty = !isLoading && levelEvents.length === 0 && attemptDots.length === 0
   const displayLevel = hoveredLevel ?? currentLevel
-  const canShowLevel = !isLoading && isAccessible && !isEmpty && !error
+  const canShowLevel = !isLoading && !isEmpty && !error
 
   useEffect(() => {
     onLevelChange?.(canShowLevel ? displayLevel : null)
@@ -98,33 +92,13 @@ export function LearningProgressPanelView({
         </div>
       )}
 
-      {!isLoading && !isAccessible && (
-        <div className="flex flex-col items-center justify-center gap-4 py-12 text-center">
-          <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
-            <Lock className="h-5 w-5 text-primary" />
-          </div>
-          <div>
-            <p className="flex items-center justify-center gap-1.5 font-semibold">
-              Learning Progress
-              <ProBadge />
-            </p>
-            <p className="text-sm text-muted-foreground mt-1">
-              Track your mastery journey over time
-            </p>
-          </div>
-          <Link to="/upgrade" className={buttonVariants({ size: 'sm' })}>
-            Upgrade to Pro
-          </Link>
-        </div>
-      )}
-
-      {!isLoading && isAccessible && error && (
+      {!isLoading && error && (
         <div className="rounded-lg bg-destructive/10 px-4 py-3 text-sm text-destructive">
           {error}
         </div>
       )}
 
-      {!isLoading && isAccessible && isEmpty && (
+      {!isLoading && isEmpty && (
         <div className="text-center py-10 text-muted-foreground text-sm">
           No quiz attempts yet for this concept.
           <br />

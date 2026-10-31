@@ -1,19 +1,15 @@
 // The pictures on the Upgrade page.
 //
 // Each benefit is shown as a small, static vignette of the surface it unlocks —
-// the day's plan, the strategy picker, a concept's level history, a project
-// attempt, the exams still being built, Listen —
-// drawn from the same tokens and marks as the real thing (CheckMark, the
-// mastery greens), so what a reader is shown here is what
+// the day's plan, the strategy picker, a project attempt, Listen —
+// drawn from the same tokens and marks as the real thing (CheckMark), so what a reader is shown here is what
 // they get after checkout. They are pictures, not controls: every one is
 // `aria-hidden` and carries no handlers; the card beside it says it in words.
 
 import { BookOpen, Car, Circle, FileSpreadsheet, Pause, Sparkles } from 'lucide-react'
 import { CheckMark } from '@/components/CheckMark'
-import { ExamLogo } from '@/components/ExamLogo'
 import { LogoTile } from '@/components/LogoTile'
 import { examAccentStyle } from '@/lib/examColors'
-import { EXAM_STATUS_LABEL, examStatus } from '@/lib/examStatus'
 import { cn } from '@/lib/utils'
 
 /** The frame every vignette sits in, so the four read as one set. */
@@ -104,79 +100,6 @@ export function StrategyArt() {
   )
 }
 
-// A concept's level over a few weeks: New, up through L1 and L2, a dip to
-// Forgotten, then back and on to L3 — the ladder the progress graph draws.
-const LEVELS = ['New', 'L1', 'L2', 'L3'] as const
-const STEPS: { x: number; level: number; forgotten?: boolean }[] = [
-  { x: 0, level: 0 },
-  { x: 40, level: 1 },
-  { x: 90, level: 2 },
-  { x: 140, level: 1, forgotten: true },
-  { x: 175, level: 2 },
-  { x: 220, level: 3 },
-]
-
-/** Learning progress — a concept's mastery climbing the ladder over time. */
-export function ProgressArt() {
-  const W = 240
-  const H = 84
-  const y = (level: number) => H - 8 - level * ((H - 16) / 3)
-  let path = `M ${STEPS[0].x} ${y(STEPS[0].level)}`
-  for (let i = 1; i < STEPS.length; i++) {
-    path += ` H ${STEPS[i].x} V ${y(STEPS[i].level)}`
-  }
-  path += ` H ${W}`
-  return (
-    <ArtFrame>
-      <div className="rounded-md bg-card p-3 shadow-sm">
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-semibold">Chain Ladder Method</span>
-          <span className="rounded-full bg-green-100 px-1.5 py-0.5 text-[10px] font-semibold text-green-700 dark:bg-green-900/40 dark:text-green-300">
-            Level 3
-          </span>
-        </div>
-        <div className="mt-2 flex gap-2">
-          <div className="flex flex-col justify-between py-0.5 text-[9px] leading-none text-muted-foreground">
-            {[...LEVELS].reverse().map(l => <span key={l}>{l}</span>)}
-          </div>
-          <svg viewBox={`0 0 ${W} ${H}`} className="h-[84px] w-full" preserveAspectRatio="none">
-            {LEVELS.map((_, i) => (
-              <line
-                key={i}
-                x1={0}
-                x2={W}
-                y1={y(i)}
-                y2={y(i)}
-                className="stroke-border"
-                strokeWidth={1}
-                strokeDasharray="2 3"
-                vectorEffect="non-scaling-stroke"
-              />
-            ))}
-            <path
-              d={path}
-              fill="none"
-              className="stroke-green-500"
-              strokeWidth={2}
-              strokeLinejoin="round"
-              vectorEffect="non-scaling-stroke"
-            />
-            {STEPS.slice(1).map(s => (
-              <circle
-                key={s.x}
-                cx={s.x}
-                cy={y(s.level)}
-                r={3}
-                className={s.forgotten ? 'fill-amber-500' : 'fill-green-500'}
-              />
-            ))}
-          </svg>
-        </div>
-      </div>
-    </ArtFrame>
-  )
-}
-
 /**
  * A PCPA attempt under way — the brief's tile (the Projects tab's, drawn here
  * from its parts so the entry chunk doesn't carry the brief catalogue), a line
@@ -207,42 +130,6 @@ export function ProjectArt() {
             <div className="h-full w-[73%] rounded-full bg-[var(--exam-accent-vivid)]" style={examAccentStyle('CAS-PCPA')} />
           </div>
         </div>
-      </div>
-    </ArtFrame>
-  )
-}
-
-// Exams still being filled out. Their tags are read from `examStatus`, so the
-// picture can't claim an exam is unfinished after it has been promoted — drop
-// one from this list once it reads ready.
-const BUILDING: { examKey: string; examId?: string; name: string }[] = [
-  { examKey: 'MAS-II', name: 'MAS-II' },
-  { examKey: 'CAS-5', name: 'Exam 5' },
-  { examKey: 'CAS-9', name: 'Exam 9' },
-  { examKey: 'CAS-6', examId: '6U', name: 'Exam 6U' },
-]
-
-/** The exams the subscription goes into: still in beta or in development. */
-export function FundArt() {
-  return (
-    <ArtFrame>
-      <div className="rounded-md bg-card p-3 shadow-sm">
-        <div className="text-xs font-semibold">Still being built</div>
-        <ul className="mt-2 grid grid-cols-2 gap-1.5">
-          {BUILDING.map(({ examKey, examId, name }) => {
-            const status = examStatus(examKey, examId)
-            const label = EXAM_STATUS_LABEL[status]
-            return (
-              <li key={name} className="flex items-center gap-2 rounded-md bg-muted/60 p-1.5">
-                <ExamLogo examKey={examKey} size="sm" muted={status === 'development'} />
-                <div className="min-w-0">
-                  <div className="truncate text-[11px] font-medium">{name}</div>
-                  {label && <div className="truncate text-[9px] text-muted-foreground">{label}</div>}
-                </div>
-              </li>
-            )
-          })}
-        </ul>
       </div>
     </ArtFrame>
   )

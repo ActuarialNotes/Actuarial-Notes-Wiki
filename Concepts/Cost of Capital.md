@@ -2,9 +2,9 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-10-18
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:73f18af4fe56e0fd3447425b19b8fa0c4cfb8c084292ab646e0c07f4cc1a874e
+  content_hash: sha256:b0a6ebd8b1f042d3f496c7948093f8a7e6fd962d03d29455ce77312c94149d0b
   sources:
     - "D'Arcy, Capital Allocation in the Property-Liability Insurance Industry (Variance 5:2), pp.141-146 (PDF pp.1-6), sha256:e7a4dc616cf02bf9721fd906a35cdd3c2a017ae92921b058a6a932555c955612 — https://www.casact.org/sites/default/files/2021-07/Capital-Allocation-Darcy.pdf"
     - "Damodaran, The Cost of Capital: The Swiss Army Knife of Finance (April 2016), pp.2, 5, 17, sha256:5213c261bc05b5e8920f6a2feba1687c1f424fa1155b20789b6848a3e4223f90 — https://pages.stern.nyu.edu/~adamodar/pdfiles/papers/costofcapital.pdf"
@@ -17,6 +17,7 @@ verification:
     - "CAS Exam 9 Working Group, Note to Allocation of Capital in the Insurance Industry (Cummins), January 2026, pp.1-3, sha256:b5768e1c98dd51f4bc86b133f9da30de2cb0497d65f0e34af4861cb122c305fc — https://www.casact.org/sites/default/files/2026-01/Exam_9_Erratum_Cummins_Capital-1.pdf"
     - "CAS Exam 9 Content Outline, Fall 2026, pp.4-5, 7 (Domains B and C; text references), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
     - "CAS abstract record, Cummins, Allocation of Capital in the Insurance Industry (RMIR 3(1), 2000), abstract, sha256:e794f5454cd27647fe926819fa474a13934475e091a93c69aa752413e234b2f8 — https://www.casact.org/abstract/allocation-capital-insurance-industry"
+    - "Goldfarb, P&C Insurance Company Valuation (CAS study note, rev. Oct 2010), pp.27 and fn 28 (book value as the firm's equity capital; assets and liabilities fairly stated on the balance sheet), 30 (book value: reported book value of the firm's equity; tangible book value), 35-39 (6.1.3 shortcut to valuation and comparable firms; 6.2 P-BV or price to tangible book; 6.2.1 P-BV = 1 + (ROE - k)/(k - g), formula image read from text layer; 6.4 market vs transaction multiples and cautions: control premiums, M&A overpricing, IPO underpricing, reported variables, underlying economic assumptions), sha256:2402ab80aaa255b46db5da92a48324890c2f990776b4852c549515f4e4de5ba4 — https://www.casact.org/sites/default/files/2021-03/7_Goldfarb.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Cost of Capital.md
@@ -32,6 +33,7 @@ verification:
 - **Allocating the cost.** $C_i$ is the capital allocated to unit $i$, so the allocation method (see [[Risk Capital]]) decides each unit's charge. The charge is due for every year the capital is held, which is why long-tailed lines carry far more of it than their first-year capital suggests.
 - **Line-specific rates.** One could instead estimate a beta for each line and charge each line its own CAPM rate. In practice underwriting betas are hard to estimate, and the CAPM prices only systematic risk, whereas an insurer's frictional costs depend on *total* risk — including the diversifiable risk the CAPM treats as free.
 - **Frictional costs.** Capital inside an insurer costs more than the same capital held by investors directly: investment income on it is taxed at the corporate level before it reaches shareholders ([[Insurance Income Tax|double taxation]]), surplus capital invites agency costs, and replacing capital after a large loss is expensive. The part pricing must recover is the required return **less** what the capital earns while it is held.
+- **The discount rate in a valuation multiple.** The cost of equity is also the discount rate $k$ that ties the price-to-book value multiple to a firm's fundamentals: with constant ROE and book value growing at $g$, $\text{P/BV} = 1 + (\text{ROE} - k)/(k - g)$. Firms with similar ROE, growth and discount rates should therefore trade at similar multiples. A shortcut valuation applies the P-BV multiples of such comparable firms, or of comparable past acquisitions and IPOs (**transaction multiples**), to the firm's book value (or tangible book value), giving a range of values. Book value is the reported book value of the firm's equity, resting on the asset and liability values its balance sheet reports; tangible book value is that reported book value adjusted to remove the impact of intangible assets such as goodwill. Transaction prices avoid the day-to-day swings of market prices, but can carry a control premium or an acquirer's overpayment, IPOs tend to be underpriced, and a past deal reflects the interest rates and outlook of its own time.
 - **Cost versus return.** The hurdle $k$ is compared with the unit's [[Return on Capital]] (RAROC), or subtracted from its income to give EVA — see [[Risk-Adjusted Performance]]. In Mildenhall and Major's notation the cost of capital $\iota$ is margin divided by capital, and it sets the premium in [[Risk-Adjusted Pricing]].
 
 > [!example]- Cost of Equity and the Charge to Each Line {Example}

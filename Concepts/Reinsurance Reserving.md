@@ -2,13 +2,14 @@
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-16
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:da477903858a55725883d5d66cb0ffcc4a7cccac61f9f57d43815eb7f0631c0a
+  content_hash: sha256:6be9e458ce42eac4a7e763551d1aca205bdba97f3ea07d39490ef400c61b0068
   sources:
-    - "Friedland, Reserving for Reinsurance (CAS Study Note — Exam 7, (c)2023 CAS; cited by the outline as 2022), PDF pp.10, 26-28, 35-40, 43, 45-47, 50-56, 66, 69-72, sha256:6da495a26206ececf40a3c3fc8fb3db04556c940242f5bcffe2b21b7e4445ceb — https://www.casact.org/sites/default/files/2022-11/Exam7_Study_Note_Friedland.pdf"
+    - "Friedland, Reserving for Reinsurance (CAS Study Note — Exam 7, (c)2023 CAS; cited by the outline as 2022), PDF pp.10, 26-28, 32-33, 35-41, 43, 45-48, 50-56, 66, 69-72, sha256:6da495a26206ececf40a3c3fc8fb3db04556c940242f5bcffe2b21b7e4445ceb — https://www.casact.org/sites/default/files/2022-11/Exam7_Study_Note_Friedland.pdf"
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, Version 3, 2010), PDF pp.159-160 (Ch.9: % unreported = 1.00 minus the inverse of the reported CDF), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
     - "CAS, Exam 7 Content Outline, Fall 2026 (Exam_7_CO_2026_F v04 2026_9_16), PDF pp.3-6 (tasks A.ii.4 = 5, A.v.1-3 = 15-17; Teng and Perkins excluding Section 5 with Feldblum Sections 1-2; Friedland A.v.1-A.v.3), sha256:be1833c4f35a9344e33b1c48336dca9724d6556890997b3d8715f9de709ca5ed — https://www.casact.org/sites/default/files/2026-03/Exam_7_CO_2026_Fall.pdf"
+    - "Patrik, Reinsurance, Ch.7 of Foundations of Casualty Actuarial Science (4th ed., CAS 2001) — Exam 7's reading before Friedland (2022), printed pp.434-440 (PDF pp.92-98: Problems 1, 2, 6 and 7 of the seven reinsurance loss reserving problems), sha256:26f2fc8441b1a2f8b335a9bfc9e20f0c742fa340c4b7f6eff93376c3c340cf06 — https://www.casact.org/sites/default/files/database/studynotes_ch7.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Reinsurance Reserving.md
@@ -30,6 +31,8 @@ verification:
   - As a result, early development factors and tails are higher than primary, especially for non-proportional covers, and trend is leveraged in excess layers.
   - Rate-change data for on-leveling is weaker because contract terms change from year to year.
 - **Data realities.** Data often arrive as summary reports rather than claim detail; the detailed [[Bordereau|bordereau]], mainly a pro rata practice, has largely been supplanted by summary reporting. Claim counts are seldom usable. Reported losses include the reinsurer's **additional case reserves** (ACRs) on top of cedant case reserves. Several currencies must be restated at a common exchange rate, or the development factors absorb exchange movements. Catastrophe losses are estimated event by event and removed from the triangles. Discontinued business may be excluded, and some of it (asbestos, environmental and abuse) may not suit triangle methods.
+- **Data coding and IT systems.** Friedland lists data coding at the reinsurer itself among the reasons reinsurance data are harder to validate than primary data. Every cedant and broker has different IT systems and reports. Turning their bordereaux into the format actuarial work needs is hard to do efficiently and accurately, and remains manually intensive. Standardized data sets have been slow to be adopted, because updating existing systems is costly and other IT projects come first.
+- **Industry data help less.** [[Schedule P]] has three non-proportional assumed reinsurance lines, with no claim counts. Friedland gives three limits. Ten accident years is typically too short for excess of loss. The lines are not split finely enough by major line of business or type of reinsurance. The combined experience may not reflect any one reinsurer's markets, terms and operations. Aggregated by accident year, the data look more like primary insurance than the volatile, long-tailed reinsurance losses they hold.
 - **Segmentation.** Friedland quotes Patrik's priority list:
   - line of business;
   - contract type (treaty, facultative, finite);
@@ -41,6 +44,10 @@ verification:
 
   Credibility limits how far it can be taken.
 - **Experience period.** Reinsurers often analyse by **treaty (underwriting) year**. Immature treaty years must have their ultimates reduced for premium not yet earned, and results are allocated to accident year through earning patterns. Losses-occurring-during and risks-attaching contracts cover different claims, so the actuary must know which applies.
+- **Patrik's chapter, Exam 7's reading before Friedland (2022), adds** (not on the current outline):
+  - **Persistent upward development.** Most reinsurance claim reserves develop upward. Economic and social inflation cause it. So does the cedant's claims staff reserving at modal values: faced with too little information on a potentially serious claim, a claims person tends to reserve to "expectation", read as the mode of the distribution. That is enough for most claims, but the few that blow up above the mode are the ones the excess reinsurer covers. ALAE also tends to be under-reserved. Early information may therefore show that a claim will pierce the retention without yet showing its ultimate severity.
+  - **Data coding and IT systems.** The business, and the level of data detail expected of it, have grown faster than reinsurers' systems can handle and produce the reports marketing, underwriting, claims, accounting and actuarial staff ask for. Patrik calls this a problem of the whole insurance business, but more true of reinsurance.
+  - **Reserve to surplus.** An adequate loss reserve is larger relative to surplus for a reinsurer, and the other problems make it both larger and more uncertain. Patrik treats this as a management problem more than a technical one: the actuary has to overcome the disbelief of management and marketing and persuade them to allocate adequate resources for loss liabilities. A start-up, with no claim run-off to point to, has it worst.
 - **Outputs are wider.** The spread of indicated IBNR across methods is larger than primary; see [[Range of Indications]]. External patterns such as RAA data help but mix unlike contracts. The cedant's side is [[Ceded Loss Reserve]], and cover types are in [[Types of Reinsurance]].
 
 > [!example]- Development vs Bornhuetter-Ferguson on an Immature Excess Year {Example}

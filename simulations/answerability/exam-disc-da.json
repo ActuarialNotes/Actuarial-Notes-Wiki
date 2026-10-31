@@ -244,7 +244,15 @@
        "page": "Frequency",
        "quote": "$$\\text{Frequency} = \\frac{\\text{Number of Claims}}{\\text{Earned Exposures}}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Earned Exposure",
+      "quote": "Earned exposures are also the weights in classification analysis and the denominator of [[Frequency|claim frequency]]",
+      "note": "Earned Exposure (linked from tagged Data Documentation) gives claim frequency as claims over earned exposure",
+      "date": "2026-10-30",
+      "run": "g8-discda-sort"
+     }
     },
     {
      "id": "r2",
@@ -483,7 +491,13 @@
        "page": "Earned Exposure",
        "quote": "A $12$-month policy contributes **one** earned car-year in total, spread pro rata over its term: written the day it is issued, earned $1/12$ per month, in force from effective date to expiry."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The question's own setup gives the policy as 1.00 car-year and says exposure is earned evenly by month; proration is arithmetic on stated data",
+      "date": "2026-10-30",
+      "run": "g8-discda-sort"
+     }
     }
    ]
   },
@@ -707,7 +721,15 @@
        "page": "External Information in Reserving",
        "quote": "**Never use external data unadjusted.** It must be reconciled to the subject book on the dimensions that actually drive development"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Statistical Plan",
+      "quote": "A small insurer's own data are too thin for credible class and territory relativities, so the industry statistics give it a starting point.",
+      "note": "Tagged page: a small insurer's own data cannot give credible class/territory relativities, which rules out treating its other-state data as fully credible",
+      "date": "2026-10-30",
+      "run": "g8-discda-sort"
+     }
     },
     {
      "id": "r5",
@@ -1517,7 +1539,13 @@
      "statement": "To include a default value for nulls in an aggregate, apply the null-replacement function to the column inside the aggregate so the substitution happens row by row before aggregating; wrapping the aggregate result does not change the per-row nulls.",
      "concept": "SQL Aggregate Functions and NULL Handling",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Follows directly from definitions on tagged pages: Missing Data says COALESCE(column, value) substitutes a default where the value is missing and AVG uses only non-null values; SQL says an aggregate returns null only when no rows are selected, so a COALESCE around AVG changes nothing. Order-of-evaluation reasoning, not a further fact",
+      "date": "2026-10-30",
+      "run": "g8-discda-sort"
+     }
     }
    ]
   },
@@ -2494,7 +2522,13 @@
      "statement": "Enlarging plotted points increases overlap and therefore worsens overplotting.",
      "concept": "Overplotting in Scatter Plots",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Distractor elimination from the definition of overplotting on tagged Exploratory Data Visualization (points overplot into a solid mass): larger points overlap more; plain reasoning, not a separate fact",
+      "date": "2026-10-30",
+      "run": "g8-discda-sort"
+     }
     },
     {
      "id": "r5",
@@ -2502,7 +2536,15 @@
      "statement": "Summarizing two variables with a single overall mean discards the relationship between them, which a scatter plot is meant to display.",
      "concept": "Scatter Plots for Relationships Between Variables",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Scatter Plot",
+      "quote": "display of two variables at once",
+      "note": "A scatter plot is defined as a display of two variables at once; one overall mean of a single variable cannot show that relationship",
+      "date": "2026-10-30",
+      "run": "g8-discda-sort"
+     }
     },
     {
      "id": "r6",
@@ -2510,7 +2552,15 @@
      "statement": "A dense cluster of points in a plot reflects where most of the data lie (typical values), not outliers, and removing it hides the bulk of the data.",
      "concept": "Outliers",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Scatter Plot",
+      "quote": "that sit away from the cloud",
+      "note": "Scatter Plot reads outliers as points away from the cloud, so the dense cloud is the bulk of the data, not outliers",
+      "date": "2026-10-30",
+      "run": "g8-discda-sort"
+     }
     }
    ]
   },
@@ -2586,7 +2636,15 @@
        "page": "Univariate Plot",
        "quote": "The histogram is right about the shape, and the two modes usually mean a missing [[Categorical Predictor|categorical variable]] (two classes of risk mixed in one column) that should be split out."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Types of Plots",
+      "quote": "a bar chart, histogram or density plot for one variable; a box plot, scatter plot, stacked bar chart or heat map for two",
+      "note": "Tagged page: a histogram shows one variable; comparing a numerical variable across groups needs a two-variable plot such as side-by-side box plots",
+      "date": "2026-10-30",
+      "run": "g8-discda-sort"
+     }
     },
     {
      "id": "r5",
@@ -2624,7 +2682,15 @@
        "page": "Frequency",
        "quote": "**Frequency** is the number of claims per unit of exposure"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Types of Plots",
+      "quote": "Each tile shows claims per car-year.",
+      "note": "Tagged page's heat-map-of-claim-frequency example defines each tile's frequency as claims per car-year",
+      "date": "2026-10-30",
+      "run": "g8-discda-sort"
+     }
     },
     {
      "id": "r2",
@@ -2714,7 +2780,15 @@
        "page": "Univariate Plot",
        "quote": "the box draws nothing between them, so a box plot cannot show two humps."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Types of Plots",
+      "quote": "a line chart for a variable over time",
+      "note": "Tagged page assigns change over time to the line chart (values in time order); a box plot summarizes median, quartiles and outliers with no time order",
+      "date": "2026-10-30",
+      "run": "g8-discda-sort"
+     }
     },
     {
      "id": "r5",
@@ -2727,7 +2801,15 @@
        "page": "Scatter Plot",
        "quote": "A **Scatter Plot** is an [[Exploratory Data Analysis]] display of two variables at once: each observation is one point at $(x_i, y_i)$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Types of Plots",
+      "quote": "Each observation as a point: direction, form and strength of a relationship",
+      "note": "Tagged page: a scatter plot shows the relationship between two numerical variables, not change over time",
+      "date": "2026-10-30",
+      "run": "g8-discda-sort"
+     }
     }
    ]
   },
@@ -4131,7 +4213,15 @@
      "statement": "A cybersecurity event is an event resulting in unauthorized access to, disruption of, or misuse of an information system or the nonpublic information stored on it, and the model law's notification duty is triggered when the licensee determines such an event has occurred.",
      "concept": "Cybersecurity Event",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Insurance Data Regulation",
+      "quote": "After a licensee determines that a cybersecurity event has occurred, it must notify the state's commissioner within 72 hours",
+      "note": "The tagged page states the trigger of the notification duty; an intruder accessing nonpublic data is a cybersecurity event in plain reading",
+      "date": "2026-10-30",
+      "run": "g8-discda-sort"
+     }
     }
    ]
   },
@@ -4271,7 +4361,15 @@
      "statement": "Title insurance is expressly excluded from Colorado SB21-169 (C.R.S. §10-3-1104.9).",
      "concept": "Colorado SB21-169 External Consumer Data Regulation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Insurance Data Regulation",
+      "quote": "The section does not apply to title insurance",
+      "note": "Added in 84c9f0bc from SB21-169 §10-3-1104.9(6)(a), PDF p.6; checked against the signed bill.",
+      "date": "2026-10-30",
+      "run": "g8-discda-chk"
+     }
     },
     {
      "id": "r4",
@@ -4284,7 +4382,15 @@
        "page": "Insurance Data Regulation",
        "quote": "Commercial insurance is outside the law except businessowners and commercial general liability policies with annual premiums of \\$10,000 or less."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Insurance Data Regulation",
+      "quote": "or to insurers issuing commercial insurance policies, except that it does apply to insurers issuing businessowners or commercial general liability policies with annual premiums of \\$10,000 or less",
+      "note": "Re-quoted: 84c9f0bc rewrote the sentence this item was quoted from; the new wording states §10-3-1104.9(6)(c), PDF p.6, checked against the signed bill.",
+      "date": "2026-10-30",
+      "run": "g8-discda-chk"
+     }
     },
     {
      "id": "r5",
@@ -4292,7 +4398,15 @@
      "statement": "Bonds executed by qualified surety companies are expressly excluded from Colorado SB21-169 (C.R.S. §10-3-1104.9).",
      "concept": "Colorado SB21-169 External Consumer Data Regulation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Insurance Data Regulation",
+      "quote": "to bonds executed by qualified surety companies",
+      "note": "Added in 84c9f0bc from SB21-169 §10-3-1104.9(6)(b), PDF p.6; checked against the signed bill.",
+      "date": "2026-10-30",
+      "run": "g8-discda-chk"
+     }
     }
    ]
   },
@@ -4732,7 +4846,897 @@
      "statement": "To predict with a fitted model, express each predictor in the units used in the model's definition (e.g., convert dollars to thousands of dollars) before substituting it into the equation.",
      "concept": "Multiple Linear Regression",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The question's own setup states x1 is in thousands of dollars; substituting 20 for $20,000 is reading the question, not course content",
+      "date": "2026-10-30",
+      "run": "g8-discda-sort"
+     }
+    }
+   ]
+  },
+  "discda-an-226": {
+   "path": "questions/exam-disc-da/discda-an-226.md",
+   "run": "answerability-20261031-disc-da",
+   "input_hash": "sha256:5ad684e38c37f96db19844656e53eb40f4bf2e0cc6af7b8e7eb10eca2b4ac635",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "Unsupervised clustering such as K-means always returns clusters whether or not the data contain real subgroups, and it finds structure only in the input features, not in an outcome such as losses.",
+     "concept": "K-Means Clustering",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Clustering",
+       "quote": "**Clusters are always found:** Clustering returns clusters whether or not the data contain real subgroups."
+      },
+      {
+       "page": "Unsupervised Learning",
+       "quote": "**Unsupervised learning** looks for structure in predictors $X$ when there is no response $Y$ to predict."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "Separation of clusters in the predictor space does not imply that the clusters differ in expected cost or loss experience, so clusters formed without loss data must be tested against loss experience before use.",
+     "concept": "Unsupervised Learning",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Clustering",
+       "quote": "Whether they would reappear in an independent sample is a hard question, so clusters used as [[Data Segmentation|segments]] should be checked on other data and against what the business knows"
+      },
+      {
+       "page": "Data Segmentation",
+       "quote": "**Clusters are not validated segments:** A clustering algorithm always returns groups. Whether they differ in expected cost is a separate question."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "A valid rating segment groups risks with similar expected costs, differs from other segments in expected cost, and is large and stable enough to be credible.",
+     "concept": "Risk Classification and Rating Segments",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Data Segmentation",
+       "quote": "fine enough that each group's risks share similar expected costs and emergence patterns ([[Homogeneity|homogeneity]]), yet large and stable enough that each group's own experience can be relied on ([[Credibility|credibility]])."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "Before adopting data-driven clusters as segments, check their credibility and validate their stability on other data or time periods.",
+     "concept": "Model Validation",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Data Segmentation",
+       "quote": "a proposed segment still has to pass the tests above, such as homogeneity, credibility and stability."
+      },
+      {
+       "page": "Clustering",
+       "quote": "so clusters used as [[Data Segmentation|segments]] should be checked on other data and against what the business knows"
+      }
+     ]
+    }
+   ]
+  },
+  "discda-an-227": {
+   "path": "questions/exam-disc-da/discda-an-227.md",
+   "run": "answerability-20261031-disc-da",
+   "input_hash": "sha256:5e2cf33440ef6439b7ef65eae484943c374cabf6143ef8e91801bb8140557cb3",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "Euclidean distance between two observations is the square root of the sum over features of squared differences in feature values.",
+     "concept": "Euclidean Distance",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Similarity and Distance Measures",
+       "quote": "$$d_{\\text{Euc}}(\\mathbf{u}, \\mathbf{v}) = \\sqrt{\\sum_{j=1}^{p} (u_j - v_j)^2}$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "When features are left on their raw scales, the distance is dominated by the feature with the largest numeric spread, so that feature drives the resulting clusters.",
+     "concept": "Feature Scaling in Clustering",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Similarity and Distance Measures",
+       "quote": "A raw distance is dominated by whichever feature has the largest spread in its units."
+      },
+      {
+       "page": "Clustering",
+       "quote": "**Unscaled features:** On raw data, the feature with the largest numbers dominates the distances and so the clusters."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "Standardize features to have standard deviation one (and typically mean zero) before clustering, especially when features are measured in different units, so each has comparable influence on the distance.",
+     "concept": "Feature Scaling in Clustering",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Clustering",
+       "quote": "whether to **standardize** the variables (to standard deviation one) depends on the application: it gives every variable equal weight, and is advisable when they are measured on different scales"
+      },
+      {
+       "page": "Similarity and Distance Measures",
+       "quote": "Standardizing each feature to mean zero and standard deviation one puts them on a comparable scale and gives each equal weight."
+      }
+     ]
+    }
+   ]
+  },
+  "discda-an-228": {
+   "path": "questions/exam-disc-da/discda-an-228.md",
+   "run": "answerability-20261031-disc-da",
+   "input_hash": "sha256:60d094996104dc3f75e5b00de2c0bcac7687d34326c07e96fb07ad562443e1bd",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "The unit of observation is the entity each row of the analysis data set represents (e.g., a policy term), and the table defining those units must retain all of its rows.",
+     "concept": "Unit of Observation",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Data Preparation",
+       "quote": "For an insurance model the result has one row per unit of observation, such as a policy term or a claim, holding the target, the predictors and the exposure."
+      },
+      {
+       "page": "Table Join",
+       "quote": "The table whose rows are the units being studied goes on the left of a left join, so that none of them is lost."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "An inner join keeps only rows with matches in both tables, so units with no related records (e.g., policy terms with no claims) are dropped, biasing results such as claim frequency.",
+     "concept": "Inner Join",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Data Preparation",
+       "quote": "An inner join of claims onto terms removes every claim-free term, so the frequency computed afterwards is roughly the number of claims divided by the exposure of the terms that had them. The left join from the terms keeps them."
+      },
+      {
+       "page": "Relational Database",
+       "quote": "An inner join of claims onto policies removes every policy without a claim, which is most of a book, and a frequency computed afterwards is far too high."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "A left join keeps every row of the left table and fills columns from the right table with nulls where no match exists.",
+     "concept": "Left Join",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Table Join",
+       "quote": "A left join keeps every row of the left table, a right join keeps every row of the right table and is a left join with the tables swapped, and a full outer join keeps every row of both."
+      },
+      {
+       "page": "Relational Database",
+       "quote": "A left join keeps every row of the left table and fills the right table's fields with null where there is no match"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "To combine a one-to-many relationship at the unit level, first aggregate the many-side table (e.g., count claims by term) to one row per key, then join that summary onto the unit table.",
+     "concept": "Aggregating Before Joining",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Data Preparation",
+       "quote": "Summarize the \"many\" side to the unit of observation before joining it, such as counting claims and summing losses by policy term."
+      },
+      {
+       "page": "Tidy Data",
+       "quote": "A frequency model is fit at the policy (or policy-term) level, so claim-level data must be **aggregated** — claims counted and losses summed by policy — and then **joined** to the policy data"
+      },
+      {
+       "page": "Relational Database",
+       "quote": "Aggregate the \"many\" side to the key first, or sum only fields that belong to the many side."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "procedure",
+     "statement": "After a left join, replace null aggregates for units with no matches by 0 (e.g., using COALESCE) so that counts are correct.",
+     "concept": "Handling Missing Values (Nulls)",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Missing Data",
+       "quote": "`COALESCE(column, value)` returns the first of its arguments that is not null, which substitutes a default where the value is missing."
+      },
+      {
+       "page": "Relational Database",
+       "quote": "A left join gives null claim fields to a policy with no claims. They must be set to zero claims and zero losses before modelling, because software treats a null as missing and may drop the row."
+      }
+     ]
+    },
+    {
+     "id": "r6",
+     "kind": "fact",
+     "statement": "Counting rows after a left join gives an unmatched unit a count of 1 because of its single null-filled row; counting a non-null ID column (e.g., COUNT of claim ID) ignores nulls and gives 0.",
+     "concept": "COUNT Aggregate Function",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "SQL",
+       "quote": "`COUNT(*)` counts rows, `COUNT(col)` counts rows where `col` is not null, and `SUM`, `AVG`, `MIN` and `MAX` work on the non-null values."
+      },
+      {
+       "page": "Table Join",
+       "quote": "Each unmatched row appears exactly once in an outer join that keeps its table, with nulls in the other table's fields."
+      },
+      {
+       "page": "Missing Data",
+       "quote": "`COUNT(*)` counts every row, while `COUNT(column)` counts only the non-null values, and `SUM`, `AVG`, `MIN` and `MAX` use only the non-null values."
+      }
+     ]
+    }
+   ]
+  },
+  "discda-an-229": {
+   "path": "questions/exam-disc-da/discda-an-229.md",
+   "run": "answerability-20261031-disc-da",
+   "input_hash": "sha256:9f81a5216caf4474a6683a644bff6ff70708753be53925bcdc7788149e6a01ab",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "Consent as a data ethics principle means individuals agree to the collection and use of their data, and that agreement is tied to the specific purpose for which the data was provided.",
+     "concept": "Data Ethics Principles",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Data Ethics",
+       "quote": "People should know what data are collected about them and agree to its use. Consent given for one purpose, such as claims handling, does not automatically cover another, such as marketing or pricing."
+      },
+      {
+       "page": "Data Ethics Checklist",
+       "quote": "informed consent (subjects opt in with a clear understanding of how their data will be used)"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "Consent given for one purpose does not automatically extend to a different secondary use of the data; using data for a new purpose requires notifying the individuals and obtaining their agreement.",
+     "concept": "Data Ethics Principles",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Data Ethics",
+       "quote": "People should know what data are collected about them and agree to its use. Consent given for one purpose, such as claims handling, does not automatically cover another, such as marketing or pricing."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "The Gramm-Leach-Bliley Act (GLBA) requires financial institutions, including insurers, to give privacy notices and offer opt-out rights before sharing nonpublic personal information with nonaffiliated third parties.",
+     "concept": "Gramm-Leach-Bliley Act",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Insurance Data Regulation",
+       "quote": "An institution may not disclose that information to a nonaffiliated third party without first giving the consumer a privacy notice and a chance to opt out, with an exception for service providers bound by a confidentiality contract (§6802)."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "definition",
+     "statement": "Accountability means a named party is responsible for owning a model and its outcomes, transparency means model decisions can be explained, and fairness means outcomes do not unjustly differ across protected groups.",
+     "concept": "Data Ethics Principles",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Data Ethics",
+       "quote": "Someone must own each model and its outcomes, the decisions and tests must be documented, and affected people need a way to question a result."
+      },
+      {
+       "page": "Explainability",
+       "quote": "**Explainability** is the ability to explain why a model produces the outputs it does, in terms that a particular stakeholder, such as a regulator, an underwriter or a policyholder, can understand and act on."
+      },
+      {
+       "page": "Unfair Discrimination",
+       "quote": "charging different premiums to risks that present the **same expected cost**, or charging on a basis that is legally or socially prohibited."
+      }
+     ]
+    }
+   ]
+  },
+  "discda-an-230": {
+   "path": "questions/exam-disc-da/discda-an-230.md",
+   "run": "answerability-20261031-disc-da",
+   "input_hash": "sha256:14333f9d6d2d3a20dfd3af43128b490a3273eb212ef82cb5181ce0bd3bcdad03",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "ASOP No. 12 requires the actuary to select risk characteristics that are related to expected outcomes, such as expected cost differences.",
+     "concept": "ASOP No. 12 Risk Classification",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Professional Responsibilities of the Actuary",
+       "quote": "ASOP 12 (*Risk Classification*: risk characteristics must be related to expected outcomes, though a cause-and-effect relationship need not be shown, and applicable law can limit the choice)"
+      },
+      {
+       "page": "Rating Variable",
+       "quote": "It must be statistically related to expected losses; a causal story strengthens the case, but ASOP No. 12 does not require one."
+      },
+      {
+       "page": "Rating Class",
+       "quote": "ASOP No. 12 adds considerations for the characteristics that define classes: a demonstrated relationship to expected outcomes (causality is not required), objectivity, practicality, applicable law, and industry and business practice."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "definition",
+     "statement": "A risk characteristic is shown to be related to expected outcomes when variation in actual or reasonably anticipated experience correlates with the characteristic.",
+     "concept": "ASOP No. 12 Risk Classification",
+     "status": "missing",
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Rating Variable",
+      "quote": "It must be statistically related to expected losses; a causal story strengthens the case, but ASOP No. 12 does not require one.",
+      "note": "Tagged page teaches ASOP 12's test: a statistical relationship to expected losses, no causality required",
+      "date": "2026-10-30",
+      "run": "g8-discda-sort"
+     }
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "Under ASOP No. 12, it is not necessary to establish a cause-and-effect relationship between a risk characteristic and the expected outcome in order to use the characteristic in a classification system.",
+     "concept": "ASOP No. 12 Risk Classification",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Professional Responsibilities of the Actuary",
+       "quote": "ASOP 12 (*Risk Classification*: risk characteristics must be related to expected outcomes, though a cause-and-effect relationship need not be shown, and applicable law can limit the choice)"
+      },
+      {
+       "page": "Rating Variable",
+       "quote": "It must be statistically related to expected losses; a causal story strengthens the case, but ASOP No. 12 does not require one."
+      },
+      {
+       "page": "Rating Class",
+       "quote": "ASOP No. 12 adds considerations for the characteristics that define classes: a demonstrated relationship to expected outcomes (causality is not required), objectivity, practicality, applicable law, and industry and business practice."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "ASOP No. 12 directs the actuary to consider whether applicable law limits or prohibits use of a risk characteristic, but the standard does not itself require regulatory approval to select a characteristic; rate approval is governed by state rating law.",
+     "concept": "ASOP No. 12 Risk Classification",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Professional Responsibilities of the Actuary",
+       "quote": "ASOP 12 (*Risk Classification*: risk characteristics must be related to expected outcomes, though a cause-and-effect relationship need not be shown, and applicable law can limit the choice)"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "definition",
+     "statement": "Unfair discrimination in rating refers to rates that do not reflect differences in expected cost or that rely on prohibited bases, not to characteristics that merely lack a known cause.",
+     "concept": "Unfair Discrimination",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Unfair Discrimination",
+       "quote": "charging different premiums to risks that present the **same expected cost**, or charging on a basis that is legally or socially prohibited."
+      },
+      {
+       "page": "Data Ethics",
+       "quote": "meaning different treatment of risks with the same expected cost or treatment based on a prohibited characteristic."
+      }
+     ]
+    }
+   ]
+  },
+  "discda-an-231": {
+   "path": "questions/exam-disc-da/discda-an-231.md",
+   "run": "answerability-20261031-disc-da",
+   "input_hash": "sha256:80f90c33aa3740b08b4b47ad3e35b7c319d40467c9e20e037ff6f72eaceda09a",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "Proxy discrimination occurs when a model that excludes a protected characteristic still reproduces its effect through other inputs that are correlated with that characteristic.",
+     "concept": "Proxy Discrimination",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Proxy Discrimination",
+       "quote": "occurs when a facially neutral variable predicts the outcome partly because it is correlated with a protected characteristic, so that a model which leaves the protected characteristic out still charges or treats people differently according to it."
+      },
+      {
+       "page": "Bias in Actuarial Practice",
+       "quote": "In a model with many correlated inputs, a prohibited characteristic can be reconstructed from permitted ones — postal code, occupation, vehicle, credit-adjacent data — so the model reproduces the prohibited effect without ever seeing it."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "Excluding a protected characteristic from the model's inputs does not guarantee a non-discriminatory outcome, so a model should be assessed by its outcomes across groups rather than by its input list.",
+     "concept": "Algorithmic Bias Testing",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Unfair Discrimination",
+       "quote": "Testing for it means measuring the model's output across the protected groups, not only checking that the variable is absent from the input"
+      },
+      {
+       "page": "Data Ethics",
+       "quote": "Fairness is tested on the model's outcomes by group, not on its list of inputs."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "definition",
+     "statement": "Unfair discrimination in rating is a difference in rates or premiums between groups that is not supported by a corresponding difference in expected loss costs.",
+     "concept": "Unfair Discrimination",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Unfair Discrimination",
+       "quote": "charging different premiums to risks that present the **same expected cost**, or charging on a basis that is legally or socially prohibited."
+      },
+      {
+       "page": "Principles of Ratemaking",
+       "quote": "a rate differential that reflects a genuine cost difference is **not** unfair discrimination"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "Fitting a model to loss data does not ensure that premiums match loss costs for every group, so group-level premium-to-loss-cost comparisons are needed to check for unintended bias.",
+     "concept": "Algorithmic Bias Testing",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Proxy Discrimination",
+       "quote": "The first test is on outputs rather than inputs: compare predicted premiums, decline rates and loss ratios across the protected groups, because a premium difference with no matching loss difference is the signal"
+      },
+      {
+       "page": "Data Ethics",
+       "quote": "A ratio $R_g$ near 1 means the group's premium is in line with its expected cost, and a ratio well above 1 means it pays more than its losses support."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "procedure",
+     "statement": "When testing reveals a premium gap for a protected group, identify the inputs driving the gap and evaluate whether they relate to loss experience or only to group membership, then correct the model.",
+     "concept": "Algorithmic Bias Testing",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Proxy Discrimination",
+       "quote": "A variable whose predictive power is mostly borrowed from $z$ can be dropped or replaced by one closer to the cause of loss."
+      },
+      {
+       "page": "Bias in Actuarial Practice",
+       "quote": "Decompose the $1.34$ into contributing variables. If one variable drives it and has no causal cost story, that is the proxy."
+      }
+     ]
+    },
+    {
+     "id": "r6",
+     "kind": "fact",
+     "statement": "Colorado law requires insurers that use external consumer data and algorithms to test for unfairly discriminatory outcomes against protected classes.",
+     "concept": "Colorado SB21-169 Insurance Regulation",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Insurance Data Regulation",
+       "quote": "insurers must disclose the external data they use, keep a risk management framework to test for unfair discrimination, and have an officer attest to it."
+      },
+      {
+       "page": "Data Ethics Checklist",
+       "quote": "*Proxy discrimination* and *fairness across groups* are the questions Colorado's SB21-169 requires some insurers to answer by testing"
+      }
+     ]
+    },
+    {
+     "id": "r7",
+     "kind": "fact",
+     "statement": "Withdrawing from writing business in particular neighborhoods raises its own unfair discrimination concern (such as redlining) and is not the appropriate remedy for a biased model.",
+     "concept": "Redlining",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Insurance Data Regulation",
+       "quote": "refusing, canceling or limiting a property or casualty risk solely because of its geographic location, unless based on sound underwriting and actuarial principles related to actual or reasonably anticipated loss experience."
+      }
+     ]
+    }
+   ]
+  },
+  "discda-an-232": {
+   "path": "questions/exam-disc-da/discda-an-232.md",
+   "run": "answerability-20261031-disc-da",
+   "input_hash": "sha256:92141cb9ce6bce53c0056b506eec7262110992bd81ea622dd03a741e554a557b",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "A loss ratio relativity (indicated relativity) compares a group's expected loss ratio to the base/average; a value below 1.00 means the group's expected cost is lower than the rate charged without that variable, and above 1.00 means higher.",
+     "concept": "Loss Ratio Relativity",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Credit-Based Insurance Scoring",
+       "quote": "$$\\text{LR relativity}_k = \\frac{\\text{Loss ratio}_k}{\\text{Loss ratio}_{\\text{total}}}$$"
+      },
+      {
+       "page": "Balancing Back",
+       "quote": "Under the [[Loss Ratio Method|loss ratio method]], a class's indicated relativity is its current relativity times its loss ratio divided by the base class's loss ratio, with premiums at current rates."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "To find how much a group pays relative to its own indicated rate, divide the relativity actually charged by the group's indicated relativity.",
+     "concept": "Rate Adequacy by Class (Charged vs Indicated Relativity)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Credit-Based Insurance Scoring",
+       "quote": "Relative to a credit-rated plan, high-score drivers pay $1.00 / 0.775 = 1.29$ times their indicated rate and low-score drivers $1.00 / 1.318 = 0.76$ times theirs."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "Banning a rating variable such as credit does not remove differences in expected cost between groups; it shifts premium from higher-cost groups to lower-cost groups, so lower-risk drivers subsidize higher-risk drivers.",
+     "concept": "Regulatory Restrictions on Rating Variables",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Credit-Based Insurance Scoring",
+       "quote": "A ban does not remove the cost difference; it moves it from low-score to high-score drivers."
+      },
+      {
+       "page": "Risk Classification Restrictions",
+       "quote": "cross-subsidy flows from the previously low-rated group to the previously high-rated one"
+      }
+     ]
+    }
+   ]
+  },
+  "discda-an-233": {
+   "path": "questions/exam-disc-da/discda-an-233.md",
+   "run": "answerability-20261031-disc-da",
+   "input_hash": "sha256:7a08214e5b2a07c3c2a72ef8e9727ddd714cc8aabec12ada45096da196b0668e",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "A presentation (explanatory) chart's title should state the main finding or takeaway for the audience rather than merely describe what the chart shows.",
+     "concept": "Chart Titles in Data Visualization",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Presentation Visualization",
+       "quote": "The purpose of a plot title is to summarize the main finding, not to describe the chart."
+      },
+      {
+       "page": "Visualization Design Principles",
+       "quote": "The title states the point the chart makes."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "Descriptive information such as what is plotted, the variables, and units belongs in the axis titles, labels, or subtitle rather than in the main title.",
+     "concept": "Chart Titles in Data Visualization",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Presentation Visualization",
+       "quote": "so the graphic has to explain itself: a title, axis titles with units, and labels on the data rather than a legend to decode."
+      },
+      {
+       "page": "Visualization Design Principles",
+       "quote": "Every axis gets a title with units unless the labels explain themselves (Wilke ch. 22; *R for Data Science*, ch. 11)."
+      }
+     ]
+    }
+   ]
+  },
+  "discda-an-234": {
+   "path": "questions/exam-disc-da/discda-an-234.md",
+   "run": "answerability-20261031-disc-da",
+   "input_hash": "sha256:46c8aef46878d658c998a14d9b6ef1ff37b2f85796a90de8b84e44fdc4fadd3a",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "An asymmetric binary feature is one where presence (1) is informative but absence (0) is not, so a shared absence does not indicate that two records are similar.",
+     "concept": "Binary Dissimilarity Measures",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Similarity and Distance Measures",
+       "quote": "For *asymmetric* binary features, where joint absence says little, such as two policies that both lack a rare endorsement, the Jaccard dissimilarity counts disagreements among only the features present in at least one record."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The Jaccard dissimilarity between two binary records is (c10 + c01)/(c11 + c10 + c01), the share of disagreements among features present in at least one of the two records, so joint absences (c00) are excluded.",
+     "concept": "Jaccard Dissimilarity",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Similarity and Distance Measures",
+       "quote": "For *asymmetric* binary features, where joint absence says little, such as two policies that both lack a rare endorsement, the Jaccard dissimilarity counts disagreements among only the features present in at least one record."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "Simple matching dissimilarity is the proportion of all binary features on which two records disagree, (c10 + c01)/(c00 + c11 + c10 + c01), so joint absences count as agreement.",
+     "concept": "Simple Matching Dissimilarity",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Similarity and Distance Measures",
+       "quote": "For nominal or binary features, a common measure is the share of features on which two records disagree (the Hamming distance in SciPy; simple matching)."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "With sparse binary data where most indicators are 0, simple matching makes records look very similar because of the many joint absences, so Jaccard is preferred.",
+     "concept": "Binary Dissimilarity Measures",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Similarity and Distance Measures",
+       "quote": "For rare binary features, two records that both lack a feature are not thereby similar. Jaccard ignores joint absences; simple matching counts them."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "Euclidean distance on 0/1 coded indicators (squaring and summing differences) treats joint absences as agreement, as simple matching does, and standardization is a separate preprocessing step for numeric features, not part of Jaccard.",
+     "concept": "Euclidean Distance",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Similarity and Distance Measures",
+       "quote": "For rare binary features, two records that both lack a feature are not thereby similar. Jaccard ignores joint absences; simple matching counts them."
+      }
+     ]
+    }
+   ]
+  },
+  "discda-an-235": {
+   "path": "questions/exam-disc-da/discda-an-235.md",
+   "run": "answerability-20261031-disc-da",
+   "input_hash": "sha256:766cb68f2fe2523711615b318f2cb70ba5132f7182f378e673a0a1ffa5bd696a",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "A supervised learning model is trained on data in which the target variable is known for each observation, and it learns to predict that target; unsupervised learning has no target and looks for structure such as clusters.",
+     "concept": "Supervised and Unsupervised Learning",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Supervised Learning",
+       "quote": "**Supervised learning** fits a model to predict a labelled response $Y$ from predictors $X$. Every observation in the training data carries the answer, so the fit can be scored against it"
+      },
+      {
+       "page": "Unsupervised Learning",
+       "quote": "**Unsupervised learning** looks for structure in predictors $X$ when there is no response $Y$ to predict."
+      }
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Predictive Analytics",
+      "quote": "methods (GLMs, trees) learn from a known target;",
+      "note": "Tagged page: supervised methods learn from a known target, unsupervised find structure with no target",
+      "date": "2026-10-30",
+      "run": "g8-discda-sort"
+     }
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "Whether a method is supervised or unsupervised depends on whether the training data contain a known target, not on whether the cases to be scored have known outcomes; all predictive models score cases whose outcome is not yet known.",
+     "concept": "Supervised and Unsupervised Learning",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Predictive Analytics",
+       "quote": "Pricing and claims models are supervised"
+      },
+      {
+       "page": "Supervised Learning",
+       "quote": "Every observation in the training data carries the answer, so the fit can be scored against it"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "In-sample fit always improves as terms are added to a model, so it is a poor measure of predictive performance on new data (overfitting).",
+     "concept": "Overfitting",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Predictive Analytics",
+       "quote": "A prediction is only as good as its out-of-sample performance: in-sample fit always improves as terms are added, so a model is judged on hold-out data or by [[Cross-Validation]] (see [[Bias-Variance Tradeoff]])"
+      },
+      {
+       "page": "Holdout Sample",
+       "quote": "Training error always falls as terms are added; holdout error falls, then **rises** once the model starts fitting noise."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "Model performance is evaluated on data not used for fitting, using a hold-out (test) sample or cross-validation.",
+     "concept": "Model Validation",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Holdout Sample",
+       "quote": "A **Holdout Sample** is data deliberately kept out of model building so the finished model can be tested on observations it has never seen."
+      },
+      {
+       "page": "Cross-Validation",
+       "quote": "**Cross-Validation** estimates how well a model predicts **new** data by repeatedly holding part of the sample out of the fit and scoring the model on it."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "The business decision the model will inform is settled when framing the business problem, before data work begins, because it determines how output must be presented and which variables may be used (including legal restrictions).",
+     "concept": "Framing the Business Problem",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Predictive Analytics",
+       "quote": "The **decision** the model feeds — a rate change, an underwriting referral, a non-renewal — which fixes how the output must be presented and which variables may lawfully be used."
+      }
+     ]
+    }
+   ]
+  },
+  "discda-an-236": {
+   "path": "questions/exam-disc-da/discda-an-236.md",
+   "run": "answerability-20261031-disc-da",
+   "input_hash": "sha256:a2fda7794fe3aeddc72fa8d3a1ea8350c054a04d531889fc3a509abfe10fac14",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "procedure",
+     "statement": "A predictive modeling project begins by framing the business problem, before data are acquired, explored, or modeled.",
+     "concept": "Predictive Modeling Project Workflow",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Predictive Analytics",
+       "quote": "The workflow the CAS PCPA requirement is built around: frame the **business problem** → select and review the data ([[Data Quality]])"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "Framing the problem means defining the target variable precisely (e.g., highest loss ratio, claim frequency, or largest single loss), since different definitions of a vague term yield different models.",
+     "concept": "Target Variable Definition",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Predictive Analytics",
+       "quote": "The **target** — \"worst\" could mean highest loss ratio, highest claim frequency, or largest single loss, and each gives a different model."
+      },
+      {
+       "page": "Underwriting Modeling Dataset",
+       "quote": "For a rating plan the target is usually frequency, severity or pure premium; loss ratio suits a search for deficiencies in an existing plan"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "definition",
+     "statement": "The unit of analysis is the level at which each observation is recorded and modeled, such as policy, vehicle, or policy-year.",
+     "concept": "Unit of Analysis",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Predictive Analytics",
+       "quote": "The **unit of analysis** — policy, vehicle, or policy-year."
+      },
+      {
+       "page": "Underwriting Modeling Dataset",
+       "quote": "one row per risk per time period, such as a policy, vehicle or location for a calendar year"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "The business decision the model will feed determines which variables may lawfully or appropriately be used as predictors, so it must be settled during problem framing.",
+     "concept": "Predictive Modeling Project Workflow",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Predictive Analytics",
+       "quote": "The **decision** the model feeds — a rate change, an underwriting referral, a non-renewal — which fixes how the output must be presented and which variables may lawfully be used."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "Model-form selection, hold-out split design, and data acquisition come after problem framing, because they depend on the target, the data review and exploration, and permissible variables.",
+     "concept": "Predictive Modeling Project Workflow",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Predictive Analytics",
+       "quote": "frame the **business problem** → select and review the data ([[Data Quality]]) → … → split off a [[Holdout Sample|hold-out sample]] → fit, diagnose and refine the model"
+      }
+     ]
     }
    ]
   }

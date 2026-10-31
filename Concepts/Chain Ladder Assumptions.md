@@ -1,11 +1,12 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:b59ee82a76499c7db8434dc46456f161518f63844f285114ca0b0e17d3b90d57
-  sources: []
+  last_checked: 2026-10-30
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:ccbf86d323674999531ba20e8c0c5991f9fd230f0d3c2220f69fdacae4fca7a8
+  sources:
+    - "Venter, Testing the Assumptions of Age-to-Age Factors (PCAS LXXXV, 1998), Implication 4, printed p.832 (PDF p.26), sha256:58523222aa33f1b8c82455818e8c2da1b8f24aee7d83badf8c88d2f71a638dcb — https://www.casact.org/sites/default/files/database/proceed_proceed98_980807.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Chain Ladder Assumptions.md
@@ -22,7 +23,7 @@ verification:
     1. $f(d)$ is significant.
     2. It beats the alternative emergence patterns: linear with constant, $f(d)c(w,d) + g(d)$; factor times parameter, $f(d)h(w)$; and with a calendar year term, $f(d)h(w)g(w+d)$.
     3. The model is linear: no runs of same-signed [[Residual|residuals]] against $c(w,d)$.
-    4. The factor is stable: no such runs against time.
+    4. The factor is stable: no such runs against time. The formal treatment of instability is the state-space model, which compares the instability of the observations around the current mean with the instability of the mean itself over time. It helps decide whether to use all the data or a weighted average that de-emphasizes older years.
     5. There is no correlation among columns ([[Development Factor Correlation Test]]).
     6. There are no particularly high or low diagonals ([[Calendar Year Effect]]).
 - **Significance.** Regress $q(w,d+1)$ on $c(w,d)$ with a constant $a$ and a factor $b$. A factor is usually wanted at least twice its standard deviation (about a 4.5% chance for a Normal when the true value is zero), or 1.65 times (about 10%). In a cumulative-to-cumulative regression, test the factor's difference from $1$.

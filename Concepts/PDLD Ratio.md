@@ -1,11 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:fd67dad74d6aaec5e2e7a6025ebf554a3cf73a309d709caabfbbe5209d4f878b
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-30
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:a3ab497684fe2d4325f863cb02adb30582a720db1571980b49f8ab40ae63d300
+  sources:
+    - "Teng and Perkins, Estimating the Premium Asset on Retrospectively Rated Policies (PCAS LXXXIII, 1996), printed pp.613-623 (PDF pp.3-13): formulas 2.1-2.4, formula example 1.426/0.717, empirical lags 27/18, 39/30, 51/42, selected 1.750 vs 1.460, negative historical ratios, sixth-adjustment PDLD selected at zero (p.618), CPDLD weights incl. 0.4% emerging after the last adjustment (p.622), sha256:30efb7917ebbc6361393f76652a21d97e1915032f94667699904248d1bd900f1 — https://www.casact.org/sites/default/files/2021-03/7_Teng_and_Perkins.pdf"
+    - "Feldblum, Discussion of Estimating the Premium Asset on Retrospectively Rated Policies (PCAS LXXXV, 1998), printed pp.274-277 (PDF pp.1-4: three advantages incl. 'may prove particularly useful when changes in the retrospective rating plan parameters distort the indications of other methods'; why not a premium chain ladder, rationale a/b, nine months and annual updates vs quarterly), pp.287-295 (PDF pp.14-22: line segments of decreasing slope, Assumptions A and B, Y-intercept enhancement, basic premium charge / expected loss ratio), sha256:1c572191d2239553f306dc29ba1186f3c3477e06b1652562ab55acd4c8bc04ed — https://www.casact.org/sites/default/files/2021-03/7_Teng_and_Perkins_Discussion_of_Paper.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/PDLD Ratio.md
@@ -34,7 +36,9 @@ verification:
   - Plotted against the reported loss ratio, retro premium is a chain of line segments of decreasing slope, one per adjustment. Responsiveness falls as a book matures and as its loss ratio rises.
   - Each segment starts from the **actual** point reached (his Assumptions A and B). That is what lets the method track emerging experience where Fitzgibbon's single regression line cannot.
   - The first segment should not pass through the origin: $\text{PDLD}_1$ blends the basic premium ratio with the true first slope. To separate them, subtract the average basic premium charge divided by the expected loss ratio from $\text{CPDLD}_1$.
-  - A premium [[Chain Ladder Method|chain ladder]] would wait until at least nine months after expiry and update only annually. The loss-based method updates every quarter.
+  - Why not develop premium by a [[Chain Ladder Method|chain ladder]], as losses are? Ultimate losses can be estimated sooner than retro premium, and retro premium depends on losses.
+  - A premium chain ladder would wait until at least nine months after expiry and update only annually. The loss-based method updates every quarter.
+  - The PDLD method is modelled directly on the retro rating formula, and it may prove particularly useful when changes in the retro rating plan parameters distort the indications of other methods.
 - See [[Estimating the Premium Asset on Retrospectively Rated Policies (Teng and Perkins - 1996)|Teng and Perkins (1996)]] and [[Loss Sensitive Rating]].
 
 > [!example]- Empirical PDLD Ratios from Booked Premium and Reported Loss {Example}

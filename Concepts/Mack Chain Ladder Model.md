@@ -1,11 +1,12 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:9d379eaeefc8cbbcddab0e2c8d148090e33dbab8a36c87bb67782338ac9fff3d
-  sources: []
+  last_checked: 2026-10-30
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:211b52490e6b722381cfd5f105e176bbce19313b4d4afff387fd6cafc8f663c7
+  sources:
+    - "Mack, Measuring the Variability of Chain Ladder Reserve Estimates (CAS Forum, Spring 1994), §3 regression view, printed pp.122-125 (PDF pp.22-25: f_k0 = sum C_ik C_i,k+1 / sum C_ik^2, f_k2 simple average, the two plots and Plots 0/1/2, 'replace ... with f_k0 or f_k2'), and the empirical limits, printed pp.133-134 (PDF pp.33-34); printed = PDF + 100, sha256:f20a3d7ff26247fb26839073418b918b9823e6908829f9ae8f889f636e1a9da5 — https://www.casact.org/sites/default/files/2021-03/7_Mack_1994.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Mack Chain Ladder Model.md
@@ -24,6 +25,7 @@ verification:
 >
 > $$\hat\alpha_{I-1}^2 = \min\left(\frac{\hat\alpha_{I-2}^4}{\hat\alpha_{I-3}^2},\ \hat\alpha_{I-3}^2,\ \hat\alpha_{I-2}^2\right)$$
 
+- **Checking the variance assumption.** First plot $C_{i,k+1}$ against $C_{ik}$ to see whether the points lie around a straight line through the origin with slope $\hat f_k$. If linearity is acceptable, plot the weighted residuals $(C_{i,k+1} - C_{ik}\hat f_k)/\sqrt{C_{ik}}$, $1 \le i \le I-k$, against $C_{ik}$. The assumption $\text{Var} \propto C_{ik}$ is supported if they show no specific trend and appear purely random. Mack compares this plot with the residuals for the two other variance choices: $C_{i,k+1} - C_{ik}f_{k0}$ for a constant variance, where $f_{k0} = \sum_i C_{ik}C_{i,k+1}/\sum_i C_{ik}^2$, and $(C_{i,k+1} - C_{ik}f_{k2})/C_{ik}$ for variance proportional to $C_{ik}^2$, where $f_{k2}$ is the simple average of the factors. If the chain ladder's plot is non-random and one of the others is not, for several $k$, replace $\hat f_k$ with that alternative.
 - **Standard error of one year's reserve.** The [[Mean Square Error|mean squared error]] of $\hat R_i = \hat C_{iI} - C_{i,I+1-i}$ is taken conditional on the observed triangle. Its square root, estimated below, is the same for the reserve as for the ultimate. In the bracket, the $1/\hat C_{ik}$ term estimates the future random variation ([[Process Risk|process]]) and the $1/\sum C_{jk}$ term the error in the $\hat f_k$ ([[Parameter Risk|estimation]]). $\hat C_{ik}$ is the triangle completed by the chain ladder, with $\hat C_{i,I+1-i} = C_{i,I+1-i}$.
 
 > $$
@@ -44,6 +46,7 @@ verification:
 
 - **Confidence limits.** When the volume is large, a [[Normal Distribution|Normal]] approximation gives $\hat R_i \pm z\,\text{s.e.}$. When $\text{s.e.}(\hat R_i)$ exceeds about $50\%$ of $\hat R_i$, Mack recommends a [[Lognormal Distribution|Lognormal]] with the same mean and variance. That fit has $\sigma_i^2 = \ln\!\big(1 + \text{s.e.}^2/\hat R_i^2\big)$, and its $z$-[[Percentile|percentile]] is $\hat R_i\exp(z\sigma_i - \sigma_i^2/2)$. Adding $C_{i,I+1-i}$ turns reserve limits into limits for the ultimate.
 - **Allocating a total percentile.** To give the total a chosen percentile, Mack sets that percentile of $\hat R$ and finds the one $z$ at which the accident years' Lognormal percentiles add up to it. Every year then sits at the same confidence level.
+- **Empirical limits.** Mack sets his intervals beside *empirical limits*: the ultimate from the chain ladder with every remaining age-to-age factor replaced by the minimum, or the maximum, individual factor $C_{i,k+1}/C_{ik}$ observed so far at that age. They come out narrower than the confidence intervals for the older accident years and wider for the recent ones, because few factors are observed at the late ages. Their confidence level therefore changes from year to year, and Mack finds the approach unreasonable.
 
 > [!example]- Estimating the Factors and Their Variances From a Paid Triangle {Example}
 > Cumulative paid claims (\$000):

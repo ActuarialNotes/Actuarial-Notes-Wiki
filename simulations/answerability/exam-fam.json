@@ -1078,7 +1078,15 @@
      "statement": "The complete expectation of life equals the temporary expectation plus the survival probability to the end of the term times the complete expectation at that later age: e_x = e_{x:n|} + {}_n p_x · e_{x+n}.",
      "concept": "Temporary Complete Expectation of Life",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Future Lifetime Random Variable",
+      "quote": "Splitting the lifetime at $n$ years gives $\\mathring{e}_x = \\mathring{e}_{x:\\overline{n}|} + {}_np_x\\,\\mathring{e}_{x+n}$",
+      "note": "Splitting the expectation of life at n years; SOA Exam FAM-L Sample Solutions (2024-10, sha256:9e7f7b03...) Q2.5 p.6 (e40 = e40:20 + 20p40 e60) and Q3.2 p.10 (the complete version, split over two years). Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "VALIDATE checker 2026-10-31T19:44Z/cd9b"
+     }
     },
     {
      "id": "r2",
@@ -1690,7 +1698,15 @@
      "statement": "Expand select curtate/complete expectation of life across the select period by splitting into the first-year integral, plus the one-year survival probability times the next-year integral, plus the product of survival probabilities times the ultimate expectation at the later age: e_[x] = ∫0^1 tp_[x] dt + p_[x] ∫0^1 tp_{x+1} dt + p_[x] p_{x+1} e_{x+2}.",
      "concept": "Complete Expectation of Life",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Future Lifetime Random Variable",
+      "quote": "The same recursions hold for a select life, run year by year through the select period and then into the ultimate part of the table: $\\mathring{e}_{[x]} = \\int_0^1 {}_tp_{[x]}\\,dt + p_{[x]}\\,\\mathring{e}_{[x]+1}$, and so on.",
+      "note": "Select expectation run year by year into the ultimate table; SOA Exam FAM-L Sample Solutions (2024-10, sha256:9e7f7b03...) Q3.2 p.10; Hartman Stat 344 Ch.3 slides 16-17 (sha256:1f528470...). Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "VALIDATE checker 2026-10-31T19:44Z/cd9b"
+     }
     },
     {
      "id": "r3",
@@ -1715,7 +1731,15 @@
      "statement": "The complete expectation of life satisfies the one-year recursion e_x = ∫0^1 tp_x dt + p_x e_{x+1}, and for a select life e_[x] = ∫0^1 tp_[x] dt + p_[x] e_{x+1}.",
      "concept": "Complete Expectation of Life",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Future Lifetime Random Variable",
+      "quote": "With $n = 1$ these are the one-year recursions $\\mathring{e}_x = \\int_0^1 {}_tp_x\\,dt + p_x\\,\\mathring{e}_{x+1}$ and $e_x = p_x\\left(1 + e_{x+1}\\right)$.",
+      "note": "One-year recursions for complete and curtate expectation; SOA Exam FAM-L Sample Solutions (2024-10, sha256:9e7f7b03...) Q3.2 p.10 (complete) and Q2.5 p.6 (curtate, e40:1 = p40). Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "VALIDATE checker 2026-10-31T19:44Z/cd9b"
+     }
     },
     {
      "id": "r5",
@@ -2322,7 +2346,15 @@
      "statement": "Under a uniform distribution of deaths (UDD) over an interval of length n, the probability of death within the first s years of the interval is s/n times the probability of death over the whole interval (s q_x = (s/n) n q_x for 0 ≤ s ≤ n).",
      "concept": "Uniform Distribution of Deaths (UDD)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Fractional Age Assumption",
+      "quote": "If deaths are uniform over the $n$ years from age $x$, then $\\ell_{x+s}$ is linear for $0 \\le s \\le n$ and ${}_sq_x = \\frac{s}{n}\\,{}_nq_x$.",
+      "note": "Deaths uniform over an n-year interval: sq_x = (s/n) nq_x; SOA Exam FAM-L Sample Solutions (2024-10, sha256:9e7f7b03...) Q3.11 p.15 (2.5q50 = 2q50 + 2p50(0.5/2)(0.04)). Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "VALIDATE checker 2026-10-31T19:44Z/cd9b"
+     }
     }
    ]
   },
@@ -2477,7 +2509,15 @@
      "statement": "The curtate expectation satisfies the recursion e_x = p_x (1 + e_{x+1}).",
      "concept": "Curtate Expectation of Life",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Future Lifetime Random Variable",
+      "quote": "With $n = 1$ these are the one-year recursions $\\mathring{e}_x = \\int_0^1 {}_tp_x\\,dt + p_x\\,\\mathring{e}_{x+1}$ and $e_x = p_x\\left(1 + e_{x+1}\\right)$.",
+      "note": "Curtate recursion e_x = p_x(1 + e_x+1); SOA Exam FAM-L Sample Solutions (2024-10, sha256:9e7f7b03...) Q3.13 p.15 (e[58]+2 = p[58]+2(1 + e60)); Slud ch.4 ex.5 p.115. Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "VALIDATE checker 2026-10-31T19:44Z/cd9b"
+     }
     },
     {
      "id": "r4",
@@ -3064,7 +3104,15 @@
      "statement": "For a term insurance with level benefit payable at death and positive force of interest, the present value of benefits decreases with time of death, so earlier deaths within the term produce larger present values and a high percentile of PV corresponds to a low percentile of the time of death.",
      "concept": "Percentiles of Present Value of Insurance Benefits",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Future Lifetime Random Variable",
+      "quote": "For an $n$-year term benefit paid at death, the present value is $v^{T_x}$ if $T_x \\le n$ and 0 after the term, so it falls with the time of death and then drops to zero.",
+      "note": "PV of an n-year term benefit decreases with time of death, then is 0; SOA Exam FAM-L Sample Solutions (2024-10, sha256:9e7f7b03...) Q4.5 p.20 ('the earlier the death (before year 30), the larger the loss'). Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "VALIDATE checker 2026-10-31T19:44Z/cd9b"
+     }
     },
     {
      "id": "r2",
@@ -3072,7 +3120,15 @@
      "statement": "To find the p-th percentile of the PV of a term insurance benefit, find the time of death t at which the cumulative probability of death equals 1-p (i.e. l_{x+t} = p·l_x), provided that time lies within the term, and evaluate the PV at that time.",
      "concept": "Percentiles of Present Value of Insurance Benefits",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Future Lifetime Random Variable",
+      "quote": "Its $p$-th percentile comes from an early death: find $t$ with ${}_tp_x = p$, that is $\\ell_{x+t} = p\\,\\ell_x$. If $t$ falls inside the term the percentile is $v^t$. If $t$ falls after it, more than a proportion $p$ of lives survive the term and receive nothing, so the percentile is 0.",
+      "note": "Percentile of a term benefit's PV from l_x+t = p l_x, v^t inside the term, 0 when survivors exceed p; SOA Exam FAM-L Sample Solutions (2024-10, sha256:9e7f7b03...) Q4.5 p.20 (0.95 l45, 100,000e^(-0.05t)) and Q7.41 p.82 (survivor value vs early-death percentile). Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "VALIDATE checker 2026-10-31T19:44Z/cd9b"
+     }
     },
     {
      "id": "r3",
@@ -4141,7 +4197,15 @@
      "statement": "If a random variable Y is a decreasing function of T, the p-th percentile of Y equals the function evaluated at the (1−p)-th percentile of T, so the 90th percentile of Y corresponds to the 10th percentile of T.",
      "concept": "Percentiles of Transformed Random Variables",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Future Lifetime Random Variable",
+      "quote": "If $Y = g(T_x)$ with $g$ decreasing, a large value of $Y$ comes from an early death. So the $p$-th percentile of $Y$ is $g(t)$ at the $t$ with $\\Pr(T_x > t) = {}_tp_x = p$, which is the $(1-p)$-th percentile of $T_x$.",
+      "note": "Percentile of a decreasing function of T_x taken at tp_x = p; SOA Exam FAM-L Sample Solutions (2024-10, sha256:9e7f7b03...) Q4.18 p.26 and Q6.45 p.58. Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "VALIDATE checker 2026-10-31T19:44Z/cd9b"
+     }
     },
     {
      "id": "r3",
@@ -4724,7 +4788,15 @@
      "statement": "The n-year temporary life annuity-immediate relates to the annuity-due by a_{x:n} = a¨_{x:n} - 1 + nEx.",
      "concept": "Temporary Life Annuity-Immediate",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Life Annuity",
+      "quote": "$a_{x:\\overline{n}|} = \\ddot{a}_{x:\\overline{n}|} - 1 + {}_nE_x$. Compared with the temporary annuity-due it loses the payment at time 0 and gains a payment at time $n$ if $(x)$ is alive then.",
+      "note": "a_x:n = ä_x:n - 1 + nE_x; Hartman, Stat 344 Ch.5 (BYU, sha256:3cceb4a4...) slide 18. Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "VALIDATE checker 2026-10-31T19:44Z/cd9b"
+     }
     }
    ]
   },
@@ -5036,7 +5108,15 @@
      "statement": "The variance of the present value of a whole life annuity-due equals (²A_x − (A_x)²)/d², where ²A_x is the second moment of the whole life insurance present value.",
      "concept": "Whole Life Annuity-Due",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Life Annuity",
+      "quote": "the present value of the whole life annuity-due is $Y = \\ddot{a}_{\\overline{K_x+1}|} = (1 - Z)/d$ with $Z = v^{K_x+1}$, so $\\text{Var}(Y) = \\left({}^2\\!A_x - A_x^2\\right)/d^2$",
+      "note": "Var of whole life annuity-due = (2A_x - A_x^2)/d^2 via Y = (1 - Z)/d; Hartman, Stat 344 Ch.5 (BYU, sha256:3cceb4a4...) slides 6-7, 17. Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "VALIDATE checker 2026-10-31T19:44Z/cd9b"
+     }
     },
     {
      "id": "r3",
@@ -5649,7 +5729,15 @@
      "statement": "For a return-of-premiums death benefit without interest, the benefit in year k is the face amount plus the cumulative premiums paid (k times P), so its present value is the face amount times the term insurance APV plus P times the increasing term insurance APV (IA)^1.",
      "concept": "Increasing Term Insurance",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Equivalence Principle",
+      "quote": "A death benefit that returns the premiums paid, without interest, pays $G(k+1)$ on death in year $k+1$, an increasing term insurance. Its EPV is $G\\,(IA)^1_{x:\\overline{n}|}$, plus $S\\,A^1_{x:\\overline{n}|}$ when a level sum $S$ is paid as well. Because $G$ appears on both sides of the equation of value, collect its terms and solve",
+      "note": "Return of premiums without interest as an increasing term insurance plus level sum; SOA Exam FAM-L Sample Solutions (2024-10, sha256:9e7f7b03...) Q6.1 p.34 (1000 + P, 1000 + 2P; P = 1000A^1/(ä - (IA)^1)); Valdez slide 11. Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "VALIDATE checker 2026-10-31T19:44Z/cd9b"
+     }
     },
     {
      "id": "r3",
@@ -5742,7 +5830,15 @@
      "statement": "A death benefit that returns all gross premiums paid without interest equals a benefit of G times the number of years elapsed (k+1 in year of death), so its actuarial present value is G times the increasing term insurance (IA)^1.",
      "concept": "Increasing Term Insurance",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Equivalence Principle",
+      "quote": "A death benefit that returns the premiums paid, without interest, pays $G(k+1)$ on death in year $k+1$, an increasing term insurance. Its EPV is $G\\,(IA)^1_{x:\\overline{n}|}$, plus $S\\,A^1_{x:\\overline{n}|}$ when a level sum $S$ is paid as well. Because $G$ appears on both sides of the equation of value, collect its terms and solve",
+      "note": "Return of premiums without interest valued as G(IA)^1 plus S A^1, G collected and solved; Valdez STT 456 Premium Calculation slide 11 (sha256:7b4af669...) and SOA Exam FAM-L Sample Solutions (2024-10, sha256:9e7f7b03...) Q6.1-6.2 p.34. Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "VALIDATE checker 2026-10-31T19:44Z/cd9b"
+     }
     },
     {
      "id": "r3",
@@ -5878,7 +5974,15 @@
      "statement": "The expected present value of a whole life annuity-due payable m times per year (of 1 per year) is ä^(m)_x = (1 − A^(m)_x) / d^(m), where d^(m) is the nominal discount rate convertible m-thly.",
      "concept": "Life Annuities Payable m-thly",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Life Annuity",
+      "quote": "the same argument gives $\\ddot{a}^{(m)}_x = \\left(1 - A^{(m)}_x\\right)/d^{(m)}$ and $\\text{Var}(Y) = \\left({}^2\\!A^{(m)}_x - \\left(A^{(m)}_x\\right)^2\\right)/\\left(d^{(m)}\\right)^2$",
+      "note": "m-thly annuity-due ä(m) = (1 - A(m))/d(m); Hartman, Stat 344 Ch.5 (BYU, sha256:3cceb4a4...) slide 27 and SOA Exam FAM-L Sample Solutions (2024-10, sha256:9e7f7b03...) Q6.4 p.35. Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "VALIDATE checker 2026-10-31T19:44Z/cd9b"
+     }
     },
     {
      "id": "r2",
@@ -5886,7 +5990,15 @@
      "statement": "The variance of the present value of a whole life annuity-due payable m times per year (of 1 per year) is Var = (²A^(m)_x − (A^(m)_x)²) / (d^(m))², since the annuity PV is (1 − Z)/d^(m) with Z the PV of the corresponding insurance.",
      "concept": "Life Annuities Payable m-thly",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Life Annuity",
+      "quote": "the same argument gives $\\ddot{a}^{(m)}_x = \\left(1 - A^{(m)}_x\\right)/d^{(m)}$ and $\\text{Var}(Y) = \\left({}^2\\!A^{(m)}_x - \\left(A^{(m)}_x\\right)^2\\right)/\\left(d^{(m)}\\right)^2$",
+      "note": "Variance of the m-thly annuity-due (2A(m) - A(m)^2)/d(m)^2; SOA Exam FAM-L Sample Solutions (2024-10, sha256:9e7f7b03...) Q6.4 p.35; Hartman, Stat 344 Ch.5 (BYU, sha256:3cceb4a4...) slide 27. Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "VALIDATE checker 2026-10-31T19:44Z/cd9b"
+     }
     },
     {
      "id": "r3",
@@ -6215,7 +6327,15 @@
      "statement": "A death benefit equal to the premiums accumulated with interest at the valuation rate, paid at the end of the year of death, has present value equal to the annuity-due of premiums over the years paid, π·a¨_{K+1|}, since discounting the accumulated value π·s¨_{K+1|} by v^{K+1} gives π·a¨_{K+1|}.",
      "concept": "Return of Premium Benefit",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Equivalence Principle",
+      "quote": "If the death benefit is the premiums accumulated at the valuation rate $i$, paid at the end of the year of death, its present value on death in year $K_x+1$ is $P\\,\\ddot{s}_{\\overline{K_x+1}|}\\,v^{K_x+1} = P\\,\\ddot{a}_{\\overline{K_x+1}|}$, exactly the present value of the premiums paid.",
+      "note": "Refund accumulated at the valuation rate: P s̈_(K+1) v^(K+1) = P ä_(K+1); SOA Exam FAM-L Sample Solutions (2024-10, sha256:9e7f7b03...) Q6.7 p.37; Valdez slide 12. Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "VALIDATE checker 2026-10-31T19:44Z/cd9b"
+     }
     },
     {
      "id": "r6",
@@ -6223,7 +6343,15 @@
      "statement": "Equation of value at time n: if premium accumulations at the valuation interest rate fund the return-of-premium death benefits, then the premiums of survivors accumulated to the end of the term must fund the endowment benefit, so π·s¨_{n|} = endowment amount.",
      "concept": "Equation of Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Equivalence Principle",
+      "quote": "These death benefits are self-funding, so for an $n$-year endowment insurance with this death benefit and an endowment of $E$, the equation of value reduces to $P\\,\\ddot{s}_{\\overline{n}|} = E$, and mortality drops out.",
+      "note": "Self-funding refund: P s̈_n = E, mortality drops out; SOA Exam FAM-L Sample Solutions (2024-10, sha256:9e7f7b03...) Q6.7 p.37 (pi s̈_20 = 100,000). Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "VALIDATE checker 2026-10-31T19:44Z/cd9b"
+     }
     }
    ]
   },
@@ -6780,7 +6908,15 @@
      "statement": "Under UDD, the m-thly annuity-due is ä_x^(m) = α(m)·ä_x − β(m), where α(m) = i·d/(i^(m)·d^(m)) and β(m) = (i − i^(m))/(i^(m)·d^(m)).",
      "concept": "Uniform Distribution of Deaths",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Fractional Age Assumption",
+      "quote": "Under UDD this gives $\\ddot{a}^{(m)}_x = \\alpha(m)\\,\\ddot{a}_x - \\beta(m)$, with $\\alpha(m) = \\frac{i\\,d}{i^{(m)}\\,d^{(m)}}$ and $\\beta(m) = \\frac{i - i^{(m)}}{i^{(m)}\\,d^{(m)}}$.",
+      "note": "UDD m-thly annuity-due alpha(m) ä_x - beta(m) with alpha, beta; Hartman, Stat 344 Ch.5 (BYU, sha256:3cceb4a4...) slide 36. Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "VALIDATE checker 2026-10-31T19:44Z/cd9b"
+     }
     },
     {
      "id": "r3",
@@ -7315,7 +7451,15 @@
      "statement": "Under UDD, the m-thly temporary annuity-due is approximated by ä^(m)_{x:n} = α(m)·ä_{x:n} − β(m)·(1 − nE_x), where α(m) and β(m) are the UDD annuity factors.",
      "concept": "M-thly Annuities under UDD",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Fractional Age Assumption",
+      "quote": "For an $n$-year temporary annuity, $\\ddot{a}^{(m)}_{x:\\overline{n}|} = \\alpha(m)\\,\\ddot{a}_{x:\\overline{n}|} - \\beta(m)\\left(1 - {}_nE_x\\right)$.",
+      "note": "UDD m-thly temporary annuity alpha(m) ä_x:n - beta(m)(1 - nE_x); Hartman, Stat 344 Ch.5 (BYU, sha256:3cceb4a4...) slide 36. Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "VALIDATE checker 2026-10-31T19:44Z/cd9b"
+     }
     },
     {
      "id": "r4",
@@ -8142,7 +8286,15 @@
      "statement": "Under UDD, the m-thly annuity-due is approximated by ä^(m)_x ≈ α(m)·ä_x − β(m), where α(m) = i·d / (i^(m)·d^(m)) and β(m) = (i − i^(m)) / (i^(m)·d^(m)).",
      "concept": "Uniform Distribution of Deaths (UDD) Assumption",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Fractional Age Assumption",
+      "quote": "Under UDD this gives $\\ddot{a}^{(m)}_x = \\alpha(m)\\,\\ddot{a}_x - \\beta(m)$, with $\\alpha(m) = \\frac{i\\,d}{i^{(m)}\\,d^{(m)}}$ and $\\beta(m) = \\frac{i - i^{(m)}}{i^{(m)}\\,d^{(m)}}$.",
+      "note": "UDD m-thly annuity-due alpha(m) ä_x - beta(m) with alpha, beta; Hartman, Stat 344 Ch.5 (BYU, sha256:3cceb4a4...) slide 36. Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "VALIDATE checker 2026-10-31T19:44Z/cd9b"
+     }
     },
     {
      "id": "r2",
@@ -8548,7 +8700,15 @@
      "statement": "For a constant force of mortality mu and force of interest delta, the n-year temporary continuous life annuity of 1 per year has EPV abar_{x:n} = (1 - e^{-n(mu+delta)})/(mu+delta).",
      "concept": "Temporary Life Annuity",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Life Annuity",
+      "quote": "$\\bar{a}_{x:\\overline{n}|} = \\int_0^n e^{-(\\mu+\\delta)t}\\,dt = \\left(1 - e^{-n(\\mu+\\delta)}\\right)/(\\mu+\\delta)$",
+      "note": "Constant-force temporary continuous annuity (1 - e^(-n(mu+delta)))/(mu+delta); SOA Exam FAM-L Sample Solutions (2024-10, sha256:9e7f7b03...) Q6.36 p.52 (n = 20). Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "VALIDATE checker 2026-10-31T19:44Z/cd9b"
+     }
     },
     {
      "id": "r4",
@@ -9185,7 +9345,15 @@
      "statement": "When the loss L is a monotone decreasing function of T, the p-th percentile of L equals L evaluated at the (1-p) quantile of T, i.e. at the t with Pr(T > t) = 1-p.",
      "concept": "Percentiles of a Loss Random Variable",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Future Lifetime Random Variable",
+      "quote": "If $Y = g(T_x)$ with $g$ decreasing, a large value of $Y$ comes from an early death. So the $p$-th percentile of $Y$ is $g(t)$ at the $t$ with $\\Pr(T_x > t) = {}_tp_x = p$, which is the $(1-p)$-th percentile of $T_x$.",
+      "note": "Percentile of a decreasing function of T_x taken at Pr(T_x > t) = p; SOA Exam FAM-L Sample Solutions (2024-10, sha256:9e7f7b03...) Q6.45 p.58 (75th percentile of L0 at Pr[T35 > t] = 0.75). Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "VALIDATE checker 2026-10-31T19:44Z/cd9b"
+     }
     },
     {
      "id": "r4",
@@ -9248,7 +9416,15 @@
      "statement": "The APV of a benefit equal to the return (without interest) of premiums paid, payable at the end of the year of death during an n-year period, with annual premium P, is P times the increasing term insurance (IA)^1_{x:n}.",
      "concept": "Increasing Term Insurance",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Equivalence Principle",
+      "quote": "A death benefit that returns the premiums paid, without interest, pays $G(k+1)$ on death in year $k+1$, an increasing term insurance. Its EPV is $G\\,(IA)^1_{x:\\overline{n}|}$, plus $S\\,A^1_{x:\\overline{n}|}$ when a level sum $S$ is paid as well. Because $G$ appears on both sides of the equation of value, collect its terms and solve",
+      "note": "Return of premiums without interest valued as G(IA)^1, G on both sides; Valdez slide 11 and SOA Exam FAM-L Sample Solutions (2024-10, sha256:9e7f7b03...) Q6.1-6.2 p.34. Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "VALIDATE checker 2026-10-31T19:44Z/cd9b"
+     }
     },
     {
      "id": "r3",
@@ -9497,7 +9673,15 @@
      "statement": "Under UDD, the m-thly temporary annuity-due is approximated by ä^(m)_{x:n} = α(m) ä_{x:n} − β(m)(1 − nE_x), where α(m) and β(m) are the standard UDD annuity factors.",
      "concept": "Annuity-Due Payable m-thly",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Fractional Age Assumption",
+      "quote": "For an $n$-year temporary annuity, $\\ddot{a}^{(m)}_{x:\\overline{n}|} = \\alpha(m)\\,\\ddot{a}_{x:\\overline{n}|} - \\beta(m)\\left(1 - {}_nE_x\\right)$.",
+      "note": "UDD m-thly temporary annuity alpha(m) ä_x:n - beta(m)(1 - nE_x); Hartman, Stat 344 Ch.5 (BYU, sha256:3cceb4a4...) slide 36. Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "VALIDATE checker 2026-10-31T19:44Z/cd9b"
+     }
     },
     {
      "id": "r4",
@@ -9697,7 +9881,15 @@
      "statement": "The increasing n-year term insurance can be expressed as (IA)^1_{x:n|} = (n+1)·A^1_{x:n|} − Σ_{k=1}^{n} A^1_{x:k|}.",
      "concept": "Increasing Term Insurance",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Equivalence Principle",
+      "quote": "$(IA)^1_{x:\\overline{n}|} = (n+1)A^1_{x:\\overline{n}|} - \\sum_{k=1}^{n} A^1_{x:\\overline{k}|}$.",
+      "note": "(IA)^1 = (n+1)A^1 - sum A^1_x:k; SOA Exam FAM-L Sample Solutions (2024-10, sha256:9e7f7b03...) Q6.51 p.60 (n = 10, 11A^1 - sum) and Slud §6.1.1 p.151 ((DA)^1 = (n+1)A^1 - (IA)^1, general n). Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "VALIDATE checker 2026-10-31T19:44Z/cd9b"
+     }
     }
    ]
   },
@@ -10846,7 +11038,15 @@
      "statement": "Under UDD, the m-thly temporary annuity-due is approximated by ä^(m)_{x:n} = α(m) ä_{x:n} − β(m)(1 − nE_x).",
      "concept": "m-thly Annuities (UDD)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Fractional Age Assumption",
+      "quote": "For an $n$-year temporary annuity, $\\ddot{a}^{(m)}_{x:\\overline{n}|} = \\alpha(m)\\,\\ddot{a}_{x:\\overline{n}|} - \\beta(m)\\left(1 - {}_nE_x\\right)$.",
+      "note": "UDD m-thly temporary annuity alpha(m) ä_x:n - beta(m)(1 - nE_x); Hartman, Stat 344 Ch.5 (BYU, sha256:3cceb4a4...) slide 36. Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "VALIDATE checker 2026-10-31T19:44Z/cd9b"
+     }
     },
     {
      "id": "r6",

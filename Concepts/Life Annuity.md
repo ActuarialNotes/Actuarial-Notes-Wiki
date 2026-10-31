@@ -2,16 +2,14 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-10-05
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:da165d17759c0d6fb615f99b40485fd8487a8013a1518c0b6c535d61ea170d83
+  content_hash: sha256:2c5a1cf3f77f93a8d7b3e32a9d7eb9e7709d75f8f13966eac6f022a440be5796
   sources:
-    - "Struppeck, Life Contingencies Study Note for CAS Exam S (revised 9/19/2015), ch.3 pp.6-8 (life-annuity-due ä_x and life-annuity-immediate a_x; ä_x = 1 + νp_xä_{x+1} and its verbal reading; d = interest paid at the start of the year; 1 = dä_x + A_x, ä_x = (1 - A_x)/d; annuity until death or n years whichever first, and guaranteed n years whichever last), ch.4 p.9 (replicating portfolios: ä_40 - (1.03)^{-25}(l_65/l_40)ä_65 for the temporary annuity, ä_5 + (1.03)^{-5}(l_25/l_20)ä_25 for the guaranteed one), sha256:8ea3f762df47e0c143b217219e7aa7033709e55f2a6378de25ed385673e3a849 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Struppeck.pdf"
-    - "CAS Exam MAS-I Tables, Illustrative Life Table: Basic Functions and Single Benefit Premiums at i = 0.06, PDF p.4, sha256:cb5674138a67f7a498b8cc90357144fd121cbcbbc7487f214557b105611a69b4 — https://www.casact.org/sites/default/files/2021-03/masi_tables.pdf"
-    - "Slud, Actuarial Mathematics and Life-Table Statistics (Univ. of Maryland, (c)2001), §1.2 p.9 (d = i/(1+i)), §4.1 p.100 eq.(4.4) (annuity-immediate = annuity-due less its time-0 payment), p.104 eq.(4.16) (ä_{x:n} = Σ v^k kp_x), §4.2 p.108 eq.(4.26) (ā_x = ∫ v^t tp_x dt), sha256:dccaca6b0e9f58a2f472390538e901660d0a45eb816e2869657718735c2b80bb — https://www.math.umd.edu/~slud/s470/BookChaps/01Book.pdf"
-    - "SOA Exam MLC Sample Solutions (MLC-09-16, 2016), Q14 (p.10; PDF p.11: ā = 1/(μ+δ), Ā = μ/(μ+δ) under constant force, Ā + δā = 1), sha256:791e13b42b926bfe8abe54f489fa6767aa508c9c0419bfa2340a24e9a2ea37f7 — https://www.soa.org/globalassets/assets/files/edu/edu-2014-spring-mlc-sol.pdf"
-    - "CAS Exam MAS-I Spring 2019, Q11-Q12 — official exam paper (scan), PDF pp.15-16, sha256:02debe7c986ee38d3f484b277d0dc4a08ec424d0bb3b868b4890e4edb9312274 — https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exammasi_spmasi-19.pdf"
-    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Domain A tasks 4-6 and readings (p.3), reading list (p.6: Ross A1-A6, Struppeck A5-6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
+    - "Hartman, Stat 344 Life Contingencies I, Chapter 5 (BYU), slide 6 (ä_x = (1 - A_x)/d, holding between the random variables), slide 7 (Var(Y) = (2A_x - A_x^2)/d^2; ä_x = 1 + v p_x ä_x+1), slide 17 (immediate Y* = Y - 1, same variance), slide 18 (a_x:n = ä_x:n + nE_x - 1), slide 27 (Y = (1 - v^(K(m)+1/m))/d(m), ä(m)_x = (1 - A(m)_x)/d(m)), sha256:3cceb4a4ae537548e470a22a01a01f62e1de16319c9669ddeeb17bed4c9509cf — https://hartman.byu.edu/docs/344Files/Stat344_Chapter5.pdf"
+    - "SOA Exam FAM-L Sample Solutions (2024-10, rev. Aug 2026), Q6.4 p.35 (Var(X) = (2A(12)_62 - (A(12)_62)^2)/(d(12))^2), Q6.36 p.52 (constant force: ā_x:20 = (1 - e^(-20(mu+delta)))/(mu+delta)), sha256:9e7f7b03e0252ccb8f69e4f453d443d8d7cb43ef3945d05c935fdf234cae72ab — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/2024-10-exam-fam-l-sample-solutions.pdf"
+    - "Struppeck, Life Contingencies Study Note for CAS Exam S (revised 9/19/2015), ch.3 pp.6-8 (ä_x recursion; 1 = d ä_x + A_x), sha256:8ea3f762df47e0c143b217219e7aa7033709e55f2a6378de25ed385673e3a849 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Struppeck.pdf"
+    - "CAS Exam MAS-I Tables, Illustrative Life Table at i = 0.06, PDF p.4 (1000q40 = 2.78, ä41 = 14.6864, 1000A40 = 161.32, ä40 = 14.8166, ä65 = 9.8969, l40 = 9,313,166, l65 = 7,533,964), sha256:cb5674138a67f7a498b8cc90357144fd121cbcbbc7487f214557b105611a69b4 — https://www.casact.org/sites/default/files/2021-03/masi_tables.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Life Annuity.md

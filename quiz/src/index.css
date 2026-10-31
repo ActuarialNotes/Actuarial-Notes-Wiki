@@ -1515,6 +1515,45 @@ summary .katex-display,
   .streak-celebrate-count { animation: none; }
 }
 
+/* Welcome to Pro (components/ProCelebration.tsx): the chip drops in and
+   bounces, stars burst out from behind it, its sparkle twinkles. Shares the
+   streak overlay's scrim, card and halo, and Quiz Battle's confetti. */
+@keyframes pro-celebrate-chip {
+  0%   { opacity: 0; transform: translateY(-46px) scale(0.6) rotate(-8deg); }
+  55%  { opacity: 1; transform: translateY(6px) scale(1.12) rotate(3deg); }
+  75%  { transform: translateY(-3px) scale(0.96) rotate(-1deg); }
+  100% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
+}
+.pro-celebrate-chip {
+  animation:
+    pro-celebrate-chip 640ms 100ms cubic-bezier(0.34, 1.56, 0.64, 1) both,
+    pro-celebrate-bob 2.8s 900ms ease-in-out infinite;
+}
+@keyframes pro-celebrate-bob {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-4px) rotate(-1.5deg); }
+}
+@keyframes pro-celebrate-star {
+  0%   { opacity: 0; transform: translate(0, 0) scale(0.2) rotate(0deg); }
+  50%  { opacity: 1; transform: translate(var(--dx), var(--dy)) scale(1.15) rotate(90deg); }
+  100% { opacity: 0.85; transform: translate(var(--dx), var(--dy)) scale(1) rotate(144deg); }
+}
+.pro-celebrate-star {
+  animation: pro-celebrate-star 760ms cubic-bezier(0.22, 1.2, 0.36, 1) both;
+}
+@keyframes pro-celebrate-sparkle {
+  0%, 100% { opacity: 1; transform: scale(1) rotate(0deg); }
+  50%      { opacity: 0.55; transform: scale(0.7) rotate(20deg); }
+}
+.pro-celebrate-sparkle {
+  animation: pro-celebrate-sparkle 1.6s 700ms ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pro-celebrate-chip,
+  .pro-celebrate-sparkle { animation: none; }
+  .pro-celebrate-star { animation: none; transform: translate(var(--dx), var(--dy)); }
+}
+
 /* Quiz setup deck card: a quick riffle when the question draw is shuffled —
    the card kicks sideways and tips, then settles. Brief UI feedback, not a
    celebration. The confirmation text/icon it accompanies is static, so a

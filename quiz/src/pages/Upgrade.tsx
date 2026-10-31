@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { ArrowRight, Loader2, Lock, Tag } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { useSubscription } from '@/hooks/useSubscription'
+import { requestProCelebration } from '@/lib/proCelebration'
 import { supabase } from '@/lib/supabase'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -84,6 +85,7 @@ export default function Upgrade() {
       if (data?.error) throw new Error(data.error)
       if (!data?.success) throw new Error('Redemption failed')
       setBetaSuccess(true)
+      requestProCelebration({ confirmed: true })
     } catch (err) {
       setBetaError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
     } finally {

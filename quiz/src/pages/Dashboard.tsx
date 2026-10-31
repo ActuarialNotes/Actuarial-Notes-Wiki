@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { useProgress } from '@/hooks/useProgress'
 import { useSubscription } from '@/hooks/useSubscription'
+import { requestProCelebration } from '@/lib/proCelebration'
 import { supabase } from '@/lib/supabase'
 import { Bell, BookOpen, Download, Gem, GraduationCap, HelpCircle, Loader2, LogIn, LogOut, Play, PlusCircle, Settings2, ShoppingBag, Sparkles, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -156,9 +157,6 @@ export default function Dashboard() {
   const [conceptsOpenCounter, setConceptsOpenCounter] = useState(0)
   const [startQuizCounter, setStartQuizCounter] = useState(0)
   const [isLaunchingQuiz, setIsLaunchingQuiz] = useState(false)
-  const [showUpgradedBanner, setShowUpgradedBanner] = useState(
-    () => new URLSearchParams(location.search).get('upgraded') === '1',
-  )
   const [planComplete, setPlanComplete] = useState(false)
   const [profileOpen, setProfileOpen] = useState(false)
   const [signOutConfirm, setSignOutConfirm] = useState(false)
@@ -213,6 +211,8 @@ export default function Dashboard() {
     if (params.get('upgraded') === '1') {
       const sessionId = params.get('session_id')
       navigate('/dashboard', { replace: true })
+      // Back from Stripe: welcome them once the subscription reads Pro.
+      requestProCelebration({ confirmed: false })
       if (sessionId) {
         supabase.functions
           .invoke('stripe-sync-session', { body: { sessionId } })
@@ -894,29 +894,6 @@ export default function Dashboard() {
           under it is what to do about that answer today. The primary actions
           (`primaryActions`) sit under the readiness card, the schedule above it. */}
       {activeSyllabus && <div ref={setReadinessSlotEl} />}
-
-      {/* Congratulations banner — shown after returning from Stripe checkout */}
-      {showUpgradedBanner && (
-        <div className="rounded-lg bg-green-500/10 px-4 py-3 flex items-start justify-between gap-3">
-          <div className="flex items-start gap-2">
-            <Sparkles className="h-5 w-5 text-green-500 mt-0.5 shrink-0" />
-            <div>
-              <p className="text-sm font-semibold text-green-700 dark:text-green-400">Welcome to Pro!</p>
-              <p className="text-xs text-green-600 dark:text-green-500 mt-0.5">
-                Your subscription is confirmed. Pro features are activating now.
-              </p>
-            </div>
-          </div>
-          <button
-            type="button"
-            onClick={() => setShowUpgradedBanner(false)}
-            className="text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-200 shrink-0 mt-0.5"
-            aria-label="Dismiss"
-          >
-            <X className="h-4 w-4" />
-          </button>
-        </div>
-      )}
 
       {/* Readiness card — only shown when there is an active exam */}
       <div>

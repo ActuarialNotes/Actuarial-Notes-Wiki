@@ -33,6 +33,7 @@ import { AuthProvider } from '@/contexts/AuthContext'
 import { ExamProgressProvider } from '@/contexts/ExamProgressContext'
 import { useAuth } from '@/hooks/useAuth'
 import { useSubscription } from '@/hooks/useSubscription'
+import { ProCelebration } from '@/components/ProCelebration'
 import { canEnterMode, modeDestination, type AppMode } from '@/lib/appMode'
 import { actuariaDestination } from '@/lib/actuaria/access'
 import { useActuariaAccess } from '@/hooks/useActuariaAccess'
@@ -504,6 +505,8 @@ export default function App({ initialSession }: { initialSession: Session | null
             {TOUR_ENABLED && <OnboardingTour />}
             <MathFocus />
             <ImageFocus />
+            {/* The welcome to Pro, whichever way it was got (lib/proCelebration.ts). */}
+            <ProCelebration />
             {/* The app's one PDF reader. Root-level so a document opened from a
                 dialog, a sheet or a card clears it and outlives it. */}
             <PdfReaderHost />

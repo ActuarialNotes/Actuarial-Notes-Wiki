@@ -12,7 +12,7 @@ verification:
   open_critical: 0
   log: .verify/Concepts/Long-Term Insurance Coverage.md
 ---
-**A Long-Term Insurance Coverage** is an [[Insurance Coverage|insurance coverage]] written for many years or for life by an [[Insurer|insurer]]: life insurance, annuities, long-term health insurance and pension plans. The cash flows run for decades and depend on the survival or health of the insured, so they are valued with interest and mortality, paid for by level premiums, and backed by policy values.
+**A Long-Term Insurance Coverage** is an [[Insurance Coverage|insurance coverage]] written for many years or for life: life insurance, annuities, long-term health insurance and pension plans. The cash flows run for decades and depend on the survival or health of the insured, so they are valued with interest and mortality, paid for by level premiums, and backed by policy values.
 
 > $$\text{EPV} = \sum_{k} \text{CF}_k\, v^{k}\,\Pr(\text{CF}_k \text{ is paid})$$
 

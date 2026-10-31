@@ -24,8 +24,8 @@ verification:
 > $$F_n(x) = F_n(c_{j-1}) + (x - c_{j-1})\,f_n(x)$$
 
 - **Symbols:** Following Klugman, Panjer & Willmot (*Loss Models*, chapter 11), $n = \sum n_j$ is the sample size and $F(x \mid \theta)$ is the model's distribution function. An open last interval has $c_k = \infty$ and $F(\infty \mid \theta) = 1$, so it contributes $S(c_{k-1} \mid \theta)^{n_k}$. The second block is the likelihood for individual data, in which each exact value contributes its density.
-- **What grouping costs:** Grouped data say nothing about where in its interval each value fell, so the grouped-data estimate has a larger variance than the individual-data estimate from the same losses. Grouping is a form of interval censoring, and claims reported only by size band are the usual source.
-- **Closed forms:** The grouped likelihood usually has to be maximised numerically. With only two groups, the maximum sets $F(c_1 \mid \theta) = n_1/n$ for any one-parameter model. For the [[Exponential Distribution|exponential]] with equally spaced boundaries, every term is a power of $p = e^{-h/\theta}$, where $h$ is the spacing, and the maximum has a closed form.
+- **What grouping costs:** Grouped data say nothing about where in its interval each value fell. Grouping is a form of interval censoring.
+- **Closed forms:** The grouped likelihood usually has to be maximised numerically. For the [[Exponential Distribution|exponential]] with equally spaced boundaries, every term is a power of $p = e^{-h/\theta}$, where $h$ is the spacing, and the maximum has a closed form.
 - **Histogram and ogive:** The [[Histogram|histogram]] $f_n$ is constant on each interval, with total area 1. The ogive $F_n$, its integral, joins the empirical distribution function at the boundaries with straight lines, which assumes that the observations are spread evenly within each interval. These are the grouped-data counterparts of the [[Empirical Distribution|empirical distribution]], and neither is defined on an open last interval.
 
 > [!example]- Exponential Fit to Claims Counted by Size Band {Example}

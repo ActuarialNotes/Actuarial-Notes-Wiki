@@ -7,12 +7,14 @@ date: "2010"
 Type: "Study Note"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf)"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
   content_hash: sha256:f7a4bbc2d48e30e117386233de0dc50da25f6c0af377aa4767edb165dc3a2d4d
-  sources: []
+  sources:
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, Version 3, July 30 2010), title page (PDF p.1), acknowledgments (PDF pp.5-6), printed TOC (PDF pp.7-8), bookmark outline, every chapter's section headings, Ch.1 pp.10-16 (PDF 16-22), Part 3 intro p.79 (PDF 85), Part 4 intro p.369 (PDF 375), Ch.16 p.370 (PDF 376), Ch.17 pp.386-387 (PDF 392-393), List of Changes (PDF p.450), Errata (PDF p.451), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+    - "CAS Exam 5 Content Outline, Fall 2026 (v02 2026_09_15), Domain B tasks 1-20, pp.4-5; Complete Text References, p.6, sha256:fd8373ae9bbe7e56b93f99cee304c76c1d29a9d0dc7f07e6ed500bd647f41795 — https://www.casact.org/sites/default/files/2026-03/Exam_5_CO_2026_Fall.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Estimating Unpaid Claims Using Basic Techniques (Friedland - 2010).md

@@ -2,13 +2,13 @@
 verification:
   status: in_review
   confidence: null
-  last_checked: 2026-10-09
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
   content_hash: sha256:134c0a9ad45182e24df265ddfcaf7e7eb7ce1c3e25195be19a5aba3cb1a3b6c4
   sources:
-    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch.1 p.14 (PDF p.20), Ch.4 p.44 (PDF p.50), Ch.6 p.71 (PDF p.77), Ch.11 pp.206-208 (PDF pp.212-214), Ch.13 p.288 (PDF p.294), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
-    - "CAS Exam 5 Content Outline, Fall 2025, p.3 task A3, sha256:bbb07433732f1d2f097db74e69ed263771dd512ce3e14229384b6df5654ebfc7 — https://www.casact.org/sites/default/files/2025-05/Exam_5_ContentOutline_2025_F.pdf"
-    - "CAS Exam 5 Content Outline, Fall 2026, p.3 task A3, sha256:fd8373ae9bbe7e56b93f99cee304c76c1d29a9d0dc7f07e6ed500bd647f41795 — https://www.casact.org/sites/default/files/2026-03/Exam_5_CO_2026_Fall.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ver. July 2010), full-text search; Ch.11 p.198 (PDF p.204), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+    - "ASOP No. 43, Property/Casualty Unpaid Claim Estimates (ASB, June 2007, Doc. No. 159), full-text search, sha256:776302c442cb8d3210fc41269d38caeec4c547da8159084b80fa2ac4ce949cce — https://www.actuarialstandardsboard.org/wp-content/uploads/2014/02/asop043_159.pdf"
+    - "CAS Exam 5 Content Outline, Fall 2026, pp.3-6 (tasks A3, B16-B20; Complete Text References), sha256:fd8373ae9bbe7e56b93f99cee304c76c1d29a9d0dc7f07e6ed500bd647f41795 — https://www.casact.org/sites/default/files/2026-03/Exam_5_CO_2026_Fall.pdf"
   open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Close Year.md

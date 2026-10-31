@@ -86,3 +86,21 @@ created: 2026-09-12
 - checks_run: F-001/F-002 re-read against Friedland and fixed; both examples recomputed (3,500,000/700 = 5,000; 4,200,000/300 = 14,000; 7,700,000/1,000 = 7,700; 5,000/7,700 = 0.649); full-text search of Friedland and Werner for 'close year'; Exam 5 content outlines Fall 2025 and Fall 2026 diffed for the term.
 - sources_checked: Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch.1 p.14 (PDF p.20), Ch.4 p.44 (PDF p.50), Ch.6 p.71 (PDF p.77), Ch.11 pp.206-208 (PDF pp.212-214), Ch.13 p.288 (PDF p.294), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf; CAS Exam 5 Content Outline, Fall 2025, p.3 task A3, sha256:bbb07433732f1d2f097db74e69ed263771dd512ce3e14229384b6df5654ebfc7 — https://www.casact.org/sites/default/files/2025-05/Exam_5_ContentOutline_2025_F.pdf; CAS Exam 5 Content Outline, Fall 2026, p.3 task A3, sha256:fd8373ae9bbe7e56b93f99cee304c76c1d29a9d0dc7f07e6ed500bd647f41795 — https://www.casact.org/sites/default/files/2026-03/Exam_5_CO_2026_Fall.pdf
 - note: F-001 and F-002 fixed from Friedland. Left in_review on F-003: the close-year definition and its operational-use bullet are in no reading read this session ('close year' occurs zero times in Friedland and Werner), and the Fall 2026 Exam 5 outline no longer lists close year.
+
+## [C-003] Still present: Close-year basis and its uses appear in no syllabus reading read
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T13:29Z/0351
+- date: 2026-10-31
+- reaffirms: F-003
+- note: Re-checked 2026-10-31 against both Exam 5 reserving readings and the A3 line. ASOP 43 (sha256:776302c4…): 'close year', 'closed year', 'year of closing', 'settlement year', 'closed claim', 'disposal rate' — zero hits. Friedland (sha256:5e983082…): 'close year', 'closed year', 'year of closing', 'settlement year', 'year of settlement' — zero hits; the one 'year closed' hit (printed p.198, PDF p.204) is 'half-year closing date' in the disposal-rate discussion. CAS Exam 5 Content Outline Fall 2026 (sha256:fd8373ae…) p.3 task A3 lists 'calendar year, policy year, accident year, report year, and in-force' — 'close year' zero hits in the document. The Exam 5 page carries Close Year only as an editorial *Key concepts* entry under A3. Finding stands; the maintainer has to decide whether the page stays on Exam 5 and from what source its definition is written.
+
+## [C-004] Validation pass — in_review
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T13:29Z/0351
+- date: 2026-10-31
+- status_set: in_review
+- checks_run: Full-text search for 'close year' and synonyms in ASOP 43 and Friedland; Fall 2026 Exam 5 outline task A3 re-read and searched; Exam 5 page A3 line read (Close Year is an editorial key concept there). Earlier-fixed F-001/F-002 text unchanged since the 2026-10-09 pass.
+- sources_checked: Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ver. July 2010), full-text search; Ch.11 p.198 (PDF p.204), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf; ASOP No. 43, Property/Casualty Unpaid Claim Estimates (ASB, June 2007, Doc. No. 159), full-text search, sha256:776302c442cb8d3210fc41269d38caeec4c547da8159084b80fa2ac4ce949cce — https://www.actuarialstandardsboard.org/wp-content/uploads/2014/02/asop043_159.pdf; CAS Exam 5 Content Outline, Fall 2026, pp.3-6 (tasks A3, B16-B20; Complete Text References), sha256:fd8373ae9bbe7e56b93f99cee304c76c1d29a9d0dc7f07e6ed500bd647f41795 — https://www.casact.org/sites/default/files/2026-03/Exam_5_CO_2026_Fall.pdf
+- note: Left in_review on F-003 (reaffirmed): neither ASOP 43 nor Friedland names a close-year aggregation basis, and the Fall 2026 Exam 5 outline's A3 no longer lists it. Not verified; maintainer decision needed on whether the page belongs to Exam 5 and what source should define it.

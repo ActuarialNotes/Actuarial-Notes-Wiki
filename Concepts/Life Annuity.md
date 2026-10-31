@@ -30,6 +30,10 @@ A **Life Annuity** pays periodic benefits contingent on the survival of one or m
 - The annuity-immediate is the annuity-due without its first payment: $a_x = \ddot{a}_x - 1$
 - **Temporary** annuity (pays until death or $n$ years, whichever comes first): $\ddot{a}_{x:\overline{n}|} = \ddot{a}_x - v^n\,{_n}p_x\,\ddot{a}_{x+n}$. **Guaranteed** for $n$ years (whichever comes last): $\ddot{a}_{\overline{n}|} + v^n\,{_n}p_x\,\ddot{a}_{x+n}$
 - **Paid continuously** (continuous variant): $\bar{a}_x = \int_0^\infty e^{-\delta t}\,{_t}p_x\,dt = (1 - \bar{A}_x)/\delta$; under a constant force of mortality $\mu$, $\bar{a}_x = 1/(\mu + \delta)$
+- **Temporary annuity-immediate:** $a_{x:\overline{n}|} = \ddot{a}_{x:\overline{n}|} - 1 + {}_nE_x$. Compared with the temporary annuity-due it loses the payment at time 0 and gains a payment at time $n$ if $(x)$ is alive then.
+- **Temporary continuous annuity under a constant force:** with constant force of mortality $\mu$, ${}_tp_x = e^{-\mu t}$, so $\bar{a}_{x:\overline{n}|} = \int_0^n e^{-(\mu+\delta)t}\,dt = \left(1 - e^{-n(\mu+\delta)}\right)/(\mu+\delta)$, the temporary counterpart of $1/(\mu+\delta)$.
+- **Variance:** the present value of the whole life annuity-due is $Y = \ddot{a}_{\overline{K_x+1}|} = (1 - Z)/d$ with $Z = v^{K_x+1}$, so $\text{Var}(Y) = \left({}^2\!A_x - A_x^2\right)/d^2$, where ${}^2\!A_x$ is $A_x$ at $v^2$. The annuity-immediate has the same variance, since it differs from the annuity-due by the constant 1.
+- **Paid $m$ times a year:** the same argument gives $\ddot{a}^{(m)}_x = \left(1 - A^{(m)}_x\right)/d^{(m)}$ and $\text{Var}(Y) = \left({}^2\!A^{(m)}_x - \left(A^{(m)}_x\right)^2\right)/\left(d^{(m)}\right)^2$, where $A^{(m)}_x$ pays at the end of the $\frac1m$-th of a year of death and $d^{(m)}$ is the nominal rate of discount convertible $m$-thly.
 
 ![[Media/Figures/Life_Annuity.svg|340]]
 

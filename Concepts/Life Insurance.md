@@ -32,6 +32,8 @@ verification:
 - Products: [[Whole Life Insurance|whole life]] ($A_x$), term ($A^{1}_{x:\overline{n}|}$), pure endowment (${}_nE_x = v^n\,{}_np_x$), endowment ($A_{x:\overline{n}|} = A^{1}_{x:\overline{n}|} + {}_nE_x$), and policies with account values such as [[Universal Life Insurance|universal life]] and equity-linked contracts
 - **Variance:** the second moment ${}^2\!A$ is $A$ at $v^2$, and $\text{Var}(Z) = {}^2\!A - A^2$ for a benefit of 1. Insurance and [[Life Annuity|annuity]] EPVs are linked by $A_{x:\overline{n}|} = 1 - d\,\ddot{a}_{x:\overline{n}|}$
 - Under the uniform distribution of deaths [[Fractional Age Assumption|fractional age assumption]], $\bar{A}_x = \frac{i}{\delta}A_x$ and $A^{(m)}_x = \frac{i}{i^{(m)}}A_x$ (for a term or endowment insurance, only the death part is adjusted)
+- **Why the products changed:** over the last few decades life insurance products, and the way insurers manage their risks, have changed radically and grown more complex. The reasons given are more sophisticated policyholders, more competition among life insurers and more computing power, together with more complex risk management techniques.
+- **Underwriting and distribution:** the distribution method affects how much underwriting is done. A direct-marketed product with a low face amount may have very limited underwriting. The actuary then assumes higher than normal mortality, which the low expense of selling the business partly offsets.
 
 > [!example]- Three-Year Term Insurance: EPV and Standard Deviation {Example}
 > A 3-year term insurance on $(60)$ pays $100{,}000$ at the end of the year of death. Given $q_{60} = 0.010$, $q_{61} = 0.012$, $q_{62} = 0.014$ and $i = 5\%$, find the EPV and the standard deviation of the present value.

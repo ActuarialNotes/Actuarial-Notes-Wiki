@@ -31,6 +31,9 @@ verification:
 - **Net vs gross:** leave expenses out and the result is the **net premium**; include them and it is the **gross premium**. Net premiums are also used inside net premium policy values, on the valuation basis.
 - **Variance of the loss:** for whole life, $\text{Var}(L_0) = \left(S + P/d\right)^2\left({}^2\!A_x - A_x^2\right)$. Zero expected loss is not zero risk. The portfolio percentile principle instead chooses $P$ so that the aggregate loss on $N$ policies is negative with a target probability, a [[Percentile|percentile]] of the loss usually found with the [[Normal Distribution|normal]] approximation.
 - **State-dependent and joint-life contracts (ALTAM):** the same equation holds. Each EPV is taken over the multiple-state model, or over the joint or last-survivor status, and premiums are valued only while the paying status lasts.
+- **Return of premiums without interest:** A death benefit that returns the premiums paid, without interest, pays $G(k+1)$ on death in year $k+1$, an increasing term insurance. Its EPV is $G\,(IA)^1_{x:\overline{n}|}$, plus $S\,A^1_{x:\overline{n}|}$ when a level sum $S$ is paid as well. Because $G$ appears on both sides of the equation of value, collect its terms and solve: $G\,\ddot{a}_{x:\overline{n}|} = S\,A^1_{x:\overline{n}|} + G\,(IA)^1_{x:\overline{n}|}$ gives $G = S\,A^1_{x:\overline{n}|}/\left(\ddot{a}_{x:\overline{n}|} - (IA)^1_{x:\overline{n}|}\right)$, with any expenses added to the right-hand side first. For whole life, $G = S\,A_x/\left(\ddot{a}_x - (IA)_x\right)$.
+- **Increasing term from level terms:** $(IA)^1_{x:\overline{n}|} = (n+1)A^1_{x:\overline{n}|} - \sum_{k=1}^{n} A^1_{x:\overline{k}|}$. A benefit of $k+1$ on death in year $k+1$ is $n+1$ less $n-k$, and the decreasing benefit $n-k$ is a stack of term insurances of 1 for $1, 2, \ldots, n$ years, since a death in year $k+1$ is covered by the $n-k$ of them that last at least $k+1$ years.
+- **Return of premiums with interest:** If the death benefit is the premiums accumulated at the valuation rate $i$, paid at the end of the year of death, its present value on death in year $K_x+1$ is $P\,\ddot{s}_{\overline{K_x+1}|}\,v^{K_x+1} = P\,\ddot{a}_{\overline{K_x+1}|}$, exactly the present value of the premiums paid. These death benefits are self-funding, so for an $n$-year endowment insurance with this death benefit and an endowment of $E$, the equation of value reduces to $P\,\ddot{s}_{\overline{n}|} = E$, and mortality drops out. For a whole life policy with premiums payable for life, the same refund plus a sum $S$ on death leaves the loss at $S\,v^{K_x+1}$ whatever the premium, so no premium satisfies the equation, and a refund at a rate above $i$ makes the loss positive every time.
 
 > [!example]- Net Premium and Loss Volatility for Whole Life {Example}
 > Using the Standard Ultimate Life Table at $i = 5\%$ ($A_{50} = 0.18931$, ${}^2\!A_{50} = 0.05108$, $\ddot{a}_{50} = 17.0245$), find the net annual premium for a fully discrete whole life insurance of \$100,000 on $(50)$. Then find the standard deviation of $L_0$.
@@ -79,6 +82,21 @@ verification:
 > > \end{align*}
 > > $$
 > > Valuing premiums with the last-survivor annuity $\bar{a}_{\overline{xy}} = 16.786$ would give \$957.45. That premium is too small, because no premium is paid after the first death.
+
+> [!example]- Whole Life with a Return of Premiums {Example}
+> A fully discrete whole life insurance on $(40)$ pays \$10,000 plus a return of all premiums paid, without interest, at the end of the year of death. The annual net premium is \$290.84, $(IA)_{40} = 8.6179$ and $i = 4\%$. Find $\ddot{a}_{40}$.
+>
+> > [!answer]-
+> > Write the equation of value with the refund on the benefit side, then replace $A_{40}$ by $1 - d\,\ddot{a}_{40}$ so that $\ddot{a}_{40}$ is the only unknown. Here $d = 0.04/1.04 = 0.0384615$.
+> > $$
+> > \begin{align*}
+> > 290.84\,\ddot{a}_{40} &= 10{,}000A_{40} + 290.84\,(IA)_{40} \\
+> > 290.84\,\ddot{a}_{40} &= 10{,}000(1 - 0.0384615\,\ddot{a}_{40}) + 2{,}506.43 \\
+> > \ddot{a}_{40}(290.84 + 384.615) &= 12{,}506.43 \\
+> > \ddot{a}_{40} &= 18.516
+> > \end{align*}
+> > $$
+> > So $A_{40} = 1 - 0.0384615(18.516) = 0.2879$. Without the refund the same $A_{40}$ would need a premium of only $10{,}000(0.2879)/18.516$, about \$155: the refund nearly doubles the premium, because the refund itself has to be paid for out of the premiums.
 
 > [!tip]- How it appears on the exam
 > - **FAM** gives a life table (usually the SULT) or a survival model, a benefit and an expense basis. It asks for the net or gross annual premium by the equivalence principle, often with limited premium terms or a return-of-premium benefit.

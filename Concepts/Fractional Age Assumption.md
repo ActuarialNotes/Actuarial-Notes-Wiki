@@ -32,6 +32,8 @@ verification:
 - **What UDD means.** $\ell_{x+s}$ is linear in $s$, so the density ${}_sp_x\,\mu_{x+s} = q_x$ is flat over the year. Equivalently, $T_x = K_x + R$, where $R$ is [[Uniform Continuous Distribution|uniform]] on $(0,1)$ and independent of the curtate lifetime $K_x$. This gives $\mathring{e}_x = e_x + \tfrac12$. Under a constant force, $\ell_{x+s}$ is exponential in $s$ and $\mu$ is flat within the year.
 - **Within a year, not from age $x$.** For $0 \le t < t+s \le 1$, UDD gives ${}_sq_{x+t} = s\,q_x/(1 - t\,q_x)$, while a constant force gives ${}_sp_{x+t} = (p_x)^s$. Across an integer age, split the period and multiply the pieces.
 - **Insurance values (FAM).** Under UDD, $\bar{A}_x = \tfrac{i}{\delta}A_x$ and $A^{(m)}_x = \tfrac{i}{i^{(m)}}A_x$. The claims acceleration approximation $\bar{A}_x \approx (1+i)^{1/2}A_x$ assumes instead that deaths are paid, on average, half a year early.
+- **Annuity values (FAM).** Annuities follow from the insurance values through $\ddot{a}^{(m)}_x = (1 - A^{(m)}_x)/d^{(m)}$, not by multiplying $\ddot{a}_x$ by a ratio. Under UDD this gives $\ddot{a}^{(m)}_x = \alpha(m)\,\ddot{a}_x - \beta(m)$, with $\alpha(m) = \frac{i\,d}{i^{(m)}\,d^{(m)}}$ and $\beta(m) = \frac{i - i^{(m)}}{i^{(m)}\,d^{(m)}}$. For an $n$-year temporary annuity, $\ddot{a}^{(m)}_{x:\overline{n}|} = \alpha(m)\,\ddot{a}_{x:\overline{n}|} - \beta(m)\left(1 - {}_nE_x\right)$. [[Woolhouse's Formula|Woolhouse's formula]] is the other standard approximation.
+- **Over a longer interval.** A table given only every $n$ years can be filled in the same way. If deaths are uniform over the $n$ years from age $x$, then $\ell_{x+s}$ is linear for $0 \le s \le n$ and ${}_sq_x = \frac{s}{n}\,{}_nq_x$.
 - **Multiple decrements (ALTAM).** UDD in the multiple decrement table, or constant forces, gives $p'^{(j)}_x = \left(p^{(\tau)}_x\right)^{q^{(j)}_x/q^{(\tau)}_x}$. UDD in each single decrement table instead gives, for two decrements, $q^{(1)}_x = q'^{(1)}_x\left(1 - \tfrac12 q'^{(2)}_x\right)$.
 
 > [!example]- Survival Across a Birthday {Example}
@@ -67,6 +69,23 @@ verification:
 > > \end{align*}
 > > $$
 > > Paying at the moment of death raises the value by about $2.5\%$. Monthly payment raises it by a little less.
+
+> [!example]- A Monthly Annuity Under UDD {Example}
+> On the SULT at $i = 5\%$, $\ddot{a}_{50} = 17.0245$. Find $\ddot{a}^{(12)}_{50}$ under UDD, and check it against $A^{(12)}_{50} = 0.19361$ from the previous example.
+>
+> > [!answer]-
+> > At $5\%$, $i^{(12)} = 0.048889$ and $d^{(12)} = 0.048691$.
+> > $$
+> > \begin{align*}
+> > \alpha(12) &= \frac{(0.05)(0.047619)}{(0.048889)(0.048691)} \\
+> > &= 1.00020 \\
+> > \beta(12) &= \frac{0.05 - 0.048889}{(0.048889)(0.048691)} \\
+> > &= 0.46651 \\
+> > \ddot{a}^{(12)}_{50} &= 1.00020(17.0245) - 0.46651 \\
+> > &= 16.5614
+> > \end{align*}
+> > $$
+> > The check is $(1 - 0.19361)/0.048691 = 16.5614$. Monthly payments are worth about $0.46$ less than annual ones in advance, close to the $\frac{m-1}{2m} = 0.458$ that paying each instalment later on average suggests.
 
 > [!example]- Deconstructing a Multiple Decrement Table {Example}
 > A two-decrement model has $q^{(1)}_x = 0.03$ (death) and $q^{(2)}_x = 0.12$ (withdrawal). Assuming UDD in the multiple decrement table, find the associated single decrement rates $q'^{(1)}_x$ and $q'^{(2)}_x$.

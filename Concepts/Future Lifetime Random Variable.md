@@ -40,6 +40,10 @@ verification:
 - **One life, one model:** The lifetimes at different ages come from one lifetime $T_0$, conditioned on survival to age $x$, so ${}_tp_x = S_0(x+t)/S_0(x)$ and ${}_{t+u}p_x = {}_tp_x\,{}_up_{x+t}$. In a select model the distribution also depends on the age at selection, which the notation shows as ${}_tp_{[x]+s}$. A [[Joint Life|joint life]] status combines the future lifetimes of two such lives, $T_x$ and $T_y$.
 - **Curtate lifetime and moments:** $K_x$ takes the value $k$ with probability ${}_kp_x\,q_{x+k} = {}_{k|}q_x$, for $k = 0, 1, 2, \ldots$. The second moments are $E[T_x^2] = 2\int_0^\infty t\,{}_tp_x\,dt$ and $E[K_x^2] = \sum_{k \ge 1}(2k-1)\,{}_kp_x$, and each variance is the second moment less the squared mean. Capping the lifetime at $n$ years gives the term expectations $\mathring{e}_{x:\overline{n}|} = \int_0^n {}_tp_x\,dt$ and $e_{x:\overline{n}|} = \sum_{k=1}^n {}_kp_x$.
 - **Under UDD:** With the uniform distribution of deaths [[Fractional Age Assumption|fractional age assumption]], $T_x = K_x + R$, where $R$ is uniform on $(0,1)$ and independent of $K_x$. It follows that $\mathring{e}_x = e_x + \frac12$ and $\text{Var}(T_x) = \text{Var}(K_x) + \frac{1}{12}$.
+- **Recursions for the expectation of life:** Splitting the lifetime at $n$ years gives $\mathring{e}_x = \mathring{e}_{x:\overline{n}|} + {}_np_x\,\mathring{e}_{x+n}$, and likewise $e_x = e_{x:\overline{n}|} + {}_np_x\,e_{x+n}$: the years lived in the first $n$, plus, if $(x)$ survives them, the expectation from age $x+n$. With $n = 1$ these are the one-year recursions $\mathring{e}_x = \int_0^1 {}_tp_x\,dt + p_x\,\mathring{e}_{x+1}$ and $e_x = p_x\left(1 + e_{x+1}\right)$.
+- **Select expectations:** The same recursions hold for a select life, run year by year through the select period and then into the ultimate part of the table: $\mathring{e}_{[x]} = \int_0^1 {}_tp_{[x]}\,dt + p_{[x]}\,\mathring{e}_{[x]+1}$, and so on. With a select period of $d$ years, the life aged $x+d$ selected at $x$ is subject to ultimate mortality, so $\mathring{e}_{[x]+d} = \mathring{e}_{x+d}$.
+- **Percentiles of a decreasing function:** If $Y = g(T_x)$ with $g$ decreasing, a large value of $Y$ comes from an early death. So the $p$-th percentile of $Y$ is $g(t)$ at the $t$ with $\Pr(T_x > t) = {}_tp_x = p$, which is the $(1-p)$-th percentile of $T_x$. The present value $v^{T_x}$ of a benefit paid at death, and most loss random variables, are decreasing in $T_x$, and the same reasoning applies to functions of $K_x$.
+- **A term benefit:** For an $n$-year term benefit paid at death, the present value is $v^{T_x}$ if $T_x \le n$ and 0 after the term, so it falls with the time of death and then drops to zero. Its $p$-th percentile comes from an early death: find $t$ with ${}_tp_x = p$, that is $\ell_{x+t} = p\,\ell_x$. If $t$ falls inside the term the percentile is $v^t$. If $t$ falls after it, more than a proportion $p$ of lives survive the term and receive nothing, so the percentile is 0.
 
 > [!example]- Probabilities and Moments from a Survival Function {Example}
 > A newborn's lifetime has survival function $S_0(x) = \left(1 - \frac{x}{100}\right)^{1/2}$ for $0 \le x \le 100$. For a life aged 40, find ${}_{20}p_{40}$, ${}_{10|10}q_{40}$, $\mu_{60}$, $\mathring{e}_{40}$ and the standard deviation of $T_{40}$.
@@ -96,6 +100,22 @@ verification:
 > > &= 0.7308
 > > \end{align*}
 > > $$
+
+> [!example]- A Percentile of the Present Value of a Death Benefit {Example}
+> For the survival function of the first example, a life aged 40 has ${}_tp_{40} = \left(1 - \frac{t}{60}\right)^{1/2}$. With $\delta = 0.04$, find the 90th percentile of the present value of a benefit of 1 paid at the moment of death under a whole life insurance, a 20-year term insurance and a 10-year term insurance.
+>
+> > [!answer]-
+> > The present value falls as the death comes later, so its 90th percentile comes from the time by which only 10% of lives have died.
+> > $$
+> > \begin{align*}
+> > \left(1 - \tfrac{t}{60}\right)^{1/2} &= 0.9 \\
+> > t &= 60(1 - 0.81) \\
+> > &= 11.4 \\
+> > v^{11.4} &= e^{-0.04(11.4)} \\
+> > &= 0.6338
+> > \end{align*}
+> > $$
+> > The 90th percentile is $0.6338$ for the whole life insurance and for the 20-year term, since 11.4 years is inside the term. For the 10-year term it is 0: more than 90% of lives survive ten years, and their present value is zero.
 
 > [!tip]- How it appears on the exam
 > - **FAM** gives a survival function, a force of mortality or a life table, and asks for ${}_tp_x$, ${}_tq_x$, ${}_{u|t}q_x$, $\mu_{x+t}$ or the density $f_x(t)$ for a life at a stated age, using select notation where the table is select.

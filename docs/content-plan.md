@@ -19,7 +19,8 @@ roadmap review_
 > maintainer moved them back to `beta` the same day, because their banks had not been checked
 > against G8. Each comes back to `ready` once its bank is run and its items are closed (steps 0
 > and 10). **Exams P and FM are `ready` again (30 Oct)**, and **MAS-I, the three DISCs and Exam 7 (31 Oct)**,
-> 8 / 8: all seven moved back on 25 Oct are ready again. The other ten are beta exams in Phase 2.
+> 8 / 8: all seven moved back on 25 Oct are ready again. **MAS-II is `ready` (31 Oct)**, the first of the
+> ten beta exams in Phase 2 to pass all eight (step 1); the other nine follow.
 
 This is the **one plan for the vault's content**: the exam pages, concept pages, resource pages
 and question banks, the fact check that stands behind them, and the generated figures and
@@ -778,7 +779,7 @@ and then a resolve run.
 | Step | Exam | Left | Sources | Ends with |
 |---|---|---|---|---|
 | 0 | MAS-I, with MAS-II and SRM; the seven moved back from ready | The ISLR and Dobson deltas: the ACIA Capstone lines the CIA commit added. Then `check-answerable` on the seven banks, 2,020 questions, runs only: it measures what step 10 holds | Free (the books and the CIA syllabus); about $445 of model calls | MAS-I to 7 / 8; every one of the seven with a record, so step 10 is sized and placed |
-| 1 | MAS-II | 2 concepts restated off Cowpertwait's wording. G8 (§3.9): 141 items on 67 questions. The Fall 2018 McElreath questions first, under D24, which takes ESS, WAIC and KL divergence out with their questions; then the page gaps (*Linear Mixed Model* 17 items, *Principal Components Analysis* 8, and 55 smaller pages) and 28 retags | fpp3, NIST (open); West, ISLR, Tse for the gaps | **ready** |
+| 1 | MAS-II | 2 concepts restated off Cowpertwait's wording. G8 (§3.9): 141 items on 67 questions. The Fall 2018 McElreath questions first, under D24, which takes ESS, WAIC and KL divergence out with their questions; then the page gaps (*Linear Mixed Model* 17 items, *Principal Components Analysis* 8, and 55 smaller pages) and 28 retags | fpp3, NIST (open); West, ISLR, Tse for the gaps | **ready ✅ (31 Oct)**, 8 / 8 |
 | 2 | Exam 9 | *Enterprise Risk Management*; CJS and Cummins 2008 | Open ERM texts; the assigned texts tried again | **ready**, or held on a copy only the maintainer can supply |
 | 3 | SRM | 7 concepts; Frees 2010 | ISLR (free), Frees (commercial; an online version) | **ready** |
 | 4 | Exam 5 | 61 concepts; 4 readings | All free; Friedland split by chapter group | **ready** (and the reserving concepts FAM and ASTAM share) |
@@ -803,7 +804,7 @@ runs are complete for P and FM and partial for the other five. Under D30 the ope
 | exam-p | 284 / 719 → **719 / 719 ✅ (30 Oct)** | 456 → 0 | 227 → 0 | 0 |
 | exam-fm | 253 / 460 → **460 / 460 ✅ (30 Oct)** | 241 → 0 | 59 → 0 | 0 |
 | exam-mas-i | 35 / 281 → **281 / 281 ✅ (30 Oct)** | 22 → 72 → 0 | 7 → 20 → 0 | 225 → 0 |
-| exam-mas-ii | 80 / 141 | 113 | 17 | 0 |
+| exam-mas-ii | 80 / 141 → **124 / 124 ✅ (31 Oct)** | 113 → 0 | 17 → 0 | 0 |
 | exam-7 | 21 / 125 → **124 / 124 ✅ (31 Oct)** | 30 → 0 | 7 → 0 | 0 |
 | exam-disc-da | 48 / 70 → **70 / 70 ✅ (31 Oct)** | 8 → 0 | 7 → 0 | 0 |
 | exam-disc-rm | 53 / 144 → **144 / 144 ✅ (31 Oct)** | 5 → 0 | 6 → 0 | 0 |
@@ -820,6 +821,31 @@ writer (runs `a2ck`, `g8-masi-check-A1-2026-10-30`, `chkB`, `g8C-chk`; four mino
 `--check MAS-I` passes **8 / 8**, and MAS-I is **ready** again (31 Oct). *Overfitting*, edited
 but never fact checked before, is `in_review` (only its new bullet checked); it is not a MAS-I page. Exam 7 and the DISCs reach none of those pages and
 are short lists: finish their runs and close them alongside. Steps 2–9 follow as listed.
+
+**Step 1 done (31 Oct): MAS-II is ready**, 8 / 8. In order:
+
+- **D24 on Fall 2018** (run `d56c`). 17 of Q16–Q35, on McElreath's computation (Metropolis, ESS,
+  HMC, Gelman-Rubin, WAIC, KL divergence, HPDIs, model averaging), are `off_syllabus`, re-passed.
+  Q23 (ISLR §3.3.3), Q28 and Q31 (Tse 8.1.1) stay served. Served questions 141 → 124; G6 holds.
+- **The sort** (rule 11, run `2782`). 13 items closed `not-required`, 7 resolved on passages the
+  check had missed, 9 questions retagged and re-passed (10 items). 54 left for writers.
+- **The pages.** Four writers, one per reading (West, Cowpertwait, ISLR with Goldburd, Tse), wrote
+  the 54 onto 19 pages from open texts. Six checkers, none a writer, fact checked every page whole
+  and closed the items (runs `9cfd`, `1486`, `b549`, `9044`, `61e8`, `8e26`): all 19 verified (14
+  medium, 5 high), 13 minor findings fixed. *Correlogram* and *Backward Shift Operator*, G4's two
+  `in_review` pages, were restated off Cowpertwait (its −1/n ± 2/√n bounds and its notation, which
+  no open text confirms, became fpp3's and Shumway & Stoffer's), so G4 passes.
+- **Rule 6.** The edits re-verified pages shared with MAS-I (*Multicollinearity*), SRM and the
+  ACIA Capstone (*K-Nearest Neighbors*, *Proportion of Variance Explained*), ATPA (*Linear Mixed
+  Model*) and PCPA (*Quantile Plot*). MAS-I stays 8 / 8.
+- **Judgment calls in the record.** `masii-2019f-q12:r4` and `masi-2018s-q42:r2` were resolved by
+  the coordinator on verified passages that teach what the solution needs. The first was resolved
+  without a source for "the KR df converge to the naive ones". The second was re-quoted after the
+  Correlogram restatement; its stem prints its own bounds. `masii-2019f-q39:r5` was resolved after
+  its "eigenvalue near 1" clause was cut as unsourced.
+- **The app agrees with the gate.** The answerability panel now counts a prerequisite exam's pages
+  as in reach (`prerequisitePages` in `lib/answerability.ts`), as `answerability_lib.py` does. 15
+  served MAS-II questions read *Answerable* only through MAS-I's pages.
 
 **Sizing.** These numbers come from `verification-plan.md` §6 and the FM and Exam 9 packets:
 
@@ -1004,7 +1030,7 @@ build with the default until the decision is made.
 | D20 | — | A reading with no public copy (the ISO CGL plan) | ✅ settled 18 Oct 2026: **the default stands.** P1 is not loosened: the page stays `in_review`, Exam 8 stays beta, until someone reads the study-kit manual. Re-asked as D28 (25 Oct), since it now also holds Exam 6C |
 | D21 | — | Goldburd et al. 2020 vs the 2025 revision Exam 8 assigns | The page as it is |
 | D23 | — | MAS-II's page has 36 tasks where the 2026 outline has 21 (F-001): restore the outline's (about ten in-reading concepts tagged on paper questions would leave the syllabus) or keep the vault's | ✅ settled 18 Oct 2026: **the outline's 21 tasks, verbatim**; the vault's finer concepts (*Posterior Distribution*, *AIC* …) stay on the syllabus on `*Key concepts:*` lines — D8's rule |
-| D24 | — | MAS-II's 2019 papers' ~35 Bayesian/MCMC questions (McElreath, no longer assigned): `off_syllabus` or served | ✅ settled 18 Oct 2026: **`off_syllabus: true`** — kept, found by sitting and search, out of quiz draws, as Exam 9's and 6C's outlived questions are. Applied to 29; five of the 34 the packets listed are answerable from a current reading (2019S Q24 from West; 2019F Q22, 25, 32, 37 from MAS-I, which MAS-II assumes) and stay served |
+| D24 | — | MAS-II's 2019 papers' ~35 Bayesian/MCMC questions (McElreath, no longer assigned): `off_syllabus` or served | ✅ settled 18 Oct 2026: **`off_syllabus: true`** — kept, found by sitting and search, out of quiz draws, as Exam 9's and 6C's outlived questions are. Applied to 29; five of the 34 the packets listed are answerable from a current reading (2019S Q24 from West; 2019F Q22, 25, 32, 37 from MAS-I, which MAS-II assumes) and stay served. Applied to Fall 2018 on 31 Oct (run `d56c`): 17 of Q16–Q35 flagged; Q23 (ISLR §3.3.3), Q28 and Q31 (Tse 8.1.1) served |
 | D22 | — | Exam 9's unread readings (Brehm, Mildenhall & Major, Grossi & Kunreuther; both Cummins articles; CJS's JEP text): a copy, or a reachable author-posted one | ✅ settled 18 Oct 2026: **verify on open texts at D7's medium ceiling** — each concept against a citable open source that states the same thing (MAS-II's method: Loss Data Analytics, fpp3, NIST), with the assigned reading's contents and catalogue record as the scope check. Only what no open source covers stays `in_review`. The two readings' own pages stay as verified at medium |
 | D27 | — (new, 25 Oct) | Extend D22's open-text method from Exam 9 to every beta exam: commercial readings' pages at medium against contents, catalogue and outline; their concepts at medium against open texts; what no open source states cut or restated rather than left `in_review` | **Yes**, the method Phase 2 runs on. It follows from D7 and D22 and needs no new rule; it is recorded so a sweep doesn't ask exam by exam |
 | D28 | D20, re-asked (25 Oct) | A reading that is **only in the CAS study kit**, with a page that states only what the outline says (citation, assigned pages, the cases or sections it lists) and nothing about the document's content. Verify that page at medium against the outline, the way D22's pages were verified against contents and catalogue, or hold it `in_review` until someone reads the kit. New reason: under D20 this blocks **Exam 8** (the ISO CGL plan) and also **Exam 6C** (Agricultural Programs, Baer & Rendall, KPMG Regulatory Oversight, Landmark Legal, McDonald, Morneau Shepell), so two of the ten beta exams can't reach `ready` without the kit | ✅ settled 25 Oct 2026: **hold.** A study-kit-only reading stays `in_review` until the kit itself is read; P1 is not loosened and the outline is not a substitute. Exam 8 and 6C stay beta on these pages alone, and the rest of both campaigns runs regardless |

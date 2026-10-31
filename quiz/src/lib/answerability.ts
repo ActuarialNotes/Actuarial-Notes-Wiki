@@ -246,18 +246,69 @@ export function quoteText(quote: string): string {
 
 /**
  * What a question can reach today, beyond what the check recorded: the pages
- * it is tagged with (its `wiki_link`, read off the question as it is now) and
- * the pages its exam's learning objectives link (D30). Page titles, compared
- * without case — a `[[link]]` opens its page by exact or case-folded title.
+ * it is tagged with (its `wiki_link`, read off the question as it is now), the
+ * pages its exam's learning objectives link (D30), and the pages its exam
+ * assumes (`prerequisitePages`). Page titles, compared without case — a
+ * `[[link]]` opens its page by exact or case-folded title.
  */
 export interface ReachNow {
   tagged: ReadonlySet<string>
   syllabus: ReadonlySet<string>
+  prerequisite: ReadonlySet<string>
 }
 
-export function reachNow(tags: Iterable<string>, syllabus: Iterable<string>): ReachNow {
+export function reachNow(tags: Iterable<string>, syllabus: Iterable<string>, prerequisite: Iterable<string> = []): ReachNow {
   const fold = (xs: Iterable<string>) => new Set([...xs].map((x) => x.trim().toLowerCase()).filter(Boolean))
-  return { tagged: fold(tags), syllabus: fold(syllabus) }
+  return { tagged: fold(tags), syllabus: fold(syllabus), prerequisite: fold(prerequisite) }
+}
+
+/**
+ * Every page an exam assumes, as `prerequisite_pages` in answerability_lib.py
+ * reads it: what the exam page's *Prerequisite knowledge* callout links — a
+ * concept page as itself, an exam page as that exam's learning-objective
+ * concepts — and, through each exam it names, what that exam assumes in turn.
+ * `examPages` is the `Exam *.md` pages by file name; `objectivePages` gives an
+ * exam's learning-objective concepts from its file name. Read off the pages,
+ * never inferred: an exam page with no such callout assumes nothing.
+ */
+export function prerequisitePages(
+  examFile: string,
+  examPages: Readonly<Record<string, string>>,
+  objectivePages: (examFile: string) => string[],
+): string[] {
+  const byTitle = new Map(Object.keys(examPages).map((f) => [f.replace(/\.md$/i, '').toLowerCase(), f]))
+  const out = new Set<string>()
+  const seen = new Set<string>()
+  const todo = [examFile.endsWith('.md') ? examFile : `${examFile}.md`]
+  while (todo.length) {
+    const exam = todo.pop()!
+    if (seen.has(exam) || !(exam in examPages)) continue
+    seen.add(exam)
+    for (const link of prerequisiteCalloutLinks(examPages[exam])) {
+      const target = link.split('/').pop()!.trim()
+      const examHit = byTitle.get(target.toLowerCase())
+      if (examHit) {
+        objectivePages(examHit).forEach((p) => out.add(p))
+        todo.push(examHit)
+      } else if (target) {
+        out.add(target)
+      }
+    }
+  }
+  return [...out]
+}
+
+/** The `[[link]]` targets inside an exam page's `> [!question]- Prerequisite knowledge` callout. */
+export function prerequisiteCalloutLinks(markdown: string): string[] {
+  const lines = markdown.split('\n')
+  const out: string[] = []
+  for (let i = 0; i < lines.length; i++) {
+    if (!/^>\s*\[!question\][-+]?\s*.*prerequisite/i.test(lines[i])) continue
+    for (let j = i + 1; j < lines.length && /^>/.test(lines[j]); j++) {
+      for (const m of lines[j].matchAll(/\[\[([^\]|#]+)(?:#[^\]|]*)?(?:\|[^\]]*)?\]\]/g)) out.push(m[1].trim())
+    }
+  }
+  return out
 }
 
 /**
@@ -297,16 +348,16 @@ export interface RequirementNow {
 /**
  * Where a requirement stands now. A resolution wins (it was proved in code when
  * it was written); else a place the check recorded is in reach as recorded;
- * else a place on a page the question is now tagged with, or on the exam's
- * syllabus, brings it into reach; else it stands as the check found it.
+ * else a place on a page the question is now tagged with, on the exam's
+ * syllabus or on a page the exam assumes, brings it into reach; else it stands as the check found it.
  */
 export function requirementNow(req: AnswerabilityRequirement, reach?: ReachNow): RequirementNow {
   if (req.resolution?.kind === 'not-required') return { state: 'not-required' }
   if (req.resolution?.kind === 'taught') return { state: 'resolved', page: req.resolution.page }
   if (IN_REACH.has(req.status)) return { state: req.status as AnswerabilityTier, page: req.places[0]?.page }
   if (reach) {
-    for (const tier of ['tagged', 'syllabus'] as const) {
-      const pages = tier === 'tagged' ? reach.tagged : reach.syllabus
+    for (const tier of ['tagged', 'syllabus', 'prerequisite'] as const) {
+      const pages = reach[tier]
       const hit = req.places.find((p) => pages.has(p.page.toLowerCase()))
       if (hit) return { state: tier, page: hit.page }
     }

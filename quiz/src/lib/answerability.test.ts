@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { readFileSync, readdirSync } from 'node:fs'
+import { existsSync, readFileSync, readdirSync } from 'node:fs'
 import { join } from 'node:path'
 import {
   answerabilityEntry,
@@ -8,6 +8,8 @@ import {
   checkSentence,
   nowSentence,
   parseAnswerabilityRecord,
+  prerequisiteCalloutLinks,
+  prerequisitePages,
   questionTagTitles,
   quoteText,
   reachNow,
@@ -137,6 +139,21 @@ describe('where a requirement stands now', () => {
     expect(verdictNow(gap, reach)).toBe('gap')
   })
 
+  it('reads the pages an exam assumes off its Prerequisite knowledge callout, through every exam it names', () => {
+    const examPages = {
+      'Exam B.md': '> [!question]- Prerequisite knowledge\n>\n> - [[Concepts/Calculus]] at a thorough level.\n> - All of [[Exam A|A]].\n\n## Learning Objectives',
+      'Exam A.md': '> [!question]- Prerequisite knowledge\n> - [[Probability]]\n',
+      'Exam C.md': 'No callout here. [[Statistics]]',
+    }
+    const objectives: Record<string, string[]> = { 'Exam A.md': ['Median', 'Mode'] }
+    expect(prerequisiteCalloutLinks(examPages['Exam B.md'])).toEqual(['Concepts/Calculus', 'Exam A'])
+    expect(prerequisitePages('Exam B', examPages, (f) => objectives[f] ?? []).sort())
+      .toEqual(['Calculus', 'Median', 'Mode', 'Probability'])
+    expect(prerequisitePages('Exam C', examPages, () => [])).toEqual([])
+    const elsewhereOnMedian = { ...elsewhere, places: [{ page: 'Median', quote: 'q' }] }
+    expect(requirementNow(elsewhereOnMedian, reachNow([], [], ['Median']))).toEqual({ state: 'prerequisite', page: 'Median' })
+  })
+
   it('reads a question’s tags as page titles, as answerability_lib.py does', () => {
     const raw = '---\nid: "p-1"\nwiki_link:\n  - Concepts/Bayes+Theorem\n  - "Concepts/Set+Theory"\nanswer: "B"\n---\nBody'
     expect(questionTagTitles(raw)).toEqual(['Bayes Theorem', 'Set Theory'])
@@ -153,20 +170,28 @@ describe('the panel against the gate', () => {
   const catalog = JSON.parse(readFileSync(join(root, 'scripts/exam_catalog.json'), 'utf8'))
   const ready = (catalog.exams as { page: string; bank: string | null; status: string }[])
     .filter((e) => e.status === 'ready' && e.bank)
+  const examPages = Object.fromEntries((catalog.exams as { page: string }[])
+    .filter((e) => existsSync(join(root, e.page)))
+    .map((e) => [e.page, readFileSync(join(root, e.page), 'utf8')]))
+  const objectivePages = (file: string) => {
+    const page = examPages[file]
+    const meta = page ? parseExamMetadata(page) : null
+    if (!meta) return []
+    return parseExamSyllabus(page, meta.examId, meta.examLabel, meta.examTopic).topics.flatMap((t) => t.concepts.map((c) => c.name))
+  }
   for (const exam of ready) {
     it(`${exam.page}: every served question reads Answerable`, () => {
-      const page = readFileSync(join(root, exam.page), 'utf8')
-      const meta = parseExamMetadata(page)!
-      const syllabus = parseExamSyllabus(page, meta.examId, meta.examLabel, meta.examTopic)
-      const pages = syllabus.topics.flatMap((t) => t.concepts.map((c) => c.name))
+      const pages = objectivePages(exam.page)
+      const prerequisite = prerequisitePages(exam.page, examPages, objectivePages)
       const record = parseAnswerabilityRecord(
         readFileSync(join(root, `simulations/answerability/${exam.bank}.json`), 'utf8'))!
       const open: string[] = []
       for (const entry of Object.values(record.questions)) {
         const raw = readFileSync(join(root, entry.path!), 'utf8')
         if (/^off_syllabus:\s*true\s*$/m.test(raw) || /^\s+open_critical:\s*[1-9]/m.test(raw)) continue
-        const reach = reachNow(questionTagTitles(raw), pages)
-        if (verdictNow(entry, reach) !== 'answerable') open.push(entry.id)
+        const reach = reachNow(questionTagTitles(raw), pages, prerequisite)
+        // A question the check found nothing required for passes the gate as it stands.
+        if (!['answerable', 'no requirements'].includes(verdictNow(entry, reach))) open.push(entry.id)
       }
       expect(open).toEqual([])
     })

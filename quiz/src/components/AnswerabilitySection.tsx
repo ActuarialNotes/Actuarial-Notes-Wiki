@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { ChevronDown, ListChecks } from 'lucide-react'
 import { fetchAllQuestions, fetchWikiFile } from '@/lib/github'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
+import examPages from 'virtual:exam-pages'
 import { formatCheckedDate } from '@/lib/verification'
 import { FACT_CHECK_TONE_CLASSES } from '@/lib/factCheckTone'
 import { FactCheckSection } from '@/components/FactCheckSection'
@@ -16,6 +17,7 @@ import {
   parseAnswerabilityRecord,
   questionTagTitles,
   quoteText,
+  prerequisitePages,
   reachNow,
   requirementLabel,
   requirementNow,
@@ -96,9 +98,11 @@ export function AnswerabilitySection({ contentPath }: { contentPath: string }) {
   }, [recordPath, contentPath])
 
   if (!found) return null
-  // The exam's syllabus pages: what its learning objectives link (D30).
-  const syllabus = syllabi.find((s) => s.fileName === found.exam)
-  const reach = reachNow(found.tags, syllabus?.topics.flatMap((t) => t.concepts.map((c) => c.name)) ?? [])
+  // The exam's syllabus pages: what its learning objectives link (D30), and the
+  // pages it assumes through its Prerequisite knowledge callout.
+  const objectivePages = (file: string) =>
+    syllabi.find((s) => s.fileName === file.replace(/\.md$/i, ''))?.topics.flatMap((t) => t.concepts.map((c) => c.name)) ?? []
+  const reach = reachNow(found.tags, objectivePages(found.exam), prerequisitePages(found.exam, examPages, objectivePages))
   return <AnswerabilityHistory entry={found.entry} reach={reach} />
 }
 

@@ -3633,7 +3633,15 @@
      "statement": "When age-to-age factors show seasonality across accident periods, such as systematically different factors for first-half versus second-half accident half-years, separate factors should be selected and applied for each season, not blended across seasons.",
      "concept": "Seasonality in Loss Development",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Age to Age Factor",
+      "quote": "When factors show seasonality, select the factor for each season by averaging only the factors of accident periods from that season, and apply to each period the factor for its own season.",
+      "note": "Seasonality bullet (Friedland Ch.11 pp.197-198, PDF 203-204)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write4"
+     }
     },
     {
      "id": "r5",
@@ -3654,7 +3662,15 @@
      "statement": "An accident year's ultimate is obtained by estimating ultimate for each of its accident half-years from its own latest diagonal value and summing them.",
      "concept": "Accident Period Aggregation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Age to Age Factor",
+      "quote": "Each accident period is projected to ultimate from its own latest value with its own season's factors; an accident year's ultimate is the sum of the projected ultimates of the periods within it.",
+      "note": "Projection by accident half-year (Friedland Ch.11 pp.197-199, PDF 203-205); the summation to the accident year is definitional",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write4"
+     }
     },
     {
      "id": "r7",
@@ -3708,7 +3724,15 @@
      "statement": "The case outstanding development factor equals (RCDF − 1) × PCDF / (PCDF − RCDF) + 1, equivalently RCDF × (PCDF − 1)/(PCDF − RCDF), where RCDF and PCDF are the reported and paid CDFs to ultimate; unpaid = case outstanding × this factor.",
      "concept": "Case Outstanding Development Technique",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Case Outstanding Development Method",
+      "quote": "The case outstanding development factor is (reported CDF − 1) × paid CDF ÷ (paid CDF − reported CDF) + 1, equivalently reported CDF × (paid CDF − 1) ÷ (paid CDF − reported CDF).",
+      "note": "Approach #2: case outstanding factor from benchmark reported and paid CDFs; unpaid = case x factor (Friedland Ch.12 p.269, PDF 275)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write4"
+     }
     },
     {
      "id": "r3",
@@ -3784,7 +3808,15 @@
      "statement": "The case outstanding development technique is particularly useful when case outstanding is the only claims data available, such as when an entity has no paid or reported loss history.",
      "concept": "Case Outstanding Development Technique",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Case Outstanding Development Method",
+      "quote": "The case outstanding development technique is particularly useful when current case outstanding is the only claims data available, with no paid or reported history",
+      "note": "Approach #2: when case outstanding is the only data (Friedland Ch.12 p.268, PDF 274)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write4"
+     }
     }
    ]
   },
@@ -3847,7 +3879,15 @@
      "statement": "The credibility interpretation of BF breaks down when cumulative percent reported or paid exceeds 100% (e.g. due to salvage and subrogation recoveries), since Z cannot exceed 1.",
      "concept": "Bornhuetter-Ferguson Method",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Bornhuetter-Ferguson Method",
+      "quote": "The credibility reading then breaks down: Z = 1/CDF is greater than 1, and a credibility weight must lie between 0 and 1.",
+      "note": "CDFs below 1.00 (salvage/subrogation, conservative case) break the credibility reading (Friedland Ch.9 p.156, PDF 162)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write4"
+     }
     },
     {
      "id": "r5",
@@ -4202,7 +4242,15 @@
      "statement": "A change in settlement rate alters the mix of open claims, so an apparent change in average case outstanding may not indicate a change in case reserve adequacy; case outstanding alone is inconclusive.",
      "concept": "Reported Claim Development Method",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Case Adequacy",
+      "quote": "An increase in average case outstanding is therefore inconclusive on its own",
+      "note": "Check settlement rate before reading a rise in average case O/S as strengthening (Friedland Ch.6 pp.72, 76, PDF 78, 82)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write4"
+     }
     },
     {
      "id": "r7",
@@ -6515,7 +6563,15 @@
      "statement": "When accident periods in different parts of the year (e.g., first half vs. second half) show systematically different development patterns, this indicates seasonality, and a blended all-period factor will be distorted.",
      "concept": "Seasonality in Loss Development",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Age to Age Factor",
+      "quote": "An average across all periods then blends two patterns and fits neither.",
+      "note": "Seasonality bullet: half-years ending December vs June, 6-12 closed count factors (Friedland Ch.11 pp.197-198, PDF 203-204)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write4"
+     }
     },
     {
      "id": "r3",
@@ -6523,7 +6579,15 @@
      "statement": "When seasonality is present, select age-to-age factors separately for each season by averaging only factors from accident periods of the same season.",
      "concept": "Seasonality in Loss Development",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Age to Age Factor",
+      "quote": "When factors show seasonality, select the factor for each season by averaging only the factors of accident periods from that season",
+      "note": "Seasonality: select from same-season periods only (Friedland Ch.11 p.198, PDF 204)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write4"
+     }
     },
     {
      "id": "r4",
@@ -7118,7 +7182,15 @@
      "statement": "Adjusted open claim count equals ultimate-consistent reported count minus restated closed count, i.e., actual reported (closed plus open) counts less adjusted closed counts.",
      "concept": "Berquist-Sherman Method",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Berquist-Sherman Method",
+      "quote": "Adjusted open claim counts are reported claim counts minus adjusted closed claim counts.",
+      "note": "Combined adjustment: adjusted open counts (Friedland Ch.13 p.292, PDF 298)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write4"
+     }
     },
     {
      "id": "r5",
@@ -7156,7 +7228,15 @@
      "statement": "When both case outstanding adequacy and settlement rate changes occur, the Berquist-Sherman adjustments are combined into a single adjusted reported triangle, giving one ultimate estimate rather than separate ones.",
      "concept": "Berquist-Sherman Method",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Berquist-Sherman Method",
+      "quote": "when case adequacy and settlement rate have both changed, the two adjustments are combined into a single adjusted reported triangle, which gives one projection in place of two.",
+      "note": "Combined adjustment: one adjusted reported triangle (Friedland Ch.13 p.292, PDF 298)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write4"
+     }
     }
    ]
   },
@@ -7308,7 +7388,15 @@
      "statement": "Linear interpolation estimates a value at an intermediate maturity by assuming the change between two known maturities occurs uniformly (a straight line) over the interval, so the fraction of the interval elapsed times the total change is added to the starting value.",
      "concept": "Linear Interpolation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Actual vs Expected Analysis",
+      "quote": "Linear interpolation assumes the change between the two known ages happens evenly over the interval: the percentage at the earlier age plus the fraction of the interval elapsed times the change over the whole interval.",
+      "note": "Interim evaluations by interpolation (Friedland Ch.15 pp.351-352, PDF 357-358; Exhibit IV Sheet 4)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write4"
+     }
     },
     {
      "id": "r3",
@@ -7363,7 +7451,15 @@
      "statement": "Linear interpolation of claim development may be inappropriate for an immature accident year because claims do not emerge uniformly; the development pattern is a curve (e.g., seasonality, faster early reporting, highly leveraged development factors), so a straight line can misestimate expected claims.",
      "concept": "Linear Interpolation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Actual vs Expected Analysis",
+      "quote": "linear interpolation of annual development patterns is usually not appropriate, particularly for the most immature accident years, because claims do not emerge evenly within a year",
+      "note": "Interpolation limits and Bornhuetter-Ferguson's skewed quarterly distribution (Friedland Ch.15 p.352, PDF 358)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write4"
+     }
     }
    ]
   },
@@ -10118,7 +10214,15 @@
      "statement": "To find the percent reported or paid at an age between evaluation points, linearly interpolate between the cumulative percentages at the adjacent ages, using the accident-period age in months at the evaluation date.",
      "concept": "Interpolation of Development Factors",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Actual vs Expected Analysis",
+      "quote": "the expected percentage reported or paid is found by interpolating the pattern at the accident period's age in months at the valuation date.",
+      "note": "Interim evaluations: interpolate the % reported/paid at the age at valuation (Friedland Ch.15 pp.351-352, PDF 357-358)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write4"
+     }
     },
     {
      "id": "r3",
@@ -12078,7 +12182,15 @@
      "statement": "When CDFs are less than 1.00, the implied credibility Z = 1/CDF exceeds 1, which is not a valid credibility weight; the BF method may still be used with adjustments such as capping CDFs at 1.00, or an alternative technique may be used.",
      "concept": "Bornhuetter-Ferguson Method",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Bornhuetter-Ferguson Method",
+      "quote": "In practice actuaries either limit the CDFs to a minimum of 1.00 when applying BF (as Friedland's examples do), or still calculate BF with the factors below 1.00 but rely on another technique to select ultimate claims for those years",
+      "note": "CDFs below 1.00: Z > 1 and the two practical treatments (Friedland Ch.9 p.156, PDF 162)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write4"
+     }
     }
    ]
   },
@@ -12594,7 +12706,15 @@
      "statement": "The Bornhuetter-Ferguson method is inappropriate when severity changes, because the change also alters the percent unreported implied by the historical pattern.",
      "concept": "Bornhuetter-Ferguson Method",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Changing Conditions",
+      "quote": "A change that alters development, such as a legal reform that lowers severity on open claims as well as future ones, distorts BF's IBNR along with the development technique's.",
+      "note": "BF uses the development technique's patterns (Friedland Ch.9 p.152, PDF 158); responses: report-year data (Ch.13 p.283, PDF 289), F-S with adjusted severities (Ch.11 p.204, PDF 210)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write4"
+     }
     },
     {
      "id": "r5",
@@ -15229,7 +15349,15 @@
      "statement": "Incremental average severity at a development age is the incremental paid claims divided by the incremental closed claim counts for that interval.",
      "concept": "Disposal Rate Frequency-Severity Technique",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Frequency-Severity Method",
+      "quote": "Incremental paid severity at an age is the incremental paid claims in that age interval divided by the incremental closed claim counts in the same interval.",
+      "note": "Disposal rate technique: incremental paid severity defined (Friedland Ch.11 p.208, PDF 214)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write4"
+     }
     },
     {
      "id": "r3",
@@ -17589,7 +17717,15 @@
      "statement": "The case outstanding development factor equals paid CDF × (reported CDF − 1) / (paid CDF − reported CDF) + 1, and unpaid claims equal this factor times case outstanding.",
      "concept": "Case Outstanding Development Technique",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Case Outstanding Development Method",
+      "quote": "The case outstanding development factor is (reported CDF − 1) × paid CDF ÷ (paid CDF − reported CDF) + 1, equivalently reported CDF × (paid CDF − 1) ÷ (paid CDF − reported CDF).",
+      "note": "Approach #2: the factor and unpaid = case outstanding x factor (Friedland Ch.12 p.269, PDF 275)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write4"
+     }
     },
     {
      "id": "r2",
@@ -17878,7 +18014,15 @@
      "statement": "The frequency-severity technique assumes claims are paid in full at closure with no partial payments; partial payments on open claims violate this assumption.",
      "concept": "Frequency-Severity Technique Using Disposal Rates",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Frequency-Severity Method",
+      "quote": "An implicit assumption is that there are no significant partial (interim) payments. The technique matches paid dollars to closed counts, so material payments on claims that are still open distort the incremental severities.",
+      "note": "Disposal rate technique: no-partial-payments assumption and the dollars/counts mismatch (Friedland Ch.11 pp.205, 211, PDF 211, 217)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write4"
+     }
     },
     {
      "id": "r6",
@@ -20748,7 +20892,15 @@
      "statement": "The Berquist-Sherman paid adjustment models the relationship between cumulative paid claims Y and cumulative closed claim counts X with an exponential curve Y = a·e^(bX), whose parameters a and b are fit (e.g., by a two-point fit) between successive ages.",
      "concept": "Berquist-Sherman Paid Claim Development Adjustment",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Berquist-Sherman Method",
+      "quote": "Berquist and Sherman fit an exponential curve, Y = a × e^(bX), to cumulative paid claims Y against cumulative closed claim counts X between each pair of successive ages in an accident year",
+      "note": "Settlement rate adjustment step 3: two-point exponential fits (Friedland Ch.13 p.289, PDF 295)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write4"
+     }
     },
     {
      "id": "r3",
@@ -23099,7 +23251,15 @@
      "statement": "Frequency equals trended ultimate claim counts divided by on-level earned premium, which removes the effects of rate changes, count trend and book growth.",
      "concept": "Frequency-Severity Technique",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Frequency-Severity Method",
+      "quote": "Where earned premium is the only exposure data available, frequency is the trended ultimate claim counts divided by the on-level earned premium. Putting premium on the current rate level keeps rate changes out of the frequency, and dividing by an exposure measure keeps growth in the book out of it.",
+      "note": "Approach #2: frequency per on-level earned premium (Friedland Ch.11 pp.202-204, PDF 208-210)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write4"
+     }
     },
     {
      "id": "r4",
@@ -23120,7 +23280,15 @@
      "statement": "De-trend a selected frequency (claim count) and a selected severity from the level of one year back to the earlier accident year by dividing by the respective annual trend factors for the years between them.",
      "concept": "Trending Claim Counts and Severity",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Frequency-Severity Method",
+      "quote": "To move a selected severity back one year, divide it by one year's severity trend factor. To move a selected frequency back one year, divide it by one year's claim count trend factor and reverse one year of change in the exposure base",
+      "note": "Approach #2: moving selected frequency and severity back a year (Friedland Ch.11 pp.203-204, PDF 209-210)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write4"
+     }
     },
     {
      "id": "r6",
@@ -23983,7 +24151,15 @@
      "statement": "To restate claims for a change in severity (e.g., a court decision) that applies to payments made after a date, de-cumulate the triangle into incremental payments, because each incremental cell is paid in a single calendar year, and multiply the incremental payments made before the change by the severity factor to bring them to the current severity level.",
      "concept": "Adjusting Loss Triangles for Severity or Law Changes",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Changing Conditions",
+      "quote": "de-cumulate the paid triangle, restate each incremental cell paid before the change to the new level, and re-cumulate before selecting factors.",
+      "note": "Calendar-year restatement on incremental cells (Friedland Ch.5 pp.55-56, PDF 61-62; Ch.8 p.133, PDF 139; Ch.11 p.209, PDF 215)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write4"
+     }
     },
     {
      "id": "r2",
@@ -26927,7 +27103,15 @@
      "statement": "In the disposal-rate frequency-severity method, the tail severity at maturity m is the average severity of all claims closing at age m and later, i.e. pooled paid dollars divided by pooled closed claim counts for all cells at maturity m or beyond.",
      "concept": "Frequency-Severity Method (Disposal Rate Technique)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Frequency-Severity Method",
+      "quote": "The tail severity is the sum of trended incremental paid claims divided by the sum of incremental closed claim counts over every cell at the selected age and older.",
+      "note": "Disposal rate technique: tail severity pooled over the selected age and older (Friedland Ch.11 p.209, PDF 215)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write4"
+     }
     },
     {
      "id": "r2",
@@ -26935,7 +27119,15 @@
      "statement": "Compute a tail severity by summing trended incremental paid losses over all cells at maturity m or later and dividing by the sum of untrended incremental closed counts over those same cells.",
      "concept": "Frequency-Severity Method (Disposal Rate Technique)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Frequency-Severity Method",
+      "quote": "The tail severity is the sum of trended incremental paid claims divided by the sum of incremental closed claim counts over every cell at the selected age and older.",
+      "note": "Disposal rate technique: tail severity computation (Friedland Ch.11 p.209, PDF 215)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write4"
+     }
     },
     {
      "id": "r3",
@@ -26974,7 +27166,15 @@
      "statement": "To choose the maturity at which to combine data into a single tail severity, compare trended incremental severities by cell (paid x trend / counts) across accident years and pick the age where they stop being stable and credible, keeping earlier ages as their own steps.",
      "concept": "Frequency-Severity Method (Disposal Rate Technique)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Frequency-Severity Method",
+      "quote": "Where the trended incremental severities begin to vary from year to year at the older ages, usually because few claims close there and one large claim can dominate, the experience of those ages is combined.",
+      "note": "Disposal rate technique: combine where trended severities turn variable (Friedland Ch.11 p.209, PDF 215)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write4"
+     }
     },
     {
      "id": "r6",
@@ -26982,7 +27182,15 @@
      "statement": "Combining at too early an age discards usable development detail, while combining too late leaves the tail selection resting on few, volatile claims; late-maturity incremental severities based on small claim counts are erratic and noisy.",
      "concept": "Frequency-Severity Method (Disposal Rate Technique)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Frequency-Severity Method",
+      "quote": "Combining too late leaves the oldest ages' severities resting on a handful of volatile claims; combining too early gives up age-by-age severities that the data can still support.",
+      "note": "Disposal rate technique: trade-off in choosing the combining age (Friedland Ch.11 p.209, PDF 215)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write4"
+     }
     }
    ]
   },
@@ -30279,7 +30487,15 @@
      "statement": "The selected ultimate should be revised when actual-versus-expected variance reflects genuinely more claim dollars, such as a large loss or catastrophe claim occurring in the period, even if it is a one-off that is excluded from future accident-year expectations.",
      "concept": "Revising Selected Ultimate Claims",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Actual vs Expected Analysis",
+      "quote": "When the excess is real additional claim dollars, such as a large claim reported in the period, those dollars stay in that accident year's ultimate, which therefore rises",
+      "note": "A/E: revising prior selections; White's second option (Friedland Ch.15 pp.351-353, PDF 357-359)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write4"
+     }
     },
     {
      "id": "r6",
@@ -32459,7 +32675,15 @@
      "statement": "To adjust for changes in settlement rate, apply the disposal rates from the selected basis diagonal at each age to every accident year's ultimate claim counts to get adjusted closed counts, then subtract them from reported counts to get adjusted open counts.",
      "concept": "Berquist-Sherman Settlement Rate Adjustment",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Berquist-Sherman Method",
+      "quote": "Select the disposal rates on the latest diagonal as the basis, and multiply the selected disposal rate at each age by each accident year's ultimate claim counts to get the adjusted closed claim counts.",
+      "note": "Settlement rate adjustment step 2 plus adjusted open counts = reported - adjusted closed (Friedland Ch.13 pp.288, 292, PDF 294, 298)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write4"
+     }
     },
     {
      "id": "r4",
@@ -35082,7 +35306,15 @@
      "statement": "A frequency-severity tail severity is computed by pooling all incremental paid claims and closed claim counts at the maturity age and older, then dividing total adjusted paid by total claim count (a count-weighted pooled severity).",
      "concept": "Tail Severity (Frequency-Severity Method)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Frequency-Severity Method",
+      "quote": "The tail severity is the sum of trended incremental paid claims divided by the sum of incremental closed claim counts over every cell at the selected age and older.",
+      "note": "Disposal rate technique: pooled tail severity (Friedland Ch.11 p.209, PDF 215)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write4"
+     }
     },
     {
      "id": "r2",
@@ -35124,7 +35356,15 @@
      "statement": "The maturity age for the tail should be set where data becomes erratic or sparse, so pooling older data gives a more stable and credible estimate than separate age-to-age factors.",
      "concept": "Tail Severity (Frequency-Severity Method)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Frequency-Severity Method",
+      "quote": "Where the trended incremental severities begin to vary from year to year at the older ages, usually because few claims close there and one large claim can dominate, the experience of those ages is combined.",
+      "note": "Disposal rate technique: tail age where data become erratic or sparse (Friedland Ch.11 p.209, PDF 215)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write4"
+     }
     },
     {
      "id": "r5",
@@ -35132,7 +35372,15 @@
      "statement": "Choosing the tail maturity age involves a trade-off: too late leaves too little data in the tail for credibility, too early discards reliable individual age-to-age factors; also consider the share of claims expected to close after that age, the impact on total projections, and alignment with industry data maturity age for supplementing data.",
      "concept": "Tail Severity (Frequency-Severity Method)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Frequency-Severity Method",
+      "quote": "The age at which to combine depends on the age at which the results become erratic, the influence on the total projection of selecting a particular age, and the percentage of claims expected to be closed beyond that age.",
+      "note": "Disposal rate technique: Friedland's three considerations for the combining age, plus the too-early/too-late trade-off (Friedland Ch.11 p.209, PDF 215)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write4"
+     }
     }
    ]
   },
@@ -37510,7 +37758,15 @@
      "statement": "In the alternative case outstanding method, the case outstanding development factor equals (CDF_reported − 1) × CDF_paid / (CDF_paid − CDF_reported) + 1, and unpaid claims equal case outstanding times this factor.",
      "concept": "Case Outstanding Development Technique",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Case Outstanding Development Method",
+      "quote": "The estimated unpaid claims are the current case outstanding times that factor.",
+      "note": "Approach #2: factor formula and unpaid = case outstanding x factor (Friedland Ch.12 p.269, PDF 275)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write4"
+     }
     },
     {
      "id": "r7",
@@ -37779,7 +38035,15 @@
      "statement": "To project future closed counts for an immature accident year, take the remaining open claims (ultimate minus closed to date) and allocate them across future ages in proportion to the incremental selected disposal rates divided by one minus the current disposal rate.",
      "concept": "Frequency-Severity Disposal Rate Technique",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Frequency-Severity Method",
+      "quote": "the claims an accident year still has to close (its ultimate claim counts less the claims closed to date) are spread over the future ages in proportion to the selected incremental disposal rates still to come, each divided by one minus the selected disposal rate at the latest age.",
+      "note": "Disposal rate technique: projecting future closed counts (Friedland Ch.11 p.207, PDF 213)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write4"
+     }
     },
     {
      "id": "r3",
@@ -38177,7 +38441,15 @@
        "page": "Frequency-Severity Method",
        "quote": "**Counts and trended severity.** Develop counts, but estimate severity by **trending** a mature year's severity forward rather than developing an immature one — useful where severity development is unstable but severity trend is well understood."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Frequency-Severity Method",
+      "quote": "Because frequency and severity are projected separately, a known change in claim cost, such as a tort reform or a benefit change, can be built into the selected severities directly instead of waiting for it to show up in the development pattern.",
+      "note": "Advantage of the split: explicit adjustment of severity (Friedland Ch.11 pp.204, 212, PDF 210, 218)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write4"
+     }
     }
    ]
   },

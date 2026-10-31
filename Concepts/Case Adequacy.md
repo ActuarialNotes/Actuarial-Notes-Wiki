@@ -1,12 +1,12 @@
 ---
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: high
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
   content_hash: sha256:c99289621bc3f0df92a4c7c954ad0f53b1bd779da4516421201b203327b8660c
   sources:
-    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch. 6 pp. 68-76 (paid-to-reported, average case outstanding, stable columns grow with inflation); Ch. 7 pp. 101-103 (Scenario 3); Ch. 9 p. 158; Ch. 10 p. 178 (Cape Cod reflects higher reported claims); Ch. 13 pp. 285-287 (B-S case adjustment); Ch. 15 p. 349, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch.6 Development Triangle as a Diagnostic Tool, PDF pp.78, 82 (printed 72, 76): settlement emphasis, less complicated claims close quickest, average case outstanding vs mix of claims, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 2
   open_critical: 0
   log: .verify/Concepts/Case Adequacy.md

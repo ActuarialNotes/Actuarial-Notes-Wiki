@@ -1,12 +1,12 @@
 ---
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: high
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:ea42e97c640fd4a5c6a53bffe400c83d40d712d49ac422ecfceb021f4c7aca28
+  content_hash: sha256:4c246607c357f43d957d08f1bcc1b299bdd33f8d4bf8d4666edbc415af64f415
   sources:
-    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch.11 Frequency-Severity Techniques, PDF pp.200-203, 207-213, 218 (printed 194-197, 201-207, 212), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch.11 Frequency-Severity Techniques, PDF pp.200-203, 207-218 (printed 194-197, 201-212): Approach #2 (pp.202-204), disposal rate technique (pp.205-211), footnote 67 (p.211), When the Techniques Work (p.212), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Frequency-Severity Method.md
@@ -28,7 +28,7 @@ Further points:
 
 - The value of the split is **diagnostic**. A dollar triangle tells you losses grew; frequency and severity tell you *why*, and the two causes call for different responses and carry different persistence.
 - Counts are more **credible** and less inflation-sensitive; severity is where the trend lives. Projecting each with the tool it suits — development for counts, trend for severity — is often better than developing either alone.
-- The method needs **consistent count definitions** across the whole triangle, and it is sensitive to [[Large Loss|large losses]] in the severity series, so severities are usually capped and the excess layer added back separately.
+- The method needs **consistent count definitions** across the whole triangle, and it is sensitive to [[Large Loss|large losses]] in the severity series: to avoid distortions from spurious large claims the actuary may cap claims at a predetermined value or exclude large claims entirely, and must then add a provision for large claims to the estimate of unpaid claims (Friedland, Ch. 11, p. 210).
 - A pitfall: average severity triangles mix two opposing forces — IBNER pushing severity up, late-reported small claims pulling it down. Report-year severities avoid the dilution; accident-year severities do not.
 - Because frequency and severity are projected separately, a known change in claim cost, such as a tort reform or a benefit change, can be built into the selected severities directly instead of waiting for it to show up in the development pattern. Friedland lists this ability to reflect inflation explicitly as an often-cited advantage, and adjusts XYZ Insurer's severities for its tort reforms this way (Friedland, Ch. 11). The other side of it: the result is highly sensitive to the trend assumption.
 

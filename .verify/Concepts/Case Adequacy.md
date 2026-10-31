@@ -67,3 +67,14 @@ created: 2026-10-31
 - checks_run: avg case O/S definition vs Ch. 6 Table 11; column-wise diagnostic vs Ch. 6 p. 76 and Ch. 13 p. 285; effect on reported development, paid immunity, Cape Cod double effect vs Chs. 7, 9, 10, 15; B-S remedy (latest diagonal kept, selected severity trend) vs Ch. 13 pp. 286-287; both examples recomputed line by line
 - sources_checked: Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch. 6 pp. 68-76 (paid-to-reported, average case outstanding, stable columns grow with inflation); Ch. 7 pp. 101-103 (Scenario 3); Ch. 9 p. 158; Ch. 10 p. 178 (Cape Cod reflects higher reported claims); Ch. 13 pp. 285-287 (B-S case adjustment); Ch. 15 p. 349, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf
 - note: One major contradiction fixed (F-001). Two minor findings left open: an unsourced adequacy-ratio formula (F-002) and loose percentages in an example (F-003). Weakening being the 'more dangerous direction' is reasoning that is not in Friedland.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T17:32Z/cde6
+- date: 2026-10-31
+- status_set: verified
+- confidence: high
+- checks_run: settlement-rate bullet diffed against p.72 ('insurers are able to close the less complicated and less expensive claims the quickest') and p.76 ('If smaller claims are settling more quickly, we are then left with only the more complex and more expensive claims ... would lead to an increase down the columns in the average case outstanding ... determine how much ... is truly due to a systemic change ... and how much is due to a different mix of claims'); closed-to-reported diagnostic p.72; rest of page unchanged since this morning's pass
+- sources_checked: Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch.6 Development Triangle as a Diagnostic Tool, PDF pp.78, 82 (printed 72, 76): settlement emphasis, less complicated claims close quickest, average case outstanding vs mix of claims, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf
+- note: New bullet agrees with Friedland Ch.6. Prior minor findings F-002 (adequacy-ratio formula unsourced) and F-003 (example percentages) remain open.

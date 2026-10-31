@@ -1,12 +1,12 @@
 ---
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: high
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
   content_hash: sha256:40808eb7f31f29c759cbea38ca3f787d7b8249c855e43e0b11f6ace7fe9d8ebe
   sources:
-    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch.9 Bornhuetter-Ferguson Technique, PDF pp.158-159, 162 (printed 152-153, 156): Brosius credibility form Z = 1/CDF, key assumption, formulas, CDFs below 1.00, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch.9 Bornhuetter-Ferguson Technique, PDF pp.158, 162 (printed 152, 156): same patterns as development technique; CDFs less than 1.00, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Bornhuetter-Ferguson Method.md

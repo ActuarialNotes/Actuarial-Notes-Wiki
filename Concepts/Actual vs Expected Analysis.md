@@ -1,13 +1,12 @@
 ---
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: high
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
   content_hash: sha256:bc11b8abab3ef37652e208f01776740748519507cc0a0a1384b4d8e864f55a67
   sources:
-    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ver. July 2010), Ch.15 pp.345-353 (PDF pp.351-359), Ch.7 p.93 (PDF p.99), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
-    - "CAS Exam 5 Content Outline, Fall 2026, pp.3-6 (tasks A3, B16-B20; Complete Text References), sha256:fd8373ae9bbe7e56b93f99cee304c76c1d29a9d0dc7f07e6ed500bd647f41795 — https://www.casact.org/sites/default/files/2026-03/Exam_5_CO_2026_Fall.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch.15 Evaluation of Techniques, PDF pp.357-359 (printed 351-353): A/E purpose and expected-claims formula, quarterly/monthly interpolation, Bornhuetter-Ferguson quarterly distribution, Hugh White's three options, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Actual vs Expected Analysis.md

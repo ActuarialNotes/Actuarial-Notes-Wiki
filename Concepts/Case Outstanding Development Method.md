@@ -1,12 +1,12 @@
 ---
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: high
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
   content_hash: sha256:3b3735cd3e478f9045f153505b125c2e2e4e96b223df64b81a5ccb0c7a80ace4
   sources:
-    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch.12 Case Outstanding Development Technique, PDF pp.271-274 (printed 265-268): Approach #1 (Wiser) ratios, assumptions, limitations; Approach #2, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch.12 Case Outstanding Development Technique, PDF pp.271-275 (printed 265-269): Approach #1, Approach #2 key assumptions, common uses, mechanics, factor formula and limitations, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Case Outstanding Development Method.md

@@ -1,13 +1,12 @@
 ---
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: high
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
   content_hash: sha256:17ca0e19e0bfbe3f7c174b9f59206fa869f12a09f0efe5e693b909d3b9248b7d
   sources:
-    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch.7, PDF pp.91-95 (printed 85-89): age-to-age factors, averages (simple, medial, volume-weighted, geometric), selection criteria, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
-    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch.9, PDF p.162 (printed 156): development factors below 1.00, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch.11 Frequency-Severity Techniques, PDF pp.202-205 (printed 196-199): Auto Collision Insurer half-year example, seasonality in closed counts, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Age to Age Factor.md

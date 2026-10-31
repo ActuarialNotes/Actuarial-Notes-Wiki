@@ -1,14 +1,13 @@
 ---
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: high
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:0234741259260a2c92d9b76c030e0af1e07172b237f2d5b92b6cab3fae03df16
+  content_hash: sha256:58c9ff271657a94009a6a6890c629a6c35335f09c6ae1db84b74e1214191e0fd
   sources:
-    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch.13 Berquist-Sherman Techniques, PDF pp.289-296 (printed 283-290): data selection, case adequacy detection and adjustment, settlement-rate adjustment, disposal rates, Thorne's caveats, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
-    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch.11, PDF p.212 (printed 206): disposal rate definition, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
-  open_findings: 1
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch.13 Berquist-Sherman Techniques, PDF pp.289-298 (printed 283-292): case adequacy adjustment, settlement rate adjustment (pp.288-290), XYZ Insurer combined adjustment (p.292), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Berquist-Sherman Method.md
 ---
@@ -98,7 +97,7 @@ Further points:
 > >
 > > Average case outstanding is growing $\approx 4.5\%$ a year — steady, and consistent with ordinary severity trend. There is no sign of a case adequacy shift.
 > >
-> > The closed-to-reported ratio, though, has moved from $58\%$ to $74\%$ in two years, and the paid-to-reported ratio has moved with it. Claims are **closing much faster**.
+> > The closed-to-reported ratio, though, has moved from $58\%$ to $74\%$ in three years, and the paid-to-reported ratio has moved with it. Claims are **closing much faster**.
 > >
 > > The consequences:
 > >

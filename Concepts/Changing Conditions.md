@@ -1,12 +1,14 @@
 ---
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: high
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
   content_hash: sha256:7491c488f8835b9361baca80c7236d522f4c3d79a4f1f5c10ba61ae12df531ac
   sources:
-    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch. 4 pp. 44-50 (understanding the environment; interview questions); Ch. 6 pp. 63-77; Ch. 7 pp. 96-105 (assumptions, Scenarios 1-4, product mix); Ch. 8 pp. 137-139; Ch. 9 pp. 157-161; Ch. 10 pp. 177-179; Ch. 13 pp. 283-284; Ch. 15 p. 349 (summary table of estimated IBNR), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch.5 p.55-56 (PDF 61-62) incremental paid triangle by calendar period; Ch.8 p.133 (PDF 139) reform restatement; Ch.9 p.152 (PDF 158) BF uses the development technique's patterns; Ch.11 pp.204, 209-210 (PDF 210, 215-216) reform-adjusted and trended severities; Ch.13 p.283 (PDF 289) report-year data after a legal shift, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+    - "CAS Exam 5 Spring 2017 — sample answers and examiner's report, Q23 part a, pp.88-89, sha256:f42f48b0e1bec884aba2e4c0eca91ee2b95b3f5cc6fd7f02de78086899f9e0c6 — https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam5_sp17-5.pdf"
+    - "CAS Exam 5 Fall 2015 — sample answers and examiner's report, Q22 part b, p.85, sha256:a3367c88f08abf0726c14d2034c8772c03594cbcf07494b93b35b6433dbca42c — https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam5_f15-5.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Changing Conditions.md

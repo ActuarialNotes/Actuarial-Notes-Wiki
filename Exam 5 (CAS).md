@@ -79,11 +79,11 @@ The **Basic Techniques for Ratemaking and Estimating Claim Liabilities** is a 4-
 > 13. Calculate and evaluate the estimation techniques for [[Recoveries|recoveries]] (e.g., [[Salvage and Subrogation|salvage and subrogation]], [[Reinsurance Recovery|reinsurance]]).
 > 14. Calculate and evaluate the estimation techniques for [[Allocated Loss Adjustment Expense|allocated loss adjustment expenses]].
 > 15. Calculate and evaluate the estimation techniques for [[Unallocated Loss Adjustment Expenses ULAE|unallocated loss adjustment expenses]].
-> 16. Evaluate the results of a [[Claim Reserve|reserve]] analysis for [[Reserve Adequacy|adequacy and reasonableness]] using [[Loss Ratio|loss ratios]], [[Severity|severities]], [[Pure Premium Analysis|pure premiums]], [[Frequency|frequencies]], [[Unpaid Claims|indicated unpaid losses]], etc.
+> 16. Evaluate the results of a [[Loss Reserving|reserve]] analysis for [[Reserve Adequacy|adequacy and reasonableness]] using [[Loss Ratio|loss ratios]], [[Severity|severities]], [[Pure Premium Analysis|pure premiums]], [[Frequency|frequencies]], [[Unpaid Claims|indicated unpaid losses]], etc.
 > 17. Monitor results for [[Reserve Adequacy|adequacy]] and [[Reasonableness Testing|reasonability]] including [[Roll Forward Analysis|interim valuations]] (e.g., [[Actual vs Expected Analysis|actual versus expected]], [[Roll Forward Analysis|roll forward analysis]]).
 > 18. [[Reserve Communication|Communicate results and drivers of change]] to various [[Stakeholder Reporting|stakeholders]] ([[Stakeholder Reporting|internal management]], [[Stakeholder Reporting|investors]], [[Regulatory Reporting|regulators]]).
 > 19. Define and apply [[Reinsurance|reinsurance]] concepts to calculate [[Net Losses|net]], [[Ceded Losses|ceded]], and [[Gross Losses|gross losses]].
-> 20. Utilize [[External Information in Reserving|external information]] in a [[Claim Reserve|reserve]] analysis (e.g., [[Inflation|inflation]], [[Tort Reform|tort reform]], [[Tort Litigation|attorney involvement]]).
+> 20. Utilize [[External Information in Reserving|external information]] in a [[Loss Reserving|reserve]] analysis (e.g., [[Inflation|inflation]], [[Tort Reform|tort reform]], [[Tort Litigation|attorney involvement]]).
 > 
 > **Readings:**
 > - Friedland

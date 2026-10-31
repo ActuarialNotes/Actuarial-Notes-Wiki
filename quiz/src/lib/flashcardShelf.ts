@@ -75,3 +75,42 @@ export function completedTodayConcepts(
   }
   return out
 }
+
+/**
+ * Which exam heading each deck card sits under when the deck is grouped by
+ * exam: concept name (lowercased) → exam label.
+ *
+ * A card added from an exam's shelf remembers that exam (`FlashCard.exam`, the
+ * shelf's `examId`), and that is where it goes — a reader who added *Convexity*
+ * from Exam FM finds it under Exam FM, not under some later exam whose syllabus
+ * also names it. Only when the card carries no exam (added from a search, the
+ * Collected shelf, a quiz level-up, or before cards remembered one), or the
+ * exam it names has gone, is it placed by syllabus — the first of `syllabi`
+ * that lists it, so pass them in the shelf's order (`flashcardShelfExams`, the
+ * exams being studied first, then up the ladder) ahead of the rest. A concept
+ * no syllabus lists is left out; the page files it under "Other".
+ */
+export function deckExamLabels(
+  cards: readonly { name: string; exam?: string }[],
+  syllabi: readonly WikiExamSyllabus[],
+): Map<string, string> {
+  const labelById = new Map<string, string>()
+  const firstListing = new Map<string, string>()
+  for (const s of syllabi) {
+    if (!labelById.has(s.examId)) labelById.set(s.examId, s.examLabel)
+    for (const topic of s.topics) {
+      for (const c of topic.concepts) {
+        const key = c.name.toLowerCase()
+        if (!firstListing.has(key)) firstListing.set(key, s.examLabel)
+      }
+    }
+  }
+
+  const out = new Map<string, string>()
+  for (const card of cards) {
+    const key = card.name.toLowerCase()
+    const label = (card.exam ? labelById.get(card.exam) : undefined) ?? firstListing.get(key)
+    if (label) out.set(key, label)
+  }
+  return out
+}

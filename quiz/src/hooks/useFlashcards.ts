@@ -14,6 +14,12 @@ export interface FlashCard extends WikiEntryRef {
   // Completed cards stay in the deck (with a checkmark) until "Clear Completed"
   // sweeps them out of it.
   completedAt?: number
+  // The exam shelf the card was added from (its syllabus `examId`, e.g.
+  // "FM-2"), so the deck files it under that exam rather than under whichever
+  // other exam's syllabus also names the concept. Absent for a card added from
+  // a search, the Collected shelf or a quiz level-up — see deckExamLabels in
+  // lib/flashcardShelf.ts.
+  exam?: string
 }
 
 const STORAGE_KEY = 'actuarial_flashcards'
@@ -61,7 +67,8 @@ function saveOrder(order: string[]) {
 interface FlashcardsState {
   cards: FlashCard[]
   customOrder: string[]
-  addCard: (ref: WikiEntryRef) => void
+  /** `exam`: the exam shelf the card is added from, when there is one. */
+  addCard: (ref: WikiEntryRef & { exam?: string }, exam?: string) => void
   removeCard: (name: string) => void
   clearCards: () => void
   toggleCompleted: (name: string) => void
@@ -80,10 +87,17 @@ interface FlashcardsState {
 export const useFlashcards = create<FlashcardsState>((set, get) => ({
   cards: load(),
   customOrder: loadOrder(),
-  addCard: (ref) => {
+  addCard: (ref, exam) => {
     const { cards, customOrder } = get()
     if (cards.some(c => c.name.toLowerCase() === ref.name.toLowerCase())) return
-    const newCard: FlashCard = { ...ref, addedAt: Date.now() }
+    const from = exam ?? ref.exam
+    const newCard: FlashCard = {
+      kind: ref.kind,
+      name: ref.name,
+      ...(ref.path ? { path: ref.path } : {}),
+      ...(from ? { exam: from } : {}),
+      addedAt: Date.now(),
+    }
     const nextCards = [...cards, newCard]
     const nextOrder = [...customOrder, ref.name]
     save(nextCards)

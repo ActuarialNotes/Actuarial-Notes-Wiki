@@ -1,12 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:73591b7621a5f943f8a6c0966e96849a643bb771524e6255a27273ed039e275a
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:2f3730f397bc09f91b3f830579fdccde3351db3dd4eddc0d80f675a54dc78ca3
+  sources:
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch. 3 p.34 and fn 16 (PDF p.40); Ch. 14 pp.330-332 (PDF pp.336-338), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Reinsurance Recovery.md
 ---
@@ -17,7 +18,7 @@ verification:
 
 > $$\text{Ceded Ultimate} = \text{Ceded Reported} \times \text{CDF}^{\text{ceded}}$$
 
-- Estimate **gross and ceded separately** and derive net as the difference. The ceded pattern is not the gross pattern: excess cessions attach only to large claims, so the ceded triangle develops later, more steeply and far more erratically than gross. See [[Reinsurance]].
+- Some actuaries estimate **gross and ceded separately** and derive net as the difference; others estimate gross and net and derive ceded. The ceded pattern is not the gross pattern: excess cessions attach only to large claims, so the ceded triangle develops later, more steeply and far more erratically than gross. See [[Reinsurance]].
 - Ceded triangles are **thin and volatile** by construction — a handful of claims — so they are often estimated by applying the treaty terms to projected large-claim experience rather than by developing the ceded triangle directly.
 - Historical ceded data reflects the treaties **as they then stood**. A change in attachment point, limit or structure makes prior ceded years non-comparable, which is the reason net triangles are unreliable in a book whose reinsurance programme moves.
 - **Collectability** must be assessed: disputes over coverage, commutations that settle the recoverable for a lump sum, and reinsurer insolvency all reduce what actually arrives. Statutory reporting requires provisions for uncollectible reinsurance, and the actuary should state whether the estimate is before or after such a provision.

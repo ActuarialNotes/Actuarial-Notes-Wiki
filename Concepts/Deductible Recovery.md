@@ -1,12 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:d89773ae1a601380de79b7d4beb15b3567bd73c1a5718242c466975c30c4ffd2
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:ddb15c81bd4557fda9dafb47754725346debbfec79ddf927857ba0b8cae3982a
+  sources:
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch. 3 p.33 (PDF p.39); Ch. 14 p.329 (PDF p.335), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 15 p.303 (PDF p.315), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Deductible Recovery.md
 ---
@@ -18,9 +20,9 @@ verification:
 > $$\text{Net Loss} = \text{Gross Paid} - \text{Collected Recoveries}$$
 
 - Economically a large deductible resembles a [[Self-Insured Retention|self-insured retention]], but the mechanics differ: under an SIR the insured pays its own claims and the insurer's limit sits above the retention; under a large deductible the insurer pays ground-up and collects afterwards.
-- That difference creates **credit risk**. The insurer has already paid the claimant; if the insured becomes insolvent before reimbursing, the shortfall is a retained loss. Programmes are therefore collateralized — letters of credit, trusts, surety — sized off the actuarial estimate of unpaid recoveries.
+- That difference creates **credit risk**. The insurer has already paid the claimant; if the insured becomes insolvent before reimbursing, the shortfall is a retained loss. Collateral is sometimes received to cover potentially uncollectible deductible amounts, but the credit risk is rarely fully collateralized.
 - Recoveries must be **estimated and developed on their own**, like [[Salvage and Subrogation|salvage and subrogation]]: billing lags payment, and the recovery pattern is a function of the deductible level and the size-of-loss distribution, not of the loss pattern.
-- The insurer reserves **gross** and carries the expected recoveries as an offsetting asset, discounted for expected uncollectibility. Reporting net without disclosing the gross figure hides the credit exposure.
+- Insurers differ in how **case outstanding** treats the deductible: some set it net of the deductible, others do not consider the deductible at all, and practice can vary between lines within one insurer. Reporting net without disclosing the gross figure hides the credit exposure.
 - Because the deductible erodes with [[Inflation|inflation]], the recoverable share of a growing loss falls over time — the same leverage that affects [[Deductible Rating|deductible pricing]], working here on the balance sheet.
 
 ![[Media/Figures/Deductible_Recovery.svg|340]]

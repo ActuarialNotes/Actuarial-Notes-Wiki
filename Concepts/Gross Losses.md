@@ -1,11 +1,12 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:5dcd046904901836a7ef5084e830d5f1cbe60eac62023afdc28eec31d4d73c6a
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:eed6df203e750049c808eb870cdef554442b0c539a1e3bb2d999114693236710
+  sources:
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch. 3 pp.33-34 (PDF pp.39-40); Ch. 14 pp.329-332 (PDF pp.335-338), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Gross Losses.md
@@ -18,8 +19,8 @@ verification:
 > $$\text{Gross Ultimate} = \text{Gross Reported} \times \text{CDF}^{\text{gross}}$$
 
 - **"Gross" needs a qualifier.** It most often means gross of reinsurance, but a figure can also be gross or net of [[Salvage and Subrogation|salvage and subrogation]], of [[Deductible Recovery|deductible recoveries]], and of ULAE. Every comparison must confirm which recoveries the gross figure excludes; the syllabus and the Annual Statement use the term in different senses.
-- Reserve analysis is normally run on **gross data first**: it is the largest and most homogeneous dataset, it is unaffected by changes in reinsurance structure, and the ceded and net figures follow from it.
-- Gross and ceded develop on **different patterns** — excess cessions attach only to large, slow claims — so ceded cannot be scaled from gross except under quota share. This is why net is derived as gross minus ceded rather than developed directly.
+- Reserve analysis is often run on **gross data first**: it is the largest and most homogeneous dataset, it is unaffected by changes in reinsurance structure, and the ceded and net figures follow from it.
+- Gross and ceded develop on **different patterns** — excess cessions attach only to large, slow claims — so ceded cannot be scaled from gross except under quota share.
 - Gross data is also what survives a **change of programme**. When the treaty changes, the ceded and net histories break; the gross history does not, and it can be re-ceded under the new terms.
 - For ratemaking, whether to work gross or net depends on how the reinsurance cost is provided for — see [[Net of Reinsurance]].
 

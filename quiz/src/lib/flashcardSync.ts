@@ -77,10 +77,13 @@ export function mergeDeck(
     const key = cardKey(card.name)
     const seen = byKey.get(key)
     if (!seen) { byKey.set(key, card); continue }
+    const [first, second] = seen.addedAt <= card.addedAt ? [seen, card] : [card, seen]
+    const exam = first.exam ?? second.exam
     byKey.set(key, {
-      ...(seen.addedAt <= card.addedAt ? seen : card),
-      addedAt: Math.min(seen.addedAt, card.addedAt),
+      ...first,
+      addedAt: first.addedAt,
       completedAt: latest(seen.completedAt, card.completedAt),
+      ...(exam ? { exam } : {}),
     })
   }
 
@@ -173,6 +176,8 @@ interface DeckRow {
   added_at: string
   completed_at: string | null
   sort_order: number | null
+  /** Absent until 20261101_flashcard_exam.sql is applied. */
+  exam?: string | null
 }
 
 function toMillis(iso: string | null): number {
@@ -207,6 +212,7 @@ export async function fetchRemoteFlashcards(userId: string): Promise<FlashcardSn
       ...(r.path ? { path: r.path } : {}),
       addedAt: toMillis(r.added_at),
       ...(r.completed_at ? { completedAt: toMillis(r.completed_at) } : {}),
+      ...(r.exam ? { exam: r.exam } : {}),
     }))
     // customOrder covers every card in the client (the Flashcards page appends
     // any that are missing), so rebuild it that way: ordered rows first, then
@@ -284,7 +290,7 @@ async function pushDeck(
   order: readonly string[],
 ): Promise<void> {
   const position = new Map(order.map((name, i) => [cardKey(name), i]))
-  await replaceRows('user_flashcards', 'concept_key', userId, cards.map(c => ({
+  const rows = cards.map(c => ({
     user_id: userId,
     concept_key: cardKey(c.name),
     concept_name: c.name,
@@ -293,7 +299,21 @@ async function pushDeck(
     added_at: new Date(c.addedAt).toISOString(),
     completed_at: c.completedAt ? new Date(c.completedAt).toISOString() : null,
     sort_order: position.get(cardKey(c.name)) ?? null,
-  })))
+    exam: c.exam ?? null,
+  }))
+  try {
+    await replaceRows('user_flashcards', 'concept_key', userId, rows)
+  } catch (err) {
+    // A database without the `exam` column yet (20261101_flashcard_exam.sql
+    // not applied) rejects the whole upsert. Keep the deck syncing without it;
+    // the card still remembers its exam in this browser.
+    if (!(err instanceof Error) || !/\bexam\b/.test(err.message)) throw err
+    await replaceRows('user_flashcards', 'concept_key', userId, rows.map(r => {
+      const rest: Partial<typeof r> = { ...r }
+      delete rest.exam
+      return rest
+    }))
+  }
 }
 
 // ── Write queue ───────────────────────────────────────────────────────────────

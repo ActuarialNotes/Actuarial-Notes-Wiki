@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { completedTodayConcepts, flashcardShelfExams } from './flashcardShelf'
+import { completedTodayConcepts, deckExamLabels, flashcardShelfExams } from './flashcardShelf'
 import type { DailyLevelUp } from './dailyProgressStore'
 import type { WikiExamSyllabus } from './wikiParser'
 
@@ -92,5 +92,42 @@ describe('completedTodayConcepts', () => {
 
   it('is empty with nothing completed today', () => {
     expect(completedTodayConcepts([], CONCEPTS)).toEqual([])
+  })
+})
+
+describe('deckExamLabels', () => {
+  function withConcepts(examId: string, examLabel: string, concepts: string[]): WikiExamSyllabus {
+    return {
+      examId, examLabel, examTopic: examLabel, resources: [],
+      topics: [{ name: 'Topic', concepts: concepts.map(name => ({ name })) }] as WikiExamSyllabus['topics'],
+    }
+  }
+  // Convexity is on FM's syllabus and on a later exam's too.
+  const syllabi = [
+    withConcepts('FM-2', 'Exam FM', ['Convexity', 'Forward Rate']),
+    withConcepts('ILA-M2', 'Exam ILA-M2', ['Convexity', 'Forward Rate']),
+    withConcepts('INV', 'Exam INV', ['Yield Curve']),
+  ]
+
+  it('files a card under the exam it was added from', () => {
+    const labels = deckExamLabels([{ name: 'Convexity', exam: 'FM-2' }], syllabi)
+    expect(labels.get('convexity')).toBe('Exam FM')
+  })
+
+  it('keeps the chosen exam even when another syllabus lists the concept first', () => {
+    const labels = deckExamLabels([{ name: 'Convexity', exam: 'ILA-M2' }], syllabi)
+    expect(labels.get('convexity')).toBe('Exam ILA-M2')
+  })
+
+  it('falls back to the first syllabus listing it, not the last', () => {
+    const labels = deckExamLabels([{ name: 'Forward Rate' }, { name: 'Yield Curve' }], syllabi)
+    expect(labels.get('forward rate')).toBe('Exam FM')
+    expect(labels.get('yield curve')).toBe('Exam INV')
+  })
+
+  it('falls back when the remembered exam has gone, and leaves unlisted concepts out', () => {
+    const labels = deckExamLabels([{ name: 'convexity', exam: 'GONE' }, { name: 'Nowhere' }], syllabi)
+    expect(labels.get('convexity')).toBe('Exam FM')
+    expect(labels.has('nowhere')).toBe(false)
   })
 })

@@ -87,7 +87,7 @@ approximated logo is an invented brand. A publisher with no usable mark, and a m
 fails to load, fall back to the monogram tile (`components/cowork/EntityLogo.tsx`).
 
 **Documents are always cards, never rows.** One component draws them everywhere they are
-listed — the shelf's Documents view and a source's page — and it is the study guide's
+listed — the Resources shelf and a source's page — and it is the study guide's
 resource card
 (`components/cowork/ResourceCard.tsx` beside `components/wiki/SourceMaterialGallery.tsx`):
 the work's jacket when the vault has one (`lib/coworkCovers.ts`), otherwise its kind icon,
@@ -108,14 +108,26 @@ never constructed**, and it is the year *this body* came into being, not the yea
 business began — Intact Financial Corporation dates from 2009 though the Halifax Insurance
 Company it grew out of dates from 1809. No record worth citing, no pill.
 
-### Two filters, and the library is one of them
+### Two shelves, Sources and Resources
 
-The shelf's **primary** filter is *Sources or Documents*, because those are two different
-questions and each is answered by a different card. Everything else — the query, the
-category pills, the library — means the same thing in both views.
+Publishers and what they publish are two different questions, each answered by a different
+card, so they are **two pages**: **Sources** (`/cowork`, `pages/Cowork/SourcesView.tsx`) and
+**Resources** (`/cowork/resources`, `pages/Cowork/ResourcesView.tsx`). They were one page with
+a Sources / Documents toggle; now each carries a one-row panel leading to the other
+(`components/cowork/CoworkPageRow.tsx`) — the Study Guides tab's row between its exam ladder
+and its Resources shelf — and the sidebar lists both.
 
-**My Library leads the secondary row.** It is a filter, not a section: it narrows the shelf
-to publishers the reader follows (Sources) or documents they have taken (Documents). It used
+**Resources filters the way Study mode's Resources page does**: Exam, Publisher and Year, OR
+within one and AND across them, each option counting what choosing it would leave, riding the
+URL (`?publisher=…&year=…`). It is the same code — `lib/resourceFilters.ts` reads any
+`ResourceFacetItem`, and `coworkFacetItem` (`lib/coworkSources.ts`) hands a document over in
+that shape: the publisher is its entity, the year its `published` date's, the exams those the
+vault's own page is a reading for (none for a document with no vault page — never a guess).
+Exam is a dropdown rather than the study page's logo strip, and Vintage (an edition of one
+exam's syllabus) isn't offered.
+
+**My Library leads each shelf's filter row.** It is a filter, not a section: it narrows the shelf
+to publishers the reader follows (Sources) or resources they have taken (Resources). It used
 to be a block stacked above the shelf, which made what a reader *had* a different place from
 what they *could have*, pushed the filters below the fold, and showed the same card in both
 its states on one screen. An empty array is a library with nothing in it and matches nothing;

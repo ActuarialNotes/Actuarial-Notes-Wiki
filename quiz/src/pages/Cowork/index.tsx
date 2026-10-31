@@ -10,6 +10,7 @@ import { EntityLogo } from '@/components/cowork/EntityLogo'
 import { entityById, resourceEntryRef, type SourceResource } from '@/lib/coworkSources'
 import { COWORK_ENTITIES, COWORK_RESOURCES } from '@/data/coworkSources'
 import SourcesView from './SourcesView'
+import ResourcesView from './ResourcesView'
 import SourcePage from './SourcePage'
 // Registers Cowork's sample source documents as virtual vault files, which is
 // what lets them open in the same popup viewer as a real wiki page. Imported
@@ -36,8 +37,9 @@ import '@/lib/coworkContent'
  * Anything that would need a bespoke viewer should become a page at a
  * vault-shaped path instead.
  *
- * Two addresses here, and a source is one of them, the way an exam's study
- * guide is (`/cowork`, `/cowork/sources/:id`), so a source can be linked to and
+ * Three addresses here — the two shelves, Sources and Resources, and a
+ * source's own page, the way an exam's study guide is (`/cowork`,
+ * `/cowork/resources`, `/cowork/sources/:id`), so a source can be linked to and
  * the back button works through the loop. The search is not among them: it
  * is a question the bar answers with a list of places to go
  * (`components/cowork/CoworkTopBar.tsx`), exactly as the wiki's is, so there is
@@ -50,6 +52,9 @@ export default function Cowork() {
   const popupOpen = useConceptPopup(s => s.open)
 
   const entityId = params.tab === 'sources' ? params.id ?? null : null
+  // The shelf of what the sources publish, `/cowork/resources` — the other
+  // half of the Sources shelf, each page carrying a row to the other.
+  const onResources = params.tab === 'resources' && !params.id
 
   /**
    * Open a document in the popup viewer.
@@ -106,7 +111,7 @@ export default function Cowork() {
   return (
     <div className="min-h-screen">
       <CoworkTopBar
-        placeholder="Search sources and documents"
+        placeholder="Search sources and resources"
         pageTitle={entity?.name ?? null}
         pageIcon={entity ? <EntityLogo entity={entity} size="md" /> : undefined}
         backLink={backLink}
@@ -120,8 +125,10 @@ export default function Cowork() {
       >
         {entityId ? (
           <SourcePage entityId={entityId} onOpenResource={openResource} onBack={sourceBack.go} backLabel={sourceBack.label} />
+        ) : onResources ? (
+          <ResourcesView onOpenResource={openResource} />
         ) : (
-          <SourcesView onOpenResource={openResource} />
+          <SourcesView />
         )}
       </div>
 

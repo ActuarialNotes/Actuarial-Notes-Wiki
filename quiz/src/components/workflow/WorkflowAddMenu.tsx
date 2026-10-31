@@ -179,7 +179,7 @@ export function WorkflowAddMenu({
     case 'root':
       body = (
         <>
-          <NavRow icon={Library} title="Source" subtitle="A document from Sources, and the tables it publishes" onClick={() => go({ id: 'sources' })} testId="workflow-add-sources" />
+          <NavRow icon={Library} title="Source" subtitle="A resource from Sources, and the tables it publishes" onClick={() => go({ id: 'sources' })} testId="workflow-add-sources" />
           <NavRow icon={Database} title="Data" subtitle="Published tables, or your own" onClick={() => go({ id: 'data' })} testId="workflow-add-data" />
           <NavRow icon={Calculator} title="Calculation" subtitle={`${TOOLS.length - dataTools.length} tools in ${calcAreas.length} areas`} onClick={() => go({ id: 'calc' })} testId="workflow-add-calc" />
           <NavRow icon={BookOpen} title="Concept" subtitle="The method or idea a step rests on" onClick={() => go({ id: 'concepts' })} testId="workflow-add-concepts" />
@@ -192,7 +192,7 @@ export function WorkflowAddMenu({
       body = query.trim()
         ? sourceMatches.length
           ? sourceMatches.map(r => sourceRow(r))
-          : <p className="px-4 py-3 text-sm text-muted-foreground">No documents match “{query.trim()}”.</p>
+          : <p className="px-4 py-3 text-sm text-muted-foreground">No resources match “{query.trim()}”.</p>
         : (
             <>
               {libraryDocs.length > 0 && (
@@ -207,7 +207,7 @@ export function WorkflowAddMenu({
                   key={e.id}
                   lead={<EntityLogo entity={e} size="sm" />}
                   title={e.name}
-                  subtitle={`${COWORK_RESOURCES.filter(r => r.entityId === e.id).length} documents`}
+                  subtitle={`${COWORK_RESOURCES.filter(r => r.entityId === e.id).length} resources`}
                   onClick={() => go({ id: 'publisher', entity: e })}
                   testId="workflow-add-publisher"
                 />
@@ -338,7 +338,7 @@ export function WorkflowAddMenu({
   }
 
   const searching = page.id === 'concepts' || page.id === 'exam' || page.id === 'sources'
-  const searchLabel = page.id === 'sources' ? 'Search documents' : 'Search concept pages'
+  const searchLabel = page.id === 'sources' ? 'Search resources' : 'Search concept pages'
 
   return (
     <div

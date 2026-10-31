@@ -215,19 +215,27 @@ function SidebarGroup({
 }
 
 /**
- * The nav rows of **Cowork** mode — its two places, Sources and Workflows.
+ * The nav rows of **Cowork** mode — its shelves, Sources and Resources, and
+ * Workflows.
  * The workflow count is deliberately not a badge here: reading the workflow
  * store would pull the tools engine into the main bundle with the sidebar.
  * Study's rows are not hidden behind a flag here; they are simply not this
  * mode's rows (see `lib/appMode.ts`).
  */
 function CoworkNav({ collapsed, onNavigate }: { collapsed: boolean; onNavigate: () => void }) {
-  const libraryCount = useCoworkLibrary(s => s.entityIds.length + s.resourceIds.length)
-  // A source has its own page under /cowork/sources, and the nav is now the
-  // only thing saying which of Cowork's two places you are in (the page carries
-  // no tabs), so the Sources row has to stay lit while you are reading one.
+  const followed = useCoworkLibrary(s => s.entityIds.length)
+  const taken = useCoworkLibrary(s => s.resourceIds.length)
+  // A source has its own page under /cowork/sources, and the nav is the only
+  // thing saying which of Cowork's places you are in (the page carries no
+  // tabs), so the Sources row has to stay lit while you are reading one.
   const { pathname } = useLocation()
   const onSourcePage = pathname.startsWith('/cowork/sources')
+  const countBadge = (n: number) =>
+    n > 0 ? (
+      <span className="rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-semibold tabular-nums text-muted-foreground">
+        {n}
+      </span>
+    ) : undefined
 
   return (
     <>
@@ -239,13 +247,15 @@ function CoworkNav({ collapsed, onNavigate }: { collapsed: boolean; onNavigate: 
         end
         forceActive={onSourcePage}
         onNavigate={onNavigate}
-        badge={
-          libraryCount > 0 ? (
-            <span className="rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-semibold tabular-nums text-muted-foreground">
-              {libraryCount}
-            </span>
-          ) : undefined
-        }
+        badge={countBadge(followed)}
+      />
+      <SidebarItem
+        to="/cowork/resources"
+        label="Resources"
+        icon={<LibraryBig className="h-5 w-5 lg:h-4 lg:w-4" />}
+        collapsed={collapsed}
+        onNavigate={onNavigate}
+        badge={countBadge(taken)}
       />
       <SidebarItem
         to="/cowork/workflows"

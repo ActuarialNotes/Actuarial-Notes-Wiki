@@ -1743,10 +1743,12 @@ auto **loss trend benchmarks** first) brings it as the step's data, mapped onto 
 inputs the way an uploaded CSV's columns are, so a coverage's trend links straight into Trend
 Factor.
 
-The Sources surfaces, and the shape of each is deliberate: the shelf (`/cowork`) answers
-one primary filter — **Sources or Documents** — with a grid of publisher cards or document
-cards, over a secondary pill row led by **My Library** (a filter narrowing the shelf to what
-the reader follows/has taken, not a section stacked above it); **a source is its own page**
+The Sources surfaces, and the shape of each is deliberate: two shelves — **Sources**
+(`/cowork`, publisher cards) and **Resources** (`/cowork/resources`, document cards, filtered by
+Study mode's Exam / Publisher / Year through `lib/resourceFilters.ts` and `coworkFacetItem`) —
+each carrying a row card to the other (`components/cowork/CoworkPageRow.tsx`, the Study Guides
+tab's Exams ↔ Resources row), and each filter row led by **My Library** (a filter narrowing the
+shelf to what the reader follows/has taken, not a section stacked above it); **a source is its own page**
 (`/cowork/sources/:id`), the way an exam's study guide is, with the publisher's *own* logo in
 the sticky header (`SourceEntity.logo`, transcribed from their site, monogram tile as the
 fallback) and their catalogue below it; and **a document is always a card**, never a row — one

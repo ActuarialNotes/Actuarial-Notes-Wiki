@@ -1,8 +1,10 @@
 import { describe, it, expect } from 'vitest'
+import { emptyResourceFacets, filterResources as filterByFacets, resourceFacetOptions } from './resourceFilters'
 import {
   EMPTY_LIBRARY,
   addEntity,
   addResource,
+  coworkFacetItem,
   entityById,
   entityResources,
   filterResources,
@@ -304,5 +306,35 @@ describe('entityById / entityResources', () => {
     expect(entityResources(RESOURCES, 'osfi').map(r => r.id)).toEqual(['mct', 'orsa'])
     expect(entityResources(RESOURCES, 'cu').map(r => r.id)).toEqual(['news'])
     expect(entityResources(RESOURCES, 'nobody')).toEqual([])
+  })
+})
+
+describe('coworkFacetItem', () => {
+  const exams = new Map([['osfi mct', ['Exam 6C']]])
+
+  it('reads the publisher off the entity, the year off the date and the exams off the vault page', () => {
+    const mct = { ...MCT, wikiRef: { kind: 'resource' as const, name: 'OSFI MCT' } }
+    expect(coworkFacetItem(mct, ENTITIES, exams)).toMatchObject({
+      publisher: OSFI.name,
+      year: Number(MCT.published!.slice(0, 4)),
+      exams: ['Exam 6C'],
+    })
+  })
+
+  it('files an undated document under no year, and one with no vault page under no exam', () => {
+    const item = coworkFacetItem(ORSA, ENTITIES, exams)
+    expect(item.year).toBeUndefined()
+    expect(item.exams).toBeUndefined()
+  })
+
+  it('filters by the Study Guides Resources rule: OR within a facet, AND across', () => {
+    const items = RESOURCES.map(r => coworkFacetItem(r, ENTITIES, exams))
+    const byOsfi = { ...emptyResourceFacets(), publisher: new Set([OSFI.name]) }
+    expect(filterByFacets(items, byOsfi).map(i => i.resource.id).sort()).toEqual(['mct', 'orsa'])
+    const counts = resourceFacetOptions(items, 'publisher', emptyResourceFacets())
+    expect(counts).toEqual([
+      { value: CU.name, label: CU.name, count: 1 },
+      { value: OSFI.name, label: OSFI.name, count: 2 },
+    ].sort((a, b) => a.value.localeCompare(b.value)))
   })
 })

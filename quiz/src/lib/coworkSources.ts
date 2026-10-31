@@ -510,3 +510,39 @@ export function libraryEntities(state: LibraryState, entities: SourceEntity[]): 
   const taken = new Set(state.entityIds)
   return entities.filter(e => taken.has(e.id))
 }
+
+/* ------------------------------------------------------------ resource facets */
+
+/**
+ * A document as the Resources shelf's filters read it — Exam, Publisher and
+ * Year, the facets the Study Guides tab's Resources page filters by
+ * (`lib/resourceFilters.ts`), so the two shelves narrow by one rule.
+ *
+ * The publisher is the entity Cowork lists the document under; the year is
+ * the one its `published` date names (none for an undated document or a
+ * sample); and the exams are those the vault's own page is a syllabus reading
+ * for — `examsByPage`, the wiki index's `exams` keyed by page name — so a
+ * document with no vault page, or one no exam assigns, is under no exam
+ * rather than filed under a guess.
+ */
+export interface CoworkFacetItem {
+  resource: SourceResource
+  exams?: string[]
+  publisher?: string
+  year?: number
+}
+
+export function coworkFacetItem(
+  resource: SourceResource,
+  entities: SourceEntity[],
+  examsByPage: ReadonlyMap<string, readonly string[]>,
+): CoworkFacetItem {
+  const year = resource.published ? parseInt(resource.published.slice(0, 4), 10) : NaN
+  const exams = resource.wikiRef ? examsByPage.get(resource.wikiRef.name.toLowerCase()) : undefined
+  return {
+    resource,
+    exams: exams && exams.length > 0 ? [...exams] : undefined,
+    publisher: entityById(entities, resource.entityId)?.name,
+    year: Number.isFinite(year) ? year : undefined,
+  }
+}

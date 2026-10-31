@@ -28,3 +28,25 @@ created: 2026-10-17
 - proposed_action: Add a bullet on target encoding with out-of-fold encoding, citing Chalk et al. Ch.6 (new prose: for an author).
 - applied: false
 - fingerprint: fc08fb3032fd
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T12:23Z/2047
+- date: 2026-10-31
+- status_set: verified
+- confidence: high
+- checks_run: delta check of the ridge = Buhlmann passage against Holmes & Casotto §3.1.2 and App. A, read this session; derivation re-done
+- sources_checked: Holmes & Casotto, Penalized Regression and Lasso Credibility, CAS Monograph 13 (2025 revision), §3.1.2 p.16 (PDF 26); App. A.1-A.2 pp.86-91 (PDF 96-101, eq. A.1), sha256:f6978accbd2bcd43284ec939dd90966430a3e36fc126aab4584241a13d7a28cd — https://www.casact.org/sites/default/files/2025-08/CAS_Monograph_13_2025_revision.pdf
+- note: Delta pass; the rest of the page is as verified 2026-10-17, and F-001 (target encoding, minor) stays open. H&C App. A.1: one class-code feature, normal distribution, identity link, target y_i = Y_i - Ybar, n_j and ybar_j as the page defines them; A.2 gives the Buhlmann estimator n_j/(n_j + k) ybar_j with k = sigma^2/tau^2 (within over between variance) and eq. A.1 shows the MAP objective is ridge with lambda = sigma^2/tau^2. Minimizing (1/2)sum(y - X b)^2 + (lambda/2) sum b_j^2 gives n_j b_j - n_j ybar_j + lambda b_j = 0, b_j = n_j ybar_j/(n_j + lambda) = ybar_j/(1 + lambda/n_j), as the page states. §3.1.2 p.16: the lower the exposure the greater the shrinkage; lambda = 0 is the unpenalized GLM, which A.1 shows returns ybar_j (full credibility).
+
+## [C-003] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T12:23Z/2047
+- date: 2026-10-31
+- status_set: verified
+- confidence: high
+- checks_run: source list restated
+- sources_checked: Holmes & Casotto, Penalized Regression and Lasso Credibility, CAS Monograph 13 (2025 revision), §3.1.2 p.16 (PDF 26); App. A.1-A.2 pp.86-91 (PDF 96-101, eq. A.1), sha256:f6978accbd2bcd43284ec939dd90966430a3e36fc126aab4584241a13d7a28cd — https://www.casact.org/sites/default/files/2025-08/CAS_Monograph_13_2025_revision.pdf; Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed. (2025 revision), §5.5, §9.2, §10.1, PDF pp.65, 100-101, 103-106, sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf; Chalk et al., From GLMs to Comprehensive Insurance Pricing: Techniques and Challenges, CAS Monograph 16, 1st ed., Ch.6 §6.1-6.7, Ch.8 §8.2, PDF pp.85-105, 143, sha256:0b293634c3d6320eac9aca5d2f8ba4ca7954f20db8a462b24771c60b5e046d74 — https://www.casact.org/sites/default/files/2026-02/CAS_Monograph-16_From_GLMs.pdf; Couret & Venter, Using Multi-Dimensional Credibility to Estimate Class Frequency Vectors in Workers Compensation (ASTIN Bulletin 38(1), 2008), abstract, §2, PDF pp.1-2, 7-11, sha256:ce50d8a0fbc395621d29dd153836b0303a269d94697bb1932b5f334b47ebba18 — https://www.casact.org/sites/default/files/2021-03/8_Couret_Venter.pdf
+- note: Same run, same content: restates the block's sources as this run's delta sources plus the prior pass's sources, which still cover the page's unchanged content. No new checks.

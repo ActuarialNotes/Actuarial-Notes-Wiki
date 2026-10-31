@@ -1,8 +1,8 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-10
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
   content_hash: sha256:adf2c23551e9bd650fed3c77e0497eb47068c0545aebf6c61fd1cf467eba7cff
   sources:
@@ -12,6 +12,7 @@ verification:
     - "IRMI Glossary, 'deductible', entry, sha256:95bff5ff32cde7c6a56aafa63343209ec839067f1a3ed9a75dd4dda780c17286 — https://www.irmi.com/term/insurance-definitions/deductible"
     - "D. R. Clark, Basics of Reinsurance Pricing (CAS study note, rev. 2014), pp.15, 23-25, 17-19, 27-30, 43, sha256:1c4429fee538cc8d90157c1849ca689a3a2173a2670fc57f212d866b493e2c63 — https://www.casact.org/sites/default/files/2021-03/8_Clark.pdf"
     - "R. Sahasrabuddhe, 'Claims Development by Layer' (CAS E-Forum Fall 2010, rev. 2 Jan 2013), abstract and §1, sha256:42ecb7ecc7270a462e397a1d4d5c8d42e50b4bc9719122b4c53873dfc84fd5a3 — https://www.casact.org/pubs/forum/10fforum/Sahasrabuddhe.pdf"
+    - "D. R. Clark, Basics of Reinsurance Pricing (CAS study note, rev. 2014), p.27 (truncated Pareto severity for excess loss factors, closed-form E[x;L]), sha256:1c4429fee538cc8d90157c1849ca689a3a2173a2670fc57f212d866b493e2c63 — https://www.casact.org/sites/default/files/2021-03/8_Clark.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Excess Insurance.md

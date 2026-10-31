@@ -1,13 +1,14 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-09
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
   content_hash: sha256:25acdefe9366a0b49de63e6c4b499aea8f82a0675f142211bc1b6dd7bb42b37d
   sources:
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.15 pp.303-304 (PDF pp.315-316); Ch.11 p.197 (PDF p.209), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch.1 p.13 (PDF p.19); Ch.3 p.35 (PDF p.41); Ch.5 p.73 (PDF p.79); Ch.7 pp.84, 96 (PDF pp.90, 102); Ch.13 p.268 (PDF p.274); Ch.15 p.332 (PDF p.338); App. A p.426 (PDF p.432), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+    - "Fisher, McTaggart, Petker & Pettingell, Individual Risk Rating (CAS study note, 2019), §5 Self-Insured Retentions, pp.23-24 (PDF 28-29: insurer reimburses only after the insured has paid), sha256:3182cd5d8ebccc92be67a246e61a527acda5b304b823448d99f8a2546ca07b81 — https://www.casact.org/sites/default/files/2021-03/8_Fisher_et_al.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Self-Insured Retention.md

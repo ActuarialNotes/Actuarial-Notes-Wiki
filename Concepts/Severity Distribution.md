@@ -1,8 +1,8 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-05
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
   content_hash: sha256:5edf4eedbfcf3c4f619f65d72bbdeae00095028fd73fb145ece5ee9ae78f6739
   sources:
@@ -13,6 +13,8 @@ verification:
     - "Werner & Modlin, Basic Ratemaking, 5th ed. (CAS, May 2016), ch.6 'Leveraged Effect of Limits on Severity Trend' pp.117-118 (PDF 129-130, Tables 6.20-6.21: positive trend -> Basic Limits Trend <= Total Limits Trend <= Excess Losses Trend; excess = total minus basic; deductibles leverage analogously) and ch.11 pp.193, 197 (PDF 205, 209: indicated ILF(H) = LAS(H)/LAS(B)), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), Domain B tasks 5, 8 and 9, readings Hogg, Tse (PDF p.4); Tse §§1.1, 2.2-2.5 assigned (PDF p.6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
     - "CAS Exam 9 Content Outline, Fall 2026, Domain A task 1 'Fit loss distribution-based exposure curves' (p.3) and text reference Bernegger (p.7), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
+    - "Bahnemann, Distributions for Actuaries (CAS Monograph 2), Problem 2.31 (PDF p.87, CV = SD/mean); §5.2 eq. 5.8 pp.145-146 (PDF pp.157-158, mean excess e(x): constant for exponential, increasing linear for Pareto with a > 1), sha256:d4d172f9646852ab018ae3f0df95e5fbdbfabda4db55d6d4596977ed2eaa3ef8 — https://www.casact.org/sites/default/files/2021-03/8_Bahnemann.pdf"
+    - "Wikipedia, 'Lomax distribution', oldid 1333105295, section 'Gamma-exponential (scale-) mixture connection' (exponential with gamma-distributed rate is Lomax/Pareto), sha256:0365b35d2ad2bc7a02e0e3cb1a2e215a3f592623bc24d95e25cd9fb06ce6f9d4 — https://en.wikipedia.org/w/index.php?title=Lomax_distribution&oldid=1333105295"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Severity Distribution.md

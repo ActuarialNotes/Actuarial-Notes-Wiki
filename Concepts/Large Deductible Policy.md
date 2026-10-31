@@ -1,12 +1,15 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
   content_hash: sha256:2c8ed93dfa88bdc04ccb324a9b894c1b5cde3e84d8d799007317fe63677c143a
-  sources: []
-  open_findings: 0
+  sources:
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.15 'Large Deductible Policies', printed pp.303-305 (PDF pp.315-317), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Fisher, McTaggart, Petker & Pettingell, Individual Risk Rating (CAS Study Note, v3 Oct 2019), Ch.2 §5, PDF pp.27-29; Ch.3 ICRLL pricing PDF pp.89-90 and answer 13 PDF p.117, sha256:3182cd5d8ebccc92be67a246e61a527acda5b304b823448d99f8a2546ca07b81 — https://www.casact.org/sites/default/files/2021-03/8_Fisher_et_al.pdf"
+    - "Bahnemann, Distributions for Actuaries, CAS Monograph 2 (2015), §5 inflation and a fixed limit, printed p.155 (PDF p.167), sha256:d4d172f9646852ab018ae3f0df95e5fbdbfabda4db55d6d4596977ed2eaa3ef8 — https://www.casact.org/sites/default/files/2021-03/8_Bahnemann.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Large Deductible Policy.md
 ---

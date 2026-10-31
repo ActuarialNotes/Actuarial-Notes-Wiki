@@ -20,7 +20,13 @@
        "page": "Expected Loss",
        "quote": "**Expected loss** is the mean of the loss that an insurer, or one layer of its coverage, will bear over a period: the expected number of claims times the expected amount each claim contributes."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Arithmetic on the question's own data: count x severity summed over lines; the question supplies every input.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm1"
+     }
     },
     {
      "id": "r2",
@@ -253,7 +259,13 @@
        "page": "Variance and Standard Deviation",
        "quote": "$$= E[X^2] - \\mu^2$$ … $$\\sigma = \\text{SD}(X) = \\sqrt{\\text{Var}(X)}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "A step of one sample answer's route to Pearson's rho; the tagged Correlation page gives the sum-of-deviations formula for r that the alternative answer uses, so no separate SD formula is needed.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm1"
+     }
     },
     {
      "id": "r3",
@@ -430,7 +442,15 @@
        "page": "Variance and Standard Deviation",
        "quote": "**Variance** $\\sigma^2$ and **Standard Deviation** $\\sigma$ both measure how far a [[Random Variable]] spreads around its mean. Variance is the expected squared deviation; standard deviation is its square root, restored to the original units of $X$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Measure",
+      "quote": "[[Variance]] and [[Standard Deviation|standard deviation]] average the deviations from the mean, treating favourable and unfavourable surprises alike.",
+      "note": "Risk Measure (tagged) teaches standard deviation as a whole-distribution, mean-based measure counting favourable and adverse deviations alike.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm1"
+     }
     },
     {
      "id": "r2",
@@ -456,7 +476,15 @@
        "page": "Basic Risk Measures",
        "quote": "the variance, the standard deviation and the semivariance, which counts only unfavourable deviations"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Measure",
+      "quote": "*Semivariance* and downside standard deviation count only unfavourable deviations",
+      "note": "Risk Measure (tagged) teaches that semi-standard deviation counts only adverse deviations.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm1"
+     }
     },
     {
      "id": "r4",
@@ -909,7 +937,13 @@
      "statement": "Mitigate external fraud and data-security risk from outsourcing to third parties through access controls such as passwords and heightened security.",
      "concept": "Operational Risk Mitigation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The examiner's mitigation for this project's outsourcing (passwords, heightened security) is a scenario-specific answer; the event type itself (external fraud) is on Operational Risk.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm1"
+     }
     },
     {
      "id": "r6",
@@ -917,7 +951,13 @@
      "statement": "Mitigate execution, delivery and process management risk from vendors by clearly communicating expectations between internal staff and vendor personnel and by funding or reserving for the risk of errors.",
      "concept": "Operational Risk Mitigation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Communicating expectations with the vendor and funding for errors is a scenario-specific mitigation; the event type (execution, delivery and process management) is on Operational Risk.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm1"
+     }
     }
    ]
   },
@@ -1139,7 +1179,15 @@
        "page": "Risk Diversification",
        "quote": "$$C = \\sqrt{C_1^2 + C_2^2 + 2\\rho\\, C_1 C_2}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Management Process",
+      "quote": "it shows the CAS principle that portfolio risk is not the simple sum of the individual risks: the total equals $\\sigma_A + \\sigma_B$ only when $\\rho = 1$.",
+      "note": "Risk Management Process (linked from tagged Risk Management) teaches that aggregated risk equals the simple sum only under perfect correlation, with the square-root formula above it.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm1"
+     }
     },
     {
      "id": "r7",
@@ -1147,7 +1195,13 @@
      "statement": "Bonds from the same issuer are treated as perfectly correlated (correlation of 1, diversification parameter α = 0), so no diversification benefit applies.",
      "concept": "Credit Risk Solvency Capital Requirement Aggregation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "That one issuer's two bonds default together (correlation 1) is the inference the question's own 'same issuer' setup calls for; the aggregation rule itself is r6.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm1"
+     }
     }
    ]
   },
@@ -1239,7 +1293,13 @@
      "statement": "Loss ratios of a large, stable book of business tend to be positively correlated across years because the same policyholders remain and the book performs similarly over time, and a large book has high credibility so its loss ratio does not swing widely.",
      "concept": "Insurance Risk Model Correlation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "A reason specific to this book (large and stable, same policyholders); the examiner accepted any well-explained reason.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm1"
+     }
     },
     {
      "id": "r2",
@@ -1247,7 +1307,13 @@
      "statement": "Personal auto is highly regulated and has low catastrophe exposure, so rate levels change slowly and results are consistent, which makes loss ratios positively correlated from year to year.",
      "concept": "Insurance Risk Model Correlation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "A reason specific to the scenario's line (personal auto regulated, little cat exposure); the examiner accepted any well-explained reason.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm1"
+     }
     },
     {
      "id": "r3",
@@ -1496,7 +1562,13 @@
        "page": "Convolution",
        "quote": "- **Forgetting the order count.** $f_X^{*2}(3) = 2(0.6)(0.4)$, not $(0.6)(0.4)$: $3 = 1+2 = 2+1$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The question states the perils are independent; tabulating the combined distribution by multiplying probabilities and adding losses is arithmetic on its data.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm1"
+     }
     }
    ]
   },
@@ -1546,7 +1618,13 @@
        "page": "Investment Income",
        "quote": "In the projection, $A_{t-1}$ is the assets at the start of year $t$, $P_t$ the premiums received and $C_t$ the claims, expenses and commissions paid during the year, and $i_t$ the earned rate."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The question states when premiums, expenses and claims are paid; investment income on the beginning assets is arithmetic from that setup.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm1"
+     }
     },
     {
      "id": "r5",
@@ -1579,7 +1657,15 @@
      "statement": "The efficient frontier approach plots expected underwriting profit against a risk measure (e.g., VaR or TVaR) for reinsurance options; preferred options have higher profit for lower risk (upper left).",
      "concept": "Efficient Frontier for Reinsurance Evaluation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Mitigation",
+      "quote": "Brehm puts reinsurance programmes on an **efficient frontier** of expected return against risk: a programme below the frontier is dominated, and the choice along it is a question of appetite.",
+      "note": "Risk Mitigation (syllabus) teaches the efficient frontier of return against risk for reinsurance programmes, dominated options below it.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm1"
+     }
     },
     {
      "id": "r8",
@@ -1678,7 +1764,13 @@
        "page": "Market Risk Margin",
        "quote": "applies a factor to common share holdings, and it is high — equities are volatile and their fall correlates with the economic conditions in which insurers also suffer underwriting losses."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The examiner's argument about these two companies' investment strategies and how each should price; specific to the scenario.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm1"
+     }
     },
     {
      "id": "r3",
@@ -1716,7 +1808,15 @@
        "page": "Social Inflation",
        "quote": "Short-tail property lines are barely affected, because they involve little litigation."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Long Tail Lines",
+      "quote": "Long-tail reserves are also exposed to **calendar-year** forces that no accident-year pattern anticipates",
+      "note": "Done: Long Tail Lines added. The elsewhere places were Claim Reserve / Social Inflation, so this item needs the resolve with the Long Tail Lines quote (social and economic inflation, legislative reform, judicial reinterpretation).",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm1"
+     }
     },
     {
      "id": "r5",
@@ -2020,7 +2120,15 @@
      "statement": "Lines of insurance that are normally uncorrelated (different perils, policyholders, industries, geography) can become correlated when a single extreme event, such as a hurricane or economic recession, simultaneously drives losses in both lines.",
      "concept": "Correlation and Dependency Between Lines of Insurance",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Modeling",
+      "quote": "common drivers such as inflation acting on claims and asset values together, catastrophes crossing lines, the cycle moving lines together, and tail dependence",
+      "note": "Risk Modeling (syllabus) teaches that common drivers - a catastrophe crossing lines, inflation, the cycle - make otherwise separate lines move together.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm1"
+     }
     },
     {
      "id": "r2",
@@ -2028,7 +2136,15 @@
      "statement": "Correlation between risks often increases in the tails of the loss distributions, so a single constant correlation coefficient understates joint extreme outcomes.",
      "concept": "Tail Dependence",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Model Selection",
+      "quote": "Correlation alone does not fix how risks combine — two dependence structures with the same marginals and the same correlation can differ sharply in how often extreme losses occur together",
+      "note": "Model Selection (syllabus) teaches that one correlation number misses how often extremes coincide. If the coordinator finds this too thin, fold it into the copula-basics write.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm1"
+     }
     },
     {
      "id": "r3",
@@ -2139,7 +2255,15 @@
        "page": "Coefficient of Variation",
        "quote": "The **Coefficient of Variation** $CV$ is the ratio of the standard deviation to the mean, measuring dispersion as a proportion of the mean."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Measure",
+      "quote": "The [[Coefficient of Variation|coefficient of variation]], $\\sigma / \\mu$, compares risk between distributions with different means.",
+      "note": "Risk Measure (syllabus) gives CV = sigma/mu, so sigma = CV x mean.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm1"
+     }
     },
     {
      "id": "r2",
@@ -2372,7 +2496,13 @@
        "page": "Profit Testing",
        "quote": "Each year the insurer starts with the reserve released from the year before, receives the premium, pays the expenses and earns interest on the balance."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Investable assets = beginning surplus + premium - up-front expenses (net of ceded premium, plus commission) is arithmetic from the question's stated payment timing.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm1"
+     }
     },
     {
      "id": "r4",
@@ -2603,7 +2733,13 @@
        "page": "Cumulative Distribution Function (CDF)",
        "quote": "For a continuous random variable, $F(x) = \\int_{-\\infty}^{x} f(t)\\, dt$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Drawn from the examiner's remark that candidates confused pdf and cdf; neither sample answer uses the pdf-cdf relationship.",
+      "date": "2026-10-31",
+      "run": "g9-sort-brehm1"
+     }
     }
    ]
   },

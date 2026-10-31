@@ -7,6 +7,8 @@ import rehypeKatex from 'rehype-katex'
 import type { Components } from 'react-markdown'
 import { calloutComponents } from '@/components/calloutComponents'
 import { codeComponents } from '@/components/codeComponents'
+import { ProseLink } from '@/components/PdfLinkButton'
+import type { PdfReaderDoc } from '@/hooks/usePdfReader'
 import { DistributionSimulator } from '@/components/wiki/DistributionSimulator'
 import { SourceMaterialGallery } from '@/components/wiki/SourceMaterialGallery'
 import { examPillLabel } from '@/lib/resourceExams'
@@ -48,6 +50,12 @@ export interface WikiArticleProps {
    * page's class can draw them without markers (`rehypeOutlineItems`).
    */
   outlineItems?: boolean
+  /**
+   * Where a PDF the article links to is read. Defaults to the app's reader;
+   * a page of the concept popup passes its stack, so the document opens as
+   * the next page instead of covering the pane.
+   */
+  onReadPdf?: (doc: PdfReaderDoc) => void
 }
 
 export interface WikiTitleAction {
@@ -112,7 +120,7 @@ function stripHtmlBlocks(md: string): string {
     .replace(/^> *<div\b.*?<\/div> *\n?/gm, '')
 }
 
-export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, className, titleBadge, titleAction, outlineItems }: WikiArticleProps) {
+export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, className, titleBadge, titleAction, outlineItems, onReadPdf }: WikiArticleProps) {
   const navigate = useNavigate()
   const articleRef = useRef<HTMLDivElement | null>(null)
   const { theme } = useTheme()
@@ -203,13 +211,8 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
     a({ href, children, ...rest }) {
       if (!href) return <a {...rest}>{children}</a>
       const ref = hrefToEntryRef(href)
-      if (!ref) {
-        return (
-          <a href={href} target="_blank" rel="noopener noreferrer" {...rest}>
-            {children}
-          </a>
-        )
-      }
+      // An outside link — and a PDF among them is read in the app.
+      if (!ref) return <ProseLink href={href} onRead={onReadPdf} {...rest}>{children}</ProseLink>
       const route = wikiRoute(ref)
       const exists = isInWikiIndex(ref.kind, ref.name)
       // A `#repeat` fragment (added by rewriteWikilinks for the 2nd+ mention of
@@ -231,7 +234,7 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
         </a>
       )
     },
-  }), [openRef, hideImages, titleBadge, sourceMaterial, objectives, sourceExam, theme])
+  }), [openRef, hideImages, titleBadge, sourceMaterial, objectives, sourceExam, theme, onReadPdf])
 
   // Active-concept highlight: when the popup is open and its sourcePath
   // matches this article's sourcePath, the matching wikilink is flagged and

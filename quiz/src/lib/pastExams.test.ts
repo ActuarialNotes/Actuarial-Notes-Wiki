@@ -291,6 +291,6 @@ describe('examSourceLabel', () => {
     // Exam P and FM release no dated sittings, so their shelf has no rows. It
     // is never "Practice Exam": that is a way of sitting questions, chosen
     // apart from where they come from.
-    expect(examSourceLabel([])).toBe('Samples')
+    expect(examSourceLabel([])).toBe('By Source')
   })
 })

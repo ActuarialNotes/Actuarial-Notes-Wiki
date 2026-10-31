@@ -18,7 +18,7 @@ A **quantile plot** (or lift chart by predicted quantile) sorts a held-out datas
 
 - Three criteria pick the winning model: **predictive accuracy** — does each bucket's actual match its predicted level? — **monotonicity** — do the actuals rise across the buckets (small reversals are okay)? — and the **vertical distance** between the first and last quantiles
 - A model can rank well and be badly calibrated (bars rise but sit above the predicted line throughout), or be well calibrated on average and rank nothing (flat bars at the overall mean)
-- **Accuracy is not narrowness.** A model whose predictions are too extreme — above the actuals in the top buckets and below them in the bottom ones — fails the predictive-accuracy test, and a narrow range of predictions close to the average is no evidence of accuracy either: each bucket's prediction is judged against what actually emerged in that bucket
+- **Accuracy is not narrowness.** A model whose predictions are too extreme — above the actuals in the top buckets and below them in the bottom ones — scores poorly on predictive accuracy, and a narrow range of predictions close to the average is no evidence of accuracy either: each bucket's prediction is judged against what actually emerged in that bucket
 - That vertical distance is the model's **[[Lift|lift]]**: a large difference between the actual pure premium in the lowest and highest buckets means the model can maximally distinguish the best and worst risks
 - Buckets are **equal exposure**, not equal count
 - Must be built on **held-out** data; on training data the plot flatters the more flexible model. Two models are compared on their two quantile plots; a [[Double Lift Chart]] compares them directly

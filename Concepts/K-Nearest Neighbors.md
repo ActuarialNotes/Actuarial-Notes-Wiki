@@ -23,8 +23,8 @@ verification:
 - **Choosing $K$**: small $K$ = low bias, high variance (flexible); large $K$ = high bias, low variance (smooth); optimal $K$ selected by cross-validation
 - **$K = n$**: when $K$ equals the number of training observations, every neighborhood $\mathcal{N}_K(x_0)$ is the whole training set, so KNN predicts the class that has the majority in the training data for every observation, whatever its predictor values — the extreme of oversmoothing
 - The **Bayes classifier** is the unattainable benchmark: it assigns $x_0$ to the class $j$ with the largest true $\Pr(Y = j \mid X = x_0)$, so its error probability at $x_0$ is $1 - \max_j \Pr(Y = j \mid X = x_0)$, which for two classes with $p = \Pr(Y = 1 \mid X = x_0)$ is $\min\{p,\ 1-p\}$
-- The **Bayes error rate** $1 - E\left[\max_j \Pr(Y = j \mid X)\right]$ is the lowest possible test error rate; the expectation averages over the values of $X$, so for a given set of test points it is the average of $1 - \max_j \Pr(Y = j \mid X = x_i)$ over those $x_i$, worked from the true conditional probabilities rather than by checking the test labels
-- KNN is a **lazy learner** — it stores all training data and does computation at prediction time (no explicit training phase)
+- The **Bayes error rate** $1 - E\left[\max_j \Pr(Y = j \mid X)\right]$ is the lowest possible test error rate; the expectation averages over the values of $X$. On a given set of test points, the Bayes classifier's expected error rate is the average of the per-point error probabilities $1 - \max_j \Pr(Y = j \mid X = x_i)$ over those $x_i$, worked from the true conditional probabilities rather than by checking the test labels
+- KNN estimates **no parameters**: it keeps the training data and does its work at prediction time, finding each new point's nearest neighbors, which can be slow in a large training set
 - **Curse of dimensionality**: KNN degrades in high dimensions as distances become uninformative
 
 ![[Media/Figures/K-Nearest_Neighbors.svg|340]]

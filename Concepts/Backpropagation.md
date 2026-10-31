@@ -24,7 +24,7 @@ verification:
 - $\eta$ is the **learning rate**: too large and the loss oscillates or diverges, too small and training crawls
 - **Stochastic gradient descent** applies the update on mini-batches rather than the full dataset; it is the state of the art for fitting deep networks, and it naturally enforces its own form of approximately quadratic regularization
 - The loss surface is **non-convex** — different random starting weights give different fits, so results are not reproducible without a fixed seed
-- The squared-error objective is usually written with a $\tfrac12$, $R(\theta) = \tfrac12\sum_i \left(y_i - f_\theta(x_i)\right)^2$: differentiating the square brings down a 2 that cancels it, so $\partial R_i/\partial f_\theta(x_i) = -\left(y_i - f_\theta(x_i)\right)$ and each weight's gradient is the residual times what feeds that weight. Without the $\tfrac12$ (as in the example below) every gradient doubles
+- The squared-error objective is often written with a $\tfrac12$, $R(\theta) = \tfrac12\sum_i \left(y_i - f_\theta(x_i)\right)^2$: differentiating the square brings down a 2 that cancels it, so $\partial R_i/\partial f_\theta(x_i) = -\left(y_i - f_\theta(x_i)\right)$ and an output weight's gradient is minus the residual times the activation $A_k = g(z_{ik})$ feeding it, $\partial R_i/\partial \beta_k = -\left(y_i - f_\theta(x_i)\right) A_k$. Without the $\tfrac12$ (as in the example below) every gradient doubles
 - Regularization comes as a weight-decay penalty ([[Regularization|ridge]] on the weights), early stopping, or dropout
 
 ![[Media/Figures/Backpropagation.svg|340]]

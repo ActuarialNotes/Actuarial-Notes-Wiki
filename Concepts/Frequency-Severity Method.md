@@ -1,12 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:38f2eab7bf5771be168a7168b642b2d2064d3a89d8493245c577300782f9b470
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: high
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:d39190a27c88503956e52041045a7ce594f31d7eaf05f28f05bf44011ffd3165
+  sources:
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch.11 Frequency-Severity Techniques, PDF pp.200-203, 207-213, 218 (printed 194-197, 201-207, 212), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Frequency-Severity Method.md
 ---
@@ -20,8 +21,8 @@ verification:
 Friedland gives three variants:
 
 - **Development on counts and severities.** Develop the count triangle to ultimate counts; develop an average severity triangle (dollars ÷ counts at each age) to ultimate severity; multiply. The straightforward version.
-- **Counts and trended severity.** Develop counts, but estimate severity by **trending** a mature year's severity forward rather than developing an immature one — useful where severity development is unstable but severity trend is well understood.
-- **Disposal rate (Berquist-Sherman) approach.** Project the number of claims closing in each future period from historical **disposal rates**, value them at a trended severity for that maturity, and sum the future payments. This is the variant that handles a changing [[Settlement Rate|settlement rate]] head on.
+- **Exposures and inflation.** For the most recent accident years, where development factors are most leveraged: compare developed ultimate counts with a trended **exposure** base to select a **frequency**, and select severity from developed severities **trended** to the latest year's cost level.
+- **Disposal rate approach.** Project the number of claims closing in each future period from historical **disposal rates**, value them at a trended severity for that maturity, and sum the future payments. This is the variant that handles a changing [[Settlement Rate|settlement rate]] head on.
 
 Further points:
 

@@ -1,11 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:c1d31f962955442c2729d438a48dfeb3e3510a45428c16423687ee75f2d98121
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:e7131e4ee67da84c8c62bd4fa294767c57a108c617b87d77a163e4ee06fa9272
+  sources:
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch.7, PDF pp.91-95 (printed 85-89): age-to-age factors, averages (simple, medial, volume-weighted, geometric), selection criteria, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch.9, PDF p.162 (printed 156): development factors below 1.00, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Age to Age Factor.md
@@ -77,7 +79,7 @@ Further points:
 > > [!answer]-
 > > $$\begin{align*}
 > > \text{Simple all-year} &= 1.525 \\
-> > \text{Volume-weighted all-year} &= 1.545 \\
+> > \text{Volume-weighted all-year} &= 1.558 \\
 > > \text{Latest 3-year simple} &= 1.633 \\
 > > \text{Medial (drop high/low)} &= 1.528
 > > \end{align*}$$

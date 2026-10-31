@@ -1,21 +1,23 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:7168cf447ac9195297dc252345a70a78cdd4297455846d4660d0fd61c1810ca8
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: high
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:360137e112588684c903f646e003dc92b5aba78d055f5f4bf4bc780d93b8fb0c
+  sources:
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch.13 Berquist-Sherman Techniques, PDF pp.289-296 (printed 283-290): data selection, case adequacy detection and adjustment, settlement-rate adjustment, disposal rates, Thorne's caveats, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch.11, PDF p.212 (printed 206): disposal rate definition, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Berquist-Sherman Method.md
 ---
 
 **Berquist-Sherman Method** restates a historical [[Development Triangle|triangle]] so that every year reflects **current** claims practice, removing the distortion caused by a change in [[Case Adequacy|case reserve adequacy]] or in [[Settlement Rate|claim settlement rates]]. Development factors are then selected from the restated triangle.
 
-> $$\text{Adjusted Case}_{\text{AY},n} = \text{Case}_{\text{latest},n} \times \left(1 + t\right)^{-(\text{years before latest})}$$
+> $$\text{Adjusted Avg Case}_{\text{AY},n} = \text{Avg Case}_{\text{latest},n} \times \left(1 + t\right)^{-(\text{years before latest})}$$
 
-> $$\text{Adjusted Reported}_{\text{AY},n} = \text{Paid}_{\text{AY},n} + \text{Adjusted Case}_{\text{AY},n}$$
+> $$\text{Adjusted Reported}_{\text{AY},n} = \text{Paid}_{\text{AY},n} + \text{Adjusted Avg Case}_{\text{AY},n} \times \text{Open Counts}_{\text{AY},n}$$
 
 **The case adequacy adjustment** (for a *reported* triangle):
 
@@ -27,7 +29,7 @@ verification:
 
 **The settlement rate adjustment** (for a *paid* triangle):
 
-1. Compute **disposal rates** — closed claims ÷ ultimate (or reported) claims — at each accident year and maturity.
+1. Compute **disposal rates** — closed claims ÷ ultimate claims — at each accident year and maturity.
 2. Select the current disposal rate pattern as the target.
 3. For each historical cell, interpolate the paid losses that *would* have been paid had that year closed claims at the current rate — reading along the row's paid-versus-disposal-rate relationship.
 4. Rebuild the paid triangle at the common disposal pattern and select factors from it.
@@ -91,7 +93,7 @@ Further points:
 > >
 > > Average case outstanding is growing $\approx 4.5\%$ a year — steady, and consistent with ordinary severity trend. There is no sign of a case adequacy shift.
 > >
-> > The disposal rate, though, has moved from $58\%$ to $74\%$ in two years, and the paid-to-reported ratio has moved with it. Claims are **closing much faster**.
+> > The closed-to-reported ratio, though, has moved from $58\%$ to $74\%$ in two years, and the paid-to-reported ratio has moved with it. Claims are **closing much faster**.
 > >
 > > The consequences:
 > >

@@ -1,13 +1,12 @@
 ---
 verification:
   status: verified
-  confidence: medium
+  confidence: high
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:cf774ea9e04701fd14988c92280ad2f3ddb96a4e736c6bde11253f48cf6dafd4
+  content_hash: sha256:82b00dec7b74fe24f8bd41b018efb347691c037533f59f95220b7e8160e7fbfb
   sources:
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.15 pp.305-309 (PDF pp.317-321), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
-    - "Fisher, McTaggart, Petker & Pettingell, Individual Risk Rating (CAS Study Note, v3 Oct 2019), Ch.2 §3 and §7, PDF pp.22-26, 31 incl. fn.6 and fn.12; Ch.3 §2.2 Formulas 3.1-3.5, PDF pp.58-63; Table L PDF p.84; ICRLL PDF pp.89-90; answers PDF pp.116-117, sha256:3182cd5d8ebccc92be67a246e61a527acda5b304b823448d99f8a2546ca07b81 — https://www.casact.org/sites/default/files/2021-03/8_Fisher_et_al.pdf"
+    - "Fisher, McTaggart, Petker & Pettingell, Individual Risk Rating (CAS Study Note, v3 Oct 2019), Ch.2 p.21 (PDF p.26); Ch.3 §5.2 p.84-85 (PDF pp.89-90); Ch.4 p.95 (PDF p.100), sha256:3182cd5d8ebccc92be67a246e61a527acda5b304b823448d99f8a2546ca07b81 — https://www.casact.org/sites/default/files/2021-03/8_Fisher_et_al.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Retrospective Rating.md

@@ -70,3 +70,38 @@ created: 2026-09-12
 - checks_run: source list restated
 - sources_checked: Actuarial Standards Board, ASOP No. 12, Risk Classification (for All Practice Areas), Doc. No. 132 (Dec. 2005), §3.3.2-3.3.4 pp.4-5 (PDF 10-11), sha256:7d4f2631a589bac24cf34b1f622e95aa7bfa979aaca96de27c651099c0b12dc7 — https://www.actuarialstandardsboard.org/wp-content/uploads/2014/02/asop012_132.pdf; Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.9 pp.151-159 and 161-170 (PDF pp.163-171, 173-182), Ch.10 p.172 (PDF p.184), Ch.11 p.189 with fn.37 (PDF p.201), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf; CAS Statement of Principles Regarding Property and Casualty Insurance Ratemaking (adopted May 1988; reinstated May 2021), Section II p.2, Principle 3, sha256:f240ea62dd033aac827c2073e56c0a4061d5c84531e5cf6be02d333a8f9f2140 — https://www.casact.org/sites/default/files/2021-05/Statement-Of-Principles-Ratemaking.pdf
 - note: Same run, same content: restates the block's sources as this run's delta sources plus the prior pass's sources, which still cover the page's unchanged content. No new checks.
+
+## [F-002] ASOP 12 consequence sentence dropped its voluntary-coverage condition
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-31T12:57Z/ad84
+- date: 2026-10-31
+- severity: minor
+- status: open
+- locus: What risk classification is used for paragraph, second sentence
+- claim: Ignoring differences in risk characteristics can leave lower risk individuals underusing the system, and so without coverage, while higher risk individuals are covered at insufficient rates, which threatens the viability of the entire system.
+- evidence: ASOP 12 Appendix 1 (PDF p.14): 'Failure to adhere to actuarial principles regarding risk classification for voluntary coverages can result in underutilization of the financial or personal security system by, and thus lack of coverage for, lower risk individuals, and can result in coverage at insufficient rates for higher risk individuals, which threatens the viability of the entire system.' The page dropped 'for voluntary coverages' and recast the subject as ignoring differences in risk characteristics (which ASOP ties to the assessment societies' financial distress and inequity, a separate sentence).
+- source_rank: 2
+- proposed_action: Restore ASOP's subject and condition: 'For voluntary coverages, failing to follow actuarial principles of risk classification can leave ...'.
+- applied: true
+- fingerprint: a68aaaf7aa5e
+
+## [F-002/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-31T12:57Z/ad84
+- date: 2026-10-31
+- resolves: F-002
+- status: resolved
+- note: Corrected in this run to 'For voluntary coverages, failing to follow actuarial principles of risk classification can leave lower risk individuals underusing the system, ...', as ASOP 12 Appendix 1 PDF p.14 has it.
+
+## [C-005] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T12:57Z/ad84
+- date: 2026-10-31
+- status_set: verified
+- confidence: high
+- checks_run: delta check of the added ASOP 12 Appendix 1 paragraph sentence by sentence against PDF p.14; older text not re-checked (verified C-004)
+- sources_checked: Actuarial Standards Board, ASOP No. 12, Risk Classification (for All Practice Areas), Doc. No. 132 (Dec. 2005), Appendix 1 p.8 (PDF p.14), sha256:7d4f2631a589bac24cf34b1f622e95aa7bfa979aaca96de27c651099c0b12dc7 — https://www.actuarialstandardsboard.org/wp-content/uploads/2014/02/asop012_132.pdf
+- note: ASOP 12 Appendix 1 (PDF p.14) is headed 'provided for informational purposes but is not part of the standard of practice' — the page says so. 'Risk classification is generally used to treat participants with similar risk characteristics in a consistent manner, to permit economic incentives to operate and thereby encourage widespread availability of coverage, and to protect the soundness of the system' matches. The AAA's 1980 Risk Classification Statement of Principles is item 2 of the appendix's background literature, as the page says. The consequence sentence lacked ASOP's 'for voluntary coverages' condition (F-002, fixed in this run). The AAA Statement itself was not read; the page does not quote it.

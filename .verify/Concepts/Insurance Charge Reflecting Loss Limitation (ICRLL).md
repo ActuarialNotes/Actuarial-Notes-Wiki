@@ -61,3 +61,14 @@ created: 2026-10-31
 - checks_run: every claim read against the reading; Fisher's own example re-run (1.588, 929,000 -> ELG 29, 0.1583x490,000+160,000=237,567) and the page's example recomputed (k=0.25, factor 1.60, 2,016,000, r=1.5, 108,000+300,000=408,000); (1+0.8k)/(1-k) >= 1 and increasing in k checked; numbers compared with cas8-2012-q20, 2013-q19, 2014-q17, 2017-q17, 2019-q14 (none on the page)
 - sources_checked: Fisher et al., Individual Risk Rating (CAS Exam 8 study note, 2019), Ch.3 PDF pp.66, 78-79, 84, 89-90, 119, sha256:3182cd5d8ebccc92be67a246e61a527acda5b304b823448d99f8a2546ca07b81 — https://www.casact.org/sites/default/files/2021-03/8_Fisher_et_al.pdf
 - note: New page, checked whole against Fisher et al. ch.3. 'Divided by standard premium ... percent of standard premium' is arithmetic on the reading's total. 'Where ... a Table L [is] available, the adjustment is not needed' follows from p.83 (Table L prices both limits in one table) with p.89. F-001, F-002 fixed in this pass.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T12:58Z/2de4
+- date: 2026-10-31
+- status_set: verified
+- confidence: high
+- checks_run: Delta only: two new bullets. E{A_D} = E(1-k) follows from the page's k = (E - E{A_D})/E (fn.49, Formula 3.10) and the entry ratio over expected limited loss (PDF p.89 example: 750,000/490,000). k as the excess/total ratio a retro plan applies to the total loss estimate: Fisher p.18 and fn.49 ('This excess ratio, k'). Writer-flagged sentence (per-occurrence charge as a ratio to standard premium, divided by the expected loss ratio, gives k): kept as plain arithmetic on the reading's definitions — the charge is kE, and E is the expected loss ratio times premium (Fisher p.21, PDF p.26: 'the expected loss ratio to be applied to guaranteed-cost premium to estimate the total expected losses', 'per-occurrence excess losses as a ratio to total losses'), so (kE/P)/(E/P) = k. No question's numbers on the page.
+- sources_checked: Fisher, McTaggart, Petker & Pettingell, Individual Risk Rating (CAS Study Note, v3 Oct 2019), Ch.3 §5.2 p.84-85 (PDF pp.89-90) Formula 3.10, fn.49 and worked example; Ch.2 p.18 (PDF p.23) and p.21 (PDF p.26), sha256:3182cd5d8ebccc92be67a246e61a527acda5b304b823448d99f8a2546ca07b81 — https://www.casact.org/sites/default/files/2021-03/8_Fisher_et_al.pdf
+- note: Older content verified this morning (run be9b) against Fisher Ch.3; only the delta re-checked.

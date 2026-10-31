@@ -4,9 +4,9 @@ verification:
   confidence: high
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:8435afbb02caa174982784eeecddebda174889aa7b05d37c9b3b6005843e8f45
+  content_hash: sha256:8bd1c917997c3518575c6069a7b0cfdb400e8d6bbab350be7d485b52b1a0182e
   sources:
-    - "Fisher, McTaggart, Petker & Pettingell, Individual Risk Rating (CAS Study Note, v3 Oct 2019), Ch.3 §2.1-2.2 PDF pp.52-63, Table L Lee diagram PDF pp.84-85, Ch.3 answers 12 and 20 PDF pp.116-117, 120, sha256:3182cd5d8ebccc92be67a246e61a527acda5b304b823448d99f8a2546ca07b81 — https://www.casact.org/sites/default/files/2021-03/8_Fisher_et_al.pdf"
+    - "Fisher, McTaggart, Petker & Pettingell, Individual Risk Rating (CAS Study Note, v3 Oct 2019), Ch.3 §2.1 pp.51-52 (PDF pp.56-57), sha256:3182cd5d8ebccc92be67a246e61a527acda5b304b823448d99f8a2546ca07b81 — https://www.casact.org/sites/default/files/2021-03/8_Fisher_et_al.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Lee Diagram.md

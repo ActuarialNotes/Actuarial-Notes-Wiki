@@ -85,3 +85,14 @@ created: 2026-10-31
 - checks_run: every claim read against Bailey & Simon pp.159-164 incl. Tables 1-3 and Appendices I-II; both worked examples recomputed from scratch (Z1=0.158, Z2=0.224, Z3=0.273, relative 1.42/1.73; R=13.007, Z=0.0375); numbers compared with cas8-2012-q6, 2014-q5, 2015-q1, 2016-q1, 2017-q3, 2018-q3, 2019-q3 (none reused); links resolve
 - sources_checked: AN ACTUARIAL NOTE ON THE CREDIBILITY OF EXPERIENCE OF A SINGLE PRIVATE PASSENGER CAR, Bailey & Simon, An Actuarial Note on the Credibility of Experience of a Single Private Passenger Car (PCAS 1959), pp.159-164 (PDF pp.1-6): Table 1-3, Appendix I-II, sha256:3e44bb5b3d17e96aaae61b27b0d72889043c44feb049a3ca3444095101f456e2 — https://www.casact.org/sites/default/files/2021-03/8_Bailey_Simon.pdf
 - note: New page. R = 1/(1 - Pr(N=0)) kept as a plain generalisation of Appendix II's m/(1-e^-m). Premium-as-base bullet restated (F-002) to what the paper says; Hazam's conditions are not on the page. Bonus-malus comparison bullet checked for consistency against the verified Bonus-Malus System page (rank 4) only.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T12:57Z/ad84
+- date: 2026-10-31
+- status_set: verified
+- confidence: high
+- checks_run: delta check of the added Hazam bullet sentence by sentence against Hazam's discussion; older text not re-checked (verified against Bailey & Simon, C-001)
+- sources_checked: W. J. Hazam, Discussion of Bailey & Simon, An Actuarial Note on the Credibility of Experience of a Single Private Passenger Car, PCAS XLVII (1960), pp.150-152, PDF pp.1-3, sha256:48b8d420ffd358904509532447e15d50df0d5b1756c2026f81e8d058a02f09e4 — https://www.casact.org/sites/default/files/database/proceed_proceed60_60150.pdf
+- note: Hazam PCAS XLVII p.151: 'a premium base eliminates maldistribution only if (1) high frequency territories are also high premium territories and (2) if territorial differentials are proper. However, premium, although not perfect, is an improvement over exposure as a base for this type of study. The fact that either or both of these inherent assumptions may not always exist does not detract from the qualitative nature of the conclusions but may alter somewhat the basic relative frequencies of Table 1 and the consequent values in Tables 2 and 3.' The bullet states both conditions, the improper-differentials consequence (the contrapositive of 'only if'), the improvement-over-exposure judgment and the qualitative-conclusions caveat (Tables 2 and 3 are the credibilities and relative credibilities). No numbers added.

@@ -4,11 +4,9 @@ verification:
   confidence: high
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:324f4e2756ba8520c24099b4002248a0d0c1de20f93da5a916f70c73b9f5a220
+  content_hash: sha256:149706c8488ae09d46220377d53aba3b788977eb8e20b06dc3d3e05e08d9681d
   sources:
-    - "Actuarial Standards Board, ASOP No. 12, Risk Classification (for All Practice Areas), Doc. No. 132 (Dec. 2005), §3.3.2-3.3.4 pp.4-5 (PDF 10-11), sha256:7d4f2631a589bac24cf34b1f622e95aa7bfa979aaca96de27c651099c0b12dc7 — https://www.actuarialstandardsboard.org/wp-content/uploads/2014/02/asop012_132.pdf"
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.9 pp.151-159 and 161-170 (PDF pp.163-171, 173-182), Ch.10 p.172 (PDF p.184), Ch.11 p.189 with fn.37 (PDF p.201), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
-    - "CAS Statement of Principles Regarding Property and Casualty Insurance Ratemaking (adopted May 1988; reinstated May 2021), Section II p.2, Principle 3, sha256:f240ea62dd033aac827c2073e56c0a4061d5c84531e5cf6be02d333a8f9f2140 — https://www.casact.org/sites/default/files/2021-05/Statement-Of-Principles-Ratemaking.pdf"
+    - "Actuarial Standards Board, ASOP No. 12, Risk Classification (for All Practice Areas), Doc. No. 132 (Dec. 2005), Appendix 1 p.8 (PDF p.14), sha256:7d4f2631a589bac24cf34b1f622e95aa7bfa979aaca96de27c651099c0b12dc7 — https://www.actuarialstandardsboard.org/wp-content/uploads/2014/02/asop012_132.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Classification Ratemaking.md
@@ -22,7 +20,7 @@ verification:
 
 **Why classify at all.** In a competitive market an insurer that charges one average rate to a heterogeneous group loses the better risks to competitors that price them properly, and retains the worse ones — the **adverse selection spiral**. Classification is what keeps the pool viable, and [[Principles of Ratemaking|Principle 3]] requires the rate to reflect the individual risk transfer.
 
-**What risk classification is used for** ([[ASOP 12 - Risk Classification (ASB - 2005)|ASOP 12]], Appendix 1, which is background and not part of the standard). ASOP 12 states that risk classification is generally used for three purposes: to treat participants with similar risk characteristics in a consistent manner, to permit economic incentives to operate and thereby encourage widespread availability of coverage, and to protect the soundness of the system. Ignoring differences in risk characteristics can leave lower risk individuals underusing the system, and so without coverage, while higher risk individuals are covered at insufficient rates, which threatens the viability of the entire system. ASOP 12 cites the American Academy of Actuaries' 1980 *Risk Classification Statement of Principles* as background on the subject.
+**What risk classification is used for** ([[ASOP 12 - Risk Classification (ASB - 2005)|ASOP 12]], Appendix 1, which is background and not part of the standard). ASOP 12 states that risk classification is generally used for three purposes: to treat participants with similar risk characteristics in a consistent manner, to permit economic incentives to operate and thereby encourage widespread availability of coverage, and to protect the soundness of the system. For voluntary coverages, failing to follow actuarial principles of risk classification can leave lower risk individuals underusing the system, and so without coverage, while higher risk individuals are covered at insufficient rates, which threatens the viability of the entire system. ASOP 12 cites the American Academy of Actuaries' 1980 *Risk Classification Statement of Principles* as background on the subject.
 
 **Criteria for a rating variable** (Werner, after Finger's *Risk Classification*):
 

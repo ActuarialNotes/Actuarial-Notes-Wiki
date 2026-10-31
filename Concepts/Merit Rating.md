@@ -4,9 +4,9 @@ verification:
   confidence: high
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:da7724dada025387a8ea9d2f65fc7dfe83a0944cbf555484e6767ec4fe090559
+  content_hash: sha256:c18277345ccb0d005a0ebaf7402747f364eac4a3533a3ec61c53c5a64d7bade0
   sources:
-    - "AN ACTUARIAL NOTE ON THE CREDIBILITY OF EXPERIENCE OF A SINGLE PRIVATE PASSENGER CAR, Bailey & Simon, An Actuarial Note on the Credibility of Experience of a Single Private Passenger Car (PCAS 1959), pp.159-164 (PDF pp.1-6): Table 1-3, Appendix I-II, sha256:3e44bb5b3d17e96aaae61b27b0d72889043c44feb049a3ca3444095101f456e2 — https://www.casact.org/sites/default/files/2021-03/8_Bailey_Simon.pdf"
+    - "W. J. Hazam, Discussion of Bailey & Simon, An Actuarial Note on the Credibility of Experience of a Single Private Passenger Car, PCAS XLVII (1960), pp.150-152, PDF pp.1-3, sha256:48b8d420ffd358904509532447e15d50df0d5b1756c2026f81e8d058a02f09e4 — https://www.casact.org/sites/default/files/database/proceed_proceed60_60150.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Merit Rating.md

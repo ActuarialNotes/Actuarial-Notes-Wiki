@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:7f1290632ca39a5f021a41fbb2a3bccb5020e862fbe1a5dd0a7c20660b266a13
+  content_hash: sha256:e45b3b626ffce46a709b7abc5368c5a5a9e00f7132138396a0b94225f2e78974
   sources: []
   open_findings: 0
   open_critical: 0
@@ -22,7 +22,7 @@ verification:
 - $V_i$ is the premium of origin period $i$ and $C_{i,n-i+1}$ its latest cumulative paid claims.
 - $m_k$ is the **incremental loss ratio** of development period $k$: the paid claims $S_{ik}$ of that period, summed over the origin periods that have reached it, divided by those periods' premium. $\sum_k m_k$ is the expected loss ratio.
 - $p_i = \sum_{k \le n-i+1} m_k \big/ \sum_k m_k$ is the **loss ratio payout factor**, the expected share of ultimate paid by now, and $q_i = 1 - p_i$ is the reserve factor. The method works from loss ratios where the standard methods use link ratios.
-- **Choosing $Z_i$.** Benktander's weight is $Z_i = p_i$, the [[Benktander Method|Benktander]] loss ratio reserve. Neuhaus's is $Z_i = p_i \sum_k m_k$. Hürlimann's optimal weight minimizes both the mean squared error and the variance of $R_i^c$ when $\mathrm{Var}[U_i] = \mathrm{Var}[U_i^{BC}]$:
+- **Choosing $Z_i$.** Benktander's weight is $Z_i = p_i$, the [[Benktander Method|Benktander]] loss ratio reserve. Neuhaus's is $Z_i = p_i \sum_k m_k$: the payout factor times a constant, the expected loss ratio, so it too grows as the period matures. Hürlimann's optimal weight minimizes both the mean squared error and the variance of $R_i^c$ when $\mathrm{Var}[U_i] = \mathrm{Var}[U_i^{BC}]$:
 
 > $$Z_i^{*} = \frac{p_i}{p_i + \sqrt{p_i}}$$
 
@@ -35,7 +35,9 @@ verification:
 - **Relations to the standard methods.**
   - The collective reserve is Mack's (1997) loss ratio method. Its a priori is the portfolio's burning cost, so actuaries using the same premiums always agree, unlike a judgmental BF prior.
   - Iterating $U \to C_{i,n-i+1} + q_i U$ from the burning cost $V_i\sum_k m_k$ gives first the collective reserve, then the Benktander reserve, and converges to the individual reserve.
-  - With chain-ladder lag factors $p_i^{CL} = 1/\text{CDF}$ in place of $p_i$, the individual reserve becomes the chain ladder reserve. Mixing it with a [[Cape Cod Method|Cape Cod]] or BF collective reserve at $Z_i = p_i^{CL}/(p_i^{CL} + \sqrt{p_i^{CL}})$ gives Hürlimann's optimal Cape Cod and optimal Bornhuetter-Ferguson methods.
+  - With chain-ladder lag factors $p_i^{CL} = 1/\text{CDF}$ in place of $p_i$, the individual reserve becomes the chain ladder reserve, $R_i^{CL} = (q_i^{CL}/p_i^{CL})\,C_{i,n-i+1}$.
+  - Hürlimann's [[Cape Cod Method|Cape Cod]] method is the credibility mixture of that chain ladder reserve with the collective reserve $q_i^{CL}\cdot LR\cdot V_i$, where $LR = \sum_i C_{i,n-i+1} \big/ \sum_i p_i^{CL} V_i$ is the latest claims over the lag-weighted premium. Its weight is Benktander's, $Z_i = p_i^{CL}$, the period's share of ultimate in by now. So the reserve is $Z_i$ times the chain ladder reserve plus $1 - Z_i$ times the Cape Cod reserve, and a more mature period leans more on the chain ladder.
+  - Using the optimal weight $Z_i = p_i^{CL}/(p_i^{CL} + \sqrt{p_i^{CL}})$ instead, with a Cape Cod or BF collective reserve, gives Hürlimann's optimal Cape Cod and optimal Bornhuetter-Ferguson methods.
 
 > [!example]- Collective, Individual and Credible Reserves From One Triangle {Example}
 > Incremental paid claims and premium (\$000s), with no development after $36$ months:

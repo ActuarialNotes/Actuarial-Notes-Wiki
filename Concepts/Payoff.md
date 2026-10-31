@@ -1,11 +1,19 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:30087f29baf1de7da3f9a5818991133d944c3c59720c4747f1d39ea2a45b7a83
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:dcc01f7abbe6cf8cf323765b2bdd872283135a9378eefa2e9e9b9729f659524d
+  sources:
+    - "SOA Exam FAM syllabus, October 2026, Topic 6 (a)-(d), p.5; readings p.8 (AMLCR Ch.16), sha256:90172025d8bd9d69e18e974fdee447963e54258e5f0e419aa3ef5b7d3e55a00e — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-fam-syllabus.pdf"
+    - "K. Foster (CCNY), Lecture Notes 5: Option Values (Hull Ch 9), Spring 2010, Upper/Lower Bounds, Put-Call Parity, Early Exercise of American Options, sha256:5d6ea3740ce0bd304c4bb3cb04a77fc163b043dd385ab2a9390ee1bc567acc04 — https://kfoster.ccny.cuny.edu/classes/spring2010/eco275/lecturenotes5.html"
+    - "Wikipedia, Forward contract (rank 3), Payoffs, sha256:fdc482d7cdd12b7546a7d48063003949a714a0518a8569445eac48631000a425 — https://en.wikipedia.org/wiki/Forward_contract"
+    - "Wikipedia, Interest rate cap and floor (rank 3), Interest rate cap: caplet payoff, payment at end of period, sha256:27f214df7f24d378a9b60624b4dbf367e52ffd2bdf548194238fdbd0a8fdf9e6 — https://en.wikipedia.org/wiki/Interest_rate_cap_and_floor"
+    - "SOA ALTAM Spring 2023 model solutions, Q6(a)-(b), p.13, sha256:7808fbbb76bc8d54d394976603e8123a3fdb44a6020cfd126cc95f3c6814b512 — https://www.soa.org/globalassets/assets/files/edu/2023/spring/solutions/spring-2023-solutions-altam.pdf"
+    - "SOA ALTAM Spring 2025 model solutions, Q6(b)-(e), pp.19-20, sha256:6371e71ec29b9d7997e03348d4455e4d3e7418660261b36ddd4dd5a2fa0edf66 — https://www.soa.org/globalassets/assets/files/edu/2025/spring/solutions/2025-spring-altam-solutions.pdf"
+    - "SOA ALTAM syllabus, October 2026, Topic 7 (a)-(d), p.6, sha256:44b64a78219337f43387cb52837c7c2ce590ae2b97321d6e8e4e29ab2cd38c5e — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-altam-syllabus.pdf"
+    - "SOA INV-201 syllabus, Nov 2026-Jul 2027, Topic 1(a); Topic 3(c), p.4; hedging topic (c), p.7, sha256:8b5d280585ae9d0e35943729f861ac13ada7462be850c328da93645b7bbd9bc1 — https://www.soa.org/globalassets/assets/files/edu/2026/inv-201/2026-2027-inv-201-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Payoff.md

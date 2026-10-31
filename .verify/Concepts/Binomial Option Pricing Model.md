@@ -1,0 +1,15 @@
+---
+target: Concepts/Binomial Option Pricing Model.md
+created: 2026-10-31
+---
+
+## [C-001] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T18:54Z/f179
+- date: 2026-10-31
+- status_set: verified
+- confidence: medium
+- checks_run: formula-by-formula against Cudina L17 (Delta=e^{-dh}(Vu-Vd)/(Su-Sd), B=e^{-rh}(uVd-dVu)/(u-d), V0=DeltaS0+B, p*=(e^{(r-d)h}-d)/(u-d), V0=e^{-rT}[p*Vu+(1-p*)Vd]); forward tree, no-arbitrage condition and p*=1/(1+e^{sigma sqrt h}) against Cudina L18; real-world p irrelevant (Sigman p.3; FAM-S Q108); multi-period backward induction, American max(binomial, exercise), convergence to BS (Wikipedia); FAM-S Q100/Q103/Q108 confirm FAM's use (one- and two-period trees, u,d or p* given, continuous discounting each step); independent recomputation of both examples (6.8748; 7.37 / 7.47); link check
+- sources_checked: SOA Exam FAM syllabus, October 2026, Topic 6 (a)-(d), p.5; readings p.8 (AMLCR Ch.16), sha256:90172025d8bd9d69e18e974fdee447963e54258e5f0e419aa3ef5b7d3e55a00e — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-fam-syllabus.pdf; M. Cudina (UT Austin), M339D Lecture 17: Option pricing in the one-period binomial model, Lecture 17, pp.3-5, eqs. 17.1-17.4, sha256:8bcdda7a38233af8e1b15e9111762407662d5bf68fe4039cf7b67d30aff1b838 — http://web.ma.utexas.edu/users/mcudina/m339d-lecture-17-binomial-option-pricing-one-period.pdf; M. Cudina (UT Austin), M339D Lecture 18: The forward binomial tree, Lecture 18, pp.1-2, sha256:fcac094be5476cfcd6f557d78c6493d01b209d49922cddd58b2d1002720dbaed — http://web.ma.utexas.edu/users/mcudina/m339d-lecture-18-forward-trees.pdf; K. Sigman (Columbia), Binomial lattice model for stock prices (2007), pp.1-3, eqs. 3-9, sha256:e638c7c5da07b00908e9dff9297df74e5b26c7cbde1f149f29e770fbf25df2cb — http://www.columbia.edu/~ks20/FE-Notes/4700-07-Notes-BLM.pdf; SOA Exam FAM-S sample solutions (Oct 2024), Q100 p.39; Q103 p.40; Q108 p.43, sha256:7b3f61d8c385f486f3dbc586cdaab035fe9c45a055710e8327d213c4d3e71b48 — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/2024-10-exam-fam-s-sample-solutions.pdf; Wikipedia, Binomial options pricing model (rank 3), Method, Step 3; Relationship with Black-Scholes, sha256:b12df888884415d33dcc0e61f7c506c7ed5654e6b63f73515965e2f3db9e146b — https://en.wikipedia.org/wiki/Binomial_options_pricing_model
+- note: FAM reading for Topic 6 is AMLCR 3rd ed. Ch.16 (commercial, not read; rule 4); no free SOA study note covers the topic. Checked at medium against open texts per D7/D22/D27: the SOA's own FAM-S sample set (the syllabus's 'Sample Questions and Solutions for Topics 1-6'), named-author lecture notes and Wikipedia as rank-3 support. Every worked example was recomputed from scratch (rank 5, falsify-only) before reading the page's figures: all agree to the printed precision. Notation follows McDonald (as Cudina's notes do); AMLCR's own notation was not checked. Not linked from any other exam page that is verified (FAM, ACIA-CAPSTONE only).

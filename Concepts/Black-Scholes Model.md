@@ -3,12 +3,18 @@ aliases:
   - Black-Schole
   - Black-Scholes
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
   content_hash: sha256:be35d6faacb2d8d9a2c3289e7344dd2a1225b78a50e79f58d7aa743be588cb4d
-  sources: []
+  sources:
+    - "SOA Exam FAM syllabus, October 2026, Topic 6 (a)-(d), p.5; readings p.8 (AMLCR Ch.16), sha256:90172025d8bd9d69e18e974fdee447963e54258e5f0e419aa3ef5b7d3e55a00e — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-fam-syllabus.pdf"
+    - "M. Haugh (Columbia IEOR E4706), The Black-Scholes Model (2016), eqs. 9, 12-13 pp.2-3; delta and N(d2) remark p.7, sha256:a84225df571d081f2eb2079d8e1160d51af50c72e4fd2c52f5073ac39d6884bb — http://www.columbia.edu/~mh2078/FoundationsFE/BlackScholes.pdf"
+    - "Wikipedia, Black-Scholes model (rank 3), Black-Scholes formula, sha256:de43f555c0be45c41ff7ce2b24ad6fe3b14350385ab64b341ee80234f01b9a63 — https://en.wikipedia.org/wiki/Black%E2%80%93Scholes_model"
+    - "SOA ALTAM Fall 2024 model solutions, Q6(a)-(b), p.13, sha256:bef60a4ff411c7fa3eb0fd8d4b6a52a32d8ddf620ff365270c2a6dce96299a4f — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/fall-2024-altam-solutions.pdf"
+    - "SOA ALTAM syllabus, October 2026, Topic 7 (a)-(d), p.6, sha256:44b64a78219337f43387cb52837c7c2ce590ae2b97321d6e8e4e29ab2cd38c5e — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-altam-syllabus.pdf"
+    - "SOA Exam FAM-S sample solutions (Oct 2024), Q101 p.40, sha256:7b3f61d8c385f486f3dbc586cdaab035fe9c45a055710e8327d213c4d3e71b48 — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/2024-10-exam-fam-s-sample-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Black-Scholes Model.md

@@ -113,3 +113,41 @@ created: 2026-10-18
 - checks_run: frontmatter and lead against the AEA record (title, authors, JEP 23(1) Winter 2009 pp.3-25, abstract); syllabus callout against outline p.5 and p.7 (C5-C6, Study Kit); headings against the working paper's sections (Manufacturing AAA-rated Securities; The Challenge of Rating Structured Finance Assets; The Relation of Structured Finance to Subprime; The Pricing of Systematic Risk in Structured Products; The Rise and Fall of the Structured Finance Market; Implications and Conclusions; References) — all present, in order; every bullet diffed against the working paper; two-bond, three-bond and CDO-squared figures (1%, 0.1/2.8/27.1%, 19%, 3.6%), Table 2 and Table 3 figures, subprime and issuance figures recomputed or diffed; resource_lint (0 errors); links resolve
 - sources_checked: Coval, Jurek & Stafford, The Economics of Structured Finance, Harvard Business School Working Paper 09-060 (2008, the authors' institution's copy), printed pp.1-28 read in full (PDF pp.1-37) with Tables 1-3, sha256:887b5c53aeb5367b127322c6972a1c41176e96dc613bc52eee296002b971c551 — https://www.hbs.edu/ris/Publication%20Files/09-060.pdf; American Economic Association, The Economics of Structured Finance (Journal of Economic Perspectives 23(1), Winter 2009, pp.3-25, DOI 10.1257/jep.23.1.3) — article record, citation metadata and abstract, sha256:c820f5b8d1d8d1c3f3126755ace10ec043cfe3787f3deec045447d6dbc432237 — https://www.aeaweb.org/articles?id=10.1257/jep.23.1.3; CAS Exam 9 Content Outline, Fall 2026 (v01 2026-03-18), p.5 Domain C tasks C1-C7 and pp.7-8 text references, sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf
 - note: Left in_review: the page describes the published JEP article, whose text could not be read this session (The AEA's own PDF (pubs.aeaweb.org/doi/pdfplus/10.1257/jep.23.1.3, and www.aeaweb.org/articles/pdf/...) returned 403 to curl and to WebFetch this session, with and without a browser user agent; web.archive.org was unreachable through the proxy; no copy hosted by the authors or their institutions other than HBS Working Paper 09-060 was found (HBS faculty item page 35183 also 403).). Checked against the authors' HBS working paper 09-060 instead: every section and nearly every bullet agrees. Fixed F-001 and F-002, where the page had dropped the +/− from ratings (the working paper and Table 1 arithmetic agree). Open: F-003 (BBB vs BBB−), F-004 (a bullet absent from the working paper), F-005 (cites a third-party course copy). Verifying needs the JEP text.
+
+## [F-003/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-31T13:26Z/69a5
+- date: 2026-10-31
+- resolves: F-003
+- status: resolved
+- note: The JEP text could not be read (This session: Unpaywall (DOI 10.1257/jep.23.1.3) lists one open location, SSRN 10.2139/ssrn.1287363 (accepted version); SSRN Delivery.cfm and the abstract page returned 403, and the AEA PDF (pubs.aeaweb.org/doi/pdfplus/10.1257/jep.23.1.3) returned 403.) Resolved against the authors' working paper as D22 directs: HBS WP 09-060 printed pp.14-15 and Table 3 both give BBB-; the page now says BBB-.
+
+## [F-004/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-31T13:26Z/69a5
+- date: 2026-10-31
+- resolves: F-004
+- status: resolved
+- note: The JEP text could not be read (This session: Unpaywall (DOI 10.1257/jep.23.1.3) lists one open location, SSRN 10.2139/ssrn.1287363 (accepted version); SSRN Delivery.cfm and the abstract page returned 403, and the AEA PDF (pubs.aeaweb.org/doi/pdfplus/10.1257/jep.23.1.3) returned 403.) HBS WP 09-060 pp.5-8 re-read this run: no statement on tranche prices or promised returns in the section; the bullet is cut.
+
+## [F-005/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-31T13:26Z/69a5
+- date: 2026-10-31
+- resolves: F-005
+- status: resolved
+- note: Re-cited: the first Sources entry is now the authors' HBS Working Paper 09-060 (their institution's copy, sha256 887b5c53...), saying the JEP text could not be fetched and the page describes the article as the working paper states it; the third-party course copy (users.ssc.wisc.edu) is no longer cited. The AEA record remains the second entry.
+
+## [C-003] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T13:26Z/69a5
+- date: 2026-10-31
+- status_set: verified
+- confidence: medium
+- checks_run: frontmatter and lead against the AEA record and abstract; syllabus callout against outline pp.5, 7 (C5-C6, SK, no sections excluded); headings against the working paper's sections; spot re-check this run of the figures against the working paper (Table 2 97.52/2.07/56.94; 0.02-0.75 and 1.07-29.96; 27.1; 3.6; 96.8bn and 22 percent; 2.6 and 55 percent, 350bn; ABX 98.35; ten-fold; Basel half; First Pacific; Mason and Rosner; Economic Catastrophe Bonds); F-003 to F-005 resolved; resource_lint 0 errors
+- sources_checked: Coval, Jurek & Stafford, The Economics of Structured Finance, Harvard Business School Working Paper 09-060 (2008), the authors' institution's copy, printed pp.1-28 with Tables 1-3; pp.5-8 (Manufacturing AAA-rated Securities: no statement on tranche prices or promised returns), pp.14-15 (7.5 percent default probability takes the AAA mezzanine CDO2 claim to BBB-; .SF modifiers as warning labels), sha256:887b5c53aeb5367b127322c6972a1c41176e96dc613bc52eee296002b971c551 — https://www.hbs.edu/ris/Publication%20Files/09-060.pdf; American Economic Association, The Economics of Structured Finance (Journal of Economic Perspectives), article record: JEP 23(1), Winter 2009, pp.3-25, DOI 10.1257/jep.23.1.3, abstract, sha256:dd1a425d2b65beedccaa172b4be81776bdd88d1edfbce873e0c21d025f5d8f59 — https://www.aeaweb.org/articles?id=10.1257/jep.23.1.3; CAS Exam 9 Content Outline, Fall 2026 (v01, 2026-03-18), pp.3-7: Domains B-D tasks and readings; text references (Brehm et al. D1-D6, source SK; Coval, Jurek, and Stafford C5-C6, SK; Cummins CAT Bond C7, RMIR 11(1) pp.23-47, SK), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf
+- note: Verified at medium (D22): the assigned JEP text could not be read (This session: Unpaywall (DOI 10.1257/jep.23.1.3) lists one open location, SSRN 10.2139/ssrn.1287363 (accepted version); SSRN Delivery.cfm and the abstract page returned 403, and the AEA PDF (pubs.aeaweb.org/doi/pdfplus/10.1257/jep.23.1.3) returned 403.) The page is checked against the authors' HBS working paper 09-060, which every bullet agrees with after this run's fixes, plus the AEA record and abstract and the Fall 2026 outline. C-001's conflict inside the working paper (senior tranche BBB- at 12.5 percent in Table 3, at 20 percent in the text) stands; the page follows Table 3.

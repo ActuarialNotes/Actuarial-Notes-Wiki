@@ -7,16 +7,16 @@ date: "2009"
 Type: "Paper"
 Available from: "[aeaweb.org](https://www.aeaweb.org/articles?id=10.1257/jep.23.1.3)"
 verification:
-  status: in_review
-  confidence: null
-  last_checked: 2026-10-18
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:fab7b7fc72f3e7bcd572d2f33136b0fd682b8ee0e6534bcf151e6d040f60b31c
+  content_hash: sha256:d56ced273da37635557a7509b9bfb45a73016dcbb46fbe9df479fda1efe363ae
   sources:
-    - "Coval, Jurek & Stafford, The Economics of Structured Finance, Harvard Business School Working Paper 09-060 (2008, the authors' institution's copy), printed pp.1-28 read in full (PDF pp.1-37) with Tables 1-3, sha256:887b5c53aeb5367b127322c6972a1c41176e96dc613bc52eee296002b971c551 — https://www.hbs.edu/ris/Publication%20Files/09-060.pdf"
-    - "American Economic Association, The Economics of Structured Finance (Journal of Economic Perspectives 23(1), Winter 2009, pp.3-25, DOI 10.1257/jep.23.1.3) — article record, citation metadata and abstract, sha256:c820f5b8d1d8d1c3f3126755ace10ec043cfe3787f3deec045447d6dbc432237 — https://www.aeaweb.org/articles?id=10.1257/jep.23.1.3"
-    - "CAS Exam 9 Content Outline, Fall 2026 (v01 2026-03-18), p.5 Domain C tasks C1-C7 and pp.7-8 text references, sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
-  open_findings: 3
+    - "Coval, Jurek & Stafford, The Economics of Structured Finance, Harvard Business School Working Paper 09-060 (2008), the authors' institution's copy, printed pp.1-28 with Tables 1-3; pp.5-8 (Manufacturing AAA-rated Securities: no statement on tranche prices or promised returns), pp.14-15 (7.5 percent default probability takes the AAA mezzanine CDO2 claim to BBB-; .SF modifiers as warning labels), sha256:887b5c53aeb5367b127322c6972a1c41176e96dc613bc52eee296002b971c551 — https://www.hbs.edu/ris/Publication%20Files/09-060.pdf"
+    - "American Economic Association, The Economics of Structured Finance (Journal of Economic Perspectives), article record: JEP 23(1), Winter 2009, pp.3-25, DOI 10.1257/jep.23.1.3, abstract, sha256:dd1a425d2b65beedccaa172b4be81776bdd88d1edfbce873e0c21d025f5d8f59 — https://www.aeaweb.org/articles?id=10.1257/jep.23.1.3"
+    - "CAS Exam 9 Content Outline, Fall 2026 (v01, 2026-03-18), pp.3-7: Domains B-D tasks and readings; text references (Brehm et al. D1-D6, source SK; Coval, Jurek, and Stafford C5-C6, SK; Cummins CAT Bond C7, RMIR 11(1) pp.23-47, SK), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
+  open_findings: 0
   open_critical: 0
   log: ".verify/Resources/Books/The Economics of Structured Finance (Coval, Jurek, and Stafford - 2009).md"
 ---
@@ -35,7 +35,6 @@ An article on the rise and fall of structured finance: pooling loans, bonds and 
 - The protection offered by the junior claims, or overcollateralization, determines the largest portfolio loss that can be sustained before a more senior claim is impaired.
 - Two-bond example: two identical $1 bonds, each with default probability $p_D$, pooled into a $2 fund against which a junior tranche (bearing the first $1 of losses) and a senior tranche (which defaults only if both bonds default) are issued; the tranche default probabilities depend on the likelihood of both bonds defaulting together, which can be described by one parameter, the joint probability of default or the default correlation.
 - With a 10 percent default probability and uncorrelated defaults, the senior tranche has only a 1 percent chance of default; with perfectly correlated defaults it inherits the 10 percent risk of the underlying bonds and there is no credit enhancement; intermediate correlations give a senior default risk between 1 and 10 percent.
-- Junior tranches, being risky, have low prices and high promised returns, while senior tranches have relatively higher prices and lower promised returns.
 - Adding a third $1 bond (10 percent default probability, uncorrelated) makes the senior tranche default 0.1 percent of the time, the middle tranche 2.8 percent and the junior tranche 27.1 percent, so two-thirds of the capital is repackaged into claims less risky than the underlying bonds.
 - Reapplying the machinery to junior tranches: two $1 junior tranches (each defaulting with 19 percent probability) from separate two-bond pools can be combined and tranched again, giving a senior tranche with a 3.6 percent default probability; a collateralized debt obligation made from tranches of other CDOs is called CDO-squared (CDO²).
 - The lower the default correlation across the underlying assets, the more improbable it is that all default at once and the safer the senior-most claim can be made; as defaults become more correlated, the senior-most claims become less safe.
@@ -57,7 +56,7 @@ An article on the rise and fall of structured finance: pooling loans, bonds and 
 - The second-generation structure amplifies the shift: as pairwise correlation within the pools rises from 20 to 60 percent, the expected payoff on the CDO²'s mezzanine claim, investment grade at baseline, drops by 25 percent.
 - Figure 2 varies the default probability of the underlying bonds with correlation held at 0.20: raising it from 5 to 10 percent cuts the expected payoff 55 percent for the junior tranche, 8 percent for the mezzanine tranche and 0.01 percent for the senior tranche, while the CDO²'s junior and mezzanine values fall quickly towards zero and its senior value falls substantially.
 - Table 3 shows ratings after the changes: because investment-grade ratings are finely partitioned, even modest parameter changes can downgrade the original CDO's senior tranche (to A+ at a 10 percent default probability and BBB− at 12.5 percent).
-- When the default probability rises to 10 percent, the CDO²'s mezzanine claim, initially AAA, loses 50 percent of its expected payoff and falls below the rating scale; a rise to 7.5 percent is enough to take the AAA-rated mezzanine CDO² claim to BBB.
+- When the default probability rises to 10 percent, the CDO²'s mezzanine claim, initially AAA, loses 50 percent of its expected payoff and falls below the rating scale; a rise to 7.5 percent is enough to take the AAA-rated mezzanine CDO² claim to BBB−.
 - The ".SF" rating modifiers proposed by regulators for structured finance instruments are perhaps best regarded as warning labels, given the plausible uncertainty in the underlying parameters.
 - With plausible overcollateralization (12 percent in the example) the senior tranche of the original CDO is well protected from large changes in default probabilities and correlations, but all tranches of the CDO² are highly sensitive to the baseline parameters, including the most senior claims.
 - A large fraction of CDOs issued over the previous decade had subprime residential mortgage-backed securities as underlying assets, and since many of these are themselves tranches of an original securitization, CDOs of mortgage-backed securities are effectively CDO²s; with scarce historical data on subprime defaults, errors in default correlations, default probabilities and recovery rates, magnified by re-securitization, help explain the losses.
@@ -104,6 +103,6 @@ An article on the rise and fall of structured finance: pooling loans, bonds and 
 ## References
 
 ## Sources
-- [The Economics of Structured Finance (Coval, Jurek and Stafford, Journal of Economic Perspectives, Winter 2009)](https://users.ssc.wisc.edu/~mchinn/coval_structured_JEP.pdf) — the document: a 23-page PDF of the article (sha256 17e4af6309fa3651…) with the journal's running heads for Volume 23, Number 1, pages 3–25, read in full: the opening pages, the section headings, Tables 1–3, Figures 1–2 (their notes and the text describing them), the footnotes and the references; this copy was read because the AEA's own PDF could not be fetched
+- [The Economics of Structured Finance (Coval, Jurek and Stafford, Harvard Business School Working Paper 09-060, 2008)](https://www.hbs.edu/ris/Publication%20Files/09-060.pdf) — the document as read: the authors' working paper, posted by their institution (sha256 887b5c53aeb5367b…), printed pages 1–28 with Tables 1–3 and Figures 1–2, read in full; the published Journal of Economic Perspectives text could not be fetched, so this page describes the article as the working paper states it
 - [The Economics of Structured Finance (American Economic Association)](https://www.aeaweb.org/articles?id=10.1257/jep.23.1.3) — the publisher's record: authors, journal, volume, issue, pages 3–25, Winter 2009, DOI 10.1257/jep.23.1.3 and the abstract
 - [CAS Exam 9 Content Outline, Fall 2026](https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf) — the citation, the abbreviation "Coval, Jurek, and Stafford", tasks C5–C6, and the wording of tasks C5 and C6 under Domain C

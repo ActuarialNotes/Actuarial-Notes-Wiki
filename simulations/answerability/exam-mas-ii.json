@@ -397,7 +397,15 @@
        "page": "Correlogram",
        "quote": "When the true $\\rho_k = 0$, $r_k$ is approximately normal with mean $-1/n$ and variance $1/n$. That"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Correlogram",
+      "quote": "so about $95\\%$ of the bars should fall within $\\pm 1.96/\\sqrt{n}$, usually rounded to two standard errors, $\\pm 2/\\sqrt{n}$. If a question prints its own bounds, use the ones it gives.",
+      "note": "Re-quoted after Correlogram was restated off Cowpertwait (run 2026-10-31T04:58Z/1486, verified medium against fpp3 2.9 and Shumway & Stoffer Property 1.2): the page teaches that a bar outside the bounds is significant, and to use a question's printed bounds; this question prints -1/n +/- 2/sqrt(n) in its own stem.",
+      "date": "2026-10-31",
+      "run": "mas-ii-coordinator-2026-10-31"
+     }
     },
     {
      "id": "r3",

@@ -2794,10 +2794,67 @@
   },
   "fm-037": {
    "path": "questions/exam-fm/fm-037.md",
-   "run": "answerability-20261025-fm",
+   "run": "answerability-20261031-043638-fm",
    "input_hash": "sha256:b214af17064b5a1972286cf11b48925c3f5891fdb5c6ea34a93bdf5a7f5ade3c",
-   "verdict": "no requirements",
-   "requirements": []
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "procedure",
+     "statement": "To exactly match liabilities (cash-flow matching), work backwards from the latest liability: use the only asset paying at the last date to cover that liability, then use the interim cash flows it produces to reduce the remaining liability at earlier dates.",
+     "concept": "Cash Flow Matching",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Cash Flow Matching",
+       "quote": "Construction proceeds **backwards** from the last liability date — fund the final liability first, then the second-to-last, and so on."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "A bond's periodic coupon equals the face amount times the coupon rate per period (nominal annual coupon rate convertible m times a year divided by m).",
+     "concept": "Bond Coupon Payments",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bonds",
+       "quote": "**[[Coupon]]** — Periodic interest payment = Face Value × Coupon Rate / payments per year"
+      },
+      {
+       "page": "Coupon",
+       "quote": "A **coupon** is the periodic interest payment made by a bond issuer to the bondholder, equal to the face value $F$ multiplied by the coupon rate per period $r$."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "At maturity a bond pays its redemption value (face amount for a par-redeemed bond) plus the final coupon, so the final cash flow is face plus one coupon.",
+     "concept": "Bond Cash Flows",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Cash Flow Matching",
+       "quote": "the 2-year bond pays its face $F$ plus a coupon of $0.05F$ at time 2, so"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "Purchasing a fractional number of units of a bond scales all of that bond's cash flows proportionally, so the units needed equal the required cash flow divided by the bond's per-unit cash flow at that date.",
+     "concept": "Cash Flow Matching",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Cash Flow Matching",
+       "quote": "the 2-year bond pays its face $F$ plus a coupon of $0.05F$ at time 2, so … 1.05F &= 2{,}000 \\"
+      }
+     ]
+    }
+   ]
   },
   "fm-038": {
    "path": "questions/exam-fm/fm-038.md",

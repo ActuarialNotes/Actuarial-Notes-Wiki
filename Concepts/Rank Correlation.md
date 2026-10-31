@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:6698d62cb3e2ef21359d37d4dbb0190090cb58f7fffc6d6f82a63403ad3fb60d
+  content_hash: sha256:e2cfb4128e25cfbd09a327525c02969c56e6cc4f3a073d671c2c7911982d55d9
   sources: []
   open_findings: 0
   open_critical: 0
@@ -25,7 +25,7 @@ verification:
 - **The price of invariance:** rank correlations are not moment-based, so they don't combine through variance–covariance algebra as Pearson correlations do. Mack's [[Development Factor Correlation Test]] uses Spearman's rho because a rank test is distribution-free.
 
 > [!idea] The idea
-> Pearson asks whether the points lie near a straight line, weighting each point by how far it sits from the mean; ranks ask only whether a larger $x$ goes with a larger $y$. So one pair that is the largest in *both* series — a catastrophe year in two states — adds a huge product of deviations to Pearson's numerator, but only a rank difference of zero to Spearman's.
+> Pearson asks whether the points lie near a straight line, weighting each point by how far it sits from the mean; ranks ask only whether a larger $x$ goes with a larger $y$. So one pair that is the largest in *both* series adds a huge product of deviations to Pearson's numerator, but only a rank difference of zero to Spearman's.
 
 > [!trap] An outlier pair inflates Pearson
 > When Pearson is high and the rank measures are near zero, look for one pair that is extreme in both series. It drives the Pearson figure; take it out and the apparent correlation can vanish or reverse. Explaining the gap needs both halves: Pearson is cardinal and outlier-sensitive, rank correlation is ordinal.

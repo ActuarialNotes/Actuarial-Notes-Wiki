@@ -2402,7 +2402,15 @@
      "statement": "A flat (uniform) prior is constant over its support, so the posterior is proportional to the likelihood there and has its peak where the likelihood peaks.",
      "concept": "Uniform Continuous Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Posterior Distribution",
+      "quote": "inside its support the posterior is proportional to the likelihood alone, and outside its support the posterior is zero, because the prior is a factor of the product",
+      "note": "Posterior Distribution teaches it; checked against Gelman BDA3 §2.1 p.30, §4.3 p.90 and LDA Ex. 4.4.5 in run 2026-10-31T04:56Z/9cfd",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:56Z/9cfd"
+     }
     },
     {
      "id": "r4",
@@ -4815,7 +4823,15 @@
        "page": "Bayesian Estimation",
        "quote": "Each loss contributes $1/\\theta$ to the likelihood, which is 0 unless $\\theta \\ge 1{,}500$, the lar"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Posterior Distribution",
+      "quote": "If the uniform prior covers only an interval, the posterior is the likelihood cut off at the ends of that interval and renormalised, so its mode is the value inside the interval where the likelihood is largest",
+      "note": "Posterior Distribution teaches it; checked against Gelman BDA3 §4.1 pp.85–86, §4.3 p.90 and LDA Ex. 4.4.5 in run 2026-10-31T04:56Z/9cfd",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:56Z/9cfd"
+     }
     },
     {
      "id": "r6",
@@ -6475,7 +6491,15 @@
      "statement": "An improper prior is a prior density that does not integrate to a finite value over the parameter space, such as the Haldane prior pi^-1(1-pi)^-1 (the Beta(0,0) kernel).",
      "concept": "Improper Prior Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Posterior Distribution",
+      "quote": "A prior is improper when its integral over the parameter space is infinite, so it cannot be normalised into a distribution",
+      "note": "Posterior Distribution teaches it; checked against LDA §4.4.2 and Gelman BDA3 §2.8 pp.51–53 in run 2026-10-31T04:56Z/9cfd",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:56Z/9cfd"
+     }
     },
     {
      "id": "r4",
@@ -6496,7 +6520,15 @@
      "statement": "With an improper prior, the posterior can still be proper or improper depending on the data; if the posterior is improper, it has no valid distribution and no posterior mean exists.",
      "concept": "Improper Prior Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Posterior Distribution",
+      "quote": "the result is a usable posterior only if it has a finite integral, and whether it does depends on the data",
+      "note": "Posterior Distribution teaches it; checked against Gelman BDA3 §2.8 pp.52–53 and §4.3 p.90 in run 2026-10-31T04:56Z/9cfd",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:56Z/9cfd"
+     }
     }
    ],
    "imported_from": "report.md"
@@ -6934,7 +6966,15 @@
      "statement": "In the Bühlmann-Straub model, the overall mean is estimated as the exposure-weighted average of the risks' sample means: mu-hat = sum m_i x-bar_i / m.",
      "concept": "Bühlmann-Straub Credibility",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Bühlmann-Straub Credibility",
+      "quote": "The overall mean is the exposure-weighted average of the risks' means, $\\hat{\\mu} = \\bar{X} = \\frac{1}{m}\\sum_{i=1}^{r} m_i \\bar{X}_i$",
+      "note": "Bühlmann-Straub Credibility teaches it; checked against LDA §9.6.2 in run 2026-10-31T04:56Z/9cfd",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:56Z/9cfd"
+     }
     },
     {
      "id": "r4",
@@ -6942,7 +6982,15 @@
      "statement": "The variance of the hypothetical means is estimated as a-hat = [sum m_i (x-bar_i - mu-hat)^2 - (r-1) v-hat] / [m - sum m_i^2 / m], where r is the number of risks.",
      "concept": "Empirical Bayes Nonparametric Estimation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Bühlmann-Straub Credibility",
+      "quote": "the unbiased VHM estimate with unequal exposures is $\\hat{a} = \\frac{\\sum_{i=1}^{r} m_i(\\bar{X}_i - \\bar{X})^2 - (r-1)\\hat{v}}{m - \\frac{1}{m}\\sum_{i=1}^{r} m_i^2}$, where $r$ is the number of risks",
+      "note": "Bühlmann-Straub Credibility teaches it; checked against LDA §9.6.2 in run 2026-10-31T04:56Z/9cfd",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:56Z/9cfd"
+     }
     },
     {
      "id": "r5",

@@ -1,15 +1,15 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-18
-  last_checked_by: agent:validate-v1
-  content_hash: sha256:0e5403334dca37dd707667a581ba9b5b155fe5f2652f126ba8500e3f4d5cc267
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
+  last_checked_by: agent:checker-tse
+  content_hash: sha256:c7db047f65b920610e0d61c4b7bffb87b11c52733c7a7bb6da175891fb227090
   sources:
+    - "Frees et al., Loss Data Analytics (open text), Ch. 4 §4.4.2 Bayesian Model (improper prior) and Example 4.4.5 (uniform prior on an interval), sha256:c5fe1ff26cec4dee6f8bcc285b75c840202c947246f7b5d5598f9b837ccad021 — https://openacttexts.github.io/Loss-Data-Analytics/ChapModelSelection.html"
+    - "Gelman et al., Bayesian Data Analysis, 3rd ed., author-hosted non-commercial electronic edition, §2.1 p.30, §2.8 pp.51–53, §4.1 pp.85–86, §4.3 p.90, sha256:246f7d34daad4971d40fa247f1045bf3fce4f912dcea9b4267b161ee7a70b306 — https://sites.stat.columbia.edu/gelman/book/BDA3.pdf"
     - "Frees et al., Loss Data Analytics (open text), Ch. 9 Experience Rating Using Credibility Theory, Ch. 9 §§9.2–9.6, sha256:35a840449990c8fda61687ebde4646508b6296ffac3daba18f0181eb2511fa36 — https://openacttexts.github.io/Loss-Data-Analytics/ChapCredibility.html"
-    - "Frees et al., Loss Data Analytics (open text), Ch. 4, §4.4.4 Conjugate Distributions, sha256:c5fe1ff26cec4dee6f8bcc285b75c840202c947246f7b5d5598f9b837ccad021 — https://openacttexts.github.io/Loss-Data-Analytics/ChapModelSelection.html"
     - "Frees et al., Loss Data Analytics (open text), Appendix B, §16.3 Conjugate Distributions, sha256:66a757e0d3dfdac6e4196cd9458ad437bb4ea690dca28797e4c1fe403c5f9e92 — https://openacttexts.github.io/Loss-Data-Analytics/CAppB.html"
-    - "Tse, Nonlife Actuarial Models (Cambridge 2009), publisher preview, Contents pp. ix–x (PDF pp.11–12), sha256:f6d009afdd1776907db090b41b72dd5a76d0b5ba3f0ee42e8b07279d5763b404 — https://api.pageplace.de/preview/DT0400.9780511630231_A24404031/preview-9780511630231_A24404031.pdf"
     - "CAS Exam MAS-II Content Outline 2026, p.2 Domain A; p.4 Tse Chs 6.1–6.3, 7.1–7.4, 8.1–8.2, 9.1–9.2, sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf"
   open_findings: 0
   open_critical: 0
@@ -27,8 +27,8 @@ verification:
 - **What it is used for.** The Bayesian premium is the posterior mean of the hypothetical mean, $E[\mu(\Theta) \mid \mathbf{x}]$, the estimator that minimises expected squared error. The [[Predictive Distribution|predictive distribution]] of the next observation integrates $f(x_{n+1} \mid \theta)$ against the posterior.
 - **Prior versus data.** With little data the posterior stays near the prior. As $n$ grows, the likelihood dominates and the posterior concentrates near the [[Maximum Likelihood Estimation|MLE]]. That movement *is* credibility. When the posterior mean is linear in $\bar{x}$ it equals the [[Bühlmann Credibility|Bühlmann]] estimate exactly — see [[Exact Credibility]].
 - Updating is **sequential**: this year's posterior is next year's prior, and processing the years one at a time gives the same result as processing them together.
-- **A flat (uniform) prior.** A uniform prior is constant wherever it is positive, so inside its support the posterior is proportional to the likelihood alone, and outside its support the posterior is zero, because the prior is a factor of the product. The prior cannot move the posterior's peak: under a uniform prior the posterior mode is the maximum likelihood estimate. If the uniform prior covers only an interval, the posterior is the likelihood cut off at the ends of that interval and renormalised, so its mode is the value inside the interval where the likelihood is largest, and an MLE outside the interval cannot be the posterior mode.
-- **Improper priors.** A prior is improper when its integral over the parameter space is infinite, so it cannot be normalised into a distribution; a constant density on the whole real line is one, and $\pi^{-1}(1-\pi)^{-1}$ on $(0,1)$, the improper Beta$(0,0)$ kernel, is another. The algebra still runs — multiply prior by likelihood — but the result is a usable posterior only if it has a finite integral, and whether it does depends on the data: with the Beta$(0,0)$ prior and binomial data the posterior is improper when every trial is a success or every trial is a failure. An improper posterior is not a probability distribution, so it has no posterior mean or any other summary to report; always check that the posterior integrates to a finite value.
+- **A flat (uniform) prior.** A uniform prior is constant wherever it is positive, so inside its support the posterior is proportional to the likelihood alone, and outside its support the posterior is zero, because the prior is a factor of the product. The prior cannot move the posterior's peak: under a uniform prior the posterior mode is the maximum likelihood estimate. If the uniform prior covers only an interval, the posterior is the likelihood cut off at the ends of that interval and renormalised, so its mode is the value inside the interval where the likelihood is largest, and an MLE outside the interval cannot be the posterior mode: a normal likelihood centred below an interval that starts at $0$ gives a posterior piled up against $0$, the end of the interval nearest the likelihood's peak.
+- **Improper priors.** A prior is improper when its integral over the parameter space is infinite, so it cannot be normalised into a distribution; a constant density on the whole real line is one, and $\pi^{-1}(1-\pi)^{-1}$ on $(0,1)$, the improper Beta$(0,0)$ kernel, is another. The algebra still runs — multiply prior by likelihood — but the result is a usable posterior only if it has a finite integral, and whether it does depends on the data: with the Beta$(0,0)$ prior and binomial data the posterior is improper when every trial is a success or every trial is a failure. An improper posterior cannot be normalised — the integral in the denominator of Bayes' formula above is infinite — so it is not a probability distribution and there is no posterior mean or any other summary to report; always check that the posterior integrates to a finite value.
 
 > [!example]- Updating a Two-Class Driver Prior {Example}
 > A portfolio is $75\%$ good drivers, whose annual claim counts are Poisson with mean $0.2$, and $25\%$ bad drivers, Poisson with mean $0.6$. A driver chosen at random has $1$ claim in a year. Find the posterior class probabilities and the expected number of claims next year.

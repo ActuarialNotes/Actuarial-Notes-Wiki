@@ -1,9 +1,9 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-18
-  last_checked_by: agent:validate-v1
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
+  last_checked_by: agent:checker-tse
   content_hash: sha256:67f14b171abcbdbac40edb6fb98f16b1013973ac555d8e2456348effbcf04902
   sources:
     - "Frees et al., Loss Data Analytics (open text), Ch. 9 Experience Rating Using Credibility Theory, Ch. 9 §§9.2–9.6, sha256:35a840449990c8fda61687ebde4646508b6296ffac3daba18f0181eb2511fa36 — https://openacttexts.github.io/Loss-Data-Analytics/ChapCredibility.html"

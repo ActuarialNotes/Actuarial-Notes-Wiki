@@ -117,3 +117,38 @@ created: 2026-09-12
 - checks_run: delta only: the added 'Premium as the base' bullet read against Bailey & Simon p.159 and Table 1 (claim frequency per $1000 of premium)
 - sources_checked: IRMI Glossary, 'exposure base', entry, sha256:47e94e12e79df29163b37da0ab98b8194ba29990c124768a2200b11b65f9b3d0 — https://www.irmi.com/term/insurance-definitions/exposure-base; IRMI Glossary, 'premium audit', entry, sha256:4d303e9e2670eb03ca6e5050b336726d99d40c4294ec4a273a9a9f79a6b79909 — https://www.irmi.com/term/insurance-definitions/premium-audit; Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.4 pp.49-51 (PDF pp.61-63) — hash reconfirmed, unchanged since the 2026-10-09 pass, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf; AN ACTUARIAL NOTE ON THE CREDIBILITY OF EXPERIENCE OF A SINGLE PRIVATE PASSENGER CAR, Bailey & Simon, An Actuarial Note on the Credibility of Experience of a Single Private Passenger Car (PCAS 1959), pp.159-164 (PDF pp.1-6): Table 1-3, Appendix I-II, sha256:3e44bb5b3d17e96aaae61b27b0d72889043c44feb049a3ca3444095101f456e2 — https://www.casact.org/sites/default/files/2021-03/8_Bailey_Simon.pdf
 - note: Only the new bullet was checked; the rest was verified 2026-10-10 (medium) against the sources already listed and is unchanged, so the earlier confidence stands.
+
+## [F-004] Payroll said to track 'how much an injury costs'; Werner ties only indemnity to wages
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-31T17:32Z/b3a4
+- date: 2026-10-31
+- severity: minor
+- status: open
+- locus: bullet 'Why workers compensation uses payroll'
+- claim: So payroll reflects both how much the workforce is exposed to injury and how much an injury costs, whereas hours worked measure only the time exposed.
+- evidence: Werner ties indemnity benefits to wages (Ch.6 p.101, PDF p.113: compensation rate 66.7% of pre-injury wage; App. D p.D-2, PDF p.395: 'As indemnity benefits are tied to wage levels, the indemnity benefits change as wages change'). Medical costs are not tied to wages, and Ch.4 p.51 (PDF p.63) says the 1980s pressure to move to hours worked was for medical coverage. 'How much an injury costs' overstates what payroll tracks.
+- source_rank: 2
+- proposed_action: Say 'the size of its indemnity claims' and note the hours-worked proposal was for medical coverage.
+- applied: true
+- fingerprint: 6216bacb8990
+
+## [F-004/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-31T17:32Z/b3a4
+- date: 2026-10-31
+- resolves: F-004
+- status: resolved
+- note: Applied as proposed.
+
+## [C-005] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T17:32Z/b3a4
+- date: 2026-10-31
+- status_set: verified
+- confidence: medium
+- checks_run: The two new bullets diffed against W&M Ch.4 p.49 (two-year home = twice one-year's expected loss), p.58 (six-month policy = one-half written exposure), p.50 (workers/hours move payroll and risk together), Ch.6 p.101, App. D p.D-2; rest of the page re-read and stands on the 2026-10-09/10-31 passes (IRMI, Bailey & Simon sources unchanged).
+- sources_checked: Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 4 pp. 49-51, 58 (PDF pp. 61-63, 70); Ch. 6 p. 101 (PDF p. 113); App. D p. D-2 (PDF p. 395), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf
+- note: One minor finding opened and applied. Medium: vault-authored examples.

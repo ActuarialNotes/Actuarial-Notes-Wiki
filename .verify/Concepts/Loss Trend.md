@@ -191,3 +191,14 @@ created: 2026-09-12
 - checks_run: Read Werner Ch.6 Loss Trend through Overlap Fallacy end to end and ASOP 13 §§1-4 this session. Drivers (inflation, medical costs, safety technology, social influences per ASOP 13 §2.4, distributional changes) against Werner p.110; PP trend = (1+freq)(1+sev) - 1 against p.112 (-1% and +2% -> +1%); trend period definition against p.113. Example 1 recomputed before reading: 7/1/2023 to 7/1/2026 = 3.0, 1.05^3 = 1.157625; start-of-period error understates by 1 - 1/1.05 = 4.8%, midpoint error by 1 - 1/1.05^0.5 = 2.4% (page: 5% and 2%). Example 2: all five year-over-year changes reproduce (3.75/4.82/8.05/8.51/8.82%).
 - sources_checked: Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 6 pp.109-121 (PDF pp.121-133), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf; ASOP No. 13, Trending Procedures in Property/Casualty Insurance (ASB, 2009), Sections 1-4, pp.1-4 (PDF pp.5-8), sha256:5d985e9cbf666cda56b67bb6489e2f1430313278145e87816c7b2297dcd59acd — https://www.casact.org/sites/default/files/2021-03/5_ASOP_13.pdf
 - note: F-001 (major) resolved; six new findings (F-005 major, five minor) fixed and resolved. Confidence medium: the second example's selection discussion is the vault's own judgment.
+
+## [C-003] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T17:32Z/b3a4
+- date: 2026-10-31
+- status_set: verified
+- confidence: medium
+- checks_run: New layer-trend bullet diffed against W&M Table 6.20 ((4) = trended ground-up, (6) = min[(4), $25,000], excess = total - capped; trend applied before capping) and p.118 (claims below the limit before and after trend do not affect the excess layer). The flagged 'average excess severity over claims that reach the layer' is stated by the CAS Fall 2016 Q11(b) examiner's report: 'The average excess severity includes only the 20 claims that reach the excess layer.' Recomputed the Q11(b) layer: 4,500,000/4,000,000 = 1.125. Rest of page unchanged since 2026-10-09.
+- sources_checked: Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 6 pp. 117-118 (PDF pp. 129-130), Tables 6.20-6.21, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf; CAS Exam 5 Fall 2016 — sample answers and examiner's report, Q11(b), report p.53, sha256:ca09c50a744a462ecef90f59e436daec7da51ede0493cd5ebadc65f761e826f7 — https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam5_f16-5.pdf
+- note: Writer's flagged extension kept: the examiner's report (rank 1) states it. Medium as before.

@@ -1,13 +1,13 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-09
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
   content_hash: sha256:2dabe70b1d6a8249db0bead272f2ed7db25608fdd04629580cccb81c7043d0a9
   sources:
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 6 pp.109-121 (PDF pp.121-133), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
-    - "ASOP No. 13, Trending Procedures in Property/Casualty Insurance (ASB, 2009), Sections 1-4, pp.1-4 (PDF pp.5-8), sha256:5d985e9cbf666cda56b67bb6489e2f1430313278145e87816c7b2297dcd59acd — https://www.casact.org/sites/default/files/2021-03/5_ASOP_13.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 6 pp. 117-118 (PDF pp. 129-130), Tables 6.20-6.21, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "CAS Exam 5 Fall 2016 — sample answers and examiner's report, Q11(b), report p.53, sha256:ca09c50a744a462ecef90f59e436daec7da51ede0493cd5ebadc65f761e826f7 — https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam5_f16-5.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Loss Trend.md

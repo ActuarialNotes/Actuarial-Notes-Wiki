@@ -47,3 +47,14 @@ created: 2026-09-13
 - checks_run: Non-pricing levers re-read against Werner p.264 — expense reduction added (it was missing), 'agency compensation' and 'claims handling' wording replaced by Werner's marketing and loss-control items. Base-rate display relabelled to Werner's 'change in average rate differential' (p.276, off-balance factor = reciprocal). Capping bullet rewritten to Werner's relativity capping (pp.280-283) and premium transition rule (p.284: 15% cap, 1.20/1.15 - 1 = 4.3%; base rate over whole period vs end of transition; overlapping transitions) — the unsourced 'two rate levels tracked for on-levelling' removed. Practical-constraints paragraph tied to Ch.13 systems constraints, Ch.14 communication, and the Ch.6 trend period running from the proposed effective date. Distribution-shift remark rewritten to Werner p.285. Examples recomputed: $3.64M; 1.060/1.035 = 1.0242, 480 x 1.0242 = 491.62, 1.06 x 1.035 = 1.097.
 - sources_checked: Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.14 pp.263-264, 276-285 (PDF pp.275-276, 288-297); Ch.13 pp.241-243, 256 (PDF pp.253-255, 268); Ch.6 p.113 (PDF p.125), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf
 - note: F-001 fixed. Medium: worked examples are vault-authored.
+
+## [C-003] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T17:32Z/b3a4
+- date: 2026-10-31
+- status_set: verified
+- confidence: medium
+- checks_run: Additions diffed: capping reasons vs Ch.14 p.283 ('reduce the probability that the insured shops for a better deal'; 'a regulation or law may limit the increase'); approximated average rate differential vs pp.272-274 (S approximated as the product of exposure-weighted average differentials; additive discounts subtracted from one; distributional bias as the shortcoming, $217.96 vs $218.07); competitive comparisons vs Ch.13 pp.247-248 (sample risks / market basket fn.46, quoted risks, existing insureds; base rate advantage). Rest unchanged since 2026-10-09.
+- sources_checked: Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 13 pp. 247-248 (PDF pp. 259-260); Ch. 14 pp. 263-264, 272-274, 283 (PDF pp. 275-276, 284-286, 295), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf
+- note: Clean pass on the additions. Medium: vault-authored examples.

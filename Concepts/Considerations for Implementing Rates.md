@@ -1,12 +1,12 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-09
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
   content_hash: sha256:355dfd8d5c597638d7ba2e480e88d14adea96fca17e4857d3969d3f61de782b8
   sources:
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.14 pp.263-264, 276-285 (PDF pp.275-276, 288-297); Ch.13 pp.241-243, 256 (PDF pp.253-255, 268); Ch.6 p.113 (PDF p.125), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 13 pp. 247-248 (PDF pp. 259-260); Ch. 14 pp. 263-264, 272-274, 283 (PDF pp. 275-276, 284-286, 295), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Considerations for Implementing Rates.md

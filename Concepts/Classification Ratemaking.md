@@ -1,12 +1,13 @@
 ---
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: high
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
   content_hash: sha256:badc87014abff1f348836ffdde4f2b3b3602f30e43ae9205c84c5935fd166c7d
   sources:
-    - "Actuarial Standards Board, ASOP No. 12, Risk Classification (for All Practice Areas), Doc. No. 132 (Dec. 2005), Appendix 1 p.8 (PDF p.14), sha256:7d4f2631a589bac24cf34b1f622e95aa7bfa979aaca96de27c651099c0b12dc7 — https://www.actuarialstandardsboard.org/wp-content/uploads/2014/02/asop012_132.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.9 printed pp.155-168 (PDF 167-180) criteria, pure premium, loss ratio and adjusted pure premium approaches; App. E pp.E-1 to E-4 (PDF 409-414), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Actuarial Standards Board, ASOP No. 12, Risk Classification (for All Practice Areas), Doc. No. 132 (Dec. 2005), §3.2.1-3.2.7, §3.3.1-3.3.4 pp.3-5 (PDF 9-11); Appendix 1 p.8 (PDF 14), sha256:7d4f2631a589bac24cf34b1f622e95aa7bfa979aaca96de27c651099c0b12dc7 — https://www.actuarialstandardsboard.org/wp-content/uploads/2014/02/asop012_132.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Classification Ratemaking.md

@@ -41,7 +41,15 @@
      "statement": "Workers compensation indemnity benefits are a percentage of the injured worker's wages, so payroll reflects both claim frequency and severity, whereas hours worked reflects only time exposed to hazards (frequency and medical losses).",
      "concept": "Workers Compensation Insurance",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exposure Base",
+      "quote": "So payroll reflects both how much the workforce is exposed to injury and the size of its indemnity claims, whereas hours worked measure only the time exposed",
+      "note": "W&M Ch. 4 p. 50 (PDF 62), Ch. 6 p. 101 (PDF 113), App. D p. D-2 (PDF 395).",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write2"
+     }
     },
     {
      "id": "r4",
@@ -309,7 +317,15 @@
        "page": "Expenses",
        "quote": "Much of the cost of servicing an account doesn't grow with its size, so the expense *ratio* falls as premium grows."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Fixed Expenses",
+      "quote": "so a ratio measured on a small or new book is not representative of the ongoing provision",
+      "note": "W&M Ch. 7 p. 129 (PDF 141): a growing portfolio can cause expense ratios to decrease; page now also links [[Expenses]].",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write2"
+     }
     },
     {
      "id": "r4",
@@ -346,7 +362,15 @@
      "statement": "Typical expense provisions in a rate level reflect ongoing variable costs (expenses that vary with premium or policy count), while one-time investments such as market-entry marketing are funded by company capital or management outside the rates.",
      "concept": "Expense Provisions in Ratemaking",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Expense Provisions",
+      "quote": "leave it out of the rates, in which case it is basically funded by existing surplus",
+      "note": "Selecting the provisions section, W&M Ch. 7 pp. 128-129, 134 (PDF 140-141, 146); extraordinary expense not in rates is funded by existing surplus.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write2"
+     }
     }
    ]
   },
@@ -3057,7 +3081,15 @@
        "page": "Profit Margin",
        "quote": "$$\\text{Profit margin} = \\frac{\\text{NPV}}{\\text{EPV of premiums}}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Lifetime Value",
+      "quote": "Lifetime profit as a percentage of premium is the sum of the present values of the persistency-adjusted profits divided by the sum of the present values of the persistency-adjusted premiums.",
+      "note": "W&M Ch. 13 pp. 257-258 (PDF 269-270), Tables 13.16-13.17.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write2"
+     }
     },
     {
      "id": "r6",
@@ -3501,7 +3533,15 @@
      "statement": "Regulations in some jurisdictions limit the maximum rate change a policyholder may receive at a single renewal, which can make a capping rule legally required.",
      "concept": "Rate Regulation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Considerations for Implementing Rates",
+      "quote": "in some jurisdictions a regulation or law limits the increase an insurer may offer a renewing insured, so the cap is required rather than chosen",
+      "note": "W&M Ch. 14 p. 283 (PDF 295), premium transition rules.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write2"
+     }
     }
    ]
   },
@@ -6208,7 +6248,15 @@
        "page": "Profit Margin",
        "quote": "$$\\text{EPV of premiums} = \\sum_{t=0}^{n-1} P\\,{}_tp_x\\,(1+r)^{-t}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Lifetime Value",
+      "quote": "The present value of premium is the premium times the cumulative persistency, discounted; in Werner's table each year is discounted from its start, so the first policy year is not discounted.",
+      "note": "W&M Ch. 13 p. 258 (PDF 270), Table 13.16 col. 10.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write2"
+     }
     },
     {
      "id": "r4",
@@ -7880,7 +7928,15 @@
      "statement": "A worker's weekly indemnity benefit equals the compensation rate times pre-injury wage, subject to a minimum benefit floor and a maximum benefit cap (both usually expressed as percentages of the state average weekly wage).",
      "concept": "Workers Compensation Indemnity Benefits",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Policy Provision Changes",
+      "quote": "A worker's weekly benefit is the compensation rate times the wage, raised to the minimum if it falls below it and cut to the maximum if it exceeds it.",
+      "note": "WC weekly benefit with min/max written from W&M Ch. 6 pp. 101-102 (PDF 113-114).",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write2"
+     }
     },
     {
      "id": "r2",
@@ -7888,7 +7944,15 @@
      "statement": "To estimate the average weekly benefit across a wage distribution, compute each wage level's benefit after applying the minimum and maximum limits, then weight by the percentage of workers at each level and sum.",
      "concept": "Workers Compensation Benefit Level Impact Analysis",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Policy Provision Changes",
+      "quote": "The direct effect of a change is found by calculating the benefits before and after the change over the distribution of workers by wage, then dividing total benefits after by total benefits before and subtracting one.",
+      "note": "Direct effect over the wage distribution, W&M Ch. 6 pp. 101-102 (PDF 113-114), Table 6.6.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write2"
+     }
     },
     {
      "id": "r3",
@@ -7909,7 +7973,15 @@
      "statement": "Lowering the maximum benefit reduces benefits only for higher-wage workers whose benefits are capped, and it affects more workers as the cap falls below their uncapped benefit; lower-wage workers are affected only by the compensation rate.",
      "concept": "Workers Compensation Maximum Weekly Benefit",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Policy Provision Changes",
+      "quote": "Lowering the maximum benefit cuts benefits only for the higher-wage workers whose benefit is at or above the new maximum, and more workers are capped the lower it falls",
+      "note": "W&M Ch. 6 p. 102 (PDF 114): the lower maximum reaches the 125%+ SAWW bands only; min-bound workers unchanged.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write2"
+     }
     },
     {
      "id": "r5",
@@ -7922,7 +7994,15 @@
        "page": "Moral Hazard",
        "quote": "with $\\$2{,}500$ at stake, the insured takes more care and does not submit marginal claims."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Policy Provision Changes",
+      "quote": "A benefit that replaces more of the wage may make workers more inclined to file claims and give claimants less incentive to return to work in a timely manner, so claim frequency and duration may rise; a benefit that replaces less may work the other way, and only on the workers whose benefit it changes.",
+      "note": "Indirect effects, W&M Ch. 6 pp. 100-101, 103 (PDF 112-113, 115).",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write2"
+     }
     },
     {
      "id": "r6",
@@ -7935,7 +8015,15 @@
        "page": "Moral Hazard",
        "quote": "The larger effect in practice: extended treatment under [[Statutory Accident Benefits|accident benefits]], repair rather than the cheaper alternative, longer disability duration."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Policy Provision Changes",
+      "quote": "A benefit that replaces more of the wage may make workers more inclined to file claims and give claimants less incentive to return to work in a timely manner, so claim frequency and duration may rise; a benefit that replaces less may work the other way, and only on the workers whose benefit it changes.",
+      "note": "Indirect effect on duration (return to work), W&M Ch. 6 p. 101 (PDF 113).",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write2"
+     }
     }
    ]
   },
@@ -8143,7 +8231,15 @@
      "statement": "When projected average premium exceeds the historical average premium behind the expense ratios, the premium-based method overstates fixed expense per exposure, so the indicated rate is excessive; the reverse makes it inadequate.",
      "concept": "Premium-Based Projection Method",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Expense Provisions",
+      "quote": "A shift in mix that raises the average premium without affecting expenses (higher amounts of insurance) makes the method overstate the fixed expense ratio",
+      "note": "Premium-based method distortions, W&M Ch. 7 pp. 131-132 (PDF 143-144).",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write2"
+     }
     },
     {
      "id": "r6",
@@ -9936,7 +10032,15 @@
      "statement": "To put historical industry loss cost premium on current payroll level, multiply each year by the cumulative annual payroll level changes occurring after that year up to the current year (the current year's own change is excluded).",
      "concept": "Workers Compensation Ratemaking: Payroll Adjustment",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exposure Trend",
+      "quote": "multiplying each accident year by the cumulative product of the annual payroll level changes in the years after it, so the most recent year's factor is 1.000 and a year's own change is not applied to it",
+      "note": "W&M App. D pp. D-1-D-2, D-6 (PDF 394-395, 399), Premium exhibit cols 2-5.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write2"
+     }
     },
     {
      "id": "r2",
@@ -9977,7 +10081,15 @@
      "statement": "To put historical indemnity losses on current benefit level, multiply each year by the cumulative annual benefit level changes occurring after that year up to the current year (the current year's own change is excluded).",
      "concept": "Workers Compensation Ratemaking: Benefit Level Adjustment",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Policy Provision Changes",
+      "quote": "each accident year's indemnity losses are multiplied by the cumulative product of the annual benefit-level changes in the years after it, so a year's own change is not applied to it, and then by any known change after the experience period",
+      "note": "Benefit-level restatement written from W&M App. D pp. D-2, D-8 (PDF 395, 401), Indemnity Benefit Cost Level Factors col. 4.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write2"
+     }
     },
     {
      "id": "r5",
@@ -10759,7 +10871,15 @@
      "statement": "Select the fixed expense provision by averaging historical fixed expense ratios while excluding anomalous years caused by extraordinary events, and justify the exclusion.",
      "concept": "Fixed Expense Provision",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Expense Provisions",
+      "quote": "a year inflated by an extraordinary item is not simply averaged in with the others",
+      "note": "W&M Ch. 7 p. 129 (PDF 141), extraordinary expenses; Expense Provisions reached via the new link on the tagged Fixed Expenses page.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write2"
+     }
     },
     {
      "id": "r8",
@@ -16943,7 +17063,15 @@
        "page": "Excess of Loss",
        "quote": "Trend each historical loss individually *before* applying the layer. Excess losses grow faster than trend because a loss just below $R$ trends into the layer."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loss Trend",
+      "quote": "apply the total-limits severity trend to each ground-up loss, then cap both the original and the trended losses at the basic limit and compare the totals; the excess losses are the total-limits losses minus the basic-limits losses, before and after trend, and their ratio is the excess trend",
+      "note": "W&M Ch. 6 pp. 117-118 (PDF 129-130), Tables 6.20-6.21.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write2"
+     }
     },
     {
      "id": "r5",
@@ -16956,7 +17084,15 @@
        "page": "Layer of Insurance",
        "quote": "$E[N]\\,S(a)$ claims are expected to reach the layer. Each pays on average $\\left(E[X \\wedge b] - E[X \\wedge a]\\right)/S(a)$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loss Trend",
+      "quote": "the layer's losses — and an average excess severity — are taken over the claims that reach the layer, not over every ground-up claim",
+      "note": "W&M Ch. 6 p. 118 (PDF 130): claims below the limit do not affect the excess layer.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write2"
+     }
     },
     {
      "id": "r6",
@@ -19908,7 +20044,15 @@
      "statement": "Estimate the average premium under a multiplicative rating plan by computing the exposure-weighted average of each rating variable's factor (and of each discount factor, i.e. 1 minus the discount) and multiplying these averages by the base premium.",
      "concept": "Rating Plan Premium Calculation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Considerations for Implementing Rates",
+      "quote": "For a purely multiplicative rating algorithm that average differential is approximated as the product of each rating variable's exposure-weighted average differential; an additive discount enters as one minus its exposure-weighted average discount.",
+      "note": "W&M Ch. 14 pp. 272-274 (PDF 284-286), approximated average rate differential method.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write2"
+     }
     },
     {
      "id": "r2",
@@ -22197,7 +22341,15 @@
      "statement": "Select each expense ratio based on its trend: if ratios show a consistent trend, select the most recent year to remain responsive; if there is no clear pattern or the ratios are volatile, select an average of the years.",
      "concept": "Selecting Expense Provisions",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Expense Provisions",
+      "quote": "Where the ratios are stable the multi-year average is selected; where they show a trend over time the actuary may select the most recent year's ratio or some other value.",
+      "note": "W&M Ch. 7 pp. 128, 131 (PDF 140, 143).",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write2"
+     }
     },
     {
      "id": "r5",
@@ -22205,7 +22357,15 @@
      "statement": "Selections should be made on each expense category's total ratio before splitting into fixed and variable, so that volatility in one component does not mask a trend in another.",
      "concept": "Selecting Expense Provisions",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Expense Provisions",
+      "quote": "In the premium-based method the selection is made on each category's total expense ratio, and the selected ratio is then divided into its fixed and variable parts.",
+      "note": "W&M Ch. 7 p. 131 (PDF 143): 'The selected expense ratio is then divided into fixed and variable ratios.'",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write2"
+     }
     },
     {
      "id": "r6",
@@ -22509,7 +22669,15 @@
      "statement": "A policy with a term longer than one year carries one exposure unit per year of term (e.g., a two-year policy counts as two exposures).",
      "concept": "Exposure Base",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exposure Base",
+      "quote": "One home insured for two years has twice the expected loss of the same home insured for one year, so it is two house-years of exposure",
+      "note": "W&M Ch. 4 pp. 49, 58 (PDF 61, 70).",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write2"
+     }
     },
     {
      "id": "r4",
@@ -28315,7 +28483,15 @@
        "page": "Workers Compensation Underwriting",
        "quote": "Texas, for example, publishes a maximum weekly income benefit tied to its state average weekly wage, \\$1,271 for injuries from October 2025 through September 2026."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Policy Provision Changes",
+      "quote": "The statute sets a compensation rate, a percentage of the worker's pre-injury wage, and a minimum and a maximum weekly benefit, each stated as a percentage of the state average weekly wage (SAWW).",
+      "note": "W&M Ch. 6 p. 101 (PDF 113); reached from the tagged Workers Compensation Insurance page, which now links Policy Provision Changes.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write2"
+     }
     },
     {
      "id": "r2",
@@ -28323,7 +28499,15 @@
      "statement": "A worker's weekly indemnity benefit equals the compensation rate times the pre-injury wage, floored at the minimum benefit and capped at the maximum benefit: min(max(rate x wage, minimum), maximum).",
      "concept": "Workers Compensation Indemnity Benefit Limits",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Policy Provision Changes",
+      "quote": "A worker's weekly benefit is the compensation rate times the wage, raised to the minimum if it falls below it and cut to the maximum if it exceeds it.",
+      "note": "W&M Ch. 6 pp. 101-102 (PDF 113-114); reached via the link on Workers Compensation Insurance.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write2"
+     }
     },
     {
      "id": "r3",
@@ -28331,7 +28515,15 @@
      "statement": "To estimate the direct impact of a benefit law change on losses, compute total benefits under the current and proposed structures (benefit per wage band times number of workers, summed), and express the impact as the percentage change of proposed over current benefits.",
      "concept": "Impact of Law Changes on Workers Compensation Losses",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Policy Provision Changes",
+      "quote": "The direct effect of a change is found by calculating the benefits before and after the change over the distribution of workers by wage, then dividing total benefits after by total benefits before and subtracting one.",
+      "note": "W&M Ch. 6 p. 102 (PDF 114), Table 6.6.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write2"
+     }
     },
     {
      "id": "r4",
@@ -28339,7 +28531,15 @@
      "statement": "When wages are grouped in bands, approximate each band's wage by its average (total wages divided by number of workers) when applying benefit rate and limits.",
      "concept": "Impact of Law Changes on Workers Compensation Losses",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Policy Provision Changes",
+      "quote": "a band between the limits is paid the compensation rate times its total wages, which is the band's average wage times its number of workers",
+      "note": "W&M Table 6.6 (PDF 114): benefits = 0.667 x band total wages; limit x workers for min/max bands.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write2"
+     }
     },
     {
      "id": "r5",
@@ -28347,7 +28547,15 @@
      "statement": "Raising the minimum benefit reduces the financial incentive of low-wage workers to avoid injury claims and return to work, increasing claim frequency and duration among low-wage workers.",
      "concept": "Indirect Effects of Workers Compensation Benefit Changes",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Policy Provision Changes",
+      "quote": "A benefit that replaces more of the wage may make workers more inclined to file claims and give claimants less incentive to return to work in a timely manner, so claim frequency and duration may rise",
+      "note": "W&M Ch. 6 p. 101 (PDF 113): indirect effect of a higher replacement; applies to the low-wage workers a higher minimum reaches.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write2"
+     }
     },
     {
      "id": "r6",
@@ -28355,7 +28563,15 @@
      "statement": "Lowering the maximum benefit widens the gap between wage and benefit for high-wage workers, strengthening their incentive to avoid claims and return to work sooner, so claim frequency and duration fall among high-wage workers.",
      "concept": "Indirect Effects of Workers Compensation Benefit Changes",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Policy Provision Changes",
+      "quote": "a benefit that replaces less may work the other way, and only on the workers whose benefit it changes",
+      "note": "W&M Ch. 6 pp. 101, 103 (PDF 113, 115): indirect effect of a lower maximum on high-wage workers.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write2"
+     }
     }
    ]
   },
@@ -31097,7 +31313,15 @@
      "statement": "Expense ratios or per-exposure amounts are computed for each historical year, and a selection representative of future expense levels is made.",
      "concept": "Expense Provisions in Ratemaking",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Expense Provisions",
+      "quote": "The actuary calculates the historical expense ratio for each expense category and each year (or, in the exposure/policy-based method, the fixed expense per exposure or per policy), usually with a multi-year average beside them.",
+      "note": "W&M Ch. 7 pp. 128, 134 (PDF 140, 146).",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write2"
+     }
     },
     {
      "id": "r6",
@@ -31118,7 +31342,15 @@
      "statement": "The exposure-based method can be distorted by economies of scale as the book grows or shrinks, by exposures trending differently than expenses, and by fixed expenses that vary by risk characteristic (e.g. new vs. renewal business).",
      "concept": "Exposure-Based Projection Method",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Expense Provisions",
+      "quote": "some expenses treated as fixed actually vary by characteristic, such as new versus renewal business; and that economies of scale in a growing or shrinking book make the average fixed expense per exposure decline or rise",
+      "note": "Exposure/policy-based method shortcomings, W&M Ch. 7 pp. 134-135 (PDF 146-147).",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write2"
+     }
     }
    ]
   },
@@ -31351,7 +31583,15 @@
        "page": "Claims Handling Process",
        "quote": "The outcome of the process is a payment that keeps the insurer's promise and no more than the policy owes."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Non-Pricing Solutions",
+      "quote": "better claims handling lowers the losses paid without a change in rate",
+      "note": "W&M App. D p. D-5 (PDF 398): company's more stringent underwriting and claims handling practices lower expected losses; linked [[Claims Handling]].",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write2"
+     }
     },
     {
      "id": "r6",
@@ -31376,7 +31616,15 @@
      "statement": "To compare premiums fairly across companies, hold risk characteristics fixed by obtaining competitor quotes for representative risk profiles, re-rating the company's book with competitors' filed rates, or comparing by segment.",
      "concept": "Competitor Rate Comparison",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Considerations for Implementing Rates",
+      "quote": "for a set of sample risks (a market basket), for all quoted risks (new business), or for all existing insureds (renewal competitiveness)",
+      "note": "W&M Ch. 13 pp. 247-248 (PDF 259-260).",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write2"
+     }
     }
    ]
   },
@@ -33975,7 +34223,15 @@
      "statement": "Countrywide expenses (general, other acquisition) are spread over countrywide premium and exposures, while state-specific expenses (taxes, licenses and fees, commissions) are spread over that state's premium and exposures.",
      "concept": "Expense Allocation Basis (Earned vs Written)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Expense Provisions",
+      "quote": "Other acquisition costs and general expenses are usually assumed to be uniform across locations, so their ratios use countrywide expenses over countrywide premium. Taxes, licenses and fees vary by state, so their ratios are based on the state's own data",
+      "note": "W&M Ch. 7 p. 128 (PDF 140) and Table 7.6.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write2"
+     }
     },
     {
      "id": "r4",
@@ -36215,7 +36471,15 @@
        "page": "Excess of Loss",
        "quote": "**Leverage:** untrended layer losses are $150 + 0 + 650 + 50 = 850$, so trend raised them by $1{,}107/850 - 1 = 30.2\\%$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loss Trend",
+      "quote": "apply the total-limits severity trend to each ground-up loss, then cap both the original and the trended losses at the basic limit and compare the totals",
+      "note": "W&M Ch. 6 pp. 117-118 (PDF 129-130), Table 6.20.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write2"
+     }
     },
     {
      "id": "r2",
@@ -36245,7 +36509,15 @@
        "page": "Excess of Loss",
        "quote": "Trend each historical loss individually *before* applying the layer. Excess losses grow faster than trend because a loss just below $R$ trends into the layer."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loss Trend",
+      "quote": "The trend must be applied to the ground-up loss before the limit, never to the capped amount.",
+      "note": "W&M Ch. 6 pp. 117-118 (PDF 129-130); excess = total limits minus basic limits.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write2"
+     }
     },
     {
      "id": "r4",
@@ -36443,7 +36715,15 @@
      "statement": "Select a ratemaking expense ratio for each expense category by comparing the latest year's ratio with prior years and averaging stable years while excluding anomalous years or relying on the latest data.",
      "concept": "Expense Ratios in Ratemaking",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Expense Provisions",
+      "quote": "The selection for each category is either the latest year's ratio or a multi-year average, balanced with management input, prior expense loads and judgment.",
+      "note": "W&M Ch. 7 pp. 128-129 (PDF 140-141).",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write2"
+     }
     },
     {
      "id": "r3",
@@ -36498,7 +36778,15 @@
      "statement": "Countrywide or benchmark expense ratios may be inappropriate for a new state because expenses (e.g., taxes, commissions) vary by state and start-up costs make initial expenses higher than historical benchmarks.",
      "concept": "Expense Provisions for a New State",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Expense Provisions",
+      "quote": "A countrywide ratio therefore may not fit a single state's taxes, licenses and fees or commissions.",
+      "note": "W&M Ch. 7 p. 128 (PDF 140); short-term fixed cost rise with planned growth p. 129 (PDF 141). Expense Provisions reached via link on tagged Fixed Expenses.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write2"
+     }
     }
    ]
   },
@@ -38207,7 +38495,15 @@
      "statement": "Averaging beginning and ending in-force premium approximates calendar year earned premium only if policies have the same term (e.g., all annual) and are written uniformly throughout the year; shorter-term policies can incept and expire between valuations and be missed, and irregular writing or a small, changing book makes the estimate unreliable.",
      "concept": "In-Force Premium",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "In-Force",
+      "quote": "the average of the in-force premium at the start and end of a year is a fair estimate of that year's earned premium only when every policy has the same annual term and policies are written uniformly through the year",
+      "note": "W&M Ch. 5 pp. 70-71 (PDF 82-83): in-force is full-term premium; different terms; uniform writing assumption. Conclusion drawn from these and the CAS Fall 2019 Q2(d) examiner's report (the more uniform the writing, the more accurate the estimate).",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write2"
+     }
     },
     {
      "id": "r6",

@@ -40,6 +40,4702 @@
      ]
     }
    ]
+  },
+  "srm-002": {
+   "path": "questions/exam-srm/srm-002.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:01c0ee88cc68bd03a89ed938f36f98a4ecb9685b57eb72c01b2d99180a9efbaf",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "K-means clustering requires the number of clusters K to be specified in advance, whereas hierarchical clustering does not; the dendrogram can be cut at any height to obtain any number of clusters.",
+     "concept": "Clustering Methods",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Clustering",
+       "quote": "Requires $K$ prespecified; minimizes within-cluster variance"
+      },
+      {
+       "page": "Hierarchical Clustering",
+       "quote": "No $K$ is chosen in advance — the number of clusters is decided *afterwards* by choosing a height at which to cut the dendrogram"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "Both K-means and hierarchical clustering assign every observation to a cluster, so outliers can heavily distort the results of either method; neither is robust to outliers.",
+     "concept": "Clustering Methods",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "The K-means algorithm begins by randomly assigning each observation to one of K clusters (then iterates computing centroids and reassigning), so results depend on the random start; hierarchical clustering is deterministic and needs no random assignment.",
+     "concept": "K-means Clustering",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "K-Means Clustering",
+       "quote": "**Initialize**: randomly assign each observation to one of $K$ clusters"
+      },
+      {
+       "page": "Hierarchical Clustering",
+       "quote": "**Deterministic**: unlike [[K-Means Clustering]] there is no random initialization, so the same data always give the same tree"
+      }
+     ]
+    }
+   ]
+  },
+  "srm-003": {
+   "path": "questions/exam-srm/srm-003.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:53e8d9eb819f886e389795fd7617a98297488948cce7e587d7c70fa5caf5a64c",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "A random walk model expresses the series as its initial value plus the cumulative sum of white noise terms, so y_t = y_{t-1} + c_t.",
+     "concept": "Random Walk Model",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Random Walk",
+       "quote": "A **random walk** is the non-stationary series whose change at each step is [[White Noise|white noise]]: $Y_t = Y_{t-1} + \\varepsilon_t$."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "An h-step ahead forecast from a random walk starts at the last observed value and adds the estimated mean of each future white noise term, so y-hat_{T+h} = y_T + h * c-bar.",
+     "concept": "Random Walk Forecasting",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Random Walk",
+       "quote": "The **$h$-step forecast is the last observation**, $\\hat Y_{t+h} = Y_t$, for every $h$ — and the forecast interval widens with $\\sqrt{h}$"
+      },
+      {
+       "page": "Random Walk",
+       "quote": "A **random walk with drift**, $Y_t = \\delta + Y_{t-1} + \\varepsilon_t$, adds a linear trend of slope $\\delta$ — a [[Deterministic and Stochastic Trend|stochastic trend]], not a deterministic one"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The white noise mean is estimated by the sample average of the observed increments, c-bar = (c_1 + ... + c_T)/T, and the sum of the increments equals T times their average.",
+     "concept": "Random Walk Forecasting",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Sample Mean",
+       "quote": "The **Sample Mean** $\\bar{X}$ is the arithmetic average of a random sample and the standard estimator of the population mean $\\mu$."
+      },
+      {
+       "page": "Sample Mean",
+       "quote": "$$\\bar{X} = \\frac{1}{n}\\sum_{i=1}^{n} X_i$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "definition",
+     "statement": "The forecast error is the actual value minus the forecast, y_{T+h} - y-hat_{T+h}, which for a random walk equals the sum of actual future white noise terms minus h times the estimated mean.",
+     "concept": "Forecast Error",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Time Series Forecast",
+       "quote": "$$\\hat{Y}_{t+h} \\pm z_{1-\\alpha/2}\\,\\sigma\\sqrt{\\textstyle\\sum_{j=0}^{h-1}\\psi_j^{2}}$$"
+      }
+     ]
+    }
+   ]
+  },
+  "srm-004": {
+   "path": "questions/exam-srm/srm-004.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:042345f8707644006b2017bea4648729f07faca43ec14391f5642b4cd7dea403",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "A random walk model expresses y_t as y_0 plus the cumulative sum of white noise terms, so the first differences y_t - y_{t-1} equal the white noise terms c_t.",
+     "concept": "Random Walk Model",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Random Walk",
+       "quote": "A **random walk** is the non-stationary series whose change at each step is [[White Noise|white noise]]: $Y_t = Y_{t-1} + \\varepsilon_t$."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The white noise standard deviation of a random walk is estimated by the sample standard deviation of the first differences, s_c^2 = sum (c_t - cbar)^2 / (n - 1), where n is the number of differences.",
+     "concept": "Random Walk Model",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Sample Variance",
+       "quote": "$$S^2 = \\frac{1}{n-1}\\sum_{i=1}^{n}(X_i - \\bar{X})^2$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The l-step-ahead forecast of a random walk has standard error s_c * sqrt(l), because the forecast error is a sum of l independent white noise terms.",
+     "concept": "Random Walk Forecasting",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Time Series Forecast",
+       "quote": "a [[Random Walk]] stays flat at the last value with an interval widening as $\\sqrt{h}$"
+      },
+      {
+       "page": "Prediction Interval",
+       "quote": "[[Random Walk|random walk]]: $\\psi_j = 1$, so the variance is $h\\sigma^2$ and the interval widens without limit, the signature of a unit root"
+      },
+      {
+       "page": "Random Walk",
+       "quote": "The forecast error is $\\varepsilon_{41}+\\varepsilon_{42}+\\varepsilon_{43}$, with variance $3\\sigma^2 = 27$ and SD $\\sqrt{27} = 5.20$:"
+      }
+     ]
+    }
+   ]
+  },
+  "srm-005": {
+   "path": "questions/exam-srm/srm-005.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:14b882a6be1ecd94984959d190635a1cf0ec45c06018992e74691da6959169f6",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "Principal component analysis (PCA) is an unsupervised technique that finds a low-dimensional representation of a dataset by projecting observations onto a few linear combinations of the variables (principal components).",
+     "concept": "Principal Component Analysis",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Principal Components Analysis",
+       "quote": "**Principal Components Analysis (PCA)** is an unsupervised [[Statistical Learning]] technique that finds a low-dimensional representation of a high-dimensional dataset by identifying the directions (**principal components**) of maximum variance."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "The principal components give the low-dimensional linear surfaces (lines, planes, hyperplanes) that are closest to the observations, as measured by average squared Euclidean distance.",
+     "concept": "Principal Component Analysis",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "The first principal component is the direction (line) in p-dimensional space along which the observations vary the most and which is closest to the observations.",
+     "concept": "First Principal Component",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Principal Components Regression",
+       "quote": "The first component is the direction along which the observations vary the most."
+      },
+      {
+       "page": "Loading Vector",
+       "quote": "It is the direction in predictor space along which the data vary most (subject to being orthogonal to the earlier components), and its entries say how each variable contributes."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "PCA seeks a low-dimensional representation of the data that retains as much of the variation (variance) as possible.",
+     "concept": "Principal Component Analysis",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Principal Components Analysis",
+       "quote": "**Principal Components Analysis (PCA)** is an unsupervised [[Statistical Learning]] technique that finds a low-dimensional representation of a high-dimensional dataset by identifying the directions (**principal components**) of maximum variance."
+      },
+      {
+       "page": "Proportion of Variance Explained",
+       "quote": "The **proportion of variance explained (PVE)** is the share of the total variance in the data captured by a principal component."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "PCA can be used for data visualization, since the first few principal component scores can be plotted to view observations in low dimensions.",
+     "concept": "Principal Component Analysis",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Principal Components Analysis",
+       "quote": "Used for **visualization** of high-dimensional data, and to derive a few features for a supervised fit"
+      },
+      {
+       "page": "Loading Vector",
+       "quote": "A **biplot** draws both on one pair of axes for the first two components: each observation as a point at its scores $(z_{i1}, z_{i2})$ and each variable as an arrow to its loadings $(\\phi_{j1}, \\phi_{j2})$"
+      }
+     ]
+    }
+   ]
+  },
+  "srm-006": {
+   "path": "questions/exam-srm/srm-006.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:5df1238f1af082af1635e0e7f10c8f8d814fe00687d181ca1f96bbe8276b4b21",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "Principal components are ordered by variance explained, so the proportion of variance explained (PVE) by each successive principal component is non-increasing (decreases or stays the same).",
+     "concept": "Principal Component Analysis",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Proportion of Variance Explained",
+       "quote": "PVE is **decreasing in $m$** by construction, and the cumulative curve rises to 1 at the last component, $m = \\min(n-1, p)$"
+      },
+      {
+       "page": "Principal Components Analysis",
+       "quote": "PCs are **orthogonal** — each successive PC captures the maximum remaining variance"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "The cumulative proportion of variance explained is non-decreasing as more principal components are added, reaching 1 when all components are used.",
+     "concept": "Principal Component Analysis",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Proportion of Variance Explained",
+       "quote": "PVE is **decreasing in $m$** by construction, and the cumulative curve rises to 1 at the last component, $m = \\min(n-1, p)$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "Using all principal components is not desirable; the goal is to use the fewest components that capture enough of the variance to understand the data (dimension reduction).",
+     "concept": "Principal Component Analysis",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Proportion of Variance Explained",
+       "quote": "The usual reading is off the [[Scree Plot]] or a cumulative-PVE target such as 90%"
+      },
+      {
+       "page": "Scree Plot",
+       "quote": "**Read the elbow, not the last drop.** Components after the bend add little variance each and are usually not interpretable"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "A scree plot graphs the proportion of variance explained against the component number, and the number of principal components is chosen at the elbow where the PVE drops off and additional components add little.",
+     "concept": "Scree Plot",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Scree Plot",
+       "quote": "A **scree plot** graphs the eigenvalues (or the [[Proportion of Variance Explained]]) of a [[Principal Components Analysis]] against the component number. The number of components worth keeping is read off the **elbow** — the point after which the curve flattens into scree."
+      }
+     ]
+    }
+   ]
+  },
+  "srm-007": {
+   "path": "questions/exam-srm/srm-007.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:7fa153fed1d32b3abdea0851e95dbb876f935d201b3e7194cfc291f7c53cba37",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "A binary outcome (e.g., event occurs or not) is modeled in a GLM with a binomial (Bernoulli) response distribution, which corresponds to a classification model.",
+     "concept": "Generalized Linear Models",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Logistic Regression",
+       "quote": "**Logistic Regression** is the [[Generalized Linear Model]] for a binary response (with extensions to more than two categories, below): the outcome is modelled as binomial"
+      },
+      {
+       "page": "Response Variable",
+       "quote": "**Binary response** — claim or no claim, renew or lapse, fraud referral: binomial with the logit link, which is [[Logistic Regression]]."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "For a binary response, the link function should map the linear predictor to a mean between 0 and 1, so the identity (linear) link is unsuitable because it can give values outside [0,1].",
+     "concept": "Link Function",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Logistic Regression",
+       "quote": "First, the **fitted values are not probabilities** — the identity link is unbounded, so predictions leave $[0,1]$."
+      },
+      {
+       "page": "Response Variable",
+       "quote": "The fitted value is a probability; a linear model on a $0/1$ response can predict values outside $[0, 1]$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "definition",
+     "statement": "The logit link, g(μ) = ln(μ/(1−μ)), maps a probability in (0,1) to the real line, so its inverse (the logistic function) keeps predicted probabilities between 0 and 1; it is the standard link for binomial GLMs (logistic regression).",
+     "concept": "Logistic Regression",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Link Function",
+       "quote": "| Logit | $\\ln\\!\\frac{\\mu}{1-\\mu}$ | $\\frac{e^\\eta}{1+e^\\eta}$ | Binomial (binary outcomes) |"
+      },
+      {
+       "page": "Logistic Regression",
+       "quote": "the **logit** [[Link Function]] maps the probability $\\pi \\in (0,1)$ onto the whole real line, so the linear predictor can take any value and the fitted probability always stays between $0$ and $1$."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "The normal distribution is suited to continuous, unbounded responses, not to binary outcomes.",
+     "concept": "Normal Distribution",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Response Variable",
+       "quote": "**Continuous, roughly symmetric, constant variance** — Normal with the identity link: ordinary [[Linear Regression]]"
+      },
+      {
+       "page": "Normal Distribution",
+       "quote": "The **Normal Distribution** $X \\sim N(\\mu, \\sigma^2)$ is a symmetric, bell-shaped continuous distribution on $(-\\infty, \\infty)$ fully characterized by its mean $\\mu$ and variance $\\sigma^2$."
+      }
+     ]
+    }
+   ]
+  },
+  "srm-008": {
+   "path": "questions/exam-srm/srm-008.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:336d7b9b38aa258deefcd31970b78a35a6a735817dcf349b9abf88d09bc90f05",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "Subset selection (e.g., forward, backward, best subset) is a procedure that fits a model using only a chosen subset of the available predictors, adding or removing variables according to a criterion.",
+     "concept": "Subset Selection",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Variable Selection",
+       "quote": "Start with all predictors (needs $n > p$); at each step remove the least useful one; choose among the sizes as in the last row"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "Subset selection tends to remove irrelevant predictors, yielding a simpler model with fewer variables.",
+     "concept": "Subset Selection",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Variable Selection",
+       "quote": "Start with all predictors (needs $n > p$); at each step remove the least useful one"
+      },
+      {
+       "page": "Regularization",
+       "quote": "lasso's $\\ell_1$ penalty zeroes out the irrelevant variables, producing a model with a few predictors that can be filed and explained"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "A model with fewer predictors is easier to interpret.",
+     "concept": "Model Interpretability",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Variable Selection",
+       "quote": "**Variable Selection** is the process of choosing which predictors to include in a model's [[Model Structure]], balancing improved fit against the risk of overfitting and loss of interpretability."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "Removing irrelevant predictors reduces the variance of the fitted model, which can improve prediction accuracy.",
+     "concept": "Bias-Variance Tradeoff",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Variable Selection",
+       "quote": "Selecting too few variables causes underfitting (high bias); selecting too many causes overfitting (high variance)"
+      },
+      {
+       "page": "Bias-Variance Tradeoff",
+       "quote": "Adding terms, interactions, or levels lowers bias and raises variance. Removing them does the reverse."
+      }
+     ]
+    }
+   ]
+  },
+  "srm-009": {
+   "path": "questions/exam-srm/srm-009.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:ae4eb953be3fea114583400b1c3ba9534b638938107eeff4870cb9a847447ed5",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "For a two-class node with class proportions p and 1-p, the Gini index is 2p(1-p) (in general, the sum over classes of p_k(1-p_k)).",
+     "concept": "Gini Index",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Classification Tree",
+       "quote": "$$G = \\sum_{k=1}^{K}\\hat{p}_{mk}\\left(1 - \\hat{p}_{mk}\\right)$$"
+      },
+      {
+       "page": "Gini Index",
+       "quote": "$$G = \\sum_{k=1}^K \\hat{p}_{mk}(1 - \\hat{p}_{mk})$$"
+      },
+      {
+       "page": "Node Impurity",
+       "quote": "For two classes: $E = \\min(\\hat{p}, 1 - \\hat{p})$; $G = 2\\hat{p}(1 - \\hat{p})$, with maximum $0.5$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The entropy of a node is -sum over classes of p_k ln(p_k), where p_k is the proportion of observations in class k.",
+     "concept": "Entropy (Classification Trees)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Classification Tree",
+       "quote": "$$D = -\\sum_{k=1}^{K}\\hat{p}_{mk}\\ln\\hat{p}_{mk}$$"
+      },
+      {
+       "page": "Node Impurity",
+       "quote": "$$D_m = -\\sum_{k=1}^{K}\\hat{p}_{mk}\\ln\\hat{p}_{mk}$$"
+      },
+      {
+       "page": "Entropy",
+       "quote": "$$D = -\\sum_{k=1}^K \\hat{p}_{mk} \\log(\\hat{p}_{mk})$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "The total impurity (Gini or entropy) after a split is the weighted average of the node impurities, weighted by the number of observations in each node.",
+     "concept": "Classification Trees",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Classification Tree",
+       "quote": "A split is scored by the observation-weighted impurity of its two children."
+      },
+      {
+       "page": "Node Impurity",
+       "quote": "$$\\Delta I = I_{\\text{parent}} - \\frac{n_L}{n}I_L - \\frac{n_R}{n}I_R$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "When comparing splits, the split with the smaller total Gini index or entropy (lower impurity) is preferred.",
+     "concept": "Classification Trees",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Node Impurity",
+       "quote": "The tree grows by choosing, at each step, the split that reduces it most."
+      },
+      {
+       "page": "Entropy",
+       "quote": "The split that **maximizes information gain** (minimizes child entropy) is chosen"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "procedure",
+     "statement": "Classification errors for a split are counted by predicting the majority class in each node, so each node's errors equal the number of observations in its minority class; the split with fewer total errors is preferred under the misclassification criterion.",
+     "concept": "Classification Error Rate",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Classification Tree",
+       "quote": "For two classes $G = 2\\hat{p}(1-\\hat{p})$ and $E = \\min(\\hat{p}, 1-\\hat{p})$."
+      },
+      {
+       "page": "Node Impurity",
+       "quote": "For two classes: $E = \\min(\\hat{p}, 1 - \\hat{p})$; $G = 2\\hat{p}(1 - \\hat{p})$, with maximum $0.5$"
+      }
+     ]
+    }
+   ]
+  },
+  "srm-010": {
+   "path": "questions/exam-srm/srm-010.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:55d607217237c9c4a4e06352a3b2f311796b0e45d1dfef3fe65c4a002f81b559",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "A random forest chooses a new random subset of predictors at each split of each tree, rather than one subset for the whole tree.",
+     "concept": "Random Forests",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Random Forest",
+       "quote": "at *each split*, only a random subset of $m$ predictors is eligible."
+      },
+      {
+       "page": "Tree Ensemble",
+       "quote": "| **Random Forest** | Bagging + random feature subsets | Decorrelates trees; typically $\\sqrt{p}$ features per split |"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "A random forest with the number of predictors considered at each split equal to the total number of predictors is equivalent to bagging.",
+     "concept": "Random Forests",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Random Forest",
+       "quote": "$m = p$ **is** bagging — bagging is the special case, not a different algorithm"
+      },
+      {
+       "page": "Hyperparameter",
+       "quote": "With $m = 12 = p$ every predictor is available at every split: that is **bagging**"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "Restricting each split to a random subset of predictors decorrelates the trees, so averaging them reduces variance more than bagging does, making random forests an improvement over bagging.",
+     "concept": "Random Forests",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Random Forest",
+       "quote": "That decorrelates the trees, so averaging removes more variance than bagging can."
+      },
+      {
+       "page": "Bagging",
+       "quote": "Bagged trees are highly correlated because a dominant predictor is chosen first in nearly every tree, which caps the gain. [[Random Forest]] exists to break that correlation"
+      }
+     ]
+    }
+   ]
+  },
+  "srm-011": {
+   "path": "questions/exam-srm/srm-011.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:334b5119ee83ac9e7dc590d0cabdafcef4df24212fc458f73004bc7034782e62",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "The sum of squared errors is SSE = Σ (y_i − f̂(x_i))², the sum over observations of squared differences between observed values and model predictions.",
+     "concept": "Sum of Squared Errors",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Residual Sum of Squares",
+       "quote": "The **Residual Sum of Squares (RSS)** (also called the **Sum of Squared Errors, SSE**) measures the total unexplained variability in a regression model — the sum of squared differences between observed and fitted values."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "definition",
+     "statement": "A residual is the observed response minus the fitted (predicted) value, e_i = y_i − f̂(x_i).",
+     "concept": "Residuals",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Residual",
+       "quote": "A **residual** is the part of an observation a fitted model does not explain: the observed value minus the [[Fitted Values|fitted value]]."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "A sum of squared errors is a sum of squares and can never be negative.",
+     "concept": "Sum of Squared Errors",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Residual Sum of Squares",
+       "quote": "The **Residual Sum of Squares (RSS)** (also called the **Sum of Squared Errors, SSE**) measures the total unexplained variability in a regression model — the sum of squared differences between observed and fitted values."
+      }
+     ]
+    }
+   ]
+  },
+  "srm-012": {
+   "path": "questions/exam-srm/srm-012.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:87f6259409b59b40fc3f7cb01a44e6ada4dc4f4e7ddf2c9516f3a49511371620",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "Model flexibility is the ability of a method to fit a wide range of possible functional forms; a method restricted to a specific form (such as linear) is inflexible.",
+     "concept": "Flexibility vs. Interpretability",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Smoothing Spline",
+       "quote": "Higher $df_\\lambda$ means a more flexible fit, with lower bias and higher variance."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "Linear regression is a relatively inflexible (low flexibility) approach because it restricts the model to a linear form.",
+     "concept": "Linear Regression",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bias-Variance Tradeoff",
+       "quote": "is error from the model being too rigid to represent the truth (a straight line through a curved relationship)"
+      },
+      {
+       "page": "Statistical Learning",
+       "quote": "the curve is forced to be perfectly smooth, which makes it the least squares straight line — rigid, high bias, low variance."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "The lasso is a constrained, less flexible version of linear regression: the penalty shrinks coefficients and selects a subset of variables, so it is less flexible than ordinary least squares.",
+     "concept": "Lasso Regression",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Regularization",
+       "quote": "**Lasso** ($\\ell_1$) sets some coefficients exactly to zero, so it performs [[Variable Selection]] as part of the fit — good when the truth is sparse"
+      },
+      {
+       "page": "Variable Selection",
+       "quote": "Fit all $p$ predictors with a penalty that sets some coefficients exactly to zero, so the selection happens within the fit"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "Bagging, which averages many trees fit to bootstrap samples, is a more flexible approach than a single model and is not low flexibility.",
+     "concept": "Bagging",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bagging",
+       "quote": "The trees are grown **deep and unpruned**: bagging handles the variance, so each tree is left to have low bias"
+      },
+      {
+       "page": "Tree Ensemble",
+       "quote": "Ensembles reduce the high variance of individual trees while preserving their ability to capture complex, non-linear patterns."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "There is a tradeoff between flexibility and interpretability: more flexible methods are generally harder to interpret, so no method is both highly flexible and easily interpretable.",
+     "concept": "Flexibility vs. Interpretability",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Statistical Learning",
+       "quote": "**Prediction**: minimize test error; interpretability may be sacrificed"
+      },
+      {
+       "page": "Interpretability",
+       "quote": "The first example shows the shape of that comparison: the more flexible model may predict better, while the GLM is more transparent."
+      }
+     ]
+    }
+   ]
+  },
+  "srm-013": {
+   "path": "questions/exam-srm/srm-013.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:6d0e40ca7bb82422ce634e760b97ebde22933b5747d80f5df998c960616f6a9f",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "A confidence interval in regression estimates the mean response E(y | x) at a given x, reflecting only uncertainty in the estimated coefficients.",
+     "concept": "Confidence and Prediction Intervals in Linear Regression",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Confidence Interval",
+       "quote": "A **Confidence Interval** is a range computed from a sample that covers the unknown parameter with a stated long-run probability $1 - \\alpha$."
+      },
+      {
+       "page": "Prediction Interval",
+       "quote": "A [[Confidence Interval|confidence interval]] covers a fixed parameter such as a mean."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "definition",
+     "statement": "A prediction interval in regression gives a range for an individual new observation y at a given x, and includes both the estimation uncertainty and the irreducible error variance of ε.",
+     "concept": "Confidence and Prediction Intervals in Linear Regression",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Prediction Interval",
+       "quote": "A **prediction interval** is a range that will contain a *future observation*, such as next quarter's claim frequency or next month's claim count, with a stated probability."
+      },
+      {
+       "page": "Prediction Interval",
+       "quote": "A prediction interval must also allow for the random shock the new observation will carry, so it is always wider."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "The prediction interval is always at least as wide as the confidence interval at the same x and level, because its variance adds the error variance to that of the fitted mean; the two coincide only when the error variance is zero.",
+     "concept": "Confidence and Prediction Intervals in Linear Regression",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Prediction Interval",
+       "quote": "Both are centred on the fitted line, and because of the $(x_0 - \\bar{x})^2$ term both are narrowest at $x_0 = \\bar{x}$ and widen symmetrically as $x_0$ moves away from it, in either direction. The prediction interval is always the wider of the two."
+      },
+      {
+       "page": "Prediction Interval",
+       "quote": "the prediction interval for a new $Y$ at $x_0$ adds 1 under the square root"
+      }
+     ]
+    }
+   ]
+  },
+  "srm-014": {
+   "path": "questions/exam-srm/srm-014.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:5f4aef1a2c5b69db716fa756270c59b609bdaa0ab4e1d42f426717889ec552d8",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "When residual variance increases with the fitted values (heteroscedasticity), transforming the dependent variable can make the variance more constant, e.g. with a log transformation.",
+     "concept": "Heteroscedasticity",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Heteroscedasticity",
+       "quote": "Residual variances that are not constant over the triangle call for weighted least squares, with weights inversely proportional to the variance."
+      },
+      {
+       "page": "Ordinary Least Squares",
+       "quote": "With uncorrelated, constant-variance errors it is the best linear unbiased estimator (the Gauss–Markov theorem)"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "When the dependent variable can be zero, add a constant (e.g. one) before taking the logarithm, since the log of zero is undefined (negative infinity).",
+     "concept": "Response Variable Transformations",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "Power transformations of the dependent variable with power less than one, such as the square root, can reduce increasing variance of residuals.",
+     "concept": "Power Transformations",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r4",
+     "kind": "definition",
+     "statement": "The logit transformation, ln(p/(1-p)), is defined only for values strictly between 0 and 1.",
+     "concept": "Logit Function",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "srm-015": {
+   "path": "questions/exam-srm/srm-015.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:c38f7d3fbc9d2b1bc0517b9d03e14fb0ac147dacaf941dd1dcc355da10fa1c6d",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "procedure",
+     "statement": "In K-means clustering, each cluster's centroid is computed as the coordinate-wise mean of the data points currently assigned to that cluster.",
+     "concept": "K-Means Clustering",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "K-Means Clustering",
+       "quote": "2. **Update**: compute each cluster centroid as the mean of its assigned observations"
+      },
+      {
+       "page": "Clustering",
+       "quote": "**Centroid**: distance between the two clusters' centroids (mean vectors)"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "In each K-means iteration, after computing centroids, every observation is reassigned to the cluster whose centroid is nearest by Euclidean distance.",
+     "concept": "K-Means Clustering",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "K-Means Clustering",
+       "quote": "3. **Assign**: assign each observation to the nearest centroid (by Euclidean distance)"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The Euclidean distance between points (x1, y1) and (x2, y2) is sqrt((x1-x2)^2 + (y1-y2)^2).",
+     "concept": "Euclidean Distance",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Similarity and Distance Measures",
+       "quote": "d_{\\text{Euc}}(\\mathbf{u}, \\mathbf{v}) = \\sqrt{\\sum_{j=1}^{p} (u_j - v_j)^2}"
+      },
+      {
+       "page": "Similarity and Distance Measures",
+       "quote": "Euclidean distance is the straight-line distance, the root of summed squared differences"
+      }
+     ]
+    }
+   ]
+  },
+  "srm-016": {
+   "path": "questions/exam-srm/srm-016.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:427b5c2b5f7e98fa56e80b8284f170554e09861c66e6460d8344bf44f0bbb73c",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "procedure",
+     "statement": "K-means clustering begins by randomly assigning each observation to one of K clusters, then iterates by computing cluster centroids and reassigning observations to the nearest centroid.",
+     "concept": "K-Means Clustering",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "K-Means Clustering",
+       "quote": "1. **Initialize**: randomly assign each observation to one of $K$ clusters"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "Because K-means starts from a random initial assignment, different runs on the same data can produce different clusterings, so results may differ between people; hierarchical clustering is deterministic.",
+     "concept": "K-Means Clustering",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "K-Means Clustering",
+       "quote": "The algorithm is guaranteed to **converge** but may reach a **local minimum** — run multiple times with different initializations and keep the best result (lowest WCSS)"
+      },
+      {
+       "page": "Hierarchical Clustering",
+       "quote": "**Deterministic**: unlike [[K-Means Clustering]] there is no random initialization, so the same data always give the same tree"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "In K-means the number of clusters K is specified in advance and remains fixed across iterations, so the algorithm must be rerun if a different K is desired.",
+     "concept": "K-Means Clustering",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "K-Means Clustering",
+       "quote": "**K-Means Clustering** is a partition-based [[Clustering]] algorithm that partitions $n$ observations into $K$ non-overlapping clusters by minimizing **total within-cluster variance** (the within-cluster sum of squares, WCSS)."
+      },
+      {
+       "page": "Clustering",
+       "quote": "| **Partition-based** | [[K-Means Clustering]] | Requires $K$ prespecified; minimizes within-cluster variance |"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "Agglomerative hierarchical clustering starts with each observation as its own cluster and successively fuses the closest pair of clusters, reducing the cluster count by one each step until a single cluster remains.",
+     "concept": "Hierarchical Clustering",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Hierarchical Clustering",
+       "quote": "Agglomerative clustering starts with every observation in its own cluster and repeatedly fuses the two closest, recording the whole history as a [[Dendrogram]]."
+      },
+      {
+       "page": "Clustering",
+       "quote": "2. Merge the two most similar clusters using a **linkage criterion**"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "Hierarchical clustering is run once and produces a dendrogram; any number of clusters can be obtained by cutting the dendrogram at the appropriate height without rerunning the algorithm.",
+     "concept": "Hierarchical Clustering",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Hierarchical Clustering",
+       "quote": "No $K$ is chosen in advance — the number of clusters is decided *afterwards* by choosing a height at which to cut the dendrogram"
+      },
+      {
+       "page": "Dendrogram",
+       "quote": "One tree gives every $K$ at once: cutting high gives few clusters, cutting low gives many"
+      }
+     ]
+    }
+   ]
+  },
+  "srm-018": {
+   "path": "questions/exam-srm/srm-018.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:385c2532a9b5651dc883ab48ed70b4894e06fe1fae1b989e440037e06052bda7",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "The total sum of squares (TSS) is the sum of squared deviations of the observed responses from their mean, measuring total variability in the response.",
+     "concept": "Sum of Squares Decomposition",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Residual Sum of Squares",
+       "quote": "$\\text{SS}_{\\text{Tot}} = \\text{SS}_{\\text{Reg}} + \\text{RSS}$, where $\\text{SS}_{\\text{Tot}} = \\sum(y_i - \\bar{y})^2$ and $\\text{SS}_{\\text{Reg}} = \\sum(\\hat{y}_i - \\bar{y})^2$"
+      },
+      {
+       "page": "ANOVA",
+       "quote": "| Total | $\\text{SS}_\\text{Tot} = \\sum(y_i - \\bar y)^2$ | $n-1$ | | |"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "definition",
+     "statement": "The residual sum of squares (RSS) is the sum of squared residuals, the sum over observations of (y_i - fitted y_i)^2, measuring variability unexplained by the regression.",
+     "concept": "Sum of Squares Decomposition",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Residual Sum of Squares",
+       "quote": "measures the total unexplained variability in a regression model — the sum of squared differences between observed and fitted values."
+      },
+      {
+       "page": "ANOVA",
+       "quote": "| Residual (Error) | $\\text{RSS} = \\sum(y_i - \\hat y_i)^2$ | $n-p-1$ | $\\text{MSE} = \\text{RSS}/(n-p-1)$ | |"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The coefficient of determination is R^2 = 1 - RSS/TSS, the proportion of total variability explained by the regression.",
+     "concept": "Coefficient of Determination (R^2)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Linear Regression",
+       "quote": "Fit is summarized by [[R-Squared]] $= 1 - \\text{RSS}/\\text{SS}_{\\text{Tot}}$, with $\\hat\\sigma^2 = \\text{RSS}/(n - p - 1)$ estimating the error variance"
+      }
+     ]
+    }
+   ]
+  },
+  "srm-019": {
+   "path": "questions/exam-srm/srm-019.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:b7354bba696d0310c9726c82a0ecd82182a6dfa8593cd7f3a03cf512c6ad781e",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "The likelihood ratio test statistic is twice the difference between the maximized log-likelihood of the larger (unrestricted) model and that of the restricted (null) model: 2(l_full − l_restricted).",
+     "concept": "Likelihood Ratio Test",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Likelihood Ratio Test",
+       "quote": "$$-2\\ln\\Lambda = 2\\left[\\ell(\\hat\\theta) - \\ell(\\hat\\theta_0)\\right] \\ \\dot\\sim\\ \\chi^2_{r}$$"
+      },
+      {
+       "page": "Chi-Squared Distribution",
+       "quote": "$-2\\ln\\lambda = 2(\\ell_2 - \\ell_1)$ is approximately $\\chi^2(p_2 - p_1)$ in large samples."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "Under the null hypothesis, the likelihood ratio statistic follows a chi-square distribution with degrees of freedom equal to the number of additional parameters in the full model relative to the restricted model.",
+     "concept": "Likelihood Ratio Test",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Likelihood Ratio Test",
+       "quote": "$r$ is the number of **restrictions** — the difference in free parameters between the full and reduced models"
+      },
+      {
+       "page": "Chi-Squared Distribution",
+       "quote": "for nested models with $p_1 < p_2$ parameters, $-2\\ln\\lambda = 2(\\ell_2 - \\ell_1)$ is approximately $\\chi^2(p_2 - p_1)$ in large samples."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "To test whether all slope coefficients are zero, compare the full model with the intercept-only model, ignoring intermediate models; reject the null if the statistic exceeds the chi-square critical value at the chosen significance level.",
+     "concept": "Likelihood Ratio Test",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Likelihood Ratio Test",
+       "quote": "Reject $H_0$ (the reduced model) when $-2\\ln\\Lambda$ exceeds the upper-$\\alpha$ point of $\\chi^2_r$"
+      },
+      {
+       "page": "Deviance",
+       "quote": "The critical value $\\chi^2_{0.05, 2} = 5.99$. Since $14.4 > 5.99$, **reject $H_0$** — territory significantly improves the model."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "The 95th percentile of the chi-square distribution with 3 degrees of freedom is about 7.81.",
+     "concept": "Chi-Square Distribution",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Chi-Square Goodness-of-Fit Test",
+       "quote": "the critical value is $\\chi^2_{0.05,\\,3} = 7.81$"
+      },
+      {
+       "page": "Chi-Squared Distribution",
+       "quote": "The $df = 3$ row gives $7.81$ in the $0.950$ column and $9.35$ in the $0.975$ column."
+      }
+     ]
+    }
+   ]
+  },
+  "srm-020": {
+   "path": "questions/exam-srm/srm-020.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:b328d515a90b2d63122adb645aaf47402a2b2ca4693d3d01f7a74fbe4ded7b14",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "A simple linear model for a binary or probability response can produce predicted values below 0 or above 1, so it is unsuitable for modeling probabilities.",
+     "concept": "Linear Probability Model",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Logistic Regression",
+       "quote": "the identity link is unbounded, so predictions leave $[0,1]$"
+      },
+      {
+       "page": "Response Variable",
+       "quote": "a linear model on a $0/1$ response can predict values outside $[0, 1]$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "definition",
+     "statement": "The logit function, ln(p/(1-p)), is a link function that maps probabilities in (0,1) to the real line, so its inverse (the logistic function) restricts model predictions to between 0 and 1.",
+     "concept": "Logistic Regression",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Logistic Regression",
+       "quote": "the **logit** [[Link Function]] maps the probability $\\pi \\in (0,1)$ onto the whole real line, so the linear predictor can take any value and the fitted probability always stays between $0$ and $1$."
+      },
+      {
+       "page": "Link Function",
+       "quote": "| Logit | $\\ln\\!\\frac{\\mu}{1-\\mu}$ | $\\frac{e^\\eta}{1+e^\\eta}$ | Binomial (binary outcomes) |"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "The canonical link function for the Poisson distribution is the natural logarithm, which does not restrict predictions to the interval 0 to 1.",
+     "concept": "Generalized Linear Models Link Functions",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Generalized Linear Model",
+       "quote": "| Count | Poisson | Log: $g(\\mu) = \\ln\\mu$ |"
+      },
+      {
+       "page": "Link Function",
+       "quote": "This holds for the Poisson with a log link, the normal with the identity link and the binomial with the logit link."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "Removing observations or truncating/altering predicted values to force them into a range is inappropriate because it biases the model estimates rather than fixing the model form.",
+     "concept": "Linear Probability Model",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "srm-021": {
+   "path": "questions/exam-srm/srm-021.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:5b6020943bf625e6adec42ce9028a2c1623a16231ec2aa6c48108600c94402cd",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "A time series is stationary in the mean if E(y_t) is constant over time, and stationary in the variance if Var(y_t) is constant over time; otherwise it is nonstationary in that respect.",
+     "concept": "Stationarity",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Stationarity",
+       "quote": "A [[Time Series]] is **(weakly) stationary** when its mean, variance and autocovariances do not depend on time — only on the lag."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "A random walk y_t = y_{t-1} + c_t equals the starting value plus the sum of the independent increments c_1,...,c_t.",
+     "concept": "Random Walk",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Random Walk",
+       "quote": "$$Y_t = Y_{t-1} + \\varepsilon_t = Y_0 + \\sum_{i=1}^{t}\\varepsilon_i$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "For a random walk with increment mean μ_c and variance σ_c^2, E(y_t) = y_0 + t·μ_c.",
+     "concept": "Random Walk",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Random Walk",
+       "quote": "A **random walk with drift**, $Y_t = \\delta + Y_{t-1} + \\varepsilon_t$, adds a linear trend of slope $\\delta$ — a [[Deterministic and Stochastic Trend|stochastic trend]], not a deterministic one"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "For a random walk with increment variance σ_c^2 and independent increments, Var(y_t) = t·σ_c^2, which grows linearly in t when σ_c^2 > 0.",
+     "concept": "Random Walk",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Random Walk",
+       "quote": "$$\\mathrm{Var}(Y_t) = t\\sigma^{2}, \\qquad \\mathrm{Corr}(Y_t, Y_{t+k}) = \\sqrt{\\frac{t}{t+k}}$$"
+      },
+      {
+       "page": "Random Walk",
+       "quote": "The variance grows **without bound** in $t$, so the series is not [[Stationarity|stationary]] and has no mean to revert to — it wanders"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "A random walk is nonstationary in the mean when the increment mean is nonzero, and nonstationary in the variance whenever the increment variance is positive.",
+     "concept": "Random Walk",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Random Walk",
+       "quote": "A **random walk with drift**, $Y_t = \\delta + Y_{t-1} + \\varepsilon_t$, adds a linear trend of slope $\\delta$ — a [[Deterministic and Stochastic Trend|stochastic trend]], not a deterministic one"
+      }
+     ]
+    }
+   ]
+  },
+  "srm-022": {
+   "path": "questions/exam-srm/srm-022.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:400c4bcf7477eea86f6cc42bc5f85340005c9c14d3c9176a780f3b692ac23cb3",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "An autoregressive model of order one, AR(1), has the form y_t = beta_0 + beta_1 y_{t-1} + epsilon_t, so the only predictor of y_t is the immediately preceding value y_{t-1}.",
+     "concept": "Autoregressive Model of Order One",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Autoregressive Model",
+       "quote": "$$Y_t = c + \\phi_1 Y_{t-1} + \\cdots + \\phi_p Y_{t-p} + \\varepsilon_t$$"
+      },
+      {
+       "page": "Stationarity",
+       "quote": "An AR(1) $Y_t = \\phi Y_{t-1} + \\varepsilon_t$ is stationary exactly when $\\lvert\\phi\\rvert < 1$; at $\\phi = 1$ it is a [[Random Walk]] and there is no fixed mean to return to"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "An AR(1) model is stationary if and only if the absolute value of beta_1 is less than 1; the intercept beta_0 can be any value and does not affect stationarity.",
+     "concept": "Stationarity of Time Series",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Autoregressive Model",
+       "quote": "- [[Stationarity]] requires all roots of $\\phi(B) = 0$ **outside** the unit circle; for AR(1) that is $\\lvert\\phi\\rvert < 1$, and $\\phi = 1$ is a [[Random Walk]]"
+      },
+      {
+       "page": "Stationarity",
+       "quote": "An AR(1) $Y_t = \\phi Y_{t-1} + \\varepsilon_t$ is stationary exactly when $\\lvert\\phi\\rvert < 1$; at $\\phi = 1$ it is a [[Random Walk]] and there is no fixed mean to return to"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "definition",
+     "statement": "A white noise process is a series of independent, identically distributed (mean-zero) error terms with constant variance and no dependence between observations.",
+     "concept": "White Noise",
+     "status": "linked",
+     "places": [
+      {
+       "page": "White Noise",
+       "quote": "**White noise** is a [[Time Series]] of uncorrelated, mean-zero, constant-variance terms."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "definition",
+     "statement": "A random walk is a time series in which each value equals the previous value plus white noise, y_t = y_{t-1} + epsilon_t (with an optional drift constant); it is non-stationary and corresponds to AR(1) with beta_1 = 1.",
+     "concept": "Random Walk",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Stationarity",
+       "quote": "An AR(1) $Y_t = \\phi Y_{t-1} + \\varepsilon_t$ is stationary exactly when $\\lvert\\phi\\rvert < 1$; at $\\phi = 1$ it is a [[Random Walk]] and there is no fixed mean to return to"
+      },
+      {
+       "page": "Random Walk",
+       "quote": "A **random walk** is the non-stationary series whose change at each step is [[White Noise|white noise]]: $Y_t = Y_{t-1} + \\varepsilon_t$. It is ARIMA$(0,1,0)$, the boundary case of an AR(1) at $\\phi = 1$, and the null hypothesis a unit-root test is testing."
+      }
+     ]
+    }
+   ]
+  },
+  "srm-023": {
+   "path": "questions/exam-srm/srm-023.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:65fd6b1e326ad27bf62585cc631f4dc137720c07a839412b2868cb51127b6d67",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "In simple linear regression by least squares, the slope estimate is b1 = Σ(xi − x̄)(yi − ȳ) / Σ(xi − x̄)² and the intercept is b0 = ȳ − b1·x̄.",
+     "concept": "Simple Linear Regression",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Ordinary Least Squares",
+       "quote": "$\\hat\\beta_1 = S_{xy}/S_{xx}$ and $\\hat\\beta_0 = \\bar{y} - \\hat\\beta_1\\bar{x}$, where $S_{xy} = \\sum(x_i - \\bar{x})(y_i - \\bar{y})$ and $S_{xx} = \\sum(x_i - \\bar{x})^2$"
+      },
+      {
+       "page": "Linear Regression",
+       "quote": "\\hat\\beta_1 = \\frac{S_{xy}}{S_{xx}} = \\frac{400}{250} = 1.6"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "If all data points lie exactly on a straight line, the least squares regression line is that line (residuals are zero).",
+     "concept": "Simple Linear Regression",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "To predict a response for a new value of the predictor, substitute it into the fitted regression equation ŷ = b0 + b1x.",
+     "concept": "Simple Linear Regression",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Ordinary Least Squares",
+       "quote": "\\hat{y}_6 &= 9.37 + 0.61(6)"
+      },
+      {
+       "page": "Linear Regression",
+       "quote": "\\hat{y} = 25.8 + 1.6x \\ \\Longrightarrow\\ \\hat{y}(15) = 25.8 + 24 = 49.8"
+      }
+     ]
+    }
+   ]
+  },
+  "srm-024": {
+   "path": "questions/exam-srm/srm-024.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:a8a3ada05b21a3c933a303bad4c4b577616fb4912916d35e482473c52f0386d9",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "The regression F statistic is F = [(TSS − RSS)/p] / [RSS/(n − p − 1)], where p is the number of predictors (excluding the intercept) and n is the number of observations.",
+     "concept": "F-test for Multiple Linear Regression",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "R-Squared",
+       "quote": "So $F = \\dfrac{(\\text{SS}_\\text{Tot} - \\text{SS}_\\text{Res})/p}{\\text{SS}_\\text{Res}/(n-p-1)}$"
+      },
+      {
+       "page": "ANOVA",
+       "quote": "$F = \\text{MSR}/\\text{MSE} \\sim F_{p,\\, n-p-1}$ under $H_0: \\beta_1 = \\cdots = \\beta_p = 0$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "R² = 1 − RSS/TSS, the proportion of total variability explained by the regression.",
+     "concept": "Coefficient of Determination (R²)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Residual Sum of Squares",
+       "quote": "[[R-Squared]] $= 1 - \\text{RSS}/\\text{SS}_{\\text{Tot}}$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "R² and F depend only on the ratio RSS/TSS (together with n and p), so R² can be computed from F, n and p without knowing RSS or TSS individually.",
+     "concept": "Coefficient of Determination (R²)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "R-Squared",
+       "quote": "and dividing the top and bottom by $\\text{SS}_\\text{Tot}$ gives $F = \\dfrac{R^2/p}{(1 - R^2)/(n - p - 1)}$ on $p$ and $n - p - 1$ degrees of freedom."
+      }
+     ]
+    }
+   ]
+  },
+  "srm-025": {
+   "path": "questions/exam-srm/srm-025.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:2a83f46f1606d4e0bcd36d3443de548ee9073521aa7e9942f7515ad6fedb4c8c",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "Recursive binary splitting is a greedy top-down method that fits the training data closely, so it can grow an overly complex tree that overfits and performs poorly on test data.",
+     "concept": "Recursive Binary Splitting",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Decision Tree",
+       "quote": "Decision trees are **highly interpretable** but have high variance — small data changes can produce very different trees"
+      },
+      {
+       "page": "Overfitting",
+       "quote": "Every split it made chased a random deviation from \\$12,000, and those deviations did not repeat in the new data."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "A decision tree with more splits is more complex, giving lower bias but higher variance; smaller trees have lower variance but higher bias.",
+     "concept": "Bias-Variance Tradeoff in Decision Trees",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Tree Pruning",
+       "quote": "Pruning is the single-tree answer to variance"
+      },
+      {
+       "page": "Overfitting",
+       "quote": "Each remedy lowers the variance of the fit: [[Tree Pruning|pruning]] removes leaves,"
+      },
+      {
+       "page": "Bias-Variance Tradeoff",
+       "quote": "Adding terms, interactions, or levels lowers bias and raises variance. Removing them does the reverse."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "In cost complexity pruning, the tuning parameter alpha penalizes the number of terminal nodes; when alpha = 0 there is no penalty, so the subtree minimizing training error is the full, very large tree.",
+     "concept": "Cost Complexity Pruning",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Tree Pruning",
+       "quote": "$\\alpha = 0$ keeps the full tree; raising $\\alpha$ makes leaves progressively too expensive, collapsing the tree from the bottom up to a single node"
+      },
+      {
+       "page": "Regression Tree",
+       "quote": "At $\\alpha = 0$ the full tree wins, and a larger $\\alpha$ gives a smaller tree, because a split that adds one leaf survives only if it reduces the RSS by more than $\\alpha$."
+      }
+     ]
+    }
+   ]
+  },
+  "srm-026": {
+   "path": "questions/exam-srm/srm-026.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:795e500cc447a197ecfe3fc4894ca1e185211fe380d9451294ba639298986994",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "A classification tree partitions the predictor space into rectangular regions by recursive binary splits, each made with a single predictor, so each split is a vertical or horizontal line (axis-parallel) in two dimensions.",
+     "concept": "Decision Trees",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Decision Tree",
+       "quote": "partitions the predictor space into rectangular regions by applying a sequence of binary splits, then predicts a constant value (regression) or class (classification) within each region."
+      },
+      {
+       "page": "Regression Tree",
+       "quote": "a split on predictor $X_j$ at cutpoint $s$ sends $R_1(j,s) = \\{X \\mid X_j < s\\}$ to one branch and $R_2(j,s) = \\{X \\mid X_j \\geq s\\}$ to the other."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "Each split of a tree divides one existing region into two parts, so a class pattern can be modeled with no error only if it can be built by successive axis-parallel line splits of existing regions; diagonal or non-nested boundaries cannot be represented exactly.",
+     "concept": "Decision Trees",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Decision Tree",
+       "quote": "partitions the predictor space into rectangular regions by applying a sequence of binary splits, then predicts a constant value (regression) or class (classification) within each region."
+      },
+      {
+       "page": "Regression Tree",
+       "quote": "At each step it searches every predictor and every cutpoint for the split of one current region that reduces the RSS most, without looking ahead to splits that might follow, and it repeats until a stopping rule is met, such as a minimum number of observations in each leaf."
+      }
+     ]
+    }
+   ]
+  },
+  "srm-027": {
+   "path": "questions/exam-srm/srm-027.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:e0337519717bcbe32dd5008637aaf26a55ec67b5149df2cccd4d170cbb8ce538",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "The p-value of a regression coefficient's t-test is the probability, under the null hypothesis that the coefficient is zero, of observing a t statistic at least as extreme as the one obtained.",
+     "concept": "Hypothesis Tests for Regression Coefficients (t-test)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "p-Value",
+       "quote": "A **p-Value** is the probability, computed assuming the null hypothesis is true, of observing a test statistic at least as extreme as the one obtained."
+      },
+      {
+       "page": "Parameter Estimate Tables",
+       "quote": "Significance of the predictor: $P(\\lvert T_{n-p-1} \\rvert \\geq \\lvert t\\text{-value}\\rvert)$ for a t-value, $P(\\lvert Z \\rvert \\geq \\lvert z\\text{-value}\\rvert)$ for a z-value"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "To test whether a predictor is significant in a linear regression, compare its coefficient's p-value to the significance level; if the p-value exceeds the level, fail to reject the null that the coefficient is zero, so the predictor is not statistically significant and is a candidate to drop.",
+     "concept": "Hypothesis Tests for Regression Coefficients (t-test)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "p-Value",
+       "quote": "It converts any test statistic onto a common $0$–$1$ scale: reject $H_0$ when the p-value falls below the significance level $\\alpha$."
+      },
+      {
+       "page": "Hypothesis Testing",
+       "quote": "Reject $H_0$ when p-value $< \\alpha$"
+      },
+      {
+       "page": "Parameter Estimate Tables",
+       "quote": "A small p-value (e.g., $< 0.05$) indicates the predictor is statistically significant"
+      }
+     ]
+    }
+   ]
+  },
+  "srm-029": {
+   "path": "questions/exam-srm/srm-029.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:29cdb501e0c41f4c826dc0708e40e21e9dd4eb6eb4fef28b11939473dd6fa342",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "Decision trees are easy to interpret because their splitting rules form simple if-then decision rules that can be followed directly.",
+     "concept": "Decision Trees",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Decision Tree",
+       "quote": "Decision trees are **highly interpretable** but have high variance — small data changes can produce very different trees"
+      },
+      {
+       "page": "Generalized Linear Model",
+       "quote": "CART (classification and regression trees, see [[Regression Tree]]) builds a tree of if-then conditions"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "Decision trees can be displayed graphically as a tree diagram, which makes them easy to read even for non-experts.",
+     "concept": "Decision Trees",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "Decision trees are generally considered easier to explain to people than linear regression models, and they may more closely mirror human decision-making.",
+     "concept": "Decision Trees",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Interpretability",
+       "quote": "and that a small tree can be easier to follow than a large linear model"
+      },
+      {
+       "page": "Regression Tree",
+       "quote": "The prediction is a step function of the predictors, so the tree captures non-linear effects and [[Interaction|interactions]] without being told about them, and it is easy to explain."
+      }
+     ]
+    }
+   ]
+  },
+  "srm-030": {
+   "path": "questions/exam-srm/srm-030.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:612a37ab9efd02f8bce711caac890c63305a8ee170f0a92fbf635b4f1b5e1674",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "Principal component loadings are not unique: each loading vector is determined only up to a sign flip.",
+     "concept": "Principal Component Analysis",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Principal Components Analysis",
+       "quote": "$\\boldsymbol{\\phi}_m$ is the $m$-th **loading vector** (eigenvector of the covariance matrix $\\mathbf{S}$ with eigenvalue $\\lambda_m$)"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "PCA constrains each principal component's loading vector so that the sum of squares of its loadings equals one; without this constraint the variance could be made arbitrarily large.",
+     "concept": "Principal Component Analysis",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Principal Components Analysis",
+       "quote": "$$\\boldsymbol{\\phi}_1 = \\arg\\max_{\\|\\boldsymbol{\\phi}\\|=1} \\text{Var}(\\mathbf{X}\\boldsymbol{\\phi})$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "With p variables and at least p observations, the p principal components together explain 100% of the total variance in the data.",
+     "concept": "Proportion of Variance Explained",
+     "status": "syllabus",
+     "places": [
+      {
+       "page": "Proportion of Variance Explained",
+       "quote": "the cumulative curve rises to 1 at the last component, $m = \\min(n-1, p)$"
+      }
+     ]
+    }
+   ]
+  },
+  "srm-031": {
+   "path": "questions/exam-srm/srm-031.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:5b5d308b324195070c5cba6afa5f83b8c14fc482cccd7aeab6b84cc951474d6d",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "A random walk is a nonstationary time series in which each observation equals the previous observation plus a white noise term, so its first differences are white noise.",
+     "concept": "Random Walk",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Random Walk",
+       "quote": "A **random walk** is the non-stationary series whose change at each step is [[White Noise|white noise]]: $Y_t = Y_{t-1} + \\varepsilon_t$."
+      },
+      {
+       "page": "Differencing",
+       "quote": "Forecasts must be **integrated back** to the original scale, which is where a random walk's flat forecast comes from"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "A random walk exhibits a (apparent) trend in time and variability that increases over time, which shows up in a control chart of the series.",
+     "concept": "Random Walk",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Random Walk",
+       "quote": "The variance grows **without bound** in $t$, so the series is not [[Stationarity|stationary]] and has no mean to revert to — it wanders"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "Differencing a series (taking changes between consecutive observations) removes the trend and stabilizes the variance; if the differenced series is white noise, the original series is modeled as a random walk.",
+     "concept": "Differencing of Time Series",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Differencing",
+       "quote": "**Differencing** replaces a [[Time Series]] by its period-to-period changes. It is the standard route from a non-stationary series to a [[Stationarity|stationary]] one, and the operation the \"I\" in [[ARIMA]] counts."
+      },
+      {
+       "page": "Random Walk",
+       "quote": "**First differencing** makes it white noise: $\\nabla Y_t = \\varepsilon_t$. That is the whole content of the \"I\" in ARIMA"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "For a random walk, the standard deviation of the original series exceeds that of the differenced series, because trend and growing variance inflate the original's variability.",
+     "concept": "Random Walk",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Random Walk",
+       "quote": "The variance grows **without bound** in $t$, so the series is not [[Stationarity|stationary]] and has no mean to revert to — it wanders"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "definition",
+     "statement": "A white noise process is a sequence of uncorrelated random variables with constant mean (zero) and constant variance.",
+     "concept": "White Noise",
+     "status": "linked",
+     "places": [
+      {
+       "page": "White Noise",
+       "quote": "**White noise** is a [[Time Series]] of uncorrelated, mean-zero, constant-variance terms."
+      }
+     ]
+    }
+   ]
+  },
+  "srm-032": {
+   "path": "questions/exam-srm/srm-032.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:4b0b322dd6e8aa94b4318e38fbe07144c577aa4bc30c26b8a747462945c01d72",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "Clustering is a set of techniques for finding homogeneous subgroups among observations (or features) in a data set, so that members of a group are similar to each other and different from other groups.",
+     "concept": "Clustering",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Clustering",
+       "quote": "**Clustering** is an unsupervised [[Statistical Learning]] technique that groups observations into clusters so that observations within a cluster are similar to each other and dissimilar from those in other clusters."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "Clustering is unsupervised learning because there is no response (target) variable, and it is often used in exploratory data analysis.",
+     "concept": "Unsupervised Learning",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Clustering",
+       "quote": "There is no response variable $Y$ — the goal is to discover structure in $\\mathbf{X}$."
+      },
+      {
+       "page": "Unsupervised Learning",
+       "quote": "**Unsupervised learning** looks for structure in predictors $X$ when there is no response $Y$ to predict."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "Clustering can be applied either to observations (rows) using the features, or to features (columns) using the observations, since the roles of rows and columns can be reversed in the algorithm.",
+     "concept": "Clustering",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "srm-033": {
+   "path": "questions/exam-srm/srm-033.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:9d5a15c6ff94fbabc8d046334e3ccb506ece47abbfff6054bd030e607af56aed",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "procedure",
+     "statement": "To predict with a regression tree, start at the root and follow each split's condition (true goes to one branch, false to the other) for the observation's predictor values until reaching a terminal node (leaf).",
+     "concept": "Regression Trees",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Regression Tree",
+       "quote": "Each prediction follows the splits to a leaf and returns that leaf's training mean."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "The predicted response for an observation in a regression tree is the value at its leaf, which is the mean response of the training observations in that leaf region.",
+     "concept": "Regression Trees",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Regression Tree",
+       "quote": "every observation that falls in region $R_j$ is predicted by the mean response $\\hat{y}_{R_j}$ of the training observations in that region."
+      },
+      {
+       "page": "Decision Tree",
+       "quote": "**Regression tree prediction:** $\\hat{y} = \\frac{1}{|R_m|}\\sum_{i \\in R_m} y_i$ for region $R_m$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "definition",
+     "statement": "Each internal node of a regression tree splits on a predictor and a cutoff (e.g. x < c), dividing observations into two branches based on whether the condition holds.",
+     "concept": "Regression Trees",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Regression Tree",
+       "quote": "a split on predictor $X_j$ at cutpoint $s$ sends $R_1(j,s) = \\{X \\mid X_j < s\\}$ to one branch and $R_2(j,s) = \\{X \\mid X_j \\geq s\\}$ to the other."
+      },
+      {
+       "page": "Decision Tree",
+       "quote": "partitions the predictor space into rectangular regions by applying a sequence of binary splits"
+      }
+     ]
+    }
+   ]
+  },
+  "srm-034": {
+   "path": "questions/exam-srm/srm-034.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:7999a6f3c641f29a8c4446162f31f8a1939349f857f1f71ca30174a08474344c",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "K-means clustering begins with a random initial assignment of observations to clusters and converges only to a local optimum, so different runs with the same K can yield different cluster assignments.",
+     "concept": "K-Means Clustering",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "K-Means Clustering",
+       "quote": "The algorithm is guaranteed to **converge** but may reach a **local minimum** — run multiple times with different initializations and keep the best result (lowest WCSS)"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "Hierarchical clustering is deterministic: given the data, a linkage and a dissimilarity measure, it produces the same dendrogram, so cutting at a given number of clusters gives the same assignments each time.",
+     "concept": "Hierarchical Clustering",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Hierarchical Clustering",
+       "quote": "**Deterministic**: unlike [[K-Means Clustering]] there is no random initialization, so the same data always give the same tree"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "Hierarchical clustering (cutting a dendrogram) and K-means use different algorithms, so for the same number of clusters they need not produce the same cluster assignments.",
+     "concept": "Hierarchical Clustering",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Hierarchical Clustering",
+       "quote": "No $K$ is chosen in advance — the number of clusters is decided *afterwards* by choosing a height at which to cut the dendrogram"
+      },
+      {
+       "page": "Clustering",
+       "quote": "| **Partition-based** | [[K-Means Clustering]] | Requires $K$ prespecified; minimizes within-cluster variance |"
+      }
+     ]
+    }
+   ]
+  },
+  "srm-035": {
+   "path": "questions/exam-srm/srm-035.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:8b81a2203ff4b7367dd1088cec1312222e4ca9ccd5a08c190e7aca5e445797c0",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "A scree plot graphs the proportion of variance explained (or eigenvalue) by each principal component against the component number, in decreasing order.",
+     "concept": "Principal Components Analysis",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Proportion of Variance Explained",
+       "quote": "PVE is **decreasing in $m$** by construction, and the cumulative curve rises to 1 at the last component, $m = \\min(n-1, p)$"
+      },
+      {
+       "page": "Scree Plot",
+       "quote": "A **scree plot** graphs the eigenvalues (or the [[Proportion of Variance Explained]]) of a [[Principal Components Analysis]] against the component number."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "The cumulative proportion of variance explained by the first k principal components is the sum of the individual proportions of variance explained by those components.",
+     "concept": "Principal Components Analysis",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Proportion of Variance Explained",
+       "quote": "$$\\text{cumulative: } \\sum_{m=1}^{M}\\mathrm{PVE}_m$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "To choose the number of principal components needed to reach a target share of variance, add components in order of decreasing variance explained until the cumulative proportion meets or exceeds the target.",
+     "concept": "Principal Components Analysis",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Proportion of Variance Explained",
+       "quote": "Cumulative: 45%, 68.75%, **81.25%** — **three components** clear 80%, cutting eight variables to three at a 19% loss of variance."
+      },
+      {
+       "page": "Scree Plot",
+       "quote": "or keep enough components to reach a cumulative PVE target"
+      }
+     ]
+    }
+   ]
+  },
+  "srm-036": {
+   "path": "questions/exam-srm/srm-036.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:bee41705f69c09e2d6dcbbd8bc66e3928b44db01fc0724bdca166e7bcf92c41f",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "Hierarchical clustering assigns every observation to a cluster, so extreme outliers are not left unassigned (unlike methods that allow noise points).",
+     "concept": "Hierarchical Clustering",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Clustering",
+       "quote": "3. Repeat until all observations are in one cluster"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "A dendrogram can be cut at different heights to obtain any desired number of clusters, so a single dendrogram yields clusterings with different numbers of clusters.",
+     "concept": "Dendrogram",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Hierarchical Clustering",
+       "quote": "No $K$ is chosen in advance — the number of clusters is decided *afterwards* by choosing a height at which to cut the dendrogram"
+      },
+      {
+       "page": "Dendrogram",
+       "quote": "One tree gives every $K$ at once: cutting high gives few clusters, cutting low gives many"
+      },
+      {
+       "page": "Clustering",
+       "quote": "4. Cut the dendrogram at a chosen height to obtain $K$ clusters"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "Clustering methods, including hierarchical clustering, have high variance and are not robust: small changes in the data or a different sample can lead to different clusters.",
+     "concept": "Hierarchical Clustering",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Clustering",
+       "quote": "Whether they would reappear in an independent sample is a hard question, so clusters used as [[Data Segmentation|segments]] should be checked on other data and against what the business knows"
+      }
+     ]
+    }
+   ]
+  },
+  "srm-037": {
+   "path": "questions/exam-srm/srm-037.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:a404cda2747c1eb09ad95e1f7d84790ef065bfcb57bbc9f169a93327545666ac",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "Principal component loading vectors are unique only up to a sign flip: flipping the signs of all loadings in a component yields an equivalent loading vector, and programs may choose the sign arbitrarily.",
+     "concept": "Principal Components Analysis",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Loading Vector",
+       "quote": "**Sign is arbitrary**: $\\boldsymbol{\\phi}_m$ and $-\\boldsymbol{\\phi}_m$ describe the same component, so two software packages may report opposite signs (the scores flip with the loadings)"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "Flipping the sign of only some loadings in a component (not all of them) does not give an equivalent principal component loading vector, so such a difference cannot be explained by an arbitrary sign choice.",
+     "concept": "Principal Components Analysis",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Loading Vector",
+       "quote": "**Sign is arbitrary**: $\\boldsymbol{\\phi}_m$ and $-\\boldsymbol{\\phi}_m$ describe the same component, so two software packages may report opposite signs (the scores flip with the loadings)"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "Whether variables are scaled to unit standard deviation before PCA changes the resulting loadings, so programs with different default scaling settings can give different loadings.",
+     "concept": "Principal Components Analysis",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Principal Components Analysis",
+       "quote": "PCA requires **standardizing** predictors (subtract mean, divide by SD) when variables are on different scales"
+      },
+      {
+       "page": "Unsupervised Learning",
+       "quote": "Results are **scale-sensitive**: both PCA and distance-based clustering must have their variables standardized when units differ"
+      },
+      {
+       "page": "Principal Components Regression",
+       "quote": "Standardize each predictor before computing the components. Otherwise the high-variance variables dominate them."
+      }
+     ]
+    }
+   ]
+  },
+  "srm-038": {
+   "path": "questions/exam-srm/srm-038.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:4ad991c17b03edecd63d2734a93c03c3026db15c5e2d271703da5df3b43f0d6f",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "A linear trend in time model has the form y_t = β0 + β1 t + ε_t, where the deterministic trend is linear in t and the errors ε_t are white noise (not a random walk).",
+     "concept": "Linear Trend in Time Model",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Deterministic and Stochastic Trend",
+       "quote": "\\text{deterministic: } Y_t = \\alpha + \\beta t + z_t, \\quad z_t \\text{ stationary}"
+      },
+      {
+       "page": "Linear Trend",
+       "quote": "A **Linear Trend** models a ratemaking statistic as changing by a **constant amount** per unit of time"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "definition",
+     "statement": "A random walk with drift is y_t = y_0 + μ_c t + u_t, where u_t is the cumulative sum of white noise terms, equivalent to y_t = y_{t-1} + μ_c + ε_t, so that the first differences c_t = y_t − y_{t-1} have constant mean μ_c.",
+     "concept": "Random Walk Model",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Random Walk",
+       "quote": "A **random walk with drift**, $Y_t = \\delta + Y_{t-1} + \\varepsilon_t$, adds a linear trend of slope $\\delta$ — a [[Deterministic and Stochastic Trend|stochastic trend]], not a deterministic one"
+      },
+      {
+       "page": "Deterministic and Stochastic Trend",
+       "quote": "\\text{stochastic: } Y_t = \\delta + Y_{t-1} + \\varepsilon_t \\quad (\\text{[[Random Walk]] with drift})"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "A random walk with drift and a linear trend in time model both have a linear trend component in expected value, differing only in the error structure (white noise versus a random walk), and the two error structures are hard to compare, so the comparison remains unclear even when the drift is zero.",
+     "concept": "Random Walk Model",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Random Walk",
+       "quote": "A **random walk with drift**, $Y_t = \\delta + Y_{t-1} + \\varepsilon_t$, adds a linear trend of slope $\\delta$ — a [[Deterministic and Stochastic Trend|stochastic trend]], not a deterministic one"
+      },
+      {
+       "page": "Deterministic and Stochastic Trend",
+       "quote": "They look alike on a plot and demand opposite treatments"
+      }
+     ]
+    }
+   ]
+  },
+  "srm-039": {
+   "path": "questions/exam-srm/srm-039.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:10b6fa6905b0743f4bd4af39f1749c8b693cfc350d5e92cb24965ccabc59671b",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "A linear model (including a GLM) only needs to be linear in the coefficients, not in the predictors, so polynomial terms such as x and x^2 can be included to fit curved relationships.",
+     "concept": "Linear Regression Model",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Polynomial Regression",
+       "quote": "**Polynomial Regression** extends [[Linear Regression]] to a non-linear relationship by adding powers of the predictor as extra predictors."
+      },
+      {
+       "page": "Polynomial Regression",
+       "quote": "Its coefficients are still estimated by least squares, because it is a standard linear model in the predictors $x_i, x_i^2, \\dots, x_i^d$."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "Linear models and GLMs assume (for ordinary least squares) constant variance of the response given the predictors (homoscedasticity), which can be checked by whether the spread of points around the fitted curve is similar across x.",
+     "concept": "Linear Regression Model",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Linear Regression",
+       "quote": "The four assumptions — **linearity, independence, constant variance, normality of errors** — are exactly what the diagnostic plots check: a [[Residual Plot]] for the first and third, a [[QQ Plot]] for the fourth"
+      },
+      {
+       "page": "Residual Plot",
+       "quote": "| Fan shape (spread increases) | **Heteroscedasticity** — variance is not constant |"
+      },
+      {
+       "page": "Scatter Plot",
+       "quote": "a fan that widens to the right says the variance grows with the mean, which is an argument for a [[Generalized Linear Model]] rather than [[Linear Regression]]"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "Decision trees and random forests handle nonlinear relationships but are not preferred merely because predictors are quantitative; they tend to perform relatively better with qualitative predictors, and a clear or nonlinear relationship does not by itself favor them over a GLM.",
+     "concept": "Random Forest",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Regression Tree",
+       "quote": "A single tree has high variance, however, and a linear model predicts better when the true relationship is close to linear."
+      }
+     ]
+    }
+   ]
+  },
+  "srm-040": {
+   "path": "questions/exam-srm/srm-040.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:134080670b81917b2514106e67a80e8438558a4f03dd05bdc67821e9d956ec37",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "In a dendrogram, the height at which clusters fuse indicates dissimilarity: at the lowest height each observation is its own cluster, and cutting at a greater height yields fewer clusters, so cutting lower never decreases the number of clusters.",
+     "concept": "Hierarchical Clustering",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Dendrogram",
+       "quote": "Height is the only thing that means anything.** The lower two observations fuse, the more similar they are"
+      },
+      {
+       "page": "Dendrogram",
+       "quote": "One tree gives every $K$ at once: cutting high gives few clusters, cutting low gives many"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "K-means clustering takes the number of clusters K as a pre-specified input and assigns observations to clusters by iteratively minimizing within-cluster variation, without needing to plot the data first.",
+     "concept": "K-Means Clustering",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "K-Means Clustering",
+       "quote": "1. **Initialize**: randomly assign each observation to one of $K$ clusters"
+      },
+      {
+       "page": "K-Means Clustering",
+       "quote": "**K-Means Clustering** is a partition-based [[Clustering]] algorithm that partitions $n$ observations into $K$ non-overlapping clusters by minimizing **total within-cluster variance** (the within-cluster sum of squares, WCSS)."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "Hierarchical clustering produces nested clusters, so the clusters at a given number are tied to those already formed, whereas K-means performs a fresh analysis for each K; when the true clusters are not nested, hierarchical clustering can give a worse result than K-means for the same number of clusters.",
+     "concept": "Hierarchical Clustering",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Hierarchical Clustering",
+       "quote": "**Deterministic**: unlike [[K-Means Clustering]] there is no random initialization, so the same data always give the same tree"
+      },
+      {
+       "page": "Hierarchical Clustering",
+       "quote": "The nested structure is an **assumption**: forcing a hierarchy on data whose natural groupings are not nested (e.g. splitting by sex and by nationality) distorts the result"
+      }
+     ]
+    }
+   ]
+  },
+  "srm-041": {
+   "path": "questions/exam-srm/srm-041.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:7620f5697f26f9e0ea7ff39d58ff38d542d0847c231532f5d5f70396e3fceee6",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "A random forest builds many trees on bootstrap samples, considering only a random subset of m of the p features at each split, which decorrelates the trees.",
+     "concept": "Random Forest",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Random Forest",
+       "quote": "A **random forest** is [[Bagging|bagged]] [[Decision Tree|trees]] with one extra step: at *each split*, only a random subset of $m$ predictors is eligible. That decorrelates the trees, so averaging removes more variance than bagging can."
+      },
+      {
+       "page": "Tree Ensemble",
+       "quote": "| **Random Forest** | Bagging + random feature subsets | Decorrelates trees; typically $\\sqrt{p}$ features per split |"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "Bagging is the special case of a random forest with m = p, so every split considers all predictors; random forests proper use m < p.",
+     "concept": "Random Forest",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Random Forest",
+       "quote": "$m = p$ **is** bagging — bagging is the special case, not a different algorithm"
+      },
+      {
+       "page": "Hyperparameter",
+       "quote": "random forests — $B$ and $m$, typically $m \\approx \\sqrt{p}$ ($m = p$ is bagging)"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "With m of p predictors chosen at random at each split, the probability that a given predictor (such as the strongest) is not among those considered is (p - m)/p.",
+     "concept": "Random Forest",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "Typical choices for the number of features per split in a random forest are m = sqrt(p) for classification and m = p/3 for regression, not p/2.",
+     "concept": "Random Forest",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Random Forest",
+       "quote": "$$m \\approx \\sqrt{p} \\ \\text{(classification)}, \\qquad m \\approx p/3 \\ \\text{(regression)}$$"
+      }
+     ]
+    }
+   ]
+  },
+  "srm-042": {
+   "path": "questions/exam-srm/srm-042.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:fa22cd57b2738b1a6f23a7a578ef80e4b52afb42af3273b1d27938c86256afb3",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "The linear probability model for a binary response has three main drawbacks: fitted values can fall outside [0,1] (poor fitted values), heteroscedastic errors, and residual analysis that is not meaningful.",
+     "concept": "Linear Probability Model",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Logistic Regression",
+       "quote": "Why Not Ordinary Regression? {Example}"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "Logistic and probit regression use a link function that maps the linear predictor into (0,1), which avoids the drawbacks of the linear probability model.",
+     "concept": "Binary Dependent Variable Regression",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Logistic Regression",
+       "quote": "the **logit** [[Link Function]] maps the probability $\\pi \\in (0,1)$ onto the whole real line, so the linear predictor can take any value and the fitted probability always stays between $0$ and $1$."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The logit (logistic) function is π(z) = e^z / (1 + e^z).",
+     "concept": "Logistic Regression",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Logistic Regression",
+       "quote": "$$\\pi = \\frac{e^{\\eta}}{1 + e^{\\eta}} = \\frac{1}{1 + e^{-\\eta}}$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "The probit function is π(z) = Φ(z), where Φ is the standard normal cumulative distribution function.",
+     "concept": "Probit Regression",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Link Function",
+       "quote": "| Probit | $\\Phi^{-1}(\\mu)$ | $\\Phi(\\eta)$ | Binary outcomes |"
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "The logit and probit functions are very similar in shape and give similar fitted results; they are not substantially different.",
+     "concept": "Logistic Regression",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "srm-043": {
+   "path": "questions/exam-srm/srm-043.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:ff7817967311a8b198221e869e2fda9ac8ead3ee2ad4802f46730487de026b9b",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "Clustering is an unsupervised learning method that discovers structure in data by finding homogeneous subgroups among observations, without a response variable.",
+     "concept": "Clustering",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Clustering",
+       "quote": "**Clustering** is an unsupervised [[Statistical Learning]] technique that groups observations into clusters so that observations within a cluster are similar to each other and dissimilar from those in other clusters."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "Principal components analysis, not clustering, is the unsupervised technique used to reduce the dimensionality of a dataset while retaining a large fraction of the variance.",
+     "concept": "Principal Components Analysis",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Unsupervised Learning",
+       "quote": "The two MAS-II syllabus methods: [[Principal Components Analysis]] (find a few directions that carry most of the variance) and [[Clustering]] (find groups of similar observations)"
+      },
+      {
+       "page": "Principal Components Analysis",
+       "quote": "**Principal Components Analysis (PCA)** is an unsupervised [[Statistical Learning]] technique that finds a low-dimensional representation of a high-dimensional dataset by identifying the directions (**principal components**) of maximum variance."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "K-means clustering requires the number of clusters K to be specified in advance.",
+     "concept": "K-Means Clustering",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Clustering",
+       "quote": "| **Partition-based** | [[K-Means Clustering]] | Requires $K$ prespecified; minimizes within-cluster variance |"
+      },
+      {
+       "page": "K-Means Clustering",
+       "quote": "**K-Means Clustering** is a partition-based [[Clustering]] algorithm that partitions $n$ observations into $K$ non-overlapping clusters by minimizing **total within-cluster variance** (the within-cluster sum of squares, WCSS)."
+      }
+     ]
+    }
+   ]
+  },
+  "srm-044": {
+   "path": "questions/exam-srm/srm-044.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:f4399c1f98fa7f699827c8ba5ad1f9570d4136252fb8170ccc2791b0ab99625a",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "An intercept-only regression model (no predictors) has fitted values equal to the sample mean, so its residual sum of squares equals the total sum of squares.",
+     "concept": "Linear Regression Sum of Squares Decomposition",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Residual Sum of Squares",
+       "quote": "- For [[Decision Tree]] regression, RSS is the split criterion"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The F-statistic for comparing a restricted model to a larger model is F = [(RSS_restricted − RSS_full)/q] / [RSS_full/(n − p − 1)], where q is the number of added predictors and p is the number of predictors in the full model.",
+     "concept": "F-test for Nested Linear Regression Models",
+     "status": "linked",
+     "places": [
+      {
+       "page": "R-Squared",
+       "quote": "So $F = \\dfrac{(\\text{SS}_\\text{Tot} - \\text{SS}_\\text{Res})/p}{\\text{SS}_\\text{Res}/(n-p-1)}$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "The F-statistic has numerator degrees of freedom equal to the number of added predictors (q) and denominator degrees of freedom equal to n minus the number of estimated coefficients in the full model (including the intercept).",
+     "concept": "F-test for Nested Linear Regression Models",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "F-Distribution",
+       "quote": "dropping $q$ of the $p$ predictors from a [[Linear Regression|linear regression]] fitted to $n$ observations raises the [[Residual Sum of Squares|residual sum of squares]] from $\\text{RSS}$ to $\\text{RSS}_0$"
+      }
+     ]
+    }
+   ]
+  },
+  "srm-045": {
+   "path": "questions/exam-srm/srm-045.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:ba0ad9a2c3e462dd8639c37d57409136dab35e5a9bb7f2e0ec126b60e550a041",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "In a GLM with a log link, the expected response equals the exponential of the linear predictor (the inverse of the log link is exp).",
+     "concept": "Generalized Linear Models",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Link Function",
+       "quote": "| Log | $\\ln\\mu$ | $e^\\eta$ | Poisson (counts), Gamma (severity) |"
+      },
+      {
+       "page": "Fitted Values",
+       "quote": "With a log link $\\hat\\mu_i = e^{\\hat\\eta_i}$, and a log-exposure [[Offset Variable|offset]] is part of $\\hat\\eta_i$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "To compute a GLM prediction, sum the intercept and each coefficient multiplied by its predictor value, including an interaction term's coefficient multiplied by the product of the interacting indicator variables.",
+     "concept": "Generalized Linear Models",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Generalized Linear Model",
+       "quote": "$$= \\beta_0 + \\beta_1 x_{i1} + \\cdots + \\beta_p x_{ip}$$"
+      },
+      {
+       "page": "Design Matrix",
+       "quote": "an [[Interaction]] contributes the product of its columns; a quadratic term contributes a column of $x^2$"
+      }
+     ]
+    }
+   ]
+  },
+  "srm-046": {
+   "path": "questions/exam-srm/srm-046.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:75cc42484c069a351d0baea5a82b1ec782dafe40f6972a3ef6af7d3371465889",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "Exponential smoothing recursion: s_t = (1-w) y_t + w s_{t-1}, where w is the smoothing weight on the prior smoothed value.",
+     "concept": "Exponential Smoothing",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Exponential Smoothing",
+       "quote": "$$\\hat{Y}_{t+1} = \\alpha Y_t + (1-\\alpha)\\hat{Y}_t, \\qquad 0 < \\alpha < 1$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "With simple exponential smoothing, the forecast for any future time is the current smoothed value s_T (a flat forecast regardless of horizon).",
+     "concept": "Exponential Smoothing",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Exponential Smoothing",
+       "quote": "**Simple** smoothing has a flat $h$-step forecast — it assumes no trend, and is the optimal forecast for an ARIMA(0,1,1)"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "Double exponential smoothing computes a second smoothed series by applying the smoothing recursion to the first smoothed series: s_t^(2) = (1-w) s_t^(1) + w s_{t-1}^(2).",
+     "concept": "Double Exponential Smoothing",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "In double exponential smoothing the trend estimate is b_T = ((1-w)/w)(s_T^(1) - s_T^(2)).",
+     "concept": "Double Exponential Smoothing",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r5",
+     "kind": "formula",
+     "statement": "In double exponential smoothing the level (intercept) at time T is a_T = 2 s_T^(1) - s_T^(2).",
+     "concept": "Double Exponential Smoothing",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r6",
+     "kind": "formula",
+     "statement": "The double exponential smoothing forecast l steps ahead is the level plus the trend times l: ŷ_{T+l} = a_T + b_T · l.",
+     "concept": "Double Exponential Smoothing",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "srm-048": {
+   "path": "questions/exam-srm/srm-048.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:55e9fff76550f4be8f80b9383a31fa44d13d4de28d9edd3fca635c205f149bcf",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "In a regression tree built by recursive binary splitting, each internal node tests a predictor against a threshold, and each split divides the current region into two sub-regions, with the final unsplit regions (leaves/terminal nodes) forming a partition of the predictor space.",
+     "concept": "Decision Trees",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Decision Tree",
+       "quote": "A **Decision Tree** is a [[Statistical Learning]] method that partitions the predictor space into rectangular regions by applying a sequence of binary splits, then predicts a constant value (regression) or class (classification) within each region."
+      },
+      {
+       "page": "Regression Tree",
+       "quote": "recursive binary splitting divides the predictor space into regions $R_1, \\ldots, R_J$, and every observation that falls in region $R_j$ is predicted by the mean response $\\hat{y}_{R_j}$ of the training observations in that region."
+      },
+      {
+       "page": "Classification Tree",
+       "quote": "recursive binary splitting divides the predictor space into regions $R_1, \\ldots, R_M$, and each observation is predicted to belong to the **most commonly occurring class** among the training observations in its region."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "To draw a tree as a partition plot, a split on a predictor at a threshold is drawn as a line perpendicular to that predictor's axis (e.g., X1 < t is a horizontal line at t on the X1 vertical axis), and the 'true' branch corresponds to the side where the inequality holds.",
+     "concept": "Decision Trees",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Regression Tree",
+       "quote": "ISLR sends $X_j < s$ to the left. An observation exactly at the cutpoint goes to the branch for $X_j \\geq s$ unless the tree states otherwise."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "Splits made after an earlier split apply only within the region produced by that branch, so a later split's line extends only across that sub-region and not across the whole plot.",
+     "concept": "Decision Trees",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Regression Tree",
+       "quote": "Any cutpoint between 4 and 6 gives the same split, and the urban indicator is considered again inside each branch at the next step."
+      }
+     ]
+    }
+   ]
+  },
+  "srm-049": {
+   "path": "questions/exam-srm/srm-049.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:4bd836cc4cd34a4a4afbdd65b12c852afbc1eb2015c33e9a5864acc171e4f483",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "A confidence interval for the response at a given set of predictors is an interval estimate of the expected value (mean response) E[y|x], reflecting only the error in estimating the regression function.",
+     "concept": "Confidence Interval for Mean Response in Linear Regression",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Prediction Interval",
+       "quote": "The confidence interval for the mean response $E(Y)$ at $x_0$ is $\\hat{y}_0 \\pm t_{\\alpha/2,\\,n-2}\\, s \\sqrt{1/n + (x_0 - \\bar{x})^2/S_{xx}}$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "definition",
+     "statement": "A prediction interval for the response at a given set of predictors is an interval for an individual new observation y, reflecting both estimation error of the mean and the irreducible error variance of the new observation.",
+     "concept": "Prediction Interval in Linear Regression",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Prediction Interval",
+       "quote": "**A prediction interval** is a range that will contain a *future observation*, such as next quarter's claim frequency or next month's claim count, with a stated probability."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "As the sample size grows without bound, the estimation error in the fitted mean response goes to zero, so the width of the confidence interval for the mean response approaches zero.",
+     "concept": "Confidence Interval for Mean Response in Linear Regression",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Confidence Interval",
+       "quote": "Width shrinks like $1/\\sqrt{n}$ and grows with confidence"
+      },
+      {
+       "page": "Prediction Interval",
+       "quote": "The \"$1 +$\" is the new observation's own noise. It is why a prediction interval does not shrink to zero as $n$ grows, while the confidence interval for the mean does."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "The width of a prediction interval does not shrink to zero as the sample size grows, because the irreducible error variance of a new observation does not depend on the sample size.",
+     "concept": "Prediction Interval in Linear Regression",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Prediction Interval",
+       "quote": "The \"$1 +$\" is the new observation's own noise. It is why a prediction interval does not shrink to zero as $n$ grows, while the confidence interval for the mean does."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "For the same predictors and confidence level, a prediction interval is always wider than the confidence interval for the mean response, because it includes the additional variability of an individual observation.",
+     "concept": "Prediction Interval in Linear Regression",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Prediction Interval",
+       "quote": "A prediction interval must also allow for the random shock the new observation will carry, so it is always wider."
+      }
+     ]
+    }
+   ]
+  },
+  "srm-050": {
+   "path": "questions/exam-srm/srm-050.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:904d34589cf11b0c9fca97c70b5b28b7a0cce6e994821107d0915ac6e4658b0b",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "Interpretability and flexibility trade off: more flexible statistical learning methods are generally harder to interpret, while simpler, less flexible methods (e.g., linear regression) are more interpretable.",
+     "concept": "Flexibility-Interpretability Trade-off",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Interpretability",
+       "quote": "Interpretability is a property of the model"
+      },
+      {
+       "page": "Interpretability",
+       "quote": "Linear is not automatically interpretable"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "When inference (understanding the relationship between predictors and response) is the goal, simpler and less flexible methods are preferred because they are easier to interpret.",
+     "concept": "Prediction versus Inference",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Statistical Learning",
+       "quote": "**Inference**: understand which predictors affect $Y$ and how; interpretability is essential"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "The lasso is a relatively simple, less flexible method that yields an interpretable model by shrinking some coefficients to exactly zero (variable selection), whereas bagging averages many trees and is more flexible and harder to interpret.",
+     "concept": "Lasso",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Regularization",
+       "quote": "**Lasso** ($\\ell_1$) sets some coefficients exactly to zero, so it performs [[Variable Selection]] as part of the fit — good when the truth is sparse"
+      },
+      {
+       "page": "Bagging",
+       "quote": "It leaves bias essentially unchanged and cuts variance"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "More flexible methods tend to overfit the training data, so greater flexibility does not guarantee better accuracy on unseen (test) data; test error is typically U-shaped in flexibility.",
+     "concept": "Overfitting and Bias-Variance Trade-off",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Statistical Learning",
+       "quote": "**Flexibility is not accuracy:** A more flexible method has lower bias but higher variance; on new data it can predict worse than a simpler one."
+      },
+      {
+       "page": "Overfitting",
+       "quote": "Test MSE is U-shaped instead: past the minimum, each added parameter fits errors $\\varepsilon_i$ that belong to this sample only and will not recur, so the variance of $\\hat{f}$ rises by more than its squared bias falls."
+      }
+     ]
+    }
+   ]
+  },
+  "srm-051": {
+   "path": "questions/exam-srm/srm-051.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:e8070a07ac5542f60d9e5b80fac4aab6bdafa21170b9cbb44858f3160e0e4921",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "procedure",
+     "statement": "To predict with a regression tree, start at the root and follow the split condition at each internal node (yes/no) according to the observation's predictor values until reaching a terminal node (leaf).",
+     "concept": "Regression Trees",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Regression Tree",
+       "quote": "Each prediction follows the splits to a leaf and returns that leaf's training mean."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "The predicted response for an observation in a regression tree is the value assigned to its leaf (the mean response of training observations in that region), so observations in the same leaf get the same prediction.",
+     "concept": "Regression Trees",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Regression Tree",
+       "quote": "every observation that falls in region $R_j$ is predicted by the mean response $\\hat{y}_{R_j}$ of the training observations in that region."
+      },
+      {
+       "page": "Decision Tree",
+       "quote": "then predicts a constant value (regression) or class (classification) within each region."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "In a regression tree, a predictor is only used for an observation if it appears in a split on that observation's path; splits in other branches do not affect its prediction.",
+     "concept": "Regression Trees",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Regression Tree",
+       "quote": "Urban garaging adds $9.2 - 7.6 = 1.6$ thousand for vehicles under 5 years old and nothing for older ones, because the right branch never splits on it."
+      }
+     ]
+    }
+   ]
+  },
+  "srm-052": {
+   "path": "questions/exam-srm/srm-052.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:79f3d1b8b85883c35e4d4217bdee1273de8dcf0936d0b8edabac155a8c3c44ea",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "A Pearson residual is the difference between the observed and fitted value divided by the estimated standard deviation of the response (a standardized residual).",
+     "concept": "Pearson Residuals",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Pearson Residual",
+       "quote": "**Pearson Residual** is an actual incremental loss minus its fitted value, divided by the standard deviation the model implies for that cell."
+      },
+      {
+       "page": "Residual",
+       "quote": "The **Pearson residual** divides by the standard deviation implied by the [[Variance Function|variance function]] $V$."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "The sum of squared Pearson residuals gives the Pearson chi-square goodness-of-fit statistic for a generalized linear model.",
+     "concept": "Pearson Chi-Square Statistic",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Residual",
+       "quote": "Its squares sum to the Pearson $\\chi^2$ statistic, which divided by the residual degrees of freedom estimates the [[Dispersion Parameter|dispersion]]"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "Plotting Pearson residuals against candidate explanatory variables not in the model can reveal patterns indicating that adding those variables would improve the model specification.",
+     "concept": "Residual Analysis",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Model Diagnostics",
+       "quote": "a [[Residual Plot]] against the fitted values and against each predictor, where curvature means a missing term or transformation"
+      },
+      {
+       "page": "Deviance Residual",
+       "quote": "Plotted against accident, development and calendar period or the fitted value, the residuals should scatter evenly about zero with constant spread. A trend means the cell means are wrong, such as a missing effect."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "Because Pearson residuals are standardized, unusually large residuals in absolute value flag outliers or unusual observations.",
+     "concept": "Residual Analysis",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Residual",
+       "quote": "either way, values beyond about $\\pm 3$ flag an [[Outlier|outlier]]"
+      },
+      {
+       "page": "Deviance Residual",
+       "quote": "Standardized by $\\hat\\phi$ alone the residual is $\\sqrt{858.1/100} = 2.93$, which looks like an outlier."
+      }
+     ]
+    }
+   ]
+  },
+  "srm-053": {
+   "path": "questions/exam-srm/srm-053.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:f3bfc0ed68b67d9fada101ebd0db3df2acb4dfd98849cda07489339e0f87d720",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "In the simple linear regression model Y = β0 + β1 X + ε, the intercept β0 is the expected value of Y when X = 0, not the overall expected value of Y.",
+     "concept": "Simple Linear Regression",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Linear Regression",
+       "quote": "$\\hat\\beta_j$ is the change in $E[Y]$ per unit of $x_j$ **holding the other predictors fixed**"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "definition",
+     "statement": "In simple linear regression the slope β1 is the average change in Y associated with a one-unit increase in X.",
+     "concept": "Simple Linear Regression",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Linear Regression",
+       "quote": "$\\hat\\beta_j$ is the change in $E[Y]$ per unit of $x_j$ **holding the other predictors fixed**"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "The error term ε in the linear regression model is assumed to be independent of X, with mean zero.",
+     "concept": "Linear Regression Model Assumptions",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Linear Regression",
+       "quote": "$$Y_i = \\beta_0 + \\beta_1 x_{i1} + \\cdots + \\beta_p x_{ip} + \\varepsilon_i, \\qquad \\varepsilon_i \\stackrel{\\text{iid}}{\\sim} N(0, \\sigma^2)$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "definition",
+     "statement": "The equation Y = β0 + β1 X + ε defines the population regression line, the true relationship between X and Y, whose coefficients are unknown and estimated from data.",
+     "concept": "Population Regression Line",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "The method of least squares estimates the regression coefficients by minimizing the residual sum of squares.",
+     "concept": "Least Squares Estimation",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Ordinary Least Squares",
+       "quote": "**Ordinary least squares (OLS)** estimates the coefficients of a [[Linear Regression|linear regression]] by choosing the $\\hat{\\boldsymbol\\beta}$ that minimizes the [[Residual Sum of Squares|residual sum of squares]]"
+      }
+     ]
+    }
+   ]
+  },
+  "srm-054": {
+   "path": "questions/exam-srm/srm-054.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:70e1a3f1b93b2c0ad5bc8d3d723246c8a2b7c3a8177887a10d2c3ec2a4649439",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "A predictor in a regression is statistically insignificant when its t-test p-value exceeds the chosen significance level, making it a candidate for removal from the model.",
+     "concept": "t-test for Regression Coefficients",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "p-Value",
+       "quote": "$$\\text{reject } H_0 \\iff p < \\alpha$$"
+      },
+      {
+       "page": "Parameter Estimate Tables",
+       "quote": "A small p-value (e.g., $< 0.05$) indicates the predictor is statistically significant"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "In backward selection, remove only one insignificant predictor at a time, namely the one with the highest p-value, then refit the model and reassess.",
+     "concept": "Backward Selection",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Variable Selection",
+       "quote": "Start with all predictors (needs $n > p$); at each step remove the least useful one"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "Removing a predictor changes the remaining coefficient estimates and p-values, so a variable that was insignificant may become significant after refitting; hence insignificant variables should not be dropped simultaneously.",
+     "concept": "Backward Selection",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "p-Value",
+       "quote": "In [[Parameter Estimate Tables]] each coefficient's p-value tests $H_0: \\beta_j = 0$ given the other terms in the model; it says nothing about the variable in isolation"
+      },
+      {
+       "page": "Multicollinearity",
+       "quote": "coefficients that flip sign when a variable is added or a few rows change"
+      }
+     ]
+    }
+   ]
+  },
+  "srm-055": {
+   "path": "questions/exam-srm/srm-055.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:2561e2e56f5477b13043941ba8ce5eef45928f15ec7294771f83b110f556a001",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "For a random walk with drift, the one-step forecast is the previous observation plus the estimated mean of the white noise (drift) term: \\hat{y}_{t+1} = y_t + \\hat{\\mu}.",
+     "concept": "Random Walk Model",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Random Walk",
+       "quote": "\\hat Y_{43} = Y_{40} + 3(1.4) = 218 + 4.2 = 222.2"
+      },
+      {
+       "page": "Deterministic and Stochastic Trend",
+       "quote": "Long-horizon forecast | the trend line | last value plus $h\\delta$, with a widening interval"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "definition",
+     "statement": "A one-step forecast residual (error) is the actual observation minus its one-step predicted value, and it is used to evaluate a model on a holdout set.",
+     "concept": "Time Series Model Validation",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Time Series Forecast",
+       "quote": "Assess a forecast on a held-out tail of the series, not on the fitted data, using MAE, RMSE or MAPE"
+      },
+      {
+       "page": "Residual",
+       "quote": "An [[ARIMA]] model's residuals are its one-step-ahead forecast errors, $\\hat\\varepsilon_t = y_t - \\hat{y}_{t \\mid t-1}$."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "formula",
+     "statement": "The mean error (ME) is the average of the forecast errors: ME = (1/m) \\sum e_t.",
+     "concept": "Forecast Error Measures",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "The mean square error (MSE) is the average of the squared forecast errors: MSE = (1/m) \\sum e_t^2.",
+     "concept": "Forecast Error Measures",
+     "status": "syllabus",
+     "places": [
+      {
+       "page": "Model Validation",
+       "quote": "\\text{MSE}_{\\text{val}} = \\frac{1}{n_v}\\sum_{i \\in \\text{val}}\\left(y_i - \\hat{f}(x_i)\\right)^2"
+      },
+      {
+       "page": "Model Training and Evaluation",
+       "quote": "the test MSE averages its squared errors over $n_{\\text{test}}$ records it never saw"
+      },
+      {
+       "page": "Mean Square Error",
+       "quote": "\\text{MSE} = \\frac{1}{n}\\sum_{i=1}^{n}\\big(y_i - \\hat f(x_i)\\big)^2"
+      }
+     ]
+    }
+   ]
+  },
+  "srm-056": {
+   "path": "questions/exam-srm/srm-056.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:0dc3b36c511c3c9ad9d1efe02621cd7f21a6e78003edcb179b29fc41c553a71b",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "Prediction with a fitted regression model assumes the new observation follows the same model (same relationship and error structure) as the sample data used to fit it.",
+     "concept": "Prediction in Regression",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Prediction Interval",
+       "quote": "The usual intervals assume the model is correct, its parameters are known and the errors are normal, so check the residuals with a [[Correlogram|correlogram]] and a [[QQ Plot]]."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "Different candidate regression models generally produce different predictions for the same new observation, so predictions depend on the model chosen.",
+     "concept": "Prediction in Regression",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r3",
+     "kind": "definition",
+     "statement": "A prediction interval is a range expected to contain a new observation with a stated probability, and it is centered on the point prediction, which is the single most likely value.",
+     "concept": "Prediction Interval",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Prediction Interval",
+       "quote": "**A prediction interval** is a range that will contain a *future observation*, such as next quarter's claim frequency or next month's claim count, with a stated probability."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "A narrower prediction interval is more informative about the true value than a wider one, since it pins the value down more precisely.",
+     "concept": "Prediction Interval",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Confidence Interval",
+       "quote": "but it is wide enough that the indicated relativity is far from precisely known."
+      }
+     ]
+    }
+   ]
+  },
+  "srm-057": {
+   "path": "questions/exam-srm/srm-057.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:76560966087a0eff5803cc4bdb74a30f0e4ea4ede0edd5a89506c905f0ebf93f",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "A regression tree partitions the predictor space into regions via successive binary splits on predictor values; each end (terminal) node corresponds to a region defined by the conditions along the path from the root.",
+     "concept": "Regression Trees",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Regression Tree",
+       "quote": "recursive binary splitting divides the predictor space into regions $R_1, \\ldots, R_J$, and every observation that falls in region $R_j$ is predicted by the mean response $\\hat{y}_{R_j}$ of the training observations in that region."
+      },
+      {
+       "page": "Decision Tree",
+       "quote": "partitions the predictor space into rectangular regions by applying a sequence of binary splits, then predicts a constant value (regression) or class (classification) within each region."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "The predicted response for an end node of a regression tree is the mean of the response values of the training observations that fall in that node.",
+     "concept": "Regression Trees",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Regression Tree",
+       "quote": "every observation that falls in region $R_j$ is predicted by the mean response $\\hat{y}_{R_j}$ of the training observations in that region."
+      },
+      {
+       "page": "Decision Tree",
+       "quote": "$\\hat{y} = \\frac{1}{|R_m|}\\sum_{i \\in R_m} y_i$ for region $R_m$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "To find the observations in an end node, follow the tree's split conditions from the root, assigning each observation to the branch whose condition (numeric threshold or categorical level set) it satisfies.",
+     "concept": "Regression Trees",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Regression Tree",
+       "quote": "a split on predictor $X_j$ at cutpoint $s$ sends $R_1(j,s) = \\{X \\mid X_j < s\\}$ to one branch and $R_2(j,s) = \\{X \\mid X_j \\geq s\\}$ to the other."
+      },
+      {
+       "page": "Classification Tree",
+       "quote": "A qualitative predictor splits by sending some of its levels to each branch."
+      }
+     ]
+    }
+   ]
+  },
+  "srm-058": {
+   "path": "questions/exam-srm/srm-058.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:731c7009006159c9b0ce88f7b71f200ee9f2fdd99dcaca743e5d5160c81be9f7",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "In the approximate conditional least squares method for an AR(1) model, the slope estimate b1 is the lag-1 sample autocorrelation r1, the sum of products of consecutive deviations from the sample mean divided by the sum of squared deviations from the mean.",
+     "concept": "Autoregressive Model of Order One (AR(1))",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Autocorrelation Function",
+       "quote": "\\hat{\\rho}_k = \\frac{\\sum_{t=1}^{n-k}(y_t - \\bar{y})(y_{t+k} - \\bar{y})}{\\sum_{t=1}^{n}(y_t - \\bar{y})^{2}}"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "In the approximate conditional least squares method for an AR(1) model, the intercept estimate is b0 = ybar(1 - b1), where ybar is the sample mean of all observations.",
+     "concept": "Autoregressive Model of Order One (AR(1))",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Autoregressive Model",
+       "quote": "**AR(1)**: $\\mathrm{Corr}(Y_t, Y_{t-k}) = \\phi^{k}$, mean $\\mu = c/(1-\\phi)$, variance $\\sigma^2/(1-\\phi^2)$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "definition",
+     "statement": "The fitted value for an AR(1) model at time t is b0 + b1*y_{t-1}, and the residual e_t is the observed y_t minus this fitted value, defined for t = 2 through T.",
+     "concept": "Autoregressive Model of Order One (AR(1))",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r4",
+     "kind": "formula",
+     "statement": "For an AR(1) model fit to T observations, the mean square error is s^2 = the sum of squared deviations of the residuals from their average divided by (T - 3), which estimates Var(epsilon_t) = sigma^2.",
+     "concept": "Mean Squared Error in Time Series Regression",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "srm-059": {
+   "path": "questions/exam-srm/srm-059.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:cc87dfdbcb1288d253a61c68260ba17591bb5c5dcffa0a0b21aa6f56339a4bfe",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "The within-cluster variation of cluster C_k is W(C_k) = (1/|C_k|) times the sum over all pairs of observations in the cluster of their squared Euclidean distances, summed across features.",
+     "concept": "K-Means Clustering",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "A cluster's within-cluster variation (pairwise form) equals twice the sum of squared Euclidean distances of its observations from the cluster centroid.",
+     "concept": "K-Means Clustering",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r3",
+     "kind": "definition",
+     "statement": "A cluster centroid is the vector of feature-wise means of the observations assigned to the cluster.",
+     "concept": "K-Means Clustering",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "K-Means Clustering",
+       "quote": "2. **Update**: compute each cluster centroid as the mean of its assigned observations"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "definition",
+     "statement": "The total within-cluster variation is the sum of the within-cluster variations over all K clusters, which K-means seeks to minimize.",
+     "concept": "K-Means Clustering",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "K-Means Clustering",
+       "quote": "**K-Means Clustering** is a partition-based [[Clustering]] algorithm that partitions $n$ observations into $K$ non-overlapping clusters by minimizing **total within-cluster variance** (the within-cluster sum of squares, WCSS)."
+      }
+     ]
+    }
+   ]
+  },
+  "srm-060": {
+   "path": "questions/exam-srm/srm-060.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:522e97ae137fce2419aaac27a913b9fcc343c398c307795fb6712161dcf9540f",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "Total within-cluster variation decreases as K increases and is minimized (equal to zero) when K equals the number of observations, so minimizing it does not give a useful choice of K.",
+     "concept": "K-Means Clustering",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "K-Means Clustering",
+       "quote": "**Choosing $K$**: use the **elbow method** (plot WCSS vs. $K$; look for an elbow where WCSS stops decreasing sharply) or silhouette scores"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "Setting the number of clusters equal to the number of observations overfits the data, since each observation becomes its own cluster and there are rarely that many true clusters.",
+     "concept": "K-Means Clustering",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "There is no exact or single method for choosing the optimal number of clusters K in K-means; the choice is subjective.",
+     "concept": "K-Means Clustering",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Clustering",
+       "quote": "Each can change the clusters, so try several and keep the most useful and interpretable result."
+      }
+     ]
+    }
+   ]
+  },
+  "srm-061": {
+   "path": "questions/exam-srm/srm-061.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:9075a99812db66623831a8be178d8c6d72371065386fd2b2faef376127672d9c",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "AIC and BIC do not directly estimate test error; they indirectly estimate it by adjusting the training error (e.g., RSS) with a penalty for the number of predictors.",
+     "concept": "Akaike and Bayesian Information Criteria",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Test Error",
+       "quote": "[[AIC]] and [[BIC]] instead adjust training error for complexity."
+      },
+      {
+       "page": "Cross-Validation",
+       "quote": "It measures test error directly, rather than penalizing complexity indirectly as [[AIC]] and [[BIC]] do."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "AIC adds a penalty of 2d (times the error variance estimate) to the training error, while BIC adds a penalty of ln(n)·d (times the error variance estimate), where d is the number of predictors and n is the sample size.",
+     "concept": "Akaike and Bayesian Information Criteria",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "AIC",
+       "quote": "$$\\text{AIC} = -2\\ell(\\hat{\\boldsymbol{\\beta}}) + 2p$$"
+      },
+      {
+       "page": "BIC",
+       "quote": "$$\\text{BIC} = -2\\ell(\\hat{\\boldsymbol{\\beta}}) + p\\ln(n)$$"
+      },
+      {
+       "page": "Model Selection",
+       "quote": "$k = 2$ gives [[AIC]]; $k = \\ln n$ gives [[BIC]]"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "For models with the same number of predictors, AIC and BIC give the same ranking of models, so they select the same subset.",
+     "concept": "Akaike and Bayesian Information Criteria",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "BIC",
+       "quote": "$$\\text{BIC} = -2\\ell(\\hat{\\boldsymbol{\\beta}}) + p\\ln(n)$$"
+      },
+      {
+       "page": "Model Selection",
+       "quote": "$k = 2$ gives [[AIC]]; $k = \\ln n$ gives [[BIC]], which penalizes more heavily once $n \\geq 8$."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "When ln(n) > 2 (n > 7), BIC penalizes additional predictors more heavily than AIC, so BIC selects a model with no more variables than AIC.",
+     "concept": "Akaike and Bayesian Information Criteria",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "BIC",
+       "quote": "BIC tends to select **simpler models** than AIC for large $n$ since $\\ln(n) > 2$ when $n > 7$"
+      },
+      {
+       "page": "Variable Selection",
+       "quote": "**BIC penalizes additional parameters more heavily** than AIC, so it tends to favor sparser models"
+      },
+      {
+       "page": "Model Selection",
+       "quote": "$k = \\ln n$ gives [[BIC]], which penalizes more heavily once $n \\geq 8$"
+      }
+     ]
+    }
+   ]
+  },
+  "srm-062": {
+   "path": "questions/exam-srm/srm-062.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:bd26fe34e1115679706f8e873f08397710f623e872f60b15b9a9a9f5f5da8fae",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "A (1-α) confidence interval for a regression coefficient is the estimate ± t critical value (with n minus number of parameters degrees of freedom, at 1-α/2) times the standard error of the estimate.",
+     "concept": "Confidence Intervals for Regression Coefficients",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Confidence Interval",
+       "quote": "The general form is $\\hat\\theta \\pm (\\text{critical value}) \\times \\text{SE}(\\hat\\theta)$, where the critical value comes from the estimator's [[Sampling Distribution]]"
+      },
+      {
+       "page": "Student's t-Distribution",
+       "quote": "in simple [[Linear Regression|linear regression]], $t = \\hat{\\beta}_1/\\text{SE}(\\hat{\\beta}_1)$ has a $t(n - 2)$ distribution when $\\beta_1 = 0$; a 95% interval for $\\beta_1$ uses the 97.5% quantile of $t(n - 2)$."
+      },
+      {
+       "page": "Parameter Estimate Tables",
+       "quote": "$\\hat{\\beta} \\pm t_{0.025,\\, n-p-1} \\cdot \\text{SE}(\\hat{\\beta})$ for a t-value, $\\hat{\\beta} \\pm 1.96 \\cdot \\text{SE}(\\hat{\\beta})$ for a z-value"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "With a large number of observations (over about 100), the t distribution is approximately normal, so the 95% critical value is approximately 1.96 (rule of thumb of 2).",
+     "concept": "Student's t Distribution",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Student's t-Distribution",
+       "quote": "The density is symmetric about 0 with heavier tails than the normal; as $n \\to \\infty$ it converges to the standard normal density."
+      },
+      {
+       "page": "Parameter Estimate Tables",
+       "quote": "The two agree as the degrees of freedom grow — the two-sided 5% critical value is $2.09$ at 20 df and $1.98$ at 100 df, against $1.96$"
+      }
+     ]
+    }
+   ]
+  },
+  "srm-063": {
+   "path": "questions/exam-srm/srm-063.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:098a0c7c9619818a98228b5da8a4c16a63615f638a290a845dc467b966e2ed00",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "procedure",
+     "statement": "To predict with a regression tree, start at the root and at each internal node evaluate the split condition for the observation, following the branch for yes or no (conventionally left for yes/true, right for no) until reaching a terminal node.",
+     "concept": "Regression Trees",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Regression Tree",
+       "quote": "Each prediction follows the splits to a leaf and returns that leaf's training mean."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "The predicted value for an observation in a regression tree is the value assigned to the terminal node (leaf) it lands in, which is the mean response of the training observations in that region.",
+     "concept": "Regression Trees",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Regression Tree",
+       "quote": "A **regression tree** is a [[Decision Tree|decision tree]] for a quantitative [[Response Variable|response]]: recursive binary splitting divides the predictor space into regions $R_1, \\ldots, R_J$, and every observation that falls in region $R_j$ is predicted by the mean response $\\hat{y}_{R_j}$ of the training observations in that region."
+      },
+      {
+       "page": "Decision Tree",
+       "quote": "**Regression tree prediction:** $\\hat{y} = \\frac{1}{|R_m|}\\sum_{i \\in R_m} y_i$ for region $R_m$"
+      }
+     ]
+    }
+   ]
+  },
+  "srm-064": {
+   "path": "questions/exam-srm/srm-064.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:17aff8e4c34e45d00d3abb45601ee2d7b6414d9c9962f11ab7058fa6a5bf50a5",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "A stationary AR(1) model is y_t = beta_0 + beta_1 y_{t-1} + epsilon_t, where the series has constant mean and variance and autocovariances depending only on the lag, and beta_0 can be any fixed constant.",
+     "concept": "Autoregressive Model of Order 1 (AR(1))",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Autoregressive Model",
+       "quote": "$$Y_t = c + \\phi_1 Y_{t-1} + \\cdots + \\phi_p Y_{t-p} + \\varepsilon_t$$"
+      },
+      {
+       "page": "Stationarity",
+       "quote": "A [[Time Series]] is **(weakly) stationary** when its mean, variance and autocovariances do not depend on time — only on the lag."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "An AR(1) process is stationary only if the absolute value of the slope coefficient is less than 1 (-1 < beta_1 < 1); beta_1 = 1 gives a non-stationary random walk.",
+     "concept": "Stationarity of AR(1) Process",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Autoregressive Model",
+       "quote": "[[Stationarity]] requires all roots of $\\phi(B) = 0$ **outside** the unit circle; for AR(1) that is $\\lvert\\phi\\rvert < 1$, and $\\phi = 1$ is a [[Random Walk]]"
+      },
+      {
+       "page": "Stationarity",
+       "quote": "An AR(1) $Y_t = \\phi Y_{t-1} + \\varepsilon_t$ is stationary exactly when $\\lvert\\phi\\rvert < 1$; at $\\phi = 1$ it is a [[Random Walk]] and there is no fixed mean to return to"
+      }
+     ]
+    }
+   ]
+  },
+  "srm-066": {
+   "path": "questions/exam-srm/srm-066.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:d48ccfa8f062ddb44cdd9b86b6d3f1152348f226d178642c4f36b0a6cacb0370",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "procedure",
+     "statement": "To find the region for a leaf of a regression tree, take the intersection of all split conditions along the path from the root to that leaf.",
+     "concept": "Regression Trees",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Regression Tree",
+       "quote": "Each prediction follows the splits to a leaf and returns that leaf's training mean."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "In a regression tree diagram, the left branch of a split is the side where the stated inequality holds and the right branch is the complementary side.",
+     "concept": "Regression Trees",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Regression Tree",
+       "quote": "The boundary:** ISLR sends $X_j < s$ to the left. An observation exactly at the cutpoint goes to the branch for $X_j \\geq s$ unless the tree states otherwise."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "A region's definition includes only predictors that are split on along its path; a predictor that is not split on along that path imposes no condition on the region.",
+     "concept": "Regression Trees",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Regression Tree",
+       "quote": "Urban garaging adds $9.2 - 7.6 = 1.6$ thousand for vehicles under 5 years old and nothing for older ones, because the right branch never splits on it."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "Successive splits on the same predictor along a path combine into an interval, such as a lower bound from a right branch and an upper bound from a later left branch.",
+     "concept": "Regression Trees",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "srm-067": {
+   "path": "questions/exam-srm/srm-067.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:15f8198eca4e0f36e7e608538dd99a6211e54548d44e335e40f6b57c9d58fa63",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "The loglikelihood of a logistic regression (binary response) model is the sum over observations of ln(p_i) for successes and ln(1 - p_i) for failures, where p_i is the model's fitted success probability for that observation.",
+     "concept": "Logistic Regression",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The likelihood ratio test statistic equals twice the difference between the maximized loglikelihood of the full model and that of the restricted (null) model: 2(l_full - l_restricted).",
+     "concept": "Likelihood Ratio Test",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Likelihood Ratio Test",
+       "quote": "$$-2\\ln\\Lambda = 2\\left[\\ell(\\hat\\theta) - \\ell(\\hat\\theta_0)\\right] \\ \\dot\\sim\\ \\chi^2_{r}$$"
+      },
+      {
+       "page": "Chi-Squared Distribution",
+       "quote": "for nested models with $p_1 < p_2$ parameters, $-2\\ln\\lambda = 2(\\ell_2 - \\ell_1)$ is approximately $\\chi^2(p_2 - p_1)$ in large samples."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "Under the null hypothesis, the likelihood ratio statistic follows a chi-square distribution with degrees of freedom equal to the difference in the number of parameters (explanatory variables) between the full and restricted models.",
+     "concept": "Likelihood Ratio Test",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Likelihood Ratio Test",
+       "quote": "$r$ is the number of **restrictions** — the difference in free parameters between the full and reduced models"
+      },
+      {
+       "page": "Chi-Squared Distribution",
+       "quote": "for nested models with $p_1 < p_2$ parameters, $-2\\ln\\lambda = 2(\\ell_2 - \\ell_1)$ is approximately $\\chi^2(p_2 - p_1)$ in large samples."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "procedure",
+     "statement": "Reject the null hypothesis at a given significance level if the test statistic exceeds the chi-square critical value for that level; the lowest significance level for rejection is the smallest level whose critical value the statistic still exceeds.",
+     "concept": "Hypothesis Testing",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Likelihood Ratio Test",
+       "quote": "Reject $H_0$ (the reduced model) when $-2\\ln\\Lambda$ exceeds the upper-$\\alpha$ point of $\\chi^2_r$"
+      },
+      {
+       "page": "Hypothesis Testing",
+       "quote": "Reject $H_0$ when p-value $< \\alpha$"
+      },
+      {
+       "page": "Chi-Squared Distribution",
+       "quote": "Because $9.4$ also exceeds $9.35$ but not $11.34$ (the $0.990$ column), the [[p-Value|p-value]] lies between 0.01 and 0.025."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "When the indicator variable's coefficient is set to zero (null hypothesis beta_1 = 0), the model reduces to an intercept-only model with a single common fitted probability for all observations.",
+     "concept": "Logistic Regression",
+     "status": "missing",
+     "places": []
+    }
+   ]
+  },
+  "srm-068": {
+   "path": "questions/exam-srm/srm-068.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:2bfb13c3eb026964da6de0da493be9465be8ed52de476465af57f2ef0e2c8637",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "procedure",
+     "statement": "In boosting for regression trees, the residuals are initialized to the observed target values (r_i = y_i), before any trees are fit.",
+     "concept": "Boosting",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "After fitting each tree f_b in boosting, the residuals are updated as r_i_new = r_i_old − λ·f_b(x_i), where λ is the shrinkage parameter.",
+     "concept": "Boosting",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Boosting",
+       "quote": "$$\\hat{f}(x) \\leftarrow \\hat{f}(x) + \\lambda \\hat{f}^{b}(x), \\qquad r_i \\leftarrow r_i - \\lambda \\hat{f}^{b}(x_i)$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "A regression tree with a single split predicts the same constant value for every observation falling in a given region, determined by whether the predictor is below or at/above the split point.",
+     "concept": "Regression Trees",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Regression Tree",
+       "quote": "every observation that falls in region $R_j$ is predicted by the mean response $\\hat{y}_{R_j}$ of the training observations in that region."
+      },
+      {
+       "page": "Decision Tree",
+       "quote": "then predicts a constant value (regression) or class (classification) within each region."
+      }
+     ]
+    }
+   ]
+  },
+  "srm-069": {
+   "path": "questions/exam-srm/srm-069.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:79daeec653269363c379349f2e8dead1229f53dbdc9c136b85c93f120055a836",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "procedure",
+     "statement": "In boosting for regression trees, the fitted function starts at \\hat{f}(x) = 0 and each residual is initially r_i = y_i.",
+     "concept": "Boosting",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "After fitting each tree b, boosting updates the model by \\hat{f}(x) \\leftarrow \\hat{f}(x) + \\lambda \\hat{f}^b(x), where \\lambda is the shrinkage parameter.",
+     "concept": "Boosting",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Boosting",
+       "quote": "$$\\hat{f}(x) \\leftarrow \\hat{f}(x) + \\lambda \\hat{f}^{b}(x), \\qquad r_i \\leftarrow r_i - \\lambda \\hat{f}^{b}(x_i)$$"
+      },
+      {
+       "page": "Tree Ensemble",
+       "quote": "$$\\hat{f}^{(m)}(x) = \\hat{f}^{(m-1)}(x) + \\lambda \\cdot \\hat{f}_b(x; r_i^{(m-1)})$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "A regression tree's prediction for an observation is the leaf value of the region its predictor values fall into, determined by applying the split rule.",
+     "concept": "Regression Trees",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Regression Tree",
+       "quote": "every observation that falls in region $R_j$ is predicted by the mean response $\\hat{y}_{R_j}$ of the training observations in that region."
+      },
+      {
+       "page": "Decision Tree",
+       "quote": "**Regression tree prediction:** $\\hat{y} = \\frac{1}{|R_m|}\\sum_{i \\in R_m} y_i$ for region $R_m$"
+      }
+     ]
+    }
+   ]
+  },
+  "srm-070": {
+   "path": "questions/exam-srm/srm-070.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:3840e8e6a84a435b1b29570544dcba3a21d50f545d4b950f98e0fb9b3fc2c356",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "For a linear regression with d predictors fitted to n observations, AIC = (1/n)(RSS + 2·d·σ̂²), where σ̂² is the estimated error variance.",
+     "concept": "Akaike Information Criterion (AIC)",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "When computing AIC to compare models, estimate σ̂² once from the full model containing all predictors (the square of its residual standard error) and use that same value for every candidate model.",
+     "concept": "Akaike Information Criterion (AIC)",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "The model with the smallest AIC is preferred when selecting among candidate models.",
+     "concept": "Akaike Information Criterion (AIC)",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "AIC",
+       "quote": "Lower AIC indicates a better model (better fit relative to complexity)"
+      },
+      {
+       "page": "Variable Selection",
+       "quote": "Lower [[AIC]] or [[BIC]] indicates a better trade-off between fit and complexity"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "definition",
+     "statement": "The residual standard error is the square root of the estimated error variance, so squaring it gives σ̂².",
+     "concept": "Residual Standard Error",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Residual Sum of Squares",
+       "quote": "RSS is the numerator of the **residual variance** estimate: $\\hat{\\sigma}^2 = \\text{RSS}/(n-p-1)$"
+      },
+      {
+       "page": "Model Output",
+       "quote": "and the residual standard error is $\\sqrt{\\text{MS}_{\\text{Res}}}$"
+      }
+     ]
+    }
+   ]
+  },
+  "srm-071": {
+   "path": "questions/exam-srm/srm-071.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:9e97efa37deff3130946bcbba09d8877f996d79d7faf35658bccf8977053a6a9",
+   "verdict": "gap",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "Omitting important explanatory variables from a regression model (underspecification) generally biases the coefficient estimates of the remaining variables, unless the omitted variables are uncorrelated with the included ones.",
+     "concept": "Omitted Variable Bias",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bias",
+       "quote": "In modelling, bias also arises from the *model* rather than the estimator — an omitted predictor, an ignored [[Interaction]], or fitting a straight line to a curved relationship all bias the fitted values regardless of sample size"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "Omitting important variables leaves unexplained variation in the residuals, so the error variance estimate s^2 is inflated, which widens prediction intervals.",
+     "concept": "Multiple Linear Regression",
+     "status": "missing",
+     "places": []
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "The total sum of squares depends only on the response values (their deviations from the mean), so it does not change with which explanatory variables are included in the model.",
+     "concept": "Analysis of Variance (Regression)",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Residual Sum of Squares",
+       "quote": "**Decomposition**: $\\text{SS}_{\\text{Tot}} = \\text{SS}_{\\text{Reg}} + \\text{RSS}$, where $\\text{SS}_{\\text{Tot}} = \\sum(y_i - \\bar{y})^2$ and $\\text{SS}_{\\text{Reg}} = \\sum(\\hat{y}_i - \\bar{y})^2$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "definition",
+     "statement": "Underfitting occurs when a model is too simple to capture the true relationship in the data, such as when important variables are left out.",
+     "concept": "Underfitting and Overfitting",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Bias-Variance Tradeoff",
+       "quote": "**Underfitting** = high bias, low variance: training and test error are both high and close together."
+      }
+     ]
+    }
+   ]
+  },
+  "srm-072": {
+   "path": "questions/exam-srm/srm-072.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:e7668fc1768da0d23d597df5650662769a0a537383fe5bdcdf3c81094bc44dec",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "A predictor in a regression model is statistically significant at level alpha if its p-value is less than alpha, in which case the null hypothesis that its coefficient is zero is rejected.",
+     "concept": "Hypothesis Testing for Regression Coefficients",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "p-Value",
+       "quote": "It converts any test statistic onto a common $0$–$1$ scale: reject $H_0$ when the p-value falls below the significance level $\\alpha$."
+      },
+      {
+       "page": "Parameter Estimate Tables",
+       "quote": "A small p-value (e.g., $< 0.05$) indicates the predictor is statistically significant"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "definition",
+     "statement": "The p-value of a coefficient test is the probability, under the null hypothesis that the coefficient is zero, of observing a test statistic at least as extreme as the one obtained.",
+     "concept": "P-value",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "p-Value",
+       "quote": "A **p-Value** is the probability, computed assuming the null hypothesis is true, of observing a test statistic at least as extreme as the one obtained."
+      },
+      {
+       "page": "Hypothesis Testing",
+       "quote": "$$\\text{p-value} = P(\\text{test statistic as extreme or more extreme} \\mid H_0 \\text{ true})$$"
+      }
+     ]
+    }
+   ]
+  },
+  "srm-073": {
+   "path": "questions/exam-srm/srm-073.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:ef2625950dd629fe5c31938f6c1c3aff8feecae7696641c0de37d73dc3ad578a",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "procedure",
+     "statement": "Cost complexity pruning selects the tuning parameter (and corresponding subtree size) by choosing the subtree that minimizes the cross-validation estimate of prediction error such as MSE.",
+     "concept": "Cost Complexity Pruning",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Tree Pruning",
+       "quote": "The sequence of subtrees as $\\alpha$ increases is **nested and finite**, so [[Cross-Validation]] over $\\alpha$ picks the size and the tree is refit on the full data at that $\\alpha$"
+      },
+      {
+       "page": "Regression Tree",
+       "quote": "ISLR's Algorithm 8.1 grows a large tree $T_0$, uses cost-complexity pruning (the third block) to obtain the best subtree for each $\\alpha$, chooses $\\alpha$ by $K$-fold cross-validation, and returns the subtree for that $\\alpha$."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "The optimal pruned tree size is read from the cross-validation (test) MSE curve at the tree size where it is lowest, rather than from the training MSE, which keeps decreasing as tree size grows.",
+     "concept": "Regression Trees",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Cross-Validation",
+       "quote": "Cross-validation is what turns the [[Bias-Variance Tradeoff]] into a decision: training error falls monotonically with complexity, while CV error is U-shaped, and its minimum marks the right model size"
+      },
+      {
+       "page": "Regression Tree",
+       "quote": "Training RSS always prefers the full tree. The size of the pruned tree must come from cross-validation or a validation set"
+      }
+     ]
+    }
+   ]
+  },
+  "srm-074": {
+   "path": "questions/exam-srm/srm-074.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:9421cfeec920668fc8a6a7197c2864009547d87d7ce7eaa5feaa807adb4f6e99",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "A random forest builds many decision trees on bootstrap samples and, at each split, considers only a random subset of m of the p predictors, which decorrelates the trees.",
+     "concept": "Random Forest",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Random Forest",
+       "quote": "A **random forest** is [[Bagging|bagged]] [[Decision Tree|trees]] with one extra step: at *each split*, only a random subset of $m$ predictors is eligible. That decorrelates the trees, so averaging removes more variance than bagging can."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "The m candidate predictors in a random forest are sampled without replacement, so that exactly m distinct predictors are considered.",
+     "concept": "Random Forest",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Random Forest",
+       "quote": "A **random forest** is [[Bagging|bagged]] [[Decision Tree|trees]] with one extra step: at *each split*, only a random subset of $m$ predictors is eligible."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "In a random forest, a fresh random sample of m predictors is drawn at every split of every tree, not once per tree.",
+     "concept": "Random Forest",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Random Forest",
+       "quote": "at *each split*, only a random subset of $m$ predictors is eligible."
+      }
+     ]
+    }
+   ]
+  },
+  "srm-075": {
+   "path": "questions/exam-srm/srm-075.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:21e195f3700189f528e57f86b803fd5b5d567b4cc52a8da62eb9d05f706a3607",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "The Tweedie distribution has variance equal to the dispersion parameter times the mean raised to the power p, Var(Y) = phi * mu^p.",
+     "concept": "Tweedie Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Tweedie Distribution",
+       "quote": "$$\\text{Var}(Y) = \\phi\\,\\mu^{p}, \\qquad 1 < p < 2$$"
+      },
+      {
+       "page": "Exponential Family",
+       "quote": "$$E[Y] = b'(\\theta) = \\mu, \\qquad \\text{Var}(Y) = a(\\phi)\\,b''(\\theta) = \\phi\\,V(\\mu)$$"
+      },
+      {
+       "page": "Variance Function",
+       "quote": "[[Tweedie Distribution|Tweedie]] with $1 < p < 2$: $\\mu^p$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "For 1 < p < 2, a Tweedie random variable is a compound Poisson sum of gamma random variables, so it has a point mass at zero equal to e^(-lambda), the probability of zero claims, plus a continuous positive part.",
+     "concept": "Tweedie Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Tweedie Distribution",
+       "quote": "For $1 < p < 2$ it is a compound Poisson–Gamma distribution: a Poisson number of Gamma-sized claims. That gives it a point mass at zero plus a right-skewed continuous part"
+      },
+      {
+       "page": "Tweedie Distribution",
+       "quote": "- $P(Y = 0) = e^{-\\lambda} > 0$: the Tweedie is the one member that puts genuine probability on exactly zero while remaining continuous elsewhere"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "The Tweedie distribution belongs to the exponential dispersion family (linear exponential family) of distributions used in generalized linear models.",
+     "concept": "Linear Exponential Family",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Exponential Family",
+       "quote": "The **Exponential Family** is the class of distributions whose density can be written in a common exponential form. It is the set of response distributions a [[Generalized Linear Model]] can use: Normal, Poisson, binomial, [[Gamma]], inverse Gaussian, and the [[Tweedie Distribution]] all belong to it."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "The Poisson distribution is only a limiting case of the Tweedie distribution with 1 < p < 2 as p approaches 1, not a special case within that range of p.",
+     "concept": "Tweedie Distribution",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Tweedie Distribution",
+       "quote": "| $1$ | Poisson | Counts |"
+      }
+     ]
+    }
+   ]
+  },
+  "srm-076": {
+   "path": "questions/exam-srm/srm-076.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:118df6e0747619c4df930bed404c0c81fc0265a042be9c5036aa42a847d30ce6",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "PCA constructs principal components as linear combinations of the predictors, so it captures only linear relationships among the variables.",
+     "concept": "Principal Components Analysis",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Principal Components Analysis",
+       "quote": "$\\mathbf{z}_m = \\mathbf{X}\\boldsymbol{\\phi}_m$ is the $m$-th **score vector** (principal component)"
+      },
+      {
+       "page": "Principal Components Regression",
+       "quote": "Every $Z_m$ is a linear combination of all $p$ original predictors"
+      },
+      {
+       "page": "Loading Vector",
+       "quote": "$$z_{im} = \\phi_{1m}x_{i1} + \\phi_{2m}x_{i2} + \\cdots + \\phi_{pm}x_{ip}$$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "Principal components are ordered so that the first component captures the largest share of variance in the data, and each later component captures the most remaining variance while being uncorrelated with earlier ones.",
+     "concept": "Principal Components Analysis",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Principal Components Analysis",
+       "quote": "PCs are **orthogonal** — each successive PC captures the maximum remaining variance"
+      },
+      {
+       "page": "Principal Components Regression",
+       "quote": "Each later component has the largest variance subject to being uncorrelated with the ones before it, which means perpendicular to them."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "Later principal components, which explain little variance, are the ones that tend to reflect noise, while the first components capture the main structure.",
+     "concept": "Principal Components Analysis",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Scree Plot",
+       "quote": "The name is geological: the steep face is the components that matter, the rubble at the base is noise"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "definition",
+     "statement": "A loading is the coefficient of a variable in a principal component; a loading near zero means that variable contributes little to that component.",
+     "concept": "Principal Components Analysis",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Principal Components Regression",
+       "quote": "$\\phi_{1m}, \\dots, \\phi_{pm}$ are the **loadings** of the $m$th component"
+      },
+      {
+       "page": "Loading Vector",
+       "quote": "A **loading vector** $\\boldsymbol{\\phi}_m$ holds the weights that define the $m$-th principal component in [[Principal Components Analysis]]."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "Principal components are derived features, not predictors, and a variable's small loading on one component does not mean the variable is unimportant or can be discarded.",
+     "concept": "Principal Components Analysis",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Principal Components Regression",
+       "quote": "Every $Z_m$ is a linear combination of all $p$ original predictors, so the fitted model still uses every one of them (see [[Variable Selection]])."
+      },
+      {
+       "page": "Partial Least Squares",
+       "quote": "As in PCR, the new features are linear combinations of the original predictors, not a subset of them (see [[Variable Selection]])."
+      }
+     ]
+    }
+   ]
+  },
+  "srm-an-001": {
+   "path": "questions/exam-srm/srm-an-001.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:af97cb85e1548b5bce4b3be5f68db228bb99a54b9a628295e9d3b308e286247e",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "procedure",
+     "statement": "The validation set approach randomly splits the data into a training set and a validation set, fits the model on the training set, and estimates test error from the validation set; different random splits give different estimates.",
+     "concept": "Validation Set Approach",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Test Error",
+       "quote": "**Validation set:** fit on one part and score on the rest. Simple, but the estimate is variable and overstates the error, because the fit used fewer observations."
+      },
+      {
+       "page": "Train-Test Split",
+       "quote": "ISLR's validation set approach (James et al., §5.1.1) splits the data in two, fits on one part and scores on the other."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "procedure",
+     "statement": "Leave-one-out cross-validation fits the model n times, each time holding out one observation, and averages the n resulting errors; it involves no randomness, so it yields the same estimate on every run with the same data.",
+     "concept": "Leave-One-Out Cross-Validation",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Cross-Validation",
+       "quote": "**$k$-fold**: split the data into $k$ equal parts, fit on $k-1$ and score on the held-out fold, then rotate."
+      },
+      {
+       "page": "Test Error",
+       "quote": "**Leave-one-out (LOOCV):** $\\text{CV}_{(n)} = \\frac{1}{n}\\sum \\text{MSE}_i$."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "Training on fewer observations tends to give a worse-fitting model, so the validation set approach, which fits on only part of the data, tends to overestimate the test error of the model fit to all the data.",
+     "concept": "Validation Set Approach",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Test Error",
+       "quote": "**Validation set:** fit on one part and score on the rest. Simple, but the estimate is variable and overstates the error, because the fit used fewer observations."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "LOOCV has low bias because each fit uses nearly all the data, but its fitted models are trained on almost identical data and their errors are highly correlated, so its estimate has higher variance than that of k-fold cross-validation.",
+     "concept": "Bias-Variance Trade-off in Cross-Validation",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Cross-Validation",
+       "quote": "**Leave-one-out** ($k = n$) is nearly unbiased but has high variance and is expensive"
+      },
+      {
+       "page": "Test Error",
+       "quote": "It is slightly more biased than LOOCV but less variable, since LOOCV's $n$ fits are nearly identical and their errors highly correlated."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "k-fold cross-validation with a moderate k (such as 5 or 10) has somewhat more bias than LOOCV but lower variance, since its training sets overlap less.",
+     "concept": "k-Fold Cross-Validation",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Cross-Validation",
+       "quote": "$k = 5$ or $10$ is the standard choice, a bias–variance compromise: each fit uses $(k-1)n/k$ observations, so the bias is modest, and the $k$ training sets overlap less than LOOCV's, so the estimate has lower variance — at a cost of only $k$ fits"
+      },
+      {
+       "page": "Test Error",
+       "quote": "It is slightly more biased than LOOCV but less variable, since LOOCV's $n$ fits are nearly identical and their errors highly correlated."
+      }
+     ]
+    }
+   ]
+  },
+  "srm-an-002": {
+   "path": "questions/exam-srm/srm-an-002.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:c74403788fd41d13b15a23d1a146c43592caa214c8f3fd93907e8d95cb636760",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "Training MSE decreases (or does not increase) as model flexibility increases, so it cannot be used to compare models of different flexibility or select the model.",
+     "concept": "Training Error vs Test Error",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Test Error",
+       "quote": "The **training error**, measured on the fitting data, is different: it falls automatically as the model becomes more flexible, so it cannot choose between models."
+      },
+      {
+       "page": "Overfitting",
+       "quote": "Training MSE falls every time flexibility is added, because a model with as many free parameters as observations can reproduce them exactly."
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "definition",
+     "statement": "Test MSE is the mean squared error of a fitted model on held-out observations not used in fitting, and measures predictive performance on new data.",
+     "concept": "Test MSE",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Test Error",
+       "quote": "**Test error** is the average error a fitted model makes on observations that were not used to fit it."
+      },
+      {
+       "page": "Overfitting",
+       "quote": "the test MSE averages the same squared error over observations that were not used in the fit."
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "As flexibility increases, test MSE typically follows a U-shape: it falls to a minimum and then rises, so the best model is the one with the lowest test MSE.",
+     "concept": "Bias-Variance Tradeoff",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Test Error",
+       "quote": "By the [[Bias-Variance Tradeoff|bias-variance tradeoff]], test error is U-shaped in flexibility: bias falls, variance rises."
+      },
+      {
+       "page": "Bias-Variance Tradeoff",
+       "quote": "The total is U-shaped, and the minimum is the right complexity"
+      },
+      {
+       "page": "Model Training and Evaluation",
+       "quote": "Training error keeps falling as a model gets more flexible, while error on new data falls and then rises, a U-shape."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "definition",
+     "statement": "Overfitting occurs when a model fits noise specific to the training data, shown by training MSE continuing to fall while test MSE rises.",
+     "concept": "Overfitting",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Overfitting",
+       "quote": "**Overfitting** is fitting a model so closely to its training data that it follows the noise in that sample as well as the signal, so that it predicts new observations worse than a simpler model would."
+      },
+      {
+       "page": "Model Training and Evaluation",
+       "quote": "A model with small training error and large test error is [[Overfitting|overfitting]]: it has learned patterns in the training data that arose by chance (*ISLR*, §2.2)."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "Test MSE is normally higher than training MSE for any model, so a test MSE above training MSE alone does not indicate overfitting; a small gap between them is not the selection criterion, since an underfit model can have a small gap.",
+     "concept": "Overfitting",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Overfitting",
+       "quote": "Training error below test error does not by itself mean the model overfits. Almost every model has this gap; overfitting means a less flexible model would have predicted better."
+      }
+     ]
+    },
+    {
+     "id": "r6",
+     "kind": "definition",
+     "statement": "Underfitting occurs when a model is too inflexible to capture the true structure, giving high error on both training and test sets.",
+     "concept": "Underfitting",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Bias-Variance Tradeoff",
+       "quote": "**Underfitting** = high bias, low variance: training and test error are both high and close together."
+      },
+      {
+       "page": "Variable Selection",
+       "quote": "Selecting too few variables causes underfitting (high bias)"
+      }
+     ]
+    },
+    {
+     "id": "r7",
+     "kind": "procedure",
+     "statement": "Validation set approach: randomly split the data into a training set and a test (validation) set, fit candidate models on the training set, and choose the model with the lowest error on the validation set.",
+     "concept": "Validation Set Approach",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Train-Test Split",
+       "quote": "ISLR's validation set approach (James et al., §5.1.1) splits the data in two, fits on one part and scores on the other."
+      },
+      {
+       "page": "Test Error",
+       "quote": "**Validation set:** fit on one part and score on the rest. Simple, but the estimate is variable and overstates the error, because the fit used fewer observations."
+      }
+     ]
+    }
+   ]
+  },
+  "srm-an-003": {
+   "path": "questions/exam-srm/srm-an-003.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:a3a2366d5cfb2531ad6f23d461e6c3965aec38ffa4a6acbbb78039d5b4b2016a",
+   "verdict": "untagged",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "K-nearest neighbors regression predicts the response at a point x0 as the average of the responses of the K training observations nearest to x0: f̂(x0) = (1/K) Σ_{xi in N0} yi.",
+     "concept": "K-Nearest Neighbors Regression",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "K-Nearest Neighbors",
+       "quote": "**Regression:** $\\hat{f}(x_0) = \\frac{1}{K}\\sum_{i \\in \\mathcal{N}_K(x_0)} y_i$"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "definition",
+     "statement": "With a single predictor, the Euclidean distance between a training point xi and a new point x0 is the absolute difference |xi - x0|.",
+     "concept": "Euclidean Distance",
+     "status": "elsewhere",
+     "places": [
+      {
+       "page": "Similarity and Distance Measures",
+       "quote": "$$d_{\\text{Euc}}(\\mathbf{u}, \\mathbf{v}) = \\sqrt{\\sum_{j=1}^{p} (u_j - v_j)^2}$$"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "procedure",
+     "statement": "To find the neighborhood in KNN, compute the distance from the new point to every training observation, rank them, and select the K smallest distances.",
+     "concept": "K-Nearest Neighbors Regression",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "K-Nearest Neighbors",
+       "quote": "$\\mathcal{N}_K(x_0)$ is the **neighborhood** of the $K$ nearest training points to $x_0$"
+      },
+      {
+       "page": "Local Regression",
+       "quote": "Gather the fraction $s = k/n$ of training points whose $x_i$ are closest to $x_0$."
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "KNN regression is non-parametric: it assumes no functional form for f, so its prediction is a local average and does not use a fitted global model such as the least squares line.",
+     "concept": "Non-parametric Methods",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "K-Nearest Neighbors",
+       "quote": "KNN estimates **no parameters**: it keeps the training data and does its work at prediction time, finding each new point's nearest neighbors, which can be slow in a large training set"
+      }
+     ]
+    }
+   ]
+  },
+  "srm-an-004": {
+   "path": "questions/exam-srm/srm-an-004.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:63623aa6994797a7ed14d9a842ab5efac66d74c716c566ea68405c26c414647e",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "formula",
+     "statement": "The lag k sample autocorrelation is r_k = sum_{t=k+1}^{T}(y_{t-k} - ybar)(y_t - ybar) divided by sum_{t=1}^{T}(y_t - ybar)^2, using the single overall sample mean and the full-series sum of squares in the denominator.",
+     "concept": "Sample Autocorrelation",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Autocorrelation Function",
+       "quote": "\\hat{\\rho}_k = \\frac{\\sum_{t=1}^{n-k}(y_t - \\bar{y})(y_{t+k} - \\bar{y})}{\\sum_{t=1}^{n}(y_t - \\bar{y})^{2}}"
+      },
+      {
+       "page": "Correlogram",
+       "quote": "c_k = \\frac{1}{n}\\sum_{t=1}^{n-k}(x_t - \\bar{x})(x_{t+k} - \\bar{x})"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "definition",
+     "statement": "The lag k autocorrelation measures the correlation between observations of a time series that are k periods apart.",
+     "concept": "Autocorrelation",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Autocorrelation Function",
+       "quote": "The **autocorrelation function (ACF)** gives the correlation between a [[Time Series]] and itself $k$ periods earlier."
+      },
+      {
+       "page": "Time Series",
+       "quote": "The **autocorrelation function (ACF)** $\\rho(h) = \\text{Cor}(Y_t, Y_{t+h})$ and **partial ACF (PACF)** describe temporal dependence"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "fact",
+     "statement": "In the lag k sample autocorrelation, the numerator sums only the T-k available pairs of observations while the denominator sums over all T observations, and both use the overall mean rather than separate means for each lagged list.",
+     "concept": "Sample Autocorrelation",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Autocorrelation Function",
+       "quote": "\\hat{\\rho}_k = \\frac{\\sum_{t=1}^{n-k}(y_t - \\bar{y})(y_{t+k} - \\bar{y})}{\\sum_{t=1}^{n}(y_t - \\bar{y})^{2}}"
+      },
+      {
+       "page": "Correlogram",
+       "quote": "c_k = \\frac{1}{n}\\sum_{t=1}^{n-k}(x_t - \\bar{x})(x_{t+k} - \\bar{x})"
+      },
+      {
+       "page": "Cross-Correlation",
+       "quote": "As in the sample ACF, the sum has $n - h$ terms but is divided by $n$."
+      }
+     ]
+    }
+   ]
+  },
+  "srm-an-005": {
+   "path": "questions/exam-srm/srm-an-005.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:36d14d07fa385a15e0e03d8d06315948696ee0b0c208f7d41e794b3b94862cb8",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "fact",
+     "statement": "If the sample autocorrelations of a fitted model's residuals all lie within the approximate ±2/√n bands, the residuals show no remaining serial correlation, so the mean model (e.g., the AR order) is adequate.",
+     "concept": "Residual Diagnostics for Time Series Models",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Autocorrelation Function",
+       "quote": "On residuals it is the [[White Noise]] check: all spikes inside the bands means the model has extracted the structure"
+      },
+      {
+       "page": "White Noise",
+       "quote": "after fitting, the residual [[Autocorrelation Function|ACF]] should show no spike outside the $\\pm 1.96/\\sqrt{n}$ bands. A surviving spike means structure the model has missed"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "fact",
+     "statement": "Uncorrelated errors are not necessarily independent; autocorrelation in the squared residuals indicates dependence in the errors' variance (heteroskedasticity) even when the residuals themselves are uncorrelated.",
+     "concept": "Heteroskedasticity in Time Series",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "ARCH Model",
+       "quote": "The shocks $\\varepsilon_t$ are uncorrelated, so their [[Autocorrelation Function|autocorrelation function]] looks like that of [[White Noise|white noise]], but their squares are positively autocorrelated, because a large $\\varepsilon_{t-1}^2$ raises $\\sigma_t^2$."
+      },
+      {
+       "page": "White Noise",
+       "quote": "uncorrelated does not imply independent without it"
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "kind": "definition",
+     "statement": "An ARCH(p) model specifies the conditional variance of the error as a linear function of the p previous squared errors: σ_t² = ω + γ_1 ε_{t-1}² + ... + γ_p ε_{t-p}².",
+     "concept": "ARCH Model",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "ARCH Model",
+       "quote": "$$\\sigma_t^2 = \\omega + \\gamma_1\\varepsilon_{t-1}^2 + \\cdots + \\gamma_p\\varepsilon_{t-p}^2$$"
+      }
+     ]
+    },
+    {
+     "id": "r4",
+     "kind": "fact",
+     "statement": "Bursts of large residuals of either sign separated by quiet stretches (volatility clustering), together with positively autocorrelated squared residuals, are the pattern an ARCH model is designed to capture.",
+     "concept": "ARCH Model",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "ARCH Model",
+       "quote": "It describes **volatility clustering**, the tendency of financial returns to have large moves, of either sign, followed by more large moves and quiet periods followed by quiet periods."
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "kind": "fact",
+     "statement": "An ARCH(p) process with the sum of the γ coefficients less than 1 is stationary with constant unconditional variance ω/(1 − Σγ_j), so changing conditional variance does not imply non-stationarity or a trend in variability.",
+     "concept": "ARCH Model",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "ARCH Model",
+       "quote": "An ARCH process is heteroskedastic only conditionally. Its unconditional variance is constant when it is stationary, so \"ARCH implies non-stationarity\" is false."
+      }
+     ]
+    },
+    {
+     "id": "r6",
+     "kind": "fact",
+     "statement": "Sample autocorrelations of a stationary series die out quickly, whereas slowly decaying autocorrelations suggest non-stationarity that calls for differencing.",
+     "concept": "Stationarity and Differencing",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Autocorrelation Function",
+       "quote": "Slow, near-linear decay signals non-stationarity and calls for [[Differencing]]"
+      },
+      {
+       "page": "Stationarity",
+       "quote": "an [[Autocorrelation Function]] that decays very slowly and nearly linearly"
+      },
+      {
+       "page": "Differencing",
+       "quote": "After one difference the autocorrelations die out quickly — that is stationary, with a small MA(1) or AR(1) left to model."
+      }
+     ]
+    }
+   ]
   }
  }
 }

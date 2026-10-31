@@ -191,9 +191,9 @@ Adopted during the DISC, MAS-I and Exam 7 campaigns (Appendix A), and binding on
 
 From `python3 scripts/publication_readiness.py --body all` and `--hold`, after Phase Q closed,
 re-measured with G8 the same day.
-84 exam pages: **11 ready, 6 beta, 67 in development** (Exams P and FM promoted 30 Oct, MAS-I, the three DISCs, Exam 7, MAS-II, Exam 9, Exam 5 and SRM 31 Oct).
+84 exam pages: **12 ready, 5 beta, 67 in development** (Exams P and FM promoted 30 Oct, MAS-I, the three DISCs, Exam 7, MAS-II, Exam 9, Exam 5, SRM and FAM 31 Oct).
 
-**Ready (11).** The seven exams that were ready on 25 Oct went back to beta that day, when G8 joined
+**Ready (12).** The seven exams that were ready on 25 Oct went back to beta that day, when G8 joined
 the gates (D29). **Exam P** is ready again since 30 Oct: page verified, 68 concepts verified, 6 / 6
 readings verified, every concept with a question, 719 / 719 served questions verified, and 719 / 719
 answerable (G8: 683 items closed — 254 passages the check missed, 19 by retagging 15 questions, 220
@@ -248,16 +248,31 @@ STAT 501 and Frees's posted R scripts, each fact checked by a different agent, r
 Twelve of the 13 pages are shared with MAS-I, MAS-II or DISC-DA, and those passes were their re-check;
 all three still pass G8. One Exam 5 item quoted a *Trend* bullet the FAM packet restated (run `3416`)
 and was re-quoted on the restated bullet.
+**FAM** is ready since 31 Oct (Phase 2 step 5, C9), 8 / 8: page verified (against the February 2027
+syllabus, which the page now cites; its content is October 2026's word for word), 80 concepts
+verified (the last 37 in six reading packets at medium on open texts — Loss Data Analytics, the SOA's
+FAM-S / FAM-L solutions and tables, Valdez, Hartman, Slud, Werner & Modlin, named-author notes —
+runs `3d3b`, `3416`, `0c7d`, `182f`, `f179`), Klugman's, Brown & Lennox's and AMLCR's pages verified
+at medium on the publishers' contents, errata and the syllabi (D7, D27), every concept with a
+question, 274 / 274 served questions verified, and 274 / 274 answerable (G8, run
+`answerability-20261031-fam` and three re-runs, $24: 170 answerable at first; 139 items — 30 not
+required, 36 resolved on passages the check missed, 26 by retagging 23 questions, 48 by passages
+written onto 10 pages by two writers and fact checked by three other agents, runs `7c08`, `7d25`,
+`cd9b`). *Stop-Loss Reinsurance*'s interpolation between span points, in no open source, was cut
+(D27). For the maintainer: three Policy Value items (`faml-7-10:r5`, `faml-7-31:r3`, `faml-7-36:r3`)
+and three Future Lifetime / Equivalence Principle items rest on SOA solutions that apply the
+general result to their own numbers rather than state it (AMLCR, which states them, is commercial);
+and *Equivalence Principle*'s F-001 (minor, open): its return-of-premium example's ä₄₀ = 18.516 is a
+recomputation on Valdez's published data, which prints no answer.
 
 
-`--hold` (31 Oct): 11 ready exams, 0 errors, 1 warning (PCPA's G6).
+`--hold` (31 Oct): 12 ready exams, 0 errors, 1 warning (PCPA's G6).
 
-**Beta (6)**, in Phase 2's order:
+**Beta (5)**, in Phase 2's order:
 
 | Exam | Page | Concepts | Unverified concepts | Readings unverified | No question | Bank verified | Answerable | Gates | Fails |
 |---|---|---:|---:|---:|---:|---|---|---:|---|
 | MAS-II | verified | 98 | 2 | 1 / 6 | 0 | 141 / 141 | 74 / 141 | 5 / 8 | G4, G5, G8 |
-| FAM | verified | 80 | 0 | 0 / 3 | 0 | 274 / 274 | 170 / 274 at first (139 items; sort under way) | 7 / 8 | G8 |
 | ASTAM | verified | 56 | 22 | 4 / 4 | 0 | 62 / 62 | not run | 5 / 8 | G4, G5, G8 |
 | ALTAM | verified | 61 | 50 | 2 / 2 | 0 | 94 / 94 | not run | 5 / 8 | G4, G5, G8 |
 | PCPA | verified | 29 | 5 | 12 / 13 | 29 | no bank | no bank | 5 / 8 | G4, G5, G6 |
@@ -802,7 +817,7 @@ and then a resolve run.
 | 2 | Exam 9 | *Enterprise Risk Management*; CJS and Cummins 2008. G8: 248 items on 88 questions | Open ERM texts; the assigned texts tried again | **ready ✅ (31 Oct)**, 8 / 8. G4/G5 (run `69a5`, D22): *Enterprise Risk Management* restated to the CAS ERM Committee's 2003 overview, Brehm's four phases and implementation issues (in no open source) cut; CJS verified on the HBS working paper, the JEP text still unreachable; Cummins 2008's callout restated. G8: the sort (rule 11) closed 83 items (not-required, passages the check missed, 20 questions retagged); D10 applied to the 2012–2015 Exam 7 ERM questions from CAS's 2012–2015 syllabi, 30 `off_syllabus` (every point on Brooks, IAA 2004, Feldblum or Venter's papers; 2016–2019's one ERM reading is Brehm, today's), 2012 Q14, Q21 and 2014 Q18 kept served for G6 though D10 would flag them; the rest written onto 21 pages (new: *Franchise Value* from Panning, *Copula* and *Rank Correlation* from Venter 2002, Embrechts et al. and Mack) from open texts, with CAS's examiners' reports as last resort where Brehm alone states it, and fact checked by different agents (runs `c56a`, `2103`, `a5e7` and brehmB's). Bank serves 101 of 280 |
 | 3 | SRM | 7 concepts; Frees 2010 | ISLR (free), Frees (commercial; an online version) | **ready ✅ (31 Oct)**, 8 / 8 (§2) |
 | 4 | Exam 5 | 61 concepts; 4 readings | All free; Friedland split by chapter group | **ready ✅ (31 Oct)**, 8 / 8: seven reading packets, then G8's 314 items (sort, five writers, five checkers). Record: §4, step 4 |
-| 5 | FAM | 37 concepts; Klugman, Brown & Lennox, AMLCR | Commercial (D7, D27); open texts for the concepts (Loss Data Analytics, the SOA's own notes) | **ready** (and the three readings ASTAM and ALTAM share) |
+| 5 | FAM | 37 concepts; Klugman, Brown & Lennox, AMLCR | Commercial (D7, D27); open texts for the concepts (Loss Data Analytics, the SOA's own notes) | **ready ✅ (31 Oct)**, 8 / 8 (§2); the three readings ASTAM and ALTAM share are verified |
 | 6 | ASTAM | 22 concepts; two SOA study notes | Free notes; the rest done in step 5 | **ready** |
 | 7 | ALTAM | 50 concepts; ALTAM-21-23 | Free note; AMLCR done in step 5 | **ready** |
 | 8 | PCPA | A bank for 29 concepts, written and checked by different agents (D5); 5 concepts; 12 readings | Mostly commercial; ASOP 23 and 56, R4DS and McKinney free | **ready** |

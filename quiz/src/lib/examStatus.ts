@@ -38,8 +38,8 @@ import type { ItemStatus } from '@/data/tracks'
 export type ExamStatus = 'ready' | 'beta' | 'development'
 
 /** Exams whose material is finished enough to carry no status label at all: each passes all eight
- * gates of `publication_readiness.py --check` (P and FM again since 2026-10-30, MAS-I, the DISCs and Exam 7 since 2026-10-31, after G8 emptied it on 2026-10-25; MAS-II, Exam 9 and Exam 5 since 2026-10-31; SRM since 2026-10-31). */
-const READY_EXAMS = new Set<string>(['P', 'FM', 'MAS-I', 'CAS-DA', 'CAS-RM', 'CAS-IA', 'CAS-7', 'MAS-II', 'CAS-9', 'CAS-5', 'SRM'])
+ * gates of `publication_readiness.py --check` (P and FM again since 2026-10-30, MAS-I, the DISCs and Exam 7 since 2026-10-31, after G8 emptied it on 2026-10-25; MAS-II, Exam 9 and Exam 5 since 2026-10-31; SRM and FAM since 2026-10-31). */
+const READY_EXAMS = new Set<string>(['P', 'FM', 'MAS-I', 'CAS-DA', 'CAS-RM', 'CAS-IA', 'CAS-7', 'MAS-II', 'CAS-9', 'CAS-5', 'SRM', 'FAM'])
 
 /**
  * Exams that exist only as a syllabus outline so far. Greyed out wherever they

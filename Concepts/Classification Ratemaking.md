@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:149706c8488ae09d46220377d53aba3b788977eb8e20b06dc3d3e05e08d9681d
+  content_hash: sha256:badc87014abff1f348836ffdde4f2b3b3602f30e43ae9205c84c5935fd166c7d
   sources:
     - "Actuarial Standards Board, ASOP No. 12, Risk Classification (for All Practice Areas), Doc. No. 132 (Dec. 2005), Appendix 1 p.8 (PDF p.14), sha256:7d4f2631a589bac24cf34b1f622e95aa7bfa979aaca96de27c651099c0b12dc7 — https://www.actuarialstandardsboard.org/wp-content/uploads/2014/02/asop012_132.pdf"
   open_findings: 0

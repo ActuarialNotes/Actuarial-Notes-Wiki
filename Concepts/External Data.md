@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:20f90843e5dd7473c24b026f0b6e6258cc319f9efdf51960b1f7457c7771b20e
+  content_hash: sha256:6bf7ba31c3a833e3307d61e4d34f3baa0ba209615b94197eda74308ca04383aa
   sources:
     - "Werner & Modlin, Basic Ratemaking, 5th ed. (CAS, May 2016), Ch.3 External Data / Other Third-Party Data, printed pp.44-47 (PDF pp.56-59): credit, geo-demographic, weather indices, motor vehicle records; Ch.9 Traditional Risk Classification, printed p.158 (PDF p.170): usage-based insurance, privacy consent, legal criteria, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
     - "ASB, ASOP No. 23 Data Quality (Doc. No. 185, Dec. 2016), §3.5 reliance on data supplied by others, disclosed, PDF p.10, sha256:784c57a1379b189b234452dc7fe18d391ae86e7f5fb8815d14d35400eb3e7bdf — https://www.actuarialstandardsboard.org/wp-content/uploads/2017/01/asop023_185.pdf"
@@ -19,6 +19,7 @@ verification:
 
 > $$\text{Match rate} = \frac{\text{records matched to the source}}{\text{records submitted}}$$
 
+- **Versus internal data:** The insurer's own records are its [[Insurer Operational Data|operational data]], which describe its own book at the level of the individual policy and claim; external data supplements them rather than replacing them.
 - **Common sources:** [[Credit-Based Insurance Scoring|Credit-based insurance scores]] are built from credit reports, and telematics devices and phone apps record driving behaviour for [[Usage-Based Insurance|usage-based insurance]]. Geospatial and weather data describe a location's exposure to wildfire, flood or hail, public records include motor vehicle reports and property and court records, and connected sensors in homes and vehicles (the Internet of Things) report events such as water leaks as they happen.
 - **Matching:** External data must be attached to the insurer's records by a key such as an address, a vehicle identification number, or a name with a date of birth. The match rate above measures how many records found a match, and the records that fail to match are rarely a random sample of the book.
 - **Considerations:** Before using a source, check its quality (accuracy, completeness, how current it is and whether its definitions change over time), whether its use is legal for that purpose and line of business, the privacy and consent requirements for personal data, and its cost against the improvement it brings to the model. Check also whether it carries historical bias that could lead to [[Proxy Discrimination|proxy discrimination]]. [[Data Quality|Data quality]] standards such as ASOP No. 23 still expect the actuary to review data supplied by others and to disclose any reliance on them.

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:3112f84c11cbe7dfa700556e9d47554d4ef8992f4185c19e7b8ac24ade1aa201
+  content_hash: sha256:0d12d5ba1b0ec8def44ac53f9b0c58bc0b35cdb359edaad4cf97cf131d1d9cc9
   sources:
     - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed., §2.5 pp.16-17 (PDF 26-27); §2.9 pp.27-28 (PDF 37-38); §4.1-4.2 pp.37-38 (PDF 47-48); §5.4.2-5.4.5 pp.50-55 (PDF 60-65); §5.6.2 Tables 10-12 pp.58-60 (PDF 68-70); §6.4 pp.73-74 (PDF 83-84); §9.1 incl. fn.19 pp.89-90 (PDF 99-100), sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
     - "Holmes & Casotto, Penalized Regression and Lasso Credibility, CAS Monograph 13 (2025 revision), App. C.2 p.106 (PDF 116, penalized regression and near aliasing), sha256:f6978accbd2bcd43284ec939dd90966430a3e36fc126aab4584241a13d7a28cd — https://www.casact.org/sites/default/files/2025-08/CAS_Monograph_13_2025_revision.pdf"

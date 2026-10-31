@@ -120,3 +120,14 @@ created: 2026-09-13
 - checks_run: delta of commit c7887a25 only (one link bullet); the rest of the page verified 2026-10-09 against Werner & Modlin and Palmer, unchanged; link target Loss and Loss Adjustment Expense resolves
 - sources_checked: Bahnemann, Distributions for Actuaries, CAS Monograph 2 (2015), §6.2 increased limit factors built on loss plus ALAE, Example 6.3 and Table 6.1, PDF p.179, sha256:d4d172f9646852ab018ae3f0df95e5fbdbfabda4db55d6d4596977ed2eaa3ef8 — https://www.casact.org/sites/default/files/2021-03/8_Bahnemann.pdf
 - note: The added bullet says the page's ILFs are on loss and LAE and points to Loss and Loss Adjustment Expense for the loading; that restates the page's own Werner bullet ('ratio of losses and LAE at the two limits') and Palmer's formula with ALAE(L) and ULAE(L), and Bahnemann's Example 6.3 builds ILFs on indemnity plus ALAE. Navigation only; no new fact.
+
+## [C-003] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T17:29Z/d9a2
+- date: 2026-10-31
+- status_set: verified
+- confidence: medium
+- checks_run: new layer-by-layer bullets diffed against W&M Ch.11 pp.194-197: censoring at the policy limit, each layer only from policies with limits at or above its top (p.195), LAS($100K) from all policies capped at $100K / 5,000 (p.195), layer losses = claims in the layer less the bottom plus full width for claims above the top (p.196: 773 and 574 claims less $100K, 232 x $150K), layer severity / claims reaching the layer x Pr(X > bottom) from the same policies = layer losses / their total claim count (pp.196-197), stacking to LAS($250K) and LAS($500K) (p.197). Recomputed: 385,229,223/5,000 = 77,046; 132,876,901/2,981 = 44,575; LAS(250K) = 121,621; (81,092,725 - 232 x 250,000)/1,518 = 15,213; LAS(500K) = 136,834 — all match W&M. Older bullets re-read against W&M p.193 (indicated ILF, profit-by-limit departure, three assumptions, personal auto counter-example), p.197 (leveraged trend), p.198 (fitted curves, ISO mixed exponential, GLM frequency) and Palmer pp.2-4, 13 (ISO $100K basic limit, broader experience, ILF with ALAE/ULAE/RL, LAS integral). Layer of Insurance link resolves. Examples recomputed (1,080; 80; marginals 0.00200/0.00060/0.00060).
+- sources_checked: Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 11 pp.193-198 (PDF pp.205-210), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf; Palmer, Increased Limits Ratemaking for Liability Insurance (CAS study note, 2006), PDF pp.2-4, 13, sha256:44fcc71dbf33647fd07be04e515239989907eb894fc8df5fb18b541ebe301cf7 — https://www.casact.org/sites/default/files/database/studynotes_palmer.pdf
+- note: No new findings. Medium: worked examples are vault-authored.

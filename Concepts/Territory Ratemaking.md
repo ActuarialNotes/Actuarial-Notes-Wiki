@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-09-12
   last_checked_by: agent:validate-v1
-  content_hash: sha256:a8389346ca81a72dfcb584895d9c0fa2b87c60be06ad44f383117a910f76693e
+  content_hash: sha256:c003664a1b3f078911ab47e7f273ae5cd9448e676f2d972ac1605b4b72bb21e9
   sources:
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 11 pp.188-191 (PDF pp.200-203), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
   open_findings: 0

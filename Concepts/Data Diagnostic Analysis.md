@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-16
   last_checked_by: agent:validate-v1
-  content_hash: sha256:01fd7c6a6278bf5a7e2bc7e8171d01bc4f46bde7f3b49ad608b148c3e20b13fc
+  content_hash: sha256:cc4762362d91c979226046efad560d318bcfae40a9241170ae4f6e86620d860d
   sources:
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Chapters 5-6 pp.61-77 (PDF pp.67-83); Chapter 13 p.291 (PDF p.297), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
     - "Shapland, Using the ODP Bootstrap Model (CAS Monograph #4, 2016), eq. (3.16) p.11 (PDF p.19); Sections 4.1-4.9 pp.20-30 and 5.1-5.3 pp.31-37 (PDF pp.28-45), eqs. (4.8)-(4.10), sha256:51b072243c0fe839cd776d9dc77532c544e2d52e025a29610e1aaea2cff07abf — https://www.casact.org/sites/default/files/2021-03/7_Shapland.pdf"
@@ -32,6 +32,8 @@ verification:
   - **[[Case Adequacy|Case strengthening]]:** average case outstanding rises faster than trend on the latest diagonals, and paid-to-reported falls.
   - **Faster [[Settlement Rate|settlement]]:** closure rates and paid-to-reported rise together.
   - **A [[Mix of Business|mix]] change:** shows up down the columns.
+  - **Faster settlement of small claims:** insurers can close the less complicated and less expensive claims the quickest, so when settlement speeds up, the claims left open are the more complex and more expensive ones. Average case outstanding then rises down the columns with no change in case adequacy, and because the average reported claim also counts the smaller claims already closed, average case outstanding can sit well above it. The actuary has to determine how much of an increase is a real change in case adequacy and how much is a different mix of open claims (Friedland, Ch. 6, pp. 72, 75–76).
+  - **Averages need consistent counts:** the average paid claim is paid claims divided by closed claim counts, and the average case outstanding is unpaid case divided by open counts (reported less closed), so neither can be formed without claim counts. Whether claims closed without payment are counted changes every average, so the insurer's definition must be known and used consistently throughout the experience period (Friedland, Ch. 6, pp. 72–73).
 
   Each of these breaks a chain ladder assumption. The usual fixes are a [[Berquist-Sherman Method|Berquist-Sherman]] restatement, or separating [[Large Loss|large]] and [[Catastrophe Loss|catastrophe]] losses.
 - **Model diagnostics (Exam 7, Shapland).**

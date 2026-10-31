@@ -1,12 +1,13 @@
 ---
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
   content_hash: sha256:367a587c6fecdac063843f9a7997e70f1422ba4e34749c5aae0dae044fe0776d
   sources:
-    - "Bahnemann, Distributions for Actuaries, CAS Monograph 2 (2015), §6.2 increased limit factors built on loss plus ALAE, Example 6.3 and Table 6.1, PDF p.179, sha256:d4d172f9646852ab018ae3f0df95e5fbdbfabda4db55d6d4596977ed2eaa3ef8 — https://www.casact.org/sites/default/files/2021-03/8_Bahnemann.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 11 pp.193-198 (PDF pp.205-210), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Palmer, Increased Limits Ratemaking for Liability Insurance (CAS study note, 2006), PDF pp.2-4, 13, sha256:44fcc71dbf33647fd07be04e515239989907eb894fc8df5fb18b541ebe301cf7 — https://www.casact.org/sites/default/files/database/studynotes_palmer.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Increased Limits.md

@@ -47,3 +47,41 @@ created: 2026-10-31
 - proposed_action: 'keep' -> 'falls to the insurer'.
 - applied: true
 - fingerprint: 50925c829655
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-31T12:20Z/be9b
+- date: 2026-10-31
+- resolves: F-001
+- status: resolved
+- note: Fixed in this pass: the clause now says exam solutions call k the 'LER' (share the per-occurrence limit eliminates), which is 1 - LER in the deductible sense of [[Loss Elimination Ratio]].
+
+## [F-002/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-31T12:20Z/be9b
+- date: 2026-10-31
+- resolves: F-002
+- status: resolved
+- note: Fixed in this pass: 'for the same aggregate limit' added; the identity itself recomputed from Formulas 3.6/3.8.
+
+## [F-003/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-31T12:20Z/be9b
+- date: 2026-10-31
+- resolves: F-003
+- status: resolved
+- note: Fixed in this pass: 'keep' -> 'falls to the insurer'.
+
+## [C-001] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T12:20Z/be9b
+- date: 2026-10-31
+- status_set: verified
+- confidence: high
+- checks_run: every claim read against the reading; Exhibits 3.24-3.27 recomputed (k=0.08, phi*-k = 0.13, 0.17 at r=1.2, 1.0; phi*(1.0)=0.25; phi*(2.5)=k=0.08); psi*=phi*+r-1 checked against Formula 3.9; phi_lim(1-k)+k conversion and convexity derived from Formulas 3.6/3.8 (stop-loss transform of F_D); numbers compared with cas8-2012-q18, 2013-q13, 2014-q12 (none on the page)
+- sources_checked: Fisher et al., Individual Risk Rating (CAS Exam 8 study note, 2019), Ch.3 PDF pp.48-49, 78-79, 83-88, sha256:3182cd5d8ebccc92be67a246e61a527acda5b304b823448d99f8a2546ca07b81 — https://www.casact.org/sites/default/files/2021-03/8_Fisher_et_al.pdf
+- note: New page, checked whole against Fisher et al. ch.3. Kept as plain derivations: the (1-k) conversion (now stated at the same aggregate limit) and convexity of phi*_D, whose aggregate part is a Table M charge of F_D (Fisher p.58 property 4 applied to F_D). F-001..F-003 fixed in this pass.

@@ -32,3 +32,32 @@ created: 2026-10-31
 - proposed_action: Restate as a less variable distribution with lower charges above an entry ratio of 1, and qualify the last sentence with 'usually' and 'at entry ratios above 1'.
 - applied: true
 - fingerprint: 096adc3906ce
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-31T12:20Z/be9b
+- date: 2026-10-31
+- resolves: F-001
+- status: resolved
+- note: Fixed in this pass, same wording as on Table L.
+
+## [F-002/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-31T12:20Z/be9b
+- date: 2026-10-31
+- resolves: F-002
+- status: resolved
+- note: Fixed in this pass: 'less variable, with lower charges above an entry ratio of 1'; last sentence qualified 'usually ... at entry ratios above 1' per Fisher pp.78-79.
+
+## [C-001] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T12:20Z/be9b
+- date: 2026-10-31
+- status_set: verified
+- confidence: high
+- checks_run: every claim read against the reading; Fisher's own example re-run (1.588, 929,000 -> ELG 29, 0.1583x490,000+160,000=237,567) and the page's example recomputed (k=0.25, factor 1.60, 2,016,000, r=1.5, 108,000+300,000=408,000); (1+0.8k)/(1-k) >= 1 and increasing in k checked; numbers compared with cas8-2012-q20, 2013-q19, 2014-q17, 2017-q17, 2019-q14 (none on the page)
+- sources_checked: Fisher et al., Individual Risk Rating (CAS Exam 8 study note, 2019), Ch.3 PDF pp.66, 78-79, 84, 89-90, 119, sha256:3182cd5d8ebccc92be67a246e61a527acda5b304b823448d99f8a2546ca07b81 — https://www.casact.org/sites/default/files/2021-03/8_Fisher_et_al.pdf
+- note: New page, checked whole against Fisher et al. ch.3. 'Divided by standard premium ... percent of standard premium' is arithmetic on the reading's total. 'Where ... a Table L [is] available, the adjustment is not needed' follows from p.83 (Table L prices both limits in one table) with p.89. F-001, F-002 fixed in this pass.

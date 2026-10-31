@@ -1,12 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
   content_hash: sha256:5e19bf6848a5ad2e6357711ceb3eeae3de030166111a0d99c22d970bb63bf53a
-  sources: []
-  open_findings: 2
+  sources:
+    - "Fisher et al., Individual Risk Rating (CAS Exam 8 study note, 2019), Ch.3 PDF pp.45-49, 58, 66-75, 78-79, 89-90, 94-97, 115, 119, sha256:3182cd5d8ebccc92be67a246e61a527acda5b304b823448d99f8a2546ca07b81 — https://www.casact.org/sites/default/files/2021-03/8_Fisher_et_al.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Table M.md
 ---

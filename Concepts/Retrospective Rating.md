@@ -24,7 +24,7 @@ verification:
 - When the plan limits individual losses (a per-accident loss limitation), the insured pays for that limit too: its cost is either built into the table of insurance charges or, in some plans, computed as a separate additional charge.
 - The **maximum** protects the insured against a bad year, the **minimum** protects the insurer against a good one. Together they define how much risk is actually transferred; a plan with a tight max/min band is close to guaranteed cost, a wide one close to self-insurance. The **net insurance charge** in the basic premium — the insurance charge for the maximum less the insurance savings for the minimum — is the price of that band; the charge and savings come from a table of values, expressed as a percentage of expected unlimited losses (deriving the table is beyond Werner's scope).
 - Retro plans suit **large accounts** with credible volume, and they align incentives directly: every dollar of loss inside the band costs the insured $\text{LCF} \times \text{TM}$ dollars of premium. Conceptually a retro plan is close to self-insurance, except that its loss limits and its maximum and minimum leave some risk with the insurer.
-- The per-accident limit's share of expected loss is its [[Loss Elimination Ratio]].
+- The share of expected loss below the per-accident limit, the part that enters ratable losses, is the limit's [[Loss Elimination Ratio]].
 
 ![[Media/Figures/Retrospective_Rating.svg|340]]
 
@@ -36,7 +36,7 @@ Fisher et al. write the plan as $R = (B + cL) \times T$, with basic premium amou
 - **The expense part of $B$** is $e - (c - 1)E$ as a percentage of guaranteed-cost premium, where $e$ is the expense ratio underlying the guaranteed-cost premium. That expense ratio already **reflects the premium discount** (expenses are a lower percentage of premium for large accounts), so in a retro plan the premium discount is implicit in the basic premium rather than a separate step. Setting the expected retro premium equal to $e + E$ gives
   $B = e - (c - 1)E + c\,[\phi(r_G) - \psi(r_H)]\,E$, with the charge $\phi$ and savings $\psi$ from [[Table M]].
 - **No stated minimum.** Even with no minimum ratable loss there is still a minimum premium: with $L = 0$ the formula gives $B \times T$. So with no stated minimum, $H = BT$, the minimum entry ratio is $r_H = 0$, and the savings term is $\psi(0) = 0$.
-- **Moving the per-occurrence limit.** The total expected loss always equals the expected per-occurrence excess losses, plus the expected aggregate excess losses (net of savings), plus the expected ratable losses. Raising the per-occurrence limit moves expected loss out of the per-occurrence excess charge in $B$ and into the expected ratable losses, dollar for dollar, and both carry the same $c$.
+- **Moving the per-occurrence limit.** The total expected loss always equals the expected per-occurrence excess losses, plus the expected aggregate excess losses (net of savings), plus the expected ratable losses. Raising the per-occurrence limit moves expected loss out of the per-occurrence excess charge in $B$ and into the expected ratable losses and the aggregate excess charge, dollar for dollar in total, and all of them carry the same $c$.
 - **Per-occurrence limit and maximum overlap.** Capping each occurrence makes it less likely that ratable losses reach the maximum, so the two charges are not additive; the aggregate charge is priced on limited losses ([[Table L]], Table M$_D$, or the NCCI's [[Insurance Charge Reflecting Loss Limitation (ICRLL)|ICRLL]] procedure). The areas are drawn in a [[Lee Diagram]].
 
 ## The balance equations
@@ -55,7 +55,7 @@ Given the maximum premium $G$ and minimum premium $H$, the entry ratios and char
 
 - Incurred loss retro plans are typically first evaluated 6 months after policy expiration (18 months of development) and annually thereafter. Losses at 18 months are usually far below ultimate, so the insured typically receives a partial **refund** at the first adjustment, and then pays **additional premium** as losses develop upward — which creates [[Credit Risk|credit risk]] for the insurer.
 - To protect itself, the insurer can apply **loss development factors** to the losses in the retro formula, established up front when the plan is written. Under both the NCCI's and ISO's plans the provision for IBNR is made through factors applied to standard premium and then multiplied by the loss conversion factor and the tax multiplier, for the first three adjustments (NCCI) or the first four (ISO). The development premium brings early adjustments nearer the final premium, so less is refunded and later recouped.
-- If the development factor to ultimate is $f$ and the ultimate limited loss is $U$, the reported loss is $U/f$, so the provision for future development of limited losses is $U(1 - 1/f)$.
+- Fisher et al. give no formula for the provision itself. A development factor to ultimate $f$ takes reported limited losses $U/f$ to the ultimate limited loss $U$, so the future development of limited losses it provides for is $U(1 - 1/f)$.
 - Paid loss plans are typically not given development factors, since they are meant to mimic a large deductible's cash flows.
 
 > [!example]- Computing a Retrospective Premium {Example}

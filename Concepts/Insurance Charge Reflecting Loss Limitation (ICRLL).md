@@ -1,12 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
   content_hash: sha256:7bd11bfb2a0c979dd528bd03917852a926fdecf8836436e16a60d6784807f58a
-  sources: []
-  open_findings: 2
+  sources:
+    - "Fisher et al., Individual Risk Rating (CAS Exam 8 study note, 2019), Ch.3 PDF pp.66, 78-79, 84, 89-90, 119, sha256:3182cd5d8ebccc92be67a246e61a527acda5b304b823448d99f8a2546ca07b81 — https://www.casact.org/sites/default/files/2021-03/8_Fisher_et_al.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Insurance Charge Reflecting Loss Limitation (ICRLL).md
 ---

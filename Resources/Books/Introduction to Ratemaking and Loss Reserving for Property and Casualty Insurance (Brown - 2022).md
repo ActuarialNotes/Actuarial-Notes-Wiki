@@ -8,12 +8,17 @@ Edition: "5th"
 Type: "Textbook"
 ISBN: "978-1-64756-787-3"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
   content_hash: sha256:e793240acb12a3a749e0815788d341b3bbc7f5ab2c5ed5cff7bf6ebc356032f9
-  sources: []
+  sources:
+    - "Brown & Lennox, Introduction to Ratemaking and Loss Reserving for P&C Insurance, 5th ed. (ACTEX 2022) — publisher's sample pages, title p.(i), copyright p.(ii), contents pp.iii-vi, acknowledgements p.vii, preface p.viii (PDF pp.1-9), sha256:186d9239f5c102f1077ad1c229ec03d6dfeae209d5c4bf36728641582c4c451e — https://www.actexmadriver.com/samples/Intro_to_Ratemaking_06092022_sample.pdf"
+    - "SOA Exam FAM syllabus, October 2026, Readings, p.8; Topics 5 and 7, pp.5-6, sha256:90172025d8bd9d69e18e974fdee447963e54258e5f0e419aa3ef5b7d3e55a00e — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-fam-syllabus.pdf"
+    - "SOA Exam FAM syllabus, February 2027, Readings, p.8, sha256:da98474b74b0a9e9153b8ce198f30195dfbe394b3e300e785e58f12663b447e4 — https://www.soa.org/globalassets/assets/files/edu/2027/spring/syllabi/2027-2-fam-syllabus.pdf"
+    - "SOA Exam ASTAM syllabus, October 2026, Resources, p.6; Topic 6, p.5, sha256:6d462aea25c09b15cc457176ecf2d5d6143df8fb88df9f366557de17ec1ec9ba — https://www.soa.org/globalassets/assets/files/edu/2026/astam/2026-fall-exam-astam-syllabus.pdf"
+    - "SOA, Errata for Brown & Lennox 5th ed. (Sept 26, 2024), p.1, sha256:d07dceb96b3f4b83afec6c96240192bd006750586d2e5ce363b1991e8a97f5d5 — https://www.soa.org/globalassets/assets/files/edu/2024/fall/2024-10-exam-fam-errata-5th-edition.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Introduction to Ratemaking and Loss Reserving for Property and Casualty Insurance (Brown - 2022).md

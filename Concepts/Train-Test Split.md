@@ -60,7 +60,7 @@ A **train-test split** divides the available data into disjoint parts that do di
 > [!tip]- How it appears on the exam
 > - **SRM** asks how decision trees are fit to training data and pruned, and it compares the training-versus-test (validation set) approach with $k$-fold and leave-one-out cross-validation. Multiple-choice statements test which set each step may use and why the validation set estimate is variable and tends to overstate the test error.
 > - **PA** expects a written description of how the data were split, which set each exhibit was built on, and why the final comparison uses held-out data.
-> - **ATPA** asks candidates to recognize and mitigate the effect of repeated use of train/test/validate sets, in the take-home assessment, whose report describes how the candidate's own data were split and used.
+> - **ATPA** asks candidates to recognize and mitigate the effect of repeated use of train/test/validate sets, in the take-home assessment, which requires analysis of a data set in the context of a business problem and submission of a report.
 
 > [!warning]- Exam traps
 > - **Tuning on the test set:** Choosing a hyperparameter or a model by test error and then reporting that error as unbiased overstates the model's accuracy. Once the test set has chosen anything, a different set must report the result.

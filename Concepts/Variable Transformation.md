@@ -11,7 +11,7 @@ verification:
   log: .verify/Concepts/Variable Transformation.md
 ---
 
-A **Variable Transformation** replaces a predictor $x$ with a function of it, $h(x)$, so that its relationship with the response is captured by a model that is linear on the scale of the [[Link Function|link]]. In a [[Generalized Linear Model]] the *response* is not transformed — the link and the error distribution handle its scale — so transformation is about the *predictors*.
+A **Variable Transformation** replaces a predictor $x$ with a function of it, $h(x)$, so that its relationship with the response is captured by a model that is linear on the scale of the [[Link Function|link]].
 
 > $$g(\mu) = \beta_0 + \beta_1\,h(x) + \cdots$$
 >
@@ -21,7 +21,7 @@ A **Variable Transformation** replaces a predictor $x$ with a function of it, $h
 - **Log**: for positive, right-skewed predictors whose effect is proportional (amount of insurance, building value). With a log link this is usually the natural first choice
 - **Binning (banding)**: cut a continuous variable into groups and fit a level for each, treating it as a [[Categorical Predictor|categorical predictor]]. Captures any shape, but spends a parameter per band and ignores the ordering within one
 - **Polynomial** ($x$, $x^2$, …) and **piecewise linear** (hinge) terms: fit a curve with a few parameters. Polynomials can behave badly at the edges of the data
-- **Capping** extreme predictor values before fitting stops a handful of points from driving the fit (see [[Outlier]]); **standardizing**, $(x - \bar{x})/s_x$, puts predictors on a common scale and helps when [[Interaction|interactions]] or penalties are used
+- Before a penalized fit such as ridge regression, **standardizing**, $(x - \bar{x})/s_x$, puts predictors on a common scale
 - The need for a transformation shows up in [[Exploratory Data Analysis]] and in a [[Residual Plot]] against the predictor — a curve where there should be none
 
 > [!example]- Interpreting a Logged Predictor {Example}

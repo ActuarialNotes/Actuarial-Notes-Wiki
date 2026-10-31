@@ -105,3 +105,11 @@ verification:
 > > $$
 > >
 > > A single $\phi$ would have given $\sqrt{1.2188 \times 80} = 9.87$, overstating the late periods' volatility by a factor of $2.7$. The group-A cells go the other way.
+
+## In least-squares regression
+
+The same word names a failed assumption of the [[Linear Regression|linear regression]] model, whose errors are assumed to have constant variance, $\mathrm{Var}(\epsilon_i) = \sigma^2$. The standard errors, confidence intervals and hypothesis tests of the fit rely on it (James et al., §3.3.3, item 3).
+
+- **Detecting it.** A funnel shape in the [[Residual Plot|plot of residuals against fitted values]]: the residuals spread wider as the fitted values grow, which happens when the error variance increases with the response.
+- **Transform the response.** One remedy is to replace $Y$ with a concave function of it, such as $\log Y$ or $\sqrt{Y}$. A power transformation $Y^{\lambda}$ with $0 < \lambda < 1$ is concave in the same way. Such a transformation shrinks the larger responses more than the smaller ones, which reduces the heteroscedasticity. Refit and read the residual plot again.
+- **Or weight the fit.** When the variance of each response is known up to a constant, say $\sigma^2/n_i$ for an average of $n_i$ raw observations, fit by weighted least squares with weights proportional to the inverse variances, here $w_i = n_i$.

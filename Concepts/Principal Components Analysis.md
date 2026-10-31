@@ -25,6 +25,7 @@ verification:
 - $\boldsymbol{\phi}_m$ is the $m$-th **loading vector** (eigenvector of the covariance matrix $\mathbf{S}$ with eigenvalue $\lambda_m$)
 - $\mathbf{z}_m = \mathbf{X}\boldsymbol{\phi}_m$ is the $m$-th **score vector** (principal component)
 - PCs are **orthogonal** — each successive PC captures the maximum remaining variance
+- **Another interpretation — the closest surfaces** (James et al., §12.2.2): principal components also give the low-dimensional linear surfaces that are closest to the observations, measured by average squared Euclidean distance. The first loading vector is the line in $p$-dimensional space closest to the $n$ observations, the first two span the closest plane, and in general the first $M$ span the closest $M$-dimensional hyperplane
 - **Scree plot**: plot of $\lambda_m$ vs. $m$; an "elbow" suggests how many PCs to retain
 - PCA requires **standardizing** predictors (subtract mean, divide by SD) when variables are on different scales
 - Used for **visualization** of high-dimensional data, and to derive a few features for a supervised fit

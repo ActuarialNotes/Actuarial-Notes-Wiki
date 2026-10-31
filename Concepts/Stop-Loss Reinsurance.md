@@ -2,13 +2,18 @@
 aliases:
   - Stop Loss Reinsurance
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
   content_hash: sha256:6acd9b3ad5cb3c8065ce5be230d63761b5d4a5ad4c1991b1ffdf31a82b997b70
-  sources: []
-  open_findings: 0
+  sources:
+    - "Frees et al., Loss Data Analytics (open text, openacttexts.github.io), ch.5, 5.3.2 Stop-loss Insurance: net stop-loss premium E[(S-d)_+]=E(S)-E(S^d), E(S^j)=sum_{x<j} x f(x)+j Pr(S>=j), recursion E[(S-(j+1)h)_+]=E[(S-jh)_+]-h(1-F_S(jh)), sha256:09489050a45e6eb2ee0d96804458eb22c936a61716227e08ad0398b9cba870d4 — https://openacttexts.github.io/Loss-Data-Analytics/ChapAggLossModels.html"
+    - "SOA Exam FAM-S Sample Questions, Q29 stop-loss on a three-person group, p.24, sha256:ef535e2198444052082114642e5884d8fe279975ebe7059abb363c5ecfcfd4de — https://www.soa.org/globalassets/assets/files/edu/2024/fall/questions/2024-10-exam-fam-s-sample-questions.pdf"
+    - "SOA Exam FAM-S Sample Solutions, Q29 solution, E(S)-E(S^1)=3-0.936=2.064, p.14, sha256:7b3f61d8c385f486f3dbc586cdaab035fe9c45a055710e8327d213c4d3e71b48 — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/2024-10-exam-fam-s-sample-solutions.pdf"
+    - "SOA Exam ASTAM Syllabus, October 2026, Topic 3 outcome a (stop loss reinsurance among coverage modifications), p.3, sha256:6d462aea25c09b15cc457176ecf2d5d6143df8fb88df9f366557de17ec1ec9ba — https://www.soa.org/globalassets/assets/files/edu/2026/astam/2026-fall-exam-astam-syllabus.pdf"
+    - "SOA Exam FAM Syllabus, February 2027, Topic 2 outcome l, p.3, sha256:da98474b74b0a9e9153b8ce198f30195dfbe394b3e300e785e58f12663b447e4 — https://www.soa.org/globalassets/assets/files/edu/2027/spring/syllabi/2027-2-fam-syllabus.pdf"
+  open_findings: 2
   open_critical: 0
   log: .verify/Concepts/Stop-Loss Reinsurance.md
 ---

@@ -8,13 +8,20 @@ Edition: "5th"
 Type: "Textbook"
 ISBN: "978-1-119-52378-9"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
   content_hash: sha256:41b9260717498326fe9bc4c54a771e2f56978d1d75afd2d015825e1bf51860e7
-  sources: []
-  open_findings: 0
+  sources:
+    - "SOA Exam FAM Syllabus, February 2027, Readings, Loss Models chapter list, p.8, sha256:da98474b74b0a9e9153b8ce198f30195dfbe394b3e300e785e58f12663b447e4 — https://www.soa.org/globalassets/assets/files/edu/2027/spring/syllabi/2027-2-fam-syllabus.pdf"
+    - "SOA Exam FAM Syllabus, October 2026, Readings, Loss Models chapter list, p.8, sha256:90172025d8bd9d69e18e974fdee447963e54258e5f0e419aa3ef5b7d3e55a00e — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-fam-syllabus.pdf"
+    - "SOA Exam ASTAM Syllabus, October 2026, Resources, Loss Models chapter list, p.6, sha256:6d462aea25c09b15cc457176ecf2d5d6143df8fb88df9f366557de17ec1ec9ba — https://www.soa.org/globalassets/assets/files/edu/2026/astam/2026-fall-exam-astam-syllabus.pdf"
+    - "CIA Education Syllabus – ACIA Capstone Exam and Modules (last updated January 19, 2026), Section 3 table, A4.7-A4.13, pp.28-29, sha256:2a0fb1facb47c97a76ac956d86f0514bcb9e5459ecdc0a973bd3f6f155e3d291 — https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=608114&fid=627235"
+    - "Wiley, Loss Models 5th ed. — Table of Contents excerpt (PDF), Contents, all 8 pages (pp.v-xii), sha256:814f18cfefff53b09b2f477c3d6fd8eb84d77ef1aea69a8a27beefc620f2afe3 — https://media.wiley.com/product_data/excerpt/88/11195237/1119523788-8.pdf"
+    - "Wiley product page, Loss Models: From Data to Decisions, 5th Edition, authors, ISBN 978-1-119-52378-9, May 2019, 560 pages, description, sha256:c358af4e429dc3b30ab1e94bd6de20a1e669d1050d01523e11aa73307117d001 — https://www.wiley.com/en-us/Loss+Models%3A+From+Data+to+Decisions%2C+5th+Edition-p-9781119523789"
+    - "SOA, Corrections and Comments for Loss Models, Fifth Edition, p.1, sha256:28b25400d43c5e9bfe0f077c96b2806e38af8ce1047a23500c71ad8d0ece24f8 — https://www.soa.org/globalassets/assets/files/edu/2021/corrections-comments-loss-models.pdf"
+  open_findings: 2
   open_critical: 0
   log: .verify/Resources/Books/Loss Models - From Data to Decisions (Klugman - 2019).md
 ---

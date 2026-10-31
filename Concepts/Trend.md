@@ -1,11 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:ded45e74ba328a190b13166dd44a53633ab20ea45f8dd2aba74835319b72d8a9
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:e9b720c41c5b7b6ae802f5afac2f98d61df9aee83696c189afc60e16ea56263b
+  sources:
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 4 pp.61-62 (Exposure Trend); Ch. 5 pp.81-82, 88; Ch. 6 pp.109-110 (Loss Trend), 112-115 (trend periods), 119 (PDF pp.73-74, 93-94, 100, 121-122, 124-127, 131), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "SOA Exam FAM-S sample solutions (Oct 2024), Q69, Q76, Q95, Q96, Q107 (pp.29, 31, 37), sha256:7b3f61d8c385f486f3dbc586cdaab035fe9c45a055710e8327d213c4d3e71b48 — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/2024-10-exam-fam-s-sample-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Trend.md

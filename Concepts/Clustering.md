@@ -37,9 +37,11 @@ verification:
 - **Centroid**: distance between the two clusters' centroids (mean vectors); can produce **inversions**, where two clusters fuse at a height below either of them in the dendrogram
 
 - Clustering requires a **dissimilarity measure** (e.g., Euclidean distance, correlation-based distance); whether to **standardize** the variables (to standard deviation one) depends on the application: it gives every variable equal weight, and is advisable when they are measured on different scales
+- **Observations or features:** Clustering usually groups the observations on the basis of the features, to find subgroups among the observations. It can just as well group the features on the basis of the observations, to find subgroups among the features, by transposing the data matrix (James et al., §12.4)
 - Used in actuarial science for **policyholder segmentation** and **territory grouping**
 - **Choices that change the answer** (James et al., §12.4.3): whether to standardize, which dissimilarity measure and linkage to use, where to cut the dendrogram, and how many clusters to ask $K$-means for. Each can change the clusters, so try several and keep the most useful and interpretable result. See [[Similarity and Distance Measures]]
 - **Clusters are always found:** Clustering returns clusters whether or not the data contain real subgroups. Whether they would reappear in an independent sample is a hard question, so clusters used as [[Data Segmentation|segments]] should be checked on other data and against what the business knows
+- **Outliers and robustness** (James et al., §12.4.3): $K$-means and hierarchical clustering both force every observation into a cluster, so a few observations that belong to no subgroup can heavily distort the clusters found. Neither method is very robust to small changes in the data either: clustering again after removing a random subset of the observations often gives quite different clusters, so cluster subsets of the data to see which clusters hold up
 
 ![[Media/Figures/Clustering.svg|340]]
 

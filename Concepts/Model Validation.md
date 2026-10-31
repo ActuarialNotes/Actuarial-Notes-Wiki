@@ -12,7 +12,7 @@ verification:
   open_critical: 0
   log: .verify/Concepts/Model Validation.md
 ---
-**Model Validation** is the testing of whether a model's output reasonably represents what is being modelled, using evidence the model was not built from: data held out of the fit, historical actual results, independent calculations or alternative models. In statistical learning it means estimating **test** error rather than training error; in actuarial cash-flow modelling it means reconciling the model to the in-force, the financial statements and past experience. It is a core control of [[Model Governance|model governance]] and the main defence against [[Model Risk|model risk]].
+**Model Validation** is the testing of whether a model's output reasonably represents what is being modelled, using evidence the model was not built from: data held out of the fit, historical actual results, independent calculations or alternative models. In statistical learning it means estimating **test** error rather than training error; in actuarial cash-flow modelling it means reconciling the model to the in-force, the financial statements and past experience. It is a core control of [[Model Governance|model governance]], and ASOP 56 lists it among the steps for mitigating [[Model Risk|model risk]].
 
 > $$\text{MSE}_{\text{val}} = \frac{1}{n_v}\sum_{i \in \text{val}}\left(y_i - \hat{f}(x_i)\right)^2$$
 
@@ -60,7 +60,7 @@ verification:
 > [!tip]- How it appears on the exam
 > - **SRM** asks to compare the validation set approach, $k$-fold and leave-one-out cross-validation: computing a CV estimate from fold errors, and explaining their bias and variance (LOOCV nearly unbiased but high variance and costly; validation set variable and pessimistic).
 > - SRM pairs validation with training versus test error and the [[Bias-Variance Tradeoff|bias-variance tradeoff]]: which model a validation curve selects and why the training curve cannot.
-> - **CP-312** asks to describe, apply and evaluate validation techniques for cash-flow and other financial models (static and dynamic validation, back-testing, sensitivity tests, independent review) and to place validation in a model governance framework; mostly written answers on a case.
+> - **CP-312** asks to describe, apply and evaluate model validation techniques, for cash flow models of long-term insurance business and for other types of models, and to apply model governance; a case study is provided with the examination.
 
 > [!warning]- Exam traps
 > - Choosing the model with the lowest training error. More flexible models always fit the training data better; only error on data not used in the fit measures prediction.

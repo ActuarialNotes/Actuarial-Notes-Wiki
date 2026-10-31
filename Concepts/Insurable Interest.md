@@ -1,18 +1,15 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-10
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
   content_hash: sha256:ac371c8159bf20225246a947cf787fa634398d4c425ea22f6564a89f2901913e
   sources:
-    - "ISO HO 00 03 05 11, Homeowners 3 – Special Form (Maine Bureau of Insurance copy), Section I Conditions A, L (pp.13, 16), sha256:ac539e500a5767946452d1e6ad4c4b7dcc395c6c65c48fc3a8ac92a7c330a1d4 — https://www.maine.gov/pfr/insurance/sites/maine.gov.pfr.insurance/files/inline-files/ho00-03-05-11-homeowners3-special-form.pdf"
-    - "ISO CP 00 10 10 12, Building and Personal Property Coverage Form, F.2 Mortgageholders (p.14), sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf"
-    - "IRMI Insurance Glossary, 'insurable interest' (fetched 2026-10-10), sha256:2b0775a9e7247c71bd5e88ff280d1b912360a4baac367db45704da4bb476fb73 — https://www.irmi.com/term/insurance-definitions/insurable-interest"
-    - "IRMI Insurance Glossary, 'mortgagee clause' (fetched 2026-10-10), sha256:cf74e45616f1ee2dec958c4f6eb9d8be1f8a676a89d5df0a72b2102b10fad1ed — https://www.irmi.com/term/insurance-definitions/mortgagee-clause"
-    - "IRMI Insurance Glossary, 'loss payable clause' (fetched 2026-10-10), sha256:b6f98f37316d5d3d544dfda955e9d95413c762706326f120885d88ef16b2fb25 — https://www.irmi.com/term/insurance-definitions/loss-payable-clause"
-    - "IRMI Insurance Glossary, 'additional insured' (fetched 2026-10-10), sha256:409eb538c47c34793c3c490ff42d783b8e4f8501278141539fb8f4cd62e8299e — https://www.irmi.com/term/insurance-definitions/additional-insured"
-    - "Kramer v. Phoenix Life Ins. Co., 15 N.Y.3d 539 (2010), 2010 NY Slip Op 08376 (fetched 2026-10-10), sha256:955277c231faa2de50826179adc62246af0dd86d1c1093f5a5c569c546bc5db7 — https://nycourts.gov/reporter/3dseries/2010/2010_08376.htm"
+    - "California Insurance Code §283 (via california.public.law), §283, sha256:333eecb69eda84e50dd65e8049caf28a18ee8ba79b6a569e18348ad5b9122aa5 — https://california.public.law/codes/insurance_code_section_283"
+    - "California Insurance Code §281 (via california.public.law), §281, sha256:4849b31d0abb5c51e9c45366a046d5f54cb6e4d0ebd43fe0da2f3f29570d06c6 — https://california.public.law/codes/insurance_code_section_281"
+    - "FC&S Editors, Insurable Interest in Contract to Purchase Home (PropertyCasualty360, 13 Nov 2009), on Whitten v. Cincinnati Ins. Co., 544 N.E.2d 1169 (1989), sha256:6fe87cac21370094499195e2a8b498fe8cbaca483c7bc38adda4b6ebf0f36494 — https://propertycasualty360.com/fcs/2009/11/13/insurable-interest-in-contract-to-purchase-home-422-6636"
+    - "IRMI Insurance Glossary, 'insurable interest', sha256:055edc75d4b610edb423b6d984bf2fc98e723fc77336e6e5a1050f9f2bdb3b49 — https://www.irmi.com/term/insurance-definitions/insurable-interest"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Insurable Interest.md

@@ -218,7 +218,15 @@
      "statement": "A mere expectation of a future benefit (such as an expected inheritance) or an intention to buy property, with no ownership right or contract, is not an insurable interest.",
      "concept": "Insurable Interest",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Insurable Interest",
+      "quote": "A mere expectancy is not insurable: a hope of inheriting property, or an intention to buy it, with no right to the property and no contract for it, gives the holder nothing a loss can take away.",
+      "note": "Teaches that an expectancy (inheritance hope, intention to buy) with no right and no contract is not an insurable interest. Source: Cal. Ins. Code §283 (california.public.law); §281. Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T19:38Z/7c08"
+     }
     },
     {
      "id": "r5",
@@ -226,7 +234,15 @@
      "statement": "A buyer already bound by a contract of sale can have an insurable interest in property before the sale closes.",
      "concept": "Insurable Interest",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Insurable Interest",
+      "quote": "A buyer already bound by a contract of sale is different: the contract is a right the loss would impair, so the buyer has an insurable interest before the sale closes and title passes.",
+      "note": "Teaches that a buyer bound by a contract of sale has an insurable interest before closing. Source: FC&S (PropertyCasualty360, 13 Nov 2009) on Whitten v. Cincinnati Ins. Co., 544 N.E.2d 1169 (1989); Cal. Ins. Code §283 ('nor upon any valid contract for it'). Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T19:38Z/7c08"
+     }
     },
     {
      "id": "r6",
@@ -14333,7 +14349,15 @@
      "statement": "A bonus equal to a constant times the amount by which a random loss falls below a threshold is the payoff c·max(d − X, 0), which equals c·(d − min(X, d)); its expected value is c·(d − E[X ∧ d]).",
      "concept": "Limited Expected Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Limited Expected Value",
+      "quote": "A payment that rewards a loss for falling below $d$, $(d - X)_+ = \\max(d - X, 0)$, equals $d - (X \\wedge d)$, so $E[(d - X)_+] = d - E[X \\wedge d]$. A payment of $c$ times the shortfall has expected value $c\\,(d - E[X \\wedge d])$.",
+      "note": "Teaches E[(d - X)+] = d - E[X ^ d] and the expected value of c times the shortfall. Source: Loss Data Analytics §3.4.2 (definition of X ^ u, from which the identity follows case by case). Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T19:38Z/7c08"
+     }
     },
     {
      "id": "r2",
@@ -15824,7 +15848,15 @@
      "statement": "When a benefit change is triggered by the insured's cumulative out-of-pocket amount reaching a cap, convert that cap into the corresponding ground-up loss level by adding up the insured's share in each earlier band (deductible, coinsurance share of the band, full cost portion) and solving for the loss at which the insured's total equals the cap.",
      "concept": "Out-of-Pocket Maximum",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Coverage Modifications",
+      "quote": "A threshold stated as an amount the insured has paid, such as an out-of-pocket maximum, is first converted into a ground-up loss level: add up the insured's share band by band and solve for the loss at which that cumulative share reaches the threshold.",
+      "note": "Teaches converting an out-of-pocket threshold into a ground-up breakpoint by cumulating the insured's share band by band, and the banded LEV sum. Source: Loss Data Analytics §3.4.1-3.4.3 (one-band formula, generalised by linearity); the method is stated in general words in the SOA FAM-S solutions (Q33 p.16, Q60 p.27). Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T19:38Z/7c08"
+     }
     }
    ]
   },
@@ -17879,7 +17911,15 @@
      "statement": "When a policyholder's out-of-pocket maximum-like threshold is defined by cumulative policyholder payments, find the loss level at which cumulative policyholder payments across the deductible, coinsured layer, and 100%-paid layer reach the stated amount, which gives the breakpoint where the next coinsurance tier begins.",
      "concept": "Out-of-Pocket Maximum",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Coverage Modifications",
+      "quote": "A threshold stated as an amount the insured has paid, such as an out-of-pocket maximum, is first converted into a ground-up loss level: add up the insured's share band by band and solve for the loss at which that cumulative share reaches the threshold.",
+      "note": "Teaches converting an out-of-pocket threshold into a ground-up breakpoint by cumulating the insured's share band by band, and the banded LEV sum. Source: Loss Data Analytics §3.4.1-3.4.3 (one-band formula, generalised by linearity); the method is stated in general words in the SOA FAM-S solutions (Q33 p.16, Q60 p.27). Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T19:38Z/7c08"
+     }
     },
     {
      "id": "r5",
@@ -20799,7 +20839,15 @@
      "statement": "For a lognormal stock price model with parameters mu and sigma per year, the log-return over t years has mean mu*t and variance sigma^2*t (parameters scale linearly in time for mean and variance).",
      "concept": "Lognormal Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Black-Scholes Model",
+      "quote": "A stock or fund said to follow a lognormal distribution with parameters $\\mu$ and $\\sigma$ per year has $\\ln(S_t/S_0) \\sim N(\\mu t, \\sigma^2 t)$: the mean and the variance of the log return both grow in proportion to $t$, so its standard deviation grows with $\\sqrt t$.",
+      "note": "Teaches the per-year lognormal parameter convention, ln(S_t/S_0) ~ N(mu t, sigma^2 t), and its relation to the GBM drift. Source: Haugh, A Brief Introduction to Stochastic Calculus (Columbia IEOR E4706, 2016), §3.2 eq. (13), p.7. Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T19:38Z/7c08"
+     }
     },
     {
      "id": "r3",

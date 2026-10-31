@@ -1,16 +1,13 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-04
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
   content_hash: sha256:755adc54e50c3cd0621facb96b0515f4d17b5f36ca294a70eb30434eac7b8636
   sources:
-    - "Frees & Johnson (eds.), Loss Data Analytics, Version 1.1 (Aug 2020, open textbook), Ch.3 Modeling Loss Severity: §3.4.1 Y^L, Y^P = Y^L | X > d, E(Y^P) = E(Y^L)/(1 - F(d)), LER = [E(X) - E(Y^L)]/E(X), franchise deductible; §3.4.3 Y^L = alpha[(X^u) - (X^d)], maximum payment alpha(u - d) with u the maximum covered loss, and E(Y^L) = alpha(1+r)[E(X^(u/(1+r))) - E(X^(d/(1+r)))], sha256:263021bf543b04b2881284b38b7dcbd0586b78daec371b88a1eefcd362dff732 — https://openacttexts.github.io/Loss-Data-Analytics/ChapSeverity.html"
-    - "Frees & Johnson (eds.), Loss Data Analytics, Version 1.1 (Aug 2020), Ch.5 §5.5.2 P_{N^P}(z) = P_{N^L}(1 + v(z-1)), v = Pr(X > d): N^P ~ Poi(lambda v), NB(beta v, r); §5.5.3 E(S) = E(N^L)E(X^L) = E(N^P)E(X^P), sha256:09489050a45e6eb2ee0d96804458eb22c936a61716227e08ad0398b9cba870d4 — https://openacttexts.github.io/Loss-Data-Analytics/ChapAggLossModels.html"
-    - "SOA, Tables for Exam C (Fall 2009), Pareto F(x) and E[X^x] = theta/(alpha-1)[1 - (theta/(x+theta))^(alpha-1)] (PDF p.8); binomial P(z) = [1 + q(z-1)]^m and negative binomial P(z) = [1 - beta(z-1)]^(-r) (PDF p.15), sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf"
-    - "Tse, Nonlife Actuarial Models (Cambridge UP, 2009), publisher preview: contents §2.5 Effects of coverage modifications, p.66-79 (PDF p.10); Theorem 1.2 Poisson decomposition X_i ~ PN(lambda p_i) (PDF p.31); BN(n, theta) and NB(r, theta) parameterisation (PDF p.25, 27-28), sha256:f6d009afdd1776907db090b41b72dd5a76d0b5ba3f0ee42e8b07279d5763b404 — https://api.pageplace.de/preview/DT0400.9780511630231_A24404031/preview-9780511630231_A24404031.pdf"
-    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), Domain B task 5 (PDF p.4), Tse §§2.2-2.5 assigned (PDF p.6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
+    - "Frees & Johnson (eds.), Loss Data Analytics (open textbook), Ch.3 §3.4.2 Policy Limits (X ^ u definition; X = (X-u)+ + X ^ u; Y^L = (X^u) - (X^d)), §3.4.3 Y^L = alpha[(X^u) - (X^d)], piecewise in X, sha256:263021bf543b04b2881284b38b7dcbd0586b78daec371b88a1eefcd362dff732 — https://openacttexts.github.io/Loss-Data-Analytics/ChapSeverity.html"
+    - "SOA Exam FAM-S sample solutions (Oct 2024), Q33 p.16; Q60 p.27, sha256:7b3f61d8c385f486f3dbc586cdaab035fe9c45a055710e8327d213c4d3e71b48 — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/2024-10-exam-fam-s-sample-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Coverage Modifications.md

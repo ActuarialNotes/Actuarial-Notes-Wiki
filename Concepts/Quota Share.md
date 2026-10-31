@@ -2,12 +2,12 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-10-18
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
   content_hash: sha256:65937c7fa7d48df42f442277e424b4d1546afebb19521914f3b162a0e61b4e7f
   sources:
-    - "Clark, Basics of Reinsurance Pricing (CAS Study Note, revised 2014), pp.3-9 (§1A quota share definition, pricing steps 1-6, worked example; §1B adjustable features), sha256:1c4429fee538cc8d90157c1849ca689a3a2173a2670fc57f212d866b493e2c63 — https://www.casact.org/sites/default/files/old/studynotes_clark_2014.pdf"
-    - "CAS Exam 9 Content Outline, Fall 2026, pp.3, 7 (task A1-A3, readings Clark and Bernegger), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
+    - "Clark, Basics of Reinsurance Pricing (CAS Study Note, revised 2014), §1A pp.3-8 (quota share takes a flat percent of premium and losses including ALAE; ceding commission; pricing steps 1-6: five or more years, exclude cat and shock, develop, trend, parallelogram for losses-occurring, non-cat ELR, cat load from an engineering-based model, commission, brokerage, general expenses, target return), §1B p.9 (loss occurrence limit; adjustable features) and pp.9-13 (sliding scale, profit commission, loss corridors), sha256:1c4429fee538cc8d90157c1849ca689a3a2173a2670fc57f212d866b493e2c63 — https://www.casact.org/sites/default/files/old/studynotes_clark_2014.pdf"
+    - "CAS Exam 9 Content Outline, Fall 2026, pp.3, 7 (tasks A1-A5, readings Clark, Bernegger, Grossi & Kunreuther), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
   open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Quota Share.md

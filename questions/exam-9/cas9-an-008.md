@@ -11,14 +11,15 @@ wiki_link:
   - Concepts/Risk-Adjusted+Pricing
   - Concepts/Insurance+Pricing
   - Concepts/Cost+of+Capital
+  - Concepts/Financial+Economics
 answer: "A"
 points: 1
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-18
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:3cbe90d33f27e9ad199128c779305e8ff24cdd77c57bd620bb277c88fbe45135
+  content_hash: sha256:3a3f41cef58f9c2ed2b4c3912ad4d014f5f0ca2de6e6538960fe9c26822843c4
   sources:
     - "CAS Exam 9 Working Group, Note to Allocation of Capital in the Insurance Industry (Cummins), January 2026, pp.1-3 (r_E = r_A(1+k1+k2) + r1 s1 + r2 s2; corrected r_i = -(k_i/s_i) r_F + beta_i (r_M - r_F); error on article p.15), sha256:b5768e1c98dd51f4bc86b133f9da30de2cb0497d65f0e34af4861cb122c305fc — https://www.casact.org/sites/default/files/2026-01/Exam_9_Erratum_Cummins_Capital-1.pdf"
     - "CAS Exam 9 Content Outline, Fall 2026 (v01 2026-03-18), Domains A-D tasks pp.3-6 and text references pp.7-8, sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"

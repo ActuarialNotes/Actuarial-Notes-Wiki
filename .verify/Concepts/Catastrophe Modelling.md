@@ -85,3 +85,62 @@ created: 2026-10-18
 - checks_run: SOA glossary quote verbatim against p.12; definition against Humphreys p.1; framework row (events, hazard, vulnerability, financial loss) against Exam 8 F2016 Q18 and F2018 Q17 reports; data row against the same and Braun & Kousky p.3; uses against Humphreys p.1 and IIASA p.4; new ## Sources URL fetched and hashed; scope against the Fall 2026 outline (A4-A5, Grossi & Kunreuther Ch.2-6) and the errata. Wiki links resolve.
 - sources_checked: Humphreys, Exceedance Probability in Catastrophe Modeling, CAS E-Forum Winter 2021, pp.1-7, 16 (definition and perils incl. terrorism; uses: ratemaking, portfolio management, underwriting, cost of capital, cost of reinsurance and risk transfer, ERM, capital adequacy; EP(x) = P(X > x); AAL = sum p_i X_i; return period = 1/EP; OEP = probability the largest loss in a year exceeds x; AEP the survival function of the annual aggregate S, E[S] = integral of A(x) dx; AEP used for aggregate covers such as stop loss), sha256:c161864d85d35169b8e1f92af664542f05f005772e4cc6607ead0d68f08fdf89 — https://www.casact.org/sites/default/files/2021-03/02_humphreys.pdf; SOA Actuarial Glossary, p.12 'Catastrophe', sha256:9e6976838bc6d827be402fba326a3f977bc566bc5700470e9208ec59a93bf953 — https://www.soa.org/4a537f/globalassets/assets/files/edu/actuarial-glossary.pdf; CAS Exam 8 Fall 2016 — sample answers and examiner's report, Q18, PDF pp.72-73 (the four modules: event/hazard, inventory/exposure, vulnerability/damage, loss; inventory data on building codes, built value, type, contents; policy limits and deductibles; epistemic reducible, aleatory not), sha256:ad67f56b0e090f8c283c58e728d656f4685a6e2b3ff8219144ecb46facbeac2e — https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam8_16-8.pdf; CAS Exam 8 Fall 2018 — exam and examiner's report, Q17, PDF pp.88-89 (inventory and vulnerability modules; parameters such as magnitude, soil type, location, wind speed; epistemic uncertainty; logic trees and simulation), sha256:7993ff15f4c6aae538bde337a57fbbf775aab27f3a232b8a828458ac52a330c4 — https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam8_18-8.pdf; Ermoliev, Ermolieva, MacDonald & Norkin, Insurability of Catastrophic Risks: The Stochastic Optimization Model, IIASA Research Report RR-00-20 (reprinted from Optimization 47, 2000, with permission), PDF pp.3-4 (catastrophes produce losses highly correlated in space and time, which break the law of large numbers; insurers can reduce ruin only by deliberately selecting the dependent risks they cover; catastrophe modelling used for coverage, premiums and reinsurance), sha256:451edc97fb5e761c971298be1e43e1f43ad5970a850631a559fa93d7b93cb5d0 — https://pure.iiasa.ac.at/id/eprint/6252/1/RR-00-20.pdf; Braun & Kousky, Catastrophe Bonds, Wharton Risk Center Primer (July 2021), pp.1-6 (sponsor, bankruptcy-remote SPV, Treasury collateral in trust, floating rate plus premium; indemnity, industry-loss, parametric and modelled-loss triggers and Figure 3: parametric most transparent and most basis risk, indemnity the opposite, the other two between; modeller estimates probability of first loss and EL from property and policy data; average maturity three years; proportional payout from attachment to exhaustion; multi-year price stability, full collateral, dollar-for-dollar capital in the top layers; complement and substitute for reinsurance), sha256:38708381788f2732616650c245307b1775384bb347f4d1f7a884d05eb13918e7 — https://esg.wharton.upenn.edu/wp-content/uploads/2023/08/Cat-Bond-Primer-July-2021.pdf; CAS Exam 9 Content Outline, Fall 2026 (v01 2026-03-18) — scope check, pp.3, 5, 7 (Domain A tasks 4-5 with Grossi & Kunreuther; Domain C task 7 securitization and CAT bonds with Coval, Jurek & Stafford, Cummins CAT Bond, Cummins Capital, Mildenhall & Major, Panning; readings table: Grossi & Kunreuther Ch.2-6 for A4-A5, CJS for C5-C6, Cummins CAT Bond for C7), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf; CAS Syllabus Committee, Clarification and Errata to Catastrophe Modeling (Grossi & Kunreuther), March 29 2021, pp.1-3 (OEP, AEP and CEP definitions; AAL = sum p_i L_i in Table 2.1), sha256:8677464a4952483b031c9559d96f083629d4e22a14281c604368665f4d9c63a6 — https://www.casact.org/sites/default/files/2021-05/8_Grossi_Kunreuther_Errata_2021.pdf
 - note: Verified at medium on open texts (D22): every sentence now on the page is sourced. Grossi & Kunreuther itself is still unread (sold). The page's thinness against A4-A5 is open as a minor finding for a writer.
+
+## [F-004] Mmax weights attributed to the whole central and eastern US
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-31T13:54Z/2103
+- date: 2026-10-31
+- severity: minor
+- status: open
+- locus: 'Logic trees' bullet
+- claim: The USGS represents its uncertainty in the maximum magnitude of the central and eastern United States by weights on four plausible values (0.1, 0.3, 0.5 and 0.1 on Mmax of 6.8, 7.2, 7.6 and 8.0) ...
+- evidence: USGS OFR 2014-1091 PDF p.41 gives these weights for the Mesozoic extended margin ('The New Madrid and Charleston seismic zones lie in the Mesozoic extended margin'); for the Paleozoic extended margin it assigns equal weight (0.4) to 7.2 and 7.6, reducing the weighted average to 7.40. The distribution is one zone's, not the CEUS's.
+- source_rank: 3
+- proposed_action: Restate the region as the Mesozoic extended margin of the CEUS, where the New Madrid and Charleston zones lie.
+- applied: true
+- fingerprint: c560ff3521a5
+
+## [F-004/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-31T13:54Z/2103
+- date: 2026-10-31
+- resolves: F-004
+- status: resolved
+- note: Restated: 'the maximum magnitude of the Mesozoic extended margin of the central and eastern United States, where the New Madrid and Charleston seismic zones lie'.
+
+## [F-005] Examiners' report said to name the two common methods
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-31T13:54Z/2103
+- date: 2026-10-31
+- severity: nit
+- status: open
+- locus: 'Simulation' bullet, last sentence
+- claim: CAS's examiners credit logic trees and simulation as the two common methods of incorporating uncertainty, contrasted on these points.
+- evidence: Fall 2018 Q17(c) report (PDF p.89): 'Candidates most commonly used logic trees and simulation as methods to incorporate uncertainty. Alternative answers earned credit ...' and the expectation was two methods 'and two ways in which the given methods materially differ'.
+- source_rank: 1
+- proposed_action: Restate to the report's wording.
+- applied: true
+- fingerprint: 8d9602b1d484
+
+## [F-005/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-31T13:54Z/2103
+- date: 2026-10-31
+- resolves: F-005
+- status: resolved
+- note: Restated: 'Logic trees and simulation are the two methods of incorporating uncertainty that candidates most commonly used, and CAS's examiners credit them contrasted on these points.'
+
+## [C-003] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T13:54Z/2103
+- date: 2026-10-31
+- status_set: verified
+- confidence: medium
+- checks_run: whole page: glossary quote and Humphreys definition and uses re-fetched (hashes match); data row against the 2016 Q18 and 2018 Q17 sample answers; new Uncertainty section against USGS pp.16, 41, 120 word for word and the 2017 Q20 / 2018 Q17 sample answers and reports; Mmax weighted average recomputed (0.68 + 2.16 + 3.80 + 0.80 = 7.44); rule 10: no question figures (2017 Q20's intensities and probabilities, 2018 Q17's parameters) on the page
+- sources_checked: Petersen et al., Documentation for the 2014 Update of the United States National Seismic Hazard Maps, USGS Open-File Report 2014-1091 (public domain), PDF p.16 (aleatory variability, 'random variability in a given model', and epistemic uncertainty, 'uncertainty in which model is most correct'), PDF p.41 (Mesozoic extended margin, New Madrid and Charleston: Mmax weights 0.1/0.3/0.5/0.1 on 6.8/7.2/7.6/8.0, weighted average 7.44), PDF p.120 (ground motion models: intensity in terms of source, path and site; mean and SD of a normal density for log spectral acceleration), sha256:60738755ce084738d4cd82a65c280523bd43b5cb768e6f16f3f4ea7710549296 — https://pubs.usgs.gov/of/2014/1091/pdf/ofr2014-1091.pdf; Humphreys, Exceedance Probability in Catastrophe Modeling, CAS E-Forum Winter 2021, p.1 (definition; uses: ratemaking, portfolio management, underwriting, loss mitigation, cost of capital, reinsurance and risk transfer, ERM, capital adequacy used by rating agencies), p.12 (Poisson claim counts, the common assumption for catastrophes), sha256:c161864d85d35169b8e1f92af664542f05f005772e4cc6607ead0d68f08fdf89 — https://www.casact.org/sites/default/files/2021-03/02_humphreys.pdf; SOA Actuarial Glossary, p.12 'Catastrophe', sha256:9e6976838bc6d827be402fba326a3f977bc566bc5700470e9208ec59a93bf953 — https://www.soa.org/4a537f/globalassets/assets/files/edu/actuarial-glossary.pdf; CAS Exam 8 Fall 2016 — sample answers and examiner's report, Q18, PDF pp.72-73 (the four modules; inventory data; epistemic reducible, aleatory not), sha256:ad67f56b0e090f8c283c58e728d656f4685a6e2b3ff8219144ecb46facbeac2e — https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam8_16-8.pdf; CAS Exam 8 Fall 2017 — sample answers and examiner's report, Q20(a), PDF pp.93-94 (A damage function, B uncertainty of the actual damage, C the uncertainty of the forces experienced by the structure during the event; Sample 2 'given an initial estimate'), sha256:9496e4d8e8eeea922abcb05728d8df22b73ca717b8bde0ee5e877f6d33bc3a65 — https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam8_17-8.pdf; CAS Exam 8 Fall 2018 — sample answers and examiner's report, Q17(b)-(c), PDF pp.88-89 (epistemic; logic trees: weights from expert opinion, weighted combination, easy to trace and communicate, simplified opinions, not easy to scale; simulation: randomly sampled alternatives, complex situations, robust assumptions, updated more easily, computationally intensive, black box; the two methods candidates most commonly used), sha256:7993ff15f4c6aae538bde337a57fbbf775aab27f3a232b8a828458ac52a330c4 — https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam8_18-8.pdf; CAS Syllabus Committee, Clarification and Errata to Catastrophe Modeling (Grossi & Kunreuther), March 29 2021, pp.1-3 (OEP/AEP/CEP definitions; Table 2.1 events as independent Bernoulli random variables, each occurring at most once; loss 0 if an event does not occur; AAL = sum p_i L_i), sha256:8677464a4952483b031c9559d96f083629d4e22a14281c604368665f4d9c63a6 — https://www.casact.org/sites/default/files/2021-05/8_Grossi_Kunreuther_Errata_2021.pdf; CAS Exam 9 Content Outline, Fall 2026, pp.3, 7 (tasks A1-A5, readings Clark, Bernegger, Grossi & Kunreuther), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf
+- note: Whole-page check after the writer's Exam 9 G8 passages; two wording restatements (F-004, F-005). F-003 (thin against A4-A5) stays open, minor. Linked from Exam 9 and F1PC (CIA, development); this pass is the re-check for both. Source hashes: every CAS and USGS PDF re-fetched from its URL this run and hashed; each matches the hash the writer cited.

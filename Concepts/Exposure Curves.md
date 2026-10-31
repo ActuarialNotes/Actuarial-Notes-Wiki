@@ -1,15 +1,18 @@
 ---
 verification:
   status: verified
-  confidence: medium
-  last_checked: 2026-10-18
+  confidence: high
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:0fdfe38cfb6341dfc29bd14299aba92de5c4a43f2831f420b65a261bd9fd97cd
+  content_hash: sha256:638766a663f7eb2aeccc511207247187f60f4d6b56c63f5e7e1281d7741e66eb
   sources:
-    - "Bernegger, The Swiss Re Exposure Curves and the MBBEFD Distribution Class (ASTIN Bulletin 27(1), 1997), pp.99-111 (§2.1-2.3 eqs (2.1)-(2.6), §3.2 eq (3.3), §4.1, §4.3 eqs (4.5)-(4.6), Fig. 4.2), sha256:5c07f557257622c9dd5f1886705a55de9f368fef1839dd405c87a8550f8a7c89 — https://www.casact.org/sites/default/files/2021-03/8_Bernegger.pdf"
-    - "Clark, Basics of Reinsurance Pricing (CAS Study Note, revised 2014), pp.17-19 (exposure curve P(p), layer = P((R+L)/IV) - P(R/IV)), pp.27-29 (casualty ILFs / exposure factor), sha256:1c4429fee538cc8d90157c1849ca689a3a2173a2670fc57f212d866b493e2c63 — https://www.casact.org/sites/default/files/old/studynotes_clark_2014.pdf"
-    - "CAS Exam 9 Content Outline, Fall 2026, pp.3, 7 (task A1-A3, readings Clark and Bernegger), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
-  open_findings: 1
+    - "Bernegger, The Swiss Re Exposure Curves and the MBBEFD Distribution Class (ASTIN Bulletin 27(1), 1997), pp.99-111 read from page images (OCR): §2.1 eq (2.1), §2.2 eqs (2.2)-(2.3) 'With F(0) = 0 and G'(0) = 1/E[x]', §2.3 eq (2.4), §3 (3.10)-(3.12), §4.1 iterative b, §4.2 first two moments, §4.3 eqs (4.5)-(4.6), c = 0, 1.5-4 (Y1-Y4), 5 (Lloyd's industrial), sha256:5c07f557257622c9dd5f1886705a55de9f368fef1839dd405c87a8550f8a7c89 — https://www.casact.org/sites/default/files/2021-03/8_Bernegger.pdf"
+    - "Clark, Basics of Reinsurance Pricing (CAS Study Note, revised 2014), §2A pp.17-19 (exposure curve P(p); layer P((R+L)/IV) - P(R/IV); limits profile per location basis, else distortions; all locations at the midpoint of the range; scale independence, homeowners vs large commercial risks), pp.27-29 (casualty ILFs as exposure factors), sha256:1c4429fee538cc8d90157c1849ca689a3a2173a2670fc57f212d866b493e2c63 — https://www.casact.org/sites/default/files/old/studynotes_clark_2014.pdf"
+    - "CAS Exam 8 Fall 2012 — sample answers and examiner's report, Q10(a)-(b), PDF pp.53-54 (PP/IV at band midpoints; homogeneity of homes vs commercial construction and occupancy; per-risk profile vs per-location curve), sha256:f0a8a4e1060ad54d4a69208dd574d53dbcafc29ceddbabe7be0a2da2e0f9232b — https://www.casact.org/sites/default/files/2021-03/f12-8.pdf"
+    - "CAS Exam 8 Fall 2016 — sample answers and examiner's report, Q21, PDF p.80 (even distribution of insured values, midpoint, citing Clark; G(8/8)-G(4/8) overstates), sha256:ad67f56b0e090f8c283c58e728d656f4685a6e2b3ff8219144ecb46facbeac2e — https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam8_16-8.pdf"
+    - "CAS Exam 8 Fall 2017 — sample answers and examiner's report, Q18(a)-(b), PDF p.88 (exposure distribution restated to a loss distribution; g = 1/p; Sample 2 computes the same G points without the restatement), sha256:9496e4d8e8eeea922abcb05728d8df22b73ca717b8bde0ee5e877f6d33bc3a65 — https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam8_17-8.pdf"
+    - "CAS Exam 9 Content Outline, Fall 2026, pp.3, 7 (tasks A1-A5, readings Clark, Bernegger, Grossi & Kunreuther), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Exposure Curves.md
 ---
@@ -35,6 +38,11 @@ verification:
 - **Fitting it.** Match the total-loss probability and the mean: $g = 1/p$ directly, then solve for $b$ iteratively from $\mu = E[y]$, which falls as $b$ rises. It can also be fitted to $\mu$ and the standard deviation.
 - **The Swiss Re curves.** The one-parameter family $b(c) = e^{3.1 - 0.15(1+c)c}$, $g(c) = e^{(0.78 + 0.12c)c}$ reproduces the Swiss Re curves Y1–Y4 at $c = 1.5$, $2$, $3$, $4$ and a Lloyd's industrial curve at $c = 5$. At $c = 0$ every loss is a total loss. Higher $c$ gives a more concave curve: small partial losses relative to the MPL, typical of large industrial risks.
 - **Exposure rating.** Band the risk profile by MPL, estimate each band's expected loss as $\text{ELR} \times \text{premium}$, and apply $G$ band by band. For casualty lines, [[Increased Limits|ILFs]] play the role of $G$ ([[Reinsurance Pricing]]). The curve prices a *per-risk* cover and says nothing about catastrophe accumulation.
+- **The limits profile has to match the curve (Clark).** The limits profile is the distribution of premium by ranges of insured value. Clark warns that it must be checked to verify that the size-of-risk ranges are on a per location basis: if it is assembled using total values for policies covering multiple locations, distortions will result. A curve built from per-location values, applied to a profile banded by each policy's total value, reads every multi-location policy as one large risk and so misplaces its losses on the curve.
+- **Which value in a band.** Clark's exposure-rating example assumes that all locations within a range are exactly equal to the midpoint of the range, so a band's exposure factor is read at $R/\text{midpoint}$ and $(R+L)/\text{midpoint}$, not at the top of the range. For a band of $\$2$M to $\$6$M of insured value, a layer $\$2$M xs $\$1$M uses $G(3/4) - G(1/4)$; using the band's maximum, $G(3/6) - G(1/6)$, treats every risk as the largest in the band.
+- **Scale independence (Clark).** Exposure rating carries the implicit assumption that the same exposure curve applies regardless of the size of the insured value: the likelihood of a $\$10{,}000$ loss on a $\$100{,}000$ risk equals the likelihood of a $\$100{,}000$ loss on a $\$1{,}000{,}000$ risk. Clark says this assumption may be appropriate for homeowners business, for which the technique was first developed, but may be a serious problem when applied to large commercial risks. The reason CAS's examiners credit is homogeneity: homes are much alike across a wide range of sizes, while commercial risks differ in construction and occupancy (and so contents) as their size changes.
+  - *Checking it in a book.* If the same curve holds in every band and loss frequency per location is similar, expected loss per location grows in proportion to insured value. So divide each band's pure premium per location by the band's midpoint insured value: roughly equal ratios across bands support pooling the bands into one curve, while a ratio that rises or falls with size says the bands behave differently. For example, bands with midpoints $\$200{,}000$ and $\$800{,}000$ and pure premiums of $\$3{,}000$ and $\$12{,}000$ both give $1.5\%$.
+- **The loss-degree distribution is conditional on a loss.** Bernegger derives $F$ from $G$ with $F(0) = 0$ and $G'(0) = 1/E[x]$, so $F$ describes the losses that occur, with no mass at zero. An exposure distribution that includes risks with no loss is restated first: divide each positive loss degree's probability by $1 - P(\text{no loss})$. The values of $G$ come out the same either way, since the zero losses add nothing to $E[x \wedge d]$ or to $E[x]$, but the mean $\mu = E[x]$ and the total-loss probability $p$ (and hence $g = 1/p$ for an MBBEFD fit) are the conditional ones. For example, if $90\%$ of risks have no loss, $6\%$ lose $20\%$ of MPL, $3\%$ lose $60\%$ and $1\%$ are total losses, the conditional probabilities are $60\%$, $30\%$ and $10\%$, so $\mu = 0.12 + 0.18 + 0.10 = 0.40$ and $p = 0.10$, $g = 10$ — not $\mu = 0.04$ and $p = 0.01$.
 
 > [!example]- Building a Curve from a Loss-Degree Distribution {Example}
 > For a class of warehouses, $10\%$ of losses are total, and below a total loss $1 - F(y) = 1 - 0.9y$ for $0 \le y < 1$. Derive $G$, check the slope properties, and find the share of expected loss between $20\%$ and $50\%$ of MPL.
@@ -61,7 +69,7 @@ verification:
 > > \end{align*}
 > > $$
 > >
-> > The layer from $20\%$ to $50\%$ of MPL carries $37\%$ of expected loss. A mean damage ratio of $55\%$ is far heavier than real property experience, which is why fitted curves such as the Swiss Re family are much more concave.
+> > The layer from $20\%$ to $50\%$ of MPL carries $37\%$ of expected loss.
 
 > [!example]- Exposure Rating a Per-Risk Layer {Example}
 > A per-risk treaty covers $\$3$M xs $\$2$M, with an ELR of $60\%$ and the Swiss Re $c = 3$ curve, where $G(0.10) = 0.4056$, $G(0.25) = 0.6002$ and $G(0.40) = 0.7163$. Band A has MPL $\$5$M and $\$400{,}000$ of premium. Band B has MPL $\$20$M and $\$600{,}000$ of premium. Find the expected layer loss.

@@ -52,3 +52,36 @@ created: 2026-10-18
 - checks_run: blind recomputation in Python of the key and every distractor's stated reasoning; one keyed option; distinct options; explanation line by line; factual claims against source; topic/learning_objective/wiki_link against Exam 9 (CAS).md objectives (all link targets exist, + for spaces); format per question-writer formats.md; validate_content.py
 - sources_checked: Directive 2009/138/EC (Solvency II), Annex IV §1 Basic SCR formula and correlation matrix (Market-Default 0.25, Market-Non-life 0.25, Default-Non-life 0.5), as published by legislation.gov.uk (original as adopted), sha256:4ebfc6d5b0e76219fd253e976fc953a7e86c88ddb09e4ae9bcce0f2a88cb1d4b — https://www.legislation.gov.uk/eudr/2009/138/annex/IV; CAS Exam 9 Content Outline, Fall 2026 (v01 2026-03-18), Domains A-D tasks pp.3-6 and text references pp.7-8, sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf
 - note: Key D (128.84) reproduced: sqrt(10,900 + 2(1,200 + 450 + 1,200)) = sqrt(16,600). Distractors reproduce: A sqrt(10,900); B sqrt(10,900 + 2,850); C default/non-life at 0.25 gives sqrt(15,400) = 124.10; E 170. Matrix entries and the 'all combinations of i and j' summation match Annex IV §1 exactly. Minor F-001 (unsupported claim) fixed by deletion and resolved; minor F-002 (D5 reading Brehm unread) open.
+
+## [F-003] Tag missing: Risk Diversification
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-31T13:24Z/ea03
+- date: 2026-10-31
+- severity: minor
+- status: open
+- locus: frontmatter wiki_link
+- claim: The question aggregates standalone capitals with a correlation matrix and the diversification credit but was not tagged with Risk Diversification, the vault page that teaches the square-root aggregation formula.
+- evidence: Concepts/Risk Diversification.md states C = sqrt(sum_i sum_j rho_ij C_i C_j), that each pair appears twice in the double sum, and that a simple sum assumes every correlation is one; G8 answerability record lists it as out of reach for cas9-an-010:r1-r3.
+- proposed_action: add the tag
+- applied: true
+- fingerprint: a7fd56db89e3
+
+## [F-003/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-31T13:24Z/ea03
+- date: 2026-10-31
+- resolves: F-003
+- status: resolved
+- note: Added Concepts/Risk+Diversification to wiki_link (G8 retag, Exam 9 campaign).
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T13:24Z/ea03
+- date: 2026-10-31
+- status_set: verified
+- confidence: medium
+- sources_checked: Directive 2009/138/EC (Solvency II), Annex IV §1 Basic SCR formula and correlation matrix (Market-Default 0.25, Market-Non-life 0.25, Default-Non-life 0.5), as published by legislation.gov.uk (original as adopted), sha256:4ebfc6d5b0e76219fd253e976fc953a7e86c88ddb09e4ae9bcce0f2a88cb1d4b — https://www.legislation.gov.uk/eudr/2009/138/annex/IV; CAS Exam 9 Content Outline, Fall 2026 (v01 2026-03-18), Domains A-D tasks pp.3-6 and text references pp.7-8, sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf
+- note: Re-passed after the wiki_link retag; stem, options and solution unchanged.

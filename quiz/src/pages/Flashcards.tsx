@@ -67,7 +67,7 @@ import {
 } from '@/lib/flashcardStudy'
 import { buildCollectedList } from '@/lib/collectedList'
 import { wikiExamIdToProgressKey, type WikiExamSyllabus } from '@/lib/wikiParser'
-import { completedTodayConcepts, flashcardShelfExams } from '@/lib/flashcardShelf'
+import { completedTodayConcepts, deckExamLabels, flashcardShelfExams } from '@/lib/flashcardShelf'
 import { resourceStripExams } from '@/lib/resourceFilters'
 import { defaultBody, loadBody, saveBody, type ExamBody } from '@/lib/bodyFilter'
 import { ExamStrip } from '@/components/ExamStrip'
@@ -415,18 +415,21 @@ function ConceptCardGrid({
   masteryOf,
   isCollected,
   onCardsAdded,
+  exam,
 }: {
   concepts: string[]
   masteryOf: (name: string) => MasteryState
   isCollected: (name: string) => boolean
   onCardsAdded?: () => void
+  /** The exam shelf these tiles are on — the deck files the cards under it. */
+  exam?: string
 }) {
   const { addCard, removeCard, hasCard } = useFlashcards()
 
   function toggle(name: string) {
     if (hasCard(name)) { removeCard(name); return }
     playSound('addToDeck')
-    addCard({ kind: 'concept', name })
+    addCard({ kind: 'concept', name }, exam)
     showAddedToDeck(1)
     onCardsAdded?.()
   }
@@ -461,10 +464,12 @@ function ShelfSummary({
   concepts,
   isCollected,
   onCardsAdded,
+  exam,
 }: {
   concepts: string[]
   isCollected: (name: string) => boolean
   onCardsAdded?: () => void
+  exam?: string
 }) {
   const { addCard, hasCard } = useFlashcards()
 
@@ -474,7 +479,7 @@ function ShelfSummary({
   const inDeck = total - notAdded.length
 
   function addAll() {
-    for (const name of notAdded) addCard({ kind: 'concept', name })
+    for (const name of notAdded) addCard({ kind: 'concept', name }, exam)
     if (notAdded.length > 0) { playSound('addToDeck'); showAddedToDeck(notAdded.length); onCardsAdded?.() }
   }
 
@@ -507,6 +512,7 @@ function ShelfSection({
   loading = false,
   emptyHint,
   className = '',
+  exam,
 }: {
   title: string
   concepts: string[]
@@ -518,6 +524,8 @@ function ShelfSection({
   /** Stands in for the grid when the section has no concepts. */
   emptyHint?: ReactNode
   className?: string
+  /** The exam shelf this section is on — the deck files its cards under it. */
+  exam?: string
 }) {
   const { addCard, hasCard } = useFlashcards()
 
@@ -526,7 +534,7 @@ function ShelfSection({
   const showCounts = !loading && concepts.length > 0
 
   function addMissing() {
-    for (const name of missing) addCard({ kind: 'concept', name })
+    for (const name of missing) addCard({ kind: 'concept', name }, exam)
     if (missing.length > 0) { playSound('addToDeck'); showAddedToDeck(missing.length); onCardsAdded?.() }
   }
 
@@ -567,6 +575,7 @@ function ShelfSection({
           masteryOf={masteryOf}
           isCollected={isCollected}
           onCardsAdded={onCardsAdded}
+          exam={exam}
         />
       )}
     </section>
@@ -606,6 +615,7 @@ function TodayStudyPlanSection({
   return (
     <ShelfSection
       title="Today's Study Plan"
+      exam={syllabus.examId}
       concepts={concepts}
       loading={planLoading || masteryLoading}
       masteryOf={masteryOf}
@@ -671,7 +681,7 @@ function ExamCardShelf({
 
   return (
     <div className="space-y-5">
-      <ShelfSummary concepts={group.allConcepts} isCollected={isCollected} onCardsAdded={onCardsAdded} />
+      <ShelfSummary concepts={group.allConcepts} isCollected={isCollected} onCardsAdded={onCardsAdded} exam={group.examId} />
       {showToday && (
         <div className="space-y-5 pb-5 border-b border-border">
           {group.studying && (
@@ -687,6 +697,7 @@ function ExamCardShelf({
           {completedToday.length > 0 && (
             <ShelfSection
               title="Completed Today"
+              exam={group.examId}
               concepts={completedToday}
               masteryOf={masteryOf}
               isCollected={isCollected}
@@ -699,6 +710,7 @@ function ExamCardShelf({
         <ShelfSection
           key={lo.name}
           title={lo.name}
+          exam={group.examId}
           concepts={lo.concepts}
           masteryOf={masteryOf}
           isCollected={isCollected}
@@ -2437,6 +2449,7 @@ function FlashcardsDeck({
     toggleCompleted, clearCompleted, resetCompleted,
   } = useFlashcards()
   const { syllabi } = useWikiSyllabus()
+  const { progress: examProgress, examVariants } = useExamProgress()
   const { records: masteryRecords } = useConceptMastery()
   const popupOpen = useConceptPopup(s => s.open)
   const popupCurrentName = useConceptPopup(s => s.open ? (s.list[s.index]?.name ?? null) : null)
@@ -2597,30 +2610,31 @@ function FlashcardsDeck({
     return () => clearTimeout(clearId)
   }, [popupCurrentName, setActiveIndex])
 
-  // concept name → exam label
+  // concept name → exam label: the exam a card was added from, else the first
+  // syllabus listing it — the exams on the add-sheet's shelf (being studied
+  // first, then up the ladder) ahead of the rest. See deckExamLabels.
   const conceptToExam = useMemo(() => {
-    const map = new Map<string, string>()
-    for (const s of syllabi) {
-      for (const topic of s.topics) {
-        for (const c of topic.concepts) {
-          map.set(c.name.toLowerCase(), s.examLabel)
-        }
-      }
-    }
-    return map
-  }, [syllabi])
+    const shelf = flashcardShelfExams(syllabi, examProgress, examVariants)
+    const onShelf = new Set(shelf)
+    return deckExamLabels(cards, [...shelf, ...syllabi.filter(s => !onShelf.has(s))])
+  }, [cards, syllabi, examProgress, examVariants])
 
-  // concept name → syllabus position { topicIndex, conceptIndex } for ordering
+  // exam label → concept name → syllabus position { topicIndex, conceptIndex },
+  // for ordering a card within the exam it is filed under.
   const conceptSyllabusPosition = useMemo(() => {
-    const map = new Map<string, { topicIndex: number; conceptIndex: number }>()
+    const byExam = new Map<string, Map<string, { topicIndex: number; conceptIndex: number }>>()
     for (const s of syllabi) {
+      if (byExam.has(s.examLabel)) continue
+      const map = new Map<string, { topicIndex: number; conceptIndex: number }>()
       s.topics.forEach((topic, topicIndex) => {
         topic.concepts.forEach((c, conceptIndex) => {
-          map.set(c.name.toLowerCase(), { topicIndex, conceptIndex })
+          const key = c.name.toLowerCase()
+          if (!map.has(key)) map.set(key, { topicIndex, conceptIndex })
         })
       })
+      byExam.set(s.examLabel, map)
     }
-    return map
+    return byExam
   }, [syllabi])
 
   // concept name → best mastery state
@@ -2671,8 +2685,9 @@ function FlashcardsDeck({
       if (ea === 'Other' && eb !== 'Other') return 1
       if (ea !== 'Other' && eb === 'Other') return -1
       if (ea !== eb) return ea.localeCompare(eb)
-      const pa = conceptSyllabusPosition.get(a.name.toLowerCase())
-      const pb = conceptSyllabusPosition.get(b.name.toLowerCase())
+      const positions = conceptSyllabusPosition.get(ea)
+      const pa = positions?.get(a.name.toLowerCase())
+      const pb = positions?.get(b.name.toLowerCase())
       if (pa && pb) {
         if (pa.topicIndex !== pb.topicIndex) return pa.topicIndex - pb.topicIndex
         return pa.conceptIndex - pb.conceptIndex

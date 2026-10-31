@@ -2,15 +2,14 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-10-18
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:fb50ac1ea420fc83017c426c1d43d8ee1a6479d83bd1a194d0c55d7544d4afdb
+  content_hash: sha256:6f2e2a72324d0dec5e627afd33294e197ea7dc36adf7ba4a6896b87390eae8a7
   sources:
     - "CAS Exam 9 Content Outline, Fall 2026 (v01, 2026-03-18), PDF pp.3-7: Domains B, C and D tasks and readings; complete text references (Brehm et al.: D1-D6, Chapters 1, 2 excl. 2.6, 3 excl. 3.4, 4, 5.4; source SK), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
     - "Basel Committee on Banking Supervision, Principles for the Sound Management of Operational Risk (BIS, June 2011), para 10 and fn 5 (PDF p.11: definition, includes legal risk, excludes strategic and reputational); para 39(a)-(f) (PDF pp.19-20: loss data, external data, RCSA, business process mapping, KRIs), sha256:d9491f870b4d8ffafa78b45923ada75b3e93223fca2f0ca069e8e3b708a108fc — https://www.bis.org/publications/201106-guidelines-principles-sound-management-operational-risk.pdf"
-    - "Basel Committee on Banking Supervision, Basel II: International Convergence of Capital Measurement and Capital Standards, Comprehensive Version (BIS, June 2006), para 644 (PDF p.158: definition); Annex 9 Detailed Loss Event Type Classification (PDF pp.319-321: seven Level 1 event types and their Level 2/3 examples), sha256:2543a00c6b6d75bb8208b02d6f823a0661db5a77725786722dfcaef910d00a4d — https://www.bis.org/publications/200606-standards-basel-ii-international-convergence-capital-measurement-and-capital-standards-revised-framework.pdf"
+    - "BCBS, Basel II: International Convergence of Capital Measurement and Capital Standards, Comprehensive Version (June 2006), paras 644 and 649-654, PDF pp.158-161 (definition; BIA: alpha 15% of positive gross income averaged over three years, negative or zero years excluded from numerator and denominator, K = alpha sum GI / n; TSA: eight business lines, betas 18% corporate finance, trading and sales, payment and settlement, 15% commercial banking and agency services, 12% retail banking, asset management, retail brokerage; three-year average, negative line charges offset without limit, negative aggregate year input zero; K_TSA = sum_years max(sum beta GI, 0)/3), Annex 9 PDF pp.319-321 (seven Level 1 event types), sha256:2543a00c6b6d75bb8208b02d6f823a0661db5a77725786722dfcaef910d00a4d — https://www.bis.org/publications/200606-standards-basel-ii-international-convergence-capital-measurement-and-capital-standards-revised-framework.pdf"
     - "Basel Committee on Banking Supervision, Operational Risk - Supervisory Guidelines for the Advanced Measurement Approaches (BIS, June 2011), Modelling section (PDF pp.42-43: loss distribution approach); fn 40 (PDF p.54: heavy-tailed losses, few observations, scenario analysis), sha256:785e1d05030bb5ac8271d5cbcfcd4434ec74757f2dc4bf307816ab82fb3e9a03 — https://www.bis.org/publications/201106-guidelines-operational-risk-supervisory-guidelines-advanced-measurement-approaches.pdf"
-    - "Directive 2009/138/EC (Solvency II), consolidated HTML, Art.13(30)-(34) definitions (underwriting, market, credit, operational, liquidity risk); Art.45(1) ORSA; Art.101(3) 99.5% one-year VaR; Art.104(1) risk modules; Art.105(2), (5), (6) non-life premium/reserve and catastrophe, market sub-modules, counterparty default (reinsurance, derivatives, receivables from intermediaries); Art.107(1), (3) operational risk capital requirement, sha256:ad77288b3961fb0425f2e8db221ecc9706975bf72c37d7d3adcf8f0df62f702e — https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32009L0138"
     - "OSFI, Minimum Capital Test Guideline (2024), Chapter 7, operational risk margin formula and components (7.2, 7.2.4), sha256:d24a1551e11bac611332379a895a9001c80ce749975b5fe4abfb203170efd5bf — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/minimum-capital-test-guideline-2024"
     - "NAIC, Insurance Topics: Risk-Based Capital (P/C formula includes catastrophe risk; capital sufficiency ratio to ACL RBC including Basic Operational Risk), read via WebFetch 2026-10-18 (no hash) — https://content.naic.org/insurance-topics/risk-based-capital"
     - "Sarbanes-Oxley Act of 2002, Public Law 107-204, Sec.404 Management assessment of internal controls (PDF p.45): annual report of each issuer to assess the internal control structure and procedures for financial reporting, sha256:f6666256313bbaddac941da3f5bda04645e5abaf08a6c53394eef2d26a93a127 — https://www.govinfo.gov/content/pkg/PLAW-107publ204/pdf/PLAW-107publ204.pdf"
@@ -20,6 +19,9 @@ verification:
     - "CAS Exam 7 Spring 2016 - exam and sample answers/examiner's report, Q21 PDF pp.25, 88-89 (ERM program: monitoring, operational and strategic risk, materiality per 'the Brehm text', upside, dependencies); Q22 PDF pp.90-92 (cycle and asset strategy; reinsurance reduces volatility); Q23 PDF p.92 (capital reference points); Q26 PDF pp.99-100 (operational vs underwriting risk); Q27 PDF pp.101-103 (agency theory, cycle management); Q28 PDF pp.104-105 (soft and technical cycle models), sha256:e07f38dd81edc9715ef2528c1861e75c609c85b598b51b723d665cf63b745b84 — https://www.casact.org/sites/default/files/2021-03/16-7.pdf"
     - "CAS Exam 7 Spring 2019 - exam and sample answers/examiner's report, Q1 PDF pp.6, 34-38 (model and estimation risk, estimation risk a subset of model risk; operational risks of a vendor agreement and KRIs: processing-centre down time, employee turnover), sha256:f6c6d52b71498f5c65eae5da824d1f74f31bf531f5059dcc64f0bfcf7c4b8416 — https://www.casact.org/sites/default/files/2021-03/19-7_0.pdf"
     - "Frees et al., Loss Data Analytics (open text), Chapter 5 Aggregate Loss Models, compound Poisson: Var(S_N) = lambda E(X^2), sha256:09489050a45e6eb2ee0d96804458eb22c936a61716227e08ad0398b9cba870d4 — https://openacttexts.github.io/Loss-Data-Analytics/ChapAggLossModels.html"
+    - "Directive 2009/138/EC (Solvency II), Art.13(33) definition of operational risk, legislation.gov.uk copy (revised version), sha256:4e4d72b6050d5b2219249ef3c9397cddce9f96bbd71e7cc92c4bc9b265e29a88 — https://www.legislation.gov.uk/eudr/2009/138/article/13"
+    - "Directive 2009/138/EC (Solvency II), Art.107(1) operational risk capital requirement, to the extent not already reflected in the Art.104 risk modules, legislation.gov.uk copy (revised version), sha256:f9fd2842492c5eb4282df32355802b345eea73e7449b6fc9bc7cfa100977ab59 — https://www.legislation.gov.uk/eudr/2009/138/article/107"
+    - "CAS Exam 7 Spring 2013 — sample answers and examiner's report, Q21 PDF pp.79-80 (basic indicator vs standardized approach; mix of business; within-year netting and divisor of three), sha256:b10657555e3da0116f715810c94b20afbcb50b86a4ba6b2fa3b9f771f2ab9d99 — https://www.casact.org/sites/default/files/2021-03/13-7.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Operational Risk.md
@@ -35,6 +37,10 @@ verification:
 - **Basel's seven event types:** internal fraud; external fraud; employment practices and workplace safety; clients, products and business practices; damage to physical assets; business disruption and system failures; execution, delivery and process management.
 - **In an insurer** these look like claims leakage and fraud, underwriting outside authority, a policy or claims system outage, a cyber attack, mis-selling or bad-faith claims handling, a data or [[Model Risk|model]] error in pricing or reserving, and failure of an outsourced provider.
 - **Determining operational risks** is mostly identification and control: process mapping, risk and control self-assessment, a loss-event database, **key risk indicators** that give early warning (system downtime, staff turnover), and internal controls — for U.S. public companies, the [[Sarbanes-Oxley]] regime over financial reporting. Capital regimes charge for it too: the [[Operational Risk Margin|operational risk margin]] in Canada's MCT, a separate capital requirement in Solvency II (Art. 107), and a component of the NAIC [[Risk-Based Capital|RBC]] formula.
+- **Basel II's simpler capital charges** (BCBS, June 2006, paras 649–654) use gross income as a proxy for the scale of operational exposure:
+  - *Basic indicator approach:* capital equals a single fixed percentage $\alpha = 15\%$ of positive annual gross income, averaged over the previous three years, $K_{\text{BIA}} = \alpha \sum \text{GI}_{+} / n$. A year with zero or negative gross income is excluded from both the numerator and the denominator, so $n$ is the number of the three years with positive income. One $\alpha$ for the whole firm, so the mix of business has no effect.
+  - *Standardised approach:* activities are split into eight business lines, each with its own factor $\beta$: $18\%$ for corporate finance, trading and sales, and payment and settlement; $15\%$ for commercial banking and agency services; $12\%$ for retail banking, asset management and retail brokerage. Capital is $K_{\text{TSA}} = \sum_{\text{years }1\text{ to }3} \max\big(\sum_j \beta_j \text{GI}_j,\ 0\big) / 3$, so it depends on the firm's mix of business.
+  - Under the standardised approach a negative charge in one business line offsets positive charges in other lines *within the same year* without limit; a year whose total is negative enters as zero but the divisor stays three. A firm with a loss year, or a loss-making line, can therefore hold less capital than under the basic indicator approach.
 - It is largely **incidental** risk: an insurer earns nothing for bearing it, so the aim is to reduce it cost-effectively rather than to exploit it. It also tends to arrive alongside other risks — the catastrophe that floods the claims office.
 
 > [!example]- Which of These Losses Are Operational? {Example}
@@ -71,3 +77,35 @@ verification:
 > > $$
 > >
 > > The control saves $\$250{,}000$ a year in expectation for a cost of $\$200{,}000$, and cuts the standard deviation by $13\%$ — worth doing. If the concern were the tail rather than the mean, a control capping severity (a payment limit) would do more than one reducing frequency.
+
+> [!example]- Basic Indicator Against Standardised Capital {Example}
+> A bank's gross income (\$M) by business line over the last three years:
+>
+> | Year | Retail banking | Corporate finance | Total |
+> |---|---|---|---|
+> | 1 | $100$ | $50$ | $150$ |
+> | 2 | $80$ | $-120$ | $-40$ |
+> | 3 | $120$ | $60$ | $180$ |
+>
+> Find the operational risk capital under the basic indicator and standardised approaches.
+>
+> > [!answer]-
+> > **Basic indicator.** Year 2's total is negative, so it is dropped from the numerator *and* the denominator:
+> >
+> > $$
+> > \begin{align*}
+> > K_{\text{BIA}} &= 0.15 \times \frac{150 + 180}{2} \\
+> > &= 24.75
+> > \end{align*}
+> > $$
+> >
+> > **Standardised.** Retail banking takes $\beta = 12\%$, corporate finance $18\%$. Year by year: $12 + 9 = 21$; $9.6 - 21.6 = -12$, floored at $0$; $14.4 + 10.8 = 25.2$.
+> >
+> > $$
+> > \begin{align*}
+> > K_{\text{TSA}} &= \frac{21 + 0 + 25.2}{3} \\
+> > &= 15.4
+> > \end{align*}
+> > $$
+> >
+> > The standardised charge is lower for two reasons: the retail book carries a smaller factor than $15\%$, and the loss year counts as zero over three years rather than vanishing and leaving the good years to be averaged over two.

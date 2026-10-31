@@ -55,7 +55,7 @@
     { "page": "Exam COP (CAS).md", "exam_id": "COP", "wiki_id": "cop-1", "progress_key": "CAS-APC", "body": "CAS", "bank": null, "status": "development", "weighted": false },
     { "page": "Exam 7 (CAS).md",      "exam_id": "7",      "wiki_id": "7-1",    "progress_key": "CAS-7",  "body": "CAS", "bank": "exam-7",          "status": "ready" },
     { "page": "Exam 8 (CAS).md",      "exam_id": "8",      "wiki_id": "8-1",    "progress_key": "CAS-8",  "body": "CAS", "bank": "exam-8",          "status": "beta" },
-    { "page": "Exam 9 (CAS).md",      "exam_id": "9",      "wiki_id": "9-1",    "progress_key": "CAS-9",  "body": "CAS", "bank": "exam-9",          "status": "beta" },
+    { "page": "Exam 9 (CAS).md",      "exam_id": "9",      "wiki_id": "9-1",    "progress_key": "CAS-9",  "body": "CAS", "bank": "exam-9",          "status": "ready" },
     {"page": "Exam ACIA-M1 (CIA).md", "exam_id": "ACIA-M1", "wiki_id": "acia-m1", "progress_key": "CIA-ACIA-M1", "body": "CIA", "bank": null, "status": "development", "weighted": false},
     {"page": "Exam ACIA-M2 (CIA).md", "exam_id": "ACIA-M2", "wiki_id": "acia-m2", "progress_key": "CIA-ACIA-M2", "body": "CIA", "bank": null, "status": "development", "weighted": false},
     {"page": "Exam ACIA-CAPSTONE (CIA).md", "exam_id": "ACIA-CAPSTONE", "wiki_id": "acia-capstone", "progress_key": "CIA-ACIA-CAPSTONE", "body": "CIA", "bank": null, "status": "development", "weighted": false},

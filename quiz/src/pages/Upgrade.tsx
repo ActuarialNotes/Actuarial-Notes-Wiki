@@ -253,7 +253,7 @@ export default function Upgrade() {
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2 text-base">
               <Tag className="h-4 w-4 text-muted-foreground" />
-              Have a beta tester code?
+              Have a code?
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">

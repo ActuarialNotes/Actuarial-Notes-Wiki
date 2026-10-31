@@ -5576,7 +5576,15 @@
      "statement": "To test scale independence in a book, compare pure premium divided by insured value (using range midpoints) across insured value ranges; roughly constant ratios support combining the ranges into one exposure curve.",
      "concept": "Exposure Curves",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exposure Curves",
+      "quote": "So divide each band's pure premium per location by the band's midpoint insured value: roughly equal ratios across bands support pooling the bands into one curve",
+      "note": "Clark 2014 §2A p.19 (scale independence: one curve regardless of insured value), with the Fall 2012 Q10(a) sample answers (PP/IV at midpoints).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:54Z/2103"
+     }
     },
     {
      "id": "r3",
@@ -5584,7 +5592,15 @@
      "statement": "Scale independence is less appropriate for commercial property than for homeowners, because commercial risks are heterogeneous in construction and occupancy across sizes, whereas homeowner risks are fairly homogeneous.",
      "concept": "Exposure Curves",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exposure Curves",
+      "quote": "Clark says this assumption may be appropriate for homeowners business, for which the technique was first developed, but may be a serious problem when applied to large commercial risks.",
+      "note": "Clark 2014 §2A p.19, verbatim; the homogeneity reason is the Fall 2012 Q10(a) sample answer.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:54Z/2103"
+     }
     },
     {
      "id": "r4",
@@ -5592,7 +5608,15 @@
      "statement": "An exposure curve applied to a limits profile requires the profile to be on the same basis (per location vs per risk) as the data used to build the curve; a per-risk profile may include varying numbers of locations and so skews results for a per-location curve.",
      "concept": "Exposure Curves",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exposure Curves",
+      "quote": "Clark warns that it must be checked to verify that the size-of-risk ranges are on a per location basis",
+      "note": "Clark 2014 §2A p.18: limits profile on a per location basis, else distortions.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:54Z/2103"
+     }
     },
     {
      "id": "r5",
@@ -5866,7 +5890,15 @@
      "statement": "To read a loss level off an exceedance probability curve given only some plotted points, treat the curve as continuous and linearly interpolate between the adjacent points rather than choosing a plotted point.",
      "concept": "Exceedance Probability Curve",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Probable Maximum Loss",
+      "quote": "convert the return period to an exceedance probability ($1/\\text{RP}$) and interpolate linearly *in exceedance probability* between the two bracketing points",
+      "note": "CAS examiners' reports, Fall 2012 Q9(b) (linear interpolation, not eyeballing or a discrete reading) and Fall 2013 Q24(a).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:54Z/2103"
+     }
     },
     {
      "id": "r4",
@@ -6302,7 +6334,15 @@
      "statement": "To find the loss at an exceedance probability not listed on an OEP curve, linearly interpolate between the two adjacent curve points (probability, loss).",
      "concept": "Occurrence Exceedance Probability Curve",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Probable Maximum Loss",
+      "quote": "convert the return period to an exceedance probability ($1/\\text{RP}$) and interpolate linearly *in exceedance probability* between the two bracketing points",
+      "note": "Fall 2013 Q24(a) report: the 1/250 PML by linear interpolation between OEP points.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:54Z/2103"
+     }
     },
     {
      "id": "r4",
@@ -6541,7 +6581,15 @@
      "statement": "Policy limits and attachment points drift upward over time, so applying current limits and attachment points to historical losses misstates the ground-up loss implied by a historical layer payment, because past attachment points were lower.",
      "concept": "Limit and Attachment Point Drift",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Excess of Loss",
+      "quote": "Underlying limits and attachment points rise over time as well, so an old excess payment came from a ground-up loss above the attachment *then in force*.",
+      "note": "Clark 2014 §3A p.24 (insureds raise limits over time; limits drift) and §3B(a) p.32 (umbrella trended with the underlying limit); Fall 2014 Q20(b) report.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:54Z/2103"
+     }
     },
     {
      "id": "r6",
@@ -6549,7 +6597,15 @@
      "statement": "If a historical claim is converted to ground-up using the current (higher) attachment point rather than the lower historical one, the ground-up loss is overstated, so the trended layer claim is overstated.",
      "concept": "Limit and Attachment Point Drift",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Excess of Loss",
+      "quote": "Rebuilding it with today's higher attachment overstates the ground-up loss, and the trended layer loss with it.",
+      "note": "Fall 2014 Q20(b) report (the 2004 attachment likely lower, so the ground-up loss lower), on Clark 2014 pp.24, 32.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:54Z/2103"
+     }
     }
    ]
   },
@@ -6595,7 +6651,15 @@
      "statement": "Ranking of umbrella cost by ALAE treatment: ALAE inside underlying and outside umbrella is most expensive; ALAE outside both is least expensive; ALAE inside both is in between, since lowered attachment outweighs uncapped ALAE above the umbrella limit when most expected loss lies in lower portions of the layer.",
      "concept": "Treatment of ALAE in Increased Limits and Umbrella Pricing",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Excess of Loss",
+      "quote": "For an excess layer, ALAE inside the underlying limit and outside its own costs the most (both effects raise it) and ALAE outside both the least",
+      "note": "Clark 2014 §3A pp.24-25, 29 (ALAE added to loss with the limit on the sum; attachment AP/(1+e) in the exposure factor) for the two effects; the ranking as the Fall 2014 Q21(a) report credits it.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:54Z/2103"
+     }
     },
     {
      "id": "r4",
@@ -6837,7 +6901,15 @@
      "statement": "An aggregate loss distribution model should reflect the true volatility and potential loss cost of the underlying business, so contract smoothing features like carryforwards are generally not built into it, partly because renewal or cancellation of the treaty in later years is uncertain.",
      "concept": "Aggregate Loss Distribution",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Sliding Scale Commissions",
+      "quote": "Leaving it out keeps the full volatility of the underlying business in the distribution; reducing its variance assumes the treaty will be renewed, which is uncertain.",
+      "note": "Clark 2014 §1B(a) pp.11-12 (long-run approach reduces variance; contract may not renew; no standard method); Fall 2014 Q23(c) report (either position, argued from volatility and renewal).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:54Z/2103"
+     }
     }
    ]
   },
@@ -7261,7 +7333,15 @@
        "page": "Discrete Random Variable",
        "quote": "Convolve, summing over the ways each total can occur:"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Catastrophe Model Output",
+      "quote": "Each combination's probability is the product of $p_i$ over the events that occur and $1 - p_i$ over those that don't, and its loss is the sum of the occurring events' losses.",
+      "note": "CAS errata to Grossi & Kunreuther (2021) pp.2-3 (independent Bernoulli events, at most once, loss 0 if not occurring); SOA GI-301 study note (2025) p.2; Fall 2015 Q22(a) sample answers.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:54Z/2103"
+     }
     },
     {
      "id": "r3",
@@ -7526,7 +7606,15 @@
      "statement": "With pro-rata ALAE in an excess treaty, ALAE is shared in the same proportion as the ceded loss is to the total loss on each claim (ceded loss / total claim loss times ALAE).",
      "concept": "Excess of Loss Reinsurance",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Excess of Loss",
+      "quote": "*Pro rata with loss*: the ALAE in the layer is allocated in proportion to losses, claim by claim — the layer takes ALAE $\\times$ (layer loss $\\div$ total loss) on each claim",
+      "note": "Clark 2014 §3A p.24 ('ALAE in the layer allocated in proportion to losses') and Example 1-2, p.25; per-claim as Clark Step 3.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:54Z/2103"
+     }
     },
     {
      "id": "r3",
@@ -7598,7 +7686,13 @@
      "statement": "A quota share with a maximum ceded loss ratio caps the reinsurer's recovery at that ratio times ceded premium, so the capital reduction from the quota share is limited to that cap rather than the full cession percentage of the gross loss.",
      "concept": "Quota Share Reinsurance",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The 150% maximum ceded loss ratio is a contract term the question states; applying it (ceded loss capped at max LR x ceded premium, so capital falls by the cap) is the question's own term plus arithmetic. No reading teaches a QS loss-ratio cap (Clark 2014 §1A-1B pp.3-13 re-read); the writer's passage on Quota Share was cut (F-002).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:54Z/2103"
+     }
     }
    ]
   },
@@ -7750,7 +7844,15 @@
      "statement": "For a range of insured values, assume insured values are evenly distributed and use the midpoint (average insured value) to compute the ratio of loss size to insured value and the exposure factors, rather than the range's maximum.",
      "concept": "Exposure Curves",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exposure Curves",
+      "quote": "Clark's exposure-rating example assumes that all locations within a range are exactly equal to the midpoint of the range, so a band's exposure factor is read at",
+      "note": "Clark 2014 §2A p.18 (locations at the midpoint of the range); Fall 2016 Q21 report cites Clark for it.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:54Z/2103"
+     }
     },
     {
      "id": "r4",
@@ -7851,7 +7953,15 @@
      "statement": "To build an exposure curve from an exposure distribution by loss-as-percent-of-MPL, restate it as a distribution of loss sizes among exposures with positive loss (divide each probability by 1 minus the probability of zero loss) to get the conditional loss distribution.",
      "concept": "Exposure Curves",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exposure Curves",
+      "quote": "An exposure distribution that includes risks with no loss is restated first: divide each positive loss degree's probability by $1 - P(\\text{no loss})$.",
+      "note": "Bernegger 1997 §2.2 eqs (2.2)-(2.3) (F(0)=0, G'(0)=1/E[x]); Fall 2017 Q18(a) report requires the restatement.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:54Z/2103"
+     }
     },
     {
      "id": "r2",
@@ -8106,7 +8216,15 @@
      "statement": "Uncertainty in the intensity experienced at the site, given an earthquake (e.g., from an initial estimate of intensity), is represented by a probability distribution over intensity (secondary uncertainty in hazard).",
      "concept": "Catastrophe Model Hazard Module",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Catastrophe Modelling",
+      "quote": "So for one event a site has a *distribution* of intensity, not a single value.",
+      "note": "USGS OFR 2014-1091 p.120 (ground motion models: mean and SD of a normal density for log spectral acceleration); Fall 2017 Q20(a) report (curve C, uncertainty of the forces the structure experiences).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:54Z/2103"
+     }
     },
     {
      "id": "r4",
@@ -8234,7 +8352,15 @@
      "statement": "To evaluate a credibility weight Z with the MSE criterion, form for each past period a prediction as Z/2 times each of the two prior periods' frequencies plus (1-Z) times the cumulative overall frequency up to that point, then average the squared differences between actual and predicted frequencies; choose the Z with the lowest MSE.",
      "concept": "Mean-Squared-Error Criterion for Credibility",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Experience",
+      "quote": "for a trial $Z$, predict each past period from the periods before it, square each prediction's difference from what then happened, average the squares, and choose the $Z$ with the smallest mean.",
+      "note": "Mahler 1990 §6.4-6.5 and §7.1 (retrospective tests; Z/N to the N latest years; least squared error), printed pp.241-242; Fall 2018 Q1(b) report (cumulative frequency to date as the complement).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:54Z/2103"
+     }
     },
     {
      "id": "r5",
@@ -8422,7 +8548,15 @@
      "statement": "To find a PML at a return period not listed in the table, convert return periods to exceedance probabilities and linearly interpolate between the bracketing points on exceedance probability, not on return period years.",
      "concept": "Exceedance Probability Curve",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Probable Maximum Loss",
+      "quote": "don't pick the nearer plotted point, and don't interpolate on the return-period years — CAS's examiners list each of these as a common mistake.",
+      "note": "Fall 2018 Q16(a) report: interpolate the exceedance probabilities; common mistake 'using return period years for interpolation'.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:54Z/2103"
+     }
     },
     {
      "id": "r3",
@@ -8592,7 +8726,15 @@
      "statement": "A logic tree incorporates uncertainty by assigning probability weights (based on expert opinion) to alternative parameter values or model branches and combining the results as a weighted average; it is easy to trace and communicate but relies on subjective, simplified opinions and does not scale well to many scenarios.",
      "concept": "Logic Trees",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Catastrophe Modelling",
+      "quote": "Alternative parameter values or alternative models are set out as branches, each given a weight from expert judgement, and the results are combined as a weighted average.",
+      "note": "USGS OFR 2014-1091 p.41 (Mmax weights 0.1/0.3/0.5/0.1, weighted average 7.44); Fall 2018 Q17(c) sample answers and report.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:54Z/2103"
+     }
     },
     {
      "id": "r7",
@@ -8605,7 +8747,15 @@
        "page": "Parameter Risk",
        "quote": "A simulation draws the parameter and *then* the outcome for each iteration, and ranks the outcomes."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Catastrophe Modelling",
+      "quote": "Parameter values are drawn at random from probability distributions over many trials, giving a distribution of outcomes rather than a weighted point estimate.",
+      "note": "Fall 2018 Q17(c) sample answers and report (simulation: randomly sampled alternatives, complex situations, computationally intensive, black box).",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:54Z/2103"
+     }
     }
    ]
   },

@@ -1,14 +1,12 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-17
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
   content_hash: sha256:3f5c7461a1260dc638dc493720a4349cf3f253ff765dbea84cda27a7a5b5cdba
   sources:
-    - "Fisher, McTaggart, Petker & Pettingell, Individual Risk Rating (CAS Study Note, v3 Oct 2019), Ch.2 §3, PDF pp.22-26, sha256:3182cd5d8ebccc92be67a246e61a527acda5b304b823448d99f8a2546ca07b81 — https://www.casact.org/sites/default/files/2021-03/8_Fisher_et_al.pdf"
-    - "Werner & Modlin, Basic Ratemaking, 5th ed. (CAS, 2016), Ch.15 retrospective rating, PDF p.319, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
-    - "Bahnemann, Distributions for Actuaries, CAS Monograph 2 (2015), Ch.6, PDF pp.174-176, sha256:d4d172f9646852ab018ae3f0df95e5fbdbfabda4db55d6d4596977ed2eaa3ef8 — https://www.casact.org/sites/default/files/2021-03/8_Bahnemann.pdf"
+    - "Bahnemann, Distributions for Actuaries, CAS Monograph 2 (2015), §6.1 eqs.6.1-6.7, PDF pp.175-176; Example 6.3 and ILF eq.6.15 with ALAE factor (1+u), PDF p.179, sha256:d4d172f9646852ab018ae3f0df95e5fbdbfabda4db55d6d4596977ed2eaa3ef8 — https://www.casact.org/sites/default/files/2021-03/8_Bahnemann.pdf"
   open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Expenses.md

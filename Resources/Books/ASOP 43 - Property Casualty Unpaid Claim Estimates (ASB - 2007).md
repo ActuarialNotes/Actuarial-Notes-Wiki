@@ -8,12 +8,17 @@ Type: "Standard of Practice"
 Code: "ASOP No. 43"
 Available from: "[actuarialstandardsboard.org](https://www.actuarialstandardsboard.org/wp-content/uploads/2014/02/asop043_159.pdf)"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:f32f34e662db117d8e3b8927cfb9fc57e4fdb0e49856529738662b7e8e495aa7
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:02972477ec5f0e212139cfe46d2359df8d7e7226a6f01cacbe18f734c0034073
+  sources:
+    - "ASOP No. 43, Property/Casualty Unpaid Claim Estimates (ASB, June 2007, Doc. No. 159), title page, table of contents pp.ii-iii, transmittal memorandum pp.iv-v, §§1-4 pp.1-10, Appendixes 1-3 headings pp.11-24 (PDF pp.1-31), sha256:776302c442cb8d3210fc41269d38caeec4c547da8159084b80fa2ac4ce949cce — https://www.actuarialstandardsboard.org/wp-content/uploads/2014/02/asop043_159.pdf"
+    - "ASOP No. 43, CAS copy, sha256:776302c442cb8d3210fc41269d38caeec4c547da8159084b80fa2ac4ce949cce (byte-identical to the ASB PDF) — https://www.casact.org/sites/default/files/2021-03/5_ASOP_43.pdf"
+    - "CAS Exam 5 Content Outline, Fall 2026, pp.3-6 (tasks A3, B16-B20; Complete Text References), sha256:fd8373ae9bbe7e56b93f99cee304c76c1d29a9d0dc7f07e6ed500bd647f41795 — https://www.casact.org/sites/default/files/2026-03/Exam_5_CO_2026_Fall.pdf"
+    - "CAS Exam 6U Content Outline, Fall 2026, p.7 (Complete Text References: ASOP 43 → C6), sha256:11d626dc3093e467832cce0b86eca970c6add2904bb028d36f4c5b6e80356951 — https://www.casact.org/sites/default/files/2026-03/Exam_6U_CO_2026_Fall.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ver. July 2010), Table of Contents / bookmark outline (Appendix B at PDF p.435), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/ASOP 43 - Property Casualty Unpaid Claim Estimates (ASB - 2007).md
@@ -32,7 +37,7 @@ The Actuarial Standards Board's guidance for actuaries estimating loss and loss 
 - 1.1 Purpose
     - "Unpaid claims" includes the associated unpaid claim adjustment expense.
 - 1.2 Scope
-    - Applies to [[Unpaid Claims|unpaid claim]] estimates for events that have occurred as of an accounting date, for all classes of entities — self-insureds, insurance companies, reinsurers and governmental entities — excluding estimates developed solely for ratemaking.
+    - Applies to [[Unpaid Claims|unpaid claim]] estimates for events that have already occurred or will have occurred as of an accounting date, for all classes of entities — self-insureds, insurance companies, reinsurers and governmental entities — excluding estimates developed solely for ratemaking.
     - Covers estimates gross of recoverables such as deductibles, ceded [[Reinsurance|reinsurance]] and [[Salvage and Subrogation|salvage and subrogation]], estimates net of them, and estimates of the recoverables; for discounted estimates it addresses the undiscounted value.
 - 1.3 Cross References
 - 1.4 Effective Date

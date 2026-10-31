@@ -1,11 +1,12 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:38a9c006468869c4e76262c7fbe267f205344630cc43f0d142283d79802d8633
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:c9ac6df58a7eb3a6908637313c651a060698dc1183c138ebf267353e7904cf4a
+  sources:
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch. 3 p.33 (PDF p.39); Ch. 4 (PDF pp.50-56, chapter title); Ch. 14 pp.329-330 (PDF pp.335-336), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Salvage and Subrogation.md
@@ -15,7 +16,7 @@ verification:
 
 > $$\text{Net Ultimate} = \text{Gross Ultimate} - \text{S\&S Ultimate}$$
 
-- S&S must be **projected on its own triangle**, not scaled from losses. Recovery patterns lag payment patterns — salvage arrives within months, but subrogation requires establishing liability against a third party and can take years, especially where litigation is involved.
+- S&S is projected either by the **development technique** on reported or received S&S, or by a **ratio approach**: develop the ratio of received S&S to paid claims to an ultimate ratio and apply it to ultimate claims gross of S&S. Recovery patterns lag payment patterns — salvage arrives within months, but subrogation requires establishing liability against a third party and can take years, especially where litigation is involved.
 - Applying loss development factors to reported recoveries, or netting recoveries inside the loss triangle without checking that the netting is consistent across all years, both produce errors that are invisible in the result.
 - Data must be **consistent about direction**: recoveries may be recorded as negative payments inside the loss triangle, as a separate recovery triangle, or (worst) inconsistently across systems and years. A change in recording convention looks exactly like a change in recovery rates.
 - Because recoveries can arrive after a claim closes, S&S is a common source of **negative development** — age-to-age factors below $1.000$ in the later columns of a net triangle. Capping factors at $1.000$ removes real recoveries from the estimate.

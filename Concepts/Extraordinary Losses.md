@@ -1,12 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
   content_hash: sha256:7c0f38776b95c833d75de78b2e345c7f354c5ecc1617e3494ee189c99e93975d
-  sources: []
-  open_findings: 0
+  sources:
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 6 pp. 95-99, 107-108, 112 (PDF pp. 107-111, 119-120, 124); Appendix B pp. B-2-B-3 (PDF pp. 359-361), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Extraordinary Losses.md
 ---

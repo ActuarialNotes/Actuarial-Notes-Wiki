@@ -1,12 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:e2a42edcccffbda241feeb322271e3c32fa766371db79f55671d1c9c92ebf45e
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:c99843625e0fec87368606525d4a6f55c3a790c65f72cfed0a362386aca07171
+  sources:
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch. 4 p. 47 (underwriting executive questions); Ch. 7 pp. 103-105 (product mix); Ch. 8 p. 137 (adjust a priori for pricing/underwriting changes); Ch. 13 pp. 283-284, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 5 p. 82 (distributional changes, average premium); Ch. 6 p. 110 (distributional changes in loss trend), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Underwriting Changes.md
 ---
@@ -33,7 +35,7 @@ verification:
 > > Post-change accident years contain a materially better book. Two effects follow:
 > >
 > > - **Loss ratios fall** in recent diagonals, for reasons unrelated to rate adequacy.
-> > - **Development factors from the blended history overstate** ultimate for the post-change years, since they were estimated on a book containing four times as much high-hazard business — which reports later and settles slower.
+> > - **Development factors from the blended history overstate** ultimate for the post-change years, since they were estimated on a book containing six times as much high-hazard business — which reports later and settles slower.
 > >
 > > The response is to give **less weight to pre-change accident years** when selecting factors, and to segment the data by hazard grade so the two populations can be seen separately. If the segments have enough volume, reserving them separately removes the problem entirely.
 > >

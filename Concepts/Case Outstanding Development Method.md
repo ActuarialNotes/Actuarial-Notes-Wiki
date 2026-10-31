@@ -1,11 +1,12 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:eee75ff40546ae124a4269af0d49859e029f2727e8e987e21758bf9b99b921dc
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:3b3735cd3e478f9045f153505b125c2e2e4e96b223df64b81a5ccb0c7a80ace4
+  sources:
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch.12 Case Outstanding Development Technique, PDF pp.271-275 (printed 265-269): Approach #1, Approach #2 key assumptions, common uses, mechanics, factor formula and limitations, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Case Outstanding Development Method.md
@@ -19,10 +20,18 @@ verification:
 
 - $f_{\text{case}}$ converts the current case balance into *all* remaining payments — including payments on claims not yet reported. It is estimated from mature years: for each historical cohort, divide everything paid after a given valuation by the case outstanding at that valuation.
 - Friedland's fuller version works period by period, using two ratios estimated from history: **paid in the next period ÷ case outstanding at the start**, and **case outstanding at the end ÷ case outstanding at the start**. Rolling these forward generates a payment stream and runs the case balance down to zero.
-- The method suits books where **case reserving is consistent and disciplined** — case outstanding is then a genuine forecast of the remaining cost — and where paid patterns are distorted by changing [[Settlement Rate|settlement rates]].
+- Its added key assumption is that **claims activity on IBNR is related consistently to claims already reported**. That holds only where most claims are reported within the accident period — **claims-made** coverages and **report-year** analysis — which limits its use; it is not used extensively. It also needs case reserving that is consistent, so that case outstanding is a genuine forecast of the remaining cost.
 - Its weakness is the mirror image: it depends entirely on case adequacy being stable. A [[Case Adequacy|strengthening]] inflates the base to which $f_{\text{case}}$ is applied, and the historical factor was estimated under the old, weaker regime.
 - It is the natural companion to a **paid** projection rather than a substitute: paid data and case data are independent inputs, so agreement between the two is meaningful evidence.
 - Do **not** develop paid losses to ultimate and then add developed case outstanding — that double counts. Paid-to-date is taken at face value; only the case balance is developed.
+
+**When case outstanding is the only data** (Friedland's Approach #2, Ch. 12, pp. 268–269):
+
+- The case outstanding development technique is particularly useful when current case outstanding is the only claims data available, with no paid or reported history: for older years, for years before a self-insurance program began, or after mergers and acquisitions. When Approach #2 is used, it is most often because no other reliable claims data exists.
+- The case outstanding is developed with a factor derived from benchmark (industry) reported and paid CDFs to ultimate. The case outstanding development factor is (reported CDF − 1) × paid CDF ÷ (paid CDF − reported CDF) + 1, equivalently reported CDF × (paid CDF − 1) ÷ (paid CDF − reported CDF).
+- The estimated unpaid claims are the current case outstanding times that factor. Unlike the development technique on reported or paid claims, the projection is of unpaid claims, not ultimate claims; the factor carries provisions for both case development and IBNR.
+- For example, benchmark CDFs of 1.40 reported and 2.20 paid give (0.40 × 2.20) ÷ 0.80 + 1 = 2.10, so each dollar of case outstanding implies $2.10 of unpaid claims. The formula follows from the two patterns: unpaid is ultimate × (1 − 1/paid CDF), case outstanding is ultimate × (1/reported CDF − 1/paid CDF), and their ratio is the factor.
+- Its limits: the benchmarks may not fit the entity's own experience, the derived factors are highly leveraged for the recent, less mature years, and individual large claims in the case outstanding can distort it.
 
 ![[Media/Figures/Case_Outstanding_Development_Method.svg|340]]
 

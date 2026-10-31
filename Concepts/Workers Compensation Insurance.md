@@ -1,10 +1,10 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:8dff9708fcfe40e107e7147e1a93d3d21a4acd593606f5da9f3e86dbe9a36192
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:ccda4a56fba2f1aebecdb831296061a2f671a9a207c8b193b2376c96cd90bd44
   sources: []
   open_findings: 0
   open_critical: 0
@@ -18,6 +18,7 @@ verification:
 - **Not written by private insurers** in any province — the boards (WSIB in Ontario, WorkSafeBC, WCB Alberta, CNESST in Quebec) hold a monopoly. This is the largest single difference from the United States, where private carriers write workers' compensation in most states, and it is a standard 6C versus 6U comparison.
 - **Funding and rate setting.** Employers are assigned to rate groups by industry and pay an assessment per $\$100$ of insurable payroll, adjusted by [[Experience Rating|experience rating]] so that an employer's own claim record affects its rate. The boards target **full funding** of the liability for benefits already awarded — many spent decades recovering from unfunded positions, and funding ratios are a standing policy issue.
 - **Long-tail liabilities.** Permanent disability and survivor benefits are lifetime annuities, so a board's liability behaves like a pension plan's: sensitive to discount rate, mortality and indexation, and valued by actuaries on that basis rather than by triangle methods.
+- **Statutory benefits in ratemaking (Exam 5).** Statutes set the benefit structure — the compensation rate as a percentage of pre-injury wage, and minimum and maximum weekly benefits as percentages of the state average weekly wage. Werner & Modlin price a benefit change by its direct effect on total benefits across the wage distribution and a judgmental indirect effect on claimant behaviour; the calculation is on [[Policy Provision Changes]].
 - **Interaction with private insurance.** An employer's general liability policy does not cover employee injury (the board has exclusive jurisdiction), but the board's **subrogation** rights against negligent third parties bring it into ordinary liability claims, and an injured worker's tort claim against a third party is coordinated with board benefits as a [[Collateral Benefits|collateral benefit]].
 
 ![[Media/Figures/Workers_Compensation_Insurance.svg|340]]

@@ -1,12 +1,15 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:55093b06158b10568b04d640fc21c2712e24576ddf804fa98c56aff12687d90e
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:e0d596efaa9ce2a30977c25cd939044928039c1d83f138eedb7d5c779f5c38a0
+  sources:
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.7 p.139 and Ch.8 pp.145-149 (PDF pp.151, 157-161), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.9 pp.161, 165-166 (PDF pp.173, 177-178), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, v3 2010), Ch. 15 Evaluation of Techniques (PDF p.352), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Pure Premium Analysis.md
 ---
@@ -21,7 +24,7 @@ verification:
 - Comparing the projected pure premium with the **rate-implied** pure premium (current rate $\times$ [[Permissible Loss Ratio|PLR]]) tests adequacy directly; a ratio above $1.0$ means the rate is inadequate.
 - For **classification** work, pure premiums by class or [[Territory Ratemaking|territory]] give relativities directly. They must be [[Credibility|credibility-weighted]] against the overall average, and — because a univariate pure premium picks up the effect of every correlated variable — checked against a multivariate ([[Generalized Linear Model|GLM]]) result before use.
 - The frequency/severity split is what makes the analysis **actionable**: a frequency problem calls for underwriting, classification and risk-control responses; a severity problem calls for rate, limits, deductibles and claims handling.
-- In **reserving**, projected pure premium is a reasonableness test: multiply the reserving actuary's ultimate losses by nothing at all — just divide by exposures — and compare the resulting cost per exposure across accident years. A series that jumps in a way trend and rate changes cannot explain points at the estimate, not the world.
+- In **reserving**, projected pure premium is a reasonableness test: multiply the reserving actuary's ultimate losses by nothing at all — just divide by exposures — and compare the resulting cost per exposure across accident years. A series that jumps in a way trend cannot explain points at the estimate, not the world.
 
 ![[Media/Figures/Pure_Premium_Analysis.svg|340]]
 
@@ -49,7 +52,7 @@ verification:
 > > 2. **Correlation.** If urban policyholders also skew toward younger drivers or higher limits, part of the $2.00$ belongs to those variables rather than to geography. A univariate analysis assigns the whole effect to territory and would double-count when the other variables are rated too — the problem multivariate methods exist to solve.
 
 > [!example]- Testing Rate Adequacy by Class {Example}
-> A commercial property book, with projected pure premiums and current rates per $\$1{,}000$ of insured value. The permissible loss ratio is $62\%$.
+> A commercial property book, with projected pure premiums and current rates per $\$1{,}000$ of insured value. The permissible loss ratio is $62\%$, and all expenses are treated as variable, so the permissible loss ratio and the variable permissible loss ratio are the same.
 >
 > | Class | Projected PP | Current rate |
 > |---|---|---|
@@ -70,4 +73,4 @@ verification:
 > >
 > > Class A is over-priced by $6\%$; B and C are under-priced by around $12\%$ and $11\%$.
 > >
-> > The overall indication is the exposure-weighted combination of these, and the class changes must then be **off-balanced** against it so that correcting the relativities does not accidentally deliver an overall increase the analysis did not call for — see [[Rate Change]] and [[Classification Ratemaking]].
+> > The overall indication is the premium-weighted combination of these, and the class changes must then be **off-balanced** against it so that correcting the relativities does not accidentally deliver an overall increase the analysis did not call for — see [[Rate Change]] and [[Classification Ratemaking]].

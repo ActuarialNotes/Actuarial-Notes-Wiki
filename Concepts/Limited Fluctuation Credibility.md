@@ -2,13 +2,12 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-10-18
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:70916af850c833770407fbad3600f3ff3f589b973960e93e365545fde902606d
+  content_hash: sha256:79fcbcc80070fcad9ca9843d27d8876529df5df3841c1ffb11d15d8a0bd3e4ba
   sources:
-    - "Frees et al., Loss Data Analytics (open text), Ch. 9 Experience Rating Using Credibility Theory, Ch. 9 §§9.2–9.6, sha256:35a840449990c8fda61687ebde4646508b6296ffac3daba18f0181eb2511fa36 — https://openacttexts.github.io/Loss-Data-Analytics/ChapCredibility.html"
-    - "Tse, Nonlife Actuarial Models (Cambridge 2009), publisher preview, Contents pp. ix–x (PDF pp.11–12), sha256:f6d009afdd1776907db090b41b72dd5a76d0b5ba3f0ee42e8b07279d5763b404 — https://api.pageplace.de/preview/DT0400.9780511630231_A24404031/preview-9780511630231_A24404031.pdf"
-    - "CAS Exam MAS-II Content Outline 2026, p.2 Domain A; p.4 Tse Chs 6.1–6.3, 7.1–7.4, 8.1–8.2, 9.1–9.2, sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 12 pp.217-220 (PDF pp.229-232), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Frees et al., Loss Data Analytics (open text), Ch. 9 Experience Rating Using Credibility Theory, §§9.2.1–9.2.2, sha256:35a840449990c8fda61687ebde4646508b6296ffac3daba18f0181eb2511fa36 — https://openacttexts.github.io/Loss-Data-Analytics/ChapCredibility.html"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Limited Fluctuation Credibility.md
@@ -28,6 +27,10 @@ $$n_{\text{full}} = \left(\frac{z_{\alpha/2}}{r}\right)^2 \cdot \frac{\text{Var}
 - For **claim severity**: $n_{\text{full}}$ depends on the coefficient of variation $\text{CV} = \sigma/\mu$
 - For **aggregate losses**: $n_{\text{full}}$ combines frequency and severity CVs: $\text{CV}^2_S = \text{CV}^2_N + \text{CV}^2_X / E[N]$
 - Partial credibility uses the **square root rule**: $Z = \sqrt{n/n_{\text{full}}}$ when $n < n_{\text{full}}$
+- **The simplifying assumptions.** In Werner & Modlin's derivation of the basic claim-count standard (Ch. 12), exposures are homogeneous, claim occurrence follows a Poisson distribution and there is no variation in the size of loss (constant severity).
+- **Advantages** (Werner & Modlin, Ch. 12). It is the most commonly used approach and so generally accepted, the data it needs is readily available, and the computations are very straightforward.
+- **Disadvantages.** The derivation makes simplifying assumptions that may not be true in practice, such as no variation in the size of losses. It uses a selected complement but does not take into account the quality of that complement compared with the latest observation, so judgment is required.
+- Full credibility is defined by a probability p that the observed experience stays within a range k of its expected value, and Werner calls that range an arbitrary amount.
 
 ![[Media/Figures/Limited_Fluctuation_Credibility.svg|340]]
 

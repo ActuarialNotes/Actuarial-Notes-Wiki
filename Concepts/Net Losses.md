@@ -1,12 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:732a75db70161e27a67d215d87d808e5b3d20dac148c54f46b7b1313aae5da82
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:48cb4d383f8fba7f6eabf59e9dabd6011f6ddee8c4e91e4f5c2e5cf02792a54b
+  sources:
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch. 3 pp.33-34 (PDF pp.39-40); Ch. 14 pp.329-332 (PDF pp.335-338), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Net Losses.md
 ---
@@ -18,7 +19,7 @@ verification:
 > $$\text{Net Ultimate} = \text{Gross Ultimate} - \text{Ceded Ultimate} - \text{Recovery Ultimate}$$
 
 - Net is the figure that matters for **capital, solvency and the insurer's own results**, and it is the basis on which retained profitability is measured.
-- It should be **derived, not developed**. Each component — gross, ceded, S&S, deductible recoveries — has its own emergence pattern, so each is projected separately and the net figure falls out of the subtraction. Developing a net triangle directly embeds whatever reinsurance structure was in force in each historical year.
+- Net can be **derived or developed**. Some actuaries analyze gross and ceded experience separately and derive net as the difference; others analyze gross and net experience separately and derive ceded — the choice depending on data availability, the characteristics of the gross versus ceded programme, and the actuary's preference. Either way the implied third figure must be reviewed for reasonableness. Developing a net triangle directly embeds whatever reinsurance structure was in force in each historical year.
 - Net experience is **smoother than gross** because reinsurance truncates the volatility. That makes net data look more [[Credibility|credible]] than it is: the smoothing is bought, and its price is the net cost of reinsurance.
 - Net loss ratios must be compared against **net** premium. Gross losses over net premium — or the reverse — misstates the ratio by the whole cost of the reinsurance programme.
 - Net figures depend on recoveries actually **arriving**. Reinsurer insolvency, coverage disputes, and an insolvent large-deductible insured all convert an assumed recovery into a retained loss, so a net estimate carries credit risk that a gross estimate does not.

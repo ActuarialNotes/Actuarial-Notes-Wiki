@@ -143,3 +143,38 @@ created: 2026-09-12
 - checks_run: All three open findings re-checked against Werner Ch.12 this session and fixed; Harwayne rebuilt and every step recomputed in python before writing; the blend example recomputed (0.2x25+0.8x6 = 9.8; at 12, 14.6); the first-dollar list, Boor's qualities, the excess list (increased limits, lower limits, limits analysis, fitted curves - p.231) and the lead's 'complement can be more important than the data' (p.223) diffed against the text; the BF/Cape Cod bullet against Friedland Ch.9-10.
 - sources_checked: Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 12 pp.223-231 (PDF pp.235-243), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf; Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch. 9 p.156 (PDF p.162), Ch. 10 p.174 (PDF p.180), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf
 - note: Every claim now traceable to Werner Ch.12 or Friedland Ch.9-10. Confidence medium: both worked examples are vault-authored (recomputed). Two further findings (F-004 major, F-005 minor) opened, applied and resolved in this run.
+
+## [F-006] Lower limits analysis: 'policies at every limit' overstated the Ch. 11 censoring rule
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-31T17:29Z/d9a2
+- date: 2026-10-31
+- severity: minor
+- status: open
+- locus: Excess complements, Lower limits analysis bullet
+- claim: Losses capped at the basic limit can be taken from policies at every limit.
+- evidence: W&M Ch.12 p.233 (PDF p.245) says only that insurers generally code losses capped at basic limits for statistical reporting and that another lower limit may not be as available. The 'every limit' clause is the writer's inference from Ch.11: p.194 (PDF p.206) data are censored at the policy limit, and p.195 (PDF p.207) LAS at the $100K basic limit may use all policies 'even those with limits above $100,000' — every policy in that example has a limit at or above the basic limit, and the general rule (p.195) is that a layer uses only policies with limits as high as or higher than its top. A policy with a limit below the basic limit could not supply basic-limit losses, so 'every limit' needs the qualifier.
+- source_rank: 2
+- proposed_action: Read 'from policies at every limit at or above it'.
+- applied: true
+- fingerprint: 01929ca6d70d
+
+## [F-006/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-31T17:29Z/d9a2
+- date: 2026-10-31
+- resolves: F-006
+- status: resolved
+- note: Applied: 'every limit' now 'every limit at or above it', the condition W&M Ch.11 p.195 states. The companion inference in the increased limits analysis bullet ('a policy whose limit is below the attachment point cannot supply them') is kept: W&M Ch.12 p.232 requires losses not truncated at any point below the attachment point, and Ch.11 pp.194-196 says data are censored at the policy limit and lower-limit policies cannot be used above their limit; Ch.12 p.234 makes the same point for limits analysis.
+
+## [C-003] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T17:29Z/d9a2
+- date: 2026-10-31
+- status_set: verified
+- confidence: medium
+- checks_run: whole page re-read against W&M Ch.12: Boor's six qualities (p.224); six first-dollar complements and their evaluations (pp.225-231), incl. the new trended-present-rates trend sentence (pp.229-230: monetary inflation, distributional shifts, safety advances; annual loss trend often consistent with the latest indication) and the new competitors' rates bullet (p.231, each clause matched); excess lead-in (p.231); increased limits analysis formula and evaluation (pp.232-233); lower limits formula, special case, stability/bias, statistical coding, relation to lower-limit losses (pp.233-234); limits analysis formula and Table 12.7 col (8) share rules, reinsurer use, ELR-by-limit assumption (pp.234-235); fitted curves (p.235); ASOP 25 quote and 'complement more important' (p.223); method 3 (p.227); BF/Cape Cod vs Friedland. Writer's two inferences tested against Ch.11 (one kept, one qualified - F-006). Table 12.7 recomputed (0.5/3.0 x 120,000 = 20,000; 0.5/3.4 x 45,000 = 6,618; table rounds the share). Harwayne example recomputed (4.20; 5.04, 3.40; 3.00, 3.09; 3.04; own-mix 4.40 -> 3.44) and blend (9.8%, 14.6%).
+- sources_checked: Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 11 pp.193-198 (PDF pp.205-210); Ch. 12 pp.223-235 (PDF pp.235-247), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf; Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch. 9 p.156 (PDF p.162), Ch. 10 p.174 (PDF p.180), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf
+- note: Medium: the two worked examples are vault-authored (recomputed). Earlier findings all resolved.

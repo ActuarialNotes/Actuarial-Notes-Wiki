@@ -1,12 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:bb71d8f70f1ef156fc1548bc77b9cf7977088d8afee09e228572090d64afda4a
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:a96fa4c3704e1ff13d0007ca74f5d47aea718fe7ef5818c3db3e5a2f6629dc65
+  sources:
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 15 pp.289-311 (PDF pp.301-323), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Commercial Lines Rating.md
 ---
@@ -27,7 +28,7 @@ Further points:
 - **Loss rating** replaces the manual rate entirely for very large accounts: the rate is built from the account's own developed and trended loss experience rather than from a class rate at all. It is the limiting case of experience rating at $Z = 1$.
 - **Composite rating** simplifies administration for complex accounts by applying a single rate to one exposure base in place of many class rates — with an audit at expiry.
 - The mechanisms **stack in a defined order**, and the [[Rating Algorithm|rating algorithm]] must specify it. Manual → schedule and experience mods → standard premium → premium discount (for size) → retro adjustment or deductible credit.
-- Each step transfers more risk back to the insured, and each therefore reduces the insurer's [[Profit and Contingency Provision|risk charge]] — but increases credit exposure, since the insured owes money after the loss.
+- Each step transfers more risk back to the insured — but increases credit exposure, since the insured owes money after the loss.
 
 ![[Media/Figures/Commercial_Lines_Rating.svg|340]]
 

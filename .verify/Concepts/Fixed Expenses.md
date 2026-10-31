@@ -71,3 +71,38 @@ created: 2026-09-12
 - checks_run: F-001 re-checked and fixed from Werner Ch.7 p.130 and Ch.2 p.31; every sentence diffed against Werner Ch.7; both examples recomputed in python.
 - sources_checked: Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 7 pp.125-135 (PDF pp.137-147), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf; Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 8 p.143 (PDF p.155), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf; Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 2 p.31 (PDF p.43), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf; Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 9 p.151 (PDF p.163), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf
 - note: Confidence lowered from high to medium to match the policy for vault-authored examples. The competitor/adverse-selection remark in Example 2 rests on Werner Ch.9 p.151.
+
+## [F-003] 'Fixed expenses don't grow with volume' contradicts Werner's definition
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-31T17:32Z/b3a4
+- date: 2026-10-31
+- severity: minor
+- status: open
+- locus: bullet 'Because fixed expenses don't grow with volume ...'
+- claim: Because fixed expenses don't grow with volume, the fixed expense ratio of a small or new book is high and falls as the book grows.
+- evidence: Werner Ch.7 defines fixed expenses as the same for each risk (the page's own lead), so in total they grow with the number of risks; what Werner attributes the falling ratio to is that 'volume will likely increase faster than expenses' (p.129, PDF p.141) and economies of scale in a growing book (p.134, PDF p.146: 'the selection should be adjusted to include the impact of economies of scale given expected growth').
+- source_rank: 2
+- proposed_action: Drop the clause and state Werner's reason (volume outpacing expenses; economies of scale).
+- applied: true
+- fingerprint: dc1ccb3ced71
+
+## [F-003/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-31T17:32Z/b3a4
+- date: 2026-10-31
+- resolves: F-003
+- status: resolved
+- note: Applied: bullet now opens with Werner's p.129 statement and the p.134 economies-of-scale adjustment; the quoted conclusion about a small or new book is unchanged.
+
+## [C-003] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T17:32Z/b3a4
+- date: 2026-10-31
+- status_set: verified
+- confidence: medium
+- checks_run: Whole page re-read against W&M Ch.7 pp.125-135; the new bullet diffed against p.129 and p.134; [[Expenses]] and [[Expense Provisions]] links resolve; worked examples unchanged since the 2026-10-09 pass ($50, $333.33).
+- sources_checked: Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 7 pp. 125-135 (PDF pp. 137-147), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf
+- note: One minor finding opened and applied. Medium: vault-authored examples.

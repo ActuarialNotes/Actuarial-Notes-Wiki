@@ -1,11 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:11e297b9ec84897a822c48f4cfeadc5f6fb8e0a64f26a8a04bbe306f136a154e
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:7491c488f8835b9361baca80c7236d522f4c3d79a4f1f5c10ba61ae12df531ac
+  sources:
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch.5 p.55-56 (PDF 61-62) incremental paid triangle by calendar period; Ch.8 p.133 (PDF 139) reform restatement; Ch.9 p.152 (PDF 158) BF uses the development technique's patterns; Ch.11 pp.204, 209-210 (PDF 210, 215-216) reform-adjusted and trended severities; Ch.13 p.283 (PDF 289) report-year data after a legal shift, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+    - "CAS Exam 5 Spring 2017 — sample answers and examiner's report, Q23 part a, pp.88-89, sha256:f42f48b0e1bec884aba2e4c0eca91ee2b95b3f5cc6fd7f02de78086899f9e0c6 — https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam5_sp17-5.pdf"
+    - "CAS Exam 5 Fall 2015 — sample answers and examiner's report, Q22 part b, p.85, sha256:a3367c88f08abf0726c14d2034c8772c03594cbcf07494b93b35b6433dbca42c — https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam5_f15-5.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Changing Conditions.md
@@ -28,6 +31,8 @@ verification:
   - *Case strengthening*: reported development overstates, reported BF and Cape Cod overstate less; paid methods and expected claims are unaffected.
   - *Faster settlement*: paid development overstates; reported methods are largely unaffected.
   - *Growth in a slower-developing segment*: every technique on the combined data understates.
+- **BF does not escape a changed pattern.** The Bornhuetter-Ferguson technique uses the same reporting and payment patterns as the development technique (Friedland, Ch. 9), so its percentage unreported comes from the historical pattern. A change that alters development, such as a legal reform that lowers severity on open claims as well as future ones, distorts BF's IBNR along with the development technique's. Better responses are report-year data in place of accident-year data, when a shift in the social or legal climate makes severity follow the report year more closely than the accident date (Friedland, Ch. 13), or a frequency-severity approach with the severities adjusted for the reform (Friedland, Ch. 11).
+- **A change dated by payment, not by accident.** A change that applies to every payment made after a date, such as a court decision, is a calendar-year effect, and a cumulative cell mixes payments made before and after it. Each cell of the incremental paid triangle is the amount paid in a single calendar period (Friedland, Ch. 5), so the restatement is made on incremental cells: de-cumulate the paid triangle, restate each incremental cell paid before the change to the new level, and re-cumulate before selecting factors. For example, if a decision raises the cost of every payment after the end of a year by 10%, every incremental cell on that year's diagonal and the diagonals before it is multiplied by 1.10, and the cells on later diagonals are left as they are. Friedland restates historical claims as if they had occurred in the new legal environment (Ch. 8), and restates incremental paid severities cell by cell to a common cost level (Ch. 11).
 - **Responses:** detect the change (interview plus [[Data Diagnostic Analysis|diagnostics]] — average case outstanding, closed-to-reported counts, paid-to-reported ratios); lean on methods the change does not touch; restate the data ([[Berquist-Sherman Method|Berquist-Sherman]]); adjust a priori ratios for rate level and trend; segment for mix; restate history to current retentions or benefit levels.
 
 > [!example]- Case Strengthening Through Four Methods {Example}

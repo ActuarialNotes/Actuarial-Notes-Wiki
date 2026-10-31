@@ -2,12 +2,12 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-10-09
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:da75221437baab6bde09d6bc30d99663c3855b771c65bc65928a24ced6c585ec
+  content_hash: sha256:2dabe70b1d6a8249db0bead272f2ed7db25608fdd04629580cccb81c7043d0a9
   sources:
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 6 pp.109-121 (PDF pp.121-133), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
-    - "ASOP No. 13, Trending Procedures in Property/Casualty Insurance (ASB, 2009), Sections 1-4, pp.1-4 (PDF pp.5-8), sha256:5d985e9cbf666cda56b67bb6489e2f1430313278145e87816c7b2297dcd59acd — https://www.casact.org/sites/default/files/2021-03/5_ASOP_13.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 6 pp. 117-118 (PDF pp. 129-130), Tables 6.20-6.21, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "CAS Exam 5 Fall 2016 — sample answers and examiner's report, Q11(b), report p.53, sha256:ca09c50a744a462ecef90f59e436daec7da51ede0493cd5ebadc65f761e826f7 — https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam5_f16-5.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Loss Trend.md
@@ -25,6 +25,7 @@ verification:
 - **Frequency and severity are analyzed separately** to understand the drivers of the trend, because they can move in opposite directions — Werner & Modlin's example is a heavily marketed higher deductible, which lowers frequency but is likely to increase severity, a shift that is hard to see in pure premium.
 - A **two-step** trend is used when the trend in the historical period differs from the trend expected in the forecast period (legislative changes are one example): losses are first trended at a *current* trend from the experience period's average accident date to that of the latest data point in the trend data, then projected at a separately selected trend to the forecast period's average accident date. A benefit-level change is restated in the data, or allowed for in the selection, so that it is not double counted.
 - Limits **leverage** severity trend: for a positive trend, basic-limits losses trend more slowly than total-limits losses and the excess layer faster, so a severity trend measured on total-limits data must be adjusted before it is applied to basic-limits losses, or the trend is measured on basic-limits data (see [[Increased Limits|ILFs]]).
+- **Measuring the trend in a layer.** Werner & Modlin (Ch. 6) apply the total-limits severity trend to each ground-up loss, then cap both the original and the trended losses at the basic limit and compare the totals; the excess losses are the total-limits losses minus the basic-limits losses, before and after trend, and their ratio is the excess trend. The trend must be applied to the ground-up loss before the limit, never to the capped amount. Claims that stay below the limit before and after trend add nothing to the excess layer, so the layer's losses — and an average excess severity — are taken over the claims that reach the layer, not over every ground-up claim.
 
 ![[Media/Figures/Loss_Trend.svg|340]]
 

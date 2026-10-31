@@ -154,7 +154,7 @@ are in Appendix A.
 | DISC-DA / RM / IA | 70 / 146 / 221 | 100% each | **ready** again since 2026-10-31 (8 / 8; beta 2026-10-25 to 31 for G8) |
 | Exam 7 | 144 | 26 / 29 | **ready** (again since 2026-10-31, 8 / 8; beta 2026-10-25 to 31 for G8) |
 | MAS-II | 168 (44 off-syllabus) | 98 / 98 | **ready** (since 2026-10-31, 8 / 8) |
-| Exam 5 | 349 | 129 / 138 | beta |
+| Exam 5 | 349 | 129 / 138 | **ready** (since 2026-10-31, 8 / 8) |
 | Exam 6C | 394 (73 off-syllabus) | 137 / 159 | beta |
 | Exam 8 | 139 | 32 / 38 | beta |
 | Exam 9 | 280 (179 off-syllabus) | 56 / 66 | **ready** (since 2026-10-31, 8 / 8) |
@@ -590,7 +590,7 @@ gates through `--hold` in CI.
 | C0 | Refresh the generated reports | ✅ 2026-10-17 | — | Both reports regenerated; CONCEPT_GAPS' generated half refreshed (0 missing resources); Exam 8's `source_pages: partial` dropped. Re-run them at each review (Appendix A). |
 | C1 | Exam 8 → ready | 🟡 6 of 8 gates (2026-10-25) | **Now** | Content plan Phase 2. G8 (its bank's check and items), then G5: the ISO CGL plan, which is in the study kit only. It stays `in_review` until the kit is read (D20, re-affirmed as D28). The papers' printed-slip findings were closed in Phase Q (Q3). |
 | C2 | Exam 9 → ready | ✅ 2026-10-31, 8 / 8 | Done | Phase 2, step 2. G4/G5: *Enterprise Risk Management* restated to the CAS's 2003 overview, CJS and Cummins 2008 verified at medium (D22). G8: 101 of 101 served questions answerable; D10 applied to the 2012–2015 Exam 7 ERM questions (30 `off_syllabus`); items written onto 21 pages and fact checked by different agents (content plan §4). |
-| C3 | Exam 5 → ready | 🟡 5 of 8 (2026-10-25) | **Now** | Phase 2, step 4. G1 and G7 ✅ (page re-transcribed per D8; all 357 questions verified). Left: 61 concepts and 4 free readings (Friedland, ASOP 13 and 43, CAS's ratemaking principles). |
+| C3 | Exam 5 → ready | ✅ 2026-10-31, 8 / 8 | — | Phase 2, step 4 (content plan §4). 61 concepts and Friedland, ASOP 13 and 43 and CAS's ratemaking principles verified; G8 357 / 357 answerable (314 items closed: passages written onto 42 pages from Werner & Modlin and Friedland, each fact checked by a different agent). |
 | C4 | MAS-II → ready | ✅ 2026-10-31, 8 / 8 | Done | Phase 2, step 1. D24 applied to Fall 2018 (17 questions `off_syllabus`); *Backward Shift Operator* and *Correlogram* restated off Cowpertwait; G8: 124 of 124 served questions answerable, its items sorted, written onto 19 pages and fact checked by different agents (content plan §4). |
 | C5 | Exam 6C → ready | 🟡 4 of 8 (2026-10-25) | **Now** | Phase 2, step 9. G6 and G7 ✅ (all 394 questions verified, wave Q2). Left: the page's F-008–F-012 (G1), 137 concepts and 67 readings. Six of the readings are in the study kit only (D28). |
 | C6 | A PCPA bank, then PCPA → ready | ⬜ (5 of 8) | **Now** | Phase 2, step 8. A vault-written bank for its 29 concepts (D5), each question checked by a different agent from its writer, plus 5 concepts and 12 readings (mostly commercial, D7/D27). |

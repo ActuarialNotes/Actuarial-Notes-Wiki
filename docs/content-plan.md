@@ -20,8 +20,8 @@ roadmap review_
 > against G8. Each comes back to `ready` once its bank is run and its items are closed (steps 0
 > and 10). **Exams P and FM are `ready` again (30 Oct)**, and **MAS-I, the three DISCs and Exam 7 (31 Oct)**,
 > 8 / 8: all seven moved back on 25 Oct are ready again. **MAS-II is `ready` (31 Oct)**, the first of the
-> ten beta exams in Phase 2 to pass all eight (step 1), and **Exam 9 is `ready` (31 Oct)** (step 2);
-> the other eight follow.
+> ten beta exams in Phase 2 to pass all eight (step 1), and **Exam 9 is `ready` (31 Oct)** (step 2),
+> and **Exam 5 (31 Oct)** (step 4); the other seven follow.
 
 This is the **one plan for the vault's content**: the exam pages, concept pages, resource pages
 and question banks, the fact check that stands behind them, and the generated figures and
@@ -191,9 +191,9 @@ Adopted during the DISC, MAS-I and Exam 7 campaigns (Appendix A), and binding on
 
 From `python3 scripts/publication_readiness.py --body all` and `--hold`, after Phase Q closed,
 re-measured with G8 the same day.
-84 exam pages: **7 ready, 10 beta, 67 in development** (Exams P and FM promoted 30 Oct, MAS-I, the three DISCs and Exam 7 31 Oct).
+84 exam pages: **10 ready, 7 beta, 67 in development** (Exams P and FM promoted 30 Oct, MAS-I, the three DISCs, Exam 7, MAS-II, Exam 9 and Exam 5 31 Oct).
 
-**Ready (7).** The seven exams that were ready on 25 Oct went back to beta that day, when G8 joined
+**Ready (10).** The seven exams that were ready on 25 Oct went back to beta that day, when G8 joined
 the gates (D29). **Exam P** is ready again since 30 Oct: page verified, 68 concepts verified, 6 / 6
 readings verified, every concept with a question, 719 / 719 served questions verified, and 719 / 719
 answerable (G8: 683 items closed — 254 passages the check missed, 19 by retagging 15 questions, 220
@@ -228,17 +228,25 @@ its served questions still take from it, Patrik's chapter, labelled as the earli
 maintainer's call, 31 Oct); each fact checked by a different agent from its writer). D10 re-applied
 on the evidence that Friedland doesn't teach Patrik's material: 2017 Q15 is `off_syllabus` (58% of
 its points on Patrik), the other ten Patrik-era questions stay served (§6).
+**Exam 9** is ready since 31 Oct (Phase 2 step 2, C2): 8 / 8, its G8 at 101 / 101 (roadmap C2).
+**Exam 5** is ready since 31 Oct (Phase 2 step 4, C3), 8 / 8: page verified, 61 concepts verified,
+6 / 6 readings verified (Friedland, ASOP 13 and 43 and CAS's 1988 ratemaking principles in seven
+reading packets, runs `eaf1`, `3355`, `275d`, `75be`, `1f80`, `0351`, `d6ef`), every concept with a
+question, 357 / 357 served questions verified, and 357 / 357 answerable (G8, run
+`answerability-20261031-5`, $44: 202 answerable at first; 314 items closed — 88 passages the check
+missed, 49 not required, about 160 by passages written onto 42 pages from Werner & Modlin and
+Friedland by five writers and fact checked by five other agents, and about 20 by links). Details in
+§4, step 4.
 
-`--hold` (31 Oct): 7 ready exams, 0 errors, 1 warning (PCPA's G6).
 
-**Beta (10)**, in Phase 2's order:
+`--hold` (31 Oct): 10 ready exams, 0 errors, 1 warning (PCPA's G6).
+
+**Beta (7)**, in Phase 2's order:
 
 | Exam | Page | Concepts | Unverified concepts | Readings unverified | No question | Bank verified | Answerable | Gates | Fails |
 |---|---|---:|---:|---:|---:|---|---|---:|---|
 | MAS-II | verified | 98 | 2 | 1 / 6 | 0 | 141 / 141 | 74 / 141 | 5 / 8 | G4, G5, G8 |
-| Exam 9 | verified | 60 | 1 | 2 / 9 | 0 | 131 / 131 | not run | 5 / 8 | G4, G5, G8 |
 | SRM | verified | 41 | 7 | 2 / 2 | 0 | 77 / 77 | not run | 5 / 8 | G4, G5, G8 |
-| Exam 5 | verified | 137 | 61 | 4 / 6 | 0 | 357 / 357 | not run | 5 / 8 | G4, G5, G8 |
 | FAM | verified | 80 | 37 | 3 / 3 | 0 | 274 / 274 | not run | 5 / 8 | G4, G5, G8 |
 | ASTAM | verified | 56 | 22 | 4 / 4 | 0 | 62 / 62 | not run | 5 / 8 | G4, G5, G8 |
 | ALTAM | verified | 61 | 50 | 2 / 2 | 0 | 94 / 94 | not run | 5 / 8 | G4, G5, G8 |
@@ -372,7 +380,7 @@ Appendix A.
 | 1 | **MAS-II** (C4) | 5 / 8 | G4: *Backward Shift Operator* and *Correlogram* quote Cowpertwait's own wording; restate each to an open text (fpp3, NIST) and verify at medium (D22, D27). G5: the ISLR delta | Cowpertwait commercial; the rest verified |
 | 2 | **Exam 9** (C2) | 5 / 8 | G4: *Enterprise Risk Management* (Brehm's four phases are stated in no open source: restate the page to one that is, such as the CAS ERM Committee's free 2003 *Overview of Enterprise Risk Management*, or cut the claim). G5: CJS (assigned as the JEP text, read as the HBS working paper) and Cummins 2008 (SSRN 1057401), both `in_review`. Try again for the assigned texts; if no session can reach them, the maintainer supplies a copy | Most verified on open texts (D22) |
 | 3 | **SRM** (C9) | 5 / 8 | G4: 7 concepts (*ARCH Model*, *Hyperparameter*, *Model Validation*, *Overfitting*, *Regression Tree*, *Train-Test Split*, *Variable Transformation*). G5: Frees 2010, and the ISLR delta | Frees commercial (D7; Frees posts an online version); ISLR free |
-| 4 | **Exam 5** (C3) | 5 / 8 | G4: 61 concepts (59 unverified; *Close Year* and *Profit and Contingency Provision* in review). G5: Friedland, ASOP 13, ASOP 43 and CAS's 1988 ratemaking principles. Friedland is split by chapter group (`verification-plan.md` §6). Its packets also cover the chain-ladder, Bornhuetter-Ferguson and expected-loss pages FAM and ASTAM share | All free; Werner & Modlin and the sixth reading already verified |
+| 4 | **Exam 5** (C3) | ✅ 8 / 8 | **Ready (31 Oct).** G4, G5 and G8 closed in one campaign (§4, step 4) | All free, all verified |
 | 5 | **FAM** (C9) | 5 / 8 | G4: 37 concepts (20 shared: 13 with ALTAM, 8 with Exam 5 or ASTAM). G5: Klugman, Brown & Lennox and AMLCR. The FAM packets load all three readings once, for ASTAM's and ALTAM's concepts too | All commercial (D7, D27) |
 | 6 | **ASTAM** (C9) | 5 / 8 | G4: 22 concepts (8 shared). G5: Klugman and Brown & Lennox (done in FAM's packets), and the SOA study notes ASTAM-21-26 and ASTAM-22-23 | Two commercial, two free |
 | 7 | **ALTAM** (C9) | 5 / 8 | G4: 50 concepts (15 shared). G5: AMLCR (done in FAM's packets) and the SOA study note ALTAM-21-23 | AMLCR commercial; the study note free |
@@ -783,7 +791,7 @@ and then a resolve run.
 | 1 | MAS-II | 2 concepts restated off Cowpertwait's wording. G8 (§3.9): 141 items on 67 questions. The Fall 2018 McElreath questions first, under D24, which takes ESS, WAIC and KL divergence out with their questions; then the page gaps (*Linear Mixed Model* 17 items, *Principal Components Analysis* 8, and 55 smaller pages) and 28 retags | fpp3, NIST (open); West, ISLR, Tse for the gaps | **ready ✅ (31 Oct)**, 8 / 8 |
 | 2 | Exam 9 | *Enterprise Risk Management*; CJS and Cummins 2008. G8: 248 items on 88 questions | Open ERM texts; the assigned texts tried again | **ready ✅ (31 Oct)**, 8 / 8. G4/G5 (run `69a5`, D22): *Enterprise Risk Management* restated to the CAS ERM Committee's 2003 overview, Brehm's four phases and implementation issues (in no open source) cut; CJS verified on the HBS working paper, the JEP text still unreachable; Cummins 2008's callout restated. G8: the sort (rule 11) closed 83 items (not-required, passages the check missed, 20 questions retagged); D10 applied to the 2012–2015 Exam 7 ERM questions from CAS's 2012–2015 syllabi, 30 `off_syllabus` (every point on Brooks, IAA 2004, Feldblum or Venter's papers; 2016–2019's one ERM reading is Brehm, today's), 2012 Q14, Q21 and 2014 Q18 kept served for G6 though D10 would flag them; the rest written onto 21 pages (new: *Franchise Value* from Panning, *Copula* and *Rank Correlation* from Venter 2002, Embrechts et al. and Mack) from open texts, with CAS's examiners' reports as last resort where Brehm alone states it, and fact checked by different agents (runs `c56a`, `2103`, `a5e7` and brehmB's). Bank serves 101 of 280 |
 | 3 | SRM | 7 concepts; Frees 2010 | ISLR (free), Frees (commercial; an online version) | **ready** |
-| 4 | Exam 5 | 61 concepts; 4 readings | All free; Friedland split by chapter group | **ready** (and the reserving concepts FAM and ASTAM share) |
+| 4 | Exam 5 | 61 concepts; 4 readings | All free; Friedland split by chapter group | **ready ✅ (31 Oct)**, 8 / 8: seven reading packets, then G8's 314 items (sort, five writers, five checkers). Record: §4, step 4 |
 | 5 | FAM | 37 concepts; Klugman, Brown & Lennox, AMLCR | Commercial (D7, D27); open texts for the concepts (Loss Data Analytics, the SOA's own notes) | **ready** (and the three readings ASTAM and ALTAM share) |
 | 6 | ASTAM | 22 concepts; two SOA study notes | Free notes; the rest done in step 5 | **ready** |
 | 7 | ALTAM | 50 concepts; ALTAM-21-23 | Free note; AMLCR done in step 5 | **ready** |
@@ -847,6 +855,37 @@ are short lists: finish their runs and close them alongside. Steps 2–9 follow 
 - **The app agrees with the gate.** The answerability panel now counts a prerequisite exam's pages
   as in reach (`prerequisitePages` in `lib/answerability.ts`), as `answerability_lib.py` does. 15
   served MAS-II questions read *Answerable* only through MAS-I's pages.
+
+**Step 4 done (31 Oct): Exam 5 is ready**, 8 / 8. In order:
+
+- **G4 and G5, seven reading packets** (one agent each, record-only): Friedland split four ways
+  (data and loss bases, gross/net and recoveries, the techniques, changing conditions), ASOP 43 with
+  the monitoring pages, Werner & Modlin with ASOP 13 (trend) and with CAS's 1988 principles
+  (ratemaking). 59 concepts and 4 readings verified, about 25 major findings fixed (Tail Factor's
+  formula, Berquist-Sherman trending the total rather than the average case reserve, a volume-weighted
+  average at 1.545 for 1.558, net losses "never developed", coinsurance's missing cap at the face
+  amount). *Tort Litigation* and *Tort Reform* verified against 6C's Canadian readings after cutting
+  what no source supports. *Coinsurance Rating* rewritten to Werner Ch. 11 and *Close Year* rewritten
+  around Werner's and Friedland's closed-claim material, the term labelled as the vault's own (the
+  maintainer's call, 31 Oct), each checked by a different agent.
+- **One relink on the exam page.** B16 and B20 linked "reserve analysis" to *Claim Reserve*, a group
+  health page; both now link *Loss Reserving* (delta pass `4730`). F-009 and F-010 (Close Year,
+  Self-Insured Retention on Key concepts lines) stay open for the maintainer.
+- **G8.** The check (357 questions, $44) found 202 answerable and 314 items open. Four sorts (rule
+  11) closed 88 on passages the check missed and 39 not required; five writers, one per group of
+  pages (Werner Ch. 9–10; Werner Ch. 4–7, 13–15 and App. D; Werner Ch. 11–12 and 15; Friedland's
+  techniques; Friedland's data and LAE chapters), wrote the rest onto 42 pages, and five checkers,
+  none a writer, fact checked every page whole before its items closed (runs `d9a2`, `b3a4`, `cde6`,
+  `4562`, `ceab`). The checkers caught *ULAE*'s 25%/75% sentence copied from Friedland's p. 388 as
+  first printed, which the errata bound into the same PDF corrects (critical, fixed), and GLM's
+  "relativities are still credibility-weighted", contrary to Werner Ch. 12 p. 236 (cut).
+- **Rule 6.** *Case Adequacy*'s corrected bullet broke two Exam 7 quotes (`cas7-2018-q15:r1`,
+  `cas7-2019-q7:r5`), re-quoted; `--hold` holds all nine ready exams. Items brought into reach by
+  links (*Balancing Back*, *Regression Tree*, *Insurer Operational Data*, *Insurance to Value*) are
+  resolved on the check's own passages so the app's panel agrees with the gate.
+- **Left:** minor findings on the verified pages (listed in their logs); *Workers Compensation
+  Insurance* `in_review` (a 6C page; only its new Exam 5 bullet checked); *Claim Reserve* `in_review`
+  (a health page, no longer on Exam 5).
 
 **Sizing.** These numbers come from `verification-plan.md` §6 and the FM and Exam 9 packets:
 

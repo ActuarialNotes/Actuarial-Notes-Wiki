@@ -1,11 +1,12 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:86ae4e30ccefdc7b7bf936a90f8e4277f6918ec6f6e4b98ac9fdb4cbd22bb536
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:f6d187d9f55756821accff5b70ac9ae356f4b35d02ed0f3f0ccb12758d15fb5e
+  sources:
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch.7, PDF pp.96-99, 101, 103 (printed 90-93, 95, 97): CDF calculation, percentage reported = 1/CDF, leverage (CDF 4.00 example), paid vs reported CDFs, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Cumulative Development Factor.md
@@ -18,7 +19,7 @@ verification:
 > $$\text{Ultimate} = C_n \times \text{CDF}_{n \to \text{ult}}$$
 
 - The reciprocal is the **percentage reported** (or paid): $p_n = 1/\text{CDF}_n$, and $1 - p_n$ is the percentage unreported. These are the quantities the [[Bornhuetter-Ferguson Method|BF]], [[Cape Cod Method|Cape Cod]] and [[Benktander Method|Benktander]] methods actually use — the CDF and the emergence pattern are the same information in two forms.
-- CDFs are built **backwards from the tail**: start with the tail factor, multiply in each successive age-to-age factor moving toward younger ages. They decrease monotonically with maturity.
+- CDFs are built **backwards from the tail**: start with the tail factor, multiply in each successive age-to-age factor moving toward younger ages. They generally decrease with maturity.
 - The CDF measures **leverage**. At a CDF of $4$, a dollar of distortion on the diagonal becomes four dollars of ultimate — which is why the chain ladder is unreliable at immature ages in [[Long Tail Lines|long-tail lines]] and why methods that develop only the *unreported* portion are preferred there.
 - A CDF is specific to the triangle it came from: paid CDFs differ from reported CDFs, count CDFs from dollar CDFs, and a CDF built on data capped at a retention differs from a gross one. Borrowing across bases is a common and consequential error.
 - Sensitivity to the tail rises sharply with the length of the tail: for a short-tail line the tail is a rounding difference, for a long-tail line it can be the largest single assumption in the analysis.

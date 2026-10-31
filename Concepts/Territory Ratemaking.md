@@ -2,10 +2,11 @@
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-09-12
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:a8389346ca81a72dfcb584895d9c0fa2b87c60be06ad44f383117a910f76693e
+  content_hash: sha256:c003664a1b3f078911ab47e7f273ae5cd9448e676f2d972ac1605b4b72bb21e9
   sources:
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.11 printed p.189 (PDF 201), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 11 pp.188-191 (PDF pp.200-203), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
   open_findings: 0
   open_critical: 0
@@ -20,8 +21,10 @@ verification:
 
 - Geographic cost drivers: population and traffic density, crime, weather and catastrophe exposure, repair and medical costs, litigation propensity and local court behaviour, and — for property — building codes and fire protection class.
 - Territories are defined at some granularity (postal code, county, census tract) and then **grouped** into rating territories. Too fine and no cell is [[Credibility|credible]]; too coarse and real cost differences are averaged away — the [[Homogeneity|homogeneity/credibility]] trade-off in its sharpest form.
+- **Choosing the basic geographic unit** (Werner & Modlin, Ch. 11, p. 189). The unit should be refined enough to be relatively homogeneous with respect to geographic differences while still having some observations in most units, and each option trades one advantage for another. Zip codes have the advantage of being the most readily available, but they change over time. Counties are static and readily available, but most are large and so contain very heterogeneous risks. Census blocks are relatively static over time, but require a process to map insurance policies to them.
 - **Spatial smoothing** is what makes fine granularity workable: because loss cost varies continuously across space, a cell's estimate can borrow strength from its neighbours. Werner describes distance-based and adjacency-based smoothing, applied *before* territories are grouped.
 - Territory must be estimated **alongside** other rating variables, not before them. Urban territories carry different vehicle mixes, limit selections and driver populations, and a one-way territorial relativity absorbs all of it — see the univariate problem under [[Classification Ratemaking]].
+- **Off-balance.** New territorial relativities change the book's average relativity, so the base rate is offset to keep the overall change at the indicated level. The off-balance factor, the exposures it is weighted by, and each territory's resulting rate change are worked through on [[Balancing Back]].
 - **Catastrophe** exposure must be handled separately. Coastal territories' relativities computed on experience including hurricane losses swing on whether a storm happened to make landfall during the period; the modelled [[Catastrophe Loss|catastrophe load]] belongs in the territory rate as its own component.
 - Territorial rating attracts the most **social and regulatory** scrutiny of any variable, because geography correlates with income and demographics. Some jurisdictions restrict or prohibit territory in certain lines.
 

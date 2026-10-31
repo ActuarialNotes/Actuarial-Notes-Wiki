@@ -2,12 +2,12 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-10-09
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:4266ead44b73923d89276c993549b37605677ead760802baf2ba7347a0e0acd5
+  content_hash: sha256:869dd47bb5f9e9083e55b5247edcc25cb7f47c4528c260ec50805ec9ae5d937c
   sources:
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 3 pp.42-44 (PDF pp.54-56); Ch. 6 p.106 (PDF p.118) triangle rows and diagonals, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
-    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch. 3 pp.39-42 (PDF pp.45-48), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, Version 3, 2010), Ch.3 pp.40-41 (PDF 46-47), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. 2016), Ch.3 p.42 (PDF 54), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Accident Year.md
@@ -19,6 +19,7 @@ verification:
 
 - The **occurrence date** alone decides the year. A policy written $10/1/2023$ with a loss on $2/4/2024$ paid in $2026$ is Accident Year $2024$.
 - Werner & Modlin set three objectives for aggregating ratemaking data: accurately match losses and premium, use the most recent data available, and minimize the cost of data collection and retrieval. AY matches premium and losses better than [[Calendar Year]], and its claims occur over a shorter time frame than a [[Policy Year]]'s, so its ultimate can be reliably estimated sooner. Friedland calls it the accepted norm for P&C insurers in the U.S. and Canada, and by far the most common grouping for the analysis of unpaid claims.
+- Friedland adds that tracking claims by accident year is valuable when economic or regulatory forces (such as inflation or law amendments) or major claim events (such as atypical weather or a major catastrophe) change claims experience (Ch.3, p.41). An event that happens on one date falls in a single accident year, while a policy year's claims can occur over a 24-month calendar period for annual policies, so the same event can be spread across two policy years.
 - An AY cohort is **not final** at year end: losses still develop as claims are reported and case reserves are re-estimated, so an AY must be brought to ultimate with a [[Cumulative Development Factor|CDF]] before it can be compared with a mature year. See [[Loss Development]].
 - Premium and losses are only *approximately* matched. AY $n$ earned premium comes partly from policies written in year $n-1$, whose rates and terms differ — which is why the premium must still be brought to current level ([[On-Leveling]]).
 - The rows of a [[Development Triangle]] are usually accident years; diagonals are valuation dates. Insurers also compile claims by accident *month*, *quarter* and *half-year*.

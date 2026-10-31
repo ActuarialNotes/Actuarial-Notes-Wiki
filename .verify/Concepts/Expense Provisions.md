@@ -95,3 +95,38 @@ created: 2026-09-12
 - checks_run: F-001 re-checked against Werner Ch.1 p.9 and Table 7.2 and fixed; every bullet diffed against Ch.7; rate formula against Ch.8 pp.142-143; both examples recomputed in python.
 - sources_checked: Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 7 pp.125-139 (PDF pp.137-151), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf; Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 1 p.9 (PDF p.21), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf; Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 8 pp.141-145 (PDF pp.153-157), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf; Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 9 p.151 (PDF p.163), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf
 - note: Two more findings opened and applied (F-002 major, VPLR/PLR mislabel; F-003 minor). Confidence medium: vault-authored examples.
+
+## [F-004] Extraordinary-expense conclusion not anchored in the reading
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-31T17:32Z/b3a4
+- date: 2026-10-31
+- severity: minor
+- status: open
+- locus: ## Selecting the provisions, bullet 'Non-recurring and extraordinary items'
+- claim: A year inflated by such an extraordinary item is therefore not simply averaged in with the others.
+- evidence: Werner Ch.7 p.129 (PDF p.141) says an extraordinary expense requires the actuary to decide to what extent to reflect it (spread over several years, or leave it out and fund it from surplus), and: 'In the example shown in Table 7.1, there were no extraordinary expenses and a three-year straight average expense ratio is selected.' The conclusion is supported but was presented as the page's own inference.
+- source_rank: 2
+- proposed_action: Tie the sentence to Werner's Table 7.1 statement.
+- applied: true
+- fingerprint: 94c7a34d30c5
+
+## [F-004/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-31T17:32Z/b3a4
+- date: 2026-10-31
+- resolves: F-004
+- status: resolved
+- note: Applied: 'In Werner's Table 7.1 there were no extraordinary expenses, so a three-year straight average is selected; a year inflated by an extraordinary item is not simply averaged in with the others.'
+
+## [C-003] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T17:32Z/b3a4
+- date: 2026-10-31
+- status_set: verified
+- confidence: medium
+- checks_run: Whole page re-read; new 'Selecting the provisions' and 'Distortions' sections diffed against W&M Ch.7 pp.128-135: year-by-year ratios and selection (p.128), stable -> average / trend -> latest (p.131), select then split 75% fixed (p.131), prospective examples (pp.128-129), non-recurring/extraordinary and surplus funding (p.129), state disallowances (p.129), countrywide vs state data (p.128, Table 7.6 fn.25), premium-based distortions x3 and remedies (pp.131-132), exposure-based shortcomings x4 (pp.134-135). Examples unchanged since the 2026-10-09 pass (V 21.0%, F $52.00, $272.97 vs $222.22 re-confirmed).
+- sources_checked: Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 7 pp. 126-137 (PDF pp. 138-149), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf
+- note: One minor finding opened and applied (extraordinary-item sentence anchored to Table 7.1). Medium: vault-authored examples.

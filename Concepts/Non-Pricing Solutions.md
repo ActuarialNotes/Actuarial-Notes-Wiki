@@ -1,12 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:2121a30c6eb7134b94d6b4135c35bbf3ff9ba26fb3e965e6c466ebd790af592c
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: high
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:e6f99fb4527f99395582b80290b3f4d6272352d7036be8a0b0e6be6639ba43c6
+  sources:
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 14 pp. 263-264, 287-288 (PDF pp. 275-276, 299-300); App. D p. D-5 (PDF p. 398), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Non-Pricing Solutions.md
 ---
@@ -17,10 +18,11 @@ verification:
 
 - $\bar{P}_I$ is the indicated average premium, $\bar{L}$ the expected loss and LAE per exposure, $\bar{E}_F$ the [[Fixed Expenses|fixed expense]] per exposure, $V$ the [[Variable Expenses|variable expense]] provision and $Q_T$ the target [[Profit and Contingency Provision|profit provision]] (the [[Pure Premium Method|pure premium]] form of the indication). A pricing solution raises the current average premium toward $\bar{P}_I$; a non-pricing solution lowers $\bar{P}_I$ toward the current premium.
 - **Reduce expenses** — underwriting or LAE: a smaller marketing budget, lower staffing, lower acquisition cost. This lowers $\bar{E}_F$ or $V$.
-- **Reduce expected losses** in three ways:
+- **Reduce expected losses:**
   - *Change the portfolio* — tighten underwriting criteria, or non-renew policies whose premium is grossly inadequate. Premium leaves along with the losses, so it helps only if the loss reduction exceeds the premium reduction.
   - *Reduce coverage* — a coverage level change such as excluding mold from homeowners. Removing previously covered loss without lowering the rate is equivalent to a rate increase.
   - *Better loss control* — for example, medical management and return-to-work programs that stop workers compensation disability claims escalating.
+  - *Better [[Claims Handling|claims handling]]* — better claims handling lowers the losses paid without a change in rate: Werner & Modlin's workers compensation example (App. D) expects lower losses than the industry's from a company's more stringent underwriting and claims handling practices.
 - **When they are used:** where rates are promulgated or increases are hard to obtain, companies often run the indication but act on it through non-pricing levers; where a full increase would damage retention and new business (see [[Ratemaking Constraints]], [[Lifetime Value]]), they supplement a partial increase. Catastrophe concentration is managed the same way — restricting new business in exposed areas, requiring higher catastrophe deductibles, buying [[Reinsurance|reinsurance]].
 - After any such action the losses, expenses and premium are re-projected and the [[Overall Rate Level Indication|indication]] recomputed. Underwriting and coverage changes act only as policies renew, so they take a full term to earn in.
 

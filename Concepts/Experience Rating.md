@@ -4,10 +4,9 @@ verification:
   confidence: medium
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:a17e29bac3ea79fc76e983e71b5375817ae26d468e757f70ecd1eb97f7baaa26
+  content_hash: sha256:dc1e9d1c1bd7e6499d9b2a8074f26bd51116ab40c961dcb37937dbb8b8621e7d
   sources:
-    - "Fisher, McTaggart, Petker & Pettingell, Individual Risk Rating (CAS Study Note, v3 Oct 2019), Ch.1 §6-9, PDF pp.11, 13-14, sha256:3182cd5d8ebccc92be67a246e61a527acda5b304b823448d99f8a2546ca07b81 — https://www.casact.org/sites/default/files/2021-03/8_Fisher_et_al.pdf"
-    - "BattleActs, ISO.Rating.Peek (BattleActs Wiki study guide to ISO's Commercial General Liability Experience and Schedule Rating Plan; secondary source, page last edited 28 May 2024, oldid 18420), PDF pp.1-5: Overview, Rules 4, 5, 5B, 5D-5E, 10, 16, sha256:f18b7f8350d8e78cff420ac68e594ae81190cfd9f40266d4c9739f6e66149c66 — https://battleacts8.ca/0/wiki/index.php?title=ISO.Rating.Peek"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 11 p.201 (PDF p.213); Ch. 15 pp.295-296, Tables 15.4-15.5 (PDF pp.307-308); App. D p.D-2 (PDF p.395), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
   open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Experience Rating.md
@@ -41,6 +40,9 @@ verification:
   $$M = \frac{A_p + wA_e + (1-w)E_e + B}{E_p + (1-w)E_e + B + wE_e} = \frac{A_p + wA_e + (1-w)E_e + B}{E + B}$$
 
   Matching the two forms, the primary credibility is $Z_p = E/(E+B)$ and the excess credibility is $Z_e = wZ_p = wE/(E+B)$.
+- **NCCI expected losses** (Werner & Modlin, Ch. 15). The expected losses are the actual payroll in hundreds of dollars, by class, for the experience period, multiplied by the class's expected loss rate per hundred dollars of payroll. The expected loss rates reflect the losses expected to be reported at the evaluation of each experience-period policy.
+- **The D-ratio.** The expected primary losses are the expected losses multiplied by the D-ratio, the [[Loss Elimination Ratio|loss elimination ratio]] at the primary loss limit, which is the share of expected losses that is expected to be primary. The expected excess losses are the expected losses minus the expected primary losses, which is one minus the D-ratio times the expected losses.
+- **Mods in an overall indication** (Werner & Modlin, App. D). In a workers compensation rate level indication, historical loss cost premium is computed as if each year's historical average experience modification factor was used. Multiplying it by the ratio of the average mod expected in the projected period to that year's historical average mod brings it to the mod level expected in the future.
 - **Evaluating a plan: the quintile test.** An effective experience rating plan should identify risk differences among otherwise similar risks and adjust for them. Rank the risks by the size of their mod and collapse them into five groups; calculate the manual loss ratio (losses over manual premium) and the standard loss ratio (losses over standard, modified premium) for each group; and observe any trends across the groups. An upward trend in manual loss ratios as the mod rises shows that the plan identifies differences between risks. Standard loss ratios that are much less dispersed, with no discernible trend, show that it adjusts for them.
 - A downward trend in standard loss ratios as the mods increase means the plan gives too much credibility to the risks' own experience; an upward trend means it does not give enough credibility. A good experience rating plan will have no discernible trend in the modified loss ratios, so that risks with credit mods and risks with debit mods are equally profitable after the mod is applied — all risks equal in profit potential and therefore equally desirable to write.
 - **The efficiency test.** For each plan, the efficiency test statistic is the ratio of the variance of the standard loss ratios across the quintiles to the variance of the manual loss ratios. The plan with the lower variance ratio is better: it makes risks of differing experience more equally desirable.

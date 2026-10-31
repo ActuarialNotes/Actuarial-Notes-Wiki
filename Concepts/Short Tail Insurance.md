@@ -1,17 +1,19 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:b58834ffced486bacda52a8e91117e86c734bddeb3b1e9be5483683440f72dae
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:69c7649cda6bb10e021faabab8bb6c836c76bffe19491d5bdb3c2cf4b4ece993
+  sources:
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch. 1 p.15 (PDF p.21); Part 3 intro pp.79-80 (PDF pp.85-86); Ch. 9 p.155 (PDF p.161), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 7 p.138 (PDF p.150), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Short Tail Insurance.md
 ---
 
-**Short Tail Insurance** covers lines whose claims are reported and settled quickly — typically within a year — so that reported losses are close to ultimate almost immediately and [[IBNR]] is small relative to case reserves.
+**Short Tail Insurance** covers lines whose claims are reported and settled quickly — ultimate claims are often known within one or two years after the end of the accident period — so that reported losses are close to ultimate almost immediately and [[IBNR]] is small relative to case reserves.
 
 > $$\text{CDF}_{12 \to \text{ult}} \approx 1.0 \text{ for short-tail lines}$$
 

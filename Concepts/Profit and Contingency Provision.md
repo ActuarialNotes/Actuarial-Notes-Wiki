@@ -1,15 +1,16 @@
 ---
 verification:
-  status: in_review
-  confidence: null
-  last_checked: 2026-10-09
+  status: verified
+  confidence: high
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
   content_hash: sha256:940562f642361912ca0e096f2fae59fa84882e6a4fd7bc8d2c46af8100b4c269
   sources:
-    - "CAS Statement of Principles Regarding Property and Casualty Insurance Ratemaking (adopted May 1988), pp.2-4, sha256:f240ea62dd033aac827c2073e56c0a4061d5c84531e5cf6be02d333a8f9f2140 — https://www.casact.org/sites/default/files/2021-05/Statement-Of-Principles-Ratemaking.pdf"
+    - "CAS Statement of Principles Regarding Property and Casualty Insurance Ratemaking (adopted May 1988; rescinded Dec 2020, reinstated May 2021), pp.1-5, sha256:f240ea62dd033aac827c2073e56c0a4061d5c84531e5cf6be02d333a8f9f2140 — https://www.casact.org/sites/default/files/2021-05/Statement-Of-Principles-Ratemaking.pdf"
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 7 pp.125, 138 (PDF pp.137, 150), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 8 pp.142-144 (PDF pp.154-156), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
-  open_findings: 1
+    - "Robbin, The Underwriting Profit Provision (CAS Exam Study Note, 1992), outline p.2; §III p.16; §V p.25; §IX p.44; Conclusion p.50 (PDF pages), sha256:8dd432d4d021809b625c2a09f3f587cf188275bd979c3849ba5a61c10908d6fb — https://www.casact.org/sites/default/files/database/studynotes_robbin9.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Profit and Contingency Provision.md
 ---

@@ -2,10 +2,11 @@
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-09-12
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:a2c4cac43f90b718060a57f2ea39acc0647811263ce2e37c80e24f557384325d
+  content_hash: sha256:19dd8ba1ea120e3a24cd70f2029956e57e9c543e724efbae210fe1b6af128ac3
   sources:
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.9 printed pp.161-168 (PDF 173-180); Ch.10 pp.171-174 (PDF 183-186), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 8 pp.141-142 and 145-147 (PDF pp.153-154, 157-159), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 2 p.29 (PDF p.41) — NCCI loss costs adjusted by each insurer for its own expenses, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
   open_findings: 0
@@ -24,6 +25,14 @@ verification:
 - The method's requirement is a **well-defined, stable exposure base**. Where exposures are not consistently recorded, or where the base changed mid-history, the pure premium is unreliable and the loss ratio method is preferred.
 - Both methods are **algebraically equivalent** given consistent inputs, since $\text{Loss Ratio} = \text{Pure Premium} / \text{Average Premium}$. They differ in the data each demands: pure premium needs exposures, loss ratio needs premium on level.
 - Advisory organizations file **loss costs** — pure premiums — leaving each insurer to apply its own expense and profit provisions through a loss cost multiplier. That division of labour only works in the pure premium framework.
+
+**In classification ratemaking** (Werner & Modlin, Ch. 9, pp. 161–168, and Ch. 10, pp. 171–173). The same approach gives a rating variable's relativities: each level's loss and ALAE divided by its exposures is its pure premium, and its relativity is that pure premium divided by the total's or the base level's (see [[Classification Ratemaking]]).
+
+- **The hidden assumption.** A one-way pure premium analysis assumes each level's exposures are spread the same way across the levels of every other rating variable. Where one territory holds a disproportionate share of high-value homes, its pure premium reflects the high-value homes' experience as well as its own, and the indicated relativity is distorted, a double-counting effect called distributional bias.
+- **Testing for exposure correlation.** Compare the distribution of one variable's exposures within each level of the other: for each territory, the percentage of its exposures at each amount-of-insurance level. If the mix is the same within every territory (it need not be an even split, only the same split everywhere), the variables are not exposure-correlated and the one-way relativities are not distorted by it, so they need no adjustment. If the mixes differ, the variables are correlated and the one-way results are biased (p. 164).
+- **The adjusted pure premium approach.** Where premium at current rate level is not available for each level, as the loss ratio approach needs, the pure premium approach can be performed using exposures adjusted by the exposure-weighted average relativity of all the other rating variables. For each level of the variable being analysed, its exposures in each level of the other variable are multiplied by that level's current relativity and summed; the weights come from the exposure distribution and the factors are the other variable's relativities, while the losses enter only as the numerator. The level's losses divided by its adjusted exposures is its adjusted pure premium, from which relativities are computed as before (pp. 166–168).
+- **What it achieves.** The adjustment minimizes the impact of distributional bias. With the current relativities as the factors it gives the same indicated relativities as the loss ratio approach (apart from rounding), carrying any inequity in the current relativities with it; only with the true relativities, which are never known, would it be exact (p. 168). Werner calls it merely an approximation to a proper reflection of all exposure correlations (Ch. 10, p. 171).
+- **Sequential analysis** chains the adjustment: a one-way analysis of the first variable, then the second variable's relativities from exposures adjusted for the first variable's results, and so on through the list in one pass. The results depend on the order of the variables (Ch. 10, pp. 173–174).
 
 ![[Media/Figures/Pure_Premium_Method.svg|340]]
 

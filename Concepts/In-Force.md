@@ -2,14 +2,12 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-10-09
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:d0cc0d81642c0b4753f5492f4d6f2d83fd989a71ea69a7223e7d21a215816d84
+  content_hash: sha256:14459f9f858ab77f0a592b07b75b8771d759474aeba0297c6dd640beaf518e62
   sources:
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 1 pp.2, 8, 10 (PDF pp.14, 20, 22), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 4 pp.57-58 (PDF pp.69-70), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 5 pp.66, 70-71 (PDF pp.78, 82-83), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 3 p.44 (PDF p.56); Ch. 13 pp.257, 259 (PDF pp.269, 271); Ch. 14 p.284 (PDF p.296), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 5 pp. 70-71 (PDF pp. 82-83), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "CAS Exam 5 Fall 2019 — sample answers and examiner's report, Q2(d), report pp.36-37, sha256:51609658f7f72676944585c38f8eb3bbb52fcdafc58070de5524051435100df0 — https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam5_f19-5.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/In-Force.md
@@ -25,6 +23,7 @@ verification:
 - In-force premium is the **full-term** premium of each policy in effect at the date — the policy's own term, not an annualized one — so a six-month policy carrying $\$400$ of premium contributes $\$400$. Books written on different terms are therefore not directly comparable: of two insurers writing the same written premium, one on annual and one on semi-annual policies, the semi-annual writer's in-force premium is half the other's. After a mid-term change, in-force premium is the full-term premium applicable on the date.
 - In-force exposures count the insured units exposed to loss at the date — a snapshot with no regard to the duration of the exposure. Companies define the insured unit differently: items such as cars (a three-car policy is three in-force exposures), policies, or written exposures.
 - As the best estimate of the company's [[Mix of Business|mix of business]] at a date, the latest in-force premium is used to measure the impact of a rate change on the existing portfolio, and the latest in-force distribution is normally the estimate of the distribution expected while new rates are in effect. Where earned premium by territory is unavailable, in-force premium by territory may stand in for it.
+- **In-force is not earned.** In-force premium counts each policy's full-term premium at a date, whatever its term, while earned premium counts the coverage provided over a period. Werner & Modlin warn that in-force premium must be interpreted carefully across policies with different terms (a semi-annual book's in-force premium is half an annual book's for the same written premium), and that treating policies as written at the middle of a period holds only if they are written uniformly through it. So the average of the in-force premium at the start and end of a year is a fair estimate of that year's earned premium only when every policy has the same annual term and policies are written uniformly through the year; with shorter terms, mixed terms or uneven writings it is not.
 - Changes in average premium, once adjusted for rate changes, show changes in the mix of business written; comparing successive in-force snapshots separates the change in volume (policy count) from the change in average premium.
 - Renewal analysis works on the in-force book too: the **retention ratio** is policies renewed $\div$ potential renewal policies, and rate scenarios for the renewal portfolio are tested on the in-force distribution — see also [[Lifetime Value|lifetime value analysis]], which allows for the fact that not all insureds renew.
 

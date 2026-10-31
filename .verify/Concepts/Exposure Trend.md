@@ -36,3 +36,14 @@ created: 2026-09-12
 - confidence: high
 - checks_run: Recomputed both examples from scratch before reading the answers, which is what surfaced F-001 (resolved in this pass): 1.03^2.5 = 1.0766966, 1.06^2.5 = 1.1568170, trended payroll $53,835K, trended losses $1,850,880, projected PP per $100 = $3.4381, net trend (1.06/1.03)^2.5 = 1.074411 = +7.44% over 2.5 years = 2.91%/yr; second example $3.7018 vs $3.4381 = +7.68%, which is exactly 1.03^2.5. Definition checked against Werner Ch. 4 p. 61: 'For some lines of business, the exposure measure used is sensitive to time-related influences such as inflation. For example, payroll and sales revenue' — and the internal-data / industry-index (average wage index) sources the page cites are Werner's. The pure-premium-method bullet is Werner Ch. 6 p. 119: the projected loss measure 'needs to be compared to exposures that have been projected to future levels using the selected exposure trend'; the loss-ratio-method counterpart (the effect entering through average premium instead) is on the same page. Links, embed and LaTeX clean.
 - sources_checked: Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 4 pp. 61-62 (PDF pp. 73-74), EXPOSURE TREND, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf; Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 6 pp. 119-120 (PDF pp. 131-132), Coordinating Exposure, Premium and Loss Trends, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T17:32Z/b3a4
+- date: 2026-10-31
+- status_set: verified
+- confidence: high
+- checks_run: New WC bullet diffed against App. D p.D-1 and the Premium exhibit (p.D-6): col.(3) = [1 + (2 next row)] x (3 next row), 2016 = 1.000 (recomputed 1.035, 1.035 x 1.042 = 1.078, x1.037 = 1.118); col.(4) 6.1% expected wage change; col.(5) composite exposure trend. Whole page re-read; both examples recomputed (1.03^2.5 = 1.0767, 1.06^2.5 = 1.1568, $3.438, 1.0744, $3.702, +7.7%).
+- sources_checked: Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 4 pp. 61-62 (PDF pp. 73-74); Ch. 6 pp. 119-120 (PDF pp. 131-132); App. D pp. D-1-D-2, D-6 (PDF pp. 394-395, 399), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf
+- note: Clean pass on the addition; the rest unchanged since the 2026-09-12 pass.

@@ -1,12 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:7842fe1ff5e7cff656731227962a9d52144beee7bf4d81300f7b29f6102e1db5
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: high
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:40808eb7f31f29c759cbea38ca3f787d7b8249c855e43e0b11f6ace7fe9d8ebe
+  sources:
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch.9 Bornhuetter-Ferguson Technique, PDF pp.158, 162 (printed 152, 156): same patterns as development technique; CDFs less than 1.00, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Bornhuetter-Ferguson Method.md
 ---
@@ -20,6 +21,7 @@ verification:
 - $C$ is reported (or paid) losses to date, $U_0 = \text{ELR} \times \text{EP}$ the a priori expectation, and $1 - 1/\text{CDF}$ the percentage unreported from the [[Development Triangle|development pattern]].
 - The key structural property: **actual emergence is taken at face value and only the unemerged portion is estimated**. The chain ladder instead scales the whole diagonal, so a distorted diagonal is multiplied by the full CDF. BF's answer moves dollar-for-dollar with a reporting anomaly; the chain ladder's moves by CDF-times.
 - BF is a **credibility weighting** in disguise: it equals $Z \, U_{\text{CL}} + (1-Z)\,U_0$ with $Z = 1/\text{CDF}$. The more of the year that has emerged, the more the answer relies on the data — automatically, without a separate credibility judgment.
+- **CDFs below 1.00.** Downward development (salvage and subrogation recoveries lagging the claims, or conservative case outstanding that settles for less) gives cumulative development factors below 1.00 and a percentage reported above 100%. The credibility reading then breaks down: Z = 1/CDF is greater than 1, and a credibility weight must lie between 0 and 1. In practice actuaries either limit the CDFs to a minimum of 1.00 when applying BF (as Friedland's examples do), or still calculate BF with the factors below 1.00 but rely on another technique to select ultimate claims for those years (Friedland, Ch. 9, p. 156).
 - It is therefore the method of choice at **immature maturities** and for [[Long Tail Lines|long-tail lines]], converging to the chain ladder as the cohort matures.
 - The a priori is the weak point. A stale ELR that ignores [[Rate Level Change|rate changes]] and [[Loss Trend|trend]] produces a systematically biased reserve — and the bias persists year after year without ever showing up as instability. Where no reliable external ELR exists, the [[Cape Cod Method|Cape Cod]] technique derives one from the data instead.
 - BF does not respond to bad news. If emergence runs far ahead of the a priori, BF holds most of its estimate anchored — which is exactly right when the emergence is noise and exactly wrong when it is signal. Comparing BF against chain ladder each year, and investigating the gap, is how that is managed.

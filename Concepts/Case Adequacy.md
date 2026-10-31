@@ -1,12 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:5aac2144f7560593d115767547b4f36558f27b6ec55cd81813feb8003ab2f4e2
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: high
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:c99289621bc3f0df92a4c7c954ad0f53b1bd779da4516421201b203327b8660c
+  sources:
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch.6 Development Triangle as a Diagnostic Tool, PDF pp.78, 82 (printed 72, 76): settlement emphasis, less complicated claims close quickest, average case outstanding vs mix of claims, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+  open_findings: 2
   open_critical: 0
   log: .verify/Concepts/Case Adequacy.md
 ---
@@ -18,7 +19,8 @@ verification:
 > $$\text{Adequacy ratio} = \frac{\text{Case reserve at valuation}}{\text{Eventual settlement value}}$$
 
 - **The diagnostic is average case outstanding per open claim**, compared *down each column* of the triangle. It should grow at roughly the severity trend. A jump concentrated on one **diagonal**, appearing at every maturity at once, is a change in reserving practice, not in claim cost.
-- **Strengthening** raises reported losses immediately, so recent age-to-age factors fall (more of the ultimate is already booked). Applying historical factors — built under weaker reserving — to a strengthened diagonal **over-states** ultimate, because the strengthening is developed a second time.
+- **Check the settlement rate before reading a rise as strengthening.** Insurers can usually close the less complicated and less expensive claims quickest, so faster settlement leaves the more complex and more expensive claims open, and that alone raises average case outstanding down the columns with no change in adequacy. An increase in average case outstanding is therefore inconclusive on its own: compare it with the ratio of closed to reported claim counts and determine how much of the increase is a change in adequacy and how much a different mix of open claims (Friedland, Ch. 6, pp. 72 and 76).
+- **Strengthening** raises reported losses immediately. Applying historical factors — built under weaker reserving — to a strengthened diagonal **over-states** ultimate, because the strengthening is developed a second time.
 - **Weakening** does the reverse and understates ultimate, which is the more dangerous direction: the reserves are inadequate and the method that is supposed to catch it is biased in the same direction.
 - **Paid data is immune**, so a divergence between paid and reported chain ladder estimates is the corroborating evidence. Rising average case outstanding *and* reported ultimates running above paid ultimates together confirm a strengthening.
 - The remedy is the [[Berquist-Sherman Method|Berquist-Sherman]] case adjustment: restate historical average case outstanding to the current adequacy level using a selected severity trend, rebuild the reported triangle, and select factors from the restated history.

@@ -119,3 +119,14 @@ created: 2026-09-13
 - checks_run: Ultimate = losses at age x CDF and the CDF chain against Friedland p.90 and Werner pp.108-109 (age-to-ultimate = product of selected link ratios and tail); pure IBNR vs IBNER against Friedland p.14 and Werner p.107 ('emergence of new claims as well as adverse development on known claims'); downward development from salvage, subrogation and high early case reserves against Werner pp.107-108; short/long-tail examples and tail factor against Werner pp.105, 108; BF % unreported = 1 - 1/CDF against Friedland p.153; leveraged CDFs and alternative techniques against Friedland p.97; Berquist-Sherman against Werner p.109. Examples recomputed before reading: CDF 2.27285, ultimate 9,546,180, IBNR 5,346,180; 1/2.2729 = 44.0% reported; 6.3M/9.0M = 0.70.
 - sources_checked: Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 6 pp.105-109 and 120-121 (PDF pp.117-121, 132-133), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf; Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch. 2 p.14 (PDF p.20); Ch. 6 p.68 (PDF p.74); Ch. 7 pp.90-91, 97, 105 (PDF pp.96-97, 103, 111); Ch. 9 p.153 (PDF p.159), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf
 - note: F-001 (applied) resolved; three new findings (two minor, one nit) fixed and resolved. Confidence medium: the worked examples and the 'classic error' remark are vault-authored.
+
+## [C-003] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T17:32Z/4562
+- date: 2026-10-31
+- status_set: verified
+- confidence: medium
+- checks_run: Added reporting-lag bullet vs Ch.7 p.97 (PDF 103: development methods 'assume ... the claim reporting lags (i.e., the time between date of occurrence and date of report) have not changed'). The consequence (faster reporting -> recent years further along -> historical reported factors too large -> reported projection overstates; paid unchanged when payment pace is unchanged) is the page's own one-step derivation from that assumption, flagged by the writer; checked by reasoning (rank 5) and accepted as following directly from the stated assumption, not cited to Friedland. Example recomputed: 1.65x1.22x1.08x1.03x1.015 = 2.2729; 4.2M x 2.2729 = 9,546,180; IBNR 5,346,180; 5% of ultimate = 477k.
+- sources_checked: Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, Version 3, 2010), Ch.7 pp.95-97 (PDF 101-103), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf
+- note: Addition checks against Friedland Ch.7; no open findings.

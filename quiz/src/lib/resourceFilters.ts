@@ -28,6 +28,13 @@ export const RESOURCE_FACET_LABEL: Record<ResourceFacet, string> = {
   year: 'Year',
 }
 
+/**
+ * What the facets read off a resource. A wiki index item is one; Cowork's
+ * Resources shelf hands its documents in the same shape (`coworkFacetItem` in
+ * `lib/coworkSources.ts`), so the two shelves filter by one rule.
+ */
+export type ResourceFacetItem = Pick<WikiIndexItem, 'exams' | 'publisher' | 'year'>
+
 export type ResourceFacetSelection = Readonly<Record<ResourceFacet, ReadonlySet<string>>>
 
 export interface ResourceFacetOption {
@@ -58,7 +65,7 @@ export function hasResourceFilters(selection: ResourceFacetSelection): boolean {
 }
 
 /** The values a resource counts under for one facet — none when its page doesn't say. */
-export function resourceFacetValues(item: WikiIndexItem, facet: ResourceFacet): string[] {
+export function resourceFacetValues(item: ResourceFacetItem, facet: ResourceFacet): string[] {
   switch (facet) {
     case 'exam':
       return item.exams ?? []
@@ -71,17 +78,17 @@ export function resourceFacetValues(item: WikiIndexItem, facet: ResourceFacet): 
   }
 }
 
-function matchesFacet(item: WikiIndexItem, facet: ResourceFacet, chosen: ReadonlySet<string>): boolean {
+function matchesFacet(item: ResourceFacetItem, facet: ResourceFacet, chosen: ReadonlySet<string>): boolean {
   return chosen.size === 0 || resourceFacetValues(item, facet).some(v => chosen.has(v))
 }
 
 /** Does `item` pass every facet, bar `skip` (the one whose options are being counted)? */
-function matchesFacets(item: WikiIndexItem, selection: ResourceFacetSelection, skip?: ResourceFacet): boolean {
+function matchesFacets(item: ResourceFacetItem, selection: ResourceFacetSelection, skip?: ResourceFacet): boolean {
   return RESOURCE_FACETS.every(facet => facet === skip || matchesFacet(item, facet, selection[facet]))
 }
 
 /** The resources the selection leaves, in the order they came. */
-export function filterResources(items: readonly WikiIndexItem[], selection: ResourceFacetSelection): WikiIndexItem[] {
+export function filterResources<T extends ResourceFacetItem>(items: readonly T[], selection: ResourceFacetSelection): T[] {
   return items.filter(item => matchesFacets(item, selection))
 }
 
@@ -93,7 +100,7 @@ export function filterResources(items: readonly WikiIndexItem[], selection: Reso
  * nothing under it, so it can still be unticked.
  */
 export function resourceFacetOptions(
-  items: readonly WikiIndexItem[],
+  items: readonly ResourceFacetItem[],
   facet: ResourceFacet,
   selection: ResourceFacetSelection,
 ): ResourceFacetOption[] {

@@ -40,7 +40,7 @@ export interface EntityCardProps {
 export function EntityCard({ group, followed, onToggleFollow, href }: EntityCardProps) {
   const { entity, resources, total } = group
   const hidden = total - resources.length
-  const noun = total === 1 ? 'document' : 'documents'
+  const noun = total === 1 ? 'resource' : 'resources'
 
   return (
     <Card className="relative overflow-hidden transition-colors duration-150 focus-within:ring-2 focus-within:ring-ring hover:bg-accent/40">

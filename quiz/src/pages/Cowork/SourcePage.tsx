@@ -113,7 +113,7 @@ export default function SourcePage({ entityId, onOpenResource, onBack, backLabel
 
       <section>
         <h2 className="mb-3 text-sm font-semibold text-foreground">
-          Documents
+          Resources
           {resources.length > 0 && (
             <span className="ml-1.5 rounded-full bg-muted px-1.5 py-0.5 text-[11px] font-semibold leading-none tabular-nums text-muted-foreground">
               {resources.length}

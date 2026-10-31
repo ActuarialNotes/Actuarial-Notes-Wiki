@@ -38,4 +38,23 @@ test.describe('cowork mode', () => {
     await expect(page).toHaveURL(/\/cowork\/workflows$/)
     await expect(page.getByTestId('workflow-add')).toBeVisible()
   })
+
+  test('crosses between the Sources and Resources shelves by their rows, and filters Resources', async ({ page }) => {
+    await page.goto('/cowork')
+    await expect(page.getByRole('tab', { name: 'Documents' })).toHaveCount(0)
+    await page.getByTestId('cowork-link-resources').click()
+    await expect(page).toHaveURL(/\/cowork\/resources$/)
+
+    // The Study Guides Resources page's filters, riding the URL the same way.
+    await page.getByRole('button', { name: /^Publisher/ }).click()
+    await page.locator('div.absolute.top-full button').first().click()
+    await expect(page).toHaveURL(/publisher=/)
+    // Close the menu (it closes on a press outside it) and come back to the top,
+    // where the sticky search bar can't sit over the row.
+    await page.getByRole('button', { name: /^Publisher/ }).click()
+    await page.evaluate(() => window.scrollTo(0, 0))
+
+    await page.getByTestId('cowork-link-sources').click()
+    await expect(page).toHaveURL(/\/cowork$/)
+  })
 })

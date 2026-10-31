@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:727fa805148a42a18abfc12a78d40a761e61dde1194d9f2d2ee207ba25337dc0
+  content_hash: sha256:ac371c8159bf20225246a947cf787fa634398d4c425ea22f6564a89f2901913e
   sources:
     - "ISO HO 00 03 05 11, Homeowners 3 – Special Form (Maine Bureau of Insurance copy), Section I Conditions A, L (pp.13, 16), sha256:ac539e500a5767946452d1e6ad4c4b7dcc395c6c65c48fc3a8ac92a7c330a1d4 — https://www.maine.gov/pfr/insurance/sites/maine.gov.pfr.insurance/files/inline-files/ho00-03-05-11-homeowners3-special-form.pdf"
     - "ISO CP 00 10 10 12, Building and Personal Property Coverage Form, F.2 Mortgageholders (p.14), sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf"
@@ -26,6 +26,7 @@ verification:
 
 - $s$ is the insured's share of the property's value — full ownership $s = 1$, a co-owner or partner less. The bound is the **principle of indemnity**: insurance restores the insured's loss but must not let them profit from the event, which would create [[Moral Hazard|moral hazard]].
 - **Who has it.** Owners, co-owners, mortgage lenders (to the loan balance), tenants for improvements they made, and bailees for customers' goods in their care, in property; anyone who can be held legally liable, in liability; oneself, a spouse or dependant, a creditor (to the debt) and an employer in a key employee, in life.
+- **What is not an interest.** The interest must rest on a right that the loss would impair: ownership, a contract about the property, a secured interest or a legal liability. A mere expectancy is not insurable: a hope of inheriting property, or an intention to buy it, with no right to the property and no contract for it, gives the holder nothing a loss can take away. A buyer already bound by a contract of sale is different: the contract is a right the loss would impair, so the buyer has an insurable interest before the sale closes and title passes.
 - **When it must exist.** For property and liability cover, at the **time of loss**; for [[Life Insurance|life insurance]], at **inception** only — the policy stays valid if the relationship later ends.
 - Insurable interest works alongside the policy's valuation provisions (actual cash value or replacement cost) and [[Coinsurance|coinsurance]]/insurance-to-value clauses: interest decides *whose* loss and how much of it, valuation decides what the loss is worth.
 - **Protecting each interest.** A policy protects other parties' interests in several ways. The ISO homeowners form (HO 00 03 05 11) states the cap directly: even when more than one person has an insurable interest, the insurer pays no insured more than that insured's interest at the time of loss, nor more than the limit. A **mortgage clause** (HO 00 03, condition L; the BPP's mortgageholders condition) pays a named mortgagee and the insured as interests appear, in order of precedence, gives the mortgagee advance notice of cancellation or nonrenewal, and keeps the mortgagee's claim valid even when the insured's claim is denied, provided the mortgagee reports any change in ownership, occupancy or substantial change in risk it knows of, pays premium due if the insured has not, and submits a sworn statement of loss within 60 days of notice. The insurer that pays the mortgagee in that case takes over the mortgagee's rights. A **loss payable clause** names another party with an interest in covered property, such as a lender on a financed car or the lessor of leased equipment, to be paid as its interest may appear; under a typical clause the insurer has no obligation to the loss payee if it can deny payment to the insured. An **additional insured** is added to a policy at the named insured's request, as when a tenant must insure a leased building and name the owner.
@@ -62,6 +63,22 @@ verification:
 > > (b) **Not payable.** Property insurance needs interest at the time of loss; on 15 April she owned nothing and lost nothing.
 > >
 > > (c) **Void.** No interest at inception — the contract is a wager on the stranger's life, the abuse insurable-interest law exists to prevent.
+
+> [!example]- An Heir, a Bidder and a Buyer Under Contract {Example}
+> A farmhouse is destroyed by fire. Three people had bought fire insurance on it. Decide which of them has an insurable interest in the farmhouse at the time of the loss.
+>
+> (a) The owner's niece, named in the owner's will to inherit the farm, who owns no part of it today.
+>
+> (b) A developer who had told the owner it hoped to buy the farm and had made an offer the owner had not accepted.
+>
+> (c) A buyer who had signed a binding contract to buy the farm; closing was set for the following month, so title had not yet passed.
+>
+> > [!answer]-
+> > - **(a) No interest.** An expected inheritance is a mere expectancy. The owner can change the will, and the niece holds no right in the farm that the fire destroys.
+> > - **(b) No interest.** A hope or an intention to buy, with no contract, is not insurable. If the farm burns, the developer has lost a chance, not a right.
+> > - **(c) Interest.** The signed contract gives the buyer a right in the property, and the fire impairs it, so the buyer has an insurable interest before the sale closes.
+> >
+> > *Why is (c) different from (b)?* Both expect to own the farm. Only the buyer has a legal right founded on a contract, which is what a loss can damage.
 
 > [!example]- Arson Under a Mortgage Clause and a Loss Payable Clause {Example}
 > A business owner's building is mortgaged to a bank with \$150,000 outstanding, and the bank is named under the mortgageholders condition of the BPP. A machine inside is leased from an equipment company, named as loss payee under a typical loss payable clause. The owner sets a fire that destroys both, a \$200,000 building loss and a \$40,000 loss to the machine. The insurer denies the owner's claim for arson. The bank has paid no premium and reported nothing, but it had no knowledge of any change in risk and files a sworn proof of loss within 60 days of the insurer's notice. Who is paid?

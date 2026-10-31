@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:fab70e52f66a08433629858129a40d1583892b7c84b1ecfa855af8c683450039
+  content_hash: sha256:45c838faa763bfb503c4f105990d332b615d6d12b19ce6347ea4757e6670bec4
   sources:
     - "SOA, Tables for Exam C (Fall 2009), A.3.3.1 Exponential (PDF p.11) and A.2.3.1 Pareto incl. alpha = 1 (PDF p.8), sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf"
     - "SOA Exam C Sample Solutions (C-09-15), Q#101 mean excess loss (PDF p.37), E[(X-d)+] = E(X) - E(X ^ d) (PDF p.74), sha256:de58b71716cce5fbbe82cd3b31d1533db67686a86cabe407844ae403534a9a4a — https://www.soa.org/globalassets/assets/files/edu/edu-exam-c-sample-sol.pdf"
@@ -28,6 +28,7 @@ The **Limited Expected Value** (LEV) of a random variable $X$ at limit $u$ is th
 - Used to price **[[Policy Limit|policy limits]]** and **excess-of-loss reinsurance**: the insurer pays $E[X \wedge u]$ and the reinsurer pays $E[X] - E[X \wedge u]$
 - Exam 5 (Werner & Modlin) writes the limit as $H$ and calls $E[X \wedge H]$ the **limited average severity** $\text{LAS}(H)$. Under its simplifying assumptions, the increased limit factor for limit $H$ over basic limit $B$ is $\text{ILF}(H) = \text{LAS}(H)/\text{LAS}(B)$ (see [[Increased Limits]])
 - **As an area.** $E[X \wedge u]$ is the area under a [[Lee Diagram]]'s curve below the horizontal line at $u$.
+- **A shortfall below a threshold.** A payment that rewards a loss for falling below $d$, $(d - X)_+ = \max(d - X, 0)$, equals $d - (X \wedge d)$, so $E[(d - X)_+] = d - E[X \wedge d]$. A payment of $c$ times the shortfall has expected value $c\,(d - E[X \wedge d])$. It is the mirror of $E[(X - d)_+] = E[X] - E[X \wedge d]$, and it prices a bonus or dividend paid when losses come in under a target.
 
 **Common formulas:**
 
@@ -45,3 +46,20 @@ The **Limited Expected Value** (LEV) of a random variable $X$ at limit $u$ is th
 > > [!answer]-
 > > $$E[X \wedge 2{,}000] = 1{,}000\left(1 - e^{-2{,}000/1{,}000}\right) = 1{,}000(1 - e^{-2}) \approx 1{,}000(0.8647) = 864.7$$
 > > The insurer expects to pay \$$864.70$ per loss.
+
+> [!example]- A Bonus for Losses Under a Target {Example}
+> A reinsurer pays a ceding company a profit bonus equal to $25\%$ of the amount by which the year's losses $X$ fall below $800$, and nothing if losses reach $800$. Losses are $\text{Exponential}(\theta = 500)$. Find the expected bonus.
+>
+> > [!answer]-
+> > The bonus is $0.25\,(800 - X)_+$, and $(800 - X)_+ = 800 - (X \wedge 800)$, so it needs only the limited expected value at the target.
+> >
+> > $$
+> > \begin{align*}
+> > E[X \wedge 800] &= 500\left(1 - e^{-800/500}\right) \\
+> > &= 399.05 \\
+> > E[\text{Bonus}] &= 0.25\,(800 - 399.05) \\
+> > &= 100.24
+> > \end{align*}
+> > $$
+> >
+> > *Why subtract from the target?* $X \wedge 800$ is the loss when it is under $800$ and $800$ otherwise, so $800 - (X \wedge 800)$ is the shortfall when there is one and $0$ when there isn't.

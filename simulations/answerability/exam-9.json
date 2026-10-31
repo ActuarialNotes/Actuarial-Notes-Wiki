@@ -6136,7 +6136,13 @@
        "page": "Ceded Loss Reserve",
        "quote": "$$\\text{Ceded unpaid} = \\text{Gross unpaid} - \\text{Net unpaid}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Arithmetic of this solution: net retained = gross − ceded is a definition, and the unplaced shares of each layer (100% / 90% / 75% placed) are the question's own data.",
+      "date": "2026-10-31",
+      "run": "g9-sort-reins"
+     }
     }
    ]
   },
@@ -6977,7 +6983,13 @@
      "statement": "With a cedent termination option, a trial in which the interim profit commission is positive is terminated at that point and pays only that commission; trials not terminated continue and use cumulative full-term ceded premium and ceded loss to determine the final commission.",
      "concept": "Termination Provisions of Finite Reinsurance Contracts",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The termination option and both profit-commission formulas are given in the stem, with the instruction that the cedant terminates only when the commission is positive; evaluating that rule trial by trial is this solution's plan.",
+      "date": "2026-10-31",
+      "run": "g9-sort-reins"
+     }
     }
    ]
   },
@@ -7040,7 +7052,15 @@
      "statement": "To simulate a loss from a discrete aggregate distribution with a uniform random number, find the interval of the cumulative distribution F(x) (or of 1 − random number on the exceedance curve) that contains the number and select the corresponding discrete loss amount, without interpolating.",
      "concept": "Simulation of Discrete Distributions (Inverse Transform)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Inversion Method",
+      "quote": "lay the probabilities end to end on $(0, 1)$ and return the value whose interval contains $u$",
+      "note": "Part b simulates the year's loss from U = 0.86 on a discrete distribution; Inversion Method's discrete-case bullet teaches exactly that (pick the value whose interval contains u, no interpolation). Retagged; quote tested with Pages.index().find (True, tier tagged).",
+      "date": "2026-10-31",
+      "run": "g9-sort-reins"
+     }
     }
    ]
   },
@@ -7890,7 +7910,15 @@
        "page": "Standard Deviation",
        "quote": "$$= \\sqrt{E[X^2] - (E[X])^2}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Risk Loads",
+      "quote": "\\text{Var}(X) &= 0.06(25) + 0.04(100) - 0.70^2",
+      "note": "Risk Loads (tagged) works the standard deviation of a discrete layer loss with the no-loss outcome contributing zero: Var = Σ p·x² − E[X]², then σ = √Var on the next line, for the standard-deviation risk load the question applies. Quote tested (True, tier tagged).",
+      "date": "2026-10-31",
+      "run": "g9-sort-reins"
+     }
     },
     {
      "id": "r6",
@@ -7962,7 +7990,13 @@
      "statement": "When exposures are not given, use earned premium as the exposure base, test each line separately, and compute expected counts as each group's premium times the overall claim frequency per premium.",
      "concept": "Exposure Base for Frequency",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The question's own data: earned premium is the only exposure measure given (the examiner's report: 'as it was the only option available'), so using it and testing each line separately is this solution's setup.",
+      "date": "2026-10-31",
+      "run": "g9-sort-reins"
+     }
     },
     {
      "id": "r4",
@@ -8117,7 +8151,15 @@
      "statement": "To find the reassumed corridor percentage, set the expected loss ratio net of corridor recoveries (expected unadjusted loss ratio minus the expected corridor loss ratio times the share) equal to the target loss ratio, and solve for the share, equivalently dividing the required loss ratio reduction by the expected loss ratio within the corridor.",
      "concept": "Loss Corridor",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loss Corridors",
+      "quote": "Plugging in the expected loss ratio would value it at zero. Evaluate the probability and average loss ratio below, within and above the corridor (Clark).",
+      "note": "Loss Corridors (tagged) teaches the corridor's expected effect from the loss-ratio distribution, with LR_net = LR − c·min(max(LR − a, 0), b − a) above it; setting that expectation equal to the target loss ratio and solving for c is algebra on what the page teaches. Quote tested (True, tier tagged).",
+      "date": "2026-10-31",
+      "run": "g9-sort-reins"
+     }
     }
    ]
   },
@@ -8511,7 +8553,15 @@
        "page": "Complement of Credibility",
        "quote": "$$\\text{Estimate} = Z \\times \\text{Experience} + (1 - Z) \\times \\text{Complement}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loss Cost",
+      "quote": "It can also come from **exposure rating**, which applies [[Exposure Curves|exposure curves]] or ILFs to the risk profile. The two are credibility-weighted.",
+      "note": "Loss Cost (tagged): experience (burning-cost) and exposure loss costs for an excess layer are credibility-weighted, Z × experience + (1 − Z) × exposure. Quote tested (True, tier tagged).",
+      "date": "2026-10-31",
+      "run": "g9-sort-reins"
+     }
     },
     {
      "id": "r5",
@@ -8545,7 +8595,13 @@
        "page": "Pro Rata Reinsurance",
        "quote": "$$\\text{Commission} = c \\times \\text{Ceded premium}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "A step of this solution's plan: it assembles the profit from the question's own premiums, commission, ceded loss ratio and expense ratio (gross premium = net ÷ (1 − 25%) is algebra on the stated 25% quota share and the stated basis 'net of the Quota Share').",
+      "date": "2026-10-31",
+      "run": "g9-sort-reins"
+     }
     },
     {
      "id": "r7",

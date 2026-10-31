@@ -84,7 +84,15 @@
      "statement": "For a linear trend plus noise model x_t = α_0 + α_1 t + z_t, the first difference equals α_1 + (z_t - z_{t-1}), so the intercept cancels and the slope remains as a constant.",
      "concept": "Linear Trend Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Differencing",
+      "quote": "One difference removes a linear trend",
+      "note": "The tagged Differencing page states the fact; writing it out for x_t = a0 + a1 t + z_t is algebra.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:42Z/2782"
+     }
     },
     {
      "id": "r3",
@@ -92,7 +100,13 @@
      "statement": "Estimate model parameters by writing the observed differences and observed values as equations in the unknown parameters and noise terms, then solving the resulting simultaneous equations.",
      "concept": "Linear Trend Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "A step of this solution's plan: solving the question's own given differences and values as simultaneous equations is algebra.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:42Z/2782"
+     }
     },
     {
      "id": "r4",
@@ -118,7 +132,15 @@
        "page": "Linear Trend",
        "quote": "$$\\hat{y}_t = a + b\\,t$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Deterministic and Stochastic Trend",
+      "quote": "Long-horizon forecast | the trend line",
+      "note": "The tagged page's table gives a deterministic trend's forecast as the trend line; plugging t in is arithmetic.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:42Z/2782"
+     }
     }
    ],
    "imported_from": "report.md"
@@ -743,7 +765,13 @@
      "statement": "Common factors shared by the AR and MA polynomials can be cancelled to reduce the model (for example to an ARIMA form), which does not change the stationarity or invertibility conclusions here.",
      "concept": "Parameter Redundancy in ARMA Models",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "An aside in the solution: the options count (p,q) as written and the stationarity/invertibility answers come from the roots (taught); cancelling the common factor is not needed to answer.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:42Z/2782"
+     }
     }
    ],
    "imported_from": "report.md"
@@ -1437,7 +1465,13 @@
      "statement": "To choose the specification with the most random effects, include the random intercept plus random coefficients only for covariates (or terms) that vary within subjects and are not redundant with other included random terms.",
      "concept": "Linear Mixed Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "This solution's plan: combining the identification facts (r1, r3, r4, left open) to pick among the question's options.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:42Z/2782"
+     }
     }
    ],
    "imported_from": "report.md"
@@ -1605,7 +1639,13 @@
      "statement": "The group random effect u_j should appear only once in the hierarchical specification (in the Level 2 intercept equation); including it in both levels double-counts it, giving 2u_j with variance 4 times the group variance, and the student-level residual epsilon_ij must remain in Level 1.",
      "concept": "Linear Mixed Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Distractor analysis for this question's options: once the level placement (r2) and substitution (r1) are known, double-counting u_j and Var(2u)=4Var(u) are algebra.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:42Z/2782"
+     }
     }
    ],
    "imported_from": "report.md"
@@ -1870,7 +1910,15 @@
      "statement": "A model that pools or groups categories (equal coefficients for several levels) is nested within the model that estimates a separate coefficient for each level, since grouping only imposes equality constraints.",
      "concept": "Nested Models",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Likelihood Ratio Test",
+      "quote": "the difference in free parameters between the full and reduced models",
+      "note": "The tagged LRT page defines nesting by restrictions on the full model's parameters; pooling levels is such an equality restriction.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:42Z/2782"
+     }
     },
     {
      "id": "r4",
@@ -2479,7 +2527,15 @@
      "statement": "The variance of the hypothetical means (VHM) equals the probability-weighted mean of the squared hypothetical means minus the square of the overall expected mean.",
      "concept": "Bühlmann Credibility",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Variance of Hypothetical Means",
+      "quote": "VHM is the variance of that quantity across the population",
+      "note": "The tagged VHM page defines VHM as Var(mu(Theta)); E[mu^2] - mu^2 is the standard variance identity.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:42Z/2782"
+     }
     },
     {
      "id": "r5",
@@ -2973,7 +3029,13 @@
        "page": "Model Training and Evaluation",
        "quote": "Flagging nothing would be right on all 704 legitimate claims, for an accuracy of $704 / 813 = 0.866$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Arithmetic on the question's setup (three equal classes); the course fact (k = n predicts one class) is r3, left open.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:42Z/2782"
+     }
     }
    ],
    "imported_from": "report.md"
@@ -3246,7 +3308,13 @@
      "statement": "For a given node, cross-entropy is at least the Gini index, which is at least the classification error rate, with all three equal at zero for a pure node. For a two-class node with p = 1/2 the error rate and Gini index are equal, and in other impure nodes Gini exceeds the error rate.",
      "concept": "Gini Index",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The ordering is the question's answer, found by computing the three measures (each taught: Node Impurity, Gini Index, Entropy) on its nodes; not a fact to teach.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:42Z/2782"
+     }
     }
    ],
    "imported_from": "report.md"
@@ -3284,7 +3352,13 @@
      "statement": "When the data are centered (column means zero), the total variance is the sum of squares of all entries, and any common 1/n or 1/(n-1) factor cancels in the PVE ratio.",
      "concept": "Principal Components Analysis",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Arithmetic: a common 1/n factor cancels in a ratio; centred columns make sum of squares the variance numerator.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:42Z/2782"
+     }
     },
     {
      "id": "r4",
@@ -4190,7 +4264,13 @@
      "statement": "In a grid approximation, the prior is a discrete set of candidate parameter values with probabilities obtained by normalizing the given weights so they sum to 1.",
      "concept": "Grid Approximation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The question's own setup: it says to weight responses by 1/years; normalizing weights to sum to 1 is arithmetic. Grid approximation itself is not this item.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:42Z/2782"
+     }
     },
     {
      "id": "r2",
@@ -4346,7 +4426,13 @@
      "statement": "A log-transformed predictor equals zero when the original variable equals 1, so the intercept corresponds to the original variable being 1, not its mean, unless the log variable is centered.",
      "concept": "Log Transformation of Predictors",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Application of the intercept rule (r1, taught on Linear Regression) with ln 1 = 0; arithmetic, not a separate fact.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:42Z/2782"
+     }
     },
     {
      "id": "r3",
@@ -4941,7 +5027,15 @@
      "statement": "A principal component with a zero eigenvalue explains no additional variance, so the cumulative proportional variance reaches 100% at the component before it and stays flat afterward.",
      "concept": "Principal Components Analysis",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Principal Components Analysis",
+      "quote": "\\text{PVE}_m = \\frac{\\lambda_m}{\\sum_{j=1}^p \\lambda_j}",
+      "note": "PVE is the eigenvalue's share; a zero eigenvalue adds zero, so the cumulative PVE is flat from there.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:42Z/2782"
+     }
     },
     {
      "id": "r5",
@@ -5413,7 +5507,13 @@
      "statement": "Level 2 fixed-effect terms and coefficients carry over unchanged into the fixed-effects part of the combined LMM: group-level covariates (such as indicator variables) stay in the intercept part, while the time-varying covariate keeps its own coefficient.",
      "concept": "Linear Mixed Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Follows algebraically from the substitution procedure (r1, left open): the Level 2 terms carry over when substituted.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:42Z/2782"
+     }
     },
     {
      "id": "r4",
@@ -5443,7 +5543,13 @@
      "statement": "The variance-covariance matrix D of the random effects in a linear mixed model is always symmetric because Cov(u_j, u_k) = Cov(u_k, u_j).",
      "concept": "Linear Mixed Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Cov(u_j,u_k) = Cov(u_k,u_j) is prerequisite probability (the exam page's Prerequisite knowledge callout), not MAS-II course content.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:42Z/2782"
+     }
     },
     {
      "id": "r2",
@@ -5825,7 +5931,15 @@
      "statement": "A consistent shift in the same direction across all subjects as the treatment changes indicates a fixed treatment effect.",
      "concept": "Linear Mixed Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Linear Mixed Model",
+      "quote": "parameters that apply to the entire population",
+      "note": "The tagged LMM page defines fixed effects as population-wide; a shift common to every subject is read off a profile plot as one.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:42Z/2782"
+     }
     },
     {
      "id": "r3",
@@ -6116,7 +6230,13 @@
      "statement": "In a hierarchical model, the posterior of theta given omega uses the conditional prior of theta given omega, and normalization integrates over theta across the range allowed by that prior.",
      "concept": "Bayesian",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "A step of this solution: Bayes' theorem (taught) normalized over the support the question's own prior gives theta.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:42Z/2782"
+     }
     }
    ],
    "imported_from": "report.md"
@@ -6424,7 +6544,15 @@
        "page": "Bayesian Bornhuetter-Ferguson Model",
        "quote": "For a given $M_i$, a larger $\\beta_i$ is a smaller prior variance and more certainty about $M_i$. T"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Credibility",
+      "quote": "Credibility rises when risks genuinely differ from one another (large VHM)",
+      "note": "The tagged Credibility page: a small between-group (prior) variance means low credibility for the data, i.e. more weight on the prior mean.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:42Z/2782"
+     }
     },
     {
      "id": "r4",
@@ -6835,7 +6963,13 @@
      "statement": "To predict aggregate losses for a future period, multiply the credibility-estimated per-exposure mean by the future period's exposure.",
      "concept": "Bühlmann-Straub Credibility",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Plain arithmetic in this solution: per-exposure estimate times the question's future exposure.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:42Z/2782"
+     }
     }
    ],
    "imported_from": "report.md"

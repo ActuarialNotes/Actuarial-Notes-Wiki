@@ -1516,7 +1516,15 @@
      "statement": "In a linear mixed model with repeated measures per subject, a random coefficient on a covariate can only be identified if that covariate varies within a subject; a covariate constant within a subject has a random effect confounded with the random intercept.",
      "concept": "Linear Mixed Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Random Intercept and Slope",
+      "quote": "A random slope needs its predictor to vary within the group.",
+      "note": "Random Intercept and Slope teaches it; checked against Barr et al. 2013 (PMC3881361) in run 2026-10-31T05:07Z/9044",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:07Z/9044"
+     }
     },
     {
      "id": "r2",
@@ -1537,7 +1545,15 @@
      "statement": "A time-invariant subject characteristic such as sex can enter a linear mixed model as a fixed effect but not as a random effect when each subject is observed repeatedly.",
      "concept": "Linear Mixed Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Random Intercept and Slope",
+      "quote": "A characteristic that is constant for each subject (a between-subject variable, such as a policyholder's territory) can enter as a fixed effect but not with a by-subject random slope",
+      "note": "Random Intercept and Slope teaches it; checked against Barr et al. 2013 (PMC3881361) in run 2026-10-31T05:07Z/9044",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:07Z/9044"
+     }
     },
     {
      "id": "r4",
@@ -1545,7 +1561,15 @@
      "statement": "An interaction between a time-invariant covariate and a time-varying covariate (e.g., sex × age) is, within a subject, either zero or a copy of the time-varying covariate, so its random coefficient is redundant with the random slope on the time-varying covariate and cannot be identified.",
      "concept": "Linear Mixed Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Random Intercept and Slope",
+      "quote": "across one subject's rows $z_i x_{ij}$ is either all zeros or an exact copy of $x_{ij}$, so a random coefficient on it duplicates the random slope on $x_{ij}$ and cannot be identified",
+      "note": "Random Intercept and Slope teaches it; checked against Barr et al. 2013 (PMC3881361) in run 2026-10-31T05:07Z/9044",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:07Z/9044"
+     }
     },
     {
      "id": "r5",
@@ -1698,7 +1722,15 @@
      "statement": "To convert a two-level hierarchical (multilevel) model to its equivalent single-equation linear mixed model, substitute the Level 2 equation(s) for the Level 1 coefficients into the Level 1 equation and combine terms.",
      "concept": "Hierarchical Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Hierarchical Model",
+      "quote": "Substitute the Level 2 equations for the coefficients in the Level 1 equation and collect terms",
+      "note": "Hierarchical Model teaches it; checked against Adolph UW POLS 510 slides 22, 75-78 and Rodriguez c8 in run 2026-10-31T05:07Z/9044",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:07Z/9044"
+     }
     },
     {
      "id": "r2",
@@ -1706,7 +1738,15 @@
      "statement": "In a hierarchical model, each level's equation includes only covariates measured at that level; group-level (e.g., classroom) covariates enter the Level 2 equation for the group-specific coefficient, while individual-level covariates enter the Level 1 equation.",
      "concept": "Hierarchical Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Hierarchical Model",
+      "quote": "The **Level 2** equations describe each coefficient with the group-level covariates and the group random effects",
+      "note": "Hierarchical Model teaches it; checked against Adolph UW POLS 510 slides 22, 75-78 and Rodriguez c8 in run 2026-10-31T05:07Z/9044",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:07Z/9044"
+     }
     },
     {
      "id": "r3",
@@ -3440,7 +3480,15 @@
      "statement": "The proportion of variance explained by the m-th principal component equals the sum of squared m-th component scores divided by the total sum of squares of all (centered) variables, sum_i z_im^2 / sum_j sum_i x_ij^2.",
      "concept": "Principal Components Analysis",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Proportion of Variance Explained",
+      "quote": "so $\\mathrm{PVE}_m = \\sum_{i} z_{im}^2 \\big/ \\sum_{j}\\sum_{i} x_{ij}^2$ and the $\\frac{1}{n}$ cancels",
+      "note": "Proportion of Variance Explained teaches it; checked against ISLR 2nd ed. §12.2.3 eqs. (12.8)-(12.10), PDF pp.511-512 in run 2026-10-31T05:08Z/61e8",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:08Z/61e8"
+     }
     },
     {
      "id": "r3",
@@ -3884,7 +3932,15 @@
      "statement": "With q random covariates, u_i is q×1 and its covariance matrix D is q×q; the number of fixed covariates and the number of observations do not affect the dimensions of D.",
      "concept": "Linear Mixed Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Covariance Structure",
+      "quote": "With $q$ random-effect columns, $\\mathbf{u}_i$ is $q \\times 1$ and $\\mathbf{D}$ is $q \\times q$",
+      "note": "Covariance Structure teaches it; checked against lme4 (Bates et al. 2015) §2.3, App. A.1 and SAS/STAT 13.1 PROC MIXED p.5316 in run 2026-10-31T05:07Z/9044",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:07Z/9044"
+     }
     }
    ],
    "imported_from": "report.md"
@@ -3901,7 +3957,15 @@
      "statement": "When covariance parameter estimation in a linear mixed model fails (non-convergence, nonpositive-definite D matrix, boundary estimates), remedies include fitting the implied marginal model, fitting a marginal model with an unstructured covariance matrix, and choosing alternative starting values for…",
      "concept": "Linear Mixed Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Restricted Maximum Likelihood",
+      "quote": "or fit a marginal model instead — the implied marginal model, or one with an unstructured residual covariance matrix — which models $\\mathbf{V}_i$ directly without the random effects",
+      "note": "Restricted Maximum Likelihood teaches it; checked against SAS/STAT 13.1 PROC MIXED pp.5316, 5352-5354 and The Analysis Factor in run 2026-10-31T05:07Z/9044",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:07Z/9044"
+     }
     },
     {
      "id": "r2",
@@ -3909,7 +3973,15 @@
      "statement": "The implied marginal model of a linear mixed model omits the random effects and directly fits the marginal covariance matrix V_i = Z_i D Z_i' + R_i, without requiring D to be positive-definite.",
      "concept": "Implied Marginal Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Covariance Structure",
+      "quote": "drops the random effects and models the marginal covariance $\\mathbf{V}_i = \\mathbf{Z}_i\\mathbf{D}\\mathbf{Z}_i^\\top + \\mathbf{R}_i$ directly as a structure on the residuals",
+      "note": "Covariance Structure teaches it; checked against SAS/STAT 13.1 PROC MIXED pp.5315-5316 in run 2026-10-31T05:07Z/9044",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:07Z/9044"
+     }
     },
     {
      "id": "r3",
@@ -3930,7 +4002,15 @@
      "statement": "Iterative ML/REML estimation can fail from poor starting values, so choosing alternative starting values for the covariance parameters is a standard first remedy for convergence failure.",
      "concept": "REML and ML Estimation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Restricted Maximum Likelihood",
+      "quote": "Remedies: supply alternative starting values for the covariance parameters (SAS's `PARMS` statement, which also runs a grid search over the likelihood surface)",
+      "note": "Restricted Maximum Likelihood teaches it; checked against SAS/STAT 13.1 PROC MIXED pp.5352-5354 in run 2026-10-31T05:07Z/9044",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:07Z/9044"
+     }
     }
    ],
    "imported_from": "report.md"
@@ -3986,7 +4066,15 @@
      "statement": "The exponential variance function is Var(e_ij) = sigma^2 exp(2 delta v_ij) and the power variance function is Var(e_ij) = sigma^2 |v_ij|^…",
      "concept": "",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Variance Function",
+      "quote": "the **exponential** form $\\mathrm{Var}(\\varepsilon_{ij}) = \\sigma^2\\exp(2\\delta v_{ij})$ (`nlme`'s `varExp`) and the **power** form $\\mathrm{Var}(\\varepsilon_{ij}) = \\sigma^2\\lvert v_{ij}\\rvert^{2\\delta}$ (`varPower`)",
+      "note": "Variance Function teaches it; checked against nlme varExp.Rd / varPower.Rd in run 2026-10-31T05:07Z/9044",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:07Z/9044"
+     }
     },
     {
      "id": "r5",
@@ -4116,7 +4204,15 @@
      "statement": "Observation-level covariates and the residual error term belong in the Level 1 equation, while group-level covariates and the group random effect belong in the Level 2 equations for the coefficients.",
      "concept": "Linear Mixed Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Hierarchical Model",
+      "quote": "The **Level 1** equation describes an observation with group-specific coefficients, and it holds only the observation-level covariates and the residual",
+      "note": "Hierarchical Model teaches it; checked against Adolph UW POLS 510 slides 22, 75-78 and Rodriguez c8 in run 2026-10-31T05:07Z/9044",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:07Z/9044"
+     }
     },
     {
      "id": "r3",
@@ -4124,7 +4220,15 @@
      "statement": "To convert a hierarchical model into the general (composite) form, substitute the Level 2 equations for the coefficients into the Level 1 equation and expand; the result should match the general specification term by term.",
      "concept": "Linear Mixed Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Hierarchical Model",
+      "quote": "Substitute the Level 2 equations for the coefficients in the Level 1 equation and collect terms",
+      "note": "Hierarchical Model teaches it; checked against Adolph UW POLS 510 slides 22, 75-78 and Rodriguez c8 in run 2026-10-31T05:07Z/9044",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:07Z/9044"
+     }
     },
     {
      "id": "r4",
@@ -4362,7 +4466,15 @@
      "statement": "The marginal covariance matrix ZDZ' + R implied by a linear mixed model is positive-definite by construction (D and R are positive-definite), so a marginal model can be fit in cases where the corresponding mixed model cannot, such as when the marginal covariance is nonpositive-definite or has negat…",
      "concept": "Implied Marginal Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Covariance Structure",
+      "quote": "So a marginal model can be fitted where the mixed model cannot, for instance when the data call for a negative within-subject correlation.",
+      "note": "Covariance Structure teaches it; checked against SAS/STAT 13.1 PROC MIXED p.5316 and The Analysis Factor in run 2026-10-31T05:07Z/9044",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:07Z/9044"
+     }
     },
     {
      "id": "r4",
@@ -5155,7 +5267,15 @@
      "statement": "If one variable is an exact linear function of another (correlation of ±1), the correlation matrix is singular, so at least one eigenvalue equals zero and the rank is reduced.",
      "concept": "Singular Matrix and Rank",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Scree Plot",
+      "quote": "the matrix is singular and $p - r$ eigenvalues are exactly zero: the scree plot falls to zero and the cumulative PVE reaches 100% before the last component, then stays flat",
+      "note": "Scree Plot teaches it; checked against Minitab PCA Methods and formulas, Shalizi 36-401 Lecture 17, NIST 6.5.5.2, ISLR p.506 in run 2026-10-31T05:08Z/61e8",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:08Z/61e8"
+     }
     },
     {
      "id": "r4",
@@ -5179,7 +5299,15 @@
      "statement": "A variable that is nearly uncorrelated with the other variables is captured by its own principal component with an eigenvalue near 1 (for standardized variables), while a group of highly correlated variables is absorbed mostly into a single dominant component.",
      "concept": "Principal Components Analysis",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Scree Plot",
+      "quote": "A group of highly correlated variables loads together on one dominant component, while a variable nearly uncorrelated with the rest is left largely to a component of its own",
+      "note": "Scree Plot teaches it; checked against ISLR 2nd ed. §12.2.1 USArrests, PDF pp.507-509 (the eigenvalue-near-1 clause was cut as unsourced; the page teaches the shared/own-component structure the solution uses) in run 2026-10-31T05:08Z/61e8",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:08Z/61e8"
+     }
     }
    ],
    "imported_from": "report.md"
@@ -5344,7 +5472,15 @@
      "statement": "Principal component scores of centred (mean-zero) predictors have mean zero, so the sample variance of the scores is the sum of squared scores divided by n, with no mean subtraction.",
      "concept": "Principal Components Analysis",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Proportion of Variance Explained",
+      "quote": "Because every variable is centred to mean zero, the scores $z_{1m}, \\dots, z_{nm}$ average zero as well, so their variance is simply $\\frac{1}{n}\\sum_i z_{im}^2$, with no mean to subtract",
+      "note": "Proportion of Variance Explained teaches it; checked against ISLR 2nd ed. §12.2.1 p.500 (PDF 506) and (12.9) in run 2026-10-31T05:08Z/61e8",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:08Z/61e8"
+     }
     },
     {
      "id": "r4",
@@ -5622,7 +5758,15 @@
      "statement": "A hierarchical (multilevel) linear mixed model is converted to a single-equation LMM by substituting the Level 2 equations for the Level 1 coefficients and collecting terms.",
      "concept": "Linear Mixed Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Hierarchical Model",
+      "quote": "A random effect in a slope's equation comes out multiplied by that slope's covariate (a random slope, not a second random intercept)",
+      "note": "Hierarchical Model teaches it; checked against Adolph UW POLS 510 slides 22, 75-78 and Rodriguez c8 in run 2026-10-31T05:07Z/9044",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:07Z/9044"
+     }
     },
     {
      "id": "r2",
@@ -7162,7 +7306,15 @@
      "statement": "In a PCA biplot of standardized (scaled) variables, the angle between two variables' loading arrows approximates their correlation: a small angle means high positive correlation, a right angle means near-zero correlation, and opposite directions mean negative correlation.",
      "concept": "Principal Components Analysis",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loading Vector",
+      "quote": "the cosine of the angle between two arrows approximates the correlation between those variables — a small angle, highly positively correlated; a right angle, nearly uncorrelated; opposite directions, negatively correlated",
+      "note": "Loading Vector teaches it; checked against Greenacre, Biplots in Practice ch.6 p.63 in run 2026-10-31T05:08Z/61e8",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:08Z/61e8"
+     }
     },
     {
      "id": "r2",
@@ -7196,7 +7348,15 @@
      "statement": "PCA is performed on centered data, so a biplot score shows an observation's deviation from each variable's mean; it shows whether a value is above or below average but not whether the raw value is positive or negative.",
      "concept": "Principal Components Analysis",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loading Vector",
+      "quote": "A point far out along a variable's arrow is well above that variable's average, and a point near the origin is near average on both components; the plot cannot say whether the raw value itself is positive or negative",
+      "note": "Loading Vector teaches it; checked against ISLR 2nd ed. pp.500, 503 (PDF 506, 509) in run 2026-10-31T05:08Z/61e8",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:08Z/61e8"
+     }
     },
     {
      "id": "r5",
@@ -7204,7 +7364,15 @@
      "statement": "A biplot displays both observations (as principal component scores) and variables (as loading vectors) on the same axes for the first two principal components.",
      "concept": "Principal Components Analysis",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loading Vector",
+      "quote": "A **biplot** draws both on one pair of axes for the first two components: each observation as a point at its scores $(z_{i1}, z_{i2})$ and each variable as an arrow to its loadings $(\\phi_{j1}, \\phi_{j2})$",
+      "note": "Loading Vector teaches it; checked against ISLR 2nd ed. Fig. 12.1 caption, PDF p.508 in run 2026-10-31T05:08Z/61e8",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:08Z/61e8"
+     }
     }
    ],
    "imported_from": "report.md"

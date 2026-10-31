@@ -23,7 +23,7 @@ A **Payoff** is the amount a derivative or an embedded guarantee pays its holder
 
 - $S_T$ is the underlying's price at expiry, $K$ the strike, $F_{0,T}$ the forward price, $G$ the guaranteed amount and $F_n$ the policyholder's fund at maturity $n$; $(\cdot)^+$ keeps only the positive part, so an option's payoff is never negative while a forward's can be
 - **Interest-rate options (INV-201):** a caplet pays $N\,\tau\,(L - K)^+$ and a floorlet $N\,\tau\,(K - L)^+$, where $N$ is the notional, $\tau$ the accrual fraction and $L$ the reference rate set at the start of the period. The payment is made at the end of the period, in arrears. A cap is a strip of caplets
-- **Embedded guarantees (ALTAM):** a GMDB pays $(G_t - F_t)^+$ at death; a GMMB pays $(G - F_n)^+$ at maturity if alive. A GMWB guarantees withdrawals totalling the premium even if the fund runs out; a GMIB guarantees an annuity rate. $G$ may be the premium, a roll-up or a ratchet to past fund highs
+- **Embedded guarantees (ALTAM):** a GMDB pays $(G_t - F_t)^+$ at death; a GMMB pays $(G - F_n)^+$ at maturity if alive. A GMIB guarantees an annuity rate. $G$ may be the premium, a roll-up or a ratchet to past fund highs
 - Each guarantee is in effect a put option on the fund, which is why its value comes from the [[Black-Scholes Model]] and its risk is managed by [[Hedging|hedging]]
 
 > [!example]- Bull Call Spread at Three Prices {Example}

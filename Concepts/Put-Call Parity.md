@@ -74,7 +74,7 @@ verification:
 > > The call is worth $10.63$. Ignoring the dividends would give $12.57$: the call holder does not receive them, so they come off the prepaid forward.
 
 > [!tip]- How it appears on the exam
-> - **FAM** (objective "apply put-call parity"): given three of $C$, $P$, $S_0$, $K$, $r$, $\delta$, solve for the fourth, often a put price from a [[Black-Scholes Model|Black-Scholes]] call or a [[Risk-Neutral Valuation|binomial]] call computed earlier in the question.
+> - **FAM** (objective "apply put-call parity"): given three of $C$, $P$, $S_0$, $K$, $r$, $\delta$, solve for the fourth, often a put price from a [[Black-Scholes Model|Black-Scholes]] call or a [[Binomial Option Pricing Model|binomial]] call computed earlier in the question.
 > - **FAM**: parity used backwards to find an implied dividend yield, an implied risk-free rate, or the strike at which $C = P$ (the forward price, $K = S_0 e^{(r-\delta)T}$).
 > - **INV-201** ("understand put-call parity and price bounds"): identify which quotes violate parity or the bounds, and describe the arbitrage trades and their cash flows today and at expiry, as a written answer.
 > - **INV-201**: parity for [[Delta Hedging|delta]] and the other Greeks, $\Delta_C - \Delta_P = e^{-\delta T}$ and equal gammas and vegas, used to convert a hedge in calls into one in puts.

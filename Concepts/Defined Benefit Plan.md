@@ -22,7 +22,7 @@ A **Defined Benefit Plan** (DB plan) is a [[Retirement Plan]] that promises each
 > $$B_{\text{CARE}} = \alpha \sum_{k=0}^{n-1} S_{x_0+k}\,\frac{I_{\text{ret}}}{I_{x_0+k}}$$
 
 - **Symbols** (Dickson, Hardy & Waters, ch. 10): $\alpha$ is the accrual rate (typically 1%–2%), $S_y$ the salary earned in the year of age $y$ to $y+1$, $x_0$ the entry age, $S_{\text{Fin}}$ the average salary over the last few years before retirement, $I$ a revaluation index (prices or wages).
-- **Salary scale.** Future salaries are projected with $s_y$: $S_{y} = S_x\,s_y/s_x$. FAS benefits depend on it; CAE benefits do not, which is why a CAE plan needs a higher $\alpha$ for the same [[Retirement Plan|replacement ratio]].
+- **Salary scale.** Future salaries are projected with $s_y$: $S_{y} = S_x\,s_y/s_x$. A member whose earnings grow faster than the revaluation rate gets a lower pension from a career average plan than from a comparable final salary plan, which is why a CAE plan needs a higher $\alpha$ for the same [[Retirement Plan|replacement ratio]].
 - **Risks** — investment, [[Mortality|longevity]] and, for FAS, salary inflation — are the sponsor's; the member's pension does not move with the fund. The cost is measured by [[Valuation]]: the [[Actuarial Accrued Liability]] for service to date and the [[Normal Cost]] for the year's accrual.
 - The benefit is paid as a [[Life Annuity]], so its value is $B$ times an annuity factor discounted for interest and survival to retirement. Compare [[Defined Contribution Plan]].
 
@@ -84,6 +84,5 @@ A **Defined Benefit Plan** (DB plan) is a [[Retirement Plan]] that promises each
 
 > [!warning]- Exam traps
 > - Projecting with the wrong salary-scale ages: salary in year $y$ to $y+1$ is $S_x\,s_y/s_x$; projecting the final salary as $S_x\,s_{65}/s_x$ instead of $s_{64}/s_x$ overstates it by a year of growth.
-> - A salary *rate* at exact age $x$ is centred on $x - \tfrac{1}{2}$: divide by $s_{x-1/2}$ (often $\tfrac{1}{2}(s_{x-1}+s_x)$), not by $s_x$.
-> - Averaging the wrong salaries: FAS over the last three years before 65 is ages 62, 63, 64 — not 63, 64, 65.
+> > - Averaging the wrong salaries: FAS over the last three years before 65 is ages 62, 63, 64 — not 63, 64, 65.
 > - Using total career salary in the FAS formula, or $n\,\alpha\,S_{\text{Fin}}$ for CAE: CAE already sums over service, so multiplying by $n$ again counts it twice.

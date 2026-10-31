@@ -76,7 +76,7 @@ A **European option** gives its holder the right, but not the obligation, to buy
 > - **Bounds:** A question can also give a quote outside the no-arbitrage bounds and ask which trades lock in a riskless profit, as in the second example.
 
 > [!warning]- Exam traps
-> - **Moneyness of a put:** A put is in the money when $S < K$. Reading a put's moneyness with the call's rule gives the wrong intrinsic value and the wrong sign for its delta.
+> - **Moneyness of a put:** A put is in the money when $S < K$. Reading a put's moneyness with the call's rule gives the wrong intrinsic value.
 > - **Negative time value is not an arbitrage:** A deep-in-the-money European put can sell below $K - S_0$, because its holder must wait until $T$. The bound that binds is $Ke^{-rT} - S_0$, so a put priced between the two is fair.
 > - **No early exercise:** A European option is valued from its payoff at $T$ alone. Adding an early-exercise check at the interior nodes of a tree values the American option instead, which is worth more for a put.
 > - **Dividends in the bounds:** With a dividend yield, the stock enters the bounds as $S_0e^{-\delta T}$. Using $S_0$ overstates the call's lower bound and can make a fair price look like an arbitrage.

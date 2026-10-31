@@ -12,7 +12,7 @@ verification:
   open_critical: 0
   log: .verify/Concepts/Long-Term Insurance Coverage.md
 ---
-**A Long-Term Insurance Coverage** is an [[Insurance Coverage|insurance coverage]] written for many years or for life, whose guaranteed terms the [[Insurer|insurer]] cannot change while the contract is in force: life insurance, annuities, long-term health insurance and pension plans. The cash flows run for decades and depend on the survival or health of the insured, so they are valued with interest and mortality, paid for by level premiums, and backed by policy values.
+**A Long-Term Insurance Coverage** is an [[Insurance Coverage|insurance coverage]] written for many years or for life by an [[Insurer|insurer]]: life insurance, annuities, long-term health insurance and pension plans. The cash flows run for decades and depend on the survival or health of the insured, so they are valued with interest and mortality, paid for by level premiums, and backed by policy values.
 
 > $$\text{EPV} = \sum_{k} \text{CF}_k\, v^{k}\,\Pr(\text{CF}_k \text{ is paid})$$
 
@@ -34,7 +34,7 @@ verification:
 | [[Defined Contribution Plan]] | Whatever the member's account buys | Member: investment, annuity price |
 
 - **Symbols:** $\text{CF}_k$ is a cash flow due at time $k$, paid only if the life is in the state the contract requires, such as alive, dead or sick. The second block is the [[Equivalence Principle|equivalence principle]], and the third is the policy value, the long-term form of a [[Reserve|reserve]].
-- **What makes a coverage long-term:** The terms are guaranteed, so the insurer cannot reprice when mortality, morbidity or interest rates move against it. A level premium is more than the cost of cover in the early years and less than it later, so the insurer holds a policy value that earns investment income for decades. Interest therefore matters as much as mortality.
+- **What makes a coverage long-term:** A level premium is more than the cost of cover in the early years and less than it later, so the insurer holds a policy value that earns investment income for decades. Interest therefore matters as much as mortality.
 - **Health:** Long-term [[Health Insurance|health insurance]] is modelled with a [[Multiple State Model|multiple state model]], in which benefits depend on being sick or on falling sick.
 - **Contrast:** A [[Short-Term Insurance Coverage|short-term coverage]] is priced one term at a time, so its premium is close to that term's expected claims, and its reserves are for claims already incurred rather than for future guaranteed benefits.
 

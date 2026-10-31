@@ -11,7 +11,7 @@ verification:
   log: .verify/Concepts/Modified Net Premium Policy Value.md
 ---
 
-**A Modified Net Premium Policy Value** is a net premium [[Policy Value|policy value]] calculated with a net premium that is lower in the first year and higher afterwards, so that the policy value allows for the insurer's initial expenses. The standard method is **full preliminary term** (FPT): the first-year net premium only pays for one year of term cover, and the renewal net premium is that of a policy issued one year older for one year shorter.
+**A Modified Net Premium Policy Value** is a net premium [[Policy Value|policy value]] calculated with net premiums that are not level but follow some other specified pattern; the actual premiums paid are unchanged. One particular method is **full preliminary term** (FPT): the first-year net premium only pays for one year of term cover, and the renewal net premium is that of a policy issued one year older for one year shorter.
 
 > $$P^{FPT}_0 = S\,v\,q_x$$
 

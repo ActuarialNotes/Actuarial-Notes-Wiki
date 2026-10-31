@@ -83,7 +83,7 @@ verification:
 > > The one-sigma daily move is $0.25(40)\sqrt{1/365} = 0.523$; a move more than twice that costs the writer about $\$32.86$, whichever direction it goes.
 
 > [!tip]- How it appears on the exam
-> - **FAM** (Black-Scholes "price and delta hedge"): compute $\Delta$ for a call or put and the number of shares to buy or sell to hedge a written position; often extended one period to the rebalancing trade.
+> - **FAM** (Black-Scholes "price and delta hedge"): compute $\Delta$ for a call or put and the number of shares to buy or sell to hedge a written position.
 > - **ALTAM** ("construct a replicating portfolio ... using delta-hedging"): for a GMMB or GMDB, split the guarantee's value into its stock and bond parts, weighted by survival or death probabilities, and roll it forward to find the rebalancing cost and the hedge error at the next step.
 > - **INV-201** ("the interplay between hedging assumptions and hedging outcomes"): explain or compute hedge P&L under discrete rebalancing, realized versus implied volatility, jumps and transaction costs, usually as a written answer supported by the gamma approximation.
 

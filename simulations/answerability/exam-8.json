@@ -315,7 +315,13 @@
      "statement": "A ballast value, maximum/minimum mods and swing limits on annual rate changes are other NCCI-type devices that dampen the impact of an individual risk's experience on the modification.",
      "concept": "Experience Rating Stabilizing Devices",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "A detail no reading on Exam 8's current syllabus states (searched Fisher et al. 2019, Bahnemann, Bailey & Simon with Hazam, Goldburd et al., ASOP 12): swing limits; the other devices (ballast, min/max mods, MSL) are taught on Experience Rating from Fisher pp.11, 13 (maintainer, 31 Oct)",
+      "date": "2026-10-31",
+      "run": "g8-cas8-final"
+     }
     }
    ]
   },
@@ -1754,7 +1760,13 @@
      "statement": "Using earned premium as the exposure base is appropriate only if high-frequency territories are also high-premium territories and the territorial relativities are correct; otherwise earned car years is the more appropriate base.",
      "concept": "Credibility Exposure Base in Merit Rating (Bailey and Simon)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "A detail no reading on Exam 8's current syllabus states (searched Fisher et al. 2019, Bahnemann, Bailey & Simon with Hazam, Goldburd et al., ASOP 12): car years as the better base otherwise; Hazam, the reading, calls premium an improvement over exposure, and his conditions are taught on Merit Rating (maintainer, 31 Oct)",
+      "date": "2026-10-31",
+      "run": "g8-cas8-final"
+     }
     },
     {
      "id": "r3",
@@ -1762,7 +1774,13 @@
      "statement": "To test whether earned premium is a suitable exposure base, compare each territory's relative frequency (claims per car year) with its relative average premium (premium per car year) to see whether high-frequency territories have high average premium.",
      "concept": "Frequency and Average Premium Relativities",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "A detail no reading on Exam 8's current syllabus states (searched Fisher et al. 2019, Bahnemann, Bailey & Simon with Hazam, Goldburd et al., ASOP 12): a territory-by-territory check of frequency against average premium; neither Bailey & Simon nor Hazam describes it (maintainer, 31 Oct)",
+      "date": "2026-10-31",
+      "run": "g8-cas8-final"
+     }
     },
     {
      "id": "r4",
@@ -1804,7 +1822,15 @@
      "statement": "The three primary purposes of risk classification in the AAA Risk Classification Statement of Principles are to protect the financial soundness of the insurance system, to enhance fairness, and to encourage availability of coverage by allowing economic incentives to operate.",
      "concept": "Purposes of Risk Classification (AAA Statement of Principles)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Classification Ratemaking",
+      "quote": "risk classification is generally used for three purposes: to treat participants with similar risk characteristics in a consistent manner, to permit economic incentives to operate and thereby encourage widespread availability of coverage, and to protect the soundness of the system",
+      "note": "ASOP 12 App. 1's statement of the three purposes, which it draws from the AAA Statement of Principles the solution names; ASOP says 'consistent manner' where the AAA says 'enhance fairness'. Closed on ASOP 12's wording (maintainer, 31 Oct).",
+      "date": "2026-10-31",
+      "run": "g8-cas8-final"
+     }
     },
     {
      "id": "r2",
@@ -3666,7 +3692,13 @@
      "statement": "The NCCI experience rating modification is M = (Ap + W·Ae + (1−W)·Ee + B)/(E + B), where Ap is actual primary losses, Ae actual excess losses, Ee expected excess losses, E expected losses, W the excess-loss weight, and B (balance point) and K (credibility-related constant) vary with risk size.",
      "concept": "NCCI Experience Rating Plan",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "A detail no reading on Exam 8's current syllabus states (searched Fisher et al. 2019, Bahnemann, Bailey & Simon with Hazam, Goldburd et al., ASOP 12): that the ballast B varies with risk size (Gillam's argument); the formula itself is taught on Experience Rating from Fisher p.13 (maintainer, 31 Oct)",
+      "date": "2026-10-31",
+      "run": "g8-cas8-final"
+     }
     },
     {
      "id": "r2",
@@ -5308,7 +5340,13 @@
      "statement": "Earned premium as an exposure base corrects for maldistribution only if the rate differentials embedded in premium (e.g., territorial) are proper; if such differentials are prohibited or improper, premium is not necessarily a better exposure base.",
      "concept": "Merit Rating Plans",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "A detail no reading on Exam 8's current syllabus states (searched Fisher et al. 2019, Bahnemann, Bailey & Simon with Hazam, Goldburd et al., ASOP 12): 'prohibited' differentials and premium as 'not necessarily a better base'; Hazam's conditions are taught on Merit Rating, and he calls premium an improvement over exposure (maintainer, 31 Oct)",
+      "date": "2026-10-31",
+      "run": "g8-cas8-final"
+     }
     },
     {
      "id": "r3",
@@ -5333,7 +5371,13 @@
      "statement": "Group classes by accident-free years, compute claim frequency (claims / earned car years) for each group and overall, and set the group's mod equal to its frequency divided by the overall frequency.",
      "concept": "Merit Rating Plans",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "A detail no reading on Exam 8's current syllabus states (searched Fisher et al. 2019, Bahnemann, Bailey & Simon with Hazam, Goldburd et al., ASOP 12): the merit rating procedure on earned car years; Bailey & Simon use premium as the base, as taught on Merit Rating (maintainer, 31 Oct)",
+      "date": "2026-10-31",
+      "run": "g8-cas8-final"
+     }
     },
     {
      "id": "r5",
@@ -7725,7 +7769,13 @@
      "statement": "Table M is based on countrywide data, is more credible, can be updated for inflation by adjusting the excess loss group (ELG) table, and is flexible for changing loss limits since it does not need a separate table for each limit.",
      "concept": "Table M",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "A detail no reading on Exam 8's current syllabus states (searched Fisher et al. 2019, Bahnemann, Bailey & Simon with Hazam, Goldburd et al., ASOP 12): that Table M is 'more credible'; its countrywide basis and inflation updating are taught on Table M from Fisher (maintainer, 31 Oct)",
+      "date": "2026-10-31",
+      "run": "g8-cas8-final"
+     }
     },
     {
      "id": "r6",
@@ -7733,7 +7783,13 @@
      "statement": "Table L is built from California data and includes California premium taxes, so it is inappropriate for use in other states, and it gives more accurate charges for a fixed loss limit without needing many tables.",
      "concept": "Table L",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "A detail no reading on Exam 8's current syllabus states (searched Fisher et al. 2019, Bahnemann, Bailey & Simon with Hazam, Goldburd et al., ASOP 12): that Table L is built from California data with California premium taxes; Fisher names it only as Skurnick's California Table L (maintainer, 31 Oct)",
+      "date": "2026-10-31",
+      "run": "g8-cas8-final"
+     }
     }
    ]
   },
@@ -9088,7 +9144,13 @@
      "statement": "A model should not include a risk's own historical losses as a predictor when experience rating already reflects them, because doing so double counts the experience, and past losses are volatile for a risk and weakly credible.",
      "concept": "Experience Rating and GLM Interaction",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "An examiner's accepted argument, not something a reading on Exam 8's current syllabus teaches; checked against Fisher et al. 2019, Bahnemann, Goldburd et al. and the other current readings: the GLM half (past losses volatile and weakly credible as a predictor); the double-counting principle itself is taught on Experience Rating from Fisher ch.1 (maintainer, 31 Oct)",
+      "date": "2026-10-31",
+      "run": "g8-cas8-final"
+     }
     },
     {
      "id": "r11",
@@ -9168,7 +9230,13 @@
      "statement": "Size a schedule debit or credit by judging the fraction of the experience period that does not reflect the current risk condition and applying that fraction to the maximum allowed modification for the characteristic.",
      "concept": "Schedule Rating",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "An examiner's accepted argument, not something a reading on Exam 8's current syllabus teaches; checked against Fisher et al. 2019, Bahnemann, Goldburd et al. and the other current readings: a rule for sizing a schedule credit from the share of the experience period; Fisher ch.1 s.9 gives the principle (taught on Schedule Rating), not a sizing rule (maintainer, 31 Oct)",
+      "date": "2026-10-31",
+      "run": "g8-cas8-final"
+     }
     },
     {
      "id": "r5",
@@ -9383,7 +9451,13 @@
      "statement": "The layer method is convenient when the survival function is easy to integrate or when computing expected loss at many limits (each added layer is just an additional slice); the size method is more intuitive for a single limit and when working with the density or algebraic evaluation of integrals.",
      "concept": "Layer Method vs Size Method",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "An examiner's accepted argument, not something a reading on Exam 8's current syllabus teaches; checked against Fisher et al. 2019, Bahnemann, Goldburd et al. and the other current readings: why the size method is more intuitive for a single limit (the page teaches Fisher's comparison of the two methods) (maintainer, 31 Oct)",
+      "date": "2026-10-31",
+      "run": "g8-cas8-final"
+     }
     },
     {
      "id": "r6",
@@ -12073,7 +12147,13 @@
      "statement": "Calculating a risk load for ILFs requires calibrating the risk constant k to the portfolio and computing the load for each limit, which is technically more demanding than judgmentally selecting a profit and contingency load per limit.",
      "concept": "Risk Load Calculation for Increased Limit Factors",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "An examiner's accepted argument, not something a reading on Exam 8's current syllabus teaches; checked against Fisher et al. 2019, Bahnemann, Goldburd et al. and the other current readings: risk-loaded ILFs as more demanding than a judgmental profit load by limit; Bahnemann 6.3 makes no such comparison (maintainer, 31 Oct)",
+      "date": "2026-10-31",
+      "run": "g8-cas8-final"
+     }
     },
     {
      "id": "r5",
@@ -13078,7 +13158,13 @@
      "statement": "Drawbacks of validation plots: quintile plots need separate plots per model and may be skewed by uneven risk sizes; double lift charts are hard to interpret and do not show actual dollar levels; loss ratio plots show only differentiation/ranking, not prediction accuracy.",
      "concept": "Model Validation Plots",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "An examiner's accepted argument, not something a reading on Exam 8's current syllabus teaches; checked against Fisher et al. 2019, Bahnemann, Goldburd et al. and the other current readings: the drawbacks of quantile plots and double lift charts beyond what Goldburd 7.2 says (on Model Benchmarking) (maintainer, 31 Oct)",
+      "date": "2026-10-31",
+      "run": "g8-cas8-final"
+     }
     },
     {
      "id": "r6",
@@ -13567,7 +13653,13 @@
      "statement": "Trending and developing experience losses to the prospective level instead of detrending/undeveloping the expected losses gives equal weight to all experience years' expected losses, whereas the standard method weights older years differently, so the resulting mods differ.",
      "concept": "Experience Rating",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "An examiner's accepted argument, not something a reading on Exam 8's current syllabus teaches; checked against Fisher et al. 2019, Bahnemann, Goldburd et al. and the other current readings: that trending actual losses gives the experience years equal weight; no reading states it (maintainer, 31 Oct)",
+      "date": "2026-10-31",
+      "run": "g8-cas8-final"
+     }
     },
     {
      "id": "r9",

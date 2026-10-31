@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:529db62be06da75df381d1c53d99bd39b873e15694adf4fb3ab95480927965e2
+  content_hash: sha256:a1f32c4782eb28851814e1469bbe57aaa55907bb9eba99f1a1d8e9e6a0dfcc7d
   sources: []
   open_findings: 0
   open_critical: 0
@@ -23,6 +23,10 @@ verification:
 - Premium **must be on level** and losses must be trended to a common cost level before the ELR is computed, or the derived ratio blends years written at different rate levels and different cost levels into one number. This is Cape Cod's most-missed requirement.
 - Cape Cod converges to the [[Chain Ladder Method|chain ladder]] as cohorts mature and to the [[Expected Loss Method|expected claims]] technique for very immature ones — the same limiting behaviour as BF.
 - A **decay-weighted** variant (generalized Cape Cod) weights recent years more heavily in the ELR estimate, recognizing that the loss ratio level genuinely drifts.
+- **Patrik's chapter, Exam 7's reading before Friedland (2022), adds** (not on the current outline), for reinsurance:
+  - **Exposure base.** The premium is each year's earned **risk pure premium**: the treaty premium net of reinsurance commissions, brokerage fees and internal expenses, adjusted to remove rate-level differences between years. Commissions and brokerage are easy to net out, being coded by contract. Internal expenses are harder, and if they cannot be netted out they can be left in, since only a relative exposure base is needed.
+  - **Against the chain ladder.** The ELR comes from the overall reported experience rather than from judgment, though each year's IBNR then depends heavily on its rate-level adjusted premium. As long as those rate-relativity adjustments are reasonably accurate, Stanard-Bühlmann gives more accurate estimates than the chain ladder for the recent, immature years and overall.
+  - **Credibility IBNR.** When the rate-level adjustments are not fully trusted, the two estimates are weighted together: more weight on Stanard-Bühlmann for green years, where the chain ladder estimate has high variance, and more on the chain ladder for older years, where the cumulative rate-level adjustments are trusted less. With report lag $\text{Rlag}_k$ and a credibility factor $0 \le CF \le 1$, the weight on the chain ladder is $Z_k = CF \times \text{Rlag}_k$, and $\text{IBNR}_k = Z_k \cdot \text{IBNR}^{CL}_k + (1 - Z_k) \cdot \text{IBNR}^{SB}_k$.
 
 ![[Media/Figures/Cape_Cod_Method.svg|340]]
 

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:027e3682527f384f48bf33ec37d7e49d88372308911d573e373388b8e9d26f9b
+  content_hash: sha256:6be9e458ce42eac4a7e763551d1aca205bdba97f3ea07d39490ef400c61b0068
   sources:
     - "Friedland, Reserving for Reinsurance (CAS Study Note — Exam 7, (c)2023 CAS; cited by the outline as 2022), PDF pp.10, 26-28, 32-33, 35-41, 43, 45-48, 50-56, 66, 69-72, sha256:6da495a26206ececf40a3c3fc8fb3db04556c940242f5bcffe2b21b7e4445ceb — https://www.casact.org/sites/default/files/2022-11/Exam7_Study_Note_Friedland.pdf"
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, Version 3, 2010), PDF pp.159-160 (Ch.9: % unreported = 1.00 minus the inverse of the reported CDF), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
@@ -43,6 +43,10 @@ verification:
 
   Credibility limits how far it can be taken.
 - **Experience period.** Reinsurers often analyse by **treaty (underwriting) year**. Immature treaty years must have their ultimates reduced for premium not yet earned, and results are allocated to accident year through earning patterns. Losses-occurring-during and risks-attaching contracts cover different claims, so the actuary must know which applies.
+- **Patrik's chapter, Exam 7's reading before Friedland (2022), adds** (not on the current outline):
+  - **Persistent upward development.** Most reinsurance claim reserves develop upward. Economic and social inflation cause it. So does the cedant's claims staff reserving at modal values: faced with too little information on a potentially serious claim, a claims person tends to reserve to "expectation", read as the mode of the distribution. That is enough for most claims, but the few that blow up above the mode are the ones the excess reinsurer covers. ALAE also tends to be under-reserved. Early information may therefore show that a claim will pierce the retention without yet showing its ultimate severity.
+  - **Data coding and IT systems.** The business, and the level of data detail expected of it, have grown faster than reinsurers' systems can handle and produce the reports marketing, underwriting, claims, accounting and actuarial staff ask for. Patrik calls this a problem of the whole insurance business, but more true of reinsurance.
+  - **Reserve to surplus.** An adequate loss reserve is larger relative to surplus for a reinsurer, and the other problems make it both larger and more uncertain. Patrik treats this as a management problem more than a technical one: the actuary has to overcome the disbelief of management and marketing and persuade them to allocate adequate resources for loss liabilities. A start-up, with no claim run-off to point to, has it worst.
 - **Outputs are wider.** The spread of indicated IBNR across methods is larger than primary; see [[Range of Indications]]. External patterns such as RAA data help but mix unlike contracts. The cedant's side is [[Ceded Loss Reserve]], and cover types are in [[Types of Reinsurance]].
 
 > [!example]- Development vs Bornhuetter-Ferguson on an Immature Excess Year {Example}

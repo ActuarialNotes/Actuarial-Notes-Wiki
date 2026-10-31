@@ -30892,7 +30892,13 @@
      "statement": "Expected losses equal the expected loss rate per $100 of payroll times payroll divided by 100.",
      "concept": "Experience Rating Expected Losses",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "arithmetic: the question gives the expected loss rate per $100 of payroll and the payroll",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort4"
+     }
     },
     {
      "id": "r2",
@@ -31015,7 +31021,15 @@
        "page": "Development Triangle",
        "quote": "**Development Triangle** is the fundamental data structure of reserving: cumulative amounts arranged with **cohorts as rows** (usually [[Accident Year|accident years]]), **maturities as columns** (age in months since the start of the cohort), and **valuation dates as diagonals**."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Development Triangle",
+      "quote": "maturities as columns (age in months since the start of the cohort), and valuation dates as diagonals",
+      "note": "stale re-quote: the page still says ages are measured from the start of the cohort (accident year), so 12 months is the year's end",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort4"
+     }
     },
     {
      "id": "r3",
@@ -31053,7 +31067,13 @@
      "statement": "The case outstanding at an evaluation date is the ending case outstanding from the claim's latest transaction on or before that date; if no later transaction occurs it carries forward, and a claim not yet reported by that date contributes zero.",
      "concept": "Reported Claims",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "reading the question's own transaction table (ending case outstanding carries until the next transaction); reported = paid + case is taught on Case Reserves",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort4"
+     }
     }
    ]
   },
@@ -31537,7 +31557,15 @@
        "page": "Case Adequacy",
        "quote": "**Strengthening** raises reported losses immediately, so recent age-to-age factors fall (more of the ultimate is already booked). Applying historical factors — built under weaker reserving — to a strengthened diagonal **over-states** ultimate, because the strengthening is developed a second time."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Case Adequacy",
+      "quote": "Applying historical factors — built under weaker reserving — to a strengthened diagonal over-states ultimate, because the strengthening is developed a second time.",
+      "note": "stale re-quote: same teaching, reworded",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort4"
+     }
     },
     {
      "id": "r5",
@@ -31626,7 +31654,15 @@
        "page": "Berquist-Sherman Method",
        "quote": "$$\\text{Adjusted Reported}_{\\text{AY},n} = \\text{Paid}_{\\text{AY},n} + \\text{Adjusted Case}_{\\text{AY},n}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Berquist-Sherman Method",
+      "quote": "Multiply the restated averages by the open claim counts to get adjusted case reserves, add paid, and rebuild the reported triangle.",
+      "note": "stale re-quote: adjusted reported = paid + open counts x adjusted average case; with both adjustments the paid and open counts are the adjusted ones",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort4"
+     }
     },
     {
      "id": "r5",
@@ -31962,7 +31998,15 @@
        "page": "Actual vs Expected Analysis",
        "quote": "$$\\text{Expected emergence} = U_{\\text{prior}} \\times \\left(\\frac{1}{\\text{CDF}_{n+1}} - \\frac{1}{\\text{CDF}_{n}}\\right)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Actual vs Expected Analysis",
+      "quote": "The expected figure comes from the prior ultimate and the emergence pattern: the share of ultimate the pattern says should report (or be paid) between the two valuations.",
+      "note": "stale re-quote: expected emergence = prior ultimate x the share expected to report between the two valuations",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort4"
+     }
     },
     {
      "id": "r5",
@@ -32363,7 +32407,13 @@
      "statement": "Select the expected claim frequency for each coverage separately by pooling the experience years (total claims divided by total exposures) rather than using a single year's frequency or combining coverages.",
      "concept": "Classical Credibility",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "a step of this solution's plan: the examiners asked only that a frequency be selected; pooling the three years per coverage is one supportable selection",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort4"
+     }
     },
     {
      "id": "r3",
@@ -32532,7 +32582,15 @@
      "statement": "In a cumulative reported claim count triangle, each entry already includes all earlier reported claims for that accident year, so the count covered as of a given date is read directly from the entry at that age, and the latest diagonal value is the total reported to date, with no summing of cells.",
      "concept": "Claim Count Triangles",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Development Triangle",
+      "quote": "holds the cumulative amount for that accident year at age",
+      "note": "a cumulative triangle cell already holds everything reported to that age; the count as of a date is read off its diagonal",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort4"
+     }
     },
     {
      "id": "r4",
@@ -32605,7 +32663,15 @@
        "page": "CGL Endorsements",
        "quote": "If a claims-made CGL is cancelled or not renewed, replaced with an occurrence policy, or renewed with a later retroactive date, a basic extended reporting period applies automatically at no charge."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Claims Made Coverage",
+      "quote": "covers claims that occurred during the claims-made coverage period but are reported after the last policy expires",
+      "note": "tagged page teaches the extended reporting endorsement (tail coverage) for a switch to occurrence; check missed it (it looked on CGL Endorsements)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort4"
+     }
     }
    ]
   },
@@ -33192,7 +33258,15 @@
      "statement": "Retention ratio is the number of policies renewed divided by the number of policies currently in force (up for renewal); a minimum retention ratio target caps the rate increase that can be taken.",
      "concept": "Retention Ratio",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "In-Force",
+      "quote": "the retention ratio is policies renewed",
+      "note": "retention ratio definition (syllabus page); the minimum-retention target itself is the question's management constraint",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort4"
+     }
     },
     {
      "id": "r3",
@@ -33200,7 +33274,13 @@
      "statement": "Apply a retention constraint by computing the minimum retained policy count (current count times minimum retention ratio), finding the largest rate change in the retention model output that still meets it, and capping the indicated rate change at that level.",
      "concept": "Retention Ratio",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "a step of this solution's plan: reading the question's retention-model table against its own minimum-retention target",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort4"
+     }
     },
     {
      "id": "r4",
@@ -34002,7 +34082,13 @@
      "statement": "A change in the legal environment such as tort reform affects only future claim payments: already-paid claims are unchanged, while both case reserves and IBNR (all unpaid claims) are scaled by the expected reduction.",
      "concept": "Adjusting Claims Development Methods for Changes in Legal Environment",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "the question states the reform reduces future claim payments by 20%; that paid claims are past and case + IBNR are the future payments is the definition of unpaid claims (Unpaid Claims page)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort4"
+     }
     },
     {
      "id": "r5",
@@ -34010,7 +34096,13 @@
      "statement": "To incorporate a change affecting future payments, compute the unadjusted unpaid estimate under the technique, multiply it by (1 − reduction), and add back paid claims to obtain adjusted ultimate claims.",
      "concept": "Adjusting Claims Development Methods for Changes in Legal Environment",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "a step of this solution's plan: unadjusted unpaid x (1 - reduction) + paid, arithmetic on the question's stated reduction",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort4"
+     }
     }
    ]
   },
@@ -34376,7 +34468,13 @@
      "statement": "Apply the adjustment only to the claim segment affected by the change in case reserve adequacy (e.g., large claims) and leave unaffected segments (e.g., small claims) unadjusted, using their unadjusted reported data.",
      "concept": "Adjusting for Changes in Case Reserve Adequacy",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "a step of this solution's plan: the question's own data show only large-claim average case outstanding changed; the case-adequacy diagnostic itself is taught (Case Adequacy, Data Diagnostic Analysis)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort4"
+     }
     },
     {
      "id": "r4",
@@ -34520,7 +34618,15 @@
        "page": "Stop-Loss Reinsurance",
        "quote": "A stop-loss retention applies to the total for the period."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Reinsurance",
+      "quote": "Only an aggregate cover limits the total.",
+      "note": "tagged page: an aggregate (stop-loss) cover caps the total; that the 2015-16 limit is shared is stated in the question",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort4"
+     }
     },
     {
      "id": "r5",
@@ -35376,7 +35482,15 @@
        "page": "Overfitting",
        "quote": "**Overfitting** is fitting a model so closely to its training data that it follows the noise in that sample as well as the signal, so that it predicts new observations worse than a simpler model would."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Holdout Sample",
+      "quote": "holdout error falls, then rises once the model starts fitting noise",
+      "note": "linked page teaches overfitting as fitting noise that fails on new data (with ASOP 56's definition beside it)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort4"
+     }
     },
     {
      "id": "r3",
@@ -35393,7 +35507,15 @@
        "page": "Overfitting",
        "quote": "The signature is a validation or CV error that turns upward as flexibility keeps rising while the training error keeps falling."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Bias-Variance Tradeoff",
+      "quote": "training error is tiny and test error is much larger",
+      "note": "linked page: the overfitting signature is near-perfect training fit with much worse holdout performance",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort4"
+     }
     },
     {
      "id": "r4",
@@ -35455,7 +35577,13 @@
      "statement": "To derive a non-uniform quarterly earning pattern from exposure data, divide each calendar quarter's earned exposures by the exposures in force during that quarter (starting with the first quarter, where only the first cohort is in force); the resulting fractions sum to 1 over a policy's term.",
      "concept": "Exposure Earning Pattern",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "the question's own non-uniform seasonal pattern, recovered from its own written and earned exposures; Werner & Modlin teach only uniform earning (Ch.4)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort4"
+     }
     },
     {
      "id": "r3",
@@ -35510,7 +35638,13 @@
      "statement": "Calendar period earned exposures equal the in-force exposures during the period (by cohort) times that calendar quarter's earning pattern fraction, so future earned exposures after writing stops are based on in-force (not unearned) exposures.",
      "concept": "Calendar Period Earned Exposures",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "a step of this solution's plan using the pattern recovered from the question's data (earned = in-force x the quarter's share)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort4"
+     }
     },
     {
      "id": "r7",
@@ -35766,7 +35900,13 @@
      "statement": "When the complement is built from all other states, remove the subject state's exposures and losses from the countrywide totals for each class before computing the other states' class pure premiums.",
      "concept": "Harwayne's Method",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "the question says the complement is all other states; removing State A from the countrywide totals is subtraction on the given data",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort4"
+     }
     },
     {
      "id": "r3",
@@ -35907,7 +36047,13 @@
      "statement": "Using the stated assumption about payment amounts (e.g., claims are paid at either a fixed fraction of the limit or the full limit), split each policy limit's claim count by the percentage at the limit to get the number of claims at each claim size.",
      "concept": "Increased Limit Factors",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "the question's own stated assumption (payments are 50% or 100% of the limit) applied to its own table",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort4"
+     }
     }
    ]
   },
@@ -36089,7 +36235,15 @@
        "page": "Rating Plan",
        "quote": "$$\\text{Manual Premium} = \\text{Exposure} \\times \\text{Base Rate} \\times \\prod_k f_k$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exposure Base",
+      "quote": "base rates are expressed per exposure",
+      "note": "syllabus page (also gives Premium = Rate x Exposures): premium moves with the exposure base, e.g. payroll",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort4"
+     }
     },
     {
      "id": "r5",
@@ -36149,7 +36303,15 @@
        "page": "Loss Sensitive Rating",
        "quote": "*Large deductible:* the insurer pays every claim and bills the deductible back. It must have a per-occurrence limit, may have an aggregate, and has no minimum. Reimbursements are not premium, so they escape premium tax."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Self-Insured Retention",
+      "quote": "a deductible set high enough that the insured bears significant risk",
+      "note": "linked page defines a large deductible program (Werner's WC and CGL examples)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort4"
+     }
     }
    ]
   },
@@ -36803,7 +36965,13 @@
      "statement": "With no severity trend, historical severities need no trend adjustment and the selected severities can be used as observed.",
      "concept": "Severity Trend in Claim Projection",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "the question states there is no severity trend",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort4"
+     }
     },
     {
      "id": "r6",
@@ -37301,7 +37469,15 @@
        "page": "Quota Share",
        "quote": "Net loss is $(1-a)X$, so its coefficient of variation equals gross."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Ceded Losses",
+      "quote": "Under quota share, ceded is a fixed share",
+      "note": "linked page: quota share cedes a fixed share of gross, so net = gross x (1 - ceded share)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort4"
+     }
     },
     {
      "id": "r3",
@@ -37309,7 +37485,13 @@
      "statement": "Under a uniform emergence assumption, the expected payments in an interval are spread equally across its sub-periods, so each quarter of a four-quarter interval receives 25%.",
      "concept": "Payment Pattern Emergence Assumptions",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "the question states claims emerge uniformly between evaluation points; 25% per quarter is arithmetic",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort4"
+     }
     },
     {
      "id": "r4",
@@ -37360,7 +37542,15 @@
      "statement": "An industry payment pattern will not exactly match a company's own experience because of differences in policy types, claim settlement practices and mix, so small deviations from it are not strong evidence the estimate is wrong.",
      "concept": "Payment Pattern Emergence Assumptions",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "External Information in Reserving",
+      "quote": "It must be reconciled to the subject book on the dimensions that actually drive development",
+      "note": "syllabus page: an industry pattern differs from the company's book (coverage, limits, mix, practices), so small deviations from it are expected",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort4"
+     }
     }
    ]
   },
@@ -38157,7 +38347,15 @@
      "statement": "Neither classification rating nor individual risk rating is necessary when all risks have the same expected loss cost (nothing to differentiate) or when rates are set by the regulator rather than the insurer.",
      "concept": "Risk Classification",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Classification Ratemaking",
+      "quote": "an insurer that charges one average rate to a heterogeneous group loses the better risks to competitors that price them properly",
+      "note": "classification exists because risks are heterogeneous; where every risk has the same expected cost there is nothing to differentiate. The regulator-set-rates case is an example, not a fact to learn",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort4"
+     }
     },
     {
      "id": "r5",
@@ -38864,7 +39062,13 @@
        "page": "Automobile Insurance Reform",
        "quote": "The insurer's data covers accident years before the reform."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "the question states the reform reduces claims occurring on or after its effective date",
+      "date": "2026-10-31",
+      "run": "g8-cas5-sort4"
+     }
     },
     {
      "id": "r4",

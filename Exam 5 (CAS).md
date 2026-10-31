@@ -1,14 +1,13 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-18
+  status: verified
+  confidence: high
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
   content_hash: sha256:85d9f5ce684cb0a381532c1e858ae93ae2835dd6e10b3cfcccffce24a8406a9e
   sources:
-    - "CAS, Exam Content Outline — Basic Techniques for Ratemaking and Estimating Claim Liabilities (Exam 5), Fall 2026 (Exam_5_CO_2026_F v02 2026_09_15, 6 pp.; https://www.casact.org/sites/default/files/2026-03/Exam_5_CO_2026_Fall.pdf, sha256:fd8373ae9bbe7e56b93f99cee304c76c1d29a9d0dc7f07e6ed500bd647f41795), pp.1-6"
-    - "Werner, G. and Modlin, C., Basic Ratemaking, CAS, Fifth Edition, May 2016 (https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c), bookmark outline and full-text search for each Key concepts term"
-    - "Friedland, J.F., Estimating Unpaid Claims Using Basic Techniques, CAS, Third Version, July 2010 (https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464), full-text search for each Domain B Key concepts term"
+    - "CAS Exam 5 Content Outline, Fall 2026 (Exam_5_CO_2026_F v02), pp.3-6 (tasks B16, B20 re-read; all tasks unchanged since the 2026-10-18 pass), sha256:fd8373ae9bbe7e56b93f99cee304c76c1d29a9d0dc7f07e6ed500bd647f41795 — https://www.casact.org/sites/default/files/2026-03/Exam_5_CO_2026_Fall.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ver. July 2010), Ch.1 p.13 (PDF p.19) 'Reserves' terminology; App. A (PDF p.433) 'claims reserve analysis', sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 2
   open_critical: 0
   log: .verify/Exam 5 (CAS).md

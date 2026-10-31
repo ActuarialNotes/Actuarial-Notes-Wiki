@@ -1,15 +1,15 @@
 ---
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: high
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:ac4367855c263bca5ea3023b30f4273c927b34de2d789d7a135625dc4df0825b
+  content_hash: sha256:d04b5e56c102110d1e4e2b7ceef7a5cdb157140e6bc5294cb176cc948aaeade2
   sources:
-    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ver. July 2010), full-text search; Ch.11 p.198 (PDF p.204), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
-    - "ASOP No. 43, Property/Casualty Unpaid Claim Estimates (ASB, June 2007, Doc. No. 159), full-text search, sha256:776302c442cb8d3210fc41269d38caeec4c547da8159084b80fa2ac4ce949cce — https://www.actuarialstandardsboard.org/wp-content/uploads/2014/02/asop043_159.pdf"
-    - "CAS Exam 5 Content Outline, Fall 2026, pp.3-6 (tasks A3, B16-B20; Complete Text References), sha256:fd8373ae9bbe7e56b93f99cee304c76c1d29a9d0dc7f07e6ed500bd647f41795 — https://www.casact.org/sites/default/files/2026-03/Exam_5_CO_2026_Fall.pdf"
-  open_findings: 1
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.1 pp.3, 8, 11 (PDF pp.15, 20, 23); Ch.3 p.42 (PDF p.54); Ch.6 pp.91, 94, 108-112 (PDF pp.103, 106, 120-124); App. A p.A-5 (PDF p.342), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ver. July 2010), Ch.1 p.14 (PDF p.20); Ch.6 pp.70-71 (PDF pp.76-77); Ch.11 pp.206-208 (PDF pp.212-214); Ch.13 pp.284, 288 (PDF pp.290, 294), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+    - "CAS Exam 5 Content Outline, Fall 2026 (Exam_5_CO_2026_F v02), p.3 task A3, sha256:fd8373ae9bbe7e56b93f99cee304c76c1d29a9d0dc7f07e6ed500bd647f41795 — https://www.casact.org/sites/default/files/2026-03/Exam_5_CO_2026_Fall.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Close Year.md
 ---
@@ -20,7 +20,7 @@ verification:
 
 - This is Werner & Modlin's **paid severity** — "paid losses on closed claims divided by closed claims" (Ch. 1) — with the claims grouped by the year they closed. A claim is *closed* once it is settled, and may be re-opened if further activity occurs (Ch. 1).
 - A [[Severity|severity]] has to say which losses and which claims it uses: paid or reported losses; reported, paid or closed claims; with or without claims that closed without payment (Werner & Modlin Ch. 6). Paid severity on closed claims and reported severity on reported claims are different numbers.
-- In ratemaking, closed counts are the denominator of the [[Loss Trend|loss trend]] data Werner & Modlin show for short-tailed lines: calendar-year paid losses and closed claim counts for the 12 months ending each quarter, because paid losses are free of changes in case reserving (Ch. 6, Exhibit 6.14; Appendix A).
+- In ratemaking, closed counts are the denominator of the [[Loss Trend|loss trend]] data Werner & Modlin show for short-tailed lines: calendar-year paid losses and closed claim counts for the 12 months ending each quarter, because paid losses are free of changes in case reserving (Ch. 6, Table 6.14; Appendix A).
 - Changes in severity show loss trends and "the impact of any changes in claims handling procedures" (Werner & Modlin Ch. 1) — see [[Claims Processing Changes]].
 - Friedland measures closed counts by **accident year** instead: the **disposal rate** is cumulative closed claim counts divided by the selected ultimate claim count for the accident year (Ch. 11), used in the disposal-rate [[Frequency-Severity Method|frequency-severity technique]] and the [[Berquist-Sherman Method|Berquist-Sherman]] paid adjustment for a change in [[Settlement Rate|settlement rate]] (Ch. 13).
 - Closed is not always final: Friedland's unpaid claim estimate carries an estimate for reopened claims (Ch. 1), and an insurer that re-opens a closed claim rather than coding a new one can make closed counts *fall* along an accident year (Ch. 6).

@@ -1,13 +1,14 @@
 ---
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: high
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
   content_hash: sha256:7027428c9426d8dd3af4c58fc8cc024e0c506bb350581acb90193be6d72d3275
   sources:
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 11 pp.188, 206-215 (PDF pp.200, 218-227), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
-  open_findings: 3
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.11 pp.206-215 (PDF pp.218-227; pp.210-212 read as page images), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "CAS Exam 5 Content Outline, Fall 2026 (Exam_5_CO_2026_F v02), p.4 task A14, sha256:fd8373ae9bbe7e56b93f99cee304c76c1d29a9d0dc7f07e6ed500bd647f41795 — https://www.casact.org/sites/default/files/2026-03/Exam_5_CO_2026_Fall.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Coinsurance Rating.md
 ---

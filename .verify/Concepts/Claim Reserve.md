@@ -26,3 +26,11 @@ created: 2026-10-31
 - status_set: in_review
 - checks_run: Friedland searched for P&C usage (Ch.1 pp.13-14, PDF 19-20). Health content (completion factors, PVANYD/ICOS, DLR, ASOP 5 definition) not checked against a source. Both examples recomputed independently (volume-weighted factors 2.0529/1.1169/1.0318/1.0101; CF 0.4185-0.9900; reserve 850.5 and 762.8; PMPM 110.10; DLR 86,325 and 103,899). Rank 5: they agree with the page but cannot confirm it.
 - note: Not verified: this page is written for GH-201/CP-321, and its sources (the SOA group health reserving readings and ASOP 5) were outside this Friedland packet and were not fetched. Needs a pass against those readings. One minor finding on the Exam 5 link target.
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:claude
+- date: 2026-10-31
+- resolves: F-001
+- status: resolved
+- note: Exam 5 (CAS).md B16 and B20 now link 'reserve' to [[Loss Reserving]] (commit 0aa16da6); the delta pass in run 2026-10-31T13:42Z/4730 re-verified the exam page with that link. This page is no longer on Exam 5.

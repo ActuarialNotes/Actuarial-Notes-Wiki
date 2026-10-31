@@ -81,3 +81,48 @@ created: 2026-10-31
 - checks_run: Router left this concept unnamed; searched Werner for 'coinsurance' and 'insurance to value' and read Ch.11's ITV section in full (PDF pp.218-227) before re-reading the page. Clause formula and penalty conditions against pp.209-210 (F-001, fixed). Coverage of the section walked against its Key Concepts list (F-002). Both examples recomputed before reading the answers: participation $1,200 → $992 (-17.3%); clause cV $800,000, ratio 0.75, recovery $150,000, penalty $50,000, and the 33%/33% premium-recovery comparison. All reproduce. Wiki-links resolve.
 - sources_checked: Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 11 pp.188, 206-215 (PDF pp.200, 218-227), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf
 - note: Not verified: an open major omission (F-002, the reading's rate approach and ITV initiatives) needs new prose, which a validation pass may not write, and the percentage-participation half (F-003) has no source in the Exam 5 reading.
+
+## [F-002/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-31T13:42Z/4730
+- date: 2026-10-31
+- resolves: F-002
+- status: resolved
+- note: Resolved by the rewrite, checked against Werner Ch.11 this run. Rate approach: rate = f x E[min(L,F)] / F matches p.212 (PDF p.224, read as an image) in empirical form; falls as F approaches V, decreasing / constant / increasing rate for right-skewed / uniform / left-skewed, coinsurance as the part of a loss above face, the loss distribution the major difficulty — all p.212. ITV initiatives: GRC above the limit at 100% ITV, capped (e.g. 125%) after 1990s catastrophes; component property estimation tools at new business and renewal; inspections, indexation, education; additional premium without a rate increase exceeding added losses because small losses predominate; actuary estimates the effect — pp.212-213 (PDF pp.224-225). Partial-loss / uniform-underinsurance points pp.208-209 (PDF pp.220-221); penalty shape (linear to F, falls to zero at cV, uncovered excess above cV) and value-establishment condition p.211 (PDF p.223).
+
+## [F-003/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-31T13:42Z/4730
+- date: 2026-10-31
+- resolves: F-003
+- status: resolved
+- note: Resolved: the percentage-participation half, its 80/20 plan and its pricing example are gone ('participation', '80/20' zero hits on the page). The page now carries only Werner Ch.11's coinsurance clause and rate approach.
+
+## [F-004/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-31T13:42Z/4730
+- date: 2026-10-31
+- resolves: F-004
+- status: resolved
+- note: Resolved: 'nearly the same expected recovery' and 'higher loss ratios per $1,000 of stated value ... mix, not cost' are gone. The ITV bullet now states Werner pp.208-209's terms: payment short of the loss above face, full-ITV rate collecting too little premium on an underinsured home (inequitable), uniform underinsurance inadequate but equitable with the base rate drifting to actual ITV, both only because partial losses are possible.
+
+## [C-002] Comment
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T13:42Z/4730
+- date: 2026-10-31
+- note: Conflict inside the source, logged rather than filed against the page: Werner & Modlin Ch.11 p.212 (PDF p.224) says 'Right-skewed distribution (i.e., small losses predominate)', while p.213 (PDF p.225) says 'homeowners loss distributions tend to be left-skewed (i.e., small losses predominate)'. Both read this run (p.212 as a page image). The page uses 'right-skewed' with p.212, writes the p.213 point as 'because small losses predominate in homeowners' without the skew label, and its Exam traps names the discrepancy with both page numbers. That is the reading's own inconsistency transcribed faithfully; no change proposed.
+
+## [C-003] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T13:42Z/4730
+- date: 2026-10-31
+- status_set: verified
+- confidence: high
+- checks_run: Read Werner Ch.11 pp.206-215 before re-reading the page; formulas checked against the page images (I = L x F/cV with I <= F and I <= L, p.210; a = min(F/cV, 1), p.209; penalty cases L-I / F-I / 0, p.210; empirical rate formula, p.212). Each bullet's page reference checked (pp.208-213). A14 wording (coinsurance among alternative ratemaking procedures) against the Fall 2026 outline p.4. Examples recomputed before reading answers: (1) cV = 576,000, a = 5/6; L 120k -> I 100k, e 20k; L 540k -> I 450k, e = F - I = 30k; L 600k -> 500k capped at 480k, e 0, 120k uninsured; max e at L = F = 80k. (2) E[min(L,F)] 112.5 / 130 / 135 (000); pure premium 2,250 / 2,600 / 2,700; rate per 1,000 11.25 / 8.67 / 6.75, steps 2.58 then 1.92, decreasing at a decreasing rate; 2,700/2,250 = 1.20. (3) 300 x 6.75 = 2,025 vs 2,600; 400 x 6.75 = 2,700 vs 2,700; +675 premium, +100 loss, 575 shortfall. All match. Exam-section shapes consistent with the bank's CAS papers (cas5-2013f-013 adequacy/equity discussion, cas5-2016f-q14 penalty and max penalty, cas5-2019f-014 two coinsurance percentages, cas5-2018f-013 rate per 1,000 by amount of insurance). Wiki links and figure resolve.
+- sources_checked: Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.11 pp.206-215 (PDF pp.218-227; pp.210-212 read as page images), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf; CAS Exam 5 Content Outline, Fall 2026 (Exam_5_CO_2026_F v02), p.4 task A14, sha256:fd8373ae9bbe7e56b93f99cee304c76c1d29a9d0dc7f07e6ed500bd647f41795 — https://www.casact.org/sites/default/files/2026-03/Exam_5_CO_2026_Fall.pdf
+- note: Verified. F-002, F-003, F-004 resolved by the rewrite; Werner's own skewness inconsistency (pp.212 vs 213) logged as a comment, handled honestly on the page.

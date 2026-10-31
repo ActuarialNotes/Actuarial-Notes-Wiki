@@ -104,3 +104,47 @@ created: 2026-09-12
 - checks_run: Full-text search for 'close year' and synonyms in ASOP 43 and Friedland; Fall 2026 Exam 5 outline task A3 re-read and searched; Exam 5 page A3 line read (Close Year is an editorial key concept there). Earlier-fixed F-001/F-002 text unchanged since the 2026-10-09 pass.
 - sources_checked: Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ver. July 2010), full-text search; Ch.11 p.198 (PDF p.204), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf; ASOP No. 43, Property/Casualty Unpaid Claim Estimates (ASB, June 2007, Doc. No. 159), full-text search, sha256:776302c442cb8d3210fc41269d38caeec4c547da8159084b80fa2ac4ce949cce — https://www.actuarialstandardsboard.org/wp-content/uploads/2014/02/asop043_159.pdf; CAS Exam 5 Content Outline, Fall 2026, pp.3-6 (tasks A3, B16-B20; Complete Text References), sha256:fd8373ae9bbe7e56b93f99cee304c76c1d29a9d0dc7f07e6ed500bd647f41795 — https://www.casact.org/sites/default/files/2026-03/Exam_5_CO_2026_Fall.pdf
 - note: Left in_review on F-003 (reaffirmed): neither ASOP 43 nor Friedland names a close-year aggregation basis, and the Fall 2026 Exam 5 outline's A3 no longer lists it. Not verified; maintainer decision needed on whether the page belongs to Exam 5 and what source should define it.
+
+## [F-004] Werner's loss trend display cited as 'Exhibit 6.14'; Werner numbers it Table 6.14
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-31T13:42Z/4730
+- date: 2026-10-31
+- severity: nit
+- status: open
+- locus: third bullet, citation '(Ch. 6, Exhibit 6.14; Appendix A)'
+- claim: Cites Werner & Modlin Ch. 6 'Exhibit 6.14' for calendar-year paid losses and closed claim counts for the 12 months ending each quarter.
+- evidence: Werner & Modlin Ch.6 p.111 (PDF p.123) captions the display '6.14 Exponential Loss Trend Example' (columns Earned Exposure, Closed Claim Count, Paid Losses, 12 months ending each quarter) and p.112 (PDF p.124) refers to it as 'Table 6.14 is an example of using an exponential fit.' The text never calls it an exhibit.
+- source_rank: 2
+- proposed_action: Change 'Exhibit 6.14' to 'Table 6.14'.
+- applied: true
+- fingerprint: ff34f2fc7688
+
+## [F-004/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-31T13:42Z/4730
+- date: 2026-10-31
+- resolves: F-004
+- status: resolved
+- note: Applied in this run: citation now reads '(Ch. 6, Table 6.14; Appendix A)', Werner's own name for the display (p.112, PDF p.124).
+
+## [F-003/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-31T13:42Z/4730
+- date: 2026-10-31
+- resolves: F-003
+- status: resolved
+- note: Resolved by the rewrite (maintainer's decision to keep the page as the vault's own label). The page now opens by calling Close Year 'the vault's own label' and 'not a term Exam 5's readings use', and its exam section says it is not in the Fall 2026 outline's A3 (outline p.3: 'calendar year, policy year, accident year, report year, and in-force' — re-read this run; 'close year' zero hits). Every remaining claim was traced this run to the page it cites: Werner Ch.1 p.8 (PDF p.20) paid severity = 'paid losses on closed claims divided by closed claims' and severity changes 'highlight the impact of any changes in claims handling procedures'; Ch.1 p.3 (PDF p.15) closed / re-opened; Ch.3 p.42 and Ch.6 p.91 (PDF pp.54, 103) the four aggregation methods and AY 'not closed (fixed)'; Ch.6 p.94 (PDF p.106) reported/paid/closed claims with or without CNP; Ch.6 pp.108-111 (PDF pp.120-123) short-tailed lines, CY paid 12 months ending each quarter, paid definition free of case-reserving changes, history of claims handling procedures, Table 6.14 closed counts; App. A p.A-5 (PDF p.342) closed counts, paid losses, rolling 12 months; Ch.1 p.11 (PDF p.23) close ratio = quotes to new policies. Friedland Ch.1 p.14 (PDF p.20) reopened claims component; Ch.6 pp.70-71 (PDF pp.76-77) reopened coding can decrease closed counts across a row, closed-to-reported diagnostic, footnote 29 backlog; Ch.11 p.206 (PDF p.212) disposal rate = cumulative closed / selected ultimate count; p.208 (PDF p.214) smaller claims settle quicker; Ch.13 p.284 (PDF p.290) large-claim focus, 'smaller claims may become larger claims more quickly'; p.288 (PDF p.294) disposal rate definition 'differs among different authors'. The old operational-use and 'rarely a ratemaking basis' claims are gone.
+
+## [C-005] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T13:42Z/4730
+- date: 2026-10-31
+- status_set: verified
+- confidence: high
+- checks_run: Every sentence traced to the page it cites (each quote read in the cached source this run, not taken from the writer); chapter attribution checked (aggregation methods are Werner Ch.3 p.42 and restated Ch.6 p.91; the page's Ch.6 citation holds); A3 wording against the Fall 2026 outline; 'close year' full-text search in the outline. Examples recomputed before reading the answers: grouping PY 2022 / AY 2023 / RY 2023 / close 2025; 2024 paid 800(2,000)+200(20,000)=5,600,000 / 1,000 = 5,600; 2025 paid 1,200(2,000)+200(20,000)=6,400,000 / 1,400 = 4,571.43; 4,571.43/5,600 - 1 = -18.4%. All match. Wiki links and figure embed resolve; the page's own question (cas5-an-001) is tagged to it.
+- sources_checked: Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.1 pp.3, 8, 11 (PDF pp.15, 20, 23); Ch.3 p.42 (PDF p.54); Ch.6 pp.91, 94, 108-112 (PDF pp.103, 106, 120-124); App. A p.A-5 (PDF p.342), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf; Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ver. July 2010), Ch.1 p.14 (PDF p.20); Ch.6 pp.70-71 (PDF pp.76-77); Ch.11 pp.206-208 (PDF pp.212-214); Ch.13 pp.284, 288 (PDF pp.290, 294), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf; CAS Exam 5 Content Outline, Fall 2026 (Exam_5_CO_2026_F v02), p.3 task A3, sha256:fd8373ae9bbe7e56b93f99cee304c76c1d29a9d0dc7f07e6ed500bd647f41795 — https://www.casact.org/sites/default/files/2026-03/Exam_5_CO_2026_Fall.pdf
+- note: Verified. F-003 resolved by the rewrite's honest labelling; one nit (Exhibit vs Table 6.14) fixed. Exam 5 (CAS).md still lists Close Year as an A3 key concept (its F-009, open, maintainer's call) — outside this page.

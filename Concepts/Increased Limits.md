@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:2233266aa5ae4e0bf0ed10d4a2dc67219fe31d2c7a97568544775b466033a0e5
+  content_hash: sha256:fe5b6c843fc37b1a50b577ec19db4731320072ea3508bbf883e1e07d7eb76593
   sources:
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.11 pp.192-198 (PDF pp.204-210); Ch.6 pp.116-117 (PDF pp.128-129); Ch.9 p.161 (PDF p.173), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
     - "Palmer, Increased Limits Ratemaking for Liability Insurance (CAS study note, 2006), PDF pp.3-4, 13-14, 18, 27-28, sha256:44fcc71dbf33647fd07be04e515239989907eb894fc8df5fb18b541ebe301cf7 — https://www.casact.org/sites/default/files/database/studynotes_palmer.pdf"
@@ -25,6 +25,7 @@ verification:
 - **Consistency.** Since $\text{LAS}(k) = \int_0^k S(x)\,dx$ (Palmer), each additional dollar of limit at $x$ adds $S(x)$ — the probability a loss exceeds $x$ — which cannot rise as $x$ rises. So the *marginal* indemnity cost per dollar of additional limit must not increase as the limit rises; an indemnity ILF table whose marginal cost increases is not consistent with any size-of-loss distribution.
 - ILFs are **leveraged by inflation**. As losses grow, more of them pierce the basic limit and the excess layers grow faster than the ground-up trend — so ILF tables must be reviewed, not left in place, through inflationary periods.
 - The **assumptions** behind Werner's ILF matter: all underwriting expenses are variable and the variable expense and profit provisions do not vary by limit; frequency and severity are independent; and frequency is the same whatever limit is chosen. The last fails for some lines — personal auto insureds who choose very high limits tend to have lower accident frequencies — which is one reason a GLM, which does not assume equal frequency, can give different (even counter-intuitive) factors.
+- ILFs here are on loss and LAE; how ALAE and ULAE are loaded onto indemnity is on [[Loss and Loss Adjustment Expense]].
 
 ![[Media/Figures/Increased_Limits.svg|340]]
 

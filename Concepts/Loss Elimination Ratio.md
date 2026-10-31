@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:bfb27115bd9ef7f4f1d9dfdd939ceb94feda5ca2cc69e453eac6e325be5b98ab
+  content_hash: sha256:91338c8d3e8aa3bff70fcfc376e9505c45a052a23e1ac7cca8086f6e44281d52
   sources:
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.11 pp.199-202 (PDF pp.211-214); Ch.9 p.161 (PDF p.173); Ch.15 p.303 (PDF p.315), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
     - "Palmer, Increased Limits Ratemaking for Liability Insurance (CAS study note, 2006), PDF pp.13-14, sha256:44fcc71dbf33647fd07be04e515239989907eb894fc8df5fb18b541ebe301cf7 — https://www.casact.org/sites/default/files/database/studynotes_palmer.pdf"
@@ -21,7 +21,7 @@ verification:
 
 - $E[X \wedge d] = E[\min(X,d)]$ is the **limited expected value** — the expected loss capped at $d$. Because every loss contributes at most $d$, the LER captures both the small claims eliminated entirely and the first $d$ dollars of the large ones.
 - The LER is the bridge from a full-coverage rate to a deductible rate: multiply the full-coverage loss cost by $(1 - \text{LER})$ to get the loss cost net of the deductible. See [[Deductible Rating]].
-- LERs are computed from an empirical size-of-loss distribution (where the ground-up loss is known for every claim) or from a fitted continuous distribution. If the data hold only losses net of the deductible, policies with a deductible above the one being priced cannot be used, because the losses they eliminated were never reported.
+- LERs are computed from an empirical size-of-loss distribution (where the ground-up loss is known for every claim) or from a fitted continuous distribution, such as a [[Pareto Distribution|Pareto]], whose limited expected value has a closed form. If the data hold only losses net of the deductible, policies with a deductible above the one being priced cannot be used, because the losses they eliminated were never reported.
 - The LER **falls as losses inflate**, because a fixed deductible eliminates a shrinking fraction of a growing loss — the leveraged effect described under [[Inflation]]. Deductible relativities must therefore be reviewed as costs rise, or they silently become inadequate.
 - The relativity $(1-\text{LER})$ applied to the whole rate rests on Werner's assumption that all expenses are variable. Per-policy [[Fixed Expenses|fixed expenses]] do not shrink with a deductible — where they are material and not charged as a fee, including the fixed-expense loading flattens the relativity — and on a large deductible policy the insurer often handles every claim, including those entirely within the deductible, so the premium must cover those handling costs too.
 

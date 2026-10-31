@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:ab8925b2cf6df7fab07d5957541d1f50dcc52b39fbd07b8b5c212c10cc003482
+  content_hash: sha256:0c41beece0cd42ddc3b8a77e3faba75586c604da6a0e5ddea41aac9f4b83db93
   sources:
     - "IRMI Glossary, 'exposure base', entry, sha256:47e94e12e79df29163b37da0ab98b8194ba29990c124768a2200b11b65f9b3d0 — https://www.irmi.com/term/insurance-definitions/exposure-base"
     - "IRMI Glossary, 'premium audit', entry, sha256:4d303e9e2670eb03ca6e5050b336726d99d40c4294ec4a273a9a9f79a6b79909 — https://www.irmi.com/term/insurance-definitions/premium-audit"
@@ -33,6 +33,7 @@ Further properties:
 - Exposures come in the same four flavours as premium — **written**, [[Earned Exposure|earned]], unearned and [[In-Force|in-force]]; which one is used depends on the analysis, and pure premium is typically calculated on earned exposures.
 - Some bases, such as payroll and sales revenue, are highly influenced by inflation, which is what [[Exposure Trend]] measures; count-based bases (car-years, house-years) are not.
 - Where no single base is proportional to loss across the whole book, the shortfall is picked up by rating variables instead: this is the boundary between the exposure base and [[Classification Ratemaking|classification]].
+- **Premium as the base.** In Bailey and Simon's merit rating study, claim frequency is measured per unit of premium rather than per car year; see [[Merit Rating]].
 
 ![[Media/Figures/Exposure_Base.svg|340]]
 

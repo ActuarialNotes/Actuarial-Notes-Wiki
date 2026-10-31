@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:a6f7c21c390a84d4876c2019cd41e615f736125052e705950aeeb4f0c37b82dd
+  content_hash: sha256:f9d5686506a8f3491e3c52cabaead37aeaeecc19fea758a8bb9a632e3e846fdc
   sources:
     - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, 2nd ed. (CAS Monograph 5; rank 3 for MAS-I), §6.1.2 eqs.15-16 p.63 (PDF 73: scaled deviance, saturated and null models); §6.2 pp.64-67 (F-test, AIC, BIC); §6.3.1 pp.67-69 (PDF 77-79: deviance residuals normal with constant variance; discrete-distribution caveat, randomized quantile and binned working residuals, aggregated data; q-q plot, right tail above the line = more skewed than gamma, inverse Gaussian); §5.4.1 p.48 (partial residual plots for non-linearity); §6.4 p.74 (Cook's distance, CV, bootstrap); §7.1 pp.75-76 (PDF 85-86: actual vs predicted on holdout, sorted by prediction and grouped into percentiles); §7.2.1 p.77 (quantile plots), sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), Domain C tasks 4 and 8 (p.5), 'Parameter and Diagnostic Tables' (PDF p.7: tables/plots 'of the type shown in the texts'; a language 'such as R'; 'candidates will not be asked to write or interpret R code'), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
@@ -24,7 +24,7 @@ verification:
 
 - $D^*$ is the **scaled deviance**. It measures the log-likelihood gap between the model and the saturated model, which has one parameter per record and fits perfectly ($D^* = 0$). The null model (intercept only) marks the other end, so a model's deviance lies between zero and the null deviance. Maximizing likelihood is the same as minimizing deviance.
 - The **deviance residual** $d_i$ is the signed square root of record $i$'s contribution to the deviance. If the assumed distribution is right, deviance residuals are roughly normal with constant variance — for a continuous response. For a discrete distribution (Poisson, negative binomial) or one with a point mass (Tweedie, at zero), the many records with the same target value cluster the residuals into tight groups, so they will likely not look normal even when the model is right; use binned working residuals (or randomized quantile residuals) instead. Highly aggregated count data behave more like a continuous response.
-- **Fit is not predictive power.** Adding any predictor lowers deviance. In-sample measures therefore compare models only through a test ([[Likelihood Ratio Test]] or $F$-test, for nested models) or a penalty ([[AIC]], [[BIC]]). Whether the fit holds on new data is a holdout question.
+- **Fit is not predictive power.** Adding any predictor lowers deviance. In-sample measures therefore compare models only through a test ([[Likelihood Ratio Test]] or $F$-test, for nested models) or a penalty ([[AIC]], [[BIC]]). Each power of a [[Polynomial Regression|polynomial]] term counts as one more predictor, and one more parameter. Whether the fit holds on new data is a holdout question.
 - **Diagnostic plots (MAS-I).**
   - [[Residual Plot|Residuals against fitted values]]: a trend means the mean is misspecified (wrong link or a missing term), and a funnel means the wrong [[Variance Function|variance function]].
   - A [[QQ Plot]] of deviance residuals from a continuous response should be close to a straight line; bent tails mean the data are more or less skewed than the assumed distribution.

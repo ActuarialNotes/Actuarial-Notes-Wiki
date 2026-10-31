@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-17
   last_checked_by: agent:validate-v1
-  content_hash: sha256:6eac6529e388b2c4a71303c8e090bd1cfb27c865e710b9e6e3ead448f9d410cd
+  content_hash: sha256:f7d786b5f9d84098f1d36fab155382c337ad2d5fa0dc72f581e0df3aee0648a6
   sources:
     - "Fisher, McTaggart, Petker & Pettingell, Individual Risk Rating (CAS Study Note, v3 Oct 2019), Ch.2 §2-9, Ch.3 §1.2-3.1, Ch.4 §1, PDF pp.22-32, 58, 62, 66, 100, sha256:3182cd5d8ebccc92be67a246e61a527acda5b304b823448d99f8a2546ca07b81 — https://www.casact.org/sites/default/files/2021-03/8_Fisher_et_al.pdf"
     - "Werner & Modlin, Basic Ratemaking, 5th ed. (CAS, 2016), Ch.15 retrospective rating, PDF p.319, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
@@ -23,12 +23,15 @@ verification:
 
 - $A$ is the actual aggregate (ratable) loss, $E = \mathrm{E}[A]$ its expected value, and $r = A/E$ the **entry ratio**. $r_G$ and $r_H$ are the entry ratios at the maximum and minimum. The **Table M charge** $\phi(r) = \mathrm{E}[\max(A/E - r,\,0)]$ is the expected loss above $rE$ per unit of $E$, and the **savings** $\psi(r) = \mathrm{E}[\max(r - A/E,\,0)]$ is the expected shortfall below it. Always $\psi(r) = \phi(r) + r - 1$.
 - **Retro premium** is $R = (B + cL)\,T$, with loss conversion factor $c$ (loads LAE) and tax multiplier $T = 1/(1 - \text{tax rate})$. Setting $\mathrm{E}[R]/T = e + E$ gives the basic premium $B$ above. Here $e$ is total expense before taxes, including LAE and profit, and $I = E[\phi(r_G) - \psi(r_H)]$ is the **net insurance charge**. Fisher et al. note that this *balanced* premium is no longer required or desirable for most plans, because the plans transfer less risk than guaranteed cost; the *expected losses* must still balance.
-- **Per-occurrence limits.** A loss limit adds an excess-loss charge. The aggregate charge is then computed on *limited* losses (Table M$_D$), or both are combined in one charge (Table L). Table M is entered by risk size, because small risks have volatile entry ratios and therefore larger charges.
+- **Per-occurrence limits.** A loss limit adds an excess-loss charge. The aggregate charge is then computed on *limited* losses (Table M$_D$), or both are combined in one charge (Table L). Table M is entered by risk size, because small risks have volatile entry ratios and therefore larger charges. The charges, savings and their overlap are drawn as areas in a [[Lee Diagram]]. The NCCI approximates the limited-loss charge with its [[Insurance Charge Reflecting Loss Limitation (ICRLL)|ICRLL]] procedure; see [[Table M]] and [[Table L]].
 - **The other plans** (large deductibles are now more common than retro plans):
   - *Large deductible:* the insurer pays every claim and bills the deductible back. It must have a per-occurrence limit, may have an aggregate, and has no minimum. Reimbursements are not premium, so they escape premium tax.
   - *SIR:* the insured handles its own claims, and the insurer's limit sits above the retention.
   - *Dividend plans:* return money when losses are low but collect nothing when they are high, so they are unbalanced.
+- **Against guaranteed cost.** Under a guaranteed-cost policy the premium is fixed up front and the insured does not share in its own risk, except perhaps through a small deductible: its cost is certain and its cash flow stable, but good loss experience is not reflected, and the insurer bears all of the variability. A loss-sensitive plan reflects good (and bad) experience immediately, without the lag and credibility-weighting of experience rating, at the price of uncertain costs. Because the insured retains a significant fraction of the risk, the fair premium for a retro plan with a high aggregate limit is lower than the guaranteed-cost premium for the same risk.
+- **Consistency of assumptions.** The sum of the predicted primary, per-occurrence excess and aggregate excess losses should compare reasonably with the predicted total losses, for the various plans that might be written on various accounts; if it does not, the assumptions behind the excess estimates need investigating. Per-occurrence and aggregate charges developed independently (say, a company's own excess factors with a rating bureau's aggregate factors) can price the same plan differently depending on how it is described — a per-occurrence limit at or above the aggregate limit should not change the loss cost. A rating bureau's "pure premium" is sometimes loaded with non-loss items such as LAE and loss-based assessments, so it can be larger than a loss-only estimate. Unadjusted bureau excess factors multiplied by a loss estimate that excludes those items understate excess losses, sometimes substantially.
 - **Analysing a plan** means looking at [[Credit Risk|credit risk]] on future premium or reimbursements (managed with collateral, loss development factors and holdbacks). The insured should keep the predictable working layer, and retentions should rise with trend. Cash flow differs between paid and incurred retros. The aggregate charge is highly sensitive to the loss pick.
+- **Clash.** One occurrence that triggers retentions on several lines can be capped by a single combined retention; see [[Clash Cover]].
 
 > [!example]- Table M Charges from Aggregate Outcomes {Example}
 > Five similar accounts, equally likely, finish at entry ratios $0.4$, $0.7$, $0.9$, $1.2$ and $1.8$. Compute $\phi(1.5)$ and $\psi(0.6)$, and verify the charge–savings identity at $r = 0.6$.

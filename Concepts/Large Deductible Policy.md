@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:5ad2f8243ab05678cc5be699ba49e26545296db286f397561b4a61b67a62f9c5
+  content_hash: sha256:2c8ed93dfa88bdc04ccb324a9b894c1b5cde3e84d8d799007317fe63677c143a
   sources: []
   open_findings: 0
   open_critical: 0
@@ -25,7 +25,10 @@ A **Large Deductible Policy** is a commercial policy — commonly workers compen
   - *Risk margin* — losses above a large deductible are more uncertain than those below, so the profit margin may need to rise.
 - **Thin data at high deductibles.** An insured's own losses above a high $d$ are too sparse to price from, so excess ratios come from size-of-loss distributions or fitted curves, and they are **leveraged**: with $d$ fixed, the excess layer grows faster than ground-up severity.
 - Many programs also cap the insured's total reimbursements with an **aggregate limit**; the insurer's expected payments above it are an additional insurance charge, much like the charge for a [[Retrospective Rating|retro]] maximum.
-- Contrast a [[Self-Insured Retention|self-insured retention]], where the insured pays its own claims and the policy sits above them. The reserving counterpart — estimating and collecting what insureds owe back — is [[Deductible Recovery]]. Related mechanisms: [[Loss Sensitive Rating]], [[Commercial Lines Rating]].
+- **Fisher et al.'s pricing.** The premium for a large deductible must cover the same components that a retro plan's premium covers, with one exception: it does not cover the expected cost of losses below both the per-occurrence deductible and the aggregate deductible limit. So it covers the expected per-occurrence excess losses, the expected aggregate excess losses, expenses and an underwriting profit provision. The aggregate charge applies only to the limited losses: total expected loss is the expected excess of the deductible plus the insurance charge times the expected limited losses, read from a Table M$_D$, from the unlimited [[Table M]] through [[Insurance Charge Reflecting Loss Limitation (ICRLL)|ICRLL]], or combined with the excess in [[Table L]] (see the [[Lee Diagram]]). Premium tax and some premium-based assessments are lower, because deductible reimbursements are not premium, and commission may be lower if it is a percentage of net premium.
+- **Against excess over an SIR** (Fisher et al.): under a [[Self-Insured Retention|self-insured retention]] the insured adjusts and pays its own claims (or hires a third-party administrator), whereas a large deductible insurer pays all claims from the first dollar and bills the insured back. So the excess-over-SIR insurer: incurs no ALAE on claims within the retention, and the retention generally applies to loss only; includes only a minimal amount of ULAE in its premium, which also lowers the base for premium taxes and premium-based assessments even further; takes on no credit risk for the loss-sensitive feature, since it is not responsible for claims until the insured has paid them; and has a policy limit generally *not eroded* by the retention ($\$1$m over a $\$250$k SIR covers $\$250$k to $\$1{,}250$k, while a $\$1$m large deductible policy with a $\$250$k deductible covers only $\$250$k to $\$1$m).
+- The reserving counterpart — estimating and collecting what insureds owe back — is [[Deductible Recovery]]. Related mechanisms: [[Loss Sensitive Rating]], [[Commercial Lines Rating]].
+- How LAE is split and loaded onto loss is on [[Loss and Loss Adjustment Expense]].
 
 > [!example]- Pricing a Workers Compensation Large Deductible {Example}
 > Expected ground-up losses are $\$2{,}400{,}000$; $\text{LER}(\$250{,}000) = 75\%$. The insurer handles and pays every claim and bills back amounts under the deductible, which applies to loss only; ALAE is $9\%$ of ground-up losses and is not reduced by the deductible. Fixed expenses are $\$60{,}000$; deductible processing costs $3\%$ and credit risk $1.5\%$ of expected deductible reimbursements; the risk margin is $12\%$ of excess losses; $V = 10\%$ and $Q = 3\%$.

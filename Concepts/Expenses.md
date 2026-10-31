@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-17
   last_checked_by: agent:validate-v1
-  content_hash: sha256:238032a5c62a148c32c182dcc79688f489198ac6542077e0bb51bf0b9fa91f02
+  content_hash: sha256:3f5c7461a1260dc638dc493720a4349cf3f253ff765dbea84cda27a7a5b5cdba
   sources:
     - "Fisher, McTaggart, Petker & Pettingell, Individual Risk Rating (CAS Study Note, v3 Oct 2019), Ch.2 §3, PDF pp.22-26, sha256:3182cd5d8ebccc92be67a246e61a527acda5b304b823448d99f8a2546ca07b81 — https://www.casact.org/sites/default/files/2021-03/8_Fisher_et_al.pdf"
     - "Werner & Modlin, Basic Ratemaking, 5th ed. (CAS, 2016), Ch.15 retrospective rating, PDF p.319, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
@@ -22,6 +22,7 @@ verification:
 
 - **Components.** LAE splits into [[Allocated Loss Adjustment Expense|ALAE]] (defence and experts, charged to a specific claim) and [[Unallocated Loss Adjustment Expenses ULAE|ULAE]] (the overhead of the claims department). Underwriting expenses are commissions and brokerage, other acquisition, general expenses, and premium taxes, licences and fees. Together they drive the [[Expense Ratio|expense ratio]].
 - **Fixed or variable.** In a rate, [[Variable Expenses|variable expenses]] rise with premium and [[Fixed Expenses|fixed expenses]] are a dollar amount per exposure or per policy ([[Expense Provisions]]). Much of the cost of servicing an account doesn't grow with its size, so the expense *ratio* falls as premium grows. Large risks get premium discounts for that reason.
+- **Loading a premium.** If variable expenses plus the loads for profit and risk are the fraction $v$ of the final premium, and fixed expenses are $f$ per exposure unit, the premium for $m$ exposure units with pure premium $p$ is $P = m(p + f)/(1 - v)$. In words, premium equals expected loss plus fixed expense, divided by one minus the sum of the variable expense, commission, tax, profit and risk percentages. With no fixed expense the premium is the expected loss times the loss-cost multiplier $1/(1 - v)$. A load stated as a percentage of premium goes in the denominator; LAE stated as a percentage of loss multiplies the loss in the numerator, as in Bahnemann's severity $E[X; l](1 + u)$ with ALAE at $u$ of indemnity. Underwriting profit can be zero, or even negative in anticipation of investment income: a negative profit load is added back, which increases the denominator $1 - v$ and lowers the premium.
 - **Where expenses sit in a retro plan (Exam 8).** $R$ is the retrospective premium, $L$ the insured's actual limited losses, $\text{LCF}$ the loss conversion factor and $\text{TM}$ the tax multiplier.
     - The loss conversion factor carries the LAE, which tracks losses, so it responds to actual experience.
     - The tax multiplier carries premium taxes and assessments, which are levied on whatever premium is finally charged.

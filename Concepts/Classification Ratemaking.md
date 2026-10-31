@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:4e568eac4c585b3eeb58da944ad4b4006760ac26c873fa0b5f6d6cf3d4727765
+  content_hash: sha256:324f4e2756ba8520c24099b4002248a0d0c1de20f93da5a916f70c73b9f5a220
   sources:
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.9 pp.151-159 and 161-170 (PDF pp.163-171, 173-182), Ch.10 p.172 (PDF p.184), Ch.11 p.189 with fn.37 (PDF p.201), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
     - "CAS Statement of Principles Regarding Property and Casualty Insurance Ratemaking (adopted May 1988; reinstated May 2021), Section II p.2, Principle 3, sha256:f240ea62dd033aac827c2073e56c0a4061d5c84531e5cf6be02d333a8f9f2140 — https://www.casact.org/sites/default/files/2021-05/Statement-Of-Principles-Ratemaking.pdf"
@@ -27,6 +27,14 @@ verification:
 - **Operational** — objective, inexpensive to obtain and verify, not manipulable by the insured.
 - **Social** — privacy, causality, controllability and affordability; these are where public and regulatory objections arise.
 - **Legal** — some variables are prohibited outright in some jurisdictions.
+
+**Considerations in establishing risk classes** ([[ASOP 12 - Risk Classification (ASB - 2005)|ASOP 12]] §3.3.2). Once risk characteristics are chosen, the actuary forming the classes weighs three considerations, which are often interrelated:
+
+- **[[Adverse Selection|Adverse selection]]** — if the variation in expected outcomes within a risk class is too great, adverse selection is likely, so each class should be homogeneous enough with respect to expected outcomes for the system's purpose.
+- **Credibility** — risk classes should be large enough to allow credible statistical inferences about expected outcomes; where the data are not sufficient, the actuary balances predictability against homogeneity.
+- **Practicality** — the actuary balances the potentially conflicting objectives of accuracy and efficiency, since the cost, time and effort of assigning risks to classes increase with the number of classes.
+
+ASOP 12 also asks the actuary to comply with applicable law, consider industry and business practices, and consider the reasonableness of the results, such as the consistency of the pattern of rates among classes (§3.3.3–3.3.4).
 
 **Univariate vs. multivariate.**
 

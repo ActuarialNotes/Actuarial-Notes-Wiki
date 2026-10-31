@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:c99230b26a9122ffed79cc81d55b110ec55462335cf3d5eedb6a8e4965b58679
+  content_hash: sha256:c0ed63d1dd8f6f044150bfde83692e00f6bf38426517fe6d8e554a85001ad11f
   sources:
     - "Tse, Nonlife Actuarial Models: Theory, Methods and Evaluation (Cambridge UP, 2009), publisher preview: §1.1 aggregate claim = frequency x severity (PDF p.22), §1.5.1 compound distribution - \"A compound Poisson distribution is a compound distribution where the primary distribution is Poisson, for any secondary distribution\" (PDF p.39), Theorem 1.4 M_S(t) = M_N[log M_X(t)] (PDF p.41), Theorem 1.6 E(S) = mu_N mu_X, Var(S) = mu_N sigma_X^2 + sigma_N^2 mu_X^2 and eq. 1.79 Var(S) = lambda E(X^2), \"holds ... whether X is discrete or continuous\" (PDF p.45-46), contents §3.1 / §3.3 collective risk model and §3.3.3 its approximations (PDF p.10), sha256:f6d009afdd1776907db090b41b72dd5a76d0b5ba3f0ee42e8b07279d5763b404 — https://api.pageplace.de/preview/DT0400.9780511630231_A24404031/preview-9780511630231_A24404031.pdf"
     - "Daniel, \"Poisson processes (and mixture distributions)\", CAS Study Note (June 2008), §1.2 Definition 1.8 and Examples 1.9-1.10 (PDF p.6-7), Fact 1.11 and the normal approximation when E[N] is large (PDF p.7-8), sha256:e345451e9daae82b400aed77f2da0c96c361ed4fbdfd22456b8f711ca0d50888 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Daniel_1.pdf"
@@ -28,6 +28,8 @@ An **Aggregate Loss Model** models the total (aggregate) losses $S$ from a portf
 - When $N \sim \text{Poi}(\lambda)$: $\text{Var}(S) = \lambda \cdot E[X^2]$ (simplification since $\text{Var}(N) = E[N] = \lambda$)
 - When $N \sim \text{Poi}(\lambda)$: $S$ has a **compound Poisson** distribution; the MGF is $M_S(t) = \exp\!\left(\lambda(M_X(t) - 1)\right)$
 - The [[Normal Distribution|Normal]] approximation via the [[Central Limit Theorem (CLT)]] applies when the portfolio is large
+- An aggregate deductible or limit is priced on the distribution of $S$ itself: the share of $E[S]$ above an aggregate threshold $A$ is the excess charge factor $E[(S - A)_+]/E[S]$ (see [[Aggregate Excess of Loss]])
+- **Insurance charge tables.** Tabulated by entry ratio, the aggregate charge is [[Table M]], and its areas are drawn in a [[Lee Diagram]].
 
 ![[Media/Figures/Aggregate_Loss_Model.svg|340]]
 

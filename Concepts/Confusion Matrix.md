@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:3b599d247b6b6803721a50459cc852edad38f919f5be091fa7086b0924650a86
+  content_hash: sha256:2cba1c091c659bd37d1bb57aa52db06679c865a125618fcf92b89b4e9fe17ddb
   sources:
     - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), CAS-hosted, §4.4.2 pp.148-152 (Tables 4.4-4.7, Fig. 4.8) and §8.1.2 pp.336-338 (eqs 8.6-8.7); §2.2 pp.30, 37 (test MSE, test error rate), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
     - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed., Chapter 7, §7.1-7.3.1 incl. fn 17, pp.75-85 (PDF pp.85-95), sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
@@ -26,7 +26,7 @@ A **confusion matrix** cross-tabulates predicted class against actual class for 
 | Precision (PPV) | $\dfrac{TP}{TP + FP}$ | of the flagged, how many were right |
 | False positive rate | $1 - \text{specificity}$ | the $x$-axis of the ROC curve |
 
-- The matrix depends on the **threshold** applied to the predicted probability; moving it trades sensitivity against specificity. [[AUROC]] summarizes every threshold at once
+- The matrix depends on the **threshold** applied to the predicted probability; moving it trades sensitivity against specificity. [[AUROC]] summarizes every threshold at once. How a threshold turns a model's probability into a decision is set out under [[Model Training and Evaluation]]
 - **Accuracy misleads under class imbalance.** With 1% fraud, predicting "never fraud" scores 99% accuracy and catches nothing — sensitivity is 0
 - The two errors rarely cost the same: a missed fraud and a wrongly investigated honest claim have different price tags, and the threshold should reflect that rather than defaulting to 0.5
 - Sensitivity/specificity are read **down the actual columns**; precision reads **across the predicted row** — the usual place to slip

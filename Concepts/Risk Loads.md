@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:765c9abc6799e108e04be5aba08c207d7ad2431951b66555eb4722d359615516
+  content_hash: sha256:fe4083f5f71b47fede4bf073a8c84421b33cf14292ddeb23db08d87d64578f13
   sources:
     - "CAS Exam 9 Content Outline, Fall 2026 (v01, 2026-03-18), PDF pp.3-7: Domains B, C and D tasks and readings; complete text references (Brehm et al.: D1-D6, Chapters 1, 2 excl. 2.6, 3 excl. 3.4, 4, 5.4; source SK), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
     - "Mildenhall & Major, Pricing Insurance Risk (Wiley 2022), Chapter 1 excerpt (publisher's free sample), pp.1-6 (risk margin to afford capital a return; capital vs pricing risk measures; VaR or TVaR at 99.5%; Artzner et al. 1999; SRMs as distortions; SRM calibrated to cat bond pricing; Constant Cost of Capital SRM), sha256:af37057d34a0c9b927fa8d0246eaf121a500e385c6902a8f8db8b08e6a55fe2c — https://media.wiley.com/product_data/excerpt/70/11197556/1119755670-5.pdf"
@@ -30,6 +30,7 @@ verification:
 - **Cost-of-capital loads** set capital first, with a capital risk measure (VaR, TVaR or a regulatory standard), then charge the target return on it: $R = \iota\,Q = \delta\,(a - L)$, where $a$ is assets, $\iota$ the target [[Return on Capital|return]] and $\delta = \iota/(1+\iota)$. See [[Cost of Capital]] and [[Risk Capital]].
 - **Distortion loads** $R = \rho_g(X) - E[X]$ weight remote layers more heavily than their probability. The distortion can be calibrated to observed market prices, for example of catastrophe bonds and reinsurance layers.
 - **Loads are not additive.** Pooling reduces risk, so the load on a portfolio is less than the sum of the stand-alone loads. The portfolio load has to be set top-down and allocated to lines or policies — the problem of [[Risk-Adjusted Pricing]]. In Exam 5 ratemaking the same idea sits inside the [[Profit and Contingency Provision]].
+- **Risk-loaded increased limit factors (Exam 8).** Bahnemann adds a risk load $\rho(l)$, an increasing function of the policy limit $l$, to the expected severity at each limit, so the factor is $I(l) = \dfrac{E[X; l](1 + u) + \rho(l)}{E[X; b](1 + u) + \rho(b)}$, with $b$ the basic limit and $u$ the ALAE ratio. With Poisson claim counts the variance method sets $\rho(l) = k\,E[X^2; l]$ and the standard deviation method $\rho(l) = k'\sqrt{E[X^2; l]}$. The multiplier $k$ is selected to produce the desired level of risk loading for the portfolio, so calculating risk-loaded ILFs means calibrating $k$ against the portfolio's mix of limits and computing the second moment of limited severity for every limit, rather than applying one profit percentage to all limits. Both methods are incompatible with the layer formula: pricing the layer $(a, a + l]$ as $\rho(a + l) - \rho(a)$ overstates its risk load, so ideally one prices the layer with non-risk-loaded factors and then adds the risk load for the layer.
 
 > [!example]- Five Risk Loads for One Catastrophe Layer {Example}
 > Losses (\$ millions) to a \$10M xs \$10M catastrophe layer are $0$ with probability $0.90$, $5$ with probability $0.06$ and $10$ (a full limit loss) with probability $0.04$. Compute the technical premium under (a) the expected value principle with $\theta = 0.5$, (b) the standard deviation principle with $k = 0.25$, (c) the variance principle with $k = 0.05$, (d) a proportional hazard distortion $g(s) = s^{0.7}$, and (e) a constant $15\%$ cost of capital with the layer fully collateralised ($a = 10$).

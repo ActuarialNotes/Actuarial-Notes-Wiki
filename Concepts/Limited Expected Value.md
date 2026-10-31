@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-09-28
   last_checked_by: agent:validate-v1
-  content_hash: sha256:e1f199323fee5738627b710ff140312f48528427e5785b9d26d6391c6ea249ec
+  content_hash: sha256:fab70e52f66a08433629858129a40d1583892b7c84b1ecfa855af8c683450039
   sources:
     - "SOA, Tables for Exam C (Fall 2009), A.3.3.1 Exponential (PDF p.11) and A.2.3.1 Pareto incl. alpha = 1 (PDF p.8), sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf"
     - "SOA Exam C Sample Solutions (C-09-15), Q#101 mean excess loss (PDF p.37), E[(X-d)+] = E(X) - E(X ^ d) (PDF p.74), sha256:de58b71716cce5fbbe82cd3b31d1533db67686a86cabe407844ae403534a9a4a — https://www.soa.org/globalassets/assets/files/edu/edu-exam-c-sample-sol.pdf"
@@ -24,8 +24,9 @@ The **Limited Expected Value** (LEV) of a random variable $X$ at limit $u$ is th
 - Also written $E[\min(X, u)]$; the **limited loss variable** is $Y = \min(X, u)$
 - $e(u)$ is the mean excess loss at $u$: $e(u) = \dfrac{E[X] - E[X \wedge u]}{1 - F(u)}$
 - As $u \to \infty$, $E[X \wedge u] \to E[X]$
-- Used to price **policy limits** and **excess-of-loss reinsurance**: the insurer pays $E[X \wedge u]$ and the reinsurer pays $E[X] - E[X \wedge u]$
+- Used to price **[[Policy Limit|policy limits]]** and **excess-of-loss reinsurance**: the insurer pays $E[X \wedge u]$ and the reinsurer pays $E[X] - E[X \wedge u]$
 - Exam 5 (Werner & Modlin) writes the limit as $H$ and calls $E[X \wedge H]$ the **limited average severity** $\text{LAS}(H)$. Under its simplifying assumptions, the increased limit factor for limit $H$ over basic limit $B$ is $\text{ILF}(H) = \text{LAS}(H)/\text{LAS}(B)$ (see [[Increased Limits]])
+- **As an area.** $E[X \wedge u]$ is the area under a [[Lee Diagram]]'s curve below the horizontal line at $u$.
 
 **Common formulas:**
 

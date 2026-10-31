@@ -335,6 +335,7 @@ export function ConceptPagePanel({
                 outlineItems={!!resourceMeta}
                 sourcePath={sourcePath}
                 hideImages
+                onReadPdf={onOpenPdf}
                 onWikiLink={ref => {
                   // Stay inside the popup, and keep this page: the target opens
                   // as a new panel stacked on top of it.

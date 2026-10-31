@@ -5,6 +5,7 @@ import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
 import { codeComponents, inlineCodeComponents } from '@/components/codeComponents'
+import { ProseLink } from '@/components/PdfLinkButton'
 import { normalizeVaultMath } from '@/lib/vaultMath'
 import { themedFigureSrc } from '@/lib/figureTheme'
 import { useTheme } from '@/hooks/useTheme'
@@ -88,12 +89,14 @@ const inlineComponents: Components = {
   p: ({ children }) => <span>{children}</span>,
   br: () => <span> </span>,
   img: ZoomableImage,
+  a: ({ node: _node, ...props }) => <ProseLink {...props} />,
 }
 
 const blockComponents: Components = {
   ...codeComponents,
   table: scrollableTable,
   img: ZoomableImage,
+  a: ({ node: _node, ...props }) => <ProseLink {...props} />,
 }
 
 export function MarkdownText({ children, className, inline, conceptNames }: Props) {

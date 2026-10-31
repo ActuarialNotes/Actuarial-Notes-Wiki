@@ -134,3 +134,51 @@ export function PdfLinkButton({
     </a>
   )
 }
+
+/**
+ * A PDF the prose links to — a markdown `[text](….pdf)` in a study guide, a
+ * concept page or a question's explanation. It stays the link the author wrote
+ * (same underline, same words), but a plain click reads the document in the
+ * app the way `PdfLinkButton` does, under the same `opensInReader` rule; any
+ * other link is an ordinary out-link in a new tab.
+ *
+ * The reader is titled with the link's own words. A list row that links a
+ * document by a bare word ("questions and solutions") names the document in
+ * its lead, so that lead — the row's text before its first colon or dash —
+ * becomes the subtitle.
+ */
+export function ProseLink({
+  href,
+  children,
+  onRead,
+  ...rest
+}: React.AnchorHTMLAttributes<HTMLAnchorElement> & { onRead?: (doc: PdfReaderDoc) => void }) {
+  if (!href) return <a {...rest}>{children}</a>
+  const url = href
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      {...rest}
+      onClick={e => {
+        if (!opensInReader(url, e)) return
+        e.preventDefault()
+        const doc = { url, ...proseLinkTitles(e.currentTarget) }
+        if (onRead) onRead(doc)
+        else openPdfReader(doc)
+      }}
+    >
+      {children}
+    </a>
+  )
+}
+
+function proseLinkTitles(anchor: HTMLAnchorElement): { title: string; subtitle?: string } {
+  const words = (anchor.textContent ?? '').trim()
+  const title = words ? words[0].toUpperCase() + words.slice(1) : 'PDF'
+  const row = anchor.closest('li')
+  const lead = row?.textContent?.split(/:| — | – /)[0].replace(/\s+/g, ' ').trim()
+  const subtitle = lead && lead.toLowerCase() !== title.toLowerCase() && lead.length <= 100 ? lead : undefined
+  return { title, subtitle }
+}

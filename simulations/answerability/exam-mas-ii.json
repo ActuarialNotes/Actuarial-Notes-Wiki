@@ -41,7 +41,15 @@
      "statement": "A correlogram does not reveal the direction (positive or negative) of a trend, since rising and falling series can produce the same autocorrelation pattern.",
      "concept": "Correlogram",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Correlogram",
+      "quote": "It shows that a trend is there, not which way it runs: a rising and a falling trend give the same slow decay, since $r_k$ is unchanged when every $x_t$ is replaced by $-x_t$ (each deviation from $\\bar{x}$ changes sign, so their products do not)",
+      "note": "Correlogram teaches it; checked against fpp3 §2.8 (r_k formula; sign-invariance verified as an algebraic identity on it) in run 2026-10-31T04:58Z/1486",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:58Z/1486"
+     }
     },
     {
      "id": "r4",
@@ -218,7 +226,15 @@
      "statement": "With positive serial correlation in the errors, ordinary least squares standard errors of the regression coefficients are biased downward (underestimated), making estimates look more precise than they are.",
      "concept": "Correlation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Deterministic and Stochastic Trend",
+      "quote": "Errors at adjacent times are often positively correlated, and then the OLS standard errors tend to underestimate the true ones: confidence intervals are too narrow and p-values too small, so a coefficient can look significant when it is not",
+      "note": "Deterministic and Stochastic Trend teaches it; checked against ISLR §3.3.3 and fpp3 §10.1 in run 2026-10-31T04:58Z/1486",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:58Z/1486"
+     }
     },
     {
      "id": "r2",
@@ -239,7 +255,15 @@
      "statement": "GLS provides more appropriate (better) estimates of the standard errors of regression coefficients when residuals are autocorrelated, improving on OLS in that setting.",
      "concept": "Generalized Least Squares",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Deterministic and Stochastic Trend",
+      "quote": "so its standard errors account for the autocorrelation that the OLS formula $\\sigma^2(X'X)^{-1}$ ignores",
+      "note": "Deterministic and Stochastic Trend teaches it; checked against Fox & Weisberg time-series appendix §1-2 and Shumway & Stoffer EZ §3.9 in run 2026-10-31T04:58Z/1486",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:58Z/1486"
+     }
     },
     {
      "id": "r4",
@@ -247,7 +271,15 @@
      "statement": "GLS's advantage over OLS comes from modeling the residual correlation structure, not from maximizing a likelihood under white noise residuals.",
      "concept": "Generalized Least Squares",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Deterministic and Stochastic Trend",
+      "quote": "Its advantage comes from that correlation structure: GLS is the maximum likelihood estimator under correlated normal errors, not under white noise, where it reduces to OLS.",
+      "note": "Deterministic and Stochastic Trend teaches it; checked against Fox & Weisberg time-series appendix §1 (GLS maximizes the N(0, Σ) likelihood) in run 2026-10-31T04:58Z/1486",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:58Z/1486"
+     }
     }
    ],
    "imported_from": "report.md"
@@ -1132,7 +1164,15 @@
      "statement": "Short-term extrapolation of a deterministic trend can be justified because underlying trends usually change slowly relative to the forecast lead time.",
      "concept": "Deterministic and Stochastic Trend",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Deterministic and Stochastic Trend",
+      "quote": "That assumption is easiest to defend a short way ahead, where the trend has little time to change; a stochastic trend is the safer forecast over longer horizons, because its intervals allow for the growth rate to change",
+      "note": "Deterministic and Stochastic Trend teaches it; checked against fpp3 §10.4 in run 2026-10-31T04:58Z/1486",
+      "date": "2026-10-31",
+      "run": "2026-10-31T04:58Z/1486"
+     }
     }
    ],
    "imported_from": "report.md"
@@ -1323,7 +1363,15 @@
      "statement": "A t-test can be used to test a hypothesis about a single fixed-effect parameter in a Linear Mixed Model.",
      "concept": "Linear Mixed Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Linear Mixed Model",
+      "quote": "A single fixed-effect parameter (one row of $\\mathbf{L}$ in $H_0\\colon \\mathbf{L}\\boldsymbol\\beta = 0$) is tested with a $t$ statistic",
+      "note": "Linear Mixed Model teaches it; checked against SAS/STAT 13.1 PROC MIXED docs pp.5322-5323 in run 2026-10-31T05:03Z/b549",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:03Z/b549"
+     }
     },
     {
      "id": "r3",
@@ -1331,7 +1379,15 @@
      "statement": "Type I (sequential) and Type III (conditional) F-tests can be used to test linear hypotheses involving multiple fixed effects in a Linear Mixed Model.",
      "concept": "Linear Mixed Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Linear Mixed Model",
+      "quote": "a linear hypothesis on several fixed effects (rank of $\\mathbf{L}$ above 1) with an $F$ statistic, built from Type 1 (sequential) or Type 3 (partial) $\\mathbf{L}$ matrices.",
+      "note": "Linear Mixed Model teaches it; checked against SAS/STAT 13.1 PROC MIXED docs pp.5323, 5340 in run 2026-10-31T05:03Z/b549",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:03Z/b549"
+     }
     },
     {
      "id": "r4",
@@ -1339,7 +1395,15 @@
      "statement": "An omnibus Wald test tests a general linear hypothesis H0: Lβ = 0 about the fixed effects using a chi-square statistic.",
      "concept": "Wald Test",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Linear Mixed Model",
+      "quote": "The **omnibus Wald test** of $H_0\\colon \\mathbf{L}\\boldsymbol\\beta = 0$ compares the numerator of that $F$ statistic with a $\\chi^2$ distribution whose degrees of freedom are the rank of $\\mathbf{L}$.",
+      "note": "Linear Mixed Model teaches it; checked against SAS/STAT 13.1 PROC MIXED docs p.5341 in run 2026-10-31T05:03Z/b549",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:03Z/b549"
+     }
     },
     {
      "id": "r5",
@@ -1347,7 +1411,15 @@
      "statement": "A Wald z-test for a covariance (variance) parameter is not recommended because the normal approximation requires very large samples for skewed variance estimates and fails when the null value lies on the boundary of the parameter space.",
      "concept": "Wald Test",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Linear Mixed Model",
+      "quote": "is valid for large samples, but it can be unreliable for small data sets and for parameters such as variance components, which have a skewed or bounded sampling distribution.",
+      "note": "Linear Mixed Model teaches it; checked against SAS/STAT 13.1 PROC MIXED docs p.5322 in run 2026-10-31T05:03Z/b549",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:03Z/b549"
+     }
     },
     {
      "id": "r6",
@@ -1403,7 +1475,15 @@
      "statement": "The estimated variance of the generalized least squares estimator of the fixed effects is (X' V-hat^{-1} X)^{-1}, which plugs in the estimated covariance matrix V-hat as if it were the true known matrix.",
      "concept": "Linear Mixed Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Linear Mixed Model",
+      "quote": "the estimated variance of $\\hat{\\boldsymbol\\beta}$ is the GLS formula $(\\mathbf{X}^\\top\\hat{\\mathbf{V}}^{-1}\\mathbf{X})^{-1}$ with $\\hat{\\mathbf{V}}$ treated as if it were the true $\\mathbf{V}$",
+      "note": "Linear Mixed Model teaches it; checked against SAS/STAT 13.1 PROC MIXED docs pp.5320-5321 in run 2026-10-31T05:03Z/b549",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:03Z/b549"
+     }
     },
     {
      "id": "r4",
@@ -1411,7 +1491,15 @@
      "statement": "Because the variance of the fixed-effect estimates ignores the uncertainty in estimating the covariance parameters, it is biased (understated) under both ML and REML estimation; REML does not make it unbiased.",
      "concept": "Linear Mixed Model",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Linear Mixed Model",
+      "quote": "and that is so whichever method estimated them: REML corrects the bias of the variance components, not this one.",
+      "note": "Linear Mixed Model teaches it; checked against SAS/STAT 13.1 PROC MIXED docs pp.5321, 5357 in run 2026-10-31T05:03Z/b549",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:03Z/b549"
+     }
     }
    ],
    "imported_from": "report.md"
@@ -4066,7 +4154,15 @@
      "statement": "The standard estimated covariance matrix of the fixed-effect estimates treats the estimated covariance parameters as if they were the true values, ignoring the uncertainty from estimating them, so it underestimates the variance of the fixed-effect estimates (standard errors too small, tests anti-co…",
      "concept": "Kenward-Roger Adjustment",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Linear Mixed Model",
+      "quote": "It tends to underestimate the true sampling variability of $\\hat{\\boldsymbol\\beta}$ because no account is made for the uncertainty in estimating $\\mathbf{G}$ and $\\mathbf{R}$",
+      "note": "Linear Mixed Model teaches it; checked against SAS/STAT 13.1 PROC MIXED docs p.5321 in run 2026-10-31T05:03Z/b549",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:03Z/b549"
+     }
     },
     {
      "id": "r2",
@@ -4074,7 +4170,15 @@
      "statement": "The Kenward-Roger method inflates the estimated covariance matrix of the fixed-effect estimates to correct its downward bias and approximates the denominator degrees of freedom for the F-test in a linear mixed model.",
      "concept": "Kenward-Roger Adjustment",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Linear Mixed Model",
+      "quote": "inflates the estimated covariance matrix of the fixed effects to reduce its small-sample bias and then computes Satterthwaite-type denominator degrees of freedom for the $F$ test",
+      "note": "Linear Mixed Model teaches it; checked against SAS/STAT 13.1 PROC MIXED docs pp.5276-5277 and Kenward & Roger 1997 in run 2026-10-31T05:03Z/b549",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:03Z/b549"
+     }
     },
     {
      "id": "r3",
@@ -4082,7 +4186,15 @@
      "statement": "The Kenward-Roger adjustment is designed for linear mixed models, where random effects and correlated residuals make observations neither independent nor equally weighted, so a standard F-test with naive degrees of freedom is not appropriate.",
      "concept": "Kenward-Roger Adjustment",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Linear Mixed Model",
+      "quote": "The **Kenward–Roger** method, built for REML fits of mixed models in small samples, inflates the estimated covariance matrix of the fixed effects",
+      "note": "Linear Mixed Model teaches it; checked against Kenward & Roger 1997 abstract, SAS/STAT 13.1 PROC MIXED docs pp.5276-5277, 5323 in run 2026-10-31T05:03Z/b549",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:03Z/b549"
+     }
     },
     {
      "id": "r4",
@@ -5878,7 +5990,15 @@
      "statement": "The generalized least squares estimator of the fixed effects with known covariance is the best linear unbiased estimator (BLUE) by the Gauss-Markov result.",
      "concept": "Best Linear Unbiased Estimator",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Linear Mixed Model",
+      "quote": "If $\\mathbf{G}$ and $\\mathbf{R}$ are known, $\\hat{\\boldsymbol\\beta}$ is the best linear unbiased estimator (BLUE) of $\\boldsymbol\\beta$.",
+      "note": "Linear Mixed Model teaches it; checked against SAS/STAT 13.1 PROC MIXED docs p.5321 in run 2026-10-31T05:03Z/b549",
+      "date": "2026-10-31",
+      "run": "2026-10-31T05:03Z/b549"
+     }
     },
     {
      "id": "r3",

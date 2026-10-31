@@ -1,11 +1,16 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
   content_hash: sha256:e3e5795c1615bdbc6e4df8590fbd5128b07a4d8da025e9df86ccfe2a470a06f9
-  sources: []
+  sources:
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer, 2021; CAS-hosted copy), §6.1.3 one-standard-error rule printed p.236 (PDF p.244); §6.2.1 standardizing before ridge printed p.239 (PDF p.247); §6.2.3 selecting the tuning parameter by CV and refitting on all observations printed p.250 (PDF p.258); §6.5.2 glmnet alpha=0 ridge, alpha=1 lasso (PDF p.282); §8.1.1 cost-complexity tuning parameter alpha (PDF pp.340-341); §8.2.1-8.2.3 bagging B not critical, m = sqrt(p), m = p is bagging, boosting B can overfit, lambda 0.01 or 0.001, d = 1 stumps (PDF pp.349-355); §2.2.3 larger K less flexible (PDF p.52), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "Hastie, Qian & Tay, An Introduction to glmnet (glmnet vignette), elastic net penalty controlled by alpha, alpha=1 lasso (default) to ridge; lambda.1se = most regularized model within one standard error of the minimum, sha256:9a07a4d074261e30547f684d8a6fed9286623a828ffeaa7c43c62f6dc90b7e68 — https://glmnet.stanford.edu/articles/glmnet.html"
+    - "scikit-learn User Guide, 3.1 Cross-validation, §3.1 ('hyperparameters' are settings that must be set manually; tuning them on the test set leaks it into the model), sha256:78d7587fa92ba3b3e480c9d841b50fedc14ac29d571ccb319d4068235154f0e2 — https://scikit-learn.org/stable/modules/cross_validation.html"
+    - "SOA, Exam SRM syllabus, January 2027, outcome 4c 'Describe bagging, boosting, and random forests and the hyperparameters used to control them', p.4, sha256:2165c0dec2c26a810a100a504f6a38ac05f02348c1af26e4c8ad71b679eb56af — https://www.soa.org/globalassets/assets/files/edu/2027/spring/syllabi/2027-01-exam-srm-syllabus.pdf"
+    - "SOA, Exam PA syllabus, October 2026, learning outcome 'Select appropriate hyperparameters for regularized regression'; written responses, sha256:1f1c46424d78ac04c297bf6c121bf9d03aec7d451560335cc9e07c7c533a4d84 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-exam-pa-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Hyperparameter.md

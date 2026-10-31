@@ -2,12 +2,18 @@
 aliases:
   - Validation
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:128e9e5e8223dc6a3ea87473251d69ee9b087a1d29c5b8c78f90839a1910151e
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:36ab71d2e81f9f98738617cd6fd6ae6e8444e0d26f87051bd64af89694119cdb
+  sources:
+    - "ASB, ASOP No. 56, Modeling (Dec 2019), §3.6 and §3.6.2 a-e, pp.14-15 (model output validation reasonably represents what is modeled; historical actual results, hold-out data, statistical tests, variations on key assumptions, alternative models), sha256:fba1fcec717852b4ce7611104841f39659e94cbe46f4dfb7d621b2cbf8e41f33 — https://www.actuarialstandardsboard.org/wp-content/uploads/2020/01/asop056_195-1.pdf"
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer, 2021; CAS-hosted copy), §2.2.1 printed pp.29-33; §5.1.1-5.1.4 printed pp.198-206 (validation set approach variable and overestimates test error; LOOCV less bias, costly; k-fold average); §6.2.3 printed p.250, sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "Olswang, 'Validating a Liability Model', SOA Financial Reporting Section monograph (1999), pp.1-2 (static validation: model in-force position at the valuation date vs actual - policy counts, units, face amount, premiums, reserves; dynamic validation: model revenue account vs actual, backward and forward; ratio model/actual), sha256:ab688018c75191522f9588c2409b60421386b50a9cf7051e02e9838a6bd28a86 — https://www.soa.org/globalassets/assets/library/monographs/50th-anniversary/financial-reporting-section/1999/january/m-as99-1_viii.pdf"
+    - "scikit-learn User Guide, 3.1 Cross-validation, §3.1 (nested cross-validation; test set leaks when used to tune), sha256:78d7587fa92ba3b3e480c9d841b50fedc14ac29d571ccb319d4068235154f0e2 — https://scikit-learn.org/stable/modules/cross_validation.html"
+    - "SOA, Exam SRM syllabus, January 2027, outcomes 1b-1d, p.2, sha256:2165c0dec2c26a810a100a504f6a38ac05f02348c1af26e4c8ad71b679eb56af — https://www.soa.org/globalassets/assets/files/edu/2027/spring/syllabi/2027-01-exam-srm-syllabus.pdf"
+    - "SOA, CP-312 Model Development and Governance syllabus, Nov 2026/Mar 2027, p.1 (case study provided with the examination); outcomes 1c, 2b; Topic 3 Model Governance, sha256:7c62bff559da90773de77ad707816992f3d41dd083df0e96d78aa8b67d34e757 — https://www.soa.org/globalassets/assets/files/edu/2026/cp-312/2026-2027-cp-312-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Model Validation.md

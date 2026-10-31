@@ -1,11 +1,12 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
   content_hash: sha256:b76ae0085bee493c66913f0866e46e8f3a8e2c22362086835369ce93ee0a4906
-  sources: []
+  sources:
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 5 pp. 73-80 (PDF pp. 85-92), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Parallelogram Method.md

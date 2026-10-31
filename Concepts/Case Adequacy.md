@@ -1,12 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:5aac2144f7560593d115767547b4f36558f27b6ec55cd81813feb8003ab2f4e2
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:bc1ab7aa1ded0619020d6ad7b8e92803203901ff2f04d37f859edf1f5606e3b4
+  sources:
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch. 6 pp. 68-76 (paid-to-reported, average case outstanding, stable columns grow with inflation); Ch. 7 pp. 101-103 (Scenario 3); Ch. 9 p. 158; Ch. 10 p. 178 (Cape Cod reflects higher reported claims); Ch. 13 pp. 285-287 (B-S case adjustment); Ch. 15 p. 349, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+  open_findings: 2
   open_critical: 0
   log: .verify/Concepts/Case Adequacy.md
 ---
@@ -18,7 +19,7 @@ verification:
 > $$\text{Adequacy ratio} = \frac{\text{Case reserve at valuation}}{\text{Eventual settlement value}}$$
 
 - **The diagnostic is average case outstanding per open claim**, compared *down each column* of the triangle. It should grow at roughly the severity trend. A jump concentrated on one **diagonal**, appearing at every maturity at once, is a change in reserving practice, not in claim cost.
-- **Strengthening** raises reported losses immediately, so recent age-to-age factors fall (more of the ultimate is already booked). Applying historical factors — built under weaker reserving — to a strengthened diagonal **over-states** ultimate, because the strengthening is developed a second time.
+- **Strengthening** raises reported losses immediately. Applying historical factors — built under weaker reserving — to a strengthened diagonal **over-states** ultimate, because the strengthening is developed a second time.
 - **Weakening** does the reverse and understates ultimate, which is the more dangerous direction: the reserves are inadequate and the method that is supposed to catch it is biased in the same direction.
 - **Paid data is immune**, so a divergence between paid and reported chain ladder estimates is the corroborating evidence. Rising average case outstanding *and* reported ultimates running above paid ultimates together confirm a strengthening.
 - The remedy is the [[Berquist-Sherman Method|Berquist-Sherman]] case adjustment: restate historical average case outstanding to the current adequacy level using a selected severity trend, rebuild the reported triangle, and select factors from the restated history.

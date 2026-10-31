@@ -1,11 +1,12 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
   content_hash: sha256:11e297b9ec84897a822c48f4cfeadc5f6fb8e0a64f26a8a04bbe306f136a154e
-  sources: []
+  sources:
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch. 4 pp. 44-50 (understanding the environment; interview questions); Ch. 6 pp. 63-77; Ch. 7 pp. 96-105 (assumptions, Scenarios 1-4, product mix); Ch. 8 pp. 137-139; Ch. 9 pp. 157-161; Ch. 10 pp. 177-179; Ch. 13 pp. 283-284; Ch. 15 p. 349 (summary table of estimated IBNR), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Changing Conditions.md

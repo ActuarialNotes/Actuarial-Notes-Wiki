@@ -1,11 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
   content_hash: sha256:4f98512c00c49c0c253c50b02c2a7d9cfabe3f9a5c41ccb71dbba6663432995e
-  sources: []
+  sources:
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch. 4 pp. 44, 47 (classes of business; mix questions); Ch. 6 p. 75 (type of claims changing); Ch. 7 pp. 103-105 (changing product mix); Chs. 8-10 product-mix sections; Ch. 13 p. 283 (homogeneous groups); Ch. 15 p. 349, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 5 p. 82 (distributional changes -> premium trend); Ch. 6 p. 110 (distributional changes affect frequency and severity), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Mix of Business.md

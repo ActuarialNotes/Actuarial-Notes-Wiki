@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:2eb20e255311c3bd78fad541ec34c4c7dfc670b9aa6678e5adb033763e50edc0
+  content_hash: sha256:680fe3052e9e25dcd525bf09d5cfae1fdc8c6e962dc5f9dca17885e606accc57
   sources: []
   open_findings: 0
   open_critical: 0
@@ -13,7 +13,7 @@ verification:
 
 **Actual vs. Expected Analysis** (A/E) compares the emergence that actually occurred in a period against what the previous valuation's assumptions implied should occur. It is the primary monitoring tool between full reserve reviews, and the fastest way to detect that an estimate is drifting.
 
-> $$\text{Expected emergence} = U_{\text{prior}} \times \left(\frac{1}{\text{CDF}_{n+1}} - \frac{1}{\text{CDF}_{n}}\right)$$
+> $$\text{Expected emergence} = \frac{U_{\text{prior}} - \text{Reported}_{n}}{1 - 1/\text{CDF}_{n}} \times \left(\frac{1}{\text{CDF}_{n+1}} - \frac{1}{\text{CDF}_{n}}\right)$$
 
 > $$\text{A/E} = \frac{\text{Actual emergence}}{\text{Expected emergence}}$$
 

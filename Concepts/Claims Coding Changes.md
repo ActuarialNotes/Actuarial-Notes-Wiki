@@ -1,11 +1,12 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
   content_hash: sha256:fabf60470a64ab53a1448ea7f2c5c42fff5551efab59fe97100c066b5e061e95
-  sources: []
+  sources:
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch. 4 pp. 46 (claims Qs 7-9: claimant vs accident, per coverage, reopened claims), 48 (data-processing Q5 coding procedures, Q10 claimant vs occurrence); Ch. 6 pp. 74, 76 (reopened, CNP, consistent claim-count definitions); Ch. 13 p. 283 (exposures instead of counts after a change in claim definition), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Claims Coding Changes.md

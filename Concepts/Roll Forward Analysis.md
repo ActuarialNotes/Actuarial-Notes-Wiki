@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:6f6b838118f885635ba3272e692de7b5abe2172d00d3c9dd555538bbd54662f4
+  content_hash: sha256:7176b43bd516fbebb0341ee0e65f3268036a3a02b22089a35ab81ccb582552ef
   sources: []
   open_findings: 0
   open_critical: 0
@@ -18,7 +18,7 @@ verification:
 > $$\text{Prior-year development} = \sum_{\text{prior AYs}} \left(U_{\text{current}} - U_{\text{prior}}\right)$$
 
 - The **prior-year development** term is the only one that reflects a change of view. The other terms are arithmetic: a new accident year arrives, and payments run off the balance. Isolating the development term is the point of the exercise.
-- **Adverse** development (positive) means the prior estimate was deficient; **favourable** (negative) means it was redundant. Statutory reporting requires this to be disclosed by accident year — Schedule P Part 2 is a one-year and two-year development table across the whole industry.
+- **Adverse** development (positive) means the prior estimate was deficient; **favourable** (negative) means it was redundant. Statutory reporting requires this to be disclosed by accident year — Schedule P Part 2 is a one-year and two-year development table.
 - Roll forward is also the **interim valuation** tool: between full reviews, ultimates for prior years are held and the balance is rolled forward on the expected pattern, with [[Actual vs Expected Analysis|A/E]] used to decide when the held ultimates must be revisited.
 - A run of adverse development in the same direction across several roll-forwards is systematic deficiency, not bad luck, and calls for the assumptions to be re-selected rather than for the current estimate to be topped up again.
 - Favourable development is not automatically good news: consistent redundancy overstates the current year's loss ratio, which feeds an over-stated rate indication into pricing, exactly as deficiency feeds an under-stated one.

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:98d41287ef669dd85fb3e1fc104f3284f5ef402c8ee1c8922d47499c8ed39f1e
+  content_hash: sha256:a30da84be291cd006f6735dfbb1ae252b2f230878b00716002ac3759fd235f5a
   sources: []
   open_findings: 0
   open_critical: 0
@@ -17,15 +17,15 @@ verification:
 
 > $$\text{ULAE Reserve} = R \times \left(0.5 \times \text{Case} + 1.0 \times \text{IBNR}\right)$$
 
-Friedland's four approaches, in order of increasing sophistication:
+Friedland's four dollar-based techniques:
 
 - **Classical (dollar-based, paid-to-paid).** Compute the ratio $R$ of calendar-year paid ULAE to calendar-year paid loss, review it for trend, and apply it to unpaid claims. If ULAE is assumed to be spent half at reporting and half at settlement, only $50\%$ remains on reported-but-unpaid claims while $100\%$ remains on [[IBNR]] — the formula above. Assuming ULAE is spent purely with payments instead gives $R \times (\text{Case} + \text{IBNR})$.
 - **Kittel's refinement.** The classical ratio is distorted in a growing book, because paid ULAE reflects today's claim *activity* (much of it on newly reported claims) while paid loss reflects older claims. Kittel divides by the **average of paid and incurred** loss instead:
 
 > $$R_{\text{Kittel}} = \frac{\text{Paid ULAE}}{0.5(\text{Paid Loss}) + 0.5(\text{Incurred Loss})}$$
 
-- **Mango-Allen bootstrap.** Where calendar-year paid losses are volatile, replace them with *expected* losses — apply reporting and payment patterns to accident-year ultimate estimates — so the denominator is smoothed rather than driven by one year's payment timing.
-- **Conger-Nolibos generalized approach.** Drops the $50/50$ assumption entirely: ULAE is allocated to claim events (opening, maintenance, closing) with selected weights, and the resulting ratio is applied to the corresponding unpaid counts or dollars. This is the method for books whose growth rate or claim mix is changing materially.
+- **Conger-Nolibos generalized approach.** Drops the $50/50$ assumption entirely: ULAE is allocated to claim events (opening, maintenance, closing) with selected weights, and the resulting ratio is applied to the corresponding unpaid dollars. This is the method for books whose growth rate or claim mix is changing materially.
+- **Mango-Allen refinement.** Where calendar-year paid losses are volatile, replace them with *expected* losses — apply reporting and payment patterns to accident-year ultimate estimates — so the denominator is smoothed rather than driven by one year's payment timing.
 
 Further points:
 

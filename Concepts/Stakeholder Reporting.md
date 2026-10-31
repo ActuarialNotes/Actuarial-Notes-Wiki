@@ -4,14 +4,14 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:b56db88954a16735397896b62c7792ff472a6b6f6231f4c9cf1ba48ac1161310
+  content_hash: sha256:8cb4bd9e1ff1dccca225462942b0665114af1f4dd6630442d4c0511dfd22103b
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Stakeholder Reporting.md
 ---
 
-**Stakeholder Reporting** is the communication of reserve and pricing results to the parties who act on them — management, the board, regulators, investors, rating agencies and auditors. Each needs the same substance at a different depth, and [[ASOP 43 - Property Casualty Unpaid Claim Estimates (ASB - 2007)|ASOP 43]] fixes what must be disclosed regardless of audience.
+**Stakeholder Reporting** is the communication of reserve and pricing results to the parties who act on them — management, the board, regulators, investors, rating agencies and auditors. Each needs the same substance at a different depth, and [[ASOP 43 - Property Casualty Unpaid Claim Estimates (ASB - 2007)|ASOP 43]] fixes what must be disclosed.
 
 > $$\Delta\text{Reserve} = \text{New AY} - \text{Payments} \pm \text{Prior-year development}$$
 
@@ -45,7 +45,7 @@ The professional constraint: **the substance must not vary by audience.** Adapti
 > How should this be handled?
 >
 > > [!answer]-
-> > The range is not a hedge — it is a property of the liability. The point estimate is the [[Unpaid Claims|actuarial central estimate]]: the expected value over the range of reasonably possible outcomes, and the right single number to book.
+> > The range is not a hedge — it is a property of the liability. The point estimate is the [[Unpaid Claims|actuarial central estimate]]: the expected value over the range of reasonably possible outcomes.
 > >
 > > What the range adds is decision-relevant information the point estimate cannot carry:
 > >

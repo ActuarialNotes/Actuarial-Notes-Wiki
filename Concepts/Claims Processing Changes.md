@@ -1,11 +1,12 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:6c41694c2bb1e22919d249bfc0cf301ef942fbbe95ef92d6a58624a743d65e44
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:c87d9e2217ea2f02194d78285dd1a75dfc084540dc705be6fb51c3c059469e6d
+  sources:
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch. 4 pp. 44-47; Ch. 6 pp. 68-76 (management reports, closed-to-reported, average values, CNP, footnote 29); Ch. 7 pp. 96-103; Ch. 9 p. 158; Ch. 11 p. 206; Ch. 13 pp. 283-293; Ch. 15 p. 349, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Claims Processing Changes.md
@@ -63,7 +64,7 @@ verification:
 > > Neither triangle can be used as the clean check on the other, which is the usual escape route. What remains:
 > >
 > > 1. Apply **both** Berquist-Sherman adjustments — restate the paid triangle to a common disposal rate and the reported triangle to current case adequacy — and compare the two restated results.
-> > 2. Lean on methods that do not depend on the triangle's recent diagonal at all: the [[Expected Loss Method|expected claims]] technique and [[Bornhuetter-Ferguson Method|BF]] with an externally derived ELR.
+> > 2. Lean on methods that do not depend on the triangle's recent diagonal at all: the [[Expected Loss Method|expected claims]] technique.
 > > 3. Use [[Frequency-Severity Method|frequency-severity]] on **closed** claims with a disposal-rate projection, which handles the settlement change explicitly.
 > >
 > > And document heavily: with both distortions active, the estimate rests far more on judgment than usual, and [[Reserve Communication|the report]] should say so.

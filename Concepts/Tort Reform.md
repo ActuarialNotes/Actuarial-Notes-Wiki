@@ -1,12 +1,14 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
   content_hash: sha256:b75c0e02322eafcb52d0455d8bab027c68567e1a28f58d1305c159824388095b
-  sources: []
-  open_findings: 0
+  sources:
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch. 4 p. 44 fn 20 (definition of tort reform); Ch. 7 p. 96; Ch. 10 p. 177, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+    - "Cappelletti, Tort Law: Topics for General Insurance Actuaries (SOA study note, rev. May 2025), §3 pp. 8-12 (definition; collateral source, noneconomic damages and prejudgment interest reforms; prospective vs retroactive); §6 p. 64 (Canadian cap), sha256:5316698581bb73d51dbcfb9a74ea92254fed6fc2b018253e2b26abc346ca2a6f — https://www.soa.org/globalassets/assets/files/edu/2025/fall/study-note/2025-11-gi-201-study-note-tort-law.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Tort Reform.md
 ---

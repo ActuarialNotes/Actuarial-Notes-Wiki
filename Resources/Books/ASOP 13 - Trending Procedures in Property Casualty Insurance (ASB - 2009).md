@@ -8,12 +8,15 @@ Type: "Standard of Practice"
 Code: "ASOP No. 13"
 Available from: "[actuarialstandardsboard.org](https://www.actuarialstandardsboard.org/wp-content/uploads/2013/12/asop013_133.pdf)"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
   content_hash: sha256:9ca87765e799662785444b400522bf5e8b038dd96a6bb06978934b5e32acd69c
-  sources: []
+  sources:
+    - "ASOP No. 13, Trending Procedures in Property/Casualty Insurance (ASB, Doc. No. 133, June 2009, updated for deviation language May 2011), title page, table of contents (p. ii), transmittal memorandum (pp. iii-iv), §§1-4 (pp. 1-4), Appendices 1-2 (pp. 5-11), sha256:5d985e9cbf666cda56b67bb6489e2f1430313278145e87816c7b2297dcd59acd — https://www.actuarialstandardsboard.org/wp-content/uploads/2013/12/asop013_133.pdf"
+    - "ASOP No. 13, CAS copy, sha256:5d985e9cbf666cda56b67bb6489e2f1430313278145e87816c7b2297dcd59acd (byte-identical to the ASB PDF) — https://www.casact.org/sites/default/files/2021-03/5_ASOP_13.pdf"
+    - "CAS Exam 5 Content Outline, Fall 2026 (Exam_5_CO_2026_F v02 2026_09_15), Domain A readings list p. 4; Complete Text References p. 6 (ASOP 13: A4, A8), sha256:fd8373ae9bbe7e56b93f99cee304c76c1d29a9d0dc7f07e6ed500bd647f41795 — https://www.casact.org/sites/default/files/2026-03/Exam_5_CO_2026_Fall.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/ASOP 13 - Trending Procedures in Property Casualty Insurance (ASB - 2009).md

@@ -1,19 +1,21 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:d2d53b285d504f49f61ea834fa2f871b06d3701fc32bd097a9e98677aa819799
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: high
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:616c8d91df0fbd6b70458daef590744521366891149e5da1bc8955a64a4ab5b7
+  sources:
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 5 pp. 71-80 (PDF pp. 83-92), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, Third Version, July 2010), Ch. 3 p. 41, Ch. 6 pp. 70-71, Ch. 8 pp. 139-142 and Exhibit III Sheet 2 notes p. 151, Ch. 10 pp. 182-183 (PDF pages), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+  open_findings: 2
   open_critical: 0
   log: .verify/Concepts/Rate Level Change.md
 ---
 
 **Rate Level Change** is the effect that past [[Rate Change|rate changes]] have on the comparability of data across years — the reason historical premium must be brought to a common level before any loss ratio, trend or a priori expectation built on it can be believed.
 
-> $$\text{On-Level Factor} = \frac{\text{Current cumulative index}}{\text{Index in force during the period}}$$
+> $$\text{On-Level Factor} = \frac{\text{Current cumulative rate level index}}{\text{Average rate level index for the historical period}}$$
 
 > $$\text{Adjusted ELR}_i = \text{ELR}_{\text{base}} \times \frac{\text{Rate level}_{\text{base}}}{\text{Rate level}_i} \times \frac{\text{Loss trend}_i}{\text{Loss trend}_{\text{base}}}$$
 

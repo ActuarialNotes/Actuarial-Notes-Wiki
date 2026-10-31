@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:625d94d5d84f2f4851c28726c43fe4f7e391e94426e753ccd06417553335d8dd
+  content_hash: sha256:7f7b77579e2d120bf7131f942e70e2c1f707d71ba9710966bca5fcba04b1ebce
   sources: []
   open_findings: 0
   open_critical: 0
@@ -17,7 +17,7 @@ verification:
 
 > $$\text{ALAE Ratio} = \frac{\text{ALAE}}{\text{Indemnity}}$$
 
-- Because ALAE attaches to a claim, it is captured in case reserves and can be **developed in a triangle** exactly like indemnity. Friedland gives three approaches: develop a **combined** loss-and-ALAE triangle, develop **ALAE separately** in its own triangle, or develop a **ratio of ALAE to loss** and apply it to projected losses.
+- Because ALAE attaches to a claim, it can be **developed in a triangle** exactly like indemnity. Friedland gives three approaches: develop a **combined** loss-and-ALAE triangle, develop **ALAE separately** in its own triangle, or develop a **ratio of ALAE to loss** and apply it to projected losses.
 - Combining is simplest and is the usual choice, but it assumes ALAE develops like indemnity. It often does not: defence costs accrue steadily through litigation while indemnity lands at settlement, so an ALAE-only triangle can have a different shape and a different tail.
 - The ALAE ratio varies enormously by line — roughly $30$–$50\%$ of indemnity in professional liability, $15$–$25\%$ in general liability, $10$–$15\%$ in auto liability, and a few percent in property. A load taken from one line and applied to another is a substantial error.
 - ALAE can be **countercyclical to indemnity**: money spent defending a claim vigorously may reduce the indemnity paid. A "defence and settle" strategy shift moves both components, in opposite directions, and shows up in the triangles as a change in the ALAE ratio.

@@ -1,12 +1,14 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:eccc61737605f6b99afa8b1dab52b6603390f8013bcc888554c41685f98e43b1
-  sources: []
-  open_findings: 0
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:60573c938f5e5aeb242177ac9ba18612d08ca771f538837e4dd6cfacf506ef9e
+  sources:
+    - "Davidson, The Cap on Non-Pecuniary General Damages (CAS Exam 6C reading), pp. 1-5 (the 1978 trilogy and the non-pecuniary cap), sha256:9b544951d4a031e08f3c40a9a30b552764f705bc09a7a6ea2af3d57e5907149f — https://www.casact.org/sites/default/files/2021-03/6C_Davidson.pdf"
+    - "Cappelletti, Tort Law: Topics for General Insurance Actuaries (SOA study note, rev. May 2025), §3 p. 8 fn 11; §6 pp. 53-64 (loser pays in Canada, $100,000 trilogy cap indexed to inflation, U.S. noneconomic awards much greater), sha256:5316698581bb73d51dbcfb9a74ea92254fed6fc2b018253e2b26abc346ca2a6f — https://www.soa.org/globalassets/assets/files/edu/2025/fall/study-note/2025-11-gi-201-study-note-tort-law.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Tort Litigation.md
 ---
@@ -30,7 +32,7 @@ verification:
 > Compute the award.
 >
 > > [!answer]-
-> > **Future income loss**, as an annuity-due-style present value at a net rate of $2\%$ over $25$ years:
+> > **Future income loss**, as a present value at a net rate of $2\%$ over $25$ years:
 > >
 > > $$\begin{align*}
 > > \text{PV} &= \$70{,}000 \times \frac{1 - 1.02^{-25}}{0.02} \\

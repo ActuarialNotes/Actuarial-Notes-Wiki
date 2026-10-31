@@ -1,12 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
   content_hash: sha256:0412c82a281aa898035f7c22712188fe57735d7ef5c6ec50666cd68cfaa1cdf4
-  sources: []
-  open_findings: 0
+  sources:
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 6 pp. 110-116 (PDF pp. 122-128: linear vs exponential, Table 6.14 windows, R², pure premium trend combination, catastrophes/rolling years fn. 22, benefit changes, trend period 4.5 years); Ch. 5 p. 84 (PDF p. 96), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Exponential Trend.md
 ---

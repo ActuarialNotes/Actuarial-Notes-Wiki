@@ -12,7 +12,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:f32f34e662db117d8e3b8927cfb9fc57e4fdb0e49856529738662b7e8e495aa7
+  content_hash: sha256:02972477ec5f0e212139cfe46d2359df8d7e7226a6f01cacbe18f734c0034073
   sources: []
   open_findings: 0
   open_critical: 0
@@ -32,7 +32,7 @@ The Actuarial Standards Board's guidance for actuaries estimating loss and loss 
 - 1.1 Purpose
     - "Unpaid claims" includes the associated unpaid claim adjustment expense.
 - 1.2 Scope
-    - Applies to [[Unpaid Claims|unpaid claim]] estimates for events that have occurred as of an accounting date, for all classes of entities — self-insureds, insurance companies, reinsurers and governmental entities — excluding estimates developed solely for ratemaking.
+    - Applies to [[Unpaid Claims|unpaid claim]] estimates for events that have already occurred or will have occurred as of an accounting date, for all classes of entities — self-insureds, insurance companies, reinsurers and governmental entities — excluding estimates developed solely for ratemaking.
     - Covers estimates gross of recoverables such as deductibles, ceded [[Reinsurance|reinsurance]] and [[Salvage and Subrogation|salvage and subrogation]], estimates net of them, and estimates of the recoverables; for discounted estimates it addresses the undiscounted value.
 - 1.3 Cross References
 - 1.4 Effective Date

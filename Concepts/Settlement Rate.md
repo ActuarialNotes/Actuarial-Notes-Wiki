@@ -1,12 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:092f645db7a84964f552bd3504a68e8a72216d40b1d5197c88f409f1bb9520eb
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:9774279171a9a3a2d73c567ea3fe96d5a2c44e5133d47e312852234fe773fe2c
+  sources:
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch. 4 pp. 44-47; Ch. 6 pp. 75-76; Ch. 7 p. 96; Ch. 11 p. 206 (disposal rate definition); Ch. 13 pp. 291-293 (B-S paid adjustment), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Settlement Rate.md
 ---
@@ -19,7 +20,7 @@ verification:
 - **Faster settlement** pushes losses from open to paid, so the recent paid diagonal is high relative to history. Historical paid factors — built when claims closed more slowly — then **over-develop** it and overstate ultimate.
 - **Slower settlement** does the reverse and understates ultimate from paid data.
 - **Reported data is largely immune**, because reported losses include the case reserve whether or not the claim has closed. So a paid-versus-reported divergence, together with a moving disposal rate, is the diagnostic pair.
-- Drivers to ask about (Friedland Ch. 4): staffing levels and adjuster caseloads, changes in settlement authority, a "close the old inventory" initiative, litigation strategy, outsourcing, and the economic or legal environment.
+- Drivers to ask about (Friedland Chs. 4 and 6): staffing levels and adjuster caseloads, changes in settlement authority, a "close the old inventory" initiative, litigation strategy, outsourcing, and the economic or legal environment.
 - The remedy is the [[Berquist-Sherman Method|Berquist-Sherman]] paid adjustment: restate each historical year's paid losses to what they would have been at the *current* disposal pattern, by interpolating along each year's paid-versus-disposal-rate relationship, then select factors from the restated triangle.
 - Watch the mix of **closed with payment** versus **closed without**. A drive to close files can inflate the closure rate with zero-payment closures, moving the rate without moving any money — visible only if the two are counted separately.
 

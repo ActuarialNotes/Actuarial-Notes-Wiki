@@ -72,3 +72,61 @@ created: 2026-10-04
 - checks_run: every edit re-read: same-data condition vs R AIC doc Details; parameter count incl. intercept vs Monograph 5 eq.18 and the F18 Q39 table; example recomputed in python (248, 252); AIC = -2l + 2p vs Monograph 5 eq.18 and Ding eq.(8); non-nested use vs Monograph 5 §6.2.2; KL motivation vs Ding p.10; AICc = AIC + 2p(p+1)/(n-p-1) checked numerically against STAT 504 (927.1762 + 12/170 = 927.2468, matches) - Ding prints the same correction with d+1 in place of p, d counting the coefficients only; ln(n) > 2 for n > 7 vs ISLR p.234; F18 Q39 recomputed (best subset picks I,1,5 AIC 0; forward picks I,2,5 AIC 0.2; difference 0.20 -> B = CAS key); links resolve; figure not re-checked (generated, out of scope)
 - sources_checked: R Core Team, R documentation 'AIC {stats}' (R-devel manual, stats 4.6.0), Description and Details, sha256:f55c97cef5d53ab762953509b4e5c4da1e8891b8263ce021ef04dcb27c81b8df — https://stat.ethz.ch/R-manual/R-devel/library/stats/html/AIC.html; Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed. (2025 revision), §6.2.2 Penalized Measures of Fit, eq.18, PDF pp.76-77, sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf; Ding, Tarokh & Yang, 'Model Selection Techniques - An Overview', IEEE Signal Processing Magazine 2018 (arXiv:1810.09583v1), §II-A eqs (8) and AICc, PDF p.5; §III PDF p.10 (KL motivation), sha256:fd9744e006712c6d59f8da05f42769eeed90244d857e031cc70ec41d139446b6 — https://arxiv.org/pdf/1810.09583v1; Penn State STAT 504, Lesson 9 'Poisson Regression', SAS output for the horseshoe-crab width model (Full Log Likelihood -461.5881, AIC 927.1762, AICC 927.2468, BIC 933.4828; deviance df 171, n = 173, 2 parameters), sha256:f8021fab7a1c8cfeb2de7ebfe3b5d1977a32671dd3acefc9ade531369c5da506 — https://online.stat.psu.edu/stat504/Lesson09; James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer 2021), §6.1.3 Cp, AIC, BIC and adjusted R^2, printed pp.232-234 (PDF pp.240-242), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf; CAS Exam MAS-I Fall 2018, Q39 — official exam paper (scan), PDF p.43; Final Answer Key PDF p.50 (B), sha256:47ced888a314db1a5e29e28c0a52f989966b21a079b1c08634b73dc90e844296 — https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exammasi_fmasi-18.pdf
 - note: Resolve run: F-001 and F-002 fixed and closed. Medium: the definition, conditions and AICc rest on rank-3 references (R documentation, Monograph 5, Ding et al., STAT 504); ISLR (rank 2) gives AIC only in its least-squares sigma-hat^2 form, which ranks models the same way on a different scale.
+
+## [F-003] Unsourced claim about re-estimating sigma^2 per candidate
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-31T19:12Z/e10e
+- date: 2026-10-31
+- severity: minor
+- status: open
+- locus: bullet 'Here σ̂² is an estimate…', sentence 4; least-squares example, last sentence
+- claim: Re-estimating σ̂² from each candidate's own fit would change the scale of the criterion from model to model and break the comparison (and, in the example, would put the two numbers on different scales).
+- evidence: ISLR §6.1.3 pp.233-234 (PDF 241-242) and footnote 4 say only that σ̂² is 'typically estimated using the full model containing all predictors' and that the formula 'requires an expression for σ², which we obtain using the full model'; they give no reason about scales, and no other source read this run states it. Deleted both sentences (transcription: the page now says what the source says).
+- source_rank: 2
+- proposed_action: Delete the two sentences.
+- applied: true
+- fingerprint: 0e60b8a9d70e
+
+## [F-001/R2] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-31T19:12Z/e10e
+- date: 2026-10-31
+- resolves: F-001
+- status: resolved
+- note: Both sentences deleted in this run.
+
+## [C-003] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T19:12Z/e10e
+- date: 2026-10-31
+- status_set: verified
+- confidence: medium
+- checks_run: new least-squares AIC bullet, σ̂² bullet and example against ISLR §6.1.3; derivation -2ℓ = n log(2πσ²) + RSS/σ² with σ² fixed checked line by line (the d vs d+1 count shifts every model by 2σ²/n); example recomputed before reading it (246/50 = 4.92, 242/50 = 4.84; penalty difference 16 < RSS drop 20); rest re-read
+- sources_checked: James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021, CAS-hosted copy), §6.1.3 eq (6.2) Cp with σ̂² from the full model, AIC display, footnote 4 (two least-squares formulas, log(RSS) form), pp.233-234 (PDF 241-242), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf
+- note: Delta pass after the SRM G8 writer's edits (commit 54b25be3b): every added passage read against the source at its locator; unchanged content was verified against the same source bytes in the prior pass in this log, re-read on the page for consistency with the new passages; wiki-links and figure embeds resolve. Checked by a different agent from the writer. ISLR p.234: 'AIC = (1/n)(RSS + 2dσ̂²)… omitted irrelevant constants… Cp and AIC are proportional'. F-001 (minor) fixed by deletion. The derivation sentence is the page's own working (ISLR: 'detailed derivations… outside the scope'); recomputation found it sound. Prior sources (R AIC docs, Goldburd et al., Ding et al., STAT 504, MAS-I F18 Q39) not re-read; the unchanged claims rest on the prior pass.
+
+## [C-004] Comment
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T19:12Z/e10e
+- date: 2026-10-31
+- note: Correction to F-001/R2 (this run): it was addressed to the wrong finding. F-001 had already been resolved by F-001/R and is unaffected; the note 'Both sentences deleted in this run' belongs to F-003, which is resolved in the next entry.
+
+## [F-003/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-31T19:12Z/e10e
+- date: 2026-10-31
+- resolves: F-003
+- status: resolved
+- note: Both sentences deleted in this run (see F-003's evidence); the page now says only what ISLR §6.1.3 and footnote 4 say about σ̂².
+
+## [C-005] Comment
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T19:12Z/e10e
+- date: 2026-10-31
+- note: Likewise, 'F-001 (minor) fixed by deletion' in the C-003 pass note of this run means F-003.

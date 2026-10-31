@@ -1,15 +1,12 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-10
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
   content_hash: sha256:60d63606de7288fc4e37ce4224a94534be810158399b4c9015700ef89d93ea5e
   sources:
-    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021, CAS-hosted copy), §12.4.2-12.4.3 PDF pp.532, 536-538 (delta: small decisions, validating clusters, balanced linkage, scaling); prior-pass sections §12.4, Table 12.3, sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
-    - "R documentation stats::hclust, Details, sha256:328952439ed3b589585f167660963e8541969526986dce52e95d1b661585cec4 — https://stat.ethz.ch/R-manual/R-devel/library/stats/html/hclust.html"
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. 2016), Ch.11 'Clustering' PDF p.203, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
-    - "CAS Exam MAS-II Content Outline 2026, Domain C tasks 7-8, PDF p.3, sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf"
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021, CAS-hosted copy), §12.4 opening p.517 (PDF 523); §12.4.3 Small Decisions, Validating the Clusters, Other Considerations, A Tempered Approach pp.530-532 (PDF 536-538), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Clustering.md

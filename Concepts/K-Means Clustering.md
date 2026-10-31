@@ -1,12 +1,14 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-18
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:e8b6bbe81e7a0479825e9284021e3deb8c73821fc3f514eca3502238736023bc
+  content_hash: sha256:9d7edf0783339262c0a997932f52f30d592c39d466ecd3de54305e41f8437fcc
   sources:
-    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), CAS-hosted copy, §12.4, pp.516-531 (PDF 523-538), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021, CAS-hosted copy), §12.4.1 eqs (12.15)-(12.18), Algorithm 12.2, pp.517-520 (PDF 523-526); §12.4.3 pp.530-531 (PDF 536-537), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "GraphPad Prism Statistics Guide, K-means 'Tabular results', Within-cluster sum of squares, sha256:25fba4f68c7968816f2bb3f63f2b5d76cfbf7eea45061485c4e46a0d311ed764 — https://www.graphpad.com/guides/prism/latest/statistics/stat_kmeans_results_tabular_results.htm"
+    - "Schwesinger, CPSC 558 lecture 'Clustering' (Kutztown University, Spring 2026), slide 12 'Choosing k', sha256:a0221d385bf130a18943c973c2213df48fa0e97d5296050aca322c78540cc728 — https://faculty.kutztown.edu/schwesin/spring2026/cpsc558/lectures/Clustering.pdf"
   open_findings: 1
   open_critical: 0
   log: .verify/Concepts/K-Means Clustering.md
@@ -22,7 +24,7 @@ verification:
 
 > $$W(C_k) = \frac{1}{|C_k|} \sum_{i, i' \in C_k} \sum_{j=1}^p (x_{ij} - x_{i'j})^2$$
 
-- **Pairwise equals twice the centroid form** (eq. 12.18): $W(C_k) = 2 \sum_{i \in C_k} \sum_{j=1}^p (x_{ij} - \bar{x}_{kj})^2$, where $\bar{x}_{kj}$ is the mean of feature $j$ in cluster $C_k$. So James et al.'s objective is twice the WCSS above, and the two pick the same clusters. The identity is why the algorithm works: the cluster means are the values that minimize the sum of squared deviations, so recomputing the centroids, and then moving each observation to its nearest centroid, can only lower the objective
+- **Pairwise equals twice the centroid form** (eq. 12.18): $W(C_k) = 2 \sum_{i \in C_k} \sum_{j=1}^p (x_{ij} - \bar{x}_{kj})^2$, where $\bar{x}_{kj}$ is the mean of feature $j$ in cluster $C_k$. So James et al.'s objective is twice the WCSS above, and the two pick the same clusters. The identity is why the algorithm works: the cluster means are the values that minimize the sum of squared deviations, so recomputing the centroids, and then moving each observation to its nearest centroid, can never raise the objective
 
 **K-Means algorithm (Lloyd's algorithm):**
 1. **Initialize**: randomly assign each observation to one of $K$ clusters

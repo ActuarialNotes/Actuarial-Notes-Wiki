@@ -1,17 +1,12 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-05
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:a71ef2b04c66444482fbfebd9c515eff0b9da8667ffebaae12f79572f9d9ff7a
+  content_hash: sha256:be9114e7527fe60c12db968ccf1eb277fe4a63c5287f86afc927b0ac7036909d
   sources:
-    - "R Core Team, R documentation 'AIC {stats}' (R-devel manual, stats 4.6.0), Description and Details, sha256:f55c97cef5d53ab762953509b4e5c4da1e8891b8263ce021ef04dcb27c81b8df — https://stat.ethz.ch/R-manual/R-devel/library/stats/html/AIC.html"
-    - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed. (2025 revision), §6.2.2 Penalized Measures of Fit, eq.18, PDF pp.76-77, sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
-    - "Ding, Tarokh & Yang, 'Model Selection Techniques - An Overview', IEEE Signal Processing Magazine 2018 (arXiv:1810.09583v1), §II-A eqs (8) and AICc, PDF p.5; §III PDF p.10 (KL motivation), sha256:fd9744e006712c6d59f8da05f42769eeed90244d857e031cc70ec41d139446b6 — https://arxiv.org/pdf/1810.09583v1"
-    - "Penn State STAT 504, Lesson 9 'Poisson Regression', SAS output for the horseshoe-crab width model (Full Log Likelihood -461.5881, AIC 927.1762, AICC 927.2468, BIC 933.4828; deviance df 171, n = 173, 2 parameters), sha256:f8021fab7a1c8cfeb2de7ebfe3b5d1977a32671dd3acefc9ade531369c5da506 — https://online.stat.psu.edu/stat504/Lesson09"
-    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer 2021), §6.1.3 Cp, AIC, BIC and adjusted R^2, printed pp.232-234 (PDF pp.240-242), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
-    - "CAS Exam MAS-I Fall 2018, Q39 — official exam paper (scan), PDF p.43; Final Answer Key PDF p.50 (B), sha256:47ced888a314db1a5e29e28c0a52f989966b21a079b1c08634b73dc90e844296 — https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exammasi_fmasi-18.pdf"
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021, CAS-hosted copy), §6.1.3 eq (6.2) Cp with σ̂² from the full model, AIC display, footnote 4 (two least-squares formulas, log(RSS) form), pp.233-234 (PDF 241-242), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/AIC.md
@@ -32,7 +27,7 @@ The **Akaike Information Criterion (AIC)** is a model selection measure that bal
 
 > $$\text{AIC} = \frac{1}{n}\left(\text{RSS} + 2d\,\hat\sigma^2\right)$$
 
-- Here $\hat\sigma^2$ is an estimate of the error variance obtained **once, from the full model containing all the predictors** (the square of its residual standard error), and the **same value is used for every candidate**. The form comes from the likelihood one with $\sigma^2$ treated as known: then $-2\ell = \text{RSS}/\sigma^2$ plus a constant, so $-2\ell + 2p$ is $(\text{RSS} + 2p\sigma^2)/\sigma^2$ plus a constant, and multiplying by $\sigma^2/n$ gives the form above (counting the intercept or not shifts every model equally). Re-estimating $\hat\sigma^2$ from each candidate's own fit would change the scale of the criterion from model to model and break the comparison. James et al. note a second least-squares formula, for when $\sigma^2$ is not to be estimated, with a $\log(\text{RSS})$ term in place of $\text{RSS}$
+- Here $\hat\sigma^2$ is an estimate of the error variance obtained **once, from the full model containing all the predictors** (the square of its residual standard error), and the **same value is used for every candidate**. The form comes from the likelihood one with $\sigma^2$ treated as known: then $-2\ell = \text{RSS}/\sigma^2$ plus a constant, so $-2\ell + 2p$ is $(\text{RSS} + 2p\sigma^2)/\sigma^2$ plus a constant, and multiplying by $\sigma^2/n$ gives the form above (counting the intercept or not shifts every model equally). James et al. note a second least-squares formula, for when $\sigma^2$ is not to be estimated, with a $\log(\text{RSS})$ term in place of $\text{RSS}$
 
 ![[Media/Figures/AIC.svg|340]]
 
@@ -60,4 +55,4 @@ The **Akaike Information Criterion (AIC)** is a model selection measure that bal
 > > \end{align*}
 > > $$
 > >
-> > Model B is preferred: its two extra predictors cut the RSS by $20$, more than the $16$ they add to the penalty. Using each model's own residual variance instead of the full model's would put the two numbers on different scales.
+> > Model B is preferred: its two extra predictors cut the RSS by $20$, more than the $16$ they add to the penalty.

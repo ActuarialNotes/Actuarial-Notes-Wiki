@@ -70,7 +70,15 @@
      "statement": "Both K-means and hierarchical clustering assign every observation to a cluster, so outliers can heavily distort the results of either method; neither is robust to outliers.",
      "concept": "Clustering Methods",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Clustering",
+      "quote": "$K$-means and hierarchical clustering both force every observation into a cluster, so a few observations that belong to no subgroup can heavily distort the clusters found. Neither method is very robust to small changes in the data either",
+      "note": "Both K-means and hierarchical clustering force every observation into a cluster, so outliers distort them; neither is robust. ISLR 2nd ed. (CAS-hosted copy, sha256:f708349f…) §12.4.3 'Other Considerations in Clustering', pp.531-532 (PDF 537-538). Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "validate 2026-10-31T19:12Z/e10e"
+     }
     },
     {
      "id": "r3",
@@ -239,7 +247,15 @@
      "statement": "The principal components give the low-dimensional linear surfaces (lines, planes, hyperplanes) that are closest to the observations, as measured by average squared Euclidean distance.",
      "concept": "Principal Component Analysis",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Principal Components Analysis",
+      "quote": "principal components also give the low-dimensional linear surfaces that are closest to the observations, measured by average squared Euclidean distance. The first loading vector is the line in $p$-dimensional space closest to the $n$ observations, the first two span the closest plane",
+      "note": "PCs as the low-dimensional linear surfaces closest to the observations (average squared Euclidean distance). ISLR 2nd ed. (CAS-hosted copy, sha256:f708349f…) §12.2.2, p.503 (PDF 509). Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "validate 2026-10-31T19:12Z/e10e"
+     }
     },
     {
      "id": "r3",
@@ -904,7 +920,15 @@
      "statement": "Power transformations of the dependent variable with power less than one, such as the square root, can reduce increasing variance of residuals.",
      "concept": "Power Transformations",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Heteroscedasticity",
+      "quote": "One remedy is to replace $Y$ with a concave function of it, such as $\\log Y$ or $\\sqrt{Y}$. A power transformation $Y^{\\lambda}$ with $0 < \\lambda < 1$ is concave in the same way. Such a transformation shrinks the larger responses more than the smaller ones, which reduces the heteroscedasticity.",
+      "note": "Concave transformations of Y (log Y, √Y; Y^λ, 0<λ<1) shrink the larger responses more and reduce heteroscedasticity. ISLR 2nd ed. (CAS-hosted copy, sha256:f708349f…) §3.3.3 item 3, p.96 (PDF 106); Rodriguez GLM notes ch.2 §2.10 (Box-Cox power family, λ = 1/2 the square root). Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "validate 2026-10-31T19:12Z/e10e"
+     }
     },
     {
      "id": "r4",
@@ -1712,7 +1736,15 @@
      "statement": "Decision trees can be displayed graphically as a tree diagram, which makes them easy to read even for non-experts.",
      "concept": "Decision Trees",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Decision Tree",
+      "quote": "they can be displayed graphically as a tree diagram and are easily interpreted even by a non-expert, especially when small",
+      "note": "Trees can be displayed graphically and are easily interpreted even by a non-expert, especially if small. ISLR 2nd ed. (CAS-hosted copy, sha256:f708349f…) §8.1.4, p.339 (PDF 347). Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "validate 2026-10-31T19:12Z/e10e"
+     }
     },
     {
      "id": "r3",
@@ -1903,7 +1935,15 @@
      "statement": "Clustering can be applied either to observations (rows) using the features, or to features (columns) using the observations, since the roles of rows and columns can be reversed in the algorithm.",
      "concept": "Clustering",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Clustering",
+      "quote": "Clustering usually groups the observations on the basis of the features, to find subgroups among the observations. It can just as well group the features on the basis of the observations, to find subgroups among the features, by transposing the data matrix",
+      "note": "Clustering observations on the features, or features on the observations by transposing the data matrix. ISLR 2nd ed. (CAS-hosted copy, sha256:f708349f…) §12.4 opening, p.517 (PDF 523). Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "validate 2026-10-31T19:12Z/e10e"
+     }
     }
    ]
   },
@@ -3080,7 +3120,15 @@
      "statement": "The equation Y = β0 + β1 X + ε defines the population regression line, the true relationship between X and Y, whose coefficients are unknown and estimated from data.",
      "concept": "Population Regression Line",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Linear Regression",
+      "quote": "$Y = \\beta_0 + \\beta_1 X + \\varepsilon$ defines the population regression line, the best linear approximation to the true relationship between $X$ and $Y$. Its coefficients are unknown and the line is unobserved.",
+      "note": "Y = β0 + β1X + ε defines the population regression line, the best linear approximation to the true relationship; unknown and unobserved. ISLR 2nd ed. (CAS-hosted copy, sha256:f708349f…) §3.1.2 eq. 3.5, pp.63-64 (PDF 73-74). Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "validate 2026-10-31T19:12Z/e10e"
+     }
     },
     {
      "id": "r5",
@@ -3405,7 +3453,15 @@
      "statement": "The within-cluster variation of cluster C_k is W(C_k) = (1/|C_k|) times the sum over all pairs of observations in the cluster of their squared Euclidean distances, summed across features.",
      "concept": "K-Means Clustering",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "K-Means Clustering",
+      "quote": "the within-cluster variation of cluster $C_k$ is the sum of the squared Euclidean distances between every ordered pair of its observations, divided by the cluster's size",
+      "note": "Pairwise definition of within-cluster variation W(C_k), eq. 12.16-12.17. ISLR 2nd ed. (CAS-hosted copy, sha256:f708349f…) §12.4.1, p.518 (PDF 524). Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "validate 2026-10-31T19:12Z/e10e"
+     }
     },
     {
      "id": "r2",
@@ -3413,7 +3469,15 @@
      "statement": "A cluster's within-cluster variation (pairwise form) equals twice the sum of squared Euclidean distances of its observations from the cluster centroid.",
      "concept": "K-Means Clustering",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "K-Means Clustering",
+      "quote": "Pairwise equals twice the centroid form (eq. 12.18): $W(C_k) = 2 \\sum_{i \\in C_k} \\sum_{j=1}^p (x_{ij} - \\bar{x}_{kj})^2$",
+      "note": "Identity 12.18: pairwise W(C_k) = 2 × sum of squared deviations from the centroid. ISLR 2nd ed. (CAS-hosted copy, sha256:f708349f…) §12.4.1, p.519 (PDF 525); worked example recomputed (16 both ways). Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "validate 2026-10-31T19:12Z/e10e"
+     }
     },
     {
      "id": "r3",
@@ -3460,7 +3524,15 @@
        "page": "K-Means Clustering",
        "quote": "**Choosing $K$**: use the **elbow method** (plot WCSS vs. $K$; look for an elbow where WCSS stops decreasing sharply) or silhouette scores"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "K-Means Clustering",
+      "quote": "The total within-cluster variation cannot choose it: the best achievable total never rises as $K$ grows, and at $K = n$ every observation is its own cluster and the total is zero",
+      "note": "Re-quoted: the writer's rewrite of the Choosing-K bullet removed the old quote. Total within-cluster variation never rises with K and is zero at K = n, so it cannot choose K. ISLR 2nd ed. (CAS-hosted copy, sha256:f708349f…) §12.4.1 p.520 (PDF 526) and (12.16)/(12.18); GraphPad Prism K-means guide ('will always decrease as more clusters are used… exactly zero' at K = n). Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "validate 2026-10-31T19:12Z/e10e"
+     }
     },
     {
      "id": "r2",
@@ -3468,7 +3540,15 @@
      "statement": "Setting the number of clusters equal to the number of observations overfits the data, since each observation becomes its own cluster and there are rarely that many true clusters.",
      "concept": "K-Means Clustering",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "K-Means Clustering",
+      "quote": "The total within-cluster variation cannot choose it: the best achievable total never rises as $K$ grows, and at $K = n$ every observation is its own cluster and the total is zero. Setting $K = n$ therefore overfits, since a data set rarely has as many true clusters as observations. In practice $K$ is a judgment, with no single agreed method",
+      "note": "K must be prespecified and selecting it is far from simple; total WCSS falls with K and is zero at K = n, so K = n overfits. ISLR 2nd ed. (CAS-hosted copy, sha256:f708349f…) §12.4.1 p.520 and §12.4.3 p.531 (PDF 526, 537; 'true subgroups' vs 'clustering the noise'); GraphPad Prism K-means guide (WCSS always decreases, exactly zero at K = n). Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "validate 2026-10-31T19:12Z/e10e"
+     }
     },
     {
      "id": "r3",
@@ -3853,7 +3933,15 @@
      "statement": "In boosting for regression trees, the residuals are initialized to the observed target values (r_i = y_i), before any trees are fit.",
      "concept": "Boosting",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Boosting",
+      "quote": "Start from nothing. Set $\\hat{f}(x) = 0$ and $r_i = y_i$ for every observation in the training set, so the first tree is fitted to the responses themselves",
+      "note": "Boosting for regression trees starts with f̂(x) = 0 and r_i = y_i for all i in the training set. ISLR 2nd ed. (CAS-hosted copy, sha256:f708349f…) §8.2.3 Algorithm 8.2 step 1, p.347 (PDF 355). Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "validate 2026-10-31T19:12Z/e10e"
+     }
     },
     {
      "id": "r2",
@@ -3899,7 +3987,15 @@
      "statement": "In boosting for regression trees, the fitted function starts at \\hat{f}(x) = 0 and each residual is initially r_i = y_i.",
      "concept": "Boosting",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Boosting",
+      "quote": "Start from nothing. Set $\\hat{f}(x) = 0$ and $r_i = y_i$ for every observation in the training set, so the first tree is fitted to the responses themselves",
+      "note": "Boosting for regression trees starts with f̂(x) = 0 and r_i = y_i for all i in the training set. ISLR 2nd ed. (CAS-hosted copy, sha256:f708349f…) §8.2.3 Algorithm 8.2 step 1, p.347 (PDF 355). Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "validate 2026-10-31T19:12Z/e10e"
+     }
     },
     {
      "id": "r2",
@@ -3949,7 +4045,15 @@
      "statement": "For a linear regression with d predictors fitted to n observations, AIC = (1/n)(RSS + 2·d·σ̂²), where σ̂² is the estimated error variance.",
      "concept": "Akaike Information Criterion (AIC)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "AIC",
+      "quote": "for a model with $d$ predictors fitted to $n$ observations AIC takes the form below … $$\\text{AIC} = \\frac{1}{n}\\left(\\text{RSS} + 2d\\,\\hat\\sigma^2\\right)$$",
+      "note": "Least-squares AIC = (1/n)(RSS + 2dσ̂²) for d predictors, up to constants. ISLR 2nd ed. (CAS-hosted copy, sha256:f708349f…) §6.1.3, p.234 (PDF 242). Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "validate 2026-10-31T19:12Z/e10e"
+     }
     },
     {
      "id": "r2",
@@ -3957,7 +4061,15 @@
      "statement": "When computing AIC to compare models, estimate σ̂² once from the full model containing all predictors (the square of its residual standard error) and use that same value for every candidate model.",
      "concept": "Akaike Information Criterion (AIC)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "AIC",
+      "quote": "Here $\\hat\\sigma^2$ is an estimate of the error variance obtained once, from the full model containing all the predictors (the square of its residual standard error), and the same value is used for every candidate.",
+      "note": "σ̂² estimated once from the full model containing all predictors and used for every candidate. ISLR 2nd ed. (CAS-hosted copy, sha256:f708349f…) §6.1.3 eq. 6.2 text and footnote 4, pp.233-234 (PDF 241-242). Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "validate 2026-10-31T19:12Z/e10e"
+     }
     },
     {
      "id": "r3",

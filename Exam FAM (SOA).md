@@ -1,18 +1,17 @@
 ---
 syllabus:
-  source_url: "https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-fam-syllabus.pdf"
-  sitting: "October 2026"
-  source_sha256: 90172025d8bd9d69e18e974fdee447963e54258e5f0e419aa3ef5b7d3e55a00e
-  extracted_at: 2026-10-05
+  source_url: "https://www.soa.org/globalassets/assets/files/edu/2027/spring/syllabi/2027-2-fam-syllabus.pdf"
+  sitting: "February 2027"
+  source_sha256: da98474b74b0a9e9153b8ce198f30195dfbe394b3e300e785e58f12663b447e4
+  extracted_at: 2026-10-31
 verification:
   status: verified
   confidence: high
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:0faf60dd10d44a40f71a01c5f59b5487418b732e4cae80ec13ab1c29e5cdcca0
+  content_hash: sha256:1862f3ddf9381c1def1d1274d49f8fa905ae082d52269185bcf46b3c5db31422
   sources:
     - "SOA, February 2027 syllabus PDF for FAM, all pages, sha256:da98474b74b0a9e9153b8ce198f30195dfbe394b3e300e785e58f12663b447e4 — https://www.soa.org/globalassets/assets/files/edu/2027/spring/syllabi/2027-2-fam-syllabus.pdf"
-    - "SOA FAM exam study page (https://www.soa.org/education/exam-req/edu-exam-fam/study/), read 2026-10-31: lists the October 2026 and February 2027 syllabi"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam FAM (SOA).md

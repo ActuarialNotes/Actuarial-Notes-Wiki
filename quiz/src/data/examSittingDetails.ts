@@ -399,7 +399,7 @@ const GUIDE_ABOUT: Record<string, ExamAbout> = {
   'fam-1': {
     facts: [{ label: 'Length', value: '3.5 hours' }, { label: 'Questions', value: '34 multiple choice' }, SOA_DELIVERY, SOA_UNOFFICIAL],
     source: { label: 'SOA — Exam FAM', url: `${SOA_EXAM}edu-exam-fam/` },
-    factSources: [{ label: 'SOA — Exam FAM syllabus', url: 'https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-fam-syllabus.pdf' }],
+    factSources: [{ label: 'SOA — Exam FAM syllabus', url: 'https://www.soa.org/globalassets/assets/files/edu/2027/spring/syllabi/2027-2-fam-syllabus.pdf' }],
     noSittings: SOA_NO_SITTINGS,
   },
   'srm-1': {

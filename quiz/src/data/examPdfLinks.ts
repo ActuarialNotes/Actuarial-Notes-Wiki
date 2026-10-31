@@ -460,9 +460,9 @@ const SYLLABUS_PDF_LINKS: Record<string, ExamPdfLink> = {
   // lib/examCatalog.test.ts holds the two together. ATPA's is its 2022
   // learning-objectives document, the one its page links.
   'fam-1': {
-    url: 'https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-fam-syllabus.pdf',
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2027/spring/syllabi/2027-2-fam-syllabus.pdf',
     label: 'Syllabus',
-  }, // October 2026
+  }, // February 2027
   'srm-1': {
     url: 'https://www.soa.org/globalassets/assets/files/edu/2027/spring/syllabi/2027-01-exam-srm-syllabus.pdf',
     label: 'Syllabus',

@@ -63,7 +63,7 @@ OUT_DIR = os.path.join(ROOT, ".syllabus")
 # quiz/src/lib/examCatalog.test.ts holds the two together.
 SOA = "https://www.soa.org/globalassets/assets/files/edu"
 SOURCES: dict[str, str] = {
-    "fam-1": f"{SOA}/2026/fall/syllabi/2026-10-fam-syllabus.pdf",
+    "fam-1": f"{SOA}/2027/spring/syllabi/2027-2-fam-syllabus.pdf",
     "srm-1": f"{SOA}/2027/spring/syllabi/2027-01-exam-srm-syllabus.pdf",
     "pa-1": f"{SOA}/2026/fall/syllabi/2026-10-exam-pa-syllabus.pdf",
     "altam-1": f"{SOA}/2026/fall/syllabi/2026-10-altam-syllabus.pdf",

@@ -27,6 +27,7 @@ verification:
 - **In a linear mixed model.** The default residual covariance is $\mathbf{R}_i = \sigma^2\mathbf{I}$: constant variance. It can be relaxed in two ways:
   - **heterogeneous variances**, a separate $\sigma_g^2$ for each level of a factor (a treatment group, a region)
   - **variance as a function** of a covariate or of the fitted mean, e.g. the power form $\mathrm{Var}(\varepsilon_{ij}) = \sigma^2\lvert\mu_{ij}\rvert^{2\delta}$ (the `varPower` structure in R's `nlme`)
+    - with a variance covariate $v_{ij}$ (a covariate such as development age, or the fitted value), the residual variance is $\sigma^2$ times the variance function: the **exponential** form $\mathrm{Var}(\varepsilon_{ij}) = \sigma^2\exp(2\delta v_{ij})$ (`nlme`'s `varExp`) and the **power** form $\mathrm{Var}(\varepsilon_{ij}) = \sigma^2\lvert v_{ij}\rvert^{2\delta}$ (`varPower`), where $\delta$ is the estimated variance-function coefficient
 - **Testing it.** Unlike in a GLM, the LMM's mean–variance link is a modelling choice with its own estimated parameters. The competing models share their fixed effects, so they are compared by a [[Likelihood Ratio Test|likelihood ratio test]] on [[Restricted Maximum Likelihood|REML]] fits, or by AIC. The choice feeds the [[Covariance Structure|covariance structure]], and so the standard errors of every fixed effect.
 
 > [!example]- Same Miss, Different Claims {Example}

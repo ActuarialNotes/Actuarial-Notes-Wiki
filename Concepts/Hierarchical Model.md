@@ -30,6 +30,8 @@ A **Hierarchical Model** (also called a **multilevel model**) organizes data and
 $$\text{ICC} = \frac{\sigma_u^2}{\sigma_u^2 + \sigma_\varepsilon^2}$$
 - A high ICC indicates that knowing one observation's group provides substantial information about other observations in the same group
 - Hierarchical models can also include **random slopes**, where the effect of a predictor $x_{ij}$ varies across groups $j$
+- **Level 1 / Level 2 notation.** The same model can be written one level at a time. The **Level 1** equation describes an observation with group-specific coefficients, and it holds only the observation-level covariates and the residual: $Y_{ij} = b_{0j} + b_{1j}x_{ij} + \varepsilon_{ij}$. The **Level 2** equations describe each coefficient with the group-level covariates and the group random effects: $b_{0j} = \beta_0 + \beta_2 z_j + u_{0j}$ and $b_{1j} = \beta_1 + \beta_3 z_j + u_{1j}$. Group-level variables thus help determine the Level 1 relationships.
+- **Converting to one equation.** Substitute the Level 2 equations for the coefficients in the Level 1 equation and collect terms: $Y_{ij} = \beta_0 + \beta_1 x_{ij} + \beta_2 z_j + \beta_3 z_j x_{ij} + u_{0j} + u_{1j}x_{ij} + \varepsilon_{ij}$. A random effect in a slope's equation comes out multiplied by that slope's covariate (a random slope, not a second random intercept), and a group-level covariate in a slope's equation becomes a cross-level interaction. Each random effect, and the residual, appears exactly once.
 
 ![[Media/Figures/Hierarchical_Model.svg|340]]
 

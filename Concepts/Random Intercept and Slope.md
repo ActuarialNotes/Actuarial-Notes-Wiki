@@ -25,6 +25,8 @@ A **random intercept** lets each group have its own baseline; a **random slope**
 - $\sigma_{01}$ is the intercept-slope covariance: negative means groups that start high grow more slowly (a common convergence pattern)
 - A random slope costs two extra parameters ($\sigma_1^2$, $\sigma_{01}$) and often fails to converge when groups are small — test it before keeping it
 - The predictor carrying a random slope must also appear as a [[Fixed Effects|fixed effect]]; the random part is a mean-zero deviation from it
+- **A random slope needs its predictor to vary within the group.** A characteristic that is constant for each subject (a between-subject variable, such as a policyholder's territory) can enter as a fixed effect but not with a by-subject random slope: each subject belongs to only one of its levels, so a model with that random slope is unidentifiable. Between-subject variables get only the by-subject random intercept; within-subject variables can carry both a random intercept and a random slope.
+- The same goes for the interaction of a 0/1 between-subject indicator $z_i$ with a within-subject predictor $x_{ij}$: across one subject's rows $z_i x_{ij}$ is either all zeros or an exact copy of $x_{ij}$, so a random coefficient on it duplicates the random slope on $x_{ij}$ and cannot be identified.
 
 ![[Media/Figures/Random_Intercept_and_Slope.svg|340]]
 

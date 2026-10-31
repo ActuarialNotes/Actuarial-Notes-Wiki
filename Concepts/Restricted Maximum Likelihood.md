@@ -24,6 +24,7 @@ verification:
 - **The rule that gets tested:** compare models differing in their *random* part (or covariance structure) with REML; compare models differing in their *fixed* effects with **ML**, because the REML likelihoods are then not comparable at all
 - [[AIC]] and [[BIC]] inherit the same rule — a REML AIC may only be compared with another REML AIC on identical fixed effects
 - Bias matters most with few groups; with many groups ML and REML converge
+- **When estimation fails.** ML and REML are iterative, and the algorithm can fail to converge, stop with an estimated $\mathbf{G}$ (West et al.'s $\mathbf{D}$) that is not positive definite, or leave a variance component on its boundary of $0$. Remedies: supply alternative starting values for the covariance parameters (SAS's `PARMS` statement, which also runs a grid search over the likelihood surface); rescale effects so the covariance parameters are on similar scales; drop a random effect whose variance is estimated at $0$; or fit a marginal model instead — the implied marginal model, or one with an unstructured residual covariance matrix — which models $\mathbf{V}_i$ directly without the random effects (see [[Covariance Structure]])
 
 ![[Media/Figures/Restricted_Maximum_Likelihood.svg|340]]
 

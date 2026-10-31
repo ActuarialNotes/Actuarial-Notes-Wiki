@@ -4204,7 +4204,15 @@
      "statement": "Omitting important variables leaves unexplained variation in the residuals, so the error variance estimate s^2 is inflated, which widens prediction intervals.",
      "concept": "Multiple Linear Regression",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Bias",
+      "quote": "The error variance estimate $s^2$ (the MSE) therefore tends to overestimate $\\sigma^2$, and the confidence and prediction intervals built from it are wider than they should be",
+      "note": "Bias's omitted-variable bullet teaches that the omitted variable's variation stays in the residuals, so s² (MSE) overestimates σ² and the confidence and prediction intervals built from it widen. Source: Penn State STAT 501 Lesson 10 §10.1 Outcome 2 (MSE overestimates σ², wider confidence intervals; sha256:c5c4744b…) and §7.2 (PI = ŷ ± t·√(MSE + se²); sha256:09f3e2de…). Checked by a different agent from the writer.",
+      "date": "2026-10-31",
+      "run": "2026-10-31T19:23Z/365f"
+     }
     },
     {
      "id": "r3",

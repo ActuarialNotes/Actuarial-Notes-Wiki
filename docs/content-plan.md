@@ -18,8 +18,8 @@ roadmap review_
 > answerable). P, FM, MAS-I, the three DISCs and Exam 7 had passed every gate there was; the
 > maintainer moved them back to `beta` the same day, because their banks had not been checked
 > against G8. Each comes back to `ready` once its bank is run and its items are closed (steps 0
-> and 10). **Exams P and FM are `ready` again (30 Oct)**, and **MAS-I and the three DISCs (31 Oct)**,
-> 8 / 8; the other eleven are beta exams in Phase 2.
+> and 10). **Exams P and FM are `ready` again (30 Oct)**, and **MAS-I, the three DISCs and Exam 7 (31 Oct)**,
+> 8 / 8: all seven moved back on 25 Oct are ready again. The other ten are beta exams in Phase 2.
 
 This is the **one plan for the vault's content**: the exam pages, concept pages, resource pages
 and question banks, the fact check that stands behind them, and the generated figures and
@@ -189,9 +189,9 @@ Adopted during the DISC, MAS-I and Exam 7 campaigns (Appendix A), and binding on
 
 From `python3 scripts/publication_readiness.py --body all` and `--hold`, after Phase Q closed,
 re-measured with G8 the same day.
-84 exam pages: **6 ready, 11 beta, 67 in development** (Exams P and FM promoted 30 Oct, MAS-I and the three DISCs 31 Oct).
+84 exam pages: **7 ready, 10 beta, 67 in development** (Exams P and FM promoted 30 Oct, MAS-I, the three DISCs and Exam 7 31 Oct).
 
-**Ready (6).** The seven exams that were ready on 25 Oct went back to beta that day, when G8 joined
+**Ready (7).** The seven exams that were ready on 25 Oct went back to beta that day, when G8 joined
 the gates (D29). **Exam P** is ready again since 30 Oct: page verified, 68 concepts verified, 6 / 6
 readings verified, every concept with a question, 719 / 719 served questions verified, and 719 / 719
 answerable (G8: 683 items closed — 254 passages the check missed, 19 by retagging 15 questions, 220
@@ -218,14 +218,21 @@ checked, run `answerability-20261031-disc-rm`; 23 items closed — 9 passages th
 required, 3 by passages written onto *Insurance Producer* (NAIC, IRMI, RIEA) and *Risk
 Identification* (OpenStax, Saylor, RAND on groupthink and Delphi) and fact checked by a different
 agent, run `g8-discrm-chk`).
+**Exam 7** is ready again since 31 Oct: 124 / 124 served questions answerable (G8: the last 83
+checked, run `answerability-20261031-7`; 87 items closed — passages the check missed, 7 questions
+retagged and re-passed, items not required, and passages written onto 13 pages from Friedland 2022,
+Shapland, Mack, Venter, Verrall, Teng & Perkins, Feldblum, Hürlimann, Goldfarb and, for the facts
+its served questions still take from it, Patrik's chapter, labelled as the earlier reading (the
+maintainer's call, 31 Oct); each fact checked by a different agent from its writer). D10 re-applied
+on the evidence that Friedland doesn't teach Patrik's material: 2017 Q15 is `off_syllabus` (58% of
+its points on Patrik), the other ten Patrik-era questions stay served (§6).
 
-`--hold` (31 Oct): 6 ready exams, 0 errors, 1 warning (PCPA's G6).
+`--hold` (31 Oct): 7 ready exams, 0 errors, 1 warning (PCPA's G6).
 
-**Beta (11)**: Exam 7, moved back from ready, then the rest in Phase 2's order:
+**Beta (10)**, in Phase 2's order:
 
 | Exam | Page | Concepts | Unverified concepts | Readings unverified | No question | Bank verified | Answerable | Gates | Fails |
 |---|---|---:|---:|---:|---:|---|---|---:|---|
-| Exam 7 | verified | 25 | 0 | 0 / 15 | 0 | 125 / 125 | not run | 7 / 8 | G8 |
 | MAS-II | verified | 98 | 2 | 1 / 6 | 0 | 141 / 141 | 74 / 141 | 5 / 8 | G4, G5, G8 |
 | Exam 9 | verified | 60 | 1 | 2 / 9 | 0 | 131 / 131 | not run | 5 / 8 | G4, G5, G8 |
 | SRM | verified | 41 | 7 | 2 / 2 | 0 | 77 / 77 | not run | 5 / 8 | G4, G5, G8 |
@@ -359,7 +366,7 @@ Appendix A.
 
 | # | Exam | Gates | What is left | Readings it rests on |
 |---|---|---:|---|---|
-| — | P, FM, MAS-I, the DISCs, Exam 7 (beta again since 25 Oct; **P and FM ready again 30 Oct, MAS-I and the DISCs 31 Oct, 8 / 8**) | 7 / 8 | The first seven gates done (Phase 1; Appendix A). MAS-I is 6 / 8 until ISLR's and Dobson's delta re-check (Phase 2, step 0). G8: each bank's check (step 0), then its items (step 10), then back to `ready` | Their readings, all verified |
+| — | P, FM, MAS-I, the DISCs, Exam 7 (beta again since 25 Oct; **P and FM ready again 30 Oct, MAS-I, the DISCs and Exam 7 31 Oct, 8 / 8**) | 7 / 8 | The first seven gates done (Phase 1; Appendix A). MAS-I is 6 / 8 until ISLR's and Dobson's delta re-check (Phase 2, step 0). G8: each bank's check (step 0), then its items (step 10), then back to `ready` | Their readings, all verified |
 | 1 | **MAS-II** (C4) | 5 / 8 | G4: *Backward Shift Operator* and *Correlogram* quote Cowpertwait's own wording; restate each to an open text (fpp3, NIST) and verify at medium (D22, D27). G5: the ISLR delta | Cowpertwait commercial; the rest verified |
 | 2 | **Exam 9** (C2) | 5 / 8 | G4: *Enterprise Risk Management* (Brehm's four phases are stated in no open source: restate the page to one that is, such as the CAS ERM Committee's free 2003 *Overview of Enterprise Risk Management*, or cut the claim). G5: CJS (assigned as the JEP text, read as the HBS working paper) and Cummins 2008 (SSRN 1057401), both `in_review`. Try again for the assigned texts; if no session can reach them, the maintainer supplies a copy | Most verified on open texts (D22) |
 | 3 | **SRM** (C9) | 5 / 8 | G4: 7 concepts (*ARCH Model*, *Hyperparameter*, *Model Validation*, *Overfitting*, *Regression Tree*, *Train-Test Split*, *Variable Transformation*). G5: Frees 2010, and the ISLR delta | Frees commercial (D7; Frees posts an online version); ISLR free |
@@ -527,7 +534,9 @@ From `docs/syllabus-pipeline-review.md` §5 (packages 1–3 and 9 are done) and 
   P and FM banks before anyone runs it.
 - ~~**Exam 7 leftovers (D10)**~~ ✅ 25 Oct (§6): a question resting mostly on a dropped reading is
   `off_syllabus`. Only 2012 Q9 (England & Verrall) does; the other eleven rest mostly on
-  Stanard-Bühlmann and credibility weighting, which Hürlimann 2009 and Clark still teach.
+  Stanard-Bühlmann and credibility weighting, which Hürlimann 2009 and Clark still teach. Re-applied
+  31 Oct for G8: 2017 Q15 flagged too; the Patrik facts the served ten still use are on *Reinsurance
+  Reserving* and *Cape Cod Method*, labelled as the earlier reading.
 - **The converter's printed slips**: open minor findings on the Exam 8 papers are mostly CAS's own
   printed errors the vault repeats untagged; each wants an "(as printed)" note in its paper's
   packet.
@@ -779,7 +788,7 @@ and then a resolve run.
 | 8 | PCPA | A bank for 29 concepts, written and checked by different agents (D5); 5 concepts; 12 readings | Mostly commercial; ASOP 23 and 56, R4DS and McKinney free | **ready** |
 | 9 | Exam 6C | The page's F-008–F-012; 137 concepts; 67 readings | Free Canadian documents, but six are in the study kit only | Every gate but G5, which stays held on those six pages until the kit is read (D28) |
 | — | Exam 8 | The ISO CGL plan; G8 | Study kit only; the bank's check and items are free to do now | Held on G5 (D20, D28), with G8 closed |
-| 10 | The seven moved back (P, FM, MAS-I, the DISCs, Exam 7) | G8's items, from step 0's runs | Their own readings, all verified | Each **ready** again, 8 / 8, one promotion PR each. **P ✅ and FM ✅ ready 30 Oct, MAS-I ✅ and the three DISCs ✅ 31 Oct** (8 / 8) |
+| 10 | The seven moved back (P, FM, MAS-I, the DISCs, Exam 7) | G8's items, from step 0's runs | Their own readings, all verified | Each **ready** again, 8 / 8, one promotion PR each. **P ✅ and FM ✅ ready 30 Oct, MAS-I ✅, the three DISCs ✅ and Exam 7 ✅ 31 Oct** (8 / 8): step 10 done |
 
 Steps 2–9 each start with the exam's `check-answerable` run, and each ends at **ready** only with
 G8 passing. Step 10 is listed last but is placed by step 0's runs. Each of the seven is one gate
@@ -795,7 +804,7 @@ runs are complete for P and FM and partial for the other five. Under D30 the ope
 | exam-fm | 253 / 460 → **460 / 460 ✅ (30 Oct)** | 241 → 0 | 59 → 0 | 0 |
 | exam-mas-i | 35 / 281 → **281 / 281 ✅ (30 Oct)** | 22 → 72 → 0 | 7 → 20 → 0 | 225 → 0 |
 | exam-mas-ii | 80 / 141 | 113 | 17 | 0 |
-| exam-7 | 21 / 125 | 30 | 7 | 83 |
+| exam-7 | 21 / 125 → **124 / 124 ✅ (31 Oct)** | 30 → 0 | 7 → 0 | 0 |
 | exam-disc-da | 48 / 70 → **70 / 70 ✅ (31 Oct)** | 8 → 0 | 7 → 0 | 0 |
 | exam-disc-rm | 53 / 144 → **144 / 144 ✅ (31 Oct)** | 5 → 0 | 6 → 0 | 0 |
 | exam-disc-ia | 54 / 221 → **221 / 221 ✅ (31 Oct)** | 5 → 0 | 7 → 0 | 0 |
@@ -984,7 +993,7 @@ build with the default until the decision is made.
 | D7 | CAS plan D3, verification plan §7.6 | Is a medium confidence ceiling enough for a commercial-only source? | Yes |
 | D8 | CAS plan D4, verification plan §7.2 | 6C's F-001 (domain C renumbering), and Exam 5's v02 outline | ✅ settled 18 Oct 2026: **transcribe CAS's words; the vault's additions go on `*Key concepts:*` lines.** 6C: domain C's five tasks as the Fall 2026 outline prints them, in its order; F-002's added scope (litigation environment, funding mechanisms) linked to the nearest existing pages; the shelf's Learning objective filter dropped for 6C until CAS's reading codes match its tasks (6U's precedent). Exam 5: A18 added, every task and the domain B preamble restored to the v02 outline's words, the vault-added clauses' links moved to `*Key concepts:*` lines (the concept set unchanged), and the Werner and Friedland chapter scopes added to Source Material |
 | D9 | verification plan §7.4 | The orphan concepts: link, merge or delete | Leave them unverified |
-| D10 | CAS plan §4.1 | Exam 7's questions on dropped readings; 2012 q20 filed under Exam 9 | ✅ settled 25 Oct 2026: **`off_syllabus` where most of a question's points rest on a reading no longer assigned**, kept served otherwise, never split or moved (a log can't be renamed). Applied to the twelve Patrik / Brehm questions: 2012 Q9 flagged, eleven served on Hürlimann and Clark. 2012 q20 stays where it is |
+| D10 | CAS plan §4.1 | Exam 7's questions on dropped readings; 2012 q20 filed under Exam 9 | ✅ settled 25 Oct 2026: **`off_syllabus` where most of a question's points rest on a reading no longer assigned**, kept served otherwise, never split or moved (a log can't be renamed). Applied to the twelve Patrik / Brehm questions: 2012 Q9 flagged, eleven served on Hürlimann and Clark. 2012 q20 stays where it is. **Re-applied 31 Oct** (maintainer), once G8 showed Friedland 2022 teaches none of Patrik's reinsurance-reserving facts: each of eleven questions' points split by reading, 2017 Q15 flagged (58% Patrik), ten kept served; the Patrik facts those ten still use are taught from Patrik's chapter (CAS, Foundations ch.7), labelled as the earlier reading |
 | — | Phase Q, Q3 | The questions held on a publisher's error (ASTAM 17, 25; ALTAM 61, Spring 2024 Q3; Exam 7 2013 Q21; Exam 8 2018 Q6) | ✅ settled 25 Oct 2026: **the publisher's text, key and figures stay as printed, with a marked editor's note beside the error**, written by one agent and passed by another. `fams-109` keeps the SOA's key with no note (the solution's reading is defensible) |
 | — | Phase Q, Q1 | A sample set that prints no point values (ASTAM's, ALTAM Q55, Q56, Q61) | ✅ settled 25 Oct 2026: **`points: 0`**, read by the app as *none printed* and paced at the paper's points per question |
 | — | Phase Q, Q2 | 6C's scope calls | ✅ settled 25 Oct 2026: Spring 2018 Q13, Q14 and Spring 2017 Q14 `off_syllabus`; Spring 2019 Q18 and Fall 2015 Q16 as they are |

@@ -152,7 +152,7 @@ are in Appendix A.
 | Exam FM | 461 | 91 / 91 | **ready** (again since 2026-10-30, 8 / 8; beta 2026-10-25 to 30 for G8) |
 | MAS-I | 281 | 178 / 178 | **ready** (again since 2026-10-31, 8 / 8; beta 2026-10-25 to 31 for G8) |
 | DISC-DA / RM / IA | 70 / 146 / 221 | 100% each | **ready** again since 2026-10-31 (8 / 8; beta 2026-10-25 to 31 for G8) |
-| Exam 7 | 144 | 26 / 29 | beta (ready 2026-10-16 to 2026-10-25, G8) |
+| Exam 7 | 144 | 26 / 29 | **ready** (again since 2026-10-31, 8 / 8; beta 2026-10-25 to 31 for G8) |
 | MAS-II | 168 | 98 / 98 | beta |
 | Exam 5 | 349 | 129 / 138 | beta |
 | Exam 6C | 394 (73 off-syllabus) | 137 / 159 | beta |
@@ -253,7 +253,7 @@ to §4. Where an item has a former roadmap ID (P0–P4), §4 gives it.
    closed. The same day the maintainer moved P, FM, MAS-I, the three DISCs and Exam 7 back to
    `beta`, since their banks hadn't been checked against G8. **Exams P and FM are `ready` again
    since 2026-10-30, and MAS-I and the three DISCs since 2026-10-31** (all eight gates;
-   `--hold` now holds them); Exam 7 waits on its G8 items.
+   `--hold` now holds them); with Exam 7 the same day, all seven are ready again (step 10 done).
    In order (content plan §4):
    - **Step 0:** the ISLR and Dobson deltas, so MAS-I is 7 / 8 (the CIA commit made them
      stale), and `check-answerable` on the seven demoted exams' banks (runs only, about $445).
@@ -733,7 +733,7 @@ Where a default is given, sessions build with it until the decision is made.
 | D7 | Is a **medium confidence ceiling** enough for commercial-only sources? | content plan §6 (was CAS D3) | C9, MAS-II | Yes |
 | D8 | 6C's **F-001**, and Exam 5's **v02 outline** findings | content plan §6 (was CAS D4) | C3, C5 | ✅ settled 2026-10-18: transcribe CAS's words, the vault's additions on `*Key concepts:*` lines; 6C's objective filter dropped until CAS's codes agree (content plan §6) |
 | D9 | The **46 orphan concepts** | content plan §6 | V5 | Leave them unverified |
-| D10 | Exam 7 leftovers: questions on dropped readings (Patrik, Brehm/Goldfarb, England & Verrall); 2012 q20 filed under Exam 9 | content plan Appendix A.3 | — | ✅ settled 2026-10-25: `off_syllabus` where most of a question's points rest on a dropped reading (2012 Q9 only); the rest served; 2012 q20 stays |
+| D10 | Exam 7 leftovers: questions on dropped readings (Patrik, Brehm/Goldfarb, England & Verrall); 2012 q20 filed under Exam 9 | content plan Appendix A.3 | — | ✅ settled 2026-10-25: `off_syllabus` where most of a question's points rest on a dropped reading (2012 Q9 only); the rest served; 2012 q20 stays. Re-applied 2026-10-31 by the maintainer: 2017 Q15 off-syllabus, the other ten served, the Patrik facts they use taught from Patrik and labelled as the earlier reading |
 | D11 | **Delete** the retired comprehension checks (the folder, the parser, the skill), or keep them parked | `flashcard-collection.md` | R2 | Keep them parked |
 | D12 | Listen: the voice; whether it is Pro-only | `listen-recordings.md` | X4 | The test voice; free |
 | D13 | **The free / Pro boundary** (Cowork after Preview, Tools saved runs, practice packs) | old P4.3, `cowork.md` | G4, A4 | No change |
@@ -929,6 +929,12 @@ ls Concepts/*.md | wc -l; ls Resources/Books/*.md | wc -l
   second look on Sonnet, runs the locator on Haiku and no longer lists a solution's own plan as a
   requirement: on 20 Exam P questions, $1.18 and 11 gaps where the old code took $3.35 and found 20.
   Phase 2's step 10 (P, FM, MAS-I, the DISCs, Exam 7) is placed first.
+
+- **2026-10-31, Exam 7 ready again (Phase 2 step 10, done).** Its last 83 questions checked ($9.56)
+  and its 87 G8 items closed (content plan §2): passages written onto 13 pages, each fact checked by a
+  different agent; D10 re-applied (2017 Q15 off-syllabus) and the Patrik facts the served questions
+  use taught from Patrik, labelled (the maintainer's calls). `--check 7` 8 / 8; all seven exams
+  moved back on 25 Oct are ready again.
 
 - **2026-10-31, DISC-RM ready again (Phase 2 step 10).** Its last 84 questions checked ($4.59) and
   its 23 G8 items closed (content plan §2); `--check DISC-RM` 8 / 8, in `READY_EXAMS` and

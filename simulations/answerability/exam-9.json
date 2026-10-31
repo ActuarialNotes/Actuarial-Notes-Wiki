@@ -6986,7 +6986,15 @@
        "page": "Frequency-Severity Models",
        "quote": "**Frequency-Severity Models** build a [[Pure Premium|pure premium]] from separate component models — one for claim [[Frequency|frequency]] (claims per exposure) and one for claim [[Severity|severity]] (loss per claim) — and combine them, rather than modelling pure premium in a single step."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Severity Distribution",
+      "quote": "Paired with a claim-count distribution, it prices anything that depends on how large claims are: deductibles, limits, excess layers and [[Exposure Curves|exposure curves]].",
+      "note": "Taught on Severity Distribution, one link from the tag added in run 0add; recorded so the panel, which reads no links, agrees with the gate.",
+      "date": "2026-10-31",
+      "run": "g9-sort-reins"
+     }
     },
     {
      "id": "r3",
@@ -7033,7 +7041,15 @@
        "page": "Poisson Distribution",
        "quote": "A defining property is $E[X] = \\text{Var}(X) = \\lambda$ — the mean and variance are equal"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Frequency Distribution",
+      "quote": "The variance is below the mean for the binomial, equal to it for the Poisson and above it for the negative binomial, because $\\text{Var}(N)/E[N] = 1/(1-a)$ and $a$ is negative, zero and positive in turn.",
+      "note": "Taught on Frequency Distribution, one link from the tag added in run 0add; recorded so the panel, which reads no links, agrees with the gate.",
+      "date": "2026-10-31",
+      "run": "g9-sort-reins"
+     }
     }
    ]
   },
@@ -8853,7 +8869,15 @@
        "page": "Chi-Square Goodness-of-Fit Test",
        "quote": "$$Q = \\sum_{j=1}^{k} \\frac{(O_j - E_j)^2}{E_j}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Chi-Square Goodness-of-Fit Test",
+      "quote": "$$Q = \\sum_{j=1}^{k} \\frac{(O_j - E_j)^2}{E_j}$$",
+      "note": "Taught on Chi-Square Goodness-of-Fit Test, one link from the tag added in run 0add; recorded so the panel, which reads no links, agrees with the gate.",
+      "date": "2026-10-31",
+      "run": "g9-sort-reins"
+     }
     },
     {
      "id": "r2",
@@ -8866,7 +8890,15 @@
        "page": "Chi-Square Goodness-of-Fit Test",
        "quote": "Reject $H_0$ at level $\\alpha$ when $Q$ exceeds the upper-$\\alpha$ [[Critical Value|critical value]] of the [[Chi-Squared Distribution|chi-squared distribution]] with $k - 1 - r$ degrees of freedom."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Chi-Square Goodness-of-Fit Test",
+      "quote": "Reject $H_0$ at level $\\alpha$ when $Q$ exceeds the upper-$\\alpha$ [[Critical Value|critical value]] of the [[Chi-Squared Distribution|chi-squared distribution]] with $k - 1 - r$ degrees of freedom.",
+      "note": "Taught on Chi-Square Goodness-of-Fit Test, one link from the tag added in run 0add; recorded so the panel, which reads no links, agrees with the gate.",
+      "date": "2026-10-31",
+      "run": "g9-sort-reins"
+     }
     },
     {
      "id": "r3",

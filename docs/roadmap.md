@@ -157,7 +157,7 @@ are in Appendix A.
 | Exam 5 | 349 | 129 / 138 | beta |
 | Exam 6C | 394 (73 off-syllabus) | 137 / 159 | beta |
 | Exam 8 | 139 | 32 / 38 | beta |
-| Exam 9 | 270 (149 off-syllabus) | 56 / 66 | beta |
+| Exam 9 | 280 (179 off-syllabus) | 56 / 66 | **ready** (since 2026-10-31, 8 / 8) |
 | PCPA, 6U | none | 0 / 30, 0 / 80 | beta, development |
 | SOA past FM (29 exams) | none | — | development |
 | Exam 6I, Exam 6T | none | — | development |
@@ -254,11 +254,11 @@ to §4. Where an item has a former roadmap ID (P0–P4), §4 gives it.
    `beta`, since their banks hadn't been checked against G8. **Exams P and FM are `ready` again
    since 2026-10-30, and MAS-I and the three DISCs since 2026-10-31** (all eight gates;
    `--hold` now holds them); with Exam 7 the same day, all seven are ready again (step 10 done).
-   **MAS-II is `ready` since 2026-10-31** (step 1 done).
+   **MAS-II is `ready` since 2026-10-31** (step 1 done), and **Exam 9** the same day (step 2 done).
    In order (content plan §4):
    - **Step 0:** the ISLR and Dobson deltas, so MAS-I is 7 / 8 (the CIA commit made them
      stale), and `check-answerable` on the seven demoted exams' banks (runs only, about $445).
-   - **Steps 1–3:** ~~MAS-II~~ ✅, Exam 9 and SRM. Each is one packet from ready.
+   - **Steps 1–3:** ~~MAS-II~~ ✅, ~~Exam 9~~ ✅ and SRM. Each is one packet from ready.
    - **Steps 4–7:** Exam 5, then FAM, ASTAM and ALTAM, loading the shared Klugman, Brown & Lennox
      and AMLCR once.
    - **Steps 8–9:** PCPA and 6C.
@@ -589,7 +589,7 @@ gates through `--hold` in CI.
 |---|---|---|---|---|
 | C0 | Refresh the generated reports | ✅ 2026-10-17 | — | Both reports regenerated; CONCEPT_GAPS' generated half refreshed (0 missing resources); Exam 8's `source_pages: partial` dropped. Re-run them at each review (Appendix A). |
 | C1 | Exam 8 → ready | 🟡 6 of 8 gates (2026-10-25) | **Now** | Content plan Phase 2. G8 (its bank's check and items), then G5: the ISO CGL plan, which is in the study kit only. It stays `in_review` until the kit is read (D20, re-affirmed as D28). The papers' printed-slip findings were closed in Phase Q (Q3). |
-| C2 | Exam 9 → ready | 🟡 5 of 8 (2026-10-25) | **Now** | Phase 2, step 2. G7 ✅ (Phase Q). Left: G4, *Enterprise Risk Management* (Brehm's four phases are in no open source: restate or cut); G5, CJS and Cummins 2008 `in_review` (try the assigned texts again, else a copy from the maintainer). |
+| C2 | Exam 9 → ready | ✅ 2026-10-31, 8 / 8 | Done | Phase 2, step 2. G4/G5: *Enterprise Risk Management* restated to the CAS's 2003 overview, CJS and Cummins 2008 verified at medium (D22). G8: 101 of 101 served questions answerable; D10 applied to the 2012–2015 Exam 7 ERM questions (30 `off_syllabus`); items written onto 21 pages and fact checked by different agents (content plan §4). |
 | C3 | Exam 5 → ready | 🟡 5 of 8 (2026-10-25) | **Now** | Phase 2, step 4. G1 and G7 ✅ (page re-transcribed per D8; all 357 questions verified). Left: 61 concepts and 4 free readings (Friedland, ASOP 13 and 43, CAS's ratemaking principles). |
 | C4 | MAS-II → ready | ✅ 2026-10-31, 8 / 8 | Done | Phase 2, step 1. D24 applied to Fall 2018 (17 questions `off_syllabus`); *Backward Shift Operator* and *Correlogram* restated off Cowpertwait; G8: 124 of 124 served questions answerable, its items sorted, written onto 19 pages and fact checked by different agents (content plan §4). |
 | C5 | Exam 6C → ready | 🟡 4 of 8 (2026-10-25) | **Now** | Phase 2, step 9. G6 and G7 ✅ (all 394 questions verified, wave Q2). Left: the page's F-008–F-012 (G1), 137 concepts and 67 readings. Six of the readings are in the study kit only (D28). |
@@ -937,6 +937,11 @@ ls Concepts/*.md | wc -l; python3 -c "import sys; sys.path.insert(0, 'scripts');
   second look on Sonnet, runs the locator on Haiku and no longer lists a solution's own plan as a
   requirement: on 20 Exam P questions, $1.18 and 11 gaps where the old code took $3.35 and found 20.
   Phase 2's step 10 (P, FM, MAS-I, the DISCs, Exam 7) is placed first.
+
+- **2026-10-31, Exam 9 ready (Phase 2 step 2, C2 done).** G4/G5 restated or verified on open texts
+  (D22); its 248 G8 items sorted (83 closed), D10 applied to Exam 7's 2012–2015 ERM questions (30
+  `off_syllabus`, read off CAS's syllabi of those years), the rest written onto 21 pages (three new)
+  and fact checked by different agents. `--check 9` 8 / 8; every ready exam still 8 / 8.
 
 - **2026-10-31, MAS-II ready (Phase 2 step 1, C4 done).** D24 applied to Fall 2018 (17 McElreath
   questions `off_syllabus`, 124 served); its G8 items sorted, then written onto 19 pages from open

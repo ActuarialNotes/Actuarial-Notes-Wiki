@@ -20,7 +20,8 @@ roadmap review_
 > against G8. Each comes back to `ready` once its bank is run and its items are closed (steps 0
 > and 10). **Exams P and FM are `ready` again (30 Oct)**, and **MAS-I, the three DISCs and Exam 7 (31 Oct)**,
 > 8 / 8: all seven moved back on 25 Oct are ready again. **MAS-II is `ready` (31 Oct)**, the first of the
-> ten beta exams in Phase 2 to pass all eight (step 1); the other nine follow.
+> ten beta exams in Phase 2 to pass all eight (step 1), and **Exam 9 is `ready` (31 Oct)** (step 2);
+> the other eight follow.
 
 This is the **one plan for the vault's content**: the exam pages, concept pages, resource pages
 and question banks, the fact check that stands behind them, and the generated figures and
@@ -780,7 +781,7 @@ and then a resolve run.
 |---|---|---|---|---|
 | 0 | MAS-I, with MAS-II and SRM; the seven moved back from ready | The ISLR and Dobson deltas: the ACIA Capstone lines the CIA commit added. Then `check-answerable` on the seven banks, 2,020 questions, runs only: it measures what step 10 holds | Free (the books and the CIA syllabus); about $445 of model calls | MAS-I to 7 / 8; every one of the seven with a record, so step 10 is sized and placed |
 | 1 | MAS-II | 2 concepts restated off Cowpertwait's wording. G8 (§3.9): 141 items on 67 questions. The Fall 2018 McElreath questions first, under D24, which takes ESS, WAIC and KL divergence out with their questions; then the page gaps (*Linear Mixed Model* 17 items, *Principal Components Analysis* 8, and 55 smaller pages) and 28 retags | fpp3, NIST (open); West, ISLR, Tse for the gaps | **ready ✅ (31 Oct)**, 8 / 8 |
-| 2 | Exam 9 | *Enterprise Risk Management*; CJS and Cummins 2008 | Open ERM texts; the assigned texts tried again | **ready**, or held on a copy only the maintainer can supply |
+| 2 | Exam 9 | *Enterprise Risk Management*; CJS and Cummins 2008. G8: 248 items on 88 questions | Open ERM texts; the assigned texts tried again | **ready ✅ (31 Oct)**, 8 / 8. G4/G5 (run `69a5`, D22): *Enterprise Risk Management* restated to the CAS ERM Committee's 2003 overview, Brehm's four phases and implementation issues (in no open source) cut; CJS verified on the HBS working paper, the JEP text still unreachable; Cummins 2008's callout restated. G8: the sort (rule 11) closed 83 items (not-required, passages the check missed, 20 questions retagged); D10 applied to the 2012–2015 Exam 7 ERM questions from CAS's 2012–2015 syllabi, 30 `off_syllabus` (every point on Brooks, IAA 2004, Feldblum or Venter's papers; 2016–2019's one ERM reading is Brehm, today's), 2012 Q14, Q21 and 2014 Q18 kept served for G6 though D10 would flag them; the rest written onto 21 pages (new: *Franchise Value* from Panning, *Copula* and *Rank Correlation* from Venter 2002, Embrechts et al. and Mack) from open texts, with CAS's examiners' reports as last resort where Brehm alone states it, and fact checked by different agents (runs `c56a`, `2103`, `a5e7` and brehmB's). Bank serves 101 of 280 |
 | 3 | SRM | 7 concepts; Frees 2010 | ISLR (free), Frees (commercial; an online version) | **ready** |
 | 4 | Exam 5 | 61 concepts; 4 readings | All free; Friedland split by chapter group | **ready** (and the reserving concepts FAM and ASTAM share) |
 | 5 | FAM | 37 concepts; Klugman, Brown & Lennox, AMLCR | Commercial (D7, D27); open texts for the concepts (Loss Data Analytics, the SOA's own notes) | **ready** (and the three readings ASTAM and ALTAM share) |

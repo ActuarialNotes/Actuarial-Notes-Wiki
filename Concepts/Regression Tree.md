@@ -1,11 +1,16 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
   content_hash: sha256:a08cbd708b85d9a711241caa99d6b59f8868dab670dec1d44a194ae870cf596a
-  sources: []
+  sources:
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), CAS-hosted copy, §8.1.1-8.1.4 and §8.2 opening, printed pp.327-340 (PDF pp.335-348; printed = PDF - 8), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 10 CART, p.184 (PDF p.196), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "SOA Exam SRM syllabus, January 2027, Topic 4 Decision Trees, outcomes a-d, p.4, sha256:2165c0dec2c26a810a100a504f6a38ac05f02348c1af26e4c8ad71b679eb56af — https://www.soa.org/globalassets/assets/files/edu/2027/spring/syllabi/2027-01-exam-srm-syllabus.pdf"
+    - "SOA Exam PA syllabus, October 2026, Topic 5 Tree-Based Models, outcome a, p.4, sha256:1f1c46424d78ac04c297bf6c121bf9d03aec7d451560335cc9e07c7c533a4d84 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-exam-pa-syllabus.pdf"
+    - "Therneau & Atkinson, An Introduction to Recursive Partitioning Using the RPART Routines (rpart package vignette), §4.1 pp.12-13 and the scaled cp definition, p.24, sha256:bfaf9d334344b5ffa5622f136acbabb6943fd78e8e03ad9d1daa57b2b7fbf5a6 — https://cran.r-project.org/web/packages/rpart/vignettes/longintro.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Regression Tree.md

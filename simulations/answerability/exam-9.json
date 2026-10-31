@@ -9085,7 +9085,15 @@
      "statement": "A catastrophe risk swap is an unfunded agreement to pay on a covered event, so each party is exposed to counterparty default risk that can be reduced by choosing a financially strong counterparty.",
      "concept": "Catastrophe Risk Swaps",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Insurance-Linked Securities",
+      "quote": "A swap is not prefunded: it is only an agreement to pay if the covered event occurs, so each party carries counterparty default risk, reduced by choosing a financially strong counterparty",
+      "note": "CAS Exam 9 Spring 2013 Q13 model solutions PDF p.46 (source of last resort); IAA Risk Book Reinsurance 11.3",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:40Z/c56a"
+     }
     },
     {
      "id": "r3",
@@ -9148,7 +9156,15 @@
      "statement": "A catastrophe risk swap exchanges uncorrelated catastrophe exposures (e.g., different regions or perils) between two parties, giving each risk diversification.",
      "concept": "Catastrophe Risk Swaps",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Insurance-Linked Securities",
+      "quote": "Pairing uncorrelated exposures diversifies both parties' books, which a cat bond — protection on the issuer's own risk — does not do for its issuer.",
+      "note": "IAA Risk Book Reinsurance 11.3 printed pp.21-22 (peak exposures in different parts of the world swapped); CAS 2013 Q13 report PDF p.95",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:40Z/c56a"
+     }
     }
    ]
   },
@@ -9284,7 +9300,15 @@
        "page": "Lifetime Value",
        "quote": "${}_{t}p$ is the probability the customer is still on the books at time $t$ and $r$ the discount rate."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Franchise Value",
+      "quote": "F = \\left[P - E - \\frac{L}{1+y}\\right]\\frac{d}{1-d}",
+      "note": "Panning 2006 p.7: F = [P-E-L/(1+y)]*d/(1-d), d = cr/(1+y)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:40Z/c56a"
+     }
     },
     {
      "id": "r4",
@@ -9292,7 +9316,15 @@
      "statement": "Panning's franchise value formula is F = c·s·(a + b·y) / ((1+y)(1+y−c_r)), where c_r is the client retention rate, s is surplus, y is the risk-free rate, and a and b describe how the target return depends on the interest rate.",
      "concept": "Franchise Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Franchise Value",
+      "quote": "Then $F = \\dfrac{cr\\cdot S\\,\\big(a + (b-1)\\,y\\big)}{(1+y)(1+y-cr)}$, which, for any $a$ and $b$ giving the same $k$ today, is the same franchise value.",
+      "note": "Panning 2006 p.8 closed form (numerator a+(b-1)y as Panning prints it; the item's a+b*y is the paper's misreading, identical at b=0 as in this question)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:40Z/c56a"
+     }
     },
     {
      "id": "r5",
@@ -9347,7 +9379,15 @@
      "statement": "Franchise value F = c·r·S·(a + b·y − y) / [(1 + y)(1 + y − c·r)] when the target return on surplus is k = a + b·y, where cr is the client retention rate, S is surplus and y is the risk-free rate.",
      "concept": "Franchise Value (Panning)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Franchise Value",
+      "quote": "Then $F = \\dfrac{cr\\cdot S\\,\\big(a + (b-1)\\,y\\big)}{(1+y)(1+y-cr)}$, which, for any $a$ and $b$ giving the same $k$ today, is the same franchise value.",
+      "note": "Panning 2006 p.8 closed form under k = a + b*y",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:40Z/c56a"
+     }
     },
     {
      "id": "r3",
@@ -9355,7 +9395,15 @@
      "statement": "Duration of franchise value D_F = (a − b + 1) / [(1 + y)(a + b·y − y)] + 1 / (1 + y − c·r), measuring the sensitivity of franchise value to changes in interest rates.",
      "concept": "Duration of Franchise Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Franchise Value",
+      "quote": "is $D_F = \\dfrac{a - b + 1}{(1+y)(a + b\\,y - y)} + \\dfrac{1}{1 + y - cr}$",
+      "note": "Panning 2006 p.9 duration of franchise value (rendered page)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:40Z/c56a"
+     }
     },
     {
      "id": "r4",
@@ -9397,7 +9445,15 @@
      "statement": "Fannie Mae and Freddie Mac purchased whole mortgages from originators to free lenders' balance sheets, increasing mortgage credit availability and liquidity and removing regional imbalances in funding, effectively nationalizing the home mortgage market.",
      "concept": "Mortgage Market Innovations (Fannie Mae and Freddie Mac)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Securitization",
+      "quote": "To ensure a continuous supply of credit to home buyers, government-sponsored enterprises such as Fannie Mae, Freddie Mac and Ginnie Mae were chartered to buy mortgages originated by local banks, provided the loans meet size and credit-quality requirements.",
+      "note": "CJS 09-060 printed p.16; the Spring 2014 Q13 examiner's report gives full credit for 'increased mortgage availability or improved liquidity in local markets', which this teaches; regional-imbalance and balance-sheet wording is one sample answer's, not required",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:40Z/c56a"
+     }
     },
     {
      "id": "r2",
@@ -9985,7 +10041,15 @@
      "statement": "Under a fixed target return on surplus, franchise value equals (P - E - L/(1+y)) times d/(1-d), where d is the discount factor reflecting retention and the risk-free rate.",
      "concept": "Franchise Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Franchise Value",
+      "quote": "F = \\left[P - E - \\frac{L}{1+y}\\right]\\frac{d}{1-d}",
+      "note": "Panning 2006 p.7 franchise value formula",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:40Z/c56a"
+     }
     },
     {
      "id": "r4",
@@ -9993,7 +10057,15 @@
      "statement": "The retention-based discount factor d equals the client retention rate cr divided by (1+y), so cr = d(1+y).",
      "concept": "Franchise Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Franchise Value",
+      "quote": "The multiplier inverts directly: $cr = d(1+y)$.",
+      "note": "Panning 2006 p.7 d = cr/(1+y), inverted",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:40Z/c56a"
+     }
     },
     {
      "id": "r5",
@@ -10001,7 +10073,15 @@
      "statement": "When target return on surplus varies with the risk-free rate as k = a + b·y, franchise value equals cr·S·[a + y(b-1)] / (1+y) / (1+y-cr).",
      "concept": "Variable Target Return on Surplus Pricing",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Franchise Value",
+      "quote": "Then $F = \\dfrac{cr\\cdot S\\,\\big(a + (b-1)\\,y\\big)}{(1+y)(1+y-cr)}$, which, for any $a$ and $b$ giving the same $k$ today, is the same franchise value.",
+      "note": "Panning 2006 p.8 closed form",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:40Z/c56a"
+     }
     },
     {
      "id": "r6",
@@ -10009,7 +10089,15 @@
      "statement": "Premium under a target return on surplus k is P = [S(k - y) + L]/(1+y) + E, with k = a + b·y under the variable strategy.",
      "concept": "Variable Target Return on Surplus Pricing",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Franchise Value",
+      "quote": "so $P = [S(k-y) + L]/(1+y) + E$. Its current economic value is $C = S + P - E - L/(1+y)$.",
+      "note": "Panning 2006 p.6 premium to target return k (k = a + b*y on p.8, same page bullet)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:40Z/c56a"
+     }
     },
     {
      "id": "r7",
@@ -10017,7 +10105,15 @@
      "statement": "Duration of franchise value under variable target return pricing is D_f = (a-b+1)/(1+y)/(a+b·y-y) + 1/(1+y-cr).",
      "concept": "Duration of Franchise Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Franchise Value",
+      "quote": "is $D_F = \\dfrac{a - b + 1}{(1+y)(a + b\\,y - y)} + \\dfrac{1}{1 + y - cr}$",
+      "note": "Panning 2006 p.9 duration formula",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:40Z/c56a"
+     }
     },
     {
      "id": "r8",
@@ -10476,7 +10572,15 @@
      "statement": "For constant client retention cr and risk-free rate y, franchise value = [P - E - L/(1+y)] * d/(1-d), where d = cr/(1+y) and the bracket is the per-policy present value of profit for one policy year.",
      "concept": "Franchise Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Franchise Value",
+      "quote": "F = \\left[P - E - \\frac{L}{1+y}\\right]\\frac{d}{1-d}",
+      "note": "Panning 2006 p.7 franchise value formula",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:40Z/c56a"
+     }
     },
     {
      "id": "r3",
@@ -10493,7 +10597,15 @@
        "page": "Lifetime Value",
        "quote": "With retention $p$, the year-$t$ profit is received with probability $p^{t}$:"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Franchise Value",
+      "quote": "The later renewals are a perpetuity at the steady retention, but they start from the clients who survived the first renewal, so the whole tail is scaled by $0.75$ and discounted one more year",
+      "note": "Panning 2006 p.7 series P(d+d^2+...) applied with a different first-year retention; method matches the Spring 2017 Q12 examiner's report",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:40Z/c56a"
+     }
     },
     {
      "id": "r4",
@@ -11025,7 +11137,15 @@
        "page": "Binomial Option Pricing Model",
        "quote": "$$C = e^{-rh}\\left[p^*C_u + (1 - p^*)\\,C_d\\right]$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Structured Finance",
+      "quote": "A tranche that pays a fixed amount $X$ at maturity $T$, or nothing if it defaults, is worth its expected payoff discounted to today: $\\text{Price} = X(1 - p_D)/(1+r)^T$",
+      "note": "CAS Exam 9 Spring 2018 Q12 sample answer PDF p.67 (price = 100(1-p)/1.05); CJS 09-060 p.19 ratings reflect expected payoffs",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:40Z/c56a"
+     }
     },
     {
      "id": "r6",
@@ -11101,7 +11221,15 @@
      "statement": "Price of a risky zero-coupon-type tranche = promised payment × (1 − default probability) discounted at the discount rate over the number of years to maturity: P = Payoff × (1−PD)/(1+r)^T.",
      "concept": "Pricing of Defaultable Securities",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Structured Finance",
+      "quote": "A tranche that pays a fixed amount $X$ at maturity $T$, or nothing if it defaults, is worth its expected payoff discounted to today: $\\text{Price} = X(1 - p_D)/(1+r)^T$",
+      "note": "CAS Exam 9 Spring 2019 Q10 sample answer PDF p.58 (500(1-p)/1.05^2)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:40Z/c56a"
+     }
     },
     {
      "id": "r5",
@@ -11114,7 +11242,15 @@
        "page": "Yield Rate",
        "quote": "the interest rate per period at which the present value of all future cash flows equals the current price $P$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Structured Finance",
+      "quote": "Its yield is $(X/\\text{Price})^{1/T} - 1$, and its **default premium** is that yield less the risk-free rate, the measure CAS's examiners credit.",
+      "note": "CAS Exam 9 Spring 2019 Q10 part b sample answer PDF p.58 (yield = (500/price)^(1/2) - 1)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:40Z/c56a"
+     }
     },
     {
      "id": "r6",
@@ -11127,7 +11263,15 @@
        "page": "Corporate Bond",
        "quote": "$$s = y_{\\text{corp}} - y_{\\text{govt}}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Structured Finance",
+      "quote": "Its yield is $(X/\\text{Price})^{1/T} - 1$, and its **default premium** is that yield less the risk-free rate, the measure CAS's examiners credit.",
+      "note": "CAS Exam 9 Spring 2019 Q10 examiner's report PDF p.59 (default premium = CDO2 return less risk-free rate)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:40Z/c56a"
+     }
     },
     {
      "id": "r7",
@@ -11203,7 +11347,15 @@
      "statement": "Franchise value (value of future new and renewal business) with retention ratio cr is F = cr·S·(a + b·y − y) / [(1+y)(1+y−cr)].",
      "concept": "Franchise Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Franchise Value",
+      "quote": "Then $F = \\dfrac{cr\\cdot S\\,\\big(a + (b-1)\\,y\\big)}{(1+y)(1+y-cr)}$, which, for any $a$ and $b$ giving the same $k$ today, is the same franchise value.",
+      "note": "Panning 2006 p.8 closed form",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:40Z/c56a"
+     }
     },
     {
      "id": "r5",
@@ -11224,7 +11376,15 @@
      "statement": "Duration of franchise value is D_F = (a − b + 1)/[(1+y)(a + b·y − y)] + 1/(1+y−cr).",
      "concept": "Duration of Franchise Value",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Franchise Value",
+      "quote": "is $D_F = \\dfrac{a - b + 1}{(1+y)(a + b\\,y - y)} + \\dfrac{1}{1 + y - cr}$",
+      "note": "Panning 2006 p.9 duration formula",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:40Z/c56a"
+     }
     },
     {
      "id": "r7",
@@ -11401,7 +11561,15 @@
      "statement": "A catastrophe model provision already stated at the future policy period's cost level must not be developed or trended again.",
      "concept": "Catastrophe Model Loss Provision",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Catastrophe Expected Loss Cost",
+      "quote": "That provision is added to non-catastrophe losses that have already been trended and developed to ultimate; adding it first and then trending and developing the sum over-adjusts the expected catastrophe losses (Werner & Modlin).",
+      "note": "Werner & Modlin 5th ed. Ch.6 printed p.94 (order of adjustments, over-adjusted)",
+      "date": "2026-10-31",
+      "run": "2026-10-31T13:40Z/c56a"
+     }
     },
     {
      "id": "r4",

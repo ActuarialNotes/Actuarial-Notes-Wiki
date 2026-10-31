@@ -1,11 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:7d1dfc509bd3805a10feadcb9735fbd748e78fbdc1d8295c4b3ba820badac598
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:df06987dc3ec1e1b308b29d7c21ea0c28502c77bb693dbaceea52a20a37aba4b
+  sources:
+    - "Panning, Managing Interest Rate Risk: ALM, Franchise Value, and Strategy (Willis Re, July 2006), pp.5-11 (model assumptions and notation pp.5-6; P - L - E + (S+P-E)y = kS, P = [S(k-y)+L]/(1+y)+E and C = S+P-E-L/(1+y) p.6; P, L, E followed by P*cr, L*cr, E*cr, d = cr/(1+y), P*d/(1-d) = P*cr/(1+y-cr), perpetuity at cr = 1, F = [P-E-L/(1+y)]*d/(1-d) p.7; k = a + b*y, b = 0 fixed, b = 1 risk-free plus premium, F = cr*S*(a+(b-1)y)/[(1+y)(1+y-cr)] p.8 and D = (a-b+1)/[(1+y)(a+by-y)] + 1/(1+y-cr) p.9, both read from the rendered pages; Table 1, duration of a total = dollar duration / PV, double impact of rates on interest-sensitive premiums p.9; D_V 6.70, 5.18, zero or negative asset duration infeasible and invisible to regulators and rating agencies p.10; pricing strategy a = 10%, b = 1 gives 7.62 and 3.27 p.10), sha256:9f569b0edf7a677b08716b2c06103c0c7826007d00c5a17c5f4d32f129e32278 — https://www.casact.org/sites/default/files/2021-03/9_Panning.pdf"
+    - "CAS Exam 9 Spring 2017 — sample answers and examiner's report, Q12 part a, PDF pp.61-62 (FV with first-year retention 90% then 80%: first-year term then later years scaled by it and multiplied by d/(1-d); examiner: 'how to apply it when the client retention rates vary from one year to the next'), sha256:bca96aba31c0e64a7b054e54622485f16ed3195dcce4b2c7bf94505134ab7176 — https://www.casact.org/sites/default/files/2021-03/17-9.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Franchise Value.md
@@ -24,7 +26,7 @@ verification:
 - **Duration of franchise value**, $D = -(dF/dy)/F$, is $D_F = \dfrac{a - b + 1}{(1+y)(a + b\,y - y)} + \dfrac{1}{1 + y - cr}$. The duration of the firm's total economic value is the value-weighted average, $(C\,D_C + F\,D_F)/(C+F)$ — the dollar duration of the total over its value.
 
 > [!idea] The idea
-> Franchise value is a perpetuity of next year's economic profit, shrunk each year by the clients who leave. When premiums are set to a fixed target return, a rise in rates hits it twice — each future dollar is discounted harder *and* fewer premium dollars are needed to earn the target — so its duration is far longer than its cash flows suggest. Tying the target return to the interest rate removes the second effect, which is why Panning manages this risk through pricing rather than through the asset portfolio.
+> Franchise value is a perpetuity of next year's economic profit, shrunk each year by the clients who leave. When premiums are set to a fixed target return, a rise in rates hits it twice — each future dollar is discounted harder *and* fewer premium dollars are needed to earn the target — so its duration is far longer than its cash flows suggest. Tying the target return to the interest rate changes the size of the second effect, which is why Panning manages this risk through pricing rather than through the asset portfolio.
 
 > [!trap] Discounting at the target return
 > The multiplier is $d = cr/(1+y)$ with the **risk-free** rate $y$, and the current economic value discounts losses at $y$ too. The target return $k$ enters only through the premium (or through $a$ and $b$). Using $k$ in $d$ understates $F$.

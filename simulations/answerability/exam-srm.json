@@ -1,0 +1,45 @@
+{
+ "version": 1,
+ "exam": "Exam SRM (SOA)",
+ "bank": "exam-srm",
+ "questions": {
+  "srm-001": {
+   "path": "questions/exam-srm/srm-001.md",
+   "run": "answerability-20261031-srm",
+   "input_hash": "sha256:2eeacbb847366c9c41603283d342eeb06530a3d25b3c63be884384d01bce97a4",
+   "verdict": "answerable",
+   "requirements": [
+    {
+     "id": "r1",
+     "kind": "definition",
+     "statement": "Complete linkage defines the intercluster dissimilarity as the largest pairwise dissimilarity between an observation in one cluster and an observation in the other cluster.",
+     "concept": "Hierarchical Clustering Linkage",
+     "status": "tagged",
+     "places": [
+      {
+       "page": "Linkage",
+       "quote": "$$\\text{complete: } \\max_{i \\in A,\\, j \\in B} d_{ij} \\qquad \\text{single: } \\min_{i \\in A,\\, j \\in B} d_{ij}$$"
+      },
+      {
+       "page": "Clustering",
+       "quote": "- **Complete**: maximum distance between any pair of points in the two clusters"
+      }
+     ]
+    },
+    {
+     "id": "r2",
+     "kind": "formula",
+     "statement": "The Euclidean distance between two points is the square root of the sum of squared differences in their coordinates.",
+     "concept": "Euclidean Distance",
+     "status": "linked",
+     "places": [
+      {
+       "page": "Similarity and Distance Measures",
+       "quote": "$$d_{\\text{Euc}}(\\mathbf{u}, \\mathbf{v}) = \\sqrt{\\sum_{j=1}^{p} (u_j - v_j)^2}$$"
+      }
+     ]
+    }
+   ]
+  }
+ }
+}

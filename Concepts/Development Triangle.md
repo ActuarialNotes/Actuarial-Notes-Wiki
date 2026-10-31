@@ -1,12 +1,12 @@
 ---
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
   content_hash: sha256:0bbcc60ff037872d55590d10572210f8c32d6fe08044ec5aa35c022d8aa9a935
   sources:
-    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, Version 3, July 30 2010), Ch.5 pp.51-62 (PDF 57-68); Ch.6 (PDF 69-83); Ch.7 pp.84-95 (PDF 90-101), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, Version 3, 2010), Ch.5 pp.54-57, 61 (PDF 60-63, 67); Ch.7 pp.96-97 (PDF 102-103); Ch.13 p.283 (PDF 289), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Development Triangle.md

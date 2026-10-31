@@ -82,3 +82,14 @@ created: 2026-10-31
 - checks_run: Definition and examples (legal, expert witness, independent adjusters if assigned) vs Friedland p.369 and p.386; combined vs separate development and the different-pattern caveat vs p.370; ratio approach vs pp.371-374; formulas (Loss & ALAE = Indemnity + ALAE; ALAE ratio) consistent with p.371; both examples recomputed independently (35,000; 135,000; 35%; 2,280,000; 880,000; 61% vs 63% paid) — agree.
 - sources_checked: Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, Version 3, July 30 2010), Part 4 intro p.369 (PDF 375); Ch.16 pp.370-374 (PDF 376-380); Ch.17 p.386 (PDF 392); Ch.1 p.15 (PDF 21), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf; Werner & Modlin, Basic Ratemaking (CAS, 5th ed. 2016), Ch.6 'Loss Adjustment Expenses', pp.121-122 (PDF 133-134), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf
 - note: The definition, the triangle-development point and the different-pattern caveat check against Friedland Ch.16. One contradicted clause (ALAE always in case reserves) deleted. Three minor findings stay open: Friedland's techniques miscounted, unsourced ALAE-ratio ranges, and unsourced countercyclical/treaty claims.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T17:32Z/4562
+- date: 2026-10-31
+- status_set: verified
+- confidence: medium
+- checks_run: Ratio-of-paid-ALAE-to-paid-claims material vs Ch.16: four projection techniques and Wiser's additive-stability quote (PDF 377, printed 371); stability assumption, defense strategy and external vs internal counsel, error-in-ultimate-claims disadvantage, leverage advantage, judgmental selection for 2007-08 when 0.0102 looks high from recording changes or unusually large expenses (PDF 379); additive factors as successive differences, cumulative addition from the oldest age, ultimate ratio = latest diagonal + cumulative factor, unpaid = ultimate - paid (PDF 379-380). The second disadvantage clause (a distorted latest ratio carries through) is the development technique's mechanics applied to the ratio and is what Friedland's 0.0102 example shows; the 'ALAE alone is not exposed to claim errors' sentence is true by construction. Neither is a quotation. Examples recomputed (35,000; 135,000; 35%; 2,280,000; 880,000; 61%/63%).
+- sources_checked: Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, Version 3, 2010), Ch.16 pp.371-374 (PDF 377-380), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf
+- note: Additions check against Friedland Ch.16. F-002 ('three approaches', left as is at the coordinator's instruction because G8 quotes depend on it), F-003 and F-004 still open.

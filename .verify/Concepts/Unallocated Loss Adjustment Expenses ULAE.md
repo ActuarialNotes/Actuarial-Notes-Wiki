@@ -130,3 +130,62 @@ created: 2026-10-31
 - checks_run: Definition vs p.386; classical formula 0.5 x case + 1.0 x IBNR vs pp.387-388; Kittel ratio and its growth rationale vs pp.391-393; Mango-Allen description vs p.400; Conger-Nolibos weights vs pp.394-395; growth/shrinkage distortion vs p.390; both examples recomputed independently (12.0%, 840,000; 8.0%, 560,000; 280,000; 5.0/6.0/8.9%, 6.6% average) — agree; full-text search of every named method.
 - sources_checked: Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, Version 3, July 30 2010), Ch.17 pp.386-404 (PDF 392-410), Errata (PDF p.451), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf; Werner & Modlin, Basic Ratemaking (CAS, 5th ed. 2016), Ch.6 'Loss Adjustment Expenses', pp.121-122 (PDF 133-134), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf
 - note: Formulas and the classical/Kittel/Mango-Allen descriptions check against Friedland Ch.17. Three transcription fixes applied (technique class and order, 'bootstrap', C-N counts). Open: two major findings (count- and triangle-based techniques omitted; runoff example attributes per-claim costing to C-N) and one minor (unsourced figures and alternatives).
+
+## [F-007] 25%/75% professional-liability example transcribes the text the book's errata corrects
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-31T17:32Z/4562
+- date: 2026-10-31
+- severity: critical
+- status: open
+- locus: 'When the classical technique fails', Long-tail lines bullet, last sentence
+- claim: for a long-tail professional liability portfolio ... one actuary applies 25% of the ratio to case outstanding and 75% to IBNR, which includes development on case outstanding.
+- evidence: Friedland Ch.17 p.388 (PDF 394) prints '25% applied to case outstanding and 75% to IBNR', but the Errata page bound into the same CAS PDF (PDF p.451) corrects exactly that sentence to: 'ratios of 25% applied to opening the claims and 75% to closing the claims (implying 75% of the ULAE ratio applied to case outstanding and 100% to IBNR, which includes development on case outstanding)'. The uncorrected text also contradicts the paragraph's own conclusion ('a greater proportion of the expenses are related to closing the claims'): under it a candidate would put 25%, not 75%, of the ratio on case outstanding — the wrong direction for cas5-2017-q24, whose solution needs the classical 50% to understate the case-outstanding piece for a long-tail line. sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf
+- source_rank: 2
+- proposed_action: Transcribe the errata: 25% opening / 75% closing, i.e. 75% of the ratio on case outstanding and 100% on IBNR.
+- applied: true
+- fingerprint: 614ea77c2a39
+
+## [F-008] Test of the same-inflation assumption (paid ULAE trend vs loss cost per exposure) is not in Friedland
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-31T17:32Z/4562
+- date: 2026-10-31
+- severity: minor
+- status: open
+- locus: 'When the classical technique fails', Inflation bullet, last sentence
+- claim: The assumption is tested by comparing how fast ULAE costs have grown with how fast claim costs have grown, for instance the trend in paid ULAE against the trend in loss cost per exposure
+- evidence: Friedland Ch.17 pp.387-391 (PDF 393-397) states Kittel's same-inflation condition and Mango-Allen's upward distortion (PDF 397) but gives no test of it; the only related text is the XYZ ratio selection weighing 'the relationship between claim and salary inflation' (p.388, PDF 394). 'loss cost per exposure' and 'per exposure' do not occur in Ch.17. The writer flagged this sentence as not in Friedland. sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf
+- source_rank: 2
+- proposed_action: Delete the unsupported clause; keep the p.388 claim/salary-inflation sentence.
+- applied: true
+- fingerprint: bf414cd76783
+
+## [F-007/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-31T17:32Z/4562
+- date: 2026-10-31
+- resolves: F-007
+- status: resolved
+- note: Corrected in this change to the errata's wording: 25% opening / 75% closing, implying 75% of the ratio on case outstanding and 100% on IBNR, with the errata named.
+
+## [F-008/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-31T17:32Z/4562
+- date: 2026-10-31
+- resolves: F-008
+- status: resolved
+- note: Unsupported clause deleted in this change; the p.388 claim/salary-inflation sentence stays.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T17:32Z/4562
+- date: 2026-10-31
+- status_set: verified
+- confidence: medium
+- checks_run: Added 'When the classical technique fails' and 'Count-based techniques' vs Ch.17: Johnson's short-tailed quote and Rahardjo's liability quote (PDF 396); 25%/75% professional-liability example vs p.388 and the Errata (PDF 451) — corrected; Kittel same-inflation and Mango-Allen upward distortion (PDF 397); XYZ selection weighing claim/salary inflation (PDF 394); $1,000 vs $100 dollar-based assumption (PDF 393); Mango-Allen average-size and 'rider' objections, count-based key assumption (PDF 408); Johnson reporting/maintenance weights and weighted-count mechanics (PDF 409-410). Examples recomputed (12.0%, 840,000; 8.0%, 560,000; 280,000; 6.6% average).
+- sources_checked: Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, Version 3, 2010), Ch.17 pp.386-391, 402-404 (PDF 392-397, 408-410); Errata (PDF 451), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf
+- note: One critical transcription error (25/75 contradicting the errata) and one minor unsupported test sentence fixed. F-004 is partly addressed (Johnson and the count-based premise now present; Brian, Mango-Allen claim staffing, Rahardjo, Spalla and triangle-based still absent) and stays open, as do F-005 and F-006.

@@ -1,13 +1,12 @@
 ---
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:431d04a17ced976ab0314eb397a38514888b880f0f5449bb2b38411ad2839ba4
+  content_hash: sha256:ae0bac012fad1a180d7c1a2b73f0d7933d4b1c07e10e79ea3a830abe8c914a75
   sources:
-    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, Version 3, July 30 2010), Ch.17 pp.386-404 (PDF 392-410), Errata (PDF p.451), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. 2016), Ch.6 'Loss Adjustment Expenses', pp.121-122 (PDF 133-134), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, Version 3, 2010), Ch.17 pp.386-391, 402-404 (PDF 392-397, 408-410); Errata (PDF 451), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 3
   open_critical: 0
   log: .verify/Concepts/Unallocated Loss Adjustment Expenses ULAE.md
@@ -31,8 +30,8 @@ Friedland's four dollar-based techniques:
 
 When the classical technique fails (Friedland Ch.17, pp.388–391):
 
-- **Long-tail lines.** The $50/50$ split assumes ULAE is spent when a claim is opened and when it is closed. Johnson finds the classical technique gives good results only for very short-tailed, stable lines, and Rahardjo that the open-and-close assumption is definitely not true for liability claims, which keep incurring claims-handling expense while they stay open. Some actuaries respond by changing the percentages: for a long-tail professional liability portfolio with substantial claims-handling work during the life of the claim, one actuary applies 25% of the ratio to case outstanding and 75% to IBNR, which includes development on case outstanding.
-- **Inflation.** Kittel notes that the classical technique accounts for inflation only if the costs underlying ULAE inflate at the same rate as claim costs; if different rates of inflation underlie the claims experience and ULAE, the estimated unpaid ULAE may not be predictive of future experience. Mango and Allen add that the paid-to-paid ratio is distorted upward under inflation, because most claims paid in a calendar year were incurred in earlier years, so inflation reaches the denominator later than the numerator. The assumption is tested by comparing how fast ULAE costs have grown with how fast claim costs have grown, for instance the trend in paid ULAE against the trend in loss cost per exposure; Friedland's selection of a classical ratio weighs the relationship between claim and salary inflation (p.388).
+- **Long-tail lines.** The $50/50$ split assumes ULAE is spent when a claim is opened and when it is closed. Johnson finds the classical technique gives good results only for very short-tailed, stable lines, and Rahardjo that the open-and-close assumption is definitely not true for liability claims, which keep incurring claims-handling expense while they stay open. Some actuaries respond by changing the percentages: for a long-tail professional liability portfolio with substantial claims-handling work during the life of the claim, one actuary assumes 25% of ULAE is spent opening claims and 75% closing them, implying 75% of the ratio applied to case outstanding and 100% to IBNR, which includes development on case outstanding (as corrected by the book's errata).
+- **Inflation.** Kittel notes that the classical technique accounts for inflation only if the costs underlying ULAE inflate at the same rate as claim costs; if different rates of inflation underlie the claims experience and ULAE, the estimated unpaid ULAE may not be predictive of future experience. Mango and Allen add that the paid-to-paid ratio is distorted upward under inflation, because most claims paid in a calendar year were incurred in earlier years, so inflation reaches the denominator later than the numerator. Friedland's selection of a classical ratio weighs the relationship between claim and salary inflation (p.388).
 
 Count-based techniques (Friedland Ch.17, pp.387, 402–404):
 

@@ -28,3 +28,14 @@ created: 2026-10-31
 - checks_run: Count triangle types (reported, closed with/without payment, total closed, outstanding) vs p.61; average case outstanding and closed-to-reported diagnostics vs Ch.6; disposal rate = closed / ultimate counts vs Ch.11 and p.288 (Friedland notes other authors define it differently); count consistency (CNP exclusion, reopened) vs Ch.5 p.52 and Ch.11; F-S and B-S uses vs Ch.11/13; both examples recomputed independently (1.157, 1.048, CDF 1.225, 612, 1,000, 82%; 5,000 to 4,000; 60%; 5,000 to 3,500) — agree.
 - sources_checked: Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, Version 3, July 30 2010), Ch.5 pp.60-62 (PDF 66-68); Ch.6 pp.69-77 (PDF 75-83); Ch.11 pp.195-212 (PDF 201-218); Ch.13 p.288 (PDF 294); Ch.17 p.389 (PDF 395), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf
 - note: Checks against Friedland. One minor overclaim open.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T17:32Z/4562
+- date: 2026-10-31
+- status_set: verified
+- confidence: medium
+- checks_run: Added downward-development bullet vs Ch.11 p.196 (reported counts exclude CNP; fast-reporting collision; more CNP closures than new reports; factors < 1.00 at 6-12 months); count triangle types vs p.61; examples recomputed (1,070/925 = 1.157; 545/520 = 1.048; x1.010 = 1.225; 500 x 1.225 = 612; $1,000; severities 5,000/4,000; disposal 60%; avg case 5,000/3,500).
+- sources_checked: Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, Version 3, 2010), Ch.5 p.61 (PDF 67); Ch.11 p.196 (PDF 202), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf
+- note: Addition checks against Friedland Ch.11. F-001 (dollar data can split IBNR) still open.

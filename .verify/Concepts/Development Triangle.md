@@ -52,3 +52,14 @@ created: 2026-10-31
 - checks_run: Rows, columns, diagonals and age measured from the start of the cohort vs pp.52-54; orientation vs p.54; interval choice (monthly/quarterly/semi-annual; credibility and stability) vs p.61; data bases and ratio triangles vs p.61; diagnostic use vs Ch.6; volume-weighted age-to-age formula vs Ch.7; both examples recomputed independently (1.500/1.150/1.040; column growth 10%, 18%, 19%; +12%/+11%/+12% diagonal lift) — agree.
 - sources_checked: Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, Version 3, July 30 2010), Ch.5 pp.51-62 (PDF 57-68); Ch.6 (PDF 69-83); Ch.7 pp.84-95 (PDF 90-101), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf
 - note: Checks against Friedland. One wording fix applied (triangles can be incremental). One minor finding open (an unsourced overclaim).
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T17:32Z/4562
+- date: 2026-10-31
+- status_set: verified
+- confidence: medium
+- checks_run: Writer's additions read against the pages they cite: incremental triangle built from transactions by AY row and calendar period, cumulative = running sum (Tables 6-8, PDF 61-62); diagonals built by adding each year's calendar-period payments to the prior diagonal (PDF 63); interval chosen for credibility/stability (PDF 67); AY factor at 12 months as average of accident-month factors and exposure growth making the average occurrence date non-comparable (PDF 102-103); Berquist-Sherman accident quarters when exposure growth changes markedly (PDF 289). The direction (growth -> later average date -> historical factors understate) is not stated by Friedland; recomputed from her accident-month model (reporting linear to 24 months: even exposure CDF12 = 3.69, exposure weights rising with month CDF12 = 5.14, so the historical factor understates) — accepted as a one-step consequence of her stated mechanism, not a quotation. Both examples recomputed (1.500/1.150/1.040; 10/18/19%; +12/+11/+12%).
+- sources_checked: Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, Version 3, 2010), Ch.5 pp.54-57, 61 (PDF 60-63, 67); Ch.7 pp.96-97 (PDF 102-103); Ch.13 p.283 (PDF 289), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf
+- note: Additions check against Friedland Ch.5, 7 and 13. F-002 (three-assumption overclaim) still open and unchanged.

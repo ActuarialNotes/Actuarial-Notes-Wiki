@@ -1,13 +1,12 @@
 ---
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
   content_hash: sha256:1d8fd9f56f48c6898fc7cfee007dd0ff1c5b66734906d7ff1cea7a614c855d9b
   sources:
-    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, Version 3, July 30 2010), Part 4 intro p.369 (PDF 375); Ch.16 pp.370-374 (PDF 376-380); Ch.17 p.386 (PDF 392); Ch.1 p.15 (PDF 21), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. 2016), Ch.6 'Loss Adjustment Expenses', pp.121-122 (PDF 133-134), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, Version 3, 2010), Ch.16 pp.371-374 (PDF 377-380), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 3
   open_critical: 0
   log: .verify/Concepts/Allocated Loss Adjustment Expense.md

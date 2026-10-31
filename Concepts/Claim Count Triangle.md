@@ -1,12 +1,12 @@
 ---
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
   content_hash: sha256:867e462d9bb21b573cc5da275058654663649057ab542f7e58af2e1a484ce6a6
   sources:
-    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, Version 3, July 30 2010), Ch.5 pp.60-62 (PDF 66-68); Ch.6 pp.69-77 (PDF 75-83); Ch.11 pp.195-212 (PDF 201-218); Ch.13 p.288 (PDF 294); Ch.17 p.389 (PDF 395), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, Version 3, 2010), Ch.5 p.61 (PDF 67); Ch.11 p.196 (PDF 202), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Claim Count Triangle.md

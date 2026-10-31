@@ -95,3 +95,38 @@ created: 2026-09-13
 - checks_run: Read Werner Ch.3 Data Aggregation and Friedland Ch.3 aggregation sections end to end this session; definition diffed against Werner p.43 and Friedland p.40; not-final-at-year-end and need to develop against Werner p.43; premium/loss approximate matching against Werner p.43 and Friedland p.40 ('Calendar year earned premiums provide an approximate matching'); triangle rows = accident years and diagonals = valuation dates against Werner p.106 (PDF p.118); assignment table rechecked date by date (AY 2024, PY 2023, RY 2024, close 2025; CY: 40,000 reported in 2024 = 0 paid + 40,000 case, 52,000 - 40,000 = 12,000 in 2025); example 2 recomputed: 4.4M/8M = 55.0%, 5.3M/8M = 66.25%, 5.3M x 1.150 = 6,095,000, /8M = 76.19%.
 - sources_checked: Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 3 pp.42-44 (PDF pp.54-56); Ch. 6 p.106 (PDF p.118) triangle rows and diagonals, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf; Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch. 3 pp.39-42 (PDF pp.45-48), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf
 - note: F-001 resolved, two new minor findings (F-002, F-003) fixed and resolved. Confidence medium, not high: the page carries vault-authored worked examples (recomputed), and the Close Year row rests on the vault's own [[Close Year]] definition — neither Werner Ch.3 nor Friedland Ch.3 defines a close year.
+
+## [F-004] 'the same event is spread across two policy years' overstates the 24-month point
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-31T17:32Z/4562
+- date: 2026-10-31
+- severity: nit
+- status: open
+- locus: bullet 3, last sentence
+- claim: so the same event is spread across two policy years.
+- evidence: Friedland Ch.3 p.41 (PDF 47) says only that a policy year's claims 'can extend over a 24-month calendar period' for 12-month policies. An event on date D falls on policies written in the 12 months before D, which straddle two policy years except when D is the last day of a year; 'can be' is what the source supports. sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf
+- source_rank: 2
+- proposed_action: 'is spread' -> 'can be spread'.
+- applied: true
+- fingerprint: c0350c0cc7a2
+
+## [F-004/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-31T17:32Z/4562
+- date: 2026-10-31
+- resolves: F-004
+- status: resolved
+- note: 'is spread' changed to 'can be spread' in this change.
+
+## [C-003] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T17:32Z/4562
+- date: 2026-10-31
+- status_set: verified
+- confidence: medium
+- checks_run: Added bullet vs Friedland Ch.3 p.41 (PDF 47): tracking by AY valuable for economic/regulatory forces (inflation, law amendments) and major claim events (atypical weather, catastrophe) — near-verbatim; PY claims extend over 24 months for 12-month policies. Werner's three aggregation objectives re-read (PDF 54). Example 2 recomputed (55.0%, 66.25%, 6,095,000, 76.2%).
+- sources_checked: Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, Version 3, 2010), Ch.3 pp.40-41 (PDF 46-47), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf; Werner & Modlin, Basic Ratemaking (CAS, 5th ed. 2016), Ch.3 p.42 (PDF 54), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf
+- note: Addition checks against Friedland Ch.3; one nit ('is' -> 'can be' spread across two policy years) fixed.

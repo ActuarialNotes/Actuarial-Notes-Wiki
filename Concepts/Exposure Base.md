@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:ea749a3869a06a04c268b4c69c64fbf60024ea15758205dba85dd8173757fa1a
+  content_hash: sha256:2b0402578db774d9dedbce8c30725142f9d3d5044cd1472590af5456b2dca92d
   sources:
     - "IRMI Glossary, 'exposure base', entry, sha256:47e94e12e79df29163b37da0ab98b8194ba29990c124768a2200b11b65f9b3d0 — https://www.irmi.com/term/insurance-definitions/exposure-base"
     - "IRMI Glossary, 'premium audit', entry, sha256:4d303e9e2670eb03ca6e5050b336726d99d40c4294ec4a273a9a9f79a6b79909 — https://www.irmi.com/term/insurance-definitions/premium-audit"
@@ -30,7 +30,7 @@ Werner & Modlin give three criteria for choosing one:
 Further properties:
 
 - **Exposure is counted per year of coverage.** One home insured for two years has twice the expected loss of the same home insured for one year, so it is two house-years of exposure; a policy written for a term other than a year counts its term in exposure units, and a six-month policy is one-half of a written exposure (Werner & Modlin, Ch. 4).
-- **Why workers compensation uses payroll.** As the number of workers or the hours they work rise or fall, payroll and the risk of loss move together (Werner & Modlin, Ch. 4). Payroll also tracks the size of claims: indemnity benefits are a percentage of the injured worker's pre-injury wage (Ch. 6), and as indemnity benefits are tied to wage levels, they change as wages change (App. D). So payroll reflects both how much the workforce is exposed to injury and how much an injury costs, whereas hours worked measure only the time exposed.
+- **Why workers compensation uses payroll.** As the number of workers or the hours they work rise or fall, payroll and the risk of loss move together (Werner & Modlin, Ch. 4). Payroll also tracks the size of claims: indemnity benefits are a percentage of the injured worker's pre-injury wage (Ch. 6), and as indemnity benefits are tied to wage levels, they change as wages change (App. D). So payroll reflects both how much the workforce is exposed to injury and the size of its indemnity claims, whereas hours worked measure only the time exposed; the 1980s proposal to switch to hours worked was for the medical coverage (Ch. 4).
 - Common bases: earned car-years (personal auto), earned house-years (homeowners), payroll — in hundreds of dollars in the U.S. — (workers compensation), sales revenue, payroll, square footage or number of units (commercial general liability), amount of insurance (commercial business property).
 - **In underwriting (DISC-RM):** the premium base for a general liability account follows its classification. IRMI lists payroll, receipts, sales, square footage, area or man-hours for general liability, units for auto and value per \$1,000 for property, and a [[Premium Audit|premium audit]] verifies the base after the policy ends ([[Commercial General Liability]]).
 - Exposures come in the same four flavours as premium — **written**, [[Earned Exposure|earned]], unearned and [[In-Force|in-force]]; which one is used depends on the analysis, and pure premium is typically calculated on earned exposures.

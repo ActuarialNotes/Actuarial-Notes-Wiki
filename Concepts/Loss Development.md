@@ -1,13 +1,12 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-09
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
   content_hash: sha256:5390161fa1fc33ec1f6b63fe776e43b42029457e47ed7ed49141eb6bbf214679
   sources:
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 6 pp.105-109 and 120-121 (PDF pp.117-121, 132-133), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
-    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch. 2 p.14 (PDF p.20); Ch. 6 p.68 (PDF p.74); Ch. 7 pp.90-91, 97, 105 (PDF pp.96-97, 103, 111); Ch. 9 p.153 (PDF p.159), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, Version 3, 2010), Ch.7 pp.95-97 (PDF 101-103), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Loss Development.md

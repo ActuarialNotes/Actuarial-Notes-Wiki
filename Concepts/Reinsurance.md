@@ -1,13 +1,15 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-10
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
   content_hash: sha256:45a475c31abd8975756e052db6c7f67c2f406fc23887989f9ccc7ad7593235b0
   sources:
-    - "Myers, Reinsurance Overview (NAMIC Directors' Education, 9 May 2017), slides pp.6–17 (functions, types, facultative uses, pro rata, per-risk/cat XOL, types of reinsurers, marketing), sha256:c8c7fe0c3bbd0f5d327147142f007ff9d13af260c71da725eb9973a0700121a4 — https://www.namic.org/pdf/reinsuranceRe/17dbc_ReinsuranceOverview.pdf"
-    - "Baranoff, Brockett & Kahane, Risk Management for Enterprises and Individuals (Saylor, CC BY-NC-SA), §7.3 'Claims Adjusting', sha256:85078f2f0eb5eeae7a77d336f6f5ff14be25519272bfc27d528e037c21424877 — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s11-03-insurance-operations-reinsuran.html"
+    - "Friedland, Reserving for Reinsurance (CAS Study Note — Exam 7), PDF pp.22, 24, 74-76, sha256:6da495a26206ececf40a3c3fc8fb3db04556c940242f5bcffe2b21b7e4445ceb — https://www.casact.org/sites/default/files/2022-11/Exam7_Study_Note_Friedland.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, Version 3, 2010), Ch.14 pp.330-331 (PDF 336-337), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. 2016), Ch.6 p.99 (PDF 111), Ch.7 p.137 (PDF 149), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Myers, Reinsurance Overview (NAMIC, 2017), slides pp.6, 15, sha256:c8c7fe0c3bbd0f5d327147142f007ff9d13af260c71da725eb9973a0700121a4 — https://www.namic.org/pdf/reinsuranceRe/17dbc_ReinsuranceOverview.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Reinsurance.md

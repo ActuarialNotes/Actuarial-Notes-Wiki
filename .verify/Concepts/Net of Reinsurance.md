@@ -120,3 +120,14 @@ created: 2026-09-12
 - checks_run: Open findings re-read and fixed; whole page re-read against Werner and Friedland; Werner App. B arithmetic re-checked (673,248 - 458,673 = 214,575; /13,681 = 15.68); Example 1 recomputed (65.0%, 75.0%, 63.9%); Example 2 recomputed (0.64/0.73 = 0.877, -12.3%; 900,000/40,000,000 = 2.25%; 0.6625/0.73 = 0.908, -9.2%; gap 3.1 points). Treaty-change bullet rests on Friedland Ch.4 p.44 (reinsurance limits and attachment points alter patterns) and Ch.7 p.96.
 - sources_checked: Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.6 p.99 (PDF p.111), Ch.7 p.137 (PDF p.149), Appendix B pp.B-3, B-8 (PDF pp.361, 366), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf; Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch.4 p.44 (PDF p.50), Ch.7 p.96 (PDF p.102), Ch.14 pp.330-332 (PDF pp.336-338), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf
 - note: F-001, F-002 fixed; two new minors (F-003, F-004) found and fixed. Medium: vault-authored examples.
+
+## [C-003] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T17:32Z/4562
+- date: 2026-10-31
+- status_set: verified
+- confidence: medium
+- checks_run: Added bullet vs study note PDF 75 (retained after QS and stop-loss = min[retained after QS, stop-loss limit]; 'Reported and paid losses ... calculated in a similar way', AY4 paid capped) and PDF 76 (XS per occurrence first, stop-loss as the final step); Werner's two non-proportional treatments re-read; Friedland net <= gross check and net tail. Examples recomputed (65.0/75.0/63.9%; 0.64/0.73 = 0.877, -12.3%; 900,000 = 2.25%; 0.6625/0.73 = 0.908, -9.2%).
+- sources_checked: Friedland, Reserving for Reinsurance (CAS Study Note — Exam 7), PDF pp.74-76, sha256:6da495a26206ececf40a3c3fc8fb3db04556c940242f5bcffe2b21b7e4445ceb — https://www.casact.org/sites/default/files/2022-11/Exam7_Study_Note_Friedland.pdf; Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, Version 3, 2010), Ch.14 pp.330-331 (PDF 336-337), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf; Werner & Modlin, Basic Ratemaking (CAS, 5th ed. 2016), Ch.6 p.99 (PDF 111), Ch.7 p.137 (PDF 149), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf
+- note: Addition checks against the reinsurance study note; no open findings.

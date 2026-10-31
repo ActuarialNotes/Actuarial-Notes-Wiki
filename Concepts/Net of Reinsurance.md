@@ -1,13 +1,14 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-09
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
   content_hash: sha256:ac01e1c8cf57ebd0cc196b93e123f3e3cd68e0fac5f6526de11f8e866417e682
   sources:
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.6 p.99 (PDF p.111), Ch.7 p.137 (PDF p.149), Appendix B pp.B-3, B-8 (PDF pp.361, 366), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
-    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch.4 p.44 (PDF p.50), Ch.7 p.96 (PDF p.102), Ch.14 pp.330-332 (PDF pp.336-338), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+    - "Friedland, Reserving for Reinsurance (CAS Study Note — Exam 7), PDF pp.74-76, sha256:6da495a26206ececf40a3c3fc8fb3db04556c940242f5bcffe2b21b7e4445ceb — https://www.casact.org/sites/default/files/2022-11/Exam7_Study_Note_Friedland.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, Version 3, 2010), Ch.14 pp.330-331 (PDF 336-337), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. 2016), Ch.6 p.99 (PDF 111), Ch.7 p.137 (PDF 149), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Net of Reinsurance.md

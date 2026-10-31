@@ -118,7 +118,13 @@
        "page": "Uniform Continuous Distribution",
        "quote": "$$E[(X-300)_+] = P(X > 300) \\times E[X - 300 \\mid X > 300] = 0.7 \\times 350 = 245$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Evaluating the excess ratio for the question's own uniform distribution (integrating its given density) is this solution's arithmetic; the excess-ratio definition is a separate item.",
+      "date": "2026-10-31",
+      "run": "g8-cas8-sort"
+     }
     },
     {
      "id": "r3",
@@ -186,7 +192,13 @@
        "page": "Uniform Continuous Distribution",
        "quote": "- $E[X] = (a+b)/2$, $\\text{Var}(X) = (b-a)^2/12$, and $F(x) = (x-a)/(b-a)$ for $a < x < b$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The moments of the question's own uniform and two-point distributions are prerequisite arithmetic on its setup, not Exam 8 course content.",
+      "date": "2026-10-31",
+      "run": "g8-cas8-sort"
+     }
     }
    ]
   },
@@ -327,7 +339,13 @@
      "statement": "PAFs, detrend factors, and loss development factors are chosen from plan tables according to the coverage (products/completed operations vs premises/operations), the policy type (occurrence vs claims-made), and the policy year's age at the evaluation date.",
      "concept": "Experience Rating Plan Factor Selection",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Choosing PAFs, detrend factors and LDFs by coverage, policy type and age is a lookup in the ISO CGL plan's tables, which are provided on the exam (candidates are expected to use the manual, not memorize it).",
+      "date": "2026-10-31",
+      "run": "g8-cas8-sort"
+     }
     },
     {
      "id": "r4",
@@ -343,7 +361,13 @@
      "statement": "The credibility Z, expected experience ratio, and maximum single loss (MSL) are looked up in the plan table using the total subject loss cost (company subject loss cost).",
      "concept": "Experience Rating Credibility and MSL Table",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Looking up Z, EER and MSL by company subject loss cost is a lookup in the ISO CGL plan's table, provided on the exam (candidates use it, not memorize it).",
+      "date": "2026-10-31",
+      "run": "g8-cas8-sort"
+     }
     },
     {
      "id": "r6",
@@ -978,7 +1002,13 @@
      "statement": "Look up the state and hazard group differential and the ELPPF in the state's published tables, using the most recent effective-dated tables (e.g. the 2008 expected loss range table) unless a different year is stated, then map the adjusted loss size to an expected loss group.",
      "concept": "Expected Loss Groups for Aggregate Deductible Insurance Charges",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Looking up the state/hazard group differential and ELPPF in the question's published tables, choosing the table by effective date, is a table lookup; how the expected loss group is chosen is a separate item (r3).",
+      "date": "2026-10-31",
+      "run": "g8-cas8-sort"
+     }
     },
     {
      "id": "r5",
@@ -2378,7 +2408,13 @@
      "statement": "When the entry ratio falls between tabulated values, the excess ratio is found by linear interpolation between the adjacent table entries (or rounding to the nearest entry).",
      "concept": "Excess Ratio Table Lookup",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Linear interpolation between adjacent entries of the question's table is generic arithmetic.",
+      "date": "2026-10-31",
+      "run": "g8-cas8-sort"
+     }
     },
     {
      "id": "r6",
@@ -2407,7 +2443,13 @@
      "statement": "Expected unlimited loss for a policy equals standard premium times the expected ultimate loss ratio.",
      "concept": "Large Deductible Policy Pricing",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Expected unlimited loss = standard premium x expected loss ratio is arithmetic on the question's setup.",
+      "date": "2026-10-31",
+      "run": "g8-cas8-sort"
+     }
     },
     {
      "id": "r2",
@@ -2440,7 +2482,13 @@
      "statement": "Map the adjusted expected loss to the Table M expected loss group whose range contains it.",
      "concept": "Table M",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Mapping the adjusted expected loss to the expected loss group whose range contains it is a lookup in the question's table; the adjustment itself is r3.",
+      "date": "2026-10-31",
+      "run": "g8-cas8-sort"
+     }
     },
     {
      "id": "r5",
@@ -2867,7 +2915,13 @@
        "page": "Uniform Continuous Distribution",
        "quote": "Since losses are uniform, those above 300 are distributed $\\text{Unif}(300, 1000)$. The probability of exceeding the deductible is $P(X > 300) = 700/1000 = 0.7$, and given $X > 300$ the expected excess is $700/2 = 350$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Evaluating the excess ratio for the question's own uniform distribution is this solution's arithmetic; the excess-ratio definition is a separate item.",
+      "date": "2026-10-31",
+      "run": "g8-cas8-sort"
+     }
     },
     {
      "id": "r3",
@@ -2966,7 +3020,13 @@
      "statement": "Determine credibility, expected experience ratio, and maximum single loss by finding the bracket of the table containing the total company subject loss cost (summed over the experience period).",
      "concept": "Experience Rating Plan Table Lookup",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Looking up Z, EER and MSL by total company subject loss cost is a lookup in the ISO CGL plan's table, provided on the exam (candidates use it, not memorize it).",
+      "date": "2026-10-31",
+      "run": "g8-cas8-sort"
+     }
     },
     {
      "id": "r5",
@@ -3550,7 +3610,13 @@
      "statement": "When an unknown value affects the mean, bound the unknown to find the range of the mean and cutoff loss ratio, to determine which risks lie above the entry-ratio cutoff and so contribute to the charge.",
      "concept": "Table M (Excess Loss Charges)",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Bounding the question's own unknown value to see which risks lie above the cutoff is this solution's plan.",
+      "date": "2026-10-31",
+      "run": "g8-cas8-sort"
+     }
     }
    ]
   },
@@ -3696,7 +3762,13 @@
      "statement": "Measure the effect of using outdated ranges as the difference between the premium under the correct (updated) ELG and under the outdated ELG, divided by the premium under the correct (updated) ELG.",
      "concept": "Retrospective Rating Plan Premium Formula",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Measuring the error as the premium difference over the correct premium is this solution's chosen measure; arithmetic.",
+      "date": "2026-10-31",
+      "run": "g8-cas8-sort"
+     }
     }
    ]
   },
@@ -3751,7 +3823,13 @@
        "page": "Independent Events",
        "quote": "For a collection of events $A_1, \\ldots, A_n$ to be **mutually independent**, the product rule must hold for every subset of the collection, not just pairs:"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Multiplying the question's independent annual event probabilities (1/n for a once-in-n-years event) is arithmetic on its setup.",
+      "date": "2026-10-31",
+      "run": "g8-cas8-sort"
+     }
     },
     {
      "id": "r4",
@@ -3975,7 +4053,13 @@
        "page": "Uniform Continuous Distribution",
        "quote": "$$E[(X-300)_+] = P(X > 300) \\times E[X - 300 \\mid X > 300] = 0.7 \\times 350 = 245$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The excess area for the question's own uniform distribution (a triangle on its Lee diagram) is this solution's arithmetic; reading charges off a Lee diagram is taught separately.",
+      "date": "2026-10-31",
+      "run": "g8-cas8-sort"
+     }
     },
     {
      "id": "r6",
@@ -3988,7 +4072,13 @@
        "page": "Uniform Continuous Distribution",
        "quote": "$E[X] = (a+b)/2$, $\\text{Var}(X) = (b-a)^2/12$, and $F(x) = (x-a)/(b-a)$ for $a < x < b$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The mean of the question's uniform distribution is prerequisite arithmetic on its setup.",
+      "date": "2026-10-31",
+      "run": "g8-cas8-sort"
+     }
     }
    ]
   },
@@ -4395,7 +4485,13 @@
        "page": "Uniform Continuous Distribution",
        "quote": "$E[X] = (a+b)/2$, $\\text{Var}(X) = (b-a)^2/12$, and $F(x) = (x-a)/(b-a)$ for $a < x < b$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The question states losses are uniform within ranges; the linear CDF and midpoint average follow arithmetically from that setup.",
+      "date": "2026-10-31",
+      "run": "g8-cas8-sort"
+     }
     },
     {
      "id": "r3",
@@ -4607,7 +4703,13 @@
      "statement": "Look up the credibility Z, the expected experience ratio (EER), and the maximum single loss (MSL) in the ISO manual tables using the company subject loss costs (CSLC) as the entry point.",
      "concept": "ISO General Liability Experience Rating Plan",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Looking up Z, EER and MSL by company subject loss cost is a lookup in the ISO CGL plan's table, provided on the exam (candidates use it, not memorize it).",
+      "date": "2026-10-31",
+      "run": "g8-cas8-sort"
+     }
     },
     {
      "id": "r5",
@@ -4677,7 +4779,13 @@
      "statement": "The loss-free modification is the experience mod when the account has no actual losses, equal to [(1-Zp)Ep + (1-Ze)Ee]/E, i.e., the mod with Ap = Ae = 0.",
      "concept": "Loss-Free Modification",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The loss-free mod is the split-plan mod formula evaluated with no actual losses: plugging A=0 into a formula that is a separate item (r1).",
+      "date": "2026-10-31",
+      "run": "g8-cas8-sort"
+     }
     },
     {
      "id": "r4",
@@ -5087,7 +5195,13 @@
        "page": "Loss Development",
        "quote": "$$\\text{Ultimate Losses} = \\text{Losses at age } n \\times \\text{CDF}_{n \\to \\text{ult}}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Dividing the question's expected ultimate loss by its given age-to-ultimate factor is arithmetic on the given table.",
+      "date": "2026-10-31",
+      "run": "g8-cas8-sort"
+     }
     },
     {
      "id": "r3",
@@ -5155,7 +5269,13 @@
        "page": "Premium Reserve",
        "quote": "$$\\text{Premium reserve} = \\text{Expected ultimate premium} - \\text{Premium booked to date}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The net cash flow (computed retro premium less premium already paid) is this solution's arithmetic.",
+      "date": "2026-10-31",
+      "run": "g8-cas8-sort"
+     }
     },
     {
      "id": "r7",
@@ -5278,7 +5398,13 @@
        "page": "Uniform Continuous Distribution",
        "quote": "- $E[X] = (a+b)/2$, $\\text{Var}(X) = (b-a)^2/12$, and $F(x) = (x-a)/(b-a)$ for $a < x < b$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The mean of the question's piecewise-uniform distribution is arithmetic on its setup.",
+      "date": "2026-10-31",
+      "run": "g8-cas8-sort"
+     }
     }
    ]
   },
@@ -6253,7 +6379,13 @@
      "statement": "The total CSLC is used to look up in the plan tables the credibility Z, the expected experience ratio (EER), and the maximum single loss (MSL).",
      "concept": "Credibility and Maximum Single Loss Table",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Looking up Z, EER and MSL by total CSLC is a lookup in the ISO CGL plan's table, provided on the exam (candidates use it, not memorize it).",
+      "date": "2026-10-31",
+      "run": "g8-cas8-sort"
+     }
     },
     {
      "id": "r5",
@@ -6333,7 +6465,13 @@
      "statement": "Compute expected claims for the insureds claim-free for t years by multiplying the number of claim-free insureds in each class by that class's expected claim frequency and summing across classes.",
      "concept": "Shifting Risk Parameters",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Expected claims for the claim-free groups from the question's class counts and frequencies is this solution's arithmetic.",
+      "date": "2026-10-31",
+      "run": "g8-cas8-sort"
+     }
     },
     {
      "id": "r2",
@@ -6341,7 +6479,13 @@
      "statement": "The average frequency of the group claim-free for t years is total expected claims divided by total insureds, and the relative frequency is this average divided by the average frequency at t=0 (or for the whole group).",
      "concept": "Shifting Risk Parameters",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Average and relative frequency of the claim-free group from the question's counts is this solution's arithmetic.",
+      "date": "2026-10-31",
+      "run": "g8-cas8-sort"
+     }
     },
     {
      "id": "r3",
@@ -6410,7 +6554,13 @@
      "statement": "The weighting value W and ballast value B are looked up in the NCCI table by the insured's expected losses, using the same table year as the ELR and D-ratio, which are looked up by state and class code.",
      "concept": "NCCI Experience Rating Plan",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Looking up W, B, ELR and D-ratio in the question's tables by expected losses, state and class is a table lookup.",
+      "date": "2026-10-31",
+      "run": "g8-cas8-sort"
+     }
     },
     {
      "id": "r4",
@@ -7104,7 +7254,13 @@
      "statement": "Read an excess ratio at an entry ratio not listed in a table by linear interpolation between the adjacent tabulated entry ratios.",
      "concept": "Linear Interpolation",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Linear interpolation between adjacent entries of the question's table is generic arithmetic.",
+      "date": "2026-10-31",
+      "run": "g8-cas8-sort"
+     }
     },
     {
      "id": "r6",
@@ -8047,7 +8203,13 @@
      "statement": "Manual premium is the modeled pure premium rate multiplied by exposure (payroll divided by 100 for a rate per $100 of payroll).",
      "concept": "Pure Premium Rating",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Manual premium = modeled rate x payroll/100 is exposure-unit arithmetic on the question's setup.",
+      "date": "2026-10-31",
+      "run": "g8-cas8-sort"
+     }
     },
     {
      "id": "r7",
@@ -8934,7 +9096,13 @@
      "statement": "Interpolation is not needed when the entry ratio matches a table row; otherwise insurance charges are read from the row/column for the entry ratio and expected loss group (the state hazard group differential accounts for state and hazard riskiness in the adjustment).",
      "concept": "Table M / Insurance Charge",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Reading the charge off the question's Table M excerpt (no interpolation when the entry ratio is tabulated) is a table lookup.",
+      "date": "2026-10-31",
+      "run": "g8-cas8-sort"
+     }
     }
    ]
   },
@@ -9404,7 +9572,13 @@
      "statement": "The premium impact of a change in ILFs for a portfolio is the ratio of the exposure-weighted average ILF under the new method to that under the old method, minus 1, with any base premium cancelling when applied consistently.",
      "concept": "Increased Limits Factors Portfolio Average",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Portfolio impact as the ratio of exposure-weighted average ILFs minus 1 is comparing on a common basis: arithmetic.",
+      "date": "2026-10-31",
+      "run": "g8-cas8-sort"
+     }
     }
    ]
   },
@@ -9534,7 +9708,13 @@
      "statement": "Premium adjustment factors (Table 13B for current-level/base adjustment and Table 13C by policy year) and detrend factors are looked up by policy year, with detrend factors being larger (closer to 1) for more recent years and smaller for older years.",
      "concept": "Premium Adjustment Factors and Loss Detrending",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The PAF (Tables 13B/13C) and detrend factors by policy year are lookups in the ISO CGL plan, provided on the exam (candidates use it, not memorize it).",
+      "date": "2026-10-31",
+      "run": "g8-cas8-sort"
+     }
     },
     {
      "id": "r4",
@@ -9542,7 +9722,13 @@
      "statement": "The credibility Z, expected experience ratio (EER), and maximum single loss (MSL) are looked up in the ISO experience rating tables using the total company subject loss costs (expected losses).",
      "concept": "Credibility and Maximum Single Loss in ISO Experience Rating",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Looking up Z, EER and MSL by total CSLC is a lookup in the ISO CGL plan's table, provided on the exam (candidates use it, not memorize it).",
+      "date": "2026-10-31",
+      "run": "g8-cas8-sort"
+     }
     },
     {
      "id": "r5",
@@ -9656,7 +9842,13 @@
        "page": "Medical Cost Trend",
        "quote": "$$\\text{PMPM}_{\\text{proj}} = \\text{PMPM}_{\\text{exp}} \\times (1 + T)^{m/12}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Compounding the question's given annual trend rate to the prospective period is arithmetic.",
+      "date": "2026-10-31",
+      "run": "g8-cas8-sort"
+     }
     },
     {
      "id": "r4",
@@ -9753,7 +9945,13 @@
      "statement": "Look up the credibility Z, expected experience ratio (EER), and maximum single loss in the plan's credibility and maximum single loss table using the company subject loss cost.",
      "concept": "ISO Commercial General Liability Experience and Schedule Rating Plan",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Looking up Z, EER and MSL by company subject loss cost is a lookup in the ISO CGL plan's table, provided on the exam (candidates use it, not memorize it).",
+      "date": "2026-10-31",
+      "run": "g8-cas8-sort"
+     }
     },
     {
      "id": "r3",
@@ -9791,7 +9989,13 @@
      "statement": "Under the ISO CGL plan, the maximum schedule credit for employee training is 6% and for a safety program is 2%, and the total schedule mod is capped by the sum of category maximums.",
      "concept": "ISO Commercial General Liability Experience and Schedule Rating Plan",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "The schedule-rating category maxima (6% employees, 2% safety program) are a lookup in the ISO CGL plan, provided on the exam (candidates use it, not memorize it).",
+      "date": "2026-10-31",
+      "run": "g8-cas8-sort"
+     }
     },
     {
      "id": "r6",
@@ -10150,7 +10354,13 @@
      "statement": "Insurance charges from different sources must be compared on the same basis (dollars, percent of standard premium, or percent of expected loss).",
      "concept": "Net Insurance Charge",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Comparing insurance charges on the same basis (dollars, percent of premium or of expected loss) is generic, not course content.",
+      "date": "2026-10-31",
+      "run": "g8-cas8-sort"
+     }
     },
     {
      "id": "r7",
@@ -10879,7 +11089,13 @@
      "statement": "A risk-adjusted ILF is mathematically grounded but its load is embedded in the pure premium and less visible to laypersons, whereas an explicit profit and contingency load by limit is more transparent and easily understood by non-technical audiences.",
      "concept": "Increased Limit Factors",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "An evaluative argument (transparency to non-technical audiences) that the solution makes; no reading teaches it as content.",
+      "date": "2026-10-31",
+      "run": "g8-cas8-sort"
+     }
     }
    ]
   },
@@ -11410,7 +11626,13 @@
        "page": "Frequency Distribution",
        "quote": "so its mean is $1 - p_0^M$ times the zero-truncated mean"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Weighting the question's conditional claim-count mean by its probability of any claim is a step of this solution's arithmetic.",
+      "date": "2026-10-31",
+      "run": "g8-cas8-sort"
+     }
     },
     {
      "id": "r5",
@@ -12809,7 +13031,13 @@
      "statement": "The predicted value for a level in a single-feature penalized regression equals the overall mean (intercept) plus the shrunk level coefficient.",
      "concept": "Penalized Regression for High-Cardinality Categorical Features",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Prediction = intercept + the level's coefficient is the model equation applied; the shrinkage formula is r1.",
+      "date": "2026-10-31",
+      "run": "g8-cas8-sort"
+     }
     },
     {
      "id": "r3",

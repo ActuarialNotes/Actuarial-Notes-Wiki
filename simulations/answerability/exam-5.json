@@ -8198,7 +8198,15 @@
      "statement": "A competitor's rate indication is a questionable complement because competitors may target a different market and use different operations, so it may be biased and adjustments are hard to make; a general inflation trend does not reflect the loss experience or rate need of the state.",
      "concept": "Complement of Credibility",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Complement of Credibility",
+      "quote": "The trend applied is an annual loss trend, often the one used in the latest rate level indication, because the change in loss cost level since the current rates were set comes from monetary inflation, distributional shifts, safety advances and the like.…Competitors' manual rates reflect not only their loss costs but also marketing considerations, judgment and the effects of the regulatory process, all of which can make them inaccurate. Competitors may also have different underwriting and claim practices, which creates a bias that may be difficult to quantify.",
+      "note": "Competitors' rates evaluation (marketing, judgment, regulation; different underwriting/claim practices, bias hard to quantify) and the loss trend behind trended present rates; W&M Ch.12 pp.229-231 (PDF 241-243)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write3"
+     }
     },
     {
      "id": "r4",
@@ -9800,7 +9808,15 @@
      "statement": "To adjust premium for experience modification level, multiply by the ratio of the projected average experience mod to that year's historical average experience mod (do not multiply the mods together).",
      "concept": "Experience Rating Modification Factor",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Experience Rating",
+      "quote": "Multiplying it by the ratio of the average mod expected in the projected period to that year's historical average mod brings it to the mod level expected in the future.",
+      "note": "Experience mod adjustment to loss cost premium; W&M App. D p.D-2 (PDF 395), columns 6-7",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write3"
+     }
     },
     {
      "id": "r3",
@@ -10762,7 +10778,15 @@
        "page": "Excess of Loss",
        "quote": "For casualty, use a severity curve or ILFs: $\\big[E[X \\wedge \\min(PL, R+L)] - E[X \\wedge \\min(PL, R)]\\big] / E[X \\wedge PL]$ by policy limit $PL$. In both cases the factor multiplies subject premium times the expected loss ratio."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Complement of Credibility",
+      "quote": "The complement is the total limits expected loss ratio times the sum, over the policy limits, of the total premium at each limit times that limit's share.…For a limit inside the layer the share is the ILF at the limit minus the ILF at the attachment point, divided by the ILF at the limit. For a limit above the top of the layer the share is the ILF at the top of the layer minus the ILF at the attachment point, divided by the ILF at the limit.",
+      "note": "Limits analysis complement formula; W&M Ch.12 p.234 and Table 12.7 (PDF 246)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write3"
+     }
     },
     {
      "id": "r3",
@@ -10775,7 +10799,15 @@
        "page": "Excess of Loss",
        "quote": "The layer tops out at $\\$1$M, so for both limits the numerator is $\\text{ILF}(1\\text{M}) - \\text{ILF}(300\\text{K}) = 0.40$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Complement of Credibility",
+      "quote": "A limit at or below the attachment point contributes nothing to the layer.…For a limit above the top of the layer the share is the ILF at the top of the layer minus the ILF at the attachment point, divided by the ILF at the limit.",
+      "note": "Which limits contribute in limits analysis; W&M Ch.12 Table 12.7 col (8) (PDF 246)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write3"
+     }
     },
     {
      "id": "r4",
@@ -10788,7 +10820,15 @@
        "page": "Excess of Loss",
        "quote": "In both cases the factor multiplies subject premium times the expected loss ratio."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Complement of Credibility",
+      "quote": "Premium at a limit times the expected loss ratio estimates the expected losses of the policies at that limit, and an ILF ratio takes the share of those losses that falls in the layer.",
+      "note": "Premium x ELR x ILF share in limits analysis; W&M Ch.12 p.234 (PDF 246)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write3"
+     }
     },
     {
      "id": "r5",
@@ -17061,7 +17101,15 @@
      "statement": "Expected losses equal the payroll (in units of $100) multiplied by the expected loss rate per $100 of payroll.",
      "concept": "Experience Rating Expected Losses",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Experience Rating",
+      "quote": "The expected losses are the actual payroll in hundreds of dollars, by class, for the experience period, multiplied by the class's expected loss rate per hundred dollars of payroll.",
+      "note": "NCCI expected losses from payroll; W&M Ch.15 p.295 (PDF 307), Table 15.5",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write3"
+     }
     },
     {
      "id": "r3",
@@ -17069,7 +17117,15 @@
      "statement": "The D-ratio is the expected proportion of expected losses that are primary losses, so expected primary losses Ep = D × expected losses and expected excess losses Ee = (1 − D) × expected losses.",
      "concept": "D-Ratio",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Experience Rating",
+      "quote": "The expected primary losses are the expected losses multiplied by the D-ratio…which is the share of expected losses that is expected to be primary. The expected excess losses are the expected losses minus the expected primary losses, which is one minus the D-ratio times the expected losses.",
+      "note": "D-ratio; W&M Ch.15 pp.295-296 (PDF 307-308), Table 15.5",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write3"
+     }
     },
     {
      "id": "r4",
@@ -19541,7 +19597,15 @@
      "statement": "With policy-limit-censored data, estimate LAS at the basic limit using all claims from all policy limits, with losses capped at the basic limit divided by total claim count.",
      "concept": "Increased Limits Factors",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Increased Limits",
+      "quote": "The limited average severity at the basic limit uses the claims from all policies, whatever their limits, each capped at the basic limit, and divides the total by the total number of claims.",
+      "note": "LAS at the basic limit from censored data; W&M Ch.11 pp.194-195 (PDF 206-207)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write3"
+     }
     },
     {
      "id": "r3",
@@ -19549,7 +19613,15 @@
      "statement": "To extend LAS to a higher limit, add to LAS at the lower limit the average layer severity per claim (losses in the layer, with claims exceeding the layer capped at layer width, divided by claims exceeding the lower limit), using only policies whose limits reach the top of the layer, multiplied by the probability of exceeding the lower limit (the layer's claims per all claims in the data).",
      "concept": "Increased Limits Factors",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Increased Limits",
+      "quote": "The average severity of a layer is its losses divided by the number of claims reaching the layer (those exceeding its bottom), using only the policies whose limits reach the top of the layer. Before it is added to the limited average severity below it, it is multiplied by the probability that a claim exceeds the bottom of the layer, estimated from the same policies.",
+      "note": "Extending LAS by a layer from censored data; W&M Ch.11 pp.195-197 (PDF 207-209)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write3"
+     }
     },
     {
      "id": "r4",
@@ -19574,7 +19646,15 @@
      "statement": "The complement of credibility for an excess layer via the lower limits analysis is experience losses capped at a lower limit (using all policy limits) times the industry ILF difference between the layer's top and bottom limits divided by the industry ILF at the capping limit.",
      "concept": "Complement of Credibility for Excess Layers",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Complement of Credibility",
+      "quote": "The same calculation with losses capped at a limit below the attachment point, often the basic limit: the losses capped at the lower limit are multiplied by the ILF at the top of the layer minus the ILF at the attachment point, divided by the ILF at the lower limit.",
+      "note": "Lower limits analysis formula; W&M Ch.12 p.233 (PDF 245)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write3"
+     }
     },
     {
      "id": "r6",
@@ -19582,7 +19662,15 @@
      "statement": "Increased limits analysis (capping at the attachment point) requires data not truncated below the attachment point, so only policies with limits at or above it are used; lower limits analysis uses all policy limits and is more stable but less logically related to the excess layer.",
      "concept": "Complement of Credibility for Excess Layers",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Complement of Credibility",
+      "quote": "It needs ground-up losses that have not been capped anywhere below the attachment point, so a policy whose limit is below the attachment point cannot supply them.…Losses capped at the basic limit can be taken from policies at every limit at or above it, and insurers usually code them for statistical reporting. Capping lower may make the estimate more stable, but differences in size-of-loss distributions are exacerbated, so it is likely more biased, and it is related to the lower-limit losses rather than to the losses in the layer.",
+      "note": "Increased limits vs lower limits analysis: data needs, stability, bias, relation to the layer; W&M Ch.12 pp.232-234 (PDF 244-246)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write3"
+     }
     }
    ]
   },
@@ -31454,7 +31542,15 @@
      "statement": "Competitor rate filing factors are useful as a reasonableness check and a fallback source because they come from a similar line and market, but they reflect the competitor's own book, underwriting and possibly non-cost-based pricing.",
      "concept": "Competitor Rate Filings",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Complement of Credibility",
+      "quote": "used by a new or small company whose own data is too unreliable, on the reasoning that a competitor with many more exposures has less process error. Competitors' manual rates reflect not only their loss costs but also marketing considerations, judgment and the effects of the regulatory process, all of which can make them inaccurate. Competitors may also have different underwriting and claim practices, which creates a bias that may be difficult to quantify.…A similar competitor's rates bear a logical relationship to the subject and are generally accepted by regulators, so this complement is often the only viable alternative",
+      "note": "Competitors' rates as a complement: when used, why biased, regulator acceptance, often the only viable alternative; W&M Ch.12 p.231 (PDF 243)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write3"
+     }
     },
     {
      "id": "r5",
@@ -31620,7 +31716,15 @@
      "statement": "The D-ratio is the proportion of expected losses that are expected primary losses; expected excess losses equal expected losses minus expected primary losses.",
      "concept": "D-Ratio",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Experience Rating",
+      "quote": "The expected primary losses are the expected losses multiplied by the D-ratio…which is the share of expected losses that is expected to be primary. The expected excess losses are the expected losses minus the expected primary losses",
+      "note": "D-ratio; W&M Ch.15 pp.295-296 (PDF 307-308), Table 15.5",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write3"
+     }
     },
     {
      "id": "r3",
@@ -33135,7 +33239,13 @@
      "statement": "An exposure-based full credibility standard is preferred because exposures are known or projectable in advance of the experience period, whereas claim counts are not known until the period has developed, so the needed volume of business is known up front and is simpler to apply.",
      "concept": "Classical Credibility",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "not-required",
+      "note": "Werner p.219 gives the exposure standard (claim standard / expected frequency) but no reason for preferring it; the reason in the requirement is in no Exam 5 reading.",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write3"
+     }
     },
     {
      "id": "r4",
@@ -33156,7 +33266,15 @@
      "statement": "Disadvantages of classical credibility are that it assumes Poisson claim frequency and constant severity, relies on an arbitrary choice of probability p and range k for the full credibility standard, and ignores the accuracy or quality of the complement of credibility.",
      "concept": "Classical Credibility",
      "status": "missing",
-     "places": []
+     "places": [],
+     "resolution": {
+      "kind": "taught",
+      "page": "Limited Fluctuation Credibility",
+      "quote": "exposures are homogeneous, claim occurrence follows a Poisson distribution and there is no variation in the size of loss (constant severity).…It uses a selected complement but does not take into account the quality of that complement compared with the latest observation, so judgment is required.…Full credibility is defined by a probability p that the observed experience stays within a range k of its expected value, and Werner calls that range an arbitrary amount.",
+      "note": "Classical credibility assumptions and disadvantages; W&M Ch.12 pp.217-220 (PDF 229-232)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write3"
+     }
     },
     {
      "id": "r6",
@@ -36723,7 +36841,15 @@
        "page": "Layer of Insurance",
        "quote": "Layers stack: the layers of a tower add up to the ground-up loss."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Increased Limits",
+      "quote": "The limited average severity at a higher limit is the limited average severity at the lower limit plus that weighted layer severity, and each further layer is added the same way.",
+      "note": "LAS stacked layer by layer, plus link to Layer of Insurance; W&M Ch.11 pp.195-197 (PDF 207-209)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write3"
+     }
     },
     {
      "id": "r3",
@@ -36753,7 +36879,15 @@
        "page": "Layer of Insurance",
        "quote": "Cap each claim at $750$ and at $250$, then difference the totals:"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Increased Limits",
+      "quote": "A layer's losses are what each claim puts into it: the claim capped at the top of the layer minus the bottom of the layer, or zero for a claim below the bottom, so a claim above the top contributes the full width of the layer.…That is the same as dividing the layer's losses by the total claim count of those policies.",
+      "note": "A layer's losses per claim and division by all eligible policies' claims; W&M Ch.11 pp.196-197 (PDF 208-209)",
+      "date": "2026-10-31",
+      "run": "g8-cas5-write3"
+     }
     },
     {
      "id": "r5",

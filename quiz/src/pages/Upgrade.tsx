@@ -23,7 +23,7 @@ import { cn } from '@/lib/utils'
 const HEADLINE_BENEFITS = [
   'A study plan for every day until your exam',
   'Study in syllabus order, or the heaviest topics first',
-  'Each day’s list in your inbox every morning',
+  'Each day’s list in your inbox, at the time you choose',
   'Rehearse the PCPA project from start to finish',
 ]
 
@@ -32,7 +32,7 @@ const HEADLINE_BENEFITS = [
 const BENEFITS: { title: string; body: string; Art: () => React.JSX.Element }[] = [
   {
     title: 'Follow a Daily Study Plan',
-    body: 'Set your exam date and the syllabus is split into daily lists, sized to the time you have left. Fall behind or start forgetting something, and the plan changes to match. Turn on the morning email and each day’s list is in your inbox before you open the app.',
+    body: 'Set your exam date and the syllabus is split into daily lists, sized to the time you have left. Fall behind or start forgetting something, and the plan changes to match. Turn on the daily email and each day’s list is in your inbox before you open the app.',
     Art: StudyPlanArt,
   },
   {

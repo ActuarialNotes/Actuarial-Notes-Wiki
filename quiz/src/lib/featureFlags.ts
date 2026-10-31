@@ -109,7 +109,7 @@ export const QUESTS_ENABLED: boolean = true
 export const LEAGUES_ENABLED: boolean = true
 
 /**
- * Daily study-plan email — an opt-in morning email listing what the study plan
+ * Daily study-plan email — an opt-in daily email listing what the study plan
  * has scheduled for today. When ON, the Dashboard's reminders modal
  * (signed-in only) carries the opt-in toggle and a local send-time picker,
  * persisted to the user_email_prefs table. The email itself is sent

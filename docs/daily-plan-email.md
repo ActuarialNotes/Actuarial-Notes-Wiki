@@ -1,6 +1,6 @@
 # Daily Study-Plan Email
 
-An opt-in morning email that lists the concepts the [study plan](study-plan-generation.md) has scheduled for the day, so students start each day knowing exactly what to practise — before they open the app.
+An opt-in daily email that lists the concepts the [study plan](study-plan-generation.md) has scheduled for the day, so students start each day knowing exactly what to practise — before they open the app.
 
 ## User experience
 
@@ -11,7 +11,7 @@ An opt-in morning email that lists the concepts the [study plan](study-plan-gene
 
 ## Architecture
 
-The study plan is generated **client-side** and cached to `exam_progress.study_plan_cache` when the user opens the app (see [study-plan-generation.md](study-plan-generation.md) — "Caching and Cross-Device Sync"). A morning email goes out *before* the user opens the app, so the cache is usually a day (or more) old. The server never re-runs plan generation — it reconstructs today's list from the cached plan's forward schedule:
+The study plan is generated **client-side** and cached to `exam_progress.study_plan_cache` when the user opens the app (see [study-plan-generation.md](study-plan-generation.md) — "Caching and Cross-Device Sync"). The email goes out *before* the user opens the app, so the cache is usually a day (or more) old. The server never re-runs plan generation — it reconstructs today's list from the cached plan's forward schedule:
 
 - Cache generated **today** (another device already rebuilt it): use its `todaysConcepts` verbatim.
 - Cache from an **earlier day**: every `assignment` scheduled after the generation day up to and including today (catch-up for skipped days), deduped, in schedule order. Assignments *on* the generation day are excluded — they were that day's list.

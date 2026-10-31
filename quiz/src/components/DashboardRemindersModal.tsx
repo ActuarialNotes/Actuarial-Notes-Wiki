@@ -63,7 +63,7 @@ export function DashboardRemindersModal({ open, onClose, email, isPro, subscript
 
         <div className="p-5 space-y-4">
           <p className="text-sm text-muted-foreground">
-            A short morning email with the concepts your study plan has scheduled for the day,
+            A short daily email with the concepts your study plan has scheduled for the day,
             sent to <span className="font-medium text-foreground">{email}</span>.
             Days with nothing scheduled are skipped.
           </p>
@@ -81,7 +81,7 @@ export function DashboardRemindersModal({ open, onClose, email, isPro, subscript
             <>
               <div className="flex items-center justify-between gap-4">
                 <Label htmlFor="dashboard-reminder-toggle" className="cursor-pointer">
-                  Send me my study plan every morning
+                  Email me my study plan every day
                 </Label>
                 <button
                   id="dashboard-reminder-toggle"

@@ -109,7 +109,7 @@ months." Market it to that moment specifically.
 *Answers:* "Am I behind?", at the moment it hurts most.
 
 **9. Study in the gaps** *(packaging; one decision)*
-Listen recordings, the morning email and offline review, sold as "turn your commute into study
+Listen recordings, the daily email and offline review, sold as "turn your commute into study
 hours." Listen is planned as free (D12). Bundling it is a choice to revisit.
 *Answers:* "Am I behind?" by finding hours the reader didn't know they had.
 

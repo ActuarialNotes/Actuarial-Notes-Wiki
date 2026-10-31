@@ -1,4 +1,4 @@
-// daily-plan-email: sends each opted-in user a morning email listing what
+// daily-plan-email: sends each opted-in user a daily email listing what
 // their study plan has scheduled for today.
 //
 // Invoked hourly by pg_cron (supabase/migrations/20260721_daily_plan_email.sql)

@@ -1217,8 +1217,11 @@ Other important `lib/` modules:
   `DAILY_PLAN_EMAIL_ENABLED`. See `docs/daily-plan-email.md`.
 - `accuracyTrend.ts` / `difficultyBreakdown.ts` / `registrationNudge.ts` — three answers to one
   reader's review: the Dashboard's **Accuracy** card (`components/AccuracyTrendCard.tsx`, via
-  `hooks/useAccuracyTrend.ts` — one exam's `question_responses` by day, this week against last, by
-  difficulty; signed-in only, lazy), the results screen's score **by difficulty** (shown only once
+  `hooks/useAccuracyTrend.ts` — one exam's `question_responses` over a 7 / 30 / 90-day span the
+  reader picks, every figure on the card covering that one span: the rate against the span before,
+  by difficulty with each count (stepped back under 10 answers), a pooled rolling 7-day line over
+  each day's dot sized by its answers, the weakest topics each starting a quiz on that topic, and a
+  tapped day opening its questions (`components/AccuracyDayDialog.tsx`); signed-in only, lazy), the results screen's score **by difficulty** (shown only once
   the quiz is over, like `showMeta`; a perfect quiz on Hard questions says so), and the
   **registration deadline nudge** (`components/RegistrationNudge.tsx`, lazy, on the quiz builder and
   the Dashboard): within 14 days of the deadline `registrationStatus` reads off the transcribed

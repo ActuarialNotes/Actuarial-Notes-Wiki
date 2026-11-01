@@ -276,7 +276,6 @@ export default function Search() {
     return SEARCH_TYPES.some(t => t.value === requested) ? (requested as SearchType) : 'questions'
   })
   const [textQuery, setTextQuery] = useState(() => searchParams.get('q') ?? '')
-  useSearchTracking(textQuery)
   const [wikiIndex, setWikiIndex] = useState<WikiIndexItem[]>([])
   const [wikiLoading, setWikiLoading] = useState(false)
   const wikiIndexFetchedRef = useRef(false)
@@ -676,11 +675,16 @@ export default function Search() {
   // The quiz button's bar, measured for whatever else is parked on the bottom
   // edge — the "Return to quiz" pill rides above it (style guide §5.1).
   const showQuizBar = searchType === 'questions' && !loading && filtered.length > 0
+  // How many results the query found — unknown (not 0) while they are loading.
+  const searchResultCount =
+    searchType === 'questions' ? (loading ? undefined : filtered.length) : wikiLoading ? undefined : wikiResults.length
+  const tracking = useSearchTracking(textQuery, { resultCount: searchResultCount })
   const quizBarRef = useRef<HTMLDivElement>(null)
   useActionBarHeight(quizBarRef, showQuizBar)
 
   return (
-    <div className="container max-w-4xl mx-auto px-4 sm:px-6 py-8 pb-28 space-y-6">
+    // The whole page is the search: a filter or a type pill is still searching.
+    <div className="container max-w-4xl mx-auto px-4 sm:px-6 py-8 pb-28 space-y-6" data-search-region>
       <div className="space-y-1">
         <h1 className="text-2xl font-bold tracking-tight">Search</h1>
         <p className="text-muted-foreground">Search questions, concepts, and resources</p>
@@ -730,6 +734,7 @@ export default function Search() {
               type="text"
               value={textQuery}
               onChange={e => setTextQuery(e.target.value)}
+              {...tracking}
               placeholder={searchPlaceholder}
               className="flex-1 min-w-0 bg-transparent border-0 focus:outline-none text-base text-foreground placeholder:text-muted-foreground"
               autoComplete="off"
@@ -980,7 +985,7 @@ export default function Search() {
       </Card>
 
       {/* Results */}
-      <div className="space-y-3">
+      <div className="space-y-3" data-search-results>
         {searchType === 'questions' ? (
           <>
             <p className="text-sm text-muted-foreground">
@@ -1082,7 +1087,7 @@ export default function Search() {
 
       {/* Sticky quiz button — Questions mode only */}
       {showQuizBar && (
-        <div ref={quizBarRef} className="fixed bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 z-50 flex justify-center px-4 py-4 bg-background/80 backdrop-blur-sm">
+        <div ref={quizBarRef} data-search-results className="fixed bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 z-50 flex justify-center px-4 py-4 bg-background/80 backdrop-blur-sm">
           <button
             type="button"
             onClick={handleStartQuiz}

@@ -44,7 +44,8 @@ import type { ConceptMasteryRecord } from '@/lib/mastery'
 import { slugForLink } from '@/lib/conceptMatch'
 import { useSoundEffects } from '@/hooks/useSoundEffects'
 import { usePageKeyboard } from '@/hooks/useKeyboard'
-import { trackQuizStarted, trackQuestionAnswered, trackQuizCompleted, trackFirstQuiz, trackFirstCorrect, trackReminderSession } from '@/lib/analytics'
+import { trackQuizStarted, trackQuestionAnswered, trackQuizCompleted, trackFirstQuiz, trackFirstCorrect, trackReminderSession, trackQuizLeftUnanswered } from '@/lib/analytics'
+import { unansweredExit, type QuizExitHow, type QuizExitSnapshot } from '@/lib/quizExit'
 
 export default function Quiz() {
   const [searchParams] = useSearchParams()
@@ -156,6 +157,8 @@ export default function Quiz() {
   // reader would arrive wherever they were going to a "Return to quiz" pill
   // for a quiz they never started.
   const leavingRef = useRef(false)
+  // Whether the quiz this page started was the device's first (`first_quiz`).
+  const firstQuizRef = useRef(false)
 
   // Next and Back turn the question like a sheet on a pile — the answered one
   // is flicked off and the next lifts into place — rather than swapping it in
@@ -187,7 +190,7 @@ export default function Quiz() {
       startQuiz(questions, mode, search)
       const exam = questions[0]?.exam ?? 'Unknown'
       trackQuizStarted({ mode, exam, question_count: questions.length })
-      trackFirstQuiz({ mode, exam })
+      firstQuizRef.current = trackFirstQuiz({ mode, exam })
     }
   }, [loading, questions, status, mode, search, startQuiz])
 
@@ -303,6 +306,60 @@ export default function Quiz() {
   useEffect(() => {
     if (timeAllowance !== null && questionOnScreen && timer === null) startTimer(timeAllowance)
   }, [timeAllowance, questionOnScreen, timer, startTimer])
+
+  // ── Left before the first answer (roadmap L10) ───────────────────────────
+  // Half of first quizzes end with no answer, and this is how we learn where:
+  // the wait, the concept list or the first question (lib/quizExit.ts). The
+  // snapshot is refreshed every render so the moment of leaving — Quit, a
+  // route change, the tab hidden — reports what was on screen then. Once per
+  // visit to the page: a reader who looks something up and comes back to
+  // answer still counts as having left once, which `question_answered` after
+  // it tells apart.
+  const exitSnapshot = useRef<QuizExitSnapshot | null>(null)
+  exitSnapshot.current = {
+    status,
+    loading,
+    answered: Object.keys(responses).length,
+    awaitingConceptList: awaitingConceptListDecision,
+    showingConceptList: showConceptList,
+    mode,
+    exam: storeQuestions[0]?.exam ?? filters.exam ?? '',
+    questionCount: storeQuestions.length,
+    newConcepts: newQuizConcepts.length,
+    questionType: storeQuestions[currentIndex]?.type ?? '',
+    firstQuiz: firstQuizRef.current,
+  }
+  const pageOpenedAt = useRef(Date.now())
+  const exitReported = useRef(false)
+  function reportUnansweredExit(how: QuizExitHow) {
+    if (exitReported.current || !exitSnapshot.current) return
+    const event = unansweredExit(exitSnapshot.current, how, (Date.now() - pageOpenedAt.current) / 1000)
+    if (!event) return
+    exitReported.current = true
+    trackQuizLeftUnanswered(event)
+  }
+  const reportExitRef = useRef(reportUnansweredExit)
+  reportExitRef.current = reportUnansweredExit
+  const pageMounted = useRef(false)
+  useEffect(() => {
+    pageMounted.current = true
+    const onHidden = () => {
+      if (document.visibilityState === 'hidden') reportExitRef.current('hidden')
+    }
+    const onPageHide = () => reportExitRef.current('hidden')
+    document.addEventListener('visibilitychange', onHidden)
+    window.addEventListener('pagehide', onPageHide)
+    return () => {
+      document.removeEventListener('visibilitychange', onHidden)
+      window.removeEventListener('pagehide', onPageHide)
+      // A tick later, so StrictMode's rehearsal unmount in development (torn
+      // down and set up again at once) isn't reported as leaving.
+      pageMounted.current = false
+      setTimeout(() => {
+        if (!pageMounted.current) reportExitRef.current('navigated')
+      })
+    }
+  }, [])
 
   // Scroll to top whenever the question changes. The pending selection needs no
   // clearing here — it is tagged with its question and read back through
@@ -424,6 +481,8 @@ export default function Quiz() {
   }, !anyDialogOpen && !conceptPopupOpen && !showConceptList && status !== 'idle' && status !== 'complete')
 
   function handleQuit() {
+    // Before the store resets: once it has, there is no quiz left to describe.
+    reportUnansweredExit('quit')
     leavingRef.current = true
     leaveQuiz()
     back.go()

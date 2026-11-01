@@ -131,6 +131,7 @@ export function FlashcardsSearchBar({
             placeholder={scope === 'deck' ? 'Search your deck' : 'Search concepts to add'}
             ariaLabel="Search flashcards"
             navCollapsed={active}
+            resultCount={results.length}
           />
 
           {active && (
@@ -149,7 +150,7 @@ export function FlashcardsSearchBar({
               </div>
 
               {hasQuery && (
-                <ul className="max-h-[50vh] space-y-0.5 overflow-y-auto">
+                <ul className="max-h-[50vh] space-y-0.5 overflow-y-auto" data-search-results>
                   {results.length === 0 ? (
                     <li className="px-2 py-2 text-xs text-muted-foreground">No matches.</li>
                   ) : (

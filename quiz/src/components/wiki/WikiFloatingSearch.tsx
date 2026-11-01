@@ -218,6 +218,7 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBad
             placeholder="Search concepts"
             ariaLabel="Search study guides"
             navCollapsed={active}
+            resultCount={conceptResults.length}
           />
 
           {pageTitle && (
@@ -240,7 +241,7 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBad
               </div>
 
               {/* Results */}
-              <ul className="space-y-0.5 max-h-[50vh] overflow-y-auto">
+              <ul className="space-y-0.5 max-h-[50vh] overflow-y-auto" data-search-results>
                 {conceptResults.length === 0 ? (
                   <li className="text-xs text-muted-foreground px-2 py-2">No matches.</li>
                 ) : (

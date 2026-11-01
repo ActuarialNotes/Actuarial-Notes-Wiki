@@ -149,14 +149,19 @@ describe('learning wrappers (roadmap L1)', () => {
 
 describe('event parameters', () => {
   it('cuts a string parameter at GA4’s 100 characters', () => {
-    trackSearch({ search_term: 'x'.repeat(300), search_scope: 'Concepts' })
+    trackSearch({ search_term: 'x'.repeat(300), search_scope: 'Concepts', search_outcome: 'left' })
     const params = gtag.mock.calls.find(c => c[1] === 'search')![2] as { search_term: string }
     expect(params.search_term).toHaveLength(100)
   })
 
   it('redacts an email typed into a search', () => {
-    trackSearch({ search_term: 'help me@example.com', search_scope: 'Search' })
-    expect(gtag).toHaveBeenCalledWith('event', 'search', { search_term: 'help [redacted email]', search_scope: 'Search' })
+    trackSearch({ search_term: 'help me@example.com', search_scope: 'Search', search_outcome: 'opened', result_count: 3 })
+    expect(gtag).toHaveBeenCalledWith('event', 'search', {
+      search_term: 'help [redacted email]',
+      search_scope: 'Search',
+      search_outcome: 'opened',
+      result_count: 3,
+    })
   })
 })
 

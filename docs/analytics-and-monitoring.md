@@ -52,6 +52,7 @@ visit `gtag` stays undefined and every `track*` call is a no-op. Kept out:
 | `localhost`, `vite preview` (the e2e suite), `*.vercel.app` previews | only `quiz.actuarialnotes.com` is measured (`MEASURED_HOSTS`) |
 | Playwright, Puppeteer, Selenium | `navigator.webdriver === true` |
 | Crawlers, Lighthouse, headless Chrome, uptime checks, link previewers | user agent (`isAutomatedUserAgent`) — GA4 drops the IAB's known bots server-side too; this catches what runs our JavaScript anyway |
+| A headless crawler with an ordinary Chrome user agent and no webdriver flag | its screen (`isHeadlessScreen`): 1280×1200, 1280×1280, 1600×1600 or 800×600 — sizes no display has. The Singapore crawler (roadmap G8) was 7,117 users at 1280×1200 over Aug–Oct 2026, and nobody at any of the four sizes ever fired `first_interaction`. A size real readers also use (1440×900) is never added |
 | A reader who switched it off | Settings → Privacy → Usage analytics (`setAnalyticsOptOut`) |
 
 What is left is **labelled**, not dropped:
@@ -118,8 +119,8 @@ limits (`fitParams`: 100 characters; page params longer).
 | Family | Events |
 |--------|--------|
 | Pages & people | `page_view`, `first_interaction` |
-| Reading — no URL of their own | `content_view` (`content_type`, `content_name`, `surface`: `popup` for the concept popup's open page, `reader` for the PDF reader), `search` (GA4's recommended event: `search_term`, `search_scope`) |
-| Studying | `quiz_started`, `question_answered`, `quiz_completed`, `flashcard_reviewed`, `search_query` (a quiz built on the Search page), `battle_started` (`format`: `same_screen` / `room_host` / `room_guest` / `matched`), `project_started`, `craft_combined` (a pair dropped together on a Concept Craft board — `exam`, `topic`, `outcome`, the connection's `strength` and how many concepts a new one `made`) `craft_topic_completed` and `craft_medal_won` (the `medal`, with how many `connections` it was won in on a board of how many `concepts`; docs/concept-craft.md) |
+| Reading — no URL of their own | `content_view` (`content_type`, `content_name`, `surface`: `popup` for the concept popup's open page, `reader` for the PDF reader), `search` (GA4's recommended event: `search_term`, `search_scope`, `search_outcome`, `result_count`) |
+| Studying | `quiz_started`, `quiz_left_unanswered` (below), `question_answered`, `quiz_completed`, `flashcard_reviewed`, `search_query` (a quiz built on the Search page), `battle_started` (`format`: `same_screen` / `room_host` / `room_guest` / `matched`), `project_started`, `craft_combined` (a pair dropped together on a Concept Craft board — `exam`, `topic`, `outcome`, the connection's `strength` and how many concepts a new one `made`) `craft_topic_completed` and `craft_medal_won` (the `medal`, with how many `connections` it was won in on a board of how many `concepts`; docs/concept-craft.md) |
 | Learning (roadmap L1, `lib/learningSignals.ts`) | `concept_retention` (a concept answered for the first time after its decay window: `concept`, `exam`, `retained` — that answer — its earned `level` and `days_since_correct`; once per decay episode per device, from `quizStore` for quizzes and the fix-mistakes reviewer), `reminder_opened` (a landing with a reminder's `utm_source`; `channel`), `reminder_session` (the first quiz finished within 6 h of that landing: `channel`, `exam`, `question_count`, `correct_count`, `minutes_after_open`), `mistake_reviewed` (a missed question answered again in the reviewer: `question_id`, `exam`, `is_correct`, `days_since_miss`) |
 | The Tutor (`docs/tutor.md` §12) | `tutor_offer` (a bubble: `kind` — the moment — `exam`, `response`: `shown` / `accepted` / `declined`), `tutor_answer` (a part answered in the Tutor: `exam`, `kind` of part, `grade`, `confidence`, `relearn`, `days_since_last` answer on the concept, −1 for a first), `tutor_confused` (`exam`, `reason`), `tutor_session` (a session ended: `exam`, `items`, `minutes`, `phase`) |
 | Gamification | `streak_extended`, `xp_earned`, `daily_goal_met`, `quest_completed`, `quest_claimed`, `daily_quests_cleared`, `league_joined`, `league_left` |
@@ -128,10 +129,29 @@ limits (`fitParams`: 100 characters; page params longer).
 | Activation funnel | `sign_up → first_quiz → first_correct → concept_collected → day2_return` |
 
 `search` comes from `hooks/useSearchTracking.ts`, mounted on every search box
-(`FloatingSearchInput` — the wiki, Dashboard, Flashcards and Cowork bars — the quiz
-builder's search and the Search page). It fires once per term after the reader stops
-typing for 1.5 s, lower-cased and redacted; its scope is the page's content group.
-What readers look for and don't find is the content backlog.
+(`FloatingSearchInput` — the wiki, Dashboard, Flashcards, Cowork, Store and Tools
+bars — the quiz builder's search and the Search page). It fires once per term when the
+reader is **done** with the box, not when they pause (a pause fired mid-word:
+`liability`, `liability for`, `liability for in`), lower-cased and redacted; its scope
+is the page's content group. `search_outcome` is how it ended: `opened` (a pointer
+inside the box's `[data-search-results]`), `submitted` (Enter) or `left` (a pointer or
+focus outside the box's `[data-search-region]`, the box cleared, the page hidden or
+left). `result_count` is how many results the box was showing; it is sent only by a
+box with a list of its own — the Store's and the Tools catalogue's bars filter the page
+below them, so they send no count and their outcome is always `submitted` or `left`.
+**A search that led nowhere** is `result_count = 0`, and the terms behind it are the
+content backlog.
+
+`quiz_left_unanswered` (roadmap L10, `lib/quizExit.ts`) fires once per visit to the
+quiz page when it is left with no answer confirmed: `stage` is what was on screen
+(`loading_questions` — the bank still downloading, `loading_concepts`, `concept_list`
+— the pre-quiz list, `question`), `how` is `quit`, `navigated` or `hidden` (the tab
+hidden or closed), with `first_quiz` (this was the device's first), `new_concepts` (the
+list's length), `question_type` (the question on screen) and `seconds_on_page`. Half of
+first quizzes ended without an answer (`analytics-audit-2026-10-19.md`); *Events →
+`quiz_left_unanswered` with `first_quiz = true`, by `stage`* says where. A reader who
+leaves to look something up and comes back to answer has left once too, so count
+people with the event and **no** `question_answered` after it.
 
 `sign_up` was `signup` before GA4's recommended name was adopted: a key event or
 exploration built on `signup` must be moved to `sign_up`.
@@ -191,11 +211,13 @@ Several of these must be done in GA4 itself — the code can't:
 4. **Admin → Data retention → 14 months** (the default is 2, which empties
    explorations of anything older).
 5. **Admin → Custom definitions**, so the params show in reports — event-scoped:
-   `content_type`, `content_name`, `surface`, `search_scope`, `input_type`, `mode`,
+   `content_type`, `content_name`, `surface`, `search_scope`, `search_outcome`,
+   `stage`, `how`, `first_quiz`, `question_type`, `input_type`, `mode`,
    `exam`, `format`, `project`, `language`, `product`, `seller`, `aisle`, `concept`,
    `retained`, `level`, `channel`, `is_correct`;
    user-scoped: `account_type`, `credential_track`, `theme`; custom metric:
-   `seconds_to_interaction` (seconds), and for the learning events `days_since_correct`,
+   `seconds_to_interaction` (seconds), `result_count`, `seconds_on_page` (seconds),
+   `new_concepts`, and for the learning events `days_since_correct`,
    `days_since_miss` and `minutes_after_open`.
 6. **Admin → Key events**: `sign_up` (re-mark it if `signup` was one), `first_quiz`,
    `quiz_completed`, `day2_return`, `upgrade_clicked`.

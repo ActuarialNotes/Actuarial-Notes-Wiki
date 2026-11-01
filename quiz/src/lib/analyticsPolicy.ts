@@ -7,8 +7,9 @@
 //   • the dev server, `vite preview` (the e2e suite) and Vercel preview
 //     deployments — only the production host is measured;
 //   • automation — a browser driven by WebDriver/CDP (Playwright, Puppeteer,
-//     Selenium) says so in `navigator.webdriver`, and crawlers, auditors and
-//     headless browsers say so in their user agent;
+//     Selenium) says so in `navigator.webdriver`, crawlers, auditors and
+//     headless browsers say so in their user agent, and a crawler that hides
+//     both still gives itself away by a screen no display has;
 //   • whoever opted out in Settings.
 //
 // What is left is labelled rather than dropped: the developer's own devices
@@ -69,6 +70,22 @@ export function isAutomatedUserAgent(userAgent: string): boolean {
   return AGENT_PATTERN.test(userAgent)
 }
 
+// Screen sizes that only a headless browser reports. A crawler that sends a
+// normal Chrome user agent and hides `navigator.webdriver` still has to pick a
+// window, and these are the ones it picked: no display made is 1280×1200 or
+// square, and 800×600 is headless Chrome's default. Read off GA4 (2026-08-01 to
+// 2026-10-31, docs/analytics-audit-2026-10-19.md): 7,117 users at 1280×1200 —
+// 3,473 of them, all Windows 10 Chrome in Singapore, in the last two weeks of
+// it — and the 90 at the other three, and **not one** first_interaction among
+// them. A size real people use (1440×900, a MacBook's) is never listed here, even
+// when crawlers use it too: losing a reader costs more than counting a bot.
+const HEADLESS_SCREENS: ReadonlySet<string> = new Set(['1280x1200', '1280x1280', '1600x1600', '800x600'])
+
+/** Is this a screen size only a headless browser reports? (Width × height in CSS pixels, as `screen` gives them.) */
+export function isHeadlessScreen(width: number, height: number): boolean {
+  return HEADLESS_SCREENS.has(`${Math.round(width)}x${Math.round(height)}`)
+}
+
 export function isMeasuredHost(hostname: string): boolean {
   return MEASURED_HOSTS.includes(hostname.toLowerCase())
 }
@@ -84,6 +101,8 @@ export interface MeasurementContext {
   userAgent: string
   /** `navigator.webdriver` — true under Playwright, Puppeteer, Selenium. */
   webdriver: boolean
+  /** `screen.width` × `screen.height`, when the browser gives them. */
+  screen?: { width: number; height: number }
   optedOut: boolean
   /** A debug session (`?ga_debug=1`) is measured on any host, so a preview build can be checked in DebugView. */
   debug: boolean
@@ -96,7 +115,8 @@ export type MeasurementDecision =
 /** Should this visit reach Google Analytics at all? */
 export function decideMeasurement(ctx: MeasurementContext): MeasurementDecision {
   if (ctx.optedOut) return { measure: false, reason: 'opted-out' }
-  if (ctx.webdriver || isAutomatedUserAgent(ctx.userAgent)) return { measure: false, reason: 'automation' }
+  const headless = ctx.screen ? isHeadlessScreen(ctx.screen.width, ctx.screen.height) : false
+  if (ctx.webdriver || headless || isAutomatedUserAgent(ctx.userAgent)) return { measure: false, reason: 'automation' }
   if (!ctx.debug && !isMeasuredHost(ctx.hostname)) return { measure: false, reason: 'host' }
   return { measure: true }
 }
@@ -249,6 +269,29 @@ export function fitParams<T extends Record<string, unknown>>(params: T): T {
 export function searchTerm(raw: string): string {
   const term = raw.trim().replace(/\s+/g, ' ').toLowerCase()
   return term.length < 2 ? '' : redactPii(term)
+}
+
+/** How a search ended: a result opened, Enter pressed, or the box left behind. */
+export type SearchOutcome = 'opened' | 'submitted' | 'left'
+
+/**
+ * The `search` event for a box the reader is done with — or `null` when there
+ * is nothing worth sending: too short to be a term, or the term just reported
+ * (opening a result and then leaving the page is one search, not two).
+ * `result_count` rides only when the box knows its results.
+ */
+export function searchReport(
+  search: { text: string; resultCount?: number; scope: string; outcome: SearchOutcome },
+  lastReported: string | null,
+): { search_term: string; search_scope: string; search_outcome: SearchOutcome; result_count?: number } | null {
+  const term = searchTerm(search.text)
+  if (!term || term === lastReported) return null
+  return {
+    search_term: term,
+    search_scope: search.scope,
+    search_outcome: search.outcome,
+    ...(search.resultCount === undefined ? {} : { result_count: search.resultCount }),
+  }
 }
 
 /**

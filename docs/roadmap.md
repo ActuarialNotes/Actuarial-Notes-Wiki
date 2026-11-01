@@ -517,17 +517,26 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   uses, `lib/tutor/bank.ts`), and an ungraded one counts for nothing. It changes how every
   CAS written exam's mastery and readiness move, so it is the maintainer's call.
   *(Found planning the Tutor, 2026-10-18.)*
-- **G8: keep the Singapore crawler out of GA4.** About 3,660 of the 90 days' reported users
+- ~~**G8: keep the Singapore crawler out of GA4.**~~ ✅ 2026-11-01: `decideMeasurement` now also
+  keeps out a screen no display has (`isHeadlessScreen`: 1280×1200, 1280×1280, 1600×1600, 800×600).
+  GA4, Aug–Oct: 7,117 users at 1280×1200, none of the four sizes ever with a `first_interaction`.
+  The Vercel firewall block stays the maintainer's option; past data can't be cleaned, so the
+  audit's human segment still applies before this date. About 3,660 of the 90 days' reported users
   are one headless profile (Singapore, Windows 10 Chrome, 1280×1200, one wiki page each, never
   interacts) that passes `decideMeasurement`: a normal user agent and no `navigator.webdriver`.
   Still arriving (426 on 2026-10-18). Block or challenge it in the Vercel firewall from its
   logged user agent and IPs (a Vercel setting, so the maintainer's), or add its user agent to
   `isAutomatedUserAgent`. *(GA4 audit, 2026-10-19.)*
-- **G9: a result count on the `search` event.** "Searches that lead nowhere" can't be read
+- ~~**G9: a result count on the `search` event.**~~ ✅ 2026-11-01: `search` fires once the reader
+  is done with the box, with `result_count` and `search_outcome` (`opened` / `submitted` /
+  `left`); register both (G3, step 5). "Searches that lead nowhere" can't be read
   without one, and the 1.5 s pause fires mid-word (`liability`, `liability for`,
   `liability for in`). Add `result_count` (and register it), and fire on a pause plus leaving
   the box or opening a result. *(GA4 audit, 2026-10-19.)*
-- **L10: why half of first quizzes end before the first answer.** Of 31 people who started a
+- **L10: why half of first quizzes end before the first answer.** 🟡 2026-11-01: instrumented —
+  `quiz_left_unanswered` (`lib/quizExit.ts`) says the `stage` (the bank loading, the concept
+  list, the first question), `how`, and `first_quiz`. Left: register its params (G3, step 5),
+  let a few weeks of first quizzes accrue, then fix what it points at. Of 31 people who started a
   first quiz in 90 days, 17 answered a question. The pre-quiz concept list
   (`PreQuizConcepts`) or the first question is where they leave; the audit can't tell which.
   An event for leaving the concept list, or a look at the flow on a phone, would.
@@ -939,6 +948,11 @@ ls Concepts/*.md | wc -l; python3 -c "import sys; sys.path.insert(0, 'scripts');
 ```
 
 ## Appendix B: Revision history
+
+- **2026-11-01, the GA4 audit's three code items (G8, G9, L10 in §3.4).** The Singapore crawler is
+  kept out by its screen size; `search` reports when the reader is done, with a result count and
+  an outcome; `quiz_left_unanswered` says where a quiz is left before its first answer. The new
+  params are listed in `analytics-and-monitoring.md`'s custom-definitions step (G3).
 
 - **2026-10-30, Cowork's corpus from the vault (A3).** Every practice resource page is listed in
   Cowork under its publisher, derived at build time; 28 new entities; 23 of the 24 samples

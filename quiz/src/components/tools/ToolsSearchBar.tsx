@@ -131,6 +131,7 @@ function ToolPageBar({ title, back }: { title: string; back: Back }) {
           placeholder="Search tools"
           ariaLabel="Search tools"
           navCollapsed={active}
+          resultCount={results.length}
         />
         {active && hasQuery ? (
           <div className="pb-3">
@@ -149,7 +150,7 @@ function ToolPageBar({ title, back }: { title: string; back: Back }) {
 function ToolResults({ tools, query, onOpen }: { tools: ToolSpec[]; query: string; onOpen: (t: ToolSpec) => void }) {
   if (!tools.length) return <p className="px-2 py-2 text-xs text-muted-foreground">No tools match.</p>
   return (
-    <ul className="max-h-[50vh] space-y-0.5 overflow-y-auto" data-testid="tool-search-results">
+    <ul className="max-h-[50vh] space-y-0.5 overflow-y-auto" data-testid="tool-search-results" data-search-results>
       {tools.map(t => (
         <li key={t.id}>
           <button

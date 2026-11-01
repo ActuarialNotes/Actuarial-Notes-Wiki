@@ -53,6 +53,7 @@ import {
   readControlParam,
   redactPii,
 } from './analyticsPolicy'
+import type { QuizLeftUnanswered } from './quizExit'
 
 /** The full event catalogue: event name → its params. Add events here first. */
 export interface AnalyticsEventMap {
@@ -63,13 +64,24 @@ export interface AnalyticsEventMap {
   // ── Reading (no URL of their own) ─────────────────────────────────────────
   /** A page opened in the concept popup, or a document in the PDF reader. */
   content_view: { content_type: string; content_name: string; surface: string }
-  /** GA4's recommended site-search event, fired once the reader stops typing. */
-  search: { search_term: string; search_scope: string }
+  /**
+   * GA4's recommended site-search event, fired once the reader is done with
+   * the box (hooks/useSearchTracking.ts): `search_outcome` is how — `opened` a
+   * result, `submitted` with Enter, or `left` — and `result_count` how many
+   * results it showed, where the box has a list of its own.
+   */
+  search: { search_term: string; search_scope: string; search_outcome: string; result_count?: number }
 
   // ── Engagement (fire every time) ──────────────────────────────────────────
   quiz_started: { mode: string; exam: string; question_count: number }
   question_answered: { question_id: string; is_correct: boolean; exam: string; mode: string }
   quiz_completed: { mode: string; exam: string; question_count: number; correct_count: number }
+  /**
+   * A quiz left before its first answer (roadmap L10, lib/quizExit.ts): what
+   * was on screen (`stage`), how it was left (`how`), and — on a device's first
+   * quiz — which of them half of first quizzes end at.
+   */
+  quiz_left_unanswered: QuizLeftUnanswered
   flashcard_reviewed: { concept: string; kind: string }
   streak_extended: { length: number; longest: number }
   xp_earned: { amount: number; total: number }
@@ -240,6 +252,7 @@ export function initAnalytics(): void {
     hostname: window.location.hostname,
     userAgent: safe(() => navigator.userAgent, ''),
     webdriver: safe(() => navigator.webdriver === true, false),
+    screen: safe(() => ({ width: window.screen.width, height: window.screen.height }), undefined),
     optedOut: isAnalyticsOptedOut(),
     debug,
   })
@@ -449,6 +462,10 @@ export function trackQuizStarted(params: AnalyticsEventMap['quiz_started']) {
   track('quiz_started', params)
 }
 
+export function trackQuizLeftUnanswered(params: AnalyticsEventMap['quiz_left_unanswered']) {
+  track('quiz_left_unanswered', params)
+}
+
 export function trackQuestionAnswered(params: AnalyticsEventMap['question_answered']) {
   track('question_answered', params)
 }
@@ -561,9 +578,11 @@ export function trackSignup(method: string = 'password') {
   track('sign_up', { method })
 }
 
-/** First quiz ever started on this device. */
-export function trackFirstQuiz(params: AnalyticsEventMap['first_quiz']) {
-  if (reachMilestone('first_quiz')) track('first_quiz', params)
+/** First quiz ever started on this device. Says whether this was it. */
+export function trackFirstQuiz(params: AnalyticsEventMap['first_quiz']): boolean {
+  if (!reachMilestone('first_quiz')) return false
+  track('first_quiz', params)
+  return true
 }
 
 /** First correct answer ever on this device. */

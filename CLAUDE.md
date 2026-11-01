@@ -647,7 +647,13 @@ Other important `lib/` modules:
   `\begin` as fence *meta* and runs to the end of the page. Both render as red KaTeX error
   text. `normalizeVaultMath` is applied by `WikiArticle` and `MarkdownText` before parsing;
   it only ever moves delimiters, never edits a LaTeX body, and is idempotent. Write the
-  vault the Obsidian way — this module is what makes that render.
+  vault the Obsidian way — this module is what makes that render. Its last pass,
+  `formulaBoxes.ts`, gives **every equation its own formula box**: a `> $$…$$` box holding
+  several equations (more `$$` lines, or `a = 1, \qquad b = 2` on one line, or an `aligned`
+  block whose rows each have their own left-hand side) is split at render time — never in
+  the vault, so no page's fact check goes stale. It splits only at top-level separators, only
+  between pieces that each carry an `=`, and keeps an index range (`k = 1, 2, \ldots`) and
+  anything with an implication arrow whole; `formulaBoxes.test.ts` holds it to the vault.
 - `wikiParser.ts` / `wikiIndex.ts` / `wikiExtract.ts` — parse wiki pages, build search index, extract syllabus structure
 - `conceptMatch.ts` — resolves concept name variants/aliases to a canonical slug (`slugForLink`)
 - `examStatus.ts` — how far along each exam's material is, keyed by exam_progress key:

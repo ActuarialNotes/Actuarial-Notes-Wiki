@@ -34,6 +34,8 @@
 
 // Leading blockquote markers (`> `, `> > `, indented or not). Everything in the
 // vault's examples lives inside callouts, so a fence usually carries one.
+import { splitFormulaBoxes } from './formulaBoxes'
+
 const BLOCKQUOTE_PREFIX_RE = /^(?:[ \t]*>[ \t]?)*/
 
 const CODE_FENCE_RE = /^(?:```|~~~)/
@@ -112,6 +114,11 @@ function fencePositions(body: string): number[] {
   return found
 }
 
+/**
+ * …and, last, one equation per formula box (`lib/formulaBoxes.ts`). That pass
+ * drops the separators between equations it splits apart; nothing else here
+ * edits a LaTeX body.
+ */
 export function normalizeVaultMath(markdown: string): string {
   if (!markdown.includes('$')) return markdown
 
@@ -178,5 +185,5 @@ export function normalizeVaultMath(markdown: string): string {
     inDisplay = true
   }
 
-  return out.join('\n')
+  return splitFormulaBoxes(out.join('\n'))
 }

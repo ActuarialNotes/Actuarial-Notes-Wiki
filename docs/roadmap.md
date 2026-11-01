@@ -1,6 +1,6 @@
 # Roadmap: Actuarial Notes
 
-_Last reviewed: **2026-10-17** against `main` @ `1a47980` (and updated by the next-phase branch) · Next review due: **2026-10-31**_
+_Last reviewed: **2026-11-01** against `main` @ `9173ef7` (CI, L9, and the learning review: `learning-review.md`) · Next review due: **2026-11-15**_
 
 This is the **one roadmap** for everything in this repository: Study Mode, the content vault,
 Fact Check, the AI connector, Actuarial Tools, Cowork, and the experiments around them. It
@@ -182,7 +182,9 @@ not because anything regressed.
 
 **Built, but not operating.** These are the "promise unbacked" items, and they rank first:
 
-- **CI is red,** so the gate isn't stopping anything.
+- ~~**CI is red,** so the gate isn't stopping anything.~~ Green on `main` since 2026-11-01
+  (the runs after #1733 and #1734). It still isn't a *required* check (D14), so nothing stops
+  a red PR from merging.
 - **The weekly Validate Sweep has never run the agent.** Its runs skip the agent step,
   so `ANTHROPIC_API_KEY` is evidently not set, and the 2026-10-05 run failed at "Check the record". Every one of the 24 `_runs` summaries
   is from a hand-run session.
@@ -216,8 +218,8 @@ to §4. Where an item has a former roadmap ID (P0–P4), §4 gives it.
    Search, the Gem Shop, Upgrade, the parked tour and the PDF reader's panel are lazy chunks
    now: 881 kB). And the flashcard-focus test read the wrong card once the deck began to be
    filed by exam. Four tests (two quiz, the Tutor, a Workflows link) still pass only on a
-   retry: each click hangs to the 30 s timeout on CI's runner. Left: see CI
-   go green on `main`, then **D14**: make the CI checks required on `main`, which is what
+   retry: each click hangs to the 30 s timeout on CI's runner. **CI is green on `main` again
+   (2026-11-01: the runs after #1733 and #1734 passed).** Left: **D14**: make the CI checks required on `main`, which is what
    keeps a red e2e job from merging again. Until then, every other "✅ with tests" in this
    file is weaker than it looks.
 2. ~~**E3: move the question bank out of the entry chunk, and add a size budget to CI.**~~
@@ -344,7 +346,9 @@ These are in order within each lane.
   `Flashcards.tsx`.
 - **E7:** an error collector (an endpoint or Sentry).
 
-**Learning engine:**
+**Learning engine:** the 2026-11-01 learning review (`learning-review.md`) ranks eight new
+items against the goal of passing, L11–L18 in §3.4; until the maintainer ranks them, the
+order below stands.
 - ~~**L1: instrument learning.**~~ ✅ 2026-10-17: `concept_retention`, `reminder_opened` /
   `reminder_session` and `mistake_reviewed` (`lib/learningSignals.ts`; how to read them is in
   `analytics-and-monitoring.md`). The email's link carries UTM parameters, so it deploys with
@@ -507,7 +511,10 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   `scripts/ontology_map.py`. Either add the nine topics there (each is a syllabus term with
   a concept page), or retag the questions, which makes them stale until re-verified.
   *(2026-10-17.)*
-- **L9: a written part counts for what the reader marked it.** The quiz records a written
+- ~~**L9: a written part counts for what the reader marked it.**~~ ✅ built (on `main` by 2026-10-24):
+  `questionCredit` (`lib/parser.ts`) counts a written part only as its self-grade, an ungraded
+  one earns nothing, and a question with nothing graded is not correct (`effectiveIsCorrect` is
+  its credit at 1). Found still listed here by the 2026-11-01 review. As proposed: the quiz records a written
   part's self-grade (`manualGrades`) but `effectiveIsCorrect` skips essay parts, and a
   question with no graded part left returns **correct**: 144 of Exam 5's 278 lettered
   questions and 58 of its 72 unlettered ones are written-only, so pressing *Check answers*
@@ -533,6 +540,39 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   An event for leaving the concept list, or a look at the flow on a phone, would.
   *(GA4 audit, 2026-10-19.)*
 
+- **L11–L18: preparing for the paper, not the bank (the 2026-11-01 learning review).**
+  `docs/learning-review.md` reviews Study Mode against the research on learning and exam
+  preparation, asking what it takes to *pass*: knowledge, transfer to unseen problems, the
+  paper's format, its clock, and knowing where you stand against the pass mark. The app is
+  strong on the first and measures only the first: *Exam ready* means three correct answers
+  per concept on any difficulty, repeats included, with no timed paper. Its proposals, in the
+  order it recommends:
+  1. **L18, ask how the exam went** (S). After a sitting's results date, once, opt-in
+     (D34). The app has no record of whether anyone passed, so nothing below can be checked.
+     Its data takes longest to accumulate, so it starts first.
+  2. **L12, count new questions, not remembered ones** (M). Weight mastery evidence by
+     novelty (a first attempt counts fully, a spaced repeat less), unseen-first draws from
+     `question_responses` across devices, and a held-out set per exam for practice exams
+     (D33).
+  3. **L15, a pacing report** (S). `time_spent_seconds` is stored and never shown: time
+     against budget per question, the questions over twice their share, points per minute;
+     triage advice; short fluency sets for the SOA's multiple-choice exams.
+  4. **L2 and L3 widened** (M). Confidence tap in the quiz, plus an optional reason on a
+     miss (didn't know / misread / slip / time); a slip doesn't push a concept toward
+     Forgotten; sure-and-wrong leads relearning.
+  5. **L14, a checklist for self-marking written parts** (M). The sample answer's points, cut
+     mechanically, ticked before the grade (idea-unit scoring; Rawson & Dunlosky 2007).
+  6. **L11, a predicted score** (M). The expected share of points on the exam's blueprint,
+     from first attempts on unseen questions, with a range, read against a transcribed pass
+     mark where one is published. The same build as the Pro proposal's forecast; whether it
+     becomes the headline number is D32.
+  7. **L13, the Tutor's engine behind Today's Study Plan for every ready exam** (L). FSRS
+     capped by days left, successive relearning and interleaved sessions, the ladder
+     displayed from that state. Merges L3, L5 and L6; the biggest lever.
+  8. **L16, completion problems** (faded worked examples from the publisher's own steps)
+     and **L17, a placement check** (a short diagnostic that seeds Level 1), M each.
+  *(Proposed 2026-11-01.)*
+
 ---
 
 ## 4. Tracks
@@ -549,7 +589,7 @@ capture (`lib/errorMonitoring.ts`), typed analytics (`lib/analytics.ts`, 31 even
 
 | ID | Item | Status | Tier | Notes and subplan |
 |---|---|---|---|---|
-| E1 | CI green on `main` | 🟡 green locally, 2026-10-17 | **Now** | Fixed: `tour.spec.ts` skips while `TOUR_ENABLED` is off; `exam-pdf` (zoom is keys and gestures now; Read PDF stacks in the popup), `wiki` (the exam strip replaced the Exam dropdown), `flashcard-focus` (cards got shorter) and `store` (a race on the measured column width). The cowork and reveal failures no longer reproduce. Left: a green CI run on `main`. Was P0.1 / P0.5. |
+| E1 | CI green on `main` | ✅ green on `main` 2026-11-01 (after #1733, #1734) | **Now** until E2 | Fixed: `tour.spec.ts` skips while `TOUR_ENABLED` is off; `exam-pdf` (zoom is keys and gestures now; Read PDF stacks in the popup), `wiki` (the exam strip replaced the Exam dropdown), `flashcard-focus` (cards got shorter) and `store` (a race on the measured column width). The cowork and reveal failures no longer reproduce. Left: a green CI run on `main`. Was P0.1 / P0.5. |
 | E2 | Required status checks on `main` | ⬜ | **Now** | Maintainer action (D14). Without it, E1 decays again. |
 | E3 | Question bank out of the entry chunk; CI size budget | ✅ 2026-10-17 | — | `fetchAllQuestions` dynamic-imports `virtual:questions-content` (one lazy chunk; per-exam chunks would only pay once a surface asks for one exam's questions). Entry 3,667 → 730 kB gzip. `npm run size` in `ci.yml`, budget 900 kB. Was P3.3. |
 | E4 | Dependency vulnerabilities and Dependabot | 🟡 | **Now** | Done: `npm audit fix` (15 → 14, 2 high → 0); `.github/dependabot.yml`, npm and Actions weekly. Left: `react-router` 6 → 7 and `katex` (majors, moderate advisories); `uuid` via `@fortune-sheet` has no fix; lift the Supabase pin (2.39 → 2.1xx) in its own PR, tested against a real project — Dependabot ignores it until then. |
@@ -587,6 +627,16 @@ Shipped:
 | L6 | Tunable spaced-repetition intervals | ⬜ | Later | `DECAY_DAYS_*` are constants in `mastery.ts`. Needs L1. Was P2.1. |
 | L7 | Web push reminders | ⬜ | Later | Blocked on E12. Same rules as the email: opt-in, quiet days, framed as an invitation. Was half of P1.3. |
 | L8 | **The Tutor** | 🟡 Phase 1 built 2026-10-18, Preview | Next | `tutor.md`. The reader's own Gem Shop character, floating on every page, walking an Exam 5 candidate through the exam: phases from the exam date, a part served at the moment it is worth most (after reading, when due, to relearn a miss), an FSRS-4.5 scheduler capped by the days left, confidence before every reveal, self-grades banked through `recordReviewAnswers`, and a diagnosis of what is confusing (sure-and-wrong, persistent misses, confusable siblings on one syllabus line, shaky foundations, the weakest kind of part, calibration) with the examiners' reports quoted verbatim. No model. Next: Phase 2 (debrief, timed sets, a `user_tutor_events` sync table), then Beta for Pro (D25). |
+| L9 | Written parts count for their self-grade | ✅ by 2026-10-24 | — | `questionCredit` in `lib/parser.ts`: an ungraded written part is out of the tally; nothing graded, no credit. |
+| L10 | Why half of first quizzes end before the first answer | ⬜ | Proposed | §3.4; `analytics-audit-2026-10-19.md`. L17 may bear on it. |
+| L11 | A predicted score beside coverage | ⬜ | Proposed | `learning-review.md` §3.1. Shares a build with the Pro proposal's forecast; D32. Needs L12; checked against L18. |
+| L12 | Novelty-weighted mastery; unseen-first draws; a held-out set | ⬜ | Proposed | `learning-review.md` §3.2; D33. |
+| L13 | The Tutor's scheduler behind the study plan, every ready exam | ⬜ | Proposed | `learning-review.md` §3.3. Merges L3, L5, L6; reuses `lib/tutor/memory.ts`, `log.ts`, `scheduler.ts`. |
+| L14 | Checklist self-marking for written parts | ⬜ | Proposed | `learning-review.md` §3.4. |
+| L15 | Pacing report, triage, fluency sets | ⬜ | Proposed | `learning-review.md` §3.5. The data is already in `quiz_sessions`. |
+| L16 | Completion problems (faded worked examples) | ⬜ | Proposed | `learning-review.md` §3.7. |
+| L17 | Placement check when an exam is added | ⬜ | Proposed | `learning-review.md` §3.7. |
+| L18 | Ask how the exam went | ⬜ | Proposed | `learning-review.md` §3.8; D34. The outcome metric in §7. |
 | — | Comprehension checks | 🗑 | — | Retired 2026-09-25. Collection happens at Level 1. Was P1.5; see R2. |
 | — | "Fading concepts" card | 🗑 | — | Removed. `lib/masteryAnalytics.ts` stays for the heatmap. Was P2.5. |
 | — | In-app "report this question" | ✅ | — | Built as part of VERIFY. What's left is operating it (V2). Was P2.3. |
@@ -776,6 +826,9 @@ Where a default is given, sessions build with it until the decision is made.
 | D28 | A reading only in the **CAS study kit**, whose page states only what the outline says: verify the page at medium against the outline, or hold it `in_review` until the kit is read (D20, re-asked) | content plan §6 | C1, C5: Exam 8's and 6C's G5 | ✅ settled 2026-10-25: **hold** until the kit itself is read. Exam 8, and 6C's six kit-only readings, stay below `ready` until then |
 | D29 | Should **answerability** (C20) hold a promotion back: an eighth gate, a bar on the gap share, or a figure the promotion PR only reports | content plan §6 | C20; Phase 2's promotions | ✅ settled 2026-10-25 by the maintainer: **a gate, G8**, on each item's resolution rather than the check's score; a prerequisite exam's pages count as in reach. The seven exams that were ready were **moved back to `beta`** the same day, each promoted again when `--check` passes all eight (Phase 2, steps 0 and 10) |
 | D30 | G8's reach: should a page the exam's **own** learning objectives link count as in reach, as a prerequisite exam's pages already do | content plan §6 | C20; Phase 2's G8 items | ✅ settled 2026-10-30 by the maintainer: **yes** (tier `syllabus`). Exam P's out-of-reach items fell from 673 to 227 and FM's from 358 to 59, with no edit |
+| D32 | Does readiness become a **predicted score** (L11) as its headline, or stay syllabus coverage with the forecast beside it | `learning-review.md` §3.1 | L11 | Coverage stays the headline; the forecast is shown beside it, labelled an estimate, until L18's outcomes check it |
+| D33 | A **held-out set** per exam (never served in quizzes; kept for practice exams and the forecast), and its share | `learning-review.md` §3.2 | L12, L11 | No held-out set; build novelty weighting and unseen-first draws only |
+| D34 | Ask readers **how their exam went** (opt-in, private, aggregate use only) | `learning-review.md` §3.8 | L18 | Ask, opt-in, pass / didn't pass / didn't sit / rather not say; no score |
 | D31 | Re-run `check-answerable --ids` after a page edit closes an item? | content plan §6 | C20 | ✅ settled 2026-10-30 by the maintainer: **no**; `resolve` proves the item closed in code. A question is re-run only when its own text changes |
 
 ### 6.2 Settled: don't re-open without a new reason
@@ -815,11 +868,12 @@ Where a default is given, sessions build with it until the decision is made.
 | Learning | Per-concept retention: correct on revisit after the decay window | Instrumented (`concept_retention`, L1) |
 | Re-engagement | Daily email → session conversion | Instrumented (`reminder_opened` → `reminder_session`, L1); needs G1 live |
 | Calibration | The gap between confidence and accuracy | ⬜ L2 |
+| **Outcome** | Pass rate of readers who sat; forecast (L11) against result | ⬜ L18. The goal itself; every other row is a proxy for it |
 | Economy | Gems earned vs spent; quest-vs-plan adherence | 🟡 `quest_claimed` only |
 | Social | League retention by final rank | ⬜ needs a rollover query |
 | Content trust | % of files verified (48.6%); open critical findings (2); stale files (21) | Measured (`Validation Status.md`) |
 | Publication | Exams ready (7 of 43); gates passed per beta exam | Measured (`publication_readiness.py`) |
-| Reliability | Crash-free sessions; CI green on `main` | 🟡 the `exception` events exist; **CI is red, and hasn't run since 2026-10-10** |
+| Reliability | Crash-free sessions; CI green on `main` | 🟡 the `exception` events exist; CI green on `main` since 2026-11-01, not yet required (D14) |
 | Performance | Entry chunk gzip (today 730 kB, budget 900 kB for first paint); LCP / INP | 🟡 the budget is in CI; LCP / INP unmeasured |
 | Monetization | Trial → paid; Pro retention | Stripe data |
 
@@ -833,7 +887,8 @@ Every planning document in the repo, what it is for, and how healthy it is. A do
 
 | Document | Role | Covers | State | Last touched |
 |---|---|---|---|---|
-| `docs/roadmap.md` | **This file**: governance, priorities, status | Everything | Active | 2026-10-17 |
+| `docs/roadmap.md` | **This file**: governance, priorities, status | Everything | Active | 2026-11-01 |
+| `docs/learning-review.md` | Review: Study Mode against the research on exam preparation | L11–L18 (§3.4) | Proposed | 2026-11-01 |
 | `docs/content-plan.md` | **Subplan: all vault content**: the gates, every exam's standing, the workstreams, the phases, the content decisions, the campaign records | C1–C18, V3–V11 | Active. Phase Q (every question verified) closed 2026-10-25; Phase 2 next | 2026-10-25 |
 | `docs/verification-plan.md` | Method: fact-check packets, tooling, sizing | V5 | Reference. Its waves and decisions moved to the content plan | 2026-10-18 |
 | `CONCEPT_GAPS_PLAN.md` | Record of phases A–D, and the generated gap worklist | C11 | Record; its open items are in the content plan §3.3 | 2026-10-18 |
@@ -891,6 +946,10 @@ of this file, in git history):
    raise rewards to fix an engagement dip; fix the learning value instead.
 7. **Implementation intentions.** A reminder fires at the time the learner chose, and
    reads as an invitation.
+8. **Prepare for the paper, not the bank.** The exam is unseen questions, on a clock, in
+   its own format, against a pass mark. Evidence from a remembered question counts for less
+   than a new one; a readiness number has to predict a result; and the app should know how
+   its readers did (`learning-review.md`, L11–L18).
 
 **Content:** nothing is invented; the vault is never 100% AI-written without human review;
 a fact is verified only against a citable source (`verification.md`, P1).
@@ -939,6 +998,12 @@ ls Concepts/*.md | wc -l; python3 -c "import sys; sys.path.insert(0, 'scripts');
 ```
 
 ## Appendix B: Revision history
+
+- **2026-11-01, CI green, L9 done, and the learning review.** CI passes on `main` again (the
+  runs after #1733 and #1734); E1 is done but for D14. L9 (written parts count for their
+  self-grade) was found already built and marked so. `docs/learning-review.md` reviews Study
+  Mode against the research on exam preparation and proposes L11–L18 (§3.4), D32–D34 (§6.1),
+  an Outcome metric (§7) and principle 8 (§9).
 
 - **2026-10-30, Cowork's corpus from the vault (A3).** Every practice resource page is listed in
   Cowork under its publisher, derived at build time; 28 new entities; 23 of the 24 samples

@@ -55,8 +55,9 @@ mechanical problem too, found while planning: the quiz counts a written-only que
 none left returns `true`). 144 of Exam 5's 278 lettered questions, and 58 of its 72 unlettered
 ones, are written-only, so a candidate can level up Exam 5 concepts by pressing *Check
 answers*. The Tutor grades every written part by the candidate's own self-grade against the
-examiners' answer, and banks that honestly (§5.4). The quiz-side fix is proposed separately on
-the roadmap (§3.4, *L9*), because it changes how every CAS written exam's mastery works.
+examiners' answer, and banks that honestly (§5.4). The quiz-side fix (roadmap *L9*) has
+since been built: a written part counts only as its self-grade, an ungraded one for nothing
+(`questionCredit` in `lib/parser.ts`).
 
 ---
 

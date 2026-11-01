@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { useProgress } from '@/hooks/useProgress'
@@ -46,12 +46,18 @@ import { DashboardExportModal } from '@/components/DashboardExportModal'
 import { DashboardRemindersModal } from '@/components/DashboardRemindersModal'
 import { DashboardGuideModal } from '@/components/DashboardGuideModal'
 import { DashboardSearchBar } from '@/components/DashboardSearchBar'
+import { useAccuracyTrend } from '@/hooks/useAccuracyTrend'
 import { DAILY_PLAN_EMAIL_ENABLED, MISTAKES_REVIEW_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
 
 const ACTIVE_EXAM_KEY = 'quiz.dashboard.activeExamId'
 const WELCOME_DISMISSED_KEY = 'quiz.dashboard.welcomeDismissed'
 
 // ── Welcome Modal ─────────────────────────────────────────────────────────────
+
+// Lazy: it reads the Store's registration tables, which stay out of first paint.
+const RegistrationNudge = lazy(() => import('@/components/RegistrationNudge'))
+// Lazy too: below the fold, and drawn only once there are answers to draw.
+const AccuracyTrendCard = lazy(() => import('@/components/AccuracyTrendCard').then(m => ({ default: m.AccuracyTrendCard })))
 
 function WelcomeModal({ onAddExam, onClose }: { onAddExam: () => void; onClose: () => void }) {
   return (
@@ -306,6 +312,7 @@ export default function Dashboard() {
   const activeSyllabus = inProgressSyllabi[clampedIdx] ?? null
   const activeProgressKey = activeSyllabus ? wikiExamIdToProgressKey(activeSyllabus.examId) : null
   const activeTargetDate = activeProgressKey ? (targetDates[activeProgressKey] ?? null) : null
+  const { trend: accuracy } = useAccuracyTrend(activeSyllabus ? questionExamLabel(activeSyllabus) : null, allQuestions)
 
   // Active exams for the Leaderboard tab's exam selector (leagues are per-exam),
   // keyed by exam_progress key so they match what quizStore credits XP to.
@@ -893,6 +900,11 @@ export default function Dashboard() {
           the answer to the question the page exists to answer, and the plan
           under it is what to do about that answer today. The primary actions
           (`primaryActions`) sit under the readiness card, the schedule above it. */}
+      {!isGuest && activeProgressKey && (
+        <Suspense fallback={null}>
+          <RegistrationNudge examKey={activeProgressKey} />
+        </Suspense>
+      )}
       {activeSyllabus && <div ref={setReadinessSlotEl} />}
 
       {/* Readiness card — only shown when there is an active exam */}
@@ -930,6 +942,13 @@ export default function Dashboard() {
           />
         )}
       </div>
+
+      {/* How often this exam's answers are right, over the last month. */}
+      {!isGuest && activeSyllabus && accuracy && accuracy.days.length > 0 && (
+        <Suspense fallback={null}>
+          <AccuracyTrendCard trend={accuracy} />
+        </Suspense>
+      )}
 
       {!isGuest && user && (
         <DashboardExportModal open={exportOpen} onClose={() => setExportOpen(false)} user={user} />

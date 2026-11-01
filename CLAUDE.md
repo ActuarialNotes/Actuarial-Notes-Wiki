@@ -1209,6 +1209,15 @@ Other important `lib/` modules:
   golden vectors, and holds the SQL rollover to `leagues.ts` the same way). Prefs live in `user_email_prefs`
   (`hooks/useEmailPrefs.ts` + `components/DashboardRemindersModal.tsx`, the Dashboard's bell). Gated by
   `DAILY_PLAN_EMAIL_ENABLED`. See `docs/daily-plan-email.md`.
+- `accuracyTrend.ts` / `difficultyBreakdown.ts` / `registrationNudge.ts` — three answers to one
+  reader's review: the Dashboard's **Accuracy** card (`components/AccuracyTrendCard.tsx`, via
+  `hooks/useAccuracyTrend.ts` — one exam's `question_responses` by day, this week against last, by
+  difficulty; signed-in only, lazy), the results screen's score **by difficulty** (shown only once
+  the quiz is over, like `showMeta`; a perfect quiz on Hard questions says so), and the
+  **registration deadline nudge** (`components/RegistrationNudge.tsx`, lazy, on the quiz builder and
+  the Dashboard): within 14 days of the deadline `registrationStatus` reads off the transcribed
+  sittings tables, dismissed per sitting in localStorage. Pure and tested; flows in
+  `e2e/accuracy.spec.ts`.
 - `learningSignals.ts` — the **learning instrumentation** (roadmap L1): whether studying
   *worked*, as pure functions `lib/analytics.ts` sends. `concept_retention` — a concept
   answered for the first time after its decay window (`decayIfStale` steps it down), with

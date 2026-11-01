@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { questionCredit, questionOutcome } from '@/lib/parser'
 import { PRACTICE_EXAM_LABEL } from '@/lib/pastExams'
 import { formatScore, scoreColorClass } from '@/lib/quizScore'
+import { DIFFICULTY_LABEL, difficultyHeadline, scoreByDifficulty } from '@/lib/difficultyBreakdown'
 import type { Question, SelfGrade, QuestionOutcome } from '@/lib/parser'
 import type { MasteryState } from '@/lib/mastery'
 import type { MasteryTransition } from '@/stores/quizStore'
@@ -282,6 +283,10 @@ export function ConceptCoverageSection({
   const credits = questions.map(q => questionCredit(q, responses[q.id]?.chosen, manualGrades))
   const outcomes = questions.map(q => questionOutcome(q, responses[q.id]?.chosen, manualGrades))
   const hasIncorrect = outcomes.some(o => o !== 'correct')
+  // The score by difficulty. Hidden while the quiz is live, it is what tells a
+  // reader whether a good score was on easy questions or hard ones.
+  const difficultyScores = scoreByDifficulty(questions, outcomes.map(o => o === 'correct'))
+  const headline = difficultyHeadline(difficultyScores)
 
   // Score header colors
   const pctColor = scoreColorClass(score.percentage)
@@ -297,6 +302,7 @@ export function ConceptCoverageSection({
               <h1 className="text-xl font-bold">
                 {score.mode === 'mock-exam' ? `${PRACTICE_EXAM_LABEL} Complete` : 'Quiz Complete'}
               </h1>
+              {headline && <p className="mt-1 text-sm font-medium text-foreground">{headline}</p>}
             </div>
             <div className={`text-4xl font-black tabular-nums leading-none ${pctColor}`}>
               {score.percentage}%
@@ -313,12 +319,19 @@ export function ConceptCoverageSection({
               <span className="text-2xl font-bold tabular-nums">{formatTime(score.timeTakenSeconds)}</span>
               <p className="text-xs text-muted-foreground mt-0.5">Time</p>
             </div>
+            {difficultyScores.map(d => (
+              <div key={d.difficulty}>
+                <span className="text-2xl font-bold tabular-nums">{d.correct}</span>
+                <span className="text-lg text-muted-foreground">/{d.total}</span>
+                <p className="text-xs text-muted-foreground mt-0.5">{DIFFICULTY_LABEL[d.difficulty]}</p>
+              </div>
+            ))}
           </div>
 
           {/* Sign-in prompt */}
           {!score.isLoggedIn && (
             <div className="mt-4 rounded-lg bg-muted/40 px-4 py-3 text-sm flex flex-col sm:flex-row sm:items-center gap-3 sm:justify-between">
-              <span className="text-muted-foreground">Sign in to save your results and track progress</span>
+              <span className="text-muted-foreground">Sign in to keep your results and see your accuracy over time</span>
               <Button size="sm" variant="outline" onClick={score.onSignIn}>
                 Sign In
               </Button>

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { Question } from './parser'
-import { questionPoints, quizPoints } from './quizScore'
+import { isUnanswered, questionPoints, quizPoints, scoredQuestions } from './quizScore'
 
 function mc(id: string, points: number, answer = 'A'): Question {
   return {
@@ -40,5 +40,30 @@ describe('quizPoints', () => {
   it('a quiz of one-point questions is a count', () => {
     const score = quizPoints([mc('a', 1), mc('b', 1)], { a: { chosen: 'A' } }, {})
     expect(score).toMatchObject({ earned: 1, possible: 2, percentage: 50, unitPoints: true })
+  })
+})
+
+describe('unanswered questions', () => {
+  const questions = [mc('a', 1), mc('b', 1), mc('c', 1)]
+  const responses = { a: { chosen: 'A' }, b: { chosen: 'B' } }
+
+  it('a question with no response and no grade is unanswered', () => {
+    expect(isUnanswered(questions[2], responses)).toBe(true)
+    expect(isUnanswered(questions[1], responses)).toBe(false)
+  })
+
+  it('a self-graded part counts as an answer', () => {
+    expect(isUnanswered(questions[2], {}, { 'c__a': 'correct' })).toBe(false)
+  })
+
+  it('a quiz finished early is scored on what was answered', () => {
+    const scored = scoredQuestions(questions, responses, 'quiz')
+    expect(scored.map(q => q.id)).toEqual(['a', 'b'])
+    expect(quizPoints(scored, responses, {})).toMatchObject({ earned: 1, possible: 2, percentage: 50 })
+  })
+
+  it('a practice exam still scores its blanks', () => {
+    const scored = scoredQuestions(questions, responses, 'mock-exam')
+    expect(quizPoints(scored, responses, {})).toMatchObject({ earned: 1, possible: 3, percentage: 33 })
   })
 })

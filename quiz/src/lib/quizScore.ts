@@ -61,3 +61,38 @@ export function scoreColorClass(percentage: number): string {
 export function effectiveOutcome(q: Question, chosen: string | null | undefined, manualGrades: Record<string, SelfGrade>): boolean {
   return questionCredit(q, chosen, manualGrades) >= 1
 }
+
+// ─── Unanswered questions ─────────────────────────────────────────────────────
+// A quiz can be finished early. In a quiz the questions never reached weren't
+// got wrong — they were never tried — so they are Unanswered: out of the score,
+// out of its denominator, and recorded nowhere as a miss. A practice exam is a
+// rehearsal of the sitting, where a blank earns nothing, so there they still
+// count against the score.
+
+type ResponseMap = Record<string, { chosen: string | null } | undefined>
+
+// No answer was committed and no part was self-graded.
+export function isUnanswered(q: Question, responses: ResponseMap, manualGrades: Record<string, SelfGrade> = {}): boolean {
+  const chosen = responses[q.id]?.chosen
+  if (chosen !== undefined && chosen !== null) return false
+  if (manualGrades[q.id] !== undefined) return false
+  const prefix = `${q.id}__`
+  return !Object.keys(manualGrades).some(k => k.startsWith(prefix))
+}
+
+// Whether a mode leaves an unanswered question out of the score.
+export function skipsUnanswered(mode: string): boolean {
+  return mode !== 'mock-exam'
+}
+
+// The questions a finished session is scored on: every one in a practice exam,
+// only the answered ones in a quiz.
+export function scoredQuestions<Q extends Question>(
+  questions: Q[],
+  responses: ResponseMap,
+  mode: string,
+  manualGrades: Record<string, SelfGrade> = {},
+): Q[] {
+  if (!skipsUnanswered(mode)) return questions
+  return questions.filter(q => !isUnanswered(q, responses, manualGrades))
+}

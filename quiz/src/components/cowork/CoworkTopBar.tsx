@@ -156,6 +156,7 @@ export function CoworkTopBar({
             placeholder={placeholder}
             ariaLabel={placeholder}
             navCollapsed={active}
+            resultCount={found}
           />
 
           {pageTitle && <FloatingSearchStrip title={pageTitle} icon={pageIcon} backLink={backLink} />}
@@ -171,7 +172,7 @@ export function CoworkTopBar({
                 </SearchScopePill>
               </div>
 
-              <ul className="max-h-[50vh] space-y-0.5 overflow-y-auto">
+              <ul className="max-h-[50vh] space-y-0.5 overflow-y-auto" data-search-results>
                 {found === 0 ? (
                   <li className="px-2 py-2 text-xs text-muted-foreground">No matches.</li>
                 ) : (

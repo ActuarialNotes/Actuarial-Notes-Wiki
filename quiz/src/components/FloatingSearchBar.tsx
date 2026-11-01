@@ -61,6 +61,9 @@ export const FloatingSearchBar = forwardRef(function FloatingSearchBar(
     <div
       ref={ref}
       data-floating-search
+      // The search's region: a pointer inside it (a scope pill, the clear
+      // button) is still searching — hooks/useSearchTracking.ts.
+      data-search-region
       className={cn('sticky top-0 z-50 border-b bg-background/90 backdrop-blur-md', className)}
     >
       <div className={cn('mx-auto px-4 sm:px-6', WIDTH_CLASS[width])}>{children}</div>
@@ -80,6 +83,12 @@ export interface FloatingSearchInputProps {
   inputRef?: Ref<HTMLInputElement>
   /** The search is in use, so the nav button gives up the line. */
   navCollapsed?: boolean
+  /**
+   * How many results the place is showing for `value`, reported with the
+   * `search` event. A place marks its results `data-search-results` so that
+   * opening one is told apart from leaving.
+   */
+  resultCount?: number
 }
 
 export function FloatingSearchInput({
@@ -91,8 +100,9 @@ export function FloatingSearchInput({
   ariaLabel,
   inputRef,
   navCollapsed = false,
+  resultCount,
 }: FloatingSearchInputProps) {
-  useSearchTracking(value)
+  const tracking = useSearchTracking(value, { resultCount })
   return (
     <div className="flex h-[calc(3.5rem-1px)] items-center gap-2">
       <MobileNavButton collapsed={navCollapsed} className="-ml-1.5" />
@@ -104,7 +114,12 @@ export function FloatingSearchInput({
         type="text"
         value={value}
         onChange={e => onChange(e.target.value)}
-        onFocus={onFocus}
+        onFocus={e => {
+          tracking.onFocus(e)
+          onFocus?.()
+        }}
+        onBlur={tracking.onBlur}
+        onKeyDown={tracking.onKeyDown}
         placeholder={placeholder}
         aria-label={ariaLabel}
         autoComplete="off"

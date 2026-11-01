@@ -142,6 +142,7 @@ export function DashboardSearchBar({ questions }: { questions: Question[] }) {
             placeholder={SCOPE_PLACEHOLDER[scope]}
             ariaLabel="Search concepts, resources and questions"
             navCollapsed={active}
+            resultCount={resultCount}
           />
 
           {active && (
@@ -158,7 +159,9 @@ export function DashboardSearchBar({ questions }: { questions: Question[] }) {
               </div>
 
               {hasQuery && (
-                <>
+                // The results and the hand-over to the Search page below them:
+                // either is the reader taking the search further.
+                <div data-search-results>
                   <div className="max-h-[50vh] overflow-y-auto">
                     {resultCount === 0 ? (
                       <p className="px-2 py-2 text-xs text-muted-foreground">No matches.</p>
@@ -189,7 +192,7 @@ export function DashboardSearchBar({ questions }: { questions: Question[] }) {
                     <Search className="h-3.5 w-3.5 shrink-0" />
                     Search all {SCOPE_LABEL[scope].toLowerCase()} for “{query.trim()}”
                   </button>
-                </>
+                </div>
               )}
             </div>
           )}

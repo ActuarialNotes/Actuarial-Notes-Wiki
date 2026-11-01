@@ -5,12 +5,14 @@ import {
   describeContent,
   fitParams,
   isAutomatedUserAgent,
+  isHeadlessScreen,
   isInternalAccount,
   isMeasuredHost,
   isNewPageView,
   pageLocation,
   readControlParam,
   redactPii,
+  searchReport,
   searchTerm,
   type MeasurementContext,
 } from './analyticsPolicy'
@@ -48,6 +50,16 @@ describe('decideMeasurement', () => {
     })
   })
 
+  it('keeps out a crawler that hides its automation but not its window', () => {
+    // The Singapore crawler: an ordinary Windows Chrome agent, no webdriver flag.
+    expect(decideMeasurement(ctx({ screen: { width: 1280, height: 1200 } }))).toEqual({
+      measure: false,
+      reason: 'automation',
+    })
+    expect(decideMeasurement(ctx({ screen: { width: 1920, height: 1080 } }))).toEqual({ measure: true })
+    expect(decideMeasurement(ctx({ screen: { width: 390, height: 844 }, userAgent: IPHONE }))).toEqual({ measure: true })
+  })
+
   it('keeps out automation even in a debug session', () => {
     expect(decideMeasurement(ctx({ webdriver: true, debug: true })).measure).toBe(false)
   })
@@ -82,6 +94,20 @@ describe('isAutomatedUserAgent', () => {
   ])('lets a person through: %s', ua => {
     expect(isAutomatedUserAgent(ua)).toBe(false)
   })
+})
+
+describe('isHeadlessScreen', () => {
+  it.each([[1280, 1200], [1280, 1280], [1600, 1600], [800, 600]])('flags %ix%i', (w, h) => {
+    expect(isHeadlessScreen(w, h)).toBe(true)
+  })
+
+  // Real displays — including 1440×900, which crawlers use too but MacBooks do as well.
+  it.each([[1920, 1080], [1440, 900], [1536, 864], [1280, 800], [1280, 720], [390, 844], [402, 874], [1200, 1280]])(
+    'lets %ix%i through',
+    (w, h) => {
+      expect(isHeadlessScreen(w, h)).toBe(false)
+    },
+  )
 })
 
 describe('hosts and accounts', () => {
@@ -200,6 +226,33 @@ describe('searchTerm', () => {
 
   it('redacts personal details', () => {
     expect(searchTerm('me@example.com')).toBe('[redacted email]')
+  })
+})
+
+describe('searchReport', () => {
+  const search = { text: '  Liability for Incurred Claims ', resultCount: 0, scope: 'Concepts', outcome: 'left' as const }
+
+  it('reports the term as it stands when the reader is done, with its results and how it ended', () => {
+    expect(searchReport(search, null)).toEqual({
+      search_term: 'liability for incurred claims',
+      search_scope: 'Concepts',
+      search_outcome: 'left',
+      result_count: 0,
+    })
+  })
+
+  it('leaves the count out for a box with no list of its own', () => {
+    expect(searchReport({ ...search, resultCount: undefined }, null)).not.toHaveProperty('result_count')
+  })
+
+  it('reports a term once: opening a result and then leaving the page is one search', () => {
+    expect(searchReport({ ...search, outcome: 'opened' }, null)?.search_outcome).toBe('opened')
+    expect(searchReport(search, 'liability for incurred claims')).toBeNull()
+  })
+
+  it('sends nothing for a term too short to be one', () => {
+    expect(searchReport({ ...search, text: 'l' }, null)).toBeNull()
+    expect(searchReport({ ...search, text: '   ' }, null)).toBeNull()
   })
 })
 

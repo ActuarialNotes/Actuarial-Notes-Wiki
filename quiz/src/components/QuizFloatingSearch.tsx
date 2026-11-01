@@ -76,7 +76,6 @@ export function QuizFloatingSearch({ filter, strip, banner }: QuizFloatingSearch
   const { questions: allQuestions } = useAllQuestions()
   const { byQuestionId: attemptsByQuestionId, tracked: attemptsTracked } = useQuestionAttempts()
   const [query, setQuery] = useState('')
-  useSearchTracking(query)
   const [active, setActive] = useState(false)
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const [attemptStatus, setAttemptStatus] = useState<AttemptStatus>('all')
@@ -184,6 +183,7 @@ export function QuizFloatingSearch({ filter, strip, banner }: QuizFloatingSearch
   }, [facetPool, isAttempted])
 
   const questionResults = useMemo(() => visiblePool.slice(0, 100), [visiblePool])
+  const tracking = useSearchTracking(query, { resultCount: visiblePool.length })
   const totalCount = visiblePool.length
 
   function toggleFilter(facet: QuestionFacet, value: string) {
@@ -220,6 +220,7 @@ export function QuizFloatingSearch({ filter, strip, banner }: QuizFloatingSearch
 
       <div
         ref={containerRef}
+        data-search-region
         className="sticky top-0 z-50 border-b bg-background/90 backdrop-blur-md"
       >
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
@@ -239,7 +240,12 @@ export function QuizFloatingSearch({ filter, strip, banner }: QuizFloatingSearch
               type="text"
               value={query}
               onChange={e => setQuery(e.target.value)}
-              onFocus={() => setActive(true)}
+              onFocus={e => {
+                tracking.onFocus(e)
+                setActive(true)
+              }}
+              onBlur={tracking.onBlur}
+              onKeyDown={tracking.onKeyDown}
               onMouseDown={e => {
                 // First tap on touch: open the panel only. Cancelling the
                 // mousedown's default action suppresses the focus it would
@@ -389,7 +395,7 @@ export function QuizFloatingSearch({ filter, strip, banner }: QuizFloatingSearch
                 </div>
 
                 {/* Results list */}
-                <div className="py-2 space-y-2">
+                <div className="py-2 space-y-2" data-search-results>
                   {questionResults.length === 0 ? (
                     <p className="text-xs text-muted-foreground px-2 py-2">No questions found.</p>
                   ) : (

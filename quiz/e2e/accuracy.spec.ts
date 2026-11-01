@@ -29,14 +29,51 @@ test.beforeEach(async ({ page }) => {
     route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(rows.map(r => ({ user_id: USER_ID, ...r }))) }))
 })
 
-test('the Dashboard shows this week’s accuracy against last week’s', async ({ page }) => {
+test('the Dashboard shows accuracy over the span picked, against the span before', async ({ page }) => {
   await page.goto('/dashboard')
   const card = page.getByRole('region', { name: 'Accuracy' })
   await expect(card).toBeVisible({ timeout: 20_000 })
+  // 30 days by default: every answer, and no 30 days before it on record.
+  await expect(card).toContainText('10 of 20 right, last 30 days')
+  await expect(card).not.toContainText('pts')
+  await card.getByRole('radio', { name: 'Last 7 days' }).click()
   await expect(card).toContainText('70%')
   await expect(card).toContainText('7 of 10 right, last 7 days')
-  await expect(card).toContainText('40 pts on the week before')
-  await expect(card).toContainText('Hard')
+  await expect(card).toContainText('40 pts on the 7 days before')
+  await expect(card).toContainText('Hard · 5')
+  await card.screenshot({ path: 'test-results/accuracy-card-7d.png' })
+  await card.getByRole('radio', { name: 'Last 30 days' }).click()
+  await card.screenshot({ path: 'test-results/accuracy-card-30d.png' })
+  await page.emulateMedia({ colorScheme: 'dark' })
+  await card.screenshot({ path: 'test-results/accuracy-card-30d-dark.png' })
+})
+
+test('the weakest topics each start a quiz on that topic', async ({ page }) => {
+  await page.goto('/dashboard')
+  const card = page.getByRole('region', { name: 'Accuracy' })
+  await expect(card).toBeVisible({ timeout: 20_000 })
+  await card.getByRole('radio', { name: 'Last 30 days' }).click()
+  const topics = card.getByRole('link')
+  await expect(topics).toHaveCount(3)
+  await expect(topics.first()).toContainText('Immunization')
+  await expect(topics.first()).toContainText('1 of 4 right')
+  await topics.first().click()
+  await expect(page).toHaveURL(/\/quiz\?exam=Financial\+Mathematics&topics=Immunization&count=10/)
+  // The quiz finds questions on the topic: its pre-quiz list or its first question.
+  await expect(page.getByRole('button', { name: 'Start Quiz' }).or(page.getByRole('button', { name: 'Option A' })).first()).toBeVisible({ timeout: 20_000 })
+})
+
+test('a day on the chart opens the questions answered that day', async ({ page }) => {
+  await page.goto('/dashboard')
+  const card = page.getByRole('region', { name: 'Accuracy' })
+  await expect(card).toBeVisible({ timeout: 20_000 })
+  await card.getByRole('radio', { name: 'Last 30 days' }).click()
+  await card.getByRole('button', { name: /^October 30: 4 of 5 right/ }).click()
+  const dialog = page.getByRole('dialog', { name: 'Questions answered on October 30' })
+  await expect(dialog).toBeVisible()
+  await expect(dialog).toContainText('4 of 5 right (80%)')
+  await dialog.getByRole('button', { name: 'Try these 3 again' }).click()
+  await expect(page).toHaveURL(/\/quiz\?ids=fm-002,fm-004,fm-005$/)
 })
 
 test('the registration deadline shows four days out, and stays dismissed', async ({ page }) => {

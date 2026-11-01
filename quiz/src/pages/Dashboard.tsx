@@ -312,7 +312,8 @@ export default function Dashboard() {
   const activeSyllabus = inProgressSyllabi[clampedIdx] ?? null
   const activeProgressKey = activeSyllabus ? wikiExamIdToProgressKey(activeSyllabus.examId) : null
   const activeTargetDate = activeProgressKey ? (targetDates[activeProgressKey] ?? null) : null
-  const { trend: accuracy } = useAccuracyTrend(activeSyllabus ? questionExamLabel(activeSyllabus) : null, allQuestions)
+  const accuracyExam = activeSyllabus ? questionExamLabel(activeSyllabus) : null
+  const { trends: accuracy } = useAccuracyTrend(accuracyExam, allQuestions)
 
   // Active exams for the Leaderboard tab's exam selector (leagues are per-exam),
   // keyed by exam_progress key so they match what quizStore credits XP to.
@@ -943,10 +944,10 @@ export default function Dashboard() {
         )}
       </div>
 
-      {/* How often this exam's answers are right, over the last month. */}
-      {!isGuest && activeSyllabus && accuracy && accuracy.days.length > 0 && (
+      {/* How often this exam's answers are right, over the last 7, 30 or 90 days. */}
+      {!isGuest && accuracyExam && accuracy && accuracy[90].days.length > 0 && (
         <Suspense fallback={null}>
-          <AccuracyTrendCard trend={accuracy} />
+          <AccuracyTrendCard trends={accuracy} examLabel={accuracyExam} questions={allQuestions} />
         </Suspense>
       )}
 

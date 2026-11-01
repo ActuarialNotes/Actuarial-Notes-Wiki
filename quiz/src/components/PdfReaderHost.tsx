@@ -1,5 +1,11 @@
+import { lazy, Suspense } from 'react'
 import { usePdfReader } from '@/hooks/usePdfReader'
-import { PdfViewerPanel } from '@/components/PdfViewerPanel'
+
+// The panel (and pdf.js behind it) is fetched the first time a document is
+// opened, not with the first paint: most visits never open one.
+const PdfViewerPanel = lazy(() =>
+  import('@/components/PdfViewerPanel').then(m => ({ default: m.PdfViewerPanel })),
+)
 
 /**
  * The app's single exam-PDF reader, mounted once at the root.
@@ -24,14 +30,16 @@ export function PdfReaderHost() {
   const closePdf = usePdfReader(state => state.closePdf)
   if (!doc) return null
   return (
-    <PdfViewerPanel
-      key={`${doc.url}#${doc.page ?? 1}`}
-      url={doc.url}
-      title={doc.title}
-      subtitle={doc.subtitle}
-      initialPage={doc.page}
-      onClose={closePdf}
-    />
+    <Suspense fallback={null}>
+      <PdfViewerPanel
+        key={`${doc.url}#${doc.page ?? 1}`}
+        url={doc.url}
+        title={doc.title}
+        subtitle={doc.subtitle}
+        initialPage={doc.page}
+        onClose={closePdf}
+      />
+    </Suspense>
   )
 }
 

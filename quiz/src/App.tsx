@@ -13,12 +13,7 @@ import Games from '@/pages/Games'
 import Review from '@/pages/Review'
 import Dashboard from '@/pages/Dashboard'
 import Flashcards from '@/pages/Flashcards'
-import Search from '@/pages/Search'
-import Settings from '@/pages/Settings'
-import Upgrade from '@/pages/Upgrade'
-import GemShop from '@/pages/GemShop'
 import Sidebar from '@/components/Sidebar'
-import OnboardingTour from '@/components/OnboardingTour'
 import SoundEffects from '@/components/SoundEffects'
 import MathFocus from '@/components/MathFocus'
 import PaperRouter from '@/components/PaperRouter'
@@ -78,6 +73,15 @@ const { Component: Craft, preload: loadCraft } = lazyRoute(() => import('@/pages
 // Actuaria Online (docs/actuaria-online.md) — the game layer, one lazy chunk,
 // so its display face, its star map and its screens never reach Study Mode.
 const { Component: Actuaria, preload: loadActuaria } = lazyRoute(() => import('@/pages/Actuaria'))
+// Settings, Search, the Gem Shop and the Upgrade page — opened on purpose,
+// never the first screen, so they wait for the click (first-paint budget, E3).
+const { Component: GemShop, preload: loadGemShop } = lazyRoute(() => import('@/pages/GemShop'))
+const { Component: Settings, preload: loadSettings } = lazyRoute(() => import('@/pages/Settings'))
+const { Component: Search, preload: loadSearch } = lazyRoute(() => import('@/pages/Search'))
+const { Component: Upgrade, preload: loadUpgrade } = lazyRoute(() => import('@/pages/Upgrade'))
+// The onboarding tour is parked (TOUR_ENABLED is off): lazy, so a parked
+// feature costs first paint nothing.
+const { Component: OnboardingTour } = lazyRoute(() => import('@/components/OnboardingTour'))
 
 const { Component: WikiLayout, preload: loadWikiLayout } = lazyRoute(() => import('@/components/wiki/WikiLayout'))
 const { Component: WikiHome, preload: loadWikiHome } = lazyRoute(() => import('@/pages/wiki/WikiHome'))
@@ -103,6 +107,10 @@ function preloadRoute(path: string): Promise<unknown> | null {
   if (route === '/battle') return loadBattle()
   if (route === '/craft' || route.startsWith('/craft/')) return loadCraft()
   if (route === '/store') return loadStore()
+  if (route === '/store/gems') return loadGemShop()
+  if (route === '/upgrade') return loadUpgrade()
+  if (route === '/settings') return loadSettings()
+  if (route === '/search') return loadSearch()
   if (COMMUNITY_ENABLED && (route === '/community' || route.startsWith('/community/'))) return loadCommunity()
   if (TOOLS_ENABLED && (route === '/tools' || route.startsWith('/tools/'))) return loadTools()
   if (ACTUARIA_ENABLED && (route === '/actuaria' || route.startsWith('/actuaria/'))) return loadActuaria()
@@ -419,11 +427,11 @@ export default function App({ initialSession }: { initialSession: Session | null
                 <Route path="/actuaria/*" element={<ActuariaRoute />} />
                 <Route path="/review" element={<Review />} />
                 <Route path="/dashboard" element={<ErrorBoundary><Dashboard /></ErrorBoundary>} />
-                <Route path="/search" element={<Search />} />
+                <Route path="/search" element={<Suspense fallback={<WikiFallback />}><Search /></Suspense>} />
                 <Route path="/flashcards" element={<ErrorBoundary><Flashcards /></ErrorBoundary>} />
                 <Route path="/browse" element={<Navigate to="/search" replace />} />
-                <Route path="/settings" element={<Settings />} />
-                <Route path="/upgrade" element={<Upgrade />} />
+                <Route path="/settings" element={<Suspense fallback={<WikiFallback />}><Settings /></Suspense>} />
+                <Route path="/upgrade" element={<Suspense fallback={<WikiFallback />}><Upgrade /></Suspense>} />
                 {/* The Store: real products, each bought on its seller's own
                     page. The gem shop is a corner of it. */}
                 <Route path="/store" element={<StoreRoute />} />
@@ -433,7 +441,7 @@ export default function App({ initialSession }: { initialSession: Session | null
                 <Route path="/tools/:slug" element={<ToolsRoute />} />
                 <Route path="/community" element={<CommunityRoute />} />
                 <Route path="/community/topic/:topicId" element={<CommunityRoute />} />
-                <Route path="/store/gems" element={<ErrorBoundary><GemShop /></ErrorBoundary>} />
+                <Route path="/store/gems" element={<ErrorBoundary><Suspense fallback={<WikiFallback />}><GemShop /></Suspense></ErrorBoundary>} />
                 <Route path="/research" element={
                   RESEARCH_TAB_ENABLED ? (
                     <RequireAuth>
@@ -502,7 +510,7 @@ export default function App({ initialSession }: { initialSession: Session | null
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Main>
-            {TOUR_ENABLED && <OnboardingTour />}
+            {TOUR_ENABLED && <Suspense fallback={null}><OnboardingTour /></Suspense>}
             <MathFocus />
             <ImageFocus />
             {/* The welcome to Pro, whichever way it was got (lib/proCelebration.ts). */}

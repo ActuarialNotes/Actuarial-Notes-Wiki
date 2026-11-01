@@ -25,8 +25,9 @@ test.describe('flashcard focus mode on a phone', () => {
     })
     await page.addInitScript(() => {
       localStorage.setItem('actuarial_flashcards', JSON.stringify([
+        // Lift alone: the deck orders cards by exam and syllabus, so a second
+        // card could come first and the test would be reading the wrong card.
         { kind: 'concept', name: 'Lift', addedAt: 1 },
-        { kind: 'concept', name: 'Gini Index', addedAt: 2 },
       ]))
     })
 

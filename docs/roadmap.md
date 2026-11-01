@@ -211,7 +211,12 @@ to §4. Where an item has a former roadmap ID (P0–P4), §4 gives it.
    `data-tour="exam-p"` marker when its SOA track began to be drawn in chunks. The other
    nine were tests behind the content and the UI (Exam 5 now has multiple-choice questions
    and races; renamed and re-verified questions; a rewritten Lift page; the CIA's third
-   body on the Study Guides picker). Fixed, and the suite passes as CI runs it. Left: see CI
+   body on the Study Guides picker). Fixed, and the suite passes as CI runs it. 2026-11-01:
+   red again on two counts. First paint crept to 902 kB, over the 900 kB budget (Settings,
+   Search, the Gem Shop, Upgrade, the parked tour and the PDF reader's panel are lazy chunks
+   now: 881 kB). And the flashcard-focus test read the wrong card once the deck began to be
+   filed by exam. Four tests (two quiz, the Tutor, a Workflows link) still pass only on a
+   retry: each click hangs to the 30 s timeout on CI's runner. Left: see CI
    go green on `main`, then **D14**: make the CI checks required on `main`, which is what
    keeps a red e2e job from merging again. Until then, every other "✅ with tests" in this
    file is weaker than it looks.

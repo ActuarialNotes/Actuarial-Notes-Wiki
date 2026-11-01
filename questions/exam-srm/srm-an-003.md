@@ -10,14 +10,15 @@ wiki_link:
   - Concepts/K-Nearest+Neighbors
   - Concepts/Ordinary+Least+Squares
   - Concepts/Statistical+Learning
+  - Concepts/Similarity+and+Distance+Measures
 answer: "B"
 points: 1
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-18
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:91ff273d93e967fbcd2a1c7cc3fb2b0834f446828b7b59a0b882c14db674ea60
+  content_hash: sha256:471840866187b79e99306f7108173977637a2d6e487f9398941720e38eb4397e
   sources:
     - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer, 2021), §3.5 Comparison of Linear Regression with K-Nearest Neighbors, KNN regression definition (3.39), p.105 (PDF p.115), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
     - "SOA Exam SRM syllabus, January 2027 (Basics of Statistical Learning; Linear Models obj. 7; Time Series Models obj. 1-2; readings ISLR Ch.2 §1-3, Ch.3 §1-6, Ch.5 §1; Frees Ch.8 §1-4, Ch.9 §1-5), sha256:2165c0dec2c26a810a100a504f6a38ac05f02348c1af26e4c8ad71b679eb56af — https://www.soa.org/globalassets/assets/files/edu/2027/spring/syllabi/2027-01-exam-srm-syllabus.pdf"

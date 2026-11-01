@@ -28,3 +28,14 @@ created: 2026-10-18
 - checks_run: read the routed ISLR pages before the page; formula-by-formula comparison; full-text search of every named method; worked examples recomputed independently; wiki-links and embeds resolve
 - sources_checked: James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), CAS-hosted copy, §8.1, printed pp.327-340 (PDF pp.335-348; printed = PDF - 8), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf
 - note: Definition, RSS and Gini/entropy formulas, recursive binary splitting, stopping rule, cost-complexity criterion (8.4) and the non-robustness claim all match §8.1 (pp.330-340). Pruning example arithmetic correct (100 vs 100); its tie-break is unsourced (F-001, open). Also linked from Exam SRM, whose reading includes ISLR ch.8; claims hold for both.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-31T19:12Z/e10e
+- date: 2026-10-31
+- status_set: verified
+- confidence: medium
+- checks_run: new advantages/disadvantages bullet against ISLR §8.1.4 point by point (six bullets); rest re-read
+- sources_checked: James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021, CAS-hosted copy), §8.1.4 Advantages and Disadvantages of Trees, pp.339-340 (PDF 347-348), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf
+- note: Delta pass after the SRM G8 writer's edits (commit 54b25be3b): every added passage read against the source at its locator; unchanged content was verified against the same source bytes in the prior pass in this log, re-read on the page for consistency with the new passages; wiki-links and figure embeds resolve. Checked by a different agent from the writer. Every point of the bullet is one of ISLR's four ▲ and two ▼ bullets, in order. F-001 (pruning-example tie-break, minor) remains open, hence medium.

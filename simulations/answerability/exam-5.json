@@ -8614,7 +8614,15 @@
        "page": "Manual Rate",
        "quote": "**Trend:** The base rate is projected from the midpoint of the experience period to the midpoint of the rating period, because claims are spread over both periods."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Trend",
+      "quote": "The trend period runs from the average date of historical losses (midpoint of the accident year) to the average date of future losses: the midpoint of the period over which the new policies' coverage runs, which for annual policies written over one year is one year after the effective date",
+      "note": "Re-quoted: the FAM Brown & Lennox packet (run 2026-10-31T18:55Z/3416, F-003) restated this Trend bullet to Werner & Modlin ch. 6 pp.112-115, which removed the old quote; the restated bullet, verified in that run, teaches the same trend period and spells out the annual-policy case the requirement needs.",
+      "date": "2026-10-31",
+      "run": "coordinator-20261031-srm-fam"
+     }
     },
     {
      "id": "r10",

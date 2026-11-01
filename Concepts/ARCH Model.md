@@ -2,13 +2,18 @@
 aliases:
   - Autoregressive Conditionally Heteroskedastic
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
   content_hash: sha256:a6549a3f73ae7b0bc54f6838bf0277dd187e16198e0474ad211b4c2b49bcec62
-  sources: []
-  open_findings: 0
+  sources:
+    - "SOA, Exam SRM syllabus, January 2027, Topic 3 learning outcomes 3a-3c, p.4; Textbooks, Frees Ch.9 §1-5, p.5, sha256:2165c0dec2c26a810a100a504f6a38ac05f02348c1af26e4c8ad71b679eb56af — https://www.soa.org/globalassets/assets/files/edu/2027/spring/syllabi/2027-01-exam-srm-syllabus.pdf"
+    - "Frees, Regression Modeling with Actuarial and Financial Applications (Cambridge, 2010), publisher's front matter, printed contents p.viii: Chapter 9, §9.5 ARCH/GARCH Models p.285, sha256:5ba2667a8ef934a28ca17bec157901c672026dbf2613d4c16afafc935df2d0ac — https://assets.cambridge.org/97805217/60119/frontmatter/9780521760119_frontmatter.pdf"
+    - "Engle, 'Risk and Volatility: Econometric Models and Financial Practice', Nobel Lecture, 8 Dec 2003, pp.327-330 (ARCH as weighted average of past squared forecast errors; squared residuals autocorrelated though residuals are not; GARCH(1,1) as long-run, previous forecast and news; fat tails and volatility clustering; mean reversion), pp.336-337 (squared-return autocorrelations; long-run variance dominates multi-step forecasts), sha256:3f695ec65f09f4e774efdf0b665860297351d62ca3f00cb8c42f54c77b961004 — https://www.nobelprize.org/uploads/2018/06/engle-lecture.pdf"
+    - "Wikipedia, 'Autoregressive conditional heteroskedasticity' (read 2026-10-31), Model specification and GARCH(p, q) model specification (ARCH(q) equation, alpha_0 > 0, alpha_i >= 0, conditional variance given the past), sha256:dc2f9fafd6d55d312ec93fa705a44f4bdf25eaa63a80e4f8bbba3eed3bc8aba7 — https://en.wikipedia.org/wiki/Autoregressive_conditional_heteroskedasticity"
+    - "NYU Stern V-Lab, GARCH Model Documentation, Level 1 (long-run variance omega/(1-alpha-beta); alpha+beta < 1 for mean reversion and a finite unconditional variance; fat tails from normal innovations; half-life ln(0.5)/ln(alpha+beta)), sha256:3670f3187430338b34d68bd2db4fce7c9e0987ed3b98a74001cfc4a60bf59805 — https://vlab.stern.nyu.edu/docs/volatility/GARCH"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/ARCH Model.md
 ---

@@ -1,17 +1,20 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:39da5fddc5aed8a75306854e380458690dc458b428c45205adf5f2e9dc1dbc5a
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:4945509860b4213a0b682133d12b76eb6d4be2ae947fcd58c610fa7d236b6d44
+  sources:
+    - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed., §2.4.1 printed pp.11-12 (logging continuous predictors in a log-link model; coefficient as a power; AOI example; driver-age U shape); §5.1.3 printed p.45; §5.4-5.4.4 printed pp.48-54 (binning, polynomial terms erratic at the edges, hinge functions, partial residual plots), sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer, 2021; CAS-hosted copy), §3.3.3 PDF pp.104-106 (non-linearity seen in residual plots, transform the predictors with log X, sqrt X, X^2; transform the response with log Y or sqrt Y); §6.2.1 printed p.239 (standardize before ridge), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "SOA, Exam SRM syllabus, January 2027, outcome 2e, p.3, sha256:2165c0dec2c26a810a100a504f6a38ac05f02348c1af26e4c8ad71b679eb56af — https://www.soa.org/globalassets/assets/files/edu/2027/spring/syllabi/2027-01-exam-srm-syllabus.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Variable Transformation.md
 ---
 
-A **Variable Transformation** replaces a predictor $x$ with a function of it, $h(x)$, so that its relationship with the response is captured by a model that is linear on the scale of the [[Link Function|link]]. In a [[Generalized Linear Model]] the *response* is not transformed — the link and the error distribution handle its scale — so transformation is about the *predictors*.
+A **Variable Transformation** replaces a predictor $x$ with a function of it, $h(x)$, so that its relationship with the response is captured by a model that is linear on the scale of the [[Link Function|link]].
 
 > $$g(\mu) = \beta_0 + \beta_1\,h(x) + \cdots$$
 >
@@ -21,7 +24,7 @@ A **Variable Transformation** replaces a predictor $x$ with a function of it, $h
 - **Log**: for positive, right-skewed predictors whose effect is proportional (amount of insurance, building value). With a log link this is usually the natural first choice
 - **Binning (banding)**: cut a continuous variable into groups and fit a level for each, treating it as a [[Categorical Predictor|categorical predictor]]. Captures any shape, but spends a parameter per band and ignores the ordering within one
 - **Polynomial** ($x$, $x^2$, …) and **piecewise linear** (hinge) terms: fit a curve with a few parameters. Polynomials can behave badly at the edges of the data
-- **Capping** extreme predictor values before fitting stops a handful of points from driving the fit (see [[Outlier]]); **standardizing**, $(x - \bar{x})/s_x$, puts predictors on a common scale and helps when [[Interaction|interactions]] or penalties are used
+- Before a penalized fit such as ridge regression, **standardizing**, $(x - \bar{x})/s_x$, puts predictors on a common scale
 - The need for a transformation shows up in [[Exploratory Data Analysis]] and in a [[Residual Plot]] against the predictor — a curve where there should be none
 
 > [!example]- Interpreting a Logged Predictor {Example}

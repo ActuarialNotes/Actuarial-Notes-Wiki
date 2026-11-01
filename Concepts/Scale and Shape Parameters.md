@@ -2,12 +2,16 @@
 aliases:
   - Shape Parameter
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
   content_hash: sha256:5e3c7a6b6647523750fb65c6d7d47081d2438e801b661f606efa28440bf03b88
-  sources: []
+  sources:
+    - "Frees et al., Loss Data Analytics (open text, openacttexts.github.io), ch.3, 3.2.1-3.2.3 gamma/Pareto/Weibull shape and scale; Weibull hazard decreasing/constant/increasing in the shape; 3.3.2 Multiplication by a Constant: scale distribution and scale parameter definition, lognormal mu + log c with e^mu the scale, inflation and currency, sha256:263021bf543b04b2881284b38b7dcbd0586b78daec371b88a1eefcd362dff732 — https://openacttexts.github.io/Loss-Data-Analytics/ChapSeverity.html"
+    - "SOA Tables for Exam FAM (Loss Models Appendices A and B excerpts), Appendix A: x enters each CDF through x/theta; gamma E[X^k]; Pareto E[X^k] k<alpha; Weibull; lognormal; A.6 \"the scale parameter theta\", pp.5-12, sha256:430c8babdb38ff53ae7ce7d5d1d3bd55c2890eeb9ae96db5015121d1c2f11e17 — https://www.soa.org/globalassets/assets/files/edu/2024/fall/2024-10-exam-fam-tables.pdf"
+    - "SOA Exam ASTAM Syllabus, October 2026, Topic 1 outcome a (how changes in the parameters affect the distributions), p.2, sha256:6d462aea25c09b15cc457176ecf2d5d6143df8fb88df9f366557de17ec1ec9ba — https://www.soa.org/globalassets/assets/files/edu/2026/astam/2026-fall-exam-astam-syllabus.pdf"
+    - "SOA Exam FAM Syllabus, February 2027, Topic 2 outcome b (role of scale and shape parameters), p.3, sha256:da98474b74b0a9e9153b8ce198f30195dfbe394b3e300e785e58f12663b447e4 — https://www.soa.org/globalassets/assets/files/edu/2027/spring/syllabi/2027-2-fam-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Scale and Shape Parameters.md

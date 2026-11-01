@@ -7,13 +7,19 @@ date: "2010"
 Type: "Textbook"
 ISBN: "978-0-521-13596-2"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
   content_hash: sha256:743a802bc8f47928f4d3c363e18cc88b3446422ef05f5b3a084cf81d22a41751
-  sources: []
-  open_findings: 0
+  sources:
+    - "Frees, Regression Modeling with Actuarial and Financial Applications (Cambridge, 2010), publisher's front matter, title page, copyright page (First published 2010; ISBN 978-0-521-76011-9 hardback, 978-0-521-13596-2 paperback; Library of Congress data) and printed contents pp.vii-xi, sha256:5ba2667a8ef934a28ca17bec157901c672026dbf2613d4c16afafc935df2d0ac — https://assets.cambridge.org/97805217/60119/frontmatter/9780521760119_frontmatter.pdf"
+    - "Cambridge Core record, book description; formats, dates (hardback 30 November 2009), ISBNs, 584 pages; contents listing, sha256:64f01a27bf8e080787875688f537d9cff331210a79edae6f531bf33b8e1a083e — https://www.cambridge.org/core/books/regression-modeling-with-actuarial-and-financial-applications/25C768AB6FFE4FAD5F2AD725D8643C18"
+    - "Frees, Book Resources - Regression Modeling (UW-Madison), Book Resources page: chapter titles; Chapters 1-2 posted free in full, first two web pages of Chapters 3-8 and 11-13, sha256:973fdd9c5d3bf9d6b52e3a6f0294fb7cac8301af9495ccde3854a71f9094442e — https://users.ssc.wisc.edu/~ewfrees/regression/book-resources/"
+    - "SOA, Exam SRM syllabus, January 2027, Textbooks, p.5, sha256:2165c0dec2c26a810a100a504f6a38ac05f02348c1af26e4c8ad71b679eb56af — https://www.soa.org/globalassets/assets/files/edu/2027/spring/syllabi/2027-01-exam-srm-syllabus.pdf"
+    - "SOA, Exam PA syllabus, October 2026, Frees citation, chapters and sections, and the note on Chapters 7-9, sha256:1f1c46424d78ac04c297bf6c121bf9d03aec7d451560335cc9e07c7c533a4d84 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-exam-pa-syllabus.pdf"
+    - "CIA, Education Syllabus - ACIA Capstone Exam and Modules (last updated January 19, 2026), background reading tables pp.30-31: A5.2 (Frees as alternate reference 1: Ch.2 §1-8, 3 §1-5, 5 §1-7, 11 §1-6, 12 §1-4, 13 §1-6) and A5.13 (Frees Ch.6 §1-5), sha256:2a0fb1facb47c97a76ac956d86f0514bcb9e5459ecdc0a973bd3f6f155e3d291 — https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=608114&fid=627235"
+  open_findings: 1
   open_critical: 0
   log: .verify/Resources/Books/Regression Modeling with Actuarial and Financial Applications (Frees - 2010).md
 ---

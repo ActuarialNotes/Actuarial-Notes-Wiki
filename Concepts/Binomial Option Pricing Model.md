@@ -2,12 +2,18 @@
 aliases:
   - Binomial Option Pricing
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
   content_hash: sha256:5a5e723984c1b311d7e67b403a8136319936eddd24d9f8f41c323efa0b357ffa
-  sources: []
+  sources:
+    - "SOA Exam FAM syllabus, October 2026, Topic 6 (a)-(d), p.5; readings p.8 (AMLCR Ch.16), sha256:90172025d8bd9d69e18e974fdee447963e54258e5f0e419aa3ef5b7d3e55a00e — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-fam-syllabus.pdf"
+    - "M. Cudina (UT Austin), M339D Lecture 17: Option pricing in the one-period binomial model, Lecture 17, pp.3-5, eqs. 17.1-17.4, sha256:8bcdda7a38233af8e1b15e9111762407662d5bf68fe4039cf7b67d30aff1b838 — http://web.ma.utexas.edu/users/mcudina/m339d-lecture-17-binomial-option-pricing-one-period.pdf"
+    - "M. Cudina (UT Austin), M339D Lecture 18: The forward binomial tree, Lecture 18, pp.1-2, sha256:fcac094be5476cfcd6f557d78c6493d01b209d49922cddd58b2d1002720dbaed — http://web.ma.utexas.edu/users/mcudina/m339d-lecture-18-forward-trees.pdf"
+    - "K. Sigman (Columbia), Binomial lattice model for stock prices (2007), pp.1-3, eqs. 3-9, sha256:e638c7c5da07b00908e9dff9297df74e5b26c7cbde1f149f29e770fbf25df2cb — http://www.columbia.edu/~ks20/FE-Notes/4700-07-Notes-BLM.pdf"
+    - "SOA Exam FAM-S sample solutions (Oct 2024), Q100 p.39; Q103 p.40; Q108 p.43, sha256:7b3f61d8c385f486f3dbc586cdaab035fe9c45a055710e8327d213c4d3e71b48 — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/2024-10-exam-fam-s-sample-solutions.pdf"
+    - "Wikipedia, Binomial options pricing model (rank 3), Method, Step 3; Relationship with Black-Scholes, sha256:b12df888884415d33dcc0e61f7c506c7ed5654e6b63f73515965e2f3db9e146b — https://en.wikipedia.org/wiki/Binomial_options_pricing_model"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Binomial Option Pricing Model.md

@@ -9,14 +9,15 @@ wiki_link:
   - Concepts/Equivalence+Principle
   - Concepts/Endowment+Insurance
   - Concepts/Pure+Endowment
+  - Concepts/Annuity+Due
 answer: "C"
 points: 1
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-23
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:551bb6126b446db8a2cb6ec258cd2e73be7696ba9b021dd33f91cdbb915930e8
+  content_hash: sha256:7161a42221206162d4a0428ac7d3c8e1356c4a62b3af57179da809eaff4dc97f
   sources:
     - "SOA Exam FAM-L Sample Questions (Oct 2024), Q6.7, p.54, sha256:4aaf3469628f2b63a689c187d963857a5a6e749c5eaca9978b264d854f60a28d — https://www.soa.org/globalassets/assets/files/edu/2024/fall/questions/2024-10-exam-fam-l-sample-questions.pdf"
     - "SOA Exam FAM-L Sample Solutions (Oct 2024), Q6.7, p.37-38, sha256:9e7f7b03e0252ccb8f69e4f453d443d8d7cb43ef3945d05c935fdf234cae72ab — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/2024-10-exam-fam-l-sample-solutions.pdf"

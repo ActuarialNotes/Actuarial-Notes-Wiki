@@ -2,12 +2,18 @@
 aliases:
   - Parametric Survival
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:a9efa71abcaa6d48d3145b73f4dd3198af430f492dd2e9105fed9acc9dc4d743
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:1224096ccf033b536de3a39f21693e8c76035847e65cc801236106f8e0f2e8d8
+  sources:
+    - "Slud, Actuarial Mathematics and Life-Table Statistics (Univ. of Maryland, 2001, author's posted text), §2.2 pp.39-44 (PDF 49-54: force of mortality, tpx = exp(-int mu), uniform, exponential, Weibull, Gompertz-Makeham, infant mortality); §3.2 pp.62-66 (PDF 72-76: UDD tqx = t qx and mu = q/(1-tq), constant force tpx = px^t, complete = curtate + 1/2, no simple model fits a whole life table); §4.1 pp.99-103 (PDF 109-113: term, pure endowment nEx = v^n npx, endowment = term + pure endowment, deferred = nEx A_{x+n}, d ä + A = 1); §4.2 pp.110-111 (PDF 120-121: Abar = (i/delta) A under UDD); §5.1 p.127 (PDF 137: i/i(m) on the term part only, pure endowment independent of m), sha256:dccaca6b0e9f58a2f472390538e901660d0a45eb816e2869657718735c2b80bb — https://www.math.umd.edu/~slud/s470/BookChaps/01Book.pdf"
+    - "SOA Tables for Exam FAM (2024-10), Standard Ultimate Life Table pp.20-21; Makeham's law formula p.22, sha256:430c8babdb38ff53ae7ce7d5d1d3bd55c2890eeb9ae96db5015121d1c2f11e17 — https://www.soa.org/globalassets/assets/files/edu/2024/fall/2024-10-exam-fam-tables.pdf"
+    - "SOA Exam FAM-L tables Excel workbook (2022-10), sheet 'Select and Ult', cells A4:B6 (A = 0.00022, B = 2.7E-6, c = 1.124), sha256:ed9eb9c1d1ce26e050d26cb59d44fa3e03ab4d7595d5485e9cad9687e63b800d — https://www.soa.org/globalassets/assets/files/edu/2022/2022-10-exam-fam-l-tables-excel-workbook.xlsx"
+    - "Wikipedia, Gompertz–Makeham law of mortality, lead; Mathematical formulation (Makeham term: accidents); Moments and life expectancy (closed form via the incomplete gamma function); Empirical patterns (infancy, exponential adult rise, late-life deceleration disputed), sha256:733b8c31a2e23560f0cbdc79f2513b978cd24af03be1357dbdbef4fff13ee072 — https://en.wikipedia.org/wiki/Gompertz%E2%80%93Makeham_law_of_mortality"
+    - "SOA Exam FAM syllabus, October 2026, Topics 8-10 learning outcomes pp.6-7; Readings p.8 (AMLCR chapters), sha256:90172025d8bd9d69e18e974fdee447963e54258e5f0e419aa3ef5b7d3e55a00e — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-fam-syllabus.pdf"
+    - "SOA Exam FAM-L sample solutions (2024-10), Q4.12 p.23 (Cov(Z1,Z2) = -E[Z1]E[Z2]), Q4.19 p.26, Q6.3-6.4 p.35 (second moments, variances), sha256:9e7f7b03e0252ccb8f69e4f453d443d8d7cb43ef3945d05c935fdf234cae72ab — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/2024-10-exam-fam-l-sample-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Parametric Survival Model.md
@@ -25,7 +31,7 @@ verification:
 > $$\text{de Moivre: } {}_tp_x = \frac{\omega - x - t}{\omega - x}$$
 
 - **The laws:** Gompertz's law is Makeham's with $A = 0$, a force that grows exponentially with age, and Makeham's constant $A$ adds an age-independent risk such as accidents. Weibull's law has $\mu_x = kx^n$. The exponential model has a constant force $\mu$, so ${}_tp_x = e^{-\mu t}$ at every age. De Moivre's law has $\mu_x = 1/(\omega - x)$, so $T_x$ is [[Uniform Continuous Distribution|uniform]] on $(0, \omega - x)$.
-- **Moments:** Under a constant force, $\mathring{e}_x = 1/\mu$ and $\text{Var}(T_x) = 1/\mu^2$, as for any [[Exponential Distribution|exponential distribution]]. Under de Moivre's law, $\mathring{e}_x = (\omega - x)/2$ and $\text{Var}(T_x) = (\omega - x)^2/12$. Gompertz and Makeham moments have no closed form, so they are found numerically or from a table.
+- **Moments:** Under a constant force, $\mathring{e}_x = 1/\mu$ and $\text{Var}(T_x) = 1/\mu^2$, as for any [[Exponential Distribution|exponential distribution]]. Under de Moivre's law, $\mathring{e}_x = (\omega - x)/2$ and $\text{Var}(T_x) = (\omega - x)^2/12$. Gompertz and Makeham moments are found numerically or from a table.
 - **From law to table:** A law generates a table through $\ell_{x+t} = \ell_x\,{}_tp_x$. The Standard Ultimate Life Table (SULT) used on FAM is Makeham's law with $A = 0.00022$, $B = 2.7 \times 10^{-6}$ and $c = 1.124$, tabulated from a radix at age 20. A table gives values only at integer ages and needs a [[Fractional Age Assumption|fractional age assumption]] between them, while a law gives ${}_tp_x$ at every age directly.
 - **Strengths and limits:** A law is smooth, needs few parameters and extrapolates to the oldest ages, where data are thin. No simple law fits the whole human [[Mortality|mortality]] curve, with its infant mortality and its accident hump in early adulthood, so tables are used where accuracy at every age matters.
 

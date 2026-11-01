@@ -1,11 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
   content_hash: sha256:1b366e6f28deb339b53d1e3cd7029e3f40fbac61a1c570d50d0ac4a25fed10af
-  sources: []
+  sources:
+    - "Frees et al., Loss Data Analytics (open text, openacttexts.github.io), ch.5 Aggregate Loss Models, 5.2 n-fold convolution recursion F^{*n}(x)=sum F^{*(n-1)}(x-y)f(y); 5.3 F_S = p0 + sum p_n F^{*n}; 5.3.2 net stop-loss premium E(S)-E(S^d); 5.4.1 recursive method for (a,b,0)/(a,b,1), discretize continuous severity, sha256:09489050a45e6eb2ee0d96804458eb22c936a61716227e08ad0398b9cba870d4 — https://openacttexts.github.io/Loss-Data-Analytics/ChapAggLossModels.html"
+    - "SOA Exam ASTAM Syllabus, October 2026, Topic 2 Aggregate Models, outcomes a-b (convolution and recursive formulas; method of rounding and local moment matching), p.2, sha256:6d462aea25c09b15cc457176ecf2d5d6143df8fb88df9f366557de17ec1ec9ba — https://www.soa.org/globalassets/assets/files/edu/2026/astam/2026-fall-exam-astam-syllabus.pdf"
+    - "SOA Exam FAM Syllabus, February 2027, Topic 2 outcomes i-l (convolution method, stop-loss expected payment), p.3, sha256:da98474b74b0a9e9153b8ce198f30195dfbe394b3e300e785e58f12663b447e4 — https://www.soa.org/globalassets/assets/files/edu/2027/spring/syllabi/2027-2-fam-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Convolution.md

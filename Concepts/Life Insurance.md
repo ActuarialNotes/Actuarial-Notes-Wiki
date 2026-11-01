@@ -1,11 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:048f51283fb9fb85c2b18bc6c51bef10be3c45996fbe1f66cd555d0f01ee1764
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:d4638465afef520f68d318669693d778c3a8a7864aac306820f4d2e8e1b02fad
+  sources:
+    - "SOA Exam FAM Sample Solutions (version Aug 18, 2026), Q1.1 and Q1.2 p.2, sha256:9e7f7b03e0252ccb8f69e4f453d443d8d7cb43ef3945d05c935fdf234cae72ab — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/2024-10-exam-fam-l-sample-solutions.pdf"
+    - "SOA Exam FAM Sample Questions, Topics 7-10 (version Aug 18, 2026), Q7.26 p.115; Q1.1-1.2 p.3, sha256:4aaf3469628f2b63a689c187d963857a5a6e749c5eaca9978b264d854f60a28d — https://www.soa.org/globalassets/assets/files/edu/2024/fall/questions/2024-10-exam-fam-l-sample-questions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Life Insurance.md
@@ -25,6 +27,8 @@ verification:
 - Products: [[Whole Life Insurance|whole life]] ($A_x$), term ($A^{1}_{x:\overline{n}|}$), pure endowment (${}_nE_x = v^n\,{}_np_x$), endowment ($A_{x:\overline{n}|} = A^{1}_{x:\overline{n}|} + {}_nE_x$), and policies with account values such as [[Universal Life Insurance|universal life]] and equity-linked contracts
 - **Variance:** the second moment ${}^2\!A$ is $A$ at $v^2$, and $\text{Var}(Z) = {}^2\!A - A^2$ for a benefit of 1. Insurance and [[Life Annuity|annuity]] EPVs are linked by $A_{x:\overline{n}|} = 1 - d\,\ddot{a}_{x:\overline{n}|}$
 - Under the uniform distribution of deaths [[Fractional Age Assumption|fractional age assumption]], $\bar{A}_x = \frac{i}{\delta}A_x$ and $A^{(m)}_x = \frac{i}{i^{(m)}}A_x$ (for a term or endowment insurance, only the death part is adjusted)
+- **Why the products changed:** over the last few decades life insurance products, and the way insurers manage their risks, have changed radically and grown more complex. The reasons given are more sophisticated policyholders, more competition among life insurers and more computing power, together with more complex risk management techniques.
+- **Underwriting and distribution:** the distribution method affects how much underwriting is done. A direct-marketed product with a low face amount may have very limited underwriting. The actuary then assumes higher than normal mortality, which the low expense of selling the business partly offsets.
 
 > [!example]- Three-Year Term Insurance: EPV and Standard Deviation {Example}
 > A 3-year term insurance on $(60)$ pays $100{,}000$ at the end of the year of death. Given $q_{60} = 0.010$, $q_{61} = 0.012$, $q_{62} = 0.014$ and $i = 5\%$, find the EPV and the standard deviation of the present value.

@@ -10,14 +10,15 @@ wiki_link:
   - Concepts/Term+Life+Insurance
   - Concepts/Covariance
   - Concepts/Variance
+  - Concepts/Linear+Combinations+of+Random+Variables
 answer: "C"
 points: 1
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-23
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:59cc7de4db283962261389f4f5597c84c30dfa118a9baa2e05a1e0da9281ad13
+  content_hash: sha256:b728b99d19b21e1f65a3231cd5ae8618aec62a19cf81bbe31c4c932821485490
   sources:
     - "SOA Exam FAM-L Sample Questions (Topics 7-10, Aug 2026 version), Q4.12, p.33 (question), sha256:4aaf3469628f2b63a689c187d963857a5a6e749c5eaca9978b264d854f60a28d — https://www.soa.org/globalassets/assets/files/edu/2024/fall/questions/2024-10-exam-fam-l-sample-questions.pdf"
     - "SOA Exam FAM-L Sample Solutions (Topics 7-10), Q4.12, p.23 (solution and key), sha256:9e7f7b03e0252ccb8f69e4f453d443d8d7cb43ef3945d05c935fdf234cae72ab — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/2024-10-exam-fam-l-sample-solutions.pdf"

@@ -2,13 +2,19 @@
 aliases:
   - Short-Term Insurance
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
   content_hash: sha256:0fc9e6bce0398992b88a40eea8c7cc44354caf3153af812b2bbb7f875bee6df8
-  sources: []
-  open_findings: 0
+  sources:
+    - "Frees et al., Loss Data Analytics (open text, openacttexts.github.io), ch.1, 1.1.3 Insurance Processes (short-term: a year or six months; one-period model), 1.2.2 Renewing Insurance (decline, new premium at renewal), sha256:2c2039e91e3cd3a8b02d046160e76b59b69c79c3b891b63adf8f7900f48421dc — https://openacttexts.github.io/Loss-Data-Analytics/ChapIntro.html"
+    - "Frees et al., Loss Data Analytics (open text, openacttexts.github.io), ch.7, 7.2.1 Pure Premium Method: Premium = (Losses + Fixed)/(1 - V - Q), sha256:e2b442d46d43ea67112f4a7a8f3b2cbb8e6437db8600722d5ea1a1c5f19c8408 — https://openacttexts.github.io/Loss-Data-Analytics/ChapPremiumFoundations.html"
+    - "Frees et al., Loss Data Analytics (open text, openacttexts.github.io), ch.11, 11.1.1 IBNR and RBNS claims; 11.3.1 deterministic chain-ladder, sha256:040c5904f5d17dccd17772da19b8d45cf2a23fbec75661549d5168e6e611e939 — https://openacttexts.github.io/Loss-Data-Analytics/ChapLossReserves.html"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch.9 Bornhuetter-Ferguson: Ultimate = Actual Paid + Expected Claims x % Unpaid; Z = 1/CDF; unpaid claims develop on expected claims, PDF pp.158-159 (printed 152-153), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+    - "Werner & Modlin, Basic Ratemaking, 5th ed. (CAS, 2016), Ch.8 pure premium vs loss ratio methods, indicated change vs current rate, PDF p.158; unearned premium definition, PDF p.78, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "SOA Exam FAM Syllabus, February 2027, Topic 5 (ELR, chain-ladder, BF; ratemaking adjustments; loss cost and loss ratio methods), p.5, sha256:da98474b74b0a9e9153b8ce198f30195dfbe394b3e300e785e58f12663b447e4 — https://www.soa.org/globalassets/assets/files/edu/2027/spring/syllabi/2027-2-fam-syllabus.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Short-Term Insurance Coverage.md
 ---

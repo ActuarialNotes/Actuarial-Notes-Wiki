@@ -7,11 +7,12 @@ syllabus:
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-18
+  last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
   content_hash: sha256:a115570d6add8f28149739a3ca52b4c7e62741e744a6d2353999910911c6d15a
   sources:
     - "SOA, January 2027 syllabus PDF for SRM, all pages, sha256:2165c0dec2c26a810a100a504f6a38ac05f02348c1af26e4c8ad71b679eb56af — https://www.soa.org/globalassets/assets/files/edu/2027/spring/syllabi/2027-01-exam-srm-syllabus.pdf"
+    - "SOA SRM exam study page (https://www.soa.org/education/exam-req/edu-exam-srm-detail/study/), read 2026-10-31: lists the September 2026 and January 2027 syllabi; January 2027 is the newest"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam SRM (SOA).md

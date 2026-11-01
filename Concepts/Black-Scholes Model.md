@@ -3,12 +3,15 @@ aliases:
   - Black-Schole
   - Black-Scholes
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:be35d6faacb2d8d9a2c3289e7344dd2a1225b78a50e79f58d7aa743be588cb4d
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-31
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:4f5da096e442af4f91a45b66b86b233f80058abd6a1a58b6b6377a6397bd787d
+  sources:
+    - "M. Haugh, A Brief Introduction to Stochastic Calculus (Columbia IEOR E4706, 2016), §3.2 Example 3, eq. (13), p.7, sha256:4b46de3a7be7614a125324d6360ed019727aa7d4a9cb75e87f681d9ecc36e19d — http://www.columbia.edu/~mh2078/FoundationsFE/IntroStochCalc.pdf"
+    - "M. Haugh, The Black-Scholes Model (Columbia IEOR E4706, 2016), eq. (1), p.1 (GBM drift mu); p.2 (mu = r would mean no premium for holding the stock; Q-dynamics eq. (10)), sha256:a84225df571d081f2eb2079d8e1160d51af50c72e4fd2c52f5073ac39d6884bb — http://www.columbia.edu/~mh2078/FoundationsFE/BlackScholes.pdf"
+    - "SOA Exam FAM-S sample solutions (Oct 2024), Q104 p.41, sha256:7b3f61d8c385f486f3dbc586cdaab035fe9c45a055710e8327d213c4d3e71b48 — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/2024-10-exam-fam-s-sample-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Black-Scholes Model.md
@@ -24,6 +27,7 @@ The **Black-Scholes Model** prices a European option on a non-dividend-paying st
 > $$d_2 = d_1 - \sigma\sqrt{T}$$
 
 - $S_0$ is today's stock price, $K$ the strike, $T$ the time to expiry in years and $N(\cdot)$ the standard [[Normal Distribution|normal]] CDF. Under the risk-neutral measure $\ln S_T$ is normal with mean $\ln S_0 + (r - \sigma^2/2)T$ and variance $\sigma^2 T$, so $S_T$ is [[Lognormal Distribution|lognormal]]; $N(d_2)$ is the risk-neutral probability that a call finishes in the money
+- **Real-world (P-measure) model.** For a real probability, such as the chance that a fund ends below a guarantee, use the distribution of actual returns, not the risk-neutral one. A stock or fund said to follow a lognormal distribution with parameters $\mu$ and $\sigma$ per year has $\ln(S_t/S_0) \sim N(\mu t, \sigma^2 t)$: the mean and the variance of the log return both grow in proportion to $t$, so its standard deviation grows with $\sqrt t$. Then $\Pr(S_t < G) = N\!\left(\frac{\ln(G/S_0) - \mu t}{\sigma\sqrt t}\right)$. Here $\mu$ is the mean of the log return. Under geometric Brownian motion with expected return $\alpha$, that mean is $\alpha - \sigma^2/2$, so check which of the two parameters a question gives.
 - **Delta** (units of stock in the [[Delta Hedging|replicating portfolio]]): $N(d_1)$ for the call, $-N(-d_1)$ for the put. Valuing at time $t$ replaces $T$ by $T - t$
 - Call and put satisfy [[Put-Call Parity|put-call parity]], $c - p = S_0 - Ke^{-rT}$, which is a quick check on any pair of prices
 - **Embedded guarantees (AMLCR):** a guaranteed minimum maturity benefit $G$ at time $T$ on a fund $F_T = F_0\,(S_T/S_0)(1-m)^T$ is a put on the fund. Its value at issue is ${}_Tp_x$ times a Black-Scholes put with $F_0(1-m)^T$ in place of $S_0$ and $G$ in place of $K$, where $m$ is the annual management charge
@@ -84,6 +88,32 @@ The **Black-Scholes Model** prices a European option on a non-dividend-paying st
 > > \end{align*}
 > > $$
 > > The guarantee costs about $7.8\%$ of the premium, which the insurer recovers from the management charges or a separate risk charge.
+
+> [!example]- Real-World Versus Risk-Neutral Probability of a Shortfall {Example}
+> A fund follows a lognormal distribution with parameters $\mu = 0.05$ and $\sigma = 0.20$ per year. A guarantee pays if the fund's value in 4 years is below its value today. The continuously compounded risk-free rate is $r = 0.03$. Find the real-world probability that the guarantee pays, and compare it with the risk-neutral probability used in pricing.
+>
+> > [!answer]-
+> > Over 4 years both the mean and the variance of the log return scale by 4, so $\ln(S_4/S_0) \sim N(0.20,\ 0.16)$, a standard deviation of $0.40$.
+> >
+> > $$
+> > \begin{align*}
+> > \Pr(S_4 < S_0) &= N\!\left(\frac{0 - 0.20}{0.40}\right) \\
+> > &= N(-0.50) \\
+> > &= 0.3085
+> > \end{align*}
+> > $$
+> >
+> > Under the risk-neutral measure the mean of the log return is $(r - \sigma^2/2)\,t = (0.03 - 0.02)(4) = 0.04$:
+> >
+> > $$
+> > \begin{align*}
+> > \Pr{}^{Q}(S_4 < S_0) &= N\!\left(\frac{0 - 0.04}{0.40}\right) \\
+> > &= N(-0.10) \\
+> > &= 0.4602
+> > \end{align*}
+> > $$
+> >
+> > *Why do they differ?* The risk-neutral measure is a pricing device: it replaces the fund's own drift with the risk-free rate. How often the guarantee actually pays is a question about the real-world distribution, with its own $\mu$.
 
 > [!tip]- How it appears on the exam
 > - **FAM** asks for the price of a European call or put on a non-dividend-paying stock, and its delta, from $S_0$, $K$, $r$, $\sigma$ and $T$; a companion part often checks or uses [[Put-Call Parity|put-call parity]].

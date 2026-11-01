@@ -10,7 +10,7 @@ import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { loadCachedStudyPlan, todayISO } from '@/lib/studyPlan'
 import { QuestionCard } from '@/components/QuestionCard'
 import { ConceptCoverageSection } from '@/components/ConceptCoverageSection'
-import { effectiveOutcome, formatScore, quizPoints, scoreColorClass } from '@/lib/quizScore'
+import { effectiveOutcome, formatScore, isUnanswered, quizPoints, scoreColorClass, scoredQuestions, skipsUnanswered } from '@/lib/quizScore'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { Loader2 } from 'lucide-react'
@@ -231,7 +231,13 @@ export default function Review() {
   // rather than counting as a full hit or miss. correctCount stays the
   // whole-question count that drives gems/streak; points is what the results
   // screen displays.
-  const points = quizPoints(session.questions, session.responses, session.manualGrades ?? {})
+  // A quiz finished early is scored on what was answered; its untried questions
+  // are Unanswered, not wrong. A practice exam scores every question.
+  const points = quizPoints(
+    scoredQuestions(session.questions, session.responses, session.mode, session.manualGrades ?? {}),
+    session.responses,
+    session.manualGrades ?? {},
+  )
   const { percentage } = points
 
   // Level-ups the quiz produced. They drive the ceremony — where a New concept
@@ -244,10 +250,13 @@ export default function Review() {
   const outcomes = session.questions.map(q =>
     effectiveOutcome(q, session.responses[q.id]?.chosen, session.manualGrades ?? {})
   )
+  const unanswered = session.questions.map(q =>
+    skipsUnanswered(session.mode) && isUnanswered(q, session.responses, session.manualGrades ?? {})
+  )
   const visibleQuestions = selectedQuestion !== null
     ? session.questions.filter((_, i) => i === selectedQuestion)
     : showIncorrectOnly
-    ? session.questions.filter((_, i) => !outcomes[i])
+    ? session.questions.filter((_, i) => !outcomes[i] && !unanswered[i])
     : session.questions
 
   // What "Try Again" re-quizzes: only the questions this session didn't get full
@@ -255,6 +264,8 @@ export default function Review() {
   // missed, and so does a question left unanswered. Nothing missed → nothing to
   // retry, so the button drops out and only "New Quiz" remains.
   const retryIds = session.questions.filter((_, i) => !outcomes[i]).map(q => q.id)
+  const unansweredCount = unanswered.filter(Boolean).length
+  const missedCount = retryIds.length - unansweredCount
   const retryMode = session.mode
 
   // A new quiz is set up in the builder this one came from, when it came from
@@ -362,12 +373,12 @@ export default function Review() {
               <LayoutDashboard className="h-5 w-5" />
             </button>
           )}
-          {retryIds.length > 0 && (
+          {missedCount > 0 && (
             <div className="relative">
               <button
                 type="button"
                 onClick={handleReviewIncorrect}
-                aria-label={`Review ${retryIds.length} incorrect`}
+                aria-label={`Review ${missedCount} incorrect`}
                 title="Review Incorrect"
                 tabIndex={actionsPinned ? 0 : -1}
                 className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground transition-all hover:bg-primary/90 active:bg-primary/80 active:scale-[0.97]"
@@ -375,7 +386,7 @@ export default function Review() {
                 <XCircle className="h-5 w-5" />
               </button>
               <span className="absolute -top-1.5 -right-1.5 flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-orange-500 px-1 text-[11px] font-bold leading-none text-white shadow ring-2 ring-background tabular-nums">
-                {retryIds.length}
+                {missedCount}
               </span>
             </div>
           )}
@@ -468,7 +479,10 @@ export default function Review() {
           ) : undefined
           return (
             <div key={question.id} className="space-y-1">
-              <p className="text-xs text-muted-foreground font-medium">Question {idx + 1}</p>
+              <p className="text-xs text-muted-foreground font-medium">
+                Question {idx + 1}
+                {unanswered[idx] && <span className="ml-1.5 text-muted-foreground">· Unanswered</span>}
+              </p>
               <QuestionCard
                 question={question}
                 selectedAnswer={chosen}
@@ -489,7 +503,10 @@ export default function Review() {
       <div className="flex flex-col sm:flex-row gap-3 pb-8">
         {retryIds.length > 0 && (
           <Button variant="outline" onClick={handleTryAgain} className="flex-1">
-            Try Again ({retryIds.length} missed)
+            Try Again ({[
+              missedCount > 0 ? `${missedCount} missed` : null,
+              unansweredCount > 0 ? `${unansweredCount} unanswered` : null,
+            ].filter(Boolean).join(', ')})
           </Button>
         )}
         <Button onClick={handleNewQuiz} className="flex-1">

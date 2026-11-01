@@ -7,7 +7,7 @@ import { CompletionCornerBadge } from '@/components/CheckMark'
 import { Button } from '@/components/ui/button'
 import { questionCredit, questionOutcome } from '@/lib/parser'
 import { PRACTICE_EXAM_LABEL } from '@/lib/pastExams'
-import { formatScore, scoreColorClass } from '@/lib/quizScore'
+import { formatScore, isUnanswered, scoreColorClass, skipsUnanswered } from '@/lib/quizScore'
 import { DIFFICULTY_LABEL, difficultyHeadline, scoreByDifficulty } from '@/lib/difficultyBreakdown'
 import type { Question, SelfGrade, QuestionOutcome } from '@/lib/parser'
 import type { MasteryState } from '@/lib/mastery'
@@ -28,11 +28,16 @@ interface Response {
   chosen: string | null
 }
 
+// A question's outcome on the results screen. A quiz finished early leaves its
+// untried questions Unanswered rather than wrong (lib/quizScore.ts).
+type Outcome = QuestionOutcome | 'unanswered'
+
 // Outcome → segment colour for the radial chart.
-const OUTCOME_COLOR: Record<QuestionOutcome, string> = {
+const OUTCOME_COLOR: Record<Outcome, string> = {
   correct: '#22c55e',   // green-500
   partial: '#eab308',   // yellow-500
   incorrect: '#ef4444', // red-500
+  unanswered: '#94a3b8', // slate-400
 }
 
 export interface ScoreSummary {
@@ -100,7 +105,7 @@ function QuizCoverageRadial({
 }: {
   totalQ: number
   questionIndices: number[]
-  outcomes: QuestionOutcome[]
+  outcomes: Outcome[]
   credits: number[]
   selectedQuestion: number | null
   onQuestionClick: (idx: number | null) => void
@@ -109,6 +114,8 @@ function QuizCoverageRadial({
   const linked = new Set(questionIndices)
   const segDeg = 360 / totalQ
   const scoredPoints = questionIndices.reduce((sum, i) => sum + (credits[i] ?? 0), 0)
+  const scoredCount = questionIndices.filter(i => outcomes[i] !== 'unanswered').length
+  const anyUnanswered = outcomes.some(o => o === 'unanswered')
 
   // active is the segment to label (selected takes priority over hovered)
   const active = selectedQuestion ?? hovered
@@ -202,13 +209,16 @@ function QuizCoverageRadial({
               fontWeight="bold"
               fill={OUTCOME_COLOR[outcomes[selectedQuestion]]}
             >
-              {outcomes[selectedQuestion] === 'correct' ? '✓' : outcomes[selectedQuestion] === 'partial' ? '~' : '✗'}
+              {outcomes[selectedQuestion] === 'correct' ? '✓'
+                : outcomes[selectedQuestion] === 'partial' ? '~'
+                : outcomes[selectedQuestion] === 'unanswered' ? '–'
+                : '✗'}
             </text>
           </>
         ) : (
           <>
             <text x={CX} y={CY - 8} textAnchor="middle" fontSize={26} fontWeight="bold" fill="currentColor">
-              {formatScore(scoredPoints)}/{questionIndices.length}
+              {formatScore(scoredPoints)}/{scoredCount}
             </text>
             <text x={CX} y={CY + 14} textAnchor="middle" fontSize={11} fill="currentColor" opacity={0.5}>
               correct
@@ -230,6 +240,12 @@ function QuizCoverageRadial({
           <span className="inline-block h-2.5 w-2.5 rounded-full bg-red-500" />
           Incorrect
         </span>
+        {anyUnanswered && (
+          <span className="flex items-center gap-1.5">
+            <span className="inline-block h-2.5 w-2.5 rounded-full bg-slate-400" />
+            Unanswered
+          </span>
+        )}
         <span className="flex items-center gap-1.5">
           <span className="inline-block h-2.5 w-2.5 rounded-full bg-foreground/10" />
           Other question
@@ -281,11 +297,22 @@ export function ConceptCoverageSection({
   // Prev/next list for the popup — the levelled-up concepts, in card order.
   const levelUpRefs: WikiEntryRef[] = levelUpTransitions.map(t => ({ kind: 'concept' as const, name: t.conceptSlug }))
   const credits = questions.map(q => questionCredit(q, responses[q.id]?.chosen, manualGrades))
-  const outcomes = questions.map(q => questionOutcome(q, responses[q.id]?.chosen, manualGrades))
-  const hasIncorrect = outcomes.some(o => o !== 'correct')
-  // The score by difficulty. Hidden while the quiz is live, it is what tells a
-  // reader whether a good score was on easy questions or hard ones.
-  const difficultyScores = scoreByDifficulty(questions, outcomes.map(o => o === 'correct'))
+  const leaveUnanswered = skipsUnanswered(score.mode)
+  const outcomes: Outcome[] = questions.map(q =>
+    leaveUnanswered && isUnanswered(q, responses, manualGrades)
+      ? 'unanswered'
+      : questionOutcome(q, responses[q.id]?.chosen, manualGrades),
+  )
+  const hasIncorrect = outcomes.some(o => o === 'incorrect' || o === 'partial')
+  const unansweredCount = outcomes.filter(o => o === 'unanswered').length
+  // The score by difficulty, over the questions that were answered. Hidden
+  // while the quiz is live, it is what tells a reader whether a good score was
+  // on easy questions or hard ones.
+  const answeredIdx = outcomes.flatMap((o, i) => (o === 'unanswered' ? [] : [i]))
+  const difficultyScores = scoreByDifficulty(
+    answeredIdx.map(i => questions[i]),
+    answeredIdx.map(i => outcomes[i] === 'correct'),
+  )
   const headline = difficultyHeadline(difficultyScores)
 
   // Score header colors
@@ -315,6 +342,12 @@ export function ConceptCoverageSection({
               <span className="text-lg text-muted-foreground">/{formatScore(score.totalPoints ?? score.totalQuestions)}</span>
               <p className="text-xs text-muted-foreground mt-0.5">{score.totalPoints !== undefined ? 'Points' : 'Correct'}</p>
             </div>
+            {unansweredCount > 0 && (
+              <div>
+                <span className="text-2xl font-bold tabular-nums">{unansweredCount}</span>
+                <p className="text-xs text-muted-foreground mt-0.5">Unanswered</p>
+              </div>
+            )}
             <div>
               <span className="text-2xl font-bold tabular-nums">{formatTime(score.timeTakenSeconds)}</span>
               <p className="text-xs text-muted-foreground mt-0.5">Time</p>

@@ -22,6 +22,7 @@ import { trackConceptCollected, trackConceptRetention } from '@/lib/analytics'
 import type { RetentionAnswer } from '@/lib/learningSignals'
 import type { PendingAnswer } from '@/lib/pendingAnswer'
 import { normalizeSearch, type QuizSessionStatus } from '@/lib/quizResume'
+import { scoredQuestions } from '@/lib/quizScore'
 
 // A concept's flashcard is collected the moment it first reaches Level 1 —
 // there is no separate comprehension check (docs/flashcard-collection.md).
@@ -440,7 +441,11 @@ interface PersistableSession {
 // sessions completed while signed out and persisted retroactively after the
 // user signs in).
 async function persistSessionToCloud(userId: string, params: PersistableSession): Promise<{ error: string | null }> {
-  const { questions, responses, mode, correctCount, totalSeconds, masteryTransitions, manualGrades = {} } = params
+  const { questions: served, responses, mode, correctCount, totalSeconds, masteryTransitions, manualGrades = {} } = params
+  // A quiz's unanswered questions were never tried, so they are recorded
+  // nowhere — not in the session's total, not as a wrong response. A practice
+  // exam's blanks are part of its score and are kept.
+  const questions = scoredQuestions(served, responses, mode, manualGrades)
   // A transition saved before transitions carried their exam (a pending guest
   // session) falls back to the quiz's first question's exam.
   const fallbackExamId = EXAM_LABEL_TO_ID[questions[0]?.exam ?? ''] ?? null
@@ -679,6 +684,9 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
       return chosen !== undefined && effectiveIsCorrect(q, chosen, manualGrades)
     }).map(q => q.id)
     const correctCount = correctIds.length
+    // A quiz finished early scores only what was answered; a practice exam
+    // scores every question (lib/quizScore.ts, "Unanswered questions").
+    const scoredCount = scoredQuestions(questions, responses, mode, manualGrades).length
 
     // Before any mastery write: which decayed concepts did this quiz revisit,
     // and were they still known? (roadmap L1)
@@ -699,7 +707,7 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
         responses,
         mode,
         correctCount,
-        totalQuestions: questions.length,
+        totalQuestions: scoredCount,
         timeTakenSeconds: totalSeconds,
         completedAt: new Date().toISOString(),
         masteryTransitions,
@@ -717,7 +725,7 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
         to: t.to,
         at: new Date().toISOString(),
       })))
-      addDailyQuizStats(correctCount, questions.length)
+      addDailyQuizStats(correctCount, scoredCount)
       // Remember what today's quizzes have already served so the next Today's
       // Plan launch draws fresh questions rather than repeating these.
       appendTodayAnsweredIds(questions.map(q => q.id))
@@ -756,7 +764,7 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
       responses,
       mode,
       correctCount,
-      totalQuestions: questions.length,
+      totalQuestions: scoredCount,
       timeTakenSeconds: totalSeconds,
       completedAt: new Date().toISOString(),
       masteryTransitions,
@@ -768,7 +776,7 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
       // quota exceeded — continue
     }
 
-    addDailyQuizStats(correctCount, questions.length)
+    addDailyQuizStats(correctCount, scoredCount)
     // Remember what today's quizzes have already served so the next Today's
     // Plan launch draws fresh questions rather than repeating these.
     appendTodayAnsweredIds(questions.map(q => q.id))

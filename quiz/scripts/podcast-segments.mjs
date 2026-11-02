@@ -32,7 +32,8 @@
 // one track (lib/podcast.ts, joinClips).
 //
 // Where: the public Supabase Storage bucket `podcast` (SUPABASE_URL +
-// SUPABASE_SERVICE_ROLE_KEY), or with --local quiz/public/podcast/ (git
+// SUPABASE_SERVICE_ROLE_KEY — the legacy service_role key or a new secret key,
+// `sb_secret_…`), or with --local quiz/public/podcast/ (git
 // ignores it; serve it with VITE_PODCAST_BASE_URL=/podcast npm run dev).
 
 import { spawn, execFile } from 'node:child_process'
@@ -119,6 +120,13 @@ function allScripts(app, pages) {
 
 // ── Storage ─────────────────────────────────────────────────────────────────
 
+// The service-role credential, as Supabase wants it sent. A legacy key is a
+// JWT and goes in both headers; a new secret key (`sb_secret_…`) is not a JWT
+// and goes in `apikey` alone — the gateway turns it into the service role.
+function authHeaders(key) {
+  return key.startsWith('sb_') ? { apikey: key } : { Authorization: `Bearer ${key}`, apikey: key }
+}
+
 function storage(local) {
   if (local) {
     return {
@@ -149,8 +157,7 @@ function storage(local) {
       const res = await fetch(`${base}/storage/v1/object/${BUCKET}/${file}`, {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${key}`,
-          apikey: key,
+          ...authHeaders(key),
           'Content-Type': contentType,
           'Cache-Control': immutable ? 'public, max-age=31536000, immutable' : 'public, max-age=60',
           'x-upsert': 'true',
@@ -165,7 +172,7 @@ function storage(local) {
 // ── What the plans need ─────────────────────────────────────────────────────
 
 async function rest(base, key, query) {
-  const res = await fetch(`${base}/rest/v1/${query}`, { headers: { Authorization: `Bearer ${key}`, apikey: key } })
+  const res = await fetch(`${base}/rest/v1/${query}`, { headers: authHeaders(key) })
   if (!res.ok) throw new Error(`${query.split('?')[0]}: ${res.status} ${await res.text()}`)
   return res.json()
 }

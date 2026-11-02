@@ -4,9 +4,10 @@
 // Pro cloud TTS) consume the same tokens so the word-highlighting logic is
 // engine-agnostic.
 
-import { stripFrontmatter, BREADCRUMB_RE } from '@/lib/wikiMarkdown'
-import { cleanWikiLinks } from '@/lib/wikiParser'
-import { latexToSpeech } from '@/lib/mathSpeech'
+// Relative imports, and none that read Vite's env: the vite config builds the
+// podcast's script hashes with this module (lib/podcast.ts).
+import { BREADCRUMB_RE, cleanWikiLinks, stripFrontmatter } from './wikiParser'
+import { latexToSpeech } from './mathSpeech'
 
 export interface WordToken {
   type: 'word'

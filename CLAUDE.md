@@ -251,6 +251,23 @@ before touching that area**:
 - `docs/daily-plan-email.md` — the opt-in daily study-plan email: how the sender derives
   "today's concepts" from the (usually day-old) `study_plan_cache`, the hourly pg_cron →
   edge-function send loop, and the one-time Resend/vault setup checklist.
+- `docs/daily-podcast.md` — the **daily podcast** (Pro): Today's Study Plan read aloud, from the
+  plan card's *Listen to today's plan* (`components/podcast/PodcastButton.tsx`, lazy, in
+  `ReadinessCard`) and the daily email's Listen button (`/dashboard?episode=<exam key>`). Every
+  word is the concept page's, through the Listen pipeline, with fixed links between — **no model
+  writes anything** (`lib/podcastScripts.ts`: definition, two formulas, a few bullets, *The
+  idea*, the first exam trap). A clip is shared by every reader and named by its script's hash
+  and voice; `scripts/podcast-segments.mjs sync` records what is missing (Kokoro-82M `af_heart`
+  on the CPU now, ElevenLabs later — `--provider elevenlabs`) into the public `podcast` bucket,
+  nightly in `.github/workflows/podcast-segments.yml`, and rewrites `index.json` with only the
+  clips current with the vault. The app checks each clip again against the build's script
+  hashes (`virtual:podcast-scripts`), plans the episode (`planEpisode` in `lib/podcast.ts`,
+  mirrored in the email's edge function and held to it by `duplicationContracts.test.ts`) and
+  joins the clips byte for byte into one track — every clip is CBR MP3 with no tags and no Xing
+  header, which is what makes that work. The one `<audio>` and its lock-screen controls are
+  `stores/podcastStore.ts`; the player is a pill in the resume dock
+  (`components/podcast/PodcastPlayer.tsx`, lazy). Read before touching anything named
+  `podcast*`.
 - `docs/leagues.md` — the opt-in weekly XP leagues (roadmap P4.1): the tier ladder and
   promotion/relegation math, the lazy Monday-UTC rollover, and the privacy model
   (snapshot-on-join / delete-on-leave, RPC-only board reads).
@@ -1390,7 +1407,7 @@ Other important `lib/` modules:
   modules are tested.
 - `featureFlags.ts` — build-time feature flags (`ACTUARIA_ENABLED` — on, for the approved accounts in `lib/actuaria/access.ts`; `ACTUARIA_OPEN_TO_ALL`, which the e2e build sets with `VITE_ACTUARIA_PREVIEW=on`, opens it to everyone —, `COWORK_ENABLED`, `TUTOR_ENABLED` and `TUTOR_OPEN_TO_ALL` (the Tutor; the e2e build's `VITE_TUTOR_PREVIEW=on` opens it only to a page that sets `actuarial_tutor_preview`), `RESEARCH_AI_ENABLED`, `RESEARCH_TAB_ENABLED`,
   `STREAK_ENABLED`, `XP_ENABLED`, `QUESTS_ENABLED`,
-  `LEAGUES_ENABLED`, `DAILY_PLAN_EMAIL_ENABLED`, `FACT_CHECK_UI_ENABLED`, `TOUR_ENABLED`). `TOUR_ENABLED` is
+  `LEAGUES_ENABLED`, `DAILY_PLAN_EMAIL_ENABLED`, `PODCAST_ENABLED`, `FACT_CHECK_UI_ENABLED`, `TOUR_ENABLED`). `TOUR_ENABLED` is
   **off**: the guided onboarding tour (`components/OnboardingTour.tsx` +
   `hooks/useOnboardingTour.ts`) is parked pending a simpler rebuild, so `App.tsx` doesn't
   mount it and Settings → Support hides the "Take the tour" row. The component, store and
@@ -1643,7 +1660,7 @@ compile — don't "clean up" the flagged code as dead.
 cd quiz
 npm install
 npm run dev        # vite dev server
-npm run build      # tsc + vite build
+npm run build      # tsc + vite build (with a 4 GB heap: the build needs more than Node's ~2 GB default)
 npm run lint       # eslint src --ext ts,tsx
 npm test           # vitest run
 npm run mcp:local  # after a build: the AI connector at http://localhost:8787/api/mcp
@@ -1678,6 +1695,11 @@ modules that read directly from the repo root:
   never in this module
 - `virtual:resource-timeline` — the dated `Resources/{Books,Events,Regulation,Benchmarks}/`
   pages that power the Resources timeline/heatmap
+- `virtual:podcast-scripts` — every concept page's daily-podcast script hashes, by slug
+  (`buildScriptHashes` in `lib/podcastScripts.ts`, ~60 KB, the podcast's own chunk). The vite
+  config runs the Listen pipeline to make it, which is why `listenTokens.ts` and what it imports
+  use relative imports and read no Vite env (`stripFrontmatter` / `BREADCRUMB_RE` live in
+  `wikiParser.ts`, re-exported from `wikiMarkdown.ts`)
 - `virtual:store-books` — the Store's textbook aisle: the `Resources/Books` textbooks with
   an ISBN that an exam assigns, with each exam's chapters (`lib/storeBooks.ts`, ~20 KB)
 - `virtual:seo-pages` — every exam, concept and resource page, described (`lib/seo.ts`).

@@ -16,6 +16,7 @@ questions/exam-p-backup/
 
 # Listen recordings: made by quiz/scripts/listen-recording.mjs, kept in object storage, never in git
 quiz/public/listen/
+quiz/public/podcast/
 
 # Compiled TypeScript under quiz/: the app is typechecked with noEmit and bundled by vite, so a
 # .js/.d.ts beside a .ts source, or a .tsbuildinfo, is a stray `tsc -b` / `tsc` run — never source.

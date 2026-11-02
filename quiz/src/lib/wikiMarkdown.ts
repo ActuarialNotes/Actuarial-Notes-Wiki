@@ -6,6 +6,7 @@
 
 import { hrefToEntryRef, wikiRoute } from '@/lib/wikiRoutes'
 import { vaultMediaUrl } from '@/lib/vaultAssets'
+import { BREADCRUMB_RE, stripFrontmatter } from '@/lib/wikiParser'
 
 const GITHUB_REPO = import.meta.env.VITE_GITHUB_REPO as string
 const GITHUB_BRANCH = import.meta.env.VITE_GITHUB_BRANCH as string
@@ -138,11 +139,9 @@ export function extractImages(markdown: string): Array<{ src: string; alt: strin
 // file): [[Actuarial Notes Wiki|Wiki]] / **Exam P-1 (SOA)**
 // or [[Wiki]] / [[Concepts]] / **Concept Name**
 // These are not wanted in the quiz app and add non-existent "concepts" to popup lists.
-export const BREADCRUMB_RE = /^\[\[[^\]|]*(?:\|[^\]]+)?\]\][^\n]* \/ [^\n]*\n?/
-
-export function stripFrontmatter(raw: string): string {
-  return raw.replace(/^---\n[\s\S]*?\n---\n?/, '')
-}
+// Pure and import-free in wikiParser, so the vite config can read a page the
+// way the app does (the podcast's build-time script hashes, lib/podcast.ts).
+export { BREADCRUMB_RE, stripFrontmatter }
 
 const CALLOUT_TYPE_RE = /^\s*\[!/
 

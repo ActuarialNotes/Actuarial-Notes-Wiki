@@ -7,7 +7,7 @@
 // `mathSpeech.ts` says it. This module is pure: the script, the character range
 // each token owns in it, and the recording manifest the player reads.
 
-import type { SpeechSegment } from '@/lib/listenTokens'
+import type { SpeechSegment } from './listenTokens'
 
 /** One token's place in the script: characters [start, end) of `Narration.text`. */
 export interface NarrationToken {

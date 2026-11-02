@@ -28,6 +28,7 @@ import { renderStaticPage, staticBody } from './src/lib/seoPrerender'
 import { buildQuestionSeoPages, questionMarkdown, questionNeighbours, questionRuns } from './src/lib/seoQuestions'
 import { parseAllQuestions } from './src/lib/parser'
 import { contentPathFromVerification } from './src/lib/verification'
+import { buildScriptHashes } from './src/lib/podcastScripts'
 
 const REPO_ROOT = path.resolve(__dirname, '..')
 
@@ -239,6 +240,31 @@ async function collectStoreBooks() {
     books.push({ name: name.replace(/\.md$/i, ''), attrs, coverImage: extractCoverImageUrl(text) })
   }
   return buildStoreBooks(examPages, books)
+}
+
+// ── The daily podcast's script hashes ───────────────────────────────────────
+// For every concept page, the hash of the script its podcast clips are recorded
+// from (lib/podcast.ts). The player plays a recording only when its hash is
+// this one, so a clip made from an older page is never heard. ~60 KB, in the
+// podcast player's own chunk.
+function podcastScriptsPlugin(): Plugin {
+  const VIRTUAL_ID = 'virtual:podcast-scripts'
+  const RESOLVED_ID = '\0' + VIRTUAL_ID
+  return {
+    name: 'podcast-scripts',
+    resolveId: (id) => id === VIRTUAL_ID ? RESOLVED_ID : undefined,
+    load: async (id) => {
+      if (id !== RESOLVED_ID) return
+      const names = await readdir(path.join(REPO_ROOT, 'Concepts')).catch(() => [] as string[])
+      const pages: Array<{ name: string; markdown: string }> = []
+      for (const name of names.sort()) {
+        if (!name.endsWith('.md')) continue
+        const markdown = await readFile(path.join(REPO_ROOT, 'Concepts', name), 'utf-8').catch(() => null)
+        if (markdown != null) pages.push({ name: name.replace(/\.md$/i, ''), markdown })
+      }
+      return `export default ${JSON.stringify(buildScriptHashes(pages))}`
+    },
+  }
 }
 
 // ── Cowork's vault documents ─────────────────────────────────────────────────
@@ -928,7 +954,7 @@ function seoPagesPlugin(): Plugin {
 }
 
 export default defineConfig({
-  plugins: [react(), examPagesPlugin(), wikiContentPlugin(), storeBooksPlugin(), coworkVaultPlugin(), resourceTimelinePlugin(), questionsContentPlugin(), comprehensionChecksPlugin(), examGuidesPlugin(), pdfjsAssetsPlugin(), vaultMediaPlugin(), seoPagesPlugin(), aiConnectorAssetsPlugin()],
+  plugins: [react(), examPagesPlugin(), wikiContentPlugin(), storeBooksPlugin(), coworkVaultPlugin(), podcastScriptsPlugin(), resourceTimelinePlugin(), questionsContentPlugin(), comprehensionChecksPlugin(), examGuidesPlugin(), pdfjsAssetsPlugin(), vaultMediaPlugin(), seoPagesPlugin(), aiConnectorAssetsPlugin()],
   resolve: {
     alias: { '@': path.resolve(__dirname, 'src') },
   },

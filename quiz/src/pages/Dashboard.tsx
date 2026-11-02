@@ -44,6 +44,7 @@ import { FixMistakesButton } from '@/components/FixMistakesButton'
 import type { LeagueExamOption } from '@/components/LeaderboardPanel'
 import { DashboardExportModal } from '@/components/DashboardExportModal'
 import { DashboardRemindersModal } from '@/components/DashboardRemindersModal'
+import { usePodcast } from '@/stores/podcastStore'
 import { DashboardGuideModal } from '@/components/DashboardGuideModal'
 import { DashboardSearchBar } from '@/components/DashboardSearchBar'
 import { useAccuracyTrend } from '@/hooks/useAccuracyTrend'
@@ -303,6 +304,22 @@ export default function Dashboard() {
         if (idx >= 0) setActiveExamIdx(idx)
       }
     } catch { /* ignore */ }
+  }, [inProgressSyllabi])
+
+  // The daily email's Listen button links to /dashboard?episode=<exam key>:
+  // show that exam, and ask its Play button to open the episode once it is
+  // built (stores/podcastStore.ts, `request`). After the restore above, so the
+  // link's exam wins over the one last viewed.
+  const episodeParamRef = useRef(new URLSearchParams(location.search).get('episode'))
+  useEffect(() => {
+    const key = episodeParamRef.current
+    if (!key || inProgressSyllabi.length === 0) return
+    episodeParamRef.current = null
+    const idx = inProgressSyllabi.findIndex(s => wikiExamIdToProgressKey(s.examId) === key)
+    if (idx >= 0) setActiveExamIdx(idx)
+    usePodcast.getState().request(key)
+    navigate('/dashboard', { replace: true })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inProgressSyllabi])
 
   // Continuous (wrap-around) index

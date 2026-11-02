@@ -8,6 +8,7 @@ An opt-in daily email that lists the concepts the [study plan](study-plan-genera
 - **Opt in**: the Dashboard's reminders bell (signed-in only — the email goes to the account address). A toggle turns the email on, and a picker chooses the local send hour (default 8:00 AM). The browser's IANA timezone is stored alongside the hour and refreshed on every save, so the send time follows whichever device last touched the setting.
 - **The email**: one section per exam the reader is studying (`status = 'in_progress'`, the exams the Dashboard shows) that has a cached study plan, each with a pacing line (day number, pacing status, days to target), today's concept list (capped at 12, "+N more" beyond that), and the plan's "worth a refresher" concepts. A CTA links to the quiz (with UTM parameters — see *Measuring it*); the footer links to `/dashboard?reminders=1`, which opens the bell's modal, to change the time or turn it off.
 - **Quiet days**: if no exam has anything scheduled or worth reviewing, no email is sent.
+- **Listen**: a section whose concepts are recorded for the [daily podcast](daily-podcast.md) gets a *Listen to today's plan · N min* button, linking to `/dashboard?episode=<exam key>` (the Dashboard opens that exam's episode). The function reads the podcast bucket's `index.json` once per run and times the episode with `planEpisode`, mirrored from `quiz/src/lib/podcast.ts` and held to it by `duplicationContracts.test.ts`; no recordings, no button.
 
 ## Architecture
 
@@ -27,6 +28,7 @@ This derivation (`deriveTodaysConcepts`), the pacing phrasing, and the timezone 
 | Pure derivation core + tests | `quiz/src/lib/dailyEmail.ts` / `.test.ts` |
 | Reminders modal + hook | `quiz/src/components/DashboardRemindersModal.tsx`, `quiz/src/hooks/useEmailPrefs.ts` |
 | Feature flag `DAILY_PLAN_EMAIL_ENABLED` | `quiz/src/lib/featureFlags.ts` |
+| The episode's length on the Listen button (mirrored) | `quiz/src/lib/podcast.ts` — see [daily-podcast.md](daily-podcast.md) |
 
 ### Send loop
 

@@ -88,31 +88,51 @@ Listen's rule, kept twice over:
 
 ### Joining clips
 
-Every clip is CBR 64 kb/s mono MP3 at 44.1 kHz with **no ID3 tag and no Xing header**
-(`ffmpeg -write_xing 0 -id3v2_version 0 -write_id3v1 0 -map_metadata -1`). That lets the player
+Every clip is CBR **32 kb/s mono MP3 at 24 kHz** (Kokoro's own rate; `PODCAST_AUDIO_FORMAT`,
+`mp3-24k-32k`) with **no ID3 tag and no Xing header**
+(`ffmpeg -ar 24000 -ac 1 -b:a 32k -write_xing 0 -id3v2_version 0 -write_id3v1 0 -map_metadata -1`).
+32 kb/s is clear for speech at half the size of 64 kb/s, which the first recordings used. That lets the player
 join clips byte for byte (`joinClips`) into one track the browser measures by its bitrate — one
 track to scrub, and one track a phone keeps playing with the screen locked (a playlist of
 separate files stalls between tracks in a background tab on iOS). A clip's length is exact from
-its size: `bytes × 8 / 64000`.
+its size: `bytes × 8 / 32000` — at 24 kHz and 32 kb/s every frame is 96 bytes, with no padding.
 
 ### The index
 
 `podcast/index.json`, compact because the Dashboard reads it (cached a minute; audio a year):
 
 ```json
-{ "v": 1, "voices": [["af_heart", "kokoro-82m"]],
-  "clips": { "brief/bayes-theorem": ["22q9qqw6i92", 52.17, 417332, 0], … } }
+{ "v": 1, "format": "mp3-24k-32k", "voices": [["af_heart", "kokoro-82m"]],
+  "clips": { "brief/bayes-theorem": ["22q9qqw6i92", 52.2, 208800, 0], … } }
 ```
 
 Each clip is `[script hash, seconds, bytes, voice index]`; its file is
-`<key>-<hash>-<voice slug>.mp3`. The byte size is kept for the RSS feed (below), which needs
+`<key>-<hash>-<voice slug>-32k.mp3`. An index in another `format` reads as no index (its files
+can't be joined with these), and the recorder, finding one, records everything again. The byte size is kept for the RSS feed (below), which needs
 an enclosure's length.
+
+### Storage over time
+
+Storage does **not** grow by the day: an episode is a playlist of clips that already exist, and
+each concept is recorded once. The bucket holds one brief and one refresher per concept page —
+about 32 hours of audio, **~0.45 GB** at 32 kb/s for the whole vault — plus the old copy of a
+page that was edited, until it is pruned. At the end of every run the recorder deletes the audio
+that neither the new index nor the one before it names (a page edited or removed, a voice or
+format changed); keeping the previous index's files one more run means a reader whose browser
+read the old index a moment ago can still load its clips. So the bucket stays near the vault's
+size. A failed prune is logged and retried next run; it never fails the run.
+
+What grows with use is **download** (egress): an episode is ~2–4 MB, and each reader's browser
+caches a clip for a year under its name, so a concept heard again costs nothing. Watch it on
+Supabase's Usage page; on the free plan, a few thousand plays a month is the ceiling. A
+whole-page Listen recording for every concept (~145 hours, ~2 GB at this rate) would need a
+bigger home than the free plan — Supabase Pro or Cloudflare R2.
 
 ## The voice
 
 **Now: Kokoro-82M**, voice `af_heart` (the maintainer's pick, 2026-11-02) — Apache-2.0 model
 and voices, run with `kokoro-onnx` (MIT) on the CPU, no PyTorch. On a 4-core machine it reads
-about 4× faster than real time; the whole vault (~1,380 briefs and refreshers, ~35 hours of
+about 4× faster than real time; the whole vault (~1,380 briefs and refreshers, ~32 hours of
 audio) is about 9 hours of recording, so the nightly job's 5-hour budget backfills it in two
 nights. Each run records, in order: the three bridges; every concept on a Pro reader's plan in
 the next 7 days, soonest first; then (nightly) the rest of the vault. Coqui XTTS was ruled out

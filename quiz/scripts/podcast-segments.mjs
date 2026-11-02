@@ -27,9 +27,14 @@
 //               ELEVENLABS_API_KEY; --voice is a voice id, --model a model id
 //               (default eleven_multilingual_v2). Untested until there's a key.
 //
-// Every clip is written as CBR 64 kb/s mono MP3 at 44.1 kHz with no ID3 tag
-// and no Xing header (ffmpeg), so the app can join clips byte for byte into
-// one track (lib/podcast.ts, joinClips).
+// Every clip is written as CBR 32 kb/s mono MP3 at 24 kHz with no ID3 tag
+// and no Xing header (ffmpeg; PODCAST_AUDIO_FORMAT in lib/podcast.ts), so the
+// app can join clips byte for byte into one track (joinClips).
+//
+// Pruning: after a run, audio that neither the new index nor the one before it
+// names is deleted — a page edited, a page removed, a voice or format changed.
+// Keeping the previous index's files for one more run means a reader whose
+// browser read the old index a moment ago can still load its clips.
 //
 // Where: the public Supabase Storage bucket `podcast` (SUPABASE_URL +
 // SUPABASE_SERVICE_ROLE_KEY — the legacy service_role key or a new secret key,
@@ -139,6 +144,13 @@ function storage(local) {
         await mkdir(path.dirname(target), { recursive: true })
         await writeFile(target, body)
       },
+      async list(folder) {
+        const names = await readdir(path.join(LOCAL_DIR, folder)).catch(() => [])
+        return names.filter(n => n.endsWith('.mp3')).map(n => `${folder}/${n}`)
+      },
+      async remove(files) {
+        for (const f of files) await rm(path.join(LOCAL_DIR, f), { force: true })
+      },
     }
   }
   const base = (process.env.SUPABASE_URL ?? process.env.VITE_SUPABASE_URL ?? '').replace(/\/+$/, '')
@@ -166,6 +178,68 @@ function storage(local) {
       })
       if (!res.ok) throw new Error(`Upload of ${file} failed: ${res.status} ${await res.text()}`)
     },
+    // One folder's files (`brief`, `refresher`, `bridge`), a page at a time.
+    async list(folder) {
+      const out = []
+      for (let offset = 0; ; offset += 1000) {
+        const res = await fetch(`${base}/storage/v1/object/list/${BUCKET}`, {
+          method: 'POST',
+          headers: { ...authHeaders(key), 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prefix: folder, limit: 1000, offset, sortBy: { column: 'name', order: 'asc' } }),
+        })
+        if (!res.ok) throw new Error(`Listing ${folder}/ failed: ${res.status} ${await res.text()}`)
+        const page = await res.json()
+        for (const o of page) if (o?.name?.endsWith('.mp3')) out.push(`${folder}/${o.name}`)
+        if (page.length < 1000) return out
+      }
+    },
+    async remove(files) {
+      for (let i = 0; i < files.length; i += 500) {
+        const res = await fetch(`${base}/storage/v1/object/${BUCKET}`, {
+          method: 'DELETE',
+          headers: { ...authHeaders(key), 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prefixes: files.slice(i, i + 500) }),
+        })
+        if (!res.ok) throw new Error(`Deleting old audio failed: ${res.status} ${await res.text()}`)
+      }
+    },
+  }
+}
+
+/**
+ * The audio files an index names, whatever format it was written in: the
+ * current one (lib/podcast.ts), or the first, 64 kb/s one, whose names had
+ * no format suffix. What pruning must leave alone.
+ */
+function indexedFiles(app, raw) {
+  const files = new Set()
+  if (!raw || typeof raw !== 'object' || !raw.clips) return files
+  const current = app.parsePodcastIndex(raw)
+  if (current) {
+    for (const c of Object.values(current)) files.add(c.a)
+    return files
+  }
+  const voices = Array.isArray(raw.voices) ? raw.voices : []
+  for (const [key, v] of Object.entries(raw.clips)) {
+    const voice = Array.isArray(v) ? voices[v[3]]?.[0] : null
+    if (typeof v?.[0] === 'string' && typeof voice === 'string') files.add(`${key}-${v[0]}-${app.podcastSlug(voice)}.mp3`)
+  }
+  return files
+}
+
+/** Delete the audio no index names. Never fails the run: a failed prune is retried next run. */
+async function prune(app, store, previousRaw, kept) {
+  const named = indexedFiles(app, previousRaw)
+  for (const c of Object.values(kept)) named.add(c.a)
+  try {
+    const stale = []
+    for (const folder of ['bridge', 'brief', 'refresher']) {
+      for (const f of await store.list(folder)) if (!named.has(f)) stale.push(f)
+    }
+    if (stale.length) await store.remove(stale)
+    console.log(`Pruned ${stale.length} audio file(s) no index names.`)
+  } catch (err) {
+    console.error(`Pruning skipped: ${err.message}`)
   }
 }
 
@@ -269,16 +343,16 @@ function elevenLabsVoice(modelId) {
   }
 }
 
-/** Any audio → CBR 64 kb/s mono 44.1 kHz MP3, no tags, no Xing header — joinable byte for byte. */
-async function toClipMp3(input, output) {
+/** Any audio → CBR 32 kb/s mono 24 kHz MP3, no tags, no Xing header — joinable byte for byte. */
+async function toClipMp3(app, input, output) {
   await run('ffmpeg', [
     '-loglevel', 'error', '-y', '-i', input,
-    '-ar', '44100', '-ac', '1', '-c:a', 'libmp3lame', '-b:a', '64k',
+    '-ar', '24000', '-ac', '1', '-c:a', 'libmp3lame', '-b:a', '32k',
     '-write_xing', '0', '-id3v2_version', '0', '-write_id3v1', '0', '-map_metadata', '-1',
     output,
   ])
   const bytes = (await stat(output)).size
-  return { bytes, seconds: (bytes * 8) / 64000 }
+  return { bytes, seconds: (bytes * 8) / app.PODCAST_AUDIO_BITRATE }
 }
 
 // ── Commands ────────────────────────────────────────────────────────────────
@@ -292,7 +366,10 @@ async function sync(app, flags) {
   const store = storage(Boolean(flags.local))
   const scripts = allScripts(app, await conceptPages())
 
-  const index = app.parsePodcastIndex(await store.readIndex()) ?? {}
+  // An index in an older format (the first, 64 kb/s one) parses as none, so
+  // everything is recorded again in the current one.
+  const previousRaw = await store.readIndex()
+  const index = app.parsePodcastIndex(previousRaw) ?? {}
   const modelName = provider === 'kokoro' ? 'kokoro-82m' : (flags.model ?? 'eleven_multilingual_v2')
   // Keep only what is still current: a changed page, a deleted page or a
   // switched voice drops a clip from the index (its audio stays, unnamed).
@@ -331,7 +408,11 @@ async function sync(app, flags) {
   const writeIndex = async () => {
     await store.put('index.json', JSON.stringify(app.podcastIndexFile(kept)) + '\n', 'application/json')
   }
-  if (todo.length === 0) { if (dropped) await writeIndex(); return }
+  if (todo.length === 0) {
+    if (dropped) await writeIndex()
+    await prune(app, store, previousRaw, kept)
+    return
+  }
 
   const voice = provider === 'kokoro' ? await kokoroVoice() : elevenLabsVoice(modelName)
   const tmp = await mkdtemp(path.join(os.tmpdir(), 'podcast-clip-'))
@@ -347,7 +428,7 @@ async function sync(app, flags) {
       try {
         const raw = await voice.speak(text, voiceId, path.join(tmp, 'clip.wav'), path.join(tmp, 'clip-raw.mp3'))
         const out = path.join(tmp, 'clip.mp3')
-        const { bytes, seconds } = await toClipMp3(raw, out)
+        const { bytes, seconds } = await toClipMp3(app, raw, out)
         const audio = app.clipAudioFile(key, hash, voiceId)
         // Audio first: the index must never name a file that isn't there.
         await store.put(audio, await readFile(out), 'audio/mpeg')
@@ -366,6 +447,7 @@ async function sync(app, flags) {
     await writeIndex()
   }
   console.log(`Recorded ${made} clip(s) into ${store.where}${failed ? `, ${failed} failed` : ''}; the index lists ${Object.keys(kept).length}.`)
+  await prune(app, store, previousRaw, kept)
   if (failed && made === 0) process.exitCode = 1
 }
 

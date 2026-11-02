@@ -148,8 +148,11 @@ workflow downloads them and checks their sha256.
 ## Setup checklist (one-time)
 
 1. Apply `20261102_podcast_bucket.sql` (creates the public `podcast` bucket).
-2. The workflow uses the `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` repository secrets
-   (already set for the validate sweep).
+2. Add the repository secrets the workflow reads (Settings → Secrets and variables → Actions):
+   `SUPABASE_SERVICE_ROLE_KEY` — a dedicated secret key (`sb_secret_…`, Supabase → Project
+   Settings → API Keys → New secret key) or the legacy `service_role` key — and the project:
+   `SUPABASE_PROJECT_REF` (already set for `deploy-functions.yml`; the URL is built from it) or
+   `SUPABASE_URL`.
 3. Run **Actions → Podcast Segments → Run workflow** once (scope `all`), or wait for the nightly
    run. The Dashboard button and the email's Listen button appear as soon as today's concepts
    are recorded.

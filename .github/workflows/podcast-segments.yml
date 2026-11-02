@@ -95,12 +95,22 @@ jobs:
       - name: Record
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          # The project ref is what deploy-functions.yml already uses; with no
+          # SUPABASE_URL secret, the URL is built from it.
+          SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           PODCAST_PYTHON: python
           SCOPE: ${{ github.event_name == 'push' && 'plans' || inputs.scope || 'all' }}
           BUDGET: ${{ github.event_name == 'push' && '60' || inputs.budget || '300' }}
         run: |
           export KOKORO_MODEL="$HOME/kokoro/kokoro-v1.0.onnx" KOKORO_VOICES="$HOME/kokoro/voices-v1.0.bin"
+          if [ -z "$SUPABASE_URL" ] && [ -n "$SUPABASE_PROJECT_REF" ]; then
+            export SUPABASE_URL="https://$SUPABASE_PROJECT_REF.supabase.co"
+          fi
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_SERVICE_ROLE_KEY" ]; then
+            echo "::error::Missing secrets: set SUPABASE_PROJECT_REF (or SUPABASE_URL) and SUPABASE_SERVICE_ROLE_KEY under Settings → Secrets and variables → Actions."
+            exit 1
+          fi
           args="--plans --budget-minutes $BUDGET --voice af_heart"
           [ "$SCOPE" = "all" ] && args="$args --all"
           node scripts/podcast-segments.mjs sync $args

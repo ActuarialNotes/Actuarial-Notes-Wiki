@@ -44,11 +44,17 @@ interface SegmentedControlProps<T extends string> {
    * a pill reads as one object you flip (style guide §4).
    */
   pill?: boolean
+  /**
+   * Size each option to its label, with the same padding either side, rather
+   * than splitting the width evenly — even widths leave a short label floating
+   * in space beside a long one that nearly fills its segment.
+   */
+  fit?: boolean
   className?: string
 }
 
 const SIZES = {
-  xs: 'h-6 text-xs',
+  xs: 'h-7 text-[13px]',
   sm: 'h-9',
   md: 'h-10',
   lg: 'h-11',
@@ -62,6 +68,7 @@ export function SegmentedControl<T extends string>({
   label,
   size = 'md',
   pill = false,
+  fit = false,
   className,
 }: SegmentedControlProps<T>) {
   const groupRef = useRef<HTMLDivElement>(null)
@@ -113,7 +120,7 @@ export function SegmentedControl<T extends string>({
             // the group. This is the standard radiogroup interaction.
             tabIndex={isActive ? 0 : -1}
             onClick={() => onChange(option.value)}
-            style={{ flex: option.flex ?? 1 }}
+            style={{ flex: fit ? 'none' : (option.flex ?? 1) }}
             className={cn(
               'flex min-w-0 items-center justify-center gap-1.5 text-sm font-medium transition-colors',
               pill ? 'rounded-full px-4' : 'rounded-md px-2',

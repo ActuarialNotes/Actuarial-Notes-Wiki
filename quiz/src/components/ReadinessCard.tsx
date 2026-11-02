@@ -1057,8 +1057,10 @@ export function ReadinessCard({
 
                 {/* Bonus concepts */}
                 {bonusConcepts.length > 0 && (
-                  <>
-                    <div className="flex items-center gap-2 pt-1">
+                  // One group, spaced like a topic's rows — loose in the
+                  // list above, each row took the list's gap between topics.
+                  <div className="space-y-0.5">
+                    <div className="flex items-center gap-2 pt-1 pb-1">
                       <div className="flex-1 border-t border-dashed border-muted-foreground/30" />
                       <span className="text-sm text-muted-foreground shrink-0">Also completed today</span>
                       <div className="flex-1 border-t border-dashed border-muted-foreground/30" />
@@ -1073,7 +1075,7 @@ export function ReadinessCard({
                           onClick={() => openDashboard(toRefs(allConcepts), toRefs(studyPlanConceptsForModal), 'entire-syllabus', globalIdx === -1 ? 0 : globalIdx)}
                           className={`w-full flex items-center gap-2 text-left transition-colors${flashingConcept?.toLowerCase() === lu.conceptSlug.toLowerCase() ? ' concept-row-highlight' : ''}`}
                         >
-                          <CheckMark className="h-4 w-4" />
+                          <CheckMark className="h-5 w-5" />
                           <span className="text-base py-1.5 flex-1 min-w-0 truncate text-muted-foreground line-through hover:text-foreground/80">
                             {lu.conceptSlug}
                           </span>
@@ -1083,7 +1085,7 @@ export function ReadinessCard({
                         </button>
                       )
                     })}
-                  </>
+                  </div>
                 )}
               </div>
 
@@ -1217,6 +1219,7 @@ export function ReadinessCard({
             label="Schedule view"
             size="xs"
             pill
+            fit
             value={scheduleView}
             onChange={changeScheduleView}
             options={[
@@ -1267,7 +1270,7 @@ export function ReadinessCard({
       const dayLabel = new Date(displayDay + 'T00:00:00').toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })
       const isFutureDay = displayDay > todayStr
       return (
-        <div className="border-t pt-4 mt-1 space-y-4">
+        <div className="pt-3 space-y-4">
           {/* Header row */}
           <div className="flex items-center justify-between">
             <span className="text-sm font-semibold">{dayLabel}</span>

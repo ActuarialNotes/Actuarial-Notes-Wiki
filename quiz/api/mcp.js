@@ -6,7 +6,8 @@
 // Streamable HTTP, stateless, read-only and public (no sign-in: everything it
 // serves is the published vault). Both MCP protocol eras are spoken on this one
 // endpoint — see _mcp/protocol.js — and the tools, resources and prompts are in
-// _mcp/server.js. docs/ai-connector.md is the full account.
+// _mcp/server.js. Every request is logged as one `{"mcp_usage": …}` line
+// (_mcp/usage.js) — no IP, no person. docs/ai-connector.md is the full account.
 //
 // It lives under `quiz/api/` for the same reason `exam-pdf.js` does: the app is
 // its own Vercel project rooted at `quiz/`, and this has to share its origin to
@@ -125,9 +126,14 @@ export default async function handler(req, res) {
     siteUrl: process.env.MCP_PUBLIC_SITE_URL || DEFAULT_SITE_URL,
   })
   const { body, bodyError } = readBody(req)
-  const out = await handleMcpHttp({ method: req.method, headers: req.headers ?? {}, body, bodyError }, server, err => {
-    console.error('[mcp]', err)
-  })
+  const out = await handleMcpHttp(
+    { method: req.method, headers: req.headers ?? {}, body, bodyError },
+    server,
+    err => console.error('[mcp]', err),
+    // One line per request, for counting use in Vercel's logs: filter on
+    // `mcp_usage`. What the event holds — and what it never does — is _mcp/usage.js.
+    event => console.log(JSON.stringify({ mcp_usage: event })),
+  )
   for (const [key, value] of Object.entries(out.headers)) res.setHeader(key, value)
   res.status(out.status)
   return out.body === undefined ? res.end() : res.end(out.body)

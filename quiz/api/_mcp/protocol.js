@@ -24,8 +24,11 @@
 //
 // This module is transport logic only — it knows nothing about actuarial
 // content. `server.js` supplies the tools, resources and prompts; `../mcp.js`
-// adapts it to Vercel's request/response. No dependencies, so it is exercised
+// adapts it to Vercel's request/response; `usage.js` shapes the usage events it
+// reports. No outside dependencies, so it is exercised
 // directly by src/lib/mcpProtocol.test.ts.
+
+import { usageEvent } from './usage.js'
 
 export const MODERN_VERSIONS = ['2026-07-28']
 export const LEGACY_VERSIONS = ['2025-11-25', '2025-06-18', '2025-03-26', '2024-11-05']
@@ -160,6 +163,15 @@ function discoverResult(server) {
   }
 }
 
+/** Hand one usage event to the observer; a failing observer never fails the request. */
+function report(observe, { headers, ...rest }) {
+  try {
+    observe(usageEvent({ ...rest, userAgent: headerValue(headers, 'user-agent') }))
+  } catch {
+    // Usage reporting is best-effort.
+  }
+}
+
 async function runHandler(server, method, params, ctx) {
   const handler = server.methods[method]
   if (!handler) throw new McpError(ErrorCode.METHOD_NOT_FOUND, `Method not found: ${method}`)
@@ -178,7 +190,28 @@ function errorFor(err, era) {
 
 // ── Legacy era ───────────────────────────────────────────────────────────────
 
-async function legacyResponse(message, server, headers, log) {
+async function legacyResponse(message, server, headers, log, observe) {
+  const started = Date.now()
+  const payload = await legacyAnswer(message, server, headers, log)
+  if (observe) {
+    const params = isObject(message.params) ? message.params : {}
+    report(observe, {
+      era: 'legacy',
+      protocolVersion: message.method === 'initialize'
+        ? (typeof params.protocolVersion === 'string' ? params.protocolVersion : undefined)
+        : headerValue(headers, 'mcp-protocol-version') ?? HEADERLESS_VERSION,
+      method: message.method,
+      params,
+      headers,
+      result: payload.result,
+      errorCode: payload.error?.code,
+      ms: Date.now() - started,
+    })
+  }
+  return payload
+}
+
+async function legacyAnswer(message, server, headers, log) {
   const { method, id } = message
   const params = isObject(message.params) ? message.params : {}
   try {
@@ -213,15 +246,15 @@ async function legacyResponse(message, server, headers, log) {
   }
 }
 
-async function legacy(message, server, headers, log) {
+async function legacy(message, server, headers, log, observe) {
   const { kind } = classify(message)
   // A notification (`notifications/initialized`, `notifications/cancelled`) or a
   // response to a request we never send: accepted, nothing to answer.
   if (kind !== 'request') return accepted()
-  return json(200, await legacyResponse(message, server, headers, log))
+  return json(200, await legacyResponse(message, server, headers, log, observe))
 }
 
-async function legacyBatch(messages, server, headers, log) {
+async function legacyBatch(messages, server, headers, log, observe) {
   // JSON-RPC batching existed in 2025-03-26 only; answered for that revision's
   // clients, never for a modern request.
   if (messages.length === 0) return json(400, errorPayload(null, ErrorCode.INVALID_REQUEST, 'Empty batch'))
@@ -229,19 +262,37 @@ async function legacyBatch(messages, server, headers, log) {
   for (const message of messages) {
     const c = classify(message)
     if (c.invalid) out.push(errorPayload(c.id, ErrorCode.INVALID_REQUEST, c.invalid))
-    else if (c.kind === 'request') out.push(await legacyResponse(message, server, headers, log))
+    else if (c.kind === 'request') out.push(await legacyResponse(message, server, headers, log, observe))
   }
   return out.length ? json(200, out) : accepted()
 }
 
 // ── Modern era ───────────────────────────────────────────────────────────────
 
-async function modern(message, server, headers, meta, log) {
+async function modern(message, server, headers, meta, log, observe) {
   const { kind } = classify(message)
   if (kind !== 'request') return accepted()
   const { id, method } = message
   const params = isObject(message.params) ? message.params : {}
-  const fail = (status, code, text, data) => json(status, errorPayload(id, code, text, data))
+  const started = Date.now()
+  const seen = (result, errorCode) => {
+    if (!observe) return
+    report(observe, {
+      era: 'modern',
+      protocolVersion: typeof meta[META.protocolVersion] === 'string' ? meta[META.protocolVersion] : undefined,
+      method,
+      params,
+      clientInfo: isObject(meta[META.clientInfo]) ? meta[META.clientInfo] : undefined,
+      headers,
+      result,
+      errorCode,
+      ms: Date.now() - started,
+    })
+  }
+  const fail = (status, code, text, data) => {
+    seen(undefined, code)
+    return json(status, errorPayload(id, code, text, data))
+  }
 
   // Validation, in the order the spec's error taxonomy reads: the version
   // declared in the body against its header, then whether we speak it, then
@@ -290,6 +341,7 @@ async function modern(message, server, headers, meta, log) {
     // with an empty filter and close gracefully, as a server ending a
     // subscription on its own initiative does (patterns/subscriptions).
     const subscription = { [META.subscriptionId]: id }
+    seen({})
     return sse([
       { jsonrpc: '2.0', method: 'notifications/subscriptions/acknowledged', params: { _meta: subscription, notifications: {} } },
       { jsonrpc: '2.0', id, result: { resultType: 'complete', _meta: { ...subscription, ...serverMeta } } },
@@ -304,6 +356,7 @@ async function modern(message, server, headers, meta, log) {
   }
   try {
     const result = method === 'server/discover' ? discoverResult(server) : await runHandler(server, method, params, ctx)
+    seen(result)
     return json(200, { jsonrpc: '2.0', id, result: complete(result) })
   } catch (err) {
     if (!(err instanceof McpError)) log?.(err)
@@ -335,9 +388,12 @@ async function modern(message, server, headers, meta, log) {
  *   `body` is the parsed JSON; `bodyError` says the body could not be parsed.
  * @param {McpServerDefinition} server
  * @param {(err: unknown) => void} [log] Told about unexpected handler failures.
+ * @param {(event: object) => void} [observe] Told about every request answered,
+ *   as a usage event (`usageEvent` in ./usage.js — what was asked, by which
+ *   client, and how it went; never who). Notifications aren't reported.
  * @returns {Promise<{ status: number, headers: Record<string, string>, body?: string }>}
  */
-export async function handleMcpHttp(request, server, log) {
+export async function handleMcpHttp(request, server, log, observe) {
   const method = String(request.method || '').toUpperCase()
   if (method !== 'POST') {
     // No standalone SSE stream (legacy GET) and no sessions to end (legacy
@@ -347,11 +403,11 @@ export async function handleMcpHttp(request, server, log) {
   if (request.bodyError) return json(400, errorPayload(null, ErrorCode.PARSE_ERROR, 'Parse error: the body is not valid JSON'))
 
   const body = request.body
-  if (Array.isArray(body)) return legacyBatch(body, server, request.headers, log)
+  if (Array.isArray(body)) return legacyBatch(body, server, request.headers, log, observe)
   const c = classify(body)
   if (c.invalid) return json(400, errorPayload(c.id, ErrorCode.INVALID_REQUEST, `Invalid request: ${c.invalid}`))
 
-  if (body.method === 'initialize') return legacy(body, server, request.headers, log)
+  if (body.method === 'initialize') return legacy(body, server, request.headers, log, observe)
   const meta = isObject(body.params) && isObject(body.params._meta) ? body.params._meta : {}
   const metaVersion = meta[META.protocolVersion]
   const headerVersion = headerValue(request.headers, 'mcp-protocol-version')
@@ -359,12 +415,12 @@ export async function handleMcpHttp(request, server, log) {
   // Per-request metadata naming a modern version is a modern request; one
   // naming a legacy version (which never carried it) is read as legacy.
   if (metaVersion !== undefined && !LEGACY_VERSIONS.includes(metaVersion)) {
-    return modern(body, server, request.headers, meta, log)
+    return modern(body, server, request.headers, meta, log, observe)
   }
   if (headerVersion === undefined || LEGACY_VERSIONS.includes(headerVersion)) {
-    return legacy(body, server, request.headers, log)
+    return legacy(body, server, request.headers, log, observe)
   }
-  if (MODERN_VERSIONS.includes(headerVersion)) return modern(body, server, request.headers, meta, log)
+  if (MODERN_VERSIONS.includes(headerVersion)) return modern(body, server, request.headers, meta, log, observe)
   // A version nobody speaks: say which ones we do, in the modern error both
   // eras can read (a legacy client gets its 400 either way).
   if (c.kind !== 'request') return json(400, errorPayload(null, ErrorCode.UNSUPPORTED_PROTOCOL_VERSION, 'Unsupported protocol version', { supported: SUPPORTED_VERSIONS, requested: headerVersion }))

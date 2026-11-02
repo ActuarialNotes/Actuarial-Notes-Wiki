@@ -82,7 +82,8 @@ page view itself, the first included, through `trackPageView`:
   shelf's and Store's filters, the flashcard deck's view) is not — `isNewPageView`.
 - **The URL is cleaned** (`pageLocation`): no fragment, no auth codes or tokens, no
   `internal`/`ga_debug` switches, emails and long numbers redacted. `utm_*` and `gclid`
-  stay — they are how GA4 attributes the visit.
+  stay — they are how GA4 attributes the visit. The AI connector's links into the app carry
+  `utm_source=mcp&utm_medium=ai_connector` (`docs/ai-connector.md`, *Measuring use*).
 - **`content_group`** names the section of the app (`contentGroup`: Quiz builder, Quiz,
   Study guides, Concepts, Resources, Flashcards, Dashboard, Store…) — GA4's built-in
   *Content group* dimension, the way to read the Pages report a tab at a time.

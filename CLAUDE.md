@@ -1353,7 +1353,7 @@ Other important `lib/` modules:
   open critical finding. `aiConnector.ts` holds the public addresses (connector URL, skill zip) the
   Settings card (`components/AiConnectorCard.tsx`) and `llms.txt` hand out. The run-time half is
   plain JS under `quiz/api/_mcp/` (`protocol.js` both MCP eras, `server.js` tools/resources/prompts,
-  `knowledgeBase.js` index + search, `load.js`); a few helpers are mirrored there
+  `knowledgeBase.js` index + search, `load.js`, `usage.js` the usage log and link tags); a few helpers are mirrored there
   (`normalizeTerm`, `objectiveKey`, `normalizeAnswerText`) and pinned by `mcpServer.test.ts`.
 - `battle.ts` / `battleDisplay.ts` / `battleSetup.ts` / `battleRoom.ts` / `battleSession.ts` /
   `battleTransport.ts` / `battleLobby.ts` / `battleMatchmaking.ts` / `battleTopics.ts` /
@@ -1834,6 +1834,10 @@ to know before changing it:
    first. `search`/`fetch` keep ChatGPT's exact result shapes; tool names are public API.
 3. **The export and the endpoint are versioned together.** Change the export's shape → bump
    `KNOWLEDGE_BASE_VERSION` and `SUPPORTED_KB_VERSION` in the same change.
+4. **Use is measured without people.** Every request is one `{"mcp_usage": …}` log line
+   (`quiz/api/_mcp/usage.js`: method, tool, client, outcome, an allowlist of arguments — never an
+   answer, a calculator's input or an IP), and the links it hands into the app carry
+   `utm_source=mcp`. A new tool argument stays out of the log until it is added to that allowlist.
 
 ## The Tutor
 

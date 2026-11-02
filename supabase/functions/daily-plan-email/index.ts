@@ -112,14 +112,147 @@ function localDateHour(timeZone: string, now: Date = new Date()): { date: string
   }
 }
 
+// ── The daily podcast's episode (mirrored from quiz/src/lib/podcast.ts) ─────
+//
+// podcastSlug, podcastClipKey, planEpisode and episodeMinutesLabel are copied
+// verbatim from lib/podcast.ts, which can't be imported here;
+// lib/duplicationContracts.test.ts runs this copy against the same vectors.
+// The email puts the episode's length on its Listen button, from the index of
+// recorded clips in the public `podcast` bucket (docs/daily-podcast.md). The
+// index lists only clips current with the vault, so no script hash is checked
+// here — the app checks it again before it plays.
+
+function podcastSlug(name: string): string {
+  return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
+}
+function podcastClipKey(kind: string, name: string): string {
+  return `${kind}/${podcastSlug(name)}`
+}
+interface EpisodeEntry {
+  kind: 'brief' | 'refresher' | 'bridge'
+  /** The concept's name, or the bridge's id. */
+  name: string
+  key: string
+  seconds: number
+}
+
+export interface EpisodePlan {
+  entries: EpisodeEntry[]
+  seconds: number
+  /** Concepts on the plan that the episode doesn't read: not recorded yet, or past the caps. */
+  unread: string[]
+  /** How many concepts the episode reads. */
+  concepts: number
+}
+function planEpisode(
+  todaysConcepts: string[],
+  reviewConcepts: string[],
+  status: string | undefined,
+  clips: Record<string, { d: number; h: string }>,
+  isCurrent?: (key: string, hash: string) => boolean,
+): EpisodePlan {
+  // At most 12 concepts from today's plan (the email lists 12), 5 refreshers,
+  // and no more concepts once the episode runs 15 minutes.
+  const maxBriefs = 12
+  const maxRefreshers = 5
+  const target = 15 * 60
+  const ok = (key: string) => {
+    const clip = clips[key]
+    return !!clip && clip.d > 0 && (!isCurrent || isCurrent(key, clip.h))
+  }
+  const entries: EpisodeEntry[] = []
+  const unread: string[] = []
+  let seconds = 0
+  let concepts = 0
+  const seen = new Set<string>()
+  const add = (kind: EpisodeEntry['kind'], name: string, key: string) => {
+    entries.push({ kind, name, key, seconds: clips[key].d })
+    seconds += clips[key].d
+  }
+  const briefs = status === 'review_mode' ? [] : todaysConcepts
+  const briefPicks: string[] = []
+  for (const name of briefs) {
+    const slug = podcastSlug(name)
+    if (seen.has(slug)) continue
+    seen.add(slug)
+    const key = podcastClipKey('brief', name)
+    if (!ok(key) || briefPicks.length >= maxBriefs) { unread.push(name); continue }
+    briefPicks.push(name)
+  }
+  const refresherPicks: string[] = []
+  for (const name of reviewConcepts) {
+    const slug = podcastSlug(name)
+    if (seen.has(slug)) continue
+    seen.add(slug)
+    const key = podcastClipKey('refresher', name)
+    if (!ok(key) || refresherPicks.length >= maxRefreshers) { unread.push(name); continue }
+    refresherPicks.push(name)
+  }
+  if (briefPicks.length + refresherPicks.length === 0) return { entries: [], seconds: 0, unread, concepts: 0 }
+
+  const intro = podcastClipKey('bridge', 'intro')
+  const outro = podcastClipKey('bridge', 'outro')
+  const bridge = podcastClipKey('bridge', 'refreshers')
+  if (ok(intro)) add('bridge', 'intro', intro)
+  const budget = target - (ok(outro) ? clips[outro].d : 0)
+  for (const name of briefPicks) {
+    const key = podcastClipKey('brief', name)
+    // Always read at least one concept, however long.
+    if (concepts > 0 && seconds + clips[key].d > budget) { unread.push(name); continue }
+    add('brief', name, key)
+    concepts++
+  }
+  const bridgeSeconds = concepts > 0 && ok(bridge) ? clips[bridge].d : 0
+  const fit: string[] = []
+  let running = seconds
+  for (const name of refresherPicks) {
+    const extra = clips[podcastClipKey('refresher', name)].d + (fit.length === 0 ? bridgeSeconds : 0)
+    if (concepts + fit.length > 0 && running + extra > budget) { unread.push(name); continue }
+    fit.push(name)
+    running += extra
+  }
+  if (fit.length > 0 && bridgeSeconds > 0) add('bridge', 'refreshers', bridge)
+  for (const name of fit) {
+    add('refresher', name, podcastClipKey('refresher', name))
+    concepts++
+  }
+  if (ok(outro)) add('bridge', 'outro', outro)
+  return { entries, seconds, unread, concepts }
+}
+function episodeMinutesLabel(seconds: number): string {
+  return `${Math.max(1, Math.ceil(seconds / 60))} min`
+}
+
+type PodcastClips = Record<string, { d: number; h: string }>
+
+/** The recordings' index → its clips, or {} when there is none (no button then). */
+async function loadPodcastClips(supabaseUrl: string): Promise<PodcastClips> {
+  try {
+    const res = await fetch(`${supabaseUrl.replace(/\/+$/, '')}/storage/v1/object/public/podcast/index.json`)
+    if (!res.ok) return {}
+    const raw = await res.json()
+    const out: PodcastClips = {}
+    for (const [key, v] of Object.entries((raw?.clips ?? {}) as Record<string, unknown>)) {
+      if (!Array.isArray(v) || typeof v[0] !== 'string' || typeof v[1] !== 'number' || !(v[1] > 0)) continue
+      out[key] = { h: v[0], d: v[1] }
+    }
+    return out
+  } catch {
+    return {}
+  }
+}
+
 // ── Email composition ─────────────────────────────────────────────────────────
 
 interface ExamSection {
+  examId: string
   label: string
   concepts: string[]
   reviewConcepts: string[]
   pacingLine: string
   catchUp: boolean
+  /** Today's episode, when any of today's concepts is recorded. */
+  episode: { minutes: string; concepts: number } | null
 }
 
 function daysBetweenISO(fromISO: string, toISO: string): number {
@@ -129,7 +262,7 @@ function daysBetweenISO(fromISO: string, toISO: string): number {
   return Math.round((to - from) / 86_400_000)
 }
 
-function buildSection(examId: string, plan: EmailPlanSnapshot, today: string): ExamSection | null {
+function buildSection(examId: string, plan: EmailPlanSnapshot, today: string, clips: PodcastClips): ExamSection | null {
   const concepts = deriveTodaysConcepts(plan, today)
   const reviewConcepts = (plan.reviewConcepts ?? []).filter(c => typeof c === 'string')
   if (concepts.length === 0 && reviewConcepts.length === 0) return null
@@ -146,13 +279,24 @@ function buildSection(examId: string, plan: EmailPlanSnapshot, today: string): E
     pieces.push(`${daysBetweenISO(today, readyDate)} days to your target`)
   }
 
+  const episode = planEpisode(concepts, reviewConcepts, plan.status, clips)
+
   return {
+    examId,
     label: EXAM_LABELS[examId] ?? examId,
     concepts,
     reviewConcepts,
     pacingLine: pieces.join(' · '),
     catchUp: !!plan.generatedDate && plan.generatedDate < today,
+    episode: episode.concepts > 0 ? { minutes: episodeMinutesLabel(episode.seconds), concepts: episode.concepts } : null,
   }
+}
+
+// The Listen button opens the Dashboard on this exam with its episode up
+// (`?episode=`). Same utm_source as the session link, so reminder_opened counts
+// it; utm_content tells the two buttons apart.
+function episodeUrl(examId: string): string {
+  return `${APP_URL}/dashboard?episode=${encodeURIComponent(examId)}&utm_source=daily-plan-email&utm_medium=email&utm_campaign=study-plan&utm_content=podcast`
 }
 
 function escapeHtml(s: string): string {
@@ -185,6 +329,9 @@ function renderHtml(sections: ExamSection[], friendlyDate: string): string {
         <p style="margin:14px 0 0;font-size:14px;font-weight:600;color:#111827;">Worth a refresher</p>
         ${renderConceptList(s.reviewConcepts)}
       ` : ''}
+      ${s.episode ? `
+        <a href="${escapeHtml(episodeUrl(s.examId))}" style="display:inline-block;margin-top:16px;padding:8px 16px;border:1px solid #c7d2fe;background:#eef2ff;color:#3730a3;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600;">&#127911; Listen to today's plan &middot; ${escapeHtml(s.episode.minutes)}</a>
+      ` : ''}
     </div>`).join('')
 
   return `
@@ -215,6 +362,7 @@ function renderText(sections: ExamSection[], friendlyDate: string): string {
       lines.push('Worth a refresher:')
       for (const c of s.reviewConcepts.slice(0, MAX_EMAIL_CONCEPTS)) lines.push(`  - ${c}`)
     }
+    if (s.episode) lines.push(`Listen to today's plan (${s.episode.minutes}): ${episodeUrl(s.examId)}`)
     lines.push('')
   }
   lines.push(`Start today's session: ${SESSION_URL}`)
@@ -281,6 +429,9 @@ Deno.serve(async (req: Request) => {
   const { data: prefs, error: prefsErr } = await prefsQuery
   if (prefsErr) return Response.json({ error: prefsErr.message }, { status: 500 })
 
+  // The podcast's recordings, read once per run (empty → no Listen buttons).
+  const podcastClips = await loadPodcastClips(Deno.env.get('SUPABASE_URL')!)
+
   const now = new Date()
   let sent = 0
   let skipped = 0
@@ -312,7 +463,7 @@ Deno.serve(async (req: Request) => {
       if (examErr) throw new Error(examErr.message)
 
       const sections = (examRows ?? [])
-        .map(r => buildSection(r.exam_id as string, r.study_plan_cache as EmailPlanSnapshot, localDate))
+        .map(r => buildSection(r.exam_id as string, r.study_plan_cache as EmailPlanSnapshot, localDate, podcastClips))
         .filter((s): s is ExamSection => s !== null)
       if (sections.length === 0) { skipped++; continue }
 

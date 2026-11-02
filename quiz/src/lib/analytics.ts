@@ -124,6 +124,12 @@ export interface AnalyticsEventMap {
   /** A practice session ended. */
   tutor_session: { exam: string; items: number; minutes: number; phase: string }
 
+  // ── The daily podcast (docs/daily-podcast.md) ─────────────────────────────
+  /** Today's episode started playing (once per episode per page load). `source` is where it was opened from. */
+  podcast_play: { exam: string; minutes: number; concepts: number; source: string }
+  /** Played to the end. */
+  podcast_complete: { exam: string; minutes: number; concepts: number }
+
   // ── Reliability (from lib/errorMonitoring.ts) ─────────────────────────────
   exception: { description: string; fatal: boolean }
 
@@ -646,6 +652,15 @@ export function trackTutorConfused(params: AnalyticsEventMap['tutor_confused']) 
 
 export function trackTutorSession(params: AnalyticsEventMap['tutor_session']) {
   track('tutor_session', params)
+}
+
+/** The daily podcast's events (docs/daily-podcast.md). */
+export function trackPodcastPlay(params: AnalyticsEventMap['podcast_play']) {
+  track('podcast_play', params)
+}
+
+export function trackPodcastComplete(params: AnalyticsEventMap['podcast_complete']) {
+  track('podcast_complete', params)
 }
 
 /**

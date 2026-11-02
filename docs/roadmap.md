@@ -728,12 +728,13 @@ A standing rule: **the app calls no model and holds no key** (see the decision l
 
 ### 4.6 G: Growth, engagement and money
 
-Subplans: `daily-plan-email.md`, `leagues.md`, `seo.md`, `analytics-and-monitoring.md`,
-`store.md`.
+Subplans: `daily-plan-email.md`, `daily-podcast.md`, `leagues.md`, `seo.md`,
+`analytics-and-monitoring.md`, `store.md`.
 
 | ID | Item | Status | Tier | Notes |
 |---|---|---|---|---|
 | G1 | Confirm the daily email sends | 🟢 built; live state unknown | **Now** | Maintainer: Resend, the secrets, the smoke test. Record the outcome in the doc. |
+| G10 | **The daily podcast** (Pro) | 🟢 built 2026-11-02; nothing recorded yet | Now | `daily-podcast.md`. Today's Study Plan read aloud: each concept's definition, two formulas, a few bullets, *The idea* and first exam trap, from its page through the Listen pipeline, with fixed links between (no model). Clips are shared and named by script hash; the browser joins them into one track. Played from the plan card and the email's Listen button; keeps playing across the app and on the lock screen. Kokoro-82M (`af_heart`) records nightly in Actions. Maintainer: apply the bucket migration and run the workflow once. Next: ElevenLabs (D35), a personal intro, an RSS feed. |
 | G2 | SEO outside the repo | ⬜ | Next | A path-preserving `wiki.actuarialnotes.com` redirect (today it sends every path to the home page); submitting the sitemap.  Also `VERCEL_DEEP_CLONE=true` on the Vercel project, so every sitemap entry gets its `lastmod` (a shallow clone dates only the last few commits' pages). |
 | G8 | Search: question pages, real 404s, a dated sitemap | ✅ 2026-10-30 | — | Every served question has a page of its own, `/wiki/question/<id>` (stem, options, parts — the answer behind a click into the quiz; `lib/seoQuestions.ts`); a missing exam, concept, resource or question URL answers 404, not a 200 soft 404; sitemap entries carry `lastmod` from git. See `seo.md`. |
 | G3 | The GA4 admin checklist | ⬜ checked 2026-10-19: steps 1, 2, 5, 6 not done | Next | 8 manual steps in `analytics-and-monitoring.md`. The audit (`analytics-audit-2026-10-19.md`) found history-change page views still on (~47% of page views are duplicates), the Internal Traffic filter in Testing (internal devices are 66% of engagement time), and no custom definitions or key events. Steps 3, 4, 7, 8 can't be read through the API. |
@@ -829,6 +830,7 @@ Where a default is given, sessions build with it until the decision is made.
 | D32 | Does readiness become a **predicted score** (L11) as its headline, or stay syllabus coverage with the forecast beside it | `learning-review.md` §3.1 | L11 | Coverage stays the headline; the forecast is shown beside it, labelled an estimate, until L18's outcomes check it |
 | D33 | A **held-out set** per exam (never served in quizzes; kept for practice exams and the forecast), and its share | `learning-review.md` §3.2 | L12, L11 | No held-out set; build novelty weighting and unseen-first draws only |
 | D34 | Ask readers **how their exam went** (opt-in, private, aggregate use only) | `learning-review.md` §3.8 | L18 | Ask, opt-in, pass / didn't pass / didn't sit / rather not say; no score |
+| D35 | The daily podcast: **when to move to ElevenLabs** (which voice, which model), and whether to build the **private RSS feed** | `daily-podcast.md` | G10 | Kokoro `af_heart` until then; no feed |
 | D31 | Re-run `check-answerable --ids` after a page edit closes an item? | content plan §6 | C20 | ✅ settled 2026-10-30 by the maintainer: **no**; `resolve` proves the item closed in code. A question is re-run only when its own text changes |
 
 ### 6.2 Settled: don't re-open without a new reason
@@ -909,7 +911,7 @@ Every planning document in the repo, what it is for, and how healthy it is. A do
 | `docs/assessment-2026-08-31.md` | A one-off audit | — | **Historical.** Its recommendations are folded in here | 2026-10-05 |
 | `docs/analytics-audit-2026-10-19.md` | A one-off audit: GA4 | G3, G8, G9, L10 | Snapshot; its actions are those rows | 2026-10-19 |
 | `docs/validation-agent-first-run.md` | A first-run record | — | Historical; every item closed | — |
-| `docs/pcpa-project.md`, `quiz-battle.md`, `concept-craft.md`, `store.md`, `workflows.md`, `cowork.md`, `ai-connector.md`, `listen-recordings.md`, `simulated-learner.md`, `daily-plan-email.md`, `leagues.md`, `seo.md`, `analytics-and-monitoring.md` | Feature design docs. Each has a short "next", "not yet" or "deferrals" list | X, A and G rows | Reference | various |
+| `docs/pcpa-project.md`, `quiz-battle.md`, `concept-craft.md`, `store.md`, `workflows.md`, `cowork.md`, `ai-connector.md`, `listen-recordings.md`, `simulated-learner.md`, `daily-plan-email.md`, `daily-podcast.md`, `leagues.md`, `seo.md`, `analytics-and-monitoring.md` | Feature design docs. Each has a short "next", "not yet" or "deferrals" list | X, A and G rows | Reference | various |
 | All other `docs/*.md` | How a module works | — | Reference; no open items | various |
 
 ---
@@ -998,6 +1000,11 @@ ls Concepts/*.md | wc -l; python3 -c "import sys; sys.path.insert(0, 'scripts');
 ```
 
 ## Appendix B: Revision history
+
+- **2026-11-02, the daily podcast (G10).** Today's Study Plan as an episode for Pro readers, read
+  from the concept pages by Kokoro-82M, recorded nightly into a public bucket, played from the
+  plan card and the daily email. Decision D35 opened (ElevenLabs, an RSS feed). `npm run build`
+  now gives Vite a 4 GB heap: the build was already at Node's ~2 GB default.
 
 - **2026-11-01, CI green, L9 done, and the learning review.** CI passes on `main` again (the
   runs after #1733 and #1734); E1 is done but for D14. L9 (written parts count for their

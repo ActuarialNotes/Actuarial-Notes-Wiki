@@ -5,6 +5,9 @@
 //     edge function runs in Deno and can't import from quiz/src, so its helpers
 //     are a verbatim mirror. Here the mirror's own source is cut out of that
 //     file, transpiled and *run* against the same vectors as the original.
+//   • lib/podcast.ts ↔ the same edge function — the episode the email's Listen
+//     button times (podcastSlug, podcastClipKey, planEpisode,
+//     episodeMinutesLabel), run against the vectors lib/podcast.test.ts uses.
 //   • lib/leagues.ts ↔ league_rollover_if_due() in the leagues migration — the
 //     week-end promotion/demotion maths, in SQL. Postgres doesn't run in this
 //     suite (supabase/tests/ does, by hand), so the SQL's constants are read
@@ -25,6 +28,8 @@ import {
   localDateHour,
   type EmailPlanSnapshot,
 } from './dailyEmail'
+import { episodeMinutesLabel, planEpisode, podcastClipKey, podcastSlug } from './podcast'
+import { EPISODE_CLIPS } from './podcast.fixtures'
 import { COHORT_CAP, LEAGUE_TIERS, TOP_TIER_INDEX, demoteCount, promoteCount, zoneForRank } from './leagues'
 
 const REPO = resolve(__dirname, '../../..')
@@ -195,6 +200,49 @@ function libNewTier(rank: number, n: number, tier: number): number {
   const zone = zoneForRank(rank, n, tier)
   return zone === 'promotion' ? tier + 1 : zone === 'demotion' ? tier - 1 : tier
 }
+
+// ── The daily podcast's episode ─────────────────────────────────────────────
+
+interface PodcastMirror {
+  podcastSlug: typeof podcastSlug
+  podcastClipKey: typeof podcastClipKey
+  planEpisode: typeof planEpisode
+  episodeMinutesLabel: typeof episodeMinutesLabel
+}
+
+function loadPodcastMirror(): PodcastMirror {
+  const names = ['podcastSlug', 'podcastClipKey', 'planEpisode', 'episodeMinutesLabel'] as const
+  const body = names.map(n => functionSource(EDGE, n)).join('\n\n')
+  const js = ts.transpileModule(body, { compilerOptions: { target: ts.ScriptTarget.ES2022 } }).outputText
+  return new Function(`${js}\nreturn { ${names.join(', ')} }`)() as PodcastMirror
+}
+
+describe('daily email: the edge function mirrors the podcast episode in lib/podcast.ts', () => {
+  const mirror = loadPodcastMirror()
+  const long: Record<string, { d: number; h: string }> = { ...EPISODE_CLIPS }
+  const names = Array.from({ length: 14 }, (_, i) => `Long ${i}`)
+  for (const n of names) long[podcastClipKey('brief', n)] = { d: 200, h: 'x' }
+
+  const vectors: Array<Parameters<typeof planEpisode>> = [
+    [['A', 'B', 'Missing'], ['D', 'E', 'A'], 'on_track', EPISODE_CLIPS],
+    [['A'], ['D'], 'review_mode', EPISODE_CLIPS],
+    [['Missing'], [], 'on_track', EPISODE_CLIPS],
+    [names, ['D', 'E'], 'behind', long],
+    [["Bayes' Theorem", 'bayes theorem'], [], undefined, { 'brief/bayes-theorem': { d: 50, h: 'b' } }],
+  ]
+
+  it.each(vectors.map((v, i) => [i, v] as const))('vector %i plans the same episode', (_i, v) => {
+    expect(mirror.planEpisode(...v)).toEqual(planEpisode(...v))
+  })
+
+  it('slugs, keys and minutes agree', () => {
+    for (const name of ["Bayes' Theorem", 'Loss Ratio (LR)', '  Odd -- Name  ']) {
+      expect(mirror.podcastSlug(name)).toBe(podcastSlug(name))
+      expect(mirror.podcastClipKey('refresher', name)).toBe(podcastClipKey('refresher', name))
+    }
+    for (const seconds of [1, 59.9, 60, 61, 899]) expect(mirror.episodeMinutesLabel(seconds)).toBe(episodeMinutesLabel(seconds))
+  })
+})
 
 describe('leagues: league_rollover_if_due() mirrors lib/leagues.ts', () => {
   const sql = readSqlRollover()

@@ -1,7 +1,9 @@
+import { lazy, Suspense } from 'react'
 import { useLocation } from 'react-router-dom'
 import { QuizResumeButton } from '@/components/QuizResumeButton'
 import { BattleQueueButton } from '@/components/BattleQueueButton'
 import { useBattleQueueVisible, useFollowBattleMatch, useQuizResumeVisible } from '@/hooks/useResumeDock'
+import { usePodcast } from '@/stores/podcastStore'
 
 /**
  * The bottom-edge dock for what the reader has left running elsewhere: a quiz
@@ -16,13 +18,20 @@ import { useBattleQueueVisible, useFollowBattleMatch, useQuizResumeVisible } fro
  * under it (`paper-chrome-resume` in index.css) — one element carries that
  * name, which is why the two pills share a dock rather than each floating.
  */
+// The podcast's player is fetched the first time an episode is opened, not with
+// the first paint: most visits never play one.
+const PodcastPlayer = lazy(() =>
+  import('@/components/podcast/PodcastPlayer').then(m => ({ default: m.PodcastPlayer })),
+)
+
 export function ResumeDock() {
   const { pathname } = useLocation()
   const quiz = useQuizResumeVisible(pathname)
   const battle = useBattleQueueVisible()
+  const podcast = usePodcast(s => s.episode !== null)
   useFollowBattleMatch()
 
-  if (!quiz && !battle) return null
+  if (!quiz && !battle && !podcast) return null
 
   return (
     <div
@@ -33,6 +42,7 @@ export function ResumeDock() {
     >
       {quiz && <QuizResumeButton />}
       {battle && <BattleQueueButton />}
+      {podcast && <Suspense fallback={null}><PodcastPlayer /></Suspense>}
     </div>
   )
 }

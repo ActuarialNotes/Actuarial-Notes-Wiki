@@ -8,6 +8,8 @@ interface ImportMetaEnv {
    * See docs/listen-recordings.md.
    */
   readonly VITE_LISTEN_BASE_URL?: string
+  /** Where the daily podcast's clips are served from (lib/podcast.ts); `/podcast` serves public/podcast/ in development. */
+  readonly VITE_PODCAST_BASE_URL?: string
   /**
    * Optional error-monitoring collector endpoint. When set, captured errors are
    * beacon-POSTed here (a Sentry tunnel or any custom collector). See
@@ -62,6 +64,13 @@ declare module 'virtual:exam-pages' {
   /** Every root `Exam *.md` syllabus page, keyed by file name. */
   const examPages: Record<string, string>
   export default examPages
+}
+
+declare module 'virtual:podcast-scripts' {
+  import type { PodcastScriptHashes } from '@/lib/podcast'
+  /** Every concept page's podcast script hashes, by slug — see lib/podcast.ts. */
+  const hashes: PodcastScriptHashes
+  export default hashes
 }
 
 declare module 'virtual:store-books' {

@@ -1,4 +1,4 @@
-import { useMemo, useState, useCallback, useEffect, useRef, type ReactNode } from 'react'
+import { lazy, Suspense, useMemo, useState, useCallback, useEffect, useRef, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
 import { ArrowDown, ArrowUp, CalendarDays, CheckCircle2, Circle, Gem, Lock, Pencil, Settings2, X } from 'lucide-react'
@@ -62,6 +62,12 @@ import { useAuth } from '@/hooks/useAuth'
 import { questionExamLabel } from '@/lib/examIds'
 import { daysLeftLabel } from '@/lib/examMenu'
 import { SegmentedControl } from '@/components/ui/SegmentedControl'
+
+// The daily podcast's button and the episode it builds (docs/daily-podcast.md)
+// are their own chunk: the card shouldn't wait on them.
+const PodcastButton = lazy(() =>
+  import('@/components/podcast/PodcastButton').then(m => ({ default: m.PodcastButton })),
+)
 
 
 // ── Study Guide Radial ─────────────────────────────────────────────────────────
@@ -991,6 +997,12 @@ export function ReadinessCard({
                   <span className="ml-auto shrink-0"><StreakNavBadge size="md" /></span>
                 )}
               </div>
+
+              {/* The daily podcast — today's plan, read aloud. Nothing until
+                  an episode exists (docs/daily-podcast.md). */}
+              <Suspense fallback={null}>
+                <PodcastButton plan={plan} examKey={progressKey} examLabel={syllabus.examLabel} />
+              </Suspense>
 
               {/* Progress pills — shown when there's activity today */}
               {todayQuestionsAnswered > 0 && !allConceptsDone && (

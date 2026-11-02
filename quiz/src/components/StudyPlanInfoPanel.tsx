@@ -38,24 +38,6 @@ const LEVELS: { key: string; label: string; desc: string; color: string }[] = [
   },
 ]
 
-export function SpacedRepetitionSlide() {
-  return (
-    <div className="space-y-4">
-      <p className="text-muted-foreground">
-        Instead of cramming, we revisit each concept at growing intervals: short gaps at first, then longer ones as the concept sticks.
-      </p>
-      <div className="flex items-center gap-1.5 flex-wrap">
-        {['Day 1', 'Day 3', 'Day 7', 'Day 14', 'Day 30'].map((d, i, arr) => (
-          <span key={d} className="flex items-center gap-1.5">
-            <span className="text-sm font-medium px-2 py-0.5 rounded-md bg-muted/40">{d}</span>
-            {i < arr.length - 1 && <span className="text-muted-foreground text-sm">›</span>}
-          </span>
-        ))}
-      </div>
-    </div>
-  )
-}
-
 export function ForgettingCurveSlide() {
   return (
     <div className="space-y-4">

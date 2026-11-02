@@ -221,7 +221,7 @@ describe('get_practice_questions', () => {
     const out = (await tool('get_practice_questions', { exam: 'P', count: 10 })).text
     const ids = [...out.matchAll(/id: (p-\d+)/g)].map(m => m[1]).sort()
     expect(ids).toEqual(['p-001', 'p-002', 'p-003', 'p-006'])
-    expect(out).toContain('https://quiz.actuarialnotes.com/quiz?ids=')
+    expect(out).toMatch(/https:\/\/quiz\.actuarialnotes\.com\/quiz\?ids=[^\s]*&utm_source=mcp&utm_medium=ai_connector&utm_campaign=get_practice_questions/)
   })
 
   it('filters by concept, objective, sitting and difficulty, and honours exclude', async () => {
@@ -489,7 +489,7 @@ describe('the calculators — list_tools, describe_tool, run_tool', () => {
     })).text)
     expect(out.values.total_ultimate).toBeCloseTo(1986.65, 1)
     expect(out.input_hash).toMatch(/^sha256:/)
-    expect(out.app_url).toMatch(/^https:\/\/quiz\.actuarialnotes\.com\/tools\/bornhuetter-ferguson#input=/)
+    expect(out.app_url).toMatch(/^https:\/\/quiz\.actuarialnotes\.com\/tools\/bornhuetter-ferguson\?utm_source=mcp&utm_medium=ai_connector&utm_campaign=run_tool#input=/)
     expect(out.trace.length).toBeGreaterThan(0)
     // What it was tested against travels with the result (docs/actuarial-tools.md R6).
     expect(out.tested_against).toContain('Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Chapter 9, Exhibit I, Sheet 1, p. 162')
@@ -513,7 +513,7 @@ describe('the calculators — list_tools, describe_tool, run_tool', () => {
     })).text)
     expect(out.comparison.rows.map((r: { label: string }) => r.label)).toEqual(['Frequency', 'Severity', 'Bad'])
     expect(out.comparison.rows[1].trend).toBeCloseTo(0.06, 10)
-    expect(out.runs[0].app_url).toMatch(/\/tools\/trend-fit#input=/)
+    expect(out.runs[0].app_url).toMatch(/\/tools\/trend-fit\?utm_source=mcp[^#]*#input=/)
     expect(out.runs[0].trace).toBeUndefined()
     expect(out.runs[0].defaulted_judgments).toEqual(['latest', 'seasonal'])
     expect(out.runs[2].error).toMatch(/array of rows/)

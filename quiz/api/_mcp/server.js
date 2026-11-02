@@ -23,6 +23,7 @@
 
 import { ErrorCode, McpError, ResourceNotFoundError } from './protocol.js'
 import { normalizeTerm } from './knowledgeBase.js'
+import { withConnectorSource } from './usage.js'
 import {
   AREAS as TOOL_AREAS,
   TOOLS as CALCULATORS,
@@ -573,7 +574,7 @@ export const TOOLS = [
       const lines = [
         `# Practice set — ${scope} · ${drawn.length} question${drawn.length === 1 ? '' : 's'}`,
         'Answers are hidden. Ask one question at a time, exactly as written, and wait for the student\'s answer. Then call check_answer with the question id and their answer. Don\'t reveal or hint at an answer first.',
-        `Take this set in the Actuarial Notes app (progress is tracked there): ${ix.kb.site}/quiz?ids=${ids.map(encodeURIComponent).join(',')}`,
+        `Take this set in the Actuarial Notes app (progress is tracked there): ${withConnectorSource(`${ix.kb.site}/quiz?ids=${ids.map(encodeURIComponent).join(',')}`, 'get_practice_questions')}`,
         `(${pool.length} questions matched; to draw more without repeats, pass these ids in exclude.)`,
       ]
       drawn.forEach((q, i) => lines.push('', '---', '', `## Question ${i + 1} · id: ${q.id}`, questionPrompt(ix, q)))
@@ -729,7 +730,7 @@ TOOLS.push(
         input_hash: inputHash,
         method: methodRefs(ix, spec.method),
         tested_against: toolSummary(spec).tested_against,
-        app_url: `${site}${runPath(toolSlug(spec), input)}`,
+        app_url: withConnectorSource(`${site}${runPath(toolSlug(spec), input)}`, 'run_tool'),
       }))
     },
   },
@@ -757,7 +758,7 @@ function batch(spec, args, site) {
           warnings: run.warnings,
           defaulted_judgments: run.judgments.filter(j => j.default).map(j => j.field),
           input_hash: run.inputHash,
-          app_url: `${site}${runPath(toolSlug(spec), run.input)}`,
+          app_url: withConnectorSource(`${site}${runPath(toolSlug(spec), run.input)}`, 'run_tool'),
         }
       : { label, error })),
     tested_against: toolSummary(spec).tested_against,

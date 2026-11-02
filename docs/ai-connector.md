@@ -202,6 +202,29 @@ The rate limit is generous on purpose. Claude and ChatGPT reach a connector from
 addresses, so a tight per-address limit would throttle every user of the same assistant at once.
 Use Vercel's firewall for anything stricter.
 
+**Measuring use.** The connector has no accounts, so it counts requests, not people. Two
+signals, both free of personal data:
+
+- **One log line per request.** `quiz/api/mcp.js` writes `{"mcp_usage": {…}}` to the function
+  log for every JSON-RPC request answered (notifications aren't). The event (`usageEvent` in
+  `_mcp/usage.js`) holds the era and protocol version, the method, the tool / prompt name or
+  resource URI, the client's name and version (from `_meta` in the modern era; a legacy client
+  names itself only in its `initialize`), the first product token of its User-Agent
+  (`Claude-User`, `python-httpx` — never the rest of the string), the outcome (`ok`,
+  `tool_error`, `error` with its code) and the time taken. Tool arguments are an allowlist of
+  the ones that say *what* was studied — `exam`, `concept`, `objective`, `topic`, `difficulty`,
+  `sitting`, `type`, `area`, `tool`, `question_id`, `count`, `limit`, and a batch's run count;
+  a search `query` is cut to 80 characters with emails and long numbers blanked, as the app
+  does before GA. A student's answer and a calculator's input never leave the request. No IP
+  address is logged. Read it in Vercel → the `quiz` project → Logs, searching `mcp_usage`
+  (or a log drain, to keep it past Vercel's retention).
+- **Tagged links into the app.** The links the connector hands out — a practice set's
+  `/quiz?ids=…` and a calculator run's `app_url` — carry
+  `utm_source=mcp&utm_medium=ai_connector&utm_campaign=<tool>` (`withConnectorSource`), which
+  `pageLocation` keeps, so GA4's *Session source* shows the visits that came from an assistant.
+  Page URLs given as citations (`search`, `fetch`, `get_concept`) are left untagged: they are the
+  pages' identifiers.
+
 **Testing locally**
 ```bash
 cd quiz && npm run build && npm run mcp:local     # http://localhost:8787/api/mcp
@@ -220,6 +243,8 @@ TypeScript clients in all four modes: `@modelcontextprotocol/sdk` 1.x (legacy, n
 - `lib/mcpServer.test.ts`: every tool, resource and prompt over a fixture built by the real
   exporter; the mirrors below; and a sweep of the real vault (every syllabus, every page, a
   question from every bank).
+- `lib/mcpUsage.test.ts`: the usage event (what it keeps and drops), the link tags, and the
+  transport reporting one event per request in both eras.
 - `lib/mcpEndpoint.test.ts`: the Vercel handler (CORS, origin policy, rate limit, body parsing)
   and the loader (host handling, caching, failure and retry).
 

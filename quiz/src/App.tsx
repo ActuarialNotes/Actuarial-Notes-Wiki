@@ -20,6 +20,7 @@ import PaperRouter from '@/components/PaperRouter'
 import ImageFocus from '@/components/ImageFocus'
 import PdfReaderHost from '@/components/PdfReaderHost'
 import FlashcardSync from '@/components/FlashcardSync'
+import GuestMasterySync from '@/components/GuestMasterySync'
 import AnalyticsTracker from '@/components/AnalyticsTracker'
 import Toast from '@/components/Toast'
 import { ResumeDock } from '@/components/ResumeDock'
@@ -406,6 +407,7 @@ export default function App({ initialSession }: { initialSession: Session | null
       <SoundEffects />
       <AuthProvider initialSession={initialSession}>
         <FlashcardSync />
+        <GuestMasterySync />
         <ExamProgressProvider>
           <AnalyticsTracker />
           <div className="min-h-screen bg-background text-foreground flex">

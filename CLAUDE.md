@@ -1406,6 +1406,13 @@ Other important `lib/` modules:
   local state is unioned into the server **once per device per user** (so guest work
   survives sign-in), and after that the server wins — see `docs/flashcard-collection.md`.
 - `localMasteryStore.ts` / `dailyProgressStore.ts` — localStorage-backed offline fallbacks that sync with Supabase
+- `guestMastery.ts` — **signed-out mastery**: a guest's quizzes fold into a localStorage store
+  (`foldMasteryEvents`, the one fold the signed-in upsert runs too), `useConceptMastery` reads it
+  while signed out, and `components/GuestMasterySync.tsx` merges it into the account on sign-in
+  (`mergeGuestIntoAccount` — an account's own progress is never lowered) and then clears it. A
+  pending guest session marked `guestMasteryRecorded` is not re-applied by
+  `syncPendingSessionToCloud`. Before this, a guest's concepts never got past Level 1 and nothing
+  survived the day. Pure and tested.
 - `github.ts` — fetches wiki content from GitHub raw URLs at runtime (for the live site, vs. the
   build-time bundle). Note that `listRepoContents` hits the GitHub **API**, which is limited to
   60 requests/hour per IP without `VITE_GITHUB_TOKEN` — don't put it on a path that has to work.

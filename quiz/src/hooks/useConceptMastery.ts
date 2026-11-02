@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabase'
 import type { ConceptMasteryRecord } from '@/lib/mastery'
 import { sanitizeMasteryState, decayIfStale } from '@/lib/mastery'
 import { readLocalMastery, syncLocalMastery } from '@/lib/localMasteryStore'
+import { GUEST_MASTERY_EVENT, readGuestMastery } from '@/lib/guestMastery'
 
 export interface UseConceptMasteryResult {
   records: ConceptMasteryRecord[]
@@ -30,7 +31,8 @@ export function useConceptMastery(): UseConceptMasteryResult {
 
   useEffect(() => {
     if (!userId) {
-      setRecords([])
+      // Signed out: the guest mastery store (lib/guestMastery.ts).
+      setRecords(readGuestMastery())
       setLoading(false)
       return
     }
@@ -126,6 +128,13 @@ export function useConceptMastery(): UseConceptMasteryResult {
 
     return () => { cancelled = true }
   }, [userId, version])
+
+  // The guest store changed (a signed-out quiz, or its merge into the account
+  // on sign-in) — re-read.
+  useEffect(() => {
+    window.addEventListener(GUEST_MASTERY_EVENT, refresh)
+    return () => window.removeEventListener(GUEST_MASTERY_EVENT, refresh)
+  }, [refresh])
 
   // Supabase realtime — reflects quiz completions from other devices instantly
   useEffect(() => {

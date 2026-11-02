@@ -3,6 +3,7 @@ import { questionCredit } from '@/lib/parser'
 import type { Question, QuizMode, SelfGrade } from '@/lib/parser'
 import { supabase } from '@/lib/supabase'
 import { applyAnswer, decayIfStale, emptyRecord, sanitizeMasteryState, type ConceptMasteryRecord, type MasteryState } from '@/lib/mastery'
+import { foldMasteryEvents, GUEST_USER_ID, readGuestMastery, writeGuestMastery, type MasteryEvent } from '@/lib/guestMastery'
 import { mergeLocalMastery } from '@/lib/localMasteryStore'
 import { slugForLink } from '@/lib/conceptMatch'
 import { appendTodayLevelUps, addDailyGems, addDailyQuizStats, appendTodayAnsweredIds } from '@/lib/dailyProgressStore'
@@ -148,17 +149,15 @@ function awardXpAndQuests(
   })()
 }
 
-async function upsertMasteryFromResponses(
-  userId: string,
+// A quiz's answers as mastery events, grouped by (exam_id, concept_slug). Within
+// a single quiz a concept may be touched multiple times — they stay in question
+// order so streak/state arithmetic is deterministic.
+function masteryEvents(
   questions: Question[],
   responses: Record<string, { chosen: string }>,
-  fallbackRecords: ConceptMasteryRecord[] = [],
-  manualGrades: Record<string, SelfGrade> = {},
-): Promise<MasteryTransition[]> {
-  // Group answer events by (exam_id, concept_slug). Within a single quiz a
-  // concept may be touched multiple times — fold them in question order so
-  // streak/state arithmetic is deterministic.
-  const events: Array<{ examId: string; conceptSlug: string; isCorrect: boolean; isHard: boolean }> = []
+  manualGrades: Record<string, SelfGrade>,
+): MasteryEvent[] {
+  const events: MasteryEvent[] = []
   for (const q of questions) {
     const examId = EXAM_LABEL_TO_ID[q.exam]
     if (!examId) continue
@@ -170,9 +169,40 @@ async function upsertMasteryFromResponses(
       events.push({ examId, conceptSlug, isCorrect, isHard })
     }
   }
-  if (events.length === 0) return []
+  return events
+}
 
-  const keys = [...new Set(events.map(e => `${e.examId}::${e.conceptSlug}`))]
+// Signed out: fold the quiz into the guest mastery store (lib/guestMastery.ts),
+// starting from what earlier signed-out quizzes left there, so a guest climbs
+// the same ladder a signed-in reader does and keeps it until they sign up.
+function recordGuestMastery(
+  questions: Question[],
+  responses: Record<string, { chosen: string }>,
+  manualGrades: Record<string, SelfGrade>,
+  fallbackRecords: ConceptMasteryRecord[] = [],
+): MasteryTransition[] {
+  const events = masteryEvents(questions, responses, manualGrades)
+  if (events.length === 0) return []
+  // The store is read fresh; the caller's records (the hook's last read of it)
+  // only fill in what the store doesn't hold.
+  const prior = new Map<string, ConceptMasteryRecord>()
+  for (const r of [...fallbackRecords, ...readGuestMastery()]) {
+    prior.set(`${r.exam_id}::${r.concept_slug}`, { ...r, state: sanitizeMasteryState(r.state) })
+  }
+  const { rows, transitions } = foldMasteryEvents(GUEST_USER_ID, events, prior, new Date())
+  writeGuestMastery(rows)
+  return transitions
+}
+
+async function upsertMasteryFromResponses(
+  userId: string,
+  questions: Question[],
+  responses: Record<string, { chosen: string }>,
+  fallbackRecords: ConceptMasteryRecord[] = [],
+  manualGrades: Record<string, SelfGrade> = {},
+): Promise<MasteryTransition[]> {
+  const events = masteryEvents(questions, responses, manualGrades)
+  if (events.length === 0) return []
 
   const { data: existing, error: selectError } = await supabase
     .from('concept_mastery')
@@ -190,58 +220,22 @@ async function upsertMasteryFromResponses(
     console.warn('concept_mastery select failed, using cached records:', selectError.message)
   }
 
-  // Index fallback records for O(1) lookup. These are the hook's last-known
-  // records — potentially stale if a prior quiz in the same session already
-  // advanced the concept — but far better than starting from zero when the
-  // DB SELECT returns nothing.
-  const fallbackByKey = new Map<string, ConceptMasteryRecord>()
+  // Starting records: the fresh DB fetch first (NOT the caller-provided records,
+  // which may be stale if the React hook hasn't re-fetched since a previous quiz
+  // in the same session), then the hook's cached record — which preserves the
+  // real correct_count, where a blank record would write count=1 and keep the
+  // concept from ever reaching Level 2 — and otherwise a blank one (the fold's).
+  const prior = new Map<string, ConceptMasteryRecord>()
   for (const r of fallbackRecords) {
-    fallbackByKey.set(`${r.exam_id}::${r.concept_slug}`, { ...r, state: sanitizeMasteryState(r.state) })
+    prior.set(`${r.exam_id}::${r.concept_slug}`, { ...r, state: sanitizeMasteryState(r.state) })
   }
-
-  const byKey = new Map<string, ConceptMasteryRecord>()
   for (const r of (!selectError && existing ? existing : []) as ConceptMasteryRecord[]) {
-    byKey.set(`${r.exam_id}::${r.concept_slug}`, r)
-  }
-  for (const key of keys) {
-    if (byKey.has(key)) continue
-    // Prefer the hook's cached record over a blank emptyRecord. A cached record
-    // preserves the real correct_count from the last session; emptyRecord resets
-    // it to 0, causing the upsert to write count=1 (new→level1) and permanently
-    // prevent the concept from accumulating the count=2 needed for Level 2.
-    const [examId, ...rest] = key.split('::')
-    const conceptSlug = rest.join('::')
-    byKey.set(key, fallbackByKey.get(key) ?? emptyRecord(userId, examId, conceptSlug))
+    prior.set(`${r.exam_id}::${r.concept_slug}`, r)
   }
 
   const now = new Date()
-  const touchedKeys = new Set(events.map(e => `${e.examId}::${e.conceptSlug}`))
-
-  // Capture the decay-adjusted pre-answer state for each touched concept so
-  // transitions reflect what the user actually experienced (e.g. a level1
-  // concept that decayed to forgotten before this quiz produces from:'forgotten',
-  // not from:'level1'). This must use the fresh DB fetch, NOT caller-provided
-  // priorMasteryRecords which may be stale if the React hook hasn't re-fetched
-  // since a previous quiz in the same session.
-  const preStates = new Map<string, MasteryState>()
-  for (const key of touchedKeys) {
-    preStates.set(key, decayIfStale(byKey.get(key)!, now).state)
-  }
-
-  // Every state each row passes through, so a quiz that forgets a concept and
-  // relearns it logs both steps rather than a net Level 3 → Level 1.
-  const paths = new Map<string, MasteryState[]>()
-  for (const ev of events) {
-    const key = `${ev.examId}::${ev.conceptSlug}`
-    const prev = byKey.get(key)!
-    const next = applyAnswer(prev, { isCorrect: ev.isCorrect, isHard: ev.isHard, at: now })
-    byKey.set(key, next)
-    appendStep(paths, key, preStates.get(key)!, next.state)
-  }
-
-  const rows = [...byKey.entries()]
-    .filter(([key]) => touchedKeys.has(key))
-    .map(([, r]) => ({ ...r, updated_at: now.toISOString() }))
+  const folded = foldMasteryEvents(userId, events, prior, now)
+  const rows = folded.rows.map(r => ({ ...r, updated_at: now.toISOString() }))
 
   // Always persist to localStorage first so mastery state survives even if
   // the Supabase write fails (e.g. table not yet migrated in production).
@@ -252,22 +246,8 @@ async function upsertMasteryFromResponses(
     .upsert(rows, { onConflict: 'user_id,exam_id,concept_slug' })
   if (upsertError) throw new Error(`concept_mastery upsert: ${upsertError.message}`)
 
-  // Return DB-accurate transitions for daily_completions and session summary.
-  const transitions: MasteryTransition[] = []
-  for (const key of touchedKeys) {
-    const fromState = preStates.get(key)!
-    const afterRecord = byKey.get(key)!
-    if (fromState !== afterRecord.state) {
-      transitions.push({
-        conceptSlug: afterRecord.concept_slug,
-        examId: afterRecord.exam_id,
-        from: fromState,
-        to: afterRecord.state,
-        path: paths.get(key),
-      })
-    }
-  }
-  return transitions
+  // DB-accurate transitions for daily_completions and the session summary.
+  return folded.transitions
 }
 
 function appendStep(paths: Map<string, MasteryState[]>, key: string, start: MasteryState, state: MasteryState): void {
@@ -322,6 +302,11 @@ export interface CompletedSession {
   // only written to localStorage and still needs to be persisted to Supabase
   // once the user signs in (see syncPendingSessionToCloud).
   needsCloudSync?: boolean
+  // True when the session's mastery was already folded into the guest mastery
+  // store (lib/guestMastery.ts). That store reaches the account through
+  // GuestMasterySync, so syncPendingSessionToCloud must not apply these answers
+  // to concept_mastery a second time.
+  guestMasteryRecorded?: boolean
 }
 
 export interface QuizStore {
@@ -693,11 +678,11 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
     trackConceptRetention(retentionAnswers(questions, responses, manualGrades), priorMasteryRecords)
 
     if (!userId) {
-      // Unauthenticated: no DB to fetch from, so compute transitions from the
-      // caller-provided priorMasteryRecords (localStorage). Fire the level-up
-      // event so TodayCard reflects progress, then return early.
+      // Unauthenticated: fold the quiz into the guest mastery store, which is
+      // merged into the account on sign-in (components/GuestMasterySync.tsx).
+      // Fire the level-up event so TodayCard reflects progress, then return early.
       const masteryTransitions = collectLevelledConcepts(
-        computeMasteryTransitions(questions, responses, priorMasteryRecords, manualGrades),
+        recordGuestMastery(questions, responses, manualGrades, priorMasteryRecords),
       )
       const upward = masteryTransitions.filter(
         t => t.to === 'level1' || t.to === 'level2' || t.to === 'level3',
@@ -713,6 +698,7 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
         masteryTransitions,
         manualGrades: Object.keys(manualGrades).length > 0 ? manualGrades : undefined,
         needsCloudSync: true,
+        guestMasteryRecorded: true,
       }
       try {
         localStorage.setItem(LAST_SESSION_KEY, JSON.stringify(completedSession))
@@ -864,11 +850,16 @@ export async function syncPendingSessionToCloud(
   const { questions, responses, mode, correctCount, timeTakenSeconds, manualGrades = {} } = session
 
   let masteryTransitions: MasteryTransition[]
-  try {
-    masteryTransitions = await upsertMasteryFromResponses(userId, questions, responses, priorMasteryRecords, manualGrades)
-  } catch (masteryErr) {
-    console.error('concept_mastery upsert failed during pending session sync:', masteryErr)
-    masteryTransitions = computeMasteryTransitions(questions, responses, priorMasteryRecords, manualGrades)
+  if (session.guestMasteryRecorded) {
+    // Already in the guest store, which GuestMasterySync merges into the account.
+    masteryTransitions = session.masteryTransitions ?? []
+  } else {
+    try {
+      masteryTransitions = await upsertMasteryFromResponses(userId, questions, responses, priorMasteryRecords, manualGrades)
+    } catch (masteryErr) {
+      console.error('concept_mastery upsert failed during pending session sync:', masteryErr)
+      masteryTransitions = computeMasteryTransitions(questions, responses, priorMasteryRecords, manualGrades)
+    }
   }
 
   const { error } = await persistSessionToCloud(userId, {
@@ -944,7 +935,7 @@ export async function recordReviewAnswers(
       masteryTransitions = computeMasteryTransitions(answered, responses, priorMasteryRecords, manualGrades)
     }
   } else {
-    masteryTransitions = computeMasteryTransitions(answered, responses, priorMasteryRecords, manualGrades)
+    masteryTransitions = recordGuestMastery(answered, responses, manualGrades, priorMasteryRecords)
   }
   masteryTransitions = collectLevelledConcepts(masteryTransitions)
 

@@ -12,6 +12,7 @@
 import { supabase } from '@/lib/supabase'
 import { EXAM_ID_TO_LABEL } from '@/lib/examIds'
 import { clearLocalMastery } from '@/lib/localMasteryStore'
+import { clearGuestMastery } from '@/lib/guestMastery'
 import { LAST_SESSION_KEY, readLastSession } from '@/stores/quizStore'
 
 function clearLastSessionLocal(examLabel?: string): void {
@@ -72,6 +73,7 @@ export async function resetProgressData(userId: string, examId: string | null): 
   if (progressError) return progressError.message
 
   clearLocalMastery(examId ?? undefined)
+  clearGuestMastery(examId ?? undefined)
   clearLastSessionLocal(examLabel)
   return null
 }

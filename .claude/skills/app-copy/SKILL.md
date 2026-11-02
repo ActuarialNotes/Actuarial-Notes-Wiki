@@ -98,6 +98,17 @@ on one is.
 Each entry: the date, the screen, what the maintainer said, and the rule it
 implies. Newest first.
 
+- 2026-11-02 · Dashboard "?" guide · The old slide was confusing (and its
+  "Day 1 › 3 › 7 › 14 › 30" chain wasn't the app's schedule). Rewritten as five
+  slides: How It Works, Concept Levels, Today's Study Plan, Exam Readiness,
+  Projected Readiness. "Counts how far up the ladder the whole syllabus has
+  got" was unclear; the maintainer picked "adds up your levels across the
+  syllabus, weighted the way the exam weights it. 100% means every concept is at
+  Level 3." Asked to merge the levels and decay slides into one. → Define a
+  number by what 100% means. Explain a mechanism with the app's real figures
+  (30/14/7 days, five a day, ⅓ ⅔ full), read from the code, and say each fact on
+  one slide only.
+
 - 2026-10-31 · Upgrade page · Removed the "Track Learning Progress" card and
   bullet because levels are free now, and the "Fund New Exams and Questions" card
   (the proposal says it read as a donation appeal). Headline is now "Know you're

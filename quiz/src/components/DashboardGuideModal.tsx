@@ -3,10 +3,18 @@ import {
   X,
   ChevronLeft,
   ChevronRight,
-  Repeat,
+  Compass,
+  Layers,
+  CalendarDays,
+  Gauge,
   TrendingUp,
 } from 'lucide-react'
-import { SpacedRepetitionSlide } from '@/components/StudyPlanInfoPanel'
+import {
+  HowItWorksSlide,
+  ConceptLevelsSlide,
+  StudyPlanSlide,
+  ExamReadinessSlide,
+} from '@/components/DashboardGuideSlides'
 import { ReadinessProjectionSlide } from '@/components/HeatmapInfoPanel'
 import type { ConceptMasteryRecord } from '@/lib/mastery'
 import type { StudyPlan } from '@/lib/studyPlan'
@@ -15,9 +23,10 @@ import { useSoundOnToggle } from '@/hooks/useSoundEffects'
 
 // The single place the Dashboard explains itself. The per-card info buttons
 // that used to open their own panels are gone — everything instructional now
-// lives here, behind the "?" icon in the Dashboard header: how spaced
-// repetition paces the plan, and where the plan projects your readiness to
-// land (last, since it's the data-driven payoff of the first).
+// lives here, behind the "?" icon in the Dashboard header: how the app works
+// as a whole, the concept levels, the study plan, the readiness score, and
+// where the plan projects your readiness to land (last, since it's the
+// data-driven payoff of the rest).
 
 interface Props {
   open: boolean
@@ -45,12 +54,15 @@ export function DashboardGuideModal({ open, onClose, syllabus, masteryRecords, e
   // appended only when there is one.
   const slides = useMemo<GuideSlide[]>(() => {
     const list: GuideSlide[] = [
-      { Icon: Repeat, title: 'Spaced repetition', Content: SpacedRepetitionSlide },
+      { Icon: Compass, title: 'How It Works', Content: HowItWorksSlide },
+      { Icon: Layers, title: 'Concept Levels', Content: ConceptLevelsSlide },
+      { Icon: CalendarDays, title: "Today's Study Plan", Content: StudyPlanSlide },
+      { Icon: Gauge, title: 'Exam Readiness', Content: ExamReadinessSlide },
     ]
     if (syllabus) {
       list.push({
         Icon: TrendingUp,
-        title: 'Projected readiness',
+        title: 'Projected Readiness',
         Content: () => (
           <ReadinessProjectionSlide
             syllabus={syllabus}

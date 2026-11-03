@@ -1,12 +1,13 @@
 // The pictures on the Upgrade page.
 //
 // Each benefit is shown as a small, static vignette of the surface it unlocks —
-// the day's plan, the strategy picker, a project attempt, Listen —
+// the day's plan, the strategy picker, today's plan as a quiz, the daily
+// podcast, accuracy analytics, a project attempt, Listen —
 // drawn from the same tokens and marks as the real thing (CheckMark), so what a reader is shown here is what
 // they get after checkout. They are pictures, not controls: every one is
 // `aria-hidden` and carries no handlers; the card beside it says it in words.
 
-import { BookOpen, Car, Circle, FileSpreadsheet, Pause, Sparkles } from 'lucide-react'
+import { ArrowUp, BookOpen, CalendarCheck, Car, Circle, FileSpreadsheet, Headphones, Pause, Sparkles } from 'lucide-react'
 import { CheckMark } from '@/components/CheckMark'
 import { LogoTile } from '@/components/LogoTile'
 import { examAccentStyle } from '@/lib/examColors'
@@ -128,6 +129,108 @@ export function ProjectArt() {
           </div>
           <div className="h-1.5 overflow-hidden rounded-full bg-muted">
             <div className="h-full w-[73%] rounded-full bg-[var(--exam-accent-vivid)]" style={examAccentStyle('CAS-PCPA')} />
+          </div>
+        </div>
+      </div>
+    </ArtFrame>
+  )
+}
+
+/** The quiz builder's source picker, Today's Plan chosen, and its start. */
+export function PlanQuizArt() {
+  return (
+    <ArtFrame>
+      <div className="rounded-md bg-card p-3 shadow-sm space-y-2.5">
+        <div className="grid grid-cols-[1.5fr_1fr_1fr] gap-0.5 rounded-md bg-muted p-0.5 text-[10px]">
+          <div className="flex items-center justify-center gap-1 rounded bg-background px-1.5 py-1 font-medium shadow-sm">
+            <CalendarCheck className="h-3 w-3 shrink-0" />
+            <span className="truncate">Today's Plan</span>
+          </div>
+          <div className="truncate px-1.5 py-1 text-center text-muted-foreground">By Topic</div>
+          <div className="truncate px-1.5 py-1 text-center text-muted-foreground">Past Papers</div>
+        </div>
+        <div className="flex flex-wrap gap-1">
+          {['Bayes Theorem', 'Poisson Distribution', 'Annuity Immediate', 'Loss Development'].map(c => (
+            <span key={c} className="rounded-full bg-muted px-2 py-0.5 text-[10px] text-muted-foreground">{c}</span>
+          ))}
+        </div>
+        <div className="rounded-md bg-foreground py-1.5 text-center text-[11px] font-medium text-background">
+          Start quiz · 8 questions
+        </div>
+      </div>
+    </ArtFrame>
+  )
+}
+
+// Share of answers right per studied day, and how many were answered.
+const ACCURACY_DAYS: { rate: number; answers: number }[] = [
+  { rate: 0.55, answers: 6 }, { rate: 0.6, answers: 10 }, { rate: 0, answers: 0 },
+  { rate: 0.65, answers: 12 }, { rate: 0.7, answers: 8 }, { rate: 0.68, answers: 14 },
+  { rate: 0, answers: 0 }, { rate: 0.75, answers: 9 }, { rate: 0.8, answers: 11 },
+  { rate: 0.78, answers: 7 },
+]
+
+/** The Dashboard's Accuracy card — a rate, its movement, a trend, the weak spot. */
+export function AnalyticsArt() {
+  const max = Math.max(...ACCURACY_DAYS.map(d => d.answers))
+  return (
+    <ArtFrame>
+      <div className="rounded-md bg-card p-3 shadow-sm">
+        <div className="flex items-baseline justify-between">
+          <span className="text-xs font-semibold">Accuracy</span>
+          <span className="text-[10px] text-muted-foreground">Last 30 days</span>
+        </div>
+        <div className="mt-1 flex items-baseline gap-1.5">
+          <span className="text-lg font-bold tabular-nums leading-none">74%</span>
+          <span className="flex items-center text-[10px] font-medium text-green-600 dark:text-green-400">
+            <ArrowUp className="h-3 w-3" />9 pts
+          </span>
+        </div>
+        <div className="mt-2 flex h-10 items-end gap-1">
+          {ACCURACY_DAYS.map((d, i) => (
+            <div key={i} className="flex h-full flex-1 items-end">
+              {d.answers > 0 && (
+                <div
+                  className="w-full rounded-sm bg-primary/70"
+                  style={{ height: `${Math.round((d.answers / max) * d.rate * 100 + 15)}%` }}
+                />
+              )}
+            </div>
+          ))}
+        </div>
+        <div className="mt-2.5 flex items-center justify-between rounded bg-muted/60 px-2 py-1 text-[10px]">
+          <span className="truncate">Weakest: Loss Development</span>
+          <span className="shrink-0 tabular-nums text-muted-foreground">48%</span>
+        </div>
+      </div>
+    </ArtFrame>
+  )
+}
+
+/**
+ * The daily podcast — the plan card's "Listen to today's plan" row
+ * (components/podcast/PodcastButton.tsx), playing, over the concept it's on.
+ */
+export function PodcastArt() {
+  return (
+    <ArtFrame>
+      <div className="rounded-md bg-card p-3 shadow-sm">
+        <div className="flex items-center gap-2.5 rounded-md bg-muted/60 px-2.5 py-2">
+          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">
+            <Headphones className="h-3.5 w-3.5" />
+          </span>
+          <div className="min-w-0 flex-1">
+            <div className="text-[11px] font-medium">Playing today's plan</div>
+            <div className="text-[10px] text-muted-foreground">4 concepts · 11 min</div>
+          </div>
+        </div>
+        <div className="mt-3 space-y-1">
+          <div className="flex justify-between text-[10px] text-muted-foreground">
+            <span className="truncate">Poisson Distribution</span>
+            <span className="shrink-0 tabular-nums">4:12 / 11:03</span>
+          </div>
+          <div className="h-1.5 overflow-hidden rounded-full bg-muted">
+            <div className="h-full w-[38%] rounded-full bg-primary" />
           </div>
         </div>
       </div>

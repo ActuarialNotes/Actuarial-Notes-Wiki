@@ -58,7 +58,8 @@ const WELCOME_DISMISSED_KEY = 'quiz.dashboard.welcomeDismissed'
 // Lazy: it reads the Store's registration tables, which stay out of first paint.
 const RegistrationNudge = lazy(() => import('@/components/RegistrationNudge'))
 // Lazy too: below the fold, and drawn only once there are answers to draw.
-const AccuracyTrendCard = lazy(() => import('@/components/AccuracyTrendCard').then(m => ({ default: m.AccuracyTrendCard })))
+const AnalyticsLocked = lazy(() => import('@/components/analytics/AnalyticsLocked').then(m => ({ default: m.AnalyticsLocked })))
+const AnalyticsSection = lazy(() => import('@/components/analytics/AnalyticsSection').then(m => ({ default: m.AnalyticsSection })))
 
 function WelcomeModal({ onAddExam, onClose }: { onAddExam: () => void; onClose: () => void }) {
   return (
@@ -330,7 +331,8 @@ export default function Dashboard() {
   const activeProgressKey = activeSyllabus ? wikiExamIdToProgressKey(activeSyllabus.examId) : null
   const activeTargetDate = activeProgressKey ? (targetDates[activeProgressKey] ?? null) : null
   const accuracyExam = activeSyllabus ? questionExamLabel(activeSyllabus) : null
-  const { trends: accuracy } = useAccuracyTrend(accuracyExam, allQuestions)
+  // Analytics is Pro: no one else's answers are read for it.
+  const { trends: accuracy, rows: answerRows } = useAccuracyTrend(isPro ? accuracyExam : null, allQuestions)
 
   // Active exams for the Leaderboard tab's exam selector (leagues are per-exam),
   // keyed by exam_progress key so they match what quizStore credits XP to.
@@ -961,10 +963,23 @@ export default function Dashboard() {
         )}
       </div>
 
-      {/* How often this exam's answers are right, over the last 7, 30 or 90 days. */}
-      {!isGuest && accuracyExam && accuracy && accuracy[90].days.length > 0 && (
+      {/* Analytics (Pro): how this exam's practice is going — accuracy, where
+          marks are lost, pacing — over the last 7, 30 or 90 days. */}
+      {!isGuest && !isPro && !subscriptionLoading && activeSyllabus && (
         <Suspense fallback={null}>
-          <AccuracyTrendCard trends={accuracy} examLabel={accuracyExam} questions={allQuestions} />
+          <AnalyticsLocked />
+        </Suspense>
+      )}
+      {!isGuest && isPro && accuracyExam && accuracy && answerRows && activeSyllabus && accuracy[90].days.length > 0 && (
+        <Suspense fallback={null}>
+          <AnalyticsSection
+            trends={accuracy}
+            rows={answerRows}
+            examLabel={accuracyExam}
+            examKey={activeProgressKey}
+            syllabus={activeSyllabus}
+            questions={allQuestions}
+          />
         </Suspense>
       )}
 

@@ -1236,9 +1236,19 @@ Other important `lib/` modules:
   reader's review: the Dashboard's **Accuracy** card (`components/AccuracyTrendCard.tsx`, via
   `hooks/useAccuracyTrend.ts` — one exam's `question_responses` over a 7 / 30 / 90-day span the
   reader picks, every figure on the card covering that one span: the rate against the span before,
-  by difficulty with each count (stepped back under 10 answers), a pooled rolling 7-day line over
-  each day's dot sized by its answers, the weakest topics each starting a quiz on that topic, and a
-  tapped day opening its questions (`components/AccuracyDayDialog.tsx`); signed-in only, lazy), the results screen's score **by difficulty** (shown only once
+  by difficulty with each count (any rate under 10 answers, the headline included, stepped back to
+  grey), a pooled rolling line whose window follows the span (`rollingWindow`: 3 / 7 / 14 days) over
+  each day's dot and a bar of its answers — drawn only once two days are studied — today's misses
+  and the weakest topics each starting a quiz, and a tapped day opening its questions
+  (`components/AccuracyDayDialog.tsx`); signed-in and Pro only, lazy, the first card of the Dashboard's
+  **Analytics** section — a **Pro** feature: anyone else gets `components/analytics/AnalyticsLocked.tsx`
+  (the locked study-plan card's shape, a drawn stand-in, nothing of theirs fetched — the Dashboard
+  passes `useAccuracyTrend` a null exam) — `components/analytics/AnalyticsSection.tsx`, whose
+  header's span picker covers every card; beside it, `lib/performanceAnalytics.ts`: **where you're losing marks**,
+  each syllabus section's misses weighed by its share of the paper (`sectionLeaks`, sections
+  matched through the questions' `wiki_link` concepts), **pacing**, the median time a question
+  or point took against `quizTiming.ts`'s allowance (`pacing`), and the card's **first try vs
+  retry** split (`attempts`, from the ids answered before the fetch window)), the results screen's score **by difficulty** (shown only once
   the quiz is over, like `showMeta`; a perfect quiz on Hard questions says so), and the
   **registration deadline nudge** (`components/RegistrationNudge.tsx`, lazy, on the quiz builder and
   the Dashboard): within 14 days of the deadline `registrationStatus` reads off the transcribed

@@ -4,6 +4,7 @@ import {
   accuracyTrend,
   axisTicks,
   dayQuestions,
+  firstAttempts,
   isThin,
   rollingWindow,
   spanChange,
@@ -204,5 +205,30 @@ describe('todaysMisses', () => {
   it('is empty on a day not studied', () => {
     const t = accuracyTrend([row('h2', '2026-10-30', false)], lookup, TODAY, { dayOf })
     expect(todaysMisses(t, TODAY)).toEqual([])
+  })
+})
+
+describe('first tries and retries', () => {
+  it('splits the span by whether each question had been answered before', () => {
+    const t = accuracyTrend([
+      row('h1', '2026-10-30', false),             // h1, first ever: a miss
+      row('h1', TODAY, true),                     // h1 again: a retry
+      row('e1', TODAY, true),                     // e1, answered before the fetch: a retry
+      row('m1', TODAY, true),                     // m1, first ever
+    ], lookup, TODAY, { dayOf, priorIds: new Set(['e1']) })
+    expect(t.attempts).toEqual({
+      first: { answered: 2, correct: 1 },
+      retry: { answered: 2, correct: 2 },
+    })
+  })
+
+  it('is null without the history before the fetch', () => {
+    expect(accuracyTrend([row('h1', TODAY, true)], lookup, TODAY, { dayOf }).attempts).toBeNull()
+  })
+
+  it('takes the earliest row of a question as its first, whatever order the rows come in', () => {
+    const late = row('h1', TODAY, true)
+    const early = row('h1', '2026-10-01', false)
+    expect([...firstAttempts([late, early], new Set())]).toEqual([early])
   })
 })

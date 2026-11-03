@@ -24,13 +24,19 @@ const MAX_PAGES = 10
 
 export type AccuracyTrends = Record<AccuracySpan, AccuracyTrend>
 
-async function fetchAnswers(uid: string): Promise<AnswerRow[]> {
+interface Fetched {
+  rows: AnswerRow[]
+  /** Questions answered before the fetch begins — null when that read failed or ran past its pages. */
+  priorIds: Set<string> | null
+}
+
+async function fetchAnswers(uid: string): Promise<Fetched> {
   const since = `${addDays(todayISO(), -FETCH_DAYS)}T00:00:00Z`
   const rows: AnswerRow[] = []
   for (let page = 0; page < MAX_PAGES; page++) {
     const { data, error } = await supabase
       .from('question_responses')
-      .select('question_id, is_correct, answered_at')
+      .select('question_id, is_correct, answered_at, time_spent_seconds')
       .eq('user_id', uid)
       .gte('answered_at', since)
       .order('answered_at', { ascending: false })
@@ -39,7 +45,29 @@ async function fetchAnswers(uid: string): Promise<AnswerRow[]> {
     rows.push(...(data as AnswerRow[]))
     if (data.length < PAGE) break
   }
-  return rows
+  return { rows, priorIds: await fetchPriorIds(uid, since) }
+}
+
+/**
+ * Which questions were answered before `since` — only their ids, so a first
+ * try in the window can be told from a retry. Null rather than a partial set:
+ * a set cut short would call retries first tries.
+ */
+async function fetchPriorIds(uid: string, since: string): Promise<Set<string> | null> {
+  const ids = new Set<string>()
+  for (let page = 0; page < MAX_PAGES; page++) {
+    const { data, error } = await supabase
+      .from('question_responses')
+      .select('question_id')
+      .eq('user_id', uid)
+      .lt('answered_at', since)
+      .order('answered_at', { ascending: false })
+      .range(page * PAGE, page * PAGE + PAGE - 1)
+    if (error || !data) return null
+    for (const r of data as { question_id: string }[]) ids.add(r.question_id)
+    if (data.length < PAGE) return ids
+  }
+  return null
 }
 
 /**
@@ -49,22 +77,24 @@ async function fetchAnswers(uid: string): Promise<AnswerRow[]> {
  */
 export function useAccuracyTrend(examLabel: string | null, questions: readonly Question[]): {
   trends: AccuracyTrends | null
+  /** The answers the trends were read from, for the rest of the Analytics section. */
+  rows: AnswerRow[] | null
   loading: boolean
 } {
   const { user } = useAuth()
   const userId = user?.id
-  const [rows, setRows] = useState<AnswerRow[] | null>(null)
+  const [fetched, setFetched] = useState<Fetched | null>(null)
   const [loading, setLoading] = useState(false)
 
   const fetchRows = useCallback((uid: string, isStale: () => boolean = () => false) => {
     fetchAnswers(uid)
-      .then(data => { if (!isStale()) setRows(data) })
-      .catch(() => { if (!isStale()) setRows([]) })
+      .then(data => { if (!isStale()) setFetched(data) })
+      .catch(() => { if (!isStale()) setFetched({ rows: [], priorIds: null }) })
       .finally(() => { if (!isStale()) setLoading(false) })
   }, [])
 
   useEffect(() => {
-    if (!userId) { setRows(null); return }
+    if (!userId) { setFetched(null); return }
     let cancelled = false
     setLoading(true)
     fetchRows(userId, () => cancelled)
@@ -87,12 +117,13 @@ export function useAccuracyTrend(examLabel: string | null, questions: readonly Q
   }, [examLabel, questions])
 
   const trends = useMemo(() => {
-    if (!rows || !examLabel) return null
+    if (!fetched || !examLabel) return null
     const today = todayISO()
     const lookup = (id: string) => factsById.get(id)
+    const priorIds = fetched.priorIds ?? undefined
     const out = {} as AccuracyTrends
-    for (const span of ACCURACY_SPANS) out[span] = accuracyTrend(rows, lookup, today, { span, history: FETCH_DAYS })
+    for (const span of ACCURACY_SPANS) out[span] = accuracyTrend(fetched.rows, lookup, today, { span, history: FETCH_DAYS, priorIds })
     return out
-  }, [rows, examLabel, factsById])
-  return { trends, loading }
+  }, [fetched, examLabel, factsById])
+  return { trends, rows: fetched?.rows ?? null, loading }
 }

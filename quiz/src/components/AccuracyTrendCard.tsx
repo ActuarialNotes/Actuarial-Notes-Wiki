@@ -2,7 +2,6 @@ import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowDown, ArrowUp, ChevronRight, RotateCcw } from 'lucide-react'
 import {
-  ACCURACY_SPANS,
   DIFFICULTY_ORDER,
   MIN_CHART_DAYS,
   accuracyPercent,
@@ -15,30 +14,12 @@ import {
   type AccuracySpan,
   type AccuracyTrend,
 } from '@/lib/accuracyTrend'
-import type { AccuracyTrends } from '@/hooks/useAccuracyTrend'
 import type { Question } from '@/lib/parser'
 import { DIFFICULTY_LABEL } from '@/lib/difficultyBreakdown'
 import { addDays, todayISO } from '@/lib/studyPlan'
 import { monthDay } from '@/lib/registrationNudge'
-import { SegmentedControl } from '@/components/ui/SegmentedControl'
 import { AccuracyDayDialog } from '@/components/AccuracyDayDialog'
 import { cn } from '@/lib/utils'
-
-const SPAN_KEY = 'actuarial_accuracy_span'
-const DEFAULT_SPAN: AccuracySpan = 30
-
-function loadSpan(): AccuracySpan {
-  try {
-    const n = Number(localStorage.getItem(SPAN_KEY))
-    return (ACCURACY_SPANS as readonly number[]).includes(n) ? (n as AccuracySpan) : DEFAULT_SPAN
-  } catch {
-    return DEFAULT_SPAN
-  }
-}
-
-function saveSpan(span: AccuracySpan) {
-  try { localStorage.setItem(SPAN_KEY, String(span)) } catch { /* ignore */ }
-}
 
 /** "Oct 3" — the axis has no room for the month written out. */
 function shortDay(iso: string): string {
@@ -64,16 +45,15 @@ function weekday(iso: string): string {
  * tap with that day's questions; under the chart, today's misses and the
  * weakest topics each start a quiz.
  */
-export function AccuracyTrendCard({ trends, examLabel, questions }: {
-  trends: AccuracyTrends
+export function AccuracyTrendCard({ trend, span, examLabel, questions }: {
+  /** The span the Analytics section picked, read. */
+  trend: AccuracyTrend
+  span: AccuracySpan
   examLabel: string
   questions: readonly Question[]
 }) {
-  const [span, setSpanState] = useState<AccuracySpan>(loadSpan)
-  const setSpan = (s: AccuracySpan) => { setSpanState(s); saveSpan(s) }
-  const [active, setActive] = useState<number | null>(null)
+  const [activeDay, setActiveDay] = useState<string | null>(null)
   const [openDay, setOpenDay] = useState<string | null>(null)
-  const trend: AccuracyTrend = trends[span]
   const today = todayISO()
 
   const headline = accuracyPercent(trend.total)
@@ -100,7 +80,10 @@ export function AccuracyTrendCard({ trends, examLabel, questions }: {
   if (run.length) segments.push(run)
   // A one-point run draws nothing, and the legend shouldn't name what isn't there.
   const lineDrawn = segments.some(r => r.length > 1)
-  const shown = active !== null ? points[active] : null
+  // Keyed by day, so a hover left over from another span points at nothing.
+  const active = activeDay === null ? null : points.findIndex(p => p.day === activeDay)
+  const shown = active !== null && active >= 0 ? points[active] : null
+  const setActive = (i: number | null) => setActiveDay(i === null ? null : points[i].day)
 
   const questionsById = useMemo(() => new Map(questions.map(q => [q.id, q])), [questions])
   const opened = openDay ? trend.days.find(d => d.day === openDay) ?? null : null
@@ -109,18 +92,7 @@ export function AccuracyTrendCard({ trends, examLabel, questions }: {
 
   return (
     <section className="rounded-xl bg-card shadow-sm px-5 pt-5 pb-4" aria-labelledby="accuracy-heading">
-      <div className="flex items-center justify-between gap-3">
-        <h3 id="accuracy-heading" className="text-sm font-semibold text-muted-foreground">Accuracy</h3>
-        <SegmentedControl
-          size="xs"
-          pill
-          label="Period"
-          value={String(span) as `${AccuracySpan}`}
-          onChange={v => { setSpan(Number(v) as AccuracySpan); setActive(null) }}
-          options={ACCURACY_SPANS.map(s => ({ value: String(s) as `${AccuracySpan}`, label: `${s}D`, ariaLabel: `Last ${s} days` }))}
-          className="w-36"
-        />
-      </div>
+      <h3 id="accuracy-heading" className="text-sm font-semibold text-muted-foreground">Accuracy</h3>
 
       <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2">
         <span
@@ -161,6 +133,27 @@ export function AccuracyTrendCard({ trends, examLabel, questions }: {
                 title={pct === null ? `No ${DIFFICULTY_LABEL[d].toLowerCase()} questions answered` : isThin(t) ? `Only ${t.answered} answered — too few to read much into yet` : undefined}
               >
                 <dt className="text-muted-foreground">{DIFFICULTY_LABEL[d]}</dt>{' '}
+                <dd className={cn('font-semibold tabular-nums', (pct === null || isThin(t)) && 'text-muted-foreground')}>
+                  {pct === null ? '—' : `${pct}%`}
+                </dd>
+                {pct !== null && <>{' '}<dd className="text-muted-foreground tabular-nums">of {t.answered}</dd></>}
+              </div>
+            )
+          })}
+        </dl>
+      )}
+
+      {trend.attempts && trend.total.answered > 0 && (
+        <dl
+          className="mt-1 flex flex-wrap gap-x-5 gap-y-1 text-xs"
+          aria-label="By attempt"
+          title="A retry is a question you had answered before. Retries of questions just missed run easier, so the headline mixes two rates."
+        >
+          {([['First try', trend.attempts.first], ['Retry', trend.attempts.retry]] as const).map(([label, t]) => {
+            const pct = accuracyPercent(t)
+            return (
+              <div key={label} className="flex items-baseline gap-1">
+                <dt className="text-muted-foreground">{label}</dt>{' '}
                 <dd className={cn('font-semibold tabular-nums', (pct === null || isThin(t)) && 'text-muted-foreground')}>
                   {pct === null ? '—' : `${pct}%`}
                 </dd>

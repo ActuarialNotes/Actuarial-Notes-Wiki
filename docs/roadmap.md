@@ -439,7 +439,34 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   back to grey, and the chart waits for a second studied day; the line's window follows the span
   (3 / 7 / 14 days); a bar of answers per day replaces the dot sizes; the difficulty split is one
   quiet row; today's misses get a retry link; and the card is the first of a Dashboard
-  **Analytics** section.
+  **Analytics** section. Fourth pass, same day: the section's span picker covers every card, and
+  three readings join the card (`lib/performanceAnalytics.ts`, `components/analytics/`) —
+  **where you're losing marks** (each syllabus section's misses weighed by its share of the paper,
+  each a quiz on the section), **pacing** (median time a question, or a point, against the
+  sitting's allowance from `quizTiming.ts`, by difficulty), and **first try vs retry** on the
+  accuracy card (a question answered before, from a second read of `question_responses` ids
+  before the window). The rest of the section's ideas are L19.
+
+- **L19: the Analytics section, what comes next (proposed 2026-11-03).** Ideas from the Analytics
+  review not yet built, roughly in value order; the first six need no new storage.
+  1. **Stubborn questions** — questions missed two or more times, listed with one retry quiz (S).
+  2. **Practice exam history** — each practice-exam and past-paper session (`quiz_sessions`,
+     `mode = 'mock-exam'`) as a score over time with its time taken (S).
+  3. **Wrong-answer patterns** — questions where the reader keeps choosing the same wrong option
+     (`chosen_answer`); the explanation already speaks to that option, so it links there (M).
+  4. **Study consistency** — a calendar heatmap of answers per day, beside the streak (S).
+  5. **Coverage of the bank** — per topic, the share of its questions ever seen; where the reader
+     has never been tested (S).
+  6. **Mastery health** — concepts due to decay this week and the count already Forgotten, from
+     the ladder, with a revive quiz (S).
+  7. **Readiness over time** — needs a daily snapshot table; readiness keeps no history today (M).
+  8. **Calibration** — "how sure were you?"; needs a confidence tap per answer, which is L2/L3
+     widened in the learning review (M).
+  9. **Accuracy by format** — multiple choice against self-graded written parts, whose grades are
+     kept apart from `question_responses` (M).
+  Two items from the card's review stay open as decisions: whether the **headline** counts first
+  tries only (the split is now shown beside it, so the default is to keep all answers), and a
+  **target line** — reader-set, or a pass mark only where one is published (default: none).
 
 - **P1: make Pro compelling (the offer, not a feature list).** The Upgrade page sells four tools
   and no outcome. The proposal, `docs/pro-proposal.md`, ranks twelve candidates by expected
@@ -561,7 +588,9 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
      (D33).
   3. **L15, a pacing report** (S). `time_spent_seconds` is stored and never shown: time
      against budget per question, the questions over twice their share, points per minute;
-     triage advice; short fluency sets for the SOA's multiple-choice exams.
+     triage advice; short fluency sets for the SOA's multiple-choice exams. *(The median
+     against the budget, overall and by difficulty, is built — the Analytics section's Pacing
+     card, 2026-11-03; the rest stands.)*
   4. **L2 and L3 widened** (M). Confidence tap in the quiz, plus an optional reason on a
      miss (didn't know / misread / slip / time); a slip doesn't push a concept toward
      Forgotten; sure-and-wrong leads relearning.
@@ -1005,6 +1034,10 @@ ls Concepts/*.md | wc -l; python3 -c "import sys; sys.path.insert(0, 'scripts');
 ```
 
 ## Appendix B: Revision history
+
+- **2026-11-03, the Dashboard's Analytics section (L2, L19).** The Accuracy card says how much its
+  numbers rest on and leads a new Analytics section with where marks are lost, pacing against the
+  sitting, and first try vs retry. The section's other ideas are L19 in §3.4.
 
 - **2026-11-02, the daily podcast (G10).** Today's Study Plan as an episode for Pro readers, read
   from the concept pages by Kokoro-82M, recorded nightly into a public bucket, played from the

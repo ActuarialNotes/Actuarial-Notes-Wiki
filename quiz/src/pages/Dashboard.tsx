@@ -58,7 +58,7 @@ const WELCOME_DISMISSED_KEY = 'quiz.dashboard.welcomeDismissed'
 // Lazy: it reads the Store's registration tables, which stay out of first paint.
 const RegistrationNudge = lazy(() => import('@/components/RegistrationNudge'))
 // Lazy too: below the fold, and drawn only once there are answers to draw.
-const AccuracyTrendCard = lazy(() => import('@/components/AccuracyTrendCard').then(m => ({ default: m.AccuracyTrendCard })))
+const AnalyticsSection = lazy(() => import('@/components/analytics/AnalyticsSection').then(m => ({ default: m.AnalyticsSection })))
 
 function WelcomeModal({ onAddExam, onClose }: { onAddExam: () => void; onClose: () => void }) {
   return (
@@ -330,7 +330,7 @@ export default function Dashboard() {
   const activeProgressKey = activeSyllabus ? wikiExamIdToProgressKey(activeSyllabus.examId) : null
   const activeTargetDate = activeProgressKey ? (targetDates[activeProgressKey] ?? null) : null
   const accuracyExam = activeSyllabus ? questionExamLabel(activeSyllabus) : null
-  const { trends: accuracy } = useAccuracyTrend(accuracyExam, allQuestions)
+  const { trends: accuracy, rows: answerRows } = useAccuracyTrend(accuracyExam, allQuestions)
 
   // Active exams for the Leaderboard tab's exam selector (leagues are per-exam),
   // keyed by exam_progress key so they match what quizStore credits XP to.
@@ -961,18 +961,19 @@ export default function Dashboard() {
         )}
       </div>
 
-      {/* Analytics: how this exam's practice is going. Accuracy over the last
-          7, 30 or 90 days is its first card; more performance analysis joins it here. */}
-      {!isGuest && accuracyExam && accuracy && accuracy[90].days.length > 0 && (
-        <section aria-labelledby="analytics-heading" className="space-y-3">
-          <h2 id="analytics-heading" className="flex items-center gap-2 text-lg font-semibold">
-            {activeProgressKey && <ExamLogo examKey={activeProgressKey} size="sm" />}
-            Analytics
-          </h2>
-          <Suspense fallback={null}>
-            <AccuracyTrendCard trends={accuracy} examLabel={accuracyExam} questions={allQuestions} />
-          </Suspense>
-        </section>
+      {/* Analytics: how this exam's practice is going — accuracy, where marks
+          are lost, pacing — over the last 7, 30 or 90 days. */}
+      {!isGuest && accuracyExam && accuracy && answerRows && activeSyllabus && accuracy[90].days.length > 0 && (
+        <Suspense fallback={null}>
+          <AnalyticsSection
+            trends={accuracy}
+            rows={answerRows}
+            examLabel={accuracyExam}
+            examKey={activeProgressKey}
+            syllabus={activeSyllabus}
+            questions={allQuestions}
+          />
+        </Suspense>
       )}
 
       {!isGuest && user && (

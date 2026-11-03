@@ -1,12 +1,12 @@
 // The pictures on the Upgrade page.
 //
 // Each benefit is shown as a small, static vignette of the surface it unlocks —
-// the day's plan, the strategy picker, a project attempt, Listen —
+// the day's plan, the strategy picker, the daily podcast, a project attempt, Listen —
 // drawn from the same tokens and marks as the real thing (CheckMark), so what a reader is shown here is what
 // they get after checkout. They are pictures, not controls: every one is
 // `aria-hidden` and carries no handlers; the card beside it says it in words.
 
-import { BookOpen, Car, Circle, FileSpreadsheet, Pause, Sparkles } from 'lucide-react'
+import { BookOpen, Car, Circle, FileSpreadsheet, Headphones, Pause, Sparkles } from 'lucide-react'
 import { CheckMark } from '@/components/CheckMark'
 import { LogoTile } from '@/components/LogoTile'
 import { examAccentStyle } from '@/lib/examColors'
@@ -128,6 +128,37 @@ export function ProjectArt() {
           </div>
           <div className="h-1.5 overflow-hidden rounded-full bg-muted">
             <div className="h-full w-[73%] rounded-full bg-[var(--exam-accent-vivid)]" style={examAccentStyle('CAS-PCPA')} />
+          </div>
+        </div>
+      </div>
+    </ArtFrame>
+  )
+}
+
+/**
+ * The daily podcast — the plan card's "Listen to today's plan" row
+ * (components/podcast/PodcastButton.tsx), playing, over the concept it's on.
+ */
+export function PodcastArt() {
+  return (
+    <ArtFrame>
+      <div className="rounded-md bg-card p-3 shadow-sm">
+        <div className="flex items-center gap-2.5 rounded-md bg-muted/60 px-2.5 py-2">
+          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">
+            <Headphones className="h-3.5 w-3.5" />
+          </span>
+          <div className="min-w-0 flex-1">
+            <div className="text-[11px] font-medium">Playing today's plan</div>
+            <div className="text-[10px] text-muted-foreground">4 concepts · 11 min</div>
+          </div>
+        </div>
+        <div className="mt-3 space-y-1">
+          <div className="flex justify-between text-[10px] text-muted-foreground">
+            <span className="truncate">Poisson Distribution</span>
+            <span className="shrink-0 tabular-nums">4:12 / 11:03</span>
+          </div>
+          <div className="h-1.5 overflow-hidden rounded-full bg-muted">
+            <div className="h-full w-[38%] rounded-full bg-primary" />
           </div>
         </div>
       </div>

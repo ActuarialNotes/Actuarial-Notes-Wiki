@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { ProBadge } from '@/components/ProBadge'
 import { CheckMark } from '@/components/CheckMark'
-import { ProjectArt, StrategyArt, StudyPlanArt } from '@/components/ProBenefitArt'
+import { PodcastArt, ProjectArt, StrategyArt, StudyPlanArt } from '@/components/ProBenefitArt'
 import { trackUpgradeClicked } from '@/lib/analytics'
 import { cn } from '@/lib/utils'
 
@@ -25,6 +25,7 @@ const HEADLINE_BENEFITS = [
   'A study plan for every day until your exam',
   'Study in syllabus order, or the heaviest topics first',
   'Each day’s list in your inbox, at the time you choose',
+  'Listen to each day’s plan as a short episode',
   'Rehearse the PCPA project from start to finish',
 ]
 
@@ -40,6 +41,11 @@ const BENEFITS: { title: string; body: string; Art: () => React.JSX.Element }[] 
     title: 'Choose a Study Strategy',
     body: 'Work through the syllabus from the first reading, or start with the topics worth the most marks. You can change your mind later in your plan settings.',
     Art: StrategyArt,
+  },
+  {
+    title: 'Listen to Today’s Plan',
+    body: 'Each day’s concepts read aloud as one short episode: the definition, the key formulas and the trap to watch for. Play it from your plan, or from the Listen button in the daily email, and keep going with your phone locked.',
+    Art: PodcastArt,
   },
   {
     title: 'Rehearse the PCPA Project',

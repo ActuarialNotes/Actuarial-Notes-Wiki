@@ -961,11 +961,18 @@ export default function Dashboard() {
         )}
       </div>
 
-      {/* How often this exam's answers are right, over the last 7, 30 or 90 days. */}
+      {/* Analytics: how this exam's practice is going. Accuracy over the last
+          7, 30 or 90 days is its first card; more performance analysis joins it here. */}
       {!isGuest && accuracyExam && accuracy && accuracy[90].days.length > 0 && (
-        <Suspense fallback={null}>
-          <AccuracyTrendCard trends={accuracy} examLabel={accuracyExam} questions={allQuestions} />
-        </Suspense>
+        <section aria-labelledby="analytics-heading" className="space-y-3">
+          <h2 id="analytics-heading" className="flex items-center gap-2 text-lg font-semibold">
+            {activeProgressKey && <ExamLogo examKey={activeProgressKey} size="sm" />}
+            Analytics
+          </h2>
+          <Suspense fallback={null}>
+            <AccuracyTrendCard trends={accuracy} examLabel={accuracyExam} questions={allQuestions} />
+          </Suspense>
+        </section>
       )}
 
       {!isGuest && user && (

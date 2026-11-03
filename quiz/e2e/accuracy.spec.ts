@@ -40,12 +40,39 @@ test('the Dashboard shows accuracy over the span picked, against the span before
   await expect(card).toContainText('70%')
   await expect(card).toContainText('7 of 10 right, last 7 days')
   await expect(card).toContainText('40 pts on the 7 days before')
-  await expect(card).toContainText('Hard · 5')
+  await expect(card).toContainText(/Hard\s*80%\s*of 5/)
+  // A week pools a 3-day line, not a 7-day one that would only repeat the headline.
+  await expect(card).toContainText('3-day average')
   await card.screenshot({ path: 'test-results/accuracy-card-7d.png' })
   await card.getByRole('radio', { name: 'Last 30 days' }).click()
   await card.screenshot({ path: 'test-results/accuracy-card-30d.png' })
   await page.emulateMedia({ colorScheme: 'dark' })
   await card.screenshot({ path: 'test-results/accuracy-card-30d-dark.png' })
+})
+
+test('the Accuracy card sits in the Analytics section', async ({ page }) => {
+  await page.goto('/dashboard')
+  const analytics = page.getByRole('region', { name: 'Analytics' })
+  await expect(analytics).toBeVisible({ timeout: 20_000 })
+  await expect(analytics.getByRole('region', { name: 'Accuracy' })).toBeVisible()
+})
+
+test('one day of practice gets a number and a way back to its misses, not a chart', async ({ page }) => {
+  const rows = answers('2026-10-31', 1, 2, HARD)
+  await page.unroute(`${PLACEHOLDER}/rest/v1/question_responses*`)
+  await page.route(`${PLACEHOLDER}/rest/v1/question_responses*`, route =>
+    route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(rows.map(r => ({ user_id: USER_ID, ...r }))) }))
+  await page.goto('/dashboard')
+  const card = page.getByRole('region', { name: 'Accuracy' })
+  await expect(card).toBeVisible({ timeout: 20_000 })
+  await card.getByRole('radio', { name: 'Last 7 days' }).click()
+  await expect(card).toContainText('1 of 3 right, last 7 days')
+  await expect(card).toContainText('Your trend starts once you')
+  await expect(card).not.toContainText('day average')
+  await expect(card.getByRole('button', { name: /October 31/ })).toHaveCount(0)
+  await card.screenshot({ path: 'test-results/accuracy-card-one-day.png' })
+  await card.getByRole('link', { name: /Try today's 2 misses again/ }).click()
+  await expect(page).toHaveURL(/\/quiz\?ids=fm-004,fm-005$/)
 })
 
 test('the weakest topics each start a quiz on that topic', async ({ page }) => {

@@ -434,7 +434,12 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   `registrationStatus`, lazy). Flows in `e2e/accuracy.spec.ts`. *(Built 2026-10-31.)*
   The card's second pass (2026-11-01): one span for every figure (7 / 30 / 90 days, remembered),
   a pooled rolling 7-day line with each day a dot sized by its answers, each difficulty's count,
-  the weakest topics as quiz links, and a day's questions on a tap.
+  the weakest topics as quiz links, and a day's questions on a tap. Third pass (2026-11-03): it
+  says how much its numbers rest on — a rate under 10 answers, the headline included, is stepped
+  back to grey, and the chart waits for a second studied day; the line's window follows the span
+  (3 / 7 / 14 days); a bar of answers per day replaces the dot sizes; the difficulty split is one
+  quiet row; today's misses get a retry link; and the card is the first of a Dashboard
+  **Analytics** section.
 
 - **P1: make Pro compelling (the offer, not a feature list).** The Upgrade page sells four tools
   and no outcome. The proposal, `docs/pro-proposal.md`, ranks twelve candidates by expected

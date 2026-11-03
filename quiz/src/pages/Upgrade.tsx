@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { ProBadge } from '@/components/ProBadge'
 import { CheckMark } from '@/components/CheckMark'
-import { PodcastArt, ProjectArt, StrategyArt, StudyPlanArt } from '@/components/ProBenefitArt'
+import { AnalyticsArt, PlanQuizArt, PodcastArt, ProjectArt, StrategyArt, StudyPlanArt } from '@/components/ProBenefitArt'
 import { trackUpgradeClicked } from '@/lib/analytics'
 import { cn } from '@/lib/utils'
 
@@ -25,7 +25,9 @@ const HEADLINE_BENEFITS = [
   'A study plan for every day until your exam',
   'Study in syllabus order, or the heaviest topics first',
   'Each day’s list in your inbox, at the time you choose',
+  'Quiz yourself on today’s plan in one tap',
   'Listen to each day’s plan as a short episode',
+  'See how your accuracy is trending, and where you’re weakest',
   'Rehearse the PCPA project from start to finish',
 ]
 
@@ -43,9 +45,19 @@ const BENEFITS: { title: string; body: string; Art: () => React.JSX.Element }[] 
     Art: StrategyArt,
   },
   {
+    title: 'Quiz Today’s Plan',
+    body: 'Pick Today’s Plan on the Quiz tab and the questions come from the concepts you’re meant to study today. One quiz to finish the day, or a few questions whenever you have a minute.',
+    Art: PlanQuizArt,
+  },
+  {
     title: 'Listen to Today’s Plan',
     body: 'Each day’s concepts read aloud as one short episode: the definition, the key formulas and the trap to watch for. Play it from your plan, or from the Listen button in the daily email, and keep going with your phone locked.',
     Art: PodcastArt,
+  },
+  {
+    title: 'Track Your Accuracy',
+    body: 'See how often you get questions right over the last week, month or three months, and whether that’s going up. The topics you miss most are listed first, each one a tap from a quiz on it.',
+    Art: AnalyticsArt,
   },
   {
     title: 'Rehearse the PCPA Project',

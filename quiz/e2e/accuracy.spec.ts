@@ -28,7 +28,8 @@ async function serveAnswers(page: Page, rows: ReturnType<typeof answers>) {
 
 test.beforeEach(async ({ page }) => {
   await page.clock.setFixedTime(new Date('2026-10-31T10:00:00'))
-  await signIn(page, { examProgress: [{ exam_id: 'FM', status: 'in_progress', target_date: '2026-12-03' }] })
+  // Analytics is Pro (e2e/analytics-locked.spec.ts has the free account's view).
+  await signIn(page, { pro: true, examProgress: [{ exam_id: 'FM', status: 'in_progress', target_date: '2026-12-03' }] })
   const rows = [
     ...answers('2026-10-21', 1, 4, EASY),
     ...answers('2026-10-23', 2, 3, HARD),

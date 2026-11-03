@@ -445,7 +445,8 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   each a quiz on the section), **pacing** (median time a question, or a point, against the
   sitting's allowance from `quizTiming.ts`, by difficulty), and **first try vs retry** on the
   accuracy card (a question answered before, from a second read of `question_responses` ids
-  before the window). The rest of the section's ideas are L19.
+  before the window). The rest of the section's ideas are L19. The section is **Pro**: a free
+  account sees it locked (the study plan's locked card), and none of its answers are read.
 
 - **L19: the Analytics section, what comes next (proposed 2026-11-03).** Ideas from the Analytics
   review not yet built, roughly in value order; the first six need no new storage.
@@ -1037,7 +1038,7 @@ ls Concepts/*.md | wc -l; python3 -c "import sys; sys.path.insert(0, 'scripts');
 
 - **2026-11-03, the Dashboard's Analytics section (L2, L19).** The Accuracy card says how much its
   numbers rest on and leads a new Analytics section with where marks are lost, pacing against the
-  sitting, and first try vs retry. The section's other ideas are L19 in §3.4.
+  sitting, and first try vs retry. The section is Pro. Its other ideas are L19 in §3.4.
 
 - **2026-11-02, the daily podcast (G10).** Today's Study Plan as an episode for Pro readers, read
   from the concept pages by Kokoro-82M, recorded nightly into a public bucket, played from the

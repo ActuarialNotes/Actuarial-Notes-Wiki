@@ -73,7 +73,8 @@ async function fetchPriorIds(uid: string, since: string): Promise<Set<string> | 
 /**
  * One exam's accuracy over the last 7, 30 and 90 days, from the answers kept
  * in `question_responses` (`lib/accuracyTrend.ts`). Signed-in only: a guest's
- * answers aren't kept, so there is nothing to draw and `trends` stays null.
+ * answers aren't kept, so there is nothing to draw and `trends` stays null —
+ * as it does, with nothing fetched, while `examLabel` is null.
  */
 export function useAccuracyTrend(examLabel: string | null, questions: readonly Question[]): {
   trends: AccuracyTrends | null
@@ -93,21 +94,25 @@ export function useAccuracyTrend(examLabel: string | null, questions: readonly Q
       .finally(() => { if (!isStale()) setLoading(false) })
   }, [])
 
+  // No exam, no read: the caller passes null for a reader the card isn't for
+  // (Analytics is Pro), and nothing of theirs is fetched.
+  const active = examLabel !== null
+
   useEffect(() => {
-    if (!userId) { setFetched(null); return }
+    if (!userId || !active) { setFetched(null); return }
     let cancelled = false
     setLoading(true)
     fetchRows(userId, () => cancelled)
     return () => { cancelled = true }
-  }, [userId, fetchRows])
+  }, [userId, active, fetchRows])
 
   // A quiz finished on this device lands its answers, then says so.
   useEffect(() => {
-    if (!userId) return
+    if (!userId || !active) return
     const refetch = () => fetchRows(userId)
     window.addEventListener('quiz-session-saved', refetch)
     return () => window.removeEventListener('quiz-session-saved', refetch)
-  }, [userId, fetchRows])
+  }, [userId, active, fetchRows])
 
   const factsById = useMemo(() => {
     const map = new Map<string, QuestionFacts>()

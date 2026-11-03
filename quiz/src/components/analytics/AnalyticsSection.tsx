@@ -7,6 +7,7 @@ import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import { todayISO } from '@/lib/studyPlan'
 import { SegmentedControl } from '@/components/ui/SegmentedControl'
 import { ExamLogo } from '@/components/ExamLogo'
+import { ProBadge } from '@/components/ProBadge'
 import { AccuracyTrendCard } from '@/components/AccuracyTrendCard'
 import { SectionLeaksCard } from './SectionLeaksCard'
 import { PacingCard } from './PacingCard'
@@ -32,8 +33,8 @@ function saveSpan(span: AccuracySpan) {
  * every card over the one span picked in the section's header (7, 30 or 90
  * days, remembered). Accuracy (`lib/accuracyTrend.ts`) leads; under it, where
  * the marks are being lost and how the pace compares with the sitting's
- * (`lib/performanceAnalytics.ts`). Lazy, signed-in only — the answers it reads
- * are kept server-side.
+ * (`lib/performanceAnalytics.ts`). Lazy, signed-in and Pro only — the answers
+ * it reads are kept server-side; anyone else sees `AnalyticsLocked`.
  */
 export function AnalyticsSection({ trends, rows, examLabel, examKey, syllabus, questions }: {
   trends: AccuracyTrends
@@ -62,6 +63,7 @@ export function AnalyticsSection({ trends, rows, examLabel, examKey, syllabus, q
         <h2 id="analytics-heading" className="flex items-center gap-2 text-lg font-semibold">
           {examKey && <ExamLogo examKey={examKey} size="sm" />}
           Analytics
+          <ProBadge />
         </h2>
         <SegmentedControl
           size="xs"

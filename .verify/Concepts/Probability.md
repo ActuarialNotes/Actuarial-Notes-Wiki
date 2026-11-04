@@ -155,3 +155,38 @@ created: 2026-09-27
 - confidence: medium
 - checks_run: diff only (wording pass, 7cfd9bb8): lead split into two sentences, unchanged; idea card |E|/|S| with each outcome 1/|S| = G&S Def 1.3/Thm 1.1, new first sentence → finding (minor); dice/coins and fair-die example reworded, numbers unchanged (3/36, 3/6); tip: bank count 74 unchanged, coin shape grep-checked → finding (minor, p-303 is one shape); traps: 1/11 vs 3/36, 1-(5/6)^4=0.518, 8·6^7/6^8=8/6 recomputed, overcount attribution now explicit (consistent with F-003/R, G&S Thm 1.4 proof); terminology 'probability' kept, no chance/odds
 - sources_checked: Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 set operations and Venn Fig. 1.7, Thm 1.1-1.4 incl. Thm 1.4 proof 'added twice' (pp.21-24, PDF pp.29-32); Infinite Sample Spaces (pp.28-29, PDF pp.36-37), read 2026-11-04, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf
+
+## [F-004/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-11-04T04:27Z/5881
+- date: 2026-11-04
+- resolves: F-004
+- status: resolved
+- note: Fixed in 6914f817: the tip now reads 'such as three fair dice, or three fair coins tossed repeatedly until a success' — one coin shape. Re-checked 2026-11-04 (rank 4, consistency): of the 74 questions/exam-p files tagging Concepts/Probability, the only coin question is p-303 ('tossing three fair coins ... The experiment is repeated until a success occurs'), now described as one item; 'three fair dice' matches p-317 ('Three fair dice are thrown').
+
+## [F-005/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-11-04T04:27Z/5881
+- date: 2026-11-04
+- resolves: F-005
+- status: resolved
+- note: Fixed in 6914f817: the unsourced clause 'Counting the outcomes in an event is easy, but' was dropped; the card opens 'A count of outcomes gives a probability only when every outcome is equally likely.' Re-read 2026-11-04: G&S Def. 1.3 (p.25, PDF p.33) uniform m(ω)=1/n on an n-element Ω, giving P(E)=|E|/n; with unequal masses P(E)=Σ_{ω∈E} m(ω) (Def. 1.2, p.19), so the count ratio holds in the uniform case. The remaining sentence states nothing beyond that.
+
+## [C-006] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-11-04T04:27Z/5881
+- date: 2026-11-04
+- status_set: verified
+- confidence: medium
+- checks_run: Job 1 re-check of F-004/F-005 rewording (6914f817): tip coin shape vs questions/exam-p p-303/p-317 grep; idea-card opening vs G&S Def. 1.2/1.3 (pp.19, 25); rest of page unchanged since pass 2026-11-04T04:24Z/d5ff; source list restored after a diff-only pass replaced it
+- sources_checked: SOA Probability Exam syllabus, November 2026, General Probability learning outcomes a, c-g, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf; Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 Thm 1.1 pp.22-23 (PDF pp.30-31), Def. 1.3 p.25 (PDF p.33), historical remark p.30 (PDF p.38), §4.1 Examples 4.1/4.4 pp.133-135 (PDF pp.141-143), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf; Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 Example 1.10 (p.24, PDF p.32: three coin tosses, eight equally likely paths), Example 1.11 (p.26, PDF p.34: ordered pairs, 36 equally likely outcomes, unordered pairs declined), §3.1 A Counting Technique (p.76, PDF p.84), Example 3.14 (p.107, PDF p.115), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, §2.3 Probability Measures, coin-tossing example (2^n bit strings, equally likely), sha256:381bc53d4a8e0bf0259a5ce1093eb2d759a56e205c38c362ddb3b1a03879c7e6 — https://www.randomservices.org/random/prob/Probability.html; Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 Def. 1.2 distribution function P(E)=Σm(ω) (p.19, PDF p.27), Def. 1.3 uniform m(ω)=1/n (p.25, PDF p.33), Example 1.11 36 ordered pairs (p.26, PDF p.34), Historical Remarks: 36 ordered vs 21 unordered pairs (p.30, PDF p.38); §1.1 Example 1.3 de Méré, at least one six in four rolls 1−(5/6)^4 = .518 (pp.4-5, PDF pp.12-13); Thm 1.1 (p.22, PDF p.30), Thm 1.4 proof (p.24, PDF p.32), read 2026-11-04, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, §2.3 Probability Measures (discrete case: P(A)=#(A)/#(S) for counting measure; general discrete P(A)=Σ_{x∈A} f(x)), fetched 2026-11-04, sha256:381bc53d4a8e0bf0259a5ce1093eb2d759a56e205c38c362ddb3b1a03879c7e6 — https://www.randomservices.org/random/prob/Probability.html; SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 1 General Probability, learning outcomes a-g (PDF p.2; vault Exam P-1 page numbers them 1-7), re-read 2026-11-04, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf; Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 difference A−B (p.21, PDF p.29), Thm 1.4 proof ('added twice') and Cor. 1.1 P(A)=P(A∩B)+P(A∩~B) (p.24, PDF p.32), Historical Remarks: 36 ordered vs 21 unordered pairs (p.30, PDF p.38), read 2026-11-04, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf; Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 set operations and Venn Fig. 1.7, Thm 1.1-1.4 incl. Thm 1.4 proof 'added twice' (pp.21-24, PDF pp.29-32); Infinite Sample Spaces (pp.28-29, PDF pp.36-37), read 2026-11-04, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf
+
+## [C-007] Comment
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-11-04T04:27Z/5881
+- date: 2026-11-04
+- note: Correction to the F-004 resolution and pass of this run: the tagged question reading 'Three fair dice are thrown' is p-332, not p-317 (grep of the 74 questions/exam-p files tagging Concepts/Probability, 2026-11-04). The conclusion is unchanged.

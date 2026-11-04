@@ -85,30 +85,30 @@ No unresolved critical findings.
 
 | Page | Checked | Sources |
 |---|---|---:|
-| `Concepts/Bayes Theorem.md` | 2026-11-04 | 8 |
+| `Concepts/Bayes Theorem.md` | 2026-11-04 | 9 |
 | `Concepts/Benefit Limit.md` | 2026-11-04 | 3 |
-| `Concepts/Calculus.md` | 2026-11-04 | 4 |
-| `Concepts/Combination.md` | 2026-11-04 | 8 |
-| `Concepts/Combinatorics.md` | 2026-11-04 | 10 |
-| `Concepts/Conditional Probability.md` | 2026-11-04 | 9 |
-| `Concepts/Continuous Univariate Distributions.md` | 2026-11-04 | 9 |
+| `Concepts/Calculus.md` | 2026-11-04 | 6 |
+| `Concepts/Combination.md` | 2026-11-04 | 9 |
+| `Concepts/Combinatorics.md` | 2026-11-04 | 11 |
+| `Concepts/Conditional Probability.md` | 2026-11-04 | 10 |
+| `Concepts/Continuous Univariate Distributions.md` | 2026-11-04 | 10 |
 | `Concepts/Deductible.md` | 2026-11-04 | 5 |
 | `Concepts/Discrete Univariate Distributions.md` | 2026-11-04 | 7 |
-| `Concepts/Expected Value.md` | 2026-11-04 | 8 |
-| `Concepts/Hypergeometric Distribution.md` | 2026-11-04 | 8 |
-| `Concepts/Independent Events.md` | 2026-11-04 | 6 |
+| `Concepts/Expected Value.md` | 2026-11-04 | 9 |
+| `Concepts/Hypergeometric Distribution.md` | 2026-11-04 | 9 |
+| `Concepts/Independent Events.md` | 2026-11-04 | 7 |
 | `Concepts/Joint Probability Function.md` | 2026-11-04 | 4 |
 | `Concepts/Multivariate Distribution.md` | 2026-11-04 | 5 |
-| `Concepts/Mutually Exclusive Events.md` | 2026-11-04 | 8 |
+| `Concepts/Mutually Exclusive Events.md` | 2026-11-04 | 9 |
 | `Concepts/Percentile.md` | 2026-11-04 | 13 |
-| `Concepts/Permutation.md` | 2026-11-04 | 7 |
-| `Concepts/Probability Addition Rule.md` | 2026-11-04 | 9 |
-| `Concepts/Probability.md` | 2026-11-04 | 8 |
-| `Concepts/Random Variable.md` | 2026-11-04 | 17 |
-| `Concepts/Sample Space.md` | 2026-11-04 | 7 |
-| `Concepts/Set Theory.md` | 2026-11-04 | 15 |
-| `Concepts/The Law of Total Probability.md` | 2026-11-04 | 7 |
-| `Concepts/Venn Diagram.md` | 2026-11-04 | 11 |
+| `Concepts/Permutation.md` | 2026-11-04 | 8 |
+| `Concepts/Probability Addition Rule.md` | 2026-11-04 | 10 |
+| `Concepts/Probability.md` | 2026-11-04 | 9 |
+| `Concepts/Random Variable.md` | 2026-11-04 | 18 |
+| `Concepts/Sample Space.md` | 2026-11-04 | 8 |
+| `Concepts/Set Theory.md` | 2026-11-04 | 16 |
+| `Concepts/The Law of Total Probability.md` | 2026-11-04 | 9 |
+| `Concepts/Venn Diagram.md` | 2026-11-04 | 12 |
 | `Exam 5 (CAS).md` | 2026-10-31 | 2 |
 
 ---

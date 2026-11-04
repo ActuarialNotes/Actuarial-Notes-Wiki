@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:124d760db5ad297ccf6a089e946879418a441a4727a91700aa6e3fd185ddd5fd
+  content_hash: sha256:b8003a44ed97d64db9d84877c89ea6347ac6f1e84f2b1903f30ab153d06ccfda
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Thm 1.1 property 4 pp.22-23 (PDF pp.30-31), Thm 1.4 p.24 (PDF p.32), Thm 3.8 Inclusion-Exclusion Principle p.104 (PDF p.112), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "SOA Exam P Sample Solutions (Aug 2026 revision), Q1 and Q3 p.2, sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"
@@ -17,13 +17,17 @@ verification:
 ---
 
 The **Probability Addition Rule** gives the probability that at least one of two events $A$ or $B$ occurs, correcting for the double-counting of outcomes in their intersection.
+
+> $$P(A \cup B) = P(A) + P(B) - P(A \cap B)$$
+
 - Also known as the Inclusion-Exclusion Principle
 - When events are [[Mutually Exclusive Events|mutually exclusive]], $P(A \cap B) = 0$ and the rule reduces to simple addition
 - For three events the rule extends to include all pairwise and triple intersections:
 
-> $$P(A \cup B) = P(A) + P(B) - P(A \cap B)$$
-
 > $$P(A \cup B \cup C) = P(A)+P(B)+P(C) - P(A \cap B) - P(A \cap C) - P(B \cap C) + P(A \cap B \cap C)$$
+
+> [!idea] The idea
+> Adding $P(A)$ and $P(B)$ counts every outcome in both events twice, so the overlap is subtracted once. With three events, the triple overlap is added three times by the single events and removed three times by the pairs, so it has to be added back once; and the bigger the overlap, the smaller the union.
 
 ![[Media/Figures/Probability_Addition_Rule.svg|340]]
 
@@ -73,3 +77,16 @@ The **Probability Addition Rule** gives the probability that at least one of two
 > > Let $F$ = fire and $L$ = flood. Applying the addition rule:
 > > $$P(F \cup L) = P(F) + P(L) - P(F \cap L) = 0.05 + 0.03 - 0.01 = 0.07$$
 > > There is a 7% probability of experiencing at least one loss in the year.
+
+> [!tip]- How it appears on the exam
+> - **Exam P** (General Probability, objective 5): the page is tagged on 25 Exam P questions in the bank, most of them two- or three-event problems.
+> - Two events, with the givens in complement form ("no fillings", "no root canals", "at least one"): recover $P(A \cap B)$ or $P(A \cup B)$ and answer for the asked region.
+> - "Exactly one" of two events, often with the events independent so the overlap is a product.
+> - Three events mixing independent and mutually exclusive pairs, or giving "at least one" and "exactly two" totals, with one event's probability to solve for.
+> - The overlap not given: state the range of values a probability can take, from the bounds on $P(A \cap B)$.
+
+> [!warning]- Exam traps
+> - **Independent read as mutually exclusive.** Independent events overlap: $P(A \cap B) = P(A)\,P(B)$, not $0$. With fire $0.2$ and theft $0.3$ independent, $P(\text{at least one}) = 0.2 + 0.3 - 0.06 = 0.44$, not $0.5$.
+> - **The triple term left off.** Stopping after the pairwise subtractions undercounts the union by $P(A \cap B \cap C)$.
+> - **Union given for "exactly one".** Subtracting the overlap once gives at least one; "exactly one" subtracts it twice. An answer equal to $P(A \cup B)$ is the sign.
+> - **One value when a range is asked.** Without $P(A \cap B)$, assuming independence produces a single number; the question wants the interval the bounds allow.

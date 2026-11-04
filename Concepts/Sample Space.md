@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:0ebe422c8bc4252e67838dab633cae3bcc12f1b3307ef793943f7af4bd9cd5f4
+  content_hash: sha256:0fe2283b2fbebb11c6566d05fdf23500919317e82eb2533b980cc4a50faaa64e
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 sample space (p.18, PDF p.26), Example 1.9 (p.20, PDF p.28), Infinite Sample Spaces (p.28, PDF p.36), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.3.1 Random Experiments (outcome, sample space, event), fetched 2026-09-28, sha256:5ab5af0abfbf56905a0a023eb3242ae9749a17af50a5ff8581a6c69030ce29ad — https://www.probabilitycourse.com/chapter1/1_3_1_random_experiments.php"
@@ -15,15 +15,17 @@ verification:
   log: .verify/Concepts/Sample Space.md
 ---
 
-A **Sample Space** $S$ (or $\Omega$) is the set of all possible outcomes of a random experiment.
+A **Sample Space** $S$ (or $\Omega$) is the set of all possible outcomes of a random experiment. When $S$ is finite or countably infinite, its outcomes can be listed in sequence:
+
+> $$S = \{\omega_1, \omega_2, \ldots\}$$
+
+- where each $\omega_i$ is an elementary outcome of the experiment
 - Every conceivable result of the experiment appears as exactly one element of $S$
 - Outcomes in $S$ must be mutually exclusive (no two can occur simultaneously) and collectively exhaustive (together they cover every possibility)
 - The sample space can be finite, countably infinite, or uncountably infinite depending on the experiment
-- When $S$ is finite or countably infinite, its outcomes can be listed in sequence:
 
-> $$S = \{\omega_1, \omega_2, \ldots\}$$
->
-> $$\text{where each } \omega_i = \text{an elementary outcome of the experiment}$$
+> [!idea] The idea
+> Writing the sample space down first fixes what "every possibility" means. Because its outcomes don't overlap and miss nothing, their probabilities add to 1 and an [[Event]]'s probability is the sum over the outcomes it contains; most counting errors trace back to a sample space whose outcomes overlap, leave a case out, or aren't equally likely.
 
 ![[Media/Figures/Sample_Space.svg|340]]
 
@@ -52,3 +54,12 @@ A **Sample Space** $S$ (or $\Omega$) is the set of all possible outcomes of a ra
 > > There are three mutually exclusive, exhaustive outcomes:
 > > $$S = \{\text{No Claim},\; \text{Small Claim},\; \text{Large Claim}\}$$
 > > Each outcome is distinct, they cannot co-occur, and every possible result of the experiment is represented.
+
+> [!tip]- How it appears on the exam
+> - **Exam P** (General Probability, objective 1: define sample space and events): rarely asked on its own — one question in the bank is tagged with this page, and it asks which events, described in words over a two-year policy, match a set expression.
+> - More often it is the first step of a counting question: list the ordered outcomes of dice, coins or a two-stage choice, then count the favourable ones.
+
+> [!warning]- Exam traps
+> - **Unordered outcomes treated as equally likely.** Two dice have 21 unordered results but 36 equally likely ordered ones; dividing by 21 gives wrong probabilities because $\{1, 2\}$ happens two ways and $\{1, 1\}$ only one.
+> - **Outcomes that overlap.** $\{\text{Claim}, \text{Large Claim}, \text{No Claim}\}$ is not a sample space: a large claim is also a claim, so the probabilities add to more than 1. Split into outcomes that cannot co-occur.
+> - **$n_1 \times n_2$ without the "for each".** Drawing two different digits from 0–9 gives $10 \times 9 = 90$ ordered outcomes, not $100$; the second stage has fewer choices because the first digit can't repeat.

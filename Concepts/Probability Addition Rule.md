@@ -4,7 +4,7 @@ verification:
   confidence: high
   last_checked: 2026-11-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:b8003a44ed97d64db9d84877c89ea6347ac6f1e84f2b1903f30ab153d06ccfda
+  content_hash: sha256:2a59482c3e42649cb82b5c3fc50fbc3838eb46616fabc469e270a224704ad11e
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Thm 1.1 property 4 pp.22-23 (PDF pp.30-31), Thm 1.4 p.24 (PDF p.32), Thm 3.8 Inclusion-Exclusion Principle p.104 (PDF p.112), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "SOA Exam P Sample Solutions (Aug 2026 revision), Q1 and Q3 p.2, sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"
@@ -15,6 +15,7 @@ verification:
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.3.3 Finding Probabilities (P(A−B)=P(A)−P(A∩B); either but not both = P(A−B)+P(B−A)), fetched 2026-11-04, sha256:63d80d6b505c6ee80359645000bca6d4788ae1c97446662a77dd6deb07c7e946 — https://www.probabilitycourse.com/chapter1/1_3_3_finding_probabilities.php"
     - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, §2.3 Probability Measures (Bonferroni's inequality / two-event bounds), fetched 2026-11-04, sha256:381bc53d4a8e0bf0259a5ce1093eb2d759a56e205c38c362ddb3b1a03879c7e6 — https://www.randomservices.org/random/prob/Probability.html"
     - "SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 1 General Probability, learning outcomes a-g (PDF p.2; vault Exam P-1 page numbers them 1-7), re-read 2026-11-04, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 set operations and Venn Fig. 1.7, Thm 1.1-1.4 incl. Thm 1.4 proof 'added twice' (pp.21-24, PDF pp.29-32); Infinite Sample Spaces (pp.28-29, PDF pp.36-37), read 2026-11-04, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Probability Addition Rule.md
@@ -26,12 +27,13 @@ The **Probability Addition Rule** gives the probability that at least one of two
 
 - Also known as the Inclusion-Exclusion Principle
 - When events are [[Mutually Exclusive Events|mutually exclusive]], $P(A \cap B) = 0$ and the rule reduces to simple addition
+- The larger the overlap $P(A \cap B)$, the smaller the union $P(A \cup B)$.
 - For three events the rule extends to include all pairwise and triple intersections:
 
 > $$P(A \cup B \cup C) = P(A)+P(B)+P(C) - P(A \cap B) - P(A \cap C) - P(B \cap C) + P(A \cap B \cap C)$$
 
 > [!idea] The idea
-> Adding $P(A)$ and $P(B)$ counts every outcome in both events twice, so the overlap is subtracted once. With three events, the triple overlap is added three times by the single events and removed three times by the pairs, so it has to be added back once; and the bigger the overlap, the smaller the union.
+> Adding $P(A)$ and $P(B)$ counts every outcome in both events twice. The addition rule subtracts the overlap once, so each outcome in $A \cup B$ is counted exactly once. With three events, the single events add the triple overlap three times and the pairs subtract it three times. The rule therefore adds it back once.
 
 ![[Media/Figures/Probability_Addition_Rule.svg|340]]
 
@@ -58,11 +60,11 @@ The **Probability Addition Rule** gives the probability that at least one of two
 
 ### When the overlap is not given
 
-- If $P(A \cap B)$ is not given, it is only bounded: $A \cap B$ lies inside both events, and $P(A \cup B) \leq 1$ forces $P(A \cap B) \geq P(A) + P(B) - 1$.
+- If $P(A \cap B)$ is not given, it is only bounded. $A \cap B$ lies inside both events, so $P(A \cap B)$ is at most the smaller of $P(A)$ and $P(B)$. Since $P(A \cup B) \leq 1$, the addition rule forces $P(A \cap B) \geq P(A) + P(B) - 1$.
 
 > $$\max(0,\ P(A) + P(B) - 1) \leq P(A \cap B) \leq \min(P(A),\ P(B))$$
 
-- So $P(A \cup B)$ ranges from $\max(P(A), P(B))$, when one event contains the other, up to $\min(1, P(A) + P(B))$, and $P(\text{neither}) = 1 - P(A \cup B)$ ranges accordingly.
+- So $P(A \cup B)$ ranges from $\max(P(A), P(B))$, when one event contains the other, up to $\min(1, P(A) + P(B))$. The probability $P(\text{neither}) = 1 - P(A \cup B)$ ranges accordingly.
 
 > [!example]- Only, Exactly One, and Bounds {Example}
 > (a) $P(A) = 0.5$, $P(B) = 0.4$ and $P(A \cap B) = 0.15$. Find the probability that exactly one of $A$, $B$ occurs. (b) If instead only $P(A) = 0.5$ and $P(B) = 0.7$ are known, what values can $P(A \cup B)$ take?
@@ -72,7 +74,7 @@ The **Probability Addition Rule** gives the probability that at least one of two
 > > $$P(\text{exactly one}) = 0.35 + 0.25 = 0.60$$
 > > Check: $P(A \cup B) = 0.5 + 0.4 - 0.15 = 0.75$, and $0.75 - 0.15 = 0.60$.
 > >
-> > (b) $P(A \cap B)$ lies between $0.5 + 0.7 - 1 = 0.2$ and $\min(0.5, 0.7) = 0.5$, so $P(A \cup B) = 1.2 - P(A \cap B)$ lies between $0.7$ and $1$, and $P(\text{neither})$ between $0$ and $0.3$.
+> > (b) $P(A \cap B)$ lies between $0.5 + 0.7 - 1 = 0.2$ and $\min(0.5, 0.7) = 0.5$. So $P(A \cup B) = 1.2 - P(A \cap B)$ lies between $0.7$ and $1$, and $P(\text{neither})$ lies between $0$ and $0.3$.
 
 > [!example]- Probability of at Least One Coverage Trigger {Example}
 > For a commercial policy, the probability of a fire loss is 0.05, a flood loss is 0.03, and both losses in the same year is 0.01. What is the probability of at least one loss?
@@ -83,14 +85,14 @@ The **Probability Addition Rule** gives the probability that at least one of two
 > > There is a 7% probability of experiencing at least one loss in the year.
 
 > [!tip]- How it appears on the exam
-> - **Exam P** (General Probability, objective 5): the page is tagged on 25 Exam P questions in the bank, most of them two- or three-event problems.
-> - Two events, with the givens in complement form ("no fillings", "no root canals", "at least one"): recover $P(A \cap B)$ or $P(A \cup B)$ and answer for the asked region.
-> - "Exactly one" of two events, often with the events independent so the overlap is a product.
-> - Three events mixing independent and mutually exclusive pairs, or giving "at least one" and "exactly two" totals, with one event's probability to solve for.
-> - The overlap not given: state the range of values a probability can take, from the bounds on $P(A \cap B)$.
+> - **Exam P** (General Probability, objective 5): the page is tagged on 25 Exam P questions in the bank. Most of them are two- or three-event problems.
+> - Two events are given in complement form, such as "no fillings", "no root canals" or "at least one". The task is to recover $P(A \cap B)$ or $P(A \cup B)$ and answer for the asked region.
+> - Questions ask for "exactly one" of two events. The events are often independent, so the overlap is a product.
+> - Some questions give three events that mix independent and mutually exclusive pairs, or give "at least one" and "exactly two" totals. The task is to solve for one event's probability.
+> - When the overlap is not given, the task is to state the range of values a probability can take, from the bounds on $P(A \cap B)$.
 
 > [!warning]- Exam traps
 > - **Independent read as mutually exclusive.** Independent events overlap: $P(A \cap B) = P(A)\,P(B)$, not $0$. With fire $0.2$ and theft $0.3$ independent, $P(\text{at least one}) = 0.2 + 0.3 - 0.06 = 0.44$, not $0.5$.
 > - **The triple term left off.** Stopping after the pairwise subtractions undercounts the union by $P(A \cap B \cap C)$.
-> - **Union given for "exactly one".** Subtracting the overlap once gives at least one; "exactly one" subtracts it twice. An answer equal to $P(A \cup B)$ is the sign.
-> - **One value when a range is asked.** Without $P(A \cap B)$, assuming independence produces a single number; the question wants the interval the bounds allow.
+> - **Union given for "exactly one".** Subtracting the overlap once gives at least one. "Exactly one" subtracts it twice. An answer equal to $P(A \cup B)$ is the sign.
+> - **One value when a range is asked.** Without $P(A \cap B)$, assuming independence produces a single number. The question wants the interval the bounds allow.

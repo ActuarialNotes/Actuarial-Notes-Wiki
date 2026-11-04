@@ -45,6 +45,54 @@ back to the principle.
    block, every symbol defined, nothing a reader has to decode. Pages are read
    on phones. Median page length is ~750 words; a long page needs a reason.
 
+## How every sentence is written
+
+These rules hold for every sentence on the page — the definition, the bullets,
+the idea card, the examples' answers and the closing sections. They come from
+the maintainer's review of the first restructured pages (2026-11-04), where
+accurate content still read as disjointed.
+
+- **Keep the terminology.** Use the terms the definition and the syllabus use
+  — *probability*, *hypothesis*, *prior*, *posterior*, *evidence*,
+  *deductible*, *insured* — and never swap one for a plainer synonym or a term
+  of your own ("explanation" for *hypothesis*, "chance" for *probability*,
+  "save" for *reduce the expected payment*). Plain words go around the terms,
+  never in place of them.
+- **One idea per sentence, one main clause.** No semicolons joining two
+  thoughts, no dash-asides (`— a count, a payment —`) and no trailing
+  "and makes …" clause. Split it into two sentences instead.
+- **Name the concept as the subject** ("A random variable assigns …",
+  "Bayes' theorem reverses …"), rather than leaving the reader to infer what
+  the sentence is about.
+- **Problem first, then the concept.** Where a passage explains, open with the
+  plain difficulty or question, then say how the concept answers it.
+- **Concrete before abstract.** An example a reader can picture (two dice, a
+  loss below the deductible) before the general statement. No jargon the page
+  hasn't already introduced.
+- **Connect the sentences.** Each sentence follows from the one before it. A
+  sentence that starts a new topic belongs in a bullet of its own, not in the
+  same paragraph.
+
+Before (disjointed: three ideas, asides, jargon, the concept never named):
+
+> Outcomes such as "heads then tails" or "the policyholder dies in year 3"
+> cannot be added or averaged; the numbers attached to them — a count, a
+> payment — can. Turning each outcome into a number lets one CDF on the real
+> line answer every probability question about that variable, and makes means
+> and variances sums or integrals over that line. The same sample space carries
+> many random variables: …
+
+After:
+
+> You can't average "heads" and "tails", but you can average numbers. A random
+> variable assigns a number to each outcome, such as the number of claims or
+> the size of a payment, so that probabilities, means and variances can be
+> calculated.
+
+**Section headings are allowed.** A page may keep `##` / `###` sections below
+its opening (the maintainer finds them more readable); the order below governs
+the opening and the closing sections.
+
 ## The shape of every page
 
 ```markdown
@@ -142,8 +190,9 @@ rather than memorised. Required on every new page and on every page you
 restructure. The app draws it as a violet card in the shape of a question's
 Examiner's report (`components/MarkdownCallout.tsx`), always open.
 
-- **1–3 sentences, plain words.** No new symbols; the reader has just seen the
-  formula. A short concrete number is welcome ("if 40% has been reported, BF
+- **1–3 sentences, plain words around the page's own terms** (see "How every
+  sentence is written"). One idea: the problem, then how the concept solves
+  it. No new symbols; the reader has just seen the formula. A short concrete number is welcome ("if 40% has been reported, BF
   adds 60% of the *expected* losses to what's in").
 - **Say why, not what.** It must not restate the definition. Good ideas name
   one of: the problem the concept solves, the trade-off it makes, why each
@@ -330,6 +379,7 @@ example; give such a page its idea card and closing sections when you touch it.
 
 **Teaching**
 - [ ] Definition: 1–2 precise sentences, jargon linked, main symbol introduced
+- [ ] Every sentence: the page's own terms (no synonyms), one main clause, no semicolons or dash-asides, the concept named as the subject
 - [ ] `> [!idea] The idea` present, after the bullets: 1–3 plain sentences that say *why*, not *what*; passes the rebuild-or-predict test
 - [ ] At least one contrast with the nearest neighbour (a bullet or an example), where the concept has one
 - [ ] Examples chosen as a set: a direct application, then a contrast, twist or failure case

@@ -4,7 +4,7 @@ verification:
   confidence: high
   last_checked: 2026-11-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:f623c7264f5ced0b23916f8fd2696c7b01230d2f40053c14533cc24f04b5d5f3
+  content_hash: sha256:0f0d11e667238821281971ccff7cf94f7adb7179e5803ead66d5d3dd01517e96
   sources:
     - "SOA Exam P Sample Solutions (Aug 2026 rev.), Q137 (PDF p.40), Q181 (PDF p.54), Q61 (PDF p.21), sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"
     - "SOA Exam P Sample Questions (Aug 2026 rev.), Q137 (questions PDF p.59), Q181 (questions PDF pp.77-78), sha256:e47245963f7d2c1c4f8cc5ff1baf2090542d923ac47cbeb27d1f657ac51bf5f0 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-questions.pdf"
@@ -32,19 +32,20 @@ The **Percentile** (or quantile) $x_p$ of a [[Random Variable]] $X$ is the small
 
 > $$x_p = F^{-1}(p)$$
 
-- Here $p \in (0, 1)$; the $100p$-th percentile is the quantile of order $p$.
+- Here $p \in (0, 1)$. The $100p$-th percentile is the quantile of order $p$.
 - The 50th percentile ($p = 0.5$) is the [[Median|median]].
-- Where $F$ jumps past $p$ — a [[Discrete Random Variable|discrete]] variable, or a [[Payment Random Variable|payment]] with a probability mass at 0 — no $x$ solves $F(x) = p$; the percentile is the value at which the CDF first reaches or passes $p$. For a [[Poisson Distribution|Poisson]] with mean 3, $F(3) = 0.647$ and $F(4) = 0.815$, so its 75th percentile is 4.
+- Where $F$ jumps past $p$, as for a [[Discrete Random Variable|discrete]] variable or a [[Payment Random Variable|payment]] with a probability mass at 0, no $x$ solves $F(x) = p$; the percentile is the value at which the CDF first reaches or passes $p$. For a [[Poisson Distribution|Poisson]] with mean 3, $F(3) = 0.647$ and $F(4) = 0.815$, so its 75th percentile is 4.
 - Percentiles describe tail behavior and underlie actuarial risk measures such as Value at Risk (VaR), the loss level a portfolio will not exceed with probability $p$.
+- An increasing transformation carries percentiles straight through, which the mean does only for linear transformations. A lognormal percentile, for example, is $e$ raised to the matching normal percentile.
 
 > [!idea] The idea
-> A percentile is the CDF read backwards: instead of asking how likely a loss below $x$ is, it asks below what loss a proportion $p$ falls. Only the order of the values matters, so an increasing transformation carries percentiles straight through — a percentile of $2X$ is twice the percentile of $X$, and a lognormal percentile is $e$ raised to the matching normal percentile — something the mean does only for linear transformations.
+> The CDF gives the probability that a loss is below a given amount. A percentile reverses the question: it gives the amount below which a given proportion of losses fall. Only the order of the losses matters, so doubling every loss doubles every percentile.
 
 ![[Media/Figures/Percentile.svg|340]]
 
 ### Percentiles of transformed and conditional losses
 
-Percentiles move with increasing transformations: if $Y = g(X)$ with $g$ continuous and increasing, then $y_p = g(x_p)$. For $Y = a + bX$ with $b > 0$:
+Percentiles move with increasing transformations. If $Y = g(X)$ with $g$ continuous and increasing, then $y_p = g(x_p)$. For $Y = a + bX$ with $b > 0$:
 
 > $$y_p = a + b\,x_p$$
 
@@ -53,12 +54,12 @@ Percentiles move with increasing transformations: if $Y = g(X)$ with $g$ continu
 
 > $$P(X \leq x \mid X > d) = \frac{F(x) - F(d)}{1 - F(d)}$$
 
-- Setting it equal to $p$: the $100p$-th percentile $k$ of $X$ given $X > d$ solves $P(X > k) = (1 - p)\,P(X > d)$, that is
+- Setting the conditional CDF equal to $p$ shows that the $100p$-th percentile $k$ of $X$ given $X > d$ solves $P(X > k) = (1 - p)\,P(X > d)$, that is
 
 > $$F(k) = 1 - (1 - p)\,[1 - F(d)]$$
 
-- Since $F(k) = p + (1 - p)\,F(d) \geq p$, the conditional percentile is at least the unconditional one, $F^{-1}(p)$, and larger whenever $F(d) > 0$ and $F$ is strictly increasing: conditioning removes the losses below $d$, which shifts percentiles upward.
-- Equivalently, it is $d$ plus the $100p$-th percentile of the excess $X - d$ given $X > d$: compute the percentile of the excess amount and add $d$ back to get the percentile of the loss.
+- Since $F(k) = p + (1 - p)\,F(d) \geq p$, the conditional percentile is at least the unconditional one, $F^{-1}(p)$. It is larger whenever $F(d) > 0$ and $F$ is strictly increasing. Conditioning removes the losses below $d$, so the percentiles shift upward.
+- Equivalently, the conditional percentile is $d$ plus the $100p$-th percentile of the excess $X - d$ given $X > d$: compute the percentile of the excess amount and add $d$ back to get the percentile of the loss.
 
 > [!example]- Percentile of the Losses Above a Deductible {Example}
 > Losses are uniform on $[0, 1{,}000]$ and a deductible of $200$ applies. Find the 75th percentile of the losses that exceed the deductible, and compare it with the 75th percentile of all losses.
@@ -72,7 +73,7 @@ Percentiles move with increasing transformations: if $Y = g(X)$ with $g$ continu
 > > k &= 800
 > > \end{align*}
 > > $$
-> > Check through the excess: given $X > 200$, the excess $X - 200$ is uniform on $[0, 800]$, whose 75th percentile is $600$; adding the deductible back gives $800$. The 75th percentile of all losses is only $750$, because conditioning dropped the losses below $200$.
+> > Check the answer through the excess. Given $X > 200$, the excess $X - 200$ is uniform on $[0, 800]$, and its 75th percentile is $600$. Adding the deductible back gives $800$. The 75th percentile of all losses is only $750$, because conditioning dropped the losses below $200$.
 
 > [!example]- 90th Percentile of an Exponential Distribution {Example}
 > Claim sizes follow an [[Exponential Distribution]] with CDF $F(x) = 1 - e^{-x/10}$ for $x \geq 0$. Find the 90th percentile.
@@ -88,7 +89,7 @@ Percentiles move with increasing transformations: if $Y = g(X)$ with $g$ continu
 > > [!answer]-
 > > The 95th percentile of the standard normal is $z_{0.95} = 1.645$. Transform back with $\sigma = 15$:
 > > $$\begin{align*} x_{0.95} &= \mu + z_{0.95}\,\sigma \\ &= 100 + 1.645(15) \\ &= 124.68 \end{align*}$$
-> > There is a 95% chance the annual loss is below 124.68.
+> > The probability that the annual loss is below 124.68 is 0.95.
 
 > [!example]- Percentiles of a Payment Under a Deductible {Example}
 > Losses $X$ are exponential with mean \$5,000, and a policy pays $Y = (X - 1{,}000)_+$. Find the 10th and 90th percentiles of $Y$.
@@ -108,12 +109,12 @@ Percentiles move with increasing transformations: if $Y = g(X)$ with $g$ continu
 > > Every percentile with $p \le 0.1813$ is 0; above that, the continuous rule applies.
 
 > [!tip]- How it appears on the exam
-> - **Exam P** (Univariate Random Variables, objective 3): the median or a percentile of a named distribution (exponential, uniform, normal) or of a given density; or the reverse — a median or percentile is given, and it fixes a parameter used for something else. Differences and ratios of percentiles (an interquartile range) and the percentile of losses above a deductible also appear.
-> - **MAS-I**: percentile matching — set fitted percentiles equal to smoothed empirical ones to estimate parameters — and percentiles of order statistics and of fitted loss distributions.
+> - **Exam P** (Univariate Random Variables, objective 3): find the median or a percentile of a named distribution (exponential, uniform, normal) or of a given density. The reverse also appears, where a given median or percentile fixes a parameter used for something else. Questions also ask for differences and ratios of percentiles (an interquartile range) and for the percentile of losses above a deductible.
+> - **MAS-I**: percentile matching estimates parameters by setting fitted percentiles equal to smoothed empirical ones. Percentiles of order statistics and of fitted loss distributions also appear.
 > - **FAM**: a percentile of a present value random variable or of a count of survivors (by the normal approximation). **MAS-II**: posterior intervals read from percentiles of a posterior distribution.
 > - **Exam 7** and **Exam 9**: a confidence interval for a reserve from an approximating distribution (Mack's lognormal), and Value at Risk as a percentile of the loss distribution.
 
 > [!warning]- Exam traps
-> - **A decreasing transformation flips $p$.** If $Y = g(X)$ with $g$ decreasing — the present value of a death benefit falls as the time of death rises — then $y_p = g(x_{1-p})$. The 95th percentile of the present value comes from the 5th percentile of the lifetime; using the 95th gives one of the smallest values instead of one of the largest.
+> - **A decreasing transformation flips $p$.** If $Y = g(X)$ with $g$ decreasing, then $y_p = g(x_{1-p})$. The present value of a death benefit is such a transformation, since it falls as the time of death rises. The 95th percentile of the present value comes from the 5th percentile of the lifetime; using the 95th gives one of the smallest values instead of one of the largest.
 > - **The mean is not the median.** For a right-skewed loss the median is below the mean: an exponential with mean $\theta$ has median $\theta \ln 2 \approx 0.693\,\theta$. Setting the median equal to $\theta$ gives the wrong parameter.
-> - **Percentiles don't add.** For independent normal losses the means add but the standard deviations do not, so the 95th percentile of a total is $\mu_{\text{total}} + 1.645\sqrt{\sum \sigma_i^2}$, below the sum of the individual 95th percentiles.
+> - **Percentiles don't add.** For independent normal losses the means add but the standard deviations do not. The 95th percentile of a total is therefore $\mu_{\text{total}} + 1.645\sqrt{\sum \sigma_i^2}$, which is below the sum of the individual 95th percentiles.

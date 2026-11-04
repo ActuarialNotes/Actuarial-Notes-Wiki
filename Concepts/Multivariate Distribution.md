@@ -4,7 +4,7 @@ verification:
   confidence: high
   last_checked: 2026-11-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:4fa045eda59a40fd4a6cb3955d2b8fdbefc7491f40ee012073820acabe4a7852
+  content_hash: sha256:0c2c55bdb2c61b3ad91074660840cc1af45b142e568bccfb6fa24b4966b85536
   sources:
     - "Orloff & Bloom, MIT OCW 18.05 (Spring 2022), Reading 7b: Covariance and Correlation, Property 6 and Warning: the converse is false (p.1); Example 2, Cov = 0 with Y = X^2 but not independent (p.3); covariance measures the linear relationship (p.4), sha256:71f8a7b5f3b2233de2e8722ec1372f5704195efc2a6fb72c50c8ef505f92c4dc — https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_class07-prep-b.pdf"
     - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, Joint Distributions, joint distribution carries more information than the marginals; converse holds if X and Y are independent; independent => joint density = product of marginal densities, sha256:2192ffa7b60a3d5e969c74398a7c539483ce8d4e484febd66b251b19897f1f98 — https://www.randomservices.org/random/dist/Joint.html"
@@ -18,24 +18,25 @@ verification:
 
 A **multivariate distribution** describes the joint probabilistic behavior of two or more [[Random Variable]]s. For random variables $X_1, X_2, \ldots, X_n$, the joint distribution is characterized by the [[Joint Probability Function]] (discrete) or joint density function (continuous).
 
-- **[[Marginal Probability Function]]s**: distributions of individual variables after integrating/summing out the others
-- **[[Conditional Probability Function]]s**: distributions of one variable given fixed values of the others
+- **[[Marginal Probability Function]]s**: the distribution of each variable on its own, found by integrating or summing out the others
+- **[[Conditional Probability Function]]s**: the distribution of one variable given fixed values of the others
 - **[[Covariance]] and [[Correlation Coefficient]]**: measures of linear dependence between pairs of variables
 - If all variables are [[Independent Random Variables]], the joint distribution factors as the product of the marginals
+- Only under independence do the marginals rebuild the joint distribution, by multiplying
 
 > [!idea] The idea
-> The marginals alone cannot say how the variables move together: the example's marginals ($0.5/0.5$ and $0.4/0.6$) fit a dependent pair and an independent one equally well. So the joint distribution is the full description, and marginals, conditionals and covariance are read off it — the marginals rebuild the joint only under independence, by multiplying.
+> Knowing how each variable behaves on its own does not tell you how the variables move together. The marginals in the example below ($0.5/0.5$ and $0.4/0.6$) fit a dependent pair and an independent pair equally well. A multivariate distribution gives the joint probability of every combination of values, so the marginals, the conditionals and the covariance can all be read off it.
 
 ![[Media/Figures/Multivariate_Distribution.svg|340]]
 
 ### The multinomial distribution
 
-When each of $n$ independent trials falls into exactly one of $k$ categories with fixed probabilities $p_1, \ldots, p_k$ (summing to 1), the category counts $(N_1, \ldots, N_k)$ have a **multinomial distribution** (a trinomial for $k = 3$), the multivariate extension of the [[Binomial Distribution|binomial]]:
+When each of $n$ independent trials falls into exactly one of $k$ categories with fixed probabilities $p_1, \ldots, p_k$ (summing to 1), the category counts $(N_1, \ldots, N_k)$ have a **multinomial distribution** (a trinomial for $k = 3$). The multinomial distribution is the multivariate extension of the [[Binomial Distribution|binomial]], with joint probability function:
 
 > $$P(N_1 = n_1, \ldots, N_k = n_k) = \frac{n!}{n_1! \cdots n_k!}\,p_1^{n_1} \cdots p_k^{n_k}$$
 
-- where $n_1 + \cdots + n_k = n$;
-- the multinomial coefficient $n!/(n_1! \cdots n_k!)$ counts the orders in which those counts can occur, and each order has probability $p_1^{n_1} \cdots p_k^{n_k}$.
+- where $n_1 + \cdots + n_k = n$
+- The multinomial coefficient $n!/(n_1! \cdots n_k!)$ counts the orders in which those counts can occur. Each order has probability $p_1^{n_1} \cdots p_k^{n_k}$.
 
 > [!example]- Joint vs. Marginal Distribution {Example}
 > $X$ and $Y$ each take values $\{0, 1\}$ with joint PMF: $P(0,0)=0.1$, $P(0,1)=0.4$, $P(1,0)=0.3$, $P(1,1)=0.2$.
@@ -46,11 +47,11 @@ When each of $n$ independent trials falls into exactly one of $k$ categories wit
 > > Since $P(0,0) = 0.1 \neq P(X=0)P(Y=0) = 0.20$, $X$ and $Y$ are not independent.
 
 > [!tip]- How it appears on the exam
-> - **Exam P** (Multivariate Random Variables, 23–30%): a joint distribution given as a table, a PMF formula or a joint density with an unknown constant; find the constant, a marginal or conditional distribution, a probability over a region, or a [[Covariance|covariance]], and decide whether the variables are [[Independent Random Variables|independent]].
+> - **Exam P** (Multivariate Random Variables, 23–30%): a joint distribution is given as a table, a PMF formula or a joint density with an unknown constant. The question asks for the constant, a marginal or conditional distribution, a probability over a region, or a [[Covariance|covariance]], or asks whether the variables are [[Independent Random Variables|independent]].
 > - **Exam P** counting shapes: multinomial counts (drivers in three risk classes, claims of several types), and the multivariate [[Hypergeometric Distribution|hypergeometric]] when items are drawn without replacement from a fixed group.
 > - **Exam 9** (ERM questions moved from Exam 7): the dependence between two lines' losses described by a copula, compared with independence.
 
 > [!warning]- Exam traps
-> - **Zero covariance read as independence.** Independence gives zero covariance, but not the reverse: covariance measures only the linear relationship. Show the joint equals the product of the marginals everywhere before treating the variables as independent.
+> - **Zero covariance read as independence.** Independence gives zero covariance, but zero covariance does not give independence, because covariance measures only the linear relationship. Show that the joint distribution equals the product of the marginals everywhere before treating the variables as independent.
 > - **A triangular support integrated as a square.** For a density on $0 < x < y < 1$ the inner limits depend on the outer variable. With $f(x,y) = cx$, integrating over the triangle gives $c = 6$; integrating over the unit square gives the wrong $c = 2$. A support that isn't a rectangle also means the variables cannot be independent.
-> - **Multinomial for draws without replacement.** The multinomial needs independent trials with fixed probabilities. Drawing claims one after another from a fixed group changes the probabilities after each draw, so the counts are hypergeometric — a product of binomial coefficients over the number of ways to choose the whole sample — not multinomial with each category's share as $p_i$.
+> - **Multinomial for draws without replacement.** The multinomial needs independent trials with fixed probabilities. Drawing claims one after another from a fixed group changes the probabilities after each draw, so the counts are hypergeometric, not multinomial with each category's share as $p_i$. The hypergeometric probability is a product of binomial coefficients divided by the number of ways to choose the whole sample.

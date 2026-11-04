@@ -4,7 +4,7 @@ verification:
   confidence: high
   last_checked: 2026-11-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:4079892b8aaa5d01958297ba9154ac4121fd05c15d02fe39d47cd292412c7e5c
+  content_hash: sha256:f053b9a5905e40664ab2e0a04cee29edcb1fa3192196f891e42738e9052e98e1
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Thm 1.1 properties 4-5 (pp.22-23, PDF pp.30-31), Thm 1.2 (p.23, PDF p.31), Thm 1.4 (p.24, PDF p.32), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.2.2 Set Operations (difference, disjoint sets, partition), fetched 2026-09-28, sha256:f8c7bf7ece0a23a177de9f1eeff3631122625cb461fde905f05d4fa468ad03ba — https://www.probabilitycourse.com/chapter1/1_2_2_set_operations.php"
@@ -14,6 +14,7 @@ verification:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Thm 1.1 properties 4-5 (pp.22-23, PDF pp.30-31), Thm 1.2 and Thm 1.3 (p.23, PDF p.31); §4.1 Def. 4.1 (p.139, PDF p.147) and Thm 4.1 independence iff P(E∩F)=P(E)P(F) (p.140, PDF p.148), read 2026-11-04, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.2.2 Set Operations (mutually exclusive / disjoint sets; partitions), fetched 2026-11-04, sha256:4025d5e8caa7de295a64d919f3cfc5b2f48996971272f227a574e5e7c4c5f9fd — https://www.probabilitycourse.com/chapter1/1_2_2_set_operations.php"
     - "SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 1 General Probability, learning outcomes a-g (PDF p.2; vault Exam P-1 page numbers them 1-7), re-read 2026-11-04, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 set operations and Venn Fig. 1.7, Thm 1.1-1.4 incl. Thm 1.4 proof 'added twice' (pp.21-24, PDF pp.29-32); Infinite Sample Spaces (pp.28-29, PDF pp.36-37), read 2026-11-04, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Mutually Exclusive Events.md
@@ -25,10 +26,11 @@ Two events $A$ and $B$ are **Mutually Exclusive** (disjoint) if they cannot both
 
 - For mutually exclusive events, the [[Probability Addition Rule]] simplifies to $P(A \cup B) = P(A) + P(B)$
 - The addition rule simplification extends to any finite collection: if $A_1, A_2, \ldots, A_n$ are pairwise mutually exclusive, then $P\!\left(\bigcup_{i=1}^n A_i\right) = \sum_{i=1}^n P(A_i)$
-- Compared with [[Independent Events|independence]]: two mutually exclusive events that each have positive probability are never independent, because $P(A \cap B) = 0$ while $P(A)\,P(B) > 0$.
+- Mutually exclusive events are not the same as [[Independent Events|independent]] events. Two mutually exclusive events that each have positive probability are never independent, because $P(A \cap B) = 0$ while $P(A)\,P(B) > 0$.
+- When outcomes are split into classes that are mutually exclusive and cover every case, any one class's probability is 1 minus the probabilities of the others.
 
 > [!idea] The idea
-> Disjoint events have no overlap to double count, so their probabilities simply add. That is why splitting an outcome into classes that are mutually exclusive and cover every case is so useful: any one class's probability is 1 minus the others.
+> Adding the probabilities of two events usually counts their overlap twice. Mutually exclusive events have no overlap to double count, so their probabilities simply add.
 
 ![[Media/Figures/Mutually_Exclusive_Events.svg|340]]
 
@@ -52,11 +54,11 @@ Two events $A$ and $B$ are **Mutually Exclusive** (disjoint) if they cannot both
 
 > [!tip]- How it appears on the exam
 > - **Exam P** (General Probability, objective 4): the page is tagged on 8 Exam P questions in the bank.
-> - Three events where one pair, or two pairs, are mutually exclusive, so some intersections in the three-event addition rule vanish; often another pair is independent in the same question.
-> - Classifications into exactly one category (cancer stages, claim types, call lengths), given probabilities of combined categories; solve for a single category.
-> - Events defined in words over several periods (thefts per year, two groups of policyholders), where the task is to see which events cannot occur together.
+> - Three events are given where one pair, or two pairs, are mutually exclusive, so some intersections in the three-event addition rule vanish. Often another pair in the same question is independent.
+> - Each item is classified into exactly one category, such as cancer stages, claim types or call lengths. Given the probabilities of combined categories, the task is to solve for a single category.
+> - Events are defined in words, such as thefts per year over several periods or two groups of policyholders. The task is to see which events cannot occur together.
 
 > [!warning]- Exam traps
-> - **Mutually exclusive taken for independent.** If $A$ and $C$ are mutually exclusive, $P(A \cap C) = 0$, not $P(A)\,P(C)$; multiplying puts a positive overlap into the addition rule and understates the union.
-> - **Adding probabilities of events that overlap.** Calls lasting 2–4 minutes and calls lasting 3–5 minutes share the 3–4 minute range, so their percentages can't be added; break them into disjoint intervals first.
-> - **Exclusive but not exhaustive.** "1 minus the rest" gives a category's probability only when the classes also cover every outcome; if they don't, the remainder includes outcomes in none of the listed classes.
+> - **Mutually exclusive taken for independent.** If $A$ and $C$ are mutually exclusive, $P(A \cap C) = 0$, not $P(A)\,P(C)$. Multiplying puts a positive overlap into the addition rule and understates the union.
+> - **Adding probabilities of events that overlap.** Calls lasting 2–4 minutes and calls lasting 3–5 minutes share the 3–4 minute range, so their percentages can't be added. Break them into disjoint intervals first.
+> - **Exclusive but not exhaustive.** "1 minus the rest" gives a category's probability only when the classes also cover every outcome. If they don't, the remainder includes outcomes in none of the listed classes.

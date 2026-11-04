@@ -565,6 +565,14 @@ readable, 2026-11-04); the standard's order applies to the opening and the closi
    count in *How it appears* is checked against the bank by grep, as consistency, not truth.
 3. **One PR per exam, the edit and its fact check together.** Every edit makes the page `stale`,
    which turns a ready exam's G4 red until the pass lands.
+4. **Write to the sentence rules** in the skill's *How every sentence is written*: the page's own
+   terms (*probability*, never "chance"; *hypothesis*, never "explanation"), one main clause per
+   sentence, the concept named as the subject, the problem before the concept. They apply to
+   every sentence a batch may change; a quoted sentence that breaks them stays as it is.
+5. **A pass carries the page's whole source list.** `verify_record.py pass` replaces the
+   frontmatter `sources:`; a diff-only pass that cites only what it read that session drops every
+   earlier citation (it happened to 13 pages on 2026-11-04 and was restored the same day). Cite
+   the earlier list as well as the new sources.
 
 **Done — Exam P, the worst 24 (2026-11-04).** *Bayes Theorem, Benefit Limit, Calculus,
 Combination, Combinatorics, Conditional Probability, Continuous Univariate Distributions,
@@ -579,6 +587,15 @@ what a CDF describes) were reworded and re-checked. Two nits stay open by rule 1
 sentence on each of *Discrete* and *Continuous Univariate Distributions* ends in a colon that
 now introduces nothing. **Cost:** about 30k tokens a page to write and 30k to check, ~1.5M for
 the batch; the four groups ran in parallel in under 15 minutes each way.
+
+**Done — the same 24, rewritten to the sentence rules (2026-11-04).** The maintainer found the
+first batch accurate but hard to read: idea cards with three unconnected ideas, dash-asides, plain
+synonyms for defined terms. Six idea cards were drafted and approved, the rules went into the
+skill, and four writers applied them to every changeable sentence on the 24 pages (the approved
+cards verbatim). Diff-only re-checks (runs `d5ff`, `62e6`, `cee2`, `40e5`) found no fact changed;
+three new minor findings on reworded sentences were fixed and re-checked. Sentences the
+answerability record quotes were left as they are even where they break a rule, and *Deductible*
+now says "insured" where its quoted definition says "policyholder".
 
 **Next, in order:** the other 49 Exam P pages (no headings to keep; they need the opening order
 checked and the three sections), FM (~90 pages), the 14 broken pages (a full write and a first

@@ -240,6 +240,10 @@ python3 scripts/verify_record.py resolution <path> --resolves F-001 \
   --run-id "$RUN_ID" --note "Corrected in this PR; recomputation now reproduces 0.62."
 ```
 
+**`pass` replaces the page's `sources:` list.** On a diff-only re-pass, cite the page's
+earlier sources (its current `verification:` block) as well as what you read this session,
+or every earlier citation drops out of the frontmatter.
+
 Write an `evidence:` a reviewer can check without redoing your work: what the
 source says, where in it, and what the numbers do. "Verified against the PDF" is
 not evidence. And every file you open gets a record — a clean pass is a

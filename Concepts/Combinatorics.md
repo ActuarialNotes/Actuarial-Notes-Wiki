@@ -4,7 +4,7 @@ verification:
   confidence: high
   last_checked: 2026-11-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:afb50d38e79b008f6bbacaec06f3abeb04c4d9048ae9767154f9f5a55a2dedd1
+  content_hash: sha256:3078d23dcf7024785a503f63eac61e6428f0ce198959b715eec169957d011f50
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Def. 1.3 p.25 (PDF p.33); §3.1 Def. 3.2, Thms 3.1-3.2 p.80 (PDF p.88); §3.2 Thm 3.5 and n!/(j!(n-j)!) pp.94-95 (PDF pp.102-103), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "SOA, Probability Exam (Exam P) syllabus, November 2026, p.1 learning outcome 1b, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
@@ -16,6 +16,7 @@ verification:
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §2.1.3 Unordered Sampling without Replacement, fetched 2026-11-04: 'at least one ace' via the complement 1−C(48,3)/C(52,3), sha256:52a6cbe27c0bca8f163590511a11a4fd49e832983d99ea4080a88576e6d03d6e — https://www.probabilitycourse.com/chapter2/2_1_3_unordered_without_replacement.php"
     - "University of Washington CSE 312 (Summer 2025), lecture 04 'Counting & Probability', slides 9-11 (PDF pp.9-11): 'A Solution with a Problem' — choosing three aces then any of the remaining cards counts the same hand by two different choices; fix by disjoint cases (exactly 3, exactly 4) and the sum rule, sha256:c4fa59f36b5e5807d7b5a2e6be22f69c56afcee00c9b72bd3f0ab72f8a2521eb — https://courses.cs.washington.edu/courses/cse312/25su/lecture/04-counting-probability.pdf"
     - "SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 1 General Probability learning outcomes a-g (PDF p.2) and Topic 2 learning outcome b (PDF p.3), read 2026-11-04 for the objective numbers in the exam tip, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.1 Theorems 3.1-3.2 and n! (p.80, PDF p.88), read 2026-11-04, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Combinatorics.md
@@ -27,12 +28,12 @@ verification:
 
 > $$= n \times (n-1) \times \cdots \times 2 \times 1$$
 
-- It provides the tools needed to compute probabilities when outcomes are equally likely
-- The two fundamental problems are counting **ordered** arrangements ([[Permutation]]s) and **unordered** selections ([[Combination]]s)
+- Combinatorics provides the tools needed to compute probabilities when outcomes are equally likely.
+- The two fundamental problems are counting **ordered** arrangements ([[Permutation]]s) and **unordered** selections ([[Combination]]s).
 - In probability, combinatorics determines the sizes of events and sample spaces: $P(A) = |A| / |S|$ for uniform experiments
 
 > [!idea] The idea
-> When every outcome is equally likely, a probability is a ratio of two counts, so the work is counting. Almost every count is built in stages and multiplied — $n!$ is $n$ choices for the first place, $n-1$ for the second, and so on. The two things to settle first are whether repetition is allowed and whether the order of the choices matters; when order doesn't matter, divide out the orderings that were counted as different.
+> When every outcome is equally likely, the probability of an event is the number of outcomes in the event divided by the number in the sample space, so the work is counting. Combinatorics builds almost every count in stages and multiplies the number of choices at each stage. For example, $n!$ is $n$ choices for the first place times $n-1$ for the second, and so on down to 1. Before counting, settle whether repetition is allowed and whether the order of the choices matters. When order doesn't matter, divide out the orderings that were counted as different.
 
 ![[Media/Figures/Combinatorics.svg|340]]
 
@@ -40,7 +41,7 @@ verification:
 
 - **Multiplication principle:** if an outcome is built in stages, with $m_1$ choices at the first stage, $m_2$ at the second (whatever was chosen before), and so on, the number of outcomes is the product of the number of choices at each stage, $m_1 \times m_2 \times \cdots$. It is the rule behind $n!$, $P(n, k)$ and $\binom{n}{k}\,k!$.
 - A count with one repeated value is built in stages too: choose the repeated value, then choose which positions hold it, then fill the remaining positions with different values, and multiply the counts.
-- **With replacement:** when repetition is allowed (sampling with replacement, items not necessarily distinct), each of the $m$ positions independently has $n$ choices, giving $n^m$ ordered arrangements. When the items must be distinct the count is $P(n, m) = n!/(n-m)!$ instead.
+- **With replacement:** when repetition is allowed (sampling with replacement, items not necessarily distinct), each of the $m$ positions independently has $n$ choices, giving $n^m$ ordered arrangements. When the items must be distinct, the count is $P(n, m) = n!/(n-m)!$ instead.
 - **Symmetry in a random arrangement:** in a uniformly random seating or ordering, each person is equally likely to be in any position, so one person's position can be fixed without loss of generality; another given person is then equally likely to occupy each of the remaining positions.
 
 ### Derangements
@@ -83,11 +84,11 @@ A **derangement** is a permutation of $n$ items with no fixed point: no item sta
 > > There are 10 equally likely outcomes, so each has probability $1/10 = 0.10$.
 
 > [!tip]- How it appears on the exam
-> - **Exam P** (General Probability, objective 2): a group made of several types — claims by line of business, smokers and non-smokers, cards by rank — from which some are selected at random, and the question asks for the probability of a given mix: a product of [[Combination|combinations]] over the number of all selections.
+> - **Exam P** (General Probability, objective 2): a group is made of several types, such as claims by line of business, smokers and non-smokers, or cards by rank. Some members are selected at random, and the question asks for the probability of a given mix. That probability is a product of [[Combination|combinations]] over the number of all selections.
 > - **Exam P**: committees, lotteries and draws without replacement, sometimes with a condition such as "at least two" or "none of a type" that splits the count into cases.
 > - **Exam P**: arrangements and assignments of roles, where order matters and the count is a [[Permutation]] or a product of stage counts.
 
 > [!warning]- Exam traps
 > - **Numerator and denominator on different footings.** Counting ordered outcomes in one and unordered in the other gives an answer off by a factorial. Decide once whether order matters and count both the event and the sample space that way.
 > - **Overcounting "at least one".** Choosing one item of the required type first and then "any" for the rest counts the same selection several times. Count by cases (exactly one, exactly two, …) or take the complement of "none".
-> - **With and without replacement.** $n^m$ is for repetition allowed; drawing distinct items is $P(n, m)$ ordered or $\binom{n}{m}$ unordered. The question's "without replacement", "different" or "distinct" decides which.
+> - **With and without replacement.** $n^m$ is for repetition allowed. Drawing distinct items is $P(n, m)$ ordered or $\binom{n}{m}$ unordered. The question's "without replacement", "different" or "distinct" decides which.

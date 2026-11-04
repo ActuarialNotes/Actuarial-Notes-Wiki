@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-11-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:db0ba09eda522824024e611021e1fff6fb153e46e16f0842cadcee39cb43a8ae
+  content_hash: sha256:4d8ef87fc125e20cf80d2fc5b00104357f5f75ff6f412070f6e9225ff3bfc4ca
   sources:
     - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05), §VI Benefit limits: upper bound on how much the insurer will pay for any loss; losses in excess of 1 million are rare events (PDF p.8), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf"
     - "SOA Probability Exam (Exam P) syllabus, November 2026, Topic 2 Univariate Random Variables, learning outcomes e-f (PDF p.3), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
@@ -19,19 +19,20 @@ A **Benefit Limit** ($u$) is the maximum amount an insurer will pay on a single 
 > $$Y = \min\!\bigl(\alpha(X - d)_+,\; u\bigr)$$
 
 - where $u$ is the maximum benefit (the benefit limit), $d$ the [[Deductible|deductible]] and $\alpha$ the [[Coinsurance Percentage|coinsurance percentage]]
-- The formula caps the insurer's **payment**: the deductible comes off first, coinsurance $\alpha$ applies to the rest, and $u$ caps the result. That matches P-21-05's definition (a benefit limit sets an upper bound on how much the insurer will pay for any loss) and the way SOA's sample questions apply a limit to the benefit itself
-- A policy can instead cap the **covered loss** and apply coinsurance after the cap. P-21-05's health policy pays costs up to $5{,}000$ and reimburses $80\%$ of them, so costs of $6{,}000$ are reimbursed $0.80 \times \min(6{,}000,\ 5{,}000) = 4{,}000$, where the payment-cap formula would give $\min(4{,}800,\ 5{,}000) = 4{,}800$. The policy wording decides the order (see [[Payment Random Variable]]); with no coinsurance the two agree
-- The benefit limit is the insurer's counterpart to the [[Deductible]]: the deductible takes the first part of each loss off the insurer, while the limit caps what it pays on a large one
+- The formula caps the insurer's **payment**: the deductible comes off first, coinsurance $\alpha$ applies to the rest, and $u$ caps the result. This order matches P-21-05's definition, under which a benefit limit sets an upper bound on how much the insurer will pay for any loss. It also matches the way SOA's sample questions apply a limit to the benefit itself
+- A policy can instead cap the **covered loss** and apply coinsurance after the cap. P-21-05's health policy pays costs up to $5{,}000$ and reimburses $80\%$ of them, so costs of $6{,}000$ are reimbursed $0.80 \times \min(6{,}000,\ 5{,}000) = 4{,}000$. The payment-cap formula would give $\min(4{,}800,\ 5{,}000) = 4{,}800$. The policy wording decides the order (see [[Payment Random Variable]]). With no coinsurance the two orders give the same payment
+- The benefit limit is the insurer's counterpart to the [[Deductible]]. The deductible takes the first part of each loss off the insurer, and the benefit limit caps what the insurer pays on a large loss
 - Under the payment cap, losses above $d + u/\alpha$ result in the insurer paying exactly $u$ and the insured bearing the remainder
+- Raising the benefit limit by a dollar increases the expected payment only by the probability that the payment reaches the limit
 
 > [!idea] The idea
-> A limit gives up the insurer's rarest, largest payments in exchange for a known maximum. Every loss past the point where the payment reaches $u$ pays exactly $u$, so the payment piles a lump of probability on the cap instead of trailing off — which is why its moments are an integral below the cap plus $u$ times the chance of reaching it, and why raising the cap by a dollar adds only that chance to the expected payment.
+> Large losses are rare, but they can cost the insurer far more than the typical loss. A benefit limit caps the insurer's payment at $u$, so the insurer gives up its rarest, largest payments in exchange for a known maximum. Every loss past the point where the payment reaches $u$ pays exactly $u$. The payment therefore has a lump of probability at the limit instead of trailing off, so its moments are an integral below the limit plus $u$ times the probability of reaching it.
 
 ![[Media/Figures/Benefit_Limit.svg|340]]
 
 ### Moments of a limited loss
 
-With no deductible or coinsurance the payment is the limited loss $X \wedge u = \min(X, u)$, which equals $X$ below the limit and $u$ above it. So split the expectation at the limit: integrate up to $u$ against the density, and add $u$ times the probability that the loss exceeds it.
+With no deductible or coinsurance the payment is the limited loss $X \wedge u = \min(X, u)$, which equals $X$ below the limit and $u$ above it. Its expectation therefore splits at the limit into an integral up to $u$ against the density plus $u$ times the probability that the loss exceeds $u$.
 
 > $$E[(X \wedge u)^k] = \int_0^u x^k f(x)\,dx + u^k\,P(X > u)$$
 
@@ -73,5 +74,5 @@ With no deductible or coinsurance the payment is the limited loss $X \wedge u = 
 
 > [!warning]- Exam traps
 > - **Treating the capped payment as continuous.** $P(Y = u) = P(X > d + u/\alpha)$ is positive, so the benefit's CDF jumps to 1 at $u$. A CDF that keeps rising to the top of the loss range, or an answer of $0$ for "pays exactly the maximum", has missed the lump.
-> - **Where the cap binds, with coinsurance.** The payment reaches $u$ at the loss $d + u/\alpha$. With $d = 200$, $\alpha = 50\%$ and $u = 1{,}000$ that is $2{,}200$; $d + u = 1{,}200$ forgets the coinsurance and $u/\alpha = 2{,}000$ forgets the deductible.
+> - **Where the cap binds, with coinsurance.** The payment reaches $u$ at the loss $d + u/\alpha$. With $d = 200$, $\alpha = 50\%$ and $u = 1{,}000$ that is $2{,}200$. Using $d + u = 1{,}200$ forgets the coinsurance, and using $u/\alpha = 2{,}000$ forgets the deductible.
 > - **The limit term dropped.** $E[X \wedge u]$ needs $u\,P(X > u)$ added to the integral below the limit. In the uniform example, leaving it out gives $180$ instead of $420$.

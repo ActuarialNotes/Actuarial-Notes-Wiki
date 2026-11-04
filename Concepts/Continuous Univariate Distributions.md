@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:d383ceaf5ccb927b3048e742d287646f2acc4bc4ebd04e002975c2cdb97f2d20
+  content_hash: sha256:1a0be5e61b174dd1d461d3de84f6517832f82388bee59198b15c705c86ffc60d
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), 2.2 memoryless, only continuous density with this property is the exponential, p.68 (PDF p.76); 4 beta density on [0,1] p.168 (PDF p.176); 5.1 geometric memoryless p.186 (PDF p.194); 5.2 continuous uniform density 1/(b-a) on [a,b] and exponential density on [0, infinity) p.205 (PDF p.213), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "SOA, Tables for Exam C (Fall 2009), A.3.2.1 gamma printed p.4 (PDF p.9, page image), A.6.1.2 beta printed p.8 (PDF p.13), sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf"
@@ -19,14 +19,17 @@ verification:
 ---
 
 A **Continuous Univariate Distribution** describes the probability law of a single random variable $X$ that can take any value in a continuous interval or union of continuous intervals.
-- The probability density function (PDF) $f(x)$ must satisfy $f(x) \geq 0$ and $\int_{-\infty}^{\infty} f(x)\,dx = 1$
-- Individual point probabilities are zero; all probabilities are computed as areas under $f$:
 
 > $$P(a \leq X \leq b) = \int_a^b f(x)\, dx$$
 
+- The probability density function (PDF) $f(x)$ must satisfy $f(x) \geq 0$ and $\int_{-\infty}^{\infty} f(x)\,dx = 1$
+- Individual point probabilities are zero; all probabilities are computed as areas under $f$:
 - The CDF and the density are two views of the same object: $F(x) = \int_{-\infty}^{x} f(t)\,dt$ and $f(x) = F'(x)$. For anything phrased as a tail probability, work from the survival function $S(x) = 1 - F(x)$ instead.
 - **Symmetric densities.** A density symmetric about $m$ satisfies $f(m + x) = f(m - x)$: the density on one side of $m$ is the mirror image of the density on the other, so a density given on one side determines it on the other, $f(t) = f(2m - t)$. Exactly half the probability lies on each side, $P(X \leq m) = P(X \geq m) = 1/2$, so $m$ is the median, and a percentile above the median solves $P(m < X \leq x_p) = p - 1/2$. For instance, if $X$ is symmetric about 4 and $P(4 < X \leq 5) = 0.3$, the 80th percentile is 5
 - **Piecewise densities.** When $f$, or the function being averaged against it, is defined in pieces, split every integral at each breakpoint of both, use the matching branch on each subinterval and add. A probability is the sum of the integrals over the pieces the interval covers (an interval inside one piece needs only that branch); an expectation $E[g(X)]$ is the sum over the pieces of $\int g(x)\,f(x)\,dx$, so $E[X]$ is the sum of $\int x\,f(x)\,dx$ over each piece; and a normalizing constant comes from integrating every piece over the whole support
+
+> [!idea] The idea
+> Probability is spread along an interval the way mass is spread along a rod, so no single point holds any of it; the density is probability per unit length, and only an area under it is a probability. That is why $P(X < b)$ and $P(X \leq b)$ are equal, why a density can be larger than 1, and why the slope of the CDF is the density.
 
 ## Choosing the right one
 
@@ -79,3 +82,13 @@ Read the question for the **story** the quantity follows, then check the support
 > >                &= \tfrac{7}{12}
 > > \end{align*}
 > > $$
+
+> [!tip]- How it appears on the exam
+> - **Exam P** (Univariate Random Variables): a density given by formula — often with an unknown constant, often in pieces — and a probability, conditional probability, mean, median or percentile to find; the first step is usually the constant.
+> - **Exam P**: a story to identify — a lifetime that is exponential with a given mean or median, a value equally likely over a range, a total approximated by a normal — then a probability or a percentile of it.
+> - **Exam P**: the distribution of a payment or a function of $X$, built from the density of $X$ (see [[Transformations of Random Variables]]).
+
+> [!warning]- Exam traps
+> - **Integrating off the support.** A density stated on $0 < x < 2$ is zero elsewhere; integrating the formula past 2, or from $-\infty$, gives a wrong probability, or an integral that diverges. Set the limits from the support first.
+> - **Mean or rate in the exponential.** With mean $\theta$ the CDF is $1 - e^{-x/\theta}$; writing $e^{-\theta x}$ uses the mean as if it were the rate $1/\theta$ and gives a very different number. Check which parameter the question gives.
+> - **Memorylessness used where it doesn't hold.** $P(X > a + b \mid X > a) = P(X > b)$ only for the exponential. For any other density compute the ratio $S(a + b)/S(a)$.

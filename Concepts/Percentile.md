@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:9e2729a66dd46f7cbd216addb82428fe997d1fe08318d6b9cd03e0012a6c77d7
+  content_hash: sha256:f623c7264f5ced0b23916f8fd2696c7b01230d2f40053c14533cc24f04b5d5f3
   sources:
     - "SOA Exam P Sample Solutions (Aug 2026 rev.), Q137 (PDF p.40), Q181 (PDF p.54), Q61 (PDF p.21), sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"
     - "SOA Exam P Sample Questions (Aug 2026 rev.), Q137 (questions PDF p.59), Q181 (questions PDF pp.77-78), sha256:e47245963f7d2c1c4f8cc5ff1baf2090542d923ac47cbeb27d1f657ac51bf5f0 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-questions.pdf"
@@ -31,6 +31,9 @@ The **Percentile** (or quantile) $x_p$ of a [[Random Variable]] $X$ is the small
 - The 50th percentile ($p = 0.5$) is the [[Median|median]].
 - Where $F$ jumps past $p$ — a [[Discrete Random Variable|discrete]] variable, or a [[Payment Random Variable|payment]] with a probability mass at 0 — no $x$ solves $F(x) = p$; the percentile is the value at which the CDF first reaches or passes $p$. For a [[Poisson Distribution|Poisson]] with mean 3, $F(3) = 0.647$ and $F(4) = 0.815$, so its 75th percentile is 4.
 - Percentiles describe tail behavior and underlie actuarial risk measures such as Value at Risk (VaR), the loss level a portfolio will not exceed with probability $p$.
+
+> [!idea] The idea
+> A percentile is the CDF read backwards: instead of asking how likely a loss below $x$ is, it asks below what loss a proportion $p$ falls. Only the order of the values matters, so an increasing transformation carries percentiles straight through — a percentile of $2X$ is twice the percentile of $X$, and a lognormal percentile is $e$ raised to the matching normal percentile — something the mean does only for linear transformations.
 
 ![[Media/Figures/Percentile.svg|340]]
 
@@ -98,3 +101,14 @@ Percentiles move with increasing transformations: if $Y = g(X)$ with $g$ continu
 > > \end{align*}
 > > $$
 > > Every percentile with $p \le 0.1813$ is 0; above that, the continuous rule applies.
+
+> [!tip]- How it appears on the exam
+> - **Exam P** (Univariate Random Variables, objective 3): the median or a percentile of a named distribution (exponential, uniform, normal) or of a given density; or the reverse — a median or percentile is given, and it fixes a parameter used for something else. Differences and ratios of percentiles (an interquartile range) and the percentile of losses above a deductible also appear.
+> - **MAS-I**: percentile matching — set fitted percentiles equal to smoothed empirical ones to estimate parameters — and percentiles of order statistics and of fitted loss distributions.
+> - **FAM**: a percentile of a present value random variable or of a count of survivors (by the normal approximation). **MAS-II**: posterior intervals read from percentiles of a posterior distribution.
+> - **Exam 7** and **Exam 9**: a confidence interval for a reserve from an approximating distribution (Mack's lognormal), and Value at Risk as a percentile of the loss distribution.
+
+> [!warning]- Exam traps
+> - **A decreasing transformation flips $p$.** If $Y = g(X)$ with $g$ decreasing — the present value of a death benefit falls as the time of death rises — then $y_p = g(x_{1-p})$. The 95th percentile of the present value comes from the 5th percentile of the lifetime; using the 95th gives one of the smallest values instead of one of the largest.
+> - **The mean is not the median.** For a right-skewed loss the median is below the mean: an exponential with mean $\theta$ has median $\theta \ln 2 \approx 0.693\,\theta$. Setting the median equal to $\theta$ gives the wrong parameter.
+> - **Percentiles don't add.** For independent normal losses the means add but the standard deviations do not, so the 95th percentile of a total is $\mu_{\text{total}} + 1.645\sqrt{\sum \sigma_i^2}$, below the sum of the individual 95th percentiles.

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-11-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:7b6cb1733be0b7c2f7f48642e34aa773ecbed4c6ad3b0fd60f5f88851a79fa28
+  content_hash: sha256:3cb9624bdd35b000b492f5c1fcea20b9150d0ee8e0e54f424e2ce29b6ac636ba
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 set operations and Figure 1.7 Venn diagrams (pp.21-22, PDF pp.29-30), Thm 1.4 (p.24, PDF p.32), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.2.1 Venn Diagrams, fetched 2026-09-28, sha256:2fe78c16c34bc692e154703fc87319338f8983e53c9914321e49e0fd8e5344ab — https://www.probabilitycourse.com/chapter1/1_2_1_venn.php"
@@ -22,7 +22,7 @@ verification:
   log: .verify/Concepts/Venn Diagram.md
 ---
 
-A **Venn Diagram** is a visual tool used to represent the relationships between different sets, used for calculating the intersections and unions of multiple events. For two events, the probability of the union is:
+A **Venn Diagram** is a visual tool that represents the relationships between different sets. It is used to calculate the intersections and unions of multiple events. For two events, the probability of the union is:
 
 > $$P(A \cup B) = P(A) + P(B) - P(A \cap B)$$
 
@@ -41,7 +41,7 @@ A **Venn Diagram** is a visual tool used to represent the relationships between 
 | "Exactly one of $A$ or $B$" | $(A \setminus B) \cup (B \setminus A)$ | Both crescent moons (no overlap). |
 
 > [!idea] The idea
-> A Venn diagram cuts overlapping events into regions that don't overlap, and probabilities of non-overlapping regions simply add. Every question (a union, "neither", "exactly one") becomes a sum of regions, and every total the question gives is an equation in those regions.
+> Adding the probabilities of overlapping events counts the overlap twice. A Venn diagram cuts overlapping events into regions that don't overlap, so their probabilities simply add. A union, "neither" or "exactly one" is then a sum of regions. Every total the question gives is an equation in those regions.
 
 ![[Media/Figures/Venn_Diagram.svg|340]]
 
@@ -54,7 +54,7 @@ A **Venn Diagram** is a visual tool used to represent the relationships between 
 ### Three events: eight regions
 
 - A Venn diagram of three events $A$, $B$, $C$ splits the sample space into eight disjoint regions: three "only one event" regions, three "exactly two events" regions, the region in all three events, and the region outside all three.
-- The seven regions inside the circles partition $A \cup B \cup C$; the eighth, $(A \cup B \cup C)^c$, is "none of the events".
+- The seven regions inside the circles partition $A \cup B \cup C$. The eighth, $(A \cup B \cup C)^c$, is "none of the events".
 - Each event's total is the sum of its "only" region, the two "exactly two" regions that include it, and the all-three region.
 
 > $$P(A) = P(A \cap B^c \cap C^c) + P(A \cap B \cap C^c) + P(A \cap B^c \cap C) + P(A \cap B \cap C)$$
@@ -73,7 +73,7 @@ A **Venn Diagram** is a visual tool used to represent the relationships between 
 > > Z:&\quad 15 + b + c + 5 = 40
 > > \end{align*}
 > > $$
-> > So $a + b = 25$, $a + c = 15$ and $b + c = 20$. Adding, $2(a + b + c) = 60$, so $a + b + c = 30$ read exactly two (and $a = 10$, $b = 15$, $c = 5$).
+> > So $a + b = 25$, $a + c = 15$ and $b + c = 20$. Adding the three gives $2(a + b + c) = 60$, so $a + b + c = 30$ read exactly two. Individually, $a = 10$, $b = 15$ and $c = 5$.
 > >
 > > The union is the seven regions inside the circles: $20 + 25 + 15 + 30 + 5 = 95$, so $120 - 95 = 25$ read none.
 
@@ -91,12 +91,12 @@ A **Venn Diagram** is a visual tool used to represent the relationships between 
 > > > When filling out a Venn Diagram, **always start from the center (the intersection) and work your way out.** If you just put "70" in the Auto circle, you've forgotten that 20 of those people also have Homeowners. The "Auto Only" region is actually $70 - 20 = 50$.
 
 > [!tip]- How it appears on the exam
-> - **Exam P** (General Probability, objectives 1, 4–5): the page is tagged on 9 Exam P questions in the bank, each built on two or three overlapping groups.
-> - Three groups with "only one" counts and the all-three count given (risk factors in a driver or patient study); find the total or the number in exactly two.
-> - Portfolio or client profiles listing group totals and some pairwise and triple overlaps; find a region such as "none of the three" or "auto only".
-> - Answers in symbols: given $x\%$, $y\%$ and $z\%$ for some regions, pick the expression for another region.
+> - **Exam P** (General Probability, objectives 1, 4–5): the page is tagged on 9 Exam P questions in the bank. Each is built on two or three overlapping groups.
+> - Three groups are given with their "only one" counts and the all-three count, such as risk factors in a driver or patient study. The question asks for the total or for the number in exactly two.
+> - Portfolio or client profiles list group totals and some pairwise and triple overlaps. The question asks for a region such as "none of the three" or "auto only".
+> - Some answers are in symbols. Given $x\%$, $y\%$ and $z\%$ for some regions, the question asks for the expression for another region.
 
 > [!warning]- Exam traps
-> - **A pairwise count used as an "exactly two" region.** "30 own $A$ and $B$" includes those who own all three; the region "$A$ and $B$ only" is $30$ minus the centre. Putting $30$ in that region counts the centre twice.
-> - **Exactly one, at least one, at most one.** At least one of two is the union; exactly one is the union less the overlap; at most one is $1 - P(A \cap B)$. Answering with the union when "exactly one" is asked keeps the overlap in.
-> - **Forgetting the outside region.** The eight regions of a three-event diagram add to the whole group; when the question asks for the size of the group, the "none" region must be added (or shown to be empty).
+> - **A pairwise count used as an "exactly two" region.** "30 own $A$ and $B$" includes those who own all three. The region "$A$ and $B$ only" is $30$ minus the centre. Putting $30$ in that region counts the centre twice.
+> - **Exactly one, at least one, at most one.** At least one of two is the union. Exactly one is the union less the overlap. At most one is $1 - P(A \cap B)$. Answering with the union when "exactly one" is asked keeps the overlap in.
+> - **Forgetting the outside region.** The eight regions of a three-event diagram add to the whole group. When the question asks for the size of the group, the "none" region must be added or shown to be empty.

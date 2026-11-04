@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-11-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:3c504d819a7ef0bda6c9c450a8d8865a5a72087ccc442f00e8b75f92c003d65a
+  content_hash: sha256:e48e4cb6547890358cf13f5fe10f2930a701c60f6d00bc5fbcfc2125ddbcbce2
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 Definition 1.1 and events (p.18, PDF p.26), union/intersection/difference/subset/complement and inclusive or (p.21, PDF p.29), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.2.0 Review of Set Theory, fetched 2026-09-27, sha256:709bad215891dbadd495e88c524d42641a53b4a054f2d3c678a39e8a171bd89e — https://www.probabilitycourse.com/chapter1/1_2_0_review_set_theory.php"
@@ -26,17 +26,18 @@ verification:
   log: .verify/Concepts/Set Theory.md
 ---
 
-**Set Theory** is the branch of mathematics that studies collections of objects called **sets** and the relationships between them. It supplies the language of [[Probability]]: the [[Sample Space]] $S$ is the set of all outcomes, an [[Event]] is a subset of $S$, and [[Set Operations]] on events (union, intersection, complement) mirror the words "or", "and", and "not".
+**Set Theory** is the branch of mathematics that studies collections of objects called **sets** and the relationships between them. Set theory supplies the language of [[Probability]]. The [[Sample Space]] $S$ is the set of all outcomes, and an [[Event]] is a subset of $S$. The [[Set Operations]] union, intersection and complement mirror the words "or", "and" and "not".
 
 > $$A \subseteq S \iff (\omega \in A \Rightarrow \omega \in S)$$
 
 - A set is specified by listing its elements, $A = \{1, 2, 3\}$, or by a defining property, $A = \{\, \omega : \omega \text{ satisfies } P \,\}$.
-- $\omega \in A$ means $\omega$ is an element of $A$; $A \subseteq S$ means every element of $A$ also lies in $S$.
+- $\omega \in A$ means $\omega$ is an element of $A$.
+- $A \subseteq S$ means every element of $A$ also lies in $S$.
 - The empty set $\varnothing$ contains no elements; the complement $A^c = S \setminus A$ is everything in $S$ not in $A$.
 - Sets are the building blocks of a probability space $(S, \mathcal{F}, P)$, in which events are the sets whose probabilities are measured.
 
 > [!idea] The idea
-> The [[Axioms of Probability]] are stated for sets, so once a sentence about events is rewritten as a union, intersection or complement, every probability rule applies mechanically. A relation between sets becomes a relation between numbers: if $A \subseteq B$, then $P(A) \leq P(B)$.
+> Exam questions describe events in words, but the [[Axioms of Probability]] are stated for sets. Set theory translates the words into sets: "or" becomes a union, "and" an intersection and "not" a complement. Once a sentence about events is rewritten this way, every probability rule applies mechanically.
 
 ![[Media/Figures/Set_Theory.svg|340]]
 
@@ -58,7 +59,7 @@ verification:
 > A fair die is rolled. Let $A = \{2, 4, 6\}$ (even) and $B = \{6\}$. Find $P(A \cup B)$, $P(A \cap B)$ and $P(A \setminus B)$.
 >
 > > [!answer]-
-> > Every outcome of $B$ is in $A$, so $B \subseteq A$ (a proper subset: 2 and 4 are in $A$ but not $B$). Then $A \cup B = A$ and $A \cap B = B$:
+> > Every outcome of $B$ is in $A$, so $B \subseteq A$. It is a proper subset, because 2 and 4 are in $A$ but not in $B$. Then $A \cup B = A$ and $A \cap B = B$:
 > > $$P(A \cup B) = P(A) = \frac{3}{6}$$
 > > $$P(A \cap B) = P(B) = \frac{1}{6}$$
 > > $$P(A \setminus B) = P(A) - P(B) = \frac{2}{6}$$
@@ -83,12 +84,12 @@ verification:
 > > Both sides equal $\{1, 3\}$, confirming De Morgan's Law.
 
 > [!tip]- How it appears on the exam
-> - **Exam P** (General Probability, objective 1): the page is tagged on 29 Exam P questions in the bank, almost all of them word problems whose events must be written as sets before any rule is applied.
-> - Survey and portfolio counts: totals for each group and some overlaps are given, and a region ("only auto", "neither") is asked for.
-> - "Neither" and "at least one" through the complement: given $P(A^c)$, $P(B^c)$ and $P(A^c \cap B^c)$, find a union or an intersection.
-> - Events described in words (thefts in each of three years, accidents in two policy years), with the task to pick the set expression or the subset relation that holds.
+> - **Exam P** (General Probability, objective 1): the page is tagged on 29 Exam P questions in the bank. Almost all of them are word problems whose events must be written as sets before any rule is applied.
+> - Survey and portfolio counts give the totals for each group and some overlaps, and ask for a region such as "only auto" or "neither".
+> - "Neither" and "at least one" are found through the complement. Given $P(A^c)$, $P(B^c)$ and $P(A^c \cap B^c)$, the question asks for a union or an intersection.
+> - Events are described in words, such as thefts in each of three years or accidents in two policy years. The task is to pick the set expression or the subset relation that holds.
 
 > [!warning]- Exam traps
 > - **De Morgan the wrong way round.** "Neither $A$ nor $B$" is $(A \cup B)^c = A^c \cap B^c$. Writing $1 - P(A \cap B)$ gives "not both", which is at least as large and usually larger.
-> - **"Or" read as exclusive.** $A \cup B$ includes outcomes in both events; treating "$A$ or $B$" as "exactly one" drops the overlap and undercounts.
-> - **The difference rule without containment.** $P(A \setminus B) = P(A) - P(B)$ only when $B \subseteq A$; otherwise it is $P(A) - P(A \cap B)$. When $P(B) > P(A)$ the slip gives a negative "probability"; otherwise it gives a plausible but wrong number, so check containment before subtracting.
+> - **"Or" read as exclusive.** $A \cup B$ includes outcomes in both events. Treating "$A$ or $B$" as "exactly one" drops the overlap and undercounts.
+> - **The difference rule without containment.** $P(A \setminus B) = P(A) - P(B)$ only when $B \subseteq A$. Otherwise it is $P(A) - P(A \cap B)$. When $P(B) > P(A)$, the slip gives a negative "probability". Otherwise it gives a plausible but wrong number, so check containment before subtracting.

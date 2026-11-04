@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-11-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:8b9d017e495ef53b6bec1715cb4f8da488be75586e208668be0e383fc7e2217b
+  content_hash: sha256:4a295f4d4c425edf94e7e2e9491d894c056f8ba9b5e0cec400558f20e2e2c7d1
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §4.1 pp.133-134 (PDF pp.141-142) definition with P(E) > 0 and Example 4.2 (woman aged 60 living to 80 as a conditional probability); §4.1 Independent Events pp.139-140 (PDF pp.147-148); §4.2 p.162 (PDF p.170) continuous conditional probability, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "SOA, Probability Exam (Exam P) syllabus, November 2026, p.1 learning outcome 1f, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
@@ -25,10 +25,10 @@ verification:
 > $$P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \quad P(B) > 0$$
 
 - If $A$ and $B$ are independent, then $P(A \mid B) = P(A)$
-- Conditional probability is foundational to [[Bayes Theorem]], [[The Law of Total Probability]], and various insurance and actuarial calculations
+- Conditional probability is the foundation of [[Bayes Theorem]], [[The Law of Total Probability]] and many insurance and actuarial calculations.
 
 > [!idea] The idea
-> Knowing that $B$ happened shrinks the sample space to $B$. Outcomes outside $B$ are now impossible, so only the part of $A$ inside $B$ counts, and dividing by $P(B)$ rescales what is left so that the new, smaller space has total probability 1: if $P(B) = 0.4$ and $P(A \cap B) = 0.1$, then given $B$, $A$ holds a quarter of what remains.
+> Once $B$ is known to have occurred, every outcome outside $B$ is impossible. The outcomes left in $B$ have probabilities that sum to $P(B)$, not 1. Conditional probability restricts the sample space to $B$ and divides by $P(B)$, so that only the part of $A$ inside $B$ counts and the restricted sample space has total probability 1. If $P(B) = 0.4$ and $P(A \cap B) = 0.1$, then the part of $A$ inside $B$ holds a quarter of the probability of $B$, so $P(A \mid B) = 0.25$.
 
 ![[Media/Figures/Conditional_Probability.svg|340]]
 
@@ -59,7 +59,7 @@ When both events are intervals of the same random variable, their intersection i
 
 ### Two-way tables
 
-When a population is cross-classified by two attributes, lay it out as a two-way table: each cell is a joint count, and each row or column total is the sum of its cells because the categories partition the population.
+When a population is cross-classified by two attributes, lay it out as a two-way table. Each cell is a joint count, and each row or column total is the sum of its cells because the categories partition the population.
 
 - A missing cell is found by subtraction: its row or column total minus the other cells of that row or column.
 - For a member chosen at random, a conditional probability is a cell divided by its row or column total, $P(A \mid B) = |A \cap B| / |B|$.
@@ -70,7 +70,7 @@ For an event $A$ with $P(A) > 0$, the conditional expectation of $X$ given $A$ w
 
 > $$E[X \mid A] = \sum_x x \, \frac{P(X = x,\ A)}{P(A)} = \frac{E[X \cdot 1_A]}{P(A)}$$
 
-- where $1_A$ is the indicator of $A$: 1 if $A$ occurs and 0 otherwise.
+- Here $1_A$ is the indicator of $A$, which is 1 if $A$ occurs and 0 otherwise.
 - The conditional expectation of $X$ given an event $A$ is the sum of $x$ times the joint probability of $x$ and $A$, divided by $P(A)$.
 
 ### Equally likely draws
@@ -83,7 +83,7 @@ When every outcome is equally likely, conditioning on $B$ leaves the outcomes in
 > An urn holds 4 red, 3 blue and 5 green balls. Three are drawn without replacement. Given that no green ball is drawn, what is the probability that exactly two are red?
 >
 > > [!answer]-
-> > **Plan:** with green excluded, the draw is three balls from the 7 red and blue balls, all equally likely.
+> > **Plan:** with green excluded, the draw is three balls from the 7 red and blue balls. Every such draw is equally likely.
 > > $$P(2 \text{ red} \mid \text{no green}) = \frac{\binom{4}{2}\binom{3}{1}}{\binom{7}{3}} = \frac{6 \times 3}{35} = \frac{18}{35} \approx 0.514$$
 > > Removing the excluded category first avoids computing $P(\text{no green})$ separately.
 
@@ -95,12 +95,12 @@ When every outcome is equally likely, conditioning on $B$ leaves the outcomes in
 > > $$P(A \mid B) = \frac{P(X > 700)}{P(X > 400)} = \frac{300/1000}{600/1000} = \frac{300}{600} = 0.5$$
 
 > [!tip]- How it appears on the exam
-> - **Exam P** (General Probability, objectives 6–7): survey or portfolio percentages, often as a two-way table with a cell missing, and the question asks for the probability of one attribute given another.
-> - **Exam P** (Univariate Random Variables, objective 2): a loss or lifetime distribution with a condition such as "given that the loss exceeds the deductible" or "given survival to age $x$", computed from the CDF or survival function.
+> - **Exam P** (General Probability, objectives 6–7): a survey or portfolio is described by percentages, often as a two-way table with a cell missing. The question asks for the probability of one attribute given another.
+> - **Exam P** (Univariate Random Variables, objective 2): a loss or lifetime distribution comes with a condition such as "given that the loss exceeds the deductible" or "given survival to age $x$". The conditional probability is computed from the CDF or survival function.
 > - **Exam P**: draws without replacement given a stated condition, and conditional expectations given an event, such as the expected payment given that a payment is made.
-> - **MAS-I and MAS-II**: past-paper questions on the exponential distribution, Markov chains and Bayesian estimation link this page, where conditioning is one step of the larger calculation.
+> - **MAS-I and MAS-II**: past-paper questions on the exponential distribution, Markov chains and Bayesian estimation link this page. In them, conditioning is one step of a larger calculation.
 
 > [!warning]- Exam traps
-> - **Reversing the condition.** $P(A \mid B)$ and $P(B \mid A)$ have the same numerator but different denominators. A question that gives $P(\text{claim} \mid \text{class})$ and asks for $P(\text{class} \mid \text{claim})$ needs [[Bayes Theorem]]; answering with the given figure is the reversal.
+> - **Reversing the condition.** $P(A \mid B)$ and $P(B \mid A)$ have the same numerator but different denominators. A question that gives $P(\text{claim} \mid \text{class})$ and asks for $P(\text{class} \mid \text{claim})$ needs [[Bayes Theorem]]. Answering with the given figure is the reversal.
 > - **Dividing by the whole population.** In a table, a cell divided by the grand total is the *joint* probability $P(A \cap B)$, not $P(A \mid B)$. Divide by the total of the row or column that is given.
-> - **Complementing the wrong event.** $P(A^c \mid B) = 1 - P(A \mid B)$, but $P(A \mid B^c)$ is not $1 - P(A \mid B)$: changing the condition changes the sample space, so it has to be computed from $P(A \cap B^c)/P(B^c)$.
+> - **Complementing the wrong event.** $P(A^c \mid B) = 1 - P(A \mid B)$, but $P(A \mid B^c)$ is not $1 - P(A \mid B)$. Changing the condition changes the sample space, so $P(A \mid B^c)$ has to be computed from $P(A \cap B^c)/P(B^c)$.

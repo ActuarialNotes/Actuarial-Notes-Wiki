@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-11-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:c6fe044babd23c5be538c8b27e6d75b0106d2b70a42ed4d505f2ba8afc00c352
+  content_hash: sha256:124b984927040b4b709115d25e8c7284921e4154faa6047ae6699bfb44d529f8
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §4.1 Def. 4.1 (p.139, PDF p.147), Bayes formula and eqs. (4.2)-(4.3) (pp.145-146, PDF pp.153-154), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 1 General Probability, learning outcome 1g (PDF p.2), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
@@ -27,12 +27,13 @@ verification:
 
 > $$= \frac{P(E \mid H)\,P(H)}{\displaystyle\sum_{i} P(E \mid H_i)\,P(H_i)}$$
 
-- $H$ is the hypothesis and $E$ is the observed evidence
-- If $H$ and $E$ are independent (with $P(E) > 0$), observing $E$ leaves the prior unchanged: $P(H \mid E) = P(H)$
+- $H$ is the hypothesis and $E$ is the observed evidence.
+- If $H$ and $E$ are independent (with $P(E) > 0$), observing $E$ leaves the prior unchanged: $P(H \mid E) = P(H)$.
+- A hypothesis gains probability when the evidence is more likely under it than overall, that is when $P(E \mid H) > P(E)$. A hypothesis under which the evidence is less likely than overall loses probability.
 - See also [[Bayesian Credibility]]
 
 > [!idea] The idea
-> Exam data usually say how likely the evidence is under each hypothesis, but the question asks how likely each hypothesis is given the evidence; Bayes' theorem turns one into the other. The posterior is each hypothesis's share of the total probability of the evidence, so hypotheses that made the evidence more likely gain weight and the others lose it — and a hypothesis that was rare to begin with needs strong evidence before it becomes probable.
+> Exam questions usually give the probability of the evidence under each hypothesis, but ask for the probability of each hypothesis given the evidence. Bayes' theorem reverses the conditioning. Each hypothesis's posterior probability is its share of the total probability of the evidence, so a hypothesis with a small prior probability needs strong evidence to become probable.
 
 ![[Media/Figures/Bayes_Theorem.svg|340]]
 
@@ -42,11 +43,11 @@ When the evidence is an event $E$ together with the information that the outcome
 
 > $$P\big(H_j \mid E \cap (H_1 \cup \cdots \cup H_k)\big) = \frac{P(E \mid H_j)\,P(H_j)}{\sum_{i=1}^{k} P(E \mid H_i)\,P(H_i)}, \quad j \le k$$
 
-- This is Bayes' theorem with the evidence $E' = E \cap (H_1 \cup \cdots \cup H_k)$: $P(E' \mid H_i) = P(E \mid H_i)$ for $i \le k$ and $0$ for every other hypothesis, so the other categories drop out of the denominator.
+- This is Bayes' theorem with the evidence $E' = E \cap (H_1 \cup \cdots \cup H_k)$. Then $P(E' \mid H_i) = P(E \mid H_i)$ for $i \le k$ and $0$ for every other hypothesis, so the other hypotheses drop out of the denominator.
 
 ### Conditionally independent events
 
-Events $A$ and $B$ are conditionally independent given each class $C_i$ of a partition when $P(A \cap B \mid C_i) = P(A \mid C_i)\,P(B \mid C_i)$: within a class, the probability of several outcomes is the product of their conditional probabilities.
+Events $A$ and $B$ are conditionally independent given each class $C_i$ of a partition when $P(A \cap B \mid C_i) = P(A \mid C_i)\,P(B \mid C_i)$. Within a class, the probability of several outcomes is the product of their conditional probabilities.
 
 > $$P(A \cap B) = \sum_i P(A \mid C_i)\,P(B \mid C_i)\,P(C_i)$$
 
@@ -78,12 +79,12 @@ Events $A$ and $B$ are conditionally independent given each class $C_i$ of a par
 > > After observing a claim, the probability the policyholder is high-risk rises from 20% to 50%.
 
 > [!tip]- How it appears on the exam
-> - **Exam P** (General Probability, objective 7): policyholders, boards or messages fall into classes with known proportions; one observation is made (a claim, a positive test, a symbol received, a policy still in force) and the question asks for the probability of a class given it.
-> - **Exam P**: the evidence can come from a distribution rather than a single probability — a Poisson claim count, an exponential time to cancellation, a discrete uniform count — so each likelihood is read off that class's distribution.
-> - **MAS-I**: four questions in the bank link this page, on naive Bayes and quadratic discriminant analysis (assign the class with the largest posterior) and on a mixing distribution.
-> - **MAS-II**: four past-paper questions link this page, on Bayesian updating of a prior.
+> - **Exam P** (General Probability, objective 7): policyholders, boards or messages fall into classes with known proportions. One observation is made, such as a claim, a positive test, a symbol received or a policy still in force. The question asks for the probability of a class given that observation.
+> - **Exam P**: the evidence can come from a distribution rather than a single probability, such as a Poisson claim count, an exponential time to cancellation or a discrete uniform count. Each likelihood is then read off that class's distribution.
+> - **MAS-I**: four questions in the bank link this page. They cover naive Bayes and quadratic discriminant analysis, which assign the class with the largest posterior, and a mixing distribution.
+> - **MAS-II**: four past-paper questions link this page. They cover Bayesian updating of a prior.
 
 > [!warning]- Exam traps
-> - **Reading the likelihood as the posterior.** A test that is correct 80% of the time on defective items does not make a positive result 80% likely to be defective; with a small prior, the posterior is far lower.
+> - **Reading the likelihood as the posterior.** A test that is correct 80% of the time on defective items does not give a positive result an 80% probability of coming from a defective item. With a small prior, the posterior is far lower.
 > - **Dropping the prior.** Normalising the likelihoods, $P(E \mid H_j) / \sum_i P(E \mid H_i)$, is right only when the hypotheses are equally likely a priori. Every term needs its $P(H_i)$.
 > - **The wrong likelihood for "still in force".** When the evidence is that something has *survived* past time $t$, the likelihood under each class is its survival probability $P(T > t)$, not the density at $t$.

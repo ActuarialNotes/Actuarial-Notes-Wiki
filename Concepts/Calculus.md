@@ -1,20 +1,15 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-30
+  status: verified
+  confidence: high
+  last_checked: 2026-11-04
   last_checked_by: agent:validate-v1
   content_hash: sha256:c3e816d16aa1da2626a545c290c57bb7e2f49e8ae4b7fafe7f67d99ebac14542
   sources:
-    - "OpenStax, Calculus Volume 1 (Strang, Herman et al., 2016), Thm 2.5 p.161 (PDF p.169); continuity def. p.180 (PDF p.188); derivative def. eqs. 3.5-3.6 p.220 (PDF p.228); Thm 3.3 p.249, Thm 3.5 p.253, Thm 3.6 p.255 (PDF pp.257-263); chain rule eq. 3.17 p.288 (PDF p.296); Thms 3.15-3.16 pp.324-327 (PDF pp.332-335); Thms 4.12-4.13 pp.455, 457 (PDF pp.463, 465); antiderivative ln|x| + C p.486 (PDF p.494); Thm 4.15 p.488 (PDF p.496); Thm 5.5 p.555 (PDF p.563); Thm 5.7 p.584 (PDF p.592), sha256:202c86537285adf7e5abeb64057c39ee7333ad8c8473b6dd6a9ddf3e72443286 — https://assets.openstax.org/oscms-prodcms/media/documents/CalculusVolume1-OP.pdf"
-    - "OpenStax, Calculus Volume 2 (Strang, Herman et al., web PDF), Thm 3.1 p.232 (PDF p.240, page image); §3.4 partial fractions, strategy step 2 p.267 (PDF p.275); §3.7 Def. eq. 3.16 p.288 (PDF p.296, page image); §5.2 geometric series Def. eq. 5.7 p.401 (PDF p.409, page image); §6.3 Taylor/Maclaurin Def. eq. 6.5 p.498 (PDF p.506), sha256:f6ac06038088711766e5b664a8114c8fcb0b7b88cfb38e92bbaf56ba2df43f4a — https://assets.openstax.org/oscms-prodcms/media/documents/calculus-volume-2_-_WEB.pdf"
-    - "OpenStax, Calculus Volume 3 (Strang, Herman et al., 2016), §4.3 partial derivatives, eq. 4.12 and the fix-one-variable argument, PDF pp.377-379, sha256:63d36af23d6f9a163b5e627aaa714b63e4196d8159b9d5fa3ea93bdbdd284ca9 — https://assets.openstax.org/oscms-prodcms/media/documents/CalculusVolume3-OP.pdf"
-    - "NIST Digital Library of Mathematical Functions, §4.6 Power Series, eqs. 4.6.1 and 4.6.7 (HTML fetched 2026-09-27), sha256:dda80a4ebca6bab85fc738f032fe4fe06100a976a0728f2a8651715903addec6 — https://dlmf.nist.gov/4.6"
-    - "NIST Digital Library of Mathematical Functions, §4.2 eq. 4.2.19 exp series (HTML fetched 2026-09-27), sha256:7b3a39ea2b1dc72440b0469070ef5d9e857ad09673e010036c06580d450bd50c — https://dlmf.nist.gov/4.2"
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §4.2 Def. 4.6 joint cumulative distribution (p.165, PDF p.173), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "OpenStax, Calculus Volume 1 (Strang, Herman et al., 2016), §4.3 Problem-Solving Strategy: Locating Absolute Extrema over a Closed Interval p.372 (PDF p.380); Thm 4.11 Second Derivative Test p.400 (PDF p.408); §4.7 Problem-Solving Strategy: Solving Optimization Problems, steps 4-5 (use the constraint to write the quantity as a function of one variable; identify the domain of consideration) p.441 (PDF p.449); §5.2 eq. 5.14 p.538 (PDF p.546), sha256:202c86537285adf7e5abeb64057c39ee7333ad8c8473b6dd6a9ddf3e72443286 — https://assets.openstax.org/oscms-prodcms/media/documents/CalculusVolume1-OP.pdf"
-    - "OpenStax, Calculus Volume 2 (Strang, Herman et al., web PDF), §5.2 Geometric Series, S_k=a(1-r^k)/(1-r) for r != 1 and S_k -> a/(1-r) for |r|<1, p.401 (PDF p.409, page image read), sha256:f6ac06038088711766e5b664a8114c8fcb0b7b88cfb38e92bbaf56ba2df43f4a — https://assets.openstax.org/oscms-prodcms/media/documents/calculus-volume-2_-_WEB.pdf"
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Theorem 1.1 (P(E)>=0, P(Omega)=1, monotonicity), p.22 (PDF p.30), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "SOA Probability Exam (Exam P) syllabus, November 2026, introduction: an understanding of calculus, including series, differentiation, and integration is assumed (PDF p.1), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Def. 2.1 density P(a<=X<=b) = int_a^b f (p.59, PDF p.67); Thm 2.1 d/dx F(x) = f(x) via the Fundamental Theorem of Calculus (p.61, PDF p.69); eq. 5.2 Poisson distribution, values must sum to 1 (p.189, PDF p.197); Thm 5.1 and Cor. 5.1 f_Y(y) = f_X(phi^-1(y)) d/dy phi^-1(y) (p.210, PDF p.218); Def. 6.4 E(X) = int x f(x) dx (p.268, PDF p.276), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "OpenStax, Calculus Volume 2, §5.2 Infinite Series (web), Definition, eq. 5.7: sum_{n>=1} a r^(n-1) = a/(1-r) for |r|<1, and S_k = a(1-r^k)/(1-r), sha256:23f52fc4e749f10aea27cd134eaf650430594beb5356f1af81fb5a82c7f5735c — https://openstax.org/books/calculus-volume-2/pages/5-2-infinite-series"
+    - "OpenStax, Calculus Volume 3, §5.2 Double Integrals over General Regions (web), Type I region D = {a<=x<=b, g1(x)<=y<=g2(x)}: inner limits are functions of the outer variable, sha256:c715085bda7da7011462c865ca0bc0867b5edb0bbbe87ce69d9c3f7b280ab25b — https://openstax.org/books/calculus-volume-3/pages/5-2-double-integrals-over-general-regions"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Calculus.md

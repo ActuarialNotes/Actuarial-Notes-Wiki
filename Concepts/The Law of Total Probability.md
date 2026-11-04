@@ -1,8 +1,8 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-30
+  status: verified
+  confidence: high
+  last_checked: 2026-11-04
   last_checked_by: agent:validate-v1
   content_hash: sha256:9a01425fe348545919ec9299ab9a9b163d5b70f1d4585d0cfc513dbc4738ae60
   sources:
@@ -11,6 +11,8 @@ verification:
     - "SOA, Probability Exam (Exam P) syllabus, November 2026, p.1 learning outcome 1g, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §5.1.3 Conditioning and Independence (P(X∈A)=Σ_{y_j} P(X∈A|Y=y_j)P_Y(y_j)), sha256:f96cfc28220511431e9ae38905cb664d260d0c2d770fcc6d9a9288149ed138e0 — https://www.probabilitycourse.com/chapter5/5_1_3_conditioning_independence.php"
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §5.2.3 Conditioning and Independence, eq. (5.16) P(A)=∫P(A|X=x)f_X(x)dx and example P(X^3+Y>1)=∫_0^1 P(Y>1-x^3)dx 'since X and Y are independent', sha256:b9e764e0b2adb7b888334dd58ee563d47c9c6cd66bd666fa4fa24c7d5e3b32a4 — https://www.probabilitycourse.com/chapter5/5_2_3_conditioning_independence.php"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §4.1 eqs. (4.2)-(4.3) and Bayes' formula (PDF pp.153-154: H_i pairwise disjoint with union Ω; P(E)=Σ P(H_i)P(E|H_i); posterior = term over the sum), read 2026-11-04, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 1 General Probability learning outcomes a-g (PDF p.2) and Topic 2 learning outcome b (PDF p.3), read 2026-11-04 for the objective numbers in the exam tip, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/The Law of Total Probability.md

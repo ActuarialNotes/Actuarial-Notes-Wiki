@@ -1,8 +1,8 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-30
+  status: verified
+  confidence: high
+  last_checked: 2026-11-04
   last_checked_by: agent:validate-v1
   content_hash: sha256:496a2a46788082a4c7d1eb2ef0b9eb4247ffa043d24d932662c32d2be8e22e3a
   sources:
@@ -11,6 +11,9 @@ verification:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.2 Theorem 3.4 (Pascal's rule, include/exclude proof) and Theorem 3.5 pp.93-94 (PDF pp.101-102), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), fetched 2026-10-30, Foundations §1.8 Combinatorial Structures (committee counts by multiplication principle; Σ_{j=n}^{m} C(j,n) = C(m+1,n+1)) sha256:63ef90fd651593defb33d7772ecbe92f6198b6b655219a5cb726c76cdc393ccb — https://www.randomservices.org/random/foundations/Structures.html; Finite Sampling Models §3 The Multivariate Hypergeometric Distribution (joint pdf Π C(m_i,y_i)/C(m,n) 'from the multiplication principle') sha256:ce429ccb0682c9be25603fb52bab837daa32b2910c2aeba0603daf193a8cf978 — https://www.randomservices.org/random/urn/MultiHypergeometric.html"
     - "H. Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), fetched 2026-10-30, §2.1.3 Unordered Sampling without Replacement (Pascal identity) sha256:79bf0f32ecb9598045e409b9da0c99549342938e45c43ee75fbea7fc47c52911 — https://www.probabilitycourse.com/chapter2/2_1_3_unordered_without_replacement.php"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.2 Thm 3.5 and proof (PDF p.102: each j-subset ordered in j! ways), n!/(j!(n−j)!) (PDF p.103); §5.1 hypergeometric h(N,k,n,x) and its limit to the binomial as N,k→∞ with k/N fixed (PDF p.201), read 2026-11-04, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), Foundations §1.8 Combinatorial Structures, fetched 2026-11-04: samples classed by whether order is important and whether objects are replaced (n^k; n^(k)); each combination has k! orderings, n^(k)=C(n,k)k!; committee then officers C(n,k)k^(j); distinguishable permutations of n objects with n_i identical of type i = n!/(n_1!…n_k!); round table (n−1)!, sha256:63ef90fd651593defb33d7772ecbe92f6198b6b655219a5cb726c76cdc393ccb — https://www.randomservices.org/random/foundations/Structures.html"
+    - "SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 1 General Probability learning outcomes a-g (PDF p.2) and Topic 2 learning outcome b (PDF p.3), read 2026-11-04 for the objective numbers in the exam tip, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Combination.md

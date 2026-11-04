@@ -1,8 +1,8 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-30
+  status: verified
+  confidence: high
+  last_checked: 2026-11-04
   last_checked_by: agent:validate-v1
   content_hash: sha256:8b9d017e495ef53b6bec1715cb4f8da488be75586e208668be0e383fc7e2217b
   sources:
@@ -12,6 +12,9 @@ verification:
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §1.4.2 Law of Total Probability (P(A)=Σ P(A∩B_i) over a partition), sha256:3f3ac7b3163c958cf94f52e1d3250235f12353a03aa086f2b90d4d03407a7b78 — https://www.probabilitycourse.com/chapter1/1_4_2_total_probability.php"
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §5.1.3 Conditioning and Independence (conditional PMF P_{X|A}(x_i)=P(X=x_i and A)/P(A); E[X|A]=Σ x_i P_{X|A}(x_i)), sha256:f96cfc28220511431e9ae38905cb664d260d0c2d770fcc6d9a9288149ed138e0 — https://www.probabilitycourse.com/chapter5/5_1_3_conditioning_independence.php"
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §5.2.3 Conditioning and Independence (F_{X|A}(x)=(F_X(x)-F_X(a))/(F_X(b)-F_X(a)) given a≤X≤b; endpoints immaterial for continuous X), sha256:b9e764e0b2adb7b888334dd58ee563d47c9c6cd66bd666fa4fa24c7d5e3b32a4 — https://www.probabilitycourse.com/chapter5/5_2_3_conditioning_independence.php"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §4.1 Examples 4.1-4.2 (PDF p.141: 'We consider E to be the new sample space') and the derivation m(ω|E)=c·m(ω), c=1/P(E) (PDF p.142); Bayes probabilities as reversing the stages (PDF p.153), read 2026-11-04, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §1.4.0 Conditional Probability, fetched 2026-11-04: P(A^c|C)=1−P(A|C), sha256:42402de08e97b838f7544054043db992433b9530fa198c2a65fa3b8b5d7af7b5 — https://www.probabilitycourse.com/chapter1/1_4_0_conditional_probability.php"
+    - "SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 1 General Probability learning outcomes a-g (PDF p.2) and Topic 2 learning outcome b (PDF p.3), read 2026-11-04 for the objective numbers in the exam tip, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Conditional Probability.md

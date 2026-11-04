@@ -1,8 +1,8 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-30
+  status: verified
+  confidence: high
+  last_checked: 2026-11-04
   last_checked_by: agent:validate-v1
   content_hash: sha256:c6fe044babd23c5be538c8b27e6d75b0106d2b70a42ed4d505f2ba8afc00c352
   sources:
@@ -10,6 +10,10 @@ verification:
     - "SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 1 General Probability, learning outcome 1g (PDF p.2), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §1.4.3 Bayes' Rule, sha256:c352ede4dc334d99bc724927ca8b51853cf8561e407a34f59f165b22ae00042a — https://www.probabilitycourse.com/chapter1/1_4_3_bayes_rule.php"
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §1.4.4 Conditional Independence (definition (1.8) P(A∩B|C)=P(A|C)P(B|C); two-coin example P(A∩B)=Σ P(A|C)P(B|C)P(C) by LTP = 5/8 ≠ P(A)P(B)=9/16; 'if we know A has occurred … more likely that we have chosen Coin 2 … increases the conditional probability that B occurs'; conditional independence neither implies nor is implied by independence), sha256:ad951e9a3bf2fbaacbf4d3da76be9e02ed2c33627bed79427c4584355903b027 — https://www.probabilitycourse.com/chapter1/1_4_4_conditional_independence.php"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §4.1 Bayes' Formula (PDF pp.153-154: hypotheses, evidence, prior and posterior; P(E|H_i) known, P(H_i|E) wanted; formula), Example 4.17 (PDF p.155: prior .001, P(+|cancer)=.99 gives posterior .019 — 'one has to be careful when the prior probabilities are small'), read 2026-11-04, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "SOA Exam P Sample Solutions (2026-05 file), Q306 solution, PDF p.84 (Bayes with likelihoods P(T>1|H)=e^{-1/4}, P(T>1|A)=e^{-1/2}; 0.4612), sha256:e10d2649bdf708541f87849c85ef6cde195019cfc8a46ee9647f6733d74d04b2 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning (2nd ed., corrected June 2023 PDF from statlearning.com), §4.4 p.142 (PDF p.153): Bayes' theorem (4.15), the Bayes classifier classifies x to the class for which p_k(x) is largest, and LDA, QDA and naive Bayes plug estimates of f_k(x) into (4.15) to approximate it; §4.4.3 QDA p.152 (PDF p.163), sha256:7ed447d1a513c5dd95240a829603310f1d319a14a8079ddfb180c6a3d9d9a6ff — https://drive.google.com/uc?export=download&id=1--811-yIIvjT3dvnyFJM20rj_-tbB3bg"
+    - "SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 1 General Probability learning outcomes a-g (PDF p.2) and Topic 2 learning outcome b (PDF p.3), read 2026-11-04 for the objective numbers in the exam tip, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Bayes Theorem.md

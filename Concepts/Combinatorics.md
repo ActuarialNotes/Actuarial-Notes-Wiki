@@ -1,8 +1,8 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-30
+  status: verified
+  confidence: high
+  last_checked: 2026-11-04
   last_checked_by: agent:validate-v1
   content_hash: sha256:afb50d38e79b008f6bbacaec06f3abeb04c4d9048ae9767154f9f5a55a2dedd1
   sources:
@@ -11,6 +11,11 @@ verification:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.1 A Counting Technique p.76 (PDF p.84); Ex. 3.6 Poker Hands p.95 (PDF p.103); Historical Remarks, derangements w_1=0, w_2=1 (PDF pp.93-94), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "H. Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), fetched 2026-10-30, §2.1.0 Counting (multiplication principle) sha256:342319616112f470d1ff3cef050a29341a88a548e285cb6a328a2729d52b50df — https://www.probabilitycourse.com/chapter2/2_1_0_counting.php; §2.1.1 Ordered Sampling with Replacement (n options for each of k positions) sha256:fa301b74fb68f1fa983074b20a905e02c78520c4d5881b98cef798b9b9fce90a — https://www.probabilitycourse.com/chapter2/2_1_1_ordered_with_replacement.php; §2.1.2 Ordered Sampling without Replacement sha256:ea03a74b8351fba96d351a027350a67fa84dbc937f05aa938c98ea34ee33cdb0 — https://www.probabilitycourse.com/chapter2/2_1_2_ordered_without_replacement.php"
     - "K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), fetched 2026-10-30, Finite Sampling Models §6 The Matching Problem (derangements; b_n(0) = n! Σ (-1)^j/j! by inclusion-exclusion with #{X_i=i, i∈J} = (n-j)! and C(n,j) sets J) sha256:6c44b9152bd3fe3f4e53e442c55bb21d299ee229e7ae996e5bb893b424b2857f — https://www.randomservices.org/random/urn/Matching.html; §1 Introduction (X_i uniformly distributed on D for each i) sha256:32cb2b68070d4a61c61ff3772b9eb371ed582196aa3d7ec4ad65c254056d22fe — https://www.randomservices.org/random/urn/Introduction.html; §4 Order Statistics (given X_i = x, X_j uniform on D∖{x}) sha256:8b4b38e1ca6a79fcc598b1bebf75fc7b9694f0592411d2ef539a6c727f139c77 — https://www.randomservices.org/random/urn/OrderStatistics.html; Foundations §1.8 Combinatorial Structures, round-table exercise ('Seat one, distinguished person arbitrarily') sha256:63ef90fd651593defb33d7772ecbe92f6198b6b655219a5cb726c76cdc393ccb — https://www.randomservices.org/random/foundations/Structures.html"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.1 A Counting Technique (PDF p.84: N = n1·n2·…·nr), Thm 3.1 n·(n−1)·…·1 and Thm 3.2 (PDF p.88); Thm 3.5 C(n,j)=(n)_j/j! (PDF p.102), read 2026-11-04, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), Foundations §1.8 Combinatorial Structures, fetched 2026-11-04: samples classed by whether order is important and whether objects are replaced (n^k; n^(k)); each combination has k! orderings, n^(k)=C(n,k)k!; committee then officers C(n,k)k^(j); distinguishable permutations of n objects with n_i identical of type i = n!/(n_1!…n_k!); round table (n−1)!, sha256:63ef90fd651593defb33d7772ecbe92f6198b6b655219a5cb726c76cdc393ccb — https://www.randomservices.org/random/foundations/Structures.html"
+    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §2.1.3 Unordered Sampling without Replacement, fetched 2026-11-04: 'at least one ace' via the complement 1−C(48,3)/C(52,3), sha256:52a6cbe27c0bca8f163590511a11a4fd49e832983d99ea4080a88576e6d03d6e — https://www.probabilitycourse.com/chapter2/2_1_3_unordered_without_replacement.php"
+    - "University of Washington CSE 312 (Summer 2025), lecture 04 'Counting & Probability', slides 9-11 (PDF pp.9-11): 'A Solution with a Problem' — choosing three aces then any of the remaining cards counts the same hand by two different choices; fix by disjoint cases (exactly 3, exactly 4) and the sum rule, sha256:c4fa59f36b5e5807d7b5a2e6be22f69c56afcee00c9b72bd3f0ab72f8a2521eb — https://courses.cs.washington.edu/courses/cse312/25su/lecture/04-counting-probability.pdf"
+    - "SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 1 General Probability learning outcomes a-g (PDF p.2) and Topic 2 learning outcome b (PDF p.3), read 2026-11-04 for the objective numbers in the exam tip, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Combinatorics.md

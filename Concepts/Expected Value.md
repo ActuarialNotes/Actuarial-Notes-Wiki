@@ -1,7 +1,7 @@
 ---
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: high
   last_checked: 2026-11-04
   last_checked_by: agent:validate-v1
   content_hash: sha256:2c32e0aef4934e118b9daba0c498ff89607b70655e9719eef532cab7f6f67879
@@ -14,6 +14,7 @@ verification:
     - "Siegrist (randomservices.org), 4.5 Covariance and Correlation: cov(X, Y) = E(XY) - E(X)E(Y), HTML fetched 2026-11-04, sha256:23ef4758146296b9865ca3f82f0e849934a667dcc8643afaa28147ad146feef7 — https://www.randomservices.org/random/expect/Covariance.html"
     - "Wikipedia, Actuarial present value (rank 3): 'The actuarial present value (APV) is the expected value of the present value of future payments whose timing or amount depends on uncertain events', HTML fetched 2026-11-04, sha256:a7a94e68e9325bbedc91196cfdafb0b63da40edea81761905dace1de20e7e1dd — https://en.wikipedia.org/wiki/Actuarial_present_value"
     - "SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 2 learning outcomes c) and f) (PDF p.3); Topic 3 learning outcomes c), h) (PDF p.4), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Theorem 6.2 and the remark after it ('expectations add, whether or not the summands are mutually independent') pp.231-232 (PDF pp.239-240); §2.2 p.60 (PDF p.68: f(x) is not the probability of x, f(3/4) = 3/2); §5.1 Hypergeometric p.193 (PDF p.201: counts samples of size n; tends to binomial as N, k -> infinity), read 2026-11-04, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Expected Value.md

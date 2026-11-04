@@ -1,7 +1,7 @@
 ---
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: high
   last_checked: 2026-11-04
   last_checked_by: agent:validate-v1
   content_hash: sha256:f2b4a2d5e0cba8786e4e4e70c0dcb5dca753d4a593bd7496fe4f9430cee2e02d
@@ -14,6 +14,7 @@ verification:
     - "K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), fetched 2026-10-30, Bernoulli Trials §2 The Binomial Distribution (given Y_n = k, P[(X_1..X_n)=x | Y_n=k] = 1/C(n,k), 'does not depend on p'; successes 'a random sample of size k chosen without replacement') sha256:223ab179871c6da69d1e68811192935c2f12d9762a62de02336f446dd47b10b9 — https://www.randomservices.org/random/bernoulli/Binomial.html"
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §5.1 Hypergeometric Distribution p.193 (PDF p.201: h(N,k,n,x) = C(k,x)C(N-k,n-x)/C(N,n), every sample of size n counted equally; tends to binomial(n, k/N) as N, k -> infinity with k/N fixed), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Siegrist (randomservices.org), The Hypergeometric Distribution: var(Y) = n (r/m)(1 - r/m)(m - n)/(m - 1); draws negatively correlated; convergence to the binomial (n, p) as m -> infinity with r_m/m -> p, and of the mean and variance, HTML fetched 2026-11-04, sha256:56414fcd41140fbad38e3e39034536cd06144012f8457ed797740bec97e44487 — https://www.randomservices.org/random/urn/Hypergeometric.html"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Theorem 6.2 and the remark after it ('expectations add, whether or not the summands are mutually independent') pp.231-232 (PDF pp.239-240); §2.2 p.60 (PDF p.68: f(x) is not the probability of x, f(3/4) = 3/2); §5.1 Hypergeometric p.193 (PDF p.201: counts samples of size n; tends to binomial as N, k -> infinity), read 2026-11-04, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Hypergeometric Distribution.md

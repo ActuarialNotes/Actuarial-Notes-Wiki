@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:eb854aa18c57a60e4a12e40cd21a554bfb8fd5ad3eaea041ad87424f8a7408aa
+  content_hash: sha256:496a2a46788082a4c7d1eb2ef0b9eb4247ffa043d24d932662c32d2be8e22e3a
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.2 Thm 3.5 p.94 and p.95 (PDF pp.102-103); Thm 3.8 Inclusion-Exclusion p.104 (PDF p.112); §5.1 hypergeometric p.193 (PDF p.201); binomial distribution uses C(n,j) (PDF p.105), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "SOA, Probability Exam (Exam P) syllabus, November 2026, p.1 learning outcome 1b, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
@@ -17,13 +17,16 @@ verification:
 ---
 
 A **Combination** $\binom{n}{k}$ ("$n$ choose $k$") counts the number of ways to select $k$ objects from $n$ distinct objects when order does not matter.
-- Combinations assume no replacement: you cannot select the same object twice:
 
 > $$\binom{n}{k} = \frac{n!}{k!\,(n-k)!}$$
 
+- Combinations assume no replacement: you cannot select the same object twice
 - $n$ is the total number of objects and $k$ is the number of objects selected
 - The identity $\binom{n}{k} = \binom{n}{n-k}$ reflects that choosing $k$ items to include is equivalent to choosing $n-k$ to exclude
 - Combinations appear in the [[Binomial Distribution|Binomial]] distribution, [[Hypergeometric Distribution|Hypergeometric]] distribution, and the [[Inclusion-Exclusion Principle]] for counting
+
+> [!idea] The idea
+> A combination is a [[Permutation|permutation]] with the order forgotten. There are $n!/(n-k)!$ ordered ways to pick $k$ objects, and every unordered group turns up among them $k!$ times, once for each way of ordering it, so dividing by $k!$ leaves each group counted once: 8 adjusters give 336 ordered picks of 3, and each committee appears $3! = 6$ times among them, so there are 56 committees.
 
 ![[Media/Figures/Combination.svg|340]]
 
@@ -56,3 +59,12 @@ A **Combination** $\binom{n}{k}$ ("$n$ choose $k$") counts the number of ways to
 > > Order does not matter (a committee $\{A, B, C\}$ is the same regardless of selection order), so:
 > > $$\binom{8}{3} = \frac{8!}{3!\,5!} = \frac{8 \times 7 \times 6}{3 \times 2 \times 1} = \frac{336}{6} = 56$$
 > > There are 56 possible committees.
+
+> [!tip]- How it appears on the exam
+> - **Exam P** (General Probability, objective 2): a group split into types — workers compensation, homeowners and auto claims; heavy, light and non-smokers; cards by rank — from which some are drawn at random, and the question asks for the probability of a given mix: the product of one combination per type over $\binom{N}{n}$.
+> - **Exam P**: a lottery or casino draw, where the probability that every chosen number is drawn is a ratio of combinations.
+> - **Exam P**: combinations paired with an ordered step, such as choosing a subcommittee and then a chair and a secretary from it.
+
+> [!warning]- Exam traps
+> - **A combination where order matters.** When the selected objects get distinct roles (chair and secretary, 1st and 2nd prize), the count is $\binom{n}{k}\,k!$, a [[Permutation|permutation]]; $\binom{n}{k}$ alone is too small by a factor of $k!$.
+> - **A binomial where the draw is without replacement.** Drawing from a finite group without replacement changes the proportions after every draw, so the probability of a mix is a ratio of combinations (the [[Hypergeometric Distribution|hypergeometric]]), not $\binom{n}{k}p^k(1-p)^{n-k}$. The binomial answer is close for a large group, which is what makes it tempting.

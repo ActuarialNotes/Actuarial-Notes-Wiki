@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:b13508808829d45ea17ef747a61b6a1a8eb002a42a4e1c6ed2656e85128a3bc5
+  content_hash: sha256:8dce91aa0155dbdcb98c19d23340f934d13bc33f075ebb69d653ed667e9e42df
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.1 Def. 3.2 and Thm 3.2 p.80 (PDF p.88); §3.2 Thm 3.5 p.94 (PDF p.102), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "SOA, Probability Exam (Exam P) syllabus, November 2026, p.1 learning outcome 1b, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
@@ -16,13 +16,17 @@ verification:
 ---
 
 A **Permutation** $P(n, k)$ counts the number of ways to select and arrange $k$ objects from $n$ distinct objects in a specific order.
-- Permutations assume without replacement: you cannot select the same object twice
-- Permutations differ from combinations by a factor of $k!$: the number of ways to order the selected objects
-- Use permutations when sequence matters: ranking, scheduling, or assigning distinct roles
 
 > $$P(n, k) = \frac{n!}{(n-k)!}$$
 
 > $$= n \times (n-1) \times \cdots \times (n-k+1)$$
+
+- Permutations assume without replacement: you cannot select the same object twice
+- Permutations differ from combinations by a factor of $k!$: the number of ways to order the selected objects
+- Use permutations when sequence matters: ranking, scheduling, or assigning distinct roles
+
+> [!idea] The idea
+> Fill the $k$ places one at a time: $n$ objects can go first, $n-1$ are left for the second, and so on down to $n-k+1$ for the last, and the multiplication principle multiplies the choices. The factorial form is the same product written compactly — the $(n-k)!$ cancels the factors for the places that are never filled — so 3 ranked prizes among 8 adjusters is $8 \times 7 \times 6$.
 
 ![[Media/Figures/Permutation.svg|340]]
 
@@ -39,3 +43,13 @@ A **Permutation** $P(n, k)$ counts the number of ways to select and arrange $k$ 
 > > Order matters (1st ≠ 2nd ≠ 3rd place), so this is a permutation:
 > > $$P(8, 3) = \frac{8!}{(8-3)!} = \frac{8!}{5!} = 8 \times 7 \times 6 = 336$$
 > > There are 336 distinct ways to assign the three ranked prizes, compared to only $\binom{8}{3} = 56$ unordered committees.
+
+> [!tip]- How it appears on the exam
+> - **Exam P** (General Probability, objective 2): ranked prizes, officer posts or schedules, where each selected object gets a distinct role and the count is $P(n, k)$.
+> - **Exam P**: an ordered step after an unordered one — choose a subcommittee, then a chair and a secretary from it — so the count is a [[Combination|combination]] times a permutation.
+> - Arrangements with a restriction (items kept together, seats around a table) are counted with the rules above and usually feed a probability, the favourable arrangements over all $n!$.
+
+> [!warning]- Exam traps
+> - **Forgetting the order inside a block.** Gluing $k$ items together and arranging the blocks counts each arrangement of the block once; without the $k!$ orderings inside it the answer is too small by that factor.
+> - **Treating a circle as a row.** Around a table, $n!$ counts every rotation of the same seating separately and is $n$ times too large; the count is $(n-1)!$.
+> - **Identical objects counted as distinct.** $n!$ assumes every object is different. With repeated objects, divide by the factorial of each group of identical ones, or the count includes swaps that change nothing.

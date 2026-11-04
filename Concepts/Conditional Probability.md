@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:29e15eb6b8d8e4ef0886d92e8e2afb325c20c74165cc9150cdad046539b13fcb
+  content_hash: sha256:8b9d017e495ef53b6bec1715cb4f8da488be75586e208668be0e383fc7e2217b
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §4.1 pp.133-134 (PDF pp.141-142) definition with P(E) > 0 and Example 4.2 (woman aged 60 living to 80 as a conditional probability); §4.1 Independent Events pp.139-140 (PDF pp.147-148); §4.2 p.162 (PDF p.170) continuous conditional probability, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "SOA, Probability Exam (Exam P) syllabus, November 2026, p.1 learning outcome 1f, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
@@ -23,6 +23,9 @@ verification:
 
 - If $A$ and $B$ are independent, then $P(A \mid B) = P(A)$
 - Conditional probability is foundational to [[Bayes Theorem]], [[The Law of Total Probability]], and various insurance and actuarial calculations
+
+> [!idea] The idea
+> Knowing that $B$ happened shrinks the sample space to $B$. Outcomes outside $B$ are now impossible, so only the part of $A$ inside $B$ counts, and dividing by $P(B)$ rescales what is left so that the new, smaller space has total probability 1: if $P(B) = 0.4$ and $P(A \cap B) = 0.1$, then given $B$, $A$ holds a quarter of what remains.
 
 ![[Media/Figures/Conditional_Probability.svg|340]]
 
@@ -87,3 +90,14 @@ When every outcome is equally likely, conditioning on $B$ leaves the outcomes in
 > > [!answer]-
 > > Let $A = \{X > 700\}$ and $B = \{X > 400\}$. Since $A \subseteq B$, we have $A \cap B = A$.
 > > $$P(A \mid B) = \frac{P(X > 700)}{P(X > 400)} = \frac{300/1000}{600/1000} = \frac{300}{600} = 0.5$$
+
+> [!tip]- How it appears on the exam
+> - **Exam P** (General Probability, objectives 6–7): survey or portfolio percentages, often as a two-way table with a cell missing, and the question asks for the probability of one attribute given another.
+> - **Exam P** (Univariate Random Variables, objective 2): a loss or lifetime distribution with a condition such as "given that the loss exceeds the deductible" or "given survival to age $x$", computed from the CDF or survival function.
+> - **Exam P**: draws without replacement given a stated condition, and conditional expectations given an event, such as the expected payment given that a payment is made.
+> - **MAS-I and MAS-II**: past-paper questions on the exponential distribution, Markov chains and Bayesian estimation link this page, where conditioning is one step of the larger calculation.
+
+> [!warning]- Exam traps
+> - **Reversing the condition.** $P(A \mid B)$ and $P(B \mid A)$ have the same numerator but different denominators. A question that gives $P(\text{claim} \mid \text{class})$ and asks for $P(\text{class} \mid \text{claim})$ needs [[Bayes Theorem]]; answering with the given figure is the reversal.
+> - **Dividing by the whole population.** In a table, a cell divided by the grand total is the *joint* probability $P(A \cap B)$, not $P(A \mid B)$. Divide by the total of the row or column that is given.
+> - **Complementing the wrong event.** $P(A^c \mid B) = 1 - P(A \mid B)$, but $P(A \mid B^c)$ is not $1 - P(A \mid B)$: changing the condition changes the sample space, so it has to be computed from $P(A \cap B^c)/P(B^c)$.

@@ -4,17 +4,10 @@ verification:
   confidence: null
   last_checked: 2026-11-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:8e768c2fb91a3b3df9509d9fbee76b3f4cbe37f4aa6ed918dc38de7455ce6e91
+  content_hash: sha256:57d35b5ef9946b6fb3138caf14eab52f424e761f261e87776ab0205cf5ee0e81
   sources:
-    - "SOA Probability Exam syllabus, November 2026, General Probability learning outcomes a, c-g, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 Thm 1.1 pp.22-23 (PDF pp.30-31), Def. 1.3 p.25 (PDF p.33), historical remark p.30 (PDF p.38), §4.1 Examples 4.1/4.4 pp.133-135 (PDF pp.141-143), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 Example 1.10 (p.24, PDF p.32: three coin tosses, eight equally likely paths), Example 1.11 (p.26, PDF p.34: ordered pairs, 36 equally likely outcomes, unordered pairs declined), §3.1 A Counting Technique (p.76, PDF p.84), Example 3.14 (p.107, PDF p.115), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, §2.3 Probability Measures, coin-tossing example (2^n bit strings, equally likely), sha256:381bc53d4a8e0bf0259a5ce1093eb2d759a56e205c38c362ddb3b1a03879c7e6 — https://www.randomservices.org/random/prob/Probability.html"
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 Def. 1.2 distribution function P(E)=Σm(ω) (p.19, PDF p.27), Def. 1.3 uniform m(ω)=1/n (p.25, PDF p.33), Example 1.11 36 ordered pairs (p.26, PDF p.34), Historical Remarks: 36 ordered vs 21 unordered pairs (p.30, PDF p.38); §1.1 Example 1.3 de Méré, at least one six in four rolls 1−(5/6)^4 = .518 (pp.4-5, PDF pp.12-13); Thm 1.1 (p.22, PDF p.30), Thm 1.4 proof (p.24, PDF p.32), read 2026-11-04, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, §2.3 Probability Measures (discrete case: P(A)=#(A)/#(S) for counting measure; general discrete P(A)=Σ_{x∈A} f(x)), fetched 2026-11-04, sha256:381bc53d4a8e0bf0259a5ce1093eb2d759a56e205c38c362ddb3b1a03879c7e6 — https://www.randomservices.org/random/prob/Probability.html"
-    - "SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 1 General Probability, learning outcomes a-g (PDF p.2; vault Exam P-1 page numbers them 1-7), re-read 2026-11-04, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 difference A−B (p.21, PDF p.29), Thm 1.4 proof ('added twice') and Cor. 1.1 P(A)=P(A∩B)+P(A∩~B) (p.24, PDF p.32), Historical Remarks: 36 ordered vs 21 unordered pairs (p.30, PDF p.38), read 2026-11-04, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-  open_findings: 0
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 set operations and Venn Fig. 1.7, Thm 1.1-1.4 incl. Thm 1.4 proof 'added twice' (pp.21-24, PDF pp.29-32); Infinite Sample Spaces (pp.28-29, PDF pp.36-37), read 2026-11-04, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+  open_findings: 2
   open_critical: 0
   log: .verify/Concepts/Probability.md
 ---
@@ -30,7 +23,7 @@ If all outcomes in a finite sample space $S$ are equally likely, then $P$ can be
 - When the outcomes are not equally likely, $P(E)$ is instead the sum of the probabilities of the individual outcomes in $E$.
 
 > [!idea] The idea
-> Counting the outcomes in an event is easy, but a count gives a probability only when every outcome is equally likely. Equally likely outcomes share the total probability of 1 evenly, so each outcome has probability $1/|S|$. The probability of an event $E$ is then the count $|E|$ divided by $|S|$. The work is in choosing a sample space whose outcomes really are equally likely, such as ordered outcomes for dice and coins, and then in counting carefully.
+> A count of outcomes gives a probability only when every outcome is equally likely. Equally likely outcomes share the total probability of 1 evenly, so each outcome has probability $1/|S|$. The probability of an event $E$ is then the count $|E|$ divided by $|S|$. The work is in choosing a sample space whose outcomes really are equally likely, such as ordered outcomes for dice and coins, and then in counting carefully.
 
 ![[Media/Figures/Probability.svg|340]]
 
@@ -72,7 +65,7 @@ If all outcomes in a finite sample space $S$ are equally likely, then $P$ can be
 
 > [!tip]- How it appears on the exam
 > - **Exam P** (General Probability, objectives 1–2): the page is tagged on 74 Exam P questions in the bank. It underlies most of the first topic rather than one question shape.
-> - Equally likely outcomes are counted directly with dice and coins, such as three fair dice, three fair coins or a toss repeated until a success. Two numbers chosen at random from the same range are counted the same way.
+> - Equally likely outcomes are counted directly with dice and coins, such as three fair dice, or three fair coins tossed repeatedly until a success. Two numbers chosen at random from the same range are counted the same way.
 > - [[Combinatorics]] counts the numerator and the denominator when hats or letters are returned at random, or when a sample of claims is drawn from a group.
 > - A handful of questions on other exams link it too: FAM, ALTAM, ASTAM, MAS-I and Exam 5. On those exams it is background to the calculation rather than the point of it.
 

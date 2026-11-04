@@ -1,7 +1,7 @@
 ---
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: high
   last_checked: 2026-11-04
   last_checked_by: agent:validate-v1
   content_hash: sha256:5e25f5252bbe4acbd45c5bc3eebf99f2d64808ac5e4d8b25b4115e2df8ee578c
@@ -10,6 +10,8 @@ verification:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Def. 2.1 density P(a<=X<=b) = int_a^b f (p.59, PDF p.67); Thm 2.1 d/dx F(x) = f(x) via the Fundamental Theorem of Calculus (p.61, PDF p.69); eq. 5.2 Poisson distribution, values must sum to 1 (p.189, PDF p.197); Thm 5.1 and Cor. 5.1 f_Y(y) = f_X(phi^-1(y)) d/dy phi^-1(y) (p.210, PDF p.218); Def. 6.4 E(X) = int x f(x) dx (p.268, PDF p.276), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "OpenStax, Calculus Volume 2, §5.2 Infinite Series (web), Definition, eq. 5.7: sum_{n>=1} a r^(n-1) = a/(1-r) for |r|<1, and S_k = a(1-r^k)/(1-r), sha256:23f52fc4e749f10aea27cd134eaf650430594beb5356f1af81fb5a82c7f5735c — https://openstax.org/books/calculus-volume-2/pages/5-2-infinite-series"
     - "OpenStax, Calculus Volume 3, §5.2 Double Integrals over General Regions (web), Type I region D = {a<=x<=b, g1(x)<=y<=g2(x)}: inner limits are functions of the outer variable, sha256:c715085bda7da7011462c865ca0bc0867b5edb0bbbe87ce69d9c3f7b280ab25b — https://openstax.org/books/calculus-volume-3/pages/5-2-double-integrals-over-general-regions"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §2.2 continuous density: as dx -> 0 the probability P({x}) of a single point is 0 (p.60, PDF p.68), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "OpenStax, Calculus Volume 2, §6.3 Taylor and Maclaurin Series (web), Definition: if a = 0 the Taylor series for f at a is known as the Maclaurin series; the Taylor series for f at 0 is the Maclaurin series, sha256:d31b601074d1b8cc7241191e2d4ec581e3524ae4ec5907a6c500f2ad4683f9dd — https://openstax.org/books/calculus-volume-2/pages/6-3-taylor-and-maclaurin-series"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Calculus.md

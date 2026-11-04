@@ -1,7 +1,7 @@
 ---
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-11-04
   last_checked_by: agent:validate-v1
   content_hash: sha256:3c504d819a7ef0bda6c9c450a8d8865a5a72087ccc442f00e8b75f92c003d65a
@@ -20,7 +20,8 @@ verification:
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.3.3 Finding Probabilities (P(A−B)=P(A)−P(A∩B); if A⊂B then P(A)≤P(B)), fetched 2026-11-04, sha256:63d80d6b505c6ee80359645000bca6d4788ae1c97446662a77dd6deb07c7e946 — https://www.probabilitycourse.com/chapter1/1_3_3_finding_probabilities.php"
     - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, §2.3 Probability Measures (Kolmogorov axioms on events; difference rule; proper difference rule; increasing property), fetched 2026-11-04, sha256:381bc53d4a8e0bf0259a5ce1093eb2d759a56e205c38c362ddb3b1a03879c7e6 — https://www.randomservices.org/random/prob/Probability.html"
     - "SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 1 General Probability, learning outcomes a-g (PDF p.2; vault Exam P-1 page numbers them 1-7), re-read 2026-11-04, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
-  open_findings: 1
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 difference A−B (p.21, PDF p.29), Thm 1.4 proof ('added twice') and Cor. 1.1 P(A)=P(A∩B)+P(A∩~B) (p.24, PDF p.32), Historical Remarks: 36 ordered vs 21 unordered pairs (p.30, PDF p.38), read 2026-11-04, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Set Theory.md
 ---

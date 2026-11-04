@@ -1,7 +1,7 @@
 ---
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-11-04
   last_checked_by: agent:validate-v1
   content_hash: sha256:3deb5ac1e5007cc1e26ed232c04162b5ac26871cc0eec46824679e0f0d24bdd2
@@ -22,7 +22,8 @@ verification:
     - "Pishro-Nik (probabilitycourse.com), §4.3.1 Mixed Random Variables (neither discrete nor continuous), HTML fetched 2026-11-04, sha256:562f4bbd24ce906c5552b3bab07835a8ee2bd474cbd007390e46755b2388a301 — https://www.probabilitycourse.com/chapter4/4_3_1_mixed.php"
     - "Siegrist (randomservices.org), 2.7 Distribution and Quantile Functions: F(x^-) = P(X < x); f(x) = F(x) - F(x^-), HTML fetched 2026-11-04, sha256:50c869a04cf2c1fdbb4816de5a7a594436951d2e00cadfa069d12a10d6bd7173 — https://www.randomservices.org/random/dist/CDF.html"
     - "SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 2 Univariate Random Variables, learning outcome a) (PDF p.3), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
-  open_findings: 1
+    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §3.2.1 Cumulative Distribution Function (CDF defined for any kind of random variable; 'the CDF completely describes the distribution of a discrete random variable'), fetched 2026-11-04, sha256:5458497809659588b1c8a1d47cd2d793d5fe507d94bfa5a6412c829714a72dd7 — https://www.probabilitycourse.com/chapter3/3_2_1_cdf.php"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Random Variable.md
 ---

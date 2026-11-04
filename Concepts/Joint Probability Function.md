@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:754b1b76d848f3b38910e4c834e77bf5a3a4d7d4ed816d5f64c217a1ba182a98
+  content_hash: sha256:31fbab505c7401dd2208a346f72f3aff1a8a92bf1dfbd48129e09394f7f87cdb
   sources:
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §5.1.1 Joint Probability Mass Function (sum of the joint PMF over its range = 1; marginal PMF), web page as fetched 2026-09-28, sha256:29a5a73be1d726200cac31415dba2c0cd3ec0184d5f6f81d333ac195ab3a707a — https://www.probabilitycourse.com/chapter5/5_1_1_joint_pmf.php"
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §5.2.3 Conditioning and Independence (discrete conditional PMF P_X|Y = P_XY/P_Y), web page as fetched 2026-09-28, sha256:a87cccc76b2d0a5139f26cd6a59fa1aac41b982e3e3d2d16bb353b9c41dac04c — https://www.probabilitycourse.com/chapter5/5_2_3_conditioning_independence.php"
@@ -25,6 +25,9 @@ The **joint probability function** (joint PMF) of discrete random variables $X$ 
 - It satisfies $p(x,y) \geq 0$ for all $(x,y)$ and $\displaystyle\sum_x \sum_y p(x,y) = 1$
 - [[Marginal Probability Function]]s are obtained by summing out one variable
 - [[Conditional Probability Function]]s are obtained by fixing one variable and dividing by its marginal, so the slice sums to 1: $p_{X \mid Y}(x \mid y) = \dfrac{p(x,y)}{p_Y(y)}$ for $p_Y(y) > 0$
+
+> [!idea] The idea
+> The joint PMF puts a probability on every combination of values at once, so every question about the pair becomes a choice of cells to add. A marginal adds a whole row or column; a conditional keeps one row or column and divides by its total, because once that value is known it is the whole sample space.
 
 ![[Media/Figures/Joint_Probability_Function.svg|340]]
 
@@ -59,3 +62,14 @@ The **joint probability function** (joint PMF) of discrete random variables $X$ 
 > > $P(X=1, Y=1) = 0.10$. Marginal $P(X=1) = 0.20 + 0.10 = 0.30$.
 > >
 > > Conditional: fixing $Y = 1$ leaves the slice $(0.20, 0.10)$, which sums to $p_Y(1) = 0.30$, so $P(X=1 \mid Y=1) = 0.10/0.30 = 1/3$ and $P(X=0 \mid Y=1) = 2/3$.
+
+> [!tip]- How it appears on the exam
+> - **Exam P** (Multivariate Random Variables, outcomes 1–3): the joint PMF is given as a table or as a formula such as $c(x + 2y)$ on a listed set of pairs; find the constant from the total of 1, then a marginal, a conditional probability or the probability of an event.
+> - The same table then feeds a moment calculation: $E[XY]$, a [[Covariance|covariance]] or a [[Correlation Coefficient|correlation]], or the variance of a conditional distribution.
+> - Variations: a table with missing entries recovered from the total of 1 or from given marginals, a joint CDF table from which the PMF must be recovered, and multinomial counts (categories of drivers, types of claim).
+
+> [!warning]- Exam traps
+> - **Summing over the wrong support.** When the pairs are restricted (for example $x \le y$), the constant comes from summing only the allowed pairs. Summing over the full rectangle gives a constant that is too small and every probability after it wrong.
+> - **Dividing by the wrong marginal.** $P(X = x \mid Y = y)$ divides by $p_Y(y)$, the total of the fixed slice. Dividing by $p_X(x)$, or not dividing at all, leaves numbers that don't sum to 1 across the slice — that check catches it.
+> - **Independence from one cell.** One cell with $p(x,y) \ne p_X(x)\,p_Y(y)$ proves dependence, but one cell that matches proves nothing: independence needs the product rule in every cell.
+> - **PMF from a joint CDF.** Differencing a joint CDF table takes four terms, $p(x,y) = F(x,y) - F(x-1,y) - F(x,y-1) + F(x-1,y-1)$ on integer values. Subtracting only one neighbour leaves a cumulative total, not a single cell.

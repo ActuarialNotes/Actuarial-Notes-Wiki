@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:49b69289b86953fd5d5925415e4ba535d4ea73e39442bf69098f0e0bb139bda0
+  content_hash: sha256:c3e816d16aa1da2626a545c290c57bb7e2f49e8ae4b7fafe7f67d99ebac14542
   sources:
     - "OpenStax, Calculus Volume 1 (Strang, Herman et al., 2016), Thm 2.5 p.161 (PDF p.169); continuity def. p.180 (PDF p.188); derivative def. eqs. 3.5-3.6 p.220 (PDF p.228); Thm 3.3 p.249, Thm 3.5 p.253, Thm 3.6 p.255 (PDF pp.257-263); chain rule eq. 3.17 p.288 (PDF p.296); Thms 3.15-3.16 pp.324-327 (PDF pp.332-335); Thms 4.12-4.13 pp.455, 457 (PDF pp.463, 465); antiderivative ln|x| + C p.486 (PDF p.494); Thm 4.15 p.488 (PDF p.496); Thm 5.5 p.555 (PDF p.563); Thm 5.7 p.584 (PDF p.592), sha256:202c86537285adf7e5abeb64057c39ee7333ad8c8473b6dd6a9ddf3e72443286 — https://assets.openstax.org/oscms-prodcms/media/documents/CalculusVolume1-OP.pdf"
     - "OpenStax, Calculus Volume 2 (Strang, Herman et al., web PDF), Thm 3.1 p.232 (PDF p.240, page image); §3.4 partial fractions, strategy step 2 p.267 (PDF p.275); §3.7 Def. eq. 3.16 p.288 (PDF p.296, page image); §5.2 geometric series Def. eq. 5.7 p.401 (PDF p.409, page image); §6.3 Taylor/Maclaurin Def. eq. 6.5 p.498 (PDF p.506), sha256:f6ac06038088711766e5b664a8114c8fcb0b7b88cfb38e92bbaf56ba2df43f4a — https://assets.openstax.org/oscms-prodcms/media/documents/calculus-volume-2_-_WEB.pdf"
@@ -21,6 +21,13 @@ verification:
 ---
 
 **Calculus** is the mathematical study of continuous change. It is a core prerequisite for actuarial mathematics, underpinning [[Probability Theory]], financial mathematics, and life contingencies through differentiation, integration, and series analysis.
+
+- **Differentiation** gives rates of change: a density is the derivative of its [[Cumulative Distribution Function (CDF)|CDF]], $f(x) = F'(x)$, and setting a derivative to zero locates a maximum or minimum.
+- **Integration** turns a density into probabilities and moments: $P(a < X \leq b) = \int_a^b f(x)\,dx$ and $E[X] = \int x f(x)\,dx$.
+- **Series** do the same work for discrete distributions, where a sum replaces the integral: the geometric series sums geometric probabilities, and the series for $e^x$ shows that Poisson probabilities total 1.
+
+> [!idea] The idea
+> Probability on a continuous scale is area under a density, so integrating answers "how likely" and "on average how much", and differentiating the CDF undoes it — the Fundamental Theorem of Calculus is that two-way street. Most calculus on the exam is this one move, plus splitting an integral wherever the integrand changes formula (at a deductible, a limit, or the edge of the support).
 
 ### Limits and Continuity
 A **limit** describes the value a function approaches as its input approaches a point.
@@ -77,8 +84,8 @@ To maximize or minimize a differentiable function $g(a)$ on its feasible interva
 The **definite integral** gives the net signed area under $f$ from $a$ to $b$. If $f$ is continuous on $[a, b]$ and $F$ is any antiderivative of $f$:
 
 > $$\int_a^b f(x)\,dx = F(b) - F(a)$$
->
-> $$\text{where } F'(x) = f(x)$$
+
+- where $F'(x) = f(x)$
 
 This result is the **Fundamental Theorem of Calculus**.
 
@@ -137,3 +144,15 @@ A **finite** geometric series with first term $a$ and ratio $r$ sums in closed f
 > > [!answer]-
 > > Let $v = \dfrac{1}{1+i}$. The present value is:
 > > $$PV = v + v^2 + v^3 + \cdots = \sum_{k=1}^{\infty} v^k = \frac{v}{1-v} = \frac{1}{i}$$
+
+> [!tip]- How it appears on the exam
+> - **Exam P** lists calculus as prerequisite knowledge, not as a learning objective, and the bank tags no question to this page; it is tested inside the probability questions instead.
+> - Integrating a density: a probability over an interval, a mean or variance (integration by parts for $x e^{-\lambda x}$ and its relatives), or a double integral over a region for a joint density.
+> - Splitting at a breakpoint: payments with a [[Deductible|deductible]] or [[Benefit Limit|benefit limit]] integrate to the breakpoint and beyond it separately.
+> - Differentiating a CDF to get a density, or finding the parameter value that maximizes or minimizes a variance or an expected cost (the optimization steps above).
+> - Summing a series: geometric sums for the geometric distribution, the exponential series for Poisson probabilities and moments.
+
+> [!warning]- Exam traps
+> - **The geometric series starts at the wrong term.** $\sum_{k=0}^{\infty} r^k = 1/(1-r)$ starts at $k = 0$; a sum starting at $k = 1$ is $r/(1-r)$. In the perpetuity example, using $1/(1-v)$ gives $(1+i)/i$, the value of payments at the *start* of each year, instead of $1/i$.
+> - **Inner limits held fixed on a triangular region.** For a region such as $0 < x < y$, the inner integral's limits depend on the outer variable ($\int_0^\infty \int_0^y \ldots\,dx\,dy$). Writing constant limits on both integrals integrates over a rectangle, adding area outside the region.
+> - **The chain rule dropped.** Differentiating $F(g(y))$ gives $f(g(y))\,g'(y)$. Leaving out $g'(y)$ when finding the density of a transformed variable gives a "density" that generally doesn't integrate to 1.

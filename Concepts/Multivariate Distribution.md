@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:b976ca6f851dee37cedee40a7300b172a36300cc4e7d421ebf7da3231a56f828
+  content_hash: sha256:4fa045eda59a40fd4a6cb3955d2b8fdbefc7491f40ee012073820acabe4a7852
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §4.1 Def. 4.3 and Ex. 4.12-4.13 (joint distribution function, marginal distributions, independence) pp.142-143 (PDF pp.150-151); §4.2 Def. 4.6, eq. (4.4), Def. 4.7, Thm 4.2 p.165 (PDF p.173); conditional density f_X|Y = f_X,Y/f_Y, PDF p.290; §7.2 Sum of Two Independent Exponential Random Variables (PDF p.300), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Orloff & Bloom, MIT OCW 18.05 Introduction to Probability and Statistics (Spring 2022), Reading 7a: Joint Distributions, Independence — §3.1 joint pmf properties p.2, §3.2 joint pdf properties and constant-density area rule p.3, §3.4 joint cdf and f = d2F/dxdy p.5, §3.5 cdf properties p.6, §3.7 marginal pmf p.7, §3.8 marginal pdf p.8, §4 independence and Ex. 13 pp.9-10, sha256:12cf136bbcbef819e1a2530cbfcf15ea06ae83ec4f9ce6c0f6186c87b01d09f4 — https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_class07-prep-a.pdf"
@@ -18,10 +18,14 @@ verification:
 ---
 
 A **multivariate distribution** describes the joint probabilistic behavior of two or more [[Random Variable]]s. For random variables $X_1, X_2, \ldots, X_n$, the joint distribution is characterized by the [[Joint Probability Function]] (discrete) or joint density function (continuous).
+
 - **[[Marginal Probability Function]]s**: distributions of individual variables after integrating/summing out the others
 - **[[Conditional Probability Function]]s**: distributions of one variable given fixed values of the others
 - **[[Covariance]] and [[Correlation Coefficient]]**: measures of linear dependence between pairs of variables
 - If all variables are [[Independent Random Variables]], the joint distribution factors as the product of the marginals
+
+> [!idea] The idea
+> The marginals alone cannot say how the variables move together: the example's marginals ($0.5/0.5$ and $0.4/0.6$) fit a dependent pair and an independent one equally well. So the joint distribution is the full description, and marginals, conditionals and covariance are read off it — the marginals rebuild the joint only under independence, by multiplying.
 
 ![[Media/Figures/Multivariate_Distribution.svg|340]]
 
@@ -41,3 +45,13 @@ When each of $n$ independent trials falls into exactly one of $k$ categories wit
 > > Marginal of $X$: $P(X=0) = 0.1+0.4 = 0.5$, $P(X=1) = 0.3+0.2 = 0.5$.
 > > Marginal of $Y$: $P(Y=0) = 0.1+0.3 = 0.4$, $P(Y=1) = 0.4+0.2 = 0.6$.
 > > Since $P(0,0) = 0.1 \neq P(X=0)P(Y=0) = 0.20$, $X$ and $Y$ are not independent.
+
+> [!tip]- How it appears on the exam
+> - **Exam P** (Multivariate Random Variables, 23–30%): a joint distribution given as a table, a PMF formula or a joint density with an unknown constant; find the constant, a marginal or conditional distribution, a probability over a region, or a [[Covariance|covariance]], and decide whether the variables are [[Independent Random Variables|independent]].
+> - **Exam P** counting shapes: multinomial counts (drivers in three risk classes, claims of several types), and the multivariate [[Hypergeometric Distribution|hypergeometric]] when items are drawn without replacement from a fixed group.
+> - **Exam 9** (ERM questions moved from Exam 7): the dependence between two lines' losses described by a copula, compared with independence.
+
+> [!warning]- Exam traps
+> - **Zero covariance read as independence.** Independence gives zero covariance, but not the reverse: covariance measures only the linear relationship. Show the joint equals the product of the marginals everywhere before treating the variables as independent.
+> - **A triangular support integrated as a square.** For a density on $0 < x < y < 1$ the inner limits depend on the outer variable. With $f(x,y) = cx$, integrating over the triangle gives $c = 6$; integrating over the unit square gives the wrong $c = 2$. A support that isn't a rectangle also means the variables cannot be independent.
+> - **Multinomial for draws without replacement.** The multinomial needs independent trials with fixed probabilities. Drawing claims one after another from a fixed group changes the probabilities after each draw, so the counts are hypergeometric — a product of binomial coefficients over the number of ways to choose the whole sample — not multinomial with each category's share as $p_i$.

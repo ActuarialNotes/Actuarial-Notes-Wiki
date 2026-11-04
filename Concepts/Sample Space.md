@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-11-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:0fe2283b2fbebb11c6566d05fdf23500919317e82eb2533b980cc4a50faaa64e
+  content_hash: sha256:6c66a11cd041bfac72145abf388ab849c7068f4e77bf09dd6b1569fdc2c88f96
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 sample space (p.18, PDF p.26), Example 1.9 (p.20, PDF p.28), Infinite Sample Spaces (p.28, PDF p.36), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.3.1 Random Experiments (outcome, sample space, event), fetched 2026-09-28, sha256:5ab5af0abfbf56905a0a023eb3242ae9749a17af50a5ff8581a6c69030ce29ad — https://www.probabilitycourse.com/chapter1/1_3_1_random_experiments.php"
@@ -27,7 +27,7 @@ A **Sample Space** $S$ (or $\Omega$) is the set of all possible outcomes of a ra
 - The sample space can be finite, countably infinite, or uncountably infinite depending on the experiment
 
 > [!idea] The idea
-> Writing the sample space down first fixes what "every possibility" means. Because its outcomes don't overlap and miss nothing, their probabilities add to 1 and an [[Event]]'s probability is the sum over the outcomes it contains; most counting errors trace back to a sample space whose outcomes overlap, leave a case out, or aren't equally likely.
+> Writing the sample space down first fixes what "every possibility" means. Because its outcomes don't overlap and miss nothing, their probabilities add to 1 and an [[Event]]'s probability is the sum over the outcomes it contains. A mistake in the sample space carries into every probability computed from it: treat the 21 unordered results of two dice as equally likely and every answer is off.
 
 ![[Media/Figures/Sample_Space.svg|340]]
 

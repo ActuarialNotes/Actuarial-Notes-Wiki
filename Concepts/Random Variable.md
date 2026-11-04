@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-11-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:3411a706f04ccd1c547114c38c381bd0746d6395295555e3bee01f91d4a84b67
+  content_hash: sha256:3deb5ac1e5007cc1e26ed232c04162b5ac26871cc0eec46824679e0f0d24bdd2
   sources:
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com, HTML fetched 2026-09-27), §3.1.1 Random Variables (X is a function from the sample space to the real numbers), sha256:6a9473e3232fdf089177daacdbdeadad2d6f0e451217ed4c7d23e26c7973e356 — https://www.probabilitycourse.com/chapter3/3_1_1_random_variables.php"
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com, HTML fetched 2026-09-27), §4.1.0 Continuous Random Variables and their Distributions (Definition: continuous CDF; jumps correspond to P(X=x) > 0), sha256:5f1f5c3c515c0359a39754877a2f9ca95282110a471881b79d249ad828e3d140 — https://www.probabilitycourse.com/chapter4/4_1_0_continuous_random_vars_distributions.php"
@@ -36,7 +36,7 @@ A **Random Variable** $X$ is a function that assigns a real number to each outco
 - They are fully characterized by their probability distribution, which describes how probability is spread across their possible values
 
 > [!idea] The idea
-> Outcomes such as "heads then tails" or "the policyholder dies in year 3" cannot be added or averaged; the numbers attached to them — a count, a payment — can. Turning each outcome into a number lets one CDF on the real line describe the whole experiment, and makes means and variances sums or integrals over that line. The same sample space carries many random variables: the ground-up loss and the payment after a deductible share their outcomes but not their distributions.
+> Outcomes such as "heads then tails" or "the policyholder dies in year 3" cannot be added or averaged; the numbers attached to them — a count, a payment — can. Turning each outcome into a number lets one CDF on the real line answer every probability question about that variable, and makes means and variances sums or integrals over that line. The same sample space carries many random variables: the ground-up loss and the payment after a deductible share their outcomes but not their distributions.
 
 ![[Media/Figures/Random_Variable.svg|340]]
 

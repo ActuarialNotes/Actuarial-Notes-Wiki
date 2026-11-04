@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-11-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:29e6c571ef43a380f016d35f8a0ce4d6bb9c92518b8df18fbcd70a7902cbb395
+  content_hash: sha256:3c504d819a7ef0bda6c9c450a8d8865a5a72087ccc442f00e8b75f92c003d65a
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 Definition 1.1 and events (p.18, PDF p.26), union/intersection/difference/subset/complement and inclusive or (p.21, PDF p.29), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.2.0 Review of Set Theory, fetched 2026-09-27, sha256:709bad215891dbadd495e88c524d42641a53b4a054f2d3c678a39e8a171bd89e — https://www.probabilitycourse.com/chapter1/1_2_0_review_set_theory.php"
@@ -90,4 +90,4 @@ verification:
 > [!warning]- Exam traps
 > - **De Morgan the wrong way round.** "Neither $A$ nor $B$" is $(A \cup B)^c = A^c \cap B^c$. Writing $1 - P(A \cap B)$ gives "not both", which is at least as large and usually larger.
 > - **"Or" read as exclusive.** $A \cup B$ includes outcomes in both events; treating "$A$ or $B$" as "exactly one" drops the overlap and undercounts.
-> - **The difference rule without containment.** $P(A \setminus B) = P(A) - P(B)$ only when $B \subseteq A$; otherwise it is $P(A) - P(A \cap B)$. A negative "probability" is the usual sign of the slip.
+> - **The difference rule without containment.** $P(A \setminus B) = P(A) - P(B)$ only when $B \subseteq A$; otherwise it is $P(A) - P(A \cap B)$. When $P(B) > P(A)$ the slip gives a negative "probability"; otherwise it gives a plausible but wrong number, so check containment before subtracting.

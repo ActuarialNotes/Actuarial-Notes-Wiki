@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-11-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:3deb5ac1e5007cc1e26ed232c04162b5ac26871cc0eec46824679e0f0d24bdd2
+  content_hash: sha256:3fd37b58a704a104ca6500cbf098e63711272f421e53202f8f00a1b3621574e6
   sources:
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com, HTML fetched 2026-09-27), §3.1.1 Random Variables (X is a function from the sample space to the real numbers), sha256:6a9473e3232fdf089177daacdbdeadad2d6f0e451217ed4c7d23e26c7973e356 — https://www.probabilitycourse.com/chapter3/3_1_1_random_variables.php"
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com, HTML fetched 2026-09-27), §4.1.0 Continuous Random Variables and their Distributions (Definition: continuous CDF; jumps correspond to P(X=x) > 0), sha256:5f1f5c3c515c0359a39754877a2f9ca95282110a471881b79d249ad828e3d140 — https://www.probabilitycourse.com/chapter4/4_1_0_continuous_random_vars_distributions.php"
@@ -28,16 +28,17 @@ verification:
   log: .verify/Concepts/Random Variable.md
 ---
 
-A **Random Variable** $X$ is a function that assigns a real number to each outcome in a [[Sample Space]] $S$, enabling numerical analysis of random experiments.
+A **Random Variable** $X$ is a function that assigns a real number to each outcome in a [[Sample Space]] $S$, so that the outcomes of a random experiment can be analysed as numbers.
 
 > $$X : S \to \mathbb{R}$$
 
 - $X$ is **discrete** if its possible values form a finite or countably infinite set, and **continuous** if its probabilities come from a density, $P(a \le X \le b) = \int_a^b f(x)\,dx$ — so its CDF has no jumps and every single value has probability 0. See [[Discrete Random Variable]] and [[Continuous Random Variable]].
 - The two classes do not cover every case. A payment under a [[Deductible]], $Y = (X - d)_+$ with $X$ continuous, takes a continuum of values yet puts probability $P(X \le d) > 0$ on the single value 0: it is a **mixed** random variable, neither discrete nor continuous (see [[Payment Random Variable]]).
-- They are fully characterized by their probability distribution, which describes how probability is spread across their possible values
+- A random variable is fully characterized by its probability distribution, which describes how probability is spread across its possible values.
+- One sample space carries many random variables. The ground-up loss and the insurer's payment after a deductible are defined on the same outcomes, but they have different distributions.
 
 > [!idea] The idea
-> Outcomes such as "heads then tails" or "the policyholder dies in year 3" cannot be added or averaged; the numbers attached to them — a count, a payment — can. Turning each outcome into a number lets one CDF on the real line answer every probability question about that variable, and makes means and variances sums or integrals over that line. The same sample space carries many random variables: the ground-up loss and the payment after a deductible share their outcomes but not their distributions.
+> You can't average "heads" and "tails", but you can average numbers. A random variable assigns a number to each outcome, such as the number of claims or the size of a payment, so that probabilities, means and variances can be calculated.
 
 ![[Media/Figures/Random_Variable.svg|340]]
 
@@ -47,27 +48,27 @@ A jump in the CDF at $x$ — $F(x)$ greater than its left-hand limit $F(x^-) = P
 
 > $$P(X = x) = F(x) - F(x^-)$$
 
-- For a mixed random variable with point masses at $x_1, x_2, \ldots$ and density $f$ on its continuous part, take each mass point at its probability and integrate over the rest: $E[g(X)]$ is the sum of $g(x_i)\,P(X = x_i)$ plus the integral of $g(x) f(x)$ over the continuous portion.
+- A mixed random variable has point masses at $x_1, x_2, \ldots$ and a density $f$ on its continuous part. Its expected value $E[g(X)]$ is the sum of $g(x_i)\,P(X = x_i)$ over the mass points plus the integral of $g(x) f(x)$ over the continuous portion.
 
 > $$E[g(X)] = \sum_i g(x_i)\,P(X = x_i) + \int g(x)\,f(x)\,dx$$
 
-- Here $f$ integrates to $1 - \sum_i P(X = x_i)$, not to 1. With $g(x) = x$ this gives the mean, and with $g(x) = x^2$ the second moment for the variance.
+- Here the density $f$ integrates to $1 - \sum_i P(X = x_i)$, not to 1. With $g(x) = x$ the formula gives the mean, and with $g(x) = x^2$ it gives the second moment, which the variance needs.
 
 > [!example]- Defining a Random Variable for Coin Flips {Example}
 > Two fair coins are flipped. Define a random variable $X$ as the number of heads. List the values $X$ can take and their probabilities.
 >
 > > [!answer]-
-> > The sample space is $S = \{HH, HT, TH, TT\}$, each with probability $1/4$. The random variable $X$ maps:
+> > The sample space is $S = \{HH, HT, TH, TT\}$, and each outcome has probability $1/4$. The random variable $X$ maps the outcomes to numbers:
 > > $$X(TT) = 0,\quad X(HT) = X(TH) = 1,\quad X(HH) = 2$$
 > > So the distribution is $P(X=0)=\tfrac{1}{4}$, $P(X=1)=\tfrac{1}{2}$, $P(X=2)=\tfrac{1}{4}$.
 
 > [!tip]- How it appears on the exam
-> - **Exam P** (Univariate Random Variables, objective 1): classify a variable as discrete, continuous or mixed — typically a payment with a deductible or a limit — or judge true/false statements about CDFs and densities.
-> - **Exam P** and **MAS-I**: a CDF given in pieces with jumps; read the point masses off the jumps, then find a conditional probability or $E[Y]$ by adding the masses to the integral over the continuous part.
-> - **FAM** and **ALTAM**: the present value of an insurance or annuity, or a policy's loss, is itself a random variable ($Z$, $Y$) defined on the future lifetime, often piecewise, and the question asks for its expected value or another moment.
+> - **Exam P** (Univariate Random Variables, objective 1): classify a variable as discrete, continuous or mixed, or judge true/false statements about CDFs and densities. The variable to classify is typically a payment with a deductible or a limit.
+> - **Exam P** and **MAS-I**: a CDF is given in pieces with jumps. Read the point masses off the jumps, then find a conditional probability or $E[Y]$ by adding the masses to the integral over the continuous part.
+> - **FAM** and **ALTAM**: the present value of an insurance or annuity, or a policy's loss, is itself a random variable ($Z$, $Y$) defined on the future lifetime, often piecewise. The question asks for its expected value or another moment.
 
 > [!warning]- Exam traps
-> - **Dropping a point mass.** Integrating $y\,f(y)$ over the continuous part of a mixed variable and stopping there misses the masses — on a payment capped at a limit, the mass at the limit can carry more of the mean than the integral does. Add $\sum_i g(x_i)\,P(X = x_i)$.
-> - **$\le$ versus $<$ at a jump.** At a point mass, $P(X \le x) = F(x)$ but $P(X < x) = F(x^-)$, and they differ by the jump. Using $F(x^-)$ for an event that includes $x$ gives an answer short by exactly the mass.
-> - **"Its values fill an interval, so it is continuous."** A payment $(X - d)_+$ takes every value from 0 up yet has a mass at 0. Look for jumps in the CDF, not at the range of values.
-> - **A density is not a probability.** A density value can exceed 1 (a uniform on $(0, 0.5)$ has density 2); only its integral over an interval is a probability.
+> - **Dropping a point mass.** Integrating $y\,f(y)$ over the continuous part of a mixed variable and stopping there misses the point masses. On a payment capped at a limit, the mass at the limit can carry more of the mean than the integral does. Add $\sum_i g(x_i)\,P(X = x_i)$.
+> - **$\le$ versus $<$ at a jump.** At a point mass, $P(X \le x) = F(x)$ but $P(X < x) = F(x^-)$. The two differ by the size of the jump. Using $F(x^-)$ for an event that includes $x$ gives an answer short by exactly the mass.
+> - **"Its values fill an interval, so it is continuous."** A payment $(X - d)_+$ takes every value from 0 up yet has a mass at 0. Check the CDF for jumps instead of looking at the range of values.
+> - **A density is not a probability.** A density value can exceed 1, as a uniform on $(0, 0.5)$ has density 2. Only the integral of a density over an interval is a probability.

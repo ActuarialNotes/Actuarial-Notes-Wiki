@@ -1,10 +1,10 @@
 ---
 verification:
   status: verified
-  confidence: high
-  last_checked: 2026-10-30
+  confidence: medium
+  last_checked: 2026-11-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:a7d58c2e858a7c2eb73a319f2924bfee24fdfeddf0a5714f21df070480def07e
+  content_hash: sha256:3c504d819a7ef0bda6c9c450a8d8865a5a72087ccc442f00e8b75f92c003d65a
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 Definition 1.1 and events (p.18, PDF p.26), union/intersection/difference/subset/complement and inclusive or (p.21, PDF p.29), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.2.0 Review of Set Theory, fetched 2026-09-27, sha256:709bad215891dbadd495e88c524d42641a53b4a054f2d3c678a39e8a171bd89e — https://www.probabilitycourse.com/chapter1/1_2_0_review_set_theory.php"
@@ -15,6 +15,12 @@ verification:
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.3.3 Finding Probabilities (if A⊂B then A∩B=A and P(A)≤P(B); P(A−B)=P(A)−P(A∩B)), fetched 2026-10-30, sha256:984952f1ea762230cb0c228497cb48dced7032a55616e2ef6ca339338bd2fdfb — https://www.probabilitycourse.com/chapter1/1_3_3_finding_probabilities.php"
     - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, §2.3 Probability Measures, difference rule, proper difference rule, increasing property, sha256:381bc53d4a8e0bf0259a5ce1093eb2d759a56e205c38c362ddb3b1a03879c7e6 — https://www.randomservices.org/random/prob/Probability.html"
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Thm 1.1 property 3 (p.22, PDF p.30), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 set operations and inclusive 'or' (p.21, PDF p.29), Thm 1.1 property 3 (p.22, PDF p.30), read 2026-11-04, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.2.2 Set Operations (De Morgan's law; A−B = A∩B^c), fetched 2026-11-04, sha256:4025d5e8caa7de295a64d919f3cfc5b2f48996971272f227a574e5e7c4c5f9fd — https://www.probabilitycourse.com/chapter1/1_2_2_set_operations.php"
+    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.3.3 Finding Probabilities (P(A−B)=P(A)−P(A∩B); if A⊂B then P(A)≤P(B)), fetched 2026-11-04, sha256:63d80d6b505c6ee80359645000bca6d4788ae1c97446662a77dd6deb07c7e946 — https://www.probabilitycourse.com/chapter1/1_3_3_finding_probabilities.php"
+    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, §2.3 Probability Measures (Kolmogorov axioms on events; difference rule; proper difference rule; increasing property), fetched 2026-11-04, sha256:381bc53d4a8e0bf0259a5ce1093eb2d759a56e205c38c362ddb3b1a03879c7e6 — https://www.randomservices.org/random/prob/Probability.html"
+    - "SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 1 General Probability, learning outcomes a-g (PDF p.2; vault Exam P-1 page numbers them 1-7), re-read 2026-11-04, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 difference A−B (p.21, PDF p.29), Thm 1.4 proof ('added twice') and Cor. 1.1 P(A)=P(A∩B)+P(A∩~B) (p.24, PDF p.32), Historical Remarks: 36 ordered vs 21 unordered pairs (p.30, PDF p.38), read 2026-11-04, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Set Theory.md
@@ -28,6 +34,9 @@ verification:
 - $\omega \in A$ means $\omega$ is an element of $A$; $A \subseteq S$ means every element of $A$ also lies in $S$.
 - The empty set $\varnothing$ contains no elements; the complement $A^c = S \setminus A$ is everything in $S$ not in $A$.
 - Sets are the building blocks of a probability space $(S, \mathcal{F}, P)$, in which events are the sets whose probabilities are measured.
+
+> [!idea] The idea
+> The [[Axioms of Probability]] are stated for sets, so once a sentence about events is rewritten as a union, intersection or complement, every probability rule applies mechanically. A relation between sets becomes a relation between numbers: if $A \subseteq B$, then $P(A) \leq P(B)$.
 
 ![[Media/Figures/Set_Theory.svg|340]]
 
@@ -72,3 +81,14 @@ verification:
 > > $$A \cup B = \{2, 4, 5, 6\} \implies (A \cup B)^c = \{1, 3\}$$
 > > $$A^c \cap B^c = \{1, 3, 5\} \cap \{1, 2, 3\} = \{1, 3\}$$
 > > Both sides equal $\{1, 3\}$, confirming De Morgan's Law.
+
+> [!tip]- How it appears on the exam
+> - **Exam P** (General Probability, objective 1): the page is tagged on 29 Exam P questions in the bank, almost all of them word problems whose events must be written as sets before any rule is applied.
+> - Survey and portfolio counts: totals for each group and some overlaps are given, and a region ("only auto", "neither") is asked for.
+> - "Neither" and "at least one" through the complement: given $P(A^c)$, $P(B^c)$ and $P(A^c \cap B^c)$, find a union or an intersection.
+> - Events described in words (thefts in each of three years, accidents in two policy years), with the task to pick the set expression or the subset relation that holds.
+
+> [!warning]- Exam traps
+> - **De Morgan the wrong way round.** "Neither $A$ nor $B$" is $(A \cup B)^c = A^c \cap B^c$. Writing $1 - P(A \cap B)$ gives "not both", which is at least as large and usually larger.
+> - **"Or" read as exclusive.** $A \cup B$ includes outcomes in both events; treating "$A$ or $B$" as "exactly one" drops the overlap and undercounts.
+> - **The difference rule without containment.** $P(A \setminus B) = P(A) - P(B)$ only when $B \subseteq A$; otherwise it is $P(A) - P(A \cap B)$. When $P(B) > P(A)$ the slip gives a negative "probability"; otherwise it gives a plausible but wrong number, so check containment before subtracting.

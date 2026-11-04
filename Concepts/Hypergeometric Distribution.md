@@ -2,9 +2,9 @@
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-30
+  last_checked: 2026-11-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:f035130a5a83e87bfb5f494ede6d4d0ac85a801e69781f8563ab4288a3217988
+  content_hash: sha256:35d2764fd5a6bf07552066335aee3c511369ce5ef4d9f85d529c1580eb822391
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), 5.1 hypergeometric h(N,k,n,x)=C(k,x)C(N-k,n-x)/C(N,n) p.193 (PDF p.201), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services, UAH), The Hypergeometric Distribution, Moments section: E(Y) = n r/m, var(Y) = n (r/m)(1 - r/m)(m - n)/(m - 1), fetched 2026-09-27, sha256:56414fcd41140fbad38e3e39034536cd06144012f8457ed797740bec97e44487 — https://www.randomservices.org/random/urn/Hypergeometric.html"
@@ -12,6 +12,8 @@ verification:
     - "K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), fetched 2026-10-30, Finite Sampling Models §3 The Multivariate Hypergeometric Distribution (joint pdf; grouping 'preserved when the counting variables are combined'; conditional distribution given (Y_j: j∈B) multivariate hypergeometric with (m_i: i∈A) and z) sha256:ce429ccb0682c9be25603fb52bab837daa32b2910c2aeba0603daf193a8cf978 — https://www.randomservices.org/random/urn/MultiHypergeometric.html"
     - "K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), fetched 2026-10-30, Finite Sampling Models §8 Pólya's Urn Process ('c = -1 corresponds to sampling without replacement'; P(X_{n+1}=1 | k reds in n) = (a+kc)/(a+b+nc); trial number of the kth red ball: 'V_k = n if and only if Y_{n-1} = k-1 and X_n = 1', P(V_k=n) = P(Y_{n-1}=k-1)P(X_n=1 | Y_{n-1}=k-1)) sha256:5353056b0885451d1520fc843eeddc037e28d2d364bf019e780d2878e5e64918 — https://www.randomservices.org/random/urn/Polya.html"
     - "K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), fetched 2026-10-30, Bernoulli Trials §2 The Binomial Distribution (given Y_n = k, P[(X_1..X_n)=x | Y_n=k] = 1/C(n,k), 'does not depend on p'; successes 'a random sample of size k chosen without replacement') sha256:223ab179871c6da69d1e68811192935c2f12d9762a62de02336f446dd47b10b9 — https://www.randomservices.org/random/bernoulli/Binomial.html"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §5.1 Hypergeometric Distribution p.193 (PDF p.201: h(N,k,n,x) = C(k,x)C(N-k,n-x)/C(N,n), every sample of size n counted equally; tends to binomial(n, k/N) as N, k -> infinity with k/N fixed), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "Siegrist (randomservices.org), The Hypergeometric Distribution: var(Y) = n (r/m)(1 - r/m)(m - n)/(m - 1); draws negatively correlated; convergence to the binomial (n, p) as m -> infinity with r_m/m -> p, and of the mean and variance, HTML fetched 2026-11-04, sha256:56414fcd41140fbad38e3e39034536cd06144012f8457ed797740bec97e44487 — https://www.randomservices.org/random/urn/Hypergeometric.html"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Hypergeometric Distribution.md
@@ -28,6 +30,12 @@ The **Hypergeometric Distribution** models the number of successes in a sample o
 > $$E[X] = \frac{nK}{N}$$
 
 > $$\text{Var}(X) = \frac{nK(N-K)(N-n)}{N^2(N-1)}$$
+
+- With $p = K/N$, the mean is the binomial's $np$ and the variance is the binomial's $np(1-p)$ multiplied by $(N-n)/(N-1)$, the finite population correction, which is below 1 whenever $n \geq 2$.
+- When $N$ is large relative to $n$ the correction is close to 1, and the [[Binomial Distribution|binomial]] with $p = K/N$ is a close approximation.
+
+> [!idea] The idea
+> Every set of $n$ items is equally likely to be drawn, so the probability is a count: the ways to choose $k$ of the successes, times the ways to fill the other places from the failures, over all ways to choose $n$. Each success drawn leaves fewer for the next draw, so the draws pull against each other — the mean is the binomial's, but the count varies less, and the difference disappears as the population grows.
 
 ![[Media/Hypergeometric_pmf.svg|500]]
 
@@ -76,3 +84,14 @@ When sampling without replacement from a finite population divided into categori
 > > [!answer]-
 > > $N=10$, $K=4$, $n=3$, $k=2$:
 > > $$P(X=2) = \frac{\binom{4}{2}\binom{6}{1}}{\binom{10}{3}} = \frac{6 \cdot 6}{120} = \frac{36}{120} = 0.30$$
+
+> [!tip]- How it appears on the exam
+> - **Exam P**: a committee, a sample of policies or a hand of cards drawn without replacement from two groups; the probability of exactly $k$, or of "at least" $k$ as a short sum, or the expected count $nK/N$.
+> - **Exam P**: three or more groups — the multivariate form, or the two-group form after lumping — sometimes with a conditional variance of one group's count given another's.
+> - **Exam P**: independent events with a common probability, given how many occurred — damaged items, corrupted files, employees with accidents. Six of the 21 Exam P questions tagged with this page have this shape; $p$ cancels, and what is left is hypergeometric.
+> - **Exam P**: inspecting one at a time until the $k$-th success, asking for the probability that it comes on a given draw.
+
+> [!warning]- Exam traps
+> - **Binomial on a small pool.** Treating draws without replacement from a few dozen items as independent trials with $p = K/N$ gives a nearby but wrong answer. Use the binomial only when the question allows replacement or the pool is very large.
+> - **Carrying the given $p$ through.** When independent events are conditioned on their total, the stated probability (0.1, 0.2) is a distractor. Computing the unconditional probability from $p^k(1-p)^{n-k}$ terms and not dividing by the probability of the total gives a number that depends on $p$; the correct answer does not.
+> - **The $k$-th success is not "$k$ successes in $n$ draws".** For the $k$-th success to land on draw $n$, the first $n-1$ draws hold exactly $k-1$ successes *and* draw $n$ is a success. The plain hypergeometric probability of $k$ successes in $n$ draws counts orders where the last success came earlier.

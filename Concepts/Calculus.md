@@ -2,25 +2,27 @@
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-30
+  last_checked: 2026-11-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:49b69289b86953fd5d5925415e4ba535d4ea73e39442bf69098f0e0bb139bda0
+  content_hash: sha256:c3e816d16aa1da2626a545c290c57bb7e2f49e8ae4b7fafe7f67d99ebac14542
   sources:
-    - "OpenStax, Calculus Volume 1 (Strang, Herman et al., 2016), Thm 2.5 p.161 (PDF p.169); continuity def. p.180 (PDF p.188); derivative def. eqs. 3.5-3.6 p.220 (PDF p.228); Thm 3.3 p.249, Thm 3.5 p.253, Thm 3.6 p.255 (PDF pp.257-263); chain rule eq. 3.17 p.288 (PDF p.296); Thms 3.15-3.16 pp.324-327 (PDF pp.332-335); Thms 4.12-4.13 pp.455, 457 (PDF pp.463, 465); antiderivative ln|x| + C p.486 (PDF p.494); Thm 4.15 p.488 (PDF p.496); Thm 5.5 p.555 (PDF p.563); Thm 5.7 p.584 (PDF p.592), sha256:202c86537285adf7e5abeb64057c39ee7333ad8c8473b6dd6a9ddf3e72443286 — https://assets.openstax.org/oscms-prodcms/media/documents/CalculusVolume1-OP.pdf"
-    - "OpenStax, Calculus Volume 2 (Strang, Herman et al., web PDF), Thm 3.1 p.232 (PDF p.240, page image); §3.4 partial fractions, strategy step 2 p.267 (PDF p.275); §3.7 Def. eq. 3.16 p.288 (PDF p.296, page image); §5.2 geometric series Def. eq. 5.7 p.401 (PDF p.409, page image); §6.3 Taylor/Maclaurin Def. eq. 6.5 p.498 (PDF p.506), sha256:f6ac06038088711766e5b664a8114c8fcb0b7b88cfb38e92bbaf56ba2df43f4a — https://assets.openstax.org/oscms-prodcms/media/documents/calculus-volume-2_-_WEB.pdf"
-    - "OpenStax, Calculus Volume 3 (Strang, Herman et al., 2016), §4.3 partial derivatives, eq. 4.12 and the fix-one-variable argument, PDF pp.377-379, sha256:63d36af23d6f9a163b5e627aaa714b63e4196d8159b9d5fa3ea93bdbdd284ca9 — https://assets.openstax.org/oscms-prodcms/media/documents/CalculusVolume3-OP.pdf"
-    - "NIST Digital Library of Mathematical Functions, §4.6 Power Series, eqs. 4.6.1 and 4.6.7 (HTML fetched 2026-09-27), sha256:dda80a4ebca6bab85fc738f032fe4fe06100a976a0728f2a8651715903addec6 — https://dlmf.nist.gov/4.6"
-    - "NIST Digital Library of Mathematical Functions, §4.2 eq. 4.2.19 exp series (HTML fetched 2026-09-27), sha256:7b3a39ea2b1dc72440b0469070ef5d9e857ad09673e010036c06580d450bd50c — https://dlmf.nist.gov/4.2"
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §4.2 Def. 4.6 joint cumulative distribution (p.165, PDF p.173), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "OpenStax, Calculus Volume 1 (Strang, Herman et al., 2016), §4.3 Problem-Solving Strategy: Locating Absolute Extrema over a Closed Interval p.372 (PDF p.380); Thm 4.11 Second Derivative Test p.400 (PDF p.408); §4.7 Problem-Solving Strategy: Solving Optimization Problems, steps 4-5 (use the constraint to write the quantity as a function of one variable; identify the domain of consideration) p.441 (PDF p.449); §5.2 eq. 5.14 p.538 (PDF p.546), sha256:202c86537285adf7e5abeb64057c39ee7333ad8c8473b6dd6a9ddf3e72443286 — https://assets.openstax.org/oscms-prodcms/media/documents/CalculusVolume1-OP.pdf"
-    - "OpenStax, Calculus Volume 2 (Strang, Herman et al., web PDF), §5.2 Geometric Series, S_k=a(1-r^k)/(1-r) for r != 1 and S_k -> a/(1-r) for |r|<1, p.401 (PDF p.409, page image read), sha256:f6ac06038088711766e5b664a8114c8fcb0b7b88cfb38e92bbaf56ba2df43f4a — https://assets.openstax.org/oscms-prodcms/media/documents/calculus-volume-2_-_WEB.pdf"
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Theorem 1.1 (P(E)>=0, P(Omega)=1, monotonicity), p.22 (PDF p.30), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "SOA Probability Exam (Exam P) syllabus, November 2026, introduction: an understanding of calculus, including series, differentiation, and integration is assumed (PDF p.1), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Def. 2.1 density P(a<=X<=b) = int_a^b f (p.59, PDF p.67); Thm 2.1 d/dx F(x) = f(x) via the Fundamental Theorem of Calculus (p.61, PDF p.69); eq. 5.2 Poisson distribution, values must sum to 1 (p.189, PDF p.197); Thm 5.1 and Cor. 5.1 f_Y(y) = f_X(phi^-1(y)) d/dy phi^-1(y) (p.210, PDF p.218); Def. 6.4 E(X) = int x f(x) dx (p.268, PDF p.276), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "OpenStax, Calculus Volume 2, §5.2 Infinite Series (web), Definition, eq. 5.7: sum_{n>=1} a r^(n-1) = a/(1-r) for |r|<1, and S_k = a(1-r^k)/(1-r), sha256:23f52fc4e749f10aea27cd134eaf650430594beb5356f1af81fb5a82c7f5735c — https://openstax.org/books/calculus-volume-2/pages/5-2-infinite-series"
+    - "OpenStax, Calculus Volume 3, §5.2 Double Integrals over General Regions (web), Type I region D = {a<=x<=b, g1(x)<=y<=g2(x)}: inner limits are functions of the outer variable, sha256:c715085bda7da7011462c865ca0bc0867b5edb0bbbe87ce69d9c3f7b280ab25b — https://openstax.org/books/calculus-volume-3/pages/5-2-double-integrals-over-general-regions"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Calculus.md
 ---
 
 **Calculus** is the mathematical study of continuous change. It is a core prerequisite for actuarial mathematics, underpinning [[Probability Theory]], financial mathematics, and life contingencies through differentiation, integration, and series analysis.
+
+- **Differentiation** gives rates of change: a density is the derivative of its [[Cumulative Distribution Function (CDF)|CDF]], $f(x) = F'(x)$, and setting a derivative to zero locates a maximum or minimum.
+- **Integration** turns a density into probabilities and moments: $P(a < X \leq b) = \int_a^b f(x)\,dx$ and $E[X] = \int x f(x)\,dx$.
+- **Series** do the same work for discrete distributions, where a sum replaces the integral: the geometric series sums geometric probabilities, and the series for $e^x$ shows that Poisson probabilities total 1.
+
+> [!idea] The idea
+> Probability on a continuous scale is area under a density, so integrating answers "how likely" and "on average how much", and differentiating the CDF undoes it — the Fundamental Theorem of Calculus is that two-way street. Most calculus on the exam is this one move, plus splitting an integral wherever the integrand changes formula (at a deductible, a limit, or the edge of the support).
 
 ### Limits and Continuity
 A **limit** describes the value a function approaches as its input approaches a point.
@@ -77,8 +79,8 @@ To maximize or minimize a differentiable function $g(a)$ on its feasible interva
 The **definite integral** gives the net signed area under $f$ from $a$ to $b$. If $f$ is continuous on $[a, b]$ and $F$ is any antiderivative of $f$:
 
 > $$\int_a^b f(x)\,dx = F(b) - F(a)$$
->
-> $$\text{where } F'(x) = f(x)$$
+
+- where $F'(x) = f(x)$
 
 This result is the **Fundamental Theorem of Calculus**.
 
@@ -137,3 +139,15 @@ A **finite** geometric series with first term $a$ and ratio $r$ sums in closed f
 > > [!answer]-
 > > Let $v = \dfrac{1}{1+i}$. The present value is:
 > > $$PV = v + v^2 + v^3 + \cdots = \sum_{k=1}^{\infty} v^k = \frac{v}{1-v} = \frac{1}{i}$$
+
+> [!tip]- How it appears on the exam
+> - **Exam P** lists calculus as prerequisite knowledge, not as a learning objective, and the bank tags no question to this page; it is tested inside the probability questions instead.
+> - Integrating a density: a probability over an interval, a mean or variance (integration by parts for $x e^{-\lambda x}$ and its relatives), or a double integral over a region for a joint density.
+> - Splitting at a breakpoint: payments with a [[Deductible|deductible]] or [[Benefit Limit|benefit limit]] integrate to the breakpoint and beyond it separately.
+> - Differentiating a CDF to get a density, or finding the parameter value that maximizes or minimizes a variance or an expected cost (the optimization steps above).
+> - Summing a series: geometric sums for the geometric distribution, the exponential series for Poisson probabilities and moments.
+
+> [!warning]- Exam traps
+> - **The geometric series starts at the wrong term.** $\sum_{k=0}^{\infty} r^k = 1/(1-r)$ starts at $k = 0$; a sum starting at $k = 1$ is $r/(1-r)$. In the perpetuity example, using $1/(1-v)$ gives $(1+i)/i$, the value of payments at the *start* of each year, instead of $1/i$.
+> - **Inner limits held fixed on a triangular region.** For a region such as $0 < x < y$, the inner integral's limits depend on the outer variable ($\int_0^\infty \int_0^y \ldots\,dx\,dy$). Writing constant limits on both integrals integrates over a rectangle, adding area outside the region.
+> - **The chain rule dropped.** Differentiating $F(g(y))$ gives $f(g(y))\,g'(y)$. Leaving out $g'(y)$ when finding the density of a transformed variable gives a "density" that generally doesn't integrate to 1.

@@ -607,6 +607,17 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   8. **L16, completion problems** (faded worked examples from the publisher's own steps)
      and **L17, a placement check** (a short diagnostic that seeds Level 1), M each.
   *(Proposed 2026-11-01.)*
+- **C21: every concept page in the standard shape (content plan §3.3a).** A 2026-11-04 audit of
+  the 1,298 concept pages an exam page links found 26 in the shape the
+  `actuarial-concept-definitions` skill sets (definition → formula → bullets → *The idea* →
+  examples → *How it appears on the exam* → *Exam traps*): 1,272 have no idea card (it is new to
+  the standard), 798 lack the two closing sections, and 14 are broken (empty, a stub, no
+  opening definition or no example — *Probability Distributions*, *Credit*, *Pension*, *Capital* …). Section
+  headings are kept: the maintainer prefers them for readability (2026-11-04). The first batch
+  is done: Exam P's 24 worst pages, restructured and re-verified the same day (§3.3a). The order
+  proposed: the rest of Exam P (49 pages), FM, the 14 broken pages, then Exams 5, 7 and 9 —
+  one PR per exam, the edit and its fact check together, so a ready exam's G4 is red for hours,
+  not weeks. *(Proposed 2026-11-04.)*
 
 ---
 
@@ -714,6 +725,7 @@ gates through `--hold` in CI.
 
 | C19 | The CIA's own route to Fellowship | ✅ 2026-10-19 | — | 29 study guides transcribed from the CIA's syllabi by a CIA reader in `syllabus_extract.py`: ACIA Modules 1 and 2 and the ACIA Capstone Exam (its background readings linked by ISBN), and for each of the five FCIA tracks (PC, ILA, GB, RET, FIE) its two modules and three exams, F3BNK the banking option — all `development`, with a `Resources/Books/` page for each of the six syllabus documents and for Boudreault & Renaud and McDonald. ACIA and FCIA credential tracks (`data/tracks.ts`, the FCIA's five tracks as pathways) and a **CIA** choice on the Study Guides tab's two pages (`GuideBody` in `lib/bodyFilter.ts`). Not covered: the CIA Professionalism Workshop and the APLC (no syllabus published), the FCIA and Capstone exam dates, questions; and the exam pages now put ~85 kB gzip more into first paint (`virtual:exam-pages`), leaving 16 kB of the budget. |
 | C20 | Answerability: a content check, then the gate G8 | 🟡 G8 built 2026-10-25 | **Now** | `simulations/check-answerable` merges each run into a committed record per bank (`simulations/answerability/<bank>.json`), and `publication_readiness.py` re-reads it in code as **G8** (`scripts/answerability_lib.py`, D29): every served question checked since its text last changed, every requirement quoted on a page in reach (tagged, one link away, or a prerequisite exam's page) or recorded not required. MAS-II's record was rebuilt from its report: 74 of 141 answerable, 141 items open. P and FM pass (30 Oct). MAS-I passes (30 Oct): 281 of 281 answerable, 8 / 8 gates, awaiting promotion. Exam 7 and the DISCs: partly run. The runs and items ride Phase 2 (steps 0–10). |
+| C21 | Every concept page in the standard shape | 🟡 Exam P's 24 worst pages ✅ 2026-11-04 | Proposed (§3.4) | Content plan §3.3a. 26 of 1,298 exam-linked concept pages had the full shape. Exam P batch: 24 pages restructured (opening order, idea card, the two closing sections; headings kept, every answerability quote verbatim) and re-verified by different agents, ~60k tokens a page. Left: 49 more Exam P pages, then FM, the 14 broken pages, the rest. |
 
 ### 4.4 V: Fact Check (VERIFY)
 

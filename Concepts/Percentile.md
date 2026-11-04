@@ -2,9 +2,9 @@
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-30
+  last_checked: 2026-11-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:9e2729a66dd46f7cbd216addb82428fe997d1fe08318d6b9cd03e0012a6c77d7
+  content_hash: sha256:f623c7264f5ced0b23916f8fd2696c7b01230d2f40053c14533cc24f04b5d5f3
   sources:
     - "SOA Exam P Sample Solutions (Aug 2026 rev.), Q137 (PDF p.40), Q181 (PDF p.54), Q61 (PDF p.21), sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"
     - "SOA Exam P Sample Questions (Aug 2026 rev.), Q137 (questions PDF p.59), Q181 (questions PDF pp.77-78), sha256:e47245963f7d2c1c4f8cc5ff1baf2090542d923ac47cbeb27d1f657ac51bf5f0 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-questions.pdf"
@@ -14,6 +14,11 @@ verification:
     - "Distribution and Quantile Functions, §2.7 Distribution and Quantile Functions: F(x^-) = P(X < x); f(x) = F(x) - F(x^-) (discrete), g(x) = F(x) - F(x^-) on a mixed distribution's discrete part; quantile of order p: P(X < x) <= p <= P(X <= x); F^{-1}(p) the smallest quantile, sha256:50c869a04cf2c1fdbb4816de5a7a594436951d2e00cadfa069d12a10d6bd7173 — https://www.randomservices.org/random/dist/CDF.html"
     - "Location-Scale Families, Ch.4 Location-Scale Families: X = a + bZ, b in (0, inf); if z is a quantile of order p for Z then a + bz is a quantile of order p for X, sha256:d9bc65924c926bd13e91d33c7f63a368fff73aa005bddc1aeb595de5d0fbc738 — https://www.randomservices.org/random/special/LocationScale.html"
     - "Conditional Probability | Formulas | Calculation | Chain Rule | Prior Probability, §1.4.0 Conditional Probability: P(A|B) = P(A ∩ B)/P(B), P(B) > 0, sha256:c8061ae0b186a2655a22916fe53d09d9551ad8f170e533806480f8c86ced4c07 — https://www.probabilitycourse.com/chapter1/1_4_0_conditional_probability.php"
+    - "Siegrist (randomservices.org), 3.7 Transformations of Random Variables: r strictly decreasing gives G(y) = 1 - F[r^{-1}(y)], HTML fetched 2026-11-04, sha256:827bba81a7f85933f2ba982a09155f5277f5ec19838e2ffe70ac0563a56aca69 — https://www.randomservices.org/random/dist/Transformations.html"
+    - "Siegrist (randomservices.org), The Lognormal Distribution: quantile function F^{-1}(p) = exp[mu + sigma Phi^{-1}(p)], HTML fetched 2026-11-04, sha256:cec8c0b516a0fcc03bb953f82c186e3faa8ec2eee2479caf48df2850bfe2c51c — https://www.randomservices.org/random/special/LogNormal.html"
+    - "Siegrist (randomservices.org), 2.7 Distribution and Quantile Functions: quantile of order p: F(x^-) <= p <= F(x), HTML fetched 2026-11-04, sha256:50c869a04cf2c1fdbb4816de5a7a594436951d2e00cadfa069d12a10d6bd7173 — https://www.randomservices.org/random/dist/CDF.html"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §5.2 Exponential p.205-207 (PDF pp.213-215: F = 1 - e^{-lambda x}, lambda the reciprocal of the average); Example 7.5 p.294 (PDF p.302: sum of independent normals is normal with mean mu1+mu2, variance sigma1^2+sigma2^2), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 2 learning outcome c) (PDF p.3), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Percentile.md
@@ -31,6 +36,9 @@ The **Percentile** (or quantile) $x_p$ of a [[Random Variable]] $X$ is the small
 - The 50th percentile ($p = 0.5$) is the [[Median|median]].
 - Where $F$ jumps past $p$ — a [[Discrete Random Variable|discrete]] variable, or a [[Payment Random Variable|payment]] with a probability mass at 0 — no $x$ solves $F(x) = p$; the percentile is the value at which the CDF first reaches or passes $p$. For a [[Poisson Distribution|Poisson]] with mean 3, $F(3) = 0.647$ and $F(4) = 0.815$, so its 75th percentile is 4.
 - Percentiles describe tail behavior and underlie actuarial risk measures such as Value at Risk (VaR), the loss level a portfolio will not exceed with probability $p$.
+
+> [!idea] The idea
+> A percentile is the CDF read backwards: instead of asking how likely a loss below $x$ is, it asks below what loss a proportion $p$ falls. Only the order of the values matters, so an increasing transformation carries percentiles straight through — a percentile of $2X$ is twice the percentile of $X$, and a lognormal percentile is $e$ raised to the matching normal percentile — something the mean does only for linear transformations.
 
 ![[Media/Figures/Percentile.svg|340]]
 
@@ -98,3 +106,14 @@ Percentiles move with increasing transformations: if $Y = g(X)$ with $g$ continu
 > > \end{align*}
 > > $$
 > > Every percentile with $p \le 0.1813$ is 0; above that, the continuous rule applies.
+
+> [!tip]- How it appears on the exam
+> - **Exam P** (Univariate Random Variables, objective 3): the median or a percentile of a named distribution (exponential, uniform, normal) or of a given density; or the reverse — a median or percentile is given, and it fixes a parameter used for something else. Differences and ratios of percentiles (an interquartile range) and the percentile of losses above a deductible also appear.
+> - **MAS-I**: percentile matching — set fitted percentiles equal to smoothed empirical ones to estimate parameters — and percentiles of order statistics and of fitted loss distributions.
+> - **FAM**: a percentile of a present value random variable or of a count of survivors (by the normal approximation). **MAS-II**: posterior intervals read from percentiles of a posterior distribution.
+> - **Exam 7** and **Exam 9**: a confidence interval for a reserve from an approximating distribution (Mack's lognormal), and Value at Risk as a percentile of the loss distribution.
+
+> [!warning]- Exam traps
+> - **A decreasing transformation flips $p$.** If $Y = g(X)$ with $g$ decreasing — the present value of a death benefit falls as the time of death rises — then $y_p = g(x_{1-p})$. The 95th percentile of the present value comes from the 5th percentile of the lifetime; using the 95th gives one of the smallest values instead of one of the largest.
+> - **The mean is not the median.** For a right-skewed loss the median is below the mean: an exponential with mean $\theta$ has median $\theta \ln 2 \approx 0.693\,\theta$. Setting the median equal to $\theta$ gives the wrong parameter.
+> - **Percentiles don't add.** For independent normal losses the means add but the standard deviations do not, so the 95th percentile of a total is $\mu_{\text{total}} + 1.645\sqrt{\sum \sigma_i^2}$, below the sum of the individual 95th percentiles.

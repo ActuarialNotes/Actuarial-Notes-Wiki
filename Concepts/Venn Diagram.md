@@ -2,9 +2,9 @@
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-30
+  last_checked: 2026-11-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:95395ba3105d87dd36a3f96e2a64d39f637005dfb6094309842a0dad25ffb10e
+  content_hash: sha256:7b6cb1733be0b7c2f7f48642e34aa773ecbed4c6ad3b0fd60f5f88851a79fa28
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 set operations and Figure 1.7 Venn diagrams (pp.21-22, PDF pp.29-30), Thm 1.4 (p.24, PDF p.32), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.2.1 Venn Diagrams, fetched 2026-09-28, sha256:2fe78c16c34bc692e154703fc87319338f8983e53c9914321e49e0fd8e5344ab — https://www.probabilitycourse.com/chapter1/1_2_1_venn.php"
@@ -14,6 +14,9 @@ verification:
     - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, §1.1 Sets (partitions), sha256:88ae6adae225bb78dcf149c6e9807cc4de3d615bf803a343f73b387d3729824a — https://www.randomservices.org/random/foundations/Sets.html"
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.3.3 Finding Probabilities (Example 1.11: either but not both = P(A−B)+P(B−A); P(A−B)=P(A)−P(A∩B)), fetched 2026-10-30, sha256:984952f1ea762230cb0c228497cb48dced7032a55616e2ef6ca339338bd2fdfb — https://www.probabilitycourse.com/chapter1/1_3_3_finding_probabilities.php"
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Thm 1.2 and Thm 1.3 (p.23, PDF p.31), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Thm 1.1 property 4 (p.22, PDF p.30), Thm 1.2 and Thm 1.3 (p.23, PDF p.31), Thm 1.4 (p.24, PDF p.32), read 2026-11-04, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.3.3 Finding Probabilities (P(A−B)=P(A)−P(A∩B); Example: either but not both = P(A−B)+P(B−A)), fetched 2026-11-04, sha256:63d80d6b505c6ee80359645000bca6d4788ae1c97446662a77dd6deb07c7e946 — https://www.probabilitycourse.com/chapter1/1_3_3_finding_probabilities.php"
+    - "SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 1 General Probability, learning outcomes a-g (PDF p.2; vault Exam P-1 page numbers them 1-7), re-read 2026-11-04, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Venn Diagram.md
@@ -22,8 +25,6 @@ verification:
 A **Venn Diagram** is a visual tool used to represent the relationships between different sets, used for calculating the intersections and unions of multiple events. For two events, the probability of the union is:
 
 > $$P(A \cup B) = P(A) + P(B) - P(A \cap B)$$
-
-![[Media/Figures/Venn_Diagram.svg|340]]
 
 - **$S$**: Universal Set — the rectangle representing every possible outcome (Total Probability = 1)
 - **$A, B$**: Sets A and B — the circles representing specific events
@@ -38,6 +39,11 @@ A **Venn Diagram** is a visual tool used to represent the relationships between 
 | "Neither $A$ nor $B$" | $(A \cup B)^c$ | The space outside both circles. |
 | "$A$ but not $B$" | $A \setminus B$ | The "crescent moon" of $A$ only. |
 | "Exactly one of $A$ or $B$" | $(A \setminus B) \cup (B \setminus A)$ | Both crescent moons (no overlap). |
+
+> [!idea] The idea
+> A Venn diagram cuts overlapping events into regions that don't overlap, and probabilities of non-overlapping regions simply add. Every question (a union, "neither", "exactly one") becomes a sum of regions, and every total the question gives is an equation in those regions.
+
+![[Media/Figures/Venn_Diagram.svg|340]]
 
 ### Exactly one of two events
 
@@ -83,3 +89,14 @@ A **Venn Diagram** is a visual tool used to represent the relationships between 
 > >
 > > > [!tip] Common Trap
 > > > When filling out a Venn Diagram, **always start from the center (the intersection) and work your way out.** If you just put "70" in the Auto circle, you've forgotten that 20 of those people also have Homeowners. The "Auto Only" region is actually $70 - 20 = 50$.
+
+> [!tip]- How it appears on the exam
+> - **Exam P** (General Probability, objectives 1, 4–5): the page is tagged on 9 Exam P questions in the bank, each built on two or three overlapping groups.
+> - Three groups with "only one" counts and the all-three count given (risk factors in a driver or patient study); find the total or the number in exactly two.
+> - Portfolio or client profiles listing group totals and some pairwise and triple overlaps; find a region such as "none of the three" or "auto only".
+> - Answers in symbols: given $x\%$, $y\%$ and $z\%$ for some regions, pick the expression for another region.
+
+> [!warning]- Exam traps
+> - **A pairwise count used as an "exactly two" region.** "30 own $A$ and $B$" includes those who own all three; the region "$A$ and $B$ only" is $30$ minus the centre. Putting $30$ in that region counts the centre twice.
+> - **Exactly one, at least one, at most one.** At least one of two is the union; exactly one is the union less the overlap; at most one is $1 - P(A \cap B)$. Answering with the union when "exactly one" is asked keeps the overlap in.
+> - **Forgetting the outside region.** The eight regions of a three-event diagram add to the whole group; when the question asks for the size of the group, the "none" region must be added (or shown to be empty).

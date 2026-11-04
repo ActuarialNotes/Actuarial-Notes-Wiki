@@ -1,29 +1,34 @@
 ---
 verification:
   status: verified
-  confidence: high
-  last_checked: 2026-10-30
+  confidence: medium
+  last_checked: 2026-11-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:0ebe422c8bc4252e67838dab633cae3bcc12f1b3307ef793943f7af4bd9cd5f4
+  content_hash: sha256:6c66a11cd041bfac72145abf388ab849c7068f4e77bf09dd6b1569fdc2c88f96
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 sample space (p.18, PDF p.26), Example 1.9 (p.20, PDF p.28), Infinite Sample Spaces (p.28, PDF p.36), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.3.1 Random Experiments (outcome, sample space, event), fetched 2026-09-28, sha256:5ab5af0abfbf56905a0a023eb3242ae9749a17af50a5ff8581a6c69030ce29ad — https://www.probabilitycourse.com/chapter1/1_3_1_random_experiments.php"
     - "SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 1 General Probability, learning outcome 1a (PDF p.2), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 Example 1.11 (p.26, PDF p.34: m((i,j)) = 1/36), §3.1 A Counting Technique and tree diagrams (p.76, PDF p.84: N = n1·n2·…·nr), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 Def. 1.1 sample space (p.18, PDF p.26), Def. 1.2 distribution function m(ω)≥0, Σm(ω)=1, P(E)=Σ_{ω∈E}m(ω) (p.19, PDF p.27), Thm 1.1 (p.22, PDF p.30), Historical Remarks: 36 ordered vs 21 unordered pairs (p.30, PDF p.38); §3.1 A Counting Technique (p.76, PDF p.84), read 2026-11-04, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 1 General Probability, learning outcomes a-g (PDF p.2; vault Exam P-1 page numbers them 1-7), re-read 2026-11-04, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 difference A−B (p.21, PDF p.29), Thm 1.4 proof ('added twice') and Cor. 1.1 P(A)=P(A∩B)+P(A∩~B) (p.24, PDF p.32), Historical Remarks: 36 ordered vs 21 unordered pairs (p.30, PDF p.38), read 2026-11-04, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Sample Space.md
 ---
 
-A **Sample Space** $S$ (or $\Omega$) is the set of all possible outcomes of a random experiment.
+A **Sample Space** $S$ (or $\Omega$) is the set of all possible outcomes of a random experiment. When $S$ is finite or countably infinite, its outcomes can be listed in sequence:
+
+> $$S = \{\omega_1, \omega_2, \ldots\}$$
+
+- where each $\omega_i$ is an elementary outcome of the experiment
 - Every conceivable result of the experiment appears as exactly one element of $S$
 - Outcomes in $S$ must be mutually exclusive (no two can occur simultaneously) and collectively exhaustive (together they cover every possibility)
 - The sample space can be finite, countably infinite, or uncountably infinite depending on the experiment
-- When $S$ is finite or countably infinite, its outcomes can be listed in sequence:
 
-> $$S = \{\omega_1, \omega_2, \ldots\}$$
->
-> $$\text{where each } \omega_i = \text{an elementary outcome of the experiment}$$
+> [!idea] The idea
+> Writing the sample space down first fixes what "every possibility" means. Because its outcomes don't overlap and miss nothing, their probabilities add to 1 and an [[Event]]'s probability is the sum over the outcomes it contains. A mistake in the sample space carries into every probability computed from it: treat the 21 unordered results of two dice as equally likely and every answer is off.
 
 ![[Media/Figures/Sample_Space.svg|340]]
 
@@ -52,3 +57,12 @@ A **Sample Space** $S$ (or $\Omega$) is the set of all possible outcomes of a ra
 > > There are three mutually exclusive, exhaustive outcomes:
 > > $$S = \{\text{No Claim},\; \text{Small Claim},\; \text{Large Claim}\}$$
 > > Each outcome is distinct, they cannot co-occur, and every possible result of the experiment is represented.
+
+> [!tip]- How it appears on the exam
+> - **Exam P** (General Probability, objective 1: define sample space and events): rarely asked on its own — one question in the bank is tagged with this page, and it asks which events, described in words over a two-year policy, match a set expression.
+> - More often it is the first step of a counting question: list the ordered outcomes of dice, coins or a two-stage choice, then count the favourable ones.
+
+> [!warning]- Exam traps
+> - **Unordered outcomes treated as equally likely.** Two dice have 21 unordered results but 36 equally likely ordered ones; dividing by 21 gives wrong probabilities because $\{1, 2\}$ happens two ways and $\{1, 1\}$ only one.
+> - **Outcomes that overlap.** $\{\text{Claim}, \text{Large Claim}, \text{No Claim}\}$ is not a sample space: a large claim is also a claim, so the probabilities add to more than 1. Split into outcomes that cannot co-occur.
+> - **$n_1 \times n_2$ without the "for each".** Drawing two different digits from 0–9 gives $10 \times 9 = 90$ ordered outcomes, not $100$; the second stage has fewer choices because the first digit can't repeat.

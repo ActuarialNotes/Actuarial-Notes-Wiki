@@ -1,30 +1,38 @@
 ---
 verification:
   status: verified
-  confidence: medium
-  last_checked: 2026-10-30
+  confidence: high
+  last_checked: 2026-11-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:80c99e6d8ea4aea474a6c14e39547a8f1be9a0db15dee3808f4defcaac134c4c
+  content_hash: sha256:c6fe044babd23c5be538c8b27e6d75b0106d2b70a42ed4d505f2ba8afc00c352
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §4.1 Def. 4.1 (p.139, PDF p.147), Bayes formula and eqs. (4.2)-(4.3) (pp.145-146, PDF pp.153-154), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 1 General Probability, learning outcome 1g (PDF p.2), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §1.4.3 Bayes' Rule, sha256:c352ede4dc334d99bc724927ca8b51853cf8561e407a34f59f165b22ae00042a — https://www.probabilitycourse.com/chapter1/1_4_3_bayes_rule.php"
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §1.4.4 Conditional Independence (definition (1.8) P(A∩B|C)=P(A|C)P(B|C); two-coin example P(A∩B)=Σ P(A|C)P(B|C)P(C) by LTP = 5/8 ≠ P(A)P(B)=9/16; 'if we know A has occurred … more likely that we have chosen Coin 2 … increases the conditional probability that B occurs'; conditional independence neither implies nor is implied by independence), sha256:ad951e9a3bf2fbaacbf4d3da76be9e02ed2c33627bed79427c4584355903b027 — https://www.probabilitycourse.com/chapter1/1_4_4_conditional_independence.php"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §4.1 Bayes' Formula (PDF pp.153-154: hypotheses, evidence, prior and posterior; P(E|H_i) known, P(H_i|E) wanted; formula), Example 4.17 (PDF p.155: prior .001, P(+|cancer)=.99 gives posterior .019 — 'one has to be careful when the prior probabilities are small'), read 2026-11-04, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "SOA Exam P Sample Solutions (2026-05 file), Q306 solution, PDF p.84 (Bayes with likelihoods P(T>1|H)=e^{-1/4}, P(T>1|A)=e^{-1/2}; 0.4612), sha256:e10d2649bdf708541f87849c85ef6cde195019cfc8a46ee9647f6733d74d04b2 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning (2nd ed., corrected June 2023 PDF from statlearning.com), §4.4 p.142 (PDF p.153): Bayes' theorem (4.15), the Bayes classifier classifies x to the class for which p_k(x) is largest, and LDA, QDA and naive Bayes plug estimates of f_k(x) into (4.15) to approximate it; §4.4.3 QDA p.152 (PDF p.163), sha256:7ed447d1a513c5dd95240a829603310f1d319a14a8079ddfb180c6a3d9d9a6ff — https://drive.google.com/uc?export=download&id=1--811-yIIvjT3dvnyFJM20rj_-tbB3bg"
+    - "SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 1 General Probability learning outcomes a-g (PDF p.2) and Topic 2 learning outcome b (PDF p.3), read 2026-11-04 for the objective numbers in the exam tip, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Bayes Theorem.md
 ---
 
 **Bayes' Theorem** is a formula for reversing conditional probabilities, updating the prior probability $P(H)$ of a hypothesis to the posterior probability $P(H \mid E)$ after observing evidence $E$.
-- The denominator $P(E)$ is computed via [[The Law of Total Probability]] across a partition $\{H_i\}$ of the sample space:
 
 > $$P(H \mid E) = \frac{P(E \mid H)\,P(H)}{P(E)}$$
+
+- The denominator $P(E)$ is computed via [[The Law of Total Probability]] across a partition $\{H_i\}$ of the sample space:
 
 > $$= \frac{P(E \mid H)\,P(H)}{\displaystyle\sum_{i} P(E \mid H_i)\,P(H_i)}$$
 
 - $H$ is the hypothesis and $E$ is the observed evidence
 - If $H$ and $E$ are independent (with $P(E) > 0$), observing $E$ leaves the prior unchanged: $P(H \mid E) = P(H)$
 - See also [[Bayesian Credibility]]
+
+> [!idea] The idea
+> Exam data usually say how likely the evidence is under each hypothesis, but the question asks how likely each hypothesis is given the evidence; Bayes' theorem turns one into the other. The posterior is each hypothesis's share of the total probability of the evidence, so hypotheses that made the evidence more likely gain weight and the others lose it — and a hypothesis that was rare to begin with needs strong evidence before it becomes probable.
 
 ![[Media/Figures/Bayes_Theorem.svg|340]]
 
@@ -68,3 +76,14 @@ Events $A$ and $B$ are conditionally independent given each class $C_i$ of a par
 > > Now apply Bayes' Theorem:
 > > $$P(H \mid C) = \frac{P(C \mid H)\,P(H)}{P(C)} = \frac{0.40 \times 0.20}{0.16} = \frac{0.08}{0.16} = 0.50$$
 > > After observing a claim, the probability the policyholder is high-risk rises from 20% to 50%.
+
+> [!tip]- How it appears on the exam
+> - **Exam P** (General Probability, objective 7): policyholders, boards or messages fall into classes with known proportions; one observation is made (a claim, a positive test, a symbol received, a policy still in force) and the question asks for the probability of a class given it.
+> - **Exam P**: the evidence can come from a distribution rather than a single probability — a Poisson claim count, an exponential time to cancellation, a discrete uniform count — so each likelihood is read off that class's distribution.
+> - **MAS-I**: four questions in the bank link this page, on naive Bayes and quadratic discriminant analysis (assign the class with the largest posterior) and on a mixing distribution.
+> - **MAS-II**: four past-paper questions link this page, on Bayesian updating of a prior.
+
+> [!warning]- Exam traps
+> - **Reading the likelihood as the posterior.** A test that is correct 80% of the time on defective items does not make a positive result 80% likely to be defective; with a small prior, the posterior is far lower.
+> - **Dropping the prior.** Normalising the likelihoods, $P(E \mid H_j) / \sum_i P(E \mid H_i)$, is right only when the hypotheses are equally likely a priori. Every term needs its $P(H_i)$.
+> - **The wrong likelihood for "still in force".** When the evidence is that something has *survived* past time $t$, the likelihood under each class is its survival probability $P(T > t)$, not the density at $t$.

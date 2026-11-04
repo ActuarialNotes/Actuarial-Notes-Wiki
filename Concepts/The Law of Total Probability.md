@@ -2,26 +2,32 @@
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-30
+  last_checked: 2026-11-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:91eb3092deb801ac3034e2327f1df8eb05c5850fa5e0a5e35fbe563ad7495c11
+  content_hash: sha256:9a01425fe348545919ec9299ab9a9b163d5b70f1d4585d0cfc513dbc4738ae60
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §4.1 p.146 (PDF p.154) eqs. (4.2)-(4.3), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "SOA Exam P Sample Solutions (Aug 2026 revision), Q84, PDF p.26, sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"
     - "SOA, Probability Exam (Exam P) syllabus, November 2026, p.1 learning outcome 1g, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §5.1.3 Conditioning and Independence (P(X∈A)=Σ_{y_j} P(X∈A|Y=y_j)P_Y(y_j)), sha256:f96cfc28220511431e9ae38905cb664d260d0c2d770fcc6d9a9288149ed138e0 — https://www.probabilitycourse.com/chapter5/5_1_3_conditioning_independence.php"
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §5.2.3 Conditioning and Independence, eq. (5.16) P(A)=∫P(A|X=x)f_X(x)dx and example P(X^3+Y>1)=∫_0^1 P(Y>1-x^3)dx 'since X and Y are independent', sha256:b9e764e0b2adb7b888334dd58ee563d47c9c6cd66bd666fa4fa24c7d5e3b32a4 — https://www.probabilitycourse.com/chapter5/5_2_3_conditioning_independence.php"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §4.1 eqs. (4.2)-(4.3) and Bayes' formula (PDF pp.153-154: H_i pairwise disjoint with union Ω; P(E)=Σ P(H_i)P(E|H_i); posterior = term over the sum), read 2026-11-04, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 1 General Probability learning outcomes a-g (PDF p.2) and Topic 2 learning outcome b (PDF p.3), read 2026-11-04 for the objective numbers in the exam tip, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/The Law of Total Probability.md
 ---
 
 **The Law of Total Probability** states that if $\{A_1, \ldots, A_n\}$ is a partition of the sample space $S$, then the probability of any event $B$ can be expressed as a weighted average of its conditional probabilities given each $A_i$.
+
+> $$P(B) = \sum_{i=1}^{n} P(B \mid A_i)\,P(A_i)$$
+
 - $\{A_1, A_2, \ldots, A_n\}$ must be mutually exclusive and exhaustive events to partition $S$
 - Used for computing the denominator $P(E)$ in [[Bayes Theorem]] and finding marginal probabilities when a problem is structured by distinct scenarios or risk classes
 - Every term equals $P(B \mid A_i)\,P(A_i) = P(B \cap A_i)$
 
-> $$P(B) = \sum_{i=1}^{n} P(B \mid A_i)\,P(A_i)$$
+> [!idea] The idea
+> Split a hard probability into easy ones: when the chance of $B$ depends on which scenario holds, find it within each scenario, where it is known, and weight each answer by how likely that scenario is. Because the scenarios do not overlap and together cover everything, the pieces add up to $P(B)$ with nothing counted twice or missed — which is also why the answer always lies between the smallest and the largest of the conditional probabilities.
 
 ![[Media/Figures/The_Law_of_Total_Probability.svg|340]]
 
@@ -53,3 +59,13 @@ The events $\{X = x\}$ partition the sample space, so the law can condition on t
 > > $$P(C) = (0.20)(0.30) + (0.10)(0.50) + (0.15)(0.20)$$
 > > $$= 0.060 + 0.050 + 0.030 = 0.140$$
 > > The overall claim probability is 14%.
+
+> [!tip]- How it appears on the exam
+> - **Exam P** (General Probability, objective 7): a portfolio split into classes or territories, each with its own claim, accident or failure probability, and the question asks for the probability for a policyholder chosen at random.
+> - **Exam P**: most often as the first step of a [[Bayes Theorem]] question, where it supplies the denominator — a test result, a claim or a survival observed, and the question asks which class the policyholder is in.
+> - **Exam P**: conditioning on the value of a random variable — a claim count or a class that is itself random, a sum of two independent variables, or a continuous variable integrated against its density.
+
+> [!warning]- Exam traps
+> - **An unweighted average.** Averaging the conditional probabilities $P(B \mid A_i)$ without the weights $P(A_i)$ gives the right answer only when the classes are equally likely.
+> - **Weights that are not a partition.** The $P(A_i)$ must be the probabilities of non-overlapping classes that sum to 1. Overlapping categories, or percentages quoted on different bases, have to be turned into a partition first.
+> - **Stopping one step early.** When the question asks for the probability of a class *given* the event, $P(B)$ is only the denominator: the answer is one term of the sum divided by the whole sum.

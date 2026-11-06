@@ -62,6 +62,15 @@ A condition is often a range of a loss or a lifetime. The overlap is then an int
 - A loss uniform on $(0, 1000)$, known to exceed 400, is at most 700 with probability $(0.7 - 0.4)/(1 - 0.4) = 0.5$.
 - A person alive at age $x$ dies within $n$ years with probability $P(T \le x + n \mid T > x)$, not $P(T \le x + n)$.
 
+## Expected value given an event
+
+The same move works for an expected value. To find the mean of $X$ given an event $A$, keep only the outcomes in $A$ and rescale their probabilities by $P(A)$.
+
+> $$E[X \mid A] = \sum_x x \, \frac{P(X = x,\ A)}{P(A)}$$
+
+- A loss is 0, 100, 400 or 1,000 with probabilities 0.4, 0.3, 0.2 and 0.1. Given that the loss is positive, its mean is $(30 + 80 + 100) / 0.6 = 350$.
+- Writing $1_A$ for the indicator of $A$ (1 if $A$ occurs, 0 if not), the same formula is $E[X \cdot 1_A] / P(A)$.
+
 ## Try it
 
 > [!example]- Fill in the missing cell {Example}

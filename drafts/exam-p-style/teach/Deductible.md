@@ -74,6 +74,32 @@ If every loss rises 10% and the deductible stays at 200, the loss becomes unifor
 > [!trap] Multiplying by $1 + r$
 > With the deductible fixed, scaling the old expected payment by $1 + r$ gives too low an answer. Inflate the loss distribution first, then apply the deductible.
 
+## Discrete losses
+
+When the loss takes a few values, the integrals become sums. Take a loss of 0, 100, 400 or 1,000 with probabilities 0.4, 0.3, 0.2 and 0.1, so $E[X] = 210$, and a deductible of 200.
+
+> $$E[(X - d)_+] = \sum_{x > d} (x - d)\,p(x)$$
+
+> $$E[X \wedge d] = \sum_{x < d} x\,p(x) + d\,P(X \ge d)$$
+
+- The insurer pays $0.2 \times 200 + 0.1 \times 800 = 120$.
+- The policyholder keeps $0.3 \times 100 + 200 \times 0.3 = 90$. The second term counts every loss of 200 or more at the deductible.
+- The two add back to 210.
+- Between two possible loss amounts, the expected payment is a straight line in $d$ with slope $-P(X > d)$. It bends at each possible loss amount.
+
+Some policies pay per event above $d$ events. For a count $N$ taking the values $0, 1, 2, \ldots$, the capped count is a sum of tail probabilities.
+
+> $$E[N \wedge d] = \sum_{k=0}^{d-1} P(N > k)$$
+
+## On other exams
+
+The same deductible appears on later exams, stated in the policy's own terms.
+
+- **FAM, MAS-I and ASTAM** add the [[Loss Elimination Ratio|loss elimination ratio]], $E[X \wedge d] / E[X]$, and the effect of a deductible on how many losses become payments.
+- **Exam 5 and the DISCs** state a deductible as a percentage of the coverage amount. A 5% deductible on a home insured for \$500,000 is a flat \$25,000, whatever the size of the loss.
+- **Exam 6C and the DISCs** settle claims under a per-occurrence deductible, an annual aggregate deductible, or both, and with a limit.
+- **Exam 5 and Exam 7** price and reserve large deductible policies. The rating procedure is on [[Deductible Rating]].
+
 ## Try it
 
 > [!example]- Exponential losses {Example}
@@ -100,3 +126,4 @@ If every loss rises 10% and the deductible stays at 200, the loss becomes unifor
 > - **Per loss or per payment.** Read which one is asked.
 > - **Dropping the capped term.** $E[X \wedge d]$ includes $d \cdot P(X \ge d)$, not just the losses below $d$.
 > - **Scaling by inflation.** Inflate the losses, then apply the deductible.
+> - **A percentage of the loss instead of the coverage.** A 5% deductible on a \$500,000 home is \$25,000. Taking 5% of a \$40,000 loss understates what the insured keeps.

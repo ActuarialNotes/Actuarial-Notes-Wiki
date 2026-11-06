@@ -1,6 +1,6 @@
 ---
 name: actuarial-concept-definitions
-description: Write or improve a concept page in Concepts/*.md so it teaches — a precise definition, the defining formula (or, for a qualitative concept, its defining structure), "The idea" card that explains why it works, worked examples that model the reasoning, and collapsible "How it appears on the exam" and "Exam traps" sections. Use when the user asks to create, write, draft, fill in, explain better, or clean up a Concepts/ page (SOA Exam P / FM / FAM / ALTAM, CAS MAS-I / MAS-II / Exam 5–9, the DISCs, CIA modules), or to standardize existing pages to this shape. Not for Resources/Books pages (resource-pages skill) or for auditing a whole exam's syllabus and coverage (exam-material-review).
+description: Write or improve a concept page in Concepts/*.md so it teaches — a precise definition, the defining formula (or, for a qualitative concept, its defining structure), "The idea" card that explains why it works, sections that teach it through one running example, "Try it" examples that model the reasoning, and a collapsible "Exam traps" section. Use when the user asks to create, write, draft, fill in, explain better, or clean up a Concepts/ page (SOA Exam P / FM / FAM / ALTAM, CAS MAS-I / MAS-II / Exam 5–9, the DISCs, CIA modules), or to standardize existing pages to this shape. Not for Resources/Books pages (resource-pages skill) or for auditing a whole exam's syllabus and coverage (exam-material-review).
 ---
 
 # Actuarial Concept Page Writer
@@ -43,7 +43,7 @@ back to the principle.
    (→ inline `[!trap]` card, and the closing *Exam traps*).
 6. **Cut what doesn't help learning.** Short definitions, one formula per
    block, every symbol defined, nothing a reader has to decode. Pages are read
-   on phones. Median page length is ~750 words; a long page needs a reason.
+   on phones. A page runs ~750–1,100 words; a longer one needs a reason.
 
 ## How every sentence is written
 
@@ -89,9 +89,11 @@ After:
 > the size of a payment, so that probabilities, means and variances can be
 > calculated.
 
-**Section headings are allowed.** A page may keep `##` / `###` sections below
-its opening (the maintainer finds them more readable); the order below governs
-the opening and the closing sections.
+**Section headings carry the teaching.** Below the opening, the page teaches
+in `##` sections that build on each other (see "The teaching body"). The
+maintainer chose this style over a lean reference card and an exam-playbook
+layout after comparing all three on Exam P (2026-11-06; the drafts are in
+`drafts/exam-p-style/`).
 
 ## The shape of every page
 
@@ -112,18 +114,30 @@ the opening and the closing sections.
 
 ![[Media/Figures/<Concept>.svg|340]]   ← only if the file already exists
 
+## <A question or difficulty, answered with the running example>
+
+<One concrete case, worked as the reader reads: a table, a formula, what it shows.>
+
+## <The next step, built on the last>
+
+…
+
+## Try it
+
 > [!example]- <What this example demonstrates> {Example}
 > <Problem statement.>
 >
 > > [!answer]-
-> > <Plan in one sentence → labelled steps → result → one "why" line.>
-
-> [!tip]- How it appears on the exam
-> - <the question shapes that test it, on the exams that link the page>
+> > **Plan:** <one sentence> → steps → result → one "why" line.
 
 > [!warning]- Exam traps
 > - <the remaining mistakes that cost candidates the marks>
 ```
+
+There is no `> [!tip]- How it appears on the exam` callout any more
+(maintainer's decision, 2026-11-06). The page teaches the question shapes in
+its sections and examples, and *Exam traps* closes it. Remove the callout from
+any page you restructure.
 
 **Order matters, and part of it is load-bearing.** The *opening* — the
 definition, the formula and the bullets, everything above the first callout or
@@ -220,13 +234,15 @@ makes *while reading this formula* — put it right where it arises, as an amber
 card, instead of only at the bottom of the page.
 
 - At most one, two on a broad page. The rest stay in the closing
-  *Exam traps* list. Never state a trap in both places.
+  *Exam traps* list, where an inline trap may come back as a one-line
+  reminder.
 - Title it with the slip, in a few words (`Paid losses, reported factors`,
   `Immediate is not due`).
 - Body: what the wrong answer looks like, and the fix, in one or two
   sentences.
-- Place it after the idea card, or **inside an example's answer at the step
-  where the slip happens** (nested one level deeper: `> > > [!trap] …`).
+- Place it **in the teaching section where the slip happens**, right after the
+  worked number that a wrong reading would get wrong. Exceptionally, inside an
+  example's answer at that step (nested one level deeper: `> > > [!trap] …`).
 
 ### 6. Optional figure
 
@@ -235,81 +251,98 @@ card, instead of only at the bottom of the page.
 never invent an embed. Place it after the idea card: the picture should show
 what the idea says.
 
-### 7. Worked examples (1–3)
+### 7. The teaching body — `##` sections
 
-Each is a collapsed `> [!example]- <title> {Example}` with a nested collapsed
-`> > [!answer]-`. Collapsed means the reader sees the problem first and can try
-it — keep both `-`s, and keep the `{Example}` badge.
+Below the figure, the page teaches. This is where most of its words go.
 
-**How many** scales to the concept: 1 for a narrow conversion (`Force of
-Interest`), 2 for most, 3 for a foundational or many-sided concept (`Expected
-Value`, `Bonds`, `Bayes Theorem`) where each case teaches something different.
+- **One running example.** Pick one concrete case early and carry it through
+  every section: 1,000 policyholders with a claim table, one policy with a
+  deductible of 200, a month of claims at a rate of 3. Each section asks a new
+  question of the same case, so the reader never has to absorb new numbers
+  just to follow a new idea.
+- **Lay the data out.** A small table (a two-way table of counts, a
+  loss-by-loss split, a pmf for $k = 0, \ldots, 5$, a deductible against its
+  expected payment) is usually the clearest way to show the case. Keep it to
+  three or four short columns so it fits a phone.
+- **Each section opens with a question or a difficulty**, in plain words, as
+  its heading or first sentence ("A driver had a claim. What is the
+  probability they are young?", "Why the first dollars matter most"). Then
+  answer it on the running example, then state the general formula.
+- **Numbers first, formula second.** Work the case, then show that the formula
+  gives the same number. The formula then reads as a summary of what the
+  reader has just done.
+- **Sections build.** Order them so each uses what the one before set up:
+  one loss → the average over losses → per loss or per payment → how the
+  answer moves. A topic that builds on nothing earlier goes last.
+- **Keep every topic the page covered.** A restructure moves material into
+  sections, it doesn't drop it. Questions in the bank, and the answerability
+  record (`simulations/answerability/<bank>.json`), lean on what is there. Cut
+  only what is plainly off topic, and say what you cut.
+- **Material for another exam keeps a section.** A page linked by several
+  exams (Deductible: Exam P, FAM, Exam 5, the DISCs) teaches the shared core
+  first and gives the other exams' material its own late section, not a line
+  in a callout.
+- **No bullet restates a formula in words.** If a formula needs reading
+  aloud, it needs a worked number instead.
+- An inline `[!trap]` card sits in the section where its slip happens.
 
-**What each example is for** — pick them as a set, not one at a time:
+### 8. Try it — worked examples (2–4)
 
-- **Example 1 — the direct application.** The standard question shape, in an
+The section `## Try it` holds the examples. Each is a collapsed
+`> [!example]- <title> {Example}` with a nested collapsed `> > [!answer]-`.
+Collapsed means the reader sees the problem first and can try it — keep both
+`-`s, and keep the `{Example}` badge.
+
+**Choose them as a set, easy to hard.** Two for a narrow concept, three or four
+for a broad one. Each should exercise something the sections taught, on fresh
+numbers (not the running example again):
+
+- **First — the direct application.** The standard question shape, in an
   actuarial setting.
-- **Example 2 — the contrast or the twist.** Compare with the neighbour on the
-  same data (BF vs chain ladder), change one condition and show the answer
-  move, or show the method *failing* when its assumption breaks. This is the
-  example that teaches the boundary of the concept.
-- **Example 3 (if earned)** — a multi-step exam-style problem, or a case the
-  first two don't cover (continuous vs discrete; a premium vs a discount bond).
+- **Then — the contrast or the twist.** Change one condition and show the
+  answer move, show the neighbour on the same data, or show the method
+  failing when its assumption breaks.
+- **Last — the multi-step exam-style problem**, or a case the sections
+  mentioned but didn't work (an even count, a policy still in force, a draw
+  without replacement).
 
 **How each answer is written** — show the thinking:
 
-1. **The plan, in one sentence, before any arithmetic.** What is being asked
-   and the route: "We need $P(H \mid C)$; its denominator $P(C)$ comes from the
-   law of total probability, so find that first."
-2. **Labelled steps.** Each chunk of working opens with a short plain-language
-   label of what it achieves ("First, the a priori expected losses:"). In an
-   `align*` block, the left-hand side often *is* the label
-   (`\% \text{ unreported} &= …`).
-3. **The result, with a one-line interpretation** ("… so the bond sells at a
-   premium").
-4. **One "why" line.** Pose the question a thoughtful reader would ask and
-   answer it in a sentence: `*Why is BF higher?* Emergence is running behind
-   the a priori, and BF doesn't extrapolate the shortfall.` This models the
-   self-explanation that makes an example stick.
+1. **`**Plan:**` in one sentence, before any arithmetic.** What is being asked
+   and the route: "the evidence is survival past 1 year, so each likelihood is
+   $P(T > 1)$."
+2. **Steps.** Each chunk of working opens with a short label of what it
+   achieves, or is an `align*` whose left-hand sides are the labels.
+3. **The result, with a one-line interpretation.**
+4. **One "why" line**, when a thoughtful reader would ask one: the question and
+   its one-sentence answer ("A first head makes the biased coin more likely, so
+   a second head is more likely than 0.65.").
 
 Also:
 
 - **Actuarial, not generic**: claims, losses, deductibles, premiums, reserves,
   annuities, bonds, policyholders. This is the point of the vault.
 - **Recompute every number in code**, not by eye, and state rounding where it
-  changes a digit.
+  changes a digit. That includes the running example and its tables.
 - A **written-answer** example (a "describe", "explain" or "evaluate" task)
   follows "Qualitative concepts" below — its answer is a model answer, not a
   number.
 
-### 8. How it appears on the exam — `> [!tip]-` (collapsed)
-
-2–5 bullets on the **question shapes** that test the concept on the exams that
-link the page: what the question gives and asks for, what it is paired with,
-whether it is a calculation, a recognition or a written answer — and for a
-written answer, its **command word** (*describe*, *explain*, *evaluate*,
-*recommend*), since that word decides what earns credit. Name the exam when the
-page serves several. Ground it in the exam page's objective wording and the
-question bank (`grep -rl "Concepts/<Name+With+Plusses>" questions/`) — never
-invent a frequency you have not counted.
-
 ### 9. Exam traps — `> [!warning]-` (collapsed)
 
-2–5 bullets, each a specific mistake and its fix: a timing or convention slip
-(immediate vs due, curtate vs complete, `q` vs `p`), a confusable neighbour, a
-units or rate-basis mismatch, a sign or direction error, an assumption the
-question quietly violates. Say what the wrong answer looks like so a candidate
-can catch it mid-question. No generic advice ("read carefully"). Don't repeat
-the inline trap card here.
-
-Both closing callouts go after the last example and are required on every new
-page.
+The page's last block. 2–5 bullets, each a specific mistake and its fix: a
+timing or convention slip (immediate vs due, curtate vs complete, `q` vs `p`),
+a confusable neighbour, a units or rate-basis mismatch, a sign or direction
+error, an assumption the question quietly violates. Say what the wrong answer
+looks like so a candidate can catch it mid-question. No generic advice ("read
+carefully"). A trap already told as an inline card may come back here as a
+one-line reminder. Required on every page.
 
 ## Qualitative concepts
 
 About a hundred pages have no formula: professional standards, governance,
 regulation, IFRS 17 policy, the DISCs' risk-management and data topics, much of
-Exams 6–9's reading. The page keeps the same order with three substitutions.
+Exams 6–9's reading. The page keeps the same order with four substitutions.
 
 1. **In place of the formula: the defining structure**, right after the
    definition, as plain markdown (not a `>` box — a plain blockquote centres
@@ -335,9 +368,12 @@ Exams 6–9's reading. The page keeps the same order with three substitutions.
    question would want. Where more than one answer earns credit, say so, as the
    examiners do ("Alternatively: …"). End with a "why" line on what separated a
    full-credit answer from a partial one.
+4. **The running example is a scenario**: one company, one filing or one
+   reserve review, carried through the sections, each asking what the rule
+   requires of it at that step.
 
 `Concepts/Accepted Actuarial Practice.md` is a good model of the scenario
-example; give such a page its idea card and closing sections when you touch it.
+example; give such a page its idea card, teaching sections and Exam traps when you touch it.
 
 ## Workflow
 
@@ -382,10 +418,12 @@ example; give such a page its idea card and closing sections when you touch it.
 - [ ] Every sentence: the page's own terms (no synonyms), one main clause, no semicolons or dash-asides, the concept named as the subject
 - [ ] `> [!idea] The idea` present, after the bullets: 1–3 plain sentences that say *why*, not *what*; passes the rebuild-or-predict test
 - [ ] At least one contrast with the nearest neighbour (a bullet or an example), where the concept has one
-- [ ] Examples chosen as a set: a direct application, then a contrast, twist or failure case
-- [ ] Each answer: a one-sentence plan, labelled steps, the result interpreted, one "why" line
-- [ ] Inline `[!trap]` cards: at most one or two, placed where the slip happens, not repeated in *Exam traps*
-- [ ] `> [!tip]- How it appears on the exam` grounded in the objective and the bank (command words for written answers); `> [!warning]- Exam traps` specific
+- [ ] `##` sections that build on one running example, each opening with a question; numbers first, then the formula
+- [ ] Every topic the old page covered is still taught (or its cut is reported)
+- [ ] `## Try it`: 2–4 examples on fresh numbers, easy to hard — a direct application, then a contrast, twist or failure case
+- [ ] Each answer: a `**Plan:**` sentence, labelled steps, the result interpreted, a "why" line where one is asked
+- [ ] Inline `[!trap]` cards: at most one or two, placed in the section where the slip happens
+- [ ] No `[!tip]- How it appears on the exam` callout; `> [!warning]- Exam traps` last, specific
 - [ ] Qualitative concept: defining structure (list, hierarchy or table) in place of the formula; scenario examples with model answers
 
 **Form**

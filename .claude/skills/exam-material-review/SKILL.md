@@ -122,10 +122,10 @@ Priority follows how much a candidate is hurt, not how easy the fix is:
 4. **Pages that state but don't explain.** A page with a definition and a
    formula but no `> [!idea] The idea` card, examples that plug in numbers with
    no plan or "why" line, or no contrast with the concept it is confused with.
-   And **missing warnings and identification guidance**: the two collapsible
-   closing sections — `> [!tip]- How it appears on the exam` and
-   `> [!warning]- Exam traps` — with at most one inline `> [!trap]` card where a
-   slip is tied to the formula. The `actuarial-concept-definitions` skill has the
+   And **missing teaching and warnings**: no `##` sections working one running
+   example, no `## Try it`, or no collapsible `> [!warning]- Exam traps` closing
+   the page, with at most one or two inline `> [!trap]` cards where a slip
+   happens. The `actuarial-concept-definitions` skill has the
    shape of all of these.
 5. **Second worked examples** on pages carrying only a plug-in.
 6. **Questions** for zero-coverage concepts.

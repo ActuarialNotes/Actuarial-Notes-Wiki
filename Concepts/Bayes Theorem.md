@@ -20,72 +20,111 @@ verification:
   log: .verify/Concepts/Bayes Theorem.md
 ---
 
-**Bayes' Theorem** is a formula for reversing conditional probabilities, updating the prior probability $P(H)$ of a hypothesis to the posterior probability $P(H \mid E)$ after observing evidence $E$.
+**Bayes' Theorem** reverses a [[Conditional Probability|conditional probability]]. It updates the prior probability $P(H)$ of a hypothesis to the posterior probability $P(H \mid E)$ after evidence $E$ is observed.
 
 > $$P(H \mid E) = \frac{P(E \mid H)\,P(H)}{P(E)}$$
 
-- The denominator $P(E)$ is computed via [[The Law of Total Probability]] across a partition $\{H_i\}$ of the sample space:
-
-> $$= \frac{P(E \mid H)\,P(H)}{\displaystyle\sum_{i} P(E \mid H_i)\,P(H_i)}$$
-
 - $H$ is the hypothesis and $E$ is the observed evidence.
-- If $H$ and $E$ are independent (with $P(E) > 0$), observing $E$ leaves the prior unchanged: $P(H \mid E) = P(H)$.
-- A hypothesis gains probability when the evidence is more likely under it than overall, that is when $P(E \mid H) > P(E)$. A hypothesis under which the evidence is less likely than overall loses probability.
-- See also [[Bayesian Credibility]]
+- $P(E \mid H)$ is the likelihood: the probability of the evidence if the hypothesis is true.
+- The denominator $P(E)$ comes from [[The Law of Total Probability|the law of total probability]] over a partition $H_1, H_2, \ldots$ of the sample space.
+
+> $$P(E) = \sum_i P(E \mid H_i)\,P(H_i)$$
 
 > [!idea] The idea
-> Exam questions usually give the probability of the evidence under each hypothesis, but ask for the probability of each hypothesis given the evidence. Bayes' theorem reverses the conditioning. Each hypothesis's posterior probability is its share of the total probability of the evidence, so a hypothesis with a small prior probability needs strong evidence to become probable.
+> Questions usually tell you how likely the evidence is under each hypothesis. They ask the reverse: how likely each hypothesis is, now that the evidence has been seen. Bayes' theorem answers by giving each hypothesis its share of the total probability of the evidence.
 
 ![[Media/Figures/Bayes_Theorem.svg|340]]
 
-### Evidence restricted to a subset of hypotheses
+## One portfolio, counted
 
-When the evidence is an event $E$ together with the information that the outcome lies in a subset $H_1, \ldots, H_k$ of the hypotheses, condition on both: the denominator of Bayes' theorem sums over only the hypotheses in that subset.
+An insurer has 1,000 policyholders. 200 are high-risk and 800 are low-risk. A high-risk policyholder files a claim with probability 0.40, and a low-risk one with probability 0.10.
+
+| | Claim | No claim | Total |
+|---|---|---|---|
+| High-risk | 80 | 120 | 200 |
+| Low-risk | 80 | 720 | 800 |
+| Total | 160 | 840 | 1,000 |
+
+A policyholder files a claim. What is the probability they are high-risk? The evidence is the claim, so the sample space is the 160 claimants.
+
+> $$P(\text{high} \mid \text{claim}) = \frac{80}{160} = 0.50$$
+
+The claim raised the probability of high-risk from the prior 0.20 to the posterior 0.50.
+
+## From the counts to the formula
+
+The table and the formula do the same thing. Each cell in the claim column is a likelihood times a prior, and the column total is the law of total probability.
+
+> $$P(\text{high} \mid \text{claim}) = \frac{0.40 \times 0.20}{0.40 \times 0.20 + 0.10 \times 0.80} = \frac{0.08}{0.16} = 0.50$$
+
+- The numerator is the high-risk share of the claims.
+- The denominator is all the claims, from both classes.
+- With more than two classes, the denominator has one term per class.
+
+## Why a small prior needs strong evidence
+
+A test flags 95% of defective items, and it also flags 10% of good ones. Only 2% of items are defective. An item is flagged. Is it probably defective?
+
+> $$P(\text{defective} \mid \text{flagged}) = \frac{0.95 \times 0.02}{0.95 \times 0.02 + 0.10 \times 0.98} = \frac{0.019}{0.117} \approx 0.16$$
+
+Most flagged items are good. The test is accurate, but good items outnumber defective ones 49 to 1, so the 10% of good items that are flagged swamp the defective ones.
+
+> [!trap] Reading the likelihood as the posterior
+> "The test flags 95% of defective items" is $P(\text{flagged} \mid \text{defective})$. The question asks for $P(\text{defective} \mid \text{flagged})$. Answering 0.95 skips the prior entirely.
+
+## When the evidence comes from a distribution
+
+The likelihood doesn't have to be stated as a single probability. It can be read off each class's distribution.
+
+- A **claim count** is often Poisson, with a different mean in each class. The likelihood of $k$ claims is $e^{-\lambda}\lambda^k / k!$ for that class's $\lambda$.
+- **"Still in force at time $t$"** means the lifetime exceeded $t$. The likelihood is the survival probability $P(T > t)$, not the density at $t$.
+
+## When the evidence narrows the hypotheses
+
+Sometimes the evidence also says which hypotheses are still possible, such as "the claim came from an urban driver". Hypotheses ruled out have likelihood 0, so they drop out of the denominator. Sum only over the hypotheses still in play.
 
 > $$P\big(H_j \mid E \cap (H_1 \cup \cdots \cup H_k)\big) = \frac{P(E \mid H_j)\,P(H_j)}{\sum_{i=1}^{k} P(E \mid H_i)\,P(H_i)}, \quad j \le k$$
 
-- This is Bayes' theorem with the evidence $E' = E \cap (H_1 \cup \cdots \cup H_k)$. Then $P(E' \mid H_i) = P(E \mid H_i)$ for $i \le k$ and $0$ for every other hypothesis, so the other hypotheses drop out of the denominator.
+## Repeated observations of an unknown class
 
-### Conditionally independent events
+A coin is chosen at random from a bag and tossed twice. Given the coin, the two tosses are independent. Without knowing the coin, they are not, because the first toss is evidence about which coin it is.
 
-Events $A$ and $B$ are conditionally independent given each class $C_i$ of a partition when $P(A \cap B \mid C_i) = P(A \mid C_i)\,P(B \mid C_i)$. Within a class, the probability of several outcomes is the product of their conditional probabilities.
-
-> $$P(A \cap B) = \sum_i P(A \mid C_i)\,P(B \mid C_i)\,P(C_i)$$
+To find the probability of the second observation given the first, condition on the class in both the numerator and the denominator.
 
 > $$P(B \mid A) = \frac{\sum_i P(A \mid C_i)\,P(B \mid C_i)\,P(C_i)}{\sum_i P(A \mid C_i)\,P(C_i)}$$
 
-- Events that are independent given each class are in general not independent unconditionally when the class is unknown, because observing one event updates the probability of each class.
-- Repeated tosses of a coin chosen at random are independent only given which coin was chosen; unconditionally they are dependent, because each toss gives information about the coin.
-- The second formula is a Bayesian update of the class probabilities, $P(B \mid A) = \sum_i P(B \mid C_i)\,P(C_i \mid A)$: compute the joint probability and the probability of the observed event by conditioning on each class, then divide.
-- Observing $A$ shifts weight toward the classes under which $A$ is more likely; with two classes, when $A$ and $B$ are both more likely in the same class, this raises the probability of $B$, so $P(B \mid A) > P(B)$.
+- $C_i$ are the classes, and $A$ and $B$ are independent within each class.
+- If $A$ and $B$ are both more likely in the same class, observing $A$ makes $B$ more likely.
+
+## Try it
 
 > [!example]- Two tosses of an unknown coin {Example}
 > A bag holds a fair coin and a coin that lands heads with probability 0.8. One coin is drawn at random and tossed twice. Find the probability that the second toss is heads given that the first is.
 >
 > > [!answer]-
-> > **Plan:** the tosses are independent given the coin, so condition on the coin for both numerator and denominator.
+> > **Plan:** condition on the coin for both the joint probability and the first toss.
 > > $$P(H_1) = 0.5(0.5) + 0.5(0.8) = 0.65$$
-> > $$P(H_1 \cap H_2) = 0.5(0.5)^2 + 0.5(0.8)^2 = 0.125 + 0.32 = 0.445$$
+> > $$P(H_1 \cap H_2) = 0.5(0.5)^2 + 0.5(0.8)^2 = 0.445$$
 > > $$P(H_2 \mid H_1) = \frac{0.445}{0.65} \approx 0.685$$
-> > A first head makes the biased coin more likely, so the second head is more likely than the unconditional 0.65.
+> > A first head makes the biased coin more likely, so a second head is more likely than 0.65.
 
-> [!example]- Identifying a High-Risk Policyholder After a Claim {Example}
-> 20% of policyholders are high-risk ($H$) and 80% are low-risk ($L$). A high-risk policyholder files a claim in year 1 with probability 0.40; a low-risk one with probability 0.10. A randomly selected policyholder files a claim. What is the probability they are high-risk?
+> [!example]- Poisson claim counts {Example}
+> 60% of drivers have a Poisson claim count with mean 1, and 40% have mean 3. A driver has exactly 2 claims. Find the probability that the driver is in the mean-3 class.
 >
 > > [!answer]-
-> > First find $P(\text{claim})$ by the Law of Total Probability:
-> > $$P(C) = P(C \mid H)P(H) + P(C \mid L)P(L) = (0.40)(0.20) + (0.10)(0.80) = 0.08 + 0.08 = 0.16$$
-> > Now apply Bayes' Theorem:
-> > $$P(H \mid C) = \frac{P(C \mid H)\,P(H)}{P(C)} = \frac{0.40 \times 0.20}{0.16} = \frac{0.08}{0.16} = 0.50$$
-> > After observing a claim, the probability the policyholder is high-risk rises from 20% to 50%.
+> > **Plan:** read each likelihood off that class's Poisson distribution.
+> > $$P(2 \mid \lambda = 1) = \frac{e^{-1}\,1^2}{2!} \approx 0.1839, \qquad P(2 \mid \lambda = 3) = \frac{e^{-3}\,3^2}{2!} \approx 0.2240$$
+> > $$P(\lambda = 3 \mid 2) = \frac{0.40 \times 0.2240}{0.60 \times 0.1839 + 0.40 \times 0.2240} = \frac{0.0896}{0.2000} \approx 0.448$$
 
-> [!tip]- How it appears on the exam
-> - **Exam P** (General Probability, objective 7): policyholders, boards or messages fall into classes with known proportions. One observation is made, such as a claim, a positive test, a symbol received or a policy still in force. The question asks for the probability of a class given that observation.
-> - **Exam P**: the evidence can come from a distribution rather than a single probability, such as a Poisson claim count, an exponential time to cancellation or a discrete uniform count. Each likelihood is then read off that class's distribution.
-> - **MAS-I**: four questions in the bank link this page. They cover naive Bayes and quadratic discriminant analysis, which assign the class with the largest posterior, and a mixing distribution.
-> - **MAS-II**: four past-paper questions link this page. They cover Bayesian updating of a prior.
+> [!example]- A policy still in force {Example}
+> Half of policies are type A, whose time to cancellation is exponential with mean 1 year. The other half are type B, with mean 2 years. A policy is still in force after 1 year. Find the probability it is type A.
+>
+> > [!answer]-
+> > **Plan:** the evidence is survival past 1 year, so each likelihood is $P(T > 1)$.
+> > $$P(A \mid T > 1) = \frac{0.5\,e^{-1}}{0.5\,e^{-1} + 0.5\,e^{-0.5}} \approx 0.378$$
+> > Using the densities at 1 instead gives about 0.548, which is the answer to a different question: the policy was cancelled at exactly 1 year.
 
 > [!warning]- Exam traps
-> - **Reading the likelihood as the posterior.** A test that is correct 80% of the time on defective items does not give a positive result an 80% probability of coming from a defective item. With a small prior, the posterior is far lower.
-> - **Dropping the prior.** Normalising the likelihoods, $P(E \mid H_j) / \sum_i P(E \mid H_i)$, is right only when the hypotheses are equally likely a priori. Every term needs its $P(H_i)$.
-> - **The wrong likelihood for "still in force".** When the evidence is that something has *survived* past time $t$, the likelihood under each class is its survival probability $P(T > t)$, not the density at $t$.
+> - **Reading the likelihood as the posterior.** With a small prior, the posterior is far below the test's accuracy.
+> - **Dropping the prior.** Dividing each likelihood by the sum of the likelihoods is right only when the classes are equally likely to begin with. Every term needs its $P(H_i)$.
+> - **The density for "still in force".** Survival past $t$ has likelihood $P(T > t)$, not $f(t)$.

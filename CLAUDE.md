@@ -1481,8 +1481,9 @@ compile — don't "clean up" the flagged code as dead.
 - Wiki links use Obsidian syntax: `[[Concept Name]]` or `[[Concept Name|Display Text]]`.
 - Concept pages (`Concepts/*.md`) follow the `actuarial-concept-definitions` skill: definition →
   `> $$formula$$` (or, for a qualitative concept, its defining list/hierarchy/table) → bullets →
-  `> [!idea] The idea` → collapsed examples → collapsed *How it appears on the exam* and *Exam
-  traps*. `[!idea]` and `[!trap]` are **note cards** — always open, in the Examiner's report
+  `> [!idea] The idea` → `##` sections teaching it through one running example → `## Try it`
+  (collapsed examples, easy to hard) → collapsed *Exam traps* (no *How it appears on the exam*
+  callout since 2026-11-06; Exam P's pages are written this way). `[!idea]` and `[!trap]` are **note cards** — always open, in the Examiner's report
   shape (`MarkdownCallout`, style guide §7.2b). Nothing callout-shaped goes above the bullets:
   the opening is read by Concept Craft's recipe reader (`pageOpening`) and the SEO lead.
   `Resources/Books/` pages have their own skill, `resource-pages`.

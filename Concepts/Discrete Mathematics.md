@@ -1,14 +1,17 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-09-27
+  status: verified
+  confidence: high
+  last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
   content_hash: sha256:8861415c7a0d5717c21fdd9bfd04437b6a32f4db0a7886703fe7450f3db922e0
   sources:
-    - "Levin, Discrete Mathematics: An Open Introduction (4th ed.), §0.1 What is Discrete Mathematics?, fetched 2026-09-27, sha256:e00bf8f37901ce2eae655a7d6494fd3f7d5c38bea93d7f899a65334e14146a95 — https://discrete.openmathbooks.org/dmoi4/sec_intro-intro.html"
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.1 Exercise 8 (p.89, PDF p.97) and §3.2 (p.93, PDF p.101): a set with n elements has 2^n subsets, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "Encyclopedia of Mathematics (Springer/EMS), article Set function, fetched 2026-09-27, sha256:168f98c55dc240fde7643462ca01950c62077204b0253c44239d8d197c4a469a — https://encyclopediaofmath.org/wiki/Set_function"
+    - "Levin, Discrete Mathematics: An Open Introduction (4th ed.), §0.1 What is Discrete Mathematics? (objects individually separate and distinct, contrasted with the intervals of calculus), read 2026-11-06, sha256:ff3d5233b8d550726430f4d4ddf082cf192cd0cdcb7b1b27972d7e7c6c274773 — https://discrete.openmathbooks.org/dmoi4/sec_intro-intro.html"
+    - "Levin, Discrete Mathematics: An Open Introduction (4th ed.), §0.2 Discrete Structures (implication false only when hypothesis true and conclusion false; Def. converse Q→P and contrapositive ¬Q→¬P; converse not equivalent), read 2026-11-06, sha256:006647200a59feee0cafe9809efd0a5e876e5d62198dded7ed547bb6efa57422 — https://discrete.openmathbooks.org/dmoi4/sec_intro-structures.html"
+    - "Levin, Discrete Mathematics: An Open Introduction (4th ed.), §1.3 Rules of Logic (truth table of ¬P∨Q identical to P→Q), read 2026-11-06, sha256:ffc0b596025abccfcb8925529780567b385af4ac29f318bcff9fffd3e1f8fdfa — https://discrete.openmathbooks.org/dmoi4/sec_logic-rules.html"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.1 A Counting Technique N = n1·n2·…·nr (p.76, PDF p.84); §3.2 Ex. 3.5 and binomial coefficients, a set of n elements has 2^n subsets (p.93, PDF p.101); §5.1 hypergeometric h(N,k,n,x) = C(k,x)C(N−k,n−x)/C(N,n) (p.193, PDF p.201), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, Ch.0 §1 Sets: universal set, empty set, power set, union/intersection/difference/complement, De Morgan's laws, distributive laws, symmetric difference, Venn diagrams, partitions, read 2026-11-06, sha256:88ae6adae225bb78dcf149c6e9807cc4de3d615bf803a343f73b387d3729824a — https://www.randomservices.org/random/foundations/Sets.html"
+    - "SOA, Probability Exam (Exam P) syllabus, November 2026, introduction (calculus incl. series, differentiation, integration assumed, PDF p.1) and Topic 1 General Probability learning objective and outcomes a-g (PDF p.2), read 2026-11-06, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Discrete Mathematics.md

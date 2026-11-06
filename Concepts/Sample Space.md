@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:42a8a4beef2b74f9d4c075836e6a41431bf3f780d65d46af02b20a78dc89bc30
+  content_hash: sha256:62bd9540000c3ee97ec0863ed16c699f4aaf0875b9ebb8a14e293c77dce1fe8a
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 Def. 1.1 sample space/outcomes/events, Def. 1.2 P(E)=Σ_{ω∈E} m(ω), Examples 1.6-1.9, set operations and Fig. 1.7, Thm 1.1 (P(E)≥0, P(Ω)=1, monotonicity, disjoint additivity, complement with proof), Thms 1.2-1.4 and Cor. 1.1 (pp.18-24, PDF pp.26-32), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 Ex. 1.10, Def. 1.3 uniform m(ω)=1/n, Ex. 1.11 two dice 36 ordered pairs, no single correct sample space, Determination of Probabilities, Infinite Sample Spaces (countable; Ex. 1.13 geometric sum), Historical Remarks 36 ordered vs 21 unordered pairs (pp.24-30, PDF pp.32-38), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
@@ -42,7 +42,7 @@ Then the probabilities of the outcomes add to 1:
 
 > $$\sum_{s \in S} P(\{s\}) = 1$$
 
-- $P(\{s\})$ is the [[Probability|probability]] of the outcome $s$.
+- $P(\{s\})$ is the [[Probability|probability]] of the event containing the single outcome $s$.
 
 > [!example] A policy year is recorded as No Claim, Claim or Large Claim. Is this a sample space?
 > - The list is exhaustive: every policy year has no claim or a claim.

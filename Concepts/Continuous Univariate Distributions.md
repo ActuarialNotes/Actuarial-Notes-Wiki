@@ -21,22 +21,91 @@ verification:
   log: .verify/Concepts/Continuous Univariate Distributions.md
 ---
 
-A **Continuous Univariate Distribution** describes the probability law of a single random variable $X$ that can take any value in a continuous interval or union of continuous intervals.
+A **Continuous Univariate Distribution** describes the probability law of a single [[Random Variable|random variable]] $X$ that can take any value in an interval, or in a union of intervals. Its [[Probability Density Function (PDF)|density]] $f(x)$ gives every probability as an area.
 
 > $$P(a \leq X \leq b) = \int_a^b f(x)\, dx$$
 
 - The probability density function (PDF) $f(x)$ must satisfy $f(x) \geq 0$ and $\int_{-\infty}^{\infty} f(x)\,dx = 1$.
-- Individual point probabilities are zero; all probabilities are computed as areas under $f$:
+- A single point has probability zero, so $P(X < b)$ and $P(X \leq b)$ are equal.
 - The CDF and the density are two views of the same object: $F(x) = \int_{-\infty}^{x} f(t)\,dt$ and $f(x) = F'(x)$. For anything phrased as a tail probability, work from the survival function $S(x) = 1 - F(x)$ instead.
-- **Symmetric densities.** A density symmetric about $m$ satisfies $f(m + x) = f(m - x)$: the density on one side of $m$ is the mirror image of the density on the other. A density given on one side therefore determines it on the other, $f(t) = f(2m - t)$. Exactly half the probability lies on each side, $P(X \leq m) = P(X \geq m) = 1/2$, so $m$ is the median. A percentile above the median solves $P(m < X \leq x_p) = p - 1/2$. For instance, if $X$ is symmetric about 4 and $P(4 < X \leq 5) = 0.3$, the 80th percentile is 5.
-- **Piecewise densities.** When $f$, or the function being averaged against it, is defined in pieces, split every integral at each breakpoint of both, use the matching branch on each subinterval and add. A probability is the sum of the integrals over the pieces the interval covers (an interval inside one piece needs only that branch). An expectation $E[g(X)]$ is the sum over the pieces of $\int g(x)\,f(x)\,dx$, so $E[X]$ is the sum of $\int x\,f(x)\,dx$ over each piece. A normalizing constant comes from integrating every piece over the whole support.
 
 > [!idea] The idea
-> A loss can be any amount in an interval, not just a whole number of dollars. A continuous univariate distribution spreads probability along the interval the way mass is spread along a rod. No single point holds any of it. The density is probability per unit length, so only an area under it is a probability. That is why $P(X < b)$ and $P(X \leq b)$ are equal, why a density can be larger than 1, and why the slope of the CDF is the density.
+> A loss can be any amount in an interval, not just a whole number of dollars. A continuous distribution spreads probability along the interval the way mass is spread along a rod, so no single point holds any of it. The density is probability per unit length, which is why only an area under it is a probability and why a density can be larger than 1.
+
+![[Media/Figures/Continuous_Univariate_Distributions.svg|340]]
+
+## Finding the constant
+
+A repair cost $X$, in thousands, has density $f(x) = c\,x$ for $0 < x < 4$ and zero elsewhere. What is $c$?
+
+The total area must be 1. The area under $c\,x$ from 0 to 4 is $8c$, so $c = 1/8$.
+
+> $$\int_0^4 \frac{x}{8}\,dx = \frac{16}{16} = 1$$
+
+- The constant is almost always the first step. Every other answer on the page depends on it.
+- The density is zero outside $(0, 4)$. Every integral runs over the support, not from $-\infty$.
+
+## From the density to the CDF
+
+What is the probability that the repair costs between 1 and 3? The answer is the area under $x/8$ between those points, $(9 - 1)/16 = 0.5$.
+
+Integrating once from the bottom of the support gives the CDF, $F(x) = x^2/16$, and every probability then needs only subtraction.
+
+| $x$ | $F(x)$ | $S(x)$ |
+|---|---|---|
+| 1 | 0.0625 | 0.9375 |
+| 2 | 0.2500 | 0.7500 |
+| 3 | 0.5625 | 0.4375 |
+| 4 | 1 | 0 |
+
+- $P(1 < X < 3) = F(3) - F(1) = 0.5625 - 0.0625 = 0.5$.
+- The slope of $F$ at any point is the density there. That is how a question that gives the CDF hands you the density.
+
+## Conditional probabilities use the survival function
+
+The repair has already cost more than 2. What is the probability it costs more than 3?
+
+The condition shrinks the sample space to $X > 2$. The answer is the part of that tail beyond 3, divided by the whole tail.
+
+> $$P(X > 3 \mid X > 2) = \frac{S(3)}{S(2)} = \frac{0.4375}{0.75} = \frac{7}{12}$$
+
+- The ratio $S(b)/S(a)$ answers every "given it exceeds $a$" question.
+- Only the [[Exponential Distribution|exponential]] turns that ratio into $S(b - a)$. For the repair cost, $S(1) = 0.9375$, not $7/12$.
+
+## Mean, median and percentiles
+
+The mean weights each value by its density. The median and the other [[Percentile|percentiles]] invert the CDF.
+
+> $$E[X] = \int_{-\infty}^{\infty} x\,f(x)\,dx$$
+
+- For the repair cost, $E[X] = \int_0^4 x^2/8\,dx = 8/3 \approx 2.67$.
+- The [[Median|median]] solves $F(m) = 0.5$, so $m^2/16 = 0.5$ and $m = \sqrt{8} \approx 2.83$.
+- The 90th percentile solves $x^2/16 = 0.9$, giving $x = \sqrt{14.4} \approx 3.79$.
+- The variance follows from $E[X^2] = 8$, so $\text{Var}(X) = 8 - (8/3)^2 = 8/9$.
+
+## Symmetric densities
+
+Some questions give the density on only one side of a centre. A density symmetric about $m$ satisfies $f(m + x) = f(m - x)$. The density on one side of $m$ is the mirror image of the density on the other, so it determines it, $f(t) = f(2m - t)$.
+
+- Exactly half the probability lies on each side, $P(X \leq m) = P(X \geq m) = 1/2$, so $m$ is the median.
+- A percentile above the median solves $P(m < X \leq x_p) = p - 1/2$.
+- For instance, if $X$ is symmetric about 4 and $P(4 < X \leq 5) = 0.3$, the 80th percentile is 5.
+
+## Densities and payments in pieces
+
+A function averaged against the density can have its own breakpoints. Suppose the insurer pays the repair cost up to a cap of 3, so the payment is $\min(X, 3)$.
+
+Split the integral at 3. Below the cap the payment is $x$, and above it the payment is 3.
+
+> $$E[\min(X, 3)] = \int_0^3 x \cdot \frac{x}{8}\,dx + 3\,S(3)$$
+
+- The two pieces are $27/24 = 1.125$ and $3 \times 0.4375 = 1.3125$, so the expected payment is $2.4375$.
+- The same rule covers a density defined in pieces. Split every integral at each breakpoint of both the density and the function being averaged, use the matching branch on each piece, and add.
+- A probability over an interval inside one piece needs only that branch. A normalizing constant needs every piece over the whole support.
 
 ## Choosing the right one
 
-Read the question for the **story** the quantity follows, then check the support matches:
+Many questions name no distribution. Read the question for the **story** the quantity follows, then check that the support matches.
 
 - Every value in a range equally likely → [[Uniform Continuous Distribution]] $(a,b)$ on $(a,b)$, with $E[X] = (a+b)/2$
 - Waiting time between events, **memoryless** → [[Exponential Distribution]] $(\theta)$ on $(0,\infty)$, with $E[X] = \theta$
@@ -45,24 +114,51 @@ Read the question for the **story** the quantity follows, then check the support
 - A sum or average of many variables → [[Normal Distribution]] $(\mu,\sigma^2)$ on $\mathbb{R}$, with $E[X] = \mu$
 - A positive, heavily right-skewed loss whose **log** is normal → [[Lognormal Distribution]] $(\mu,\sigma^2)$ on $(0,\infty)$, with $E[X] = e^{\mu+\sigma^2/2}$
 
-- The word **memoryless** is decisive: it appears only for the exponential (and its discrete counterpart, the geometric).
+A few signals settle most choices.
+
+- The word **memoryless** is decisive. It appears only for the exponential and its discrete counterpart, the [[Geometric Distribution|geometric]].
 - For the lognormal, $\mu$ and $\sigma$ are the parameters of $\ln X$, **not** the mean and standard deviation of $X$. Every lognormal probability reduces to a normal one by taking logs of both sides: $P(X > c) = P(\ln X > \ln c)$.
 - Apart from a uniform with $a < 0$, the normal is the only one on this list that can go negative, and the only one with no lower bound at all. That is a red flag if the quantity is a loss.
-- Insurance provisions ([[Deductible|deductibles]], [[Benefit Limit|limits]], [[Coinsurance Percentage|coinsurance]]) transform whichever severity distribution is chosen (see [[Transformations of Random Variables]]).
+- Insurance provisions ([[Deductible|deductibles]], [[Benefit Limit|limits]], [[Coinsurance Percentage|coinsurance]]) transform whichever severity distribution is chosen. See [[Transformations of Random Variables]].
 
-![[Media/Figures/Continuous_Univariate_Distributions.svg|340]]
+## Try it
 
 > [!example]- Finding a Probability from a PDF {Example}
-> A random variable $X$ has PDF $f(x) = 3x^2$ for $0 < x < 1$. Find $P(0.5 < X < 1)$.
+> A random variable $X$ has PDF $f(x) = 3x^2$ for $0 < x < 1$. Find $P(0.5 < X < 1)$ and the median of $X$.
 >
 > > [!answer]-
-> > $$P(0.5 < X < 1) = \int_{0.5}^{1} 3x^2\, dx = \left[x^3\right]_{0.5}^{1} = 1 - (0.5)^3 = 1 - 0.125 = 0.875$$
+> > **Plan:** integrate the density over the interval, then invert the CDF for the median.
+> > $$
+> > \begin{align*}
+> > P(0.5 < X < 1) &= \int_{0.5}^{1} 3x^2\, dx \\
+> >                &= 1 - (0.5)^3 \\
+> >                &= 0.875
+> > \end{align*}
+> > $$
+> > The CDF is $F(x) = x^3$, so the median solves $m^3 = 0.5$.
+> > $$m = 0.5^{1/3} \approx 0.794$$
+> > The median sits well above 0.5 because the density piles its probability near 1.
+
+> [!example]- A Lifetime That Has Already Lasted {Example}
+> A machine's lifetime $X$, in years, has density $f(x) = (10 - x)/50$ for $0 < x < 10$. The machine is 2 years old. Find the probability it lasts beyond 6 years.
+>
+> > [!answer]-
+> > **Plan:** find the survival function, then divide the tail beyond 6 by the tail beyond 2.
+> > $$S(x) = \int_x^{10} \frac{10 - t}{50}\,dt = \frac{(10 - x)^2}{100}$$
+> > $$
+> > \begin{align*}
+> > P(X > 6 \mid X > 2) &= \frac{S(6)}{S(2)} \\
+> >                     &= \frac{0.16}{0.64} \\
+> >                     &= 0.25
+> > \end{align*}
+> > $$
+> > Without the condition the answer would be $S(4) = 0.36$. This lifetime is not memoryless, so the machine's age matters.
 
 > [!example]- A Density Defined in Two Pieces {Example}
 > $X$ has density $f(x) = c$ for $0 < x < 1$ and $f(x) = c\,x^{-3}$ for $x \geq 1$. Find $c$, $E[X]$ and $P(0.5 < X < 2)$.
 >
 > > [!answer]-
-> > Each integral is split at the breakpoint $x = 1$:
+> > **Plan:** split every integral at the breakpoint $x = 1$.
 > > $$
 > > \begin{align*}
 > > 1 &= \int_0^1 c\,dx + \int_1^\infty c\,x^{-3}\,dx \\
@@ -86,12 +182,8 @@ Read the question for the **story** the quantity follows, then check the support
 > > \end{align*}
 > > $$
 
-> [!tip]- How it appears on the exam
-> - **Exam P** (Univariate Random Variables): a density given by formula, often with an unknown constant and often in pieces, with a probability, conditional probability, mean, median or percentile to find. The first step is usually the constant.
-> - **Exam P**: a story to identify, then a probability or a percentile of it. The story may be a lifetime that is exponential with a given mean or median, a value equally likely over a range or a total approximated by a normal.
-> - **Exam P**: the distribution of a payment or a function of $X$, built from the density of $X$ (see [[Transformations of Random Variables]]).
-
 > [!warning]- Exam traps
 > - **Integrating off the support.** A density stated on $0 < x < 2$ is zero elsewhere. Integrating the formula past 2, or from $-\infty$, gives a wrong probability, or an integral that diverges. Set the limits from the support first.
-> - **Mean or rate in the exponential.** With mean $\theta$ the CDF is $1 - e^{-x/\theta}$. Writing $e^{-\theta x}$ treats the mean as if it were the rate $1/\theta$, and the result is a very different number. Check which parameter the question gives.
+> - **Mean or rate in the exponential.** With mean $\theta$ the CDF is $1 - e^{-x/\theta}$. Writing $e^{-\theta x}$ treats the mean as if it were the rate $1/\theta$. Check which parameter the question gives.
 > - **Memorylessness used where it doesn't hold.** $P(X > a + b \mid X > a) = P(X > b)$ only for the exponential. For any other density compute the ratio $S(a + b)/S(a)$.
+> - **Missing a breakpoint.** A capped payment or a piecewise density needs the integral split at every breakpoint, including the cap.

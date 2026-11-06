@@ -13,6 +13,27 @@ export interface WikiEntryRef {
   // (e.g. a `type: event` file that lives in Resources/Regulation/). When set,
   // entryRefToRepoPath() returns it verbatim.
   path?: string
+  /**
+   * A heading on the page to open at — `[[Combinatorics#The multiplication
+   * principle]]` — as its `headingSlug`. Not part of the page's identity: two
+   * refs to the same page are the same page whatever heading they name.
+   */
+  heading?: string
+}
+
+/**
+ * A heading's anchor: its words, lower case, joined by hyphens. Inline math is
+ * dropped first, so `Arranging all $n$ objects` and the rendered heading (whose
+ * math is KaTeX, not text) give the same slug. Both sides of a heading link go
+ * through this — the `[[Page#Heading]]` target and the `id` WikiArticle puts on
+ * every `##` / `###`.
+ */
+export function headingSlug(text: string): string {
+  return text
+    .replace(/\$[^$]*\$/g, ' ')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
 }
 
 // "Expected Value" → "Expected+Value" (matches Obsidian Publish slugs, keeps
@@ -132,10 +153,26 @@ export function hrefToEntryRef(href: string): WikiEntryRef | null {
     /* non-URL string, treat as path */
   }
 
-  // Drop fragment / query, trim leading slashes, turn + back into spaces.
+  // A fragment names a heading on the page (`#repeat` is rewriteWikilinks' own
+  // mark, not a heading). Then drop fragment / query, trim leading slashes, and
+  // turn + back into spaces.
+  const fragment = clean.split('#')[1]?.split('?')[0] ?? ''
+  const heading = fragment && fragment !== 'repeat' ? headingSlug(safeDecode(fragment)) : ''
   clean = clean.split('#')[0]!.split('?')[0]!.replace(/^\/+/, '').replace(/\+/g, ' ')
   if (!clean) return null
+  const ref = entryRefFromClean(clean)
+  return ref && heading ? { ...ref, heading } : ref
+}
 
+function safeDecode(s: string): string {
+  try {
+    return decodeURIComponent(s)
+  } catch {
+    return s
+  }
+}
+
+function entryRefFromClean(clean: string): WikiEntryRef | null {
   // Already slugged as concept/resource/exam internal route?
   const internal = clean.match(/^wiki\/(concept|resource|exam|event|regulation|guide)\/(.+)$/i)
   if (internal) {

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:2f010c93922f34ac87066574785f3c2dc1a29114c30dbaced8fdb6fdb4927d88
+  content_hash: sha256:0f230770e348facf4ddb7d7aeced0317f4bc0476ffb9759a5d421e0054247456
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.1 Counting Technique (stages, multiply, PDF pp.83-84), Thm 3.1 n!, Def 3.2 and Thm 3.2 k-permutations n(n−1)…(n−k+1) (PDF p.88); §3.2 binomial coefficients C(n,j) = number of j-subsets, Thm 3.4 Pascal recurrence, Thm 3.5 C(n,j)=(n)_j/j! (pp.93-94, PDF pp.101-102), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §2.1.3 Unordered Sampling without Replacement (P^n_k=C(n,k)k!; C(n,k)=n!/(k!(n−k)!), 0≤k≤n; C(n,k)=C(n,n−k); Σ C(n,k)=2^n; multinomial coefficients n!/(n1!…nr!)), read 2026-11-06, sha256:ad36b1a87daa3fd5d6a5e94a71c1a118182c7fd38a04af4a9cbf7b71e3ca62ae — https://www.probabilitycourse.com/chapter2/2_1_3_unordered_without_replacement.php"
@@ -30,7 +30,7 @@ A **Combination** is an unordered selection of distinct objects. The number of c
 > [!idea] The idea
 > Each combination of $k$ objects can be put in order in $k!$ ways. So there are $k!$ times as many [[Permutation|permutations]] as combinations, and $\binom{n}{k} = \frac{{}_{n}P_{k}}{k!}$.
 
-> [!example] A club of 8 people chooses a committee of 3. How many different committees are there?
+> [!example]- A club of 8 people chooses a committee of 3. How many different committees are there? {Example}
 > - A committee has no order, so each committee is a combination of 3 people from 8.
 > - $\binom{8}{3} = \frac{8!}{3!\,5!} = \frac{8 \times 7 \times 6}{3 \times 2 \times 1} = 56$.
 
@@ -40,7 +40,7 @@ Choosing the $k$ objects that are selected is the same as choosing the $n - k$ o
 
 > $$\binom{n}{k} = \binom{n}{n-k}$$
 
-> [!example] How many ways are there to choose 18 of 20 students for a team?
+> [!example]- How many ways are there to choose 18 of 20 students for a team? {Example}
 > - Choosing the 18 students on the team is the same as choosing the 2 students left off it.
 > - $\binom{20}{18} = \binom{20}{2} = \frac{20 \times 19}{2 \times 1} = 190$.
 
@@ -52,7 +52,7 @@ When $n$ objects are split into $r$ categories, the number of selections with ex
 
 - $n_i$ is the number of objects in category $i$, with $n_1 + n_2 + \cdots + n_r = n$.
 
-> [!example] A bag holds 3 red, 4 blue and 5 green marbles. Five are drawn at random. What is the probability of drawing 1 red, 2 blue and 2 green marbles?
+> [!example]- A bag holds 3 red, 4 blue and 5 green marbles. Five are drawn at random. What is the probability of drawing 1 red, 2 blue and 2 green marbles? {Example}
 > - The sample space is every selection of 5 marbles from 12, so $|S| = \binom{12}{5} = 792$.
 > - The event chooses 1 of the 3 red, 2 of the 4 blue and 2 of the 5 green marbles, so $|E| = \binom{3}{1}\binom{4}{2}\binom{5}{2} = 3 \times 6 \times 10 = 180$.
 > - The [[Probability|probability]] is $P(E) = \frac{180}{792} \approx 0.227$.
@@ -63,7 +63,7 @@ Adding $\binom{n}{k}$ over every size $k$ counts every subset of $n$ objects, be
 
 > $$\sum_{k=0}^{n} \binom{n}{k} = 2^n$$
 
-> [!example] Best subset selection fits one regression model for every subset of the $p$ predictors. How many models does it fit when $p = 10$?
+> [!example]- Best subset selection fits one regression model for every subset of the $p$ predictors. How many models does it fit when $p = 10$? {Example}
 > - Each subset of the 10 predictors is one model, including the model with none of them.
 > - There are $2^{10} = 1{,}024$ models.
 

@@ -1,6 +1,6 @@
 ---
 name: actuarial-concept-definitions
-description: Write or improve a concept page in Concepts/*.md — its figure, a precise one-paragraph definition, the formula in a box followed by one bullet per term the words before it did not define, an open worked example right under each formula, short `##` sections for each variation of the concept, and an optional "The idea" card and trap card. Use when the user asks to create, write, draft, fill in, explain better, or clean up a Concepts/ page (SOA Exam P / FM / FAM / ALTAM, CAS MAS-I / MAS-II / Exam 5–9, the DISCs, CIA modules), or to standardize existing pages to this shape. Not for Resources/Books pages (resource-pages skill) or for auditing a whole exam's syllabus and coverage (exam-material-review).
+description: Write or improve a concept page in Concepts/*.md — its figure, a precise one-paragraph definition, the formula in a box followed by one bullet per term the words before it did not define, a folded worked example (green card, the whole question as its title) right under each formula, short `##` sections for each variation of the concept, and an optional "The idea" card and trap card. Use when the user asks to create, write, draft, fill in, explain better, or clean up a Concepts/ page (SOA Exam P / FM / FAM / ALTAM, CAS MAS-I / MAS-II / Exam 5–9, the DISCs, CIA modules), or to standardize existing pages to this shape. Not for Resources/Books pages (resource-pages skill) or for auditing a whole exam's syllabus and coverage (exam-material-review).
 ---
 
 # Actuarial Concept Page Writer
@@ -12,7 +12,9 @@ quiz, so a page is a first lesson as often as it is a reference card.
 
 A page is **short**: one screen or two on a phone. It says what the concept
 is, gives its formula, shows the formula working on one example, and then
-does the same for each variation of the concept. Anything else is cut.
+does the same for each variation of the concept. Anything else is cut. The
+cards it uses read as a set: the violet *idea*, the amber *trap*, and the green
+*example* the reader opens when they want the worked answer.
 
 This shape was set by the maintainer on 2026-11-06 from three Exam P pages
 they wrote themselves — `Concepts/Probability.md`, `Concepts/Combinatorics.md`
@@ -40,10 +42,12 @@ A **Term** is <the definition, with [[wiki-links]]>. <Optional second sentence.>
 
 - <one bullet per term the words above did not define>
 
+<a new term or fact the formula needs, as a sentence — never a bullet>
+
 > [!idea] The idea                          ← optional
 > <what the definition alone does not say>
 
-> [!example] <the question, as the reader would ask it>
+> [!example]- <the whole question, as the reader would ask it> {Example}
 > <optional lead-in sentence, then a table as its own block>
 >
 > - <one step of the reasoning per bullet>
@@ -57,7 +61,7 @@ A **Term** is <the definition, with [[wiki-links]]>. <Optional second sentence.>
 
 - <bullets for its new terms>
 
-> [!example] <a question this section answers>
+> [!example]- <a question this section answers> {Example}
 > - …
 
 > [!trap] <name of the slip>                ← optional
@@ -65,8 +69,8 @@ A **Term** is <the definition, with [[wiki-links]]>. <Optional second sentence.>
 ```
 
 There is **no** running example, no `## Try it`, no `> [!warning]- Exam
-traps` fold and no `How it appears on the exam` callout. **Nothing on the page
-is collapsed**: every example and every card is open.
+traps` fold and no `How it appears on the exam` callout. **Every example is
+folded** (`[!example]-`), and the idea and trap cards are always open.
 
 ### 1. The figure (first line)
 
@@ -90,6 +94,13 @@ so it costs nothing there.
 - Link the concepts the definition leans on (`[[Event|event]]`,
   `[[Sample Space|sample space]]`) the first time each appears; don't
   over-link.
+- **To point at a part of another page, link its heading**:
+  `[[Combinatorics#The multiplication principle|multiplication principle]]`
+  opens Combinatorics at that section (in the concept popup, scrolled to it).
+  The target is the heading's words exactly; a heading's anchor is its words in
+  lower case with hyphens (`headingSlug` in `quiz/src/lib/wikiRoutes.ts`, math
+  dropped). Never write "on [[Page]]" or "(see [[Page]])" to say where a rule
+  lives — name the rule and link it there.
 - Introduce the symbols the formula will use in these words, so the formula
   needs as few bullets as possible: "the number of permutations of $k$
   objects chosen from $n$ distinct objects, ${}_{n}P_{k}$, is".
@@ -110,6 +121,10 @@ so it costs nothing there.
   naming the symbol and saying what it is: `- $|S|$ is the number of outcomes
   in the sample space $S$.` A condition on the terms is a bullet too, stated
   bare: `- $k \le n$.`
+- **The bullets are for the formula's symbols only.** A new term or fact the
+  reader needs next (what it means for an event to *occur*) is a plain sentence
+  after the bullets, or after the box when there are none: "The event $E$ is
+  said to occur when the outcome of the experiment is in $E$." Never a bullet.
 - A bullet may add one fact the formula needs to be read correctly (that it
   reduces to the simpler formula in the equally likely case, that $0! = 1$).
   It never justifies the formula or restates a definition ("because no object
@@ -132,22 +147,31 @@ the definition.
   definition on a page with no formula.
 - One to three sentences, or a small table. It must not restate the definition.
 
-### 5. Examples — `> [!example] <the question>`
+### 5. Examples — `> [!example]- <the question> {Example}`
 
 An example sits **directly under the formula or section it illustrates**, so
 the reader sees the formula used straight away. Usually one per formula.
 
-- **The title is the question**, as a reader would ask it, ending in a question
-  mark: `> [!example] In a race with 10 runners, how many ways are there to
-  award gold, silver and bronze medals?`. No "Example:" prefix, the type
-  written in lower case, and no `-` (examples are never collapsed).
+- **Written `> [!example]- <the question> {Example}`.** The `-` folds it, so the
+  reader meets the question and opens the working when they want it. The
+  `{Example}` tag at the end of the title is what draws it as a worked example
+  — a green card with an *Example* pill (`WORKED_EXAMPLE_STYLE` in
+  `quiz/src/components/MarkdownCallout.tsx`). Without the tag an `[!example]` is
+  a learning objective, as on the exam pages.
+- **The whole question is the title**, on the one header line, as a reader
+  would ask it, ending in a question mark: `> [!example]- A fair die is rolled.
+  Let $E$ be "an even number is rolled" and $F$ be "at least 4 is rolled". What
+  are $E \cap F$, $E \cup F$ and $E^c$? {Example}`. Its setup is part of the
+  question, never a first line of the body. Math in a title is fine. No
+  "Example:" prefix, and the type written in lower case.
 - **The body is bullets, one step per bullet**, each saying what is being done
   and why. The last bullet states the answer. A short lead-in sentence may come
   first ("The sample space lists every outcome of the experiment:").
 - **Apply the page's own formula without announcing it.** Don't write "By the
   multiplication principle (see [[Combinatorics]])" in front of a calculation
   that is simply this page's formula. Name another page's rule only when the
-  step really uses it.
+  step really uses it, and then link the rule to its heading: "by the
+  [[Combinatorics#The multiplication principle|multiplication principle]]".
 - **Simple and familiar beats actuarial.** Coins, dice, cards, a race, shirts
   and pants are fine. The example's job is to show the formula; a setting the
   reader has to decode first gets in the way. Use an insurance setting when it
@@ -169,7 +193,14 @@ all $n$ objects*), a related rule (*The multiplication principle*), a twist
 a sentence leading into the formula, the boxed formula, its bullets, then an
 example.
 
-- The heading names the case plainly. A section heading may carry math.
+- **The heading says what the section is**, in the plain words a textbook
+  would use: *Requirements of outcomes in a sample space*, *Types of sample
+  spaces*, *The multiplication principle*. Never a slogan or a turn of phrase
+  (*Each outcome once, none missing*; *Finite, countable or uncountable*), which
+  reads as written for effect rather than to say what is there. A heading may
+  carry math, but a heading other pages link to is better without it.
+- **A list of named terms in a section links each one** that has a page:
+  `**[[Mutually Exclusive Events|mutually exclusive]]**`.
 - Sections go simple → general, and stop when the exam stops. Pick what the
   syllabus and the question bank test; leave out what neither does.
 - A page linked from another exam's syllabus (Combination from MAS-I) may end
@@ -270,14 +301,16 @@ bullets answer it, each a claim with its reason.
 - [ ] Definition: one or two precise sentences, links on first use, no "Formally" / "Recall"
 - [ ] Every formula boxed (`> $$ … $$`), introduced by a sentence ending in "is"
 - [ ] Immediately after each box: one bullet per term not defined in the words before it, and conditions as bare bullets
-- [ ] No bullet that justifies the formula or restates a definition
+- [ ] No bullet that justifies the formula, restates a definition or introduces a new term (that is a sentence)
 - [ ] `[!idea] The idea` only if it says something the definition doesn't
-- [ ] Each formula followed by an open `> [!example]` whose title is the question
+- [ ] Each formula followed by `> [!example]- <the whole question> {Example}` — folded, tagged, the setup in the title
 - [ ] Example bodies: one reasoning step per bullet, the answer last; no "By <this page's rule> (see …)"
 - [ ] At least one example ends in a probability, where the page is a counting tool or a component of one
 - [ ] `##` sections are variations, simple → general, each sentence → box → bullets → example
+- [ ] Headings say plainly what the section is — no slogans
+- [ ] Every named term with a page is linked; a rule on another page is linked at its heading (`[[Page#Heading|rule]]`)
 - [ ] At most one `[!trap]`, open
-- [ ] Nothing collapsed; no *Try it*, *Exam traps* fold or *How it appears on the exam*
+- [ ] Examples folded, idea and trap open; no *Try it*, *Exam traps* fold or *How it appears on the exam*
 
 **Form**
 - [ ] Notation matches the exam's table in `references/vault-mechanics.md`; one letter per thing

@@ -82,10 +82,13 @@ export function rewriteWikilinks(md: string): string {
 
       return line.replace(linkRe, (_full, target: string, display?: string) => {
         const t = target.trim()
-        const label = (display ?? '').trim() || (t.includes('/') ? t.split('/').pop()! : t)
-        const ref = hrefToEntryRef(t) ?? { kind: 'concept' as const, name: t }
+        const shown = t.split('#')[0]!
+        const label = (display ?? '').trim() || (shown.includes('/') ? shown.split('/').pop()! : shown)
+        const ref = hrefToEntryRef(t) ?? { kind: 'concept' as const, name: shown }
         let route = wikiRoute(ref)
-        if (inExample) {
+        // `[[Page#Heading]]` keeps its heading, so the popup opens at it.
+        if (ref.heading) route += `#${ref.heading}`
+        else if (inExample) {
           const key = ref.name.toLowerCase()
           if (seen.has(key)) route += '#repeat'
           else seen.add(key)

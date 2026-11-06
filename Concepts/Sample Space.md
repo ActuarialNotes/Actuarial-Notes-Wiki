@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:62bd9540000c3ee97ec0863ed16c699f4aaf0875b9ebb8a14e293c77dce1fe8a
+  content_hash: sha256:40a5fef3c6bee22255b997af5f83ab2e3ad33b32045d3f6e4b1b4654ae28156a
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 Def. 1.1 sample space/outcomes/events, Def. 1.2 P(E)=Σ_{ω∈E} m(ω), Examples 1.6-1.9, set operations and Fig. 1.7, Thm 1.1 (P(E)≥0, P(Ω)=1, monotonicity, disjoint additivity, complement with proof), Thms 1.2-1.4 and Cor. 1.1 (pp.18-24, PDF pp.26-32), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 Ex. 1.10, Def. 1.3 uniform m(ω)=1/n, Ex. 1.11 two dice 36 ordered pairs, no single correct sample space, Determination of Probabilities, Infinite Sample Spaces (countable; Ex. 1.13 geometric sum), Historical Remarks 36 ordered vs 21 unordered pairs (pp.24-30, PDF pp.32-38), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
@@ -26,16 +26,16 @@ A **Sample Space** is the set of all possible outcomes of an experiment. When it
 
 - $s_i$ is an outcome of the experiment.
 
-> [!example] A coin is flipped and then a die is rolled. What is the sample space?
+> [!example]- A coin is flipped and then a die is rolled. What is the sample space? {Example}
 > - An outcome records both results, so it is an ordered pair (coin, die).
 > - $S = \{(H, 1), (H, 2), \ldots, (H, 6), (T, 1), (T, 2), \ldots, (T, 6)\}$.
-> - There are 2 results for the coin and 6 for the die, so by the multiplication principle on [[Combinatorics]], $|S| = 2 \times 6 = 12$.
+> - There are 2 results for the coin and 6 for the die, so by the [[Combinatorics#The multiplication principle|multiplication principle]], $|S| = 2 \times 6 = 12$.
 
-## Each outcome once, none missing
+## Requirements of outcomes in a sample space
 
 The outcomes of a sample space must be
 
-- **mutually exclusive**: no two outcomes can occur together, and
+- **[[Mutually Exclusive Events|mutually exclusive]]**: no two outcomes can occur together, and
 - **exhaustive**: every possible result of the experiment is one of them.
 
 Then the probabilities of the outcomes add to 1:
@@ -44,12 +44,12 @@ Then the probabilities of the outcomes add to 1:
 
 - $P(\{s\})$ is the [[Probability|probability]] of the event containing the single outcome $s$.
 
-> [!example] A policy year is recorded as No Claim, Claim or Large Claim. Is this a sample space?
+> [!example]- A policy year is recorded as No Claim, Claim or Large Claim. Is this a sample space? {Example}
 > - The list is exhaustive: every policy year has no claim or a claim.
 > - It is not mutually exclusive: a large claim is also a claim, so a year with a large claim matches two outcomes.
 > - It is not a sample space. Replacing Claim with Small Claim gives one, $S = \{\text{No Claim}, \text{Small Claim}, \text{Large Claim}\}$.
 
-## Finite, countable or uncountable
+## Types of sample spaces
 
 - A sample space is **finite** when it has a finite number of outcomes, like the 12 outcomes of the coin and the die.
 - It is **countably infinite** when its outcomes can be listed but the list never ends. The number of claims in a year has $S = \{0, 1, 2, \ldots\}$.

@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { renderToStaticMarkup } from 'react-dom/server'
 import ReactMarkdown, { type Components } from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import remarkMath from 'remark-math'
 import { calloutComponents } from './calloutComponents'
 
 const MD = [
@@ -65,5 +66,60 @@ describe('note cards', () => {
     expect(html).toContain('aria-label="Trap"')
     expect(html).toContain('bg-amber-50')
     expect(html).toContain('Immediate is not due.')
+  })
+})
+
+describe('titles with math, and worked examples', () => {
+  function renderMath(md: string): string {
+    return renderToStaticMarkup(
+      <ReactMarkdown remarkPlugins={[remarkGfm, remarkMath]} components={calloutComponents}>
+        {md}
+      </ReactMarkdown>,
+    )
+  }
+
+  // The header button holds the whole title line; the body is what follows it.
+  function header(html: string): string {
+    return html.slice(html.indexOf('data-callout-toggle'), html.indexOf('data-callout-body'))
+  }
+
+  it('keeps the whole title line in the header when it holds inline math', () => {
+    const html = renderMath(
+      [
+        '> [!example]- A die is rolled. Let $E$ be "even" and $F$ be "at least 4". What is $E \\cap F$? {Example}',
+        '> - $E \\cap F = \\{4, 6\\}$.',
+      ].join('\n'),
+    )
+    const head = header(html)
+    expect(head).toContain('What is ')
+    expect(head).toContain('be &quot;at least 4&quot;')
+    expect(head).not.toContain('{Example}')
+    expect(html.slice(html.indexOf('data-callout-body'))).not.toContain('What is')
+  })
+
+  it('carries on the body after a title that ends in math', () => {
+    const html = renderMath(['> [!example]- What is $P(E)$? {Example}', '> The sample space has 6 outcomes.'].join('\n'))
+    expect(header(html)).toContain('?')
+    expect(html.slice(html.indexOf('data-callout-body'))).toContain('The sample space has 6 outcomes.')
+  })
+
+  it('draws an {Example} callout as a folded green card with an Example pill', () => {
+    const html = renderMath(['> [!example]- How many committees of 3 from 8? {Example}', '> - 56.'].join('\n'))
+    expect(html).toContain('bg-emerald-50')
+    expect(html).toContain('>Example</span>')
+    expect(html).toContain('aria-expanded="false"')
+    expect(html).toContain('hidden=""')
+  })
+
+  it('leaves a learning objective (no {Example} tag) in its own style', () => {
+    const html = renderMath(['> [!example]- General Probability {23-30%}', '> Understand probability.'].join('\n'))
+    expect(html).not.toContain('bg-emerald-50')
+    expect(html).not.toContain('>Example</span>')
+  })
+
+  it('keeps math in a note card title', () => {
+    const html = renderMath(['> [!trap] $\\le$ or $<$ at a jump', '> Read the inequality.'].join('\n'))
+    const title = html.slice(0, html.indexOf('Read the inequality.'))
+    expect(title).toContain(' at a jump')
   })
 })

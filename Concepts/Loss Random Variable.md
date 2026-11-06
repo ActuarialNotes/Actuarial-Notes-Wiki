@@ -131,5 +131,4 @@ A probability about the payment becomes a probability about the loss. Find the l
 > [!warning]- Exam traps
 > - **Loss for payment.** A question about the insurer's payment is about $Y$, not $X$. Apply the policy to the loss before taking moments.
 > - **$E[X] - d$ for the expected payment.** The payment is $(X - d)_+$, which is never negative, so $E[(X - d)_+] \ge E[X] - d$.
-> - **Censoring and truncation swapped.** A limit censors the loss from above. A deductible truncates it from below.
 > - **The life loss's sign.** In life insurance, $L_0$ is benefits less premiums, so a long-lived insured gives a negative loss.

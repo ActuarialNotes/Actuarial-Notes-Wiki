@@ -65,7 +65,7 @@ Suppose the contract said instead that the insurer covers losses up to 10,000, t
 
 > $$Y = \alpha\,\big(\min(X, u) - d\big)_+$$
 
-On the loss of 15,000, this pays $0.80 \times (10{,}000 - 500) = 7600$, not 10,000. The same three numbers give a different payment, because the provisions apply in a different order. With no coinsurance, the two orders agree.
+On the loss of 15,000, this pays $0.80 \times (10{,}000 - 500) = 7600$, not 10,000. The same three numbers give a different payment, because the provisions apply in a different order.
 
 > [!trap] Forgetting to add the deductible back
 > The loss at which the payment reaches the limit is $d + u/\alpha$, not $u/\alpha$. Dividing the limit by the coinsurance gives the excess over the deductible, so the deductible must be added back.

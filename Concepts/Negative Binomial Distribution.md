@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:2b4dde5d1eac98c0f4d985db89e78107ff6f8163457e2aa203235a684ee3e6fc
+  content_hash: sha256:bc3f0bf09e1ff7c904a2aece481496062791dbb702b4a12ed936aea162af8039
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), 5.1 negative binomial u(x,k,p) = C(x-1,k-1) p^k q^(x-k), trials until the k-th head, k = 1 geometric, pp.186-187 (PDF pp.194-195), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "SOA, Tables for Exam C (Fall 2009), B.2.1.1 Poisson (PDF p.14); B.2.1.3 binomial, B.2.1.4 negative binomial (PDF p.15, page image), sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf"
@@ -109,7 +109,7 @@ The first 6 claims hold 2 large, 2 medium and 2 small. A multinomial coefficient
 
 ## On other exams
 
-- **FAM, MAS-I, ASTAM and Exam 8** use the Loss Models form. It counts failures and has parameters $r$ and $\beta$, with $p = 1/(1+\beta)$.
+- **FAM, MAS-I and ASTAM** use the Loss Models form. It counts failures and has parameters $r$ and $\beta$, with $p = 1/(1+\beta)$.
 
 > $$P(N = k) = \frac{r(r+1)\cdots(r+k-1)\,\beta^k}{k!\,(1+\beta)^{r+k}}$$
 

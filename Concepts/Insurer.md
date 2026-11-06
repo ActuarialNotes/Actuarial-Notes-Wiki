@@ -76,7 +76,7 @@ An insurer would not insure every store in one area against fire. A fire in one 
 
 The insurer's balance sheet shows what it owns against what it owes. Say it holds assets of 500M, its liabilities are 400M, and so its capital is 100M.
 
-- If the claim liabilities turn out to be understated, the extra claims come out of capital. Reserves are usually several times capital, so a small reserve error is a large capital loss.
+- If the claim liabilities turn out to be understated, the extra claims come out of capital.
 - Capital is what keeps the promise good when the estimate is wrong. That is why regulators set minimum capital requirements.
 
 ## Who else bears risk

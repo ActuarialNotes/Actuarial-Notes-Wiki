@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:015499cda60b5a6701dee97693189b140c7aa046cd0c767ed6d399a0c2511831
+  content_hash: sha256:c114ca8bbb6aa642cb42b59f868c8ad882552debbebcdb725cd5b3928ee5173d
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 Def. 1.1 sample space/outcomes/events, Def. 1.2 P(E)=Σ_{ω∈E} m(ω), Examples 1.6-1.9, set operations and Fig. 1.7, Thm 1.1 (P(E)≥0, P(Ω)=1, monotonicity, disjoint additivity, complement with proof), Thms 1.2-1.4 and Cor. 1.1 (pp.18-24, PDF pp.26-32), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.1 A Counting Technique N = n1·n2·…·nr (p.76, PDF p.84); §3.2 Ex. 3.5 and binomial coefficients, a set of n elements has 2^n subsets (p.93, PDF p.101); §5.1 hypergeometric h(N,k,n,x) = C(k,x)C(N−k,n−x)/C(N,n) (p.193, PDF p.201), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
@@ -22,9 +22,9 @@ An **Event** is a set of outcomes of an experiment. An event $E$ is a subset of 
 
 > $$E \subseteq S$$
 
-- The event $E$ occurs when the outcome of the experiment is in $E$.
+The event $E$ is said to occur when the outcome of the experiment is in $E$.
 
-> [!example] A fair die is rolled. What is the event "an even number is rolled", and what is its probability?
+> [!example]- A fair die is rolled. What is the event "an even number is rolled", and what is its probability? {Example}
 > - The sample space is $S = \{1, 2, 3, 4, 5, 6\}$.
 > - The outcomes that make the statement true are 2, 4 and 6, so $E = \{2, 4, 6\}$.
 > - The 6 outcomes are equally likely, so the [[Probability|probability]] is $P(E) = \frac{|E|}{|S|} = \frac{3}{6} = 0.5$.
@@ -47,7 +47,7 @@ The words "and", "or" and "not" combine events through the [[Set Operations|set 
 
 - Events with no outcome in common, $E \cap F = \varnothing$, are [[Mutually Exclusive Events|mutually exclusive]].
 
-> [!example] A fair die is rolled. Let $E$ be "an even number is rolled" and $F$ be "at least 4 is rolled". What are $E \cap F$, $E \cup F$ and $E^c$?
+> [!example]- A fair die is rolled. Let $E$ be "an even number is rolled" and $F$ be "at least 4 is rolled". What are $E \cap F$, $E \cup F$ and $E^c$? {Example}
 > - $E = \{2, 4, 6\}$ and $F = \{4, 5, 6\}$.
 > - $E \cap F = \{4, 6\}$, the outcomes in both.
 > - $E \cup F = \{2, 4, 5, 6\}$, the outcomes in either.

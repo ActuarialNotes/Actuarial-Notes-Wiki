@@ -19,7 +19,7 @@ A **Permutation** is an ordered arrangement of distinct objects. The number of p
 - $n!$, read "$n$ factorial", is $n \times (n-1) \times \cdots \times 2 \times 1$, with $0! = 1$.
 - $k \le n$.
 
-> [!example] In a race with 10 runners, how many ways are there to award gold, silver and bronze medals?
+> [!example]- In a race with 10 runners, how many ways are there to award gold, silver and bronze medals? {Example}
 > - Any of the 10 runners could win gold. Once gold is awarded, there are 9 remaining runners who could win silver, then 8 who could win bronze.
 > - ${}_{10}P_{3} = 10 \times 9 \times 8 = 720$.
 
@@ -39,7 +39,7 @@ When the $n$ objects are not all distinct, arranging identical objects among the
 
 - $n_i$ is the number of identical objects of type $i$, with $n_1 + n_2 + \cdots + n_r = n$.
 
-> [!example] How many distinct arrangements are there of the letters in LOSS?
+> [!example]- How many distinct arrangements are there of the letters in LOSS? {Example}
 > - There are $n = 4$ letters: one L, one O and two S's.
 > - Swapping the two S's gives the same arrangement, so divide the $4!$ arrangements by $2!$.
 > - There are $\frac{4!}{1!\,1!\,2!} = \frac{24}{2} = 12$ distinct arrangements.
@@ -52,6 +52,8 @@ When the $n$ objects are not all distinct, arranging identical objects among the
 - **The definition introduces the symbols.** "$k$ objects chosen from $n$
   distinct objects, ${}_{n}P_{k}$" defines $n$, $k$ and the quantity in words,
   so the formula needs bullets only for $n!$ and the condition $k \le n$.
+- **Examples are folded green cards.** `[!example]-` with the `{Example}` tag,
+  the whole question in the title, so the reader can try it before opening it.
 - **Two forms, two boxes.** The product, which the medals example uses, comes
   before the factorial form.
 - **The bullets carry no reasoning.** The draft's "$k \le n$, because no

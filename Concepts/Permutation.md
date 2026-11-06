@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:32c65fa4362c6a0e6e1ac909a31ddbe1ddc23b88d242d0e9766eaef5e10fe2a1
+  content_hash: sha256:a0793a427ea8d82cd91c729786ebee715728537496f74eced840c21018353579
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.1 Counting Technique (stages, multiply, PDF pp.83-84), Thm 3.1 n!, Def 3.2 and Thm 3.2 k-permutations n(n−1)…(n−k+1) (PDF p.88); §3.2 binomial coefficients C(n,j) = number of j-subsets, Thm 3.4 Pascal recurrence, Thm 3.5 C(n,j)=(n)_j/j! (pp.93-94, PDF pp.101-102), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.1 Fixed Points and hat check problem, derangements (PDF pp.90, 93); Example 3.12: P(A_i)=(n−1)!/n!, P(no fixed point)=1/2!−1/3!+…+(−1)^n/n!, table n=4: .375 (pp.105-106, PDF pp.113-114), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
@@ -28,7 +28,7 @@ A **Permutation** is an ordered arrangement of distinct objects. The number of p
 - $n!$, read "$n$ factorial", is $n \times (n-1) \times \cdots \times 2 \times 1$, with $0! = 1$.
 - $k \le n$.
 
-> [!example] In a race with 10 runners, how many ways are there to award gold, silver and bronze medals?
+> [!example]- In a race with 10 runners, how many ways are there to award gold, silver and bronze medals? {Example}
 > - Any of the 10 runners could win gold. Once gold is awarded, there are 9 remaining runners who could win silver, then 8 who could win bronze.
 > - ${}_{10}P_{3} = 10 \times 9 \times 8 = 720$.
 
@@ -38,7 +38,7 @@ When all $n$ objects are arranged, $k = n$ and the number of permutations is
 
 > $${}_{n}P_{n} = n!$$
 
-> [!example] A 4-digit PIN is chosen at random, each digit from 0 to 9. What is the probability that its 4 digits are all different?
+> [!example]- A 4-digit PIN is chosen at random, each digit from 0 to 9. What is the probability that its 4 digits are all different? {Example}
 > - The sample space is every 4-digit PIN. Digits may repeat, so $|S| = 10^4 = 10{,}000$.
 > - A PIN with all digits different is an ordered arrangement of 4 of the 10 digits, so $|E| = {}_{10}P_{4} = 10 \times 9 \times 8 \times 7 = 5{,}040$.
 > - The [[Probability|probability]] is $P(E) = \frac{5{,}040}{10{,}000} = 0.504$.
@@ -51,7 +51,7 @@ When the $n$ objects are not all distinct, arranging identical objects among the
 
 - $n_i$ is the number of identical objects of type $i$, with $n_1 + n_2 + \cdots + n_r = n$.
 
-> [!example] How many distinct arrangements are there of the letters in LOSS?
+> [!example]- How many distinct arrangements are there of the letters in LOSS? {Example}
 > - There are $n = 4$ letters: one L, one O and two S's.
 > - Swapping the two S's gives the same arrangement, so divide the $4!$ arrangements by $2!$.
 > - There are $\frac{4!}{1!\,1!\,2!} = \frac{24}{2} = 12$ distinct arrangements.

@@ -15,7 +15,7 @@ import { examPillLabel } from '@/lib/resourceExams'
 import { CredentialPath } from '@/components/wiki/CredentialPath'
 import { readCredentialPathMarker } from '@/data/credentialPaths'
 import { extractSourceMaterial, parseSyllabusObjectives, SOURCE_MATERIAL_MARKER } from '@/lib/sourceMaterial'
-import { hrefToEntryRef, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
+import { headingSlug, hrefToEntryRef, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { isInWikiIndex } from '@/lib/wikiIndex'
 import { distributionForImage } from '@/lib/distributions'
 import { normalizeVaultMath } from '@/lib/vaultMath'
@@ -71,6 +71,17 @@ export interface WikiTitleAction {
 // `components` map: react-markdown treats a new component function as a new
 // element type, so a map rebuilt every time the menu opened or closed would
 // remount the whole article.
+type HastLike = { type?: string; value?: string; properties?: { className?: unknown }; children?: HastLike[] }
+
+/** A heading's words, without its rendered math (whose KaTeX text isn't the source). */
+function hastText(node: HastLike | undefined): string {
+  if (!node) return ''
+  if (node.type === 'text') return node.value ?? ''
+  const cls = node.properties?.className
+  if (Array.isArray(cls) && cls.some(c => String(c).startsWith('katex'))) return ' '
+  return (node.children ?? []).map(hastText).join('')
+}
+
 const REHYPE_PLUGINS = [rehypeKatex]
 const OUTLINE_REHYPE_PLUGINS = [rehypeKatex, rehypeOutlineItems]
 
@@ -168,6 +179,14 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
           {titleBadge}
         </h1>
       )
+    },
+    // Every section heading carries an anchor, so `[[Page#Heading]]` can open
+    // the page at it (`headingSlug`, the same on both sides).
+    h2({ node, children, ...rest }) {
+      return <h2 {...rest} id={headingSlug(hastText(node))}>{children}</h2>
+    },
+    h3({ node, children, ...rest }) {
+      return <h3 {...rest} id={headingSlug(hastText(node))}>{children}</h3>
     },
     // A paragraph whose only content is a marker or a distribution illustration
     // becomes a <div> — unwrap the <p> so it isn't invalid nesting.

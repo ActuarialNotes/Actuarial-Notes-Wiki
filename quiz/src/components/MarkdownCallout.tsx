@@ -87,6 +87,26 @@ const EXAMPLE_STYLE: CalloutStyle = {
   contentClass: 'text-base text-muted-foreground',
 }
 
+// A concept page's worked example — one marked `{Example}` in its title. A green
+// card with an "Example" pill, folded so the reader meets the question first:
+// green sits beside the violet idea card and the amber trap card without
+// meaning *correct* there, because it is a card of its own shape, never a verdict
+// on an answer.
+const WORKED_EXAMPLE_STYLE: CalloutStyle = {
+  icon: null,
+  borderClass: '',
+  accentClass: 'text-emerald-950 dark:text-emerald-50',
+  noBorder: true,
+  roundClass: 'rounded-xl',
+  bgClass: 'bg-emerald-50 dark:bg-emerald-950/40',
+  hoverClass: 'hover:bg-emerald-100/70 dark:hover:bg-emerald-900/40',
+  contentClass: 'text-base text-foreground',
+  plainBody: true,
+}
+
+/** The `{Example}` tag that marks a worked example, rather than a learning objective. */
+const EXAMPLE_TAG_RE = /\s*\{Example\}\s*$/
+
 const EMERALD: CalloutStyle = {
   icon: CheckCircle2,
   borderClass: 'border-emerald-500/60',
@@ -247,6 +267,13 @@ interface MatchResult {
   type: string
   fold: '' | '-' | '+'
   title: string
+  /**
+   * The rest of the title line after its first run of text: inline math, emphasis
+   * or code that the markdown parser split off as elements of their own, and the
+   * text after them. Without it a title is cut at its first `$…$`, and the rest of
+   * the line drops into the body.
+   */
+  titleRest: ReactNode[]
   body: ReactNode[]
 }
 
@@ -312,6 +339,7 @@ function matchCallout(children: ReactNode): MatchResult | null {
   const titleTail = (match[3] ?? '').trim()
 
   const body: ReactNode[] = []
+  const titleRest: ReactNode[] = []
 
   if (headerInsideP) {
     const headerChild = childArray[headerIdx] as ReactElement
@@ -319,8 +347,26 @@ function matchCallout(children: ReactNode): MatchResult | null {
       ((headerChild as ReactElement).props as { children?: ReactNode }).children ?? [],
     )
     const newlineIdx = headerString.indexOf('\n')
-    const remainingFirstText = newlineIdx >= 0 ? headerString.slice(newlineIdx + 1) : ''
-    const remainingPKids = pKids.slice(1)
+    let remainingFirstText = newlineIdx >= 0 ? headerString.slice(newlineIdx + 1) : ''
+    let remainingPKids = pKids.slice(1)
+
+    // The title line runs on past the header's own text node when it holds
+    // inline math or emphasis: take everything up to the line's end.
+    if (newlineIdx < 0) {
+      let i = 0
+      for (; i < remainingPKids.length; i++) {
+        const kid = remainingPKids[i]
+        if (typeof kid === 'string' && kid.includes('\n')) {
+          const cut = kid.indexOf('\n')
+          if (cut > 0) titleRest.push(kid.slice(0, cut))
+          remainingFirstText = kid.slice(cut + 1)
+          i++
+          break
+        }
+        titleRest.push(kid)
+      }
+      remainingPKids = remainingPKids.slice(i)
+    }
 
     if (remainingFirstText.length > 0 || remainingPKids.length > 0) {
       const newPKids: ReactNode[] = []
@@ -338,13 +384,44 @@ function matchCallout(children: ReactNode): MatchResult | null {
     body.push(childArray[i])
   }
 
-  return { type, fold, title: titleTail, body }
+  // A title that ends in a run of text after its math keeps that text's end free
+  // of whitespace, as the header's own text is.
+  const last = titleRest[titleRest.length - 1]
+  if (typeof last === 'string') titleRest[titleRest.length - 1] = last.trimEnd()
+
+  return { type, fold, title: titleRest.length > 0 ? (match[3] ?? '').trimStart() : titleTail, titleRest, body }
+}
+
+/** Does the title end in the `{Example}` tag, and the title without it. */
+function splitExampleTag(title: string, titleRest: ReactNode[]): { title: string; titleRest: ReactNode[]; isExample: boolean } {
+  const last = titleRest[titleRest.length - 1]
+  if (typeof last === 'string' && EXAMPLE_TAG_RE.test(last)) {
+    return { title, titleRest: [...titleRest.slice(0, -1), last.replace(EXAMPLE_TAG_RE, '')], isExample: true }
+  }
+  if (titleRest.length === 0 && EXAMPLE_TAG_RE.test(title)) {
+    return { title: title.replace(EXAMPLE_TAG_RE, ''), titleRest, isExample: true }
+  }
+  return { title, titleRest, isExample: false }
+}
+
+/** The title line: its text (with `{…}` pills) and whatever inline nodes followed it. */
+function renderTitleLine(title: string, titleRest: ReactNode[]): ReactNode {
+  if (titleRest.length === 0) return renderTitle(title)
+  return (
+    <Fragment>
+      {renderTitle(title)}
+      {titleRest.map((node, i) => (
+        <Fragment key={i}>{typeof node === 'string' ? renderTitle(node) : node}</Fragment>
+      ))}
+    </Fragment>
+  )
 }
 
 interface CalloutProps {
   type: string
   fold: '' | '-' | '+'
   title: string
+  titleRest?: ReactNode[]
   children: ReactNode
 }
 
@@ -375,32 +452,42 @@ const CONTENT_CLASSES = `text-sm text-foreground ${BODY_FRAME} ${LEAD_PARAGRAPH}
 // A note card's body: the article's reading size, flush with the card's padding.
 const CARD_BODY_CLASSES = `text-base text-foreground [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 ${CONTENT_CLASSES_SHARED}`
 
-function NoteCard({ style, title, children }: { style: CalloutStyle; title: string; children: ReactNode }) {
+function NoteCard({ style, title, titleRest = [], children }: { style: CalloutStyle; title: string; titleRest?: ReactNode[]; children: ReactNode }) {
   const Icon = style.icon
   return (
-    <section aria-label={title} className={`not-prose my-4 space-y-2 rounded-xl p-4 ${style.bgClass ?? 'bg-muted'}`}>
+    <section aria-label={titleRest.length > 0 ? undefined : title} className={`not-prose my-4 space-y-2 rounded-xl p-4 ${style.bgClass ?? 'bg-muted'}`}>
       <p className={`flex items-center gap-1.5 text-sm font-semibold ${style.accentClass}`}>
         {Icon && <Icon aria-hidden="true" className="h-4 w-4 shrink-0" />}
-        {renderTitle(title)}
+        <span>{renderTitleLine(title, titleRest)}</span>
       </p>
       {Children.count(children) > 0 && <div className={CARD_BODY_CLASSES}>{children}</div>}
     </section>
   )
 }
 
-function Callout({ type, fold, title, children }: CalloutProps) {
+function Callout({ type, fold, title, titleRest = [], children }: CalloutProps) {
   const style = getStyle(type)
   if (style.card) {
     return (
-      <NoteCard style={style} title={title || titleCase(type)}>
+      <NoteCard style={style} title={title || titleCase(type)} titleRest={titleRest}>
         {children}
       </NoteCard>
     )
   }
-  return <FoldingCallout type={type} fold={fold} title={title} style={style}>{children}</FoldingCallout>
+  if (type === 'example') {
+    const tagged = splitExampleTag(title, titleRest)
+    if (tagged.isExample) {
+      return (
+        <FoldingCallout type={type} fold={fold} title={tagged.title} titleRest={tagged.titleRest} style={WORKED_EXAMPLE_STYLE} pill="Example">
+          {children}
+        </FoldingCallout>
+      )
+    }
+  }
+  return <FoldingCallout type={type} fold={fold} title={title} titleRest={titleRest} style={style}>{children}</FoldingCallout>
 }
 
-function FoldingCallout({ type, fold, title, style, children }: CalloutProps & { style: CalloutStyle }) {
+function FoldingCallout({ type, fold, title, titleRest = [], style, pill, children }: CalloutProps & { style: CalloutStyle; pill?: string }) {
   const collapsible = fold !== ''
   const [open, setOpen] = useState(fold !== '-')
   const Icon = style.icon
@@ -412,7 +499,7 @@ function FoldingCallout({ type, fold, title, style, children }: CalloutProps & {
   // instead of trailing titles of ragged length. Any other `{…}` tag stays in
   // the title and keeps the inline pill.
   const { title: baseTitle, weight: examWeight } =
-    type === 'example' ? splitWeightTag(title) : { title, weight: null }
+    type === 'example' && titleRest.length === 0 && !pill ? splitWeightTag(title) : { title, weight: null }
   const displayTitle = baseTitle || titleCase(type)
   const examPercentage = parseExamWeight(examWeight)
   const isBarGraph = examPercentage !== null
@@ -420,7 +507,14 @@ function FoldingCallout({ type, fold, title, style, children }: CalloutProps & {
   const headerContent = (
     <div className="flex items-center gap-3 w-full">
       {Icon && <Icon className={`h-4 w-4 shrink-0 ${style.accentClass}`} />}
-      <span className={`font-medium flex-1 text-left ${style.noBorder ? 'text-base' : 'text-sm'} ${Icon ? 'text-foreground' : style.accentClass}`}>{renderTitle(displayTitle)}</span>
+      <span className={`font-medium flex-1 text-left ${style.noBorder ? 'text-base' : 'text-sm'} ${Icon ? 'text-foreground' : style.accentClass}`}>
+        {pill && (
+          <span className="mr-2 inline-flex items-center rounded-full bg-emerald-600/15 px-2 py-0.5 align-middle text-xs font-semibold text-emerald-800 dark:bg-emerald-400/15 dark:text-emerald-200">
+            {pill}
+          </span>
+        )}
+        {renderTitleLine(displayTitle, titleRest)}
+      </span>
       {examWeight && <ExamWeightLabel weight={examWeight} />}
       {collapsible && hasBody && (
         <ChevronDown
@@ -556,7 +650,7 @@ export function CalloutBlockquote(props: ComponentProps<'blockquote'> & ExtraPro
     )
   }
   return (
-    <Callout type={match.type} fold={match.fold} title={match.title}>
+    <Callout type={match.type} fold={match.fold} title={match.title} titleRest={match.titleRest}>
       {match.body}
     </Callout>
   )

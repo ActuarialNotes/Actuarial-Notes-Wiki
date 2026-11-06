@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:f730db94d07cfcea69628b2f5db009b1aca47c0557697ed0b07612081f6b68be
+  content_hash: sha256:23407a9571bf3161d7ef49b084185bfa5409ee1e440521a7c927eee57b94d011
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.1 Counting Technique (stages, multiply, PDF pp.83-84), Thm 3.1 n!, Def 3.2 and Thm 3.2 k-permutations n(n−1)…(n−k+1) (PDF p.88); §3.2 binomial coefficients C(n,j) = number of j-subsets, Thm 3.4 Pascal recurrence, Thm 3.5 C(n,j)=(n)_j/j! (pp.93-94, PDF pp.101-102), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.1 Fixed Points and hat check problem, derangements (PDF pp.90, 93); Example 3.12: P(A_i)=(n−1)!/n!, P(no fixed point)=1/2!−1/3!+…+(−1)^n/n!, table n=4: .375 (pp.105-106, PDF pp.113-114), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
@@ -35,7 +35,7 @@ verification:
 > | **Order matters** | [[Permutation]]: ${}_{n}P_{k} = \frac{n!}{(n-k)!}$ | $n^k$ |
 > | **Order does not matter** | [[Combination]]: $\binom{n}{k} = \frac{n!}{k!\,(n-k)!}$ | $\binom{n+k-1}{k}$ |
 
-> [!example] How many ways are there to choose 2 letters from $\{A, B, C\}$?
+> [!example]- How many ways are there to choose 2 letters from $\{A, B, C\}$? {Example}
 > - Order matters, without replacement: 6 outcomes, $AB, BA, AC, CA, BC, CB$.
 > - Order does not matter, without replacement: 3 outcomes, $\{A, B\}, \{A, C\}, \{B, C\}$.
 > - Order matters, with replacement: 9 outcomes, the 6 above plus $AA, BB, CC$.
@@ -53,5 +53,5 @@ then the total number of outcomes is
 
 > $$m_1 \times m_2 \times \cdots \times m_k$$
 
-> [!example] If you have 5 shirts and 4 pairs of pants, how many outfits can you create?
+> [!example]- If you have 5 shirts and 4 pairs of pants, how many outfits can you create? {Example}
 > - There are $5 \times 4 = 20$ different outfits.

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:bfad180e38496e2c4355852e97b569e357c3d559ccc9f6b57e7be9f495ebdd05
+  content_hash: sha256:805c440e75b1c61bfcb95a432f9d483f914d02233f0d2f850337b878faea40ec
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 Def. 1.1 sample space/outcomes/events, Def. 1.2 P(E)=Σ_{ω∈E} m(ω), Examples 1.6-1.9, set operations and Fig. 1.7, Thm 1.1 (P(E)≥0, P(Ω)=1, monotonicity, disjoint additivity, complement with proof), Thms 1.2-1.4 and Cor. 1.1 (pp.18-24, PDF pp.26-32), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 Ex. 1.10, Def. 1.3 uniform m(ω)=1/n, Ex. 1.11 two dice 36 ordered pairs, no single correct sample space, Determination of Probabilities, Infinite Sample Spaces (countable; Ex. 1.13 geometric sum), Historical Remarks 36 ordered vs 21 unordered pairs (pp.24-30, PDF pp.32-38), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
@@ -28,7 +28,7 @@ If all outcomes in a finite sample space $S$ are equally likely, then the probab
 - $|E|$ is the number of outcomes in the event $E$.
 - $|S|$ is the number of outcomes in the sample space $S$.
 
-> [!example] Two fair coins are flipped. What is the probability that both coins are heads?
+> [!example]- Two fair coins are flipped. What is the probability that both coins are heads? {Example}
 > The sample space lists every outcome of the experiment:
 >
 > | Coin 1 | Coin 2 |
@@ -52,7 +52,7 @@ When the outcomes of a finite sample space $S$ are not equally likely, the proba
 - $P(\{s\})$ is the probability of the event containing the single outcome $s$.
 - When every outcome is equally likely, each $P(\{s\}) = \frac{1}{|S|}$, and the sum is $\frac{|E|}{|S|}$.
 
-> [!example] A biased coin lands heads with probability 0.7. It is flipped twice, independently. What is the probability of exactly one head?
+> [!example]- A biased coin lands heads with probability 0.7. It is flipped twice, independently. What is the probability of exactly one head? {Example}
 > The sample space and the probability of each outcome:
 >
 > | Outcome | Probability |

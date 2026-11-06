@@ -137,6 +137,18 @@ export function ConceptPagePanel({
   // has nothing to scroll through. See lib/pageScrollMemory.ts.
   useEffect(() => {
     if (content === null) return
+    // A link to a heading (`[[Page#Heading]]`) opens the page at that heading.
+    if (entry.heading) {
+      const heading = entry.heading
+      const frame = requestAnimationFrame(() => requestAnimationFrame(() => {
+        const body = bodyRef.current
+        const target = body?.querySelector<HTMLElement>(`[id="${CSS.escape(heading)}"]`)
+        if (body && target) {
+          body.scrollTop += target.getBoundingClientRect().top - body.getBoundingClientRect().top - 8
+        }
+      }))
+      return () => cancelAnimationFrame(frame)
+    }
     const saved = recallPageScroll(entry)
     if (saved <= 0) return
     const frame = requestAnimationFrame(() => requestAnimationFrame(() => {

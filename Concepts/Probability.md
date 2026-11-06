@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:29cc918441574a8207da0465dd8faf871eed2fba6b6676b3ec75cefada072dbe
+  content_hash: sha256:bfad180e38496e2c4355852e97b569e357c3d559ccc9f6b57e7be9f495ebdd05
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 Def. 1.1 sample space/outcomes/events, Def. 1.2 P(E)=Σ_{ω∈E} m(ω), Examples 1.6-1.9, set operations and Fig. 1.7, Thm 1.1 (P(E)≥0, P(Ω)=1, monotonicity, disjoint additivity, complement with proof), Thms 1.2-1.4 and Cor. 1.1 (pp.18-24, PDF pp.26-32), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 Ex. 1.10, Def. 1.3 uniform m(ω)=1/n, Ex. 1.11 two dice 36 ordered pairs, no single correct sample space, Determination of Probabilities, Infinite Sample Spaces (countable; Ex. 1.13 geometric sum), Historical Remarks 36 ordered vs 21 unordered pairs (pp.24-30, PDF pp.32-38), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
@@ -19,7 +19,7 @@ verification:
 
 ![[Media/Figures/Probability.svg|340]]
 
-A **Probability** is a measure of how likely an [[Event|event]] is to occur. Formally, probabilities are assigned by a [[Set Function|set function]] $P$ that maps each event $E$ in a [[Sample Space|sample space]] $S$ to a real number $P(E)$ between 0 and 1, and that satisfies the [[Axioms of Probability|axioms of probability]].
+A **Probability** is a measure of how likely an [[Event|event]] is to occur. Probabilities are assigned by a [[Set Function|set function]] $P$ that maps each event $E$ in a [[Sample Space|sample space]] $S$ to a real number $P(E)$ between 0 and 1, and that satisfies the [[Axioms of Probability|axioms of probability]].
 
 If all outcomes in a finite sample space $S$ are equally likely, then the probability of an event $E$ is
 

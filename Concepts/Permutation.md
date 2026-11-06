@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:8eb19ab25aab013176be824e71110ca1563dd761ffd7859351e3340e7f44e0cc
+  content_hash: sha256:32c65fa4362c6a0e6e1ac909a31ddbe1ddc23b88d242d0e9766eaef5e10fe2a1
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.1 Counting Technique (stages, multiply, PDF pp.83-84), Thm 3.1 n!, Def 3.2 and Thm 3.2 k-permutations n(n−1)…(n−k+1) (PDF p.88); §3.2 binomial coefficients C(n,j) = number of j-subsets, Thm 3.4 Pascal recurrence, Thm 3.5 C(n,j)=(n)_j/j! (pp.93-94, PDF pp.101-102), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.1 Fixed Points and hat check problem, derangements (PDF pp.90, 93); Example 3.12: P(A_i)=(n−1)!/n!, P(no fixed point)=1/2!−1/3!+…+(−1)^n/n!, table n=4: .375 (pp.105-106, PDF pp.113-114), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
@@ -26,11 +26,11 @@ A **Permutation** is an ordered arrangement of distinct objects. The number of p
 > $${}_{n}P_{k} = \frac{n!}{(n-k)!}$$
 
 - $n!$, read "$n$ factorial", is $n \times (n-1) \times \cdots \times 2 \times 1$, with $0! = 1$.
-- $k \le n$, because no object can be used twice.
+- $k \le n$.
 
 > [!example] In a race with 10 runners, how many ways are there to award gold, silver and bronze medals?
-> - Any of the 10 runners could win gold. Once gold is awarded, 9 runners remain who could win silver, then 8 who could win bronze.
-> - By the multiplication principle (see [[Combinatorics]]), ${}_{10}P_{3} = 10 \times 9 \times 8 = 720$.
+> - Any of the 10 runners could win gold. Once gold is awarded, there are 9 remaining runners who could win silver, then 8 who could win bronze.
+> - ${}_{10}P_{3} = 10 \times 9 \times 8 = 720$.
 
 ## Arranging all $n$ objects
 

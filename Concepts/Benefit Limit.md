@@ -100,7 +100,7 @@ A policy can instead cap the **covered loss** and apply coinsurance after the ca
 ## On other exams
 
 - **Exam 5** prices workers compensation, whose benefit structure sets a minimum and a maximum weekly indemnity benefit as percentages of the state average weekly wage. The maximum caps the weekly benefit the same way a benefit limit caps a payment.
-- **Exams 5, 8 and FAM** apply a fixed limit to losses that grow over time. The limit damps the growth of the payment below it ([[Inflation]]).
+- **Exam 5** trends losses that are capped at a fixed limit. The limit damps the growth of the limited payment, so limited losses trend more slowly than unlimited ones ([[Inflation]]).
 
 ## Try it
 

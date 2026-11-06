@@ -1,14 +1,17 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-11-04
+  status: verified
+  confidence: high
+  last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
   content_hash: sha256:9bd44ab59831410937e9b528a5c98b9f2c36c50391232e72e35275fedc01b508
   sources:
-    - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05), §VI Benefit limits: upper bound on how much the insurer will pay for any loss; losses in excess of 1 million are rare events (PDF p.8), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf"
-    - "SOA Probability Exam (Exam P) syllabus, November 2026, Topic 2 Univariate Random Variables, learning outcomes e-f (PDF p.3), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
-    - "Siegrist, §3.2 Additional Properties, Right Distribution Function: E(X) = int_0^inf P(X > x) dx for nonnegative X, sha256:80150b157fee54ddfea427e726a32493121464235644d38eec5997fdd9ca7321 — https://www.randomservices.org/random/expect/Properties2.html"
+    - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05), §VI Benefit limits: upper bound on how much the insurer will pay for any loss; losses in excess of 1 million are rare (PDF p.8); health policy 80% of the lesser of 5000 and cost, 6000 -> 4000; maximum claim payment 12,500 (PDF p.9), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf"
+    - "Frees et al., Loss Data Analytics (open text), Ch.3 Modeling Loss Severity, §3.4.2 X^u right censored, Pr(Y = u) = 1 - F(u), E[(X^u)^k] = int_0^u x^k f + u^k(1 - F(u)) = int_0^u k x^(k-1) S(x) dx; §3.4.3 coinsurance with limit, sha256:263021bf543b04b2881284b38b7dcbd0586b78daec371b88a1eefcd362dff732 — https://openacttexts.github.io/Loss-Data-Analytics/ChapSeverity.html"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. 2016), Ch.4 workers compensation minimum and maximum indemnity benefit as % of SAWW PDF pp.113-114; Ch.6 Leveraged Effect of Limits on Severity Trend, 10% dampened to 3.5% PDF pp.129-130, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "SOA Exam P Sample Questions (2026-05 edition), Q50 (benefit limit of 10, PDF p.23), Q243 (benefit subject to a limit of 100, PDF p.102), sha256:24980e6de9cc0a68f13ac33b0ab4b18ad8ebb54d42d1afe08eed8bebb212cf06 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-questions.pdf"
+    - "SOA Probability Exam (Exam P) syllabus, November 2026, Topic 2 outcome on deductibles, coinsurance, benefit limits, PDF p.3, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
+    - "SOA, Tables for Exam C (Fall 2009), A.3.3.1 exponential E[X^x] PDF p.11, sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Benefit Limit.md

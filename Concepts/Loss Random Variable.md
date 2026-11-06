@@ -1,15 +1,21 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-09-28
+  status: verified
+  confidence: medium
+  last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:dea4b2d061cc85087ea8ce4d15575df495c475f5846faeb129c414704cfd281f
+  content_hash: sha256:e44e835cbfe354f49ef16447b14c46c5b84b1cea381dc9830f6867976aecb2b3
   sources:
-    - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05, 2005), §III theorem on S_n (PDF pp.4-5), §VI Deductibles (PDF p.7) and Benefit Limits (PDF pp.8-9), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf"
-    - "SOA Exam P Sample Solutions (Aug 2026 revision), Q101 (PDF pp.30-31), sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"
-    - "SOA, Probability Exam (Exam P) Syllabus, November 2026, Topic 2 outcomes e-f (PDF p.3) and Topic 3 outcome i (PDF p.4), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
-    - "SOA, Tables for Exam C (Fall 2009), A.3.3.1 Exponential (PDF p.11) and A.2.3.1 Pareto (PDF p.8), sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf"
+    - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05), §VI Deductibles: loss vs claim payment, 500 deductible pays 1500 on 2000 PDF p.7; Benefit limits PDF pp.8-9, sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf"
+    - "Frees et al., Loss Data Analytics (open text), Ch.3 Modeling Loss Severity, §3.4.1 Y^L left censored and shifted, Y^P left truncated and shifted, E(Y^L) = int_d^inf (x-d) f; §3.4.2 X^u right censored, sha256:263021bf543b04b2881284b38b7dcbd0586b78daec371b88a1eefcd362dff732 — https://openacttexts.github.io/Loss-Data-Analytics/ChapSeverity.html"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. 2016), Ch.6 basic limits losses censored at the limit PDF p.129; deductible censoring below the deductible PDF p.130, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "B. Hartman, Stat 344 Life Contingencies I, Ch.6 Premiums (BYU), slide 31: L0 = v^(K+1) - P a..(K+1), E[L0] = A - P a.., Var(L0) = (1 + P/d)^2 (2A - A^2), sha256:da3f77bfcd709a519f2c4982b1969fa3d62c4ec4b410117ad00dedf510dee5e8 — https://hartman.byu.edu/docs/344Files/Stat344_Chapter6.pdf"
+    - "E. Valdez, STT 456 Premium Calculation (MSU, 2015), slides 4-5: L0 = PVFB0 - PVFP0; equivalence principle E[L0] = 0, sha256:7b4af6694606f8ee6a4ad037032100e510c0f7d382d2f47d6f85044cff02cc98 — https://users.math.msu.edu/users/valdezea/stt456s15/STT456Weeks1to2-S2015.pdf"
+    - "E. Valdez, STT 456 Policy Values (MSU, 2015), slide 6: future loss L_t = PVFB_t - PVFP_t, policy value tV = E[L_t], sha256:3ace4861349a3e83d119f5e4b1490970d1fc3dc70409fc2213e0584b1c255a5f — https://users.math.msu.edu/users/valdezea/stt456s15/STT456Weeks2to4-S2015.pdf"
+    - "SOA Exam FAM syllabus, October 2026, Topic 10 outcome a: future loss random variables; outcome b equivalence principle, PDF p.7, sha256:90172025d8bd9d69e18e974fdee447963e54258e5f0e419aa3ef5b7d3e55a00e — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-fam-syllabus.pdf"
+    - "SOA Exam ALTAM syllabus, October 2026, outcomes: policy values for state-dependent and joint-life insurance; AMLCR 3rd ed. Ch.7 §§2.4, 4, Ch.8-9 assigned, PDF pp.2-6, sha256:44b64a78219337f43387cb52837c7c2ce590ae2b97321d6e8e4e29ab2cd38c5e — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-altam-syllabus.pdf"
+    - "SOA Probability Exam (Exam P) syllabus, November 2026, Topic 2 outcomes e-f, PDF p.3, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
+    - "SOA, Tables for Exam C (Fall 2009), A.3.3.1 exponential PDF p.11, sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Loss Random Variable.md

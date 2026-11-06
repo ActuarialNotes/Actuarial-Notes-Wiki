@@ -1,15 +1,16 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-09-28
+  status: verified
+  confidence: high
+  last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
   content_hash: sha256:97a895be9a85ebb7a03b387346e2051fa5419a974b750b98e9fae1ff1ca2d5ff
   sources:
-    - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05, 2005), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf — §VI only a certain percentage of each loss may be reimbursed, often referred to as coinsurance PDF p.7; reimburse 80% of costs PDF pp.8-9"
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Ch.6: V(cX) = c^2 V(X) (PDF p.267), E((xbar - mu)^2) = sigma^2/n (PDF p.274), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "Werner & Modlin, Basic Ratemaking (CAS, 2016), Ch.11 coinsurance notation and apportionment ratio PDF p.221; indemnity formula and 500,000 / 300,000 / 80% example PDF p.222, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
-    - "SOA Probability Exam syllabus, November 2026, objective \"Calculate the amount that an insurance company pays to a policyholder for a claim given policy information, including deductibles, coinsurance percentages, and benefit limits, as well as other factors, such as inflation\", PDF p.3, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
+    - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05), §VI: only a certain percentage of each loss may be reimbursed, often referred to as coinsurance PDF p.7; 80% of the lesser of 5000 and the cost PDF pp.8-9, sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf"
+    - "Frees et al., Loss Data Analytics (open text), Ch.3 Modeling Loss Severity, §3.4.3 coinsurance factor alpha applied after the ordinary deductible: Y^L = alpha[(X^u) - (X^d)], maximum payment alpha(u - d) with u the maximum covered loss; k-th moment carries alpha^k, sha256:263021bf543b04b2881284b38b7dcbd0586b78daec371b88a1eefcd362dff732 — https://openacttexts.github.io/Loss-Data-Analytics/ChapSeverity.html"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. 2016), Ch.11 coinsurance clause: notation I, L (loss after deductible), F, V, c, a, e; a = min(F/cV, 1.0) PDF p.221; I = L x F/(cV), I <= F, I <= L; 500,000 home insured 300,000 at 80%: a = 0.75, 200,000 loss pays 150,000, penalty 50,000 PDF p.222, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Grinstead & Snell, Introduction to Probability, Ch.6 V(cX) = c^2 V(X) (PDF p.267), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "SOA Probability Exam (Exam P) syllabus, November 2026, Topic 2 outcome: deductibles, coinsurance percentages, benefit limits, inflation, PDF p.3, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Coinsurance Percentage.md

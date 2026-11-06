@@ -1,18 +1,24 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-09-28
+  status: verified
+  confidence: medium
+  last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
   content_hash: sha256:5d31ca75b07c65bbd03620e8cdf2a691093fe5096431d19d6fb67e170b348274
   sources:
-    - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05, 2005), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf — §VII Inflation: fixed deductible +54% vs losses +46% PDF p.10; fixed maximum claim payment +34% PDF p.11"
-    - "SOA Exam P Sample Solutions (Aug 2026 revision), Q328 (3% inflation as Var[1.03X + 2.5], PDF p.91), sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"
-    - "SOA, Tables for Exam C (Fall 2009), exponential entry E[X^x] = theta(1 - e^(-x/theta)), PDF p.11, sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf"
-    - "Werner & Modlin, Basic Ratemaking (CAS, 2016), Ch.6 loss trend drivers PDF p.122; Leveraged Effect of Limits on Severity Trend PDF pp.129-130; Ch.11 social inflation PDF p.204, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
-    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS study note), economic environment PDF p.50; diagonals as valuation dates PDF p.59; average case outstanding in a stable environment PDF p.81; frequency-severity and inflation PDF p.218, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
-    - "SOA Financial Mathematics Exam syllabus, December 2026, Topic 1 Time Value of Money outcome a (inflation and real rate of interest), PDF p.2, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf"
-  open_findings: 0
+    - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05), §VII Inflation: fixed deductibles and limits; deductible 500 table 650 -> 998 (+54%) vs losses 750 -> 1098 (+46%) PDF p.10; maximum 12,500 table 610 -> 819 (+34%) PDF p.11, sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf"
+    - "Frees et al., Loss Data Analytics (open text), Ch.3 Modeling Loss Severity, §3.3.1 scale distributions and inflation (lognormal mu + log 1.3, sigma unchanged); §3.4.3 inflated loss (1 + r)X with d and u unchanged, E(Y^L) = alpha(1 + r)[E(X^(u/(1+r))) - E(X^(d/(1+r)))], sha256:263021bf543b04b2881284b38b7dcbd0586b78daec371b88a1eefcd362dff732 — https://openacttexts.github.io/Loss-Data-Analytics/ChapSeverity.html"
+    - "Bahnemann, Distributions for Actuaries (CAS Monograph 2), §2.8 Inflation Effects: uniform trend Y = tX, lognormal (mu + log t, sigma), monetary vs social/judicial inflation PDF p.80; censored severity E[tX; l] and the leveraging effect of an upper limit, which disappears when the limit is trended too PDF p.81; §5.5 Inflation Effects PDF p.165, sha256:d4d172f9646852ab018ae3f0df95e5fbdbfabda4db55d6d4596977ed2eaa3ef8 — https://www.casact.org/sites/default/files/2021-03/8_Bahnemann.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. 2016), Ch.6 trend drivers (monetary inflation, medical costs, safety technology) PDF p.122; Leveraged Effect of Limits on Severity Trend, 10% -> 3.5%, basic <= total <= excess, deductibles leverage with censoring below the deductible PDF pp.129-130; Ch.11 social inflation, disproportionate impact on increased limits PDF p.204, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS), economic environment, increase in the inflation rate PDF p.50; diagonals as valuation dates PDF p.59; average values down columns limited to inflationary forces PDF p.80; frequency-severity reflects inflation explicitly, highly sensitive to the inflation assumption PDF p.218, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+    - "SOA Exam FM Sample Questions, Q402 interest rate i, real rate i', inflation r (PDF p.170), sha256:d20b5cf2b78cb4cddb3dc556e0df62c40b7d510b7941b546809cc58c4b71a069 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-questions.pdf"
+    - "SOA Exam FM Sample Solutions, Q402 solution (1 + i')(1 + r) = 1 + i (PDF p.106), sha256:ae4ec6082b43944a0c44cefaf02cdc24cf2e011dcd57366ea5f9cb32d3323f69 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf"
+    - "SOA Exam FM syllabus, December 2026, Topic 1 outcome a: inflation and real rate of interest, PDF p.2, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf"
+    - "SOA Exam P Sample Questions (2026-05 edition), Q328: 3% inflation and fixed maintenance cost 2.5 (PDF p.134), sha256:24980e6de9cc0a68f13ac33b0ab4b18ad8ebb54d42d1afe08eed8bebb212cf06 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-questions.pdf"
+    - "SOA Exam P Sample Solutions (2026-05 edition), Q328 solution Var(1.03X + 2.5) = 1.03^2 Var X (PDF p.90), sha256:e10d2649bdf708541f87849c85ef6cde195019cfc8a46ee9647f6733d74d04b2 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"
+    - "SOA, Tables for Exam C (Fall 2009), A.3.3.1 exponential E[X^x] = theta(1 - e^(-x/theta)) PDF p.11, sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf"
+    - "SOA Probability Exam (Exam P) syllabus, November 2026, Topic 2 outcome: as well as other factors, such as inflation, PDF p.3, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
+  open_findings: 2
   open_critical: 0
   log: .verify/Concepts/Inflation.md
 ---

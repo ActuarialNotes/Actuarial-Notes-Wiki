@@ -34,87 +34,140 @@ The **Percentile** (or quantile) $x_p$ of a [[Random Variable]] $X$ is the small
 
 - Here $p \in (0, 1)$. The $100p$-th percentile is the quantile of order $p$.
 - The 50th percentile ($p = 0.5$) is the [[Median|median]].
-- Where $F$ jumps past $p$, as for a [[Discrete Random Variable|discrete]] variable or a [[Payment Random Variable|payment]] with a probability mass at 0, no $x$ solves $F(x) = p$; the percentile is the value at which the CDF first reaches or passes $p$. For a [[Poisson Distribution|Poisson]] with mean 3, $F(3) = 0.647$ and $F(4) = 0.815$, so its 75th percentile is 4.
-- Percentiles describe tail behavior and underlie actuarial risk measures such as Value at Risk (VaR), the loss level a portfolio will not exceed with probability $p$.
-- An increasing transformation carries percentiles straight through, which the mean does only for linear transformations. A lognormal percentile, for example, is $e$ raised to the matching normal percentile.
+- Percentiles describe the tail of a distribution. Value at Risk (VaR) is the loss level a portfolio will not exceed with probability $p$, which is a percentile.
 
 > [!idea] The idea
 > The CDF gives the probability that a loss is below a given amount. A percentile reverses the question: it gives the amount below which a given proportion of losses fall. Only the order of the losses matters, so doubling every loss doubles every percentile.
 
 ![[Media/Figures/Percentile.svg|340]]
 
-### Percentiles of transformed and conditional losses
+## Reversing the CDF
 
-Percentiles move with increasing transformations. If $Y = g(X)$ with $g$ continuous and increasing, then $y_p = g(x_p)$. For $Y = a + bX$ with $b > 0$:
+Losses on a block of policies are uniform on $(0, 1000)$, so $F(x) = x/1000$. Setting $F(x_p) = p$ gives $x_p = 1000p$.
 
-> $$y_p = a + b\,x_p$$
+| $p$ | 0.25 | 0.50 | 0.75 | 0.90 |
+|---|---|---|---|---|
+| $x_p$ | 250 | 500 | 750 | 900 |
 
-- In particular, multiplying a random variable by a constant $c > 0$ multiplies its percentiles by that constant: the $p$-th percentile of $cX$ is $c\,x_p$.
-- A percentile of the losses that exceed a deductible $d$ is a conditional percentile: a percentile of the distribution of $X$ given $X > d$, not of $X$ itself. For $x > d$ the conditional CDF is
+- The interquartile range is $x_{0.75} - x_{0.25} = 500$.
+- The reverse question reads the CDF forward. A loss of 600 has $F(600) = 0.6$, so it is the 60th percentile.
+
+## When the CDF jumps
+
+The same block's monthly claim count is [[Poisson Distribution|Poisson]] with mean 3. Its CDF jumps at each whole number.
+
+| $k$ | 2 | 3 | 4 | 5 |
+|---|---|---|---|---|
+| $F(k)$ | 0.4232 | 0.6472 | 0.8153 | 0.9161 |
+
+No $k$ solves $F(k) = 0.75$. The CDF first reaches 0.75 at $k = 4$, so the 75th percentile is 4. This is why the definition takes the smallest $x$ with $F(x) \ge p$.
+
+A [[Payment Random Variable|payment]] can jump too. With a deductible of 200, the payment $Y = (X - 200)_+$ is 0 for every loss up to 200, so $F_Y(0) = 0.2$. Every percentile with $p \le 0.2$ is 0.
+
+## Transforming a loss
+
+Above the jump, each payment is its loss less 200. The payment rises with the loss, so the losses and payments keep their order. The 75th percentile of the payment is $750 - 200 = 550$.
+
+> $$y_p = g(x_p), \quad g \text{ continuous and increasing}$$
+
+> $$y_p = a + b\,x_p, \quad b > 0$$
+
+- If every loss rises 10%, the losses become uniform on $(0, 1100)$ and every percentile rises 10%. The 75th percentile becomes 825.
+- A lognormal percentile is $e$ raised to the matching normal percentile, $e^{\mu + z_p \sigma}$.
+- The mean passes through only a linear transformation. Percentiles pass through any increasing one.
+
+> [!trap] A decreasing transformation flips $p$
+> If $g$ is decreasing, then $y_p = g(x_{1-p})$. The present value of a death benefit falls as the time of death rises. So the 95th percentile of the present value comes from the 5th percentile of the lifetime, not the 95th.
+
+## Percentiles of the losses above a deductible
+
+The insurer's claims file holds only the losses above 200. What is the 75th percentile of those losses? This is a percentile of $X$ given $X > 200$, not of $X$ itself.
 
 > $$P(X \leq x \mid X > d) = \frac{F(x) - F(d)}{1 - F(d)}$$
 
-- Setting the conditional CDF equal to $p$ shows that the $100p$-th percentile $k$ of $X$ given $X > d$ solves $P(X > k) = (1 - p)\,P(X > d)$, that is
+Setting this equal to $p$ gives the percentile $k$.
 
 > $$F(k) = 1 - (1 - p)\,[1 - F(d)]$$
 
-- Since $F(k) = p + (1 - p)\,F(d) \geq p$, the conditional percentile is at least the unconditional one, $F^{-1}(p)$. It is larger whenever $F(d) > 0$ and $F$ is strictly increasing. Conditioning removes the losses below $d$, so the percentiles shift upward.
-- Equivalently, the conditional percentile is $d$ plus the $100p$-th percentile of the excess $X - d$ given $X > d$: compute the percentile of the excess amount and add $d$ back to get the percentile of the loss.
+For the uniform losses, $k/1000 = 1 - 0.25 \times 0.8 = 0.8$, so $k = 800$.
 
-> [!example]- Percentile of the Losses Above a Deductible {Example}
-> Losses are uniform on $[0, 1{,}000]$ and a deductible of $200$ applies. Find the 75th percentile of the losses that exceed the deductible, and compare it with the 75th percentile of all losses.
->
-> > [!answer]-
-> > Solve $F(k) = 1 - (1 - p)[1 - F(d)]$ with $F(200) = 0.2$:
-> > $$
-> > \begin{align*}
-> > \frac{k}{1{,}000} &= 1 - 0.25(0.8) \\
-> > &= 0.8 \\
-> > k &= 800
-> > \end{align*}
-> > $$
-> > Check the answer through the excess. Given $X > 200$, the excess $X - 200$ is uniform on $[0, 800]$, and its 75th percentile is $600$. Adding the deductible back gives $800$. The 75th percentile of all losses is only $750$, because conditioning dropped the losses below $200$.
+- A check through the excess: given $X > 200$, the excess $X - 200$ is uniform on $(0, 800)$. Its 75th percentile is 600, and adding the deductible back gives 800.
+- The 75th percentile of all losses is only 750. Conditioning removes the losses below $d$, so $F(k) = p + (1 - p)\,F(d) \ge p$ and the percentiles shift upward.
 
-> [!example]- 90th Percentile of an Exponential Distribution {Example}
+## Percentiles of a normal and of a total
+
+A [[Normal Distribution|normal]] percentile comes from the standard normal one, $z_p$.
+
+> $$x_p = \mu + z_p\,\sigma$$
+
+Suppose two independent losses are each normal with mean 100 and standard deviation 15. Each has 95th percentile $100 + 1.645 \times 15 \approx 124.68$.
+
+- Their total has mean 200 and standard deviation $15\sqrt{2}$. Its 95th percentile is about 234.90.
+- Adding the two individual percentiles gives about 249.35, which is too high. The means add, but the standard deviations do not.
+
+The same method gives an approximate percentile for a sum of many independent amounts, by the [[Central Limit Theorem]].
+
+## On other exams
+
+- **MAS-I**: percentile matching estimates parameters by setting fitted percentiles equal to smoothed empirical ones. Percentiles of [[Order Statistics|order statistics]] and of fitted loss distributions also appear.
+- **FAM**: a percentile of a present value random variable, or of a count of survivors by the normal approximation.
+- **MAS-II**: posterior intervals read from percentiles of a posterior distribution.
+- **Exam 7 and Exam 9**: a confidence interval for a reserve from an approximating distribution (Mack's lognormal), and Value at Risk as a percentile of the loss distribution.
+
+## Try it
+
+> [!example]- 90th percentile of an exponential claim {Example}
 > Claim sizes follow an [[Exponential Distribution]] with CDF $F(x) = 1 - e^{-x/10}$ for $x \geq 0$. Find the 90th percentile.
 >
 > > [!answer]-
-> > Set $F(x_{0.90}) = 0.90$ and solve:
-> > $$\begin{align*} 1 - e^{-x_{0.90}/10} &= 0.90 \\ e^{-x_{0.90}/10} &= 0.10 \\ x_{0.90} &= -10 \ln(0.10) \\ &= 10 \ln(10) \approx 23.03 \end{align*}$$
-> > About 90% of claims fall below 23.03.
-
-> [!example]- 95th Percentile of a Normal Loss {Example}
-> Annual losses follow a [[Normal Distribution]] $X \sim N(\mu = 100,\ \sigma^2 = 225)$. Find the 95th percentile.
->
-> > [!answer]-
-> > The 95th percentile of the standard normal is $z_{0.95} = 1.645$. Transform back with $\sigma = 15$:
-> > $$\begin{align*} x_{0.95} &= \mu + z_{0.95}\,\sigma \\ &= 100 + 1.645(15) \\ &= 124.68 \end{align*}$$
-> > The probability that the annual loss is below 124.68 is 0.95.
-
-> [!example]- Percentiles of a Payment Under a Deductible {Example}
-> Losses $X$ are exponential with mean \$5,000, and a policy pays $Y = (X - 1{,}000)_+$. Find the 10th and 90th percentiles of $Y$.
->
-> > [!answer]-
-> > $Y = 0$ whenever $X \le 1{,}000$, so the CDF of $Y$ jumps at zero:
-> > $$F_Y(0) = P(X \le 1{,}000) = 1 - e^{-0.2} = 0.1813$$
-> > Since $F_Y(0) = 0.1813 \ge 0.10$, the 10th percentile is $y_{0.10} = 0$, even though $F_Y(y) = 0.10$ has no solution. Above the jump $F_Y$ is continuous and increasing, so the 90th percentile solves $F_Y(y) = 0.90$:
+> > **Plan:** set $F(x_{0.90}) = 0.90$ and solve.
 > > $$
 > > \begin{align*}
-> > 1 - e^{-(y + 1{,}000)/5{,}000} &= 0.90 \\
-> > y + 1{,}000 &= 5{,}000 \ln 10 \\
-> > y_{0.90} &= 11{,}512.93 - 1{,}000 \\
-> >          &= 10{,}512.93
+> > 1 - e^{-x_{0.90}/10} &= 0.90 \\
+> > e^{-x_{0.90}/10} &= 0.10 \\
+> > x_{0.90} &= 10 \ln 10 \\
+> > &\approx 23.03
 > > \end{align*}
 > > $$
-> > Every percentile with $p \le 0.1813$ is 0; above that, the continuous rule applies.
+> > About 90% of claims fall below 23.03.
 
-> [!tip]- How it appears on the exam
-> - **Exam P** (Univariate Random Variables, objective 3): find the median or a percentile of a named distribution (exponential, uniform, normal) or of a given density. The reverse also appears, where a given median or percentile fixes a parameter used for something else. Questions also ask for differences and ratios of percentiles (an interquartile range) and for the percentile of losses above a deductible.
-> - **MAS-I**: percentile matching estimates parameters by setting fitted percentiles equal to smoothed empirical ones. Percentiles of order statistics and of fitted loss distributions also appear.
-> - **FAM**: a percentile of a present value random variable or of a count of survivors (by the normal approximation). **MAS-II**: posterior intervals read from percentiles of a posterior distribution.
-> - **Exam 7** and **Exam 9**: a confidence interval for a reserve from an approximating distribution (Mack's lognormal), and Value at Risk as a percentile of the loss distribution.
+> [!example]- 95th percentile of a normal loss {Example}
+> Annual losses follow a normal distribution with $\mu = 100$ and $\sigma^2 = 225$. Find the 95th percentile.
+>
+> > [!answer]-
+> > **Plan:** take the standard normal percentile and transform back with $\sigma = 15$.
+> > $$
+> > \begin{align*}
+> > x_{0.95} &= \mu + z_{0.95}\,\sigma \\
+> > &= 100 + 1.645(15) \\
+> > &\approx 124.68
+> > \end{align*}
+> > $$
+> > The probability that the annual loss is below 124.68 is 0.95.
+
+> [!example]- Percentiles of a payment under a deductible {Example}
+> Losses $X$ are exponential with mean 5,000, and a policy pays $Y = (X - 1000)_+$. Find the 10th and 90th percentiles of $Y$.
+>
+> > [!answer]-
+> > **Plan:** find the size of the jump at 0 first, then invert the CDF above it.
+> >
+> > $Y = 0$ whenever $X \le 1000$, so the CDF of $Y$ jumps at zero.
+> > $$F_Y(0) = 1 - e^{-0.2} \approx 0.1813$$
+> > Since $0.1813 \ge 0.10$, the 10th percentile is 0, even though $F_Y(y) = 0.10$ has no solution.
+> >
+> > Above the jump, the 90th percentile is the 90th percentile of the loss less 1,000.
+> > $$
+> > \begin{align*}
+> > x_{0.90} &= 5000 \ln 10 \\
+> > &\approx 11512.93 \\
+> > y_{0.90} &= 11512.93 - 1000 \\
+> > &= 10512.93
+> > \end{align*}
+> > $$
+> > Every percentile with $p \le 0.1813$ is 0. Above that, the continuous rule applies.
 
 > [!warning]- Exam traps
-> - **A decreasing transformation flips $p$.** If $Y = g(X)$ with $g$ decreasing, then $y_p = g(x_{1-p})$. The present value of a death benefit is such a transformation, since it falls as the time of death rises. The 95th percentile of the present value comes from the 5th percentile of the lifetime; using the 95th gives one of the smallest values instead of one of the largest.
-> - **The mean is not the median.** For a right-skewed loss the median is below the mean: an exponential with mean $\theta$ has median $\theta \ln 2 \approx 0.693\,\theta$. Setting the median equal to $\theta$ gives the wrong parameter.
-> - **Percentiles don't add.** For independent normal losses the means add but the standard deviations do not. The 95th percentile of a total is therefore $\mu_{\text{total}} + 1.645\sqrt{\sum \sigma_i^2}$, which is below the sum of the individual 95th percentiles.
+> - **A decreasing transformation flips $p$.** Use $x_{1-p}$ of the lifetime for the $p$-th percentile of a present value.
+> - **The mean is not the median.** An exponential with mean $\theta$ has median $\theta \ln 2 \approx 0.693\,\theta$. Setting the median equal to $\theta$ gives the wrong parameter.
+> - **Percentiles don't add.** The 95th percentile of a total of independent normal losses is $\mu_{\text{total}} + 1.645\sqrt{\sum \sigma_i^2}$, below the sum of the individual 95th percentiles.
+> - **All losses or the losses above $d$.** A percentile of the losses that exceed a deductible uses the conditional CDF, and it is larger than the same percentile of all losses.

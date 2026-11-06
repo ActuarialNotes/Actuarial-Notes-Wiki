@@ -14,72 +14,146 @@ verification:
   log: .verify/Concepts/Variance for Conditional and Marginal Distributions.md
 ---
 
-The **Variance for Conditional and Marginal Distributions** measures spread at two different levels: the marginal variance $\text{Var}(X)$ describes the spread of $X$ across the whole population, while the conditional variance $\text{Var}(X \mid Y=y)$ measures the spread of $X$ within the subpopulation where $Y=y$. The two are tied together by the **law of total variance**.
+The **Variance for Conditional and Marginal Distributions** measures spread at two levels. The marginal variance $\text{Var}(Y)$ describes the spread of $Y$ across the whole population, while the conditional variance $\text{Var}(Y \mid X = x)$ describes the spread of $Y$ within the subpopulation where $X = x$. The **law of total variance** ties the two together.
 
-> $$\text{Var}(X \mid Y=y) = E[X^2 \mid Y=y] - \bigl(E[X \mid Y=y]\bigr)^2$$
+> $$\text{Var}(Y \mid X = x) = E[Y^2 \mid X = x] - \big(E[Y \mid X = x]\big)^2$$
 
-> $$E[X] = E\bigl[E[X \mid Y]\bigr]$$
+> $$E[Y] = E\big[E[Y \mid X]\big]$$
 
-> $$\text{Var}(X) = E\bigl[\text{Var}(X \mid Y)\bigr] + \text{Var}\bigl(E[X \mid Y]\bigr)$$
+> $$\text{Var}(Y) = E\big[\text{Var}(Y \mid X)\big] + \text{Var}\big(E[Y \mid X]\big)$$
 
-- The second identity is the **law of total expectation** (double expectation); the third is the **law of total variance**. Both are the fastest route to a marginal moment when the problem hands you a conditional distribution and a distribution for its parameter.
-- Watch the notation carefully: $E[X \mid Y=y]$ is a **number**, but $E[X \mid Y]$ is a **random variable** — a function of $Y$. The outer $E[\cdot]$ and $\text{Var}(\cdot)$ in the identities average over $Y$'s distribution.
-- Read the decomposition as *(average within-group variance) + (variance of the group means)*. Both terms are non-negative, so conditioning can never raise the average spread: $E[\text{Var}(X \mid Y)] \leq \text{Var}(X)$.
-- A common slip is to compute $\text{Var}(E[X\mid Y])$ and stop — that is only the between-group piece, never the whole marginal variance.
-- Conditional distributions come from the [[Conditional Probability Function]] (discrete) or the [[Joint Probability Density Function]] (continuous). See also [[Moments for Joint Distributions]].
+- The second identity is the **law of total expectation**, also called double expectation. The third is the law of total variance.
+- $E[Y \mid X = x]$ is a number. $E[Y \mid X]$ is a random variable, a function of $X$. The outer $E$ and $\text{Var}$ average over the distribution of $X$.
+- Both pieces are non-negative, so $E[\text{Var}(Y \mid X)] \le \text{Var}(Y)$. On average, knowing $X$ can only reduce the spread.
+- Conditional distributions come from the [[Conditional Probability Function]] or, for continuous variables, the [[Joint Probability Density Function]]. See also [[Moments for Joint Distributions]].
+
+> [!idea] The idea
+> Total spread has two sources. Outcomes scatter within each group, and the groups' own means differ from one another. The law of total variance adds the average within-group variance to the variance of the group means, so ignoring either source understates the risk.
 
 ![[Media/Figures/Variance_for_Conditional_and_Marginal_Distributions.svg|340]]
 
-> [!example]- Variance of Claims Given Policy Type {Example}
-> Joint PMF: $p(0,1)=0.3$, $p(1,1)=0.2$, $p(0,2)=0.1$, $p(1,2)=0.4$ where $X$ = claims and $Y$ = policy type. Find $\text{Var}(X \mid Y=2)$.
+## Spread within each group
+
+A policyholder holds an auto policy and a home policy. Let $X$ be the number of auto claims in a year and $Y$ the number of home claims.
+
+| $X$ \ $Y$ | 0 | 1 | 2 | Total |
+|---|---|---|---|---|
+| 0 | 0.36 | 0.18 | 0.06 | 0.60 |
+| 1 | 0.10 | 0.20 | 0.10 | 0.40 |
+| Total | 0.46 | 0.38 | 0.16 | 1 |
+
+How variable are home claims for a policyholder with one auto claim? Keep the $X = 1$ row and divide by its total, 0.40. The conditional probabilities are 0.25, 0.50 and 0.25.
+
+> $$E[Y \mid X = 1] = 0(0.25) + 1(0.50) + 2(0.25) = 1.0$$
+
+> $$\text{Var}(Y \mid X = 1) = 0.50 + 4(0.25) - 1.0^2 = 0.50$$
+
+The $X = 0$ row, divided by 0.60, gives probabilities 0.6, 0.3 and 0.1. Its conditional mean is 0.5 and its conditional variance is $0.7 - 0.25 = 0.45$.
+
+## Putting the groups back together
+
+The two groups have different means and different variances.
+
+| $x$ | $P(X = x)$ | $E[Y \mid x]$ | $\text{Var}(Y \mid x)$ |
+|---|---|---|---|
+| 0 | 0.60 | 0.5 | 0.45 |
+| 1 | 0.40 | 1.0 | 0.50 |
+
+The law of total expectation averages the conditional means: $E[Y] = 0.6(0.5) + 0.4(1.0) = 0.70$. The variance needs two pieces.
+
+- Within groups: $E[\text{Var}(Y \mid X)] = 0.6(0.45) + 0.4(0.50) = 0.47$.
+- Between groups: the conditional means 0.5 and 1.0 have variance $0.6(0.25) + 0.4(1.0) - 0.70^2 = 0.06$.
+
+Together they give $\text{Var}(Y) = 0.47 + 0.06 = 0.53$. The marginal column totals give the same answer directly: $1.02 - 0.49 = 0.53$.
+
+> [!trap] Stopping at one piece
+> $\text{Var}(E[Y \mid X]) = 0.06$ is only the spread of the group means. $E[\text{Var}(Y \mid X)] = 0.47$ is only the average spread inside the groups. The marginal variance is their sum, 0.53.
+
+## When the group is a risk parameter
+
+The same split works when the conditioning variable is a risk level that varies across a portfolio. If a policyholder's claim count $N$ is [[Poisson Distribution|Poisson]] with mean $\Lambda$, then $E[N \mid \Lambda] = \Lambda$ and $\text{Var}(N \mid \Lambda) = \Lambda$.
+
+> $$\text{Var}(N) = E[\Lambda] + \text{Var}(\Lambda)$$
+
+- The variance exceeds the mean whenever $\Lambda$ varies. Mixing Poisson risks makes the portfolio's counts overdispersed.
+- The risk parameter may take a few values, as in policy types, or have a density. Either way the two pieces are the same. See [[Mixture Distribution]].
+
+## A random number of claims
+
+An aggregate loss $S = X_1 + \cdots + X_N$ adds a random number $N$ of i.i.d. claim sizes with mean $\mu$ and variance $\sigma^2$, independent of $N$. Conditioning on $N$ gives $E[S \mid N] = N\mu$ and $\text{Var}(S \mid N) = N\sigma^2$.
+
+> $$E[S] = E[N]\,\mu$$
+
+> $$\text{Var}(S) = E[N]\,\sigma^2 + \text{Var}(N)\,\mu^2$$
+
+The first term is the claim-size spread averaged over $N$. The second is the spread caused by not knowing how many claims arrive. For a Poisson $N$ with mean $\lambda$, $\text{Var}(S) = \lambda\,E[X^2]$. See [[Aggregate Loss Model]] and [[Compound Poisson Process]].
+
+## Try it
+
+> [!example]- Variance of claims given policy type {Example}
+> The joint probabilities of claims $X$ and policy type $Y$ are $p(0, 1) = 0.3$, $p(1, 1) = 0.2$, $p(0, 2) = 0.1$ and $p(1, 2) = 0.4$. Find $\text{Var}(X \mid Y = 2)$.
 >
 > > [!answer]-
-> > Since $p_Y(2)=0.5$: $p_{X|Y}(0\mid 2)=0.2$ and $p_{X|Y}(1\mid 2)=0.8$. Then $E[X \mid Y=2] = 0(0.2)+1(0.8) = 0.8$ and $E[X^2 \mid Y=2] = 0.8$. So:
-> > $$\text{Var}(X \mid Y=2) = 0.8 - (0.8)^2 = 0.16$$
+> > **Plan:** keep the $Y = 2$ cells, rescale by $P(Y = 2) = 0.5$, then use the conditional moments.
+> > The conditional probabilities are $0.1/0.5 = 0.2$ for $X = 0$ and $0.4/0.5 = 0.8$ for $X = 1$.
+> > $$
+> > \begin{align*}
+> > E[X \mid Y = 2] &= 0.8 \\
+> > E[X^2 \mid Y = 2] &= 0.8 \\
+> > \text{Var}(X \mid Y = 2) &= 0.8 - 0.8^2 \\
+> > &= 0.16
+> > \end{align*}
+> > $$
 
-> [!example]- Marginal Variance via the Law of Total Variance {Example}
-> A driver's annual claim count is $N \mid \Lambda = \lambda \sim \text{Poisson}(\lambda)$, and the risk parameter $\Lambda$ varies across the portfolio with $E[\Lambda] = 0.2$ and $\text{Var}(\Lambda) = 0.05$. Find $E[N]$ and $\text{Var}(N)$.
+> [!example]- Two policy types {Example}
+> 70% of policies are Type A and 30% are Type B. Annual claim counts are Poisson with mean 1 for Type A and mean 3 for Type B. Find the variance of the claim count of a randomly selected policy.
 >
 > > [!answer]-
-> > For a [[Poisson Distribution|Poisson]], $E[N \mid \Lambda] = \Lambda$ and $\text{Var}(N \mid \Lambda) = \Lambda$. By double expectation:
+> > **Plan:** the Poisson mean $\Lambda$ is 1 or 3, so $\text{Var}(N) = E[\Lambda] + \text{Var}(\Lambda)$.
 > > $$
 > > \begin{align*}
-> > E[N] &= E\bigl[E[N \mid \Lambda]\bigr] \\
-> >      &= E[\Lambda] \\
-> >      &= 0.2
+> > E[\Lambda] &= 0.7(1) + 0.3(3) \\
+> > &= 1.6 \\
+> > \text{Var}(\Lambda) &= 0.7(1) + 0.3(9) - 1.6^2 \\
+> > &= 0.84 \\
+> > \text{Var}(N) &= 1.6 + 0.84 \\
+> > &= 2.44
 > > \end{align*}
 > > $$
-> > By the law of total variance:
-> > $$
-> > \begin{align*}
-> > \text{Var}(N) &= E\bigl[\text{Var}(N \mid \Lambda)\bigr] + \text{Var}\bigl(E[N \mid \Lambda]\bigr) \\
-> >               &= E[\Lambda] + \text{Var}(\Lambda) \\
-> >               &= 0.2 + 0.05 \\
-> >               &= 0.25
-> > \end{align*}
-> > $$
-> > $\text{Var}(N) > E[N]$: heterogeneous risk parameters make the portfolio's claim counts **overdispersed** relative to a single Poisson.
+> > Why more than 1.6? Each type is Poisson, but the mixture adds the spread between the two types' means.
 
-> [!example]- Both Terms Matter {Example}
+> [!example]- Aggregate claims {Example}
+> The number of claims $N$ is Poisson with mean 3. Claim sizes are exponential with mean 100, independent of each other and of $N$. Find the standard deviation of aggregate claims $S$.
+>
+> > [!answer]-
+> > **Plan:** use the compound variance, with $\mu = 100$ and $\sigma^2 = 100^2$.
+> > $$
+> > \begin{align*}
+> > \text{Var}(S) &= E[N]\,\sigma^2 + \text{Var}(N)\,\mu^2 \\
+> > &= 3(10{,}000) + 3(10{,}000) \\
+> > &= 60{,}000
+> > \end{align*}
+> > $$
+> > So $\text{SD}(S) = \sqrt{60{,}000} \approx 244.9$.
+
+> [!example]- Both pieces matter {Example}
 > A loss $X$ is uniform on $(0, Y)$, where $Y$ takes the values 10 and 20 with equal probability. Find $\text{Var}(X)$.
 >
 > > [!answer]-
-> > For $X \mid Y = y \sim \text{Uniform}(0,y)$: $E[X \mid Y] = Y/2$ and $\text{Var}(X \mid Y) = Y^2/12$. With $Y \in \{10, 20\}$ equally likely, $E[Y] = 15$, $E[Y^2] = \tfrac{100 + 400}{2} = 250$.
-> >
-> > Within-group piece:
+> > **Plan:** given $Y$, the loss is uniform, so $E[X \mid Y] = Y/2$ and $\text{Var}(X \mid Y) = Y^2/12$. Then average each piece over $Y$, with $E[Y] = 15$ and $E[Y^2] = 250$.
 > > $$
 > > \begin{align*}
-> > E\bigl[\text{Var}(X \mid Y)\bigr] &= \frac{E[Y^2]}{12} \\
-> >                                   &= \frac{250}{12} \approx 20.83
+> > E\big[\text{Var}(X \mid Y)\big] &= \frac{E[Y^2]}{12} \\
+> > &= \frac{250}{12} \\
+> > &\approx 20.83 \\
+> > \text{Var}\big(E[X \mid Y]\big) &= \frac{1}{4}\left(250 - 15^2\right) \\
+> > &= 6.25
 > > \end{align*}
 > > $$
-> > Between-group piece:
-> > $$
-> > \begin{align*}
-> > \text{Var}\bigl(E[X \mid Y]\bigr) &= \text{Var}\!\left(\frac{Y}{2}\right) \\
-> >                                   &= \frac{1}{4}\left(250 - 15^2\right) \\
-> >                                   &= \frac{25}{4} = 6.25
-> > \end{align*}
-> > $$
-> > $$\text{Var}(X) = 20.83 + 6.25 \approx 27.08$$
-> > Reporting only 6.25 (the between-group term) would understate the spread by a factor of more than four ($27.08/6.25 \approx 4.3$).
+> > So $\text{Var}(X) \approx 20.83 + 6.25 = 27.08$. Reporting only the between-group 6.25 would understate the spread by a factor of more than four.
+
+> [!warning]- Exam traps
+> - **Stopping at $\text{Var}(E[Y \mid X])$.** That is only the between-group piece. Add $E[\text{Var}(Y \mid X)]$.
+> - **Averaging the conditional variances alone.** That is only the within-group piece. Add the variance of the conditional means.
+> - **Mixing up $E[Y \mid X = x]$ and $E[Y \mid X]$.** The first is a number. The second is a random variable whose variance is a piece of the law.
+> - **Squaring the wrong mean in a compound sum.** The second term is $\text{Var}(N)\,\mu^2$, the variance of the count times the squared claim mean.

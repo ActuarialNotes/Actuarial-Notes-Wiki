@@ -1,16 +1,19 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-11-04
+  status: verified
+  confidence: medium
+  last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
   content_hash: sha256:9bda6d86ad616cfdae09214feb6a454f63dae43e78f4b22a251506489e256830
   sources:
-    - "Orloff & Bloom, MIT OCW 18.05 (Spring 2022), Reading 7b: Covariance and Correlation, Property 6 and Warning: the converse is false (p.1); Example 2, Cov = 0 with Y = X^2 but not independent (p.3); covariance measures the linear relationship (p.4), sha256:71f8a7b5f3b2233de2e8722ec1372f5704195efc2a6fb72c50c8ef505f92c4dc — https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_class07-prep-b.pdf"
-    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, Joint Distributions, joint distribution carries more information than the marginals; converse holds if X and Y are independent; independent => joint density = product of marginal densities, sha256:2192ffa7b60a3d5e969c74398a7c539483ce8d4e484febd66b251b19897f1f98 — https://www.randomservices.org/random/dist/Joint.html"
-    - "Orloff & Bloom, MIT OCW 18.05 (Spring 2022), Reading 7a: Joint Distributions, Independence, §3.2 joint pdf total probability 1 (p.3); §4 independence and Ex. 12, a zero cell cannot equal a product of nonzero marginals (pp.9-10), sha256:12cf136bbcbef819e1a2530cbfcf15ea06ae83ec4f9ce6c0f6186c87b01d09f4 — https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_class07-prep-a.pdf"
-    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, The Multivariate Hypergeometric Distribution, sampling without replacement: P(Y1=y1,...,Yk=yk) = prod C(m_i,y_i) / C(m,n); with replacement the counts are multinomial, sha256:ce429ccb0682c9be25603fb52bab837daa32b2910c2aeba0603daf193a8cf978 — https://www.randomservices.org/random/urn/MultiHypergeometric.html"
-    - "SOA Probability Exam (Exam P) syllabus, November 2026, Topic 3 Multivariate Random Variables (23-30%), objective statement (discrete and continuous settings) and outcomes a-e (PDF p.4), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
+    - "Orloff & Bloom, MIT OCW 18.05 (Spring 2022), Reading 7a: Joint Distributions, Independence, §3.1 joint pmf, §3.2 joint pdf total probability 1, §3.7-3.8 marginals by summing/integrating, §4 independence and Ex. 12 (a zero cell cannot be a product of nonzero marginals) pp.2-10, sha256:12cf136bbcbef819e1a2530cbfcf15ea06ae83ec4f9ce6c0f6186c87b01d09f4 — https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_class07-prep-a.pdf"
+    - "Orloff & Bloom, MIT OCW 18.05 (Spring 2022), Reading 7b: Covariance and Correlation, Property 6 and Warning: the converse is false (p.1); covariance measures linear relationship (p.4), sha256:71f8a7b5f3b2233de2e8722ec1372f5704195efc2a6fb72c50c8ef505f92c4dc — https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_class07-prep-b.pdf"
+    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), Multinomial Distribution: joint PMF with multinomial coefficient; each Y_i ~ Binomial(n, p_i), HTML fetched 2026-11-06, sha256:eee1779c2c22be3a73f51f9149c846395c8ba2cbe8609433afd865b3c9a50e2e — https://www.randomservices.org/random/bernoulli/Multinomial.html"
+    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), The Multivariate Hypergeometric Distribution: sampling without replacement: product of binomials over C(m,n); with replacement the types form multinomial trials with p_i = m_i/m, HTML fetched 2026-11-06, sha256:ce429ccb0682c9be25603fb52bab837daa32b2910c2aeba0603daf193a8cf978 — https://www.randomservices.org/random/urn/MultiHypergeometric.html"
+    - "SOA Probability Exam (Exam P) syllabus, November 2026, Topic 3 Multivariate Random Variables (23-30%), learning objective and outcomes a-i (PDF p.4), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
+    - "CAS Exam 9 Content Outline, Fall 2026, Domain D (Brehm et al.) task 5 'Select models to manage diverse risks and evaluate correlations of risks' (PDF p.6) and Brehm chapters 1-5 (PDF p.7), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
+    - "CAS Exam 7 Spring 2015, Q21 (copulas to express correlation from joint loss distributions, booklet PDF p.25; sample answers PDF pp.82-83), sha256:b3ff9352d93b7aeaa7ffe531de52bc928e635bd72fae89247fb310580c99a568 — https://www.casact.org/sites/default/files/2021-03/15-7.pdf"
+    - "Wikipedia, Copula (statistics): Sklar's theorem (joint distribution = copula of the marginals) and the independence copula C(u,v) = uv, HTML fetched 2026-11-06, sha256:0e663c458baaef81b2713afb34d7f77eca2f8bd460043883f22cc02b2d51c556 — https://en.wikipedia.org/wiki/Copula_(statistics)"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Multivariate Distribution.md

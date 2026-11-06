@@ -1,16 +1,15 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-09-28
+  status: verified
+  confidence: high
+  last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
   content_hash: sha256:0a941cba32352871fc8aecd28861378ecb2074c2a520e1284999d0c41cf8eee0
   sources:
-    - "Orloff & Bloom, MIT OCW 18.05 Introduction to Probability and Statistics (Spring 2022), Reading 7a: Joint Distributions, Independence — §3.4 joint cdf (discrete double sum; continuous double integral) p.5, §3.5 properties of the joint cdf p.6, sha256:12cf136bbcbef819e1a2530cbfcf15ea06ae83ec4f9ce6c0f6186c87b01d09f4 — https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_class07-prep-a.pdf"
-    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §5.2.2 Joint Cumulative Distribution Function (limits, rectangle formula, f = d2F/dxdy), web page as fetched 2026-09-28, sha256:dbbb45db724d91c7f1eeede2524932e6babb38a906987d51550cb7a9990b73e0 — https://www.probabilitycourse.com/chapter5/5_2_2_joint_cdf.php"
-    - "SOA Exam P Sample Solutions (Aug 2026 revision), Q239 (discrete joint cdf, rectangle recovery, PDF p.71), Q410 (discrete joint cdf by adding cells, PDF p.115), sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Def. 4.7 (independence iff the joint cdf factors, PDF p.173), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "SOA, Probability Exam (Exam P) Syllabus, November 2026, Topic 3 Multivariate Random Variables, learning objective and outcomes a)-i), PDF p.4, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
+    - "Orloff & Bloom, MIT OCW 18.05 (Spring 2022), Reading 7a: Joint Distributions, Independence, §3.4 joint cdf F(x,y) = P(X<=x, Y<=y), double integral of the density p.5; §3.5 properties: non-decreasing, 0 at lower-left, 1 at upper-right p.6, sha256:12cf136bbcbef819e1a2530cbfcf15ea06ae83ec4f9ce6c0f6186c87b01d09f4 — https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_class07-prep-a.pdf"
+    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §5.2.2 Joint CDF: F_X(x) = F(x,inf); F(inf,inf) = 1; F(-inf,y) = F(x,-inf) = 0; rectangle rule F(x2,y2) - F(x1,y2) - F(x2,y1) + F(x1,y1); independence gives F = F_X F_Y; f = d2F/dxdy, HTML fetched 2026-11-06, sha256:e13e9b9b4648413fda67c6474c945f7a80b9cbced541aae04663da2c8af8829e — https://www.probabilitycourse.com/chapter5/5_2_2_joint_cdf.php"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Def. 4.7 independence iff the joint cdf factors (PDF p.173), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "SOA Probability Exam (Exam P) syllabus, November 2026, Topic 3 outcome a, joint CDFs for discrete random variables (PDF p.4), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Joint Cumulative Distribution Function.md

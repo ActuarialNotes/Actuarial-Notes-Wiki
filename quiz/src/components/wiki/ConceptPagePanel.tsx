@@ -343,8 +343,12 @@ export function ConceptPagePanel({
               )}
               <WikiArticle
                 markdown={processedContent ?? content}
-                className={resourceMeta ? RESOURCE_ARTICLE_CLASS : undefined}
+                className={resourceMeta ? RESOURCE_ARTICLE_CLASS : '[--sticky-heading-top:-1rem]'}
                 outlineItems={!!resourceMeta}
+                // A concept's section headings pin to the top of the pane while
+                // their section is read — flush with its edge, over the body's
+                // pt-4, so no text shows above them.
+                stickyHeadings={entry.kind === 'concept'}
                 sourcePath={sourcePath}
                 hideImages
                 onReadPdf={onOpenPdf}

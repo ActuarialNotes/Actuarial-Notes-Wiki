@@ -1,4 +1,4 @@
-import { forwardRef, type ReactNode, type Ref } from 'react'
+import { forwardRef, useCallback, useEffect, useRef, type ReactNode, type Ref } from 'react'
 import { ChevronLeft, Hammer, Search, X } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { MobileNavButton } from '@/components/MobileNavButton'
@@ -57,9 +57,31 @@ export const FloatingSearchBar = forwardRef(function FloatingSearchBar(
   { children, banner, width = 'md', className }: FloatingSearchBarProps,
   ref: Ref<HTMLDivElement>,
 ) {
+  // The bar's height, published as `--floating-search-height` on the root, so
+  // what pins itself below the bar (a concept page's section headings) lines
+  // up with its bottom edge whatever strip or banner the bar carries.
+  const own = useRef<HTMLDivElement | null>(null)
+  const setRef = useCallback((node: HTMLDivElement | null) => {
+    own.current = node
+    if (typeof ref === 'function') ref(node)
+    else if (ref) (ref as { current: HTMLDivElement | null }).current = node
+  }, [ref])
+  useEffect(() => {
+    const node = own.current
+    if (!node || typeof ResizeObserver === 'undefined') return
+    const root = document.documentElement
+    const publish = () => root.style.setProperty('--floating-search-height', `${node.offsetHeight}px`)
+    publish()
+    const observer = new ResizeObserver(publish)
+    observer.observe(node)
+    return () => {
+      observer.disconnect()
+      root.style.removeProperty('--floating-search-height')
+    }
+  }, [])
   return (
     <div
-      ref={ref}
+      ref={setRef}
       data-floating-search
       className={cn('sticky top-0 z-50 border-b bg-background/90 backdrop-blur-md', className)}
     >

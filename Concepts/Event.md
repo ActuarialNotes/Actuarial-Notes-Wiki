@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:c114ca8bbb6aa642cb42b59f868c8ad882552debbebcdb725cd5b3928ee5173d
+  content_hash: sha256:6309d6a9ea352d78a8f630111a6a7b97d7ec06a1f4a7e6a943bd9d0dfd3affce
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 Def. 1.1 sample space/outcomes/events, Def. 1.2 P(E)=Σ_{ω∈E} m(ω), Examples 1.6-1.9, set operations and Fig. 1.7, Thm 1.1 (P(E)≥0, P(Ω)=1, monotonicity, disjoint additivity, complement with proof), Thms 1.2-1.4 and Cor. 1.1 (pp.18-24, PDF pp.26-32), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.1 A Counting Technique N = n1·n2·…·nr (p.76, PDF p.84); §3.2 Ex. 3.5 and binomial coefficients, a set of n elements has 2^n subsets (p.93, PDF p.101); §5.1 hypergeometric h(N,k,n,x) = C(k,x)C(N−k,n−x)/C(N,n) (p.193, PDF p.201), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
@@ -53,5 +53,5 @@ The words "and", "or" and "not" combine events through the [[Set Operations|set 
 > - $E \cup F = \{2, 4, 5, 6\}$, the outcomes in either.
 > - $E^c = \{1, 3, 5\}$, the outcomes not in $E$.
 
-> [!trap] Similar words, different event
+> [!trap] 'At least' versus 'more than'
 > "At least 4" is $\{4, 5, 6\}$, but "more than 4" is $\{5, 6\}$. List the outcomes before treating two descriptions as the same event.

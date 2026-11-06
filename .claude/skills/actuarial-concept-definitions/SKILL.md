@@ -195,10 +195,14 @@ example.
 
 - **The heading says what the section is**, in the plain words a textbook
   would use: *Requirements of outcomes in a sample space*, *Types of sample
-  spaces*, *The multiplication principle*. Never a slogan or a turn of phrase
-  (*Each outcome once, none missing*; *Finite, countable or uncountable*), which
-  reads as written for effect rather than to say what is there. A heading may
-  carry math, but a heading other pages link to is better without it.
+  spaces*, *The multiplication principle*, *Symmetry of combinations*, *Number
+  of subsets of a set*, *Permutations of all $n$ objects*. Name the result or
+  the case the section covers, the way a textbook's section title would. Never
+  a slogan, a turn of phrase or a description of an action (*Each outcome once,
+  none missing*; *Finite, countable or uncountable*; *Choosing who is in is
+  choosing who is out*; *Counting every subset*), which reads as written for
+  effect rather than to say what is there. A heading may carry math, but a
+  heading other pages link to is better without it.
 - **A list of named terms in a section links each one** that has a page:
   `**[[Mutually Exclusive Events|mutually exclusive]]**`.
 - Sections go simple → general, and stop when the exam stops. Pick what the
@@ -209,8 +213,10 @@ example.
 ### 7. Trap — `> [!trap] <the slip>` (optional)
 
 At most one, for the mistake a reader is most likely to make with this
-concept. Open, titled with the slip in a few words (`Choose the sample space
-carefully`), the body saying what the wrong answer looks like and how to avoid
+concept. Open, titled with the slip itself in a few words — what gets confused
+or done wrong (`Choose the sample space carefully`, `'At least' versus 'more
+than'`, `Roles make it a permutation`), never a turn of phrase (*Similar words,
+different event*) — the body saying what the wrong answer looks like and how to avoid
 it, with a number if one makes it concrete. It goes at the end of the page, or
 in the section where the slip happens. Never use `[!warning]` for it: that
 draws a different card.
@@ -307,7 +313,8 @@ bullets answer it, each a claim with its reason.
 - [ ] Example bodies: one reasoning step per bullet, the answer last; no "By <this page's rule> (see …)"
 - [ ] At least one example ends in a probability, where the page is a counting tool or a component of one
 - [ ] `##` sections are variations, simple → general, each sentence → box → bullets → example
-- [ ] Headings say plainly what the section is — no slogans
+- [ ] Headings name the result or case plainly, as a textbook section would — no slogans, turns of phrase or actions
+- [ ] A trap's title names the slip itself, not a turn of phrase
 - [ ] Every named term with a page is linked; a rule on another page is linked at its heading (`[[Page#Heading|rule]]`)
 - [ ] At most one `[!trap]`, open
 - [ ] Examples folded, idea and trap open; no *Try it*, *Exam traps* fold or *How it appears on the exam*

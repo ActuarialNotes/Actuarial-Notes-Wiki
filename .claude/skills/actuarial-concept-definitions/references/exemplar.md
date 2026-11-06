@@ -23,7 +23,7 @@ A **Permutation** is an ordered arrangement of distinct objects. The number of p
 > - Any of the 10 runners could win gold. Once gold is awarded, there are 9 remaining runners who could win silver, then 8 who could win bronze.
 > - ${}_{10}P_{3} = 10 \times 9 \times 8 = 720$.
 
-## Arranging all $n$ objects
+## Permutations of all $n$ objects
 
 When all $n$ objects are arranged, $k = n$ and the number of permutations is
 
@@ -67,5 +67,5 @@ When the $n$ objects are not all distinct, arranging identical objects among the
 - **Each section is a variation** — all $n$ objects, then repeated objects —
   built like the opening: a sentence into the formula, the box, bullets for
   the new symbols, an example.
-- **A probability appears.** The PIN example in *Arranging all $n$ objects*
+- **A probability appears.** The PIN example in *Permutations of all $n$ objects*
   ends in $P(E)$, which ties the counting back to the exam's question.

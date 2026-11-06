@@ -1,15 +1,20 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-09-28
+  status: verified
+  confidence: medium
+  last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
   content_hash: sha256:4e13535223d1b6410b8ad944190448949b60c1284bf33a65b87d4cb2f4a27cd6
   sources:
-    - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05, 2005), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf — §II policyholder or designated beneficiary PDF p.2; §VI reasons for deductibles PDF p.7, benefit limits and maximum claim payment PDF pp.8-9; §VII inflation PDF pp.10-11"
-    - "Werner & Modlin, Basic Ratemaking (CAS, 2016), Ch.1 claim and claimant PDF p.14, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
-    - "SOA, Tables for Exam C (Fall 2009), exponential entry E[X^x] = theta(1 - e^(-x/theta)), PDF p.11, sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf"
-    - "SOA Probability Exam syllabus, November 2026, objective \"Calculate the amount that an insurance company pays to a policyholder for a claim given policy information, including deductibles, coinsurance percentages, and benefit limits, as well as other factors, such as inflation\", PDF p.3, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
+    - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05, 2005), PDF pp.2-3 (policyholder pays premium; insurer pays the policyholder or his designated beneficiary), p.7 (deductible; three reasons for deductibles; policyholder covers part of the loss), pp.8-9 (benefit limits; maximum on a claim payment; 80% of the lesser of 5000 and the cost), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 2016), Ch.1 PDF p.14 (claim; claimant can be an insured or a third party alleging injuries or damages covered by the policy), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "SOA, Tables for Exam C (Fall 2009), exponential E[X ^ x] = theta(1 - e^{-x/theta}) (PDF p.11), sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf"
+    - "SOA Probability Exam syllabus, November 2026, Topic 2 learning outcomes c) (expected values incl. mode, median, percentiles) and e) (amount an insurance company pays to a policyholder given deductibles, coinsurance percentages, benefit limits, inflation), PDF p.3, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
+    - "SOA INV 201 syllabus 2026-2027, PDF p.7: risks that can only be partially hedged or cannot be hedged, including policyholder behavior, sha256:8b5d280585ae9d0e35943729f861ac13ada7462be850c328da93645b7bbd9bc1 — https://www.soa.org/globalassets/assets/files/edu/2026/inv-201/2026-2027-inv-201-syllabus.pdf"
+    - "SOA ILA 201-U syllabus 2026-2027, PDF p.4: perspectives of regulators, investors, policyholders and insurance company management regarding capital, sha256:daa04ce74955f3f9410aa18ae501d020420272b16de1fe550a788bf89c1d4e87 — https://www.soa.org/globalassets/assets/files/edu/2026/ila-201u/2026-2027-ila-201u-syllabus.pdf"
+    - "CIA FCIA syllabus, Group benefits track (2026 file), PDF pp.7, 13, 16: identify the stakeholders in an insurance policy (policyholder, insureds, including employees and dependents), sha256:bd811a7377eec93db261e916a3db6b0765be5917c843993b4acdf32f0c5a2634 — https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36229&fid=17015"
+    - "CIA FCIA syllabus, Financial/investment track (2026 file), PDF p.7: risks of guaranteed riders incl. policyholder behaviour; partially hedgeable or unhedgeable policyholder behaviour, sha256:596ac4b5b2e73cdc20410d14652686301c4d219b2bf85fd838751770de91b539 — https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36225&fid=17007"
+    - "CIA FCIA syllabus, Individual life and annuities track (2026 file), PDF p.12: policyholder behavior such as policy and premium persistency, sha256:ff0543bc33cd8d299931b668b66d589ebd03f5bc7595fd11ce67173d4e1a9097 — https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36227&fid=17011"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Policyholder.md

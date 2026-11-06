@@ -20,6 +20,7 @@ import { isInWikiIndex } from '@/lib/wikiIndex'
 import { distributionForImage } from '@/lib/distributions'
 import { normalizeVaultMath } from '@/lib/vaultMath'
 import { rehypeOutlineItems } from '@/lib/resourceMeta'
+import { rehypeArticleSections } from '@/lib/articleSections'
 import { themedFigureSrc } from '@/lib/figureTheme'
 import { useTheme } from '@/hooks/useTheme'
 import { refKey, useConceptHighlight } from '@/hooks/useConceptHighlight'
@@ -56,6 +57,13 @@ export interface WikiArticleProps {
    * the next page instead of covering the pane.
    */
   onReadPdf?: (doc: PdfReaderDoc) => void
+  /**
+   * Pin each `##` heading to the top of the scroller while its section is
+   * read (a concept page's variations). The sections are grouped by
+   * `rehypeArticleSections`; the pin's offset is `--sticky-heading-top` and
+   * its fill `--sticky-heading-bg` (a colour), both set by the host.
+   */
+  stickyHeadings?: boolean
 }
 
 export interface WikiTitleAction {
@@ -84,6 +92,7 @@ function hastText(node: HastLike | undefined): string {
 
 const REHYPE_PLUGINS = [rehypeKatex]
 const OUTLINE_REHYPE_PLUGINS = [rehypeKatex, rehypeOutlineItems]
+const SECTION_REHYPE_PLUGINS = [rehypeKatex, rehypeArticleSections]
 
 const TitleActionContext = createContext<WikiTitleAction | null>(null)
 
@@ -131,7 +140,7 @@ function stripHtmlBlocks(md: string): string {
     .replace(/^> *<div\b.*?<\/div> *\n?/gm, '')
 }
 
-export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, className, titleBadge, titleAction, outlineItems, onReadPdf }: WikiArticleProps) {
+export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, className, titleBadge, titleAction, outlineItems, onReadPdf, stickyHeadings }: WikiArticleProps) {
   const navigate = useNavigate()
   const articleRef = useRef<HTMLDivElement | null>(null)
   const { theme } = useTheme()
@@ -277,13 +286,14 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
         'prose-li:my-0.5 prose-ul:my-2 prose-ol:my-2 ' +
         'prose-strong:font-semibold ' +
         '[&_li::marker]:text-muted-foreground ' +
+        (stickyHeadings ? 'sticky-headings ' : '') +
         (className ?? '')
       }
     >
       <TitleActionContext.Provider value={titleAction ?? null}>
         <ReactMarkdown
           remarkPlugins={[remarkGfm, remarkMath]}
-          rehypePlugins={outlineItems ? OUTLINE_REHYPE_PLUGINS : REHYPE_PLUGINS}
+          rehypePlugins={outlineItems ? OUTLINE_REHYPE_PLUGINS : stickyHeadings ? SECTION_REHYPE_PLUGINS : REHYPE_PLUGINS}
           components={components}
         >
           {processed}

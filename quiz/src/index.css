@@ -418,9 +418,13 @@
    reads best at full contrast. Everything inside that sat on `--background`
    (formula boxes, the footer) is lifted to the card step so it still stands
    off the page; `--card` surfaces inside keep their grey. */
+.concept-popup-aside {
+  --sticky-heading-bg: hsl(var(--card));
+}
 .dark .concept-popup-aside {
   background-color: hsl(0 0% 0%);
   --background: var(--card);
+  --sticky-heading-bg: hsl(0 0% 0%);
 }
 
 /* Concept popup: left edge tracks the sidebar width exactly.
@@ -2484,4 +2488,21 @@ summary .katex-display,
   .community-rise { animation: none; }
   .community-live { animation: none; }
   .community-drift { animation: none; }
+}
+
+/* ── Sticky section headings (concept pages) ─────────────────────────────
+   Each `##` of a concept page is grouped with its section
+   (lib/articleSections.ts), so it pins to the top of the scroller while its
+   section is read and the next heading pushes it off. The host sets where it
+   pins (`--sticky-heading-top`: under the floating search bar on the page, the
+   pane's top in the concept popup) and the surface it is filled with
+   (`--sticky-heading-bg`, a colour: the page's background or the
+   popup's own surface), so the text scrolling under it doesn't show through. */
+.sticky-headings .article-section > h2 {
+  position: sticky;
+  top: var(--sticky-heading-top, 0px);
+  z-index: 10;
+  padding-block: 0.375rem;
+  background-color: var(--sticky-heading-bg, hsl(var(--background)));
+  scroll-margin-top: max(var(--sticky-heading-top, 0px), 0px);
 }

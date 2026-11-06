@@ -199,6 +199,9 @@ export default function WikiConcept() {
         <WikiArticle
           markdown={content}
           sourcePath={`Concepts/${conceptName}.md`}
+          // Section headings pin just under the floating search bar.
+          stickyHeadings
+          className="[--sticky-heading-top:var(--floating-search-height,0px)]"
           titleBadge={
             <FactCheckBadge
               verification={parseVerification(content)}

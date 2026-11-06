@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:8bb3153a8688243b5baeb39353a8e96f10663eed5d747cfe5ebbffb6d6b3ae46
+  content_hash: sha256:29cc918441574a8207da0465dd8faf871eed2fba6b6676b3ec75cefada072dbe
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 Def. 1.1 sample space/outcomes/events, Def. 1.2 P(E)=Σ_{ω∈E} m(ω), Examples 1.6-1.9, set operations and Fig. 1.7, Thm 1.1 (P(E)≥0, P(Ω)=1, monotonicity, disjoint additivity, complement with proof), Thms 1.2-1.4 and Cor. 1.1 (pp.18-24, PDF pp.26-32), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 Ex. 1.10, Def. 1.3 uniform m(ω)=1/n, Ex. 1.11 two dice 36 ordered pairs, no single correct sample space, Determination of Probabilities, Infinite Sample Spaces (countable; Ex. 1.13 geometric sum), Historical Remarks 36 ordered vs 21 unordered pairs (pp.24-30, PDF pp.32-38), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
@@ -17,152 +17,57 @@ verification:
   log: .verify/Concepts/Probability.md
 ---
 
-A **Probability** $P$ is a measure of how likely an [[Event|event]] $E$ is to occur. A probability is a [[Set Function|set function]] that maps each event in a [[Sample Space|sample space]] to a real number between 0 and 1, and it must satisfy the [[Axioms of Probability|axioms of probability]].
+![[Media/Figures/Probability.svg|340]]
 
-If all outcomes in a finite sample space $S$ are equally likely, then $P$ can be calculated as:
+A **Probability** is a measure of how likely an [[Event|event]] is to occur. Formally, probabilities are assigned by a [[Set Function|set function]] $P$ that maps each event $E$ in a [[Sample Space|sample space]] $S$ to a real number $P(E)$ between 0 and 1, and that satisfies the [[Axioms of Probability|axioms of probability]].
+
+If all outcomes in a finite sample space $S$ are equally likely, then the probability of an event $E$ is
 
 > $$P(E) = \frac{|E|}{|S|}$$
 
-> $$=\frac{\text{number of outcomes in E}}{\text{number of possible outcomes}}$$
+- $|E|$ is the number of outcomes in the event $E$.
+- $|S|$ is the number of outcomes in the sample space $S$.
 
-- where $|E|$ is the number of outcomes in the event $E$ and $|S|$ the number of outcomes in the sample space $S$.
-- When the outcomes are not equally likely, $P(E)$ is instead the sum of the probabilities of the individual outcomes in $E$.
-
-> [!idea] The idea
-> A count of outcomes gives a probability only when every outcome is equally likely. Then each of the $|S|$ outcomes carries the same share of the total probability of 1, so an event's probability is its count divided by $|S|$. The work is in choosing a sample space whose outcomes really are equally likely, and then in counting carefully.
-
-![[Media/Figures/Probability.svg|340]]
-
-## Two dice: which outcomes are equally likely?
-
-Two fair dice are rolled. What is the probability that the sum is 4?
-
-The sums 2 to 12 look like the natural outcomes, but they are not equally likely. A sum of 2 needs both dice to show 1, while a sum of 7 can happen six ways. So the sums can't simply be counted.
-
-Treat the dice as distinguishable, as a first die and a second die, even when they look alike. Each of the $6 \times 6 = 36$ ordered pairs is then equally likely.
-
-| Sum | Ordered pairs | Probability |
-|---|---|---|
-| 2 or 12 | 1 | 1/36 |
-| 3 or 11 | 2 | 2/36 |
-| 4 or 10 | 3 | 3/36 |
-| 5 or 9 | 4 | 4/36 |
-| 6 or 8 | 5 | 5/36 |
-| 7 | 6 | 6/36 |
-
-A sum of 4 is $\{(1, 3), (2, 2), (3, 1)\}$, three of the 36 ordered pairs, so $P(\text{sum} = 4) = 3/36 = 1/12$.
-
-- The unordered result "a 1 and a 3" is two ordered outcomes, $(1, 3)$ and $(3, 1)$. The result "two 2s" is only one, $(2, 2)$.
-- When fair dice are rolled independently, every ordered outcome is equally likely. So $n$ dice have $6^n$ equally likely ordered outcomes.
-- Fair coins work the same way. $n$ tosses have $2^n$ equally likely ordered sequences.
-
-> $$P(E) = \frac{\text{number of ordered outcomes in } E}{6^n}$$
-
-## When outcomes aren't equally likely
-
-The table turns the sums into a sample space of their own, with eleven outcomes of unequal probability. What is the probability that the sum is at most 4? The event holds the sums 2, 3 and 4, so add their probabilities.
-
-$$P(\text{sum} \le 4) = \frac{1}{36} + \frac{2}{36} + \frac{3}{36} = \frac{1}{6}$$
-
-That is the general rule. A probability of an event is the sum of the probabilities of the outcomes in it.
-
-> $$P(E) = \sum_{\omega \in E} P(\{\omega\})$$
-
-- Counting is the special case in which every outcome has probability $1/|S|$.
-- Insurance outcomes are rarely equally likely. If a policy has 0, 1 or 2 claims in a year with probabilities 0.7, 0.2 and 0.1, the probability of at least one claim is $0.2 + 0.1 = 0.3$.
-
-## Probability as a set function
-
-A probability takes a set of outcomes and returns a number. The [[Axioms of Probability|axioms]] fix the rules it follows: no event has a negative probability, the whole sample space has probability 1, and the probabilities of [[Mutually Exclusive Events|mutually exclusive events]] add.
-
-What is the probability that at least one of the two dice shows a 6? Counting directly gives 11 ordered pairs: six with a 6 on the first die, six with a 6 on the second, less $(6, 6)$, which was counted twice. The complement is shorter. No 6 on either die is $5 \times 5 = 25$ pairs.
-
-> $$P(E^c) = 1 - P(E)$$
-
-- $P(\text{at least one } 6) = 1 - 25/36 = 11/36$.
-- "At least one" is almost always quicker through its complement, "none".
-
-> [!trap] Adding $1/6$ for each die
-> $1/6 + 1/6 = 12/36$ counts the outcome $(6, 6)$ twice. Probabilities add only for mutually exclusive events. Use the complement, or subtract the overlap.
-
-## Counting bigger sample spaces
-
-When the outcomes are too many to list, [[Combinatorics]] counts the numerator and the denominator. The rule doesn't change. Both counts must be taken in the same sample space, ordered with ordered or unordered with unordered.
-
-A file holds 10 claims, 3 of them large. An auditor picks 2 claims at random. What is the probability that both are large?
-
-- Unordered: $\binom{3}{2} / \binom{10}{2} = 3/45 = 1/15$.
-- Ordered: $(3 \times 2) / (10 \times 9) = 6/90 = 1/15$.
-
-Both routes agree because each unordered pair is exactly two ordered pairs, in the numerator and in the denominator alike.
-
-## On other exams
-
-A handful of questions on FAM, ALTAM, ASTAM, MAS-I and Exam 5 link this page too. On those exams the probability is background to the calculation rather than the point of it. The rules are the same: a probability lies in $[0, 1]$, mutually exclusive cases add, and the complement is 1 minus the event.
-
-## Try it
-
-> [!example]- An even number on a die {Example}
-> What is the probability of rolling an even number on a fair 6-sided die?
+> [!example] Two fair coins are flipped. What is the probability that both coins are heads?
+> The sample space lists every outcome of the experiment:
 >
-> > [!answer]-
-> > **Plan:** list the sample space, list the event, then divide the counts.
-> >
-> > - **Sample space:** $S = \{1, 2, 3, 4, 5, 6\}$, so $|S| = 6$.
-> > - **Event:** rolling an even number is $E = \{2, 4, 6\}$, so $|E| = 3$.
-> >
-> > $$P(E) = \frac{3}{6} = 0.5$$
-> >
-> > Why check the sample space first? If the problem said the result is known to be greater than 2, $|S|$ would change from 6 to 4.
-
-> [!example]- A sum of 5 on three dice {Example}
-> Three fair dice are rolled. Find the probability that the sum is 5.
+> | Coin 1 | Coin 2 |
+> | ------ | ------ |
+> | T      | T      |
+> | T      | H      |
+> | H      | T      |
+> | H      | H      |
 >
-> > [!answer]-
-> > **Plan:** count ordered triples, out of $6^3 = 216$.
-> >
-> > - The unordered results with sum 5 are $\{1, 1, 3\}$ and $\{1, 2, 2\}$.
-> > - Each can be arranged in 3 orders, so there are 6 ordered triples.
-> >
-> > $$P(\text{sum} = 5) = \frac{6}{216} = \frac{1}{36}$$
-> >
-> > Counting the two unordered results over 216 would give $2/216$, a third of the right answer.
+> - Because the coins are fair and flipped independently, the 4 outcomes are equally likely, so $|S| = 4$.
+> - The event that both coins are heads contains one outcome, $E = \{(H, H)\}$, so $|E| = 1$.
+> - The probability that both coins are heads is $P(E) = \frac{1}{4} = 0.25$.
 
-> [!example]- At least one 6 in four rolls {Example}
-> A fair die is rolled four times. Find the probability of at least one 6.
+## When outcomes are not equally likely
+
+When the outcomes of a finite sample space $S$ are not equally likely, the probability of an event $E$ is the sum of the probabilities of the outcomes in it:
+
+> $$P(E) = \sum_{s \in E} P(\{s\})$$
+
+- $s$ is an outcome in the event $E$.
+- $P(\{s\})$ is the probability of the event containing the single outcome $s$.
+- When every outcome is equally likely, each $P(\{s\}) = \frac{1}{|S|}$, and the sum is $\frac{|E|}{|S|}$.
+
+> [!example] A biased coin lands heads with probability 0.7. It is flipped twice, independently. What is the probability of exactly one head?
+> The sample space and the probability of each outcome:
 >
-> > [!answer]-
-> > **Plan:** go through the complement, no 6 in four rolls.
-> >
-> > $$
-> > \begin{align*}
-> > P(\text{no } 6) &= \left(\frac{5}{6}\right)^4 \\
-> > &= \frac{625}{1296} \\
-> > P(\text{at least one } 6) &= 1 - \frac{625}{1296} \\
-> > &\approx 0.518
-> > \end{align*}
-> > $$
-> >
-> > Adding $1/6$ four times gives $2/3$, which counts rolls with two or more 6s more than once.
-
-> [!example]- Sampling claims {Example}
-> A file holds 10 claims, 3 of them large. Four claims are chosen at random without replacement. Find the probability that exactly one is large.
+> | Outcome | Probability |
+> | ------- | ----------- |
+> | (T, T)  | $0.3 \times 0.3 = 0.09$ |
+> | (T, H)  | $0.3 \times 0.7 = 0.21$ |
+> | (H, T)  | $0.7 \times 0.3 = 0.21$ |
+> | (H, H)  | $0.7 \times 0.7 = 0.49$ |
 >
-> > [!answer]-
-> > **Plan:** count unordered samples of 4, choosing which large claim and which three small ones.
-> >
-> > $$
-> > \begin{align*}
-> > P(\text{one large}) &= \frac{\binom{3}{1}\binom{7}{3}}{\binom{10}{4}} \\
-> > &= \frac{3 \times 35}{210} \\
-> > &= 0.5
-> > \end{align*}
-> > $$
-> >
-> > The numerator and the denominator both count unordered samples, so they are counted in the same sample space.
+> - The event of exactly one head contains two outcomes: $E = \{(T, H), (H, T)\}$.
+> - Adding the probabilities of the outcomes in $E$ gives $P(E) = 0.21 + 0.21 = 0.42$.
 
-> [!warning]- Exam traps
-> - **Outcomes that aren't equally likely.** Treating the eleven sums $2, \ldots, 12$ of two dice as equally likely gives $P(\text{sum} = 4) = 1/11$. The answer is $3/36$. Count in the space of 36 ordered pairs.
-> - **"At least one" counted directly.** For at least one 6 in four rolls, $4 \times \frac{1}{6} = \frac{2}{3}$ counts rolls with two or more 6s more than once. Use the complement: $1 - (5/6)^4 = 0.518$.
-> - **A probability outside $[0, 1]$.** A count larger than $|S|$, or a negative complement, means the count went wrong. Either an outcome was counted more than once, or the numerator and denominator were counted in different sample spaces. Counting "at least one 6" in eight rolls as $8 \cdot 6^7$ favourable outcomes, for example, gives $8/6$.
-> - **Mixing ordered and unordered counts.** An ordered numerator over an unordered denominator is off by a factor of the number of orders.
+> [!trap] Choose the sample space carefully
+> Sometimes outcomes look unequal only because of how the sample space was defined.
+>
+> For example, if two fair dice are rolled, then the sums $2, 3, \ldots, 12$ are **not** equally likely. A sum of 7 can happen 6 ways, while a sum of 2 can happen only 1 way.
+>
+> Using the 36 ordered pairs $(d_1, d_2)$ as the sample space makes the outcomes equally likely again, so $P(\text{sum} = 7) = \frac{6}{36} = \frac{1}{6}$.

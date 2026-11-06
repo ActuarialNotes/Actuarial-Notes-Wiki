@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:b2513782c6819cac24f99d5a709d7aeb56f8a9b67b3141373a34b0456a41bc7a
+  content_hash: sha256:8eb19ab25aab013176be824e71110ca1563dd761ffd7859351e3340e7f44e0cc
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.1 Counting Technique (stages, multiply, PDF pp.83-84), Thm 3.1 n!, Def 3.2 and Thm 3.2 k-permutations n(n−1)…(n−k+1) (PDF p.88); §3.2 binomial coefficients C(n,j) = number of j-subsets, Thm 3.4 Pascal recurrence, Thm 3.5 C(n,j)=(n)_j/j! (pp.93-94, PDF pp.101-102), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.1 Fixed Points and hat check problem, derangements (PDF pp.90, 93); Example 3.12: P(A_i)=(n−1)!/n!, P(no fixed point)=1/2!−1/3!+…+(−1)^n/n!, table n=4: .375 (pp.105-106, PDF pp.113-114), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
@@ -17,87 +17,41 @@ verification:
   log: .verify/Concepts/Permutation.md
 ---
 
-A **Permutation** $P(n, k)$ counts the ways to select $k$ objects from $n$ distinct objects and arrange them in order.
-
-> $$P(n, k) = \frac{n!}{(n-k)!}$$
-
-> $$P(n, k) = n \times (n-1) \times \cdots \times (n-k+1)$$
-
-- A permutation assumes no replacement, so the same object cannot be selected twice.
-- Permutations differ from [[Combination|combinations]] by a factor of $k!$, the number of ways to order the selected objects.
-- Use a permutation when the sequence matters, as in ranking, scheduling or assigning distinct roles.
-
-> [!idea] The idea
-> A permutation fills $k$ places one at a time. Any of the $n$ objects can go first, $n - 1$ are left for the second, and so on. The [[Combinatorics|multiplication principle]] multiplies these choices. The factorial form is the same product, because $(n-k)!$ cancels the factors for the places that are never filled.
-
 ![[Media/Figures/Permutation.svg|340]]
 
-## Filling places in order
+A **Permutation** is an ordered arrangement of distinct objects. The number of permutations of $k$ objects chosen from $n$ distinct objects, ${}_{n}P_{k}$, is
 
-An insurer awards a 1st, 2nd and 3rd place bonus among 8 adjusters. How many outcomes are there?
+> $${}_{n}P_{k} = n \times (n-1) \times \cdots \times (n-k+1)$$
 
-| Place | Choices left |
-|---|---|
-| 1st | 8 |
-| 2nd | 7 |
-| 3rd | 6 |
+> $${}_{n}P_{k} = \frac{n!}{(n-k)!}$$
 
-> $$P(8, 3) = 8 \times 7 \times 6 = 336$$
+- $n!$, read "$n$ factorial", is $n \times (n-1) \times \cdots \times 2 \times 1$, with $0! = 1$.
+- $k \le n$, because no object can be used twice.
 
-## Ordered versus unordered
+> [!example] In a race with 10 runners, how many ways are there to award gold, silver and bronze medals?
+> - Any of the 10 runners could win gold. Once gold is awarded, 9 runners remain who could win silver, then 8 who could win bronze.
+> - By the multiplication principle (see [[Combinatorics]]), ${}_{10}P_{3} = 10 \times 9 \times 8 = 720$.
 
-A committee of 3 from the same 8 is not ranked, so there are only $\binom{8}{3} = 56$ committees. Each committee can be ranked in $3! = 6$ ways, and $56 \times 6 = 336$.
+## Arranging all $n$ objects
 
-> $$P(n, k) = \binom{n}{k}\,k!$$
+When all $n$ objects are arranged, $k = n$ and the number of permutations is
 
-When a selection is followed by an ordered step, the count is a combination times a permutation. Choosing 4 of the 8 for a subcommittee and then a chair and a secretary from the 4 gives $\binom{8}{4} \times P(4, 2) = 70 \times 12 = 840$. Choosing the chair and secretary first and then 2 more members gives $P(8, 2)\binom{6}{2} = 56 \times 15 = 840$ too.
+> $${}_{n}P_{n} = n!$$
 
-## All $n$ in a row, and identical objects
+> [!example] A 4-digit PIN is chosen at random, each digit from 0 to 9. What is the probability that its 4 digits are all different?
+> - The sample space is every 4-digit PIN. Digits may repeat, so $|S| = 10^4 = 10{,}000$.
+> - A PIN with all digits different is an ordered arrangement of 4 of the 10 digits, so $|E| = {}_{10}P_{4} = 10 \times 9 \times 8 \times 7 = 5{,}040$.
+> - The [[Probability|probability]] is $P(E) = \frac{5{,}040}{10{,}000} = 0.504$.
 
-All 8 adjusters can be put in a review rota in $8! = 40{,}320$ ways, the case $k = n$.
+## Arrangements with repeated objects
 
-$n!$ assumes every object is different. Suppose 8 claim files are queued and only their types matter: 3 auto, 3 home and 2 workers compensation. Swapping two auto files changes nothing, so divide by the orderings within each type.
+When the $n$ objects are not all distinct, arranging identical objects among themselves produces no new arrangement. If there are $r$ types of object, the number of distinct arrangements of all $n$ is
 
-> $$\frac{8!}{3!\,3!\,2!} = 560$$
+> $$\frac{n!}{n_1!\, n_2! \cdots n_r!}$$
 
-## Permutations with restrictions
+- $n_i$ is the number of identical objects of type $i$, with $n_1 + n_2 + \cdots + n_r = n$.
 
-- **Items that must be adjacent.** Glue them into one block, arrange the block with the other items, and multiply by the orderings inside the block. Two given adjusters together in the rota of 8 give $7! \times 2! = 10{,}080$ arrangements. A random rota puts them together with probability $10{,}080 / 40{,}320 = 0.25$.
-- **Around a circle.** Arrangements that differ only by a rotation are the same. Seat one object anywhere and arrange the others relative to it, giving $(n-1)!$. The 8 adjusters can sit around a round table in $7! = 5{,}040$ ways.
-- **Fixing a set of items.** The permutations of $n$ items that leave a given set of $k$ items in place number $(n - k)!$, since only the other items move. With $\binom{n}{k}$ such sets, the term $\binom{n}{k}(n-k)!$ appears in [[Inclusion-Exclusion Principle|inclusion-exclusion]] counts of permutations with fixed points. The derangement count is on [[Combinatorics]].
-
-> [!trap] Forgetting the order inside a block
-> Gluing two items and arranging the block counts each arrangement of the block once. Without the $2!$ inside it, the rota count is $7! = 5{,}040$, half the right answer.
-
-## Try it
-
-> [!example]- Officers of a committee {Example}
-> A committee of 10 names a president, a vice-president and a treasurer. How many outcomes are there?
->
-> > [!answer]-
-> > **Plan:** three distinct roles filled in order.
-> > $$P(10, 3) = 10 \times 9 \times 8 = 720$$
-
-> [!example]- Together at a round table {Example}
-> Six people sit at random around a round table. Find the probability that two given people sit next to each other.
->
-> > [!answer]-
-> > **Plan:** count the circular arrangements with the pair glued, over all circular arrangements.
-> >
-> > All arrangements: $5! = 120$. With the pair as one block, there are 5 units around the table, so $4! \times 2! = 48$.
-> >
-> > The probability is $48/120 = 0.4$. Fixing one of the two people, the other has 5 seats, 2 of them adjacent, which gives $2/5$ again.
-
-> [!example]- Claim histories {Example}
-> Over 7 policy years, a policyholder had 4 claim-free years, 2 years with one claim and 1 year with two claims. How many distinct year-by-year histories fit?
->
-> > [!answer]-
-> > **Plan:** arrange 7 years, then divide by the orderings within each group of identical years.
-> > $$\frac{7!}{4!\,2!\,1!} = 105$$
-> > Swapping two claim-free years gives the same history, so $7!$ alone overcounts.
-
-> [!warning]- Exam traps
-> - **Forgetting the order inside a block.** Multiply by the $k!$ orderings inside a block of $k$.
-> - **Treating a circle as a row.** Around a table, $n!$ counts every rotation of the same seating separately and is $n$ times too large.
-> - **Identical objects counted as distinct.** Divide by the factorial of each group of identical objects.
-> - **A permutation where order doesn't matter.** An unranked committee is $\binom{n}{k}$, smaller than $P(n, k)$ by $k!$.
+> [!example] How many distinct arrangements are there of the letters in LOSS?
+> - There are $n = 4$ letters: one L, one O and two S's.
+> - Swapping the two S's gives the same arrangement, so divide the $4!$ arrangements by $2!$.
+> - There are $\frac{4!}{1!\,1!\,2!} = \frac{24}{2} = 12$ distinct arrangements.

@@ -7,7 +7,7 @@ All three styles keep what the app depends on. The page opens with the bold term
 | | A: Lean | B: Teach | C: Playbook |
 |---|---|---|---|
 | Built for | Review and lookup | A first read | Exam practice |
-| Length (CP / Deductible) | ~400 / ~550 words | ~850 / ~900 words | ~750 / ~850 words |
+| Length (CP / Deductible) | ~450 / ~550 words | ~850 / ~900 words | ~650 / ~800 words |
 | Structure | Callouts only, no headed sections (Deductible has one) | Headed sections that build on each other | A table of question shapes, then one section per shape |
 | Examples | 2–3, at the end | One running example in the body, then two to try | One per question shape, inline |
 | Traps | One list at the end | One inline trap card plus a short list | A "Watch out" line under each shape |
@@ -30,7 +30,7 @@ All three styles keep what the app depends on. The page opens with the bold term
 
 You can mix styles, for example "A's length, C's watch-out lines".
 
-1. Length: is ~400 words enough, or is ~850 right for a first read?
+1. Length: is ~450 words enough, or is ~850 right for a first read?
 2. One running example (B), or a fresh example per idea (A, C)?
 3. Traps: inline beside the idea, or collected at the end?
 4. Should the page be organised by question shape (C), or does that belong in a separate exam guide?

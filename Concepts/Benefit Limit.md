@@ -14,65 +14,141 @@ verification:
   log: .verify/Concepts/Benefit Limit.md
 ---
 
-A **Benefit Limit** ($u$) is the maximum amount an insurer will pay on a single claim, capping the insurer's payment regardless of how large the underlying loss $X$ is.
+A **Benefit Limit** $u$ is the maximum amount an [[Insurer|insurer]] will pay on a single loss, however large the underlying loss $X$ is.
 
 > $$Y = \min\!\bigl(\alpha(X - d)_+,\; u\bigr)$$
 
-- where $u$ is the maximum benefit (the benefit limit), $d$ the [[Deductible|deductible]] and $\alpha$ the [[Coinsurance Percentage|coinsurance percentage]]
-- The formula caps the insurer's **payment**: the deductible comes off first, coinsurance $\alpha$ applies to the rest, and $u$ caps the result. This order matches P-21-05's definition, under which a benefit limit sets an upper bound on how much the insurer will pay for any loss. It also matches the way SOA's sample questions apply a limit to the benefit itself
-- A policy can instead cap the **covered loss** and apply coinsurance after the cap. P-21-05's health policy pays costs up to $5{,}000$ and reimburses $80\%$ of them, so costs of $6{,}000$ are reimbursed $0.80 \times \min(6{,}000,\ 5{,}000) = 4{,}000$. The payment-cap formula would give $\min(4{,}800,\ 5{,}000) = 4{,}800$. The policy wording decides the order (see [[Payment Random Variable]]). With no coinsurance the two orders give the same payment
-- The benefit limit is the insurer's counterpart to the [[Deductible]]. The deductible takes the first part of each loss off the insurer, and the benefit limit caps what the insurer pays on a large loss
-- Under the payment cap, losses above $d + u/\alpha$ result in the insurer paying exactly $u$ and the insured bearing the remainder
-- Raising the benefit limit by a dollar increases the expected payment only by the probability that the payment reaches the limit
+- $d$ is the [[Deductible|deductible]], $\alpha$ the [[Coinsurance Percentage|coinsurance percentage]] and $Y$ the insurer's payment. With no deductible and no coinsurance, the payment is the limited loss $X \wedge u = \min(X, u)$.
+- The formula caps the insurer's **payment**. The deductible comes off first, coinsurance applies to the rest, and $u$ caps the result. This order matches the study note P-21-05, under which a benefit limit sets an upper bound on how much the insurer will pay for any loss.
+- The benefit limit is the deductible's counterpart. The deductible takes the first part of each loss off the insurer, and the benefit limit takes the top part of a large loss.
 
 > [!idea] The idea
-> Large losses are rare, but they can cost the insurer far more than the typical loss. A benefit limit caps the insurer's payment at $u$, so the insurer gives up its rarest, largest payments in exchange for a known maximum. Every loss past the point where the payment reaches $u$ pays exactly $u$. The payment therefore has a lump of probability at the limit instead of trailing off, so its moments are an integral below the limit plus $u$ times the probability of reaching it.
+> Large losses are rare, but each can cost far more than a typical loss. A benefit limit gives up the insurer's rarest, largest payments in exchange for a known maximum. Every loss past the cap pays exactly $u$, so the payment has a lump of probability at the limit.
 
 ![[Media/Figures/Benefit_Limit.svg|340]]
 
-### Moments of a limited loss
+## One loss at a time
 
-With no deductible or coinsurance the payment is the limited loss $X \wedge u = \min(X, u)$, which equals $X$ below the limit and $u$ above it. Its expectation therefore splits at the limit into an integral up to $u$ against the density plus $u$ times the probability that the loss exceeds $u$.
+Take a loss that is uniform on $(0, 1000)$ and a policy that pays it up to a limit of 600.
+
+| Loss $X$ | Insurer pays $X \wedge 600$ | Insured keeps $(X - 600)_+$ |
+|---|---|---|
+| 200 | 200 | 0 |
+| 600 | 600 | 0 |
+| 900 | 600 | 300 |
+
+The two columns always add back to the loss.
+
+> $$X = (X \wedge u) + (X - u)_+$$
+
+## A lump at the limit
+
+Every loss above 600 pays exactly 600. So the payment equals 600 with probability $P(X > 600) = 0.4$.
+
+- Below the limit, the payment's CDF follows the loss: $F_Y(y) = y/1000$ for $0 \le y < 600$.
+- At 600 the CDF jumps from 0.6 to 1. The payment has a [[Mixture Distribution|mixed distribution]]: continuous below the limit, with a point mass at it.
+
+> $$P(Y = u) = P(X > u)$$
+
+> [!trap] The payment treated as continuous
+> A CDF for the payment that keeps rising to the top of the loss range, or an answer of 0 for "the probability the insurer pays exactly the maximum", has missed the lump.
+
+## The average payment
+
+The point mass shows up in the mean. Split the expectation at the limit: an integral below 600, plus 600 times the probability of reaching it.
+
+> $$E[X \wedge u] = \int_0^u x\,f(x)\,dx + u\,P(X > u)$$
+
+- For the running example, $\int_0^{600} x/1000\,dx = 180$, and $600 \times 0.4 = 240$. The expected payment is $E[X \wedge 600] = 420$.
+- This is the [[Limited Expected Value|limited expected value]]. It also equals the area under the survival function $S(x) = 1 - F(x)$ up to the limit: $\int_0^{600} (1 - x/1000)\,dx = 420$.
+
+Higher moments split the same way, with $u^k$ at the lump.
 
 > $$E[(X \wedge u)^k] = \int_0^u x^k f(x)\,dx + u^k\,P(X > u)$$
 
-- where $f$ is the density of the nonnegative loss $X$ and $k = 1, 2, \ldots$ For $k = 1$ this is the [[Limited Expected Value|limited expected value]]: integrate $x f(x)$ from $0$ to $u$ and add $u$ times the survival probability $P(X > u)$.
-- For $k = 1$ it also equals the integral of the survival function $S(x) = 1 - F(x)$ up to the limit, $E[X \wedge u] = \int_0^u S(x)\,dx$.
-- The variance of the limited loss is $E[(X \wedge u)^2] - E[X \wedge u]^2$, from the $k = 2$ and $k = 1$ moments.
+- For $k = 2$: $\int_0^{600} x^2/1000\,dx + 600^2 \times 0.4 = 72{,}000 + 144{,}000 = 216{,}000$.
+- The variance of the payment is $216{,}000 - 420^2 = 39{,}600$.
 
-> [!example]- Mean and Variance of a Limited Uniform Loss {Example}
-> A loss is uniform on $[0, 1{,}000]$ and a policy pays it up to a limit of $600$. Find the mean and variance of the payment.
+## Raising the limit
+
+Raising the limit by one dollar adds one dollar to the payment, but only on losses that reach the limit. So the expected payment rises at the rate $P(X > u)$.
+
+| Limit $u$ | $E[X \wedge u]$ | Added by the last 200 |
+|---|---|---|
+| 200 | 180 | |
+| 400 | 320 | 140 |
+| 600 | 420 | 100 |
+| 800 | 480 | 60 |
+| 1,000 | 500 | 20 |
+
+Each 200 of limit adds less than the one before, because fewer losses reach it.
+
+## With a deductible and coinsurance
+
+A policy with a deductible $d$ and a limit $u$ on the payment, and no coinsurance, pays the layer of the loss from $d$ to $d + u$. Its expected payment is the difference of two limited expected values.
+
+> $$E[Y] = E[X \wedge (d + u)] - E[X \wedge d]$$
+
+- With $d = 200$ and $u = 400$ on the running example, $E[Y] = 420 - 180 = 240$.
+
+With coinsurance, the payment reaches $u$ at the loss $d + u/\alpha$. With $d = 200$, $\alpha = 50\%$ and $u = 1000$ that is 2,200. Using $d + u = 1200$ forgets the coinsurance, and using $u/\alpha = 2000$ forgets the deductible.
+
+> $$E[Y] = \alpha\left(E\!\left[X \wedge \left(d + \tfrac{u}{\alpha}\right)\right] - E[X \wedge d]\right)$$
+
+A policy can instead cap the **covered loss** and apply coinsurance after the cap. P-21-05's health policy pays 80% of costs up to 5,000. Costs of 6,000 are reimbursed $0.80 \times \min(6000, 5000) = 4000$. The payment-cap formula would give $\min(4800, 5000) = 4800$. The policy wording decides the order ([[Payment Random Variable]]). With no coinsurance the two orders give the same payment.
+
+## On other exams
+
+- **Exam 5** prices workers compensation, whose benefit structure sets a minimum and a maximum weekly indemnity benefit as percentages of the state average weekly wage. The maximum caps the weekly benefit the same way a benefit limit caps a payment.
+- **Exams 5, 8 and FAM** apply a fixed limit to losses that grow over time. The limit damps the growth of the payment below it ([[Inflation]]).
+
+## Try it
+
+> [!example]- An exponential loss with a limit {Example}
+> A loss is exponential with mean 1,000, and the policy pays it up to 2,000. Find the expected payment and the probability that the insurer pays the maximum.
 >
 > > [!answer]-
-> > Split each moment at $600$, where $P(X > 600) = 0.4$:
+> > **Plan:** integrate the survival function up to the limit, then read the lump off the tail.
 > > $$
 > > \begin{align*}
-> > E[X \wedge 600] &= \int_0^{600} \frac{x}{1{,}000}\,dx + 600(0.4) \\
-> > &= 180 + 240 \\
-> > &= 420 \\[6pt]
-> > E[(X \wedge 600)^2] &= \int_0^{600} \frac{x^2}{1{,}000}\,dx + 600^2(0.4) \\
-> > &= 72{,}000 + 144{,}000 \\
-> > &= 216{,}000 \\[6pt]
-> > \text{Var}(X \wedge 600) &= 216{,}000 - 420^2 \\
-> > &= 39{,}600
+> > E[X \wedge 2000] &= \int_0^{2000} e^{-x/1000}\,dx \\
+> > &= 1000\,(1 - e^{-2}) \\
+> > &= 864.66
 > > \end{align*}
 > > $$
-> > Check the mean with the survival function: $\int_0^{600} (1 - x/1{,}000)\,dx = 600 - 180 = 420$. The $40\%$ of losses above the limit each pay exactly $600$, which is why the second term is there.
+> > The insurer pays the maximum with probability $P(X > 2000) = e^{-2} = 0.1353$.
 
-> [!example]- Payment with Deductible and Benefit Limit {Example}
-> A policy has deductible $d = 100$ and benefit limit $u = 400$ with no coinsurance. If $X = 600$, what does the insurer pay?
+> [!example]- A discrete loss {Example}
+> A loss is 0, 500, 2,000 or 5,000 with probabilities 0.5, 0.3, 0.15 and 0.05. The policy pays up to 3,000. Find the expected payment.
 >
 > > [!answer]-
-> > The uncapped payment would be $X - d = 600 - 100 = 500$. Applying the benefit limit:
-> > $$Y = \min(500, 400) = 400$$
-> > The insurer pays \$400; the insured absorbs the first \$100 (deductible) and the last \$100 (excess above limit).
+> > **Plan:** cap each loss at 3,000, then weight by its probability.
+> >
+> > The payments are 0, 500, 2,000 and 3,000.
+> > $$E[Y] = 0.3(500) + 0.15(2000) + 0.05(3000) = 600$$
+> > Without the limit the mean would be 700. The limit removes $0.05 \times 2000 = 100$.
 
-> [!tip]- How it appears on the exam
-> - **Exam P** (Univariate Random Variables, outcomes 5–6): given a loss distribution and a maximum payment, calculate the expected payment per loss, the probability the insurer pays exactly the maximum, or the CDF of the benefit paid.
-> - With a deductible and coinsurance in the same policy: the smallest loss at which the insurer pays the maximum, or the expected payment when losses inflate but the deductible and limit stay fixed.
-> - **Exam 5**: the minimum and maximum indemnity benefits of a workers compensation benefit structure (percentages of the state average weekly wage), where the maximum caps the weekly benefit the same way.
+> [!example]- Deductible, coinsurance and a limit {Example}
+> A loss is uniform on $(0, 4000)$. A policy has a deductible of 200, pays 50% of the excess, and caps the payment at 1,000. Find the expected payment and the probability that the insurer pays the maximum.
+>
+> > [!answer]-
+> > **Plan:** find where the cap binds, then take the difference of two limited expected values.
+> >
+> > The cap binds at $200 + 1000/0.5 = 2200$. For this loss, $E[X \wedge a] = a - a^2/8000$.
+> > $$
+> > \begin{align*}
+> > E[X \wedge 2200] &= 2200 - 605 \\
+> > &= 1595 \\[4pt]
+> > E[X \wedge 200] &= 200 - 5 \\
+> > &= 195 \\[4pt]
+> > E[Y] &= 0.5\,(1595 - 195) \\
+> > &= 700
+> > \end{align*}
+> > $$
+> > The insurer pays the maximum with probability $P(X > 2200) = 0.45$.
 
 > [!warning]- Exam traps
-> - **Treating the capped payment as continuous.** $P(Y = u) = P(X > d + u/\alpha)$ is positive, so the benefit's CDF jumps to 1 at $u$. A CDF that keeps rising to the top of the loss range, or an answer of $0$ for "pays exactly the maximum", has missed the lump.
-> - **Where the cap binds, with coinsurance.** The payment reaches $u$ at the loss $d + u/\alpha$. With $d = 200$, $\alpha = 50\%$ and $u = 1{,}000$ that is $2{,}200$. Using $d + u = 1{,}200$ forgets the coinsurance, and using $u/\alpha = 2{,}000$ forgets the deductible.
-> - **The limit term dropped.** $E[X \wedge u]$ needs $u\,P(X > u)$ added to the integral below the limit. In the uniform example, leaving it out gives $180$ instead of $420$.
+> - **The lump at the limit.** $P(Y = u) = P(X > d + u/\alpha)$ is positive, so the payment's CDF jumps to 1 at $u$.
+> - **Where the cap binds, with coinsurance.** The loss is $d + u/\alpha$, not $d + u$ or $u/\alpha$.
+> - **The limit term dropped.** $E[X \wedge u]$ needs $u\,P(X > u)$ added to the integral below the limit. In the running example, leaving it out gives 180 instead of 420.
+> - **The order of limit and coinsurance.** A cap on the covered loss pays at most $\alpha u$. A cap on the payment pays at most $u$.

@@ -20,55 +20,130 @@ The **joint cumulative distribution function** (joint CDF) of random variables $
 
 > $$F(x,y) = P(X \leq x,\; Y \leq y)$$
 
-- It is non-decreasing in each argument
-- $F(-\infty, y) = F(x, -\infty) = 0$ and $F(\infty, \infty) = 1$
-- For discrete variables, $F$ adds up the joint probability function over every cell at or below $x$ and at or below $y$:
-
-> $$F(x,y) = \sum_{x_i \le x}\ \sum_{y_j \le y} p(x_i, y_j)$$
-
-- For integer-valued $X$ and $Y$, a single cell is recovered from $F$ by inclusion–exclusion on the rectangle:
-
-> $$p(x,y) = F(x,y) - F(x-1,y) - F(x,y-1) + F(x-1,y-1)$$
-
-- For continuous jointly distributed variables, the joint PDF is recovered by:
-
-> $$f(x,y) = \frac{\partial^2 F(x,y)}{\partial x\, \partial y}$$
-
+- It is non-decreasing in each argument.
+- $F(-\infty, y) = F(x, -\infty) = 0$ and $F(\infty, \infty) = 1$.
+- Letting one argument run to $\infty$ gives a marginal CDF: $F_X(x) = F(x, \infty)$.
 - The joint CDF of [[Independent Random Variables]] factors as $F(x,y) = F_X(x)\cdot F_Y(y)$
+
+> [!idea] The idea
+> The joint CDF stores the probability of every lower-left corner $\{X \le x, Y \le y\}$, not of single cells. Any rectangle is a corner with two strips cut off and the doubly-cut corner added back, so every probability about $(X, Y)$ can still be recovered from $F$.
 
 ![[Media/Figures/Joint_Cumulative_Distribution_Function.svg|340]]
 
-> [!example]- A Discrete Joint CDF {Example}
-> $X$ and $Y$ are the numbers of claims on two policies, with joint probability function
->
-> | | $Y=0$ | $Y=1$ | $Y=2$ |
-> |---|---|---|---|
-> | $X=0$ | 0.30 | 0.15 | 0.05 |
-> | $X=1$ | 0.20 | 0.20 | 0.10 |
->
-> Find $F(1,1)$ and $F(0,2)$, then recover $P(X=1, Y=1)$ from $F$ alone.
->
-> > [!answer]-
-> > Add every cell with $x_i \le x$ and $y_j \le y$:
-> > $$
-> > \begin{align*}
-> > F(1,1) &= 0.30 + 0.15 + 0.20 + 0.20 = 0.85 \\
-> > F(0,2) &= 0.30 + 0.15 + 0.05 = 0.50
-> > \end{align*}
-> > $$
-> > With $F(0,1) = 0.45$, $F(1,0) = 0.50$ and $F(0,0) = 0.30$, the rectangle rule gives the cell back:
-> > $$
-> > \begin{align*}
-> > P(X=1, Y=1) &= F(1,1) - F(0,1) - F(1,0) + F(0,0) \\
-> >             &= 0.85 - 0.45 - 0.50 + 0.30 \\
-> >             &= 0.20
-> > \end{align*}
-> > $$
-> > which matches the table.
+## Adding up the cells below and to the left
+
+A policyholder has an auto policy and a home policy. $X$ and $Y$ are the numbers of claims on the two policies next year, with joint probability function
+
+| | $Y=0$ | $Y=1$ | $Y=2$ |
+|---|---|---|---|
+| $X=0$ | 0.30 | 0.15 | 0.05 |
+| $X=1$ | 0.20 | 0.20 | 0.10 |
+
+**What is $F(1, 1)$?** It is the probability of at most one auto claim and at most one home claim. Add every cell with $x_i \le x$ and $y_j \le y$: $F(1, 1) = 0.30 + 0.15 + 0.20 + 0.20 = 0.85$. Doing this for every corner gives the joint CDF as a table:
+
+| | $y=0$ | $y=1$ | $y=2$ |
+|---|---|---|---|
+| $x=0$ | 0.30 | 0.45 | 0.50 |
+| $x=1$ | 0.50 | 0.85 | 1.00 |
+
+For discrete variables, $F$ adds up the joint probability function over every cell at or below $x$ and at or below $y$:
+
+> $$F(x,y) = \sum_{x_i \le x}\ \sum_{y_j \le y} p(x_i, y_j)$$
+
+The last column is the marginal CDF of $X$. With $y = 2$, the largest value, the condition $Y \le 2$ always holds, so $F(0, 2) = P(X \le 0) = 0.50$.
+
+## Getting one cell back
+
+**Given only the CDF table, what is $P(X = 1, Y = 1)$?** Start from the corner $F(1, 1) = 0.85$. Cut off the strip with $X \le 0$, which is $F(0, 1) = 0.45$, and the strip with $Y \le 0$, which is $F(1, 0) = 0.50$. The corner $F(0, 0) = 0.30$ was cut off twice, so add it back once.
+
+> $$
+> \begin{align*}
+> P(X=1, Y=1) &= 0.85 - 0.45 - 0.50 + 0.30 \\
+>             &= 0.20
+> \end{align*}
+> $$
+
+That matches the joint table. For integer-valued $X$ and $Y$, a single cell is recovered from $F$ by inclusion–exclusion on the rectangle:
+
+> $$p(x,y) = F(x,y) - F(x-1,y) - F(x,y-1) + F(x-1,y-1)$$
+
+> [!trap] Subtracting one neighbour
+> $F(1, 1) - F(0, 1) = 0.40$ is not a cell. It is $P(X = 1, Y \le 1)$, a whole strip. A single cell needs all four terms.
+
+The same rule gives the probability of any rectangle, for discrete or continuous variables:
+
+> $$
+> \begin{align*}
+> P(a < X \le b,\ c < Y \le d) &= F(b, d) - F(a, d) \\
+>                              &\quad - F(b, c) + F(a, c)
+> \end{align*}
+> $$
+
+## The probability that both exceed
+
+**What is the probability that both policies have a claim?** The event $\{X > 0, Y > 0\}$ is the complement of "$X \le 0$ or $Y \le 0$". Inclusion–exclusion on that union gives
+
+> $$P(X > x,\ Y > y) = 1 - F_X(x) - F_Y(y) + F(x, y)$$
+
+For the policyholder, $1 - 0.50 - 0.50 + 0.30 = 0.30$. The cells $(1, 1)$ and $(1, 2)$ give the same $0.20 + 0.10$.
+
+## Continuous variables
+
+For continuous variables, $F$ is a double integral of the [[Joint Probability Density Function|joint density]] over the lower-left corner. The joint PDF is recovered by differentiating once in each variable:
+
+> $$f(x,y) = \frac{\partial^2 F(x,y)}{\partial x\, \partial y}$$
+
+Suppose $F(x, y) = \tfrac{1}{2}xy(x + y)$ for $0 \le x, y \le 1$. Differentiating $\tfrac{1}{2}(x^2 y + x y^2)$ in $x$ gives $xy + \tfrac{1}{2}y^2$, and then in $y$ gives $f(x, y) = x + y$. The rectangle rule still works: $P(X > 0.5, Y > 0.5) = 1 - 0.375 - 0.375 + 0.125 = 0.375$.
+
+## Independence factors the CDF
+
+When $X$ and $Y$ are independent, every corner probability is a product, $F(x, y) = F_X(x)\,F_Y(y)$. The converse holds too. A joint CDF that splits into a function of $x$ times a function of $y$, each a CDF, belongs to independent variables. Every cell is then the product of the two marginal PMFs, so the rectangle rule can be skipped.
+
+## Try it
 
 > [!example]- Computing a Joint Probability {Example}
 > $X$ and $Y$ are independent, each Uniform on $[0,1]$. Find $P(X \leq 0.4,\; Y \leq 0.6)$.
 >
 > > [!answer]-
+> > **Plan:** the event is one lower-left corner, so it is $F(0.4, 0.6)$, and independence makes it a product.
+> >
 > > Since $X$ and $Y$ are independent with $F_X(x) = x$ and $F_Y(y) = y$:
 > > $$F(0.4, 0.6) = F_X(0.4) \cdot F_Y(0.6) = 0.4 \times 0.6 = 0.24$$
+
+> [!example]- One cell from a product-form CDF {Example}
+> The numbers of hospital stays $X$ and outpatient visits $Y$ for a policyholder have joint CDF $F(x, y) = \left[1 - 0.6^{x+1}\right]\left[1 - 0.3^{y+1}\right]$ for nonnegative integers $x$ and $y$. Find $P(X = 1, Y = 2)$.
+>
+> > [!answer]-
+> > **Plan:** apply the four-term rectangle rule, then check it with the product of the marginal PMFs.
+> > $$
+> > \begin{align*}
+> > p(1, 2) &= F(1,2) - F(0,2) - F(1,1) + F(0,1) \\
+> >         &= 0.62272 - 0.38920 - 0.58240 + 0.36400 \\
+> >         &= 0.01512
+> > \end{align*}
+> > $$
+> > The CDF factors, so $X$ and $Y$ are independent. $P(X = 1) = 0.6^1 - 0.6^2 = 0.24$ and $P(Y = 2) = 0.3^2 - 0.3^3 = 0.063$, and $(0.24)(0.063) = 0.01512$.
+> >
+> > Why is the product the faster route? Each factor is a one-variable CDF, so each marginal PMF is one difference.
+
+> [!example]- A rectangle from a continuous CDF {Example}
+> Two loss ratios have joint CDF $F(x, y) = \tfrac{1}{2}xy(x + y)$ for $0 \le x, y \le 1$. Find $P(0.5 < X \le 1,\ 0 < Y \le 0.5)$ and the joint density.
+>
+> > [!answer]-
+> > **Plan:** use the rectangle rule with $a = 0.5$, $b = 1$, $c = 0$, $d = 0.5$, then differentiate for the density.
+> >
+> > $F(1, 0.5) = 0.375$, $F(0.5, 0.5) = 0.125$, and $F$ is 0 when either argument is 0.
+> > $$
+> > \begin{align*}
+> > P &= F(1, 0.5) - F(0.5, 0.5) - F(1, 0) + F(0.5, 0) \\
+> >   &= 0.375 - 0.125 - 0 + 0 \\
+> >   &= 0.25
+> > \end{align*}
+> > $$
+> > The density is $f(x, y) = \partial^2 F / \partial x\, \partial y = x + y$ on the unit square. Integrating it over the rectangle gives the same 0.25.
+
+> [!warning]- Exam traps
+> - **One neighbour subtracted.** $F(x, y) - F(x-1, y)$ is a strip, not a cell. Use all four terms.
+> - **"Both exceed" read as $1 - F(x, y)$.** $1 - F(x, y)$ is the probability that at least one exceeds. "Both exceed" needs $1 - F_X(x) - F_Y(y) + F(x, y)$.
+> - **Forgetting the zero corner.** For nonnegative variables, $F(0, y)$ is $P(X = 0, Y \le y)$, not 0, when $X$ is discrete. It is 0 only when $X$ is continuous.
+> - **Differentiating only once.** $\partial F / \partial x$ is not a density. The joint PDF needs one derivative in each variable.

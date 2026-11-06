@@ -98,7 +98,7 @@ With coinsurance, the payment reaches $u$ at the loss $d + u/\alpha$. With $d = 
 
 > $$E[Y] = \alpha\left(E\!\left[X \wedge \left(d + \tfrac{u}{\alpha}\right)\right] - E[X \wedge d]\right)$$
 
-A policy can instead cap the **covered loss** and apply coinsurance after the cap. P-21-05's health policy pays 80% of costs up to 5,000. Costs of 6,000 are reimbursed $0.80 \times \min(6000, 5000) = 4000$. The payment-cap formula would give $\min(4800, 5000) = 4800$. The policy wording decides the order ([[Payment Random Variable]]). With no coinsurance the two orders give the same payment.
+A policy can instead cap the **covered loss** and apply coinsurance after the cap. P-21-05's health policy pays 80% of costs up to 5,000. Costs of 6,000 are reimbursed $0.80 \times \min(6000, 5000) = 4000$. The payment-cap formula would give $\min(4800, 5000) = 4800$. The policy wording decides the order ([[Payment Random Variable]]).
 
 ## On other exams
 

@@ -14,18 +14,99 @@ verification:
   log: .verify/Concepts/Discrete Mathematics.md
 ---
 
-**Discrete Mathematics** is the branch of mathematics concerned with countable, distinct structures like [[Set Theory|sets]] as opposed to continuous quantities studied in calculus.
-- It provides the language and tools for counting outcomes, defining events, and reasoning about logical relationships between outcomes and events
-- A [[Power Set]] $\mathcal{P}(S)$ is the set of all subsets of $S$:
+**Discrete Mathematics** is the branch of mathematics concerned with countable, distinct structures like [[Set Theory|sets]], as opposed to the continuous quantities studied in [[Calculus|calculus]]. Discrete mathematics provides the language and tools for counting outcomes, defining events, and reasoning about logical relationships between outcomes and events.
 
 > $$|\mathcal{P}(S)| = 2^{|S|}$$
 
+- A [[Power Set]] $\mathcal{P}(S)$ is the set of all subsets of $S$, and $|S|$ is the number of elements of $S$.
+- Exam P lists discrete mathematics with probability in its first topic. It supplies the sets, the counts and the logic that general probability questions are built from.
+
+> [!idea] The idea
+> A probability over equally likely outcomes is a count divided by a count, and an event is a subset described in words. Discrete mathematics makes both precise. It counts outcomes without listing them, and it turns "if", "and", "or" and "not" into statements about sets.
+
 ![[Media/Figures/Discrete_Mathematics.svg|340]]
 
-> [!example]- Counting Subsets of a Risk Portfolio {Example}
+## Subsets: what a policy can cover
+
+An insurer offers four optional coverages, $S = \{\text{Fire}, \text{Flood}, \text{Theft}, \text{Liability}\}$. A policy's coverages are a subset of $S$. How many different policies are possible?
+
+Each coverage is either in the policy or out of it. Four independent in-or-out choices give $2 \times 2 \times 2 \times 2 = 16$ subsets.
+
+- The count includes the empty set (no coverage) and $S$ itself (all four coverages).
+- The same reasoning gives $2^n$ subsets for any set of $n$ elements. That is the formula above.
+- A sample space with $n$ outcomes has $2^n$ [[Event|events]], one for each subset.
+
+## Counting without listing
+
+The insurer wants to know how many policies have exactly two coverages. Listing all 16 subsets would work here, but not for 20 coverages. Counting rules answer it directly.
+
+| Question | Rule | Count |
+|---|---|---|
+| Policies with exactly 2 coverages | $\binom{4}{2}$ | 6 |
+| Orders to review all 4 coverages | $4!$ | 24 |
+| All possible policies | $2^4$ | 16 |
+
+- A [[Combination|combination]] $\binom{n}{k}$ counts the subsets of size $k$, where order doesn't matter.
+- A [[Permutation|permutation]] counts arrangements, where order does matter.
+- The subsets of each size add back to the total: $\binom{4}{0} + \binom{4}{1} + \binom{4}{2} + \binom{4}{3} + \binom{4}{4} = 1 + 4 + 6 + 4 + 1 = 16$.
+
+[[Combinatorics]] collects these rules. They are the numerator and the denominator of every equally likely probability.
+
+## Logic: "if", "and", "or", "not"
+
+Suppose the insurer requires that a policy with Flood also has Fire. How many of the 16 policies are allowed?
+
+The statement "if Flood, then Fire" fails only when Flood is in and Fire is out. That happens in $2^2 = 4$ subsets, since Theft and Liability are free. So $16 - 4 = 12$ policies are allowed.
+
+- "If $p$ then $q$" is the same as "not $p$, or $q$". It is false only when $p$ is true and $q$ is false.
+- Its **contrapositive**, "if not $q$, then not $p$", says the same thing. A policy without Fire has no Flood.
+- As sets, "if Flood then Fire" says the event "has Flood" is a subset of the event "has Fire".
+- "And", "or" and "not" are the set operations intersection, union and complement.
+
+## Sums over discrete values
+
+What is the average number of coverages, over all 16 possible policies? A discrete quantity is averaged with a sum, where a continuous one would need an integral.
+
+$$\frac{1}{16} \sum_{k=0}^{4} k \binom{4}{k} = \frac{0 + 4 + 12 + 12 + 4}{16} = 2$$
+
+- The sum runs over the distinct values $k = 0, 1, \ldots, 4$, each weighted by how many subsets have that size.
+- Means and probabilities of a [[Discrete Random Variable|discrete random variable]] are sums of exactly this kind.
+
+## Try it
+
+> [!example]- Counting subsets of a risk portfolio {Example}
 > An insurer has 4 distinct risk categories: Fire, Flood, Theft, and Liability. How many distinct subsets of these risks could be included in a policy?
 >
 > > [!answer]-
-> > The number of subsets of a set with $|S| = 4$ elements is:
+> > **Plan:** each risk is in or out, so count the subsets with the power set formula.
 > > $$|\mathcal{P}(S)| = 2^4 = 16$$
 > > This includes the empty set (no coverage) and the full set (all four risks covered), giving 16 possible coverage combinations.
+
+> [!example]- Six coverages {Example}
+> A policy can include any of 6 optional coverages. How many policies have exactly 3 coverages, and how many have at least one?
+>
+> > [!answer]-
+> > **Plan:** a combination for "exactly 3", and the complement of "none" for "at least one".
+> >
+> > - Exactly 3: $\binom{6}{3} = 20$.
+> > - At least one: $2^6 - 1 = 63$, removing only the empty policy.
+> >
+> > Counting "at least one" through its complement avoids adding six combination terms.
+
+> [!example]- Two coverages that exclude each other {Example}
+> Of 6 optional coverages, two can't be held together. How many policies are allowed?
+>
+> > [!answer]-
+> > **Plan:** count all policies, then remove those with both of the excluded pair.
+> >
+> > - All policies: $2^6 = 64$.
+> > - Policies with both: the other 4 coverages are free, so $2^4 = 16$.
+> >
+> > $$64 - 16 = 48$$
+> >
+> > The rule "not both" is the complement of "both", so subtracting is quicker than counting the allowed policies directly.
+
+> [!warning]- Exam traps
+> - **Forgetting the empty set.** A set of $n$ elements has $2^n$ subsets, including $\varnothing$. "At least one" is $2^n - 1$.
+> - **Order where it doesn't belong.** A set of coverages is unordered. Using $4 \times 3 = 12$ for two coverages counts each pair twice. The answer is $\binom{4}{2} = 6$.
+> - **Reversing "if … then".** "If Flood, then Fire" does not mean "if Fire, then Flood". A policy may have Fire without Flood.

@@ -67,14 +67,14 @@ For $n$ independent, identical risks, the mean grows like $n$ but the standard d
 
 ## CVs of named distributions
 
-Several distributions have a $CV$ that depends on their shape parameter alone.
+Several distributions have a $CV$ that depends on one parameter alone: the [[Exponential Distribution|exponential]], the [[Gamma|gamma]], the [[Poisson Distribution|Poisson]] and the [[Lognormal Distribution|lognormal]].
 
 | Distribution | $CV$ |
 |---|---|
-| [[Exponential Distribution|Exponential]] | 1 |
-| [[Gamma]] with shape $\alpha$ | $1/\sqrt{\alpha}$ |
-| [[Poisson Distribution|Poisson]] with mean $\lambda$ | $1/\sqrt{\lambda}$ |
-| [[Lognormal Distribution|Lognormal]] | $\sqrt{e^{\sigma^2} - 1}$ |
+| Exponential | 1 |
+| Gamma with shape $\alpha$ | $1/\sqrt{\alpha}$ |
+| Poisson with mean $\lambda$ | $1/\sqrt{\lambda}$ |
+| Lognormal | $\sqrt{e^{\sigma^2} - 1}$ |
 
 The lognormal row works in reverse too. Given a mean and a $CV$, it gives $\sigma^2 = \ln(1 + CV^2)$. See [[Moment]] for that fit.
 

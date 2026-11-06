@@ -23,15 +23,43 @@ verification:
   log: .verify/Concepts/Venn Diagram.md
 ---
 
-A **Venn Diagram** is a visual tool that represents the relationships between different sets. It is used to calculate the intersections and unions of multiple events. For two events, the probability of the union is:
+A **Venn Diagram** is a picture of [[Set Theory|sets]] that shows how they overlap: a rectangle for the [[Sample Space|sample space]] and a circle for each [[Event|event]]. It is used to calculate the intersections and unions of several events. For two events, the probability of the union is:
 
 > $$P(A \cup B) = P(A) + P(B) - P(A \cap B)$$
 
+- $A \cap B$ is the overlap of the circles, where both events occur, and $A \cup B$ is everything inside either circle.
+- The circles cut the rectangle into regions that don't overlap. Two events give four regions and three events give eight.
+- A count of people works the same way as a probability. Divide every region by the total to move from one to the other.
+
+> [!idea] The idea
+> Adding the probabilities of overlapping events counts the overlap twice. A Venn diagram cuts overlapping events into regions that don't overlap, so their probabilities simply add. A union, "neither" or "exactly one" is then a sum of regions, and every total the question gives is an equation in those regions.
+
+![[Media/Figures/Venn_Diagram.svg|340]]
+
+## Filling the diagram from the centre out
+
+An insurer has 100 policyholders. 70 have an auto policy ($A$), 40 have a homeowners policy ($H$), and 20 have both. How many are in each region?
+
+The overlap is given directly, so start there. Each circle's total includes the overlap, so the "only" regions are the totals less the overlap. Whatever is left is outside both circles.
+
+| Region | Policyholders |
+|---|---|
+| auto only | $70 - 20 = 50$ |
+| both | 20 |
+| home only | $40 - 20 = 20$ |
+| neither | $100 - 50 - 20 - 20 = 10$ |
+
+> [!trap] Starting from the circle totals
+> When filling out a Venn Diagram, **always start from the center (the intersection) and work your way out.** If you just put "70" in the Auto circle, you've forgotten that 20 of those people also have Homeowners. The "Auto Only" region is actually $70 - 20 = 50$.
+
+## Reading the regions
+
+The diagram has a fixed key.
+
 - **$S$**: Universal Set — the rectangle representing every possible outcome (Total Probability = 1)
-- **$A, B$**: Sets A and B — the circles representing specific events
-- **$A \cap B$**: Intersection — the overlapping region where *both* events occur
-- **$A \cup B$**: Union — the total area covered by both circles
-- Actuarial exams often use specific phrasing that maps directly to regions of a Venn Diagram
+- **$A, B$**: the circles representing specific events.
+
+Actuarial exams often use specific phrasing that maps directly to regions of a Venn diagram.
 
 | Phrasing in Problem | Mathematical Notation | Venn Region |
 | :--- | :--- | :--- |
@@ -41,32 +69,66 @@ A **Venn Diagram** is a visual tool that represents the relationships between di
 | "$A$ but not $B$" | $A \setminus B$ | The "crescent moon" of $A$ only. |
 | "Exactly one of $A$ or $B$" | $(A \setminus B) \cup (B \setminus A)$ | Both crescent moons (no overlap). |
 
-> [!idea] The idea
-> Adding the probabilities of overlapping events counts the overlap twice. A Venn diagram cuts overlapping events into regions that don't overlap, so their probabilities simply add. A union, "neither" or "exactly one" is then a sum of regions. Every total the question gives is an equation in those regions.
+As probabilities, the policyholders give $P(A) = 0.70$, $P(H) = 0.40$ and $P(A \cap H) = 0.20$. What is the probability of neither policy? First find the union, then take its complement.
 
-![[Media/Figures/Venn_Diagram.svg|340]]
+> $$P(A \cup H) = 0.70 + 0.40 - 0.20 = 0.90$$
 
-### Exactly one of two events
+> $$P(\text{Neither}) = 1 - P(A \cup H) = 1 - 0.90 = 0.10$$
 
-- "Exactly one of $A$ or $B$" is the two crescents, $A \cap B^c$ and $A^c \cap B$. The union counts the overlap once, so subtracting it once more leaves only the crescents.
+The answer matches the 10 policyholders in the "neither" region.
+
+## Exactly one of two events
+
+How many policyholders have exactly one of the two policies? That is the two crescents, $50 + 20 = 70$.
+
+The union counts the overlap once. Subtracting it once more leaves only the crescents.
 
 > $$P(\text{exactly one of } A, B) = P(A) + P(B) - 2P(A \cap B)$$
 
-### Three events: eight regions
+- With $B = H$, $0.70 + 0.40 - 2(0.20) = 0.70$, the same as the crescents.
+- "At least one" is the union, 0.90. "At most one" is $1 - P(A \cap H) = 0.80$.
 
-- A Venn diagram of three events $A$, $B$, $C$ splits the sample space into eight disjoint regions: three "only one event" regions, three "exactly two events" regions, the region in all three events, and the region outside all three.
-- The seven regions inside the circles partition $A \cup B \cup C$. The eighth, $(A \cup B \cup C)^c$, is "none of the events".
-- Each event's total is the sum of its "only" region, the two "exactly two" regions that include it, and the all-three region.
+## Three events: eight regions
 
-> $$P(A) = P(A \cap B^c \cap C^c) + P(A \cap B \cap C^c) + P(A \cap B^c \cap C) + P(A \cap B \cap C)$$
+Now add a third policy. 26 of the 100 policyholders have life insurance ($L$). 15 have auto and life, 10 have homeowners and life, and 5 have all three.
 
-- To solve a three-event problem, give each unknown region a symbol, write every given total (an event, an intersection, "only one", "exactly two", the overall total) as a sum of regions, and solve the resulting linear equations, working from the centre out.
+A Venn diagram of three events splits the sample space into eight disjoint regions:
 
-> [!example]- Three Newspapers {Example}
-> In a group of 120 people, 50 read paper $X$, 45 read $Y$ and 40 read $Z$; 20 read only $X$, 25 only $Y$, 15 only $Z$, and 5 read all three. How many read exactly two papers, and how many read none?
+- three "only one event" regions,
+- three "exactly two events" regions,
+- the region in all three events,
+- and the region outside all three, "none of the events".
+
+The seven regions inside the circles partition $A \cup H \cup L$. Each event's total is the sum of its "only" region, the two "exactly two" regions that include it, and the all-three region.
+
+> $$P(A) = P(A \cap H^c \cap L^c) + P(A \cap H \cap L^c) + P(A \cap H^c \cap L) + P(A \cap H \cap L)$$
+
+Work from the centre out, as before.
+
+| Region | Policyholders |
+|---|---|
+| all three | 5 |
+| auto and home only | $20 - 5 = 15$ |
+| auto and life only | $15 - 5 = 10$ |
+| home and life only | $10 - 5 = 5$ |
+| auto only | $70 - 15 - 10 - 5 = 40$ |
+| home only | $40 - 15 - 5 - 5 = 15$ |
+| life only | $26 - 10 - 5 - 5 = 6$ |
+| none | $100 - 96 = 4$ |
+
+- The seven inside regions add to 96, which is $P(A \cup H \cup L) = 0.96$.
+- To solve a three-event problem, give each unknown region a symbol, and write every given total as a sum of regions. The totals may be an event, an intersection, "only one", "exactly two" or the overall total. Then solve the linear equations, working from the centre out.
+- The same union comes from the [[Inclusion-Exclusion Principle|inclusion-exclusion principle]], $70 + 40 + 26 - 20 - 15 - 10 + 5 = 96$.
+
+## Try it
+
+> [!example]- Three newspapers {Example}
+> In a group of 120 people, 50 read paper $X$, 45 read $Y$ and 40 read $Z$. 20 read only $X$, 25 only $Y$, 15 only $Z$, and 5 read all three. How many read exactly two papers, and how many read none?
 >
 > > [!answer]-
-> > Let $a$, $b$, $c$ be the "exactly two" regions $X \cap Y$ only, $X \cap Z$ only and $Y \cap Z$ only. Each paper's total is its only region, its two exactly-two regions and the centre:
+> > **Plan:** name the three "exactly two" regions and write each paper's total as a sum of its regions.
+> >
+> > Let $a$, $b$, $c$ be the "exactly two" regions $X \cap Y$ only, $X \cap Z$ only and $Y \cap Z$ only.
 > > $$
 > > \begin{align*}
 > > X:&\quad 20 + a + b + 5 = 50 \\
@@ -76,26 +138,21 @@ A **Venn Diagram** is a visual tool that represents the relationships between di
 > > $$
 > > So $a + b = 25$, $a + c = 15$ and $b + c = 20$. Adding the three gives $2(a + b + c) = 60$, so $a + b + c = 30$ read exactly two. Individually, $a = 10$, $b = 15$ and $c = 5$.
 > >
-> > The union is the seven regions inside the circles: $20 + 25 + 15 + 30 + 5 = 95$, so $120 - 95 = 25$ read none.
+> > The union is the seven regions inside the circles, $20 + 25 + 15 + 30 + 5 = 95$, so $120 - 95 = 25$ read none.
 
-> [!example]- The Insurance Policyholder {Example}
-> Let $A$ be the event that a policyholder has an auto policy and $H$ the event that they have a homeowners policy, with $P(A) = 0.70$, $P(H) = 0.40$, $P(A \cap H) = 0.20$. Find the probability of a policyholder having neither policy.
+> [!example]- An answer in symbols {Example}
+> In a survey, $x\%$ of respondents have auto insurance, $y\%$ have homeowners insurance and $z\%$ have both. Find the percentage with auto only, and the percentage with neither.
 >
 > > [!answer]-
-> > **Step 1: Find the Union (Anyone with at least one policy)**
-> > $$P(A \cup H) = 0.70 + 0.40 - 0.20 = 0.90$$
+> > **Plan:** put $z$ in the centre, then work outwards.
 > >
-> > **Step 2: Find the complement (Neither)**
-> > $$P(\text{Neither}) = 1 - P(A \cup H) = 1 - 0.90 = 0.10$$
+> > - Auto only is the auto circle less the centre, $x - z$.
+> > - Home only is $y - z$.
+> > - Neither is what is left of 100.
 > >
-> > > [!tip] Common Trap
-> > > When filling out a Venn Diagram, **always start from the center (the intersection) and work your way out.** If you just put "70" in the Auto circle, you've forgotten that 20 of those people also have Homeowners. The "Auto Only" region is actually $70 - 20 = 50$.
-
-> [!tip]- How it appears on the exam
-> - **Exam P** (General Probability, objectives 1, 4–5): the page is tagged on 9 Exam P questions in the bank. Each is built on two or three overlapping groups.
-> - Three groups are given with their "only one" counts and the all-three count, such as risk factors in a driver or patient study. The question asks for the total or for the number in exactly two.
-> - Portfolio or client profiles list group totals and some pairwise and triple overlaps. The question asks for a region such as "none of the three" or "auto only".
-> - Some answers are in symbols. Given $x\%$, $y\%$ and $z\%$ for some regions, the question asks for the expression for another region.
+> > $$100 - (x - z) - (y - z) - z = 100 - x - y + z$$
+> >
+> > Why $+z$? Subtracting $x$ and $y$ removes the centre twice, so it is added back once.
 
 > [!warning]- Exam traps
 > - **A pairwise count used as an "exactly two" region.** "30 own $A$ and $B$" includes those who own all three. The region "$A$ and $B$ only" is $30$ minus the centre. Putting $30$ in that region counts the centre twice.

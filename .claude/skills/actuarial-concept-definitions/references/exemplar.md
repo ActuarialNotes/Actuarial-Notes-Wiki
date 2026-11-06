@@ -1,164 +1,69 @@
-# Exemplar: a concept page in the full shape
+# Exemplar: a concept page in the standard shape
 
-`Concepts/Deductible.md`, rewritten in the teaching style the maintainer chose
-on 2026-11-06. Every number below was recomputed in code. Notes on each part
-follow the page. (`Concepts/Conditional Probability.md`, `Bayes Theorem.md`,
-`Poisson Distribution.md` and `Order Statistics.md` were written at the same
-time and are good second models.)
+`Concepts/Permutation.md`, as the maintainer approved it on 2026-11-06. It was
+written from their own draft, and it shows every part of the shape: the
+figure, the definition, two boxed forms of the formula with their bullets, an
+example under the formula, and sections that each add one variation.
+`Concepts/Probability.md` (with a trap card) and `Concepts/Combinatorics.md`
+(with an idea card, and a section with no new terms) are the other two models.
 
 ````markdown
-A **Deductible** $d$ is the part of each loss that the policyholder pays before the insurer pays anything.
+![[Media/Figures/Permutation.svg|340]]
 
-> $$Y = \max(X - d,\ 0) = (X - d)_+$$
+A **Permutation** is an ordered arrangement of distinct objects. The number of permutations of $k$ objects chosen from $n$ distinct objects, ${}_{n}P_{k}$, is
 
-- $X$ is the ground-up loss and $Y$ is the insurer's payment on that loss.
-- The policyholder keeps the rest, $\min(X, d)$, written $X \wedge d$.
+> $${}_{n}P_{k} = n \times (n-1) \times \cdots \times (n-k+1)$$
 
-> [!idea] The idea
-> The policyholder absorbs the first $d$ of every loss. Small losses never reach the insurer, and large ones reach it $d$ smaller.
+> $${}_{n}P_{k} = \frac{n!}{(n-k)!}$$
 
-![[Media/Figures/Deductible.svg|340]]
+- $n!$, read "$n$ factorial", is $n \times (n-1) \times \cdots \times 2 \times 1$, with $0! = 1$.
+- $k \le n$.
 
-## One loss at a time
+> [!example] In a race with 10 runners, how many ways are there to award gold, silver and bronze medals?
+> - Any of the 10 runners could win gold. Once gold is awarded, there are 9 remaining runners who could win silver, then 8 who could win bronze.
+> - ${}_{10}P_{3} = 10 \times 9 \times 8 = 720$.
 
-Take a policy with a deductible of 200.
+## Arranging all $n$ objects
 
-| Loss $X$ | Policyholder keeps $X \wedge 200$ | Insurer pays $(X - 200)_+$ |
-|---|---|---|
-| 50 | 50 | 0 |
-| 200 | 200 | 0 |
-| 350 | 200 | 150 |
-| 900 | 200 | 700 |
+When all $n$ objects are arranged, $k = n$ and the number of permutations is
 
-The two columns always add back to the loss. That split is the key fact of the page.
+> $${}_{n}P_{n} = n!$$
 
-> $$X = (X \wedge d) + (X - d)_+$$
+…
 
-## Averaging over many losses
+## Arrangements with repeated objects
 
-Now let the loss be uniform on $(0, 1000)$, so $E[X] = 500$. What does the insurer expect to pay on a loss?
+When the $n$ objects are not all distinct, arranging identical objects among themselves produces no new arrangement. If there are $r$ types of object, the number of distinct arrangements of all $n$ is
 
-Taking the mean of both sides of the split shows the insurer's expected payment is the expected loss less what the policyholder keeps.
+> $$\frac{n!}{n_1!\, n_2! \cdots n_r!}$$
 
-> $$E[(X - d)_+] = E[X] - E[X \wedge d]$$
+- $n_i$ is the number of identical objects of type $i$, with $n_1 + n_2 + \cdots + n_r = n$.
 
-- $E[X \wedge d]$ is the [[Limited Expected Value|limited expected value]]. For this loss, $E[X \wedge 200] = 180$.
-- The insurer's expected payment is $500 - 180 = 320$.
-
-A second route skips the limited expected value. For a nonnegative loss, the expected payment is the area under the survival function $S(x) = 1 - F(x)$ to the right of $d$.
-
-> $$E[(X - d)_+] = \int_d^\infty S(x)\,dx$$
-
-- For the uniform loss, $\int_{200}^{1000} \left(1 - \frac{x}{1000}\right) dx = 320$.
-
-## Per loss or per payment?
-
-The 320 above averages over every loss, including the 20% that pay nothing. An insurer looking only at the claims it actually pays sees a larger average.
-
-> $$E[X - d \mid X > d] = \frac{E[(X - d)_+]}{P(X > d)}$$
-
-- For the uniform loss, $320 / 0.8 = 400$.
-- Both numbers are correct answers to different questions. Exam questions say "per loss" or "per payment", and the options usually include both.
-
-## Why the first dollars matter most
-
-Raising the deductible by one dollar reduces the payment by one dollar, but only on losses that exceed $d$. So the expected payment falls at the rate $P(X > d)$.
-
-| Deductible | Expected payment per loss | Saved by the last 200 |
-|---|---|---|
-| 0 | 500 | |
-| 200 | 320 | 180 |
-| 400 | 180 | 140 |
-| 600 | 80 | 100 |
-
-Each 200 of deductible saves less than the one before, because fewer losses reach it.
-
-## A fixed deductible under inflation
-
-If every loss rises 10% and the deductible stays at 200, the loss becomes uniform on $(0, 1100)$. The expected payment rises from 320 to about 368.18, which is 15%, not 10%.
-
-- A loss already above the deductible grows by $0.1X$, but the payment $X - d$ is smaller than $X$, so the payment grows by more than 10%.
-- Some losses just under 200 are pushed over it and start to pay.
-
-> [!trap] Multiplying by $1 + r$
-> With the deductible fixed, scaling the old expected payment by $1 + r$ gives too low an answer. Inflate the loss distribution first, then apply the deductible.
-
-## Discrete losses
-
-When the loss takes a few values, the integrals become sums. Take a loss of 0, 100, 400 or 1,000 with probabilities 0.4, 0.3, 0.2 and 0.1, so $E[X] = 210$, and a deductible of 200.
-
-> $$E[(X - d)_+] = \sum_{x > d} (x - d)\,p(x)$$
-
-> $$E[X \wedge d] = \sum_{x < d} x\,p(x) + d\,P(X \ge d)$$
-
-- The insurer pays $0.2 \times 200 + 0.1 \times 800 = 120$.
-- The policyholder keeps $0.3 \times 100 + 200 \times 0.3 = 90$. The second term counts every loss of 200 or more at the deductible.
-- The two add back to 210.
-- Between two possible loss amounts, the expected payment is a straight line in $d$ with slope $-P(X > d)$. It bends at each possible loss amount.
-
-Some policies pay per event above $d$ events. For a count $N$ taking the values $0, 1, 2, \ldots$, the capped count is a sum of tail probabilities.
-
-> $$E[N \wedge d] = \sum_{k=0}^{d-1} P(N > k)$$
-
-## On other exams
-
-The same deductible appears on later exams, stated in the policy's own terms.
-
-- **FAM, MAS-I and ASTAM** add the [[Loss Elimination Ratio|loss elimination ratio]], $E[X \wedge d] / E[X]$, and the effect of a deductible on how many losses become payments.
-- **Exam 5 and the DISCs** state a deductible as a percentage of the coverage amount. A 5% deductible on a home insured for \$500,000 is a flat \$25,000, whatever the size of the loss.
-- **Exam 6C and the DISCs** settle claims under a per-occurrence deductible, an annual aggregate deductible, or both, and with a limit.
-- **Exam 5 and Exam 7** price and reserve large deductible policies. The rating procedure is on [[Deductible Rating]].
-
-## Try it
-
-> [!example]- Exponential losses {Example}
-> Losses are exponential with mean 1,000 and the deductible is 200. Find the expected payment per loss and per payment.
->
-> > [!answer]-
-> > **Plan:** integrate the survival function above 200.
-> > $$E[(X - 200)_+] = \int_{200}^\infty e^{-x/1000}\,dx = 1000\,e^{-0.2} \approx 818.73$$
-> > Dividing by $P(X > 200) = e^{-0.2}$ gives 1,000 per payment. The [[Exponential Distribution|exponential distribution]] is memoryless, so the excess has the same mean as the loss.
-
-> [!example]- Solving for the deductible {Example}
-> A loss is 0, 100, 400 or 1,000 with probabilities 0.4, 0.3, 0.2 and 0.1. Find the deductible that makes the expected payment per loss 100.
->
-> > [!answer]-
-> > **Plan:** guess which losses exceed $d$, solve, then check the guess.
-> >
-> > If $d < 100$, all three positive losses pay, and $210 - 0.6d = 100$ gives $d = 183.3$. That is not below 100, so the guess is wrong.
-> >
-> > If $100 \le d < 400$, only 400 and 1,000 pay.
-> > $$0.2(400 - d) + 0.1(1000 - d) = 180 - 0.3d = 100$$
-> > This gives $d = 266.67$, which is inside the range.
-
-> [!warning]- Exam traps
-> - **Per loss or per payment.** Read which one is asked.
-> - **Dropping the capped term.** $E[X \wedge d]$ includes $d \cdot P(X \ge d)$, not just the losses below $d$.
-> - **Scaling by inflation.** Inflate the losses, then apply the deductible.
-> - **A percentage of the loss instead of the coverage.** A 5% deductible on a \$500,000 home is \$25,000. Taking 5% of a \$40,000 loss understates what the insured keeps.
+> [!example] How many distinct arrangements are there of the letters in LOSS?
+> - There are $n = 4$ letters: one L, one O and two S's.
+> - Swapping the two S's gives the same arrangement, so divide the $4!$ arrangements by $2!$.
+> - There are $\frac{4!}{1!\,1!\,2!} = \frac{24}{2} = 12$ distinct arrangements.
 ````
 
 ## Notes on each part
 
-- **The opening** — definition, formula, two bullets. It is short because the
-  sections do the teaching, and it is what Concept Craft and the SEO
-  description read, so nothing callout-shaped comes before the bullets.
-- **The idea** — two sentences, no new symbols. From it alone a reader can
-  predict that small losses cost the insurer nothing.
-- **One running example** — a deductible of 200, first on four single losses
-  (the table), then on a uniform loss on $(0, 1000)$. Every section asks a new
-  question of the same case: the average, per loss or per payment, how the
-  answer moves with $d$, inflation.
-- **Each section opens with a question** ("What does the insurer expect to pay
-  on a loss?", "Why the first dollars matter most"), works it on the case, then
-  states the formula. The formula reads as a summary of the number just found.
-- **Tables carry the data**: the loss-by-loss split, and the deductible against
-  its expected payment, which shows the diminishing saving at a glance.
-- **The inline trap** sits in the inflation section, right after the number a
-  wrong method gets wrong (368.18, not 352).
-- **Every topic kept.** The discrete sums, the capped count and the other
-  exams' material each have a section, late, because nothing before builds on
-  them.
-- **Try it** — fresh numbers, easy to hard. Each answer opens with
-  `**Plan:**` and ends with a why line where a reader would ask one.
-- **Exam traps** last, specific, and no "How it appears on the exam" callout.
+- **The figure comes first.** It exists (`Media/Figures/Permutation.svg`), so it
+  opens the page.
+- **The definition introduces the symbols.** "$k$ objects chosen from $n$
+  distinct objects, ${}_{n}P_{k}$" defines $n$, $k$ and the quantity in words,
+  so the formula needs bullets only for $n!$ and the condition $k \le n$.
+- **Two forms, two boxes.** The product, which the medals example uses, comes
+  before the factorial form.
+- **The bullets carry no reasoning.** The draft's "$k \le n$, because no
+  object can be used twice" lost its reason in review: the definition already
+  says the objects are arranged, not reused.
+- **No idea card.** "Use a permutation when order matters" only repeated the
+  definition, so it was cut.
+- **The example applies the formula without announcing it.** The draft's "By
+  the multiplication principle (see [[Combinatorics]])" was cut: the step is
+  this page's own formula.
+- **Each section is a variation** — all $n$ objects, then repeated objects —
+  built like the opening: a sentence into the formula, the box, bullets for
+  the new symbols, an example.
+- **A probability appears.** The PIN example in *Arranging all $n$ objects*
+  ends in $P(E)$, which ties the counting back to the exam's question.

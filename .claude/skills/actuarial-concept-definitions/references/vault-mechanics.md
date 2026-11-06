@@ -123,9 +123,31 @@ the vault the Obsidian way and these rules on top.
 
 ## Notation by exam
 
-Match the neighbouring pages:
+Match the neighbouring pages.
 
-- **Exam P:** `f(x)`, `F(x)`, `E[X]`, `\text{Var}(X)`, `P(A \mid B)`.
+**Exam P** — one symbol per thing, on every page (set 2026-11-06; the pages
+still in the older shape use $A$, $B$ for events and are brought to this table
+as they are rewritten):
+
+| Thing | Written | Not |
+| --- | --- | --- |
+| sample space | $S$ | $\Omega$ |
+| outcome | $s$ (several: $s_1, s_2, \ldots$) | $\omega$ |
+| event; a second, third event | $E$; $F$, $G$ | $A$, $B$ |
+| complement, intersection, union | $E^c$, $E \cap F$, $E \cup F$ | $\bar{E}$, $E'$, $EF$ |
+| probability of an event | $P(E)$; an outcome $P(\{s\})$ | $\Pr$, $P[E]$, $P(s)$ |
+| conditional probability | $P(E \mid F)$ | |
+| number of outcomes in a set | $\lvert E \rvert$, $\lvert S \rvert$ | $n(E)$, $\#E$ |
+| factorial | $n!$, with $0! = 1$ | |
+| permutations of $k$ from $n$ | ${}_{n}P_{k}$ | $P(n, k)$, $P^n_k$ |
+| combinations of $k$ from $n$ | $\binom{n}{k}$, read "$n$ choose $k$" | $C(n, k)$, ${}_{n}C_{k}$ |
+| random variable; pmf/pdf; cdf | $X$, $Y$; $f(x)$; $F(x)$ | |
+| mean, variance | $E[X]$, $\text{Var}(X)$ | |
+
+$F$ is both the second event and the cdf. A page that needs both writes the
+events $E_1, E_2$ instead.
+
+Other exams:
 - **Exam FM:** `i`, `v`, `d`, `\delta`, `a_{\overline{n}|}`, `s_{\overline{n}|}`,
   `\ddot{a}_{\overline{n}|}`.
 - **Exam 5:** `\text{CDF}`, age-to-age `f_{n \to n+1}`, loss-ratio and

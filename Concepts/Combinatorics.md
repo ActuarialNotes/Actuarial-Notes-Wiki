@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:a6765043f5f1be917b231064dafd226c3b1fc67c04879c2fafdfb77b2cfb2bdf
+  content_hash: sha256:f730db94d07cfcea69628b2f5db009b1aca47c0557697ed0b07612081f6b68be
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.1 Counting Technique (stages, multiply, PDF pp.83-84), Thm 3.1 n!, Def 3.2 and Thm 3.2 k-permutations n(n−1)…(n−k+1) (PDF p.88); §3.2 binomial coefficients C(n,j) = number of j-subsets, Thm 3.4 Pascal recurrence, Thm 3.5 C(n,j)=(n)_j/j! (pp.93-94, PDF pp.101-102), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.1 Fixed Points and hat check problem, derangements (PDF pp.90, 93); Example 3.12: P(A_i)=(n−1)!/n!, P(no fixed point)=1/2!−1/3!+…+(−1)^n/n!, table n=4: .375 (pp.105-106, PDF pp.113-114), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
@@ -25,7 +25,7 @@ verification:
 
 ![[Media/Figures/Combinatorics.svg|340]]
 
-**Combinatorics** is the branch of [[Discrete Mathematics|discrete mathematics]] that counts the ways to arrange, select or partition objects. In probability, combinatorics counts the outcomes in an [[Event|event]] $E$.
+**Combinatorics** is the branch of [[Discrete Mathematics|discrete mathematics]] that counts the ways to arrange, select or partition objects. In probability, combinatorics is used to count the number of outcomes in an [[Event|event]] $E$.
 
 > [!idea] The idea
 > How you count outcomes depends on two questions: does the order of the objects matter, and can an object be chosen more than once? Choosing $k$ objects from $n$ distinct objects:

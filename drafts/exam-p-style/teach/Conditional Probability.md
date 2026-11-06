@@ -86,12 +86,6 @@ A condition is often a range of a loss or a lifetime. The overlap is then an int
 > > $$P(2 \text{ red} \mid \text{no green}) = \frac{\binom{4}{2}\binom{3}{1}}{\binom{7}{3}} = \frac{18}{35} \approx 0.514$$
 > > Shrinking the urn first is the same move as shrinking the sample space to $B$.
 
-> [!tip]- How it appears on the exam
-> - **Exam P**: a survey given as percentages or a two-way table with a cell missing.
-> - **Exam P**: a loss or lifetime given a threshold, such as "given that the loss exceeds the deductible".
-> - **Exam P**: draws without replacement given a condition.
-> - **MAS-I and MAS-II**: one step inside larger questions on the exponential distribution, Markov chains and Bayesian estimation.
-
 > [!warning]- Exam traps
 > - **Reversing the condition.** Same numerator, different denominator. Use [[Bayes Theorem]].
 > - **Dividing by the grand total.** That gives $P(A \cap B)$, not $P(A \mid B)$.

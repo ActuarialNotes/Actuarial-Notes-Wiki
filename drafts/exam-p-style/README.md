@@ -1,38 +1,33 @@
 # Exam P style drafts
 
-Three rewrites each of two Exam P concept pages, to settle on one style. Nothing here is built into the app, and nothing here has been fact checked yet. The live pages are `Concepts/Conditional Probability.md` and `Concepts/Deductible.md`, which run about 1,500 words each.
+Drafts for settling one style for the Exam P concept pages. Nothing here is built into the app, and nothing here has been fact checked yet.
 
-All three styles keep what the app depends on. The page opens with the bold term, the formula and the bullets, and nothing callout-shaped comes before the bullets. The idea card and figure come next. Examples stay collapsed.
+## The chosen style: Teach
 
-| | A: Lean | B: Teach | C: Playbook |
-|---|---|---|---|
-| Built for | Review and lookup | A first read | Exam practice |
-| Length (CP / Deductible) | ~450 / ~550 words | ~850 / ~900 words | ~650 / ~800 words |
-| Structure | Callouts only, no headed sections (Deductible has one) | Headed sections that build on each other | A table of question shapes, then one section per shape |
-| Examples | 2–3, at the end | One running example in the body, then two to try | One per question shape, inline |
-| Traps | One list at the end | One inline trap card plus a short list | A "Watch out" line under each shape |
-| Tables | None | Worked data (a two-way table, a loss-by-loss split) | Routing and shortcut tables |
-| Other exams | Short "How it appears" list | Short "How it appears" list | One "Beyond Exam P" note |
+`teach/` holds five pages in the chosen style:
 
-## Files
+- [Conditional Probability](teach/Conditional%20Probability.md) (~780 words)
+- [Deductible](teach/Deductible.md) (~780 words)
+- [Bayes Theorem](teach/Bayes%20Theorem.md) (~1,100 words)
+- [Poisson Distribution](teach/Poisson%20Distribution.md) (~750 words)
+- [Order Statistics](teach/Order%20Statistics.md) (~920 words)
 
-- Conditional Probability: [A-lean](conditional-probability/A-lean.md), [B-teach](conditional-probability/B-teach.md), [C-playbook](conditional-probability/C-playbook.md)
-- Deductible: [A-lean](deductible/A-lean.md), [B-teach](deductible/B-teach.md), [C-playbook](deductible/C-playbook.md)
+What makes a page "Teach":
 
-## What changed from the live pages in every draft
+- The opening the app reads is unchanged: bold term, formula, bullets, then the idea card and the figure.
+- Below that, headed sections build on each other, and each one opens with a question or a difficulty.
+- One running example runs through the body, worked as you read: a portfolio, a policy or a month of claims, often laid out as a table.
+- A trap card sits beside the idea it distorts, at most one or two per page.
+- The page ends with **Try it**, collapsed examples running easy to hard, each with a one-line plan.
+- **Exam traps** closes the page. There is no "How it appears on the exam" callout.
 
-- Material that wandered off topic is gone, such as the signal-transmission bullet on Conditional Probability and the discrete count formula $E[N \wedge d]$ on Deductible.
-- No bullet restates a formula in words.
-- Examples run easy to hard.
-- Exam 5, 6C and DISC material on Deductible is reduced to one line pointing at [[Deductible Rating]].
+## The other styles
 
-## Questions worth answering
+`other-styles/` keeps the Lean (A) and Playbook (C) versions of Conditional Probability and Deductible, for reference.
 
-You can mix styles, for example "A's length, C's watch-out lines".
+## Before a draft replaces a live page
 
-1. Length: is ~450 words enough, or is ~850 right for a first read?
-2. One running example (B), or a fresh example per idea (A, C)?
-3. Traps: inline beside the idea, or collected at the end?
-4. Should the page be organised by question shape (C), or does that belong in a separate exam guide?
-5. Tables: worked data (B), routing (C), or none (A)?
-6. Shortcut formulas, like $\theta e^{-d/\theta}$: include them or derive them each time?
+- **Fact check.** Every draft needs a VERIFY pass against the sources the live page cites.
+- **Answerability (G8).** The answerability record quotes the live pages. Any quoted sentence a draft drops or rewords must be re-resolved, or Exam P loses its `ready` status. The drafts keep each topic the live pages cover, except these on Conditional Probability and Deductible:
+  - Conditional Probability: conditional expectation given an event, $E[X \mid A]$.
+  - Deductible: the capped count $E[N \wedge d]$, the discrete $E[X \wedge d]$ sum, and the Exam 5, 6C and DISC material.

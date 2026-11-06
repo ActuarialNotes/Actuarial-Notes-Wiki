@@ -96,12 +96,6 @@ If every loss rises 10% and the deductible stays at 200, the loss becomes unifor
 > > $$0.2(400 - d) + 0.1(1000 - d) = 180 - 0.3d = 100$$
 > > This gives $d = 266.67$, which is inside the range.
 
-> [!tip]- How it appears on the exam
-> - **Exam P**: a loss distribution and a deductible. Find the payment, its mean or variance, or the deductible that gives a target mean. [[Coinsurance Percentage|Coinsurance]], a [[Benefit Limit|benefit limit]] or [[Inflation|inflation]] is often added.
-> - **FAM, MAS-I and ASTAM**: per-loss and per-payment means, the [[Loss Elimination Ratio|loss elimination ratio]], and inflation with a fixed deductible.
-> - **Exam 5 and 7**: pricing and reserving for large deductible policies (see [[Deductible Rating]]).
-> - **The DISCs and Exam 6C**: settling a claim under policy wording, including percentage deductibles.
-
 > [!warning]- Exam traps
 > - **Per loss or per payment.** Read which one is asked.
 > - **Dropping the capped term.** $E[X \wedge d]$ includes $d \cdot P(X \ge d)$, not just the losses below $d$.

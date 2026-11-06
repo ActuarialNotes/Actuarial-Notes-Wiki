@@ -1,18 +1,16 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-30
+  status: verified
+  confidence: high
+  last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
   content_hash: sha256:d3e918d8cc015b3759c792f9f5bc38b523cb0bbe36a35c90d807a6177d8775cb
   sources:
-    - "Siegrist, Random (randomservices.org), Random Samples > Order Statistics (F_k and f_k for an i.i.d. sample; joint pdf f_jk of two order statistics and f_1n of min and max; standard uniform X_(k) beta(k, n-k+1)), sha256:19ff485c600d4294e888c1b3d05ff7eb9196449f958d3325fd72b416aca56d63 — https://www.randomservices.org/random/sample/OrderStatistics.html"
-    - "Siegrist, Random (randomservices.org), Distributions > Transformations > Minimum and Maximum (independent X_i with distribution functions F_i: max has F_1...F_n, min has 1 - product of (1 - F_i)), sha256:827bba81a7f85933f2ba982a09155f5277f5ec19838e2ffe70ac0563a56aca69 — https://www.randomservices.org/random/dist/Transformations.html"
-    - "SOA Exam P Sample Solutions (Aug 2026 revision), Q249 (min of two independent exponentials by multiplying survival functions, PDF pp.73-74), Q497 (min of three i.i.d. losses, 1 - [1 - F(x)]^3, PDF p.137), sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"
-    - "SOA, Probability Exam (Exam P) Syllabus, November 2026, Topic 3 Multivariate Random Variables, learning objective and outcomes a)-i), PDF p.4, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
-    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), 12.4 Order Statistics (finite sampling models): P[X_(i) = x] = C(x-1,i-1) C(m-x,n-i)/C(m,n), x in {i,...,m-n+i}, by the multiplication principle (m here is the page's N), HTML fetched 2026-10-30, sha256:8b4b38e1ca6a79fcc598b1bebf75fc7b9694f0592411d2ef539a6c727f139c77 — https://www.randomservices.org/random/urn/OrderStatistics.html"
-    - "Sheffield, MIT OCW 18.440 Probability and Random Variables (Spring 2014), Lecture 20 'Exponential random variables', slide 8 (min of independent exponentials has rate the sum of rates), slides 10-11 (memoryless property), slide 15 'Radioactive decay: maximum of independent exponentials' (T1 exponential with parameter n*lambda, T2 with (n-1)*lambda, 'and so forth', E[T] = lambda^-1 sum_{j=1}^n 1/j, Var by independence), PDF sha256:394516321e47a5eae056e929d398075f82956f7711c449c8deca16abb56c175c — https://ocw.mit.edu/courses/18-440-probability-and-random-variables-spring-2014/9c364e256bcc2b34ba6dd73025e8bcb2_MIT18_440S14_Lecture20.pdf"
-    - "Wikipedia, 'Order statistic', section on the exponential distribution: X_(i) =d (1/lambda) sum_{j=1}^i Z_j/(n-j+1), Z_j i.i.d. standard exponential (Rényi) (fetched 2026-10-30) — https://en.wikipedia.org/wiki/Order_statistic"
+    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org, HTML fetched 2026-11-06), 6.6 Order Statistics: f_k(x) = n!/((k-1)!(n-k)!) F^(k-1)(1-F)^(n-k) f; joint f_{j,k}; uniform sample X_(k) beta(k, n-k+1) with mean k/(n+1), sha256:19ff485c600d4294e888c1b3d05ff7eb9196449f958d3325fd72b416aca56d63 — https://www.randomservices.org/random/sample/OrderStatistics.html"
+    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org, HTML fetched 2026-11-06), 3.7 Transformations, Minimum and Maximum: independent X_i with CDFs F_i, max has F_1...F_n, min has 1 - prod(1 - F_i), sha256:827bba81a7f85933f2ba982a09155f5277f5ec19838e2ffe70ac0563a56aca69 — https://www.randomservices.org/random/dist/Transformations.html"
+    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org, HTML fetched 2026-11-06), 12.4 Order Statistics: P[X_(i) = x] = C(x-1,i-1)C(m-x,n-i)/C(m,n), sha256:8b4b38e1ca6a79fcc598b1bebf75fc7b9694f0592411d2ef539a6c727f139c77 — https://www.randomservices.org/random/urn/OrderStatistics.html"
+    - "Sheffield, MIT OCW 18.440 (Spring 2014), Lecture 20 Exponential random variables, slide 8 (min of independent exponentials has rate the sum of rates), slide 16 radioactive decay: T1 exponential nλ, T2 (n-1)λ, E[T] = λ^-1 Σ 1/j, sha256:394516321e47a5eae056e929d398075f82956f7711c449c8deca16abb56c175c — https://ocw.mit.edu/courses/18-440-probability-and-random-variables-spring-2014/9c364e256bcc2b34ba6dd73025e8bcb2_MIT18_440S14_Lecture20.pdf"
+    - "SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 2 Univariate Random Variables (PDF p.3); Topic 3 Multivariate Random Variables incl. order statistics (PDF p.4), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Order Statistics.md

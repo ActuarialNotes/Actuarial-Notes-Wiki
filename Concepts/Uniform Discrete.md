@@ -1,13 +1,15 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-09-28
+  status: verified
+  confidence: high
+  last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
   content_hash: sha256:9dd346b84d9fed57902eb7e70eb9e06da9fb6d7ab96893a0a520948cced217a5
   sources:
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), 6.2 Exercise 11: X chosen at random from 1..n has E(X) = (n+1)/2, V(X) = (n-1)(n+1)/12, p.264 (PDF p.272), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05, 2005), Deductibles section (PDF p.7), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §6.2 Exercise 11: X chosen at random from 1..n has E(X) = (n+1)/2 and V(X) = (n-1)(n+1)/12; sum of squares n(n+1)(2n+1)/6, p.264 (PDF p.272), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org, HTML fetched 2026-11-06), 5.22 Discrete Uniform Distributions: on {a, a+h, ..., b}, E(X) = (a+b)/2, var(X) = (n^2-1)h^2/12, sha256:a506d04abf9a8a26ebb000acde57d76a97462be43e855e92c983e6f2d09cbac2 — https://www.randomservices.org/random/special/UniformDiscrete.html"
+    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org, HTML fetched 2026-11-06), 5.21 The Uniform Distribution on an Interval: E(X) = (a+b)/2, var(X) = (b-a)^2/12, sha256:8e9ed89d801bc2780eab168757688e254a9484275e8d068c1fd000bf625c8558 — https://www.randomservices.org/random/special/UniformContinuous.html"
+    - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05, 2005), VI Limits on Policy Benefits, Deductibles (PDF p.7): nothing paid on a loss below the deductible, the excess paid above it, sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Uniform Discrete.md

@@ -15,17 +15,127 @@ verification:
   log: .verify/Concepts/Probability Density Function (PDF).md
 ---
 
-A **Probability Density Function (PDF)** describes the relative likelihood of a continuous random variable taking a particular value. The probability that $X$ falls in an interval $[a, b]$ is the area under $f$ over that interval.
+A **Probability Density Function (PDF)** $f(x)$ describes how the probability of a [[Continuous Random Variable|continuous random variable]] $X$ is spread along the line. The probability that $X$ falls in an interval $[a, b]$ is the area under $f$ over that interval.
 
 > $$P(a \leq X \leq b) = \int_a^b f(x)\, dx$$
 
 - The PDF must satisfy $f(x) \geq 0$ and $\int_{-\infty}^{\infty} f(x)\, dx = 1$
-- $P(X = x) = 0$ for any single point
+- $P(X = x) = 0$ for any single point, so including or excluding an endpoint changes nothing.
+- The PDF is the derivative of the [[Cumulative Distribution Function (CDF)|CDF]], $f(x) = F'(x)$.
+- Compared with a [[Probability Mass Function (PMF)|PMF]]: a PMF value is a probability, but a PDF value is a probability per unit of $x$.
+
+> [!idea] The idea
+> A density is like the thickness of a layer of sand spread along the line. The amount of sand over an interval is the probability, so you measure it by area, not by height. A tall, narrow pile and a low, wide one can hold the same amount.
 
 ![[Media/Figures/Probability_Density_Function_PDF.svg|340]]
 
+## Finding the constant
+
+A claim size $X$, in thousands, has density $f(x) = c\,x(3 - x)$ for $0 < x < 3$. The shape is fixed, but the height is set by $c$. Which $c$ makes this a density?
+
+The total area must be 1.
+
+> $$
+> \begin{align*}
+> 1 &= \int_0^3 c\,x(3 - x)\,dx \\
+>   &= c\left[\tfrac{3x^2}{2} - \tfrac{x^3}{3}\right]_0^3 \\
+>   &= 4.5c
+> \end{align*}
+> $$
+
+So $c = 2/9$, and $f(x) = \tfrac{2}{9}x(3 - x)$.
+
+## Probability is area, not height
+
+How likely is a claim of at most 1? That is the area under $f$ from 0 to 1.
+
+> $$P(X \le 1) = \int_0^1 \tfrac{2}{9}x(3 - x)\,dx = \tfrac{7}{27} \approx 0.259$$
+
+| $x$ | 0.5 | 1 | 1.5 | 2 | 2.5 |
+|---|---|---|---|---|---|
+| $f(x)$ | 0.278 | 0.444 | 0.5 | 0.444 | 0.278 |
+
+- The density peaks at $x = 1.5$, so claims near 1.5 are the most likely. That peak is the [[Mode|mode]].
+- The height 0.5 is not the probability of a claim of 1.5. That probability is 0.
+- For a short interval of length $h$, $P(x < X < x + h) \approx f(x)\,h$. A claim between 1.5 and 1.6 has probability about $0.5 \times 0.1 = 0.05$.
+- The density is symmetric about 1.5, so the mean is 1.5 too.
+
+## Units change the height
+
+Measure the same claims in tens of thousands instead, $Y = X/10$. The claims now lie on $(0, 0.3)$, and the same total area of 1 must fit on an interval one-tenth as wide.
+
+> $$f_Y(y) = 10\,f_X(10y)$$
+
+- The peak becomes $10 \times 0.5 = 5$. A density can exceed 1, as a uniform on $(0, 0.5)$ has density 2.
+- Every probability is unchanged. $P(Y \le 0.1)$ is still $7/27$, because it is the same event as $X \le 1$.
+
+> [!trap] Reading the height as a probability
+> A density of 5 does not mean "probability 5". It means about $5h$ of probability in a short interval of length $h$. Only an area under $f$ is a probability.
+
+## The density and the CDF
+
+The [[Cumulative Distribution Function (CDF)|CDF]] adds up the area to the left of $x$, and the density is its slope.
+
+> $$F(x) = \int_{-\infty}^{x} f(t)\,dt$$
+
+- For the claim size, $F(x) = \frac{x^2}{3} - \frac{2x^3}{27}$ on $[0, 3]$. Then $F(1) = 7/27$, matching the area above, and $F(3) = 1$.
+- When a question gives the CDF, differentiate it to get the density. When it gives the density, integrate it to get the CDF.
+- A density can be defined in pieces. Integrate each piece over its own range and add the areas.
+
+## Try it
+
 > [!example]- Probability from a Polynomial PDF {Example}
-> If $f(x) = 3x^2$ for $0 \leq x \leq 1$, what is $P(X > 0.5)$?
+> A loss ratio $X$ has density $f(x) = 3x^2$ for $0 \leq x \leq 1$. What is $P(X > 0.5)$?
 >
 > > [!answer]-
-> > $$P(X > 0.5) = \int_{0.5}^{1} 3x^2\, dx = \left[ x^3 \right]_{0.5}^{1} = 1 - 0.125 = 0.875$$
+> > **Plan:** integrate the density over the event's interval.
+> > $$
+> > \begin{align*}
+> > P(X > 0.5) &= \int_{0.5}^{1} 3x^2\, dx \\
+> >            &= \left[ x^3 \right]_{0.5}^{1} \\
+> >            &= 1 - 0.125 \\
+> >            &= 0.875
+> > \end{align*}
+> > $$
+> > Why so high? The density rises steeply, so most of its area sits near 1.
+
+> [!example]- A density in two pieces {Example}
+> The time to settle a claim, in years, has density $f(t) = c\,t$ for $0 < t \le 1$ and $f(t) = c$ for $1 < t \le 2$. Find $c$ and the probability that a claim takes more than 1.5 years.
+>
+> > [!answer]-
+> > **Plan:** add the area of each piece to find $c$, then integrate only the piece the event touches.
+> > $$
+> > \begin{align*}
+> > 1 &= \int_0^1 c\,t\,dt + \int_1^2 c\,dt \\
+> >   &= \tfrac{c}{2} + c \\
+> >   &= 1.5c
+> > \end{align*}
+> > $$
+> > So $c = 2/3$.
+> > $$
+> > \begin{align*}
+> > P(T > 1.5) &= \int_{1.5}^{2} \tfrac{2}{3}\,dt \\
+> >            &= \tfrac{1}{3}
+> > \end{align*}
+> > $$
+
+> [!example]- From a CDF to a density {Example}
+> A loss $X$ has CDF $F(x) = 1 - (1 + x)e^{-x}$ for $x \ge 0$. Find its density and the most likely loss.
+>
+> > [!answer]-
+> > **Plan:** differentiate the CDF, then find where the density peaks.
+> > $$
+> > \begin{align*}
+> > f(x) &= -e^{-x} + (1 + x)e^{-x} \\
+> >      &= x\,e^{-x}
+> > \end{align*}
+> > $$
+> > The derivative of $x e^{-x}$ is $(1 - x)e^{-x}$, which is zero at $x = 1$. The mode is 1, where the density is $e^{-1} \approx 0.368$.
+> >
+> > This is the gamma density with $\alpha = 2$ and $\theta = 1$.
+
+> [!warning]- Exam traps
+> - **Height for probability.** $f(x)$ is a rate and can exceed 1. Integrate it over an interval to get a probability.
+> - **Forgetting the support.** A density is zero outside its stated range. Integrating a formula past its range overstates the area.
+> - **Skipping the constant.** When the density has an unknown $c$, solve for it before computing anything else. Every later answer scales with it.
+> - **One piece only.** For a piecewise density, an interval that crosses a break needs both pieces' areas.

@@ -24,10 +24,9 @@ verification:
 
 > $$E[X] = \begin{cases} \displaystyle\sum_{k} k\, f(k) & \text{(discrete)} \\[6pt] \displaystyle\int_{-\infty}^{\infty} x\, f(x)\, dx & \text{(continuous)} \end{cases}$$
 
-- The sum or integral must converge absolutely ($\sum_k |k|\,f(k)$ or $\int |x|\,f(x)\,dx$ finite); otherwise $X$ has no expected value — a Pareto with shape $\alpha \le 1$ has none (see [[Moment]]).
+- $f$ is the [[Probability Mass Function (PMF)|PMF]] in the discrete case and the [[Probability Density Function (PDF)|density]] in the continuous case.
+- The sum or integral must converge absolutely, that is $\sum_k |k|\,f(k)$ or $\int |x|\,f(x)\,dx$ must be finite. Otherwise $X$ has no expected value. A [[Pareto Distribution|Pareto]] with shape $\alpha \le 1$ has none (see [[Moment]]).
 - It is linear: $E[aX + b] = aE[X] + b$.
-- Because the expected value is a weighted sum, the expected value of a total is the total of the expected values, whether or not the pieces are independent.
-- Expected value is monotone: if $X \le Y$ for every outcome (more generally, $P(X \le Y) = 1$), then $E[X] \le E[Y]$. Expectation preserves inequalities, so a random variable that never exceeds a constant $c$ has a mean of at most $c$. A random variable that is never negative has a mean of at least 0. For instance, a proportion that always lies between 0 and 1 has a mean between 0 and 1.
 - The $n$-th moment of $X$ is $E[X^n]$. The $n$-th central moment is $E[(X-\mu)^n]$.
 
 > [!idea] The idea
@@ -35,38 +34,138 @@ verification:
 
 ![[Media/Figures/Expected_Value.svg|340]]
 
-### Other ways to compute it
+## One claim, one number
 
-- **Symmetry.** If a density is symmetric about a point $c$, that is $f(c + t) = f(c - t)$ for all $t$, and $E[X]$ exists, then $E[X] = c$.
-- **Tail sum.** For $N$ taking values $0, 1, 2, \ldots$, the mean is the sum of the survival probabilities:
+A claim $X$ costs 0, 100 or 500 with probabilities 0.5, 0.3 and 0.2. What does the insurer expect to pay per claim?
 
-> $$E[N] = \sum_{k=0}^{\infty} P(N > k) = \sum_{k=1}^{\infty} P(N \ge k)$$
+| $x$ | $f(x)$ | $x\,f(x)$ |
+|---|---|---|
+| 0 | 0.5 | 0 |
+| 100 | 0.3 | 30 |
+| 500 | 0.2 | 100 |
+| Total | 1 | 130 |
 
+- $E[X] = 130$. On average, the insurer expects to pay \$130 per claim.
+- No single claim costs 130. The mean is an average over many claims, not a likely value.
+
+## Functions of the claim
+
+The policy now has a deductible of 50, so it pays $g(X) = (X - 50)_+$. The payment on each claim is 0, 50 or 450. Average the *payments*, not the claims.
+
+> $$E[g(X)] = \sum_x g(x)\,f(x)$$
+
+- $E[(X - 50)_+] = 0(0.5) + 50(0.3) + 450(0.2) = 105$.
+- Plugging the mean into the payment gives $(130 - 50)_+ = 80$. That is wrong. It assumes every claim costs 130.
+
+> [!trap] $E[g(X)]$ is not $g(E[X])$
+> Plugging the mean into a nonlinear function gives a wrong number, such as $(E[X])^2$ for $E[X^2]$ or $\max(E[X] - d, 0)$ for the expected payment after a deductible. Average $g$ over the distribution: $\sum g(k) f(k)$ or $\int g(x) f(x)\,dx$.
+
+## Linearity
+
+For a *linear* function, the shortcut does work. Scaling every claim by 1.1 for inflation and adding a handling fee of 20 gives $E[1.1X + 20] = 1.1(130) + 20 = 163$.
+
+Because the expected value is a weighted sum, the expected value of a total is the total of the expected values, whether or not the pieces are independent.
+
+- Two claims of this kind have expected total $130 + 130 = 260$, whether they are independent or not.
+- Linearity is not a product rule. $E[XY] = E[X]\,E[Y]$ needs independence, or at least zero [[Covariance|covariance]].
+
+Expected value is also monotone. If $X \le Y$ for every outcome (more generally, $P(X \le Y) = 1$), then $E[X] \le E[Y]$.
+
+- A random variable that never exceeds a constant $c$ has a mean of at most $c$.
+- A random variable that is never negative has a mean of at least 0. A proportion that always lies between 0 and 1 has a mean between 0 and 1.
+
+## Per loss or per payment
+
+The 105 above averages over every claim, including the half that pay nothing. Among claims that do pay, the average payment is larger. That is a mean given an event.
+
+For an event $A$ with $P(A) > 0$, the conditional mean uses the conditional distribution $f(x)/P(A)$ on $A$ and 0 off it.
+
+> $$E[X \mid A] = \frac{E[X \cdot 1_A]}{P(A)}$$
+
+- $1_A$ is the indicator of $A$: 1 if $A$ occurs, 0 if not.
+- The expected payment per payment is $105 / 0.5 = 210$.
+- For $A = \{X < c\}$ and a continuous $X$, the numerator integrates $x f(x)$ over the restricted range only.
+
+> $$E[X \mid X < c] = \frac{\int_{-\infty}^{c} x\, f(x)\, dx}{F(c)}$$
+
+## Other ways to compute it
+
+**Survival function.** For $X \ge 0$, the mean is the area under $S(x) = P(X > x)$. For the claim, $S(x) = 0.5$ on $[0, 100)$ and $0.2$ on $[100, 500)$. So $E[X] = 0.5(100) + 0.2(400) = 130$ again.
+
+> $$E[X] = \int_0^\infty S(x)\,dx$$
+
+**Tail sum.** For a count $N$ taking values $0, 1, 2, \ldots$, the same idea is a sum.
+
+> $$E[N] = \sum_{k=0}^{\infty} P(N > k)$$
+
+- Equivalently, $E[N] = \sum_{k=1}^{\infty} P(N \ge k)$.
 - For a count capped at $m$, $P(\min(N, m) > k)$ is $P(N > k)$ for $k < m$ and $0$ for $k \ge m$, so the tail sum stops at $m - 1$: $E[\min(N, m)] = \sum_{k=0}^{m-1} P(N > k)$.
-- **Expected excess of a count.** For an integer $c \ge 1$, $\max(N - c, 0) = (N - c) + \sum_{n=0}^{c-1} (c - n)\,1\{N = n\}$. Extending the sum over $n \ge c$ to all $n$ gives $E[N - c]$, but that subtracts $c - n$ for each $n < c$. The second term adds those amounts back.
+
+**Expected excess of a count.** For an integer $c \ge 1$, $E[N - c]$ would subtract $c - n$ for each $n < c$, where the excess is really 0. Adding those amounts back gives the expected excess.
 
 > $$E[\max(N - c, 0)] = E[N] - c + \sum_{n=0}^{c-1} (c - n)\, P(N = n)$$
 
 - For $c = 1$ this is $E[\max(N - 1, 0)] = E[N] - 1 + P(N = 0)$.
-- **Mean given an event.** For an event $A$ with $P(A) > 0$, the conditional mean uses the conditional density $f(x)/P(A)$ on $A$ (and 0 off it), so $E[X \mid A] = E[X \cdot 1_A] / P(A)$. For $A = \{X < c\}$ the numerator integrates $x f(x)$ over the restricted range only:
 
-> $$E[X \mid X < c] = \frac{\int_{-\infty}^{c} x\, f(x)\, dx}{F(c)}$$
+**Symmetry.** If a density is symmetric about a point $c$, that is $f(c + t) = f(c - t)$ for all $t$, and $E[X]$ exists, then $E[X] = c$.
+
+## On other exams
+
+- **Exam P** also asks for the expected value of a function of two variables, a sum, or a conditional mean, from a joint distribution. See [[Moments for Joint Distributions]].
+- **MAS-I** asks for expected counts and waiting times in Poisson processes, and moments of loss distributions and their transformations.
+- **MAS-II** uses expected values inside credibility, such as the [[Expected Value of Process Variance|expected value of the process variance]], the [[Variance of Hypothetical Means|variance of the hypothetical means]] and the prior mean.
+- **FAM** and **ALTAM**: an actuarial present value is the expected value of a present value random variable. Insurance and annuity questions are therefore expected-value questions in life-contingency notation.
+
+## Try it
 
 > [!example]- Expected Payout on a Simple Policy {Example}
-> A discrete random variable $X$ (claim size) has PMF: $P(X=0)=0.5$, $P(X=100)=0.3$, $P(X=500)=0.2$. Find $E[X]$.
+> A claim size $X$ has PMF $P(X=0)=0.6$, $P(X=200)=0.3$, $P(X=1000)=0.1$. The policy has a deductible of 100. Find the expected claim, the expected payment per loss and the expected payment per payment.
 >
 > > [!answer]-
-> > $$E[X] = 0(0.5) + 100(0.3) + 500(0.2) = 0 + 30 + 100 = 130$$
-> > On average, the insurer expects to pay \$130 per claim.
+> > **Plan:** weight each value by its probability, then repeat for the payment, then divide by the probability of a payment.
+> > $$
+> > \begin{align*}
+> > E[X] &= 200(0.3) + 1000(0.1) \\
+> >      &= 160 \\
+> > E[(X - 100)_+] &= 100(0.3) + 900(0.1) \\
+> >                &= 120
+> > \end{align*}
+> > $$
+> > A payment is made with probability 0.4, so the expected payment per payment is $120 / 0.4 = 300$.
+> >
+> > Why isn't the payment $160 - 100 = 60$? The deductible removes only 100 from the claims that exceed it, and nothing is paid on the rest.
 
-> [!tip]- How it appears on the exam
-> - **Exam P** (Univariate Random Variables, objectives 3 and 6): find the expected payment on a policy from a PMF, a density (often in pieces) or a CDF. The policy may have a deductible, a limit, a benefit schedule or a payment that varies with the loss.
-> - **Exam P** (Multivariate Random Variables): the expected value of a function of two variables, a sum, or a conditional mean, from a joint distribution.
-> - **MAS-I**: expected counts and waiting times in Poisson processes, and moments of loss distributions and their transformations. **MAS-II**: the expected values inside credibility, such as the expected value of the process variance, the variance of the hypothetical means and the prior mean.
-> - **FAM** and **ALTAM**: an actuarial present value is the expected value of a present value random variable. Insurance and annuity questions are therefore expected-value questions in life-contingency notation.
+> [!example]- A tail sum {Example}
+> The number of claims $N$ on a policy has $P(N > k) = 0.6^{k+1}$ for $k = 0, 1, 2, \ldots$. Find $E[N]$ and $E[\min(N, 2)]$.
+>
+> > [!answer]-
+> > **Plan:** add the survival probabilities, stopping at $k = 1$ for the capped count.
+> > $$
+> > \begin{align*}
+> > E[N] &= 0.6 + 0.6^2 + 0.6^3 + \cdots \\
+> >      &= \frac{0.6}{1 - 0.6} \\
+> >      &= 1.5 \\
+> > E[\min(N, 2)] &= 0.6 + 0.36 \\
+> >               &= 0.96
+> > \end{align*}
+> > $$
+
+> [!example]- Mean of a continuous loss below a threshold {Example}
+> A loss $X$ is uniform on $(0, 1000)$. Find $E[X \mid X < 400]$.
+>
+> > [!answer]-
+> > **Plan:** integrate $x f(x)$ over the restricted range, then divide by the probability of the range.
+> > $$
+> > \begin{align*}
+> > E[X \mid X < 400] &= \frac{\int_0^{400} x \cdot \tfrac{1}{1000}\,dx}{0.4} \\
+> >                   &= \frac{80}{0.4} \\
+> >                   &= 200
+> > \end{align*}
+> > $$
+> > Given the condition, the loss is uniform on $(0, 400)$, so its mean is the midpoint.
 
 > [!warning]- Exam traps
-> - **$E[g(X)]$ is not $g(E[X])$.** Plugging the mean into a nonlinear function gives a wrong number, such as $(E[X])^2$ for $E[X^2]$ or $\max(E[X] - d, 0)$ for the expected payment after a deductible. Average $g$ over the distribution: $\sum g(k) f(k)$ or $\int g(x) f(x)\,dx$.
+> - **$E[g(X)]$ for $g(E[X])$.** Average the payment, not the payment of the average.
 > - **Per loss or per payment.** The expected payment per *loss* averages over every loss, zeros included. The expected payment per *payment* is the conditional mean given that a payment is made, so it divides by the probability of a payment. Read which one the question asks for.
 > - **The tail sum's first term.** $E[N] = \sum_{k=0}^{\infty} P(N > k)$ starts at $k = 0$. Starting the $P(N > k)$ sum at $k = 1$ drops $P(N > 0)$ and understates the mean.
 > - **Linearity is not a product rule.** $E[X + Y] = E[X] + E[Y]$ always holds, but $E[XY] = E[X]\,E[Y]$ needs independence, or at least zero covariance. With dependent variables, compute $E[XY]$ from the joint distribution.

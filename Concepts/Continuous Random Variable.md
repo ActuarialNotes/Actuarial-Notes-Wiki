@@ -23,17 +23,75 @@ A **Continuous Random Variable** $X$ is a [[Random Variable]] whose [[Cumulative
 
 > $$f(x) = F'(x)$$
 
-- A valid density has $f(x) \ge 0$ and $\int_{-\infty}^{\infty} f(x)\,dx = 1$. It is a *rate*, not a probability, so it can exceed 1: $\text{Uniform}(0, 0.5)$ has $f(x) = 2$. The named families are in [[Continuous Univariate Distributions]].
-- $P(X = c) = 0$ for every $c$, so $P(a < X < b) = P(a \le X \le b) = F(b) - F(a)$. Strict and weak inequalities give the same answer — unlike a [[Discrete Random Variable]].
-- Expectations replace sums with integrals: $E[g(X)] = \int g(x)\,f(x)\,dx$ (see [[Expected Value]] and [[Moment]]). For $X \ge 0$ the survival shortcut $E[X] = \int_0^\infty [1 - F(x)]\,dx$ often avoids integration by parts.
-- With two or more continuous variables the same calculations run on a [[Joint Probability Density Function]]: probabilities, marginals and moments become double integrals, and the work is setting up the [[Region of Integration]].
-- A linear combination of independent *normal* variables is exactly normal — the continuous case Exam P singles out in [[Probabilities for Linear Combinations]].
-- Insurance payments are often **mixed**. A continuous loss passed through a [[Deductible]] or a [[Benefit Limit|limit]] produces a [[Payment Random Variable|payment]] with a point mass at 0 or at the limit, which is neither purely discrete nor purely continuous.
+- A valid density has $f(x) \ge 0$ and $\int_{-\infty}^{\infty} f(x)\,dx = 1$.
+- $P(X = c) = 0$ for every $c$, so $P(a < X < b) = P(a \le X \le b) = F(b) - F(a)$. Strict and weak inequalities give the same answer, unlike a [[Discrete Random Variable]].
+- The named families, such as the uniform, exponential and normal, are in [[Continuous Univariate Distributions]].
+
+> [!idea] The idea
+> A loss can be any amount, so no single amount can carry a lump of probability. A continuous random variable spreads its probability thinly along the line. Probability then comes only from intervals, as the area under the density over the interval.
+
+## Probability is area
+
+A claim size $X$, in thousands, has density $f(x) = x/8$ for $0 < x < 4$. Larger claims are more likely than small ones, up to the maximum of 4.
+
+The CDF adds up the area to the left of $x$.
+
+> $$F(x) = \int_0^x \frac{t}{8}\,dt = \frac{x^2}{16}, \quad 0 \le x \le 4$$
+
+| $x$ | 1 | 2 | 3 | 4 |
+|---|---|---|---|---|
+| $F(x)$ | 0.0625 | 0.25 | 0.5625 | 1 |
+
+- The probability of a claim between 1 and 3 is $F(3) - F(1) = 0.5625 - 0.0625 = 0.5$.
+- $P(1 \le X \le 3)$ is the same 0.5. The endpoints are single values, and single values carry no area.
+
+## The density is a rate
+
+The density is a *rate*, not a probability. It says how much probability lies near $x$ per unit of $x$.
+
+- For a short interval of length $h$, $P(x < X < x + h) \approx f(x)\,h$. Near $x = 2$, a claim within 0.1 of it has probability about $0.25 \times 0.1 = 0.025$.
+- Because it is a rate, a density can exceed 1: $\text{Uniform}(0, 0.5)$ has $f(x) = 2$.
+- Going the other way, the density is the slope of the CDF. Differentiating $F(x) = x^2/16$ gives back $f(x) = x/8$.
+
+## Means are integrals
+
+Expectations replace sums with integrals: $E[g(X)] = \int g(x)\,f(x)\,dx$ (see [[Expected Value]] and [[Moment]]). For the claim size:
+
+> $$
+> \begin{align*}
+> E[X] &= \int_0^4 x \cdot \frac{x}{8}\,dx \\
+>      &= \frac{64}{24} \\
+>      &\approx 2.667
+> \end{align*}
+> $$
+
+For $X \ge 0$ the survival shortcut $E[X] = \int_0^\infty [1 - F(x)]\,dx$ often avoids integration by parts. Here it gives $\int_0^4 \left(1 - \frac{x^2}{16}\right) dx = 4 - \frac{4}{3} \approx 2.667$, the same mean.
+
+## When a payment is not continuous
+
+Insurance payments are often **mixed**. A continuous loss passed through a [[Deductible]] or a [[Benefit Limit|limit]] produces a [[Payment Random Variable|payment]] with a point mass at 0 or at the limit, which is neither purely discrete nor purely continuous.
+
+- With a deductible of 1 on the claim above, the payment $Y = (X - 1)_+$ is 0 whenever $X \le 1$. So $P(Y = 0) = F(1) = 0.0625$.
+- A single value carries probability, so $Y$ is not continuous. Its mean needs the mass and the integral together. See [[Random Variable]].
+
+> [!trap] A density alone misses the mass
+> Writing $Y$'s density as $f(x+1)$ and integrating from 0 accounts for only $1 - 0.0625$ of the probability. The rest sits at $Y = 0$. Ask for $P(Y = 0)$ separately whenever a payment has a deductible or a limit.
+
+## Two or more continuous variables
+
+With two or more continuous variables, the same calculations run on a [[Joint Probability Density Function]].
+
+- Probabilities, marginals and moments become double integrals. The work is setting up the [[Region of Integration]].
+- A linear combination of independent *normal* variables is exactly normal. Exam P singles this case out in [[Probabilities for Linear Combinations]].
+
+## Try it
 
 > [!example]- Normalising a Claim-Size Density {Example}
 > A claim size $X$ (in \$000s) has density $f(x) = c(10 - x)$ for $0 < x < 10$. Find $c$, $P(X > 4)$ and $E[X]$.
 >
 > > [!answer]-
+> > **Plan:** use the total area of 1 to find $c$, then integrate over the interval and integrate $x f(x)$.
+> >
 > > The density must integrate to 1:
 > > $$
 > > \begin{align*}
@@ -59,12 +117,14 @@ A **Continuous Random Variable** $X$ is a [[Random Variable]] whose [[Cumulative
 > >      &= 3.33
 > > \end{align*}
 > > $$
-> > The mean claim is about \$3,333 and 36% of claims exceed \$4,000. $P(X \ge 4)$ is the same $0.36$ — the endpoint carries no probability.
+> > The mean claim is about \$3,333 and 36% of claims exceed \$4,000. $P(X \ge 4)$ is the same $0.36$, because the endpoint carries no probability.
 
 > [!example]- A Deductible Creates a Point Mass {Example}
 > A loss $X$ is uniform on $(0, 1{,}000)$. The policy pays $Y = \max(X - 200,\ 0)$. Find $P(Y = 0)$, $P(Y \le 300)$ and $E[Y]$, and decide whether $Y$ is continuous.
 >
 > > [!answer]-
+> > **Plan:** translate each event about $Y$ into an event about $X$, then integrate the payment over the losses that produce one.
+> >
 > > The policy pays nothing whenever the loss is below the deductible:
 > > $$
 > > \begin{align*}
@@ -86,4 +146,10 @@ A **Continuous Random Variable** $X$ is a [[Random Variable]] whose [[Cumulative
 > >      &= 320
 > > \end{align*}
 > > $$
-> > The expected payment per loss is \$320. Integrating a density alone would miss the 20% of probability sitting at zero — which is why exam questions ask for $P(Y = 0)$ separately.
+> > The expected payment per loss is \$320. The mass at zero adds nothing to the mean, but it holds 20% of the probability. That is why exam questions ask for $P(Y = 0)$ separately.
+
+> [!warning]- Exam traps
+> - **Treating a density value as a probability.** $f(x)$ can exceed 1. Only an area under $f$ is a probability.
+> - **Worrying about endpoints.** For a continuous variable, $<$ and $\le$ give the same answer. Carry that habit to a discrete or mixed variable and it fails.
+> - **Calling a payment continuous.** A deductible or a limit puts a point mass on a continuous loss. Check $P(Y = 0)$ and $P(Y = u)$ before integrating.
+> - **Forgetting the limits of the density.** Integrate only over the range where $f(x) > 0$. Integrating $x/8$ past 4 gives an area greater than 1.

@@ -2,114 +2,152 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-11-04
+  last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:80899b917b02545239777515bf2319256c5cb0eae6105ae65c5e57353f4870e4
+  content_hash: sha256:70482dceffb141a33785c129072071f7c4c0138827324c9eed8e10ef648db56d
   sources:
-    - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05), §VI Deductibles: losses below 500 pay nothing, 2000 loss pays 1500, claim payments reduced by the amount of the deductible (PDF p.7), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf"
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed., 2016), Ch.6 Leveraged Effect of Limits on Severity Trend, Table 6.20-6.21: trend on excess losses greater than the total limits trend, a claim below the limit pierces into the layer; deductibles also have a leveraging effect on severity trend, censoring below the deductible (pp.117-118, PDF pp.129-130); Ch.11 percentage deductible as % of coverage amount, 5% of 500,000 = 25,000 (p.199, PDF p.211), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
-    - "Siegrist, §3.1 Definitions and Basic Properties (Expected Value), conditional expected value E(X | A) computed with the conditional density given A, P(A) > 0, sha256:3228c869ff2a03804690236fc072d1cf7bd9b040855c67156791b50e7d3cfba9 — https://www.randomservices.org/random/expect/Properties.html"
-    - "Siegrist, The Exponential Distribution, The Memoryless Property: the conditional distribution of X - s given X > s is the distribution of X, sha256:db0eebaa01377dfc5e07ca838f9ae6c3b06b9653e6d10032de301cb07c4aad63 — https://www.randomservices.org/random/poisson/Exponential.html"
-    - "SOA Probability Exam (Exam P) syllabus, November 2026, Topic 2 Univariate Random Variables, learning outcomes e-f (PDF p.3), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
-  open_findings: 0
+    - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05), §VI Deductibles: losses below 500 pay nothing, 2000 loss pays 1500 (PDF p.7), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf"
+    - "Frees et al., Loss Data Analytics (open text), Ch.3 Modeling Loss Severity, §3.4.1 ordinary deductible Y^L, Y^P, E(Y^L) = int_d^inf S(x) dx, E(Y^P) = E(Y^L)/(1 - F(d)), LER, exponential memoryless per payment, sha256:263021bf543b04b2881284b38b7dcbd0586b78daec371b88a1eefcd362dff732 — https://openacttexts.github.io/Loss-Data-Analytics/ChapSeverity.html"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. 2016), Ch.6 deductibles leverage severity trend PDF p.130; Ch.11 flat dollar vs percentage deductibles, 5% of 500,000 = 25,000 PDF p.211; Large Deductible Policies PDF pp.315-316, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Siegrist, Random: Additional Properties of Expected Value, §3.2 E(X) = int_0^inf P(X > x) dx; E(N) = sum P(N > n), sha256:80150b157fee54ddfea427e726a32493121464235644d38eec5997fdd9ca7321 — https://www.randomservices.org/random/expect/Properties2.html"
+    - "Siegrist, Random: The Exponential Distribution, memoryless property, sha256:db0eebaa01377dfc5e07ca838f9ae6c3b06b9653e6d10032de301cb07c4aad63 — https://www.randomservices.org/random/poisson/Exponential.html"
+    - "SOA Exam FAM syllabus, October 2026, coverage modifications, loss elimination ratio, effect of inflation, PDF p.2, sha256:90172025d8bd9d69e18e974fdee447963e54258e5f0e419aa3ef5b7d3e55a00e — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-fam-syllabus.pdf"
+    - "SOA Exam ASTAM syllabus, Fall 2026, coverage modifications; loss elimination ratios, deductible factors, PDF p.3, sha256:6d462aea25c09b15cc457176ecf2d5d6143df8fb88df9f366557de17ec1ec9ba — https://www.soa.org/globalassets/assets/files/edu/2026/astam/2026-fall-exam-astam-syllabus.pdf"
+    - "CAS DISC-IA course outline, Applying Property Insurance Limits and Deductibles; BPP Limits of Insurance and Deductible (p.2), sha256:e9ce8e88d95d49d9154b6aac841f04fec43c68392171d59ca1fca10b058dd50b — https://www.casact.org/sites/default/files/2022-12/DISC_IA.pdf"
+    - "Insurance Information Institute, Background on hurricane and windstorm deductibles, hurricane deductibles as a percentage of the insured amount (fetched 2026-11-06), sha256:52981481de3c2bf0f72dcea6596cca4306978a7437f22101912a636823c5e505 — https://www.iii.org/article/background-on-hurricane-and-windstorm-deductibles"
+    - "CAS Exam 7 content outline, Fall 2026, Siewert, A Model for Reserving Workers Compensation High Deductibles (A.ii.3), PDF pp.4-5, sha256:be1833c4f35a9344e33b1c48336dca9724d6556890997b3d8715f9de709ca5ed — https://www.casact.org/sites/default/files/2026-03/Exam_7_CO_2026_Fall.pdf"
+    - "SOA Probability Exam (Exam P) syllabus, November 2026, Topic 2 outcomes e-f, PDF p.3, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Deductible.md
 ---
 
-A **Deductible** is the initial amount of a loss that the policyholder must pay before insurance coverage begins.
+A **Deductible** $d$ is the part of each loss that the policyholder pays before the insurer pays anything.
 
-> $$Y = (X - d)_+$$
+> $$Y = \max(X - d,\ 0) = (X - d)_+$$
 
-> $$= \max(X - d,\ 0)$$
-
-- where $d$ is the deductible, $X$ the ground-up loss and $Y$ the insurer's payment
-- If the loss $X$ is less than or equal to the deductible $d$, the insurer pays nothing; above $d$ it pays the excess $X - d$
-- A deductible removes the expense of processing small claims, lowers the premium, and gives the insured an economic incentive to prevent losses
-- On Exam 5, a deductible is stated either as a flat dollar amount or as a percentage of the coverage amount: a 5% deductible on a home insured for \$500,000 is equivalent to a flat \$25,000 deductible
+- $X$ is the ground-up loss and $Y$ is the insurer's payment on that loss.
+- The policyholder keeps the rest, $\min(X, d)$, written $X \wedge d$.
 
 > [!idea] The idea
-> A deductible makes the insured pay the first $d$ of every loss, so losses below $d$ cost the insurer nothing and larger ones cost it $d$ less. Each extra dollar of deductible reduces the insurer's payment only on losses that exceed it, so the first dollars of deductible reduce the expected payment the most.
+> The policyholder absorbs the first $d$ of every loss. Small losses never reach the insurer, and large ones reach it $d$ smaller.
 
 ![[Media/Figures/Deductible.svg|340]]
 
-### The retained part and the expected payment
+## One loss at a time
 
-Under an ordinary deductible $d$ the loss splits in two: the part the policyholder keeps (is not reimbursed for) is the loss capped at the deductible, $\min(X, d) = X \wedge d$, and the insurer pays the excess $(X - d)_+$.
+Take a policy with a deductible of 200.
+
+| Loss $X$ | Policyholder keeps $X \wedge 200$ | Insurer pays $(X - 200)_+$ |
+|---|---|---|
+| 50 | 50 | 0 |
+| 200 | 200 | 0 |
+| 350 | 200 | 150 |
+| 900 | 200 | 700 |
+
+The two columns always add back to the loss. That split is the key fact of the page.
 
 > $$X = (X \wedge d) + (X - d)_+$$
 
-- The mean of the retained part is the [[Limited Expected Value|limited expected value]] $E[X \wedge d]$, so the insurer's expected payment per loss is the expected loss less the limited expected value.
+## Averaging over many losses
+
+Now let the loss be uniform on $(0, 1000)$, so $E[X] = 500$. What does the insurer expect to pay on a loss?
+
+Taking the mean of both sides of the split shows the insurer's expected payment is the expected loss less what the policyholder keeps.
 
 > $$E[(X - d)_+] = E[X] - E[X \wedge d]$$
 
-- For a continuous loss with density $f$, the expected payment integrates only where the payment is positive, because losses below $d$ contribute nothing. For a nonnegative loss with survival function $S(x) = 1 - F(x)$, it also equals the integral of $S$ above $d$.
+- $E[X \wedge d]$ is the [[Limited Expected Value|limited expected value]]. For this loss, $E[X \wedge 200] = 180$.
+- The insurer's expected payment is $500 - 180 = 320$.
 
-> $$E[(X - d)_+] = \int_d^\infty (x - d)\,f(x)\,dx$$
+A second route skips the limited expected value. For a nonnegative loss, the expected payment is the area under the survival function $S(x) = 1 - F(x)$ to the right of $d$.
 
 > $$E[(X - d)_+] = \int_d^\infty S(x)\,dx$$
 
-- For a discrete loss with probability function $p(x)$, the payment sums over the loss amounts above $d$, and the retained part takes each amount below $d$ at its value and every other at $d$.
+- For the uniform loss, $\int_{200}^{1000} \left(1 - \frac{x}{1000}\right) dx = 320$.
+
+## Per loss or per payment?
+
+The 320 above averages over every loss, including the 20% that pay nothing. An insurer looking only at the claims it actually pays sees a larger average.
+
+> $$E[X - d \mid X > d] = \frac{E[(X - d)_+]}{P(X > d)}$$
+
+- For the uniform loss, $320 / 0.8 = 400$.
+- Both numbers are correct answers to different questions. Exam questions say "per loss" or "per payment", and the options usually include both.
+
+## Why the first dollars matter most
+
+Raising the deductible by one dollar reduces the payment by one dollar, but only on losses that exceed $d$. So the expected payment falls at the rate $P(X > d)$.
+
+| Deductible | Expected payment per loss | Saved by the last 200 |
+|---|---|---|
+| 0 | 500 | |
+| 200 | 320 | 180 |
+| 400 | 180 | 140 |
+| 600 | 80 | 100 |
+
+Each 200 of deductible saves less than the one before, because fewer losses reach it.
+
+## A fixed deductible under inflation
+
+If every loss rises 10% and the deductible stays at 200, the loss becomes uniform on $(0, 1100)$. The expected payment rises from 320 to about 368.18, which is 15%, not 10%.
+
+- A loss already above the deductible grows by $0.1X$, but the payment $X - d$ is smaller than $X$, so the payment grows by more than 10%.
+- Some losses just under 200 are pushed over it and start to pay.
+
+> [!trap] Multiplying by $1 + r$
+> With the deductible fixed, scaling the old expected payment by $1 + r$ gives too low an answer. Inflate the loss distribution first, then apply the deductible.
+
+## Discrete losses
+
+When the loss takes a few values, the integrals become sums. Take a loss of 0, 100, 400 or 1,000 with probabilities 0.4, 0.3, 0.2 and 0.1, so $E[X] = 210$, and a deductible of 200.
 
 > $$E[(X - d)_+] = \sum_{x > d} (x - d)\,p(x)$$
 
-> $$E[X \wedge d] = \sum_{x < d} x\,p(x) + d\,P(X \geq d)$$
+> $$E[X \wedge d] = \sum_{x < d} x\,p(x) + d\,P(X \ge d)$$
 
-- Some policies pay per event above $d$ events, with $d$ a whole number. For such a count $N$ taking the values $0, 1, 2, \ldots$, the capped count also has a tail-sum form, $E[\min(N, d)] = \sum_{k=0}^{d-1} P(N > k)$:
+- The insurer pays $0.2 \times 200 + 0.1 \times 800 = 120$.
+- The policyholder keeps $0.3 \times 100 + 200 \times 0.3 = 90$. The second term counts every loss of 200 or more at the deductible.
+- The two add back to 210.
+- Between two possible loss amounts, the expected payment is a straight line in $d$ with slope $-P(X > d)$. It bends at each possible loss amount.
 
-> $$E[N \wedge d] = \sum_{k=0}^{d-1} [1 - F(k)]$$
+Some policies pay per event above $d$ events. For a count $N$ taking the values $0, 1, 2, \ldots$, the capped count is a sum of tail probabilities.
 
-- As a function of $d$, the expected payment $E[(X - d)_+]$ is continuous and decreasing, with slope $-P(X > d)$. For a discrete loss it is piecewise linear in $d$, the slope changing at each possible loss amount.
-- To find the deductible that gives a target expected payment on a discrete loss, solve piecewise: assume $d$ lies between two consecutive loss amounts, keep only the losses above it, solve for $d$, and check that the answer lies in the assumed range. If it doesn't, reject that case and try the next range.
+> $$E[N \wedge d] = \sum_{k=0}^{d-1} P(N > k)$$
 
-> [!example]- Choosing a Deductible for a Target Expected Payment {Example}
-> A loss is $0$, $100$, $400$ or $1{,}000$ with probabilities $0.4$, $0.3$, $0.2$ and $0.1$. Find the deductible $d$ that makes the expected payment per loss $100$.
+## On other exams
+
+The same deductible appears on later exams, stated in the policy's own terms.
+
+- **FAM, MAS-I and ASTAM** add the [[Loss Elimination Ratio|loss elimination ratio]], $E[X \wedge d] / E[X]$, and the effect of a deductible on how many losses become payments.
+- **Exam 5 and the DISCs** state a deductible as a percentage of the coverage amount. A 5% deductible on a home insured for \$500,000 is a flat \$25,000, whatever the size of the loss.
+- **Exam 6C and the DISCs** settle claims under a per-occurrence deductible, an annual aggregate deductible, or both, and with a limit.
+- **Exam 5 and Exam 7** price and reserve large deductible policies. The rating procedure is on [[Deductible Rating]].
+
+## Try it
+
+> [!example]- Exponential losses {Example}
+> Losses are exponential with mean 1,000 and the deductible is 200. Find the expected payment per loss and per payment.
 >
 > > [!answer]-
-> > Plan: guess the range of $d$, keep only the losses above it, solve, then check the range.
+> > **Plan:** integrate the survival function above 200.
+> > $$E[(X - 200)_+] = \int_{200}^\infty e^{-x/1000}\,dx = 1000\,e^{-0.2} \approx 818.73$$
+> > Dividing by $P(X > 200) = e^{-0.2}$ gives 1,000 per payment. The [[Exponential Distribution|exponential distribution]] is memoryless, so the excess has the same mean as the loss.
+
+> [!example]- Solving for the deductible {Example}
+> A loss is 0, 100, 400 or 1,000 with probabilities 0.4, 0.3, 0.2 and 0.1. Find the deductible that makes the expected payment per loss 100.
+>
+> > [!answer]-
+> > **Plan:** guess which losses exceed $d$, solve, then check the guess.
 > >
-> > Case $0 \leq d < 100$: all three positive losses exceed $d$.
-> > $$
-> > \begin{align*}
-> > 0.3(100 - d) + 0.2(400 - d) + 0.1(1{,}000 - d) &= 210 - 0.6d \\
-> > 210 - 0.6d &= 100 \\
-> > d &= 183.3
-> > \end{align*}
-> > $$
-> > That is not below $100$, so reject this case.
+> > If $d < 100$, all three positive losses pay, and $210 - 0.6d = 100$ gives $d = 183.3$. That is not below 100, so the guess is wrong.
 > >
-> > Case $100 \leq d < 400$: only $400$ and $1{,}000$ exceed $d$.
-> > $$
-> > \begin{align*}
-> > 0.2(400 - d) + 0.1(1{,}000 - d) &= 180 - 0.3d \\
-> > 180 - 0.3d &= 100 \\
-> > d &= 266.67
-> > \end{align*}
-> > $$
-> > It lies in $[100, 400)$, so $d = 266.67$. The slope in this range is $-0.3$, which equals $-P(X > d)$. Each extra unit of deductible therefore reduces the insurer's expected payment by $0.3$.
-
-> [!example]- Expected Payment with an Ordinary Deductible {Example}
-> Ground-up losses $X \sim \text{Exponential}(\theta = 1000)$. An ordinary deductible of $d = 200$ applies. Find $E[Y]$ where $Y = (X - 200)_+$.
->
-> > [!answer]-
-> > For an exponential distribution, the expected payment with deductible $d$ is:
-> > $$E[Y] = E[(X-d)_+] = \theta\, e^{-d/\theta} = 1000\, e^{-200/1000} = 1000\, e^{-0.2} \approx 818.73$$
-> > The insurer expects to pay approximately \$818.73 per loss (including the zero payments when $X \leq 200$).
-
-> [!example]- Insurer Payment at Different Loss Levels {Example}
-> Under a policy with a \$$500$ deductible, what does the insurer pay on losses of \$$300$ and \$$2{,}000$?
->
-> > [!answer]-
-> > - For a \$$300$ loss: $(300 - 500)^+ = 0$. The insurer pays nothing.
-> > - For a \$$2{,}000$ loss: $(2000 - 500)^+ = 1500$. The insurer pays \$$1{,}500$.
-
-> [!tip]- How it appears on the exam
-> - **Exam P** (Univariate Random Variables, outcomes 5–6): given a loss distribution (uniform, exponential, a table) and an ordinary deductible, calculate the payment, its expected value or variance, or the deductible that produces a target expected payment. A [[Coinsurance Percentage|coinsurance percentage]], a [[Benefit Limit|benefit limit]] or [[Inflation|inflation]] often appears in the same question.
-> - **FAM, MAS-I and ASTAM**: coverage modifications. These questions ask for the expected payment per loss and per payment, the [[Loss Elimination Ratio|loss elimination ratio]], the effect of inflation on a fixed deductible, and the frequency and aggregate payments once a deductible applies.
-> - **Exam 5**: pricing large deductible policies. The rating procedure is on [[Deductible Rating]], this page's namesake. **Exam 7**: reserving for high per-occurrence deductible workers compensation, using limited and unlimited development factors.
-> - **The DISCs and Exam 6C**: settling a claim under the policy wording. The questions cover a percentage (hurricane) deductible, a per-occurrence deductible beside an annual aggregate one, and how the deductible interacts with the limit.
+> > If $100 \le d < 400$, only 400 and 1,000 pay.
+> > $$0.2(400 - d) + 0.1(1000 - d) = 180 - 0.3d = 100$$
+> > This gives $d = 266.67$, which is inside the range.
 
 > [!warning]- Exam traps
-> - **Per loss or per payment.** $E[(X - d)_+]$ averages over every loss, zeros included. The expected payment *per payment* divides it by $P(X > d)$. In the exponential example the per-loss answer is $818.73$ and the per-payment answer is $1{,}000$. A question that offers both expects you to read which one it asks for.
-> - **The capped term dropped.** $E[X \wedge d]$ needs $d\,P(X \geq d)$ added to the sum (or integral) below $d$. Leaving it out gives a limited expected value that is too small, and an expected payment $E[X] - E[X \wedge d]$ that is too large.
-> - **A percentage of the loss instead of the coverage amount.** A 5% deductible on a home insured for $\$500{,}000$ is $\$25{,}000$ whatever the loss. Taking 5% of a $\$40{,}000$ loss, which gives $\$2{,}000$, understates what the insured keeps.
-> - **Inflation scaled straight through.** With the deductible fixed, inflating every loss by $r$ raises the expected payment by more than $r$. The payment on a loss that already exceeds the deductible grows by $rX$, which is more than $r(X - d)$, and losses just under the deductible start to pay. Multiplying the old expected payment by $1 + r$ therefore gives too low an answer.
+> - **Per loss or per payment.** Read which one is asked.
+> - **Dropping the capped term.** $E[X \wedge d]$ includes $d \cdot P(X \ge d)$, not just the losses below $d$.
+> - **Scaling by inflation.** Inflate the losses, then apply the deductible.
+> - **A percentage of the loss instead of the coverage.** A 5% deductible on a \$500,000 home is \$25,000. Taking 5% of a \$40,000 loss understates what the insured keeps.

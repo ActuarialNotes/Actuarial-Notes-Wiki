@@ -79,3 +79,49 @@ created: 2026-09-28
 - checks_run: diff only (wording pass, 94c30f2a): idea card's new opening (large losses rare but can cost the insurer far more than the typical loss) read in P-21-05 §VI p.8 (losses in excess of 1 million are rare events; a limit lessens the risk assumed and keeps payments within the insurer's financial capacity) and its car example (15,000 loss at 0.02 vs expected payment 650, p.8); new bullet 'raising the limit by a dollar increases the expected payment only by the probability the payment reaches the limit' moved from the old card, d/du int_0^u S = S(u) (Siegrist §3.2 tail form); P-21-05 health example 0.8 x min(6000,5000) = 4000 vs 4800 unchanged; 'two orders give the same payment' = 'agree'; d + u/alpha = 2,200 trap and moment split unchanged
 - sources_checked: Anderson & Brown, Risk and Insurance (SOA study note P-21-05), §VI Benefit limits: upper bound on how much the insurer will pay for any loss; losses in excess of 1 million are rare events (PDF p.8), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf; SOA Probability Exam (Exam P) syllabus, November 2026, Topic 2 Univariate Random Variables, learning outcomes e-f (PDF p.3), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf; Siegrist, §3.2 Additional Properties, Right Distribution Function: E(X) = int_0^inf P(X > x) dx for nonnegative X, sha256:80150b157fee54ddfea427e726a32493121464235644d38eec5997fdd9ca7321 — https://www.randomservices.org/random/expect/Properties2.html
 - note: Wording pass: the new opening is supported by P-21-05 p.8. No findings.
+
+## [C-006] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-11-06T18:02Z/0389
+- date: 2026-11-06
+- status_set: verified
+- confidence: high
+- checks_run: Recomputed in python before comparing (scipy quad / closed forms): uniform(0,1000) limit 600: P(Y=600) = 0.4; E[X^600] = 180 + 240 = 420; second moment 72,000 + 144,000 = 216,000, Var 39,600; LEV table 180/320/420/480/500 and increments 140/100/60/20; layer 200-600: 420 - 180 = 240; d=200, alpha=0.5, u=1000 -> 2,200; P-21-05 health 0.8 x min(6000,5000) = 4000 vs min(4800,5000) = 4800. Try-its: 1000(1 - e^-2) = 864.66, e^-2 = 0.1353; discrete 600 (700 unlimited, removes 100); uniform(0,4000): E[X^2200] = 1595, E[X^200] = 195, 0.5 x 1400 = 700 (direct integration also 700), P(X>2200) = 0.45. All agree. Definitions/formulas vs P-21-05 pp.8-9 and LDA §3.4.2-3.4.3; SOA Q50/Q243 wording (2026-05 questions PDF). Exam 5 bullets vs W&M pp.113-114 (WC min/max weekly indemnity as % of SAWW) and pp.129-130 (limits dampen severity trend). Links resolve.
+- sources_checked: Anderson & Brown, Risk and Insurance (SOA study note P-21-05), §VI Benefit limits: upper bound on how much the insurer will pay for any loss; losses in excess of 1 million are rare (PDF p.8); health policy 80% of the lesser of 5000 and cost, 6000 -> 4000; maximum claim payment 12,500 (PDF p.9), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf; Frees et al., Loss Data Analytics (open text), Ch.3 Modeling Loss Severity, §3.4.2 X^u right censored, Pr(Y = u) = 1 - F(u), E[(X^u)^k] = int_0^u x^k f + u^k(1 - F(u)) = int_0^u k x^(k-1) S(x) dx; §3.4.3 coinsurance with limit, sha256:263021bf543b04b2881284b38b7dcbd0586b78daec371b88a1eefcd362dff732 — https://openacttexts.github.io/Loss-Data-Analytics/ChapSeverity.html; Werner & Modlin, Basic Ratemaking (CAS, 5th ed. 2016), Ch.4 workers compensation minimum and maximum indemnity benefit as % of SAWW PDF pp.113-114; Ch.6 Leveraged Effect of Limits on Severity Trend, 10% dampened to 3.5% PDF pp.129-130, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf; SOA Exam P Sample Questions (2026-05 edition), Q50 (benefit limit of 10, PDF p.23), Q243 (benefit subject to a limit of 100, PDF p.102), sha256:24980e6de9cc0a68f13ac33b0ab4b18ad8ebb54d42d1afe08eed8bebb212cf06 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-questions.pdf; SOA Probability Exam (Exam P) syllabus, November 2026, Topic 2 outcome on deductibles, coinsurance, benefit limits, PDF p.3, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf; SOA, Tables for Exam C (Fall 2009), A.3.3.1 exponential E[X^x] PDF p.11, sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf
+- note: Full re-pass of the rewritten page; no findings.
+
+## [F-002] 'With no coinsurance the two orders give the same payment' fails when there is a deductible
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-11-06T18:02Z/0389
+- date: 2026-11-06
+- severity: minor
+- status: open
+- locus: With a deductible and coinsurance, last paragraph, closing sentence
+- claim: With no coinsurance the two orders give the same payment.
+- evidence: Loss Data Analytics Ch.3 §3.4.3 (ChapSeverity.html, sha256:263021bf...) defines the covered-loss cap as a maximum covered loss u on the ground-up loss: Y^L = alpha[(X^u) - (X^d)], maximum payment alpha(u - d). With alpha = 1 and a deductible this differs from the page's payment cap min((X - d)+, u): d = 500, u = 10,000, X = 20,000 gives 9,500 vs 10,000 (recomputed). P-21-05's health example (PDF p.9), the only illustration the paragraph cites, has no deductible, so it supports equality only when d = 0. The sentence holds only under the reading where the cap applies to the excess over the deductible, which the paragraph does not state. Reported by the main session from the same claim found false on Policy Information.
+- source_rank: 3
+- proposed_action: Delete the sentence (done). Optionally an author restates it as 'With no coinsurance and no deductible, ...'. The trap 'A cap on the covered loss pays at most alpha u' assumes the cap is on the excess over the deductible; under LDA's maximum-covered-loss convention the most is alpha(u - d). An author may want to say which convention the page means.
+- applied: true
+- fingerprint: 2ec256745a06
+
+## [F-002/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-11-06T18:02Z/0389
+- date: 2026-11-06
+- resolves: F-002
+- status: resolved
+- note: Deleted 'With no coinsurance the two orders give the same payment.' The sentence is false when there is a deductible under LDA's maximum-covered-loss convention (9,500 vs 10,000). No replacement prose written. The trap bullet on alpha u is left in place, with the convention question noted in F-002's proposed_action.
+
+## [C-007] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-11-06T18:02Z/0389
+- date: 2026-11-06
+- status_set: verified
+- confidence: medium
+- checks_run: Diff-only re-pass after deleting one sentence (F-002). Recomputed d=500, u=10,000, X=20,000: min(X,u) - d = 9,500 vs min(X - d, u) = 10,000, which agrees with LDA §3.4.3 (max payment alpha(u - d)). The rest of the page is unchanged from this run's earlier verified pass, with the same sources and recomputations.
+- sources_checked: Anderson & Brown, Risk and Insurance (SOA study note P-21-05), §VI Benefit limits: upper bound on how much the insurer will pay for any loss; losses in excess of 1 million are rare (PDF p.8); health policy 80% of the lesser of 5000 and cost, 6000 -> 4000; maximum claim payment 12,500 (PDF p.9), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf; Frees et al., Loss Data Analytics (open text), Ch.3 Modeling Loss Severity, §3.4.2 X^u right censored, Pr(Y = u) = 1 - F(u), E[(X^u)^k] = int_0^u x^k f + u^k(1 - F(u)) = int_0^u k x^(k-1) S(x) dx; §3.4.3 coinsurance with limit, sha256:263021bf543b04b2881284b38b7dcbd0586b78daec371b88a1eefcd362dff732 — https://openacttexts.github.io/Loss-Data-Analytics/ChapSeverity.html; Werner & Modlin, Basic Ratemaking (CAS, 5th ed. 2016), Ch.4 workers compensation minimum and maximum indemnity benefit as % of SAWW PDF pp.113-114; Ch.6 Leveraged Effect of Limits on Severity Trend, 10% dampened to 3.5% PDF pp.129-130, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf; SOA Exam P Sample Questions (2026-05 edition), Q50 (benefit limit of 10, PDF p.23), Q243 (benefit subject to a limit of 100, PDF p.102), sha256:24980e6de9cc0a68f13ac33b0ab4b18ad8ebb54d42d1afe08eed8bebb212cf06 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-questions.pdf; SOA Probability Exam (Exam P) syllabus, November 2026, Topic 2 outcome on deductibles, coinsurance, benefit limits, PDF p.3, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf; SOA, Tables for Exam C (Fall 2009), A.3.3.1 exponential E[X^x] PDF p.11, sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf
+- note: Verified. Medium because the 'covered loss' cap in the paragraph and the trap is still not tied to a convention (see F-002's proposed_action); every remaining statement holds under the page's own reading.

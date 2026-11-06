@@ -1,130 +1,164 @@
 # Exemplar: a concept page in the full shape
 
-`Concepts/Bornhuetter-Ferguson Method.md`, rewritten to the skill's shape. The
-substance is the existing page's; what changed is where the explanation sits
-and how the examples are written. Notes on each part follow the page.
-
-Every number below was recomputed in code. (The vault page rounds BF for AY A to
-$9,256,000; the exact figure is $9,256,250.)
+`Concepts/Deductible.md`, rewritten in the teaching style the maintainer chose
+on 2026-11-06. Every number below was recomputed in code. Notes on each part
+follow the page. (`Concepts/Conditional Probability.md`, `Bayes Theorem.md`,
+`Poisson Distribution.md` and `Order Statistics.md` were written at the same
+time and are good second models.)
 
 ````markdown
-**Bornhuetter-Ferguson Method** (BF) estimates ultimate losses by adding to what has actually been reported an estimate of what has *not* — computed from an a priori expectation and the percentage still unreported.
+A **Deductible** $d$ is the part of each loss that the policyholder pays before the insurer pays anything.
 
-> $$U_{\text{BF}} = C + \left(1 - \tfrac{1}{\text{CDF}}\right) \times U_{0}$$
+> $$Y = \max(X - d,\ 0) = (X - d)_+$$
 
-> $$\text{IBNR} = \left(1 - \tfrac{1}{\text{CDF}}\right) \times \text{ELR} \times \text{EP}$$
-
-- where $C$ is reported (or paid) losses to date, $U_0 = \text{ELR} \times \text{EP}$ the a priori expected losses, and $1 - 1/\text{CDF}$ the percentage unreported from the [[Development Triangle|development pattern]].
-- Compared with the [[Chain Ladder Method|chain ladder]]: the chain ladder multiplies the whole diagonal by the CDF; BF leaves the diagonal alone and estimates only the gap.
-- BF is a [[Credibility|credibility]] weighting in disguise: $U_{\text{BF}} = Z\,U_{\text{CL}} + (1-Z)\,U_0$ with $Z = 1/\text{CDF}$, so it leans on the data more as the year matures, and converges to the chain ladder.
-- Its assumption is a sound a priori. An ELR not brought to current [[Rate Level Change|rate level]] and [[Loss Trend|trend]] biases the reserve every year without ever looking unstable; the [[Cape Cod Method|Cape Cod]] method derives the ELR from the data instead.
-- The [[Benktander Method]] iterates BF, feeding BF's ultimate back in as the a priori.
+- $X$ is the ground-up loss and $Y$ is the insurer's payment on that loss.
+- The policyholder keeps the rest, $\min(X, d)$, written $X \wedge d$.
 
 > [!idea] The idea
-> Trust what has already been reported, and only *estimate* what hasn't. BF fills the gap with expected losses, so the IBNR doesn't depend on what has been reported at all — and one large early claim moves the ultimate by exactly that claim, not by the CDF times it.
+> The policyholder absorbs the first $d$ of every loss. Small losses never reach the insurer, and large ones reach it $d$ smaller.
 
-> [!trap] Reported is not unreported
-> The IBNR factor is $1 - 1/\text{CDF}$, the share *still to come*. Multiplying the a priori by $1/\text{CDF}$ instead gives the losses expected to have been reported by now — not the ones still to come.
+![[Media/Figures/Deductible.svg|340]]
 
-![[Media/Figures/Bornhuetter-Ferguson_Method.svg|340]]
+## One loss at a time
 
-> [!example]- BF Ultimate at 12 Months {Example}
-> AY 2023: earned premium $\$2{,}000{,}000$, a priori ELR $65\%$, reported losses $\$600{,}000$, reported $\text{CDF}_{12} = 1.896$.
->
-> Find the BF IBNR and ultimate.
+Take a policy with a deductible of 200.
+
+| Loss $X$ | Policyholder keeps $X \wedge 200$ | Insurer pays $(X - 200)_+$ |
+|---|---|---|
+| 50 | 50 | 0 |
+| 200 | 200 | 0 |
+| 350 | 200 | 150 |
+| 900 | 200 | 700 |
+
+The two columns always add back to the loss. That split is the key fact of the page.
+
+> $$X = (X \wedge d) + (X - d)_+$$
+
+## Averaging over many losses
+
+Now let the loss be uniform on $(0, 1000)$, so $E[X] = 500$. What does the insurer expect to pay on a loss?
+
+Taking the mean of both sides of the split shows the insurer's expected payment is the expected loss less what the policyholder keeps.
+
+> $$E[(X - d)_+] = E[X] - E[X \wedge d]$$
+
+- $E[X \wedge d]$ is the [[Limited Expected Value|limited expected value]]. For this loss, $E[X \wedge 200] = 180$.
+- The insurer's expected payment is $500 - 180 = 320$.
+
+A second route skips the limited expected value. For a nonnegative loss, the expected payment is the area under the survival function $S(x) = 1 - F(x)$ to the right of $d$.
+
+> $$E[(X - d)_+] = \int_d^\infty S(x)\,dx$$
+
+- For the uniform loss, $\int_{200}^{1000} \left(1 - \frac{x}{1000}\right) dx = 320$.
+
+## Per loss or per payment?
+
+The 320 above averages over every loss, including the 20% that pay nothing. An insurer looking only at the claims it actually pays sees a larger average.
+
+> $$E[X - d \mid X > d] = \frac{E[(X - d)_+]}{P(X > d)}$$
+
+- For the uniform loss, $320 / 0.8 = 400$.
+- Both numbers are correct answers to different questions. Exam questions say "per loss" or "per payment", and the options usually include both.
+
+## Why the first dollars matter most
+
+Raising the deductible by one dollar reduces the payment by one dollar, but only on losses that exceed $d$. So the expected payment falls at the rate $P(X > d)$.
+
+| Deductible | Expected payment per loss | Saved by the last 200 |
+|---|---|---|
+| 0 | 500 | |
+| 200 | 320 | 180 |
+| 400 | 180 | 140 |
+| 600 | 80 | 100 |
+
+Each 200 of deductible saves less than the one before, because fewer losses reach it.
+
+## A fixed deductible under inflation
+
+If every loss rises 10% and the deductible stays at 200, the loss becomes uniform on $(0, 1100)$. The expected payment rises from 320 to about 368.18, which is 15%, not 10%.
+
+- A loss already above the deductible grows by $0.1X$, but the payment $X - d$ is smaller than $X$, so the payment grows by more than 10%.
+- Some losses just under 200 are pushed over it and start to pay.
+
+> [!trap] Multiplying by $1 + r$
+> With the deductible fixed, scaling the old expected payment by $1 + r$ gives too low an answer. Inflate the loss distribution first, then apply the deductible.
+
+## Discrete losses
+
+When the loss takes a few values, the integrals become sums. Take a loss of 0, 100, 400 or 1,000 with probabilities 0.4, 0.3, 0.2 and 0.1, so $E[X] = 210$, and a deductible of 200.
+
+> $$E[(X - d)_+] = \sum_{x > d} (x - d)\,p(x)$$
+
+> $$E[X \wedge d] = \sum_{x < d} x\,p(x) + d\,P(X \ge d)$$
+
+- The insurer pays $0.2 \times 200 + 0.1 \times 800 = 120$.
+- The policyholder keeps $0.3 \times 100 + 200 \times 0.3 = 90$. The second term counts every loss of 200 or more at the deductible.
+- The two add back to 210.
+- Between two possible loss amounts, the expected payment is a straight line in $d$ with slope $-P(X > d)$. It bends at each possible loss amount.
+
+Some policies pay per event above $d$ events. For a count $N$ taking the values $0, 1, 2, \ldots$, the capped count is a sum of tail probabilities.
+
+> $$E[N \wedge d] = \sum_{k=0}^{d-1} P(N > k)$$
+
+## On other exams
+
+The same deductible appears on later exams, stated in the policy's own terms.
+
+- **FAM, MAS-I and ASTAM** add the [[Loss Elimination Ratio|loss elimination ratio]], $E[X \wedge d] / E[X]$, and the effect of a deductible on how many losses become payments.
+- **Exam 5 and the DISCs** state a deductible as a percentage of the coverage amount. A 5% deductible on a home insured for \$500,000 is a flat \$25,000, whatever the size of the loss.
+- **Exam 6C and the DISCs** settle claims under a per-occurrence deductible, an annual aggregate deductible, or both, and with a limit.
+- **Exam 5 and Exam 7** price and reserve large deductible policies. The rating procedure is on [[Deductible Rating]].
+
+## Try it
+
+> [!example]- Exponential losses {Example}
+> Losses are exponential with mean 1,000 and the deductible is 200. Find the expected payment per loss and per payment.
 >
 > > [!answer]-
-> > BF ultimate is what's reported plus the unreported share of the a priori, so find the a priori and the unreported share first.
-> >
-> > $$
-> > \begin{align*}
-> > U_0 &= 0.65 \times \$2{,}000{,}000 \\
-> > &= \$1{,}300{,}000 \\[4pt]
-> > \% \text{ unreported} &= 1 - \frac{1}{1.896} \\
-> > &= 0.4726 \\[4pt]
-> > \text{IBNR} &= 0.4726 \times \$1{,}300{,}000 \\
-> > &= \$614{,}346 \\[4pt]
-> > U_{\text{BF}} &= \$600{,}000 + \$614{,}346 \\
-> > &= \$1{,}214{,}346
-> > \end{align*}
-> > $$
-> >
-> > The BF ultimate is $\$1{,}214{,}346$, of which $\$614{,}346$ is IBNR.
-> >
-> > *Why didn't the $\$600{,}000$ enter the IBNR?* BF estimates the unreported part from expected losses alone, so the IBNR would be $\$614{,}346$ whatever had been reported by 12 months.
+> > **Plan:** integrate the survival function above 200.
+> > $$E[(X - 200)_+] = \int_{200}^\infty e^{-x/1000}\,dx = 1000\,e^{-0.2} \approx 818.73$$
+> > Dividing by $P(X > 200) = e^{-0.2}$ gives 1,000 per payment. The [[Exponential Distribution|exponential distribution]] is memoryless, so the excess has the same mean as the loss.
 
-> [!example]- One Shock Claim: BF Against the Chain Ladder {Example}
-> Two accident years, each with $\$14{,}000{,}000$ of earned premium and a $65\%$ a priori ELR. At $12$ months, $\text{CDF} = 3.20$ ($31.25\%$ reported).
->
-> - **AY A** reported $\$3{,}000{,}000$ — on expectation.
-> - **AY B** reported $\$4{,}500{,}000$ — the same, plus one $\$1{,}500{,}000$ shock claim.
->
-> Compare how the chain ladder and BF respond to the shock claim.
+> [!example]- Solving for the deductible {Example}
+> A loss is 0, 100, 400 or 1,000 with probabilities 0.4, 0.3, 0.2 and 0.1. Find the deductible that makes the expected payment per loss 100.
 >
 > > [!answer]-
-> > Compute both methods for both years, then compare the change from A to B with the size of the claim.
+> > **Plan:** guess which losses exceed $d$, solve, then check the guess.
 > >
-> > Chain ladder, reported losses times the CDF:
+> > If $d < 100$, all three positive losses pay, and $210 - 0.6d = 100$ gives $d = 183.3$. That is not below 100, so the guess is wrong.
 > >
-> > $$
-> > \begin{align*}
-> > \text{CL}_A &= \$3{,}000{,}000 \times 3.20 \\
-> > &= \$9{,}600{,}000 \\
-> > \text{CL}_B &= \$4{,}500{,}000 \times 3.20 \\
-> > &= \$14{,}400{,}000
-> > \end{align*}
-> > $$
-> >
-> > BF, reported losses plus $68.75\%$ of the $\$9{,}100{,}000$ a priori ($\$6{,}256{,}250$):
-> >
-> > $$
-> > \begin{align*}
-> > \text{BF}_A &= \$3{,}000{,}000 + \$6{,}256{,}250 \\
-> > &= \$9{,}256{,}250 \\
-> > \text{BF}_B &= \$4{,}500{,}000 + \$6{,}256{,}250 \\
-> > &= \$10{,}756{,}250
-> > \end{align*}
-> > $$
-> >
-> > The $\$1.5$M claim moves the **chain ladder by $\$4{,}800{,}000$** and **BF by exactly $\$1{,}500{,}000$**.
-> >
-> > *Why does the chain ladder overreact?* It assumes a year that reports more early will report proportionally more throughout. When the extra reporting is one large claim rather than a faster pattern, that assumption manufactures $\$2.20$ of extra reserve for every real dollar.
-> >
-> > (Neither answer is final for AY B: the shock claim should be removed and reserved on its own, with a provision for further large claims — see [[Large Loss]].)
-
-> [!tip]- How it appears on the exam
-> - **Exam 5** (Friedland ch. 9): given a triangle or CDFs, earned premium and an a priori ELR, calculate BF IBNR, ultimate or unpaid — often beside the chain ladder and expected claims methods on the same data.
-> - **Exam 5** written parts: explain when BF is preferred to the chain ladder (an immature year, a long-tail line, a distorted diagonal) or why the methods' answers differ.
-> - **Exam 7**: BF is the starting point for Mack's [[Benktander Method]] and for credibility weightings of the chain ladder and the a priori.
+> > If $100 \le d < 400$, only 400 and 1,000 pay.
+> > $$0.2(400 - d) + 0.1(1000 - d) = 180 - 0.3d = 100$$
+> > This gives $d = 266.67$, which is inside the range.
 
 > [!warning]- Exam traps
-> - **Mixing bases.** Reported losses with paid CDFs (or the reverse) gives a number with no meaning. Match the losses to the triangle the CDF came from.
-> - **IBNR is not unpaid.** On the reported basis, BF ultimate less reported losses is IBNR; the total unpaid estimate is ultimate less *paid*, which adds the case reserves back.
-> - **A stale a priori.** Using a historical loss ratio without bringing it to the current rate level and trend. The question usually signals this with a rate change between the experience and the year being reserved.
+> - **Per loss or per payment.** Read which one is asked.
+> - **Dropping the capped term.** $E[X \wedge d]$ includes $d \cdot P(X \ge d)$, not just the losses below $d$.
+> - **Scaling by inflation.** Inflate the losses, then apply the deductible.
+> - **A percentage of the loss instead of the coverage.** A 5% deductible on a \$500,000 home is \$25,000. Taking 5% of a \$40,000 loss understates what the insured keeps.
 ````
 
 ## Notes on each part
 
-- **Definition** — unchanged: one sentence, what it is and what it does.
-- **Formulas** — two stacked blocks, each one statement, narrow.
-- **Bullets** — the first is the *where*. Then the **contrast** with the chain
-  ladder in one line, the credibility relationship, the **assumption** and what
-  breaks it, and a pointer to the method built on it. The old page's longest
-  reasoning ("actual emergence is taken at face value …") moved into the idea
-  card instead of being said twice.
-- **The idea** — three sentences, no new symbols, and it passes the test: from
-  it alone a reader can predict that the IBNR ignores reported losses, and that
-  a shock claim moves BF one-for-one. It sits after the bullets, so the opening
-  that Concept Craft and the SEO description read is untouched.
-- **Inline trap** — the one slip made while reading *this* formula, so it sits
-  next to it. It is not repeated in *Exam traps*.
-- **Figure** — after the idea it illustrates.
-- **Examples as a set** — the first is the direct calculation; the second is the
-  contrast with the neighbour, on data built to show the boundary between them.
-- **Each answer** — a one-sentence plan before any arithmetic; the `align*`
-  left-hand sides label the steps; the result in words; one italic *why* line
-  that models the question a good student asks.
-- **How it appears** — names the exam and the reading, the question shapes and
-  what they are paired with, and the written-answer task. No frequencies.
-- **Exam traps** — three specific slips, each saying what the wrong answer looks
-  like and how the question signals it.
+- **The opening** — definition, formula, two bullets. It is short because the
+  sections do the teaching, and it is what Concept Craft and the SEO
+  description read, so nothing callout-shaped comes before the bullets.
+- **The idea** — two sentences, no new symbols. From it alone a reader can
+  predict that small losses cost the insurer nothing.
+- **One running example** — a deductible of 200, first on four single losses
+  (the table), then on a uniform loss on $(0, 1000)$. Every section asks a new
+  question of the same case: the average, per loss or per payment, how the
+  answer moves with $d$, inflation.
+- **Each section opens with a question** ("What does the insurer expect to pay
+  on a loss?", "Why the first dollars matter most"), works it on the case, then
+  states the formula. The formula reads as a summary of the number just found.
+- **Tables carry the data**: the loss-by-loss split, and the deductible against
+  its expected payment, which shows the diminishing saving at a glance.
+- **The inline trap** sits in the inflation section, right after the number a
+  wrong method gets wrong (368.18, not 352).
+- **Every topic kept.** The discrete sums, the capped count and the other
+  exams' material each have a section, late, because nothing before builds on
+  them.
+- **Try it** — fresh numbers, easy to hard. Each answer opens with
+  `**Plan:**` and ends with a why line where a reader would ask one.
+- **Exam traps** last, specific, and no "How it appears on the exam" callout.

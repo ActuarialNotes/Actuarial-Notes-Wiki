@@ -19,38 +19,122 @@ verification:
   log: .verify/Concepts/Binomial Distribution.md
 ---
 
-The **Binomial Distribution** $X \sim \text{Bin}(n, p)$ models the number of successes in $n$ independent Bernoulli trials, each with probability of success $p$.
-- Requires trials to be independent, each trial to have exactly two outcomes, and $p$ to be constant across trials
+The **Binomial Distribution** $X \sim \text{Bin}(n, p)$ models the number of successes in $n$ independent trials, each with the same probability of success $p$.
 
-> $$P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}$$
->
-> $$k = 0, 1, \ldots, n$$
+> $$P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}, \quad k = 0, 1, \ldots, n$$
 
-- $E[X] = np$ and $\text{Var}(X) = np(1-p)$
-- **Bernoulli is the case $n = 1$.** A random variable taking only the values 0 and 1 (an indicator) is Bernoulli with success probability $p = P(X = 1)$, i.e. $\text{Bin}(1, p)$. Since $X^2 = X$, $E[X] = E[X^2] = p$, so $\text{Var}(X) = p - p^2 = p(1-p)$ and $\text{SD}(X) = \sqrt{p(1-p)}$. The same holds for a 0/1 variable under a conditional distribution, with $p$ the conditional probability of a 1.
-- **Ratios of two probabilities.** Dividing two binomial probabilities cancels the common powers of $p$ and $1-p$, leaving the binomial coefficients and a power of the odds $p/(1-p)$:
+> $$E[X] = np$$
 
-> $$\frac{P(X = j)}{P(X = k)} = \frac{\binom{n}{j}}{\binom{n}{k}}\left(\frac{p}{1-p}\right)^{j-k}$$
+> $$\text{Var}(X) = np(1-p)$$
 
-- For neighbouring values the ratio is $P(X = k+1)/P(X = k) = \dfrac{n-k}{k+1}\cdot\dfrac{p}{1-p}$. So when one point probability is stated as a multiple of another, divide the two pmf expressions and solve the simple equation left for the odds $p/(1-p)$ (or for $n$).
-- **Unequal success probabilities.** If independent trials do not share one $p$, their total count is not binomial. Condition on the outcome of the differing trial and add the mutually exclusive cases (the law of total probability). With $N = B + Y$, where $B \sim \text{Bin}(m, p)$ and $Y \sim \text{Bernoulli}(q)$ are independent:
+- The trials must be independent, each must have exactly two outcomes, and $p$ must be the same on every trial.
+- The **Bernoulli** distribution is the case $n = 1$, a single trial that is 1 with probability $p$ and 0 otherwise.
+- Compared with the [[Hypergeometric Distribution|hypergeometric]], the binomial draws with replacement, so the trials stay independent.
 
-> $$P(N = k) = (1-q)\,P(B = k) + q\,P(B = k-1)$$
-
-- With several differing trials, enumerate which of them succeed, multiply by the binomial probability for the identical trials in each case, and sum over the cases.
-- **Where the first success falls.** The first success comes on trial $j$ with $k$ successes in all exactly when trials $1, \ldots, j-1$ all fail, trial $j$ succeeds, and the other $k-1$ successes fall among the $n-j$ later trials; by independence the pieces multiply:
-
-> $$P(\text{first success on trial } j,\ X = k) = (1-p)^{j-1}\,p\,\binom{n-j}{k-1}p^{k-1}(1-p)^{n-j-k+1}$$
-
-- **Given the count, the positions are equally likely.** Given $X = k$, every one of the $\binom{n}{k}$ sets of success positions has the same conditional probability $1/\binom{n}{k}$, whatever $p$ is, so a conditional probability about where the successes fell is the number of favourable position sets divided by $\binom{n}{k}$.
+> [!idea] The idea
+> Any one arrangement of $k$ successes and $n - k$ failures has probability $p^k(1-p)^{n-k}$, because the trials are independent. The binomial coefficient counts how many such arrangements there are. So the count is the probability of one arrangement times the number of arrangements.
 
 ![[Media/Binomial_distribution_pmf.svg|450]]
 
 ![[Media/Figures/Binomial_Distribution.svg|340]]
 
-> [!example]- Number of Claims in a Group Policy {Example}
-> A group of 10 policyholders each independently file a claim with probability 0.3. Find the probability that exactly 4 file claims.
+## How many of five policyholders claim?
+
+A group of 5 policyholders each files a claim in the year with probability 0.2, independently. The number who claim is $X \sim \text{Bin}(5, 0.2)$.
+
+| Claims $k$ | Arrangements $\binom{5}{k}$ | $P(X = k)$ |
+|---|---|---|
+| 0 | 1 | 0.3277 |
+| 1 | 5 | 0.4096 |
+| 2 | 10 | 0.2048 |
+| 3 | 10 | 0.0512 |
+| 4 | 5 | 0.0064 |
+| 5 | 1 | 0.0003 |
+
+- One claim is the most likely count. Two claims has twice as many arrangements as one, but each arrangement is a quarter as likely.
+- "At least one claim" is the complement of none, $1 - 0.8^5 = 0.6723$.
+
+## The mean and variance as a sum of single trials
+
+Each policyholder is a Bernoulli indicator $I_j$ that is 1 if they claim. The count is the sum, $X = I_1 + \cdots + I_5$.
+
+- An indicator has $I_j^2 = I_j$, so $E[I_j] = E[I_j^2] = p$ and $\text{Var}(I_j) = p - p^2 = p(1-p)$.
+- Expected values add, so $E[X] = 5(0.2) = 1$.
+- Variances of independent trials add, so $\text{Var}(X) = 5(0.2)(0.8) = 0.8$.
+- The same holds for a 0/1 variable under a conditional distribution, with $p$ the conditional probability of a 1.
+
+## Comparing two probabilities
+
+A question may say that one count is some multiple as likely as another. Dividing two binomial probabilities cancels the common powers of $p$ and $1 - p$. What is left is a ratio of coefficients and a power of the odds $p/(1-p)$.
+
+> $$\frac{P(X = j)}{P(X = k)} = \frac{\binom{n}{j}}{\binom{n}{k}}\left(\frac{p}{1-p}\right)^{j-k}$$
+
+For neighbouring counts the ratio is simpler.
+
+> $$\frac{P(X = k+1)}{P(X = k)} = \frac{n-k}{k+1}\cdot\frac{p}{1-p}$$
+
+- For the five policyholders, $P(X = 2)/P(X = 1) = \frac{4}{2} \times \frac{0.2}{0.8} = 0.5$, which matches $0.2048 / 0.4096$.
+- The probabilities rise while this ratio is above 1 and fall once it drops below 1. That locates the [[Mode|mode]].
+- Given a ratio, solve the equation for the odds $p/(1-p)$, or for $n$.
+
+## When one trial is different
+
+Add a sixth policyholder who claims with probability 0.5. The six trials no longer share one $p$, so the total $N$ is not binomial. Condition on the sixth policyholder and add the two cases, using [[The Law of Total Probability|the law of total probability]].
+
+> $$P(N = k) = (1-q)\,P(B = k) + q\,P(B = k-1)$$
+
+- Here $B \sim \text{Bin}(5, 0.2)$ counts the five alike and $q = 0.5$ is the sixth policyholder's probability.
+- $P(N = 2) = 0.5(0.2048) + 0.5(0.4096) = 0.3072$.
+- With several differing trials, list which of them succeed. Multiply each case by the binomial probability for the identical trials, then add the cases.
+
+## Where the successes fall
+
+Sometimes the order of the trials matters. The first success comes on trial $j$ with $k$ successes in all exactly when trials $1, \ldots, j-1$ fail, trial $j$ succeeds, and the other $k-1$ successes fall among the $n - j$ later trials. By independence the pieces multiply.
+
+> $$P(\text{first on } j,\ X = k) = (1-p)^{j-1}\,p\,\binom{n-j}{k-1}p^{k-1}(1-p)^{n-j-k+1}$$
+
+- For the five policyholders, the first claim is the second policyholder's and exactly 2 claim with probability $0.8 \times 0.2 \times 3 \times 0.2 \times 0.8^2 = 0.0614$.
+
+Given the count, the positions are equally likely. Given $X = k$, every one of the $\binom{n}{k}$ sets of positions has conditional probability $1/\binom{n}{k}$, whatever $p$ is.
+
+- Given that exactly 2 of the 5 claimed, the first claim is the second policyholder's when the pair is $\{2,3\}$, $\{2,4\}$ or $\{2,5\}$. That is 3 of the 10 pairs, so 0.3.
+- Check: $0.0614 / 0.2048 = 0.3$. The probability $p$ cancels.
+
+## On other exams
+
+- **FAM, MAS-I and ASTAM** place the binomial in the $(a, b, 0)$ class of [[Frequency Distribution|frequency distributions]], whose probabilities satisfy $p_k / p_{k-1} = a + b/k$. For the binomial, $a = -p/(1-p)$ and $b = (n+1)p/(1-p)$. The Loss Models tables write the parameters as $m$ and $q$.
+- **FAM and MAS-I** approximate a binomial count of survivors, claims or failures by a normal distribution with mean $np$ and variance $np(1-p)$, through the [[Normal Approximation|normal approximation]].
+- **MAS-I** tests a Bernoulli sample in hypothesis tests, and counts the events of a [[Poisson Process|Poisson process]] by an earlier time given the count at a later time. That conditional count is binomial.
+- **MAS-II** pairs a binomial likelihood with a [[Beta|beta]] prior. The posterior is again beta, which makes the beta the [[Conjugate Prior|conjugate prior]] for $p$.
+
+## Try it
+
+> [!example]- Claims in a group policy {Example}
+> A group of 10 policyholders each independently files a claim with probability 0.3. Find the probability that exactly 4 file claims.
 >
 > > [!answer]-
-> > $X \sim \text{Bin}(10, 0.3)$, so:
-> > $$P(X = 4) = \binom{10}{4}(0.3)^4(0.7)^6 = 210 \times 0.0081 \times 0.117649 \approx 0.2001$$
+> > **Plan:** a fixed number of independent trials with one $p$ is binomial, $X \sim \text{Bin}(10, 0.3)$.
+> > $$P(X = 4) = \binom{10}{4}(0.3)^4(0.7)^6 \approx 0.2001$$
+> > There are 210 arrangements, each with probability $0.3^4 \times 0.7^6$.
+
+> [!example]- Solving for p from a ratio {Example}
+> Six independent risks each have the same probability $p$ of a loss. Exactly two losses is three times as likely as exactly one. Find $p$.
+>
+> > [!answer]-
+> > **Plan:** divide the two probabilities so the powers cancel, then solve for the odds.
+> > $$\frac{P(X = 2)}{P(X = 1)} = \frac{15}{6}\cdot\frac{p}{1-p} = 3$$
+> > So $p/(1-p) = 1.2$ and $p = 1.2/2.2 \approx 0.5455$.
+
+> [!example]- Three out of five {Example}
+> A system has five independent components, each working with probability 0.9. The system works if at least three components work. Find the probability that the system works.
+>
+> > [!answer]-
+> > **Plan:** the number working is $\text{Bin}(5, 0.9)$, and the system needs at least 3.
+> > $$P(X \geq 3) = 10(0.9)^3(0.1)^2 + 5(0.9)^4(0.1) + (0.9)^5$$
+> > $$P(X \geq 3) = 0.0729 + 0.32805 + 0.59049 = 0.99144$$
+
+> [!warning]- Exam traps
+> - **Leaving out the coefficient.** $p^k(1-p)^{n-k}$ is one arrangement. Multiply by $\binom{n}{k}$ unless the question fixes the order.
+> - **Binomial on a small pool.** Drawing without replacement from a few dozen items is hypergeometric. Use the binomial only with replacement or a very large pool.
+> - **Unequal probabilities.** Trials with different $p$ do not give a binomial total. Condition on the trial that differs.
+> - **Using $p$ after conditioning on the count.** Given $X = k$, all position sets are equally likely, and $p$ drops out of the answer.

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:5e7488b2be8c299f7a43f5e9f10666f7ffe8df9204db9a546cea59754a061b3c
+  content_hash: sha256:015499cda60b5a6701dee97693189b140c7aa046cd0c767ed6d399a0c2511831
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 Def. 1.1 sample space/outcomes/events, Def. 1.2 P(E)=Σ_{ω∈E} m(ω), Examples 1.6-1.9, set operations and Fig. 1.7, Thm 1.1 (P(E)≥0, P(Ω)=1, monotonicity, disjoint additivity, complement with proof), Thms 1.2-1.4 and Cor. 1.1 (pp.18-24, PDF pp.26-32), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.1 A Counting Technique N = n1·n2·…·nr (p.76, PDF p.84); §3.2 Ex. 3.5 and binomial coefficients, a set of n elements has 2^n subsets (p.93, PDF p.101); §5.1 hypergeometric h(N,k,n,x) = C(k,x)C(N−k,n−x)/C(N,n) (p.193, PDF p.201), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
@@ -16,108 +16,42 @@ verification:
   log: .verify/Concepts/Event.md
 ---
 
-An **event** $E$ is any subset of the [[Sample Space]] $S$. Events are the objects to which probabilities are assigned.
+![[Media/Figures/Event.svg|340]]
+
+An **Event** is a set of outcomes of an experiment. An event $E$ is a subset of the [[Sample Space|sample space]] $S$, written
 
 > $$E \subseteq S$$
 
-- A **simple** (elementary) **event** contains exactly one outcome.
-- $S$ itself is the certain event, and the empty set $\varnothing$ is the impossible event.
-- The [[Axioms of Probability]] define $P(E) \in [0,1]$ for every event $E$, with $P(S) = 1$.
+- The event $E$ occurs when the outcome of the experiment is in $E$.
 
-> [!idea] The idea
-> A question asks about a statement, such as "the policyholder has an accident in year two", and many different outcomes make it true. The event is the set of all those outcomes. Its probability is the total probability of the outcomes in it, so the work is in deciding exactly which outcomes belong.
+> [!example] A fair die is rolled. What is the event "an even number is rolled", and what is its probability?
+> - The sample space is $S = \{1, 2, 3, 4, 5, 6\}$.
+> - The outcomes that make the statement true are 2, 4 and 6, so $E = \{2, 4, 6\}$.
+> - The 6 outcomes are equally likely, so the [[Probability|probability]] is $P(E) = \frac{|E|}{|S|} = \frac{3}{6} = 0.5$.
 
-![[Media/Figures/Event.svg|340]]
+## Special events
 
-## From a statement to a set of outcomes
-
-A policyholder buys auto insurance for two years. Each year the insurer records 0, 1, or 2 or more accidents, so an outcome is an ordered pair (year one, year two) and $S$ has nine outcomes.
-
-Which outcomes make "exactly one accident in year one" true? Every pair whose first entry is 1.
-
-> $$F = \{(1, 0),\ (1, 1),\ (1, 2+)\}$$
-
-In the same way, "one or more accidents in year two" is every pair whose second entry is 1 or 2+.
-
-> $$G = \{(0, 1),\ (0, 2+),\ (1, 1),\ (1, 2+),\ (2+, 1),\ (2+, 2+)\}$$
-
-- The event $F$ **occurs** when the outcome lands in $F$. If the record is $(1, 1)$, then $F$ and $G$ both occur.
-- The simple event $\{(0, 0)\}$ is "no accidents in either year".
+- A **simple event** contains exactly one outcome, such as $\{4\}$.
+- The sample space $S$ is the **certain event**. It always occurs, and $P(S) = 1$.
+- The empty set $\varnothing$ is the **impossible event**. It never occurs, and $P(\varnothing) = 0$.
 
 ## Combining events
 
-Exam questions describe events in words. The words "and", "or" and "not" become the [[Set Operations|set operations]] intersection, union and complement.
+The words "and", "or" and "not" combine events through the [[Set Operations|set operations]] intersection, union and complement:
 
-| Words | Event | Outcomes |
-|---|---|---|
-| $F$ and $G$ | $F \cap G$ | (1, 1), (1, 2+) |
-| not $G$ | $G^c$ | (0, 0), (1, 0), (2+, 0) |
-| $F$ or not $G$ | $F \cup G^c$ | (1, 0), (1, 1), (1, 2+), (0, 0), (2+, 0) |
+| Words | Event | Its outcomes |
+| --- | --- | --- |
+| $E$ and $F$ | $E \cap F$ | in both $E$ and $F$ |
+| $E$ or $F$ | $E \cup F$ | in $E$, in $F$, or in both |
+| not $E$ | $E^c$ | in $S$ but not in $E$ |
 
-Two descriptions name the **same event** when they hold the same outcomes. "Exactly one accident in year one, and two or more accidents in total" is $\{(1, 1), (1, 2+)\}$. That is $F \cap G$ again, worded another way.
+- Events with no outcome in common, $E \cap F = \varnothing$, are [[Mutually Exclusive Events|mutually exclusive]].
 
-> [!trap] A description that only sounds the same
-> "Exactly one accident in year one and more than one in year two" leaves out $(1, 1)$. It is a proper subset of $F \cap G$, not the same event. Check each outcome against both descriptions.
+> [!example] A fair die is rolled. Let $E$ be "an even number is rolled" and $F$ be "at least 4 is rolled". What are $E \cap F$, $E \cup F$ and $E^c$?
+> - $E = \{2, 4, 6\}$ and $F = \{4, 5, 6\}$.
+> - $E \cap F = \{4, 6\}$, the outcomes in both.
+> - $E \cup F = \{2, 4, 5, 6\}$, the outcomes in either.
+> - $E^c = \{1, 3, 5\}$, the outcomes not in $E$.
 
-## Assigning probabilities
-
-Suppose each year has 0, 1 or 2+ accidents with probabilities 0.7, 0.2 and 0.1, independently of the other year. Each outcome's probability is then a product.
-
-| Year one | Year two: 0 | Year two: 1 | Year two: 2+ |
-|---|---|---|---|
-| 0 | 0.49 | 0.14 | 0.07 |
-| 1 | 0.14 | 0.04 | 0.02 |
-| 2+ | 0.07 | 0.02 | 0.01 |
-
-The probability of an event is the sum of its cells.
-
-> $$P(E) = \sum_{\omega \in E} P(\{\omega\})$$
-
-- $P(F) = 0.14 + 0.04 + 0.02 = 0.20$.
-- $P(F \cap G) = 0.04 + 0.02 = 0.06$.
-- $P(G^c) = 0.49 + 0.14 + 0.07 = 0.70$, so $P(G) = 0.30$.
-
-## When can probabilities be added?
-
-Two events are [[Mutually Exclusive Events|mutually exclusive]] when they share no outcome. Then the probability of their union is the sum of their probabilities, because no cell is counted twice.
-
-- $F$ and $\{(0, 0)\}$ share no cell, so $P(F \cup \{(0, 0)\}) = 0.20 + 0.49 = 0.69$.
-- $F$ and $G$ share two cells. Adding gives $0.20 + 0.30 = 0.50$, but the union is $0.44$, because the shared cells, worth 0.06, were counted twice.
-
-To decide whether several events can be added, look for an outcome that lies in two of them. One shared outcome is enough to rule it out.
-
-## Try it
-
-> [!example]- Rolling a die {Example}
-> A fair six-sided die is rolled. The sample space is $S = \{1,2,3,4,5,6\}$. Write the event "an even number is rolled" and find its probability.
->
-> > [!answer]-
-> > **Plan:** list the outcomes that make the statement true, then count.
-> >
-> > $E = \{2, 4, 6\}$ contains 3 of the 6 equally likely outcomes.
-> > $$P(E) = \frac{|E|}{|S|} = \frac{3}{6} = 0.5$$
-
-> [!example]- Thefts over three years {Example}
-> A homeowners policy is observed for three years. Let $A$ be "no thefts in any year", $B$ "at least one theft in year one" and $C$ "no theft in year one and at least one in year three". Can $P(A \cup B \cup C)$ be found by adding?
->
-> > [!answer]-
-> > **Plan:** check each pair of events for a shared outcome.
-> >
-> > - $A$ and $B$: $A$ has no theft in year one and $B$ has one. No shared outcome.
-> > - $A$ and $C$: $A$ has no theft in year three and $C$ has one. No shared outcome.
-> > - $B$ and $C$: they disagree about year one. No shared outcome.
-> >
-> > The three events are mutually exclusive, so $P(A \cup B \cup C) = P(A) + P(B) + P(C)$.
-
-> [!example]- How many events? {Example}
-> The two-year sample space above has 9 outcomes. How many different events does it have?
->
-> > [!answer]-
-> > **Plan:** an event is any subset, and each outcome is either in it or out of it.
-> > $$2^9 = 512$$
-> > The count includes $\varnothing$ and $S$ itself. The collection of all subsets is the [[Power Set|power set]] of $S$.
-
-> [!warning]- Exam traps
-> - **An outcome is not an event.** $(1, 1)$ is an outcome. $\{(1, 1)\}$ is the simple event that contains it.
-> - **Similar wording, different set.** "More than one" and "at least one" differ by the outcome with exactly one. List the outcomes before calling two events the same.
-> - **Adding events that overlap.** $P(F) + P(G)$ counts $F \cap G$ twice. Add only events that are mutually exclusive.
+> [!trap] Similar words, different event
+> "At least 4" is $\{4, 5, 6\}$, but "more than 4" is $\{5, 6\}$. List the outcomes before treating two descriptions as the same event.

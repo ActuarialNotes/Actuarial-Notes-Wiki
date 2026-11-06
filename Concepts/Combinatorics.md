@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:60767e09c3bdbce4a1d39fe89f3d29195c6cef58cc1b4104bd1ce23c84d9a1ed
+  content_hash: sha256:f730db94d07cfcea69628b2f5db009b1aca47c0557697ed0b07612081f6b68be
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.1 Counting Technique (stages, multiply, PDF pp.83-84), Thm 3.1 n!, Def 3.2 and Thm 3.2 k-permutations n(n−1)…(n−k+1) (PDF p.88); §3.2 binomial coefficients C(n,j) = number of j-subsets, Thm 3.4 Pascal recurrence, Thm 3.5 C(n,j)=(n)_j/j! (pp.93-94, PDF pp.101-102), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.1 Fixed Points and hat check problem, derangements (PDF pp.90, 93); Example 3.12: P(A_i)=(n−1)!/n!, P(no fixed point)=1/2!−1/3!+…+(−1)^n/n!, table n=4: .375 (pp.105-106, PDF pp.113-114), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
@@ -23,125 +23,35 @@ verification:
   log: .verify/Concepts/Combinatorics.md
 ---
 
-**Combinatorics** is the branch of [[Discrete Mathematics|discrete mathematics]] that counts the ways to arrange, select or partition objects. In probability it counts the outcomes of an experiment whose outcomes are equally likely.
-
-> $$P(A) = \frac{|A|}{|S|}$$
-
-> $$n! = n \times (n-1) \times \cdots \times 2 \times 1$$
-
-- $|A|$ is the number of outcomes in the event $A$ and $|S|$ the number in the sample space. The first formula needs every outcome to be equally likely.
-- $n!$ is the number of ways to arrange $n$ distinct objects in a row.
-- The two basic problems are **ordered** arrangements, [[Permutation|permutations]], and **unordered** selections, [[Combination|combinations]].
-
-> [!idea] The idea
-> When every outcome is equally likely, a probability is a count over a count. Almost every count is built in stages: multiply the number of choices at each stage. Before counting, settle two things: whether repetition is allowed, and whether the order of the choices matters. When it doesn't, divide out the orderings that were counted as different.
-
 ![[Media/Figures/Combinatorics.svg|340]]
 
-## Probability as counting
+**Combinatorics** is the branch of [[Discrete Mathematics|discrete mathematics]] that counts the ways to arrange, select or partition objects. In probability, combinatorics is used to count the number of outcomes in an [[Event|event]] $E$.
 
-A box holds 12 claim files: 5 auto, 4 home and 3 workers compensation. Three files are drawn at random without replacement. What is the probability that all three are auto?
-
-Every set of 3 files is equally likely, and there are $\binom{12}{3} = 220$ of them. The sets of 3 auto files number $\binom{5}{3} = 10$.
-
-> $$P(\text{all auto}) = \frac{10}{220} \approx 0.0455$$
-
-## Build in stages and multiply
-
-The **multiplication principle** says that if an outcome is built in stages, with $m_1$ choices at the first stage and $m_2$ at the second whatever was chosen first, there are $m_1 \times m_2 \times \cdots$ outcomes.
-
-- Drawing the 3 files in order gives $12 \times 11 \times 10 = 1{,}320$ ordered draws.
-- Each set of 3 files appears $3! = 6$ times among them, once per ordering. So there are $1{,}320 / 6 = 220$ sets.
-- Counted in order, the all-auto draws number $5 \times 4 \times 3 = 60$, and $60 / 1{,}320$ is again about 0.0455.
-
-> [!trap] Numerator and denominator on different footings
-> Counting the event in order and the sample space without order puts the answer off by a factor of $3!$. Decide once whether order matters, and count both that way.
-
-## With or without replacement
-
-Three new claims are each assigned to one of 4 adjusters, and an adjuster may get more than one. Each claim has 4 choices, so there are $4^3 = 64$ assignments. If the three claims must go to different adjusters, there are $4 \times 3 \times 2 = 24$.
-
-- With repetition allowed, $m$ positions with $n$ choices each give $n^m$ ordered arrangements.
-- With distinct items, the count is $P(n, m) = n!/(n - m)!$ ordered, or $\binom{n}{m}$ unordered.
-- If the assignments are equally likely, all three claims go to different adjusters with probability $24/64 = 0.375$.
-
-## One of each, and at least one
-
-Back to the 12 files. One file of each type can be drawn in $5 \times 4 \times 3 = 60$ ways, a product of one choice per type. The probability is $60 / 220 \approx 0.273$.
-
-At least one workers compensation file is easiest by the complement. The draws with none choose all 3 from the other 9 files.
-
-> $$P(\text{at least one WC}) = 1 - \frac{\binom{9}{3}}{220} = 1 - \frac{84}{220} \approx 0.618$$
-
-Choosing one WC file first and then any 2 of the other 11 gives $3 \times 55 = 165$, not 136. A draw with two WC files is counted twice, once for each WC file chosen "first".
-
-## Repeated values and symmetry
-
-A count with one repeated value is built in stages too. Choose the repeated value, then choose which positions hold it, then fill the remaining positions with different values.
-
-In a uniformly random seating or ordering, each person is equally likely to be in any position. So one person's position can be fixed without loss of generality, and another given person is then equally likely to be in each remaining position. Around a round table of 8, two given people sit next to each other with probability $2/7$: fix the first, and the second has 7 equally likely seats, 2 of them adjacent.
-
-## Derangements
-
-A **derangement** is a permutation of $n$ items in which no item stays in its original position. The number of derangements is written $D_n$.
-
-- A permutation that fixes a chosen set of $k$ items arranges the other $n - k$ freely, in $(n - k)!$ ways. There are $\binom{n}{k}$ such sets.
-- By the [[Inclusion-Exclusion Principle|inclusion-exclusion principle]] over the fixed items, the permutations with at least one fixed point number:
-
-> $$\sum_{k=1}^{n} (-1)^{k+1}\binom{n}{k}(n-k)!$$
-
-- Subtracting that from $n!$ gives the derangements.
-
-> $$D_n = n!\sum_{k=0}^{n}\frac{(-1)^k}{k!}$$
-
-- For example, $D_3 = 3!\left(1 - 1 + \frac{1}{2} - \frac{1}{6}\right) = 2$. Of the six orderings of three items, only the two cyclic shifts move every item.
-- If 4 adjusters' files are handed back at random, nobody gets their own with probability $D_4 / 4! = 9/24 = 0.375$.
-
-## On other exams
-
-**MAS-I** counts the minimal path sets of a reliability system. In a $k$-out-of-$n$ system, a minimal path set is any set of exactly $k$ working components, so there are $\binom{n}{k}$ of them. For two systems in series, a minimal path set takes one from each system, so the counts multiply.
-
-## Try it
-
-> [!example]- A lottery draw {Example}
-> A lottery draws 3 numbers from $\{1, 2, 3, 4, 5\}$ without replacement. How many equally likely outcomes are there if order does not matter?
+> [!idea] The idea
+> How you count outcomes depends on two questions: does the order of the objects matter, and can an object be chosen more than once? Choosing $k$ objects from $n$ distinct objects:
 >
-> > [!answer]-
-> > **Plan:** order is irrelevant and there is no replacement, so count combinations.
-> > $$\binom{5}{3} = \frac{5!}{3!\,2!} = 10$$
-> > Each outcome has probability $1/10$.
+> |  | Without replacement | With replacement |
+> | --- | --- | --- |
+> | **Order matters** | [[Permutation]]: ${}_{n}P_{k} = \frac{n!}{(n-k)!}$ | $n^k$ |
+> | **Order does not matter** | [[Combination]]: $\binom{n}{k} = \frac{n!}{k!\,(n-k)!}$ | $\binom{n+k-1}{k}$ |
 
-> [!example]- Strings with exactly one pair {Example}
-> How many 4-digit strings, digits 0 to 9 with leading zeros allowed, contain one digit exactly twice and two other digits once each?
->
-> > [!answer]-
-> > **Plan:** choose the repeated digit, then its positions, then fill the other two positions in order.
-> > $$
-> > \begin{align*}
-> > \text{repeated digit} &: 10 \\
-> > \text{positions for it} &: \binom{4}{2} = 6 \\
-> > \text{other two positions} &: 9 \times 8 = 72 \\
-> > \text{total} &= 10 \times 6 \times 72 \\
-> > &= 4{,}320
-> > \end{align*}
-> > $$
-> > The last two positions use $9 \times 8$, not $\binom{9}{2}$, because the positions are already fixed and the two digits in them are ordered.
+> [!example] How many ways are there to choose 2 letters from $\{A, B, C\}$?
+> - Order matters, without replacement: 6 outcomes, $AB, BA, AC, CA, BC, CB$.
+> - Order does not matter, without replacement: 3 outcomes, $\{A, B\}, \{A, C\}, \{B, C\}$.
+> - Order matters, with replacement: 9 outcomes, the 6 above plus $AA, BB, CC$.
+> - Order does not matter, with replacement: 6 outcomes, $\{A, B\}, \{A, C\}, \{B, C\}, \{A, A\}, \{B, B\}, \{C, C\}$.
 
-> [!example]- At least two of a type {Example}
-> A committee of 4 is chosen at random from 6 actuaries and 5 underwriters. Find the probability that it includes at least 2 actuaries.
->
-> > [!answer]-
-> > **Plan:** count each case, exactly 2, 3 or 4 actuaries, as a product of combinations, and add.
-> > $$
-> > \begin{align*}
-> > \text{exactly 2} &: \binom{6}{2}\binom{5}{2} = 150 \\
-> > \text{exactly 3} &: \binom{6}{3}\binom{5}{1} = 100 \\
-> > \text{exactly 4} &: \binom{6}{4} = 15
-> > \end{align*}
-> > $$
-> > The probability is $265 / \binom{11}{4} = 265/330 \approx 0.803$.
+## The multiplication principle
 
-> [!warning]- Exam traps
-> - **Numerator and denominator on different footings.** Count both ordered, or both unordered.
-> - **Overcounting "at least one".** Choosing one item of the type first and then "any" for the rest counts a selection several times. Count by cases or take the complement of "none".
-> - **With and without replacement.** $n^m$ is for repetition allowed. "Without replacement", "different" and "distinct" mean $P(n, m)$ or $\binom{n}{m}$.
+The **multiplication principle** states that if an outcome is built in $k$ consecutive steps, with
+
+- $m_1$ choices at the first step,
+- $m_2$ choices at the second step,
+- and so on, up to $m_k$ choices at the $k$th step,
+
+then the total number of outcomes is
+
+> $$m_1 \times m_2 \times \cdots \times m_k$$
+
+> [!example] If you have 5 shirts and 4 pairs of pants, how many outfits can you create?
+> - There are $5 \times 4 = 20$ different outfits.

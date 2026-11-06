@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:405f3057d0f76d7466b2b7bfd85a32c02c184ba27f037bcd65de1471331396d3
+  content_hash: sha256:2f010c93922f34ac87066574785f3c2dc1a29114c30dbaced8fdb6fdb4927d88
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.1 Counting Technique (stages, multiply, PDF pp.83-84), Thm 3.1 n!, Def 3.2 and Thm 3.2 k-permutations n(n−1)…(n−k+1) (PDF p.88); §3.2 binomial coefficients C(n,j) = number of j-subsets, Thm 3.4 Pascal recurrence, Thm 3.5 C(n,j)=(n)_j/j! (pp.93-94, PDF pp.101-102), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §2.1.3 Unordered Sampling without Replacement (P^n_k=C(n,k)k!; C(n,k)=n!/(k!(n−k)!), 0≤k≤n; C(n,k)=C(n,n−k); Σ C(n,k)=2^n; multinomial coefficients n!/(n1!…nr!)), read 2026-11-06, sha256:ad36b1a87daa3fd5d6a5e94a71c1a118182c7fd38a04af4a9cbf7b71e3ca62ae — https://www.probabilitycourse.com/chapter2/2_1_3_unordered_without_replacement.php"
@@ -18,115 +18,54 @@ verification:
   log: .verify/Concepts/Combination.md
 ---
 
-A **Combination** $\binom{n}{k}$, read "$n$ choose $k$", counts the ways to select $k$ objects from $n$ distinct objects when order does not matter.
+![[Media/Figures/Combination.svg|340]]
+
+A **Combination** is an unordered selection of distinct objects. The number of combinations of $k$ objects chosen from $n$ distinct objects, $\binom{n}{k}$, read "$n$ choose $k$", is
 
 > $$\binom{n}{k} = \frac{n!}{k!\,(n-k)!}$$
 
-- $n$ is the number of objects and $k$ the number selected.
-- A combination assumes no replacement, so the same object cannot be selected twice.
-- A combination differs from a [[Permutation|permutation]] by a factor of $k!$, the number of ways to order the selected objects.
-- Combinations appear in the [[Binomial Distribution|binomial]] and [[Hypergeometric Distribution|hypergeometric]] distributions and in [[Inclusion-Exclusion Principle|inclusion-exclusion]] counts.
+- $n!$, read "$n$ factorial", is $n \times (n-1) \times \cdots \times 2 \times 1$, with $0! = 1$.
+- $k \le n$.
 
 > [!idea] The idea
-> Ordered picks are easy to count, but a committee has no order. A combination counts the ordered picks, then divides out the $k!$ orderings of each group, because every unordered group appears among the ordered picks once per ordering.
+> Each combination of $k$ objects can be put in order in $k!$ ways. So there are $k!$ times as many [[Permutation|permutations]] as combinations, and $\binom{n}{k} = \frac{{}_{n}P_{k}}{k!}$.
 
-![[Media/Figures/Combination.svg|340]]
-
-## Picks without order
-
-An insurer forms a committee of 3 adjusters from 8. Picking in order, there are $8 \times 7 \times 6 = 336$ ways. But the committee $\{A, B, C\}$ appears in all of its $3! = 6$ orderings: $ABC$, $ACB$, $BAC$, $BCA$, $CAB$ and $CBA$.
-
-> $$\binom{8}{3} = \frac{336}{6} = 56$$
+> [!example] A club of 8 people chooses a committee of 3. How many different committees are there?
+> - A committee has no order, so each committee is a combination of 3 people from 8.
+> - $\binom{8}{3} = \frac{8!}{3!\,5!} = \frac{8 \times 7 \times 6}{3 \times 2 \times 1} = 56$.
 
 ## Choosing who is in is choosing who is out
 
-Choosing the 3 adjusters on the committee is the same as choosing the 5 who are left off.
+Choosing the $k$ objects that are selected is the same as choosing the $n - k$ objects that are left out, so
 
 > $$\binom{n}{k} = \binom{n}{n-k}$$
 
-On the example, $\binom{8}{3} = \binom{8}{5} = 56$. Use whichever side is smaller.
+> [!example] How many ways are there to choose 18 of 20 students for a team?
+> - Choosing the 18 students on the team is the same as choosing the 2 students left off it.
+> - $\binom{20}{18} = \binom{20}{2} = \frac{20 \times 19}{2 \times 1} = 190$.
 
 ## Selections from several categories
 
-Of the 8 adjusters, 3 are senior and 5 are junior. How many committees have exactly 1 senior adjuster? Choose the senior one from 3 and the two juniors from 5, separately, and multiply.
+When $n$ objects are split into $r$ categories, the number of selections with exactly $k_i$ objects from category $i$ is
 
-> $$\binom{3}{1}\binom{5}{2} = 3 \times 10 = 30$$
+> $$\binom{n_1}{k_1}\binom{n_2}{k_2}\cdots\binom{n_r}{k_r}$$
 
-If the committee is chosen at random, it has exactly 1 senior adjuster with probability $30/56 \approx 0.536$.
+- $n_i$ is the number of objects in category $i$, with $n_1 + n_2 + \cdots + n_r = n$.
 
-When a population is split into disjoint categories of sizes $N_1, \ldots, N_r$, a selection with exactly $k_i$ from category $i$ can be made in this many ways:
+> [!example] A bag holds 3 red, 4 blue and 5 green marbles. Five are drawn at random. What is the probability of drawing 1 red, 2 blue and 2 green marbles?
+> - The sample space is every selection of 5 marbles from 12, so $|S| = \binom{12}{5} = 792$.
+> - The event chooses 1 of the 3 red, 2 of the 4 blue and 2 of the 5 green marbles, so $|E| = \binom{3}{1}\binom{4}{2}\binom{5}{2} = 3 \times 6 \times 10 = 180$.
+> - The [[Probability|probability]] is $P(E) = \frac{180}{792} \approx 0.227$.
 
-> $$\binom{N_1}{k_1}\binom{N_2}{k_2}\cdots\binom{N_r}{k_r}$$
+## Counting every subset
 
-- The categories must cover everyone. When the counts asked for add to less than the selection size, the rest come from the leftover category, which adds a factor for it.
-- Dividing by $\binom{N}{n}$, the number of all selections of size $n$, gives the probability of that mix under the multivariate [[Hypergeometric Distribution|hypergeometric distribution]].
+Adding $\binom{n}{k}$ over every size $k$ counts every subset of $n$ objects, because each object is either in a subset or not:
 
-## When the picks get roles
+> $$\sum_{k=0}^{n} \binom{n}{k} = 2^n$$
 
-If one of the 3 committee members is named chair, each committee gives 3 different outcomes, so there are $56 \times 3 = 168$. If a chair and a secretary are both named, there are $56 \times 3 \times 2 = 336$, which is the ordered count $P(8, 3)$ again. Once every selected object has a distinct role, the count is a permutation.
+> [!example] Best subset selection fits one regression model for every subset of the $p$ predictors. How many models does it fit when $p = 10$?
+> - Each subset of the 10 predictors is one model, including the model with none of them.
+> - There are $2^{10} = 1{,}024$ models.
 
-## Pascal's rule and the hockey-stick identity
-
-Fix one adjuster. Every committee of 3 from 8 either leaves that adjuster out, choosing 3 from the other 7, or includes them, choosing 2 more from the other 7. So $56 = 35 + 21$. That is Pascal's rule.
-
-> $$\binom{n+1}{k} = \binom{n}{k} + \binom{n}{k-1}, \quad 1 \le k \le n$$
-
-Pascal's rule written as $\binom{m}{k} = \binom{m+1}{k+1} - \binom{m}{k+1}$ makes a sum of combinations telescope, with $\binom{k}{k+1} = 0$. That gives the hockey-stick identity.
-
-> $$\sum_{m=k}^{n}\binom{m}{k} = \binom{n+1}{k+1}, \quad k \le n$$
-
-- For example, $1 + 3 + 6 + 10 + 15 = \binom{7}{3} = 35$.
-- It evaluates sums of falling-factorial terms, since $m(m-1)\cdots(m-k+1) = k!\binom{m}{k}$. The simplest case is $\sum_{m=1}^{n} m = \binom{n+1}{2}$.
-
-## On other exams
-
-**MAS-I** counts the models fit by best subset selection. With $p$ predictors there is one model for every subset, and adding $\binom{p}{k}$ over every size $k$ gives $2^p$ models.
-
-## Try it
-
-> [!example]- A mix of claim types {Example}
-> Five claims are drawn at random from 12: 3 workers compensation, 4 homeowners and 5 auto. Find the probability of 1 workers compensation, 2 homeowners and 2 auto claims.
->
-> > [!answer]-
-> > **Plan:** one combination per type, over all selections of 5.
-> > $$
-> > \begin{align*}
-> > P &= \frac{\binom{3}{1}\binom{4}{2}\binom{5}{2}}{\binom{12}{5}} \\
-> > &= \frac{3 \times 6 \times 10}{792} \\
-> > &\approx 0.227
-> > \end{align*}
-> > $$
-
-> [!example]- Without replacement, not binomial {Example}
-> Four policies are drawn without replacement from 20, of which 5 are high-risk. Find the probability that exactly one is high-risk.
->
-> > [!answer]-
-> > **Plan:** a draw without replacement from a finite group is a ratio of combinations.
-> > $$
-> > \begin{align*}
-> > P &= \frac{\binom{5}{1}\binom{15}{3}}{\binom{20}{4}} \\
-> > &= \frac{5 \times 455}{4845} \\
-> > &\approx 0.470
-> > \end{align*}
-> > $$
-> > The binomial $4(0.25)(0.75)^3 \approx 0.422$ assumes the high-risk share stays at 25% after each draw. In a group of 20 it doesn't.
-
-> [!example]- An unknown count {Example}
-> Of 12 houses, $k$ are uninsured. A storm damages 2 at random. The probability that both damaged houses are uninsured is $1/22$. Find the probability that at most one damaged house is insured.
->
-> > [!answer]-
-> > **Plan:** solve for $k$ from the given probability, then count the two cases.
-> >
-> > $\binom{k}{2} / \binom{12}{2} = 1/22$, and $\binom{12}{2} = 66$, so $\binom{k}{2} = 3$ and $k = 3$.
-> > $$
-> > \begin{align*}
-> > P(\text{at most one insured}) &= \frac{\binom{3}{2} + \binom{3}{1}\binom{9}{1}}{66} \\
-> > &= \frac{3 + 27}{66} \\
-> > &\approx 0.455
-> > \end{align*}
-> > $$
-
-> [!warning]- Exam traps
-> - **A combination where order matters.** When the selected objects get distinct roles, such as chair and secretary, the count is $\binom{n}{k}\,k!$, a permutation.
-> - **A binomial where the draw is without replacement.** The probability of a mix from a finite group is a ratio of combinations, not $\binom{n}{k}p^k(1-p)^{n-k}$. The binomial answer is close for a large group, which is what makes it tempting.
-> - **A missing leftover category.** "Two non-smokers among six" leaves four chosen from the smokers, which needs its own factor.
+> [!trap] Roles make it a permutation
+> When the selected objects get distinct roles, the order matters. Choosing a president, a secretary and a treasurer from 8 people is ${}_{8}P_{3} = 336$, not $\binom{8}{3} = 56$.

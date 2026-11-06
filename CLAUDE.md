@@ -1479,13 +1479,18 @@ compile — don't "clean up" the flagged code as dead.
 ## Content conventions (markdown vault)
 
 - Wiki links use Obsidian syntax: `[[Concept Name]]` or `[[Concept Name|Display Text]]`.
-- Concept pages (`Concepts/*.md`) follow the `actuarial-concept-definitions` skill: definition →
-  `> $$formula$$` (or, for a qualitative concept, its defining list/hierarchy/table) → bullets →
-  `> [!idea] The idea` → `##` sections teaching it through one running example → `## Try it`
-  (collapsed examples, easy to hard) → collapsed *Exam traps* (no *How it appears on the exam*
-  callout since 2026-11-06; Exam P's pages are written this way). `[!idea]` and `[!trap]` are **note cards** — always open, in the Examiner's report
-  shape (`MarkdownCallout`, style guide §7.2b). Nothing callout-shaped goes above the bullets:
-  the opening is read by Concept Craft's recipe reader (`pageOpening`) and the SEO lead.
+- Concept pages (`Concepts/*.md`) follow the `actuarial-concept-definitions` skill. Since
+  2026-11-06 the shape is short and open: figure → `A **Term** is …` (a singular noun) →
+  `> $$formula$$` → one bullet per term the words before it didn't define → an open
+  `> [!example] <the question>` right under it → `##` sections, one per variation, each built the
+  same way → an optional `[!idea] The idea` and at most one `[!trap]`. Nothing is collapsed; no
+  running example, *Try it* or *Exam traps* fold. One symbol per thing across an exam (Exam P's
+  table is in the skill's `references/vault-mechanics.md`: $S$, $s$, $E$/$F$, ${}_nP_k$,
+  $\binom{n}{k}$). Exam P is being converted first (Probability, Combinatorics, Permutation are the
+  models); other exams' pages are still in the older running-example shape. `[!idea]` and
+  `[!trap]` are **note cards** — always open, in the Examiner's report shape (`MarkdownCallout`,
+  style guide §7.2b). Nothing callout-shaped goes above the bullets: the opening is read by
+  Concept Craft's recipe reader (`pageOpening`, which skips a leading figure) and the SEO lead.
   `Resources/Books/` pages have their own skill, `resource-pages`.
 - Exam pages use callout blocks (`> [!example]-`) listing learning objectives with weight
   percentages, e.g. `{23-30%}`.

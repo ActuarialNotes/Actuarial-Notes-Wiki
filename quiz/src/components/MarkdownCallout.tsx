@@ -65,10 +65,16 @@ const SKY: CalloutStyle = {
   accentClass: 'text-sky-600 dark:text-sky-400',
 }
 
+// A concept page's closing "How it appears on the exam" (tip) and "Exam traps"
+// (warning) folds: rounded cards at reading size, the icon carrying the colour
+// instead of a side rule — the same shape as the worked examples above them.
 const TEAL: CalloutStyle = {
   icon: Lightbulb,
   borderClass: 'border-teal-500/60',
   accentClass: 'text-teal-600 dark:text-teal-400',
+  roundLeft: true,
+  noBorder: true,
+  contentClass: 'text-base text-foreground',
 }
 
 const EXAMPLE_STYLE: CalloutStyle = {
@@ -93,6 +99,9 @@ const AMBER: CalloutStyle = {
   icon: AlertTriangle,
   borderClass: 'border-amber-500/60',
   accentClass: 'text-amber-600 dark:text-amber-400',
+  roundLeft: true,
+  noBorder: true,
+  contentClass: 'text-base text-foreground',
 }
 
 const RED: CalloutStyle = {

@@ -1,16 +1,15 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-09-28
+  status: verified
+  confidence: high
+  last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:2b478e56293a4dfb2e25ece2c078a9fefe8a53acebecc1a414cc931c2974aa69
+  content_hash: sha256:d3394a191d5f183482329b244c1c29f895cebe583f986077d2fab0d825464d91
   sources:
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Def. 7.1 convolution of independent integer-valued variables (printed p.286, PDF p.294), Example 7.5 sum of two independent normals (PDF p.302), Thms 9.4 and 9.6 (PDF pp.351, 365), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "SOA Exam P Sample Solutions (Aug 2026 revision), Q124 (sum of independent Poisson variables is Poisson with the means added, PDF p.37), sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"
-    - "Siegrist, Random (randomservices.org), The Poisson Process > The Poisson Distribution (closed under independent sums), sha256:cf3d0aacfdb40291bb729d32f6f7692b39e4c4a13a1e09f86ef8826bef61f688 — https://www.randomservices.org/random/poisson/Poisson.html"
-    - "SOA Exam P normal distribution table (rev. 4/29/21), row z = 2.2 (column .02 = 0.9868), sha256:5dbd8a242813fe585c3eb085d32617ff14bcaa0517ca547b263e7b03541a8bcb — https://www.soa.org/globalassets/assets/files/edu/2021/p-1-table-rev-4-29-21.pdf"
-    - "SOA, Probability Exam (Exam P) Syllabus, November 2026, Topic 3 Multivariate Random Variables, learning objective and outcomes a)-i), PDF p.4, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL), Ex. 6.3.17(a)-(c) and 6.3.18(a)-(c) printed p.281 (PDF p.289); Def. 7.1 p.286 (PDF p.294); Thm 7.1 and sum of two exponentials (PDF pp.299-301); Examples 7.5-7.6 (PDF p.302); Thms 9.4 and 9.6 (PDF pp.351, 365); continuity correction (PDF p.340), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), 14.4 The Poisson Distribution: E(N)=var(N); sum of independent Poisson(a), Poisson(b) is Poisson(a+b), sha256:cf3d0aacfdb40291bb729d32f6f7692b39e4c4a13a1e09f86ef8826bef61f688 — https://www.randomservices.org/random/poisson/Poisson.html"
+    - "SOA Exam P normal distribution table (rev. 4/29/21), standard normal table, Phi(1.00)=0.8413, Phi(1.54)=0.9382, Phi(2.22)=0.9868, PDF p.2, sha256:5dbd8a242813fe585c3eb085d32617ff14bcaa0517ca547b263e7b03541a8bcb — https://www.soa.org/globalassets/assets/files/edu/2021/p-1-table-rev-4-29-21.pdf"
+    - "SOA, Probability Exam (Exam P) Syllabus, November 2026, Topic 3 Multivariate Random Variables, learning outcomes a)-i), PDF p.4, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Probabilities for Linear Combinations.md
@@ -27,7 +26,7 @@ verification:
 - The first formula holds for any discrete pair. It adds the joint probabilities of every pair of values that gives the total $s$.
 - The second is the first for independent $X$ and $Y$, and is called a [[Convolution|convolution]].
 - The third holds when $X_1, \ldots, X_n$ are independent [[Normal Distribution|normal]] variables with means $\mu_i$ and standard deviations $\sigma_i$.
-- For a sum of many i.i.d. terms, the [[Central Limit Theorem]] gives an approximate normal distribution instead. See [[Normal Approximation]].
+- For a sum of many i.i.d. terms with finite variance, the [[Central Limit Theorem]] gives an approximate normal distribution instead. See [[Normal Approximation]].
 
 > [!idea] The idea
 > An event about $L$ is a set of outcomes of the $X_i$. Its probability adds up the outcomes in that set, which is a diagonal of a joint table or a region under a joint density. Normal variables are the convenient case, because a weighted sum of independent normals is again normal and only its mean and variance are needed.

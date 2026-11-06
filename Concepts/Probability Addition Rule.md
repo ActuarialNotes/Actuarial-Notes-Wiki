@@ -21,78 +21,143 @@ verification:
   log: .verify/Concepts/Probability Addition Rule.md
 ---
 
-The **Probability Addition Rule** gives the probability that at least one of two events $A$ or $B$ occurs, correcting for the double-counting of outcomes in their intersection.
+The **Probability Addition Rule** gives the probability that at least one of two [[Event|events]] $A$ or $B$ occurs. It adds the two probabilities and subtracts the probability that both occur, so the overlap is counted once.
 
 > $$P(A \cup B) = P(A) + P(B) - P(A \cap B)$$
 
-- Also known as the Inclusion-Exclusion Principle
-- When events are [[Mutually Exclusive Events|mutually exclusive]], $P(A \cap B) = 0$ and the rule reduces to simple addition
-- The larger the overlap $P(A \cap B)$, the smaller the union $P(A \cup B)$.
-- For three events the rule extends to include all pairwise and triple intersections:
-
-> $$P(A \cup B \cup C) = P(A)+P(B)+P(C) - P(A \cap B) - P(A \cap C) - P(B \cap C) + P(A \cap B \cap C)$$
+- $A \cup B$ is "$A$ or $B$ or both" and $A \cap B$ is "both $A$ and $B$".
+- When $A$ and $B$ are [[Mutually Exclusive Events|mutually exclusive]], $P(A \cap B) = 0$ and the rule reduces to $P(A) + P(B)$.
+- When $A$ and $B$ are [[Independent Events|independent]], $P(A \cap B) = P(A)\,P(B)$.
+- The rule for any number of events is the [[Inclusion-Exclusion Principle|inclusion-exclusion principle]].
 
 > [!idea] The idea
-> Adding $P(A)$ and $P(B)$ counts every outcome in both events twice. The addition rule subtracts the overlap once, so each outcome in $A \cup B$ is counted exactly once. With three events, the single events add the triple overlap three times and the pairs subtract it three times. The rule therefore adds it back once.
+> Adding $P(A)$ and $P(B)$ counts every outcome in both events twice. The addition rule subtracts the overlap once, so each outcome in $A \cup B$ is counted exactly once. The larger the overlap, the smaller the union.
 
 ![[Media/Figures/Probability_Addition_Rule.svg|340]]
 
-### Only one, exactly one, exactly two
+## Why not just add?
 
-- "$A$ but not $B$" has probability $P(A \cap B^c) = P(A) - P(A \cap B)$: subtract the joint probability with $B$ from the probability of $A$.
-- "Exactly one of $A$ and $B$" is the union of the two mutually exclusive events ($A$ occurs and $B$ does not) and ($B$ occurs and $A$ does not), so its probability is the sum of the two "only" probabilities.
+Over a year, 30% of an insurer's homeowners policyholders file a property claim and 20% file a liability claim. 8% file both. Out of 100 policyholders, the four regions are:
+
+| | Liability | No liability | Total |
+|---|---|---|---|
+| Property | 8 | 22 | 30 |
+| No property | 12 | 58 | 70 |
+| Total | 20 | 80 | 100 |
+
+Adding 30 and 20 gives 50. But the 8 policyholders with both claims are in the 30 and in the 20, so they were counted twice. The policyholders with at least one claim are $22 + 8 + 12 = 42$.
+
+> $$P(\text{property} \cup \text{liability}) = 0.30 + 0.20 - 0.08 = 0.42$$
+
+## Only one, exactly one, neither
+
+Questions often ask for a region other than the union. Each one is read off the same table.
+
+- **Property but not liability** is the property total less the overlap.
+
+> $$P(A \cap B^c) = P(A) - P(A \cap B)$$
+
+- On the example this is $0.30 - 0.08 = 0.22$.
+- **Exactly one** claim type is the two "only" regions added, $0.22 + 0.12 = 0.34$. The overlap is subtracted twice, once from each event.
+
+> $$P(\text{exactly one of } A, B) = P(A) + P(B) - 2P(A \cap B)$$
+
+- The same answer is the union less the overlap, $0.42 - 0.08 = 0.34$.
+- **Neither** is the complement of the union, $1 - 0.42 = 0.58$.
+
+Exam questions often state the events in complement form, such as "no emergency room visits" or "neither". Turn each statement into $P(A)$, $P(B)$ or $P(A \cup B)$ first, then solve the addition rule for the missing piece.
+
+## Mutually exclusive or independent?
+
+The overlap term is where the two most common assumptions about events enter.
+
+- If property and liability claims were **mutually exclusive**, no one could file both. The overlap would be 0 and the union would be 0.50.
+- If they were **independent**, the overlap would be $0.30 \times 0.20 = 0.06$ and the union would be $0.30 + 0.20 - 0.06 = 0.44$.
+- Independent events with positive probabilities do overlap. Exactly one of them then occurs with probability $P(A)(1 - P(B)) + (1 - P(A))P(B)$.
+
+> [!trap] Independent read as mutually exclusive
+> Independent events overlap, with $P(A \cap B) = P(A)\,P(B)$. Adding their probabilities gives 0.50 here instead of 0.44. The plain sum is usually among the options.
+
+## Three events
+
+Add a third claim type. 25% of policyholders file a glass claim $C$. The overlaps are $P(A \cap C) = 0.10$, $P(B \cap C) = 0.05$, and 3% file all three.
 
 > $$
 > \begin{align*}
-> P(\text{exactly one of } A, B) &= P(A \cap B^c) + P(A^c \cap B) \\
-> &= P(A) + P(B) - 2P(A \cap B)
+> P(A \cup B \cup C) &= P(A) + P(B) + P(C) \\
+> &\quad - P(A \cap B) - P(A \cap C) - P(B \cap C) \\
+> &\quad + P(A \cap B \cap C)
 > \end{align*}
 > $$
 
-- Equivalently, the probability that exactly one of $A$ or $B$ occurs is $P(A \cup B) - P(A \cap B)$: the union with the intersection taken out.
-- When $A$ and $B$ are independent, so are $A$ and $B^c$, and each "only" probability is a product: exactly one has probability $P(A)(1 - P(B)) + (1 - P(A))P(B)$.
-- For three events, each "exactly two" region is a pairwise intersection less the triple intersection, so:
+- On the example, $0.75 - 0.23 + 0.03 = 0.55$.
+- A policyholder with all three claims is added three times by the single events and subtracted three times by the pairs. The last term adds them back once.
+- Each "exactly two" region is a pairwise overlap less the triple overlap. The three regions together hold $0.23 - 3(0.03) = 0.14$.
 
-> $$P(\text{exactly two of } A, B, C) = P(A \cap B) + P(A \cap C) + P(B \cap C) - 3P(A \cap B \cap C)$$
+> $$
+> \begin{aligned}
+> P(\text{exactly two}) = {}& P(A \cap B) + P(A \cap C) + P(B \cap C) \\
+> &- 3P(A \cap B \cap C)
+> \end{aligned}
+> $$
 
-- When the triple intersection is empty, the probability that exactly two occur is the sum of the pairwise intersection probabilities.
-- When some pairs are mutually exclusive, only the remaining pairs contribute: if $A \cap C = B \cap C = \emptyset$, exactly two of the three can occur only as $A \cap B$, so the probability that exactly two occur is $P(A \cap B)$.
+- When the triple overlap is empty, exactly two occur with probability equal to the sum of the pairwise overlaps.
+- When some pairs are mutually exclusive, only the other pairs contribute. If $A \cap C$ and $B \cap C$ are both empty, exactly two can occur only as $A \cap B$, so the probability is $P(A \cap B)$.
 
-### When the overlap is not given
+## When the overlap is not given
 
-- If $P(A \cap B)$ is not given, it is only bounded. $A \cap B$ lies inside both events, so $P(A \cap B)$ is at most the smaller of $P(A)$ and $P(B)$. Since $P(A \cup B) \leq 1$, the addition rule forces $P(A \cap B) \geq P(A) + P(B) - 1$.
+Suppose only $P(A) = 0.30$ and $P(B) = 0.20$ are known. Then $P(A \cap B)$ is not determined, only bounded.
 
-> $$\max(0,\ P(A) + P(B) - 1) \leq P(A \cap B) \leq \min(P(A),\ P(B))$$
+- The overlap lies inside both events, so it is at most the smaller probability, 0.20.
+- The union is at most 1, so the addition rule forces $P(A \cap B) \ge P(A) + P(B) - 1$. Here that lower bound is negative, so the overlap can be 0.
 
-- So $P(A \cup B)$ ranges from $\max(P(A), P(B))$, when one event contains the other, up to $\min(1, P(A) + P(B))$. The probability $P(\text{neither}) = 1 - P(A \cup B)$ ranges accordingly.
+> $$\max(0,\ P(A) + P(B) - 1) \le P(A \cap B) \le \min(P(A),\ P(B))$$
 
-> [!example]- Only, Exactly One, and Bounds {Example}
-> (a) $P(A) = 0.5$, $P(B) = 0.4$ and $P(A \cap B) = 0.15$. Find the probability that exactly one of $A$, $B$ occurs. (b) If instead only $P(A) = 0.5$ and $P(B) = 0.7$ are known, what values can $P(A \cup B)$ take?
+- The union therefore runs from $\max(P(A), P(B))$, when one event contains the other, up to $\min(1,\ P(A) + P(B))$. On the example, it lies between 0.30 and 0.50.
+
+## Try it
+
+> [!example]- Given in complement form {Example}
+> A medical policyholder has probability 0.75 of no emergency room visits this year, 0.80 of no hospital stays, and 0.62 of neither. Find the probability of at least one emergency room visit and at least one hospital stay.
 >
 > > [!answer]-
-> > (a) The two "only" probabilities are $0.5 - 0.15 = 0.35$ and $0.4 - 0.15 = 0.25$, so
-> > $$P(\text{exactly one}) = 0.35 + 0.25 = 0.60$$
-> > Check: $P(A \cup B) = 0.5 + 0.4 - 0.15 = 0.75$, and $0.75 - 0.15 = 0.60$.
+> > **Plan:** turn each statement into a probability of an event, then solve the addition rule for the overlap.
 > >
-> > (b) $P(A \cap B)$ lies between $0.5 + 0.7 - 1 = 0.2$ and $\min(0.5, 0.7) = 0.5$. So $P(A \cup B) = 1.2 - P(A \cap B)$ lies between $0.7$ and $1$, and $P(\text{neither})$ lies between $0$ and $0.3$.
+> > Let $E$ be at least one emergency room visit and $H$ at least one hospital stay. Then $P(E) = 0.25$, $P(H) = 0.20$ and $P(E \cup H) = 1 - 0.62 = 0.38$.
+> > $$
+> > \begin{align*}
+> > P(E \cap H) &= P(E) + P(H) - P(E \cup H) \\
+> > &= 0.25 + 0.20 - 0.38 \\
+> > &= 0.07
+> > \end{align*}
+> > $$
+> > "Neither" is the complement of the union, not of the overlap.
 
-> [!example]- Probability of at Least One Coverage Trigger {Example}
-> For a commercial policy, the probability of a fire loss is 0.05, a flood loss is 0.03, and both losses in the same year is 0.01. What is the probability of at least one loss?
+> [!example]- Exactly one of two independent events {Example}
+> A policyholder has an auto claim with probability 0.4 and a home claim with probability 0.25, independently. Find the probability of exactly one type of claim.
 >
 > > [!answer]-
-> > Let $F$ = fire and $L$ = flood. Applying the addition rule:
-> > $$P(F \cup L) = P(F) + P(L) - P(F \cap L) = 0.05 + 0.03 - 0.01 = 0.07$$
-> > There is a 7% probability of experiencing at least one loss in the year.
+> > **Plan:** add the two "only" regions, each a product because the events are independent.
+> > $$
+> > \begin{align*}
+> > P(\text{exactly one}) &= 0.4(0.75) + 0.6(0.25) \\
+> > &= 0.30 + 0.15 \\
+> > &= 0.45
+> > \end{align*}
+> > $$
+> > Check: $P(A \cup B) = 0.4 + 0.25 - 0.10 = 0.55$, and $0.55 - 0.10 = 0.45$.
 
-> [!tip]- How it appears on the exam
-> - **Exam P** (General Probability, objective 5): the page is tagged on 25 Exam P questions in the bank. Most of them are two- or three-event problems.
-> - Two events are given in complement form, such as "no fillings", "no root canals" or "at least one". The task is to recover $P(A \cap B)$ or $P(A \cup B)$ and answer for the asked region.
-> - Questions ask for "exactly one" of two events. The events are often independent, so the overlap is a product.
-> - Some questions give three events that mix independent and mutually exclusive pairs, or give "at least one" and "exactly two" totals. The task is to solve for one event's probability.
-> - When the overlap is not given, the task is to state the range of values a probability can take, from the bounds on $P(A \cap B)$.
+> [!example]- A range, not a value {Example}
+> Only $P(A) = 0.5$ and $P(B) = 0.7$ are known. What values can $P(A \cup B)$ and $P(\text{neither})$ take?
+>
+> > [!answer]-
+> > **Plan:** bound the overlap, then carry the bounds through the addition rule.
+> >
+> > $P(A \cap B)$ lies between $0.5 + 0.7 - 1 = 0.2$ and $\min(0.5, 0.7) = 0.5$. So $P(A \cup B) = 1.2 - P(A \cap B)$ lies between 0.7 and 1, and $P(\text{neither})$ lies between 0 and 0.3.
+> > Assuming independence would give the single value 0.85, which the question did not license.
 
 > [!warning]- Exam traps
-> - **Independent read as mutually exclusive.** Independent events overlap: $P(A \cap B) = P(A)\,P(B)$, not $0$. With fire $0.2$ and theft $0.3$ independent, $P(\text{at least one}) = 0.2 + 0.3 - 0.06 = 0.44$, not $0.5$.
+> - **Independent read as mutually exclusive.** Independent events overlap by $P(A)\,P(B)$. The plain sum overstates the union.
 > - **The triple term left off.** Stopping after the pairwise subtractions undercounts the union by $P(A \cap B \cap C)$.
-> - **Union given for "exactly one".** Subtracting the overlap once gives at least one. "Exactly one" subtracts it twice. An answer equal to $P(A \cup B)$ is the sign.
-> - **One value when a range is asked.** Without $P(A \cap B)$, assuming independence produces a single number. The question wants the interval the bounds allow.
+> - **The union given for "exactly one".** "At least one" subtracts the overlap once. "Exactly one" subtracts it twice.
+> - **One value when a range is asked.** Without $P(A \cap B)$, the answer is the interval the bounds allow.

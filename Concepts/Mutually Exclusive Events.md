@@ -20,45 +20,109 @@ verification:
   log: .verify/Concepts/Mutually Exclusive Events.md
 ---
 
-Two events $A$ and $B$ are **Mutually Exclusive** (disjoint) if they cannot both occur simultaneously.
+Two [[Event|events]] $A$ and $B$ are **Mutually Exclusive** (disjoint) if they cannot both occur. Their intersection is empty, so its probability is 0.
 
 > $$A \cap B = \emptyset \implies P(A \cap B) = 0$$
 
-- For mutually exclusive events, the [[Probability Addition Rule]] simplifies to $P(A \cup B) = P(A) + P(B)$
-- The addition rule simplification extends to any finite collection: if $A_1, A_2, \ldots, A_n$ are pairwise mutually exclusive, then $P\!\left(\bigcup_{i=1}^n A_i\right) = \sum_{i=1}^n P(A_i)$
-- Mutually exclusive events are not the same as [[Independent Events|independent]] events. Two mutually exclusive events that each have positive probability are never independent, because $P(A \cap B) = 0$ while $P(A)\,P(B) > 0$.
-- When outcomes are split into classes that are mutually exclusive and cover every case, any one class's probability is 1 minus the probabilities of the others.
+- For mutually exclusive events, the [[Probability Addition Rule|addition rule]] reduces to $P(A \cup B) = P(A) + P(B)$.
+- The same holds for any finite collection. If $A_1, \ldots, A_n$ are pairwise mutually exclusive, the probability of their union is $\sum_{i=1}^n P(A_i)$.
+- Mutually exclusive is not the same as [[Independent Events|independent]]. Two mutually exclusive events that each have positive probability are never independent.
 
 > [!idea] The idea
 > Adding the probabilities of two events usually counts their overlap twice. Mutually exclusive events have no overlap to double count, so their probabilities simply add.
 
 ![[Media/Figures/Mutually_Exclusive_Events.svg|340]]
 
-### Three or more events
+## Events that cannot happen together
 
-- If $A$ and $C$ are mutually exclusive, every intersection that contains both of them is empty: $A \cap B \cap C \subseteq A \cap C = \emptyset$ for any event $B$, so $P(A \cap B \cap C) = 0$.
+Let $N$ be the number of claims a policyholder files in a year.
+
+| Claims $N$ | Probability |
+|---|---|
+| 0 | 0.60 |
+| 1 | 0.25 |
+| 2 | 0.10 |
+| 3 or more | 0.05 |
+
+"No claims" and "exactly one claim" cannot both happen, so they are mutually exclusive. The probability of at most one claim is $0.60 + 0.25 = 0.85$.
+
+Now take "at most one claim" and "at least one claim". Their probabilities are 0.85 and 0.40, which add to 1.25. A probability above 1 shows the events overlap: both contain $N = 1$. The addition rule gives the right answer.
+
+> $$P(N \le 1 \text{ or } N \ge 1) = 0.85 + 0.40 - 0.25 = 1$$
+
+## Mutually exclusive and exhaustive: one minus the rest
+
+The four rows of the table are mutually exclusive, and together they cover every outcome. Classes like these form a partition, and their probabilities add to 1. So any one class's probability is 1 minus the others.
+
+> $$P(N \ge 3) = 1 - 0.60 - 0.25 - 0.10 = 0.05$$
+
+This is how a question that classifies every claim into exactly one type, or every patient into exactly one stage, is solved for a single class.
+
+## Overlapping ranges, made disjoint
+
+"One or two claims" has probability 0.35 and "two or more claims" has probability 0.15. Both include $N = 2$, so their probabilities cannot be added. Break the union into pieces that do not overlap: $\{1\}$, $\{2\}$ and $\{3 \text{ or more}\}$.
+
+> $$P(N \ge 1) = 0.25 + 0.10 + 0.05 = 0.40$$
+
+The addition rule agrees: $0.35 + 0.15 - 0.10 = 0.40$. Ranges of a time or an amount, such as calls lasting 2 to 4 minutes and calls lasting 3 to 5 minutes, overlap the same way.
+
+## Mutually exclusive is not independent
+
+Learning that a policyholder filed no claims says for certain that they did not file exactly one. So $P(N = 1 \mid N = 0) = 0$, while $P(N = 1) = 0.25$. Mutually exclusive events are as dependent as two events can be.
+
+- Independence would need $P(A \cap B) = P(A)\,P(B) = 0.60 \times 0.25 = 0.15$.
+- Mutual exclusivity forces $P(A \cap B) = 0$.
+- Both can hold only when one of the events has probability 0.
+
+> [!trap] Mutually exclusive taken for independent
+> If $A$ and $C$ are mutually exclusive, $P(A \cap C) = 0$, not $P(A)\,P(C)$. Multiplying puts a positive overlap into the addition rule and understates the union.
+
+## Three or more events
+
+If $A$ and $C$ are mutually exclusive, every intersection that contains both of them is empty too. For any event $B$, $A \cap B \cap C$ lies inside $A \cap C$.
 
 > $$A \cap C = \emptyset \implies P(A \cap B \cap C) = 0$$
 
-- So in the three-event addition rule, the $P(A \cap C)$ and $P(A \cap B \cap C)$ terms both vanish when $A$ and $C$ are mutually exclusive.
-- If $C$ is mutually exclusive with both $A$ and $B$, then $A \cap B \cap C$ is a subset of each of $A \cap C$ and $B \cap C$, so it is empty too and has probability 0.
+- In the three-event addition rule, the $P(A \cap C)$ and $P(A \cap B \cap C)$ terms then both vanish.
+- If $C$ is mutually exclusive with both $A$ and $B$, then $A \cap B \cap C$ lies inside each of $A \cap C$ and $B \cap C$. It is empty and has probability 0.
+- Questions often mix the two kinds of pair: one pair independent, another mutually exclusive. Each pair's overlap is then a product or a zero.
 
-> [!example]- Insurance Claim Type {Example}
-> Each claim is classified as exactly one of property damage ($D$), bodily injury ($B$), or other. $P(D) = 0.60$ and $P(B) = 0.35$. Find the probability that a claim is property damage or bodily injury, and the probability that it is classified as other.
+## Try it
+
+> [!example]- Classifying claims {Example}
+> Each claim is classified as exactly one of property damage $D$, bodily injury $B$, or other. $P(D) = 0.60$ and $P(B) = 0.35$. Find the probability that a claim is property damage or bodily injury, and the probability that it is "other".
 >
 > > [!answer]-
-> > Since $D$ and $B$ are mutually exclusive:
-> > $$P(D \cup B) = P(D) + P(B) = 0.60 + 0.35 = 0.95$$
-> > The three classes are mutually exclusive and cover every claim, so "other" is the complement of $D \cup B$:
+> > **Plan:** the classes are mutually exclusive and exhaustive, so add two of them and take the third as the complement.
+> > $$P(D \cup B) = 0.60 + 0.35 = 0.95$$
 > > $$P(\text{other}) = 1 - 0.95 = 0.05$$
 
-> [!tip]- How it appears on the exam
-> - **Exam P** (General Probability, objective 4): the page is tagged on 8 Exam P questions in the bank.
-> - Three events are given where one pair, or two pairs, are mutually exclusive, so some intersections in the three-event addition rule vanish. Often another pair in the same question is independent.
-> - Each item is classified into exactly one category, such as cancer stages, claim types or call lengths. Given the probabilities of combined categories, the task is to solve for a single category.
-> - Events are defined in words, such as thefts per year over several periods or two groups of policyholders. The task is to see which events cannot occur together.
+> [!example]- One independent pair, one exclusive pair {Example}
+> $P(A) = 0.3$, $P(B) = 0.4$ and $P(C) = 0.2$. $A$ and $B$ are independent, and $C$ is mutually exclusive with both $A$ and $B$. Find $P(A \cup B \cup C)$.
+>
+> > [!answer]-
+> > **Plan:** fill each overlap term from the relationship of its pair, then apply the three-event rule.
+> >
+> > $P(A \cap B) = 0.3 \times 0.4 = 0.12$. The overlaps with $C$, and the triple, are 0.
+> > $$
+> > \begin{align*}
+> > P(A \cup B \cup C) &= 0.3 + 0.4 + 0.2 - 0.12 \\
+> > &= 0.78
+> > \end{align*}
+> > $$
+
+> [!example]- Overlapping call lengths {Example}
+> 40% of calls last 2 to 4 minutes, 30% last 3 to 5 minutes and 15% last 3 to 4 minutes. Find the share of calls lasting 2 to 5 minutes.
+>
+> > [!answer]-
+> > **Plan:** split the range into disjoint pieces.
+> >
+> > 2 to 3 minutes: $0.40 - 0.15 = 0.25$. 3 to 4 minutes: $0.15$. 4 to 5 minutes: $0.30 - 0.15 = 0.15$.
+> >
+> > Total: $0.25 + 0.15 + 0.15 = 0.55$.
+> > Adding 0.40 and 0.30 counts the 3 to 4 minute calls twice.
 
 > [!warning]- Exam traps
-> - **Mutually exclusive taken for independent.** If $A$ and $C$ are mutually exclusive, $P(A \cap C) = 0$, not $P(A)\,P(C)$. Multiplying puts a positive overlap into the addition rule and understates the union.
-> - **Adding probabilities of events that overlap.** Calls lasting 2–4 minutes and calls lasting 3–5 minutes share the 3–4 minute range, so their percentages can't be added. Break them into disjoint intervals first.
-> - **Exclusive but not exhaustive.** "1 minus the rest" gives a category's probability only when the classes also cover every outcome. If they don't, the remainder includes outcomes in none of the listed classes.
+> - **Mutually exclusive taken for independent.** The overlap is 0, not a product.
+> - **Adding probabilities of events that overlap.** Split overlapping ranges into disjoint pieces first.
+> - **Exclusive but not exhaustive.** "1 minus the rest" gives a class's probability only when the classes cover every outcome. Otherwise the remainder includes outcomes in none of the listed classes.

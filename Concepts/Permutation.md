@@ -19,41 +19,87 @@ verification:
   log: .verify/Concepts/Permutation.md
 ---
 
-A **Permutation** $P(n, k)$ counts the number of ways to select and arrange $k$ objects from $n$ distinct objects in a specific order.
+A **Permutation** $P(n, k)$ counts the ways to select $k$ objects from $n$ distinct objects and arrange them in order.
 
 > $$P(n, k) = \frac{n!}{(n-k)!}$$
 
-> $$= n \times (n-1) \times \cdots \times (n-k+1)$$
+> $$P(n, k) = n \times (n-1) \times \cdots \times (n-k+1)$$
 
 - A permutation assumes no replacement, so the same object cannot be selected twice.
-- Permutations differ from combinations by a factor of $k!$, the number of ways to order the selected objects.
-- Use permutations when sequence matters, as in ranking, scheduling or assigning distinct roles.
+- Permutations differ from [[Combination|combinations]] by a factor of $k!$, the number of ways to order the selected objects.
+- Use a permutation when the sequence matters, as in ranking, scheduling or assigning distinct roles.
 
 > [!idea] The idea
-> Ranking 3 prizes among 8 adjusters means filling 3 places in order. A permutation fills the $k$ places one at a time. Any of the $n$ objects can go first, $n-1$ are left for the second, and so on down to $n-k+1$ for the last. The multiplication principle multiplies these choices, so the 3 ranked prizes can be awarded in $8 \times 7 \times 6$ ways. The factorial form $n!/(n-k)!$ is the same product written compactly, because the $(n-k)!$ cancels the factors for the places that are never filled.
+> A permutation fills $k$ places one at a time. Any of the $n$ objects can go first, $n - 1$ are left for the second, and so on. The [[Combinatorics|multiplication principle]] multiplies these choices. The factorial form is the same product, because $(n-k)!$ cancels the factors for the places that are never filled.
 
 ![[Media/Figures/Permutation.svg|340]]
 
-### Permutations with restrictions
+## Filling places in order
 
-- **Fixing a set of items:** the number of permutations of $n$ distinct items that leave a specified set of $k$ items in their original positions is $(n-k)!$, since the remaining $n-k$ items can be arranged arbitrarily. There are $\binom{n}{k}$ such sets, which gives the term $\binom{n}{k}(n-k)!$ in [[Inclusion-Exclusion Principle|inclusion-exclusion]] counts of permutations with fixed points (derangements, on [[Combinatorics]]).
-- **Circular permutations:** the number of distinct arrangements of $n$ distinct objects around a circle, counting arrangements that differ only by a rotation as the same, is $(n-1)!$. Seat one object anywhere and arrange the other $n-1$ relative to it. For example, 7 people at a round table can be seated in $6! = 720$ ways.
-- **Items that must be adjacent:** to count arrangements in which certain items must be adjacent, glue them into a single block, count the arrangements of the block together with the other items, and multiply by the number of orderings inside the block ($k!$ for a block of $k$). For example, five books in a row with two particular books kept together give $4! \times 2! = 48$ arrangements.
+An insurer awards a 1st, 2nd and 3rd place bonus among 8 adjusters. How many outcomes are there?
 
-> [!example]- Assigning Ranked Prizes to Adjusters {Example}
-> From 8 adjusters, an insurer awards a 1st, 2nd, and 3rd place performance bonus. How many distinct award outcomes are possible?
+| Place | Choices left |
+|---|---|
+| 1st | 8 |
+| 2nd | 7 |
+| 3rd | 6 |
+
+> $$P(8, 3) = 8 \times 7 \times 6 = 336$$
+
+## Ordered versus unordered
+
+A committee of 3 from the same 8 is not ranked, so there are only $\binom{8}{3} = 56$ committees. Each committee can be ranked in $3! = 6$ ways, and $56 \times 6 = 336$.
+
+> $$P(n, k) = \binom{n}{k}\,k!$$
+
+When a selection is followed by an ordered step, the count is a combination times a permutation. Choosing 4 of the 8 for a subcommittee and then a chair and a secretary from the 4 gives $\binom{8}{4} \times P(4, 2) = 70 \times 12 = 840$. Choosing the chair and secretary first and then 2 more members gives $P(8, 2)\binom{6}{2} = 56 \times 15 = 840$ too.
+
+## All $n$ in a row, and identical objects
+
+All 8 adjusters can be put in a review rota in $8! = 40{,}320$ ways, the case $k = n$.
+
+$n!$ assumes every object is different. Suppose 8 claim files are queued and only their types matter: 3 auto, 3 home and 2 workers compensation. Swapping two auto files changes nothing, so divide by the orderings within each type.
+
+> $$\frac{8!}{3!\,3!\,2!} = 560$$
+
+## Permutations with restrictions
+
+- **Items that must be adjacent.** Glue them into one block, arrange the block with the other items, and multiply by the orderings inside the block. Two given adjusters together in the rota of 8 give $7! \times 2! = 10{,}080$ arrangements. A random rota puts them together with probability $10{,}080 / 40{,}320 = 0.25$.
+- **Around a circle.** Arrangements that differ only by a rotation are the same. Seat one object anywhere and arrange the others relative to it, giving $(n-1)!$. The 8 adjusters can sit around a round table in $7! = 5{,}040$ ways.
+- **Fixing a set of items.** The permutations of $n$ items that leave a given set of $k$ items in place number $(n - k)!$, since only the other items move. With $\binom{n}{k}$ such sets, the term $\binom{n}{k}(n-k)!$ appears in [[Inclusion-Exclusion Principle|inclusion-exclusion]] counts of permutations with fixed points. The derangement count is on [[Combinatorics]].
+
+> [!trap] Forgetting the order inside a block
+> Gluing two items and arranging the block counts each arrangement of the block once. Without the $2!$ inside it, the rota count is $7! = 5{,}040$, half the right answer.
+
+## Try it
+
+> [!example]- Officers of a committee {Example}
+> A committee of 10 names a president, a vice-president and a treasurer. How many outcomes are there?
 >
 > > [!answer]-
-> > Order matters (1st ≠ 2nd ≠ 3rd place), so this is a permutation:
-> > $$P(8, 3) = \frac{8!}{(8-3)!} = \frac{8!}{5!} = 8 \times 7 \times 6 = 336$$
-> > There are 336 distinct ways to assign the three ranked prizes, compared to only $\binom{8}{3} = 56$ unordered committees.
+> > **Plan:** three distinct roles filled in order.
+> > $$P(10, 3) = 10 \times 9 \times 8 = 720$$
 
-> [!tip]- How it appears on the exam
-> - **Exam P** (General Probability, objective 2): ranked prizes, officer posts or schedules, where each selected object gets a distinct role and the count is $P(n, k)$.
-> - **Exam P**: an ordered step follows an unordered one, such as choosing a subcommittee and then a chair and a secretary from it. The count is then a [[Combination|combination]] times a permutation.
-> - Arrangements with a restriction, such as items kept together or seats around a table, are counted with the rules above. The count usually feeds a probability, the favourable arrangements over all $n!$.
+> [!example]- Together at a round table {Example}
+> Six people sit at random around a round table. Find the probability that two given people sit next to each other.
+>
+> > [!answer]-
+> > **Plan:** count the circular arrangements with the pair glued, over all circular arrangements.
+> >
+> > All arrangements: $5! = 120$. With the pair as one block, there are 5 units around the table, so $4! \times 2! = 48$.
+> >
+> > The probability is $48/120 = 0.4$. Fixing one of the two people, the other has 5 seats, 2 of them adjacent, which gives $2/5$ again.
+
+> [!example]- Claim histories {Example}
+> Over 7 policy years, a policyholder had 4 claim-free years, 2 years with one claim and 1 year with two claims. How many distinct year-by-year histories fit?
+>
+> > [!answer]-
+> > **Plan:** arrange 7 years, then divide by the orderings within each group of identical years.
+> > $$\frac{7!}{4!\,2!\,1!} = 105$$
+> > Swapping two claim-free years gives the same history, so $7!$ alone overcounts.
 
 > [!warning]- Exam traps
-> - **Forgetting the order inside a block.** Gluing $k$ items together and arranging the blocks counts each arrangement of the block once. Without the $k!$ orderings inside it, the answer is too small by that factor.
-> - **Treating a circle as a row.** Around a table, $n!$ counts every rotation of the same seating separately and is $n$ times too large. The count is $(n-1)!$.
-> - **Identical objects counted as distinct.** $n!$ assumes every object is different. With repeated objects, divide by the factorial of each group of identical ones, or the count includes swaps that change nothing.
+> - **Forgetting the order inside a block.** Multiply by the $k!$ orderings inside a block of $k$.
+> - **Treating a circle as a row.** Around a table, $n!$ counts every rotation of the same seating separately and is $n$ times too large.
+> - **Identical objects counted as distinct.** Divide by the factorial of each group of identical objects.
+> - **A permutation where order doesn't matter.** An unranked committee is $\binom{n}{k}$, smaller than $P(n, k)$ by $k!$.

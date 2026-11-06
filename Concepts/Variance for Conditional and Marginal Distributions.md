@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-09-28
   last_checked_by: agent:validate-v1
-  content_hash: sha256:4cc32fbb650974e80f2045d58815ab8d30475967115ab17d65225d37ca48f9b4
+  content_hash: sha256:123a524cde1aeaaccc60f436e21c522548d9cf585e8737dd8a0f787c85e5612d
   sources:
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §5.1.5 Conditional Expectation (Revisited) and Conditional Variance, law of iterated expectations and eq. 5.10 law of total variance, eq. 5.11 Var(X) >= E[Var(X|Y)], web page as fetched 2026-09-28, sha256:6adb223e9466dcfab4770df7a7b9ea167d6143e62706037baba712126a89f3cd — https://www.probabilitycourse.com/chapter5/5_1_5_conditional_expectation.php"
     - "Siegrist, Random (randomservices.org), Expected Value > Conditional Expected Value (uniform conditional variance l^2/12), sha256:23e328f9ee55e32522905aba62841f2920eef0d32fb68d7fbb1f4e0b0eaf62f6 — https://www.randomservices.org/random/expect/Conditional.html"

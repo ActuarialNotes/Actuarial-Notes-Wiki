@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-09-28
   last_checked_by: agent:validate-v1
-  content_hash: sha256:614648f7df2ae33dde0745370e73b4d637a50dc391f3ffef816aadbc007c372f
+  content_hash: sha256:dacbd607a004fb0e369eefb1c08c3353596cc42015c57d398cc8f6e961404efa
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Thm 9.1 CLT for binomial distributions (PDF p.336), Thm 9.4 (PDF p.351), Thm 9.6 (PDF p.365), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Siegrist, Random (randomservices.org), The Poisson Process > The Poisson Distribution (normal approximation N(a, a) for large a with continuity correction; infinitely divisible; binomial normal rule of thumb np, n(1-p) >= 5), sha256:cf3d0aacfdb40291bb729d32f6f7692b39e4c4a13a1e09f86ef8826bef61f688 — https://www.randomservices.org/random/poisson/Poisson.html"

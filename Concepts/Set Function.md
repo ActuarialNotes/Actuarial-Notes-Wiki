@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-09-28
   last_checked_by: agent:validate-v1
-  content_hash: sha256:bb6fb57cc03c90cfde8d1020e31b5db5fe699dacc693d20a7900ccaa3f8d9df5
+  content_hash: sha256:8c38558254a77fe78850c34ea2275e32e029c976f742c9fecdf232dc4d9700e8
   sources:
     - "Encyclopedia of Mathematics (Springer/EMS), article Set function, fetched 2026-09-28, sha256:b2e0e1232b723b52bdc147fe88ced0ad2f459b58ce633e882eb2b38a9ea7d3d2 — https://encyclopediaofmath.org/wiki/Set_function"
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 Examples 1.6 and 1.8 (pp.18-20, PDF pp.26-28), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"

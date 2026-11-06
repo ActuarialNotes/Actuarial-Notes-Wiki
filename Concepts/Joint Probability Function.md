@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-11-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:f53f45b59cc603422e812e1379e496ae3405939afca9932704a49cae1eb855da
+  content_hash: sha256:e980be7b7746e4086eb324f0d83873666f1549f648784053171b86437fc0356c
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §4.1 conditional probability, E taken as the new sample space (p.133, PDF p.141); Def. 4.4 independence: joint = product of marginals for any choice of values (p.143, PDF p.151), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Orloff & Bloom, MIT OCW 18.05 (Spring 2022), Reading 7a: Joint Distributions, Independence, §4 independence, p(x_i,y_j) = p_X(x_i)p_Y(y_j), Ex. 12 cell-by-cell check (pp.9-10), sha256:12cf136bbcbef819e1a2530cbfcf15ea06ae83ec4f9ce6c0f6186c87b01d09f4 — https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_class07-prep-a.pdf"

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-11-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:5e25f5252bbe4acbd45c5bc3eebf99f2d64808ac5e4d8b25b4115e2df8ee578c
+  content_hash: sha256:667524c520b66127dd8737cc31b553ee42945509b146c9e58cb9c4304b81e3ee
   sources:
     - "SOA Probability Exam (Exam P) syllabus, November 2026, introduction: an understanding of calculus, including series, differentiation, and integration is assumed (PDF p.1), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Def. 2.1 density P(a<=X<=b) = int_a^b f (p.59, PDF p.67); Thm 2.1 d/dx F(x) = f(x) via the Fundamental Theorem of Calculus (p.61, PDF p.69); eq. 5.2 Poisson distribution, values must sum to 1 (p.189, PDF p.197); Thm 5.1 and Cor. 5.1 f_Y(y) = f_X(phi^-1(y)) d/dy phi^-1(y) (p.210, PDF p.218); Def. 6.4 E(X) = int x f(x) dx (p.268, PDF p.276), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"

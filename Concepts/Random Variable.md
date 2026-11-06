@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-11-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:3fd37b58a704a104ca6500cbf098e63711272f421e53202f8f00a1b3621574e6
+  content_hash: sha256:4cb0ca4d6d5d4151f23e03c0ee4099a3e378a97c5da756c8aedc8a8329b61de9
   sources:
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com, HTML fetched 2026-09-27), §3.1.1 Random Variables (X is a function from the sample space to the real numbers), sha256:6a9473e3232fdf089177daacdbdeadad2d6f0e451217ed4c7d23e26c7973e356 — https://www.probabilitycourse.com/chapter3/3_1_1_random_variables.php"
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com, HTML fetched 2026-09-27), §4.1.0 Continuous Random Variables and their Distributions (Definition: continuous CDF; jumps correspond to P(X=x) > 0), sha256:5f1f5c3c515c0359a39754877a2f9ca95282110a471881b79d249ad828e3d140 — https://www.probabilitycourse.com/chapter4/4_1_0_continuous_random_vars_distributions.php"

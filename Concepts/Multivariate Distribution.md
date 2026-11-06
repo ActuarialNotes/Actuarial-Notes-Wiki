@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-11-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:0c2c55bdb2c61b3ad91074660840cc1af45b142e568bccfb6fa24b4966b85536
+  content_hash: sha256:9bda6d86ad616cfdae09214feb6a454f63dae43e78f4b22a251506489e256830
   sources:
     - "Orloff & Bloom, MIT OCW 18.05 (Spring 2022), Reading 7b: Covariance and Correlation, Property 6 and Warning: the converse is false (p.1); Example 2, Cov = 0 with Y = X^2 but not independent (p.3); covariance measures the linear relationship (p.4), sha256:71f8a7b5f3b2233de2e8722ec1372f5704195efc2a6fb72c50c8ef505f92c4dc — https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_class07-prep-b.pdf"
     - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, Joint Distributions, joint distribution carries more information than the marginals; converse holds if X and Y are independent; independent => joint density = product of marginal densities, sha256:2192ffa7b60a3d5e969c74398a7c539483ce8d4e484febd66b251b19897f1f98 — https://www.randomservices.org/random/dist/Joint.html"

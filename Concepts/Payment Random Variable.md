@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:3c4a3209b8aac22fe0742abf7d98d6053764ebeaa08a2168e685fdc7405eeafe
+  content_hash: sha256:0322ce904b6994e1376c0a1b85b44a4137a0ab8ed543f045ed12dd9359c7fd40
   sources:
     - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05, 2005), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf — §VI Deductibles PDF p.7; Benefit limits: upper bound on insurer payment PDF p.8, health policy 80% of the lesser of 5000 and the cost PDF p.9"
     - "SOA Exam P Sample Questions (Aug 2026 revision), Q50 (PDF p.23) and Q243 (PDF pp.102-103) wording, sha256:e47245963f7d2c1c4f8cc5ff1baf2090542d923ac47cbeb27d1f657ac51bf5f0 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-questions.pdf"

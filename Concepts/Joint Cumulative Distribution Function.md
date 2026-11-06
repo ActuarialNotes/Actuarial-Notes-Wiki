@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-09-28
   last_checked_by: agent:validate-v1
-  content_hash: sha256:c66fc4a4d75026c2d93cf6961aa6aec4eb56bd7cfc9c1d11327923cc9268b666
+  content_hash: sha256:0a941cba32352871fc8aecd28861378ecb2074c2a520e1284999d0c41cf8eee0
   sources:
     - "Orloff & Bloom, MIT OCW 18.05 Introduction to Probability and Statistics (Spring 2022), Reading 7a: Joint Distributions, Independence — §3.4 joint cdf (discrete double sum; continuous double integral) p.5, §3.5 properties of the joint cdf p.6, sha256:12cf136bbcbef819e1a2530cbfcf15ea06ae83ec4f9ce6c0f6186c87b01d09f4 — https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_class07-prep-a.pdf"
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §5.2.2 Joint Cumulative Distribution Function (limits, rectangle formula, f = d2F/dxdy), web page as fetched 2026-09-28, sha256:dbbb45db724d91c7f1eeede2524932e6babb38a906987d51550cb7a9990b73e0 — https://www.probabilitycourse.com/chapter5/5_2_2_joint_cdf.php"

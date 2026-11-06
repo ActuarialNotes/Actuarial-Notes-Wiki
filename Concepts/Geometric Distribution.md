@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-09-28
   last_checked_by: agent:validate-v1
-  content_hash: sha256:bf542b7233a3db45e3e3d141db6b0f72878982efc0c4eee280f090c0e91579b5
+  content_hash: sha256:a255c5136d0f82ff6e11ef5b4fa0a3d02099545f7729f81255686c34944aa46c
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), 5.1 geometric pmf P(T=j) = q^(j-1) p p.185 (PDF p.193); P(T > k) = q^k and memoryless P(T > r+s | T > r) = q^s, also obeyed by the exponential, p.186 (PDF p.194); 6.2 E(T) = 1/p p.262 (PDF p.270), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "SOA, Tables for Exam C (Fall 2009), B.2.1.2 geometric (PDF p.15, page image), sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf"

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:b8e54523bdde27072a2ed223a393ea0d854fbee2a8df8576233bcc7c161662ef
+  content_hash: sha256:d3e918d8cc015b3759c792f9f5bc38b523cb0bbe36a35c90d807a6177d8775cb
   sources:
     - "Siegrist, Random (randomservices.org), Random Samples > Order Statistics (F_k and f_k for an i.i.d. sample; joint pdf f_jk of two order statistics and f_1n of min and max; standard uniform X_(k) beta(k, n-k+1)), sha256:19ff485c600d4294e888c1b3d05ff7eb9196449f958d3325fd72b416aca56d63 — https://www.randomservices.org/random/sample/OrderStatistics.html"
     - "Siegrist, Random (randomservices.org), Distributions > Transformations > Minimum and Maximum (independent X_i with distribution functions F_i: max has F_1...F_n, min has 1 - product of (1 - F_i)), sha256:827bba81a7f85933f2ba982a09155f5277f5ec19838e2ffe70ac0563a56aca69 — https://www.randomservices.org/random/dist/Transformations.html"

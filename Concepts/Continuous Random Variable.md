@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-09-28
   last_checked_by: agent:validate-v1
-  content_hash: sha256:efffeca9debe227fc0c7cf0e8406f69ba5e75dc989f5b2d8579bfee833ca933e
+  content_hash: sha256:b2ee0ea1dcd9d3e7e2eca8a9c6fc00310f8a0e3d9a3e1f503eb508cff395a75d
   sources:
     - "MIT OCW 18.05 (Orloff & Bloom, Spring 2022), Reading 5b: Continuous Random Variables, definition of a continuous random variable (PDF p.2), pdf values greater than 1 (PDF p.4), sha256:3b4e14112eca532d9d03de273fdc40d27e6cf241681aabf012a49837640c2e5b — https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_class05-prep-b.pdf"
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Definition 2.1 density (PDF p.67), Definition 2.2 and Theorem 2.1 F = integral of f, F' = f (PDF p.69), continuous uniform density 1/(b-a) (PDF p.213), Theorem 6.11 E(phi(X)) (PDF p.278), Example 7.5 and §10.3 sum of independent normals is normal (PDF pp.302, 404), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"

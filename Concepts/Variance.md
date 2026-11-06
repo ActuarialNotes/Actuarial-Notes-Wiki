@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-09-28
   last_checked_by: agent:validate-v1
-  content_hash: sha256:301896d0fba1f9cfe0803e452effb560a5f0fbcf6dcb59aaaeb65aec03d3b94d
+  content_hash: sha256:3477615badd7614cd1e8e10b363c40c81ab752d22f264a2ced31a8167dd3530d
   sources:
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com, HTML fetched 2026-09-27), §3.2.4 Variance (definition, Var >= 0, variance 0 for a variable equal to its mean), sha256:2eb1d22be0e78ad88e2d456fbf134ecbb4b1515f0eacaef640e8483d4ac88547 — https://www.probabilitycourse.com/chapter3/3_2_4_variance.php"
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Theorems 6.6 and 6.7, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"

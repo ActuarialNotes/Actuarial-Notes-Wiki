@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-09-28
   last_checked_by: agent:validate-v1
-  content_hash: sha256:880b9da4ffce714fa01f43a391c765c40023cb16f9c061e493cb932bac0fc1d5
+  content_hash: sha256:c3ea1b7d06b4e743801ec55ea354da3f34eb80181d35bb116212ee8913f3a68b
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), 4 Beta Density B(alpha,beta,x) = x^(alpha-1)(1-x)^(beta-1)/B(alpha,beta) on [0,1], alpha = beta = 1 is the uniform, p.168 (PDF p.176), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "SOA, Tables for Exam C (Fall 2009), A.6.1.2 beta (a, b, theta), printed p.8 (PDF p.13), read with theta = 1, sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf"

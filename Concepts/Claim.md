@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:09cb181ed62f0fccbe48cecd9c0e6442c474fb53c5090153856a516774363441
+  content_hash: sha256:ec0b15882e9bf462a61b638069fcc237b419903bdbb0ec7220d1a9b75eae9b2c
   sources:
     - "IRMI Insurance Glossary, 'claim' (fetched 2026-10-10), sha256:38c7e60380b2dc016b204eaa95c17228c89cf89e57152e7dcc4a37e300651b0b — https://www.irmi.com/term/insurance-definitions/claim"
     - "IRMI Insurance Glossary, 'proof of loss' (fetched 2026-10-10), sha256:4a15c05bdb1431633d387a74200419f35393f5ab6c054c4bcdd72de6782d79f2 — https://www.irmi.com/term/insurance-definitions/proof-of-loss"

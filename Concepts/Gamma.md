@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:9bf5eb2c4e8bfae95d437ceb90cb3db815d12467f565cfcea9540c4ce19d8b4e
+  content_hash: sha256:0e0aec4d9cfa4b21289b62c1e80ce994cd411aa3d19f6df48ca88b53b7cd382a
   sources:
     - "SOA, Tables for Exam C (Fall 2009), A.2.3.1 Pareto printed p.3 (PDF p.8, page image), A.3.2.1 Gamma printed p.4 (PDF p.9, page image), A.6.1.2 beta printed p.8 (PDF p.13), sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf; Pishro-Nik, 4.2.4 Gamma Distribution: integral of x^{alpha-1}e^{-lambda x} over (0,inf) = Gamma(alpha)/lambda^alpha, Gamma(alpha,lambda) PDF integrating to 1 (HTML fetched 2026-10-30), sha256:9e53a37b3665363206e1bd3e0befdf07703b4c70e17da404ee85aee95afb7640 — https://www.probabilitycourse.com/chapter4/4_2_4_Gamma_distribution.php"
     - "Siegrist, 5.8 The Gamma Distribution: MGF 1/(1 - bt)^k for t < 1/b; X1 + X2 gamma with shape k1 + k2 and scale b for independent gammas with common scale b (HTML fetched 2026-10-30) — https://www.randomservices.org/random/special/Gamma.html"

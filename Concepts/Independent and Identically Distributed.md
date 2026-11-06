@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:27819bd5a5b5d04e25896f1cee79e08db3f6b69c96c7f959db2d537a2e2d00c7
+  content_hash: sha256:ce3a06d3d127b7a2e4b5a98914c3486214c4a75fc55c463b0b8949fffa0de8fd
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Def. 4.5 (PDF p.152), Thm 4.2 (PDF p.173), Def. 4.8 (PDF p.176), p.184 (PDF p.192), p.207 (PDF p.215), Thms 6.7 and 6.9 (PDF pp.267-268), Cor. 6.1 (PDF p.283), §9.2 (PDF p.348), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05, 2005), §III theorem on S_n (PDF pp.4-5), §VI Deductibles (PDF p.7) and Benefit Limits (PDF pp.8-9), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf"

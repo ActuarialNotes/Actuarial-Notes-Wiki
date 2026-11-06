@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-09-28
   last_checked_by: agent:validate-v1
-  content_hash: sha256:94943cb7f994e79c6b42d9225d592eb9d2642a104c0d1c00fd470e44543f9800
+  content_hash: sha256:4e13535223d1b6410b8ad944190448949b60c1284bf33a65b87d4cb2f4a27cd6
   sources:
     - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05, 2005), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf — §II policyholder or designated beneficiary PDF p.2; §VI reasons for deductibles PDF p.7, benefit limits and maximum claim payment PDF pp.8-9; §VII inflation PDF pp.10-11"
     - "Werner & Modlin, Basic Ratemaking (CAS, 2016), Ch.1 claim and claimant PDF p.14, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"

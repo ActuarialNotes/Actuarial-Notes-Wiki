@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:8682194bf25ec29d7cbfe9d2d0100f52aa275a78722c4cc8c389c80327c2ab99
+  content_hash: sha256:061e1f0e5e708a8433561dfade2dca57afa227a79d3eec37238a78963611b88f
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Definition 1.1 (PDF p.26), Definition 1.2 (PDF p.27), marginal distributions §4.3 (PDF p.151), Theorem 6.1 (PDF p.238), Bernoulli V = pq (PDF p.269), Exercises 6.2.23 and 6.3.17-18 covariance and correlation (PDF pp.275, 289), Definition 7.1 convolution (PDF p.294), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "MIT OCW 18.05 (Orloff & Bloom, Spring 2022), Reading 4a: Discrete Random Variables, §2 definition (PDF p.2), cdf definition (PDF p.3), §2.8 Properties of the cdf (PDF pp.5-6), sha256:ff2a10e7ef1c0f5ef300ed8f73864d365ca5adcdf9775d1c4a6f356ee7687b5d — https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_class04-prep-a.pdf"

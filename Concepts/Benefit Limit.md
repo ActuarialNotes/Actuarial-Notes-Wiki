@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-11-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:4d8ef87fc125e20cf80d2fc5b00104357f5f75ff6f412070f6e9225ff3bfc4ca
+  content_hash: sha256:9bd44ab59831410937e9b528a5c98b9f2c36c50391232e72e35275fedc01b508
   sources:
     - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05), §VI Benefit limits: upper bound on how much the insurer will pay for any loss; losses in excess of 1 million are rare events (PDF p.8), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf"
     - "SOA Probability Exam (Exam P) syllabus, November 2026, Topic 2 Univariate Random Variables, learning outcomes e-f (PDF p.3), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"

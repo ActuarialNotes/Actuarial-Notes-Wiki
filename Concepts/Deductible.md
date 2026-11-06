@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-11-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:80899b917b02545239777515bf2319256c5cb0eae6105ae65c5e57353f4870e4
+  content_hash: sha256:70482dceffb141a33785c129072071f7c4c0138827324c9eed8e10ef648db56d
   sources:
     - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05), §VI Deductibles: losses below 500 pay nothing, 2000 loss pays 1500, claim payments reduced by the amount of the deductible (PDF p.7), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf"
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed., 2016), Ch.6 Leveraged Effect of Limits on Severity Trend, Table 6.20-6.21: trend on excess losses greater than the total limits trend, a claim below the limit pierces into the layer; deductibles also have a leveraging effect on severity trend, censoring below the deductible (pp.117-118, PDF pp.129-130); Ch.11 percentage deductible as % of coverage amount, 5% of 500,000 = 25,000 (p.199, PDF p.211), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"

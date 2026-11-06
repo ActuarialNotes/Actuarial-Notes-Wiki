@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:e576cc9f97a68f79a1276343e3807702d99d49b03c0ada8fd85e917e30c9ce1c
+  content_hash: sha256:a41ddaf64d9a11af6102abe278a00db66ea1624a6e3cf31a9635e2da471bfc86
   sources:
     - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05, 2005), §II insurer pays claims for premium PDF p.2; §III CV of the pool tends to zero PDF pp.4-5; §V losses reasonably independent, stores in one area against fire PDF p.6, sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf"
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL version), Ch.6, E((xbar - mu)^2) = sigma^2/n, PDF p.274, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"

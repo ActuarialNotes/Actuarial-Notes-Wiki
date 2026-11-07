@@ -71,8 +71,9 @@ export function openingUnits(markdown: string): OpeningUnit[] {
   const lines = pageBody(markdown)
   const units: OpeningUnit[] = []
   let i = 0
-  // Skip a leading breadcrumb (`[[Exam]] / …`) and blank lines.
-  while (i < lines.length && (lines[i].trim() === '' || /^\[\[[^\]]*\]\][^\n]* \/ /.test(lines[i]))) i++
+  // Skip a leading breadcrumb (`[[Exam]] / …`), a leading figure (`![[Media/Figures/…]]`,
+  // which a concept page opens with — conceptRecipes' `pageOpening` skips it too) and blank lines.
+  while (i < lines.length && (lines[i].trim() === '' || /^\[\[[^\]]*\]\][^\n]* \/ /.test(lines[i]) || /^\s*!\[\[[^\]]*\]\]\s*$/.test(lines[i]))) i++
   for (; i < lines.length; i++) {
     const line = lines[i]
     // A line that is all bold (`**Read More**`) is a heading by another name.

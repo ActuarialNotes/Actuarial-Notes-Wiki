@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:13a53eb48c262e5bd2743586ec20bc39e1a862b52095a00bbce92727575754c8
+  content_hash: sha256:8fe1a7266cd610179a4897fd12e8d8f32e5fa3f8fba600e8e3a05d2ba01daecd
   sources:
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), Domain B task 8 'applying criteria to estimates such as consistency, unbiasedness, sufficiency, efficiency, minimum variance, mean square error' (PDF p.4); James et al. Chapters 1, 2 (excluding Section 2.2.3) on Domain C (PDF p.6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
     - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random), §6.1 Estimators: bias(U) = E(U) − θ; mse(U) = E[(U − θ)²] = var(U) + bias²(U); U unbiased if E(U) = θ for all θ ∈ T; 'if we have two unbiased estimators of θ, we naturally prefer the one with the smaller variance (mean square error)'; more efficient / eff(U, V) = var(V)/var(U) defined for U, V unbiased; asymptotic relative efficiency for asymptotically unbiased sequences; consistency = convergence in probability; mean-square consistent ⇒ consistent; var(M_n) = σ²/n; var(S_n²) = (1/n)(σ4 − (n−3)σ⁴/(n−1)), sha256:10914ffca9034209da0111918cfb534d60982bde0bba142a11d61d43114c6e2a — https://www.randomservices.org/random/point/Estimators.html"
@@ -17,32 +17,59 @@ verification:
   log: .verify/Concepts/Consistency.md
 ---
 
-An estimator $\hat{\theta}_n$ is **consistent** for $\theta$ if it converges in probability to the true parameter value as the sample size grows without bound — larger samples make the estimator's error arbitrarily small with arbitrarily high probability.
-
-> $$\hat{\theta}_n \xrightarrow{p} \theta \quad \text{as } n \to \infty$$
->
-> $$\text{i.e., } \lim_{n\to\infty} P\big(|\hat{\theta}_n - \theta| > \varepsilon\big) = 0 \quad \text{for every } \varepsilon > 0$$
-
-- A convenient **sufficient condition**: if $\text{Bias}(\hat{\theta}_n) \to 0$ and $\text{Var}(\hat{\theta}_n) \to 0$ as $n \to \infty$, then $\hat{\theta}_n$ is consistent (this follows from $\text{MSE}(\hat{\theta}_n) \to 0$ and Chebyshev's inequality, since [[Mean Square Error|MSE]] bounds the tail probability)
-- Consistency is a **large-sample (asymptotic)** property — it says nothing about how the estimator behaves at small $n$, unlike [[Unbiasedness]], which is a property of the estimator at the sample size actually used (it must hold for every value of $\theta$)
-- An estimator can be **biased but still consistent** (e.g., the MLE of $\sigma^2$ divides by $n$ instead of $n-1$, but the bias vanishes as $n \to \infty$)
-- **[[Maximum Likelihood Estimation|MLEs]]** are consistent under standard regularity conditions, which is part of why MLE is the dominant estimation method in practice
-- **The sample median.** The sample median is a consistent estimator of the population median $m$ when the median is unique, that is when $F(m - \delta) < \tfrac{1}{2} < F(m + \delta)$ for every $\delta > 0$. This holds whenever the density is positive at the median (and continuous there), so the sample median converges in probability to the population median for any such distribution, symmetric or not
-
 ![[Media/Figures/Consistency.svg|340]]
 
-> [!example]- Consistency of the Sample Mean {Example}
-> Let $X_1, \ldots, X_n$ be i.i.d. with mean $\mu$ and finite variance $\sigma^2$. Show that $\bar{X}_n$ is consistent for $\mu$.
->
-> > [!answer]-
-> > $$E[\bar{X}_n] = \mu \quad \Rightarrow \quad \text{Bias}(\bar{X}_n) = 0 \text{ for all } n$$
-> >
-> > $$\text{Var}(\bar{X}_n) = \frac{\sigma^2}{n} \to 0 \quad \text{as } n \to \infty$$
-> > Since the bias is always $0$ and the variance $\to 0$, $\text{MSE}(\bar{X}_n) \to 0$, so $\bar{X}_n \xrightarrow{p} \mu$ and the sample mean is consistent.
+**Consistency** is the property of an [[Estimator|estimator]] that [[Convergence in Probability|converges in probability]] to the parameter it estimates as the sample size grows. The condition for an estimator $\hat{\theta}_n$, computed from a sample of size $n$, to be consistent for a parameter $\theta$ is
 
-> [!example]- A Biased but Consistent Estimator {Example}
-> For $X_i \stackrel{\text{iid}}{\sim} N(\mu, \sigma^2)$, the MLE of the variance is $\hat{\sigma}^2_n = \frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^2$, with $E[\hat{\sigma}^2_n] = \frac{n-1}{n}\sigma^2$. Is $\hat{\sigma}^2_n$ consistent?
->
-> > [!answer]-
-> > $$\text{Bias}(\hat{\sigma}^2_n) = \frac{n-1}{n}\sigma^2 - \sigma^2 = -\frac{\sigma^2}{n} \to 0$$
-> > The variance of $\hat{\sigma}^2_n$ also $\to 0$ as $n \to \infty$ (it is $O(1/n)$). Both conditions hold, so $\hat{\sigma}^2_n$ is consistent for $\sigma^2$ even though it is biased for every finite $n$.
+> $$\lim_{n \to \infty} P\left(|\hat{\theta}_n - \theta| > \varepsilon\right) = 0$$
+
+- $\varepsilon$ is any positive number. The limit must be 0 for every $\varepsilon$.
+
+This is written $\hat{\theta}_n \xrightarrow{p} \theta$.
+
+> [!example]- Losses are uniform on $(0, \theta)$. Is the largest loss $X_{(n)}$ a consistent estimator of $\theta$? {Example}
+> - The largest loss is never above $\theta$, so it misses $\theta$ by more than $\varepsilon$ only when every loss is below $\theta - \varepsilon$.
+> - That probability is $P(X_{(n)} < \theta - \varepsilon) = (1 - \varepsilon/\theta)^n$.
+> - With $\varepsilon = 0.05\theta$, it is $0.95^{10} = 0.5987$ for $n = 10$ and $0.95^{100} = 0.0059$ for $n = 100$.
+> - It goes to 0 as $n$ grows for every $\varepsilon > 0$, so $X_{(n)}$ is consistent for $\theta$.
+
+## Consistency from vanishing bias and variance
+
+By Markov's inequality applied to $(\hat{\theta}_n - \theta)^2$, the probability that $\hat{\theta}_n$ misses $\theta$ by more than $\varepsilon$ is at most
+
+> $$P\left(|\hat{\theta}_n - \theta| > \varepsilon\right) \le \frac{\text{MSE}(\hat{\theta}_n)}{\varepsilon^2}$$
+
+- $\text{MSE}(\hat{\theta}_n)$ is the [[Mean Square Error|mean square error]] of $\hat{\theta}_n$, its variance plus its squared [[Bias|bias]].
+
+If the bias and the variance of $\hat{\theta}_n$ both go to 0 as $n$ grows, the mean square error goes to 0, and $\hat{\theta}_n$ is consistent. An estimator that is biased for every $n$ can therefore be consistent, as long as it is [[Bias#Asymptotic unbiasedness|asymptotically unbiased]] and its variance goes to 0.
+
+> [!example]- For a normal sample, is $\hat{\sigma}^2 = \frac{1}{n}\sum (X_i - \bar{X})^2$ a consistent estimator of $\sigma^2$? {Example}
+> - Its bias is $-\sigma^2/n$, which goes to 0 as $n$ grows.
+> - Its variance is $2(n-1)\sigma^4/n^2$, which also goes to 0.
+> - Both go to 0, so $\hat{\sigma}^2$ is consistent for $\sigma^2$, although it is biased for every $n$.
+
+## Consistency of a function of a consistent estimator
+
+If $\hat{\theta}_n$ is consistent for $\theta$ and the function $g$ is continuous at $\theta$, then
+
+> $$g(\hat{\theta}_n) \xrightarrow{p} g(\theta)$$
+
+By the weak [[Law of Large Numbers|law of large numbers]], the sample mean is consistent for the population mean. Continuous functions of the sample mean, and of other sample averages, are therefore consistent for the same functions of the population moments. The sample median is consistent for the population median when the density is positive there.
+
+> [!example]- Losses are uniform on $(0, \theta)$. Are $2\bar{X}$ and $\sqrt{3 \cdot \frac{1}{n}\sum X_i^2}$ consistent estimators of $\theta$? {Example}
+> - The population mean is $\theta/2$, so $\bar{X} \xrightarrow{p} \theta/2$ and $2\bar{X} \xrightarrow{p} \theta$.
+> - The population second moment is $E[X^2] = \theta^2/3$, so $\frac{1}{n}\sum X_i^2 \xrightarrow{p} \theta^2/3$.
+> - The function $u \mapsto \sqrt{3u}$ is continuous, so the second estimator converges in probability to $\sqrt{\theta^2} = \theta$.
+> - Both estimators are consistent for $\theta$.
+
+## Unbiased estimators that are not consistent
+
+An [[Unbiasedness|unbiased]] estimator is consistent only if its distribution also concentrates around $\theta$ as $n$ grows. An estimator built from a fixed number of observations has the same distribution for every $n$, so it is not consistent.
+
+> [!example]- Losses are uniform on $(0, \theta)$. The estimator $X_1 + X_2$ is unbiased for $\theta$. Is it consistent? {Example}
+> - The estimator uses the first two losses whatever the sample size, so its distribution does not change with $n$.
+> - With $\varepsilon = 0.1\theta$, the probability that it misses $\theta$ by more than $\varepsilon$ is $0.9^2 = 0.81$ for every $n$.
+> - The probability does not go to 0, so $X_1 + X_2$ is not consistent.
+
+> [!trap] Multiplying a consistent estimator by a factor that changes with $n$
+> A factor that depends on $n$ is not a fixed continuous function, and it can destroy convergence. For a uniform sample, $X_{(n)}$ is consistent for $\theta$, but $X_{(n)}/(n+1)$ goes to 0 and $(n+1)X_{(n)}$ grows without bound. A factor that goes to 1, such as $(n+1)/n$, keeps the estimator consistent.

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:b1f2ec8ed95ca3d8afadb28c7623ac6b6bb8a93bcf23dbbe819ba3e030c6bf66
+  content_hash: sha256:0e12ad899c8d027f52820819ed9167b92b74442dbd0d3f2ef6dfcaca8955e800
   sources:
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), Domain B task 8 'applying criteria to estimates such as consistency, unbiasedness, sufficiency, efficiency, minimum variance, mean square error' (PDF p.4); James et al. Chapters 1, 2 (excluding Section 2.2.3) on Domain C (PDF p.6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
     - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random), §6.1 Estimators: bias(U) = E(U) − θ; mse(U) = E[(U − θ)²] = var(U) + bias²(U); U unbiased if E(U) = θ for all θ ∈ T; 'if we have two unbiased estimators of θ, we naturally prefer the one with the smaller variance (mean square error)'; more efficient / eff(U, V) = var(V)/var(U) defined for U, V unbiased; asymptotic relative efficiency for asymptotically unbiased sequences; consistency = convergence in probability; mean-square consistent ⇒ consistent; var(M_n) = σ²/n; var(S_n²) = (1/n)(σ4 − (n−3)σ⁴/(n−1)), sha256:10914ffca9034209da0111918cfb534d60982bde0bba142a11d61d43114c6e2a — https://www.randomservices.org/random/point/Estimators.html"
@@ -18,31 +18,35 @@ verification:
   log: .verify/Concepts/Efficiency.md
 ---
 
-**Efficiency** compares [[Unbiasedness|unbiased]] estimators by their variance relative to the smallest variance achievable: an unbiased estimator is **efficient** if it attains the Cramér–Rao lower bound, and of two unbiased estimators of the same parameter, the one with smaller variance is **relatively more efficient** (for an unbiased estimator the variance is the [[Mean Square Error]]).
-
-> $$\text{Relative Efficiency}(\hat{\theta}_1, \hat{\theta}_2) = \frac{\text{Var}(\hat{\theta}_2)}{\text{Var}(\hat{\theta}_1)}$$
-
-> $$\text{Efficiency}(\hat{\theta}) = \frac{1/\big(nI(\theta)\big)}{\text{Var}(\hat{\theta})} \leq 1$$
-
-- $I(\theta)$ is the [[Fisher Information]] in a single observation, so $1/\big(nI(\theta)\big)$ is the [[Cramér-Rao Lower Bound|Cramér–Rao lower bound]] (CRLB) for a sample of size $n$; an unbiased estimator with $\text{Efficiency}(\hat{\theta}) = 1$ attains the CRLB and is called **efficient**
-- The bound, and with it $\text{Efficiency} \leq 1$, holds only under **regularity conditions** — in practice, the support of $f(x \mid \theta)$ must not depend on $\theta$. For $\text{Uniform}(0,\theta)$ it fails: $\frac{n+1}{n}X_{(n)}$ is unbiased with variance $\frac{\theta^2}{n(n+2)}$, below the $\theta^2/n$ the formula would give, an "efficiency" of $n+2 > 1$
-- If $\text{Var}(\hat{\theta}_2) > \text{Var}(\hat{\theta}_1)$, then $\hat{\theta}_1$ is **more efficient** — relative efficiency above $1$ favors $\hat{\theta}_1$
-- Relative efficiency compares two **unbiased** estimators (asymptotic relative efficiency, two asymptotically unbiased ones). If either is biased, compare their [[Mean Square Error|MSEs]] instead: $\text{MSE} = \text{Var} + \text{Bias}^2$, so the smaller variance need not mean the smaller MSE
-- Under regularity conditions (a support that does not depend on $\theta$, a true $\theta$ inside the parameter space, a differentiable log-likelihood), **[[Maximum Likelihood Estimation|MLEs]]** are **asymptotically efficient**: their variance converges to the CRLB as $n \to \infty$, even when no finite-sample estimator attains it exactly
-- Efficiency is distinct from [[Consistency]] and [[Unbiasedness]]: an estimator can be consistent and unbiased yet inefficient if a lower-variance unbiased alternative exists
-
 ![[Media/Figures/Efficiency.svg|340]]
 
-> [!example]- Comparing Two Unbiased Estimators {Example}
-> For $X_1, \ldots, X_n \stackrel{\text{iid}}{\sim} N(\mu, \sigma^2)$, consider the sample mean $\bar{X}$ and the sample median $M$ as estimators of $\mu$. Both are unbiased, with $\text{Var}(\bar{X}) = \sigma^2/n$ and $\text{Var}(M) \approx 1.571\,\sigma^2/n$ for large $n$. Which is more efficient?
->
-> > [!answer]-
-> > $$\text{Relative Efficiency}(\bar{X}, M) = \frac{\text{Var}(M)}{\text{Var}(\bar{X})} = \frac{1.571\,\sigma^2/n}{\sigma^2/n} = 1.571$$
-> > Since this exceeds $1$, $\bar{X}$ is the **more efficient** estimator — it has smaller variance for the same sample size.
+**Efficiency** is the comparison of [[Unbiasedness|unbiased]] estimators of the same parameter by their variances. The efficiency of an unbiased estimator $\hat{\theta}_1$ relative to another unbiased estimator $\hat{\theta}_2$ of $\theta$ is
 
-> [!example]- Checking MLE Efficiency Against the CRLB {Example}
-> For $X_i \stackrel{\text{iid}}{\sim} \text{Exp}(\theta)$, the CRLB for any unbiased estimator of $\theta$ is $\theta^2/n$, and $\hat{\theta}_{\text{MLE}} = \bar{X}$ has $\text{Var}(\bar{X}) = \theta^2/n$. Is the MLE efficient here?
->
-> > [!answer]-
-> > $$\text{Efficiency}(\bar{X}) = \frac{\theta^2/n}{\theta^2/n} = 1$$
-> > The MLE's variance exactly equals the CRLB for every $n$, so $\bar{X}$ is efficient (not merely asymptotically efficient) in the exponential case.
+> $$\frac{\text{Var}(\hat{\theta}_2)}{\text{Var}(\hat{\theta}_1)}$$
+
+A relative efficiency above 1 means that $\hat{\theta}_1$ has the smaller variance and is the more efficient estimator. Relative efficiency compares unbiased estimators only. Estimators with a [[Bias|bias]] are compared by their [[Mean Square Error#Comparing estimators by mean square error|mean square errors]].
+
+> [!example]- Losses are uniform on $(0, \theta)$. From 4 losses, $2\bar{X}$ and $\frac{5}{4}X_{(4)}$ are both unbiased for $\theta$. What is the efficiency of $\frac{5}{4}X_{(4)}$ relative to $2\bar{X}$? {Example}
+> - A uniform loss on $(0, \theta)$ has variance $\theta^2/12$, so $\text{Var}(2\bar{X}) = 4 \times \theta^2/48 = \theta^2/12$.
+> - The sample maximum of $n$ uniform losses has variance $\frac{n\theta^2}{(n+1)^2(n+2)}$, which is $\frac{4\theta^2}{150}$ for $n = 4$.
+> - Scaling by $\frac{5}{4}$ multiplies the variance by $\frac{25}{16}$, so $\text{Var}(\frac{5}{4}X_{(4)}) = \theta^2/24$.
+> - The efficiency of $\frac{5}{4}X_{(4)}$ relative to $2\bar{X}$ is $\frac{\theta^2/12}{\theta^2/24} = 2$, so the scaled maximum is the more efficient estimator.
+
+## Efficiency against the Cramér–Rao lower bound
+
+Under regularity conditions, no unbiased estimator of $\theta$ from a sample of size $n$ has a variance below the [[Cramér-Rao Lower Bound|Cramér–Rao lower bound]] $1/(nI(\theta))$. The efficiency of an unbiased estimator $\hat{\theta}$ is the ratio of the bound to its variance:
+
+> $$\frac{1/(nI(\theta))}{\text{Var}(\hat{\theta})}$$
+
+- $I(\theta)$ is the [[Fisher Information|Fisher information]] in one observation.
+
+The efficiency is at most 1. An unbiased estimator with efficiency 1 attains the bound and is called efficient, and it is the [[Minimum Variance|minimum variance unbiased estimator]]. The regularity conditions include that the set of possible values of $X$ does not depend on $\theta$, so the bound does not apply to the uniform distribution on $(0, \theta)$. Under the same conditions, the [[Maximum Likelihood Estimation|maximum likelihood estimator]] is asymptotically efficient. Its variance approaches the bound as $n$ grows.
+
+> [!example]- Claim sizes are exponential with mean $\theta$. What is the efficiency of the sample mean $\bar{X}$ as an estimator of $\theta$? {Example}
+> - The log of the density is $\ln f(x) = -\ln\theta - x/\theta$, and its derivative with respect to $\theta$ is $(x - \theta)/\theta^2$.
+> - The Fisher information is the variance of that derivative, $I(\theta) = \text{Var}(X)/\theta^4 = 1/\theta^2$.
+> - The Cramér–Rao lower bound is $1/(nI(\theta)) = \theta^2/n$.
+> - The sample mean is unbiased with variance $\theta^2/n$, so its efficiency is 1 and $\bar{X}$ is efficient.
+
+> [!trap] Putting the wrong variance in the numerator
+> The relative efficiency of $\hat{\theta}_1$ to $\hat{\theta}_2$ puts the variance of $\hat{\theta}_2$ on top, so the more efficient estimator scores above 1. Some texts write the ratio the other way up. Check which estimator a question puts in the numerator before reading the answer as 2 or 0.5.

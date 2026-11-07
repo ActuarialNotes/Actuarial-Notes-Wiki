@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:8be09bab6d613a8134ced53816808289741c160ec57a82b2740cbec8379bb38f
+  content_hash: sha256:37a22a24c395da2f1dcc9d425afc27861190bf1b8bbaa67bfe710f5f9136a4da
   sources:
     - "Penn State STAT 501 Regression Methods, Lesson 10 §10.1 'What if the Regression Equation Contains \"Wrong\" Predictors?', Outcome 2 (underspecified model): biased coefficients and predictions; 'the mean square error MSE tends to overestimate σ², thereby yielding wider confidence intervals than it should'; Martian example MSE 0.653 vs 0.017, sha256:c5c4744b68f627609bd40ed82d3a571ed3aa6c2231469ddbac18d5b8cc94313c — https://online.stat.psu.edu/stat501/Lesson10"
     - "Penn State STAT 462 Applied Regression Analysis, §11.1 'What if the Regression Equation Contains \"Wrong\" Predictors?', underspecified model (outcome 2): same MSE-overestimates-σ² / wider confidence intervals sentence, sha256:4e75fc0fd87859ad788661398e41d98f592654b42642c523c849339b7fd56e4f — https://online.stat.psu.edu/stat462/node/195/"
@@ -15,34 +15,88 @@ verification:
   log: .verify/Concepts/Bias.md
 ---
 
-**Bias** is the systematic error of an estimator: the difference between its expected value and the parameter it estimates. An estimator with zero bias is [[Unbiasedness|unbiased]]; bias is one of the two components of [[Mean Square Error]], the other being variance.
-
-> $$\text{Bias}(\hat\theta) = E[\hat\theta] - \theta$$
-
-> $$\text{MSE}(\hat\theta) = \text{Var}(\hat\theta) + \left[\text{Bias}(\hat\theta)\right]^{2}$$
-
-- Bias is about the *centre* of the estimator's [[Sampling Distribution]], variance about its *spread* — an estimator can be unbiased and useless (huge variance) or biased and excellent (tiny variance)
-- **Asymptotic unbiasedness** is weaker: $\text{Bias}(\hat\theta) \to 0$ as $n \to \infty$. The [[Maximum Likelihood Estimation|MLE]] is often biased in finite samples but asymptotically unbiased and [[Consistency|consistent]]
-- Standard examples: the [[Sample Variance]] with divisor $n$ is biased low by $\sigma^2/n$; the MLE $\hat\theta = X_{(n)}$ for $\text{Uniform}(0,\theta)$ is biased low by $\theta/(n+1)$
-- Bias does **not** invert through nonlinear functions: if $\hat\theta$ is unbiased for $\theta$, $g(\hat\theta)$ is generally biased for $g(\theta)$ (by Jensen's inequality)
-- Accepting a little bias to remove a lot of variance is the whole point of shrinkage, credibility weighting, and the [[Bias-Variance Tradeoff]] that governs model complexity
-- In modelling, bias also arises from the *model* rather than the estimator — an omitted predictor, an ignored [[Interaction]], or fitting a straight line to a curved relationship all bias the fitted values regardless of sample size
-- **Omitting an important explanatory variable** underfits the regression (Frees 2010, Ch. 6, on the effects of model misspecification). The fitted values are biased, and so are the coefficients of the included variables that are correlated with the omitted one. The variation the omitted variable would have explained stays in the residuals, so the residual sum of squares is larger. The error variance estimate $s^2$ (the MSE) therefore tends to overestimate $\sigma^2$, and the confidence and prediction intervals built from it are wider than they should be (Penn State STAT 501, Lesson 10.1, on an underspecified model; §7.2 for the MSE inside the prediction interval). The total sum of squares depends only on the response, so it does not change; the larger residual share simply lowers $R^2$
-
 ![[Media/Figures/Bias.svg|340]]
 
-> [!example]- Bias of the Uniform MLE {Example}
-> For $X_1, \ldots, X_n \stackrel{\text{iid}}{\sim} \text{Uniform}(0,\theta)$, the MLE is $\hat\theta = X_{(n)}$ with $E[X_{(n)}] = \frac{n}{n+1}\theta$. Find its bias and construct an unbiased alternative.
->
-> > [!answer]-
-> > $$\text{Bias} = \frac{n}{n+1}\theta - \theta = -\frac{\theta}{n+1}$$
-> > The MLE understates $\theta$, which makes sense — the largest observation can never exceed the true maximum. Rescaling removes it:
-> > $$\tilde\theta = \frac{n+1}{n}X_{(n)}, \qquad E[\tilde\theta] = \theta$$
+**Bias** is the systematic error of an [[Estimator|estimator]]. The bias of an estimator $\hat{\theta}$ of a parameter $\theta$ is
 
-> [!example]- Choosing a Biased Estimator on MSE {Example}
-> Estimator A is unbiased with variance $100$. Estimator B has bias $-4$ and variance $50$. Which has the smaller mean square error?
->
-> > [!answer]-
-> > $$\text{MSE}_A = 100 + 0^2 = 100$$
-> > $$\text{MSE}_B = 50 + (-4)^2 = 66$$
-> > **B is preferred on MSE**, despite being biased — its variance reduction more than pays for the squared bias. This is the trade every shrinkage method makes.
+> $$\text{Bias}(\hat{\theta}) = E[\hat{\theta}] - \theta$$
+
+- $E[\hat{\theta}]$ is the expected value of $\hat{\theta}$ over repeated samples.
+
+An estimator whose bias is 0 for every value of $\theta$ is [[Unbiasedness|unbiased]]. The bias is one of the two parts of the [[Mean Square Error|mean square error]], and the variance of the estimator is the other.
+
+> [!example]- An actuary estimates the mean claim size $\mu$ from three claims by dividing their total by 4. What is the bias of this estimator? {Example}
+> - The estimator is $\hat{\theta} = (X_1 + X_2 + X_3)/4$.
+> - Its expected value is $E[\hat{\theta}] = 3\mu/4$.
+> - Its bias is $3\mu/4 - \mu = -\mu/4$, so it underestimates the mean claim size by a quarter.
+
+## Bias of the variance estimator that divides by the sample size
+
+The estimator of the variance $\sigma^2$ that divides the sum of squared deviations by $n$ is
+
+> $$\hat{\sigma}^2 = \frac{1}{n}\sum_{i=1}^{n}(X_i - \bar{X})^2$$
+
+The sum of squared deviations has expected value $(n-1)\sigma^2$, as shown under [[Unbiasedness#Unbiasedness of the sample variance|unbiasedness of the sample variance]]. The expected value of $\hat{\sigma}^2$ is therefore $(n-1)\sigma^2/n$, and its bias is
+
+> $$\text{Bias}(\hat{\sigma}^2) = -\frac{\sigma^2}{n}$$
+
+The estimator underestimates $\sigma^2$. For a normal sample it is the [[Maximum Likelihood Estimation|maximum likelihood estimator]] of $\sigma^2$.
+
+> [!example]- A sample of 4 is drawn from a population with variance 12. What are the expected value and the bias of $\hat{\sigma}^2$? {Example}
+> - The expected value is $E[\hat{\sigma}^2] = \frac{3}{4} \times 12 = 9$.
+> - The bias is $9 - 12 = -3$, which is $-\sigma^2/n = -12/4$.
+
+## Bias of the sample maximum of a uniform sample
+
+For a sample of $n$ from the uniform distribution on $(0, \theta)$, the expected value of the [[Order Statistics#The maximum and the minimum|sample maximum]] $X_{(n)}$ is
+
+> $$E[X_{(n)}] = \frac{n\theta}{n+1}$$
+
+The bias of $X_{(n)}$ as an estimator of $\theta$ is therefore
+
+> $$\text{Bias}(X_{(n)}) = -\frac{\theta}{n+1}$$
+
+The sample maximum can never exceed $\theta$, so it underestimates $\theta$. Multiplying it by $(n+1)/n$ removes the bias, and $\frac{n+1}{n}X_{(n)}$ is unbiased for $\theta$.
+
+> [!example]- Losses are uniform on $(0, \theta)$. The largest of 4 losses is 800. What is the bias of the sample maximum, and what is the unbiased estimate of $\theta$? {Example}
+> - With $n = 4$, the bias of $X_{(4)}$ is $-\theta/5$.
+> - The unbiased estimator is $\frac{5}{4}X_{(4)}$.
+> - The unbiased estimate is $\frac{5}{4} \times 800 = 1{,}000$.
+
+## Asymptotic unbiasedness
+
+An estimator $\hat{\theta}_n$ computed from a sample of size $n$ is asymptotically unbiased if its bias goes to 0 as $n$ grows:
+
+> $$\lim_{n \to \infty} \text{Bias}(\hat{\theta}_n) = 0$$
+
+The variance estimator with divisor $n$ and the sample maximum of a uniform sample are both biased for every $n$ and asymptotically unbiased. An asymptotically unbiased estimator whose variance also goes to 0 is [[Consistency#Consistency from vanishing bias and variance|consistent]].
+
+## Bias of a function of an unbiased estimator
+
+If $\hat{\theta}$ is unbiased for $\theta$, a function $g(\hat{\theta})$ is in general biased for $g(\theta)$ unless $g$ is linear. For the square of $\hat{\theta}$, the expected value is
+
+> $$E[\hat{\theta}^2] = \theta^2 + \text{Var}(\hat{\theta})$$
+
+The square therefore overestimates $\theta^2$ by $\text{Var}(\hat{\theta})$. In the same way, the sample variance $S^2$ is unbiased for $\sigma^2$, but the sample standard deviation $S$ underestimates $\sigma$, because the square root is concave.
+
+> [!example]- A sample of 25 is drawn from a population with mean $\mu$ and variance 100. What is the bias of $\bar{X}^2$ as an estimator of $\mu^2$? {Example}
+> - The sample mean is unbiased for $\mu$, with variance $\text{Var}(\bar{X}) = 100/25 = 4$.
+> - The expected value of its square is $E[\bar{X}^2] = \mu^2 + 4$.
+> - The bias of $\bar{X}^2$ is 4.
+
+## Bias from an omitted variable in regression
+
+Suppose the response follows $Y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \varepsilon$, but the regression is fitted on $x_1$ alone. The expected value of the estimated coefficient of $x_1$ is
+
+> $$E[\hat{\beta}_1] = \beta_1 + \beta_2\,\delta$$
+
+- $\delta$ is the slope of the regression of $x_2$ on $x_1$.
+
+Omitting a variable that belongs in the model biases the coefficients of the variables that remain, unless the omitted variable is uncorrelated with them, in which case $\delta = 0$.
+
+> [!example]- The true model has $\beta_1 = 2$ and $\beta_2 = 3$. The variable $x_2$ is omitted, and the slope of $x_2$ on $x_1$ is 0.5. What is the bias of $\hat{\beta}_1$? {Example}
+> - The expected value of $\hat{\beta}_1$ is $2 + 3 \times 0.5 = 3.5$.
+> - The bias of $\hat{\beta}_1$ is $3.5 - 2 = 1.5$.
+
+> [!trap] Treating the error of one estimate as bias
+> The bias is an expected value over repeated samples. One estimate of 1.3 for a coefficient whose true value is 1.5 does not show a bias of $-0.2$. The difference is a sampling error, and the bias can only be found from the expected value of the estimator.

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:950a073ed9210bf55cd67e79b5d2d8a558e5d7ba57a593fad0cd3c83a712c3ad
+  content_hash: sha256:3715528034cb766f024b3b0126e83834a76e6e075f1a6bfadc21848e510a293c
   sources:
     - "Siegrist, Random, ch.6 §6 Sufficient, Complete and Ancillary Statistics: Rao-Blackwell theorem (E(V|U) a statistic because U is sufficient, unbiased, uniformly better); completeness definition (E_theta[r(U)] = 0 for all theta implies P_theta[r(U) = 0] = 1); Lehmann-Scheffe theorem and its proof via Rao-Blackwell; Poisson: Y = sum X_i complete and sufficient, UMVUE of P(X = 0) = e^-theta is ((n-1)/n)^Y; gamma with known shape: Y complete for the scale; exponential families: natural statistic sufficient and complete, sha256:4d7402f2a960ea2b4232e57e4ee5992ac29801b9269f300f17f8e83074d5a0e4 — https://www.randomservices.org/random/point/Sufficient.html"
     - "Siegrist, Random, ch.6 §5 Best Unbiased Estimators: UMVUE definition; an unbiased estimator attaining the Cramer-Rao lower bound must be a UMVUE, sha256:0d9765c5c7b5b8a54b29fc45c3a435d20e2a9200e027609658345087dedcd531 — https://www.randomservices.org/random/point/Unbiased.html"
@@ -16,46 +16,55 @@ verification:
   log: .verify/Concepts/Rao-Blackwell Theorem.md
 ---
 
-The **Rao-Blackwell Theorem** turns any [[Unbiasedness|unbiased]] estimator $W$ of $\tau(\theta)$ into one that is at least as good: condition it on a [[Sufficient Statistic|sufficient statistic]] $T$. The result $\varphi(T) = E[W \mid T]$ is still unbiased and its variance is never larger, for every value of $\theta$.
+The **Rao-Blackwell Theorem** states that conditioning an [[Unbiasedness|unbiased]] estimator on a [[Sufficient Statistic|sufficient statistic]] gives an unbiased estimator with no larger variance. If $W$ is an unbiased estimator of $\theta$ and $T$ is a sufficient statistic for $\theta$, the improved estimator is
 
-> $$\varphi(T) = E[\,W \mid T\,]$$
+> $$\varphi(T) = E[W \mid T]$$
 
-> $$E[\varphi(T)] = \tau(\theta)$$
+By the [[Variance for Conditional and Marginal Distributions#The law of total expectation|law of total expectation]], $E[\varphi(T)] = E[W] = \theta$, so $\varphi(T)$ is unbiased. By the [[Variance for Conditional and Marginal Distributions#The law of total variance|law of total variance]], the variance of $W$ is
 
-> $$\text{Var}(\varphi(T)) = \text{Var}(W) - E\big[\text{Var}(W \mid T)\big] \le \text{Var}(W)$$
+> $$\text{Var}(W) = \text{Var}(\varphi(T)) + E\left[\text{Var}(W \mid T)\right]$$
 
-- Sufficiency is what makes $\varphi(T)$ a statistic: the conditional distribution of the sample given $T$ does not involve $\theta$, so neither does $E[W \mid T]$. The variance inequality is the law of total variance ([[Variance for Conditional and Marginal Distributions]]).
-- **Completeness.** $T$ is **complete** if the only function of $T$ with expectation 0 for every $\theta$ is $0$ itself: $E_\theta[g(T)] = 0$ for all $\theta$ implies $P_\theta[g(T) = 0] = 1$. Then two unbiased estimators that are both functions of $T$ must coincide.
-- **Lehmann–Scheffé Theorem.** If $T$ is complete and sufficient and $\varphi(T)$ is unbiased for $\tau(\theta)$, then $\varphi(T)$ is the **uniformly minimum variance unbiased estimator** (UMVUE, or MVUE): Rao–Blackwellizing any other unbiased estimator lands on the same $\varphi(T)$. So to find it, either guess an unbiased function of $T$ or condition a crude unbiased estimator on $T$.
-- For a regular [[Exponential Family|exponential family]], the natural sufficient statistic (such as $\sum X_i$ for the Poisson, exponential and gamma with known shape) is complete, which is why these families have easy UMVUEs. Compare the [[Cramér-Rao Lower Bound]], which certifies a UMVUE only when its variance hits the bound; Lehmann–Scheffé needs no bound (see [[Minimum Variance]]).
+The second term is never negative, so $\text{Var}(\varphi(T)) \le \text{Var}(W)$ for every value of $\theta$. The theorem holds in the same way for an unbiased estimator of a function of the parameter, such as $e^{-\lambda}$.
 
-> [!example]- UMVUE of the Claim-Free Probability {Example}
-> Claim counts on $n = 5$ independent policies are Poisson($\lambda$): $0, 2, 1, 0, 1$. Starting from the crude unbiased estimator $W = \mathbf{1}\{X_1 = 0\}$ of $P(N = 0) = e^{-\lambda}$, find the UMVUE and evaluate it.
+Sufficiency is what makes $\varphi(T)$ an estimator. The conditional distribution of the sample given $T$ does not involve $\theta$, so neither does $E[W \mid T]$. Conditioning on a statistic that is not sufficient can give a function of $\theta$, which cannot be computed from the sample.
+
+> [!example]- Claim sizes are exponential with mean $\theta$. Eight claims total $\$12{,}000$. Starting from the first claim $X_1$ as an estimator of $\theta$, what is the improved estimate, and how do the variances compare? {Example}
+> - The total $T = \sum X_i$ is sufficient for $\theta$.
+> - By symmetry, $E[X_i \mid T]$ is the same for all eight claims, and the eight conditional means add to $E[T \mid T] = T$.
+> - So $E[X_1 \mid T] = T/8 = \bar{X}$, and the improved estimate is $12{,}000/8 = 1{,}500$.
+> - The variance falls from $\text{Var}(X_1) = \theta^2$ to $\text{Var}(\bar{X}) = \theta^2/8$.
+
+## Completeness
+
+A statistic $T$ is complete if the only function of $T$ with expected value 0 for every value of $\theta$ is 0 itself. For every function $g$, the condition is
+
+> $$E[g(T)] = 0 \text{ for every } \theta \implies P(g(T) = 0) = 1 \text{ for every } \theta$$
+
+Two unbiased estimators that are both functions of a complete statistic are then equal, because their difference is a function of $T$ with expected value 0. The sufficient statistic of a [[Sufficient Statistic#Sufficient statistics of an exponential family|regular exponential family]] is complete.
+
+> [!example]- Two claim counts $X_1$ and $X_2$ are Poisson with mean $\lambda$. Is the statistic $(X_1, X_2)$ complete? {Example}
+> - The function $g = X_1 - X_2$ has expected value $\lambda - \lambda = 0$ for every $\lambda$.
+> - It is not 0 with probability 1, since $X_1 = 1$ and $X_2 = 0$ has positive probability.
+> - So $(X_1, X_2)$ is sufficient but not complete.
+
+## The Lehmann–Scheffé theorem
+
+If $T$ is a complete sufficient statistic for $\theta$, the unique [[Minimum Variance|minimum variance unbiased estimator]] of $\theta$ is the function $\varphi(T)$ whose expected value, for every value of $\theta$, is
+
+> $$E[\varphi(T)] = \theta$$
+
+It can be found by finding a function of $T$ that is unbiased, or by conditioning any unbiased estimator on $T$. Both lead to the same $\varphi(T)$. Without completeness, conditioning improves an estimator but does not guarantee the minimum variance unbiased estimator. The whole sample is always sufficient, and conditioning on it returns $W$ unchanged.
+
+> [!example]- Claim counts on five policies are Poisson with mean $\lambda$: 0, 2, 1, 0 and 1. Starting from $W = \mathbf{1}\{X_1 = 0\}$, an unbiased estimator of $e^{-\lambda}$, what is the minimum variance unbiased estimate of $e^{-\lambda}$? {Example}
+> - The total $T = \sum X_i$ is complete and sufficient, with $T$ Poisson with mean $5\lambda$.
+> - The sum of the other four counts is Poisson with mean $4\lambda$ and independent of $X_1$.
+> - Conditioning $W$ on $T = t$ gives
 >
-> > [!answer]-
-> > $Y = \sum X_i$ is complete and sufficient, with $Y \sim \text{Poi}(5\lambda)$ and $\sum_{i \ge 2} X_i \sim \text{Poi}(4\lambda)$ independent of $X_1$. Condition $W$ on $Y = y$:
-> >
-> > $$
-> > \begin{align*}
-> > E[W \mid Y = y] &= \frac{P(X_1 = 0)\,P\big(\sum_{i \ge 2} X_i = y\big)}{P(Y = y)} \\
-> >   &= \frac{e^{-\lambda} \cdot e^{-4\lambda}(4\lambda)^y / y!}{e^{-5\lambda}(5\lambda)^y / y!} \\
-> >   &= \left(\frac{4}{5}\right)^{y}
-> > \end{align*}
-> > $$
-> >
-> > By Lehmann–Scheffé, $\left(\frac{n-1}{n}\right)^{Y}$ is the UMVUE of $e^{-\lambda}$. Here $Y = 4$, so the estimate is $(0.8)^4 = 0.4096$. The crude estimator would have said $1$ (policy 1 happened to be claim-free); the MLE $e^{-\bar{x}} = e^{-0.8} = 0.4493$ is biased.
-
-> [!example]- Improving a One-Claim Estimate of Mean Severity {Example}
-> Claim sizes are exponential with mean $\theta$. Eight claims total \$12,000. A colleague proposes estimating $\theta$ by the first claim, $X_1$. Rao–Blackwellize this estimator, evaluate it, and compare variances.
+> $$
+> \begin{aligned}
+> E[W \mid T = t] &= \frac{e^{-\lambda} \cdot e^{-4\lambda}(4\lambda)^t/t!}{e^{-5\lambda}(5\lambda)^t/t!} \\
+> &= \left(\frac{4}{5}\right)^t
+> \end{aligned}
+> $$
 >
-> > [!answer]-
-> > $Y = \sum X_i$ is complete and sufficient for $\theta$. By symmetry $E[X_i \mid Y]$ is the same for all eight claims, and these eight conditional means add to $E[Y \mid Y] = Y$:
-> >
-> > $$
-> > \begin{align*}
-> > E[X_1 \mid Y] &= \frac{Y}{8} \\
-> >   &= \bar{X}
-> > \end{align*}
-> > $$
-> >
-> > The improved estimate is $12{,}000/8 = \$1{,}500$, and it is the UMVUE of $\theta$. Its variance is $\theta^2/8$, against $\text{Var}(X_1) = \theta^2$ — conditioning on the sufficient statistic cut the variance by a factor of 8.
+> - Here $t = 4$, so the estimate is $0.8^4 = 0.4096$.

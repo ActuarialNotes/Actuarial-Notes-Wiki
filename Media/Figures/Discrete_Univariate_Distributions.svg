@@ -86,6 +86,6 @@ text {
     <line x1="306.49" y1="350" x2="306.49" y2="354" class="tick"/>
     <text x="306.49" y="366" text-anchor="middle" class="sm dim">8</text>
     <text x="326" y="382" text-anchor="end" class="sm dim">k</text>
-    <text x="60" y="76" text-anchor="start" class="sm dim">p(k)</text>
+    <text x="60" y="76" text-anchor="start" class="sm dim">f(k)</text>
   </g>
 </svg>

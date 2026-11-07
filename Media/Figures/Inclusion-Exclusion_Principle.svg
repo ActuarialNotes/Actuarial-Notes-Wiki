@@ -47,9 +47,9 @@ text {
     <circle cx="180" cy="192" r="88" fill="#3b82f6" fill-opacity="0.16" stroke="#3b82f6" stroke-width="1.6"/>
     <circle cx="130" cy="276" r="88" fill="#d97706" fill-opacity="0.16" stroke="#d97706" stroke-width="1.6"/>
     <circle cx="230" cy="276" r="88" fill="#059669" fill-opacity="0.16" stroke="#059669" stroke-width="1.6"/>
-    <text x="104" y="120" text-anchor="middle" class="bold">A</text>
-    <text x="42" y="356" text-anchor="middle" class="bold">B</text>
-    <text x="318" y="356" text-anchor="middle" class="bold">C</text>
+    <text x="104" y="120" text-anchor="middle" class="bold">E</text>
+    <text x="42" y="356" text-anchor="middle" class="bold">F</text>
+    <text x="318" y="356" text-anchor="middle" class="bold">G</text>
     <text x="180" y="147" text-anchor="middle" class="bold">+</text>
     <text x="98" y="313" text-anchor="middle" class="bold">+</text>
     <text x="262" y="313" text-anchor="middle" class="bold">+</text>

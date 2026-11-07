@@ -9,6 +9,8 @@ import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { QuestionCard } from '@/components/QuestionCard'
 import type { SelfGrade } from '@/components/QuestionCard'
 import { ProgressBar } from '@/components/ProgressBar'
+import { examAccent } from '@/lib/examColors'
+import { EXAM_LABEL_TO_ID } from '@/lib/examIds'
 import { QuitQuizDialog } from '@/components/QuitQuizDialog'
 import { IncompletePartsDialog } from '@/components/IncompletePartsDialog'
 import { GradePartsDialog } from '@/components/GradePartsDialog'
@@ -706,6 +708,7 @@ export default function Quiz() {
           questionIds={storeQuestions.map(q => q.id)}
           isFlagged={isFlagged}
           onFlag={() => toggleFlag(currentQuestion.id)}
+          accent={examAccent(EXAM_LABEL_TO_ID[currentQuestion.exam] ?? '')}
           info={
             <QuestionInfoButton
               question={currentQuestion}
@@ -763,7 +766,10 @@ export default function Quiz() {
 
       {/* The sheet Next and Back turn. A tap on a concept it names opens that
           concept (handleMentionClick); everything else passes through. */}
-      <div ref={cardRef} className="paper-sheet mt-4" onClick={handleMentionClick}>
+      {/* The question has no card of its own — it lies on the page — but the
+          sheet still carries the page's colour, so while Next flicks it off the
+          pile the outgoing question covers the one rising beneath it. */}
+      <div ref={cardRef} className="paper-sheet mt-4 bg-background" onClick={handleMentionClick}>
         <QuestionCard
           // Keyed by question so nothing the card holds locally — a typed
           // free-entry answer, a self-grade — can outlive the question it

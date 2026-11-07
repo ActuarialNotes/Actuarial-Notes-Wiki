@@ -74,8 +74,10 @@ export function QuestionInfoButton({
           className,
         )}
       >
-        <Info className="h-4 w-4" aria-hidden />
-        Info
+        <Info className="h-[18px] w-[18px] sm:h-4 sm:w-4" aria-hidden />
+        {/* On a phone the icon carries it (the quiz bar's tools sit right of the
+            question count); from `sm` up there is room for the word. */}
+        <span className="sr-only sm:not-sr-only">Info</span>
       </button>
 
       {open && (

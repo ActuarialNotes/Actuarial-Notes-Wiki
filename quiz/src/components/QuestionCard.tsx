@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { Card, CardContent, CardHeader } from '@/components/ui/card'
-import { AnswerOption } from '@/components/AnswerOption'
+import { AnswerOption, AnswerList } from '@/components/AnswerOption'
 import { ExplanationPanel } from '@/components/ExplanationPanel'
 import { TopicBadge } from '@/components/TopicBadge'
 import { MarkdownText, MARKDOWN_LIST_CLASS, READING_MD_CLASS } from '@/components/MarkdownText'
@@ -173,11 +172,10 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
         ? estimateEssayScore(partAnswer, part.explanation ?? '')
         : null
 
-    // The part sits flush with the question on a phone (its card is the same
-    // surface as the question's, so its padding only narrowed the text) and
-    // gets its own inset from `sm` up.
+    // No surface of its own: the question sits on the page, and a hairline
+    // above each part is all that sets it off from the one before.
     return (
-      <div className="rounded-lg bg-card sm:p-4 space-y-4">
+      <div className="border-t border-border pt-5 space-y-4">
         <div className="flex items-center justify-between gap-2">
           <span className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
             Part {part.label.toUpperCase()}
@@ -244,7 +242,7 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
 
   // ── Graded part (MC or free-entry) ─────────────────────────────────────────
   return (
-    <div className="rounded-lg bg-card sm:p-4 space-y-3">
+    <div className="border-t border-border pt-5 space-y-3">
       <div className="flex items-center justify-between gap-2">
         <span className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
           Part {part.label.toUpperCase()}
@@ -262,7 +260,7 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
       {part.stem && <MarkdownText className={PART_STEM_CLASS} conceptNames={conceptNames}>{part.stem}</MarkdownText>}
 
       {part.type === 'multiple-choice' ? (
-        <div className="space-y-2">
+        <AnswerList>
           {part.options.map(option => (
             <AnswerOption
               key={option.key}
@@ -275,7 +273,7 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
               onClick={key => !isLocked && onPartAnswer(part.label, key)}
             />
           ))}
-        </div>
+        </AnswerList>
       ) : (
         <FreeEntryInput
           answer={partAnswer}
@@ -360,8 +358,8 @@ export function QuestionCard({
   // ── multiple-choice ──────────────────────────────────────────────────────
   if (question.type === 'multiple-choice') {
     return (
-      <Card className="w-full">
-        <CardHeader className="pb-3">
+      <div className="w-full">
+        <div className="pb-6">
           {showMeta && (
             <div className="flex flex-wrap gap-2 mb-3">
               <TopicBadge label={question.exam} variant="topic" />
@@ -378,23 +376,25 @@ export function QuestionCard({
           <MarkdownText conceptNames={conceptNames} className={`text-[17px] sm:text-lg leading-relaxed [&_p]:my-2 [&_p:first-child]:mt-0 [&_p:last-child]:mb-0 ${MARKDOWN_LIST_CLASS}`}>
             {question.stem}
           </MarkdownText>
-        </CardHeader>
+        </div>
 
-        <CardContent className="space-y-2" data-tour="answer-options">
-          {question.options.map((option, idx) => (
-            <AnswerOption
-              key={option.key}
-              optionKey={option.key}
-              text={option.text}
-              isSelected={selectedAnswer === option.key}
-              isCorrect={question.answer === option.key}
-              isDisabled={isLocked}
-              revealAnswer={showExplanation}
-              onClick={onAnswer}
-              onNext={isLocked ? onNext : undefined}
-              keyHint={String(idx + 1)}
-            />
-          ))}
+        <div className="space-y-3">
+          <AnswerList data-tour="answer-options">
+            {question.options.map((option, idx) => (
+              <AnswerOption
+                key={option.key}
+                optionKey={option.key}
+                text={option.text}
+                isSelected={selectedAnswer === option.key}
+                isCorrect={question.answer === option.key}
+                isDisabled={isLocked}
+                revealAnswer={showExplanation}
+                onClick={onAnswer}
+                onNext={isLocked ? onNext : undefined}
+                keyHint={String(idx + 1)}
+              />
+            ))}
+          </AnswerList>
 
           {isLocked && onNext && (
             <p className="text-xs text-center text-muted-foreground pt-1 select-none">
@@ -412,8 +412,8 @@ export function QuestionCard({
               examinerReport={question.examiner_report}
             />
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     )
   }
 
@@ -424,8 +424,8 @@ export function QuestionCard({
     const correct = selfGrade !== undefined ? selfGrade === 'correct' : autoCorrect
 
     return (
-      <Card className="w-full">
-        <CardHeader className="pb-3">
+      <div className="w-full">
+        <div className="pb-6">
           {showMeta && (
             <div className="flex flex-wrap gap-2 mb-3">
               <TopicBadge label={question.exam} variant="topic" />
@@ -442,9 +442,9 @@ export function QuestionCard({
           <MarkdownText conceptNames={conceptNames} className={`text-[17px] sm:text-lg leading-relaxed [&_p]:my-2 [&_p:first-child]:mt-0 [&_p:last-child]:mb-0 [&_table]:text-sm [&_th]:text-left [&_td]:pr-4 [&_table]:border-collapse [&_td]:border [&_td]:border-border [&_th]:border [&_th]:border-border [&_th]:px-2 [&_td]:px-2 [&_th]:py-1 [&_td]:py-1 ${MARKDOWN_LIST_CLASS}`}>
             {question.stem}
           </MarkdownText>
-        </CardHeader>
+        </div>
 
-        <CardContent className="space-y-3">
+        <div className="space-y-3">
           <FreeEntryInput
             // A free-entry answer that was typed but never submitted lives only
             // in the input's own state, where no prop change would clear it —
@@ -469,8 +469,8 @@ export function QuestionCard({
               examinerReport={question.examiner_report}
             />
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     )
   }
 
@@ -478,8 +478,8 @@ export function QuestionCard({
   const parts = question.parts ?? []
 
   return (
-    <Card className="w-full">
-      <CardHeader className="pb-3">
+    <div className="w-full">
+      <div className="pb-6">
         {showMeta && (
           <div className="flex flex-wrap gap-2 mb-3">
             <TopicBadge label={question.exam} variant="topic" />
@@ -498,9 +498,9 @@ export function QuestionCard({
             {question.stem}
           </MarkdownText>
         )}
-      </CardHeader>
+      </div>
 
-      <CardContent className="space-y-4">
+      <div className="space-y-6">
         {parts.map(part => (
           <PartCard
             // Part labels repeat across questions ("a", "b", …), so keying on
@@ -529,7 +529,7 @@ export function QuestionCard({
             conceptNames={conceptNames}
           />
         ))}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   )
 }

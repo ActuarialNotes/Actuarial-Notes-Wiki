@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:d9c6021e07b6bf6e64784be705937f59f79b30fca951a553a39e2c188740b44b
+  content_hash: sha256:152bd4d27269969201cfa0fee52dc8c129944371c57cb6123faf9cc250263611
   sources:
     - "NIST/SEMATECH e-Handbook §1.3.3.24 'Quantile-Quantile Plot' (quantiles of one data set against those of another; 45-degree reference line for the two-sample plot), sha256:48fc9a7ae492519938004302aff61ba8a909b70601999f3cf244690bcb6db9dc — https://www.itl.nist.gov/div898/handbook/eda/section3/qqplot.htm"
     - "NIST/SEMATECH e-Handbook §1.3.3.21 'Normal Probability Plot' (vertical axis: ordered response values; horizontal: normal order statistic medians; fitted reference line; used on model residuals), sha256:bdb6715e4dad4cf3d99e06540b85c460d925bb54af4d94d07e35e04dac6e0749 — https://www.itl.nist.gov/div898/handbook/eda/section3/normprpl.htm"
@@ -19,28 +19,45 @@ verification:
   log: .verify/Concepts/QQ Plot.md
 ---
 
-A **QQ Plot** (Quantile-Quantile Plot) is a graphical diagnostic that compares the **quantiles** of a dataset against the quantiles of a theoretical distribution (or another dataset) to assess goodness of fit.
-
-> **Construction:** Plot the $i$-th order statistic $x_{(i)}$ on the vertical axis against the theoretical quantile $F^{-1}(p_i)$ on the horizontal axis, with plotting position $p_i = \frac{i}{n+1}$ (or $\frac{i-0.5}{n}$).
-
-**Interpretation** (sample quantiles on the vertical axis):
-
-| Pattern | Implication |
-| :--- | :--- |
-| Points fall on a straight line | Data fits the theoretical distribution well |
-| Low end above the line, high end below it | Data has lighter (shorter) tails than the theoretical distribution |
-| Low end below the line, high end above it | Data has heavier (longer) tails — fat-tailed data |
-| Points above the line in the upper tail | Right tail is heavier than theoretical |
-| Systematic curvature | Distribution family is wrong |
-
-- A **Normal QQ plot** plots sample quantiles against Normal quantiles; a straight line indicates normality
-- Used to assess model assumptions in [[Generalized Linear Model]]s and linear regression ([[Residual Plot]]s on a QQ scale check normality of residuals)
-- Both tail cases can bend the middle of the plot into an S-like pattern, so read the direction of the departure at the two ends, not the shape of the middle
-
 ![[Media/Figures/QQ_Plot.svg|340]]
 
-> [!example]- Interpreting a Normal QQ Plot of Residuals {Example}
-> After fitting a linear regression to claim severity data, a Normal QQ plot of the residuals shows points that closely follow the reference line in the center but curve sharply upward in the upper-right tail. What does this indicate?
->
-> > [!answer]-
-> > The upward curve in the upper tail indicates that the **residuals have a heavier right tail** than the Normal distribution. This suggests the normality assumption for residuals may be violated — perhaps a log transformation of severity or a GLM with a Gamma distribution would be more appropriate.
+A **QQ Plot** (quantile-quantile plot) is a plot of the ordered values of a sample against the corresponding quantiles of an assumed distribution, used to check whether the sample follows that distribution. For a sample of $n$ residuals ordered from smallest to largest, $e_{(1)} \le \cdots \le e_{(n)}$, the $i$th point of a normal QQ plot is
+
+> $$\left(\Phi^{-1}(p_i),\ e_{(i)}\right)$$
+
+- $\Phi^{-1}$ is the inverse of the standard normal cdf, so $\Phi^{-1}(p_i)$ is the theoretical quantile on the horizontal axis.
+- $e_{(i)}$ is the $i$th smallest residual, the sample quantile on the vertical axis.
+
+The plotting position $p_i$ of the $i$th smallest of $n$ ordered values is
+
+> $$p_i = \frac{i}{n + 1}$$
+
+Another convention, $p_i = (i - 0.5)/n$, gives slightly different coordinates. A straight reference line is drawn through the points. If the sample follows the assumed distribution, the points fall near the line. A QQ plot does not show how often each value occurs.
+
+> [!example]- A regression has four residuals: $-1.2$, $0.4$, $-0.3$ and $1.1$. What are the points of their normal QQ plot? {Example}
+> - In order, the residuals are $-1.2$, $-0.3$, $0.4$ and $1.1$.
+> - With $n = 4$, the plotting positions are $i/5$: 0.2, 0.4, 0.6 and 0.8.
+> - The standard normal quantiles of these are $-0.842$, $-0.253$, $0.253$ and $0.842$.
+> - The points are $(-0.842, -1.2)$, $(-0.253, -0.3)$, $(0.253, 0.4)$ and $(0.842, 1.1)$.
+
+## Reading a QQ plot
+
+With the sample quantiles on the vertical axis, a departure from the line at each end shows how the sample's tails compare with the assumed distribution's:
+
+| Pattern | Meaning |
+| --- | --- |
+| Points close to the line | The sample follows the assumed distribution |
+| Low end below the line and high end above it (an S shape) | Both tails are heavier than assumed |
+| Low end above the line and high end below it | Both tails are lighter than assumed |
+| Only the high end above the line | The right tail is heavier than assumed, so the sample is more right-skewed |
+| Only the low end below the line | The left tail is heavier than assumed, so the sample is more left-skewed |
+
+A QQ plot of the residuals of a regression or a [[Generalized Linear Model|GLM]] checks the model's distributional assumption, alongside the [[Residual Plot|residual plot]] that checks its mean and variance.
+
+> [!example]- The normal QQ plot of a severity regression's residuals follows the reference line in the middle, but its highest points rise well above the line. What does this show? {Example}
+> - Only the high end departs from the line, and it lies above it.
+> - The largest residuals are larger than a normal distribution would produce, so the right tail is heavier than assumed.
+> - The normality assumption fails, and a right-skewed response distribution such as the [[Gamma]] should be considered.
+
+> [!trap] Reading the tails from the wrong axis
+> The patterns above hold with the sample quantiles on the vertical axis. When software puts the sample on the horizontal axis, every pattern reverses, so check the axes before reading the tails.

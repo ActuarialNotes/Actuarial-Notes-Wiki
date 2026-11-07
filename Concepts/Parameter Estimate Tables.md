@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:03fd2a9a9194302320045c8f93bbedda7964d6939a558a901a4287c27af7a893
+  content_hash: sha256:b984e79d197deff7357f518536d5e416143e2c413329d853116a4b82bce413d8
   sources:
     - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning (2nd ed., Springer 2021), §3.1.2 standard errors, t-statistic (3.14) with n-2 df, footnote 3 on the 97.5% t quantile, printed pp.66-67 (PDF pp.76-77); §4.3.2 z-statistic, Table 4.1, printed p.136 (PDF p.146); §4.6.2 Table 4.11 Poisson regression z-statistic, printed p.168 (PDF p.178), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
     - "Rodríguez, G., Lecture Notes on Generalized Linear Models (Princeton WWS 509), Ch.2 'Linear Models for Continuous Data', §2.3.1 Wald t-test: t with n-p df when sigma² estimated, normal when known, CI with t_(1-alpha/2, n-p), PDF pp.9-10, sha256:b9fae913696a54bb97a9a0f60cdddd8a5c72c9e9cf0451e503a0043d888edf1f — https://grodri.github.io/glms/notes/c2.pdf"
@@ -16,29 +16,79 @@ verification:
   log: .verify/Concepts/Parameter Estimate Tables.md
 ---
 
-**Parameter Estimate Tables** (also called **coefficient tables** or **output tables**) are standard output from statistical software when fitting regression or [[Generalized Linear Model]]s. They summarize the estimated model coefficients, their uncertainty, and hypothesis test results.
-
-**Typical columns in a parameter estimate table:**
-
-| Column | Description |
-| :--- | :--- |
-| **Parameter** | Predictor name or level |
-| **Estimate** ($\hat{\beta}$) | Maximum likelihood estimate of the coefficient |
-| **Std. Error** | Estimated standard deviation of $\hat{\beta}$ |
-| **z-value** or **t-value** | $\hat{\beta} / \text{SE}(\hat{\beta})$; test statistic for $H_0: \beta = 0$ |
-| **p-value** | Significance of the predictor: $P(\lvert T_{n-p-1} \rvert \geq \lvert t\text{-value}\rvert)$ for a t-value, $P(\lvert Z \rvert \geq \lvert z\text{-value}\rvert)$ for a z-value |
-| **95% CI** | $\hat{\beta} \pm t_{0.025,\, n-p-1} \cdot \text{SE}(\hat{\beta})$ for a t-value, $\hat{\beta} \pm 1.96 \cdot \text{SE}(\hat{\beta})$ for a z-value |
-
-- **Which distribution applies**: a [[Linear Regression|linear regression]] table reports **t-values** — $\sigma^2$ is estimated from the residuals, so under Normal errors $\hat\beta_j/\text{SE}(\hat\beta_j)$ follows a $t$ distribution with $n-p-1$ degrees of freedom ($p$ predictors plus an intercept). A GLM table such as Poisson or logistic regression reports **z-values**: Wald statistics referred to the standard Normal, because the maximum likelihood estimate is approximately Normal in large samples. The two agree as the degrees of freedom grow — the two-sided 5% critical value is $2.09$ at 20 df and $1.98$ at 100 df, against $1.96$ — but with few residual df the $t$ multiplier is much larger ($3.18$ at 3 df)
-- A small p-value (e.g., $< 0.05$) indicates the predictor is statistically significant
-- For a log-[[Link Function]] model (Poisson or Gamma GLM), $e^{\hat{\beta}}$ is the **multiplicative factor** on the mean per unit increase in the predictor
-- The **reference level** of a categorical predictor is absorbed into the intercept; other levels are interpreted relative to it
-- Standard errors from GLMs are based on the **Fisher information matrix**
-
 ![[Media/Figures/Parameter_Estimate_Tables.svg|340]]
 
-> [!example]- Interpreting GLM Output {Example}
-> A Poisson GLM output shows: Intercept $\hat{\beta}_0 = -1.8$ (SE = 0.2) and Territory B $\hat{\beta}_1 = 0.45$ (SE = 0.15, p = 0.003). The reference is Territory A. Interpret the territory coefficient.
->
-> > [!answer]-
-> > The p-value of 0.003 < 0.05 indicates that Territory B is significantly different from Territory A. With a log link, the expected claim count in Territory B is $e^{0.45} \approx 1.57$ times that in Territory A — i.e., approximately **57% more claims** in Territory B, all else equal.
+A **Parameter Estimate Table** is the part of a fitted regression's [[Model Output|output]] that lists, for each coefficient $\beta_j$, its estimate and the test of whether it is zero. A [[Categorical Predictor|categorical predictor]] has one row for each of its levels. Its columns are:
+
+| Column | Contents |
+| --- | --- |
+| Parameter | The predictor, or the level of a categorical predictor |
+| df | 1 for an estimated coefficient, 0 for a base level |
+| Estimate | $\hat{\beta}_j$ |
+| Standard error | $\text{SE}(\hat{\beta}_j)$, the estimated standard deviation of $\hat{\beta}_j$ |
+| $t$ or $z$ value | $\hat{\beta}_j / \text{SE}(\hat{\beta}_j)$ |
+| p-value | The probability of a statistic at least as extreme, if $\beta_j = 0$ |
+
+The variance of the estimator $\hat{\beta}_j$ is the square of its standard error, so variances are compared by squaring the standard errors.
+
+## Test of a coefficient
+
+The test of $H_0: \beta_j = 0$ is a Wald test. Its statistic is
+
+> $$t_j = \frac{\hat{\beta}_j}{\text{SE}(\hat{\beta}_j)}$$
+
+- $\hat{\beta}_j$ is the estimate of the coefficient $\beta_j$.
+- $\text{SE}(\hat{\beta}_j)$ is its standard error.
+
+In a [[Linear Regression|linear regression]] with an intercept and $p$ predictors fitted to $n$ observations, $t_j$ is compared with a [[Student's t-Distribution|$t$ distribution]] with $n - p - 1$ degrees of freedom. In a [[Generalized Linear Model|GLM]] with a fixed dispersion, such as a Poisson or logistic regression, it is labelled $z$ and compared with the standard normal distribution, so its two-sided p-value is
+
+> $$p = 2\left[1 - \Phi(|z|)\right]$$
+
+- $\Phi$ is the standard normal cdf.
+
+The predictor is statistically significant at level $\alpha$ when $p < \alpha$, and $H_0$ is rejected. When $p > \alpha$, the predictor is not significant and is a candidate to drop from the model. The fixed-effects table of a [[Linear Mixed Model|linear mixed model]] is read the same way.
+
+> [!example]- A Poisson GLM reports a coefficient of 0.30 with standard error 0.12. Is the predictor significant at the 5% level? {Example}
+> - The test statistic is $z = 0.30/0.12 = 2.5$.
+> - The p-value is $2[1 - \Phi(2.5)] = 2(1 - 0.99379) = 0.0124$.
+> - $0.0124 < 0.05$, so the predictor is significant at the 5% level.
+
+## Confidence interval for a coefficient
+
+A $100(1 - \alpha)\%$ confidence interval for $\beta_j$ in a linear regression is
+
+> $$\hat{\beta}_j \pm t_{\alpha/2,\, n-p-1}\, \text{SE}(\hat{\beta}_j)$$
+
+- $t_{\alpha/2,\, n-p-1}$ is the value that a $t$ distribution with $n - p - 1$ degrees of freedom exceeds with probability $\alpha/2$.
+
+With more than about 100 residual degrees of freedom, the $t$ distribution is close to normal, and the 95% value is close to 1.96.
+
+> [!example]- A linear regression with 4 predictors is fitted to 30 observations. A coefficient is estimated as 1.5 with standard error 0.4. What is a 95% confidence interval for it? {Example}
+> - The residual degrees of freedom are $30 - 4 - 1 = 25$, and $t_{0.025,\,25} = 2.060$.
+> - The half-width is $2.060 \times 0.4 = 0.824$.
+> - The interval is from 0.676 to 2.324.
+
+## Linear predictor from the table
+
+The linear predictor $\eta_i$ for an observation adds the intercept, the coefficient of each categorical level the observation falls in (the level whose range contains its value), and each numeric coefficient times the predictor's value. A base level has df 0 and coefficient 0, so it adds nothing. A predictor entered as a logarithm contributes its coefficient times $\ln x_{ij}$. Under a log link, the fitted mean is
+
+> $$\mu_i = e^{\eta_i}$$
+
+> [!example]- A Poisson frequency GLM with a log link reports an intercept of $-2.10$, territory A (df 0) 0, territory B 0.25 and vehicle age $-0.03$ per year. What is the expected claim frequency for a territory B vehicle that is 5 years old? {Example}
+> - The linear predictor is $\eta = -2.10 + 0.25 - 0.03 \times 5 = -2.00$.
+> - The expected frequency is $e^{-2.00} = 0.135$.
+
+## Base level and the intercept
+
+When every categorical predictor is at its base level and every numeric predictor is zero, the linear predictor is the intercept. With two-level predictors coded as 0/1 indicators, the intercept is the mean response of the base cell. The coefficient of an indicator is the expected difference between its level and the base level, with the other predictors held fixed. Under a log link, $e^{\hat{\beta}_j}$ is the multiplicative effect of that level relative to the base level.
+
+Changing the base level changes the coefficients but not the fitted values. The new intercept is the old model's fitted value for the new base level with the other predictors at zero, which is the old intercept plus the new base level's coefficient.
+
+> [!example]- A linear regression of salary on experience and an indicator Male (1 for male, 0 for female) gives an intercept of 50.0 and a Male coefficient of 6.0. The model is refitted with an indicator Female instead. What are the new intercept and the Female coefficient? {Example}
+> - Males are the new base level.
+> - The old model's fitted salary for a male with zero experience is $50.0 + 6.0 = 56.0$, so the new intercept is 56.0.
+> - A female's fitted salary is 6.0 lower than a male's, so the Female coefficient is $-6.0$.
+> - The experience coefficient and every fitted value are unchanged.
+
+> [!trap] Comparing p-values across different degrees of freedom
+> The same $t$ statistic gives a larger p-value when there are fewer degrees of freedom, because the $t$ distribution's tails are heavier. A $t$ statistic of 2.2 has a two-sided p-value of 0.079 on 5 degrees of freedom and 0.032 on 60, so a larger $t$ statistic does not always mean a smaller p-value.

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:4b7f6128d5ecbef8cc54ebdbeb1d3262ef605b9dbcb54d5f3405c200baaaa4ee
+  content_hash: sha256:c9b60d3e7366239cfd7813ca41520606738e2acfcd845eca6efefcab92583b2b
   sources:
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), Domain C tasks 4 and 8 (p.5), 'Parameter and Diagnostic Tables' (p.7), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
     - "CAS Exam MAS-II Content Outline 2026, Domain B tasks 3-4 (interpret LMM output; LMM diagnostics and summary statistics, p.2), Domain C tasks 6 and 8 (PCA and clustering outputs, p.3), Domain D task 4 (time series output, p.3), sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf"
@@ -23,87 +23,93 @@ verification:
   log: .verify/Concepts/Model Output.md
 ---
 
-**Model output** is what fitting software reports about a fitted model: coefficient tables, variance decompositions, fit statistics and, for a simulation model, the simulated distribution itself. Reading it is examined as a skill in its own right. That means knowing what each number means, recovering a missing entry from the others, and judging whether the results are reasonable before relying on them.
+**Model Output** is the set of tables and statistics that [[Statistical Software|statistical software]] reports about a fitted model. The output of a regression or a [[Generalized Linear Model|generalized linear model]] has three parts:
 
-> $$t_j = \frac{\hat{\beta}_j}{\mathrm{SE}(\hat{\beta}_j)}$$
+1. The [[Parameter Estimate Tables|parameter estimate table]]: each coefficient's estimate, standard error, test statistic and [[p-Value|p-value]].
+2. The [[ANOVA|ANOVA table]], or for a GLM the analysis of deviance: degrees of freedom, sums of squares or [[Deviance|deviances]], and the test statistic for each source.
+3. The fit statistics: the residual standard error, [[R-Squared|$R^2$]], the [[Dispersion Parameter|dispersion]] estimate, the null and residual deviance, and [[AIC]].
+
+## Output of a linear regression
+
+A [[Linear Regression|linear regression]] with an intercept and $p$ predictors, fitted to $n$ observations, leaves $n - p - 1$ residual degrees of freedom. The estimate of the error variance $\sigma^2$ is
+
+> $$\hat{\sigma}^2 = \frac{\text{RSS}}{n - p - 1}$$
+
+- $\text{RSS}$ is the [[Residual Sum of Squares|residual sum of squares]].
+
+The residual standard error in the output is $\hat{\sigma}$, so squaring it gives $\hat{\sigma}^2$. The $F$ statistic for the regression as a whole is
+
+> $$F = \frac{(\text{TSS} - \text{RSS})/p}{\text{RSS}/(n - p - 1)}$$
+
+- $\text{TSS}$ is the total sum of squares of the response about its mean.
+
+The output also reports $R^2 = 1 - \text{RSS}/\text{TSS}$.
+
+> [!example]- A regression with 3 predictors is fitted to 50 claims, with $\text{TSS} = 3{,}040$ and $\text{RSS} = 1{,}840$. One coefficient is 0.182 with standard error 0.046. What are $\hat{\sigma}$, $F$, $R^2$ and that coefficient's $t$ statistic? {Example}
+> - The residual degrees of freedom are $50 - 3 - 1 = 46$, so $\hat{\sigma}^2 = 1{,}840/46 = 40$ and $\hat{\sigma} = 6.32$.
+> - The regression sum of squares is $3{,}040 - 1{,}840 = 1{,}200$, so $F = (1{,}200/3)/40 = 10.0$.
+> - $R^2 = 1 - 1{,}840/3{,}040 = 0.395$.
+> - The $t$ statistic is $0.182/0.046 = 3.96$.
+
+## Output of a generalized linear model
+
+With a log link, the fitted mean is $\mu_i = e^{\eta_i}$, so the output's coefficients act multiplicatively. A one-unit increase in predictor $x_j$, or a move from the base level to another level, multiplies the expected response by
+
+> $$e^{\hat{\beta}_j}$$
+
+- $\hat{\beta}_j$ is the estimated coefficient, with the other predictors held fixed.
+
+The dispersion parameter $\phi$ of a Gamma or normal GLM measures the spread of the response around its mean. It scales the standard errors, but it does not enter the prediction of the mean.
+
+> [!example]- A Gamma severity GLM with a log link reports an intercept of 7.00, a coefficient of 0.18 for territory B (territory A is the base level) and a dispersion estimate of 1.4. What is the predicted mean severity in territory B? {Example}
+> - The linear predictor for territory B is $7.00 + 0.18 = 7.18$.
+> - The predicted mean severity is $e^{7.18} = 1{,}312.9$.
+> - Territory B's severity is $e^{0.18} = 1.197$ times territory A's, which is $e^{7.00} = 1{,}096.6$.
+> - The dispersion estimate does not enter the predicted mean.
+
+## Output of a linear mixed model
+
+A [[Linear Mixed Model|linear mixed model]] reports a table of fixed effects, read like a parameter estimate table, and the [[Variance Components|variance components]] of the random effects and the residual. It also reports $-2$ times the maximized log-likelihood. For two nested models, the [[Likelihood Ratio Test|likelihood ratio test]] statistic is
+
+> $$\text{LRT} = (-2l_0) - (-2l_1)$$
+
+- $l_0$ is the maximized log-likelihood of the restricted (null) model.
+- $l_1$ is the maximized log-likelihood of the larger model.
+
+The statistic is compared with a chi-squared distribution whose degrees of freedom are the number of added parameters, when the null value of each tested parameter lies inside its range. To test whether a random effect is needed, the null hypothesis is that its variance is zero. Zero is on the boundary of the range of a variance, so the reference distribution is an equal mixture of $\chi^2_0$ and $\chi^2_1$, and the p-value is half the $\chi^2_1$ p-value.
+
+> [!example]- A model of loss ratios with a random intercept for each agency has $-2l = 412.8$. The same model without the random intercept has $-2l = 425.1$. Is the random intercept needed? {Example}
+> - The likelihood ratio test statistic is $425.1 - 412.8 = 12.3$.
+> - The null hypothesis is that the agency variance is zero, which is on the boundary.
+> - The $\chi^2_1$ p-value of 12.3 is 0.00045, so the p-value is $0.5 \times 0.00045 = 0.00023$.
+> - The random intercept is needed.
+
+## Output of a stochastic reserving model
+
+A [[Stochastic Reserving|stochastic reserving]] model, such as the [[ODP Bootstrap Model|ODP bootstrap model]], reports a simulated [[Unpaid Claim Distribution|unpaid claim distribution]]: by accident year and in total, the mean unpaid, its standard error, its percentiles and its [[Coefficient of Variation|coefficient of variation]]. The coefficient of variation is
+
+> $$\text{CV} = \frac{\text{standard error of unpaid}}{\text{mean unpaid}}$$
+
+Before the distribution is used, its output is checked for reasonableness:
+
+1. The standard error should increase from the oldest to the most recent accident year, because the more recent years have larger mean unpaid amounts.
+2. The standard error of the total should be larger than that of any single accident year.
+3. The CV should generally decrease from the oldest to the most recent accident year, because the variability is measured against a larger mean.
+4. The CV of the total should be smaller than that of any single accident year, because of diversification across years.
+5. The CV of the most recent year or two may rise again, when parameter uncertainty outweighs process uncertainty. A large rise, or a year with a CV below the total's, is a problem to investigate.
+
+> [!example]- An ODP bootstrap reports the mean unpaid and its standard error by accident year, in thousands. Does the output pass the reasonableness checks? {Example}
 >
-> $$F = \frac{\text{MS}_{\text{Reg}}}{\text{MS}_{\text{Res}}}$$
+> | Accident year | Mean unpaid | Standard error | CV |
+> | --- | --- | --- | --- |
+> | 2019 | 180 | 95 | 0.53 |
+> | 2020 | 520 | 190 | 0.37 |
+> | 2021 | 1,150 | 310 | 0.27 |
+> | 2022 | 2,400 | 520 | 0.22 |
+> | 2023 | 3,900 | 1,400 | 0.36 |
+> | Total | 8,150 | 1,650 | 0.20 |
 >
-> $$\mathrm{CV} = \frac{\mathrm{SE}(\text{unpaid})}{\text{Mean}(\text{unpaid})}$$
-
-**Regression and GLM output (MAS-I).**
-
-- The [[Parameter Estimate Tables|parameter estimate table]] gives the estimate, its standard error, the $t$ or $z$ statistic and the [[p-Value|p-value]]. Level estimates are relative to the base level. With a log link, $e^{\hat{\beta}}$ is a multiplicative relativity. When the [[Dispersion Parameter|dispersion]] is estimated, standard errors are scaled by $\sqrt{\hat{\phi}}$.
-- The [[ANOVA|ANOVA table]] gives degrees of freedom, sums of squares and mean squares ($\text{SS}/\text{df}$), and $F$. From it, $R^2 = \text{SS}_{\text{Reg}}/\text{SS}_{\text{Tot}}$ ([[R-Squared]]), and the residual standard error is $\sqrt{\text{MS}_{\text{Res}}}$. For a [[Generalized Linear Model|GLM]] the analogue is the null and residual [[Deviance|deviance]] with their df, plus AIC.
-
-**Mixed-model and other output (MAS-II).**
-
-- A [[Linear Mixed Model|mixed model]] prints a fixed-effects table, read like a regression table. It adds the [[Variance Components|variance components]]: the variance and SD of each random effect and of the residual. The [[Intraclass Correlation|ICC]] follows directly from them.
-- Fit statistics are $-2$ log-likelihood (REML or ML: check which), [[AIC]] and [[BIC]]. A [[Likelihood Ratio Test|likelihood ratio test]] is the difference in $-2\ell$. Compare [[Restricted Maximum Likelihood|REML]] fits for changes to the random part and ML fits for changes to the fixed part. A test that a single variance component is zero sits on the boundary of its range: the reference distribution is a 50:50 mixture of $\chi^2_0$ and $\chi^2_1$, so halve the $\chi^2_1$ p-value.
-- [[Principal Components Analysis|PCA]] output: the loading vectors, each component's SD and [[Proportion of Variance Explained|PVE]]. The [[Scree Plot|scree plot]] is read for its elbow.
-- [[Hierarchical Clustering|Clustering]] output: the [[Dendrogram|dendrogram]], where fusion height is dissimilarity and the shape depends on the [[Linkage|linkage]].
-- Time-series output: coefficients with standard errors, $\hat{\sigma}^2$ and AIC. Forecast standard errors turn into [[Prediction Interval|prediction intervals]].
-
-**Simulated unpaid-claim distributions (Exam 7).** A [[Stochastic Reserving|stochastic reserving]] model such as the ODP bootstrap reports, by accident year and in total, the mean unpaid, its standard error, CV and percentiles, and the minimum and maximum simulated values. Test that [[Unpaid Claim Distribution|distribution]] for [[Reasonableness Testing|reasonableness]] before using it:
-
-- Standard errors should **rise** from older to more recent accident years, and the total SE should exceed that of any single year.
-- CVs should **fall** from older to more recent years, and the total CV should be below that of any single year.
-- The CV of the most recent year or two may rise again. Those estimates lean on the largest, least certain development factors, so [[Parameter Risk|parameter uncertainty]] dominates. A large rise suggests the model overstates the uncertainty there, and a [[Bornhuetter-Ferguson Method|Bornhuetter-Ferguson]] or [[Cape Cod Method|Cape Cod]] model for those years is worth testing.
-- The mean should sit close to the deterministic [[Chain Ladder Method|chain-ladder]] estimate the model is built on. Implausible minima or maxima point to outliers, negative incremental values or a residual problem.
-- Once outcomes are known, check calibration: across many triangles, the percentiles at which actual outcomes land in their predicted distributions should be uniform. Percentiles bunched in both tails mean the distribution is too narrow.
-
-> [!example]- Completing a Regression Output {Example}
-> A severity regression on $n = 50$ claims with $3$ predictors has $\text{SS}_{\text{Reg}} = 1{,}200$ and $\text{SS}_{\text{Res}} = 1{,}840$. One coefficient is $0.182$ with standard error $0.046$. Complete the ANOVA table and find $R^2$ and the coefficient's $t$ statistic. If the model had a log link, what would the coefficient mean?
->
-> > [!answer]-
-> > $$
-> > \begin{align*}
-> > \text{MS}_{\text{Reg}} &= 1{,}200/3 \\
-> > &= 400 \\
-> > \text{MS}_{\text{Res}} &= 1{,}840/46 \\
-> > &= 40 \\
-> > F &= 400/40 \\
-> > &= 10.0 \\
-> > R^2 &= 1{,}200/3{,}040 \\
-> > &= 0.395 \\
-> > t &= 0.182/0.046 \\
-> > &= 3.96
-> > \end{align*}
-> > $$
-> > The residual standard error is $\sqrt{40} = 6.32$. With $t = 3.96$ on $46$ df, the coefficient is clearly significant. Under a log link, $e^{0.182} = 1.20$: a one-unit increase in that predictor raises expected severity by about $20\%$.
-
-> [!example]- Reading Mixed-Model Output {Example}
-> A random-intercept model of loss ratio by agency reports an agency variance of $0.018$ and a residual variance of $0.054$. Refitting without the random intercept raises $-2\ell_R$ from $412.8$ to $425.1$. Find the ICC and test whether the agency effect is needed.
->
-> > [!answer]-
-> > $$
-> > \begin{align*}
-> > \text{ICC} &= \frac{0.018}{0.018 + 0.054} \\
-> > &= 0.25 \\
-> > \text{LRT} &= 425.1 - 412.8 \\
-> > &= 12.3
-> > \end{align*}
-> > $$
-> > The null value $\sigma^2_{\text{agency}} = 0$ is on the boundary, so the p-value is half the $\chi^2_1$ tail: $0.5 \times 0.00045 = 0.0002$. **Keep the random intercept.** A quarter of the variation in loss ratios is between agencies. Both fits share their fixed effects, so comparing REML likelihoods is valid.
-
-> [!example]- Reasonableness Checks on a Bootstrap Unpaid Distribution {Example}
-> An ODP bootstrap reports, by accident year (in $\$000$):
->
-> | AY | Mean unpaid | SE | CV |
-> |---|---|---|---|
-> | 2017 | $45$ | $40$ | $0.89$ |
-> | 2018 | $180$ | $95$ | $0.53$ |
-> | 2019 | $520$ | $190$ | $0.37$ |
-> | 2020 | $1{,}150$ | $310$ | $0.27$ |
-> | 2021 | $2{,}400$ | $520$ | $0.22$ |
-> | 2022 | $3{,}900$ | $1{,}400$ | $0.36$ |
-> | Total | $8{,}195$ | $1{,}650$ | $0.20$ |
->
-> Test the output for reasonableness.
->
-> > [!answer]-
-> > - **SE by year:** it rises steadily from $40$ to $1{,}400$, and the total ($1{,}650$) exceeds the largest single year. Pass.
-> > - **CV by year:** it falls from $0.89$ to $0.22$ through 2021, and the total ($0.20$) is below every single year. Pass.
-> > - **2022:** the CV jumps back to $0.36$. Some rise is expected in the latest year, where the largest development factors carry the most parameter uncertainty. But a rise from $0.22$ to $0.36$ is large, and 2022 alone carries most of the total's uncertainty (SE $1{,}400$ of $1{,}650$).
-> >
-> > Before accepting the distribution, look at what drives the 2022 projection: a single observed value multiplied by every development factor, the largest of which is the least stable. Then compare with a Bornhuetter-Ferguson or Cape Cod estimate for 2022, which leans less on that one value.
+> - The standard error rises from 95 to 1,400, and the total's 1,650 is larger than every single year's.
+> - The CV falls from 0.53 to 0.22 through 2022, and the total's 0.20 is smaller than every single year's.
+> - The CV of 2023 rises from 0.22 to 0.36, which is a large rise for the most recent year.
+> - The output passes the first four checks, and the 2023 projection should be investigated before the distribution is used.

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:3f315a47ca04ff0749bc08855c99dce2ee59c2b0150971bc14f0381e42a92e84
+  content_hash: sha256:df48c05237e82c23ef9aada5460daa3c25aa1716bfcd4e71e1b410dcee0bc453
   sources:
     - "StataCorp, Stata Base Reference Manual (release 19), [R] regress postestimation diagnostic plots, avplot Remarks p.5 (PDF p.5): an AV plot's regression has the same coefficient and SE as the full model; its coordinates 'cannot be used to identify functional form, or, at least, not well'; 'the relationship between y and x is forced to be linear', sha256:2b6a9b898c73d0657d3ce7fbf18a7a23c507d01ad9c1d0543cf7689dc6aa734f — https://www.stata.com/manuals/rregresspostestimationdiagnosticplots.pdf"
     - "Wikipedia, 'Partial regression plot' (citing Velleman & Welsch 1981), Properties 1-4 and the comparison with partial residual plots: LS fit has intercept 0 and slope beta_i; its residuals equal the full model's; mostly used for leverage and influential points; 'the x-axis is not X_i. This limits its usefulness in determining the need for a transformation (which is the primary purpose of the partial residual plot)', sha256:8ecce810efb2f345c2582914e56ad6e8bd2d40dec1e403dd541a5481bc48011a — https://en.wikipedia.org/wiki/Partial_regression_plot"
@@ -19,21 +19,44 @@ verification:
   log: .verify/Concepts/Added Variable Plot.md
 ---
 
-An **Added Variable Plot** (partial regression plot) isolates the relationship between a single predictor $x_j$ and the response after removing (partialling out) the linear effects of all other predictors in the model — used to see $x_j$'s adjusted effect and to spot influential observations.
-
-> $$e_Y = Y - \hat{Y}^{(-j)}, \qquad e_{x_j} = x_j - \hat{x}_j^{(-j)}$$
->
-> $$\text{Plot } e_Y \text{ vs. } e_{x_j} \text{; the slope equals } \hat{\beta}_j \text{ from the full model}$$
-
-- $\hat{Y}^{(-j)}$ and $\hat{x}_j^{(-j)}$ are the fitted values from regressing $Y$, and $x_j$ respectively, on all *other* predictors — the residuals $e_Y$ and $e_{x_j}$ represent what's left after removing those other predictors' effects
-- The least squares line through the plot has intercept $0$ and slope $\hat{\beta}_j$, and its residuals are the full model's residuals. Curvature can flag non-linearity in $x_j$, but the plot is a weak guide to the functional form: its horizontal axis is not $x_j$, and its construction forces the relationship to be linear. A partial residual (component + residual) plot is the tool for choosing a transformation
-- Unlike a simple scatter plot of $Y$ against $x_j$, the added variable plot isolates $x_j$'s **partial** (adjusted) contribution after controlling for the other predictors, including any [[Control Variable]]s
-- Points far out on the $e_{x_j}$ axis are high-leverage observations for $x_j$; points far from the fitted line are outliers (large residuals). A point that is both — at the left or right of the plot and off the general trend — is likely influential and worth investigating, complementing what a [[Residual Plot]] shows for overall fit
-
 ![[Media/Figures/Added_Variable_Plot.svg|340]]
 
-> [!example]- Reading an Added Variable Plot {Example}
-> The added variable plot for vehicle age (after controlling for territory and driver age) shows a clear U-shape rather than a straight line. What does this indicate, and what model change would address it?
->
-> > [!answer]-
-> > The U-shape suggests that vehicle age's effect on the response, net of the other predictors, is **not linear**, so a single linear term may be misspecified. An added variable plot is only a rough guide to the form, so confirm the curve with a partial residual plot of vehicle age; if it is there, a quadratic term (or banding vehicle age) in the [[Model Structure]] would capture the relationship better.
+An **Added Variable Plot** (partial regression plot) is a plot of the response adjusted for all the other predictors against one predictor $x_j$ adjusted for all the other predictors. It shows the effect of $x_j$ in the full [[Linear Regression|multiple regression]]. The added variable plot for $x_j$ is built in three steps:
+
+1. Regress the response $y$ on all the predictors except $x_j$, and keep the residuals $e_i^{(y)}$.
+2. Regress $x_j$ on the same other predictors, and keep the residuals $e_i^{(x_j)}$.
+3. Plot $e_i^{(y)}$ against $e_i^{(x_j)}$.
+
+The least squares line through the plot is
+
+> $$e_i^{(y)} = \hat{\beta}_j\, e_i^{(x_j)} + e_i$$
+
+- $\hat{\beta}_j$ is the coefficient of $x_j$ in the full multiple regression.
+- $e_i$ is the residual of observation $i$ in the full multiple regression.
+
+The line has intercept zero, because residuals from a least squares regression with an intercept average zero. By the Frisch–Waugh result, its slope is the full model's coefficient $\hat{\beta}_j$, and its residuals are the full model's residuals.
+
+> [!example]- A simple regression of claim cost on vehicle value alone gives a slope of 1.8. In the multiple regression of claim cost on vehicle value and driver age, the coefficient of vehicle value is 0.6. What line is fitted through the added variable plot for vehicle value? {Example}
+> - The slope of the line is the coefficient in the full multiple regression, 0.6.
+> - The intercept of the line is zero.
+> - The simple regression's slope of 1.8 is a marginal effect, which includes what vehicle value shares with driver age, so it differs from the adjusted coefficient.
+
+## Leverage and outliers in an added variable plot
+
+A point far along the horizontal axis has a value of $x_j$ that is unusual given the other predictors, so it has high leverage for $\hat{\beta}_j$. A point far from the fitted line is an [[Outlier|outlier]]. A point that is both can move the slope a great deal and should be investigated.
+
+## Partial residual plot
+
+An added variable plot is a weak guide to the functional form of $x_j$, because its horizontal axis is not $x_j$ and its construction forces the relationship to be linear. The plot for judging the functional form, or a needed transformation, is the partial residual (component plus residual) plot. Its vertical coordinate is
+
+> $$e_i + \hat{\beta}_j x_{ij}$$
+
+- $e_i$ is the residual of the full model, the working residual in a [[Generalized Linear Model|GLM]].
+- $\hat{\beta}_j x_{ij}$ is the fitted linear contribution of $x_j$.
+
+This is plotted against $x_{ij}$ itself. Curvature, or a systematic departure from the fitted line, shows that the linear term in $x_j$ is not appropriate. One remedy is to group $x_j$ into bins treated as a categorical predictor, so that each bin has its own coefficient, with the bin boundaries placed where the partial residuals change their pattern.
+
+> [!example]- In a frequency GLM, the partial residual plot for driver age is flat from age 25 to age 65 but rises steeply below 25 and above 65. What should replace the linear term in driver age? {Example}
+> - The partial residuals curve away from the fitted line, so a single linear term is not appropriate.
+> - The pattern changes at about age 25 and age 65.
+> - Group driver age into three bins, below 25, 25 to 65, and above 65, each with its own coefficient.

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:74a174ef6353665d260441bafee19696a471e6ebdb1583d185166a7043e76195
+  content_hash: sha256:fbe84305aec876f700aa8ceb5ef5a6d56ff5d53b05894e2d228004a52e38b17d
   sources:
     - "Wickham, Çetinkaya-Rundel & Grolemund, R for Data Science (2e), Ch.10 'Exploratory data analysis', §10.1 (iterative cycle; not a formal process; data quality even when questions are given; data cleaning one application), §10.2 (questions focus attention; variation and covariation), §10.3.1-10.3.2 (typical/rare values, clusters; zero-coded missing values), §10.6 (pattern questions; model residuals), sha256:ab13c323616810e786eb9f6298ed5d4b9bc50d1cebfb753d2725f91684553432 — https://r4ds.hadley.nz/EDA.html"
     - "Wickham, Çetinkaya-Rundel & Grolemund, R for Data Science (2e), Ch.3 'Data transformation', §3.6 'Case study: aggregates and sample size' (include a count n() with any aggregation), sha256:7ecfc380d9ba22575657e2e0ea5b16d9a2c7a235f5cfd2a3ad860bf6bbf745de — https://r4ds.hadley.nz/data-transform.html"
@@ -20,57 +20,48 @@ verification:
   log: .verify/Concepts/Exploratory Data Analysis.md
 ---
 
-**Exploratory Data Analysis (EDA)** is an approach to analyzing datasets by summarizing their main characteristics — often visually — before formal modeling. EDA helps identify patterns, anomalies, and appropriate model structures.
-
-**Common EDA techniques:**
-
-| Plot / Summary | Purpose |
-| :--- | :--- |
-| **Histogram** | Visualize the shape and spread of a univariate distribution |
-| **Box plot** | Display median, quartiles, and outliers; compare groups |
-| **Scatter plot** | Examine relationship between two continuous variables |
-| **Bar chart** | Display frequencies for categorical variables |
-| **[[QQ Plot]]** | Compare a distribution to a theoretical reference |
-| **Correlation matrix** | Identify linear relationships among predictors |
-| **Summary statistics** | Mean, median, SD, min, max, quantiles |
-
-- EDA is an iterative, open-ended process — unlike confirmatory analysis, there are no fixed hypotheses
-- For **categorical predictors**: bar charts and frequency tables reveal imbalance or rare categories
-- For **continuous predictors**: histograms and scatter plots reveal skewness, outliers, and non-linear relationships with the response
-- **Log transforms** of skewed positive variables (claim sizes, exposures) are common in actuarial EDA
-- EDA informs feature engineering, transformation choices, and the selection of an appropriate [[Generalized Linear Model]] family and [[Link Function]]
-
-**Planning an exploration:**
-
-- **An iterative cycle:** EDA is not a fixed procedure. The analyst generates questions about the data, searches for answers by visualizing, transforming and modelling it, and uses what is learned to refine the questions or ask new ones. Each question focuses attention on one part of the data set and decides which graph, summary or transformation to make next
-- **Two questions are always useful:** what *variation* occurs within each variable (its typical values, rare values, clusters and unusual values), and what *covariation* occurs between variables (whether two or more tend to vary together). [[Exploratory Data Visualization]] and [[Types of Plots]] cover the plots that answer each
-- **Data quality comes first:** Even when the analysis's main questions are set in advance, EDA is needed to check whether the data meet expectations. Data cleaning is one application of it: an impossible value, a zero standing in for a missing value, or a duplicated record is found by looking ([[Data Validation]], [[Data Issues]])
-- **Goals:** The NIST handbook lists what EDA is for: to maximize insight into a data set, uncover its structure, extract the important variables, detect outliers and anomalies, test the assumptions a model will rely on, and develop parsimonious models. The analyst also needs to know what is *not* in the data
-- **Patterns lead to questions:** When a plot shows a pattern, ask whether it could be chance, how to describe the relationship and how strong it is, what other variable might affect it, and whether it holds within subgroups. A model can then remove a strong known relationship so that subtler ones show in the residuals
-- **Summaries alongside plots:** [[Summary Statistics]] such as counts, means, quantiles and the share of missing values support the plots, and every group summary should carry its count, so that a striking average resting on a few records is recognised
-
 ![[Media/Figures/Exploratory_Data_Analysis.svg|340]]
 
-> [!example]- Using a Box Plot to Detect Group Differences {Example}
-> An actuary creates box plots of claim severity for four vehicle classes. Three boxes overlap substantially, but the "luxury" class has a noticeably higher median and wider IQR with several high outliers. What modeling decision might this suggest?
->
-> > [!answer]-
-> > The luxury class likely warrants a separate rating factor in the model (or a distinct coefficient). The high outliers suggest right-skewness; a **Gamma GLM with log link** may be more appropriate than ordinary linear regression. A log transformation of severity should also be considered for EDA plots to reduce the visual influence of extremes.
+**Exploratory Data Analysis** (EDA) is the initial investigation of a data set through summaries and plots, made before any model is built, to find its patterns and problems and to generate questions about it. Its purpose is to form hypotheses, not to confirm conclusions. An exploration proceeds in four steps:
 
-> [!example]- Planning the First Questions for a Claims Data Set {Example}
-> An analyst receives a commercial auto claims file of 80,000 claims for a severity model, with paid amount, accident date, report date, vehicle class, driver age and state. Frame the first round of exploration.
->
-> > [!answer]-
-> > Start with variation, one variable at a time: a histogram of paid amounts (and of their logarithm), a bar chart of vehicle class and state with counts, the range of driver ages, and the share of missing values in each field. Check the data's expectations as it goes: no report date before its accident date, no driver aged 0, no duplicated claim numbers.
-> >
-> > Then covariation: box plots of paid amount by vehicle class and by state, a scatter plot of paid amount against driver age, and a line chart of claim counts by accident month to see whether the volume shifts. Each answer suggests the next question: a state with unusually high severity leads to checking how many claims it has and whether one large loss drives it.
+1. Examine the variation within each variable: its typical, rare and unusual values. Plot the distribution of each variable, with a [[Histogram|histogram]] for a numeric field and a bar chart for a categorical field, and check whether the values meet expectations.
+2. Examine the covariation between variables: whether two or more tend to vary together.
+3. Treat each pattern found as a question to check, not as a conclusion.
+4. Fit a model only after the exploration has shown the data's shape and problems.
 
-> [!tip]- How it appears on the exam
-> - **DISC-DA** opens its topic on analyzing data with visualizations with planning an effective data exploration and data exploration fundamentals. Application questions describe a data set and a business question and ask what to explore first, which question about variation or covariation a plot answers, or what a finding implies for the next step.
-> - **MAS-I** asks candidates to interpret EDA plots for different data types, and **PA** and **PCPA** ask for the exploration of a data set before it is modelled.
+Examining each variable's distribution doubles as a data quality check. An impossible value, a zero standing in for a missing value or a duplicated record is found by looking at the data before anything is built on it.
 
-> [!warning]- Exam traps
-> - **EDA has no fixed script:** An answer that runs a set checklist and stops misses that each finding should generate the next question.
-> - **Exploration is not confirmation:** A pattern found while exploring is a hypothesis. It still has to be tested, and a relationship that disappears within subgroups was driven by something else.
-> - **Cleaning is part of EDA:** Data problems, such as missing values coded as zero, are found by exploring the data, not only by validation rules written in advance.
+> [!example]- An analyst receives a claims file with paid amount, accident date, report date, vehicle class and driver age, and is asked to build a severity model. What should the first round of exploration look at? {Example}
+> - A histogram of paid amounts, and of their logarithm, shows the shape of severity.
+> - A bar chart of claims by vehicle class shows which classes have little data.
+> - Checking the values finds problems: a report date before its accident date, a driver aged 0, or a duplicated claim.
+> - Box plots of paid amount by vehicle class and a scatter plot against driver age then show the covariation.
+> - The model is fitted only after these checks.
 
+## Variation within a variable
+
+The plot of a single variable depends on its [[Data Types|data type]]. A [[Histogram|histogram]] shows the shape of a numeric variable's distribution. For a heavily right-skewed positive variable, such as claim severity, a histogram of the logarithm spreads out the bulk of the data so that the shape is visible. A bar chart shows how often each level of a categorical variable occurs. A [[Box Plot|box plot]] displays a variable's median, first and third quartiles, and outliers.
+
+## Covariation between variables
+
+Side-by-side box plots, one for each level of a categorical variable, compare a numeric variable such as severity across the levels. Levels with nearly identical boxes and medians can be grouped into a single level of a [[Categorical Predictor|categorical predictor]], while a clearly shifted box suggests a separate level. A [[Scatter Plot|scatter plot]] shows the relationship between two numeric variables. A correlation matrix gives the pairwise [[Correlation|correlations]] among numeric predictors and is used to screen for strongly related, collinear pairs. It captures only linear relationships, and only between pairs.
+
+> [!example]- Side-by-side box plots of severity for four vehicle classes show medians of 3.0, 3.1, 3.2 and 6.8 thousand, with the first three boxes overlapping almost completely. How should vehicle class enter the model? {Example}
+> - The first three classes have nearly identical boxes and medians, so the data do not distinguish them.
+> - They can be grouped into one level.
+> - The fourth class's box is clearly shifted upward, so it should be a separate level.
+
+## Patterns as hypotheses
+
+A pattern seen in an exploratory plot is a hypothesis, not a conclusion or a rating relativity, and it must be checked before it is acted on. Two checks apply to most patterns:
+
+1. A difference in a group statistic, such as a median, may arise by chance when the group has few observations, so check the group's count.
+2. An apparent effect of one variable may be explained by a third variable, such as coverage mix or policy limits, so check whether the pattern holds within subgroups.
+
+> [!example]- In a box plot of severity by territory, territory 7 has a median twice that of every other territory, but it has only 12 claims. What should the analyst conclude? {Example}
+> - A median of 12 claims can differ by chance, so the difference may not be real.
+> - Territory 7 may also have a different coverage mix or limits, which could explain the difference.
+> - The pattern is a hypothesis to test with more data, or within subgroups, not a relativity to price.
+
+> [!trap] Treating an exploratory pattern as a conclusion
+> A plot made while exploring shows where to look, not what is true. A pattern resting on a few records, or one that disappears within subgroups, was not a real effect of the variable.

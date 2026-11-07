@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:fb5992f7c3ed488f7bc7b3b64557874a76e31150035f982fc3e5ec89633bf124
+  content_hash: sha256:8cfbae143173f180a43dfa111311a0841f534bc19035dee4640c5c173fe4db45
   sources:
     - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021; MAS-I reading), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf, sec.4.3.5 Multinomial Logistic Regression, eqs 4.10-4.13 (printed pp.140-141, PDF pp.150-151)"
     - "Rodriguez, GLM lecture notes (Princeton), ch.6 Multinomial Response Models, sha256:f559d07ae73bdf381de5c19a9f0621419c635e5c6495c0135af940ae36807cbb — https://grodri.github.io/glms/notes/c6.pdf, secs.6.2.1-6.2.4 (baseline category, J-1 equations, reduces to logistic for J=2, log(pi1/pi2) as difference, probabilities form eq.6.5, ML by Fisher scoring/Newton-Raphson, deviance and LR chi-square) (PDF pp.3-6)"
@@ -14,67 +14,44 @@ verification:
   log: .verify/Concepts/Multinomial Logistic Regression.md
 ---
 
-**Multinomial Logistic Regression** extends [[Logistic Regression]] to a nominal response with $J > 2$ unordered categories. One category is chosen as the **baseline** $J$, and the log-odds of each other category against it is modelled as a linear function of the predictors. Dobson & Barnett call it *nominal logistic regression*.
+A **Multinomial Logistic Regression** is a [[Logistic Regression|logistic regression]] for a response with $J > 2$ unordered categories, in which one category, $J$, is the reference category and the log-odds of each other category against it is linear in the predictors $x_1, \ldots, x_p$. Dobson and Barnett call it nominal logistic regression.
 
-> $$\ln\!\left(\frac{\pi_j}{\pi_J}\right) = \beta_{0j} + \beta_{1j}x_1 + \cdots + \beta_{pj}x_p$$
+For each category $j = 1, \ldots, J-1$, the log-odds of category $j$ against the reference category is
+
+> $$\ln\!\left(\frac{\pi_j}{\pi_J}\right) = \beta_{0j} + \beta_{1j} x_1 + \cdots + \beta_{pj} x_p$$
+
+- $\pi_j = P(Y = j)$ is the probability of category $j$ for an observation with predictors $x_1, \ldots, x_p$.
+- $\beta_{0j}, \beta_{1j}, \ldots, \beta_{pj}$ are the coefficients of category $j$.
+
+Each of the $J - 1$ equations has its own intercept and slopes, so the model has $(J-1)(p+1)$ coefficients. Write $\eta_j$ for the right side of the equation of category $j$. Because the probabilities of the $J$ categories sum to 1, the probability of category $j$ is
 
 > $$\pi_j = \frac{e^{\eta_j}}{1 + \sum_{k=1}^{J-1} e^{\eta_k}}$$
 
+and the probability of the reference category is
+
 > $$\pi_J = \frac{1}{1 + \sum_{k=1}^{J-1} e^{\eta_k}}$$
 
-- $\pi_j = P(Y = j \mid \mathbf{x})$, the probabilities sum to $1$, and $\eta_j$ is the right-hand side of the first block for $j = 1, \dots, J-1$. There are $J-1$ equations, each with its own intercept and slopes, so the model has $(J-1)(p+1)$ coefficients. With $J = 2$ it is ordinary logistic regression.
-- **Interpretation.** $e^{\beta_{ij}}$ multiplies the odds of category $j$ *against the baseline* for a one-unit increase in $x_i$. Coefficients only mean something relative to the baseline that was chosen.
-- **The baseline does not matter for predictions.** Refitting with a different baseline changes the coefficients but not the fitted probabilities. The log-odds between two non-baseline categories is the difference of their equations: $\ln(\pi_j/\pi_k) = \eta_j - \eta_k$.
-- The **softmax** coding gives every category its own $\eta_j$ and sets $\pi_j = e^{\eta_j} / \sum_{k=1}^{J} e^{\eta_k}$. It produces the same fitted values and log-odds.
-- The response is multinomial, which reduces to the [[Binomial Distribution|binomial]] when $J = 2$. The coefficients are fitted by [[Maximum Likelihood Estimation]] with an iterative algorithm, and fit is judged by the [[Deviance]] and [[Likelihood Ratio Test|likelihood-ratio tests]] between nested models.
-- The model ignores any ordering of the categories. When the response is ordered, [[Ordinal Logistic Regression]] uses that order and needs only one set of slopes.
-- Actuarial uses: a renewal outcome (renew, change coverage, lapse), the choice among several coverage options, or the way a claim is closed.
+With $J = 2$ the model is the ordinary logistic regression.
 
-> [!example]- Renewal Outcome Probabilities {Example}
-> A renewal model has three outcomes: renew unchanged (baseline), renew with reduced coverage, and lapse. For rate increase $x$ (in %), the fitted equations are
-> $\eta_{\text{reduce}} = -1.2 + 0.05x$ and $\eta_{\text{lapse}} = -2.0 + 0.10x$.
-> Find the probability of each outcome for a $10\%$ rate increase, and interpret the lapse slope.
->
-> > [!answer]-
-> > $$
-> > \begin{align*}
-> > \eta_{\text{reduce}} &= -1.2 + 0.05(10) \\
-> > &= -0.7 \\[4pt]
-> > \eta_{\text{lapse}} &= -2.0 + 0.10(10) \\
-> > &= -1.0
-> > \end{align*}
-> > $$
-> >
-> > $$
-> > \begin{align*}
-> > 1 + e^{-0.7} + e^{-1.0} &= 1 + 0.4966 + 0.3679 \\
-> > &= 1.8645
-> > \end{align*}
-> > $$
-> >
-> > $$
-> > \begin{align*}
-> > \pi_{\text{renew}} &= \frac{1}{1.8645} \\
-> > &= 0.536 \\[4pt]
-> > \pi_{\text{reduce}} &= \frac{0.4966}{1.8645} \\
-> > &= 0.266 \\[4pt]
-> > \pi_{\text{lapse}} &= \frac{0.3679}{1.8645} \\
-> > &= 0.197
-> > \end{align*}
-> > $$
-> >
-> > The three probabilities sum to $1$. Each extra point of rate increase multiplies the odds of lapsing *rather than renewing unchanged* by $e^{0.10} = 1.105$, an increase of $10.5\%$.
+> [!example]- A renewal model has three outcomes: renew unchanged (the reference category), renew with reduced coverage, and lapse. For a $10\%$ rate increase, the log-odds against renewing unchanged are $\eta_{\text{reduce}} = -0.7$ and $\eta_{\text{lapse}} = -1.0$. What is the probability of each outcome? {Example}
+> - The odds against the reference category are $e^{-0.7} = 0.4966$ for reducing coverage and $e^{-1.0} = 0.3679$ for lapsing.
+> - The denominator is $1 + 0.4966 + 0.3679 = 1.8645$.
+> - The probability of renewing unchanged is $\pi_{\text{renew}} = 1/1.8645 = 0.536$.
+> - The probability of reducing coverage is $\pi_{\text{reduce}} = 0.4966/1.8645 = 0.266$.
+> - The probability of lapsing is $\pi_{\text{lapse}} = 0.3679/1.8645 = 0.197$.
 
-> [!example]- Changing the Baseline {Example}
-> Using the same fitted model, find the log-odds of lapsing rather than reducing coverage as a function of $x$, and check it against the probabilities at $x = 10$. How many coefficients does the model estimate?
->
-> > [!answer]-
-> > $$
-> > \begin{align*}
-> > \ln\!\left(\frac{\pi_{\text{lapse}}}{\pi_{\text{reduce}}}\right) &= \eta_{\text{lapse}} - \eta_{\text{reduce}} \\
-> > &= (-2.0 + 1.2) + (0.10 - 0.05)x \\
-> > &= -0.8 + 0.05x
-> > \end{align*}
-> > $$
-> >
-> > At $x = 10$ this is $-0.3$, and $e^{-0.3} = 0.741$, which matches $0.197 / 0.266 = 0.741$. A model fitted with "reduce coverage" as the baseline would report $-0.8$ and $0.05$ for this equation and would give the same probabilities. With $J = 3$ outcomes and $p = 1$ predictor the model has $(3-1)(1+1) = 4$ coefficients.
+## Interpreting the coefficients
+
+A one-unit increase in $x_1$, with the other predictors held fixed, multiplies the odds of category $j$ against the reference category by $e^{\beta_{1j}}$. The log-odds of one non-reference category $j$ against another, $k$, is the difference of their equations:
+
+> $$\ln\!\left(\frac{\pi_j}{\pi_k}\right) = \eta_j - \eta_k$$
+
+Refitting the model with a different reference category changes the coefficients but not the fitted probabilities.
+
+> [!example]- In the renewal model, $\eta_{\text{reduce}} = -1.2 + 0.05x$ and $\eta_{\text{lapse}} = -2.0 + 0.10x$, where $x$ is the rate increase in percent. What is the log-odds of lapsing rather than reducing coverage, and by what factor does each percentage point change the odds of lapsing rather than renewing unchanged? {Example}
+> - The log-odds of lapsing rather than reducing coverage is $\eta_{\text{lapse}} - \eta_{\text{reduce}} = -0.8 + 0.05x$.
+> - At $x = 10$ it is $-0.3$, and $e^{-0.3} = 0.741$ equals $0.197/0.266$ from the probabilities above.
+> - Each percentage point multiplies the odds of lapsing rather than renewing unchanged by $e^{0.10} = 1.105$.
+
+> [!trap] Reading a coefficient against the wrong category
+> Every coefficient compares its category with the reference category. The slope $0.10$ of the lapse equation describes lapsing against renewing unchanged. Against reducing coverage, the slope of lapsing is $0.10 - 0.05 = 0.05$.

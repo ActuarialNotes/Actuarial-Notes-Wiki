@@ -269,6 +269,10 @@ export function ConceptPopup() {
   const isLoggedInPro = !!user && isPro
   const currentFilter = dashboardContext?.filter ?? 'entire-syllabus'
 
+  // The footer's syllabus-filter picker. Below `sm` it is wide enough
+  // ("Study Plan — November 7") that Previous / Next drop their words and keep
+  // their arrows, or Next is pushed off the right edge of a phone.
+  const showFooterPicker = !focusMode && hasSyllabusToFilter
   const todayLabel = `Study Plan — ${new Date().toLocaleDateString(undefined, { month: 'long', day: 'numeric' })}`
 
   // Focus mode's toggle is the only control that survives it, so there's always
@@ -398,10 +402,11 @@ export function ConceptPopup() {
               disabled={!canPrev}
               data-sound="none"
               onClick={() => turnPage(-1)}
-              className="flex-1 flex items-center justify-center gap-2 px-4 text-base sm:text-sm font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              aria-label="Previous"
+              className="flex-1 min-w-0 flex items-center justify-center gap-2 px-3 sm:px-4 text-base sm:text-sm font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
               <ChevronLeft className="h-6 w-6 sm:h-5 sm:w-5" />
-              <span>Previous</span>
+              <span className={showFooterPicker ? 'hidden sm:inline' : undefined}>Previous</span>
             </button>
             {/* The syllabus-filter picker — extra information, so focus mode drops
                 it and leaves the footer as just Previous / Next. The position it
@@ -410,16 +415,16 @@ export function ConceptPopup() {
                 A guide walk (an exam's How to Study tips) drops it too: those pages
                 are not a view of the syllabus, so every filter it offers is either
                 a no-op or a lie about what is being read. */}
-            {!focusMode && hasSyllabusToFilter && (
-            <div className="self-center flex flex-col items-center px-2 shrink-0" ref={viewingRef}>
-              <div className="relative">
+            {showFooterPicker && (
+            <div className="self-center flex flex-col items-center px-1 sm:px-2 min-w-0" ref={viewingRef}>
+              <div className="relative max-w-full">
                 <button
                   type="button"
                   onClick={() => { setViewingDropdownOpen(v => !v); setShowProInfo(false) }}
                   aria-expanded={viewingDropdownOpen}
-                  className={inkTrigger(viewingDropdownOpen, 'text-[15px]')}
+                  className={inkTrigger(viewingDropdownOpen, 'text-[15px] max-w-full shrink')}
                 >
-                  {currentFilter === 'study-plan' ? todayLabel : currentFilter === 'source-material' ? 'Source Material' : 'Entire Syllabus'}
+                  <span className="truncate">{currentFilter === 'study-plan' ? todayLabel : currentFilter === 'source-material' ? 'Source Material' : 'Entire Syllabus'}</span>
                   <ChevronDown className={inkChevron(viewingDropdownOpen)} />
                 </button>
 
@@ -500,9 +505,10 @@ export function ConceptPopup() {
               disabled={!canNext}
               data-sound="none"
               onClick={() => turnPage(1)}
-              className="flex-1 flex items-center justify-center gap-2 px-4 text-base sm:text-sm font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              aria-label="Next"
+              className="flex-1 min-w-0 flex items-center justify-center gap-2 px-3 sm:px-4 text-base sm:text-sm font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
-              <span>Next</span>
+              <span className={showFooterPicker ? 'hidden sm:inline' : undefined}>Next</span>
               <ChevronRight className="h-6 w-6 sm:h-5 sm:w-5" />
             </button>
           </div>

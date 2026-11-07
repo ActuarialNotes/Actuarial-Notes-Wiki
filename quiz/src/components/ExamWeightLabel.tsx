@@ -10,11 +10,9 @@ import { parseExamWeight } from '@/lib/examWeight'
  * row behind it also fills to the percentage — the label is the precise
  * reading of what the fill shows at a glance.
  */
-export function ExamWeightLabel({ weight, className, onAccent = false, bar = true }: {
+export function ExamWeightLabel({ weight, className, bar = true }: {
   weight: string
   className?: string
-  /** White text, for a label drawn on the exam's filled colour. */
-  onAccent?: boolean
   /** The short bar under the figure. Off where the row draws the share itself. */
   bar?: boolean
 }) {
@@ -22,7 +20,7 @@ export function ExamWeightLabel({ weight, className, onAccent = false, bar = tru
 
   return (
     <span className={cn('flex shrink-0 flex-col items-end gap-1', className)}>
-      <span className={cn('text-xs font-medium tabular-nums', onAccent ? 'text-white/85' : 'text-muted-foreground')}>{weight}</span>
+      <span className="text-xs font-medium tabular-nums text-muted-foreground">{weight}</span>
       {bar && pct !== null && (
         <span
           className="h-1 w-10 overflow-hidden rounded-full bg-muted"

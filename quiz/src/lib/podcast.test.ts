@@ -16,6 +16,7 @@ import {
   podcastBaseUrl,
   podcastClipKey,
   podcastIndexFile,
+  PODCAST_AUDIO_FORMAT,
   podcastSlug,
   scriptHash,
   type PodcastClip,
@@ -135,15 +136,19 @@ describe('the recordings index', () => {
     expect(file.voices).toEqual([['af_heart', 'kokoro-82m']])
     const parsed = parsePodcastIndex(JSON.parse(JSON.stringify(file)))!
     expect(parsed['brief/pure-premium']).toEqual({
-      h: 'abc', d: 70, b: 560000, a: 'brief/pure-premium-abc-af-heart.mp3', voice: 'af_heart', model: 'kokoro-82m',
+      h: 'abc', d: 70, b: 560000, a: 'brief/pure-premium-abc-af-heart-32k.mp3', voice: 'af_heart', model: 'kokoro-82m',
     })
   })
 
   it('drops anything malformed rather than trusting it', () => {
     expect(parsePodcastIndex(null)).toBeNull()
-    expect(parsePodcastIndex({ v: 2, voices: [], clips: {} })).toBeNull()
+    expect(parsePodcastIndex({ v: 2, format: PODCAST_AUDIO_FORMAT, voices: [], clips: {} })).toBeNull()
+    // An index in another encoding names files that can't be joined with these.
+    expect(parsePodcastIndex({ v: 1, voices: [['af_heart', 'kokoro-82m']], clips: { 'brief/ok': ['abc', 1, 1, 0] } })).toBeNull()
+    expect(parsePodcastIndex({ v: 1, format: 'mp3-44k-64k', voices: [], clips: {} })).toBeNull()
     const parsed = parsePodcastIndex({
       v: 1,
+      format: PODCAST_AUDIO_FORMAT,
       voices: [['af_heart', 'kokoro-82m']],
       clips: {
         '../etc/passwd': ['abc', 1, 1, 0],
@@ -157,7 +162,7 @@ describe('the recordings index', () => {
   })
 
   it('names audio by key, hash and voice', () => {
-    expect(clipAudioFile('brief/x', 'h1', 'af_heart')).toBe('brief/x-h1-af-heart.mp3')
+    expect(clipAudioFile('brief/x', 'h1', 'af_heart')).toBe('brief/x-h1-af-heart-32k.mp3')
   })
 
   it('a clip is current only when made from the script the vault has now', () => {

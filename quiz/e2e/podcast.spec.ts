@@ -3,7 +3,7 @@ import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { expect, test, type Page } from '@playwright/test'
 import { PLACEHOLDER, signIn } from './fixtures/signedIn'
-import { PODCAST_BRIDGES, podcastClipKey, podcastIndexFile, scriptHash, type PodcastClip } from '../src/lib/podcast'
+import { PODCAST_AUDIO_BITRATE, PODCAST_BRIDGES, podcastClipKey, podcastIndexFile, scriptHash, type PodcastClip } from '../src/lib/podcast'
 import { briefScript, refresherScript } from '../src/lib/podcastScripts'
 
 // The daily podcast (docs/daily-podcast.md): a Pro reader with a study plan
@@ -17,7 +17,7 @@ import { briefScript, refresherScript } from '../src/lib/podcastScripts'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const CLIP = readFileSync(resolve(HERE, 'fixtures/podcast-clip.mp3'))
-const CLIP_SECONDS = (statSync(resolve(HERE, 'fixtures/podcast-clip.mp3')).size * 8) / 64000
+const CLIP_SECONDS = (statSync(resolve(HERE, 'fixtures/podcast-clip.mp3')).size * 8) / PODCAST_AUDIO_BITRATE
 
 function indexForVault(): string {
   const clips: Record<string, PodcastClip> = {}

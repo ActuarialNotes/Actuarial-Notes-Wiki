@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:5dedaaf7f3d4eeadf0f7db06d3ab8b78fd43150f61c60b9709cdd666363e8ad1
+  content_hash: sha256:c42b3c2ed77322fff165b0dd31abe3efc0e0178097551f9833945ff51f079b00
   sources:
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §1.3.2 Probability (Axioms 1-3, third axiom for countably many disjoint events, finite case), read 2026-11-06, sha256:6bac16281e4f438b39671ab9249f058d9f4ed54f5477614b361b29fa10e983c8 — https://www.probabilitycourse.com/chapter1/1_3_2_probability.php"
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §1.3.3 Finding Probabilities (complement rule, P(empty)=0, P(A)<=1, P(A-B)=P(A)-P(A∩B), inclusion-exclusion n=2, monotonicity, with proofs from the axioms), read 2026-11-06, sha256:d9bbfac6df61983d64593563b88f919487a03c5ea8c140c3ee3bb97e36ca33ca — https://www.probabilitycourse.com/chapter1/1_3_3_finding_probabilities.php"
@@ -21,17 +21,17 @@ verification:
 
 The **Axioms of Probability** are the three rules that every [[Probability|probability]] $P$ on a [[Sample Space|sample space]] $S$ must satisfy.
 
-The first axiom, **non-negativity**, states that the probability of every [[Event|event]] $E$ is
+The first axiom, **non-negativity**, states that for every [[Event|event]] $E$,
 
 > $$P(E) \geq 0$$
 
-The second axiom, **total probability**, states that the probability of the sample space is
+The second axiom, **total probability**, states that the sample space has probability 1:
 
 > $$P(S) = 1$$
 
-The third axiom, **additivity**, states that for any sequence of [[Mutually Exclusive Events|mutually exclusive]] events $E_1, E_2, \ldots$, the probability of their union is
+The third axiom, **additivity**, states that for any sequence of [[Mutually Exclusive Events|mutually exclusive]] events $E_1, E_2, \ldots$, the probability of their union is the sum of their probabilities:
 
-> $$P\!\left(\bigcup_{i=1}^{\infty} E_i\right) = \sum_{i=1}^{\infty} P(E_i)$$
+> $$\displaystyle P\!\left(\bigcup_{i=1}^{\infty} E_i\right) = \sum_{i=1}^{\infty} P(E_i)$$
 
 - The sequence may be finite, as with two mutually exclusive events $E$ and $F$, where $P(E \cup F) = P(E) + P(F)$.
 
@@ -46,7 +46,7 @@ The third axiom, **additivity**, states that for any sequence of [[Mutually Excl
 
 ## The complement rule
 
-The probability that an event $E$ does not occur, the probability of its [[Event#Combining events|complement]] $E^c$, is
+The [[Event#Combining events|complement]] $E^c$ is the event that $E$ does not occur. Its probability is
 
 > $$P(E^c) = 1 - P(E)$$
 
@@ -57,7 +57,7 @@ The probability that an event $E$ does not occur, the probability of its [[Event
 
 ## Bounds on a probability
 
-The axioms also give the bounds of a probability. For every event $E$, the probability is
+The axioms also bound every probability. For every event $E$,
 
 > $$0 \leq P(E) \leq 1$$
 
@@ -65,7 +65,7 @@ If every outcome of an event $E$ is also in an event $F$, $E \subseteq F$, then
 
 > $$P(E) \leq P(F)$$
 
-The impossible event $\varnothing$ has probability $P(\varnothing) = 0$.
+The [[Event#Special events|impossible event]] $\varnothing$ has probability $P(\varnothing) = 0$.
 
 > [!example]- A claim model gives a probability of 0.40 to at least one claim. Can it give a probability of 0.45 to at least two claims? {Example}
 > - Every policy with at least two claims has at least one claim, so "at least two" $\subseteq$ "at least one".

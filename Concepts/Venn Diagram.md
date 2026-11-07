@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:939b2a6f4422e0ebff77a8b2642aeafe75a6811cfbf95be2ccb6d8bbd5826bc0
+  content_hash: sha256:7cf7b8ac1d754f0a5d06c97a047edb197795edcb571c4934e4c8889e0fc503f9
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 Def. 1.1 sample space/outcomes/events, Def. 1.2 P(E)=Σ_{ω∈E} m(ω), Examples 1.6-1.9, set operations and Fig. 1.7, Thm 1.1 (P(E)≥0, P(Ω)=1, monotonicity, disjoint additivity, complement with proof), Thms 1.2-1.4 and Cor. 1.1 (pp.18-24, PDF pp.26-32), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §1.2.1 Venn Diagrams (rectangle = universal set S, sets as closed regions), read 2026-11-06, sha256:17ef1be99b65701d11585defc07269bc6c4794f12c04b4d5332b7b4e6128cad9 — https://www.probabilitycourse.com/chapter1/1_2_1_venn.php"
@@ -34,7 +34,7 @@ The circle for $E$ holds the region in $E$ only and the region in both, so the p
 
 > $$P(E \cap F^c) = P(E) - P(E \cap F)$$
 
-The region in neither is everything outside the union, so its probability is
+The region in neither is the complement of the union, so by the [[Axioms of Probability#The complement rule|complement rule]] its probability is
 
 > $$P\big((E \cup F)^c\big) = 1 - P(E \cup F)$$
 
@@ -45,7 +45,8 @@ A count of people in each region works the same way as a probability. Dividing e
 > - The region in both is given directly: 20.
 > - The auto circle's 70 includes the 20 in both, so auto only is $70 - 20 = 50$.
 > - Homeowners only is $40 - 20 = 20$.
-> - The union is $50 + 20 + 20 = 90$, so neither is $100 - 90 = 10$.
+> - The union is $50 + 20 + 20 = 90$, the same as $70 + 40 - 20$ by the [[Probability Addition Rule|addition rule]].
+> - Neither is $100 - 90 = 10$.
 >
 > | Region | Policyholders |
 > | --- | --- |
@@ -60,17 +61,25 @@ The event that exactly one of $E$ and $F$ occurs is the two "only" regions toget
 
 > $$P(\text{exactly one of } E, F) = P(E) + P(F) - 2P(E \cap F)$$
 
-> [!example]- For the 100 policyholders above, what is the probability that a policyholder chosen at random has exactly one of the two policies? {Example}
-> - $P(E) = 0.70$, $P(F) = 0.40$ and $P(E \cap F) = 0.20$.
-> - $P(\text{exactly one}) = 0.70 + 0.40 - 2(0.20) = 0.70$.
-> - This matches the two "only" regions, $50 + 20 = 70$ policyholders.
-> - "At least one" is the union, $0.90$, and "at most one" is $1 - P(E \cap F) = 0.80$.
+The event that at least one of $E$ and $F$ occurs is their union $E \cup F$. The event that at most one occurs is the complement of $E \cap F$.
+
+> [!example]- An insurer has 100 policyholders. 70 have an auto policy, 40 have a homeowners policy and 20 have both. What is the probability that a policyholder chosen at random has exactly one of the two policies? {Example}
+> - Let $E$ be "has an auto policy" and $F$ be "has a homeowners policy", so $P(E) = 0.70$, $P(F) = 0.40$ and $P(E \cap F) = 0.20$.
+> - The two "only" regions hold $50 + 20 = 70$ policyholders, which agrees with the formula.
+> - The probability of exactly one policy is $0.70 + 0.40 - 2(0.20) = 0.70$.
 
 ## Venn diagrams of three events
 
 Three events $E$, $F$ and $G$ cut $S$ into eight regions: three in one event only, three in exactly two events, one in all three, and one outside all three. The probability of $E$ is the sum of the four regions inside its circle:
 
-> $$P(E) = P(E \cap F^c \cap G^c) + P(E \cap F \cap G^c) + P(E \cap F^c \cap G) + P(E \cap F \cap G)$$
+> $$
+> \begin{aligned}
+> P(E) = {} & P(E \cap F^c \cap G^c) \\
+> & + P(E \cap F \cap G^c) \\
+> & + P(E \cap F^c \cap G) \\
+> & + P(E \cap F \cap G)
+> \end{aligned}
+> $$
 
 Fill a three-event diagram from the centre out. Give each unknown region a symbol, and write each total the question gives as a sum of regions.
 

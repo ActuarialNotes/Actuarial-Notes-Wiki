@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:fe3873b1b8987ddc4cc02378114f7c59f55f60b9621c2200b3ee8a449a8b5f95
+  content_hash: sha256:6d1e5f42c44bea3bdaa4a07c3c9984f75c0f746b7ebaed0bc1cc1430892d78a5
   sources:
     - "Zakon, Mathematical Analysis (LibreTexts), §7.4 Set Functions. Additivity. Continuity, Definitions 1-2 (a set function is a mapping whose domain is a set family; real, extended-real, complex or vector valued; additive = finitely additive over disjoint unions; σ-additive = countably additive), read 2026-11-06, sha256:b7576cfefd9854cddf2318991ed41d91329929384b91ef4307ecf1eef865e4e9 — https://math.libretexts.org/Bookshelves/Analysis/Mathematical_Analysis_(Zakon)/07%3A_Volume_and_Measure/7.04%3A_Set_Functions._Additivity._Continuity"
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 Def. 1.1 sample space/outcomes/events, Def. 1.2 P(E)=Σ_{ω∈E} m(ω), Examples 1.6-1.9, set operations and Fig. 1.7, Thm 1.1 (P(E)≥0, P(Ω)=1, monotonicity, disjoint additivity, complement with proof), Thms 1.2-1.4 and Cor. 1.1 (pp.18-24, PDF pp.26-32), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
@@ -35,8 +35,6 @@ A [[Probability|probability]] $P$ is a set function whose collection is the [[Ev
 A set function $f$ is **additive** when, for any two sets $E$ and $F$ in $\mathcal{F}$ with no element in common, the number it assigns to their union is
 
 > $$f(E \cup F) = f(E) + f(F)$$
-
-- $E \cap F = \varnothing$.
 
 The number of elements in a set, $|E|$, is an additive set function. So is a probability, whose additivity is the third of the [[Axioms of Probability|axioms of probability]].
 

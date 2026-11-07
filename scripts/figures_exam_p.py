@@ -96,14 +96,14 @@ def probability() -> Fig:
     return f
 
 
-@figure("Set Function", "Three sets A, B and C inside S, each sent by an arrow to its "
+@figure("Set Function", "Three sets E, F and G inside S, each sent by an arrow to its "
         "own point on the real line", width=WID)
 def set_function() -> Fig:
     f = vcard()
 
     universe(f, 30, 80, 180, 300, "S")
-    blobs = [(120, 138, "A", BLUE, 0.80), (120, 230, "B", AMBER, 0.48),
-             (120, 322, "C", GREEN, 0.18)]
+    blobs = [(120, 138, "E", BLUE, 0.80), (120, 230, "F", AMBER, 0.48),
+             (120, 322, "G", GREEN, 0.18)]
     for cx, cy, lab, colour, _ in blobs:
         f.ellipse(cx, cy, 62, 30, fill=colour, fill_opacity="0.16", stroke=colour,
                   stroke_width="1.4")
@@ -221,7 +221,7 @@ def set_theory() -> Fig:
     return f
 
 
-@figure("Venn Diagram", "Two overlapping events A and B inside S, with the probability "
+@figure("Venn Diagram", "Two overlapping events E and F inside S, with the probability "
         "of each of the four regions written in it", width=WID)
 def venn_diagram() -> Fig:
     f = vcard()
@@ -229,7 +229,7 @@ def venn_diagram() -> Fig:
     sx, sy, sw, sh = 26, 86, 308, 290
     universe(f, sx, sy, sw, sh)
     cy = sy + sh / 2
-    (ax, _), (bx, _) = venn2(f, sx + sw / 2, cy, r=86, sep=90)
+    (ax, _), (bx, _) = venn2(f, sx + sw / 2, cy, r=86, sep=90, labels=("E", "F"))
     # The four regions a question can ask for, each carrying its probability.
     f.text(ax - 38, cy + 5, "0.50", cls="bold")
     f.text((ax + bx) / 2, cy + 5, "0.20", cls="bold")

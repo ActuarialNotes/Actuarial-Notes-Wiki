@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:1a8f2602658dbf15cbfa1e9e6762c0c49008b9896812173214e26c4d81d266ce
+  content_hash: sha256:39ddc0073d5e6fc3d2815d6b561d2655b119ceae45bcc8919485fb938cc5c152
   sources:
     - "Orloff & Bloom, MIT OCW 18.05 (Spring 2022), Reading 7a: Joint Distributions, Independence, §4 Definition: independent iff joint cdf = product of marginal cdfs, equivalently pmf/pdf products; Ex. 12 cell-by-cell check pp.9-10, sha256:12cf136bbcbef819e1a2530cbfcf15ea06ae83ec4f9ce6c0f6186c87b01d09f4 — https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_class07-prep-a.pdf"
     - "Orloff & Bloom, MIT OCW 18.05 (Spring 2022), Reading 7b: Covariance and Correlation, Property 5 Var(X+Y) = Var X + Var Y + 2Cov; Property 6 and Warning: converse false (p.1), sha256:71f8a7b5f3b2233de2e8722ec1372f5704195efc2a6fb72c50c8ef505f92c4dc — https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_class07-prep-b.pdf"
@@ -22,127 +22,65 @@ verification:
   log: .verify/Concepts/Independent Random Variables.md
 ---
 
-**Independent Random Variables** are [[Random Variable]]s $X$ and $Y$ for which knowing the value of one gives no information about the other. Formally, for all values $x$ and $y$, the joint distribution factors into the product of the marginals.
-
-> $$F(x, y) = F_X(x) \cdot F_Y(y)$$
-
-> $$f(x,y) = f_X(x)\cdot f_Y(y)$$
-
-- For discrete variables the same rule holds cell by cell: $p(x, y) = p_X(x)\, p_Y(y)$ for every pair.
-- Independence implies [[Covariance]] is zero ($\text{Cov}(X,Y) = 0$), though the converse is not always true
-- For independent random variables: $E[XY] = E[X]\,E[Y]$ and $\text{Var}(X + Y) = \text{Var}(X) + \text{Var}(Y)$
-- If $X$ and $Y$ are independent, so are $g(X)$ and $h(Y)$ for any functions $g$ and $h$. Hence $E[g(X)\,h(Y)] = E[g(X)]\,E[h(Y)]$, for example $E[X^2 Y^2] = E[X^2]\,E[Y^2]$.
-- Compared with [[Independent Events]]: independent random variables need the product rule for every pair of values, not for one pair of events.
-
-> [!idea] The idea
-> If $Y$ carries no information about $X$, then every conditional distribution of $X$ given $Y$ is the same as the marginal of $X$. Multiplying that marginal by the probability of $Y$ is then all it takes to get a joint probability. That is why the joint distribution is a product, and why one cell that isn't a product proves dependence.
-
 ![[Media/Figures/Independent_Random_Variables.svg|340]]
 
-## Checking a table cell by cell
+**Independent Random Variables** are [[Random Variable|random variables]] for which the value of one gives no information about the value of the other. Random variables $X$ and $Y$ are independent when, for every $x$ and $y$, their joint probability function or joint density is
 
-A policyholder has an auto policy and a home policy. $X$ is the number of auto claims next year and $Y$ the number of home claims, with joint probability function
+> $$f(x, y) = f_X(x)\,f_Y(y)$$
 
-| | $Y=0$ | $Y=1$ | $Y=2$ |
-|---|---|---|---|
-| $X=0$ | 0.30 | 0.15 | 0.05 |
-| $X=1$ | 0.20 | 0.20 | 0.10 |
+- $f_X(x)$ and $f_Y(y)$ are the [[Marginal Probability Function|marginal]] probability functions or densities of $X$ and $Y$.
 
-**Are the two claim counts independent?** The marginals are $p_X(0) = 0.50$ and $p_Y(0) = 0.50$. The product is 0.25, but the cell is 0.30. One cell that fails the product rule settles it, so $X$ and $Y$ are dependent.
+Equivalently, the [[Joint Cumulative Distribution Function|joint CDF]] is $F(x, y) = F_X(x)\,F_Y(y)$. Then the probability that a condition on $X$ and a condition on $Y$ both hold is the product of their probabilities, such as $P(X \le 1)\,P(Y > 2)$.
 
-If the counts were independent, every cell would be a product of the margins:
+> [!idea] The idea
+> One pair of values whose joint probability is not the product of its marginals proves dependence, but independence needs the product in every pair.
 
-| | $Y=0$ | $Y=1$ | $Y=2$ |
-|---|---|---|---|
-| $X=0$ | 0.25 | 0.175 | 0.075 |
-| $X=1$ | 0.25 | 0.175 | 0.075 |
+> [!example]- $X$ and $Y$ are the numbers of auto and home claims, with the joint probability function below. Are $X$ and $Y$ independent? {Example}
+> The joint probability function:
+>
+> | | $Y = 0$ | $Y = 1$ | $Y = 2$ |
+> | --- | --- | --- | --- |
+> | $X = 0$ | 0.30 | 0.15 | 0.05 |
+> | $X = 1$ | 0.20 | 0.20 | 0.10 |
+>
+> - Adding the first row gives $f_X(0) = 0.50$, and adding the first column gives $f_Y(0) = 0.50$.
+> - The product is $(0.50)(0.50) = 0.25$, but $f(0, 0) = 0.30$.
+> - One pair fails the product rule, so $X$ and $Y$ are not independent.
 
-In that table, both rows are the same distribution, $(0.50, 0.35, 0.15)$. That is independence seen through the [[Conditional Probability Function|conditional]] distributions: knowing $X$ doesn't change the distribution of $Y$.
+## Independence from a joint density
 
-## Checking a density: the support and the factors
+The variables of a joint probability function or density are independent when its support is a rectangle and it factors into a function of $x$ times a function of $y$. Each factor is then proportional to a marginal.
 
-For a joint density, two things must hold. The support must be a rectangle, and the density must split into a function of $x$ times a function of $y$.
+> [!example]- Are $X$ and $Y$ independent if $f(x, y) = 6e^{-2x-3y}$ for $x, y > 0$? And if $f(x, y) = 2$ for $0 < x < y < 1$? {Example}
+> - $6e^{-2x-3y} = 2e^{-2x} \cdot 3e^{-3y}$ on the rectangle $x, y > 0$, so $X$ and $Y$ are independent exponentials.
+> - $f(x, y) = 2$ looks constant, but its support is a triangle.
+> - Knowing $Y = 0.3$ forces $X < 0.3$, so these $X$ and $Y$ are not independent.
 
-- $f(x, y) = 6e^{-2x - 3y}$ for $x, y > 0$ is $2e^{-2x} \cdot 3e^{-3y}$ on a rectangle, so $X$ and $Y$ are independent exponentials.
-- $f(x, y) = 2$ for $0 < x < y < 1$ looks constant, but its support is a triangle. Knowing $Y = 0.3$ forces $X < 0.3$, so the variables are dependent.
+## Expected value of a product
 
-## What independence buys
+For independent $X$ and $Y$, the expected value of their product is
 
-Independence turns expectations of products into products of expectations. For the independent version of the policyholder's table:
+> $$E[XY] = E[X]\,E[Y]$$
 
-| | Mean | Variance |
-|---|---|---|
-| $X$ | 0.50 | 0.25 |
-| $Y$ | 0.65 | 0.5275 |
+More generally, $g(X)$ and $h(Y)$ are independent for any functions $g$ and $h$. So $E[X^2 Y^2] = E[X^2]\,E[Y^2]$.
 
-So $E[XY] = (0.50)(0.65) = 0.325$ and $\text{Var}(X + Y) = 0.25 + 0.5275 = 0.7775$. In the real, dependent table, $E[XY] = 0.40$. The [[Covariance]] is $0.075$, and $\text{Var}(X + Y) = 0.7775 + 2(0.075) = 0.9275$. Dependence that pushes the counts together makes the total riskier.
+> [!example]- A loss $X$ is exponential with mean 2, and an independent factor $Y$ is uniform on $(1, 1.2)$. What are $E[XY]$ and $E[X^2 Y^2]$? {Example}
+> - $E[X] = 2$ and $E[Y] = 1.1$, so $E[XY] = 2.2$.
+> - $E[X^2] = 2 \times 2^2 = 8$.
+> - $E[Y^2]$ is $\frac{1.2^3 - 1}{3(0.2)} = 1.2133$.
+> - $E[X^2 Y^2] = 8 \times 1.2133 = 9.707$.
+
+## Variance of a sum
+
+The [[Covariance|covariance]] of independent random variables is 0, so the variance of their sum is
+
+> $$\text{Var}(X + Y) = \text{Var}(X) + \text{Var}(Y)$$
+
+The variance of $X - Y$ is the same sum. Variances add, but standard deviations don't. The general rule is on [[Linear Combinations of Random Variables]].
+
+> [!example]- Independent losses $X$ and $Y$ have standard deviations 3 and 4. What is the standard deviation of $X + Y$? {Example}
+> - The variances are 9 and 16, and they add to 25.
+> - The standard deviation of $X + Y$ is $\sqrt{25} = 5$, not $3 + 4 = 7$.
 
 > [!trap] Zero covariance is not independence
-> Let $X$ be $-1$, 0 or 1 with probability $1/3$ each, and $Y = X^2$. Then $E[XY] = E[X^3] = 0 = E[X]\,E[Y]$, so the covariance is 0. Yet $Y$ is a function of $X$, and $P(X = 0, Y = 0) = 1/3$ while the product of the marginals is $1/9$.
-
-## Sums of independent counts by patterns
-
-**A sum of independent discrete variables by patterns.** To find $P(X_1 + \cdots + X_n = s)$, list every pattern of individual values that adds to $s$. By independence, one assignment of a pattern to the individuals has probability equal to the product of the PMF values. When the variables share one PMF, multiply by the number of ways to assign those values to the individuals, a binomial or multinomial coefficient: $\binom{n}{1}$ for one variable at a value and the rest at 0, $\binom{n}{2}$ for two at one value and the rest at 0.
-
-For the independent version of the policyholder, three claims in total needs $X = 1$ and $Y = 2$, so $P(X + Y = 3) = (0.50)(0.15) = 0.075$. The dependent table gives 0.10. A sum of independent continuous variables uses the same idea with an integral, the [[Convolution|convolution]].
-
-## On other exams
-
-- **The [[Central Limit Theorem]]** applies to sums of [[Independent and Identically Distributed|independent and identically distributed]] (i.i.d.) random variables, on Exam P and MAS-I alike.
-- **Exam FAM.** Independent Poisson claim counts of two types add to a Poisson count with the summed mean, which is how two types of claims are combined into one aggregate.
-- **Exam ALTAM.** Two lives with independent future lifetimes have joint survival probabilities that multiply. With $q_x = 0.2$ and $q_y = 0.1$, the probability that at least one dies within a year is $q_{xy} = 1 - (0.8)(0.9) = 0.28$. See [[Joint Life]].
-- **Exam 9.** The independence [[Copula|copula]] $C(u, v) = uv$ is the product rule written for the two marginal CDFs.
-
-## Try it
-
-> [!example]- Verifying Independence {Example}
-> $X$ and $Y$ have joint density $f(x,y) = 2$ for $0 < x < y < 1$ (and 0 elsewhere). Are $X$ and $Y$ independent?
->
-> > [!answer]-
-> > **Plan:** find both marginals and compare their product with the joint density.
-> >
-> > The marginal densities are $f_X(x) = 2(1-x)$ and $f_Y(y) = 2y$. Their product is $4y(1-x)$, but $f(x,y) = 2 \neq 4y(1-x)$ in general, so **$X$ and $Y$ are not independent**.
-> >
-> > The triangular support already said so, before any integral.
-
-> [!example]- Total Claims from Three Policies {Example}
-> Three policies have independent claim counts with common PMF $p(0) = 0.5$, $p(1) = 0.3$, $p(2) = 0.2$. Find the probability that the total is 2.
->
-> > [!answer]-
-> > **Plan:** list the patterns that add to 2, then count the ways to assign each to the three policies.
-> >
-> > The patterns adding to 2 are one policy at 2 with the others at 0, and two policies at 1 with the third at 0. Each can be assigned in $\binom{3}{1} = 3$ ways:
-> > $$
-> > \begin{align*}
-> > P(S = 2) &= 3(0.2)(0.5)^2 + 3(0.3)^2(0.5) \\
-> >          &= 0.150 + 0.135 \\
-> >          &= 0.285
-> > \end{align*}
-> > $$
-
-> [!example]- A product of independent losses {Example}
-> A loss $X$ is exponential with mean 2 and an inflation factor $Y$ is uniform on $(1, 1.2)$, independent of $X$. Find $E[XY]$ and $E[X^2 Y^2]$.
->
-> > [!answer]-
-> > **Plan:** independence lets each expectation split into one factor per variable.
-> > $$
-> > \begin{align*}
-> > E[XY] &= E[X]\,E[Y] \\
-> >       &= (2)(1.1) \\
-> >       &= 2.2
-> > \end{align*}
-> > $$
-> > For the squares, $E[X^2] = 2 \cdot 2^2 = 8$ and $E[Y^2] = \text{Var}(Y) + 1.1^2 = 0.04/12 + 1.21 = 1.21333$.
-> > $$
-> > \begin{align*}
-> > E[X^2 Y^2] &= (8)(1.21333) \\
-> >            &= 9.7067
-> > \end{align*}
-> > $$
-> > The squares are independent too, because they are functions of independent variables.
-
-> [!warning]- Exam traps
-> - **Zero covariance read as independence.** Independence gives zero covariance, but not the other way round. Check the product rule everywhere.
-> - **Independence from one cell.** One cell that matches the product of its marginals proves nothing. Every cell must match.
-> - **A constant density on a triangle.** A density can look like it factors and still be dependent, because the support is not a rectangle.
-> - **Adding standard deviations.** For independent variables the variances add, so $\text{SD}(X + Y) = \sqrt{\text{Var}(X) + \text{Var}(Y)}$, not $\text{SD}(X) + \text{SD}(Y)$.
+> Let $X$ be $-1$, 0 or 1 with probability $\frac{1}{3}$ each, and let $Y = X^2$. Then $E[X] = 0$ and $E[XY] = E[X^3] = 0$, so $\text{Cov}(X, Y) = 0$. Yet $P(X = 0, Y = 0) = \frac{1}{3}$, while $P(X = 0)\,P(Y = 0) = \frac{1}{9}$.

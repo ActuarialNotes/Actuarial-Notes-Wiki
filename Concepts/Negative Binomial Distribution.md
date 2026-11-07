@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:bc3f0bf09e1ff7c904a2aece481496062791dbb702b4a12ed936aea162af8039
+  content_hash: sha256:b5088d1b43d4259afca2d80ae86067450d13ffb0d4bbb43793587e6a76c55cb9
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §5.1 negative binomial: toss until the k-th head, X = number of tosses, u(x,k,p) = C(x-1,k-1)p^k q^(x-k), k=1 geometric, pp.186-187 (PDF pp.194-195), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org, HTML fetched 2026-11-06), 11.4 The Negative Binomial Distribution: V_k trial number of the k-th success, E = k/p, var = k(1-p)/p^2; W_k = V_k - k failures, pdf C(n+k-1,n)p^k(1-p)^n, mode at floor((k-1)(1-p)/p) with two modes when integer; the problem of points, sha256:090f2543374cd589ff963f4addb35f897d0bd1c0c8ff5c08cc7086f659858916 — https://www.randomservices.org/random/bernoulli/NegativeBinomial.html"
@@ -19,137 +19,90 @@ verification:
   log: .verify/Concepts/Negative Binomial Distribution.md
 ---
 
-The **Negative Binomial Distribution** $X \sim \text{NegBin}(r, p)$ counts the number of independent trials needed to reach the $r$-th success, when each trial succeeds with probability $p$. This page counts *trials*, so $X$ starts at $r$.
+![[Media/Figures/Negative_Binomial_Distribution.svg|340]]
 
-> $$P(X = k) = \binom{k-1}{r-1}p^r(1-p)^{k-r}, \quad k = r, r+1, \ldots$$
+A **Negative Binomial Distribution** is the distribution of the number of independent trials needed to reach the $r$th success, when each trial succeeds with probability $p$. The probability that the $r$th success comes on trial $k$ is
+
+> $$P(X = k) = \binom{k-1}{r-1}p^r(1-p)^{k-r}$$
+
+- $X$ is the number of trials.
+- $k = r, r+1, r+2, \ldots$.
+- $\binom{k-1}{r-1}$ is the number of ways to place the first $r - 1$ successes among the first $k - 1$ trials. The $k$th trial is the $r$th success.
+
+With $r = 1$, it is the [[Geometric Distribution|geometric distribution]].
+
+> [!idea] The idea
+> Waiting for the $r$th success is $r$ independent geometric waits laid end to end.
+
+> [!example]- Each claim independently has a 25% chance of being a large loss. What is the probability that the 7th claim is the third large loss? {Example}
+> - The count of claims is negative binomial with $r = 3$ and $p = 0.25$.
+> - The 7th claim must be a large loss, and the first 6 claims must hold exactly 2 large losses.
+> - There are $\binom{6}{2} = 15$ ways to place those 2.
+>
+> $$
+> \begin{aligned}
+> P(X = 7) &= 15\,(0.25)^3(0.75)^4 \\
+> &= 0.0742
+> \end{aligned}
+> $$
+
+![[Media/Negative_binomial_pmf.svg|500]]
+
+## Mean and variance
+
+The mean and the variance of the number of trials $X$ are
 
 > $$E[X] = \frac{r}{p}$$
 
 > $$\text{Var}(X) = \frac{r(1-p)}{p^2}$$
 
-- $r$ is the number of successes required and $p$ is the probability of success on each trial.
-- With $r = 1$ it is the [[Geometric Distribution|geometric distribution]].
-- The other convention counts the *failures* before the $r$-th success, $Y = X - r$, starting at 0. Its mean is $r(1-p)/p$ and its variance is the same.
-- Compared with the [[Binomial Distribution|binomial]], the negative binomial fixes the number of successes and lets the number of trials vary.
+Each is $r$ times the geometric's, because the $r$ waits are independent.
 
-> [!idea] The idea
-> Waiting for the $r$-th success is $r$ geometric waits laid end to end, so the mean and the variance are $r$ times the geometric's. The last trial must be the $r$-th success. Only the first $k - 1$ trials are free to be arranged, and they hold the other $r - 1$ successes.
+> [!example]- A fair die is rolled until two sixes appear. What are the mean and the variance of the number of rolls? {Example}
+> - The number of rolls is negative binomial with $r = 2$ and $p = 1/6$.
+> - $E[X] = 2 \div \frac{1}{6} = 12$.
+> - $\text{Var}(X) = \dfrac{2 \cdot \frac{5}{6}}{1/36} = 60$.
 
-![[Media/Negative_binomial_pmf.svg|500]]
+## Counting failures before the $r$th success
 
-![[Media/Figures/Negative_Binomial_Distribution.svg|340]]
+Some questions count the failures before the $r$th success, $Y = X - r$. Its probabilities are
 
-## When does the third large loss arrive?
+> $$P(Y = k) = \binom{k+r-1}{k}p^r(1-p)^k$$
 
-Each claim independently has a 25% chance of being a large loss. An analyst counts claims until the third large loss. The count is $X \sim \text{NegBin}(3, 0.25)$.
+- $k = 0, 1, 2, \ldots$.
 
-| Claim $k$ | $\binom{k-1}{2}$ | $P(X = k)$ |
-|---|---|---|
-| 3 | 1 | 0.0156 |
-| 5 | 6 | 0.0527 |
-| 7 | 15 | 0.0742 |
-| 9 | 28 | 0.0779 |
-| 11 | 45 | 0.0704 |
+Its mean is $r(1-p)/p$, which is $r$ less than the mean of $X$. Its variance is the same as that of $X$, $r(1-p)/p^2$.
 
-- For $k = 7$, the 7th claim is the third large loss and the first 6 claims hold exactly 2 large losses. That gives $\binom{6}{2}(0.25)^3(0.75)^4 \approx 0.0742$.
+The variance of $Y$ is greater than its mean. That makes it the **overdispersed** count, where a [[Poisson Distribution|Poisson]] count has variance equal to its mean and a [[Binomial Distribution|binomial]] count has variance below it.
 
-> [!trap] $\binom{k}{r}$ instead of $\binom{k-1}{r-1}$
-> $\binom{7}{3}$ counts 3 large losses anywhere in 7 claims. It includes orders where the third large loss came earlier. The last trial is fixed, so only the first $k - 1$ trials are arranged.
+> [!example]- Each underwriting review approves a file with probability 0.6. What is the expected number of rejections before the 3rd approval? {Example}
+> - The rejections before the 3rd approval are $Y$, with $r = 3$ and $p = 0.6$.
+> - $E[Y] = \dfrac{3 \times 0.4}{0.6} = 2$.
 
-## The mean and variance as a sum of waits
+> [!trap] Counting trials or counting failures
+> The two forms differ by $r$. Two sixes take 12 rolls on average, but only 10 of them are not sixes. Check whether the count starts at $r$ or at 0.
 
-The wait for the third large loss is the wait for the first, then the wait for the second, then the wait for the third. Each wait is geometric with $p = 0.25$, and the waits are independent.
+## Successes before a number of failures
 
-- $E[X] = 3/0.25 = 12$ claims.
-- $\text{Var}(X) = 3(0.75)/0.25^2 = 36$.
+At least $r$ successes come before the $s$th failure exactly when the first $r + s - 1$ trials hold at least $r$ successes. Writing $n = r + s - 1$, the probability is
 
-## The most likely claim
+> $$\sum_{j=r}^{n} \binom{n}{j}p^j(1-p)^{n-j}$$
 
-Which claim is most likely to be the third large loss? Compare neighbouring probabilities.
+- $j$ is the number of successes in the first $n$ trials.
 
-> $$\frac{P(X = k+1)}{P(X = k)} = \frac{k}{k-r+1}\,(1-p)$$
+> [!example]- Each underwriting review approves a file with probability 0.6. What is the probability that 3 approvals come before the 2nd rejection? {Example}
+> - With $r = 3$ and $s = 2$, the first $n = 4$ files must hold at least 3 approvals.
+> - $P(3 \text{ approvals}) = \binom{4}{3}(0.6)^3(0.4) = 0.3456$.
+> - $P(4 \text{ approvals}) = (0.6)^4 = 0.1296$.
+> - The probability is $0.3456 + 0.1296 = 0.4752$.
 
-- The probabilities rise while this ratio is above 1. At $k = 8$ the ratio is $\frac{8}{6}(0.75) = 1$ exactly.
-- So claims 8 and 9 tie as the [[Mode|mode]], each with probability about 0.0779. The mode sits below the mean of 12, because the distribution has a long right tail.
+## The form used on later exams
 
-## Counting failures instead
+FAM, MAS-I and ASTAM count failures and write the negative binomial with parameters $r$ and $\beta$, where $p = 1/(1+\beta)$. The probability of $k$ failures is
 
-Some questions count the ordinary claims before the third large loss, $Y = X - 3$.
+> $$P(N = k) = \binom{k+r-1}{k}\frac{\beta^k}{(1+\beta)^{r+k}}$$
 
-| | Trials $X$ | Failures $Y$ |
-|---|---|---|
-| Values | $r, r+1, \ldots$ | $0, 1, \ldots$ |
-| Mean | $r/p$ | $r(1-p)/p$ |
-| Variance | $r(1-p)/p^2$ | $r(1-p)/p^2$ |
+- $k = 0, 1, 2, \ldots$.
+- $\binom{k+r-1}{k} = \frac{r(r+1)\cdots(r+k-1)}{k!}$, so $r$ need not be a whole number.
 
-> $$P(Y = k) = \binom{k+r-1}{k}p^r(1-p)^k, \quad k = 0, 1, \ldots$$
-
-- For the large losses, $E[Y] = 12 - 3 = 9$ ordinary claims.
-- The failures form is **overdispersed**. Its variance-to-mean ratio is $1/p > 1$, where the binomial's is below 1 and the [[Poisson Distribution|Poisson]]'s is exactly 1. Here it is $36/9 = 4$.
-- The trials form does not share this. Its ratio is $(1-p)/p$, below 1 whenever $p > 1/2$. With $r = 3$ and $p = 0.75$, $E[X] = 4$ but $\text{Var}(X) = 4/3$.
-
-## Large losses before the fifth ordinary claim
-
-What is the probability of at least 3 large losses before the 5th ordinary claim? The question is about the race between two counts.
-
-At least $r$ successes come before the $s$-th failure exactly when the first $r + s - 1$ trials hold at least $r$ successes. If they held fewer, they would hold at least $s$ failures, and the $s$-th failure would already have come.
-
-> $$P(r \text{ successes before } s \text{ failures}) = P(\text{Bin}(r+s-1, p) \geq r)$$
-
-- With $r = 3$ and $s = 5$, the first 7 claims must hold at least 3 large losses. $P(\text{Bin}(7, 0.25) \geq 3) \approx 0.2436$.
-- This is the classical problem of points.
-
-## More than two kinds of claim
-
-Split the claims into large (0.25), medium (0.35) and small (0.40). What is the probability that the third large loss is the 7th claim and exactly 2 of the claims before it are medium?
-
-The first 6 claims hold 2 large, 2 medium and 2 small. A multinomial coefficient counts their arrangements. Each category's probability is raised to its count.
-
-> $$P = \frac{(k-1)!}{n_1!\cdots n_m!\,(r-1)!}\;q_1^{n_1}\cdots q_m^{n_m}\,p^{r}$$
-
-- Here $n_1, \ldots, n_m$ are the counts of the other categories before the $r$-th success and $q_1, \ldots, q_m$ their probabilities, so $n_1 + \cdots + n_m + r - 1 = k - 1$.
-- $P = \frac{6!}{2!\,2!\,2!}(0.35)^2(0.40)^2(0.25)^3 = 90 \times 0.1225 \times 0.16 \times 0.015625 \approx 0.0276$.
-
-## On other exams
-
-- **FAM, MAS-I and ASTAM** use the Loss Models form. It counts failures and has parameters $r$ and $\beta$, with $p = 1/(1+\beta)$.
-
-> $$P(N = k) = \frac{r(r+1)\cdots(r+k-1)\,\beta^k}{k!\,(1+\beta)^{r+k}}$$
-
-- Its mean is $r\beta$ and its variance is $r\beta(1+\beta)$. Unlike the binomial's $m$, $r$ need not be a whole number.
-- It is the overdispersed alternative to the Poisson among [[Frequency Distribution|frequency distributions]], and a member of the $(a, b, 0)$ class.
-- A Poisson count whose mean $\lambda$ is itself [[Gamma|gamma]] distributed with parameters $\alpha$ and $\theta$ is negative binomial with $r = \alpha$ and $\beta = \theta$. This [[Mixture Distribution|mixture]] is why the negative binomial models claim counts across a mix of better and worse risks.
-
-## Try it
-
-> [!example]- Damage on the fifth hurricane {Example}
-> Each hurricane independently damages a home with probability 0.4. Find the probability that the second damaging hurricane is the 5th hurricane.
->
-> > [!answer]-
-> > **Plan:** trials until the 2nd success, so $r = 2$, $p = 0.4$, $k = 5$.
-> > $$P(X = 5) = \binom{4}{1}(0.4)^2(0.6)^3 = 4 \times 0.16 \times 0.216 \approx 0.1382$$
-> > The 5th hurricane does damage, and exactly one of the first four does.
-
-> [!example]- Rolls until two sixes {Example}
-> A fair die is rolled until two sixes appear. Find the mean and variance of the number of rolls, and the mean number of rolls that are not sixes.
->
-> > [!answer]-
-> > **Plan:** two geometric waits with $p = 1/6$.
-> > $$E[X] = \frac{2}{1/6} = 12$$
-> > $$\text{Var}(X) = \frac{2(5/6)}{1/36} = 60$$
-> > The rolls that are not sixes number $X - 2$, with mean 10 and the same variance 60.
-
-> [!example]- Successes before failures {Example}
-> Each underwriting review independently approves a file with probability 0.6. Find the probability that 3 approvals come before the 2nd rejection.
->
-> > [!answer]-
-> > **Plan:** 3 approvals before 2 rejections means at least 3 approvals in the first $3 + 2 - 1 = 4$ files.
-> > $$P = \binom{4}{3}(0.6)^3(0.4) + (0.6)^4$$
-> > $$P = 0.3456 + 0.1296 = 0.4752$$
-> > Why 4 files? By then either 3 approvals or 2 rejections must have occurred, but not both.
-
-> [!warning]- Exam traps
-> - **Trials or failures.** The means differ by $r$. Check whether the count starts at $r$ or at 0.
-> - **$\binom{k}{r}$ for the coefficient.** The last trial is the $r$-th success, so the coefficient is $\binom{k-1}{r-1}$.
-> - **Overdispersion of the trials form.** Only the failures count always has variance above its mean.
-> - **$\beta$ is not $p$.** In the Loss Models form, $p = 1/(1+\beta)$ and the mean is $r\beta$.
+Its mean is $r\beta$ and its variance is $r\beta(1+\beta)$. Its probability of zero is $(1+\beta)^{-r}$.

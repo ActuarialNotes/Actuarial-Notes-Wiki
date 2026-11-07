@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:cc9e317b668b80f9f53e29d115983ac6305950ec727b972058d91c1f4bed5387
+  content_hash: sha256:18f70e928a3f48573802bceeefd630f47258fdc9be796d8f6d139be90a0e17e8
   sources:
     - "SOA, Tables for Exam C (Fall 2009), A.3.2.1 Gamma f, M(t) = (1 - theta t)^-alpha, E[X^k] (printed p.4, PDF p.9 page image, read 2026-11-06); A.3.3.1 Exponential f, F, M(t), VaR_p = -theta ln(1-p), TVaR_p = VaR_p + theta, E[X ^ x] = theta(1 - e^(-x/theta)); A.5.1.1 Lognormal E[X^k] = exp(k mu + k^2 sigma^2/2) (printed p.6, PDF p.11), sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf"
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §2.2 Example 2.17 p.68 (PDF p.76): 'The only continuous density function with this property is the exponential density'; §5.1 geometric memoryless (PDF p.194); §5.2 uniform density 1/(b-a) and exponential density (PDF pp.213-216), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
@@ -17,168 +17,124 @@ verification:
   log: .verify/Concepts/Exponential Distribution.md
 ---
 
-The **Exponential Distribution** $X \sim \text{Exp}(\theta)$ is a continuous distribution on $(0, \infty)$ with mean $\theta$. It models the time between events and the size of insurance losses.
+![[Media/Figures/Exponential_Distribution.svg|340]]
 
-> $$f(x) = \frac{1}{\theta}\,e^{-x/\theta}, \quad x > 0$$
+An **Exponential Distribution** is a continuous distribution on $(0, \infty)$ that models waiting times and loss sizes. If $X$ is exponential with mean $\theta$, its probability density function is
 
-> $$S(x) = P(X > x) = e^{-x/\theta}$$
+> $$f(x) = \frac{1}{\theta}\,e^{-x/\theta}$$
 
-- $E[X] = \theta$, $\text{Var}(X) = \theta^2$, and $F(x) = 1 - e^{-x/\theta}$.
-- Some texts parameterize by **rate** $\lambda = 1/\theta$, so $f(x) = \lambda e^{-\lambda x}$ and $E[X] = 1/\lambda$. Check which convention a problem uses before substituting.
-- Its defining property is **memorylessness**: $P(X > s + t \mid X > s) = P(X > t)$, making it the unique continuous distribution with no aging effect.
+- $x > 0$.
+- $\theta > 0$.
 
-> [!idea] The idea
-> The exponential's survival function multiplies: surviving $s + t$ is surviving $s$, then surviving $t$ more. So a loss that has already passed a point is no different from a fresh loss, and whatever exceeds a deductible is distributed like the original loss. That one fact reduces most exponential questions to a line.
+> [!example]- Losses are exponential with mean 500. What is the probability that a loss is between 300 and 1,000? {Example}
+> - Integrate the density over the interval.
+>
+> $$
+> \begin{aligned}
+> P(300 < X < 1000) &= \int_{300}^{1000} \frac{1}{500}e^{-x/500}\,dx \\
+> &= e^{-0.6} - e^{-2} \\
+> &= 0.4135
+> \end{aligned}
+> $$
 
 ![[Media/Exponential_pdf.svg|500]]
 
-![[Media/Figures/Exponential_Distribution.svg|340]]
+## Mean and variance
 
-## Tail probabilities
+The mean and the variance of $X$ are
 
-Losses are exponential with mean 500. What fraction of them exceed 300, 500 or 1,000?
+> $$E[X] = \theta$$
 
-Work from the survival function $S(x) = e^{-x/\theta}$ rather than the CDF. Almost every exponential question is a tail probability.
+> $$\text{Var}(X) = \theta^2$$
 
-| Loss $x$ | $x/\theta$ | $S(x)$ |
-|---|---|---|
-| 300 | 0.6 | 0.5488 |
-| 500 | 1 | 0.3679 |
-| 1,000 | 2 | 0.1353 |
+So the standard deviation equals the mean, and $E[X^2] = 2\theta^2$.
 
-- Only 36.8% of losses exceed the mean. The exponential is skewed right, so most losses are below average.
-- With a deductible of 300, about 54.9% of losses produce a payment.
+Some texts use the **rate** $\lambda = 1/\theta$. Then the density is $\lambda e^{-\lambda x}$ and the mean is $1/\lambda$.
 
-## What lies above a deductible
+Multiplying $X$ by a constant $c > 0$, as inflation does, gives an exponential with mean $c\theta$.
 
-A loss is known to exceed the deductible of 300. How much more is it?
+> [!example]- A waiting time is exponential with variance 100. What is the probability that it exceeds 20? {Example}
+> - The variance is $\theta^2 = 100$, so the mean is $\theta = 10$.
+> - $P(X > 20) = e^{-20/10} = e^{-2} = 0.1353$.
 
-By memorylessness, given $X > d$, the excess $X - d$ is again $\text{Exp}(\theta)$. The excess over 300 has mean 500, exactly like a fresh loss.
+## Tail probabilities and percentiles
 
-> $$E[X \mid X > d] = d + \theta$$
+The probability that $X$ exceeds $x$ is
+
+> $$P(X > x) = e^{-x/\theta}$$
+
+So the cumulative distribution function is $F(x) = 1 - e^{-x/\theta}$, and $P(a < X < b) = e^{-a/\theta} - e^{-b/\theta}$.
+
+Solving $F(x) = p$ gives the $100p$th [[Percentile|percentile]]:
+
+> $$\pi_p = -\theta\ln(1 - p)$$
+
+The [[Median|median]] is $\theta \ln 2$.
+
+> [!example]- A waiting time is exponential, and 25% of waits end within 20 minutes. What is the median wait? {Example}
+> - "25% end within 20 minutes" says $P(X > 20) = 0.75$, so $e^{-20/\theta} = 0.75$.
+> - $\theta = \dfrac{-20}{\ln 0.75} = 69.52$.
+> - The median is $69.52 \ln 2 = 48.19$ minutes.
+
+## Memorylessness
+
+For any $s > 0$ and $t > 0$,
+
+> $$P(X > s + t \mid X > s) = P(X > t)$$
+
+So given $X > d$, the excess $X - d$ is again exponential with mean $\theta$. The exponential is the only continuous distribution with this property.
+
+> [!example]- A machine's lifetime is exponential with mean 10 years. It has already worked for 4 years. What is the probability that it works at least 5 more? {Example}
+> - By memorylessness, the 4 years already worked don't matter.
+> - $P(X > 9 \mid X > 4) = P(X > 5) = e^{-0.5} = 0.6065$.
+
+## Deductibles and limits
+
+With a [[Deductible|deductible]] $d$, the expected payment per loss is
 
 > $$E[(X - d)_+] = \theta\,e^{-d/\theta}$$
 
-- So $E[X \mid X > d] = d + \theta$ and $E[(X-d)_+] = \theta e^{-d/\theta}$. These are the two identities most [[Deductible|deductible]] questions reduce to.
-- Per payment, the insurer expects 500. Per loss, including the 45% of losses that pay nothing, it expects $500\,e^{-0.6} \approx 274.4$.
-- The two differ by the factor $P(X > 300) \approx 0.5488$.
-
-## Capping a loss at a limit
-
-A policy pays losses in full up to a [[Benefit Limit|limit]] $u$. What does it expect to pay?
-
-The capped payment is $\min(X, u)$, and its mean is the area under the survival function from 0 to $u$.
+With a [[Benefit Limit|limit]] $u$, the expected capped loss is
 
 > $$E[\min(X, u)] = \theta\left(1 - e^{-u/\theta}\right)$$
 
-- Capped at a limit $u = 1{,}000$, the running example pays $500(1 - e^{-2}) \approx 432.3$ on average.
-- A layer from $d$ to $u$ is the difference of two capped means. From 300 to 1,000 it is $500(e^{-0.6} - e^{-2}) \approx 206.7$.
+The expected payment per payment, given $X > d$, is $\theta$.
 
-## Working back from one probability
+> [!example]- Losses are exponential with mean 1,000. A policy pays the excess over a deductible of 200, up to a maximum payment of 800. What is the expected payment per loss? {Example}
+> - The payment is the excess over 200 less the excess over 1,000.
+>
+> $$
+> \begin{aligned}
+> E[\text{payment}] &= 1000\,e^{-0.2} - 1000\,e^{-1} \\
+> &= 818.73 - 367.88 \\
+> &= 450.85
+> \end{aligned}
+> $$
 
-Suppose a question gives only that 54.88% of losses exceed 300. One known probability fixes $\theta$.
+> [!trap] Per loss or per payment
+> Above a deductible the excess has mean $\theta$ per payment. Multiply by $P(X > d) = e^{-d/\theta}$ for the expected payment per loss.
 
-Set the survival function at the given point equal to the given probability, and take natural logs.
+## The smallest of independent exponentials
 
-> $$\theta = \frac{-x_0}{\ln S(x_0)}$$
+If $X_1$ and $X_2$ are independent exponentials with means $\theta_1$ and $\theta_2$, then
 
-- From $S(x_0) = e^{-x_0/\theta} = s$ (equivalently $F(x_0) = 1 - s$), $\theta = -x_0/\ln s$. Here $\theta = -300/\ln 0.5488 \approx 500$. The rate is $\lambda = 1/\theta$.
-- A [[Percentile|percentile]] works the same way. The $100p$-th percentile is $\pi_p = -\theta\ln(1-p)$, so a known percentile gives $\theta = -\pi_p/\ln(1-p)$.
-- For the running example, the [[Median|median]] is $\theta \ln 2 \approx 346.6$ and the 90th percentile is $-500 \ln 0.1 \approx 1{,}151.3$.
+> $$P(\min(X_1, X_2) > x) = e^{-x/\theta_1}\,e^{-x/\theta_2}$$
 
-## Survival powers
+So the minimum is exponential, and its rate is the sum of the two rates.
 
-The law of exponents carries a known survival probability to any other point, without solving for $\theta$. Because $e^{-kx/\theta} = \left(e^{-x/\theta}\right)^k$, the survival probability at a multiple of a point is that point's survival probability raised to the multiple.
+> [!example]- Two independent components have exponential lifetimes with means 5 and 10 years. What is the expected time until the first one fails? {Example}
+> - The rates are $\frac{1}{5}$ and $\frac{1}{10}$, which add to $\frac{3}{10}$.
+> - The first failure is exponential with mean $\frac{10}{3} = 3.33$ years.
 
-> $$S(kx) = S(x)^k$$
+## Mixtures of exponentials
 
-- For the running example, $S(600) = S(300)^2 = 0.5488^2 \approx 0.3012$.
-- The same rule compares two exponentials at one point. An exponential with mean $\theta/k$ has survival $e^{-kx/\theta} = S(x)^k$.
-- Halving the mean doubles the rate and squares the survival probability at every fixed point. If $S_A(x) = S_B(x)^k$ at the same $x$, then $\theta_B = k\,\theta_A$.
-
-## Scaling and simulation
-
-$\theta$ is a [[Scale and Shape Parameters|scale parameter]]: for $c > 0$, $cX$ is exponential with mean $c\theta$, and the median and every other percentile move in proportion to $\theta$. After 10% inflation, the running example's losses are exponential with mean 550.
-
-An exponential can also be built from a uniform. If $U \sim \text{Unif}(0,1)$ and $\theta > 0$, then $Y = -\theta \ln U$ is exponential with mean $\theta$.
-
-> $$P(Y \leq y) = P\left(U \geq e^{-y/\theta}\right) = 1 - e^{-y/\theta}$$
-
-This is the [[Inversion Method|inverse-CDF method]] of simulating an exponential.
-
-## Mixtures are not exponential
-
-Suppose half the losses come from a class with mean 1 and half from a class with mean 3. Is the combined loss exponential with mean 2?
-
-It is not. A [[Mixture Distribution|mixture]] of exponentials is not exponential. Compute a probability within each component and weight by the mixing probabilities.
+If a loss comes from a class with mean $\theta_1$ with probability $w$, and otherwise from a class with mean $\theta_2$, then
 
 > $$P(X > x) = w\,e^{-x/\theta_1} + (1-w)\,e^{-x/\theta_2}$$
 
-- With means 1 and 3 equally weighted, $P(X > 2) = 0.5e^{-2} + 0.5e^{-2/3} \approx 0.324$.
-- A single exponential with the average mean 2 would give $e^{-1} \approx 0.368$.
+A [[Mixture Distribution|mixture]] of exponentials is not exponential.
 
-## The moment generating function
-
-For $t < 1/\theta$ the expectation $E[e^{tX}]$ is finite and has a closed form. For $t \ge 1/\theta$ the integral diverges.
-
-> $$M_X(t) = E\left[e^{tX}\right] = \frac{1}{1 - \theta t}, \quad t < \frac{1}{\theta}$$
-
-- In the rate form it is $M(t) = \lambda/(\lambda - t)$ for $t < \lambda$.
-- It gives the expectation of any exponential function of $X$ directly. With mean $\theta = 2$, $E[e^{0.25X}] = 1/(1 - 0.5) = 2$.
-
-## Waiting times between events
-
-In a [[Poisson Process|Poisson process]] with rate $\lambda$ events per unit time, the times between events are independent exponentials with mean $1/\lambda$. The waiting time to the $n$-th event is a sum of $n$ of them, which is a [[Gamma|gamma]] with shape $n$. Memorylessness is why the process has no memory of when the last event happened.
-
-## Try it
-
-> [!example]- Combining a Deductible and a Limit {Example}
-> Losses are $X \sim \text{Exp}(\theta = 1000)$. A policy pays the excess over a deductible of 200, capped at a maximum payment of 800. Find the expected payment per loss.
->
-> > [!answer]-
-> > **Plan:** write the payment as the difference of two excess-loss terms.
-> >
-> > The payment is $Y = \min\bigl((X-200)_+,\ 800\bigr)$, which pays out only for $200 < X < 1000$ and pays a flat 800 above that.
-> > $$
-> > \begin{align*}
-> > E[Y] &= E[(X-200)_+] - E[(X-1000)_+] \\
-> >      &= 1000\,e^{-0.2} - 1000\,e^{-1.0} \\
-> >      &= 818.73 - 367.88 \\
-> >      &\approx 450.85
-> > \end{align*}
-> > $$
-> > Layering as a difference of excess-loss expectations avoids splitting the integral into three pieces. It works for any severity distribution.
-
-> [!example]- Calibrating $\theta$ from One Probability {Example}
-> A waiting time is exponential, and 25% of waits end within 20 minutes. Find $\theta$, the probability a wait exceeds 50 minutes, and the median wait.
->
-> > [!answer]-
-> > **Plan:** turn "25% end within 20 minutes" into $S(20) = 0.75$ and take logs.
-> > $$
-> > \begin{align*}
-> > e^{-20/\theta} &= 0.75 \\
-> > \theta &= \frac{-20}{\ln 0.75} \\
-> >        &\approx 69.52
-> > \end{align*}
-> > $$
-> > Then $P(X > 50) = e^{-50/69.52} \approx 0.487$. The survival power gives the same without $\theta$: $S(50) = S(20)^{50/20} = 0.75^{2.5} \approx 0.487$. The median is $\theta \ln 2 \approx 48.19$ minutes.
-
-> [!example]- Two Classes of Loss {Example}
-> Losses from class A are exponential with mean 1 and from class B exponential with mean 3. Each class supplies half the losses. Find the probability that a loss exceeds 2.
->
-> > [!answer]-
-> > **Plan:** find the probability within each class, then weight by the class shares.
-> > $$
-> > \begin{align*}
-> > P(X > 2) &= 0.5\,e^{-2} + 0.5\,e^{-2/3} \\
-> >          &= 0.0677 + 0.2567 \\
-> >          &\approx 0.324
-> > \end{align*}
-> > $$
-> > Why not $e^{-2/2}$? The combined loss is not exponential. Near 2 its tail is lighter than that of an exponential with mean 2, and far out it is heavier.
-
-> [!warning]- Exam traps
-> - **Per loss or per payment.** Above a deductible the excess has mean $\theta$ per payment. Multiply by $e^{-d/\theta}$ for the expected payment per loss.
-> - **Mean or rate.** With mean $\theta$ the survival function is $e^{-x/\theta}$. Writing $e^{-\theta x}$ uses the mean as if it were the rate.
-> - **Averaging the means of a mixture.** A mixture of exponentials is not exponential. Weight the component probabilities, never the means.
-> - **Memorylessness on another distribution.** $P(X > s + t \mid X > s) = P(X > t)$ only for the exponential.
+> [!example]- Half of all losses are exponential with mean 1, and half are exponential with mean 3. What is the probability that a loss exceeds 2? {Example}
+> - Weight the two tail probabilities by the class shares.
+> - $P(X > 2) = 0.5e^{-2} + 0.5e^{-2/3} = 0.324$.
+> - A single exponential with the average mean 2 would give $e^{-1} = 0.368$.

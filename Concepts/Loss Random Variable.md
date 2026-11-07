@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:545d25a6cf33c9196f1813ed1a4da330b1d0146c0e10038122ed0bd137ab6849
+  content_hash: sha256:f2a4e01845b8e1ef571d83eeb3f0078ba86cb4a3a22546bac98dde9a863f6dcf
   sources:
     - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05), §VI Deductibles: loss vs claim payment, 500 deductible pays 1500 on 2000 PDF p.7; Benefit limits PDF pp.8-9, sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf"
     - "Frees et al., Loss Data Analytics (open text), Ch.3 Modeling Loss Severity, §3.4.1 Y^L left censored and shifted, Y^P left truncated and shifted, E(Y^L) = int_d^inf (x-d) f; §3.4.2 X^u right censored, sha256:263021bf543b04b2881284b38b7dcbd0586b78daec371b88a1eefcd362dff732 — https://openacttexts.github.io/Loss-Data-Analytics/ChapSeverity.html"
@@ -35,7 +35,8 @@ Losses at or below the deductible produce no payment, and larger losses are redu
 >
 > > $$
 > > \begin{aligned}
-> > E[(X - 250)_+] &= 0.3(250) + 0.15(1750) + 0.05(4750) \\
+> > & E[(X - 250)_+] \\
+> > &= 0.3(250) + 0.15(1750) + 0.05(4750) \\
 > > &= 75 + 262.5 + 237.5 \\
 > > &= 575
 > > \end{aligned}
@@ -59,7 +60,8 @@ It is also the area under the survival function above the deductible:
 >
 > > $$
 > > \begin{aligned}
-> > E[(X - 500)_+] &= \int_{500}^{\infty} e^{-x/1000}\,dx \\
+> > & E[(X - 500)_+] \\
+> > &= \int_{500}^{\infty} e^{-x/1000}\,dx \\
 > > &= 1000\,e^{-0.5} \\
 > > &= 606.53
 > > \end{aligned}

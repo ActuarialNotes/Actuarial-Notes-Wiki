@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:7e7a32d5df6a105e69520d25e4223d689ea92e8c37d7e42138acf68d357a26b6
+  content_hash: sha256:8bf4e73edb13d43d704f1dbab819996e63b605e354588a6ea5ee8d4439db89ff
   sources:
     - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05), §VI Benefit limits: upper bound on how much the insurer will pay for any loss; losses in excess of 1 million are rare (PDF p.8); health policy 80% of the lesser of 5000 and cost, 6000 -> 4000; maximum claim payment 12,500 (PDF p.9), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf"
     - "Frees et al., Loss Data Analytics (open text), Ch.3 Modeling Loss Severity, §3.4.2 X^u right censored, Pr(Y = u) = 1 - F(u), E[(X^u)^k] = int_0^u x^k f + u^k(1 - F(u)) = int_0^u k x^(k-1) S(x) dx; §3.4.3 coinsurance with limit, sha256:263021bf543b04b2881284b38b7dcbd0586b78daec371b88a1eefcd362dff732 — https://openacttexts.github.io/Loss-Data-Analytics/ChapSeverity.html"
@@ -68,7 +68,8 @@ Higher moments split the same way, with $u^k$ at the point mass:
 >
 > > $$
 > > \begin{aligned}
-> > E[X \wedge 600] &= \int_0^{600} \frac{x}{1000}\,dx + 600(0.4) \\
+> > & E[X \wedge 600] \\
+> > &= \int_0^{600} \frac{x}{1000}\,dx + 600(0.4) \\
 > > &= 180 + 240 \\
 > > &= 420
 > > \end{aligned}
@@ -78,7 +79,8 @@ Higher moments split the same way, with $u^k$ at the point mass:
 >
 > > $$
 > > \begin{aligned}
-> > E[(X \wedge 600)^2] &= \int_0^{600} \frac{x^2}{1000}\,dx + 600^2(0.4) \\
+> > & E[(X \wedge 600)^2] \\
+> > &= \int_0^{600} \frac{x^2}{1000}\,dx + 600^2(0.4) \\
 > > &= 72{,}000 + 144{,}000 \\
 > > &= 216{,}000
 > > \end{aligned}

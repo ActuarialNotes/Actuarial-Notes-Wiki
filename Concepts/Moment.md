@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:b5bc9892e78d15dff68d589ec65e079afb8f2ed53f4d7de5543529dbf9c54b90
+  content_hash: sha256:53bd6361d5368583b58000f7fa515cebffa170fbcab3b7abe1a9026613de76dd
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL version), Def. 6.1 p.226 (PDF p.234, absolute convergence; no expected value otherwise); Thm 6.2 linearity, expectations add whether or not independent; Def. 6.3 variance and standard deviation p.257; Thms 6.6 Var=E(X^2)-mu^2, 6.7 V(cX)=c^2V(X), V(X+c)=V(X), 6.8 V(X+Y)=V(X)+V(Y) independent, 6.9 sigma(S_n)=sigma sqrt(n) (pp.258-260, PDF pp.265-268), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "SOA Exam C tables (Loss Models 3rd ed. Appendix A excerpts), A.2.3.1 Pareto (E[X^k] for -1<k<alpha, no M(t)) PDF p.8; A.3.2.1 Gamma (M(t)=(1-theta t)^-alpha, t<1/theta; E[X^k]) PDF p.9; A.3.3.1 Exponential (M(t), E[X^k]=theta^k k!, E[X^x]=theta(1-e^{-x/theta})) and A.5.1.1 Lognormal (E[X^k]=exp(k mu + k^2 sigma^2/2), no M(t)) PDF p.11, sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf"
@@ -62,7 +62,8 @@ A positive skewness means a long right tail. Every odd central moment of a symme
 >
 > $$
 > \begin{aligned}
-> E\big[(X - \mu)^3\big] &= E[X^3] - 3\mu E[X^2] + 2\mu^3 \\
+> & E\big[(X - \mu)^3\big] \\
+> &= E[X^3] - 3\mu E[X^2] + 2\mu^3 \\
 > &= 6 \times 10^9 - 6 \times 10^9 + 2 \times 10^9 \\
 > &= 2 \times 10^9
 > \end{aligned}

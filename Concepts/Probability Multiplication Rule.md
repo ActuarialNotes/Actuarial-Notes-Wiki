@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:9953c32b7f081bbcc5b7c0d884ed886e585504ba5e06c577cffb21bea830bc43
+  content_hash: sha256:2642bfa16acc38d0b8577f14acb412f9d60bec06a8c716374cac0a81ebfa8a8d
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §4.1 conditional probability P(F|E)=P(F∩E)/P(E), E as the new sample space (pp.133-134, PDF pp.141-142), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §4.1 Def. 4.1 independence (either event probability 0 counts as independent), Thm 4.1 independent iff P(E∩F)=P(E)P(F) (pp.139-140, PDF pp.147-148); Def. 4.2 mutual independence over every subset, pairwise does not imply mutual (p.141, PDF p.149); Exercise 7: A heads on first toss, B heads on second, C tosses match are pairwise independent but not independent (PDF p.159), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
@@ -44,8 +44,9 @@ For three events, each factor conditions on everything before it:
 
 > $$
 > \begin{aligned}
-> P(E_1 \cap E_2 \cap E_3) = {} & P(E_1)\,P(E_2 \mid E_1) \\
-> & \times P(E_3 \mid E_1 \cap E_2)
+> & P(E_1 \cap E_2 \cap E_3) \\
+> &= P(E_1)\,P(E_2 \mid E_1) \\
+> &\quad \times P(E_3 \mid E_1 \cap E_2)
 > \end{aligned}
 > $$
 

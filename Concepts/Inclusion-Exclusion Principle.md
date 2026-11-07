@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:b41e2fb6467047e789d6f6d709487e41b5e3ac1f32c226f125879def2c392801
+  content_hash: sha256:364eff80e40c0eaad0389293d667d906a25c433e020d2cea898dda4e5aec90e8
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.2 Thm 3.8 Inclusion-Exclusion Principle and proof: an outcome in k sets counted C(k,1)−C(k,2)+…=1 times (pp.104-105, PDF pp.112-113), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 Thm 1.1 property 4, Thm 1.2 (pairwise disjoint), Thm 1.3 (P(E)=Σ P(E∩A_i) over a partition), Thm 1.4 with proof 'added twice … subtracted once' (pp.22-24, PDF pp.30-32), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
@@ -26,9 +26,12 @@ The **Inclusion-Exclusion Principle** gives the [[Probability|probability]] of a
 
 > $$
 > \begin{aligned}
-> P(E \cup F \cup G) = {} & P(E) + P(F) + P(G) \\
-> & - P(E \cap F) - P(E \cap G) - P(F \cap G) \\
-> & + P(E \cap F \cap G)
+> & P(E \cup F \cup G) \\
+> &= P(E) + P(F) + P(G) \\
+> &\quad - P(E \cap F) \\
+> &\quad - P(E \cap G) \\
+> &\quad - P(F \cap G) \\
+> &\quad + P(E \cap F \cap G)
 > \end{aligned}
 > $$
 
@@ -49,11 +52,12 @@ For events $E_1, E_2, \ldots, E_n$, the probability that at least one occurs is
 
 > $$
 > \begin{aligned}
-> P\Big(\bigcup_{i=1}^{n} E_i\Big) = {} & \sum_{i} P(E_i) \\
-> & - \sum_{i<j} P(E_i \cap E_j) \\
-> & + \sum_{i<j<k} P(E_i \cap E_j \cap E_k) \\
-> & - \cdots \\
-> & + (-1)^{n+1}\, P(E_1 \cap \cdots \cap E_n)
+> & P\Big(\bigcup_{i=1}^{n} E_i\Big) \\
+> &= \sum_{i} P(E_i) \\
+> &\quad - \sum_{i<j} P(E_i \cap E_j) \\
+> &\quad + \sum_{i<j<k} P(E_i \cap E_j \cap E_k) \\
+> &\quad - \cdots \\
+> &\quad + (-1)^{n+1}\, P(E_1 \cap \cdots \cap E_n)
 > \end{aligned}
 > $$
 

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:fe7589e9f23c29c806fa64f5816c04feaa405c35fa4a8b6157fcf88396eba9a0
+  content_hash: sha256:cec34fd32b8f20c4094112f2c85be7cea28e3d29dcd7e6790ee3f8272d3fbd01
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL), Ex. 6.3.17(a)-(c) and 6.3.18(a)-(c) printed p.281 (PDF p.289); Def. 7.1 p.286 (PDF p.294); Thm 7.1 and sum of two exponentials (PDF pp.299-301); Examples 7.5-7.6 (PDF p.302); Thms 9.4 and 9.6 (PDF pp.351, 365); continuity correction (PDF p.340), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §5.3.1 Lemma 5.3 covariance properties incl. bilinearity; eq. 5.21 Var(aX+bY); correlation definition, -1<=rho<=1, rho=+-1 linear, rho(-X,Y)=-rho(X,Y), rho(aX+b,cY+d)=rho(X,Y) for a,c>0; independent implies uncorrelated, converse fails; pairwise uncorrelated sums, sha256:10ac40b763d78b0fa19a116594da71769bf417b59a1714be707c7c410991a7fb — https://www.probabilitycourse.com/chapter5/5_3_1_covariance_correlation.php"
@@ -35,9 +35,10 @@ The variance of $aX + bY + c$ is
 
 > $$
 > \begin{aligned}
-> \text{Var}(aX + bY + c) = {} & a^2\,\text{Var}(X) \\
-> & + b^2\,\text{Var}(Y) \\
-> & + 2ab\,\text{Cov}(X, Y)
+> & \text{Var}(aX + bY + c) \\
+> &= a^2\,\text{Var}(X) \\
+> &\quad + b^2\,\text{Var}(Y) \\
+> &\quad + 2ab\,\text{Cov}(X, Y)
 > \end{aligned}
 > $$
 
@@ -58,8 +59,9 @@ When $X_1, \ldots, X_n$ are [[Independent Random Variables|independent]], every 
 
 > $$
 > \begin{aligned}
-> \text{Var}\Big(\sum_{i=1}^{n} a_i X_i\Big) = {} & a_1^2\,\text{Var}(X_1) \\
-> & + \cdots + a_n^2\,\text{Var}(X_n)
+> & \text{Var}\Big(\sum_{i=1}^{n} a_i X_i\Big) \\
+> &= a_1^2\,\text{Var}(X_1) \\
+> &\quad + \cdots + a_n^2\,\text{Var}(X_n)
 > \end{aligned}
 > $$
 

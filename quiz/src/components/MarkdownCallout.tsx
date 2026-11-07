@@ -26,12 +26,9 @@ type CalloutStyle = {
   icon: ComponentType<{ className?: string }> | null
   borderClass: string
   accentClass: string
-  roundLeft?: boolean
   noBorder?: boolean
   bgClass?: string
   contentClass?: string
-  /** Replaces the rounding `roundLeft` picks. */
-  roundClass?: string
   /** Replaces the default `my-4` between callouts. */
   marginClass?: string
   /** Padding for the header row (and the toggle button that wraps it). */
@@ -72,7 +69,6 @@ const TEAL: CalloutStyle = {
   icon: Lightbulb,
   borderClass: 'border-teal-500/60',
   accentClass: 'text-teal-600 dark:text-teal-400',
-  roundLeft: true,
   noBorder: true,
   contentClass: 'text-base text-foreground',
 }
@@ -81,7 +77,6 @@ const EXAMPLE_STYLE: CalloutStyle = {
   icon: null,
   borderClass: 'border-slate-300 dark:border-slate-500',
   accentClass: 'text-foreground',
-  roundLeft: true,
   noBorder: true,
   bgClass: 'bg-card',
   contentClass: 'text-base text-muted-foreground',
@@ -97,7 +92,6 @@ const WORKED_EXAMPLE_STYLE: CalloutStyle = {
   borderClass: '',
   accentClass: 'text-emerald-950 dark:text-emerald-50',
   noBorder: true,
-  roundClass: 'rounded-xl',
   bgClass: 'bg-emerald-50 dark:bg-emerald-950/40',
   hoverClass: 'hover:bg-emerald-100/70 dark:hover:bg-emerald-900/40',
   contentClass: 'text-base text-foreground',
@@ -111,7 +105,6 @@ const EMERALD: CalloutStyle = {
   icon: CheckCircle2,
   borderClass: 'border-emerald-500/60',
   accentClass: 'text-emerald-600 dark:text-emerald-400',
-  roundLeft: true,
   noBorder: true,
 }
 
@@ -119,7 +112,6 @@ const AMBER: CalloutStyle = {
   icon: AlertTriangle,
   borderClass: 'border-amber-500/60',
   accentClass: 'text-amber-600 dark:text-amber-400',
-  roundLeft: true,
   noBorder: true,
   contentClass: 'text-base text-foreground',
 }
@@ -139,7 +131,6 @@ const QUESTION_STYLE: CalloutStyle = {
   borderClass: '',
   accentClass: 'text-foreground',
   noBorder: true,
-  roundClass: 'rounded-xl',
   marginClass: 'my-3',
   bgClass: 'bg-muted/60 dark:bg-white/[0.06]',
   hoverClass: 'hover:bg-muted dark:hover:bg-white/[0.09]',
@@ -425,6 +416,12 @@ interface CalloutProps {
   children: ReactNode
 }
 
+// Every callout box, folding or not, has the same corners and spans the column,
+// so a page's boxes read as one set.
+const CALLOUT_ROUND = 'rounded-xl'
+// A folding box's title is underlined, so it reads as something to tap.
+const TOGGLE_TITLE = 'underline decoration-muted-foreground/50 decoration-1 underline-offset-4'
+
 // The hairline under the header and the body's padding below it.
 const BODY_FRAME = 'border-t border-border/40 px-4 pb-4 pt-3'
 // A learning objective's first line is its summary, set apart in muted italics.
@@ -455,7 +452,7 @@ const CARD_BODY_CLASSES = `text-base text-foreground [&>*:first-child]:mt-0 [&>*
 function NoteCard({ style, title, titleRest = [], children }: { style: CalloutStyle; title: string; titleRest?: ReactNode[]; children: ReactNode }) {
   const Icon = style.icon
   return (
-    <section aria-label={titleRest.length > 0 ? undefined : title} className={`not-prose my-4 space-y-2 rounded-xl p-4 ${style.bgClass ?? 'bg-muted'}`}>
+    <section aria-label={titleRest.length > 0 ? undefined : title} className={`not-prose my-4 space-y-2 ${CALLOUT_ROUND} p-4 ${style.bgClass ?? 'bg-muted'}`}>
       <p className={`flex items-center gap-1.5 text-sm font-semibold ${style.accentClass}`}>
         {Icon && <Icon aria-hidden="true" className="h-4 w-4 shrink-0" />}
         <span>{renderTitleLine(title, titleRest)}</span>
@@ -507,7 +504,7 @@ function FoldingCallout({ type, fold, title, titleRest = [], style, pill, childr
   const headerContent = (
     <div className="flex items-center gap-3 w-full">
       {Icon && <Icon className={`h-4 w-4 shrink-0 ${style.accentClass}`} />}
-      <span className={`font-medium flex-1 text-left ${style.noBorder ? 'text-base' : 'text-sm'} ${Icon ? 'text-foreground' : style.accentClass}`}>
+      <span className={`font-medium flex-1 text-left ${style.noBorder ? 'text-base' : 'text-sm'} ${Icon ? 'text-foreground' : style.accentClass}${collapsible && hasBody ? ` ${TOGGLE_TITLE}` : ''}`}>
         {pill && (
           <span className="mr-2 inline-flex items-center rounded-full bg-emerald-600/15 px-2 py-0.5 align-middle text-xs font-semibold text-emerald-800 dark:bg-emerald-400/15 dark:text-emerald-200">
             {pill}
@@ -518,13 +515,12 @@ function FoldingCallout({ type, fold, title, titleRest = [], style, pill, childr
       {examWeight && <ExamWeightLabel weight={examWeight} />}
       {collapsible && hasBody && (
         <ChevronDown
-          className={`${style.plainBody ? 'h-4 w-4' : 'h-3.5 w-3.5'} shrink-0 text-muted-foreground transition-transform duration-200 ${open ? '' : '-rotate-90'}`}
+          className={`h-5 w-5 shrink-0 text-muted-foreground transition-transform duration-200 ${open ? '' : '-rotate-90'}`}
         />
       )}
     </div>
   )
 
-  const roundClass = style.roundClass ?? (style.roundLeft ? 'rounded-lg' : 'rounded-r-lg')
   const borderClasses = style.noBorder ? '' : `border-l-[3px] ${style.borderClass}`
   const bgClass = style.bgClass ?? 'bg-card'
   const marginClass = style.marginClass ?? 'my-4'
@@ -538,7 +534,7 @@ function FoldingCallout({ type, fold, title, titleRest = [], style, pill, childr
 
   if (isBarGraph) {
     return (
-      <div className="not-prose my-4 rounded-lg overflow-hidden bg-background">
+      <div className={`not-prose my-4 ${CALLOUT_ROUND} overflow-hidden bg-background`}>
         <div className="relative">
           {/* The bar fills to the exam coverage % when collapsed, full width when
               expanded. It is filled in the colour of the exam whose page it is on
@@ -554,13 +550,13 @@ function FoldingCallout({ type, fold, title, titleRest = [], style, pill, childr
               type="button"
               data-callout-toggle
               onClick={() => setOpen(v => !v)}
-              className="relative z-10 w-full px-4 py-3 text-left hover:bg-accent/30 transition-colors duration-150"
+              className="relative z-10 w-full px-5 py-3 text-left hover:bg-accent/30 transition-colors duration-150"
               aria-expanded={open}
             >
               {headerContent}
             </button>
           ) : (
-            <div className="relative z-10 px-4 py-3">{headerContent}</div>
+            <div className="relative z-10 px-5 py-3">{headerContent}</div>
           )}
         </div>
         {hasBody && (
@@ -573,7 +569,7 @@ function FoldingCallout({ type, fold, title, titleRest = [], style, pill, childr
   }
 
   return (
-    <div className={`not-prose ${marginClass} ${borderClasses} ${bgClass} ${roundClass} overflow-hidden`}>
+    <div className={`not-prose ${marginClass} ${borderClasses} ${bgClass} ${CALLOUT_ROUND} overflow-hidden`}>
       {collapsible && hasBody ? (
         <button
           type="button"
@@ -641,7 +637,7 @@ export function CalloutBlockquote(props: ComponentProps<'blockquote'> & ExtraPro
         // overlay it opens plays the panel cue. See components/MathFocus.tsx.
         data-math-block={isMathBlock ? '' : undefined}
         data-sound={isMathBlock ? 'none' : undefined}
-        className={`not-prose my-4 bg-background rounded-lg px-6 py-4 text-center [&_p]:m-0${
+        className={`not-prose my-4 bg-background ${CALLOUT_ROUND} px-6 py-4 text-center [&_p]:m-0${
           isMathBlock ? ' cursor-zoom-in hover:ring-2 hover:ring-primary/40 transition-shadow' : ''
         }`}
       >

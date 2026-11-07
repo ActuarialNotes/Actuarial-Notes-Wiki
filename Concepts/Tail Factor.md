@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:14c8950a4a1cb1527f08d07110e5315ed1f240a749ee676464852fdfd56df0fb
+  content_hash: sha256:dbf6015c4cd138cde26bae52b1f3acf60314d8bf685258258047ad2576132f30
   sources:
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch.7 Step 5-6, PDF pp.95-97 (printed 89-91): tail factor approaches, Thorne on tail leverage, CDF at the last age = tail, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 1
@@ -14,13 +14,13 @@ verification:
 
 ![[Media/Figures/Tail_Factor.svg|340]]
 
-A **Tail Factor** is the development factor from the last age observed in a [[Development Triangle|development triangle]] to ultimate. It is needed when the [[Age to Age Factor|age-to-age factors]] at the oldest ages are still above 1.000, and it is the [[Cumulative Development Factor|cumulative development factor]] at the last age. For an accident year at the last age $N$ of the triangle, it is
+A **Tail Factor** is the development factor from the last age observed in a [[Development Triangle|development triangle]] to ultimate. It is needed when the [[Age to Age Factor|age-to-age factors]] at the oldest ages are still above 1.000. For an accident year at the last age $N$ of the triangle, it is
 
 > $$\text{Tail} = \frac{\text{Ultimate Claims}}{C_{\text{AY},\,N}}$$
 
 - $C_{\text{AY},N}$ is the accident year's claims at age $N$.
 
-When no development is expected after the last age, the tail factor is 1.000. The cumulative factor at an earlier age then includes only the remaining age-to-age factors, and an accident year at the last age is fully developed, with no IBNR. A triangle whose data have stopped developing, such as a report year triangle with no claims reported after its last age, needs no tail.
+The tail factor is the [[Cumulative Development Factor|cumulative development factor]] at the last age. When no development is expected after the last age, the tail factor is 1.000. The cumulative factor at an earlier age then includes only the remaining age-to-age factors, and an accident year at the last age is fully developed, with no IBNR. A triangle whose data have stopped developing, such as a report year triangle with no claims reported after its last age, needs no tail.
 
 > [!example]- The oldest accident year has $\$2{,}000{,}000$ of reported claims at 120 months, the last age of the triangle. Two tail factors are considered, 1.030 and 1.050. How much IBNR does each give the year? {Example}
 > - With a tail of 1.030, the ultimate claims are $2{,}000{,}000 \times 1.030 = \$2{,}060{,}000$, so the IBNR is $\$60{,}000$.

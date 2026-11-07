@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:940562f642361912ca0e096f2fae59fa84882e6a4fd7bc8d2c46af8100b4c269
+  content_hash: sha256:77183e1c600722fc909a31bf3a76f66adeac7ff3b073e902a972e2d89e7c57f1
   sources:
     - "CAS Statement of Principles Regarding Property and Casualty Insurance Ratemaking (adopted May 1988; rescinded Dec 2020, reinstated May 2021), pp.1-5, sha256:f240ea62dd033aac827c2073e56c0a4061d5c84531e5cf6be02d333a8f9f2140 — https://www.casact.org/sites/default/files/2021-05/Statement-Of-Principles-Ratemaking.pdf"
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 7 pp.125, 138 (PDF pp.137, 150), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
@@ -15,70 +15,50 @@ verification:
   log: .verify/Concepts/Profit and Contingency Provision.md
 ---
 
-**Profit and Contingency Provision** ($Q_T$) is the loading in the rate that, together with net investment and other income, provides an appropriate total after-tax return — the CAS Statement of Principles' definition of the underwriting profit and contingency provisions. The two halves answer two different risks: a charge for **random** variation from expected costs belongs in the total return consistent with the cost of capital, and so in the underwriting profit provision; a charge for **systematic** variation of the estimated costs from the expected costs belongs in the contingency provision.
-
-> $$\text{Rate} = \frac{\text{Pure Premium} + F}{1 - V - Q_T}$$
-
-> $$\text{Target Combined Ratio} = 1 - Q_T$$
-
-- $Q_T$ is a **target underwriting** profit provision, not a target total profit. Total return also includes investment income on policyholder-supplied funds (the loss and unearned premium reserves) and on capital (whether to include the latter is disputed), so the actuary typically determines the underwriting profit needed to achieve the target total return after consideration of investment income.
-- Consequently $Q_T$ is **line-dependent**. [[Long Tail Lines|Long-tail lines]] hold reserves for years and earn substantial investment income on them, so they can support a low or even negative underwriting provision and still return the target on equity; [[Short Tail Insurance|short-tail lines]] have little float and need a positive one.
-- Standard derivations: the **target return on equity** approach solves for the $Q_T$ that produces the required return given a premium-to-surplus ratio and an investment yield; **discounted cash flow / internal rate of return** models value the whole policy cash flow; the **calendar-year investment income offset** approach credits investment income directly against the provision.
-- The **contingency** element is the Statement of Principles' charge for *systematic* variation — the estimated costs differing from the expected costs. Random variation around expected costs, the long right tail of the loss distribution, is not what it covers: that risk is charged through the cost of capital in the underwriting profit provision.
-- The Statement of Principles asks that the contribution of net investment and other income be considered, and that the material assumptions and actuarial judgments of a ratemaking be documented and available for disclosure — so how investment income and the cost of capital were reflected belongs in the documentation, not just the selected $Q_T$.
-
 ![[Media/Figures/Profit_and_Contingency_Provision.svg|340]]
 
-> [!example]- The Provision in the Rate {Example}
-> A line has a projected pure premium of $\$250$, fixed expenses of $\$0$, variable expenses of $30\%$ and a target underwriting profit provision of $5\%$.
->
-> Compute the rate and verify the profit margin.
->
-> > [!answer]-
-> > $$\begin{align*}
-> > \text{Rate} &= \frac{\$250}{1 - 0.30 - 0.05} \\
-> > &= \frac{\$250}{0.65} \\
-> > &= \$384.62
-> > \end{align*}$$
-> >
-> > Decomposing:
-> >
-> > $$\begin{align*}
-> > \text{Losses} &= \$250.00 \quad (65.0\%) \\
-> > \text{Variable expenses} &= 0.30 \times \$384.62 = \$115.39 \quad (30.0\%) \\
-> > \text{Profit} &= 0.05 \times \$384.62 = \$19.23 \quad (5.0\%)
-> > \end{align*}$$
-> >
-> > The target combined ratio is $95\%$: the insurer expects to spend $\$0.95$ of every premium dollar and keep $\$0.05$ as underwriting profit, before any investment income.
+A **Profit and Contingency Provision** is the loading in a rate that, together with net investment and other income, provides an appropriate total after-tax return, as the CAS [[Principles of Ratemaking|Statement of Principles]] defines the underwriting profit and contingency provisions. In ratemaking it is the target underwriting profit provision $Q_T$, a share of premium, and the indicated rate is
 
-> [!example]- Deriving the Provision from a Target Return {Example}
-> An insurer targets a $12\%$ after-tax return on equity. It writes at a premium-to-surplus ratio of $2:1$. Reserves and unearned premium average $70\%$ of annual premium and earn $4\%$ after tax; surplus also earns $4\%$ after tax. The tax rate on underwriting profit is $21\%$.
->
-> Derive the indicated underwriting profit provision.
->
-> > [!answer]-
-> > Work per $\$1$ of premium. Surplus is $\$0.50$ (from the $2:1$ ratio).
-> >
-> > **Required after-tax income:**
-> >
-> > $$0.12 \times \$0.50 = \$0.060$$
-> >
-> > **Investment income already available (after tax):**
-> >
-> > $$\begin{align*}
-> > \text{On policyholder funds} &= 0.70 \times 0.04 = \$0.028 \\
-> > \text{On surplus} &= 0.50 \times 0.04 = \$0.020 \\[4pt]
-> > \text{Total} &= \$0.048
-> > \end{align*}$$
-> >
-> > **Shortfall to be earned from underwriting, after tax:**
-> >
-> > $$\$0.060 - \$0.048 = \$0.012$$
-> >
-> > **Grossing up for tax:**
-> >
-> > $$Q_T = \frac{\$0.012}{1 - 0.21} = \$0.0152 \approx 1.5\%$$
-> >
-> > The indicated provision is about $1.5\%$ of premium — small, because this line's float and surplus are already producing most of the required return.
-> >
-> > Change one assumption and the answer moves sharply: at a $1:1$ premium-to-surplus ratio the required income doubles to $\$0.120$ while the investment income rises only to $\$0.068$, pushing $Q_T$ to $0.052/0.79 = 6.6\%$. That sensitivity to the capital assumption is why the assumptions behind the provision should be documented rather than asserted.
+> $$\text{Indicated Rate} = \frac{\text{Pure Premium} + F}{1 - V - Q_T}$$
+
+- $F$ is the [[Fixed Expenses|fixed expense]] per exposure.
+- $V$ is the [[Variable Expenses|variable expense]] provision, as a share of premium.
+
+$Q_T$ is a share of the final premium, so it sits in the denominator with the variable expenses as part of the variable permissible loss ratio, $1 - V - Q_T$. It is a provision, not a projection of total profit dollars. A negative provision is added back, raising the denominator. With a $0\%$ provision, the indicated rate is the break-even rate, and any profit is the margin of the rate charged over expected cost.
+
+> [!example]- A line has a projected pure premium of $\$250$, no fixed expenses, variable expenses of $30\%$ and a target profit provision of $5\%$. What is the indicated rate, and what does it hold for profit? {Example}
+> - The share of premium left after variable expenses and profit is $1 - 0.30 - 0.05 = 0.65$.
+> - The indicated rate is $250/0.65 = \$384.62$.
+> - It holds $0.30 \times 384.62 = \$115.38$ of variable expenses and $0.05 \times 384.62 = \$19.23$ of profit.
+> - The target combined ratio is $1 - Q_T = 95\%$.
+
+## Profit and contingency
+
+The two halves answer two different risks. A charge for random variation from expected costs belongs in the total return consistent with the cost of capital, and so in the underwriting profit provision. A charge for systematic variation of the estimated costs from the expected costs belongs in the contingency provision. The Statement of Principles asks that the contribution of net investment and other income be considered, and that the material assumptions of a ratemaking be documented and available for disclosure.
+
+## Investment income and the provision
+
+The total profit of an insurer is its [[Underwriting Profit|underwriting profit]] plus its [[Investment Income|investment income]]. Investment income comes from two sources:
+
+1. **Policyholder-supplied funds**, the [[Unearned Premium|unearned premium]] reserve and the loss reserves, case and IBNR, held between the payment of premium and the settlement of claims.
+2. **Capital**, the owners' equity or policyholder surplus. There is substantial disagreement about whether this income should be included in ratemaking.
+
+The actuary typically determines the underwriting profit needed to achieve the target total rate of return after consideration of investment income. The provision therefore reflects the time value of money between the receipt of premium and the payment of losses. [[Long Tail Lines|Long-tail lines]] hold reserves for years and earn substantial investment income on them, so they can support a low or even negative underwriting provision and still achieve the target total return. [[Short Tail Insurance|Short-tail lines]] earn little investment income, so underwriting profit is a larger part of their return. Robbin's study note derives the provision from a target return on equity, from a discounted cash flow or internal rate of return model, or by offsetting calendar year investment income.
+
+> [!example]- Workers compensation claims are settled years after the premium is paid, while auto collision claims are settled within months. Which line can price at a lower underwriting profit provision for the same target total return? {Example}
+> - Workers compensation is long-tailed, so the insurer holds and invests its loss reserves for years.
+> - That investment income supplies much of the target return, so the underwriting provision can be low or even negative.
+> - Auto collision is short-tailed, so it earns little investment income and needs a higher underwriting provision.
+> - Workers compensation can price at the lower provision.
+
+## Selecting the provision
+
+The provision is the insurer's choice, within what regulation allows. It may differ between companies for several reasons:
+
+1. **Risk.** A book with more risk needs more capital to support it. An insurer with a high concentration of catastrophe exposure may raise the provision to reflect that higher cost of capital.
+2. **Strategy.** A company may accept a lower provision to compete for new business or market share.
+3. **Regulation.** Regulators may restrict the profit allowed in the rates.
+4. **Investment income.** A line with more investment income needs less underwriting profit for the same total return.
+
+> [!trap] Treating the provision as total profit
+> A $-2\%$ provision on a long-tailed line is not a plan to lose money. The underwriting loss is funded by the investment income on the reserves, and the total return can still meet the target. Judge the provision with the line's investment income, never on its own.

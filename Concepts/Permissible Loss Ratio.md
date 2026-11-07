@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:433e8bdd0db7dd2b9dce1e38c20f5a3a2ea25a7e78bd928d8ded7aa1e7816b09
+  content_hash: sha256:a061d34528031c318a7eb095f01e7c83d193bdc0ba713602be6ec48f0812e4d5
   sources:
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 6 p.94 (PDF p.106); Ch. 7 pp.129-130, 137, 139 (PDF pp.141-142, 149, 151); Ch. 8 p.143 (PDF p.155), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
   open_findings: 0
@@ -12,76 +12,65 @@ verification:
   log: .verify/Concepts/Permissible Loss Ratio.md
 ---
 
-**Permissible Loss Ratio** (PLR, or target loss ratio) is the share of premium available to pay losses once every other cost has been provided for. It is the benchmark against which a projected loss ratio is judged in the [[Loss Ratio Method]].
-
-Werner & Modlin define two permissible loss ratios, both with LAE included in losses:
-
-> $$\text{PLR} = 1 - V - F\% - Q_T \quad \text{(total permissible loss ratio)}$$
-
-> $$\text{VPLR} = 1 - V - Q_T \quad \text{(variable permissible loss ratio)}$$
-
-> $$\text{Indicated Change} = \frac{\text{Projected Loss \& LAE Ratio} + F\%}{\text{VPLR}} - 1$$
-
-- $V$ is the [[Variable Expenses|variable expense]] ratio, $Q_T$ the target [[Underwriting Profit|underwriting profit]] provision, and $F\%$ the [[Fixed Expenses|fixed expense]] ratio. The **PLR** is the share of each premium dollar intended for loss and LAE; the **VPLR** is the share intended for loss, LAE *and* fixed expenses. The loss ratio indication compares the projected loss & LAE ratio plus the fixed expense ratio to the VPLR — **fixed expenses sit in the numerator with the losses**, because they are assumed to be the same for each risk rather than a percentage of premium, and so do not scale with the rate being solved for.
-- If *all* expenses are treated as variable, the VPLR and the PLR are the same, and the indication is simply:
-
-> $$\text{Indicated Change} = \frac{\text{Projected Loss \& LAE Ratio}}{\text{PLR}} - 1$$
-
-  This is the **all variable expense method**. It reproduces the fixed-expense result only for the average risk — Werner & Modlin's $\$20$ fixed expense is exactly $8\%$ of the $\$250$ average premium — and undercharges risks with below-average premium while overcharging those above it. Mixing the two conventions — subtracting $F\%$ in the denominator *and* adding it in the numerator — double-counts fixed expenses.
-- The PLR is the complement of the target combined ratio: a $70\%$ PLR with a $25\%$ total expense ratio implies a target combined ratio of $95\%$ and a $5\%$ underwriting profit.
-- A higher variable expense ratio **lowers** the PLR, leaving less room for losses. Insurers with cheap distribution can run higher loss ratios profitably — which is why a loss ratio comparison across companies with different channels says little about relative pricing discipline.
-- Where the losses and premium are not already net of non-proportional [[Reinsurance|reinsurance]], its net cost (cost of the reinsurance minus expected recoveries) may be included as an expense item in the indication.
-
 ![[Media/Figures/Permissible_Loss_Ratio.svg|340]]
 
-> [!example]- Computing the PLR and the Indication {Example}
-> An insurer's provisions: variable expenses $22\%$ of premium, fixed expenses $8\%$ of premium, target underwriting profit $5\%$. The projected loss and LAE ratio is $60\%$.
->
-> Compute the indicated rate change with fixed expenses in the numerator, and check it against the all variable expense method.
->
-> > [!answer]-
-> > **Fixed expenses in the numerator** — against the VPLR:
-> >
-> > $$\begin{align*}
-> > \text{VPLR} &= 1 - 0.22 - 0.05 = 0.73 \\[6pt]
-> > \text{Indicated factor} &= \frac{0.60 + 0.08}{0.73} \\
-> > &= \frac{0.68}{0.73} \\
-> > &= 0.9315
-> > \end{align*}$$
-> >
-> > an indicated change of $-6.8\%$.
-> >
-> > **All variable expense method** — against the total PLR:
-> >
-> > $$\begin{align*}
-> > \text{PLR} &= 1 - 0.22 - 0.08 - 0.05 = 0.65 \\[4pt]
-> > \text{Indicated factor} &= \frac{0.60}{0.65} = 0.9231
-> > \end{align*}$$
-> >
-> > an indicated change of $-7.7\%$.
-> >
-> > The two differ by about a point because the fixed expense ratio was measured at the *current* premium level; when rates change, the fixed dollars per exposure stay put while the all variable method lets them move with premium. The fixed-expense form is the one to use whenever the rate change is material.
-> >
-> > The error to avoid entirely is $\dfrac{0.60 + 0.08}{0.65} = 1.046$ — a $+4.6\%$ indication from charging fixed expenses twice, which flips the sign of the answer.
+A **Permissible Loss Ratio** (PLR, or target loss ratio) is the share of each premium dollar intended to pay for the projected losses and LAE, once the [[Expense Provisions|expense provisions]] and the profit provision have been taken out. It is the benchmark against which a projected loss ratio is judged in the [[Loss Ratio Method|loss ratio method]]. With LAE included in losses and every expense treated as variable, the permissible loss ratio is
 
-> [!example]- Reading Adequacy from the PLR {Example}
-> Three books, each with a projected loss and LAE ratio of $68\%$ and a target underwriting profit of $5\%$:
->
-> | Book | Variable expenses | Fixed expense ratio |
-> |---|---|---|
-> | Independent agency | $27\%$ | $9\%$ |
-> | Captive agency | $20\%$ | $11\%$ |
-> | Direct | $9\%$ | $16\%$ |
->
-> Which are adequately rated?
->
-> > [!answer]-
-> > $$\begin{align*}
-> > \text{Agency: } \frac{0.68 + 0.09}{1 - 0.27 - 0.05} &= \frac{0.77}{0.68} = 1.132 \Rightarrow +13.2\% \\[6pt]
-> > \text{Captive: } \frac{0.68 + 0.11}{1 - 0.20 - 0.05} &= \frac{0.79}{0.75} = 1.053 \Rightarrow +5.3\% \\[6pt]
-> > \text{Direct: } \frac{0.68 + 0.16}{1 - 0.09 - 0.05} &= \frac{0.84}{0.86} = 0.977 \Rightarrow -2.3\%
-> > \end{align*}$$
-> >
-> > Identical loss ratios, three different answers. The direct book can sustain a $68\%$ loss ratio and still return its target profit; the agency book needs a $13\%$ rate increase to reach the same place.
-> >
-> > The wider lesson: a loss ratio is meaningless as a measure of pricing adequacy without the expense structure behind it. This is also why the direct writer can quote below the agency writer on identical risks without under-pricing — and why the agency book will lose its best risks first.
+> $$\text{PLR} = 1 - V - Q_T$$
+
+- $V$ is the [[Variable Expenses|variable expense]] provision, the total expense ratio when every expense is variable.
+- $Q_T$ is the target [[Profit and Contingency Provision|underwriting profit and contingencies provision]].
+
+This is the fundamental insurance equation in ratio form. A negative profit provision raises the PLR. The indicated change is then the projected loss and LAE ratio divided by the PLR, less one, and its sign is kept: a negative result means the rates should decrease.
+
+> [!example]- An insurer's variable expenses are $25\%$ of premium and its target profit provision is $5\%$. Its projected loss and LAE ratio is $71.5\%$. What are the PLR and the indicated change? {Example}
+> - The permissible loss ratio is $1 - 0.25 - 0.05 = 70.0\%$.
+> - The indicated change is $0.715/0.700 - 1 = +2.1\%$.
+> - The rates are inadequate by $2.1\%$, although the loss ratio is well below $100\%$.
+
+## Total and variable permissible loss ratios
+
+When fixed expenses are separated, Werner & Modlin define two permissible loss ratios. The total permissible loss ratio pays for losses and LAE alone, and it is
+
+> $$\text{PLR} = 1 - F\% - V - Q_T$$
+
+- $F\%$ is the [[Fixed Expenses|fixed expense]] ratio.
+
+$F\% + V$ is the total underwriting expense ratio. The variable permissible loss ratio pays for losses, LAE and fixed expenses, and it is
+
+> $$\text{VPLR} = 1 - V - Q_T$$
+
+The two are equal when all expenses are treated as variable. With fixed expenses separated, the projected loss and LAE ratio plus the fixed expense ratio is compared to the VPLR:
+
+> $$\text{Indicated Change} = \frac{\text{Projected Loss \& LAE Ratio} + F\%}{1 - V - Q_T} - 1$$
+
+Fixed expenses are added to the loss ratio in the numerator because they do not scale with the rate being solved for. If LAE is treated as an operating expense rather than with losses, the operating expense ratio is subtracted in place of the underwriting expense ratio.
+
+> [!example]- Variable expenses are $22\%$ of premium, fixed expenses $8\%$ and the target profit provision $5\%$. The projected loss and LAE ratio is $60\%$. What do the two forms indicate, and what does counting the fixed expenses twice give? {Example}
+> - The VPLR is $1 - 0.22 - 0.05 = 0.73$, and the change is $0.68/0.73 - 1 = -6.8\%$.
+> - The total PLR is $1 - 0.22 - 0.08 - 0.05 = 0.65$, and the all-variable change is $0.60/0.65 - 1 = -7.7\%$.
+> - The two differ because the fixed expense ratio was measured at the current premium level and the all-variable form lets it move with the rate.
+> - Counting the fixed expenses in the numerator and the PLR gives $0.68/0.65 - 1 = +4.6\%$, which flips the sign of the answer.
+
+## Permissible loss ratio and expense structure
+
+A higher variable expense ratio lowers the PLR and leaves less room for losses. An insurer with cheap distribution can run a higher loss ratio profitably, so a loss ratio says nothing about pricing adequacy without the expense structure behind it.
+
+> [!example]- Three books each have a projected loss and LAE ratio of $68\%$ and a target profit provision of $5\%$. An independent agency book has variable expenses of $27\%$ and a fixed expense ratio of $9\%$, a captive agency book $20\%$ and $11\%$, and a direct book $9\%$ and $16\%$. Which are adequately priced? {Example}
+> - The agency book's indicated change is $0.77/0.68 - 1 = +13.2\%$.
+> - The captive agency book's is $0.79/0.75 - 1 = +5.3\%$.
+> - The direct book's is $0.84/0.86 - 1 = -2.3\%$.
+> - Only the direct book is adequately priced, on the same loss ratio as the other two.
+
+## Permissible loss ratio in a premium
+
+The same denominator turns an expected loss into a premium. Every load that is a percentage of premium, such as commissions, taxes, risk and profit loads, is in the denominator, and the premium is
+
+> $$\text{Premium} = \frac{\text{Expected Loss and LAE} + \text{Fixed Expenses}}{1 - \text{Variable Loads}}$$
+
+- $\text{Variable Loads}$ is the sum of every load expressed as a percentage of premium.
+
+The profit provision is a margin sized for an average risk. Writing below-average risks at an average rate erodes it rather than being absorbed by it.
+
+> [!trap] Counting fixed expenses twice
+> Fixed expenses go either in the numerator, with the VPLR in the denominator, or in the total PLR, never both. Adding $F\%$ to the loss ratio and also subtracting it in the denominator overstates the indication, as the $+4.6\%$ against $-6.8\%$ above shows.

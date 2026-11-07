@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:35fabaa6052639c7bcc46ff5c3a8e3c042bfd9871e367ad3e81601053a6da9e2
+  content_hash: sha256:0b882464ce7199e034e238b4e7f7156fc6eb5f642fdbe0e4c783eef245d9e5a0
   sources:
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 11 p.201 (PDF p.213); Ch. 15 pp.295-296, Tables 15.4-15.5 (PDF pp.307-308); App. D p.D-2 (PDF p.395), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
   open_findings: 1
@@ -86,9 +86,10 @@ A positive result is a debit, which increases premium, and a negative one a cred
 
 Capping every loss at the basic limit makes the ISO plan respond mostly to frequency.
 
-> [!example]- A risk's actual experience ratio is 0.983, its expected experience ratio 0.888 and its credibility 0.44. What is its experience modification? {Example}
-> - The deviation from expected is $(0.983 - 0.888)/0.888 = 0.107$.
-> - The debit is $0.107 \times 0.44 = 0.047$, so **the premium rises 4.7%**.
+> [!example]- A risk's projected ultimate losses and ALAE, at basic limits and limited by the MSL, are $\$200{,}262$, and its company subject basic limits loss and ALAE costs are $\$181{,}366$. Its expected experience ratio is 0.888 and its credibility 0.44. What is its experience credit or debit? {Example}
+> - The actual experience ratio is $200{,}262/181{,}366 = 1.104$.
+> - The deviation from expected is $(1.104 - 0.888)/0.888 = 0.243$.
+> - The debit is $0.243 \times 0.44 = 0.107$, so **the premium rises 10.7%**.
 
 ## Split loss plans
 

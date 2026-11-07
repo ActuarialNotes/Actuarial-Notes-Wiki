@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:f9a22fd80a26d5c9b51ebdce8ba0479408757bc1978616dcdd76bb7afda72f32
+  content_hash: sha256:d3253b64e9621ef0b03b6385eea19ae90b0fbf291c7d8d5c6702203e5ed8ff84
   sources:
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 12 pp.218-222 (PDF pp.230-234), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch. 3 p.30 (PDF p.36), Ch. 9 p.153 (PDF p.159), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/database/studynotes_friedland_estimating.pdf"
@@ -15,69 +15,92 @@ verification:
   log: .verify/Concepts/Credibility.md
 ---
 
-**Credibility** $Z$ is the weight given to a body of observed experience when it is blended with a broader estimate — the [[Complement of Credibility|complement]] — to produce an estimate more accurate than either alone.
-
-> $$\text{Estimate} = Z \times \text{Experience} + (1 - Z) \times \text{Complement}$$
-
-> $$Z = \sqrt{\frac{n}{n_{\text{full}}}} \qquad \text{(limited fluctuation)}$$
-
-> $$Z = \frac{n}{n + K} \qquad \text{(Bühlmann)}$$
-
-**Limited fluctuation (classical) credibility** asks how much data is needed for the observation to be stable within tolerance $k$ with probability $p$:
-
-> $$n_{\text{full}} = \left(\frac{z_{(1+p)/2}}{k}\right)^{2}$$
-
-- For pure **frequency** with Poisson claim counts, $p = 90\%$ and $k = \pm 5\%$ gives the standard $n_{\text{full}} = (1.645/0.05)^2 = 1{,}082$ claims. Adding severity variation raises the standard to $1{,}082 \times (1 + \text{CV}_S^2)$.
-- Partial credibility uses the **square root rule**, $Z = \sqrt{n / n_{\text{full}}}$, capped at $1$ — a class with a quarter of the required claims gets $Z = 0.50$.
-
-**Bühlmann (greatest accuracy) credibility** derives $Z$ from the variance structure rather than a tolerance:
-
-- $K = \text{EPV}/\text{VHM}$ — expected value of the process variance over the variance of the hypothetical means. Credibility rises when risks genuinely differ from one another (large VHM) and falls when individual results are noisy (large EPV).
-- Bühlmann has the better theoretical footing; limited fluctuation persists because it needs only a claim count, and $1{,}082$ is embedded in decades of filings.
-
-Further points:
-
-- Credibility governs the **homogeneity trade-off**: splitting a book finer improves [[Homogeneity|homogeneity]] but shrinks $n$ in each cell, lowering $Z$ and handing the answer to the complement.
-- The choice of complement matters most exactly when $Z$ is low — which is when actuaries are most tempted to stop thinking about it.
-- On Exam 8, credibility is also measured from a plan's own experience — one car's accident record in [[Merit Rating]] (Bailey and Simon) — and extended to several correlated means at once in [[Multi-Dimensional Credibility]] (Couret and Venter).
-- In reserving, credibility appears explicitly in the [[Bornhuetter-Ferguson Method|BF method]], where $Z = 1/\text{CDF}$: the reported portion of an accident year is its own experience and the unreported portion is priced from the a priori.
-
 ![[Media/Figures/Credibility.svg|340]]
 
-> [!example]- Partial Credibility on a Class Relativity {Example}
-> A workers compensation class has $75$ claims against a full-credibility standard of $1{,}082$. Its indicated relativity is $1.25$; the current (manual) relativity is $1.00$.
->
-> Compute the credibility-weighted relativity.
->
-> > [!answer]-
-> > $$\begin{align*}
-> > Z &= \sqrt{\frac{75}{1{,}082}} \\
-> > &= \sqrt{0.0693} \\
-> > &= 0.263
-> > \end{align*}$$
-> >
-> > $$\begin{align*}
-> > \text{Weighted relativity} &= 0.263(1.25) + 0.737(1.00) \\
-> > &= 1.066
-> > \end{align*}$$
-> >
-> > The class's own data says it costs $25\%$ more than base; the credibility procedure moves only $6.6$ points of that into the rate. With $75$ claims, a $1.25$ indication is well within the range that random fluctuation alone could produce.
-> >
-> > Note the complement here is the *current* relativity, which embeds whatever was believed last year. Where the current relativity is itself stale, a better complement is the statewide or countrywide relativity for the same class — see [[Complement of Credibility]].
+**Credibility** is a measure of the predictive value the actuary attaches to a particular body of data, in ASOP No. 25's words. It is written $Z$, and it is the weight the observed experience receives when it is blended with related experience, the [[Complement of Credibility|complement of credibility]], into an estimate more accurate than either. The credibility-weighted estimate is
 
-> [!example]- Limited Fluctuation vs. Bühlmann on the Same Risk {Example}
-> A commercial account has $n = 400$ claims. The full credibility standard is $1{,}082$ claims. A Bühlmann analysis of the class estimates $\text{EPV} = 2{,}500$ and $\text{VHM} = 4$, giving $K = 625$.
->
-> Compare the two credibility values and comment.
->
-> > [!answer]-
-> > $$\begin{align*}
-> > Z_{\text{classical}} &= \sqrt{\frac{400}{1{,}082}} = 0.608 \\[6pt]
-> > Z_{\text{Bühlmann}} &= \frac{400}{400 + 625} = 0.390
-> > \end{align*}$$
-> >
-> > The classical rule gives this account $61\%$ weight; Bühlmann gives $39\%$.
-> >
-> > The difference is that Bühlmann asks a question the classical rule does not: **how different are the risks in this class from each other?** Here $K = 625$ is large because process variance dwarfs the between-risk variance — the risks are broadly alike and their individual results are noisy. In that situation an account's own experience says relatively little about its expected cost, however much of it there is, and it deserves less weight than a fixed claim-count standard implies.
-> >
-> > Where risks genuinely differ (large VHM, small $K$), Bühlmann gives **more** credibility than the classical rule. The classical standard cannot distinguish the two cases because it never looks at the class's variance structure.
+> $$\text{Estimate} = Z \times \text{Observed Experience} + (1 - Z) \times \text{Complement}$$
+
+- $\text{Observed Experience}$ is the estimate from the subject's own data, also called the base statistic.
+- $\text{Complement}$ is the estimate from the related experience.
+
+The same blend weights an indicated rate change, an indicated relativity or a pure premium. When an indicated change factor is weighted, the result is a factor, and one is subtracted to give the change. Before indicated and current relativities are blended, each set is normalized so that its weighted average relativity is $1.00$, and the results may then be rebased so that the base class's relativity is $1.00$. With full credibility, $Z = 1$ and the indication uses the experience alone, with no complement.
+
+> [!example]- An observed pure premium of $\$200$ has credibility $Z = 0.30$, and the pure premium of the related experience is $\$300$. What is the credibility-weighted pure premium? {Example}
+> - The observed experience receives $0.30$ and the complement $0.70$.
+> - The credibility-weighted pure premium is $0.30 \times 200 + 0.70 \times 300 = \$270$.
+
+## Criteria for a measure of credibility
+
+For homogeneous risks, a measure of credibility meets three criteria:
+
+1. $Z$ is at least $0$ and at most $1$: no negative credibility, and full credibility is the cap.
+2. $Z$ increases as the size of the risk underlying the estimate increases, all else being equal.
+3. $Z$ increases at a decreasing rate as the size of the risk increases.
+
+Experience from few exposures or a single year has low credibility. It is supplemented by lengthening the experience period or by a complement such as industry data, a larger related class or external data. Supplementing a small insurer's data with industry data increases the volume and reduces the volatility.
+
+## Classical credibility
+
+Classical, or [[Limited Fluctuation Credibility|limited fluctuation]], credibility is the method most often used in ratemaking. Its goal is to limit the effect that random fluctuations in the observations have on the estimate. The experience is fully credible when the probability $p$ is high that it is within $k$ of its expected value. With homogeneous exposures, Poisson claim counts and no variation in claim size, the expected number of claims needed for full credibility is
+
+> $$n_{\text{full}} = \left(\frac{z}{k}\right)^2$$
+
+- $z$ is the standard normal percentile at $(1 + p)/2$, since the interval is two-sided.
+- $k$ is the allowed tolerance around the expected value.
+
+The standard is a number of claims. Divided by the expected frequency, it becomes a number of exposures. When the size of loss is allowed to vary, the standard is multiplied by $1 + \text{CV}^2$, where $\text{CV}$ is the coefficient of variation of the claim size, its standard deviation over its mean.
+
+> [!example]- The experience is to be within $5\%$ of its expected value with probability $90\%$. How many claims are needed for full credibility, and how many exposures at a $5\%$ frequency? {Example}
+> - The percentile is at $(1 + 0.90)/2 = 0.95$, so $z = 1.645$.
+> - The claims needed are $(1.645/0.05)^2 = 1{,}082$.
+> - At a $5\%$ frequency, the exposures needed are $1{,}082/0.05 = 21{,}640$.
+> - If the claim size has a coefficient of variation of $1.5$, the standard rises to $1{,}082 \times (1 + 1.5^2) = 3{,}517$ claims.
+
+Below the standard, partial credibility follows the square root rule:
+
+> $$Z = \min\left(\sqrt{\frac{n}{n_{\text{full}}}},\, 1\right)$$
+
+- $n$ is the number of claims in the experience, or the expected claim count, the exposures times the frequency.
+
+$n$ and $n_{\text{full}}$ are counted in the same unit, both claims or both exposures. The method is the most commonly used and so generally accepted, its data is readily available and its computations are easy. Its disadvantages are that it rests on simplifying assumptions that may not hold, such as no variation in claim size, and that it does not consider the quality of the complement against the observation.
+
+> [!example]- A class has 100 claims against the full credibility standard of 1,082. What is its credibility? {Example}
+> - The claims are below the standard, so the square root rule applies.
+> - The credibility is $Z = \sqrt{100/1{,}082} = 0.30$.
+
+## Bühlmann credibility
+
+[[Bühlmann Credibility|Bühlmann credibility]], or least squares credibility, chooses $Z$ to minimize the squared error between the estimate and the true expected value. Its complement is a prior mean, the actuary's a priori estimate, and its credibility is
+
+> $$Z = \frac{N}{N + K}$$
+
+- $N$ is the number of observations, such as exposures or years.
+- $K = \text{EVPV}/\text{VHM}$, the expected value of the process variance over the variance of the hypothetical means.
+
+A higher VHM lowers $K$ and raises credibility, and a higher EVPV raises $K$ and lowers it. Experience is more credible when risks differ greatly from one another and each risk's own experience is stable. If every exposure has the same claim distribution, $\text{VHM} = 0$ and $Z = 0$. The method assumes that the risk parameters and the risk process do not shift over time. Its major challenge is estimating EVPV and VHM. Bayesian analysis, the third method, calculates no $Z$ at all: it adjusts the prior estimate for the new information through Bayes' theorem.
+
+> [!example]- An observed pure premium of $\$200$ is based on 21 observations. The EVPV is $2.00$, the VHM is $0.50$ and the prior mean is $\$225$. What is the Bühlmann credibility-weighted pure premium? {Example}
+> - The Bühlmann parameter is $K = 2.00/0.50 = 4.00$.
+> - The credibility is $Z = 21/(21 + 4) = 0.84$.
+> - The credibility-weighted pure premium is $0.84 \times 200 + 0.16 \times 225 = \$204$.
+
+## Credibility and homogeneity
+
+Splitting data into more segments makes each more [[Homogeneity|homogeneous]] but reduces its volume, increasing its variability and lowering its credibility. In risk classification, a class must be large enough for credible predictions of its costs, and its estimates should be stable from year to year while still responding to real changes. Classification rating suits many small, homogeneous risks, where no one risk's experience is credible but groups of similar risks give credible relativities. A rating characteristic may be left out when there is too little data at its level for a stable relativity. In a GLM, levels with low exposure have low credibility, and their indicated relativities are adjusted when relativities are selected.
+
+> [!example]- A workers compensation class has 75 claims against the standard of 1,082. Its indicated relativity is $1.25$ and its current relativity, the complement, is $1.00$. What relativity is selected? {Example}
+> - The credibility is $Z = \sqrt{75/1{,}082} = 0.263$.
+> - The weighted relativity is $0.263 \times 1.25 + 0.737 \times 1.00 = 1.066$.
+> - Only about a quarter of the indicated $25\%$ difference moves into the rate.
+
+## Credibility in reserving
+
+The [[Bornhuetter-Ferguson Method|Bornhuetter-Ferguson]] ultimate is a credibility-weighted average of the development method's ultimate and the expected claims ultimate. The credibility is the percent reported, or paid, $Z = 1/\text{CDF}$. In the same way, chain ladder and Stanard-Bühlmann IBNR can be blended with $Z$ equal to a selected credibility factor times the percent reported at the starting evaluation, $Z$ on the chain ladder and $1 - Z$ on Stanard-Bühlmann. For a ratio such as the percent recovered, a Bühlmann-Straub weighting uses $Z = \text{VHM}/(\text{VHM} + \text{EVPV})$, with the estimate $Z$ times the data-based estimate plus $1 - Z$ times the prior mean.
+
+## Credibility in experience and merit rating
+
+The credibility given to a risk's own experience increases with its size, because larger risks have more stable losses. It also depends on how much the hazards of individual risks vary within the class. The more heterogeneous the class, the more credibility experience rating earns. A [[Merit Rating|merit rating]] modification for a group is $Z \times R + (1 - Z)$, where $R$ is its relative frequency and the complement is $1.0$. A frequency estimate may also weight several recent periods, each with its own $Z$, plus $1 - Z$ times the overall mean. [[Multi-Dimensional Credibility|Multi-dimensional credibility]] extends the blend to several correlated means at once, and a single-dimensional estimate is $Z$ times the sector's observed mean plus $1 - Z$ times the complement's mean. In excess pricing, experience and exposure estimates of a layer's loss cost are blended the same way, $Z$ on the experience estimate.
+
+> [!trap] Mixing claims and exposures in the square root rule
+> The square root rule compares like with like. A class with 400 exposures at a $5\%$ frequency has 20 expected claims, so against a standard of 1,082 claims its credibility is $\sqrt{20/1{,}082} = 0.14$. Comparing its 400 exposures with the claim standard gives $0.61$.

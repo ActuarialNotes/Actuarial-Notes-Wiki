@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:6334d62dcbede9d8590eac89cbac909ed6e5fdf0c5baeb9bdba4402f4e62ef8c
+  content_hash: sha256:bd59498249ca6a785e6579accf2ae6da9a50dc2fc0d214e9a55662493a55ac07
   sources:
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch.11 Frequency-Severity Techniques, PDF pp.202-205 (printed 196-199): Auto Collision Insurer half-year example, seasonality in closed counts, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 0
@@ -20,7 +20,7 @@ An **Age-to-Age Factor**, also called a link ratio or report-to-report factor, i
 
 - $C_{\text{AY},n}$ is the accident year's cumulative value at age $n$, such as its reported claims, paid claims or claim counts.
 
-A triangle of age-to-age factors has one less row and one less column than its [[Development Triangle|data triangle]]. The selected factors are multiplied together into [[Cumulative Development Factor|cumulative development factors]], so the factor from age $n$ to age $n+1$ is also the CDF at age $n$ divided by the CDF at age $n+1$.
+A triangle of age-to-age factors has one less row and one less column than its [[Development Triangle|data triangle]].
 
 > [!example]- Accident year 2021 has reported claims of $\$37{,}000$ at 12 months and $\$43{,}000$ at 24 months. What is its 12-24 factor? {Example}
 > - The factor is the claims at 24 months divided by the claims at 12 months.
@@ -66,6 +66,10 @@ A trend or shift in the recent factors of a column is a signal, not noise, and a
 > - The factors jump from about 1.42 to about 1.63 in 2021, so the column has two regimes, and every all-year average lands between them.
 > - The latest three years, about 1.63, are selected if the change can be identified and is expected to persist.
 > - Accident year 2020's factor rests on little volume, which a volume-weighted or medial average gives little weight.
+
+## Age-to-age factors and cumulative development factors
+
+The selected factors are multiplied together into [[Cumulative Development Factor|cumulative development factors]], so the factor from age $n$ to age $n+1$ is also the CDF at age $n$ divided by the CDF at age $n+1$.
 
 ## Development below 1.000
 

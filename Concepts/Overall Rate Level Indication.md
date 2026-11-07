@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:040e03ef057aaea31e3db2fb08dfc19bafffb536e80a454956dfa55ef98b8211
+  content_hash: sha256:78645957e7111d8b6682c00511eec07f62ce753cab5b61f5e6388a8e28f8ab91
   sources:
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 5 p.64 (PDF p.76); Ch. 6 p.94 (PDF p.106); Ch. 7 pp.137, 139 (PDF pp.149, 151); Ch. 8 pp.141-148 (PDF pp.153-160), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
     - "ASOP No. 13, Trending Procedures in Property/Casualty Insurance (ASB, 2009), Section 3.8, p.4 (PDF p.8), sha256:5d985e9cbf666cda56b67bb6489e2f1430313278145e87816c7b2297dcd59acd — https://www.casact.org/sites/default/files/2021-03/5_ASOP_13.pdf"
@@ -13,82 +13,93 @@ verification:
   log: .verify/Concepts/Overall Rate Level Indication.md
 ---
 
-**Overall Rate Level Indication** is the answer to the ratemaking question: by what percentage must the rate level change so that expected premium covers expected losses, expenses and profit for the future policy period? It is the aggregate result, before any [[Classification Ratemaking|classification]] work distributes it.
+![[Media/Figures/Overall_Rate_Level_Indication.svg|340]]
+
+An **Overall Rate Level Indication** is the change to the overall average rate that makes the premium cover the projected losses, LAE and expenses and achieve the target profit for the policies written while the new rates are in effect. It is the aggregate result, before [[Classification Ratemaking|classification ratemaking]] distributes it among the rating variables. In the [[Loss Ratio Method|loss ratio method]], the indicated change is
 
 > $$\text{Indicated Change} = \frac{\text{Projected Loss \& LAE Ratio} + F\%}{1 - V - Q_T} - 1$$
 
+- $\text{Projected Loss \& LAE Ratio}$ is the projected ultimate losses and LAE divided by the projected earned premium at current rate level.
+- $F\%$ is the [[Fixed Expenses|fixed expense]] ratio to the same premium.
+- $V$ is the [[Variable Expenses|variable expense]] provision and $Q_T$ the target [[Profit and Contingency Provision|profit provision]], both as shares of premium.
+
+The projected loss and LAE ratio puts the losses and the premium of the experience period on the basis of the future policy period:
+
+1. **Premium** is the historical earned premium brought to [[On Level Premium|current rate level]], developed to ultimate where it is still changing, and [[Premium Trend|trended]].
+2. **Losses** are the reported losses with extraordinary [[Large Loss|large losses]] and [[Catastrophe Loss|catastrophes]] replaced by a long-term provision, [[Loss Development|developed]] to ultimate, [[Loss Trend|trended]] to the future cost level, and restated for any benefit or coverage change.
+3. **LAE** is included with the losses: [[Allocated Loss Adjustment Expense|ALAE]] with them, and [[Unallocated Loss Adjustment Expenses ULAE|ULAE]] as a percentage load, multiplying the loss and ALAE by $1 + \text{ULAE ratio}$.
+
+Werner & Modlin prescribe no single order for the adjustments. A catastrophe model's provision is already at ultimate and at the future cost level, so it is added after the non-catastrophe losses have been developed and trended.
+
+> [!example]- Two accident years have the premium and losses below. Loss trend is $6\%$ a year, with trend periods of 3 and 2 years, and LAE is $10\%$ of loss. Variable expenses are $23\%$, the fixed expense ratio is $6\%$ and the target profit provision is $5\%$. What is the indicated change? {Example}
+>
+> | Accident year | Earned premium | On-level factor | Reported loss | CDF |
+> | --- | --- | --- | --- | --- |
+> | 2023 | $\$12{,}000{,}000$ | 1.085 | $\$7{,}100{,}000$ | 1.16 |
+> | 2024 | $\$13{,}500{,}000$ | 1.030 | $\$6{,}200{,}000$ | 1.38 |
+>
+> - The 2023 losses and LAE are $7{,}100{,}000 \times 1.16 \times 1.06^{3} \times 1.10 = \$10{,}790{,}000$.
+> - The 2024 losses and LAE are $6{,}200{,}000 \times 1.38 \times 1.06^{2} \times 1.10 = \$10{,}575{,}000$.
+> - The premiums at current rate level are $12{,}000{,}000 \times 1.085 = \$13{,}020{,}000$ and $13{,}500{,}000 \times 1.030 = \$13{,}905{,}000$.
+> - Summed over both years, the projected loss and LAE ratio is $21{,}365{,}000/26{,}925{,}000 = 79.35\%$.
+> - The numerator is $0.7935 + 0.06 = 0.8535$, and the denominator is $1 - 0.23 - 0.05 = 0.72$.
+> - The indicated change factor is $0.8535/0.72 = 1.1854$.
+> - The indicated change is $+18.5\%$.
+
+## Indicated change from an indicated rate
+
+The [[Pure Premium Method|pure premium method]] gives an indicated average rate instead of a change. Compared with the current average rate at current rate level, the indicated change is
+
 > $$\text{Indicated Change} = \frac{\text{Indicated Rate}}{\text{Current Rate}} - 1$$
 
-The build-up, following Werner & Modlin's chapters:
+- $\text{Indicated Rate}$ is the pure premium method's indicated average rate per exposure.
+- $\text{Current Rate}$ is the projected average premium per exposure at current rates.
 
-1. **Premium** — historical earned premium, brought to [[On Level Premium|current rate level]], developed to ultimate where it is still changing, and [[Premium Trend|trended]].
-2. **Losses** — reported losses with extraordinary [[Large Loss|large losses]] and [[Catastrophe Loss|catastrophes]] replaced by a long-term provision, [[Loss Development|developed]] to ultimate, [[Loss Trend|trended]] to the future cost level, restated for any benefit or coverage change, and including [[Allocated Loss Adjustment Expense|ALAE]] and [[Unallocated Loss Adjustment Expenses ULAE|ULAE]]. Werner prescribes no single order for these adjustments.
-3. **Expenses** — split into [[Fixed Expenses|fixed]] (numerator, per exposure or as a ratio) and [[Variable Expenses|variable]] (denominator); the net cost of non-proportional [[Reinsurance|reinsurance]] may be included as an expense item.
-4. **Profit** — the target [[Profit and Contingency Provision|underwriting profit provision]] $Q_T$.
-5. **Credibility** — weight the indication against a [[Complement of Credibility|complement]] where the data is thin.
-6. **Selection** — the filed change, which may differ for the reasons on [[Rate Change]].
+Given consistent data and assumptions, the two methods give the same indication. The new average rate is the current average rate times the indicated change factor.
 
-Further points:
+> [!example]- The pure premium method indicates an average rate of $\$441.03$ per exposure, and the current average rate is $\$425.00$. What is the indicated change? {Example}
+> - The indicated change factor is $441.03/425.00 = 1.0377$.
+> - The indicated change is $+3.8\%$.
 
-- Steps 1 and 2 are the two halves of "put everything on a common basis". Premium is adjusted for **rate level**; losses for **maturity and cost level**. Skipping either produces a systematically wrong answer, and the two errors do not offset.
-- The [[Loss Ratio Method]] and [[Pure Premium Method]] are alternative routes to the same indication; the first gives a change, the second an absolute rate.
-- Weighting across years in the experience period is a judgment: many companies sum projected losses and premium across all years, which weights each year's loss ratio by its premium; others select weights, often giving more to the most recent years. More years buys [[Credibility|credibility]], fewer years buys responsiveness.
-- The indication is an **estimate with a distribution**, not a fact. A sensitivity test shows how the answer moves under alternative trend, development and profit selections.
+## Combining the experience years
 
-![[Media/Figures/Overall_Rate_Level_Indication.svg|340]]
+Each year's projected loss ratio is calculated, and the years are combined into one. Many companies sum the projected losses and the projected premium across all years, which weights each year's loss ratio by its premium:
 
-> [!example]- Full Overall Indication {Example}
-> Two accident years, valued $12/31/2024$. Loss trend $6\%$; trend periods $3.0$ and $2.0$ years. LAE $10\%$ of loss. Variable expenses $23\%$, fixed expense ratio $6\%$, target profit $5\%$. Credibility $Z = 0.80$ against a complement of $+2.0\%$.
->
-> | AY | Earned premium | On-level factor | Reported loss | CDF |
-> |---|---|---|---|---|
-> | $2023$ | $\$12{,}000{,}000$ | $1.085$ | $\$7{,}100{,}000$ | $1.16$ |
-> | $2024$ | $\$13{,}500{,}000$ | $1.030$ | $\$6{,}200{,}000$ | $1.38$ |
->
-> Compute the selected rate change.
->
-> > [!answer]-
-> > **Losses:**
-> >
-> > $$\begin{align*}
-> > 2023: \; 7{,}100 \times 1.16 \times 1.06^{3.0} \times 1.10 &= \$10{,}790 \text{K} \\
-> > 2024: \; 6{,}200 \times 1.38 \times 1.06^{2.0} \times 1.10 &= \$10{,}575 \text{K}
-> > \end{align*}$$
-> >
-> > **Premium:**
-> >
-> > $$\begin{align*}
-> > 2023: \; 12{,}000 \times 1.085 &= \$13{,}020 \text{K} \\
-> > 2024: \; 13{,}500 \times 1.030 &= \$13{,}905 \text{K}
-> > \end{align*}$$
-> >
-> > **Loss ratios:** $82.9\%$ and $76.1\%$; combined $\frac{\$21{,}365}{\$26{,}925} = 79.35\%$.
-> >
-> > $$\begin{align*}
-> > \text{Indicated factor} &= \frac{0.7935 + 0.06}{1 - 0.23 - 0.05} \\
-> > &= \frac{0.8535}{0.72} \\
-> > &= 1.1854
-> > \end{align*}$$
-> >
-> > an indication of $+18.5\%$. Credibility-weighting:
-> >
-> > $$0.80 \times 18.5\% + 0.20 \times 2.0\% = +15.2\%$$
-> >
-> > Before filing $+15.2\%$, two things demand attention: the two years disagree by nearly seven points while the less mature year rests on a $1.38$ CDF, and an increase of this size will move the [[Mix of Business|mix]] through retention. Both belong in the documentation.
+> $$\text{Projected Loss \& LAE Ratio} = \frac{\sum_{y} (\text{Losses} + \text{LAE})_y}{\sum_{y} \text{Projected Premium}_y}$$
 
-> [!example]- Where the Indication Is Sensitive {Example}
-> Using the book above, test the $+18.5\%$ indication against alternative selections: loss trend $4\%$ instead of $6\%$; AY 2024 CDF $1.30$ instead of $1.38$; profit provision $3\%$ instead of $5\%$.
->
-> > [!answer]-
-> > Changing one assumption at a time (before credibility weighting):
-> >
-> > | Change | New indication |
-> > |---|---|
-> > | Base | $+18.5\%$ |
-> > | Loss trend $4\%$ | $+13.4\%$ |
-> > | AY 2024 CDF $1.30$ | $+15.4\%$ |
-> > | Profit provision $3\%$ | $+15.3\%$ |
-> >
-> > A two-point change in the trend selection moves the indication five points — more than either of the other two assumptions — because trend compounds over a $2$–$3$ year period and applies to the entire loss provision.
-> >
-> > [[ASOP 13 - Trending Procedures in Property Casualty Insurance (ASB - 2009)|ASOP 13]] sets the standard for the trending procedure behind that selection, including documentation of its methods, assumptions and data in a form another actuary could assess for reasonableness.
+- $y$ runs over the years of the experience period.
+- $(\text{Losses} + \text{LAE})_y$ is year $y$'s projected ultimate losses and LAE, and $\text{Projected Premium}_y$ its projected earned premium at current rate level.
+
+Others select weights for each year, often giving more weight to the most recent years. Equal weights on a shrinking book weight the older years too heavily. An outlier year may be excluded, and the reason for the selection is documented. A pure premium indication combines the years' pure premiums the same way, weighted by exposures.
+
+> [!example]- The two years' projected loss and LAE ratios are $82.9\%$ on $\$13{,}020{,}000$ of premium and $76.1\%$ on $\$13{,}905{,}000$. What combined ratio do premium weights give, and what do weights of $40\%$ and $60\%$ give? {Example}
+> - The premium-weighted ratio is the total losses over the total premium, $79.35\%$.
+> - Weighting the recent year more, $0.40 \times 82.9\% + 0.60 \times 76.1\%$, which is $78.8\%$.
+
+## Credibility weighting the indication
+
+Where the experience is not fully [[Credibility|credible]], the indicated change is weighted with a [[Complement of Credibility|complement]], such as the countrywide indicated change or the trended present rates. The indicated changes are weighted, not the loss ratios:
+
+> $$\text{Weighted Change} = Z \times \text{Indicated Change} + (1 - Z) \times \text{Complement}$$
+
+- $Z$ is the credibility of the experience.
+- $\text{Complement}$ is the complement's indicated change.
+
+With full credibility, $Z = 1$ and the indicated change is based entirely on the experience period.
+
+> [!example]- The book's indication of $+18.5\%$ has credibility $Z = 0.80$, and its complement is $+2.0\%$. What is the credibility-weighted indication? {Example}
+> - The weighted change is $0.80 \times 18.5\% + 0.20 \times 2.0\%$.
+> - The credibility-weighted indication is $+15.2\%$.
+
+## Sensitivity of the indication
+
+The indication is an estimate built on selections, and testing it against other selections shows how much each one matters. In the two-year example, changing one assumption at a time gives:
+
+| Change | Indicated change |
+| --- | --- |
+| None | $+18.5\%$ |
+| Loss trend $4\%$ instead of $6\%$ | $+13.4\%$ |
+| 2024 CDF $1.30$ instead of $1.38$ | $+15.4\%$ |
+| Profit provision $3\%$ instead of $5\%$ | $+15.3\%$ |
+
+The trend selection moves the indication most, because it compounds over the trend period and applies to every year's losses. [[ASOP 13 - Trending Procedures in Property Casualty Insurance (ASB - 2009)|ASOP 13]] asks that the trending procedure's methods, assumptions and data be documented so that another actuary could assess their reasonableness.

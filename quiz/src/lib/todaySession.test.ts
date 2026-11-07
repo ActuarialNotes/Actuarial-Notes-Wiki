@@ -2,14 +2,13 @@ import { describe, expect, it } from 'vitest'
 import type { MasteryState } from './mastery'
 import { EXAM_PACE } from './quizTiming'
 import {
-  apportion,
   buildSessionSteps,
   currentStep,
   MISTAKE_ROWS,
   nextSessionAction,
-  sessionBar,
   sessionMinutes,
   sessionPins,
+  sessionWalk,
   type SessionInput,
 } from './todaySession'
 
@@ -115,22 +114,6 @@ describe('timing', () => {
     expect(sessionMinutes(5, EXAM_PACE['Exam 5'])).toBeNull()
     expect(sessionMinutes(5, null)).toBeNull()
   })
-
-  it('cuts the bar by each open step’s questions, minutes adding up', () => {
-    const steps = buildSessionSteps(input())
-    const bar = sessionBar(steps, 30)
-    expect(bar.map(s => s.number)).toEqual([1, 2, 3])
-    expect(bar.map(s => s.questions)).toEqual([1, 2, 1])
-    expect(bar.reduce((n, s) => n + s.share, 0)).toBeCloseTo(1)
-    expect(bar.map(s => s.minutes)).toEqual([8, 15, 7])
-    expect(apportion(30, [1, 2, 1]).reduce((a, b) => a + b, 0)).toBe(30)
-    expect(sessionBar(steps, null).every(s => s.minutes === null)).toBe(true)
-  })
-
-  it('leaves a finished step off the bar', () => {
-    const steps = buildSessionSteps(input({ mistakes: [], isDone: n => n === 'Bayes Theorem' }))
-    expect(sessionBar(steps, 12).map(s => s.number)).toEqual([1])
-  })
 })
 
 describe('sessionPins', () => {
@@ -141,5 +124,20 @@ describe('sessionPins', () => {
       'conditional probability': 2,
       'joint probability density function': 2,
     })
+  })
+})
+
+describe('sessionWalk', () => {
+  it('walks the rows in the order they are listed, each concept once, skipping the aggregate row', () => {
+    const mistakes = [
+      { concept: 'Bayes Theorem' },
+      ...['A', 'B', 'C', 'D', 'E'].map(c => ({ concept: c })),
+    ]
+    const steps = buildSessionSteps(input({ mistakes }))
+    const walk = sessionWalk(steps)
+    const listed = steps.flatMap(s => s.rows).filter(r => !r.aggregate).map(r => r.name)
+    expect(steps[0].rows.some(r => r.aggregate)).toBe(true)
+    expect(walk).toEqual([...new Set(listed)])
+    expect(walk.filter(n => n === 'Bayes Theorem')).toHaveLength(1)
   })
 })

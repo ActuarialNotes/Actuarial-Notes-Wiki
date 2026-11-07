@@ -783,6 +783,14 @@
   animation: concept-row-highlight 1.4s ease-out both;
 }
 
+/* The row the concept popup is reading from Today's session, held highlighted
+   for as long as the popup stays on it — so Previous / Next can always be
+   followed down the list, not only for the moment the flash lasts. */
+.concept-row-current {
+  box-shadow: 0 0 0 2px hsl(var(--primary));
+  background-color: hsl(var(--primary) / 0.10);
+}
+
 /* The same row ring in the app's rainbow foil, worn by the quiz-launch cascade
    (the sweep through today's concepts when "Start Quiz" is pressed) so the whole
    launch reads as one coloured material rather than a plain white ring. A

@@ -1,19 +1,20 @@
-import { Link } from 'react-router-dom'
-import type { ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import { accuracyPercent, DIFFICULTY_ORDER, isThin, type AccuracySpan, type AccuracyTrend } from '@/lib/accuracyTrend'
 import { DIFFICULTY_LABEL } from '@/lib/difficultyBreakdown'
 import { clock, MIN_TIMED_ANSWERS, type PacingResult, type SectionLeak } from '@/lib/performanceAnalytics'
-import { costliestSection, dailyColumns, formatMarks, sectionQuizHref } from '@/lib/analyticsSummary'
+import { costliestSection, dailyColumns, formatMarks } from '@/lib/analyticsSummary'
 import { todayISO } from '@/lib/studyPlan'
 import { cn } from '@/lib/utils'
+import { SectionLeaksDialog } from './SectionLeaksDialog'
 
-function Tile({ label, value, note, tone, to }: {
+function Tile({ label, value, note, tone, onOpen }: {
   label: string
   value: string
   note: ReactNode
   /** 'thin' steps a rate on too few answers back to grey; 'loss' is marks lost. */
   tone?: 'thin' | 'loss'
-  to?: string
+  /** The tile opens a popup with the detail behind it. */
+  onOpen?: () => void
 }) {
   const body = (
     <>
@@ -31,8 +32,12 @@ function Tile({ label, value, note, tone, to }: {
     </>
   )
   const cls = 'flex min-h-[7rem] flex-col gap-1 rounded-2xl bg-muted/60 p-3.5 sm:p-4'
-  return to
-    ? <Link to={to} className={cn(cls, 'transition-colors hover:bg-muted')}>{body}</Link>
+  return onOpen
+    ? (
+      <button type="button" onClick={onOpen} aria-haspopup="dialog" className={cn(cls, 'text-left transition-colors hover:bg-muted')}>
+        {body}
+      </button>
+    )
     : <div className={cls}>{body}</div>
 }
 
@@ -40,8 +45,9 @@ function Tile({ label, value, note, tone, to }: {
  * The head of the Dashboard's Analytics section: four tiles — accuracy, the
  * marks the costliest section is losing, first tries, and pace — then the
  * span's answers day by day (right over missed) and accuracy by difficulty.
- * A rate on fewer than ten answers is stepped back to grey (`isThin`), as on
- * the full Accuracy card; a tile with nothing to read says what it needs.
+ * A rate on fewer than ten answers is stepped back to grey (`isThin`); a tile
+ * with nothing to read says what it needs. *Marks at risk* opens every
+ * section's marks lost in a popup (`SectionLeaksDialog`).
  */
 export function AnalyticsSummary({ trend, span, leaks, pace, examLabel }: {
   trend: AccuracyTrend
@@ -50,6 +56,7 @@ export function AnalyticsSummary({ trend, span, leaks, pace, examLabel }: {
   pace: PacingResult | null
   examLabel: string
 }) {
+  const [leaksOpen, setLeaksOpen] = useState(false)
   const total = trend.total
   const accuracy = accuracyPercent(total)
   const leak = costliestSection(leaks)
@@ -84,7 +91,7 @@ export function AnalyticsSummary({ trend, span, leaks, pace, examLabel }: {
           value={leak ? `−${formatMarks(leak.marksLost!)}` : '—'}
           note={leak ? `${leak.name} · ${Math.round(leak.share)}% of the exam` : 'Answer 3 in a section'}
           tone={leak ? 'loss' : undefined}
-          to={leak ? sectionQuizHref(examLabel, leak) : undefined}
+          onOpen={leaks.length > 0 ? () => setLeaksOpen(true) : undefined}
         />
         <Tile
           label="First try"
@@ -174,6 +181,8 @@ export function AnalyticsSummary({ trend, span, leaks, pace, examLabel }: {
           })}
         </ul>
       </div>
+
+      {leaksOpen && <SectionLeaksDialog leaks={leaks} examLabel={examLabel} onClose={() => setLeaksOpen(false)} />}
     </div>
   )
 }

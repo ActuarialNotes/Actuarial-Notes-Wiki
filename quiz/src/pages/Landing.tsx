@@ -37,6 +37,9 @@ import {
   quizSearchFilter,
   saveConcepts,
   selectGroup,
+  clearSessionMistakes,
+  peekSessionMistakes,
+  sessionQuizIds,
   storeSelectedIds,
   takeConceptOverride,
   toggleConcept as toggleConceptIn,
@@ -228,36 +231,52 @@ export default function Landing() {
   // address that asked for it would only launch another quiz, so Back from the
   // quiz goes to the Dashboard instead.
   const { reveal: quizReveal, conceptLinks: quizLinks, timed: quizTimed } = quizSettings
-  const launchTodaysPlan = useCallback((desiredCount: number, replace = false): boolean => {
-    const sel = buildTodaysPlanSelection()
-    if (!sel) return false
-    const selected = selectQuestionsForCoverage(sel.todayQs, sel.concepts, desiredCount, { seenIds: todayAnsweredIds })
-    if (selected.length === 0) return false
-    storeSelectedIds(selected.map(q => q.id))
+  // Launch a stored set of question ids as a quiz under the reader's settings.
+  const launchIds = useCallback((ids: readonly string[], replace: boolean): boolean => {
+    if (ids.length === 0) return false
+    storeSelectedIds(ids)
     navigate(
       quizLaunchUrl(
-        { kind: 'plan', count: selected.length },
+        { kind: 'plan', count: ids.length },
         { mode: 'quiz', reveal: quizReveal, links: quizLinks ? '1' : '0', timed: quizTimed },
       ),
       { replace },
     )
     return true
-  }, [buildTodaysPlanSelection, navigate, todayAnsweredIds, quizReveal, quizLinks, quizTimed])
+  }, [navigate, quizReveal, quizLinks, quizTimed])
 
-  // One-click launch from the dashboard, sized to complete today's plan; a
-  // quiet loading state stands in for the builder until it lands or can't.
-  const autostartLaunch = useCallback(() => {
+  const launchTodaysPlan = useCallback((desiredCount: number, replace = false, leadIds: readonly string[] = []): boolean => {
     const sel = buildTodaysPlanSelection()
     if (!sel) return false
-    launchTodaysPlan(minQuestionsToCoverConcepts(sel.todayQs, sel.concepts, { seenIds: todayAnsweredIds }), true)
-    return true
-  }, [buildTodaysPlanSelection, launchTodaysPlan, todayAnsweredIds])
+    const selected = selectQuestionsForCoverage(sel.todayQs, sel.concepts, desiredCount, { seenIds: todayAnsweredIds })
+    if (selected.length === 0) return false
+    return launchIds(sessionQuizIds(leadIds, selected.map(q => q.id)), replace)
+  }, [buildTodaysPlanSelection, todayAnsweredIds, launchIds])
+
+  // One-click launch from the dashboard's Start session: one quiz holding the
+  // missed questions it handed over (`storeSessionMistakes`) and the fewest
+  // questions that complete today's plan. A quiet loading state stands in for
+  // the builder until it lands or can't.
+  const [sessionMistakes] = useState(peekSessionMistakes)
+  const autostartLaunch = useCallback(() => {
+    const known = new Set(allQuestions.map(q => q.id))
+    const mistakeIds = (sessionMistakes?.ids ?? []).filter(id => known.has(id))
+    const withPlan = sessionMistakes?.plan !== false && planReady
+    clearSessionMistakes()
+    if (withPlan) {
+      const sel = buildTodaysPlanSelection()
+      if (sel && launchTodaysPlan(minQuestionsToCoverConcepts(sel.todayQs, sel.concepts, { seenIds: todayAnsweredIds }), true, mistakeIds)) {
+        return true
+      }
+    }
+    return launchIds(mistakeIds, true)
+  }, [allQuestions, sessionMistakes, planReady, buildTodaysPlanSelection, launchTodaysPlan, launchIds, todayAnsweredIds])
   const isAutostarting = useDashboardAutostart({
     signedIn: !!user,
     isQuiz: initialMode !== 'mock-exam',
     topic,
     loading: masteryLoading || conceptsLoading || planLoading || subLoading,
-    eligible: planReady && allQuestions.length > 0,
+    eligible: allQuestions.length > 0 && (planReady || (sessionMistakes?.ids.length ?? 0) > 0),
     launch: autostartLaunch,
   })
 

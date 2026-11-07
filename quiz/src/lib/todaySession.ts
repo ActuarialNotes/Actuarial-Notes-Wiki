@@ -3,9 +3,9 @@
 // The session is what the reader is asked to do today, in the order they should
 // do it: fix the questions they've missed and not yet answered right, learn
 // the concepts today's plan introduces, then review the ones it brings back.
-// Each step is numbered, and the same number is the pin the Dashboard's wheel
-// puts on that step's concepts (`components/dashboard/SessionWheel.tsx`), so
-// the list and the syllabus read as one picture.
+// Each step is numbered; the Dashboard's wheel outlines every concept the
+// session asks for (`components/dashboard/SessionWheel.tsx`), so the list and
+// the syllabus read as one picture.
 //
 // The session's size is the quizzes it launches, never an estimate of study
 // time: the plan's questions are `questionsNeededForPlan`'s count (the size of
@@ -32,11 +32,13 @@ export interface SessionRow {
   /** Missed questions still to fix that point at this concept (mistake rows). */
   questions: number | null
   done: boolean
+  /** The row counts missed questions with no one concept behind them — it names no page. */
+  aggregate?: true
 }
 
 export interface SessionStep {
   kind: SessionStepKind
-  /** 1-based, in the order the steps are done — the wheel's pin number. */
+  /** 1-based, in the order the steps are done. */
   number: number
   title: string
   rows: SessionRow[]
@@ -101,7 +103,7 @@ export function buildSessionSteps(input: SessionInput): SessionStep[] {
     }))
     const rest = ranked.slice(MISTAKE_ROWS).reduce((n, c) => n + c.count, 0) + unattributed
     if (rest > 0) {
-      rows.push({ name: rows.length > 0 ? 'Other questions' : 'Missed questions', section: null, target: null, questions: rest, done: false })
+      rows.push({ name: rows.length > 0 ? 'Other questions' : 'Missed questions', section: null, target: null, questions: rest, done: false, aggregate: true })
     }
     steps.push({
       kind: 'mistakes',
@@ -173,53 +175,8 @@ export function sessionMinutes(questions: number, pace: ExamPace | null): number
   return Math.max(1, Math.round((questions * secondsPerUnit(pace)) / 60))
 }
 
-export interface SessionBarSegment {
-  number: number
-  /** Share of the bar, 0–1. */
-  share: number
-  /** The step's minutes, as a share of the session's — null with no pace. */
-  minutes: number | null
-  questions: number
-}
-
 /**
- * The time bar: one segment per step still to do, as wide as its share of the
- * questions. A step's minutes are its share of the session's total, apportioned
- * so the labels add up to the number above them.
- */
-export function sessionBar(steps: readonly SessionStep[], totalMinutes: number | null): SessionBarSegment[] {
-  const open = steps.filter(s => !s.done && s.questions > 0)
-  const sum = open.reduce((n, s) => n + s.questions, 0)
-  if (sum === 0) return []
-  return open.map((s, i) => ({
-    number: s.number,
-    share: s.questions / sum,
-    minutes: totalMinutes === null ? null : apportion(totalMinutes, open.map(o => o.questions))[i],
-    questions: s.questions,
-  }))
-}
-
-/**
- * Whole parts of `total` in proportion to `weights` that add up to it exactly
- * (largest remainder; a tie goes to the earlier step).
- */
-export function apportion(total: number, weights: readonly number[]): number[] {
-  const sum = weights.reduce((a, b) => a + b, 0)
-  if (sum === 0) return weights.map(() => 0)
-  const raw = weights.map(w => (total * w) / sum)
-  const parts = raw.map(Math.floor)
-  let left = total - parts.reduce((a, b) => a + b, 0)
-  const order = raw.map((r, i) => ({ i, frac: r - Math.floor(r) })).sort((a, b) => b.frac - a.frac || a.i - b.i)
-  for (const { i } of order) {
-    if (left <= 0) break
-    parts[i]++
-    left--
-  }
-  return parts
-}
-
-/**
- * Which concepts the wheel pins, and with which step's number, keyed by
+ * Which concepts the wheel outlines, with the step each is in, keyed by
  * lower-cased name. A concept in two steps keeps the earlier one's number.
  */
 export function sessionPins(steps: readonly SessionStep[]): Map<string, number> {
@@ -232,4 +189,24 @@ export function sessionPins(steps: readonly SessionStep[]): Map<string, number> 
     }
   }
   return pins
+}
+
+/**
+ * The concepts the session's rows name, in the order they are listed, each
+ * once — the walk the concept popup's Previous / Next takes from a tapped row,
+ * so it steps down the list the reader sees.
+ */
+export function sessionWalk(steps: readonly SessionStep[]): string[] {
+  const seen = new Set<string>()
+  const walk: string[] = []
+  for (const s of steps) {
+    for (const r of s.rows) {
+      if (r.aggregate) continue
+      const key = r.name.toLowerCase()
+      if (seen.has(key)) continue
+      seen.add(key)
+      walk.push(r.name)
+    }
+  }
+  return walk
 }

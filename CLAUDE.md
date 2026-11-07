@@ -1164,7 +1164,7 @@ Other important `lib/` modules:
   (syllabus coverage, plus band, section breakdown and concept
   tally); every surface that prints a readiness % calls it — the Dashboard's **Today's
   session** wheel (`components/dashboard/SessionWheel.tsx`, `NN%` ready in the middle of the
-  ring, today's concepts pinned with their step's number), the **Study Guide**
+  ring, today's concepts outlined on it), the **Study Guide**
   popup the wheel opens (the ring and the
   criterion bar — it sits under the concept popup, ending where that pane begins, so a
   tapped arc stays highlighted while its concept reads below), the exam grid and the readiness projection. The exam study guide shows no
@@ -1180,10 +1180,9 @@ Other important `lib/` modules:
   the number on screen. See `docs/exam-readiness.md`.
 - `readinessRing.ts` — the geometry behind the **readiness ring**: one arc per syllabus
   concept, each section sized by its exam weight, each arc filled by that concept's mastery
-  state, and `ringPins` — a numbered badge beyond the ring for each pinned concept, a crowded
-  one stepped out. Pure and tested. Two surfaces draw it and differ only in chrome — the Dashboard's
+  state. Pure and tested. Two surfaces draw it and differ only in chrome — the Dashboard's
   Study Guide popup (`StudyGuideRadial`, with `SessionWheel` — the arcs round the score, today's
-  concepts pinned — on Today's session, which opens it in `components/ReadinessCard.tsx`, with a legend,
+  concepts outlined — on Today's session, which opens it in `components/ReadinessCard.tsx`, with a legend,
   curved section labels and a middle that prints the score until a concept is hovered or
   selected, then that concept's readout) and the exam page's title-row badge
   (`components/ReadinessRing.tsx`, everything stripped off) — so the two can never disagree
@@ -1191,21 +1190,25 @@ Other important `lib/` modules:
   scaling the SVG, not by editing the constants.
 - `todaySession.ts` — **Today's session**, the Dashboard's one card of work for the day
   (`components/dashboard/TodaySessionCard.tsx`, under the week strip): its **steps** in the
-  order they are done — *Fix N mistakes* (the missed questions not yet answered right, the
-  reviewer `MistakesReviewModal` opens), *Learn N new concepts* and *Review N concepts*
-  (today's plan, split by the state each concept was scheduled in) — each a numbered
-  checklist whose number is the wheel's pin (`sessionPins`); its **size**, the plan quiz's
-  own count (`questionsNeededForPlan`) plus the mistakes, in minutes at the exam's pace
-  (`sessionMinutes` — none for an exam paced by the point); the **time bar** cut by step,
-  minutes apportioned so they add up (`sessionBar`); and what **Start** does next
-  (`nextSessionAction`: the mistakes, the plan quiz, extra credit, or the quiz builder with
-  no plan). The pinned exam row carries a copy of Start (`startSessionTrigger` /
-  `onSessionChange` between the Dashboard and `ReadinessCard`). Pure and tested.
+  order they are done — *Fix N mistakes* (the missed questions not yet answered right),
+  *Learn N new concepts* and *Review N concepts* (today's plan, split by the state each
+  concept was scheduled in) — each a numbered checklist, its concepts outlined on the wheel
+  (`sessionPins`); its **size**, the plan quiz's own count (`questionsNeededForPlan`) plus
+  the mistakes, in minutes at the exam's pace (`sessionMinutes` — none for an exam paced by
+  the point); the walk a tapped row opens in the concept popup — every row's concept in the
+  order listed, each once (`sessionWalk`), the row the popup is on held highlighted
+  (`.concept-row-current`); and what **Start** does (`nextSessionAction`). Start runs the
+  whole session as **one quiz**: the missed questions' ids go to the quiz builder through
+  `storeSessionMistakes` (`lib/quizBuilder.ts`) and its autostart puts them ahead of the
+  fewest questions that complete today's plan (`sessionQuizIds`) — or launches them alone
+  once the plan is done or there is none. The pinned exam row carries a copy of Start
+  (`startSessionTrigger` / `onSessionChange` between the Dashboard and `ReadinessCard`).
+  Pure and tested.
 - `analyticsSummary.ts` — the head of the Dashboard's **Analytics** section
   (`components/analytics/AnalyticsSummary.tsx`): four tiles (accuracy, the marks the
   costliest section is losing, first tries, pace), the span day by day (`dailyColumns`) and
-  accuracy by difficulty — every figure one the full cards compute, which **All analytics**
-  opens beneath it. Pure and tested.
+  accuracy by difficulty. It is the whole section: the *Marks at risk* tile opens
+  `SectionLeaksCard` in a popup (`components/analytics/SectionLeaksDialog.tsx`). Pure and tested.
 - `distributionMath.ts` / `distributions.ts` / `distributionPlot.ts` — the distribution-simulator
   engine: special functions + seeded samplers, the per-distribution spec catalogue (with the
   `Media/*.svg` → spec map), and the pure curve/histogram/tick helpers the SVG reads. Rendered by
@@ -1269,16 +1272,12 @@ Other important `lib/` modules:
   (`hooks/useEmailPrefs.ts` + `components/DashboardRemindersModal.tsx`, the Dashboard's bell). Gated by
   `DAILY_PLAN_EMAIL_ENABLED`. See `docs/daily-plan-email.md`.
 - `accuracyTrend.ts` / `difficultyBreakdown.ts` / `registrationNudge.ts` — three answers to one
-  reader's review: the Dashboard's **Accuracy** card (`components/AccuracyTrendCard.tsx`, via
-  `hooks/useAccuracyTrend.ts` — one exam's `question_responses` over a 7 / 30 / 90-day span the
-  reader picks, every figure on the card covering that one span: the rate against the span before,
-  by difficulty with each count (any rate under 10 answers, the headline included, stepped back to
-  grey), a pooled rolling line whose window follows the span (`rollingWindow`: 3 / 7 / 14 days) over
-  each day's dot and a bar of its answers — drawn only once two days are studied — today's misses
-  and the weakest topics each starting a quiz, and a tapped day opening its questions
-  (`components/AccuracyDayDialog.tsx`); signed-in and Pro only, lazy, the first of the full cards
-  **All analytics** opens under the summary (`lib/analyticsSummary.ts`) that leads the Dashboard's
-  **Analytics** section — a **Pro** feature: anyone else gets `components/analytics/AnalyticsLocked.tsx`
+  reader's review: the Dashboard's accuracy figures (via `hooks/useAccuracyTrend.ts` — one exam's
+  `question_responses` over a 7 / 30 / 90-day span the reader picks, every figure covering that
+  one span; any rate under 10 answers stepped back to grey), drawn by the summary
+  (`lib/analyticsSummary.ts`) that is the Dashboard's **Analytics** section — the full Accuracy
+  card with its rolling line and day dialog was removed (its rolling-window and day helpers stay
+  in the lib, tested) — signed-in and Pro only, lazy, a **Pro** feature: anyone else gets `components/analytics/AnalyticsLocked.tsx`
   (the locked study-plan card's shape, a drawn stand-in, nothing of theirs fetched — the Dashboard
   passes `useAccuracyTrend` a null exam) — `components/analytics/AnalyticsSection.tsx`, whose
   header's span picker covers every card; beside it, `lib/performanceAnalytics.ts`: **where you're losing marks**,

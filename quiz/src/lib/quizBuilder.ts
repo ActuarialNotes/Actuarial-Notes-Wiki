@@ -617,6 +617,51 @@ export function storeSelectedIds(ids: readonly string[]): void {
   } catch { /* ignore */ }
 }
 
+/**
+ * Where the Dashboard's **Start session** leaves the missed questions it wants
+ * in the same quiz as today's plan (`lib/todaySession.ts`): their ids, and
+ * whether the plan's questions follow them (false once the plan is done).
+ */
+export const SESSION_MISTAKES_KEY = 'actuarial_session_mistakes'
+
+export interface SessionMistakes {
+  ids: string[]
+  plan: boolean
+}
+
+/** Hands Start session's missed questions to the quiz builder; null clears them. */
+export function storeSessionMistakes(value: SessionMistakes | null): void {
+  try {
+    if (value && value.ids.length > 0) sessionStorage.setItem(SESSION_MISTAKES_KEY, JSON.stringify(value))
+    else sessionStorage.removeItem(SESSION_MISTAKES_KEY)
+  } catch { /* ignore */ }
+}
+
+/** Start session's missed questions, read without removing them; null when there are none. */
+export function peekSessionMistakes(): SessionMistakes | null {
+  try {
+    const raw = sessionStorage.getItem(SESSION_MISTAKES_KEY)
+    if (!raw) return null
+    const v = JSON.parse(raw) as Partial<SessionMistakes>
+    if (!Array.isArray(v.ids)) return null
+    const ids = v.ids.filter((id): id is string => typeof id === 'string')
+    return ids.length > 0 ? { ids, plan: v.plan !== false } : null
+  } catch { return null }
+}
+
+/** Clears Start session's missed questions once a quiz has taken them. */
+export function clearSessionMistakes(): void {
+  storeSessionMistakes(null)
+}
+
+/**
+ * One session's questions: the missed ones first, then the plan's, each id
+ * once — the quiz Start session launches.
+ */
+export function sessionQuizIds(mistakeIds: readonly string[], planIds: readonly string[]): string[] {
+  return [...new Set([...mistakeIds, ...planIds])]
+}
+
 /** The dashboard's concept override, read once and removed; null when there is none. */
 export function takeConceptOverride(): string[] | null {
   try {

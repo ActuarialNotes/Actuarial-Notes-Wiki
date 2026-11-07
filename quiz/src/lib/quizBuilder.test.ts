@@ -32,6 +32,7 @@ import {
   todaysPlanSelection,
   toggleConcept,
   type LaunchSettings,
+  sessionQuizIds,
 } from './quizBuilder'
 import type { StudyPlan } from './studyPlan'
 import type { WikiExamSyllabus } from './wikiParser'
@@ -335,5 +336,13 @@ describe('picking concepts', () => {
     expect(conceptsFromStored('{"a":1}')).toEqual([])
     expect(conceptsFromStored('not json')).toEqual([])
     expect(conceptsFromStored(null)).toEqual([])
+  })
+})
+
+describe('sessionQuizIds', () => {
+  it('puts the missed questions first, then the plan’s, each once', () => {
+    expect(sessionQuizIds(['p-8', 'p-3'], ['p-1', 'p-3', 'p-5'])).toEqual(['p-8', 'p-3', 'p-1', 'p-5'])
+    expect(sessionQuizIds([], ['p-1'])).toEqual(['p-1'])
+    expect(sessionQuizIds(['p-8'], [])).toEqual(['p-8'])
   })
 })

@@ -19,11 +19,12 @@ import { MistakesReviewModal } from '@/components/MistakesReviewModal'
 import { TodaySessionCard } from '@/components/dashboard/TodaySessionCard'
 import { SessionWheel } from '@/components/dashboard/SessionWheel'
 import { paceForExam } from '@/lib/quizTiming'
+import { storeSessionMistakes } from '@/lib/quizBuilder'
 import {
   buildSessionSteps,
   currentStep,
   nextSessionAction,
-  sessionBar,
+  sessionWalk,
   sessionMinutes,
   sessionPins,
 } from '@/lib/todaySession'
@@ -810,21 +811,24 @@ export function ReadinessCard({
     [syllabusExamId, syllabusExamTopic],
   )
 
-  const handleStartQuiz = useCallback(() => {
+  // `withMistakes`: Start session has handed missed questions to the quiz
+  // builder (`storeSessionMistakes`), so there is a quiz to autostart even
+  // with no plan behind it.
+  const handleStartQuiz = useCallback((withMistakes = false) => {
     if (isLaunchingQuizRef.current) return
     isLaunchingQuizRef.current = true
 
     const topicValue = quizTopicValue
 
     // No daily plan to sweep through — a free account, or a Pro one that
-    // hasn't set a target date. The cascade is an animation *of the plan*, and
-    // `autostart` needs one, so both would be a second of nothing before the
-    // quiz builder appeared anyway. Go straight there, with the exam already
-    // chosen.
+    // hasn't set a target date. The cascade is an animation *of the plan*, so
+    // it would be a second of nothing: go straight on — into the missed
+    // questions when there are some, else to the quiz builder with the exam
+    // already chosen.
     if (cascadeSteps.length === 0) {
       isLaunchingQuizRef.current = false
       setSessionLaunching(false)
-      navigate(`/?topic=${encodeURIComponent(topicValue)}&mode=quiz`)
+      navigate(`/?topic=${encodeURIComponent(topicValue)}&mode=quiz${withMistakes ? '&autostart=1' : ''}`)
       return
     }
 
@@ -858,7 +862,9 @@ export function ReadinessCard({
   }, [navigate, quizTopicValue, cascadeSteps])
 
   useEffect(() => {
-    if (startQuizTrigger) handleStartQuiz()
+    if (!startQuizTrigger) return
+    storeSessionMistakes(null)
+    handleStartQuiz()
   }, [startQuizTrigger, handleStartQuiz])
 
   useEffect(() => {
@@ -986,7 +992,12 @@ export function ReadinessCard({
   const planOpen = sessionSteps.some(st => st.kind !== 'mistakes' && !st.done)
   const sessionQuestions = outstandingMistakes.length + (planOpen ? planQuestionCount : 0)
   const sessionMinutesTotal = sessionMinutes(sessionQuestions, paceForExam(examLabel))
-  const sessionBarSegments = useMemo(() => sessionBar(sessionSteps, sessionMinutesTotal), [sessionSteps, sessionMinutesTotal])
+  // The walk a tapped row opens: the rows' concepts in the order they are
+  // listed, each once — so Previous / Next steps down the list on screen.
+  const sessionWalkRefs = useMemo<WikiEntryRef[]>(
+    () => sessionWalk(sessionSteps).map(name => ({ kind: 'concept' as const, name })),
+    [sessionSteps],
+  )
   const sessionAction = nextSessionAction(sessionSteps)
   const sessionDone = sessionAction === 'extra'
   const [sessionLaunching, setSessionLaunching] = useState(false)
@@ -1002,12 +1013,18 @@ export function ReadinessCard({
           ? `Continue · step ${stepNow.number}`
           : 'Start session'
 
+  // Start runs the whole session as one quiz: the missed questions first, then
+  // the fewest questions that complete today's plan (the quiz builder's
+  // autostart puts them together).
   const runSessionStep = useCallback(() => {
-    if (sessionAction === 'mistakes') { openReviewer(); return }
     if (isLaunchingQuizRef.current) return
+    const mistakeIds = sessionAction === 'extra' || sessionAction === 'quiz'
+      ? []
+      : outstandingMistakes.map(m => m.question.id)
+    storeSessionMistakes(mistakeIds.length > 0 ? { ids: mistakeIds, plan: planOpen } : null)
     setSessionLaunching(true)
-    handleStartQuiz()
-  }, [sessionAction, openReviewer, handleStartQuiz])
+    handleStartQuiz(mistakeIds.length > 0)
+  }, [sessionAction, outstandingMistakes, planOpen, handleStartQuiz])
 
   useEffect(() => {
     if (startSessionTrigger) runSessionStep()
@@ -1438,16 +1455,15 @@ export function ReadinessCard({
         steps={sessionSteps}
         totalQuestions={sessionQuestions}
         totalMinutes={sessionMinutesTotal}
-        bar={sessionBarSegments}
         allDone={sessionDone}
         answeredToday={todayQuestionsAnswered}
         startLabel={sessionStartLabel}
         launching={sessionLaunching}
         onStart={runSessionStep}
-        onRow={(row, step) => {
-          if (step.kind === 'mistakes') { openReviewer(); return }
-          const idx = studyPlanConceptsForModal.findIndex(c => c.name.toLowerCase() === row.name.toLowerCase())
-          openDashboard(toRefs(allConcepts), toRefs(studyPlanConceptsForModal), 'study-plan', idx === -1 ? 0 : idx)
+        onRow={row => {
+          if (row.aggregate) { openReviewer(); return }
+          const idx = sessionWalkRefs.findIndex(r => r.name.toLowerCase() === row.name.toLowerCase())
+          openDashboard(toRefs(allConcepts), sessionWalkRefs, 'study-plan', idx === -1 ? 0 : idx)
         }}
         titleAside={STREAK_ENABLED ? <StreakNavBadge size="md" /> : undefined}
         listen={isPro && displayConcepts.length > 0 ? (
@@ -1458,6 +1474,7 @@ export function ReadinessCard({
         footer={sessionFooter}
         cascadeConcept={quizStartConcept}
         flashingConcept={flashingConcept}
+        currentConcept={popupOpen && !popupFromRadial && popupDashboardFilter === 'study-plan' ? popupCurrentName?.toLowerCase() ?? null : null}
         justCompleted={recentlyCompletedConcepts}
         trace={tracePlanBorder}
         onOpenDayComplete={() => setShowDayCompleteInfo(true)}

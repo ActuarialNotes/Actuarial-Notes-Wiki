@@ -2,7 +2,7 @@ import { forwardRef, type CSSProperties, type ReactNode } from 'react'
 import { Circle, Play } from 'lucide-react'
 import { CheckMark } from '@/components/CheckMark'
 import { MASTERY_LABEL } from '@/lib/masteryBadge'
-import type { SessionBarSegment, SessionRow, SessionStep } from '@/lib/todaySession'
+import type { SessionRow, SessionStep } from '@/lib/todaySession'
 
 interface Props {
   /** The exam's accent (`examAccentStyle`), washing the card. */
@@ -14,7 +14,6 @@ interface Props {
   totalQuestions: number
   /** Those questions at the exam's pace — null for an exam with no per-question pace. */
   totalMinutes: number | null
-  bar: SessionBarSegment[]
   /** Every step done today. */
   allDone: boolean
   /** Questions answered today, for the finished card. */
@@ -31,8 +30,10 @@ interface Props {
   footer?: ReactNode
   /** The concept the Start cascade is lighting (lower-cased). */
   cascadeConcept?: string | null
-  /** The concept the popup is on (lower-cased), flashed in the list. */
+  /** The concept the popup has just moved to (lower-cased), flashed in the list. */
   flashingConcept?: string | null
+  /** The concept the popup is reading from this list (lower-cased), held highlighted. */
+  currentConcept?: string | null
   /** Concepts ticked off in the last moment, flashed green (lower-cased). */
   justCompleted?: ReadonlySet<string>
   /** The Start cascade's border trace. */
@@ -48,14 +49,13 @@ function rowNote(row: SessionRow): string {
 
 /**
  * **Today's session** (`lib/todaySession.ts`): the wheel, the session's size in
- * questions and minutes, a time bar cut by step, then the steps themselves —
- * each a numbered checklist of its concepts, the number the wheel's pin — and
- * one Start, which always does the next step.
+ * questions and minutes, then the steps themselves — each a numbered checklist
+ * of its concepts — and one Start, which runs the whole session as one quiz.
  */
 export const TodaySessionCard = forwardRef<HTMLDivElement, Props>(function TodaySessionCard({
-  accent, wheel, steps, totalQuestions, totalMinutes, bar, allDone, answeredToday,
+  accent, wheel, steps, totalQuestions, totalMinutes, allDone, answeredToday,
   startLabel, launching, onStart, onRow, titleAside, listen, footer,
-  cascadeConcept, flashingConcept, justCompleted, trace, onOpenDayComplete,
+  cascadeConcept, flashingConcept, currentConcept, justCompleted, trace, onOpenDayComplete,
 }, ref) {
   return (
     <section
@@ -125,25 +125,6 @@ export const TodaySessionCard = forwardRef<HTMLDivElement, Props>(function Today
               )}
             </p>
           )}
-
-          {/* The time bar: each step still to do, as wide as its share. */}
-          {!allDone && bar.length > 1 && (
-            <div className="flex gap-1" aria-label="Time by step" role="list">
-              {bar.map(seg => (
-                <div key={seg.number} role="listitem" className="min-w-0 space-y-1.5" style={{ flex: `${seg.share} 1 0` }}>
-                  <div className="h-2.5 rounded-full bg-[var(--exam-accent-muted,hsl(var(--muted)))]" />
-                  <div className="flex items-center gap-1.5 text-[13px] font-semibold text-muted-foreground">
-                    <span className="flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full bg-foreground text-[11px] font-extrabold text-background">
-                      {seg.number}
-                    </span>
-                    <span className="truncate tabular-nums">
-                      {seg.minutes !== null ? `${seg.minutes} min` : `${seg.questions} q`}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
         </div>
 
         <ol className="space-y-1">
@@ -164,17 +145,21 @@ export const TodaySessionCard = forwardRef<HTMLDivElement, Props>(function Today
                   const key = row.name.toLowerCase()
                   const lit = cascadeConcept === key
                   const flash = flashingConcept?.toLowerCase() === key
+                  const current = !row.aggregate && currentConcept?.toLowerCase() === key
                   return (
                     <li
                       key={row.name}
                       className={
+                        'rounded-lg ' +
                         (lit ? 'concept-row-foil ' : flash ? 'concept-row-highlight ' : '') +
+                        (current ? 'concept-row-current ' : '') +
                         (justCompleted?.has(key) ? 'concept-success ' : '')
                       }
                     >
                       <button
                         type="button"
-                        data-study-concept={step.kind === 'mistakes' ? undefined : key}
+                        data-study-concept={row.aggregate ? undefined : key}
+                        aria-current={current ? 'true' : undefined}
                         onClick={() => onRow(row, step)}
                         className="flex w-full items-center gap-3 rounded-lg py-1.5 pl-9 pr-1 text-left transition-colors hover:bg-foreground/5"
                       >

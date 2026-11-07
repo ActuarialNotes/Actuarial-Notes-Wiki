@@ -7,23 +7,18 @@ import {
   RING_OUTER_R,
   RING_VIEWBOX,
   ringArcPath,
-  ringPins,
   ringPolar,
   ringTopicGroups,
   type RingSegment,
 } from '@/lib/readinessRing'
 import { masteryFill } from '@/lib/masteryFill'
 
-/** The pin badge's radius, in ring units. */
-const BADGE_R = 11
-
 /**
  * The Study Guide wheel at the head of **Today's session**: one arc per
  * syllabus concept, filled by its level (`lib/readinessRing.ts`), with the
- * readiness score in the middle — and a numbered pin on each concept the
- * session asks for, the number being its step in the list below
- * (`sessionPins` in `lib/todaySession.ts`). The pinned arcs are outlined, so
- * where today's work sits in the syllabus reads at a glance.
+ * readiness score in the middle — and each concept the session asks for
+ * (`sessionPins` in `lib/todaySession.ts`) outlined, so where today's work
+ * sits in the syllabus reads at a glance.
  *
  * The whole wheel is one button: it opens the Study Guide popup, where every
  * arc can be read.
@@ -37,7 +32,7 @@ export function SessionWheel({
   onOpen,
 }: {
   segments: RingSegment[]
-  /** Pin number per concept, keyed by lower-cased name. */
+  /** Today's concepts, keyed by lower-cased name. */
   pins: ReadonlyMap<string, number>
   /** The readiness score, rounded. */
   pct: number
@@ -46,19 +41,19 @@ export function SessionWheel({
   flash?: boolean
   onOpen: () => void
 }) {
-  const placed = useMemo(() => ringPins(segments, pins), [segments, pins])
   const groups = useMemo(() => ringTopicGroups(segments), [segments])
-  // The pinned arcs, one per concept — the same first arc its pin sits on.
+  // Today's concepts: every arc they own (a concept listed under two
+  // objectives has two), outlined.
   const pinned = useMemo(
-    () => placed.map(p => segments.find(s => s.conceptName === p.conceptName)!),
-    [placed, segments],
+    () => segments.filter(s => pins.has(s.conceptName.toLowerCase())),
+    [segments, pins],
   )
-  // Grow the drawing just enough to hold the outermost badge.
-  const reach = Math.max(RING_OUTER_R + 6, ...placed.map(p => p.r + BADGE_R + 3))
-  const pad = Math.max(0, Math.ceil(reach - RING_VIEWBOX / 2))
+  const todayCount = useMemo(() => new Set(pinned.map(s => s.conceptName.toLowerCase())).size, [pinned])
+  // A whisker of room for the outline's stroke and the section ticks.
+  const pad = Math.max(0, Math.ceil(RING_OUTER_R + 6 - RING_VIEWBOX / 2))
   const size = RING_VIEWBOX + 2 * pad
 
-  const label = `Exam readiness ${pct}%${pinned.length > 0 ? `, today's ${pinned.length} concept${pinned.length === 1 ? '' : 's'} pinned` : ''} — open the study guide`
+  const label = `Exam readiness ${pct}%${todayCount > 0 ? `, today's ${todayCount} concept${todayCount === 1 ? '' : 's'} outlined` : ''} — open the study guide`
 
   return (
     <button
@@ -92,7 +87,7 @@ export function SessionWheel({
           const b = ringPolar(g.boundaryDeg, RING_OUTER_R + 5)
           return <line key={i} x1={a.x} y1={a.y} x2={b.x} y2={b.y} stroke="currentColor" strokeWidth={1} opacity={0.25} />
         })}
-        {/* Today's concepts: the arc outlined, a tick out to its badge. */}
+        {/* Today's concepts, outlined. */}
         {pinned.map((seg, i) => (
           <path
             key={`p${i}`}
@@ -104,22 +99,6 @@ export function SessionWheel({
             strokeLinejoin="round"
           />
         ))}
-        {placed.map(p => {
-          const from = ringPolar(p.angleDeg, RING_OUTER_R + 1)
-          const to = ringPolar(p.angleDeg, p.r - BADGE_R)
-          return (
-            <g key={p.conceptName}>
-              <line x1={from.x} y1={from.y} x2={to.x} y2={to.y} stroke="currentColor" strokeWidth={1.5} opacity={0.8} />
-              <circle cx={p.x} cy={p.y} r={BADGE_R} className="fill-foreground" />
-              <text
-                x={p.x} y={p.y + 4.3} textAnchor="middle" fontSize={12.5} fontWeight={800}
-                className="fill-background"
-              >
-                {p.label}
-              </text>
-            </g>
-          )
-        })}
       </svg>
       <span className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
         <span className="flex items-center gap-1">

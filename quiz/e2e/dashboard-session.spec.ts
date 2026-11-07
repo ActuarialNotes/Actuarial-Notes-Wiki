@@ -42,9 +42,29 @@ test('the session lists the day in steps, and Start does the first one', async (
   await expect(pill).toBeVisible()
   await expect(pill).toContainText(/\d+ min/)
 
-  // Step 1 is the missed question: Start opens it.
+  // No time bar and no numbered pins on the wheel.
+  await expect(card.getByRole('list', { name: 'Time by step' })).toHaveCount(0)
+
+  // Start runs the whole session as one quiz, the missed question first.
   await card.getByRole('button', { name: 'Start session' }).click()
-  await expect(page.getByRole('complementary', { name: /^Fix mistakes/ })).toBeVisible()
+  await expect(page).toHaveURL(/\/quiz\?selection=stored/, { timeout: 30_000 })
+  const ids = await page.evaluate(() => JSON.parse(sessionStorage.getItem('actuarial_selected_ids') ?? '[]') as string[])
+  expect(ids[0]).toBe('p-008')
+  expect(ids.length).toBeGreaterThan(1)
+})
+
+test('a tapped row walks the list on screen, the row it is on held highlighted', async ({ page }) => {
+  await page.goto('/dashboard')
+  const card = page.getByRole('region', { name: "Today's session" })
+  await expect(card).toBeVisible({ timeout: 30_000 })
+  const rows = card.locator('[data-study-concept]')
+  const names = await rows.evaluateAll(els => [...new Set(els.map(e => e.getAttribute('data-study-concept')!))])
+  expect(names.length).toBeGreaterThan(2)
+  await rows.first().click()
+  for (const name of names.slice(0, 3)) {
+    await expect(card.locator(`[data-study-concept="${name}"][aria-current="true"]`).first()).toBeVisible()
+    await page.keyboard.press('ArrowRight')
+  }
 })
 
 test('the wheel opens the Study Guide', async ({ page }) => {

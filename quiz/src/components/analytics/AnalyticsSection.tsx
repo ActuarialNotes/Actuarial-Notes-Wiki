@@ -1,5 +1,4 @@
-import { useId, useMemo, useState } from 'react'
-import { ChevronDown } from 'lucide-react'
+import { useMemo, useState } from 'react'
 import { ACCURACY_SPANS, type AccuracySpan, type AnswerRow } from '@/lib/accuracyTrend'
 import { pacing, rowsInSpan, sectionLeaks } from '@/lib/performanceAnalytics'
 import type { AccuracyTrends } from '@/hooks/useAccuracyTrend'
@@ -8,9 +7,6 @@ import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import { todayISO } from '@/lib/studyPlan'
 import { SegmentedControl } from '@/components/ui/SegmentedControl'
 import { ProBadge } from '@/components/ProBadge'
-import { AccuracyTrendCard } from '@/components/AccuracyTrendCard'
-import { SectionLeaksCard } from './SectionLeaksCard'
-import { PacingCard } from './PacingCard'
 import { AnalyticsSummary } from './AnalyticsSummary'
 import { spanTitle } from '@/lib/analyticsSummary'
 
@@ -34,10 +30,9 @@ function saveSpan(span: AccuracySpan) {
  * The Dashboard's **Analytics** section: how this exam's practice is going,
  * everything over the one span picked in the section's header (7, 30 or 90
  * days, remembered). It leads with a summary (`AnalyticsSummary`: four tiles,
- * the answers day by day, accuracy by difficulty); **All analytics** opens the
- * full cards under it — Accuracy (`lib/accuracyTrend.ts`), where the marks
- * are being lost and how the pace compares with the sitting's
- * (`lib/performanceAnalytics.ts`). Lazy, signed-in and Pro only — the answers
+ * the answers day by day, accuracy by difficulty) and is the whole section;
+ * its *Marks at risk* tile opens where the marks are being lost
+ * (`lib/performanceAnalytics.ts`) in a popup. Lazy, signed-in and Pro only — the answers
  * it reads are kept server-side; anyone else sees `AnalyticsLocked`.
  */
 export function AnalyticsSection({ trends, rows, examLabel, syllabus, questions }: {
@@ -49,8 +44,6 @@ export function AnalyticsSection({ trends, rows, examLabel, syllabus, questions 
   questions: readonly Question[]
 }) {
   const [span, setSpanState] = useState<AccuracySpan>(loadSpan)
-  const [expanded, setExpanded] = useState(false)
-  const detailsId = useId()
   const setSpan = (s: AccuracySpan) => { setSpanState(s); saveSpan(s) }
 
   const examQuestions = useMemo(
@@ -80,26 +73,7 @@ export function AnalyticsSection({ trends, rows, examLabel, syllabus, questions 
           />
         </div>
         <AnalyticsSummary trend={trends[span]} span={span} leaks={leaks} pace={pace} examLabel={examLabel} />
-        <button
-          type="button"
-          onClick={() => setExpanded(v => !v)}
-          aria-expanded={expanded}
-          aria-controls={detailsId}
-          className="mt-5 flex h-12 w-full items-center justify-center gap-1.5 rounded-2xl bg-muted/60 text-[15px] font-bold transition-colors hover:bg-muted"
-        >
-          All analytics
-          <ChevronDown className={`h-4 w-4 transition-transform ${expanded ? 'rotate-180' : ''}`} aria-hidden="true" />
-        </button>
       </div>
-      {expanded && (
-        <div id={detailsId} className="space-y-3">
-          <AccuracyTrendCard trend={trends[span]} span={span} examLabel={examLabel} questions={questions} />
-          <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
-            <SectionLeaksCard leaks={leaks} examLabel={examLabel} />
-            {pace && <PacingCard result={pace} />}
-          </div>
-        </div>
-      )}
     </section>
   )
 }

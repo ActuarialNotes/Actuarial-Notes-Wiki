@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:354c59e9e241f34cc71b4c232fa9582ecf705e8c7dbcff95965c9ece5fa9f0af
+  content_hash: sha256:d6fae004c384dc63e3ba7ae3bb3b2f5f7d192ce62a8c6a64e9e7c12af9854c06
   sources:
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch.3 pp.29, 39-43 (PDF pp.35, 45-49), Ch.4 p.44 (PDF p.50), Ch.5 p.73 (PDF p.79), Ch.13 p.288 (PDF p.294), Ch.14 pp.330-331 (PDF pp.336-337), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 0
@@ -51,7 +51,7 @@ Calendar year data are transactional. Calendar year paid claims are the payments
 - $\text{CY Paid Claims}$ are the claim payments made during the calendar year.
 - $\text{Ending Case Outstanding}$ and $\text{Beginning Case Outstanding}$ are the [[Case Reserves|case outstanding]] at the end and the start of the year.
 
-A calendar year is one diagonal of every [[Development Triangle|development triangle]]. Its values are fixed and do not develop, which is its advantage and its disadvantage: they leave nothing to project future development or IBNR from, so very few techniques use calendar year claims. Calendar year exposures, such as earned premium, are often used with accident year claims.
+A calendar year is one diagonal of every [[Development Triangle|development triangle]]. Its values are fixed and do not develop, which is its advantage and its disadvantage: they leave nothing to project future development or IBNR from, so very few techniques use calendar year claims. Calendar year exposures, such as earned premium, are often used with accident year claims. From a cumulative triangle, a calendar year's reported claims are the sum over the accident years of each value on the latest diagonal minus the same accident year's value on the diagonal before, with the newest accident year counted in full.
 
 > [!example]- A cumulative reported claims triangle has, for accident year 2023, $\$700$ at 12 months and $\$900$ at 24 months, and for accident year 2024, $\$750$ at 12 months. What are the calendar year 2024 reported claims of these two accident years? {Example}
 > - The 2024 diagonal holds accident year 2023 at 24 months and accident year 2024 at 12 months.

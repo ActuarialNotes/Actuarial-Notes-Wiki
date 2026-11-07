@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:bd59498249ca6a785e6579accf2ae6da9a50dc2fc0d214e9a55662493a55ac07
+  content_hash: sha256:426f6730cecf4ecbf3d40769dbf87f105fae6663edaf4bb4d3007a6625090c95
   sources:
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch.11 Frequency-Severity Techniques, PDF pp.202-205 (printed 196-199): Auto Collision Insurer half-year example, seasonality in closed counts, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 0
@@ -77,7 +77,7 @@ Age-to-age factors need not be above 1.000. Salvage and subrogation recoveries, 
 
 ## Seasonality
 
-With accident periods shorter than a year, factors can differ with the part of the year a period covers. In Friedland's private passenger collision example, accident half-years ending in December close fewer of their claims by six months than those ending in June. An average across all periods blends two patterns. Each season's factor is then the average of the factors of that season's accident periods, applied to the periods of that season.
+With accident periods shorter than a year, factors can differ with the part of the year a period covers. In Friedland's private passenger collision example, accident half-years ending in December close fewer of their claims by six months than those ending in June. An average across all periods blends two patterns. Each season's factor is then the average of the factors of that season's accident periods, applied to the periods of that season. Each accident period is projected to ultimate from its own latest value. An accident year's ultimate is the sum of the projected ultimates of the periods within it.
 
 ## Age-to-age factors in Mack's model (Exam 7)
 

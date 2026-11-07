@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:c290af56ff9fefb7b3fbc5453f671f8e0446e571e73440e250634ab756809c02
+  content_hash: sha256:3dafcae1c046f053c232f2e6b069bb40e762e2e9ee55b9413463235e47d254fe
   sources:
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 4 pp. 49-51, 58 (PDF pp. 61-63, 70); Ch. 6 p. 101 (PDF p. 113); App. D p. D-2 (PDF p. 395), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
   open_findings: 0
@@ -71,6 +71,8 @@ Expected loss varies by many other factors too. Those become rating or underwrit
 | Physicians professional liability | Number of physician-years |
 | Professional liability | Number of professionals |
 | Personal articles floater | Value of the item |
+
+Self-insurers collect no premium, so their reserving uses other observable exposures. Friedland lists sales or square footage for general liability of corporations, and average occupied beds and outpatient visits for hospital professional liability.
 
 ## Inflation-sensitive exposure bases
 

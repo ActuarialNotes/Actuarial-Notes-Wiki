@@ -17,6 +17,10 @@ import type { PdfReaderDoc } from '@/hooks/usePdfReader'
 import { useFiguresCollapsed } from '@/hooks/useFiguresCollapsed'
 import { figureLabel, pictureImages } from '@/lib/conceptFigures'
 
+// A section heading is drawn at the pane title's size (text-lg, sm:text-xl
+// in the header above), so a page's `##` never reads bigger than its name.
+const POPUP_HEADING_CLASS = 'prose-h2:text-lg sm:prose-h2:text-xl'
+
 /**
  * The open page of the concept popup's stack: its header (the title, which is
  * the action menu's one trigger, plus the figures toggle and Listen) and its body (the article or the
@@ -343,7 +347,7 @@ export function ConceptPagePanel({
               )}
               <WikiArticle
                 markdown={processedContent ?? content}
-                className={resourceMeta ? RESOURCE_ARTICLE_CLASS : '[--sticky-heading-top:-1rem]'}
+                className={`${POPUP_HEADING_CLASS} ${resourceMeta ? RESOURCE_ARTICLE_CLASS : '[--sticky-heading-top:-1rem]'}`}
                 outlineItems={!!resourceMeta}
                 // A concept's section headings pin to the top of the pane while
                 // their section is read — flush with its edge, over the body's

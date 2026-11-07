@@ -205,6 +205,20 @@ $S_n$ (an arrival time) and $S(t)$ (an aggregate loss) never appear on the same
 page. Keep the Exam P table for events and probabilities ($E$, $P(E)$,
 $E[X]$, $\text{Var}(X)$).
 
+**Exam MAS-II** — credibility (set 2026-11-07, from the classical credibility
+pages; the vault's $p$ and $k$, shared with Exam 5 and FAM, in place of Tse's
+$1 - \alpha$):
+
+| Thing | Written | Not |
+| --- | --- | --- |
+| probability level; range parameter | $p$; $k$ | $1 - \alpha$, $r$ |
+| normal quantile | $z_{(1+p)/2}$ | $z_{\alpha/2}$ |
+| base standard (Poisson claim counts) | $\lambda_0 = (z_{(1+p)/2}/k)^2$ | $\lambda_F$ |
+| full credibility standard; observed volume | $n_F$; $n$, in the same unit | $n_{\text{full}}$ |
+| claim count of one exposure; claim size | $N$; $X$, with $\mathrm{CV}_X = \sqrt{\text{Var}(X)}/E[X]$ | $\sigma_X/\mu_X$ |
+| credibility; observed experience; complement | $Z$; $D$; $M$ | $\bar{X}$, $\mu_0$ |
+| credibility-weighted estimate | $U = Z D + (1 - Z) M$ | |
+
 Other exams:
 - **Exam FM:** `i`, `v`, `d`, `\delta`, `a_{\overline{n}|}`, `s_{\overline{n}|}`,
   `\ddot{a}_{\overline{n}|}`.

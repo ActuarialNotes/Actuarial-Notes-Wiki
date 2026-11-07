@@ -2515,3 +2515,35 @@ summary .katex-display,
   background-color: var(--sticky-heading-bg, hsl(var(--background)));
   scroll-margin-top: max(var(--sticky-heading-top, 0px), 0px);
 }
+
+/* ── Callout streaming in ────────────────────────────────────────────────
+   A folded callout opened by the reader writes itself in, like an AI
+   answer streaming: a soft edge sweeps down the body, the text behind it
+   sharpening out of a blur. Restarts on every open (a `hidden` body leaves
+   the render tree, so its animation replays). See FoldingCallout. */
+@property --stream-reveal {
+  syntax: '<length-percentage>';
+  inherits: false;
+  initial-value: 200%;
+}
+
+@keyframes callout-stream {
+  from { --stream-reveal: -4rem; filter: blur(3px); opacity: 0.4; }
+  60% { filter: blur(0); opacity: 1; }
+  to { --stream-reveal: 200%; filter: blur(0); opacity: 1; }
+}
+
+.callout-stream:not([hidden]) {
+  --stream-edge: 4rem;
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(var(--stream-reveal) - var(--stream-edge)), transparent calc(var(--stream-reveal) + var(--stream-edge)));
+  mask-image: linear-gradient(to bottom, #000 calc(var(--stream-reveal) - var(--stream-edge)), transparent calc(var(--stream-reveal) + var(--stream-edge)));
+  animation: callout-stream 0.9s cubic-bezier(0.3, 0, 0.4, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .callout-stream:not([hidden]) {
+    animation: none;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}

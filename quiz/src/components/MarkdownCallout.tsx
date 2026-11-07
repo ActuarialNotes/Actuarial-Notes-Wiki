@@ -490,6 +490,12 @@ function Callout({ type, fold, title, titleRest = [], children }: CalloutProps) 
 function FoldingCallout({ type, fold, title, titleRest = [], style, pill, children }: CalloutProps & { style: CalloutStyle; pill?: string }) {
   const collapsible = fold !== ''
   const [open, setOpen] = useState(fold !== '-')
+  // Once the reader has toggled it, the body streams in on every open, like
+  // text being written (`.callout-stream` in index.css). A body open on first
+  // render doesn't animate — nobody asked for it.
+  const [toggled, setToggled] = useState(false)
+  const toggle = () => { setToggled(true); setOpen(v => !v) }
+  const streamClass = toggled ? ' callout-stream' : ''
   const Icon = style.icon
   const hasBody = Children.count(children) > 0
 
@@ -553,7 +559,7 @@ function FoldingCallout({ type, fold, title, titleRest = [], style, pill, childr
             <button
               type="button"
               data-callout-toggle
-              onClick={() => setOpen(v => !v)}
+              onClick={toggle}
               className="relative z-10 w-full px-5 py-3 text-left hover:bg-accent/30 transition-colors duration-150"
               aria-expanded={open}
             >
@@ -564,7 +570,7 @@ function FoldingCallout({ type, fold, title, titleRest = [], style, pill, childr
           )}
         </div>
         {hasBody && (
-          <div data-callout-body hidden={!open} className={contentClasses}>
+          <div data-callout-body hidden={!open} className={`${contentClasses}${streamClass}`}>
             {children}
           </div>
         )}
@@ -578,7 +584,7 @@ function FoldingCallout({ type, fold, title, titleRest = [], style, pill, childr
         <button
           type="button"
           data-callout-toggle
-          onClick={() => setOpen(v => !v)}
+          onClick={toggle}
           className={`w-full ${headerClass} text-left ${hoverClass} transition-colors duration-150`}
           aria-expanded={open}
         >
@@ -588,7 +594,7 @@ function FoldingCallout({ type, fold, title, titleRest = [], style, pill, childr
         <div className={headerClass}>{headerContent}</div>
       )}
       {hasBody && (
-        <div data-callout-body hidden={!open} className={contentClasses}>
+        <div data-callout-body hidden={!open} className={`${contentClasses}${streamClass}`}>
           {children}
         </div>
       )}

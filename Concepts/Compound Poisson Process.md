@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:af7eb987f3727c2e147415a0ec4423f65e75c85129a07ce4c535f32407840612
+  content_hash: sha256:994101268c6c5e495e64bd39f08c36795654ecdc25955d7e47827c1f8b2d3878
   sources:
     - "Daniel, \"Poisson processes (and mixture distributions)\", CAS Study Note (June 2008) — MAS-I syllabus reading, Def. 1.8 pp.6-7 (S(t) = Σ X_j, X_j iid and independent of N), Fact 1.11 p.7 (E[S] = E[N]E[X]; Var[S] = E[N]Var[X] + Var[N]E[X]² = E[N]E[X²]), Example 1.12 p.8 (normal approximation when E[N(t)] is large), §1.4.2 p.14 (sum of compound Poisson processes: rate λ1 + λ2, severity the rate-weighted mixture), Fact 1.13 p.9 (thinning), sha256:e345451e9daae82b400aed77f2da0c96c361ed4fbdfd22456b8f711ca0d50888 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Daniel_1.pdf"
     - "Siegrist, Random (randomservices.org, HTML fetched 2026-10-04), ch.13 The Poisson Process, 'Compound Poisson Processes' (definition; mean μrt, variance (μ² + σ²)rt; MGF exp(rt[G(s) − 1]); thinning as a compound process), sha256:6c5a27a1dc417fbb651a6271f8bb72c6e6f9790ae3c59c781f8f51c29961afd6 — https://www.randomservices.org/random/poisson/Compound.html"
@@ -17,35 +17,62 @@ verification:
   log: .verify/Concepts/Compound Poisson Process.md
 ---
 
-A **Compound Poisson Process** adds a random amount to each event of a [[Poisson Process]]: if claims arrive at rate $\lambda$ and the $i$-th claim costs $X_i$, the aggregate loss by time $t$ is the random sum $S(t) = \sum_{i=1}^{N(t)} X_i$. It is the standard model for total claims on a portfolio and the process form of the [[Aggregate Loss Model]].
-
-> $$S(t) = \sum_{i=1}^{N(t)} X_i, \qquad N(t) \sim \text{Poi}(\lambda t)$$
-
-> $$E[S(t)] = \lambda t\, E[X], \qquad \text{Var}(S(t)) = \lambda t\, E[X^2]$$
-
-- The severities $X_1, X_2, \ldots$ are i.i.d., independent of the counting process $N(t)$
-- The variance uses the **second moment** $E[X^2]$, not the variance of $X$ — this falls out of the compound-variance formula $\text{Var}(S) = E[N]\text{Var}(X) + \text{Var}(N)E[X]^2$ with $E[N] = \text{Var}(N) = \lambda t$
-- The sum of independent compound Poisson processes is compound Poisson with rate $\lambda = \sum \lambda_j$ and severity distribution the $\lambda$-weighted mixture of the $F_j$
-- **Thinning** carries over: claims of a given type (e.g. those exceeding a [[Deductible]]) form their own compound Poisson process, with rate $\lambda P(X > d)$ and severity distributed as the conditional excess
-- The moment generating function is $M_{S(t)}(r) = \exp\{\lambda t\,[M_X(r) - 1]\}$, which is how higher moments and approximations are derived
-- $S(t)$ is not Poisson and is usually right-skewed; for large $\lambda t$ a Normal approximation is workable, but the skewness $\lambda t E[X^3] / (\lambda t E[X^2])^{3/2}$ vanishes only slowly
-
 ![[Media/Figures/Compound_Poisson_Process.svg|340]]
 
-> [!example]- Mean and Variance of Annual Aggregate Losses {Example}
-> Claims arrive at $\lambda = 50$ per year. Severity is [[Exponential Distribution|exponential]] with mean $2{,}000$. Find the mean and standard deviation of aggregate losses in one year.
->
-> > [!answer]-
-> > For an exponential with mean $\theta = 2{,}000$: $E[X] = 2{,}000$ and $E[X^2] = 2\theta^2 = 8 \times 10^6$.
-> > $$E[S(1)] = 50 \times 2{,}000 = 100{,}000$$
-> > $$\text{Var}(S(1)) = 50 \times 8 \times 10^6 = 4 \times 10^8$$
-> > $$\text{SD}(S(1)) = \sqrt{4 \times 10^8} = 20{,}000$$
+A **Compound Poisson Process** is a [[Stochastic Processes|stochastic process]] $\{S(t), t \ge 0\}$ that adds a random amount for each event of a [[Poisson Process|Poisson process]]. If claims occur as a Poisson process $N(t)$ with rate $\lambda$ and the $i$th claim has size $X_i$, then the aggregate loss by time $t$ is
 
-> [!example]- Aggregate Losses Above a Deductible {Example}
-> With $\lambda = 50$ and exponential severity of mean $2{,}000$, a $1{,}000$ [[Deductible]] is applied to every claim. Find the mean aggregate payment.
->
-> > [!answer]-
-> > Claims that pierce the deductible are a thinned Poisson process with rate
-> > $$\lambda' = 50 \times P(X > 1{,}000) = 50\,e^{-1000/2000} = 50\,e^{-0.5} \approx 30.33$$
-> > By the memoryless property, each such payment is again exponential with mean $2{,}000$, so
-> > $$E[S'] = 30.33 \times 2{,}000 \approx 60{,}650$$
+> $$S(t) = \sum_{i=1}^{N(t)} X_i$$
+
+- The claim sizes $X_1, X_2, \ldots$ are independent and identically distributed, and they are independent of $N(t)$.
+- $S(t) = 0$ when $N(t) = 0$.
+
+The compound Poisson process is the process form of the [[Aggregate Loss Model|aggregate loss model]], with a Poisson number of claims. Let $X$ be a random variable with the common distribution of the claim sizes. The mean of the aggregate loss is
+
+> $$E[S(t)] = \lambda t\, E[X]$$
+
+The variance of an aggregate loss with $N(t)$ independent of the claim sizes is
+
+> $$\text{Var}(S(t)) = E[N(t)]\,\text{Var}(X) + \text{Var}(N(t))\,(E[X])^2$$
+
+Because $E[N(t)] = \text{Var}(N(t)) = \lambda t$, the variance of a compound Poisson process simplifies to
+
+> $$\text{Var}(S(t)) = \lambda t\, E[X^2]$$
+
+- $E[X^2]$ is the second moment of the claim size, which equals $\text{Var}(X) + (E[X])^2$.
+
+> [!example]- Claims arrive as a Poisson process at a rate of 50 per year. Claim sizes are exponential with mean 2,000. What are the mean and the standard deviation of the aggregate loss in one year? {Example}
+> - For an [[Exponential Distribution|exponential distribution]] with mean $\theta = 2{,}000$, $E[X] = 2{,}000$ and $E[X^2] = 2\theta^2 = 8{,}000{,}000$.
+> - The mean of the aggregate loss is $E[S(1)] = 50 \times 2{,}000 = 100{,}000$.
+> - The variance of the aggregate loss is $\text{Var}(S(1)) = 50 \times 8{,}000{,}000 = 400{,}000{,}000$.
+> - The standard deviation of the aggregate loss is $\sqrt{400{,}000{,}000} = 20{,}000$.
+
+## Aggregate payments with a deductible
+
+With an ordinary [[Deductible|deductible]] $d$, only the claims with $X > d$ produce a payment. By [[Poisson Thinning|thinning]], these claims form a Poisson process with rate
+
+> $$\lambda\, P(X > d)$$
+
+The payment on each such claim is $X - d$, given $X > d$. The aggregate payments therefore form a compound Poisson process with this rate, and its mean and variance follow from the formulas above with the payment in place of $X$.
+
+> [!example]- Claims arrive as a Poisson process at a rate of 50 per year, and claim sizes are exponential with mean 2,000. Each claim is subject to a deductible of 1,000. What are the mean and the variance of the aggregate payments in one year? {Example}
+> - The rate of claims above the deductible is $50\,P(X > 1{,}000) = 50\,e^{-1{,}000/2{,}000} = 30.33$ per year.
+> - Because the exponential distribution is memoryless, the payment $X - 1{,}000$ given $X > 1{,}000$ is exponential with mean 2,000.
+> - The mean of the aggregate payments is $30.33 \times 2{,}000 = 60{,}653$.
+> - The second moment of a payment is $2 \times 2{,}000^2 = 8{,}000{,}000$, so the variance of the aggregate payments is $30.33 \times 8{,}000{,}000 = 242{,}612{,}264$.
+
+## Sum of independent compound Poisson processes
+
+If $S_1(t)$ and $S_2(t)$ are independent compound Poisson processes with rates $\lambda_1$ and $\lambda_2$, then their sum is a compound Poisson process with rate
+
+> $$\lambda = \lambda_1 + \lambda_2$$
+
+A claim of the combined process has the claim size distribution of the first process with probability $\lambda_1 / \lambda$ and that of the second process with probability $\lambda_2 / \lambda$.
+
+> [!example]- Physical damage claims arrive at a rate of 30 per year with mean size 1,000. Liability claims arrive at a rate of 10 per year with mean size 5,000. The two are independent compound Poisson processes. What is the mean claim size of the combined process, and what is the mean aggregate loss in one year? {Example}
+> - The combined process has rate $\lambda = 30 + 10 = 40$ per year.
+> - A claim is a physical damage claim with probability $30/40 = 0.75$ and a liability claim with probability $10/40 = 0.25$.
+> - The mean claim size is $0.75 \times 1{,}000 + 0.25 \times 5{,}000 = 2{,}000$.
+> - The mean aggregate loss in one year is $40 \times 2{,}000 = 80{,}000$.
+
+> [!trap] Using the variance of the claim size instead of its second moment
+> The variance of a compound Poisson process is the expected number of claims multiplied by $E[X^2]$, not by $\text{Var}(X)$. With 50 claims a year and exponential claim sizes with mean 2,000, $\lambda\,\text{Var}(X)$ gives $200{,}000{,}000$, but the correct variance is $\lambda\,E[X^2] = 400{,}000{,}000$.

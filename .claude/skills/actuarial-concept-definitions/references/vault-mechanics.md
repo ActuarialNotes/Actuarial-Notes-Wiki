@@ -156,6 +156,25 @@ as they are rewritten):
 $F$ is both the second event and the cdf. A page that needs both writes the
 events $E_1, E_2$ instead.
 
+**Exam MAS-I** — stochastic processes (set 2026-11-07, from the Poisson
+process pages; Ross's notation, with Loss Models' $S$ and $X$ for aggregate
+losses):
+
+| Thing | Written | Not |
+| --- | --- | --- |
+| counting process | $\{N(t), t \ge 0\}$, $N(t)$ the number of events by time $t$ | |
+| rate of a Poisson process | $\lambda$; of two processes $\lambda_1$, $\lambda_2$ | $\Lambda$ for a constant rate |
+| intensity function; mean value function | $\lambda(t)$; $m(t) = \int_0^t \lambda(u)\,du$ | $\Lambda(t)$ |
+| interarrival time; time of the $n$th event | $T_n$; $S_n = T_1 + \cdots + T_n$ | $W_n$, $\tau_n$ |
+| thinning probability | $p$, or $p(t)$ when it changes over time | |
+| aggregate loss by time $t$; claim size | $S(t) = \sum_{i=1}^{N(t)} X_i$; $X_i$, $X$ | $Y_i$, $W$ |
+| ordinary deductible | $d$ | |
+| exponential mean | $\theta$ | $\beta$ |
+
+$S_n$ (an arrival time) and $S(t)$ (an aggregate loss) never appear on the same
+page. Keep the Exam P table for events and probabilities ($E$, $P(E)$,
+$E[X]$, $\text{Var}(X)$).
+
 Other exams:
 - **Exam FM:** `i`, `v`, `d`, `\delta`, `a_{\overline{n}|}`, `s_{\overline{n}|}`,
   `\ddot{a}_{\overline{n}|}`.

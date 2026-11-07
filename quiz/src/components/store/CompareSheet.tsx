@@ -1,37 +1,31 @@
-// The comparison table — one exam's study materials side by side, so a reader
-// choosing between a manual, a video course and a practice bank can read
-// across rather than open twelve sheets.
+// The comparison — one exam's study materials, read **question by question**:
+// each thing the sellers state (the price, the kind, how many options, what's
+// included, every fact any of them prints — "Format", "Access", "By" — the
+// exam windows, the reviews, the date the page was read) is a section, and
+// under it every product answers in its own line, keyed by its number. Nothing
+// scrolls sideways, so it reads the same on a phone as on a desk.
 //
-// A column per product (cheapest first within each kind, `comparisonFor`), a
-// row per thing the sellers state: the kind, the price, how many options it is
-// sold in, what's included, every fact any of them prints ("Format",
-// "Access", "By", "Edition"), the reviews and the date the page was read. A
-// cell a seller doesn't fill is left blank — the Store's rule, transcribed
-// never constructed (docs/store.md) — and the table says so in a dash rather
-// than guessing.
+// The price section draws every range on one scale (`lib/storeKit.ts`), so a
+// $69–$99 bank and a $222–$794 course are told apart at a glance, and marks the
+// lowest. A line a seller doesn't fill is a dash, never a guess — the Store's
+// rule, transcribed never constructed (docs/store.md).
 //
-// The product names open the full sheet; each column ends in its seller's
-// link. Same shell as the product sheet (`useStoreDialog`).
-//
-// On a phone the table is one real table, laid out for a thumb: the row-label
-// column (a quarter of the screen, scrolling nothing) becomes a band above
-// each row whose label stays put while the columns scroll sideways, the
-// columns are exactly half the pane, so two sit side by side and
-// scrolling snaps a column at a time, the sticky product heads drop their picture, and the kind pills
-// scroll in one line. From `sm` up it is the classic grid with a pinned
-// label column.
+// Opened from the kit, it holds one step's kinds (`kinds`, titled by the
+// step); from the shelf, every study material of the exam, narrowed by the
+// kind pills. Product names open the full sheet; it ends in each seller's link.
+// Same shell as the product sheet (`useStoreDialog`).
 
-import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from 'react'
+import { useId, useMemo, useState, type ReactNode } from 'react'
 import { ArrowUpRight, X } from 'lucide-react'
 import { OverlayPortal } from '@/components/ui/OverlayPortal'
 import { CheckMark } from '@/components/CheckMark'
 import { ExamLogo } from '@/components/ExamLogo'
-import { ArtStage, StudyArt } from '@/components/store/ProductArt'
 import { SellerLogo } from '@/components/store/SellerLogo'
 import { useStoreDialog } from '@/components/store/useStoreDialog'
 import { STORE_SELLERS } from '@/data/storeCatalog'
 import { REVIEW_SOURCES, STORE_REVIEWS } from '@/data/storeReviews'
 import { trackStoreOutbound } from '@/lib/analytics'
+import { examAccentStyle } from '@/lib/examColors'
 import {
   STUDY_KIND_LABEL,
   STUDY_KIND_ORDER,
@@ -39,7 +33,6 @@ import {
   comparisonFor,
   formatPrice,
   lowestPrice,
-  priceSummary,
   reviewTally,
   reviewsFor,
   shortDate,
@@ -49,15 +42,18 @@ import {
   type StudyItem,
   type StudyKind,
 } from '@/lib/store'
+import { priceBar, priceScale, priceSpan } from '@/lib/storeKit'
 import { cn } from '@/lib/utils'
 
-/** How many of a product's "what's included" lines a cell shows before "+N more". */
-const INCLUDES_SHOWN = 5
+/** How many of a product's "what's included" lines a section shows before "+N more". */
+const INCLUDES_SHOWN = 4
 
 export function CompareSheet({
   items,
   exams,
   examKey,
+  kinds: only = null,
+  title = null,
   onExam,
   onOpen,
   onClose,
@@ -66,6 +62,10 @@ export function CompareSheet({
   /** The exams with something to compare, in ladder order. */
   exams: readonly StoreExam[]
   examKey: string
+  /** Only these kinds — a kit step's (`comparableKinds`). Null for every study material. */
+  kinds?: readonly StudyKind[] | null
+  /** The kit step it was opened from, as the heading. */
+  title?: string | null
   onExam: (key: string) => void
   /** Open a product's full sheet (the comparison closes behind it). */
   onOpen: (item: StoreItem) => void
@@ -75,14 +75,26 @@ export function CompareSheet({
   const { panelRef, closeRef } = useStoreDialog(onClose)
   const [kind, setKind] = useState<StudyKind | null>(null)
 
-  const all = useMemo(() => comparisonFor(items, examKey), [items, examKey])
+  const all = useMemo(
+    () => comparisonFor(items, examKey).filter(i => !only || only.includes(i.study.kind)),
+    [items, examKey, only],
+  )
   const kinds = STUDY_KIND_ORDER.filter(k => all.some(i => i.study.kind === k))
   const shown = kind && kinds.includes(kind) ? all.filter(i => i.study.kind === kind) : all
   const labels = comparisonFactLabels(shown.map(i => i.study))
   const cheapest = Math.min(...shown.map(i => lowestPrice(i) ?? Infinity))
+  const scale = priceScale(shown)
   const examName = exams.find(e => e.key === examKey)?.name ?? examKey
-  const span = shown.length
-  const { scrollerRef, pane } = usePhoneColumns()
+  const key = (item: StudyItem) => shown.indexOf(item) + 1
+
+  /** A section: one question, every product's answer under it. */
+  const section = (label: string, answer: (item: StudyItem) => ReactNode) => (
+    <Section key={label} label={label}>
+      {shown.map(item => (
+        <Line key={item.id} n={key(item)}>{answer(item)}</Line>
+      ))}
+    </Section>
+  )
 
   return (
     <OverlayPortal>
@@ -96,12 +108,13 @@ export function CompareSheet({
         <div
           ref={panelRef}
           data-testid="store-compare-sheet"
-          className="relative z-10 flex h-[92dvh] w-full flex-col overflow-hidden rounded-t-2xl bg-card text-card-foreground shadow-2xl sm:h-auto sm:max-h-[90vh] sm:max-w-6xl sm:rounded-2xl"
+          style={examAccentStyle(examKey)}
+          className="relative z-10 flex h-[92dvh] w-full flex-col overflow-hidden rounded-t-2xl bg-background text-foreground shadow-2xl sm:h-auto sm:max-h-[90vh] sm:max-w-2xl sm:rounded-2xl"
         >
           <header className="shrink-0 space-y-2.5 border-b border-border px-5 pb-3 pt-4 sm:space-y-3">
             <div className="flex items-start gap-3">
-              <h2 id={titleId} className="min-w-0 flex-1 text-lg font-semibold leading-tight tracking-tight">
-                Compare study materials
+              <h2 id={titleId} className="min-w-0 flex-1 text-xl font-bold leading-tight tracking-tight">
+                {title ?? 'Compare study materials'}
                 <span className="block text-sm font-normal text-muted-foreground">
                   {examName} · {shown.length} of {all.length}
                 </span>
@@ -148,8 +161,8 @@ export function CompareSheet({
                     onClick={() => setKind(k)}
                     data-sound="select"
                     className={cn(
-                      'shrink-0 whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-medium transition-colors sm:px-2.5 sm:py-1',
-                      kind === k ? 'bg-primary text-primary-foreground' : 'bg-accent hover:bg-accent/80',
+                      'shrink-0 whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-medium transition-colors',
+                      kind === k ? 'bg-pick text-pick-foreground' : 'bg-accent hover:bg-accent/80',
                     )}
                   >
                     {k ? STUDY_KIND_LABEL[k] : 'All kinds'}
@@ -159,96 +172,77 @@ export function CompareSheet({
             )}
           </header>
 
-          {/* One scroller for both axes, so the sticky heads and labels have a
-              single frame to stick in. Its measured width sets the phone
-              columns (`--col`, half of it) and the disclaimer's (`--pane`) in
-              pixels, so no browser has to resolve container units on a table cell. */}
-          <div
-            ref={scrollerRef}
-            style={{ '--pane': `${pane}px`, '--col': `${pane / 2}px`, '--n': span } as CSSProperties}
-            className="min-h-0 flex-1 overflow-auto overscroll-contain max-sm:snap-x max-sm:snap-mandatory"
-          >
-            <div className="w-max min-w-full">
-              <table className="min-w-full border-separate border-spacing-0 text-left text-sm max-sm:table-fixed max-sm:w-[calc(var(--col)*var(--n))] sm:w-max">
-                <thead>
-                  <tr>
-                    <th scope="col" className="sticky left-0 top-0 z-30 hidden w-36 min-w-[9rem] border-b border-r border-border bg-card px-3 py-2.5 sm:table-cell">
-                      <span className="sr-only">Product</span>
-                    </th>
-                    {shown.map(item => (
-                      <th key={item.id} scope="col" className={cn(COLUMN, 'sticky top-0 z-20 border-b border-border bg-card p-3 align-top font-normal')}>
-                        <ProductHead item={item} onOpen={() => onOpen(item)} />
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  <Row label="Kind" span={span}>{shown.map(i => <Cell key={i.id}>{STUDY_KIND_LABEL[i.study.kind]}</Cell>)}</Row>
-                  <Row label="Price" span={span}>
-                    {shown.map(i => (
-                      <Cell key={i.id}>
-                        <PriceCell item={i} cheapest={shown.length > 1 && lowestPrice(i) === cheapest} />
-                      </Cell>
-                    ))}
-                  </Row>
-                  <Row label="Options" span={span}>
-                    {shown.map(i => {
-                      const options = i.study.offer.options ?? []
-                      return <Cell key={i.id}>{options.length > 1 ? `${options.length} to choose from` : options.length === 1 ? options[0]!.name : null}</Cell>
-                    })}
-                  </Row>
-                  <Row label="What’s included" span={span}>
-                    {shown.map(i => (
-                      <Cell key={i.id}>
-                        <Included lines={i.study.includes ?? []} />
-                      </Cell>
-                    ))}
-                  </Row>
-                  {labels.map(label => (
-                    <Row key={label} label={label === 'By' ? 'Author' : label} span={span}>
-                      {shown.map(i => (
-                        <Cell key={i.id}>{i.study.facts?.filter(f => f.label === label).map(f => f.value).join('; ') || null}</Cell>
-                      ))}
-                    </Row>
-                  ))}
-                  <Row label="Exam windows" span={span}>
-                    {shown.map(i => <Cell key={i.id}>{i.study.windows?.length ? i.study.windows.join('; ') : null}</Cell>)}
-                  </Row>
-                  <Row label="Reviews" span={span}>
-                    {shown.map(i => (
-                      <Cell key={i.id}>
-                        <ReviewsCell item={i} />
-                      </Cell>
-                    ))}
-                  </Row>
-                  <Row label="Price checked" span={span}>
-                    {shown.map(i => <Cell key={i.id}>{shortDate(i.study.offer.checked)}</Cell>)}
-                  </Row>
-                  <Row label="" span={span}>
-                    {shown.map(i => (
-                      <Cell key={i.id}>
-                        <a
-                          href={i.study.offer.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          data-sound="open"
-                          onClick={() => trackStoreOutbound({ product: i.id, seller: i.study.offer.sellerId, aisle: i.aisle })}
-                          className="inline-flex min-h-9 w-full items-center justify-center gap-1 rounded-md bg-primary px-3 py-1.5 text-center text-xs font-semibold text-primary-foreground transition-colors hover:bg-primary/90 sm:w-auto"
+          <div className="min-h-0 flex-1 space-y-5 overflow-y-auto overscroll-contain px-4 py-4 sm:px-5" data-testid="store-compare-body">
+            {shown.length === 0 ? (
+              <p className="px-1 text-sm text-muted-foreground">Nothing to compare for {examName} yet.</p>
+            ) : (
+              <>
+                <ol className="overflow-hidden rounded-2xl bg-card" aria-label="Products">
+                  {shown.map((item, i) => {
+                    const seller = STORE_SELLERS[item.study.offer.sellerId]
+                    return (
+                      <li key={item.id} className={cn('flex items-center gap-3 px-4 py-3', i > 0 && 'border-t border-border')}>
+                        <Key n={i + 1} />
+                        <button
+                          type="button"
+                          onClick={() => onOpen(item)}
+                          className="min-w-0 flex-1 text-left text-sm font-semibold leading-snug underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                         >
-                          {STORE_SELLERS[i.study.offer.sellerId]?.short ?? 'Seller'}’s page
-                          <ArrowUpRight className="h-3.5 w-3.5 shrink-0" aria-hidden />
-                        </a>
-                      </Cell>
-                    ))}
-                  </Row>
-                </tbody>
-              </table>
+                          {item.name}
+                        </button>
+                        {seller && (
+                          <span className="flex max-w-[40%] shrink-0 items-center gap-1.5 text-xs text-muted-foreground">
+                            <SellerLogo seller={seller} size="xs" />
+                            <span className="truncate">{seller.name}</span>
+                          </span>
+                        )}
+                      </li>
+                    )
+                  })}
+                </ol>
 
-              {/* As wide as the visible pane and held at its left edge, so the
-                  notice stays readable however far the table is scrolled. */}
-              <div className="sticky left-0 w-[var(--pane)] space-y-1.5 px-5 py-4 text-[11px] leading-relaxed text-muted-foreground" data-testid="store-disclaimer">
-                {storeDisclaimer(null, null).map(p => <p key={p}>{p}</p>)}
-              </div>
+                <Section label="Price" note={scale ? `On one scale, $0 to ${formatPrice({ amount: scale, currency: 'USD' })}` : undefined}>
+                  {shown.map(item => (
+                    <Line key={item.id} n={key(item)}>
+                      <PriceAnswer item={item} scale={scale} cheapest={shown.length > 1 && lowestPrice(item) === cheapest} />
+                    </Line>
+                  ))}
+                </Section>
+                {kinds.length > 1 && !kind && section('Kind', i => STUDY_KIND_LABEL[i.study.kind])}
+                {section('Options', i => {
+                  const options = i.study.offer.options ?? []
+                  return options.length > 1 ? `${options.length} to choose from` : options.length === 1 ? options[0]!.name : null
+                })}
+                {section('What’s included', i => <Included lines={i.study.includes ?? []} />)}
+                {labels.map(label =>
+                  section(label === 'By' ? 'Author' : label, i => i.study.facts?.filter(f => f.label === label).map(f => f.value).join('; ') || null),
+                )}
+                {section('Exam windows', i => (i.study.windows?.length ? i.study.windows.join('; ') : null))}
+                {section('Reviews', i => <ReviewsAnswer item={i} />)}
+                {section('Price checked', i => shortDate(i.study.offer.checked))}
+
+                <Section label="Where to buy">
+                  {shown.map(item => (
+                    <Line key={item.id} n={key(item)}>
+                      <a
+                        href={item.study.offer.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        data-sound="open"
+                        onClick={() => trackStoreOutbound({ product: item.id, seller: item.study.offer.sellerId, aisle: item.aisle })}
+                        className="inline-flex items-center gap-1 font-semibold underline-offset-2 hover:underline"
+                      >
+                        {STORE_SELLERS[item.study.offer.sellerId]?.name ?? 'The seller'}’s page
+                        <ArrowUpRight className="h-3.5 w-3.5 shrink-0" aria-hidden />
+                      </a>
+                    </Line>
+                  ))}
+                </Section>
+              </>
+            )}
+
+            <div className="space-y-1.5 px-1 pb-2 text-[11px] leading-relaxed text-muted-foreground" data-testid="store-disclaimer">
+              {storeDisclaimer(null, null).map(p => <p key={p}>{p}</p>)}
             </div>
           </div>
         </div>
@@ -257,149 +251,83 @@ export function CompareSheet({
   )
 }
 
-/**
- * The phone layout's two measurements and its snapping. The pane's width is
- * read off the scroller (and kept current) so a column is exactly half of it;
- * and because not every browser snaps to a table cell (`scroll-snap` is only
- * a hint in Safari), a scroll that comes to rest between columns is nudged to
- * the nearest one, so the reader always sees a whole pair.
- */
-function usePhoneColumns() {
-  const scrollerRef = useRef<HTMLDivElement>(null)
-  const [pane, setPane] = useState(0)
-
-  useLayoutEffect(() => {
-    const el = scrollerRef.current
-    if (!el) return
-    const measure = () => setPane(el.clientWidth)
-    measure()
-    const observer = new ResizeObserver(measure)
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [])
-
-  useEffect(() => {
-    const el = scrollerRef.current
-    if (!el) return
-    let timer: number | undefined
-    const settle = () => {
-      if (window.matchMedia('(min-width: 640px)').matches) return
-      const column = el.clientWidth / 2
-      const last = el.scrollWidth - el.clientWidth
-      const target = Math.min(Math.round(el.scrollLeft / column) * column, last)
-      if (Math.abs(target - el.scrollLeft) < 1) return
-      const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-      el.scrollTo({ left: target, behavior: still ? 'auto' : 'smooth' })
-    }
-    const onScroll = () => {
-      window.clearTimeout(timer)
-      timer = window.setTimeout(settle, 120)
-    }
-    el.addEventListener('scroll', onScroll, { passive: true })
-    return () => {
-      window.clearTimeout(timer)
-      el.removeEventListener('scroll', onScroll)
-    }
-  }, [])
-
-  return { scrollerRef, pane }
-}
-
-/** A product's column: exactly half the pane on a phone, so two always sit side by side and a swipe lands on the next pair; a fixed width from `sm`. */
-const COLUMN = 'max-sm:w-[var(--col)] max-sm:snap-always max-sm:snap-start max-sm:border-r max-sm:border-border sm:w-52 sm:min-w-[13rem]'
-
-/** The row's label — pinned at the left on `sm`+; on a phone it is the band above the row instead. */
-const ROW_HEAD =
-  'max-sm:hidden sm:sticky sm:left-0 sm:z-10 sm:w-36 sm:min-w-[9rem] sm:border-b sm:border-r sm:border-border sm:bg-card sm:px-3 sm:py-2.5 sm:text-left sm:align-top sm:text-xs sm:font-semibold sm:text-muted-foreground'
-
-function Row({ label, span, children }: { label: string; span: number; children: ReactNode }) {
+/** A product's number, the key every section's lines are read by. */
+function Key({ n }: { n: number }) {
   return (
-    <>
-      {/* Phone only: the label as a band over the row. The label sits in a
-          sticky span inside a cell as wide as the table, so it stays at the
-          left edge while the columns scroll under it. */}
-      {label && (
-        <tr className="sm:hidden">
-          <td colSpan={span} className="border-b border-border bg-muted/60 p-0">
-            <span className="sticky left-0 inline-block px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-              {label}
-            </span>
-          </td>
-        </tr>
-      )}
-      <tr>
-        <th scope="row" className={ROW_HEAD}>
-          {label}
-        </th>
-        {children}
-      </tr>
-    </>
+    <span aria-hidden className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-bold tabular-nums">
+      {n}
+    </span>
   )
 }
 
-function Cell({ children }: { children: ReactNode }) {
+function Section({ label, note, children }: { label: string; note?: string; children: ReactNode }) {
+  return (
+    <section aria-label={label}>
+      <h3 className="flex items-baseline justify-between gap-2 px-4 pb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+        {label}
+        {note && <span className="font-medium normal-case tracking-normal">{note}</span>}
+      </h3>
+      <ul className="overflow-hidden rounded-2xl bg-card">{children}</ul>
+    </section>
+  )
+}
+
+function Line({ n, children }: { n: number; children: ReactNode }) {
   const empty = children === null || children === undefined || children === ''
   return (
-    <td className="border-b border-border px-3 py-2.5 align-top text-sm leading-snug max-sm:border-r max-sm:border-r-border">
-      {empty ? <span className="text-muted-foreground" aria-label="Not stated">—</span> : children}
-    </td>
+    <li className="flex items-start gap-3 border-t border-border px-4 py-3 text-sm leading-snug first:border-t-0">
+      <span className="sr-only">Product {n}: </span>
+      <Key n={n} />
+      <span className="min-w-0 flex-1 pt-0.5">
+        {empty ? <span className="text-muted-foreground" aria-label="Not stated">—</span> : children}
+      </span>
+    </li>
   )
 }
 
-function ProductHead({ item, onOpen }: { item: StudyItem; onOpen: () => void }) {
-  const seller = STORE_SELLERS[item.study.offer.sellerId]
+function PriceAnswer({ item, scale, cheapest }: { item: StudyItem; scale: number | null; cheapest: boolean }) {
+  const span = priceSpan(item)
+  if (!span) return <span className="text-muted-foreground">—</span>
+  const currency = span.currency as 'USD' | 'CAD'
+  const bar = scale ? priceBar(span, scale) : null
   return (
-    <span className="flex flex-col gap-2">
-      <span className="hidden sm:block">
-        <ArtStage examKey={item.exams[0]} className="h-20 rounded-lg">
-          <StudyArt product={item.study} examKey={item.exams[0]} />
-        </ArtStage>
+    <span className="flex flex-col gap-1.5">
+      <span className="flex items-center gap-3">
+        {scale && (
+          <span className="relative h-1.5 flex-1 rounded-full bg-muted" aria-hidden>
+            {bar && (
+              <span
+                className="absolute top-0 h-1.5 min-w-[6px] rounded-full bg-[var(--exam-accent-vivid)]"
+                style={{ left: `${bar.left}%`, width: `${bar.width}%` }}
+              />
+            )}
+          </span>
+        )}
+        <span className={cn('shrink-0 font-semibold tabular-nums', span.low === 0 && 'text-green-600 dark:text-green-400', scale && 'w-28 text-right')}>
+          {formatPrice({ amount: span.low, currency })}
+          {span.high > span.low && <span className="font-normal text-muted-foreground">–{formatPrice({ amount: span.high, currency })}</span>}
+        </span>
       </span>
-      <button
-        type="button"
-        onClick={onOpen}
-        className="line-clamp-2 text-left text-sm font-semibold leading-snug underline-offset-2 sm:line-clamp-3 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-      >
-        {item.name}
-      </button>
-      {seller && (
-        <span className="flex min-w-0 items-center gap-1.5 text-xs text-muted-foreground">
-          <SellerLogo seller={seller} size="xs" />
-          <span className="truncate">{seller.name}</span>
+      {(cheapest || item.study.offer.price?.note) && (
+        <span className="flex flex-wrap items-center gap-2">
+          {cheapest && (
+            <span className="rounded-full bg-[var(--exam-accent-vivid)] px-2 py-0.5 text-[11px] font-semibold text-white">Lowest price</span>
+          )}
+          {item.study.offer.price?.note && <span className="text-xs text-muted-foreground">{item.study.offer.price.note}</span>}
         </span>
       )}
     </span>
   )
 }
 
-function PriceCell({ item, cheapest }: { item: StudyItem; cheapest: boolean }) {
-  const summary = priceSummary(item.prices)
-  if (!summary) return <span className="text-muted-foreground">—</span>
-  const high = Math.max(...item.prices.filter(p => p.currency === summary.price.currency).map(p => p.amount))
-  return (
-    <span className="flex flex-col items-start gap-1">
-      <span className={cn('font-semibold tabular-nums', summary.price.amount === 0 && 'text-green-600 dark:text-green-400')}>
-        {formatPrice(summary.price)}
-        {summary.from && high > summary.price.amount && (
-          <span className="font-normal text-muted-foreground"> – {formatPrice({ amount: high, currency: summary.price.currency })}</span>
-        )}
-      </span>
-      {cheapest && (
-        <span className="rounded-full bg-green-600/10 px-2 py-0.5 text-[11px] font-semibold text-green-700 dark:text-green-400">Lowest price</span>
-      )}
-      {item.study.offer.price?.note && <span className="text-xs text-muted-foreground">{item.study.offer.price.note}</span>}
-    </span>
-  )
-}
-
 function Included({ lines }: { lines: readonly string[] }) {
-  if (lines.length === 0) return <span className="text-muted-foreground">—</span>
+  if (lines.length === 0) return null
   const more = lines.length - INCLUDES_SHOWN
   return (
     <ul className="space-y-1">
       {lines.slice(0, INCLUDES_SHOWN).map(line => (
-        <li key={line} className="flex gap-1.5 text-xs leading-snug">
-          <CheckMark className="mt-px h-3.5 w-3.5 shrink-0" />
+        <li key={line} className="flex gap-1.5 text-sm leading-snug">
+          <CheckMark className="mt-0.5 h-3.5 w-3.5 shrink-0" />
           <span>{line}</span>
         </li>
       ))}
@@ -408,11 +336,11 @@ function Included({ lines }: { lines: readonly string[] }) {
   )
 }
 
-function ReviewsCell({ item }: { item: StudyItem }) {
+function ReviewsAnswer({ item }: { item: StudyItem }) {
   const reviews = reviewsFor(item.id, STORE_REVIEWS)
-  if (reviews.length === 0) return <span className="text-muted-foreground">—</span>
+  if (reviews.length === 0) return null
   return (
-    <span className="flex flex-col gap-1 text-xs">
+    <span className="flex flex-col gap-0.5">
       {reviewTally(reviews).map(t => (
         <span key={t.source}>
           {t.count} from {t.source === 'publisher' ? STORE_SELLERS[item.study.offer.sellerId]?.name ?? 'the seller' : REVIEW_SOURCES[t.source].name}

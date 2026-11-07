@@ -1,6 +1,6 @@
 import type { Difficulty } from './parser'
 import { DIFFICULTY_LEVELS, isAllDifficultyLevels } from './quizDifficulty'
-import { timeAllowanceSeconds } from './quizTiming'
+import { paceForExam, timeAllowanceSeconds } from './quizTiming'
 
 // What the quiz setup screen's card says about the quiz it will start: how
 // long it should take, which topics it covers and which difficulties it draws
@@ -10,19 +10,31 @@ import { timeAllowanceSeconds } from './quizTiming'
 
 /**
  * How long `count` questions drawn from `pool` should take at the real
- * paper's pace (lib/quizTiming.ts): the pool's average allowance per question,
- * times the count. An exam paced per *point* (Exam 5) has questions of
- * different sizes, so the average is the honest figure for a draw not yet
- * made. Null when the pool is empty or its exam has no pace on file — the card
- * then says nothing rather than guess.
+ * paper's pace (lib/quizTiming.ts), before the draw is made. A paper whose
+ * source says how many questions it sets (ALTAM, ASTAM: three hours, six
+ * questions) gives each question its share of the sitting — so a full paper's
+ * worth reads as the paper's own length. Otherwise each question is the
+ * pool's average allowance: an exam paced per *point* with no question count
+ * (Exam 5) has questions of different sizes, and the average is the honest
+ * figure for a draw not yet made. Null when the pool is empty or its exam has
+ * no pace on file — the card then says nothing rather than guess.
  */
 export function estimateSeconds(
   pool: readonly { exam: string; points: number }[],
   count: number,
 ): number | null {
-  if (count <= 0) return null
-  const total = timeAllowanceSeconds(pool)
-  if (total === null || pool.length === 0) return null
+  if (count <= 0 || pool.length === 0) return null
+  let total = 0
+  for (const q of pool) {
+    const pace = paceForExam(q.exam)
+    if (pace?.per === 'point' && pace.questions) {
+      total += (pace.minutes * 60) / pace.questions
+      continue
+    }
+    const own = timeAllowanceSeconds([q])
+    if (own === null) return null
+    total += own
+  }
   return Math.round((total / pool.length) * count)
 }
 

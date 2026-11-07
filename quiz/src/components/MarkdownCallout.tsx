@@ -525,7 +525,7 @@ function FoldingCallout({ type, fold, title, titleRest = [], style, pill, childr
         )}
         {renderTitleLine(displayTitle, titleRest)}
       </span>
-      {examWeight && <ExamWeightLabel weight={examWeight} onAccent={onAccent} />}
+      {examWeight && <ExamWeightLabel weight={examWeight} onAccent={onAccent} bar={false} />}
       {collapsible && hasBody && (
         <ChevronDown
           className={`h-5 w-5 shrink-0 ${onAccent ? 'text-white/80' : 'text-muted-foreground'} transition-transform duration-200 ${open ? '' : '-rotate-90'}`}
@@ -547,15 +547,17 @@ function FoldingCallout({ type, fold, title, titleRest = [], style, pill, childr
 
   if (isBarGraph) {
     return (
-      <div className={`not-prose my-4 ${CALLOUT_ROUND} overflow-hidden bg-background`}>
+      <div className={`not-prose my-4 ${CALLOUT_ROUND} overflow-hidden ${open ? 'bg-background' : 'bg-card'}`}>
         <div className="relative">
-          {/* The bar fills to the exam coverage % when collapsed, full width when
-              expanded. Collapsed it is a tint of the exam whose page it is on
-              (`--exam-accent-muted`, scoped by `WikiExam`); expanded it is the
-              exam's own colour, the logo's `--exam-accent-vivid`. Plain card grey
-              wherever no exam is in scope. */}
+          {/* Collapsed, the objective is a card like the page's other rows, and
+              its share of the exam is a line along its bottom edge, drawn to the
+              percentage in the exam's own colour (the logo's
+              `--exam-accent-vivid`, scoped by `WikiExam`). Opening it floods the
+              whole header with that colour. Plain foreground grey wherever no
+              exam is in scope. */}
           <div
-            className={`absolute inset-y-0 left-0 transition-all duration-300 ${open ? 'bg-[color:var(--exam-accent-vivid,hsl(var(--card)))]' : 'bg-[color:var(--exam-accent-muted,hsl(var(--card)))]'}`}
+            aria-hidden
+            className={`absolute left-0 bottom-0 transition-all duration-300 bg-[color:var(--exam-accent-vivid,hsl(var(--muted-foreground)))] ${open ? 'top-0' : 'top-[calc(100%-3px)]'}`}
             style={{ width: open ? '100%' : `${examPercentage}%` }}
           />
           {collapsible && hasBody ? (

@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>One Venn diagram of A and B inside S with its four regions shaded apart: A without B, the overlap, B without A, and the outside</title>
+  <title>One Venn diagram of E and F inside S with its four regions shaded apart: E without F, the overlap, F without E, and the outside</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -52,11 +52,11 @@ text {
     <path d="M180.0,142.33 A92,92 0 0 1 180.0,301.67 A92,92 0 0 1 180.0,142.33 Z" fill="#7c3aed" fill-opacity="0.5" stroke="none"/>
     <circle cx="134" cy="222" r="92" fill="none" stroke="#3b82f6" stroke-width="1.6"/>
     <circle cx="226" cy="222" r="92" fill="none" stroke="#d97706" stroke-width="1.6"/>
-    <text x="72" y="142" text-anchor="middle" class="bold">A</text>
-    <text x="288" y="142" text-anchor="middle" class="bold">B</text>
-    <text x="96" y="227" text-anchor="middle" class="sm bold">A \ B</text>
-    <text x="180" y="227" text-anchor="middle" class="sm bold">A ∩ B</text>
-    <text x="264" y="227" text-anchor="middle" class="sm bold">B \ A</text>
-    <text x="320" y="362" text-anchor="end" class="sm bold">(A ∪ B)ᶜ</text>
+    <text x="72" y="142" text-anchor="middle" class="bold">E</text>
+    <text x="288" y="142" text-anchor="middle" class="bold">F</text>
+    <text x="96" y="227" text-anchor="middle" class="sm bold">E \ F</text>
+    <text x="180" y="227" text-anchor="middle" class="sm bold">E ∩ F</text>
+    <text x="264" y="227" text-anchor="middle" class="sm bold">F \ E</text>
+    <text x="320" y="362" text-anchor="end" class="sm bold">(E ∪ F)ᶜ</text>
   </g>
 </svg>

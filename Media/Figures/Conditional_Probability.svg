@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>Two overlapping events inside S with everything outside B faded, so B becomes the whole space and the overlap is the share of it that is also A</title>
+  <title>Two overlapping events inside S with everything outside F faded, so F becomes the whole space and the overlap is the share of it that is also E</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -51,8 +51,8 @@ text {
     <path d="M180.0,157.51 A92,92 0 0 1 180.0,314.49 A92,92 0 0 1 180.0,157.51 Z" fill="#7c3aed" fill-opacity="0.5" stroke="none"/>
     <path d="M26,86 h308 v290 h-308 Z M136.0,236 a92,92 0 1 0 184,0 a92,92 0 1 0 -184,0 Z" fill="var(--surf)" fill-opacity="0.72" fill-rule="evenodd" stroke="none"/>
     <circle cx="228" cy="236" r="92" fill="none" stroke="#d97706" stroke-width="2.8"/>
-    <text x="76" y="156" text-anchor="middle" class="bold dim">A</text>
-    <text x="284" y="156" text-anchor="middle" class="bold">B</text>
+    <text x="76" y="156" text-anchor="middle" class="bold dim">E</text>
+    <text x="284" y="156" text-anchor="middle" class="bold">F</text>
     <text x="180" y="241" text-anchor="middle" class="bold">0.12</text>
     <text x="270" y="241" text-anchor="middle" class="bold">0.28</text>
   </g>

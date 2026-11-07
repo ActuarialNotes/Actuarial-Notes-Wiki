@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:ceac404a789762305b6d7c2c60bfc5eda2d418a8fd630d96d014606d4df457c0
+  content_hash: sha256:671fb99042c0498483986e9fdb0e6afddc6f9eab164ced1b2209a4ec81db2e94
   sources:
     - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org, fetched 2026-11-06), 4.3 Variance: var>=0, =0 iff constant; var(a+bX)=b^2 var(X), sd(a+bX)=|b|sd(X); standard score; cv(X)=sd(X)/E(X), E(X)!=0, compares variability across different means, sha256:f0c1c5b0b4846e96d07f956599d1a428069c9402f2481a9e9ab3d6ca123f02bf — https://www.randomservices.org/random/expect/Variance.html"
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL version), Def. 6.1 p.226 (PDF p.234, absolute convergence; no expected value otherwise); Thm 6.2 linearity, expectations add whether or not independent; Def. 6.3 variance and standard deviation p.257; Thms 6.6 Var=E(X^2)-mu^2, 6.7 V(cX)=c^2V(X), V(X+c)=V(X), 6.8 V(X+Y)=V(X)+V(Y) independent, 6.9 sigma(S_n)=sigma sqrt(n) (pp.258-260, PDF pp.265-268), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
@@ -23,124 +23,61 @@ verification:
   log: .verify/Concepts/Coefficient of Variation.md
 ---
 
-The **Coefficient of Variation** $CV$ is the ratio of the standard deviation to the mean, measuring dispersion as a proportion of the mean.
+![[Media/Figures/Coefficient_of_Variation.svg|340]]
+
+A **Coefficient of Variation** is the [[Standard Deviation|standard deviation]] of a [[Random Variable|random variable]] divided by its [[Expected Value|mean]]. The coefficient of variation of a random variable $X$ is
 
 > $$CV = \frac{\sigma}{\mu}$$
 
-> $$= \frac{\sqrt{\text{Var}(X)}}{E[X]}$$
+- $\sigma$ is the standard deviation of $X$.
+- $\mu = E[X]$ is the mean of $X$, with $\mu \neq 0$.
 
-- $\sigma$ is the [[Standard Deviation|standard deviation]] and $\mu$ is the [[Expected Value|mean]] of $X$.
-- $CV$ is dimensionless, so it can compare the relative variability of distributions with different units or scales.
-- A larger $CV$ indicates greater dispersion relative to the mean.
-- It requires $E[X] \neq 0$. It is used to compare the variability of positive distributions, such as losses, with different expected values.
+The coefficient of variation has no units, so it compares the spread of distributions with different means or scales.
 
 > [!idea] The idea
-> A standard deviation of \$1,000 is large for a \$500 claim and small for a \$1 million building. The coefficient of variation divides the spread by the size, so it asks how wide the spread is *for a risk of this size*. Rescaling a risk, by inflation or a change of currency, then leaves it unchanged.
+> A standard deviation of \$1,000 is large for a \$500 claim and small for a \$1 million building.
 
-![[Media/Figures/Coefficient_of_Variation.svg|340]]
+> [!example]- Distribution A has mean 500 and standard deviation 100. Distribution B has mean 2,000 and standard deviation 300. Which has the greater relative variability? {Example}
+> - $CV_A = \frac{100}{500} = 0.20$.
+> - $CV_B = \frac{300}{2{,}000} = 0.15$.
+> - Distribution A has the greater relative variability, even though its standard deviation is smaller.
 
-## Spread relative to size
+## Coefficient of variation of $aX + b$
 
-A claim $X$ costs 0, 100 or 500 with probabilities 0.5, 0.3 and 0.2. Its mean is 130 and its standard deviation is 190.
+For a constant $a > 0$, scaling multiplies the mean and the standard deviation by $a$, so the coefficient of variation of $aX$ is
 
-> $$CV = \frac{190}{130} \approx 1.46$$
+> $$CV(aX) = CV(X)$$
 
-The standard deviation is almost one and a half times the mean. That is a very variable claim, because half the time nothing is paid and sometimes 500 is.
+Adding a constant $b > 0$ raises the mean but not the standard deviation, so it lowers the coefficient of variation.
 
-## What changes the CV?
+> [!example]- A claim has mean 130 and standard deviation 190. What is its coefficient of variation after 10% inflation, and what is it if a flat fee of 20 is added instead? {Example}
+> - Before either change, $CV = \frac{190}{130} \approx 1.46$.
+> - Inflation multiplies both by 1.1, so $CV = \frac{209}{143}$, still about 1.46.
+> - The fee makes the mean 150 and leaves the standard deviation at 190, so $CV = \frac{190}{150} \approx 1.27$.
 
-| Change to every claim | Mean | Std dev | $CV$ |
-|---|---|---|---|
-| None | 130 | 190 | 1.46 |
-| 10% inflation | 143 | 209 | 1.46 |
-| Flat fee of 20 | 150 | 190 | 1.27 |
+## Coefficient of variation of a pool of independent risks
 
-- Scaling by $a > 0$ multiplies the mean and the standard deviation by $a$, so the $CV$ is unchanged.
-- Adding a constant raises the mean but not the spread, so the $CV$ falls.
-
-## Pooling lowers the CV
-
-An insurer writes 100 independent claims like $X$. The total has mean $100 \times 130 = 13{,}000$ and standard deviation $190\sqrt{100} = 1{,}900$.
-
-> $$CV_{\text{total}} = \frac{1{,}900}{13{,}000} \approx 0.146$$
-
-For $n$ independent, identical risks, the mean grows like $n$ but the standard deviation only like $\sqrt{n}$.
+For the total of $n$ [[Independent and Identically Distributed|independent, identically distributed]] risks, each with coefficient of variation $CV$, the coefficient of variation of the total is
 
 > $$CV_{\text{total}} = \frac{CV}{\sqrt{n}}$$
 
-- Quadrupling the pool halves the $CV$. This is why a large insurer's results are relatively more predictable than a small one's.
-- Risk management texts call this ratio for the number of claims *objective risk*. It is the [[Law of Large Numbers]] at work.
+The mean of the total grows like $n$ but its standard deviation only like $\sqrt{n}$. So a larger pool is relatively more predictable, as the [[Law of Large Numbers|law of large numbers]] says.
 
-> [!trap] The total's standard deviation still grows
-> Pooling lowers the $CV$, not the standard deviation. The total's standard deviation rises with $\sqrt{n}$. Only the spread *relative to the expected total* shrinks.
+> [!example]- Insurer A covers 900 homes and insurer B covers 3,600. Each home independently has a fire claim in a year with probability 0.02. What is the coefficient of variation of the number of claims at each insurer? {Example}
+> - The number of claims is [[Binomial Distribution|binomial]], with mean $np$ and standard deviation $\sqrt{np(1-p)}$.
+> - Insurer A expects $900(0.02) = 18$ claims, with standard deviation 4.2, so $CV_A = \frac{4.2}{18} \approx 0.233$.
+> - Insurer B expects $3{,}600(0.02) = 72$ claims, with standard deviation 8.4, so $CV_B = \frac{8.4}{72} \approx 0.117$.
+> - Four times the homes gives half the coefficient of variation, as $\frac{1}{\sqrt{4}}$ predicts.
 
-## CVs of named distributions
+> [!trap] Expecting pooling to lower the standard deviation
+> Pooling lowers the coefficient of variation, not the standard deviation. The total's standard deviation still grows, by $\sqrt{n}$. Only the spread relative to the expected total shrinks.
 
-Several distributions have a $CV$ that depends on one parameter alone: the [[Exponential Distribution|exponential]], the [[Gamma|gamma]], the [[Poisson Distribution|Poisson]] and the [[Lognormal Distribution|lognormal]].
+## Coefficients of variation of named distributions
+
+Several distributions have a coefficient of variation that depends on one parameter alone:
 
 | Distribution | $CV$ |
-|---|---|
-| Exponential | 1 |
-| Gamma with shape $\alpha$ | $1/\sqrt{\alpha}$ |
-| Poisson with mean $\lambda$ | $1/\sqrt{\lambda}$ |
-| Lognormal | $\sqrt{e^{\sigma^2} - 1}$ |
-
-The lognormal row works in reverse too. Given a mean and a $CV$, it gives $\sigma^2 = \ln(1 + CV^2)$. See [[Moment]] for that fit.
-
-## On other exams
-
-- **MAS-II** sets limited-fluctuation credibility standards in terms of the severity's $CV$. With a Poisson claim count, full credibility for severity needs $n_0\,CV^2$ claims, and for the pure premium $n_0(1 + CV^2)$, where $n_0 = (z/k)^2$. For 90% probability within 5%, $n_0 = 1{,}082.41$. The claim above, with $CV^2 = 2.136$, would need about 2,312 claims for severity. See [[Limited Fluctuation Credibility]].
-- **Exam 7** reports the variability of an [[Unpaid Claim Distribution|unpaid claim estimate]] as its standard error divided by its mean. The total across accident years usually has a lower $CV$ than each year, for the same pooling reason as above.
-- **The DISCs** use the $CV$ to compare the riskiness of exposures of different sizes.
-
-## Try it
-
-> [!example]- Comparing Variability of Two Loss Distributions {Example}
-> Distribution A has mean \$500 and standard deviation \$100. Distribution B has mean \$2{,}000 and standard deviation \$300. Which has greater relative variability?
->
-> > [!answer]-
-> > **Plan:** divide each standard deviation by its mean and compare.
-> >
-> > $CV_A = 100/500 = 0.20$ and $CV_B = 300/2{,}000 = 0.15$.
-> >
-> > Distribution A has greater relative variability, even though its absolute standard deviation is smaller.
-
-> [!example]- The CV of an average {Example}
-> Independent losses $X$ and $Y$ have the same mean. Their coefficients of variation are 1 and 2. Find the $CV$ of $\frac{1}{2}(X + Y)$.
->
-> > [!answer]-
-> > **Plan:** write both standard deviations in terms of the common mean $\mu$, add variances, then divide by the mean of the average.
-> >
-> > $\sigma_X = \mu$ and $\sigma_Y = 2\mu$. The average has mean $\mu$.
-> > $$
-> > \begin{align*}
-> > \text{Var}\left(\tfrac{1}{2}(X + Y)\right) &= \tfrac{1}{4}\left(\mu^2 + 4\mu^2\right) \\
-> >                                            &= 1.25\,\mu^2 \\
-> > CV &= \frac{\sqrt{1.25}\,\mu}{\mu} \\
-> >    &\approx 1.118
-> > \end{align*}
-> > $$
-> > Why below 2 but above 1? Averaging cancels part of the spread, but the riskier loss still dominates.
-
-> [!example]- Objective risk of two pools {Example}
-> Insurer A covers 900 homes and insurer B covers 3,600. Each home independently has a fire claim in a year with probability 0.02. Compare the $CV$ of the number of claims at the two insurers.
->
-> > [!answer]-
-> > **Plan:** the claim count is binomial, so find its mean and standard deviation for each pool.
-> > $$
-> > \begin{align*}
-> > CV_A &= \frac{\sqrt{900(0.02)(0.98)}}{900(0.02)} \\
-> >      &= \frac{4.2}{18} \\
-> >      &\approx 0.233 \\
-> > CV_B &= \frac{\sqrt{3600(0.02)(0.98)}}{3600(0.02)} \\
-> >      &= \frac{8.4}{72} \\
-> >      &\approx 0.117
-> > \end{align*}
-> > $$
-> > Four times the homes gives half the $CV$, as $1/\sqrt{4}$ predicts.
-
-> [!warning]- Exam traps
-> - **Variance over mean.** The $CV$ uses the standard deviation, $\sigma/\mu$, not $\sigma^2/\mu$.
-> - **Pooling and the standard deviation.** Adding independent risks lowers the $CV$ but raises the total's standard deviation.
-> - **A constant changes the CV.** A flat amount added to every loss lowers the $CV$. Only scaling leaves it alone.
-> - **Adding CVs.** The $CV$ of a sum comes from the sum's own standard deviation and mean, never from adding or averaging the pieces' CVs.
+| --- | --- |
+| [[Exponential Distribution]] | 1 |
+| [[Gamma]] with shape $\alpha$ | $\frac{1}{\sqrt{\alpha}}$ |
+| [[Poisson Distribution]] with mean $\lambda$ | $\frac{1}{\sqrt{\lambda}}$ |

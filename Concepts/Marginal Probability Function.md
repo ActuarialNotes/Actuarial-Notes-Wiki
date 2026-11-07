@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:7d261ea284a5f2b431117be2bcb7d342d445dda507d22d9ff21aa88243893b4c
+  content_hash: sha256:1ab0b3415a148092bfbb0de3639c90926d9ddde36ecf9fb7d9aa0f120b77db12
   sources:
     - "Orloff & Bloom, MIT OCW 18.05 (Spring 2022), Reading 7a: Joint Distributions, Independence, §3.7 marginal pmf: sum the row, written in the margins p.7; §3.8 marginal pdf: integrate out the other variable p.8; §4 independence p.9, sha256:12cf136bbcbef819e1a2530cbfcf15ea06ae83ec4f9ce6c0f6186c87b01d09f4 — https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_class07-prep-a.pdf"
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §5.1.1 Joint PMF: P((X,Y) in A) = sum of P_XY over A; marginal PMFs by summing, HTML fetched 2026-11-06, sha256:25ee67175334059751c65c27c7c49c0d7bbd0d30063358dd957815fe58fa6779 — https://www.probabilitycourse.com/chapter5/5_1_1_joint_pmf.php"
@@ -14,109 +14,47 @@ verification:
   log: .verify/Concepts/Marginal Probability Function.md
 ---
 
-The **marginal probability function** of $X$ is obtained from the [[Joint Probability Function]] $p(x,y)$ by summing over all values of $Y$, describing the behavior of each variable in isolation.
-
-> $$p_X(x) = P(X = x)$$
-
-> $$= \sum_y p(x, y)$$
-
-- Similarly $p_Y(y) = \sum_x p(x,y)$
-- In the continuous case, the marginal PDF integrates the [[Joint Probability Density Function|joint density]] over the other variable: $f_X(x) = \int_{-\infty}^{\infty} f(x,y)\,dy$.
-- Marginal distributions are the starting point for computing [[Moments for Joint Distributions]] and assessing [[Independent Random Variables|independence]].
-
-> [!idea] The idea
-> The event $X = x$ happens together with exactly one value of $Y$, so it is split across the cells of one row. Adding the row puts the pieces back together. The marginal answers questions about $X$ alone, but it has forgotten how $X$ and $Y$ move together.
-
 ![[Media/Figures/Marginal_Probability_Function.svg|340]]
 
-## Adding across a row
+A **Marginal Probability Function** is the probability function of one [[Random Variable|random variable]], found from the [[Joint Probability Function|joint probability function]] of several. For discrete $X$ and $Y$, the marginal probability function of $X$ adds the joint probability function over every value of $Y$:
 
-A policyholder has an auto policy and a home policy. $X$ is the number of auto claims next year and $Y$ the number of home claims. The joint probabilities sit inside the table, and the marginals are written in its margins, which is where the name comes from.
+> $$f_X(x) = \sum_y f(x, y)$$
 
-| | $Y=0$ | $Y=1$ | $Y=2$ | $p_X$ |
-|---|---|---|---|---|
-| $X=0$ | 0.30 | 0.15 | 0.05 | 0.50 |
-| $X=1$ | 0.20 | 0.20 | 0.10 | 0.50 |
-| $p_Y$ | 0.50 | 0.35 | 0.15 | 1 |
+In the same way, $f_Y(y) = \sum_x f(x, y)$. In a table, the marginals are the row and column totals written in its margins.
 
-**What is the probability of exactly one home claim?** It doesn't matter how many auto claims come with it, so add the column: $p_Y(1) = 0.15 + 0.20 = 0.35$. Each marginal is a full probability function, so the marginals of $Y$ add to 1.
+> [!idea] The idea
+> A marginal answers any question about one variable alone, but it forgets how the two variables move together.
 
-The marginal is all that's needed for a question about one variable. The expected number of home claims is $E[Y] = (1)(0.35) + (2)(0.15) = 0.65$.
+Multiplying the marginals gives back the joint probability function only when $X$ and $Y$ are [[Independent Random Variables|independent]].
 
-## The marginal forgets how the variables move together
+> [!example]- $X$ and $Y$ are each 0 or 1, with $f(0, 0) = 0.25$ and $f(0, 1) = 0.30$. If $P(Y = 1) = 0.55$, what are $f(1, 1)$ and $f(1, 0)$? {Example}
+> - $f_Y(1) = f(0, 1) + f(1, 1)$, so $f(1, 1) = 0.55 - 0.30 = 0.25$.
+> - $f_X(0) = 0.25 + 0.30 = 0.55$, so $f_X(1) = 1 - 0.55 = 0.45$.
+> - $f_X(1) = f(1, 0) + f(1, 1)$, so $f(1, 0) = 0.45 - 0.25 = 0.20$.
 
-Multiply the margins instead of reading the cells, and the probability of no claims at all comes out as $(0.50)(0.50) = 0.25$. The table says 0.30. Many joint tables share these margins, and only one of them has every cell equal to the product. So a marginal can always be found from the joint PMF, but the joint PMF can be rebuilt from the marginals only for [[Independent Random Variables|independent]] variables. See [[Multivariate Distribution]] for the two tables side by side.
+## Supports that are not rectangles
 
-## When the support is not a rectangle
+When the support is not a rectangle, the sum runs only over the values of $Y$ allowed with each $x$.
 
-The sum runs only over the joint PMF's support. When that support is not a rectangle, the number of terms changes with the value held fixed.
+> [!example]- A policyholder files $X$ claims, from 0 to 3, and $Y$ of them are paid, so $0 \le y \le x$. Each of the 10 allowed pairs has probability $\frac{1}{10}$. What is $P(X = 2)$? {Example}
+> - With $x = 2$, the allowed values of $y$ are 0, 1 and 2.
+> - Adding their three probabilities, $f_X(2) = \frac{3}{10}$.
 
-Suppose a policyholder files $X$ claims, from 0 to 3, and $Y$ of them are paid, so $0 \le y \le x$. Each of the 10 allowed pairs has probability $1/10$. For $x = 2$, the possible values of $y$ are 0, 1 and 2, so the marginal is $p_X(x) = \sum_{y=0}^{x} p(x, y)$, here $3/10$.
+## Continuous random variables
 
-| $y$ | 0 | 1 | 2 | 3 |
-|---|---|---|---|---|
-| allowed $x$ | 0–3 | 1–3 | 2–3 | 3 |
-| $p_Y(y)$ | 0.4 | 0.3 | 0.2 | 0.1 |
+For continuous $X$ and $Y$, the marginal density of $X$ integrates the [[Joint Probability Density Function|joint density]] over $y$:
 
-A $y$ outside the support at that $x$ contributes 0. Adding over all four values of $y$ for every $x$ would count pairs, such as 2 paid out of 1 filed, that cannot happen.
+> $$f_X(x) = \int_{-\infty}^{\infty} f(x, y)\, dy$$
 
-## Continuous: integrate instead of add
+The limits of the integral come from the support at each $x$.
 
-For a joint density, the same move integrates the other variable out.
-
-> $$f_X(x) = \int_{-\infty}^{\infty} f(x,y)\,dy$$
-
-The limits come from the support. Take $f(x, y) = 6x$ for $0 < x < y < 1$. For a fixed $y$, $x$ runs from 0 to $y$, and for a fixed $x$, $y$ runs from $x$ to 1.
-
-> $$f_Y(y) = \int_0^y 6x\, dx = 3y^2$$
-
+> [!example]- $X$ and $Y$ have joint density $f(x, y) = 6x$ for $0 < x < y < 1$. What is the marginal density of $X$? {Example}
+> - For a fixed $x$, $y$ runs from $x$ to 1.
+> - The marginal density is
+>
 > $$f_X(x) = \int_x^1 6x\, dy = 6x(1 - x)$$
-
-Each marginal density integrates to 1 on $(0, 1)$, which checks the limits.
-
-## Try it
-
-> [!example]- Finding a Marginal PMF {Example}
-> Joint PMF: $p(1,1) = 0.2$, $p(1,2) = 0.3$, $p(2,1) = 0.1$, $p(2,2) = 0.4$. Find $p_X(x)$.
 >
-> > [!answer]-
-> > **Plan:** hold $x$ fixed and add over both values of $y$.
-> > $$p_X(1) = p(1,1) + p(1,2) = 0.2 + 0.3 = 0.5$$
-> > $$p_X(2) = p(2,1) + p(2,2) = 0.1 + 0.4 = 0.5$$
-> > The two values add to 1, as a marginal must.
+> - It holds for $0 < x < 1$, and it integrates to 1 there.
 
-> [!example]- A missing cell {Example}
-> The numbers of claims $X$ and $Y$ on two policies have $p(0,0) = 0.25$ and $p(0,1) = 0.30$, with $X$ and $Y$ each 0 or 1. You are told $P(Y = 1) = 0.55$. Find $P(X = 1)$ and $p(1, 0)$.
->
-> > [!answer]-
-> > **Plan:** use the given marginal of $Y$ to fill one cell, then the total of 1 to fill the other.
-> >
-> > The column for $Y = 1$ gives $p(1, 1) = 0.55 - 0.30 = 0.25$. The row for $X = 0$ adds to $0.25 + 0.30 = 0.55$, so $P(X = 1) = 1 - 0.55 = 0.45$. Then $p(1, 0) = 0.45 - 0.25 = 0.20$.
-> >
-> > Why can the cells be filled at all? Each marginal is a row or column total, so it is one equation for the unknown cells in it.
-
-> [!example]- A marginal over a triangle {Example}
-> Two loss components have joint density $f(x, y) = 2(x + y)$ for $0 < x < y < 1$. Find the marginal density of $X$ and $P(X > 0.5)$.
->
-> > [!answer]-
-> > **Plan:** for a fixed $x$, integrate $y$ from $x$ to 1, then integrate the marginal from 0.5 to 1.
-> > $$
-> > \begin{align*}
-> > f_X(x) &= \int_x^1 2(x + y)\, dy \\
-> >        &= 2x(1 - x) + (1 - x^2) \\
-> >        &= 1 + 2x - 3x^2, \quad 0 < x < 1
-> > \end{align*}
-> > $$
-> > $$
-> > \begin{align*}
-> > P(X > 0.5) &= \int_{0.5}^1 (1 + 2x - 3x^2)\, dx \\
-> >            &= 1 - 0.625 \\
-> >            &= 0.375
-> > \end{align*}
-> > $$
-> > The marginal is small near $x = 1$, because a large $x$ leaves little room for $y$ above it.
-
-> [!warning]- Exam traps
-> - **Fixed limits on a triangle.** On $0 < x < y < 1$, integrating $y$ from 0 to 1 for the marginal of $X$ adds density that isn't there. The inner limits come from the sketch of the support.
-> - **Rebuilding the joint from the marginals.** $p_X(x)\,p_Y(y)$ equals $p(x, y)$ only under independence.
-> - **Adding the wrong direction.** The marginal of $X$ holds $x$ fixed and adds over $y$. Adding a column gives the marginal of $Y$ instead.
+> [!trap] Fixed limits on a triangle
+> On $0 < x < y < 1$, integrating $y$ from 0 to 1 adds density that isn't there. Read the limits off a sketch of the support.

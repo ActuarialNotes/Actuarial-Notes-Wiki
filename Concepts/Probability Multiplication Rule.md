@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:b978b1c468451ad2871c3109301c7ffb64007f95d4a17967a67f56cfd1241a0c
+  content_hash: sha256:2642bfa16acc38d0b8577f14acb412f9d60bec06a8c716374cac0a81ebfa8a8d
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §4.1 conditional probability P(F|E)=P(F∩E)/P(E), E as the new sample space (pp.133-134, PDF pp.141-142), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §4.1 Def. 4.1 independence (either event probability 0 counts as independent), Thm 4.1 independent iff P(E∩F)=P(E)P(F) (pp.139-140, PDF pp.147-148); Def. 4.2 mutual independence over every subset, pairwise does not imply mutual (p.141, PDF p.149); Exercise 7: A heads on first toss, B heads on second, C tosses match are pairwise independent but not independent (PDF p.159), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
@@ -17,105 +17,50 @@ verification:
   log: .verify/Concepts/Probability Multiplication Rule.md
 ---
 
-The **Probability Multiplication Rule** gives the probability that two [[Event|events]] $A$ and $B$ both occur. It multiplies the probability of $A$ by the [[Conditional Probability|conditional probability]] of $B$ given $A$.
-
-> $$P(A \cap B) = P(A)\,P(B \mid A)$$
-
-> $$P(A \cap B) = P(B)\,P(A \mid B)$$
-
-- The two forms condition in opposite directions. Use the one whose conditional probability the question gives.
-- When $A$ and $B$ are [[Independent Events|independent]], $P(B \mid A) = P(B)$ and the rule becomes $P(A \cap B) = P(A)\,P(B)$.
-- The rule is the definition of conditional probability, $P(B \mid A) = P(A \cap B)/P(A)$, solved for the joint probability.
-
-> [!idea] The idea
-> Follow the events in order. $A$ happens in a share $P(A)$ of outcomes, and among those, $B$ also happens in a share $P(B \mid A)$. A share of a share is a product, so the probability that both happen is $P(A)$ times $P(B \mid A)$.
-
 ![[Media/Figures/Probability_Multiplication_Rule.svg|340]]
 
-## Two draws in sequence
+The **Probability Multiplication Rule** gives the [[Probability|probability]] that two [[Event|events]] both occur from a [[Conditional Probability|conditional probability]]. For events $E$ and $F$, the probability that both occur is
 
-A portfolio has 10 policies. 4 will generate a claim this year and 6 will not. Two policies are drawn at random without replacement. What is the probability that both generate a claim?
+> $$P(E \cap F) = P(E)\,P(F \mid E)$$
 
-The first draw is a claim with probability $4/10$. Given that, 3 of the 9 policies left are claims.
+> $$P(E \cap F) = P(F)\,P(E \mid F)$$
 
-> $$P(\text{both claim}) = \frac{4}{10} \times \frac{3}{9} = \frac{2}{15} \approx 0.133$$
+- $P(F \mid E)$ is the probability of $F$ given that $E$ has occurred.
+- When $E$ and $F$ are [[Independent Events|independent]], $P(F \mid E) = P(F)$ and the rule is $P(E \cap F) = P(E)\,P(F)$.
 
-The same rule gives every path through the two draws. Here $C$ is a claim and $N$ is no claim.
+Use the form whose conditional probability the question gives.
 
-| First, second | Probability |
-|---|---|
-| $C, C$ | $\frac{4}{10} \cdot \frac{3}{9} = \frac{12}{90}$ |
-| $C, N$ | $\frac{4}{10} \cdot \frac{6}{9} = \frac{24}{90}$ |
-| $N, C$ | $\frac{6}{10} \cdot \frac{4}{9} = \frac{24}{90}$ |
-| $N, N$ | $\frac{6}{10} \cdot \frac{5}{9} = \frac{30}{90}$ |
+> [!idea] The idea
+> The probability that both occur is the share of outcomes in which $E$ occurs, times the share of those in which $F$ also occurs.
 
-The four paths add to 1. Counting gives the same first answer, $\binom{4}{2} / \binom{10}{2} = 6/45 = 2/15$.
-
-## Either order gives the same answer
-
-The second form of the rule conditions on $B$ instead. From the table, the second policy is a claim with probability $12/90 + 24/90 = 0.4$. That is the same as the first, by symmetry. Given that the second is a claim, the first is one of the other 9 policies, 3 of which are claims.
-
-> $$P(\text{both claim}) = 0.4 \times \frac{3}{9} = \frac{2}{15}$$
-
-Both forms give the same joint probability. A question that states "of those who passed January, 60% pass February" hands over $P(\text{Feb} \mid \text{Jan})$, so the first form is the one to use.
+> [!example]- 60% of an insurer's customers insure more than one car. Of those customers, 20% insure a sports car. What is the probability that a customer insures more than one car and a sports car? {Example}
+> - Let $E$ be "insures more than one car" and $F$ be "insures a sports car".
+> - "Of those customers, 20%" is the conditional probability $P(F \mid E) = 0.20$.
+> - $P(E \cap F) = 0.60 \times 0.20 = 0.12$.
 
 ## A chain of events
 
-Draw a third policy. All three are claims with probability $\frac{4}{10} \cdot \frac{3}{9} \cdot \frac{2}{8} = \frac{1}{30}$. Each factor conditions on everything drawn before it.
+For three events, each factor conditions on everything before it:
 
-> $$P(A_1 \cap A_2 \cap A_3) = P(A_1)\,P(A_2 \mid A_1)\,P(A_3 \mid A_1 \cap A_2)$$
+> $$
+> \begin{aligned}
+> & P(E_1 \cap E_2 \cap E_3) \\
+> &= P(E_1)\,P(E_2 \mid E_1) \\
+> &\quad \times P(E_3 \mid E_1 \cap E_2)
+> \end{aligned}
+> $$
 
-- The chain extends to any number of events, one conditional factor per event.
-- A tree diagram is the same chain drawn out. Each branch carries a conditional probability, and a path's probability is the product along it.
+The chain extends to any number of events, one conditional factor per event. Draws without replacement are a chain, because each draw changes what is left.
 
-## With replacement, or independent
+> [!example]- A portfolio has 10 policies, 4 of which will have a claim. Two policies are drawn at random without replacement. What is the probability that both have a claim? {Example}
+> - The first policy has a claim with probability $\frac{4}{10}$.
+> - Given that, 3 of the 9 policies left have a claim, so the second has a claim with probability $\frac{3}{9}$.
+> - Both have a claim with probability $\frac{4}{10} \times \frac{3}{9} = \frac{2}{15} \approx 0.133$.
 
-If each policy is put back before the next draw, the second draw no longer depends on the first. $P(B \mid A) = P(B) = 0.4$ and both are claims with probability $0.4^2 = 0.16$.
+> [!example]- From the same 10 policies, policies are drawn without replacement until one with a claim is found. What is the probability that the first claim is on the third draw? {Example}
+> - The event is no claim, then no claim, then a claim.
+> - The factors are $\frac{6}{10}$, then $\frac{5}{9}$ with 5 claim-free policies left of 9, then $\frac{4}{8}$ with all 4 claims left of 8.
+> - The probability is $\frac{6}{10} \times \frac{5}{9} \times \frac{4}{8} = \frac{1}{6}$.
 
 > [!trap] Unconditional factors without replacement
-> Without replacement, the second factor must reflect the first draw. Using $0.4 \times 0.4 = 0.16$ in place of $0.4 \times 3/9 \approx 0.133$ treats dependent draws as independent.
-
-## Try it
-
-> [!example]- Reading the conditional off the wording {Example}
-> Every customer insures at least one car. 60% insure more than one car and 25% insure a sports car. Of the customers who insure more than one car, 20% insure a sports car. Find the probability that a customer insures exactly one car and it is not a sports car.
->
-> > [!answer]-
-> > **Plan:** "of the customers who insure more than one car" gives a conditional probability. Multiply it by the probability of its condition, then work through the complements.
-> >
-> > Multi-car and sports car: $0.60 \times 0.20 = 0.12$.
-> >
-> > One car and a sports car: $0.25 - 0.12 = 0.13$.
-> >
-> > One car and no sports car: $0.40 - 0.13 = 0.27$.
-
-> [!example]- "Three times as likely" {Example}
-> 60% of students pass a January exam and 45% pass a February exam. Students who pass in January are three times as likely to pass in February as those who fail in January. Find the probability that a student passes both.
->
-> > [!answer]-
-> > **Plan:** let $y = P(\text{Feb} \mid \text{fail Jan})$, so $P(\text{Feb} \mid \text{Jan}) = 3y$. Solve for $y$ from the overall pass rate, then apply the multiplication rule.
-> > $$
-> > \begin{align*}
-> > 0.45 &= 0.60(3y) + 0.40\,y \\
-> > &= 2.2\,y
-> > \end{align*}
-> > $$
-> > So $y \approx 0.2045$ and $P(\text{both}) = 0.60 \times 3y \approx 0.368$.
-> > The overall rate is the [[The Law of Total Probability|law of total probability]] over January's two outcomes.
-
-> [!example]- The first claim on the third draw {Example}
-> From the 10 policies, 4 of which claim, policies are drawn without replacement. Find the probability that the first claim appears on the third draw.
->
-> > [!answer]-
-> > **Plan:** the event is no claim, no claim, then a claim. Chain the three conditional factors.
-> > $$
-> > \begin{align*}
-> > P(N, N, C) &= \frac{6}{10} \cdot \frac{5}{9} \cdot \frac{4}{8} \\
-> > &= \frac{1}{6}
-> > \end{align*}
-> > $$
-
-> [!warning]- Exam traps
-> - **The conditional the wrong way round.** "Of those with a sports car, 48% insure several cars" is $P(\text{multi} \mid \text{sports})$. It pairs with $P(\text{sports})$, not $P(\text{multi})$.
-> - **Dependent draws treated as independent.** Without replacement, every later factor changes with what was drawn.
-> - **Multiplying where events are mutually exclusive.** Two events that cannot both occur have $P(A \cap B) = 0$, not $P(A)\,P(B)$.
+> Without replacement, each later factor must reflect what was already drawn. Using $0.4 \times 0.4 = 0.16$ for two claims treats the draws as independent, which is right only with replacement. Without it, the answer is $\frac{4}{10} \times \frac{3}{9} \approx 0.133$.

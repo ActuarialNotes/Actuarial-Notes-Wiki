@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:ec0b15882e9bf462a61b638069fcc237b419903bdbb0ec7220d1a9b75eae9b2c
+  content_hash: sha256:a2083102c3c8db247730bdb283fccc4b269b7dee55a629607478dc4949d3c873
   sources:
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. 2016), Ch.1 claim, claimant (insured or third party), accident date/occurrence date PDF p.14; IBNR, reported, open, closed, re-opened, loss = compensation paid or payable, losses and claims used interchangeably, case reserve PDF p.15, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS), diagonals = valuation dates PDF p.59; claim counts closed without payment PDF p.58; reported claim count triangle PDF pp.66-67, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
@@ -26,144 +26,83 @@ verification:
   log: .verify/Concepts/Claim.md
 ---
 
-**A claim** is a demand to an [[Insurer|insurer]] for indemnification under an [[Insurance Policy|insurance policy]] after an event the policy covers. The claimant can be the [[Policyholder|insured]], another individual the policy provides for, or a third party alleging injuries or damages that the policy covers.
+A **Claim** is a demand to an [[Insurer|insurer]] for payment under an [[Insurance Policy|insurance policy]] after an event the policy covers. The claimant can be the [[Policyholder|insured]], another person the policy provides for, or a third party alleging injuries or damages that the policy covers.
+
+A claim comes with its own terms:
+
+- The **loss** is the amount paid or payable to the claimant under the policy.
+- The **accident date**, also called the date of loss, is when the covered event happened.
+- The **report date** is when the insurer learned of the claim.
+
+> [!example]- A homeowner's kitchen burns on 3 March, the homeowner calls the insurer on 10 March, and repairs cost 18,000. What are the claim, the loss and the accident date? {Example}
+> - The homeowner's demand that the insurer pay for the repairs is the claim.
+> - The 18,000 the policy pays for is the loss, before any deductible.
+> - The accident date is 3 March, the day of the fire. The report date is 10 March.
+
+## Aggregate claims
+
+The total of a period's claims, the aggregate claims, is
 
 > $$S = X_1 + X_2 + \cdots + X_N$$
 
+- $N$ is the number of claims, its [[Frequency|frequency]].
+- $X_i$ is the size of the $i$th claim, its [[Severity|severity]].
+
+The claim sizes are independent and identically distributed, and independent of $N$. This is the collective risk model of the [[Aggregate Loss Model|aggregate loss model]]. The expected aggregate claims is
+
 > $$E[S] = E[N]\,E[X]$$
 
-- $N$ is the number of claims in a period, its [[Frequency|frequency]]. Each $X_i$ is the size of one claim, its [[Severity|severity]]. $S$ is the aggregate claims for the period.
-- The model assumes the $X_i$ are independent and identically distributed, and independent of $N$. This is the collective risk model of the [[Aggregate Loss Model|aggregate loss model]].
-- With a Poisson count, $S$ is a [[Compound Poisson Process|compound Poisson]] total.
+> [!example]- Claims arrive as a Poisson count with mean 40 a year, and each claim has mean 5,000. What are the expected aggregate claims for the year? {Example}
+> - $E[N] = 40$ and $E[X] = 5{,}000$.
+> - The expected aggregate claims are $40 \times 5{,}000 = 200{,}000$.
 
-> [!idea] The idea
-> A year's claims total is uncertain in two ways: how many claims arrive and how large each one is. Splitting the total into a count and a size lets each be modelled on its own data. The mean total is then the mean count times the mean size.
+## Variance of aggregate claims
 
-## Claim, loss and accident date
-
-A homeowner's kitchen burns on 3 March and the homeowner asks the insurer to pay for the repairs. That demand is the claim.
-
-- The *loss* is the amount of compensation paid or payable to the claimant under the policy.
-- The date of the fire is the accident date, also called the date of loss or the occurrence date.
-- Actuaries sometimes use *losses* and *claims* interchangeably, so check which one a source means.
-
-## A year of claims
-
-Take a book of homeowners policies. Claims arrive as a Poisson count with mean 40 a year. Each claim size has mean 5,000 and standard deviation 10,000. What does the insurer expect to pay in total?
-
-| Quantity | Value |
-|---|---|
-| Expected claim count $E[N]$ | 40 |
-| Expected claim size $E[X]$ | 5,000 |
-| Expected aggregate claims $E[S]$ | 200,000 |
-
-The total is 40 claims times 5,000 a claim. The formula holds whatever the distribution of the count, as long as the sizes are independent of the count.
-
-## How much the total varies
-
-The total varies for two reasons. Given the count, the sizes vary. And the count itself varies. Conditioning on the count separates the two.
-
-> $$E[S \mid N] = N\,E[X]$$
-
-> $$\text{Var}(S \mid N) = N\,\text{Var}(X)$$
-
-The laws of total expectation and total variance then give the compound variance.
+The total varies because the claim sizes vary and because the count varies. The variance of the aggregate claims is
 
 > $$\text{Var}(S) = E[N]\,\text{Var}(X) + \text{Var}(N)\,E[X]^2$$
 
-- The first term is the variation in claim sizes. For the running example it is $40 \times 10{,}000^2 = 4 \times 10^9$.
-- The second term is the variation in the count. It is $40 \times 5{,}000^2 = 1 \times 10^9$.
-- The total variance is $5 \times 10^9$, so the standard deviation is 70,711. If the count were fixed at exactly 40, it would be only 63,246.
-
-For a Poisson count, $E[N] = \text{Var}(N) = \lambda$. The two terms then combine into the second moment of a claim.
+When $N$ is [[Poisson Distribution|Poisson]] with mean $\lambda$, $E[N] = \text{Var}(N) = \lambda$, and the two terms combine into the second moment of a claim:
 
 > $$\text{Var}(S) = \lambda\,E[X^2]$$
 
-- For the running example, $E[X^2] = 10{,}000^2 + 5{,}000^2 = 1.25 \times 10^8$, and $40 \times 1.25 \times 10^8 = 5 \times 10^9$.
+> [!example]- Claims arrive as a Poisson count with mean 40 a year. Each claim has mean 5,000 and standard deviation 10,000. What is the standard deviation of the aggregate claims? {Example}
+> - The second moment of a claim is $10{,}000^2 + 5{,}000^2$, which is $1.25 \times 10^8$.
+> - The variance and standard deviation of the total are
+>
+> $$
+> \begin{aligned}
+> \text{Var}(S) &= 40 \times 1.25 \times 10^8 \\
+> &= 5 \times 10^9 \\
+> \text{SD}(S) &\approx 70{,}711
+> \end{aligned}
+> $$
 
-> [!trap] $\text{Var}(X)$ in place of $E[X^2]$
-> For a compound Poisson total, $\lambda\,\text{Var}(X) = 4 \times 10^9$ leaves out the variation in the count. Use $\lambda\,E[X^2]$.
+## Claims after a deductible
 
-## Some claims, not all
-
-Suppose 10% of claims exceed 20,000. How many large claims should the insurer expect? Each claim is large with probability 0.10, independently of the others. The large claims are then a Poisson count of their own, with mean $40 \times 0.10 = 4$ ([[Poisson Thinning]]).
-
-- The probability of no large claim in a year is $e^{-4} = 0.0183$. A year with no large claim happens less than 2% of the time.
-
-A [[Deductible|deductible]] thins claims the same way. A loss below the deductible produces no payment. The expected payment per loss $Y^L$ includes those zeros. The expected payment per payment $Y^P$ averages only over losses above the deductible $d$.
+A [[Deductible|deductible]] $d$ turns some losses into no payment at all. The payment per loss $Y^L$ includes those zeros. The payment per payment $Y^P$ averages only over losses above $d$. Their means are related by
 
 > $$E[Y^L] = P(X > d)\,E[Y^P]$$
 
-- If losses are Poisson with mean $\lambda$, payments are Poisson with mean $\lambda\,P(X > d)$.
-- A count of losses pairs with the payment per loss. A count of payments pairs with the payment per payment. Both give the same total.
+If losses are Poisson with mean $\lambda$, the number of payments is Poisson with mean $\lambda\,P(X > d)$ ([[Poisson Thinning]]).
 
-## On other exams
+> [!example]- Losses are Poisson with mean 100 a year, each exponential with mean 2,000, and the policy has a deductible of 500. What are the expected number of payments and the expected total paid? {Example}
+> - A loss exceeds the deductible with probability $e^{-0.25} = 0.7788$, so there are 77.88 payments on average.
+> - The exponential is memoryless, so the part of a loss above the deductible has the same mean as the loss itself. Each payment averages $E[Y^P] = 2{,}000$.
+> - The expected payment per loss is $0.7788 \times 2{,}000 = 1{,}557.60$.
+> - Both views give the same total: 100 losses times 1,557.60, or 77.88 payments times 2,000, is 155,760.
 
-**Exam 5** follows each claim through its life for reserving.
+> [!trap] Mixing per loss and per payment
+> A count of losses pairs with the payment per loss, and a count of payments with the payment per payment. Multiplying 100 losses by 2,000 per payment gives 200,000, which overstates the total.
 
-- A claim is reported, given a [[Case Reserves|case reserve]], paid in one or more instalments and closed. Some close without payment and some reopen.
-- Claims that have occurred but have not yet been reported are [[IBNR]].
-- Counts of claims at each stage feed the [[Claim Count Triangle|claim count triangles]] used in reserving.
+## Claims on other exams
 
-**The DISCs (DISC-IA)** value property damage claims.
+**Exam 5** follows each claim through its life for reserving. A claim is reported, given a [[Case Reserves|case reserve]], paid and closed, and some reopen. Claims that have occurred but not yet been reported are [[IBNR]].
 
-- On a property policy the insured claims for damage to its own property. This is a first-party claim. On a liability policy a third party claims for injury or damage it says the insured caused.
-- The ISO homeowners form (HO 00 03 05 11) sets out the steps of a property claim. The insured submits a signed, sworn proof of loss.
-- By written notice within 30 days of receiving the proof of loss, the insurer may choose to repair or replace the damaged property with property of like kind and quality.
-- Loss is payable 60 days after the proof of loss, once the parties agree, a final judgment is entered or an appraisal award is filed.
-- The amount turns first on the policy's valuation basis: [[Actual Cash Value|actual cash value]], [[Replacement Cost|replacement cost]] or another of the [[Loss Settlement Provisions|loss settlement provisions]]. Any coinsurance penalty and the deductible then reduce it, and the limit caps it ([[Property Insurance Limits and Deductibles]]).
+**DISC-IA** follows the steps of a property claim under the ISO homeowners form:
 
-## Try it
+1. The insured submits a signed, sworn proof of loss.
+2. Once it has the proof of loss, the insurer may, by written notice within 30 days of receiving it, choose to repair or replace the damaged property with property of like kind and quality.
+3. The loss is payable 60 days after the proof of loss once the parties agree, a final judgment is entered or an appraisal award is filed.
 
-> [!example]- Per loss or per payment {Example}
-> Losses are exponential with mean 2,000, and a deductible of 500 applies. Find the probability that a loss produces a claim payment, the expected payment per loss and the expected payment per payment.
->
-> > [!answer]-
-> > **Plan:** find $P(X > 500)$, integrate the survival function above 500, then divide.
-> > $$
-> > \begin{align*}
-> > P(X > 500) &= e^{-500/2000} \\
-> > &= 0.7788 \\[6pt]
-> > E[Y^L] &= 2000\,e^{-0.25} \\
-> > &= 1557.60 \\[6pt]
-> > E[Y^P] &= \frac{1557.60}{0.7788} \\
-> > &= 2000
-> > \end{align*}
-> > $$
-> > The exponential is memoryless, so the part of a loss above the deductible has the same mean as the loss. 100 losses at 1,557.60 and 77.88 payments at 2,000 give the same total.
-
-> [!example]- Counting payments, not losses {Example}
-> An insurer expects 300 losses next year, each uniform on $(0, 2000)$, under a deductible of 500. Find the expected number of payments and the expected total payment.
->
-> > [!answer]-
-> > **Plan:** thin the count by $P(X > 500)$, then pair the payment count with the payment per payment.
-> >
-> > - The probability of a payment is $1500 / 2000 = 0.75$, so the expected number of payments is $300 \times 0.75 = 225$.
-> > - Given a payment, the excess is uniform on $(0, 1500)$, with mean 750.
-> > - The expected total is $225 \times 750 = 168{,}750$.
-> >
-> > The check: the payment per loss is $0.75 \times 750 = 562.50$, and $300 \times 562.50 = 168{,}750$.
-
-> [!example]- Aggregate claims and the large-claim count {Example}
-> Claims arrive as a Poisson process at 25 a year. Claim size has mean 2,000 and standard deviation 3,000, and 20% of claims exceed 5,000. Find the mean and standard deviation of annual aggregate claims, and the probability of no claim above 5,000 in a year.
->
-> > [!answer]-
-> > **Plan:** use $E[S] = \lambda E[X]$ and $\text{Var}(S) = \lambda E[X^2]$, then thin the count for the large claims.
-> > $$
-> > \begin{align*}
-> > E[S] &= 25 \times 2000 \\
-> > &= 50{,}000 \\[4pt]
-> > E[X^2] &= 3000^2 + 2000^2 \\
-> > &= 1.3 \times 10^7 \\[4pt]
-> > \text{Var}(S) &= 25 \times 1.3 \times 10^7 \\
-> > &= 3.25 \times 10^8 \\[4pt]
-> > \text{SD}(S) &= 18{,}028
-> > \end{align*}
-> > $$
-> > Claims above 5,000 are Poisson with mean $25 \times 0.20 = 5$, so $P(\text{no large claim}) = e^{-5} = 0.0067$.
-
-> [!warning]- Exam traps
-> - **Mixing per loss and per payment.** Multiplying a count of losses by the mean per payment overstates the total.
-> - **$\text{Var}(X)$ for $E[X^2]$.** A compound Poisson variance is $\lambda E[X^2]$.
-> - **Dropping the count's variance.** For a non-Poisson count, the term $\text{Var}(N)\,E[X]^2$ is still there.
-> - **Valuation before limits.** On a property damage claim, value the loss on the policy's basis first. Then reduce it for any coinsurance penalty and the deductible, and cap it at the limit.
+The amount paid turns first on the policy's valuation basis, [[Actual Cash Value|actual cash value]] or [[Replacement Cost|replacement cost]]. Any coinsurance penalty and the deductible then reduce it, and the limit caps it.

@@ -1486,7 +1486,8 @@ compile — don't "clean up" the flagged code as dead.
   it (the `{Example}` tag draws it as a green card with an *Example* pill —
   `WORKED_EXAMPLE_STYLE` in `MarkdownCallout.tsx`; untagged, `[!example]` is a learning objective)
   → `##` sections, one per variation, headed plainly, each built the same way → an optional
-  `[!idea] The idea` and at most one `[!trap]`, both open. No running example, *Try it* or *Exam
+  `[!idea] The idea` (one sentence; a table or worked line expanding it goes below the card as
+  plain text) and at most one `[!trap]`, both open. No running example, *Try it* or *Exam
   traps* fold. A rule on another page is linked at its heading, `[[Page#Heading|rule]]`, which
   the concept popup opens scrolled to (`headingSlug` in `lib/wikiRoutes.ts`; every `##`/`###`
   carries that id). One symbol per thing across an exam (Exam P's

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:f171623c60146a587d327959018eaf03d99261c0d8fe794ac7cbbba0115db5f9
+  content_hash: sha256:eb7cadf61972aaec1e14cf15678e4945a33d43a2c5386a2a43f6465ae577951f
   sources:
     - "Siegrist, Random (randomservices.org), 2.7 Distribution and Quantile Functions: quantile of order p has F(x-) <= p <= F(x); F^-1(p) = min{x: F(x) >= p} the smallest quantile; a quantile of order 1/2 is a median, HTML fetched 2026-11-06, sha256:50c869a04cf2c1fdbb4816de5a7a594436951d2e00cadfa069d12a10d6bd7173 — https://www.randomservices.org/random/dist/CDF.html"
     - "SOA Exam P Sample Solutions (2026-05 file), Q61 (PDF p.20-21: exponential median, then the maximum benefit), Q181 (PDF p.53: median payment = median loss less deductible; 20th percentile max(0, 200-250) = 0), sha256:e10d2649bdf708541f87849c85ef6cde195019cfc8a46ee9647f6733d74d04b2 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"
@@ -18,133 +18,55 @@ verification:
   log: .verify/Concepts/Median.md
 ---
 
-The **Median** $m$ of a [[Random Variable]] $X$ is its 50th [[Percentile|percentile]]: the smallest value $m$ with $F(m) \ge 0.5$. For a continuous distribution it is the point where $F(m) = 0.5$, which splits the probability in half.
+A **Median** of a [[Random Variable|random variable]] $X$ is its 50th [[Percentile|percentile]], the value that splits its probability in half. For a [[Continuous Random Variable|continuous]] $X$ with [[Cumulative Distribution Function (CDF)|CDF]] $F$, the median $m$ solves
 
 > $$F(m) = 0.5$$
 
-> $$m = F^{-1}(0.5)$$
-
-- $F$ is the [[Cumulative Distribution Function (CDF)|CDF]] of $X$. For a [[Continuous Random Variable|continuous]] $X$ with a strictly increasing CDF, the median is unique.
-- For a [[Discrete Random Variable|discrete]] $X$, the median is the smallest $m$ with $F(m) \ge 0.5$, the same rule as for every other percentile.
-- Compared with the [[Expected Value|mean]]: the median depends only on the order of the values, while the mean depends on their size.
+- Equivalently, the area under the [[Probability Density Function (PDF)|density]] up to $m$ is 0.5.
 
 > [!idea] The idea
-> The median asks only which side of a value half the probability lies on. A huge claim counts as one claim above the median, however huge it is, so a heavy right tail pulls the mean up and leaves the median alone. The same fact explains why a deductible or a limit carries the median straight through.
+> The median depends only on the order of the values, so a heavy right tail pulls the mean above the median and leaves the median alone.
 
-## Which loss splits the claims in half?
+For a symmetric distribution, such as the [[Normal Distribution|normal]] or the uniform, the median equals the mean.
 
-Losses on a policy are [[Exponential Distribution|exponential]] with mean 5,000, so $F(x) = 1 - e^{-x/5000}$. Setting the CDF to one half gives the median.
+> [!example]- Losses are exponential with mean 5,000, so $F(x) = 1 - e^{-x/5000}$. What is the median loss? {Example}
+> - Setting the CDF to one half gives $e^{-m/5000} = 0.5$.
+> - Taking logarithms, $m = 5000 \ln 2 \approx 3{,}466$.
+> - Half of all losses are below about 3,466, though the mean is 5,000.
+> - In general an [[Exponential Distribution|exponential]] with mean $\theta$ has median $\theta \ln 2 \approx 0.693\,\theta$.
 
-> $$
-> \begin{align*}
-> 1 - e^{-m/5000} &= 0.5 \\
-> m &= 5000 \ln 2 \\
-> &\approx 3465.74
-> \end{align*}
-> $$
+## The median of a discrete distribution
 
-Half of all losses are below about 3,466. The general rule is to solve $F(m) = 0.5$, or equally $\int_{-\infty}^{m} f(x)\,dx = 0.5$.
+When no value has $F = 0.5$ exactly, the median is the smallest $m$ at which the CDF reaches one half:
 
-> $$\text{Exponential: } m = \theta \ln 2 \approx 0.693\,\theta$$
+> $$F(m) \geq 0.5$$
 
-## Why the median sits below the mean
+> [!example]- A policy's claim count $N$ is 0, 1, 2 or 3 with probabilities 0.35, 0.25, 0.20 and 0.20. What is the median? {Example}
+> - Accumulating the probabilities gives $F(0) = 0.35$ and $F(1) = 0.60$.
+> - The CDF first reaches 0.5 at $n = 1$.
+> - The median is 1.
 
-The mean loss is 5,000, but the median is only 3,466. A few very large losses pull the mean up. They don't move the median, because each of them is just one loss above it.
+## The median of a transformed loss
 
-Claim sizes are right-skewed, so [[Mode|mode]] < median < mean is the typical order.
+If $g$ is a non-decreasing function, the value of $g$ at the median of $X$ is the median of $g(X)$:
 
-- A [[Normal Distribution|normal]] distribution is symmetric, so its median equals its mean.
-- A [[Lognormal Distribution|lognormal]] has median $e^{\mu}$ and mean $e^{\mu + \sigma^2/2}$, so its median is always below its mean.
+> $$\text{median of } g(X) = g(m)$$
 
-## The median of a claim count
+A deductible $d$ and a limit $u$ are both non-decreasing, so the median payment is $\max(m - d, 0)$ under a deductible and $\min(m, u)$ under a limit.
 
-The number of claims $N$ on a policy has $P(N = 0, 1, 2, 3) = 0.35, 0.25, 0.20, 0.20$. Accumulate the probabilities until the CDF first reaches 0.5.
-
-| $n$ | 0 | 1 | 2 | 3 |
-|---|---|---|---|---|
-| $F(n)$ | 0.35 | 0.60 | 0.80 | 1.00 |
-
-The CDF jumps from 0.35 to 0.60 at $n = 1$, so the median is 1. No value has $F = 0.5$ exactly. The mean is $0.25 + 0.40 + 0.60 = 1.25$.
-
-## The median payment under a deductible
-
-Return to the exponential loss with mean 5,000, and add a deductible of 1,000. The payment is $Y = (X - 1000)_+$.
-
-The payment rises with the loss and never falls. So the loss that sits at the median gives the payment that sits at the median.
-
-> $$\text{median of } (X - d)_+ = \max(m - d,\ 0)$$
-
-- The median payment is $3465.74 - 1000 = 2465.74$.
-- The mean payment is $E[Y] = 5000\,e^{-0.2} \approx 4093.65$, not $5000 - 1000 = 4000$.
-- With a deductible of 4,000, $F(4000) = 1 - e^{-0.8} \approx 0.551$. More than half of losses pay nothing, so the median payment is 0.
-
-> [!trap] Subtracting the deductible from the mean
-> The median passes through the deductible, and the mean doesn't. $E[(X - d)_+]$ needs the [[Deductible|deductible]] formulas, not $E[X] - d$.
-
-## The median payment under a limit
-
-A policy limit $u$ caps the payment at $\min(X, u)$. This is also a non-decreasing function of the loss.
-
-> $$\text{median of } \min(X, u) = \min(m,\ u)$$
-
-- With a limit of 10,000, the median loss 3,466 is below it, so the median payment is 3,466.
-- With a limit of 3,000, $P(X < 3000) \approx 0.451$. Every larger loss pays 3,000, so the median payment is 3,000, the limit itself.
+> [!example]- Losses are exponential with mean 5,000 and median 3,466. A policy has a deductible of 1,000. What is the median payment? {Example}
+> - The payment $\max(X - 1000, 0)$ rises with the loss, so it carries the median through.
+> - The median payment is $3{,}466 - 1{,}000 = 2{,}466$.
+> - With a deductible of 4,000, $F(4000) = 0.551$, so more than half of losses pay nothing and the median payment is 0.
 
 ## The median of a sample
 
-Five claims were 1,200, 300, 4,500, 800 and 2,600. The sample median is the middle [[Order Statistics|order statistic]] once the values are sorted.
+The median of a sample is its middle value once the values are sorted. When the number of values is even, it is the average of the two middle values.
 
-- Sorted, the claims are 300, 800, 1,200, 2,600 and 4,500. The median is 1,200 and the mean is 1,880.
-- A sixth claim of 9,000 makes the count even. The median is the average of the two middle values, $(1200 + 2600)/2 = 1900$.
-- The same claim moves the mean from 1,880 to about 3,066.67. The median moved by much less.
+> [!example]- Six claims were 1,200, 300, 4,500, 800, 2,600 and 9,000. What are the sample median and mean? {Example}
+> - Sorted, the claims are 300, 800, 1,200, 2,600, 4,500 and 9,000.
+> - The two middle values are 1,200 and 2,600, so the median is 1,900.
+> - The mean is $18{,}400 / 6 \approx 3{,}067$, pulled up by the claim of 9,000.
 
-## Try it
-
-> [!example]- Median fire damage ratio {Example}
-> The fraction $X$ of a building's value destroyed in a fire has density $f(x) = 2(1 - x)$ for $0 < x < 1$. Find the median, and compare it with the mean and the mode.
->
-> > [!answer]-
-> > **Plan:** integrate for the CDF, then set it to one half.
-> > $$
-> > \begin{align*}
-> > F(x) &= \int_0^x 2(1 - t)\,dt \\
-> >      &= 1 - (1 - x)^2 \\
-> > (1 - m)^2 &= 0.5 \\
-> > m &= 1 - \sqrt{0.5} \\
-> >   &\approx 0.293
-> > \end{align*}
-> > $$
-> > The mean is $\int_0^1 2x(1 - x)\,dx = \tfrac{1}{3} \approx 0.333$. The density is largest at $x = 0$, so the mode is 0.
-> >
-> > The order $0 < 0.293 < 0.333$ is the right-skew pattern. Half of fires destroy less than 29% of the building, even though the average loss is a third of its value.
-
-> [!example]- A median benefit at the limit {Example}
-> Medical costs are exponential with mean 400. The policy pays the cost up to a maximum benefit of 250. Find the median benefit.
->
-> > [!answer]-
-> > **Plan:** find the median cost, then cap it at the limit.
-> >
-> > The median cost is $400 \ln 2 \approx 277.26$. That is above 250, so the median benefit is $\min(277.26,\ 250) = 250$.
-> >
-> > Why is the answer the limit? $P(X < 250) = 1 - e^{-0.625} \approx 0.465$, which is below one half. Every cost above 250 pays exactly 250, so the benefit CDF jumps past 0.5 at 250.
-
-> [!example]- A median that fixes a parameter {Example}
-> Claim sizes are exponential, and the median claim is 2,000. Find the probability that a claim exceeds 5,000.
->
-> > [!answer]-
-> > **Plan:** use the median to find $\theta$, then use $\theta$ for the tail.
-> > $$
-> > \begin{align*}
-> > \theta &= \frac{2000}{\ln 2} \approx 2885.39 \\
-> > P(X > 5000) &= e^{-5000/\theta} \\
-> > &= 2^{-2.5} \\
-> > &\approx 0.1768
-> > \end{align*}
-> > $$
-> > Why not $\theta = 2000$? The exponential's mean is $\theta$, and its median is only $0.693\,\theta$. Setting $\theta$ to the median gives $e^{-2.5} \approx 0.082$, less than half the right answer.
-
-> [!warning]- Exam traps
-> - **Median for mean.** For a right-skewed loss the median is below the mean. An exponential with mean $\theta$ has median $\theta \ln 2$.
-> - **Looking for $F(m) = 0.5$ in a discrete variable.** The median is where the CDF first reaches or passes 0.5.
-> - **A deductible that takes more than half.** If $F(d) \ge 0.5$, the median payment is 0.
-> - **An even sample.** The sample median of an even number of values is the average of the two middle values.
+> [!trap] Subtracting the deductible from the mean
+> The median passes through a deductible, but the mean doesn't. With the exponential losses above, the mean payment under a deductible of 1,000 is $5000\,e^{-0.2} \approx 4{,}094$, not $5000 - 1000 = 4000$.

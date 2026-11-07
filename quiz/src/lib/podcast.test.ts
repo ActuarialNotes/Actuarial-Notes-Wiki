@@ -70,6 +70,11 @@ describe('the concept scripts', () => {
     expect(units.map(u => u.kind)).toEqual(['paragraph', 'formula', 'formula', 'formula', 'bullet', 'bullet'])
   })
 
+  it('reads past a figure the page opens with', () => {
+    const page = '![[Media/Figures/Event.svg|340]]\n\nAn **Event** is a set of outcomes.\n\n> $$E \\subseteq S$$\n\n![[Media/Other.svg]]\n\nMore.'
+    expect(openingUnits(page).map(u => u.kind)).toEqual(['paragraph', 'formula'])
+  })
+
   it('reads the definition, two formulas, The idea and the first trap — nothing after a formula left out', () => {
     const script = briefScript('Pure Premium', PAGE)!
     const lines = script.split('\n')

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:23ca7ecfdcc7e2eed8186483024bac5a93fb88c4203f9110b068bbe3802e4fec
+  content_hash: sha256:09710645621588b769023ac72fb75a007d0d377b7084c5b4f49ed17d3b9f2155
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL), Ex. 6.3.17(a)-(c) and 6.3.18(a)-(c) printed p.281 (PDF p.289); Def. 7.1 p.286 (PDF p.294); Thm 7.1 and sum of two exponentials (PDF pp.299-301); Examples 7.5-7.6 (PDF p.302); Thms 9.4 and 9.6 (PDF pp.351, 365); continuity correction (PDF p.340), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §5.3.1 Lemma 5.3 covariance properties incl. bilinearity; eq. 5.21 Var(aX+bY); correlation definition, -1<=rho<=1, rho=+-1 linear, rho(-X,Y)=-rho(X,Y), rho(aX+b,cY+d)=rho(X,Y) for a,c>0; independent implies uncorrelated, converse fails; pairwise uncorrelated sums, sha256:10ac40b763d78b0fa19a116594da71769bf417b59a1714be707c7c410991a7fb — https://www.probabilitycourse.com/chapter5/5_3_1_covariance_correlation.php"
@@ -17,135 +17,71 @@ verification:
   log: .verify/Concepts/Moments for Linear Combinations.md
 ---
 
-**Moments for Linear Combinations** are the expected value and variance of a weighted sum $W = a_1 X_1 + a_2 X_2 + \cdots + a_n X_n$ of random variables, written in terms of the moments of the $X_i$. These results give the [[Expected Value]] and [[Variance]] of aggregate losses and portfolios, and they underlie the [[Central Limit Theorem]].
-
-> $$E[W] = a_1 E[X_1] + a_2 E[X_2] + \cdots + a_n E[X_n]$$
-
-> $$\text{Var}(W) = \sum_{i=1}^n a_i^2 \,\text{Var}(X_i) + 2\sum_{i < j} a_i a_j \,\text{Cov}(X_i, X_j)$$
-
-- where the $a_i$ are constants and $\text{Cov}$ is the [[Covariance]].
-- For [[Independent Random Variables]], every covariance is 0 and $\text{Var}(W) = \sum a_i^2\,\text{Var}(X_i)$.
-- A constant added to $W$ shifts the mean and leaves the variance alone: $\text{Var}(aX + b) = a^2\,\text{Var}(X)$.
-- The broader picture, including indicator payments and normal sums, is on [[Linear Combinations of Random Variables]].
-
-> [!idea] The idea
-> The variance of a sum is the covariance of the sum with itself. Expanding that covariance pairs every term with every term. Each variable paired with itself gives a weighted variance, and each pair of different variables appears twice, once in each order.
-
 ![[Media/Figures/Moments_for_Linear_Combinations.svg|340]]
 
-## The mean: add the weighted means
+**Moments for Linear Combinations** are the expected value and variance of a [[Linear Combinations of Random Variables|linear combination]] $W = a_1 X_1 + \cdots + a_n X_n$ of random variables, where the $a_i$ are constants. The expected value of $W$ is
 
-A policyholder holds an auto policy and a home policy. Let $X$ be the number of auto claims in a year and $Y$ the number of home claims.
+> $$E[W] = a_1 E[X_1] + \cdots + a_n E[X_n]$$
 
-| $X$ \ $Y$ | 0 | 1 | 2 | Total |
-|---|---|---|---|---|
-| 0 | 0.36 | 0.18 | 0.06 | 0.60 |
-| 1 | 0.10 | 0.20 | 0.10 | 0.40 |
-| Total | 0.46 | 0.38 | 0.16 | 1 |
+This holds whether or not the $X_i$ are independent.
 
-The table gives $E[X] = 0.40$, $E[Y] = 0.70$, $\text{Var}(X) = 0.24$, $\text{Var}(Y) = 0.53$ and $\text{Cov}(X, Y) = 0.12$. Each auto claim costs 10 and each home claim 5, so the annual cost is $L = 10X + 5Y$ with $E[L] = 4 + 3.5 = 7.5$. The two counts are dependent, and the mean didn't care.
+> [!example]- A policyholder has $E[X] = 0.40$ auto claims and $E[Y] = 0.70$ home claims a year, and the two counts are dependent. Each auto claim costs 10 and each home claim costs 5. What is the expected annual cost? {Example}
+> - The annual cost is $10X + 5Y$.
+> - Its expected value is $10(0.40) + 5(0.70) = 7.5$.
+> - The dependence between the counts doesn't change the expected value.
 
-## One variable rescaled and shifted
+## Variance of a linear combination
 
-Next year, costs rise 10% and a fixed fee of 2 is added. The new cost is $1.1L + 2$.
+For constants $a$, $b$ and $c$, the variance of $aX + bY + c$ is
 
-> $$E[1.1L + 2] = 1.1(7.5) + 2 = 10.25$$
+> $$
+> \begin{aligned}
+> &\text{Var}(aX + bY + c) \\
+> &\quad = a^2\,\text{Var}(X) + b^2\,\text{Var}(Y) \\
+> &\quad\quad + 2ab\,\text{Cov}(X, Y)
+> \end{aligned}
+> $$
 
-> $$\text{Var}(1.1L + 2) = 1.1^2\,\text{Var}(L)$$
+- $\text{Cov}(X, Y)$ is the [[Covariance|covariance]] of $X$ and $Y$.
+- The constant $c$ shifts every outcome by the same amount, so it doesn't appear.
 
-The fee moves every outcome by the same amount, so it adds nothing to the spread. The 10% rise stretches every deviation by 1.1, so the variance grows by $1.1^2 = 1.21$.
+With $n$ random variables, there is a term $a_i^2\,\text{Var}(X_i)$ for each variable and a term $2a_ia_j\,\text{Cov}(X_i, X_j)$ for each pair.
 
-## Two variables: the variance grid
-
-Writing $\text{Var}(L) = \text{Cov}(10X + 5Y,\ 10X + 5Y)$ and expanding pairs each term with each term. The four pairings form a grid.
-
-| | $10X$ | $5Y$ |
-|---|---|---|
-| $10X$ | $100\,\text{Var}(X) = 24$ | $50\,\text{Cov} = 6$ |
-| $5Y$ | $50\,\text{Cov} = 6$ | $25\,\text{Var}(Y) = 13.25$ |
-
-The four cells add to $\text{Var}(L) = 49.25$. The next year's cost then has variance $1.21(49.25) \approx 59.59$.
-
-With $n$ variables the grid has $n^2$ cells. The diagonal holds the $n$ weighted variances. The off-diagonal cells hold each covariance twice, which is where the factor 2 in the formula comes from.
+> [!example]- The auto and home claim counts above have $\text{Var}(X) = 0.24$, $\text{Var}(Y) = 0.53$ and $\text{Cov}(X, Y) = 0.12$. What is the variance of the annual cost $10X + 5Y$? {Example}
+> - The variance terms are $100(0.24) = 24$ and $25(0.53) = 13.25$.
+> - The covariance term is $2(10)(5)(0.12) = 12$.
+> - The variance of the annual cost is $24 + 13.25 + 12 = 49.25$.
 
 > [!trap] One copy of the covariance
-> Writing $a_1a_2\,\text{Cov}(X_1, X_2)$ once gives 43.25 here instead of 49.25. Every off-diagonal pair appears twice in the grid.
+> Each pair of different variables contributes its covariance twice. Writing $ab\,\text{Cov}(X, Y)$ once gives 43.25 in place of 49.25.
 
-## Covariance between two combinations
+## Independent random variables
 
-The same grid works for two different combinations. How does the auto cost $10X$ move with the total cost $L$?
+[[Independent Random Variables|Independent random variables]] have covariance 0, so every covariance term drops out:
 
-> $$\text{Cov}\Big(\sum_i a_i X_i,\ \sum_j b_j Y_j\Big) = \sum_i \sum_j a_i b_j\,\text{Cov}(X_i, Y_j)$$
+> $$
+> \begin{aligned}
+> \text{Var}\Big(\sum_i a_i X_i\Big) &= \sum_i a_i^2\,\text{Var}(X_i)
+> \end{aligned}
+> $$
 
-Here $\text{Cov}(10X,\ 10X + 5Y) = 100\,\text{Var}(X) + 50\,\text{Cov}(X, Y) = 24 + 6 = 30$. A variance of a combination is the special case where both combinations are the same.
+The coefficients are squared, so the variance of a difference $X - Y$ is the sum of the variances, $\text{Var}(X) + \text{Var}(Y)$.
 
-## Independent copies: totals and averages
+> [!example]- Independent losses have $\text{Var}(X) = 4$ and $\text{Var}(Y) = 9$. What is $\text{Var}(X - 2Y)$? {Example}
+> - The coefficients are 1 and $-2$, whose squares are 1 and 4.
+> - $\text{Var}(X - 2Y)$ is $4 + 4(9) = 40$.
 
-The insurer covers 100 independent policyholders like this one. The grid for their total $T$ has only its diagonal, because independent policyholders have no covariance.
+## Totals of independent copies
 
-| Quantity | Mean | Variance |
-|---|---|---|
-| One cost $L$ | 7.5 | 49.25 |
-| $100L$ | 750 | 492,500 |
-| Total $T$ of 100 | 750 | 4,925 |
-| Average $T/100$ | 7.5 | 0.4925 |
+For $n$ independent random variables that each have mean $\mu$ and variance $\sigma^2$, the total $T = X_1 + \cdots + X_n$ has
 
-- $100L$ and $T$ have the same mean but very different variances. Scaling one risk keeps all its volatility, while pooling independent risks lets them offset.
-- The [[Coefficient of Variation|coefficient of variation]] of $L$ is $\sqrt{49.25}/7.5 \approx 0.936$. For the total of 100 it is $\sqrt{4{,}925}/750 \approx 0.094$, smaller by a factor of $\sqrt{100}$.
+> $$E[T] = n\mu$$
 
-> $$\text{Var}(X_1 + \cdots + X_n) = n\sigma^2$$
+> $$\text{Var}(T) = n\sigma^2$$
 
-> $$\text{Var}(\bar{X}) = \frac{\sigma^2}{n}$$
+A single variable scaled by $n$ has the same mean but variance $\text{Var}(nX) = n^2\sigma^2$. Pooling independent risks lets them offset, while scaling one risk keeps all its spread.
 
-## Try it
-
-> [!example]- A profit model with two independent inputs {Example}
-> A product's profit is $Z = 3X - Y - 5$, where $X$ and $Y$ are independent with $\text{Var}(X) = 2$ and $\text{Var}(Y) = 4$. Find $\text{Var}(Z)$.
->
-> > [!answer]-
-> > **Plan:** square each weight, drop the constant, and add.
-> > $$
-> > \begin{align*}
-> > \text{Var}(Z) &= 3^2(2) + (-1)^2(4) \\
-> > &= 18 + 4 \\
-> > &= 22
-> > \end{align*}
-> > $$
-> > The $-Y$ adds variance, because its weight is squared.
-
-> [!example]- A flat increase and a percentage increase {Example}
-> A benefit has a surgeon's part $X$ and a hospital part $Y$, with $\text{Var}(X) = 400$, $\text{Var}(Y) = 900$ and $\text{Var}(X + Y) = 1{,}600$. The insurer raises $X$ by a flat 50 and $Y$ by 20%. Find the variance of the new total.
->
-> > [!answer]-
-> > **Plan:** recover the covariance from the old total, then build the new variance.
-> > $$
-> > \begin{align*}
-> > 2\,\text{Cov}(X, Y) &= 1{,}600 - 400 - 900 \\
-> > &= 300 \\
-> > \text{Var}(X + 50 + 1.2Y) &= 400 + 1.44(900) + 1.2(300) \\
-> > &= 400 + 1{,}296 + 360 \\
-> > &= 2{,}056
-> > \end{align*}
-> > $$
-> > The flat 50 changes nothing in the variance, while the 20% scales $Y$'s variance by 1.44 and the covariance by 1.2.
-
-> [!example]- Making two combinations uncorrelated {Example}
-> Losses have $\text{Var}(X) = 4$, $\text{Var}(Y) = 9$ and $\text{Cov}(X, Y) = 3$. Find the constant $c$ for which $X + Y$ and $cX + Y$ are uncorrelated.
->
-> > [!answer]-
-> > **Plan:** expand the covariance over the grid and set it to 0.
-> > $$
-> > \begin{align*}
-> > \text{Cov}(X + Y,\ cX + Y) &= c\,\text{Var}(X) + \text{Cov}(X, Y) \\
-> > &\quad + c\,\text{Cov}(X, Y) + \text{Var}(Y) \\
-> > &= 4c + 3 + 3c + 9 \\
-> > &= 7c + 12
-> > \end{align*}
-> > $$
-> > Setting $7c + 12 = 0$ gives $c = -12/7 \approx -1.71$.
-
-> [!warning]- Exam traps
-> - **$\text{Var}(nX)$ for a sum of $n$ independent copies.** The total has variance $n\sigma^2$, not $n^2\sigma^2$.
-> - **One copy of each covariance.** The factor 2 counts both orderings of the pair.
-> - **Subtracting a variance.** A negative weight is squared, so $\text{Var}(X - Y)$ adds $\text{Var}(Y)$.
-> - **Letting a constant into the variance.** A flat fee changes $E[W]$ but not $\text{Var}(W)$.
+> [!example]- An insurer covers 100 independent policyholders, each with an annual cost of mean 7.5 and variance 49.25. What are the mean and standard deviation of the total cost? {Example}
+> - The mean is $100(7.5) = 750$.
+> - The variance is $100(49.25) = 4{,}925$, so the standard deviation is $\sqrt{4{,}925} = 70.2$.
+> - One policyholder's cost scaled by 100 would have standard deviation $100\sqrt{49.25} = 701.8$, ten times larger.

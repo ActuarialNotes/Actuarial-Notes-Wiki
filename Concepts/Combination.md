@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:3e220ed87dbc7132b5ef496641cca97d06a9565b9e0e5ee31c7b741711323bbf
+  content_hash: sha256:e608f7d8a77ee59cc9a438ff60bda83895c9a08ee9fb883eb46621a6d4677e35
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.1 Counting Technique (stages, multiply, PDF pp.83-84), Thm 3.1 n!, Def 3.2 and Thm 3.2 k-permutations n(n−1)…(n−k+1) (PDF p.88); §3.2 binomial coefficients C(n,j) = number of j-subsets, Thm 3.4 Pascal recurrence, Thm 3.5 C(n,j)=(n)_j/j! (pp.93-94, PDF pp.101-102), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §2.1.3 Unordered Sampling without Replacement (P^n_k=C(n,k)k!; C(n,k)=n!/(k!(n−k)!), 0≤k≤n; C(n,k)=C(n,n−k); Σ C(n,k)=2^n; multinomial coefficients n!/(n1!…nr!)), read 2026-11-06, sha256:ad36b1a87daa3fd5d6a5e94a71c1a118182c7fd38a04af4a9cbf7b71e3ca62ae — https://www.probabilitycourse.com/chapter2/2_1_3_unordered_without_replacement.php"
@@ -28,7 +28,9 @@ A **Combination** is an unordered selection of distinct objects. The number of c
 - $k \le n$.
 
 > [!idea] The idea
-> Each combination of $k$ objects can be put in order in $k!$ ways. So there are $k!$ times as many [[Permutation|permutations]] as combinations, and $\binom{n}{k} = \frac{{}_{n}P_{k}}{k!}$.
+> There are $k!$ times as many [[Permutation|permutations]] as combinations.
+
+Each combination of $k$ objects can be put in order in $k!$ ways, so $\binom{n}{k} = \frac{{}_{n}P_{k}}{k!}$.
 
 > [!example]- A club of 8 people chooses a committee of 3. How many different committees are there? {Example}
 > - A committee has no order, so each committee is a combination of 3 people from 8.

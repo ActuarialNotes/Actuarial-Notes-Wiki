@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:3c77f230d92fbfeeb3433c238283f6d1082348ee7c99da554131f801989b19f7
+  content_hash: sha256:911020c9b658b41387d0b7335a6898b1a58137b6fd903e2cc58b553914bed69a
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §4.1 conditional probability P(F|E)=P(F∩E)/P(E), E as the new sample space (pp.133-134, PDF pp.141-142), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §4.1 Def. 4.1 independence (either event probability 0 counts as independent), Thm 4.1 independent iff P(E∩F)=P(E)P(F) (pp.139-140, PDF pp.147-148); Def. 4.2 mutual independence over every subset, pairwise does not imply mutual (p.141, PDF p.149); Exercise 7: A heads on first toss, B heads on second, C tosses match are pairwise independent but not independent (PDF p.159), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
@@ -17,104 +17,68 @@ verification:
   log: .verify/Concepts/Conditional Probability.md
 ---
 
-**Conditional Probability** $P(A \mid B)$ is the probability that [[Event|event]] $A$ occurs given that event $B$ has occurred.
-
-> $$P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \quad P(B) > 0$$
-
-- $A$ is the event being asked about and $B$ is the event known to have happened.
-- $P(A \cap B)$ is the probability that both happen.
-
-> [!idea] The idea
-> Knowing that $B$ happened rules out every outcome outside $B$. The question becomes: what share of $B$ is also $A$? The formula answers that share by dividing the overlap by the size of $B$.
-
 ![[Media/Figures/Conditional_Probability.svg|340]]
 
-## One portfolio, three questions
+A **Conditional Probability** is the probability that an [[Event|event]] $E$ occurs given that an event $F$ has occurred. If $P(F) > 0$, the conditional probability of $E$ given $F$ is
 
-An insurer covers 1,000 drivers. 300 of them are young and 700 are older. Last year 60 young drivers and 70 older drivers had a claim.
+> $$P(E \mid F) = \frac{P(E \cap F)}{P(F)}$$
 
-| | Claim | No claim | Total |
-|---|---|---|---|
-| Young | 60 | 240 | 300 |
-| Older | 70 | 630 | 700 |
-| Total | 130 | 870 | 1,000 |
+- $P(E \cap F)$ is the [[Probability|probability]] that both $E$ and $F$ occur.
 
-**What share of all drivers are young and had a claim?** That is the joint probability. The whole portfolio is the sample space, so divide by 1,000.
+> [!idea] The idea
+> Knowing that $F$ occurred shrinks the [[Sample Space|sample space]] to $F$.
 
-> $$P(\text{young} \cap \text{claim}) = \frac{60}{1000} = 0.06$$
+> [!example]- An insurer covers 1,000 drivers. 300 are young, and 60 of the young drivers had a claim last year. What is the probability that a young driver had a claim? {Example}
+> - Let $E$ be "had a claim" and $F$ be "is young".
+> - $P(E \cap F) = \frac{60}{1{,}000} = 0.06$ and $P(F) = \frac{300}{1{,}000} = 0.30$.
+> - $P(E \mid F) = \frac{0.06}{0.30} = 0.20$.
+> - This is the same as $\frac{60}{300}$, the share of the young drivers who had a claim.
 
-**A driver is young. What is the probability they had a claim?** Now the sample space is only the 300 young drivers. The 700 older drivers no longer matter.
+## The multiplication rule
 
-> $$P(\text{claim} \mid \text{young}) = \frac{60}{300} = 0.20$$
+Multiplying both sides by $P(F)$ gives the probability that both events occur:
 
-The formula gives the same answer, because dividing both counts by 1,000 doesn't change their ratio: $0.06 / 0.30 = 0.20$.
+> $$P(E \cap F) = P(E \mid F)\,P(F)$$
 
-**A driver had a claim. What is the probability they are young?** The condition has changed, so the sample space is now the 130 drivers with a claim.
+A statement such as "25% of those who insure a car also insure a home" gives a conditional probability, $P(\text{home} \mid \text{car}) = 0.25$. When $P(E \mid F) = P(E)$, knowing $F$ changes nothing, and $E$ and $F$ are [[Independent Events|independent]].
 
-> $$P(\text{young} \mid \text{claim}) = \frac{60}{130} \approx 0.46$$
+> [!example]- 40% of policyholders insure a car, and 25% of those who insure a car also insure a home. What is the probability that a policyholder insures both? {Example}
+> - Let $F$ be "insures a car" and $E$ be "insures a home", so $P(F) = 0.40$ and $P(E \mid F) = 0.25$.
+> - $P(E \cap F) = 0.25 \times 0.40 = 0.10$.
 
-The numerator, 60, is the same in both conditional questions. Only the denominator moved. That is the whole difference between $P(A \mid B)$ and $P(B \mid A)$.
+## When one event contains the other
 
-> [!trap] Reading the condition backwards
-> "20% of young drivers claim" and "20% of claimants are young" are different statements. When a question gives one and asks for the other, use [[Bayes Theorem]]. Answering with the given figure is the most common mistake on this topic.
+If every outcome of $E$ is also in $F$, $E \subseteq F$, then $E \cap F = E$, and
 
-## What stays true after conditioning
+> $$P(E \mid F) = \frac{P(E)}{P(F)}$$
 
-Conditioning on $B$ produces a new probability, so every rule you already know still works inside $B$.
+> [!example]- A fair die is rolled and shows at least 4. What is the probability that it shows 6? {Example}
+> - Let $E = \{6\}$ and $F = \{4, 5, 6\}$, so $E \subseteq F$.
+> - $P(E \mid F) = \frac{1/6}{3/6} = \frac{1}{3}$.
 
-- The complement rule holds: $P(\text{no claim} \mid \text{young}) = 1 - 0.20 = 0.80$.
-- Changing the *condition* is different. $P(\text{claim} \mid \text{older}) = 70/700 = 0.10$, which is not $1 - 0.20$.
-- Rearranging the formula gives the [[Probability Multiplication Rule|multiplication rule]]: $P(\text{young} \cap \text{claim}) = 0.30 \times 0.20 = 0.06$.
+## Conditioning on a random variable
 
-## When is the condition irrelevant?
+A condition on a [[Random Variable|random variable]] $X$ is an event such as $\{X > a\}$. For $b > a$, the event $\{X > b\}$ is contained in $\{X > a\}$, so
 
-Overall, $P(\text{claim}) = 130/1000 = 0.13$. Learning that a driver is young raises this to 0.20, so age carries information about claims. If it didn't, the two events would be [[Independent Events|independent]].
+> $$P(X > b \mid X > a) = \frac{P(X > b)}{P(X > a)}$$
 
-> $$P(A \mid B) = P(A) \iff A \text{ and } B \text{ are independent}$$
+The complement rule still holds inside the condition: $P(X \le b \mid X > a) = 1 - P(X > b \mid X > a)$.
 
-## The same idea with a random variable
-
-A condition is often a range of a loss or a lifetime. The overlap is then an interval, and the probabilities come from the CDF $F$.
-
-> $$P(X \le b \mid X > a) = \frac{F(b) - F(a)}{1 - F(a)}, \quad a < b$$
-
-- A loss uniform on $(0, 1000)$, known to exceed 400, is at most 700 with probability $(0.7 - 0.4)/(1 - 0.4) = 0.5$.
-- A person alive at age $x$ dies within $n$ years with probability $P(T \le x + n \mid T > x)$, not $P(T \le x + n)$.
+> [!example]- A loss is uniform on $(0, 1{,}000)$. Given that it exceeds a deductible of 400, what is the probability that it is at most 800? {Example}
+> - $P(X > 800) = 0.2$ and $P(X > 400) = 0.6$.
+> - $P(X > 800 \mid X > 400) = \frac{0.2}{0.6} = \frac{1}{3}$.
+> - The probability that the loss is at most 800 is $1 - \frac{1}{3} = \frac{2}{3}$.
 
 ## Expected value given an event
 
-The same move works for an expected value. To find the mean of $X$ given an event $A$, keep only the outcomes in $A$ and rescale their probabilities by $P(A)$.
+The [[Expected Value|expected value]] of a discrete random variable $X$ given an event $F$ weights each value by its probability within $F$:
 
-> $$E[X \mid A] = \sum_x x \, \frac{P(X = x,\ A)}{P(A)}$$
+> $$E[X \mid F] = \sum_x x \, \frac{P(\{X = x\} \cap F)}{P(F)}$$
 
-- A loss is 0, 100, 400 or 1,000 with probabilities 0.4, 0.3, 0.2 and 0.1. Given that the loss is positive, its mean is $(30 + 80 + 100) / 0.6 = 350$.
-- Writing $1_A$ for the indicator of $A$ (1 if $A$ occurs, 0 if not), the same formula is $E[X \cdot 1_A] / P(A)$.
+> [!example]- A loss is 0, 100, 400 or 1,000 with probabilities 0.4, 0.3, 0.2 and 0.1. What is the expected loss given that the loss is positive? {Example}
+> - The event $F$ is "the loss is positive", with $P(F) = 0.3 + 0.2 + 0.1 = 0.6$.
+> - The positive losses contribute $100(0.3)$, $400(0.2)$ and $1{,}000(0.1)$, which add to $210$.
+> - $E[X \mid F] = \frac{210}{0.6} = 350$.
 
-## Try it
-
-> [!example]- Fill in the missing cell {Example}
-> Of a group of policyholders, 40% insure a car, 30% insure a home and 15% insure both. Find $P(\text{home} \mid \text{car})$ and $P(\text{home} \mid \text{no car})$.
->
-> > [!answer]-
-> > **Plan:** lay the percentages out as a table, then divide by the given row.
-> >
-> > | | Home | No home | Total |
-> > |---|---|---|---|
-> > | Car | 15 | 25 | 40 |
-> > | No car | 15 | 45 | 60 |
-> > | Total | 30 | 70 | 100 |
-> >
-> > $P(\text{home} \mid \text{car}) = 15/40 = 0.375$ and $P(\text{home} \mid \text{no car}) = 15/60 = 0.25$. The two answers don't add to 1, because they are conditioned on different rows.
-
-> [!example]- A draw with a condition {Example}
-> An urn holds 4 red, 3 blue and 5 green balls. Three are drawn without replacement. Given that no green ball is drawn, what is the probability that exactly two are red?
->
-> > [!answer]-
-> > **Plan:** with green ruled out, the draw is three balls from the 7 red and blue balls, each set equally likely.
-> > $$P(2 \text{ red} \mid \text{no green}) = \frac{\binom{4}{2}\binom{3}{1}}{\binom{7}{3}} = \frac{18}{35} \approx 0.514$$
-> > Shrinking the urn first is the same move as shrinking the sample space to $B$.
-
-> [!warning]- Exam traps
-> - **Reversing the condition.** Same numerator, different denominator. Use [[Bayes Theorem]].
-> - **Dividing by the grand total.** That gives $P(A \cap B)$, not $P(A \mid B)$.
-> - **Complementing the condition.** $P(A \mid B^c) \ne 1 - P(A \mid B)$.
+> [!trap] Reading the condition backwards
+> "20% of young drivers had a claim" is $P(\text{claim} \mid \text{young})$. "20% of drivers with a claim are young" is $P(\text{young} \mid \text{claim})$, a different number. When a question gives one and asks for the other, use [[Bayes Theorem|Bayes' theorem]].

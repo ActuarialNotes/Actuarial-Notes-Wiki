@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:40a5fef3c6bee22255b997af5f83ab2e3ad33b32045d3f6e4b1b4654ae28156a
+  content_hash: sha256:b833162c99f5280293e2cf2ae0bfd048df2543b5bf43d2086b6f2657b48838e6
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 Def. 1.1 sample space/outcomes/events, Def. 1.2 P(E)=Σ_{ω∈E} m(ω), Examples 1.6-1.9, set operations and Fig. 1.7, Thm 1.1 (P(E)≥0, P(Ω)=1, monotonicity, disjoint additivity, complement with proof), Thms 1.2-1.4 and Cor. 1.1 (pp.18-24, PDF pp.26-32), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 Ex. 1.10, Def. 1.3 uniform m(ω)=1/n, Ex. 1.11 two dice 36 ordered pairs, no single correct sample space, Determination of Probabilities, Infinite Sample Spaces (countable; Ex. 1.13 geometric sum), Historical Remarks 36 ordered vs 21 unordered pairs (pp.24-30, PDF pp.32-38), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
@@ -28,7 +28,7 @@ A **Sample Space** is the set of all possible outcomes of an experiment. When it
 
 > [!example]- A coin is flipped and then a die is rolled. What is the sample space? {Example}
 > - An outcome records both results, so it is an ordered pair (coin, die).
-> - $S = \{(H, 1), (H, 2), \ldots, (H, 6), (T, 1), (T, 2), \ldots, (T, 6)\}$.
+> - The sample space $S$ holds the pairs $(H, 1)$, $(H, 2)$, …, $(H, 6)$ and $(T, 1)$, $(T, 2)$, …, $(T, 6)$.
 > - There are 2 results for the coin and 6 for the die, so by the [[Combinatorics#The multiplication principle|multiplication principle]], $|S| = 2 \times 6 = 12$.
 
 ## Requirements of outcomes in a sample space

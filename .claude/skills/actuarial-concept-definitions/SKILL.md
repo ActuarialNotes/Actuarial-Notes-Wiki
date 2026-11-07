@@ -45,7 +45,9 @@ A **Term** is <the definition, with [[wiki-links]]>. <Optional second sentence.>
 <a new term or fact the formula needs, as a sentence — never a bullet>
 
 > [!idea] The idea                          ← optional
-> <what the definition alone does not say>
+> <one sentence: what the definition alone does not say>
+
+<optional plain text expanding it: a worked line, a table>
 
 > [!example]- <the whole question, as the reader would ask it> {Example}
 > <optional lead-in sentence, then a table as its own block>
@@ -138,14 +140,20 @@ so it costs nothing there.
 
 Only when there is something the definition and formula don't already say: a
 decision the reader must make, a relationship between neighbours, the reason a
-formula has its shape. Combinatorics has one (the order × replacement grid
-that picks the formula). Probability doesn't. Permutation's draft had one
+formula has its shape. Combinatorics has one (order and replacement pick the
+formula). Probability doesn't. Permutation's draft had one
 ("use a permutation when order matters") and it was cut, because it repeated
 the definition.
 
 - Title it exactly `The idea`. It goes after the opening bullets, or after the
   definition on a page with no formula.
-- One to three sentences, or a small table. It must not restate the definition.
+- **The card is one sentence.** It must not restate the definition.
+- Anything that expands the idea (a worked line, the table that applies it)
+  goes **directly below the card as plain text**, never inside it and never as
+  an example. Combinatorics' card asks the two questions, and the order ×
+  replacement table follows it as an ordinary table. Axioms of Probability's
+  card says every rule follows from the three, and the complement rule's
+  derivation follows it as two sentences.
 
 ### 5. Examples — `> [!example]- <the question> {Example}`
 
@@ -308,7 +316,7 @@ bullets answer it, each a claim with its reason.
 - [ ] Every formula boxed (`> $$ … $$`), introduced by a sentence ending in "is"
 - [ ] Immediately after each box: one bullet per term not defined in the words before it, and conditions as bare bullets
 - [ ] No bullet that justifies the formula, restates a definition or introduces a new term (that is a sentence)
-- [ ] `[!idea] The idea` only if it says something the definition doesn't
+- [ ] `[!idea] The idea` only if it says something the definition doesn't — one sentence, anything more as plain text below it
 - [ ] Each formula followed by `> [!example]- <the whole question> {Example}` — folded, tagged, the setup in the title
 - [ ] Example bodies: one reasoning step per bullet, the answer last; no "By <this page's rule> (see …)"
 - [ ] At least one example ends in a probability, where the page is a counting tool or a component of one
@@ -323,6 +331,7 @@ bullets answer it, each a claim with its reason.
 - [ ] Notation matches the exam's table in `references/vault-mechanics.md`; one letter per thing
 - [ ] Tables in callouts are their own block, every line `> `-prefixed, never inside a bullet
 - [ ] `\{ \}` for literal braces; `{}_{n}P_{k}` for pre-subscripts; all math in `$…$`
+- [ ] No long inline `$…$` (a whole set, a chain of fractions): split it or box it, or it clips its card on a phone
 - [ ] Worked numbers recomputed in code
 - [ ] All `[[links]]` resolve, to the right namesake
 - [ ] Frontmatter holds only `aliases:` (if needed) and the synced `verification:`

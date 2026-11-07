@@ -25,7 +25,7 @@ import { useExamPassRates } from '@/hooks/useExamPassRates'
 import { examStatus } from '@/lib/examStatus'
 import { difficultyLevelsToParam, inDifficultyLevels } from '@/lib/quizDifficulty'
 import { formatPace, paceForExam } from '@/lib/quizTiming'
-import { difficultySummary, estimateSeconds, formatEstimate, questionsWord, topicPills } from '@/lib/quizSetup'
+import { estimateSeconds, formatEstimate, questionsWord, topicPills } from '@/lib/quizSetup'
 import { defaultBody, loadBody, saveBody, type ExamBody } from '@/lib/bodyFilter'
 import {
   conceptLevels,
@@ -52,7 +52,7 @@ import { QuizExamLadder } from '@/components/landing/QuizExamLadder'
 import { QuizGamesPanel } from '@/components/landing/QuizGamesPanel'
 import { PastPaperShelf } from '@/components/landing/PastPaperShelf'
 import { QuizTitleRow } from '@/components/landing/QuizTitleRow'
-import { QuizHeroCard } from '@/components/landing/QuizHeroCard'
+import { QuizHeroCard, type SetupSection } from '@/components/landing/QuizHeroCard'
 import { PaperTiles, TodaysPlanTile } from '@/components/landing/QuizLaunchTiles'
 import {
   CountChoice,
@@ -71,9 +71,10 @@ import { countOptions as buildCountOptions } from '@/components/landing/builderO
 // components/landing/. This page holds the state that joins them.
 //
 // The setup screen is a card and three tiles. The card is the reader's own
-// quiz — its count, how long it should take, a pill for its topics and its
-// difficulty, and Start; any pill opens the setup sheet, where the topics,
-// count, levels and how it's sat are changed. Under it, today's plan (Pro's;
+// quiz — its count, how long it should take, a pill for each topic, its
+// settings as icons, and Start; each opens the setup sheet at its own section
+// (the count at How many), where the topics, count, levels and how it's sat
+// are changed. Under it, today's plan (Pro's;
 // shown locked to anyone else, so the plan never stands above building your
 // own), then a practice exam drawn to the paper's shape and the exam's past
 // papers, each opening the sheet in its own form.
@@ -125,6 +126,12 @@ export default function Landing() {
   const [selectedSitting, setSelectedSitting] = useState<QuizSitting>(null)
   const [sheet, setSheet] = useState<Sheet | null>(initialMode === 'mock-exam' ? 'papers' : null)
   const closeSheet = useCallback(() => setSheet(null), [])
+  // Where the quiz's sheet opens — the part of the card that was tapped.
+  const [sheetFocus, setSheetFocus] = useState<SetupSection | undefined>()
+  const openQuizSheet = (section: SetupSection) => {
+    setSheetFocus(section)
+    setSheet('quiz')
+  }
 
   // The settings each format remembers apart: the card's quiz, and the whole
   // papers (practice exam and past papers), which are sat as practice exams.
@@ -350,12 +357,12 @@ export default function Landing() {
   const quizEstimate = estimateFor(quizPool, quizCount)
   const practiceEstimate = estimateFor(practicePool, practiceCount)
 
-  // The card's pills: the topics, then the difficulty.
+  // The card's pills: the topics. The settings are the card's icons.
   const pills = useMemo(() => {
-    if (selectedConcept) return [selectedConcept, difficultySummary(difficulties)]
+    if (selectedConcept) return [selectedConcept]
     const { labels, more } = topicPills(groupedConcepts, selectedConcepts)
-    return [...labels, ...(more > 0 ? [`+${more} more`] : []), difficultySummary(difficulties)]
-  }, [selectedConcept, groupedConcepts, selectedConcepts, difficulties])
+    return [...labels, ...(more > 0 ? [`+${more} more`] : [])]
+  }, [selectedConcept, groupedConcepts, selectedConcepts])
 
   function startQuiz() {
     if (selectedConcept) {
@@ -449,7 +456,7 @@ export default function Landing() {
   }
 
   const sittingSettings = (s: typeof quizSettings) => (
-    <SheetSection title="How it's sat">
+    <SheetSection section="sitting" title="How it's sat">
       <SittingChoices
         reveal={s.reveal}
         onRevealChange={s.onRevealChange}
@@ -519,7 +526,10 @@ export default function Landing() {
             count={quizCount}
             estimate={quizEstimate}
             pills={pills}
-            onChange={() => setSheet('quiz')}
+            levels={difficulties}
+            timed={quizSettings.timed}
+            revealDuring={quizSettings.reveal === 'during'}
+            onChange={openQuizSheet}
             onStart={startQuiz}
           />
           {planTile && (
@@ -550,9 +560,11 @@ export default function Landing() {
         startDisabled={quizCount === 0}
         emptyNote="No questions match. Pick other topics or levels."
         onStart={startQuiz}
+        focus={sheetFocus}
       >
         {!selectedConcept && (
           <SheetSection
+            section="topics"
             title="Topics"
             aside={selectedConcepts.length > 0 ? (
               <button
@@ -575,10 +587,10 @@ export default function Landing() {
             />
           </SheetSection>
         )}
-        <SheetSection title="How many" aside={`${quizPool.length} available`}>
-          <CountChoice options={countOptions} value={String(count)} onChange={handleCountChange} />
+        <SheetSection section="count" title="How many" aside={`${quizPool.length} available`}>
+          <CountChoice options={countOptions} value={String(count)} onChange={handleCountChange} max={quizPool.length} />
         </SheetSection>
-        <SheetSection title="Difficulty">
+        <SheetSection section="difficulty" title="Difficulty">
           <DifficultyChoice
             levels={difficulties}
             onChange={quizSettings.onDifficultiesChange}

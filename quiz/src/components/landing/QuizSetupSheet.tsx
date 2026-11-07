@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, type CSSProperties, type ReactNode } from 'react'
+import { useEffect, useId, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import { Play, X } from 'lucide-react'
 import { OverlayPortal } from '@/components/ui/OverlayPortal'
 import { useIsReadingPdf } from '@/hooks/usePdfReader'
@@ -31,6 +31,7 @@ export function QuizSetupSheet({
   startDisabled,
   onStart,
   emptyNote,
+  focus,
   children,
 }: {
   title: string
@@ -42,10 +43,23 @@ export function QuizSetupSheet({
   onStart: () => void
   /** Said above Start when there is nothing to start. */
   emptyNote?: string
+  /** The section (`SheetSection`'s `section`) to open scrolled to. */
+  focus?: string
   children: ReactNode
 }) {
   const titleId = useId()
   const panelRef = useRef<HTMLDivElement>(null)
+  const scrollRef = useRef<HTMLDivElement>(null)
+
+  // Opened from one thing on the card — the count, the difficulty — the sheet
+  // opens at that thing's section rather than at the top.
+  useEffect(() => {
+    const box = scrollRef.current
+    if (!focus || !box) return
+    const target = box.querySelector<HTMLElement>(`[data-sheet-section="${focus}"]`)
+    if (!target) return
+    box.scrollTop += target.getBoundingClientRect().top - box.getBoundingClientRect().top - 8
+  }, [focus])
   const lastFocus = useRef<HTMLElement | null>(null)
 
   // Focus the panel on open (not its first control, which a stray key would
@@ -110,7 +124,7 @@ export function QuizSetupSheet({
             </button>
           </div>
 
-          <div className="min-h-0 flex-1 space-y-6 overflow-y-auto overscroll-contain px-5 pb-5 pt-2">
+          <div ref={scrollRef} className="min-h-0 flex-1 space-y-6 overflow-y-auto overscroll-contain px-5 pb-5 pt-2">
             {children}
           </div>
 
@@ -143,16 +157,19 @@ export function QuizSetupSheet({
 export function SheetSection({
   title,
   aside,
+  section,
   children,
 }: {
   title: string
+  /** The name a sheet's `focus` opens it at. */
+  section?: string
   /** A short fact on the heading's right — "130 available". */
   aside?: ReactNode
   children: ReactNode
 }) {
   const id = useId()
   return (
-    <section aria-labelledby={id} className="space-y-2.5">
+    <section aria-labelledby={id} data-sheet-section={section} className="space-y-2.5">
       <div className="flex items-baseline justify-between gap-3">
         <h3 id={id} className="text-[13px] font-semibold uppercase tracking-wide text-muted-foreground">{title}</h3>
         {aside && <span className="text-[13px] tabular-nums text-muted-foreground">{aside}</span>}
@@ -162,16 +179,38 @@ export function SheetSection({
   )
 }
 
-/** How many questions: one row of numbers, the picked one solid in the exam's colour. */
+/**
+ * How many questions: one row of numbers, the picked one solid in the exam's
+ * colour, ending in a field for any other number. A number typed there is
+ * held to `max` (what the pool holds) and picked as soon as it is a count; a
+ * count that isn't one of the presets shows in the field, picked.
+ */
 export function CountChoice({
   options,
   value,
   onChange,
+  max,
 }: {
   options: SegmentedOption<string>[]
   value: string
   onChange: (value: string) => void
+  /** The most the field takes; 0 while unknown, which caps nothing. */
+  max?: number
 }) {
+  const custom = !options.some(o => o.value === value)
+  const [draft, setDraft] = useState(custom ? value : '')
+  const typing = useRef(false)
+  // A preset picked, or the count clamped by a shrinking pool, rewrites the
+  // field — but not mid-typing, where "1" on the way to "12" is a preset.
+  useEffect(() => { if (!typing.current) setDraft(custom ? value : '') }, [custom, value])
+
+  function type(raw: string) {
+    const digits = raw.replace(/\D/g, '').slice(0, 4)
+    setDraft(digits)
+    const n = Number(digits)
+    if (n >= 1) onChange(String(max ? Math.min(n, max) : n))
+  }
+
   return (
     <div role="radiogroup" aria-label="Question count" className="flex gap-1 rounded-2xl bg-card p-1">
       {options.map(o => {
@@ -196,6 +235,23 @@ export function CountChoice({
           </button>
         )
       })}
+      <input
+        type="text"
+        inputMode="numeric"
+        pattern="[0-9]*"
+        enterKeyHint="done"
+        aria-label={max ? `Other number of questions, up to ${max}` : 'Other number of questions'}
+        placeholder="Other"
+        value={draft}
+        onChange={e => type(e.target.value)}
+        onFocus={() => { typing.current = true }}
+        onBlur={() => { typing.current = false; setDraft(custom ? value : '') }}
+        className={cn(
+          'h-11 min-w-0 flex-[1.4] rounded-xl bg-transparent text-center text-base font-semibold tabular-nums outline-none transition-colors',
+          'placeholder:font-medium placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring',
+          custom ? PICK : 'ring-1 ring-inset ring-border',
+        )}
+      />
     </div>
   )
 }

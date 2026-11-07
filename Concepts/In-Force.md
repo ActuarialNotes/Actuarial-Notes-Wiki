@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:2164b4264bada773b871ad1a418d9c584f0589bf99aa51b2d26580c42f2f76a9
+  content_hash: sha256:e6819db760167946acf1a88742d0ab4237ed17699cb9e8524079b60a9371938c
   sources:
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 5 pp. 70-71 (PDF pp. 82-83), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
     - "CAS Exam 5 Fall 2019 — sample answers and examiner's report, Q2(d), report pp.36-37, sha256:51609658f7f72676944585c38f8eb3bbb52fcdafc58070de5524051435100df0 — https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam5_f19-5.pdf"
@@ -44,7 +44,7 @@ In-force premium counts each policy's own full-term premium, so books written on
 
 ## Uses of in-force data
 
-In-force premium is the best estimate of the company's [[Mix of Business|mix of business]] at a date. The most recent in-force premium is often used to measure the impact of a rate change on the existing portfolio of customers. When earned premium is not available at the level needed, such as by territory, in-force premium by territory may be used to estimate it. Successive in-force snapshots also separate the growth of a book into a change in the number of policies and a change in average premium. The [[Lifetime Value|retention ratio]] is measured on the in-force book: the policies renewed divided by the potential renewal policies.
+In-force premium is the best estimate of the company's [[Mix of Business|mix of business]] at a date. The most recent in-force premium is often used to measure the impact of a rate change on the existing portfolio of customers. When earned premium is not available at the level needed, such as by territory, in-force premium by territory may be used to estimate it. The average of the in-force premium at the start and the end of a year estimates that year's earned premium only when all policies have the same annual term and are written uniformly through the year. Successive in-force snapshots also separate the growth of a book into a change in the number of policies and a change in average premium. The [[Lifetime Value|retention ratio]] is measured on the in-force book: the policies renewed divided by the potential renewal policies.
 
 > [!example]- A homeowners book had 40,000 policies in force with $\$52{,}000{,}000$ of in-force premium at 12/31/2023, and 42,000 policies with $\$58{,}800{,}000$ at 12/31/2024. How much of the premium growth is policy count and how much is average premium? {Example}
 > - The average premium per policy in force is $52{,}000{,}000/40{,}000 = \$1{,}300$ in 2023 and $58{,}800{,}000/42{,}000 = \$1{,}400$ in 2024.

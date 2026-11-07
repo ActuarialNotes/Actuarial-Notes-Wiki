@@ -162,10 +162,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Cape Cod Method",
-      "quote": "The premium is each year's earned **risk pure premium**: the treaty premium net of reinsurance commissions, brokerage fees and internal expenses, adjusted to remove rate-level differences between years.",
-      "note": "Patrik p.454 (earlier Exam 7 reading, D-decision 31 Oct): the SB exposure base is premium net of commissions, brokerage and internal expenses.",
-      "date": "2026-10-31",
-      "run": "g8-cas7-chk-pk"
+      "quote": "In Patrik's chapter, the premium is each treaty year's earned risk pure premium: the premium net of commissions, brokerage and internal expenses, adjusted to remove rate-level differences between years.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -296,10 +296,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Cape Cod Method",
-      "quote": "As long as those rate-relativity adjustments are reasonably accurate, Stanard-Bühlmann gives more accurate estimates than the chain ladder for the recent, immature years and overall.",
-      "note": "Patrik p.458 (with the next bullet's 'green years, where the chain ladder estimate has high variance'): SB is preferred over the chain ladder where reported losses are volatile, provided the on-level premium supports one ELR - the substance of CAS's sample answer, in Patrik's words.",
-      "date": "2026-10-31",
-      "run": "g8-cas7-chk-pk"
+      "quote": "As long as those adjustments are reasonably accurate, Stanard-Bühlmann gives more accurate estimates than the chain ladder for the recent, immature years and overall.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -1361,10 +1361,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Cape Cod Method",
-      "quote": "With report lag $\\text{Rlag}_k$ and a credibility factor $0 \\le CF \\le 1$, the weight on the chain ladder is $Z_k = CF \\times \\text{Rlag}_k$, and $\\text{IBNR}_k = Z_k \\cdot \\text{IBNR}^{CL}_k + (1 - Z_k) \\cdot \\text{IBNR}^{SB}_k$.",
-      "note": "Patrik Formula 7.66, p.458: Z = CF x report lag on the chain ladder IBNR, 1 - Z on the SB IBNR.",
-      "date": "2026-10-31",
-      "run": "g8-cas7-chk-pk"
+      "quote": "The weight on the chain ladder is $Z = \\text{CF} \\times \\text{Rlag}$, a credibility factor $0 \\le \\text{CF} \\le 1$ times the year's percent reported, so green years lean on Stanard-Bühlmann and older years on the chain ladder.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -2035,10 +2035,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Data Issues",
-      "quote": "a modified log link handles them unless a whole column sums negative, which needs a constant shift",
-      "note": "Data Issues (tagged) teaches that negative incrementals need a modified log link or a shift under the GLM's log link; that the log of a negative number is undefined is algebra",
-      "date": "2026-10-30",
-      "run": "g8-cas7-sort"
+      "quote": "The log link fails on a negative value.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -2072,10 +2072,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Data Issues",
-      "quote": "a modified log link handles them unless a whole column sums negative, which needs a constant shift",
-      "note": "Data Issues (tagged): when the modified log link fails (a column sums negative) the triangle is shifted by a constant so every incremental is non-negative",
-      "date": "2026-10-30",
-      "run": "g8-cas7-sort"
+      "quote": "If a column sums to a negative value, every cell is shifted by the largest negative incremental to make it non-negative, the model is fitted, and the shift is taken back out of the fitted values.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -2088,10 +2088,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Data Issues",
-      "quote": "a modified log link handles them unless a whole column sums negative, which needs a constant shift",
-      "note": "Data Issues (tagged) teaches the constant shift; removing the same constant from the fitted values is what undoing a shift means",
-      "date": "2026-10-30",
-      "run": "g8-cas7-sort"
+      "quote": "If a column sums to a negative value, every cell is shifted by the largest negative incremental to make it non-negative, the model is fitted, and the shift is taken back out of the fitted values.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     }
    ]
@@ -3506,10 +3506,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Data Issues",
-      "quote": "a modified log link handles them unless a whole column sums negative, which needs a constant shift",
-      "note": "Data Issues (tagged): a negative-sum column needs a constant shift of every incremental before the GLM fit (removed again from the fitted values)",
-      "date": "2026-10-30",
-      "run": "g8-cas7-sort"
+      "quote": "If a column sums to a negative value, every cell is shifted by the largest negative incremental to make it non-negative, the model is fitted, and the shift is taken back out of the fitted values.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -4164,10 +4164,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Data Issues",
-      "quote": "exposure changes* (model losses per exposure)",
-      "note": "Data Issues (tagged) lists Shapland's exposure changes among the stochastic-triangle data issues; a year at a different exposure level or with thin data is inconsistent with the other rows",
-      "date": "2026-10-30",
-      "run": "g8-cas7-sort"
+      "quote": "When exposures change materially across accident years, the losses are divided by the earned exposures, the model is fitted to pure premiums, and the results are multiplied back by each year's exposures.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -4308,7 +4308,15 @@
        "page": "Excess of Loss",
        "quote": "is non-proportional reinsurance in which the reinsurer pays the part of each loss — per risk or per occurrence — above the cedant's retention $R$ (the attachment point), up to a limit $L$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Reinsurance",
+      "quote": "2. **Per occurrence or catastrophe excess of loss**, applied to the accumulated losses of one event.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -5154,10 +5162,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Data Segmentation",
-      "quote": "policy limits are another useful cut",
-      "note": "Friedland's reserving segmentation criteria on the page name policy limits as a cut, alongside similar reporting and settlement patterns; retagged Data Segmentation",
-      "date": "2026-10-30",
-      "run": "g8-cas7-sort"
+      "quote": "Differing policy limits distort the combined severity and development the same way.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -5639,10 +5647,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Reserving Data Organization",
-      "quote": "Split into groups that balance",
-      "note": "Reserving Data Organization (syllabus page) teaches splitting into groups that balance homogeneity against credibility; the effect on internal systemic risk (specification/data error) is on the tagged Internal Systemic Risk page",
-      "date": "2026-10-30",
-      "run": "g8-cas7-sort"
+      "quote": "More homogeneity or more volume raises credibility, but too many groups leave each with too little data for a reliable analysis.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     }
    ]
@@ -5807,10 +5815,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Data Issues",
-      "quote": "a modified log link handles them unless a whole column sums negative, which needs a constant shift",
-      "note": "Data Issues (tagged) teaches Shapland's rule: check whether a whole column of incrementals sums negative to choose between the modified log link and a constant shift; forming incrementals from the cumulative triangle is plain differencing",
-      "date": "2026-10-30",
-      "run": "g8-cas7-sort"
+      "quote": "A modified log link uses $\\ln(q)$ for $q > 0$, $0$ for $q = 0$ and $-\\ln(-q)$ for $q < 0$, which works only while the column's sum is positive.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     }
    ]
@@ -6240,10 +6248,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Cape Cod Method",
-      "quote": "With report lag $\\text{Rlag}_k$ and a credibility factor $0 \\le CF \\le 1$, the weight on the chain ladder is $Z_k = CF \\times \\text{Rlag}_k$, and $\\text{IBNR}_k = Z_k \\cdot \\text{IBNR}^{CL}_k + (1 - Z_k) \\cdot \\text{IBNR}^{SB}_k$.",
-      "note": "Patrik Formula 7.66, p.458: Z = CF x report lag on the chain ladder IBNR, 1 - Z on the SB IBNR.",
-      "date": "2026-10-31",
-      "run": "g8-cas7-chk-pk"
+      "quote": "Each year's IBNR is then $Z$ times its chain ladder IBNR plus $1 - Z$ times its Stanard-Bühlmann IBNR.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     }
    ]
@@ -7473,11 +7481,11 @@
      "places": [],
      "resolution": {
       "kind": "taught",
-      "page": "Data Diagnostic Analysis",
-      "quote": "Plot residuals against development period, accident period, calendar period and fitted value. They should be patternless and have a common variance.",
-      "note": "Data Diagnostic Analysis (tagged) teaches plotting residuals against calendar period and expecting no pattern; residuals rising across calendar years are the pattern an uncaptured calendar trend leaves (fitted too high early, too low late)",
-      "date": "2026-10-30",
-      "run": "g8-cas7-sort"
+      "page": "Residual Plot",
+      "quote": "A trend in any plot, such as residuals drifting away from zero across calendar periods, or residuals on the normality plot that stray from the straight 45-degree line, shows that the model needs adjusting.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -8159,11 +8167,11 @@
      ],
      "resolution": {
       "kind": "taught",
-      "page": "Reasonableness Testing",
-      "quote": "$p_t = 1/\\text{CDF}_t$ is the expected percentage reported (or paid) at age $t$",
-      "note": "Reasonableness Testing (syllabus page) states the percentage reported at an age is the reciprocal of its CDF",
-      "date": "2026-10-30",
-      "run": "g8-cas7-sort"
+      "page": "Cumulative Development Factor",
+      "quote": "$$\\text{Reported \\%} = \\frac{1}{\\text{CDF}_{n \\to \\text{ult}}}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -9376,10 +9384,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Loss Reserving",
-      "quote": "change, making historical paid factors too large",
-      "note": "Loss Reserving (syllabus page) teaches that a settlement rate change makes historical development factors unrepresentative of the future, which is parameter risk (tagged Parameter Risk); the process-risk effect follows from the change in the size and timing of what is still unpaid",
-      "date": "2026-10-30",
-      "run": "g8-cas7-sort"
+      "quote": "Payments running ahead of their historical pattern point to faster settlement, or to a few large claims paid early.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -11981,10 +11989,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Cape Cod Method",
-      "quote": "With report lag $\\text{Rlag}_k$ and a credibility factor $0 \\le CF \\le 1$, the weight on the chain ladder is $Z_k = CF \\times \\text{Rlag}_k$, and $\\text{IBNR}_k = Z_k \\cdot \\text{IBNR}^{CL}_k + (1 - Z_k) \\cdot \\text{IBNR}^{SB}_k$.",
-      "note": "Patrik Formula 7.66, p.458: Z = CF x report lag on the chain ladder IBNR, 1 - Z on the SB IBNR.",
-      "date": "2026-10-31",
-      "run": "g8-cas7-chk-pk"
+      "quote": "The weight on the chain ladder is $Z = \\text{CF} \\times \\text{Rlag}$, a credibility factor $0 \\le \\text{CF} \\le 1$ times the year's percent reported, so green years lean on Stanard-Bühlmann and older years on the chain ladder.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -12192,11 +12200,11 @@
      ],
      "resolution": {
       "kind": "taught",
-      "page": "Reasonableness Testing",
-      "quote": "$p_t = 1/\\text{CDF}_t$ is the expected percentage reported (or paid) at age $t$",
-      "note": "Reasonableness Testing (syllabus page) gives percent reported = 1/CDF; the share emerging between adjustments is the difference of successive percentages (arithmetic)",
-      "date": "2026-10-30",
-      "run": "g8-cas7-sort"
+      "page": "Cumulative Development Factor",
+      "quote": "The percentage of ultimate claims reported by age $n$ is the reciprocal of the reported CDF:",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {

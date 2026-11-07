@@ -280,10 +280,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Earned Exposure",
-      "quote": "Earned exposures are also the weights in classification analysis and the denominator of [[Frequency|claim frequency]]",
-      "note": "Earned Exposure (linked from tagged Data Documentation) gives claim frequency as claims over earned exposure",
-      "date": "2026-10-30",
-      "run": "g8-discda-sort"
+      "quote": "Earned exposures are the denominator of the [[Pure Premium|pure premium]] and of [[Frequency|frequency]], so they cover the same period as the losses.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -5667,10 +5667,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Predictive Analytics",
-      "quote": "methods (GLMs, trees) learn from a known target;",
-      "note": "Tagged page: supervised methods learn from a known target, unsupervised find structure with no target",
-      "date": "2026-10-30",
-      "run": "g8-discda-sort"
+      "quote": "**Supervised** methods, such as GLMs and decision trees, learn from a known target.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {

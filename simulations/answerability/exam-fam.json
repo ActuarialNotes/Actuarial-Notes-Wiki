@@ -20638,7 +20638,15 @@
        "page": "Tail Factor",
        "quote": "\\text{CDF}_{\\text{last age} \\to \\text{ult}} = \\text{Tail} \\qquad \\text{CDF}_{\\text{prior age} \\to \\text{ult}} = f_{\\text{last observed}} \\times \\text{Tail}"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cumulative Development Factor",
+      "quote": "Each age-to-age factor is therefore the ratio of successive CDFs, $f_{n \\to n+1} = \\text{CDF}_{n \\to \\text{ult}}/\\text{CDF}_{n+1 \\to \\text{ult}}$.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",

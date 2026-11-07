@@ -1528,8 +1528,9 @@ compile — don't "clean up" the flagged code as dead.
   the concept popup opens scrolled to (`headingSlug` in `lib/wikiRoutes.ts`; every `##`/`###`
   carries that id). One symbol per thing across an exam (Exam P's
   table is in the skill's `references/vault-mechanics.md`: $S$, $s$, $E$/$F$, ${}_nP_k$,
-  $\binom{n}{k}$). Exam P is being converted first (Probability, Combinatorics, Permutation are the
-  models); other exams' pages are still in the older running-example shape. `[!idea]` and
+  $\binom{n}{k}$). Exam P, MAS-I and Exam 5 are converted (Probability, Combinatorics, Permutation are the
+  models; Pure Premium, Loss Ratio and Exposure Base for Exam 5); other exams' pages are still
+  in the older running-example shape. `[!idea]` and
   `[!trap]` are **note cards** — always open, in the Examiner's report shape (`MarkdownCallout`,
   style guide §7.2b). Nothing callout-shaped goes above the bullets: the opening is read by
   Concept Craft's recipe reader (`pageOpening`, which skips a leading figure) and the SEO lead.

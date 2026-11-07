@@ -3426,7 +3426,15 @@
        "page": "Complement of Credibility",
        "quote": "**Loss costs of a larger group that includes the group being rated** — e.g. all states in the regio"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Complement of Credibility",
+      "quote": "A multi-state insurer may use all the states in a region for one state, or countrywide data.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ],
    "imported_from": "report.md"
@@ -6916,10 +6924,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Credibility",
-      "quote": "Credibility rises when risks genuinely differ from one another (large VHM)",
-      "note": "The tagged Credibility page: a small between-group (prior) variance means low credibility for the data, i.e. more weight on the prior mean.",
-      "date": "2026-10-31",
-      "run": "2026-10-31T04:42Z/2782"
+      "quote": "A higher VHM lowers $K$ and raises credibility, and a higher EVPV raises $K$ and lowers it.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {

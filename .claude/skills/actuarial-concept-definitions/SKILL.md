@@ -19,8 +19,10 @@ cards it uses read as a set: the violet *idea*, the amber *trap*, and the green
 This shape was set by the maintainer on 2026-11-06 from three Exam P pages
 they wrote themselves — `Concepts/Probability.md`, `Concepts/Combinatorics.md`
 and `Concepts/Permutation.md`. Read those three before writing a page; they
-are the standard, and `references/exemplar.md` annotates one of them. **Exam P
-is the first exam converted.** The other exams' pages are still in the older
+are the standard, and `references/exemplar.md` annotates one of them. **Exam P,
+MAS-I and Exam 5 are converted** (for Exam 5, `Concepts/Pure Premium.md`,
+`Concepts/Loss Ratio.md` and `Concepts/Exposure Base.md` are the models, the
+last for a qualitative concept). The other exams' pages are still in the older
 shape (a running example, *Try it*, collapsed *Exam traps*); convert one only
 when asked to.
 

@@ -53,10 +53,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Exposure Base",
-      "quote": "So payroll reflects both how much the workforce is exposed to injury and the size of its indemnity claims, whereas hours worked measure only the time exposed",
-      "note": "W&M Ch. 4 p. 50 (PDF 62), Ch. 6 p. 101 (PDF 113), App. D p. D-2 (PDF 395).",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write2"
+      "quote": "Indemnity benefits are a percentage of the injured worker's pre-injury wage, so payroll also tracks the size of the claims.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -385,10 +385,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Lifetime Value",
-      "quote": "LTV justifies first-year pricing below full cost where acquisition costs are large and renewal margins are reliable",
-      "note": "Lifetime Value (on Exam 5's syllabus) teaches the long-term (asset-share/lifetime) view: a first-year loss is justified by profitable renewals.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort1"
+      "quote": "New business also tends to have higher loss ratios.…A first-year loss can therefore be recouped through later renewals, and a premium can be set so that the policy breaks even, profit provision included, over the customer's expected life.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -422,10 +422,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Expense Provisions",
-      "quote": "leave it out of the rates, in which case it is basically funded by existing surplus",
-      "note": "Selecting the provisions section, W&M Ch. 7 pp. 128-129, 134 (PDF 140-141, 146); extraordinary expense not in rates is funded by existing surplus.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write2"
+      "quote": "A non-recurring or extraordinary expense is examined for its materiality and nature. The actuary may spread it over several years when what it pays for will be used for a long time, or leave it out of the rates, in which case it is funded by existing surplus.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     }
    ]
@@ -535,10 +535,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Coinsurance Rating",
-      "quote": "On an underinsured home, the payment doesn't cover the whole loss when one exceeds the face value, and a rate set for full ITV collects too little premium for its expected payments",
-      "note": "Tagged page teaches that a rate not reflecting ITV leaves the underinsured undercharged (inequitable); the subsidy between territories follows.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort1"
+      "quote": "On an underinsured home, the payment does not cover the whole loss when one exceeds the face value, and a rate set for full ITV collects too little premium for its expected payments. The rates are then *inequitable*.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -630,10 +630,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Development Triangle",
-      "quote": "Friedland builds the incremental paid triangle from claim transactions by placing each payment in the row of its accident year and the column for the calendar period in which it was made",
-      "note": "Incremental vs cumulative cells and how each is built; Friedland Ch.5 pp.55-56",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write5"
+      "quote": "the cumulative triangle is the running sum of the incremental cells along each row. Each payment goes in the row of its accident year and the column of the period it was made in",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -696,10 +696,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Development Triangle",
-      "quote": "Berquist and Sherman's remedy is to substitute accident quarters for accident years when the rate of growth of earned exposures changes markedly, because a quarter is too short for its average accident date to drift far from its midpoint",
-      "note": "Interval choice and exposure growth shifting the average accident date; Friedland Ch.5 p.61, Ch.7 pp.96-97, Ch.13 p.283",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write5"
+      "quote": "When exposures grow during a year, its average accident date is later, so it is less mature at each age than the history its factors came from, and those factors understate its ultimate. Berquist and Sherman substitute accident quarters for accident years when the growth rate of earned exposures changes markedly.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     }
    ]
@@ -769,11 +769,11 @@
      "places": [],
      "resolution": {
       "kind": "taught",
-      "page": "Close Year",
-      "quote": "This is Werner & Modlin's paid severity — \"paid losses on closed claims divided by closed claims\"",
-      "note": "Syllabus page defines paid severity as paid losses divided by closed claim counts.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort1"
+      "page": "Data Diagnostic Analysis",
+      "quote": "Average paid claim, paid claims divided by closed claim counts.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -1343,10 +1343,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Case Outstanding Development Method",
-      "quote": "That holds only where most claims are reported within the accident period — claims-made coverages and report-year analysis — which limits its use",
-      "note": "The method page states it suits claims-made / report-year data, not occurrence coverage with material IBNR.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort1"
+      "quote": "That holds where most claims are reported in the first accident period, so the method is strongest for [[Claims Made Coverage|claims-made]] coverage and [[Report Year|report year]] analysis.…The assumption does not hold for many lines, which have material pure IBNR that the current case outstanding cannot capture.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -1430,10 +1430,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Unallocated Loss Adjustment Expenses ULAE",
-      "quote": "A key assumption of count-based techniques is that the same kind of transaction costs the same amount of ULAE regardless of the claim size, so the estimate does not move with the dollar value of the claims.",
-      "note": "Count-based techniques and the Johnson technique; Friedland Ch.17 pp.387, 402-404",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write5"
+      "quote": "Mango and Allen also object that ULAE depends on the average size of a claim, not only on claim dollars, and that a dollar-based estimate rides on whatever volatility is in the estimate of ultimate claims. Count-based techniques assume the same kind of transaction costs the same ULAE regardless of claim size.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -1601,10 +1601,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Earned Premium",
-      "quote": "the premium it has earned the right to keep, recognized pro rata as the policy term elapses",
-      "note": "Tagged page: premium (fee included, as Extension of Exposures re-rates it) earns pro rata over the term.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort1"
+      "quote": "When premium is earned evenly over the term, a policy's earned premium in a period is…No premium is earned before coverage begins, whenever it is paid.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     }
    ]
@@ -1935,7 +1935,15 @@
        "page": "Quota Share",
        "quote": "Net loss is $(1-a)X$, so its coefficient of variation equals gross."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Reinsurance",
+      "quote": "Quota share cedes a fixed percentage of every policy's premium and losses. The net-to-gross ratio is constant across every claim and every development age.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -1998,7 +2006,15 @@
        "page": "Gross Losses",
        "quote": "Estimate **ceded** separately by applying the *current* treaty terms to the projected gross large-claim distribution ([[Reinsurance Recovery]])."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Net Losses",
+      "quote": "When the net data is unreliable but the gross data is correct, the actuary develops the gross ultimate claims on the gross triangle, applies the treaty terms to them to get the ceded ultimate claims, and subtracts ceded from gross to get the net ultimate claims.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -2762,10 +2778,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Parallelogram Method",
-      "quote": "It assumes uniform writing — false for seasonal business such as boat owners, whose policies are bought ahead of the season; refining to quarters or months, or weighting by the actual distribution of writings, helps",
-      "note": "Tagged page names the uniform-writing assumption and its failure; the direction of the error for a book writing more late in the year follows from it.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort1"
+      "quote": "It assumes uniform writing, which is false for seasonal business such as boat owners, whose policies are bought ahead of the season. Refining to quarters or months, or weighting by the actual distribution of writings, helps.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     }
    ]
@@ -3211,7 +3227,15 @@
        "page": "Permissible Loss Ratio",
        "quote": "when rates change, the fixed dollars per exposure stay put while the all variable method lets them move with premium"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Expense Provisions",
+      "quote": "Fixed expenses do not vary with premium, so the fixed expense ratio is distorted when historical and projected premium levels differ:…Rate increases not fully reflected in the historical premium make the method overstate the expected fixed expenses, and decreases understate them.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -3821,10 +3845,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Lifetime Value",
-      "quote": "Lifetime profit as a percentage of premium is the sum of the present values of the persistency-adjusted profits divided by the sum of the present values of the persistency-adjusted premiums.",
-      "note": "W&M Ch. 13 pp. 257-258 (PDF 269-270), Tables 13.16-13.17.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write2"
+      "quote": "Lifetime profit as a percentage of premium divides the lifetime profit by the present value of the premium, weighted by persistency the same way.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -4399,10 +4423,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Considerations for Implementing Rates",
-      "quote": "in some jurisdictions a regulation or law limits the increase an insurer may offer a renewing insured, so the cap is required rather than chosen",
-      "note": "W&M Ch. 14 p. 283 (PDF 295), premium transition rules.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write2"
+      "quote": "in some jurisdictions a regulation or law limits the increase an insurer may offer a renewing insured.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     }
    ]
@@ -4603,10 +4627,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Age to Age Factor",
-      "quote": "When factors show seasonality, select the factor for each season by averaging only the factors of accident periods from that season, and apply to each period the factor for its own season.",
-      "note": "Seasonality bullet (Friedland Ch.11 pp.197-198, PDF 203-204)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write4"
+      "quote": "Each season's factor is then the average of the factors of that season's accident periods, applied to the periods of that season.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -4640,10 +4664,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Age to Age Factor",
-      "quote": "Each accident period is projected to ultimate from its own latest value with its own season's factors; an accident year's ultimate is the sum of the projected ultimates of the periods within it.",
-      "note": "Projection by accident half-year (Friedland Ch.11 pp.197-199, PDF 203-205); the summation to the accident year is definitional",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write4"
+      "quote": "Each accident period is projected to ultimate from its own latest value. An accident year's ultimate is the sum of the projected ultimates of the periods within it.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -4681,10 +4705,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Development Triangle",
-      "quote": "Berquist and Sherman's remedy is to substitute accident quarters for accident years when the rate of growth of earned exposures changes markedly, because a quarter is too short for its average accident date to drift far from its midpoint",
-      "note": "Average accident date and shorter periods; Friedland Ch.7 pp.96-97, Ch.13 p.283",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write5"
+      "quote": "When exposures grow during a year, its average accident date is later, so it is less mature at each age than the history its factors came from, and those factors understate its ultimate. Berquist and Sherman substitute accident quarters for accident years when the growth rate of earned exposures changes markedly.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     }
    ]
@@ -4726,10 +4750,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Case Outstanding Development Method",
-      "quote": "The case outstanding development factor is (reported CDF − 1) × paid CDF ÷ (paid CDF − reported CDF) + 1, equivalently reported CDF × (paid CDF − 1) ÷ (paid CDF − reported CDF).",
-      "note": "Approach #2: case outstanding factor from benchmark reported and paid CDFs; unpaid = case x factor (Friedland Ch.12 p.269, PDF 275)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write4"
+      "quote": "$$\\text{Case Outstanding CDF} = \\frac{(\\text{Reported CDF} - 1) \\times \\text{Paid CDF}}{\\text{Paid CDF} - \\text{Reported CDF}} + 1$$…The unpaid claims are the current case outstanding times this factor",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -4834,10 +4858,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Case Outstanding Development Method",
-      "quote": "The case outstanding development technique is particularly useful when current case outstanding is the only claims data available, with no paid or reported history",
-      "note": "Approach #2: when case outstanding is the only data (Friedland Ch.12 p.268, PDF 274)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write4"
+      "quote": "Friedland's Approach #2 applies the ordinary development technique to case outstanding alone, for a self-insurer or older years with no paid or reported history",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     }
    ]
@@ -4929,10 +4953,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Bornhuetter-Ferguson Method",
-      "quote": "The credibility reading then breaks down: Z = 1/CDF is greater than 1, and a credibility weight must lie between 0 and 1.",
-      "note": "CDFs below 1.00 (salvage/subrogation, conservative case) break the credibility reading (Friedland Ch.9 p.156, PDF 162)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write4"
+      "quote": "Where salvage and subrogation lag the claims, or conservative case reserves settle for less, the CDF can be below 1.00 and $Z$ above 1, outside the range of a credibility.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -5082,11 +5106,11 @@
      "places": [],
      "resolution": {
       "kind": "taught",
-      "page": "Age to Age Factor",
-      "quote": "judgmental selection, documented — the honest answer when the column contains a known one-off",
-      "note": "Syllabus page: a period distorted by a known one-off is excluded or handled by documented judgment in the selection.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort1"
+      "page": "Frequency-Severity Method",
+      "quote": "Friedland's Approach #2 projects the most recent accident years, whose development factors are most leveraged, from an exposure base, a frequency and a trended severity.…$\\text{Frequency}$ is the selected ultimate claim counts per exposure, from the trended ultimate counts of earlier years over their trended exposures.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -5396,10 +5420,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Case Adequacy",
-      "quote": "An increase in average case outstanding is therefore inconclusive on its own",
-      "note": "Check settlement rate before reading a rise in average case O/S as strengthening (Friedland Ch.6 pp.72, 76, PDF 78, 82)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write4"
+      "quote": "The settlement rate has to be checked before a rise is read as strengthening. Insurers usually close their less complicated, less expensive claims fastest, so faster settlement leaves the more expensive claims open and raises the average case outstanding with no change in adequacy.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -5450,10 +5474,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Actual vs Expected Analysis",
-      "quote": "The expected figure comes from the prior ultimate and the emergence pattern: the share of ultimate the pattern says should report (or be paid) between the two valuations.",
-      "note": "Re-quote after today's edit: expected emergence = ultimate times the change in percent reported (paid).",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort1"
+      "quote": "the reported claims at the start are $\\text{Ultimate} \\times p_{\\text{start}}$, and the expected emergence simplifies to…$$\\text{Expected Emergence} = \\text{Ultimate} \\times (p_{\\text{end}} - p_{\\text{start}})$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -5467,7 +5491,15 @@
        "page": "Actual vs Expected Analysis",
        "quote": "At $12/31/2023$, AY 2022 was estimated at ultimate $\\$10{,}000{,}000$ with $60\\%$ reported at $24$ months and $75\\%$ at $36$ months."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Actual vs Expected Analysis",
+      "quote": "Over a calendar year each accident year ages 12 months, so $p_{\\text{end}}$ is read 12 months later in the pattern than $p_{\\text{start}}$.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -5484,7 +5516,15 @@
        "page": "Actual vs Expected Analysis",
        "quote": "- Paid and reported A/E together diagnose the cause. Reported running high with paid on track suggests [[Case Adequacy|case strengthening]]; paid running high with reported on track suggests faster [[Settlement Rate|settlement]]."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Actual vs Expected Analysis",
+      "quote": "The actual emergence in the period is the change in cumulative reported claims between the two evaluation dates.…Actual emergence above expected says the ultimate claims may be understated, or that claims are being reported faster than the pattern assumes.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -6649,10 +6689,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Age to Age Factor",
-      "quote": "Selecting a factor from the column of observations is the central judgment of the",
-      "note": "Syllabus page defines age-to-age factors and their selection.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort1"
+      "quote": "is the ratio of a cohort's cumulative value at one age to its value at the previous age.…A factor is selected for each age from the column of observed factors, usually by an average of them.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -6779,10 +6819,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Variable Expenses",
-      "quote": "must be reflected prospectively rather than from historical ratios",
-      "note": "Page teaches that a commission change is reflected prospectively in V; weighting the two sub-periods by time is this solution's own step.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort1"
+      "quote": "A structural change in distribution, such as moving business direct, renegotiating commission scales or adding a contingent commission, is reflected prospectively rather than from the historical ratios.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -7151,10 +7191,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Development Triangle",
-      "quote": "maturities as columns (age in months since the start of the cohort)",
-      "note": "Syllabus page: maturity is the age in months since the start of the accident year.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort1"
+      "quote": "the age, or maturity, is counted in months from the start of the cohort to the valuation date.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -7500,7 +7540,15 @@
        "page": "Adverse Selection",
        "quote": "Price at the population average; low risks find the price poor value and leave; the remaining pool is worse, so the price rises"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exposure Base",
+      "quote": "An objective base also keeps policyholders and producers from manipulating it.…A change of base can cause large premium swings for individual insureds",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -7850,10 +7898,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Lifetime Value",
-      "quote": "The present value of premium is the premium times the cumulative persistency, discounted; in Werner's table each year is discounted from its start, so the first policy year is not discounted.",
-      "note": "W&M Ch. 13 p. 258 (PDF 270), Table 13.16 col. 10.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write2"
+      "quote": "$$\\text{Lifetime Profit} = \\sum_{t=1}^{T} \\frac{(P_t - L_t - E_t) \\times c_t}{(1 + i)^{t-1}}$$…Lifetime profit as a percentage of premium divides the lifetime profit by the present value of the premium, weighted by persistency the same way.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -7969,7 +8017,15 @@
        "page": "Reserve Adequacy",
        "quote": "$$\\text{Redundancy / (Deficiency)} = \\text{Carried Reserve} - \\text{Indicated Reserve}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Reserve Adequacy",
+      "quote": "A redundant unpaid claim estimate is one that exceeds the amount ultimately needed to pay the claims, and an inadequate one falls below it.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -7982,7 +8038,15 @@
        "page": "Reserve Adequacy",
        "quote": "Redundancy is a profit deferral; deficiency understates the loss ratio, overstates surplus, and feeds an inadequate rate indication back into pricing, so the same error appears again in next year's business."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Reserve Adequacy",
+      "quote": "Unpaid claim estimates feed into reported loss ratios and profitability. A redundant estimate makes a book look less profitable than it truly is, and an inadequate estimate makes it look more profitable.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -7999,7 +8063,15 @@
        "page": "Unpaid Claim Distribution",
        "quote": "The distribution drives [[Risk Margin|risk margins]], capital and reinsurance decisions."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Reserve Adequacy",
+      "quote": "| Internal management | Pricing, underwriting, reinsurance, capital allocation and strategy | Can lead to rate decreases and growth at rates too low to pay future claims, or to too little reinsurance or capital | Can lead to unnecessary rate increases, lost market share, or exiting a profitable line or region |",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -8365,10 +8437,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Age to Age Factor",
-      "quote": "An average across all periods then blends two patterns and fits neither.",
-      "note": "Seasonality bullet: half-years ending December vs June, 6-12 closed count factors (Friedland Ch.11 pp.197-198, PDF 203-204)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write4"
+      "quote": "In Friedland's private passenger collision example, accident half-years ending in December close fewer of their claims by six months than those ending in June. An average across all periods blends two patterns.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -8381,10 +8453,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Age to Age Factor",
-      "quote": "When factors show seasonality, select the factor for each season by averaging only the factors of accident periods from that season",
-      "note": "Seasonality: select from same-season periods only (Friedland Ch.11 p.198, PDF 204)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write4"
+      "quote": "Each season's factor is then the average of the factors of that season's accident periods, applied to the periods of that season.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -8496,11 +8568,11 @@
      "places": [],
      "resolution": {
       "kind": "taught",
-      "page": "Frequency-Severity Method",
-      "quote": "Project the number of claims closing in each future period from historical disposal rates",
-      "note": "Tagged page teaches projecting future closed counts from disposal rates; choosing the latest diagonal's rates is this question's judgment given its changing closure rates.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort1"
+      "page": "Berquist-Sherman Method",
+      "quote": "The settlement rate adjustment restates the paid claims triangle to the disposal rates of the latest diagonal.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -8602,7 +8674,15 @@
        "page": "Inflation",
        "quote": "For an insurer operating in a stable environment, the average case outstanding should increase down each column of the triangle at the relevant annual inflation rate; averages rising faster are something to take back to the claims department."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Berquist-Sherman Method",
+      "quote": "A rising ratio of closed to reported claim counts, or of closed counts to ultimate counts (the disposal rate), at the same age points to faster settlement.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -8843,10 +8923,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Development Triangle",
-      "quote": "When exposures grow during the year, more of the year's accidents happen late in it, so its average accident date falls later and the year is less mature at each age than the history its factors came from; applying those factors understates its ultimate, and shrinking exposures do the reverse.",
-      "note": "Growth shifts the latest year's average accident date; Friedland Ch.7 pp.96-97",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write5"
+      "quote": "When exposures grow during a year, its average accident date is later, so it is less mature at each age than the history its factors came from, and those factors understate its ultimate.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -8892,11 +8972,11 @@
      ],
      "resolution": {
       "kind": "taught",
-      "page": "Ceded Losses",
-      "quote": "and the pattern is entirely different — later, steeper, and far more volatile",
-      "note": "Syllabus page: losses above a retention/basic limit develop later and more volatilely than ground-up, so historical (basic-limits) factors understate them.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort1"
+      "page": "Reinsurance",
+      "quote": "Ceded excess losses attach only to large claims, which report late and settle slowly, so the ceded development is longer-tailed and more volatile than the gross.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -9192,10 +9272,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Berquist-Sherman Method",
-      "quote": "Adjusted open claim counts are reported claim counts minus adjusted closed claim counts.",
-      "note": "Combined adjustment: adjusted open counts (Friedland Ch.13 p.292, PDF 298)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write4"
+      "quote": "The adjusted open counts are the reported counts less the adjusted closed counts.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -9246,10 +9326,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Berquist-Sherman Method",
-      "quote": "when case adequacy and settlement rate have both changed, the two adjustments are combined into a single adjusted reported triangle, which gives one projection in place of two.",
-      "note": "Combined adjustment: one adjusted reported triangle (Friedland Ch.13 p.292, PDF 298)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write4"
+      "quote": "When case adequacy and settlement rate have both changed, the two adjustments are combined into one adjusted reported triangle, which gives one projection in place of two.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     }
    ]
@@ -9296,7 +9376,15 @@
        "page": "Ceded Losses",
        "quote": "Under **quota share**, ceded is a fixed share $c$ of gross, so the ceded triangle is a scalar multiple of the gross one and develops identically. … Under **excess of loss**, ceded responds only to claims piercing retention $R$, and the pattern is entirely different — later, steeper, and far more volatile."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Ceded Losses",
+      "quote": "Because the same proportion of every claim is ceded at every age, the net-to-gross ratio is constant across the development ages of an accident year, though it can differ between accident years when the percentage changes.…Only large claims reach the layer, so the ceded share grows as large claims develop, and the net-to-gross ratio falls with age.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -9438,10 +9526,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Actual vs Expected Analysis",
-      "quote": "Linear interpolation assumes the change between the two known ages happens evenly over the interval: the percentage at the earlier age plus the fraction of the interval elapsed times the change over the whole interval.",
-      "note": "Interim evaluations by interpolation (Friedland Ch.15 pp.351-352, PDF 357-358; Exhibit IV Sheet 4)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write4"
+      "quote": "Linear interpolation assumes the percentage moves evenly between them:…$$p_{\\text{age}} = p_{\\text{earlier}} + \\frac{\\text{age} - \\text{earlier age}}{\\text{later age} - \\text{earlier age}} \\times (p_{\\text{later}} - p_{\\text{earlier}})$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -9459,10 +9547,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Actual vs Expected Analysis",
-      "quote": "$$\\text{Expected emergence} = \\frac{U_{\\text{prior}} - \\text{Reported}_{n}}{1 - 1/\\text{CDF}_{n}} \\times \\left(\\frac{1}{\\text{CDF}_{n+1}} - \\frac{1}{\\text{CDF}_{n}}\\right)$$",
-      "note": "Re-quote after today's edit: the page's formula is the unreported amount divided by percent unreported times percent emerging (Friedland p.351).",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort1"
+      "quote": "$$\\text{Expected Emergence} = \\frac{\\text{Ultimate} - \\text{Reported}}{1 - p_{\\text{start}}} \\times (p_{\\text{end}} - p_{\\text{start}})$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -9476,7 +9564,15 @@
        "page": "Actual vs Expected Analysis",
        "quote": "The **expected** figure comes from the prior ultimate and the emergence pattern: the share of ultimate the pattern says should report (or be paid) between the two valuations."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Actual vs Expected Analysis",
+      "quote": "The expected cumulative reported claims at the end of the period are the actual reported claims at the start plus the expected emergence",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -9509,10 +9605,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Actual vs Expected Analysis",
-      "quote": "linear interpolation of annual development patterns is usually not appropriate, particularly for the most immature accident years, because claims do not emerge evenly within a year",
-      "note": "Interpolation limits and Bornhuetter-Ferguson's skewed quarterly distribution (Friedland Ch.15 p.352, PDF 358)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write4"
+      "quote": "Linear interpolation of an annual pattern is usually not appropriate, particularly for the most immature accident years, because development within a year is skewed early.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     }
    ]
@@ -10018,10 +10114,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Policy Provision Changes",
-      "quote": "A worker's weekly benefit is the compensation rate times the wage, raised to the minimum if it falls below it and cut to the maximum if it exceeds it.",
-      "note": "WC weekly benefit with min/max written from W&M Ch. 6 pp. 101-102 (PDF 113-114).",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write2"
+      "quote": "the statute sets a compensation rate, a percentage of the worker's pre-injury wage, and a minimum and maximum weekly benefit stated as percentages of the state average weekly wage. A worker's weekly benefit is the compensation rate times the wage, raised to the minimum or cut to the maximum.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -10034,10 +10130,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Policy Provision Changes",
-      "quote": "The direct effect of a change is found by calculating the benefits before and after the change over the distribution of workers by wage, then dividing total benefits after by total benefits before and subtracting one.",
-      "note": "Direct effect over the wage distribution, W&M Ch. 6 pp. 101-102 (PDF 113-114), Table 6.6.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write2"
+      "quote": "The direct effect of a change is the total benefits after it divided by the total benefits before it, minus one, over the distribution of workers by wage. A wage band below the minimum or above the maximum is paid the limit times its number of workers, and a band between them is paid the compensation rate times its total wages.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -10063,10 +10159,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Policy Provision Changes",
-      "quote": "Lowering the maximum benefit cuts benefits only for the higher-wage workers whose benefit is at or above the new maximum, and more workers are capped the lower it falls",
-      "note": "W&M Ch. 6 p. 102 (PDF 114): the lower maximum reaches the 125%+ SAWW bands only; min-bound workers unchanged.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write2"
+      "quote": "Lowering the maximum cuts benefits only for the workers whose benefit is at or above the new maximum.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -10084,10 +10180,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Policy Provision Changes",
-      "quote": "A benefit that replaces more of the wage may make workers more inclined to file claims and give claimants less incentive to return to work in a timely manner, so claim frequency and duration may rise; a benefit that replaces less may work the other way, and only on the workers whose benefit it changes.",
-      "note": "Indirect effects, W&M Ch. 6 pp. 100-101, 103 (PDF 112-113, 115).",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write2"
+      "quote": "Indirect effects arise from changes in claimant behaviour caused by the benefit change, and are much harder to quantify. A benefit that replaces more of the wage may lead more workers to file claims and to return to work later. A lower maximum benefit may also have an indirect effect",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -10105,10 +10201,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Policy Provision Changes",
-      "quote": "A benefit that replaces more of the wage may make workers more inclined to file claims and give claimants less incentive to return to work in a timely manner, so claim frequency and duration may rise; a benefit that replaces less may work the other way, and only on the workers whose benefit it changes.",
-      "note": "Indirect effect on duration (return to work), W&M Ch. 6 p. 101 (PDF 113).",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write2"
+      "quote": "Indirect effects arise from changes in claimant behaviour caused by the benefit change, and are much harder to quantify. A benefit that replaces more of the wage may lead more workers to file claims and to return to work later. A lower maximum benefit may also have an indirect effect",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     }
    ]
@@ -10369,10 +10465,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Expense Provisions",
-      "quote": "A shift in mix that raises the average premium without affecting expenses (higher amounts of insurance) makes the method overstate the fixed expense ratio",
-      "note": "Premium-based method distortions, W&M Ch. 7 pp. 131-132 (PDF 143-144).",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write2"
+      "quote": "A shift that raises the average premium without affecting expenses, such as to higher amounts of insurance, overstates the fixed expense ratio.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -10624,10 +10720,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Complement of Credibility",
-      "quote": "The trend applied is an annual loss trend, often the one used in the latest rate level indication, because the change in loss cost level since the current rates were set comes from monetary inflation, distributional shifts, safety advances and the like.…Competitors' manual rates reflect not only their loss costs but also marketing considerations, judgment and the effects of the regulatory process, all of which can make them inaccurate. Competitors may also have different underwriting and claim practices, which creates a bias that may be difficult to quantify.",
-      "note": "Competitors' rates evaluation (marketing, judgment, regulation; different underwriting/claim practices, bias hard to quantify) and the loss trend behind trended present rates; W&M Ch.12 pp.229-231 (PDF 241-243)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write3"
+      "quote": "Competitors' manual rates reflect not only their loss costs but also marketing considerations, judgment and the effects of the regulatory process, which can make them inaccurate. Competitors may have different underwriting and claim practices, mix of business and limits, which create a bias that may be hard to quantify.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -10955,10 +11051,10 @@
      "resolution": {
       "kind": "taught",
       "page": "In-Force",
-      "quote": "In-force premium is the full-term premium of each policy in effect at the date",
-      "note": "Tagged page: in-force premium is that of the policies in effect at the date (written within one term before it), each at its own rate level.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort1"
+      "quote": "its effective date is on or before the date, and it has neither expired nor been cancelled.…$\\text{Full-Term Premium}$ is the premium for the whole term of each policy in force at the date, at its own term.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -12666,10 +12762,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Exposure Trend",
-      "quote": "multiplying each accident year by the cumulative product of the annual payroll level changes in the years after it, so the most recent year's factor is 1.000 and a year's own change is not applied to it",
-      "note": "W&M App. D pp. D-1-D-2, D-6 (PDF 394-395, 399), Premium exhibit cols 2-5.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write2"
+      "quote": "For workers compensation, Werner & Modlin bring historical premium at current rate level to the current payroll level with the cumulative product of the annual payroll level changes after each year.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -12682,10 +12778,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Experience Rating",
-      "quote": "Multiplying it by the ratio of the average mod expected in the projected period to that year's historical average mod brings it to the mod level expected in the future.",
-      "note": "Experience mod adjustment to loss cost premium; W&M App. D p.D-2 (PDF 395), columns 6-7",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write3"
+      "quote": "In a workers compensation rate level indication, historical premium is brought to the mod level expected in the future by the ratio of the average projected mod to each year's historical average mod.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -12715,10 +12811,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Policy Provision Changes",
-      "quote": "each accident year's indemnity losses are multiplied by the cumulative product of the annual benefit-level changes in the years after it, so a year's own change is not applied to it, and then by any known change after the experience period",
-      "note": "Benefit-level restatement written from W&M App. D pp. D-2, D-8 (PDF 395, 401), Indemnity Benefit Cost Level Factors col. 4.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write2"
+      "quote": "each accident year is multiplied by the product of the changes after it, plus any known change after the experience period. A year's own change is not applied to it again.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -12817,10 +12913,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Development Triangle",
-      "quote": "The cumulative triangle is the running sum of the incremental cells along each row: the first column is the same in both triangles, and each later cumulative cell is the cumulative cell before it plus the incremental cell at its own age.",
-      "note": "Cumulating incrementals along a row; Friedland Ch.5 p.56",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write5"
+      "quote": "A cumulative value is the incremental values to its left added up, so…$$C_{\\text{AY},\\,n+1} = C_{\\text{AY},\\,n} + I_{\\text{AY},\\,n+1}$$…At the first age the cumulative and incremental values are the same.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -13104,10 +13200,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Actual vs Expected Analysis",
-      "quote": "the expected percentage reported or paid is found by interpolating the pattern at the accident period's age in months at the valuation date.",
-      "note": "Interim evaluations: interpolate the % reported/paid at the age at valuation (Friedland Ch.15 pp.351-352, PDF 357-358)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write4"
+      "quote": "A monthly or quarterly comparison needs the percentage reported at an age between two ages of the pattern. Linear interpolation assumes the percentage moves evenly between them",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -13120,10 +13216,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Actual vs Expected Analysis",
-      "quote": "$$\\text{Expected emergence} = \\frac{U_{\\text{prior}} - \\text{Reported}_{n}}{1 - 1/\\text{CDF}_{n}} \\times \\left(\\frac{1}{\\text{CDF}_{n+1}} - \\frac{1}{\\text{CDF}_{n}}\\right)$$",
-      "note": "Tagged page's formula: prior unreported amount over percent unreported, times percent emerging in the period.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort1"
+      "quote": "$$\\text{Expected Emergence} = \\frac{\\text{Ultimate} - \\text{Reported}}{1 - p_{\\text{start}}} \\times (p_{\\text{end}} - p_{\\text{start}})$$…The expected cumulative reported claims at the end of the period are the actual reported claims at the start plus the expected emergence",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -13141,10 +13237,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Actual vs Expected Analysis",
-      "quote": "The expected figure comes from the prior ultimate and the emergence pattern: the share of ultimate the pattern says should report (or be paid) between the two valuations.",
-      "note": "Re-quote after today's edit: expected emergence = ultimate times the change in percent reported (paid).",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort1"
+      "quote": "$$\\text{Expected Emergence} = \\text{Ultimate} \\times (p_{\\text{end}} - p_{\\text{start}})$$…the expected emergence for part of the period is the period's expected emergence times the share of it that falls in that part.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -13179,7 +13275,15 @@
        "page": "Actual vs Expected Analysis",
        "quote": "The wider consequence: paid A/E at $1.0$ means the ultimate cost of these claims may not have changed at all."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Actual vs Expected Analysis",
+      "quote": "a change in operations that shifts the timing of reported or paid claims without changing the ultimate, such as [[Case Adequacy|case reserve strengthening]] or faster [[Settlement Rate|settlement]].…A change in operations is not a reason to revise the ultimate",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r7",
@@ -13192,7 +13296,15 @@
        "page": "Actual vs Expected Analysis",
        "quote": "Paid and reported A/E together diagnose the cause. Reported running high with paid on track suggests [[Case Adequacy|case strengthening]]; paid running high with reported on track suggests faster [[Settlement Rate|settlement]]."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Actual vs Expected Analysis",
+      "quote": "Comparing the paid and reported results tells them apart:…| Above expected | As expected | Case reserve strengthening, or faster reporting |…| Above expected | Above expected | Higher ultimate claims |",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -13242,10 +13354,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Actual vs Expected Analysis",
-      "quote": "$$\\text{Expected emergence} = \\frac{U_{\\text{prior}} - \\text{Reported}_{n}}{1 - 1/\\text{CDF}_{n}} \\times \\left(\\frac{1}{\\text{CDF}_{n+1}} - \\frac{1}{\\text{CDF}_{n}}\\right)$$",
-      "note": "Re-quote after today's edit: current IBNR over percent unreported times percent emerging (syllabus page).",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort1"
+      "quote": "$$\\text{Expected Emergence} = \\frac{\\text{Ultimate} - \\text{Reported}}{1 - p_{\\text{start}}} \\times (p_{\\text{end}} - p_{\\text{start}})$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -13737,10 +13849,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Expense Provisions",
-      "quote": "a year inflated by an extraordinary item is not simply averaged in with the others",
-      "note": "W&M Ch. 7 p. 129 (PDF 141), extraordinary expenses; Expense Provisions reached via the new link on the tagged Fixed Expenses page.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write2"
+      "quote": "A non-recurring or extraordinary expense is examined for its materiality and nature. The actuary may spread it over several years when what it pays for will be used for a long time, or leave it out of the rates",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -13876,10 +13988,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Classification Ratemaking",
-      "quote": "Some characteristics are only correlated with expected losses, while others directly affect them, and it is socially preferable for rating variables to be causal.",
-      "note": "Criteria-in-detail, causality (+ ASOP 12 §3.2.2 no cause-and-effect needed). W&M Ch.9 p.157 (PDF 169)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write1"
+      "quote": "Causality. It is socially preferable for a rating variable to affect losses directly rather than only correlate with them.…The actuary need not establish cause and effect, so causality is a social preference, not an actuarial requirement.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -13897,10 +14009,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Classification Ratemaking",
-      "quote": "It is preferable if insureds have some ability to control the class they belong to, and so to affect the premium they are charged.",
-      "note": "Criteria-in-detail, controllability. W&M Ch.9 pp.157-158 (PDF 169-170)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write1"
+      "quote": "Controllability. It is preferable if insureds can control their class, and so their premium",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -13956,10 +14068,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Complement of Credibility",
-      "quote": "The complement is the total limits expected loss ratio times the sum, over the policy limits, of the total premium at each limit times that limit's share.…For a limit inside the layer the share is the ILF at the limit minus the ILF at the attachment point, divided by the ILF at the limit. For a limit above the top of the layer the share is the ILF at the top of the layer minus the ILF at the attachment point, divided by the ILF at the limit.",
-      "note": "Limits analysis complement formula; W&M Ch.12 p.234 and Table 12.7 (PDF 246)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write3"
+      "quote": "$$C = \\text{LR} \\times \\sum_{d} P_d \\times \\frac{\\text{ILF}_{\\min(d,\\, A+L)} - \\text{ILF}_A}{\\text{ILF}_d}$$…Only limits above the attachment point contribute, since a limit at or below it has no losses in the layer.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -13977,10 +14089,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Complement of Credibility",
-      "quote": "A limit at or below the attachment point contributes nothing to the layer.…For a limit above the top of the layer the share is the ILF at the top of the layer minus the ILF at the attachment point, divided by the ILF at the limit.",
-      "note": "Which limits contribute in limits analysis; W&M Ch.12 Table 12.7 col (8) (PDF 246)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write3"
+      "quote": "$$C = \\text{LR} \\times \\sum_{d} P_d \\times \\frac{\\text{ILF}_{\\min(d,\\, A+L)} - \\text{ILF}_A}{\\text{ILF}_d}$$…Only limits above the attachment point contribute, since a limit at or below it has no losses in the layer.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -13998,10 +14110,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Complement of Credibility",
-      "quote": "Premium at a limit times the expected loss ratio estimates the expected losses of the policies at that limit, and an ILF ratio takes the share of those losses that falls in the layer.",
-      "note": "Premium x ELR x ILF share in limits analysis; W&M Ch.12 p.234 (PDF 246)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write3"
+      "quote": "Expected losses at a limit are the expected loss ratio times its premium, and the share of those losses that falls in the layer is the difference of the ILFs at the layer's upper and lower limits divided by the ILF at the policy limit.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -14766,10 +14878,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Coinsurance Rating",
-      "quote": "It arises only when $L > 0$, $F < cV$ and $L < cV$, rises linearly to its largest at $L = F$, falls back to zero at $L = cV$",
-      "note": "The penalty-versus-loss shape (rises to its maximum at L = F, falls to zero at cV) is stated on the tagged page.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort2"
+      "quote": "The penalty arises only when $L > 0$, $F < cV$ and $L < cV$. It rises linearly to its largest at $L = F$, where it is $F\\,(1 - F/cV)$, and falls back to zero at $L = cV$.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -14830,10 +14942,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Coinsurance Rating",
-      "quote": "the rate per amount of insurance is set by the face amount chosen, as expected indemnity divided by face value",
-      "note": "Rate per amount of insurance = expected indemnity / face value; per $1000 is the unit.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort2"
+      "quote": "the rate per unit of face value is the expected indemnity divided by the face value",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     }
    ]
@@ -14866,11 +14978,11 @@
      "places": [],
      "resolution": {
       "kind": "taught",
-      "page": "Commercial Lines Rating",
-      "quote": "is the standard premium on which the basic premium factor, the minimum and the maximum are all computed",
-      "note": "Syllabus page: the retro minimum and maximum are computed on standard premium.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort2"
+      "page": "Retrospective Rating",
+      "quote": "$R_{\\min}$ and $R_{\\max}$ are the minimum and maximum retrospective premiums, each a negotiated ratio times standard premium.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -15528,10 +15640,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Bornhuetter-Ferguson Method",
-      "quote": "In practice actuaries either limit the CDFs to a minimum of 1.00 when applying BF (as Friedland's examples do), or still calculate BF with the factors below 1.00 but rely on another technique to select ultimate claims for those years",
-      "note": "CDFs below 1.00: Z > 1 and the two practical treatments (Friedland Ch.9 p.156, PDF 162)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write4"
+      "quote": "Where salvage and subrogation lag the claims, or conservative case reserves settle for less, the CDF can be below 1.00 and $Z$ above 1, outside the range of a credibility. Actuaries then limit the CDFs to a minimum of 1.00 when applying the method, or calculate it with the lower factors and rely on another technique to select those years' ultimates.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     }
    ]
@@ -15809,7 +15921,15 @@
        "page": "Exposure Base",
        "quote": "Common bases: earned car-years (personal auto), earned house-years (homeowners), payroll — in hundreds of dollars in the U.S. — (workers compensation), sales revenue, payroll, square footage or number of units (commercial general liability), amount of insurance (commercial business property)."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exposure Base",
+      "quote": "Friedland lists sales or square footage for general liability of corporations, and average occupied beds and outpatient visits for hospital professional liability.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -16204,10 +16324,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Changing Conditions",
-      "quote": "A change that alters development, such as a legal reform that lowers severity on open claims as well as future ones, distorts BF's IBNR along with the development technique's.",
-      "note": "BF uses the development technique's patterns (Friedland Ch.9 p.152, PDF 158); responses: report-year data (Ch.13 p.283, PDF 289), F-S with adjusted severities (Ch.11 p.204, PDF 210)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write4"
+      "quote": "A legal change that lowers severity on open claims makes historical development factors too high, so the development technique overstates. The Bornhuetter-Ferguson technique uses the same reporting and payment patterns, so its percentage unreported is distorted too.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -16558,10 +16678,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Allocated Loss Adjustment Expense",
-      "quote": "In the additive version, each age-to-age factor is the difference between the ratios at successive ages (the later ratio minus the earlier one), and the factors are averaged and selected as in the standard development technique.",
-      "note": "Additive ratio development; Friedland Ch.16 pp.373-374",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write5"
+      "quote": "In the additive version, each factor is the difference between the ratios at successive ages, and the projected ultimate ratio is the latest ratio plus the sum of the selected differences from its age to ultimate.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -16875,7 +16995,15 @@
        "page": "Credibility",
        "quote": "Note the complement here is the *current* relativity, which embeds whatever was believed last year. Where the current relativity is itself stale, a better complement is the statewide or countrywide relativity for the same class — see [[Complement of Credibility]]."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Complement of Credibility",
+      "quote": "Where there is no larger group, the current rates are the best available proxy for the indicated rate, after two adjustments.…It is mainly appropriate when there is no larger group's data, since a larger related group, where one exists, is less correlated with the company's own experience.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -17708,10 +17836,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Earned Premium",
-      "quote": "recognized pro rata as the policy term elapses",
-      "note": "Pro rata on time for the remaining term.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort2"
+      "quote": "An endorsement's premium is earned over its own coverage period, from its effective date to the end of the term, separately from the original premium.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     }
    ]
@@ -18766,10 +18894,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Cumulative Development Factor",
-      "quote": "At a CDF of $4$, a dollar of distortion on the diagonal becomes four dollars of ultimate",
-      "note": "Leverage of immature years is taught on a linked page; excluding the leveraged point is the selection judgment.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort2"
+      "quote": "The CDF is largest for the most recent, immature accident years and smallest for the oldest.…At a CDF of 4.00, a dollar of distortion on the diagonal, such as a single large claim or a change in case adequacy, becomes four dollars of ultimate claims.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -18940,7 +19068,15 @@
        "page": "Cumulative Development Factor",
        "quote": "The CDF measures **leverage**. At a CDF of $4$, a dollar of distortion on the diagonal becomes four dollars of ultimate — which is why the chain ladder is unreliable at immature ages in [[Long Tail Lines|long-tail lines]] and why methods that develop only the *unreported* portion are preferred there."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cumulative Development Factor",
+      "quote": "At a CDF of 4.00, a dollar of distortion on the diagonal, such as a single large claim or a change in case adequacy, becomes four dollars of ultimate claims.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -19447,10 +19583,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Frequency-Severity Method",
-      "quote": "Incremental paid severity at an age is the incremental paid claims in that age interval divided by the incremental closed claim counts in the same interval.",
-      "note": "Disposal rate technique: incremental paid severity defined (Friedland Ch.11 p.208, PDF 214)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write4"
+      "quote": "The incremental paid severity of a cell is its incremental paid claims over its incremental closed counts.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -20223,10 +20359,10 @@
      "resolution": {
       "kind": "taught",
       "page": "On-Leveling",
-      "quote": "Seasonal writing (Werner's example: boat owners policies, bought before the boating season) or a mid-year term change breaks it",
-      "note": "Syllabus page: the uniform-writing assumption fails under a mid-year term change.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort2"
+      "quote": "The parallelogram method's assumptions are its weaknesses: premium written uniformly through the year, a single policy term, and rate changes applied uniformly to all risks.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     }
    ]
@@ -21237,10 +21373,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Classification Ratemaking",
-      "quote": "ASOP 12 asks that risk characteristics be related to expected outcomes, and a relationship is demonstrated if the variation in actual or reasonably anticipated experience correlates to the characteristic.",
-      "note": "ASOP 12 §3.2.1-3.2.2 paragraph (ASOP 12 PDF p.9)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write1"
+      "quote": "asks that risk characteristics be related to expected outcomes, and a relationship is demonstrated if the variation in actual or reasonably anticipated experience correlates to the characteristic.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -21393,10 +21529,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Loss Trend",
-      "quote": "apply the total-limits severity trend to each ground-up loss, then cap both the original and the trended losses at the basic limit and compare the totals; the excess losses are the total-limits losses minus the basic-limits losses, before and after trend, and their ratio is the excess trend",
-      "note": "W&M Ch. 6 pp. 117-118 (PDF 129-130), Tables 6.20-6.21.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write2"
+      "quote": "The trend in a layer is measured by applying the total-limits trend to each ground-up loss, then capping both the original and the trended losses at the basic limit and comparing the totals. The excess losses are the total-limits losses less the basic-limits losses, before and after trend.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -21548,10 +21684,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Classification Ratemaking",
-      "quote": "A level's indicated relativity is first computed as its pure premium (loss and ALAE per exposure) divided by the pure premium of all levels combined, its relativity to the total.",
-      "note": "One-way approaches, pure premium. W&M Ch.9 p.163 (PDF 175)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write1"
+      "quote": "In the pure premium approach, each level's pure premium is first divided by the pure premium of all levels combined, its relativity to the total, and the set is then rebased so the base level is 1.00.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -21563,11 +21699,11 @@
      "places": [],
      "resolution": {
       "kind": "taught",
-      "page": "Classification Ratemaking",
-      "quote": "each current relativity is divided by the exposure-weighted average current relativity, so that it is on the same basis as the indicated relativity to the total",
-      "note": "One-way approaches, credibility-weighting. W&M App. E (PDF 411, 413), Ch.12 p.236 (PDF 248)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write1"
+      "page": "Complement of Credibility",
+      "quote": "In classification ratemaking, the complement of an indicated relativity is often the current relativity, normalized so that its weighted average is $1.00$.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -21739,10 +21875,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Coinsurance Rating",
-      "quote": "It arises only when $L > 0$, $F < cV$ and $L < cV$, rises linearly to its largest at $L = F$, falls back to zero at $L = cV$",
-      "note": "The page gives the penalty and that it is largest at L = F, i.e. F - aF.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort2"
+      "quote": "It rises linearly to its largest at $L = F$, where it is $F\\,(1 - F/cV)$, and falls back to zero at $L = cV$.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -21823,10 +21959,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Experience Rating",
-      "quote": "The expected losses are the actual payroll in hundreds of dollars, by class, for the experience period, multiplied by the class's expected loss rate per hundred dollars of payroll.",
-      "note": "NCCI expected losses from payroll; W&M Ch.15 p.295 (PDF 307), Table 15.5",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write3"
+      "quote": "The expected losses are the actual payroll in hundreds of dollars, by class, for the experience period, times the class's expected loss rate.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -21839,10 +21975,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Experience Rating",
-      "quote": "The expected primary losses are the expected losses multiplied by the D-ratio…which is the share of expected losses that is expected to be primary. The expected excess losses are the expected losses minus the expected primary losses, which is one minus the D-ratio times the expected losses.",
-      "note": "D-ratio; W&M Ch.15 pp.295-296 (PDF 307-308), Table 15.5",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write3"
+      "quote": "The expected primary losses are the expected losses times the D-ratio, the [[Loss Elimination Ratio|loss elimination ratio]] at the primary loss limit, and the expected excess losses are the rest.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -22169,7 +22305,15 @@
        "page": "Insurer Operational Data",
        "quote": "A new product has no history of its own, and sparse or unstable internal data may need [[External Data|external data]] or [[Statistical Plan|industry statistical data]] as a benchmark."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "External Information in Reserving",
+      "quote": "its data is limited in volume, so it has little [[Credibility|credibility]], as for many smaller insurers;…Internal data reflects the insurer's own claim settlement rates, case reserving practices and book mix, so when it is credible it is relied on over external data.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -22447,10 +22591,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Case Outstanding Development Method",
-      "quote": "The case outstanding development factor is (reported CDF − 1) × paid CDF ÷ (paid CDF − reported CDF) + 1, equivalently reported CDF × (paid CDF − 1) ÷ (paid CDF − reported CDF).",
-      "note": "Approach #2: the factor and unpaid = case outstanding x factor (Friedland Ch.12 p.269, PDF 275)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write4"
+      "quote": "$$\\text{Case Outstanding CDF} = \\frac{(\\text{Reported CDF} - 1) \\times \\text{Paid CDF}}{\\text{Paid CDF} - \\text{Reported CDF}} + 1$$…The unpaid claims are the current case outstanding times this factor",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -22495,7 +22639,15 @@
        "page": "External Information in Reserving",
        "quote": "**External information also flags problems.** A development pattern far outside the industry range, or a loss ratio that diverges persistently from peers writing the same business, is a signal to re-examine internal assumptions — a diagnostic use that does not require adopting the external numbers at all."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "External Information in Reserving",
+      "quote": "Comparing the insurer's own age-to-age factors, or its loss ratios, with the industry's at each age shows where the insurer's experience departs from its peers, and a departure is a reason to re-examine its assumptions.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -22824,10 +22976,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Frequency-Severity Method",
-      "quote": "An implicit assumption is that there are no significant partial (interim) payments. The technique matches paid dollars to closed counts, so material payments on claims that are still open distort the incremental severities.",
-      "note": "Disposal rate technique: no-partial-payments assumption and the dollars/counts mismatch (Friedland Ch.11 pp.205, 211, PDF 211, 217)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write4"
+      "quote": "The technique matches paid dollars to closed counts, so it implicitly assumes no significant partial payments.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -22866,7 +23018,15 @@
        "page": "Berquist-Sherman Method",
        "quote": "The adjustments are **large and judgment-laden** — the severity trend and the target disposal pattern are both selections"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Frequency-Severity Method",
+      "quote": "Where they are material, paid claims on closed claims only, or paid claims over the claims open at the start of the interval, can be used.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -23752,7 +23912,15 @@
        "page": "Actual vs Expected Analysis",
        "quote": "**Actual vs. Expected Analysis** (A/E) compares the emergence that actually occurred in a period against what the previous valuation's assumptions implied should occur."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Actual vs Expected Analysis",
+      "quote": "compares the claims that actually emerged in a period with the claims the last [[Unpaid Claims|unpaid claim estimate]] expected to emerge in that period.…The comparison is made by accident year and in total, for reported and paid claims and for claim counts.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -23769,10 +23937,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Actual vs Expected Analysis",
-      "quote": "\\text{Expected emergence} = \\frac{U_{\\text{prior}} - \\text{Reported}_{n}}{1 - 1/\\text{CDF}_{n}}",
-      "note": "Re-quoted after the page was edited today: expected emergence = unreported x (change in % reported)/(1 - % reported at start).",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort2"
+      "quote": "$$\\text{Expected Emergence} = \\frac{\\text{Ultimate} - \\text{Reported}}{1 - p_{\\text{start}}} \\times (p_{\\text{end}} - p_{\\text{start}})$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -24269,7 +24437,15 @@
        "page": "Excess of Loss",
        "quote": "Trend each historical loss individually *before* applying the layer. Excess losses grow faster than trend because a loss just below $R$ trends into the layer."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loss Trend",
+      "quote": "The trend in a layer is measured by applying the total-limits trend to each ground-up loss, then capping both the original and the trended losses at the basic limit and comparing the totals.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r7",
@@ -24973,10 +25149,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Increased Limits",
-      "quote": "The limited average severity at the basic limit uses the claims from all policies, whatever their limits, each capped at the basic limit, and divides the total by the total number of claims.",
-      "note": "LAS at the basic limit from censored data; W&M Ch.11 pp.194-195 (PDF 206-207)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write3"
+      "quote": "Computes the limited average severity at the basic limit from the claims of all policies, whatever their limits, each capped at the basic limit, divided by the total number of claims.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -24989,10 +25165,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Increased Limits",
-      "quote": "The average severity of a layer is its losses divided by the number of claims reaching the layer (those exceeding its bottom), using only the policies whose limits reach the top of the layer. Before it is added to the limited average severity below it, it is multiplied by the probability that a claim exceeds the bottom of the layer, estimated from the same policies.",
-      "note": "Extending LAS by a layer from censored data; W&M Ch.11 pp.195-197 (PDF 207-209)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write3"
+      "quote": "Divides the layer's losses by the number of those policies' claims reaching the layer, then multiplies by the probability that a claim exceeds the bottom of the layer, estimated from the same policies.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -25030,10 +25206,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Complement of Credibility",
-      "quote": "The same calculation with losses capped at a limit below the attachment point, often the basic limit: the losses capped at the lower limit are multiplied by the ILF at the top of the layer minus the ILF at the attachment point, divided by the ILF at the lower limit.",
-      "note": "Lower limits analysis formula; W&M Ch.12 p.233 (PDF 245)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write3"
+      "quote": "Lower limits analysis uses losses capped at a lower limit $d$, often the basic limit, $L_d \\times (\\text{ILF}_{A+L} - \\text{ILF}_A)/\\text{ILF}_d$.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -25046,10 +25222,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Complement of Credibility",
-      "quote": "It needs ground-up losses that have not been capped anywhere below the attachment point, so a policy whose limit is below the attachment point cannot supply them.…Losses capped at the basic limit can be taken from policies at every limit at or above it, and insurers usually code them for statistical reporting. Capping lower may make the estimate more stable, but differences in size-of-loss distributions are exacerbated, so it is likely more biased, and it is related to the lower-limit losses rather than to the losses in the layer.",
-      "note": "Increased limits vs lower limits analysis: data needs, stability, bias, relation to the layer; W&M Ch.12 pp.232-234 (PDF 244-246)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write3"
+      "quote": "It needs ground-up losses not capped anywhere below the attachment point.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     }
    ]
@@ -25070,10 +25246,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Considerations for Implementing Rates",
-      "quote": "For a purely multiplicative rating algorithm that average differential is approximated as the product of each rating variable's exposure-weighted average differential; an additive discount enters as one minus its exposure-weighted average discount.",
-      "note": "W&M Ch. 14 pp. 272-274 (PDF 284-286), approximated average rate differential method.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write2"
+      "quote": "For a purely multiplicative rating algorithm, that average differential is approximated as the product of each rating variable's exposure-weighted average differential. An additive discount enters as one minus its exposure-weighted average discount.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -25854,10 +26030,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Case Outstanding Development Method",
-      "quote": "That holds only where most claims are reported within the accident period",
-      "note": "Tagged page: the technique suits books where most claims are reported early (claims-made, report year).",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort2"
+      "quote": "That holds where most claims are reported in the first accident period, so the method is strongest for [[Claims Made Coverage|claims-made]] coverage and [[Report Year|report year]] analysis.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -26420,10 +26596,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Berquist-Sherman Method",
-      "quote": "Berquist and Sherman fit an exponential curve, Y = a × e^(bX), to cumulative paid claims Y against cumulative closed claim counts X between each pair of successive ages in an accident year",
-      "note": "Settlement rate adjustment step 3: two-point exponential fits (Friedland Ch.13 p.289, PDF 295)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write4"
+      "quote": "Berquist and Sherman fit an exponential curve between each pair of successive ages,",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -26874,10 +27050,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Allocated Loss Adjustment Expense",
-      "quote": "Build a triangle of the ratio of cumulative paid ALAE to cumulative paid claims for each accident year at each age, and develop it to an ultimate ratio like any other triangle",
-      "note": "Paid ALAE to paid claims ratio technique; Friedland Ch.16 pp.371-374",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write5"
+      "quote": "The ratio triangle holds the ratio at each age for each accident year, and it is developed to an ultimate ratio with age-to-age factors on the ratios.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -26953,10 +27129,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Allocated Loss Adjustment Expense",
-      "quote": "Advantages: the ratio method recognizes the relationship between ALAE and claims; its development factors tend not to be as highly leveraged as development factors based on paid ALAE dollars",
-      "note": "Advantages of the ratio method; Friedland Ch.16 p.373",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write5"
+      "quote": "The ratio method recognizes the relationship between ALAE and claims, and its factors tend not to be as highly leveraged as factors on paid ALAE dollars.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -27066,10 +27242,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Actual vs Expected Analysis",
-      "quote": "\\text{Expected emergence} = \\frac{U_{\\text{prior}} - \\text{Reported}_{n}}{1 - 1/\\text{CDF}_{n}}",
-      "note": "Re-quoted after the page was edited today: expected emergence from IBNR and the change in % reported.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort2"
+      "quote": "$$\\text{Expected Emergence} = \\frac{\\text{Ultimate} - \\text{Reported}}{1 - p_{\\text{start}}} \\times (p_{\\text{end}} - p_{\\text{start}})$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -27991,10 +28167,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Expense Provisions",
-      "quote": "Where the ratios are stable the multi-year average is selected; where they show a trend over time the actuary may select the most recent year's ratio or some other value.",
-      "note": "W&M Ch. 7 pp. 128, 131 (PDF 140, 143).",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write2"
+      "quote": "Stable ratios favour the multi-year average, and ratios with a trend over time may favour the latest year's ratio.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -28007,10 +28183,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Expense Provisions",
-      "quote": "In the premium-based method the selection is made on each category's total expense ratio, and the selected ratio is then divided into its fixed and variable parts.",
-      "note": "W&M Ch. 7 p. 131 (PDF 143): 'The selected expense ratio is then divided into fixed and variable ratios.'",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write2"
+      "quote": "Each category's selected ratio is split by the percentage of it assumed fixed, and the fixed part is turned into dollars, so the fixed expense per exposure is",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -28383,10 +28559,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Exposure Base",
-      "quote": "One home insured for two years has twice the expected loss of the same home insured for one year, so it is two house-years of exposure",
-      "note": "W&M Ch. 4 pp. 49, 58 (PDF 61, 70).",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write2"
+      "quote": "Exposure is counted per year of coverage, so one home insured for two years is two house-years, and a six-month auto policy is one-half of a written car-year.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -28605,10 +28781,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Coinsurance Rating",
-      "quote": "is set by the face amount chosen, as expected indemnity divided by face value",
-      "note": "Taught on the tagged Coinsurance Rating page: rate per amount of insurance = f x E[min(L,F)] / F (Werner Ch.11 p.212); the check missed it.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort3"
+      "quote": "$$\\text{Rate} = \\frac{\\text{Frequency} \\times E[\\min(L, F)]}{F}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -28828,10 +29004,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Age to Age Factor",
-      "quote": "is the ratio of a cohort's cumulative amount at one maturity to its amount at the previous maturity",
-      "note": "Age to Age Factor (a syllabus page) defines the factor and its selection by averaging the column; the check missed it.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort3"
+      "quote": "is the ratio of a cohort's cumulative value at one age to its value at the previous age.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -29379,10 +29555,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Frequency-Severity Method",
-      "quote": "Where earned premium is the only exposure data available, frequency is the trended ultimate claim counts divided by the on-level earned premium. Putting premium on the current rate level keeps rate changes out of the frequency, and dividing by an exposure measure keeps growth in the book out of it.",
-      "note": "Approach #2: frequency per on-level earned premium (Friedland Ch.11 pp.202-204, PDF 208-210)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write4"
+      "quote": "Putting premium on the current rate level keeps rate changes out of the frequency, and dividing by an exposure keeps growth in the book out of it.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -29416,10 +29592,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Frequency-Severity Method",
-      "quote": "To move a selected severity back one year, divide it by one year's severity trend factor. To move a selected frequency back one year, divide it by one year's claim count trend factor and reverse one year of change in the exposure base",
-      "note": "Approach #2: moving selected frequency and severity back a year (Friedland Ch.11 pp.203-204, PDF 209-210)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write4"
+      "quote": "A severity moves back one year by dividing it by one year's severity trend factor. A frequency moves back by dividing it by one year's claim count trend factor and reversing one year of change in the exposure base, such as payroll inflation.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -29807,10 +29983,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Actual vs Expected Analysis",
-      "quote": "the share of ultimate the pattern says should report (or be paid) between the two valuations",
-      "note": "Actual vs Expected Analysis (syllabus page) teaches expected emergence between two valuations from the pattern (Friedland Ch.15 pp.350-351).",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort3"
+      "quote": "The expected emergence over a period is the *change* in the percentage reported, not the percentage at the end.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -30158,10 +30334,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Development Triangle",
-      "quote": "so the incremental cells along a diagonal add up to that calendar period's payments: each cohort's latest cumulative value minus its value on the previous diagonal, with the newest cohort's first cell counted in full.",
-      "note": "A diagonal's incrementals are the calendar period's payments; Friedland Ch.5 pp.55-57",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write5"
+      "quote": "The incremental cells on one diagonal add up to the calendar year's amount: each accident year's latest cumulative value minus its value on the previous diagonal, with the newest accident year's first value counted in full.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     }
    ]
@@ -30265,10 +30441,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Loss Development",
-      "quote": "If claims come to be reported faster while the pace of payment is unchanged, recent years are further along at each age than the history the reported factors came from, so the reported factors overstate their remaining development and the reported projection overstates ultimate; the paid projection is unaffected.",
-      "note": "Unchanged reporting lags assumption; Friedland Ch.7 p.97",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write5"
+      "quote": "If claims come to be reported faster while payments keep their pace, the reported factors overstate the remaining development and the reported projection overstates ultimate. The paid projection is unaffected.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -30543,10 +30719,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Changing Conditions",
-      "quote": "de-cumulate the paid triangle, restate each incremental cell paid before the change to the new level, and re-cumulate before selecting factors.",
-      "note": "Calendar-year restatement on incremental cells (Friedland Ch.5 pp.55-56, PDF 61-62; Ch.8 p.133, PDF 139; Ch.11 p.209, PDF 215)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write4"
+      "quote": "A change in severity that applies to payments made after a date is restated on the incremental paid triangle, since each incremental cell was paid in one calendar period. The incremental payments made before the date are restated to the new level, and the triangle is cumulated again before factors are selected.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -30985,10 +31161,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Allocated Loss Adjustment Expense",
-      "quote": "develop a ratio of ALAE to loss and apply it to projected losses",
-      "note": "The tagged ALAE page teaches developing the ratio of ALAE to loss (Friedland Ch.16); a development factor on that ratio is ultimate ratio over current ratio, as for any triangle.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort3"
+      "quote": "The ratio triangle holds the ratio at each age for each accident year, and it is developed to an ultimate ratio with age-to-age factors on the ratios.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -31705,10 +31881,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Classification Ratemaking",
-      "quote": "companies compare current, indicated and competitors' relativities with each set normalized so that its exposure-weighted average relativity is 1.00",
-      "note": "One-way approaches, pure premium (relativity to total, normalized). W&M Ch.9 p.163 (PDF 175)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write1"
+      "quote": "In the pure premium approach, each level's pure premium is first divided by the pure premium of all levels combined, its relativity to the total, and the set is then rebased so the base level is 1.00.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -31720,11 +31896,11 @@
      "places": [],
      "resolution": {
       "kind": "taught",
-      "page": "Classification Ratemaking",
-      "quote": "In Werner's appendix example the complement of credibility is the current relativities, normalized the same way",
-      "note": "One-way approaches, credibility-weighting. W&M App. E (PDF 411, 413)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write1"
+      "page": "Complement of Credibility",
+      "quote": "In classification ratemaking, the complement of an indicated relativity is often the current relativity, normalized so that its weighted average is $1.00$.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -32310,7 +32486,15 @@
        "page": "Pure Premium Analysis",
        "quote": "**Correlation.** If urban policyholders also skew toward younger drivers or higher limits, part of the $2.00$ belongs to those variables rather than to geography."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Pure Premium Analysis",
+      "quote": "The assumption is tested by comparing the distribution of exposures across the other rating variables within each level.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -33235,7 +33419,15 @@
        "page": "Calendar Year",
        "quote": "$$\\text{CY Reported Losses} = \\text{Paid} + \\Delta\\text{Case Reserves}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Net Losses",
+      "quote": "Net reported claims are the gross paid claims plus the gross case outstanding, less the reinsurance recoveries on both.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -33323,7 +33515,15 @@
        "page": "Reinsurance Reserving",
        "quote": "The combined experience may not reflect any one reinsurer's markets, terms and operations."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "External Information in Reserving",
+      "quote": "Internal data reflects the insurer's own claim settlement rates, case reserving practices and book mix, so when it is credible it is relied on over external data.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -33505,10 +33705,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Claim Count Triangle",
-      "quote": "more claims can close without payment in later valuations than are newly reported, so reported count age-to-age factors fall below",
-      "note": "Downward reported count development when CNP excluded; Friedland Ch.11 p.196",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write5"
+      "quote": "In Friedland's private passenger collision example, more claims close without payment at later valuations than are newly reported, so the reported count factors are below 1.00.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -33587,11 +33787,11 @@
      "places": [],
      "resolution": {
       "kind": "taught",
-      "page": "Chain Ladder Method",
-      "quote": "projects each cohort to ultimate by multiplying its latest cumulative amount by a",
-      "note": "The chain-ladder relation U = C x CDF (syllabus page), read backwards with the question's own ultimate for the oldest year, gives the tail.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort3"
+      "page": "Tail Factor",
+      "quote": "$$\\text{Tail} = \\frac{\\text{Ultimate Claims}}{C_{\\text{AY},\\,N}}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -34319,10 +34519,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Frequency-Severity Method",
-      "quote": "The tail severity is the sum of trended incremental paid claims divided by the sum of incremental closed claim counts over every cell at the selected age and older.",
-      "note": "Disposal rate technique: tail severity pooled over the selected age and older (Friedland Ch.11 p.209, PDF 215)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write4"
+      "quote": "At the oldest ages, where few claims close and one large claim can dominate, the ages are combined into one tail severity: total trended incremental paid over total incremental closed counts at the selected age and older.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -34335,10 +34535,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Frequency-Severity Method",
-      "quote": "The tail severity is the sum of trended incremental paid claims divided by the sum of incremental closed claim counts over every cell at the selected age and older.",
-      "note": "Disposal rate technique: tail severity computation (Friedland Ch.11 p.209, PDF 215)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write4"
+      "quote": "At the oldest ages, where few claims close and one large claim can dominate, the ages are combined into one tail severity: total trended incremental paid over total incremental closed counts at the selected age and older.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -34382,10 +34582,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Frequency-Severity Method",
-      "quote": "Where the trended incremental severities begin to vary from year to year at the older ages, usually because few claims close there and one large claim can dominate, the experience of those ages is combined.",
-      "note": "Disposal rate technique: combine where trended severities turn variable (Friedland Ch.11 p.209, PDF 215)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write4"
+      "quote": "The age to combine at depends on where the results become erratic, its influence on the total and the share of claims expected to close beyond it.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -34398,10 +34598,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Frequency-Severity Method",
-      "quote": "Combining too late leaves the oldest ages' severities resting on a handful of volatile claims; combining too early gives up age-by-age severities that the data can still support.",
-      "note": "Disposal rate technique: trade-off in choosing the combining age (Friedland Ch.11 p.209, PDF 215)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write4"
+      "quote": "At the oldest ages, where few claims close and one large claim can dominate, the ages are combined into one tail severity: total trended incremental paid over total incremental closed counts at the selected age and older.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     }
    ]
@@ -34847,10 +35047,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Development Triangle",
-      "quote": "Every incremental cell on one diagonal was paid in the same calendar period, so the incremental cells along a diagonal add up to that calendar period's payments",
-      "note": "Calendar-year paid as the sum of a diagonal's incrementals; Friedland Ch.5 pp.55-57",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write5"
+      "quote": "The incremental cells on one diagonal add up to the calendar year's amount: each accident year's latest cumulative value minus its value on the previous diagonal, with the newest accident year's first value counted in full.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -35701,10 +35901,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Policy Provision Changes",
-      "quote": "The statute sets a compensation rate, a percentage of the worker's pre-injury wage, and a minimum and a maximum weekly benefit, each stated as a percentage of the state average weekly wage (SAWW).",
-      "note": "W&M Ch. 6 p. 101 (PDF 113); reached from the tagged Workers Compensation Insurance page, which now links Policy Provision Changes.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write2"
+      "quote": "the statute sets a compensation rate, a percentage of the worker's pre-injury wage, and a minimum and maximum weekly benefit stated as percentages of the state average weekly wage.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -35717,10 +35917,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Policy Provision Changes",
-      "quote": "A worker's weekly benefit is the compensation rate times the wage, raised to the minimum if it falls below it and cut to the maximum if it exceeds it.",
-      "note": "W&M Ch. 6 pp. 101-102 (PDF 113-114); reached via the link on Workers Compensation Insurance.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write2"
+      "quote": "A worker's weekly benefit is the compensation rate times the wage, raised to the minimum or cut to the maximum.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -35733,10 +35933,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Policy Provision Changes",
-      "quote": "The direct effect of a change is found by calculating the benefits before and after the change over the distribution of workers by wage, then dividing total benefits after by total benefits before and subtracting one.",
-      "note": "W&M Ch. 6 p. 102 (PDF 114), Table 6.6.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write2"
+      "quote": "The **direct effect** of a change is the total benefits after it divided by the total benefits before it, minus one, over the distribution of workers by wage.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -35749,10 +35949,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Policy Provision Changes",
-      "quote": "a band between the limits is paid the compensation rate times its total wages, which is the band's average wage times its number of workers",
-      "note": "W&M Table 6.6 (PDF 114): benefits = 0.667 x band total wages; limit x workers for min/max bands.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write2"
+      "quote": "A wage band below the minimum or above the maximum is paid the limit times its number of workers, and a band between them is paid the compensation rate times its total wages.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -35765,10 +35965,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Policy Provision Changes",
-      "quote": "A benefit that replaces more of the wage may make workers more inclined to file claims and give claimants less incentive to return to work in a timely manner, so claim frequency and duration may rise",
-      "note": "W&M Ch. 6 p. 101 (PDF 113): indirect effect of a higher replacement; applies to the low-wage workers a higher minimum reaches.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write2"
+      "quote": "A benefit that replaces more of the wage may lead more workers to file claims and to return to work later.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -35781,10 +35981,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Policy Provision Changes",
-      "quote": "a benefit that replaces less may work the other way, and only on the workers whose benefit it changes",
-      "note": "W&M Ch. 6 pp. 101, 103 (PDF 113, 115): indirect effect of a lower maximum on high-wage workers.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write2"
+      "quote": "A lower maximum benefit may also have an indirect effect, whose strength depends on the economic environment and the nature of the insured population.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     }
    ]
@@ -36807,10 +37007,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Classification Ratemaking",
-      "quote": "It is desirable for insurance to be affordable for all risks, especially where it is required by law",
-      "note": "Criteria-in-detail, affordability and controllability. W&M Ch.9 p.157 (PDF 169)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write1"
+      "quote": "Insurance should be affordable for all risks, especially where it is required by law or a lender.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     }
    ]
@@ -37059,11 +37259,11 @@
      "places": [],
      "resolution": {
       "kind": "taught",
-      "page": "Reserve Communication",
-      "quote": "reserve development history, volatility, and the effect on reported earnings",
-      "note": "The tagged Reserve Communication page teaches what investors take from reserves (Friedland Ch.1 pp.4-5); the dividend example is the sample answer's own illustration, not in Friedland.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort3"
+      "page": "Stakeholder Reporting",
+      "quote": "The estimate determines reported earnings and surplus, and with them the financial metrics by which investors judge the insurer's strength.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -37202,10 +37402,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Ceded Losses",
-      "quote": "Under quota share, ceded is a fixed share",
-      "note": "Ceded Losses (one link from the tagged Net of Reinsurance) teaches quota share cession as a fixed share of gross.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort3"
+      "quote": "$$\\text{Ceded Losses} = c \\times \\text{Gross Losses}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -37227,10 +37427,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Ceded Losses",
-      "quote": "Under excess of loss, ceded responds only to claims piercing retention",
-      "note": "Ceded Losses (one link from the tagged Net of Reinsurance) teaches per-claim excess of loss cession above the retention.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort3"
+      "quote": "treaty cedes only the part of each claim above a retention, up to a limit, so for one claim",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -37242,11 +37442,11 @@
      "places": [],
      "resolution": {
       "kind": "taught",
-      "page": "Calendar Year",
-      "quote": "Werner & Modlin and Friedland both define calendar-year reported losses as paid losses plus the change in case reserves.",
-      "note": "The tagged Calendar Year page teaches CY reported = paid + change in case; applied to the ceded layer it gives the CY cession.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort3"
+      "page": "Reserving Data Organization",
+      "quote": "$$\\text{CY Reported Claims} = \\text{CY Paid Claims} + \\text{Ending Case Outstanding} - \\text{Beginning Case Outstanding}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     }
    ]
@@ -37978,7 +38178,15 @@
        "page": "Premium Accounting",
        "quote": "Additional premium for an endorsement is recorded on the endorsement's effective date and earned in the same way."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Earned Premium",
+      "quote": "An endorsement's premium is earned over its own coverage period, from its effective date to the end of the term, separately from the original premium.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -38566,10 +38774,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Development Triangle",
-      "quote": "each cohort's new cumulative value is its value on the previous diagonal plus what was paid on it during the new calendar period",
-      "note": "Adding a new diagonal to a cumulative paid triangle; Friedland Ch.5 pp.56-57",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write5"
+      "quote": "$$C_{\\text{AY},\\,n+1} = C_{\\text{AY},\\,n} + I_{\\text{AY},\\,n+1}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -38603,10 +38811,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Allocated Loss Adjustment Expense",
-      "quote": "The age-to-ultimate factor is the cumulative sum of the selected differences from that age to the last one",
-      "note": "Additive factors summed to ultimate; Friedland Ch.16 pp.373-374",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write5"
+      "quote": "In the **additive** version, each factor is the difference between the ratios at successive ages, and the projected ultimate ratio is the latest ratio plus the sum of the selected differences from its age to ultimate.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -38619,10 +38827,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Allocated Loss Adjustment Expense",
-      "quote": "the projected ultimate ratio is the ratio on the latest diagonal plus that age-to-ultimate factor.",
-      "note": "Ultimate ratio = latest ratio + additive age-to-ultimate; Friedland Ch.16 p.374",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write5"
+      "quote": "In the **additive** version, each factor is the difference between the ratios at successive ages, and the projected ultimate ratio is the latest ratio plus the sum of the selected differences from its age to ultimate.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -38799,10 +39007,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Actual vs Expected Analysis",
-      "quote": "When the excess is real additional claim dollars, such as a large claim reported in the period, those dollars stay in that accident year's ultimate, which therefore rises",
-      "note": "A/E: revising prior selections; White's second option (Friedland Ch.15 pp.351-353, PDF 357-359)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write4"
+      "quote": "sensing a random fluctuation such as a large loss, so the excess raises the ultimate",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -39315,10 +39523,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Expense Provisions",
-      "quote": "The actuary calculates the historical expense ratio for each expense category and each year (or, in the exposure/policy-based method, the fixed expense per exposure or per policy), usually with a multi-year average beside them.",
-      "note": "W&M Ch. 7 pp. 128, 134 (PDF 140, 146).",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write2"
+      "quote": "The actuary calculates each category's ratio for each year, usually with a multi-year average beside them.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -39352,10 +39560,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Expense Provisions",
-      "quote": "some expenses treated as fixed actually vary by characteristic, such as new versus renewal business; and that economies of scale in a growing or shrinking book make the average fixed expense per exposure decline or rise",
-      "note": "Exposure/policy-based method shortcomings, W&M Ch. 7 pp. 134-135 (PDF 146-147).",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write2"
+      "quote": "Economies of scale in a growing or shrinking book make the average fixed expense per exposure decline or rise.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     }
    ]
@@ -40043,10 +40251,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Classification Ratemaking",
-      "quote": "The levels of a variable should be objectively defined, so that classifying a risk does not rest on a subjective judgment.",
-      "note": "Criteria-in-detail, objective definitions. W&M Ch.9 p.156 (PDF 168)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write1"
+      "quote": "Under the operational criteria, the levels should be objectively defined.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -40093,10 +40301,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Classification Ratemaking",
-      "quote": "Controllability is not the manipulation the operational criteria guard against: it means the insured is motivated to improve the risk itself",
-      "note": "Criteria-in-detail, controllability. W&M Ch.9 pp.157-158 & fn.29 (PDF 169-170)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write1"
+      "quote": "It is preferable if insureds can control their class, and so their premium, as a workers compensation insured can with approved loss control programs.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     }
    ]
@@ -40252,10 +40460,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Classification Ratemaking",
-      "quote": "each current relativity is divided by the exposure-weighted average current relativity, so that it is on the same basis as the indicated relativity to the total",
-      "note": "One-way approaches, credibility-weighting. W&M App. E (PDF 411, 413), Ch.12 p.236 (PDF 248)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write1"
+      "quote": "The interim step puts current, indicated and competitors' relativities on a consistent basis, and is needed when indicated relativities are credibility-weighted with the normalized current ones.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -40377,7 +40585,15 @@
        "page": "External Information in Reserving",
        "quote": "The usual application is a credibility-weighted selection: $\\hat{U} = Z \\cdot U_{\\text{internal}} + (1-Z) \\cdot U_{\\text{external}}$, with $Z$ reflecting the volume and stability of the internal data."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Complement of Credibility",
+      "quote": "When a GLM's estimate for a level is not credible, a competitor's factor, an industry benchmark or a blend of them can serve instead.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -40414,10 +40630,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Complement of Credibility",
-      "quote": "used by a new or small company whose own data is too unreliable, on the reasoning that a competitor with many more exposures has less process error. Competitors' manual rates reflect not only their loss costs but also marketing considerations, judgment and the effects of the regulatory process, all of which can make them inaccurate. Competitors may also have different underwriting and claim practices, which creates a bias that may be difficult to quantify.…A similar competitor's rates bear a logical relationship to the subject and are generally accepted by regulators, so this complement is often the only viable alternative",
-      "note": "Competitors' rates as a complement: when used, why biased, regulator acceptance, often the only viable alternative; W&M Ch.12 p.231 (PDF 243)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write3"
+      "quote": "Competitors' manual rates reflect not only their loss costs but also marketing considerations, judgment and the effects of the regulatory process, which can make them inaccurate.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -40431,7 +40647,15 @@
        "page": "External Information in Reserving",
        "quote": "A development pattern far outside the industry range, or a loss ratio that diverges persistently from peers writing the same business, is a signal to re-examine internal assumptions — a diagnostic use that does not require adopting the external numbers at all."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "External Information in Reserving",
+      "quote": "The line being analyzed and the benchmark can differ in claims practices, policy coverages, underwriting, geographic mix, claim coding, policyholder deductibles and limits, legal precedents and [[Mix of Business|mix of business]].",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r6",
@@ -40444,7 +40668,15 @@
        "page": "External Information in Reserving",
        "quote": "A development pattern far outside the industry range, or a loss ratio that diverges persistently from peers writing the same business, is a signal to re-examine internal assumptions — a diagnostic use that does not require adopting the external numbers at all."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Generalized Linear Model",
+      "quote": "the band of plus and minus two standard errors around each relativity, which is roughly a 95% confidence interval, is narrow, so that each level can be told apart from its neighbours and from the base level,",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -40588,10 +40820,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Experience Rating",
-      "quote": "The expected primary losses are the expected losses multiplied by the D-ratio…which is the share of expected losses that is expected to be primary. The expected excess losses are the expected losses minus the expected primary losses",
-      "note": "D-ratio; W&M Ch.15 pp.295-296 (PDF 307-308), Table 15.5",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write3"
+      "quote": "The expected primary losses are the expected losses times the **D-ratio**, the [[Loss Elimination Ratio|loss elimination ratio]] at the primary loss limit, and the expected excess losses are the rest.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -41046,10 +41278,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Tort Reform",
-      "quote": "In a frequency-severity projection the reform adjustment goes on the severities, beside the severity trend, while the frequencies are adjusted for frequency trend and rate level",
-      "note": "Reform adjustment on severity; Friedland Ch.11 pp.204, 211",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write5"
+      "quote": "the reform adjustment goes on the severities, beside the severity trend, so that every year's severities are at the cost level and tort environment of the year being projected. The frequencies are adjusted for frequency trend and rate level.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     }
    ]
@@ -41531,10 +41763,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Berquist-Sherman Method",
-      "quote": "Select the disposal rates on the latest diagonal as the basis, and multiply the selected disposal rate at each age by each accident year's ultimate claim counts to get the adjusted closed claim counts.",
-      "note": "Settlement rate adjustment step 2 plus adjusted open counts = reported - adjusted closed (Friedland Ch.13 pp.288, 292, PDF 294, 298)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write4"
+      "quote": "$$\\text{Adjusted Closed Counts} = \\text{Selected Disposal Rate} \\times \\text{Ultimate Claim Counts}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -42008,10 +42240,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Actual vs Expected Analysis",
-      "quote": "The expected figure comes from the prior ultimate and the emergence pattern: the share of ultimate the pattern says should report (or be paid) between the two valuations.",
-      "note": "stale re-quote: expected emergence = prior ultimate x the share expected to report between the two valuations",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort4"
+      "quote": "The expected emergence over a period is the *change* in the percentage reported, not the percentage at the end.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -42029,7 +42261,15 @@
        "page": "Actual vs Expected Analysis",
        "quote": "\\text{Actual emergence} &= \\$8{,}100{,}000 - \\$6{,}000{,}000"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Actual vs Expected Analysis",
+      "quote": "The actual emergence in the period is the change in cumulative reported claims between the two evaluation dates. It is compared with the expected emergence as a difference or as a ratio,",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r6",
@@ -42137,10 +42377,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Allocated Loss Adjustment Expense",
-      "quote": "In the additive version, each age-to-age factor is the difference between the ratios at successive ages (the later ratio minus the earlier one), and the factors are averaged and selected as in the standard development technique.",
-      "note": "Additive ratio development; Friedland Ch.16 pp.373-374",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write5"
+      "quote": "In the **additive** version, each factor is the difference between the ratios at successive ages, and the projected ultimate ratio is the latest ratio plus the sum of the selected differences from its age to ultimate.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -42174,10 +42414,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Allocated Loss Adjustment Expense",
-      "quote": "because the projection starts from the latest observed ratio, whatever distorts that ratio, in the ALAE or in the claims paid to date, carries through as well",
-      "note": "Disadvantages of the ratio method vs ALAE-only development; Friedland Ch.16 p.373",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write5"
+      "quote": "Any error in the estimate of ultimate claims passes into the estimate of ultimate ALAE.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -42782,10 +43022,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Development Triangle",
-      "quote": "holds the cumulative amount for that accident year at age",
-      "note": "a cumulative triangle cell already holds everything reported to that age; the count as of a date is read off its diagonal",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort4"
+      "quote": "An incremental triangle holds what was paid or reported for each cohort in each calendar period, and the cumulative triangle is the running sum of the incremental cells along each row.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -42961,10 +43201,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Expense Provisions",
-      "quote": "Other acquisition costs and general expenses are usually assumed to be uniform across locations, so their ratios use countrywide expenses over countrywide premium. Taxes, licenses and fees vary by state, so their ratios are based on the state's own data",
-      "note": "W&M Ch. 7 p. 128 (PDF 140) and Table 7.6.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write2"
+      "quote": "Other acquisition and general expenses are usually assumed uniform across locations, so they use countrywide expenses and premium. Taxes, licenses and fees vary by state, so their ratios use the state's own data.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -43316,7 +43556,15 @@
        "page": "Profit Margin",
        "quote": "$$\\text{Profit margin} = \\frac{\\text{NPV}}{\\text{EPV of premiums}}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Lifetime Value",
+      "quote": "Lifetime profit as a percentage of premium divides the lifetime profit by the present value of the premium, weighted by persistency the same way.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -43415,11 +43663,11 @@
      "places": [],
      "resolution": {
       "kind": "taught",
-      "page": "Pure Premium Method",
-      "quote": "Compare the distribution of one variable's exposures within each level of the other",
-      "note": "Classification section, exposure-correlation test. W&M Ch.9 p.164 (PDF 176)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write1"
+      "page": "Pure Premium Analysis",
+      "quote": "The assumption is tested by comparing the distribution of exposures across the other rating variables within each level.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -43431,11 +43679,11 @@
      "places": [],
      "resolution": {
       "kind": "taught",
-      "page": "Pure Premium Method",
-      "quote": "the variables are not exposure-correlated and the one-way relativities are not distorted by it, so they need no adjustment",
-      "note": "Classification section, exposure-correlation test. W&M Ch.9 p.164 (PDF 176)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write1"
+      "page": "Pure Premium Analysis",
+      "quote": "The univariate approach assumes the exposures of each level are distributed in the same way across every other rating variable.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -43447,11 +43695,11 @@
      "places": [],
      "resolution": {
       "kind": "taught",
-      "page": "Pure Premium Method",
-      "quote": "chains the adjustment: a one-way analysis of the first variable, then the second variable's relativities from exposures adjusted for the first variable's results",
-      "note": "Classification section, adjusted PP + sequential analysis. W&M Ch.9 pp.166-168 (PDF 178-180), Ch.10 pp.173-174 (PDF 185-186)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write1"
+      "page": "Pure Premium Analysis",
+      "quote": "Each level's exposures are multiplied by the exposure-weighted average current relativity of the other rating variables, so",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -43463,11 +43711,11 @@
      "places": [],
      "resolution": {
       "kind": "taught",
-      "page": "Pure Premium Method",
-      "quote": "the weights come from the exposure distribution and the factors are the other variable's relativities, while the losses enter only as the numerator",
-      "note": "Classification section, adjusted PP. W&M Ch.9 pp.166-168 (PDF 178-180)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write1"
+      "page": "Pure Premium Analysis",
+      "quote": "$\\bar{R}_i$ is the exposure-weighted average relativity of the other rating variables for the exposures in level $i$.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     }
    ]
@@ -43617,11 +43865,11 @@
      "places": [],
      "resolution": {
       "kind": "taught",
-      "page": "In-Force",
-      "quote": "the retention ratio is policies renewed",
-      "note": "retention ratio definition (syllabus page); the minimum-retention target itself is the question's management constraint",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort4"
+      "page": "Basic Insurance Ratios",
+      "quote": "$$\\text{Retention Ratio} = \\frac{\\text{Policies Renewed}}{\\text{Potential Renewal Policies}}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -43999,10 +44247,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Data Diagnostic Analysis",
-      "quote": "because the average reported claim also counts the smaller claims already closed, average case outstanding can sit well above it",
-      "note": "Faster-settlement bullet (+ averages need consistent counts bullet). Friedland Ch.6 pp.72-73, 75-76 (PDF 78-79, 81-82)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write1"
+      "quote": "Insurers close the less complicated and less expensive claims first, so the claims left open are the larger ones.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     }
    ]
@@ -44149,10 +44397,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Claim Count Triangle",
-      "quote": "When the reported counts exclude claims closed with no payment, a claim counted while open drops out of the count if it later closes without payment.",
-      "note": "Why reported counts can fall; Friedland Ch.11 p.196",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write5"
+      "quote": "When reported counts exclude claims closed without payment, a claim counted while open drops out if it later closes without payment.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     }
    ]
@@ -44858,10 +45106,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Frequency-Severity Method",
-      "quote": "The tail severity is the sum of trended incremental paid claims divided by the sum of incremental closed claim counts over every cell at the selected age and older.",
-      "note": "Disposal rate technique: pooled tail severity (Friedland Ch.11 p.209, PDF 215)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write4"
+      "quote": "At the oldest ages, where few claims close and one large claim can dominate, the ages are combined into one tail severity: total trended incremental paid over total incremental closed counts at the selected age and older.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -44908,10 +45156,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Frequency-Severity Method",
-      "quote": "Where the trended incremental severities begin to vary from year to year at the older ages, usually because few claims close there and one large claim can dominate, the experience of those ages is combined.",
-      "note": "Disposal rate technique: tail age where data become erratic or sparse (Friedland Ch.11 p.209, PDF 215)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write4"
+      "quote": "The age to combine at depends on where the results become erratic, its influence on the total and the share of claims expected to close beyond it.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -44924,10 +45172,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Frequency-Severity Method",
-      "quote": "The age at which to combine depends on the age at which the results become erratic, the influence on the total projection of selecting a particular age, and the percentage of claims expected to be closed beyond that age.",
-      "note": "Disposal rate technique: Friedland's three considerations for the combining age, plus the too-early/too-late trade-off (Friedland Ch.11 p.209, PDF 215)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write4"
+      "quote": "The age to combine at depends on where the results become erratic, its influence on the total and the share of claims expected to close beyond it.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     }
    ]
@@ -45483,10 +45731,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Allocated Loss Adjustment Expense",
-      "quote": "Advantages: the ratio method recognizes the relationship between ALAE and claims; its development factors tend not to be as highly leveraged as development factors based on paid ALAE dollars",
-      "note": "Advantages incl. judgment on recent ratios; Friedland Ch.16 p.373",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write5"
+      "quote": "The ratio method recognizes the relationship between ALAE and claims, and its factors tend not to be as highly leveraged as factors on paid ALAE dollars.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -45753,10 +46001,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Loss Trend",
-      "quote": "apply the total-limits severity trend to each ground-up loss, then cap both the original and the trended losses at the basic limit and compare the totals",
-      "note": "W&M Ch. 6 pp. 117-118 (PDF 129-130), Table 6.20.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write2"
+      "quote": "The trend in a layer is measured by applying the total-limits trend to each ground-up loss, then capping both the original and the trended losses at the basic limit and comparing the totals.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -45791,10 +46039,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Loss Trend",
-      "quote": "The trend must be applied to the ground-up loss before the limit, never to the capped amount.",
-      "note": "W&M Ch. 6 pp. 117-118 (PDF 129-130); excess = total limits minus basic limits.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write2"
+      "quote": "The excess losses are the total-limits losses less the basic-limits losses, before and after trend.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -46037,10 +46285,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Expense Provisions",
-      "quote": "The selection for each category is either the latest year's ratio or a multi-year average, balanced with management input, prior expense loads and judgment.",
-      "note": "W&M Ch. 7 pp. 128-129 (PDF 140-141).",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write2"
+      "quote": "The selection is either the latest year's ratio or a multi-year average, balanced with management input, prior expense loads and judgment.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -46108,10 +46356,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Expense Provisions",
-      "quote": "A countrywide ratio therefore may not fit a single state's taxes, licenses and fees or commissions.",
-      "note": "W&M Ch. 7 p. 128 (PDF 140); short-term fixed cost rise with planned growth p. 129 (PDF 141). Expense Provisions reached via link on tagged Fixed Expenses.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write2"
+      "quote": "Taxes, licenses and fees vary by state, so their ratios use the state's own data. Commissions use state or countrywide data, depending on whether the commission plan varies by location.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     }
    ]
@@ -46396,7 +46644,15 @@
        "page": "Insurer Goals and Constraints",
        "quote": "Total profit therefore rises with price only up to a point, after which the business lost outweighs the higher price on the business kept."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Ratemaking Constraints",
+      "quote": "The indication sets a rate without regard to whether the product will be bought. Past some price, the business lost outweighs the higher price on what remains, and rate changes themselves prompt renewing customers to shop.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -47362,11 +47618,11 @@
      ],
      "resolution": {
       "kind": "taught",
-      "page": "Exposure Base",
-      "quote": "base rates are expressed per exposure",
-      "note": "syllabus page (also gives Premium = Rate x Exposures): premium moves with the exposure base, e.g. payroll",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort4"
+      "page": "Commercial Lines Rating",
+      "quote": "$\\text{Manual Premium}$ is the class rate times the risk's exposures.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -47438,11 +47694,11 @@
      ],
      "resolution": {
       "kind": "taught",
-      "page": "Self-Insured Retention",
-      "quote": "a deductible set high enough that the insured bears significant risk",
-      "note": "linked page defines a large deductible program (Werner's WC and CGL examples)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort4"
+      "page": "Large Deductible Policy",
+      "quote": "whose per-occurrence deductible is high enough that the insured bears a significant share of its own losses.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     }
    ]
@@ -47585,7 +47841,15 @@
        "page": "Stakeholder Reporting",
        "quote": "**Investors and rating agencies** — reserve development history, volatility, and the earnings effect. Adverse development is a disclosure item; a pattern of it affects the rating and the cost of capital."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Stakeholder Reporting",
+      "quote": "The insurer then presents itself in a stronger position than it truly is, so investors may value it above its worth and invest capital they otherwise would not.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r7",
@@ -47602,7 +47866,15 @@
        "page": "Solvency Monitoring",
        "quote": "**Its limits.** Every tool reads statutory statements, so an insurer that understates reserves looks healthy until development reveals it — which is why reserve-development ratios, the actuarial opinion and exam actuaries carry so much weight."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Unpaid Claims",
+      "quote": "Regulators rely on the financial statements to assess solvency. An inadequate estimate can hide a struggling insurer until it is too late to help it, and a redundant one can prompt an intervention that is not needed. Indicated rates are built on estimates of ultimate claims, so the same error reaches the rate filings regulators review.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -47918,10 +48190,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Case Outstanding Development Method",
-      "quote": "The estimated unpaid claims are the current case outstanding times that factor.",
-      "note": "Approach #2: factor formula and unpaid = case outstanding x factor (Friedland Ch.12 p.269, PDF 275)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write4"
+      "quote": "$$\\text{Case Outstanding CDF} = \\frac{(\\text{Reported CDF} - 1) \\times \\text{Paid CDF}}{\\text{Paid CDF} - \\text{Reported CDF}} + 1$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -48217,10 +48489,10 @@
      "resolution": {
       "kind": "taught",
       "page": "In-Force",
-      "quote": "the average of the in-force premium at the start and end of a year is a fair estimate of that year's earned premium only when every policy has the same annual term and policies are written uniformly through the year",
-      "note": "W&M Ch. 5 pp. 70-71 (PDF 82-83): in-force is full-term premium; different terms; uniform writing assumption. Conclusion drawn from these and the CAS Fall 2019 Q2(d) examiner's report (the more uniform the writing, the more accurate the estimate).",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write2"
+      "quote": "The average of the in-force premium at the start and the end of a year estimates that year's earned premium only when all policies have the same annual term and are written uniformly through the year.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -48291,10 +48563,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Frequency-Severity Method",
-      "quote": "the claims an accident year still has to close (its ultimate claim counts less the claims closed to date) are spread over the future ages in proportion to the selected incremental disposal rates still to come, each divided by one minus the selected disposal rate at the latest age.",
-      "note": "Disposal rate technique: projecting future closed counts (Friedland Ch.11 p.207, PDF 213)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write4"
+      "quote": "The claims a year still has to close are spread over its future ages in proportion to the selected incremental disposal rates, each divided by one minus the selected rate at its latest age.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -49053,10 +49325,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Ceded Losses",
-      "quote": "Under quota share, ceded is a fixed share",
-      "note": "linked page: quota share cedes a fixed share of gross, so net = gross x (1 - ceded share)",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort4"
+      "quote": "$$\\text{Ceded Losses} = c \\times \\text{Gross Losses}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -49084,7 +49356,15 @@
        "page": "Actual vs Expected Analysis",
        "quote": "The **expected** figure comes from the prior ultimate and the emergence pattern: the share of ultimate the pattern says should report (or be paid) between the two valuations."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Actual vs Expected Analysis",
+      "quote": "With such a pattern of how a period's development is spread within it, the expected emergence for part of the period is the period's expected emergence times the share of it that falls in that part.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -49097,7 +49377,15 @@
        "page": "Actual vs Expected Analysis",
        "quote": "One period's deviation is noise; a run of them is a signal."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Actual vs Expected Analysis",
+      "quote": "The actuary revises the estimate when the difference is significant or can be traced to an identifiable change, which is found through meetings with management and claims staff and a detailed analysis of the claims.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r6",
@@ -49134,10 +49422,10 @@
      "resolution": {
       "kind": "taught",
       "page": "External Information in Reserving",
-      "quote": "It must be reconciled to the subject book on the dimensions that actually drive development",
-      "note": "syllabus page: an industry pattern differs from the company's book (coverage, limits, mix, practices), so small deviations from it are expected",
-      "date": "2026-10-31",
-      "run": "g8-cas5-sort4"
+      "quote": "The line being analyzed and the benchmark can differ in claims practices, policy coverages, underwriting, geographic mix, claim coding, policyholder deductibles and limits, legal precedents and [[Mix of Business|mix of business]]. Such differences make development patterns noncomparable and increase the variability of the estimates.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     }
    ]
@@ -50748,10 +51036,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Accident Year",
-      "quote": "Friedland adds that tracking claims by accident year is valuable when economic or regulatory forces (such as inflation or law amendments) or major claim events (such as atypical weather or a major catastrophe) change claims experience",
-      "note": "Advantages of AY aggregation and PY spread over 24 months; Friedland Ch.3 p.41",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write5"
+      "quote": "It tracks changes due to economic or regulatory forces, such as inflation or law amendments, and major claim events, such as atypical weather or a catastrophe, which fall in one accident year.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     }
    ]
@@ -51073,10 +51361,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Tort Reform",
-      "quote": "claims from years before the reform are multiplied by a reform adjustment factor of one minus the estimated reduction in claim cost",
-      "note": "Reform adjustment factor in expected claims; Friedland Ch.8 pp.133-134",
-      "date": "2026-10-31",
-      "run": "g8-cas5-write5"
+      "quote": "$$\\text{Adjusted Claims} = \\text{Claims} \\times (1 - r)$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {

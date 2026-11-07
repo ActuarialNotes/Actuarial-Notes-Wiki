@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:29228d372456d9b9909d74cad00758295db2612ff3fcd22dedb7323e06e88e3c
+  content_hash: sha256:ae02365c1be54ae17544c1c48d73ed73bcf94ddd163570e919912597184014a6
   sources:
     - "SOA Probability Exam syllabus, November 2026, Topic 2 learning outcomes c) (expected values incl. mode, median, percentiles) and e) (amount an insurance company pays to a policyholder given deductibles, coinsurance percentages, benefit limits, inflation), PDF p.3, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
     - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05, 2005), PDF p.7 (percentage reimbursed; deductible), p.8 (benefit limit; deductible lowers expected claim payments and SD), p.9 (health policy paying costs up to 5000 at 80%: reimburses 80% of the lesser of 5000 and the cost; maximum on a claim payment), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf"
@@ -14,119 +14,56 @@ verification:
   log: .verify/Concepts/Policy Information.md
 ---
 
-**Policy Information** (or provisions) refers to the contractual terms of an insurance policy that determine how much of a ground-up loss $X$ the insurer pays. The main provisions are the [[Deductible|deductible]] $d$, the [[Coinsurance Percentage|coinsurance percentage]] $\alpha$ and the [[Benefit Limit|benefit limit]] $u$.
+![[Media/Figures/Policy_Information.svg|340]]
 
-> $$\text{Payment} = g(X;\ d,\ \alpha,\ u)$$
+**Policy Information** is the set of terms in an [[Insurance Policy|insurance policy]] that decide how much of a loss the insurer pays. Its main terms are the [[Deductible|deductible]] $d$, the [[Coinsurance Percentage|coinsurance percentage]] $\alpha$ and the [[Benefit Limit|benefit limit]] $u$. When the limit caps the insurer's payment, the payment on a loss $X$ is
 
 > $$Y = \min\!\big(\alpha\,(X - d)_+,\ u\big)$$
 
-- The provisions transform the [[Loss Random Variable|loss random variable]] $X$ into a [[Payment Random Variable|payment random variable]] $Y$.
-- The second formula applies the deductible first, then the coinsurance, then the cap on the payment. A policy that caps the covered loss instead applies them in a different order.
-- The provisions allocate financial responsibility between the insured and the insurer. They change both the expected payment and the insurer's risk.
+- $X$ is the ground-up [[Loss Random Variable|loss]], and $Y$ is the [[Payment Random Variable|payment]].
+- $(X - d)_+$ is the part of the loss above $d$, and 0 when $X \le d$.
 
 > [!idea] The idea
-> Each provision cuts the loss at a different place. The deductible removes the bottom of every loss, coinsurance shares the middle, and the limit removes the top. The payment is what survives all three, so the order in which they apply decides the answer.
+> The deductible removes the bottom of every loss, coinsurance shares the middle, and the limit removes the top.
 
-![[Media/Figures/Policy_Information.svg|340]]
+> [!example]- A health policy says the insured pays the first 500 of any claim, the insurer covers 80% of the amount above 500, and the insurer pays at most 10,000. What does the insurer pay on losses of 400, 3,000 and 15,000? {Example}
+> - The terms are $d = 500$, $\alpha = 0.80$ and $u = 10{,}000$ on the payment.
+> - A loss of 400 is below the deductible, so the insurer pays 0.
+> - On 3,000, it pays $0.80 \times 2{,}500 = 2{,}000$.
+> - On 15,000, 80% of the excess is 11,600, so it pays the limit of 10,000.
 
-## Reading the provisions from a contract
+## The loss at which the limit is reached
 
-A health policy states that the insured pays the first 500 of any claim, the insurer covers $80\%$ of the amount above 500, and the insurer's maximum payment is 10,000. Each phrase names one provision.
+The insurer's payment reaches the limit $u$ at the loss
 
-- The insured absorbs the first 500, so the deductible is $d = 500$.
-- The insurer pays $80\%$ of the excess over the deductible, so $\alpha = 0.80$.
-- The insurer never pays more than 10,000, so the benefit limit is $u = 10{,}000$ on the payment.
+> $$X = d + \frac{u}{\alpha}$$
 
-## From loss to payment
+Every larger loss pays exactly $u$.
 
-Apply the three provisions in order to a few losses.
+> [!example]- A policy has a deductible of 250, a coinsurance percentage of 90% and a maximum payment of 4,500. What is the smallest loss on which the insurer pays the maximum? {Example}
+> - Dividing the limit by the coinsurance gives the excess over the deductible, $\frac{4{,}500}{0.90} = 5{,}000$.
+> - Adding the deductible back gives a loss of $250 + 5{,}000 = 5{,}250$.
 
-| Loss $X$ | $0.80(X - 500)_+$ | Payment $Y$ |
-|---|---|---|
-| 400 | 0 | 0 |
-| 3,000 | 2,000 | 2,000 |
-| 10,000 | 7,600 | 7,600 |
-| 15,000 | 11,600 | 10,000 |
+> [!trap] Forgetting to add the deductible back
+> The loss at which the payment reaches the limit is $d + \frac{u}{\alpha}$, not $\frac{u}{\alpha}$. The quotient is only the excess over the deductible.
 
-The payment reaches the limit when $0.80(X - 500) = 10{,}000$, that is at a loss of 13,000. So the payment is a piecewise function of the loss.
+## A limit on the covered loss
 
-> $$
-> Y = \begin{cases}
-> 0, & X \le 500 \\
-> 0.80\,(X - 500), & 500 < X \le 13000 \\
-> 10000, & X > 13000
-> \end{cases}
-> $$
-
-The general breakpoints are $d$ and $d + u/\alpha$.
-
-## Does the limit cap the payment or the loss?
-
-Suppose the contract said instead that the insurer covers losses up to 10,000, then pays $80\%$ of the covered amount above 500. Now the limit caps the loss before the coinsurance applies.
+Some policies cap the covered loss at $u$ before the deductible and coinsurance apply. The payment is then
 
 > $$Y = \alpha\,\big(\min(X, u) - d\big)_+$$
 
-On the loss of 15,000, this pays $0.80 \times (10{,}000 - 500) = 7600$, not 10,000. The same three numbers give a different payment, because the provisions apply in a different order.
+The same three numbers give a different payment, because the terms apply in a different order.
 
-> [!trap] Forgetting to add the deductible back
-> The loss at which the payment reaches the limit is $d + u/\alpha$, not $u/\alpha$. Dividing the limit by the coinsurance gives the excess over the deductible, so the deductible must be added back.
+> [!example]- The health policy above instead covers losses up to 10,000, then pays 80% of the covered amount above 500. What does it pay on a loss of 15,000? {Example}
+> - The covered loss is $\min(15{,}000,\ 10{,}000) = 10{,}000$.
+> - The insurer pays $0.80 \times 9{,}500 = 7{,}600$, not 10,000.
 
-## A coinsurance that changes with the loss
+## Coinsurance that changes with the loss
 
-Some policies pay different shares of different layers. A policy might reimburse $100\%$ of costs between its deductible and some level, and $50\%$ of the costs above that level.
+Some policies pay different shares of different layers of a loss. The payment is then the sum over the layers of each layer's width times its share.
 
-- The payment is then a sum over the layers, each layer's width times its share.
-- To find the loss behind a given payment, fill the layers in order until the payment is used up.
-
-## Try it
-
-> [!example]- The smallest loss that reaches the limit {Example}
-> A policy has an ordinary deductible of 250, a coinsurance percentage of $90\%$ and a maximum payment by the insurer of 4,500. Find the smallest loss for which the insurer pays the maximum.
->
-> > [!answer]-
-> > **Plan:** set the coinsured excess equal to the maximum payment, then add the deductible back.
-> > $$
-> > \begin{align*}
-> > 0.90\,(X - 250) &= 4500 \\
-> > X - 250 &= 5000 \\
-> > X &= 5250
-> > \end{align*}
-> > $$
-> > Every loss of 5,250 or more pays exactly 4,500.
-
-> [!example]- Two coinsurance layers {Example}
-> A policy has a deductible of 200. It reimburses $100\%$ of costs between 200 and 1,200, and $50\%$ of costs above 1,200. Find the cost that produces a reimbursement of 1,300.
->
-> > [!answer]-
-> > **Plan:** fill the $100\%$ layer first, then find how far into the $50\%$ layer the rest reaches.
-> >
-> > The first layer pays $1200 - 200 = 1000$ in full. The remaining 300 of reimbursement comes from the $50\%$ layer.
-> > $$
-> > \begin{align*}
-> > X &= 1200 + \frac{300}{0.50} \\
-> > &= 1800
-> > \end{align*}
-> > $$
-> > So a reimbursement of at most 1,300 is the same event as a cost of at most 1,800. That is how a probability about the payment becomes a probability about the cost.
-
-> [!example]- Expected payment under all three provisions {Example}
-> Losses are uniform on $(0, 5000)$. A policy has a deductible of 500, pays $80\%$ of the excess, and has a maximum payment of 2,000. Find the expected payment per loss and per payment.
->
-> > [!answer]-
-> > **Plan:** find the breakpoints, integrate the middle piece, and add the limit times the chance of reaching it.
-> >
-> > The payment reaches 2,000 at $X = 500 + 2000/0.80 = 3000$, and $P(X > 3000) = 0.4$.
-> > $$
-> > \begin{align*}
-> > E[Y] &= \int_{500}^{3000} \frac{0.80\,(x - 500)}{5000}\,dx + 2000 \times 0.4 \\
-> > &= 500 + 800 \\
-> > &= 1300
-> > \end{align*}
-> > $$
-> > Only losses above 500 produce a payment, and $P(X > 500) = 0.9$. The expected payment per payment is $1300/0.9 \approx 1444.44$.
-
-> [!warning]- Exam traps
-> - **The order of the provisions.** Deductible, then coinsurance, then the cap on the payment, unless the policy caps the covered loss.
-> - **Dropping the deductible.** The limit is reached at $d + u/\alpha$, not at $u/\alpha$ or $u + d$.
-> - **A maximum payment read as a maximum loss.** A cap of 10,000 on the payment and a cap of 10,000 on the covered loss give different payments whenever $\alpha < 1$.
-> - **Per loss or per payment.** Losses below the deductible count in the expected payment per loss but not per payment.
+> [!example]- A policy pays nothing on the first 200 of costs, 100% of costs from 200 to 1,000 and 50% of costs above 1,000. What does it pay on costs of 2,500? {Example}
+> - The layer from 200 to 1,000 pays $1.00 \times 800 = 800$.
+> - The layer above 1,000 pays $0.50 \times 1{,}500 = 750$.
+> - The payment is $800 + 750 = 1{,}550$.

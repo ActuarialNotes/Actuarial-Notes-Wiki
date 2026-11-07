@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:ef0b3fb5d90ec8b2fbf52ce2cc8164cb49a72da0e52f422d64f62200a82909f2
+  content_hash: sha256:50b0682f171edbfa67f7e4be1f44005fbf392ee91b9597abd5312dd3f495623f
   sources:
     - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05, 2005), PDF pp.2-3 (insurer pays claims for premium; policyholder or designated beneficiary), pp.4-5 (SD of S_n is sqrt(n) sigma; CV tends to zero), p.6 (losses reasonably independent; stores in one area against fire), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf"
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL), Ch.6 PDF p.274: E((xbar - mu)^2) = sigma^2/n, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
@@ -27,120 +27,60 @@ verification:
   log: .verify/Concepts/Insurer.md
 ---
 
-**An insurer** (insurance company, insurance entity) is the party to an [[Insurance Policy|insurance policy]] that, in exchange for [[Insurance Premium|premium]], takes on the obligation to pay the covered [[Claim|claims]] of its [[Policyholder|policyholders]]. Its economic job is to pool many risks so that their combined cost can be predicted well enough to promise, and to hold [[Capital|capital]] against the part that cannot.
+An **Insurer** is the party to an [[Insurance Policy|insurance policy]] that, in exchange for a [[Insurance Premium|premium]], takes on the obligation to pay the covered [[Claim|claims]] of its [[Policyholder|policyholders]]. An insurer can promise to pay because it pools many independent risks. For the average loss on $n$ independent policies, the standard deviation is
 
 > $$\text{SD}\!\left(\frac{S_n}{n}\right) = \frac{\sigma}{\sqrt{n}}$$
 
-> $$\text{Assets} = \text{Liabilities} + \text{Capital}$$
-
-- $S_n$ is the total loss on $n$ independent policies, and $\sigma$ is the standard deviation of the loss on one policy.
-- Liabilities are mostly the insurer's estimate of the claims it still owes. Capital is what is left over to absorb the error in that estimate.
-- An insurer can be a stock company, a mutual (whose policyholders are its members), a reciprocal exchange, a Lloyd's syndicate, a captive, or, in the US, a [[Risk Retention Groups|risk retention group]].
+- $S_n$ is the total loss on the $n$ policies.
+- $\sigma$ is the [[Standard Deviation|standard deviation]] of the loss on one policy.
 
 > [!idea] The idea
-> One policyholder's loss is unpredictable, but the average loss over many independent policies is not. The insurer's promise rests on that average, and capital covers the part of the total that the average can't predict. So the capital an insurer needs per policy falls as the pool grows, as long as the losses stay independent.
+> One policyholder's loss is unpredictable, but the average loss over many independent policies is not.
 
-## Why an insurer can promise to pay
-
-An insurer writes homeowners policies. Each policy's annual loss has mean 1,000 and standard deviation 5,000. A single policy's loss is very uncertain: its coefficient of variation is 5.
-
-The [[Law of Large Numbers]] says the average loss per policy settles down as the pool grows. Its standard deviation falls as $5000/\sqrt{n}$.
-
-| Policies $n$ | SD of average loss | CV of the pool |
-|---|---|---|
-| 100 | 500 | 0.5 |
-| 10,000 | 50 | 0.05 |
-| 1,000,000 | 5 | 0.005 |
-
-With a million policies, the insurer knows its average loss to within a few dollars. It can charge close to 1,000 per policy and still be confident of paying every claim.
-
-## How much capital the promise needs
-
-Suppose the insurer charges the expected loss and holds enough capital to cover losses with probability 99.5%. By the normal approximation, the capital is $2.576$ standard deviations of the total loss. The total loss has standard deviation $5000\sqrt{n}$, so the capital per policy is $2.576 \times 5000/\sqrt{n}$.
-
-- With 100 policies, the insurer needs 1,288 of capital per policy.
-- With 10,000 policies, it needs 128.80 per policy.
-
-A pool 100 times larger needs one tenth the capital per policy.
-
-## When pooling fails
-
-The calculation above needs the losses to be reasonably independent. One policyholder's loss should not have a major effect on whether others have one.
-
-An insurer would not insure every store in one area against fire. A fire in one store could spread to the others and produce many large claim payments at once. Losses that move together this way, such as a [[Catastrophe Loss|catastrophe]], don't pool away across the [[Insurance Portfolio|portfolio]].
-
-> [!trap] Pooling correlated risks
-> The $\sigma/\sqrt{n}$ rule holds only for independent losses. Homes that share a hurricane exposure keep a common part of their losses however many are written, so the capital per policy stops falling.
-
-## What stands behind the promise
-
-The insurer's balance sheet shows what it owns against what it owes. Say it holds assets of 500M, its liabilities are 400M, and so its capital is 100M.
-
-- If the claim liabilities turn out to be understated, the extra claims come out of capital.
-- Capital is what keeps the promise good when the estimate is wrong. That is why regulators set minimum capital requirements.
-
-## Who else bears risk
-
-Insurance companies are not the only risk bearers. Friedland's basic techniques for estimating [[Unpaid Claims|unpaid claims]] are written for any risk bearer: insurance companies, and [[Self-Insured Retention|self-insurers]] such as funded self-insured programs, captive insurers and pooling associations.
-
-## On other exams
-
-- **Exam 9: why capital is costly.** Capital held inside an insurer carries frictional costs. Investment income on it is taxed twice, and it also bears agency costs and the costs of regulation. Holding too little capital brings the costs of financial distress, one of the [[Insurance Market Imperfections|insurance market imperfections]]. The premium covers these frictional costs as well as claims and expenses, so policyholders pay the cost of holding capital. Its [[Risk Loads|risk load]] affords capital a reasonable return (its [[Cost of Capital|cost]]). The [[Capital Structure|capital structure]] (equity, debt, [[Reinsurance|reinsurance]]) sets what that capital costs. That matters to policyholders, whose claims can be viewed as the insurer's risky debt.
-- **Canada (Exam 6C).** The [[Insurance Companies Act]] requires federally regulated P&C companies to maintain adequate capital. Foreign P&C companies operating in Canada on a branch basis must maintain an adequate margin of assets in Canada over liabilities in Canada. [[OSFI]]'s [[MCT]] guideline is the framework within which the Superintendent assesses that capital (for branches, through its Branch Adequacy of Assets Test).
-- The MCT ratio is capital available divided by minimum capital required. Minimum capital required is the capital required at the target level divided by $1.5$. Insurers must hold at least $100\%$, and OSFI's $150\%$ [[Supervisory Target Capital Ratio|supervisory target]] is a cushion above that minimum that facilitates early intervention.
-- An insurer can instead be registered separately in each province where it does business, though most are federally regulated by OSFI. Every insurer also needs a licence in each province where it writes, and market conduct is provincial ([[Federal-Provincial Jurisdiction]]). [[PACICC]] protects policyholders if a P&C insurer fails, and financial reporting follows [[IFRS 17]].
-- **United States (Exam 6U).** Insurance is regulated by the states. The state of domicile leads solvency oversight. An insurer must be admitted in each state where it writes, apart from [[Excess and Surplus Lines|surplus lines]] business placed with non-admitted insurers.
-- The [[NAIC Annual Statement]] is prepared on [[Statutory Accounting Principles|SAP]]. Regulators judge [[Financial Health|financial health]] through [[Risk-Based Capital|RBC]], [[IRIS Ratios]], the actuarial opinion and [[Schedule F]]. For federal income tax, loss reserves are deducted on a discounted basis ([[Loss Reserve Discounting]], [[Insurance Income Tax]]).
-
-## Try it
-
-> [!example]- Pooling and capital per policy {Example}
-> An insurer writes $n$ independent homeowners policies. Each has an expected annual loss of 800 and a standard deviation of 4,000. It charges expected loss and holds capital large enough that losses are covered with probability $99.5\%$ ($z = 2.576$, normal approximation). Find the capital per policy for $n = 400$ and for $n = 40{,}000$.
+> [!example]- Each homeowners policy has an annual loss with mean 1,000 and standard deviation 5,000. How uncertain is the average loss per policy over 100, 10,000 and 1,000,000 policies? {Example}
+> The standard deviation of the average is $\frac{5{,}000}{\sqrt{n}}$:
 >
-> > [!answer]-
-> > **Plan:** the capital is $z$ standard deviations of the total loss, divided by $n$.
-> > $$
-> > \begin{align*}
-> > \text{Capital per policy} &= \frac{2.576 \times 4000\sqrt{n}}{n} \\
-> > &= \frac{10304}{\sqrt{n}}
-> > \end{align*}
-> > $$
-> > For $n = 400$ this is $10304/20 = 515.20$. For $n = 40{,}000$ it is $10304/200 = 51.52$.
-> >
-> > A book 100 times larger needs one tenth the capital per policy. Why only if the risks are independent? Homes that share a hurricane exposure keep a common loss that no number of policies averages away.
-
-> [!example]- A reserve deficiency hits capital {Example}
-> An insurer has assets of 1,200M, claim liabilities of 700M and other liabilities of 200M. A review finds the claim liabilities are $10\%$ deficient. It is a Canadian P&C company whose minimum capital required under the MCT is 150M, and you may treat its capital available as its assets less its liabilities. Ignoring tax and any change in minimum capital required, what happens to its capital and its MCT ratio?
+> | Policies $n$ | Standard deviation of the average |
+> | --- | --- |
+> | 100 | 500 |
+> | 10,000 | 50 |
+> | 1,000,000 | 5 |
 >
-> > [!answer]-
-> > **Plan:** find the capital before and after strengthening the reserves, then divide each by the minimum.
-> > $$
-> > \begin{align*}
-> > \text{Capital before} &= 1200 - 700 - 200 \\
-> > &= 300 \\
-> > \text{Strengthening} &= 0.10 \times 700 \\
-> > &= 70 \\
-> > \text{Capital after} &= 300 - 70 \\
-> > &= 230
-> > \end{align*}
-> > $$
-> > The MCT ratio falls from $300/150 = 200\%$ to $230/150 \approx 153\%$.
-> >
-> > A $10\%$ reserve error took out $23\%$ of capital, because reserves are $2.33$ times capital. The ratio is still above the $100\%$ minimum, but it now sits just above OSFI's $150\%$ supervisory target.
+> - A single policy's loss is very uncertain, with standard deviation five times its mean.
+> - Over a million policies, the insurer knows its average loss to within a few dollars, so it can charge close to 1,000 per policy.
 
-> [!example]- Writing a whole shopping mall {Example}
-> A broker asks an insurer to write fire insurance on all 30 stores in one enclosed shopping mall, each at the same premium the insurer charges stores elsewhere. Explain whether the insurer should accept on those terms.
->
-> > [!answer]-
-> > **Plan:** test the request against the independence that pooling needs.
-> > - The stores share walls and a roof, so one fire can spread to many of them. Their losses are not independent.
-> > - The premium elsewhere assumes the insurer's pool averages out store fires. Here a single event could produce up to 30 large claims at once.
-> > - The insurer would need far more capital per store than for 30 scattered stores. It should decline, accept only some of the stores, or charge for the concentration and buy [[Reinsurance|reinsurance]].
-> >
-> > Why does this earn full credit? It names the lost independence and ties it to the capital the promise needs, rather than just saying the risk is high.
+## The insurer's balance sheet
 
-> [!warning]- Exam traps
-> - **Pooling correlated risks.** The standard deviation of the average falls as $\sigma/\sqrt{n}$ only for independent losses.
-> - **Total versus average.** The total loss's standard deviation grows as $\sigma\sqrt{n}$. It is the average, and the capital per policy, that fall.
-> - **Reserve errors and capital.** A percentage error in reserves is a larger percentage of capital, by the ratio of reserves to capital.
-> - **The MCT minimum and the target.** The MCT minimum is $100\%$. The $150\%$ is OSFI's supervisory target, a cushion above it.
+An insurer holds [[Capital|capital]] against the part of its losses that the average can't predict. Its balance sheet is
+
+> $$\text{Assets} = \text{Liabilities} + \text{Capital}$$
+
+- Liabilities are mostly the insurer's estimate of the claims it still owes.
+
+If the claim liabilities turn out to be understated, the extra claims come out of capital.
+
+> [!example]- An insurer has assets of 1,200M, claim liabilities of 700M and other liabilities of 200M. A review finds the claim liabilities are 10% too low. What is its capital after they are corrected? {Example}
+> - Before the review, capital is $1{,}200 - 700 - 200 = 300$M.
+> - Correcting the claim liabilities adds $0.10 \times 700 = 70$M of liabilities.
+> - Capital falls to $300 - 70 = 230$M.
+> - A 10% error in reserves took out 23% of capital, because reserves are 2.33 times capital.
+
+> [!trap] Pooling risks that are not independent
+> The $\frac{\sigma}{\sqrt{n}}$ rule holds only for independent losses. Thirty stores in one shopping mall share walls and a roof, so one fire can produce thirty claims at once. Losses that move together, such as a [[Catastrophe Loss|catastrophe]], don't average away across the [[Insurance Portfolio|portfolio]].
+
+## Types of insurers
+
+An insurer can be
+
+- a **stock company**, owned by its shareholders,
+- a **mutual**, owned by its policyholders,
+- a **reciprocal exchange**, whose members insure each other,
+- a **Lloyd's syndicate**,
+- a **captive**, owned by the organization it insures, or
+- in the United States, a [[Risk Retention Groups|risk retention group]].
+
+## Insurers on other exams
+
+- **Exam 9.** Capital held inside an insurer has frictional costs: double taxation of its investment income, agency costs and the costs of regulation ([[Insurance Market Imperfections]]). The premium pays the [[Cost of Capital|cost of capital]] through its [[Risk Loads|risk load]].
+- **Exam 6C.** [[OSFI]] assesses a federally regulated P&C insurer's capital with the [[MCT]] ratio, capital available over minimum capital required. The minimum is 100%, and OSFI's [[Supervisory Target Capital Ratio|supervisory target]] is 150%.
+- **Exam 6U.** Insurers are regulated by the states and report on [[Statutory Accounting Principles|statutory accounting]]. Regulators judge solvency with [[Risk-Based Capital|risk-based capital]] and the [[IRIS Ratios]]. Business that admitted insurers won't write goes to non-admitted [[Excess and Surplus Lines|surplus lines]] insurers.

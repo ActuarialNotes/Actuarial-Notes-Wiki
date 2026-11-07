@@ -331,6 +331,7 @@ bullets answer it, each a claim with its reason.
 - [ ] Notation matches the exam's table in `references/vault-mechanics.md`; one letter per thing
 - [ ] Tables in callouts are their own block, every line `> `-prefixed, never inside a bullet
 - [ ] `\{ \}` for literal braces; `{}_{n}P_{k}` for pre-subscripts; all math in `$…$`
+- [ ] No long inline `$…$` (a whole set, a chain of fractions): split it or box it, or it clips its card on a phone
 - [ ] Worked numbers recomputed in code
 - [ ] All `[[links]]` resolve, to the right namesake
 - [ ] Frontmatter holds only `aliases:` (if needed) and the synced `verification:`

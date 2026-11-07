@@ -118,6 +118,15 @@ The app renders with `remark-math` + `rehype-katex`; pages are read on phones.
    dollar before the math (`\$$1{,}000$`), which starts with `$$` and can open a
    display block.
 
+5. **No long inline math.** KaTeX can't break a line inside braces or
+   parentheses, or after a comma, so one `$…$` holding a whole set
+   (`$S = \{(H, 1), \ldots, (T, 6)\}$`) or a long chain of fractions is as wide
+   as it is long. Inside an example card that width becomes the card's minimum,
+   and on a phone every line of the card is cut off on the right. Keep each
+   inline span short (roughly 25 characters of rendered math): write a list as
+   separate spans (`$\{A, B\}$, $\{A, C\}$`) and move a long expression into a
+   boxed `> $$…$$`, one step per `aligned` row if it is still wide.
+
 `quiz/src/lib/vaultMath.ts` repairs some Obsidian-isms at render time; write
 the vault the Obsidian way and these rules on top.
 

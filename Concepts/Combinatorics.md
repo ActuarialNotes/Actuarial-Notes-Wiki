@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:e4ad1fb3a2efea2dd0efee1bf69a4c3fb9a611cf173ba3bf119117a68383d4c0
+  content_hash: sha256:eae3718e74f72fb74b1230bebb5e30e3294b2eeffb346d2b53be688c450bff67
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.1 Counting Technique (stages, multiply, PDF pp.83-84), Thm 3.1 n!, Def 3.2 and Thm 3.2 k-permutations n(n−1)…(n−k+1) (PDF p.88); §3.2 binomial coefficients C(n,j) = number of j-subsets, Thm 3.4 Pascal recurrence, Thm 3.5 C(n,j)=(n)_j/j! (pp.93-94, PDF pp.101-102), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.1 Fixed Points and hat check problem, derangements (PDF pp.90, 93); Example 3.12: P(A_i)=(n−1)!/n!, P(no fixed point)=1/2!−1/3!+…+(−1)^n/n!, table n=4: .375 (pp.105-106, PDF pp.113-114), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
@@ -38,10 +38,10 @@ The number of ways to choose $k$ objects from $n$ distinct objects is:
 | **Order does not matter** | [[Combination]]: $\binom{n}{k} = \frac{n!}{k!\,(n-k)!}$ | $\binom{n+k-1}{k}$ |
 
 > [!example]- How many ways are there to choose 2 letters from $\{A, B, C\}$? {Example}
-> - Order matters, without replacement: 6 outcomes, $AB, BA, AC, CA, BC, CB$.
-> - Order does not matter, without replacement: 3 outcomes, $\{A, B\}, \{A, C\}, \{B, C\}$.
-> - Order matters, with replacement: 9 outcomes, the 6 above plus $AA, BB, CC$.
-> - Order does not matter, with replacement: 6 outcomes, $\{A, B\}, \{A, C\}, \{B, C\}, \{A, A\}, \{B, B\}, \{C, C\}$.
+> - Order matters, without replacement: 6 outcomes, $AB$, $BA$, $AC$, $CA$, $BC$, $CB$.
+> - Order does not matter, without replacement: 3 outcomes, $\{A, B\}$, $\{A, C\}$, $\{B, C\}$.
+> - Order matters, with replacement: 9 outcomes, the 6 above plus $AA$, $BB$, $CC$.
+> - Order does not matter, with replacement: 6 outcomes, $\{A, B\}$, $\{A, C\}$, $\{B, C\}$, $\{A, A\}$, $\{B, B\}$, $\{C, C\}$.
 
 ## The multiplication principle
 

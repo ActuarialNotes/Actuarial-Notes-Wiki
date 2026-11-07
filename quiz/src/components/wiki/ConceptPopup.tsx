@@ -17,6 +17,7 @@ import { useSoundEffects, useSoundOnToggle } from '@/hooks/useSoundEffects'
 import { useSubscription } from '@/hooks/useSubscription'
 import { NavProgressBar } from '@/components/NavProgressBar'
 import { objectiveMarks } from '@/lib/syllabusChapters'
+import { INK_MENU, inkChevron, inkMenuItem, inkTrigger } from '@/components/ui/ink'
 
 function pageKey(ref: StackPageRef): string {
   return ref.kind === 'pdf' ? `pdf:${ref.url}` : `${ref.kind}:${ref.name.toLowerCase()}`
@@ -415,19 +416,20 @@ export function ConceptPopup() {
                 <button
                   type="button"
                   onClick={() => { setViewingDropdownOpen(v => !v); setShowProInfo(false) }}
-                  className="appearance-none px-2 py-2 rounded-md text-xs text-muted-foreground hover:text-foreground hover:bg-accent transition-colors cursor-pointer focus:outline-none inline-flex items-center gap-1"
+                  aria-expanded={viewingDropdownOpen}
+                  className={inkTrigger(viewingDropdownOpen, 'text-[15px]')}
                 >
                   {currentFilter === 'study-plan' ? todayLabel : currentFilter === 'source-material' ? 'Source Material' : 'Entire Syllabus'}
-                  <ChevronDown className="h-6 w-6 shrink-0" />
+                  <ChevronDown className={inkChevron(viewingDropdownOpen)} />
                 </button>
 
                 {viewingDropdownOpen && (
-                  <div className="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 z-50 w-56 rounded-md bg-popover text-popover-foreground shadow-md py-1">
+                  <div className={`absolute bottom-full mb-1.5 left-1/2 -translate-x-1/2 z-50 w-56 ${INK_MENU}`}>
                     {hasStudyPlan ? (
                       <button
                         type="button"
                         onClick={() => { setDashboardFilter('study-plan'); setViewingDropdownOpen(false) }}
-                        className={`w-full flex items-center px-3 py-2 text-xs hover:bg-accent transition-colors text-left ${currentFilter === 'study-plan' ? 'font-medium' : ''}`}
+                        className={inkMenuItem(currentFilter === 'study-plan')}
                       >
                         {todayLabel}
                       </button>
@@ -435,7 +437,7 @@ export function ConceptPopup() {
                       <Link
                         to="/dashboard"
                         onClick={() => { close(); setViewingDropdownOpen(false) }}
-                        className="w-full flex items-center gap-2 px-3 py-2 text-xs hover:bg-accent transition-colors"
+                        className={inkMenuItem(false)}
                       >
                         Set up Study Plan →
                       </Link>
@@ -443,16 +445,16 @@ export function ConceptPopup() {
                       <button
                         type="button"
                         onClick={() => { setShowProInfo(v => !v); setViewingDropdownOpen(false) }}
-                        className="w-full flex items-center gap-1.5 px-3 py-2 text-xs opacity-50 hover:opacity-70 transition-opacity text-left"
+                        className={inkMenuItem(false, 'opacity-60')}
                       >
-                        <Lock className="h-3 w-3 shrink-0" />
+                        <Lock className="h-3.5 w-3.5 shrink-0" />
                         {todayLabel}
                       </button>
                     )}
                     <button
                       type="button"
                       onClick={() => { setDashboardFilter('entire-syllabus'); setViewingDropdownOpen(false) }}
-                      className={`w-full flex items-center px-3 py-2 text-xs hover:bg-accent transition-colors text-left ${currentFilter === 'entire-syllabus' ? 'font-medium' : ''}`}
+                      className={inkMenuItem(currentFilter === 'entire-syllabus')}
                     >
                       Entire Syllabus
                     </button>
@@ -460,7 +462,7 @@ export function ConceptPopup() {
                       <button
                         type="button"
                         onClick={() => { setDashboardFilter('source-material'); setViewingDropdownOpen(false) }}
-                        className={`w-full flex items-center px-3 py-2 text-xs hover:bg-accent transition-colors text-left ${currentFilter === 'source-material' ? 'font-medium' : ''}`}
+                        className={inkMenuItem(currentFilter === 'source-material')}
                       >
                         Source Material
                       </button>

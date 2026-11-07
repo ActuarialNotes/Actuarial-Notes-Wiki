@@ -107,6 +107,11 @@ registered as a *virtual* vault file so it opens in the same popup viewer as a r
   an empty corner. Don't reach for lucide's `Check` / `CheckCircle2` for these: their tick is
   a drawn stroke, and the white-tick-on-green-disc it replaces is only invisible against one
   surface. See `docs/style-guide.md` §10.1.
+  `components/ui/ink.ts` (with `ui/buttonVariants.ts`) is **Ink**, the one control style:
+  nothing filled at rest, what is chosen goes solid in the *pick* (`bg-pick` — black/white,
+  or the exam's colour inside `examAccentStyle`), dropdowns a bold label and a chevron, the
+  committing action the inverted solid. Reach for its helpers before styling a trigger, menu
+  row, chip or header tool by hand. See `docs/style-guide.md` §7.0.
   `components/ConceptActionMenu.tsx` is **the** concept action menu — quiz, study guide, deck,
   learning progress, fact check — and the owner of the modals those rows open; the
   concept popup (whose title is its only trigger) and every flashcard surface open that one

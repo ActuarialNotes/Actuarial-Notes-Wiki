@@ -100,8 +100,9 @@ export function SegmentedControl<T extends string>({
       aria-label={label}
       onKeyDown={handleKeyDown}
       className={cn(
-        'flex items-center gap-0.5 border border-border bg-muted/50 p-0.5',
-        pill ? 'rounded-full' : 'rounded-lg',
+        // Ink (style guide §7.0): no tray — the options are words, and the
+        // chosen one goes solid in the pick.
+        'flex items-center gap-1',
         className,
       )}
     >
@@ -123,13 +124,14 @@ export function SegmentedControl<T extends string>({
             style={{ flex: fit ? 'none' : (option.flex ?? 1) }}
             className={cn(
               'flex min-w-0 items-center justify-center gap-1.5 text-sm font-medium transition-colors',
-              pill ? 'rounded-full px-4' : 'rounded-md px-2',
+              'rounded-full',
+              pill ? 'px-4' : 'px-3',
               'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background',
               'disabled:pointer-events-none disabled:opacity-40',
               SIZES[size],
               isActive
-                ? 'bg-background text-foreground shadow-sm'
-                : 'text-muted-foreground hover:bg-accent/60 hover:text-foreground',
+                ? 'bg-pick font-semibold text-pick-foreground'
+                : 'text-muted-foreground hover:bg-muted hover:text-foreground',
             )}
           >
             {option.label}

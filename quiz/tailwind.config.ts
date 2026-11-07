@@ -42,6 +42,12 @@ const config: Config = {
           DEFAULT: 'hsl(var(--popover))',
           foreground: 'hsl(var(--popover-foreground))',
         },
+        // The pick (Ink, style guide §7.0): what is chosen goes solid in it —
+        // black/white, or the exam's own hue inside an exam's scope.
+        pick: {
+          DEFAULT: 'var(--pick)',
+          foreground: 'var(--pick-foreground)',
+        },
         // Actuaria Online's one accent — chrome only, and defined only inside
         // the `.actuaria` scope (style guide §2.6).
         'actuaria-signal': {

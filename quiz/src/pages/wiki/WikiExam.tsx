@@ -273,13 +273,14 @@ export default function WikiExam() {
   const smallTitleBadge = useMemo(() => {
     const examLabel = extractedTitle ?? examDisplayName(examFileName)
     return (
-      <span className="inline-flex items-center gap-1.5 not-prose shrink-0">
+      // The exam's scope, so what is chosen in the strip fills with its colour.
+      <span className="inline-flex items-center gap-0.5 not-prose shrink-0" style={examAccentStyle(progressKey)}>
         <ExamVersionMenu progressKey={progressKey} />
         <ExamSittingInfoButton progressKey={progressKey} wikiExamId={wikiExamId} examLabel={examLabel} />
         <ExamSyllabusButton examId={wikiExamId} examLabel={examLabel} />
         <ExamQuizButton examFileName={examFileName} />
         {/* PCPA's second part: the project, which the syllabus page can't be. */}
-        {progressKey === 'CAS-PCPA' && <ExamProjectButton iconOnlyOnPhone />}
+        {progressKey === 'CAS-PCPA' && <ExamProjectButton />}
       </span>
     )
   }, [progressKey, wikiExamId, extractedTitle, examFileName])

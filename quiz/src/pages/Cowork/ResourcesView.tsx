@@ -129,7 +129,6 @@ export default function ResourcesView({ onOpenResource }: { onOpenResource: (res
               onToggle={value => toggle(facet, value)}
               getCount={value => counts.get(value) ?? 0}
               emptyTitle={EMPTY_TITLE[facet]}
-              surface="card"
             />
           )
         })}

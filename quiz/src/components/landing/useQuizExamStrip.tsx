@@ -3,6 +3,7 @@ import { ExamLogo } from '@/components/ExamLogo'
 import { FloatingSearchBack } from '@/components/FloatingSearchBar'
 import { QuizExamInfoButton } from '@/components/QuizExamInfoButton'
 import { QuizStudyGuideButton } from '@/components/landing/QuizStudyGuideButton'
+import { examAccentStyle } from '@/lib/examColors'
 import { examStudyGuideFor } from '@/lib/examMenu'
 import { filterQuestions, type Question } from '@/lib/parser'
 import { quizWikiExamId, type QuizExam } from '@/lib/quizBuilder'
@@ -34,7 +35,8 @@ export function useQuizExamStrip(
     icon: <ExamLogo examKey={exam.progressKey} size="md" />,
     backLink: <FloatingSearchBack label="Change exam" onClick={onBack} />,
     actions: (
-      <span className="inline-flex items-center gap-1.5 shrink-0">
+      // The exam's scope, so what is chosen in the strip fills with its colour.
+      <span className="inline-flex items-center gap-0.5 shrink-0" style={examAccentStyle(exam.progressKey)}>
         <QuizExamInfoButton
           exam={exam.value}
           examLabel={exam.label}

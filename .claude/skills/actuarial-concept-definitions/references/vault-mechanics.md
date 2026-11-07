@@ -171,6 +171,36 @@ losses):
 | ordinary deductible | $d$ | |
 | exponential mean | $\theta$ | $\beta$ |
 
+**Exam MAS-I** — the rest of the exam (set 2026-11-07):
+
+| Area | Thing | Written | Not |
+| --- | --- | --- | --- |
+| Markov chains | states; transition probability; matrix | $i$, $j$; $P_{ij}$; $\mathbf{P}$ | $p_{ij}$, $\mathbf{T}$ |
+| | $n$-step transition probability | $P_{ij}^{n}$ | $P_{ij}^{(n)}$ |
+| | stationary (limiting) probability | $\pi_j$ | |
+| | mean time in transient state $j$ from $i$ | $s_{ij}$ | |
+| | gambler's ruin | win probability $p$, $q = 1 - p$, target $N$, start $i$, $P_i$ | |
+| Reliability | state vector; structure function; reliability function | $\mathbf{x}$; $\phi(\mathbf{x})$; $r(\mathbf{p})$ | |
+| Simulation | uniform random number; target cdf; proposal density | $U$; $F$, $F^{-1}(U)$; $g(x)$, constant $c$ | |
+| Survival | survival function; hazard rate | $S(x)$; $h(x)$ (force of mortality $\mu_x$ on life-contingency pages) | $\lambda(x)$ |
+| | life-table functions | $l_x$, $d_x$, ${}_{t}p_{x}$, ${}_{t}q_{x}$, $e_x$ | $\Lambda$ |
+| | insurance and annuity | $A_x$, $\ddot{a}_x$, $v$, $i$ | |
+| Severity | limited expected value; deductible; limit | $E[X \wedge u]$; $d$; $u$ | $E[\min(X,u)]$ in a formula |
+| Estimation | sample; sample mean; sample variance | $X_1, \ldots, X_n$; $\bar{X}$; $S^2$ (divisor $n - 1$) | $s^2$ for the estimator |
+| | parameter; estimator | $\theta$; $\hat{\theta}$ | $T$ |
+| | likelihood; log-likelihood; Fisher information | $L(\theta)$; $l(\theta)$; $I(\theta)$ | $\ell$, $\mathcal{L}$ |
+| | order statistics | $X_{(1)} \le \cdots \le X_{(n)}$ | $Y_1, \ldots, Y_n$ |
+| | bias; mean square error | $\text{Bias}(\hat{\theta})$; $\text{MSE}(\hat{\theta})$ | |
+| Testing | hypotheses; significance level; Type II probability; power | $H_0$, $H_1$; $\alpha$; $\beta$; $1 - \beta$ | $H_a$ |
+| Regression | observations; predictors | $n$; $p$, written $x_1, \ldots, x_p$ (observation $i$: $x_{i1}, \ldots, x_{ip}$) | $k$ |
+| | response; fitted value; residual | $y_i$ (random $Y$); $\hat{y}_i$; $e_i = y_i - \hat{y}_i$ | $r_i$ |
+| | coefficients; estimates; error | $\beta_0, \ldots, \beta_p$; $\hat{\beta}_j$; $\varepsilon_i$ with variance $\sigma^2$ | $b_j$ |
+| | design matrix; hat matrix | $\mathbf{X}$; $\mathbf{H} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$ | |
+| | sums of squares | $\text{RSS}$, $\text{TSS}$, $R^2 = 1 - \text{RSS}/\text{TSS}$ | SSE, SST |
+| GLM | mean; linear predictor; link | $\mu_i = E[Y_i]$; $\eta_i = \beta_0 + \beta_1 x_{i1} + \cdots$; $g(\mu_i) = \eta_i$ | |
+| | dispersion; deviance | $\phi$; $D$ (scaled $D^*$) | |
+| | information criteria | $\text{AIC} = -2l + 2k$, $\text{BIC} = -2l + k \ln n$, $k$ the number of parameters | |
+
 $S_n$ (an arrival time) and $S(t)$ (an aggregate loss) never appear on the same
 page. Keep the Exam P table for events and probabilities ($E$, $P(E)$,
 $E[X]$, $\text{Var}(X)$).

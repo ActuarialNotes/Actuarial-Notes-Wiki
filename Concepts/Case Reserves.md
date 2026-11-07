@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:335ffbe3361ec4dcac87c53495ae2d38ed68121c7e974d306a5722bfd98f6a42
+  content_hash: sha256:cff5116a4ccde77bfe3ccc2de4cdd2bb0d49c724dc6c32f932ca739661a37625
   sources:
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, Version 3, July 30 2010), Ch.1 p.14 (PDF 20); Ch.2 'Overview' p.17 (PDF 23); Part 3 intro pp.79-80 (PDF 85-86); Ch.13 pp.284-290 (PDF 290-296), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 0
@@ -19,7 +19,7 @@ verification:
 - $\text{Reported Claims}$ are the accident year's [[Incurred Losses|reported claims]], the cumulative paid claims plus the case outstanding.
 - $\text{Paid Claims}$ are its cumulative [[Paid Losses|paid claims]] through the valuation date.
 
-A case reserve is the adjuster's estimate on the information known at the time, and it changes as medical reports, legal proceedings and settlement talks bring new information. The total [[Unpaid Claims|unpaid claims]] are the case outstanding plus the [[IBNR]]. The case outstanding covers the known claims, and the IBNR covers the development on them (IBNER) and the claims not yet reported (IBNYR).
+A case reserve is the adjuster's estimate on the information known at the time, and it changes as medical reports, legal proceedings and settlement talks bring new information. The total [[Unpaid Claims|unpaid claims]] are the case outstanding plus the [[IBNR]]. The IBNR is ultimate claims minus reported claims, not minus paid claims. The case outstanding covers the known claims, and the IBNR covers the development on them (IBNER) and the claims not yet reported (IBNYR).
 
 > [!example]- Three claims from accident year 2023 are reported during 2023, with case reserves at $12/31/2023$ of $\$200$, $\$300$ and $\$400$. A fourth 2023 claim is reported in May 2024 with a case reserve of $\$1{,}000$, and by $12/31/2024$ the first two claims have closed and the third has a case reserve of $\$200$. What is accident year 2023's case outstanding at 12 and 24 months? {Example}
 > - At 12 months, only the three claims reported in 2023 are in the triangle, so the case outstanding is $200 + 300 + 400 = \$900$.

@@ -226,6 +226,16 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
       }
       return <p {...rest}>{children}</p>
     },
+    // A table wider than its column — on a phone, or inside a note card's
+    // padding — scrolls sideways in its own box rather than spilling past the
+    // card and the page.
+    table({ node: _node, children, ...rest }) {
+      return (
+        <div className="my-2 w-full max-w-full overflow-x-auto">
+          <table {...rest} className="my-0">{children}</table>
+        </div>
+      )
+    },
     img({ src, alt }) {
       if (hideImages) return null
       const distribution = distributionForImage(src)

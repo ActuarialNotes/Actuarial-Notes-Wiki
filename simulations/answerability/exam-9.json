@@ -764,7 +764,15 @@
        "page": "Pro Rata Reinsurance",
        "quote": "It is also how an insurer can leave a territory or line, by ceding 100% of the business until the policies run off."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Reinsurance",
+      "quote": "Proportional reinsurance has the reinsurer share in the profits and losses of the ceded business, which aligns the two parties' interests, and it can cede an entire line.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -994,7 +1002,15 @@
        "page": "Large Loss",
        "quote": "**Large Losses** (shock losses) are individual claims big enough that including them at face value would distort an experience analysis — a single claim moving a class's indicated rate by more than the underlying cost level justifies."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Large Loss",
+      "quote": "It can cause large unexpected losses that threaten solvency, and it is modelled separately from attritional losses.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -2502,7 +2518,15 @@
        "page": "Underwriting Profit",
        "quote": "**Underwriting Profit** is income from the insurance operation alone — earned premium less incurred losses, LAE and underwriting expenses — before any credit for investment income."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Underwriting Profit",
+      "quote": "$$\\text{UW Profit} = \\text{Earned Premium} - \\text{Losses} - \\text{LAE} - \\text{UW Expenses}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -2519,7 +2543,15 @@
        "page": "Net of Reinsurance",
        "quote": "include the *net cost of reinsurance* — the cost of the reinsurance minus the expected recoveries — as an expense item in the indication"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Net of Reinsurance",
+      "quote": "On a net basis, premium is net of ceded premium, losses are net of recoveries, and expenses are net of the ceding commission received:",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -2555,7 +2587,15 @@
        "page": "Underwriting Profit",
        "quote": "Total profit is underwriting profit plus investment income"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Underwriting Profit",
+      "quote": "The total profit of an insurer is underwriting profit plus [[Investment Income|investment income]].",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -3567,7 +3607,15 @@
        "page": "Reinsurance",
        "quote": "**Per-occurrence / catastrophe XOL** — responds to the accumulation from one event, which is how [[Catastrophe Loss|catastrophe]] exposure is managed."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Reinsurance",
+      "quote": "**Catastrophe protection** against the accumulation of losses from one event, which also reduces liquidity risk, since the reinsurer pays a share of the claims that would otherwise need cash quickly.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -3934,7 +3982,15 @@
        "page": "Pro Rata Reinsurance",
        "quote": "[[Excess of Loss|Excess of loss]] reinsurance, by contrast, pays only the part of a loss above the retention."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Reinsurance",
+      "quote": "It does not cut off extreme tail losses, so it does little to the severity of an extreme event relative to premium.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r6",
@@ -5003,7 +5059,15 @@
        "page": "Net of Reinsurance",
        "quote": "the cedant's true cost is the multi-year net cost of reinsurance (ceded premium less expected ceded losses)"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Net of Reinsurance",
+      "quote": "$$\\text{Net Cost of Reinsurance} = \\text{Ceded Premium} - \\text{Expected Recoveries}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -5344,7 +5408,15 @@
        "page": "Premium Accounting",
        "quote": "$$\\text{NWP} = \\text{Direct} + \\text{Assumed} - \\text{Ceded}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Net of Reinsurance",
+      "quote": "$$\\text{Net} = \\text{Gross} - \\text{Ceded}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -6820,7 +6892,15 @@
        "page": "Reinsurance",
        "quote": "$$\\text{Net} = \\text{Gross} - \\text{Ceded}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Reinsurance",
+      "quote": "Comparing contracts by the lowest retained losses is the same as comparing them by the highest ceded losses.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -7074,7 +7154,15 @@
        "page": "Medical Cost Trend",
        "quote": "It is applied over the period from the midpoint of the experience period to the midpoint of the rating period, as in [[Trend|property-casualty trending]] and [[Loss Trend|loss trend]]."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loss Trend",
+      "quote": "The first policy is exposed from $7/1/2025$ and the last until $6/30/2027$, so the average loss date of the forecast period is the midpoint, $7/1/2026$.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -7237,7 +7325,15 @@
        "page": "Allocated Loss Adjustment Expense",
        "quote": "A \"defence and settle\" strategy shift moves both components, in opposite directions, and shows up in the triangles as a change in the ALAE ratio."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Allocated Loss Adjustment Expense",
+      "quote": "A historical ALAE ratio may not fit an excess layer, because losses capped at a policy limit raise the ratio of ALAE to loss, and so do claims whose litigation costs more than their indemnity.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r6",

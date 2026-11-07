@@ -842,7 +842,15 @@
        "page": "Retrospective Rating",
        "quote": "**Converted losses** $(L \\times \\text{LCF})$ are the insured's reported losses $L$, limited by any per-accident limit, multiplied by the **loss conversion factor**, which loads them for the ALAE not already in the losses plus ULAE."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Retrospective Rating",
+      "quote": "$\\text{LCF}$ is the **loss conversion factor**, which loads them for the ALAE not already in the losses plus ULAE.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -1047,7 +1055,15 @@
        "page": "Large Deductible Policy",
        "quote": "(so $1 - \\text{LER}$ is the excess ratio)"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Large Deductible Policy",
+      "quote": "$\\text{LER}(d)$ is the [[Loss Elimination Ratio|loss elimination ratio]] at deductible $d$, so $1 - \\text{LER}(d)$ is the excess ratio.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -1258,7 +1274,15 @@
        "page": "Deductible Rating",
        "quote": "The rate credit is derived from the [[Loss Elimination Ratio|loss elimination ratio]] — the share of expected losses the deductible removes."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Deductible Rating",
+      "quote": "The rate credit is derived from the [[Loss Elimination Ratio|loss elimination ratio]], the share of expected losses the deductible removes.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -1292,7 +1316,15 @@
        "page": "Large Deductible Policy",
        "quote": "Severity inflation of $8\\%$ applies to every claim."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Large Deductible Policy",
+      "quote": "Severity inflation of 8% applies to every claim.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -1309,7 +1341,15 @@
        "page": "Deductible Rating",
        "quote": "Deductibles erode with [[Inflation|inflation]]: a fixed $d$ eliminates a falling share of a growing loss, so relativities must be refreshed or higher-deductible business becomes under-priced."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Deductible Rating",
+      "quote": "A fixed $d$ eliminates a falling share of a growing loss, so relativities must be refreshed or higher-deductible business becomes under-priced.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -1715,7 +1755,15 @@
        "page": "Excess Loss Development Factor",
        "quote": "Measured on the severity distribution at that maturity, $R^L_t = E[X \\wedge L]/E[X]$ is the [[Loss Elimination Ratio|loss elimination ratio]] of the deductible, and $1 - R^L_t$ its excess ratio."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loss Elimination Ratio",
+      "quote": "A **Loss Elimination Ratio** (LER) is the proportion of ground-up losses removed by a deductible.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -1847,7 +1895,15 @@
        "page": "Cost of Capital",
        "quote": "The part pricing must recover is the required return **less** what the capital earns while it is held."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Principles of Ratemaking",
+      "quote": "**A rate provides for all costs associated with the transfer of risk.**",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -1864,7 +1920,15 @@
        "page": "Principles of Ratemaking",
        "quote": "Note what follows: a rate differential that reflects a genuine cost difference is **not** unfair discrimination, and charging the same rate for materially different risks fails Principle 3."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Classification Ratemaking",
+      "quote": "**Classification Ratemaking** is the segmentation of a book into rating classes and the derivation of **relativities**, the factors by which each class's rate differs from the base class, so that each risk pays according to its own expected cost.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -2639,7 +2703,15 @@
        "page": "Large Deductible Policy",
        "quote": "$$\\text{Premium} = \\frac{\\text{Excess Losses} + \\text{ALAE} + F + \\text{CR} + \\text{RM}}{1 - V - Q}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Large Deductible Policy",
+      "quote": "$$\\text{Premium} = \\frac{\\text{Excess Losses} + \\text{ALAE} + F + \\text{CR} + \\text{RM}}{1 - V - Q_T}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -2982,7 +3054,15 @@
        "page": "Increased Limits",
        "quote": "So the *marginal* indemnity cost per dollar of additional limit must not increase as the limit rises; an indemnity ILF table whose marginal cost increases is not consistent with any size-of-loss distribution."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Increased Limits",
+      "quote": "The *marginal* indemnity cost per dollar of additional limit must therefore not increase as the limit rises.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -2995,7 +3075,15 @@
        "page": "Increased Limits",
        "quote": "So the *marginal* indemnity cost per dollar of additional limit must not increase as the limit rises; an indemnity ILF table whose marginal cost increases is not consistent with any size-of-loss distribution."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Increased Limits",
+      "quote": "The *marginal* indemnity cost per dollar of additional limit must therefore not increase as the limit rises.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -3008,7 +3096,15 @@
        "page": "Increased Limits",
        "quote": "\\$250\\text{K} \\to \\$500\\text{K}: \\; \\frac{0.15}{250} &= 0.00060"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Increased Limits",
+      "quote": "From $\\$250{,}000$ to $\\$500{,}000$, it is $0.15/250 = 0.00060$.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -3594,7 +3690,15 @@
        "page": "Workers Compensation Underwriting",
        "quote": "The primary part carries more weight, and only 30% of a medical-only claim enters the formula in most states."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Experience Rating",
+      "quote": "It also creates an incentive for **claim suppression**, paying small claims outside the policy to keep them out of the mod.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -3625,7 +3729,15 @@
        "page": "Workers Compensation Underwriting",
        "quote": "Each loss is split at a split point, \\$18,000 in most states, into a primary part that reflects frequency and an excess part that reflects severity."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Experience Rating",
+      "quote": "The NCCI workers compensation plan splits losses into primary and excess components, so that it weights frequency more heavily than severity, on the theory that frequency is more predictive of future experience than severity.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -3642,7 +3754,15 @@
        "page": "Workers Compensation Underwriting",
        "quote": "Each loss is split at a split point, \\$18,000 in most states, into a primary part that reflects frequency and an excess part that reflects severity."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Experience Rating",
+      "quote": "The NCCI workers compensation plan splits losses into primary and excess components, so that it weights frequency more heavily than severity, on the theory that frequency is more predictive of future experience than severity.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r6",
@@ -3676,7 +3796,15 @@
        "page": "Workers Compensation Underwriting",
        "quote": "Both had \\$60,000 of losses, but B's frequency earns a debit mod and A's single large claim a credit, which is how the plan treats frequency as the better predictor."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Experience Rating",
+      "quote": "**A has a frequency problem**, forty claims where the class expects far fewer, which is persistent, controllable and highly predictive of next year.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -3715,7 +3843,15 @@
        "page": "Law of Large Numbers",
        "quote": "It requires the $X_i$ to be i.i.d. with finite mean $\\mu$; the standard proof also assumes finite variance $\\sigma^2$ and applies Chebyshev's inequality to $\\bar{X}_n$, which has $\\text{Var}(\\bar{X}_n) = \\sigma^2/n$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Experience Rating",
+      "quote": "A small risk's mod stays near $1.0$ however good or bad its recent record, because a few claims say little.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -4054,7 +4190,15 @@
        "page": "Fixed Expenses",
        "quote": "$$\\text{Rate} = \\frac{\\text{Pure Premium} + F}{1 - V - Q_T}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Unallocated Loss Adjustment Expenses ULAE",
+      "quote": "The projected loss and ALAE, adjusted for extraordinary events, development and trend, are multiplied by $1$ plus that ratio.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -4525,7 +4669,15 @@
        "page": "Large Deductible Policy",
        "quote": "\\text{Premium} = \\frac{\\text{Excess Losses} + \\text{ALAE} + F + \\text{CR} + \\text{RM}}{1 - V - Q}"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Large Deductible Policy",
+      "quote": "$$\\text{Premium} = \\frac{\\text{Excess Losses} + \\text{ALAE} + F + \\text{CR} + \\text{RM}}{1 - V - Q_T}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -4542,7 +4694,15 @@
        "page": "Excess Loss Development Factor",
        "quote": "Measured on the severity distribution at that maturity, $R^L_t = E[X \\wedge L]/E[X]$ is the [[Loss Elimination Ratio|loss elimination ratio]] of the deductible, and $1 - R^L_t$ its excess ratio."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Large Deductible Policy",
+      "quote": "$\\text{LER}(d)$ is the [[Loss Elimination Ratio|loss elimination ratio]] at deductible $d$, so $1 - \\text{LER}(d)$ is the excess ratio.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -4768,7 +4928,15 @@
        "page": "Homogeneity",
        "quote": "**Homogeneity** is the property of a group of risks whose expected loss costs are similar enough that their experience can be averaged into one rate — or projected with one development pattern — without material distortion."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Homogeneity",
+      "quote": "**Homogeneity** is the property of a group of risks with similar expected costs, so that their experience can be averaged into one rate, or projected with one development pattern, without material distortion.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -4785,7 +4953,15 @@
        "page": "Experience Rating",
        "quote": "- Credibility rises with size. A small risk's mod stays near $1.0$ however good or bad its recent record, because a few claims say little; a large risk approaches $Z = 1$ and effectively self-rates."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Credibility",
+      "quote": "In risk classification, a class must be large enough for credible predictions of its costs, and its estimates should be stable from year to year while still responding to real changes.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -4802,7 +4978,15 @@
        "page": "Experience Rating",
        "quote": "- Credibility rises with size. A small risk's mod stays near $1.0$ however good or bad its recent record, because a few claims say little; a large risk approaches $Z = 1$ and effectively self-rates."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Credibility",
+      "quote": "In risk classification, a class must be large enough for credible predictions of its costs, and its estimates should be stable from year to year while still responding to real changes.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -5061,7 +5245,15 @@
        "page": "Increased Limits",
        "quote": "**Increased Limits Factors** (ILFs) are the multiplicative factors that convert a basic-limits loss cost into the loss cost for a higher policy limit, reflecting the additional expected loss in the layer above the basic limit."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Increased Limits",
+      "quote": "An **Increased Limits Factor** (ILF) is the multiplicative factor that converts a basic-limits loss cost into the loss cost for a higher policy limit, reflecting the additional expected loss in the layer above the basic limit.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -5074,7 +5266,15 @@
        "page": "Increased Limits",
        "quote": "\\$100\\text{K} \\to \\$250\\text{K}: \\; \\frac{0.30}{150} &= 0.00200"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Increased Limits",
+      "quote": "From $\\$100{,}000$ to $\\$250{,}000$, the marginal cost per $\\$1{,}000$ of limit is $0.30/150 = 0.00200$.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -5117,7 +5317,15 @@
        "page": "Increased Limits",
        "quote": "The last fails for some lines — personal auto insureds who choose very high limits tend to have lower accident frequencies — which is one reason a GLM, which does not assume equal frequency, can give different (even counter-intuitive) factors."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Increased Limits",
+      "quote": "A GLM reflects that behavior, so it can give different, even counter-intuitive, factors, and actuaries may use both approaches to guide the selection.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r6",
@@ -5694,7 +5902,15 @@
        "page": "Schedule Rating",
        "quote": "Because credits are judgmental, they are also a source of **rate level leakage**: the filed manual rate can be adequate while the *achieved* rate is not."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Schedule Rating",
+      "quote": "The filed manual rate can be adequate while the *achieved* rate is not.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r6",
@@ -5888,7 +6104,15 @@
        "page": "Large Deductible Policy",
        "quote": "$$\\text{Premium} = \\frac{\\text{Excess Losses} + \\text{ALAE} + F + \\text{CR} + \\text{RM}}{1 - V - Q}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Large Deductible Policy",
+      "quote": "$$\\text{Premium} = \\frac{\\text{Excess Losses} + \\text{ALAE} + F + \\text{CR} + \\text{RM}}{1 - V - Q_T}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -5918,7 +6142,15 @@
        "page": "Loss and Loss Adjustment Expense",
        "quote": "It cannot be traced to a claim, so it is estimated in aggregate — classically as the ratio of calendar-year paid ULAE to calendar-year paid loss plus ALAE, applied to loss plus ALAE that has been adjusted for extraordinary events, development and trend."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loss and Loss Adjustment Expense",
+      "quote": "Loss and ALAE is loaded by multiplying it by one plus the ULAE ratio.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -5931,7 +6163,15 @@
        "page": "Large Deductible Policy",
        "quote": "Many programs also cap the insured's total reimbursements with an **aggregate limit**; the insurer's expected payments above it are an additional insurance charge, much like the charge for a [[Retrospective Rating|retro]] maximum."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Large Deductible Policy",
+      "quote": "The insurer's expected payments above it are an additional insurance charge, much like the charge for a [[Retrospective Rating|retrospective rating]] maximum.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -6399,7 +6639,15 @@
        "page": "Large Deductible Policy",
        "quote": "$$\\text{Premium} = \\frac{\\text{Excess Losses} + \\text{ALAE} + F + \\text{CR} + \\text{RM}}{1 - V - Q}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Large Deductible Policy",
+      "quote": "$$\\text{Premium} = \\frac{\\text{Excess Losses} + \\text{ALAE} + F + \\text{CR} + \\text{RM}}{1 - V - Q_T}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -6433,7 +6681,15 @@
        "page": "Deductible Rating",
        "quote": "so the premium must cover invoicing and monitoring and a provision for the credit risk that the insured cannot pay, which collateral rarely covers fully."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Deductible Rating",
+      "quote": "The premium must then cover invoicing and monitoring and a provision for the credit risk that the insured cannot pay, which collateral rarely covers fully.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -6896,7 +7152,15 @@
        "page": "Increased Limits",
        "quote": "**Increased Limits Factors** (ILFs) are the multiplicative factors that convert a basic-limits loss cost into the loss cost for a higher policy limit, reflecting the additional expected loss in the layer above the basic limit."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Increased Limits",
+      "quote": "An **Increased Limits Factor** (ILF) is the multiplicative factor that converts a basic-limits loss cost into the loss cost for a higher policy limit, reflecting the additional expected loss in the layer above the basic limit.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -6926,7 +7190,15 @@
        "page": "Increased Limits",
        "quote": "So the *marginal* indemnity cost per dollar of additional limit must not increase as the limit rises; an indemnity ILF table whose marginal cost increases is not consistent with any size-of-loss distribution."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Increased Limits",
+      "quote": "The *marginal* indemnity cost per dollar of additional limit must therefore not increase as the limit rises.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -7461,7 +7733,15 @@
        "page": "Homogeneity",
        "quote": "Homogeneity is checked, not assumed: compare loss ratios, frequencies and severities across subgroups within a proposed class, and look for a consistent difference that persists across years."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Homogeneity",
+      "quote": "Long-haul risks cost more than twice as much as local ones, so the class is not homogeneous.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r8",
@@ -7824,7 +8104,15 @@
        "page": "Large Deductible Policy",
        "quote": "$$\\text{Premium} = \\frac{\\text{Excess Losses} + \\text{ALAE} + F + \\text{CR} + \\text{RM}}{1 - V - Q}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Large Deductible Policy",
+      "quote": "$$\\text{Premium} = \\frac{\\text{Excess Losses} + \\text{ALAE} + F + \\text{CR} + \\text{RM}}{1 - V - Q_T}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -7841,7 +8129,15 @@
        "page": "Excess Loss Development Factor",
        "quote": "Measured on the severity distribution at that maturity, $R^L_t = E[X \\wedge L]/E[X]$ is the [[Loss Elimination Ratio|loss elimination ratio]] of the deductible, and $1 - R^L_t$ its excess ratio."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Large Deductible Policy",
+      "quote": "$\\text{LER}(d)$ is the [[Loss Elimination Ratio|loss elimination ratio]] at deductible $d$, so $1 - \\text{LER}(d)$ is the excess ratio.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -8231,7 +8527,15 @@
        "page": "Data Segmentation",
        "quote": "Each further split makes groups more alike but less credible; many small cells can say less than a few large ones."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Data Segmentation",
+      "quote": "Each further split makes the groups more alike but leaves each with less data.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -8880,7 +9184,15 @@
        "page": "Increased Limits",
        "quote": "The last fails for some lines — personal auto insureds who choose very high limits tend to have lower accident frequencies"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Increased Limits",
+      "quote": "Personal auto insureds who choose very high limits tend to have lower accident frequencies.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -9188,7 +9500,15 @@
        "page": "Commercial Lines Rating",
        "quote": "**[[Schedule Rating]]** — judgmental debits and credits for risk characteristics the classification system misses. Prospective, and capped by filing."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Schedule Rating",
+      "quote": "**Schedule Rating** applies underwriter-assigned debits and credits to the manual premium for characteristics of the individual risk that the classification system does not capture, such as the physical condition of premises, management quality, safety programs, employee selection and training, and loss-control practices.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -9249,7 +9569,15 @@
        "page": "Schedule Rating",
        "quote": "schedule rating looks at characteristics expected to have a material effect on future losses that are not reflected in the manual rate — or, if experience rating applies, not adequately reflected in the past experience. A newly implemented loss control programme is Werner's example."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Schedule Rating",
+      "quote": "If experience rating applies, they are the characteristics not adequately reflected in the past experience.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r6",
@@ -9443,7 +9771,15 @@
        "page": "Deductible Rating",
        "quote": "Werner writes the losses eliminated by a deductible $D$ as $\\int_0^D x f(x)\\,dx + D\\,[1 - F(D)]$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Deductible Rating",
+      "quote": "$$E[X \\wedge d] = \\int_0^d x f(x)\\,dx + d\\,[1 - F(d)]$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -9474,7 +9810,15 @@
        "page": "Increased Limits",
        "quote": "**Increased Limits Factors** (ILFs) are the multiplicative factors that convert a basic-limits loss cost into the loss cost for a higher policy limit, reflecting the additional expected loss in the layer above the basic limit."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Increased Limits",
+      "quote": "An **Increased Limits Factor** (ILF) is the multiplicative factor that converts a basic-limits loss cost into the loss cost for a higher policy limit, reflecting the additional expected loss in the layer above the basic limit.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r7",
@@ -9504,7 +9848,15 @@
        "page": "Increased Limits",
        "quote": "Since $\\text{LAS}(k) = \\int_0^k S(x)\\,dx$ (Palmer), each additional dollar of limit at $x$ adds $S(x)$ — the probability a loss exceeds $x$ — which cannot rise as $x$ rises."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Increased Limits",
+      "quote": "Each additional dollar of limit at $x$ adds $S(x)$, the probability a loss exceeds $x$, which cannot rise as $x$ rises.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -9751,7 +10103,15 @@
        "page": "Retrospective Rating",
        "quote": "**Converted losses** $(L \\times \\text{LCF})$ are the insured's reported losses $L$, limited by any per-accident limit, multiplied by the **loss conversion factor**, which loads them for the ALAE not already in the losses plus ULAE."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Retrospective Rating",
+      "quote": "$\\text{LCF}$ is the **loss conversion factor**, which loads them for the ALAE not already in the losses plus ULAE.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -9984,7 +10344,15 @@
        "page": "Excess Loss Development Factor",
        "quote": "Measured on the severity distribution at that maturity, $R^L_t = E[X \\wedge L]/E[X]$ is the [[Loss Elimination Ratio|loss elimination ratio]] of the deductible, and $1 - R^L_t$ its excess ratio."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Large Deductible Policy",
+      "quote": "$\\text{LER}(d)$ is the [[Loss Elimination Ratio|loss elimination ratio]] at deductible $d$, so $1 - \\text{LER}(d)$ is the excess ratio.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -10524,7 +10892,15 @@
        "page": "Allocated Loss Adjustment Expense",
        "quote": "$$\\text{ALAE Ratio} = \\frac{\\text{ALAE}}{\\text{Indemnity}}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Allocated Loss Adjustment Expense",
+      "quote": "When ALAE is a fixed percentage of claims, claims and ALAE together are the claims multiplied by one plus the ALAE ratio.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -10537,7 +10913,15 @@
        "page": "Increased Limits",
        "quote": "$\\text{ILF}(L) = \\dfrac{\\text{LAS}(L) + \\text{ALAE}(L) + \\text{ULAE}(L) + \\text{RL}(L)}{\\text{LAS}(B) + \\text{ALAE}(B) + \\text{ULAE}(B) + \\text{RL}(B)}$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Increased Limits",
+      "quote": "$$\\text{ILF}(L) = \\frac{\\text{LAS}(L) + \\text{ALAE}(L) + \\text{ULAE}(L) + \\text{RL}(L)}{\\text{LAS}(B) + \\text{ALAE}(B) + \\text{ULAE}(B) + \\text{RL}(B)}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -11166,7 +11550,15 @@
        "page": "Retrospective Rating",
        "quote": "The **maximum** protects the insured against a bad year, the **minimum** protects the insurer against a good one."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Retrospective Rating",
+      "quote": "The **maximum** protects the insured against a bad year, and the **minimum** protects the insurer against a good one.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -11508,7 +11900,15 @@
        "page": "Large Deductible Policy",
        "quote": "where the insurer pays the whole claim and bills the insured back, the premium carries the cost of invoicing and monitoring and a provision for the insured's inability to pay; collateral rarely covers that credit risk fully."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Large Deductible Policy",
+      "quote": "Where the insurer pays the whole claim and bills the insured back, the premium carries the cost of invoicing and monitoring and a provision for the insured's inability to pay.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r7",
@@ -12118,7 +12518,15 @@
        "page": "Increased Limits",
        "quote": "Werner's indicated ILF is the ratio of losses and LAE at the two limits, assuming all underwriting expenses are variable and the variable expense and profit provisions do not vary by limit."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Increased Limits",
+      "quote": "If all underwriting expenses are variable, the variable expense and profit provisions do not vary by limit, [[Frequency|frequency]] and [[Severity|severity]] are independent, and frequency is the same whatever limit is chosen, the indicated ILF at limit $L$ is",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -12139,7 +12547,15 @@
        "page": "Pure Premium Method",
        "quote": "$$\\text{Indicated Rate} = \\frac{\\text{Pure Premium} + F}{1 - V - Q_T}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Profit and Contingency Provision",
+      "quote": "$$\\text{Indicated Rate} = \\frac{\\text{Pure Premium} + F}{1 - V - Q_T}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -14673,7 +15089,15 @@
        "page": "Increased Limits",
        "quote": "So the *marginal* indemnity cost per dollar of additional limit must not increase as the limit rises; an indemnity ILF table whose marginal cost increases is not consistent with any size-of-loss distribution."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Increased Limits",
+      "quote": "The *marginal* indemnity cost per dollar of additional limit must therefore not increase as the limit rises.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -14686,7 +15110,15 @@
        "page": "Increased Limits",
        "quote": "So the *marginal* indemnity cost per dollar of additional limit must not increase as the limit rises; an indemnity ILF table whose marginal cost increases is not consistent with any size-of-loss distribution."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Increased Limits",
+      "quote": "The *marginal* indemnity cost per dollar of additional limit must therefore not increase as the limit rises.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -14699,7 +15131,15 @@
        "page": "Increased Limits",
        "quote": "So the *marginal* indemnity cost per dollar of additional limit must not increase as the limit rises; an indemnity ILF table whose marginal cost increases is not consistent with any size-of-loss distribution."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Increased Limits",
+      "quote": "The *marginal* indemnity cost per dollar of additional limit must therefore not increase as the limit rises.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },

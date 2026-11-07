@@ -11511,7 +11511,15 @@
        "page": "Earned Exposure",
        "quote": "A $12$-month policy contributes **one** earned car-year in total, spread pro rata over its term: written the day it is issued, earned $1/12$ per month, in force from effective date to expiry."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Earned Exposure",
+      "quote": "Earned exposures are the denominator of the [[Pure Premium|pure premium]] and of [[Frequency|frequency]], so they cover the same period as the losses.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -11641,7 +11649,15 @@
        "page": "Survival Model",
        "quote": "$S(0) = 1$, $S(\\infty) = 0$, and $S(t)$ is non-increasing"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Increased Limits",
+      "quote": "Each additional dollar of limit at $x$ adds $S(x)$, the probability a loss exceeds $x$, which cannot rise as $x$ rises.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -11882,7 +11898,15 @@
        "page": "Loss Elimination Ratio",
        "quote": "The LER **falls as losses inflate**, because a fixed deductible eliminates a shrinking fraction of a growing loss — the leveraged effect described under [[Inflation]]."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loss Elimination Ratio",
+      "quote": "The LER **falls as losses inflate**, because a fixed deductible eliminates a shrinking fraction of a growing loss.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -15278,7 +15302,15 @@
        "page": "Loss Elimination Ratio",
        "quote": "Every claim contributes $\\min(X, 500)$:"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loss Elimination Ratio",
+      "quote": "Every claim contributes $\\min(X, 500)$ to the losses eliminated.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },

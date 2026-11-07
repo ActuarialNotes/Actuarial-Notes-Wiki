@@ -24,7 +24,15 @@
        "page": "Cumulative Development Factor",
        "quote": "$$\\text{Ultimate} = C_n \\times \\text{CDF}_{n \\to \\text{ult}}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cumulative Development Factor",
+      "quote": "$$\\text{Ultimate Claims} = C_{\\text{AY},\\,n} \\times \\text{CDF}_{n \\to \\text{ult}}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -41,7 +49,15 @@
        "page": "Bornhuetter-Ferguson Method",
        "quote": "$C$ is reported (or paid) losses to date, $U_0 = \\text{ELR} \\times \\text{EP}$ the a priori expectation, and $1 - 1/\\text{CDF}$ the percentage unreported from the [[Development Triangle|development pattern]]."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Bornhuetter-Ferguson Method",
+      "quote": "$$\\text{Ultimate Claims} = \\text{Reported Claims} + \\text{Expected Claims} \\times \\left(1 - \\frac{1}{\\text{CDF}}\\right)$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -58,7 +74,15 @@
        "page": "Benktander Method",
        "quote": "$$U_{\\text{GB}} = p(2 - p)\\,U_{\\text{CL}} + \\left[1 - p(2-p)\\right] U_{0}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Benktander Method",
+      "quote": "$m = 1$ is the Bornhuetter-Ferguson method and $m = 2$ the Benktander method, whose weight on the development ultimate is $1 - q^2$, or $p(2 - p)$ with $p = 1 - q$ the percent reported.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -75,7 +99,15 @@
        "page": "Cumulative Development Factor",
        "quote": "The reciprocal is the **percentage reported** (or paid): $p_n = 1/\\text{CDF}_n$, and $1 - p_n$ is the percentage unreported."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cumulative Development Factor",
+      "quote": "$$\\text{Reported \\%} = \\frac{1}{\\text{CDF}_{n \\to \\text{ult}}}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -88,7 +120,15 @@
        "page": "Cumulative Development Factor",
        "quote": "CDFs are built **backwards from the tail**: start with the tail factor, multiply in each successive age-to-age factor moving toward younger ages."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cumulative Development Factor",
+      "quote": "$$\\text{CDF}_{n \\to \\text{ult}} = \\left(\\prod_{k \\ge n} f_{k \\to k+1}\\right) \\times \\text{Tail}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r6",
@@ -152,7 +192,15 @@
        "page": "Cape Cod Method",
        "quote": "| $2022$ | $36$ mo | $7{,}000$ | $1{,}750$ | $1.084$ | $92.3\\%$ |"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "$1 - 1/\\text{CDF}$ is the year's percent unreported, and the last term is its [[IBNR]].",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -165,7 +213,15 @@
        "page": "Cape Cod Method",
        "quote": "$$\\text{ELR} = \\frac{\\sum_i C_i}{\\sum_i \\text{EP}_i \\times \\tfrac{1}{\\text{CDF}_i}}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "$$\\text{Expected Claim Ratio} = \\frac{\\sum \\text{Reported Claims}}{\\sum \\text{Used-Up Premium}}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -178,7 +234,15 @@
        "page": "Cape Cod Method",
        "quote": "$$\\text{IBNR}_i = \\text{ELR} \\times \\text{EP}_i \\times \\left(1 - \\tfrac{1}{\\text{CDF}_i}\\right)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "$$\\text{Ultimate Claims} = \\text{Reported Claims} + \\text{Expected Claim Ratio} \\times \\text{Earned Premium} \\times \\left(1 - \\frac{1}{\\text{CDF}}\\right)$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r6",
@@ -191,7 +255,15 @@
        "page": "Cape Cod Method",
        "quote": "The ELR is estimated as total reported losses over total *used-up* (on-level, developed) premium across all years."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "Several treaties can be combined by pooling their premiums, used-up premiums and reported claims into one ratio.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r7",
@@ -204,7 +276,15 @@
        "page": "Cape Cod Method",
        "quote": "Premium **must be on level** and losses must be trended to a common cost level before the ELR is computed, or the derived ratio blends years written at different rate levels and different cost levels into one number."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "In Patrik's chapter, the premium is each treaty year's earned risk pure premium: the premium net of commissions, brokerage and internal expenses, adjusted to remove rate-level differences between years.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r8",
@@ -237,7 +317,15 @@
        "page": "Stochastic Cape Cod Model",
        "quote": "Stanard and Bühlmann independently proposed estimating the ELR from the data; Bühlmann first presented it at a meeting in Cape Cod."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "It comes from the data, not from judgment, so it responds to a change in the claim ratios that is in the data, as the development technique does.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -392,7 +480,15 @@
        "page": "Cape Cod Method",
        "quote": "$$\\text{ELR} = \\frac{\\sum_i C_i}{\\sum_i \\text{EP}_i \\times \\tfrac{1}{\\text{CDF}_i}}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "$$\\text{Expected Claim Ratio} = \\frac{\\sum \\text{Reported Claims}}{\\sum \\text{Used-Up Premium}}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -405,7 +501,15 @@
        "page": "Cape Cod Method",
        "quote": "$$\\text{IBNR}_i = \\text{ELR} \\times \\text{EP}_i \\times \\left(1 - \\tfrac{1}{\\text{CDF}_i}\\right)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "$$\\text{Ultimate Claims} = \\text{Reported Claims} + \\text{Expected Claim Ratio} \\times \\text{Earned Premium} \\times \\left(1 - \\frac{1}{\\text{CDF}}\\right)$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -510,7 +614,15 @@
        "page": "Chain Ladder Method",
        "quote": "U_{\\text{AY}} = C_{\\text{AY},\\,n} \\times \\text{CDF}_{n \\to \\text{ult}}"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Chain Ladder Method",
+      "quote": "$$f_{n \\to n+1} = \\frac{\\text{Claims at age } n+1}{\\text{Claims at age } n}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -962,7 +1074,15 @@
        "page": "Cumulative Development Factor",
        "quote": "CDFs are built **backwards from the tail**: start with the tail factor, multiply in each successive age-to-age factor moving toward younger ages."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cumulative Development Factor",
+      "quote": "$$\\text{CDF}_{n \\to \\text{ult}} = \\left(\\prod_{k \\ge n} f_{k \\to k+1}\\right) \\times \\text{Tail}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -975,7 +1095,15 @@
        "page": "Cumulative Development Factor",
        "quote": "The reciprocal is the **percentage reported** (or paid): $p_n = 1/\\text{CDF}_n$, and $1 - p_n$ is the percentage unreported."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cumulative Development Factor",
+      "quote": "$$\\text{Reported \\%} = \\frac{1}{\\text{CDF}_{n \\to \\text{ult}}}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r6",
@@ -1133,7 +1261,15 @@
        "page": "Cape Cod Method",
        "quote": "**Used-up premium** $\\text{EP}_i / \\text{CDF}_i$ is the share of each year's premium \"exposed\" to the losses reported so far."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "$\\text{Used-Up Premium}$ is each year's earned premium times its percent reported, $\\text{Earned Premium}/\\text{CDF}$.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -1146,7 +1282,15 @@
        "page": "Cape Cod Method",
        "quote": "$$\\text{ELR} = \\frac{\\sum_i C_i}{\\sum_i \\text{EP}_i \\times \\tfrac{1}{\\text{CDF}_i}}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "$$\\text{Expected Claim Ratio} = \\frac{\\sum \\text{Reported Claims}}{\\sum \\text{Used-Up Premium}}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -1159,7 +1303,15 @@
        "page": "Cape Cod Method",
        "quote": "$$\\text{IBNR}_i = \\text{ELR} \\times \\text{EP}_i \\times \\left(1 - \\tfrac{1}{\\text{CDF}_i}\\right)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "$$\\text{Ultimate Claims} = \\text{Reported Claims} + \\text{Expected Claim Ratio} \\times \\text{Earned Premium} \\times \\left(1 - \\frac{1}{\\text{CDF}}\\right)$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -1189,7 +1341,15 @@
        "page": "Bornhuetter-Ferguson Method",
        "quote": "BF is a **credibility weighting** in disguise: it equals $Z \\, U_{\\text{CL}} + (1-Z)\\,U_0$ with $Z = 1/\\text{CDF}$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "The weight on the chain ladder is $Z = \\text{CF} \\times \\text{Rlag}$, a credibility factor $0 \\le \\text{CF} \\le 1$ times the year's percent reported, so green years lean on Stanard-Bühlmann and older years on the chain ladder.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r6",
@@ -1222,7 +1382,15 @@
        "page": "Bornhuetter-Ferguson Method",
        "quote": "BF does not respond to bad news. If emergence runs far ahead of the a priori, BF holds most of its estimate anchored — which is exactly right when the emergence is noise and exactly wrong when it is signal."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "**It depends on the CDFs twice.**",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -1550,7 +1718,15 @@
        "page": "Benktander Method",
        "quote": "$$U_{\\text{GB}} = C + \\left(1 - \\tfrac{1}{\\text{CDF}}\\right) U_{\\text{BF}}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Benktander Method",
+      "quote": "$$\\text{Ultimate Claims} = \\text{Reported Claims} + \\text{BF Ultimate} \\times \\left(1 - \\frac{1}{\\text{CDF}}\\right)$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -1563,7 +1739,15 @@
        "page": "Bornhuetter-Ferguson Method",
        "quote": "$$U_{\\text{BF}} = C + \\left(1 - \\tfrac{1}{\\text{CDF}}\\right) \\times U_{0}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Bornhuetter-Ferguson Method",
+      "quote": "$$\\text{Ultimate Claims} = \\text{Reported Claims} + \\text{Expected Claims} \\times \\left(1 - \\frac{1}{\\text{CDF}}\\right)$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -1576,7 +1760,15 @@
        "page": "Cumulative Development Factor",
        "quote": "The reciprocal is the **percentage reported** (or paid): $p_n = 1/\\text{CDF}_n$, and $1 - p_n$ is the percentage unreported."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cumulative Development Factor",
+      "quote": "$$\\text{Reported \\%} = \\frac{1}{\\text{CDF}_{n \\to \\text{ult}}}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -1597,7 +1789,15 @@
        "page": "Cumulative Development Factor",
        "quote": "$$\\text{Ultimate} = C_n \\times \\text{CDF}_{n \\to \\text{ult}}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cumulative Development Factor",
+      "quote": "$$\\text{Ultimate Claims} = C_{\\text{AY},\\,n} \\times \\text{CDF}_{n \\to \\text{ult}}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -1610,7 +1810,15 @@
        "page": "Benktander Method",
        "quote": "Repeating $R = qU$ then $U = C + R$ from $U_0$ gives $U^{(m)} = (1 - q^m)\\,U_{\\text{CL}} + q^m U_0$. BF is $m = 1$, Benktander is $m = 2$, and the limit is the chain ladder."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Benktander Method",
+      "quote": "As $m$ grows, $q^m$ goes to zero and the ultimate converges to the development technique's ultimate, which gives full weight to the reported claims.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -1844,7 +2052,15 @@
        "page": "Data Issues",
        "quote": "a modified log link handles them unless a whole column sums negative, which needs a constant shift"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Data Issues",
+      "quote": "A modified log link uses $\\ln(q)$ for $q > 0$, $0$ for $q = 0$ and $-\\ln(-q)$ for $q < 0$, which works only while the column's sum is positive.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -2513,7 +2729,15 @@
        "page": "Retrospective Rating",
        "quote": "**Converted losses** $(L \\times \\text{LCF})$ are the insured's reported losses $L$, limited by any per-accident limit, multiplied by the **loss conversion factor**, which loads them for the ALAE not already in the losses plus ULAE."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Retrospective Rating",
+      "quote": "$\\text{LCF}$ is the **loss conversion factor**, which loads them for the ALAE not already in the losses plus ULAE.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -2648,7 +2872,15 @@
        "page": "Cape Cod Method",
        "quote": "$$\\text{ELR} = \\frac{\\sum_i C_i}{\\sum_i \\text{EP}_i \\times \\tfrac{1}{\\text{CDF}_i}}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "$1 - 1/\\text{CDF}$ is the year's percent unreported, and the last term is its [[IBNR]].",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -2661,7 +2893,15 @@
        "page": "Cape Cod Method",
        "quote": "**Used-up premium** $\\text{EP}_i / \\text{CDF}_i$ is the share of each year's premium \"exposed\" to the losses reported so far."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "$\\text{Used-Up Premium}$ is each year's earned premium times its percent reported, $\\text{Earned Premium}/\\text{CDF}$.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -2674,7 +2914,15 @@
        "page": "Cape Cod Method",
        "quote": "The ELR is estimated as total reported losses over total *used-up* (on-level, developed) premium across all years."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "$$\\text{Expected Claim Ratio} = \\frac{\\sum \\text{Reported Claims}}{\\sum \\text{Used-Up Premium}}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -2687,7 +2935,15 @@
        "page": "Cape Cod Method",
        "quote": "$$\\text{IBNR}_i = \\text{ELR} \\times \\text{EP}_i \\times \\left(1 - \\tfrac{1}{\\text{CDF}_i}\\right)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "$1 - 1/\\text{CDF}$ is the year's percent unreported, and the last term is its [[IBNR]].",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -2886,7 +3142,15 @@
        "page": "Age to Age Factor",
        "quote": "**Age-to-Age Factor** (link ratio) is the ratio of a cohort's cumulative amount at one maturity to its amount at the previous maturity — the observed development between two ages."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Age to Age Factor",
+      "quote": "$$f_{n \\to n+1}^{\\text{AY}} = \\frac{C_{\\text{AY},\\,n+1}}{C_{\\text{AY},\\,n}}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -3048,7 +3312,15 @@
        "page": "Stochastic Cape Cod Model",
        "quote": "This is the BF structure: actual reported plus expected unreported."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Bornhuetter-Ferguson Method",
+      "quote": "Where no reliable a priori exists, the [[Cape Cod Method|Cape Cod method]] derives it from the data.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -3095,7 +3367,15 @@
        "page": "Benktander Method",
        "quote": "Benktander weights chain ladder against BF with $Z = p$: the more of the year that has emerged, the more the answer leans on the data."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Benktander Method",
+      "quote": "$$\\text{Ultimate Claims} = Z \\times \\text{Development Ultimate} + (1 - Z) \\times \\text{BF Ultimate}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r8",
@@ -3108,7 +3388,15 @@
        "page": "Chain Ladder Method",
        "quote": "$$\\text{IBNR} = U_{\\text{AY}} - C_{\\text{AY},\\,n}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Chain Ladder Method",
+      "quote": "The [[Unpaid Claims|unpaid claims]] are the ultimate claims minus the paid claims, which is the case outstanding plus the IBNR.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -3235,7 +3523,15 @@
        "page": "Data Issues",
        "quote": "*missing values* (estimate from surrounding cells, or exclude from the factors and residuals)"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Data Issues",
+      "quote": "A missing cell is estimated from the surrounding values, or excluded from the development factor and residual calculations so that it has no residual.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -3282,7 +3578,15 @@
        "page": "Data Issues",
        "quote": "*exposure changes* (model losses per exposure)"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Data Issues",
+      "quote": "When exposures change materially across accident years, the losses are divided by the earned exposures, the model is fitted to pure premiums, and the results are multiplied back by each year's exposures.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r7",
@@ -3798,7 +4102,15 @@
        "page": "Data Issues",
        "quote": "a modified log link handles them unless a whole column sums negative, which needs a constant shift"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Data Issues",
+      "quote": "If a column sums to a negative value, every cell is shifted by the largest negative incremental to make it non-negative, the model is fitted, and the shift is taken back out of the fitted values.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -3811,7 +4123,15 @@
        "page": "Data Issues",
        "quote": "in an ODP bootstrap an error left in the triangle becomes an extreme residual that is resampled into every other cell's variability."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Data Issues",
+      "quote": "An unusually large incremental value distorts the fitted parameters and residuals.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -3824,7 +4144,15 @@
        "page": "Data Issues",
        "quote": "*missing values* (estimate from surrounding cells, or exclude from the factors and residuals); *outliers* (exclude with care — skewed residuals are expected)"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Data Issues",
+      "quote": "It is excluded from the development factor and residual calculations, while its cell is still resampled when simulated triangles are generated.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -3853,7 +4181,15 @@
        "page": "Data Issues",
        "quote": "*exposure changes* (model losses per exposure)"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Data Issues",
+      "quote": "When exposures change materially across accident years, the losses are divided by the earned exposures, the model is fitted to pure premiums, and the results are multiplied back by each year's exposures.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r7",
@@ -3993,7 +4329,15 @@
        "page": "Cape Cod Method",
        "quote": "**Used-up premium** $\\text{EP}_i / \\text{CDF}_i$ is the share of each year's premium \"exposed\" to the losses reported so far."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "$\\text{Used-Up Premium}$ is each year's earned premium times its percent reported, $\\text{Earned Premium}/\\text{CDF}$.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -4006,7 +4350,15 @@
        "page": "Cape Cod Method",
        "quote": "$$\\text{ELR} = \\frac{\\sum_i C_i}{\\sum_i \\text{EP}_i \\times \\tfrac{1}{\\text{CDF}_i}}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "$$\\text{Expected Claim Ratio} = \\frac{\\sum \\text{Reported Claims}}{\\sum \\text{Used-Up Premium}}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -4019,7 +4371,15 @@
        "page": "Cape Cod Method",
        "quote": "$$\\text{IBNR}_i = \\text{ELR} \\times \\text{EP}_i \\times \\left(1 - \\tfrac{1}{\\text{CDF}_i}\\right)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "$$\\text{Ultimate Claims} = \\text{Reported Claims} + \\text{Expected Claim Ratio} \\times \\text{Earned Premium} \\times \\left(1 - \\frac{1}{\\text{CDF}}\\right)$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -4057,7 +4417,15 @@
        "page": "Rate Level Change",
        "quote": "The [[Cape Cod Method|Cape Cod]] technique is exposed in the same way, because its used-up premium denominator is actual premium: without on-levelling, years written at low rates get too much weight in the derived ELR."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "The premium is brought to the current rate level ([[On Level Premium|on-level premium]]), and the reported claims are trended to a common cost level and adjusted for tort reform or benefit changes.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r6",
@@ -4074,7 +4442,15 @@
        "page": "Generalized Cape Cod Method",
        "quote": "Cape Cod assumes one trended, on-level ratio holds for every year."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "It assumes a single expected claim ratio across all years once they are on a common rate level.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -4679,7 +5055,15 @@
        "page": "Loss Development",
        "quote": "$$\\text{Ultimate Losses} = \\text{Losses at age } n \\times \\text{CDF}_{n \\to \\text{ult}}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Chain Ladder Method",
+      "quote": "The same method develops claim counts, ALAE or any other cumulative amount with a triangle of its own.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -4704,7 +5088,15 @@
        "page": "Data Segmentation",
        "quote": "fine enough that each group's risks share similar expected costs and emergence patterns ([[Homogeneity|homogeneity]]), yet large and stable enough that each group's own experience can be relied on ([[Credibility|credibility]])."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Data Segmentation",
+      "quote": "A split is worth making only while the gain in homogeneity outweighs the credibility it costs each group.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -4742,7 +5134,15 @@
        "page": "Data Segmentation",
        "quote": "property and liability separately, coverages within a line where they behave differently, jurisdictions where laws or volume warrant."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Line of Business",
+      "quote": "The two coverages have different reporting and payment patterns and tail lengths.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -4775,10 +5175,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Data Segmentation",
-      "quote": "group claims that share coverage (the same laws, policy terms and claims handling)",
-      "note": "Friedland's criterion: segments share the same laws and claims handling, and similar settlement patterns; regions differing in those are split; retagged Data Segmentation",
-      "date": "2026-10-30",
-      "run": "g8-cas7-sort"
+      "quote": "Geographic differences in legislation, courts and claims handling can call for separate regions.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -4796,7 +5196,15 @@
        "page": "Loss Reserving",
        "quote": "**Understand the business.** Meet claims, underwriting and operations to identify changes in coding, processing, case reserving, underwriting, policy provisions, marketing and reinsurance."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Reserving Data Organization",
+      "quote": "Changes in mix, coverages, limits, catastrophe exposure, regulation and claims operations cannot, and are learned by asking management.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -5065,7 +5473,15 @@
        "page": "Benktander Method",
        "quote": "Repeating $R = qU$ then $U = C + R$ from $U_0$ gives $U^{(m)} = (1 - q^m)\\,U_{\\text{CL}} + q^m U_0$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Benktander Method",
+      "quote": "$$R_{\\text{GB}} = p \\, R_{\\text{ind}} + q \\, R_{\\text{coll}}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -5350,7 +5766,15 @@
        "page": "Data Issues",
        "quote": "*negative incremental values* (a modified log link handles them unless a whole column sums negative, which needs a constant shift; or model salvage and subrogation separately)"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Data Issues",
+      "quote": "A modified log link uses $\\ln(q)$ for $q > 0$, $0$ for $q = 0$ and $-\\ln(-q)$ for $q < 0$, which works only while the column's sum is positive.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -5363,7 +5787,15 @@
        "page": "Data Issues",
        "quote": "*negative incremental values* (a modified log link handles them unless a whole column sums negative, which needs a constant shift; or model salvage and subrogation separately)"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Data Issues",
+      "quote": "If a column sums to a negative value, every cell is shifted by the largest negative incremental to make it non-negative, the model is fitted, and the shift is taken back out of the fitted values.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -5404,7 +5836,15 @@
        "page": "Data Diagnostic Analysis",
        "quote": "Plot residuals against development period, accident period, calendar period and fitted value. They should be patternless and have a common variance."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Data Diagnostic Analysis",
+      "quote": "The residuals are plotted against development period, accident period, calendar period and fitted value, with a zero line.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -5713,7 +6153,15 @@
        "page": "Generalized Cape Cod Method",
        "quote": "$$\\text{ELR}_j = \\frac{\\sum_i D^{|i-j|}\\, C_i\\, T_{i \\to j}}{\\sum_i D^{|i-j|}\\, P_i / \\text{CDF}_i}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "$$\\text{Expected Claim Ratio} = \\frac{\\sum \\text{Reported Claims}}{\\sum \\text{Used-Up Premium}}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -5747,7 +6195,15 @@
        "page": "Generalized Cape Cod Method",
        "quote": "$$\\text{IBNR}_j = \\text{ELR}_j \\times P_j \\times \\left(1 - \\frac{1}{\\text{CDF}_j}\\right)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "$$\\text{Ultimate Claims} = \\text{Reported Claims} + \\text{Expected Claim Ratio} \\times \\text{Earned Premium} \\times \\left(1 - \\frac{1}{\\text{CDF}}\\right)$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -5764,7 +6220,15 @@
        "page": "Bornhuetter-Ferguson Method",
        "quote": "\\$600{,}000 \\times 1.896 = \\$1{,}137{,}600"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Bornhuetter-Ferguson Method",
+      "quote": "$1/\\text{CDF}$ is the percent reported, so $1 - 1/\\text{CDF}$ is the percent unreported.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -6020,7 +6484,15 @@
        "page": "Chain Ladder Method",
        "quote": "with $p = 1/3.20 = 31.25\\%$,"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Bornhuetter-Ferguson Method",
+      "quote": "$$\\text{Ultimate Claims} = \\text{Reported Claims} + \\text{Expected Claims} \\times \\left(1 - \\frac{1}{\\text{CDF}}\\right)$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r7",
@@ -6054,7 +6526,15 @@
        "page": "Cape Cod Method",
        "quote": "The ELR is estimated as total reported losses over total *used-up* (on-level, developed) premium across all years."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "$$\\text{Expected Claim Ratio} = \\frac{\\sum \\text{Reported Claims}}{\\sum \\text{Used-Up Premium}}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -6067,7 +6547,15 @@
        "page": "Cape Cod Method",
        "quote": "$$\\text{IBNR}_i = \\text{ELR} \\times \\text{EP}_i \\times \\left(1 - \\tfrac{1}{\\text{CDF}_i}\\right)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "$$\\text{Ultimate Claims} = \\text{Reported Claims} + \\text{Expected Claim Ratio} \\times \\text{Earned Premium} \\times \\left(1 - \\frac{1}{\\text{CDF}}\\right)$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -6080,7 +6568,15 @@
        "page": "Chain Ladder Method",
        "quote": "$$U_{\\text{AY}} = C_{\\text{AY},\\,n} \\times \\text{CDF}_{n \\to \\text{ult}}$$ … $$\\text{IBNR} = U_{\\text{AY}} - C_{\\text{AY},\\,n}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Chain Ladder Method",
+      "quote": "The [[Unpaid Claims|unpaid claims]] are the ultimate claims minus the paid claims, which is the case outstanding plus the IBNR.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -6220,7 +6716,15 @@
        "page": "Generalized Cape Cod Method",
        "quote": "$P_i / \\text{CDF}_i$ is the **used-up premium**, the share of the premium that the claims reported so far correspond to."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "In Clark's growth-curve model, the Cape Cod method uses the expected percent of ultimate reported by age $x$, $G(x)$, in place of $1/\\text{CDF}$.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -6237,7 +6741,15 @@
        "page": "Generalized Cape Cod Method",
        "quote": "$$\\text{ELR}_j = \\frac{\\sum_i D^{|i-j|}\\, C_i\\, T_{i \\to j}}{\\sum_i D^{|i-j|}\\, P_i / \\text{CDF}_i}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "$$\\text{Expected Claim Ratio} = \\frac{\\sum \\text{Reported Claims}}{\\sum \\text{Used-Up Premium}}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r6",
@@ -6365,7 +6877,15 @@
        "page": "Claims Processing Changes",
        "quote": "Processing changes hit the **diagonal**: they affect every open accident year in the calendar period when the change happens, which is what distinguishes them from a change in one cohort's experience."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Development Triangle",
+      "quote": "A change in [[Case Adequacy|case adequacy]], in [[Settlement Rate|settlement speed]] or in [[Inflation|inflation]] shows on the diagonals and reaches every accident year at once.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -6812,7 +7332,15 @@
        "page": "Cape Cod Method",
        "quote": "$$\\text{IBNR}_i = \\text{ELR} \\times \\text{EP}_i \\times \\left(1 - \\tfrac{1}{\\text{CDF}_i}\\right)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Bornhuetter-Ferguson Method",
+      "quote": "$$\\text{Ultimate Claims} = \\text{Reported Claims} + \\text{Expected Claims} \\times \\left(1 - \\frac{1}{\\text{CDF}}\\right)$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -6829,7 +7357,15 @@
        "page": "Chain Ladder Method",
        "quote": "$$U_{\\text{AY}} = C_{\\text{AY},\\,n} \\times \\text{CDF}_{n \\to \\text{ult}}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Benktander Method",
+      "quote": "The development ultimate is $600{,}000 \\times 2.000 = \\$1{,}200{,}000$.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -6842,7 +7378,15 @@
        "page": "Benktander Method",
        "quote": "$$U_{\\text{GB}} = p(2 - p)\\,U_{\\text{CL}} + \\left[1 - p(2-p)\\right] U_{0}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Benktander Method",
+      "quote": "$m = 1$ is the Bornhuetter-Ferguson method and $m = 2$ the Benktander method, whose weight on the development ultimate is $1 - q^2$, or $p(2 - p)$ with $p = 1 - q$ the percent reported.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r6",
@@ -7076,7 +7620,15 @@
        "page": "Data Issues",
        "quote": "*exposure changes* (model losses per exposure)"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Data Issues",
+      "quote": "When exposures change materially across accident years, the losses are divided by the earned exposures, the model is fitted to pure premiums, and the results are multiplied back by each year's exposures.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -7121,7 +7673,15 @@
        "page": "Data Issues",
        "quote": "*missing values* (estimate from surrounding cells, or exclude from the factors and residuals)"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Data Issues",
+      "quote": "An irregular triangle with missing early ages for the older years is handled the same way.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -7134,7 +7694,15 @@
        "page": "Data Issues",
        "quote": "*outliers* (exclude with care — skewed residuals are expected)"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Data Issues",
+      "quote": "It is excluded from the development factor and residual calculations, while its cell is still resampled when simulated triangles are generated.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -7363,7 +7931,15 @@
        "page": "IBNR",
        "quote": "- **Pure IBNR** (narrow IBNR) covers claims that have occurred but are unknown to the insurer. It is a function of the **reporting pattern** and is largest at immature ages and in [[Long Tail Lines|long-tail lines]]."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "IBNR",
+      "quote": "$\\text{IBNYR}$, incurred but not yet reported, is **pure IBNR**, the narrow definition: claims that have occurred and are not yet reported to the insurer.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -7425,7 +8001,15 @@
        "page": "Generalized Cape Cod Method",
        "quote": "$P_i / \\text{CDF}_i$ is the **used-up premium**, the share of the premium that the claims reported so far correspond to."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "$\\text{Used-Up Premium}$ is each year's earned premium times its percent reported, $\\text{Earned Premium}/\\text{CDF}$.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -7438,7 +8022,15 @@
        "page": "Cape Cod Method",
        "quote": "The ELR is estimated as total reported losses over total *used-up* (on-level, developed) premium across all years."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "$$\\text{Expected Claim Ratio} = \\frac{\\sum \\text{Reported Claims}}{\\sum \\text{Used-Up Premium}}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -7459,7 +8051,15 @@
        "page": "Generalized Cape Cod Method",
        "quote": "$$\\text{IBNR}_j = \\text{ELR}_j \\times P_j \\times \\left(1 - \\frac{1}{\\text{CDF}_j}\\right)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "$1 - 1/\\text{CDF}$ is the year's percent unreported, and the last term is its [[IBNR]].",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -7476,7 +8076,15 @@
        "page": "Generalized Cape Cod Method",
        "quote": "Premium must be [[On-Leveling|on level]], claims must be [[Loss Trend|trended]] and adjusted for changes such as tort reform, and the development factors must be sound."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "**It depends on the CDFs twice.**",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -7590,7 +8198,15 @@
        "page": "Chain Ladder Method",
        "quote": "**Chain Ladder Method** (development or link-ratio method) projects each cohort to ultimate by multiplying its latest cumulative amount by a [[Cumulative Development Factor|cumulative development factor]] derived from the historical pattern."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Chain Ladder Method",
+      "quote": "The same method develops claim counts, ALAE or any other cumulative amount with a triangle of its own.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -7662,7 +8278,15 @@
        "page": "Retrospective Rating",
        "quote": "Converted losses $(L \\times \\text{LCF})$ are the insured's reported losses $L$, limited by any per-accident limit, multiplied by the **loss conversion factor**, which loads them for the ALAE not already in the losses plus ULAE."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Retrospective Rating",
+      "quote": "$\\text{LCF}$ is the **loss conversion factor**, which loads them for the ALAE not already in the losses plus ULAE.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r6",
@@ -7947,7 +8571,15 @@
        "page": "Generalized Cape Cod Method",
        "quote": "$P_i / \\text{CDF}_i$ is the **used-up premium**, the share of the premium that the claims reported so far correspond to."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "In Clark's growth-curve model, the Cape Cod method uses the expected percent of ultimate reported by age $x$, $G(x)$, in place of $1/\\text{CDF}$.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -7964,7 +8596,15 @@
        "page": "Generalized Cape Cod Method",
        "quote": "Each year's developed loss ratio $C_i\\,\\text{CDF}_i / P_i$ enters with weight $D^{|i-j|}\\,P_i/\\text{CDF}_i$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Accident Year",
+      "quote": "$$\\text{AY Loss Ratio} = \\frac{\\text{AY Losses}}{\\text{CY Earned Premium}}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -8040,7 +8680,15 @@
        "page": "Cape Cod Method",
        "quote": "$$\\text{ELR} = \\frac{\\sum_i C_i}{\\sum_i \\text{EP}_i \\times \\tfrac{1}{\\text{CDF}_i}}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "In Clark's growth-curve model, the Cape Cod method uses the expected percent of ultimate reported by age $x$, $G(x)$, in place of $1/\\text{CDF}$.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -8112,7 +8760,15 @@
        "page": "Generalized Cape Cod Method",
        "quote": "Benktander credibility-weights the development and BF ultimates for the same year, giving the development method weight equal to the year's percent reported."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Benktander Method",
+      "quote": "$$\\text{Ultimate Claims} = Z \\times \\text{Development Ultimate} + (1 - Z) \\times \\text{BF Ultimate}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r7",
@@ -8230,7 +8886,15 @@
        "page": "Age to Age Factor",
        "quote": "**Age-to-Age Factor** (link ratio) is the ratio of a cohort's cumulative amount at one maturity to its amount at the previous maturity"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Age to Age Factor",
+      "quote": "$$f_{n \\to n+1}^{\\text{AY}} = \\frac{C_{\\text{AY},\\,n+1}}{C_{\\text{AY},\\,n}}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -9206,10 +9870,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Case Adequacy",
-      "quote": "Strengthening raises reported losses immediately. Applying historical factors — built under weaker reserving — to a strengthened diagonal over-states ultimate, because the strengthening is developed a second time.",
-      "note": "Re-quoted after Exam 5's fact check (run 2026-10-31T13-31Z-75be) cut 'so recent age-to-age factors fall' as contrary to Friedland Ch. 7 p. 102: a strengthening books more of the ultimate at once, so the historical (weaker-reserving) development overstates what is left to emerge.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-final"
+      "quote": "Increased claims staffing lets adjusters set adequate case reserves sooner.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -9244,7 +9908,15 @@
        "page": "Case Adequacy",
        "quote": "Applying historical factors — built under weaker reserving — to a strengthened diagonal **over-states** ultimate, because the strengthening is developed a second time."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Chain Ladder Method",
+      "quote": "$$\\text{IBNR} = \\text{Reported Claims} \\times (\\text{CDF} - 1)$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -9316,7 +9988,15 @@
        "page": "Age to Age Factor",
        "quote": "**Medial average** (drop high and low) — robust to a single distorted year."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Large Loss",
+      "quote": "Remove an anomalous large claim from the triangle used for the age-to-age factors, so that it does not distort the selected factors.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -9341,7 +10021,15 @@
        "page": "Generalized Cape Cod Method",
        "quote": "$P_i / \\text{CDF}_i$ is the **used-up premium**, the share of the premium that the claims reported so far correspond to."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "$\\text{Used-Up Premium}$ is each year's earned premium times its percent reported, $\\text{Earned Premium}/\\text{CDF}$.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -9354,7 +10042,15 @@
        "page": "Cape Cod Method",
        "quote": "$$\\text{ELR} = \\frac{\\sum_i C_i}{\\sum_i \\text{EP}_i \\times \\tfrac{1}{\\text{CDF}_i}}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "$$\\text{Expected Claim Ratio} = \\frac{\\sum \\text{Reported Claims}}{\\sum \\text{Used-Up Premium}}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -9371,7 +10067,15 @@
        "page": "Generalized Cape Cod Method",
        "quote": "$$\\text{IBNR}_j = \\text{ELR}_j \\times P_j \\times \\left(1 - \\frac{1}{\\text{CDF}_j}\\right)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "$1 - 1/\\text{CDF}$ is the year's percent unreported, and the last term is its [[IBNR]].",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -9388,7 +10092,15 @@
        "page": "Chain Ladder Method",
        "quote": "$$U_{\\text{AY}} = C_{\\text{AY},\\,n} \\times \\text{CDF}_{n \\to \\text{ult}}$$ … $$\\text{IBNR} = U_{\\text{AY}} - C_{\\text{AY},\\,n}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Reasonableness Testing",
+      "quote": "The [[Chain Ladder Method|chain ladder]] IBNR is the reported claims times $(1 - p_t)/p_t$.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -9405,7 +10117,15 @@
        "page": "Bornhuetter-Ferguson Method",
        "quote": "BF is a **credibility weighting** in disguise: it equals $Z \\, U_{\\text{CL}} + (1-Z)\\,U_0$ with $Z = 1/\\text{CDF}$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Credibility",
+      "quote": "In the same way, chain ladder and Stanard-Bühlmann IBNR can be blended with $Z$ equal to a selected credibility factor times the percent reported at the starting evaluation, $Z$ on the chain ladder and $1 - Z$ on Stanard-Bühlmann.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r6",
@@ -9422,7 +10142,15 @@
        "page": "Actual vs Expected Analysis",
        "quote": "$$\\text{Expected emergence} = U_{\\text{prior}} \\times \\left(\\frac{1}{\\text{CDF}_{n+1}} - \\frac{1}{\\text{CDF}_{n}}\\right)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Reasonableness Testing",
+      "quote": "$$\\text{Expected Emergence} = (\\text{Ultimate} - \\text{Reported}) \\times \\frac{p_{t+1} - p_t}{1 - p_t}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r7",
@@ -9439,7 +10167,15 @@
        "page": "Actual vs Expected Analysis",
        "quote": "\\text{Actual emergence} &= \\$8{,}100{,}000 - \\$6{,}000{,}000"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Reasonableness Testing",
+      "quote": "The actual emergence is the change in reported claims between the two valuations.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r8",
@@ -9456,7 +10192,15 @@
        "page": "Actual vs Expected Analysis",
        "quote": "What is left is **case reserve strengthening during calendar $2024$**: reserves on already-known claims were raised across the board, with no corresponding change in payments."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Chain Ladder Method",
+      "quote": "A [[Case Adequacy|strengthening of case reserves]] raises the latest diagonal and the factors built after it, so the reported projection overstates ultimate claims.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -9909,7 +10653,15 @@
        "page": "Bornhuetter-Ferguson Method",
        "quote": "$$U_{\\text{BF}} = C + \\left(1 - \\tfrac{1}{\\text{CDF}}\\right) \\times U_{0}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Bornhuetter-Ferguson Method",
+      "quote": "$$\\text{Ultimate Claims} = \\text{Reported Claims} + \\text{Expected Claims} \\times \\left(1 - \\frac{1}{\\text{CDF}}\\right)$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -9922,7 +10674,15 @@
        "page": "Benktander Method",
        "quote": "$$U_{\\text{GB}} = C + \\left(1 - \\tfrac{1}{\\text{CDF}}\\right) U_{\\text{BF}}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Benktander Method",
+      "quote": "$$\\text{Ultimate Claims} = Z \\times \\text{Development Ultimate} + (1 - Z) \\times \\text{BF Ultimate}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -9935,7 +10695,15 @@
        "page": "Chain Ladder Method",
        "quote": "\\text{CDF}_{12} &= 1.500 \\times 1.265 = 1.898"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Chain Ladder Method",
+      "quote": "$\\text{CDF}_{n+1} = \\text{CDF}_n / f_{n \\to n+1}$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -9962,7 +10730,15 @@
        "page": "Benktander Method",
        "quote": "Whichever of $U_{\\text{CL}}$ and $U_{\\text{BF}}$ is larger, $U_{\\text{GB}}$ lies between them."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Benktander Method",
+      "quote": "It is above the Bornhuetter-Ferguson ultimate when the development ultimate is, which happens when claims have emerged faster than expected.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r6",
@@ -9975,7 +10751,15 @@
        "page": "Bornhuetter-Ferguson Method",
        "quote": "BF does not respond to bad news. If emergence runs far ahead of the a priori, BF holds most of its estimate anchored — which is exactly right when the emergence is noise and exactly wrong when it is signal."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Bornhuetter-Ferguson Method",
+      "quote": "When claim ratios rise, the expected unreported claims stay where they were unless the expected claim ratio is changed, so the IBNR is too low.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -10000,7 +10784,15 @@
        "page": "Generalized Cape Cod Method",
        "quote": "$$\\text{IBNR}_j = \\text{ELR}_j \\times P_j \\times \\left(1 - \\frac{1}{\\text{CDF}_j}\\right)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "In Clark's growth-curve model, the Cape Cod method uses the expected percent of ultimate reported by age $x$, $G(x)$, in place of $1/\\text{CDF}$.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -10030,7 +10822,15 @@
        "page": "Generalized Cape Cod Method",
        "quote": "$P_i / \\text{CDF}_i$ is the **used-up premium**, the share of the premium that the claims reported so far correspond to."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "In Clark's growth-curve model, the Cape Cod method uses the expected percent of ultimate reported by age $x$, $G(x)$, in place of $1/\\text{CDF}$.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -10365,7 +11165,15 @@
        "page": "Development Triangle",
        "quote": "Assumptions being made implicitly by using one at all: each cohort develops in a similar pattern, the pattern is stable over time, and the mix inside each cohort is comparable."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Development Triangle",
+      "quote": "Projecting from a triangle assumes that each cohort develops in a similar pattern, that the pattern is stable over time and that the mix inside each cohort is comparable.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -10378,7 +11186,15 @@
        "page": "Age to Age Factor",
        "quote": "Look at the column **before** averaging it. A steady column supports a volume-weighted all-year selection; a column trending over time is a signal, not noise, and calls for the latest years or an investigation."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Age to Age Factor",
+      "quote": "A trend or shift in the recent factors of a column is a signal, not noise, and an all-year average blends two regimes and fits neither.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -10412,7 +11228,15 @@
        "page": "Settlement Rate",
        "quote": "The remedy is the [[Berquist-Sherman Method|Berquist-Sherman]] paid adjustment: restate each historical year's paid losses to what they would have been at the *current* disposal pattern, by interpolating along each year's paid-versus-disposal-rate relationship, then select factors from the restated triangle."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Age to Age Factor",
+      "quote": "A trend or shift in the recent factors of a column is a signal, not noise, and an all-year average blends two regimes and fits neither.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -10454,7 +11278,15 @@
        "page": "Settlement Rate",
        "quote": "$$\\text{Disposal Rate}_n = \\frac{\\text{Closed claims at age } n}{\\text{Ultimate claim counts}}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Settlement Rate",
+      "quote": "The settlement rate is also a test of the stability of development factors, as the percentage of claims closed by age.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -10582,7 +11414,15 @@
        "page": "Bayesian Credibility",
        "quote": "the posterior mean is a linear credibility formula of the form $Z\\bar{X} + (1-Z)\\mu_0$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Credibility",
+      "quote": "$$\\text{Estimate} = Z \\times \\text{Observed Experience} + (1 - Z) \\times \\text{Complement}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r9",
@@ -10612,7 +11452,15 @@
        "page": "Salvage and Subrogation",
        "quote": "\\text{Net Ultimate} = \\text{Gross Ultimate} - \\text{S\\&S Ultimate}"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Salvage and Subrogation",
+      "quote": "Unpaid claims net of S&S are the gross unpaid claims minus the recoverable.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r11",
@@ -10775,7 +11623,15 @@
        "page": "Cape Cod Method",
        "quote": "$$\\text{IBNR}_i = \\text{ELR} \\times \\text{EP}_i \\times \\left(1 - \\tfrac{1}{\\text{CDF}_i}\\right)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Bornhuetter-Ferguson Method",
+      "quote": "The expected unreported claims are the [[IBNR]].",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -11001,7 +11857,15 @@
        "page": "Chain Ladder Method",
        "quote": "projects each cohort to ultimate by multiplying its latest cumulative amount by a [[Cumulative Development Factor|cumulative development factor]] derived from the historical pattern."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Chain Ladder Method",
+      "quote": "$$\\text{CDF}_n = f_{n \\to n+1} \\times f_{n+1 \\to n+2} \\times \\cdots \\times \\text{Tail}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -11022,7 +11886,15 @@
        "page": "Cape Cod Method",
        "quote": "The ELR is estimated as total reported losses over total *used-up* (on-level, developed) premium across all years."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "$$\\text{Expected Claim Ratio} = \\frac{\\sum \\text{Reported Claims}}{\\sum \\text{Used-Up Premium}}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -11039,7 +11911,15 @@
        "page": "Generalized Cape Cod Method",
        "quote": "$P_i / \\text{CDF}_i$ is the **used-up premium**, the share of the premium that the claims reported so far correspond to."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "$\\text{Used-Up Premium}$ is each year's earned premium times its percent reported, $\\text{Earned Premium}/\\text{CDF}$.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -11056,7 +11936,15 @@
        "page": "Bornhuetter-Ferguson Method",
        "quote": "$$\\text{IBNR} = \\left(1 - \\tfrac{1}{\\text{CDF}}\\right) \\times \\text{ELR} \\times \\text{EP}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "$$\\text{Ultimate Claims} = \\text{Reported Claims} + \\text{Expected Claim Ratio} \\times \\text{Earned Premium} \\times \\left(1 - \\frac{1}{\\text{CDF}}\\right)$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -11073,7 +11961,15 @@
        "page": "Cumulative Development Factor",
        "quote": "The reciprocal is the **percentage reported** (or paid): $p_n = 1/\\text{CDF}_n$, and $1 - p_n$ is the percentage unreported."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cumulative Development Factor",
+      "quote": "$$\\text{Reported \\%} = \\frac{1}{\\text{CDF}_{n \\to \\text{ult}}}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -11110,7 +12006,15 @@
        "page": "Expected Loss Method",
        "quote": "Its vice is the same thing — it ignores real information once real information exists."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Chain Ladder Method",
+      "quote": "For immature years of long-tail lines, or thin and volatile data, the [[Bornhuetter-Ferguson Method|Bornhuetter-Ferguson]] or [[Expected Loss Method|expected claims]] technique is preferred.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -11842,7 +12746,15 @@
        "page": "Cape Cod Method",
        "quote": "The ELR is estimated as total reported losses over total *used-up* (on-level, developed) premium across all years."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "In Clark's growth-curve model, the Cape Cod method uses the expected percent of ultimate reported by age $x$, $G(x)$, in place of $1/\\text{CDF}$.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -11889,7 +12801,15 @@
        "page": "Generalized Cape Cod Method",
        "quote": "\\hat U_j = C_j + \\text{IBNR}_j"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "In Clark's growth-curve model, the Cape Cod method uses the expected percent of ultimate reported by age $x$, $G(x)$, in place of $1/\\text{CDF}$.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -11970,10 +12890,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Case Adequacy",
-      "quote": "Strengthening raises reported losses immediately. Applying historical factors — built under weaker reserving — to a strengthened diagonal over-states ultimate, because the strengthening is developed a second time.",
-      "note": "Re-quoted after Exam 5's fact check (run 2026-10-31T13-31Z-75be) cut 'so recent age-to-age factors fall' as contrary to Friedland Ch. 7 p. 102: a strengthening books more of the ultimate at once, so the historical (weaker-reserving) development overstates what is left to emerge.",
-      "date": "2026-10-31",
-      "run": "g8-cas5-final"
+      "quote": "A strengthening raises case incurred losses in the calendar year of the change, giving positive residuals, and lowers later case incurred development once it stops, giving negative residuals afterward.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -11991,7 +12911,15 @@
        "page": "Claims Processing Changes",
        "quote": "A moving **disposal rate** is a [[Settlement Rate|settlement speed]] change and distorts **paid** development; a jump in **average case outstanding** is a [[Case Adequacy|case adequacy]] change and distorts **reported** development."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Settlement Rate",
+      "quote": "A change in settlement speed moves amounts between case outstanding and payments, so with adequate, unchanged case reserves the reported claims stay the same.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },

@@ -6933,7 +6933,15 @@
        "page": "Credibility",
        "quote": "Credibility rises when risks genuinely differ from one another (large VHM) and falls when individua"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Credibility",
+      "quote": "A higher VHM lowers $K$ and raises credibility, and a higher EVPV raises $K$ and lowers it.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -9548,7 +9556,15 @@
        "page": "Credibility",
        "quote": "$$\\text{Estimate} = Z \\times \\text{Experience} + (1 - Z) \\times \\text{Complement}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Credibility",
+      "quote": "$$\\text{Estimate} = Z \\times \\text{Observed Experience} + (1 - Z) \\times \\text{Complement}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -9613,7 +9629,15 @@
        "page": "Credibility",
        "quote": "Partial credibility uses the **square root rule**, $Z = \\sqrt{n / n_{\\text{full}}}$, capped at $1$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Credibility",
+      "quote": "$$Z = \\min\\left(\\sqrt{\\frac{n}{n_{\\text{full}}}},\\, 1\\right)$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r7",

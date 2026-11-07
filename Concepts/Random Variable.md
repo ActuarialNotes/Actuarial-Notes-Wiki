@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:4cb0ca4d6d5d4151f23e03c0ee4099a3e378a97c5da756c8aedc8a8329b61de9
+  content_hash: sha256:27c0853e984964a1ea1fcdec77fa2173df222ea52e1b25ada8bc5e64a3aff9dc
   sources:
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com, fetched 2026-11-06), §3.1.1 Random Variables: X: S -> R; range, sha256:b32e2b938c896a7fd05d6e213fb7a8442da6c352279ab627e62ef6d093e8a46b — https://www.probabilitycourse.com/chapter3/3_1_1_random_variables.php"
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL version), Def. 1.1 p.18 (PDF p.26): discrete = finite or countably infinite sample space, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
@@ -25,139 +25,61 @@ verification:
   log: .verify/Concepts/Random Variable.md
 ---
 
-A **Random Variable** $X$ is a function that assigns a real number to each outcome in a [[Sample Space]] $S$, so that the outcomes of a random experiment can be analysed as numbers.
+![[Media/Figures/Random_Variable.svg|340]]
+
+A **Random Variable** is a function that assigns a real number to each outcome in a [[Sample Space|sample space]]. A random variable $X$ on the sample space $S$ is written
 
 > $$X : S \to \mathbb{R}$$
 
-- $X$ is **discrete** if its possible values form a finite or countably infinite set. See [[Discrete Random Variable]].
-- $X$ is **continuous** if its probabilities come from a density, $P(a \le X \le b) = \int_a^b f(x)\,dx$. Its CDF then has no jumps, and every single value has probability 0. See [[Continuous Random Variable]].
-- The two classes do not cover every case. A payment under a [[Deductible]], $Y = (X - d)_+$ with $X$ continuous, takes a continuum of values yet puts probability $P(X \le d) > 0$ on the single value 0: it is a **mixed** random variable, neither discrete nor continuous (see [[Payment Random Variable]]).
-- A random variable is fully characterized by its probability distribution, which describes how probability is spread across its possible values.
+- $\mathbb{R}$ is the set of real numbers.
 
-> [!idea] The idea
-> You can't average "heads" and "tails", but you can average numbers. A random variable assigns a number to each outcome, such as the number of claims or the size of a payment, so that probabilities, means and variances can be calculated.
+> [!example]- Two fair coins are flipped and $X$ is the number of heads. What values can $X$ take, and with what probabilities? {Example}
+> - The sample space is $S = \{TT, TH, HT, HH\}$, and each outcome has probability $\frac{1}{4}$.
+> - $X(TT) = 0$, $X(TH) = X(HT) = 1$ and $X(HH) = 2$.
+> - Two outcomes give the value 1, so $P(X = 0) = \frac{1}{4}$, $P(X = 1) = \frac{1}{2}$ and $P(X = 2) = \frac{1}{4}$.
 
-![[Media/Figures/Random_Variable.svg|340]]
+## Types of random variables
 
-## One loss, several random variables
+- A **[[Discrete Random Variable|discrete random variable]]** takes a finite or countably infinite set of values, each with its own probability, like a number of claims.
+- A **[[Continuous Random Variable|continuous random variable]]** has a density, so every single value has probability 0, like the size of a loss.
+- A **mixed random variable** has a continuous part and at least one single value with positive probability, like a payment under a [[Deductible|deductible]] or a [[Benefit Limit|limit]].
 
-A policy covers one loss $X$, uniform on $(0, 1000)$. The policy has a deductible of 200 and pays at most 500. The outcome is the loss that happens. Each random variable below reads a different number off that same outcome.
+## Mixed random variables
 
-| Loss $X$ | Over deductible $(X - 200)_+$ | Paid $Y$ |
-|---|---|---|
-| 150 | 0 | 0 |
-| 450 | 250 | 250 |
-| 900 | 700 | 500 |
-
-- The paid amount is the excess over the deductible, capped at the limit: $Y = \min\big((X - 200)_+,\ 500\big)$.
-- One sample space carries many random variables. The ground-up loss and the insurer's payment are defined on the same outcomes, but they have different distributions.
-
-## Discrete, continuous or mixed?
-
-A random variable is classified by how its probability is spread, not by the values it can take.
-
-- The number of claims in a year is **discrete**. Its values are 0, 1, 2, and each carries its own probability.
-- The loss $X$ is **continuous**. Any single loss amount, such as exactly 450, has probability 0.
-- The payment $Y$ is **mixed**. It takes every value between 0 and 500, yet two single values carry probability. $Y = 0$ whenever $X \le 200$, with probability 0.2. $Y = 500$ whenever $X \ge 700$, with probability 0.3.
-
-> [!trap] Filling an interval is not enough
-> "Its values fill an interval, so it is continuous" is wrong for a payment. $Y$ fills $[0, 500]$ yet has masses at both ends. Check the CDF for jumps instead of looking at the range of values.
-
-## Reading point masses off the CDF
-
-The CDF $F(x) = P(X \le x)$ shows a point mass as a jump. The CDF jumps at $x$ when $F(x)$ is greater than its left-hand limit $F(x^-) = P(X < x)$. The single value $x$ then has probability equal to the size of the jump.
+A single value $x$ with positive probability is a **point mass**. It shows as a jump in the [[Cumulative Distribution Function (CDF)|CDF]] $F(x) = P(X \le x)$, and its probability is the size of the jump:
 
 > $$P(X = x) = F(x) - F(x^-)$$
 
-For the payment $Y$:
+- $F(x^-) = P(X < x)$ is the limit of $F$ from the left at $x$.
 
-| $y$ | $F_Y(y^-)$ | $F_Y(y)$ | Mass at $y$ |
-|---|---|---|---|
-| 0 | 0 | 0.2 | 0.2 |
-| 250 | 0.45 | 0.45 | 0 |
-| 500 | 0.7 | 1 | 0.3 |
+> [!example]- A payment $Y$ has CDF $F(y) = 0$ for $y < 0$, $F(y) = 0.4 + 0.001y$ for $0 \le y < 400$, and $F(y) = 1$ for $y \ge 400$. What are its point masses? {Example}
+> - At 0, $F$ jumps from 0 to 0.4, so $P(Y = 0) = 0.4$.
+> - Just below 400, $F$ reaches $0.4 + 0.001(400) = 0.8$, and at 400 it is 1, so $P(Y = 400) = 0.2$.
+> - Between the jumps $F$ rises at the rate $0.001$, which is the density of the continuous part.
 
-- Between the jumps, $F_Y$ rises smoothly at the rate $\frac{1}{1000}$. That smooth part is the density of $Y$.
-- At a jump, $P(Y \le 500) = 1$ but $P(Y < 500) = 0.7$. The two differ by exactly the mass.
+## Expected value of a mixed random variable
 
-## The mean of a mixed random variable
-
-A mixed random variable needs both tools at once. Each point mass is weighted like a discrete value, and the continuous part is integrated like a density.
+The [[Expected Value|expected value]] of a function $g$ of a mixed random variable $X$ adds the point masses to the integral over the continuous part:
 
 > $$E[g(X)] = \sum_i g(x_i)\,P(X = x_i) + \int g(x)\,f(x)\,dx$$
 
-- Here the density $f$ integrates to $1 - \sum_i P(X = x_i)$, not to 1. For $Y$ it integrates to $1 - 0.2 - 0.3 = 0.5$.
-- With $g(x) = x$ the formula gives the mean, and with $g(x) = x^2$ it gives the second moment, which the variance needs.
+- $x_i$ are the point masses.
+- $f(x)$ is the density of the continuous part. It integrates to $1 - \sum_i P(X = x_i)$, not to 1.
 
-For the payment $Y$, the mass at 0 adds nothing, the mass at 500 adds $500 \times 0.3 = 150$, and the continuous part adds the integral.
-
+> [!example]- A loss $X$ is exponential with mean 1,000, and the policy pays $Y = \min(X, 1{,}500)$. What is the expected payment? {Example}
+> - Every loss above 1,500 pays exactly 1,500, so $Y$ has a point mass at 1,500.
+> - Its probability is $P(X > 1{,}500)$, which is $e^{-1.5} = 0.2231$.
+> - Below 1,500, $Y$ follows the density of $X$, $f(x) = \frac{e^{-x/1000}}{1000}$.
+> - The expected payment adds the point mass to the integral:
+>
 > $$
-> \begin{align*}
-> E[Y] &= 500(0.3) + \int_{200}^{700} \frac{x - 200}{1000}\,dx \\
->      &= 150 + 125 \\
->      &= 275
-> \end{align*}
+> \begin{aligned}
+> E[Y] &= \int_0^{1500} x\,f(x)\,dx \\
+> &\quad + 1{,}500\,e^{-1.5} \\
+> &= 1{,}000\left(1 - e^{-1.5}\right) \\
+> &= 776.87
+> \end{aligned}
 > $$
 
-The mass at the limit carries more of the mean than the whole continuous part does.
-
-## On other exams
-
-- **MAS-I** gives a CDF in pieces with jumps. The point masses are read off the jumps, and $E[Y]$ adds the masses to the integral over the continuous part, as above.
-- **FAM** and **ALTAM** treat a present value as a random variable on the future lifetime. The present value of an insurance $Z$, of an annuity $Y$, or a policy's loss is often defined piecewise, and the question asks for its expected value or another moment.
-
-## Try it
-
-> [!example]- Defining a Random Variable for Coin Flips {Example}
-> Two fair coins are flipped. Define a random variable $X$ as the number of heads. List the values $X$ can take and their probabilities.
->
-> > [!answer]-
-> > **Plan:** list the outcomes, map each to its number of heads, then add the probabilities of outcomes that share a value.
-> >
-> > The sample space is $S = \{HH, HT, TH, TT\}$, and each outcome has probability $1/4$. The random variable $X$ maps the outcomes to numbers:
-> > $$X(TT) = 0,\quad X(HT) = X(TH) = 1,\quad X(HH) = 2$$
-> > So the distribution is $P(X=0)=\tfrac{1}{4}$, $P(X=1)=\tfrac{1}{2}$, $P(X=2)=\tfrac{1}{4}$.
-> >
-> > Why is $P(X = 1)$ twice the others? Two outcomes map to the value 1.
-
-> [!example]- A policy limit {Example}
-> A loss $X$ is exponential with mean 1,000. The policy pays $Y = \min(X, 1500)$. Classify $Y$, and find $P(Y = 1500)$ and $E[Y]$.
->
-> > [!answer]-
-> > **Plan:** look for a value that a whole range of losses maps to, then add its mass to the integral.
-> >
-> > Every loss above 1,500 pays exactly 1,500, so $Y$ has a mass there. Below 1,500 it follows the loss's density. $Y$ is mixed.
-> > $$P(Y = 1500) = P(X > 1500) = e^{-1.5} \approx 0.2231$$
-> > $$
-> > \begin{align*}
-> > E[Y] &= \int_0^{1500} x\,\frac{e^{-x/1000}}{1000}\,dx + 1500\,e^{-1.5} \\
-> >      &= 1000\left(1 - e^{-1.5}\right) \\
-> >      &\approx 776.87
-> > \end{align*}
-> > $$
-> > The mean of the capped payment is below the mean loss of 1,000, because every loss above the limit is cut back to it.
-
-> [!example]- A CDF with jumps {Example}
-> A payment $Y$ has CDF $F(y) = 0$ for $y < 0$, $F(y) = 0.4 + 0.001y$ for $0 \le y < 400$, and $F(y) = 1$ for $y \ge 400$. Find the point masses, $P(Y < 400)$ and $E[Y]$.
->
-> > [!answer]-
-> > **Plan:** read each jump as a mass, then integrate the density between the jumps.
-> >
-> > - At 0, $F$ jumps from 0 to 0.4, so $P(Y = 0) = 0.4$.
-> > - At 400, $F$ jumps from $0.4 + 0.4 = 0.8$ to 1, so $P(Y = 400) = 0.2$.
-> > - $P(Y < 400) = F(400^-) = 0.8$.
-> >
-> > The density between the jumps is $0.001$, which integrates to $0.4$. The masses and the density together account for $0.4 + 0.2 + 0.4 = 1$.
-> > $$
-> > \begin{align*}
-> > E[Y] &= 400(0.2) + \int_0^{400} 0.001\,y\,dy \\
-> >      &= 80 + 80 \\
-> >      &= 160
-> > \end{align*}
-> > $$
-
-> [!warning]- Exam traps
-> - **Dropping a point mass.** Integrating $y\,f(y)$ over the continuous part of a mixed variable and stopping there misses the point masses. On a payment capped at a limit, the mass at the limit can carry more of the mean than the integral does. Add $\sum_i g(x_i)\,P(X = x_i)$.
-> - **$\le$ versus $<$ at a jump.** At a point mass, $P(X \le x) = F(x)$ but $P(X < x) = F(x^-)$. The two differ by the size of the jump. Using $F(x^-)$ for an event that includes $x$ gives an answer short by exactly the mass.
-> - **Classifying by the range.** A payment $(X - d)_+$ takes every value from 0 up yet has a mass at 0. It is mixed, not continuous.
-> - **A density is not a probability.** A density value can exceed 1, as a uniform on $(0, 0.5)$ has density 2. Only the integral of a density over an interval is a probability.
+> [!trap] Calling a payment continuous
+> A payment $Y = \max(X - 200, 0)$ on a continuous loss takes every value from 0 up, yet $P(Y = 0) = P(X \le 200) > 0$. It is mixed. Integrating only the density misses the point mass, so check the CDF for jumps first.

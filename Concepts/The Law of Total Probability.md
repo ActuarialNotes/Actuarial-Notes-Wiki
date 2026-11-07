@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:e173cf2c3326bbb7a342c4eb61a1a797390530129807705fd4ef2d6b40880e89
+  content_hash: sha256:6f8ab971b3ff6faeb2c8c3b66a28f59bcffac57f6b173fe8d7316b9d2af66394
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 Thm 1.1 property 4, Thm 1.2 (pairwise disjoint), Thm 1.3 (P(E)=Σ P(E∩A_i) over a partition), Thm 1.4 with proof 'added twice … subtracted once' (pp.22-24, PDF pp.30-32), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §4.1 Bayes' Formula: hypotheses partition Ω, prior, evidence, P(E|H_i), posterior; eqs (4.1)-(4.3) P(E)=Σ P(H_k)P(E|H_k) (pp.145-146, PDF pp.153-154), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
@@ -17,116 +17,65 @@ verification:
   log: .verify/Concepts/The Law of Total Probability.md
 ---
 
-**The Law of Total Probability** finds the probability of an [[Event|event]] $B$ by splitting the sample space into scenarios $A_1, \ldots, A_n$ that form a partition. $P(B)$ is the weighted average of the [[Conditional Probability|conditional probabilities]] $P(B \mid A_i)$, each weighted by the probability of its scenario.
-
-> $$P(B) = \sum_{i=1}^{n} P(B \mid A_i)\,P(A_i)$$
-
-- The scenarios $A_1, \ldots, A_n$ must be [[Mutually Exclusive Events|mutually exclusive]] and exhaustive: no outcome in two of them, and every outcome in one.
-- Each term is a joint probability, $P(B \mid A_i)\,P(A_i) = P(B \cap A_i)$, by the [[Probability Multiplication Rule|multiplication rule]].
-- The weights $P(A_i)$ are nonnegative and add to 1, so $P(B)$ lies between the smallest and the largest $P(B \mid A_i)$.
-- The law supplies the denominator $P(E)$ in [[Bayes Theorem|Bayes' theorem]].
-
-> [!idea] The idea
-> When the probability of $B$ depends on which scenario holds, it is hard to find directly but easy to find within each scenario. The law finds it scenario by scenario and weights each answer by how likely that scenario is. The scenarios don't overlap and together cover everything, so the weighted pieces add up to $P(B)$ with nothing counted twice or missed.
-
 ![[Media/Figures/The_Law_of_Total_Probability.svg|340]]
 
-## One probability, three classes
+**The Law of Total Probability** is the rule that finds the probability of an [[Event|event]] $E$ by splitting the [[Sample Space|sample space]] into scenarios. If the events $F_1, F_2, \ldots, F_n$ partition the sample space, the probability of $E$ is
 
-A portfolio is 30% young drivers, 50% middle-aged and 20% senior. Their claim probabilities are 0.20, 0.10 and 0.15. What is the probability that a driver chosen at random has a claim?
+> $$P(E) = \sum_{i=1}^{n} P(E \mid F_i)\,P(F_i)$$
 
-| Class $A_i$ | $P(A_i)$ | $P(C \mid A_i)$ | $P(C \cap A_i)$ |
-|---|---|---|---|
-| Young | 0.30 | 0.20 | 0.060 |
-| Middle-aged | 0.50 | 0.10 | 0.050 |
-| Senior | 0.20 | 0.15 | 0.030 |
-| Total | 1 | | 0.140 |
+- $F_1, \ldots, F_n$ are [[Mutually Exclusive Events|mutually exclusive]] and exhaustive: every outcome is in exactly one of them.
+- Each term is the joint probability $P(E \cap F_i)$, by the [[Conditional Probability#The multiplication rule|multiplication rule]].
+- With two scenarios, $F$ and $F^c$, the law has two terms, $P(E \mid F)\,P(F)$ and $P(E \mid F^c)\,P(F^c)$.
 
-Each row is the share of the portfolio that is in that class and has a claim. The rows don't overlap, so they add to $P(C) = 0.14$.
+The law gives the denominator of [[Bayes Theorem|Bayes' theorem]].
 
-## Why the weights matter
-
-The plain average of the three claim probabilities is $(0.20 + 0.10 + 0.15)/3 = 0.15$. That treats every class as a third of the portfolio. The middle-aged class is half the portfolio and has the lowest rate, so the true answer, 0.14, is lower.
-
-> [!trap] An unweighted average
-> Averaging the $P(B \mid A_i)$ without the weights $P(A_i)$ is right only when the classes are equally likely. Every term needs its weight.
-
-## One step further: which class?
-
-A driver has a claim. What is the probability they are young? The answer is one row of the table over the total.
-
-> $$P(\text{young} \mid C) = \frac{0.060}{0.140} \approx 0.429$$
-
-That is [[Bayes Theorem|Bayes' theorem]]. The law of total probability is its denominator, so a Bayes question that stops at the total has stopped one step early.
+> [!example]- A portfolio is 30% young drivers, 50% middle-aged and 20% senior. Their claim probabilities are 0.20, 0.10 and 0.15. What is the probability that a driver chosen at random has a claim? {Example}
+>
+> | Class $F_i$ | $P(F_i)$ | $P(E \mid F_i)$ | $P(E \cap F_i)$ |
+> | --- | --- | --- | --- |
+> | Young | 0.30 | 0.20 | 0.060 |
+> | Middle-aged | 0.50 | 0.10 | 0.050 |
+> | Senior | 0.20 | 0.15 | 0.030 |
+>
+> - Each row is the share of the portfolio that is in that class and has a claim.
+> - The rows don't overlap, so they add to $P(E) = 0.14$.
 
 ## Conditioning on a random variable
 
-The scenarios can be the values of a [[Random Variable|random variable]]. The events $\{X = x\}$ partition the sample space. For a continuous $Y$ with density $f_Y$, the sum becomes an integral.
+The scenarios can be the values of a discrete [[Random Variable|random variable]] $X$, since the events $\{X = x\}$ partition the sample space:
 
-> $$P(A) = \sum_x P(A \mid X = x)\,P(X = x)$$
+> $$P(E) = \sum_x P(E \mid X = x)\,P(X = x)$$
 
-> $$P(A) = \int_{-\infty}^{\infty} P(A \mid Y = y)\,f_Y(y)\,dy$$
+> [!example]- Two independent claim counts $X$ and $Y$ are each 0, 1 or 2 with probabilities 0.5, 0.3 and 0.2. What is the probability that they are equal? {Example}
+> - Given $X = x$, the counts are equal when $Y = x$, which has probability $P(Y = x)$ by independence.
+> - $P(X = Y)$ is $0.5^2 + 0.3^2 + 0.2^2$, which is $0.38$.
 
-When $X$ and $Y$ are independent, conditioning on one leaves the other with its own distribution. Each term then becomes a product.
+For a continuous random variable $Y$ with density $f(y)$, the sum becomes an integral:
 
-> $$P(X + Y > s,\ X \in B) = \sum_{x \in B} P(X = x)\,P(Y > s - x)$$
+> $$P(E) = \int_{-\infty}^{\infty} P(E \mid Y = y)\,f(y)\,dy$$
 
-> $$P(X = Y) = \sum_x P(X = x)\,P(Y = x)$$
-
-> $$P(X > g(Y)) = \int_{-\infty}^{\infty} P(X > g(y))\,f_Y(y)\,dy$$
-
-Take two independent claim counts $X$ and $Y$, each 0, 1 or 2 with probabilities 0.5, 0.3 and 0.2.
-
-- They are equal with probability $0.5^2 + 0.3^2 + 0.2^2 = 0.38$. For identically distributed variables the sum is $\sum_x P(X = x)^2$.
-- $P(X + Y > 2,\ X \ge 1)$ partitions on $X = 1$ and $X = 2$: $0.3\,P(Y > 1) + 0.2\,P(Y > 0) = 0.06 + 0.10 = 0.16$.
-- For independent exponential $X$ and $Y$ with means 1 and 2, conditioning on $Y$ gives $P(X > Y) = \int_0^\infty e^{-y} \cdot \frac{1}{2} e^{-y/2}\,dy = \frac{1}{3}$.
-
-## Try it
-
-> [!example]- Accidents by territory {Example}
-> A portfolio is 40% urban, 35% suburban and 25% rural. The accident probabilities are 0.05, 0.08 and 0.12. Find the probability of an accident for a policyholder chosen at random.
+> [!example]- Given its risk parameter $\Lambda = \lambda$, a policy has no claims in a year with probability $e^{-\lambda}$. $\Lambda$ is uniform on $(0, 2)$. What is the probability of no claims? {Example}
+> - The density of $\Lambda$ is $\frac{1}{2}$ on $(0, 2)$.
+> - The probability of no claims is
 >
-> > [!answer]-
-> > **Plan:** weight each territory's probability by its share.
-> > $$
-> > \begin{align*}
-> > P(\text{accident}) &= 0.40(0.05) + 0.35(0.08) + 0.25(0.12) \\
-> > &= 0.020 + 0.028 + 0.030 \\
-> > &= 0.078
-> > \end{align*}
-> > $$
+> $$
+> \begin{aligned}
+> &\int_0^2 e^{-\lambda} \cdot \tfrac{1}{2}\,d\lambda \\
+> &= \frac{1 - e^{-2}}{2} \\
+> &= 0.432
+> \end{aligned}
+> $$
 
-> [!example]- Next year's claim, given last year's {Example}
-> 25% of drivers are risky and claim in a year with probability 0.4. The rest claim with probability 0.1. Claims in different years are independent given the class. A new applicant claimed last year. Find the probability they claim next year.
->
-> > [!answer]-
-> > **Plan:** update the class probabilities with Bayes' theorem, then apply the law of total probability with the updated weights.
-> >
-> > Last year's claim: $P(C_1) = 0.25(0.4) + 0.75(0.1) = 0.175$.
-> >
-> > Updated weights: $P(\text{risky} \mid C_1) = 0.100/0.175 \approx 0.571$, and $0.429$ for the rest.
-> > $$
-> > \begin{align*}
-> > P(C_2 \mid C_1) &= 0.571(0.4) + 0.429(0.1) \\
-> > &\approx 0.271
-> > \end{align*}
-> > $$
-> > Weighting by the original 25% and 75% would give 0.175 again. Last year's claim is evidence about the class, so the weights move.
+## Repeated trials of an unknown class
 
-> [!example]- A random claim rate {Example}
-> Given its risk parameter $\Lambda = \lambda$, a policy has no claims in a year with probability $e^{-\lambda}$. $\Lambda$ is uniform on $(0, 2)$. Find the probability of no claims.
->
-> > [!answer]-
-> > **Plan:** condition on $\Lambda$ and integrate against its density $\frac{1}{2}$.
-> > $$
-> > \begin{align*}
-> > P(\text{no claims}) &= \int_0^2 e^{-\lambda} \cdot \frac{1}{2}\,d\lambda \\
-> > &= \frac{1 - e^{-2}}{2} \\
-> > &\approx 0.432
-> > \end{align*}
-> > $$
+When the same unknown class $F_i$ produces two events $E_1$ and $E_2$, independent within each class, the first event is evidence about the class. The probability of $E_2$ given $E_1$ is
 
-> [!warning]- Exam traps
-> - **An unweighted average.** Right only when the classes are equally likely.
-> - **Weights that are not a partition.** The $P(A_i)$ must be the probabilities of classes that don't overlap and add to 1. Overlapping categories, or percentages quoted on different bases, must be turned into a partition first.
-> - **Stopping one step early.** When the question asks for a class *given* the event, $P(B)$ is only the denominator. The answer is one term over the whole sum.
+> $$P(E_2 \mid E_1) = \frac{\sum_{i} P(E_1 \mid F_i)\,P(E_2 \mid F_i)\,P(F_i)}{\sum_{i} P(E_1 \mid F_i)\,P(F_i)}$$
+
+> [!example]- 25% of drivers are risky and claim in a year with probability 0.4. The rest claim with probability 0.1. Years are independent given the class. A driver claimed last year. What is the probability that they claim next year? {Example}
+> - The denominator is the probability of a claim last year: $0.25(0.4) + 0.75(0.1) = 0.175$.
+> - The numerator is the probability of claims in both years, $0.25(0.4)^2 + 0.75(0.1)^2$, which is $0.0475$.
+> - $P(E_2 \mid E_1) = \frac{0.0475}{0.175} = 0.271$, higher than 0.175, because last year's claim makes the risky class more likely.
+
+> [!trap] An unweighted average
+> The plain average of the three claim probabilities above, $\frac{0.20 + 0.10 + 0.15}{3} = 0.15$, treats every class as a third of the portfolio. The answer is 0.14, because each $P(E \mid F_i)$ must be weighted by $P(F_i)$.

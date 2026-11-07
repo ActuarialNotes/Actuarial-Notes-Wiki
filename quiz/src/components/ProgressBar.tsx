@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, type ReactNode } from 'react'
+import { useState, useRef, useEffect, useMemo, type CSSProperties, type ReactNode } from 'react'
 import { ChevronDown, Bookmark, BookmarkCheck } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { NavProgressBar } from '@/components/NavProgressBar'
@@ -17,9 +17,27 @@ interface ProgressBarProps {
    * bar stays the one place a question is identified.
    */
   info?: ReactNode
+  /**
+   * The exam's accent (`examAccent` in lib/examColors.ts) — the colour the bar
+   * fills in. Without one it fills in the foreground, as any bar outside an
+   * exam does.
+   */
+  accent?: string
 }
 
-export function ProgressBar({ current, total, onNavigate, flaggedIds, questionIds, isFlagged, onFlag, info }: ProgressBarProps) {
+/**
+ * Up to this many questions, the bar is one step per question — a short quiz
+ * reads as "two of three done" at a glance. A longer paper's steps would be
+ * slivers, so it is one continuous bar.
+ */
+export const SEGMENTED_MAX = 30
+
+export function ProgressBar({ current, total, onNavigate, flaggedIds, questionIds, isFlagged, onFlag, info, accent }: ProgressBarProps) {
+  const segmented = total > 1 && total <= SEGMENTED_MAX
+  const segments = useMemo(
+    () => (segmented ? Array.from({ length: total }, (_, i) => ({ start: i + 1 })) : undefined),
+    [segmented, total],
+  )
   const percentage = total > 0 ? Math.min(100, (current / total) * 100) : 0
   const [open, setOpen] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -90,7 +108,6 @@ export function ProgressBar({ current, total, onNavigate, flaggedIds, questionId
   return (
     <div className="space-y-3">
       <div className="flex justify-between items-center gap-2 text-base text-muted-foreground">
-        <div className="flex min-w-0 items-center gap-1">
         {onNavigate ? (
           <div ref={containerRef} className="relative">
             <button
@@ -100,9 +117,9 @@ export function ProgressBar({ current, total, onNavigate, flaggedIds, questionId
               aria-haspopup="listbox"
               onClick={() => setOpen(o => !o)}
               onKeyDown={handleToggleKeyDown}
-              className="flex min-h-[44px] items-center gap-1.5 whitespace-nowrap rounded-lg bg-muted/40 px-3 py-2 text-[15px] sm:text-base font-medium transition-colors hover:bg-accent hover:text-foreground"
+              className="-ml-2 flex min-h-[44px] items-center gap-1.5 whitespace-nowrap rounded-lg px-2 py-2 text-[15px] sm:text-base font-semibold text-foreground transition-colors hover:bg-accent"
             >
-              Question {current} of {total}
+              Question {current} <span className="font-normal text-muted-foreground">of {total}</span>
               <ChevronDown className={cn('h-4 w-4 transition-transform text-muted-foreground', open && 'rotate-180')} />
             </button>
 
@@ -142,6 +159,7 @@ export function ProgressBar({ current, total, onNavigate, flaggedIds, questionId
         ) : (
           <span className="px-1 font-medium">Question {current} of {total}</span>
         )}
+        <div className="flex shrink-0 items-center gap-1">
         {onFlag && (
           <button
             type="button"
@@ -153,30 +171,36 @@ export function ProgressBar({ current, total, onNavigate, flaggedIds, questionId
             )}
           >
             {isFlagged
-              ? <BookmarkCheck className="h-4 w-4" />
-              : <Bookmark className="h-4 w-4" />}
-            {isFlagged ? 'Flagged' : 'Flag'}
+              ? <BookmarkCheck className="h-[18px] w-[18px] sm:h-4 sm:w-4" />
+              : <Bookmark className="h-[18px] w-[18px] sm:h-4 sm:w-4" />}
+            <span className="sr-only sm:not-sr-only">{isFlagged ? 'Flagged' : 'Flag'}</span>
           </button>
         )}
         {info}
-        </div>
         {/* The bar under the row already says how far in; on a phone the
-            figure gives its width to the three controls beside it. */}
-        <span className="hidden shrink-0 text-sm tabular-nums sm:inline">{Math.round(percentage)}%</span>
+            figure gives its width to the controls beside it. */}
+        <span className="hidden shrink-0 pl-2 text-sm tabular-nums sm:inline">{Math.round(percentage)}%</span>
+        </div>
       </div>
       {/* The bar is the second way to jump between questions, alongside the
           dropdown above it: press or drag along it to go straight to a question,
           which on a 60-question mock beats scrolling a 60-row list. Same control
           as every other progress bar in the app, in the quiz's own colours. */}
+      <div style={accent ? ({ '--quiz-accent': accent } as CSSProperties) : undefined}>
       <NavProgressBar
         current={current}
         total={total}
         label={`Question ${current} of ${total}`}
-        trackClassName="h-2.5 rounded-full bg-secondary group-hover:h-3 group-focus-visible:h-3"
-        fillClassName="bg-foreground dark:bg-foreground"
+        trackClassName={segmented
+          ? 'h-1.5 gap-1.5 group-hover:h-2 group-focus-visible:h-2'
+          : 'h-1.5 rounded-full bg-secondary group-hover:h-2 group-focus-visible:h-2'}
+        segmentClassName="rounded-full"
+        segments={segments}
+        fillClassName={accent ? 'bg-[var(--quiz-accent)] dark:bg-[var(--quiz-accent)]' : 'bg-foreground dark:bg-foreground'}
         onScrub={onNavigate ? position => onNavigate(position - 1) : undefined}
         formatValue={position => `Question ${position} of ${total}`}
       />
+      </div>
     </div>
   )
 }

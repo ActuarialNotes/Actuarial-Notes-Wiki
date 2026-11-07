@@ -85,6 +85,11 @@ export interface NavProgressBarProps {
    * chapters, and evenly spaced fictions would read as its real structure.
    */
   segments?: NavSegmentMark[]
+  /**
+   * Extra classes for each piece of a segmented track — rounding, say, when the
+   * pieces are spaced out as separate steps rather than hairline-cut chapters.
+   */
+  segmentClassName?: string
 }
 
 /** The fill itself, shared by the readout and the scrubber. */
@@ -115,6 +120,7 @@ function Track({
   highlight,
   trackClassName,
   fillClassName,
+  segmentClassName,
 }: {
   segments: NavSegment[]
   percentage: number
@@ -123,6 +129,7 @@ function Track({
   highlight?: NavSegment | null
   trackClassName?: string
   fillClassName?: string
+  segmentClassName?: string
 }) {
   if (segments.length === 0) {
     return (
@@ -143,6 +150,7 @@ function Track({
           className={cn(
             'h-full min-w-px overflow-hidden rounded-[1px] transition-colors duration-150',
             highlight && highlight.start === segment.start ? 'bg-muted-foreground/30' : 'bg-muted',
+            segmentClassName,
           )}
         >
           <Fill percentage={segmentFillPercent(segment, current)} fillClassName={fillClassName} />
@@ -162,6 +170,7 @@ export function NavProgressBar({
   onScrub,
   formatValue,
   segments,
+  segmentClassName,
 }: NavProgressBarProps) {
   const percentage = navProgressPercent(current, total)
   const trackRef = useRef<HTMLDivElement>(null)
@@ -197,6 +206,7 @@ export function NavProgressBar({
           current={current}
           trackClassName={trackClassName}
           fillClassName={fillClassName}
+          segmentClassName={segmentClassName}
         />
       </div>
     )
@@ -347,6 +357,7 @@ export function NavProgressBar({
           highlight={previewChapter}
           trackClassName={trackClassName}
           fillClassName={cn(scrubbing && 'transition-none', fillClassName)}
+          segmentClassName={segmentClassName}
         />
       </div>
 

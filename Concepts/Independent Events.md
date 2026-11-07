@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:f12b3fa776a0aa679e312fde390ce6b857b5953b125546533682ba94405fb61c
+  content_hash: sha256:0028459555c9c119b187f0e473238d1c6c3a3ec0d8d114f5cf889b4cf4367af7
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §4.1 Def. 4.1 independence (either event probability 0 counts as independent), Thm 4.1 independent iff P(E∩F)=P(E)P(F) (pp.139-140, PDF pp.147-148); Def. 4.2 mutual independence over every subset, pairwise does not imply mutual (p.141, PDF p.149); Exercise 7: A heads on first toss, B heads on second, C tosses match are pairwise independent but not independent (PDF p.159), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §1.4.1 Independence (complements of independent events independent; P(∪A_i)=1−∏(1−P(A_i)); warning not to confuse independence with disjointness), read 2026-11-06, sha256:fcf1aacf872ba059ed46a7a386f0e4725016d0ae10db09bd5d4f77d9883c35a7 — https://www.probabilitycourse.com/chapter1/1_4_1_independence.php"
@@ -17,117 +17,77 @@ verification:
   log: .verify/Concepts/Independent Events.md
 ---
 
-Two [[Event|events]] $A$ and $B$ are **Independent** if knowing that one occurred gives no information about whether the other occurred. Independence is defined by the product rule.
-
-> $$P(A \cap B) = P(A)\,P(B)$$
-
-- When $P(A) > 0$ and $P(B) > 0$, independence means $P(A \mid B) = P(A)$ and $P(B \mid A) = P(B)$.
-- The product rule is the definition because it is symmetric in $A$ and $B$ and still works when an event has probability 0. An event with probability 0 is independent of every event.
-- Independence is checked from the probabilities. It cannot be read off a diagram.
-- Independent is not [[Mutually Exclusive Events|mutually exclusive]]. Independent events with positive probabilities do overlap.
-
-> [!idea] The idea
-> When events are independent, knowing that one occurred does not change the probability of the other, so the probability that both occur is the product of their probabilities. The probability that none occurs is a product too, which is why "at least one" is found as 1 minus "none".
-
 ![[Media/Figures/Independent_Events.svg|340]]
 
-## Does knowing one tell you about the other?
+**Independent Events** are [[Event|events]] for which knowing that one occurred does not change the [[Probability|probability]] of the other. Two events $E$ and $F$ are independent when the probability that both occur is
 
-Two drivers are insured separately. Ana files a claim with probability 0.2 and Ben with probability 0.1, independently.
+> $$P(E \cap F) = P(E)\,P(F)$$
 
-| | Ben claims | Ben doesn't | Total |
-|---|---|---|---|
-| Ana claims | 0.02 | 0.18 | 0.20 |
-| Ana doesn't | 0.08 | 0.72 | 0.80 |
-| Total | 0.10 | 0.90 | 1 |
+When $P(F) > 0$, this is the same as $P(E \mid F) = P(E)$, the [[Conditional Probability|conditional probability]] of $E$ given $F$.
 
-Every cell is its row total times its column total. Given that Ana claims, Ben claims with probability $0.02 / 0.20 = 0.10$, the same as before. Knowing about Ana did not change the probability for Ben.
+> [!example]- 30% of an insurer's drivers are young, 13% have a claim, and 6% are young and have a claim. Are being young and having a claim independent? {Example}
+> - Let $E$ be "young" and $F$ be "has a claim".
+> - Independence would need $P(E \cap F) = 0.30 \times 0.13 = 0.039$.
+> - The actual $P(E \cap F) = 0.06$ is larger, so the events are not independent. Young drivers have claims more often.
 
-## Checking independence from data
+## Complements of independent events
 
-Compare a portfolio where age matters. On the [[Conditional Probability]] page, 30% of drivers are young, 13% have a claim, and 6% are young with a claim. Independence would need $0.30 \times 0.13 = 0.039$, but the joint probability is 0.06. Young drivers claim more often, so age and claims are dependent.
+If $E$ and $F$ are independent, so are $E$ and $F^c$, $E^c$ and $F$, and $E^c$ and $F^c$. So the probability that neither occurs is
 
-To check, compute $P(A)\,P(B)$ and compare it with $P(A \cap B)$. Equal means independent.
+> $$P(E^c \cap F^c) = \big(1 - P(E)\big)\big(1 - P(F)\big)$$
 
-## Complements, neither and at least one
+> [!example]- Two drivers are insured separately. Ana files a claim with probability 0.2 and Ben with probability 0.1, independently. What is the probability that at least one of them files a claim? {Example}
+> - Neither files a claim with probability $(1 - 0.2)(1 - 0.1) = 0.72$.
+> - "At least one" is the complement of "neither", so its probability is $1 - 0.72 = 0.28$.
 
-If $A$ and $B$ are independent, so are $A$ and $B^c$, $A^c$ and $B$, and $A^c$ and $B^c$. In the table, Ana claims and Ben doesn't with probability $0.2 \times 0.9 = 0.18$.
+## Mutually independent events
 
-> $$P(A^c \cap B^c) = (1 - P(A))\,(1 - P(B))$$
+Events $E_1, E_2, \ldots, E_n$ are **mutually independent** when the product rule holds for every group of them. In particular, the probability that all of them occur is
 
-- Neither driver claims with probability $0.8 \times 0.9 = 0.72$.
-- At least one claims with probability $1 - 0.72 = 0.28$.
-- The [[Probability Addition Rule|addition rule]] agrees: $0.2 + 0.1 - 0.02 = 0.28$.
-- Exactly one claims with probability $0.18 + 0.08 = 0.26$.
+> $$
+> \begin{aligned}
+> & P(E_1 \cap E_2 \cap \cdots \cap E_n) \\
+> & \quad = P(E_1)\,P(E_2) \cdots P(E_n)
+> \end{aligned}
+> $$
 
-## Many independent trials
+The rule applies to any mix of events and complements, so a sequence of independent trials has the product of its trials' probabilities.
 
-Now insure 10 drivers like Ana, independently, each claiming with probability 0.2. The probability that none claims is $0.8^{10}$.
+> [!example]- A driver has an accident in a year with probability 0.1, independently from year to year. What is the probability of no accident in years 1 and 2 and an accident in year 3? {Example}
+> - No accident in a year has probability $1 - 0.1 = 0.9$.
+> - The three years are independent, so the probability is $0.9 \times 0.9 \times 0.1 = 0.081$.
+
+Independence of every pair is not enough for mutual independence.
+
+> [!example]- A fair coin is tossed twice. Let $E$ be "the first toss is heads", $F$ be "the second toss is heads" and $G$ be "the two tosses match". Are $E$, $F$ and $G$ mutually independent? {Example}
+> - Each event has probability $\frac{1}{2}$.
+> - Each pair occurs together only on $(H, H)$, with probability $\frac{1}{4}$, which is $\frac{1}{2} \times \frac{1}{2}$. Every pair is independent.
+> - All three occur only on $(H, H)$, so $P(E \cap F \cap G) = \frac{1}{4}$.
+> - The product rule would need $\frac{1}{2} \times \frac{1}{2} \times \frac{1}{2} = \frac{1}{8}$, so the three events are not mutually independent.
+
+## At least one of several independent events
+
+If each of $n$ independent events has probability $p$, none of them occurs with probability $(1 - p)^n$. So the probability that at least one occurs is
 
 > $$P(\text{at least one}) = 1 - (1 - p)^n$$
 
-- On the example, $1 - 0.8^{10} \approx 0.893$.
-- All 10 claim with probability $0.2^{10}$, which is tiny.
+> [!example]- Five independent losses each exceed a deductible with probability 0.3. What is the probability that at least one exceeds it? {Example}
+> - No loss exceeds the deductible with probability $0.7^5 = 0.16807$.
+> - At least one exceeds it with probability $1 - 0.16807 = 0.83193$.
 
 > [!trap] "At least one" as $np$
-> Adding the 10 probabilities gives $10 \times 0.2 = 2$, which is not a probability. The sum counts every overlap repeatedly. Use 1 minus the probability of none.
+> Adding the probabilities gives $5 \times 0.3 = 1.5$, which is not a probability. The sum counts every overlap more than once. Use 1 minus the probability of none.
 
-## Pairwise is not mutual
+## Reliability of a system of independent components
 
-For three or more events, independence in pairs is not enough. Toss a fair coin twice. Let $A$ be "first toss heads", $B$ be "second toss heads" and $C$ be "the two tosses match".
+A system built from independent components works with a probability, its **reliability**, that is a product. If component $i$ works with probability $r_i$, a series system works only if every component works:
 
-- Each event has probability $\frac{1}{2}$, and each pair occurs together with probability $\frac{1}{4}$. Every pair is independent.
-- All three occur only on two heads, with probability $\frac{1}{4}$, not $\frac{1}{8}$. Once $A$ and $B$ are known, $C$ is certain.
+> $$r_1\,r_2 \cdots r_n$$
 
-Events $A_1, \ldots, A_n$ are **mutually independent** when the product rule holds for every subset of them, not just for pairs.
+A parallel system fails only if every component fails, so it works with probability
 
-> $$P(A_{i_1} \cap \cdots \cap A_{i_m}) = P(A_{i_1}) \cdots P(A_{i_m})$$
+> $$1 - (1 - r_1)(1 - r_2) \cdots (1 - r_n)$$
 
-## On other exams
-
-**MAS-I** uses independence of events as one step inside reliability, hazard-rate and stochastic-process questions.
-
-- A series system of independent components works only if every component works, so its reliability is the product of the components' reliabilities. Three components each with reliability 0.9 give $0.9^3 = 0.729$.
-- A parallel system fails only if every component fails. With the same three components it works with probability $1 - 0.1^3 = 0.999$.
-
-## Try it
-
-> [!example]- Testing independence {Example}
-> For two policyholders, $P(A \text{ claims}) = 0.4$, $P(B \text{ claims}) = 0.3$ and $P(\text{both claim}) = 0.12$. Are their claim events independent?
->
-> > [!answer]-
-> > **Plan:** compare the product of the marginals with the joint probability.
-> >
-> > $P(A)\,P(B) = 0.4 \times 0.3 = 0.12$, which equals $P(A \cap B)$. The events are independent.
-
-> [!example]- Losses above a deductible {Example}
-> Five independent losses each exceed the deductible with probability 0.3. Find the probability that at least one exceeds it.
->
-> > [!answer]-
-> > **Plan:** find the probability that none exceeds it, then take the complement.
-> > $$
-> > \begin{align*}
-> > P(\text{at least one}) &= 1 - 0.7^5 \\
-> > &\approx 0.832
-> > \end{align*}
-> > $$
-
-> [!example]- How many policies? {Example}
-> Each policy has a claim with probability 0.1, independently. How many policies are needed for the probability of at least one claim to be at least 0.95?
->
-> > [!answer]-
-> > **Plan:** set $1 - 0.9^n \ge 0.95$ and solve for $n$ with logarithms.
-> > $$
-> > \begin{align*}
-> > 0.9^n &\le 0.05 \\
-> > n &\ge \frac{\ln 0.05}{\ln 0.9} \approx 28.4
-> > \end{align*}
-> > $$
-> > So 29 policies are needed. Check: $1 - 0.9^{28} \approx 0.948$ and $1 - 0.9^{29} \approx 0.953$.
-> > Dividing by $\ln 0.9$, a negative number, flips the inequality.
-
-> [!warning]- Exam traps
-> - **Independent is not mutually exclusive.** Disjoint events with positive probabilities are dependent. Multiplying the probabilities of disjoint events, or adding those of independent ones, gives a wrong answer from the right numbers.
-> - **Pairwise is not mutual.** A question about all three events together needs mutual independence, stated or checked.
-> - **"At least one" by multiplication or addition.** It is $1 - (1 - p)^n$, not $np$ and not $p^n$.
-> - **Union without the overlap.** For independent $A$ and $B$, $P(A \cup B) = P(A) + P(B) - P(A)\,P(B)$. Dropping the last term gives the plain sum.
+> [!example]- Three independent components each work with probability 0.9. What is the reliability of the three in series, and in parallel? {Example}
+> - In series, all three must work: $0.9^3 = 0.729$.
+> - In parallel, all three must fail for the system to fail: $1 - 0.1^3 = 0.999$.

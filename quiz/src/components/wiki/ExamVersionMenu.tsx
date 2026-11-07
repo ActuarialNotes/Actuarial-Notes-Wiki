@@ -28,7 +28,7 @@ import { examAccentStyle } from '@/lib/examColors'
  * An exam with no upcoming sitting on file renders nothing: a version the
  * sittings table doesn't list would be invented.
  *
- * Like `QuizSettingsMenu`, the menu portals to <body> and is placed by
+ * Like `ConceptActionMenu`, the menu portals to <body> and is placed by
  * `placeMenu` — the trigger lives in the sticky header's stacking context.
  */
 export function ExamVersionMenu({ progressKey }: { progressKey: string }) {

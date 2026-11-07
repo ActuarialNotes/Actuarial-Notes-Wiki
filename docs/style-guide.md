@@ -486,7 +486,8 @@ under **Study Guides**. The page showing is the filled row; the tab's own row is
 
 ### 5.1 Fixed bottom action bars
 
-Several views pin their commit action to the bottom (`Landing`, `Flashcards`, `Search`).
+Several views pin their commit action to the bottom (`Flashcards`, `Search`). The quiz setup
+screen no longer does: its Start is inside the card, and the setup sheet ends in its own.
 The shape:
 
 ```

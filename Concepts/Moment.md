@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:cf31740115a3e7823bc449dd6ad6f05ada9a35c1da02bcf217abdceeee2114a0
+  content_hash: sha256:b5bc9892e78d15dff68d589ec65e079afb8f2ed53f4d7de5543529dbf9c54b90
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL version), Def. 6.1 p.226 (PDF p.234, absolute convergence; no expected value otherwise); Thm 6.2 linearity, expectations add whether or not independent; Def. 6.3 variance and standard deviation p.257; Thms 6.6 Var=E(X^2)-mu^2, 6.7 V(cX)=c^2V(X), V(X+c)=V(X), 6.8 V(X+Y)=V(X)+V(Y) independent, 6.9 sigma(S_n)=sigma sqrt(n) (pp.258-260, PDF pp.265-268), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "SOA Exam C tables (Loss Models 3rd ed. Appendix A excerpts), A.2.3.1 Pareto (E[X^k] for -1<k<alpha, no M(t)) PDF p.8; A.3.2.1 Gamma (M(t)=(1-theta t)^-alpha, t<1/theta; E[X^k]) PDF p.9; A.3.3.1 Exponential (M(t), E[X^k]=theta^k k!, E[X^x]=theta(1-e^{-x/theta})) and A.5.1.1 Lognormal (E[X^k]=exp(k mu + k^2 sigma^2/2), no M(t)) PDF p.11, sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf"
@@ -18,163 +18,98 @@ verification:
   log: .verify/Concepts/Moment.md
 ---
 
-The $n$-th **Moment** of a [[Random Variable]] $X$ is the [[Expected Value]] of its $n$-th power, $E[X^n]$, called a *raw* moment. The $n$-th *central* moment $E[(X - \mu)^n]$ measures the same thing about the mean $\mu$.
+A **Moment** of a [[Random Variable|random variable]] $X$ is the [[Expected Value|expected value]] of a power of $X$. The $n$th moment of $X$, also called the $n$th raw moment, is
 
-> $$\mu_n' = E[X^n] = \int_{-\infty}^{\infty} x^n f(x)\,dx$$
+> $$E[X^n] = \int_{-\infty}^{\infty} x^n f(x)\,dx$$
 
-> $$\mu_n = E\big[(X - \mu)^n\big]$$
+- $f(x)$ is the [[Probability Density Function (PDF)|density]] of $X$.
+- For a discrete $X$, the integral is the sum $\sum_x x^n f(x)$.
 
-- The mean is $\mu = \mu_1'$. For a discrete variable the integral becomes $\sum_x x^n\,p(x)$.
-- The first four moments summarise a distribution's location, spread, asymmetry and tail weight.
-- The second central moment is the [[Variance]], $\mu_2 = E[X^2] - \mu^2$.
+The first moment is the mean $\mu$. "The second moment" said without qualification is $E[X^2]$, taken about 0, not the variance.
 
-> [!idea] The idea
-> Raising $X$ to a higher power before averaging makes the large values count for more. The first moment says where the distribution sits. The second and higher moments, taken about the mean, say how far out it reaches and on which side, so each one adds a little more detail about the tail.
+> [!example]- Claim sizes $X$ are exponential with mean $\theta = 1{,}000$. What is $E[X^2]$? {Example}
+> - The density is $f(x) = \frac{1}{\theta}e^{-x/\theta}$ for $x > 0$.
+> - Integrating by parts twice gives $E[X^2] = 2\theta^2$.
+> - $E[X^2] = 2(1{,}000)^2 = 2{,}000{,}000$.
+> - In general, an [[Exponential Distribution|exponential]] has $E[X^n] = n!\,\theta^n$.
 
-## Raw moments of one severity
+## Central moments
 
-Claim sizes $X$ are [[Exponential Distribution|exponential]] with mean $\theta = 1{,}000$. The exponential has a closed form for every raw moment.
+The $n$th central moment is the same expected value taken about the mean $\mu$:
 
-> $$E[X^n] = n!\,\theta^n$$
+> $$E\big[(X - \mu)^n\big]$$
 
-| $n$ | $E[X^n]$ |
-|---|---|
-| 1 | $1{,}000$ |
-| 2 | $2 \times 10^6$ |
-| 3 | $6 \times 10^9$ |
-| 4 | $2.4 \times 10^{13}$ |
+The second central moment is the [[Variance|variance]]. It is found from the first two raw moments:
 
-The raw moments grow fast. They are dominated by the large claims, which is why the higher ones are hard to estimate from data.
+> $$\text{Var}(X) = E[X^2] - \mu^2$$
 
-## Central moments: about the mean
+So the second moment is $E[X^2] = \text{Var}(X) + \mu^2$.
 
-A raw moment mixes location with spread. Centring at the mean separates them. Each central moment expands into raw moments.
+> [!example]- A claim count $N$ has mean 2 and variance 3. What is $E[N^2]$? {Example}
+> - The second moment is the variance plus the square of the mean.
+> - $E[N^2] = 3 + 2^2 = 7$.
 
-> $$\mu_2 = E[X^2] - \mu^2$$
+## Skewness
 
-> $$\mu_3 = E[X^3] - 3\mu E[X^2] + 2\mu^3$$
+The skewness measures a distribution's asymmetry. It is the third central moment divided by the cube of the [[Standard Deviation|standard deviation]] $\sigma$:
 
-For the exponential severity:
+> $$\gamma_1 = \frac{E\big[(X - \mu)^3\big]}{\sigma^3}$$
 
+A positive skewness means a long right tail. Every odd central moment of a symmetric distribution is 0, so its skewness is 0.
+
+> [!example]- Claim sizes $X$ are exponential with mean 1,000, so $E[X^2] = 2 \times 10^6$ and $E[X^3] = 6 \times 10^9$. What is the skewness? {Example}
+> - The third central moment expands into raw moments:
+>
 > $$
-> \begin{align*}
-> \mu_2 &= 2 \times 10^6 - 1{,}000^2 \\
->       &= 10^6 \\
-> \mu_3 &= 6 \times 10^9 - 3(1{,}000)(2 \times 10^6) + 2(1{,}000)^3 \\
->       &= 2 \times 10^9
-> \end{align*}
+> \begin{aligned}
+> E\big[(X - \mu)^3\big] &= E[X^3] - 3\mu E[X^2] + 2\mu^3 \\
+> &= 6 \times 10^9 - 6 \times 10^9 + 2 \times 10^9 \\
+> &= 2 \times 10^9
+> \end{aligned}
 > $$
+>
+> - The variance is $2 \times 10^6 - 10^6 = 10^6$, so $\sigma = 1{,}000$.
+> - The skewness is $\frac{2 \times 10^9}{10^9} = 2$.
 
-## Shape: skewness and kurtosis
+## Moments from the moment generating function
 
-A central moment still carries units: $\mu_3$ is in dollars cubed. Dividing by the matching power of the standard deviation $\sigma$ gives a pure number that describes shape.
-
-> $$\gamma_1 = \frac{\mu_3}{\sigma^3}$$
-
-- The **skewness** of the exponential is $2 \times 10^9 / 1{,}000^3 = 2$. A positive skewness means a long right tail.
-- The **kurtosis** is $\mu_4/\sigma^4$. It is 3 for a normal. For the exponential it is 9, a heavier tail than the normal's.
-- Both are free of $\theta$. Every exponential severity has the same shape, whatever its scale.
-
-**Symmetry kills the odd moments.** All odd central moments of a symmetric distribution equal zero, if they exist. Deviations on either side of the centre cancel.
-
-- For a distribution symmetric about 0, such as the standard normal or a uniform on $(-a, a)$, $x^k f(x)$ is an odd function for odd $k$. So $E[X] = 0$ and every odd moment $E[X^k]$ that exists is 0.
-- In particular the skewness of a symmetric distribution is 0. The converse fails: a skewness of 0 does not make a distribution symmetric.
-
-## Moments from the MGF
-
-Integrating $x^n f(x)$ for each $n$ is slow. The moment generating function $M_X(t) = E[e^{tX}]$ packs every raw moment into one function.
+The moment generating function of $X$ is $M_X(t) = E[e^{tX}]$. Its $n$th derivative at 0 is the $n$th moment:
 
 > $$E[X^n] = M_X^{(n)}(0)$$
 
-- The MGF exists only where the sum or integral defining it is finite for $t$ in an interval around 0. For the exponential and the [[Gamma|gamma]], that is $t < 1/\theta$.
-- For the exponential, $M_X(t) = (1 - 1000t)^{-1}$. Its $n$-th derivative at 0 is $n!\,1000^n$, matching the table.
-- Other closed forms worth memorising: gamma $E[X^n] = \theta^n\,\alpha(\alpha+1)\cdots(\alpha+n-1)$, and [[Lognormal Distribution|lognormal]] $E[X^n] = e^{n\mu + n^2\sigma^2/2}$.
-- Loss Models' tables give no MGF for the lognormal or the Pareto. Take their moments from the formulas directly.
+The function itself gives other expected values, such as $E[e^{X}] = M_X(1)$.
 
-## When moments don't exist
+> [!example]- An exponential $X$ with mean $\theta$ has $M_X(t) = (1 - \theta t)^{-1}$. What are $E[X]$ and $E[X^2]$? {Example}
+> - The first derivative is $M_X'(t) = \theta(1 - \theta t)^{-2}$, so $E[X] = M_X'(0) = \theta$.
+> - The second derivative is $M_X''(t) = 2\theta^2(1 - \theta t)^{-3}$.
+> - So $E[X^2] = M_X''(0) = 2\theta^2$.
 
-A moment is an expected value, so it exists only when its sum or integral converges.
+## Moments that do not exist
 
-- Moments need not exist. A heavy-tailed [[Pareto Distribution|Pareto]] with shape $\alpha$ has $E[X^n]$ finite only for $n < \alpha$, so a fitted $\alpha \le 2$ means an infinite variance.
-- The exponential's tail falls off fast enough for every moment to exist.
+A moment exists only when its sum or integral converges. An integral of $x^{-k}$ from 1 to $\infty$ converges only when
 
-> [!trap] A formula on a moment that doesn't exist
-> The Pareto formula for $E[X^2]$ still returns a number when $\alpha \le 2$, and that number is meaningless. Check $n < \alpha$ before using it.
+> $$k > 1$$
 
-## On other exams
+A heavy-tailed [[Pareto Distribution|Pareto]] with shape $\alpha$ has $E[X^n]$ finite only for $n < \alpha$.
 
-- Moments of several variables, such as $E[XY]$ and [[Covariance]], are in [[Moments for Joint Distributions]] and [[Moments for Linear Combinations]].
-- Setting sample moments equal to these formulas is the [[Method of Moments]].
-- **Exam 7.** Mack (1994) measures a chain-ladder reserve estimate $R$ by its standard error. A normal interval's lower limit turns negative once the standard error exceeds half of $R$. When the [[Unpaid Claim Distribution|reserve distribution]] is rather skewed, he instead fits a lognormal with the same mean and variance, $\sigma^2 = \ln\!\big(1 + \text{s.e.}(R)^2/R^2\big)$ and $\mu = \ln R - \sigma^2/2$, and reads [[Percentile|percentiles]] off it.
+> [!example]- A loss $X$ has density $f(x) = 2x^{-3}$ for $x > 1$. Do $E[X]$ and $E[X^2]$ exist? {Example}
+> - $E[X] = \int_1^{\infty} 2x^{-2}\,dx$. The power is $k = 2 > 1$, so it converges, to 2.
+> - $E[X^2] = \int_1^{\infty} 2x^{-1}\,dx$. The power is $k = 1$, so it diverges.
+> - The mean is 2, and the second moment does not exist.
 
-## Try it
+## Matching a lognormal to two moments
 
-> [!example]- Skewness of a discrete claim {Example}
-> A claim costs 0, 100 or 500 with probabilities 0.5, 0.3 and 0.2. Find its skewness.
->
-> > [!answer]-
-> > **Plan:** find the mean, then the second and third central moments directly from the deviations.
-> >
-> > The mean is 130, so the deviations are $-130$, $-30$ and $370$.
-> > $$
-> > \begin{align*}
-> > \mu_2 &= 0.5(-130)^2 + 0.3(-30)^2 + 0.2(370)^2 \\
-> >       &= 36{,}100 \\
-> > \mu_3 &= 0.5(-130)^3 + 0.3(-30)^3 + 0.2(370)^3 \\
-> >       &= 9{,}024{,}000 \\
-> > \gamma_1 &= \frac{9{,}024{,}000}{190^3} \\
-> >          &\approx 1.316
-> > \end{align*}
-> > $$
-> > The skewness is positive because the one large claim sits far above the mean.
+A [[Lognormal Distribution|lognormal]] is a random variable whose logarithm is normal with mean $\mu$ and variance $\sigma^2$. The lognormal with a given mean $m$ and standard deviation $s$ has
 
-> [!example]- Moments from an MGF {Example}
-> A loss has MGF $M(t) = (1 - 500t)^{-3}$ for $t < 1/500$. Find its mean and variance.
->
-> > [!answer]-
-> > **Plan:** differentiate twice and set $t = 0$.
-> > $$
-> > \begin{align*}
-> > M'(t) &= 1500(1 - 500t)^{-4} \\
-> > M''(t) &= 3{,}000{,}000(1 - 500t)^{-5} \\
-> > E[X] &= M'(0) \\
-> >      &= 1500 \\
-> > E[X^2] &= M''(0) \\
-> >        &= 3{,}000{,}000 \\
-> > \text{Var}(X) &= 3{,}000{,}000 - 1500^2 \\
-> >               &= 750{,}000
-> > \end{align*}
-> > $$
-> > This is the gamma MGF with $\alpha = 3$ and $\theta = 500$, so the answers match $\alpha\theta$ and $\alpha\theta^2$.
+> $$\sigma^2 = \ln\!\left(1 + \frac{s^2}{m^2}\right)$$
 
-> [!example]- Reserve Percentile from Two Moments {Example}
-> A chain-ladder analysis gives total unpaid claims with mean $R = \$10.0$ million and standard error $\$2.5$ million. Fit a lognormal with those two moments, as Mack (1994) suggests for a skewed reserve distribution, and find its 95th percentile. Compare with a normal.
->
-> > [!answer]-
-> > **Plan:** match the coefficient of variation to get $\sigma$, match the mean to get $\mu$, then read off the percentile.
-> >
-> > The CV is $2.5/10 = 0.25$. Working in \$ millions:
-> > $$
-> > \begin{align*}
-> > \sigma^2 &= \ln(1 + 0.25^2) \\
-> >          &= \ln 1.0625 \\
-> >          &= 0.06062 \\
-> > \sigma &= 0.2462 \\
-> > \mu &= \ln 10 - \tfrac{1}{2}(0.06062) \\
-> >     &= 2.2723
-> > \end{align*}
-> > $$
-> > $$
-> > \begin{align*}
-> > x_{0.95} &= e^{\mu + 1.645\sigma} \\
-> >          &= e^{2.2723 + 0.4050} \\
-> >          &= 14.55
-> > \end{align*}
-> > $$
-> > A normal with the same moments gives $10 + 1.645(2.5) = 14.11$. The lognormal 95th percentile is \$14.55 million, about \$0.43 million higher, and its median $e^{\mu} = 9.70$ sits below the mean. Two distributions sharing a mean and a variance still disagree in the tail. The skewness they don't share is what a [[Risk Margin|risk margin]] set at a percentile is sensitive to.
+> $$\mu = \ln m - \frac{\sigma^2}{2}$$
 
-> [!warning]- Exam traps
-> - **Raw for central.** $E[X^2]$ is not the variance. Subtract $\mu^2$, and expand $\mu_3$ with all three terms.
-> - **Skewness without the scale.** $\gamma_1$ divides $\mu_3$ by $\sigma^3$, not by $\sigma^2$ or by $\mu^3$.
-> - **Using a moment that doesn't exist.** A Pareto with shape $\alpha$ has no $n$-th moment for $n \ge \alpha$.
-> - **Evaluating the MGF instead of its derivative.** $M_X(0) = 1$ always. The moments come from the derivatives at 0.
+Mack (1994) uses this to fit a lognormal to a chain-ladder reserve and its standard error, and reads [[Percentile|percentiles]] off it.
+
+> [!example]- A reserve has mean 100 and standard error 50. Which lognormal has the same mean and standard deviation? {Example}
+> - $\sigma^2 = \ln(1 + 0.25) = 0.2231$.
+> - $\mu = \ln 100 - 0.1116 = 4.4936$.
+
+> [!trap] A formula for a moment that does not exist
+> The Pareto formula for $E[X^2]$ still returns a number when $\alpha \leq 2$, and that number means nothing. Check $n < \alpha$ before using it.

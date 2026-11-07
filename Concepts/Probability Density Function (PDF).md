@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:fc4b5fc29a9d1b8a09336723061872ddd9bf411bb036be61f3d04a719b22606a
+  content_hash: sha256:6aa0e779710590b8436f96f633631ab0e5c3c06e0b28123be18cc571e9e7f258
   sources:
     - "MIT OCW 18.05 (Orloff & Bloom, Spring 2022), Reading 5b, Definition of a continuous random variable by a pdf (PDF p.2), sha256:3b4e14112eca532d9d03de273fdc40d27e6cf241681aabf012a49837640c2e5b — https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_class05-prep-b.pdf"
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com, fetched 2026-11-06), §4.1.1 PDF: f=F' where differentiable; probability per unit length; P(x<X<=x+d)~f(x)d; F=int f; int f=1, sha256:02e4d8947edff66799161896805adc05409f35f8774c1c912f5c5102b47cb3fd — https://www.probabilitycourse.com/chapter4/4_1_1_pdf.php"
@@ -20,127 +20,83 @@ verification:
   log: .verify/Concepts/Probability Density Function (PDF).md
 ---
 
-A **Probability Density Function (PDF)** $f(x)$ describes how the probability of a [[Continuous Random Variable|continuous random variable]] $X$ is spread along the line. The probability that $X$ falls in an interval $[a, b]$ is the area under $f$ over that interval.
-
-> $$P(a \leq X \leq b) = \int_a^b f(x)\, dx$$
-
-- The PDF must satisfy $f(x) \geq 0$ and $\int_{-\infty}^{\infty} f(x)\, dx = 1$
-- $P(X = x) = 0$ for any single point, so including or excluding an endpoint changes nothing.
-- The PDF is the derivative of the [[Cumulative Distribution Function (CDF)|CDF]], $f(x) = F'(x)$.
-- Compared with a [[Probability Mass Function (PMF)|PMF]]: a PMF value is a probability, but a PDF value is a probability per unit of $x$.
-
-> [!idea] The idea
-> A density is like the thickness of a layer of sand spread along the line. The amount of sand over an interval is the probability, so you measure it by area, not by height. A tall, narrow pile and a low, wide one can hold the same amount.
-
 ![[Media/Figures/Probability_Density_Function_PDF.svg|340]]
 
-## Finding the constant
+A **Probability Density Function (PDF)** is a function $f(x)$ that describes how the [[Probability|probability]] of a [[Continuous Random Variable|continuous random variable]] $X$ is spread along the real line. The probability that $X$ falls between $a$ and $b$ is the area under $f$ over that interval:
 
-A claim size $X$, in thousands, has density $f(x) = c\,x(3 - x)$ for $0 < x < 3$. The shape is fixed, but the height is set by $c$. Which $c$ makes this a density?
+> $$P(a \leq X \leq b) = \int_a^b f(x)\,dx$$
 
-The total area must be 1.
+A single value has probability $P(X = x) = 0$, so including or excluding an endpoint changes nothing.
 
+> [!example]- A loss ratio $X$ has density $f(x) = 3x^2$ for $0 \leq x \leq 1$. What is $P(X > 0.5)$? {Example}
+> - The density is 0 above 1, so the area runs from 0.5 to the end of the support, 1.
+> - The probability is the integral of the density over that interval:
+>
 > $$
-> \begin{align*}
+> \begin{aligned}
+> P(X > 0.5) &= \int_{0.5}^{1} 3x^2\,dx \\
+> &= 1 - 0.125 \\
+> &= 0.875
+> \end{aligned}
+> $$
+
+## Requirements of a density
+
+A function $f$ is a density when $f(x) \geq 0$ for every $x$ and the total area under it is
+
+> $$\int_{-\infty}^{\infty} f(x)\,dx = 1$$
+
+- $f(x) = 0$ outside the support of $X$, the set of values $X$ can take, so the integral runs over the support only.
+
+A density given up to a constant, $f(x) = c\,g(x)$, is completed by solving this equation for $c$.
+
+> [!example]- A claim size $X$, in thousands, has density $f(x) = c\,x(3 - x)$ for $0 < x < 3$. What is $c$, and what is $P(X \leq 1)$? {Example}
+> - The total area must be 1:
+>
+> $$
+> \begin{aligned}
 > 1 &= \int_0^3 c\,x(3 - x)\,dx \\
->   &= c\left[\tfrac{3x^2}{2} - \tfrac{x^3}{3}\right]_0^3 \\
->   &= 4.5c
-> \end{align*}
+> &= c\left[\frac{3x^2}{2} - \frac{x^3}{3}\right]_0^3 \\
+> &= 4.5c
+> \end{aligned}
+> $$
+>
+> - So $c = \frac{2}{9}$.
+> - The probability is the area from 0 to 1:
+>
+> $$
+> \begin{aligned}
+> P(X \leq 1) &= \int_0^1 \tfrac{2}{9}x(3 - x)\,dx \\
+> &= \tfrac{2}{9}\left(\tfrac{3}{2} - \tfrac{1}{3}\right) \\
+> &= \tfrac{7}{27} \approx 0.259
+> \end{aligned}
 > $$
 
-So $c = 2/9$, and $f(x) = \tfrac{2}{9}x(3 - x)$.
+## Densities defined in pieces
 
-## Probability is area, not height
+When a density is defined by one formula $f_1$ below a break $c$ and another $f_2$ above it, the probability of an interval that crosses the break is
 
-How likely is a claim of at most 1? That is the area under $f$ from 0 to 1.
+> $$P(a \leq X \leq b) = \int_a^c f_1(x)\,dx + \int_c^b f_2(x)\,dx$$
 
-> $$P(X \le 1) = \int_0^1 \tfrac{2}{9}x(3 - x)\,dx = \tfrac{7}{27} \approx 0.259$$
+- $a < c < b$.
 
-| $x$ | 0.5 | 1 | 1.5 | 2 | 2.5 |
-|---|---|---|---|---|---|
-| $f(x)$ | 0.278 | 0.444 | 0.5 | 0.444 | 0.278 |
-
-- The density peaks at $x = 1.5$, so claims near 1.5 are the most likely. That peak is the [[Mode|mode]].
-- The height 0.5 is not the probability of a claim of 1.5. That probability is 0.
-- For a short interval of length $h$, $P(x < X < x + h) \approx f(x)\,h$. A claim between 1.5 and 1.6 has probability about $0.5 \times 0.1 = 0.05$.
-- The density is symmetric about 1.5, so the mean is 1.5 too.
-
-## Units change the height
-
-Measure the same claims in tens of thousands instead, $Y = X/10$. The claims now lie on $(0, 0.3)$, and the same total area of 1 must fit on an interval one-tenth as wide.
-
-> $$f_Y(y) = 10\,f_X(10y)$$
-
-- The peak becomes $10 \times 0.5 = 5$. A density can exceed 1, as a uniform on $(0, 0.5)$ has density 2.
-- Every probability is unchanged. $P(Y \le 0.1)$ is still $7/27$, because it is the same event as $X \le 1$.
-
-> [!trap] Reading the height as a probability
-> A density of 5 does not mean "probability 5". It means about $5h$ of probability in a short interval of length $h$. Only an area under $f$ is a probability.
+> [!example]- The time $X$ to settle a claim, in years, has density $f(x) = \frac{2}{3}x$ for $0 < x \leq 1$ and $f(x) = \frac{2}{3}$ for $1 < x \leq 2$. What is $P(0.5 < X < 1.5)$? {Example}
+> - The interval crosses the break at 1, so it takes an area from each piece.
+> - Below the break, the area is $\frac{1}{3}(1 - 0.25) = 0.25$, from $\int_{0.5}^{1} \frac{2}{3}x\,dx$.
+> - Above the break, $\int_{1}^{1.5} \frac{2}{3}\,dx = \frac{1}{3}$.
+> - The probability is $0.25 + \frac{1}{3} = \frac{7}{12} \approx 0.583$.
 
 ## The density and the CDF
 
-The [[Cumulative Distribution Function (CDF)|CDF]] adds up the area to the left of $x$, and the density is its slope.
+The density is the slope of the [[Cumulative Distribution Function (CDF)|cumulative distribution function]] $F(x)$:
 
-> $$F(x) = \int_{-\infty}^{x} f(t)\,dt$$
+> $$f(x) = F'(x)$$
 
-- For the claim size, $F(x) = \frac{x^2}{3} - \frac{2x^3}{27}$ on $[0, 3]$. Then $F(1) = 7/27$, matching the area above, and $F(3) = 1$.
-- When a question gives the CDF, differentiate it to get the density. When it gives the density, integrate it to get the CDF.
-- A density can be defined in pieces. Integrate each piece over its own range and add the areas.
+When a question gives the CDF, differentiate it to get the density.
 
-## Try it
+> [!example]- A loss $X$ has CDF $F(x) = 1 - (1 + x)e^{-x}$ for $x \geq 0$. What is its density? {Example}
+> - Differentiating with the product rule gives $f(x) = -e^{-x} + (1 + x)e^{-x}$.
+> - The density is $f(x) = x\,e^{-x}$ for $x \geq 0$.
 
-> [!example]- Probability from a Polynomial PDF {Example}
-> A loss ratio $X$ has density $f(x) = 3x^2$ for $0 \leq x \leq 1$. What is $P(X > 0.5)$?
->
-> > [!answer]-
-> > **Plan:** integrate the density over the event's interval.
-> > $$
-> > \begin{align*}
-> > P(X > 0.5) &= \int_{0.5}^{1} 3x^2\, dx \\
-> >            &= \left[ x^3 \right]_{0.5}^{1} \\
-> >            &= 1 - 0.125 \\
-> >            &= 0.875
-> > \end{align*}
-> > $$
-> > Why so high? The density rises steeply, so most of its area sits near 1.
-
-> [!example]- A density in two pieces {Example}
-> The time to settle a claim, in years, has density $f(t) = c\,t$ for $0 < t \le 1$ and $f(t) = c$ for $1 < t \le 2$. Find $c$ and the probability that a claim takes more than 1.5 years.
->
-> > [!answer]-
-> > **Plan:** add the area of each piece to find $c$, then integrate only the piece the event touches.
-> > $$
-> > \begin{align*}
-> > 1 &= \int_0^1 c\,t\,dt + \int_1^2 c\,dt \\
-> >   &= \tfrac{c}{2} + c \\
-> >   &= 1.5c
-> > \end{align*}
-> > $$
-> > So $c = 2/3$.
-> > $$
-> > \begin{align*}
-> > P(T > 1.5) &= \int_{1.5}^{2} \tfrac{2}{3}\,dt \\
-> >            &= \tfrac{1}{3}
-> > \end{align*}
-> > $$
-
-> [!example]- From a CDF to a density {Example}
-> A loss $X$ has CDF $F(x) = 1 - (1 + x)e^{-x}$ for $x \ge 0$. Find its density and the most likely loss.
->
-> > [!answer]-
-> > **Plan:** differentiate the CDF, then find where the density peaks.
-> > $$
-> > \begin{align*}
-> > f(x) &= -e^{-x} + (1 + x)e^{-x} \\
-> >      &= x\,e^{-x}
-> > \end{align*}
-> > $$
-> > The derivative of $x e^{-x}$ is $(1 - x)e^{-x}$, which is zero at $x = 1$. The mode is 1, where the density is $e^{-1} \approx 0.368$.
-> >
-> > This is the gamma density with $\alpha = 2$ and $\theta = 1$.
-
-> [!warning]- Exam traps
-> - **Height for probability.** $f(x)$ is a rate and can exceed 1. Integrate it over an interval to get a probability.
-> - **Forgetting the support.** A density is zero outside its stated range. Integrating a formula past its range overstates the area.
-> - **Skipping the constant.** When the density has an unknown $c$, solve for it before computing anything else. Every later answer scales with it.
-> - **One piece only.** For a piecewise density, an interval that crosses a break needs both pieces' areas.
+> [!trap] Reading the height as a probability
+> A density is a probability per unit of $x$, so it can exceed 1: a uniform density on $(0, 0.5)$ is 2. Over a short interval of length $h$, $P(x < X < x + h) \approx f(x)\,h$. Only an area under $f$ is a probability.

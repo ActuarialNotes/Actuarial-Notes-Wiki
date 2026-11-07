@@ -127,6 +127,6 @@ test('a recording made from an older page is not played', async ({ page }) => {
   await page.route(`${PLACEHOLDER}/storage/v1/object/public/podcast/index.json`, route =>
     route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(stale) }))
   await page.goto('/dashboard')
-  await expect(page.getByText("Today's Study Plan").first()).toBeVisible({ timeout: 30_000 })
+  await expect(page.getByRole('heading', { name: "Today's session" })).toBeVisible({ timeout: 30_000 })
   await expect(page.getByTestId('podcast-play')).toHaveCount(0)
 })

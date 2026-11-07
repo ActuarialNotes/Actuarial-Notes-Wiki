@@ -8,6 +8,9 @@ import {
   ringArcPath,
   ringPolar,
   ringTopicGroups,
+  ringPins,
+  PIN_R,
+  PIN_STEP,
 } from './readinessRing'
 import type { WikiExamSyllabus } from './wikiParser'
 import type { ConceptMasteryRecord, MasteryState } from './mastery'
@@ -155,5 +158,34 @@ describe('ringTopicGroups', () => {
 
   it('has no groups without segments', () => {
     expect(ringTopicGroups([])).toEqual([])
+  })
+})
+
+describe('ringPins', () => {
+  const seg = (name: string, startDeg: number, endDeg: number) =>
+    ({ conceptName: name, topicName: 'T', state: 'new' as const, startDeg, endDeg })
+
+  it('puts a badge at each pinned arc’s middle, beyond the ring', () => {
+    const pins = ringPins([seg('A', 0, 10), seg('B', 90, 100), seg('C', 200, 210)], new Map([['a', 1], ['c', 3]]))
+    expect(pins.map(p => [p.conceptName, p.label, p.angleDeg, p.r])).toEqual([
+      ['A', 1, 5, PIN_R],
+      ['C', 3, 205, PIN_R],
+    ])
+    expect(pins[0].y).toBeLessThan(RING_CY - RING_OUTER_R)
+  })
+
+  it('steps a crowded badge out instead of stacking it', () => {
+    const pins = ringPins([seg('A', 0, 4), seg('B', 4, 8), seg('C', 8, 12)], new Map([['a', 1], ['b', 2], ['c', 2]]))
+    expect(pins.map(p => p.r)).toEqual([PIN_R, PIN_R + PIN_STEP, PIN_R + 2 * PIN_STEP])
+  })
+
+  it('pins a concept with two arcs once, on its first', () => {
+    const pins = ringPins([seg('A', 10, 20), seg('B', 90, 100), seg('A', 200, 210)], new Map([['a', 2]]))
+    expect(pins.map(p => p.angleDeg)).toEqual([15])
+  })
+
+  it('sees a clash across 12 o’clock', () => {
+    const pins = ringPins([seg('A', 1, 3), seg('B', 356, 358)], new Map([['a', 1], ['b', 2]]))
+    expect(pins.map(p => p.r)).toEqual([PIN_R, PIN_R + PIN_STEP])
   })
 })

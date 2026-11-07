@@ -26,6 +26,12 @@ async function serveAnswers(page: Page, rows: ReturnType<typeof answers>) {
   })
 }
 
+/** The full Accuracy, leaks and pacing cards sit behind the summary's All analytics. */
+async function openAllAnalytics(page: Page) {
+  const analytics = page.getByRole('region', { name: 'Analytics' })
+  await analytics.getByRole('button', { name: 'All analytics' }).click({ timeout: 20_000 })
+}
+
 test.beforeEach(async ({ page }) => {
   await page.clock.setFixedTime(new Date('2026-10-31T10:00:00'))
   // Analytics is Pro (e2e/analytics-locked.spec.ts has the free account's view).
@@ -41,6 +47,7 @@ test.beforeEach(async ({ page }) => {
 
 test('the Dashboard shows accuracy over the span picked, against the span before', async ({ page }) => {
   await page.goto('/dashboard')
+  await openAllAnalytics(page)
   const card = page.getByRole('region', { name: 'Accuracy' })
   await expect(card).toBeVisible({ timeout: 20_000 })
   // 30 days by default: every answer, and no 30 days before it on record.
@@ -65,6 +72,7 @@ test('the Dashboard shows accuracy over the span picked, against the span before
 
 test('the Accuracy card sits in the Analytics section', async ({ page }) => {
   await page.goto('/dashboard')
+  await openAllAnalytics(page)
   const analytics = page.getByRole('region', { name: 'Analytics' })
   await expect(analytics).toBeVisible({ timeout: 20_000 })
   await expect(analytics.getByRole('region', { name: 'Accuracy' })).toBeVisible()
@@ -72,6 +80,7 @@ test('the Accuracy card sits in the Analytics section', async ({ page }) => {
 
 test('Analytics shows where marks are lost and the pace against the exam', async ({ page }) => {
   await page.goto('/dashboard')
+  await openAllAnalytics(page)
   const analytics = page.getByRole('region', { name: 'Analytics' })
   await expect(analytics).toBeVisible({ timeout: 20_000 })
   const leaks = analytics.getByRole('region', { name: "Where you're losing marks" })
@@ -92,6 +101,7 @@ test('one day of practice gets a number and a way back to its misses, not a char
   await page.unroute(`${PLACEHOLDER}/rest/v1/question_responses*`)
   await serveAnswers(page, rows)
   await page.goto('/dashboard')
+  await openAllAnalytics(page)
   const card = page.getByRole('region', { name: 'Accuracy' })
   await expect(card).toBeVisible({ timeout: 20_000 })
   await page.getByRole('region', { name: 'Analytics' }).getByRole('radio', { name: 'Last 7 days' }).click()
@@ -106,6 +116,7 @@ test('one day of practice gets a number and a way back to its misses, not a char
 
 test('the weakest topics each start a quiz on that topic', async ({ page }) => {
   await page.goto('/dashboard')
+  await openAllAnalytics(page)
   const card = page.getByRole('region', { name: 'Accuracy' })
   await expect(card).toBeVisible({ timeout: 20_000 })
   await page.getByRole('region', { name: 'Analytics' }).getByRole('radio', { name: 'Last 30 days' }).click()
@@ -121,6 +132,7 @@ test('the weakest topics each start a quiz on that topic', async ({ page }) => {
 
 test('a day on the chart opens the questions answered that day', async ({ page }) => {
   await page.goto('/dashboard')
+  await openAllAnalytics(page)
   const card = page.getByRole('region', { name: 'Accuracy' })
   await expect(card).toBeVisible({ timeout: 20_000 })
   await page.getByRole('region', { name: 'Analytics' }).getByRole('radio', { name: 'Last 30 days' }).click()
@@ -134,13 +146,14 @@ test('a day on the chart opens the questions answered that day', async ({ page }
 
 test('the registration deadline shows four days out, and stays dismissed', async ({ page }) => {
   await page.goto('/dashboard')
+  await openAllAnalytics(page)
   const nudge = page.getByRole('status').filter({ hasText: 'Registration for the December 3 Exam FM sitting closes in 4 days' })
   await expect(nudge).toBeVisible({ timeout: 20_000 })
   await expect(nudge).toContainText('November 4, 10:00 AM U.S. Central')
   await nudge.getByRole('button', { name: 'Dismiss' }).click()
   await expect(nudge).toHaveCount(0)
   await page.reload()
-  await expect(page.getByRole('region', { name: 'Accuracy' })).toBeVisible({ timeout: 20_000 })
+  await expect(page.getByRole('region', { name: 'Analytics' })).toBeVisible({ timeout: 20_000 })
   await expect(page.getByText('Registration for the December 3 Exam FM sitting')).toHaveCount(0)
 })
 
@@ -148,4 +161,19 @@ test('the quiz builder carries the same deadline', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto('/?topic=Financial%20Mathematics')
   await expect(page.getByText('Registration for the December 3 Exam FM sitting closes in 4 days')).toBeVisible({ timeout: 20_000 })
+})
+
+test('the summary leads Analytics: the span’s tiles, day by day', async ({ page }) => {
+  await page.goto('/dashboard')
+  const analytics = page.getByRole('region', { name: 'Analytics' })
+  await expect(analytics).toBeVisible({ timeout: 20_000 })
+  await analytics.getByRole('radio', { name: 'Last 7 days' }).click()
+  await expect(analytics.getByRole('heading', { name: /Past week/ })).toBeVisible()
+  await expect(analytics).toContainText(/Accuracy\s*70%\s*7 of 10 right/)
+  // Every answer took 200 s; Exam FM allows 5:00 a question.
+  await expect(analytics).toContainText(/Pace\s*3:20/)
+  await expect(analytics.getByRole('img', { name: /October 30: 4 of 5 right/ })).toBeVisible()
+  // The full cards wait behind All analytics.
+  await expect(analytics.getByRole('region', { name: 'Accuracy' })).toHaveCount(0)
+  await analytics.screenshot({ path: 'test-results/analytics-summary.png' })
 })

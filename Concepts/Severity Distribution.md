@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:5edf4eedbfcf3c4f619f65d72bbdeae00095028fd73fb145ece5ee9ae78f6739
+  content_hash: sha256:3662606678df73b385760a0416a6acb3c2d9f89804d3865e27f6b7d05c10d658
   sources:
     - "Tse, Nonlife Actuarial Models: Theory, Methods and Evaluation (Cambridge UP 2009; MAS-I reading) — publisher preview: §1.1 p.4 (PDF 22: 'the monetary amount of each claim is called the claim severity or claim size'; frequency and severity considered separately); printed contents pp.vii-viii (PDF 9-10: §2.2.1-2.2.4 Exponential, Gamma, Weibull, Pareto; §2.4 tail properties; §2.5.4 effects of inflation), sha256:f6d009afdd1776907db090b41b72dd5a76d0b5ba3f0ee42e8b07279d5763b404 — https://api.pageplace.de/preview/DT0400.9780511630231_A24404031/preview-9780511630231_A24404031.pdf"
     - "Frees et al. (eds.), Loss Data Analytics (open textbook, 1st ed.), ch.3 'Modeling Loss Severity': §3.2.1 gamma light-tailed (all moments), §3.2.2 Pareto heavy-tailed (decreasing hazard 'another indication'), §3.2.3 Weibull hazard decreasing for shape < 1 ('heavy tailed'), increasing for > 1, §3.3.2 scale distributions (inflation multiplies the scale parameter), §3.3.5.2 k-point mixture (E(X^r), M_X(t) weighted sums), §3.4.2 E(X ^ u) = int_0^u [1 - F(x)] dx and Y^L = (X ^ u) - (X ^ d), §3.4.3 Example 3.4.5 (500 xs 100 layer, exponential mean 1000, 5% inflation: cost per payment +1.1%), §3.5.2 censored (S(u)) and truncated (f(x)/S(d)) likelihoods, sha256:263021bf543b04b2881284b38b7dcbd0586b78daec371b88a1eefcd362dff732 — https://openacttexts.github.io/Loss-Data-Analytics/ChapSeverity.html"
@@ -20,62 +20,74 @@ verification:
   log: .verify/Concepts/Severity Distribution.md
 ---
 
-**A severity distribution** is the probability distribution of the size $X$ of a single loss or claim, given that one happens. It is described by its CDF $F(x) = P(X \le x)$ or its density $f(x)$. Paired with a claim-count distribution, it prices anything that depends on how large claims are: deductibles, limits, excess layers and [[Exposure Curves|exposure curves]].
+A **Severity Distribution** is the probability distribution of the size $X$ of a single loss or claim, given that a loss occurs. It prices anything that depends on how large losses are, such as deductibles, limits and excess layers. The expected loss up to a limit $u$, the [[Limited Expected Value|limited expected value]], is
 
-> $$E[X \wedge u] = \int_0^u \big[1 - F(x)\big]\,dx$$
+> $$E[X \wedge u] = \int_0^u S(x)\,dx$$
+
+- $S(x) = 1 - F(x)$ is the survival function of $X$.
+
+The expected loss per loss in the layer from $d$ to $u$ is $E[X \wedge u] - E[X \wedge d]$. It depends only on the survival function inside the layer, so for an excess layer the tail of the distribution decides the answer.
+
+> [!example]- Losses are exponential with mean 1,000. What is the expected loss per loss in the layer from 1,000 to 2,000? {Example}
+> - The survival function is $S(x) = e^{-x/1{,}000}$.
+> - The expected loss in the layer is $\int_{1{,}000}^{2{,}000} e^{-x/1{,}000}\,dx = 1{,}000\left(e^{-1} - e^{-2}\right) = 232.54$.
+
+## Common severity distributions
+
+The severity distributions of the MAS-I reading are the [[Exponential Distribution|exponential]], [[Gamma|gamma]], [[Weibull Distribution|Weibull]] and [[Pareto Distribution|Pareto]] distributions. The [[Lognormal Distribution|lognormal]] is also common.
+
+| Distribution | Survival function $S(x)$ | Mean |
+| --- | --- | --- |
+| Exponential | $e^{-x/\theta}$ | $\theta$ |
+| Gamma | no closed form | $\alpha\theta$ |
+| Weibull | $e^{-(x/\theta)^\tau}$ | $\theta\,\Gamma(1 + 1/\tau)$ |
+| Pareto | $\left(\frac{\theta}{x + \theta}\right)^{\alpha}$ | $\frac{\theta}{\alpha - 1}$, for $\alpha > 1$ |
+| Lognormal | $1 - \Phi\left(\frac{\ln x - \mu}{\sigma}\right)$ | $e^{\mu + \sigma^2/2}$ |
+
+From the lightest [[Tail Weight|tail]] to the heaviest, the order is the Weibull with $\tau > 1$, the exponential, the lognormal and the Pareto. The lognormal has every moment but no moment generating function. A heavier-tailed distribution places more of the expected loss in the excess layers.
+
+## Scaling and inflation
+
+Each distribution in the table has a scale parameter $\theta$, or $e^\mu$ for the lognormal. Multiplying the losses by a constant $c$ keeps the family and multiplies the scale parameter by $c$. If losses inflate at the rate $r$, the scale parameter becomes
+
+> $$\theta' = (1 + r)\,\theta$$
+
+> [!example]- Losses are exponential with mean 1,000 and inflate by 10%. What is the probability that an inflated loss exceeds 2,000? {Example}
+> - The inflated losses are exponential with mean $1.1 \times 1{,}000 = 1{,}100$.
+> - The probability is $e^{-2{,}000/1{,}100} = 0.1623$.
+
+## Fitting to data truncated by a deductible
+
+Losses at or below a deductible $d$ are not reported, so the data are [[Truncation|truncated]] at $d$. Each reported loss $x_i$ enters the [[Maximum Likelihood Estimation|likelihood]] as its density given that it exceeds $d$:
+
+> $$L(\theta) = \prod_{i=1}^{n} \frac{f(x_i)}{S(d)}$$
+
+A loss [[Censoring|censored]] at a policy limit $u$ enters the likelihood as $S(u)$.
+
+> [!example]- Four losses are reported under a deductible of 1,000, with ground-up sizes 1,500, 2,500, 4,000 and 7,000. What is the maximum likelihood estimate of the mean of an exponential severity distribution? {Example}
+> - Each term of the likelihood is $\frac{\theta^{-1}e^{-x_i/\theta}}{e^{-1{,}000/\theta}} = \theta^{-1}e^{-(x_i - 1{,}000)/\theta}$.
+> - The amounts above the deductible add to $500 + 1{,}500 + 3{,}000 + 6{,}000 = 11{,}000$, so $L(\theta) = \theta^{-4}e^{-11{,}000/\theta}$.
+> - Setting the derivative of $\ln L(\theta) = -4\ln\theta - 11{,}000/\theta$ to zero gives $\hat{\theta} = 11{,}000/4 = 2{,}750$.
+
+## Exposure curves
+
+For property risks the loss is expressed as a fraction $X$ of the risk's maximum possible loss (MPL), so $0 \le X \le 1$. The [[Exposure Curves|exposure curve]] gives the proportion of the expected loss below a retention $d$, as a fraction of the MPL:
 
 > $$G(d) = \frac{E[X \wedge d]}{E[X]}$$
 
-- $E[X \wedge u]$ is the [[Limited Expected Value|limited expected value]], the expected loss capped at $u$. A layer's expected cost is the difference of two of these, so this integral is how the severity distribution turns into [[Expected Loss|expected losses by layer]] and [[Increased Limits|increased limits factors]].
-- **Families.** The MAS-I reading's four are the [[Exponential Distribution|exponential]], [[Gamma|gamma]], [[Weibull Distribution|Weibull]] and [[Pareto Distribution|Pareto]]. The first three have every moment, so they are light-tailed by the moment criterion, though a Weibull with shape below 1 has a decreasing hazard rate, the mark of a heavier tail. The Pareto has moments only of order below its shape $\alpha$ and is heavy-tailed. The [[Lognormal Distribution|lognormal]] has every moment but no moment generating function, which makes it heavy-tailed under the more common MGF criterion. A finite mixture of exponentials has every moment and an MGF, so it is light-tailed. A layer's cost depends only on $1 - F$ inside the layer, so for excess layers the tail decides the answer. Parameters are fitted by [[Maximum Likelihood Estimation|maximum likelihood]]. The fit must allow for [[Truncation|truncation]] by deductibles and [[Censoring|censoring]] at policy limits.
-- **Spread and tail.** The [[Coefficient of Variation|coefficient of variation]], the standard deviation over the mean, measures a severity distribution's spread relative to its size. The tail is read off the [[Mean Excess Loss|mean excess loss]] $e(d)$, the expected amount by which a loss exceeding $d$ exceeds it: constant for the exponential, rising linearly in $d$ for the Pareto. An exponential whose rate is itself gamma-distributed is a Pareto, so a [[Mixture Distribution|mixture]] can have a heavier tail than the distributions mixed.
-- **Exposure curves (Exam 9).** Property losses grow with the size of the risk, so they are expressed as a fraction $X \in [0,1]$ of the risk's maximum possible loss or sum insured. $G(d)$ is then the share of expected loss kept below a deductible of $d$. It rises from $G(0) = 0$ to $G(1) = 1$ and is concave. The curve and the distribution determine each other: $E[X] = 1/G'(0)$, and $1 - F(d) = G'(d)/G'(0)$ for $d < 1$.
-- **The MBBEFD class.** Bernegger's MBBEFD distributions give such curves in closed form. The one-parameter subfamily with $c = 1.5, 2, 3, 4$ coincides very well with the Swiss Re Y1–Y4 curves, and $c = 5$ with a Lloyd's curve used for rating industrial risks.
-- **Inflation** multiplies the scale parameter: if losses rise by $r$, then $\theta$ becomes $\theta(1+r)$. With the limits held fixed, the effect is leveraged ([[Inflation]]): under positive inflation, losses capped at a basic limit grow no faster than $r$, and the losses excess of it, with no cap above, at least as fast. A layer with both an attachment and a cap can grow more slowly than $r$: for an exponential with mean $1{,}000$, $5\%$ inflation raises the expected cost per payment in a $500$ xs $100$ layer by only $1.1\%$.
+$G$ rises from $G(0) = 0$ to $G(1) = 1$, and it is increasing and concave. The curve and the distribution determine each other: $E[X] = 1/G'(0)$ and $S(d) = G'(d)/G'(0)$ for $d < 1$. A cedant with retention $R$ on a risk with MPL $M$ keeps the share $G(R/M)$ of the expected loss. Using one curve for risks of different sizes assumes that the loss as a fraction of the MPL does not depend on the size of the risk.
 
-> [!example]- Fitting Severity to Deductible Data {Example}
-> Four claims are reported under a $\$1{,}000$ deductible, with ground-up sizes $\$1{,}500$, $\$2{,}500$, $\$4{,}000$ and $\$7{,}000$. Losses below $\$1{,}000$ are never reported.
->
-> Fit an exponential by maximum likelihood.
->
-> > [!answer]-
-> > Each observation is left-truncated at $1{,}000$, so its likelihood is $f(x_i) / [1 - F(1000)]$:
-> >
-> > $$
-> > \begin{align*}
-> > L(\theta) &= \prod_{i=1}^{4} \frac{\theta^{-1} e^{-x_i/\theta}}{e^{-1000/\theta}} \\
-> > &= \theta^{-4}\,e^{-(500 + 1500 + 3000 + 6000)/\theta} \\
-> > &= \theta^{-4}\,e^{-11{,}000/\theta}
-> > \end{align*}
-> > $$
-> >
-> > Setting $\frac{d}{d\theta}\ln L = -4/\theta + 11{,}000/\theta^2$ to zero gives $\hat\theta = 11{,}000/4 = 2{,}750$, the mean excess over the deductible.
-> >
-> > Ignoring the truncation gives $\hat\theta = 15{,}000/4 = 3{,}750$, which overstates severity by $36\%$. The fitted curve also says the four reports stand for $4 / e^{-1000/2750} = 5.75$ ground-up losses. Frequency needs the same correction as severity.
+Bernegger's MBBEFD class gives exposure curves in closed form:
 
-> [!example]- An Exposure Curve from a Destruction-Rate Distribution {Example}
-> For a class of property risks, the loss as a fraction of MPL has survival function $1 - F(x) = (1 - x)^3$ on $[0, 1]$. One risk has an MPL of $\$10{,}000{,}000$, premium of $\$50{,}000$ and an expected loss ratio of $60\%$.
->
-> Derive the exposure curve and find the expected loss in a $\$3$M excess of $\$2$M per-risk layer.
->
-> > [!answer]-
-> > $$
-> > \begin{align*}
-> > E[X \wedge d] &= \int_0^d (1 - x)^3\,dx \\
-> > &= \frac{1 - (1 - d)^4}{4} \\[4pt]
-> > G(d) &= 1 - (1 - d)^4
-> > \end{align*}
-> > $$
-> >
-> > The layer runs from $d = 0.2$ to $d = 0.5$ of MPL. Expected loss is $0.60 \times 50{,}000 = \$30{,}000$.
-> >
-> > $$
-> > \begin{align*}
-> > G(0.5) - G(0.2) &= 0.9375 - 0.5904 \\
-> > &= 0.3471 \\[4pt]
-> > \text{Layer loss} &= 0.3471 \times 30{,}000 \\
-> > &= \$10{,}413
-> > \end{align*}
-> > $$
-> >
-> > The cedant keeps $0.5904 \times 30{,}000 = \$17{,}712$ below $\$2$M, and $\$1{,}875$ lies above $\$5$M. Recovering the distribution from the curve: $G'(d) = 4(1 - d)^3$, so $E[X] = 1/G'(0) = 0.25$ and $G'(d)/G'(0) = (1 - d)^3$. That matches the survival function we started from.
+> $$G(x) = \frac{\ln\left[\frac{(g - 1)b + (1 - gb)\,b^x}{1 - b}\right]}{\ln(gb)}$$
+
+- $b$ and $g$ are the parameters of the curve, with $g$ the reciprocal of the probability of a total loss.
+
+> [!example]- For a class of property risks, the loss as a fraction of MPL has survival function $S(x) = (1 - x)^3$ on $[0, 1]$. A risk has an MPL of 10,000,000 and an expected loss of 30,000. What is the expected loss in the layer of 3,000,000 in excess of 2,000,000? {Example}
+> - The limited expected value is $E[X \wedge d] = \int_0^d (1 - x)^3\,dx = \frac{1 - (1 - d)^4}{4}$, and $E[X] = \frac{1}{4}$.
+> - The exposure curve is $G(d) = 1 - (1 - d)^4$.
+> - The layer runs from 0.2 to 0.5 of the MPL, and $G(0.5) - G(0.2) = 0.9375 - 0.5904 = 0.3471$.
+> - The expected loss in the layer is $0.3471 \times 30{,}000 = 10{,}413$.
+
+> [!trap] Fitting truncated data as if it were ground-up
+> Ignoring the deductible treats the reported losses as a sample from the whole distribution. In the fitting example, the sample mean of the ground-up sizes gives $\hat{\theta} = 15{,}000/4 = 3{,}750$, which overstates the mean by 36%.

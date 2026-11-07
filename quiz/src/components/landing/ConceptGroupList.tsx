@@ -94,31 +94,25 @@ function GroupSection({
   const [open, setOpen] = useState(someSelected)
   const examPercentage = parseExamWeight(group.weight)
 
-  // Open, a weighted group's header is filled with the exam's own colour (the
-  // study guide's learning objectives do the same), so it carries white text.
-  const onAccent = examPercentage !== null && open
-  const rowBg = onAccent
-    ? 'group-hover:bg-black/10'
-    : allSelected
+  const rowBg = allSelected
     ? 'bg-primary/10 group-hover:bg-primary/15'
     : someSelected
     ? 'bg-primary/5 group-hover:bg-primary/10'
     : 'group-hover:bg-accent/30'
 
   return (
-    <div className={cn('overflow-hidden rounded-xl', examPercentage !== null && !open ? 'bg-card' : 'bg-background')}>
-      <div className="relative">
+    <div className="overflow-hidden rounded-xl bg-background">
+      <div className={cn('relative', examPercentage !== null && 'bg-card')}>
         {/* Share of the exam, drawn exactly as the study guide's learning
-            objectives draw it (`MarkdownCallout`): collapsed, a card with a line
-            along its bottom edge to the group's percentage in the exam's own
-            colour (`--exam-accent-vivid`, scoped by the builder); open, that
-            colour fills the whole header. Foreground grey where no exam is in
-            scope. The selection tints sit on top, so a picked group still shows
-            its weight. */}
+            objectives draw it (`MarkdownCallout`): a card with a line along its
+            bottom edge in the exam's own colour (`--exam-accent-vivid`, scoped
+            by the builder), drawn to the group's percentage while collapsed and
+            run the full width when open. Foreground grey where no exam is in
+            scope. */}
         {examPercentage !== null && (
           <div
             aria-hidden
-            className={`absolute left-0 bottom-0 transition-all duration-300 bg-[color:var(--exam-accent-vivid,hsl(var(--muted-foreground)))] ${open ? 'top-0' : 'top-[calc(100%-3px)]'}`}
+            className={`absolute left-0 bottom-0 transition-all duration-300 bg-[color:var(--exam-accent-vivid,hsl(var(--muted-foreground)))] h-[3px]`}
             style={{ width: open ? '100%' : `${Math.min(100, examPercentage)}%` }}
           />
         )}
@@ -142,7 +136,7 @@ function GroupSection({
             ) : someSelected ? (
               <CheckMark className="h-5 w-5 text-green-500/40" />
             ) : (
-              <Circle className={cn('h-5 w-5', onAccent ? 'text-white/70' : 'text-muted-foreground/60')} />
+              <Circle className="h-5 w-5 text-muted-foreground/60" />
             )}
           </button>
 
@@ -158,13 +152,13 @@ function GroupSection({
             aria-expanded={open}
           >
             <div className="flex w-full items-center gap-2">
-              <span className={cn('min-w-0 flex-1 text-sm font-medium leading-snug', onAccent ? 'text-white' : 'text-foreground')}>
+              <span className="min-w-0 flex-1 text-sm font-medium leading-snug text-foreground">
                 {group.name}
               </span>
               {/* The precise reading of what the edge under the row shows. */}
-              {group.weight && <ExamWeightLabel weight={group.weight} onAccent={onAccent} bar={false} />}
+              {group.weight && <ExamWeightLabel weight={group.weight} bar={false} />}
               <ChevronDown
-                className={`h-3.5 w-3.5 shrink-0 ${onAccent ? 'text-white/80' : 'text-muted-foreground'} transition-transform duration-200 ${open ? '' : '-rotate-90'}`}
+                className={`h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform duration-200 ${open ? '' : '-rotate-90'}`}
               />
             </div>
           </button>

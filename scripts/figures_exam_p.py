@@ -1318,8 +1318,8 @@ def marginal_probability_function() -> Fig:
         f.rect(right + 24, r - 14, wid, 28, rx=3, fill=GREEN, fill_opacity="0.7")
     f.line(x0, top - 18, right, top - 18, cls="axis")
     f.line(right + 24, top, right + 24, y1, cls="axis")
-    f.text(x0 - 8, top - 50, "f_X", cls="sm bold", anchor="end")
-    f.text(right + 24, top - 6, "f_Y", cls="sm bold", anchor="start")
+    f.subtext(x0 - 8, top - 50, "f", "X", cls="sm bold", anchor="end")
+    f.subtext(right + 24, top - 6, "f", "Y", cls="sm bold", anchor="start")
     return f
 
 
@@ -1440,8 +1440,8 @@ def covariance() -> Fig:
         y = my - (0.72 * z1 + 0.7 * z2) * side / 6.4
         if px0 + 3 < x < px0 + side - 3 and py0 + 3 < y < py0 + side - 3:
             f.circle(x, y, 3, fill=BLUE, fill_opacity="0.8")
-    f.text(mx, py0 + side + 18, "μₓ", cls="sm dim")
-    f.text(px0 - 8, my + 4, "μ_Y", cls="sm dim", anchor="end")
+    f.subtext(mx, py0 + side + 18, "μ", "X", cls="sm dim")
+    f.subtext(px0 - 8, my + 4, "μ", "Y", cls="sm dim", anchor="end")
     return f
 
 

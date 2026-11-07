@@ -202,6 +202,13 @@ class Fig:
             f'<text {_attrs(x=_fmt(x), y=_fmt(y), text_anchor=anchor, **({"class": cls} if cls else {}), **kw)}>{escape(str(s))}</text>'
         )
 
+    def subtext(self, x, y, base, subscript, cls="", anchor="middle", **kw) -> None:
+        """A label with a subscript, such as μ with X under it: `subtext(x, y, "μ", "X")`."""
+        self.raw(
+            f'<text {_attrs(x=_fmt(x), y=_fmt(y), text_anchor=anchor, **({"class": cls} if cls else {}), **kw)}>'
+            f'{escape(str(base))}<tspan baseline-shift="sub" font-size="72%">{escape(str(subscript))}</tspan></text>'
+        )
+
     def poly(self, pts, cls="curve", **kw) -> None:
         d = " ".join(f"{_fmt(x)},{_fmt(y)}" for x, y in pts)
         self.raw(f'<polyline {_attrs(points=d, **({"class": cls} if cls else {}), **kw)}/>')

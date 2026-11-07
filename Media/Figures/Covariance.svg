@@ -115,7 +115,7 @@ text {
     <circle cx="188.91" cy="278.66" r="3" fill="#3b82f6" fill-opacity="0.8"/>
     <circle cx="198.2" cy="216.95" r="3" fill="#3b82f6" fill-opacity="0.8"/>
     <circle cx="212.74" cy="212.98" r="3" fill="#3b82f6" fill-opacity="0.8"/>
-    <text x="198" y="364" text-anchor="middle" class="sm dim">μₓ</text>
-    <text x="62" y="222" text-anchor="end" class="sm dim">μ_Y</text>
+    <text x="198" y="364" text-anchor="middle" class="sm dim">μ<tspan baseline-shift="sub" font-size="72%">X</tspan></text>
+    <text x="62" y="222" text-anchor="end" class="sm dim">μ<tspan baseline-shift="sub" font-size="72%">Y</tspan></text>
   </g>
 </svg>

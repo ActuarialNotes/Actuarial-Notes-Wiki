@@ -10,20 +10,20 @@ import { parseExamWeight } from '@/lib/examWeight'
  * row behind it also fills to the percentage — the label is the precise
  * reading of what the fill shows at a glance.
  */
-export function ExamWeightLabel({ weight, className }: { weight: string; className?: string }) {
+export function ExamWeightLabel({ weight, className, onAccent = false }: { weight: string; className?: string; onAccent?: boolean }) {
   const pct = parseExamWeight(weight)
 
   return (
     <span className={cn('flex shrink-0 flex-col items-end gap-1', className)}>
-      <span className="text-xs font-medium tabular-nums text-muted-foreground">{weight}</span>
+      <span className={cn('text-xs font-medium tabular-nums', onAccent ? 'text-white/85' : 'text-muted-foreground')}>{weight}</span>
       {pct !== null && (
         <span
-          className="h-1 w-10 overflow-hidden rounded-full bg-muted"
+          className={cn('h-1 w-10 overflow-hidden rounded-full', onAccent ? 'bg-white/25' : 'bg-muted')}
           role="img"
           aria-label={`${weight} of the exam`}
         >
           <span
-            className="block h-full rounded-full bg-muted-foreground/50"
+            className={cn('block h-full rounded-full', onAccent ? 'bg-white/80' : 'bg-muted-foreground/50')}
             style={{ width: `${Math.min(100, pct)}%` }}
           />
         </span>

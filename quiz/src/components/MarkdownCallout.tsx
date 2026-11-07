@@ -511,10 +511,13 @@ function FoldingCallout({ type, fold, title, titleRest = [], style, pill, childr
   const examPercentage = parseExamWeight(examWeight)
   const isBarGraph = examPercentage !== null
 
+  // An open objective's bar is filled with the exam's own colour — the logo's
+  // `--exam-accent-vivid` — so its header carries white text, like the logo.
+  const onAccent = isBarGraph && open
   const headerContent = (
-    <div className="flex items-center gap-3 w-full">
+    <div className={`flex items-center gap-3 w-full${onAccent ? ' text-white' : ''}`}>
       {Icon && <Icon className={`h-4 w-4 shrink-0 ${style.accentClass}`} />}
-      <span className={`font-medium flex-1 text-left ${style.noBorder ? 'text-base' : 'text-sm'} ${Icon ? 'text-foreground' : style.accentClass}${collapsible && hasBody && !pill ? ` ${TOGGLE_TITLE}` : ''}`}>
+      <span className={`font-medium flex-1 text-left ${style.noBorder ? 'text-base' : 'text-sm'} ${onAccent ? '' : Icon ? 'text-foreground' : style.accentClass}${collapsible && hasBody && !pill ? ` ${TOGGLE_TITLE}` : ''}`}>
         {pill && (
           <span className="mr-2 inline-flex items-center rounded-full bg-emerald-600/15 px-2 py-0.5 align-middle text-xs font-semibold text-emerald-800 dark:bg-emerald-400/15 dark:text-emerald-200">
             {pill}
@@ -522,10 +525,10 @@ function FoldingCallout({ type, fold, title, titleRest = [], style, pill, childr
         )}
         {renderTitleLine(displayTitle, titleRest)}
       </span>
-      {examWeight && <ExamWeightLabel weight={examWeight} />}
+      {examWeight && <ExamWeightLabel weight={examWeight} onAccent={onAccent} />}
       {collapsible && hasBody && (
         <ChevronDown
-          className={`h-5 w-5 shrink-0 text-muted-foreground transition-transform duration-200 ${open ? '' : '-rotate-90'}`}
+          className={`h-5 w-5 shrink-0 ${onAccent ? 'text-white/80' : 'text-muted-foreground'} transition-transform duration-200 ${open ? '' : '-rotate-90'}`}
         />
       )}
     </div>
@@ -547,12 +550,12 @@ function FoldingCallout({ type, fold, title, titleRest = [], style, pill, childr
       <div className={`not-prose my-4 ${CALLOUT_ROUND} overflow-hidden bg-background`}>
         <div className="relative">
           {/* The bar fills to the exam coverage % when collapsed, full width when
-              expanded. It is filled in the colour of the exam whose page it is on
-              (`--exam-accent-muted`, scoped by `WikiExam` — the soft wash read as a
-              tint rather than the exam's colour), and plain card grey wherever no
-              exam is in scope. */}
+              expanded. Collapsed it is a tint of the exam whose page it is on
+              (`--exam-accent-muted`, scoped by `WikiExam`); expanded it is the
+              exam's own colour, the logo's `--exam-accent-vivid`. Plain card grey
+              wherever no exam is in scope. */}
           <div
-            className="absolute inset-y-0 left-0 bg-[color:var(--exam-accent-muted,hsl(var(--card)))] transition-all duration-300"
+            className={`absolute inset-y-0 left-0 transition-all duration-300 ${open ? 'bg-[color:var(--exam-accent-vivid,hsl(var(--card)))]' : 'bg-[color:var(--exam-accent-muted,hsl(var(--card)))]'}`}
             style={{ width: open ? '100%' : `${examPercentage}%` }}
           />
           {collapsible && hasBody ? (
@@ -560,7 +563,7 @@ function FoldingCallout({ type, fold, title, titleRest = [], style, pill, childr
               type="button"
               data-callout-toggle
               onClick={toggle}
-              className="relative z-10 w-full px-5 py-3 text-left hover:bg-accent/30 transition-colors duration-150"
+              className={`relative z-10 w-full px-5 py-3 text-left ${onAccent ? 'hover:bg-black/10' : 'hover:bg-accent/30'} transition-colors duration-150`}
               aria-expanded={open}
             >
               {headerContent}

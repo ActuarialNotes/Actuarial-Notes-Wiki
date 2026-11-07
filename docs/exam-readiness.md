@@ -117,55 +117,39 @@ the right text, and one that it stays quiet when it should.
 
 ## The Dashboard cards
 
-**Exam readiness is the first card on the Dashboard**, and it leads a group of three that
-`ReadinessCard` portals into the slot the Dashboard puts there (`readinessSlot`, the same
-mechanism as `studyScheduleSlot`), so the cards' state and logic stay with the study plan
-while they render at the top of the page:
+**The Dashboard leads with the week, then Today's session** — what `ReadinessCard` portals
+into the slot the Dashboard puts at the top of the page (`readinessSlot`), so its state and
+logic stay with the study plan while it renders first:
 
-1. **Exam readiness** — the exam's **logo** (the `lg` tile) beside the score as
-   **`NN% Ready`** (with the movement arrow when it moved today), then **how many concepts
-   today's plan still asks for** ("6 concepts to study today" — Pro, with a plan only). No
-   title, band verdict or insight line: the number is the card's one statement. The logo says which exam the
-   card is scoped to without re-printing its name, and carries that exam's accent
-   (`lib/examColors.ts`) so the card sits on the same ladder as every other surface that
-   shows one. Above the card, leading the dashboard, is the **calendar** — the exam date and the days
-   left, set large, then the schedule strip — as a full-width section
-   with no card background or padding; under the card, bare on the page, come the
-   **primary actions**.
-
-   The dates block is the deadline the score is racing — a readiness percentage means
-   nothing without one, so the section carries it. It prints the chosen exam date and how many
-   days that leaves, and falls back to *Set your exam date* when there is none; under either,
-   the **next published sitting window** for this exam (`data/examSittings.ts`) appears only
-   when it adds something — no date chosen yet, or a date that falls outside every known
-   window. Nothing there is inferred: the countdown is the chosen date and the window is
-   transcribed from the sittings table, so an exam with no scheduled sitting simply offers
-   the picker. Tapping the block's date line opens the Study Plan modal at the exam-date step.
-
-   Under those two lines is the **schedule strip** — what used to be the Study Schedule card,
-   drawn as a *linear* heatmap (`<ExamHeatmap layout="linear">`): one 32px-tall cell per day
-   from a week before the first session to a week past the exam's sitting window
-   (`scheduleStripRange` in `lib/heatmapGrid.ts` — every day shares one line, so the span is
-   kept tight and each day stays a target a finger can hit), shaded by how much of that day's
-   plan was completed, with today ringed, the exam day solid and the target-ready day amber.
-   The **sitting window** the exam date falls in (`examWindowFor` in `data/examSittings.ts` —
-   transcribed, so a date in no known window shades nothing but exam day) is a faint wash of
-   the exam's accent colour behind its days. Merging it here is what makes the deadline and the record of what has been done
-   about it one object rather than two cards saying the same thing at opposite ends of the
-   page. It keeps everything the card did: tapping a day opens that day's panel below the
-   block (its sessions, gems, level-ups and what the plan schedules for it), the
-   *schedule-forming* sweep plays out on it when a plan is locked in. The **target-ready**
-   date has no row of its own: its day is the amber cell on the strip, and it is set in the
-   Study Plan modal.
-2. **Today's Study Plan** — what to do about that score today. It follows the number rather
-   than the ring: a reader who has just read *Not started* is looking for the next step, not
-   for a breakdown of how the number was reached.
-3. **Study Guide** — the **ring** beside the **criterion**, the breakdown for the reader who
-   wants one.
-
-The actions (*Read concepts* / *Fix mistakes* / *Start Quiz*) are the Dashboard's: it owns
-their triggers and the pinned-header copies, and hands them to `ReadinessCard` as the
-`actions` prop, which renders them straight under the readiness card, bare on the page.
+1. **The week** — one line saying when the exam is (*68 days to Exam P · Thu, Jan 14*, or
+   *Set your exam date*; tapping it opens the Study Plan modal at the exam-date step), the
+   Week / Overview toggle beside it, the **next published sitting window**
+   (`data/examSittings.ts`) only when it adds something — no date chosen yet, or one outside
+   every known window — and then the **schedule strip**: a *linear* heatmap
+   (`<ExamHeatmap layout="linear">`), one cell per day from a week before the first session
+   to a week past the exam's sitting window (`scheduleStripRange` in `lib/heatmapGrid.ts`),
+   shaded by how much of that day's plan was completed, with today ringed, the exam day
+   solid, the target-ready day amber and the **sitting window** (`examWindowFor` — transcribed,
+   so a date in no known window shades nothing but exam day) a faint wash of the exam's
+   accent. Tapping a day opens that day's panel below it (its sessions, gems, level-ups and
+   what the plan schedules for it); the *schedule-forming* sweep plays out on it when a plan
+   is locked in. Nothing there is inferred: the countdown is the chosen date and the window
+   is transcribed.
+2. **Today's session** (`components/dashboard/TodaySessionCard.tsx`, `lib/todaySession.ts`),
+   in the exam's accent. It opens on the **readiness wheel** (`SessionWheel`): the ring's
+   arcs with **`NN%` ready** in the middle (and the movement arrow when it moved today), and
+   a **numbered pin** on each concept the session asks for — the number is its step below
+   (`ringPins` in `lib/readinessRing.ts` places them, stepping a crowded pin out). The wheel
+   is one button: it opens the **Study Guide** popup. Under it, *Today's session* — its size
+   in **questions and minutes** (the plan quiz's own count, `questionsNeededForPlan`, plus
+   the missed questions still to fix, at the exam's pace from `lib/quizTiming.ts`; an exam
+   paced by the point gets no minutes rather than invented ones), a **time bar** cut by step,
+   and the **steps**, each a checklist of its concepts: *Fix N mistakes* (the reviewer that
+   was the Dashboard's Fix mistakes button), *Learn N new concepts* and *Review N concepts*
+   (today's plan, split by the state each concept was scheduled in). **Start** always does
+   the next step, and the pinned exam row carries a copy of it (*▶ 30 min*), so the day's
+   work is one tap from anywhere on the page.
+3. For an account without Pro, the **locked plan** card.
 
 It is one call — `computeExamReadiness` — read two ways on the Dashboard:
 

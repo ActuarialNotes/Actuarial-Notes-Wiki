@@ -5,10 +5,9 @@ import { useProgress } from '@/hooks/useProgress'
 import { useSubscription } from '@/hooks/useSubscription'
 import { requestProCelebration } from '@/lib/proCelebration'
 import { supabase } from '@/lib/supabase'
-import { Bell, BookOpen, Download, Gem, GraduationCap, HelpCircle, Loader2, LogIn, LogOut, Play, PlusCircle, Settings2, ShoppingBag, Sparkles, X } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { Bell, Download, Gem, GraduationCap, HelpCircle, Loader2, LogIn, LogOut, Play, PlusCircle, Settings2, ShoppingBag, Sparkles, X } from 'lucide-react'
 import { ActiveExamCardLoading, ActiveExamCardEmpty } from '@/components/ActiveExamCard'
-import { ReadinessCard } from '@/components/ReadinessCard'
+import { ReadinessCard, type SessionSummary } from '@/components/ReadinessCard'
 import ExamsPopout from '@/components/ExamsPopout'
 import { StudyPlanConfigModal } from '@/components/StudyPlanConfigModal'
 import { MascotWidget } from '@/components/MascotWidget'
@@ -21,7 +20,6 @@ import { useStudyPlan } from '@/hooks/useStudyPlan'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { useAllQuestions } from '@/hooks/useAllQuestions'
 import { questionsNeededForPlan } from '@/lib/todayPlanCount'
-import { TodayQuizCornerBadge } from '@/components/TodayQuizBadge'
 import { useTodayQuizCounts } from '@/hooks/useTodayQuizCount'
 import { CompletionCornerBadge } from '@/components/CheckMark'
 import { ExamLogo } from '@/components/ExamLogo'
@@ -40,7 +38,6 @@ import { matchesSelectedVariant } from '@/data/examSittings'
 import { EXAM_ID_TO_TRACK_NAME } from '@/data/tracks'
 import { useGems } from '@/hooks/useGems'
 import { LevelBadge } from '@/components/LevelBadge'
-import { FixMistakesButton } from '@/components/FixMistakesButton'
 import type { LeagueExamOption } from '@/components/LeaderboardPanel'
 import { DashboardExportModal } from '@/components/DashboardExportModal'
 import { DashboardRemindersModal } from '@/components/DashboardRemindersModal'
@@ -48,7 +45,7 @@ import { usePodcast } from '@/stores/podcastStore'
 import { DashboardGuideModal } from '@/components/DashboardGuideModal'
 import { DashboardSearchBar } from '@/components/DashboardSearchBar'
 import { useAccuracyTrend } from '@/hooks/useAccuracyTrend'
-import { DAILY_PLAN_EMAIL_ENABLED, MISTAKES_REVIEW_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
+import { DAILY_PLAN_EMAIL_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
 
 const ACTIVE_EXAM_KEY = 'quiz.dashboard.activeExamId'
 const WELCOME_DISMISSED_KEY = 'quiz.dashboard.welcomeDismissed'
@@ -164,8 +161,8 @@ export default function Dashboard() {
   const [onboardingStep, setOnboardingStep] = useState<1 | 2 | 3>(1)
   const [conceptsOpenCounter, setConceptsOpenCounter] = useState(0)
   const [startQuizCounter, setStartQuizCounter] = useState(0)
-  const [isLaunchingQuiz, setIsLaunchingQuiz] = useState(false)
-  const [planComplete, setPlanComplete] = useState(false)
+  const [startSessionCounter, setStartSessionCounter] = useState(0)
+  const [session, setSession] = useState<SessionSummary | null>(null)
   const [profileOpen, setProfileOpen] = useState(false)
   const [signOutConfirm, setSignOutConfirm] = useState(false)
   const [exportOpen, setExportOpen] = useState(false)
@@ -181,18 +178,10 @@ export default function Dashboard() {
   // dashboard exists to answer and carries the schedule strip and the primary
   // actions that act on it, then Today's Study Plan and the Study Guide ring.
   const [readinessSlotEl, setReadinessSlotEl] = useState<HTMLDivElement | null>(null)
-  // FixMistakesButton portals its compact copy into this slot in the pinned
-  // header row (the slot only exists while the actions are pinned).
-  const [mistakesSlotEl, setMistakesSlotEl] = useState<HTMLDivElement | null>(null)
-
-  // Sticky exam header: the exam switcher pins to the top of the viewport, and
-  // once the full-size primary actions row has scrolled up behind it, compact
-  // copies of those two buttons slide into the pinned row so "Read concepts"
-  // and the quiz launch stay reachable from anywhere on the page.
-  const examTabsRowRef = useRef<HTMLDivElement>(null)
+  // The exam switcher pins to the top of the viewport, and carries the Start
+  // of today's session at its right end, so the day's work is one tap away
+  // from anywhere on the page.
   const examTabsScrollRef = useRef<HTMLDivElement>(null)
-  const primaryActionsRef = useRef<HTMLDivElement>(null)
-  const [actionsPinned, setActionsPinned] = useState(false)
   const [tabsOverflowRight, setTabsOverflowRight] = useState(false)
 
   useEffect(() => {
@@ -394,12 +383,6 @@ export default function Dashboard() {
   // nothing picked, and no quest, heatmap or guide reads a plan's concepts.
   const studyPlan = isPro ? computedPlan : null
 
-  // Today's plan concepts — gates the "Start Quiz / Extra Credit" action
-  // (mirrors the same derivation in ReadinessCard).
-  const displayConcepts = studyPlan?.status === 'review_mode'
-    ? (studyPlan?.reviewConcepts ?? [])
-    : (studyPlan?.todaysConcepts ?? [])
-
   // Fewest questions needed to complete today's plan — shown as a badge on the
   // "Start Quiz" button (the exact size of the quiz that button
   // launches, scoped to the active exam) and hidden once the plan is complete.
@@ -433,15 +416,17 @@ export default function Dashboard() {
     return questionsNeededForPlan(studyPlan, questionExamLabel(activeSyllabus), allQuestions, doneConceptSlugs, todayAnsweredIds)
   }, [activeSyllabus, studyPlan, allQuestions, doneConceptSlugs, todayAnsweredIds])
 
-  // Top-of-dashboard primary actions. "Read concepts" and the quiz launch reuse
-  // the trigger props ReadinessCard already listens on (same path as the header
-  // quick-actions), so the concept popup / quiz-launch cascade behave identically.
-  const handleReadConcepts = useCallback(() => setConceptsOpenCounter(c => c + 1), [])
-  const handleStartTodaysQuiz = useCallback(() => {
-    if (isLaunchingQuiz) return
-    setIsLaunchingQuiz(true)
-    setStartQuizCounter(c => c + 1)
-  }, [isLaunchingQuiz])
+  // Sizes one step of today's session: the same count as the plan's, for some
+  // of its concepts (lib/todaySession.ts).
+  const questionsFor = useCallback((concepts: readonly string[]) => {
+    if (!activeSyllabus || !studyPlan) return 0
+    const subset = [...concepts]
+    return questionsNeededForPlan(
+      { ...studyPlan, status: 'on_track', todaysConcepts: subset, reviewConcepts: subset },
+      questionExamLabel(activeSyllabus), allQuestions, doneConceptSlugs, todayAnsweredIds,
+    )
+  }, [activeSyllabus, studyPlan, allQuestions, doneConceptSlugs, todayAnsweredIds])
+  const handleStartSession = useCallback(() => setStartSessionCounter(c => c + 1), [])
 
   // The tab strip's trailing edge only fades while there are more tabs to the
   // right of it — fading a tab that's already the last one just makes the active
@@ -452,36 +437,10 @@ export default function Dashboard() {
     setTabsOverflowRight(scroller.scrollWidth - scroller.clientWidth - scroller.scrollLeft > 1)
   }, [])
 
-  // Swap in the compact header actions once the full-size actions row has
-  // scrolled up behind the pinned exam tabs. Both rects come from the same
-  // measurement, so the threshold follows the sticky offset (which differs per
-  // breakpoint — the md top bar vs. the lg sidebar) with nothing hard-coded.
-  // The pinned row's height is fixed (h-10 controls), so the compact buttons
-  // appearing can't move the threshold and make the state flicker.
   useEffect(() => {
-    if (!activeSyllabus) {
-      setActionsPinned(false)
-      return
-    }
-    let raf = 0
-    const measure = () => {
-      raf = 0
-      const tabs = examTabsRowRef.current
-      const actions = primaryActionsRef.current
-      if (!tabs || !actions) return
-      setActionsPinned(actions.getBoundingClientRect().bottom < tabs.getBoundingClientRect().bottom)
-      measureTabsOverflow()
-    }
-    const schedule = () => { if (!raf) raf = requestAnimationFrame(measure) }
-    measure()
-    window.addEventListener('scroll', schedule, { passive: true })
-    window.addEventListener('resize', schedule)
-    return () => {
-      if (raf) cancelAnimationFrame(raf)
-      window.removeEventListener('scroll', schedule)
-      window.removeEventListener('resize', schedule)
-    }
-  }, [activeSyllabus, measureTabsOverflow])
+    window.addEventListener('resize', measureTabsOverflow)
+    return () => window.removeEventListener('resize', measureTabsOverflow)
+  }, [measureTabsOverflow])
 
   // Keep the selected exam visible in the tab strip — it scrolls horizontally
   // once the compact actions claim the right end of the pinned row.
@@ -493,7 +452,7 @@ export default function Dashboard() {
     if (!active) return
     const left = active.offsetLeft - (scroller.clientWidth - active.offsetWidth) / 2
     scroller.scrollTo({ left: Math.max(0, left), behavior: 'smooth' })
-  }, [clampedIdx, actionsPinned, inProgressSyllabi.length, measureTabsOverflow])
+  }, [clampedIdx, inProgressSyllabi.length, measureTabsOverflow])
 
   // Build a fast masteryState lookup (conceptName → MasteryState) for TodayCard chips
   const masteryStateByName = useMemo(() => {
@@ -570,74 +529,15 @@ export default function Dashboard() {
     !welcomeDismissed &&
     (showWelcomeModal || (!syllabusLoading && !loadingExams && !hasActiveExams))
 
-  // Quiz-launch action, shared by the full-size actions row and its compact
-  // copy in the pinned exam header (which only has room for a one-word label).
-  // Once today's plan is finished the same launch keeps working, but it's no
-  // longer the day's work — it reads as "Extra Credit".
-  // A daily plan is the Pro feature — starting a quiz is not. With a plan,
-  // the button launches exactly today's plan; without one (free account, or a
-  // Pro account that hasn't set a target date) it opens the quiz builder
-  // with this exam already chosen. Hiding it from free users left their
-  // dashboard with no way into a quiz at all.
-  const hasTodaysPlan = isPro && displayConcepts.length > 0
-  const showQuizAction = hasTodaysPlan || !isPro
-  const quizActionLabel = isLaunchingQuiz
-    ? 'Get ready…'
-    : (hasTodaysPlan && planComplete ? 'Extra Credit' : 'Start Quiz')
-  const compactQuizLabel = isLaunchingQuiz
+  // The header's Start: today's session's size, or what its next step is.
+  const startPillText = session?.launching
     ? 'Wait…'
-    : (hasTodaysPlan && planComplete ? 'Extra' : 'Quiz')
-
-  // Primary actions — Read concepts (left) + the narrow Fix Mistakes button +
-  // Start Today's Quiz (right). Authored here because this page owns their
-  // triggers, but handed to ReadinessCard, which renders them straight under
-  // the Exam readiness card, outside any card. Fix Mistakes lives inside this block on purpose — the
-  // pinned-header copies swap in once primaryActionsRef has scrolled past, so
-  // all three have to scroll out together.
-  const primaryActions = activeSyllabus ? (
-    <div ref={primaryActionsRef} className="flex flex-col gap-4">
-      {/* Three across on a phone is tight, so the two wide actions drop to
-          text-sm below sm and are allowed to wrap rather than overflow the
-          row (Button is whitespace-nowrap by default). */}
-      <div className="flex gap-3">
-        <Button
-          variant="secondary"
-          onClick={handleReadConcepts}
-          className="min-w-0 flex-1 gap-1.5 sm:gap-2.5 whitespace-normal leading-tight text-sm sm:text-base h-auto px-3 sm:px-4 py-4"
-        >
-          <BookOpen className="h-5 w-5 shrink-0" />
-          Read concepts
-        </Button>
-
-        {/* Fix mistakes — the concepts behind questions you've missed and
-            not yet re-answered correctly. Hides itself when there are
-            none, leaving the two full-width actions side by side. */}
-        {!isGuest && MISTAKES_REVIEW_ENABLED && (
-          <FixMistakesButton
-            masteryRecords={activeExamRecords}
-            examTopic={questionExamLabel(activeSyllabus)}
-            compactSlot={mistakesSlotEl}
-          />
-        )}
-
-        {showQuizAction && (
-          <div className="relative min-w-0 flex-1">
-            <button
-              type="button"
-              data-sound="begin"
-              onClick={handleStartTodaysQuiz}
-              disabled={isLaunchingQuiz}
-              className="w-full h-full flex items-center justify-center gap-1.5 sm:gap-2.5 px-3 sm:px-4 py-4 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/80 text-sm sm:text-base font-semibold leading-tight transition-all active:scale-[0.97] disabled:opacity-80 disabled:cursor-default"
-            >
-              <Play className={`h-5 w-5 shrink-0 ${isLaunchingQuiz ? 'animate-pulse' : ''}`} />
-              {quizActionLabel}
-            </button>
-            {!planComplete && <TodayQuizCornerBadge count={todaysQuizBadgeCount} size="lg" />}
-          </div>
-        )}
-      </div>
-    </div>
-  ) : null
+    : session && !session.done && session.minutes !== null
+      ? `${session.minutes} min`
+      : session?.done ? 'Extra' : 'Start'
+  const startPillLabel = session
+    ? `${session.label}${!session.done && session.questions > 0 ? ` — ${session.questions} question${session.questions === 1 ? '' : 's'}${session.minutes !== null ? `, ${session.minutes} minutes` : ''}` : ''}`
+    : 'Start'
 
   return (
     <>
@@ -822,7 +722,7 @@ export default function Dashboard() {
           actions below no room to ever show. Don't re-wrap them. */}
       {hasActiveExams && (
         <div className="sticky top-14 lg:top-0 z-20 -mx-5 sm:-mx-8 px-5 sm:px-8 py-1.5 bg-background/95 backdrop-blur-sm">
-          <div ref={examTabsRowRef} className="flex items-center gap-2">
+          <div className="flex items-center gap-2">
             <div
               ref={examTabsScrollRef}
               onScroll={measureTabsOverflow}
@@ -867,59 +767,28 @@ export default function Dashboard() {
               })}
             </div>
 
-            {/* Compact copies of the primary actions — only once the full-size
-                pair below has scrolled behind this row. Icon-only on phones,
-                icon + short label from sm up. */}
-            {activeSyllabus && actionsPinned && (
-              <div className="dashboard-pinned-actions flex shrink-0 items-center gap-1.5">
-                <button
-                  type="button"
-                  onClick={handleReadConcepts}
-                  aria-label="Read concepts"
-                  title="Read concepts"
-                  className="flex h-10 items-center gap-1.5 rounded-full bg-secondary px-3 text-sm font-semibold text-secondary-foreground hover:bg-secondary/80 transition-colors"
-                >
-                  <BookOpen className="h-4 w-4 shrink-0" />
-                  <span className="hidden sm:inline">Read</span>
-                </button>
-                {/* Slot for FixMistakesButton's compact copy — `contents` so the
-                    portaled pill sits directly in this flex row. Kept left of
-                    Start Quiz, mirroring the full-size row below. */}
-                <div ref={setMistakesSlotEl} className="contents" />
-                {showQuizAction && (
-                  <div className="relative">
-                    <button
-                      type="button"
-                      data-sound="begin"
-                      onClick={handleStartTodaysQuiz}
-                      disabled={isLaunchingQuiz}
-                      aria-label={quizActionLabel}
-                      title={quizActionLabel}
-                      className="flex h-10 items-center gap-1.5 rounded-full bg-primary px-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90 active:bg-primary/80 transition-all active:scale-[0.97] disabled:opacity-80 disabled:cursor-default"
-                    >
-                      <Play className={`h-4 w-4 shrink-0 ${isLaunchingQuiz ? 'animate-pulse' : ''}`} />
-                      <span className="hidden sm:inline">{compactQuizLabel}</span>
-                    </button>
-                    {!planComplete && todaysQuizBadgeCount > 0 && (
-                      <span
-                        className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-orange-500 text-white text-[10px] font-bold shadow ring-2 ring-background tabular-nums"
-                        aria-label={`${todaysQuizBadgeCount} questions left in today's plan`}
-                      >
-                        {todaysQuizBadgeCount}
-                      </span>
-                    )}
-                  </div>
-                )}
-              </div>
+            {/* Today's session, one tap from anywhere: its size, and Start.
+                The same button as the card's, which always does the next step. */}
+            {activeSyllabus && session && (
+              <button
+                type="button"
+                data-sound="begin"
+                onClick={handleStartSession}
+                disabled={session.launching}
+                aria-label={startPillLabel}
+                title={startPillLabel}
+                className="flex h-10 shrink-0 items-center gap-1.5 rounded-full bg-primary px-4 text-sm font-bold text-primary-foreground transition-all hover:bg-primary/90 active:scale-[0.97] disabled:opacity-80"
+              >
+                <Play className={`h-3.5 w-3.5 shrink-0 fill-current ${session.launching ? 'animate-pulse' : ''}`} aria-hidden="true" />
+                <span className="tabular-nums">{startPillText}</span>
+              </button>
             )}
           </div>
         </div>
       )}
-      {/* Exam readiness, Today's Study Plan and the Study Guide ring — portaled
-          here by ReadinessCard (below) so they lead the dashboard: the score is
-          the answer to the question the page exists to answer, and the plan
-          under it is what to do about that answer today. The primary actions
-          (`primaryActions`) sit under the readiness card, the schedule above it. */}
+      {/* The week and Today's session — portaled here by ReadinessCard (below)
+          so they lead the dashboard: when the exam is and what has been done
+          about it, then the wheel and the day's work with its one Start. */}
       {!isGuest && activeProgressKey && (
         <Suspense fallback={null}>
           <RegistrationNudge examKey={activeProgressKey} />
@@ -956,9 +825,11 @@ export default function Dashboard() {
             openConceptsTrigger={conceptsOpenCounter}
             startQuizTrigger={startQuizCounter}
             isPro={isPro}
-            onPlanCompletionChange={setPlanComplete}
             readinessSlot={readinessSlotEl}
-            actions={primaryActions}
+            planQuestionCount={todaysQuizBadgeCount}
+            questionsFor={questionsFor}
+            startSessionTrigger={startSessionCounter}
+            onSessionChange={setSession}
           />
         )}
       </div>
@@ -976,7 +847,6 @@ export default function Dashboard() {
             trends={accuracy}
             rows={answerRows}
             examLabel={accuracyExam}
-            examKey={activeProgressKey}
             syllabus={activeSyllabus}
             questions={allQuestions}
           />

@@ -2,22 +2,12 @@ import { Link } from 'react-router-dom'
 import { ChevronRight } from 'lucide-react'
 import { accuracyPercent } from '@/lib/accuracyTrend'
 import type { SectionLeak } from '@/lib/performanceAnalytics'
+import { formatMarks as marks, sectionQuizHref as quizHref } from '@/lib/analyticsSummary'
 
 /** Judged sections listed before the rest fold away. */
 const SHOWN = 5
 /** Unjudged sections listed — the biggest unknowns. */
 const SHOWN_UNJUDGED = 3
-
-function marks(n: number): string {
-  return n >= 10 ? String(Math.round(n)) : n.toFixed(1).replace(/\.0$/, '')
-}
-
-function quizHref(examLabel: string, leak: SectionLeak): string {
-  // The quiz reads `concepts` as a comma list; a name with a comma can't ride it.
-  const concepts = leak.concepts.filter(c => !c.includes(','))
-  const params = new URLSearchParams({ exam: examLabel, concepts: concepts.join(','), count: '10' })
-  return `/quiz?${params.toString()}`
-}
 
 /**
  * **Where you're losing marks**: each syllabus section's accuracy weighed by

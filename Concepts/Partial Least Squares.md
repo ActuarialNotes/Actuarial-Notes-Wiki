@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:8c62a1ce38681aa4162a997a8a85536e3dee37ed8991541c6d67b150f3009344
+  content_hash: sha256:30501ad4142d5482a26072f56feee0b80edda6b4770ea0437b6f22d5a257eb35
   sources:
     - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R (2nd ed., Springer 2021), §6.3.2 'Partial Least Squares', printed pp.259-261 (PDF pp.267-269), and §6.3.1 for the PCR comparison, printed pp.256-259 (PDF pp.264-267); eq (3.4) simple-regression slope, printed p.62 (PDF p.72), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), reading list p.6 (James et al. Chapters 5, 6 and 7 assigned to tasks C1-C9), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
@@ -13,67 +13,47 @@ verification:
   log: .verify/Concepts/Partial Least Squares.md
 ---
 
-**Partial Least Squares (PLS)** is a *supervised* dimension reduction method. Like [[Principal Components Regression]], it builds $M$ new features $Z_1, \dots, Z_M$ as linear combinations of the predictors and fits a least squares linear model to them. Unlike PCR, it uses the response $Y$ to choose those features, so they approximate the predictors and are also related to the response.
+A **Partial Least Squares** (PLS) fit is a supervised dimension reduction method: it builds $M$ new features $Z_1, \ldots, Z_M$ as linear combinations of the $p$ predictors, using the response to choose them, and then fits a least squares [[Linear Regression|linear regression]] of the response on the new features. Each new feature is
 
 > $$Z_m = \sum_{j=1}^{p} \phi_{jm} X_j$$
->
+
+- $\phi_{1m}, \ldots, \phi_{pm}$ are the weights of the predictors $X_1, \ldots, X_p$ in the $m$th feature.
+
+After the $p$ predictors are standardized, the weight of each predictor in the first feature is the slope of the simple linear regression of the response on that predictor:
+
 > $$\phi_{j1} = \frac{\sum_{i=1}^{n}(x_{ij} - \bar{x}_j)(y_i - \bar{y})}{\sum_{i=1}^{n}(x_{ij} - \bar{x}_j)^2}$$
->
-> $$y_i = \theta_0 + \sum_{m=1}^{M} \theta_m z_{im} + \epsilon_i$$
 
-- **First direction.** Standardize the $p$ predictors. Then set each $\phi_{j1}$ equal to the coefficient from the simple [[Linear Regression]] of $Y$ onto $X_j$ (the second line). That coefficient is proportional to the [[Correlation|correlation]] between $Y$ and $X_j$. So $Z_1$ puts the most weight on the variables most strongly related to the response.
-- **Later directions.** Regress each variable on $Z_1$ and keep the residuals. The residuals are the information $Z_1$ has not explained. Compute $Z_2$ from them in exactly the same way $Z_1$ was computed from the original data, and repeat until there are $M$ directions. Finally, fit $Y$ on $Z_1, \dots, Z_M$ by least squares, just as in PCR.
-- **Tuning.** $M$ is a tuning parameter, usually chosen by [[Cross-Validation]]. The predictors and the response are generally standardized first.
-- **Against PCR.** PCR finds its directions without using $Y$, so nothing guarantees that the directions that best explain the predictors are also the best ones for predicting the response (see [[Principal Components Analysis]], [[Unsupervised Learning]]). The first PLS direction fits the predictors less closely than the first principal component, but it explains the response better (see [[Supervised Learning]]).
-- **In practice.** PLS is popular in chemometrics. It often performs no better than ridge regression (see [[Regularization]]) or PCR. Supervised dimension reduction can reduce bias, but it can also increase variance, so on balance PLS gains little over PCR. As in PCR, the new features are linear combinations of the original predictors, not a subset of them (see [[Variable Selection]]).
+- $x_{ij}$ is the value of predictor $X_j$ for observation $i$, and $\bar{x}_j$ is its mean.
+- $y_i$ is the response of observation $i$, and $\bar{y}$ is the mean response.
 
-> [!example]- Computing the First PLS Direction {Example}
-> Four auto policies have two standardized predictors, vehicle value $X_1$ and annual mileage $X_2$ (each with mean $0$ and $\sum x^2 / n = 1$), and claim cost $y$ in \$000:
+Each slope is proportional to the [[Correlation|correlation]] between the response and the predictor, so $Z_1$ puts the most weight on the predictors most strongly related to the response. For the second feature, each predictor is regressed on $Z_1$, and $Z_2$ is computed from the residuals in the same way as $Z_1$ was computed from the data. This is repeated until there are $M$ features. The response is then regressed on $Z_1, \ldots, Z_M$:
+
+> $$y_i = \theta_0 + \sum_{m=1}^{M} \theta_m z_{im} + \varepsilon_i$$
+
+- $z_{im}$ is the value of $Z_m$ for observation $i$.
+- $\theta_0, \ldots, \theta_M$ are the regression coefficients, and $\varepsilon_i$ is the error term.
+
+> [!example]- Four policies have standardized predictors $x_1$ and $x_2$ and claim cost $y$ as below. What is the first PLS feature, and what is the fitted value of policy 4 with $M = 1$? {Example}
 >
 > | Policy | $x_1$ | $x_2$ | $y$ |
-> |---|---|---|---|
-> | 1 | $-1$ | $-1.4$ | $2$ |
-> | 2 | $-1$ | $0.2$ | $6$ |
-> | 3 | $1$ | $-0.2$ | $4$ |
-> | 4 | $1$ | $1.4$ | $8$ |
+> | --- | --- | --- | --- |
+> | 1 | $-1$ | $-1.4$ | 2 |
+> | 2 | $-1$ | $0.2$ | 6 |
+> | 3 | $1$ | $-0.2$ | 4 |
+> | 4 | $1$ | $1.4$ | 8 |
 >
-> Find the first PLS direction $Z_1$, then the PLS fit with $M = 1$ and its fitted value for policy 4.
->
-> > [!answer]-
-> > $\bar y = 5$, so $y - \bar y = (-3, 1, -1, 3)$. Each predictor has mean $0$ and $\sum x_{ij}^2 = 4$, so the simple-regression slopes are
-> > $$
-> > \begin{align*}
-> > \phi_{11} &= \frac{(-1)(-3) + (-1)(1) + (1)(-1) + (1)(3)}{4} \\
-> > &= 1.0 \\
-> > \phi_{21} &= \frac{(-1.4)(-3) + (0.2)(1) + (-0.2)(-1) + (1.4)(3)}{4} \\
-> > &= 2.2
-> > \end{align*}
-> > $$
-> > The direction $z_{i1} = 1.0\,x_{i1} + 2.2\,x_{i2}$ gives scores $(-4.08, -0.56, 0.56, 4.08)$, with mean $0$. Regressing $y$ on $z_1$:
-> > $$
-> > \begin{align*}
-> > \hat\theta_1 &= \frac{\sum z_{i1}(y_i - \bar y)}{\sum z_{i1}^2} \\
-> > &= \frac{23.36}{33.92} \\
-> > &= 0.6887 \\
-> > \hat\theta_0 &= 5
-> > \end{align*}
-> > $$
-> > Policy 4's fitted value is $5 + 0.6887(4.08) = 7.81$, or \$7,810.
-> >
-> > Mileage gets 2.2 times the weight of vehicle value because it is far more correlated with claim cost: $r = 0.98$ against $0.45$, which is the same ratio. For comparison, these two standardized predictors have correlation $0.6$, and their first principal component weights them equally, $(0.707, 0.707)$. PCA picks its direction without ever looking at $y$.
+> - The mean response is 5, so $y - \bar{y}$ is $-3$, $1$, $-1$ and $3$, and each predictor has mean 0 and $\sum x_{ij}^2 = 4$.
+> - The weights are $\phi_{11} = 4/4 = 1.0$ and $\phi_{21} = 8.8/4 = 2.2$.
+> - The values of $Z_1 = X_1 + 2.2X_2$ are $-4.08$, $-0.56$, $0.56$ and $4.08$.
+> - Regressing $y$ on $z_1$ gives $\hat\theta_1 = 23.36/33.92 = 0.6887$ and $\hat\theta_0 = 5$.
+> - The fitted value of policy 4 is $5 + 0.6887(4.08) = 7.81$.
 
-> [!example]- PLS or PCR? {Example}
-> Which of these statements are true?
->
-> I. PLS uses the response to choose its directions, and PCR does not.
-> II. A PLS fit with $M = 3$ directions on 50 predictors uses only 3 of the 50 predictors.
-> III. Because it is supervised, PLS can be expected to beat PCR.
->
-> > [!answer]-
-> > **Only I.**
-> >
-> > I is true. The first PLS direction weights each $X_j$ by its simple-regression coefficient on $Y$. PCR's components depend only on the predictors.
-> >
-> > II is false. Each $Z_m$ is a linear combination of the predictors, so all 50 still feed the fit. The *dimension* is reduced to 3, but no predictors are dropped.
-> >
-> > III is false. ISLR notes that PLS often does no better than ridge regression or PCR in practice. Supervision can reduce bias, but it can also increase variance, so the overall benefit relative to PCR is a wash.
+## Partial least squares and principal components regression
+
+| | [[Principal Components Regression]] | Partial least squares |
+| --- | --- | --- |
+| Directions chosen from | The predictors only | The predictors and the response |
+| Type of method | Unsupervised directions | Supervised directions |
+| First direction | Explains the predictors best | Explains the response better, the predictors less well |
+
+In both methods each direction is a linear combination of all $p$ predictors, so neither performs [[Variable Selection|variable selection]]. The directions are derived features, and a small weight on one direction does not mean that a predictor is unimportant. The number of directions $M$ is chosen by [[Cross-Validation|cross-validation]]. In practice PLS often performs no better than ridge regression or principal components regression, because using the response can reduce bias but can also increase variance.

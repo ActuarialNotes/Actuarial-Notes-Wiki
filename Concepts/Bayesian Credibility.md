@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:7cf975f234041e7cbee3f0c5f76a3f9b3f3496737acbc61df07ddf366f1bc33b
+  content_hash: sha256:7e7d07700500e6bfc1c70231b318daea5bab8080dd3bca45decfa2992f6dd44f
   sources:
     - "Frees et al., Loss Data Analytics (open text), Ch. 9 Experience Rating Using Credibility Theory, Ch. 9 §§9.2–9.6, sha256:35a840449990c8fda61687ebde4646508b6296ffac3daba18f0181eb2511fa36 — https://openacttexts.github.io/Loss-Data-Analytics/ChapCredibility.html"
     - "Frees et al., Loss Data Analytics (open text), Ch. 4, §4.4.4 Conjugate Distributions, sha256:c5fe1ff26cec4dee6f8bcc285b75c840202c947246f7b5d5598f9b837ccad021 — https://openacttexts.github.io/Loss-Data-Analytics/ChapModelSelection.html"
@@ -15,29 +15,40 @@ verification:
   log: .verify/Concepts/Bayesian Credibility.md
 ---
 
-**Bayesian Credibility** applies [[Bayes Theorem|Bayesian inference]] to credibility: the prior distribution of the risk parameter $\theta$ is updated with observed data to produce a posterior distribution, and the credibility estimate is the **posterior mean** $E[\theta \mid \mathbf{X}]$.
-
-> $$\text{Credibility Estimate} = E[\theta \mid X_1, \ldots, X_n]$$
-
-> $$\pi(\theta \mid \mathbf{X}) \propto L(\mathbf{X} \mid \theta) \cdot \pi(\theta)$$
-
-- When the likelihood is in the **linear exponential family** and the prior is its **conjugate**, the posterior mean is a linear credibility formula of the form $Z\bar{X} + (1-Z)\mu_0$
-- In this case, **Bayesian credibility = [[Bühlmann Credibility]]** (Bayesian is optimal; Bühlmann is the best linear approximation, and they agree in these cases)
-
-**Common conjugate pairs:**
-
-| Likelihood | Prior | Posterior |
-| :--- | :--- | :--- |
-| Poisson$(\theta)$ | Gamma$(\alpha, \beta)$, rate $\beta$ | Gamma$(\alpha + \sum x_i,\, \beta + n)$ |
-| Binomial$(m, \theta)$ | Beta$(\alpha, \beta)$ | Beta$(\alpha + \sum x_i,\, \beta + mn - \sum x_i)$ |
-| Normal$(\theta, \sigma^2)$ | Normal$(\mu_0, \tau^2)$ | Normal (linear combination) |
-
 ![[Media/Figures/Bayesian_Credibility.svg|340]]
 
-> [!example]- Bayesian Update for Poisson Claim Frequency {Example}
-> A policyholder's annual claim count $N \sim \text{Poi}(\theta)$. The prior for $\theta$ is Gamma$(2, 0.5)$ (mean $= 2 \times 0.5 = 1$). In 3 years, the policyholder had 0, 2, and 1 claims. Find the posterior mean.
->
-> > [!answer]-
-> > $\sum x_i = 3$, $n = 3$. The prior's $0.5$ is a scale, so its rate is $\beta = 1/0.5 = 2$. The Poisson–gamma update adds the claim count to the shape and the years to the rate: the posterior is Gamma with shape $2 + 3 = 5$ and rate $2 + 3 = 5$ (scale $0.2$).
-> > Posterior mean $= 5/5 = 1$ claim per year.
-> > This is the credibility-weighted blend: posterior mean $= Z \cdot \bar{X} + (1-Z)\mu_0$ with $Z = n/(n + \beta) = 3/(3 + 2) = 0.6$, giving $0.6(1) + 0.4(1) = 1$. Here the sample mean equals the prior mean, so the data confirm the prior rather than move it.
+**Bayesian Credibility** is a [[Credibility|credibility]] method that estimates a risk's next observation by its mean under the [[Posterior Distribution|posterior distribution]] of the risk parameter $\Theta$, given the risk's observations $\mathbf{X} = (X_1, \ldots, X_n)$. The credibility estimate is the **posterior mean** of the hypothetical mean, the Bayesian premium:
+
+> $$E[X_{n+1} \mid \mathbf{X}] = E[\mu(\Theta) \mid \mathbf{X}]$$
+
+- $\mu(\theta) = E[X \mid \Theta = \theta]$ is the hypothetical mean of a risk with parameter $\theta$.
+
+The posterior comes from [[Bayes Theorem|Bayes' theorem]], $\pi(\theta \mid \mathbf{x}) \propto f(\mathbf{x} \mid \theta)\,\pi(\theta)$. Of all estimates built from the observations, the Bayesian premium has the smallest expected squared error.
+
+> [!example]- Risks are 60% class A, with claim probability $0.1$ a year, and 40% class B, with claim probability $0.3$. A risk has a claim in its first year. What is its Bayesian premium for claims next year? {Example}
+> - Prior times likelihood is $0.6(0.1) = 0.06$ for class A and $0.4(0.3) = 0.12$ for class B.
+> - The posterior probabilities are $0.06/0.18 = 1/3$ for A and $2/3$ for B.
+> - The Bayesian premium is $\tfrac{1}{3}(0.1) + \tfrac{2}{3}(0.3) = 0.2333$, up from the prior mean of $0.18$.
+
+> [!idea] The idea
+> The Bayesian premium is the best estimate of all, and [[Bühlmann Credibility|Bühlmann credibility]] is the best straight-line approximation to it.
+
+The two coincide when the Bayesian premium is itself linear in the observations, which is [[Exact Credibility|exact credibility]].
+
+## Conjugate priors
+
+When the likelihood is in the **linear exponential family** and the prior is its **[[Conjugate Prior|conjugate prior]]**, the posterior mean is a linear credibility formula:
+
+> $$E[\mu(\Theta) \mid \mathbf{X}] = Z\bar{X} + (1 - Z)\mu$$
+
+- $\mu = E[\mu(\Theta)]$ is the prior mean of the hypothetical mean.
+- $Z = n/(n + k)$, with $k$ read from the prior's parameters.
+
+For a Poisson likelihood and a gamma prior with shape $\alpha$ and scale $\beta$, the posterior is gamma with shape $\alpha + \sum x_i$ and scale $\beta/(1 + n\beta)$, and $k = 1/\beta$.
+
+> [!example]- A policyholder's annual claim count is Poisson with mean $\Lambda$, and $\Lambda$ is gamma with shape $\alpha = 2$ and scale $\beta = 0.5$. In 3 years the policyholder had 0, 2 and 1 claims. What is the Bayesian premium? {Example}
+> - The prior mean is $\alpha\beta = 1$.
+> - The posterior is gamma with shape $2 + 3 = 5$ and scale $0.5/(1 + 3 \times 0.5) = 0.2$.
+> - The Bayesian premium is the posterior mean, $5 \times 0.2 = 1$ claim per year.
+> - In credibility form, $k = 1/0.5 = 2$ and $Z = 3/(3 + 2) = 0.6$, so the premium is $0.6(1) + 0.4(1) = 1$.
+> - The sample mean equals the prior mean, so the data confirm the prior rather than move it.

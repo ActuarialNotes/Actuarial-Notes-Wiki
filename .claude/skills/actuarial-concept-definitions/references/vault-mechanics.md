@@ -254,6 +254,21 @@ $1 - \alpha$):
 | | decomposition | $x_t = m_t + s_t + z_t$ (trend, seasonal, error) | |
 | | forecast | $\hat{x}_{t+k \mid t}$ | |
 
+Symbols the pages added, local to one or two pages: a gamma prior's shape
+$\alpha$ and *scale* $\beta$ (so Poisson-gamma $k = 1/\beta$), a beta prior
+Beta$(a, b)$, observations $\mathbf{x} = (x_1, \ldots, x_n)$; in mixed models a
+second grouping factor $v_{j(i)}$ (nested) or $v_j$ (crossed) with variance
+$\sigma^2_v$, random intercept and slope $u_{0i}$, $u_{1i}$ with $\mathbf{D}$'s
+entries $\sigma^2_{u0}$, $\sigma^2_{u1}$, $\sigma_{u01}$, a cluster-level covariate
+$w_i$, and the credibility weight written $n_i/(n_i + k)$, never $Z$; in
+statistical learning the KNN neighbourhood $\mathcal{N}_0$, region means
+$\hat{y}_{R_j}$, PCA eigenvalues $\lambda_m$, dissimilarity $d_{ii'}$, the
+learning rate $\rho$ with loss $R(\theta)$, and softmax outputs $Z_1, \ldots,
+Z_M$; in time series the AR constant $\alpha_0$, partial autocorrelation
+$\alpha_{kk}$, the polynomials $\alpha(\mathbf{B})$ and $\beta(\mathbf{B})$ (not
+Cowpertwait & Metcalfe's $\theta_p$, $\phi_q$), drift $\delta$ and the
+forecast horizon $k$.
+
 $k$ is Bühlmann's credibility parameter on the greatest-accuracy pages and the
 range parameter on the classical ones; a page needing both (the *Credibility*
 overview) states the classical one only through a link. $\mathbf{Z}_i$ (a design matrix) and $Z$ (a credibility) never share a page.

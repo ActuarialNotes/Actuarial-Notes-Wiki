@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:998bfacb5ec2b9373f228db85d89ea463f94411dbf8f5345a128b3a81dfeda2d
+  content_hash: sha256:ffc72273613a2eccf10af065b4fca01dbda847389831224c149674f0d012a976
   sources:
     - "CAS Exam MAS-I Tables (version 01/15/2018; handed out with the exam), Loss Models appendix excerpts: A.3.3.1 Exponential f(x) = e^{-x/θ}/θ, F(x) = 1 - e^{-x/θ}, E[X^k] = θ^k k! (PDF p.12); B.2.1.1 Poisson p_k = e^{-λ}λ^k/k!, E = Var = λ and B.2.1.3 Binomial p_k = C(m,k) q^k (1-q)^{m-k}, E = mq, Var = mq(1-q) (PDF p.15), sha256:cb5674138a67f7a498b8cc90357144fd121cbcbbc7487f214557b105611a69b4 — https://www.casact.org/sites/default/files/2021-03/masi_tables.pdf"
     - "Daniel, \"Poisson processes (and mixture distributions)\", CAS Study Note (June 2008) — MAS-I syllabus reading, Def. & Prop. 1.1 p.4 (Poisson pf, E = Var = Λ), Ex. 1.16 pp.9-10 (a die roll is uniform on 1..6), Def. & Prop. 1.20 p.11 (gamma: α = 1 is exponential with mean θ; integer α is a sum of α independent exponentials), Fact 1.26 p.13 (interevent times exponential with mean 1/λ; T_n gamma with α = n, θ = 1/λ), sha256:e345451e9daae82b400aed77f2da0c96c361ed4fbdfd22456b8f711ca0d50888 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Daniel_1.pdf"
@@ -19,65 +19,64 @@ verification:
   log: .verify/Concepts/Probability Distributions.md
 ---
 
-**External Resources**
-1. [ProbOnto](https://sites.google.com/site/probonto/) (Probability Distribution Ontology) for data about distributions and their relationships.
-2. [SIPmath 3.0 Standard](https://www.probabilitymanagement.org/30-standard) for data structures for probability distributions.
-
----
-
-## Probability Distributions
-
-- **[[Uniform Discrete|Uniform]]** (a die roll)
-- **Bernoulli** (a coin flip)
-- **[[Binomial Distribution|Binomial]]** (the number of heads in $n$ coin flips)
-- **[[Poisson Distribution|Poisson]]** (the number of heads in many flips of a coin that rarely lands heads)
-- **[[Normal Distribution|Normal]]** (the number of heads in many coin flips, approximately)
-	- **[[Student's t-Distribution|t-Distribution]]**
-- **[[Exponential Distribution|Exponential]]** (the waiting time between events of a [[Poisson Process]])
-- **[[Gamma]]** (the waiting time to the $n$-th event of a [[Poisson Process]])
-
-Relationships
-
-- **Binomial → Poisson**: As $n \to \infty, p \to 0, np = \lambda$.
-- **Binomial → Normal**: As $n \to \infty, np \text{ and } n(1-p)$ are large.
-- **Poisson → Normal**: As $\lambda$ becomes large.
-
-**[[Exponential Family]]**
-
-> $$f(x \mid \theta) = h(x)\exp\big(\eta(\theta)\,T(x) - A(\theta)\big)$$
-
-- This is the form $f(y; \theta) = \exp[a(y)b(\theta) + c(\theta) + d(y)]$ in Larsen's study note (which supplements Dobson & Barnett §3.2), with $h = e^{d}$, $T = a$, $\eta = b$ and $A = -c$.
-
-### Binomial
-Tossing a coin $n$ times, how likely to get $k$ heads? If each toss lands heads with probability $p$, independently of the others:
-
-> $$P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}$$
-
-- $k = 0, 1, \ldots, n$, with $E[X] = np$ and $\text{Var}(X) = np(1-p)$
-
-### Poisson
-
-> $$P(N = k) = \frac{e^{-\lambda}\lambda^k}{k!}$$
-
-- $k = 0, 1, 2, \ldots$, with $E[N] = \text{Var}(N) = \lambda$
-
-### Normal
-
-> $$f(x) = \frac{1}{\sigma\sqrt{2\pi}}\, e^{-(x-\mu)^2/(2\sigma^2)}$$
-
-- $-\infty < x < \infty$; $\mu$ is the mean and $\sigma$ the standard deviation
-
-### Exponential
-
-> $$f(x) = \frac{1}{\theta}\, e^{-x/\theta}$$
-
-- $x > 0$, with $F(x) = 1 - e^{-x/\theta}$ and $E[X] = \theta$
-- It is the gamma distribution with $\alpha = 1$, and the sum of $n$ independent exponentials with mean $\theta$ is gamma with $\alpha = n$ and the same $\theta$
-
----
-
-## Central Concepts
-
-- **[[Central Limit Theorem]]**
-
 ![[Media/Figures/Probability_Distributions.svg|340]]
+
+A **Probability Distribution** is the assignment of probabilities to the values of a [[Random Variable|random variable]]. A discrete random variable has a [[Probability Mass Function (PMF)|probability mass function]] $p(x) = P(X = x)$, and a continuous random variable has a [[Probability Density Function (PDF)|probability density function]] $f(x)$. Either way the distribution function is $F(x) = P(X \le x)$.
+
+## Discrete distributions
+
+The named discrete distributions, the [[Binomial Distribution|binomial]], [[Poisson Distribution|Poisson]], [[Negative Binomial Distribution|negative binomial]] and [[Geometric Distribution|geometric]], count events:
+
+| Distribution | $P(X = k)$ | $E[X]$ | $\text{Var}(X)$ |
+| --- | --- | --- | --- |
+| Binomial | $\binom{n}{k}p^k(1-p)^{n-k}$, $k = 0, \ldots, n$ | $np$ | $np(1-p)$ |
+| Poisson | $\frac{e^{-\lambda}\lambda^k}{k!}$, $k = 0, 1, \ldots$ | $\lambda$ | $\lambda$ |
+| Negative binomial | $\binom{k+r-1}{k}\left(\frac{1}{1+\beta}\right)^r\left(\frac{\beta}{1+\beta}\right)^k$ | $r\beta$ | $r\beta(1+\beta)$ |
+| Geometric | $\frac{\beta^k}{(1+\beta)^{k+1}}$, $k = 0, 1, \ldots$ | $\beta$ | $\beta(1+\beta)$ |
+
+The binomial counts the successes in $n$ independent trials, each with probability $p$. Loss Models writes its parameters as $m$ and $q$, so its mean is $mq$. The negative binomial and geometric are written in the Loss Models form, with $k = 0, 1, \ldots$ failures.
+
+> [!example]- A policy has a claim in a year with probability 0.2, independently of 9 other policies. What is the probability of exactly 2 claims among the 10 policies, and what is the expected number of claims? {Example}
+> - The number of claims is binomial with $n = 10$ and $p = 0.2$.
+> - $P(X = 2) = \binom{10}{2}(0.2)^2(0.8)^8 = 45 \times 0.04 \times 0.16777 = 0.3020$.
+> - The expected number of claims is $np = 10 \times 0.2 = 2$.
+
+## Continuous distributions
+
+The named continuous distributions, the [[Uniform Continuous Distribution|uniform]], [[Normal Distribution|normal]], [[Exponential Distribution|exponential]] and [[Gamma|gamma]], measure amounts and times:
+
+| Distribution | $f(x)$ | $E[X]$ | $\text{Var}(X)$ |
+| --- | --- | --- | --- |
+| Uniform on $(a, b)$ | $\frac{1}{b - a}$ | $\frac{a + b}{2}$ | $\frac{(b - a)^2}{12}$ |
+| Normal | $\frac{1}{\sigma\sqrt{2\pi}}e^{-(x-\mu)^2/(2\sigma^2)}$ | $\mu$ | $\sigma^2$ |
+| Exponential | $\frac{1}{\theta}e^{-x/\theta}$, $x > 0$ | $\theta$ | $\theta^2$ |
+| Gamma | $\frac{x^{\alpha-1}e^{-x/\theta}}{\Gamma(\alpha)\,\theta^\alpha}$, $x > 0$ | $\alpha\theta$ | $\alpha\theta^2$ |
+
+The claim-size distributions, including the [[Weibull Distribution|Weibull]] and [[Pareto Distribution|Pareto]], are compared on the [[Severity Distribution|severity distribution]] page.
+
+> [!example]- Claims arrive as a Poisson process at a rate of 2 per year. What is the distribution of the time until the first claim, and what is the probability that it arrives within 4 months? {Example}
+> - The time until the first claim is exponential with mean $\theta = 1/2$ year.
+> - The probability that it arrives within $1/3$ year is $1 - e^{-(1/3)/(1/2)} = 1 - e^{-2/3} = 0.4866$.
+
+## Relationships between distributions
+
+1. The binomial with $n$ large and $p$ small is approximately Poisson with $\lambda = np$.
+2. The binomial with $np$ and $n(1-p)$ large, and the Poisson with $\lambda$ large, are approximately normal, by the [[Central Limit Theorem]].
+3. The exponential is the gamma with $\alpha = 1$. The sum of $n$ independent exponentials with mean $\theta$ is gamma with $\alpha = n$ and the same $\theta$. In a [[Poisson Process|Poisson process]] with rate $\lambda$, the time until the $n$th event is gamma with $\alpha = n$ and $\theta = 1/\lambda$.
+4. A Poisson whose mean is gamma with parameters $\alpha$ and $\theta$ is negative binomial with $r = \alpha$ and $\beta = \theta$, a [[Mixture Distribution|mixture]].
+
+## The exponential family
+
+A distribution belongs to the [[Exponential Family|exponential family]] if its probability function can be written in the form
+
+> $$f(y; \theta) = \exp\left[a(y)\,b(\theta) + c(\theta) + d(y)\right]$$
+
+- $\theta$ is the parameter of the distribution.
+- $a(y)$ and $d(y)$ are functions of $y$ alone, and $b(\theta)$ and $c(\theta)$ are functions of $\theta$ alone.
+
+The distribution is in canonical form when $a(y) = y$, and $b(\theta)$ is then its natural parameter. The binomial, Poisson, normal, exponential and gamma distributions are all in the exponential family, which is what makes them the response distributions of a [[Generalized Linear Model|generalized linear model]].
+
+> [!example]- How is the Poisson distribution with mean $\lambda$ written in exponential family form? {Example}
+> - The probability function is $\frac{e^{-\lambda}\lambda^y}{y!} = \exp\left[y \ln\lambda - \lambda - \ln y!\right]$.
+> - So $a(y) = y$, $b(\lambda) = \ln\lambda$, $c(\lambda) = -\lambda$ and $d(y) = -\ln y!$.
+> - The form is canonical, and the natural parameter is $\ln\lambda$.

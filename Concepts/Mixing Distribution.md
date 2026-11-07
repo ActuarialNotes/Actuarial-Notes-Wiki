@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:0e5fe0e7a7189b942e27d6a4e7f2ff2882ab9b4bf0e76b58181c68ddfe28068e
+  content_hash: sha256:1b5770c8b4eb0f1a0cf4df64cb36134757472fda2c977b398adc2c8bc6d3833e
   sources:
     - "Daniel, \"Poisson processes (and mixture distributions)\", CAS Study Note (June 2008) — MAS-I syllabus reading, §1.3.3 pp.9-12 (Mixing Method; Gamma-mixed Poisson is negative binomial r = α, β = θ, Def. & Prop. 1.21; Example 1.24: for N(t), Λ = tλ is Gamma(α, tθ), so β = tθ), sha256:e345451e9daae82b400aed77f2da0c96c361ed4fbdfd22456b8f711ca0d50888 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Daniel_1.pdf"
     - "Frees et al., Loss Data Analytics (open text, arXiv:1808.06718v1, 2018), §2.6 Mixture Distributions, PDF pp.49-50 (Gamma(α, θ)-mixed Poisson pmf = C(α+k−1, k)(1/(1+θ))^α(θ/(1+θ))^k), sha256:1df1831e7d67a072712a2945645b788f5974748143da267bb471b9a7bc3baf33 — https://arxiv.org/pdf/1808.06718"
@@ -17,70 +17,63 @@ verification:
   log: .verify/Concepts/Mixing Distribution.md
 ---
 
-A **Mixing Distribution** is the distribution of a model parameter that varies randomly from risk to risk. In a [[Mixed Poisson Process]] it is the distribution $g(\lambda)$ of the claim rate $\Lambda$ across the [[Insurance Portfolio|portfolio]]: each insured has a fixed but unknown rate, and a randomly chosen insured's count distribution is the Poisson averaged over $g$.
+A **Mixing Distribution** is the distribution of a parameter that varies randomly from risk to risk across an [[Insurance Portfolio|insurance portfolio]]. In a [[Mixed Poisson Process|mixed Poisson process]] it is the distribution of the rate $\Lambda$, and the distribution of the number of events for a risk selected at random is a [[Mixture Distribution|mixture]] of Poisson distributions. When $\Lambda$ takes the values $\lambda_1, \lambda_2, \ldots$, the probability of $k$ events by time $t$ is
 
-> $$P(N(t) = n) = \int_0^\infty \frac{e^{-\lambda t}(\lambda t)^n}{n!}\, g(\lambda)\, d\lambda$$
+> $$P(N(t) = k) = \sum_j P(\Lambda = \lambda_j)\,\frac{e^{-\lambda_j t}(\lambda_j t)^k}{k!}$$
 
-> $$\text{Var}(N(t)) = t\,E[\Lambda] + t^2\,\text{Var}(\Lambda)$$
+When $\Lambda$ is continuous with density $g(\lambda)$, the sum becomes an integral:
 
-- With a discrete mixing distribution (a few risk classes with weights $w_j$ and rates $\lambda_j$) the integral becomes a sum, $\sum_j w_j\, e^{-\lambda_j t}(\lambda_j t)^n/n!$. The mean is always $t\,E[\Lambda]$; the extra $t^2\,\text{Var}(\Lambda)$ in the variance is the between-risk heterogeneity.
-- **Gamma mixing gives the negative binomial.** If $\Lambda \sim$ [[Gamma]]$(\alpha, \theta)$ (shape $\alpha$, scale $\theta$), then $N(t)$ is [[Negative Binomial Distribution|negative binomial]] in its failures-count form with $r = \alpha$ and $p = 1/(1 + \theta t)$:
+> $$P(N(t) = k) = \int_0^\infty \frac{e^{-\lambda t}(\lambda t)^k}{k!}\,g(\lambda)\,d\lambda$$
 
-> $$P(N(t) = n) = \frac{\Gamma(n + \alpha)}{n!\,\Gamma(\alpha)}\, p^{\alpha}(1-p)^{n}$$
+The mean of any function of $\Lambda$ is weighted the same way. For example, $E[\Lambda] = \sum_j \lambda_j P(\Lambda = \lambda_j)$ for a discrete mixing distribution.
 
-- The mixing distribution is the **prior**. After $n$ claims in $t$ years, the gamma rate's [[Posterior Distribution|posterior]] is Gamma with shape $\alpha + n$ and scale $\theta/(1 + \theta t)$; its mean equals $Z(n/t) + (1-Z)\alpha\theta$ with $Z = t/(t + 1/\theta)$. This is the gamma–Poisson case of [[Bayesian Credibility]], where Bayes and [[Bühlmann Credibility|Bühlmann]] agree ([[Exact Credibility|exact credibility]]).
-- Mixing is why a policyholder's past predicts its future — the basis of [[Experience Rating]] and a [[Bonus-Malus System]]. It also costs the process its independent increments (it keeps stationary ones).
-- The same device mixes any parameter: an [[Exponential Distribution|exponential]] severity whose rate is gamma-distributed is Pareto unconditionally.
+> [!example]- In a motor portfolio, 75% of drivers have a claim rate of 0.2 per year and 25% have a rate of 0.8 per year. What is the probability that a driver selected at random has no claims in a year? {Example}
+> - A driver with rate 0.2 has no claims with probability $e^{-0.2} = 0.81873$.
+> - A driver with rate 0.8 has no claims with probability $e^{-0.8} = 0.44933$.
+> - Weighting by the mixing distribution, $P(N(1) = 0) = 0.75(0.81873) + 0.25(0.44933)$.
+> - The probability is $0.61405 + 0.11233 = 0.7264$.
 
-> [!example]- Gamma Mixing Across an Auto Portfolio {Example}
-> Annual claim rates across a personal auto portfolio are Gamma with $\alpha = 2$ and $\theta = 0.1$ (mean $0.2$). For a randomly selected insured, find the probabilities of $0$ and $1$ claims next year, and compare with a $\text{Poi}(0.2)$ model.
->
-> > [!answer]-
-> > Here $p = 1/(1 + 0.1) = 10/11$:
-> >
-> > $$
-> > \begin{align*}
-> > P(N = 0) &= \left(\tfrac{10}{11}\right)^2 \\
-> > &= 0.8264 \\
-> > P(N = 1) &= \frac{\Gamma(3)}{1!\,\Gamma(2)}\left(\tfrac{10}{11}\right)^2\left(\tfrac{1}{11}\right) \\
-> > &= 0.1503
-> > \end{align*}
-> > $$
-> >
-> > The Poisson gives $e^{-0.2} = 0.8187$ and $0.2e^{-0.2} = 0.1637$. Same mean, but mixing moves probability to zero claims and to the tail: the variance is $2(0.1)(1.1) = 0.22$ against $0.20$.
+## Gamma mixing distribution
 
-> [!example]- Updating One Insured's Rate {Example}
-> In the same portfolio, an insured has $3$ claims in $2$ years. Find the posterior mean of its claim rate.
->
-> > [!answer]-
-> > The posterior is Gamma with shape $2 + 3 = 5$ and scale $0.1/(1 + 0.2) = 1/12$:
-> >
-> > $$
-> > \begin{align*}
-> > E[\Lambda \mid N(2) = 3] &= \frac{5}{12} \\
-> > &= 0.4167
-> > \end{align*}
-> > $$
-> >
-> > As a credibility weighting, $Z = 2/(2 + 10) = 1/6$ on the observed $1.5$ per year and $5/6$ on the prior $0.2$: $0.25 + 0.1667 = 0.4167$. The rate estimate more than doubles on two years of data, yet most of the weight stays on the portfolio mean.
+When the mixing distribution is [[Gamma|gamma]] with shape $\alpha$ and scale $\theta$, the number of events by time $t$ is [[Negative Binomial Distribution#The form used on later exams|negative binomial]] with $r = \alpha$ and $\beta = \theta t$. The probability of $k$ events is
 
-> [!example]- Two Risk Classes and a Claim-Free Year {Example}
-> $70\%$ of drivers have rate $0.1$ and $30\%$ have rate $0.5$. Find the probability that a randomly chosen driver is claim-free for a year, and the probability that a claim-free driver is high-risk.
->
-> > [!answer]-
-> > $$
-> > \begin{align*}
-> > P(N = 0) &= 0.7e^{-0.1} + 0.3e^{-0.5} \\
-> > &= 0.63339 + 0.18196 \\
-> > &= 0.81535
-> > \end{align*}
-> > $$
-> >
-> > $$
-> > \begin{align*}
-> > P(\text{high} \mid N = 0) &= \frac{0.18196}{0.81535} \\
-> > &= 0.2232
-> > \end{align*}
-> > $$
-> >
-> > One clean year lowers the chance the driver is high-risk from $30\%$ to $22\%$ — the logic a claim-free discount rests on.
+> $$P(N(t) = k) = \binom{k + \alpha - 1}{k}\frac{(\theta t)^k}{(1 + \theta t)^{\alpha + k}}$$
+
+Its mean is $\alpha\theta t$ and its variance is $\alpha\theta t(1 + \theta t)$, which is greater than the mean.
+
+> [!example]- Annual claim rates across a portfolio are gamma distributed with $\alpha = 2$ and $\theta = 0.1$. What are the probabilities of 0 claims and of 1 claim next year for an insured selected at random, and how do they compare with a Poisson count with the same mean? {Example}
+> - The number of claims is negative binomial with $r = 2$ and $\beta = 0.1$, with mean $0.2$.
+> - The probability of 0 claims is $\frac{1}{1.1^{2}} = 0.8264$.
+> - The probability of 1 claim is $\binom{2}{1}\frac{0.1}{1.1^{3}} = 0.1503$.
+> - A Poisson count with mean 0.2 gives $e^{-0.2} = 0.8187$ and $0.2e^{-0.2} = 0.1637$.
+> - The mixture puts more probability on 0 claims and on large numbers of claims, and its variance is $2(0.1)(1.1) = 0.22$ against 0.2.
+
+## Updating the mixing distribution
+
+The mixing distribution is the prior distribution of a risk's rate. After the risk has $n$ events by time $t$, [[Bayes Theorem|Bayes' theorem]] gives the [[Posterior Distribution|posterior distribution]] of its rate. For a discrete mixing distribution, the posterior probability of the rate $\lambda_j$ is
+
+> $$P(\Lambda = \lambda_j \mid N(t) = n) = \frac{P(\Lambda = \lambda_j)\,e^{-\lambda_j t}\lambda_j^n}{\sum_i P(\Lambda = \lambda_i)\,e^{-\lambda_i t}\lambda_i^n}$$
+
+The expected number of events in a future period is the posterior mean of the rate multiplied by the length of the period. For a group of identical risks, it is multiplied by the number of risks as well.
+
+> [!example]- In the motor portfolio above, a driver has exactly 1 claim in a year. What is the probability that the driver has rate 0.8, and what is the driver's expected number of claims next year? {Example}
+> - The weight of rate 0.2 is $0.75 \times e^{-0.2} \times 0.2 = 0.12281$.
+> - The weight of rate 0.8 is $0.25 \times e^{-0.8} \times 0.8 = 0.08987$.
+> - The probability of rate 0.8 is $\frac{0.08987}{0.12281 + 0.08987} = 0.4225$.
+> - The expected number of claims next year is $0.5775(0.2) + 0.4225(0.8) = 0.4535$, against the portfolio mean of 0.35.
+
+For a gamma mixing distribution with shape $\alpha$ and scale $\theta$, the posterior is gamma with shape $\alpha + n$ and scale $\theta/(1 + \theta t)$. The posterior mean is
+
+> $$E[\Lambda \mid N(t) = n] = \frac{\alpha + n}{1/\theta + t}$$
+
+The posterior mean is a [[Bayesian Credibility|credibility]] weighted average of the risk's observed rate $n/t$ and the prior mean $\alpha\theta$:
+
+> $$E[\Lambda \mid N(t) = n] = Z\,\frac{n}{t} + (1 - Z)\,\alpha\theta$$
+
+- $Z = \frac{t}{t + 1/\theta}$ is the credibility factor, which increases with $t$.
+
+> [!example]- Annual claim rates are gamma distributed with $\alpha = 2$ and $\theta = 0.1$. An insured has 3 claims in 2 years. What is the posterior mean of its claim rate? {Example}
+> - The posterior mean is $\frac{2 + 3}{10 + 2} = \frac{5}{12} = 0.4167$.
+> - The credibility factor is $Z = \frac{2}{2 + 10} = \frac{1}{6}$.
+> - The observed rate is $3/2 = 1.5$ and the prior mean is $2 \times 0.1 = 0.2$.
+> - As a check, $\frac{1}{6}(1.5) + \frac{5}{6}(0.2) = 0.25 + 0.1667 = 0.4167$.

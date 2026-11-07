@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:84e97ecbec51e4504584f47403fde1bf3a55d3296c0c134541e843a89a1718d0
+  content_hash: sha256:35a2d1df887bffd9d9bc4393f50e68c05b4d5fbaaf4832608963a6761f53dca2
   sources:
     - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), Ch.6 §6 'Order Statistics' (five-number summary (x_(1), q1, q2, q3, x_(n)); boxplot draws the five numbers and the outliers; empirical CDF), sha256:19ff485c600d4294e888c1b3d05ff7eb9196449f958d3325fd72b416aca56d63 — https://www.randomservices.org/random/sample/OrderStatistics.html"
     - "NIST/SEMATECH e-Handbook of Statistical Methods, §1.3.3.14 'Histogram' (centre, spread, skewness, outliers, multiple modes), fetched 2026-10-05 (per-request Cloudflare token makes the hash fetch-specific), sha256:65e6e5992ec7900eee386aaa75a674f05da4dfd19a964974182b18d10e39e7ad — https://www.itl.nist.gov/div898/handbook/eda/section3/histogra.htm"
@@ -14,37 +14,42 @@ verification:
   log: .verify/Concepts/Univariate Plot.md
 ---
 
-A **Univariate Plot** displays the distribution of **one** variable at a time — its centre, spread, shape, and outliers — without reference to any other variable. Univariate plots are the first step of [[Exploratory Data Analysis]]: they are what tells you which response distribution and which transformations a model can plausibly use.
-
-> $$\text{one variable} \ \longrightarrow \ \text{shape, centre, spread, outliers}$$
-
-| Plot | Shows | Best at |
-| :--- | :--- | :--- |
-| [[Histogram]] | Binned counts | Overall shape, multimodality |
-| [[Box Plot]] | Five-number summary | Outliers, comparing groups |
-| Dot plot / strip plot | Every observation | Small samples, ties |
-| Empirical CDF | $\hat{F}(x) = \frac{1}{n}\#\{x_i \le x\}$ | Quantiles, no binning choice |
-| [[QQ Plot]] | Sample vs theoretical quantiles | Tail behaviour, distributional fit |
-| Bar chart | Category counts | Rare levels of a [[Categorical Predictor]] |
-
-- For a **continuous** variable, start with a [[Histogram]] for shape and a [[Box Plot]] for outliers; for a **categorical** variable, a bar chart of level frequencies is the univariate plot, and it is how thin levels get found before they blow up a GLM's standard errors
-- The empirical CDF is the one univariate plot with **no tuning choice** — no bin width, no whisker rule — so it is the honest check when a histogram's shape looks bin-dependent
-- Univariate plots of the *response* narrow the choice of distribution and [[Link Function]]; univariate plots of each *predictor* find skew, spikes at zero, and impossible values before they contaminate the fit
-- They cannot show relationships: a variable can look perfectly well behaved on its own and still be badly related to the response, which is what a [[Scatter Plot]] and the diagnostic plots are for
-- Plot exposures too, not just losses — a univariate plot of exposure by level shows where the data is thin enough that a fitted coefficient will be unstable
-
 ![[Media/Figures/Univariate_Plot.svg|340]]
 
-> [!example]- Choosing Plots for a New Data Set {Example}
-> An actuary receives a data set with claim count (integer, mostly zero), claim severity (positive, right-skewed), and territory (12 levels). Which univariate plot fits each?
->
-> > [!answer]-
-> > - **Claim count**: a bar chart of the counts $0, 1, 2, \ldots$ — a histogram of a variable that is $85\%$ zeros just shows one bar. Compare the sample mean and variance while you are there; variance $\gg$ mean means overdispersion, so [[Negative Binomial Distribution|negative binomial]] rather than plain [[Poisson Regression]].
-> > - **Severity**: a [[Histogram]] of $\ln(\text{severity})$ plus a [[Box Plot]] on the raw scale, so the shape and the outliers are both visible.
-> > - **Territory**: a bar chart of exposure by level, to find levels with too little data to fit their own coefficient.
+A **Univariate Plot** is a plot of the distribution of one variable, its centre, spread, shape and outliers, without reference to any other variable. Plotting the distribution of each variable is the first step of [[Exploratory Data Analysis|exploratory data analysis]], and it doubles as a data quality check that reveals errors before anything is built on the data. The univariate plot depends on the variable's [[Data Types|data type]]:
 
-> [!example]- When the Histogram and the Box Plot Disagree {Example}
-> A box plot of a variable looks symmetric with no outliers, but the histogram shows two clear humps. Which is telling the truth?
->
-> > [!answer]-
-> > Both — they measure different things. The five numbers behind a box plot ($\min, Q_1, Q_2, Q_3, \max$) can be identical for a symmetric unimodal sample and a symmetric **bimodal** one, and the box draws nothing between them, so a box plot cannot show two humps. The histogram is right about the shape, and the two modes usually mean a missing [[Categorical Predictor|categorical variable]] (two classes of risk mixed in one column) that should be split out.
+| Plot | Data type | Shows |
+| --- | --- | --- |
+| Histogram | Continuous | The shape of the distribution, including skewness and a second mode |
+| Box plot | Continuous | The median, the quartiles and the outliers |
+| Bar chart with one bar per value | Discrete count | How often each value occurs, including the share of zeros and the shape of the tail |
+| Bar chart of counts or exposure by level | Categorical | Levels with little data |
+| QQ plot | Continuous | Whether the variable follows an assumed distribution |
+
+The [[Histogram]], the [[Box Plot|box plot]] and the [[QQ Plot|QQ plot]] each have their own page.
+
+> [!example]- A data set has claim count per policy (an integer, mostly zero), claim severity (positive and right-skewed) and territory (12 levels). Which univariate plot suits each variable? {Example}
+> - Claim count is a discrete count, so a bar chart with one bar per value shows the share of zeros and the tail.
+> - Severity is continuous and right-skewed, so a histogram of its logarithm shows its shape, and a box plot shows its outliers.
+> - Territory is categorical, so a bar chart of exposure by territory shows which territories have little data.
+
+## Bar chart of exposure by level
+
+A bar chart of exposure by level is the univariate plot of a [[Categorical Predictor|categorical predictor]]. A level with few observations has an imprecisely estimated coefficient, with a large standard error. An apparent difference at such a level should be confirmed, or given [[Credibility|credibility]] weight, before it is fully priced.
+
+> [!example]- A bar chart of exposure by territory shows that territory 12 has 40 car-years, against several thousand in each other territory. A frequency model gives territory 12 the highest relativity. Should that relativity be priced in full? {Example}
+> - Territory 12 has very little exposure, so its coefficient has a large standard error.
+> - Its high relativity may be chance.
+> - It should be confirmed with more data, or credibility-weighted toward the overall level, before it is priced in full.
+
+## What a univariate plot cannot show
+
+A univariate plot shows one variable at a time, so it cannot show:
+
+1. A relationship with the response, which needs a [[Scatter Plot|scatter plot]] or side-by-side box plots.
+2. Differences between groups, because a single histogram of pooled data shows the overall distribution and hides them.
+3. A change over time, because a box plot or a histogram discards the time order.
+4. In a box plot, how many observations share a value, because repeated identical values are drawn as one point. A pile-up at one value is revealed by a histogram.
+
+> [!trap] Drawing a histogram of a count
+> A histogram of a count that is mostly zero shows one tall bar, and bins that do not align with the integers leave gaps. A bar chart with one bar per value is the univariate plot of a count.

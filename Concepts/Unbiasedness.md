@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:3175aceda6d8e0f174535c74a4ed0782da21e404e5c779fa2b30e2a1a2537e28
+  content_hash: sha256:095b2904e691b52e925efac79e26f4bff1e2726e5926378ddfd2d1e1abadc3a6
   sources:
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), Domain B task 8 'applying criteria to estimates such as consistency, unbiasedness, sufficiency, efficiency, minimum variance, mean square error' (PDF p.4); James et al. Chapters 1, 2 (excluding Section 2.2.3) on Domain C (PDF p.6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
     - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random), §6.1 Estimators: bias(U) = E(U) − θ; mse(U) = E[(U − θ)²] = var(U) + bias²(U); U unbiased if E(U) = θ for all θ ∈ T; 'if we have two unbiased estimators of θ, we naturally prefer the one with the smaller variance (mean square error)'; more efficient / eff(U, V) = var(V)/var(U) defined for U, V unbiased; asymptotic relative efficiency for asymptotically unbiased sequences; consistency = convergence in probability; mean-square consistent ⇒ consistent; var(M_n) = σ²/n; var(S_n²) = (1/n)(σ4 − (n−3)σ⁴/(n−1)), sha256:10914ffca9034209da0111918cfb534d60982bde0bba142a11d61d43114c6e2a — https://www.randomservices.org/random/point/Estimators.html"
@@ -20,31 +20,49 @@ verification:
   log: .verify/Concepts/Unbiasedness.md
 ---
 
-An estimator $\hat{\theta}$ of a parameter $\theta$ is **unbiased** if its expected value equals the true parameter value for all $\theta$. Unbiasedness means the estimator is correct **on average**.
-
-> $$E[\hat{\theta}] = \theta \quad \text{for all } \theta$$
-
-> $$\text{Bias}(\hat{\theta}) = E[\hat{\theta}] - \theta = 0$$
-
-- The **sample mean** $\bar{X} = \frac{1}{n}\sum X_i$ is an unbiased estimator of the population mean $\mu$
-- The **sample variance** $S^2 = \frac{1}{n-1}\sum (X_i - \bar{X})^2$ is unbiased for $\sigma^2$; dividing by $n$ instead gives a biased estimator. For a **normal** population the divisor-$n$ version has the lower MSE, but that does not hold for every population: for Bernoulli$(1/2)$ data with $n \geq 5$, $S^2$ has the lower MSE
-- Unbiasedness alone does not imply a good estimator — a large [[Variance]] is also undesirable; the **[[Mean Square Error]]** combines both: $\text{MSE}(\hat{\theta}) = \text{Var}(\hat{\theta}) + \text{Bias}^2(\hat{\theta})$
-- The **UMVUE** (Uniformly Minimum Variance Unbiased Estimator) is the unbiased estimator with smallest variance for all $\theta$
-- **[[Maximum Likelihood Estimation|MLEs]]** are generally **asymptotically** unbiased but may be biased in small samples
-- **Unbiasedness does not survive a nonlinear transformation.** The square root is concave, so by Jensen's inequality $E[S] = E\big[\sqrt{S^2}\,\big] \le \sqrt{E[S^2]} = \sigma$. The sample standard deviation $S$ is a negatively biased estimator that tends to underestimate $\sigma$, even though $S^2$ is unbiased for $\sigma^2$
-- **When unbiasedness matters.** Averaging $k$ independent estimates $U_1, \ldots, U_k$ of $\theta$, each with mean $\theta + b$ and variance $v$, gives an average with mean $\theta + b$ and variance $v/k$. Averaging shrinks the variance but leaves the bias unchanged, so by the [[Law of Large Numbers]] the average of many biased estimates settles on $\theta + b$, not $\theta$. Bias does not average away, so an unbiased estimator is wanted when estimates from many small samples are averaged or pooled. Unbiasedness also matters when the estimate feeds a procedure built on it: for a normal sample, $(n-1)S^2/\sigma^2$ has a [[Chi-Squared Distribution|chi-square distribution]] with $n - 1$ degrees of freedom and $(\bar{X} - \mu)/(S/\sqrt{n})$ a [[Student's t-Distribution|$t$ distribution]] with $n - 1$, statements about $S^2$ that do not hold for the divisor-$n$ estimator
-
 ![[Media/Figures/Unbiasedness.svg|340]]
 
-> [!example]- Checking Unbiasedness of the Sample Mean {Example}
-> Let $X_1, \ldots, X_n$ be i.i.d. with mean $\mu$. Show that $\bar{X}$ is unbiased for $\mu$.
->
-> > [!answer]-
-> > $$E[\bar{X}] = E\!\left[\frac{1}{n}\sum_{i=1}^n X_i\right] = \frac{1}{n}\sum_{i=1}^n E[X_i] = \frac{1}{n}(n\mu) = \mu$$
-> > Since $E[\bar{X}] = \mu$, $\bar{X}$ is unbiased.
+**Unbiasedness** is the property of an [[Estimator|estimator]] whose expected value equals the parameter it estimates, whatever the value of the parameter. An estimator $\hat{\theta}$ of a parameter $\theta$ is unbiased when, for every value of $\theta$, its expected value is
 
-> [!example]- MLE Bias for the Exponential Distribution {Example}
-> For $X_i \sim \text{Exp}(\theta)$, the MLE is $\hat{\theta} = \bar{X}$. Is it unbiased?
->
-> > [!answer]-
-> > $E[\bar{X}] = E[X_i] = \theta$. Yes, $\hat{\theta} = \bar{X}$ is **unbiased** for $\theta$ in the exponential case.
+> $$E[\hat{\theta}] = \theta$$
+
+An unbiased estimator has [[Bias|bias]] 0, and its [[Mean Square Error|mean square error]] equals its variance. Among the unbiased estimators of $\theta$, the one with the smallest variance for every value of $\theta$ is the [[Minimum Variance|minimum variance unbiased estimator]].
+
+> [!example]- A loss $X_1$ is uniform on $(0, \theta)$. Is $2X_1$ an unbiased estimator of $\theta$? {Example}
+> - The expected value of a uniform loss on $(0, \theta)$ is $\theta/2$.
+> - The expected value of the estimator is $E[2X_1] = 2 \times \theta/2 = \theta$.
+> - This holds for every $\theta$, so $2X_1$ is unbiased for $\theta$.
+
+## Unbiasedness of the sample mean
+
+Expectation is linear. For random variables $X$ and $Y$ and constants $a$ and $b$, the expected value of $aX + bY$ is
+
+> $$E[aX + bY] = aE[X] + bE[Y]$$
+
+This holds whether or not $X$ and $Y$ are independent. For a sample $X_1, \ldots, X_n$ from a population with mean $\mu$, the expected value of the [[Sample Mean|sample mean]] is therefore
+
+> $$E[\bar{X}] = \mu$$
+
+The average of the [[Order Statistics|order statistics]] $X_{(1)}, \ldots, X_{(n)}$ is the sample mean, so it is also unbiased for $\mu$, even though the order statistics are dependent.
+
+> [!example]- The estimators $\hat{\theta}_1$ and $\hat{\theta}_2$ are both unbiased for $\theta$. Is $w\hat{\theta}_1 + (1 - w)\hat{\theta}_2$ unbiased for $\theta$? {Example}
+> - By linearity, the expected value is $wE[\hat{\theta}_1] + (1 - w)E[\hat{\theta}_2]$.
+> - This is $w\theta + (1 - w)\theta = \theta$.
+> - The combination is unbiased for every weight $w$, whether or not the two estimators are independent.
+
+## Unbiasedness of the sample variance
+
+For a sample of $n$ from a population with variance $\sigma^2$, the expected sum of squared deviations from the sample mean is
+
+> $$E\left[\sum_{i=1}^{n}(X_i - \bar{X})^2\right] = (n-1)\sigma^2$$
+
+Dividing the sum by $n - 1$ gives the [[Sample Variance|sample variance]] $S^2$, whose expected value is
+
+> $$E[S^2] = \sigma^2$$
+
+Dividing by $n$ instead gives a [[Bias#Bias of the variance estimator that divides by the sample size|biased estimator]]. When the population mean $\mu$ is known, the average $\frac{1}{n}\sum (X_i - \mu)^2$ is unbiased for $\sigma^2$, because each $(X_i - \mu)^2$ has expected value $\sigma^2$.
+
+> [!example]- Three losses are 2, 4 and 9. What is the unbiased estimate of the variance of a loss? {Example}
+> - The sample mean is $\bar{x} = 15/3 = 5$.
+> - The squared deviations are 9, 1 and 16, which sum to 26.
+> - Dividing by $n - 1 = 2$ gives the unbiased estimate $26/2 = 13$.

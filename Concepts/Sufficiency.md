@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:6f30ad0a48bdfc415a9602f453d27d904be9d681f238e1c4f20979d434575a2b
+  content_hash: sha256:705b9c38ab9467951f12a17b25220d237f923802897ee81f1dbeaa710459b56b
   sources:
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), Domain B tasks 1 (estimate mean and variance), 2 (sufficient statistic), 4 (critical values from a sampling distribution), 7 (order statistics), 8 (MLE; consistency, unbiasedness, sufficiency, efficiency, minimum variance, MSE; censoring and truncation), 9 (PDF p.4); Hogg Domain B §§4.1, 5.1, 6.1–6.5, 7.1–7.6 and Tse §§12.1, 12.3 (PDF p.6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
     - "Siegrist, Random, §6.3 Maximum Likelihood (likelihood = pdf with roles reversed; log-likelihood; interior vs boundary maxima; invariance; Bernoulli/Poisson/normal/gamma MLEs; Uniform[0,h]: MLE X_(n), mse 2h²/((n+1)(n+2)), (n+1)X_(n)/n unbiased with var h²/(n(n+2)); Uniform[a,a+1]: MLE not unique), sha256:f8c94e3de84f7a025fd32395169938f37e7fd7958d5a8be9d56b54ed307d6ffd — https://www.randomservices.org/random/point/Likelihood.html"
@@ -14,38 +14,34 @@ verification:
   log: .verify/Concepts/Sufficiency.md
 ---
 
-**Sufficiency** is the property that a statistic $T(X_1, \ldots, X_n)$ captures all of a sample's information about a parameter $\theta$: once the [[Sufficient Statistic]] $T$ is known, the conditional distribution of the data no longer depends on $\theta$. It is a key criterion when judging an estimator built from $T$.
-
-> $$f(x_1, \ldots, x_n \mid T = t,\, \theta) = f(x_1, \ldots, x_n \mid T = t)$$
-
-- The right side is free of $\theta$, so $T$ leaves no extra information in the raw data
-- Equivalently, by the **Fisher–Neyman factorization theorem**, $T$ is sufficient when the joint density factors as:
-
-> $$f(x_1, \ldots, x_n \mid \theta) = g\big(T(x_1,\ldots,x_n),\, \theta\big) \cdot h(x_1, \ldots, x_n)$$
-
-- An estimator should be a function of a sufficient statistic; by **Rao–Blackwell**, conditioning any [[Unbiasedness|unbiased]] estimator on $T$ never increases its variance, pushing toward [[Minimum Variance]]
-- If a [[Maximum Likelihood Estimation|MLE]] exists, one can always be chosen that is a function of the sufficient statistic, and a **unique** MLE always is one — so it satisfies the sufficiency criterion. Without uniqueness only that choice is guaranteed: for $\text{Uniform}[a, a+1]$, any statistic in $[X_{(n)} - 1,\ X_{(1)}]$ is an MLE of $a$
-- An unbiased function of a **complete** sufficient statistic is the UMVUE (Lehmann–Scheffé)
-
 ![[Media/Figures/Sufficiency.svg|340]]
 
-> [!example]- Sufficiency via the Conditional Distribution {Example}
-> Let $X_1, \ldots, X_n \stackrel{\text{iid}}{\sim} \text{Bernoulli}(p)$ (e.g., whether each policy filed a claim). Show that $T = \sum X_i$ is sufficient for $p$.
->
-> > [!answer]-
-> > Given $T = t$, every arrangement of $t$ ones among $n$ trials is equally likely:
-> > $$
-> > \begin{align*}
-> > P\!\left(\mathbf{X} = \mathbf{x} \mid T = t\right) &= \frac{p^{t}(1-p)^{n-t}}{\binom{n}{t} p^{t}(1-p)^{n-t}} \\
-> >   &= \frac{1}{\binom{n}{t}}
-> > \end{align*}
-> > $$
-> > The result is free of $p$, so knowing the total $T$ alone preserves all information about $p$ — $T$ is sufficient.
+**Sufficiency** is the criterion that an [[Estimator|estimator]] of a parameter $\theta$ should use the sample only through a [[Sufficient Statistic|sufficient statistic]] $T$. An estimator meets the criterion when, for some function $\varphi$ that does not involve $\theta$, it is
 
-> [!example]- MLE Depends Only on the Sufficient Statistic {Example}
-> Claim counts $X_1, \ldots, X_n \stackrel{\text{iid}}{\sim} \text{Poi}(\lambda)$ have sufficient statistic $T = \sum X_i$. Confirm the MLE of $\lambda$ uses the data only through $T$.
->
-> > [!answer]-
-> > Maximizing the log-likelihood $\ell(\lambda) = -n\lambda + T\ln\lambda - \sum\ln(x_i!)$ gives:
-> > $$\hat{\lambda} = \frac{1}{n}\sum_{i=1}^n X_i = \frac{T}{n}$$
-> > The estimator is a function of $T$ alone, so the [[Maximum Likelihood Estimation|MLE]] satisfies sufficiency.
+> $$\hat{\theta} = \varphi(T)$$
+
+Such an estimator loses none of the information that the sample holds about $\theta$.
+
+> [!example]- Claim counts $X_1, \ldots, X_n$ are Poisson with mean $\lambda$, and $T = \sum X_i$ is sufficient for $\lambda$. Which of $\bar{X}$, $X_1$ and $(X_1 + X_2)/2$ meet the sufficiency criterion? {Example}
+> - The sample mean is $\bar{X} = T/n$, a function of $T$, so it meets the criterion.
+> - Two samples with the same total can have different values of $X_1$, so $X_1$ is not a function of $T$.
+> - The same is true of $(X_1 + X_2)/2$, so neither of these meets the criterion.
+
+## Sufficiency of the maximum likelihood estimator
+
+By the [[Sufficient Statistic#The factorization theorem|factorization theorem]], the log-likelihood of the sample is
+
+> $$l(\theta) = \ln g(T, \theta) + \ln h(x_1, \ldots, x_n)$$
+
+- $g$ and $h$ are the factors of the joint pmf or pdf, and $h$ does not involve $\theta$.
+
+Maximizing $l(\theta)$ depends on the sample only through $T$, so a unique [[Maximum Likelihood Estimation|maximum likelihood estimator]] is a function of $T$. When the maximum likelihood estimator is not unique, one can be chosen that is a function of $T$.
+
+> [!example]- Five policies have claim counts 3, 1, 0, 2 and 4, Poisson with mean $\lambda$. What is the maximum likelihood estimate of $\lambda$, and does it meet the sufficiency criterion? {Example}
+> - The log-likelihood is $l(\lambda) = -n\lambda + T\ln\lambda - \sum \ln x_i!$, with $T = \sum x_i$.
+> - Setting its derivative $-n + T/\lambda$ to 0 gives $\hat{\lambda} = T/n$, a function of $T$ alone.
+> - Here $T = 10$ and $n = 5$, so the estimate is $\hat{\lambda} = 2$.
+
+## Sufficiency and the Rao–Blackwell theorem
+
+An unbiased estimator $W$ that is not a function of $T$ can be improved. By the [[Rao-Blackwell Theorem|Rao–Blackwell theorem]], $E[W \mid T]$ is an unbiased estimator whose variance is no larger than $\text{Var}(W)$ for every value of $\theta$. Sufficiency is what makes $E[W \mid T]$ free of $\theta$, so that it can be computed from the sample. If $T$ is also complete, an unbiased function of $T$ is the [[Minimum Variance|minimum variance unbiased estimator]] by the [[Rao-Blackwell Theorem#The Lehmann–Scheffé theorem|Lehmann–Scheffé theorem]].

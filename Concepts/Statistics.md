@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:4fd15da4fcb9baf4970e80e569a5172902c195b6812d9c9649ffcba8911b0914
+  content_hash: sha256:e791349c63994ecbbc2c686fb165358c0db18ec2624b786cdc06cd1a8b1a9219
   sources:
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), Domain B task 8 'applying criteria to estimates such as consistency, unbiasedness, sufficiency, efficiency, minimum variance, mean square error' (PDF p.4); James et al. Chapters 1, 2 (excluding Section 2.2.3) on Domain C (PDF p.6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
     - "Siegrist, Random, §5.1 Introduction (Random Samples): a statistic is an observable function of the data; descriptive vs inferential statistics; a statistic is a random variable with a distribution of its own, sha256:0af72fbf0202413525cae99e696cfa70014a803d6c5ac7a7dcafd1577742414f — https://www.randomservices.org/random/sample/Introduction.html"
@@ -18,33 +18,17 @@ verification:
   log: .verify/Concepts/Statistics.md
 ---
 
-**Statistics** is the discipline of collecting, summarizing, and drawing inferences about a population from sample data. A **statistic** is any quantity computed from a sample; the most fundamental are the **sample mean** $\bar{X}$ and **sample variance** $S^2$, which estimate the population mean $\mu$ and variance $\sigma^2$.
-
-> $$\bar{X} = \frac{1}{n}\sum_{i=1}^n X_i$$
-
-> $$S^2 = \frac{1}{n-1}\sum_{i=1}^n (X_i - \bar{X})^2$$
-
-- Dividing the sum of squared deviations by $n-1$ (rather than $n$) makes $S^2$ an [[Unbiasedness|unbiased]] estimator of $\sigma^2$
-- Every statistic has its own [[Sampling Distribution]], which quantifies how it varies from sample to sample
-- **Descriptive** statistics summarize data (mean, variance, quantiles); **inferential** statistics generalize to the population via estimation (e.g. [[Maximum Likelihood Estimation]]) and [[Hypothesis Testing]]
-- Statistics builds on [[Probability]]: a probability model for the data is assumed, then its parameters are estimated and tested
-- Actuaries use statistics to model claim frequency and severity, set premiums, and quantify reserve uncertainty
-
 ![[Media/Figures/Statistics.svg|340]]
 
-> [!example]- Estimating the Mean and Variance of Claim Sizes {Example}
-> Five reported claims (in \$$1{,}000$s) are $4, 6, 7, 9, 9$. Estimate the mean and variance of the claim-size distribution.
->
-> > [!answer]-
-> > $$\bar{X} = \frac{4+6+7+9+9}{5} = \frac{35}{5} = 7$$
-> > Sum of squared deviations: $(4-7)^2 + (6-7)^2 + (7-7)^2 + (9-7)^2 + (9-7)^2 = 9 + 1 + 0 + 4 + 4 = 18$.
-> > $$S^2 = \frac{18}{5-1} = 4.5$$
-> > The estimated mean claim is \$$7{,}000$ with sample variance $4.5$ (in $\$1{,}000^2$ units).
+**Statistics** is the branch of mathematics that draws conclusions about a [[Probability Distributions|probability distribution]] from a [[Random Sample|random sample]] $X_1, \ldots, X_n$ taken from it. A **statistic** is a function of the sample that does not depend on any unknown parameter. A statistic is itself a random variable, and its distribution is its [[Sampling Distribution|sampling distribution]].
 
-> [!example]- Standard Error of the Sample Mean {Example}
-> Using the sample above ($n = 5$, $S^2 = 4.5$), estimate the standard error of $\bar{X}$.
->
-> > [!answer]-
-> > The standard error estimates the standard deviation of the [[Sampling Distribution]] of $\bar{X}$:
-> > $$\text{SE}(\bar{X}) = \frac{S}{\sqrt{n}} = \frac{\sqrt{4.5}}{\sqrt{5}} = \frac{2.121}{2.236} \approx 0.949$$
-> > So the mean claim estimate of \$$7{,}000$ carries a standard error of about \$$949$.
+Statistical inference about an unknown parameter $\theta$ of the distribution takes three forms:
+
+1. **[[Parameter Estimation|Point estimation]]** uses one statistic, an [[Estimator|estimator]] $\hat{\theta}$, as the value of $\theta$.
+2. **[[Confidence Interval|Interval estimation]]** uses two statistics as the endpoints of an interval that contains $\theta$ with a stated probability.
+3. **[[Hypothesis Testing|Hypothesis testing]]** uses a statistic to decide whether the data are consistent with a stated value of $\theta$.
+
+> [!example]- A random sample $X_1, \ldots, X_n$ is drawn from a normal distribution with unknown mean $\mu$ and known variance $\sigma^2 = 4$. Which of $\bar{X}$, $\bar{X} - \mu$ and $\sum X_i^2 / 4$ are statistics? {Example}
+> - The [[Sample Mean|sample mean]] $\bar{X}$ is computed from the observations alone, so it is a statistic.
+> - $\bar{X} - \mu$ depends on the unknown mean $\mu$, so it is not a statistic.
+> - $\sum X_i^2 / 4$ uses only the observations and the known variance, so it is a statistic.

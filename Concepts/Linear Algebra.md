@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:35d07cc955b1f1497328af33ec2f63d3268401b02aeb02a8f839a4e7a8b29c32
+  content_hash: sha256:f78225b314096e9eb2d62dd3e94d0a554c30020d97fbf2a84cc468b6722d42f4
   sources:
     - "Margalit & Rabinoff, Interactive Linear Algebra (Georgia Tech), §3.5 'Matrix Inverses': det of a 2x2 matrix = ad - bc; invertible iff det != 0, sha256:3f21c6a9af68bf9b0e8d4ad7751a264e7777340451dc48284db01f019c0f0a4b — https://textbooks.math.gatech.edu/ila/matrix-inverses.html"
     - "Margalit & Rabinoff, Interactive Linear Algebra (Georgia Tech), §4.1 invertibility property: square A invertible iff det(A) != 0; 2x2 formula, sha256:00e719a0b116a6335b4f77553e51006ef6e8b22fd9fdbd8e60da57d1d7a7cb92 — https://textbooks.math.gatech.edu/ila/determinants-definitions-properties.html"
@@ -19,53 +19,60 @@ verification:
   log: .verify/Concepts/Linear Algebra.md
 ---
 
-**Linear Algebra** is the study of vectors, matrices, and linear transformations. It is the computational backbone of regression, the [[Generalized Linear Model]], and [[Principal Components Analysis]]: data is stored in a design matrix and model fitting reduces to matrix operations.
-
-> $$A\mathbf{x} = \mathbf{b}$$
-
-- A **matrix** $A$ of size $m \times n$ maps a vector $\mathbf{x} \in \mathbb{R}^n$ to $A\mathbf{x} \in \mathbb{R}^m$; the system above has a unique solution when $A$ is square and **invertible**
-- The **transpose** $A^\top$ swaps rows and columns; the **inverse** $A^{-1}$ satisfies $A A^{-1} = I$, the identity matrix
-- $A$ is invertible iff $\det(A) \neq 0$ (equivalently, full **rank**); for a $2\times 2$ matrix with entries $a, b, c, d$ the determinant is $ad - bc$
-
-**Least-squares regression (normal equations).** Fitting $\mathbf{y} = X\boldsymbol{\beta} + \boldsymbol{\varepsilon}$ by minimizing the [[Residual Sum of Squares]] gives the ordinary least-squares estimate:
-
-> $$\hat{\boldsymbol{\beta}} = \left(X^\top X\right)^{-1} X^\top \mathbf{y}$$
-
-- $X$ is the **design matrix** (one row per observation, one column per predictor plus an intercept); this formula underlies linear regression and the iteratively re-weighted version used to fit a [[Generalized Linear Model]]
-
-**Eigenvalues and eigenvectors.** A nonzero vector $\mathbf{v}$ is an **eigenvector** of a square matrix $A$ with **eigenvalue** $\lambda$ when:
-
-> $$A\mathbf{v} = \lambda\mathbf{v}$$
-
-- Eigenvalues solve the **characteristic equation** $\det(A - \lambda I) = 0$
-- The eigenvectors of a covariance matrix are the **principal components** in [[Principal Components Analysis]], and each eigenvalue is the variance explained along its component
-
 ![[Media/Figures/Linear_Algebra.svg|340]]
 
-> [!example]- Least-Squares Slope for Two Data Points {Example}
-> Fit $y = \beta x$ (no intercept) by least squares to the points $(x, y) = (1, 2)$ and $(2, 3)$. Find $\hat{\beta}$.
->
-> > [!answer]-
-> > Here $X = \begin{bmatrix} 1 \\ 2 \end{bmatrix}$ and $\mathbf{y} = \begin{bmatrix} 2 \\ 3 \end{bmatrix}$, so $X^\top X$ and $X^\top \mathbf{y}$ are scalars:
-> > $$
-> > \begin{align*}
-> > \hat{\beta} &= \frac{X^\top \mathbf{y}}{X^\top X} = \frac{(1)(2) + (2)(3)}{(1)^2 + (2)^2} \\
-> >   &= \frac{8}{5} \\
-> >   &= 1.6
-> > \end{align*}
-> > $$
-> > The best-fit slope through the origin is $\hat{\beta} = 1.6$.
+**Linear Algebra** is the branch of mathematics that studies vectors, matrices and the linear operations on them. In regression it writes the model for all $n$ observations as one equation, $\mathbf{y} = \mathbf{X}\boldsymbol\beta + \boldsymbol\varepsilon$, where $\mathbf{X}$ is the [[Design Matrix|design matrix]].
 
-> [!example]- Eigenvalues of a 2×2 Covariance Matrix {Example}
-> A standardized two-variable dataset has covariance matrix $\Sigma = \begin{bmatrix} 1 & 0.6 \\ 0.6 & 1 \end{bmatrix}$. Find its eigenvalues (the variances captured by the two principal components).
->
-> > [!answer]-
-> > Solve $\det(\Sigma - \lambda I) = 0$:
-> > $$
-> > \begin{align*}
-> > (1 - \lambda)^2 - 0.6^2 &= 0 \\
-> > 1 - \lambda &= \pm 0.6 \\
-> > \lambda &= 1.6 \ \text{ or } \ 0.4
-> > \end{align*}
-> > $$
-> > The first principal component explains $1.6 / (1.6 + 0.4) = 80\%$ of the total variance.
+The product of an $m \times q$ matrix $\mathbf{A}$ and a $q \times r$ matrix $\mathbf{B}$ is the $m \times r$ matrix $\mathbf{A}\mathbf{B}$ whose entry in row $i$ and column $j$ is
+
+> $$(\mathbf{A}\mathbf{B})_{ij} = \sum_{k=1}^{q} a_{ik}\, b_{kj}$$
+
+- $a_{ik}$ is the entry of $\mathbf{A}$ in row $i$ and column $k$, and $b_{kj}$ is the entry of $\mathbf{B}$ in row $k$ and column $j$.
+- The number of columns of $\mathbf{A}$ must equal the number of rows of $\mathbf{B}$.
+
+> [!example]- A design matrix has rows $(1, 2)$, $(1, 5)$ and $(1, 8)$, and the estimated coefficients are $\hat\beta_0 = 1.0$ and $\hat\beta_1 = 0.5$. What are the fitted values $\mathbf{X}\hat{\boldsymbol\beta}$? {Example}
+> - $\mathbf{X}$ is $3 \times 2$ and $\hat{\boldsymbol\beta}$ is $2 \times 1$, so the product is a $3 \times 1$ vector.
+> - Each entry is a row of $\mathbf{X}$ multiplied entry by entry with $\hat{\boldsymbol\beta}$ and summed: $1(1.0) + 2(0.5) = 2.0$, $1(1.0) + 5(0.5) = 3.5$ and $1(1.0) + 8(0.5) = 5.0$.
+> - The fitted values are $2.0$, $3.5$ and $5.0$.
+
+## The matrix $\mathbf{X}^T\mathbf{X}$
+
+The transpose $\mathbf{X}^T$ has the rows of $\mathbf{X}$ as its columns. The entry of $\mathbf{X}^T\mathbf{X}$ in row $j$ and column $k$ is
+
+> $$(\mathbf{X}^T\mathbf{X})_{jk} = \sum_{i=1}^{n} x_{ij}\, x_{ik}$$
+
+- $x_{ij}$ is the entry of $\mathbf{X}$ for observation $i$ in column $j$.
+
+A diagonal entry $(\mathbf{X}^T\mathbf{X})_{jj}$ is the sum of squares of column $j$. For the intercept column, whose entries are all 1, it is the number of observations $n$, and the off-diagonal entries in that row are the column sums of the other columns.
+
+> [!example]- The design matrix has rows $(1, 1)$, $(1, 2)$ and $(1, 3)$. What is $\mathbf{X}^T\mathbf{X}$? {Example}
+> - The intercept column's sum of squares is $1 + 1 + 1 = 3$, the number of observations.
+> - The second column's sum of squares is $1 + 4 + 9 = 14$.
+> - The off-diagonal entry is the sum of products of the two columns, $1 + 2 + 3 = 6$.
+> - So $\mathbf{X}^T\mathbf{X}$ has rows $(3, 6)$ and $(6, 14)$.
+
+## The inverse of a matrix
+
+The inverse of a square matrix $\mathbf{A}$ is the matrix $\mathbf{A}^{-1}$ with $\mathbf{A}\mathbf{A}^{-1} = \mathbf{I}$, the identity matrix. It exists only when the determinant of $\mathbf{A}$ is not zero. The inverse of a $2 \times 2$ matrix is
+
+> $$\begin{bmatrix} a & b \\ c & d \end{bmatrix}^{-1} = \frac{1}{ad - bc}\begin{bmatrix} d & -b \\ -c & a \end{bmatrix}$$
+
+- $ad - bc$ is the determinant, and $ad - bc \ne 0$.
+
+> [!example]- What is the inverse of the matrix with rows $(3, 6)$ and $(6, 14)$? {Example}
+> - The determinant is $3(14) - 6(6) = 6$.
+> - Swapping the diagonal entries and changing the sign of the off-diagonal entries gives rows $(14, -6)$ and $(-6, 3)$.
+> - The inverse is $\frac{1}{6}$ times that matrix, with rows $(2.3333, -1)$ and $(-1, 0.5)$.
+
+## Eigenvalues and eigenvectors
+
+A nonzero vector $\mathbf{v}$ is an eigenvector of a square matrix $\mathbf{A}$, with eigenvalue $\lambda$, when
+
+> $$\mathbf{A}\mathbf{v} = \lambda \mathbf{v}$$
+
+The eigenvalues are the solutions of $\det(\mathbf{A} - \lambda \mathbf{I}) = 0$. The eigenvectors of a covariance matrix are the directions of the [[Principal Components Analysis|principal components]], and each eigenvalue is the variance along its component.
+
+> [!example]- Two standardized variables have the covariance matrix with rows $(1, 0.6)$ and $(0.6, 1)$. What are its eigenvalues, and what share of the total variance does the first principal component explain? {Example}
+> - The eigenvalues solve $(1 - \lambda)^2 - 0.6^2 = 0$, so $1 - \lambda = \pm 0.6$.
+> - The eigenvalues are $1.6$ and $0.4$.
+> - The first principal component explains $1.6/(1.6 + 0.4) = 80\%$ of the total variance.

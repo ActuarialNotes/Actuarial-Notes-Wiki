@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:cb0b0758900801957e621c431be110eff352ff1cc005d93b9a05128727bfbe27
+  content_hash: sha256:77da7155ae342a14123a83a76e6d01d3307df2fb8b822a0e4c2ba34f6cc8d4b7
   sources:
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), Domain B task 8 'applying criteria to estimates such as consistency, unbiasedness, sufficiency, efficiency, minimum variance, mean square error' (PDF p.4); James et al. Chapters 1, 2 (excluding Section 2.2.3) on Domain C (PDF p.6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
     - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random), §6.1 Estimators: bias(U) = E(U) − θ; mse(U) = E[(U − θ)²] = var(U) + bias²(U); U unbiased if E(U) = θ for all θ ∈ T; 'if we have two unbiased estimators of θ, we naturally prefer the one with the smaller variance (mean square error)'; more efficient / eff(U, V) = var(V)/var(U) defined for U, V unbiased; asymptotic relative efficiency for asymptotically unbiased sequences; consistency = convergence in probability; mean-square consistent ⇒ consistent; var(M_n) = σ²/n; var(S_n²) = (1/n)(σ4 − (n−3)σ⁴/(n−1)), sha256:10914ffca9034209da0111918cfb534d60982bde0bba142a11d61d43114c6e2a — https://www.randomservices.org/random/point/Estimators.html"
@@ -18,29 +18,52 @@ verification:
   log: .verify/Concepts/Minimum Variance.md
 ---
 
-**Minimum Variance** is a criterion for comparing estimators: among the [[Unbiasedness|unbiased]] estimators of a parameter, the one with the **smallest variance** is preferred — for an unbiased estimator the variance is the [[Mean Square Error]], the expected squared distance from the true parameter.
-
-> **[[Cramér-Rao Lower Bound|Cramér–Rao Lower Bound]] (CRLB):** Under regularity conditions (the support of $f(x \mid \theta)$ does not depend on $\theta$), for any unbiased estimator $\hat{\theta}$,
-> $$\text{Var}(\hat{\theta}) \geq \frac{1}{I(\theta)}$$
-
-> $$= \frac{1}{n \cdot I_1(\theta)}$$
-
-> $$\text{where } I_1(\theta) = E\!\left[\left(\frac{\partial}{\partial\theta}\ln f(X \mid \theta)\right)^2\right] \text{ is the Fisher information}$$
-
-- $I_1(\theta)$ is the information in one observation and $I(\theta) = n\,I_1(\theta)$ the [[Fisher Information]] in a sample of size $n$
-- An unbiased estimator that **achieves** the CRLB is called **efficient**
-- The regularity conditions matter: for $\text{Uniform}(0,\theta)$ the support depends on $\theta$, and $\frac{n+1}{n}X_{(n)}$ is unbiased with variance $\frac{\theta^2}{n(n+2)}$ — below the $\theta^2/n$ the bound would give
-- The **UMVUE** (Uniformly Minimum Variance Unbiased Estimator) achieves minimum variance simultaneously for all $\theta$ within the class of unbiased estimators
-- By the Lehmann–Scheffé theorem, an unbiased function of a **complete sufficient statistic** is the UMVUE
-- Under the same kind of regularity conditions (common support, a true $\theta$ inside the parameter space, a differentiable log-likelihood), [[Maximum Likelihood Estimation|MLEs]] are **asymptotically efficient**: their variance approaches the CRLB as $n \to \infty$
-
 ![[Media/Figures/Minimum_Variance.svg|340]]
 
-> [!example]- Cramér–Rao Bound for the Exponential Mean {Example}
-> For $X_i \stackrel{\text{iid}}{\sim} \text{Exp}(\theta)$, find the Cramér–Rao lower bound on the variance of any unbiased estimator of $\theta$.
->
-> > [!answer]-
-> > $f(x|\theta) = \frac{1}{\theta}e^{-x/\theta}$, so $\ln f = -\ln\theta - x/\theta$.
-> > $\frac{\partial}{\partial\theta}\ln f = -\frac{1}{\theta} + \frac{x}{\theta^2}$.
-> > $I_1(\theta) = \text{Var}\!\left(\frac{X-\theta}{\theta^2}\right) = \frac{\theta^2}{\theta^4} = \frac{1}{\theta^2}$.
-> > CRLB $= \dfrac{\theta^2}{n}$. Since $\text{Var}(\bar{X}) = \theta^2/n$, the sample mean $\bar{X}$ is efficient.
+**Minimum Variance** is the criterion that, among the [[Unbiasedness|unbiased]] estimators of a parameter, prefers the one with the smallest variance. An unbiased estimator $\hat{\theta}^*$ of $\theta$ is the minimum variance unbiased estimator (MVUE) when the condition on its variance is
+
+> $$\text{Var}(\hat{\theta}^*) \le \text{Var}(\hat{\theta})$$
+
+- $\hat{\theta}$ is any unbiased estimator of $\theta$.
+- The inequality holds for every value of $\theta$.
+
+The MVUE is also called the uniformly minimum variance unbiased estimator (UMVUE).
+
+> [!example]- Two losses $X_1$ and $X_2$ have mean $\mu$ and variance $\sigma^2$. Among the unbiased estimators $wX_1 + (1 - w)X_2$, which weight $w$ gives the smallest variance? {Example}
+> - The variance of the estimator is $\left[w^2 + (1 - w)^2\right]\sigma^2$.
+> - Setting the derivative $2w - 2(1 - w)$ to 0 gives $w = 0.5$.
+> - The estimator with the smallest variance in this class is the sample mean $\bar{X}$, with variance $0.5\sigma^2$.
+
+## The Cramér–Rao lower bound
+
+Under regularity conditions, the variance of every unbiased estimator of $\theta$ from a sample of size $n$ is at least the [[Cramér-Rao Lower Bound|Cramér–Rao lower bound]]:
+
+> $$\text{Var}(\hat{\theta}) \ge \frac{1}{nI(\theta)}$$
+
+- $I(\theta)$ is the [[Fisher Information|Fisher information]] in one observation.
+
+An unbiased estimator whose variance equals the bound is [[Efficiency#Efficiency against the Cramér–Rao lower bound|efficient]] and is the MVUE. The bound limits unbiased estimators only, so a biased estimator can have a smaller variance without any contradiction. It says nothing about the [[Mean Square Error|mean square error]] of a biased estimator, which can also be smaller.
+
+> [!example]- Claim sizes are exponential with mean $\theta$, so $I(\theta) = 1/\theta^2$. For 4 claims, is the variance of $\sum X_i/5$ below the Cramér–Rao lower bound? {Example}
+> - The bound for an unbiased estimator is $\theta^2/4 = 0.25\theta^2$.
+> - The variance of $\sum X_i/5$ is $4\theta^2/25 = 0.16\theta^2$, which is below the bound.
+> - There is no contradiction, because $E[\sum X_i/5] = 0.8\theta$ and the estimator is biased.
+
+## Finding a minimum variance unbiased estimator
+
+By the [[Rao-Blackwell Theorem#The Lehmann–Scheffé theorem|Lehmann–Scheffé theorem]], an unbiased estimator that is a function of a [[Rao-Blackwell Theorem#Completeness|complete]] [[Sufficient Statistic|sufficient statistic]] is the unique MVUE. This does not need the Cramér–Rao lower bound to be attained. The MVUEs of the common parameters are:
+
+| Distribution | Parameter | Complete sufficient statistic | MVUE |
+| :--- | :--- | :--- | :--- |
+| Normal, $\mu$ known | $\sigma^2$ | $\sum (X_i - \mu)^2$ | $\frac{1}{n}\sum (X_i - \mu)^2$ |
+| Normal, $\mu$ unknown | $\mu$ | $\sum X_i$ and $\sum X_i^2$ | $\bar{X}$ |
+| Normal, $\mu$ unknown | $\sigma^2$ | $\sum X_i$ and $\sum X_i^2$ | $S^2$ |
+| Poisson | $\lambda$ | $\sum X_i$ | $\bar{X}$ |
+| Exponential | $\theta$ | $\sum X_i$ | $\bar{X}$ |
+| Uniform on $(0, \theta)$ | $\theta$ | $X_{(n)}$ | $\frac{n+1}{n}X_{(n)}$ |
+
+> [!example]- A normal sample of 8 has known mean 0, and $\sum x_i^2 = 200$. What is the minimum variance unbiased estimate of $\sigma^2$? {Example}
+> - With the mean known, $\sum X_i^2$ is a complete sufficient statistic for $\sigma^2$.
+> - Each $X_i^2$ has expected value $\sigma^2$, so $\frac{1}{8}\sum X_i^2$ is unbiased.
+> - It is an unbiased function of a complete sufficient statistic, so it is the MVUE.
+> - The estimate is $200/8 = 25$.

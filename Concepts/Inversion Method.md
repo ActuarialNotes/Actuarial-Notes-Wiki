@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:23bf574bdd42b517fcaa771bbc3263ca13a0290a7d9d15d717d1fad3658edeb9
+  content_hash: sha256:220bd785fca7a8d85321e838e878ddfaf276cd04f2cdd2871984b9619dff4f76
   sources:
     - "CAS Exam MAS-I Sample Questions (as of 11/21/2017), Q1 and official solution: inversion method, exponential draws -ln(0.2) - ln(0.8) = 1.833; item note 'when simulating exponential random variables using either U or (1-U) as values is valid (example 11.3)'; text reference Ross 11.2.1, PDF pp.1-2, sha256:6f146ad2b2d0fd72746c551376572045246c317ae0ca8e189e3ffeffa79670de - https://www.casact.org/sites/default/files/2021-04/MASI_Sample_Questions.pdf"
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06): Ross Sections 11.1, 11.2.1, 11.2.2 assigned (Domain A), PDF p.6, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed - https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
@@ -18,65 +18,63 @@ verification:
   log: .verify/Concepts/Inversion Method.md
 ---
 
-The **Inversion Method** (inverse transform method) simulates a draw from a distribution with [[Cumulative Distribution Function (CDF)|CDF]] $F$ by generating $U$ from a [[Uniform Continuous Distribution|Uniform]]$(0, 1)$ distribution and returning the value $x$ at which the CDF reaches $U$.
+The **Inversion Method** is a method of simulating a value of a random variable $X$ with a continuous [[Cumulative Distribution Function (CDF)|cumulative distribution function]] $F$ from a random number $U$ that is [[Uniform Continuous Distribution|uniform]] on $(0, 1)$. The simulated value is the solution of $F(X) = U$, which is
 
-> $$X = F^{-1}(U), \quad U \sim \text{Unif}(0, 1)$$
+> $$X = F^{-1}(U)$$
 
-> $$X = x_j \quad \text{if} \quad F(x_{j-1}) \leq U < F(x_j)$$
+- $F^{-1}$ is the inverse function of $F$.
 
-- **Why it works:** $F$ is nondecreasing, so $F^{-1}(U) \leq x$ exactly when $U \leq F(x)$, and a uniform falls below $F(x)$ with probability $F(x)$. Hence $P(X \leq x) = F(x)$.
-- **Continuous case:** solve $F(x) = u$ for $x$. For an [[Exponential Distribution|exponential]] with mean $\theta$, $x = -\theta \ln(1-u)$; Pareto and Weibull also invert in closed form, others need numerical root-finding.
-- **Discrete case** (second block): lay the probabilities end to end on $(0, 1)$ and return the value whose interval contains $u$. A jump in a mixed CDF — a point mass at a policy limit, say — catches every $u$ in the jump. Conventions differ on which value a $u$ landing exactly on a cumulative probability maps to, so follow the problem's rule.
-- Because $1 - U$ is also uniform, some texts invert the survival function instead, $X = S^{-1}(U)$. The two give different draws from the same $u$ — read which one a question wants.
-- $F^{-1}(0.99)$ is the 99th [[Percentile|percentile]], so inversion is also how simulated quantiles are read. Applied to exponential [[Interarrival Time|interarrival times]] and cumulated, it simulates a [[Poisson Process]].
+The simulated value has the cumulative distribution function $F$, because $F$ is increasing and $U$ is uniform:
 
-> [!example]- Simulating Severities {Example}
-> (a) Losses are exponential with mean $\$1{,}000$. Simulate a loss from $u = 0.70$.
->
-> (b) Losses are Pareto with $F(x) = 1 - \left(\frac{2{,}000}{x + 2{,}000}\right)^3$. Simulate a loss from $u = 0.875$.
->
-> > [!answer]-
-> > (a) $x = -1{,}000 \ln(1 - 0.70) = -1{,}000 \ln(0.30) = \$1{,}203.97$.
-> >
-> > (b) Set $F(x) = 0.875$:
-> >
-> > $$
-> > \begin{align*}
-> > \left(\frac{2{,}000}{x + 2{,}000}\right)^3 &= 1 - 0.875 \\
-> > \frac{2{,}000}{x + 2{,}000} &= 0.125^{1/3} \\
-> > &= 0.5 \\
-> > x &= 2{,}000
-> > \end{align*}
-> > $$
-> >
-> > The simulated loss is $\$2{,}000$, the $87.5$th percentile of the Pareto.
+> $$
+> \begin{aligned}
+> P(X \le x) &= P(F^{-1}(U) \le x) \\
+> &= P(U \le F(x)) \\
+> &= F(x)
+> \end{aligned}
+> $$
 
-> [!example]- Simulating Annual Claim Counts {Example}
-> A policy's annual claim count has $P(0) = 0.50$, $P(1) = 0.30$, $P(2) = 0.15$, $P(3) = 0.05$. Using the rule $X = x_j$ if $F(x_{j-1}) \leq u < F(x_j)$, simulate four years from $u = 0.62,\ 0.97,\ 0.18,\ 0.83$.
->
-> > [!answer]-
-> > The cumulative probabilities are $0.50,\ 0.80,\ 0.95,\ 1.00$, giving intervals $[0, 0.50) \to 0$, $[0.50, 0.80) \to 1$, $[0.80, 0.95) \to 2$, $[0.95, 1) \to 3$.
-> >
-> > - $0.62 \to 1$
-> > - $0.97 \to 3$
-> > - $0.18 \to 0$
-> > - $0.83 \to 2$
-> >
-> > The simulated counts are $1, 3, 0, 2$: six claims in four years, against an expected $4 \times 0.75 = 3$.
+> [!example]- A random variable has density $f(x) = 3x^2$ for $0 < x < 1$. What value does the inversion method simulate from the random number $u = 0.5$? {Example}
+> - The cumulative distribution function is $F(x) = x^3$ for $0 < x < 1$.
+> - Setting $F(x) = 0.5$ gives $x^3 = 0.5$.
+> - The simulated value is $x = 0.5^{1/3} = 0.7937$.
 
-> [!example]- Simulating Claim Arrival Times {Example}
-> Claims arrive as a Poisson process at $\lambda = 2$ per month. Using $T = -\ln(1 - u)/\lambda$ with $u_1 = 0.40$ and $u_2 = 0.80$, simulate the first two arrival times. How many claims fall in the first month?
->
-> > [!answer]-
-> > $$
-> > \begin{align*}
-> > T_1 &= -\ln(0.60)/2 \\
-> > &= 0.2554 \\
-> > T_2 &= -\ln(0.20)/2 \\
-> > &= 0.8047 \\
-> > S_2 &= T_1 + T_2 \\
-> > &= 1.0601
-> > \end{align*}
-> > $$
-> >
-> > The first claim arrives at $0.26$ months and the second after the month ends, so this path has exactly one claim in month 1.
+## The exponential distribution
+
+An [[Exponential Distribution|exponential]] random variable with mean $\theta$ has $F(x) = 1 - e^{-x/\theta}$. Solving $F(X) = U$, the simulated value is
+
+> $$X = -\theta \ln(1 - U)$$
+
+With the rate $\lambda = 1/\theta$, the simulated value is $X = -\ln(1 - U)/\lambda$. Because $1 - U$ is also uniform on $(0, 1)$, $X = -\theta \ln U$ is an exponential random variable with mean $\theta$ as well. The two give different values from the same random number, so a question states which one it uses.
+
+> [!example]- Losses are exponential with mean 1,000. What loss does the inversion method simulate from the random number $u = 0.70$? {Example}
+> - The simulated loss is $x = -1{,}000 \ln(1 - 0.70)$.
+> - It is $-1{,}000 \ln 0.30 = 1{,}203.97$.
+
+## The Weibull distribution
+
+A [[Weibull Distribution|Weibull]] random variable with parameters $\theta$ and $\tau$ has $F(x) = 1 - e^{-(x/\theta)^\tau}$. Solving $F(X) = U$, the simulated value is
+
+> $$X = \theta\left(-\ln(1 - U)\right)^{1/\tau}$$
+
+> [!example]- Losses have a Weibull distribution with $\theta = 1{,}000$ and $\tau = 0.5$. What loss does the inversion method simulate from the random number $u = 0.30$? {Example}
+> - The simulated loss is $x = 1{,}000\left(-\ln 0.70\right)^{2}$.
+> - It is $1{,}000(0.35667)^2 = 127.22$.
+
+## Sums of exponential random variables
+
+The time of the $n$th event of a [[Poisson Process|Poisson process]] with rate $\lambda$ is the sum of $n$ independent exponential [[Interarrival Time|interarrival times]], each with mean $1/\lambda$. Simulating each interarrival time from its own random number $U_i$, the simulated time of the $n$th event is
+
+> $$S_n = -\frac{1}{\lambda}\sum_{i=1}^{n} \ln(1 - U_i)$$
+
+- $U_1, \ldots, U_n$ are independent random numbers, each uniform on $(0, 1)$.
+
+The time $S_n$ has a [[Gamma|gamma distribution]] with shape $n$ and mean $n/\lambda$, so the same sum simulates a gamma random variable whose shape is a whole number.
+
+> [!example]- Claims arrive as a Poisson process at a rate of 2 per month. Using the random numbers $u_1 = 0.40$ and $u_2 = 0.80$ for the first two interarrival times, what is the simulated time of the second claim? {Example}
+> - The first interarrival time is $-\ln(0.60)/2 = 0.2554$ months.
+> - The second interarrival time is $-\ln(0.20)/2 = 0.8047$ months.
+> - The simulated time of the second claim is $S_2 = 0.2554 + 0.8047 = 1.0601$ months.
+
+> [!trap] Using $U$ where the question uses $1 - U$
+> Both $-\theta \ln(1 - U)$ and $-\theta \ln U$ simulate the same distribution, but not the same value. For losses with mean 1,000 and $u = 0.70$, the first gives 1,203.97 and the second gives 356.67. Use the form the question gives.

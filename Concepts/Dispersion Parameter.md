@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:9301b21c8231ccf123afe1c3c078b6da27f4f49fafc57109c33b7cae718ac8fc
+  content_hash: sha256:e7749cf262bd360740cb1af043e8e05cedbee0e1442ab7b650b97e583c05b8c8
   sources:
     - "Rodriguez, GLM lecture notes (Princeton), App. B secs.B.1.1, B.2, B.3.1-B.3.2 (PDF pp.2-7), sha256:92bc67a6a2fc52a0ffa2babfd7a13e175b2babb52dd28f778d5e307cc65aa286 — https://grodri.github.io/glms/notes/a2.pdf"
     - "Rodriguez, GLM lecture notes, Models for Count Data With Overdispersion, sec.1 (Pearson phihat = chi2_p/(n-p); SEs x sqrt(phihat); beta unchanged) (PDF pp.1-2), sha256:956c3ad4849787d3a60c6d0f42b8c7e60d23e80be1da988417f9e9a42c73121e — https://grodri.github.io/glms/notes/c4a.pdf"
@@ -15,31 +15,46 @@ verification:
   log: .verify/Concepts/Dispersion Parameter.md
 ---
 
-The **Dispersion Parameter** $\phi$ is the scale factor in an [[Exponential Family]] variance: $\text{Var}(Y) = \phi\,V(\mu)$. It separates *how the variance depends on the mean* (the variance function $V$, fixed by the chosen distribution) from *how large the variance is overall* (the scale, estimated from the data).
-
-> $$\text{Var}(Y_i) = \frac{\phi\,V(\mu_i)}{w_i}$$
-
-> $$\hat\phi = \frac{1}{n-p}\sum_{i=1}^{n}\frac{w_i\,(y_i - \hat\mu_i)^2}{V(\hat\mu_i)} \qquad \text{(Pearson estimate)}$$
-
-- For the **Normal** response $\phi = \sigma^2$; for **Poisson** and **binomial** the theory fixes $\phi = 1$; for **[[Gamma]]** $\phi$ is the squared coefficient of variation
-- $\phi$ does **not** affect the fitted coefficients $\hat\beta$ — it scales their standard errors by $\sqrt{\hat\phi}$, and so changes every p-value and [[Confidence Interval]] in [[Parameter Estimate Tables]]
-- $\hat\phi > 1$ in a Poisson or binomial model is **overdispersion**: more spread than the distribution permits, usually from variation in risk level among policyholders that the model's predictors do not explain
-- Two estimators are in common use — the Pearson $\chi^2$ statistic over degrees of freedom (above) and the unscaled residual [[Deviance]] over degrees of freedom, $D/(n-p)$. The Pearson version is the standard approach
-- With $D$ the unscaled deviance, the **scaled deviance** $D^* = D/\phi$ is what is compared against $\chi^2$; when $\phi$ has to be estimated, comparing nested models that differ by $r$ parameters uses the $F$ statistic $\frac{\Delta D/r}{\hat\phi}$ instead, with $\hat\phi$ from the larger model
-- Prior weights $w_i$ (e.g. exposure or claim count) divide the variance: a group average built from many observations is more precisely known, which is how grouped data is fitted correctly
-
 ![[Media/Figures/Dispersion_Parameter.svg|340]]
 
-> [!example]- Estimating and Applying the Dispersion {Example}
-> A Poisson GLM on $500$ observations with $8$ parameters has a Pearson $\chi^2$ of $1{,}230$. Estimate $\phi$ and adjust a coefficient with $\hat\beta = 0.40$ and unscaled $\text{SE} = 0.15$.
->
-> > [!answer]-
-> > $$\hat\phi = \frac{1{,}230}{500 - 8} = \frac{1{,}230}{492} = 2.50$$
-> > $$\text{SE}_{\text{scaled}} = 0.15\sqrt{2.50} = 0.237$$
-> > The Wald statistic falls from $0.40/0.15 = 2.67$ (significant) to $0.40/0.237 = 1.69$ (not significant at $5\%$). Ignoring overdispersion would have kept a predictor the data does not support.
+The **Dispersion Parameter** $\phi$ of a distribution in the [[Exponential Family|exponential family]] is the constant that scales its variance. The variance of a response with mean $\mu$ is
 
-> [!example]- Dispersion in a Gamma Severity Model {Example}
-> A Gamma GLM for severity returns $\hat\phi = 0.64$. What does that say about the spread of individual claims?
->
-> > [!answer]-
-> > For a Gamma, $\text{Var}(Y) = \phi\mu^2$, so the coefficient of variation is $\sqrt{\phi} = 0.80$ — the standard deviation of a claim is about $80\%$ of its expected size, whatever the size. It also corresponds to a Gamma shape of $\alpha = 1/\phi = 1.56$, a right-skewed severity distribution, and here $\phi$ is a genuine parameter of the model rather than a symptom of anything wrong.
+> $$\text{Var}(Y) = \phi\, V(\mu)$$
+
+- $V(\mu)$ is the [[Variance Function|variance function]], which is fixed by the distribution.
+
+The variance function says how the variance changes with the mean, and $\phi$ sets its overall size. The dispersion parameter is $\sigma^2$ for the [[Normal Distribution|normal]], $1$ for the [[Poisson Distribution|Poisson]] and the [[Binomial Distribution|binomial]], and $1/\alpha$ for a [[Gamma|gamma]] with shape $\alpha$. For the normal, the gamma and the [[Tweedie Distribution|Tweedie]] it is estimated from the data. It does not enter the fitted mean.
+
+> [!example]- A gamma GLM for claim severity gives $\hat{\phi} = 0.64$. What are the coefficient of variation and the shape of the severity distribution? {Example}
+> - For the gamma, $V(\mu) = \mu^2$, so the variance is $0.64\mu^2$ and the standard deviation is $0.8\mu$.
+> - The coefficient of variation is $0.8$, whatever the mean.
+> - The shape is $\alpha = 1/0.64 = 1.5625$.
+
+## Prior weights
+
+When observation $i$ carries a prior weight $w_i$, its variance is
+
+> $$\text{Var}(Y_i) = \frac{\phi\, V(\mu_i)}{w_i}$$
+
+- $\mu_i$ is the mean of observation $i$.
+
+An observation that is the average of $w_i$ independent outcomes has $1/w_i$ times the variance of one outcome. In a severity GLM whose response is the average severity of several claims, the weight is the number of claims, and an individual claim record has weight 1. The weight changes the variance of the observation, not its mean.
+
+> [!example]- In a gamma severity GLM with $\hat{\phi} = 0.64$, one row is the average of 4 claims with fitted mean 2,000. What is the variance of that row's average severity? {Example}
+> - The variance of one claim with mean 2,000 is $0.64 \times 2{,}000^2 = 2{,}560{,}000$.
+> - The row has weight $w_i = 4$, so its variance is $2{,}560{,}000 / 4 = 640{,}000$.
+
+## Estimating the dispersion parameter
+
+The dispersion parameter is estimated by the Pearson chi-square statistic divided by the residual degrees of freedom:
+
+> $$\hat{\phi} = \frac{1}{n - k}\sum_{i=1}^{n} \frac{w_i\,(y_i - \hat{\mu}_i)^2}{V(\hat{\mu}_i)}$$
+
+- $n$ is the number of observations, and $k$ is the number of estimated coefficients, including the intercept.
+
+The [[Deviance|deviance]] divided by $n - k$ is a second estimator. In a Poisson or binomial model, $\phi$ is $1$ in theory, so an estimate well above 1 indicates overdispersion, more variation than the distribution allows. Estimating $\phi$, as a [[Quasi-Likelihood|quasi-likelihood]] model does, leaves the coefficient estimates unchanged and multiplies their standard errors by $\sqrt{\hat{\phi}}$.
+
+> [!example]- A Poisson GLM with 8 coefficients is fitted to 500 observations, and the Pearson chi-square statistic is 1,230. A coefficient of 0.40 has standard error 0.15 in the Poisson fit. What are $\hat{\phi}$ and the standard error that allows for it? {Example}
+> - The dispersion estimate is $\hat{\phi} = \frac{1{,}230}{500 - 8} = 2.50$.
+> - The standard error is $0.15\sqrt{2.50} = 0.237$.
+> - The Wald statistic falls from $0.40 / 0.15 = 2.67$ to $0.40 / 0.237 = 1.69$, so the coefficient is no longer significant at the 5% level.

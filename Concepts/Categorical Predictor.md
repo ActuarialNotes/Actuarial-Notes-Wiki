@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:e02d4d6a62b5491e835ed67742d12e0519bd2ecfd0e4f7c9fd0067292c97f866
+  content_hash: sha256:0d5a9672a022dbcadfce84ffb270b9c0474279bd4694df85e18c932ce5a99623
   sources:
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Domain C description and tasks 1-9, PDF p.5; reading list PDF p.6, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
     - "Dobson & Barnett, An Introduction to Generalized Linear Models, 4th ed. (CRC 2018) — publisher eBook preview, §1.2 Scope, printed p.2 (PDF p.19), sha256:40ed0b2549113ee0bea29e41786886ce992ffa29251ad26fb1037385bb51611a — https://api.pageplace.de/preview/DT0400.9781351726221_A37406780/preview-9781351726221_A37406780.pdf"
@@ -15,25 +15,44 @@ verification:
   log: .verify/Concepts/Categorical Predictor.md
 ---
 
-A **Categorical Predictor** is an explanatory variable in a [[Generalized Linear Model]] whose values fall into a finite set of unordered groups (levels), such as territory or vehicle type — contrasted with an **ordinal predictor** (categories with a natural order, e.g., a credit tier) and a **continuous predictor** (a numeric variable, e.g., vehicle age).
-
-| Predictor type | Example | How it enters the model |
-| :--- | :--- | :--- |
-| Categorical (nominal) | Territory, vehicle type | $k-1$ indicator variables for $k$ levels |
-| Ordinal | Credit tier, limit band | As categorical, or with order-preserving (e.g., banded numeric) coding |
-| Continuous | Vehicle age, driver age | A single coefficient, or banded/transformed |
-
-- A categorical predictor with $k$ levels is represented using $k-1$ **indicator (dummy) variables**; the omitted level is the **reference level**, absorbed into the intercept (see [[Parameter Estimate Tables]])
-- **Terminology differs between the MAS-I sources.** The CAS outline lists categorical, ordinal and continuous predictors as three kinds, which is the sense used here. Dobson & Barnett call nominal and ordinal variables alike *categorical*; a qualitative explanatory variable is a **factor** and its categories are its **levels**
-- An **[[Interaction]]** between two predictors allows the effect of one to differ across the levels of the other, e.g., the effect of vehicle age differing by territory
-- Continuous predictors assume a smooth effect on the response (linear on the link scale unless transformed); banding a continuous variable into categories trades smoothness for flexibility at the cost of extra parameters
-- Choosing the right type for each variable is part of selecting the [[Model Structure]] of an [[Extended Linear Model]]
-
 ![[Media/Figures/Categorical_Predictor.svg|340]]
 
-> [!example]- Coding a Categorical Predictor with a Reference Level {Example}
-> Territory has three levels: A, B, C. A Poisson GLM with a log link uses Territory A as the reference level and fits $\hat{\beta}_B = 0.20$, $\hat{\beta}_C = -0.10$. Interpret the relativities for Territories B and C relative to A.
->
-> > [!answer]-
-> > $$\text{Relativity}_B = e^{0.20} \approx 1.22, \qquad \text{Relativity}_C = e^{-0.10} \approx 0.90$$
-> > Territory B's expected claim frequency is about **22% higher** than Territory A, and Territory C's is about **10% lower**, holding all else equal.
+A **Categorical Predictor** is a [[Predictor Variable|predictor variable]] whose values are a finite set of categories, called levels, such as territory or vehicle type. A categorical predictor with $k$ levels enters a model with an intercept through $k - 1$ indicator variables, one for each level except a base level. With level 1 as the base level, the linear predictor of observation $i$ is
+
+> $$\eta_i = \beta_0 + \beta_2 x_{i2} + \cdots + \beta_k x_{ik}$$
+
+- $x_{ij}$ is 1 if observation $i$ is at level $j$, and 0 otherwise.
+- $\beta_j$ is the difference in the linear predictor between level $j$ and the base level.
+
+The base level has no indicator, so its effect is part of the intercept, and software reports its coefficient as 0, with 0 degrees of freedom. The intercept is the linear predictor of an observation at the base level of every categorical predictor. The base level is usually the level with the most exposure. Under a log link, $e^{\beta_j}$ is the relativity of level $j$ to the base level. Whether the predictor has any effect is tested on all $k - 1$ coefficients together, by comparing the models with and without it in a nested-model test based on the [[Deviance|deviance]].
+
+> [!example]- Territory has levels A, B and C. A Poisson GLM with a log link uses territory A as the base level and gives $\hat{\beta}_B = 0.20$ and $\hat{\beta}_C = -0.10$. What are the relativities of B and C to A, and of C to B? {Example}
+> - The relativity of territory B to A is $e^{0.20} = 1.221$.
+> - The relativity of territory C to A is $e^{-0.10} = 0.905$.
+> - The relativity of C to B is the exponential of the difference in their coefficients, $e^{-0.10 - 0.20} = 0.741$.
+
+## Categorical, ordinal and continuous predictors
+
+A predictor is entered according to its type:
+
+| Type | Example | How it enters the model | Coefficients |
+| --- | --- | --- | --- |
+| Categorical (nominal) | Territory, vehicle type | An indicator for each level except the base | $k - 1$ |
+| Ordinal | Credit tier, limit band | As categorical, or as one numeric score | $k - 1$, or $1$ |
+| Continuous | Vehicle age, amount of insurance | One term, or banded or transformed | $1$ |
+
+The codes of a nominal predictor, such as territory numbers, have no meaningful spacing. Entering them as one numeric predictor imposes a single slope and treats the order of the codes as meaningful, so they are entered as indicators. An ordinal predictor whose levels have unknown spacing is safest entered as indicators. It is entered as one numeric score only if its effect changes steadily from level to level. A continuous predictor is entered as one term only if its effect on the linear predictor is roughly linear. Otherwise it is banded into categories or transformed, for example by its logarithm or a polynomial.
+
+> [!example]- Territories are stored as the codes 1 to 5, and an actuary enters the code as a numeric predictor. What does the model assume, and how should territory be entered? {Example}
+> - A numeric predictor has one coefficient, so the model assumes the linear predictor changes by the same amount from each territory code to the next.
+> - Territory 5 is not "more" than territory 1, so that assumption has no basis.
+> - Territory should be entered as a categorical predictor with 4 indicator variables against a base territory.
+
+## Binning a continuous predictor
+
+Binning a continuous predictor into ranges and entering it as a categorical predictor gives each bin its own coefficient, so the model can follow an effect that is not linear. Binning has these costs:
+
+1. It adds parameters, one for each bin after the first.
+2. Each bin has less data, so its estimate is less credible and less stable.
+3. It ignores the variation of the effect within a bin.
+4. Nothing keeps adjacent bins consistent, so the estimates can reverse between neighbouring bins.

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:1bea575dc8a607c6d264745e8b142b04b6399520218d949e55a06ab7560c8e93
+  content_hash: sha256:ddb3f41507a01d5cee69be1e726b2d30c294350dd3447bcdbb0df3675790ca3b
   sources:
     - "Dobson & Barnett, An Introduction to Generalized Linear Models, 4th ed. (CRC 2018), publisher eBook preview, §1.2 Scope (printed pp.2-3, PDF pp.19-20), sha256:40ed0b2549113ee0bea29e41786886ce992ffa29251ad26fb1037385bb51611a — https://api.pageplace.de/preview/DT0400.9781351726221_A37406780/preview-9781351726221_A37406780.pdf"
     - "Larsen, 'Generalized Linear Models', CAS Study Note (rev. June 2016), PDF p.2 (Tweedie variance powers p = 0, 1, (1,2), 2, 3), sha256:5c4ed4e8eacf72624f38c5313eb6903f57d627b6ac81ce52e0a5a69404af90bd — https://www.casact.org/sites/default/files/2021-03/MAS-I_Larsen.pdf"
@@ -16,43 +16,55 @@ verification:
   log: .verify/Concepts/Response Variable.md
 ---
 
-The **response variable** — also the dependent variable, target or outcome — is the quantity $Y$ a model explains or predicts from its [[Predictor Variable|predictors]]. Its [[Data Types|data type]] and the way its variance behaves determine the model: in a [[Generalized Linear Model]], the response distribution and the [[Link Function|link function]].
+A **Response Variable** is the variable $Y$ that a model explains or predicts from the [[Predictor Variable|predictor variables]]. It is also called the dependent variable or the target. The observed values of the response, $y_1, \ldots, y_n$, are data, as are the values of the predictors. The parameters of the model are the coefficients and the [[Dispersion Parameter|dispersion parameter]].
 
-> $$g\big(E[Y_i]\big) = \mathbf{x}_i^\top\boldsymbol\beta$$
+In a [[Generalized Linear Model]], the values the response can take decide its distribution, and the [[Link Function|link function]] keeps the fitted mean in that range:
 
-> $$\mathrm{Var}(Y_i) = \phi\,V(\mu_i)$$
+| Response | Values | Distribution | Usual link |
+| --- | --- | --- | --- |
+| A continuous amount with constant variance | All real numbers, symmetric | [[Normal Distribution|Normal]] | Identity |
+| A claim count | $0, 1, 2, \ldots$ | [[Poisson Distribution|Poisson]] | Log |
+| Yes or no | $0$ or $1$ | [[Binomial Distribution|Binomial]] | Logit |
+| Claim severity | Positive, right-skewed | [[Gamma]] or inverse Gaussian | Log |
+| Pure premium | Zero, or a positive amount | [[Tweedie Distribution|Tweedie]], $1 < p < 2$ | Log |
 
-- $\mu_i = E[Y_i]$; $V$ is the [[Variance Function|variance function]] fixed by the chosen distribution and $\phi$ is the [[Dispersion Parameter|dispersion parameter]]. Choosing a distribution is choosing how the variance grows with the mean
-- **Continuous, roughly symmetric, constant variance** — Normal with the identity link: ordinary [[Linear Regression]]
-- **Claim counts** — Poisson ($V(\mu) = \mu$), or [[Negative Binomial Distribution|negative binomial]] if overdispersed, with a log link and log exposure as an [[Offset Variable|offset]]: [[Poisson Regression]]
-- **Claim severity** — positive and right-skewed, with standard deviation roughly proportional to the mean: [[Gamma]] ($V(\mu) = \mu^2$) with a log link, weighted by claim count. The inverse Gaussian ($V(\mu) = \mu^3$) suits a heavier tail
-- **Pure premium or loss cost** — mostly zeros plus a skewed positive amount: the [[Tweedie Distribution|Tweedie]] with power $1 < p < 2$ and a log link
-- **Binary response** — claim or no claim, renew or lapse, fraud referral: binomial with the logit link, which is [[Logistic Regression]]. The fitted value is a probability; a linear model on a $0/1$ response can predict values outside $[0, 1]$
-- A GLM links the *mean* and leaves $Y$ itself untransformed. Least squares on $\ln Y$ is a different model: $E[\ln Y] \neq \ln E[Y]$, so exponentiating its fitted values understates the mean
+A normal response is continuous and symmetric over all real numbers, so it suits neither a binary response nor an amount with a mass at zero and a long right tail. A Poisson response takes only whole numbers, so it suits claim counts rather than amounts. The gamma takes only positive values, so it cannot model a pure premium that is often zero.
 
-> [!example]- Matching Each Response to a Model {Example}
-> Choose a distribution and link for each response: (a) number of claims per policy-year; (b) average severity per claim; (c) whether a policy renews; (d) loss cost per car-year, $92\%$ of which are zero.
->
-> > [!answer]-
-> > - **(a)** Poisson with a log link and $\ln(\text{exposure})$ as an offset; switch to negative binomial if the residual deviance is far above its degrees of freedom
-> > - **(b)** Gamma with a log link, weighted by the number of claims behind each average — an average of many claims is less variable than one claim
-> > - **(c)** Binomial with a logit link: logistic regression, whose fitted values are renewal probabilities
-> > - **(d)** Tweedie with $1 < p < 2$ and a log link. The point mass at zero rules out the Gamma, and the continuous positive part rules out the Poisson; the Tweedie is a compound Poisson–Gamma that has both
-> >
-> > In every case the log (or logit) link keeps the fitted mean in the range the response can take, and makes the coefficients multiplicative.
+> [!example]- Which distribution and link should model each of these responses: the number of claims per policy, the average severity per claim, and the loss cost per car-year, most of which are zero? {Example}
+> - The number of claims is a non-negative whole number, so it has a Poisson distribution with a log link.
+> - The average severity is positive and right-skewed, so it has a gamma distribution with a log link.
+> - The loss cost has a mass at zero and a continuous positive part, so it has a Tweedie distribution with $1 < p < 2$ and a log link.
+> - The log link keeps each fitted mean positive and makes the effects of the predictors multiplicative.
 
-> [!example]- A Binary Response: Probabilities and Odds {Example}
-> A logistic model for whether a claim is referred to the special investigations unit has $\hat\eta = -1.5 + 0.8\,I_{\text{attorney}}$. Find the referral probability with and without attorney involvement, the odds ratio, and the ratio of the probabilities.
->
-> > [!answer]-
-> > $$
-> > \begin{align*}
-> > \hat\pi_0 &= \frac{1}{1 + e^{1.5}} \\
-> > &= 0.182 \\
-> > \hat\pi_1 &= \frac{1}{1 + e^{0.7}} \\
-> > &= 0.332 \\
-> > \text{Odds ratio} &= e^{0.8} \\
-> > &= 2.23
-> > \end{align*}
-> > $$
-> > The probability ratio is $0.332/0.182 = 1.82$. Attorney involvement multiplies the **odds** of referral by $2.23$ but the **probability** by only $1.82$. The two agree only when the probability is small, so an odds ratio read as a relative risk overstates the effect whenever the outcome is common.
+## A binary response
+
+A binary response $Y$ is 1 if an event occurs and 0 if it does not, and its mean is the probability $\pi$ that the event occurs. With the logit link the model is [[Logistic Regression|logistic regression]], and the probability is
+
+> $$\pi = \frac{1}{1 + e^{-\eta}}$$
+
+- $\eta$ is the linear predictor.
+
+A linear model with the identity link can give fitted values below 0 or above 1, which cannot be probabilities. A coefficient $\beta_j$ multiplies the odds $\pi/(1 - \pi)$ by $e^{\beta_j}$, but it does not multiply the probability by $e^{\beta_j}$.
+
+> [!example]- A logistic model for whether a claim is referred for investigation has $\hat{\eta} = -1.5 + 0.8x$, where $x$ is 1 if an attorney is involved and 0 if not. What are the two referral probabilities, the odds ratio and the ratio of the probabilities? {Example}
+> - Without an attorney, $\hat{\eta} = -1.5$ and the probability is $\frac{1}{1 + e^{1.5}} = 0.1824$.
+> - With an attorney, $\hat{\eta} = -0.7$ and the probability is $\frac{1}{1 + e^{0.7}} = 0.3318$.
+> - The odds ratio is $e^{0.8} = 2.226$.
+> - The ratio of the probabilities is $0.3318 / 0.1824 = 1.819$, smaller than the odds ratio.
+
+## Modelling the logarithm of the response
+
+A GLM with a log link models the logarithm of the mean, $\ln E[Y]$. A normal linear model fitted to $\ln Y$ models the mean of the logarithm, $E[\ln Y]$, which is a different quantity. For a positive response that is not constant,
+
+> $$E[\ln Y] < \ln E[Y]$$
+
+Exponentiating the fitted values of a model for $\ln Y$ therefore gives the geometric mean, or the median, of $Y$ rather than its mean, and it understates the mean of a right-skewed response.
+
+> [!example]- A claim is 100 or 900 with equal probability. What are $\ln E[Y]$ and $E[\ln Y]$, and what does exponentiating $E[\ln Y]$ give? {Example}
+> - The mean is $E[Y] = 500$, so $\ln E[Y] = 6.2146$.
+> - The mean of the logarithm is $E[\ln Y] = \frac{\ln 100 + \ln 900}{2} = 5.7038$.
+> - Exponentiating gives $e^{5.7038} = 300$, the geometric mean, which is $200$ below the mean of $500$.
+
+## Prior weights
+
+A prior weight $w_i$ divides the [[Dispersion Parameter#Prior weights|variance]] of the response of observation $i$. The weight changes how precisely each observation is known, not its mean, so a weight cannot remove an effect, such as a trend, from the mean. A response that is the average severity of several claims takes the number of claims as its weight.

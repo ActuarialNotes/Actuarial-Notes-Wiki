@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:a145478c64c9ec1445e80df32c83df1041243a8161a71e72be4d15a95b81d880
+  content_hash: sha256:47a3ecc5427f3854e872213188d849f09c18bc126a52e7623473eb51e27585e4
   sources:
     - "Siegrist, Random (randomservices.org), ch.8 Hypothesis Testing §1 Introduction: hypotheses H0/H1, rejection (critical) region, type 1 and type 2 errors table, significance level, power, two-sided/left/right-tailed tests named for the alternative, P-value as the smallest alpha that rejects, sha256:fb05a9d71b55ba113e2f71afa052bc059b35f2c5b6946012c19ecbc693faab1a — https://www.randomservices.org/random/hypothesis/Introduction.html"
     - "Penn State STAT 415 (2026 notes), Lesson 9 Hypothesis Tests (Part I): §9.1 Defs 9.1-9.4 (H0, Ha, alpha, beta), power = 1 - beta, Type I/II error table, alpha chosen in advance (0.05 most common), §9.5 Z test with known sigma, sha256:4b40913ee64c6e155867542d9d3517e3384e5a942452f6fc8b1e72bf815a8acf — https://online.stat.psu.edu/stat415/Lesson09.html"
@@ -19,53 +19,89 @@ verification:
   log: .verify/Concepts/Hypothesis Testing.md
 ---
 
-**Hypothesis Testing** is a statistical procedure for deciding between two competing claims about a population parameter: the **null hypothesis** $H_0$ and the **alternative hypothesis** $H_1$ (or $H_a$).
-
-> **Decision Rule:** Reject $H_0$ if the test statistic falls in the **rejection region** (critical region); otherwise, fail to reject $H_0$.
->
-> $$\text{p-value} = P(\text{test statistic as extreme or more extreme} \mid H_0 \text{ true})$$
-
-**Types of hypotheses:**
-- **Simple** $H_0: \theta = \theta_0$ vs. **one-sided** $H_1: \theta > \theta_0$ or $H_1: \theta < \theta_0$
-- **Two-sided** $H_1: \theta \neq \theta_0$
-
-**Decision errors:**
-
-| | $H_0$ True | $H_0$ False |
-| :--- | :--- | :--- |
-| Reject $H_0$ | [[Type I Error]] ($\alpha$) | Correct (Power $= 1-\beta$) |
-| Fail to Reject $H_0$ | Correct | [[Type II Error]] ($\beta$) |
-
-- The **significance level** $\alpha = P(\text{Type I Error})$ is set in advance (e.g., 0.05)
-- **Power** $= 1 - \beta = P(\text{Reject } H_0 \mid H_1 \text{ true})$
-- Reject $H_0$ when p-value $< \alpha$
-
-**Paired observations.** When the two samples are matched pairs (the same unit measured before and after, or two naturally paired units), the observations within a pair are dependent, and a test for two independent samples does not apply. When observations come in dependent matched pairs, form the within-pair differences and apply a one-sample $t$-test to those differences. This paired t-test reduces two matched samples to a single sample of within-pair differences $d_i = y_i - z_i$ and tests whether the mean difference equals zero, $H_0: \mu_d = 0$:
-
-> $$t = \frac{\bar{d}}{s_d / \sqrt{n}}$$
-
-- $\bar{d}$ and $s_d$ are the mean and standard deviation of the differences, assumed to come from a normal population; $t$ has a [[Student's t-Distribution|$t$ distribution]] with $n - 1$ degrees of freedom, where $n$ is the number of pairs, not the number of observations
-- Pairing removes the variation between units, so the differences usually vary less than unmatched observations do and a real difference is easier to detect
-
 ![[Media/Figures/Hypothesis_Testing.svg|340]]
 
-> [!example]- One-Sample Z-Test for a Mean {Example}
-> A claims adjuster believes average claim size is \$$5{,}000$. A sample of $n = 100$ claims has $\bar{x} = 5{,}200$ and $\sigma = 800$. Test $H_0: \mu = 5{,}000$ vs. $H_1: \mu > 5{,}000$ at $\alpha = 0.05$.
->
-> > [!answer]-
-> > $$Z = \frac{\bar{x} - \mu_0}{\sigma / \sqrt{n}} = \frac{5{,}200 - 5{,}000}{800 / \sqrt{100}} = \frac{200}{80} = 2.50$$
-> > The critical value for a one-sided test at $\alpha = 0.05$ is $z_{0.05} = 1.645$. Since $2.50 > 1.645$, **reject $H_0$**. There is sufficient evidence that the mean claim size exceeds \$$5{,}000$.
+**Hypothesis Testing** is the use of a [[Random Sample|random sample]] to decide between two hypotheses about the distribution the sample was drawn from: the null hypothesis $H_0$ and the alternative hypothesis $H_1$. A test rejects $H_0$ when the sample falls in a critical region $C$, a set of possible samples chosen before the data are seen.
 
-> [!example]- Paired t-Test on Two Repair Estimates {Example}
-> Two body shops each estimate the repair cost of the same six damaged vehicles. Shop A's estimate minus Shop B's, in hundreds, is $3, 1, 4, -2, 2, 4$. At $\alpha = 0.05$, test whether Shop A's estimates are higher on average, $H_1: \mu_d > 0$.
->
-> > [!answer]-
-> > Plan: the estimates are paired by vehicle, so test the six differences as one sample.
-> >
-> > $$\bar{d} = \frac{12}{6} = 2$$
-> >
-> > $$s_d^2 = \frac{1 + 1 + 4 + 16 + 0 + 4}{5} = 5.2, \quad s_d = 2.280$$
-> >
-> > $$t = \frac{2}{2.280/\sqrt{6}} = 2.148$$
-> >
-> > With $6 - 1 = 5$ degrees of freedom the one-sided 5% critical value is $t_{0.05,5} = 2.015$. Since $2.148 > 2.015$, **reject $H_0$**: Shop A's estimates run higher. A two-sided test at 5% would use $t_{0.025,5} = 2.571$ and would not reject, so the direction of $H_1$ decides this one.
+The four outcomes of a test are:
+
+|  | $H_0$ is true | $H_1$ is true |
+| --- | --- | --- |
+| **Reject $H_0$** | [[Type I Error]] | Correct decision |
+| **Do not reject $H_0$** | Correct decision | [[Type II Error]] |
+
+The significance level of the test is the probability of a Type I error:
+
+> $$\alpha = P(\mathbf{X} \in C \mid H_0)$$
+
+- $\mathbf{X} = (X_1, \ldots, X_n)$ is the sample.
+
+The probability of a Type II error is $\beta$. The [[Power of a Test|power]] of the test, $1 - \beta$, is the probability that the test rejects $H_0$ when $H_1$ is true.
+
+> [!example]- An actuary tests $H_0$: the current rates are adequate. The test rejects $H_0$ and rates are increased. Later analysis shows that the rates were adequate. Which error occurred? {Example}
+> - $H_0$ was true, because the rates were adequate.
+> - The test rejected $H_0$, so the error is a Type I error.
+> - Its probability before the data were seen was the significance level $\alpha$.
+
+## Simple and composite hypotheses
+
+A hypothesis is **simple** if it specifies the distribution completely, and **composite** otherwise. For a parameter $\theta$ with null hypothesis $H_0: \theta = \theta_0$, the alternative hypothesis decides which tail of the test statistic's distribution forms the critical region:
+
+| Alternative | Written | Critical region |
+| --- | --- | --- |
+| One-sided, upper | $H_1: \theta > \theta_0$ | Upper tail |
+| One-sided, lower | $H_1: \theta < \theta_0$ | Lower tail |
+| Two-sided | $H_1: \theta \ne \theta_0$ | Both tails |
+
+## Test for a mean with known variance
+
+For a random sample from a [[Normal Distribution|normal distribution]] with known standard deviation $\sigma$, the test statistic for $H_0: \mu = \mu_0$ is
+
+> $$Z = \frac{\bar{X} - \mu_0}{\sigma / \sqrt{n}}$$
+
+- $\bar{X}$ is the [[Sample Mean|sample mean]].
+- $\mu_0$ is the mean under $H_0$.
+
+Under $H_0$, $Z$ has the standard normal distribution. Against $H_1: \mu > \mu_0$, the test rejects $H_0$ when $Z \ge z_\alpha$, the upper $\alpha$ point of the standard normal distribution and the [[Critical Value|critical value]] of the test.
+
+> [!example]- Claim sizes are normal with standard deviation 800. A sample of 100 claims has mean 5,200. Does a test of $H_0: \mu = 5{,}000$ against $H_1: \mu > 5{,}000$ at significance level 0.05 reject $H_0$? {Example}
+> - The test statistic is $Z = \frac{5{,}200 - 5{,}000}{800 / \sqrt{100}} = \frac{200}{80} = 2.50$.
+> - The critical value of an upper-tailed test at 0.05 is $z_{0.05} = 1.645$.
+> - Because $2.50 > 1.645$, the test rejects $H_0$.
+
+## Test for a mean with unknown variance
+
+When $\sigma$ is unknown, it is replaced by the sample standard deviation $S$, and the test statistic for $H_0: \mu = \mu_0$ is
+
+> $$T = \frac{\bar{X} - \mu_0}{S / \sqrt{n}}$$
+
+- $S^2$ is the [[Sample Variance|sample variance]], with divisor $n - 1$.
+
+Under $H_0$, $T$ has a [[Student's t-Distribution|$t$ distribution]] with $n - 1$ degrees of freedom.
+
+> [!example]- Claim severities are normal. A sample of 16 claims has mean 5,400 and sample standard deviation 800. Does a test of $H_0: \mu = 5{,}000$ against $H_1: \mu > 5{,}000$ reject $H_0$ at significance level 0.05, and at 0.01? {Example}
+> - The test statistic is $T = \frac{5{,}400 - 5{,}000}{800 / \sqrt{16}} = \frac{400}{200} = 2.00$, with $16 - 1 = 15$ degrees of freedom.
+> - At 0.05 the critical value is $t_{0.05,15} = 1.753$. Because $2.00 > 1.753$, the test rejects $H_0$.
+> - At 0.01 the critical value is $t_{0.01,15} = 2.602$. Because $2.00 < 2.602$, the test does not reject $H_0$.
+
+## Test for paired observations
+
+When the observations come in dependent pairs, such as the same unit measured twice, the test uses the $n$ within-pair differences $d_i$ as one sample. The test statistic for $H_0: \mu_d = 0$ is
+
+> $$T = \frac{\bar{d}}{s_d / \sqrt{n}}$$
+
+- $\bar{d}$ and $s_d$ are the mean and the sample standard deviation of the differences.
+- $\mu_d$ is the mean difference.
+- $n$ is the number of pairs, not the number of observations.
+
+Under $H_0$, and with normal differences, $T$ has a $t$ distribution with $n - 1$ degrees of freedom.
+
+> [!example]- Two body shops each estimate the repair cost of the same six vehicles. Shop A's estimate minus Shop B's, in hundreds, is $3$, $1$, $4$, $-2$, $2$ and $4$. At significance level 0.05, are Shop A's estimates higher on average? {Example}
+> - The estimates are paired by vehicle, so the six differences are one sample, with $\bar{d} = 12/6 = 2$.
+> - The sample variance of the differences is $s_d^2 = \frac{1 + 1 + 4 + 16 + 0 + 4}{5} = 5.2$, so $s_d = 2.280$.
+> - The test statistic is $T = \frac{2}{2.280 / \sqrt{6}} = 2.148$, with 5 degrees of freedom.
+> - The alternative $H_1: \mu_d > 0$ is upper-tailed, and $t_{0.05,5} = 2.015$.
+> - Because $2.148 > 2.015$, the test rejects $H_0$. Shop A's estimates are higher on average.
+
+> [!trap] Treating "do not reject" as "accept"
+> A test that does not reject $H_0$ has not shown that $H_0$ is true. With low power, a false $H_0$ is often not rejected, so the conclusion is only that the data are consistent with $H_0$.

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:08701718ff4ca68c3f79764f0de6dae77e3967ac5ade0a064d5ce0a95b8bab7e
+  content_hash: sha256:63d7213d42259fa8c87a05917f07f7f029d52fc78ad3d23ced8af6f47108c5a3
   sources:
     - "Frees et al., Loss Data Analytics (open text), ch.4 Model Selection and Estimation: §4.1.1.3 smoothed empirical quantile (1-h)X_(j) + hX_(j+1), j = floor((n+1)q), h = (n+1)q - j (Example 4.1.3); §4.1.3.1 moments not available when they do not exist, percentile matching as the alternative; §4.1.3.2 Example 4.1.10 Pareto quantile theta((1-q)^(-1/alpha) - 1), numerical routine required, no analytic solution; Example 4.1.11 loglogistic by ratio of the two equations, n = 11, q = 0.4 gives 0.2 X_(4) + 0.8 X_(5); estimates vary with percentiles chosen; MLE more efficient, moments/percentile matching easier to explain and give starting values, sha256:c5fe1ff26cec4dee6f8bcc285b75c840202c947246f7b5d5598f9b837ccad021 — https://openacttexts.github.io/Loss-Data-Analytics/ChapModelSelection.html"
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), reading list PDF p.6: Tse §12.1 assigned, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
@@ -15,62 +15,47 @@ verification:
   log: .verify/Concepts/Percentile Matching.md
 ---
 
-**Percentile Matching** estimates the parameters of a model by making its [[Percentile|percentiles]] equal the corresponding percentiles of the data: with $p$ unknown parameters, choose $p$ percentile levels $g_1, \ldots, g_p$ and solve the $p$ equations below. It is the percentile analogue of the [[Method of Moments]] and works even when the model's moments do not exist.
+**Percentile Matching** is a method of [[Parameter Estimation|parameter estimation]] that sets [[Percentile|percentiles]] of a distribution equal to the corresponding percentiles of the sample and solves for the parameters. For a distribution with cdf $F(x \mid \theta)$ and $k$ unknown parameters, $k$ percentile levels $g$ are chosen, and for each of them the equation is
 
-> $$F(\hat\pi_{g_k} \mid \theta) = g_k, \quad k = 1, \ldots, p$$
+> $$F(\hat{\pi}_g \mid \theta) = g$$
 
-> $$\hat\pi_g = (1 - h)\,x_{(j)} + h\,x_{(j+1)}$$
+- $\hat{\pi}_g$ is the smoothed empirical percentile of the sample at level $g$.
 
-> $$j = \lfloor (n+1)g \rfloor, \qquad h = (n+1)g - j$$
+> [!example]- Claim sizes are exponential with unknown mean $\theta$. The smoothed empirical median of a sample of claims is 485. What is the percentile matching estimate of $\theta$? {Example}
+> - The equation at the median is $1 - e^{-485/\theta} = 0.5$.
+> - Solving gives $485/\theta = \ln 2$.
+> - The estimate is $\hat{\theta} = 485/\ln 2 = 699.7$.
 
-- $\hat\pi_g$ is the **smoothed empirical percentile**: locate position $(n+1)g$ among the [[Order Statistics|order statistics]] $x_{(1)} \le \cdots \le x_{(n)}$ and interpolate linearly between the neighbouring observations. For $n = 11$ and $g = 0.4$, the position is $4.8$, so $\hat\pi_{0.4} = 0.2\,x_{(4)} + 0.8\,x_{(5)}$.
-- The exponential, [[Weibull Distribution|Weibull]] and loglogistic give equations that can be solved by hand: for the two-parameter ones, dividing one equation by the other eliminates $\theta$. A closed-form inverse CDF is not enough on its own — the two-parameter [[Pareto Distribution|Pareto]] has $F^{-1}(g) = \theta\big((1 - g)^{-1/\alpha} - 1\big)$, yet its two percentile equations have no analytic solution and need a numerical solver, as does the general case $F^{-1}(g \mid \theta) = \hat\pi_g$.
-- **Loglogistic.** Its distribution function is $F(x) = \dfrac{(x/\theta)^{\gamma}}{1 + (x/\theta)^{\gamma}}$. Setting $F(x) = g$ and solving for the bracketed term gives $(x/\theta)^{\gamma} = g/(1 - g)$, the odds of $g$, so each percentile equation reads $(\hat\pi_{g_k}/\theta)^{\gamma} = g_k/(1 - g_k)$. Taking the ratio of the two equations eliminates $\theta$ and leaves one equation in $\gamma$; either equation then gives $\theta$.
-- **Choices matter.** Different percentile levels give different estimates, and the method uses only a few points of the sample. [[Maximum Likelihood Estimation|Maximum likelihood]] uses the data more efficiently and is generally preferred; percentile matching and moments give quick, explainable estimates and starting values for the MLE search.
-- Because percentiles always exist, the method can fit heavy-tailed severity models such as a Pareto with $\alpha \le 1$, where the moment equations have no solution (see [[Tail Weight]]).
+## The smoothed empirical percentile
 
-> [!example]- Exponential Fit to the Sample Median {Example}
-> Ten claims are observed: $120, 180, 260, 330, 410, 560, 720, 980, 1{,}600, 2{,}400$. Fit an [[Exponential Distribution|exponential]] distribution by matching the smoothed empirical median.
->
-> > [!answer]-
-> > The position is $(10 + 1)(0.5) = 5.5$, halfway between $x_{(5)} = 410$ and $x_{(6)} = 560$, so $\hat\pi_{0.5} = 485$. Match the exponential median:
-> >
-> > $$
-> > \begin{align*}
-> > 1 - e^{-485/\theta} &= 0.5 \\
-> > \hat\theta &= \frac{485}{\ln 2} \\
-> >   &= 699.7
-> > \end{align*}
-> > $$
-> >
-> > The fitted mean severity is about \$700, below the sample mean of \$756 — the median match ignores how far out the two largest claims sit.
+For a sample of size $n$ with [[Order Statistics|order statistics]] $x_{(1)} \le \cdots \le x_{(n)}$, the smoothed empirical percentile at level $g$ is at position $(n+1)g$ in the ordered sample. When the position is not a whole number, it is found by linear interpolation:
 
-> [!example]- Weibull Fit to the Quartiles {Example}
-> Eleven losses are observed: $54, 95, 140, 190, 230, 310, 380, 450, 620, 840, 1{,}300$. Fit a Weibull, $F(x) = 1 - e^{-(x/\theta)^{\tau}}$, by matching the 25th and 75th smoothed empirical percentiles.
->
-> > [!answer]-
-> > With $n + 1 = 12$, the positions are $3$ and $9$, so $\hat\pi_{0.25} = 140$ and $\hat\pi_{0.75} = 620$. Each equation becomes $(x/\theta)^{\tau} = -\ln(1 - g)$:
-> >
-> > $$
-> > \begin{align*}
-> > (140/\theta)^{\tau} &= -\ln 0.75 \\
-> >   &= 0.28768 \\
-> > (620/\theta)^{\tau} &= -\ln 0.25 \\
-> >   &= 1.38629
-> > \end{align*}
-> > $$
-> >
-> > Dividing the second by the first eliminates $\theta$:
-> >
-> > $$
-> > \begin{align*}
-> > \left(\frac{620}{140}\right)^{\tau} &= 4.81884 \\
-> > \hat\tau &= \frac{\ln 4.81884}{\ln 4.42857} \\
-> >   &= \frac{1.57253}{1.48808} \\
-> >   &= 1.0568 \\
-> > \hat\theta &= \frac{620}{1.38629^{1/1.0568}} \\
-> >   &= 455.2
-> > \end{align*}
-> > $$
-> >
-> > The fitted Weibull passes exactly through both quartiles; its shape $\hat\tau \approx 1.06$ is close to the exponential case $\tau = 1$.
+> $$\hat{\pi}_g = (1 - h)\,x_{(j)} + h\,x_{(j+1)}$$
+
+- $j$ is the integer part of $(n+1)g$.
+- $h = (n+1)g - j$ is the fractional part.
+
+> [!example]- Ten claims are 120, 180, 260, 330, 410, 560, 720, 980, 1,600 and 2,400. What is the smoothed empirical median? {Example}
+> - The position of the median is $(10 + 1)(0.5) = 5.5$, so $j = 5$ and $h = 0.5$.
+> - The 5th and 6th order statistics are 410 and 560.
+> - The smoothed empirical median is $0.5(410) + 0.5(560) = 485$.
+
+## Two parameters
+
+With two parameters, two percentile equations are solved together. When the distribution has a scale parameter $\theta$ and a shape parameter, dividing one equation by the other eliminates $\theta$. The shape parameter is found from the result, and $\theta$ from either equation. For the loglogistic distribution, $F(x) = \frac{(x/\theta)^\gamma}{1 + (x/\theta)^\gamma}$, each equation becomes
+
+> $$\left(\frac{\hat{\pi}_g}{\theta}\right)^{\gamma} = \frac{g}{1 - g}$$
+
+> [!example]- Eleven losses are 54, 95, 140, 190, 230, 310, 380, 450, 620, 840 and 1,300. A loglogistic distribution is fitted by matching the 25th and 75th smoothed empirical percentiles. What are the estimates of $\gamma$ and $\theta$? {Example}
+> - With $n + 1 = 12$, the positions are $12(0.25) = 3$ and $12(0.75) = 9$, so $\hat{\pi}_{0.25} = 140$ and $\hat{\pi}_{0.75} = 620$.
+> - The equations are $(140/\theta)^\gamma = 0.25/0.75 = 1/3$ and $(620/\theta)^\gamma = 0.75/0.25 = 3$.
+> - Dividing the second equation by the first gives $(620/140)^\gamma = 9$.
+> - The shape estimate is $\hat{\gamma} = \ln 9 / \ln(620/140) = 1.4766$.
+> - From the first equation, $\hat{\theta} = 140 \times 3^{1/1.4766} = 294.6$.
+
+## Comparison with the method of moments
+
+Percentile matching does not use the moments of the distribution, and percentiles always exist. It can therefore fit a heavy-tailed distribution whose moments are infinite, or whose sample moments are dominated by the largest claims. A percentile near the middle of the data is not affected by extreme observations, but an extreme percentile such as the 95th rests on the largest observations. [[Maximum Likelihood Estimation|Maximum likelihood estimation]] uses all of the data, and percentile matching estimates are used as starting values for its numerical search.
+
+> [!trap] Using $ng$ instead of $(n+1)g$ for the position
+> The smoothed empirical percentile is at position $(n+1)g$. For 10 claims, the median is at position 5.5, halfway between the 5th and 6th order statistics, not at position $10(0.5) = 5$.

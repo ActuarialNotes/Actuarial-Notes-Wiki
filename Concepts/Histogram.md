@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:4f644d7247bb036b1c71ce3770c8fe02f446cf374d5d3ebddfaaf2758abea829
+  content_hash: sha256:c418c75ecf0e45042737fe07d2988ac882e9ba95e9daa5fcbfad070a53c43f12
   sources:
     - "NIST/SEMATECH e-Handbook of Statistical Methods, §1.3.3.14 'Histogram' (definition, count and density normalisations, questions answered), sha256:5dd49706cfe4151a32e35dcae8bf63d421ba68685abf7473588776c7830f065a — https://www.itl.nist.gov/div898/handbook/eda/section3/histogra.htm"
     - "Smile (Statistical Machine Intelligence and Learning Engine) Java API, smile.math.Histogram: bins(n) square-root rule and sturges(n) k = ceil(log2(n) + 1), sha256:1a0502638b9edbf8b5b7bb5a4ad62e41fc6dd0be3bcf9ae6947be2f3977b37c5 — http://haifengl.github.io/api/java/smile/math/Histogram.html"
@@ -16,30 +16,50 @@ verification:
   log: .verify/Concepts/Histogram.md
 ---
 
-A **Histogram** is an [[Exploratory Data Analysis]] display of a single continuous variable: the range is cut into bins of equal width and a bar is drawn over each bin whose area is proportional to the number of observations falling in it. It is the sample's picture of the underlying [[Probability Density Function (PDF)|density]].
-
-> $$\text{bar height} = \frac{n_j}{n \cdot w} \quad \text{(density scale)}$$
-
-> $$n_j = \#\{i : x_i \in \text{bin } j\}, \qquad w = \text{bin width}$$
-
-- On the **density scale** the bars have total area $1$, so the histogram can be overlaid directly on a fitted density; on the **count scale** the height is simply $n_j$
-- **Bin width is the whole game**: too wide and real structure (a second mode, a spike at zero) disappears; too narrow and sampling noise looks like structure
-- The shape read off a histogram drives the modelling choice — right skew with a long tail points to [[Gamma]] or [[Lognormal Distribution|lognormal]] severity, a spike at zero plus a right-skewed remainder points to the [[Tweedie Distribution]]
-- Unlike a [[Box Plot]], a histogram reveals **multimodality**; unlike a [[QQ Plot]], it is poor at judging tails, because the extreme bins hold few observations
-- Applied to a discrete count variable it becomes a bar chart of the [[Probability Mass Function (PMF)|PMF]] — useful for spotting overdispersion before fitting a [[Poisson Regression]]
-- Taking $\log$ of a positive skewed variable before plotting usually turns an uninformative spike-and-tail into a readable, near-symmetric shape
-
 ![[Media/Figures/Histogram.svg|340]]
 
-> [!example]- Reading a Severity Histogram {Example}
-> A histogram of $500$ claim amounts has a tall first bar covering $[0, 2{,}000)$, steadily shorter bars out to $20{,}000$, and a handful of observations past $50{,}000$. The bin width is $2{,}000$ and the first bin holds $180$ claims. What is the density-scale height of the first bar, and what does the shape suggest?
->
-> > [!answer]-
-> > $$\text{height} = \frac{n_1}{n \cdot w} = \frac{180}{500 \times 2{,}000} = 1.8 \times 10^{-4}$$
-> > Equivalently, $36\%$ of the claims fall in the first bin. The long right tail with no left tail is **strong right skew**, so a Normal-response model is inappropriate; fit severity with a [[Gamma]] or lognormal [[Generalized Linear Model]], or model $\ln(\text{severity})$.
+A **Histogram** is a plot of a single continuous variable's distribution, in which the range is cut into bins and a bar is drawn over each bin. On the density scale, the area of each bar is the proportion of the $n$ observations in its bin, so the height of the bar over bin $j$ is
 
-> [!example]- Choosing a Bin Width {Example}
-> An actuary plots $n = 64$ observations of a continuous variable using $4$ bins, then again using $32$ bins. The first looks like a single smooth hump; the second looks like a comb of spikes. Which is right?
->
-> > [!answer]-
-> > Neither — both are artifacts of the bin choice. A common starting rule is $k \approx \sqrt{n} = 8$ bins (or Sturges' $k \approx 1 + \log_2 n = 7$). With $64$ observations, $4$ bins over-smooths away any second mode and $32$ bins leaves about two observations per bin, so the "spikes" are pure sampling noise. Plot several widths and only trust features that survive all of them.
+> $$\text{height}_j = \frac{n_j}{n\, w_j}$$
+
+- $n_j$ is the number of observations in bin $j$.
+- $w_j$ is the width of bin $j$.
+
+The total area of all the bars is 1, so a density-scale histogram estimates the [[Probability Density Function (PDF)|probability density function]]. On the count scale, the height of each bar is simply $n_j$.
+
+> [!example]- A histogram of 500 claim amounts, in thousands, has a first bin from 0 to 2 that holds 180 claims. What is the density-scale height of its bar? {Example}
+> - The bin width is $w_1 = 2$.
+> - The height is $\frac{180}{500 \times 2} = 0.18$.
+> - The bar's area, $0.18 \times 2 = 0.36$, is the proportion of claims in the bin.
+
+## Number of observations in a range
+
+On the density scale, the proportion of observations in a range of whole bins is the sum of the bars' areas. The number of observations in the range is
+
+> $$n \sum_{j} \text{height}_j \times w_j$$
+
+- The sum is over the bins in the range.
+
+> [!example]- A density-scale histogram of 500 claim amounts, in thousands, has bins 0 to 2, 2 to 4, 4 to 8 and 8 to 16, with heights 0.18, 0.14, 0.06 and 0.015. How many claims are at least 2 but less than 8? {Example}
+> - The areas sum to $0.36 + 0.28 + 0.24 + 0.12 = 1$, as they must.
+> - The bins from 2 to 8 have areas $0.14 \times 2 = 0.28$ and $0.06 \times 4 = 0.24$.
+> - The proportion of claims in the range is $0.28 + 0.24 = 0.52$.
+> - The number of claims is $0.52 \times 500 = 260$.
+
+## Reading the shape of a histogram
+
+A histogram shows a variable's range, its skewness and any second mode. These guide the choice of a model's distribution: a long right tail with no left tail points to a [[Gamma]] or [[Lognormal Distribution|lognormal]] severity, and a spike at zero with a right-skewed remainder points to a [[Tweedie Distribution|Tweedie]] response. How the variance changes with the mean is read from other plots, such as box plots by group, whose spread grows with the median, or a scatter plot that widens into a wedge.
+
+For a heavily right-skewed positive variable, a histogram of the logarithm spreads out the bulk of the data so that the shape is visible. A distribution that is roughly symmetric on the log scale, as a lognormal is, is strongly right-skewed on the original scale.
+
+> [!example]- A histogram of the logarithm of 2,000 claim amounts is roughly symmetric, with a single hump. What does the histogram of the claim amounts themselves look like? {Example}
+> - A variable whose logarithm is symmetric behaves like a lognormal variable.
+> - A lognormal distribution is strongly right-skewed.
+> - The histogram of the claim amounts has a tall bar near zero and a long right tail.
+
+## Histogram of a discrete variable
+
+A histogram groups a continuous variable into bins. For a discrete variable, such as a claim count, bins that do not align with the integer values leave empty bins, and the picture depends on where the bin edges fall. A bar chart with one bar per value is the plot for a discrete variable.
+
+> [!trap] Reading bar heights as proportions
+> On the density scale, a bar's height is not the proportion of observations in its bin. Multiply each height by its bin's width, which matters most when the bins have different widths.

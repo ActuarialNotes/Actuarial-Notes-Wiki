@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:6eeb1cbb072e02302c7fed1671b4e8c7e40044be4382e6d7f9e608b95bdf0b9e
+  content_hash: sha256:43c2653bda28ecbf2fee73a1890e90330aaf28d578985a316af6a0e328f68884
   sources:
     - "Dobson & Barnett, An Introduction to Generalized Linear Models, 4th ed. (CRC 2018), publisher eBook preview, §1.4.2 Chi-squared distribution items 1-4 and 7 (sum of squares of n independent N(0,1) is chi-squared(n); E = n, var = 2n; item 4: Y_i = Z_i + mu_i with at least one mu_i non-zero gives the non-central chi-squared chi^2(n, lambda), lambda = sum mu_i^2, mean n + lambda, variance 2n + 4 lambda; reproductive property), printed pp.9-10 (PDF pp.26-27); §1.4.3-1.4.4 t and F defined from chi-squared, PDF pp.27-28, sha256:40ed0b2549113ee0bea29e41786886ce992ffa29251ad26fb1037385bb51611a — https://api.pageplace.de/preview/DT0400.9781351726221_A37406780/preview-9781351726221_A37406780.pdf"
     - "CAS Exam MAS-I Tables, 'Lower-tail areas for Chi-square distributions', df 1-50 (df 9: 2.70 and 19.02; df 3: 7.81, 9.35, 11.34), PDF p.20, sha256:cb5674138a67f7a498b8cc90357144fd121cbcbbc7487f214557b105611a69b4 — https://www.casact.org/sites/default/files/2021-03/masi_tables.pdf"
@@ -18,50 +18,75 @@ verification:
   log: .verify/Concepts/Chi-Squared Distribution.md
 ---
 
-The **Chi-Squared Distribution** $\chi^2(n)$ with $n$ degrees of freedom is the distribution of the sum of squares of $n$ independent standard [[Normal Distribution|normal]] variables. It is the [[Sampling Distribution|sampling distribution]] behind tests and intervals for a normal variance and behind likelihood ratio tests.
+A **Chi-Squared Distribution** with $r$ degrees of freedom, written $\chi^2(r)$, is the distribution of the sum of the squares of $r$ independent standard [[Normal Distribution|normal]] random variables. A chi-squared random variable with $r$ degrees of freedom is
 
-> $$V = \sum_{i=1}^{n} Z_i^2 \sim \chi^2(n), \quad Z_i \sim N(0, 1)$$
+> $$V = Z_1^2 + Z_2^2 + \cdots + Z_r^2$$
 
-> $$f(x) = \frac{x^{n/2 - 1}\,e^{-x/2}}{2^{n/2}\,\Gamma(n/2)}, \quad x > 0$$
+- $Z_1, \ldots, Z_r$ are independent standard normal random variables.
 
-> $$E[V] = n$$
+Its mean is
 
-> $$\text{Var}(V) = 2n$$
+> $$E[V] = r$$
 
-- $f$ is the density of $V$. It is the [[Gamma]] distribution with shape $n/2$ and scale 2; with $n = 2$ it is the [[Exponential Distribution|exponential]] with mean 2.
-- **Additivity:** a sum of independent chi-squared variables is chi-squared, with the degrees of freedom added.
-- **Noncentral:** if the $Z_i$ are replaced by independent $N(\mu_i, 1)$ variables with at least one $\mu_i \neq 0$, the sum of squares has the [[Noncentral Chi-Squared Distribution|noncentral chi-squared distribution]] $\chi^2(n, \lambda)$, $\lambda = \sum \mu_i^2$.
-- **Normal samples:** for a sample of size $n$ from $N(\mu, \sigma^2)$ with [[Sample Variance|sample variance]] $S^2$, $(n - 1)S^2/\sigma^2 \sim \chi^2(n - 1)$. This gives the [[Confidence Interval|confidence interval]] and the test for $\sigma^2$.
-- **[[Likelihood Ratio Test|Likelihood ratio tests]]:** for nested models with $p_1 < p_2$ parameters, $-2\ln\lambda = 2(\ell_2 - \ell_1)$ is approximately $\chi^2(p_2 - p_1)$ in large samples. For [[Generalized Linear Model|GLMs]] this is the drop in [[Deviance|deviance]] divided by the [[Dispersion Parameter|dispersion parameter]].
-- **The CAS MAS-I table** gives *lower-tail* areas for $n = 1$ to 50: the entry in column $p$ is the value $c$ with $P(V \leq c) = p$, for $p = 0.005,\ 0.010,\ 0.025,\ 0.050,\ 0.950,\ 0.975,\ 0.990,\ 0.995$. An upper-tail 5% critical value is read from the $0.950$ column. For large $n$ the distribution is approximately normal with mean $n$ and variance $2n$.
-- On MAS-I it supplies the critical values for tests of a normal variance, chi-square tests (Hogg §4.7), likelihood ratio tests (Hogg §8.3) and GLM model comparisons. The [[Student's t-Distribution]] and the [[F-Distribution]] are both built from it.
+and its variance is
 
-> [!example]- Confidence Interval for the Variance of Log-Losses {Example}
-> The logarithms of 10 claim amounts are treated as a sample from a normal distribution. Their sample variance is $s^2 = 0.36$. Using the CAS chi-square table, find a 95% confidence interval for $\sigma^2$.
->
-> > [!answer]-
-> > $(n - 1)S^2/\sigma^2 \sim \chi^2(9)$, and $(n - 1)s^2 = 9(0.36) = 3.24$. From the $df = 9$ row, $P(\chi^2_9 \leq 2.70) = 0.025$ and $P(\chi^2_9 \leq 19.02) = 0.975$. Solving $2.70 \leq 3.24/\sigma^2 \leq 19.02$ for $\sigma^2$:
-> >
-> > $$
-> > \begin{align*}
-> > \text{lower} &= \frac{3.24}{19.02} \\
-> > &= 0.170 \\
-> > \text{upper} &= \frac{3.24}{2.70} \\
-> > &= 1.200
-> > \end{align*}
-> > $$
-> >
-> > The interval $(0.170,\ 1.200)$ is not centred on $0.36$: the chi-squared distribution is skewed right, so the large quantile sets the lower bound.
+> $$\text{Var}(V) = 2r$$
 
-> [!example]- Testing an Added Rating Variable {Example}
-> A claim-frequency GLM has maximised log-likelihood $-1{,}250.6$. Adding a rating variable with 4 levels (3 extra parameters) raises it to $-1{,}245.9$. Test at the 5% level whether the variable is significant.
->
-> > [!answer]-
-> > $$
-> > \begin{align*}
-> > 2(\ell_2 - \ell_1) &= 2\bigl(-1{,}245.9 - (-1{,}250.6)\bigr) \\
-> > &= 9.4
-> > \end{align*}
-> > $$
-> >
-> > Compare with $\chi^2(3)$. The $df = 3$ row gives $7.81$ in the $0.950$ column and $9.35$ in the $0.975$ column. Since $9.4 > 7.81$, reject the smaller model at 5%: the variable is significant. Because $9.4$ also exceeds $9.35$ but not $11.34$ (the $0.990$ column), the [[p-Value|p-value]] lies between 0.01 and 0.025.
+The chi-squared distribution with $r$ degrees of freedom is the [[Gamma|gamma distribution]] with shape $r/2$ and scale 2. A sum of independent chi-squared random variables is chi-squared, with degrees of freedom equal to the sum of their degrees of freedom.
+
+> [!example]- $X_1, \ldots, X_5$ are a random sample from a normal distribution with mean $\mu$ and variance $\sigma^2$. What are the distribution, mean and variance of $\sum_{i=1}^{5}(X_i - \mu)^2/\sigma^2$? {Example}
+> - Each $(X_i - \mu)/\sigma$ is standard normal, and the five are independent.
+> - The sum of their squares is chi-squared with 5 degrees of freedom.
+> - Its mean is 5 and its variance is $2 \times 5 = 10$.
+
+## Sums of squares of a normal sample
+
+For a random sample $X_1, \ldots, X_n$ from a normal distribution, replacing $\mu$ by the [[Sample Mean|sample mean]] $\bar{X}$ costs one degree of freedom, so the [[Sample Variance|sample variance]] $S^2$ satisfies
+
+> $$\frac{(n-1)S^2}{\sigma^2} \sim \chi^2(n-1)$$
+
+The sample mean is normal with variance $\sigma^2/n$, so $n(\bar{X} - \mu)^2/\sigma^2$ is the square of one standard normal random variable and is $\chi^2(1)$.
+
+> [!example]- The logarithms of 10 claim amounts are a random sample from a normal distribution, with sample variance $s^2 = 0.36$. What is a 95% confidence interval for $\sigma^2$? {Example}
+> - $9S^2/\sigma^2$ is $\chi^2(9)$, and $9s^2 = 3.24$.
+> - In the 9 degrees of freedom row, $P(V \le 2.70) = 0.025$ and $P(V \le 19.02) = 0.975$.
+> - Solving $2.70 \le 3.24/\sigma^2 \le 19.02$ for $\sigma^2$ gives $3.24/19.02 \le \sigma^2 \le 3.24/2.70$.
+> - The 95% [[Confidence Interval|confidence interval]] for $\sigma^2$ is $(0.170, 1.200)$.
+
+## Testing a normal variance
+
+To test $H_0: \sigma^2 = \sigma_0^2$ with a random sample of size $n$ from a normal distribution, the test statistic is
+
+> $$\frac{(n-1)S^2}{\sigma_0^2}$$
+
+- $\sigma_0^2$ is the variance under $H_0$.
+
+Under $H_0$ the statistic is $\chi^2(n-1)$. Against $H_1: \sigma^2 > \sigma_0^2$, $H_0$ is rejected when the statistic exceeds the value that $\chi^2(n-1)$ exceeds with probability $\alpha$. Against $H_1: \sigma^2 < \sigma_0^2$, $H_0$ is rejected when the statistic is below the value that $\chi^2(n-1)$ falls below with probability $\alpha$.
+
+The CAS MAS-I chi-squared table gives lower-tail areas. The entry in column $p$ is the value $c$ with $P(V \le c) = p$, so an upper-tail critical value at level $\alpha$ is read from the column $1 - \alpha$.
+
+> [!example]- A random sample of 20 losses from a normal distribution has $s^2 = 45$. What is the smallest significance level at which $H_0: \sigma^2 = 100$ is rejected in favour of $H_1: \sigma^2 < 100$? {Example}
+> - The test statistic is $19 \times 45/100 = 8.55$.
+> - In the 19 degrees of freedom row, the lower-tail values are 7.63 at 0.010, 8.91 at 0.025 and 10.12 at 0.050.
+> - The statistic is below 8.91 but not below 7.63.
+> - $H_0$ is rejected at the 2.5% level but not at the 1% level.
+
+## Likelihood ratio tests
+
+For nested models, the [[Likelihood Ratio Test|likelihood ratio statistic]] is twice the difference between the maximized log-likelihoods of the larger and the smaller model. In large samples, under the hypothesis that the smaller model is adequate,
+
+> $$2\bigl(l(\hat{\theta}_{\text{larger}}) - l(\hat{\theta}_{\text{smaller}})\bigr) \sim \chi^2(q)$$
+
+- $q$ is the number of parameters the larger model adds.
+
+For a [[Generalized Linear Model|GLM]], the statistic is the drop in [[Deviance|deviance]], divided by the [[Dispersion Parameter|dispersion parameter]] $\phi$ when $\phi$ is not 1. When the [[p-Value|p-value]] is below the significance level, the smaller model is rejected and the added variables are statistically significant.
+
+> [!example]- A claim frequency GLM has maximized log-likelihood $-1{,}250.6$. Adding a rating variable with 4 levels raises it to $-1{,}245.9$. Is the variable significant at the 5% level, and between which values does the p-value lie? {Example}
+> - The 4 levels add $q = 3$ parameters.
+> - The statistic is $2\bigl(-1{,}245.9 - (-1{,}250.6)\bigr) = 9.4$.
+> - In the 3 degrees of freedom row, the values are 7.81 at 0.950, 9.35 at 0.975 and 11.34 at 0.990.
+> - The statistic exceeds 7.81, so the variable is significant at the 5% level.
+> - The statistic is between 9.35 and 11.34, so the p-value is between 0.01 and 0.025.
+
+> [!trap] Reading the lower-tail table for an upper-tail test
+> The CAS table's column 0.050 holds the value $\chi^2(r)$ falls below with probability 0.05. An upper-tail test at the 5% level uses the column 0.950. With 3 degrees of freedom the critical value is 7.81, not 0.35.

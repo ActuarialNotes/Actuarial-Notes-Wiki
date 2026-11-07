@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:e8a9a413c79af98ee56cc856f20c851463a5793d706d1ba8fec5e7ef35f0fca4
+  content_hash: sha256:dbd7b8b827e1dbb4b9d070ea3e5692a66e1dfe5d6f5bbb20fcca17ee48b55887
   sources:
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Domain C description and tasks 1-9, PDF p.5; reading list PDF p.6, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
     - "CAS Exam MAS-II Content Outline 2026, Domain B description and tasks 1-4, PDF p.2, sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf"
@@ -16,23 +16,61 @@ verification:
   log: .verify/Concepts/Model Structure.md
 ---
 
-**Model Structure** is the specified form of an [[Extended Linear Model]]: the distribution of the response, the [[Link Function]], and the terms of the linear predictor — which predictors, transformations, and [[Interaction|interactions]] appear. This is the CAS MAS-I usage: choosing a GLM's model structure from the behavior of the data includes choosing its link function and the distribution of the dependent variable.
-
-> $$Y \sim \text{chosen distribution}, \qquad g(\mu) = \eta, \qquad \eta = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \beta_3 (x_1 \times x_2) + \beta_4 x_1^2 + \cdots$$
-
-- $\mu = E(Y)$ and $g$ is the link. The distribution and link are chosen from the behavior of the response; [[Model Selection]] covers how
-- Linear-predictor decisions include: which [[Categorical Predictor|predictors]] to include, whether to add [[Interaction|interaction terms]], and whether to band or transform continuous variables (e.g., [[Polynomial Regression|polynomial terms]]) — the choice of terms is the focus of **[[Variable Selection]]**
-- For a [[Linear Mixed Model]] (MAS-II), the structure also covers how the model accommodates correlated observations and a variance that is not constant; the MAS-II outline names the model structure and variable selection as separate things to evaluate
-- A model can have the correct distribution and link but the wrong linear predictor (e.g., a missing interaction); its adequacy is checked with a [[Residual Plot]] or a [[Marginal Model Plot]]
-- Adding terms always improves in-sample fit but risks overfitting; [[AIC]] and [[BIC]] penalize unnecessary complexity when comparing structures
-- Two models with the same distribution and link, one's linear predictor nested within the other's, are compared using **[[ANOVA]] (analysis of deviance)**
-
 ![[Media/Figures/Model_Structure.svg|340]]
 
-> [!example]- Comparing Two Candidate Model Structures {Example}
-> An actuary fits a Poisson GLM for claim frequency two ways: Model 1 uses main effects for territory and vehicle age only ([[AIC]] $= 4{,}102$). Model 2 adds a territory $\times$ vehicle age interaction ([[AIC]] $= 4{,}085$). Which model structure is preferred?
->
-> > [!answer]-
-> > Lower AIC indicates a better trade-off between fit and complexity. Since Model 2's AIC ($4{,}085$) is lower than Model 1's ($4{,}102$), the richer model structure — including the territory $\times$ vehicle age **[[Interaction]]** — is preferred.
-> >
-> > Territory is categorical, so the interaction is a set of coefficients, at least one per non-base territory. Judge them **jointly**, as this AIC comparison does or as a nested F-test of all of them at once would, not one p-value at a time in the [[Parameter Estimate Tables|parameter estimate table]]: the individual coefficients and their p-values change with the choice of base territory, and the joint test does not.
+A **Model Structure** is the specified form of an [[Extended Linear Model|extended linear model]]: the distribution of the [[Response Variable|response]], the [[Link Function|link function]], and the terms of the linear predictor. For a [[Generalized Linear Model|generalized linear model]] with mean $\mu_i = E[Y_i]$ and predictors $x_{i1}, \ldots, x_{ip}$, the model structure is
+
+> $$g(\mu_i) = \beta_0 + \beta_1 x_{i1} + \cdots + \beta_p x_{ip}$$
+
+- $g$ is the link function.
+- $\beta_0, \ldots, \beta_p$ are the coefficients.
+- $Y_i$ has a distribution from the [[Exponential Family|exponential family]], chosen together with $g$.
+
+The right-hand side is the linear predictor $\eta_i$. Specifying the model structure means making three choices:
+
+1. The distribution of $Y_i$.
+2. The link function $g$.
+3. The terms of $\eta_i$: which predictors appear, how each is transformed, and which [[Interaction|interactions]] are included.
+
+## Distribution and link for the response
+
+The distribution and the link are chosen from the behavior of the response being modeled. The usual choices lead to [[Poisson Regression|Poisson regression]] for counts, a [[Gamma]] model for severity, [[Logistic Regression|logistic regression]] for a binary response and a [[Tweedie Distribution|Tweedie]] model for pure premium.
+
+| Response | Distribution | Usual link |
+| --- | --- | --- |
+| Continuous, symmetric, constant variance | Normal | Identity |
+| Count of events, such as claims | Poisson | Log |
+| Positive and right-skewed, variance proportional to $\mu_i^2$, such as claim severity | Gamma | Log |
+| Binary, or a proportion of successes | Binomial | Logit |
+| Pure premium: a mass at zero and a skewed positive part | Tweedie | Log |
+
+> [!example]- An actuary models the probability that a homeowners policy renews. What distribution and link should the model structure use? {Example}
+> - Each policy either renews or does not, so the response is binary.
+> - A binary response has a binomial distribution.
+> - The logit link keeps the fitted probability between 0 and 1.
+> - The model structure is a binomial distribution with a logit link.
+
+## Terms of the linear predictor
+
+A continuous predictor enters $\eta_i$ as a single term, or through a transformation such as $\ln x_{ij}$ or a [[Polynomial Regression|polynomial]]. A [[Categorical Predictor|categorical predictor]] with $k$ levels enters as $k - 1$ indicator variables, and the level with no indicator is the base level. An interaction $x_{i1} x_{i2}$ lets the effect of one predictor depend on the value of another.
+
+Changing which level of a categorical predictor is the base level changes the coefficients, but not the fitted values. The refitted model spans the same columns and reproduces the same group means.
+
+> [!example]- A frequency model has main effects for territory and for vehicle age. The data show that newer vehicles have more claims in urban territories than in rural ones. How should the model structure change? {Example}
+> - The effect of vehicle age differs by territory, which is an interaction.
+> - Add a territory $\times$ vehicle age term to the linear predictor.
+> - Territory is categorical, so the interaction adds one coefficient for each non-base territory.
+
+## Comparing nested model structures
+
+A model whose terms are a subset of another's is nested within it. The larger model always fits at least as well, so its [[Deviance|deviance]] is lower than or equal to that of the smaller model. The lowest deviance is therefore not a reason to choose a model. A larger structure is kept only when its added terms improve the fit significantly, by an [[ANOVA|analysis of deviance]], or when a penalized criterion favors it. The [[AIC]] of a model with $k$ parameters and maximized log-likelihood $l$ is
+
+> $$\text{AIC} = -2l + 2k$$
+
+> [!example]- Model 1 has main effects for territory and vehicle age, with 6 parameters and log-likelihood $-2{,}045$. Model 2 adds their interaction, with 12 parameters and log-likelihood $-2{,}030.5$. Which model structure does AIC prefer? {Example}
+> - For Model 1, $\text{AIC} = 4{,}090 + 12 = 4{,}102$.
+> - For Model 2, $\text{AIC} = 4{,}061 + 24 = 4{,}085$.
+> - The lower AIC is preferred, so AIC prefers Model 2, with the interaction.
+
+> [!trap] Choosing the structure with the lowest deviance
+> Adding any term lowers the deviance or leaves it unchanged, so the model with the most terms always has the lowest deviance. Compare nested structures with a test of the added terms, or with AIC or BIC, which charge for each parameter.

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:9dd043afa477cab8192398f50d83c82dac31ab2b515c055f694769faed9f25f4
+  content_hash: sha256:29cf25bfce972c9b0b662543bc4e9c7b2522631d9a4a540db8a551dce9d3be76
   sources:
     - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021; CAS-hosted copy; MAS-I reading), §3.3.3 pp.92-99 (PDF 102-109): residual plot e_i = y_i - y-hat_i vs fitted values; U-shape = non-linearity, quadratic term (Fig 3.9); funnel = heteroscedasticity, log Y or sqrt Y remedy (Fig 3.11); outlier vs high leverage (Figs 3.12-3.13), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
     - "Weisberg, Applied Linear Regression, 4th ed. (Wiley 2014), Ch.9 'Regression Diagnostics' (course copy), §9.1.5 Fig 9.2 (null plot; megaphones = nonconstant variance; curvature = non-linearity), sha256:7ecdc82a05367d2107915fe0535c8cbf65a9f47d95ee80b8816e0c5903d507af — https://www2.stat.duke.edu/courses/Fall21/sta521.001/papers/Applied_Linear_Regression_CHAPTER_9_Regression_Diagnostics.pdf"
@@ -19,31 +19,66 @@ verification:
   log: .verify/Concepts/Residual Plot.md
 ---
 
-A **Residual Plot** is a diagnostic graph used to assess model fit by plotting **residuals** (observed minus fitted values) against fitted values, a predictor, or another variable. Patterns in residuals indicate model deficiencies.
-
-> $$e_i = y_i - \hat{y}_i \quad \text{(raw residual)}$$
-
-> $$r_i = \frac{e_i}{\hat{\sigma}\sqrt{1 - h_{ii}}} \quad \text{(standardized/studentized residual)}$$
-
-**How to read residual plots:**
-
-| Pattern | Implication |
-| :--- | :--- |
-| Random scatter around zero | Model is adequate |
-| Fan shape (spread increases) | **Heteroscedasticity** — variance is not constant |
-| Curved pattern | **Non-linearity** — a transform or polynomial term is needed |
-| Systematic trend | A predictor is missing or improperly specified |
-| Isolated points far from zero | **Outliers**; whether one is influential depends on its leverage $h_{ii}$, which a residual plot does not show — check $h_{ii}$ or Cook's distance |
-
-- For [[Generalized Linear Model]]s, **Pearson residuals** $r_i^P = (y_i - \hat{\mu}_i)/\sqrt{V(\hat{\mu}_i)}$ and **deviance residuals** are used instead of raw residuals
-- **Residuals vs. fitted**: checks for non-linearity and heteroscedasticity
-- **Residuals vs. predictor**: checks whether a variable's effect is correctly specified
-- A **Normal [[QQ Plot]]** of residuals checks the normality assumption
-
 ![[Media/Figures/Residual_Plot.svg|340]]
 
-> [!example]- Identifying Heteroscedasticity in a Residual Plot {Example}
-> After fitting a linear regression of claim severity on vehicle value, the residual plot shows residuals spreading out in a fan shape as fitted values increase. What does this suggest?
->
-> > [!answer]-
-> > The fan shape indicates **heteroscedasticity**: variance of residuals increases with the fitted value. This is typical for positive, right-skewed data like claim severity. Remedies include applying a log transformation to severity or switching to a Gamma [[Generalized Linear Model]] with a log [[Link Function]], which naturally models multiplicative variance.
+A **Residual Plot** is a graph of a fitted model's [[Residual|residuals]] against the [[Fitted Values|fitted values]], a predictor, or another variable, used to check the model's assumptions. The residual of observation $i$ is
+
+> $$e_i = y_i - \hat{y}_i$$
+
+- $y_i$ is the observed response, and $\hat{y}_i$ is its fitted value.
+
+The standardized residual divides the residual by its estimated standard deviation:
+
+> $$r_i = \frac{e_i}{\hat{\sigma}\sqrt{1 - h_{ii}}}$$
+
+- $\hat{\sigma}$ is the estimate of the error standard deviation.
+- $h_{ii}$ is the leverage of observation $i$, from the [[Hat Matrix|hat matrix]].
+
+If the model is right, the residuals scatter randomly in a band of constant width centred on zero. A pattern in the plot shows which assumption fails:
+
+| Pattern | Meaning |
+| --- | --- |
+| A random band centred on zero, with constant spread | The mean structure and the variance are adequate |
+| Curvature | The predictor's effect is nonlinear, and a term such as a quadratic is needed |
+| A trend, or residuals systematically positive in one region | A predictor is missing or wrongly specified |
+| A spread that grows or shrinks across the plot (a fan) | [[Heteroscedasticity]]: the variance is not constant |
+| Isolated points far from zero | [[Outlier|Outliers]] |
+
+> [!example]- A linear regression of claim severity on vehicle value is fitted. The residuals plotted against the fitted values spread out in a fan as the fitted values increase. What does this show, and what model would remove it? {Example}
+> - A spread that grows with the fitted value shows that the variance of severity increases with its mean.
+> - The constant-variance assumption of the linear regression fails.
+> - A [[Gamma]] GLM with a log link assumes a variance proportional to the square of the mean, which fits this pattern.
+
+## Residuals of a generalized linear model
+
+The raw residuals of a [[Generalized Linear Model|GLM]] have a spread that depends on the mean, so a GLM's residual plot uses residuals scaled by the [[Variance Function|variance function]] $V(\mu)$. The Pearson residual is
+
+> $$r_i^P = \frac{y_i - \hat{\mu}_i}{\sqrt{V(\hat{\mu}_i)}}$$
+
+- $\hat{\mu}_i$ is the fitted mean of observation $i$.
+
+The [[Deviance Residual|deviance residual]] is the signed square root of the observation's contribution to the deviance. When the variance function is right, the [[Pearson Residual|Pearson residuals]] and the deviance residuals have a roughly constant spread.
+
+## Residuals of a chain-ladder model
+
+[[Mack Chain Ladder Model|Mack's chain-ladder model]] assumes that the variance of the next cumulative loss is proportional to the current cumulative loss. For accident year $i$ at development age $k$, the weighted residual is
+
+> $$\frac{C_{i,k+1} - f_k\, C_{i,k}}{\sqrt{C_{i,k}}}$$
+
+- $C_{i,k}$ is the cumulative loss of accident year $i$ at age $k$.
+- $f_k$ is the age-to-age factor from age $k$ to age $k + 1$.
+- Under a constant variance, the residual is $C_{i,k+1} - f_k\, C_{i,k}$, with no division.
+
+The weighted residuals are plotted against $C_{i,k}$, the cumulative loss at the earlier age. Residuals scattered randomly around zero with no trend and no change in spread support the variance assumption and the linear development. A trend, such as residuals decreasing with claim size, or a fan shows that the assumption fails.
+
+> [!example]- An accident year has a cumulative loss of 1,000 at age 12 and 1,250 at age 24, and the age-to-age factor from 12 to 24 is 1.20. What is its weighted residual? {Example}
+> - The fitted loss at age 24 is $1.20 \times 1{,}000 = 1{,}200$.
+> - The residual is $1{,}250 - 1{,}200 = 50$.
+> - The weighted residual is $50/\sqrt{1{,}000} = 1.58$.
+
+## Residuals of a bootstrap reserving model
+
+The [[ODP Bootstrap Model|ODP bootstrap model]] assumes that its standardized residuals are independent and identically distributed, with a constant variance. The residuals are plotted against development period, accident year, calendar period and the size of the predicted incremental loss, and a normality plot is drawn. Heteroscedasticity shows as a spread, or a variance computed from the residuals, that differs materially between development periods. A trend in any plot, such as residuals drifting away from zero across calendar periods, or residuals on the normality plot that stray from the straight 45-degree line, shows that the model needs adjusting.
+
+> [!trap] Reading only the residuals against the fitted values
+> A model can show a random band against the fitted values and still be wrong for one predictor. Plot the residuals against each predictor too, and in a reserving model against accident year, development period and calendar period.

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:f6f574025467aff734e7476b0f5ae6ba9438bacb02f63a4259f6fecc276d4a4d
+  content_hash: sha256:518755964c3cb376b30823b0bc4c1ab0fd6c4141b54c51c4ce39311dd2f9b426
   sources:
     - "Daniel, \"Poisson processes (and mixture distributions)\", CAS Study Note (June 2008) — MAS-I syllabus reading, Fact 1.13 p.9 (types with probabilities π_j(t): each type a Poisson process with rate π_j(t)λ(t), and the type counts independent), Example 1.14 p.9, §1.4.3 and Example 1.29 pp.14-15 (thinning a homogeneous process with π(t) gives a non-homogeneous one), sha256:e345451e9daae82b400aed77f2da0c96c361ed4fbdfd22456b8f711ca0d50888 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Daniel_1.pdf"
     - "Siegrist, Random (randomservices.org, HTML fetched 2026-10-04), ch.13 The Poisson Process, 'Thinning and Superposition', Thinning (two-type process: rates rp and r(1 − p), independent; M_t given N_t = n binomial(n, p); k types), sha256:e07aab3aa8206236541466f57719dcdce9fdf7f1f21a9dd5357d89034cf623ba — https://www.randomservices.org/random/poisson/Splitting.html"
@@ -17,53 +17,54 @@ verification:
   log: .verify/Concepts/Poisson Thinning.md
 ---
 
-**Poisson Thinning** (splitting) is the result that if each event of a [[Poisson Process]] with rate $\lambda$ is independently classified as type 1 with probability $p$ and type 2 with probability $1-p$, the two type counts are themselves **independent** Poisson processes with rates $\lambda p$ and $\lambda(1-p)$.
+**Poisson Thinning** is the splitting of a [[Poisson Process|Poisson process]] into several processes by classifying each event, independently of all other events, as one of $k$ types. If each event of a Poisson process with rate $\lambda$ is of type $i$ with probability $p_i$, then the events of type $i$ form a Poisson process with rate
 
-> $$N_1(t) \sim \text{Poi}(\lambda p\, t)$$
->
-> $$N_2(t) \sim \text{Poi}\big(\lambda (1-p)\, t\big)$$
+> $$\lambda_i = \lambda\, p_i$$
 
-- $N_1(t)$ and $N_2(t)$ are independent of each other, and each has independent, stationary increments. With $k$ types of probabilities $p_1, \ldots, p_k$, the result gives $k$ independent Poisson processes with rates $\lambda p_i$.
-- **Independence is the surprising part.** Learning that many small claims occurred says nothing about the number of large ones. Contrast conditioning on the total: given $N(t) = n$, $N_1(t)$ is [[Binomial Distribution|binomial]]$(n, p)$ and the two counts are negatively dependent.
-- **Time-dependent classification** (Ross): if an event at time $s$ is type $i$ with probability $P_i(s)$, the $N_i(t)$ are independent Poisson with means $\lambda \int_0^t P_i(s)\,ds$. Reporting-lag and [[IBNR]] counts come from this version.
-- Thinning with a probability $p(t)$ that varies over time produces a [[Nonhomogeneous Poisson Process]] with [[Intensity Function|intensity]] $\lambda p(t)$ — which is also how such a process is simulated.
-- Standard uses: claims that pierce a [[Deductible]] ($p = P(X > d)$), claims by cause of loss or coverage, losses in a reinsurance layer. The reverse operation is [[Poisson Superposition]], and each type's aggregate amount is its own [[Compound Poisson Process]].
+- $p_1 + p_2 + \cdots + p_k = 1$.
 
-> [!example]- Claims That Pierce a Deductible {Example}
-> Losses on a book occur as a Poisson process at $\lambda = 10$ per year. Loss amounts are exponential with mean $\$5{,}000$, independent of the arrival process, and every policy carries a $\$2{,}000$ deductible.
->
-> (a) At what rate do paid claims arrive? (b) What is the probability of no paid claims in a year? (c) This year $4$ losses below the deductible have been recorded. What is the expected number of paid claims this year?
->
-> > [!answer]-
-> > $$
-> > \begin{align*}
-> > p &= P(X > 2{,}000) \\
-> > &= e^{-2{,}000/5{,}000} \\
-> > &= 0.67032 \\
-> > \lambda p &= 10 \times 0.67032 \\
-> > &= 6.7032
-> > \end{align*}
-> > $$
-> >
-> > (a) Paid claims form a Poisson process at $6.70$ per year.
-> >
-> > (b) $P(N_1(1) = 0) = e^{-6.7032} = 0.00123$.
-> >
-> > (c) Still $6.70$. The small-loss count $N_2$ is independent of $N_1$, so the four losses under the deductible carry no information about the number of paid claims.
+The number of type $i$ events in an interval of length $t$ is therefore Poisson with mean $\lambda p_i t$. With two types this is [[Poisson Process#Thinning a Poisson process|thinning a Poisson process]] with $p_1 = p$ and $p_2 = 1 - p$.
 
-> [!example]- Counting IBNR Claims from Reporting Lags {Example}
-> Claims occur as a Poisson process at $\lambda = 20$ per month starting at time $0$. Each claim's reporting delay is exponential with mean $2$ months, independent of everything else. At $t = 6$ months, find the expected numbers of incurred-but-not-reported and reported claims.
+> [!example]- Claims arrive as a Poisson process at a rate of 20 per year. Each claim is a collision claim with probability 0.6, a comprehensive claim with probability 0.3 and a liability claim with probability 0.1, independently of the other claims. What is the probability of exactly 2 liability claims in a year, and of no liability claim in six months? {Example}
+> - The liability claims form a Poisson process with rate $20 \times 0.1 = 2$ per year.
+> - The probability of exactly 2 liability claims in a year is $\frac{e^{-2}\,2^2}{2!} = 0.2707$.
+> - The number of liability claims in six months is Poisson with mean $2 \times 0.5 = 1$.
+> - The probability of no liability claim in six months is $e^{-1} = 0.3679$.
+
+## Independence of the thinned processes
+
+The $k$ thinned processes are independent of each other. The number of events of one type therefore gives no information about the number of events of another type, and the expected number of type 2 events by time $t$, given any number $n$ of type 1 events, is
+
+> $$E[N_2(t) \mid N_1(t) = n] = \lambda\, p_2\, t$$
+
+- $N_i(t)$ is the number of type $i$ events by time $t$.
+
+Given the total number of events $N(t) = n$, by contrast, the number of type 1 events is [[Binomial Distribution|binomial]] with $n$ trials and probability $p_1$, and the numbers of the two types are dependent.
+
+> [!example]- Losses occur as a Poisson process at a rate of 10 per year. Loss amounts are exponential with mean 5,000, and each policy has an ordinary deductible of 2,000. So far this year, 4 losses below the deductible have been recorded. What is the expected number of losses this year that exceed the deductible? {Example}
+> - A loss exceeds the deductible with probability $P(X > 2{,}000) = e^{-2{,}000/5{,}000} = 0.67032$.
+> - The losses above the deductible form a Poisson process with rate $10 \times 0.67032 = 6.7032$ per year.
+> - The losses above and below the deductible form independent processes, so the 4 losses below the deductible do not change this expectation.
+> - The expected number of losses above the deductible this year is $6.70$.
+
+## Classification that depends on the time of the event
+
+Suppose an event that occurs at time $s$ is of type $i$ with probability $p_i(s)$, independently of all other events. Then the numbers of events of each type by time $t$ are independent Poisson random variables, and the mean number of type $i$ events is
+
+> $$E[N_i(t)] = \lambda \int_0^t p_i(s)\,ds$$
+
+The events of one type form a [[Nonhomogeneous Poisson Process#Thinning with a probability that changes over time|nonhomogeneous Poisson process]] with intensity function $\lambda p_i(s)$.
+
+> [!example]- Claims occur as a Poisson process at a rate of 20 per month, starting at time 0. The delay from occurrence to report is exponential with mean 2 months, independently for each claim. What are the expected numbers of claims that have occurred but are not yet reported at 6 months, and of claims reported by then? {Example}
+> - A claim that occurs at time $s \le 6$ is still unreported at time 6 with probability $e^{-(6 - s)/2}$.
+> - The expected number of unreported claims is
 >
-> > [!answer]-
-> > A claim occurring at time $s \leq 6$ is still unreported at $t = 6$ with probability $e^{-(6-s)/2}$. By time-dependent thinning:
-> >
-> > $$
-> > \begin{align*}
-> > E[N_{\text{IBNR}}(6)] &= 20 \int_0^6 e^{-(6-s)/2}\,ds \\
-> > &= 20 \times 2\left(1 - e^{-3}\right) \\
-> > &= 40 \times 0.95021 \\
-> > &= 38.01
-> > \end{align*}
-> > $$
-> >
-> > The reported count has mean $20 \times 6 - 38.01 = 81.99$. Both are Poisson and **independent** — under this model, the number of claims already reported says nothing about how many are still to come.
+> $$
+> \begin{aligned}
+> 20\int_0^6 e^{-(6-s)/2}\,ds &= 40\left(1 - e^{-3}\right) \\
+> &= 38.01
+> \end{aligned}
+> $$
+>
+> - The expected number of claims that occur by time 6 is $20 \times 6 = 120$, so the expected number reported is $120 - 38.01 = 81.99$.
+> - The two numbers are independent Poisson random variables.

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:baf2d6c0fc2c88c595808950ca8b3c2014c348777916f4ead1331fab4a19f163
+  content_hash: sha256:4d47256b4acec3b2abcd77bffb9dbe2e4bd666b077d08f2d9000afbd2ca2bfea
   sources:
     - "Daniel, \"Poisson processes (and mixture distributions)\", CAS Study Note (June 2008) — MAS-I syllabus reading, ch.1 §1.1 p.3 (N(t) counts events in (0, t]; increments over non-overlapping intervals independent, touching endpoints OK), Def. & Prop. 1.2 p.4, Example 1.6 pp.5-6 (T_3 > 1.2 iff N(1.2) ≤ 2), §1.4.1 p.13 (stationary increments only in the homogeneous case), sha256:e345451e9daae82b400aed77f2da0c96c361ed4fbdfd22456b8f711ca0d50888 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Daniel_1.pdf"
     - "Chen, Math 263 Stochastic Processes, 'Poisson processes' slides (San José State U.; based on Ross §§5.3.1-5.3.4, 5.4.1-5.4.2), counting-process conditions PDF p.4, increments Def 0.2 p.5, Poisson Def 0.3 p.6, sha256:a349a248cda7898d393bb41861b87fd65399e793d1abd981babaab36dbdbf826 — https://www.sjsu.edu/faculty/guangliang.chen/Math263/lec8PoissonProcesses.pdf"
@@ -18,55 +18,55 @@ verification:
   log: .verify/Concepts/Counting Process.md
 ---
 
-A **Counting Process** $\{N(t), t \geq 0\}$ is a [[Stochastic Processes|stochastic process]] in which $N(t)$ is the total number of events — [[Claim|claims]] reported, policies lapsing, storms making landfall — that have occurred by time $t$. It is the frame on which the [[Poisson Process]] and all its variants are built.
+A **Counting Process** $\{N(t), t \ge 0\}$ is a [[Stochastic Processes|stochastic process]] in which $N(t)$ is the number of events that have occurred by time $t$. A counting process satisfies four conditions:
 
-> $$N(t) - N(s) = \text{number of events in } (s, t], \quad s < t$$
+1. $N(t) \ge 0$.
+2. $N(t)$ is integer-valued.
+3. If $s < t$, then $N(s) \le N(t)$.
+4. If $s < t$, then $N(t) - N(s)$ is the number of events in the interval $(s, t]$.
 
-- **Four defining conditions** (Ross): $N(t) \geq 0$; $N(t)$ is integer-valued; $N(t)$ is nondecreasing, so $s < t \Rightarrow N(s) \leq N(t)$; and the increment $N(t) - N(s)$ counts the events in $(s, t]$. A quantity that can fall — open claims, surplus — is not a counting process.
-- **Independent increments**: counts in disjoint intervals are independent. **Stationary increments**: the distribution of $N(t+s) - N(s)$ depends only on the length $t$, not on where the interval sits.
-- The [[Poisson Process]] is the counting process with $N(0) = 0$, independent increments and $N(t+s) - N(s) \sim \text{Poi}(\lambda t)$. Let the rate vary over time and stationarity is lost — the [[Nonhomogeneous Poisson Process]]; let the rate vary randomly across risks and independence is lost — the [[Mixed Poisson Process]].
-- Counting and waiting carry the same information: $N(t) \geq n \iff S_n \leq t$, where $S_n$ is the arrival time of the $n$-th event (see [[Interarrival Time]]).
-- **Exam technique:** rewrite a joint probability such as $P(N(1) = a,\ N(3) = b)$ in terms of **non-overlapping increments** — $N(1)$ and $N(3) - N(1)$ — so that independence lets it factor.
+The difference $N(t) - N(s)$ is the increment of the process over $(s, t]$.
 
-> [!example]- Which Claim Measures Are Counting Processes? {Example}
-> A claims department tracks four quantities through a policy year:
->
-> 1. $A(t)$ — the cumulative number of claims reported by time $t$
-> 2. $B(t)$ — the number of claims open at time $t$
-> 3. $C(t)$ — the cumulative dollars paid on claims by time $t$
-> 4. $D(t)$ — the cumulative number of claims over $\$50{,}000$ reported by time $t$
->
-> Which are counting processes, and when would they have stationary increments?
->
-> > [!answer]-
-> > - $A(t)$: **yes** — nonnegative, integer-valued and nondecreasing. Its increments are stationary only if the reporting rate is constant through the year; a hail-exposed book with a summer peak breaks that.
-> > - $B(t)$: **no** — it falls every time a claim closes.
-> > - $C(t)$: **no** — it is nondecreasing but records dollars, not events. Aggregate amounts are modelled on top of a counting process, as in the [[Compound Poisson Process]].
-> > - $D(t)$: **yes** — it is $A(t)$ with each claim kept only if it is large, a [[Poisson Thinning|thinned]] count.
+> [!example]- A claims department tracks the number of claims reported by time $t$, the number of claims open at time $t$, and the total amount paid on claims by time $t$. Which of these are counting processes? {Example}
+> - The number of claims reported by time $t$ is a nonnegative integer that never decreases, so it is a counting process.
+> - The number of claims open at time $t$ decreases each time a claim closes, so it fails condition 3.
+> - The total amount paid by time $t$ never decreases, but it is an amount of money rather than a number of events, so it fails condition 2.
 
-> [!example]- Joint and Conditional Claim Counts {Example}
-> Claims are reported as a Poisson process at $\lambda = 2$ per week. Find $P(N(1) = 1,\ N(3) = 4)$ and $P(N(1) = 1 \mid N(3) = 4)$.
->
-> > [!answer]-
-> > Split into the disjoint increments $N(1)$ and $N(3) - N(1)$, which are independent with means $2$ and $4$:
-> >
-> > $$
-> > \begin{align*}
-> > P(N(1)=1,\ N(3)=4) &= P(N(1)=1)\,P\big(N(3)-N(1)=3\big) \\
-> > &= \left(2e^{-2}\right)\left(\frac{e^{-4}\,4^3}{3!}\right) \\
-> > &= (0.27067)(0.19537) \\
-> > &= 0.05288
-> > \end{align*}
-> > $$
-> >
-> > Dividing by $P(N(3) = 4) = e^{-6}6^4/4! = 0.13385$, the rate cancels and a binomial is left — given four claims in three weeks, each falls in week 1 independently with probability $1/3$:
-> >
-> > $$
-> > \begin{align*}
-> > P(N(1)=1 \mid N(3)=4) &= \binom{4}{1}\left(\tfrac{1}{3}\right)\left(\tfrac{2}{3}\right)^3 \\
-> > &= \frac{32}{81} \\
-> > &= 0.3951
-> > \end{align*}
-> > $$
-> >
-> > Conditioning on the total turns a Poisson question into a binomial one, and $\lambda$ no longer matters.
+## Independent increments
+
+A counting process has independent increments when the numbers of events in non-overlapping intervals are independent. For $s < t$, the joint probability of the numbers of events by times $s$ and $t$ then factors over the intervals $(0, s]$ and $(s, t]$:
+
+> $$P(N(s) = a,\ N(t) = b) = P(N(s) = a)\,P(N(t) - N(s) = b - a)$$
+
+- $a \le b$.
+
+> [!example]- Claims are reported as a Poisson process at a rate of 2 per week. What is the probability of exactly 1 claim in the first week and exactly 4 claims in the first three weeks? {Example}
+> - The event is 1 claim in $(0, 1]$ and $4 - 1 = 3$ claims in $(1, 3]$.
+> - The two intervals do not overlap, so their numbers of claims are independent.
+> - $N(1)$ is Poisson with mean 2, so $P(N(1) = 1) = 2e^{-2} = 0.27067$.
+> - $N(3) - N(1)$ is Poisson with mean $2 \times 2 = 4$, so $P(N(3) - N(1) = 3) = \frac{e^{-4}\,4^3}{3!} = 0.19537$.
+> - The probability is $0.27067 \times 0.19537 = 0.0529$.
+
+## Stationary increments
+
+A counting process has stationary increments when the distribution of the number of events in an interval depends only on the length of the interval. For every $s \ge 0$ and $t > 0$, the number of events in $(s, s + t]$ has the distribution of the number of events in $(0, t]$:
+
+> $$P(N(s + t) - N(s) = k) = P(N(t) = k)$$
+
+- $k = 0, 1, 2, \ldots$.
+
+Stationary increments describe the distribution of each increment on its own. They do not make increments in different intervals independent, so a future count can depend on a past count even when the increments are stationary.
+
+| Process | Independent increments | Stationary increments |
+| --- | --- | --- |
+| [[Poisson Process]] | Yes | Yes |
+| [[Nonhomogeneous Poisson Process]] | Yes | No |
+| [[Mixed Poisson Process]] | No | Yes |
+
+> [!example]- Claims occur as a Poisson process at a rate of 3 per month. What is the probability of exactly 2 claims between the end of month 5 and the end of month 6? {Example}
+> - The increments are stationary, so $N(6) - N(5)$ has the distribution of $N(1)$.
+> - $N(1)$ is Poisson with mean 3.
+> - The probability is $\frac{e^{-3}\,3^2}{2!} = 0.2240$.
+
+> [!trap] Treating overlapping counts as independent
+> $N(1)$ and $N(3)$ are not independent, because the first week is part of both intervals. Write $P(N(1) = 1,\ N(3) = 4)$ as $P(N(1) = 1)\,P(N(3) - N(1) = 3)$, never as $P(N(1) = 1)\,P(N(3) = 4)$.

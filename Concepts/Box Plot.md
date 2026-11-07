@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:ae9fc5cd33492e13db31929876166cd2c428adbc01dd509d04ad93f17721d43d
+  content_hash: sha256:1ff26b40d1cbaf35e525fe792d48a6691ef12db7f5bcd2092c20b6b4adf1c281
   sources:
     - "NIST/SEMATECH e-Handbook of Statistical Methods, §1.3.3.7 'Box Plot' (basic box plot to min/max; 'Box plots with fences' L1/U1 = 1.5 IQ, L2/U2 = 3.0 IQ), fetched 2026-10-05 (page carries a per-request Cloudflare token, so its hash differs per fetch), sha256:67a9ab2a3aa2c1cb4abee07ce91609e67053ef2b835dd70ffae07e513305bbdd — https://www.itl.nist.gov/div898/handbook/eda/section3/boxplot.htm"
     - "NIST/SEMATECH e-Handbook of Statistical Methods, §7.1.6 'What are outliers in the data?' (inner/outer fences; mild/extreme outliers; quartiles at the .25(N+1)th/.75(N+1)th ordered points), fetched 2026-10-05, sha256:9e80560e583c4042385b7fd9ce0dff91b8b4903487d3f65db517e5e231bd66b4 — https://www.itl.nist.gov/div898/handbook/prc/section1/prc16.htm"
@@ -16,34 +16,47 @@ verification:
   log: .verify/Concepts/Box Plot.md
 ---
 
-A **Box Plot** (box-and-whisker plot) is an [[Exploratory Data Analysis]] display that summarizes a distribution with five numbers: the minimum, first quartile $Q_1$, median $Q_2$, third quartile $Q_3$, and maximum. The box spans the middle half of the data and the whiskers reach the most extreme observations that are not flagged as outliers.
+![[Media/Figures/Box_Plot.svg|340]]
+
+A **Box Plot** (box-and-whisker plot) is a plot that summarizes a sample's distribution by its [[Median|median]], its first quartile $Q_1$ and third quartile $Q_3$, and its outliers. The box runs from $Q_1$ to $Q_3$ and holds the middle half of the data, with a line at the median. The interquartile range is
 
 > $$\text{IQR} = Q_3 - Q_1$$
 
-> $$\text{potential outlier if } x < Q_1 - 1.5\,\text{IQR} \ \text{ or } \ x > Q_3 + 1.5\,\text{IQR}$$
+The lower and upper fences are
 
-- The **box** runs from $Q_1$ to $Q_3$ and holds 50% of the observations; the line inside it is the **median**, not the mean
-- The **whiskers** extend to the furthest observation within $1.5 \times \text{IQR}$ of the box; points beyond are drawn individually as outliers
-- **The convention varies.** The $1.5\,\text{IQR}$ limits are the *inner fences*; NIST calls a point beyond one a *mild* outlier and a point beyond an *outer fence*, $Q_1 - 3\,\text{IQR}$ or $Q_3 + 3\,\text{IQR}$, an *extreme* one, and its basic box plot has no fences at all — the whiskers run to the minimum and maximum. Quartiles have several definitions too: this page takes the medians of the lower and upper halves (the median itself left out when $n$ is odd), which in the example below matches NIST's $(n+1)p$-th ordered value, while R's `boxplot` uses Tukey's hinges — so software can report different quartiles and fences for the same data
-- A median sitting left of centre with a long right whisker signals **right skew** — the usual shape for claim severity
-- Box plots are read **side by side**: one box per level of a [[Categorical Predictor]] shows whether a rating variable separates the response, which is exactly the evidence needed before adding that variable to a [[Generalized Linear Model]]
-- A box plot hides multimodality — two clusters and one broad spread can give the same five numbers, so pair it with a [[Histogram]] before concluding anything about shape
-- Because it is built from [[Order Statistics]], it is resistant to extreme values: one enormous claim moves the maximum but not the box
+> $$Q_1 - 1.5\,\text{IQR} \quad \text{and} \quad Q_3 + 1.5\,\text{IQR}$$
 
-![[Media/Figures/Box_Plot.svg|340]]
+An observation outside a fence, more than $1.5\,\text{IQR}$ beyond the box, is an outlier. Each whisker extends to the most extreme observation that is not an outlier, so it ends at a data value, not at the fence. Each outlier is plotted individually beyond the whiskers.
 
-> [!example]- Building a Box Plot from a Sample {Example}
-> Eleven claim amounts (in thousands) are: $2, 3, 4, 5, 6, 7, 8, 9, 11, 14, 40$. Find the five-number summary and identify any outliers.
->
-> > [!answer]-
-> > With $n = 11$, the median is the 6th value, $Q_2 = 7$. The lower half $\{2,3,4,5,6\}$ has median $Q_1 = 4$; the upper half $\{8,9,11,14,40\}$ has median $Q_3 = 11$.
-> > $$\text{IQR} = 11 - 4 = 7$$
-> > $$\text{upper fence} = Q_3 + 1.5(7) = 11 + 10.5 = 21.5$$
-> > $$\text{lower fence} = Q_1 - 1.5(7) = 4 - 10.5 = -6.5$$
-> > The value $40 > 21.5$ is an **outlier**; the upper whisker therefore stops at $14$. The five-number summary is $(2, 4, 7, 11, 40)$ with $40$ plotted separately. It also lies beyond the outer fence $Q_3 + 3(7) = 32$, so NIST would call it an *extreme* outlier. R's `boxplot` would draw $Q_1 = 4.5$ and $Q_3 = 10$ (fences $-3.75$ and $18.25$) — different numbers, the same outlier and whisker.
+The quartiles are found here by the median of halves. Order the $n$ observations and find the median. $Q_1$ is the median of the values below the median, and $Q_3$ is the median of the values above it. When $n$ is odd, the median itself is left out of both halves. Software uses several other quartile definitions, which can give slightly different quartiles and fences.
 
-> [!example]- Comparing Vehicle Classes {Example}
-> Box plots of severity for three vehicle classes show medians of $3.1$, $3.3$, and $6.8$ (in thousands), with the first two boxes overlapping heavily and the third sitting well above them with several high outliers. What does this suggest for the model?
->
-> > [!answer]-
-> > The first two classes are not distinguished by the data and could be **grouped into one level**, saving a parameter. The third class needs its own coefficient. The high outliers and the widening spread as the median rises indicate variance growing with the mean — a **Gamma [[Generalized Linear Model]] with a log [[Link Function]]** fits that pattern better than ordinary [[Linear Regression]].
+> [!example]- Eleven claim amounts, in thousands, are 2, 3, 4, 5, 6, 7, 8, 9, 11, 14 and 40. What are the quartiles, the fences and the outliers of their box plot? {Example}
+> - With $n = 11$, the median is the 6th value, 7.
+> - The lower half is 2, 3, 4, 5, 6, so $Q_1 = 4$. The upper half is 8, 9, 11, 14, 40, so $Q_3 = 11$.
+> - $\text{IQR} = 11 - 4 = 7$, so the fences are $4 - 10.5 = -6.5$ and $11 + 10.5 = 21.5$.
+> - 40 is above 21.5, so it is the one outlier, and the upper whisker ends at 14.
+
+## Comparing groups with side-by-side box plots
+
+Side-by-side box plots, one for each level of a [[Categorical Predictor|categorical predictor]], compare the response's median, spread and outliers across the levels. They show whether the response differs by level:
+
+1. The location of a box, its median and its position, is the evidence for a difference in the mean. Levels with nearly identical boxes and medians can be grouped into one level, while a clearly shifted box suggests a separate level.
+2. Skewness shows as asymmetry within a box plot, such as an upper whisker and upper half of the box longer than the lower ones. Shorter whiskers indicate a smaller scale, not skewness.
+3. A few outliers are individual extreme observations, so they are weak evidence that a level's typical response differs.
+4. For a [[Gamma]] severity response, the standard deviation grows with the mean, so levels with larger medians also show larger spreads.
+
+> [!example]- Box plots of severity for three vehicle classes have medians of 3.1, 3.3 and 6.8 thousand. The first two boxes overlap almost completely, and the third is higher and wider, with a few high outliers. What do they show? {Example}
+> - The first two classes have nearly the same box and median, so they can be grouped into one level.
+> - The third class's box is clearly shifted upward, so it needs its own level.
+> - Its wider box is consistent with a Gamma response, whose spread grows with its mean.
+
+## What a box plot does not show
+
+A box plot reduces a sample to a few numbers, so it hides some features of the data:
+
+1. It cannot show two humps, because a unimodal and a bimodal sample can have the same quartiles.
+2. It does not show how many observations share a value, because repeated identical values are drawn as one point. A pile-up at one value is revealed by a [[Histogram|histogram]].
+3. It discards time order, so it cannot show a change at a point in time.
+
+> [!trap] Ending the whisker at the fence
+> The fence is a cut-off, not a data value. The whisker stops at the most extreme observation inside the fence, which in the example is 14, not 21.5.

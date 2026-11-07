@@ -122,4 +122,18 @@ describe('titles with math, and worked examples', () => {
     const title = html.slice(0, html.indexOf('Read the inequality.'))
     expect(title).toContain(' at a jump')
   })
+
+  it('underlines a folding title, but not a worked example, which gets no stray "Example" before its math', () => {
+    const md = (src: string) =>
+      renderToStaticMarkup(
+        <ReactMarkdown remarkPlugins={[remarkGfm, remarkMath]} components={calloutComponents}>
+          {src}
+        </ReactMarkdown>,
+      )
+    const underlined = /[ "]underline[ "]/
+    expect(md('> [!question]- Exam format\n> Three hours.')).toMatch(underlined)
+    const example = md('> [!example]- $X$ and $Y$ are each 0 or 1. {Example}\n> Answer.')
+    expect(example).not.toMatch(underlined)
+    expect(example.match(/Example/g)).toHaveLength(1)
+  })
 })

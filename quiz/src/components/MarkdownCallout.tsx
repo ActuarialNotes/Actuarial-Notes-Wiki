@@ -419,8 +419,11 @@ interface CalloutProps {
 // Every callout box, folding or not, has the same corners and spans the column,
 // so a page's boxes read as one set.
 const CALLOUT_ROUND = 'rounded-xl'
-// A folding box's title is underlined, so it reads as something to tap.
-const TOGGLE_TITLE = 'underline decoration-muted-foreground/50 decoration-1 underline-offset-4'
+// A folding box's title is underlined, so it reads as something to tap — the
+// article's own link underline (the text's colour, the default thickness), so it
+// looks like the concept links around it. A worked example is not: its pill
+// already says what it is.
+const TOGGLE_TITLE = 'underline'
 
 // The hairline under the header and the body's padding below it.
 const BODY_FRAME = 'border-t border-border/40 px-4 pb-4 pt-3'
@@ -497,14 +500,15 @@ function FoldingCallout({ type, fold, title, titleRest = [], style, pill, childr
   // the title and keeps the inline pill.
   const { title: baseTitle, weight: examWeight } =
     type === 'example' && titleRest.length === 0 && !pill ? splitWeightTag(title) : { title, weight: null }
-  const displayTitle = baseTitle || titleCase(type)
+  // A title that opens with math has no text of its own; it is not titleless.
+  const displayTitle = baseTitle || (titleRest.length > 0 ? '' : titleCase(type))
   const examPercentage = parseExamWeight(examWeight)
   const isBarGraph = examPercentage !== null
 
   const headerContent = (
     <div className="flex items-center gap-3 w-full">
       {Icon && <Icon className={`h-4 w-4 shrink-0 ${style.accentClass}`} />}
-      <span className={`font-medium flex-1 text-left ${style.noBorder ? 'text-base' : 'text-sm'} ${Icon ? 'text-foreground' : style.accentClass}${collapsible && hasBody ? ` ${TOGGLE_TITLE}` : ''}`}>
+      <span className={`font-medium flex-1 text-left ${style.noBorder ? 'text-base' : 'text-sm'} ${Icon ? 'text-foreground' : style.accentClass}${collapsible && hasBody && !pill ? ` ${TOGGLE_TITLE}` : ''}`}>
         {pill && (
           <span className="mr-2 inline-flex items-center rounded-full bg-emerald-600/15 px-2 py-0.5 align-middle text-xs font-semibold text-emerald-800 dark:bg-emerald-400/15 dark:text-emerald-200">
             {pill}

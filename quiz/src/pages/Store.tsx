@@ -138,7 +138,6 @@ export default function Store() {
   // is browsing instead, and shows the shelves.
   const kitMode = !!exam && !aisle && !refined
   const kit = useMemo(() => (kitMode && exam ? examKit(items, exam, variant) : null), [kitMode, items, exam, variant])
-  const examCounts = useMemo(() => aisleCounts(items, { exam, aisle: null, variant, body }), [items, exam, variant, body])
 
   // A filter is the same page showing something else: it replaces the history
   // entry rather than stacking one per tap (as the Resources shelf does).
@@ -274,25 +273,26 @@ export default function Store() {
           />
         )}
 
+        {/* The aisles ride above the kit as well as the shelf: with an exam
+            chosen, the first pill is that exam's kit. */}
+        <div ref={shelfTop} className="scroll-mt-16" />
+        <AisleNav value={aisle} counts={counts} kit={!!exam && !refined} onChange={a => choose({ aisle: a })} />
+
         {kit && exam ? (
           <ExamKit
             examKey={exam}
             examName={examName ?? exam}
             kit={kit}
-            done={new Set(kitTicks.done[exam] ?? [])}
-            onToggle={step => kitTicks.toggle(exam, step)}
+            picks={kitTicks.done[exam] ?? {}}
+            onPick={(step, value) => kitTicks.pick(exam, step, value)}
             today={today}
             isPro={isPro}
-            counts={examCounts}
             onOpen={setOpen}
             onCompare={(kinds, title) => setComparing({ exam, kinds, title })}
-            onBrowse={a => seeAll(a)}
+            onTextbooks={() => seeAll('textbooks')}
           />
         ) : (
           <>
-            <div ref={shelfTop} className="scroll-mt-16" />
-            <AisleNav value={aisle} counts={counts} onChange={a => choose({ aisle: a })} />
-
             {/* The refinements, one row of pills under the aisles. Registration is
                 one fee per exam — nothing to narrow by price or maker — so it has none. */}
             {aisle !== 'registration' && (
@@ -449,10 +449,13 @@ export default function Store() {
 function AisleNav({
   value,
   counts,
+  kit,
   onChange,
 }: {
   value: StoreAisle | null
   counts: Record<StoreAisle, number>
+  /** One exam chosen and nothing narrowed: the first pill is its kit, not "Everything". */
+  kit: boolean
   onChange: (aisle: StoreAisle | null) => void
 }) {
   const total = STORE_AISLES.reduce((n, a) => n + counts[a], 0)
@@ -461,8 +464,8 @@ function AisleNav({
       aria-label="Aisles"
       className="sticky top-14 z-20 -mx-4 flex gap-2 overflow-x-auto bg-background/95 px-4 py-2 backdrop-blur-sm [scrollbar-width:none] sm:-mx-6 sm:px-6 [&::-webkit-scrollbar]:hidden"
     >
-      <AislePill active={value === null} onClick={() => onChange(null)} count={total}>
-        Everything
+      <AislePill active={value === null} onClick={() => onChange(null)} count={kit ? null : total}>
+        {kit ? 'Your kit' : 'Everything'}
       </AislePill>
       {STORE_AISLES.map(a => {
         const Icon = AISLE_ICON[a]
@@ -486,7 +489,7 @@ function AislePill({
 }: {
   active: boolean
   disabled?: boolean
-  count: number
+  count: number | null
   onClick: () => void
   children: ReactNode
 }) {
@@ -504,7 +507,9 @@ function AislePill({
       )}
     >
       {children}
-      <span className={cn('text-xs tabular-nums', active ? 'text-primary-foreground/70' : 'text-muted-foreground')}>{count}</span>
+      {count !== null && (
+        <span className={cn('text-xs tabular-nums', active ? 'text-primary-foreground/70' : 'text-muted-foreground')}>{count}</span>
+      )}
     </button>
   )
 }

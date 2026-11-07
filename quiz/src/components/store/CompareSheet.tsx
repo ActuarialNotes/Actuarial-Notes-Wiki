@@ -2,12 +2,16 @@
 // each thing the sellers state (the price, the kind, how many options, what's
 // included, every fact any of them prints — "Format", "Access", "By" — the
 // exam windows, the reviews, the date the page was read) is a section, and
-// under it every product answers in its own line, keyed by its number. Nothing
+// under it every product answers in its own line, headed by its seller's logo
+// and its name — never a number to look up, so nothing has to be remembered
+// between sections. The products list at the top picks which of them are
+// compared: weighing two manuals is two lines a section, not eight. Nothing
 // scrolls sideways, so it reads the same on a phone as on a desk.
 //
 // The price section draws every range on one scale (`lib/storeKit.ts`), so a
 // $69–$99 bank and a $222–$794 course are told apart at a glance, and marks the
-// lowest. A line a seller doesn't fill is a dash, never a guess — the Store's
+// lowest. The bars are the page's ink, not the exam's colour: the colour marks
+// what is chosen (style guide §7.0), and a price isn't. A line a seller doesn't fill is a dash, never a guess — the Store's
 // rule, transcribed never constructed (docs/store.md).
 //
 // Opened from the kit, it holds one step's kinds (`kinds`, titled by the
@@ -74,24 +78,33 @@ export function CompareSheet({
   const titleId = useId()
   const { panelRef, closeRef } = useStoreDialog(onClose)
   const [kind, setKind] = useState<StudyKind | null>(null)
+  // The products the reader has taken out of the comparison (none, at first).
+  const [left, setLeft] = useState<ReadonlySet<string>>(new Set())
 
   const all = useMemo(
     () => comparisonFor(items, examKey).filter(i => !only || only.includes(i.study.kind)),
     [items, examKey, only],
   )
   const kinds = STUDY_KIND_ORDER.filter(k => all.some(i => i.study.kind === k))
-  const shown = kind && kinds.includes(kind) ? all.filter(i => i.study.kind === kind) : all
+  const listed = kind && kinds.includes(kind) ? all.filter(i => i.study.kind === kind) : all
+  const shown = listed.filter(i => !left.has(i.id))
   const labels = comparisonFactLabels(shown.map(i => i.study))
   const cheapest = Math.min(...shown.map(i => lowestPrice(i) ?? Infinity))
   const scale = priceScale(shown)
   const examName = exams.find(e => e.key === examKey)?.name ?? examKey
-  const key = (item: StudyItem) => shown.indexOf(item) + 1
+  const toggleLeft = (id: string) =>
+    setLeft(prev => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
 
   /** A section: one question, every product's answer under it. */
   const section = (label: string, answer: (item: StudyItem) => ReactNode) => (
     <Section key={label} label={label}>
       {shown.map(item => (
-        <Line key={item.id} n={key(item)}>{answer(item)}</Line>
+        <Line key={item.id} item={item}>{answer(item)}</Line>
       ))}
     </Section>
   )
@@ -116,7 +129,7 @@ export function CompareSheet({
               <h2 id={titleId} className="min-w-0 flex-1 text-xl font-bold leading-tight tracking-tight">
                 {title ?? 'Compare study materials'}
                 <span className="block text-sm font-normal text-muted-foreground">
-                  {examName} · {shown.length} of {all.length}
+                  {examName} · comparing {shown.length} of {listed.length}
                 </span>
               </h2>
               <button
@@ -140,6 +153,7 @@ export function CompareSheet({
                   title={exam.name}
                   onClick={() => {
                     setKind(null)
+                    setLeft(new Set())
                     onExam(exam.key)
                   }}
                   className={cn(
@@ -158,7 +172,10 @@ export function CompareSheet({
                     key={k ?? 'all'}
                     type="button"
                     aria-pressed={kind === k}
-                    onClick={() => setKind(k)}
+                    onClick={() => {
+                      setKind(k)
+                      setLeft(new Set())
+                    }}
                     data-sound="select"
                     className={cn(
                       'shrink-0 whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-medium transition-colors',
@@ -173,37 +190,69 @@ export function CompareSheet({
           </header>
 
           <div className="min-h-0 flex-1 space-y-5 overflow-y-auto overscroll-contain px-4 py-4 sm:px-5" data-testid="store-compare-body">
-            {shown.length === 0 ? (
+            {listed.length === 0 ? (
               <p className="px-1 text-sm text-muted-foreground">Nothing to compare for {examName} yet.</p>
             ) : (
               <>
-                <ol className="overflow-hidden rounded-2xl bg-card" aria-label="Products">
-                  {shown.map((item, i) => {
-                    const seller = STORE_SELLERS[item.study.offer.sellerId]
-                    return (
-                      <li key={item.id} className={cn('flex items-center gap-3 px-4 py-3', i > 0 && 'border-t border-border')}>
-                        <Key n={i + 1} />
-                        <button
-                          type="button"
-                          onClick={() => onOpen(item)}
-                          className="min-w-0 flex-1 text-left text-sm font-semibold leading-snug underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                        >
-                          {item.name}
-                        </button>
-                        {seller && (
-                          <span className="flex max-w-[40%] shrink-0 items-center gap-1.5 text-xs text-muted-foreground">
-                            <SellerLogo seller={seller} size="xs" />
-                            <span className="truncate">{seller.name}</span>
-                          </span>
-                        )}
-                      </li>
-                    )
-                  })}
-                </ol>
+                <section aria-labelledby={`${titleId}-pick`}>
+                  <h3 id={`${titleId}-pick`} className="flex items-baseline justify-between gap-2 px-4 pb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    Compare
+                    {listed.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => setLeft(left.size ? new Set() : new Set(listed.slice(2).map(i => i.id)))}
+                        className="font-medium normal-case tracking-normal text-foreground underline-offset-2 hover:underline"
+                      >
+                        {left.size ? 'Show all' : 'Just the first two'}
+                      </button>
+                    )}
+                  </h3>
+                  <ul className="overflow-hidden rounded-2xl bg-card" aria-label="Products">
+                    {listed.map((item, i) => {
+                      const seller = STORE_SELLERS[item.study.offer.sellerId]
+                      const on = !left.has(item.id)
+                      return (
+                        <li key={item.id} className={cn('flex items-center gap-1 pl-1 pr-4', i > 0 && 'border-t border-border')}>
+                          <button
+                            type="button"
+                            role="checkbox"
+                            aria-checked={on}
+                            aria-label={`Compare ${item.name}`}
+                            onClick={() => toggleLeft(item.id)}
+                            data-sound="select"
+                            className="flex h-12 w-11 shrink-0 items-center justify-center rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                          >
+                            {on ? (
+                              <CheckMark className="h-5 w-5 text-foreground" />
+                            ) : (
+                              <span aria-hidden className="h-5 w-5 rounded-full border-2 border-muted-foreground/50" />
+                            )}
+                          </button>
+                          {seller && <SellerLogo seller={seller} size="xs" />}
+                          <button
+                            type="button"
+                            onClick={() => onOpen(item)}
+                            className={cn(
+                              'min-w-0 flex-1 py-3 pl-2 text-left text-sm font-semibold leading-snug underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                              !on && 'text-muted-foreground',
+                            )}
+                          >
+                            {item.name}
+                            {seller && <span className="block text-xs font-normal text-muted-foreground">{seller.name}</span>}
+                          </button>
+                        </li>
+                      )
+                    })}
+                  </ul>
+                </section>
 
+                {shown.length === 0 ? (
+                  <p className="px-4 text-sm text-muted-foreground">Tick the products to compare above.</p>
+                ) : (
+                <>
                 <Section label="Price" note={scale ? `On one scale, $0 to ${formatPrice({ amount: scale, currency: 'USD' })}` : undefined}>
                   {shown.map(item => (
-                    <Line key={item.id} n={key(item)}>
+                    <Line key={item.id} item={item}>
                       <PriceAnswer item={item} scale={scale} cheapest={shown.length > 1 && lowestPrice(item) === cheapest} />
                     </Line>
                   ))}
@@ -223,7 +272,7 @@ export function CompareSheet({
 
                 <Section label="Where to buy">
                   {shown.map(item => (
-                    <Line key={item.id} n={key(item)}>
+                    <Line key={item.id} item={item}>
                       <a
                         href={item.study.offer.url}
                         target="_blank"
@@ -238,6 +287,8 @@ export function CompareSheet({
                     </Line>
                   ))}
                 </Section>
+                </>
+                )}
               </>
             )}
 
@@ -248,15 +299,6 @@ export function CompareSheet({
         </div>
       </div>
     </OverlayPortal>
-  )
-}
-
-/** A product's number, the key every section's lines are read by. */
-function Key({ n }: { n: number }) {
-  return (
-    <span aria-hidden className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-bold tabular-nums">
-      {n}
-    </span>
   )
 }
 
@@ -272,13 +314,21 @@ function Section({ label, note, children }: { label: string; note?: string; chil
   )
 }
 
-function Line({ n, children }: { n: number; children: ReactNode }) {
+/**
+ * One product's answer to a section's question, headed by the product itself —
+ * its seller's logo and its name — so a line reads on its own. On a phone the
+ * name sits over the answer; wider, beside it.
+ */
+function Line({ item, children }: { item: StudyItem; children: ReactNode }) {
   const empty = children === null || children === undefined || children === ''
+  const seller = STORE_SELLERS[item.study.offer.sellerId]
   return (
-    <li className="flex items-start gap-3 border-t border-border px-4 py-3 text-sm leading-snug first:border-t-0">
-      <span className="sr-only">Product {n}: </span>
-      <Key n={n} />
-      <span className="min-w-0 flex-1 pt-0.5">
+    <li className="flex flex-col gap-1.5 border-t border-border px-4 py-3 text-sm leading-snug first:border-t-0 sm:flex-row sm:items-start sm:gap-4">
+      <span className="flex min-w-0 items-center gap-2 sm:w-52 sm:shrink-0">
+        {seller && <SellerLogo seller={seller} size="xs" />}
+        <span className="min-w-0 truncate text-xs font-semibold text-muted-foreground" title={item.name}>{item.name}</span>
+      </span>
+      <span className="min-w-0 flex-1">
         {empty ? <span className="text-muted-foreground" aria-label="Not stated">—</span> : children}
       </span>
     </li>
@@ -297,7 +347,7 @@ function PriceAnswer({ item, scale, cheapest }: { item: StudyItem; scale: number
           <span className="relative h-1.5 flex-1 rounded-full bg-muted" aria-hidden>
             {bar && (
               <span
-                className="absolute top-0 h-1.5 min-w-[6px] rounded-full bg-[var(--exam-accent-vivid)]"
+                className="absolute top-0 h-1.5 min-w-[6px] rounded-full bg-foreground/60"
                 style={{ left: `${bar.left}%`, width: `${bar.width}%` }}
               />
             )}
@@ -311,7 +361,7 @@ function PriceAnswer({ item, scale, cheapest }: { item: StudyItem; scale: number
       {(cheapest || item.study.offer.price?.note) && (
         <span className="flex flex-wrap items-center gap-2">
           {cheapest && (
-            <span className="rounded-full bg-[var(--exam-accent-vivid)] px-2 py-0.5 text-[11px] font-semibold text-white">Lowest price</span>
+            <span className="rounded-full bg-muted px-2 py-0.5 text-[11px] font-semibold">Lowest price</span>
           )}
           {item.study.offer.price?.note && <span className="text-xs text-muted-foreground">{item.study.offer.price.note}</span>}
         </span>

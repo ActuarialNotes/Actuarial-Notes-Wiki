@@ -25,11 +25,14 @@ test.describe('store', () => {
     await kit.getByRole('button', { name: /^Calculator\s*\d+ allowed/ }).click()
     await expect(page.getByTestId('store-item-ba-ii-plus')).toBeVisible()
 
-    // Browsing an aisle leaves the kit for that aisle's shelf.
-    await kit.getByRole('button', { name: /^Calculators/ }).click()
+    // The aisles ride above the kit: one leaves it for that aisle's shelf, and
+    // the first pill comes back to the kit.
+    await page.getByRole('navigation', { name: 'Aisles' }).getByRole('button', { name: /^Calculators/ }).click()
     await expect(page).toHaveURL(/aisle=calculators/)
     await expect(page.getByTestId('store-kit')).toHaveCount(0)
     await expect(page.getByRole('heading', { name: 'Registration', exact: true })).toHaveCount(0)
+    await page.getByRole('button', { name: 'Your kit' }).click()
+    await expect(page.getByTestId('store-kit')).toBeVisible()
 
     await expect(page.getByText('Something went wrong')).toHaveCount(0)
   })
@@ -107,20 +110,42 @@ test.describe('store', () => {
     await expect(next).toContainText('Calculator')
     await expect(page.getByTestId('store-kit-progress')).toHaveAttribute('aria-label', /^1 of 5 steps sorted/)
 
-    // The tick outlives the visit.
-    await page.reload()
+    // Undo puts it back, and so does its tick, which stays on the step.
+    await page.getByTestId('store-kit-undo').getByRole('button', { name: 'Undo' }).click()
+    await expect(page.getByTestId('store-kit-next')).toContainText('Register')
+    await page.getByRole('button', { name: 'Mark Register sorted' }).click()
     await expect(page.getByTestId('store-kit-next')).toContainText('Calculator')
+    await page.getByRole('button', { name: /^Register: sorted/ }).click()
+    await expect(page.getByTestId('store-kit-next')).toContainText('Register')
+    await page.getByRole('button', { name: 'Mark Register sorted' }).click()
+
+    // The calculator step asks which one; the pick names the step.
+    await page.getByRole('radio', { name: 'I have BA II Plus', exact: true }).click()
+    await expect(page.getByTestId('store-kit-step-calculator')).toContainText('You have the BA II Plus')
+    await expect(page.getByTestId('store-kit-progress')).toHaveAttribute('aria-label', /^2 of 5 steps sorted/)
+
+    // The picks outlive the visit.
+    await page.reload()
+    await expect(page.getByTestId('store-kit-next')).toContainText('Learn the syllabus')
+    await expect(page.getByTestId('store-kit-step-calculator')).toContainText('You have the BA II Plus')
   })
 
   test('compares a step’s study materials, question by question', async ({ page }) => {
     await page.goto('/store?exam=MAS-I')
-    await page.getByRole('button', { name: /Learn the syllabus/ }).click()
+    await page.getByRole('button', { name: /^Learn the syllabus/ }).click()
     await page.getByTestId('store-compare').click()
     const sheet = page.getByTestId('store-compare-sheet')
     await expect(sheet).toBeVisible()
     await expect(sheet).toContainText('Exam MAS-I')
     await expect(sheet.getByRole('region', { name: 'Price', exact: true })).toBeVisible()
-    await expect(sheet.getByRole('button', { name: 'ASM Study Manual Program for CAS Exam MAS-I' })).toBeVisible()
+    await expect(sheet.getByRole('button', { name: /^ASM Study Manual Program for CAS Exam MAS-I/ })).toBeVisible()
+
+    // Every answer is headed by its product's name, not a number to look up;
+    // taking a product out of the comparison takes its lines out too.
+    const price = sheet.getByRole('region', { name: 'Price', exact: true })
+    await expect(price.getByText('ASM Study Manual Program for CAS Exam MAS-I')).toBeVisible()
+    await sheet.getByRole('checkbox', { name: 'Compare ASM Study Manual Program for CAS Exam MAS-I' }).click()
+    await expect(price.getByText('ASM Study Manual Program for CAS Exam MAS-I')).toHaveCount(0)
 
     // Another exam from the sheet's own strip.
     await sheet.getByRole('radio', { name: 'Exam FM' }).click()
@@ -133,7 +158,7 @@ test.describe('store', () => {
   test('the comparison reads on a phone without scrolling sideways', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 })
     await page.goto('/store?exam=MAS-I')
-    await page.getByRole('button', { name: /Learn the syllabus/ }).click()
+    await page.getByRole('button', { name: /^Learn the syllabus/ }).click()
     await page.getByTestId('store-compare').click()
     const body = page.getByTestId('store-compare-body')
     await expect(body).toBeVisible()

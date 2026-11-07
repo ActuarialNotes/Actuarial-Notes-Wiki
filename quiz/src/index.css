@@ -41,6 +41,13 @@
        slides (see "Paper on a desk"), so it is a step darker than the page. */
     --desk: 0 0% 80%;
     --shadow-sheet: rgba(0,0,0,0.30);
+    /* The pick — the fill of whatever is *chosen* (a selected chip, an open
+       dropdown, the picked menu row, an active tool). Black and white outside
+       an exam; `examAccentStyle` sets it to the exam's own vivid hue inside
+       one. A full colour, not an HSL triple, so the exam can replace it.
+       Style guide §7.0 (Ink). */
+    --pick: hsl(var(--foreground));
+    --pick-foreground: hsl(var(--background));
   }
 
   .dark {
@@ -66,6 +73,8 @@
     --ring: 0 0% 100%;
     --desk: 0 0% 13%;
     --shadow-sheet: rgba(0,0,0,0.75);
+    --pick: hsl(var(--foreground));
+    --pick-foreground: hsl(var(--background));
   }
 }
 

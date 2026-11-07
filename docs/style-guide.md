@@ -521,8 +521,9 @@ element type — match it:
 
 | Element | Radius |
 |---|---|
-| Pills, badges, avatars, icon buttons, rings | `rounded-full` |
-| Buttons, inputs, nav items, small controls | `rounded-md` |
+| Buttons, chips, segments, pills, badges, avatars, icon buttons, rings | `rounded-full` |
+| Dropdown triggers (`rounded-lg`), header tool tiles (10px), menu rows (`rounded-lg`) | see §7.0 |
+| Inputs, nav items | `rounded-md` |
 | **Cards & panels** | `rounded-lg` |
 | Larger feature cards / sheets | `rounded-xl` |
 | Modals / dialogs | `rounded-2xl` |
@@ -558,10 +559,39 @@ raw `shadow-md`. Don't invent new shadow recipes for standard surfaces.
 Use the primitives in `quiz/src/components/ui/` (shadcn-style, CVA variants). Extend a variant
 before writing a bespoke element.
 
+### 7.0 Ink — the control style
+
+Every pill, button, chip and dropdown follows one style, **Ink**. Its class strings live in
+`components/ui/ink.ts` (dropdown triggers and menus, tool tiles, chips) and
+`components/ui/buttonVariants.ts` (buttons). Four rules:
+
+1. **Nothing is filled at rest.** A control is its words or its icon. A press or hover lays a
+   light wash under it (`hover:bg-muted`). No borders on controls.
+2. **What is chosen goes solid, in the pick.** A selected chip or segment, an open dropdown
+   trigger, the picked menu row, an active tool, a filter that narrows the list: all
+   `bg-pick text-pick-foreground`. The pick is black on white / white on black — **or the
+   exam's own colour inside an exam's scope**: `examAccentStyle` sets `--pick` to the exam's
+   vivid hue (white text on it). A menu that portals out of the scope spreads
+   `examAccentStyle` onto itself (`ExamVersionMenu`). The picked menu row ends in the
+   `CheckMark`, in the row's text colour.
+3. **A dropdown is a bold label and a chevron** (`inkTrigger`, 40px, `text-base font-semibold`),
+   the same on the exam strip, the filter rows and the concept popup's footer; its menu is
+   `INK_MENU` with `inkMenuItem` rows (40px, 15px text).
+4. **The committing action is the inverted solid** (`Button` `default`, `bg-primary`) — never
+   the exam colour. So colour reads as *chosen* and black/white as *do it*. The **Return to
+   quiz** pill is the inverted solid too: the one filled object on a page.
+
+An exam's header strip draws its tools as **labelled tiles** (`inkToolTile`: an 18px icon over
+an 11px word — Info, Syllabus, Quiz, Project, Study Guide), solid while the panel each opens
+is open (`aria-expanded`).
+
 ### 7.1 Buttons (`button.tsx`)
 
-Variants: `default` (solid primary), `destructive`, `outline`, `secondary`, `ghost`, `link`.
-Sizes: `default` (h-10), `sm` (h-9), `lg` (h-11), `icon` (h-10 w-10).
+Variants: `default` (inverted solid), `destructive`, `outline`, `secondary`, `ghost`, `link`.
+Sizes: `default` (h-11, 15px), `sm` (h-9), `lg` (h-12), `icon` (h-10 w-10). Every button is a
+pill (`rounded-full`). `outline` and `secondary` are semibold words with no fill; `ghost` is the
+same in the muted colour. All three go solid in the pick while `aria-expanded` or
+`aria-pressed` is true (§7.0).
 
 - **One `default` per view.** Secondary actions → `outline`/`secondary`; tertiary → `ghost` or
   `link`. Cancel in a dialog is `ghost`/`outline`, confirm is `default` (or `destructive`).
@@ -638,16 +668,16 @@ Exam", a question count. **Always this component**, never a hand-rolled row of b
 four of those had accumulated in two different shapes, none announcing itself as a group.
 
 ```
-Group:     rounded-lg border border-border bg-muted/50 p-0.5   role="radiogroup" + aria-label
-Option:    h-9 (sm) / h-10 (md) rounded-md                     role="radio" + aria-checked
-Selected:  bg-background text-foreground shadow-sm
+Group:     flex gap-1 (no tray)                                  role="radiogroup" + aria-label
+Option:    h-9 (sm) / h-10 (md) rounded-full, words at rest     role="radio" + aria-checked
+Selected:  bg-pick text-pick-foreground font-semibold
 ```
 
 Two rules the component enforces for you:
 
-- **The selected option is a raised neutral, never `bg-primary`.** A segmented control is a
-  refinement, not the view's committing action; a solid primary fill here competes with the
-  one button that is (§1.2, §7.1).
+- **The selected option is the pick, never `bg-primary`** (§7.0). Outside an exam the pick
+  looks like the primary fill, but it is a different token: inside an exam it is the exam's
+  colour, and it never takes the committing action's place.
 - **Roving tabindex + arrow keys.** One tab stop for the group, arrows move within it and
   wrap. `role="radio"` also earns the `select` cue from the delegated sound listener, which
   is the right cue for "picked one of several" (`docs/sound-design.md`).

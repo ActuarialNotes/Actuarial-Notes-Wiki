@@ -93,9 +93,13 @@ describe('examAccentStyle', () => {
     const style = examAccentStyle('CAS-5') as Record<string, string>
     expect(Object.keys(style).sort()).toEqual([
       '--exam-accent', '--exam-accent-muted', '--exam-accent-soft', '--exam-accent-vivid',
+      '--pick', '--pick-foreground',
     ])
     expect(style['--exam-accent']).toBe('hsl(290.5 75% 55%)')
     expect(style['--exam-accent-soft']).toContain('/ 0.14')
     expect(style['--exam-accent-vivid']).toBe('hsl(290.5 88% 46%)')
+    // The pick is the exam's vivid hue, white on it.
+    expect(style['--pick']).toBe(style['--exam-accent-vivid'])
+    expect(style['--pick-foreground']).toBe('hsl(0 0% 100%)')
   })
 })

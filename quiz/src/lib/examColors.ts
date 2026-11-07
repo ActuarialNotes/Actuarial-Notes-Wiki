@@ -32,6 +32,11 @@
 //   --exam-accent-vivid   the hue turned up and darkened: a filled shape
 //                         carrying white text, where the accent is the
 //                         subject rather than a highlight (the exam logo)
+//   --pick / --pick-foreground
+//                         the Ink pick: the vivid hue with white on it, so a
+//                         chosen chip, an open dropdown or an active tool
+//                         inside the exam's scope fills with the exam's colour
+//                         (black/white outside one — index.css)
 //
 //   <Card style={examAccentStyle('CAS-5')}
 //         className="ring-1 ring-transparent hover:ring-[var(--exam-accent)]
@@ -164,6 +169,10 @@ export function examAccentStyle(examKey: string): CSSProperties | undefined {
     '--exam-accent-muted': examAccent(examKey, 0.45),
     '--exam-accent-soft': examAccent(examKey, 0.14),
     '--exam-accent-vivid': examAccentVivid(examKey),
+    // Inside an exam, what is chosen goes solid in the exam's hue rather than
+    // black/white (the Ink pick, style guide §7.0).
+    '--pick': examAccentVivid(examKey),
+    '--pick-foreground': 'hsl(0 0% 100%)',
   } as CSSProperties
 }
 

@@ -1,6 +1,8 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { ChevronDown } from 'lucide-react'
 import { placeMenu } from '@/lib/menuPlacement'
+import { CheckMark } from '@/components/CheckMark'
+import { INK_MENU, INK_MENU_HEADING, inkChevron, inkMenuItem, inkTrigger } from '@/components/ui/ink'
 
 interface MultiSelectOption {
   value: string
@@ -23,13 +25,8 @@ interface MultiSelectDropdownProps {
    *  A dropdown with no options stays on screen, disabled, so a filter the
    *  surface always offers doesn't come and go with the pool. */
   emptyTitle?: string
-  /** The pill's resting fill while nothing is chosen. `background` suits a
-   *  row on a card or panel; on the page itself it would leave the pill
-   *  without a shape, so a page's own filter row (the Resources shelf) takes
-   *  `card`. */
-  surface?: 'background' | 'card'
-  /** `pill` draws the trigger as a compact outlined pill, the shape of the
-   *  toggles it sits in a row with (the Store's Free). */
+  /** `pill` draws the trigger a size smaller, the height of the chips it
+   *  sits in a row with (the Store's Free). */
   shape?: 'tile' | 'pill'
   /** One choice at a time — a radio mark, and picking closes the menu. The
    *  Resources shelf's Vintage: an edition of the syllabus, never two. */
@@ -39,8 +36,10 @@ interface MultiSelectDropdownProps {
   allByDefault?: boolean
 }
 
-/** A pill-style button that opens a checkbox list for multi-selecting options
- *  (or, with `single`, a radio list for picking one).
+/** An Ink dropdown (style guide §7.0) — a bold label and a chevron that opens a
+ *  list for multi-selecting options (or, with `single`, picking one). Picked
+ *  rows go solid in the pick, and so does the trigger while it is open or
+ *  while the filter narrows the list.
  *  The Concepts, Source, Exam and Sitting filters of every question list
  *  (`QuestionFilterBar`) and the Exam, Publisher, Year and Vintage filters of the
  *  Resources shelf (`pages/wiki/WikiResources.tsx`) are drawn with it, and so
@@ -53,7 +52,6 @@ export function MultiSelectDropdown({
   onToggle,
   getCount,
   emptyTitle,
-  surface = 'background',
   shape = 'tile',
   single: singleChoice = false,
   allByDefault = false,
@@ -113,29 +111,24 @@ export function MultiSelectDropdown({
         disabled={empty}
         title={empty ? emptyTitle : undefined}
         aria-label={single !== null ? `${label}: ${displayLabel}` : undefined}
-        className={`flex items-center text-sm font-medium transition-colors whitespace-nowrap disabled:opacity-40 disabled:cursor-not-allowed ${
-          shape === 'pill' ? 'gap-1 rounded-full border px-3 py-1.5' : 'gap-2 rounded-lg px-4 py-2.5'
-        } ${
-          highlighted
-            ? `bg-primary/10 text-primary${shape === 'pill' ? ' border-primary/40' : ''}`
-            : `${surface === 'card' ? 'bg-card' : 'bg-background'} enabled:hover:bg-accent`
-        }`}
+        aria-expanded={open}
+        className={inkTrigger(open || highlighted, shape === 'pill' ? 'h-9 rounded-full px-3 text-sm' : undefined)}
       >
         <span className="max-w-[14rem] truncate">{displayLabel}</span>
-        <ChevronDown className={`${shape === 'pill' ? 'h-3.5 w-3.5' : 'h-4 w-4'} transition-transform shrink-0 ${open ? 'rotate-180' : ''}`} />
+        <ChevronDown className={inkChevron(open, shape === 'pill' ? 'h-3.5 w-3.5' : undefined)} />
       </button>
       {open && !empty && (
         <div
           ref={menuRef}
           style={{ left: menuShift }}
-          className="absolute top-full mt-1 z-20 bg-card rounded-lg shadow-lg w-max min-w-[200px] max-w-[18rem] py-1.5 max-h-72 overflow-y-auto">
+          className={`absolute top-full mt-1.5 z-20 w-max min-w-[200px] max-w-[18rem] max-h-72 overflow-y-auto ${INK_MENU}`}>
           {options.map((opt, i) => {
             const count = getCount?.(opt.value)
             const heading = opt.group && opt.group !== options[i - 1]?.group ? opt.group : null
             return (
               <div key={opt.value}>
                 {heading && (
-                  <p className="px-4 pt-2.5 pb-1 text-xs font-medium text-muted-foreground">{heading}</p>
+                  <p className={INK_MENU_HEADING}>{heading}</p>
                 )}
                 <button
                   type="button"
@@ -146,35 +139,26 @@ export function MultiSelectDropdown({
                     onToggle(opt.value)
                     if (singleChoice) setOpen(false)
                   }}
-                  className="flex items-center gap-3 w-full px-4 py-3 text-sm hover:bg-accent transition-colors text-left"
+                  aria-pressed={singleChoice ? undefined : selected.has(opt.value)}
+                  className={inkMenuItem(selected.has(opt.value))}
                 >
-                  <div
-                    className={`h-4 w-4 ${singleChoice ? 'rounded-full' : 'rounded'} border flex items-center justify-center shrink-0 ${
-                      selected.has(opt.value) ? 'bg-primary border-primary' : 'border-input bg-background'
-                    }`}
-                  >
-                    {selected.has(opt.value) && singleChoice && (
-                      <span className="h-1.5 w-1.5 rounded-full bg-primary-foreground" />
-                    )}
-                    {selected.has(opt.value) && !singleChoice && (
-                      <svg className="h-2.5 w-2.5 text-primary-foreground" fill="none" viewBox="0 0 10 10">
-                        <path d="M2 5L4 7L8 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    )}
-                  </div>
                   {opt.hint ? (
                     <span className="flex-1 min-w-0">
                       <span className="capitalize">{opt.label}</span>
-                      <span className="block text-xs text-muted-foreground leading-snug">{opt.hint}</span>
+                      <span className="block text-xs font-normal opacity-75 leading-snug">{opt.hint}</span>
                     </span>
                   ) : (
                     <span className="capitalize flex-1">{opt.label}</span>
                   )}
                   {count !== undefined && (
-                    <span className="ml-2 text-xs bg-muted text-muted-foreground rounded-full px-2 py-0.5 min-w-[1.5rem] text-center font-medium">
+                    <span className="ml-2 text-xs font-medium tabular-nums opacity-75 min-w-[1.5rem] text-right">
                       {count}
                     </span>
                   )}
+                  {/* The pick is solid; its check is the app's one checkmark, in the pick's text colour. */}
+                  {selected.has(opt.value)
+                    ? <CheckMark className="h-4 w-4 text-current" />
+                    : <span className="h-4 w-4 shrink-0" aria-hidden />}
                 </button>
               </div>
             )

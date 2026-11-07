@@ -6,6 +6,7 @@ import { useSearchTracking } from '@/hooks/useSearchTracking'
 import { backLabel, type Back } from '@/hooks/useBack'
 import { RESTORE_SCROLL } from '@/lib/routeScrollMemory'
 import { cn } from '@/lib/utils'
+import { inkChip } from '@/components/ui/ink'
 import type { ExamStatus } from '@/lib/examStatus'
 
 /**
@@ -268,10 +269,7 @@ export function SearchScopePill({ active, disabled, onClick, children }: SearchS
       disabled={disabled}
       aria-pressed={active}
       data-sound="select"
-      className={cn(
-        'rounded-full px-3 py-1 text-xs font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40',
-        active ? 'bg-primary text-primary-foreground' : 'bg-accent text-foreground hover:bg-accent/80',
-      )}
+      className={inkChip(active, 'h-8 px-3')}
     >
       {children}
     </button>

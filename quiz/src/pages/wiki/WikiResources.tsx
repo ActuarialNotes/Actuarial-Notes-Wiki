@@ -337,7 +337,6 @@ export default function WikiResources() {
               onToggle={value => toggle(facet, value)}
               getCount={value => counts.get(value) ?? 0}
               emptyTitle={EMPTY_TITLE[facet]}
-              surface="card"
             />
           )
         })}
@@ -354,7 +353,6 @@ export default function WikiResources() {
                 ? 'Choose one region to see its syllabus by edition'
                 : 'Choose one exam to see its syllabus by edition'
           }
-          surface="card"
           single
         />
       </div>

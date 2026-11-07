@@ -9,7 +9,7 @@ import { sittingVersionLabel, type ExamSitting } from '@/data/examSittings'
 import { sittingTimeline } from '@/lib/sittingTimeline'
 import { SittingTimeline } from '@/components/SittingTimeline'
 import { todayISO } from '@/lib/studyPlan'
-import { cn } from '@/lib/utils'
+import { inkToolTile } from '@/components/ui/ink'
 
 /**
  * **About this sitting** — the study guide's info button, in the sticky header
@@ -62,13 +62,10 @@ export function ExamSittingInfoButton({
         aria-haspopup="dialog"
         aria-expanded={open}
         title={label}
-        className={cn(
-          'inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-accent hover:text-foreground',
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring not-prose',
-          open && 'bg-accent text-foreground',
-        )}
+        className={inkToolTile(open)}
       >
-        <Info className="h-4 w-4" aria-hidden />
+        <Info className="h-[18px] w-[18px]" aria-hidden />
+        <span aria-hidden>Info</span>
       </button>
       {open && (
         <ExamSittingInfoDialog

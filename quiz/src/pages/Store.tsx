@@ -281,7 +281,6 @@ export default function Store() {
             </button>
             <MultiSelectDropdown
               label="Price"
-              surface="card"
               shape="pill"
               options={PRICE_BANDS.map(b => ({ value: b.id, label: b.label }))}
               selected={new Set(prices)}
@@ -289,7 +288,6 @@ export default function Store() {
             />
             <MultiSelectDropdown
               label="Publisher"
-              surface="card"
               shape="pill"
               options={[
                 ...options.publishers.map(([name]) => ({ value: name, label: name, group: 'Publishers' })),

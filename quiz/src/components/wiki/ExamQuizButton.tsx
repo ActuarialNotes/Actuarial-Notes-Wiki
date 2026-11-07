@@ -17,9 +17,8 @@ export function ExamQuizButton({ examFileName }: { examFileName: string }) {
     <HeaderLinkButton
       to={`/?topic=${encodeURIComponent(topic)}&mode=quiz`}
       icon={Play}
-      label="Start Quiz"
+      label="Quiz"
       title="Quiz on this exam's questions"
-      iconOnlyOnPhone
     />
   )
 }

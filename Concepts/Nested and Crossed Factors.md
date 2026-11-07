@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:ec5403b37fe16bf206d6e377cbbf9f139acf746604df57d6c5a0a962d37922c4
+  content_hash: sha256:a0cbcd5cddce388ed971c08f07aaa13cb64a72636ac0d412dc25870bc97c7933
   sources:
     - "Bates, Maechler, Bolker & Walker, Fitting Linear Mixed-Effects Models Using lme4, J. Stat. Softw. 67(1), 2015 (CC BY), Sections 1.1, 2.2 (Table 2), 3.4 (eqs. 30-41), 5.2 (anova refit with ML), pp.2-8, 16-17, 24-25, 34, sha256:a9ae8934fbe46ac4c3a6d333a75c2c815f9d2ed7725d7613ddce1d5a5244bbff — https://www.jstatsoft.org/index.php/jss/article/view/v067i01/946"
     - "Bolker et al., GLMM FAQ (author-hosted), Nested or crossed?; Testing hypotheses (boundary-conservative LRT), sha256:53ab8a0c586ae5893841de85a84585e1cb46e79852c7c349c9e5bedb5c63d231 — https://bbolker.github.io/mixedmodels-misc/glmmFAQ.html"
@@ -14,59 +14,56 @@ verification:
   log: .verify/Concepts/Nested and Crossed Factors.md
 ---
 
-**Nested and crossed factors** describe how two grouping factors in a [[Linear Mixed Model]] relate to each other. Factor $B$ is **nested** in factor $A$ when every level of $B$ occurs within exactly one level of $A$, as with adjusters within claim offices or vehicles within policies. $A$ and $B$ are **crossed** when a level of one occurs with several levels of the other, as with territories observed in every accident year.
+**Nested and Crossed Factors** describe how two grouping factors in a [[Linear Mixed Model|linear mixed model]] relate to each other. Factor $B$ is **nested** in factor $A$ when every level of $B$ occurs within exactly one level of $A$, as with adjusters within claim offices. $A$ and $B$ are **crossed** when a level of one occurs with several levels of the other, as with territories observed in every accident year. For observation $t$ of adjuster $j$ in office $i$, the nested model is
 
-> $$\text{Nested: } y_{ijk} = \beta_0 + a_i + b_{j(i)} + \varepsilon_{ijk}$$
->
-> $$\text{Crossed: } y_{ijk} = \beta_0 + a_i + c_j + \varepsilon_{ijk}$$
+> $$Y_{tji} = \beta_0 + u_i + v_{j(i)} + \varepsilon_{tji}$$
 
-- $a_i \sim N(0, \sigma_a^2)$, $b_{j(i)} \sim N(0, \sigma_b^2)$ (read "level $j$ within level $i$") and $c_j \sim N(0, \sigma_c^2)$. All are independent of each other and of the residual $\varepsilon_{ijk} \sim N(0, \sigma^2)$. Each grouping factor costs one [[Variance Components|variance component]].
-- **The test.** Ask whether "level 7" of $B$ means the same thing under every level of $A$. Adjuster 7 in Toronto and adjuster 7 in Calgary are different people, so adjuster is nested in office. Accident year 2022 is the same year for every territory, so year and territory are crossed.
-- **What each implies for correlation.** Let $\sigma_T^2$ be the total variance. In a nested ([[Hierarchical Model|hierarchical]]) model, two claims from the same adjuster share $a_i + b_{j(i)}$, with correlation $(\sigma_a^2 + \sigma_b^2)/\sigma_T^2$. Two claims from the same office but different adjusters share only $a_i$: $\sigma_a^2/\sigma_T^2$. In a crossed model, observations sharing only a territory have correlation $\sigma_a^2/\sigma_T^2$, and those sharing only a year have $\sigma_c^2/\sigma_T^2$. Each is an [[Intraclass Correlation|intraclass correlation]]. The crossed [[Covariance Structure|covariance structure]] is no longer block-diagonal by any one factor.
-- **Coding.** The software has to be told which design it is. In R's `lme4`, `(1 | office/adjuster)` expands to `(1 | office) + (1 | office:adjuster)`, while `(1 | territory) + (1 | year)` specifies crossed effects. A common error: inner IDs are recycled across groups (an "adjuster 7" in every office) and the model is written as if crossed. The software then pools different people into one level. Give each inner unit a unique ID, or state the nesting explicitly.
-- Crossed designs are why a mixed model is not always a simple multilevel tree: [[Random Intercept and Slope|random intercepts]] can come from two unrelated classifications at once, and each is shrunk toward the mean on its own.
+- $u_i \sim N(0, \sigma_u^2)$ is the office effect.
+- $v_{j(i)} \sim N(0, \sigma_v^2)$ is the effect of adjuster $j$ within office $i$.
+- $\varepsilon_{tji} \sim N(0, \sigma^2)$ is the residual, and all the terms are independent.
 
-> [!example]- Nested or Crossed? {Example}
-> Classify each design:
-> 1. Vehicles on multi-vehicle auto policies, with a random effect for policy and one for vehicle.
-> 2. Loss ratios for $200$ territories in each of $10$ accident years, with random effects for territory and for year.
-> 3. Claim closing times, each claim handled by one adjuster, each adjuster working in one of $12$ offices.
->
-> > [!answer]-
-> > 1. **Nested.** A vehicle belongs to exactly one policy.
-> > 2. **Crossed.** Every territory appears in every year, and a year's shock (a hail season, a burst of inflation) hits all territories at once. Territory effects and year effects are separate and additive.
-> > 3. **Nested, three levels:** claims within adjusters within offices. Adjuster IDs must be unique across offices, or the nesting must be declared.
+For observation $t$ of territory $i$ in year $j$, the crossed model is
 
-> [!example]- Correlations in a Three-Level Claims Model {Example}
-> A model of log claim-closing time has these variance components: office $\sigma_a^2 = 0.04$, adjuster within office $\sigma_b^2 = 0.06$, and residual $\sigma^2 = 0.30$. Find the correlation between two claims (a) with the same adjuster, (b) from the same office but different adjusters, and (c) from different offices.
->
-> > [!answer]-
-> > $$
-> > \begin{align*}
-> > \sigma_T^2 &= 0.04 + 0.06 + 0.30 \\
-> > &= 0.40 \\
-> > \rho_{\text{same adjuster}} &= \frac{0.04 + 0.06}{0.40} \\
-> > &= 0.25 \\
-> > \rho_{\text{same office}} &= \frac{0.04}{0.40} \\
-> > &= 0.10
-> > \end{align*}
-> > $$
-> > (c) Claims from different offices share no random effect, so their correlation is $0$.
-> >
-> > Most of the clustering is at the adjuster level. Dropping the adjuster factor would understate the dependence among a desk's claims by more than half.
+> $$Y_{tij} = \beta_0 + u_i + v_j + \varepsilon_{tij}$$
 
-> [!example]- Correlations When Territory and Year Are Crossed {Example}
-> A crossed model of territory loss ratios has territory variance $0.012$, accident-year variance $0.008$ and residual variance $0.020$. Find the correlation between two observations that share (a) only a territory, and (b) only an accident year.
->
-> > [!answer]-
-> > $$
-> > \begin{align*}
-> > \sigma_T^2 &= 0.012 + 0.008 + 0.020 \\
-> > &= 0.040 \\
-> > \rho_{\text{territory}} &= \frac{0.012}{0.040} \\
-> > &= 0.30 \\
-> > \rho_{\text{year}} &= \frac{0.008}{0.040} \\
-> > &= 0.20
-> > \end{align*}
-> > $$
-> > Two territories in the same accident year are correlated through the common year shock, even though neither territory is nested in the other. A nested specification could not represent that.
+- $u_i \sim N(0, \sigma_u^2)$ is the territory effect and $v_j \sim N(0, \sigma_v^2)$ the year effect.
+
+Each grouping factor costs one [[Variance Components|variance component]]. A model can include several crossed random effects at once, each entering as its own independent term.
+
+To decide between the two, ask whether level 7 of $B$ means the same thing under every level of $A$. Adjuster 7 in Toronto and adjuster 7 in Calgary are different people, so adjuster is nested in office. Accident year 2022 is the same year for every territory, so year and territory are crossed.
+
+> [!example]- Are these nested or crossed: vehicles on multi-vehicle policies with effects for policy and vehicle; loss ratios of 200 territories in each of 10 accident years; claims each handled by one adjuster, each adjuster in one of 12 offices? {Example}
+> - Vehicle is nested in policy, because a vehicle belongs to exactly one policy.
+> - Territory and year are crossed, because every territory appears in every year and a year's shock hits all territories at once.
+> - Claims are nested in adjusters, which are nested in offices: a three-level model.
+
+## Correlation under nesting
+
+Two claims of the same adjuster share $u_i + v_{j(i)}$, and two claims of the same office but different adjusters share only $u_i$. Their correlations are
+
+> $$\rho_{\text{same adjuster}} = \frac{\sigma_u^2 + \sigma_v^2}{\sigma_u^2 + \sigma_v^2 + \sigma^2}$$
+
+> $$\rho_{\text{same office}} = \frac{\sigma_u^2}{\sigma_u^2 + \sigma_v^2 + \sigma^2}$$
+
+Each is an [[Intraclass Correlation|intraclass correlation]]. Claims from different offices share no random effect, so their correlation is $0$. A prediction for a subject includes the random effect at every level of the nesting.
+
+> [!example]- A model of log claim-closing time has office variance $0.04$, adjuster-within-office variance $0.06$ and residual variance $0.30$. What is the correlation of two claims with the same adjuster, and of two from the same office with different adjusters? {Example}
+> - The total variance is $0.04 + 0.06 + 0.30 = 0.40$.
+> - Two claims of one adjuster have correlation $(0.04 + 0.06)/0.40 = 0.25$.
+> - Two claims of one office and different adjusters have correlation $0.04/0.40 = 0.10$.
+
+## Correlation under crossing
+
+Two observations sharing only a territory have correlation $\sigma_u^2/(\sigma_u^2 + \sigma_v^2 + \sigma^2)$, and two sharing only a year have $\sigma_v^2/(\sigma_u^2 + \sigma_v^2 + \sigma^2)$. The crossed [[Covariance Structure|covariance structure]] is not block-diagonal by any one factor.
+
+> [!example]- A crossed model of territory loss ratios has territory variance $0.012$, accident-year variance $0.008$ and residual variance $0.020$. What is the correlation of two observations sharing only a territory, and only a year? {Example}
+> - The total variance is $0.012 + 0.008 + 0.020 = 0.040$.
+> - Sharing only a territory, the correlation is $0.012/0.040 = 0.30$.
+> - Sharing only a year, the correlation is $0.008/0.040 = 0.20$.
+
+## Coding nested and crossed factors
+
+In R's `lme4`, `(1 | office/adjuster)` expands to `(1 | office) + (1 | office:adjuster)`, while `(1 | territory) + (1 | year)` specifies crossed effects.
+
+> [!trap] Recycled inner IDs
+> When adjuster IDs restart in every office (an adjuster 7 in each) and the model is written as crossed, the software pools different people into one level. Give each inner unit a unique ID, or state the nesting.

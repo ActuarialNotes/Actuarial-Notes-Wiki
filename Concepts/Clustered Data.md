@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:463c7445142bcd6c195610f5e38d83e88ab7c8ba05296449913a238679778cb4
+  content_hash: sha256:695c7ea5a16a54f7dfa2135f0856b31a80ac23e6b5c8e1c5563296d102d40217
   sources:
     - "Rodriguez, GLM lecture notes (Princeton), Models for Longitudinal and Clustered Data (2008, rev. 2012), secs.2.1-2.4 (fixed effects as one dummy per group; random intercept; intra-class correlation sigma_a^2/(sigma_a^2+sigma_e^2); OLS consistent but SEs biased unless corrected for clustering; random slopes) (PDF pp.2-6), sha256:59a9530438fb4812feeabbb9abdc8eb89551e1f8d457cd8e18faf77601e40ce3 — https://grodri.github.io/glms/notes/c8.pdf"
     - "Cameron & Miller, 'A Practitioner's Guide to Cluster-Robust Inference', J. Human Resources (2015), sec.II.B eq.6 (variance inflation 1 + rho_x rho_u (N_g - 1), exact for rho_x = 1; PDF p.6), sha256:a2d6ef5622b5597ef2c18dd53d700c6b2ffbadaa4c202af0e21ddc0520072214 — https://cameron.econ.ucdavis.edu/research/Cameron_Miller_JHR_2015_February.pdf"
@@ -20,42 +20,54 @@ verification:
   log: .verify/Concepts/Clustered Data.md
 ---
 
-**Clustered data** are observations that arrive in groups — policies within agencies, claims within adjusters, several years of experience on the same policyholder — so that observations in the same cluster are more alike than observations in different ones. They break the independence assumption of [[Linear Regression]] and the [[Generalized Linear Model]], and they are the reason the [[Linear Mixed Model]] exists.
+**Clustered data** are observations that come in groups, such as policies within agencies, claims within adjusters, or several years of experience on one policyholder, so that observations in the same cluster are more alike than observations in different clusters. They break the independence assumption of [[Linear Regression|linear regression]] and the [[Generalized Linear Model|generalized linear model]], and they are what the [[Linear Mixed Model|linear mixed model]] is built for. For observation $t$ of cluster $i$, a random intercept model is
 
-> $$y_{ij} = \mathbf{x}_{ij}^\top\boldsymbol\beta + b_i + \varepsilon_{ij}$$
+> $$Y_{ti} = \beta_0 + \beta_1 x_{ti} + u_i + \varepsilon_{ti}$$
 
-> $$\mathrm{Corr}(y_{ij}, y_{ik}) = \frac{\sigma_b^{2}}{\sigma_b^{2} + \sigma^{2}}$$
+- $u_i \sim N(0, \sigma_u^2)$ is a [[Random Effects|random effect]] shared by every observation of cluster $i$.
+- $\varepsilon_{ti} \sim N(0, \sigma^2)$ is independent noise.
 
-- $i$ indexes clusters and $j$ the observations within one. $b_i \sim N(0, \sigma_b^2)$ is a [[Random Effects|random effect]] shared by everything in cluster $i$, and $\varepsilon_{ij} \sim N(0, \sigma^2)$ is independent noise. The shared $b_i$ is what correlates two different observations $j \neq k$ of the same cluster, by the [[Intraclass Correlation|intraclass correlation]] in the second block
-- **Grouped (nested) data**: each unit belongs to one group at each level — policies in agencies in regions — the setting of a [[Hierarchical Model|hierarchical model]]. **Crossed** data: each observation is classified by two groupings at once, such as the adjuster and the repair shop on a claim ([[Nested and Crossed Factors]])
-- **Repeated measures (longitudinal) data**: the same unit observed several times. The correlation often weakens as the time between observations grows, which calls for an AR(1) or similar [[Covariance Structure|covariance structure]] rather than one common correlation
-- **Ignoring the clustering** typically leaves the coefficient estimates unbiased but makes their standard errors too small: $m$ correlated observations in a cluster carry only as much information as $m / [1 + (m - 1)\rho]$ independent ones. Predictors that vary only *between* clusters are hit hardest, and effects that are not real look significant
-- **Remedies**: a random intercept (and perhaps a [[Random Intercept and Slope|random slope]]) for each cluster; a marginal model that specifies the correlation of the residuals directly; or one fixed-effect indicator per cluster, which spends a parameter per cluster and does no shrinkage. The random-effect route predicts each cluster's effect by its [[Best Linear Unbiased Predictor|BLUP]], a [[Credibility|credibility]]-weighted estimate
-- A mixed model can also let the residual variance differ by group instead of assuming it constant. And in [[Cross-Validation|cross-validation]], a cluster must be held out whole — otherwise its correlated rows left in training leak its information into the test
+The shared $u_i$ is what correlates two observations of the same cluster. Their correlation is the [[Intraclass Correlation|intraclass correlation]] $\sigma_u^2/(\sigma_u^2 + \sigma^2)$.
 
-> [!example]- A Significant Effect That Is Not {Example}
-> A fleet-level indicator (telematics installed) is tested in a regression on $1{,}000$ observations: $200$ commercial fleets, each observed for $5$ years. Fitted as if independent, its $t$-statistic is $2.5$. The intraclass correlation of the residuals within a fleet is $0.30$. Correct the test.
->
-> > [!answer]-
-> > The indicator is constant within each fleet, so the full design effect applies to it:
-> > $$
-> > \begin{align*}
-> > \text{Design effect} &= 1 + (5 - 1)(0.30) \\
-> > &= 2.2 \\
-> > n_{\text{eff}} &= \frac{1{,}000}{2.2} \\
-> > &= 455 \\
-> > t_{\text{corrected}} &= \frac{2.5}{\sqrt{2.2}} \\
-> > &= 1.69
-> > \end{align*}
-> > $$
-> > The standard error was understated by a factor of $\sqrt{2.2} = 1.48$. At $1.69$ the effect is no longer significant at the $5\%$ level (two-sided critical value $1.96$). The $1{,}000$ rows hold about as much information as $455$ independent ones — and on a fleet-level question, really only $200$ fleets' worth.
+> [!example]- In a random intercept model of loss ratios by agency, $\sigma_u^2 = 0.01$ and $\sigma^2 = 0.04$. What is the correlation between two loss ratios from the same agency, and from different agencies? {Example}
+> - Two loss ratios of one agency share $u_i$, so their correlation is $0.01/(0.01 + 0.04) = 0.20$.
+> - Loss ratios of different agencies share no random effect, so their correlation is $0$.
 
-> [!example]- Recognizing the Clustering in a Claims File {Example}
-> A workers compensation file has one row per claim for $6$ years, recording the employer (the policyholder, most with claims in several years), the adjuster (each handles claims from many employers), and the claim's incurred loss. Describe the clustering and a mixed-model structure for it.
->
-> > [!answer]-
-> > - **Employer** is a cluster observed repeatedly: claims from the same employer share its safety culture and payroll mix, and its year-to-year results form **longitudinal** data
-> > - **Adjuster** is a second cluster: claims handled by the same adjuster share that adjuster's reserving and settlement habits
-> > - The two are **crossed**, not nested: an adjuster works claims from many employers, and an employer's claims go to many adjusters
-> >
-> > A reasonable start is crossed random intercepts for employer and adjuster, with the rating variables as fixed effects. If an employer's residuals correlate more strongly in adjacent years than in distant ones, add an AR(1) structure over years within employer. Treating the rows as independent would overstate how much is known about every employer-level variable.
+## Types of clustered data
+
+1. **Grouped (nested) data**: each unit belongs to one group at each level, such as policies in agencies in regions. This is the setting of a [[Hierarchical Model|hierarchical model]].
+2. **Crossed data**: each observation is classified by two groupings at once, such as the adjuster and the repair shop on a claim ([[Nested and Crossed Factors|nested and crossed factors]]).
+3. **Repeated measures (longitudinal) data**: the same unit is observed several times. The correlation often weakens as the time between observations grows, which calls for an AR(1) or similar [[Covariance Structure|covariance structure]] rather than one common correlation.
+
+> [!example]- A workers compensation file has one row per claim over 6 years, recording the employer (most with claims in several years), the adjuster (each handles claims from many employers) and the incurred loss. What clustering does it have? {Example}
+> - Employer is a cluster observed repeatedly. Claims of one employer share its safety culture, and its year-to-year results are longitudinal data.
+> - Adjuster is a second cluster. Claims handled by one adjuster share that adjuster's reserving and settlement habits.
+> - The two are crossed, not nested, because an adjuster works claims from many employers and an employer's claims go to many adjusters.
+> - A reasonable start is crossed random intercepts for employer and adjuster, with the rating variables as fixed effects.
+
+## Effect of ignoring the clustering
+
+Ignoring the clustering typically leaves the coefficient estimates unbiased but makes their standard errors too small. The $m$ correlated observations of a cluster carry only as much information as
+
+> $$\frac{m}{1 + (m - 1)\rho}$$
+
+independent observations.
+
+- $\rho$ is the intraclass correlation.
+- $1 + (m - 1)\rho$ is the design effect.
+
+Predictors that vary only between clusters are hit hardest, and effects that are not real look significant.
+
+> [!example]- A fleet-level indicator is tested on 1,000 observations, 200 fleets each observed for 5 years. Fitted as if independent, its $t$ statistic is $2.5$, and the intraclass correlation within a fleet is $0.30$. Is the effect significant at the 5% level? {Example}
+> - The indicator is constant within each fleet, so the full design effect applies: $1 + (5 - 1)(0.30) = 2.2$.
+> - The 1,000 rows carry as much information as $1{,}000/2.2 = 455$ independent ones.
+> - The standard error was understated by $\sqrt{2.2} = 1.48$, so the corrected statistic is $2.5/1.48 = 1.69$.
+> - $1.69 < 1.96$, so the effect is not significant.
+
+## Remedies for clustering
+
+1. A random intercept for each cluster, and perhaps a [[Random Intercept and Slope|random slope]]. Each cluster's effect is predicted by its [[Best Linear Unbiased Predictor|BLUP]], a [[Credibility|credibility]]-weighted estimate.
+2. A marginal model that specifies the correlation of the residuals directly.
+3. One fixed-effect indicator per cluster, which spends a parameter per cluster and does no shrinkage.
+
+A mixed model can also let the residual variance differ by group ([[Variance Function|variance function]]). In [[Cross-Validation|cross-validation]], a cluster is held out whole, because its correlated rows left in training would leak its information into the test.

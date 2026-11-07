@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:47384b059237af69b56892f8213a1f4751924c8a7bf2875114b93de5bccbaff4
+  content_hash: sha256:7fcd0de3925d628174f0d040ee42bce1a49f908de04d2751b3bc5a65273d000b
   sources:
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch.3, printed p.37 (PDF p.43): paid claims cumulative/incremental, with or without expenses, net or gross of recoveries; claim counting per claimant/occurrence, reopened claims; verification of the data (four components, no formal audit); default values, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
     - "Werner & Modlin, Basic Ratemaking, 5th ed. (CAS, May 2016), Ch.3 Data Aggregation, printed pp.42-43 (PDF pp.54-55): calendar year paid = all payments in the year, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
@@ -19,75 +19,57 @@ verification:
   log: .verify/Concepts/Data Issues.md
 ---
 
-**Data Issues** are defects in the data behind a ratemaking or reserving analysis — errors, omissions, inconsistent definitions, anomalous values and structural irregularities — that would bias the result if the data were used as delivered. The actuary must find them, then correct, adjust for, work around or disclose them.
+A **Data Issue** is a defect in the data behind a ratemaking or reserving analysis, such as an error, an omission, an inconsistent definition or a questionable value, that would bias the result if the data were used as delivered. An analysis based on incorrect or incomplete data can produce erroneous results. Actuarial standards do not require a formal audit, but they do require procedures to verify that the data is reliable and sufficient for its purpose. Friedland's data review has four components:
 
-> $$\text{CY}_Y\ \text{paid} = \sum_{\text{AY}} \left( P_{\text{AY}}^{(Y)} - P_{\text{AY}}^{(Y-1)} \right)$$
+1. **Consistency with financial statement data.** The data reconciles with the financial statements, which may be subject to external audit.
+2. **Consistency with prior data.** The data is consistent with the data of the prior analysis, and any difference is explained.
+3. **Data reasonableness.** Questionable values, such as large negative paid claims or inconsistencies between data elements, are investigated before the data is used, especially if they are material. A questionable value is not always an incorrect one.
+4. **Data definitions.** The definition of each data element is known, rather than assumed from its label, and so are the default values that stand in for missing information. A default used too often makes the element unreliable.
 
-- $P_{\text{AY}}^{(Y)}$ is cumulative paid for an accident year as of year-end $Y$: the latest diagonal of a paid triangle less the previous diagonal is the calendar year's payments. That identity is what lets a triangle be **reconciled** to financial statements, a standard first check on any reserving or ratemaking extract.
-- **Friedland's verification checklist** (not an audit — see [[Data Quality]]): *consistency with financial statement data*; *consistency with the prior analysis's data*, with any difference explained; *reasonableness* — questionable values such as large negative paid claims or fields that contradict each other are investigated, though not presumed wrong; and *definitions* — know what each field means (incurred, reserves and paid all mean different things to different departments) and how often default values stand in for missing information.
-- **Typical errors:** transactions coded to the wrong accident period, line or coverage; payments not yet allocated to an accident period; impossible dates (a claim reported before it occurred, a policy effective after it expires); zero or negative exposure; duplicated or missing months; catastrophes and large losses flagged inconsistently.
-- **Definitional changes** masquerade as trends: counting per claimant instead of per occurrence, treating reopened claims as new, including ALAE, recording claims net or gross of [[Recoveries|recoveries]]. See [[Claims Coding Changes]] and [[Changing Conditions]].
-- **In a modelling data set** (the record-level data behind a predictive model), the common issues are found by looking at each variable and are handled case by case:
-  - *Unusual values:* an outlier may be a data entry error, a genuine extreme or a real discovery. Repeat the analysis with and without it; if it changes the result, find its cause before dropping it and disclose the removal. A value that cannot be true is better replaced by a missing value than deleted with its whole row ([[Outlier]]).
-  - *Missing values in disguise:* an impossible zero, such as a zero dimension, is often a missing value coded as zero, which a search for missing values will not find ([[Missing Data]]).
-  - *Duplicates:* a record loaded twice, or a [[Table Join|join]] on a key that repeats, inflates counts and totals. Counting occurrences of each key finds them.
-  - *Inconsistent coding and definitions:* the same quantity in different units, formats or bases across sources has to be put on one basis, as described under [[Data Documentation]] and [[Data Validation]].
-- **Exam 7 — issues in a stochastic triangle model** (Shapland's ODP bootstrap): *negative incremental values* (a modified log link handles them unless a whole column sums negative, which needs a constant shift; or model salvage and subrogation separately); *missing values* (estimate from surrounding cells, or exclude from the factors and residuals); *outliers* (exclude with care — skewed residuals are expected); *heteroscedasticity* (group development periods and adjust residuals, or sample within groups); *heteroecthesious data* — a partial first development period or partial last diagonal; and *exposure changes* (model losses per exposure). See [[Data Diagnostic Analysis]], [[Stochastic Reserving]], [[Missing Data]], [[Outlier]].
-- The end-of-analysis counterpart is [[Reasonableness Testing|reasonableness testing]] of the results: implied frequencies, severities, loss ratios and average unpaid per open claim by year.
+> [!example]- An extract of paid claims shows a large negative payment on one accident year. Should the actuary delete it before projecting? {Example}
+> - A large negative paid claim is a questionable value, but not necessarily an incorrect one.
+> - It may be a recovery, such as salvage or subrogation, or an entry correcting an earlier payment.
+> - Deleting it unexamined could remove a genuine recovery and overstate the paid claims.
+> - The actuary investigates what it represents before using the data, and corrects it only if it proves to be an error.
 
-> [!example]- A Paid Triangle That Does Not Reconcile {Example}
-> Cumulative paid ($000):
->
-> | AY | 12 | 24 | 36 | 48 |
-> |---|---|---|---|---|
-> | $2021$ | $4{,}200$ | $7{,}100$ | $8{,}300$ | $8{,}700$ |
-> | $2022$ | $4{,}500$ | $7{,}500$ | $8{,}900$ | |
-> | $2023$ | $4{,}800$ | $8{,}100$ | | |
-> | $2024$ | $5{,}000$ | | | |
->
-> The accounting records show calendar year $2024$ payments on AY $2021$–$2024$ of $\$10{,}700$k, of which $\$5{,}600$k is on AY $2024$. The selected paid CDF at $12$ months is $2.10$. Reconcile and assess the effect.
->
-> > [!answer]-
-> > $$
-> > \begin{align*}
-> > \text{Latest diagonal} &= 8{,}700 + 8{,}900 + 8{,}100 + 5{,}000 \\
-> > &= 30{,}700 \\
-> > \text{Prior diagonal} &= 8{,}300 + 7{,}500 + 4{,}800 = 20{,}600 \\
-> > \text{Triangle CY 2024} &= 30{,}700 - 20{,}600 = 10{,}100
-> > \end{align*}
-> > $$
-> >
-> > The triangle is $\$600$k short. By accident year its CY $2024$ increments are $400$, $1{,}400$, $3{,}300$ and $5{,}000$; the first three match the accounting records, so the gap is entirely in AY $2024$ — typically payments made but not yet allocated to an accident period when the extract was cut.
-> >
-> > $$\$600\text{k} \times 2.10 = \$1{,}260\text{k}$$
-> >
-> > of AY $2024$ ultimate would be missing from a paid projection, and next year's $12$–$24$ factor would be overstated when the payments surface. Correct the extract (or reallocate the $\$600$k) before selecting anything.
+## Definitions of claims and claim counts
 
-> [!example]- A Keying Error in the Development Factors {Example}
-> Paid $12$–$24$ age-to-age factors for AY $2019$–$2023$ are $1.62$, $1.66$, $2.945$, $1.67$ and $1.63$. Investigation of AY $2021$ finds a $\$580{,}000$ payment keyed as $\$5{,}800{,}000$; the AY had $\$4{,}000$k paid at $12$ months. AY $2024$ has $\$4{,}300$k paid at $12$ months.
->
-> Quantify the effect and the right treatment.
->
-> > [!answer]-
-> > $$
-> > \begin{align*}
-> > \text{Corrected AY 2021 at 24} &= 11{,}780 - 5{,}220 = 6{,}560 \\
-> > \text{Corrected factor} &= 6{,}560 / 4{,}000 = 1.640 \\
-> > \text{Average as keyed} &= 9.525 / 5 = 1.905 \\
-> > \text{Average corrected} &= 8.220 / 5 = 1.644
-> > \end{align*}
-> > $$
-> >
-> > (The keyed value at $24$ months was $6{,}560 + 9 \times 580 = 11{,}780$.) Left in, the error would add $4{,}300 \times (1.905 - 1.644) = \$1{,}122$k at the $12$–$24$ step alone for AY $2024$, before the rest of the CDF compounds it; it would also depress AY $2021$'s later factors, since its base is inflated.
-> >
-> > Correcting the record is better than excluding the cell: exclusion loses a genuine observation, and in an ODP bootstrap an error left in the triangle becomes an extreme residual that is resampled into every other cell's variability.
+Even paid claims can mean different things to different people. The actuary needs to know whether they are cumulative or incremental, whether they include claim-related expenses and which ones, and whether they are net or gross of [[Recoveries|recoveries]]. For claim counts, the actuary needs to know whether an accident with payments under several coverages or to several claimants is one claim or several, and whether a reopened claim is counted as a new claim. A change in any of these definitions moves the data without any change in the underlying losses.
 
-> [!tip]- How it appears on the exam
-> - **Exam 5** and **Exam 7** test data issues in reserving and ratemaking data: reconciling a triangle to the financial statements, spotting a keying error through an anomalous development factor, and recognising a definitional change that looks like a trend.
-> - **DISC-DA** covers addressing common data issues in its topic on working with different types of data, after [[Structured Data|structured]] and [[Unstructured Data|unstructured]] data. Application questions describe a problem in a modelling data set (an outlier, a duplicated record, an impossible value, inconsistent units) and ask how to detect it or what to do about it.
+## Reconciling a triangle
 
-> [!warning]- Exam traps
-> - **Investigate before deleting:** An extreme value that is genuine carries information. Dropping it without a cause, or without disclosing it, biases the data.
-> - **Drop the value, not the row:** Replacing one impossible value with a missing value keeps the rest of the record's information; deleting the row loses it.
-> - **A definitional change is not a trend:** A shift caused by counting claims differently, or by including ALAE, moves the data without any change in the underlying losses.
+A triangle is reconciled to the financial statements through its diagonals. A calendar year's payments are the latest diagonal of a cumulative paid triangle less the diagonal before it, accident year by accident year.
 
+> [!example]- A cumulative paid triangle ($000) has 8,700, 8,900, 8,100 and 5,000 on its latest diagonal for accident years 2021 to 2024, and 8,300, 7,500 and 4,800 on the one before for 2021 to 2023. The accounting records show $\$10{,}700$k paid in calendar year 2024, of which $\$5{,}600$k is on accident year 2024. Does the triangle reconcile? {Example}
+> - The triangle's calendar year 2024 payments are $(8{,}700 + 8{,}900 + 8{,}100 + 5{,}000) - (8{,}300 + 7{,}500 + 4{,}800) = \$10{,}100$k.
+> - It is $\$600$k short of the accounting records.
+> - Accident years 2021 to 2023 increased by $400$, $1{,}400$ and $3{,}300$, which sum to the $\$5{,}100$k the records show on them.
+> - The gap is all in accident year 2024, shown at $\$5{,}000$k against $\$5{,}600$k. The extract is corrected before any factor is selected.
+
+## Questionable values
+
+An unusual value may be a data entry error, a genuine extreme value or a real discovery, so it is investigated before it is changed or removed. A value that is impossible against known constraints, such as a paid loss far above the policy limit with no other explanation, is a likely keying error. It is checked against the source record and corrected, and if the true value cannot be found, it is set to missing. Deleting the whole record would discard its other valid information, and can bias the result if the deleted records are not random. Capping all values at a percentile changes many genuine values without fixing the error. Other common issues:
+
+- **Disguised missing values.** A default value written by a system for a blank field, or a spike of records at one round or extreme value such as 0, 99 or 999, is missing data coded as a value ([[Missing Data|missing data]]). A search for blanks does not find it.
+- **Duplicates.** A record loaded twice, or a [[Table Join|join]] on a key that repeats, inflates counts and totals. Counting the occurrences of each key finds them.
+- **Inconsistent coding.** The same quantity in different units, formats or bases across sources is put on one basis ([[Data Validation|data validation]]).
+
+ASOP No. 23 permits the use of data with defects after appropriate adjustment, with the adjustments disclosed.
+
+> [!example]- Paid 12-to-24-month factors for five accident years are 1.62, 1.66, 2.945, 1.67 and 1.63. The 2.945 accident year had $\$4{,}000$k paid at 12 months, and a $\$580$k payment in its second year was keyed as $\$5{,}800$k. What is the effect on the average factor? {Example}
+> - The keyed value at 24 months is $4{,}000 \times 2.945 = \$11{,}780$k, and the error is $5{,}800 - 580 = \$5{,}220$k.
+> - The corrected value is $11{,}780 - 5{,}220 = \$6{,}560$k, a factor of $6{,}560/4{,}000 = 1.640$.
+> - The average factor falls from $9.525/5 = 1.905$ to $8.220/5 = 1.644$.
+> - Correcting the record is better than excluding the cell, which would lose a genuine observation.
+
+## Data issues in a bootstrap model
+
+Shapland's [[ODP Bootstrap Model|over-dispersed Poisson bootstrap]] models the incremental values of a triangle, and some data issues need their own treatment:
+
+- **Negative incremental values.** The log link fails on a negative value. A modified log link uses $\ln(q)$ for $q > 0$, $0$ for $q = 0$ and $-\ln(-q)$ for $q < 0$, which works only while the column's sum is positive. If a column sums to a negative value, every cell is shifted by the largest negative incremental to make it non-negative, the model is fitted, and the shift is taken back out of the fitted values.
+- **Missing values.** A missing cell is estimated from the surrounding values, or excluded from the development factor and residual calculations so that it has no residual. An irregular triangle with missing early ages for the older years is handled the same way.
+- **Outliers.** An unusually large incremental value distorts the fitted parameters and residuals. It is excluded from the development factor and residual calculations, while its cell is still resampled when simulated triangles are generated.
+- **Exposure changes.** When exposures change materially across accident years, the losses are divided by the earned exposures, the model is fitted to pure premiums, and the results are multiplied back by each year's exposures.
+
+> [!trap] Deleting the row for one bad value
+> A record with one impossible field still holds valid information in its other fields. Setting the bad field to missing keeps it, and deleting the row loses it, along with any pattern in which records were deleted.

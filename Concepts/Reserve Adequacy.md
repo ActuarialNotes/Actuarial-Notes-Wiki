@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:cd107fbdcf7f56247bc539ea870d4ef234361e406a8ec789d7f4826a1c707845
+  content_hash: sha256:a54427b71a375ada2b81ba1e311224cc9949a25f6188bf8c681c02572beacf7d
   sources:
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ver. July 2010), Ch.1 pp.4-5 (PDF pp.10-11); Ch.3 p.34 (PDF p.40); Ch.15 pp.345-348 (PDF pp.351-354), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
     - "ASOP No. 43, Property/Casualty Unpaid Claim Estimates (ASB, June 2007, Doc. No. 159), §§3.6.5, 3.7.1, 4.1(f), 4.2(b), pp.7-10 (PDF pp.12-15), sha256:776302c442cb8d3210fc41269d38caeec4c547da8159084b80fa2ac4ce949cce — https://www.actuarialstandardsboard.org/wp-content/uploads/2014/02/asop043_159.pdf"
@@ -14,67 +14,65 @@ verification:
   log: .verify/Concepts/Reserve Adequacy.md
 ---
 
-**Reserve Adequacy** is whether the carried [[Unpaid Claims|unpaid claim estimate]] is sufficient to pay the claims it covers. Testing it is a distinct step from computing the estimate: the methods produce numbers, and the adequacy review asks whether the resulting picture is coherent.
-
-> $$\text{Redundancy / (Deficiency)} = \text{Carried Reserve} - \text{Indicated Reserve}$$
-
-> $$\text{Implied Ultimate LR}_{\text{AY}} = \frac{\text{Selected Ultimate}}{\text{On-level Earned Premium}}$$
-
-Friedland's reasonableness tests — each asks whether a *derived* statistic behaves sensibly:
-
-- **Ultimate loss ratios** by accident year, on-level. They should move with rate adequacy and trend, not jump.
-- **Ultimate severities and frequencies** by year. A selected ultimate implying a $30\%$ severity jump in one year needs a reason.
-- **Ultimate pure premiums** per exposure — the premium-free version of the same test.
-- **Implied development** in the selection: what CDF does the chosen ultimate imply, and is it consistent with the triangle?
-- **IBNR to case ratios**, and **IBNR as a percentage of ultimate**, compared across years and against benchmarks.
-- **Implied remaining payment pattern**: does the unpaid amount, spread over the expected payout pattern, look like the payments the book actually makes?
-
-Further points:
-
-- Reserve adequacy is best judged **over time, not at a point**. A single valuation cannot reveal bias; a series of valuations of the same accident year can — see [[Actual vs Expected Analysis]] and [[Roll Forward Analysis]].
-- The **direction of error is asymmetric in consequence**. Redundancy is a profit deferral; deficiency understates the loss ratio, overstates surplus, and feeds an inadequate rate indication back into pricing, so the same error appears again in next year's business.
-- Adequacy is tested **gross and net**, and by segment. A book can be adequate in aggregate while one line is severely deficient and another redundant.
-- [[ASOP 43 - Property Casualty Unpaid Claim Estimates (ASB - 2007)|ASOP 43]] requires the actuary to consider whether the estimate is reasonable, to disclose significant assumptions, and to identify material changes from the prior analysis.
-
 ![[Media/Figures/Reserve_Adequacy.svg|340]]
 
-> [!example]- Testing the Selection Against Implied Statistics {Example}
-> Selected ultimates and derived statistics for a book, on-level:
->
-> | AY | On-level EP | Selected ultimate | Ultimate LR | Ultimate counts | Severity |
-> |---|---|---|---|---|---|
-> | $2021$ | $\$20{,}000$K | $\$13{,}400$K | $67.0\%$ | $1{,}340$ | $\$10{,}000$ |
-> | $2022$ | $\$21{,}000$K | $\$14{,}280$K | $68.0\%$ | $1{,}360$ | $\$10{,}500$ |
-> | $2023$ | $\$22{,}000$K | $\$15{,}180$K | $69.0\%$ | $1{,}380$ | $\$11{,}000$ |
-> | $2024$ | $\$23{,}000$K | $\$14{,}950$K | $65.0\%$ | $1{,}300$ | $\$11{,}500$ |
->
-> Is the selection reasonable?
->
-> > [!answer]-
-> > The severity series is clean: $\$10{,}000 \to \$11{,}500$, about $+4.8\%$ a year, consistent throughout including $2024$.
-> >
-> > The problem is **AY 2024's counts**: $1{,}340 \to 1{,}360 \to 1{,}380$, then $1{,}300$ — a fall of $5.8\%$ in a year when on-level premium grew $4.5\%$. That combination requires frequency to have dropped nearly $10\%$ per unit of exposure, and nothing in the severity series or the loss ratios suggests a change of that kind.
-> >
-> > The likely explanation is that AY 2024's **ultimate claim counts are under-projected** — the count development factor at $12$ months is the least certain in the triangle, and under-projecting it lowers both the count and, through it, the ultimate loss.
-> >
-> > That would also explain the loss ratio dropping to $65\%$ after three years of steady increase. The loss ratio series and the count series are telling the same story, and the story is about the estimate rather than the business.
-> >
-> > This is exactly what the reasonableness tests are for: each individual selection looked defensible, and only the derived statistics across years reveal that one of them is not.
+**Reserve Adequacy** is whether an [[Unpaid Claims|unpaid claim estimate]] is enough to pay the claims it covers. A redundant unpaid claim estimate is one that exceeds the amount ultimately needed to pay the claims, and an inadequate one falls below it. Against the actuary's indicated estimate, the carried estimate's margin is
 
-> [!example]- Carried Versus Indicated {Example}
-> An actuary's indicated unpaid claim estimate is $\$47{,}500{,}000$ against a carried reserve of $\$43{,}000{,}000$. Surplus is $\$60{,}000{,}000$ and the book earns $\$90{,}000{,}000$ of premium a year.
+> $$\text{Redundancy} = \text{Carried Unpaid Claims} - \text{Indicated Unpaid Claims}$$
+
+- $\text{Carried Unpaid Claims}$ is the estimate held in the financial statements.
+- $\text{Indicated Unpaid Claims}$ is the actuary's estimate of the amount needed.
+- A negative redundancy is a deficiency.
+
+Unpaid claim estimates feed into reported loss ratios and profitability. A redundant estimate makes a book look less profitable than it truly is, and an inadequate estimate makes it look more profitable.
+
+> [!example]- The indicated unpaid claims are $\$47{,}500{,}000$ and the carried unpaid claims are $\$43{,}000{,}000$. Surplus is $\$60{,}000{,}000$. Is the carried estimate adequate, and by how much does it overstate surplus? {Example}
+> - The redundancy is $43{,}000{,}000 - 47{,}500{,}000 = -\$4{,}500{,}000$, a deficiency, so the carried estimate is inadequate.
+> - The deficiency is $4.5/47.5 = 9.5\%$ of the indicated unpaid claims.
+> - The liabilities are understated by $\$4{,}500{,}000$, so surplus is overstated by that amount, $4.5/60 = 7.5\%$ of the surplus reported.
+
+## Why an inaccurate estimate matters
+
+Friedland looks at the accuracy of unpaid claim estimates from three viewpoints:
+
+| Viewpoint | Uses the estimate for | An inadequate estimate | A redundant estimate |
+| --- | --- | --- | --- |
+| Internal management | Pricing, underwriting, reinsurance, capital allocation and strategy | Can lead to rate decreases and growth at rates too low to pay future claims, or to too little reinsurance or capital | Can lead to unnecessary rate increases, lost market share, or exiting a profitable line or region |
+| Investors | The balance sheet, the income statement and the metrics drawn from them | Presents the insurer as stronger than it truly is | Presents the insurer as weaker than it truly is |
+| Regulators | Supervising the insurer's financial position | Can mask a struggling insurer until it is too late to help it regain its strength | Misstates its true financial position |
+
+The inadequate estimate in pricing compounds: rates set from understated losses are too low for the claims the new policies will produce, and gaining market share at those rates makes it worse, until the insurer's solvency can be at risk.
+
+> [!example]- An insurer's reserves have been inadequate for several years. Why does the problem grow rather than stay the same size? {Example}
+> - Understated unpaid claims understate the historical losses, so the loss ratios used in rate indications look better than they are.
+> - Rates indicated from those loss ratios are too low, so the new business is underpriced as well.
+> - The lower rates win market share, so more business is written at inadequate rates.
+> - Each year's new business adds its own shortfall to the deficiency on the old business.
+
+## Reasonableness tests of the selected ultimate claims
+
+An important final check of the selected [[Ultimate Loss|ultimate claims]], particularly for the most recent accident years, looks at them in contexts outside the methods that produced them. By accident year, the selection implies
+
+1. **[[Loss Ratio|Claim ratios]]**, the ultimate claims divided by the on-level [[Earned Premium|earned premium]], compared across years and with the expected or pricing claim ratio.
+2. **[[Severity|Severities]]**, the ultimate claims divided by the ultimate claim counts.
+3. **[[Pure Premium Analysis|Pure premiums]]**, the ultimate claims divided by the [[Earned Exposure|earned exposures]].
+4. **[[Frequency|Frequencies]]**, the ultimate claim counts divided by the earned exposures, or by earned premium as a proxy when exposures are not available.
+5. **Average unpaid amounts**, the implied average case outstanding on open claims and the average amount of each unreported claim.
+
+Each statistic should be stable or follow a consistent trend from year to year, and should agree with what management and the industry say about the business. The review either gives the actuary greater confidence in the estimate or sends the actuary for more information before concluding. [[ASOP 43 - Property Casualty Unpaid Claim Estimates (ASB - 2007)|ASOP 43]] requires the actuary to assess the reasonableness of the estimate with appropriate indicators or tests.
+
+> [!example]- Is this selection reasonable? {Example}
+> The selected ultimate claims and the statistics they imply, in thousands of dollars except the severity:
 >
-> Assess the significance.
+> | Accident year | On-level earned premium | Ultimate claims | Claim ratio | Ultimate counts | Severity |
+> | --- | --- | --- | --- | --- | --- |
+> | 2021 | 20,000 | 13,400 | 67.0% | 1,340 | $\$10{,}000$ |
+> | 2022 | 21,000 | 14,280 | 68.0% | 1,360 | $\$10{,}500$ |
+> | 2023 | 22,000 | 15,180 | 69.0% | 1,380 | $\$11{,}000$ |
+> | 2024 | 23,000 | 14,950 | 65.0% | 1,300 | $\$11{,}500$ |
 >
-> > [!answer]-
-> > $$\begin{align*}
-> > \text{Deficiency} &= \$47{,}500{,}000 - \$43{,}000{,}000 \\
-> > &= \$4{,}500{,}000
-> > \end{align*}$$
-> >
-> > That is $9.5\%$ of the indicated reserve and $7.5\%$ of surplus. Two consequences run in parallel:
-> >
-> > - **Balance sheet.** Correcting it reduces surplus to $\$55.5$M, a $7.5\%$ hit, and the premium-to-surplus ratio moves from $1.50$ to $1.62$.
-> > - **Pricing.** The carried reserves imply loss ratios five percent lower than the indication does. If those understated loss ratios have been feeding rate indications, current rates are inadequate by roughly the same margin — and the deficiency will therefore repeat in the business being written now.
-> >
-> > The second consequence is the one that compounds, and it is the reason reserve adequacy findings belong in front of the pricing actuary as well as the CFO.
+> - The severities rise about 5% a year, steadily, including in 2024.
+> - Ultimate counts per $\$1{,}000$ of premium, a proxy for frequency, are 67.0, 64.8, 62.7 and then 56.5, a 9.9% drop in the last year.
+> - Nothing else in the data explains such a drop in frequency, so the 2024 ultimate claim counts look under-projected.
+> - The 2024 claim ratio falls to 65.0% after three years of increases, which points to the same problem.
+> - The 2024 selection is not reasonable as it stands, and its claim count projection is revisited.

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:5d56788d42bba9207154e9edefa4451c203e6474ae75bd3c4ce7fa05479df334
+  content_hash: sha256:e47a1656651dac8ed44105b2a65b4a7b27ae818d7ff349fb076f2c726c018dc4
   sources:
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.9 pp.155-158 (PDF pp.167-170), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch.3 pp.29-30 (PDF pp.35-36), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
@@ -14,48 +14,50 @@ verification:
   log: .verify/Concepts/Homogeneity.md
 ---
 
-**Homogeneity** is the property of a group of risks whose expected loss costs are similar enough that their experience can be averaged into one rate — or projected with one development pattern — without material distortion.
-
-> $$\text{Homogeneous if } E[\text{Loss Cost}_i] \approx E[\text{Loss Cost}_j] \text{ for all } i,j \text{ in the group}$$
-
-- Homogeneity is always traded against [[Credibility]]. Splitting a book finer makes each group more alike but leaves each with less data; combining groups buys volume at the price of averaging together risks that genuinely differ. Every segmentation decision in ratemaking and reserving is a point on that curve.
-- In **ratemaking**, a non-homogeneous class means systematic cross-subsidy: the better risks in the class are overcharged and leave (see [[Classification Ratemaking]]), while the worse risks stay — the adverse selection spiral that risk classification exists to prevent.
-- In **reserving**, Friedland groups claims on the behaviour that drives development — reporting patterns, settlement patterns, how well case reserves can be set, the likelihood of reopening — alongside consistency of coverage, claim volume and severity. Two coverages may have similar loss ratios and completely different reporting and settlement speeds; combining them into one triangle produces development factors that describe neither. See [[Reserving Data Organization]].
-- Werner's criteria for evaluating a rating variable (after Finger's *Risk Classification*) are **statistical** (statistical significance, homogeneity, credibility), **operational** (objective, inexpensive to administer, verifiable), **social** (affordability, causality, controllability, privacy concerns) and **legal** — homogeneity is one requirement inside the statistical criteria, not the whole test.
-- Homogeneity is checked, not assumed: compare loss ratios, frequencies and severities across subgroups within a proposed class, and look for a consistent difference that persists across years.
-
 ![[Media/Figures/Homogeneity.svg|340]]
 
-> [!example]- Testing a Class for Homogeneity {Example}
-> A commercial auto class "light trucks" is rated at a single rate. Splitting it by radius of operation gives:
->
-> | Subgroup | Earned exposures | Losses | Pure premium |
-> |---|---|---|---|
-> | Local (under $50$ mi) | $6{,}000$ | $\$3{,}600{,}000$ | $\$600$ |
-> | Intermediate | $2{,}500$ | $\$2{,}125{,}000$ | $\$850$ |
-> | Long haul | $1{,}500$ | $\$2{,}250{,}000$ | $\$1{,}500$ |
->
-> Is the class homogeneous, and what should be done?
->
-> > [!answer]-
-> > $$\text{Class pure premium} = \frac{\$7{,}975{,}000}{10{,}000} = \$797.50$$
-> >
-> > Relativities to the class average: $0.75$, $1.07$ and $1.88$. Long-haul risks cost more than twice what local risks cost, so the class is **not homogeneous** — the single rate is $33\%$ above the local operators' cost and $47\%$ below the long-haul cost.
-> >
-> > The remedy is to introduce radius of operation as a rating variable. The subgroup volumes support it: even the $1{,}500$-exposure long-haul cell carries a difference far too large to be noise, and the relativities should be [[Credibility|credibility-weighted]] against the class average rather than used raw.
-> >
-> > If the insurer does not split the class, competitors that do will quote the local operators below its rate and take them, leaving it with the long-haul risks at an inadequate rate.
+**Homogeneity** is the property of a group of risks with similar expected costs, so that their experience can be averaged into one rate, or projected with one development pattern, without material distortion. It is about expected costs, not actual ones: even identical risks have different loss experience in a policy period, because insured events are random. A classification aims for groups that are homogeneous within and heterogeneous between, and it is traded against [[Credibility|credibility]], because a finer group has less data.
 
-> [!example]- Homogeneity in a Reserving Segmentation {Example}
-> An actuary must reserve a $\$30{,}000{,}000$ commercial package book. Property claims (60% of premium) close within a year; liability claims (40%) take six years. One combined triangle gives a $12$–$24$ factor of $1.28$.
->
-> Is the combined triangle acceptable?
->
-> > [!answer]-
-> > No — for two reasons, and the second is the one that bites.
-> >
-> > First, $1.28$ describes neither coverage: property alone would be near $1.05$, liability near $1.60$. The blended factor is only correct while the **mix** stays exactly where it was.
-> >
-> > Second, that is precisely what will not hold. If the insurer grows the liability side to $55\%$ of premium, the true blended factor rises, but the historical triangle still reports $1.28$ — the estimate is now biased low, and nothing in the triangle reveals why. This is the [[Mix of Business|mix-of-business]] distortion.
-> >
-> > Split into property and liability triangles. Each is homogeneous in emergence pattern, each has enough volume to be credible at this premium size, and the blended answer falls out of the sum rather than being baked into the factors.
+> [!example]- A commercial auto class of light trucks is rated at one rate. By radius of operation, local trucks have 6,000 exposures and $\$3{,}600{,}000$ of losses, intermediate 2,500 and $\$2{,}125{,}000$, and long haul 1,500 and $\$2{,}250{,}000$. Is the class homogeneous? {Example}
+> - The pure premiums are $\$600$ local, $\$850$ intermediate and $\$1{,}500$ long haul.
+> - The class pure premium is $7{,}975{,}000/10{,}000 = \$797.50$, so the relativities are $0.75$, $1.07$ and $1.88$.
+> - Long-haul risks cost more than twice as much as local ones, so the class is not homogeneous.
+> - The single rate is 33% above the local trucks' cost and 47% below the long-haul trucks'. Radius of operation should become a [[Rating Variable|rating variable]], with credibility-weighted relativities.
+
+## Homogeneity as a criterion for a rating variable
+
+Werner & Modlin, after Finger, group the criteria for evaluating a rating variable into four categories:
+
+1. **Statistical**: statistical significance, homogeneity and credibility.
+2. **Operational**: objective, inexpensive to administer and verifiable.
+3. **Social**: affordability, causality, controllability and privacy concerns.
+4. **Legal**: the variable is permitted by law.
+
+Homogeneity is one of the statistical criteria. If a group contains materially different risks, it is subdivided with more levels of a variable or a new variable. If a level has too few risks or is unstable, similar levels are combined to make it credible, as ASOP No. 12 asks the actuary to consider. Creating more groupings can improve homogeneity and reduce discontinuities between rates, but it reduces credibility and raises expense.
+
+## Homogeneity and adverse selection
+
+A heterogeneous class charges its better risks more than their cost and its worse risks less. A competitor that segments more finely can quote the better risks a lower rate and take them, while the worse risks stay, so the insurer's average loss cost rises. This is [[Adverse Selection|adverse selection]]. Overly broad rating territories are an example: one average territorial relativity overcharges the better risks and undercharges the worse. An insurer that introduces a rating variable that better matches rates to risk can attract lower-risk classes with lower rates, which improves its long-run profitability.
+
+## Homogeneity in reserving
+
+Friedland subdivides claims into groups with similar characteristics on:
+
+1. Consistency of the coverage triggered, so that the claims are subject to similar laws, policy terms and claims handling.
+2. The volume of claim counts.
+3. The time to report a claim once it has occurred.
+4. The ability to set an appropriate case reserve through the life of the claim.
+5. The time to settle a claim once it is reported.
+6. The likelihood that a claim reopens once it is settled.
+7. The average settlement value, the severity.
+
+Development techniques assume the historical pattern applies to the immature years. Data that blends segments with different patterns, such as short-tailed and long-tailed coverages, gives development factors that describe neither, and they become biased when the mix between the segments shifts. Splitting the data restores homogeneity but reduces the volume in each segment and makes its link ratios more variable. Reinsurance data, with its varied treaties and retentions, is especially hard: split into homogeneous groups it loses credibility.
+
+> [!example]- A commercial package book is reserved with one triangle. Property claims develop by a 12-to-24 factor of 1.05 and liability claims by 1.60, and liability is 42% of the losses at 12 months, giving a combined factor of 1.28. What happens if liability grows to 55% of the losses at 12 months? {Example}
+> - The combined factor is a weighted average of the two coverages' factors, by their share of the losses at 12 months.
+> - At a 55% liability share, the true combined factor is $0.45 \times 1.05 + 0.55 \times 1.60 = 1.35$.
+> - The historical triangle still shows 1.28, so it understates the development on the latest years.
+> - Separate property and liability triangles are each homogeneous, and the combined estimate is their sum.
+
+> [!trap] Combining segments because their frequencies match
+> Two segments with the same claim frequency can still report and settle at different speeds. Homogeneity for reserving is about development and settlement patterns, so compare the segments' development factors and diagnostics, not their frequencies.

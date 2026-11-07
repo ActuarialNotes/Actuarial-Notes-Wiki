@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:0691f4f4db9442a4c88ef9cb3f196bc8bbf1c3e062c71e553a7e134bfb1bbb39
+  content_hash: sha256:d9a7f5c866f5d99a769a33c1bb0c9539a6cbc923fcc4b203adaea50a643b6d12
   sources:
     - "Patrik, Reinsurance, Ch.7 of Foundations of Casualty Actuarial Science (4th ed., CAS 2001) — Exam 7's reading before Friedland (2022), printed pp.451-458 (PDF pp.109-116: CL and BF disadvantages; Stanard-Bühlmann method, earned risk pure premium net of commissions, brokerage and internal expenses, Formula 7.64, used-up premium, Table 7.65 and the accuracy comparison; Credibility IBNR, Formula 7.66), sha256:26f2fc8441b1a2f8b335a9bfc9e20f0c742fa340c4b7f6eff93376c3c340cf06 — https://www.casact.org/sites/default/files/database/studynotes_ch7.pdf"
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, Version 3, 2010), Ch.10 Cape Cod Technique, PDF pp.180-185 (printed 174-179: Cape Cod = reported BF with the expected claim ratio from reported experience; used-up premium = EP x % reported; % reported = 1/CDF; not as appropriate as BF for thin or volatile data; on-level premium and trended claims required in theory; Scenario 3 case-strength overstatement), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
@@ -14,71 +14,65 @@ verification:
   log: .verify/Concepts/Cape Cod Method.md
 ---
 
-**Cape Cod Method** (Stanard-Bühlmann) is the [[Bornhuetter-Ferguson Method|Bornhuetter-Ferguson]] technique with the a priori loss ratio **derived from the data itself** rather than supplied externally. The ELR is estimated as total reported losses over total *used-up* (on-level, developed) premium across all years.
-
-> $$\text{ELR} = \frac{\sum_i C_i}{\sum_i \text{EP}_i \times \tfrac{1}{\text{CDF}_i}}$$
-
-> $$\text{IBNR}_i = \text{ELR} \times \text{EP}_i \times \left(1 - \tfrac{1}{\text{CDF}_i}\right)$$
-
-- **Used-up premium** $\text{EP}_i / \text{CDF}_i$ is the share of each year's premium "exposed" to the losses reported so far. Weighting by it puts each accident year on a common maturity footing, so an immature year contributes little to the ELR estimate — as it should, having reported little.
-- Once the ELR is in hand, the IBNR formula is identical to BF. The whole difference between the two methods is **where the a priori comes from**: BF imports it, Cape Cod estimates it.
-- That makes Cape Cod the right choice when **no credible external ELR exists** — a book whose pricing history is unreliable — and it removes BF's dependence on a judgmentally selected loss ratio. The cost is that the estimate is no longer independent of the data: a systematically distorted triangle now corrupts the a priori as well as the development.
-- Premium **must be on level** and losses must be trended to a common cost level before the ELR is computed, or the derived ratio blends years written at different rate levels and different cost levels into one number.
-- Cape Cod converges to the [[Chain Ladder Method|chain ladder]] as cohorts mature and to the [[Expected Loss Method|expected claims]] technique for very immature ones — the same limiting behaviour as BF.
-- A **decay-weighted** variant (generalized Cape Cod) estimates a separate ELR for each year, weighting the other years less the further they lie from it, recognizing that the loss ratio level drifts.
-- **Patrik's chapter, Exam 7's reading before Friedland (2022), adds** (not on the current outline), for reinsurance:
-  - **Exposure base.** The premium is each year's earned **risk pure premium**: the treaty premium net of reinsurance commissions, brokerage fees and internal expenses, adjusted to remove rate-level differences between years. Commissions and brokerage are easy to net out, being coded by contract. Internal expenses are harder, and if they cannot be netted out they can be left in, since only a relative exposure base is needed. The rate-level adjusted premium is what goes into the Stanard-Bühlmann calculation of the ELR and the IBNR; each year's estimated ultimate loss is then its reported loss plus that IBNR, and its estimated ultimate loss ratio is stated over the year's earned risk pure premium, not the adjusted premium.
-  - **Against the chain ladder.** The ELR comes from the overall reported experience rather than being selected judgmentally, as in Bornhuetter-Ferguson, though each year's IBNR then depends heavily on its rate-level adjusted premium. As long as those rate-relativity adjustments are reasonably accurate, Stanard-Bühlmann gives more accurate estimates than the chain ladder for the recent, immature years and overall.
-  - **Credibility IBNR.** When the rate-level adjustments are not fully trusted, the two estimates are weighted together: more weight on Stanard-Bühlmann for green years, where the chain ladder estimate has high variance, and more on the chain ladder for older years, where the cumulative rate-level adjustments are trusted less. With report lag $\text{Rlag}_k$ and a credibility factor $0 \le CF \le 1$, the weight on the chain ladder is $Z_k = CF \times \text{Rlag}_k$, and $\text{IBNR}_k = Z_k \cdot \text{IBNR}^{CL}_k + (1 - Z_k) \cdot \text{IBNR}^{SB}_k$.
-
 ![[Media/Figures/Cape_Cod_Method.svg|340]]
 
-> [!example]- Deriving the ELR and the Reserve {Example}
-> Three accident years, with on-level earned premium and reported losses ($000s):
->
-> | AY | Maturity | EP | Reported | CDF | $\%$ reported |
-> |---|---|---|---|---|---|
-> | $2022$ | $36$ mo | $7{,}000$ | $1{,}750$ | $1.084$ | $92.3\%$ |
-> | $2023$ | $24$ mo | $6{,}500$ | $2{,}600$ | $1.265$ | $79.1\%$ |
-> | $2024$ | $12$ mo | $6{,}000$ | $2{,}850$ | $1.898$ | $52.7\%$ |
->
-> Compute the Cape Cod ELR and total IBNR.
->
-> > [!answer]-
-> > **Used-up premium:**
-> >
-> > $$\begin{align*}
-> > 2022: \; 7{,}000 \times 0.923 &= 6{,}461 \\
-> > 2023: \; 6{,}500 \times 0.791 &= 5{,}142 \\
-> > 2024: \; 6{,}000 \times 0.527 &= 3{,}162 \\[4pt]
-> > \text{Total} &= 14{,}764
-> > \end{align*}$$
-> >
-> > **ELR:**
-> >
-> > $$\text{ELR} = \frac{1{,}750 + 2{,}600 + 2{,}850}{14{,}764} = \frac{7{,}200}{14{,}764} = 48.8\%$$
-> >
-> > **IBNR by year** ($\text{ELR} \times \text{EP} \times \%$ unreported):
-> >
-> > | AY | $\%$ unreported | IBNR |
-> > |---|---|---|
-> > | $2022$ | $7.7\%$ | $0.488 \times 7{,}000 \times 0.077 = 263$ |
-> > | $2023$ | $20.9\%$ | $0.488 \times 6{,}500 \times 0.209 = 662$ |
-> > | $2024$ | $47.3\%$ | $0.488 \times 6{,}000 \times 0.473 = 1{,}384$ |
-> > | **Total** | | $\$2{,}309$K |
-> >
-> > Note how the used-up premium weights the years. AY 2022 is mature, so its used-up premium is nearly its full premium and it *dominates* the ELR estimate. The immature AY 2024 contributes only $3{,}162$ of the $14{,}764$ denominator despite having $6{,}000$ of premium.
+The **Cape Cod Method**, or Stanard-Bühlmann method, is the [[Bornhuetter-Ferguson Method|Bornhuetter-Ferguson method]] with the expected claim ratio derived from the reported claims experience instead of selected by judgment. One expected claim ratio is derived for all the accident years together, as their total reported claims over their total used-up premium:
 
-> [!example]- When Cape Cod Beats BF, and When It Does Not {Example}
-> Two situations: (a) a five-year-old commercial programme whose pricing indications have never been reconciled to results; (b) a book that changed its case reserving philosophy two years ago, strengthening reserves across all open years.
->
-> Which method suits each?
->
-> > [!answer]-
-> > **(a) Cape Cod.** With no reliable external ELR, a BF estimate would rest on an a priori nobody can defend. Cape Cod derives the loss ratio from the programme's own emergence, weighted properly by maturity, and removes the guess entirely.
-> >
-> > **(b) BF — or neither, until the triangle is fixed.** The case strengthening has inflated reported losses on every year at once. Cape Cod computes its ELR *from those inflated losses*, so the strengthening enters the estimate twice: once through the reported losses in the numerator of each year's ultimate, and again through an ELR that is now too high.
-> >
-> > BF with an externally derived ELR — from pricing, adjusted for [[Rate Level Change|rate level]] and trend — is insulated from that particular contamination, because its a priori never touches the distorted triangle.
-> >
-> > The general principle: **Cape Cod's strength is independence from external judgment; its weakness is dependence on the data.** When the data is the thing that is wrong, an external a priori is worth more than a self-consistent one. The proper fix in (b) is a [[Berquist-Sherman Method|Berquist-Sherman]] restatement before either method is run.
+> $$\text{Expected Claim Ratio} = \frac{\sum \text{Reported Claims}}{\sum \text{Used-Up Premium}}$$
+
+- $\text{Reported Claims}$ are each year's reported claims to date, not developed to ultimate.
+- $\text{Used-Up Premium}$ is each year's earned premium times its percent reported, $\text{Earned Premium}/\text{CDF}$. It is the premium whose claims are expected to have been reported by the valuation date.
+
+Each year's ultimate claims are then the reported claims plus the expected unreported claims, as in the Bornhuetter-Ferguson method:
+
+> $$\text{Ultimate Claims} = \text{Reported Claims} + \text{Expected Claim Ratio} \times \text{Earned Premium} \times \left(1 - \frac{1}{\text{CDF}}\right)$$
+
+- $1 - 1/\text{CDF}$ is the year's percent unreported, and the last term is its [[IBNR]].
+
+The total IBNR is the sum over the accident years. With paid claims and the paid CDF, the same steps give a paid Cape Cod estimate. Exposures and pure premiums can replace premium and claim ratios, with used-up exposures in the denominator.
+
+> [!example]- Three accident years have earned premium ($000) of 10,000, 10,500 and 11,000, reported claims of 6,300, 5,600 and 3,500, and reported CDFs of 1.050, 1.230 and 1.859 at 36, 24 and 12 months. What are the Cape Cod expected claim ratio and IBNR? {Example}
+> - The used-up premiums are $10{,}000/1.050 = 9{,}524$, $10{,}500/1.230 = 8{,}537$ and $11{,}000/1.859 = 5{,}917$, a total of 23,978.
+> - The reported claims total 15,400, so the expected claim ratio is $15{,}400/23{,}978 = 64.2\%$.
+> - The percents unreported are $1 - 1/1.050 = 4.76\%$, $1 - 1/1.230 = 18.70\%$ and $1 - 1/1.859 = 46.21\%$.
+> - The IBNRs are $0.642 \times 10{,}000 \times 0.0476 = 306$, $0.642 \times 10{,}500 \times 0.1870 = 1{,}261$ and $0.642 \times 11{,}000 \times 0.4621 = 3{,}263$.
+> - The total IBNR is $\$4{,}830$ thousand. The immature year contributes only 5,917 of the 23,978 used-up premium, so the mature years set most of the ratio.
+
+## Adjusting claims and premium to a common level
+
+One ratio is applied to every year, so the claims and premium of all years must be on a common level first. The premium is brought to the current rate level ([[On Level Premium|on-level premium]]), and the reported claims are trended to a common cost level and adjusted for tort reform or benefit changes. The ratio derived from them is then restated to each year's own rate, cost and legal level before it multiplies that year's premium. For a year whose premium has on-level factor $\text{OLF}$ and whose claims are trended $n$ years to the common level, the expected claim ratio at the year's own level is
+
+> $$\text{Year's Claim Ratio} = \frac{\text{Expected Claim Ratio} \times \text{OLF}}{(1 + t)^n \times \text{Reform Factor}}$$
+
+- $t$ is the annual claim trend, and $\text{Reform Factor}$ is the tort reform adjustment applied to the year's claims.
+
+Where the history of rate changes or trend is not available, the method is often run on unadjusted premium and claims. The actuary then keeps that simplification in mind when selecting ultimate claims.
+
+> [!example]- The Cape Cod expected claim ratio at the 2024 rate and cost level is 70.0%. AY 2022 earned $\$10{,}000{,}000$, its on-level factor to 2024 rates is 1.08 and claim trend is 5% a year, with no reform. What are AY 2022's expected claims? {Example}
+> - At 2024 rates its premium is $10{,}000{,}000 \times 1.08 = \$10{,}800{,}000$, and its expected claims at the 2024 cost level are $0.700 \times 10{,}800{,}000 = \$7{,}560{,}000$.
+> - Two years of trend are removed: $7{,}560{,}000/1.05^2 = \$6{,}857{,}143$.
+> - Equivalently, the year's claim ratio is $0.700 \times 1.08/1.1025 = 68.6\%$ of its unadjusted premium.
+
+## Cape Cod against Bornhuetter-Ferguson
+
+The key assumption is that unreported claims will develop based on expected claims, which are derived from the reported claims and earned premium. The two methods differ only in where the expected claims come from, so the comments on the Bornhuetter-Ferguson method apply to both. Reinsurers are among its most frequent users.
+
+- **The expected claim ratio is mechanical.** It comes from the data, not from judgment, so it responds to a change in the claim ratios that is in the data, as the development technique does. A change anticipated but not yet in the data, such as a coming severity increase, can be built into a Bornhuetter-Ferguson ratio and not into a Cape Cod one.
+- **One weighted ratio covers every year.** A Bornhuetter-Ferguson analysis can select different ratios for older and recent years; the Cape Cod method cannot. It assumes a single expected claim ratio across all years once they are on a common rate level.
+- **It needs credible data.** With thin or volatile data, or very high attachment points with sparse experience, the derived ratio is unreliable and the Bornhuetter-Ferguson method with a benchmark ratio is more appropriate.
+- **It depends on the CDFs twice.** CDFs that are too high understate the used-up premium, which overstates the expected claim ratio, and they also overstate the percent unreported, so the IBNR is overstated. A strengthening of case reserves does both and also inflates the reported claims in the ratio's numerator.
+
+> [!example]- Case reserves were strengthened two years ago on every open year. Should the reported Cape Cod method or the reported Bornhuetter-Ferguson method with a pricing-based ratio be relied on? {Example}
+> - The strengthening raised the reported CDFs, so both methods overstate the percent unreported.
+> - The Cape Cod ratio is also computed from the inflated reported claims and the understated used-up premium, so its expected claims are overstated too.
+> - The Bornhuetter-Ferguson ratio from pricing never touches the distorted triangle, so it is affected only through the CDFs.
+> - The Bornhuetter-Ferguson method is the better of the two, and a [[Berquist-Sherman Method|Berquist-Sherman]] restatement of the triangle before either is run is better still.
+
+## The Cape Cod method in Exam 7
+
+In Clark's growth-curve model, the Cape Cod method uses the expected percent of ultimate reported by age $x$, $G(x)$, in place of $1/\text{CDF}$. The expected loss ratio is the total claims to date over the total of each year's on-level premium times $G(x)$, and each year's reserve is that ratio times its premium times $1 - G(x)$, or $G(T) - G(x)$ when the curve is truncated at age $T$. It has fewer parameters than Clark's LDF method, one expected loss ratio for all years in place of an ultimate for each year. Several treaties can be combined by pooling their premiums, used-up premiums and reported claims into one ratio.
+
+In Patrik's chapter, the premium is each treaty year's earned risk pure premium: the premium net of commissions, brokerage and internal expenses, adjusted to remove rate-level differences between years. When those adjustments are not fully trusted, the chain ladder and Stanard-Bühlmann IBNRs are credibility weighted. The weight on the chain ladder is $Z = \text{CF} \times \text{Rlag}$, a credibility factor $0 \le \text{CF} \le 1$ times the year's percent reported, so green years lean on Stanard-Bühlmann and older years on the chain ladder.
+
+> [!trap] Developing the claims in the ratio
+> The numerator is reported claims, not ultimate claims. Developing each year's claims and dividing by the full premium weights the years by premium instead of by used-up premium. In the three-year example, total developed claims over total premium give $20{,}010/31{,}500 = 63.5\%$ in place of 64.2%, because the immature year now counts with its full premium.

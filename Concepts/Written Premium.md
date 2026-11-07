@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:757b8958314ef12521fbc780b41b580f3f1c020b57fe4a8050c8c772e71a6b84
+  content_hash: sha256:3192646e2c9190a2f5eddf0935e7220d2fdc42223d037a81f1ad74bb15770d4e
   sources:
     - "NAIC, Accounting Practices and Procedures Manual, as of March 2025, Part 1 (Indiana DOI copy), SSAP No. 53 ¶3-4, 6, 12, 14-15 (PDF pp.347-350); SSAP No. 62R ¶30 (62-8, PDF p.441), sha256:a29e7223b53854eff1beb79c3fd6a969c54529d2dacc74510ea122a5c7b4ad13 — https://www.in.gov/idoi/files/INDAP25-Pt-1.pdf"
     - "Odomirok, McFarlane, Kennedy & Brenden, Financial Reporting Through the Lens of a Property/Casualty Actuary (CAS, 2014), U&IE Part 1B columns, pp.82-83, 218 (printed 81-82, 217), sha256:eee4cf26c25cc24d4802029ecc44bbc9b419f2bfa9d1859e6e808884a0ec04e6 — https://www.casact.org/sites/default/files/database/studynotes_odomirok-etal_financial-reportingv4.pdf"
@@ -14,67 +14,58 @@ verification:
   log: .verify/Concepts/Written Premium.md
 ---
 
-**Written Premium** is the full premium booked when a policy is issued, for the entire policy term, regardless of how much of the coverage period has elapsed.
-
-> $$\text{Written Premium} = \sum_{\text{policies issued in period}} \text{full-term premium}$$
-
-> $$\text{Earned Premium} = \text{Written Premium} - \Delta\text{UEP}$$
-
-- Written premium is a **transaction** measure: the whole $\$1{,}200$ of an annual policy is written on the day it is bound, even though only $\$100$ has been [[Earned Premium|earned]] a month later. The unbooked remainder sits in the [[Unearned Premium|unearned premium reserve]].
-- In a **growing** book written premium exceeds earned premium, because the UEP is rising; in a **shrinking** book the relationship reverses. The gap is therefore a measure of growth, not of profitability.
-- Written premium is the right measure for production, market share, commission (paid on writings) and for the **average written premium** series used in [[Premium Trend|premium trend]] analysis — trend is a written-level phenomenon, since it is driven by what is being sold today.
-- It is the *wrong* denominator for a [[Loss Ratio|loss ratio]]: losses in the period arise from coverage provided in the period, which is earned premium.
-- Written premium may still change after issuance — endorsements, cancellations and [[Premium Audit|audits]] all book additional or return premium into a later period, so "written premium" for a policy year keeps moving until the audits close.
-- **Statutory definition and types:** SSAP No. 53 defines written premium as the contractually determined amount charged to the policyholder for the policy's effective period, recorded on the effective date. An insurer's written premium is **direct** (its own policies), **assumed** (reinsurance it accepts) or **ceded** (reinsurance it buys, which reduces its written and earned premium), and **net** written premium is direct plus assumed less ceded ([[Premium Accounting]]).
-
 ![[Media/Figures/Written_Premium.svg|340]]
 
-> [!example]- Written, Earned and Unearned from One Policy {Example}
-> A $12$-month homeowners policy is written $10/1/2024$ for $\$1{,}200$.
->
-> Give calendar year $2024$'s written, earned and unearned premium for this policy.
->
-> > [!answer]-
-> > $$\begin{align*}
-> > \text{CY 2024 written} &= \$1{,}200 \\
-> > \text{CY 2024 earned} &= \$1{,}200 \times \tfrac{3}{12} = \$300 \\
-> > \text{UEP at } 12/31/2024 &= \$1{,}200 \times \tfrac{9}{12} = \$900
-> > \end{align*}$$
-> >
-> > The remaining $\$900$ earns during $2025$ — so this single policy contributes $\$1{,}200$ to CY 2024 written premium and only $\$300$ to CY 2024 earned premium. Checking the identity for CY 2024:
-> >
-> > $$\$1{,}200 - (\$900 - \$0) = \$300 \;\checkmark$$
+**Written Premium** is the total premium of the policies written during a period, the full-term premium of each policy whose effective date falls in the period, regardless of how much of its coverage has been provided. Mid-term adjustments, such as endorsements, cancellations and audits, are written premium too. For a period, it is
 
-> [!example]- Written Premium Growth Overstates Rate Adequacy {Example}
-> An insurer reports the following:
->
-> | Year | Written premium | Earned premium |
-> |---|---|---|
-> | $2023$ | $\$40{,}000{,}000$ | $\$37{,}000{,}000$ |
-> | $2024$ | $\$52{,}000{,}000$ | $\$44{,}000{,}000$ |
->
-> Incurred losses were $\$26{,}640{,}000$ in $2023$ and $\$31{,}680{,}000$ in $2024$. Management reports "the loss ratio improved from $66.6\%$ to $60.9\%$".
->
-> Evaluate the claim.
->
-> > [!answer]-
-> > Management divided losses by **written** premium:
-> >
-> > $$\frac{\$26{,}640{,}000}{\$40{,}000{,}000} = 66.6\% \qquad \frac{\$31{,}680{,}000}{\$52{,}000{,}000} = 60.9\%$$
-> >
-> > On the correct **earned** basis:
-> >
-> > $$\frac{\$26{,}640{,}000}{\$37{,}000{,}000} = 72.0\% \qquad \frac{\$31{,}680{,}000}{\$44{,}000{,}000} = 72.0\%$$
-> >
-> > The loss ratio did not improve at all — it is flat at $72\%$. The apparent improvement is entirely an artefact of $30\%$ written-premium growth outrunning $19\%$ earned-premium growth: losses emerge on *earned* exposure, so a fast-growing book always looks better on a written basis than it is.
-> >
-> > This is one of the standard data-reasonableness checks: any loss ratio quoted against written premium in a growing book should be recomputed before it is believed.
+> $$\text{Written Premium} = \sum \text{Full-Term Premium} + \text{Adjustments}$$
 
-> [!tip]- How it appears on the exam
-> - **DISC-IA:** The objective on types of written premium asks how direct, assumed, ceded and net written premium relate, and when a transaction, such as an endorsement, an audit adjustment or premium paid before the effective date, counts as written premium.
-> - **Exam 5:** Written premium feeds premium trend and the bridge to earned premium through the change in the unearned premium reserve.
+- $\text{Full-Term Premium}$ is the premium for the whole term of each policy with an effective date in the period.
+- $\text{Adjustments}$ are the additional and return premiums of the mid-term changes assigned to the period.
 
-> [!warning]- Exam traps
-> - **Net is after ceding:** Net written premium subtracts ceded premium from direct plus assumed; leaving out assumed business understates it.
-> - **Advance premium is not written:** Premium paid before the policy's effective date is a liability, not written premium, until coverage begins.
-> - **Written on the effective date:** Written premium is recorded when the policy takes effect, not when it is collected.
+Written premium is assigned by the policy's effective date. Under SSAP No. 53 it is recorded on the effective date, not when the premium is billed or received. Premium received before the effective date is an advance premium liability, not written premium, until coverage begins.
+
+> [!example]- An annual homeowners policy is written on 10/1/2024 for $\$1{,}200$. What are its calendar year 2024 written, earned and unearned premium? {Example}
+> - Its effective date is in 2024, so its whole $\$1{,}200$ is calendar year 2024 written premium.
+> - Three of its twelve months fall in 2024, so its 2024 [[Earned Premium|earned premium]] is $1{,}200 \times 3/12 = \$300$.
+> - The [[Unearned Premium|unearned premium]] at 12/31/2024 is $1{,}200 \times 9/12 = \$900$, which is earned in 2025.
+
+## Cancellations and audits
+
+A pro rata mid-term cancellation returns the premium for the unexpired part of the term as negative written premium. Only the premium for the expired part is earned. Where the negative written premium goes depends on the aggregation:
+
+- **Calendar year.** The return premium is written premium of the calendar year in which the cancellation occurs, which can be a later year than the original. The original year is not restated.
+- **Policy year.** The return premium is booked in the policy's own policy year, once the cancellation has occurred by the evaluation date. Before that, the policy year holds the full original written premium.
+
+Audit premium follows the same rule. It is written premium of the calendar year in which it is booked, and of the policy's original policy year once the audit has occurred. Policy year premium in an audited line, such as workers compensation, therefore keeps developing after the policy year ends.
+
+> [!example]- An annual policy is written on 7/1/2011 for $\$400$ and cancelled on 3/31/2012, after 75% of its term has expired. What written premium does it contribute to each calendar year and to policy year 2011? {Example}
+> - Its original $\$400$ is calendar year 2011 written premium.
+> - The cancellation returns the unexpired 25%, $0.25 \times 400 = \$100$, as $-\$100$ of calendar year 2012 written premium.
+> - In policy year 2011, the original $\$400$ and the $-\$100$ are both booked, for $\$300$ of written premium once the evaluation date is on or after 3/31/2012.
+> - The policy earns $\$200$ in 2011 and $\$100$ in 2012, its premium for the 75% of the term that expired.
+
+## Written and earned premium
+
+Earned premium is the written premium adjusted for the change in the unearned premium reserve:
+
+> $$\text{Written Premium} = \text{Earned Premium} + \text{Ending UEP} - \text{Beginning UEP}$$
+
+- $\text{Ending UEP}$ and $\text{Beginning UEP}$ are the unearned premium reserves at the end and the start of the period.
+
+In a growing book, the unearned premium reserve rises and written premium exceeds earned premium. In a shrinking book the relationship reverses.
+
+## Written premium in ratemaking
+
+Losses arise from the coverage provided in a period, so a loss ratio's denominator is earned premium. Written premium shows what is being sold now. The changes in average written premium at current rate level measure [[Premium Trend|premium trend]]. The premium is first restated at current rate level, or the trend data shows an abrupt change at each rate change, and the rate change would be counted twice: once in the current rate level adjustment and once in the trend.
+
+## Direct, assumed, ceded and net written premium
+
+An insurer's written premium is direct, on its own policies, or assumed, on reinsurance it accepts. Ceded written premium is the part it passes to its reinsurers. Its net written premium is
+
+> $$\text{Net Written Premium} = \text{Direct} + \text{Assumed} - \text{Ceded}$$
+
+- $\text{Direct}$, $\text{Assumed}$ and $\text{Ceded}$ are the direct, assumed and ceded written premium of the period.
+
+> [!trap] A loss ratio on written premium
+> An insurer writes $\$40{,}000{,}000$ and earns $\$37{,}000{,}000$ in 2023, then writes $\$52{,}000{,}000$ and earns $\$44{,}000{,}000$ in 2024, with losses of $\$26{,}640{,}000$ and $\$31{,}680{,}000$. On written premium its loss ratio falls from 66.6% to 60.9%. On earned premium it is 72.0% in both years. A growing book always looks better on written premium. Divide losses by earned premium.

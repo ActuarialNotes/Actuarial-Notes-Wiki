@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:b2ee76d6b4d7350128e1be67080512750fad742fae47c700c7451f5dbf85331a
+  content_hash: sha256:bd26490490eb4074b7b08764fc15cd8aff5ee80dfb51dbbb340317dd9331b3c3
   sources:
     - "ASOP No. 43, Property/Casualty Unpaid Claim Estimates (ASB, June 2007, Doc. No. 159), §§3.3, 3.6.1, 3.8, 4.1-4.2, pp.3-10 (PDF pp.8-15), sha256:776302c442cb8d3210fc41269d38caeec4c547da8159084b80fa2ac4ce949cce — https://www.actuarialstandardsboard.org/wp-content/uploads/2014/02/asop043_159.pdf"
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ver. July 2010), Ch.1 pp.4-5, 9-10 (PDF pp.10-11, 15-16); Ch.15 pp.350-351 (PDF pp.356-357), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
@@ -14,59 +14,40 @@ verification:
   log: .verify/Concepts/Reserve Communication.md
 ---
 
-**Reserve Communication** is the actuary's obligation to explain an [[Unpaid Claims|unpaid claim estimate]] — what it is, how it was derived, how uncertain it is, and why it has changed — to audiences who will act on it. [[ASOP 43 - Property Casualty Unpaid Claim Estimates (ASB - 2007)|ASOP 43]] governs what must be disclosed.
-
-> $$\Delta\text{Reserve} = \underbrace{\text{New AY}}_{\text{exposure}} - \underbrace{\text{Payments}}_{\text{run-off}} + \underbrace{\text{Prior-year development}}_{\text{change of view}}$$
-
-**What ASOP 43 requires the actuary to disclose**: the intended purpose and scope of the estimate, the basis (an actuarial central estimate, a range, or another target), the methods and key assumptions, any material assumption changes from the prior analysis, significant limitations and uncertainties, and whether the estimate is gross or net, discounted or undiscounted, and what it includes (indemnity, ALAE, ULAE, recoveries).
-
-**Explaining a change** is the hardest part and the one most often done badly. A movement in the reserve has three unrelated sources, and combining them into one number tells the reader nothing:
-
-- **New exposure** — a new accident year arrived.
-- **Run-off** — payments made and claims closed.
-- **Re-estimation** — the actuary's view of prior years changed. Within this, separate the change caused by *actual experience* (emergence differing from expectation) from the change caused by *a different method or assumption*.
-
-**Adapting to the audience** without changing the substance:
-
-- **Management and board** — what changed, why, what it costs, what to do about it. Dollar amounts by accident year and driver, with the pricing implication stated.
-- **Regulators** — the Statement of Actuarial Opinion, Schedule P, and the supporting Actuarial Report, in the prescribed form. See [[Regulatory Reporting]].
-- **Investors and rating agencies** — reserve development history, volatility, and the effect on reported earnings; adverse development is a disclosure item. See [[Stakeholder Reporting]].
-- **Auditors** — reproducible method documentation and data reconciliation.
-
-Uncertainty must be communicated, not buried: a point estimate given without a sense of its range invites the reader to treat it as precise, and the reserve is the least precise number on the balance sheet.
-
 ![[Media/Figures/Reserve_Communication.svg|340]]
 
-> [!example]- Explaining an $\$8$M Strengthening {Example}
-> General liability reserves rose from $\$42{,}000{,}000$ to $\$50{,}000{,}000$. The analysis shows: $\$5{,}200{,}000$ of adverse development on AY $2021$–$2023$ from higher severity on litigated claims; $\$1{,}900{,}000$ from a longer tail factor, changed after a benchmark study; and $\$900{,}000$ of ordinary growth on the new accident year net of payments.
->
-> Draft the substance of the communication to management.
->
-> > [!answer]-
-> > **What changed and why** — the $\$8.0$M splits three ways, and the three mean different things:
-> >
-> > | Driver | Amount | What it is |
-> > |---|---|---|
-> > | Severity on litigated claims, AY 2021–23 | $\$5.2$M | Experience emerged worse than expected |
-> > | Tail factor lengthened | $\$1.9$M | Assumption change, from a benchmark study |
-> > | New accident year net of run-off | $\$0.9$M | Ordinary mechanics, not a change of view |
-> >
-> > **What it implies beyond the balance sheet.** The $\$5.2$M is a severity trend running ahead of the assumption used in *pricing*. If reserving severity trend has been $5\%$ and emergence implies $8\%$, the current rate indication is understated, and the same deficiency is being written into new business today. This is the finding management most needs and the one most often left out of a reserve report.
-> >
-> > **What remains uncertain.** The tail change rests on an industry benchmark, not on this book's own data; a further year of emergence will test it. The litigated-claim severity may be a level shift or a continuing trend, and the two imply materially different reserves a year from now.
-> >
-> > **What was ruled out.** Case adequacy and settlement rates were reviewed and found stable, so the increase is not an artefact of a claims-practice change.
+**Reserve Communication** is the actuary's account of an [[Unpaid Claims|unpaid claim estimate]] to the people who will use it: what the estimate is, how it was derived, how uncertain it is and why it has changed. [[ASOP 43 - Property Casualty Unpaid Claim Estimates (ASB - 2007)|ASOP 43]] sets what the communication must disclose, consistent with the estimate's intended purpose or use:
 
-> [!example]- The Same Result to Three Audiences {Example}
-> Year-end reserves were $\$50{,}000{,}000$; $\$5{,}000{,}000$ of adverse development has since emerged on prior accident years.
->
-> What does each audience need?
->
-> > [!answer]-
-> > **Management** — the $\$5$M by accident year and cause, whether the current selection should be strengthened further, and the read-across to pricing. This audience needs the actionable version and can be given the diagnostic detail.
-> >
-> > **Regulators** — the development disclosed in Schedule P Part 2, the Statement of Actuarial Opinion reflecting the revised estimate, and an Actuarial Report documenting the methods, assumptions, and the change from the prior analysis. ASOP 43 requires the material assumption changes to be identified explicitly, not merely reflected in the number.
-> >
-> > **Investors** — the development disclosed in the financial statements with its effect on reported earnings, and enough about the driver to distinguish a one-off from a continuing trend.
-> >
-> > The constraint that binds all three: **the substance must be the same**. Adapting depth and framing to the audience is professional communication; presenting a more favourable characterization to one audience than another is not, and ASOP 43's disclosure requirements exist to make the difference visible.
+1. **Purpose.** The intended purpose or uses of the estimate.
+2. **Limitations.** Any significant limitation that constrained the analysis, so that a more in-depth analysis could produce a materially different result.
+3. **Scope.** The intended measure (such as an actuarial central estimate, a high or low estimate, or a mean plus a risk margin) and whether it is discounted, whether it is gross or net of specified recoverables, which claim adjustment expenses it covers, and which claims.
+4. **Dates.** The accounting date, the valuation date of the data, and the review date through which information was considered.
+5. **Risks and uncertainties.** Specific significant risks and uncertainties about whether actual results may vary from the estimate.
+6. **Assumptions and reliances.** Significant events, assumptions or reliances with a material effect on the estimate, including assumptions supplied by others.
+7. **Departures.** Any prescribed assumption or method, any reliance on other sources that disclaims responsibility for an assumption, and any material deviation from the standard.
+
+> [!example]- An actuary's report says only "The best estimate of unpaid claims is $\$50{,}000{,}000$." What does it fail to tell the reader? {Example}
+> - "Best estimate" describes the quality of the estimate, not its objective, so the intended measure is not identified.
+> - It does not say whether the amount is discounted, gross or net of reinsurance and other recoverables, or which adjustment expenses and claims it covers.
+> - It gives no accounting, valuation or review date, so the reader cannot tell what information it reflects.
+> - It discloses no significant risks, uncertainties or assumptions, so the reader cannot tell how far the actual result could fall from it.
+
+## Communicating a change in the estimate
+
+When an estimate updates a previous one, the actuary discloses the changes in assumptions, procedures, methods or models that have a material effect on it, and the reasons for them as far as the actuary knows them. The standard does not require their effect to be quantified. A change in the unpaid claims also reflects the new accident period and the payments made, which are not a change of view, so the change of view is separated from them by a [[Roll Forward Analysis|roll forward]]. Within the change of view, the part caused by claims emerging differently from expected is separated from the part caused by a new method or assumption.
+
+> [!example]- General liability unpaid claims rose $\$8.0$M in a year: $\$5.2$M from adverse development on accident years 2021–2023 as litigated claims settled for more, $\$1.9$M from a longer tail factor chosen after a benchmark study, and $\$0.9$M from the new accident year net of payments. How should the change be explained to management? {Example}
+> - The $\$0.9$M is the ordinary arrival of a new accident year less payments, not a change of view.
+> - The $\$5.2$M is claims emerging worse than expected, so it says the cost of litigated claims is higher than the estimate assumed.
+> - The $\$1.9$M is a change of assumption, which is disclosed with its reason, the benchmark study.
+> - Higher severity on litigated claims than assumed also bears on the current rates, so the explanation reaches pricing as well as the balance sheet.
+
+## Communicating uncertainty
+
+An estimate may be presented as a point estimate, a range of estimates, a point estimate with a margin for adverse deviation, or a probability distribution of the unpaid claims, chosen for its intended purpose. A range is disclosed with its basis: a range of reasonable estimates of the intended measure, or a confidence interval from a model or reflecting certain risks. An estimate that swings from one valuation to the next moves the reported results and the financial metrics that investors, rating agencies and regulators watch, so its volatility is part of what is communicated.
+
+> [!example]- An actuary's central estimate is $\$47.5$M within a range of reasonable estimates of $\$43$M to $\$54$M. Management asks for "just the number". What should the communication give? {Example}
+> - It gives the central estimate as the number, identified as an actuarial central estimate.
+> - It discloses the range with its basis, a range of estimates each reasonable on its own.
+> - It names the significant risks behind the range, such as the tail factor or the severity trend, so management knows which assumptions could move the result.
+> - The range is $\$6.5$M above the central estimate and $\$4.5$M below it, so the upside risk to the liability is larger than the downside, which bears on how much capital to hold.

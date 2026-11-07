@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:fabf60470a64ab53a1448ea7f2c5c42fff5551efab59fe97100c066b5e061e95
+  content_hash: sha256:7d010793804ace24eacc8c0a4cb5e7b3e706abdbcd2d34d5e665c424c47e9d4b
   sources:
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch. 4 pp. 46 (claims Qs 7-9: claimant vs accident, per coverage, reopened claims), 48 (data-processing Q5 coding procedures, Q10 claimant vs occurrence); Ch. 6 pp. 74, 76 (reopened, CNP, consistent claim-count definitions); Ch. 13 p. 283 (exposures instead of counts after a change in claim definition), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 0
@@ -12,52 +12,29 @@ verification:
   log: .verify/Concepts/Claims Coding Changes.md
 ---
 
-**Claims Coding Changes** are changes in how claims are categorized in the claims system — coverage codes, cause-of-loss codes, claim vs. claimant counting, the treatment of reopened claims, or the line to which a claim is assigned. They move data between cells without changing any underlying cost.
-
-> $$\text{Apparent change} = \text{True change} + \text{Reclassification effect}$$
-
-- The signature is a **sharp, one-time shift concentrated at a single valuation date**, offset by a corresponding shift somewhere else. Losses do not appear or disappear in aggregate; they move.
-- Coding changes primarily corrupt **segment-level** analyses. A pure reclassification leaves the total reserve indication unaffected while making the affected lines' triangles unusable — which is dangerous precisely because the aggregate check passes.
-- **Claim count definitions** are the most common casualty: counting per claimant instead of per claim, beginning or ceasing to count claims closed without payment, or treating a reopened claim as new. Any of these makes a [[Claim Count Triangle|count triangle]] discontinuous and produces a spurious [[Frequency|frequency]] trend.
-- Distinguish from [[Claims Processing Changes]], which alter the **timing** of payments and reserve changes and so change the shape of the development curve. Coding changes alter **allocation**.
-- The remedies, in order of preference: recode the history consistently, map the old and new schemes and restate, or (last resort) select factors from post-change diagonals only and accept the loss of history.
-- This is exactly what Friedland's Chapter 4 management interview is for. A coding change is invisible in the triangle until it has already distorted the factors, and it is trivially identifiable by asking.
-
 ![[Media/Figures/Claims_Coding_Changes.svg|340]]
 
-> [!example]- A Coverage Reclassification {Example}
-> An insurer migrates claims systems on $1/1/2023$. Slip-and-fall claims at insured premises were coded "GL — premises" in the old system and "GL — operations" in the new one.
->
-> What happens to the two sub-line triangles?
->
-> > [!answer]-
-> > The premises triangle shows a sharp **drop** starting on the $12/31/2023$ diagonal; the operations triangle shows a matching **rise**. The combined GL triangle is unaffected.
-> >
-> > An actuary selecting factors from either sub-line's full history blends two definitions. Premises development factors will be understated (the recent diagonal is artificially low relative to its own history) and operations overstated.
-> >
-> > Fixes: recode the historical claims to the new scheme, or select factors for the affected sub-lines from post-migration data only. Where neither is possible, the honest answer is to analyze GL in total — the level at which the reclassification nets out — and allocate the result, disclosing that the sub-line split is not supported by the data.
+**Claims Coding Changes** are changes in how an insurer's systems record its claims: what counts as one claim, how a reopened claim is coded, which claims are counted at all, and the period, line and coverage a claim is recorded under. They change the claim counts and the cells of the [[Development Triangle|triangles]] without changing the cost of any claim.
 
-> [!example]- A Claim Count Definition Change {Example}
-> Reported claim counts and reported losses at $12$ months:
->
-> | AY | Counts | Losses | Severity |
-> |---|---|---|---|
-> | $2021$ | $2{,}000$ | $\$9{,}000$K | $\$4{,}500$ |
-> | $2022$ | $2{,}060$ | $\$9{,}500$K | $\$4{,}612$ |
-> | $2023$ | $2{,}120$ | $\$9{,}900$K | $\$4{,}670$ |
-> | $2024$ | $2{,}950$ | $\$10{,}300$K | $\$3{,}492$ |
->
-> Diagnose.
->
-> > [!answer]-
-> > Counts jumped $39\%$ in $2024$ while losses grew only $4\%$, so average severity fell $25\%$. A genuine $39\%$ frequency increase with no corresponding loss growth is close to impossible — the extra claims would have to be almost costless.
-> >
-> > That is the signature of a **counting change**: the insurer has started counting something it did not count before, most likely claims closed without payment, or claimants rather than claims.
-> >
-> > The consequences run through everything built on counts:
-> >
-> > - **[[Frequency-Severity Method|Frequency-severity]] projections** break — the frequency series has a step change and the severity series has an offsetting one.
-> > - **Count development factors** are corrupted for any year spanning the change.
-> > - **Average case outstanding**, the main [[Case Adequacy|case adequacy]] diagnostic, is divided by a redefined denominator and will appear to fall.
-> >
-> > The fix is to obtain counts on a consistent definition — usually available by re-extracting with the old filter — before any count-based analysis is run.
+The coding the actuary needs to know, and to see held constant through the experience period, is:
+
+1. **Claimant or occurrence**: whether an accident with several claimants, or with payments under several coverages, is one claim or several.
+2. **Reopened claims**: whether a reopened claim is coded as a new claim or as the original claim reopened, which can make the closed counts decrease across a row.
+3. **Claims closed without payment**: whether they are in the closed counts, and whether a claim with no case outstanding and no payment is in the reported counts.
+4. **Allocation**: the accident period, line and coverage a claim and its payments are recorded under, including payments not yet allocated to an accident period.
+
+Counting claims closed without payment, or claims with no case outstanding and no payments, gives much lower average values. What matters most is that the actuary knows the definition and that it is the same throughout the experience period. A change in the definition of a claim count has a significant effect on every diagnostic and every technique that uses claim counts.
+
+The [[Frequency-Severity Method|frequency-severity techniques]] are the most exposed, because they assume that future claim count development will be similar to past claim count development. Reopened claims can distort both the frequency and the severity, so where they are numerous the actuary may analyze them separately. Berquist and Sherman suggest earned exposures in place of claim counts when the count data are of questionable accuracy or the definition of a claim count has changed.
+
+> [!example]- Reported counts and losses at $12$ months were $2{,}000$ and $\$9{,}000{,}000$ for accident year $2021$, $2{,}060$ and $\$9{,}500{,}000$ for $2022$, $2{,}120$ and $\$9{,}900{,}000$ for $2023$, and $2{,}950$ and $\$10{,}300{,}000$ for $2024$. What does the jump in $2024$ suggest? {Example}
+> - The average reported severity is about $\$4{,}500$, $\$4{,}612$ and $\$4{,}670$ for $2021$ to $2023$, and $10{,}300{,}000/2{,}950 = \$3{,}492$ for $2024$.
+> - Counts rose $39\%$ in $2024$ while losses rose $4\%$, so the extra claims cost almost nothing.
+> - A frequency increase that large with no growth in losses is far more likely a change in what is counted, such as claimants instead of occurrences or claims with no payment, than a change in experience.
+> - Frequency-severity projections, count development factors and the average case outstanding all use these counts, so the actuary gets counts on one definition before using any of them.
+
+> [!example]- A workers compensation insurer starts coding a reopened claim as a new claim instead of reopening the original one. What happens to its counts and averages? {Example}
+> - Every reopening now adds a reported claim, so reported counts rise from the date of the change with no new accidents.
+> - Frequency rises, and the average severity per claim falls, because the reopened claims are counted twice.
+> - The count development factors spanning the change mix the two definitions.
+> - The actuary recodes the history on one definition, or segregates the reopened claims and analyzes them separately.

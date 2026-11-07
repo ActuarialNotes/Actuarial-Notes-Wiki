@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:eed6df203e750049c808eb870cdef554442b0c539a1e3bb2d999114693236710
+  content_hash: sha256:3451a78f07fe818d6590a2021d35c119f95add4ef1b6dd8a24a18afa681e48c8
   sources:
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch. 3 pp.33-34 (PDF pp.39-40); Ch. 14 pp.329-332 (PDF pp.335-338), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 0
@@ -12,47 +12,40 @@ verification:
   log: .verify/Concepts/Gross Losses.md
 ---
 
-**Gross Losses** are losses before any cessions or recoveries are removed — the full amount of claim cost arising on the business the insurer wrote. Gross is the base from which [[Ceded Losses|ceded]], recovery and [[Net Losses|net]] figures are derived.
-
-> $$\text{Gross} = \text{Net} + \text{Ceded} + \text{Other Recoveries}$$
-
-> $$\text{Gross Ultimate} = \text{Gross Reported} \times \text{CDF}^{\text{gross}}$$
-
-- **"Gross" needs a qualifier.** It most often means gross of reinsurance, but a figure can also be gross or net of [[Salvage and Subrogation|salvage and subrogation]], of [[Deductible Recovery|deductible recoveries]], and of ULAE. Every comparison must confirm which recoveries the gross figure excludes; the syllabus and the Annual Statement use the term in different senses.
-- Reserve analysis is often run on **gross data first**: it is the largest and most homogeneous dataset, it is unaffected by changes in reinsurance structure, and the ceded and net figures follow from it.
-- Gross and ceded develop on **different patterns** — excess cessions attach only to large, slow claims — so ceded cannot be scaled from gross except under quota share.
-- Gross data is also what survives a **change of programme**. When the treaty changes, the ceded and net histories break; the gross history does not, and it can be re-ceded under the new terms.
-- For ratemaking, whether to work gross or net depends on how the reinsurance cost is provided for — see [[Net of Reinsurance]].
-
 ![[Media/Figures/Gross_Losses.svg|340]]
 
-> [!example]- Reconciling Gross, Ceded and Net {Example}
-> AY 2024: net retained losses $\$800{,}000$; excess-of-loss reinsurance recoverable $\$300{,}000$; salvage and subrogation recovered $\$50{,}000$.
->
-> What are gross losses?
->
-> > [!answer]-
-> > $$\begin{align*}
-> > \text{Gross} &= \$800{,}000 + \$300{,}000 + \$50{,}000 \\
-> > &= \$1{,}150{,}000
-> > \end{align*}$$
-> >
-> > The insurer's policyholders were paid $\$1{,}150{,}000$; the insurer itself bore $\$800{,}000$ of it. Note that this figure is gross of *both* reinsurance and S&S — a "gross of reinsurance, net of S&S" figure would be $\$1{,}100{,}000$, and the two are quoted interchangeably often enough that the basis must be stated.
+**Gross Losses** are an insurer's direct and assumed claims before the claims ceded to reinsurers are taken out. With [[Ceded Losses|ceded losses]] and [[Net Losses|net losses]] they are one of the three components of an [[Unpaid Claims|unpaid claim estimate]] made both gross and net of [[Reinsurance|reinsurance]], and
 
-> [!example]- Why the Gross Triangle Survives a Treaty Change {Example}
-> An insurer raised its per-occurrence retention from $\$250{,}000$ to $\$1{,}000{,}000$ effective $1/1/2022$. Its analyst proposes developing the net triangle, on the grounds that net is what the company retains.
->
-> Evaluate.
->
-> > [!answer]-
-> > The net triangle contains two incompatible regimes: through AY 2021 it is net of a $\$250$K retention, from AY 2022 net of $\$1$M. Net losses jump upward at the break for a reason that has nothing to do with claim cost, and no development factor selected across that boundary describes either regime.
-> >
-> > The **gross** triangle is unaffected — gross losses are what they are regardless of who ultimately pays them — so it can be developed with a consistent history and the full ten years of data.
-> >
-> > The sound procedure is therefore:
-> >
-> > 1. Develop **gross** to ultimate on the unbroken history.
-> > 2. Estimate **ceded** separately by applying the *current* treaty terms to the projected gross large-claim distribution ([[Reinsurance Recovery]]).
-> > 3. Derive **net** as the difference.
-> >
-> > This is the general reason the gross basis is the analytical starting point: it is the only one of the three that is invariant to the insurer's own risk-transfer decisions.
+> $$\text{Gross Losses} = \text{Net Losses} + \text{Ceded Losses}$$
+
+"Gross" says which recoveries are still in the figure, so it needs a qualifier. A figure gross of reinsurance can still be net of [[Salvage and Subrogation|salvage and subrogation]], and the actuary needs to know whether paid claims are recorded net or gross of those recoveries. For an insurer that cedes nothing, gross and net claims are the same and separate analyses are not needed.
+
+> [!example]- An accident year's net claims are $\$800{,}000$ and $\$300{,}000$ is recoverable from excess of loss reinsurance. Salvage of $\$50{,}000$ has already been deducted from both. What are its gross claims? {Example}
+> - Gross claims are net claims plus ceded claims, $800{,}000 + 300{,}000 = \$1{,}100{,}000$.
+> - The salvage is still deducted, so this is gross of reinsurance and net of salvage.
+> - Gross of both reinsurance and salvage, the claims are $1{,}100{,}000 + 50{,}000 = \$1{,}150{,}000$.
+
+## Analyzing gross with ceded or with net
+
+The development techniques apply to gross, ceded or net claims. To estimate unpaid claims net of reinsurance, actuaries analyze two of the three components and derive the third as the difference:
+
+1. **Gross and ceded.** Net is gross less ceded, the usual choice when ceded claims are coded in a different system from gross, so net triangles are hard to build.
+2. **Gross and net.** Ceded is gross less net, the more likely choice when ceded claims are in the same system and net data is readily available.
+
+The choice also depends on the reinsurance program and on the volume and quality of the data. Either way the actuary reviews the implied third component for reasonableness. Gross triangles hold the most claims and so may be the more credible, and some actuaries select the gross development factors first and use them in selecting the net or ceded factors. Others select net factors first, because large claims make gross claims more variable. The selected gross and net factors should bear a reasonable relationship to each other.
+
+> [!example]- An insurer's net claim data is unreliable after a system conversion, but its gross data is correct and it has one excess of loss treaty. How can it estimate net ultimate claims? {Example}
+> - Project gross ultimate claims with a development technique on the gross triangle.
+> - Estimate the ceded ultimate claims by applying the treaty's retention and limit to the projected gross claims.
+> - Net ultimate claims are the gross ultimate less the ceded ultimate.
+> - The unreliable net triangle is never developed.
+
+## When the reinsurance program changes
+
+Gross claims do not depend on the reinsurance the insurer buys. A change of retention or limit breaks the ceded and net histories and leaves the gross history whole, so the gross triangle keeps its full history for development, and the ceded claims can be estimated under the current treaty terms.
+
+> [!example]- An insurer raised its per-occurrence retention from $\$250{,}000$ to $\$1{,}000{,}000$ on January 1, 2022. Why should it not select development factors from its net triangle across accident years 2018–2024? {Example}
+> - Through 2021 the net triangle is net of a $\$250{,}000$ retention, and from 2022 net of $\$1{,}000{,}000$.
+> - More of each large claim is retained from 2022, so net claims develop differently on the two sides of the change.
+> - A factor averaged across the change describes neither retention.
+> - The gross triangle is unaffected, so the insurer develops gross claims and estimates the ceded claims under the $\$1{,}000{,}000$ retention.

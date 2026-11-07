@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:34a8f0ce9a0f8f4938cf01d994de6ffd50b7226227b0e10d2a7816749d81a4ea
+  content_hash: sha256:fd03fc8a973a312827912e8c512ed73985c34d944a368842fe0d3f6e1814589c
   sources:
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), Domain B tasks 1 (estimate mean and variance), 2 (sufficient statistic), 4 (critical values from a sampling distribution), 7 (order statistics), 8 (MLE; consistency, unbiasedness, sufficiency, efficiency, minimum variance, MSE; censoring and truncation), 9 (PDF p.4); Hogg Domain B §§4.1, 5.1, 6.1–6.5, 7.1–7.6 and Tse §§12.1, 12.3 (PDF p.6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
     - "Siegrist, Random, §6.3 Maximum Likelihood (likelihood = pdf with roles reversed; log-likelihood; interior vs boundary maxima; invariance; Bernoulli/Poisson/normal/gamma MLEs; Uniform[0,h]: MLE X_(n), mse 2h²/((n+1)(n+2)), (n+1)X_(n)/n unbiased with var h²/(n(n+2)); Uniform[a,a+1]: MLE not unique), sha256:f8c94e3de84f7a025fd32395169938f37e7fd7958d5a8be9d56b54ed307d6ffd — https://www.randomservices.org/random/point/Likelihood.html"
@@ -19,28 +19,74 @@ verification:
   log: .verify/Concepts/Maximum Likelihood Estimation.md
 ---
 
-**Maximum Likelihood Estimation (MLE)** is a method of parameter estimation that chooses the parameter value $\hat{\theta}$ that **maximizes the likelihood function** — the joint probability (discrete data) or joint density (continuous data) of the observed sample, read as a function of the parameter.
-
-> $$L(\theta) = \prod_{i=1}^n f(x_i \mid \theta)$$
-
-> $$\hat{\theta}_{\text{MLE}} = \arg\max_\theta L(\theta) = \arg\max_\theta \ell(\theta)$$
-
-> $$\ell(\theta) = \ln L(\theta) = \sum_{i=1}^n \ln f(x_i \mid \theta)$$
-
-- Taking the log turns the product into a sum and simplifies maximization
-- When the maximum is at an interior point and the log-likelihood is differentiable, the MLE solves the **score equation** $\ell'(\hat{\theta}) = 0$. The maximum can instead sit on a boundary: for $\text{Uniform}(0, \theta)$, $L(\theta) = \theta^{-n}$ on $\theta \ge \max x_i$ is decreasing, so $\hat{\theta} = \max X_i$, where $\ell'(\hat{\theta}) = -n/\hat{\theta} \ne 0$
-- Under regularity conditions — every $f(x \mid \theta)$ has the same support, the true $\theta$ is an interior point, the log-likelihood is differentiable, and the score equation has a unique root — MLEs are **consistent**, **asymptotically normal** with variance $1/[nI(\theta)]$ (see [[Fisher Information]]), and **asymptotically efficient** (achieve the [[Cramér-Rao Lower Bound]] in large samples). $\text{Uniform}(0, \theta)$, whose support depends on $\theta$, is the standard exception
-- **Invariance property**: if $\hat{\theta}$ is the MLE of $\theta$, then $g(\hat{\theta})$ is the MLE of $g(\theta)$
-
-**Adjustments for incomplete data:**
-- **[[Censoring]]**: observation is known to exceed some value $c$; contribute $P(X > c \mid \theta) = S(c \mid \theta)$ to the likelihood
-- **[[Truncation]]**: only observations exceeding a threshold $d$ are recorded; condition on $X > d$, contributing $f(x \mid \theta)/S(d \mid \theta)$
-
 ![[Media/Figures/Maximum_Likelihood_Estimation.svg|340]]
 
-> [!example]- MLE for an Exponential Distribution {Example}
-> Five claim sizes (in \$$1{,}000$s) are: $2, 3, 5, 4, 6$. Assuming $X_i \sim \text{Exp}(\theta)$, find the MLE of $\theta$.
->
-> > [!answer]-
-> > For $\text{Exp}(\theta)$: $f(x) = \frac{1}{\theta}e^{-x/\theta}$, so $\ell(\theta) = -n\ln\theta - \frac{1}{\theta}\sum x_i$.
-> > Setting $\ell'(\theta) = -\frac{n}{\theta} + \frac{\sum x_i}{\theta^2} = 0$ gives $\hat{\theta} = \bar{x} = \frac{2+3+5+4+6}{5} = 4$ (i.e., \$$4{,}000$).
+**Maximum Likelihood Estimation** is a method of [[Parameter Estimation|parameter estimation]] that estimates a parameter $\theta$ by the value $\hat{\theta}$ that maximizes the probability of the observed sample. For independent observations $x_1, \ldots, x_n$ from a distribution with pdf or pmf $f(x \mid \theta)$, the likelihood function is
+
+> $$L(\theta) = \prod_{i=1}^{n} f(x_i \mid \theta)$$
+
+The log-likelihood is
+
+> $$l(\theta) = \ln L(\theta) = \sum_{i=1}^{n} \ln f(x_i \mid \theta)$$
+
+The logarithm is an increasing function, so $L(\theta)$ and $l(\theta)$ have their maximum at the same value $\hat{\theta}$, the maximum likelihood estimate. When the maximum is at a point where $l(\theta)$ is differentiable, $\hat{\theta}$ is the solution of
+
+> $$l'(\hat{\theta}) = 0$$
+
+- $l'(\theta)$ is the score function, the first derivative of the log-likelihood with respect to $\theta$.
+
+> [!example]- Five claim sizes are 2, 3, 5, 4 and 6. Claim sizes are exponential with mean $\theta$. What is the maximum likelihood estimate of $\theta$? {Example}
+> - The exponential pdf is $f(x \mid \theta) = \frac{1}{\theta}e^{-x/\theta}$, so $\ln f(x \mid \theta) = -\ln\theta - x/\theta$.
+> - The sum of the claim sizes is 20, so $l(\theta) = -5\ln\theta - 20/\theta$.
+> - The score function is $l'(\theta) = -5/\theta + 20/\theta^2$.
+> - Setting the score function to 0 gives $\hat{\theta} = 20/5 = 4$, the sample mean.
+
+## Maximum at a boundary
+
+The maximum of $L(\theta)$ can be at the edge of the values of $\theta$ that the data allow, where the score function is not 0. For a sample from a [[Uniform Continuous Distribution|uniform distribution]] on $(0, \theta)$, the likelihood is $\theta^{-n}$ when $\theta$ is at least every observation, and 0 otherwise. The likelihood decreases in $\theta$, so the maximum likelihood estimate is the largest observation:
+
+> $$\hat{\theta} = X_{(n)}$$
+
+- $X_{(n)}$ is the largest of the [[Order Statistics|order statistics]] $X_{(1)} \le \cdots \le X_{(n)}$.
+
+> [!example]- Five losses from a uniform distribution on $(0, \theta)$ are 2, 7, 4, 9 and 3. What is the maximum likelihood estimate of $\theta$? {Example}
+> - The likelihood is $\theta^{-5}$ for $\theta \ge 9$ and 0 for $\theta < 9$.
+> - $\theta^{-5}$ decreases as $\theta$ increases, so the likelihood is largest at the smallest allowed value.
+> - The maximum likelihood estimate is $\hat{\theta} = 9$.
+
+## Invariance
+
+If $\hat{\theta}$ is the maximum likelihood estimate of $\theta$, then the maximum likelihood estimate of a function $g(\theta)$ is
+
+> $$\widehat{g(\theta)} = g(\hat{\theta})$$
+
+> [!example]- Claim sizes are exponential with mean $\theta$, and the maximum likelihood estimate of $\theta$ is 4. What is the maximum likelihood estimate of the probability that a claim exceeds 10? {Example}
+> - The probability that a claim exceeds 10 is $g(\theta) = e^{-10/\theta}$.
+> - Its maximum likelihood estimate is $g(4) = e^{-10/4} = 0.0821$.
+
+## Likelihood for incomplete data
+
+When the data are [[Incomplete Data|incomplete]] because of [[Censoring|censoring]] or [[Truncation|truncation]], each observation contributes to the likelihood the probability of what was observed. With $F(x)$ the cdf and $S(x) = 1 - F(x)$ the survival function, the contributions are:
+
+| Observation | Contribution to $L(\theta)$ |
+| --- | --- |
+| exact value $x$ | $f(x)$ |
+| right-censored at $u$, known only to exceed $u$ | $S(u)$ |
+| known only to lie in the interval $(a, b]$ | $F(b) - F(a)$ |
+| exact value $x$, left-truncated at $d$ | $f(x)/S(d)$ |
+| right-censored at $u$, left-truncated at $d$ | $S(u)/S(d)$ |
+
+> [!example]- Ground-up losses are exponential with mean $\theta$. Only losses above a deductible of 500 are reported, and a loss above 10,000 is recorded as 10,000. The five reported losses are 1,500, 2,500, 4,000, 10,000 and 10,000. What is the maximum likelihood estimate of $\theta$? {Example}
+> - Each exact loss contributes $f(x)/S(500) = \frac{1}{\theta}e^{-(x - 500)/\theta}$.
+> - Each loss recorded at 10,000 is right-censored and contributes $S(10{,}000)/S(500) = e^{-9{,}500/\theta}$.
+> - The exact losses exceed 500 by 1,000, 2,000 and 3,500, and each censored loss is 9,500 above 500, a total of 25,500.
+> - The log-likelihood is $l(\theta) = -3\ln\theta - 25{,}500/\theta$.
+> - Setting $l'(\theta) = -3/\theta + 25{,}500/\theta^2$ to 0 gives $\hat{\theta} = 25{,}500/3 = 8{,}500$.
+
+## Properties of the maximum likelihood estimator
+
+Under regularity conditions, which include that the support of $f(x \mid \theta)$ does not depend on $\theta$, the maximum likelihood estimator is [[Consistency|consistent]]. For a large sample it is approximately normal with mean $\theta$ and variance $1/[nI(\theta)]$, where $I(\theta)$ is the [[Fisher Information|Fisher information]]. This variance is the [[Cramér-Rao Lower Bound|Cramér-Rao lower bound]], so the estimator is asymptotically efficient. The uniform distribution on $(0, \theta)$ does not meet these conditions, because its support depends on $\theta$.
+
+## Maximum likelihood for a generalized linear model
+
+The coefficients $\beta_0, \ldots, \beta_p$ of a [[Generalized Linear Model|generalized linear model]] are maximum likelihood estimates. The log-likelihood is the sum of $\ln f(y_i)$ under the response distribution, with each mean $\mu_i$ given by $g(\mu_i) = \eta_i$. Statistical software maximizes it numerically.

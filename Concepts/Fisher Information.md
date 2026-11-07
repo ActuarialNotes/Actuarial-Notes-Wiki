@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:2e5a714c27de028489d3996ba66b7c638d7ad48a36c2bdb1ec2191327d781453
+  content_hash: sha256:c990f808c76e5c6d9f41da718dc80ca66e63e237319355a168f4a9d4a3dbcd99
   sources:
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), Domain B tasks 1 (estimate mean and variance), 2 (sufficient statistic), 4 (critical values from a sampling distribution), 7 (order statistics), 8 (MLE; consistency, unbiasedness, sufficiency, efficiency, minimum variance, MSE; censoring and truncation), 9 (PDF p.4); Hogg Domain B §§4.1, 5.1, 6.1–6.5, 7.1–7.6 and Tse §§12.1, 12.3 (PDF p.6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
     - "Siegrist, Random, §6.5 Best Unbiased Estimators (UMVUE; Cramér–Rao bound under the interchange assumption, support not depending on θ; (dλ/dθ)²/(n E[l²]) and the second-derivative form; equality iff h(X) = λ(θ) + u(θ)L1; Bernoulli, Poisson (θ/n), normal (M attains σ²/n), gamma; Uniform[0,a]: assumption fails, theorem does not apply), sha256:0d9765c5c7b5b8a54b29fc45c3a435d20e2a9200e027609658345087dedcd531 — https://www.randomservices.org/random/point/Unbiased.html"
@@ -18,34 +18,45 @@ verification:
   log: .verify/Concepts/Fisher Information.md
 ---
 
-**Fisher Information** $I(\theta)$ measures how sharply the likelihood identifies a parameter — the expected curvature of the log-likelihood at $\theta$. It sets the **Cramér–Rao lower bound**, a lower bound on the variance of any [[Unbiasedness|unbiased]] estimator — one that is not always attained — and so defines what [[Efficiency|efficient]] means.
-
-> $$I(\theta) = E\!\left[\left(\frac{\partial}{\partial\theta}\ln f(X\mid\theta)\right)^{2}\right] = -E\!\left[\frac{\partial^{2}}{\partial\theta^{2}}\ln f(X\mid\theta)\right]$$
-
-> $$\text{Var}(\hat\theta) \ \ge\ \frac{1}{n\,I(\theta)} \qquad \text{(Cramér–Rao)}$$
-
-- Information is **additive** over independent observations: a sample of $n$ carries $I_n(\theta) = n\,I(\theta)$, so the bound falls like $1/n$
-- The two expressions above agree under the usual regularity conditions (the support does not depend on $\theta$) — which is why the bound does *not* apply to the $\text{Uniform}(0,\theta)$ problem
-- An estimator attaining the bound is called **efficient**; the ratio $\frac{1/(nI(\theta))}{\text{Var}(\hat\theta)}$ is its efficiency
-- Under regularity conditions — a support that does not depend on $\theta$, a true $\theta$ inside the parameter space, a differentiable log-likelihood — the [[Maximum Likelihood Estimation|MLE]] is asymptotically Normal and asymptotically efficient:
-  $$\hat\theta_{\text{MLE}} \ \dot\sim\ N\!\left(\theta,\ \frac{1}{n I(\theta)}\right)$$
-  which is where MLE standard errors — and the ones printed in [[Parameter Estimate Tables]] — come from
-- In practice the **observed information** $-\ell''(\hat\theta)$ evaluated at the estimate replaces the expectation; inverting it gives the covariance matrix in the multiparameter case
-- Large $I(\theta)$ means a sharply peaked likelihood and a well-determined parameter; a flat likelihood carries little information and produces wide standard errors
-
 ![[Media/Figures/Fisher_Information.svg|340]]
 
-> [!example]- Information for a Poisson Rate {Example}
-> Claim counts are $X_1, \ldots, X_n \stackrel{\text{iid}}{\sim} \text{Poi}(\lambda)$. Find $I(\lambda)$ and the Cramér–Rao bound, and check whether $\bar{X}$ attains it.
->
-> > [!answer]-
-> > $$\ln f(x \mid \lambda) = -\lambda + x\ln\lambda - \ln x!$$
-> > $$\frac{\partial^2}{\partial\lambda^2}\ln f = -\frac{x}{\lambda^2} \ \Longrightarrow\ I(\lambda) = -E\!\left[-\frac{X}{\lambda^2}\right] = \frac{\lambda}{\lambda^2} = \frac{1}{\lambda}$$
-> > The bound is $\dfrac{1}{n I(\lambda)} = \dfrac{\lambda}{n}$. Since $\text{Var}(\bar{X}) = \lambda/n$, the [[Sample Mean]] attains the bound — it is the efficient estimator of $\lambda$.
+The **Fisher Information** $I(\theta)$ is a measure of how precisely one observation determines a parameter $\theta$, given by the expected curvature of its log-density. For one observation $X$ with density $f(x \mid \theta)$, the Fisher information is
 
-> [!example]- Standard Error of an MLE {Example}
-> A sample of $n = 200$ exponential claim sizes has MLE $\hat\theta = \bar{x} = 1{,}500$, and for the exponential $I(\theta) = 1/\theta^2$. Give an approximate $95\%$ [[Confidence Interval]] for $\theta$.
->
-> > [!answer]-
-> > $$\text{Var}(\hat\theta) \approx \frac{1}{n I(\theta)} = \frac{\theta^2}{n} \ \Longrightarrow\ \text{SE}(\hat\theta) \approx \frac{1{,}500}{\sqrt{200}} = 106.1$$
-> > $$1{,}500 \pm 1.96(106.1) = (1{,}292,\ 1{,}708)$$
+> $$I(\theta) = -E\left[\frac{\partial^2}{\partial \theta^2} \ln f(X \mid \theta)\right]$$
+
+Under regularity conditions, which include that the support of $f$ does not depend on $\theta$, it is also the variance of the score, the expected square of the first derivative:
+
+> $$I(\theta) = E\left[\left(\frac{\partial}{\partial \theta} \ln f(X \mid \theta)\right)^2\right]$$
+
+A large $I(\theta)$ means a sharply peaked log-likelihood and a precisely estimated parameter. A small $I(\theta)$ means a flat log-likelihood.
+
+> [!example]- Claim counts follow a [[Poisson Distribution|Poisson distribution]] with mean $\lambda$. What is the Fisher information of $\lambda$ for one observation? {Example}
+> - The log-density is $\ln f(x \mid \lambda) = -\lambda + x\ln\lambda - \ln x!$.
+> - The first derivative is $-1 + x/\lambda$, and the second derivative is $-x/\lambda^2$.
+> - Taking the negative expected value gives $I(\lambda) = E[X]/\lambda^2 = \lambda/\lambda^2$.
+> - The Fisher information is $I(\lambda) = 1/\lambda$.
+
+## Information in a sample
+
+Information adds over independent observations. The Fisher information of a [[Random Sample|random sample]] of size $n$ is
+
+> $$I_n(\theta) = n\,I(\theta)$$
+
+> [!example]- Claim sizes are exponential with mean $\theta$. What is the Fisher information of $\theta$ in a sample of 50 claims, evaluated at $\theta = 1{,}000$? {Example}
+> - The log-density is $\ln f(x \mid \theta) = -\ln\theta - x/\theta$.
+> - The second derivative is $1/\theta^2 - 2x/\theta^3$.
+> - Its negative expected value, with $E[X] = \theta$, is $I(\theta) = -1/\theta^2 + 2/\theta^2 = 1/\theta^2$.
+> - For 50 claims at $\theta = 1{,}000$, the information is $50/1{,}000^2 = 0.00005$.
+
+## Variance of the maximum likelihood estimator
+
+For a large sample, the [[Maximum Likelihood Estimation|maximum likelihood estimator]] $\hat{\theta}$ is approximately normal with mean $\theta$ and variance
+
+> $$\text{Var}(\hat{\theta}) \approx \frac{1}{n\,I(\theta)}$$
+
+This is the [[Cramér-Rao Lower Bound|Cramér-Rao lower bound]]. In practice $\theta$ is replaced by $\hat{\theta}$, or $nI(\theta)$ by the observed information $-l''(\hat{\theta})$, the negative second derivative of the log-likelihood at the estimate. These are the standard errors printed in [[Parameter Estimate Tables|parameter estimate tables]].
+
+> [!example]- A sample of 200 exponential claim sizes gives the maximum likelihood estimate $\hat{\theta} = 1{,}500$. What is an approximate 95% [[Confidence Interval|confidence interval]] for $\theta$? {Example}
+> - For the exponential, $I(\theta) = 1/\theta^2$, so $\text{Var}(\hat{\theta}) \approx \theta^2/200$.
+> - Replacing $\theta$ by 1,500, the standard error is $1{,}500/\sqrt{200} = 106.07$.
+> - The interval is $1{,}500 \pm 1.96(106.07)$, which is $(1{,}292,\ 1{,}708)$.

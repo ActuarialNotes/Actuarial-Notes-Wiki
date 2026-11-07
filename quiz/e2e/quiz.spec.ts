@@ -152,3 +152,53 @@ test.describe('score by difficulty', () => {
     await expect(page.getByText('It was rated Hard.')).toBeVisible()
   })
 })
+
+// A guest's first finished quiz asks them to save it (lib/guestSavePrompt.ts) —
+// once: after "Not now" the next quiz goes straight to its results.
+test.describe('guest save prompt', () => {
+  async function finishOne(page: import('@playwright/test').Page) {
+    await page.goto('/quiz?ids=p-004')
+    const startQuiz = page.getByRole('button', { name: 'Start Quiz' })
+    const optionA = page.getByRole('button', { name: 'Option A' })
+    await expect(startQuiz.or(optionA).first()).toBeVisible()
+    if (await startQuiz.isVisible()) await startQuiz.click()
+    await optionA.click()
+    await page.getByRole('button', { name: 'Confirm Answer' }).click()
+    await page.getByRole('button', { name: /Finish Quiz/i }).click()
+    await expect(page).toHaveURL(/\/review/)
+  }
+
+  // The level-up ceremony, the streak flame and any quests play first; the
+  // prompt waits for them, so step through each until it is the one open.
+  async function pastCelebrations(page: import('@playwright/test').Page, prompt: import('@playwright/test').Locator) {
+    const celebration = page.getByRole('dialog').getByRole('button', { name: /^(Continue|Keep it going|Later|Claim later)$/ }).first()
+    await expect(async () => {
+      if (await prompt.isVisible()) return
+      if (await celebration.isVisible()) await celebration.click()
+      await expect(prompt).toBeVisible({ timeout: 1000 })
+    }).toPass({ timeout: 20000 })
+  }
+
+  test('asks after the first quiz, then never again', async ({ page }) => {
+    await finishOne(page)
+    const prompt = page.getByRole('dialog', { name: 'Save your progress' })
+    await pastCelebrations(page, prompt)
+    await expect(prompt.getByRole('button', { name: 'Create an account' })).toBeVisible()
+    await prompt.getByRole('button', { name: 'Not now' }).click()
+    await expect(prompt).toHaveCount(0)
+
+    await finishOne(page)
+    await expect(page.getByRole('heading', { name: 'Question Review' })).toBeVisible()
+    await page.waitForTimeout(1500)
+    await expect(prompt).toHaveCount(0)
+  })
+
+  test('Create an account opens the sign-up form', async ({ page }) => {
+    await finishOne(page)
+    const prompt = page.getByRole('dialog', { name: 'Save your progress' })
+    await pastCelebrations(page, prompt)
+    await prompt.getByRole('button', { name: 'Create an account' }).click()
+    await expect(page).toHaveURL(/\/auth/)
+    await expect(page.getByLabel('Confirm Password')).toBeVisible()
+  })
+})

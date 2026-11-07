@@ -14,13 +14,17 @@ type Mode = 'signin' | 'signup'
 
 interface LocationState {
   from?: string
+  /** Open on the sign-up form (the guest save prompt's "Create an account"). */
+  mode?: Mode
 }
 
 export default function Auth() {
   const navigate = useNavigate()
   const location = useLocation()
   const { user, loading } = useAuth()
-  const [mode, setMode] = useState<Mode>('signin')
+  const [mode, setMode] = useState<Mode>(
+    () => ((location.state as LocationState | null)?.mode === 'signup' ? 'signup' : 'signin'),
+  )
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')

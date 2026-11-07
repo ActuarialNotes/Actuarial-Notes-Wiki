@@ -15,6 +15,13 @@ describe('estimateSeconds', () => {
     expect(estimateSeconds(pool, 2)).toBe(Math.round(one + three))
   })
 
+  it("gives a paper that states its question count each question's share", () => {
+    // ALTAM: three hours, six questions — whatever the pool's points.
+    const pool = [{ exam: 'Exam ALTAM', points: 8 }, { exam: 'Exam ALTAM', points: 11 }]
+    expect(estimateSeconds(pool, 6)).toBe(180 * 60)
+    expect(formatEstimate(estimateSeconds(pool, 3)!)).toBe('~1 h 30 min')
+  })
+
   it('says nothing for an empty draw or an exam with no pace', () => {
     expect(estimateSeconds([], 5)).toBeNull()
     expect(estimateSeconds([{ exam: 'Exam MAS-I', points: 1 }], 0)).toBeNull()

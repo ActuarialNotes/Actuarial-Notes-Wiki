@@ -529,6 +529,7 @@ export default function Landing() {
             levels={difficulties}
             timed={quizSettings.timed}
             revealDuring={quizSettings.reveal === 'during'}
+            conceptLinks={quizSettings.conceptLinks}
             onChange={openQuizSheet}
             onStart={startQuiz}
           />

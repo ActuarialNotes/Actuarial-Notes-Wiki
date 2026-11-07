@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { Eye, EyeOff, Play, Timer, TimerOff } from 'lucide-react'
+import { BookOpen, BookX, Eye, EyeOff, Play, Timer, TimerOff } from 'lucide-react'
 import type { Difficulty } from '@/lib/parser'
 import { DIFFICULTY_LEVELS } from '@/lib/quizDifficulty'
 import { difficultySummary } from '@/lib/quizSetup'
@@ -12,7 +12,8 @@ export type SetupSection = 'topics' | 'count' | 'difficulty' | 'sitting'
  * The quiz setup screen's card: the reader's own quiz, ready to start. The
  * count is the headline — itself a button, opening the sheet at *How many* —
  * with the time it should take beside it. Under them a pill for each topic,
- * then the settings as a row of icons (difficulty, timed, when answers show):
+ * then the settings as a row of icons (difficulty, timed, when answers show,
+ * whether concepts can be tapped — an off one drawn hollow):
  * the topics are names worth reading, the settings are states worth glancing
  * at. Every one of them opens the setup sheet at its own section
  * (`onChange`). One action, Start, white on the exam's colour.
@@ -28,6 +29,7 @@ export function QuizHeroCard({
   levels,
   timed,
   revealDuring,
+  conceptLinks,
   onChange,
   onStart,
 }: {
@@ -42,6 +44,8 @@ export function QuizHeroCard({
   timed: boolean
   /** Answers marked as each is confirmed (`during`), or held for the end. */
   revealDuring: boolean
+  /** Concepts a question names can be tapped to read. */
+  conceptLinks: boolean
   onChange: (section: SetupSection) => void
   onStart: () => void
 }) {
@@ -91,22 +95,31 @@ export function QuizHeroCard({
 
       <div role="group" aria-label="Quiz settings" className="flex gap-2 border-t border-white/20 pt-3">
         <SettingIcon
-          label={`Difficulty: ${difficultySummary(levels)}. Change`}
+          label={`Difficulty: ${difficultySummary(levels)}`}
           onClick={() => onChange('difficulty')}
         >
           <DifficultyBars levels={levels} />
         </SettingIcon>
         <SettingIcon
-          label={`${timed ? 'Timed' : 'Untimed'}. Change`}
+          label={timed ? 'Timed' : 'Untimed'}
+          on={timed}
           onClick={() => onChange('sitting')}
         >
           {timed ? <Timer className="h-[22px] w-[22px]" aria-hidden /> : <TimerOff className="h-[22px] w-[22px]" aria-hidden />}
         </SettingIcon>
         <SettingIcon
-          label={`${revealDuring ? 'Answers after each question' : 'Answers at the end'}. Change`}
+          label={revealDuring ? 'Answers after each question' : 'Answers at the end'}
+          on={revealDuring}
           onClick={() => onChange('sitting')}
         >
           {revealDuring ? <Eye className="h-[22px] w-[22px]" aria-hidden /> : <EyeOff className="h-[22px] w-[22px]" aria-hidden />}
+        </SettingIcon>
+        <SettingIcon
+          label={conceptLinks ? 'Tap concepts to read them' : 'Concepts not tappable'}
+          on={conceptLinks}
+          onClick={() => onChange('sitting')}
+        >
+          {conceptLinks ? <BookOpen className="h-[22px] w-[22px]" aria-hidden /> : <BookX className="h-[22px] w-[22px]" aria-hidden />}
         </SettingIcon>
       </div>
 
@@ -135,17 +148,38 @@ export function QuizHeroCard({
   )
 }
 
-/** One setting as an icon button: no text, its state in its name. */
-function SettingIcon({ label, onClick, children }: { label: string; onClick: () => void; children: ReactNode }) {
+/**
+ * One setting as an icon button: no text, its state in its name. An on/off
+ * setting that is off is drawn hollow — no fill, a dashed edge, the struck
+ * icon dimmed — so off reads at a glance, not only by the slash in the glyph.
+ */
+function SettingIcon({
+  label,
+  on = true,
+  onClick,
+  children,
+}: {
+  label: string
+  /** Omitted for a setting with a value rather than a switch (difficulty). */
+  on?: boolean
+  onClick: () => void
+  children: ReactNode
+}) {
   return (
     <button
       type="button"
       data-testid="quiz-setting"
-      aria-label={label}
-      title={label.replace(/\. Change$/, '')}
+      data-on={on}
+      aria-label={`${label}. Change`}
+      title={label}
       aria-haspopup="dialog"
       onClick={onClick}
-      className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/20 text-white transition-colors hover:bg-white/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+      className={cn(
+        'flex h-11 w-11 items-center justify-center rounded-xl text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white',
+        on
+          ? 'bg-white/20 hover:bg-white/30'
+          : 'border-[1.5px] border-dashed border-white/50 bg-transparent hover:bg-white/10 [&>svg]:opacity-60',
+      )}
     >
       {children}
     </button>

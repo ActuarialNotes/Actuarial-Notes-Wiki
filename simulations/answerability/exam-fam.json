@@ -13795,7 +13795,15 @@
        "page": "Credibility",
        "quote": "Adding severity variation raises the standard to $1{,}082 \\times (1 + \\text{CV}_S^2)$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Full Credibility Standard",
+      "quote": "With Poisson claim counts the frequency term is $1$, so $n_F = \\lambda_0\\,(1 + \\mathrm{CV}_X^2)$ expected claims.",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r2",
@@ -13812,7 +13820,15 @@
        "page": "Credibility",
        "quote": "For pure **frequency** with Poisson claim counts, $p = 90\\%$ and $k = \\pm 5\\%$ gives the standard $n_{\\text{full}} = (1.645/0.05)^2 = 1{,}082$ claims."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Full Credibility Standard",
+      "quote": "$p = 0.90 \\Rightarrow z_{0.95} = 1.645$, and $k = 0.05$.",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r3",
@@ -14257,7 +14273,15 @@
        "page": "Full Credibility Standard",
        "quote": "$n_F = \\left(\\frac{z_{(1+p)/2}}{k}\\right)^{2}\\left[\\frac{\\sigma_N^{2}}{\\mu_N} + \\left(\\frac{\\sigma_X}{\\mu_X}\\right)^{2}\\right]$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Full Credibility Standard",
+      "quote": "Every full credibility standard is $\\lambda_0$ times the squared [[Coefficient of Variation|coefficient of variation]] of one unit of what is being estimated, counted in that unit.",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r6",
@@ -14274,7 +14298,15 @@
        "page": "Normal Distribution",
        "quote": "$z_{0.90} = 1.282$, $z_{0.95} = 1.645$, $z_{0.975} = 1.960$, $z_{0.99} = 2.326$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Full Credibility Standard",
+      "quote": "$p = 0.90 \\Rightarrow z_{0.95} = 1.645$, and $k = 0.05$.",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r7",
@@ -14588,7 +14620,15 @@
        "page": "Full Credibility Standard",
        "quote": "$$n_F = \\left(\\frac{z_{(1+p)/2}}{k}\\right)^{2}\\left[\\frac{\\sigma_N^{2}}{\\mu_N} + \\left(\\frac{\\sigma_X}{\\mu_X}\\right)^{2}\\right]$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Full Credibility Standard",
+      "quote": "Every full credibility standard is $\\lambda_0$ times the squared [[Coefficient of Variation|coefficient of variation]] of one unit of what is being estimated, counted in that unit.",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r5",
@@ -14605,7 +14645,15 @@
        "page": "Limited Fluctuation Credibility",
        "quote": "Partial credibility uses the **square root rule**: $Z = \\sqrt{n/n_{\\text{full}}}$ when $n < n_{\\text{full}}$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Partial Credibility",
+      "quote": "$$Z = \\min\\left(\\sqrt{\\frac{n}{n_F}},\\; 1\\right)$$",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r6",
@@ -14622,7 +14670,15 @@
        "page": "Normal Distribution",
        "quote": "Useful percentiles: $z_{0.90} = 1.282$, $z_{0.95} = 1.645$, $z_{0.975} = 1.960$, $z_{0.99} = 2.326$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Full Credibility Standard",
+      "quote": "$p = 0.90 \\Rightarrow z_{0.95} = 1.645$, and $k = 0.05$.",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     }
    ]
   },
@@ -16547,7 +16603,15 @@
        "page": "Full Credibility Standard",
        "quote": "It is the smallest expected claim count $n_F$ for which the observed value stays within $100k\\%$ of its expected value with probability $p$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Full Credibility Standard",
+      "quote": "It is the smallest volume for which the observed value $W$ is within $100k\\%$ of its expected value with probability $p$:",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r2",
@@ -16564,7 +16628,15 @@
        "page": "Full Credibility Standard",
        "quote": "$$n_F = \\left(\\frac{z_{(1+p)/2}}{k}\\right)^{2}\\left[\\frac{\\sigma_N^{2}}{\\mu_N} + \\left(\\frac{\\sigma_X}{\\mu_X}\\right)^{2}\\right]$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Full Credibility Standard",
+      "quote": "$$n_F = \\lambda_0\\,\\frac{\\text{Var}(N)}{E[N]^{2}}$$",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r3",
@@ -17224,7 +17296,15 @@
        "page": "Full Credibility Standard",
        "quote": "$$n_F = \\left(\\frac{z_{(1+p)/2}}{k}\\right)^{2}\\left[\\frac{\\sigma_N^{2}}{\\mu_N} + \\left(\\frac{\\sigma_X}{\\mu_X}\\right)^{2}\\right]$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Full Credibility Standard",
+      "quote": "Every full credibility standard is $\\lambda_0$ times the squared [[Coefficient of Variation|coefficient of variation]] of one unit of what is being estimated, counted in that unit.",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r5",
@@ -17850,7 +17930,15 @@
        "page": "Credibility",
        "quote": "$$n_{\\text{full}} = \\left(\\frac{z_{(1+p)/2}}{k}\\right)^{2}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Full Credibility Standard",
+      "quote": "For Poisson claim counts $\\text{Var}(N) = E[N]$, so the standard reduces to $n_F = \\lambda_0$ expected claims.",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r2",
@@ -17867,7 +17955,15 @@
        "page": "Credibility",
        "quote": "Adding severity variation raises the standard to $1{,}082 \\times (1 + \\text{CV}_S^2)$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Full Credibility Standard",
+      "quote": "With Poisson claim counts the frequency term is $1$, so $n_F = \\lambda_0\\,(1 + \\mathrm{CV}_X^2)$ expected claims.",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r3",
@@ -20157,7 +20253,15 @@
        "page": "Full Credibility Standard",
        "quote": "It is the smallest expected claim count $n_F$ for which the observed value stays within $100k\\%$ of its expected value with probability $p$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Full Credibility Standard",
+      "quote": "It is the smallest volume for which the observed value $W$ is within $100k\\%$ of its expected value with probability $p$:",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r2",
@@ -20174,7 +20278,15 @@
        "page": "Credibility",
        "quote": "Adding severity variation raises the standard to $1{,}082 \\times (1 + \\text{CV}_S^2)$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Full Credibility Standard",
+      "quote": "With Poisson claim counts the frequency term is $1$, so $n_F = \\lambda_0\\,(1 + \\mathrm{CV}_X^2)$ expected claims.",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r3",
@@ -20242,7 +20354,15 @@
        "page": "Credibility",
        "quote": "Adding severity variation raises the standard to $1{,}082 \\times (1 + \\text{CV}_S^2)$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Full Credibility Standard",
+      "quote": "With Poisson claim counts the frequency term is $1$, so $n_F = \\lambda_0\\,(1 + \\mathrm{CV}_X^2)$ expected claims.",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r2",
@@ -20259,7 +20379,15 @@
        "page": "Credibility",
        "quote": "$$n_{\\text{full}} = \\left(\\frac{z_{(1+p)/2}}{k}\\right)^{2}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Full Credibility Standard",
+      "quote": "$z_{(1+p)/2}$ is the $(1+p)/2$ quantile of the standard normal distribution, because the range is two-sided.",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r3",
@@ -21625,7 +21753,15 @@
        "page": "Credibility",
        "quote": "$$n_{\\text{full}} = \\left(\\frac{z_{(1+p)/2}}{k}\\right)^{2}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Full Credibility Standard",
+      "quote": "$$\\lambda_0 = \\left(\\frac{z_{(1+p)/2}}{k}\\right)^{2}$$",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r2",
@@ -21642,7 +21778,15 @@
        "page": "Full Credibility Standard",
        "quote": "**Severity**: $n_F = (z/k)^2 \\cdot \\mathrm{CV}_X^2$ claims, where $\\mathrm{CV}_X = \\sigma_X/\\mu_X$ is the [[Coefficient of Variation]] of claim size"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Full Credibility Standard",
+      "quote": "Every full credibility standard is $\\lambda_0$ times the squared [[Coefficient of Variation|coefficient of variation]] of one unit of what is being estimated, counted in that unit.",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r3",
@@ -21663,7 +21807,15 @@
        "page": "Credibility",
        "quote": "$$Z = \\sqrt{\\frac{n}{n_{\\text{full}}}} \\qquad \\text{(limited fluctuation)}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Partial Credibility",
+      "quote": "$$Z = \\min\\left(\\sqrt{\\frac{n}{n_F}},\\; 1\\right)$$",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r4",
@@ -21680,7 +21832,15 @@
        "page": "Credibility",
        "quote": "$$\\text{Estimate} = Z \\times \\text{Experience} + (1 - Z) \\times \\text{Complement}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Limited Fluctuation Credibility",
+      "quote": "$$U = Z D + (1 - Z) M$$",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     }
    ]
   },

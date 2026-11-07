@@ -219,6 +219,45 @@ $1 - \alpha$):
 | credibility; observed experience; complement | $Z$; $D$; $M$ | $\bar{X}$, $\mu_0$ |
 | credibility-weighted estimate | $U = Z D + (1 - Z) M$ | |
 
+**Exam MAS-II** — the rest of the exam (set 2026-11-07):
+
+| Area | Thing | Written | Not |
+| --- | --- | --- | --- |
+| Greatest accuracy credibility | risk parameter; observations | $\Theta$ (a value $\theta$); $X_1, \ldots, X_n$, mean $\bar{X}$ | |
+| | hypothetical mean; process variance | $\mu(\theta) = E[X \mid \Theta = \theta]$; $v(\theta) = \text{Var}(X \mid \Theta = \theta)$ | $\mu_X(\Theta)$, $\sigma^2_X(\Theta)$ |
+| | overall mean; EPV; VHM | $\mu = E[\mu(\Theta)]$; $v = E[v(\Theta)]$; $a = \text{Var}(\mu(\Theta))$ | $\mu_{PV}$, $\sigma^2_{HM}$ |
+| | credibility parameter; credibility | $k = v/a$; $Z = n/(n + k)$ | $K$ |
+| | credibility premium | $Z\bar{X} + (1 - Z)\mu$ | |
+| | Bühlmann-Straub exposures | $m_j$ for period $j$, $m = \sum m_j$, $Z = m/(m + k)$ | $w_j$ |
+| | empirical Bayes estimates | $\hat{\mu}$, $\hat{v}$, $\hat{a}$, $\hat{k}$ | |
+| Bayesian | prior; likelihood; posterior | $\pi(\theta)$; $f(x \mid \theta)$; $\pi(\theta \mid x_1, \ldots, x_n)$ | $g(\theta)$ |
+| | predictive distribution | $f(x_{n+1} \mid x_1, \ldots, x_n)$ | |
+| Linear mixed models | observation $t$ of cluster $i$ | $Y_{ti}$; cluster vector $\mathbf{Y}_i$ with $n_i$ rows | $y_{ij}$ |
+| | the model | $\mathbf{Y}_i = \mathbf{X}_i\boldsymbol{\beta} + \mathbf{Z}_i\mathbf{u}_i + \boldsymbol{\varepsilon}_i$ | $\mathbf{b}_i$ |
+| | random effects; residuals | $\mathbf{u}_i \sim N(\mathbf{0}, \mathbf{D})$; $\boldsymbol{\varepsilon}_i \sim N(\mathbf{0}, \mathbf{R}_i)$ | $\mathbf{G}$ |
+| | marginal covariance | $\mathbf{V}_i = \mathbf{Z}_i\mathbf{D}\mathbf{Z}_i^T + \mathbf{R}_i$ | |
+| | variance components (random intercept) | $\sigma^2_{u}$ (between clusters), $\sigma^2$ (within) | $\tau^2$ |
+| | intraclass correlation | $\sigma^2_u/(\sigma^2_u + \sigma^2)$ | |
+| | covariance parameters; estimates | $\boldsymbol{\theta}$; ML, REML; $\hat{\boldsymbol{\beta}}$, EBLUP $\hat{\mathbf{u}}_i$ | |
+| Statistical learning | observations; predictors; response | $n$; $p$, $X_1, \ldots, X_p$; $Y$, fitted $\hat{f}$ | |
+| | neighbours; clusters | $K$ (KNN); $K$ (K-means), cluster $C_k$ | |
+| | tree regions; class share in region $m$ | $R_1, \ldots, R_J$; $\hat{p}_{mk}$ | |
+| | Gini index; entropy | $G = \sum_k \hat{p}_{mk}(1 - \hat{p}_{mk})$; $D = -\sum_k \hat{p}_{mk}\log\hat{p}_{mk}$ | |
+| | trees; predictors per split; boosting | $B$; $m$ (often $\sqrt{p}$); shrinkage $\lambda$, splits $d$ | |
+| | principal components | loadings $\phi_{jm}$; scores $z_{im}$; $M$ components | |
+| | neural network | $K$ hidden units, activations $A_k = g(w_{k0} + \sum_j w_{kj}X_j)$, output weights $\beta_k$ | |
+| | classification counts | TP, FP, TN, FN; sensitivity, specificity | recall, TPR |
+| Time series | series; white noise | $\{x_t\}$; $\{w_t\}$ with variance $\sigma^2$ | $\varepsilon_t$, $a_t$ |
+| | backward shift; difference | $\mathbf{B}x_t = x_{t-1}$; $\nabla = 1 - \mathbf{B}$, $\nabla^d$ | $L$ |
+| | AR($p$); MA($q$); ARIMA | $x_t = \alpha_1 x_{t-1} + \cdots + \alpha_p x_{t-p} + w_t$; $x_t = w_t + \beta_1 w_{t-1} + \cdots + \beta_q w_{t-q}$; ARIMA($p, d, q$) | $\phi$, $\theta$ |
+| | autocovariance; autocorrelation | $\gamma_k$, $\rho_k = \gamma_k/\gamma_0$; sample $c_k$, $r_k$ | |
+| | decomposition | $x_t = m_t + s_t + z_t$ (trend, seasonal, error) | |
+| | forecast | $\hat{x}_{t+k \mid t}$ | |
+
+$k$ is Bühlmann's credibility parameter on the greatest-accuracy pages and the
+range parameter on the classical ones; a page needing both (the *Credibility*
+overview) states the classical one only through a link. $\mathbf{Z}_i$ (a design matrix) and $Z$ (a credibility) never share a page.
+
 Other exams:
 - **Exam FM:** `i`, `v`, `d`, `\delta`, `a_{\overline{n}|}`, `s_{\overline{n}|}`,
   `\ddot{a}_{\overline{n}|}`.

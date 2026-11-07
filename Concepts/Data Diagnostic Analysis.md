@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:dbf60ba8dbe472b2bff57e8a92aa7c9035e2f9f38d5bb57d56bc2dbfa2ff11a6
+  content_hash: sha256:e532411db4077a1d45b9639fd4450ff3182e19afeba1363cfe2c4ca94a09eb84
   sources:
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Chapters 5-6 pp.61-77 (PDF pp.67-83), re-read Ch.6 pp.72-76 (PDF 78-82) incl. Tables 11-14 this session; Chapter 13 p.291 (PDF p.297), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
     - "Shapland, Using the ODP Bootstrap Model (CAS Monograph #4, 2016), eq. (3.16) p.11 (PDF p.19); Sections 4.1-4.9 pp.20-30 and 5.1-5.3 pp.31-37 (PDF pp.28-45), eqs. (4.8)-(4.10), sha256:51b072243c0fe839cd776d9dc77532c544e2d52e025a29610e1aaea2cff07abf — https://www.casact.org/sites/default/files/2021-03/7_Shapland.pdf"
@@ -53,6 +53,8 @@ Each common change leaves its own mark down the columns of the diagnostics:
 | Case outstanding strengthened | Falls | No change | Rises faster than trend |
 | Faster settlement | Rises | Rises | Can rise, as small claims close first |
 | Slower settlement | Falls | Falls | Changes with the mix of claims left open |
+
+When case outstanding is strengthened, the paid-to-reported ratio falls and average case outstanding rises faster than the trend, with no change in the closed-to-reported counts. When settlement speeds up, the paid-to-reported and closed-to-reported ratios both rise, and when it slows they both fall.
 
 A ratio can move because of its numerator or its denominator. A rising paid-to-reported ratio can come from faster settlement, weaker case outstanding or both, so the ratio alone cannot tell them apart. An unchanged ratio does not prove nothing has changed, because faster settlement and stronger case outstanding can offset each other.
 

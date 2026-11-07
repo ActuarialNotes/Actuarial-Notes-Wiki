@@ -74,7 +74,7 @@ import { ExamStrip } from '@/components/ExamStrip'
 import { SegmentedControl } from '@/components/ui/SegmentedControl'
 import { Button } from '@/components/ui/button'
 import { WikiArticle } from '@/components/wiki/WikiArticle'
-import { stripFrontmatter, extractMathBlockquotes, extractImages } from '@/lib/wikiMarkdown'
+import { extractMathBlockquotes, extractImages, splitDefinition } from '@/lib/wikiMarkdown'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { FlashcardsSearchBar } from '@/components/FlashcardsSearchBar'
 import { trackFlashcardReviewed } from '@/lib/analytics'
@@ -153,42 +153,12 @@ const CLEAR_OVERLAY = (
 )
 
 
-const BREADCRUMB_RE = /^\[\[[^\]|]*(?:\|[^\]]+)?\]\][^\n]* \/ [^\n]*\n?/
-
-// Splits a wiki page's leading paragraph (the "definition") from the rest of
-// the body, so the two can be shown separately without duplicating it — e.g.
-// the flashcard back shows the definition, and the "expand" section below it
-// shows only what follows.
-function splitFirstParagraph(markdown: string): { paragraph: string; rest: string } {
-  const cleaned = stripFrontmatter(markdown).replace(BREADCRUMB_RE, '')
-  const lines = cleaned.split('\n')
-  const paragraphLines: string[] = []
-  let started = false
-  let restStart = lines.length
-  for (let i = 0; i < lines.length; i++) {
-    const trimmed = lines[i].trim()
-    if (!started) {
-      if (trimmed && !trimmed.startsWith('#') && !/^[*+-] /.test(trimmed) && !/^\d+\. /.test(trimmed) && !trimmed.startsWith('>')) {
-        started = true
-        paragraphLines.push(trimmed)
-      }
-    } else {
-      if (trimmed === '' || /^[*+-] /.test(trimmed) || /^\d+\. /.test(trimmed) || trimmed.startsWith('>') || trimmed.startsWith('#')) {
-        restStart = i
-        break
-      }
-      paragraphLines.push(trimmed)
-    }
-  }
-  return { paragraph: paragraphLines.join('\n'), rest: lines.slice(restStart).join('\n') }
-}
-
 function extractFirstParagraph(markdown: string): string {
-  return splitFirstParagraph(markdown).paragraph
+  return splitDefinition(markdown).paragraph
 }
 
 function withoutFirstParagraph(markdown: string): string {
-  return splitFirstParagraph(markdown).rest
+  return splitDefinition(markdown).rest
 }
 
 // ─── The add-flashcards shelves ──────────────────────────────────────────────

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-10-16
   last_checked_by: agent:validate-v1
-  content_hash: sha256:d5c9411bc04dcc39b211f52b5e7dd58a11aa208ec76cffaa4aa6e61ea9a8e56d
+  content_hash: sha256:e8fbd6e4e2c46fbbdd0af189dc63f8243faa4c944217bcc5b094e7a914df3cfa
   sources:
     - "CREDIBLE CLAIMS RESERVES: THE BENKTANDER METHOD, Section 2, p.335 (credibility mixture U_c = cU_CL + (1-c)U_0), sha256:8e9e86f6dd4ed6a402d5380dd446ebeba5e2c3d921f90828ad485a8cfb508086 — https://www.casact.org/sites/default/files/2021-03/7_Mack_2000.pdf"
     - "https://www.casact.org/sites/default/files/2021-03/7_Brosius.pdf, Development Formula 2, p.13, sha256:de06a701db8825c8a6384bf92f577a5fe6ccfab627379f21199df35396a2a690 — https://www.casact.org/sites/default/files/2021-03/7_Brosius.pdf"
@@ -57,7 +57,7 @@ The claims expected to emerge between the age $t$ of one valuation and the age $
 - $\text{Reported}$ is the reported claims at the first valuation, so $\text{Ultimate} - \text{Reported}$ is the IBNR.
 - $p_t$ and $p_{t+1}$ are the expected percents reported at the two ages.
 
-The actual emergence is the change in reported claims between the two valuations. Actual above expected says the development factors or the ultimate were understated, and actual below expected that they were overstated. With the chain ladder's own ultimate, the expected emergence is $\text{Ultimate} \times p_{t+1} - \text{Reported}$. For paid claims with the chain ladder, it is the current paid claims times $\text{CDF}_t/\text{CDF}_{t+1} - 1$.
+The actual emergence is the change in reported claims between the two valuations. The expected cumulative claims at the second valuation are the reported claims at the first plus the expected emergence, and they are compared with the actual cumulative claims. Actual above expected says the development factors or the ultimate were understated, and actual below expected that they were overstated. With the chain ladder's own ultimate, the expected emergence is $\text{Ultimate} \times p_{t+1} - \text{Reported}$. For paid claims with the chain ladder, it is the current paid claims times $\text{CDF}_t/\text{CDF}_{t+1} - 1$.
 
 > [!example]- At the prior year-end, accident year 2024 had $6{,}000$ of reported claims, a 12-month CDF of 2.000 and a 24-month CDF of 1.250, so its chain ladder ultimate was $12{,}000$. Twelve months later its reported claims are $10{,}500$. How do actual and expected emergence compare? {Example}
 > - The IBNR was $12{,}000 - 6{,}000 = 6{,}000$, and $p_{12} = 0.50$, $p_{24} = 0.80$.

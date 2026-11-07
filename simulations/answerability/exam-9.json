@@ -9045,7 +9045,15 @@
        "page": "Limited Fluctuation Credibility",
        "quote": "$$\\text{Estimate} = Z \\cdot \\bar{X} + (1-Z) \\cdot \\mu_0$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Limited Fluctuation Credibility",
+      "quote": "$$U = Z D + (1 - Z) M$$",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r6",

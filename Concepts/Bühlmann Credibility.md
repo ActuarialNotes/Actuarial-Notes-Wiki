@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:a28a88a7dd70d0413a9a8014d764f1b72e3ee03c9e5e7d9e53f8b1cdc34bf122
+  content_hash: sha256:082abb18b487b2a9fa3b3b9c5637e98444638d1b71285a5325ffaad32280f283
   sources:
     - "Frees et al., Loss Data Analytics (open text), Ch. 9 Experience Rating Using Credibility Theory, Ch. 9 §§9.2–9.6, sha256:35a840449990c8fda61687ebde4646508b6296ffac3daba18f0181eb2511fa36 — https://openacttexts.github.io/Loss-Data-Analytics/ChapCredibility.html"
     - "Tse, Nonlife Actuarial Models (Cambridge 2009), publisher preview, Contents pp. ix–x (PDF pp.11–12), sha256:f6d009afdd1776907db090b41b72dd5a76d0b5ba3f0ee42e8b07279d5763b404 — https://api.pageplace.de/preview/DT0400.9780511630231_A24404031/preview-9780511630231_A24404031.pdf"
@@ -14,31 +14,49 @@ verification:
   log: ".verify/Concepts/Bühlmann Credibility.md"
 ---
 
-**Bühlmann Credibility** (also called **Greatest Accuracy Credibility**) is a least-squares credibility framework that derives the credibility factor $Z$ by minimizing the expected squared error between the credibility estimate and the true (unknown) risk parameter $\theta$.
-
-> $$\text{Estimate} = Z \cdot \bar{X} + (1-Z) \cdot \mu$$
->
-> $$Z = \frac{n}{n + k}, \quad k = \frac{v}{a}$$
-
-**Variance components:**
-
-| Symbol | Name | Definition |
-| :--- | :--- | :--- |
-| $\mu = E[X]$ | Overall mean | Expected value of $X$ |
-| $v = E[\sigma^2(\theta)]$ | Expected process variance | Expected within-risk variance |
-| $a = \text{Var}(\mu(\theta))$ | Variance of hypothetical means | Between-risk variance |
-| $k = v/a$ | Bühlmann credibility parameter | Ratio of process variance to structural variance |
-
-- As $n \to \infty$, $Z \to 1$ (full credibility to observed data)
-- As $k \to 0$ (low process variance), $Z \to 1$ even for small $n$
-- Bühlmann credibility is the **best linear estimate** of $\mu(\theta)$ given $X_1, \ldots, X_n$
-- When $\theta$ has a conjugate prior, Bühlmann = Bayesian credibility ([[Bayesian Credibility]])
-
 ![[Media/Figures/Bühlmann_Credibility.svg|340]]
 
-> [!example]- Bühlmann Credibility Calculation {Example}
-> A risk has process variance $v = 400$ and structural variance $a = 100$. Three years of observations give $\bar{X} = 50$ and the overall mean is $\mu = 40$. Calculate the credibility estimate.
->
-> > [!answer]-
-> > $k = v/a = 400/100 = 4$; $Z = n/(n+k) = 3/(3+4) = 3/7 \approx 0.4286$.
-> > $$\text{Estimate} = \frac{3}{7}(50) + \frac{4}{7}(40) = 21.43 + 22.86 \approx 44.29$$
+**Bühlmann Credibility**, also called **greatest accuracy credibility**, is a [[Credibility|credibility]] method that estimates a risk's hypothetical mean $\mu(\Theta)$ by the linear function of its observations $X_1, \ldots, X_n$ with the smallest expected squared error. The credibility premium is
+
+> $$Z\bar{X} + (1 - Z)\mu$$
+
+- $\bar{X}$ is the mean of the risk's $n$ observations.
+- $\mu = E[\mu(\Theta)]$ is the overall mean, the complement of credibility.
+
+With $n$ observations the credibility is
+
+> $$Z = \frac{n}{n + k}$$
+
+- $k = v/a$ is the Bühlmann credibility parameter.
+- $v$ is the [[Expected Value of Process Variance|expected value of the process variance]] (EPV).
+- $a$ is the [[Variance of Hypothetical Means|variance of the hypothetical means]] (VHM).
+
+$n$ counts observations of the unit $v$ and $a$ describe. When they describe one year's loss, each year of a policyholder's experience is one observation.
+
+> [!example]- A risk has $v = 400$ and $a = 100$. Three years of observations give $\bar{X} = 50$, and the overall mean is $\mu = 40$. What is the credibility premium? {Example}
+> - $k = 400/100 = 4$.
+> - $Z = 3/(3 + 4) = 3/7 = 0.4286$.
+> - The premium is $\frac{3}{7}(50) + \frac{4}{7}(40) = 21.43 + 22.86 = 44.29$.
+
+> [!idea] The idea
+> A risk's experience earns credibility when risks differ from one another and loses it when each risk's results are noisy.
+
+A larger VHM lowers $k$ and raises $Z$, and a larger EPV raises $k$ and lowers $Z$. $Z$ rises toward 1 as $n$ grows but never reaches 1 for any finite $n$, unlike [[Limited Fluctuation Credibility|limited fluctuation credibility]].
+
+## Computing the structural parameters
+
+When the risks fall into types with known probabilities, $\mu$, $v$ and $a$ are found by weighting each type's hypothetical mean $\mu(\theta)$ and process variance $v(\theta)$ by its probability.
+
+> [!example]- 60% of drivers have Poisson claim counts with mean 0.1 a year and 40% with mean 0.3. A driver has 1 claim in 2 years. What is the Bühlmann estimate of the driver's claims next year? {Example}
+> - For a Poisson risk the hypothetical mean and the process variance both equal its mean.
+> - $\mu = 0.6(0.1) + 0.4(0.3) = 0.18$, and $v = 0.18$.
+> - $a = 0.6(0.1 - 0.18)^2 + 0.4(0.3 - 0.18)^2 = 0.0096$.
+> - $k = 0.18/0.0096 = 18.75$, and $Z = 2/(2 + 18.75) = 0.0964$.
+> - The driver's mean is $\bar{X} = 0.5$, so the estimate is $0.0964(0.5) + 0.9036(0.18) = 0.211$.
+
+## Bühlmann and Bayesian credibility
+
+The Bühlmann premium is the best linear approximation to the [[Bayesian Credibility|Bayesian premium]] $E[\mu(\Theta) \mid X_1, \ldots, X_n]$. The two are equal when the Bayesian premium is itself linear in the observations, as for a Poisson risk with a gamma prior, which is [[Exact Credibility|exact credibility]].
+
+> [!trap] Observations counted in the wrong unit
+> If $v$ and $a$ are for one year's aggregate loss, a policyholder with 3 years of experience has $n = 3$, not its number of claims. Count $n$ in the unit the structural parameters describe.

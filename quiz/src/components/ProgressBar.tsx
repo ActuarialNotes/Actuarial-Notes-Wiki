@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useMemo, type CSSProperties, type ReactNode } from 'react'
+import { useState, useRef, useEffect, useMemo, type ReactNode } from 'react'
 import { ChevronDown, Bookmark, BookmarkCheck } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { NavProgressBar } from '@/components/NavProgressBar'
@@ -17,12 +17,6 @@ interface ProgressBarProps {
    * bar stays the one place a question is identified.
    */
   info?: ReactNode
-  /**
-   * The exam's accent (`examAccent` in lib/examColors.ts) — the colour the bar
-   * fills in. Without one it fills in the foreground, as any bar outside an
-   * exam does.
-   */
-  accent?: string
 }
 
 /**
@@ -32,7 +26,7 @@ interface ProgressBarProps {
  */
 export const SEGMENTED_MAX = 30
 
-export function ProgressBar({ current, total, onNavigate, flaggedIds, questionIds, isFlagged, onFlag, info, accent }: ProgressBarProps) {
+export function ProgressBar({ current, total, onNavigate, flaggedIds, questionIds, isFlagged, onFlag, info }: ProgressBarProps) {
   const segmented = total > 1 && total <= SEGMENTED_MAX
   const segments = useMemo(
     () => (segmented ? Array.from({ length: total }, (_, i) => ({ start: i + 1 })) : undefined),
@@ -185,8 +179,7 @@ export function ProgressBar({ current, total, onNavigate, flaggedIds, questionId
       {/* The bar is the second way to jump between questions, alongside the
           dropdown above it: press or drag along it to go straight to a question,
           which on a 60-question mock beats scrolling a 60-row list. Same control
-          as every other progress bar in the app, in the quiz's own colours. */}
-      <div style={accent ? ({ '--quiz-accent': accent } as CSSProperties) : undefined}>
+          as every other progress bar in the app. */}
       <NavProgressBar
         current={current}
         total={total}
@@ -196,11 +189,10 @@ export function ProgressBar({ current, total, onNavigate, flaggedIds, questionId
           : 'h-1.5 rounded-full bg-secondary group-hover:h-2 group-focus-visible:h-2'}
         segmentClassName="rounded-full"
         segments={segments}
-        fillClassName={accent ? 'bg-[var(--quiz-accent)] dark:bg-[var(--quiz-accent)]' : 'bg-foreground dark:bg-foreground'}
+        fillClassName="bg-foreground dark:bg-foreground"
         onScrub={onNavigate ? position => onNavigate(position - 1) : undefined}
         formatValue={position => `Question ${position} of ${total}`}
       />
-      </div>
     </div>
   )
 }

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:162c8b153f3977a58326d83e438ea20a6c777fb71d3f2c9a75c42fbfef2cab8e
+  content_hash: sha256:c458b937e6be687820b579d5b9ae9cd47877935e5f00b3e7240ef02b0771ef0e
   sources:
     - "Frees et al., Loss Data Analytics (open text), Ch. 9 Experience Rating Using Credibility Theory, Ch. 9 §§9.2–9.6, sha256:35a840449990c8fda61687ebde4646508b6296ffac3daba18f0181eb2511fa36 — https://openacttexts.github.io/Loss-Data-Analytics/ChapCredibility.html"
     - "Frees et al., Loss Data Analytics (open text), Ch. 4, §4.4.4 Conjugate Distributions, sha256:c5fe1ff26cec4dee6f8bcc285b75c840202c947246f7b5d5598f9b837ccad021 — https://openacttexts.github.io/Loss-Data-Analytics/ChapModelSelection.html"
@@ -15,24 +15,30 @@ verification:
   log: .verify/Concepts/Variance of Hypothetical Means.md
 ---
 
-The **variance of the hypothetical means (VHM)**, written $a$, is the between-risk variance in a [[Bühlmann Credibility]] model — how much the risks in the portfolio genuinely differ from one another once process noise is stripped out.
-
-> $$a = \mathrm{VHM} = \mathrm{Var}_\Theta\!\left(E[X \mid \Theta]\right)$$
-
-- $\mu(\Theta) = E[X \mid \Theta]$ is the **hypothetical mean**: the long-run mean of a risk with parameter $\Theta$. VHM is the variance of that quantity across the population
-- With the [[Expected Value of Process Variance]] $v$ it gives $k = v/a$ and $Z = n/(n+k)$
-- **Large $a$** means the risks are genuinely heterogeneous, so a risk's own experience is worth a lot and $Z$ rises
-- $a = 0$ means every risk has the same mean — experience rating has nothing to detect, and $Z = 0$ for any $n$
-- The overall mean is $\mu = E[\mu(\Theta)]$, and $\mathrm{Var}(X) = v + a$
-
 ![[Media/Figures/Variance_of_Hypothetical_Means.svg|340]]
 
-> [!example]- VHM for a Gamma-Poisson Model {Example}
-> Claim counts are Poisson with mean $\Lambda$, where $\Lambda \sim \text{Gamma}(\alpha = 4, \theta = 0.05)$. Find $\mu$, $v$, $a$, and $k$.
->
-> > [!answer]-
-> > $\mu(\Lambda) = \Lambda$ and $\sigma^2(\Lambda) = \Lambda$ for a Poisson.
-> > $$\mu = E[\Lambda] = \alpha\theta = 4(0.05) = 0.20$$
-> > $$v = E[\Lambda] = 0.20 \qquad a = \mathrm{Var}(\Lambda) = \alpha\theta^{2} = 4(0.0025) = 0.01$$
-> > $$k = \frac{v}{a} = \frac{0.20}{0.01} = 20 = \frac{1}{\theta}$$
-> > For the Gamma-Poisson, $k$ is always $1/\theta$, and $Z = n/(n + 1/\theta)$ reproduces the Bayesian posterior mean exactly.
+The **Variance of Hypothetical Means** (VHM), written $a$, is the variance, across the risks in a portfolio, of each risk's expected outcome. With risk parameter $\Theta$, it is
+
+> $$a = \text{Var}\big(\mu(\Theta)\big)$$
+
+- $\mu(\theta) = E[X \mid \Theta = \theta]$ is the hypothetical mean, the long-run mean of a risk with parameter $\theta$.
+
+The overall mean is $\mu = E[\mu(\Theta)]$. The VHM measures how much the true risk levels differ from one another. With the [[Expected Value of Process Variance|expected value of the process variance]] $v$, it gives the [[Bühlmann Credibility|Bühlmann]] parameter $k = v/a$ and the credibility $Z = n/(n + k)$. A larger VHM lowers $k$ and raises $Z$, so experience rating is most useful in a heterogeneous class. When $a = 0$ every risk has the same mean, and $Z = 0$ for any $n$.
+
+> [!example]- Half the drivers have Poisson claim counts with mean 0.10, and half with mean 0.40. What is the VHM? {Example}
+> - The hypothetical means are 0.10 and 0.40, so $\mu = 0.25$.
+> - $a = 0.5(0.10 - 0.25)^2 + 0.5(0.40 - 0.25)^2 = 0.0225$.
+> - With $v = 0.25$, $k = 0.25/0.0225 = 11.1$.
+
+## Poisson claim counts with a gamma mean
+
+When claim counts are Poisson with mean $\Lambda$, and $\Lambda$ has a gamma distribution with shape $\alpha$ and scale $\beta$, the hypothetical mean and process variance are both $\Lambda$, so
+
+> $$k = \frac{v}{a} = \frac{\alpha\beta}{\alpha\beta^2} = \frac{1}{\beta}$$
+
+The shape $\alpha$ cancels, so $Z = n/(n + 1/\beta)$ does not depend on it. Written with its rate $1/\beta$, the gamma's mean is $\alpha$ divided by the rate and its variance $\alpha$ divided by the rate squared, and $k$ is the rate.
+
+> [!example]- Claim counts are Poisson with mean $\Lambda$, where $\Lambda$ is gamma with $\alpha = 4$ and $\beta = 0.05$. What are $\mu$, $v$, $a$ and $k$? {Example}
+> - $\mu = v = E[\Lambda] = 4(0.05) = 0.20$.
+> - $a = \text{Var}(\Lambda) = 4(0.05)^2 = 0.01$.
+> - $k = 0.20/0.01 = 20 = 1/\beta$.

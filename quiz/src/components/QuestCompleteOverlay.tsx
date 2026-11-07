@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Gem, Loader2, Swords } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { useSoundEffects, useSoundOnMount } from '@/hooks/useSoundEffects'
@@ -21,9 +21,16 @@ import type { QuestDef } from '@/data/quests'
  * (covering ones that land after). "Later" leaves the rewards claimable from
  * the Dashboard quests card.
  */
-export function QuestCompleteOverlay() {
+export function QuestCompleteOverlay({ onResolved }: { onResolved?: () => void } = {}) {
   const { user } = useAuth()
   const [quests, setQuests] = useState<QuestDef[]>(() => readJustCompletedQuests())
+  // Tell the page when there is nothing (left) to show, so whatever plays after
+  // the quests — the guest save prompt — waits for them.
+  const onResolvedRef = useRef(onResolved)
+  onResolvedRef.current = onResolved
+  useEffect(() => {
+    if (quests.length === 0) onResolvedRef.current?.()
+  }, [quests.length])
   const [claiming, setClaiming] = useState(false)
   const { play } = useSoundEffects()
   useSoundOnMount('complete', quests.length > 0)

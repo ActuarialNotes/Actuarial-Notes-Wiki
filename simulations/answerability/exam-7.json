@@ -10128,8 +10128,8 @@
      ],
      "resolution": {
       "kind": "taught",
-      "page": "Credibility",
-      "quote": "In the same way, chain ladder and Stanard-Bühlmann IBNR can be blended with $Z$ equal to a selected credibility factor times the percent reported at the starting evaluation, $Z$ on the chain ladder and $1 - Z$ on Stanard-Bühlmann.",
+      "page": "Cape Cod Method",
+      "quote": "The weight on the chain ladder is $Z = \\text{CF} \\times \\text{Rlag}$, a credibility factor $0 \\le \\text{CF} \\le 1$ times the year's percent reported, so green years lean on Stanard-Bühlmann and older years on the chain ladder.",
       "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
       "date": "2026-11-07",
       "run": "claude/epic-goodall-89r4k3"

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:933b27c812b02687a9a55abbad676d656c21788af4c8f37fc84559507de6a668
+  content_hash: sha256:0e9620f26a5b9a39fb6a55e04f1389f1f7a9b8349c2bd4267116d627cc20c2c2
   sources:
     - "Hyndman & Athanasopoulos, Forecasting: Principles and Practice, 3rd ed. (OTexts, open online text), §9.4 Moving average models (definition, invertibility, MA(1) constraint), §9.5 identification, §9.8 MA(q) forecast variance, read 2026-10-18, sha256:35587d5a25830d81dcb41d6196d18eaee424556c40cae948bf52a5a1d1a79650 — https://otexts.com/fpp3/arima.html"
   open_findings: 0
@@ -12,25 +12,37 @@ verification:
   log: .verify/Concepts/Moving Average Model.md
 ---
 
-A **moving average model of order $q$**, MA($q$), writes a [[Time Series]] as a weighted sum of the current and last $q$ [[White Noise|white-noise]] shocks. It is the "MA" in [[ARIMA]], and it models a series where a shock has a **finite** memory of exactly $q$ periods.
-
-> $$Y_t = \mu + \varepsilon_t + \theta_1\varepsilon_{t-1} + \cdots + \theta_q\varepsilon_{t-q}$$
->
-> $$Y_t = \mu + \theta(B)\varepsilon_t, \qquad \theta(B) = 1 + \theta_1 B + \cdots + \theta_q B^{q}$$
-
-- **Always [[Stationarity|stationary]]** — a finite sum of white-noise terms has constant mean and variance whatever the $\theta$'s. The condition on the $\theta$'s is *invertibility* (roots of $\theta(B)$ outside the unit circle), needed for the parameters to be identifiable
-- **MA(1)**: $\mathrm{Var}(Y_t) = \sigma^2(1+\theta_1^2)$ and $\rho_1 = \dfrac{\theta_1}{1+\theta_1^{2}}$, with $\rho_k = 0$ for $k \ge 2$. That bounds $\lvert\rho_1\rvert \le 0.5$ — an MA(1) simply cannot produce a lag-1 correlation of 0.7
-- **Identification:** the [[Autocorrelation Function|ACF]] cuts off after lag $q$, the [[Partial Autocorrelation Function|PACF]] tails off — the exact mirror of an [[Autoregressive Model|AR]]
-- Beyond $q$ steps ahead the forecast is just the mean: shocks older than $q$ periods have left the model entirely
-- An unexpected MA(1) term after [[Differencing]] is the fingerprint of over-differencing
-
 ![[Media/Figures/Moving_Average_Model.svg|340]]
 
-> [!example]- MA(1) Autocorrelation and Forecast {Example}
-> $Y_t = 50 + \varepsilon_t + 0.4\varepsilon_{t-1}$ with $\sigma^2 = 25$. Find $\mathrm{Var}(Y_t)$, $\rho_1$, and the one- and two-step forecasts given $\hat\varepsilon_t = -3$.
->
-> > [!answer]-
-> > $$\mathrm{Var}(Y_t) = 25(1 + 0.16) = 29 \qquad \rho_1 = \frac{0.4}{1.16} = 0.345$$
-> > $$\hat Y_{t+1} = 50 + 0.4(-3) = 48.8$$
-> > $$\hat Y_{t+2} = 50$$
-> > Two steps out, both $\varepsilon_{t+2}$ and $\varepsilon_{t+1}$ are unknown and forecast as 0 — the shock at time $t$ has dropped out of the model, so the forecast is the mean.
+A **Moving Average Model** of order $q$, MA($q$), expresses the value $x_t$ of a [[Time Series|time series]] as the current [[White Noise|white noise]] term plus a linear combination of the previous $q$ white noise terms. The MA($q$) model is
+
+> $$x_t = w_t + \beta_1 w_{t-1} + \beta_2 w_{t-2} + \cdots + \beta_q w_{t-q}$$
+
+- $\beta_1, \ldots, \beta_q$ are the model's coefficients.
+- $w_t$ has mean 0 and variance $\sigma^2$.
+
+A series with mean $\mu$ adds $\mu$ to the right-hand side. A shock affects the series for exactly $q$ periods and then leaves it. An MA model is the "MA" in [[ARIMA]]. Its [[Autocorrelation Function|ACF]] cuts off after lag $q$, and its [[Partial Autocorrelation Function|PACF]] tails off.
+
+An MA model is always [[Stationarity|stationary]], because a finite sum of white noise terms has a constant mean and variance whatever the coefficients. The condition on the coefficients is invertibility: every root of $1 + \beta_1\mathbf{B} + \cdots + \beta_q\mathbf{B}^q = 0$ lies outside the unit circle. A pure [[Autoregressive Model|autoregressive model]] has no MA terms, so it is always invertible.
+
+> [!example]- A series follows $x_t = 50 + w_t + 0.4w_{t-1}$, and the latest estimated noise term is $\hat{w}_t = -3$. What are the forecasts of $x_{t+1}$ and $x_{t+2}$? {Example}
+> - The future noise terms are forecast as 0.
+> - $\hat{x}_{t+1} = 50 + 0.4(-3) = 48.8$.
+> - $\hat{x}_{t+2} = 50$, because the shock at time $t$ has left the model after one period.
+
+## The MA(1) model
+
+The MA(1) model $x_t = w_t + \beta_1 w_{t-1}$ has variance and lag-1 autocorrelation
+
+> $$\text{Var}(x_t) = \sigma^2(1 + \beta_1^2)$$
+
+> $$\rho_1 = \frac{\beta_1}{1 + \beta_1^2}$$
+
+Its autocorrelations at lags 2 and beyond are 0. The lag-1 autocorrelation of an MA(1) can never exceed $0.5$ in absolute value.
+
+> [!example]- A series follows $x_t = 50 + w_t + 0.4w_{t-1}$ with $\sigma^2 = 25$. What are its variance and its lag-1 autocorrelation? {Example}
+> - $\text{Var}(x_t) = 25(1 + 0.4^2) = 25(1.16) = 29$.
+> - $\rho_1 = 0.4/1.16 = 0.345$.
+
+> [!trap] An MA(1) cannot have a large lag-1 autocorrelation
+> A sample ACF with $r_1 = 0.7$ that cuts off after lag 1 does not fit an MA(1), whose $|\rho_1|$ is at most $0.5$.

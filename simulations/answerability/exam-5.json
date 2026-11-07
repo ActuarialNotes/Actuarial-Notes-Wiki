@@ -3336,7 +3336,15 @@
        "page": "Limited Fluctuation Credibility",
        "quote": "$$Z = \\min\\!\\left(1,\\, \\sqrt{\\frac{n}{n_{\\text{full}}}}\\right)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Partial Credibility",
+      "quote": "$$Z = \\min\\left(\\sqrt{\\frac{n}{n_F}},\\; 1\\right)$$",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r5",
@@ -3357,7 +3365,15 @@
        "page": "Limited Fluctuation Credibility",
        "quote": "$$\\text{Estimate} = Z \\cdot \\bar{X} + (1-Z) \\cdot \\mu_0$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Limited Fluctuation Credibility",
+      "quote": "$$U = Z D + (1 - Z) M$$",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r6",
@@ -3980,7 +3996,7 @@
      "resolution": {
       "kind": "taught",
       "page": "Credibility",
-      "quote": "$$Z = \\min\\left(\\sqrt{\\frac{n}{n_{\\text{full}}}},\\, 1\\right)$$",
+      "quote": "$$Z = \\min\\left(\\sqrt{\\frac{n}{n_F}},\\; 1\\right)$$",
       "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
       "date": "2026-11-07",
       "run": "claude/epic-goodall-89r4k3"
@@ -4936,8 +4952,8 @@
      ],
      "resolution": {
       "kind": "taught",
-      "page": "Credibility",
-      "quote": "$$\\text{Estimate} = Z \\times \\text{Observed Experience} + (1 - Z) \\times \\text{Complement}$$",
+      "page": "Bornhuetter-Ferguson Method",
+      "quote": "$$\\text{Ultimate Claims} = \\text{Reported Claims} + \\text{Expected Claims} \\times \\left(1 - \\frac{1}{\\text{CDF}}\\right)$$",
       "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
       "date": "2026-11-07",
       "run": "claude/epic-goodall-89r4k3"
@@ -7747,7 +7763,15 @@
        "page": "Partial Credibility",
        "quote": "$$Z = \\min\\left(\\sqrt{\\frac{n}{n_F}},\\; 1\\right)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Limited Fluctuation Credibility",
+      "quote": "Compute the credibility $Z = \\min(\\sqrt{n/n_F}, 1)$, with the observed volume $n$ in the same unit as $n_F$.",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r5",
@@ -10720,7 +10744,7 @@
      "resolution": {
       "kind": "taught",
       "page": "Complement of Credibility",
-      "quote": "Competitors' manual rates reflect not only their loss costs but also marketing considerations, judgment and the effects of the regulatory process, which can make them inaccurate. Competitors may have different underwriting and claim practices, mix of business and limits, which create a bias that may be hard to quantify.",
+      "quote": "Competitors may also have different underwriting and claim practices, which creates a bias that may be difficult to quantify.",
       "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
       "date": "2026-11-07",
       "run": "claude/epic-goodall-89r4k3"
@@ -14068,7 +14092,7 @@
      "resolution": {
       "kind": "taught",
       "page": "Complement of Credibility",
-      "quote": "$$C = \\text{LR} \\times \\sum_{d} P_d \\times \\frac{\\text{ILF}_{\\min(d,\\, A+L)} - \\text{ILF}_A}{\\text{ILF}_d}$$…Only limits above the attachment point contribute, since a limit at or below it has no losses in the layer.",
+      "quote": "The complement is the total limits expected loss ratio times the sum, over the policy limits, of the total premium at each limit times that limit's share.",
       "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
       "date": "2026-11-07",
       "run": "claude/epic-goodall-89r4k3"
@@ -14089,7 +14113,7 @@
      "resolution": {
       "kind": "taught",
       "page": "Complement of Credibility",
-      "quote": "$$C = \\text{LR} \\times \\sum_{d} P_d \\times \\frac{\\text{ILF}_{\\min(d,\\, A+L)} - \\text{ILF}_A}{\\text{ILF}_d}$$…Only limits above the attachment point contribute, since a limit at or below it has no losses in the layer.",
+      "quote": "A limit at or below the attachment point contributes nothing to the layer.",
       "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
       "date": "2026-11-07",
       "run": "claude/epic-goodall-89r4k3"
@@ -14110,7 +14134,7 @@
      "resolution": {
       "kind": "taught",
       "page": "Complement of Credibility",
-      "quote": "Expected losses at a limit are the expected loss ratio times its premium, and the share of those losses that falls in the layer is the difference of the ILFs at the layer's upper and lower limits divided by the ILF at the policy limit.",
+      "quote": "Premium at a limit times the expected loss ratio estimates the expected losses of the policies at that limit, and an ILF ratio takes the share of those losses that falls in the layer.",
       "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
       "date": "2026-11-07",
       "run": "claude/epic-goodall-89r4k3"
@@ -16886,7 +16910,7 @@
      "resolution": {
       "kind": "taught",
       "page": "Credibility",
-      "quote": "**Credibility** is a measure of the predictive value the actuary attaches to a particular body of data, in ASOP No. 25's words.",
+      "quote": "Credibility reflects how much predictive value the experience has, given its volume and stability.",
       "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
       "date": "2026-11-07",
       "run": "claude/epic-goodall-89r4k3"
@@ -18112,7 +18136,15 @@
        "page": "Partial Credibility",
        "quote": "$$Z = \\min\\left(\\sqrt{\\frac{n}{n_F}},\\; 1\\right)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Partial Credibility",
+      "quote": "$$Z = \\min\\left(\\sqrt{\\frac{n}{n_F}},\\; 1\\right)$$",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r8",
@@ -21667,7 +21699,15 @@
        "page": "Partial Credibility",
        "quote": "$$Z = \\min\\left(\\sqrt{\\frac{n}{n_F}},\\; 1\\right)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Partial Credibility",
+      "quote": "$$Z = \\min\\left(\\sqrt{\\frac{n}{n_F}},\\; 1\\right)$$",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r3",
@@ -21699,8 +21739,8 @@
      "places": [],
      "resolution": {
       "kind": "taught",
-      "page": "Complement of Credibility",
-      "quote": "In classification ratemaking, the complement of an indicated relativity is often the current relativity, normalized so that its weighted average is $1.00$.",
+      "page": "Classification Ratemaking",
+      "quote": "The interim step puts current, indicated and competitors' relativities on a consistent basis, and is needed when indicated relativities are credibility-weighted with the normalized current ones.",
       "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
       "date": "2026-11-07",
       "run": "claude/epic-goodall-89r4k3"
@@ -22338,7 +22378,7 @@
      "resolution": {
       "kind": "taught",
       "page": "Credibility",
-      "quote": "Supplementing a small insurer's data with industry data increases the volume and reduces the volatility.",
+      "quote": "It can be supplemented by lengthening the experience period, or by a complement such as industry data, which adds volume and reduces volatility.",
       "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
       "date": "2026-11-07",
       "run": "claude/epic-goodall-89r4k3"
@@ -25010,7 +25050,15 @@
        "page": "Partial Credibility",
        "quote": "$$Z = \\min\\left(\\sqrt{\\frac{n}{n_F}},\\; 1\\right)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Partial Credibility",
+      "quote": "$$Z = \\min\\left(\\sqrt{\\frac{n}{n_F}},\\; 1\\right)$$",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r2",
@@ -25052,7 +25100,15 @@
        "page": "Partial Credibility",
        "quote": "$Z$ multiplies the observed experience; $1 - Z$ goes to the [[Complement of Credibility]]"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Partial Credibility",
+      "quote": "$Z$ multiplies the observed experience, and $1 - Z$ goes to the [[Complement of Credibility|complement of credibility]].",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r4",
@@ -25206,7 +25262,7 @@
      "resolution": {
       "kind": "taught",
       "page": "Complement of Credibility",
-      "quote": "Lower limits analysis uses losses capped at a lower limit $d$, often the basic limit, $L_d \\times (\\text{ILF}_{A+L} - \\text{ILF}_A)/\\text{ILF}_d$.",
+      "quote": "The same calculation with losses capped at a limit below the attachment point, often the basic limit: the losses capped at the lower limit are multiplied by the ILF at the top of the layer minus the ILF at the attachment point, divided by the ILF at the lower limit.",
       "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
       "date": "2026-11-07",
       "run": "claude/epic-goodall-89r4k3"
@@ -25222,7 +25278,7 @@
      "resolution": {
       "kind": "taught",
       "page": "Complement of Credibility",
-      "quote": "It needs ground-up losses not capped anywhere below the attachment point.",
+      "quote": "It needs ground-up losses that have not been capped anywhere below the attachment point, so a policy whose limit is below the attachment point cannot supply them.",
       "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
       "date": "2026-11-07",
       "run": "claude/epic-goodall-89r4k3"
@@ -27934,7 +27990,15 @@
        "page": "Credibility",
        "quote": "Partial credibility uses the **square root rule**, $Z = \\sqrt{n / n_{\\text{full}}}$, capped at $1$ — a class with a quarter of the required claims gets $Z = 0.50$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Partial Credibility",
+      "quote": "$$Z = \\min\\left(\\sqrt{\\frac{n}{n_F}},\\; 1\\right)$$",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r2",
@@ -27955,7 +28019,15 @@
        "page": "Partial Credibility",
        "quote": "$Z$ multiplies the observed experience; $1 - Z$ goes to the [[Complement of Credibility]]"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Limited Fluctuation Credibility",
+      "quote": "$$U = Z D + (1 - Z) M$$",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r3",
@@ -31896,8 +31968,8 @@
      "places": [],
      "resolution": {
       "kind": "taught",
-      "page": "Complement of Credibility",
-      "quote": "In classification ratemaking, the complement of an indicated relativity is often the current relativity, normalized so that its weighted average is $1.00$.",
+      "page": "Classification Ratemaking",
+      "quote": "The interim step puts current, indicated and competitors' relativities on a consistent basis, and is needed when indicated relativities are credibility-weighted with the normalized current ones.",
       "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
       "date": "2026-11-07",
       "run": "claude/epic-goodall-89r4k3"
@@ -31918,7 +31990,15 @@
        "page": "Limited Fluctuation Credibility",
        "quote": "$$Z = \\min\\!\\left(1,\\, \\sqrt{\\frac{n}{n_{\\text{full}}}}\\right)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Partial Credibility",
+      "quote": "$$Z = \\min\\left(\\sqrt{\\frac{n}{n_F}},\\; 1\\right)$$",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r4",
@@ -32230,7 +32310,15 @@
        "page": "Limited Fluctuation Credibility",
        "quote": "Z = \\min\\!\\left(1,\\, \\sqrt{\\frac{n}{n_{\\text{full}}}}\\right)"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Partial Credibility",
+      "quote": "$$Z = \\min\\left(\\sqrt{\\frac{n}{n_F}},\\; 1\\right)$$",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r5",
@@ -32247,7 +32335,15 @@
        "page": "Limited Fluctuation Credibility",
        "quote": "\\text{Estimate} = Z \\cdot \\bar{X} + (1-Z) \\cdot \\mu_0"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Limited Fluctuation Credibility",
+      "quote": "$$U = Z D + (1 - Z) M$$",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r6",
@@ -40448,7 +40544,15 @@
        "page": "Partial Credibility",
        "quote": "Z = \\min\\left(\\sqrt{\\frac{n}{n_F}},\\; 1\\right)"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Limited Fluctuation Credibility",
+      "quote": "Compute the credibility $Z = \\min(\\sqrt{n/n_F}, 1)$, with the observed volume $n$ in the same unit as $n_F$.",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r3",
@@ -40588,8 +40692,8 @@
      ],
      "resolution": {
       "kind": "taught",
-      "page": "Complement of Credibility",
-      "quote": "When a GLM's estimate for a level is not credible, a competitor's factor, an industry benchmark or a blend of them can serve instead.",
+      "page": "External Information in Reserving",
+      "quote": "Internal data reflects the insurer's own claim settlement rates, case reserving practices and book mix, so when it is credible it is relied on over external data.",
       "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
       "date": "2026-11-07",
       "run": "claude/epic-goodall-89r4k3"
@@ -40614,7 +40718,7 @@
      "resolution": {
       "kind": "taught",
       "page": "Complement of Credibility",
-      "quote": "When a GLM's estimate for a level is not credible, a competitor's factor, an industry benchmark or a blend of them can serve instead.",
+      "quote": "When $Z$ is low (a small class, a new territory, an excess layer) the complement, not the data, determines the answer.",
       "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
       "date": "2026-11-07",
       "run": "claude/epic-goodall-89r4k3"
@@ -40630,7 +40734,7 @@
      "resolution": {
       "kind": "taught",
       "page": "Complement of Credibility",
-      "quote": "Competitors' manual rates reflect not only their loss costs but also marketing considerations, judgment and the effects of the regulatory process, which can make them inaccurate.",
+      "quote": "Competitors' manual rates reflect not only their loss costs but also marketing considerations, judgment and the effects of the regulatory process, all of which can make them inaccurate.",
       "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
       "date": "2026-11-07",
       "run": "claude/epic-goodall-89r4k3"
@@ -41462,7 +41566,15 @@
        "page": "Credibility",
        "quote": "$K = \\text{EPV}/\\text{VHM}$ — expected value of the process variance over the variance of the hypothetical means."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Credibility",
+      "quote": "$$Z = \\frac{N}{N + K}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -41479,7 +41591,15 @@
        "page": "Credibility",
        "quote": "$$Z = \\frac{n}{n + K} \\qquad \\text{(Bühlmann)}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Credibility",
+      "quote": "$$Z = \\frac{N}{N + K}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -49451,7 +49571,15 @@
        "page": "Credibility",
        "quote": "$$n_{\\text{full}} = \\left(\\frac{z_{(1+p)/2}}{k}\\right)^{2}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Full Credibility Standard",
+      "quote": "$$\\lambda_0 = \\left(\\frac{z_{(1+p)/2}}{k}\\right)^{2}$$",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r2",
@@ -49468,7 +49596,15 @@
        "page": "Credibility",
        "quote": "**Limited fluctuation (classical) credibility** asks how much data is needed for the observation to be stable within tolerance $k$ with probability $p$:"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Full Credibility Standard",
+      "quote": "$z_{(1+p)/2}$ is the $(1+p)/2$ quantile of the standard normal distribution, because the range is two-sided.",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r3",
@@ -49498,7 +49634,15 @@
        "page": "Partial Credibility",
        "quote": "$$Z = \\min\\left(\\sqrt{\\frac{n}{n_F}},\\; 1\\right)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Partial Credibility",
+      "quote": "$$Z = \\min\\left(\\sqrt{\\frac{n}{n_F}},\\; 1\\right)$$",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r5",
@@ -50434,8 +50578,8 @@
      ],
      "resolution": {
       "kind": "taught",
-      "page": "Credibility",
-      "quote": "Classification rating suits many small, homogeneous risks, where no one risk's experience is credible but groups of similar risks give credible relativities.",
+      "page": "Classification Ratemaking",
+      "quote": "**Credibility** — risk classes should be large enough to allow credible statistical inferences about expected outcomes.",
       "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
       "date": "2026-11-07",
       "run": "claude/epic-goodall-89r4k3"

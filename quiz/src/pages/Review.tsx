@@ -26,6 +26,8 @@ import { readJustCompletedQuests } from '@/lib/questStore'
 import { EXAM_LABEL_TO_ID } from '@/lib/examIds'
 import { getDailyGems } from '@/lib/dailyProgressStore'
 import { useGems } from '@/hooks/useGems'
+import { GuestSavePrompt } from '@/components/GuestSavePrompt'
+import { markGuestSavePromptAsked, readGuestSavePromptAsked, shouldAskGuestToSave } from '@/lib/guestSavePrompt'
 
 // Shared "quiz these exact questions" seam (same key RecentMistakesCard and
 // MasteryAnalyticsCard write) — keeps the retry URL small for a long miss list.
@@ -47,14 +49,20 @@ const STATE_ORDER: Record<MasteryState, number> = {
 // dismissed — or immediately when the streak didn't grow — flipping to the quest
 // overlay. When a streak can't run (feature off, or no correct answer today), we
 // start already resolved so quests appear right away.
-function PostQuizCelebrations({ streakEligible }: { streakEligible: boolean }) {
+// `onDone` fires once both have had their turn, for what plays after them.
+function PostQuizCelebrations({ streakEligible, onDone }: { streakEligible: boolean; onDone: () => void }) {
   const [streakDone, setStreakDone] = useState(!streakEligible)
+  const onDoneRef = useRef(onDone)
+  onDoneRef.current = onDone
+  useEffect(() => {
+    if (streakDone && !QUESTS_ENABLED) onDoneRef.current()
+  }, [streakDone])
   return (
     <>
       {streakEligible && !streakDone && (
         <StreakCompleteOverlay onResolved={() => setStreakDone(true)} />
       )}
-      {QUESTS_ENABLED && streakDone && <QuestCompleteOverlay />}
+      {QUESTS_ENABLED && streakDone && <QuestCompleteOverlay onResolved={() => onDoneRef.current()} />}
     </>
   )
 }
@@ -65,7 +73,7 @@ export default function Review() {
   const navigate = useNavigate()
   const back = useBack({ to: '/', label: 'Quiz' }, { skip: path => path.split(/[?#]/)[0] === '/quiz' })
   const [searchParams] = useSearchParams()
-  const { user } = useAuth()
+  const { user, loading: authLoading } = useAuth()
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
   const { balance: gemBalance, loading: gemsLoading } = useGems()
   const { resetQuiz } = useQuizStore()
@@ -81,6 +89,9 @@ export default function Review() {
   const actionsRowRef = useRef<HTMLDivElement>(null)
   const pinnedHeaderRef = useRef<HTMLDivElement>(null)
   const syncingRef = useRef(false)
+  // The guest save prompt — asked once, after the celebrations have played.
+  const [celebrationsDone, setCelebrationsDone] = useState(false)
+  const [guestSaveAsked, setGuestSaveAsked] = useState(() => readGuestSavePromptAsked())
 
   useEffect(() => {
     const onScroll = () => setShowBackToTop(window.scrollY > 400)
@@ -311,6 +322,17 @@ export default function Review() {
   const levelUpCeremonyReady = !user || !gemsLoading
   const showLevelUpCeremony = hasLevelUps && !levelUpsDone && levelUpCeremonyReady
   const celebrationsReady = !hasLevelUps || levelUpsDone
+  const showGuestSavePrompt = celebrationsReady && celebrationsDone && !showPlanBonus
+    && shouldAskGuestToSave({
+      authLoading,
+      signedIn: !!user,
+      finishedAsGuest: !!session.needsCloudSync,
+      alreadyAsked: guestSaveAsked,
+    })
+  const closeGuestSavePrompt = () => {
+    markGuestSavePromptAsked()
+    setGuestSaveAsked(true)
+  }
 
   return (
     <>
@@ -327,7 +349,18 @@ export default function Review() {
         shown in that order, after the level-up ceremony and before the review
         content below. */}
     {celebrationsReady && (
-      <PostQuizCelebrations streakEligible={STREAK_ENABLED && correctCount > 0} />
+      <PostQuizCelebrations
+        streakEligible={STREAK_ENABLED && correctCount > 0}
+        onDone={() => setCelebrationsDone(true)}
+      />
+    )}
+    {/* A guest's first finished quiz: ask them to save it, once, last. */}
+    {showGuestSavePrompt && (
+      <GuestSavePrompt
+        onCreateAccount={() => { closeGuestSavePrompt(); navigate('/auth', { state: { from: '/review', mode: 'signup' } }) }}
+        onSignIn={() => { closeGuestSavePrompt(); navigate('/auth', { state: { from: '/review' } }) }}
+        onClose={closeGuestSavePrompt}
+      />
     )}
     {/* Today's Study Plan finished by this quiz — unlock the 2× gem bonus. */}
     {celebrationsReady && showPlanBonus && progressKey && (

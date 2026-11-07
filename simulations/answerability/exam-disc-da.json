@@ -4966,7 +4966,15 @@
        "page": "Data Segmentation",
        "quote": "**Clusters are not validated segments:** A clustering algorithm always returns groups. Whether they differ in expected cost is a separate question."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Data Segmentation",
+      "quote": "Clusters formed from the features alone, without loss data, need not differ in expected cost.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -5004,7 +5012,15 @@
        "page": "Clustering",
        "quote": "so clusters used as [[Data Segmentation|segments]] should be checked on other data and against what the business knows"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Data Segmentation",
+      "quote": "A clustering algorithm will find clusters in any data, so a proposed segment is held to the same tests as any other: risks with similar expected costs within it, different expected costs from other segments, enough volume to be credible and stability on other data or time periods.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },

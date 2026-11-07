@@ -9,7 +9,7 @@ import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { QuestionCard } from '@/components/QuestionCard'
 import type { SelfGrade } from '@/components/QuestionCard'
 import { ProgressBar } from '@/components/ProgressBar'
-import { examAccent } from '@/lib/examColors'
+import { ExamLogo } from '@/components/ExamLogo'
 import { EXAM_LABEL_TO_ID } from '@/lib/examIds'
 import { QuitQuizDialog } from '@/components/QuitQuizDialog'
 import { IncompletePartsDialog } from '@/components/IncompletePartsDialog'
@@ -25,7 +25,6 @@ import { mentionWalk } from '@/lib/conceptMentions'
 import { loadConceptLinks, parseConceptLinksParam } from '@/lib/quizConceptLinks'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { PRACTICE_EXAM_LABEL } from '@/lib/pastExams'
 import { isAnswerCorrect, isMultiPartAnswerComplete } from '@/lib/parser'
 import { ungradedWrittenParts, writtenParts } from '@/lib/writtenAnswer'
 import { pendingAnswerFor, tagPendingAnswer } from '@/lib/pendingAnswer'
@@ -47,6 +46,7 @@ import { slugForLink } from '@/lib/conceptMatch'
 import { useSoundEffects } from '@/hooks/useSoundEffects'
 import { usePageKeyboard } from '@/hooks/useKeyboard'
 import { trackQuizStarted, trackQuestionAnswered, trackQuizCompleted, trackFirstQuiz, trackFirstCorrect, trackReminderSession } from '@/lib/analytics'
+import { LoadingMark } from '@/components/LoadingMark'
 
 export default function Quiz() {
   const [searchParams] = useSearchParams()
@@ -554,10 +554,7 @@ export default function Quiz() {
   // hold the quiz up.
   if ((!resumed && (loading || (status === 'idle' && !error))) || awaitingConceptListDecision) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <p className="text-muted-foreground">Loading questions…</p>
-      </div>
+      <LoadingMark className="flex items-center justify-center min-h-[60vh]" />
     )
   }
 
@@ -642,6 +639,9 @@ export default function Quiz() {
   const setPartGrade = (partLabel: string, grade: SelfGrade) =>
     setManualGrade(`${currentQuestion.id}__${partLabel}`, grade)
 
+  // The exam this question is from, as its logo in the header's right corner.
+  const examLogoKey = EXAM_LABEL_TO_ID[currentQuestion.exam]
+
   return (
     <>
     <div
@@ -663,16 +663,7 @@ export default function Quiz() {
         </Button>
 
         <div className="flex items-center gap-2">
-          <span
-            className={
-              'inline-flex items-center text-xs font-medium px-2.5 py-1 rounded-full border ' +
-              (mode === 'mock-exam'
-                ? 'bg-primary/10 text-primary border-primary/30'
-                : 'bg-muted text-muted-foreground border-border')
-            }
-          >
-            {mode === 'mock-exam' ? PRACTICE_EXAM_LABEL : 'Quiz'}
-          </span>
+          {examLogoKey && <ExamLogo examKey={examLogoKey} size="sm" />}
           {timer !== null && (
             <QuizTimer startedAt={timer.startedAt} allowanceSeconds={timer.allowanceSeconds} />
           )}
@@ -708,7 +699,6 @@ export default function Quiz() {
           questionIds={storeQuestions.map(q => q.id)}
           isFlagged={isFlagged}
           onFlag={() => toggleFlag(currentQuestion.id)}
-          accent={examAccent(EXAM_LABEL_TO_ID[currentQuestion.exam] ?? '')}
           info={
             <QuestionInfoButton
               question={currentQuestion}

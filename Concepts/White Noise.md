@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:8b55b44f05596f84656b49c5f9b99db3f93b9a0bd399f3384fa0db0def1e35e9
+  content_hash: sha256:3b3511187696333dc72b29e27809f907935223d98f433f52382f83bfd428046a
   sources:
     - "Hyndman & Athanasopoulos, Forecasting: Principles and Practice, 3rd ed. (OTexts, open online text), §2.9 White noise (no autocorrelation; 95% of spikes within ±1.96/√T), read 2026-10-18, sha256:a13a2a978731e95537586c671e4b4edda0fbb1711e81a1f01e2c2b967f4212b7 — https://otexts.com/fpp3/graphics.html"
     - "Hyndman & Athanasopoulos, Forecasting: Principles and Practice, 3rd ed. (OTexts, open online text), §5.4 Ljung-Box Q* = T(T+2) sum r_k^2/(T-k), read 2026-10-18, sha256:d72117b50768eed014ba8ec8bc835940cdfa2b34ca7ec76b22ce2b0484877f9a — https://otexts.com/fpp3/toolbox.html"
@@ -14,24 +14,32 @@ verification:
   log: .verify/Concepts/White Noise.md
 ---
 
-**White noise** is a [[Time Series]] of uncorrelated, mean-zero, constant-variance terms. It is the input every [[ARIMA]] model is built from, and the thing a fitted model's residuals must look like if the model has captured everything.
-
-> $$E[\varepsilon_t] = 0, \quad \mathrm{Var}(\varepsilon_t) = \sigma^{2}, \quad \mathrm{Cov}(\varepsilon_t, \varepsilon_s) = 0 \ (t \neq s)$$
->
-> $$\rho_k = 0 \ \text{ for all } k \geq 1$$
-
-- White noise is [[Stationarity|stationary]] by construction and completely **unforecastable** — the best prediction of $\varepsilon_{t+1}$ is 0, whatever the history
-- **Gaussian white noise** additionally assumes normality, which is what prediction intervals need; uncorrelated does not imply independent without it
-- The diagnostic use is the important one: after fitting, the residual [[Autocorrelation Function|ACF]] should show no spike outside the $\pm 1.96/\sqrt{n}$ bands. A surviving spike means structure the model has missed
-- The **Ljung-Box** portmanteau test checks several lags at once: $Q = n(n+2)\sum_{k=1}^{h}\frac{\hat\rho_k^2}{n-k} \sim \chi^2_{h-p-q}$
-- About 1 lag in 20 will breach the bands by chance — a single mid-range spike is not evidence of misfit
-
 ![[Media/Figures/White_Noise.svg|340]]
 
-> [!example]- Are These Residuals White Noise? {Example}
-> After fitting an ARIMA(1,1,0) to 100 observations, the residual ACF shows $\hat\rho_1 = 0.05$, $\hat\rho_2 = -0.31$, $\hat\rho_3 = 0.08$. Is the fit adequate?
->
-> > [!answer]-
-> > The bands are $\pm 1.96/\sqrt{100} = \pm 0.196$.
-> > $\hat\rho_1$ and $\hat\rho_3$ sit well inside. $\hat\rho_2 = -0.31$ is **outside** — and at lag 2, not at some random high lag where a chance breach would be unsurprising.
-> > **Not white noise.** There is structure left at lag 2; try adding an MA(2) or AR(2) term and re-check.
+**White Noise** is a [[Time Series|time series]] $\{w_t\}$ of uncorrelated variables with mean zero and the same variance $\sigma^2$. Its properties are
+
+> $$E[w_t] = 0, \quad \text{Var}(w_t) = \sigma^2, \quad \text{Cov}(w_t, w_s) = 0 \ (t \ne s)$$
+
+When the $w_t$ are also independent and normal, the series is **Gaussian white noise**. Uncorrelated variables are not necessarily independent, so the normality is an extra assumption.
+
+White noise is [[Stationarity|stationary]], and its autocorrelation is $\rho_k = 0$ for every lag $k \ge 1$. It cannot be forecast: future white noise terms have expectation zero, so they drop out of the point forecast of any time series model.
+
+> [!example]- A series is $x_t = 50 + 2t + w_t$, with $\{w_t\}$ white noise. What is the forecast of $x_{21}$ made at time 20? {Example}
+> - The future term $w_{21}$ has expectation zero, so it drops out of the forecast.
+> - The forecast is $50 + 2(21) = 92$.
+
+## White noise as a residual check
+
+A fitted model has captured the dependence in a series when its residuals look like white noise. For white noise, the sample autocorrelations $r_k$ of $n$ observations lie within
+
+> $$\pm \frac{2}{\sqrt{n}}$$
+
+- The bands are approximately 95% bounds, $\pm 1.96/\sqrt{n}$.
+
+About one sample autocorrelation in 20 falls outside the bands by chance. A large value at a low lag is evidence of structure the model has missed.
+
+> [!example]- After fitting a model to 100 observations, the residuals have $r_1 = 0.05$, $r_2 = -0.31$ and $r_3 = 0.08$. Are the residuals white noise? {Example}
+> - The bands are $\pm 1.96/\sqrt{100} = \pm 0.196$.
+> - $r_1$ and $r_3$ are inside the bands.
+> - $r_2 = -0.31$ is outside, at a low lag.
+> - The residuals are not white noise, so the model has missed structure at lag 2.

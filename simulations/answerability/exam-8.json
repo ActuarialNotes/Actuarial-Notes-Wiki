@@ -4972,8 +4972,8 @@
      ],
      "resolution": {
       "kind": "taught",
-      "page": "Credibility",
-      "quote": "In risk classification, a class must be large enough for credible predictions of its costs, and its estimates should be stable from year to year while still responding to real changes.",
+      "page": "Experience Rating",
+      "quote": "A small risk's mod stays near $1.0$ however good or bad its recent record, because a few claims say little.",
       "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
       "date": "2026-11-07",
       "run": "claude/epic-goodall-89r4k3"
@@ -4997,8 +4997,8 @@
      ],
      "resolution": {
       "kind": "taught",
-      "page": "Credibility",
-      "quote": "In risk classification, a class must be large enough for credible predictions of its costs, and its estimates should be stable from year to year while still responding to real changes.",
+      "page": "Experience Rating",
+      "quote": "A small risk's mod stays near $1.0$ however good or bad its recent record, because a few claims say little.",
       "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
       "date": "2026-11-07",
       "run": "claude/epic-goodall-89r4k3"
@@ -8554,8 +8554,8 @@
      ],
      "resolution": {
       "kind": "taught",
-      "page": "Data Segmentation",
-      "quote": "Each further split makes the groups more alike but leaves each with less data.",
+      "page": "Homogeneity",
+      "quote": "Creating more groupings can improve homogeneity and reduce discontinuities between rates, but it reduces credibility and raises expense.",
       "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
       "date": "2026-11-07",
       "run": "claude/epic-goodall-89r4k3"
@@ -14272,7 +14272,15 @@
        "page": "Credibility",
        "quote": "- $K = \\text{EPV}/\\text{VHM}$ — expected value of the process variance over the variance of the hypothetical means."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Credibility",
+      "quote": "$$Z = \\frac{N}{N + K}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -14310,7 +14318,15 @@
        "page": "Variance of Hypothetical Means",
        "quote": "- $a = 0$ means every risk has the same mean — experience rating has nothing to detect, and $Z = 0$ for any $n$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Experience Rating",
+      "quote": "A small risk's mod stays near $1.0$ however good or bad its recent record, because a few claims say little.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },

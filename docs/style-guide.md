@@ -759,8 +759,17 @@ dashboard, a search result — gets the plain bar.
 
 ### 7.6 Empty, loading & error states
 
-- **Loading:** `Loader2` spinner with `animate-spin`, `h-4 w-4`, beside muted text
-  (`text-sm text-muted-foreground`) — see `WikiFallback`.
+- **Loading a page:** `PageLoading` / `LoadingMark` (`components/LoadingMark.tsx`): six cells
+  of a development triangle, each diagonal pulsing in turn, no words. It fades in after 300ms,
+  so a short wait shows nothing. Every route fallback (`WikiFallback`) and the quiz's wait for
+  its questions use it.
+- **Loading the app (first visit):** the full development triangle in `index.html` (`#boot`),
+  plain HTML drawn before any bundle. It fills **one diagonal per boot step that has really
+  happened** (page, styles, app code, started, session, drawn, first page ready — the later
+  steps reported through `bootStep` in `components/BootDone.tsx`), then the *Ult* column goes
+  green and it lifts. Never advance it on a timer: a step it can't measure fills when it ends.
+- **Loading inside a control:** `Loader2` spinner with `animate-spin`, `h-4 w-4`, beside muted
+  text (`text-sm text-muted-foreground`).
 - **Empty:** centered icon in a soft `bg-primary/10 rounded-2xl` tile + short heading +
   one muted explanatory line + a single primary action (see the Dashboard welcome/empty cards).
 - **Error:** route-level `ErrorBoundary` for crashes; inline errors use `text-destructive`.

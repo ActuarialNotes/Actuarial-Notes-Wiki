@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:a78bb1d48c848b981ef1de03af5f816f1f7c135c72651ca67045af156dfd039c
+  content_hash: sha256:490b11fa68fc61f14178a80e6e12c4bd925450e3d101afefb21fc4f0cad05e75
   sources:
     - "Dobson & Barnett, An Introduction to Generalized Linear Models, 4th ed. (CRC 2018), publisher eBook preview, §1.4.3 t-distribution eq. (1.6) T = Z/(X^2/n)^(1/2) with Z ~ N(0,1), X^2 ~ chi-squared(n) independent; §1.4.4 item 2 eq. (1.8) T^2 ~ F(1, n), printed pp.10-11 (PDF pp.27-28), sha256:40ed0b2549113ee0bea29e41786886ce992ffa29251ad26fb1037385bb51611a — https://api.pageplace.de/preview/DT0400.9781351726221_A37406780/preview-9781351726221_A37406780.pdf"
     - "CAS Exam MAS-I Tables, 'Tail areas (two-sided) for t-distributions', columns 0.20, 0.10, 0.05, 0.02, 0.01; df 1-30, 35-60 by 5, 70, 80, 90, 100, 120, 400, Inf (df 15: 1.753, 2.947; df 18: 2.101, 2.552, 2.878), PDF p.16, sha256:cb5674138a67f7a498b8cc90357144fd121cbcbbc7487f214557b105611a69b4 — https://www.casact.org/sites/default/files/2021-03/masi_tables.pdf"
@@ -16,50 +16,78 @@ verification:
   log: ".verify/Concepts/Student's t-Distribution.md"
 ---
 
-**Student's t-Distribution** $t(n)$ with $n$ degrees of freedom is the distribution of a standard [[Normal Distribution|normal]] variable divided by the square root of an independent [[Chi-Squared Distribution|chi-squared]] variable over its degrees of freedom. It is the [[Sampling Distribution|sampling distribution]] of a mean or a regression coefficient standardised by an *estimated* standard error.
+A **Student's t-Distribution** with $r$ degrees of freedom, written $t(r)$, is the distribution of a standard [[Normal Distribution|normal]] random variable divided by the square root of an independent [[Chi-Squared Distribution|chi-squared]] random variable over its degrees of freedom. A $t$ random variable with $r$ degrees of freedom is
 
-> $$T = \frac{Z}{\sqrt{V/n}} \sim t(n), \quad Z \sim N(0,1),\ V \sim \chi^2(n)$$
+> $$T = \frac{Z}{\sqrt{V/r}}$$
 
-> $$f(t) = \frac{\Gamma\!\left(\frac{n + 1}{2}\right)}{\sqrt{n\pi}\;\Gamma\!\left(\frac{n}{2}\right)}\left(1 + \frac{t^2}{n}\right)^{-(n + 1)/2}$$
+- $Z$ is a standard normal random variable.
+- $V$ is a chi-squared random variable with $r$ degrees of freedom, independent of $Z$.
 
-> $$E[T] = 0, \quad n > 1$$
+Its mean is
 
-> $$\text{Var}(T) = \frac{n}{n - 2}, \quad n > 2$$
+> $$E[T] = 0$$
 
-- $Z$ and $V$ are independent, and $f$ is defined for all real $t$. The density is symmetric about 0 with heavier tails than the normal; as $n \to \infty$ it converges to the standard normal density. With $n = 1$ it is the Cauchy distribution, which has no mean.
-- **Normal samples:** for a sample of size $n$ from $N(\mu, \sigma^2)$ with [[Sample Mean|sample mean]] $\bar{X}$ and [[Sample Variance|sample variance]] $S^2$, $\dfrac{\bar{X} - \mu}{S/\sqrt{n}} \sim t(n - 1)$. This is the one-sample t-test and the [[Confidence Interval|confidence interval]] for $\mu$ when $\sigma$ is unknown.
-- **Regression coefficients:** in simple [[Linear Regression|linear regression]], $t = \hat{\beta}_1/\text{SE}(\hat{\beta}_1)$ has a $t(n - 2)$ distribution when $\beta_1 = 0$; a 95% interval for $\beta_1$ uses the 97.5% quantile of $t(n - 2)$.
-- **Link to F:** $T^2 \sim F(1, n)$, so a two-sided t-test on one coefficient is the [[F-Distribution|F-test]] with one numerator degree of freedom.
-- **The CAS MAS-I table** gives *two-sided* tail areas $0.20,\ 0.10,\ 0.05,\ 0.02,\ 0.01$: the entry $c$ satisfies $P(|T| > c) = $ the column heading. It covers $df = 1$ to 30, then 35 to 60 in fives, 70, 80, 90, 100, 120, 400 and $\infty$ (the normal row). For a **one-sided** test at level $\alpha$, read the $2\alpha$ column.
-- On MAS-I it supplies critical values for [[Hypothesis Testing|tests]] of means and for the t-statistics reported for linear-model coefficients.
+- $r > 1$.
 
-> [!example]- Has Average Severity Risen? {Example}
-> Last year's average claim severity was 1,000. A sample of 16 claims this year has $\bar{x} = 1{,}150$ and $s = 200$; claim sizes are assumed normal. Test $H_0: \mu = 1{,}000$ against $H_1: \mu > 1{,}000$ at the 5% level, and bound the [[p-Value|p-value]].
->
-> > [!answer]-
-> > $$
-> > \begin{align*}
-> > t &= \frac{1{,}150 - 1{,}000}{200/\sqrt{16}} \\
-> > &= \frac{150}{50} \\
-> > &= 3.0
-> > \end{align*}
-> > $$
-> >
-> > There are $16 - 1 = 15$ degrees of freedom. The test is one-sided, so the 5% critical value is in the two-sided $0.10$ column: $1.753$. Since $3.0 > 1.753$, reject $H_0$. The two-sided $0.01$ column gives $2.947 < 3.0$, so the one-sided p-value is below $0.005$.
+Its variance is
 
-> [!example]- Significance of a Rating Factor in a Regression {Example}
-> A simple linear regression of loss ratio on a credit-score variable, fitted to $n = 20$ territories, gives $\hat{\beta}_1 = 0.42$ with standard error $0.15$. Test $\beta_1 = 0$ against a two-sided alternative, and give a 95% confidence interval for $\beta_1$.
->
-> > [!answer]-
-> > $t = 0.42/0.15 = 2.8$, with $20 - 2 = 18$ degrees of freedom. In the $df = 18$ row the two-sided $0.02$ column is $2.552$ and the $0.01$ column is $2.878$, so the p-value is between 0.01 and 0.02: significant at 5% and 2%, not at 1%.
-> >
-> > The two-sided $0.05$ column gives $2.101$:
-> >
-> > $$
-> > \begin{align*}
-> > \hat{\beta}_1 \pm 2.101\,\text{SE} &= 0.42 \pm 2.101(0.15) \\
-> > &= 0.42 \pm 0.315
-> > \end{align*}
-> > $$
-> >
-> > The interval $(0.105,\ 0.735)$ excludes 0, consistent with rejecting $\beta_1 = 0$ at 5%.
+> $$\text{Var}(T) = \frac{r}{r-2}$$
+
+- $r > 2$. For $r \le 2$ the variance does not exist.
+
+The density is symmetric about 0 and has heavier tails than the standard normal density. As $r$ grows, $t(r)$ approaches the standard normal distribution, so with more than about 100 degrees of freedom the two-sided 5% critical value is close to 1.96. The square of a $t(r)$ random variable has the [[F-Distribution|F-distribution]] $F(1, r)$.
+
+> [!example]- What are the mean and the variance of a $t$-distribution with 6 degrees of freedom? {Example}
+> - The degrees of freedom exceed 1, so the mean is 0.
+> - The degrees of freedom exceed 2, so the variance is $6/(6-2) = 1.5$.
+
+## The t statistic for a normal sample
+
+For a random sample of size $n$ from a normal distribution with mean $\mu$, the [[Sample Mean|sample mean]] standardized by the sample standard deviation $S$ has a $t$-distribution:
+
+> $$\frac{\bar{X} - \mu}{S/\sqrt{n}} \sim t(n-1)$$
+
+The CAS MAS-I $t$ table gives two-sided tail areas 0.20, 0.10, 0.05, 0.02 and 0.01. The entry $c$ in a column satisfies $P(|T| > c)$ equal to the column heading. A one-sided test at level $\alpha$ reads the column $2\alpha$. When the direction of a one-sided alternative matches the sign of the statistic, its [[p-Value|p-value]] is half the two-sided p-value. A p-value is bounded by finding the two critical values in the row that bracket the absolute value of the statistic.
+
+> [!example]- Last year's mean claim severity was 1,000. A random sample of 16 claims this year has $\bar{x} = 1{,}150$ and $s = 200$, and claim sizes are normal. Is $H_0: \mu = 1{,}000$ rejected in favour of $H_1: \mu > 1{,}000$ at the 5% level, and what bound is there on the p-value? {Example}
+> - The statistic is $(1{,}150 - 1{,}000)/(200/\sqrt{16}) = 150/50 = 3.0$, with $16 - 1 = 15$ degrees of freedom.
+> - The one-sided 5% critical value is in the two-sided 0.10 column, 1.753.
+> - The statistic exceeds 1.753, so $H_0$ is rejected.
+> - The two-sided 0.01 column gives 2.947, which the statistic also exceeds, so the one-sided p-value is below 0.005.
+
+## The paired t test
+
+When each of $n$ subjects is measured twice, the test uses the differences $d_1, \ldots, d_n$, with mean $\bar{d}$ and sample standard deviation $s_d$. If the differences are normal with mean 0 under $H_0$, the paired $t$ statistic is
+
+> $$t = \frac{\bar{d}}{s_d/\sqrt{n}}$$
+
+- $n$ is the number of pairs, and the statistic has $n - 1$ degrees of freedom.
+
+For a one-sided alternative, the differences are taken in the direction that makes the alternative a mean difference greater than 0, and the p-value is the upper tail.
+
+> [!example]- Six claims are each estimated by two adjusters. The differences, adjuster A less adjuster B, are 10, 6, 14, $-4$, 8 and 8. Is there evidence at the 5% level that adjuster A's estimates are higher on average, and what bound is there on the p-value? {Example}
+> - The mean difference is $\bar{d} = 42/6 = 7$.
+> - The sample variance of the differences is $s_d^2 = (476 - 6 \times 7^2)/5 = 36.4$, so $s_d = 6.033$.
+> - The statistic is $t = 7/(6.033/\sqrt{6}) = 2.842$, with 5 degrees of freedom.
+> - The one-sided 5% critical value is 2.015, which the statistic exceeds, so $H_0$ is rejected.
+> - The statistic lies between 2.571 (two-sided 0.05) and 3.365 (two-sided 0.02), so the one-sided p-value is between 0.01 and 0.025.
+
+## The t statistic for a regression coefficient
+
+In a [[Linear Regression|linear regression]] with $p$ predictors and an intercept fitted to $n$ observations, the statistic for $H_0: \beta_j = 0$ is
+
+> $$t = \frac{\hat{\beta}_j}{\text{SE}(\hat{\beta}_j)}$$
+
+- $\text{SE}(\hat{\beta}_j)$ is the standard error of $\hat{\beta}_j$ reported in the [[Parameter Estimate Tables|parameter estimate table]].
+- The statistic has $n - p - 1$ degrees of freedom when $H_0$ is true and the errors are normal.
+
+A $100(1-\alpha)\%$ [[Confidence Interval|confidence interval]] for $\beta_j$ is $\hat{\beta}_j \pm c\,\text{SE}(\hat{\beta}_j)$, where $c$ is the two-sided $\alpha$ critical value of $t(n - p - 1)$. For the same statistic, fewer degrees of freedom give heavier tails and a larger p-value.
+
+> [!example]- A simple linear regression fitted to 20 territories gives $\hat{\beta}_1 = 0.42$ with standard error 0.15. What bound is there on the two-sided p-value for $\beta_1 = 0$, and what is a 95% confidence interval for $\beta_1$? {Example}
+> - The statistic is $t = 0.42/0.15 = 2.8$, with $20 - 1 - 1 = 18$ degrees of freedom.
+> - In the 18 degrees of freedom row, the 0.02 column is 2.552 and the 0.01 column is 2.878, so the p-value is between 0.01 and 0.02.
+> - The 0.05 column is 2.101, so the interval is $0.42 \pm 2.101 \times 0.15 = 0.42 \pm 0.315$.
+> - The 95% confidence interval for $\beta_1$ is $(0.105, 0.735)$.
+
+> [!trap] Using the two-sided column for a one-sided test
+> The CAS $t$ table's columns are two-sided areas. A one-sided test at the 5% level uses the 0.10 column. With 15 degrees of freedom its critical value is 1.753, not the 2.131 in the 0.05 column.

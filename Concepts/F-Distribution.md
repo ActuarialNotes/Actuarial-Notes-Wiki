@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:fb68734ce1ca795682ae05a3e1a5bbb922fae67f9ccdea62db89284d52116f14
+  content_hash: sha256:af3f97fc0ae69db4b292951f3cc58bc580e3e639d172758bef9d104dbe581a0f
   sources:
     - "Dobson & Barnett, An Introduction to Generalized Linear Models, 4th ed. (CRC 2018), publisher eBook preview, §1.4.4 F-distribution item 1 eq. (1.7) F = (X1^2/n)/(X2^2/m), item 2 eq. (1.8) T^2 ~ F(1, n), item 3 the non-central F (numerator non-central chi-squared, denominator central chi-squared; 'The mean of a non-central F-distribution is larger than the mean of central F-distribution with the same degrees of freedom'), printed pp.10-11 (PDF pp.27-28), sha256:40ed0b2549113ee0bea29e41786886ce992ffa29251ad26fb1037385bb51611a — https://api.pageplace.de/preview/DT0400.9781351726221_A37406780/preview-9781351726221_A37406780.pdf"
     - "CAS Exam MAS-I Tables, 'Selected Upper-tail areas for F-distributions' (den 24, num 2: 0.05 = 3.403, 0.10 = 2.538; den 8, num 10: 0.05 = 3.347; den 10, num 8: 0.05 = 3.072), PDF pp.17-19, sha256:cb5674138a67f7a498b8cc90357144fd121cbcbbc7487f214557b105611a69b4 — https://www.casact.org/sites/default/files/2021-03/masi_tables.pdf"
@@ -19,47 +19,59 @@ verification:
   log: .verify/Concepts/F-Distribution.md
 ---
 
-The **F-Distribution** $F(n, m)$ with $n$ numerator and $m$ denominator degrees of freedom is the distribution of the ratio of two independent [[Chi-Squared Distribution|chi-squared]] variables, each divided by its degrees of freedom. It is the [[Sampling Distribution|sampling distribution]] for comparing two variances and for testing groups of coefficients in linear models.
+An **F-Distribution** with $r_1$ numerator and $r_2$ denominator degrees of freedom, written $F(r_1, r_2)$, is the distribution of the ratio of two independent [[Chi-Squared Distribution|chi-squared]] random variables, each divided by its degrees of freedom. An $F$ random variable with $r_1$ and $r_2$ degrees of freedom is
 
-> $$F = \frac{U/n}{V/m} \sim F(n, m), \quad U \sim \chi^2(n),\ V \sim \chi^2(m)$$
+> $$W = \frac{U/r_1}{V/r_2}$$
 
-> $$\begin{aligned} f(x) &= \frac{\Gamma\!\left(\frac{n + m}{2}\right)}{\Gamma\!\left(\frac{n}{2}\right)\Gamma\!\left(\frac{m}{2}\right)}\,\frac{n}{m} \\ &\quad \times \frac{\left(\frac{n}{m}x\right)^{n/2 - 1}}{\left(1 + \frac{n}{m}x\right)^{(n + m)/2}}, \quad x > 0 \end{aligned}$$
+- $U$ is a chi-squared random variable with $r_1$ degrees of freedom.
+- $V$ is a chi-squared random variable with $r_2$ degrees of freedom, independent of $U$.
 
-> $$E[F] = \frac{m}{m - 2}, \quad m > 2$$
+Its mean is
 
-> $$\text{Var}(F) = 2\left(\frac{m}{m - 2}\right)^2 \frac{n + m - 2}{n(m - 4)}, \quad m > 4$$
+> $$E[W] = \frac{r_2}{r_2 - 2}$$
 
-- $U$ and $V$ are independent. The mean depends only on the denominator degrees of freedom and is close to 1 when $m$ is large.
-- **Reciprocal:** $1/F \sim F(m, n)$. A lower-tail critical value is therefore the reciprocal of an upper-tail one with the degrees of freedom swapped: the value below which $F(n, m)$ falls with probability $\alpha$ is $1/c$, where $c$ is the upper-$\alpha$ point of $F(m, n)$.
-- **Link to t:** if $T \sim t(m)$ then $T^2 \sim F(1, m)$ — see [[Student's t-Distribution]].
-- **Noncentral F:** if $U$ is instead [[Noncentral Chi-Squared Distribution|noncentral chi-squared]], the ratio has the noncentral F-distribution, whose mean is larger than that of the central $F(n, m)$.
-- **Two normal variances:** for independent normal samples of sizes $n_X$ and $n_Y$, $\dfrac{S_X^2/\sigma_X^2}{S_Y^2/\sigma_Y^2} \sim F(n_X - 1,\ n_Y - 1)$, using the [[Sample Variance|sample variances]].
-- **Nested linear models:** dropping $q$ of the $p$ predictors from a [[Linear Regression|linear regression]] fitted to $n$ observations raises the [[Residual Sum of Squares|residual sum of squares]] from $\text{RSS}$ to $\text{RSS}_0$; with normal errors and the $q$ coefficients truly zero,
-  $\dfrac{(\text{RSS}_0 - \text{RSS})/q}{\text{RSS}/(n - p - 1)} \sim F(q,\ n - p - 1)$. With $q = p$ this is the overall F-statistic, and [[ANOVA]] tables test group means the same way.
-- **GLMs:** to test $k$ added parameters, $\dfrac{D_S - D_B}{k\,\hat{\phi}_B}$ is compared with $F(k,\ n - p_B)$, where $D_S$ and $D_B$ are the unscaled [[Deviance|deviances]] of the small and big models, $\hat{\phi}_B$ is the big model's estimated [[Dispersion Parameter|dispersion parameter]] and $p_B$ its number of parameters.
-- **The CAS MAS-I table** gives *upper-tail* critical values for areas $0.20,\ 0.10,\ 0.05,\ 0.02,\ 0.01$, numerator df $1$–$12$, $14, 16, 20, 24, 30, 40, 50, 75, 100, 200, 500, \infty$, and denominator df $1$–$26$. Find the denominator row, the upper-tail area, then the numerator column.
+- $r_2 > 2$.
 
-> [!example]- Can Two Predictors Be Dropped? {Example}
-> A linear model for claim severity with $p = 5$ predictors is fitted to $n = 30$ observations, with $\text{RSS} = 120$. Refitting without two of the predictors gives $\text{RSS}_0 = 150$. Test at the 5% level whether both dropped coefficients are zero.
->
-> > [!answer]-
-> > $$
-> > \begin{align*}
-> > F &= \frac{(150 - 120)/2}{120/(30 - 5 - 1)} \\
-> > &= \frac{15}{5} \\
-> > &= 3.0
-> > \end{align*}
-> > $$
-> >
-> > Compare with $F(2, 24)$. In the table's denominator-24 rows, numerator column 2, the upper 5% point is $3.403$ and the upper 10% point is $2.538$. Since $2.538 < 3.0 < 3.403$, the p-value is between 0.05 and 0.10: do not reject at 5%. The data do not show that the two predictors are needed.
+The reciprocal $1/W$ has the $F(r_2, r_1)$ distribution. The square of a random variable with the [[Student's t-Distribution|t-distribution]] $t(r)$ has the $F(1, r)$ distribution.
 
-> [!example]- Comparing the Volatility of Two Territories {Example}
-> Normal claim amounts are sampled from two territories: territory A has $n = 11$ and $s_A^2 = 2.4$; territory B has $n = 9$ and $s_B^2 = 0.8$. Test $H_0: \sigma_A^2 = \sigma_B^2$ against a two-sided alternative at the 10% level.
->
-> > [!answer]-
-> > Under $H_0$, $s_A^2/s_B^2 \sim F(10, 8)$, and the observed ratio is $2.4/0.8 = 3.0$. A two-sided 10% test puts 5% in each tail.
-> >
-> > - Upper 5% point of $F(10, 8)$, from the denominator-8 rows, numerator column 10: $3.347$.
-> > - Lower 5% point: the reciprocal of the upper 5% point of $F(8, 10)$, which is $3.072$ (denominator-10 rows, numerator column 8), so $1/3.072 = 0.326$.
-> >
-> > Since $0.326 < 3.0 < 3.347$, do not reject $H_0$ at 10%. The ratio is large, but with samples this small an F-ratio of 3 is not unusual.
+The CAS MAS-I $F$ table gives upper-tail critical values for the areas 0.20, 0.10, 0.05, 0.02 and 0.01. A value is found from the denominator degrees of freedom, the upper-tail area and the numerator degrees of freedom.
+
+> [!example]- What is the mean of an $F$-distribution with 2 and 24 degrees of freedom? {Example}
+> - The mean depends only on the denominator degrees of freedom, $r_2 = 24$.
+> - The mean is $24/(24 - 2) = 1.091$.
+
+## Comparing two normal variances
+
+For independent random samples of sizes $n_1$ and $n_2$ from normal distributions with variances $\sigma_1^2$ and $\sigma_2^2$, the [[Sample Variance|sample variances]] $S_1^2$ and $S_2^2$ satisfy
+
+> $$\frac{S_1^2/\sigma_1^2}{S_2^2/\sigma_2^2} \sim F(n_1 - 1, n_2 - 1)$$
+
+Under $H_0: \sigma_1^2 = \sigma_2^2$ the unknown variances cancel, and the test statistic is $S_1^2/S_2^2$. A two-sided test also needs a lower-tail value, which the table does not give. If $c$ is the value that $F(r_2, r_1)$ exceeds with probability $\alpha$, then the value that $F(r_1, r_2)$ falls below with probability $\alpha$ is
+
+> $$\frac{1}{c}$$
+
+> [!example]- Normal claim amounts are sampled from two territories. Territory 1 has 11 claims with $s_1^2 = 2.4$, and territory 2 has 9 claims with $s_2^2 = 0.8$. Is $H_0: \sigma_1^2 = \sigma_2^2$ rejected against a two-sided alternative at the 10% level? {Example}
+> - Under $H_0$, $S_1^2/S_2^2$ is $F(10, 8)$, and the observed ratio is $2.4/0.8 = 3.0$.
+> - A two-sided 10% test puts 5% in each tail.
+> - The upper 5% value of $F(10, 8)$ is 3.347.
+> - The upper 5% value of $F(8, 10)$ is 3.072, so the lower 5% value of $F(10, 8)$ is $1/3.072 = 0.326$.
+> - The ratio 3.0 lies between 0.326 and 3.347, so $H_0$ is not rejected.
+
+## Testing nested linear models
+
+To test whether $q$ of the $p$ predictors in a [[Linear Regression|linear regression]] fitted to $n$ observations can be dropped, the reduced model's [[Residual Sum of Squares|residual sum of squares]] $\text{RSS}_0$ is compared with the full model's $\text{RSS}$. The partial $F$ statistic is
+
+> $$\frac{(\text{RSS}_0 - \text{RSS})/q}{\text{RSS}/(n - p - 1)}$$
+
+- $n - p - 1$ is the residual degrees of freedom of the full model.
+
+When the $q$ coefficients are 0 and the errors are normal, the statistic has the $F(q, n - p - 1)$ distribution, and a large value means the added terms are significant. For a [[Generalized Linear Model|GLM]] whose [[Dispersion Parameter|dispersion parameter]] is estimated, the drop in [[Deviance|deviance]] divided by $q\hat{\phi}$ is compared with $F$ on $q$ and the larger model's residual degrees of freedom. [[ANOVA]] tables test group means in the same way.
+
+> [!example]- A linear model with 5 predictors is fitted to 30 observations, with RSS 120. Without two of the predictors, the RSS is 150. Is the hypothesis that both dropped coefficients are 0 rejected at the 5% level? {Example}
+> - The numerator is $(150 - 120)/2 = 15$, and the denominator is $120/(30 - 5 - 1) = 5$.
+> - The statistic is $15/5 = 3.0$.
+> - It is compared with $F(2, 24)$, whose upper 10% value is 2.538 and upper 5% value is 3.403.
+> - The p-value is between 0.05 and 0.10, so the hypothesis is not rejected at the 5% level.
+
+> [!trap] Swapping the degrees of freedom
+> The numerator degrees of freedom belong to the statistic in the numerator. For $S_1^2/S_2^2$ with 11 and 9 observations they are $F(10, 8)$, whose upper 5% value is 3.347. Reading $F(8, 10)$ gives 3.072.

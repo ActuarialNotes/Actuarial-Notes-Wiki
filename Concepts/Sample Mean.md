@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:c789784356070dbd57ff979d8d6f8417124d679b1b6ea2ec34bab8862e5e4e53
+  content_hash: sha256:6bc2d2e514b05f5cb09a9cbee8c81d23e4bbeccf6ff8ded4a556c926c501724e
   sources:
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), Domain B tasks 1 (estimate mean and variance), 2 (sufficient statistic), 4 (critical values from a sampling distribution), 7 (order statistics), 8 (MLE; consistency, unbiasedness, sufficiency, efficiency, minimum variance, MSE; censoring and truncation), 9 (PDF p.4); Hogg Domain B §§4.1, 5.1, 6.1–6.5, 7.1–7.6 and Tse §§12.1, 12.3 (PDF p.6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
     - "Siegrist, Random, §5.2 The Sample Mean (definition; outlier exercise: dropping one score of 10 moves the mean 64 → 66.25), sha256:e21a3da7773a6f7f925b4cb0c583d5331abb1656fe01ed952c8d42b26f238cab — https://www.randomservices.org/random/sample/Mean.html"
@@ -21,31 +21,52 @@ verification:
   log: .verify/Concepts/Sample Mean.md
 ---
 
-The **Sample Mean** $\bar{X}$ is the arithmetic average of a random sample and the standard estimator of the population mean $\mu$. It is [[Unbiasedness|unbiased]], [[Consistency|consistent]], and — for a Normal population — the [[Minimum Variance]] unbiased estimator.
+![[Media/Figures/Sample_Mean.svg|340]]
+
+A **Sample Mean** is the average of the observations in a [[Random Sample|random sample]], and it is the usual [[Estimator|estimator]] of the mean $\mu$ of the distribution. The sample mean $\bar{X}$ of a random sample $X_1, \ldots, X_n$ is
 
 > $$\bar{X} = \frac{1}{n}\sum_{i=1}^{n} X_i$$
 
-> $$E[\bar{X}] = \mu, \qquad \text{Var}(\bar{X}) = \frac{\sigma^2}{n}$$
+The sample mean is not resistant to extreme observations. One large claim can move it by any amount, so for heavy-tailed claim data the sample mean and the other sample moments are erratic.
 
-- The **standard error** is $\text{SD}(\bar{X}) = \sigma/\sqrt{n}$; estimated from data it is $S/\sqrt{n}$. Halving it requires four times the sample
-- By the [[Central Limit Theorem]], $\bar{X}$ is approximately $N(\mu, \sigma^2/n)$ for large $n$ whatever the population shape — the fact behind almost every test and [[Confidence Interval]] in this section
-- For a Normal population the result is exact: $\bar{X} \sim N(\mu, \sigma^2/n)$, and $\bar{X}$ is independent of the [[Sample Variance]] $S^2$
-- $\bar{X}$ is the [[Maximum Likelihood Estimation|MLE]] of $\mu$ for Normal, Poisson, and exponential data, and is a function of the [[Sufficient Statistic]] $\sum X_i$ in each case
-- It is **not resistant**: one extreme claim shifts $\bar{X}$ without limit, while the median and the other quantiles a [[Box Plot]] is drawn from are relatively insensitive to changes in the data
-- With unequal exposures, the exposure-weighted mean $\sum w_i X_i / \sum w_i$ is the right estimator — the same idea that a GLM handles with an [[Offset Variable|offset]] or weights
+> [!example]- Five claims, in thousands, are 4, 6, 7, 9 and 9. What is the sample mean? {Example}
+> - The sum of the observations is $4 + 6 + 7 + 9 + 9 = 35$.
+> - The sample mean is $\bar{x} = 35/5 = 7$, or 7,000.
 
-![[Media/Figures/Sample_Mean.svg|340]]
+## Mean and variance of the sample mean
 
-> [!example]- Standard Error and Sample Size {Example}
-> Claim severity has $\sigma = 4{,}000$. How large must $n$ be for the standard error of $\bar{X}$ to be at most $200$?
->
-> > [!answer]-
-> > $$\frac{\sigma}{\sqrt{n}} \le 200 \ \Longrightarrow\ \sqrt{n} \ge \frac{4{,}000}{200} = 20 \ \Longrightarrow\ n \ge 400$$
-> > A sample of $400$ claims pins the mean down to within roughly $\pm 400$ (two standard errors) with $95\%$ confidence.
+If each observation has mean $\mu$ and variance $\sigma^2$, the mean of the sample mean is
 
-> [!example]- Probability the Sample Mean Misses {Example}
-> A sample of $n = 100$ claims is drawn from a population with $\mu = 5{,}000$ and $\sigma = 1{,}500$. Find $P(\bar{X} > 5{,}300)$.
->
-> > [!answer]-
-> > By the [[Central Limit Theorem]], $\bar{X} \approx N(5{,}000,\ 1{,}500^2/100) = N(5{,}000,\ 150^2)$.
-> > $$Z = \frac{5{,}300 - 5{,}000}{150} = 2.00 \ \Longrightarrow\ P(\bar{X} > 5{,}300) \approx 1 - 0.9772 = 0.0228$$
+> $$E[\bar{X}] = \mu$$
+
+and its variance is
+
+> $$\text{Var}(\bar{X}) = \frac{\sigma^2}{n}$$
+
+These hold whatever the shape of the distribution. The standard deviation of the sample mean, $\sigma/\sqrt{n}$, is its **standard error**. When $\sigma$ is unknown, the standard error is estimated by $S/\sqrt{n}$, where $S$ is the sample standard deviation from the [[Sample Variance|sample variance]]. Halving the standard error requires four times the number of observations.
+
+> [!example]- Claim counts $X_1, \ldots, X_{50}$ are a random sample from a Poisson distribution with mean $\lambda = 0.3$. What is the variance of the estimator $\frac{2}{50}\sum_{i=1}^{50} X_i$ of $2\lambda$? {Example}
+> - The estimator is $2\bar{X}$, twice the sample mean.
+> - A Poisson distribution has variance $\lambda = 0.3$, so $\text{Var}(\bar{X}) = 0.3/50 = 0.006$.
+> - Multiplying by 2 multiplies the variance by 4, so the variance of the estimator is $4 \times 0.006 = 0.024$.
+
+## Distribution of the sample mean
+
+For a random sample from a [[Normal Distribution|normal distribution]], the sample mean is exactly normal with mean $\mu$ and variance $\sigma^2/n$, and it is independent of the sample variance $S^2$. For a random sample from any distribution with finite variance, the [[Central Limit Theorem#The sample mean|central limit theorem]] makes the sample mean approximately normal for large $n$. In either case, the standardized sample mean is
+
+> $$Z = \frac{\bar{X} - \mu}{\sigma/\sqrt{n}}$$
+
+- $Z$ is standard normal for a normal sample, and approximately standard normal for a large sample from any distribution.
+
+> [!example]- A random sample of 100 claims is drawn from a distribution with mean 5,000 and standard deviation 1,500. What is the approximate probability that the sample mean exceeds 5,300? {Example}
+> - The standard error is $1{,}500/\sqrt{100} = 150$.
+> - The standardized value is $z = (5{,}300 - 5{,}000)/150 = 2.00$.
+> - The probability is approximately $P(Z > 2.00) = 1 - 0.9772 = 0.0228$.
+
+> [!example]- Claim sizes have standard deviation 1,500. What is the smallest number of claims for which the sample mean is within 100 of $\mu$ with probability at least 0.95? {Example}
+> - The sample mean is within 100 of $\mu$ when $|Z| \le 100\sqrt{n}/1{,}500$.
+> - This has probability at least 0.95 when $100\sqrt{n}/1{,}500 \ge 1.96$, that is, when $n \ge (1.96 \times 15)^2 = 864.36$.
+> - The number of claims is a whole number, so the smallest is $n = 865$.
+
+> [!trap] Dividing the standard deviation by $n$
+> The standard error of the sample mean is $\sigma/\sqrt{n}$, not $\sigma/n$. With $\sigma = 1{,}500$ and $n = 100$ it is 150. Dividing by $n$ gives 15 and a probability far too small.

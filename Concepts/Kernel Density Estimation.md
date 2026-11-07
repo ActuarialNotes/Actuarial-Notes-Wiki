@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:f30292dbdc1501a136ae5f609c65faea7a0d7b29b2b6c7d66cf16d82bffc4a13
+  content_hash: sha256:e416750fd5bc10f5cda3354cba7296064cf510be266fb803bbe4b26d4ef16bbf
   sources:
     - "Frees et al., Loss Data Analytics (open text), Ch 4 'Model Selection and Estimation', §4.1.1.4 Density Estimators: eq. (4.2) f_n(x) = (1/2nb) sum I(x-b < X_i <= x+b), eq. (4.3) kernel estimator (1/nb) sum w((x-X_i)/b), Table 4.1 kernels (uniform 1/2 I(-1<x<=1), triangle (1-|x|) I(|x|<=1), Gaussian phi), kernel CDF estimator (1/n) sum W((x-X_i)/b) with uniform W, bandwidth bias-variance trade-off (Example 4.1.4), sha256:c5fe1ff26cec4dee6f8bcc285b75c840202c947246f7b5d5598f9b837ccad021 — https://openacttexts.github.io/Loss-Data-Analytics/ChapModelSelection.html"
     - "CAS Exam MAS-I Spring 2019, Q20 — official exam paper (scan), PDF p.24; Final Answer Key PDF p.50 (Q20 = D), sha256:02debe7c986ee38d3f484b277d0dc4a08ec424d0bb3b868b4890e4edb9312274 — https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exammasi_spmasi-19.pdf"
@@ -15,76 +15,72 @@ verification:
   log: .verify/Concepts/Kernel Density Estimation.md
 ---
 
-**Kernel Density Estimation** is a nonparametric estimate of a [[Probability Density Function (PDF)|density]] from a sample $x_1, \ldots, x_n$: each observation is replaced by a small density (the **kernel**) centred on it, with spread set by the **bandwidth** $b > 0$, and the $n$ kernels are averaged.
+**Kernel Density Estimation** is a nonparametric method of estimating a [[Probability Density Function (PDF)|density]] from a sample $x_1, \ldots, x_n$, in which each observation is replaced by a density centred on it, called a kernel, and the $n$ kernels are averaged. If $k_y(x)$ is the kernel centred at $y$, the kernel density estimate at $x$ is
 
-> $$\hat{f}(x) = \frac{1}{nb}\sum_{i=1}^{n} w\!\left(\frac{x - x_i}{b}\right)$$
+> $$\hat{f}(x) = \frac{1}{n}\sum_{i=1}^{n} k_{x_i}(x)$$
 
-> $$\hat{F}(x) = \frac{1}{n}\sum_{i=1}^{n} W\!\left(\frac{x - x_i}{b}\right)$$
+The spread of each kernel is set by its bandwidth $b > 0$. A larger bandwidth gives a smoother estimate that can miss local features of the data, and a smaller one follows the data closely but varies more, a [[Bias-Variance Tradeoff|bias-variance tradeoff]].
 
-- $w$ is a density centred at 0 and $W$ its [[Cumulative Distribution Function (CDF)|CDF]]. Equivalently, the kernel centred at an observation $y$ is $k_y(x) = \frac{1}{b}\,w\!\left(\frac{x - y}{b}\right)$, and $\hat{f}(x)$ is the average of $k_{x_1}(x), \ldots, k_{x_n}(x)$.
-- **Uniform (rectangular) kernel**, $w(u) = \frac{1}{2}$ on $-1 \leq u \leq 1$: each observation is spread evenly over $[y - b,\ y + b]$ at height $\frac{1}{2b}$, so $\hat{f}(x)$ is the number of observations within $b$ of $x$, divided by $2bn$. Its CDF rises linearly, $W(u) = \frac{u + 1}{2}$ on $[-1, 1]$.
-- **Triangular kernel**, $w(u) = 1 - |u|$ on $-1 \leq u \leq 1$: a tent of height $\frac{1}{b}$ over $[y - b,\ y + b]$, so $k_y(x) = \frac{b - |x - y|}{b^2}$. Its CDF is $W(u) = \frac{(1 + u)^2}{2}$ for $-1 \leq u \leq 0$ and $1 - \frac{(1 - u)^2}{2}$ for $0 \leq u \leq 1$.
-- **Gaussian kernel**, $w = \phi$, the standard [[Normal Distribution|normal]] density: each kernel is a normal density with mean $x_i$ and standard deviation $b$, and $W = \Phi$. Unlike the other two, it gives every observation some weight at every $x$.
-- **An observation exactly $b$ from $x$:** for the rectangular kernel the edge matters, and texts differ — this page writes the window closed, $[y - b,\ y + b]$, while some texts write the uniform kernel on a half-open interval. The CAS answer key to MAS-I Spring 2019 Q20 counts an observation lying exactly $b$ *above* $x$ ($x_i = x + b$): leaving it out gives option A rather than the keyed D. That paper has no observation exactly $b$ below $x$, so it settles only that edge. The triangular kernel is 0 at the edge, so there the question does not arise.
-- **Choosing $b$:** a larger bandwidth averages over more data and gives a smoother curve that can miss local features; a smaller one follows the data closely but is more volatile — a [[Bias-Variance Tradeoff|bias–variance tradeoff]]. The rectangular kernel is a [[Histogram]] whose bin of width $2b$ moves with $x$.
+## The rectangular kernel
 
-> [!example]- Smoothing a Small Loss Sample Three Ways {Example}
-> Five losses are observed: $300,\ 450,\ 500,\ 700,\ 800$. With bandwidth $b = 200$, estimate the density at $x = 600$ using (a) a rectangular kernel, (b) a triangular kernel and (c) a Gaussian kernel.
->
-> > [!answer]-
-> > The window around 600 is $[400, 800]$. It holds 450, 500 and 700, and 800 sits exactly on its edge; 300 is outside.
-> >
-> > (a) Rectangular — counting the edge observation 800 (closed window), four observations each contribute $\frac{1}{2b} = \frac{1}{400}$:
-> >
-> > $$
-> > \begin{align*}
-> > \hat{f}(600) &= \frac{1}{5}\left(\frac{4}{400}\right) \\
-> > &= 0.0020
-> > \end{align*}
-> > $$
-> >
-> > (b) Triangular — the distances are 150, 100, 100 and 200, so the numerators $b - |x - x_i|$ are $50,\ 100,\ 100,\ 0$, each over $b^2 = 40{,}000$:
-> >
-> > $$
-> > \begin{align*}
-> > \hat{f}(600) &= \frac{1}{5}\left(\frac{250}{40{,}000}\right) \\
-> > &= 0.00125
-> > \end{align*}
-> > $$
-> >
-> > (c) Gaussian — the standardised distances $u = (600 - x_i)/200$ are $1.5,\ 0.75,\ 0.5,\ -0.5,\ -1.0$, with $\phi(u) = 0.1295,\ 0.3011,\ 0.3521,\ 0.3521,\ 0.2420$:
-> >
-> > $$
-> > \begin{align*}
-> > \hat{f}(600) &= \frac{1.3768}{5 \times 200} \\
-> > &= 0.00138
-> > \end{align*}
-> > $$
-> >
-> > The rectangular estimate is the largest because it gives the edge observation full weight, where the triangular kernel gives it none.
+The rectangular, or uniform, kernel spreads each observation evenly over the interval from $y - b$ to $y + b$:
 
-> [!example]- Kernel-Smoothed CDF of Claim Sizes {Example}
-> Claim sizes (in thousands) are $2,\ 5,\ 6,\ 9,\ 15$. With bandwidth $b = 2$, estimate $F(6.5)$ using (a) a uniform kernel and (b) a triangular kernel.
->
-> > [!answer]-
-> > The standardised distances $u = (6.5 - x_i)/2$ are $2.25,\ 0.75,\ 0.25,\ -1.25,\ -4.25$. An observation with $u \geq 1$ lies wholly below 6.5 and contributes 1; one with $u \leq -1$ contributes 0.
-> >
-> > (a) Uniform, $W(u) = \frac{u + 1}{2}$: the contributions are $1,\ 0.875,\ 0.625,\ 0,\ 0$.
-> >
-> > $$
-> > \begin{align*}
-> > \hat{F}(6.5) &= \frac{1 + 0.875 + 0.625}{5} \\
-> > &= 0.5000
-> > \end{align*}
-> > $$
-> >
-> > (b) Triangular, $W(u) = 1 - \frac{(1 - u)^2}{2}$ for $0 \leq u \leq 1$: the claims at 5 and 6 contribute $1 - \frac{0.25^2}{2} = 0.96875$ and $1 - \frac{0.75^2}{2} = 0.71875$.
-> >
-> > $$
-> > \begin{align*}
-> > \hat{F}(6.5) &= \frac{1 + 0.96875 + 0.71875}{5} \\
-> > &= 0.5375
-> > \end{align*}
-> > $$
-> >
-> > The empirical CDF at 6.5 is $3/5 = 0.6$. Both smoothed estimates are lower because they spread part of the claims at 5 and 6 above 6.5 — the triangular kernel less of it, since it keeps more of each claim's weight close to the claim.
+> $$k_y(x) = \frac{1}{2b}$$
+
+- $y - b \le x \le y + b$, and $k_y(x) = 0$ outside this interval.
+
+An observation contributes $\frac{1}{2b}$ to the sum when it is within $b$ of $x$, including an observation exactly $b$ from $x$. The estimate is therefore the number of observations within $b$ of $x$, divided by $2bn$.
+
+> [!example]- Five losses are 300, 450, 500, 700 and 800. What is the rectangular kernel density estimate at 600 with bandwidth 200? {Example}
+> - The observations within 200 of 600 are 450, 500, 700 and 800, where 800 is exactly 200 away.
+> - The loss of 300 is 300 away and contributes 0.
+> - The estimate is $\hat{f}(600) = \dfrac{4}{2 \times 200 \times 5} = 0.0020$.
+
+## The triangular kernel
+
+The triangular kernel is a tent over the same interval, highest at $y$:
+
+> $$k_y(x) = \frac{b - |x - y|}{b^2}$$
+
+- $y - b \le x \le y + b$, and $k_y(x) = 0$ outside this interval.
+
+An observation exactly $b$ from $x$ contributes 0.
+
+> [!example]- For the same five losses, what is the triangular kernel density estimate at 600 with bandwidth 200? {Example}
+> - The distances from 600 to 450, 500, 700 and 800 are 150, 100, 100 and 200, so the numerators $b - |x - x_i|$ are 50, 100, 100 and 0.
+> - The loss of 300 is outside the interval and contributes 0.
+> - The estimate is $\hat{f}(600) = \dfrac{250}{40{,}000 \times 5} = 0.00125$.
+
+## The Gaussian kernel
+
+The Gaussian kernel is the [[Normal Distribution|normal]] density with mean $y$ and standard deviation $b$:
+
+> $$k_y(x) = \frac{1}{b\sqrt{2\pi}}\, e^{-(x - y)^2/(2b^2)}$$
+
+Unlike the other two kernels, it gives every observation some weight at every $x$.
+
+> [!example]- For the same five losses, what is the Gaussian kernel density estimate at 600 with bandwidth 200? {Example}
+> - The standardized distances $(600 - x_i)/200$ are 1.5, 0.75, 0.5, $-0.5$ and $-1.0$.
+> - The standard normal density at these values is 0.1295, 0.3011, 0.3521, 0.3521 and 0.2420, with sum 1.3768.
+> - The estimate is $\hat{f}(600) = \dfrac{1.3768}{200 \times 5} = 0.00138$.
+
+## The kernel-smoothed distribution function
+
+The kernel-smoothed estimate of the [[Cumulative Distribution Function (CDF)|cdf]] averages the cdfs of the kernels:
+
+> $$\hat{F}(x) = \frac{1}{n}\sum_{i=1}^{n} K_{x_i}(x)$$
+
+- $K_y(x)$ is the cdf of the kernel centred at $y$.
+
+For the rectangular kernel, $K_y(x)$ is 0 for $x < y - b$, 1 for $x > y + b$, and in between
+
+> $$K_y(x) = \frac{x - (y - b)}{2b}$$
+
+> [!example]- Claim sizes, in thousands, are 2, 5, 6, 9 and 15. What is the kernel-smoothed estimate of $F(6.5)$ with a rectangular kernel of bandwidth 2? {Example}
+> - The claim of 2 lies wholly below 6.5, so $K_2(6.5) = 1$.
+> - $K_5(6.5) = (6.5 - 3)/4 = 0.875$ and $K_6(6.5) = (6.5 - 4)/4 = 0.625$.
+> - The claims of 9 and 15 lie wholly above 6.5, so they contribute 0.
+> - The estimate is $\hat{F}(6.5) = (1 + 0.875 + 0.625)/5 = 0.5$.
+
+> [!trap] Leaving out an observation exactly $b$ away
+> The rectangular kernel's interval is closed, so an observation exactly $b$ from $x$ contributes $\frac{1}{2b}$. In the first example, leaving out the loss of 800 gives $\hat{f}(600) = 0.0015$ instead of 0.0020.

@@ -14,20 +14,20 @@ history — but nothing on screen says "mock" any more. Two labels replace it, b
 
 | Label | Where | When |
 |---|---|---|
-| `examSourceLabel(rows)` → **Past Papers** | The source tab on the quiz builder | The exam has released sittings (Exam 5, Exam 7, MAS-I, MAS-II) |
-| `examSourceLabel(rows)` → **By Source** | The same tab | It has none — Exam P and FM draw on the SOA's rolling sample set, so their shelf is the Mix row and the sample set's PDFs |
-| `PRACTICE_EXAM_LABEL` → **Practice Exam** | The builder's format choice, the Start button, the in-quiz mode pill, the quit dialog, the completion heading | The session is sat as a practice exam — whatever source it was drawn from |
+| `examSourceLabel(rows)` → **Past Papers** | The paper tile on the quiz setup screen, and the sheet it opens | The exam has released sittings (Exam 5, Exam 7, MAS-I, MAS-II) |
+| `examSourceLabel(rows)` → **By Source** | The same tile | It has none — Exam P and FM draw on the SOA's rolling sample set, so their shelf is the Mix row and the sample set's PDFs |
+| `PRACTICE_EXAM_LABEL` → **Practice Exam** | The in-quiz mode pill, the quit dialog, the completion heading (the setup screen's tile says *Practice exam*) | The session is sat as a practice exam — a past paper, or the practice exam tile's draw |
 
-**The source and the format are two choices.** The tab says where the questions come from
-(Today's Plan, By Topic, Past Papers); the format control beside Start says how they're sat —
-**Quiz** (a short set: the count and difficulties picked, answers as you go by default) or
-**Practice Exam** (full length — a sitting whole, or from any other source a paper shaped like the
-real one — every difficulty, answers at the end by default). Any source can be sat either way:
-a past paper as a quiz, a set of topics as a practice exam. They used to be one control, whose
-Past Papers tab also meant "practice exam" (and was even *named* Practice Exam for P and FM),
-so where the questions came from and how they were sat couldn't be told apart. The mode id
-`mock-exam` is the format; `source === 'papers'` is the shelf. A quiz of a few questions from
-one sitting is a random few, kept in the paper's order (`hooks/useQuestions.ts`).
+**The setup screen, and where the shelf sits on it.** An exam's quiz setup screen is a card
+for the reader's own **Quiz** (a short set from the topics, count and difficulties picked;
+answers as you go by default) and, under it, two tiles for whole papers: **Practice exam** — the
+whole bank drawn to the paper's shape (`drawPracticeExam`) — and **Past Papers**, which opens this
+shelf in the setup sheet. Both are sat as a **Practice Exam** (full length, every difficulty,
+answers at the end by default; the sheet's switches change the reveal, the clock and the concept
+links, remembered for the format). The mode id `mock-exam` is the format; `source === 'papers'`
+is the shelf. A link carrying `mode=mock-exam` opens the screen with the shelf's sheet up. A
+past paper is no longer sat as a short quiz from the builder: what a few questions of one sitting
+were for, the card's topics and count now do.
 
 **A practice exam of no one sitting is shaped like the paper** (`lib/practiceExam.ts`,
 `drawPracticeExam`, used by `useQuestions` and the builder's shuffle alike):
@@ -207,9 +207,9 @@ paper anyone can sit) and `applyPassRates` drops them.
 Selecting a sitting sets `selectedSitting` in `Landing.tsx`, which already fed everything
 downstream and still does:
 
-- the builder's pool (`builderPool`, `lib/quizBuilder.ts`) filters the bank to that sitting, so the deck card's count and the shuffle
-  draw from that paper only;
-- `handleStart` passes `year` / `session` to `/quiz`, and the sitting's full question count
+- the builder's pool (`builderPool`, `lib/quizBuilder.ts`) filters the bank to that sitting, so the sheet's Start draws from that paper
+  only;
+- `startPapers` (`Landing.tsx`) passes `year` / `session` to `/quiz`, and the sitting's full question count
   as `count` (a past paper is sat whole, not sampled) — and in the paper's own order:
   `useQuestions` hands a sitting to `inPaperOrder` (`lib/pastExams.ts`) instead of the
   shuffle every other draw gets. The order is read off the id, whose `-q<n>` suffix is the

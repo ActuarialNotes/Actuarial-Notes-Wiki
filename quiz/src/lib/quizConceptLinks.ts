@@ -1,5 +1,5 @@
 // Whether a quiz's questions link the concepts they name — the quiz builder's
-// "Tap concepts to read them" choice (components/QuizSettingsMenu.tsx).
+// "Tap concepts to read them" choice (the quiz setup sheet, components/landing/QuizSetupSheet.tsx).
 //
 // With it on, a concept a question writes out ("the concept of materiality")
 // is underlined, and tapping it opens the concept in the popup the study guide

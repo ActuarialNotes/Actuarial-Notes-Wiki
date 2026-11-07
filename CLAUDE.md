@@ -601,10 +601,10 @@ before touching that area**:
   jacket always wins — drop it in under a name that isn't `… - Cover.svg` and the generator
   leaves it alone forever.
 - `docs/mock-exam-browser.md` — the **past-paper browser** on the quiz builder (the mode id is
-  still `mock-exam`, and it is now the *format*, not the source: the builder asks where the
-  questions come from — the tab reads **Past Papers**, or **By Source** for an exam with no released
-  sittings (`examSourceLabel`) — and, separately beside Start, whether to sit them as a **Quiz** or a
-  **Practice Exam** (`PRACTICE_EXAM_LABEL` in `lib/pastExams.ts`); any source either way): the
+  still `mock-exam`, and it is the *format*, not the source: on the quiz setup screen the
+  **Past Papers** tile — **By Source** for an exam with no released sittings (`examSourceLabel`) —
+  opens the shelf in the setup sheet, and a paper is sat whole as a **Practice Exam**
+  (`PRACTICE_EXAM_LABEL` in `lib/pastExams.ts`), as is the **Practice exam** tile's draw): the
   authored sitting catalogue (`data/pastExams.ts`), how `lib/pastExams.ts` merges it with the
   question bank so unimported papers still list (greyed out), the **live pass-rate
   pipeline** (`api/pass-rates.js` → `lib/passRates.ts` → `hooks/useExamPassRates`) that lays
@@ -787,9 +787,9 @@ Other important `lib/` modules:
 - `revealMode.ts` — **when the answers show**: `'during'` marks and explains each
   answer as soon as it's confirmed, `'end'` holds the lot back for /review. The quiz
   page has always read a `reveal` search param; this module is the reader's side of
-  it — the checkbox in the quiz builder's settings menu
-  (`components/QuizSettingsMenu.tsx`, the button beside the deck card),
-  remembered per mode in localStorage. The defaults split (`DEFAULT_REVEAL`) because the two modes are for
+  it — the *Show answers after each question* switch in the quiz setup sheet
+  (`components/landing/QuizSetupSheet.tsx`, opened by any pill on the setup card or by a
+  paper tile), remembered per mode in localStorage. The defaults split (`DEFAULT_REVEAL`) because the two modes are for
   different things: a quiz is practice *with* feedback (`during`), a practice exam is
   a rehearsal of the sitting (`end`). Reveal is a *choice*, not a property of the
   mode — `Quiz.tsx` gates `showExplanation` on the choice alone, so a practice exam
@@ -804,7 +804,7 @@ Other important `lib/` modules:
   guide's `data-wikiref`; a tap opens it in `ConceptPopup` and the popup walks every mention on the
   card (`mentionWalk`, walk kind `question`), highlighting and scrolling each one through
   `hooks/useConceptHighlight.ts` — the hook `WikiArticle` uses for the same thing. Only words already
-  on screen are marked. On by default for a quiz, off for a practice exam — the settings menu's
+  on screen are marked. On by default for a quiz, off for a practice exam — the setup sheet's
   *Tap concepts to read them*, per mode, riding the URL as `links=1`/`links=0`. The quiz's **Info**
   panel's concept rows open the same popup. Pure and tested.
 - `quizBuilder.ts` — the **quiz builder** (the Quiz tab, `pages/Landing.tsx`) as data: the
@@ -813,13 +813,20 @@ Other important `lib/` modules:
   (`todaysPlanSelection`), the pool each source covers (`builderPool`), the draw's size and
   signature, and the `/quiz` address every launch writes (`quizLaunchUrl` — each kind keeps
   its key order, since a quiz resumes by its address). The page holds only the state that
-  joins it to what it draws — `components/landing/` (the exam ladder, the concept groups,
-  Today's Plan, the past-paper shelf, the action bar) and the `useQuizExamScreen` /
-  `useTodaysPlanQuiz` / `useBuilderPool` / `useQuizBuilderSettings` / `useShuffledDraw` /
-  `useDashboardAutostart` hooks. Pure and tested.
-- `quizDifficulty.ts` — the quiz builder's **difficulty multi-select** (settings menu, quiz
-  mode only): Easy / Med / Hard, any combination, at least one ticked. It is a *filter* —
-  an unticked level is out of the pool, so the deck card's count, the count clamp and
+  joins it to what it draws — `components/landing/` (the exam ladder, and an exam's **setup
+  screen**: `QuizHeroCard`, the reader's own quiz in the exam's colour — a big count, the time
+  it should take, a pill for its topics and its difficulty, and Start; `QuizLaunchTiles`, today's
+  plan under it — Pro's to start, shown locked and not a button to anyone else, so the plan never
+  stands above building your own — then **Practice exam** and **Past Papers** side by side, the
+  same height; and `QuizSetupSheet`, the sheet a pill or tile opens: topics (the concept groups),
+  how many, difficulty, and how it's sat as switches, ending in its own Start) and the
+  `useQuizExamScreen` / `useTodaysPlanQuiz` / `useBuilderPool` / `useQuizBuilderSettings` /
+  `useDashboardAutostart` hooks. What the card says — the time estimate at the paper's pace, the
+  topics' pills (an objective picked whole is one pill), the difficulty pill — is
+  `lib/quizSetup.ts`. Pure and tested.
+- `quizDifficulty.ts` — the quiz builder's **difficulty multi-select** (the setup sheet, the
+  card's quiz only): Easy / Med / Hard, any combination, at least one ticked. It is a *filter* —
+  an unticked level is out of the pool, so the setup card's count, the count clamp and
   Today's Plan pool all move with it (`inDifficultyLevels`, the quiz builder's `inLevels`), and each level
   shows how many questions it holds. It rides the URL as `levels=easy,hard`
   (`QuestionFilter.difficulties`, applied by `filterQuestions`; omitted when every level is
@@ -829,8 +836,8 @@ Other important `lib/` modules:
 - `quizTiming.ts` — **Timed** quizzes: the per-exam pace table (transcribed from each exam's
   `Guides/<exam page>/Format and pacing.md` — per question for the MC papers, per *point* for
   Exam 5), the set's time budget (`timeAllowanceSeconds`, null rather than invented for an
-  exam with no pace), and the per-mode stored choice. The builder's settings menu sets
-  `timed=1`; `components/QuizTimer.tsx` counts down in the quiz header from the first
+  exam with no pace), and the per-mode stored choice. The setup sheet's *Timed* switch sets
+  `timed=1` (and the setup card's time estimate is this pace, `estimateSeconds` in `lib/quizSetup.ts`); `components/QuizTimer.tsx` counts down in the quiz header from the first
   question (not the pre-quiz concept list), goes amber in the last tenth and counts the
   overrun in red rather than ending the quiz. Pure and tested.
 - `writtenAnswer.ts` — the **written parts** of a long-answer question (`answer === ''`: a CAS

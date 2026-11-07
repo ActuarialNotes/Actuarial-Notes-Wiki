@@ -1,35 +1,53 @@
 import { test, expect } from '@playwright/test'
 
-// The quiz builder's two choices, kept apart: *where* the questions come from
-// (Today's Plan, By Topic, Past Papers) and *how* they are sat (Quiz or
-// Practice Exam). And, in the quiz, a concept the question names opens in the
-// concept popup — highlighted on the card, the way a study guide's link is.
+// The quiz setup screen (pages/Landing.tsx): a card for the reader's own quiz,
+// whose pills open the setup sheet, and tiles for the whole papers — a
+// practice exam drawn to the paper's shape, and the past papers. And, in the
+// quiz, a concept the question names opens in the concept popup —
+// highlighted on the card, the way a study guide's link is.
 
-test.describe('quiz format', () => {
-  test('a past paper can be sat as a quiz or as a practice exam', async ({ page }) => {
+test.describe('quiz setup', () => {
+  test("a pill opens the sheet, and the card's count follows it", async ({ page }) => {
     await page.goto('/?topic=Exam%205')
-    const start = page.getByRole('button', { name: /^Start / })
-    await page.getByRole('radio', { name: 'Past Papers' }).click()
-    await page.getByRole('radio', { name: /Spring 2019/ }).click()
+    await page.getByTestId('quiz-pill').first().click()
+    const sheet = page.getByRole('dialog', { name: 'Your quiz' })
+    await expect(sheet).toBeVisible()
+    await sheet.getByRole('radio', { name: '5 questions' }).click()
+    await expect(sheet.getByRole('button', { name: 'Start 5 questions' })).toBeVisible()
 
-    // The source stays put while the format changes.
-    await expect(start).toHaveText(/Start Quiz/)
-    await page.getByRole('radio', { name: /Practice Exam/ }).click()
-    await expect(start).toHaveText(/Start Practice Exam/)
-    await expect(page.getByRole('radio', { name: /Spring 2019/ })).toHaveAttribute('aria-checked', 'true')
-
-    await page.getByRole('radio', { name: /^Quiz/ }).click()
-    await start.click()
+    await sheet.getByRole('button', { name: 'Close' }).click()
+    await expect(sheet).toBeHidden()
+    const card = page.getByRole('region', { name: 'Your quiz' })
+    await expect(card).toContainText('5questions')
+    await card.getByRole('button', { name: 'Start quiz' }).click()
     await expect(page).toHaveURL(/mode=quiz/)
+    await expect(page).toHaveURL(/count=5/)
+  })
+
+  test('a past paper is sat whole, as a practice exam', async ({ page }) => {
+    await page.goto('/?topic=Exam%205')
+    await page.getByRole('button', { name: /Past Papers/ }).click()
+    const sheet = page.getByRole('dialog', { name: 'Past Papers' })
+    await sheet.getByRole('radio', { name: /Spring 2019/ }).click()
+    await sheet.getByRole('button', { name: 'Start Spring 2019' }).click()
+    await expect(page).toHaveURL(/mode=mock-exam/)
     await expect(page).toHaveURL(/year=2019/)
   })
 
-  test('a set of topics can be sat as a practice exam', async ({ page }) => {
+  test('a practice exam is drawn from the whole bank', async ({ page }) => {
     await page.goto('/?topic=Exam%205')
-    await page.getByRole('radio', { name: /Practice Exam/ }).click()
-    await page.getByRole('button', { name: 'Start Practice Exam' }).click()
+    await page.getByRole('button', { name: /Practice exam/ }).click()
+    await page.getByRole('dialog', { name: 'Practice exam' })
+      .getByRole('button', { name: 'Start practice exam' }).click()
     await expect(page).toHaveURL(/mode=mock-exam/)
     await expect(page.getByRole('button', { name: /Quit exam/ })).toBeVisible()
+  })
+
+  test("today's plan is shown locked to a reader without Pro", async ({ page }) => {
+    await page.goto('/?topic=Exam%205')
+    const plan = page.getByTestId('todays-plan-tile')
+    await expect(plan).toHaveAttribute('aria-disabled', 'true')
+    await expect(plan).toContainText('Pro')
   })
 })
 

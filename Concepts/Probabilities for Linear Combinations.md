@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:d3394a191d5f183482329b244c1c29f895cebe583f986077d2fab0d825464d91
+  content_hash: sha256:80a0cd83b441a96e6e1729478d48b550aa6200dc378e9af4114dd415dcb65621
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL), Ex. 6.3.17(a)-(c) and 6.3.18(a)-(c) printed p.281 (PDF p.289); Def. 7.1 p.286 (PDF p.294); Thm 7.1 and sum of two exponentials (PDF pp.299-301); Examples 7.5-7.6 (PDF p.302); Thms 9.4 and 9.6 (PDF pp.351, 365); continuity correction (PDF p.340), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), 14.4 The Poisson Distribution: E(N)=var(N); sum of independent Poisson(a), Poisson(b) is Poisson(a+b), sha256:cf3d0aacfdb40291bb729d32f6f7692b39e4c4a13a1e09f86ef8826bef61f688 — https://www.randomservices.org/random/poisson/Poisson.html"
@@ -15,144 +15,68 @@ verification:
   log: .verify/Concepts/Probabilities for Linear Combinations.md
 ---
 
-**Probabilities for Linear Combinations** are probabilities of events such as $L \le s$ for a weighted sum $L = c_1 X_1 + c_2 X_2 + \cdots + c_n X_n$ of random variables. Probabilities for linear combinations need the distribution of $L$, not just its mean and variance, and that distribution comes from the joint distribution of the $X_i$.
-
-> $$P(X + Y = s) = \sum_{x} P(X = x,\ Y = s - x)$$
-
-> $$P(X + Y = s) = \sum_{x} P(X = x)\,P(Y = s - x)$$
-
-> $$L \sim N\!\left(\sum_i c_i\mu_i,\ \sum_i c_i^2\sigma_i^2\right)$$
-
-- The first formula holds for any discrete pair. It adds the joint probabilities of every pair of values that gives the total $s$.
-- The second is the first for independent $X$ and $Y$, and is called a [[Convolution|convolution]].
-- The third holds when $X_1, \ldots, X_n$ are independent [[Normal Distribution|normal]] variables with means $\mu_i$ and standard deviations $\sigma_i$.
-- For a sum of many i.i.d. terms with finite variance, the [[Central Limit Theorem]] gives an approximate normal distribution instead. See [[Normal Approximation]].
-
-> [!idea] The idea
-> An event about $L$ is a set of outcomes of the $X_i$. Its probability adds up the outcomes in that set, which is a diagonal of a joint table or a region under a joint density. Normal variables are the convenient case, because a weighted sum of independent normals is again normal and only its mean and variance are needed.
-
 ![[Media/Figures/Probabilities_for_Linear_Combinations.svg|340]]
 
-## Read the diagonals of the joint table
+**Probabilities for Linear Combinations** are the probabilities of events about a [[Linear Combinations of Random Variables|linear combination]] of random variables, such as a sum $X + Y$ being at least some value. For discrete random variables $X$ and $Y$ with joint probability function $p(x, y)$, the probability that their sum is $s$ is
 
-A policyholder holds an auto policy and a home policy. Let $X$ be the number of auto claims in a year and $Y$ the number of home claims.
+> $$P(X + Y = s) = \sum_x p(x,\ s - x)$$
 
-| $X$ \ $Y$ | 0 | 1 | 2 | Total |
-|---|---|---|---|---|
-| 0 | 0.36 | 0.18 | 0.06 | 0.60 |
-| 1 | 0.10 | 0.20 | 0.10 | 0.40 |
-| Total | 0.46 | 0.38 | 0.16 | 1 |
+- The sum runs over every value $x$ of $X$.
 
-What is the probability of at least two claims in total? Each total $T = X + Y$ collects the cells on one diagonal.
+The terms of the sum are the cells of the joint table on one diagonal.
 
-| $T$ | Cells | Probability |
-|---|---|---|
-| 0 | (0, 0) | 0.36 |
-| 1 | (0, 1), (1, 0) | 0.28 |
-| 2 | (0, 2), (1, 1) | 0.26 |
-| 3 | (1, 2) | 0.10 |
-
-So $P(T \ge 2) = 0.26 + 0.10 = 0.36$. Weights only relabel the cells. For the cost $10X + 5Y$ in thousands, $P(10X + 5Y \ge 15)$ collects the cells $(1, 1)$ and $(1, 2)$, which gives 0.30.
-
-## Independent counts: convolve the marginals
-
-Suppose instead that the two policies were independent, with the same marginal totals. Each cell is then the product of its row and column totals. That is the convolution.
-
-| $T$ | Dependent | Independent |
-|---|---|---|
-| 0 | 0.36 | 0.276 |
-| 1 | 0.28 | 0.412 |
-| 2 | 0.26 | 0.248 |
-| 3 | 0.10 | 0.064 |
-
-Independence gives $P(T \ge 2) = 0.312$, below the true 0.36. The positive dependence pushes probability toward the ends, where both counts are low or both are high.
-
-> [!trap] Multiplying marginals for dependent variables
-> The convolution needs independence. With a joint table in hand, sum the table's own cells.
-
-For three or more variables, convolve one at a time. Some families need no convolution at all. Independent [[Poisson Distribution|Poisson]] variables sum to a Poisson with the means added.
-
-## Independent normals: standardize the sum
-
-Two independent lines of business have annual losses $A \sim N(400, 30^2)$ and $H \sim N(350, 40^2)$. What is the probability that the combined loss exceeds 800?
-
-The total is normal with mean 750 and variance $30^2 + 40^2 = 2{,}500$, so its standard deviation is 50.
-
-> $$P(A + H > 800) = P\left(Z > \frac{800 - 750}{50}\right) = P(Z > 1) \approx 0.1587$$
-
-A difference works the same way. $A - H$ has mean 50 and the same variance 2,500, so $P(A > H) = P(Z > -1) \approx 0.8413$.
-
-- Adding the standard deviations, $30 + 40 = 70$, is the classic slip. Variances add, standard deviations don't.
-
-## Continuous sums: integrate over the region
-
-Without normality, the probability is the joint density integrated over the region where the sum satisfies the event. Let two independent losses be uniform on $(0, 10)$. The event $X + Y \le 5$ is a triangle with area 12.5 inside a square of area 100.
-
-> $$P(X + Y \le 5) = \frac{12.5}{100} = 0.125$$
-
-For a density rather than a probability, the convolution becomes an integral.
-
-> $$f_{X+Y}(s) = \int f_X(x)\,f_Y(s - x)\,dx$$
-
-- The limits are the values of $x$ for which both $f_X(x)$ and $f_Y(s - x)$ are positive.
-- Two independent [[Exponential Distribution|exponential]] variables with the same mean $\theta$ sum to a gamma variable, with $P(X + Y > s) = e^{-s/\theta}(1 + s/\theta)$.
-
-## Many policyholders: the normal approximation
-
-The insurer covers 100 independent policyholders like the one in the table. Their total claim count $C$ has mean $100(1.1) = 110$ and variance $100(1.01) = 101$, using the table's $E[T] = 1.1$ and $\text{Var}(T) = 1.01$. The [[Central Limit Theorem]] makes $C$ approximately normal. $C$ is a count, so $P(C \ge 126)$ uses the continuity correction at 125.5.
-
-> $$P(C \ge 126) \approx P\left(Z > \frac{125.5 - 110}{\sqrt{101}}\right) \approx 0.062$$
-
-## Try it
-
-> [!example]- A portfolio loss over a threshold {Example}
-> Two independent losses are $X_1 \sim N(100, 10^2)$ and $X_2 \sim N(200, 15^2)$. Find $P(X_1 + X_2 > 340)$.
+> [!example]- A policyholder's numbers of auto claims $X$ and home claims $Y$ in a year have the joint probabilities below. What is the probability of at least 2 claims in total? {Example}
+> | $X$ \ $Y$ | 0 | 1 | 2 |
+> | --- | --- | --- | --- |
+> | 0 | 0.36 | 0.18 | 0.06 |
+> | 1 | 0.10 | 0.20 | 0.10 |
 >
-> > [!answer]-
-> > **Plan:** the sum is normal, so find its mean and standard deviation and standardize.
-> > $$
-> > \begin{align*}
-> > \mu_L &= 100 + 200 \\
-> > &= 300 \\
-> > \sigma_L &= \sqrt{10^2 + 15^2} \\
-> > &\approx 18.03
-> > \end{align*}
-> > $$
-> > $$P(L > 340) = P\left(Z > \frac{40}{18.03}\right) = P(Z > 2.22) \approx 0.0132$$
+> - A total of 2 is the diagonal $(0, 2)$ and $(1, 1)$, with probability $0.06 + 0.20 = 0.26$.
+> - A total of 3 is the cell $(1, 2)$, with probability 0.10.
+> - $P(X + Y \ge 2)$ is $0.26 + 0.10 = 0.36$.
 
-> [!example]- Total claims from two independent policies {Example}
-> Policy A has $X$ claims with $P(X = 0) = 0.5$, $P(X = 1) = 0.3$ and $P(X = 2) = 0.2$. Policy B, independently, has $Y$ claims with $P(Y = 0) = 0.6$ and $P(Y = 1) = 0.4$. Find $P(X + Y \ge 2)$.
->
-> > [!answer]-
-> > **Plan:** convolve for the small totals, then use the complement.
-> > $$
-> > \begin{align*}
-> > P(X + Y = 0) &= (0.5)(0.6) \\
-> > &= 0.30 \\
-> > P(X + Y = 1) &= (0.5)(0.4) + (0.3)(0.6) \\
-> > &= 0.38
-> > \end{align*}
-> > $$
-> > So $P(X + Y \ge 2) = 1 - 0.30 - 0.38 = 0.32$. Directly, $P(X + Y = 2) = 0.24$ and $P(X + Y = 3) = 0.08$, which also total 0.32.
+## Sums of independent random variables
 
-> [!example]- Hospital and doctor costs together {Example}
-> Hospital costs $X$ are exponential with mean 2 and doctor costs $Y$ are exponential with mean 1, independent. Find $P(X + Y > 3)$.
->
-> > [!answer]-
-> > **Plan:** convolve the densities to get the density of $S = X + Y$, then integrate its tail.
-> > $$
-> > \begin{align*}
-> > f_S(s) &= \int_0^s \tfrac{1}{2}e^{-x/2}\,e^{-(s - x)}\,dx \\
-> > &= e^{-s/2} - e^{-s} \\
-> > P(S > 3) &= \int_3^\infty \left(e^{-s/2} - e^{-s}\right)ds \\
-> > &= 2e^{-1.5} - e^{-3} \\
-> > &\approx 0.3965
-> > \end{align*}
-> > $$
-> > Why are the limits 0 to $s$? Both costs are positive, so $x$ can't exceed the total $s$.
+When $X$ and $Y$ are [[Independent Random Variables|independent]], each joint probability is a product of the marginal probabilities, so
 
-> [!warning]- Exam traps
-> - **Adding standard deviations.** For independent terms, add variances and take the square root.
-> - **Convolving dependent variables.** With a joint table, read its diagonals instead of multiplying marginals.
-> - **Assuming any sum is normal.** Exact normality needs normal terms. Otherwise the CLT gives only an approximation, for many terms.
-> - **Skipping the continuity correction.** A normal approximation to a count needs the half-unit adjustment.
+> $$P(X + Y = s) = \sum_x p_X(x)\,p_Y(s - x)$$
+
+- $p_X$ and $p_Y$ are the marginal probability functions of $X$ and $Y$.
+
+This sum is called a **convolution**. The sum of independent [[Poisson Distribution|Poisson]] random variables is Poisson, with mean equal to the sum of the means.
+
+> [!example]- The numbers of claims on two independent policies are Poisson with means 1 and 2. What is the probability of 2 claims in total? {Example}
+> - The totals of 2 are $(0, 2)$, $(1, 1)$ and $(2, 0)$.
+> - Their probabilities are $e^{-1}\frac{2^2}{2!}e^{-2}$, $e^{-1}(2e^{-2})$ and $\frac{e^{-1}}{2!}e^{-2}$.
+> - They add to $e^{-3}(2 + 2 + 0.5) = 0.2240$.
+> - The total is Poisson with mean 3, and $\frac{e^{-3}\,3^2}{2!} = 0.2240$ agrees.
+
+## Linear combinations of independent normal random variables
+
+If $X_1, \ldots, X_n$ are independent [[Normal Distribution|normal]] random variables with means $\mu_i$ and standard deviations $\sigma_i$, then for constants $c_i$ the linear combination $L = c_1 X_1 + \cdots + c_n X_n$ is normal:
+
+> $$L \sim N\!\left(\sum_i c_i\,\mu_i,\ \sum_i c_i^2\,\sigma_i^2\right)$$
+
+A probability for $L$ is found by standardizing it, subtracting its mean and dividing by its standard deviation.
+
+> [!example]- Two independent lines of business have annual losses $X \sim N(400, 30^2)$ and $Y \sim N(350, 40^2)$. What is the probability that the total loss exceeds 800? {Example}
+> - The total has mean $400 + 350 = 750$.
+> - Its variance is $30^2 + 40^2 = 2{,}500$, so its standard deviation is 50.
+> - The standardized value of 800 is $\frac{800 - 750}{50} = 1$.
+> - The probability is $P(Z > 1) = 0.1587$.
+
+> [!trap] Adding standard deviations
+> Variances add, standard deviations don't. Adding $30 + 40 = 70$ as the standard deviation of the total gives $P(Z > 0.71) = 0.2389$ in place of 0.1587.
+
+For a sum of many independent random variables of any distribution, the [[Central Limit Theorem]] makes the sum approximately normal. That is the [[Normal Approximation|normal approximation]].
+
+## Sums of continuous random variables
+
+For continuous random variables with joint density $f(x, y)$, the probability that the sum is at most $s$ is the integral of the density over the region below the line $x + y = s$:
+
+> $$P(X + Y \le s) = \iint_{x + y \le s} f(x, y)\,dx\,dy$$
+
+> [!example]- Two independent losses are each uniform on $(0, 10)$. What is the probability that their total is at most 5? {Example}
+> - The pair is uniform on the square $(0, 10) \times (0, 10)$, which has area 100.
+> - The region $x + y \le 5$ inside it is a triangle with legs 5, so its area is 12.5.
+> - $P(X + Y \le 5)$ is $\frac{12.5}{100} = 0.125$.

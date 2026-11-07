@@ -55,6 +55,99 @@
   </head>
   <body>
     <div id="root"></div>
+    <!-- The first-load screen: a development triangle that fills one diagonal
+         per step of the boot that has really happened: the page arrived, its
+         styles, the app's code, the app starting, the session restored, the
+         app drawn and its first page ready. The steps after the code are
+         reported by the app (window.__boot, components/BootDone.tsx); the
+         files by a PerformanceObserver. The next diagonal blinks while its step
+         is under way. Then the ultimate column goes green and the screen lifts.
+         It fades in after 250ms, so a cached load never flashes it, and sits
+         outside #root because the SEO prerender rewrites that tag
+         (lib/seoPrerender.ts). -->
+    <div id="boot" role="progressbar" aria-label="Loading Actuarial Notes" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+      <style>
+        #boot { --bg: hsl(0 0% 95%); --fg: #000; --mute: hsl(0 0% 34%); --cell: hsl(0 0% 88%); --ok: hsl(142 64% 36%);
+          position: fixed; inset: 0; z-index: 2147483000; display: grid; place-items: center; background: var(--bg); color: var(--fg);
+          font: 500 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace; font-variant-numeric: tabular-nums;
+          opacity: 0; animation: boot-in .2s ease-out .25s forwards; transition: opacity .2s ease-out }
+        html.dark #boot { --bg: #000; --fg: #fff; --mute: hsl(0 0% 70%); --cell: hsl(0 0% 16%); --ok: hsl(142 60% 50%) }
+        html:not(.js) #boot { display: none }
+        #boot.out { opacity: 0; pointer-events: none }
+        #boot .bt { display: grid; gap: 16px; justify-items: center }
+        #boot .bw { font: 700 16px/1 ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif; letter-spacing: -.01em }
+        #boot .bg { display: grid; grid-template-columns: auto repeat(8, 26px); gap: 4px; color: var(--mute) }
+        #boot .bl { display: grid; place-items: center end; padding-right: 4px }
+        #boot .bh { display: grid; place-items: end center; height: 14px }
+        #boot .bc { height: 20px; border-radius: 4px; background: var(--cell); transition: background-color .15s }
+        #boot .bc.v { background: none }
+        #boot .bc.on { background: var(--fg) }
+        #boot .bc.now { background: none; box-shadow: inset 0 0 0 1.5px var(--fg); animation: boot-blink .9s ease-in-out infinite }
+        #boot .bc.u { background: none; box-shadow: inset 0 0 0 1px var(--cell) }
+        #boot .bc.u.on { background: var(--ok); box-shadow: none }
+        #boot .br { color: var(--mute); min-height: 1em }
+        #boot .br b { color: var(--fg); font-weight: 500 }
+        @keyframes boot-in { to { opacity: 1 } }
+        @keyframes boot-blink { 50% { opacity: .35 } }
+        @media (prefers-reduced-motion: reduce) { #boot { animation-duration: 0s } #boot .bc.now { animation: none } }
+      </style>
+      <div class="bt"><div class="bw">Actuarial Notes</div><div class="bg" aria-hidden="true"></div><div class="br" aria-hidden="true"></div></div>
+    </div>
+    <script>
+      (function () {
+        var boot = document.getElementById('boot'); if (!boot) return
+        var t0 = Date.now(), N = 7, grid = boot.querySelector('.bg'), read = boot.querySelector('.br')
+        var el = function (c, t) { var d = document.createElement('div'); d.className = c; if (t != null) d.textContent = t; grid.appendChild(d); return d }
+        var year = new Date().getFullYear(), diag = [], ult = [], r, c
+        el('bl')
+        for (c = 0; c < N; c++) el('bh', 12 * (c + 1))
+        el('bh', 'Ult')
+        for (r = 0; r < N; r++) {
+          el('bl', year - N + 1 + r)
+          for (c = 0; c < N; c++) { var x = el(c < N - r ? 'bc' : 'bc v'); if (c < N - r) (diag[r + c] = diag[r + c] || []).push(x) }
+          ult.push(el('bc u'))
+        }
+        // One step per diagonal, in the order they are named while pending.
+        var steps = [['html', ''], ['css', 'Loading styles'], ['js', 'Loading the app'], ['start', 'Starting up'],
+          ['session', 'Restoring your session'], ['drawn', 'Drawing the page'], ['page', 'Opening the page']]
+        var done = { html: 1 }, files = { css: {}, js: {} }, finished = false
+        var tags = document.querySelectorAll('link[rel=stylesheet][href], script[type=module][src]')
+        for (var i = 0; i < tags.length; i++) files[tags[i].src ? 'js' : 'css'][tags[i].src || tags[i].href] = 1
+        function empty(o) { for (var k in o) return false; return true }
+        if (empty(files.css)) done.css = 1
+        function paint() {
+          var n = 0, label = ''
+          for (var i = 0; i < steps.length; i++) { if (done[steps[i][0]]) n++; else if (!label) label = steps[i][1] }
+          for (var d = 0; d < N; d++) for (var j = 0; j < diag[d].length; j++) diag[d][j].className = d < n ? 'bc on' : d === n ? 'bc now' : 'bc'
+          boot.setAttribute('aria-valuenow', String(Math.round(100 * n / N)))
+          if (!finished) read.textContent = label
+          return n
+        }
+        try {
+          new PerformanceObserver(function (list) {
+            list.getEntries().forEach(function (e) {
+              for (var k in files) if (files[k][e.name]) { delete files[k][e.name]; if (empty(files[k])) done[k] = 1 }
+            })
+            paint()
+          }).observe({ type: 'resource', buffered: true })
+        } catch (e) {}
+        paint()
+        // A boot that throws must not leave the screen covering the page.
+        window.addEventListener('error', function () { if (!finished) { finished = true; boot.remove() } })
+        // The app reports its own steps. Each implies the ones before it.
+        window.__boot = function (step) {
+          if (finished) return
+          for (var i = 0; i < steps.length; i++) { done[steps[i][0]] = 1; if (steps[i][0] === step) break }
+          if (paint() < N) return
+          finished = true
+          if (Date.now() - t0 < 250) { boot.remove(); return }
+          read.innerHTML = '<b>Developed to ultimate</b>'
+          var still = matchMedia('(prefers-reduced-motion: reduce)').matches
+          ult.forEach(function (u, i) { setTimeout(function () { u.className = 'bc u on' }, still ? 0 : i * 40) })
+          setTimeout(function () { boot.className = 'out'; setTimeout(function () { boot.remove() }, 220) }, still ? 0 : N * 40 + 180)
+        }
+      })()
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

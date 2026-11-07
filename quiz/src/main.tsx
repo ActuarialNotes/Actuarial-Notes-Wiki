@@ -2,11 +2,15 @@ import React from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App'
+import { BootDone, bootStep } from './components/BootDone'
 import { supabase } from './lib/supabase'
 import { hydrateFromSharedCookie } from './lib/hydrateSession'
 import type { Session } from '@supabase/supabase-js'
 import { initErrorMonitoring } from './lib/errorMonitoring'
 import { identifyUser, initAnalytics, trackDay2ReturnOnBoot, trackReminderOpenedOnBoot } from './lib/analytics'
+
+// The app's code has arrived and is running (index.html's first-load screen).
+bootStep('start')
 
 // Capture uncaught errors and unhandled rejections from the very first tick,
 // before any React render can throw.
@@ -48,13 +52,20 @@ async function bootstrap() {
   identifyUser(initialSession?.user ?? null)
   trackDay2ReturnOnBoot()
 
+  bootStep('session')
+
   const rootElement = document.getElementById('root')
   if (!rootElement) throw new Error('Root element #root not found in index.html')
   createRoot(rootElement).render(
     <React.StrictMode>
       <App initialSession={initialSession} />
+      <BootDone />
     </React.StrictMode>
   )
 }
 
-bootstrap()
+// A boot that throws before React mounts must not leave the screen covering the page.
+bootstrap().catch(err => {
+  bootStep('page')
+  throw err
+})

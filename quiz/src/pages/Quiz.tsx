@@ -47,6 +47,7 @@ import { slugForLink } from '@/lib/conceptMatch'
 import { useSoundEffects } from '@/hooks/useSoundEffects'
 import { usePageKeyboard } from '@/hooks/useKeyboard'
 import { trackQuizStarted, trackQuestionAnswered, trackQuizCompleted, trackFirstQuiz, trackFirstCorrect, trackReminderSession } from '@/lib/analytics'
+import { LoadingMark } from '@/components/LoadingMark'
 
 export default function Quiz() {
   const [searchParams] = useSearchParams()
@@ -554,10 +555,7 @@ export default function Quiz() {
   // hold the quiz up.
   if ((!resumed && (loading || (status === 'idle' && !error))) || awaitingConceptListDecision) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <p className="text-muted-foreground">Loading questions…</p>
-      </div>
+      <LoadingMark className="flex items-center justify-center min-h-[60vh]" />
     )
   }
 

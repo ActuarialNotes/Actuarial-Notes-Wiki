@@ -3,7 +3,7 @@ import { Routes, Route, Link, Navigate, useNavigate, useLocation } from 'react-r
 import { usePageTracking } from '@/hooks/usePageTracking'
 import { usePageHead } from '@/hooks/usePageHead'
 import { NOT_FOUND_HEAD } from '@/lib/seo'
-import { Loader2 } from 'lucide-react'
+import { PageLoading } from '@/components/LoadingMark'
 import type { Session } from '@supabase/supabase-js'
 import Landing from '@/pages/Landing'
 import Auth from '@/pages/Auth'
@@ -146,11 +146,7 @@ function WarmStudyGuides() {
 }
 
 function WikiFallback() {
-  return (
-    <div className="flex items-center gap-2 p-8 text-sm text-muted-foreground">
-      <Loader2 className="h-4 w-4 animate-spin" /> Loading…
-    </div>
-  )
+  return <PageLoading />
 }
 
 interface ErrorBoundaryState { error: Error | null }

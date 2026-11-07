@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:5d31ca75b07c65bbd03620e8cdf2a691093fe5096431d19d6fb67e170b348274
+  content_hash: sha256:efd0cdf8159e8ac4112911769f3433c2423065007f13811a9de7e7cae8f4e2bb
   sources:
     - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05), §VII Inflation: fixed deductibles and limits; deductible 500 table 650 -> 998 (+54%) vs losses 750 -> 1098 (+46%) PDF p.10; maximum 12,500 table 610 -> 819 (+34%) PDF p.11, sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf"
     - "Frees et al., Loss Data Analytics (open text), Ch.3 Modeling Loss Severity, §3.3.1 scale distributions and inflation (lognormal mu + log 1.3, sigma unchanged); §3.4.3 inflated loss (1 + r)X with d and u unchanged, E(Y^L) = alpha(1 + r)[E(X^(u/(1+r))) - E(X^(d/(1+r)))], sha256:263021bf543b04b2881284b38b7dcbd0586b78daec371b88a1eefcd362dff732 — https://openacttexts.github.io/Loss-Data-Analytics/ChapSeverity.html"
@@ -23,157 +23,83 @@ verification:
   log: .verify/Concepts/Inflation.md
 ---
 
-**Inflation** is the growth in the size of losses over time. In a loss model, inflation at a uniform rate $r$ turns the loss random variable $X$ into a larger one.
-
-> $$X' = (1 + r)\,X$$
-
-- $r$ is the inflation rate over the period, $X$ is the loss before inflation and $X'$ is the loss after it.
-- Inflation scales every dollar amount of the loss. The mean rises by the factor $1 + r$ and the variance by $(1 + r)^2$.
-- Many [[Deductible|deductibles]] and [[Benefit Limit|benefit limits]] are fixed in dollars. Inflation therefore does not scale the insurer's payment by $1 + r$.
-
-> [!idea] The idea
-> Inflation makes the losses larger but leaves a fixed deductible where it was. The deductible shrinks relative to the losses, so the insurer's payment above it rises by more than $r$. A fixed limit works the other way: it stops the payment from following the loss, so the payment below it rises by less than $r$.
-
 ![[Media/Figures/Inflation.svg|340]]
 
-## What inflation does to the loss
+**Inflation** is the growth in the size of losses over time. Under uniform inflation at a rate $r$, every loss is multiplied by $1 + r$, so a loss $X$ becomes
 
-Take a loss that is uniform on $(0, 1000)$ this year, and let every loss rise 10% next year. Each loss of $x$ becomes a loss of $1.1x$, so next year's loss is uniform on $(0, 1100)$.
+> $$X' = (1 + r)X$$
 
-| Quantity | This year | Next year |
-|---|---|---|
-| Mean | 500 | 550 |
-| Variance | 83,333 | 100,833 |
-| Upper end | 1,000 | 1,100 |
+The mean of the loss rises by the factor $1 + r$ and its variance by $(1 + r)^2$. Over $n$ years at a compound rate $r$, every loss is multiplied by $(1 + r)^n$.
 
-The mean rises 10% and the variance rises 21%, because $1.1^2 = 1.21$. The same rule gives the variance of any linear change, such as a loss that rises 3% and then has a fixed fee of 2.5 added.
+> [!idea] The idea
+> Inflation scales the losses but not a policy's fixed dollar terms, so the insurer's payment does not rise at the rate $r$.
 
-> $$\text{Var}(aX + b) = a^2\,\text{Var}(X)$$
+> [!example]- This year's losses are uniform on $(0, 1000)$. Every loss rises 10% next year. What are next year's mean and variance? {Example}
+> - Each loss $x$ becomes $1.1x$, so next year's loss is uniform on $(0, 1100)$.
+> - The mean rises from 500 to $1.1 \times 500 = 550$.
+> - The variance rises by $1.1^2 = 1.21$, from 83,333 to 100,833.
 
-Inflation keeps a loss in its own family when the family has a scale parameter. Only the scale parameter changes.
+## The distribution of an inflated loss
 
-- An [[Exponential Distribution|exponential]] with mean $\theta$ becomes an exponential with mean $(1 + r)\theta$.
-- A [[Pareto Distribution|Pareto]] or a gamma keeps its shape $\alpha$, and its scale $\theta$ becomes $(1 + r)\theta$.
-- A lognormal keeps its $\sigma$, and its $\mu$ becomes $\mu + \ln(1 + r)$.
+The inflated loss is at most $x$ exactly when the original loss is at most $x/(1 + r)$, so its CDF is
 
-## A fixed deductible: why the payment rises faster
+> $$F_{X'}(x) = F_X\!\left(\frac{x}{1 + r}\right)$$
 
-Now apply a deductible of 200 that stays at 200. This year the insurer expects to pay $E[(X - 200)_+] = 320$ per loss. Next year the same calculation on the uniform $(0, 1100)$ loss gives 368.18. That is a rise of 15.1%, not 10%.
+Each cumulative probability stays the same, and the loss amount it belongs to is scaled up by $1 + r$. A family with a scale parameter $\theta$ stays in the family, with $\theta$ replaced by $(1 + r)\theta$:
 
-- A loss already above 200 grows by $0.1X$, but the payment $X - 200$ is smaller than $X$. The payment therefore grows by more than 10%.
-- Some losses just under 200 are pushed over it and start to pay. The probability of a payment rises from 0.8 to 0.818.
+- an [[Exponential Distribution|exponential]] with mean $\theta$ becomes an exponential with mean $(1 + r)\theta$,
+- a [[Pareto Distribution|Pareto]] or a [[Gamma|gamma]] keeps its shape $\alpha$, and its $\theta$ becomes $(1 + r)\theta$,
+- a lognormal keeps its $\sigma$, and its $\mu$ becomes $\mu + \ln(1 + r)$.
 
-Inflating the loss against a fixed deductible gives the same answer as leaving the loss alone and lowering the deductible to $d/(1 + r)$, then scaling up.
+> [!example]- Losses are exponential with mean 1,000. Every loss rises 10%. What is the probability that a loss next year exceeds 2,000? {Example}
+> - Next year's loss is exponential with mean 1,100.
+> - The probability is $e^{-2000/1100}$, which is $0.1623$.
+
+## Inflation with a fixed deductible
+
+When the [[Deductible|deductible]] $d$ stays at the same dollar amount, inflating the loss is the same as lowering the deductible to $d/(1 + r)$ and scaling up. The expected payment per loss is
 
 > $$E[(X' - d)_+] = (1 + r)\,E\!\left[\left(X - \tfrac{d}{1 + r}\right)_+\right]$$
 
-- For the running example, $1.1 \times E[(X - 181.82)_+] = 1.1 \times 334.71 = 368.18$.
+The payment rises by more than $r$. Losses above the deductible grow by $rX$, but the payment $X - d$ is smaller than $X$, and losses just under the deductible are pushed over it. This is the leveraged effect of a fixed deductible.
 
-> [!trap] Multiplying by $1 + r$
-> With the deductible fixed, $1.1 \times 320 = 352$ is too low. Inflate the loss distribution first, then apply the deductible.
+The expected payment per payment rises by less than the payment per loss, because the losses newly pushed over the deductible are small. For an exponential loss it rises by exactly $r$, because the exponential is memoryless.
 
-## Per loss or per payment?
+If the deductible is raised in step with the losses, to $(1 + r)d$, the payment rises by exactly $r$.
 
-The 15.1% rise is per loss. Per payment, the expected payment rises from $320 / 0.8 = 400$ to $368.18 / 0.818 = 450$, which is 12.5%.
+> [!example]- Losses are exponential with mean 1,000, with a deductible of 500. Every loss rises 10% and the deductible stays at 500. By what percentage does the expected payment per loss rise? {Example}
+> - For an exponential loss with mean $\theta$, $E[(X - d)_+]$ is $\theta e^{-d/\theta}$.
+> - This year, $1000\,e^{-0.5} = 606.53$.
+> - Next year, $1100\,e^{-500/1100} = 698.21$.
+> - The expected payment per loss rises $698.21 / 606.53 - 1$, which is 15.1%.
 
-The expected payment per payment rises less than per loss. The losses newly pushed over the deductible are small ones, so they pull the average payment down. The two rises are linked through the probability of a payment.
+> [!trap] Multiplying the payment by $1 + r$
+> With the deductible fixed, $1.1 \times 606.53 = 667.18$ is too low. Inflate the loss first, then apply the deductible.
 
-> $$1.151 = 1.125 \times 1.0227$$
+## Inflation with a fixed limit
 
-An exponential loss is the exception. It is memoryless, so its expected payment per payment is its mean, and that rises by exactly $r$.
-
-## A fixed limit: why the payment rises slower
-
-Go back to the uniform loss with no deductible, and cap each payment at 600. The insurer expects to pay $E[X \wedge 600] = 420$ this year and $436.36$ next year, a rise of only 3.9%. Every loss above 600 still pays 600, whatever its size.
-
-The losses above the limit take the leverage instead. The table splits the ground-up loss at the deductible and at the limit.
-
-| Part of the loss | This year | Next year | Rise |
-|---|---|---|---|
-| Whole loss | 500 | 550 | 10.0% |
-| Above a deductible of 200 | 320 | 368.18 | 15.1% |
-| Below a limit of 600 | 420 | 436.36 | 3.9% |
-| Above a limit of 600 | 80 | 113.64 | 42.0% |
-
-The [[Limited Expected Value|limited expected value]] follows the same rule as the deductible, with the limit scaled down by $1 + r$.
+When a [[Benefit Limit|benefit limit]] $u$ stays fixed, the [[Limited Expected Value|limited expected value]] follows the same rule, with the limit divided by $1 + r$:
 
 > $$E[X' \wedge u] = (1 + r)\,E\!\left[X \wedge \tfrac{u}{1 + r}\right]$$
 
-## When the policy terms inflate too
+The payment rises by less than $r$, because every loss above the limit still pays $u$. The losses above the limit rise by more than $r$. A layer from $d$ to $u$ with a coinsurance percentage $\alpha$ divides both terms by $1 + r$:
 
-If the deductible is raised in step with the losses, to $(1 + r)d$, the payment rises by exactly $r$. Every piece of the calculation is scaled by the same factor.
+> $$
+> \begin{aligned}
+> E[Y'] = \alpha(1 + r)\Big(&E\big[X \wedge \tfrac{u}{1+r}\big] \\
+> &- E\big[X \wedge \tfrac{d}{1+r}\big]\Big)
+> \end{aligned}
+> $$
 
-> $$E[(X' - (1 + r)d)_+] = (1 + r)\,E[(X - d)_+]$$
+> [!example]- Losses are exponential with mean 2,000, and a policy pays each loss up to 3,000. Every loss rises 10% and the limit stays at 3,000. By what percentage does the expected payment rise? {Example}
+> - For an exponential loss with mean $\theta$, $E[X \wedge u]$ is $\theta(1 - e^{-u/\theta})$.
+> - This year, $2000(1 - e^{-1.5}) = 1553.74$.
+> - Next year, $2200(1 - e^{-3000/2200})$ is $1637.40$.
+> - The expected payment rises 5.4%, less than 10%. The expected loss above the limit rises from 446.26 to 562.60, which is 26.1%.
 
-A fixed deductible also removes a smaller share of the inflated loss. The [[Loss Elimination Ratio|loss elimination ratio]] of the deductible of 200 falls from $180 / 500 = 0.360$ to $181.82 / 550 = 0.331$.
+## Inflation on other exams
 
-## On other exams
-
-**Exam FM** uses the word for prices in general. The real rate of interest $i'$ is what remains of the interest rate $i$ after inflation at rate $r$ ([[Real Rate of Interest]]).
-
-> $$1 + i' = \frac{1 + i}{1 + r}$$
-
-- With $i = 5\%$ and $r = 2\%$, $i' = 2.94\%$, slightly less than $i - r = 3\%$.
-
-**Exam 5 and Exam 8** study inflation as a driver of [[Loss Trend|loss trend]], alongside rising medical costs and advances in safety technology.
-
-- The leveraged effect of limits holds for any positive severity trend: the basic limits trend is at most the total limits trend, which is at most the excess losses trend (Werner & Modlin). Their example dampens a 10% total limits severity trend to 3.5% in basic limits losses.
-- Deductibles have the same leveraging effect, with the censoring below the deductible rather than above the limit.
-- The study note P-21-05 shows both effects on a car policy at 10% inflation a year. From year 1 to year 5, expected losses rise 46%. Under a fixed deductible of 500, expected claim payments rise 54%, from 650 to 998. With a fixed maximum claim payment of 12,500 added, they rise only 34%, from 610 to 819.
-- [[Social Inflation|Social inflation]] is a significant rise in the propensity for lawsuits and the size of jury awards. Like general inflation, it hits increased limits losses hardest.
-
-**Exam 5 reserving** treats a change in the inflation rate as a change in the economic environment that the actuary must understand before estimating unpaid claims (Friedland).
-
-- In a stable environment, the average case outstanding increases down each column of the triangle at the annual inflation rate. Averages that rise faster are a question for the claims department.
-- Each diagonal of a triangle is one valuation date. A shift along the latest diagonal therefore points to something that happened in that calendar year ([[Calendar Year Effect]]).
-- When every factor on the latest diagonal exceeds its column average, and paid severity on closed claims rose too, the payments themselves went up. That is consistent with an inflation shift.
-- Development techniques assume that past development patterns account for inflation. The [[Frequency-Severity Method|frequency-severity method]] reflects inflation explicitly, at the price of being highly sensitive to the inflation assumption.
-
-## Try it
-
-> [!example]- A fixed deductible on an exponential loss {Example}
-> Ground-up losses are exponential with mean 1,000, with an ordinary deductible of 500. Next year every loss rises 10% and the deductible stays at 500. Find the percentage increase in the expected payment per loss.
->
-> > [!answer]-
-> > **Plan:** inflate the exponential's mean to 1,100, then apply the deductible to each year's loss.
-> >
-> > For an exponential loss, $E[(X - d)_+] = \theta e^{-d/\theta}$.
-> > $$
-> > \begin{align*}
-> > \text{This year:} \quad 1000\,e^{-0.5} &= 606.53 \\
-> > \text{Next year:} \quad 1100\,e^{-500/1100} &= 698.21
-> > \end{align*}
-> > $$
-> > The expected payment per loss rises $698.21 / 606.53 - 1 = 15.1\%$.
-> >
-> > Why more than 10%? The deductible has in effect fallen to $500 / 1.1 = 454.55$ in this year's dollars.
-
-> [!example]- The same policy, per payment {Example}
-> For the policy above, find the percentage increase in the expected payment per payment.
->
-> > [!answer]-
-> > **Plan:** use the memoryless property, under which the excess over the deductible has the loss's own distribution.
-> >
-> > The expected payment per payment is $\theta$ in each year, 1,000 and then 1,100. It rises exactly 10%.
-> >
-> > Why less than per loss? The probability of a payment also rises, from $e^{-0.5} = 0.6065$ to $e^{-0.4545} = 0.6347$, and $1.10 \times 1.0465 = 1.151$.
-
-> [!example]- A fixed limit {Example}
-> Losses are exponential with mean 2,000 and a policy pays each loss up to 3,000. Next year every loss rises 10% and the limit stays at 3,000. Find the percentage increase in the expected payment, and in the expected loss above the limit.
->
-> > [!answer]-
-> > **Plan:** use $E[X \wedge u] = \theta(1 - e^{-u/\theta})$ in each year, and subtract from the mean for the part above the limit.
-> > $$
-> > \begin{align*}
-> > \text{This year:} \quad 2000\,(1 - e^{-1.5}) &= 1553.74 \\
-> > \text{Next year:} \quad 2200\,(1 - e^{-3000/2200}) &= 1637.40
-> > \end{align*}
-> > $$
-> > The expected payment rises 5.4%, about half the inflation rate. The expected loss above the limit rises from $2000 - 1553.74 = 446.26$ to $2200 - 1637.40 = 562.60$, which is 26.1%.
-
-> [!warning]- Exam traps
-> - **Scaling the payment by $1 + r$.** With fixed policy terms, inflate the loss distribution and recompute the payment.
-> - **Expecting the same rise per loss and per payment.** Under a fixed deductible, the rise per payment is smaller, because the newly paying losses are small.
-> - **Inflating the shape parameter.** Only the scale parameter changes. A Pareto with $\alpha = 2$ stays at $\alpha = 2$.
-> - **Inflating the deductible by mistake.** Read whether the deductible is "fixed" or "indexed". An indexed deductible gives a rise of exactly $r$.
-> - **Subtracting rates on Exam FM.** The real rate is $(1 + i)/(1 + r) - 1$, not $i - r$.
+- **Exam 5 and Exam 8** treat inflation as a driver of [[Loss Trend|loss trend]]. Limits leverage it: the basic limits trend is at most the total limits trend, which is at most the excess losses trend. A deductible leverages it the other way, so the losses above a fixed deductible rise faster than the ground-up trend.
+- **Exam 8** finds the excess ratio of an inflated loss $mX$ at a limit $L$ by evaluating the original loss's excess ratio at $L/m$. The implied trend in a layer is the ratio of the trended to the untrended expected loss in the layer, less 1.
+- **Exam 5 reserving** measures severity trend by the ratios of incremental severities between adjacent accident years at the same age. A shift along the latest diagonal points to a [[Calendar Year Effect|calendar year effect]], such as an inflation shift. Development techniques assume that past development patterns already reflect inflation. The [[Frequency-Severity Method|frequency-severity method]] trends severities explicitly, so it addresses inflation directly but depends heavily on the selected trend.
+- **Exam FM** uses the word for prices in general: the [[Real Rate of Interest|real rate of interest]] $i'$ satisfies $1 + i' = (1 + i)/(1 + r)$.

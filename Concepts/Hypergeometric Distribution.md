@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:468d3a5c061f7b1d1b3394e949322dd03b61654d75f07ece9e5cf5d7740289f0
+  content_hash: sha256:210e6c74af73387cc1312bdabc2579675c1c9f8fb99096eaaeee9d7d188a8464
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §5.1 Hypergeometric Distribution p.193 (PDF p.201): h(N,k,n,x) = C(k,x)C(N-k,n-x)/C(N,n), every sample of size n equally likely; approaches binomial(n, k/N) for large N, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org, HTML fetched 2026-11-06), 12.2 The Hypergeometric Distribution: var(Y) = n(r/m)(1-r/m)(m-n)/(m-1); draws negatively correlated, sha256:56414fcd41140fbad38e3e39034536cd06144012f8457ed797740bec97e44487 — https://www.randomservices.org/random/urn/Hypergeometric.html"
@@ -16,123 +16,77 @@ verification:
   log: .verify/Concepts/Hypergeometric Distribution.md
 ---
 
-The **Hypergeometric Distribution** models the number of successes $X$ in a sample of $n$ items drawn **without replacement** from a finite population of $N$ items, $K$ of which are successes.
+![[Media/Figures/Hypergeometric_Distribution.svg|340]]
+
+A **Hypergeometric Distribution** is the distribution of the number of successes in a sample of $n$ items drawn without replacement from $N$ items, $K$ of which are successes. The probability of $k$ successes is
 
 > $$P(X = k) = \frac{\dbinom{K}{k}\dbinom{N-K}{n-k}}{\dbinom{N}{n}}$$
 
-> $$E[X] = \frac{nK}{N}$$
-
-> $$\text{Var}(X) = \frac{nK(N-K)(N-n)}{N^2(N-1)}$$
-
-- $N$ is the population size, $K$ the number of successes in it and $n$ the sample size.
 - $k$ runs from $\max(0,\, n + K - N)$ to $\min(n, K)$.
-- Unlike the [[Binomial Distribution|binomial]], the draws are not independent. Each draw changes what is left for the next.
+
+The numerator chooses $k$ of the $K$ successes and $n - k$ of the $N - K$ failures. The denominator counts every sample of $n$.
 
 > [!idea] The idea
-> An auditor who draws policies without replacement changes the pool with every draw, so the draws are not independent trials. The hypergeometric avoids following the draws by counting sets instead. Every set of $n$ items is equally likely, so the probability is the number of ways to choose $k$ successes, times the ways to fill the other places from the failures, over the ways to choose $n$.
+> Every set of $n$ items is equally likely to be drawn, so the probability is a count of sets.
+
+> [!example]- A file holds 10 policies, 4 with errors. An auditor selects 3 at random without replacement. What is the probability that exactly 2 have errors? {Example}
+> - There are $\binom{10}{3} = 120$ equally likely samples.
+> - Choosing 2 of the 4 with errors and 1 of the 6 without gives $6 \times 6 = 36$ samples.
+> - The probability is $36/120 = 0.3$.
 
 ![[Media/Hypergeometric_pmf.svg|500]]
 
-![[Media/Figures/Hypergeometric_Distribution.svg|340]]
+## Mean and variance of the hypergeometric distribution
 
-## How many of the three have errors?
+Each item drawn is a success with probability $K/N$, so by linearity the mean is
 
-A file holds 10 insurance policies, 4 with errors and 6 without. An auditor selects 3 at random without replacement. There are $\binom{10}{3} = 120$ equally likely samples.
+> $$E[X] = \frac{nK}{N}$$
 
-| Errors $k$ | Samples $\binom{4}{k}\binom{6}{3-k}$ | $P(X = k)$ |
-|---|---|---|
-| 0 | 20 | 0.1667 |
-| 1 | 60 | 0.5000 |
-| 2 | 36 | 0.3000 |
-| 3 | 4 | 0.0333 |
+The draws are not independent, which shows in the variance:
 
-- For $k = 2$, choose 2 of the 4 policies with errors and 1 of the 6 without, giving $6 \times 6 = 36$ samples.
-- "At least 2" is a short sum, $0.30 + 0.0333 = 0.3333$.
+> $$\text{Var}(X) = n\,\frac{K}{N}\left(1 - \frac{K}{N}\right)\frac{N-n}{N-1}$$
 
-## The mean and the variance
+The last factor is the **finite population correction**. It is below 1 whenever $n \ge 2$, so a hypergeometric count varies less than a binomial one.
 
-Each of the 3 policies drawn has an error with probability $4/10$, whichever draw it is. Expected values add, whether or not the draws are independent, so $E[X] = 3 \times 0.4 = 1.2$.
+> [!example]- A file holds 10 policies, 4 with errors, and an auditor selects 3 without replacement. What are the mean and variance of the number with errors? {Example}
+> - The mean is $3 \times 4/10 = 1.2$.
+> - The binomial part is $3 \times 0.4 \times 0.6 = 0.72$.
+> - The variance is $0.72 \times 7/9 = 0.56$.
 
-The variance is where the dependence shows. Each error drawn leaves fewer errors for the next draw, so the draws pull against each other.
+## Compared with the binomial distribution
 
-- With $p = K/N$, the variance is the binomial's $np(1-p)$ times the **finite population correction** $(N-n)/(N-1)$.
-- For the auditor, $3(0.4)(0.6) = 0.72$, and $0.72 \times 7/9 = 0.56$.
-- The correction is below 1 whenever $n \geq 2$, so the hypergeometric count varies less than a binomial count.
+When the population is large relative to the sample, each draw barely changes what is left. The hypergeometric is then close to the [[Binomial Distribution|binomial]] with $p = K/N$:
 
-## Compared with the binomial
+> $$P(X = k) \approx \binom{n}{k}\left(\frac{K}{N}\right)^k\left(1 - \frac{K}{N}\right)^{n-k}$$
 
-What if the auditor replaced each policy before the next draw? The count would be $\text{Bin}(3, 0.4)$, with $P(X = 2) = 0.288$ instead of 0.300.
-
-- On a pool of 10 the difference is visible. On a pool of 1,000 with 400 errors, the hypergeometric gives 0.2881 and the binomial 0.2880.
-- When $N$ is large relative to $n$, the correction is close to 1, and the binomial with $p = K/N$ is a close approximation.
+> [!example]- A file holds 10 policies, 4 with errors. If the auditor replaced each policy before the next draw, what would be the probability that exactly 2 of 3 have errors? {Example}
+> - With replacement, the count is $\text{Bin}(3, 0.4)$.
+> - The probability is $3 \times 0.4^2 \times 0.6 = 0.288$.
+> - Without replacement it was 0.300. On a pool of 10, the difference shows.
 
 > [!trap] Binomial on a small pool
-> Treating draws from a few dozen items as independent trials with $p = K/N$ gives a nearby but wrong answer. Use the binomial only when the question allows replacement or the pool is very large.
-
-## The second error, drawing one at a time
-
-The auditor now draws policies one at a time. What is the probability that the second error turns up on the 3rd draw?
-
-The second error is on draw 3 exactly when the first 2 draws hold exactly 1 error and draw 3 is an error.
-
-- The first part is hypergeometric, $\binom{4}{1}\binom{6}{1}/\binom{10}{2} = 24/45$.
-- Given that, 8 policies remain and 3 have errors, so draw 3 is an error with probability $3/8$.
-- The product is $\frac{24}{45} \times \frac{3}{8} = 0.2$.
-
-In general, the $k$-th success comes on draw $n$ with this probability.
-
-> $$P = \frac{\dbinom{K}{k-1}\dbinom{N-K}{n-k}}{\dbinom{N}{n-1}} \cdot \frac{K-k+1}{N-n+1}$$
+> Draws from a few dozen items without replacement are not independent trials. Use the binomial only when the question allows replacement or the pool is very large.
 
 ## More than two types
 
-Suppose the 4 errors are 3 premium errors and 1 coverage error. The sample now has three kinds of policy. The counts of each kind follow the **multivariate hypergeometric distribution**.
+When the population splits into types of sizes $K_1, \ldots, K_m$ that add to $N$, the counts of each type in the sample follow the **multivariate hypergeometric distribution**:
 
-> $$P(k_1, \ldots, k_m) = \frac{\dbinom{K_1}{k_1}\dbinom{K_2}{k_2}\cdots\dbinom{K_m}{k_m}}{\dbinom{N}{n}}$$
+> $$P(k_1, \ldots, k_m) = \frac{\dbinom{K_1}{k_1}\cdots\dbinom{K_m}{k_m}}{\dbinom{N}{n}}$$
 
-- Here the population splits into types of sizes $K_1, \ldots, K_m$ that add to $N$, and the sample counts $k_1, \ldots, k_m$ add to $n$.
-- One premium error, one coverage error and one clean policy has probability $\binom{3}{1}\binom{1}{1}\binom{6}{1}/120 = 18/120 = 0.15$.
-- **Lumping.** When only one type matters, combine all the others into one group of $N - K$ items. The count of that type is then the ordinary hypergeometric.
-- **Conditioning on one type.** Given that $k_1$ of the $n$ draws fell in type 1, the other $n - k_1$ draws are a sample without replacement from the $N - K_1$ items outside type 1. So the conditional count of another type $j$ is hypergeometric with population $N - K_1$, $K_j$ successes and $n - k_1$ draws.
+- $k_1 + \cdots + k_m = n$.
 
-## Independent events, given how many occurred
+When only one type matters, combine all the others into one group of $N - K$ items, and the count of that type is the ordinary hypergeometric.
 
-Eight claim files are each independently corrupted with probability 0.1. Exactly 3 are corrupted. What is the probability that exactly 1 of the first 4 files is corrupted?
+> [!example]- A file holds 3 policies with premium errors, 1 with a coverage error and 6 clean. An auditor selects 3 without replacement. What is the probability of one of each? {Example}
+> - Choose 1 of 3, 1 of 1 and 1 of 6: $3 \times 1 \times 6 = 18$ samples.
+> - There are 120 samples in all.
+> - The probability is $18/120 = 0.15$.
 
-Every set of 3 corrupted files has the same probability, $0.1^3 \times 0.9^5$. Given the total, that common factor cancels, so each of the $\binom{8}{3}$ sets is equally likely. The corrupted set is a sample of 3 drawn without replacement from the 8 files.
+## Independent events given how many occurred
 
-- The count among the first 4 is hypergeometric with $N = 8$, $K = 4$ and $n = 3$.
-- $P = \binom{4}{1}\binom{4}{2}/\binom{8}{3} = 24/56 \approx 0.4286$.
-- The probability 0.1 drops out of the answer.
+When $N$ independent events each have the same probability and exactly $n$ occurred, every set of $n$ that could have occurred is equally likely. The events that occurred are then a sample of $n$ drawn without replacement, and the count among any $K$ of them is hypergeometric. In the same way, the first $n$ items brought in random order are a sample of $n$ drawn without replacement.
 
-## Try it
-
-> [!example]- Fraudulent claims in an audit {Example}
-> Of 20 claims, 5 are fraudulent. An investigator selects 4 at random without replacement. Find the probability that at least one is fraudulent, and compare it with the binomial answer.
->
-> > [!answer]-
-> > **Plan:** use the complement, the probability of no fraudulent claims.
-> > $$P(X = 0) = \frac{\binom{15}{4}}{\binom{20}{4}} = \frac{1365}{4845} \approx 0.2817$$
-> > So $P(X \geq 1) \approx 0.7183$. Treating the draws as independent with $p = 0.25$ gives $1 - 0.75^4 \approx 0.6836$, which is too low on a pool of 20.
-> > Why higher? Each clean claim drawn leaves a pool richer in fraudulent ones.
-
-> [!example]- Three colours in one draw {Example}
-> A bin holds 3 auto, 4 home and 5 liability claim files. Four are drawn without replacement. Find the probability of 1 auto, 1 home and 2 liability files.
->
-> > [!answer]-
-> > **Plan:** multivariate hypergeometric with $N = 12$ and $n = 4$.
-> > $$P = \frac{\binom{3}{1}\binom{4}{1}\binom{5}{2}}{\binom{12}{4}} = \frac{3 \times 4 \times 10}{495} \approx 0.2424$$
-> > The denominator counts every set of 4 from the 12. The numerator chooses within each type and multiplies.
-
-> [!example]- The given probability is a distractor {Example}
-> Ten employees each independently have an accident in the year with probability 0.2. Exactly 2 have accidents. Four of the ten work night shifts. Find the probability that neither accident was on the night shift.
->
-> > [!answer]-
-> > **Plan:** given the total, the 2 employees with accidents are a sample without replacement from the 10.
-> > $$P = \frac{\binom{6}{2}}{\binom{10}{2}} = \frac{15}{45} \approx 0.3333$$
-> > Why does 0.2 not appear? Every pair of employees has the same probability $0.2^2 \times 0.8^8$, and it cancels in the conditional probability.
-
-> [!warning]- Exam traps
-> - **Binomial on a small pool.** Draws without replacement are dependent. Use the hypergeometric unless the pool is very large.
-> - **Carrying the given $p$ through.** When independent events are conditioned on their total, the stated probability is a distractor. An answer that depends on $p$ has not divided by the probability of the total.
-> - **The $k$-th success is not "$k$ successes in $n$ draws".** For the $k$-th success to land on draw $n$, the first $n-1$ draws hold exactly $k-1$ successes and draw $n$ is a success.
-> - **Forgetting the correction.** $np(1-p)$ alone overstates the variance by the factor $(N-1)/(N-n)$.
+> [!example]- Eight claim files are each corrupted with probability 0.1, independently. Exactly 3 are corrupted. What is the probability that exactly 1 of the first 4 files is corrupted? {Example}
+> - The 3 corrupted files are a sample of 3 from the 8.
+> - The count among the first 4 is hypergeometric with $N = 8$, $K = 4$ and $n = 3$.
+> - The probability is $\binom{4}{1}\binom{4}{2}/\binom{8}{3}$, which is $24/56 = 0.4286$.

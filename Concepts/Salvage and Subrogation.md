@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:c9ac6df58a7eb3a6908637313c651a060698dc1183c138ebf267353e7904cf4a
+  content_hash: sha256:f2ed9ca970371314f30082f6a0fefcd34bdb03399942a8b58ce2f22236ff91b9
   sources:
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch. 3 p.33 (PDF p.39); Ch. 4 (PDF pp.50-56, chapter title); Ch. 14 pp.329-330 (PDF pp.335-336), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 0
@@ -12,57 +12,27 @@ verification:
   log: .verify/Concepts/Salvage and Subrogation.md
 ---
 
-**Salvage and Subrogation** (S&S) are the two recoveries that reduce an insurer's net cost after it has paid a claim: **salvage** is the value realized from damaged property the insurer takes title to (a totalled vehicle); **subrogation** is recovery from a third party legally responsible for the loss.
-
-> $$\text{Net Ultimate} = \text{Gross Ultimate} - \text{S\&S Ultimate}$$
-
-- S&S is projected either by the **development technique** on reported or received S&S, or by a **ratio approach**: develop the ratio of received S&S to paid claims to an ultimate ratio and apply it to ultimate claims gross of S&S. Recovery patterns lag payment patterns — salvage arrives within months, but subrogation requires establishing liability against a third party and can take years, especially where litigation is involved.
-- Applying loss development factors to reported recoveries, or netting recoveries inside the loss triangle without checking that the netting is consistent across all years, both produce errors that are invisible in the result.
-- Data must be **consistent about direction**: recoveries may be recorded as negative payments inside the loss triangle, as a separate recovery triangle, or (worst) inconsistently across systems and years. A change in recording convention looks exactly like a change in recovery rates.
-- Because recoveries can arrive after a claim closes, S&S is a common source of **negative development** — age-to-age factors below $1.000$ in the later columns of a net triangle. Capping factors at $1.000$ removes real recoveries from the estimate.
-- Salvage is material in auto physical damage and property; subrogation in auto liability, workers compensation (third-party actions) and products liability. Recovery rates vary enormously by line, so a benchmark ratio borrowed across lines is worthless.
-- Omitting S&S from the analysis overstates net reserves; assuming this year's recovery rate will persist without checking the subrogation department's staffing and practices is the mirror error.
-
 ![[Media/Figures/Salvage_and_Subrogation.svg|340]]
 
-> [!example]- Developing Recoveries Separately {Example}
-> AY 2023: gross reported losses $\$1{,}000{,}000$ with a gross CDF of $1.200$; reported salvage $\$80{,}000$ and subrogation $\$40{,}000$, with an S&S CDF of $1.250$.
->
-> Compute net ultimate losses.
->
-> > [!answer]-
-> > $$\begin{align*}
-> > \text{Gross ultimate} &= \$1{,}000{,}000 \times 1.200 \\
-> > &= \$1{,}200{,}000 \\[6pt]
-> > \text{S\&S reported} &= \$80{,}000 + \$40{,}000 = \$120{,}000 \\[4pt]
-> > \text{S\&S ultimate} &= \$120{,}000 \times 1.250 \\
-> > &= \$150{,}000 \\[6pt]
-> > \text{Net ultimate} &= \$1{,}200{,}000 - \$150{,}000 \\
-> > &= \$1{,}050{,}000
-> > \end{align*}$$
-> >
-> > The S&S CDF ($1.250$) exceeds the gross CDF ($1.200$) because recoveries lag losses. Developing the recoveries at the gross factor instead would give an S&S ultimate of $\$144{,}000$ and a net ultimate $\$6{,}000$ too high — small here, but the gap widens with the tail, and in subrogation-heavy lines the recovery CDF can be double the loss CDF.
+**Salvage and Subrogation** (S&S) are two of the most common [[Recoveries|recoveries]] of an insurer. When the insurer pays an insured for a total loss, it acquires the rights to the damaged property, and salvage is what it collects from selling that property. Subrogation is the insurer's right to recover the amount it paid an insured from a third party responsible for the injury or damage. Ultimate claims net of S&S are
 
-> [!example]- A Change in Recovery Practice {Example}
-> Subrogation recoveries as a percentage of paid losses, by accident year at $36$ months:
->
-> | AY | Recovery ratio |
-> |---|---|
-> | $2019$ | $6.2\%$ |
-> | $2020$ | $6.4\%$ |
-> | $2021$ | $6.1\%$ |
-> | $2022$ | $9.3\%$ |
-> | $2023$ | $9.8\%$ |
->
-> The insurer outsourced subrogation to a specialist vendor in $2022$. How should the reserve analysis respond?
->
-> > [!answer]-
-> > The recovery ratio stepped up roughly $50\%$ when the vendor took over — a genuine, explained change in the process, not noise.
-> >
-> > Consequences for the analysis:
-> >
-> > - **Historical recovery factors are stale.** Factors built on $2019$–$2021$ describe the old recovery rate and will under-project recoveries on the recent years, over-stating net reserves.
-> > - **The older accident years are still running off under the new arrangement.** If the vendor is also pursuing open subrogation on AY $2019$–$2021$ claims, those years' future recoveries will exceed what their own history implies — so the change affects every open year, not just the new ones.
-> > - **The net triangle is now non-homogeneous** across the change date, which is an argument for developing gross and recoveries separately (as here) rather than netting inside one triangle.
-> >
-> > The practical selection: use the post-$2022$ ratios for the recent years, and for the older years apply judgment about how much of their remaining subrogation potential the vendor can still capture. Both are judgment calls, and both belong in the documentation — this is the sort of operational change Friedland's Chapter 4 management interview is designed to surface *before* the triangles are built.
+> $$\text{Net Ultimate Claims} = \text{Gross Ultimate Claims} - \text{Ultimate S\&S}$$
+
+Salvage is most commonly associated with property coverages, and is fast to report and fast to settle. Subrogation, typically associated with liability coverages, can take years to realize, well after the underlying claims are paid. That gives age-to-age factors below $1.000$ at older ages for some lines. Subrogation follows a covered payment. Whether a policy covers a loss does not depend on whether the insurer can recover from a liable third party, such as a manufacturer.
+
+## Developing S&S on its own
+
+Where the insurer keeps S&S data, the [[Chain Ladder Method|development technique]] can be applied to the reported or the received S&S alone, with the S&S triangle's own age-to-age factors. Received S&S, sometimes called paid S&S, is a payment from a third party to the insurer. Developed this way, an accident year's ultimate S&S is
+
+> $$\text{Ultimate S\&S} = \frac{\text{Received S\&S}}{\text{Percentage Received}}$$
+
+- $\text{Percentage Received}$ is the expected share of ultimate S&S received by the year's age, the reciprocal of the S&S CDF.
+
+The S&S recoverable is the ultimate S&S minus the S&S received, and it is a reduction to the estimate of unpaid claims. Unpaid claims net of S&S are the gross unpaid claims minus the recoverable. The alternative is to develop the ratio of S&S to paid claims, the [[Recoveries#The ratio approach to salvage and subrogation|ratio approach]], whose factors are less leveraged.
+
+> [!example]- An accident year has gross reported claims of $\$1{,}000{,}000$ with a gross CDF of $1.200$, and received S&S of $\$120{,}000$, of which $80\%$ is expected to have been received by its age. Gross paid claims are $\$700{,}000$. What are its net ultimate claims and its net unpaid claims? {Example}
+> - The gross ultimate claims are $1{,}000{,}000 \times 1.200 = \$1{,}200{,}000$.
+> - The ultimate S&S is $120{,}000/0.80 = \$150{,}000$.
+> - The net ultimate claims are $1{,}200{,}000 - 150{,}000 = \$1{,}050{,}000$.
+> - The gross unpaid claims are $1{,}200{,}000 - 700{,}000 = \$500{,}000$, and the S&S recoverable is $150{,}000 - 120{,}000 = \$30{,}000$.
+> - The net unpaid claims are $500{,}000 - 30{,}000 = \$470{,}000$.

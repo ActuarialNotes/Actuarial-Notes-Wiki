@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:c4692422b9da7e86f99215010205753229d7a90a72275cab5b5c8fd2cba83fb9
+  content_hash: sha256:cab7b634f5750127b687c1a8a0fc1347073f6647207b2c0b025c283d8d7d5a18
   sources:
     - "ASB, ASOP No. 23 Data Quality (Doc. No. 185, Dec. 2016), §2.1 appropriate data, §2.2 audit, §2.5 review, §2.6 sufficient, §3.1-3.6, §3.8(c), §4.1, PDF pp.6-11, sha256:784c57a1379b189b234452dc7fe18d391ae86e7f5fb8815d14d35400eb3e7bdf — https://www.actuarialstandardsboard.org/wp-content/uploads/2017/01/asop023_185.pdf"
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch.3 \"Verification of the Data\", printed p.37 (PDF p.43), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
@@ -16,44 +16,35 @@ verification:
   log: .verify/Concepts/Data Quality.md
 ---
 
-**Data Quality** is whether the data behind an actuarial analysis are *appropriate* (suitable for the intended purpose and relevant to what is being analyzed), *reasonable* and *sufficient* (enough records and data elements for the analysis). [[ASOP 23 - Data Quality (ASB - 2016)|ASOP No. 23]] sets out what an actuary must do about it: select the data, review it, decide how it can be used, and disclose its limitations.
+**Data Quality** is whether the data behind an actuarial analysis are appropriate, reasonable and sufficient for it. Appropriate data are suitable for the intended purpose and relevant to what is analyzed, and sufficient data have enough records and data elements for the analysis. [[ASOP 23 - Data Quality (ASB - 2016)|ASOP No. 23]] sets out what the actuary does about it:
 
-> $$\text{Reconciliation difference} = \sum_{i} \text{Premium}_i^{\,\text{data}} - \text{Premium}^{\,\text{financial records}}$$
+1. **Select** the data (§3.2). Consider the data elements wanted and the alternatives, and whether the data are appropriate, current, internally consistent, consistent with readily available external information and sufficient, and what their known limitations are.
+2. **Review** the data (§3.3). Make a reasonable effort to learn the definition of each data element, and look for questionable values and inconsistent relationships, such as a policy effective after it expires or a default value standing in for a blank field.
+3. **Decide how to use** the data (§3.4): as they are, enhanced, with judgmental adjustments, or not at all if they are too inadequate.
+4. **Rely on others** with disclosure (§3.5). The accuracy of data supplied by others is their responsibility, but the actuary still reviews the data and discloses the reliance.
+5. **Disclose** the data's significant limitations and the significant steps taken to adjust or improve them.
 
-- The reconciliation above is a standard review check: totals built from the modelling data (premium, exposure, paid losses, claim counts) are compared with an independent source such as the financial statements. A difference is not automatically an error — it has to be **explained** (a missing month, a line of business excluded, a timing difference)
-- **Selection** (ASOP 23 §3.2): consider the data elements wanted and the alternatives; weigh whether the data are appropriate and current, internally consistent, consistent with readily available external information, sufficient, and what their known limitations are
-- **Review** (§3.3): make a reasonable effort to learn the *definition* of each data element and to identify questionable values or inconsistent relationships — a policy effective after it expires, a claim reported before the accident, negative exposure. A review is not an **audit**, and the actuary is not required to perform one
-- **Use** (§3.4): judge whether the data are acceptable as they are, need enhancement, can be used with judgmental adjustments, or are too inadequate to use at all
-- **Reliance** (§3.5–3.6): the accuracy of data supplied by others is their responsibility, but the actuary still reviews it and discloses the reliance. This is the stakeholder side of PCPA objective A1 — the business owners, underwriters and IT staff who supply data and context are the first source of both
-- Poor-quality data are a source of [[Model Risk|model risk]]: a model will fit whatever it is given
+A review is not an audit. ASOP No. 23 defines a review as an examination of the obvious characteristics of the data for reasonableness and consistency, which is less detailed than an audit of their accuracy and completeness. The standards require procedures to verify that the data are reliable and sufficient, and documentation of the review, but not a formal audit. Poor-quality data are a source of [[Model Risk|model risk]], because a model fits whatever it is given.
 
-> [!example]- Reconciling a Modelling Extract {Example}
-> A homeowners modelling extract totals $\$41{,}600{,}000$ of written premium for the year. The annual statement shows $\$43{,}200{,}000$ for the same line. The data owner explains that $\$1{,}500{,}000$ of premium on policies written through a program administrator is booked outside the policy system. What remains unexplained, and what should the actuary do?
->
-> > [!answer]-
-> > $$
-> > \begin{align*}
-> > \text{Difference} &= 41{,}600{,}000 - 43{,}200{,}000 \\
-> > &= -1{,}600{,}000 \\
-> > \text{Unexplained} &= -1{,}600{,}000 + 1{,}500{,}000 \\
-> > &= -100{,}000
-> > \end{align*}
-> > $$
-> > $\$100{,}000$ — about $0.2\%$ of premium — remains unexplained. That is small enough that it is unlikely to matter to a rating model, but it should still be noted. The **$\$1.5$M program business** is the real finding: those policies are missing from the model data entirely. The actuary must decide whether their absence biases the analysis — and disclose it either way.
+> [!example]- Reviewing a personal auto file, an actuary finds 312 policies with a driver age of 0 and 41 with a driver age above 110. What should the actuary do? {Example}
+> - The actuary first learns the field's definition from the data owner, and why these values occur.
+> - An age of 0 is often a default written when the field was left blank, so it is [[Missing Data|missing data]] in disguise, not a real age.
+> - Ages above 110 are more likely keying errors, such as dates of birth entered in the wrong format.
+> - The values are corrected from the source where practical. Otherwise they are treated as missing, so that a model does not fit a relativity to "age 0".
+> - The questionable values found and the steps taken are disclosed in summary form.
 
-> [!example]- Questionable Values Found in Review {Example}
-> Reviewing a personal auto file, an actuary finds $312$ policies with a driver age of $0$ and $41$ with driver age above $110$. How should these be handled under ASOP 23?
->
-> > [!answer]-
-> > First, **find the definition**: ask the data owner what the field means and why these values occur. Age $0$ is often a default written when the field was left blank, which makes it [[Missing Data|missing data]] in disguise, not a real age. Values above $110$ are more likely keying errors or dates of birth entered in the wrong format.
-> >
-> > Then decide on **use**: correct the values from source if practical; otherwise treat them as missing rather than letting a model fit a relativity to "age 0." Finally **disclose**: in summary form, the questionable values found and the steps taken to fix them.
+## Reconciliation
 
-> [!tip]- How it appears on the exam
-> - **DISC-DA** covers applying data quality principles in its first topic, planning an insurer data modeling project, beside [[Data Documentation|documenting data]] and [[Data Types|data classifications]]. Application questions describe a data set gathered for a model and ask which quality consideration it fails (appropriate, reasonable, sufficient, current) or what the analyst should do next: learn a field's definition, investigate a questionable value, reconcile to another source, or disclose a limitation.
-> - **PCPA** uses the same ASOP No. 23 framework: reconciling the data to financial records before an analysis, and judging whether the data can support it.
+Reconciliation compares control totals of the data, such as premium, exposures, paid losses or claim counts, with an independent source such as the financial statements. It tests the data in total, not record by record. A difference is not automatically an error, but it has to be explained, such as a missing month, an excluded line or a timing difference.
 
-> [!warning]- Exam traps
-> - **A review is not an audit:** ASOP No. 23 defines a review as an examination of the data's obvious characteristics for reasonableness and consistency, which is less detailed than an audit testing accuracy and completeness. An answer requiring the actuary to audit the source data overstates the standard.
-> - **Questionable is not wrong:** A strange value is investigated and its definition learned before it is changed or excluded. Unresolved questionable values that could matter are disclosed in summary form.
-> - **Imperfect data can still be used:** ASOP No. 23 lets the actuary use data as they are, enhance them, apply disclosed judgmental adjustments, or widen the results, and only if the data are so inadequate that none of these works obtain other data, do the parts of the assignment the data support (with the principal's consent), or decline it.
+> [!example]- A homeowners modelling extract totals $\$41{,}600{,}000$ of written premium for the year, and the annual statement shows $\$43{,}200{,}000$ for the line. The data owner explains that $\$1{,}500{,}000$ of premium written through a program administrator is booked outside the policy system. What remains unexplained? {Example}
+> - The extract is $41{,}600{,}000 - 43{,}200{,}000 = -\$1{,}600{,}000$ short of the statement.
+> - The program business explains $\$1{,}500{,}000$ of it, leaving $\$100{,}000$, about 0.2% of premium, unexplained.
+> - The real finding is that the program policies are missing from the model data. The actuary decides whether their absence biases the analysis, and discloses it.
+
+## Using imperfect data
+
+Data with defects can still be used. Questionable values are investigated before they are changed or excluded, especially if they are material, because a questionable value is not always an incorrect one. A value that cannot be corrected is set to missing rather than deleting its whole record, which would discard the record's other information. A missing or disguised-missing value is handled explicitly, for example with an "unknown" level or a missing-value flag. A spike of records at one round or extreme value, such as 0, 99 or 999, out of line with the rest of a smooth distribution, is a typical sign of a placeholder code. If the data are so inadequate that no adjustment works, the actuary obtains other data, performs only the parts of the assignment the data support, or declines it.
+
+> [!trap] Requiring an audit of the data
+> ASOP No. 23 asks for a review, not an audit. An answer that has the actuary audit the source data overstates the standard. What it does require is that the review be documented and the data's limitations disclosed.

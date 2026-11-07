@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:867e462d9bb21b573cc5da275058654663649057ab542f7e58af2e1a484ce6a6
+  content_hash: sha256:d56732f83b621879c776d4bae63f4142aeb3aa7cae049f16568cd8c820186103
   sources:
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, Version 3, 2010), Ch.5 p.61 (PDF 67); Ch.11 p.196 (PDF 202), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 1
@@ -12,79 +12,48 @@ verification:
   log: .verify/Concepts/Claim Count Triangle.md
 ---
 
-**Claim Count Triangle** is a [[Development Triangle|development triangle]] of claim *counts* rather than dollars. Counts are what make the dollar triangles interpretable: they separate "more claims" from "costlier claims", and they are the denominator of every severity diagnostic.
-
-> $$\text{Ultimate Counts} = N_n \times \text{CDF}^{\text{count}}_{n \to \text{ult}}$$
-
-> $$\text{Severity} = \frac{\text{Ultimate Losses}}{\text{Ultimate Counts}}$$
-
-Four count triangles are built, and each answers a different question:
-
-- **Reported counts** — how fast claims come in. Develops to ultimate; the basis for pure [[IBNR]] counts.
-- **Closed counts** — how fast claims settle. The [[Settlement Rate|disposal rate]] is closed counts over ultimate (or reported) counts.
-- **Open counts** — the inventory. Divided into case reserves it gives **average case outstanding**, the sharpest [[Case Adequacy|case adequacy]] diagnostic.
-- **Counts closed with payment** (vs. closed without) — a shift in the CWP proportion changes average paid severity without any change in claim cost.
-
-Further points:
-
-- Count factors are **smaller** than dollar factors at the same age, because a claim is counted as soon as it is reported while its dollars accrue for years afterward.
-- Counts must be **defined consistently**: per claim or per claimant, counting claims closed without payment or not, treating reopened claims as new or as continuing. A definition change mid-triangle looks exactly like a frequency trend.
-- **Reported counts can develop downward.** When the reported counts exclude claims closed with no payment, a claim counted while open drops out of the count if it later closes without payment. In a fast-reporting, fast-settling coverage such as private passenger collision, more claims can close without payment in later valuations than are newly reported, so reported count age-to-age factors fall below $1.00$ (Friedland Ch.11, p.196).
-- Counts split broad IBNR into its two parts: **pure IBNR** (unreported claims, valued at an expected severity) and **IBNER** (development on known claims). Dollar triangles alone cannot separate them.
-- Counts are the input to the [[Frequency-Severity Method]] and the disposal-rate variant of [[Berquist-Sherman Method|Berquist-Sherman]].
-
 ![[Media/Figures/Claim_Count_Triangle.svg|340]]
 
-> [!example]- Developing Counts and Deriving Severity {Example}
-> Cumulative reported claim counts:
->
-> | AY | 12 mo | 24 mo | 36 mo |
-> |---|---|---|---|
-> | $2021$ | $450$ | $520$ | $545$ |
-> | $2022$ | $475$ | $550$ | |
-> | $2023$ | $500$ | | |
->
-> The tail beyond $36$ months is $1.010$. Ultimate losses for AY 2023 are projected at $\$612{,}000$.
->
-> Project ultimate counts and severity.
->
-> > [!answer]-
-> > $$\begin{align*}
-> > f_{12\text{–}24} &= \frac{520 + 550}{450 + 475} = \frac{1{,}070}{925} = 1.157 \\[4pt]
-> > f_{24\text{–}36} &= \frac{545}{520} = 1.048
-> > \end{align*}$$
-> >
-> > $$\text{CDF}^{\text{count}}_{12} = 1.157 \times 1.048 \times 1.010 = 1.225$$
-> >
-> > $$\begin{align*}
-> > \text{Ultimate counts (AY 2023)} &= 500 \times 1.225 = 612 \\[4pt]
-> > \text{Ultimate severity} &= \frac{\$612{,}000}{612} = \$1{,}000
-> > \end{align*}$$
-> >
-> > Note the count CDF of $1.225$ against a dollar CDF that would typically be well above $1.5$ at $12$ months for the same line: counts are $82\%$ complete while dollars are much less so, because the claims already reported have years of payment ahead of them.
+A **Claim Count Triangle** is a [[Development Triangle|development triangle]] of numbers of claims rather than dollars, by accident year and age. A reported claim count triangle is developed like a dollar triangle, so the ultimate claim counts of an accident year at age $n$ are
 
-> [!example]- Counts Reveal What Dollars Hide {Example}
-> Two accident years at $24$ months:
->
-> | | AY 2022 | AY 2023 |
-> |---|---|---|
-> | Reported losses | $\$5{,}000{,}000$ | $\$6{,}000{,}000$ |
-> | Reported counts | $1{,}000$ | $1{,}500$ |
-> | Closed counts | $600$ | $900$ |
-> | Open counts | $400$ | $600$ |
-> | Case reserves | $\$2{,}000{,}000$ | $\$2{,}100{,}000$ |
->
-> Reported losses rose $20\%$. What actually happened?
->
-> > [!answer]-
-> > $$\begin{align*}
-> > \text{Severity: } \frac{5{,}000{,}000}{1{,}000} = \$5{,}000 &\to \frac{6{,}000{,}000}{1{,}500} = \$4{,}000 \\[6pt]
-> > \text{Disposal rate: } \frac{600}{1{,}000} = 60\% &\to \frac{900}{1{,}500} = 60\% \\[6pt]
-> > \text{Avg case O/S: } \frac{2{,}000{,}000}{400} = \$5{,}000 &\to \frac{2{,}100{,}000}{600} = \$3{,}500
-> > \end{align*}$$
-> >
-> > Losses rose $20\%$ but **counts rose $50\%$ while average severity fell $20\%$**. The book has grown, and it has grown into smaller claims — a mix shift toward a lower-severity segment, not an increase in claim cost.
-> >
-> > The average case outstanding falling from $\$5{,}000$ to $\$3{,}500$ is consistent with that story (smaller claims), but it is *also* what a case reserve weakening would look like. The disposal rate holding at $60\%$ rules out a settlement-speed change. Distinguishing mix from adequacy requires looking at the claims themselves — which is exactly the conversation with claims management that Friedland's Chapter 4 prescribes.
-> >
-> > Without the count triangles, the dollar triangle shows only "$+20\%$" and none of this is visible.
+> $$\text{Ultimate Claim Counts} = \text{Reported Claim Counts} \times \text{CDF}_{n \to \text{ult}}$$
+
+- $\text{Reported Claim Counts}$ are the accident year's claims reported through age $n$.
+- $\text{CDF}_{n \to \text{ult}}$ is the [[Cumulative Development Factor|cumulative development factor]] selected from the claim count triangle.
+
+Counts separate more claims from costlier claims, so ultimate claims divided by ultimate claim counts is the ultimate [[Severity|severity]]. Counts are the input to the [[Frequency-Severity Method|frequency-severity techniques]]. A count factor is usually smaller than a dollar factor at the same age, because a claim is counted as soon as it is reported while its dollars accrue for years afterward.
+
+> [!example]- Reported claim counts are 450, 520 and 545 at 12, 24 and 36 months for accident year 2021, 475 and 550 for 2022, and 500 at 12 months for 2023. The tail factor is 1.010, and accident year 2023's ultimate claims are $\$612{,}000$. What are its ultimate claim counts and severity? {Example}
+> - The volume-weighted 12 to 24 month factor is $(520 + 550)/(450 + 475) = 1{,}070/925 = 1.157$.
+> - The 24 to 36 month factor is $545/520 = 1.048$.
+> - The CDF at 12 months is $1.157 \times 1.048 \times 1.010 = 1.225$.
+> - The ultimate claim counts are $500 \times 1.225 = 612$.
+> - The ultimate severity is $612{,}000/612 = \$1{,}000$.
+
+## Types of claim count triangles
+
+Each count triangle answers a different question:
+
+1. **Reported counts** show how fast claims are reported, and they develop to the ultimate counts that give the pure [[IBNR]] counts.
+2. **Closed counts** show how fast claims settle.
+3. **Open counts**, reported less closed, are the claims still to be settled.
+4. **Counts closed with payment** and **closed without payment** split the closed claims, and a shift between them changes the average paid claim with no change in claim cost.
+
+Ratios of these triangles are the diagnostics. The ratio of closed to reported counts tests for a change in [[Settlement Rate|settlement rate]], and the [[Berquist-Sherman Method|Berquist-Sherman]] disposal rate is closed counts over ultimate counts. Case outstanding divided by open counts is the **average case outstanding**, one of the most important tests of [[Case Adequacy|case adequacy]].
+
+> [!example]- Accident year 2022 has $\$5{,}000{,}000$ of reported claims on 1,000 reported claims at 24 months, with 600 closed and $\$2{,}000{,}000$ of case outstanding. Accident year 2023 has $\$6{,}000{,}000$ on 1,500 reported claims, with 900 closed and $\$2{,}100{,}000$ of case outstanding. Reported claims rose 20%. What happened? {Example}
+> - The average reported claim fell from $5{,}000{,}000/1{,}000 = \$5{,}000$ to $6{,}000{,}000/1{,}500 = \$4{,}000$.
+> - The ratio of closed to reported counts stayed at $600/1{,}000 = 900/1{,}500 = 60\%$, so settlement speed did not change.
+> - The average case outstanding fell from $2{,}000{,}000/400 = \$5{,}000$ to $2{,}100{,}000/600 = \$3{,}500$.
+> - Counts rose 50% while severity fell 20%, so the book grew into smaller claims.
+> - The fall in average case outstanding fits smaller claims, but it is also what a weakening of case outstanding would look like, so the claims department is asked which it is.
+
+## Defining claim counts
+
+Counts must be defined the same way throughout the experience period. The actuary needs to know whether a claim is counted per claim or per claimant, whether claims closed without payment are in the closed and reported counts, and whether a reopened claim is a new claim. A change of definition partway through the triangle looks like a change in frequency or settlement rate.
+
+Reported counts can develop downward. When reported counts exclude claims closed without payment, a claim counted while open drops out if it later closes without payment. In Friedland's private passenger collision example, more claims close without payment at later valuations than are newly reported, so the reported count factors are below 1.00.
+
+## Pure IBNR and development on known claims
+
+Counts split the broad IBNR into its two parts. The unreported claim counts, ultimate less reported, valued at an expected severity, are the pure IBNR. The rest of the IBNR is IBNER, the development on claims already reported. Dollar triangles alone cannot separate them.

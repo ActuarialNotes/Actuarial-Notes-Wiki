@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:7ab96caff916014696504c66082568650d5e9ab1199868c5f9b07daf0593c071
+  content_hash: sha256:a9c14fc5063b945a384b419837af6b0ed045e42b5180af8ec4c8c5526fb33bbb
   sources:
     - "AF Group / Accident Fund, Premium Audit Process (web page, read 2026-10-10): estimate vs actual exposures and classifications, online/mail/phone/virtual/physical audits, audit noncompliance charge varies by state, sha256:bb3f82a60aebdb65467e3bf0144b0406cce6742e2713a6ea2c3df00b3f096259 — https://accidentfund.com/ph/premium-audit-process"
     - "Fla. Admin. Code R. 69O-189.003(4)(b) and (f) (via Cornell LII), voluntary-market minimum audit requirements, records examined, classification audits, sha256:a361d22c0e135409ed917b6df625d654dda03db24afd8fbd17602e93d6fff80f — https://www.law.cornell.edu/regulations/florida/Fla-Admin-Code-Ann-R-69O-189-003"
@@ -14,69 +14,54 @@ verification:
   log: .verify/Concepts/Premium Audit.md
 ---
 
-**Premium Audit** is the post-expiration verification of a policy's actual exposure, used on commercial lines whose [[Exposure Base|exposure base]] cannot be known in advance — workers compensation (payroll), general liability (sales or receipts), commercial auto (mileage or units).
+![[Media/Figures/Premium_Audit.svg|340]]
+
+A **Premium Audit** is the verification, after a policy expires, of the policy's actual exposure and classifications, so that its final premium can be determined. It is used on commercial lines whose [[Exposure Base|exposure base]] cannot be known in advance: workers compensation (payroll), general liability (sales or receipts) and commercial auto (mileage or units).
+
+The insured pays a **deposit premium** at inception based on estimated exposures. After the audit, the premium and its adjustment are
 
 > $$\text{Audited Premium} = \text{Rate} \times \text{Actual Exposure}$$
 
 > $$\text{Audit Adjustment} = \text{Audited Premium} - \text{Deposit Premium}$$
 
-- The insured pays a **deposit premium** at inception based on estimated exposures. After expiry, the auditor examines payroll records, tax filings and sales ledgers, and the difference is billed as **additional premium** or refunded as **return premium**.
-- **Why insurers audit:** The premium charged at inception is an estimate, and the exposures and classifications behind it change during the policy. The audit compares the actual exposures and classifications with the estimate to fix the final premium, which can go down as well as up, and it checks that each employee's duties are assigned to the right classification. Without it, an insured that under-estimates its exposure pays too little, and one that over-estimates pays too much.
-- **How audits are done:** An audit may be physical, at the insured's premises with an auditor, or virtual, by telephone, by mail or online. The records reviewed include payroll records, federal reports of employee income, state reemployment tax forms, cash disbursement journals and other accounting records, certificates of insurance for subcontractors, and independent contractor documents. Which method a policy gets is often set by rule. Florida's workers compensation rule, for example, requires a physical audit every year for a voluntary market policy with an estimated annual premium of \$10,000 or more, allows a mail or physical audit below that, and requires a physical audit for new business with construction classifications. An insured that does not cooperate with an audit can face an audit noncompliance charge, which varies by state.
-- Audits break the tidy relationship between transaction date and cohort. An audit on a policy written in $2023$ books premium in $2025$, so **[[Policy Year]] premium keeps changing** for two or three years and [[Calendar Year|calendar year]] premium contains audit adjustments belonging to prior years.
-- For ratemaking this means the experience period's premium is not final. Werner's remedy is an **audit-to-date development** on premium — the same logic as loss development, applied to the premium triangle — or restricting the experience period to years whose audits are essentially complete.
-- Audits are the reason auditable lines carry [[Exposure Trend|exposure trend]]: a growing insured generates more payroll and pays more premium at the same rate, with no filing required. That automatic response is a feature, and it is why workers compensation rates respond to wage inflation without action.
-- Audit results are also a **data quality** control. Systematic under-reporting of payroll, misclassification into cheaper class codes, and unaudited policies all show up as premium that never arrives, and each distorts both the rate indication and the classification relativities built on the reported exposures.
+- $\text{Rate}$ is the rate per unit of the exposure base, such as per $\$100$ of payroll.
+- $\text{Actual Exposure}$ is the exposure found at audit, counted in those units.
 
-![[Media/Figures/Premium_Audit.svg|340]]
+A positive adjustment is billed as **additional premium**, and a negative one is refunded as **return premium**.
 
-> [!example]- Workers Compensation Audit Adjustment {Example}
-> A workers compensation policy is written with estimated payroll of $\$2{,}000{,}000$ at a rate of $\$3.50$ per $\$100$ of payroll. At audit, actual payroll for the term was $\$2{,}400{,}000$.
->
-> Compute the deposit premium, audited premium and adjustment.
->
-> > [!answer]-
-> > $$\begin{align*}
-> > \text{Deposit} &= \frac{\$2{,}000{,}000}{100} \times \$3.50 \\
-> > &= \$70{,}000 \\[6pt]
-> > \text{Audited} &= \frac{\$2{,}400{,}000}{100} \times \$3.50 \\
-> > &= \$84{,}000 \\[6pt]
-> > \text{Additional premium} &= \$84{,}000 - \$70{,}000 \\
-> > &= \$14{,}000
-> > \end{align*}$$
-> >
-> > The exposures used in the ratemaking database must be updated to $\$2{,}400{,}000$ as well. Booking the extra premium while leaving the exposure at its estimate would overstate the average premium per exposure and corrupt the [[Premium Trend|premium trend]] analysis.
+> [!example]- A workers compensation policy is written on an estimated payroll of $\$2{,}000{,}000$ at $\$3.50$ per $\$100$ of payroll. At audit, the actual payroll for the term was $\$2{,}400{,}000$. What are the deposit premium, the audited premium and the adjustment? {Example}
+> - The deposit premium is $(2{,}000{,}000/100) \times 3.50 = \$70{,}000$.
+> - The audited premium is $(2{,}400{,}000/100) \times 3.50 = \$84{,}000$.
+> - The adjustment is $84{,}000 - 70{,}000 = \$14{,}000$, billed as additional premium.
 
-> [!example]- Developing Premium to Ultimate {Example}
-> A general liability book shows the following policy-year written premium at successive valuations ($000s):
->
-> | PY | 12 mo | 24 mo | 36 mo |
-> |---|---|---|---|
-> | $2021$ | $9{,}500$ | $10{,}070$ | $10{,}171$ |
-> | $2022$ | $10{,}200$ | $10{,}812$ | |
-> | $2023$ | $11{,}000$ | | |
->
-> Estimate ultimate PY 2023 premium.
->
-> > [!answer]-
-> > Age-to-age premium development factors:
-> >
-> > $$\begin{align*}
-> > \text{PY 2021: } 12\text{–}24 &= \frac{10{,}070}{9{,}500} = 1.060 \\[4pt]
-> > \text{PY 2022: } 12\text{–}24 &= \frac{10{,}812}{10{,}200} = 1.060 \\[4pt]
-> > \text{PY 2021: } 24\text{–}36 &= \frac{10{,}171}{10{,}070} = 1.010
-> > \end{align*}$$
-> >
-> > $$\text{CDF}_{12 \to \text{ult}} = 1.060 \times 1.010 = 1.071$$
-> >
-> > $$\text{Ultimate PY 2023} = \$11{,}000{,}000 \times 1.071 = \$11{,}781{,}000$$
-> >
-> > Using the unaudited $\$11{,}000{,}000$ as the denominator of a PY 2023 loss ratio would overstate it by about $7\%$ relative — while the losses in the numerator are developed to ultimate and the premium is not. Consistency of maturity between numerator and denominator is the point: develop both, or neither.
+## What an audit checks
 
-> [!tip]- How it appears on the exam
-> - **DISC-RM:** The risk control and premium auditing section asks why insurers audit premiums, how an audit is carried out (the method, the records examined, the classification check), and what audits contribute to underwriting, ratemaking and the insured's fair treatment.
-> - **Ratemaking (Exam 5):** Audits explain why policy-year premium develops, and why an unaudited year's premium needs development before it is used.
+The premium charged at inception is an estimate, and the exposures and classifications behind it change during the policy. The audit compares the actual exposures and classifications with the estimate to fix the final premium, which can go down as well as up, and it checks that each employee's duties are assigned to the right classification. Payroll for duties in another class is moved to that class and charged at its rate.
 
-> [!warning]- Exam traps
-> - **Audits can return premium:** An audit finds the actual exposure, so an insured whose payroll or sales fell gets a return premium. Treating the audit as a device only for collecting more is wrong.
-> - **Classification matters as much as exposure:** Payroll assigned to a cheaper class code understates the premium even when the total payroll is right. The audit checks both.
+An audit may be physical, at the insured's premises, or virtual, by telephone, mail or online. The records reviewed include payroll records, federal reports of employee income, state reemployment tax forms, cash disbursement journals and other accounting records, certificates of insurance for subcontractors, and independent contractor documents. Florida's workers compensation rule, for example, requires a physical audit every year for a voluntary market policy with an estimated annual premium of \$10,000 or more, allows a mail or physical audit below that, and requires a physical audit for new business with construction classifications. An insured that does not cooperate with an audit can face an audit noncompliance charge, which varies by state.
+
+> [!example]- An employer's deposit premium was set on an estimated payroll of $\$1{,}500{,}000$, all in a clerical class at $\$0.50$ per $\$100$. At audit the payroll is $\$1{,}600{,}000$, of which $\$400{,}000$ is for employees doing field installation, a class rated at $\$6.00$ per $\$100$. What is the adjustment? {Example}
+> - The deposit premium is $(1{,}500{,}000/100) \times 0.50 = \$7{,}500$.
+> - The clerical class keeps $\$1{,}200{,}000$ of payroll, for $(1{,}200{,}000/100) \times 0.50 = \$6{,}000$.
+> - The installation payroll is moved to its own class, for $(400{,}000/100) \times 6.00 = \$24{,}000$.
+> - The audited premium is $6{,}000 + 24{,}000 = \$30{,}000$.
+> - The adjustment is $30{,}000 - 7{,}500 = \$22{,}500$ of additional premium, most of it from the classification.
+
+## Premium development
+
+The audit books its adjustment when it occurs, after the policy has expired, so the adjustment is written and earned in full at the audit. [[Calendar Year|Calendar year]] premium is fixed at the end of the year, so it contains audit adjustments belonging to policies of prior years. [[Policy Year|Policy year]] premium assigns each adjustment back to the year the policy was written, so it keeps developing after the policy year ends. Workers compensation audits happen about three to six months after the policy expires.
+
+Policy year premium is brought to ultimate with premium development factors, read from the historical pattern of premium by age:
+
+> $$f_{24 \to 36} = \frac{\text{Policy Year Premium at 36 months}}{\text{Policy Year Premium at 24 months}}$$
+
+Because the final premium follows the audited payroll, an auditable line's premium rises with wage inflation at an unchanged rate. That is its [[Exposure Trend|exposure trend]].
+
+> [!example]- A workers compensation carrier writes one policy a month in 2011, each booked at $\$500{,}000$. Every policy develops upward by 8% at its audit, six months after it expires. What is the Policy Year 2011 premium development factor from 24 to 36 months? {Example}
+> - At December 31, 2012, the six policies written in the first half of 2011 have been audited, and the other six have not.
+> - The premium at 24 months is $6 \times 500{,}000 \times 1.08 + 6 \times 500{,}000 = \$6{,}240{,}000$.
+> - At December 31, 2013, all twelve have been audited, so the premium at 36 months is $12 \times 500{,}000 \times 1.08 = \$6{,}480{,}000$.
+> - The development factor is $6{,}480{,}000/6{,}240{,}000 = 1.0385$.
+
+> [!trap] Developing the losses but not the premium
+> A policy year loss ratio with ultimate losses over premium still awaiting audits is overstated. In the example, Policy Year 2011's premium at 24 months is $\$6{,}240{,}000$, so its loss ratio is $1.0385$ times what it is on the ultimate $\$6{,}480{,}000$. Develop the premium to ultimate too.

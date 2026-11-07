@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:ac470267a649d0361ebc1c15e8561a2cbddba2037333cff2791c35555fcfc865
+  content_hash: sha256:1e079ebe75a660c523af62cc55da986c4f30e7287e9f11e9b81b3afd723bd3cb
   sources:
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 1 pp.5-6 (PDF pp.17-18); Ch. 3 p.42 (PDF p.54); Ch. 6 pp.120-121 (PDF pp.132-133); Ch. 8 pp.141-148 (PDF pp.153-160); Ch. 13 p.257 (PDF p.269), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
     - "CAS Statement of Principles Regarding Property and Casualty Insurance Ratemaking (1988), Parts I-II, pp.1-2, sha256:f240ea62dd033aac827c2073e56c0a4061d5c84531e5cf6be02d333a8f9f2140 — https://www.casact.org/sites/default/files/2021-05/Statement-Of-Principles-Ratemaking.pdf"
@@ -14,59 +14,78 @@ verification:
   log: .verify/Concepts/Ratemaking.md
 ---
 
-**Ratemaking** is the process of determining the appropriate price (the **rate**) to charge for insurance coverage. It is a **prospective** process that uses historical data and actuarial projections to ensure the premium collected is sufficient to cover future losses, expenses, and a margin for profit, while remaining competitive and regulatory-compliant. Contrast with [[Loss Reserving|loss reserving]], which estimates the unpaid cost of claims that have already occurred.
+![[Media/Figures/Ratemaking.svg|340]]
 
-- The **fundamental insurance equation** states that, over the future policy period:
+**Ratemaking** is the process of setting the price of insurance, a rate per unit of [[Exposure Base|exposure]], before the costs it must pay are known. Its goal is that, over the period the rates will be in effect, the premium balances the fundamental insurance equation
 
 > $$\text{Premium} = \text{Losses} + \text{LAE} + \text{UW Expenses} + \text{UW Profit}$$
 
-- The [[Overall Rate Level Indication|overall indication]] restates that equation in one of two ways. The [[Pure Premium Method]] gives an indicated average **rate** per exposure, compared with the current average rate to get a change; the [[Loss Ratio Method]] gives the indicated **change** directly:
+- $\text{Losses}$ and $\text{LAE}$ are the expected losses and [[Loss and Loss Adjustment Expense|loss adjustment expense]] of the policies.
+- $\text{UW Expenses}$ are the other expenses of acquiring and servicing the policies, [[Fixed Expenses|fixed]] and [[Variable Expenses|variable]].
+- $\text{UW Profit}$ is the target [[Underwriting Profit|underwriting profit]].
 
-> $$\text{Indicated Average Rate} = \frac{\bar{L} + \bar{E}_F}{1 - V - Q_T}, \qquad \text{Indicated Change} = \frac{\text{Indicated Average Rate}}{\text{Current Average Rate}} - 1$$
->
-> $$\text{Indicated Change} = \frac{\text{LR} + F}{1 - V - Q_T} - 1$$
->
-> $$\bar{L} = \text{pure premium incl. LAE},\ \bar{E}_F = \text{fixed expense per exposure},\ \text{LR} = \text{proj. loss \& LAE ratio},\ F = \text{fixed expense ratio}$$
->
-> $$V = \text{variable expense \%},\ Q_T = \text{target UW profit \%}$$
+Ratemaking is prospective. It uses historical data and actuarial projections to estimate the costs expected while the rates are in effect. Historical costs are used only as information about those future costs, and premium is not set to recoup past losses. [[Loss Reserving|Loss reserving]] is retrospective: it estimates the unpaid cost of claims that have already occurred.
 
-- Two equivalent constructions produce this indication: the [[Pure Premium Method]] (works from exposures and losses, needs no premium) and the [[Loss Ratio Method]] (works from [[On Level Premium|on-level premium]] and a [[Permissible Loss Ratio]]). They agree when given consistent inputs.
-- Historical data must be adjusted on three axes before it can be used: [[Loss Development|developed]] to ultimate, [[Loss Trend|trended]] to the future period, and [[On-Leveling|brought to current rate level]]. Skipping any one biases the indication; applying both development and trend is not a double count (Werner & Modlin's *overlap fallacy*).
-- Ratemaking data is organized by [[Ratemaking Data Organization|calendar, accident, policy, or report period]], each meeting Werner & Modlin's three objectives — match losses and premium, use the most recent data, minimize the cost of collection — to a different degree.
-- The overall indication is then allocated to individual risks through [[Classification Ratemaking|classification]], [[Territory Ratemaking|territory]], [[Increased Limits|limit]], and [[Deductible Rating|deductible]] relativities, and finalized through the [[Rating Algorithm|rating algorithm]].
-- The [[Principles of Ratemaking|four CAS principles]] frame the whole exercise: a rate estimates expected future costs, provides for all costs of the risk transfer, provides for the costs of an *individual* risk transfer, and is actuarially sound — and therefore not excessive, inadequate, or unfairly discriminatory — when it does all three.
-- The calculated indication need not be the filed change: [[Ratemaking Constraints|regulatory, operational, and marketing constraints]] and [[Lifetime Value|customer lifetime value]] shape the selected [[Rate Change|rate change]].
+> [!idea] The idea
+> The equation has to balance for the book as a whole and for each individual risk, which is why an overall rate level is set first and then divided among risks by [[Classification Ratemaking|classification ratemaking]].
 
-![[Media/Figures/Ratemaking.svg|340]]
+> [!example]- A book's current rates are expected to produce $\$1{,}000{,}000$ of premium. Its expected losses and LAE are $\$680{,}000$ and its underwriting expenses are $\$250{,}000$. What underwriting profit do the rates produce, and do they meet a 5% target? {Example}
+> - The underwriting profit is what is left of the premium, $1{,}000{,}000 - 680{,}000 - 250{,}000 = \$70{,}000$.
+> - As a share of premium, it is $70{,}000/1{,}000{,}000 = 7\%$.
+> - The rates produce more than the 5% target, so on these estimates they are slightly excessive.
 
-> [!example]- Calculating a Pure Premium {Example}
-> 
-> An actuary expects a fleet of $1{,}000$ delivery vans to incur \$$250{,}000$ in total losses over the next year. If the administrative expenses are estimated at \$$50$ per van, what is the **Pure Premium**?
-> 
-> > [!answer]-
-> > 
-> > - **Projected Losses ($L$):** \$$250{,}000$
-> > - **Exposure Units ($N$):** $1{,}000$ vans
-> > 
-> > The **Pure Premium** ($PP$) represents the portion of the rate required to pay for losses and loss adjustment expenses:
-> > 
-> > $$PP = \frac{L}{N} = \frac{250{,}000}{1{,}000} = \$250$$
-> > 
-> > > [!tip] The "Gross" Difference
-> > > The Pure Premium is **not** the final price the customer pays. To get the **Gross Premium**, you must "load" the Pure Premium for taxes, commissions, and profit — see [[Expense Provisions]].
+## Adjusting historical experience
 
-> [!example]- Indicated Rate Change {Example}
-> Projected pure premium is $\$250$ per exposure, [[Fixed Expenses|fixed expenses]] are $\$40$ per exposure, [[Variable Expenses|variable expenses]] are $22\%$ of premium, and the target underwriting profit provision is $5\%$. The current average rate is $\$385$.
->
-> What is the indicated rate change?
->
-> > [!answer]-
-> > Build the indicated average rate:
-> >
-> > $$\text{Indicated Rate} = \frac{\$250 + \$40}{1 - 0.22 - 0.05} = \frac{\$290}{0.73} = \$397.26$$
-> >
-> > Compare to the current average rate:
-> >
-> > $$\text{Indicated Change} = \frac{\$397.26}{\$385.00} - 1 = +3.2\%$$
-> >
-> > Note that fixed expenses are **added** in the numerator while variable expenses **gross up** the denominator. Loading both as percentages — or adding both as dollars — is the most common error on this calculation.
+Historical experience is restated to the conditions expected while the rates are in effect. Werner & Modlin list rate changes, operational changes, inflationary pressures, changes in the [[Mix of Business|mix of business]] and law changes among the items that may require it. In practice, losses are [[Loss Development|developed]] to ultimate and [[Loss Trend|trended]] to the future period, and premium is [[On-Leveling|brought to current rate level]] and trended.
+
+> [!example]- An insurer's losses have been rising with inflation for five years. What happens if its actuary sets the new rates on the untrended historical losses? {Example}
+> - The future losses will be higher than the losses of the historical period, because inflation continues.
+> - Untrended losses understate the future losses.
+> - The premium needed to achieve the target profit is then understated, and the rates are inadequate.
+
+## The overall rate level indication
+
+The [[Overall Rate Level Indication|overall indication]] rearranges the fundamental insurance equation in one of two ways. In the [[Pure Premium Method|pure premium method]], the indicated average rate per exposure is
+
+> $$\text{Indicated Average Rate} = \frac{\text{Pure Premium} + F}{1 - V - Q_T}$$
+
+- $\text{Pure Premium}$ is the projected [[Pure Premium|pure premium]], losses and LAE per exposure.
+- $F$ is the projected fixed expense per exposure.
+- $V$ is the variable expense provision, as a share of premium.
+- $Q_T$ is the target [[Profit and Contingency Provision|profit provision]], as a share of premium.
+
+The indicated change is the indicated average rate divided by the current average rate, less 1.
+
+> [!example]- The projected pure premium is $\$250$ and fixed expenses are $\$40$ per exposure. Variable expenses are 22% of premium, the target profit provision is 5% and the current average rate is $\$385$. What is the indicated rate change? {Example}
+> - The pure premium and fixed expense together are $250 + 40 = \$290$.
+> - The share of premium left after variable expenses and profit is $1 - 0.22 - 0.05 = 0.73$.
+> - The indicated average rate is $290/0.73 = \$397.26$.
+> - The indicated change is $397.26/385 - 1 = +3.2\%$.
+
+In the [[Loss Ratio Method|loss ratio method]], the indicated change is
+
+> $$\text{Indicated Change} = \frac{\text{Loss Ratio} + F\%}{1 - V - Q_T} - 1$$
+
+- $\text{Loss Ratio}$ is the projected [[Loss Ratio|loss and LAE ratio]], with the premium at [[On Level Premium|current rate level]].
+- $F\%$ is the projected fixed expense ratio, fixed expenses as a share of premium.
+
+The two methods give the same indication on consistent inputs. The loss ratio method needs current premium, so it is used only for an existing company.
+
+> [!example]- The projected loss and LAE ratio is 65% and the fixed expense ratio is 6.5%. Variable expenses are 25% of premium and the target profit provision is 10%. What is the indicated rate change? {Example}
+> - The loss and LAE ratio and the fixed expense ratio together are $0.65 + 0.065 = 0.715$.
+> - The share of premium left after variable expenses and profit is $1 - 0.25 - 0.10 = 0.65$.
+> - The indicated change is $0.715/0.65 - 1 = +10\%$.
+
+## The principles of ratemaking
+
+The CAS [[Principles of Ratemaking|Statement of Principles]] defines an actuarially sound rate in four principles:
+
+1. A rate is an estimate of the expected value of future costs.
+2. A rate provides for all costs associated with the transfer of risk.
+3. A rate provides for the costs associated with an individual risk transfer.
+4. A rate is reasonable and not excessive, inadequate, or unfairly discriminatory if it is an actuarially sound estimate of the expected value of all future costs associated with an individual risk transfer.
+
+The indicated rate need not be the rate filed. [[Ratemaking Constraints|Regulatory, operational and marketing constraints]] and [[Lifetime Value|customer lifetime value]] shape the selected [[Rate Change|rate change]].
+
+> [!trap] Multiplying by the expense and profit loads
+> Variable expenses and profit are shares of the premium, not of the costs, so the costs are divided by $1 - V - Q_T$. Multiplying the $\$290$ of costs by $1 + 0.22 + 0.05$ gives $\$368.30$, which leaves too little for expenses and profit. The indicated average rate is $290/0.73 = \$397.26$.

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:bd1e1505b06bb4d1a345ce30a161cf720bc3d498b76c1cd32d11faabdcc50971
+  content_hash: sha256:588c48f5eaae981df768df291d90c9e207207235643acb546cfcf870f8db121f
   sources:
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, Version 3, July 30 2010), Ch.1 p.15 (PDF 21); Part 3 intro pp.79-80 (PDF 85-86); Ch.7-10 mechanics; Ch.15 p.345 (PDF 351), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 0
@@ -12,63 +12,49 @@ verification:
   log: .verify/Concepts/Ultimate Loss.md
 ---
 
-**Ultimate Loss** is the total cost a cohort of claims will have when every one of them is settled and closed — the quantity every reserving method exists to estimate.
-
-> $$U = \text{Paid} + \text{Case Reserves} + \text{IBNR}$$
-
-> $$U = \text{Reported} + \text{IBNR}$$
-
-- Ultimate is an **estimate until the last claim closes**, which in a long-tail line can be decades. Only at that point does it become a fact, and by then it is of historical interest only.
-- The methods differ in how they estimate the unknown part, not in what they estimate: [[Chain Ladder Method|chain ladder]] scales the diagonal, [[Bornhuetter-Ferguson Method|BF]] adds an a priori-based estimate of what has not emerged, [[Cape Cod Method|Cape Cod]] derives that a priori from the data, [[Frequency-Severity Method|frequency-severity]] multiplies projected counts by projected severity.
-- **Selecting** an ultimate is a separate step from computing the methods. Standard practice is to run several methods on both paid and reported data, lay the results side by side by accident year, and select — leaning on a priori methods at immature ages and development methods at mature ones, with reasons recorded.
-- The ultimate loss ratio ($U / \text{EP}$) is the number that links reserving to pricing: it is the retrospective test of whether the year was priced adequately, and it is the input to the a priori for future years ([[Rate Level Change]]).
-- Ultimate must be stated on a defined basis — gross or [[Net of Reinsurance|net]], with or without [[Allocated Loss Adjustment Expense|ALAE]], before or after [[Salvage and Subrogation|salvage and subrogation]] — and the basis must be the same on both sides of every comparison.
-
 ![[Media/Figures/Ultimate_Loss.svg|340]]
 
-> [!example]- Selecting an Ultimate from Several Methods {Example}
-> AY 2023 at $12$ months: paid $\$300{,}000$, case reserves $\$200{,}000$, reported $\$500{,}000$; earned premium $\$1{,}200{,}000$; a priori ELR $83.3\%$; reported $\text{CDF}_{12} = 2.400$; paid $\text{CDF}_{12} = 4.100$.
->
-> Compute the candidate ultimates and select.
->
-> > [!answer]-
-> > $$\begin{align*}
-> > \text{Reported CL} &= \$500{,}000 \times 2.400 = \$1{,}200{,}000 \\[4pt]
-> > \text{Paid CL} &= \$300{,}000 \times 4.100 = \$1{,}230{,}000 \\[4pt]
-> > \text{Expected claims} &= 0.833 \times \$1{,}200{,}000 = \$1{,}000{,}000 \\[6pt]
-> > \text{BF (reported)} &= \$500{,}000 + \left(1 - \tfrac{1}{2.400}\right)\$1{,}000{,}000 \\
-> > &= \$500{,}000 + \$583{,}000 \\
-> > &= \$1{,}083{,}000
-> > \end{align*}$$
-> >
-> > The four estimates span $\$1{,}000{,}000$ to $\$1{,}230{,}000$. At **$12$ months** the development methods rest on a $2.4$ (or $4.1$) multiple of a thin diagonal, so they carry the least weight; the expected claims estimate rests entirely on an ELR that may be stale.
-> >
-> > A selection around $\$1{,}140{,}000$ — between BF and the chain ladders, closer to BF — is defensible, implying
-> >
-> > $$\text{IBNR} = \$1{,}140{,}000 - \$500{,}000 = \$640{,}000$$
-> >
-> > What matters more than the exact pick is that the paid and reported chain ladders **agree** ($\$1{,}200$K vs $\$1{,}230$K). That agreement says the diagonal is not distorted by case adequacy or settlement speed, which is what makes leaning toward the development methods reasonable at all.
+An **Ultimate Loss**, or ultimate claims, is the total value of a group of claims, such as an accident year's, once every claim has been settled and closed with no chance of reopening. It is the quantity every reserving method estimates, and it stays an estimate until the last claim closes. An accident year's ultimate claims are
 
-> [!example]- Ultimates Moving Between Valuations {Example}
-> Selected ultimates for one accident year at successive year-ends:
->
-> | Valuation | Selected ultimate |
-> |---|---|
-> | $12$ mo | $\$9{,}200{,}000$ |
-> | $24$ mo | $\$9{,}400{,}000$ |
-> | $36$ mo | $\$10{,}100{,}000$ |
-> | $48$ mo | $\$11{,}300{,}000$ |
->
-> What does this pattern indicate?
->
-> > [!answer]-
-> > The estimate has risen at every valuation, and the increases are **accelerating** ($+2.2\%$, $+7.4\%$, $+11.9\%$). A well-estimated ultimate should move randomly around its final value, not drift consistently in one direction.
-> >
-> > Consistent upward drift means the estimation process is **systematically low**, and the usual causes are:
-> >
-> > - development factors selected too low, often by excluding "unusual" high factors each year;
-> > - a [[Tail Factor|tail factor]] that is too small — which bites at exactly these later maturities;
-> > - an a priori ELR that was too optimistic, holding BF estimates down while the data pulled upward;
-> > - a genuine calendar-year deterioration ([[Inflation|social inflation]], a legal change) affecting all open years.
-> >
-> > The distinction matters: the first three are process failures to be corrected in the method, the fourth is a real-world change to be quantified and reflected in *both* reserves and pricing. Tracking this pattern across accident years is what [[Actual vs Expected Analysis|actual-versus-expected]] monitoring is for, and finding it four years late — as here — is exactly what that monitoring exists to prevent.
+> $$\text{Ultimate Claims} = \text{Paid Claims} + \text{Case Outstanding} + \text{IBNR}$$
+
+- $\text{Paid Claims}$ are the claims paid to date.
+- $\text{Case Outstanding}$ is the [[Case Reserves|case reserves]] on reported claims, so the paid claims plus the case outstanding are the reported claims.
+- $\text{IBNR}$ is the [[IBNR|broad IBNR]], the estimate of everything not yet in the reported claims.
+
+The methods differ in how they estimate the IBNR, not in what they estimate: the [[Chain Ladder Method|development technique]] scales the claims to date, the [[Bornhuetter-Ferguson Method|Bornhuetter-Ferguson]] and [[Cape Cod Method|Cape Cod]] methods add expected unreported claims, and the [[Frequency-Severity Method|frequency-severity]] techniques multiply counts by severity. An ultimate is stated on a defined basis, gross or [[Net of Reinsurance|net of reinsurance]], with or without [[Allocated Loss Adjustment Expense|ALAE]], before or after [[Salvage and Subrogation|salvage and subrogation]], and the same basis is used on both sides of any comparison. The ultimate claim ratio, ultimate claims over earned premium, is the retrospective test of whether the year was priced adequately.
+
+> [!example]- An accident year has paid claims of $\$500{,}000$, case outstanding of $\$300{,}000$ and IBNR of $\$400{,}000$. What are its reported and ultimate claims? {Example}
+> - The reported claims are $500{,}000 + 300{,}000 = \$800{,}000$.
+> - The ultimate claims are $800{,}000 + 400{,}000 = \$1{,}200{,}000$.
+
+## Selecting ultimate claims
+
+Selecting the ultimate is a separate step from running the methods. Several methods are run on both paid and reported data and laid side by side by accident year. The actuary leans on the methods that use an a priori expectation at immature ages and on the development methods at mature ones, and records the reasons. The selection is assessed against the range and average of the estimates: one outside the range needs an explanation, from which methods the data distort and which are stable. An independent benchmark, such as another technique's claim ratios by year, tests the reasonableness of the result.
+
+> [!example]- AY 2024 at 12 months has paid claims of $\$300{,}000$ and reported claims of $\$500{,}000$. Earned premium is $\$1{,}200{,}000$ and the expected claims are $\$1{,}000{,}000$. The reported CDF is 2.400 and the paid CDF is 4.100. What are the candidate ultimates, and what do they say? {Example}
+> - The reported development ultimate is $500{,}000 \times 2.400 = \$1{,}200{,}000$.
+> - The paid development ultimate is $300{,}000 \times 4.100 = \$1{,}230{,}000$.
+> - The expected claims ultimate is $\$1{,}000{,}000$.
+> - The reported Bornhuetter-Ferguson ultimate is $500{,}000 + (1 - 1/2.400) \times 1{,}000{,}000 = \$1{,}083{,}333$.
+> - The paid and reported development ultimates agree, so case adequacy and settlement speed are unlikely to be distorting the diagonal. At 12 months their CDFs are highly leveraged, so a selection between the Bornhuetter-Ferguson and development ultimates is defensible.
+
+## Monitoring ultimates between valuations
+
+Between full analyses, actual claim emergence is compared with expected emergence. The actual emergence is the change in reported claims over the period. The expected reported claims in the period are
+
+> $$\text{Expected Emergence} = \frac{\text{Ultimate Claims} - \text{Reported Claims}}{1 - \text{Percent Reported}} \times (\text{New Percent Reported} - \text{Percent Reported})$$
+
+- $\text{Ultimate Claims}$ are the ultimates selected at the prior valuation, and $\text{Reported Claims}$ the reported claims then.
+- $\text{Percent Reported}$ is $1/\text{CDF}$ at the prior age, and $\text{New Percent Reported}$ is $1/\text{CDF}$ at the age one period later.
+
+Actual emergence above expected suggests the factors and ultimates were understated, and below expected that they were overstated. The response depends on the cause. A real change in the losses, such as a deteriorating claim ratio, a catastrophe or an unexpected large claim, calls for a higher ultimate. A faster reporting or a strengthening of case reserves calls instead for revised factors or a [[Berquist-Sherman Method|Berquist-Sherman]] adjustment, and reported emergence with paid in line points to the case reserves. When emergence is consistent with expected, especially on reported claims, the selection need not change. Revised ultimates come from the revised CDFs applied to the latest reported claims and are never below them. An ultimate that rises at every valuation is systematically low: the factors or tail are too small, the a priori too optimistic, or a calendar-year change is hitting every open year, and management is asked about operational changes that could explain it.
+
+> [!example]- At the last year-end AY 2023's selected ultimate was $\$2{,}798$ thousand, with $\$2{,}463$ thousand reported and 88.0% reported. A year later it should be 99.9% reported. What are the expected reported claims in the year? {Example}
+> - The expected unreported claims at the last year-end are $2{,}798 - 2{,}463 = 335$.
+> - Dividing by the 12.0% then unreported gives $335/0.120 = 2{,}792$, the amount the reporting pattern spreads over the remaining ages.
+> - The year should report $2{,}792 \times (0.999 - 0.880) = \$332$ thousand.
+> - If the year actually reported $\$450$ thousand, emergence ran ahead of expected, and the cause decides whether the ultimate or the factors are revised.
+
+> [!trap] Reading a case strengthening as worse losses
+> Reported claims emerging above expected while paid claims are in line does not by itself mean the ultimate is higher. If case reserves were strengthened, the extra reported claims are the same claims reserved more fully. Raising the ultimate by the excess and also developing the stronger diagonal with the old factors counts the strengthening twice.

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-09-12
   last_checked_by: agent:validate-v1
-  content_hash: sha256:823b159ad34e0ffe6bc52417b151eeceb3d5dcb0477a19539c9442ec3665bda1
+  content_hash: sha256:91a109101fc499b6a9a7307a3f14883471bdeb16954ec78f717675c74adc22ed
   sources:
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 1 p.2 (PDF p.14) and Ch. 4 pp.51-56 (PDF pp.63-68), incl. Table 4.1 and footnote 8, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
   open_findings: 0
@@ -12,56 +12,48 @@ verification:
   log: .verify/Concepts/Earned Exposure.md
 ---
 
-**Earned Exposure** is the portion of written exposure for which coverage has actually been provided during the period — the exposure analogue of [[Earned Premium|earned premium]], and the correct denominator for a pure premium.
-
-> $$\text{Earned Exposure} = \text{Written Exposure} - \Delta\text{Unearned Exposure}$$
-
-> $$\text{Pure Premium} = \frac{\text{Losses}}{\text{Earned Exposures}}$$
-
-- A $12$-month policy contributes **one** earned car-year in total, spread pro rata over its term: written the day it is issued, earned $1/12$ per month, in force from effective date to expiry.
-- Losses in the numerator and exposures in the denominator must cover the **same period**. Accident-year losses over written exposures inflates the denominator in a growing book and understates the pure premium — the same mismatch that makes written premium wrong for a loss ratio.
-- With policies written **uniformly** through the year, a calendar year earns roughly half of that year's written exposure plus half of the prior year's. In a steady-state book the two halves are equal and earned $\approx$ written; in a growing book earned lags written.
-- Exposures must be earned on a basis consistent with the premium: if premium is earned pro rata, so are exposures. Lines with strongly seasonal risk (crop, some property covers) may earn premium on a non-uniform schedule, and exposures follow the same schedule.
-- Earned exposures are also the weights in classification analysis and the denominator of [[Frequency|claim frequency]], so an error here propagates through the entire indication.
-
 ![[Media/Figures/Earned_Exposure.svg|340]]
 
-> [!example]- Calendar Year Earned Car-Years {Example}
-> An insurer writes $1{,}200$ annual auto policies during $2024$ — $100$ on the first of each month — and wrote no business before $2024$.
->
-> How many car-years are earned in calendar year $2024$?
->
-> > [!answer]-
-> > The January cohort earns $12/12$ of a year, the February cohort $11/12$, and so on down to the December cohort's $1/12$:
-> >
-> > $$\begin{align*}
-> > \text{Earned} &= 100 \times \frac{12 + 11 + \cdots + 1}{12} \\
-> > &= 100 \times \frac{78}{12} \\
-> > &= 650 \text{ car-years}
-> > \end{align*}$$
-> >
-> > Written exposure for $2024$ is $1{,}200$ car-years, so the year earns $54.2\%$ of what it wrote. The remaining $550$ car-years are unearned at $12/31/2024$ and earn during $2025$.
-> >
-> > Using $1{,}200$ as the denominator of the $2024$ pure premium would understate loss cost by nearly half.
+An **Earned Exposure** is the portion of a policy's written [[Exposure Base|exposure]] for which coverage has already been provided. A policy's written exposure is its number of insured units times its term in years, so one car insured for twelve months is one car-year and for six months is one-half of a car-year. When exposure is earned evenly over the term, a policy's earned exposure in a period is
 
-> [!example]- Earned Exposure in a Growing Book {Example}
-> An insurer writes annual policies uniformly and grows steadily:
->
-> | Year | Written car-years |
-> |---|---|
-> | $2023$ | $10{,}000$ |
-> | $2024$ | $12{,}000$ |
->
-> Accident year 2024 losses are $\$4{,}500{,}000$. Compute the AY 2024 pure premium.
->
-> > [!answer]-
-> > With uniform writings and annual terms, a calendar year earns half of its own writings and half of the prior year's:
-> >
-> > $$\begin{align*}
-> > \text{Earned}_{2024} &= 0.5 \times 12{,}000 + 0.5 \times 10{,}000 \\
-> > &= 11{,}000 \text{ car-years} \\[6pt]
-> > \text{Pure premium} &= \frac{\$4{,}500{,}000}{11{,}000} \\
-> > &= \$409.09
-> > \end{align*}$$
-> >
-> > Had written exposure ($12{,}000$) been used, the pure premium would come out at $\$375.00$ — an $8\%$ understatement, entirely an artefact of growth. The faster the book grows, the larger the error, which is why the earned basis is not optional.
+> $$\text{Earned Exposure} = \text{Written Exposure} \times \frac{\text{Time in Force in the Period}}{\text{Policy Term}}$$
+
+- $\text{Written Exposure}$ is the policy's exposure for its whole term, counted when it is written.
+- $\text{Time in Force in the Period}$ is the part of the policy's term that falls in the period.
+- $\text{Policy Term}$ is the length of the policy's whole term, in the same unit.
+
+The earned and unearned exposures of a policy add up to its written exposure, and over its life its earned exposures in successive periods add up to its written exposure. Earned exposures are the denominator of the [[Pure Premium|pure premium]] and of [[Frequency|frequency]], so they cover the same period as the losses.
+
+> [!example]- An insurer writes 100 annual auto policies on the first of each month of 2024 and wrote nothing before. How many car-years does it earn in calendar year 2024? {Example}
+> - The January policies are in force for 12 of their 12 months in 2024, the February policies for 11, and so on down to 1 for the December policies.
+> - The earned exposure is $100 \times (12 + 11 + \cdots + 1)/12 = 100 \times 78/12 = 650$ car-years.
+> - The written exposure is 1,200 car-years, so 550 car-years are still unearned at 12/31/2024.
+
+## Calendar year and policy year earned exposures
+
+Written exposure belongs to the period in which the policy is written. A mid-term change, such as a cancellation or an added car, adds or subtracts exposure in proportion to the remaining term, in the calendar year of the change. Earned exposure is aggregated in two ways:
+
+- **Calendar year** earned exposure is the exposure earned during the year, on every policy in force, whenever it was written.
+- **Policy year** earned exposure is the exposure earned to the evaluation date on the policies written in the year, including what is earned after the year ends.
+
+> [!example]- An insurer writes annual policies evenly through each year: 10,000 car-years in 2023 and 12,000 in 2024. Its accident year 2024 losses are $\$4{,}500{,}000$. What is its 2024 pure premium? {Example}
+> - With annual policies written evenly, a calendar year earns half its own writings and half the prior year's.
+> - The calendar year 2024 earned exposure is $0.5 \times 12{,}000 + 0.5 \times 10{,}000 = 11{,}000$ car-years.
+> - The pure premium is $4{,}500{,}000/11{,}000 = \$409.09$ per car-year.
+
+## Uniform writings and the average written date
+
+When policies are written evenly through a period, they can be treated as all written on the period's average written date, its midpoint. Each is then earned evenly over the term that follows that date, and the share earned in a calendar year is the part of that term inside the year. This is the assumption of the [[Parallelogram Method|parallelogram method]], so it does not apply when writings are uneven or the actual policy dates are known.
+
+> [!example]- An insurer writes six-month policies evenly through each year: 2,000 car-years in 2023 and 2,400 in 2024. What is its calendar year 2024 earned exposure? {Example}
+> - Policies written in the first half of a year expire within it, and those written in the second half run into the next year.
+> - Averaged over the year, 75% of a year's six-month writings are earned in the year and 25% in the next.
+> - The calendar year 2024 earned exposure is $0.75 \times 2{,}400 + 0.25 \times 2{,}000 = 2{,}300$ car-years.
+
+> [!example]- An insurer writes 1,000 car-years of annual policies evenly through the fourth quarter of 2024. How much exposure is earned in 2024 and in 2025? {Example}
+> - The average written date is the middle of the quarter, 11/15/2024.
+> - The average policy is in force for one and a half months of 2024, $1.5/12 = 1/8$ of its term.
+> - It earns $1{,}000/8 = 125$ car-years in 2024 and the other 875 in 2025.
+
+> [!trap] Written exposures as the denominator
+> In a growing book, written exposures exceed earned exposures. Dividing the 2024 losses above by the 12,000 written car-years gives $\$375.00$, an 8% understatement of the $\$409.09$ pure premium. Divide losses by the exposures earned in the same period.

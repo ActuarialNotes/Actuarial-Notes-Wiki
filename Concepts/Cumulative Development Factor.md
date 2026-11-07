@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:f6d187d9f55756821accff5b70ac9ae356f4b35d02ed0f3f0ccb12758d15fb5e
+  content_hash: sha256:c2b4c052e3450b819fb4a6a93c7b1f8374a61fcb7756dda1d764ca8f681ae67d
   sources:
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch.7, PDF pp.96-99, 101, 103 (printed 90-93, 95, 97): CDF calculation, percentage reported = 1/CDF, leverage (CDF 4.00 example), paid vs reported CDFs, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 0
@@ -12,61 +12,62 @@ verification:
   log: .verify/Concepts/Cumulative Development Factor.md
 ---
 
-**Cumulative Development Factor** (CDF, or age-to-ultimate factor) is the product of all selected [[Age to Age Factor|age-to-age factors]] from a given maturity through to ultimate, including the [[Tail Factor|tail]].
+![[Media/Figures/Cumulative_Development_Factor.svg|340]]
+
+A **Cumulative Development Factor** (CDF) is the product of the selected [[Age to Age Factor|age-to-age factors]] from a cohort's current age onward and the [[Tail Factor|tail factor]]. It is also called an age-to-ultimate factor, and it projects the cohort's claims from their current age to ultimate. The CDF at age $n$ is
 
 > $$\text{CDF}_{n \to \text{ult}} = \left(\prod_{k \ge n} f_{k \to k+1}\right) \times \text{Tail}$$
 
-> $$\text{Ultimate} = C_n \times \text{CDF}_{n \to \text{ult}}$$
+- $f_{k \to k+1}$ is the selected age-to-age factor from age $k$ to the next age, for every age $k$ from $n$ to the last age of the [[Development Triangle|triangle]].
+- $\text{Tail}$ is the tail factor from the last age to ultimate, $1.000$ when no development is expected beyond it.
 
-- The reciprocal is the **percentage reported** (or paid): $p_n = 1/\text{CDF}_n$, and $1 - p_n$ is the percentage unreported. These are the quantities the [[Bornhuetter-Ferguson Method|BF]], [[Cape Cod Method|Cape Cod]] and [[Benktander Method|Benktander]] methods actually use — the CDF and the emergence pattern are the same information in two forms.
-- CDFs are built **backwards from the tail**: start with the tail factor, multiply in each successive age-to-age factor moving toward younger ages. They generally decrease with maturity.
-- The CDF measures **leverage**. At a CDF of $4$, a dollar of distortion on the diagonal becomes four dollars of ultimate — which is why the chain ladder is unreliable at immature ages in [[Long Tail Lines|long-tail lines]] and why methods that develop only the *unreported* portion are preferred there.
-- A CDF is specific to the triangle it came from: paid CDFs differ from reported CDFs, count CDFs from dollar CDFs, and a CDF built on data capped at a retention differs from a gross one. Borrowing across bases is a common and consequential error.
-- Sensitivity to the tail rises sharply with the length of the tail: for a short-tail line the tail is a rounding difference, for a long-tail line it can be the largest single assumption in the analysis.
+CDFs are calculated by successive multiplication, beginning with the tail factor and the oldest age-to-age factor and moving to younger ages. Each age-to-age factor is therefore the ratio of successive CDFs, $f_{n \to n+1} = \text{CDF}_{n \to \text{ult}}/\text{CDF}_{n+1 \to \text{ult}}$. In the development technique, an accident year's ultimate claims are its latest claims times the CDF for its age:
 
-![[Media/Figures/Cumulative_Development_Factor.svg|340]]
+> $$\text{Ultimate Claims} = C_{\text{AY},\,n} \times \text{CDF}_{n \to \text{ult}}$$
 
-> [!example]- Building CDFs and Reading the Emergence Pattern {Example}
-> Selected factors: $f_{12\text{–}24} = 1.500$, $f_{24\text{–}36} = 1.200$, $f_{36\text{–}48} = 1.050$, tail $= 1.020$.
->
-> Build the CDF table and the implied emergence pattern.
->
-> > [!answer]-
-> > Working backwards from the tail:
-> >
-> > $$\begin{align*}
-> > \text{CDF}_{48} &= 1.020 \\
-> > \text{CDF}_{36} &= 1.050 \times 1.020 = 1.071 \\
-> > \text{CDF}_{24} &= 1.200 \times 1.071 = 1.285 \\
-> > \text{CDF}_{12} &= 1.500 \times 1.285 = 1.928
-> > \end{align*}$$
-> >
-> > | Age | CDF | $\%$ reported | $\%$ unreported |
-> > |---|---|---|---|
-> > | $12$ | $1.928$ | $51.9\%$ | $48.1\%$ |
-> > | $24$ | $1.285$ | $77.8\%$ | $22.2\%$ |
-> > | $36$ | $1.071$ | $93.4\%$ | $6.6\%$ |
-> > | $48$ | $1.020$ | $98.0\%$ | $2.0\%$ |
-> >
-> > An accident year with $\$600{,}000$ reported at $12$ months has an ultimate of
-> >
-> > $$\$600{,}000 \times 1.928 = \$1{,}156{,}800$$
-> >
-> > of which $48.1\%$ — $\$556{,}800$ — is IBNR. Nearly half the estimate is an assumption at that maturity.
+- $C_{\text{AY},n}$ is the accident year's reported or paid claims at its age $n$ on the latest diagonal.
+- The CDF is the one built from the same kind of claims.
 
-> [!example]- Paid and Reported CDFs Must Reconcile {Example}
-> For the same accident year at $24$ months: paid $\$1{,}800{,}000$ with a paid CDF of $2.40$; reported $\$3{,}150{,}000$ with a reported CDF of $1.30$.
+The CDF is largest for the most recent, immature accident years and smallest for the oldest. An accident year at the last age with no further development has a CDF of 1.000, so its ultimate claims are its current claims.
+
+> [!example]- The selected age-to-age factors are 1.500 from 12 to 24 months, 1.200 from 24 to 36 months and 1.050 from 36 to 48 months, and the tail factor from 48 months is 1.020. An accident year has $\$600{,}000$ of reported claims at 12 months. What are the CDFs and its ultimate claims? {Example}
+> - The CDF at 48 months is the tail factor, $1.020$.
+> - The CDF at 36 months is $1.050 \times 1.020 = 1.071$.
+> - The CDF at 24 months is $1.200 \times 1.071 = 1.285$.
+> - The CDF at 12 months is $1.500 \times 1.285 = 1.928$.
+> - The accident year's ultimate claims are $600{,}000 \times 1.928 = \$1{,}156{,}800$, and its IBNR is $\$556{,}800$.
+
+## Percentage reported
+
+The percentage of ultimate claims reported by age $n$ is the reciprocal of the reported CDF:
+
+> $$\text{Reported \%} = \frac{1}{\text{CDF}_{n \to \text{ult}}}$$
+
+The percentage unreported is $1 - 1/\text{CDF}_{n \to \text{ult}}$, and the same reciprocal of a paid CDF is the percentage paid. The reporting and payment patterns these give are what the [[Bornhuetter-Ferguson Method|Bornhuetter-Ferguson]], [[Cape Cod Method|Cape Cod]] and [[Benktander Method|Benktander]] techniques use. The CDF and the reporting pattern are the same information in two forms. The reporting pattern also gives the reported claims to date as the ultimate claims divided by the CDF.
+
+> [!example]- With the CDFs above, what share of ultimate claims is reported at each age? {Example}
 >
-> Compare the estimates and diagnose.
+> | Age | CDF | Reported | Unreported |
+> | --- | --- | --- | --- |
+> | 12 | 1.928 | 51.9% | 48.1% |
+> | 24 | 1.285 | 77.8% | 22.2% |
+> | 36 | 1.071 | 93.4% | 6.6% |
+> | 48 | 1.020 | 98.0% | 2.0% |
 >
-> > [!answer]-
-> > $$\begin{align*}
-> > \text{Ultimate}_{\text{paid}} &= \$1{,}800{,}000 \times 2.40 = \$4{,}320{,}000 \\
-> > \text{Ultimate}_{\text{reported}} &= \$3{,}150{,}000 \times 1.30 = \$4{,}095{,}000
-> > \end{align*}$$
-> >
-> > A $5.5\%$ gap, with paid running higher. Both estimates rest on the *same* underlying claims, so the difference is information about the diagonal, not about the ultimate.
-> >
-> > Implied case reserves are $\$3{,}150{,}000 - \$1{,}800{,}000 = \$1{,}350{,}000$. The paid method says total future payments will be $\$2{,}520{,}000$; the reported method says $\$2{,}295{,}000$. The reported method is therefore implicitly claiming that case reserves plus a modest IBNR will cover the run-off, while the paid method — which knows nothing about case reserves — projects more.
-> >
-> > The reconciliation to perform: check whether **case adequacy has weakened** (which would make the reported figure too low and the paid method right), or whether **settlement has accelerated** (which would inflate the paid diagonal and make the paid method too high). The [[Claim Count Triangle|closure rate]] and average case outstanding decide between them; the gap itself does not.
+> - Each reported share is $1/\text{CDF}$, such as $1/1.928 = 51.9\%$ at 12 months.
+> - Each unreported share is one minus the reported share.
+
+## Leverage of a CDF
+
+A CDF multiplies every dollar on the latest diagonal. At a CDF of 4.00, a dollar of distortion on the diagonal, such as a single large claim or a change in case adequacy, becomes four dollars of ultimate claims. Long-tail lines can have paid CDFs above 10.00 for the latest years, so their development projections are very sensitive. Techniques that develop only the unreported portion are preferred there ([[Long Tail Lines#Leverage of development factors|leverage]]).
+
+## Paid and reported CDFs
+
+A CDF is specific to the triangle it came from. Paid CDFs differ from reported CDFs, count CDFs from dollar CDFs, and a CDF on claims limited at a retention from one on unlimited claims. Paid CDFs are usually greater than reported CDFs at the same age, because payments lag reporting.
+
+> [!example]- An accident year at 24 months has $\$1{,}800{,}000$ paid with a paid CDF of 2.40, and $\$3{,}150{,}000$ reported with a reported CDF of 1.30. How do the projections compare? {Example}
+> - The paid projection is $1{,}800{,}000 \times 2.40 = \$4{,}320{,}000$.
+> - The reported projection is $3{,}150{,}000 \times 1.30 = \$4{,}095{,}000$.
+> - Both rest on the same claims, so the 5.5% gap is information about the latest diagonal, not about the ultimate.
+> - A weakening of case adequacy would make the reported projection too low, and a faster settlement would make the paid projection too high.
+> - The closed-to-reported count and average case outstanding triangles decide between them.

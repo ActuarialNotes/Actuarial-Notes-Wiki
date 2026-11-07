@@ -3322,7 +3322,15 @@
        "page": "Basic Insurance Ratios",
        "quote": "A state *complaint index* divides the insurer's share of the state's complaints in a line by its share of the line's premium: 1.00 means complaints in proportion to its business, 2.00 twice as many as its share."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Basic Insurance Ratios",
+      "quote": "A state *complaint index* divides the insurer's share of the state's complaints in a line by its share of the line's premium.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -3335,7 +3343,15 @@
        "page": "Basic Insurance Ratios",
        "quote": "\\text{Complaint index} &= \\frac{30 / 1{,}200}{0.02} \\"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Basic Insurance Ratios",
+      "quote": "The insurer's share of complaints is $30/1{,}200 = 2.5\\%$, so its complaint index is $0.025/0.02 = 1.25$.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -3361,7 +3377,15 @@
        "page": "Basic Insurance Ratios",
        "quote": "**A complaint index is relative:** It compares the insurer's share of complaints with its share of business. A large insurer with many complaints can still have an index below 1.00."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Basic Insurance Ratios",
+      "quote": "The index adjusts for the insurer's size, so a large insurer with many complaints can still have an index below 1.00.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -4402,7 +4426,15 @@
        "page": "Permissible Loss Ratio",
        "quote": "The PLR is the complement of the target combined ratio: a $70\\%$ PLR with a $25\\%$ total expense ratio implies a target combined ratio of $95\\%$ and a $5\\%$ underwriting profit."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loss Ratio",
+      "quote": "A projected loss ratio above the PLR means rates are inadequate even when the book appears to be making money.",
+      "note": "Re-quoted after the page was rewritten in the new concept shape and approved",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r6",
@@ -4419,7 +4451,15 @@
        "page": "Underwriting Changes",
        "quote": "Loosening does the reverse, and is the more dangerous direction because the deterioration arrives later than the growth."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Underwriting Changes",
+      "quote": "Filed class rates are charged per exposure and do not adjust automatically to the quality of the risks written.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -4894,7 +4934,15 @@
        "page": "Schedule Rating",
        "quote": "**Schedule Rating** applies underwriter-assigned debits and credits to the manual premium for characteristics of the individual risk that the classification system does not capture — the physical condition of premises, management quality, safety programmes, employee selection and training, loss-control practices."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Schedule Rating",
+      "quote": "**Schedule Rating** applies underwriter-assigned debits and credits to the manual premium for characteristics of the individual risk that the classification system does not capture, such as the physical condition of premises, management quality, safety programs, employee selection and training, and loss-control practices.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -5025,7 +5073,15 @@
        "page": "Underwriting Profit",
        "quote": "$$\\text{UW Profit} = \\text{EP} - \\text{Losses} - \\text{LAE} - \\text{UW Expenses}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Underwriting Profit",
+      "quote": "$$\\text{UW Profit} = \\text{Earned Premium} - \\text{Losses} - \\text{LAE} - \\text{UW Expenses}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -6502,7 +6558,15 @@
        "page": "Premium Audit",
        "quote": "The insured pays a **deposit premium** at inception based on estimated exposures. After expiry, the auditor examines payroll records, tax filings and sales ledgers, and the difference is billed as **additional premium** or refunded as **return premium**."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Premium Audit",
+      "quote": "$$\\text{Audit Adjustment} = \\text{Audited Premium} - \\text{Deposit Premium}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -7030,7 +7094,15 @@
        "page": "Insurance Premium",
        "quote": "The audit books $\\$30{,}000$ of additional premium ($15\\%$) in a period after the policy expired."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Premium Audit",
+      "quote": "$$\\text{Audit Adjustment} = \\text{Audited Premium} - \\text{Deposit Premium}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -7871,7 +7943,15 @@
        "page": "Reinsurance",
        "quote": "It is placed either through a reinsurance broker or intermediary, paid by the reinsurer, or directly with a direct-writing reinsurer whose own employees produce the business."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Reinsurance",
+      "quote": "**Direct writers**, reinsurers whose own salaried employees negotiate directly with the ceding companies.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -7884,7 +7964,15 @@
        "page": "Reinsurance",
        "quote": "It is placed either through a reinsurance broker or intermediary, paid by the reinsurer, or directly with a direct-writing reinsurer whose own employees produce the business."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Reinsurance",
+      "quote": "**Brokers or intermediaries**, who produce business for reinsurers and are paid by the reinsurers.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -7897,7 +7985,15 @@
        "page": "Reinsurance",
        "quote": "It is placed either through a reinsurance broker or intermediary, paid by the reinsurer, or directly with a direct-writing reinsurer whose own employees produce the business."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Reinsurance",
+      "quote": "It is placed through two main marketing channels:",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -7914,7 +8010,15 @@
        "page": "Residual Market",
        "quote": "**The Residual Market** is the mechanism that provides coverage to risks the voluntary market will not write at approved rates."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Reinsurance",
+      "quote": "Reinsurance is bought from professional reinsurers, from the reinsurance departments of primary insurers, from Lloyd's syndicates, and from pools, which may be voluntary or involuntary, such as FAIR plans for hard-to-place risks.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -7927,7 +8031,15 @@
        "page": "Reinsurance",
        "quote": "from Lloyd's syndicates and the Bermuda and international market"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Reinsurance",
+      "quote": "Reinsurance is bought from professional reinsurers, from the reinsurance departments of primary insurers, from Lloyd's syndicates, and from pools, which may be voluntary or involuntary, such as FAIR plans for hard-to-place risks.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -9243,7 +9355,15 @@
        "page": "Exposure Base",
        "quote": "**Exposure Base** is the basic unit of risk that underlies the premium — the quantity the rate is charged *per*."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exposure Base",
+      "quote": "An **Exposure Base** is the unit that measures a policy's exposure to loss, such as a car-year, a house-year or $\\$100$ of payroll.",
+      "note": "Re-quoted after the page was rewritten in the new concept shape and approved",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",

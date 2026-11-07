@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:1d8fd9f56f48c6898fc7cfee007dd0ff1c5b66734906d7ff1cea7a614c855d9b
+  content_hash: sha256:e50322897ff220a303714e9453895929ba2111be4c1f8469b7bed6021cf60d4a
   sources:
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, Version 3, 2010), Ch.16 pp.371-374 (PDF 377-380), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 3
@@ -12,56 +12,59 @@ verification:
   log: .verify/Concepts/Allocated Loss Adjustment Expense.md
 ---
 
-**Allocated Loss Adjustment Expense** (ALAE) is claim adjustment cost that can be attributed to a specific claim — defence counsel fees, expert witnesses, independent adjusters, court costs — as opposed to [[Unallocated Loss Adjustment Expenses ULAE|ULAE]], the claims-department overhead that cannot.
-
-> $$\text{Loss \& ALAE} = \text{Indemnity} + \text{ALAE}$$
-
-> $$\text{ALAE Ratio} = \frac{\text{ALAE}}{\text{Indemnity}}$$
-
-- Because ALAE attaches to a claim, it can be **developed in a triangle** exactly like indemnity. Friedland gives three approaches: develop a **combined** loss-and-ALAE triangle, develop **ALAE separately** in its own triangle, or develop a **ratio of ALAE to loss** and apply it to projected losses.
-- Combining is simplest and is the usual choice, but it assumes ALAE develops like indemnity. It often does not: defence costs accrue steadily through litigation while indemnity lands at settlement, so an ALAE-only triangle can have a different shape and a different tail.
-- **Developing the ratio of paid ALAE to paid claims** (Friedland Ch.16, pp.371–374). Build a triangle of the ratio of cumulative paid ALAE to cumulative paid claims for each accident year at each age, and develop it to an ultimate ratio like any other triangle — multiplicatively, with age-to-age factors on the ratios, or additively. Ultimate ALAE is the selected ultimate ratio times the selected ultimate claims, and unpaid ALAE is ultimate ALAE less paid ALAE.
-  - In the additive version, each age-to-age factor is the difference between the ratios at successive ages (the later ratio minus the earlier one), and the factors are averaged and selected as in the standard development technique. The age-to-ultimate factor is the cumulative sum of the selected differences from that age to the last one, and the projected ultimate ratio is the ratio on the latest diagonal plus that age-to-ultimate factor.
-  - Wiser notes that if the ratios are very small at early maturities, the additive approach seems to be more stable.
-  - Advantages: the ratio method recognizes the relationship between ALAE and claims; its development factors tend not to be as highly leveraged as development factors based on paid ALAE dollars; and actuarial judgment is easy to apply, particularly in selecting the ultimate ratio for the most recent years, where a projected ratio out of line with earlier years (from a change in how ALAE is recorded, or unusually large expenses) can be set aside for an average of the other years.
-  - Disadvantages: any error in the estimate of ultimate claims carries into the estimate of ultimate ALAE, and because the projection starts from the latest observed ratio, whatever distorts that ratio, in the ALAE or in the claims paid to date, carries through as well. Developing paid or reported ALAE on its own uses ALAE data alone, so it is not exposed to errors in the claims. The method also assumes the relationship between ALAE and claims has been stable over the experience period; a change in defense strategy, or in the use of external versus internal defense counsel, undermines it.
-- The ALAE ratio varies enormously by line — roughly $30$–$50\%$ of indemnity in professional liability, $15$–$25\%$ in general liability, $10$–$15\%$ in auto liability, and a few percent in property. A load taken from one line and applied to another is a substantial error.
-- ALAE can be **countercyclical to indemnity**: money spent defending a claim vigorously may reduce the indemnity paid. A "defence and settle" strategy shift moves both components, in opposite directions, and shows up in the triangles as a change in the ALAE ratio.
-- Whether ALAE sits inside "losses" matters for the [[Reinsurance|reinsurance]] treaty too: treaties differ on whether ALAE is included within the limit, shared pro rata, or added on top — which changes both [[Ceded Losses|ceded]] and net figures.
-
 ![[Media/Figures/Allocated_Loss_Adjustment_Expense.svg|340]]
 
-> [!example]- ALAE on a Litigated Claim {Example}
-> A general liability claim settles with an indemnity payment of $\$100{,}000$. Along the way the insurer paid defence counsel $\$25{,}000$, an expert witness $\$8{,}000$, and court costs $\$2{,}000$.
->
-> Compute total incurred and the ALAE ratio, and state how the claim appears in the triangles.
->
-> > [!answer]-
-> > $$\begin{align*}
-> > \text{ALAE} &= \$25{,}000 + \$8{,}000 + \$2{,}000 = \$35{,}000 \\[4pt]
-> > \text{Loss \& ALAE} &= \$100{,}000 + \$35{,}000 = \$135{,}000 \\[4pt]
-> > \text{ALAE ratio} &= \frac{\$35{,}000}{\$100{,}000} = 35\%
-> > \end{align*}$$
-> >
-> > In a **combined** triangle the claim contributes $\$135{,}000$. In **separate** triangles it contributes $\$100{,}000$ to the indemnity triangle and $\$35{,}000$ to the ALAE triangle — and the two will develop differently, since the defence fees were largely paid before the indemnity settlement.
-> >
-> > A $35\%$ ratio is at the high end for GL and would be worth investigating: is it one unusually litigated claim, or has the book's mix shifted toward disputed claims?
+An **Allocated Loss Adjustment Expense** (ALAE) is a claim adjustment cost the insurer can assign to a particular claim, such as legal and expert witness expenses. [[Unallocated Loss Adjustment Expenses ULAE|ULAE]], such as the claims department's payroll and rent, cannot be assigned to one claim. In U.S. statutory reporting the split is instead defense and cost containment (DCC) and adjusting and other (A&O). The ratio of an accident year's ALAE to its claims at age $n$ is
 
-> [!example]- Estimating Unpaid ALAE by the Ratio Approach {Example}
-> An actuary has projected ultimate indemnity of $\$12{,}000{,}000$ for an accident year and $\$7{,}500{,}000$ of indemnity paid to date. Historical ratios of ultimate ALAE to ultimate indemnity for mature years are $0.18$, $0.19$, $0.20$ and $0.19$. ALAE paid to date on this year is $\$1{,}400{,}000$.
->
-> Estimate unpaid ALAE.
->
-> > [!answer]-
-> > Select an ultimate ALAE ratio of $0.19$:
-> >
-> > $$\begin{align*}
-> > \text{Ultimate ALAE} &= 0.19 \times \$12{,}000{,}000 \\
-> > &= \$2{,}280{,}000 \\[4pt]
-> > \text{Unpaid ALAE} &= \$2{,}280{,}000 - \$1{,}400{,}000 \\
-> > &= \$880{,}000
-> > \end{align*}$$
-> >
-> > The check worth doing: ALAE is $61\%$ paid ($1{,}400/2{,}280$) while indemnity is $63\%$ paid ($7{,}500/12{,}000$) — close enough that the ratio approach is defensible here.
-> >
-> > If instead ALAE were $85\%$ paid against $63\%$ on indemnity, the ratio method would be projecting ALAE that has largely already been spent, and a **separate ALAE triangle** would be the better estimator. That comparison — the relative maturity of the two components — is what decides between the methods.
+> $$\text{ALAE Ratio} = \frac{\text{Paid ALAE}}{\text{Paid Claims}}$$
+
+- $\text{Paid ALAE}$ and $\text{Paid Claims}$ are the cumulative paid ALAE and paid claims only, both at age $n$.
+
+When ALAE is a fixed percentage of claims, claims and ALAE together are the claims multiplied by one plus the ALAE ratio. ALAE is assigned to a claim and its accident date is known, so all the development techniques can be used with it.
+
+> [!example]- A general liability claim settles for $\$100{,}000$. The insurer also paid defense counsel $\$25{,}000$, an expert witness $\$8{,}000$ and court costs $\$2{,}000$. What are the claim's ALAE, its claim and ALAE together, and its ALAE ratio? {Example}
+> - The ALAE is $25{,}000 + 8{,}000 + 2{,}000 = \$35{,}000$.
+> - The claim and ALAE together are $100{,}000 + 35{,}000 = \$135{,}000$.
+> - The ALAE ratio is $35{,}000/100{,}000 = 35\%$.
+
+## Estimating unpaid ALAE
+
+There are three ways to project ultimate ALAE:
+
+1. **Combined with claims.** Because of data limitations, ALAE is often developed in one triangle with the claims.
+2. **Development of ALAE on its own.** The [[Chain Ladder Method|development technique]] is applied to paid ALAE, or to reported ALAE where the insurer sets case outstanding for ALAE.
+3. **Development of the ratio of paid ALAE to paid claims.** A triangle of the ratio is developed to an ultimate ratio.
+
+Combining assumes ALAE develops like the claims. For some liability lines it does not: defense and expert witness costs are paid during the investigation, well before any payment to the claimant, and some defense costs follow it. Claims and ALAE are combined only if their development patterns and their ratio are consistent over time.
+
+Whichever way it is projected, unpaid ALAE is ultimate ALAE minus paid ALAE, summed over the accident years.
+
+## Ratio of paid ALAE to paid claims
+
+The ratio triangle holds the ratio at each age for each accident year, and it is developed to an ultimate ratio with age-to-age factors on the ratios. The ultimate ALAE is then
+
+> $$\text{Ultimate ALAE} = \text{Ultimate ALAE Ratio} \times \text{Ultimate Claims}$$
+
+- $\text{Ultimate ALAE Ratio}$ is the ratio projected to ultimate for the accident year.
+- $\text{Ultimate Claims}$ is the selected ultimate claims of the accident year, not its paid claims to date.
+
+In the **additive** version, each factor is the difference between the ratios at successive ages, and the projected ultimate ratio is the latest ratio plus the sum of the selected differences from its age to ultimate. Wiser notes that if the ratios are very small at early maturities, the additive approach seems to be more stable.
+
+> [!example]- The ratio of paid ALAE to paid claims is 0.050, 0.080 and 0.090 at 12, 24 and 36 months for accident year 2021, 0.055 and 0.083 for 2022, and 0.060 at 12 months for 2023. There is no development after 36 months. Accident year 2023 has ultimate claims of $\$2{,}000{,}000$ and $\$54{,}000$ of paid ALAE. What is its unpaid ALAE by the additive approach? {Example}
+> - The 12 to 24 month differences are $0.080 - 0.050 = 0.030$ and $0.083 - 0.055 = 0.028$, with an average of $0.029$.
+> - The 24 to 36 month difference is $0.090 - 0.080 = 0.010$.
+> - Accident year 2023's ultimate ratio is $0.060 + 0.029 + 0.010 = 0.099$.
+> - Its ultimate ALAE is $0.099 \times 2{,}000{,}000 = \$198{,}000$.
+> - Its unpaid ALAE is $198{,}000 - 54{,}000 = \$144{,}000$.
+
+The ratio method recognizes the relationship between ALAE and claims, and its factors tend not to be as highly leveraged as factors on paid ALAE dollars. Its disadvantages are three:
+
+1. Any error in the estimate of ultimate claims passes into the estimate of ultimate ALAE.
+2. ALAE spent on claims that settle with no payment distorts the ratio, especially at early ages.
+3. It assumes the relationship between ALAE and claims has been stable over the experience period, which a change in defense strategy, or in the use of external versus internal defense counsel, breaks.
+
+A [[Large Loss|large claim]] is removed before the ALAE, or the ratio, is developed, and its own ultimate ALAE is added back.
+
+## ALAE in excess of loss reinsurance
+
+An excess of loss treaty treats ALAE in one of three ways: included with the claim amount in determining the excess coverage (the most common), not covered, or covered pro rata in the proportion of the claim that is in the layer. In excess pricing, a cap on each occurrence applies to its loss and ALAE together. A historical ALAE ratio may not fit an excess layer, because losses capped at a policy limit raise the ratio of ALAE to loss, and so do claims whose litigation costs more than their indemnity.

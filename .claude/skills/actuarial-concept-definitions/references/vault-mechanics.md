@@ -276,11 +276,37 @@ overview) states the classical one only through a link. $\mathbf{Z}_i$ (a design
 Other exams:
 - **Exam FM:** `i`, `v`, `d`, `\delta`, `a_{\overline{n}|}`, `s_{\overline{n}|}`,
   `\ddot{a}_{\overline{n}|}`.
-- **Exam 5:** `\text{CDF}`, age-to-age `f_{n \to n+1}`, loss-ratio and
-  pure-premium notation; ratemaking is **prospective**, reserving
-  **retrospective** — say which, and keep the vocabularies distinct
-  (development *to* ultimate vs trend *forward to* the policy period; conflating
-  them double-counts).
+- **Exam 5** — ratemaking (set 2026-11-07, from the Pure Premium, Loss Ratio
+  and Exposure Base pages; Werner & Modlin's ratios, written out in words as on
+  the Frequency and Severity pages):
+
+  | Thing | Written | Not |
+  | --- | --- | --- |
+  | basic ratios | $\text{Frequency}$, $\text{Severity}$, $\text{Pure Premium}$, $\text{Loss Ratio}$, $\text{Average Premium}$ in `\text{}` | $PP$, $LR$ in a formula |
+  | the ratios' inputs | $\text{Losses}$, $\text{LAE}$, $\text{Earned Exposures}$, $\text{Earned Premium}$ | $L$, $E_L$, $X$ |
+  | LAE ratio; loss and LAE ratio | $\text{LAE}/\text{Losses}$; $\text{Loss Ratio} \times (1 + \text{LAE Ratio})$ | LAE over premium |
+  | development to ultimate | $\text{CDF}$; age-to-age $f_{n \to n+1}$ | LDF for an age-to-ultimate factor |
+  | trend | annual trend $t$ over $n$ years, factor $(1 + t)^n$ | |
+  | expense and profit provisions | fixed per exposure $F$ (as a share of premium $F\%$), variable $V$, target profit $Q_T$ | |
+  | permissible loss ratio | $\text{PLR} = 1 - V - Q_T$ (all-variable); with fixed expenses as a ratio, $1 - F\% - V - Q_T$ | |
+  | trend on a page whose time variable is $t$ | fitted trend $\hat{T}$; components $T_F$, $T_S$, $T_{PP}$ (Exponential Trend, Linear Trend) | $t$ for both |
+  | losses by report year and lag (claims-made) | $L(Y, i)$, Werner & Modlin Ch. 16 | |
+
+  **Exam 5** — reserving (set 2026-11-07, from the reserving pages; Friedland's
+  word *claims*, in `\text{}`):
+
+  | Thing | Written | Not |
+  | --- | --- | --- |
+  | claims | $\text{Paid Claims}$, $\text{Reported Claims}$, $\text{Case Outstanding}$, $\text{Ultimate Claims}$, $\text{IBNR}$, $\text{Unpaid Claims}$ | $C$, $U$ as bare letters; *losses* in a reserving formula |
+  | a cell of a cumulative triangle | $C_{\text{AY},\,n}$, accident year AY at age $n$ | |
+  | development | age-to-age $f_{n \to n+1}$; $\text{CDF}_{n \to \text{ult}}$ or $\text{CDF}_n$; $\text{Tail}$ | LDF for an age-to-ultimate factor |
+  | share reported (paid) | $1/\text{CDF}$ in a method's formula; $p_t$, or $p_{\text{start}}$, $p_{\text{end}}$, where an actual-versus-expected formula needs a symbol | |
+  | a priori | $\text{Expected Claims}$, $\text{Expected Claim Ratio}$; Cape Cod's $\text{Used-Up Premium}$ | ELR, $U$ |
+  | credibility weight | $Z$ (Benktander: $q$, the share unreported) | |
+
+  Ratemaking is **prospective**, reserving **retrospective** — say which, and
+  keep the vocabularies distinct (development *to* ultimate vs trend *forward
+  to* the policy period; conflating them double-counts).
 
 ## Topic reference
 

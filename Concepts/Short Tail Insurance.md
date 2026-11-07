@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:69c7649cda6bb10e021faabab8bb6c836c76bffe19491d5bdb3c2cf4b4ece993
+  content_hash: sha256:f932d5af2a0e29cd1be1859d04e53c3b00059ad858eebc0ac395458dbcb32940
   sources:
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch. 1 p.15 (PDF p.21); Part 3 intro pp.79-80 (PDF pp.85-86); Ch. 9 p.155 (PDF p.161), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 7 p.138 (PDF p.150), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
@@ -13,45 +13,30 @@ verification:
   log: .verify/Concepts/Short Tail Insurance.md
 ---
 
-**Short Tail Insurance** covers lines whose claims are reported and settled quickly — ultimate claims are often known within one or two years after the end of the accident period — so that reported losses are close to ultimate almost immediately and [[IBNR]] is small relative to case reserves.
-
-> $$\text{CDF}_{12 \to \text{ult}} \approx 1.0 \text{ for short-tail lines}$$
-
-- Typical short-tail lines: auto physical damage (collision, comprehensive), homeowners property, inland marine, boiler and machinery, most first-party property covers.
-- Losses are **observable**: a damaged car or a burnt building is inspected, appraised and paid. There is no latent injury, little litigation, and the loss amount is not a function of a jury's opinion years later.
-- Consequently development is compact, [[Tail Factor|tail factors]] are near $1.000$, and the [[Chain Ladder Method|chain ladder]] on **paid** data is reliable at maturities where a long-tail line would still be guessing.
-- Fast emergence means fast feedback on rate adequacy: shorter experience periods are acceptable, trend is measurable with less lag, and rate changes show up in results within a year — one reason personal lines can be re-priced annually.
-- The dominant risk is **not** development but concentration: a single hail storm or hurricane can produce more loss in a day than a normal year, so [[Catastrophe Loss|catastrophe]] losses are excluded from the experience and loaded separately. A short-tail line can therefore have low reserve risk and very high underwriting risk at the same time.
-- Short-tail reserves are also sensitive to seasonality: the December diagonal of a property triangle behaves differently from the June one, which is why quarterly rather than annual cohorts are common.
-
 ![[Media/Figures/Short_Tail_Insurance.svg|340]]
 
-> [!example]- Short-Tail vs. Long-Tail Development Side by Side {Example}
-> An auto comprehensive claim arises from hail damage on $3/5/2024$. A workers compensation occupational-disease claim also arises from $2024$ exposure.
->
-> Trace each claim's life and the implication for reserving.
->
-> > [!answer]-
-> > **Comprehensive claim** — reported within days, vehicle appraised within a week, paid within a month. At $12/31/2024$ it is closed and its cost is a fact. The AY 2024 comprehensive triangle needs a $12$-to-ultimate factor of perhaps $1.02$, and virtually all of that is a handful of claims still in appraisal.
-> >
-> > **Occupational disease claim** — the exposure occurred in $2024$, but the disease may not manifest until $2029$ and may not be filed until $2031$; medical and indemnity payments then run for the claimant's lifetime. At $12/31/2024$ the claim is invisible, sitting entirely in pure IBNR, and the AY 2024 workers compensation CDF at $12$ months may exceed $2.0$.
-> >
-> > Same accident year, same insurer, same valuation date — and one estimate is essentially known while the other is dominated by assumptions about the next thirty years. This is why they are never combined in one triangle ([[Homogeneity]]).
+**Short Tail Insurance** is insurance whose claims are reported and settled quickly, so that its [[Ultimate Loss|ultimate claims]] are often known within one or two years after the end of the accident period. Its typical lines are:
 
-> [!example]- Where the Uncertainty Actually Lives {Example}
-> A homeowners book has $\$50{,}000{,}000$ of earned premium. Non-catastrophe losses have averaged a $58\%$ loss ratio with little year-to-year variation. Catastrophe losses over the last ten years were: $\$0$, $\$1$M, $\$0$, $\$4$M, $\$0$, $\$0$, $\$38$M, $\$2$M, $\$0$, $\$1$M.
->
-> How should the rate indication treat the two components?
->
-> > [!answer]-
-> > The non-catastrophe portion is short-tail and stable — develop and trend it in the ordinary way.
-> >
-> > For catastrophes, the ten-year *average* is
-> >
-> > $$\frac{\$46{,}000{,}000}{10} = \$4{,}600{,}000 \text{ per year}$$
-> >
-> > or a $9.2\%$ catastrophe loss ratio — but the median year is $\$0$ and one year is $\$38$M. Neither the mean nor the median of ten observations is a credible estimate of a hurricane load.
-> >
-> > The correct treatment is to **exclude** catastrophe losses from the experience period entirely and load a modelled average annual loss (see [[Catastrophe Loss]]), so that the indication does not swing by $\pm 8$ points depending on whether the experience period happens to contain the storm.
-> >
-> > The line is short-tail in *development* and highly volatile in *result* — the two are independent properties, and conflating them is a common error.
+1. Automobile physical damage, collision and comprehensive.
+2. Homeowners and other property insurance.
+3. Inland marine, boiler and machinery, and most other first-party property covers.
+
+Paid claims and [[Case Reserves|case outstanding]] are a high proportion of a short-tail line's ultimate claims at early maturities, so its [[IBNR]] is a small share of what remains unpaid. Its development is compact and its [[Tail Factor|tail factor]] is close to 1.000. Medical professional liability, at the other end, is a [[Long Tail Lines|long-tail line]].
+
+> [!example]- A hail storm on $3/5/2024$ damages an insured car, and in the same year a worker is exposed to a substance that causes an occupational disease. How do the two claims differ at $12/31/2024$? {Example}
+> - The comprehensive claim is reported within days and the car is appraised and paid within a month.
+> - At $12/31/2024$ it is closed, and its cost is known.
+> - The disease may not appear for years, so at $12/31/2024$ the workers compensation claim is not yet reported and sits entirely in pure IBNR.
+> - Mixing the two lines in one triangle would give development factors that fit neither, so they are analyzed separately.
+
+## Methods for short-tail lines
+
+The development technique is particularly suitable for high-frequency, low-severity lines with timely reporting, so the [[Chain Ladder Method|development technique]] works well on short-tail data. When there is little or no pure IBNR, the [[Case Outstanding Development Method|case outstanding development technique]] is also appropriate, because it projects only from claims already reported.
+
+## Seasonality in short-tail development
+
+Short-tail data are often organized by accident half-year or quarter rather than accident year. Shorter periods show seasonality in development that annual data average together. In Friedland's private passenger collision example, the accident half-years ending in December close a smaller share of their claims by six months than those ending in June, so their 6 to 12 month closed count factors are higher. Each season's factor is then selected from the accident periods of that season.
+
+## Catastrophe risk in short-tail lines
+
+The main uncertainty in a short-tail line is not development but concentration. A single hail storm or hurricane can produce more loss in a day than a normal year, so [[Catastrophe Loss|catastrophe]] losses are excluded from the experience and loaded separately. A short-tail line can therefore have low reserve risk and very high catastrophe risk at the same time.

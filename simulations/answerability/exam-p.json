@@ -10418,11 +10418,11 @@
      ],
      "resolution": {
       "kind": "taught",
-      "page": "Deductible",
-      "quote": "As a function of $d$, the expected payment $E[(X - d)_+]$ is continuous and decreasing, with slope $-P(X > d)$. For a discrete loss it is piecewise linear in $d$, the slope changing at each possible loss amount.",
-      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), §3.2 Additional Properties, Right Distribution Function: E(X) = ∫_0^∞ P(X > x) dx for nonnegative X and E(N) = Σ_{n≥0} P(N > n) for N in ℕ — https://www.randomservices.org/random/expect/Properties2.html; OpenStax Calculus Volume 1, §5.3 The Fundamental Theorem of Calculus, Part 1 — https://openstax.org/books/calculus-volume-1/pages/5-3-the-fundamental-theorem-of-calculus (d/dd ∫_d^∞ S(x) dx = -S(d)); checked in the w5 fact check",
-      "date": "2026-10-30",
-      "run": "g8-exam-p-2026-10-30/w5"
+      "page": "Deductible Rating",
+      "quote": "Each extra dollar of deductible eliminates $1 - F(d)$ per claim, the probability that a loss exceeds $d$.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     }
    ]
@@ -42105,11 +42105,11 @@
      ],
      "resolution": {
       "kind": "taught",
-      "page": "Continuous Univariate Distributions",
-      "quote": "work from the survival function $S(x) = 1 - F(x)$ instead.",
-      "note": "passage on Continuous Univariate Distributions (syllabus) states S(x) = 1 − F(x); check's miss",
-      "date": "2026-10-30",
-      "run": "g8-exam-p-2026-10-30"
+      "page": "Deductible Rating",
+      "quote": "Each extra dollar of deductible eliminates $1 - F(d)$ per claim, the probability that a loss exceeds $d$.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     }
    ]

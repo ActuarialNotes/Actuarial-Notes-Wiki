@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:01444f8604573d4466726204fa68d7a4c0dfc715719cf51939c34b92842061e4
+  content_hash: sha256:487ef6bfca8c438acb420ff9a264cfbcd3f0ca8732d8d723a01d16258a4fdc68
   sources:
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch.5 p.55-56 (PDF 61-62) incremental paid triangle by calendar period; Ch.8 p.133 (PDF 139) reform restatement; Ch.9 p.152 (PDF 158) BF uses the development technique's patterns; Ch.11 pp.204, 209-210 (PDF 210, 215-216) reform-adjusted and trended severities; Ch.13 p.283 (PDF 289) report-year data after a legal shift, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
     - "CAS Exam 5 Spring 2017 — sample answers and examiner's report, Q23 part a, pp.88-89, sha256:f42f48b0e1bec884aba2e4c0eca91ee2b95b3f5cc6fd7f02de78086899f9e0c6 — https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam5_sp17-5.pdf"
@@ -74,7 +74,7 @@ Berquist and Sherman's responses, as Friedland presents them, are:
 3. **Adjust the data**: the [[Berquist-Sherman Method|Berquist-Sherman]] adjustments for case adequacy and settlement rate, and restating history to the current retention, deductible or benefit level.
 4. **Adjust the a priori**: put the expected claim ratio on current [[Rate Level Change|rate level]], trend and legal environment.
 
-After a change in reinsurance terms, the actuary estimates ultimate claims on gross data and applies the new contract, or restates the prior years' net data to the new terms. A change in the per-occurrence retention or limit changes the layer of loss in the data, so mixing retentions in one triangle distorts its age-to-age factors. A legal change that lowers severity on open claims makes historical development factors too high, so the development technique overstates. One that raises severity makes it understate, and the development technique recognizes the change only as it emerges in the claims.
+After a change in reinsurance terms, the actuary estimates ultimate claims on gross data and applies the new contract, or restates the prior years' net data to the new terms. A change in the per-occurrence retention or limit changes the layer of loss in the data, so mixing retentions in one triangle distorts its age-to-age factors. A legal change that lowers severity on open claims makes historical development factors too high, so the development technique overstates. One that raises severity makes it understate, and the development technique recognizes the change only as it emerges in the claims. A change in severity that applies to payments made after a date is restated on the incremental paid triangle, since each incremental cell was paid in one calendar period. The incremental payments made before the date are restated to the new level, and the triangle is cumulated again before factors are selected.
 
 > [!example]- A tort reform cuts the cost of claims by $20\%$ for accidents on or after $1/1/2025$. How are accident years $2022$ to $2025$ restated to the new legal environment? {Example}
 > - Claims from accidents before the reform would cost $20\%$ less if they occurred today, so accident years $2022$ to $2024$ are multiplied by a reform factor of $1 - 0.20 = 0.80$.

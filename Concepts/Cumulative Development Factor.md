@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:7b0ca0ca973fe446999e2ed4ee459bf936101448d59afd48d26392d8456f6413
+  content_hash: sha256:c2b4c052e3450b819fb4a6a93c7b1f8374a61fcb7756dda1d764ca8f681ae67d
   sources:
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch.7, PDF pp.96-99, 101, 103 (printed 90-93, 95, 97): CDF calculation, percentage reported = 1/CDF, leverage (CDF 4.00 example), paid vs reported CDFs, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 0
@@ -18,10 +18,10 @@ A **Cumulative Development Factor** (CDF) is the product of the selected [[Age t
 
 > $$\text{CDF}_{n \to \text{ult}} = \left(\prod_{k \ge n} f_{k \to k+1}\right) \times \text{Tail}$$
 
-- $f_{k \to k+1}$ is the selected age-to-age factor from age $k$ to the next age, for every age $k$ from $n$ to the last age of the triangle.
+- $f_{k \to k+1}$ is the selected age-to-age factor from age $k$ to the next age, for every age $k$ from $n$ to the last age of the [[Development Triangle|triangle]].
 - $\text{Tail}$ is the tail factor from the last age to ultimate, $1.000$ when no development is expected beyond it.
 
-CDFs are calculated by successive multiplication, beginning with the tail factor and the oldest age-to-age factor and moving to younger ages. In the development technique, an accident year's ultimate claims are its latest claims times the CDF for its age:
+CDFs are calculated by successive multiplication, beginning with the tail factor and the oldest age-to-age factor and moving to younger ages. Each age-to-age factor is therefore the ratio of successive CDFs, $f_{n \to n+1} = \text{CDF}_{n \to \text{ult}}/\text{CDF}_{n+1 \to \text{ult}}$. In the development technique, an accident year's ultimate claims are its latest claims times the CDF for its age:
 
 > $$\text{Ultimate Claims} = C_{\text{AY},\,n} \times \text{CDF}_{n \to \text{ult}}$$
 

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:6f3bd2b756e6d7860406fdaeb5d11961ad043a00f11387cf66fb0521982aa44c
+  content_hash: sha256:5de22604e868ba6aadea3fb3ac983146aaec25bfc01821c984109189474b53fd
   sources:
     - "Fisher, McTaggart, Petker & Pettingell, Individual Risk Rating (CAS Study Note, v3 Oct 2019), Ch.2 p.21 (PDF p.26); Ch.3 §5.2 p.84-85 (PDF pp.89-90); Ch.4 p.95 (PDF p.100), sha256:3182cd5d8ebccc92be67a246e61a527acda5b304b823448d99f8a2546ca07b81 — https://www.casact.org/sites/default/files/2021-03/8_Fisher_et_al.pdf"
   open_findings: 0
@@ -29,7 +29,7 @@ $L \times \text{LCF}$ are the converted losses. The final retrospective premium 
 
 - $R_{\min}$ and $R_{\max}$ are the minimum and maximum retrospective premiums, each a negotiated ratio times standard premium.
 
-The basic premium covers the insurer's non-LAE expenses, profit, and the **net insurance charge**, the cost of the maximum and minimum guarantees. The net insurance charge is the insurance charge for the maximum less the insurance savings for the minimum. The charge and savings come from a table of values, expressed as a percentage of expected unlimited losses. When the plan limits individual losses (a per-accident loss limitation), the insured pays for that limit too. Its cost is either built into the table of insurance charges or, in some plans, computed as a separate additional charge.
+The basic premium covers the insurer's non-LAE expenses, profit, and the **net insurance charge**, the cost of the maximum and minimum guarantees. The net insurance charge is the insurance charge for the maximum less the insurance savings for the minimum. The charge and savings come from a table of values, expressed as a percentage of expected unlimited losses. When the plan limits individual losses (a per-accident loss limitation), the insured pays for that limit too. The share of expected loss above the limit, which the limit eliminates from the ratable losses, is the limit's [[Loss Elimination Ratio|loss elimination ratio]]. Its cost is either built into the table of insurance charges or, in some plans, computed as a separate additional charge.
 
 > [!example]- A workers compensation policy has a standard premium of $\$500{,}000$, a basic premium of $\$100{,}000$, a loss conversion factor of 1.10 and a tax multiplier of 1.03. The minimum retrospective premium is $\$300{,}000$ and the maximum $\$800{,}000$. Limited losses are $\$350{,}000$. What is the retrospective premium? {Example}
 > - The converted losses are $350{,}000 \times 1.10 = \$385{,}000$.
@@ -51,7 +51,7 @@ The **maximum** protects the insured against a bad year, and the **minimum** pro
 
 A retrospective plan's premium is typically an initial premium at the start of the period, followed by adjustments after it as the claims experience becomes known. Incurred loss retro plans are typically first evaluated 6 months after policy expiration (18 months of development) and annually thereafter. Losses at 18 months are usually far below ultimate, so the insured typically receives a partial **refund** at the first adjustment, and then pays **additional premium** as losses develop upward. That creates [[Credit Risk|credit risk]] for the insurer.
 
-To protect itself, the insurer can apply **loss development factors** to the losses in the retrospective formula, established when the plan is written. Under both the NCCI's and ISO's plans, the provision for IBNR is made through factors applied to standard premium and then multiplied by the loss conversion factor and the tax multiplier, for the first three adjustments (NCCI) or the first four (ISO). A development factor to ultimate $f$ takes reported limited losses $U/f$ to the ultimate limited loss $U$, so the future development it provides for is $U(1 - 1/f)$. Paid loss plans are typically not given development factors, since they are meant to mimic a large deductible's cash flows.
+To protect itself, the insurer can apply **loss development factors** to the losses in the retrospective formula, established when the plan is written. Under both the NCCI's and ISO's plans, the provision for IBNR is made through factors applied to standard premium and then multiplied by the loss conversion factor and the tax multiplier, for the first three adjustments (NCCI) or the first four (ISO). A [[Cumulative Development Factor|development factor to ultimate]] $f$ takes reported limited losses $U/f$ to the ultimate limited loss $U$, so the future development it provides for is $U(1 - 1/f)$. Paid loss plans are typically not given development factors, since they are meant to mimic a large deductible's cash flows.
 
 ## The basic premium
 

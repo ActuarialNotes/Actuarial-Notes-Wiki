@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:8c9d07aa5830b1ec2a0cb58a1cd4b1f87d8a13abfeecd85b9dda824c0370fc0d
+  content_hash: sha256:86be73828fe71a65611d13f93507b209b4ce9eed2346788c2783b4cfea2ad79c
   sources:
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 6 pp. 100-104 (PDF pp. 112-116), Tables 6.4-6.6; App. D pp. D-1-D-3, D-8 (PDF pp. 394-396, 401), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch. 4 p. 44; Ch. 6 p. 76; Ch. 7 p. 96; Ch. 13 p. 283, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
@@ -59,6 +59,6 @@ In [[Workers Compensation Insurance|workers compensation]] the statute sets a co
 
 The **direct effect** of a change is the total benefits after it divided by the total benefits before it, minus one, over the distribution of workers by wage. A wage band below the minimum or above the maximum is paid the limit times its number of workers, and a band between them is paid the compensation rate times its total wages. Lowering the maximum cuts benefits only for the workers whose benefit is at or above the new maximum.
 
-**Indirect effects** arise from changes in claimant behaviour caused by the benefit change, and are much harder to quantify. A benefit that replaces more of the wage may lead more workers to file claims and to return to work later. With no data to estimate the indirect effect, it is set judgmentally.
+**Indirect effects** arise from changes in claimant behaviour caused by the benefit change, and are much harder to quantify. A benefit that replaces more of the wage may lead more workers to file claims and to return to work later. A lower maximum benefit may also have an indirect effect, whose strength depends on the economic environment and the nature of the insured population. With no data to estimate the indirect effect, it is set judgmentally.
 
 Indemnity benefits are tied to wages, so they also rise with wage inflation. In Werner & Modlin's workers compensation indication the annual benefit-level changes and the annual impact of wage inflation on benefits are separate factors, multiplied together into one benefit cost level factor.

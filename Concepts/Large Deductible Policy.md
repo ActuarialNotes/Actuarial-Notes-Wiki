@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:5cd88fe7409229d5974c4b3040a7316d86e0eec8aa7e4390dceb119d56e769d0
+  content_hash: sha256:918bf98ddc9a96edbd82e8bfe53d0ce11b0070594e48088f11c8bd599e627768
   sources:
     - "Fisher, McTaggart, Petker & Pettingell, Individual Risk Rating (CAS Study Note, v3 Oct 2019), Ch.2 p.18 (PDF p.23), sha256:3182cd5d8ebccc92be67a246e61a527acda5b304b823448d99f8a2546ca07b81 — https://www.casact.org/sites/default/files/2021-03/8_Fisher_et_al.pdf"
     - "Bahnemann, Distributions for Actuaries, CAS Monograph 2 (2015), printed p.155 (PDF p.167), sha256:d4d172f9646852ab018ae3f0df95e5fbdbfabda4db55d6d4596977ed2eaa3ef8 — https://www.casact.org/sites/default/files/2021-03/8_Bahnemann.pdf"
@@ -70,7 +70,7 @@ An insured's own losses above a high $d$ are too sparse to price from, so the ch
 
 ## Aggregate deductible limit
 
-Many programs also cap the insured's total reimbursements with an **aggregate limit**. The insurer's expected payments above it are an additional insurance charge, much like the charge for a [[Retrospective Rating|retrospective rating]] maximum. Fisher et al. price a large deductible for the same components as a retrospective plan's premium, except the expected losses below both the per-occurrence deductible and the aggregate limit. The aggregate charge applies only to the limited losses, read from a Table M$_D$, from the unlimited [[Table M]] through the [[Insurance Charge Reflecting Loss Limitation (ICRLL)|ICRLL]], or together with the excess in [[Table L]] ([[Lee Diagram]]). Premium tax and some premium-based assessments are lower, because deductible reimbursements are not premium.
+Many programs also cap the insured's total reimbursements with an **aggregate limit**. The insurer's expected payments above it are an additional insurance charge, much like the charge for a [[Retrospective Rating|retrospective rating]] maximum. Fisher et al. price a large deductible for the same components as a retrospective plan's premium, except the expected losses below both the per-occurrence deductible and the aggregate limit. The aggregate charge applies only to the limited losses, read from a Table M$_D$, from the unlimited [[Table M]] through the [[Insurance Charge Reflecting Loss Limitation (ICRLL)|ICRLL]], or together with the excess in [[Table L]] ([[Lee Diagram]]). The total expected loss is then the expected loss excess of the deductible plus the aggregate charge times the expected limited loss. Premium tax and some premium-based assessments are lower, because deductible reimbursements are not premium.
 
 ## Large deductible and self-insured retention
 

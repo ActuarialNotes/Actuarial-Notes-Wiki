@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:c38fad289a14845b4dfbc4ee476e505f5249d8d31cbf11e7535233904e396e6c
+  content_hash: sha256:dfa87e2f0364a7c993847e207030e3c1d96b54e376fa689fb3d869c2b4bcbb5b
   sources:
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Domain C heading, description and tasks 1-9 (Task 2: model structure, e.g. link function and distribution of the dependent variable for GLM; tasks 3, 7, 8: evaluation, AIC/BIC/deviance, diagnostic plots), PDF p.5, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
     - "Dobson & Barnett, An Introduction to Generalized Linear Models, 4th ed. (CRC 2018) — publisher eBook preview, §1.2 Scope, printed pp.2-3 (PDF pp.19-20): modelling step 1, specifying models in two parts; linear regression a special case of GLMs, sha256:40ed0b2549113ee0bea29e41786886ce992ffa29251ad26fb1037385bb51611a — https://api.pageplace.de/preview/DT0400.9781351726221_A37406780/preview-9781351726221_A37406780.pdf"
@@ -16,27 +16,54 @@ verification:
   log: .verify/Concepts/Extended Linear Model.md
 ---
 
-**Extended Linear Models** is the name the CAS MAS-I outline gives its regression domain: ordinary linear regression and the models that extend it by relaxing its classical assumptions — allowing a non-Normal response distribution, a non-identity [[Link Function]], and a more flexible linear predictor. [[Generalized Linear Model]]s are the most common extended linear model used in actuarial work.
+![[Media/Figures/Extended_Linear_Model.svg|340]]
+
+An **Extended Linear Model** is a regression model in which a function of the mean of the [[Response Variable|response]] is a linear combination of the [[Predictor Variable|predictors]]. The CAS MAS-I syllabus uses the term for [[Linear Regression|linear regression]] together with the models that extend it, chiefly the [[Generalized Linear Model|generalized linear model]].
+
+For observation $i$ with predictor values $x_{i1}, \ldots, x_{ip}$, the linear predictor is
 
 > $$\eta_i = \beta_0 + \beta_1 x_{i1} + \cdots + \beta_p x_{ip}$$
 
-> $$g(\mu_i) = \eta_i, \qquad Y_i \sim \text{(chosen response distribution)}$$
+- $\beta_0, \beta_1, \ldots, \beta_p$ are the coefficients.
 
-| Model class | Response distribution | Link |
-| :--- | :--- | :--- |
-| Ordinary regression | Normal | Identity |
-| [[Generalized Linear Model]] | Exponential family | Chosen to fit the data |
+The mean of the response, $\mu_i = E[Y_i]$, is related to the linear predictor by a [[Link Function|link function]] $g$, so the model is
 
-- Both classes can include [[Interaction|interactions]], transformations such as polynomial terms, and banded variables: "linear" means linear in the coefficients, so $\beta_0 + \beta_1 x + \beta_2 x^2$ is still a linear model
-- Building an extended linear model means choosing its **[[Model Structure]]**, which has three parts: the **response distribution**, the **[[Link Function]]**, and the **linear predictor** (which predictors, transformations, and interactions enter it). The MAS-I outline's own example of choosing a GLM's model structure is choosing its link function and the distribution of the dependent variable
-- Ordinary least-squares regression is a special case where the response is Normal and the link is the identity function
-- Model adequacy is compared across candidate extended linear models using [[Deviance]], [[AIC]], [[BIC]], and [[Residual Plot]]s
-- In insurance ratemaking, the choice of extended linear model is driven by the data's behavior — e.g., a right-skewed, strictly positive severity favors a Gamma distribution with a log link, while integer claim counts favor a Poisson distribution
+> $$g(\mu_i) = \eta_i$$
 
-![[Media/Figures/Extended_Linear_Model.svg|340]]
+- $Y_i$ has a distribution from the [[Exponential Family|exponential family]], such as the normal, Poisson or gamma distribution.
 
-> [!example]- Selecting an Extended Linear Model for Claim Severity {Example}
-> An actuary has individual claim severities that are strictly positive and right-skewed. Why is ordinary least-squares regression not an appropriate extended linear model here, and what would be a better choice?
->
-> > [!answer]-
-> > Ordinary least-squares assumes a Normal response, which can produce negative fitted severities and underweights the right skew. A **Gamma [[Generalized Linear Model]] with a log [[Link Function]]** is a better extended linear model: it restricts fitted values to be positive and models the multiplicative, right-skewed behavior typical of claim severity.
+The model is linear in the coefficients, not necessarily in the predictors. A column of $x^2$, a log-transformed predictor or a product of two predictors (an [[Interaction|interaction]]) can therefore enter the linear predictor, and all the predictors are estimated together, each holding the others fixed.
+
+> [!example]- Which of the models $\eta = \beta_0 + \beta_1 x + \beta_2 x^2$ and $\eta = \beta_0 + x^{\beta_1}$ is an extended linear model? {Example}
+> - In $\beta_0 + \beta_1 x + \beta_2 x^2$, each coefficient multiplies a known quantity, $1$, $x$ or $x^2$, so the linear predictor is linear in the coefficients.
+> - The term $x^2$ is simply a second column of the [[Design Matrix|design matrix]], so the first model is an extended linear model.
+> - In $\beta_0 + x^{\beta_1}$, the coefficient $\beta_1$ is an exponent, so the linear predictor is not linear in the coefficients.
+> - Only the first model is an extended linear model.
+
+## Linear regression as a special case
+
+When the response is normal and the link is the identity, $g(\mu) = \mu$, the model is linear regression:
+
+> $$\mu_i = \beta_0 + \beta_1 x_{i1} + \cdots + \beta_p x_{ip}$$
+
+For this model the [[Maximum Likelihood Estimation|maximum likelihood estimates]] of the coefficients are the [[Ordinary Least Squares|least squares estimates]], which minimize the sum of squared errors. For any other response distribution, such as the Poisson with a log link, the coefficients are estimated by maximizing the log-likelihood, and least squares gives different estimates.
+
+## Choice of response distribution and link
+
+The response distribution and the link are chosen from the behaviour of the response:
+
+| Response | Distribution | Usual link |
+| --- | --- | --- |
+| Continuous, symmetric, constant variance | Normal | Identity |
+| Continuous, strictly positive, right-skewed | Gamma or inverse Gaussian | Log |
+| Count of events, such as claims | Poisson | Log |
+| Binary, such as claim or no claim | Binomial | Logit |
+
+A normal distribution assigns probability to negative values and has a variance that does not depend on the mean. An identity link can give a negative fitted mean, while a log link gives $\mu_i = e^{\eta_i}$, which is always positive and makes each predictor act multiplicatively on the mean. The normal model with an identity link is therefore a poor choice for claim severities or claim counts, whose values are non-negative and whose variance grows with the mean.
+
+> [!example]- Individual claim severities are strictly positive and right-skewed. Why is a normal linear model a poor choice, and what extended linear model is better? {Example}
+> - A normal response is symmetric and allows negative values, while the severities are positive and right-skewed.
+> - The normal model assumes a constant variance, while the variance of severities grows with their mean.
+> - An identity link can produce negative fitted severities.
+> - A [[Gamma|gamma]] generalized linear model with a log link has strictly positive support, a right skew and a variance that grows with the mean, and its fitted means $e^{\eta_i}$ are positive.
+> - The gamma model with a log link is the better choice.

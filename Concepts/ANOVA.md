@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:2c2693c96f530b180fc77fc340c220fd13892b658ca9a0353233fc8a6c9fcd05
+  content_hash: sha256:30cec5245a185a6ca609ab3668488b8e9617abb635f6e6649b0b9801f47b96a7
   sources:
     - "Rodríguez, G., Lecture Notes on Generalized Linear Models (Princeton WWS 509), Ch.2 'Linear Models for Continuous Data', §2.3.4 hierarchical anova Table 2.2, PDF p.14; §2.5 Tables 2.7-2.8, PDF pp.24-25; §2.6.4 one-way anova Table 2.12, PDF p.31; §2.8 'Analysis of Covariance Models' ('models where some of the predictors are continuous variates and some are discrete factors'), PDF p.42, sha256:b9fae913696a54bb97a9a0f60cdddd8a5c72c9e9cf0451e503a0043d888edf1f — https://grodri.github.io/glms/notes/c2.pdf"
     - "Rodríguez, G., Lecture Notes on Generalized Linear Models (Princeton WWS 509), App. B 'Generalized Linear Model Theory', §B.3.2 likelihood ratio tests, scaled deviance, exact F for normal errors, phi = 1 for binomial/Poisson, PDF pp.6-7, sha256:92bc67a6a2fc52a0ffa2babfd7a13e175b2babb52dd28f778d5e307cc65aa286 — https://grodri.github.io/glms/notes/a2.pdf"
@@ -19,45 +19,75 @@ verification:
   log: .verify/Concepts/ANOVA.md
 ---
 
-**Analysis of Variance (ANOVA)** is a statistical method for testing whether the means of two or more groups differ by partitioning total variability in the response into explained and unexplained components. Regression output prints the same partition as an **ANOVA table** for the fitted model, where it tests whether the predictors explain any of the response.
-
-> **One-Way ANOVA F-Test:**
-> $$F = \frac{\text{MSB}}{\text{MSW}}$$
-
-> $$= \frac{\text{SS}_\text{Between}/(k-1)}{\text{SS}_\text{Within}/(N-k)} \sim F_{k-1,\, N-k}$$
-
-**ANOVA table structure:**
-
-| Source | SS | df | MS | F |
-| :--- | :--- | :--- | :--- | :--- |
-| Between groups | $\text{SS}_B$ | $k-1$ | $\text{MS}_B$ | $\text{MS}_B/\text{MS}_W$ |
-| Within groups | $\text{SS}_W$ | $N-k$ | $\text{MS}_W$ | |
-| Total | $\text{SS}_T$ | $N-1$ | | |
-
-- $k$ = number of groups, $N$ = total observations
-- $H_0$: all group means are equal; reject if $F > F_{\alpha, k-1, N-k}$
-- ANOVA is a special case of a linear model: it is equivalent to a regression with indicator variables for group membership
-- When the $F$ test rejects $H_0$, [[Multiple Comparisons|multiple-comparison procedures]] (Tukey, Scheffé, Bonferroni) find which means differ; adding a continuous variate to the group indicators gives an [[Analysis of Covariance]] model
-
-**Regression ANOVA table** (fitted model with $p$ predictors and an intercept, $n$ observations):
-
-| Source | SS | df | MS | F |
-| :--- | :--- | :--- | :--- | :--- |
-| Regression | $\text{SSR} = \sum(\hat y_i - \bar y)^2$ | $p$ | $\text{MSR} = \text{SSR}/p$ | $\text{MSR}/\text{MSE}$ |
-| Residual (Error) | $\text{RSS} = \sum(y_i - \hat y_i)^2$ | $n-p-1$ | $\text{MSE} = \text{RSS}/(n-p-1)$ | |
-| Total | $\text{SS}_\text{Tot} = \sum(y_i - \bar y)^2$ | $n-1$ | | |
-
-- The sums of squares and the degrees of freedom both add up: $\text{SS}_\text{Tot} = \text{SSR} + \text{RSS}$ and $(n-1) = p + (n-p-1)$. MSE is $\hat\sigma^2$
-- $F = \text{MSR}/\text{MSE} \sim F_{p,\, n-p-1}$ under $H_0: \beta_1 = \cdots = \beta_p = 0$ — the overall test that no predictor is related to the response. The one-way table above is the case where the predictors are the $k-1$ group indicators: Between is the Regression row ($p = k-1$), Within is the Residual row
-- A **sequential** (hierarchical, Type I) table splits the Regression row into one row per predictor in the order it entered the model — $\text{SSR}(x_1)$, then $\text{SSR}(x_2 \mid x_1)$, and so on, each the drop in RSS from adding that term. The rows sum to SSR, and each row's $F$ is its MS over the full model's MSE. **Order matters**: a predictor's sequential SS is what it adds *after* the ones above it, which can differ greatly from what it explains alone
-- **Analysis of Deviance** (the GLM analogue) compares nested [[Generalized Linear Model]]s by the change in [[Deviance]]. The change **scaled by the dispersion** $\phi$, $[D_{\text{small}} - D_{\text{big}}]/\phi$, is asymptotically $\chi^2$ with degrees of freedom equal to the number of added parameters. For Poisson and binomial $\phi = 1$, so the raw change in deviance is compared with $\chi^2$; when $\phi$ is estimated (Normal, Gamma), use the $F$ test $F = \dfrac{D_{\text{small}} - D_{\text{big}}}{(\text{number of added parameters}) \times \hat\phi_{\text{big}}}$ on (added parameters, $n - p_{\text{big}}$) df, with $p_{\text{big}}$ counting the intercept. For a Normal model the deviance is the RSS and this $F$ is exact
-
 ![[Media/Figures/ANOVA.svg|340]]
 
-> [!example]- One-Way ANOVA for Claim Severity Across Territories {Example}
-> An actuary tests whether mean claim severity differs across three territories using 30 claims (10 per territory). The ANOVA table shows $\text{SS}_B = 1{,}200$ and $\text{SS}_W = 5{,}400$. Test at $\alpha = 0.05$.
->
-> > [!answer]-
-> > $\text{MS}_B = 1{,}200/(3-1) = 600$; $\text{MS}_W = 5{,}400/(30-3) = 200$.
-> > $F = 600/200 = 3.0$.
-> > The critical value $F_{0.05, 2, 27} \approx 3.35$. Since $3.0 < 3.35$, **fail to reject $H_0$**; no significant difference in mean severity across territories at the 5% level.
+**ANOVA**, the analysis of variance, is the division of the [[Residual Sum of Squares#Total sum of squares|total sum of squares]] of a response into the part a model explains and the part it leaves unexplained, used to test whether the model explains any of the variation. Regression software prints the division as an ANOVA table. For a [[Linear Regression|linear regression]] with an intercept, $p$ predictors and $n$ observations, the ANOVA table is:
+
+| Source | Sum of squares | Degrees of freedom | Mean square |
+| --- | --- | --- | --- |
+| Regression | $\text{TSS} - \text{RSS}$ | $p$ | $(\text{TSS} - \text{RSS})/p$ |
+| Residual | $\text{RSS}$ | $n - p - 1$ | $\text{RSS}/(n - p - 1)$ |
+| Total | $\text{TSS}$ | $n - 1$ | |
+
+In both the sum of squares and the degrees of freedom columns, the regression and residual rows add up to the total row. The residual mean square is $\hat\sigma^2$, the estimate of the error variance. The test of $H_0\colon \beta_1 = \cdots = \beta_p = 0$, that no predictor is related to the response, against the alternative that at least one $\beta_j$ is not zero, uses the statistic
+
+> $$F = \frac{(\text{TSS} - \text{RSS})/p}{\text{RSS}/(n - p - 1)}$$
+
+- Under $H_0$, $F$ has an [[F-Distribution|$F$ distribution]] with $p$ and $n - p - 1$ degrees of freedom.
+
+$H_0$ is rejected at level $\alpha$ when $F$ exceeds the upper-$\alpha$ critical value of that distribution. Software output gives $p$ as the numerator degrees of freedom of $F$ and $n - p - 1$ as the residual degrees of freedom, from which $n$ follows.
+
+> [!example]- A regression with 2 predictors and an intercept is fitted to 50 observations, with $\text{TSS} = 1{,}000$ and $\text{RSS} = 320$. Is the regression significant at the 5% level? {Example}
+> - The regression sum of squares is $1{,}000 - 320 = 680$ on $p = 2$ degrees of freedom, a mean square of 340.
+> - The residual sum of squares is 320 on $50 - 2 - 1 = 47$ degrees of freedom, a mean square of $6.8$.
+> - $F = 340/6.8 = 50$.
+> - The 5% critical value of $F$ with 2 and 47 degrees of freedom is $3.195$, so $H_0$ is rejected: at least one predictor is related to the response.
+
+## One-way analysis of variance
+
+One-way ANOVA tests whether the means of $J$ groups are equal. It is the regression of the response on $J - 1$ group indicators, so the regression sum of squares is the between-group sum of squares, and the RSS is the within-group sum of squares $\sum_j \sum_i (y_{ij} - \bar{y}_j)^2$. The statistic is
+
+> $$F = \frac{(\text{TSS} - \text{RSS})/(J - 1)}{\text{RSS}/(n - J)}$$
+
+- $\bar{y}_j$ is the mean of group $j$, and $n$ is the total number of observations.
+- Under $H_0$ that all the group means are equal, $F$ has an $F$ distribution with $J - 1$ and $n - J$ degrees of freedom.
+
+When $H_0$ is rejected, [[Multiple Comparisons|multiple comparison]] procedures find which means differ. Adding a continuous covariate to the group indicators gives an [[Analysis of Covariance|analysis of covariance]].
+
+> [!example]- Claim severities from three territories, 10 claims each, give a between-group sum of squares of 1,200 and a within-group sum of squares of 5,400. Do the mean severities differ at the 5% level? {Example}
+> - The between-group mean square is $1{,}200/(3 - 1) = 600$.
+> - The within-group mean square is $5{,}400/(30 - 3) = 200$.
+> - $F = 600/200 = 3.0$.
+> - The 5% critical value of $F$ with 2 and 27 degrees of freedom is $3.354$, so $H_0$ is not rejected: the data do not show different mean severities.
+
+## F test for nested models
+
+To test whether $q$ of the coefficients of a model with $p$ predictors are all zero, the restricted model without them is compared with the full model by the statistic
+
+> $$F = \frac{(\text{RSS}_0 - \text{RSS})/q}{\text{RSS}/(n - p - 1)}$$
+
+- $\text{RSS}_0$ is the residual sum of squares of the restricted model, and $\text{RSS}$ is that of the full model.
+- Under $H_0$, $F$ has an $F$ distribution with $q$ and $n - p - 1$ degrees of freedom.
+
+The overall test is the case $q = p$, in which the restricted model has only the intercept and $\text{RSS}_0 = \text{TSS}$. A sequential ANOVA table lists, for each predictor in the order it entered the model, the drop in RSS from adding it, so a predictor's row depends on the predictors entered before it.
+
+> [!example]- With 24 observations, a model with 1 predictor has $\text{RSS}_0 = 18.0$. Adding a 3-level factor, as 2 indicators, gives $\text{RSS} = 12.0$. Is the factor significant at the 5% level? {Example}
+> - The full model has $p = 3$ predictors, so its residual degrees of freedom are $24 - 3 - 1 = 20$.
+> - The numerator is $(18.0 - 12.0)/2 = 3.0$ and the denominator is $12.0/20 = 0.6$, so $F = 5.0$.
+> - The 5% critical value of $F$ with 2 and 20 degrees of freedom is $3.493$, so the factor is significant.
+
+## Analysis of deviance
+
+A [[Generalized Linear Model|generalized linear model]] is compared with a smaller model nested in it by the change in [[Deviance|deviance]]. Scaled by the [[Dispersion Parameter|dispersion parameter]] $\phi$, the change is approximately chi-squared:
+
+> $$\frac{D_0 - D}{\phi} \sim \chi^2_q$$
+
+- $D_0$ is the deviance of the smaller model and $D$ that of the larger model.
+- $q$ is the number of parameters the larger model adds, which is the difference in their residual degrees of freedom.
+
+A categorical predictor with $J$ levels adds $J - 1$ parameters. For the Poisson and binomial distributions $\phi = 1$, so the change in deviance itself is compared with the chi-squared critical value. When $\phi$ is estimated, the statistic $F = (D_0 - D)/(q\hat\phi)$ is compared with an $F$ distribution. A significant drop in deviance means the added terms are needed, and otherwise they can be dropped.
+
+> [!example]- A Poisson log-linear model has deviance 25.3 on 12 degrees of freedom. Adding an interaction gives deviance 14.1 on 9 degrees of freedom. Is the interaction needed at the 5% level? {Example}
+> - The change in deviance is $25.3 - 14.1 = 11.2$ on $12 - 9 = 3$ degrees of freedom.
+> - The 5% critical value of $\chi^2_3$ is $7.815$.
+> - $11.2 > 7.815$, so the interaction is needed.

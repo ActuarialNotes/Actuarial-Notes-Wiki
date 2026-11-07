@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:7ad2ea6ddb900e0fe23e07ad8747bc75b5854380a9aedb7b7d40115d0ec81e04
+  content_hash: sha256:6ae7d78141ab1eb17ee55940ddd0263508c1701ac6b7aecff78205e44ead1118
   sources:
     - "Penn State STAT 501 Regression Methods (online course notes), Lesson 11 §11.2 yhat = Xb = Hy, yhat_i = h_i1 y_1 + ... + h_in y_n, sha256:6229ca1803f9d152028893131b323ac3ebdff7b49733518cc14a77a87200dbb9 — https://online.stat.psu.edu/stat501/Lesson11.html"
     - "Rodríguez, G., Lecture Notes on Generalized Linear Models (Princeton WWS 509), Ch.2 'Linear Models for Continuous Data', §2.2.1 normal equations X'X b = X'y; §2.9.1 fitted values and residuals, PDF pp.6, 49, sha256:b9fae913696a54bb97a9a0f60cdddd8a5c72c9e9cf0451e503a0043d888edf1f — https://grodri.github.io/glms/notes/c2.pdf"
@@ -18,49 +18,51 @@ verification:
   log: .verify/Concepts/Fitted Values.md
 ---
 
-**Fitted values** are a model's estimates of the mean response for the observations it was fitted to — $\hat{y}_i$ in [[Linear Regression]], $\hat\mu_i$ in a [[Generalized Linear Model]]. The gap between each observation and its fitted value is the [[Residual|residual]], so fitted values are the reference point for every [[Model Diagnostics|diagnostic]].
+**Fitted Values** are a model's estimates of the mean response at the predictor values of the observations it was fitted to. In a [[Linear Regression|linear regression]] with estimated coefficients $\hat\beta_0, \ldots, \hat\beta_p$, the fitted value of observation $i$ is
 
-> $$\hat{\mathbf{y}} = \mathbf{X}\hat{\boldsymbol\beta} = \mathbf{H}\mathbf{y}$$
+> $$\hat{y}_i = \hat\beta_0 + \hat\beta_1 x_{i1} + \cdots + \hat\beta_p x_{ip}$$
 
-> $$\hat\mu_i = g^{-1}(\hat\eta_i) = g^{-1}(\mathbf{x}_i^\top\hat{\boldsymbol\beta})$$
+- $x_{ij}$ is the value of predictor $j$ for observation $i$.
 
-- $\mathbf{X}$ is the [[Design Matrix|design matrix]], $\mathbf{H}$ the [[Hat Matrix|hat matrix]], $g$ the [[Link Function|link function]] and $\hat\eta_i$ the fitted linear predictor. In OLS, each $\hat{y}_i = \sum_j h_{ij}\,y_j$ is a weighted combination of all the responses
-- **Two scales in a GLM.** $\hat\eta_i$ is the fitted value on the *link* scale and $\hat\mu_i$ on the *response* scale; R returns either with `predict(fit, type = "link")` or `type = "response"`. With a log link $\hat\mu_i = e^{\hat\eta_i}$, and a log-exposure [[Offset Variable|offset]] is part of $\hat\eta_i$
-- **OLS with an intercept**: the residuals sum to zero, so the fitted values average to $\bar{y}$, and the residuals are uncorrelated with the fitted values. That is why a residuals-versus-fitted [[Residual Plot|plot]] never shows a linear trend — any pattern it does show is curvature or changing spread. [[R-Squared]] equals the squared correlation between $y$ and $\hat{y}$
-- **Balance in a GLM**: with the canonical link and an intercept (Poisson with log, binomial with logit, Normal with identity), the fitted values reproduce the observed total — and, for each level of a categorical predictor, that level's total. A [[Gamma]] model with a log link is not canonical and balances only approximately
-- **Fitted is not predicted.** A fitted value is in-sample: the model was chosen to match it, so the fitted error understates the [[Prediction Error|error on new data]]. Judge a model on a [[Holdout Sample|holdout sample]] or by [[Cross-Validation|cross-validation]]
-- A [[Linear Mixed Model]] has two kinds: **marginal** fitted values $\mathbf{X}\hat{\boldsymbol\beta}$, the population average, and **conditional** ones $\mathbf{X}\hat{\boldsymbol\beta} + \mathbf{Z}\hat{\mathbf{b}}$, which add each group's [[Best Linear Unbiased Predictor|BLUP]]
+The difference between an observation and its fitted value is its [[Residual|residual]], $e_i = y_i - \hat{y}_i$.
 
-> [!example]- Fitted Claim Counts on Both Scales {Example}
-> A Poisson frequency GLM has $\hat\eta = \ln(\text{exposure}) - 2.0 + 0.4\,I_{\text{urban}}$. Policy A is rural with $0.5$ years of exposure and no claims; policy B is urban with $1.0$ year and one claim. Find each fitted value on the link and response scales, and each raw residual.
+> [!example]- A simple regression gives the fitted line $\hat{y} = 25.8 + 1.6x$. An observation has $x = 15$ and $y = 52$. What are its fitted value and its residual? {Example}
+> - The fitted value is the line's value at $x = 15$: $\hat{y} = 25.8 + 1.6(15) = 49.8$.
+> - The residual is $52 - 49.8 = 2.2$.
+
+## Fitted values in matrix form
+
+For all $n$ observations at once, the vector of fitted values is
+
+> $$\hat{\mathbf{y}} = \mathbf{X}\hat{\boldsymbol\beta}$$
+
+- $\mathbf{X}$ is the [[Design Matrix|design matrix]] and $\hat{\boldsymbol\beta} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}$ is the [[Ordinary Least Squares|least squares]] estimate.
+
+Equivalently, $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$, where $\mathbf{H}$ is the [[Hat Matrix|hat matrix]], so each $\hat{y}_i = \sum_j h_{ij}\, y_j$ is a weighted combination of all the responses.
+
+> [!example]- The design matrix has rows $(1, 1)$, $(1, 2)$ and $(1, 3)$, and the estimates are $\hat\beta_0 = 0.3333$ and $\hat\beta_1 = 1.5$. What are the fitted values? {Example}
+> - Each fitted value is a row of $\mathbf{X}$ times $\hat{\boldsymbol\beta}$.
+> - The fitted values are $0.3333 + 1.5 = 1.8333$, $0.3333 + 3 = 3.3333$ and $0.3333 + 4.5 = 4.8333$.
+
+## Fitted values of a generalized linear model
+
+In a [[Generalized Linear Model|generalized linear model]] with [[Link Function|link function]] $g$, the fitted mean of observation $i$ is
+
+> $$\hat\mu_i = g^{-1}(\hat\eta_i)$$
+
+- $\hat\eta_i = \hat\beta_0 + \hat\beta_1 x_{i1} + \cdots + \hat\beta_p x_{ip}$ is the fitted linear predictor, including any [[Offset Variable|offset]].
+- $g^{-1}$ is the inverse of the link function.
+
+$\hat\eta_i$ is the fitted value on the link scale and $\hat\mu_i$ is the fitted value on the response scale. With a log link, $\hat\mu_i = e^{\hat\eta_i}$, so the log of a fitted mean is the sum of the intercept and the coefficients that apply to the observation. Taking logs of fitted means and differencing them therefore recovers the coefficients.
+
+> [!example]- A Poisson model with a log link has $\hat\eta = \ln(\text{exposure}) - 2.0 + 0.4\,I_{\text{urban}}$. What is the fitted claim count of a rural policy with 0.5 years of exposure and of an urban policy with 1 year? {Example}
+> - For the rural policy, $\hat\eta = \ln 0.5 - 2.0 = -2.6931$, so $\hat\mu = e^{-2.6931} = 0.0677$.
+> - For the urban policy, $\hat\eta = \ln 1 - 2.0 + 0.4 = -1.6$, so $\hat\mu = e^{-1.6} = 0.2019$.
+
+> [!example]- A log-link model with two indicators, $R$ and $F$, and their interaction has fitted means 0.10 for the base cell, 0.15 when only $R = 1$, 0.12 when only $F = 1$ and 0.24 when both are 1. What is the interaction coefficient? {Example}
+> - With a log link, $\ln \hat\mu$ is the intercept plus the coefficients that apply to the cell.
+> - The interaction coefficient is what the cell with both indicators adds beyond the two separate effects:
 >
-> > [!answer]-
-> > $$
-> > \begin{align*}
-> > \hat\eta_A &= \ln 0.5 - 2.0 \\
-> > &= -2.693 \\
-> > \hat\mu_A &= e^{-2.693} \\
-> > &= 0.0677 \\
-> > \hat\eta_B &= 0 - 2.0 + 0.4 \\
-> > &= -1.6 \\
-> > \hat\mu_B &= e^{-1.6} \\
-> > &= 0.2019
-> > \end{align*}
-> > $$
-> > The residuals are $0 - 0.0677 = -0.0677$ for A and $1 - 0.2019 = 0.7981$ for B. B's large residual is not evidence against the model: a Poisson count with mean $0.2019$ is positive with probability $1 - e^{-0.2019} = 0.183$. Individual residuals of a count model are lumpy by nature, which is why they are read in aggregate.
-
-> [!example]- Fitted Values That Balance by Construction {Example}
-> A Poisson GLM with a log link, an intercept and territory as its only predictor is fitted to: A — $1{,}000$ car-years, $50$ claims; B — $400$ car-years, $30$ claims; C — $600$ car-years, $24$ claims. The coefficients are $\hat\beta_0 = \ln 0.05$, $\hat\beta_B = \ln 1.5$ and $\hat\beta_C = \ln 0.8$. Compute the fitted claim counts. Does their agreement with the data show a good model?
+> $$\hat\beta_{RF} = \ln \hat\mu_{RF} - \ln \hat\mu_R - \ln \hat\mu_F + \ln \hat\mu_{\text{base}}$$
 >
-> > [!answer]-
-> > $$
-> > \begin{align*}
-> > \hat\mu_A &= 1{,}000 \times 0.05 \\
-> > &= 50 \\
-> > \hat\mu_B &= 400 \times 0.05 \times 1.5 \\
-> > &= 30 \\
-> > \hat\mu_C &= 600 \times 0.05 \times 0.8 \\
-> > &= 24
-> > \end{align*}
-> > $$
-> > The fitted counts match each territory's observed count exactly, and so match the total of $104$. This is not evidence of quality: with the canonical log link the maximum likelihood equations are $\mathbf{X}^\top(\mathbf{y} - \hat{\boldsymbol\mu}) = \mathbf{0}$, which force the fitted total of every indicator column to equal the observed total. The model has simply spent one parameter per territory. Whether the relativities $1.5$ and $0.8$ hold up is a question for a holdout period.
+> - The coefficient is $\ln \frac{0.24 \times 0.10}{0.15 \times 0.12} = \ln 1.3333$, which is $0.2877$.

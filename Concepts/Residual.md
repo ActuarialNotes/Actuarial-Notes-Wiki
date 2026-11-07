@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:a20aefadf33639d2ef883e620eab3bf173eb0c1bc3d28906588a02267a773184
+  content_hash: sha256:b223350635f6abe31e33576bf6b71fa618b03da08c1f87643a47c090ed8014a3
   sources:
     - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021; CAS-hosted copy; MAS-I reading), §3.1.1 pp.61-62 (PDF 71-72: e_i = y_i - y-hat_i, RSS = e_1^2 + ... + e_n^2, eq. 3.3); §3.2 p.71 (PDF 81: 'p distinct predictors'); eq. 3.24 p.77 (PDF 87: n - p - 1 df); §3.3.3 items 4-5 pp.97-99 (PDF 107-109: studentized residual = e_i over its estimated standard error, |r| > 3 possible outlier; average leverage (p+1)/n), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
     - "Dobson & Barnett, An Introduction to Generalized Linear Models, 4th ed. (CRC 2018; MAS-I reading) — publisher preview: §2.2.1 p.23 (PDF 40: residual Y - theta-hat; Poisson approximate standardized residual (Y - theta-hat)/sqrt(theta-hat)), sha256:40ed0b2549113ee0bea29e41786886ce992ffa29251ad26fb1037385bb51611a — https://api.pageplace.de/preview/DT0400.9781351726221_A37406780/preview-9781351726221_A37406780.pdf"
@@ -28,69 +28,95 @@ verification:
   log: .verify/Concepts/Residual.md
 ---
 
-A **residual** is the part of an observation a fitted model does not explain: the observed value minus the [[Fitted Values|fitted value]]. It is the sample stand-in for the unobservable error $\varepsilon_i$, and every [[Model Diagnostics|diagnostic]] — the [[Residual Plot]], the [[QQ Plot]], the residual [[Autocorrelation Function|ACF]] — asks whether the residuals still contain structure.
+A **Residual** is the difference between an observed response and the [[Fitted Values|fitted value]] a model gives it. The residual of observation $i$ is
 
 > $$e_i = y_i - \hat{y}_i$$
 
-> $$r_i = \frac{e_i}{\hat\sigma\sqrt{1 - h_{ii}}}$$
+- $y_i$ is the observed response, and $\hat{y}_i$ is its fitted value.
 
-**Linear regression.**
+A residual is the observable estimate of the model's error $\varepsilon_i$. In a [[Ordinary Least Squares|least squares]] fit with an intercept the residuals sum to zero, and the sum of their squares is the [[Residual Sum of Squares|residual sum of squares]]. Every [[Model Diagnostics|model diagnostic]], such as the [[Residual Plot|residual plot]] and the [[QQ Plot|QQ plot]], looks for structure left in the residuals.
 
-- $e_i$ is the **raw** residual. Even when the errors have constant variance the residuals do not: $\mathrm{Var}(e_i) = \sigma^2(1 - h_{ii})$, where $h_{ii}$ is the leverage from the [[Hat Matrix|hat matrix]]
-- $r_i$ is the **standardized** (internally studentized) residual. The **externally studentized** residual uses $\hat\sigma_{(i)}$, estimated with observation $i$ left out, and follows a $t$ distribution with $n - p - 2$ degrees of freedom, where $p$ is the number of predictors ($p + 1$ coefficients with the intercept). Texts differ on which one they call "studentized"; either way, values beyond about $\pm 3$ flag an [[Outlier|outlier]]
-- With an intercept, [[Ordinary Least Squares|OLS]] residuals sum to zero, and their squares sum to the [[Residual Sum of Squares]]
+> [!example]- A fitted line is $\hat{y} = 2.3 + 0.5x$. An observation has $x = 4$ and $y = 3.9$. What is its residual? {Example}
+> - The fitted value is $2.3 + 0.5(4) = 4.3$.
+> - The residual is $3.9 - 4.3 = -0.4$. It is negative because the observation lies below the fitted line.
 
-**Generalized linear models.** When the variance depends on the mean, raw residuals are not comparable across observations, so two scaled versions are used:
+## Standardized residuals and Cook's distance
+
+In linear regression the variance of the residual $e_i$ is $\sigma^2(1 - h_{ii})$, where $h_{ii}$ is the [[Hat Matrix#Leverage|leverage]] of observation $i$. The standardized residual divides each residual by its estimated standard deviation:
+
+> $$r_i = \frac{e_i}{\hat\sigma \sqrt{1 - h_{ii}}}$$
+
+- $\hat\sigma^2 = \text{RSS}/(n - p - 1)$ is the estimate of the error variance.
+
+The studentized residual uses an estimate of $\sigma$ computed without observation $i$. A standardized or studentized residual greater than 3 in absolute value flags a possible [[Outlier|outlier]]. Cook's distance measures the influence of observation $i$ by combining its standardized residual with its leverage:
+
+> $$D_i = \frac{r_i^2}{p + 1} \cdot \frac{h_{ii}}{1 - h_{ii}}$$
+
+- $p + 1$ is the number of coefficients including the intercept, which is 2 in simple linear regression.
+
+An observation with $D_i$ greater than 1 is usually treated as influential.
+
+> [!example]- A simple linear regression has $\hat\sigma = 0.6$. Observations A and B both have residual $0.5$, with leverages $0.20$ and $0.92$. What are their standardized residuals and Cook's distances? {Example}
+> - For A, $r_A = 0.5/(0.6\sqrt{0.80}) = 0.93$, and $D_A = \frac{0.93^2}{2} \cdot \frac{0.20}{0.80} = 0.11$.
+> - For B, $r_B = 0.5/(0.6\sqrt{0.08}) = 2.95$, and $D_B = \frac{2.95^2}{2} \cdot \frac{0.92}{0.08} = 49.9$.
+> - The raw residuals are equal, but B's leverage pulls the fit toward it, so its residual is large relative to its standard deviation and B is highly influential.
+
+## Pearson and deviance residuals
+
+In a [[Generalized Linear Model|generalized linear model]] the variance of the response depends on its mean, so raw residuals are not comparable across observations. The Pearson residual divides the raw residual by the standard deviation the model assumes:
 
 > $$r_i^{P} = \frac{y_i - \hat\mu_i}{\sqrt{V(\hat\mu_i)}}$$
 
-> $$r_i^{D} = \operatorname{sign}(y_i - \hat\mu_i)\sqrt{d_i}$$
+- $\hat\mu_i$ is the fitted mean, and $V$ is the [[Variance Function|variance function]].
 
-- The **Pearson residual** divides by the standard deviation implied by the [[Variance Function|variance function]] $V$. Its squares sum to the Pearson $\chi^2$ statistic, which divided by the residual degrees of freedom estimates the [[Dispersion Parameter|dispersion]]
-- The **deviance residual** uses $d_i$, observation $i$'s contribution to the [[Deviance|deviance]], so its squares sum to $D$. For Poisson, $d_i = 2\left[y_i \ln(y_i/\hat\mu_i) - (y_i - \hat\mu_i)\right]$, with $y \ln y = 0$ at $y = 0$. Deviance residuals are adjusted for the shape of the assumed distribution, so if it is right they are approximately Normal with constant variance, and a QQ plot of them tests the choice for a continuous response such as a gamma severity. For a discrete response (Poisson, negative binomial) they fall in tight clusters and will likely not look Normal unless the data are highly aggregated; randomized quantile residuals or binned working residuals are used instead
+The sum of the squared Pearson residuals is the Pearson $\chi^2$ statistic, and dividing it by the residual degrees of freedom estimates the [[Dispersion Parameter|dispersion parameter]] $\phi$. Because Pearson residuals are standardized, one that is large in absolute value flags an unusual observation. The [[Deviance Residual|deviance residual]] is
 
-**Linear mixed models.** The model's *conditional* errors $\boldsymbol\varepsilon = \mathbf{y} - \mathbf{X}\boldsymbol\beta - \mathbf{Z}\mathbf{b}$ have covariance $\mathbf{R}$, and its *marginal* errors $\mathbf{y} - \mathbf{X}\boldsymbol\beta = \mathbf{Z}\mathbf{b} + \boldsymbol\varepsilon$ have covariance $\mathbf{V} = \mathbf{Z}\mathbf{D}\mathbf{Z}^\top + \mathbf{R}$. Conditional residuals $\mathbf{y} - \mathbf{X}\hat{\boldsymbol\beta} - \mathbf{Z}\hat{\mathbf{b}}$ and marginal residuals $\mathbf{y} - \mathbf{X}\hat{\boldsymbol\beta}$ estimate them, but like OLS residuals they are computed from estimates, so their covariances only approximate $\mathbf{R}$ and $\mathbf{V}$. The [[Variance Components|variance components]] therefore imply a [[Covariance Structure|covariance structure]] that the residuals are checked against, and the [[Intraclass Correlation|intraclass correlation]] is the correlation between two marginal errors in the same group.
+> $$r_i^{D} = \text{sign}(y_i - \hat\mu_i)\sqrt{d_i}$$
 
-**Time series.** An [[ARIMA]] model's residuals are its one-step-ahead forecast errors, $\hat\varepsilon_t = y_t - \hat{y}_{t \mid t-1}$. If the model has captured the dependence they are [[White Noise|white noise]]: no spike in the [[Correlogram|correlogram]] of their ACF or [[Partial Autocorrelation Function|PACF]] outside $\pm 1.96/\sqrt{n}$, and a Ljung–Box statistic below its $\chi^2$ critical value. A spike that survives points to the AR or MA term that is missing.
+- $d_i$ is observation $i$'s contribution to the [[Deviance|deviance]], so the squared deviance residuals sum to $D$.
 
-> [!example]- Pearson and Deviance Residuals for Claim Counts {Example}
-> A Poisson frequency GLM gives two policies the same fitted mean $\hat\mu = 1.2$. One had $3$ claims, the other none. Compute both residuals for each.
+For a Poisson model, observation $i$'s contribution to the deviance is
+
+> $$d_i = 2\left[y_i \ln\frac{y_i}{\hat\mu_i} - (y_i - \hat\mu_i)\right]$$
+
+- The term $y_i \ln(y_i/\hat\mu_i)$ is taken as 0 when $y_i = 0$.
+
+If the model's distribution is right, the deviance residuals of a continuous response are close to normal, so a QQ plot of them that follows the reference line shows no departure from the assumed distribution.
+
+> [!example]- A Poisson model gives two policies the fitted mean 1.2. One had 3 claims and the other none. What are their Pearson and deviance residuals? {Example}
+> - For $y = 3$, $r^P = (3 - 1.2)/\sqrt{1.2} = 1.643$.
+> - For $y = 3$, $d = 2[3 \ln(3/1.2) - 1.8] = 1.898$, so $r^D = \sqrt{1.898} = 1.378$.
+> - For $y = 0$, $r^P = -1.2/\sqrt{1.2} = -1.095$.
+> - For $y = 0$, $d = 2(1.2) = 2.4$, so $r^D = -\sqrt{2.4} = -1.549$.
+
+## Residuals of a linear mixed model
+
+In a [[Linear Mixed Model|linear mixed model]] $\mathbf{y} = \mathbf{X}\boldsymbol\beta + \mathbf{Z}\mathbf{b} + \boldsymbol\varepsilon$, the conditional errors $\boldsymbol\varepsilon$ have covariance matrix $\mathbf{R}$, and the marginal errors $\mathbf{Z}\mathbf{b} + \boldsymbol\varepsilon$ have covariance matrix
+
+> $$\mathbf{V} = \mathbf{Z}\mathbf{D}\mathbf{Z}^T + \mathbf{R}$$
+
+- $\mathbf{Z}$ is the design matrix of the [[Random Effects|random effects]] $\mathbf{b}$, and $\mathbf{D}$ is their covariance matrix.
+
+The marginal residuals $\mathbf{y} - \mathbf{X}\hat{\boldsymbol\beta}$ and the conditional residuals $\mathbf{y} - \mathbf{X}\hat{\boldsymbol\beta} - \mathbf{Z}\hat{\mathbf{b}}$ are checked against this [[Covariance Structure|covariance structure]]. With one random intercept per subject, $\mathbf{Z}_i$ is a column of ones and $\mathbf{D}$ is the between-subject variance $\sigma_b^2$.
+
+> [!example]- A random-intercept model has $\sigma_b^2 = 40$ and independent conditional errors with $\sigma^2 = 160$. What covariance matrix does it imply for one subject's three marginal errors, and what is their correlation? {Example}
+> - $\mathbf{Z}_i \mathbf{D} \mathbf{Z}_i^T$ is $40$ in every entry, and $\mathbf{R}_i = 160\,\mathbf{I}$.
 >
-> > [!answer]-
-> > For $y = 3$:
-> > $$
-> > \begin{align*}
-> > r^P &= \frac{3 - 1.2}{\sqrt{1.2}} \\
-> > &= 1.643 \\
-> > d &= 2\left[3\ln\frac{3}{1.2} - (3 - 1.2)\right] \\
-> > &= 1.898 \\
-> > r^D &= +\sqrt{1.898} \\
-> > &= 1.378
-> > \end{align*}
-> > $$
-> > For $y = 0$: $r^P = -1.2/\sqrt{1.2} = -1.095$, and $d = 2(1.2) = 2.4$, so $r^D = -\sqrt{2.4} = -1.549$.
-> >
-> > The Pearson residuals are lopsided — a large positive value for a claim-heavy policy, a modest negative one for a claim-free policy — because a Poisson count is right-skewed. The deviance residuals pull the two toward symmetry. Even so, with individual policy counts every claim-free policy with the same fitted mean gets the same residual, so the residuals fall in tight clusters and will likely not look Normal on a QQ plot. For individual Poisson data, randomized quantile residuals or binned working residuals are the better check.
-
-> [!example]- A Small Residual at a High-Leverage Point {Example}
-> A regression has $\hat\sigma = 0.6$. Observation A has raw residual $e = 0.5$ and leverage $h = 0.20$; observation B has the same raw residual and $h = 0.92$. Standardize both.
+> $$\mathbf{V}_i = \begin{bmatrix} 200 & 40 & 40 \\ 40 & 200 & 40 \\ 40 & 40 & 200 \end{bmatrix}$$
 >
-> > [!answer]-
-> > $$
-> > \begin{align*}
-> > r_A &= \frac{0.5}{0.6\sqrt{0.80}} \\
-> > &= 0.93 \\
-> > r_B &= \frac{0.5}{0.6\sqrt{0.08}} \\
-> > &= 2.95
-> > \end{align*}
-> > $$
-> > Identical raw residuals, very different messages. B pulls the fit so hard toward itself that a residual of $0.5$ is nearly three standard deviations of what its position allows. Screening raw residuals alone would miss it.
+> - The [[Intraclass Correlation|intraclass correlation]] between any two errors of the subject is $40/200 = 0.20$.
 
-> [!example]- The Error Covariance Implied by a Random Intercept {Example}
-> Annual loss ratios for each policyholder are modelled with a random intercept, $\hat\sigma_b^2 = 40$ and $\hat\sigma^2 = 160$, independent conditional errors. Write the covariance matrix the model implies for one policyholder's three marginal errors, and their correlation.
->
-> > [!answer]-
-> > $$
-> > \mathbf{V}_i = \sigma_b^2\mathbf{J} + \sigma^2\mathbf{I} = \begin{bmatrix} 200 & 40 & 40 \\ 40 & 200 & 40 \\ 40 & 40 & 200 \end{bmatrix}
-> > $$
-> > Here $\mathbf{J}$ is the $3 \times 3$ matrix of ones. Each variance is $40 + 160 = 200$ and every pair of years shares the policyholder's intercept, so the correlation is $40/200 = 0.20$ at every lag — compound symmetry. The fitted marginal residuals $\mathbf{y}_i - \mathbf{X}_i\hat{\boldsymbol\beta}$ only approximate this structure, because $\hat{\boldsymbol\beta}$ is estimated. The conditional residuals should look uncorrelated; if their correlation instead falls off with the gap between years, an AR(1) structure for $\mathbf{R}$ is the next model to try.
+## Residuals of a time series model
+
+The residuals of a time series model such as an [[ARIMA]] model are its one-step-ahead forecast errors:
+
+> $$e_t = y_t - \hat{y}_{t \mid t-1}$$
+
+- $\hat{y}_{t \mid t-1}$ is the forecast of $y_t$ made from the observations up to time $t - 1$.
+
+If the model has captured the dependence in the series, its residuals are [[White Noise|white noise]], and no autocorrelation of the residuals in the [[Correlogram|correlogram]] lies outside $\pm 1.96/\sqrt{n}$.
+
+> [!example]- The residuals of a model fitted to 100 observations have lag-3 autocorrelation 0.25 and no other large autocorrelation. Are they white noise? {Example}
+> - The bounds are $\pm 1.96/\sqrt{100} = \pm 0.196$.
+> - The lag-3 autocorrelation of 0.25 lies outside the bounds, so the residuals are not white noise.
+> - The model has missed dependence at lag 3.

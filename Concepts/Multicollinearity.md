@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:checker-islr-a
-  content_hash: sha256:d40c3fca4327ffc84462775521ab67d6d2069bd9a80b2bcfce2abac1f0d48bf7
+  content_hash: sha256:c047b21dc680bf428620d579c8c8d7965f0cbfff7e6c9c94ebc5b2c194f72ac3
   sources:
     - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), CAS-hosted copy, §3.3.3 item 6 'Collinearity' incl. Figures 3.14-3.15 and Table 3.11, inflated SEs, failure to reject H0, masked importance, VIF, printed pp.99-103 (PDF pp.109-113), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
     - "Shalizi, C. R., CMU 36-401 Modern Regression, Lecture 17 'Multicollinearity' (Fall 2015), §2 eq. (6) p.5 Var[beta-hat] = sigma^2 (x'x)^-1 and §2.1 p.6 the inverse of n^-1 x'x for p = 2, whose beta1-beta2 entry is -Cov[X1,X2]/det, sha256:d8115efaaad92aacf470b4ba842b184c2906aba30816c4f6ae2a13b8c1327380 — https://www.stat.cmu.edu/~cshalizi/mreg/15/lectures/lecture-17.pdf"
@@ -17,34 +17,61 @@ verification:
   log: .verify/Concepts/Multicollinearity.md
 ---
 
-**Multicollinearity** is strong linear association among the *predictors* of a regression. The fit as a whole stays fine, but individual coefficients become unstable: the data cannot say which of two nearly interchangeable variables is doing the work, so each coefficient gets a large standard error.
-
-> $$\text{VIF}_j = \frac{1}{1 - R_j^{2}}$$
-
-> $$\text{Var}(\hat\beta_j) = \frac{\sigma^{2}}{S_{jj}} \times \text{VIF}_j$$
-
-- $S_{jj} = \sum_{i=1}^{n} (x_{ij} - \bar{x}_j)^2$ is the centred sum of squares of predictor $x_j$ (not the uncentred diagonal entry of $\mathbf{X}^\top\mathbf{X}$), so $\sigma^2/S_{jj}$ is $\text{Var}(\hat\beta_j)$ when $x_j$ is the only predictor, and $\text{VIF}_j$ is the factor by which the other predictors inflate it
-- $R_j^2$ is from regressing predictor $x_j$ on all the *other* predictors. A **variance inflation factor** above $5$–$10$ is the usual flag
-- Symptoms: a significant overall $F$ test with no significant individual coefficients, coefficients that flip sign when a variable is added or a few rows change, and standard errors that are implausibly large
-- **Correlated predictors give correlated estimates.** The RSS contours for two collinear coefficients run along a narrow valley: a wide range of individual values fits almost equally well, so each coefficient is poorly determined and its interval is wide (it can include zero even when both predictors are strongly related to the response), yet the pair is held to the valley. With positively correlated predictors ($x_1 \approx x_2$) the fit depends essentially on $\beta_1 + \beta_2$, so the sum is well determined while raising one coefficient means lowering the other — the valley slopes downward and the estimates are negatively correlated. With negatively correlated predictors ($x_1 \approx -x_2$) it is the difference $\beta_1 - \beta_2$ that is determined, and the valley slopes upward
-- Keep the two apart: correlation between the **coefficient estimates** is the symptom, while the property of the data is the correlation between the **predictors**, and for two predictors the two have opposite signs
-- What it does **not** hurt is prediction inside the observed range of the predictors — fitted values and [[R-Squared]] are unaffected. It damages *interpretation*, which is fatal for a rating model where each relativity must stand on its own
-- **Perfect** collinearity (the dummy-variable trap: including every level of a [[Categorical Predictor]] plus an intercept) makes $\mathbf{X}^\top\mathbf{X}$ singular and the fit impossible; drop one level as the base
-- Remedies: drop one of the pair, combine them into a single variable, centre the variables before adding polynomial or [[Interaction]] terms, or shrink with a penalized fit. Collecting data that breaks the association is the real fix
-- Common in insurance data by construction — vehicle age and vehicle value, building age and construction type, exposure and premium all move together
-- Detect it before fitting with a correlation matrix or a [[Scatter Plot]] matrix of the predictors; confirm afterwards with VIFs from the [[Parameter Estimate Tables]]
-
 ![[Media/Figures/Multicollinearity.svg|340]]
 
-> [!example]- Computing and Interpreting a VIF {Example}
-> Regressing vehicle value on the other predictors gives $R^2 = 0.92$. Compute the VIF and describe the effect on the coefficient.
->
-> > [!answer]-
-> > $$\text{VIF} = \frac{1}{1 - 0.92} = 12.5$$
-> > The variance of $\hat\beta$ for vehicle value is $12.5$ times what it would be if that predictor were uncorrelated with the others, so its standard error is $\sqrt{12.5} = 3.5$ times larger. A relativity that would have been comfortably significant may now fail its Wald test entirely.
+**Multicollinearity** is a strong linear relationship among the [[Predictor Variable|predictors]] of a regression. Collinear predictors carry nearly the same information, so the data can determine their combined effect but cannot separate the effect of each. The variance inflation factor of the coefficient of predictor $x_j$ is
 
-> [!example]- Sign Flip in a Rating Model {Example}
-> A severity model includes both vehicle age and vehicle value, which correlate at $-0.94$. Alone, vehicle age has coefficient $-0.08$; together with value it becomes $+0.05$. Is the positive sign a real effect?
->
-> > [!answer]-
-> > Almost certainly not. With $r = -0.94$ the two variables carry nearly the same information, so the fit can raise one coefficient and offset it through the other with little change in the likelihood — the split between them is essentially arbitrary. Keep **one** of the two (or build a single derived variable such as value-per-year-of-age) and choose between the candidate models on holdout error or [[AIC]], not on the sign of an unstable coefficient.
+> $$\text{VIF}_j = \frac{1}{1 - R_j^2}$$
+
+- $R_j^2$ is the [[R-Squared|$R^2$]] from regressing $x_j$ on all the other predictors.
+
+$\text{VIF}_j$ is the factor by which the variance of $\hat\beta_j$ is inflated, compared with a model in which $x_j$ is uncorrelated with the other predictors. Its smallest value is 1, and a VIF above 5 or 10 indicates a problematic amount of collinearity.
+
+> [!example]- Regressing vehicle value on the other predictors gives $R^2 = 0.92$. What is the VIF of the vehicle value coefficient, and what does it do to the standard error? {Example}
+> - $\text{VIF} = 1/(1 - 0.92) = 12.5$, above the usual threshold of 10.
+> - The variance of the coefficient is 12.5 times what it would be without collinearity.
+> - Its standard error is $\sqrt{12.5} = 3.54$ times as large.
+
+## Variance of a coefficient under multicollinearity
+
+In linear regression the variance of the estimated coefficient $\hat\beta_j$ is
+
+> $$\text{Var}(\hat\beta_j) = \frac{\sigma^2}{\sum_{i=1}^{n} (x_{ij} - \bar{x}_j)^2} \cdot \text{VIF}_j$$
+
+- $\sigma^2$ is the error variance, and $\bar{x}_j$ is the mean of predictor $x_j$.
+
+The first factor is the variance of the slope in a simple regression on $x_j$ alone, which has no collinearity. With the same error variance, the VIF is therefore the square of the ratio of the coefficient's standard error in the multiple regression to its standard error in the simple regression.
+
+> [!example]- The coefficient of a predictor has standard error 0.40 in a simple regression on that predictor alone and 1.10 in the multiple regression. What is its VIF, assuming the same error variance? {Example}
+> - The VIF is the squared ratio of the standard errors, $(1.10/0.40)^2 = 7.56$.
+
+## Effects of multicollinearity
+
+1. The standard errors of the collinear coefficients are inflated, so their confidence intervals are wide. Each coefficient can be insignificant even when the overall $F$ test is significant.
+2. The sizes and signs of the collinear coefficients are unstable. They can change a great deal when a predictor is added or removed or when a few observations change, and the usual interpretation of a coefficient, holding the other predictors fixed, no longer applies.
+3. The fitted values and the predictive accuracy within the range of the data are largely unaffected.
+
+Removing one predictor changes the estimates and $p$-values of the others, so a predictor that was insignificant can become significant after refitting. Insignificant predictors are therefore removed one at a time, not all at once.
+
+> [!example]- A severity model includes vehicle age and vehicle value, whose correlation is $-0.94$. Alone, vehicle age has coefficient $-0.08$. With vehicle value in the model, it becomes $+0.05$. Is the positive sign a real effect? {Example}
+> - The two predictors carry nearly the same information, so the fit can raise one coefficient and offset it through the other with little change in the RSS.
+> - The split of the effect between the two coefficients is therefore poorly determined, and the sign of either one is not reliable.
+> - The usual remedy is to keep one of the two predictors, or to combine them into a single variable.
+
+## Detecting and removing multicollinearity
+
+A correlation matrix or a [[Scatter Plot#Scatter plot matrix|scatter plot matrix]] of the predictors shows collinearity between pairs of predictors. Regressing one predictor on another and finding a high $R^2$ shows the same. Collinearity among three or more predictors can exist when no pair is highly correlated, so the VIFs are the more complete check. The usual remedies are to remove one of the collinear predictors or to combine them into a single predictor.
+
+## Aliasing
+
+Aliasing is the exact case, a perfect linear dependence among the columns of the [[Design Matrix#Linearly dependent columns|design matrix]], which leaves the coefficients without a unique estimate:
+
+1. Intrinsic aliasing comes from the definition of the variables, such as an indicator for every level of a [[Categorical Predictor|categorical predictor]] together with an intercept. It is removed by dropping one level of each factor as its base level.
+2. Extrinsic aliasing comes from the data, such as a level of one factor that coincides exactly with a level of another. It is removed by keeping only one of the two aliased parameters.
+3. Near aliasing is a strong but not perfect dependence, usually caused by a few observations that break an otherwise exact one. It behaves like severe multicollinearity.
+
+GLM software usually detects intrinsic and extrinsic aliasing and drops the aliased parameters.
+
+> [!example]- A model has an intercept and two categorical predictors, with 3 and 4 levels. How many parameters does it have once intrinsic aliasing is removed? {Example}
+> - Each factor loses one level as its base, so the factors contribute $3 - 1 = 2$ and $4 - 1 = 3$ parameters.
+> - With the intercept, the model has $1 + 2 + 3 = 6$ parameters.

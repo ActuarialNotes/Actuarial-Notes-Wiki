@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:53bbed5ea56c511bf59a238fb4713b3714665ca5b7a908ca20e2914845b36538
+  content_hash: sha256:e24eea472edbcd61fe5f0634896f453e3835ac8a0111fbc20d27555ecacd7aca
   sources:
     - "American Academy of Actuaries, Extreme Events and Property Lines Committee, Uses of Catastrophe Model Output (July 2018), pp.11, 13, 20, 23, 26 (PDF pp.15, 17, 24, 27, 30: entire book of business; how a property's loss potential interacts with existing policies; AAL = expected loss per year; PML / return period loss; 1,000 homes around Florida vs coastal Miami-Dade; premiums commensurate with risk, risk selection; adding a property changes the book's PML; many claims in close geographic proximity all at once, transferred to reinsurers), sha256:66a8390a3fa24c93d203b0dec3227811a8dcd15c3cf9c8a49459bf9265260bd6 — https://www.actuary.org/sites/default/files/files/publications/Catastrophe_Modeling_Monograph_07.25.2018.pdf"
     - "Mango, 'An Application of Game Theory: Property Catastrophe Risk Load', Proceedings of the CAS LXXXV (1998), pp.157-158 and §§2, 4 (marginal methods use the change in portfolio variance / standard deviation from adding a new account; Var(L + n) = Var(L) + Var(n) + 2Cov(L, n), eq.(2.4); MV risk load λ[Var(n) + 2Cov(L, n)], eq.(4.1)), sha256:29233156c3360784643452285edd2f4037c82de544f441a07976766f01a6ddc2 — https://www.casact.org/sites/default/files/database/proceed_proceed98_980157.pdf"
@@ -18,73 +18,41 @@ verification:
   log: .verify/Concepts/Insurance Portfolio.md
 ---
 
-**An insurance portfolio**, or book of business, is the set of [[Insurance Policy|policies]] an [[Insurer|insurer]] holds, whether in one line, one region or in total, whose combined losses the insurer bears. Risk is pooled, measured and managed at the portfolio level. What a policy costs the insurer depends on how its losses move together with everyone else's.
+An **Insurance Portfolio**, or book of business, is the set of [[Insurance Policy|policies]] an [[Insurer|insurer]] holds, whose combined losses the insurer bears. If the portfolio has $n$ policies and $X_j$ is the loss on policy $j$ over a period, the total loss of the portfolio is
 
-> $$S = \sum_{j=1}^{n} S_j$$
+> $$S = X_1 + X_2 + \cdots + X_n$$
 
-> $$\text{Var}(S) = \sum_{j} \text{Var}(S_j) + \sum_{j \neq k} \text{Cov}(S_j, S_k)$$
+The [[Covariance#Variance of a sum|variance of the sum]] is
 
-- $S_j$ is policy $j$'s loss for the period. When policies are independent, the covariance terms vanish and the [[Coefficient of Variation|coefficient of variation]] of $S$ falls like $1/\sqrt{n}$. That is the pooling insurance depends on, and it breaks down when policies are correlated.
-- **Catastrophe accumulation (Exam 9).** A hurricane or earthquake causes many claims close together all at once, so policies in its footprint are correlated and the covariance terms do not vanish. Insuring 1,000 homes spread around a state may be acceptable where 1,000 homes on one stretch of coast are not. Cat exposure is therefore managed across the whole book. [[Catastrophe Modelling|Cat models]] produce the [[Catastrophe Expected Loss Cost|expected loss cost]] (the average annual loss) and [[Probable Maximum Loss|PMLs]] at chosen return periods, including how much one more location adds to the book's PML. The insurer controls [[Concentration Risk|concentrations]] through risk selection, premiums commensurate with the risk, and [[Reinsurance|reinsurance]] ([[Catastrophe Exposure Management]]).
-- **Heterogeneity (MAS-I).** Policies differ in their underlying claim rates. A [[Mixed Poisson Process|mixed Poisson]] model treats a policy's rate $\Lambda$ as a draw from a [[Mixing Distribution|mixing distribution]] across the portfolio. A gamma mix gives [[Negative Binomial Distribution|negative binomial]] counts. A policy's own claims then tell you something about its $\Lambda$, which is the basis of [[Experience Rating|experience rating]] and [[Bayesian Credibility|credibility]].
-- **Marginal view.** In [[Risk-Adjusted Pricing|risk-adjusted pricing]], what a new policy adds to the book depends on how its losses interact with the existing policies. Marginal methods set its [[Risk Loads|risk load]] from the change in portfolio variance or standard deviation. Adding account $n$ to portfolio $L$ changes the variance by $\text{Var}(n) + 2\,\text{Cov}(L, n)$, so its covariance with the book counts, not just its standalone variance.
-- This is not the [[Portfolio]] page, which covers an Exam FM investment portfolio on the asset side of the balance sheet. An insurance portfolio is on the liability side.
+> $$\text{Var}(S) = \sum_{j=1}^{n} \text{Var}(X_j) + 2\sum_{j < k} \text{Cov}(X_j, X_k)$$
 
-> [!example]- Where Diversification Stops {Example}
-> Each home in a coastal book has an expected annual loss of $\mu = \$1{,}000$ and a standard deviation of $\sigma = \$10{,}000$. Any two homes' losses have correlation $\rho$.
->
-> Find the portfolio's coefficient of variation for $n = 1{,}000$ and $n = 10{,}000$ homes, first with $\rho = 0$ and then with $\rho = 0.01$.
->
-> > [!answer]-
-> > With $n$ equal variances and a common correlation:
-> >
-> > $$
-> > \begin{align*}
-> > \text{Var}(S) &= n\sigma^2 + n(n-1)\rho\,\sigma^2 \\
-> > \text{CV}(S) &= \frac{\sigma}{\mu}\sqrt{\frac{1 + (n-1)\rho}{n}}
-> > \end{align*}
-> > $$
-> >
-> > With $\rho = 0$:
-> >
-> > - $n = 1{,}000$: $\text{CV} = 10\sqrt{1/1{,}000} = 0.316$
-> > - $n = 10{,}000$: $\text{CV} = 10\sqrt{1/10{,}000} = 0.100$
-> >
-> > With $\rho = 0.01$:
-> >
-> > - $n = 1{,}000$: $\text{CV} = 10\sqrt{10.99/1{,}000} = 1.048$
-> > - $n = 10{,}000$: $\text{CV} = 10\sqrt{100.99/10{,}000} = 1.005$
-> >
-> > Independent risks diversify steadily. A correlation of just $0.01$ sets a floor of $\frac{\sigma}{\mu}\sqrt{\rho} = 1.0$ that growth can't get below. Adding 9,000 homes in the same footprint barely changes the relative risk. Reducing it further takes writing elsewhere or ceding risk to reinsurers.
+- $\text{Cov}(X_j, X_k)$ is the [[Covariance|covariance]] of the losses on policies $j$ and $k$.
 
-> [!example]- What One Claim Says About a Policy {Example}
-> A portfolio is $70\%$ low-risk policies with Poisson rate $0.05$ and $30\%$ high-risk policies with rate $0.20$. The insurer can't tell them apart at underwriting. A policy has exactly one claim this year.
->
-> Find the probability it is high-risk and its expected claims next year.
->
-> > [!answer]-
-> > $$
-> > \begin{align*}
-> > P(N{=}1 \mid \text{low}) &= 0.05\,e^{-0.05} \\
-> > &= 0.04756 \\[4pt]
-> > P(N{=}1 \mid \text{high}) &= 0.20\,e^{-0.20} \\
-> > &= 0.16375
-> > \end{align*}
-> > $$
-> >
-> > $$
-> > \begin{align*}
-> > P(\text{high} \mid N{=}1) &= \frac{0.3(0.16375)}{0.7(0.04756) + 0.3(0.16375)} \\
-> > &= \frac{0.04912}{0.08242} \\
-> > &= 0.596
-> > \end{align*}
-> > $$
-> >
-> > $$
-> > \begin{align*}
-> > E[\Lambda \mid N{=}1] &= 0.404(0.05) + 0.596(0.20) \\
-> > &= 0.139
-> > \end{align*}
-> > $$
-> >
-> > The portfolio average rate is $0.7(0.05) + 0.3(0.20) = 0.095$. One claim raises this policy's expected frequency by almost half. Pricing it at the portfolio average would undercharge it, which is why experience rating uses this information.
+When the policies are independent, every covariance is 0. Adding an independent policy then adds only its own mean to $E[S]$ and its own variance to $\text{Var}(S)$, and the [[Coefficient of Variation#Coefficient of variation of a pool of independent risks|coefficient of variation of a pool of independent risks]] falls as the number of policies grows. An insurance portfolio is a set of liabilities, and is distinct from an investment [[Portfolio|portfolio]] of assets.
+
+> [!example]- A portfolio has 1,000 independent policies, each with an annual loss of mean 1,000 and standard deviation 10,000. What are the mean, the standard deviation and the coefficient of variation of the total loss? {Example}
+> - The mean of the total loss is $1{,}000 \times 1{,}000 = 1{,}000{,}000$.
+> - The variance is $1{,}000 \times 10{,}000^2 = 10^{11}$, so the standard deviation is $316{,}228$.
+> - The coefficient of variation is $316{,}228/1{,}000{,}000 = 0.316$.
+
+## Correlated policies
+
+Policies exposed to a common event, such as a hurricane or a change in the legal environment, have correlated losses. For $n$ policies, each with mean $\mu$ and standard deviation $\sigma$, and with correlation $\rho$ between any two, the variance of the total loss is
+
+> $$\text{Var}(S) = n\sigma^2 + n(n-1)\rho\,\sigma^2$$
+
+and its coefficient of variation is
+
+> $$\text{CV}(S) = \frac{\sigma}{\mu}\sqrt{\frac{1 + (n-1)\rho}{n}}$$
+
+As $n$ grows, $\text{CV}(S)$ approaches $(\sigma/\mu)\sqrt{\rho}$ rather than 0. Adding correlated policies reduces the relative risk of the portfolio only down to this level. An insurer limits such concentrations through underwriting, pricing and [[Reinsurance|reinsurance]] ([[Catastrophe Exposure Management|catastrophe exposure management]]).
+
+> [!example]- Each home in a coastal portfolio has an annual loss with mean $\mu$ and standard deviation $10\mu$, and any two homes' losses have correlation 0.01. What is the coefficient of variation of the total loss for 1,000 homes and for 10,000 homes, and how does it compare with independent homes? {Example}
+> - With $n = 1{,}000$, $\text{CV}(S) = 10\sqrt{10.99/1{,}000} = 1.048$.
+> - With $n = 10{,}000$, $\text{CV}(S) = 10\sqrt{100.99/10{,}000} = 1.005$.
+> - Both are close to the limit $10\sqrt{0.01} = 1.0$.
+> - Independent homes give $10\sqrt{1/1{,}000} = 0.316$ and $10\sqrt{1/10{,}000} = 0.100$.
+
+## Differences between policies
+
+The policies in a portfolio also differ in their expected numbers of claims. A [[Mixed Poisson Process|mixed Poisson process]] models this by treating a policy's claim rate as a draw from a [[Mixing Distribution|mixing distribution]] across the portfolio. A policy's own claims then carry information about its rate, which is the basis of [[Experience Rating|experience rating]].

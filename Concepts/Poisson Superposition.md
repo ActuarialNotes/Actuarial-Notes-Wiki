@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:79f65c54f934b35d6c5507273a2167f6e6449887a9384acb263878d9811a2aff
+  content_hash: sha256:d9b69c34f10ba4977fccd3831499f676c24f322790e927650714d6faf2cc658d
   sources:
     - "Daniel, \"Poisson processes (and mixture distributions)\", CAS Study Note (June 2008) — MAS-I syllabus reading, Fact 1.15 pp.9-10 (sum of independent Poisson processes is Poisson with λ1 + λ2), §1.4.2 and Example 1.28 p.14 (next event from N_1 with probability λ1/(λ1+λ2); merged compound Poisson severity is the rate-weighted mixture), sha256:e345451e9daae82b400aed77f2da0c96c361ed4fbdfd22456b8f711ca0d50888 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Daniel_1.pdf"
     - "Siegrist, Random (randomservices.org, HTML fetched 2026-10-04), ch.13 The Poisson Process, 'Thinning and Superposition', Superposition (combined process Poisson with rate r1 + r2; requires independence), sha256:e07aab3aa8206236541466f57719dcdce9fdf7f1f21a9dd5357d89034cf623ba — https://www.randomservices.org/random/poisson/Splitting.html"
@@ -17,48 +17,44 @@ verification:
   log: .verify/Concepts/Poisson Superposition.md
 ---
 
-**Poisson Superposition** is the result that the sum of independent [[Poisson Process|Poisson processes]] is itself a Poisson process whose rate is the sum of the individual rates — merging independent claim streams produces one Poisson stream.
+**Poisson Superposition** is the combination of independent [[Poisson Process|Poisson processes]] into one process that counts the events of all of them. The sum of $r$ independent Poisson processes with rates $\lambda_1, \lambda_2, \ldots, \lambda_r$ is a Poisson process with rate
 
-> $$N(t) = N_1(t) + N_2(t) + \cdots + N_k(t)$$
->
-> $$\lambda = \lambda_1 + \lambda_2 + \cdots + \lambda_k$$
+> $$\lambda = \lambda_1 + \lambda_2 + \cdots + \lambda_r$$
 
-- The component processes must be **independent**. The merged process inherits independent increments, and a sum of independent Poisson counts is Poisson with the summed mean.
-- **Labelling:** each event of the merged process came from stream $i$ with probability $\lambda_i/\lambda$, independently of the other events and of the event times. Superposition run backwards is [[Poisson Thinning]].
-- **First arrival:** the wait for the first event of any type is exponential with rate $\lambda$ (mean $1/\lambda$), and that event is of type $i$ with probability $\lambda_i/\lambda$ — the competing-exponentials result on [[Interarrival Time]].
-- Given $N(t) = n$ merged events, the number from stream $i$ is [[Binomial Distribution|binomial]]$(n, \lambda_i/\lambda)$.
-- **$n$ of type 1 before $m$ of type 2:** this happens exactly when at least $n$ of the first $n+m-1$ merged events are type 1, so with $p = \lambda_1/(\lambda_1 + \lambda_2)$:
+The same result holds for counts over a fixed period. The [[Poisson Distribution#Sums of independent Poisson counts|sum of independent Poisson random variables]] is Poisson with mean equal to the sum of their means. The total count over $n$ independent periods with the same Poisson mean is therefore Poisson with mean $n$ times that mean.
 
-> $$\sum_{k=n}^{n+m-1} \binom{n+m-1}{k} p^k (1-p)^{n+m-1-k}$$
+> [!example]- On a block of auto policies, collision claims arrive at a rate of 3 per month, comprehensive claims at 2 per month and liability claims at 1 per month, as independent Poisson processes. What is the probability of no claims of any kind in a quarter of a month? {Example}
+> - All claims together form a Poisson process with rate $\lambda = 3 + 2 + 1 = 6$ per month.
+> - The number of claims in a quarter of a month is Poisson with mean $6 \times 0.25 = 1.5$.
+> - The probability of no claims is $e^{-1.5} = 0.2231$.
 
-- Streams driven by a common shock (two lines hit by the same storm) are not independent, and their sum need not be Poisson. For amounts, merged [[Compound Poisson Process|compound Poisson]] streams stay compound Poisson with a rate-weighted mixture of severities.
+## The process each event comes from
 
-> [!example]- Merging Three Auto Coverages {Example}
-> On a block of auto policies, collision claims arrive at $3$ per month, comprehensive at $2$ per month and liability at $1$ per month, as independent Poisson processes.
->
-> (a) Find the probability of no claims of any kind in a week ($t = 1/4$ month). (b) Find the probability that the next claim is a liability claim. (c) Given $8$ claims in a month, find the distribution and mean of the number of collision claims.
->
-> > [!answer]-
-> > The merged process is Poisson with $\lambda = 3 + 2 + 1 = 6$ per month.
-> >
-> > (a) $P(N(1/4) = 0) = e^{-6/4} = e^{-1.5} = 0.2231$.
-> >
-> > (b) $\lambda_{\text{liab}}/\lambda = 1/6 = 0.1667$.
-> >
-> > (c) Each of the $8$ claims is collision with probability $3/6 = 0.5$, independently, so the collision count is $\text{Binomial}(8, 0.5)$ with mean $4$.
+Each event of the combined process comes from process $i$ with probability $\lambda_i/\lambda$, independently of the other events and of the time at which it occurs. Given $N(t) = n$ events of the combined process by time $t$, the number from process 1 is therefore [[Binomial Distribution|binomial]], and the probability that $k$ of them come from process 1 is
 
-> [!example]- Which Large-Loss Stream Hits Twice First? {Example}
-> Large property losses arrive at $3$ per year and large casualty losses at $1$ per year, as independent Poisson processes. What is the probability that the insurer sees its second large property loss before its second large casualty loss?
->
-> > [!answer]-
-> > Each merged large loss is property with probability $p = 3/(3+1) = 0.75$. Two property before two casualty means at least $2$ property among the first $n + m - 1 = 3$ large losses:
-> >
-> > $$
-> > \begin{align*}
-> > P &= \binom{3}{2}(0.75)^2(0.25) + \binom{3}{3}(0.75)^3 \\
-> > &= 0.421875 + 0.421875 \\
-> > &= 0.84375
-> > \end{align*}
-> > $$
-> >
-> > There is about an $84\%$ chance the property stream reaches two losses first.
+> $$P(N_1(t) = k \mid N(t) = n) = \binom{n}{k}\left(\frac{\lambda_1}{\lambda}\right)^{k}\left(1 - \frac{\lambda_1}{\lambda}\right)^{n-k}$$
+
+- $N_1(t)$ is the number of events of process 1 by time $t$.
+- $k = 0, 1, \ldots, n$.
+
+When all $r$ processes have the same rate, each event comes from any one of them with probability $1/r$.
+
+> [!example]- In the same block of auto policies, 8 claims occurred in a month. What is the probability that exactly 4 of them were collision claims, and what is the expected number of collision claims? {Example}
+> - Each claim is a collision claim with probability $3/6 = 0.5$, independently of the other claims.
+> - Given 8 claims, the number of collision claims is binomial with $n = 8$ and probability 0.5.
+> - The probability of exactly 4 is $\binom{8}{4}(0.5)^4(0.5)^4 = \frac{70}{256} = 0.2734$.
+> - The expected number of collision claims is $8 \times 0.5 = 4$.
+
+## One process reaching $n$ events before another reaches $m$
+
+With two independent processes, let $p = \lambda_1/(\lambda_1 + \lambda_2)$. Process 1 reaches $n$ events before process 2 reaches $m$ events exactly when at least $n$ of the first $n + m - 1$ events of the combined process come from process 1. The probability of that is
+
+> $$\sum_{k=n}^{n+m-1} \binom{n+m-1}{k}\, p^{k}(1-p)^{n+m-1-k}$$
+
+> [!example]- Large property losses arrive at a rate of 3 per year and large casualty losses at a rate of 1 per year, as independent Poisson processes. What is the probability that the second large property loss occurs before the second large casualty loss? {Example}
+> - Each large loss is a property loss with probability $p = \frac{3}{3 + 1} = 0.75$.
+> - With $n = m = 2$, look at the first $n + m - 1 = 3$ large losses.
+> - The property losses come first when at least 2 of those 3 are property losses.
+> - Exactly 2 property losses has probability $\binom{3}{2}(0.75)^2(0.25) = 0.421875$.
+> - All 3 property losses has probability $(0.75)^3 = 0.421875$.
+> - The probability is $0.421875 + 0.421875 = 0.8438$.

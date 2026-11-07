@@ -208,11 +208,23 @@ $E[X]$, $\text{Var}(X)$).
 Other exams:
 - **Exam FM:** `i`, `v`, `d`, `\delta`, `a_{\overline{n}|}`, `s_{\overline{n}|}`,
   `\ddot{a}_{\overline{n}|}`.
-- **Exam 5:** `\text{CDF}`, age-to-age `f_{n \to n+1}`, loss-ratio and
-  pure-premium notation; ratemaking is **prospective**, reserving
-  **retrospective** — say which, and keep the vocabularies distinct
-  (development *to* ultimate vs trend *forward to* the policy period; conflating
-  them double-counts).
+- **Exam 5** — ratemaking (set 2026-11-07, from the Pure Premium, Loss Ratio
+  and Exposure Base pages; Werner & Modlin's ratios, written out in words as on
+  the Frequency and Severity pages):
+
+  | Thing | Written | Not |
+  | --- | --- | --- |
+  | basic ratios | $\text{Frequency}$, $\text{Severity}$, $\text{Pure Premium}$, $\text{Loss Ratio}$, $\text{Average Premium}$ in `\text{}` | $PP$, $LR$ in a formula |
+  | the ratios' inputs | $\text{Losses}$, $\text{LAE}$, $\text{Earned Exposures}$, $\text{Earned Premium}$ | $L$, $E_L$, $X$ |
+  | LAE ratio; loss and LAE ratio | $\text{LAE}/\text{Losses}$; $\text{Loss Ratio} \times (1 + \text{LAE Ratio})$ | LAE over premium |
+  | development to ultimate | $\text{CDF}$; age-to-age $f_{n \to n+1}$ | LDF for an age-to-ultimate factor |
+  | trend | annual trend $t$ over $n$ years, factor $(1 + t)^n$ | |
+  | expense and profit provisions | fixed per exposure $F$ (as a share of premium $F\%$), variable $V$, target profit $Q_T$ | |
+  | permissible loss ratio | $\text{PLR} = 1 - V - Q_T$ (all-variable) | |
+
+  Ratemaking is **prospective**, reserving **retrospective** — say which, and
+  keep the vocabularies distinct (development *to* ultimate vs trend *forward
+  to* the policy period; conflating them double-counts).
 
 ## Topic reference
 

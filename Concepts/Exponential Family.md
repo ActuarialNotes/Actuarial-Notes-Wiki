@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:2c3d163d768372cc5981af67eb8ebee765319eeb9c98b47282947e08077d517e
+  content_hash: sha256:064dc7023747ef4b46d754ef29d071e330cd4ce14387776f72ba2c21e1f1d50b
   sources:
     - "Larsen, 'Generalized Linear Models', CAS Study Note (Dec 2015, rev. June 2016; MAS-I reading), pp.1-3 (quasi-likelihood; Tweedie power-variance list; canonical links and exponential-family table), sha256:5c4ed4e8eacf72624f38c5313eb6903f57d627b6ac81ce52e0a5a69404af90bd — https://www.casact.org/sites/default/files/2021-03/MAS-I_Larsen.pdf"
     - "Rodriguez, GLM lecture notes (Princeton), App. B secs.B.1.1-B.3.2 (PDF pp.2-7), sha256:92bc67a6a2fc52a0ffa2babfd7a13e175b2babb52dd28f778d5e307cc65aa286 — https://grodri.github.io/glms/notes/a2.pdf"
@@ -16,41 +16,62 @@ verification:
   log: .verify/Concepts/Exponential Family.md
 ---
 
-The **Exponential Family** is the class of distributions whose density can be written in a common exponential form. It is the set of response distributions a [[Generalized Linear Model]] can use: Normal, Poisson, binomial, [[Gamma]], inverse Gaussian, and the [[Tweedie Distribution]] all belong to it.
-
-> $$f(y \mid \theta, \phi) = \exp\!\left\{\frac{y\theta - b(\theta)}{a(\phi)} + c(y, \phi)\right\}$$
-
-> $$E[Y] = b'(\theta) = \mu, \qquad \text{Var}(Y) = a(\phi)\,b''(\theta) = \phi\,V(\mu)$$
-
-- $\theta$ is the **canonical parameter**, $\phi$ the [[Dispersion Parameter]], $b(\theta)$ the cumulant function whose derivatives generate the mean and variance
-- The **variance function** $V(\mu) = b''(\theta)$ is what distinguishes members and what makes the family so useful: it ties the spread to the mean instead of assuming it constant
-
-| Distribution | $V(\mu)$ | Canonical link | Typical actuarial use |
-| :--- | :--- | :--- | :--- |
-| Normal | $1$ | Identity | Ordinary [[Linear Regression]] |
-| Poisson | $\mu$ | $\ln\mu$ | Claim frequency |
-| Binomial | $\mu(1-\mu)$ | $\ln\frac{\mu}{1-\mu}$ | Retention, large-claim indicator |
-| Gamma | $\mu^2$ | $-1/\mu$ (log in practice) | Claim severity |
-| Inverse Gaussian | $\mu^3$ | $-1/(2\mu^2)$ | Heavy-tailed severity |
-| Tweedie ($1<p<2$) | $\mu^{p}$ | $\mu^{1-p}/(1-p)$ (log in practice) | Pure premium |
-
-- The **canonical [[Link Function]]** is the one with $g(\mu) = \theta$; it makes $\sum x_{ij}y_i$ a [[Sufficient Statistic]] and the likelihood well behaved, but any one-to-one, differentiable link may be used — the log link is standard for insurance because it makes rating factors multiplicative
-- Membership is what lets every GLM be fitted by the same algorithm — iteratively reweighted least squares, equivalent to Fisher scoring — with [[Fisher Information]] $X^\top W X/\phi$; the [[Deviance]]'s $\chi^2$ distribution is a large-sample approximation. Quasi-likelihood runs the same algorithm from the mean–variance relationship alone, when a full exponential-family distribution is not assumed
-- Fixing $\phi$ at $1$ gives the "pure" one-parameter family; estimating it accommodates over- or under-dispersion without leaving the framework
-
 ![[Media/Figures/Exponential_Family.svg|340]]
 
-> [!example]- Showing the Poisson Is in the Family {Example}
-> Write the $\text{Poi}(\mu)$ probability function in exponential-family form and identify $\theta$, $b(\theta)$, and $V(\mu)$.
->
-> > [!answer]-
-> > $$f(y) = \frac{e^{-\mu}\mu^{y}}{y!} = \exp\left\{y\ln\mu - \mu - \ln y!\right\}$$
-> > Matching the standard form: $\theta = \ln\mu$, $b(\theta) = e^{\theta} = \mu$, $a(\phi) = 1$, $c(y,\phi) = -\ln y!$.
-> > $$E[Y] = b'(\theta) = e^{\theta} = \mu, \qquad V(\mu) = b''(\theta) = e^{\theta} = \mu$$
-> > The canonical link is $\theta = \ln\mu$ — the log link, exactly what [[Poisson Regression]] uses.
+The **Exponential Family** is the class of distributions whose probability function or density can be written in the form below. The response of a [[Generalized Linear Model]] has a distribution in this family. A distribution with canonical parameter $\theta$ and [[Dispersion Parameter|dispersion parameter]] $\phi$ is in the exponential family if its probability function or density is
 
-> [!example]- Choosing a Member from the Data {Example}
-> Plotting group variances against group means for a severity data set gives a relationship close to $\text{Var} \propto \mu^2$. Which family member fits, and what would $\text{Var} \propto \mu$ have suggested?
->
-> > [!answer]-
-> > $V(\mu) = \mu^2$ is the **Gamma**, so a Gamma GLM (log link) is indicated for severity. A variance proportional to $\mu$ would point at the **Poisson** — appropriate for counts, not amounts. This mean–variance plot is the practical way to pick a distribution and is a standard [[Exploratory Data Analysis]] step before fitting.
+> $$f(y; \theta, \phi) = \exp\left(\frac{y\theta - b(\theta)}{a(\phi)} + c(y, \phi)\right)$$
+
+- $b(\theta)$ is the cumulant function.
+- $a(\phi)$ is a function of the dispersion parameter, usually $a(\phi) = \phi$.
+- $c(y, \phi)$ is a function that does not involve $\theta$.
+
+The family is also called the exponential dispersion family, or the linear exponential family.
+
+> [!example]- Is the Poisson distribution with mean $\mu$ in the exponential family, and what are $\theta$, $b(\theta)$ and $a(\phi)$? {Example}
+> - The Poisson probability function is $f(y) = \frac{e^{-\mu}\mu^{y}}{y!}$.
+> - Taking the exponential of its logarithm gives $f(y) = \exp(y \ln \mu - \mu - \ln y!)$.
+> - This has the exponential family form with $\theta = \ln \mu$, $b(\theta) = e^{\theta}$, $a(\phi) = 1$ and $c(y, \phi) = -\ln y!$.
+> - The Poisson distribution is in the exponential family, with dispersion parameter $\phi = 1$.
+
+## Mean and variance
+
+The first derivative of the cumulant function gives the mean:
+
+> $$\mu = E[Y] = b'(\theta)$$
+
+and its second derivative gives the variance:
+
+> $$\text{Var}(Y) = a(\phi)\, b''(\theta)$$
+
+The canonical parameter is the inverse of $b'$ applied to the mean, $\theta = (b')^{-1}(\mu)$. Writing $b''(\theta)$ as a function of the mean gives the [[Variance Function|variance function]] $V(\mu)$, so that with $a(\phi) = \phi$ the variance is
+
+> $$\text{Var}(Y) = \phi\, V(\mu)$$
+
+The variance function says how the variance changes with the mean, and the dispersion parameter sets its overall size.
+
+> [!example]- What are the mean and the variance function of the Poisson distribution, from its cumulant function $b(\theta) = e^{\theta}$? {Example}
+> - The mean is $b'(\theta) = e^{\theta}$, and $\theta = \ln \mu$, so $b'(\theta) = \mu$.
+> - The second derivative is $b''(\theta) = e^{\theta} = \mu$, so $V(\mu) = \mu$.
+> - With $\phi = 1$, the variance is $\text{Var}(Y) = \mu$, equal to the mean.
+
+## Members of the family
+
+The common members, with their variance functions and canonical links, are:
+
+| Distribution | $V(\mu)$ | $\phi$ | Canonical link |
+| --- | --- | --- | --- |
+| [[Normal Distribution|Normal]] | $1$ | $\sigma^2$ | $\mu$ (identity) |
+| [[Poisson Distribution|Poisson]] | $\mu$ | $1$ | $\ln \mu$ (log) |
+| [[Binomial Distribution|Binomial]] proportion | $\mu(1 - \mu)$ | $1$ | $\ln\frac{\mu}{1 - \mu}$ (logit) |
+| [[Gamma]] | $\mu^2$ | $1/\alpha$ | $1/\mu$ (inverse) |
+| Inverse Gaussian | $\mu^3$ | estimated | $1/\mu^2$ |
+| [[Tweedie Distribution|Tweedie]], $1 < p < 2$ | $\mu^p$ | estimated | $\mu^{1-p}$ |
+
+The canonical link is the [[Link Function|link function]] that sets the linear predictor equal to the canonical parameter, $g(\mu) = \theta$. A constant multiple does not change a link, so the gamma's canonical parameter $\theta = -1/\mu$ gives the inverse link $1/\mu$. The Tweedie distribution with $1 < p < 2$ is a compound Poisson-gamma distribution.
+
+> [!example]- Plotting the variance of a severity data set's groups against their means shows the variance growing with the square of the mean. Which member of the family should model severity? {Example}
+> - A variance proportional to $\mu^2$ is the variance function $V(\mu) = \mu^2$.
+> - That is the variance function of the gamma distribution.
+> - A gamma GLM, usually with a log link, should model severity.
+> - A variance proportional to $\mu$ would have pointed to the Poisson distribution, which is for counts rather than amounts.

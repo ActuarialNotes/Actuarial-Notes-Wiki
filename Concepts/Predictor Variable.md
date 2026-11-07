@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:6f3be4ed654e6e7caf821695b044c9f4a57b3cbb3dcbf9d424c98535fa597703
+  content_hash: sha256:35461ab45150f0557e0280ec85d9396346ebbf5a31d8624ca4196429e5b5fdd0
   sources:
     - "Dobson & Barnett, An Introduction to Generalized Linear Models, 4th ed. (CRC 2018) — publisher eBook preview, §1.2 Scope, printed pp.2-3 (PDF pp.19-20), sha256:40ed0b2549113ee0bea29e41786886ce992ffa29251ad26fb1037385bb51611a — https://api.pageplace.de/preview/DT0400.9781351726221_A37406780/preview-9781351726221_A37406780.pdf"
     - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer 2021), §3.3.1 printed p.86 (PDF p.96); §3.3.3 Collinearity printed pp.101-103 (PDF pp.111-113); §6.1.1-6.1.3 printed pp.227-234 (PDF pp.235-242), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
@@ -15,39 +15,48 @@ verification:
   log: .verify/Concepts/Predictor Variable.md
 ---
 
-A **predictor variable** — also called an explanatory or independent variable, a covariate, a feature, or in ratemaking a [[Rating Variable|rating variable]] — is an input $x_j$ used to explain or predict the [[Response Variable|response]]. Each predictor fills one or more columns of the [[Design Matrix|design matrix]] and receives its own coefficient. Usage of *covariate* varies: Dobson & Barnett reserve it for a quantitative explanatory variable and call a qualitative one a **factor**.
+A **Predictor Variable** is a variable $x_j$ used to explain or predict the [[Response Variable|response variable]]. It is also called an explanatory variable, an independent variable or a covariate, and in ratemaking a [[Rating Variable|rating variable]]. In a [[Generalized Linear Model]] with predictors $x_1, \ldots, x_p$, the linear predictor of observation $i$ is
 
-> $$g(\mu_i) = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \cdots + \beta_p x_{ip}$$
+> $$\eta_i = \beta_0 + \beta_1 x_{i1} + \cdots + \beta_p x_{ip}$$
 
-- $\mu_i = E[Y_i]$ and $g$ is the [[Link Function|link function]] (the identity in [[Linear Regression]]). $\beta_j$ is the effect of $x_j$ **holding the other predictors fixed**; with a log link, $e^{\beta_j}$ is a multiplicative relativity
-- **Types** ([[Data Types]]): a continuous predictor gets one coefficient, or a [[Variable Transformation|transformation]] when its effect is curved; a nominal [[Categorical Predictor|categorical predictor]] with $k$ levels gets $k - 1$ indicator columns; an ordinal one can be treated either way. An [[Interaction]] lets one predictor's effect depend on the level of another
-- **Not every input is a free predictor.** A [[Control Variable|control variable]] is estimated so that it absorbs a real effect (a year trend, say) but is left out of the rates; an [[Offset Variable|offset]] enters with its coefficient fixed at $1$; an identifier is not a predictor at all
-- **[[Multicollinearity]] among predictors** — vehicle age with vehicle value, building age with construction type — inflates each coefficient's variance by $\text{VIF}_j = 1/(1 - R_j^2)$, where $R_j^2$ comes from regressing $x_j$ on the other predictors. Fitted values are largely unaffected; the interpretation of each coefficient is not
-- "Independent" variable does not mean statistically independent of the other predictors. In insurance data they almost never are, which is exactly why a multivariate model is needed instead of one-way analyses
-- Adding a predictor always lowers training error but can raise [[Test Error|test error]]. Choosing them is [[Variable Selection|variable selection]], judged by significance tests, [[AIC]], [[BIC]] and [[Cross-Validation|cross-validation]]
+- $x_{ij}$ is the value of predictor $j$ for observation $i$.
+- $\beta_j$ is the change in $\eta_i$ for a unit increase in $x_{ij}$, with the other predictors held fixed.
 
-> [!example]- Assigning Roles in a Frequency Data Set {Example}
-> A personal auto frequency file contains: claim count, earned car-years, accident year, territory ($12$ levels), driver age, number of prior claims, and policy number. The rating plan will use territory, driver age and prior claims. State each field's role in a Poisson GLM with a log link.
->
-> > [!answer]-
-> > - **Claim count** — the response
-> > - **Earned car-years** — an offset, entered as $\ln(\text{car-years})$ with coefficient fixed at $1$, so the model fits a frequency per car-year
-> > - **Accident year** — a control variable: estimated so that trend is not absorbed into the rating variables, then left out of the rates
-> > - **Territory** — a categorical predictor with $11$ indicator columns against a base territory
-> > - **Driver age** — continuous, but its effect on frequency is U-shaped, so it is banded or transformed rather than given a single slope
-> > - **Prior claims** — a count used as a predictor; usually capped (e.g. $0$, $1$, $2+$) and treated as ordinal
-> > - **Policy number** — an identifier, used to join tables; including it as a predictor would be meaningless
+A predictor enters the linear predictor in the form the model specifies. A predictor entered through a transformation, such as its natural logarithm, contributes its coefficient multiplied by the transformed value. A continuous predictor entered as a single term contributes one coefficient, and a [[Categorical Predictor|categorical predictor]] with $k$ levels contributes $k - 1$ coefficients.
 
-> [!example]- How Collinearity Hides a Real Effect {Example}
-> In a severity model, regressing vehicle value on the other predictors gives $R_j^2 = 0.84$. Had the predictors been uncorrelated, the vehicle-value coefficient of $0.15$ would have had a standard error of $0.04$. Find the VIF, the actual standard error, and the $t$-statistic before and after the inflation.
->
-> > [!answer]-
-> > $$
-> > \begin{align*}
-> > \text{VIF} &= \frac{1}{1 - 0.84} \\
-> > &= 6.25 \\
-> > \text{SE} &= 0.04\sqrt{6.25} \\
-> > &= 0.10
-> > \end{align*}
-> > $$
-> > The $t$-statistic falls from $0.15/0.04 = 3.75$ to $0.15/0.10 = 1.50$. The effect may be entirely real, but the data cannot separate it from the correlated predictors, so vehicle value looks insignificant. The low $t$-statistic does not show that the effect is absent. The two standard remedies are to drop one of the collinear predictors, usually at little cost to the fit since the information it carries is largely redundant, or to combine them into a single predictor.
+The word "independent" describes the role of a predictor in the model. It does not mean that the predictors are statistically independent of one another, and in insurance data they rarely are.
+
+> [!example]- A log-link frequency GLM has $\hat{\eta} = -4.0 + 0.30 \ln x$, where $x$ is the amount of insurance in thousands. What is the expected frequency for an amount of insurance of 200 thousand? {Example}
+> - The predictor enters as its natural logarithm, $\ln 200 = 5.2983$.
+> - The linear predictor is $\hat{\eta} = -4.0 + 0.30 \times 5.2983 = -2.4105$.
+> - The expected frequency is $e^{-2.4105} = 0.0898$.
+
+## Rating variables, control variables and offsets
+
+Not every predictor in a ratemaking model is used in the same way:
+
+1. A rating variable has its coefficient estimated, and its relativities are used in the rating plan.
+2. A [[Control Variable|control variable]], such as accident year, is fitted as a predictor so that its effect is estimated, and is then dropped when the rates are built, or set at one chosen level.
+3. An [[Offset Variable|offset]], such as the logarithm of exposure, enters with its coefficient fixed at 1 rather than estimated.
+
+> [!example]- A frequency file holds the claim count, earned car-years, accident year, territory, driver age and policy number. The rating plan will use territory and driver age. What role does each field play in a Poisson GLM with a log link? {Example}
+> - The claim count is the response.
+> - The logarithm of earned car-years is an offset, so the model fits a frequency per car-year.
+> - Accident year is a control variable, fitted as a categorical predictor so that trend is not absorbed by territory and driver age, and then dropped from the rates.
+> - Territory and driver age are rating variables.
+> - The policy number is an identifier, not a predictor.
+
+## Correlated predictors
+
+When predictors are highly correlated, which is [[Multicollinearity|multicollinearity]], the variance of their coefficient estimates is inflated and the estimates become unstable. The variance inflation factor of predictor $x_j$ is
+
+> $$\text{VIF}_j = \frac{1}{1 - R_j^2}$$
+
+- $R_j^2$ is the $R^2$ of the regression of $x_j$ on the other predictors.
+
+The standard error of $\hat{\beta}_j$ is $\sqrt{\text{VIF}_j}$ times what it would be if $x_j$ were uncorrelated with the other predictors. A VIF above 5 or 10 is usually considered high.
+
+> [!example]- Regressing vehicle value on the other predictors gives $R_j^2 = 0.84$. If the predictors were uncorrelated, the coefficient of vehicle value, $0.15$, would have a standard error of $0.04$. What is the VIF, and what are the standard error and the $t$ statistic? {Example}
+> - The VIF is $\frac{1}{1 - 0.84} = 6.25$.
+> - The standard error is $0.04\sqrt{6.25} = 0.10$.
+> - The $t$ statistic is $0.15 / 0.10 = 1.50$, compared with $0.15 / 0.04 = 3.75$ without the correlation.

@@ -2712,7 +2712,15 @@
        "page": "Limited Fluctuation Credibility",
        "quote": "$$Z = \\min\\!\\left(1,\\, \\sqrt{\\frac{n}{n_{\\text{full}}}}\\right)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Partial Credibility",
+      "quote": "$$Z = \\min\\left(\\sqrt{\\frac{n}{n_F}},\\; 1\\right)$$",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r5",
@@ -2733,7 +2741,15 @@
        "page": "Limited Fluctuation Credibility",
        "quote": "$$\\text{Estimate} = Z \\cdot \\bar{X} + (1-Z) \\cdot \\mu_0$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Limited Fluctuation Credibility",
+      "quote": "$$U = Z D + (1 - Z) M$$",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r6",
@@ -3232,7 +3248,15 @@
        "page": "Full Credibility Standard",
        "quote": "It is the smallest expected claim count $n_F$ for which the observed value stays within $100k\\%$ of its expected value with probability $p$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Full Credibility Standard",
+      "quote": "A standard stated in claims converts to exposures by dividing by the expected claim frequency per exposure.",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r7",
@@ -6211,7 +6235,15 @@
        "page": "Partial Credibility",
        "quote": "$$Z = \\min\\left(\\sqrt{\\frac{n}{n_F}},\\; 1\\right)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Limited Fluctuation Credibility",
+      "quote": "Compute the credibility $Z = \\min(\\sqrt{n/n_F}, 1)$, with the observed volume $n$ in the same unit as $n_F$.",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r5",
@@ -13498,7 +13530,15 @@
        "page": "Partial Credibility",
        "quote": "**Partial credibility** is the weight $Z < 1$ that [[Limited Fluctuation Credibility|classical credibility]] gives to experience that falls short of the [[Full Credibility Standard]]."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Limited Fluctuation Credibility",
+      "quote": "is a [[Credibility|credibility]] method that gives observed experience full weight once its volume reaches the [[Full Credibility Standard|full credibility standard]], and partial weight below it.",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r2",
@@ -14544,7 +14584,15 @@
        "page": "Partial Credibility",
        "quote": "$$Z = \\min\\left(\\sqrt{\\frac{n}{n_F}},\\; 1\\right)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Partial Credibility",
+      "quote": "$$Z = \\min\\left(\\sqrt{\\frac{n}{n_F}},\\; 1\\right)$$",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r8",
@@ -17411,7 +17459,15 @@
        "page": "Partial Credibility",
        "quote": "$$Z = \\min\\left(\\sqrt{\\frac{n}{n_F}},\\; 1\\right)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Partial Credibility",
+      "quote": "$$Z = \\min\\left(\\sqrt{\\frac{n}{n_F}},\\; 1\\right)$$",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r3",
@@ -20066,7 +20122,15 @@
        "page": "Partial Credibility",
        "quote": "$$Z = \\min\\left(\\sqrt{\\frac{n}{n_F}},\\; 1\\right)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Partial Credibility",
+      "quote": "$$Z = \\min\\left(\\sqrt{\\frac{n}{n_F}},\\; 1\\right)$$",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r2",
@@ -20108,7 +20172,15 @@
        "page": "Partial Credibility",
        "quote": "$Z$ multiplies the observed experience; $1 - Z$ goes to the [[Complement of Credibility]]"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Partial Credibility",
+      "quote": "$Z$ multiplies the observed experience, and $1 - Z$ goes to the [[Complement of Credibility|complement of credibility]].",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r4",
@@ -22430,7 +22502,15 @@
        "page": "Credibility",
        "quote": "Partial credibility uses the **square root rule**, $Z = \\sqrt{n / n_{\\text{full}}}$, capped at $1$ — a class with a quarter of the required claims gets $Z = 0.50$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Partial Credibility",
+      "quote": "$$Z = \\min\\left(\\sqrt{\\frac{n}{n_F}},\\; 1\\right)$$",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r2",
@@ -22451,7 +22531,15 @@
        "page": "Partial Credibility",
        "quote": "$Z$ multiplies the observed experience; $1 - Z$ goes to the [[Complement of Credibility]]"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Limited Fluctuation Credibility",
+      "quote": "$$U = Z D + (1 - Z) M$$",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r3",
@@ -22800,7 +22888,15 @@
        "page": "Full Credibility Standard",
        "quote": "the volume of experience at which … assigns $Z = 1$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Full Credibility Standard",
+      "quote": "At or above the standard the estimate is the observed experience alone, with no weight on the [[Complement of Credibility|complement of credibility]].",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     }
    ]
   },
@@ -25614,7 +25710,15 @@
        "page": "Limited Fluctuation Credibility",
        "quote": "$$Z = \\min\\!\\left(1,\\, \\sqrt{\\frac{n}{n_{\\text{full}}}}\\right)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Partial Credibility",
+      "quote": "$$Z = \\min\\left(\\sqrt{\\frac{n}{n_F}},\\; 1\\right)$$",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r4",
@@ -25870,7 +25974,15 @@
        "page": "Limited Fluctuation Credibility",
        "quote": "Z = \\min\\!\\left(1,\\, \\sqrt{\\frac{n}{n_{\\text{full}}}}\\right)"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Partial Credibility",
+      "quote": "$$Z = \\min\\left(\\sqrt{\\frac{n}{n_F}},\\; 1\\right)$$",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r5",
@@ -25887,7 +25999,15 @@
        "page": "Limited Fluctuation Credibility",
        "quote": "\\text{Estimate} = Z \\cdot \\bar{X} + (1-Z) \\cdot \\mu_0"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Limited Fluctuation Credibility",
+      "quote": "$$U = Z D + (1 - Z) M$$",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r6",
@@ -32528,7 +32648,15 @@
        "page": "Partial Credibility",
        "quote": "Z = \\min\\left(\\sqrt{\\frac{n}{n_F}},\\; 1\\right)"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Limited Fluctuation Credibility",
+      "quote": "Compute the credibility $Z = \\min(\\sqrt{n/n_F}, 1)$, with the observed volume $n$ in the same unit as $n_F$.",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r3",
@@ -37462,7 +37590,15 @@
        "page": "Partial Credibility",
        "quote": "$Z$ multiplies the observed experience; $1 - Z$ goes to the [[Complement of Credibility]]"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Partial Credibility",
+      "quote": "$Z$ multiplies the observed experience, and $1 - Z$ goes to the [[Complement of Credibility|complement of credibility]].",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r7",
@@ -39811,7 +39947,15 @@
        "page": "Credibility",
        "quote": "$$n_{\\text{full}} = \\left(\\frac{z_{(1+p)/2}}{k}\\right)^{2}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Full Credibility Standard",
+      "quote": "$$\\lambda_0 = \\left(\\frac{z_{(1+p)/2}}{k}\\right)^{2}$$",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r2",
@@ -39828,7 +39972,15 @@
        "page": "Credibility",
        "quote": "**Limited fluctuation (classical) credibility** asks how much data is needed for the observation to be stable within tolerance $k$ with probability $p$:"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Full Credibility Standard",
+      "quote": "$z_{(1+p)/2}$ is the $(1+p)/2$ quantile of the standard normal distribution, because the range is two-sided.",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r3",
@@ -39858,7 +40010,15 @@
        "page": "Partial Credibility",
        "quote": "$$Z = \\min\\left(\\sqrt{\\frac{n}{n_F}},\\; 1\\right)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Partial Credibility",
+      "quote": "$$Z = \\min\\left(\\sqrt{\\frac{n}{n_F}},\\; 1\\right)$$",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r5",

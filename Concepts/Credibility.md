@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:f9a22fd80a26d5c9b51ebdce8ba0479408757bc1978616dcdd76bb7afda72f32
+  content_hash: sha256:198d62583687155342a08fed6246f6e8c01df6a6ba75a4b3e259e5839f466a6c
   sources:
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 12 pp.218-222 (PDF pp.230-234), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch. 3 p.30 (PDF p.36), Ch. 9 p.153 (PDF p.159), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/database/studynotes_friedland_estimating.pdf"
@@ -15,69 +15,67 @@ verification:
   log: .verify/Concepts/Credibility.md
 ---
 
-**Credibility** $Z$ is the weight given to a body of observed experience when it is blended with a broader estimate — the [[Complement of Credibility|complement]] — to produce an estimate more accurate than either alone.
-
-> $$\text{Estimate} = Z \times \text{Experience} + (1 - Z) \times \text{Complement}$$
-
-> $$Z = \sqrt{\frac{n}{n_{\text{full}}}} \qquad \text{(limited fluctuation)}$$
-
-> $$Z = \frac{n}{n + K} \qquad \text{(Bühlmann)}$$
-
-**Limited fluctuation (classical) credibility** asks how much data is needed for the observation to be stable within tolerance $k$ with probability $p$:
-
-> $$n_{\text{full}} = \left(\frac{z_{(1+p)/2}}{k}\right)^{2}$$
-
-- For pure **frequency** with Poisson claim counts, $p = 90\%$ and $k = \pm 5\%$ gives the standard $n_{\text{full}} = (1.645/0.05)^2 = 1{,}082$ claims. Adding severity variation raises the standard to $1{,}082 \times (1 + \text{CV}_S^2)$.
-- Partial credibility uses the **square root rule**, $Z = \sqrt{n / n_{\text{full}}}$, capped at $1$ — a class with a quarter of the required claims gets $Z = 0.50$.
-
-**Bühlmann (greatest accuracy) credibility** derives $Z$ from the variance structure rather than a tolerance:
-
-- $K = \text{EPV}/\text{VHM}$ — expected value of the process variance over the variance of the hypothetical means. Credibility rises when risks genuinely differ from one another (large VHM) and falls when individual results are noisy (large EPV).
-- Bühlmann has the better theoretical footing; limited fluctuation persists because it needs only a claim count, and $1{,}082$ is embedded in decades of filings.
-
-Further points:
-
-- Credibility governs the **homogeneity trade-off**: splitting a book finer improves [[Homogeneity|homogeneity]] but shrinks $n$ in each cell, lowering $Z$ and handing the answer to the complement.
-- The choice of complement matters most exactly when $Z$ is low — which is when actuaries are most tempted to stop thinking about it.
-- On Exam 8, credibility is also measured from a plan's own experience — one car's accident record in [[Merit Rating]] (Bailey and Simon) — and extended to several correlated means at once in [[Multi-Dimensional Credibility]] (Couret and Venter).
-- In reserving, credibility appears explicitly in the [[Bornhuetter-Ferguson Method|BF method]], where $Z = 1/\text{CDF}$: the reported portion of an accident year is its own experience and the unreported portion is priced from the a priori.
-
 ![[Media/Figures/Credibility.svg|340]]
 
-> [!example]- Partial Credibility on a Class Relativity {Example}
-> A workers compensation class has $75$ claims against a full-credibility standard of $1{,}082$. Its indicated relativity is $1.25$; the current (manual) relativity is $1.00$.
->
-> Compute the credibility-weighted relativity.
->
-> > [!answer]-
-> > $$\begin{align*}
-> > Z &= \sqrt{\frac{75}{1{,}082}} \\
-> > &= \sqrt{0.0693} \\
-> > &= 0.263
-> > \end{align*}$$
-> >
-> > $$\begin{align*}
-> > \text{Weighted relativity} &= 0.263(1.25) + 0.737(1.00) \\
-> > &= 1.066
-> > \end{align*}$$
-> >
-> > The class's own data says it costs $25\%$ more than base; the credibility procedure moves only $6.6$ points of that into the rate. With $75$ claims, a $1.25$ indication is well within the range that random fluctuation alone could produce.
-> >
-> > Note the complement here is the *current* relativity, which embeds whatever was believed last year. Where the current relativity is itself stale, a better complement is the statewide or countrywide relativity for the same class — see [[Complement of Credibility]].
+**Credibility** is the weight $Z$, between 0 and 1, given to a body of observed experience when it is blended with a [[Complement of Credibility|complement of credibility]] to estimate a future value. The credibility-weighted estimate is
 
-> [!example]- Limited Fluctuation vs. Bühlmann on the Same Risk {Example}
-> A commercial account has $n = 400$ claims. The full credibility standard is $1{,}082$ claims. A Bühlmann analysis of the class estimates $\text{EPV} = 2{,}500$ and $\text{VHM} = 4$, giving $K = 625$.
->
-> Compare the two credibility values and comment.
->
-> > [!answer]-
-> > $$\begin{align*}
-> > Z_{\text{classical}} &= \sqrt{\frac{400}{1{,}082}} = 0.608 \\[6pt]
-> > Z_{\text{Bühlmann}} &= \frac{400}{400 + 625} = 0.390
-> > \end{align*}$$
-> >
-> > The classical rule gives this account $61\%$ weight; Bühlmann gives $39\%$.
-> >
-> > The difference is that Bühlmann asks a question the classical rule does not: **how different are the risks in this class from each other?** Here $K = 625$ is large because process variance dwarfs the between-risk variance — the risks are broadly alike and their individual results are noisy. In that situation an account's own experience says relatively little about its expected cost, however much of it there is, and it deserves less weight than a fixed claim-count standard implies.
-> >
-> > Where risks genuinely differ (large VHM, small $K$), Bühlmann gives **more** credibility than the classical rule. The classical standard cannot distinguish the two cases because it never looks at the class's variance structure.
+> $$U = Z D + (1 - Z) M$$
+
+- $D$ is the observed experience.
+- $M$ is the complement of credibility.
+
+Credibility reflects how much predictive value the experience has, given its volume and stability. Its role in ratemaking is to make a rate change reflect the signal in the data rather than the noise in sparse or erratic data.
+
+Credibility increases with the volume of experience, so a larger risk's own experience earns more weight. Experience from few exposures or a single year has low credibility. It can be supplemented by lengthening the experience period, or by a complement such as industry data, which adds volume and reduces volatility.
+
+> [!example]- A workers compensation class has 75 claims against a full credibility standard of 1,082 claims. Its indicated relativity is 1.25, and the current relativity is 1.00. What is the credibility-weighted relativity? {Example}
+> - By the [[Partial Credibility|square-root rule]], $Z = \sqrt{75/1{,}082} = \sqrt{0.0693} = 0.263$.
+> - The estimate is $0.263(1.25) + 0.737(1.00) = 1.066$.
+> - With 75 claims, a 1.25 indication is well within the range that random fluctuation alone could produce.
+> - The complement here is the current relativity. Where a larger related group's relativity is available, such as the countrywide relativity for the same class, it is usually the better complement.
+
+## Limited fluctuation credibility
+
+[[Limited Fluctuation Credibility|Limited fluctuation (classical) credibility]] gives full weight once the experience is large enough to be stable, within a chosen range of its expected value with a chosen probability. That volume is the [[Full Credibility Standard|full credibility standard]] $n_F$, and below it the credibility is
+
+> $$Z = \min\left(\sqrt{\frac{n}{n_F}},\; 1\right)$$
+
+- $n$ is the volume of the experience, in the same unit as $n_F$.
+
+When the experience is fully credible, the indication is used as it is, with no weight on the complement.
+
+## Bühlmann credibility
+
+[[Bühlmann Credibility|Bühlmann (greatest accuracy) credibility]] derives $Z$ from how much the risks differ, not from a stability standard. With $n$ observations, the credibility is
+
+> $$Z = \frac{n}{n + k}$$
+
+- $k = v/a$ is the [[Expected Value of Process Variance|expected value of the process variance]] (EPV) divided by the [[Variance of Hypothetical Means|variance of the hypothetical means]] (VHM).
+
+Credibility rises when risks genuinely differ from one another (large VHM) and falls when each risk's own results are noisy (large EPV).
+
+> [!example]- An account has 400 claims, and the full credibility standard is 1,082 claims. A Bühlmann analysis of its class gives $\text{EPV} = 2{,}500$ and $\text{VHM} = 4$. What credibility does each method give? {Example}
+> - The classical credibility is $\sqrt{400/1{,}082} = 0.608$.
+> - The Bühlmann parameter is $k = 2{,}500/4 = 625$, so the Bühlmann credibility is $400/(400 + 625) = 0.390$.
+> - The risks in the class are broadly alike and their results are noisy, so Bühlmann gives the account's own experience less weight than the claim-count standard does.
+
+## Credibility and homogeneity
+
+A class must be large enough for its experience to give credible predictions. Splitting a book into finer classes makes each class more [[Homogeneity|homogeneous]], but it shrinks the volume of data in each, which lowers each class's credibility. For the same reason, [[Classification Ratemaking|classification rating]] suits many small, homogeneous risks, none of whose own experience is credible, and a rating characteristic may be left out when there is too little data at a level to estimate a stable relativity.
+
+## Credibility in reserving
+
+The [[Bornhuetter-Ferguson Method|Bornhuetter-Ferguson]] ultimate is a credibility-weighted average of the development method ultimate and the expected claims ultimate:
+
+> $$\text{Ultimate}_{\text{BF}} = Z \cdot \text{Ultimate}_{\text{dev}} + (1 - Z) \cdot \text{Ultimate}_{\text{exp}}$$
+
+- $Z = 1/\text{CDF}$, the reciprocal of the [[Cumulative Development Factor|cumulative development factor]].
+
+> [!example]- An accident year has reported losses of 600, a cumulative development factor of 1.5 and expected losses of 1,000. What is its Bornhuetter-Ferguson ultimate? {Example}
+> - The development method ultimate is $600 \times 1.5 = 900$.
+> - $Z = 1/1.5 = 0.667$.
+> - The ultimate is $0.667(900) + 0.333(1{,}000) = 933.3$, the same as $600 + (1 - 1/1.5)(1{,}000)$.
+
+## Credibility on Exam 8
+
+Credibility can also be measured from a plan's own experience, such as one car's accident record in [[Merit Rating|merit rating]], and extended to several correlated means at once in [[Multi-Dimensional Credibility|multi-dimensional credibility]].

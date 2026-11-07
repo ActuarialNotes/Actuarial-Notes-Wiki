@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:0cecb42673457c4f904a40c486782f0dd7795156ea63d07555af69f7592cb6bc
+  content_hash: sha256:7ef725d3bf51fd4f9f0fb9b5cd6f2bedd8b4667dc91d414b00c839894cd818f3
   sources:
     - "Hyndman & Athanasopoulos, Forecasting: Principles and Practice, 3rd ed. (OTexts, open online text), §2.3 Time series patterns (seasonal vs cyclic), §2.8 seasonal ACF, read 2026-10-18, sha256:a13a2a978731e95537586c671e4b4edda0fbb1711e81a1f01e2c2b967f4212b7 — https://otexts.com/fpp3/graphics.html"
     - "Hyndman & Athanasopoulos, Forecasting: Principles and Practice, 3rd ed. (OTexts, open online text), §3.2 additive vs multiplicative, log transform equivalence; §3.4 seasonal components adjusted to add to zero / to m, read 2026-10-18, sha256:c11e3a143a4e52c5365ce641b76b17dd41e682b285de613906a5a661dab3e00f — https://otexts.com/fpp3/decomposition.html"
@@ -16,23 +16,38 @@ verification:
   log: .verify/Concepts/Seasonality.md
 ---
 
-**Seasonality** is a pattern in a [[Time Series]] that repeats at a fixed, known period $s$ — 4 for quarterly data, 12 for monthly, 7 for daily. It is distinct from a cycle, whose length is not fixed.
-
-> $$Y_t = m_t + s_t + z_t \quad \text{with } s_t = s_{t+s} \text{ and } \sum_{j=1}^{s}s_j = 0$$
->
-> $$\text{seasonal ARIMA: } (p,d,q)\times(P,D,Q)_s$$
-
-- **Additive** seasonality adds a fixed amount each period; **multiplicative** scales the level, so it grows with the trend. A log transform turns the second into the first
-- Signature on the [[Autocorrelation Function|ACF]]: significant spikes at lags $s, 2s, 3s, \dots$ that do not die away
-- **Handling it:** seasonal [[Differencing]] $\nabla_s Y_t = Y_t - Y_{t-s}$ removes a stochastic seasonal pattern; seasonal dummies or a sine/cosine pair in a regression remove a deterministic one
-- A seasonal ARIMA multiplies the seasonal and non-seasonal polynomials, so it models within-period and across-period dependence at once
-- Actuarial cases: winter freeze losses, quarterly reporting lags, the seasonal pattern in the reporting of accident-year claims
-
 ![[Media/Figures/Seasonality.svg|340]]
 
-> [!example]- Additive or Multiplicative? {Example}
-> Quarterly claim counts show a Q1 excess over the yearly average of +180 in year 1 (average 900), +310 in year 5 (average 1,550) and +420 in year 9 (average 2,100). Which form of seasonality, and what transform helps?
->
-> > [!answer]-
-> > As a share of the level: $180/900 = 20\%$, $310/1550 = 20\%$, $420/2100 = 20\%$ — constant in **proportional** terms, growing in absolute terms.
-> > **Multiplicative.** Fit on $\log Y_t$, where the Q1 effect becomes a constant $\log(1.20) = 0.182$ addition and an additive seasonal model applies.
+**Seasonality** is a pattern in a [[Time Series|time series]] that repeats with a fixed, known period $s$: 4 for quarterly data, 12 for monthly data. A cycle differs from it by having no fixed period. In an additive model, the seasonal effect $s_t$ is
+
+> $$x_t = m_t + s_t + z_t$$
+
+- $m_t$ is the trend and $z_t$ the random part.
+- $s_t = s_{t+s}$, and the $s$ seasonal effects sum to zero.
+
+In the sample [[Autocorrelation Function|autocorrelations]], seasonality shows as large values at lags $s, 2s, 3s, \ldots$ that do not die away.
+
+> [!example]- The seasonal effects of a quarterly additive model are $-40$, $25$ and $60$ for Q1 to Q3. What is the Q4 effect? {Example}
+> - The four effects sum to zero.
+> - The Q4 effect is $-(-40 + 25 + 60) = -45$.
+
+## Additive and multiplicative seasonality
+
+In multiplicative seasonality the seasonal effect scales the level instead of adding to it:
+
+> $$x_t = m_t \times s_t \times z_t$$
+
+A seasonal effect that grows with the level is multiplicative. Taking logs turns a multiplicative model into an additive one, $\log x_t = \log m_t + \log s_t + \log z_t$.
+
+> [!example]- Quarterly claim counts exceed the yearly average in Q1 by 180 when the average is 900, by 310 when it is 1,550 and by 420 when it is 2,100. Is the seasonality additive or multiplicative? {Example}
+> - As a share of the level, the excess is $180/900$, $310/1{,}550$ and $420/2{,}100$, each $20\%$.
+> - The effect is constant in proportion and grows in amount, so it is multiplicative.
+> - On $\log x_t$ the Q1 effect is the constant $\log 1.2 = 0.182$.
+
+## Seasonal effects in a regression
+
+A deterministic seasonal pattern is fitted by [[Linear Regression|regression]] on indicator variables, one for each season, or on sine and cosine terms of period $s$. A stochastic seasonal pattern is removed by the seasonal [[Differencing|difference]] $\nabla_s x_t = x_t - x_{t-s}$.
+
+> [!example]- A monthly regression has a linear trend and an indicator for each month, with $\hat{x}_t = 200 + 1.5t + \hat{s}_{\text{month}}$ and a December effect of 35. What is the forecast for $t = 48$, a December? {Example}
+> - The trend part is $200 + 1.5(48) = 272$.
+> - Adding the December effect gives $272 + 35 = 307$.

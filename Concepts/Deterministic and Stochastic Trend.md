@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:checker-ts
-  content_hash: sha256:b3b6ed16776aeb5171419fe6f3838bb0b305527acb4f348747defa2b1b10f132
+  content_hash: sha256:bc523b0ed11531f4e348cd853d937bda52d95be7482cc17c0161c67199886415
   sources:
     - "Hyndman & Athanasopoulos, Forecasting: Principles and Practice, 3rd ed. (OTexts, open online text), Ch. 10, §10.1 Estimation (ignoring error autocorrelation: tests incorrect, p-values too small), §10.4 Stochastic and deterministic trends (implicit assumption slope won't change; stochastic safer especially for longer horizons; wider intervals), read 2026-10-31, sha256:d593f252a70f4c83982101b306992502d55992de8bc4cfc02e8b27174e9db52c — https://otexts.com/fpp3/regarima.html"
     - "Hyndman & Athanasopoulos, Forecasting: Principles and Practice, 3rd ed. (OTexts, open online text), Ch. 7, §7.3 Spurious regression, read 2026-10-31, sha256:84b44c855b4aae3d30f8ebcfc93c3c29c7aa43d57b8c4d00147e1bbda41cfbc5 — https://otexts.com/fpp3/regression.html"
@@ -18,32 +18,53 @@ verification:
   log: .verify/Concepts/Deterministic and Stochastic Trend.md
 ---
 
-A **deterministic trend** is a fixed function of time that the series returns to after a shock; a **stochastic trend** is a unit root, where each shock permanently moves the level. They look alike on a plot and demand opposite treatments — the distinction that objective D3 turns on.
-
-> $$\text{deterministic: } Y_t = \alpha + \beta t + z_t, \quad z_t \text{ stationary}$$
->
-> $$\text{stochastic: } Y_t = \delta + Y_{t-1} + \varepsilon_t \quad (\text{[[Random Walk]] with drift})$$
-
-| | Deterministic (trend-stationary) | Stochastic (difference-stationary) |
-| :--- | :--- | :--- |
-| Effect of a shock | dies out — the series returns to the line | **permanent** — the level shifts forever |
-| Correct treatment | regress on $t$, model the residuals | [[Differencing|difference]] the series |
-| $\mathrm{Var}(Y_t)$ | bounded | grows with $t$ |
-| Long-horizon forecast | the trend line | last value plus $h\delta$, with a widening interval |
-
-- **Getting it wrong costs both ways.** Differencing a trend-stationary series over-differences it, injecting a spurious negative MA(1) term. Detrending a unit-root series leaves the trend behind and the residuals still non-stationary
-- The formal test is a unit-root (Dickey–Fuller) test: $H_0$ is a stochastic trend
-- Forecast intervals differ sharply — a deterministic trend gives intervals of roughly constant width, a stochastic one gives intervals widening as $\sqrt{h}$
-- **Spurious regression**: two independent series with stochastic trends can show a highly significant regression and a high $R^2$. Always check the residual [[Autocorrelation Function|ACF]] before believing a time-series regression
-- **Extrapolating a deterministic trend** carries the fitted slope forward unchanged, so it assumes the slope will not change over the forecast horizon. That assumption is easiest to defend a short way ahead, where the trend has little time to change; a stochastic trend is the safer forecast over longer horizons, because its intervals allow for the growth rate to change
-- **Autocorrelated residuals in a trend regression.** [[Ordinary Least Squares|OLS]] standard errors assume uncorrelated errors. Errors at adjacent times are often positively correlated, and then the OLS standard errors tend to underestimate the true ones: confidence intervals are too narrow and p-values too small, so a coefficient can look significant when it is not
-- **Generalized least squares (GLS)** fixes this by modelling the errors' correlation instead of assuming it away. With error covariance matrix $\Sigma$ (for time series, built from the residual autocorrelations, e.g. an AR(1) error), $\hat\beta_{GLS} = (X'\Sigma^{-1}X)^{-1}X'\Sigma^{-1}y$ with $\mathrm{Var}(\hat\beta_{GLS}) = (X'\Sigma^{-1}X)^{-1}$, so its standard errors account for the autocorrelation that the OLS formula $\sigma^2(X'X)^{-1}$ ignores. Its advantage comes from that correlation structure: GLS is the maximum likelihood estimator under correlated normal errors, not under white noise, where it reduces to OLS. In practice, fit OLS, identify an ARMA model for its residuals, then refit by GLS (or maximum likelihood) with that error model and check that the new residuals look like [[White Noise|white noise]]
-
 ![[Media/Figures/Deterministic_and_Stochastic_Trend.svg|340]]
 
-> [!example]- Which Trend Is It? {Example}
-> A 60-quarter premium index trends upward. Regressing on $t$ gives $R^2 = 0.94$ but residuals with $\hat\rho_1 = 0.93$ decaying very slowly. First-differencing gives a series with $\hat\rho_1 = 0.11$ and nothing else significant. Which trend, and what is the model?
->
-> > [!answer]-
-> > **Stochastic.** The detrended residuals are still non-stationary — $\hat\rho_1 = 0.93$ with slow decay is a unit root that the regression did not remove. A true deterministic trend would leave stationary residuals.
-> > First differencing produces something close to [[White Noise]], so the model is a **random walk with drift**, ARIMA(0,1,0) with a constant. The $R^2 = 0.94$ from the trend regression is the spurious-regression trap.
+A **Deterministic Trend** is a trend that is a fixed function of time, such as a line, a polynomial or a sine-cosine term, usually with a plausible physical explanation. A **Stochastic Trend** is a trend that changes direction unpredictably, with no plausible physical explanation, and is modelled as a random process. A linear deterministic trend is
+
+> $$x_t = \alpha_0 + \alpha_1 t + z_t$$
+
+- $\{z_t\}$ is a [[Stationarity|stationary]] series.
+
+The simplest stochastic trend is a [[Random Walk|random walk]] with drift $\delta$:
+
+> $$x_t = x_{t-1} + \delta + w_t$$
+
+- $\{w_t\}$ is [[White Noise|white noise]].
+
+Both have a mean that grows linearly in $t$. They differ in what a shock does. Under a deterministic trend the series returns to the trend line, and under a stochastic trend each shock moves the level for good. High serial correlation with random error is the mark of a stochastic trend.
+
+> [!example]- A trend regression on 60 quarters gives $R^2 = 0.94$, but its residuals have a lag 1 autocorrelation of 0.93 that decays very slowly. The first differences have a lag 1 autocorrelation of 0.11 and nothing else significant. Which kind of trend is it? {Example}
+> - A deterministic trend would leave stationary residuals, and these residuals are not stationary.
+> - The first differences look like white noise.
+> - The trend is stochastic, and the series is a random walk with drift.
+
+## Fitting a deterministic trend by regression
+
+A deterministic trend is fitted by [[Linear Regression|regression]] of the series on functions of time $t$, and the residuals are then modelled as a stationary series. Its forecast extends the fitted function:
+
+> $$\hat{x}_{t} = \hat{\alpha}_0 + \hat{\alpha}_1 t$$
+
+A deterministic trend follows a fixed form, so it is better suited to extrapolation than a stochastic trend, whose future path is driven by random shocks. Short-term extrapolation is the easiest to justify, because underlying trends usually change slowly relative to the forecast lead time.
+
+> [!example]- A trend regression gives $\hat{x}_t = 140 + 3.2t$. What is the forecast for $t = 50$? {Example}
+> - The forecast extends the fitted line to $t = 50$.
+> - $\hat{x}_{50} = 140 + 3.2(50) = 300$.
+
+## Autocorrelated residuals in a trend regression
+
+The standard errors of [[Ordinary Least Squares|least squares]] assume uncorrelated errors. When adjacent errors are positively correlated, those standard errors understate the true ones, so a trend can look significant when it is not. Generalized least squares fits the regression with the errors' correlation modelled, for example as an AR(1), and its estimator is
+
+> $$\hat{\boldsymbol{\beta}}_{GLS} = (\mathbf{X}^T\boldsymbol{\Sigma}^{-1}\mathbf{X})^{-1}\mathbf{X}^T\boldsymbol{\Sigma}^{-1}\mathbf{y}$$
+
+- $\boldsymbol{\Sigma}$ is the covariance matrix of the errors.
+
+With uncorrelated errors of equal variance, it reduces to least squares.
+
+> [!example]- A trend regression's residuals have a lag 1 autocorrelation of 0.6. What happens to the least squares standard errors, and what is done instead? {Example}
+> - Positively correlated errors make the least squares standard errors too small.
+> - The regression is refitted by generalized least squares with an AR(1) model for the errors.
+> - The new residuals are checked to look like white noise.
+
+> [!trap] Differencing a deterministic trend
+> Differencing a series whose trend is deterministic removes the trend but over-differences the stationary part, creating a large negative lag 1 autocorrelation. Regressing a series with a stochastic trend on $t$ leaves residuals that are still not stationary. Check which trend it is before choosing the treatment.

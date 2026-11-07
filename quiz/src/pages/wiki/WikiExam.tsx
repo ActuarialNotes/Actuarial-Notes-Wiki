@@ -160,7 +160,7 @@ export default function WikiExam() {
   // so the strip says which exam you are in with the object you
   // picked it with, rather than restating the heading a few pixels below it.
   const pageIcon = useMemo(() => (
-    <ExamLogo examKey={progressKey} size="md" />
+    <ExamLogo examKey={progressKey} size="strip" />
   ), [progressKey])
 
   // Always back to the exam list: the browser's Back when the reader came

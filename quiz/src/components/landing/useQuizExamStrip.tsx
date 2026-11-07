@@ -32,7 +32,7 @@ export function useQuizExamStrip(
   if (!exam) return undefined
   return {
     title: exam.label,
-    icon: <ExamLogo examKey={exam.progressKey} size="md" />,
+    icon: <ExamLogo examKey={exam.progressKey} size="strip" />,
     backLink: <FloatingSearchBack label="Change exam" onClick={onBack} />,
     actions: (
       // The exam's scope, so what is chosen in the strip fills with its colour.

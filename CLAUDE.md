@@ -966,6 +966,11 @@ Other important `lib/` modules:
   the page's own ISBN, the vended detail-page link used untouched, an hour at the CDN and
   nothing cached in the browser, and the "as of" stamp, disclaimers and associate disclosure
   beside any price (the wording is pinned by `amazonPrice.test.ts`).
+- `storeKit.ts` — the Store's **exam kit** (`docs/store.md`, "The kit"): one exam's shelf as
+  steps (register → calculator → learn → practise → review), the first unticked one in the
+  spotlight, prices on one scale (`priceScale` / `priceBar`, shared with the question-by-question
+  comparison), and the reader's ticks (`hooks/useStoreKit.ts`, localStorage). Drawn by
+  `components/store/ExamKit.tsx`; pure and tested.
 - `store.ts` / `storeBooks.ts` — the **Store** (`docs/store.md`). `store.ts` is its logic,
   pure and tested: the four aisles, the exams the shelf narrows to (`STORE_EXAMS`, in
   ladder order), price printing (`Free` for nothing, "From" over choices), registration

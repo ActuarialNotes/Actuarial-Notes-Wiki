@@ -54,7 +54,35 @@ where the subscription is taken through Stripe. It reads *Active* for a reader w
    a real jacket. The BA-35, discontinued and pictured nowhere, is still drawn from what
    tells the models apart (`CalculatorArt`), in the object's own colours.
 
+## The kit
+
+With an exam chosen and nothing else — no aisle, no search, no refinement — the Shop is that
+exam's **kit** (`components/store/ExamKit.tsx`, `lib/storeKit.ts`): its shelf read as the
+steps a candidate goes through — **Register**, **Calculator**, **Learn the syllabus**
+(manuals, video courses, seminars, courses, bundles), **Practise questions** and **Review on
+the go** (flashcards) — each holding every product the Shop carries for it, in the shelf's
+order. A step with nothing in it is left out. With no exam in the address the Shop opens on
+the first exam the reader is studying that it stocks (`defaultKitExam`); choosing **All** writes
+`?exam=all`, so the reader's choice holds.
+
+- A **segmented bar**, one piece per step, fills in the exam's colour as steps are ticked off.
+- **Next up** is the first step not ticked, the one surface on the page filled with the exam's
+  colour (`--exam-accent-vivid`), so the colour always means "this needs you now".
+  Registration shows its fee and a **Register** button that opens the registration sheet.
+- **Then** lists every other step as a row that opens to its products, each with its seller,
+  its price range and a bar on the step's one price scale, a **Compare** button where there is
+  a choice, and the tick (**I have this**, **I have one**, **I’ve registered**).
+- **Optional** holds the syllabus textbooks and Pro; **Browse the Shop** opens the aisles.
+
+The ticks are the reader's own checklist, kept in this browser only
+(`hooks/useStoreKit.ts`, `actuarial_store_kit_v1`) — nothing else reads them. The kit decides
+nothing about what to buy: every product still opens its sheet, and the sheet's one button
+goes to the seller.
+
 ## The shelf
+
+An aisle, a search, a refinement or **All** shows the shelves.
+
 
 | Aisle | Built from | What a card is |
 |---|---|---|
@@ -106,23 +134,18 @@ the price on the right.
 
 ### Comparing study materials
 
-**Compare study materials** opens one exam's study materials as a table
-(`components/store/CompareSheet.tsx`, `comparisonFor` / `comparisonFactLabels`): a column per
-product, like with like and cheapest first, and a row for the kind, the price (its range, and
-the lowest on the table marked), the options, what's included, every fact any of them states
-(Format, Access, Author, Edition…), the exam windows, the reviews and the date the page was
-read, ending in each seller's link. A seller that doesn't state something gets a dash, never a
-guess. The table's own exam strip moves between exams; its kind pills narrow the columns.
-
-The **Compare** button in the study-materials heading is a filled, labelled pill at every
-width — it is that heading's one action. The table is one real `<table>` that lays itself out
-for a phone: the row-label column becomes a band over each row (its label held at the left
-edge while the columns scroll sideways), columns are exactly half the pane's measured width (in
-pixels, in a `table-fixed` table, so no browser resolves container units on a table cell), so two always sit
-side by side, and scrolling snaps a column at a time (CSS snap, plus a nudge to the nearest column
-where a browser won't snap to a table cell), the sticky product heads drop their picture, the kind pills scroll in one line and
-the disclaimer is held at the left edge, as wide as the pane. From `sm` up it is the grid with
-a pinned label column. `e2e/store.spec.ts` checks a cell sits under its own product at 390 px.
+**Compare** opens one exam's study materials (`components/store/CompareSheet.tsx`,
+`comparisonFor` / `comparisonFactLabels`), read **question by question**: the products first,
+numbered, then a section per thing the sellers state — the price, the kind, the options,
+what's included, every fact any of them prints (Format, Access, Author, Edition…), the exam
+windows, the reviews, the date the page was read, and where to buy — with every product's
+answer on its own line under it, keyed by its number. Nothing scrolls sideways, so it reads the
+same at 390 px as on a desk (`e2e/store.spec.ts` checks it). The price section draws every range
+on one scale (`priceScale` / `priceBar` in `lib/storeKit.ts`, the top rounded up to the next
+hundred; none when the prices are in two currencies) and marks the lowest. A seller that doesn't
+state something gets a dash, never a guess. Opened from a kit step it holds that step's kinds
+(`comparableKinds`) under the step's name; from the study-materials heading, all of them, with
+kind pills to narrow. The sheet's own exam strip moves between exams.
 
 ### Reviews
 

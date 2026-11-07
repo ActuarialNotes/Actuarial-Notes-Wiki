@@ -4402,7 +4402,15 @@
        "page": "Permissible Loss Ratio",
        "quote": "The PLR is the complement of the target combined ratio: a $70\\%$ PLR with a $25\\%$ total expense ratio implies a target combined ratio of $95\\%$ and a $5\\%$ underwriting profit."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loss Ratio",
+      "quote": "A projected loss ratio above the PLR means rates are inadequate even when the book appears to be making money.",
+      "note": "Re-quoted after the page was rewritten in the new concept shape and approved",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r6",
@@ -9243,7 +9251,15 @@
        "page": "Exposure Base",
        "quote": "**Exposure Base** is the basic unit of risk that underlies the premium — the quantity the rate is charged *per*."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exposure Base",
+      "quote": "An **Exposure Base** is the unit that measures a policy's exposure to loss, such as a car-year, a house-year or $\\$100$ of payroll.",
+      "note": "Re-quoted after the page was rewritten in the new concept shape and approved",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",

@@ -20,7 +20,15 @@
        "page": "Exposure Base",
        "quote": "**Exposure Base** is the basic unit of risk that underlies the premium — the quantity the rate is charged *per*."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exposure Base",
+      "quote": "An **Exposure Base** is the unit that measures a policy's exposure to loss, such as a car-year, a house-year or $\\$100$ of payroll.",
+      "note": "Re-quoted after the page was rewritten in the new concept shape and approved",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -66,7 +74,15 @@
        "page": "Premium Audit",
        "quote": "The records reviewed include payroll records, federal reports of employee income, state reemployment tax forms, cash disbursement journals and other accounting records, certificates of insurance for subcontractors, and independent contractor documents."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exposure Base",
+      "quote": "**Practical.** The base is objective, and relatively easy and inexpensive to obtain and verify. An objective base also keeps policyholders and producers from manipulating it.",
+      "note": "Re-quoted after the page was rewritten in the new concept shape and approved",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -1216,7 +1232,15 @@
        "page": "Pure Premium",
        "quote": "The pure premium used in a rate is always **projected**: historical losses developed to ultimate, trended to the forecast period, adjusted for [[Large Loss|large losses]] and [[Catastrophe Loss|catastrophes]], and divided by exposures that are themselves trended if the base inflates ([[Exposure Trend]])."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Pure Premium",
+      "quote": "$$\\text{Projected Pure Premium} = \\frac{(\\text{Losses} + \\text{LAE}) \\times \\text{CDF} \\times (1 + t)^n}{\\text{Earned Exposures}}$$",
+      "note": "Re-quoted after the page was rewritten in the new concept shape and approved",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r6",
@@ -5952,7 +5976,15 @@
        "page": "Classification Ratemaking",
        "quote": "**Operational** — objective, inexpensive to obtain and verify, not manipulable by the insured."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exposure Base",
+      "quote": "**Practical.** The base is objective, and relatively easy and inexpensive to obtain and verify. An objective base also keeps policyholders and producers from manipulating it.",
+      "note": "Re-quoted after the page was rewritten in the new concept shape and approved",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -8474,7 +8506,15 @@
        "page": "Exposure Base",
        "quote": "Some bases, such as payroll and sales revenue, are highly influenced by inflation, which is what [[Exposure Trend]] measures; count-based bases (car-years, house-years) are not."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exposure Base",
+      "quote": "Some bases, such as payroll and sales revenue, are highly influenced by inflation. Count-based bases, such as car-years and house-years, are not.",
+      "note": "Re-quoted after the page was rewritten in the new concept shape and approved",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -10765,7 +10805,15 @@
        "page": "Pure Premium",
        "quote": "The pure premium used in a rate is always **projected**: historical losses developed to ultimate, trended to the forecast period, adjusted for [[Large Loss|large losses]] and [[Catastrophe Loss|catastrophes]], and divided by exposures that are themselves trended if the base inflates ([[Exposure Trend]])."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Pure Premium",
+      "quote": "A rate is an estimate of future costs, so the pure premium used in a rate is projected to the period the rates will be in effect.",
+      "note": "Re-quoted after the page was rewritten in the new concept shape and approved",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -12705,7 +12753,15 @@
        "page": "Exposure Base",
        "quote": "**Exposure Base** is the basic unit of risk that underlies the premium — the quantity the rate is charged *per*. It measures a policy's exposure to loss, which is why it is the basis of the premium: base rates are expressed per exposure, and it is the denominator of the pure premium."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exposure Base",
+      "quote": "$$\\text{Premium} = \\text{Rate} \\times \\text{Exposures}$$",
+      "note": "Re-quoted after the page was rewritten in the new concept shape and approved",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -12735,7 +12791,15 @@
        "page": "Exposure Base",
        "quote": "**Practical.** Objective, and relatively easy and inexpensive to obtain and verify — which also keeps policyholders and producers from manipulating it (declared annual mileage invites more dishonesty than car-years)."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exposure Base",
+      "quote": "**Practical.** The base is objective, and relatively easy and inexpensive to obtain and verify. An objective base also keeps policyholders and producers from manipulating it.",
+      "note": "Re-quoted after the page was rewritten in the new concept shape and approved",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -15272,7 +15336,15 @@
        "page": "Loss Development",
        "quote": "$$\\text{Ultimate Losses} = \\text{Losses at age } n \\times \\text{CDF}_{n \\to \\text{ult}}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Pure Premium",
+      "quote": "$$\\text{Projected Pure Premium} = \\frac{(\\text{Losses} + \\text{LAE}) \\times \\text{CDF} \\times (1 + t)^n}{\\text{Earned Exposures}}$$",
+      "note": "Re-quoted after the page was rewritten in the new concept shape and approved",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -15500,7 +15572,15 @@
        "page": "Exposure Base",
        "quote": "**Exposure Base** is the basic unit of risk that underlies the premium — the quantity the rate is charged *per*."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exposure Base",
+      "quote": "An **Exposure Base** is the unit that measures a policy's exposure to loss, such as a car-year, a house-year or $\\$100$ of payroll.",
+      "note": "Re-quoted after the page was rewritten in the new concept shape and approved",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -15526,7 +15606,15 @@
        "page": "Exposure Base",
        "quote": "**Practical.** Objective, and relatively easy and inexpensive to obtain and verify — which also keeps policyholders and producers from manipulating it (declared annual mileage invites more dishonesty than car-years)."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exposure Base",
+      "quote": "**Practical.** The base is objective, and relatively easy and inexpensive to obtain and verify. An objective base also keeps policyholders and producers from manipulating it.",
+      "note": "Re-quoted after the page was rewritten in the new concept shape and approved",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -17390,7 +17478,15 @@
        "page": "Exposure Base",
        "quote": "$$\\text{Pure Premium} = \\frac{\\text{Losses} + \\text{LAE}}{\\text{Earned Exposures}}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exposure Base",
+      "quote": "the earned exposures are the denominator of the [[Pure Premium|pure premium]]",
+      "note": "Re-quoted after the page was rewritten in the new concept shape and approved",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -19516,7 +19612,15 @@
        "page": "Pure Premium",
        "quote": "The identity holds because $\\dfrac{\\text{Losses}}{\\text{Exposures}} = \\dfrac{\\text{Claims}}{\\text{Exposures}} \\times \\dfrac{\\text{Losses}}{\\text{Claims}}$ — and it is what allows the two components to be trended, developed and diagnosed separately ([[Frequency]], [[Severity]])."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Pure Premium",
+      "quote": "[[Frequency]] is the number of claims per earned exposure, and [[Severity]] is the average loss per claim.",
+      "note": "Re-quoted after the page was rewritten in the new concept shape and approved",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -22123,7 +22227,15 @@
        "page": "Risk Classification Restrictions",
        "quote": "**Standard criteria** for whether a classification variable is acceptable: actuarial (statistically significant, homogeneous, credible), operational (objective, cheap to verify, not manipulable), social (privacy, causality, affordability, controllability) and legal (permitted in the jurisdiction)."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exposure Base",
+      "quote": "**Practical.** The base is objective, and relatively easy and inexpensive to obtain and verify. An objective base also keeps policyholders and producers from manipulating it.",
+      "note": "Re-quoted after the page was rewritten in the new concept shape and approved",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -25343,7 +25455,15 @@
        "page": "Target Loss Ratio",
        "quote": "When the projected loss ratio exceeds the target, rates are inadequate; when it falls below, rates are excessive; the ratio of projected to target drives the indicated change"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loss Ratio",
+      "quote": "A projected loss ratio above the PLR means rates are inadequate even when the book appears to be making money.",
+      "note": "Re-quoted after the page was rewritten in the new concept shape and approved",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -26019,7 +26139,15 @@
        "page": "Exposure Base",
        "quote": "Some bases, such as payroll and sales revenue, are highly influenced by inflation, which is what [[Exposure Trend]] measures; count-based bases (car-years, house-years) are not."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exposure Base",
+      "quote": "The premium on an inflation-sensitive base changes with inflation at an unchanged rate",
+      "note": "Re-quoted after the page was rewritten in the new concept shape and approved",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -28425,7 +28553,15 @@
        "page": "Loss Ratio",
        "quote": "As a reserving diagnostic, the loss ratio series across accident years at a fixed maturity should move smoothly. A break in the series is a signal"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loss Ratio",
+      "quote": "With no change in rates, [[Mix of Business|mix of business]] or claims handling, the series should move smoothly. A break in the series is a signal of such a change",
+      "note": "Re-quoted after the page was rewritten in the new concept shape and approved",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -29333,7 +29469,15 @@
        "page": "Classification Ratemaking",
        "quote": "objective, inexpensive to obtain and verify, not manipulable by the insured."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exposure Base",
+      "quote": "**Practical.** The base is objective, and relatively easy and inexpensive to obtain and verify. An objective base also keeps policyholders and producers from manipulating it.",
+      "note": "Re-quoted after the page was rewritten in the new concept shape and approved",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -29414,7 +29558,15 @@
        "page": "Exposure Base",
        "quote": "The proposal should be rejected; the AOI effect in the table is a case for an [[Classification Ratemaking|AOI relativity]], not a new base."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exposure Base",
+      "quote": "The change is justified only if the gain in proportionality outweighs the cost of the transition.",
+      "note": "Re-quoted after the page was rewritten in the new concept shape and approved",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -30779,7 +30931,15 @@
        "page": "Loss Ratio",
        "quote": "**Loss Ratio** is losses (usually with LAE) divided by earned premium"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loss Ratio",
+      "quote": "A **Loss Ratio** is the ratio of losses to premium.",
+      "note": "Re-quoted after the page was rewritten in the new concept shape and approved",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -31854,7 +32014,15 @@
        "page": "Pure Premium",
        "quote": "historical losses developed to ultimate, trended to the forecast period, adjusted for [[Large Loss|large losses]] and [[Catastrophe Loss|catastrophes]], and divided by exposures that are themselves trended if the base inflates ([[Exposure Trend]])."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Pure Premium",
+      "quote": "$$\\text{Projected Pure Premium} = \\frac{(\\text{Losses} + \\text{LAE}) \\times \\text{CDF} \\times (1 + t)^n}{\\text{Earned Exposures}}$$",
+      "note": "Re-quoted after the page was rewritten in the new concept shape and approved",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r7",
@@ -32268,7 +32436,15 @@
        "page": "Exposure Base",
        "quote": "**Practical.** Objective, and relatively easy and inexpensive to obtain and verify — which also keeps policyholders and producers from manipulating it (declared annual mileage invites more dishonesty than car-years)."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exposure Base",
+      "quote": "**Practical.** The base is objective, and relatively easy and inexpensive to obtain and verify. An objective base also keeps policyholders and producers from manipulating it.",
+      "note": "Re-quoted after the page was rewritten in the new concept shape and approved",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r6",
@@ -35480,7 +35656,15 @@
        "page": "Pure Premium Analysis",
        "quote": "Pure premium is the **premium-free** view of cost: because it never divides by premium, it needs no [[On-Leveling|on-levelling]] and is unaffected by rate history."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Pure Premium",
+      "quote": "It is the portion of the rate that pays claims, before any provision for expenses or profit.",
+      "note": "Re-quoted after the page was rewritten in the new concept shape and approved",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r6",
@@ -38464,7 +38648,15 @@
        "page": "Workers Compensation Underwriting",
        "quote": "**Payroll and its audit:** Remuneration is the usual [[Exposure Base|premium base]]."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exposure Base",
+      "quote": "Payroll is the workers compensation base because it is responsive to changes in exposure",
+      "note": "Re-quoted after the page was rewritten in the new concept shape and approved",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r6",
@@ -40757,7 +40949,15 @@
        "page": "Exposure Base",
        "quote": "**Practical.** Objective, and relatively easy and inexpensive to obtain and verify — which also keeps policyholders and producers from manipulating it (declared annual mileage invites more dishonesty than car-years)."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exposure Base",
+      "quote": "Telematics now lets a personal auto insurer measure miles driven accurately. Should it replace car-years with miles driven as its exposure base?",
+      "note": "Re-quoted after the page was rewritten in the new concept shape and approved",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },

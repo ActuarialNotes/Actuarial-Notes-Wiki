@@ -5,8 +5,8 @@
 //
 // Nothing here decides what a reader should buy. A step lists every product
 // the Shop carries for it, in the shelf's own order (like with like, cheapest
-// first); the reader ticks a step off ("I have this") and the next one comes
-// forward. What they've ticked is theirs alone, kept in the browser.
+// first); the reader says which one they have (or ticks the step off) and the
+// next one comes forward. What they've ticked is theirs alone, kept in the browser.
 //
 // Pure and tested (`storeKit.test.ts`).
 
@@ -138,8 +138,18 @@ export function defaultKitExam(studying: ReadonlySet<string>, stocked: readonly 
   return stocked.find(key => studying.has(key)) ?? null
 }
 
-/** What the reader has ticked off, by exam — read back from storage, anything malformed dropped. */
-export type KitDone = Record<string, KitStepId[]>
+/**
+ * What the reader has sorted, by exam and step: the id of the product they
+ * have, or `KIT_OWN` when they ticked the step without naming one ("I've
+ * registered", "something not listed here"). Read back from storage, anything
+ * malformed dropped. The first version kept a list of ticked steps per exam;
+ * such a list reads as every step ticked with no product named.
+ */
+export type KitPicks = Partial<Record<KitStepId, string>>
+export type KitDone = Record<string, KitPicks>
+
+/** A step sorted without a listed product. */
+export const KIT_OWN = ''
 
 export function parseKitDone(raw: string | null): KitDone {
   if (!raw) return {}
@@ -148,9 +158,16 @@ export function parseKitDone(raw: string | null): KitDone {
     if (!value || typeof value !== 'object' || Array.isArray(value)) return {}
     const out: KitDone = {}
     for (const [exam, steps] of Object.entries(value as Record<string, unknown>)) {
-      if (!Array.isArray(steps)) continue
-      const kept = KIT_STEP_ORDER.filter(id => steps.includes(id))
-      if (kept.length) out[exam] = kept
+      const picks: KitPicks = {}
+      if (Array.isArray(steps)) {
+        for (const id of KIT_STEP_ORDER) if (steps.includes(id)) picks[id] = KIT_OWN
+      } else if (steps && typeof steps === 'object') {
+        for (const id of KIT_STEP_ORDER) {
+          const pick = (steps as Record<string, unknown>)[id]
+          if (typeof pick === 'string') picks[id] = pick
+        }
+      }
+      if (Object.keys(picks).length) out[exam] = picks
     }
     return out
   } catch {
@@ -158,14 +175,22 @@ export function parseKitDone(raw: string | null): KitDone {
   }
 }
 
-/** Tick a step off, or back on. */
-export function toggleKitStep(done: KitDone, exam: string, step: KitStepId): KitDone {
-  const current = new Set(done[exam] ?? [])
-  if (current.has(step)) current.delete(step)
-  else current.add(step)
+/**
+ * Sort a step (with the product the reader has, or `KIT_OWN`), or un-sort it
+ * with `null`. Picking what is already picked un-sorts it, so every pick is
+ * undone by the same tap that made it.
+ */
+export function pickKitStep(done: KitDone, exam: string, step: KitStepId, pick: string | null): KitDone {
+  const current: KitPicks = { ...(done[exam] ?? {}) }
+  if (pick === null || current[step] === pick) delete current[step]
+  else current[step] = pick
   const next = { ...done }
-  const kept = KIT_STEP_ORDER.filter(id => current.has(id))
-  if (kept.length) next[exam] = kept
+  if (Object.keys(current).length) next[exam] = current
   else delete next[exam]
   return next
+}
+
+/** Tick a step off with no product named, or back on. */
+export function toggleKitStep(done: KitDone, exam: string, step: KitStepId): KitDone {
+  return pickKitStep(done, exam, step, done[exam]?.[step] !== undefined ? null : KIT_OWN)
 }

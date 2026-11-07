@@ -8,6 +8,7 @@ import {
   examKit,
   nextStep,
   parseKitDone,
+  pickKitStep,
   priceBar,
   priceScale,
   priceSpan,
@@ -92,14 +93,30 @@ describe('defaultKitExam', () => {
 
 describe('kit storage', () => {
   it('keeps only known steps, and survives junk', () => {
-    expect(parseKitDone('{"P":["register","nope"],"FM":"x"}')).toEqual({ P: ['register'] })
+    expect(parseKitDone('{"P":{"register":"","calculator":"ba-ii-plus","nope":"x","learn":3},"FM":"x"}')).toEqual({
+      P: { register: '', calculator: 'ba-ii-plus' },
+    })
     expect(parseKitDone('not json')).toEqual({})
     expect(parseKitDone(null)).toEqual({})
   })
 
+  it('reads the first version, a list of ticked steps, as ticks with no product', () => {
+    expect(parseKitDone('{"P":["register","nope"]}')).toEqual({ P: { register: '' } })
+  })
+
   it('ticks a step off and back on', () => {
     const once = toggleKitStep({}, 'P', 'calculator')
-    expect(once).toEqual({ P: ['calculator'] })
+    expect(once).toEqual({ P: { calculator: '' } })
     expect(toggleKitStep(once, 'P', 'calculator')).toEqual({})
+  })
+
+  it('remembers which product a step was sorted with, and the same pick undoes it', () => {
+    const picked = pickKitStep({}, 'P', 'calculator', 'ba-ii-plus')
+    expect(picked).toEqual({ P: { calculator: 'ba-ii-plus' } })
+    expect(pickKitStep(picked, 'P', 'calculator', 'ti-30xa')).toEqual({ P: { calculator: 'ti-30xa' } })
+    expect(pickKitStep(picked, 'P', 'calculator', 'ba-ii-plus')).toEqual({})
+    expect(pickKitStep(picked, 'P', 'calculator', null)).toEqual({})
+    // A tick with no product on a step that has one un-sorts it.
+    expect(toggleKitStep(picked, 'P', 'calculator')).toEqual({})
   })
 })

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:c42b3c2ed77322fff165b0dd31abe3efc0e0178097551f9833945ff51f079b00
+  content_hash: sha256:d2ef6a24a890df8b3d2e02b9cbac6ad1e58ab71a53617e86033c74e993204737
   sources:
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §1.3.2 Probability (Axioms 1-3, third axiom for countably many disjoint events, finite case), read 2026-11-06, sha256:6bac16281e4f438b39671ab9249f058d9f4ed54f5477614b361b29fa10e983c8 — https://www.probabilitycourse.com/chapter1/1_3_2_probability.php"
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §1.3.3 Finding Probabilities (complement rule, P(empty)=0, P(A)<=1, P(A-B)=P(A)-P(A∩B), inclusion-exclusion n=2, monotonicity, with proofs from the axioms), read 2026-11-06, sha256:d9bbfac6df61983d64593563b88f919487a03c5ea8c140c3ee3bb97e36ca33ca — https://www.probabilitycourse.com/chapter1/1_3_3_finding_probabilities.php"
@@ -36,7 +36,9 @@ The third axiom, **additivity**, states that for any sequence of [[Mutually Excl
 - The sequence may be finite, as with two mutually exclusive events $E$ and $F$, where $P(E \cup F) = P(E) + P(F)$.
 
 > [!idea] The idea
-> Every other rule of probability follows from these three. For example, $E$ and its complement $E^c$ are mutually exclusive and together make up $S$, so the second and third axioms give $P(E) + P(E^c) = 1$.
+> Every other rule of probability follows from these three.
+
+For example, an event $E$ and its complement $E^c$ are mutually exclusive and together make up $S$. So the second and third axioms give $P(E) + P(E^c) = 1$.
 
 > [!example]- An insurer assigns probability 0.60 to no claims on a policy in a year, 0.25 to one claim, 0.10 to two claims and 0.05 to three or more claims. Is this a valid probability? {Example}
 > - Non-negativity holds: every probability is at least 0.

@@ -1,12 +1,21 @@
-import { Play } from 'lucide-react'
+import type { ReactNode } from 'react'
+import { Eye, EyeOff, Play, Timer, TimerOff } from 'lucide-react'
+import type { Difficulty } from '@/lib/parser'
+import { DIFFICULTY_LEVELS } from '@/lib/quizDifficulty'
+import { difficultySummary } from '@/lib/quizSetup'
 import { cn } from '@/lib/utils'
+
+/** The part of the setup sheet a tap on the card opens to. */
+export type SetupSection = 'topics' | 'count' | 'difficulty' | 'sitting'
 
 /**
  * The quiz setup screen's card: the reader's own quiz, ready to start. The
- * count is the headline, the time it should take beside it, and under them a
- * pill for each thing that shapes the draw — the topics, the difficulty —
- * each opening the setup sheet (`onChange`). One action, Start, white on the
- * exam's colour.
+ * count is the headline — itself a button, opening the sheet at *How many* —
+ * with the time it should take beside it. Under them a pill for each topic,
+ * then the settings as a row of icons (difficulty, timed, when answers show):
+ * the topics are names worth reading, the settings are states worth glancing
+ * at. Every one of them opens the setup sheet at its own section
+ * (`onChange`). One action, Start, white on the exam's colour.
  *
  * The card is painted in the exam's opaque accent (`--exam-accent-vivid`),
  * which carries white text in either theme; an exam with no accent falls back
@@ -16,6 +25,9 @@ export function QuizHeroCard({
   count,
   estimate,
   pills,
+  levels,
+  timed,
+  revealDuring,
   onChange,
   onStart,
 }: {
@@ -23,12 +35,18 @@ export function QuizHeroCard({
   count: number
   /** "~53 min", or null when the exam has no pace on file. */
   estimate: string | null
-  /** The pills, in order — each opens the sheet. */
+  /** The topics' pills, in order — each opens the sheet at the topics. */
   pills: string[]
-  onChange: () => void
+  /** The difficulties the draw is from. */
+  levels: Difficulty[]
+  timed: boolean
+  /** Answers marked as each is confirmed (`during`), or held for the end. */
+  revealDuring: boolean
+  onChange: (section: SetupSection) => void
   onStart: () => void
 }) {
   const empty = count === 0
+  const word = count === 1 ? 'question' : 'questions'
   return (
     <section
       aria-label="Your quiz"
@@ -36,9 +54,18 @@ export function QuizHeroCard({
       style={{ backgroundColor: 'var(--exam-accent-vivid, #4f46e5)' }}
     >
       <div className="flex items-center gap-4">
-        <span className="text-6xl font-bold leading-none tracking-tight tabular-nums">{count}</span>
+        <button
+          type="button"
+          data-testid="quiz-count"
+          aria-label={`${count} ${word}. Change how many`}
+          aria-haspopup="dialog"
+          onClick={() => onChange('count')}
+          className="-mx-1 rounded-xl px-1 text-6xl font-bold leading-none tracking-tight tabular-nums transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+        >
+          {count}
+        </button>
         <span className="min-w-0 text-xl font-bold leading-tight">
-          <span className="block">{count === 1 ? 'question' : 'questions'}</span>
+          <span className="block">{word}</span>
           {estimate && <span className="block opacity-60">{estimate}</span>}
         </span>
       </div>
@@ -49,9 +76,9 @@ export function QuizHeroCard({
             key={label}
             type="button"
             data-testid="quiz-pill"
-            aria-label={`${label}. Change quiz`}
+            aria-label={`${label}. Change topics`}
             aria-haspopup="dialog"
-            onClick={onChange}
+            onClick={() => onChange('topics')}
             className={cn(
               'max-w-full truncate rounded-full bg-white/20 px-3 py-1.5 text-sm font-semibold text-white underline decoration-white/70 underline-offset-4 transition-colors',
               'hover:bg-white/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white',
@@ -62,8 +89,29 @@ export function QuizHeroCard({
         ))}
       </div>
 
+      <div role="group" aria-label="Quiz settings" className="flex gap-2 border-t border-white/20 pt-3">
+        <SettingIcon
+          label={`Difficulty: ${difficultySummary(levels)}. Change`}
+          onClick={() => onChange('difficulty')}
+        >
+          <DifficultyBars levels={levels} />
+        </SettingIcon>
+        <SettingIcon
+          label={`${timed ? 'Timed' : 'Untimed'}. Change`}
+          onClick={() => onChange('sitting')}
+        >
+          {timed ? <Timer className="h-[22px] w-[22px]" aria-hidden /> : <TimerOff className="h-[22px] w-[22px]" aria-hidden />}
+        </SettingIcon>
+        <SettingIcon
+          label={`${revealDuring ? 'Answers after each question' : 'Answers at the end'}. Change`}
+          onClick={() => onChange('sitting')}
+        >
+          {revealDuring ? <Eye className="h-[22px] w-[22px]" aria-hidden /> : <EyeOff className="h-[22px] w-[22px]" aria-hidden />}
+        </SettingIcon>
+      </div>
+
       {empty && (
-        <p className="text-sm text-white/80">No questions match. Tap a pill to change the topics or levels.</p>
+        <p className="text-sm text-white/80">No questions match. Tap a topic or the difficulty to change them.</p>
       )}
 
       <button
@@ -84,5 +132,47 @@ export function QuizHeroCard({
         Start quiz
       </button>
     </section>
+  )
+}
+
+/** One setting as an icon button: no text, its state in its name. */
+function SettingIcon({ label, onClick, children }: { label: string; onClick: () => void; children: ReactNode }) {
+  return (
+    <button
+      type="button"
+      data-testid="quiz-setting"
+      aria-label={label}
+      title={label.replace(/\. Change$/, '')}
+      aria-haspopup="dialog"
+      onClick={onClick}
+      className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/20 text-white transition-colors hover:bg-white/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+    >
+      {children}
+    </button>
+  )
+}
+
+/** Three rising bars, one per level, filled where the level is in the draw. */
+function DifficultyBars({ levels }: { levels: Difficulty[] }) {
+  return (
+    <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden>
+      {DIFFICULTY_LEVELS.map((level, i) => {
+        const h = 6 + i * 5
+        return (
+          <rect
+            key={level}
+            x={2.5 + i * 7}
+            y={19 - h}
+            width={4}
+            height={h}
+            rx={1}
+            fill="currentColor"
+            fillOpacity={levels.includes(level) ? 1 : 0}
+            stroke="currentColor"
+            strokeWidth={1.4}
+          />
+        )
+      })}
+    </svg>
   )
 }

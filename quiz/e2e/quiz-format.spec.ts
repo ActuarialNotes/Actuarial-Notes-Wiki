@@ -24,6 +24,19 @@ test.describe('quiz setup', () => {
     await expect(page).toHaveURL(/count=5/)
   })
 
+  test('the count opens the sheet at How many, which takes any number', async ({ page }) => {
+    await page.goto('/?topic=Exam%205')
+    await page.getByTestId('quiz-count').click()
+    const sheet = page.getByRole('dialog', { name: 'Your quiz' })
+    await expect(sheet).toBeVisible()
+    const other = sheet.getByRole('textbox', { name: /Other number of questions/ })
+    await expect(other).toBeInViewport()
+    await other.fill('12')
+    await expect(sheet.getByRole('button', { name: 'Start 12 questions' })).toBeVisible()
+    await sheet.getByRole('button', { name: 'Close' }).click()
+    await expect(page.getByRole('region', { name: 'Your quiz' })).toContainText('12questions')
+  })
+
   test('a past paper is sat whole, as a practice exam', async ({ page }) => {
     await page.goto('/?topic=Exam%205')
     await page.getByRole('button', { name: /Past Papers/ }).click()

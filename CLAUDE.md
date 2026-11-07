@@ -815,11 +815,13 @@ Other important `lib/` modules:
   its key order, since a quiz resumes by its address). The page holds only the state that
   joins it to what it draws — `components/landing/` (the exam ladder, and an exam's **setup
   screen**: `QuizHeroCard`, the reader's own quiz in the exam's colour — a big count, the time
-  it should take, a pill for its topics and its difficulty, and Start; `QuizLaunchTiles`, today's
+  it should take, a pill for each topic, the settings (difficulty, timed, when answers show) as a
+  row of icons, and Start; the count, a pill or an icon opens the sheet at its own section
+  (`SetupSection`, the sheet's `focus`); `QuizLaunchTiles`, today's
   plan under it — Pro's to start, shown locked and not a button to anyone else, so the plan never
   stands above building your own — then **Practice exam** and **Past Papers** side by side, the
   same height; and `QuizSetupSheet`, the sheet a pill or tile opens: topics (the concept groups),
-  how many, difficulty, and how it's sat as switches, ending in its own Start) and the
+  how many (the presets, or any number typed in *Other*), difficulty, and how it's sat as switches, ending in its own Start) and the
   `useQuizExamScreen` / `useTodaysPlanQuiz` / `useBuilderPool` / `useQuizBuilderSettings` /
   `useDashboardAutostart` hooks. What the card says — the time estimate at the paper's pace, the
   topics' pills (an objective picked whole is one pill), the difficulty pill — is

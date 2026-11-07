@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:94fb71a9c84e14a31c9a768fb76b28cb7ea86b10053310035343f159607156d1
+  content_hash: sha256:04572b117381c1a21f7ba69f8a0f576430168c72295be2f5c7d8428e66ceb78f
   sources:
     - "NIST/SEMATECH e-Handbook of Statistical Methods §7.1.3.1 Critical values and p values: critical values are cut-offs exceeded with probability alpha under H0, bounding the rejection region; rejecting when the statistic exceeds the critical value is analogous to rejecting when the p-value is below alpha, sha256:1de003010ccb462a50f87f25eb777a581442a61423c97e884266d8e89b0ff797 — https://www.itl.nist.gov/div898/handbook/prc/section1/prc131.htm"
     - "NIST/SEMATECH e-Handbook §1.3.5.8 Chi-Square Test for the Variance: T = (N-1)(s/sigma0)^2, upper, lower and two-tailed critical regions with two different chi-square points on N-1 df, sha256:479a6c6d7f68671d8a61d0daa073e5884a428b477d7b0308c50863c7f164d467 — https://www.itl.nist.gov/div898/handbook/eda/section3/eda358.htm"
@@ -19,50 +19,67 @@ verification:
   log: .verify/Concepts/Critical Value.md
 ---
 
-A **critical value** $c$ is the boundary of the rejection region in [[Hypothesis Testing|a hypothesis test]]: the percentile of the test statistic's [[Sampling Distribution|sampling distribution]] under $H_0$ chosen so that, if $H_0$ is true, the statistic lands beyond it with probability equal to the significance level $\alpha$.
+A **Critical Value** is a boundary of the critical region of a [[Hypothesis Testing|hypothesis test]]. It is the value of the test statistic beyond which the null hypothesis $H_0$ is rejected. For an upper-tailed test with test statistic $W$ at significance level $\alpha$, the critical value $c$ is the value for which
 
-> $$P\left(T \ge c \mid H_0\right) = \alpha$$
+> $$P(W \ge c \mid H_0) = \alpha$$
 
-- The block is for an upper-tailed test; a lower-tailed test rejects when $T \le c$ with $P(T \le c \mid H_0) = \alpha$, and a two-sided test splits $\alpha/2$ into each tail. Rejecting a true $H_0$ is a [[Type I Error]], so $\alpha$ is its probability by construction.
-- **Notation.** Here $z_\alpha$, $t_{\alpha,\nu}$, $\chi^2_{\alpha,\nu}$ and $F_{\alpha,\nu_1,\nu_2}$ are *upper* $\alpha$ points — the value with probability $\alpha$ above it. Tables differ, so check which tail yours tabulates.
-- **Tests on a mean.** Use $Z = \dfrac{\bar X - \mu_0}{\sigma/\sqrt n}$ against $z_\alpha$ when $\sigma$ is known ($z_{0.05} = 1.645$, $z_{0.025} = 1.960$). Use $T = \dfrac{\bar X - \mu_0}{S/\sqrt n}$ against $t_{\alpha,\,n-1}$ when $\sigma$ is estimated from a [[Normal Distribution|normal]] sample.
-- **Tests on a variance.** Use $\chi^2 = (n-1)S^2/\sigma_0^2$ against $\chi^2_{\alpha,\,n-1}$. The chi-square is skewed, so a two-sided test needs two different critical values, $\chi^2_{1-\alpha/2,\,n-1}$ and $\chi^2_{\alpha/2,\,n-1}$, not $\pm$ one number. For two variances, $F = S_1^2/S_2^2$ is compared with $F_{\alpha,\,n_1-1,\,n_2-1}$. The lower point comes from $F_{1-\alpha,\,\nu_1,\,\nu_2} = 1/F_{\alpha,\,\nu_2,\,\nu_1}$.
-- **Same decision as the [[p-Value]].** The statistic is beyond the critical value exactly when the p-value is below $\alpha$. A two-sided test at level $\alpha$ rejects $\mu_0$ exactly when $\mu_0$ lies outside the $1-\alpha$ [[Confidence Interval]]. Moving the critical value trades [[Type II Error]] against Type I error, which is what sets the [[Power of a Test|power]].
+A lower-tailed test rejects $H_0$ when $W \le c$, with $P(W \le c \mid H_0) = \alpha$. A two-sided test puts probability $\alpha/2$ in each tail, so it has two critical values.
 
-> [!example]- t-Test on Mean Claim Severity {Example}
-> After a change in repair costs, a sample of $n = 16$ auto physical damage claims has mean \$5,400 and sample standard deviation \$800. Assuming severities are normal, test $H_0: \mu = 5{,}000$ against $H_1: \mu > 5{,}000$ at $\alpha = 0.05$ and at $\alpha = 0.01$.
->
-> > [!answer]-
-> > $\sigma$ is unknown, so use the $t$ distribution with $15$ degrees of freedom.
-> >
-> > $$
-> > \begin{align*}
-> > T &= \frac{5{,}400 - 5{,}000}{800/\sqrt{16}} \\
-> > &= \frac{400}{200} \\
-> > &= 2.00
-> > \end{align*}
-> > $$
-> >
-> > - At $\alpha = 0.05$: $t_{0.05,15} = 1.753$. Since $2.00 > 1.753$, **reject** $H_0$.
-> > - At $\alpha = 0.01$: $t_{0.01,15} = 2.602$. Since $2.00 < 2.602$, **do not reject**.
-> >
-> > The evidence of higher severity is significant at 5% but not at 1%, which places the p-value between them (it is about $0.032$).
+The upper $\alpha$ points $z_\alpha$, $t_{\alpha,\nu}$, $\chi^2_{\alpha,\nu}$ and $F_{\alpha,\nu_1,\nu_2}$ are the values with probability $\alpha$ above them under the standard [[Normal Distribution|normal]], [[Student's t-Distribution|$t$]], [[Chi-Squared Distribution|chi-squared]] and [[F-Distribution|$F$]] distributions with the degrees of freedom shown. The CAS MAS-I $t$ table is headed by the two-sided tail area, so $t_{0.025,\nu}$ is in the column headed 0.05. Its chi-squared table is headed by the lower-tail probability, so $\chi^2_{0.05,\nu}$ is in the column headed 0.95.
 
-> [!example]- Chi-Square Test for Increased Volatility {Example}
-> A pricing model assumes claim severities have standard deviation \$1,000. A sample of $n = 25$ recent claims has $s = 1{,}300$. Assuming normality, test $H_0: \sigma^2 = 1{,}000^2$ against $H_1: \sigma^2 > 1{,}000^2$ at $\alpha = 0.05$ and $\alpha = 0.01$.
->
-> > [!answer]-
-> > $$
-> > \begin{align*}
-> > \chi^2 &= \frac{(n-1)s^2}{\sigma_0^2} \\
-> > &= \frac{24 \times 1{,}300^2}{1{,}000^2} \\
-> > &= 40.56
-> > \end{align*}
-> > $$
-> >
-> > With $24$ degrees of freedom, $\chi^2_{0.05,24} = 36.415$ and $\chi^2_{0.01,24} = 42.980$.
-> >
-> > - At $5\%$: $40.56 > 36.415$, so **reject** $H_0$.
-> > - At $1\%$: $40.56 < 42.980$, so **do not reject**.
-> >
-> > At the usual 5% level the data say severity is more volatile than the model assumes — a reason to revisit any risk load built on the old standard deviation.
+> [!example]- A $z$ test is run at significance level 0.05. What are its critical values when the alternative hypothesis is upper-tailed, lower-tailed and two-sided? {Example}
+> - An upper-tailed test rejects when $Z \ge z_{0.05} = 1.645$.
+> - A lower-tailed test rejects when $Z \le -1.645$.
+> - A two-sided test puts 0.025 in each tail, so it rejects when $Z \le -1.960$ or $Z \ge 1.960$.
+
+## Critical values for a test on a variance
+
+For a random sample from a normal distribution, the test statistic for $H_0: \sigma^2 = \sigma_0^2$ is
+
+> $$\chi^2 = \frac{(n-1)S^2}{\sigma_0^2}$$
+
+- $S^2$ is the [[Sample Variance|sample variance]], with divisor $n - 1$.
+
+Under $H_0$, this statistic has a chi-squared distribution with $n - 1$ degrees of freedom. Against $H_1: \sigma^2 > \sigma_0^2$ the test rejects when $\chi^2 \ge \chi^2_{\alpha,n-1}$, and against $H_1: \sigma^2 < \sigma_0^2$ it rejects when $\chi^2 \le \chi^2_{1-\alpha,n-1}$. The chi-squared distribution is not symmetric, so the two critical values of a two-sided test are not the same distance from the centre.
+
+> [!example]- Claim severities are normal. A sample of 25 claims has sample standard deviation 1,300. Does a test of $H_0: \sigma^2 = 1{,}000^2$ against $H_1: \sigma^2 > 1{,}000^2$ reject $H_0$ at significance level 0.05, and at 0.01? {Example}
+> - The test statistic is $\chi^2 = \frac{24 \times 1{,}300^2}{1{,}000^2} = 40.56$, with 24 degrees of freedom.
+> - At 0.05 the critical value is $\chi^2_{0.05,24} = 36.415$. Because $40.56 > 36.415$, the test rejects $H_0$.
+> - At 0.01 the critical value is $\chi^2_{0.01,24} = 42.980$. Because $40.56 < 42.980$, the test does not reject $H_0$.
+
+## Critical values for a test on two variances
+
+For independent random samples of sizes $n_1$ and $n_2$ from two normal distributions, the test statistic for $H_0: \sigma_1^2 = \sigma_2^2$ is
+
+> $$F = \frac{S_1^2}{S_2^2}$$
+
+- $S_1^2$ and $S_2^2$ are the sample variances of the two samples.
+
+Under $H_0$, $F$ has an $F$ distribution with $n_1 - 1$ and $n_2 - 1$ degrees of freedom. Against $H_1: \sigma_1^2 < \sigma_2^2$ the test rejects for small values of $F$, below the lower $\alpha$ point. Tables give only upper points, and the lower point is
+
+> $$F_{1-\alpha,\nu_1,\nu_2} = \frac{1}{F_{\alpha,\nu_2,\nu_1}}$$
+
+- $\nu_1 = n_1 - 1$ and $\nu_2 = n_2 - 1$.
+
+> [!example]- Independent normal samples of sizes 6 and 11 are used to test $H_0: \sigma_1^2 = \sigma_2^2$ against $H_1: \sigma_1^2 < \sigma_2^2$ at significance level 0.05. What is the critical value of $S_1^2 / S_2^2$? {Example}
+> - Under $H_0$, $S_1^2 / S_2^2$ has an $F$ distribution with 5 and 10 degrees of freedom.
+> - The alternative is lower-tailed, so the critical value is the lower 0.05 point, $F_{0.95,5,10}$.
+> - With the degrees of freedom reversed, the table gives $F_{0.05,10,5} = 4.735$.
+> - The critical value is $\frac{1}{4.735} = 0.211$, and the test rejects $H_0$ when $S_1^2 / S_2^2 \le 0.211$.
+
+## Critical values for a discrete test statistic
+
+When the test statistic is discrete, only certain significance levels are possible. Raising the critical value shrinks the critical region and lowers the significance level, so for an upper-tailed test at significance level at most $\alpha$, the critical value is the smallest $k$ for which
+
+> $$P(W \ge k \mid H_0) \le \alpha$$
+
+The upper-tail probabilities are added from the largest possible value of $W$ downward until the total would exceed $\alpha$.
+
+> [!example]- In 10 independent trials with success probability $q$, a test of $H_0: q = 0.5$ against $H_1: q > 0.5$ rejects $H_0$ when the number of successes $S$ is at least $k$. What is the smallest $k$ for a significance level of at most 0.05? {Example}
+> - Under $H_0$, $S$ is binomial with 10 trials and $q = 0.5$.
+> - $P(S \ge 10) = 1/1{,}024 = 0.0010$ and $P(S \ge 9) = 11/1{,}024 = 0.0107$.
+> - $P(S \ge 8) = 56/1{,}024 = 0.0547$, which exceeds 0.05.
+> - The smallest critical value is $k = 9$, and the significance level of the test is 0.0107.
+
+> [!trap] Using a two-sided critical value for a one-sided test
+> An upper-tailed $z$ test at significance level 0.05 rejects when $Z \ge z_{0.05} = 1.645$. Using $z_{0.025} = 1.960$, the two-sided value, gives a test whose significance level is 0.025, not 0.05, and whose power is lower.

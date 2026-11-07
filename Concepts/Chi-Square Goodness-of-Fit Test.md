@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:9764ae4c4172b63de194b63adddf12cf7019b3b64be146f956aa75dc8a199d92
+  content_hash: sha256:aa3b5bacddf792229038a002d34f319545aa8198e1642530ac1a43dc319f2f29
   sources:
     - "Siegrist, Random, ch.8 §6 Chi-Square Tests: statistic sum (O_j - e_j)^2/e_j, reject iff V > chi^2_(k-1)(1 - alpha), k - 1 df because the counts sum to n, rule of thumb e_j >= 5 and as many cells as possible subject to it, one df lost per estimated parameter, test of independence with E_ij = N_i M_j / n on (k-1)(m-1) df, sha256:379cf5939801c94b251884c0c82f0e6efc7ecce35cec11a645881d7ca9c7a6aa — https://www.randomservices.org/random/hypothesis/ChiSquare.html"
     - "NIST/SEMATECH e-Handbook §1.3.5.15 Chi-Square Goodness-of-Fit Test: E_i = N(F(Y_u) - F(Y_l)); k - c df with c = estimated parameters + 1; value depends on the binning; applies to discrete distributions such as the binomial and Poisson while K-S and A-D are restricted to continuous ones, sha256:e0110e7f23ed6b65947c69d9970817744285553a943548b52d7a527794c88b13 — https://www.itl.nist.gov/div898/handbook/eda/section3/eda35f.htm"
@@ -17,48 +17,66 @@ verification:
   log: .verify/Concepts/Chi-Square Goodness-of-Fit Test.md
 ---
 
-The **Chi-Square Goodness-of-Fit Test** checks whether a sample came from a hypothesized distribution by sorting the observations into $k$ cells and comparing each cell's observed count $O_j$ with the count $E_j$ the model predicts. Large discrepancies give a large statistic $Q$ and lead to rejecting the model, so it is a right-tailed [[Hypothesis Testing|hypothesis test]].
+A **Chi-Square Goodness-of-Fit Test** is a [[Hypothesis Testing|hypothesis test]] of whether the counts of $n$ observations in $k$ categories agree with the probabilities $p_1, \ldots, p_k$ that a hypothesized distribution assigns to the categories. The test statistic is
 
-> $$Q = \sum_{j=1}^{k} \frac{(O_j - E_j)^2}{E_j}$$
+> $$Q = \sum_{j=1}^{k} \frac{(O_j - n p_j)^2}{n p_j}$$
 
-> $$E_j = n\,p_j = n\left[F(c_j) - F(c_{j-1})\right]$$
+- $O_j$ is the observed count in category $j$, and $O_1 + \cdots + O_k = n$.
+- $n p_j$ is the expected count in category $j$ under $H_0$.
 
-> $$Q \ \dot\sim\ \chi^2_{\,k-1-r} \quad \text{under } H_0$$
+Under $H_0$, $Q$ has approximately a [[Chi-Squared Distribution|chi-squared distribution]] with $k - 1$ degrees of freedom when the probabilities $p_j$ are fully specified. Large differences between the observed and expected counts make $Q$ large, so the test rejects $H_0$ at significance level $\alpha$ when $Q$ exceeds the upper $\alpha$ point $\chi^2_{\alpha,k-1}$. The approximation needs every expected count to be at least 5, and sparse categories are combined until this holds.
 
-- $n$ is the sample size, $p_j$ the model probability of cell $j$ (from the [[Cumulative Distribution Function (CDF)|CDF]] $F$ at the cell boundaries $c_{j-1} < c_j$), and $r$ is the number of parameters **estimated from the data**. Reject $H_0$ at level $\alpha$ when $Q$ exceeds the upper-$\alpha$ [[Critical Value|critical value]] of the [[Chi-Squared Distribution|chi-squared distribution]] with $k - 1 - r$ degrees of freedom.
-- **Degrees of freedom.** One is lost because the counts must sum to $n$; one more is lost for each estimated parameter. A fully specified model ($r = 0$) has $k - 1$; a [[Poisson Distribution|Poisson]] with $\lambda$ estimated, on four cells, has $4 - 1 - 1 = 2$.
-- **Large-sample rule of thumb:** the chi-squared approximation needs every $E_j \ge 5$; combine sparse cells (usually in the tail) until it holds.
-- The value of $Q$ depends on how the cells are chosen, and the test works for **discrete** models such as the Poisson and binomial as well as for binned continuous data. The [[Kolmogorov-Smirnov Test|Kolmogorov–Smirnov and Anderson–Darling tests]] are the alternatives for ungrouped continuous data.
-- **Test of independence.** The same statistic on a $k \times m$ contingency table, with $E_{ij} = (\text{row } i \text{ total})(\text{column } j \text{ total})/n$, tests whether two classifications are independent, on $(k-1)(m-1)$ degrees of freedom.
+> [!example]- A die is rolled 120 times, and the faces 1 to 6 come up 25, 17, 15, 23, 24 and 16 times. Does a test at significance level 0.05 reject the hypothesis that the die is fair? {Example}
+> - Under $H_0$ each face has probability $1/6$, so each expected count is $120/6 = 20$.
+> - The squared differences from 20 are 25, 9, 25, 9, 16 and 16, which sum to 100.
+> - The test statistic is $Q = 100/20 = 5.0$, with $6 - 1 = 5$ degrees of freedom.
+> - Because $5.0 < \chi^2_{0.05,5} = 11.07$, the test does not reject the hypothesis that the die is fair.
 
-> [!example]- Claim Counts Against a Fully Specified Size Distribution {Example}
-> An insurer's pricing model says that 50% of claims are under \$1,000, 30% are \$1,000–\$5,000, 15% are \$5,000–\$25,000 and 5% exceed \$25,000. Last year's 400 claims fell 186, 132, 58 and 24 into these bands. Test the model at the 5% level.
->
-> > [!answer]-
-> > The expected counts are $400 \times (0.50, 0.30, 0.15, 0.05) = (200, 120, 60, 20)$, all at least 5:
-> >
-> > $$
-> > \begin{align*}
-> > Q &= \frac{(186-200)^2}{200} + \frac{(132-120)^2}{120} + \frac{(58-60)^2}{60} + \frac{(24-20)^2}{20} \\
-> >   &= 0.980 + 1.200 + 0.067 + 0.800 \\
-> >   &= 3.05
-> > \end{align*}
-> > $$
-> >
-> > No parameters were estimated, so there are $4 - 1 = 3$ degrees of freedom and the critical value is $\chi^2_{0.05,\,3} = 7.81$. Since $3.05 < 7.81$, **do not reject** — the pricing model's size bands are consistent with the year's claims.
+## Testing a fitted distribution
 
-> [!example]- Testing a Fitted Poisson Frequency Model {Example}
-> Of 500 policies, 260 had no claims, 190 had one, 40 had two and 10 had three (none had more). Fit a Poisson by maximum likelihood and test it at the 5% level using the cells $0, 1, 2, 3{+}$.
->
-> > [!answer]-
-> > The MLE is the sample mean, $\hat\lambda = (190 + 2 \cdot 40 + 3 \cdot 10)/500 = 0.6$. The Poisson probabilities are $0.5488, 0.3293, 0.0988$, leaving $0.0231$ for $3{+}$, so the expected counts are $274.41, 164.64, 49.39, 11.56$:
-> >
-> > $$
-> > \begin{align*}
-> > Q &= \frac{(260-274.41)^2}{274.41} + \frac{(190-164.64)^2}{164.64} + \frac{(40-49.39)^2}{49.39} + \frac{(10-11.56)^2}{11.56} \\
-> >   &= 0.756 + 3.905 + 1.786 + 0.210 \\
-> >   &= 6.66
-> > \end{align*}
-> > $$
-> >
-> > One parameter was estimated, so there are $4 - 1 - 1 = 2$ degrees of freedom and $\chi^2_{0.05,\,2} = 5.99$. Since $6.66 > 5.99$, **reject** the Poisson model at 5% (but not at 2.5%, where the critical value is $7.38$). Forgetting to subtract the estimated parameter would have compared $6.66$ with $\chi^2_{0.05,\,3} = 7.81$ and wrongly kept the model: the policies show more one-claim risks than a single Poisson rate allows.
+When the hypothesized distribution has $r$ parameters estimated from the same data, one more degree of freedom is lost for each of them. The number of degrees of freedom of $Q$ is then
+
+> $$k - 1 - r$$
+
+> [!example]- Of 500 policies, 260 had no claims, 190 had one claim, 40 had two and 10 had three. Does a test at significance level 0.05 reject a [[Poisson Distribution|Poisson]] model fitted by maximum likelihood, with the categories 0, 1, 2 and 3 or more? {Example}
+> - The maximum likelihood estimate is the sample mean, $\hat{\lambda} = \frac{190 + 80 + 30}{500} = 0.6$.
+> - The Poisson probabilities are 0.5488, 0.3293 and 0.0988, which leaves 0.0231 for 3 or more claims.
+> - The expected counts are 274.41, 164.64, 49.39 and 11.56.
+> - The terms $(O_j - n p_j)^2 / (n p_j)$ are 0.756, 3.905, 1.786 and 0.210, so $Q = 6.66$.
+> - One parameter was estimated, so there are $4 - 1 - 1 = 2$ degrees of freedom and $\chi^2_{0.05,2} = 5.991$.
+> - Because $6.66 > 5.991$, the test rejects the Poisson model.
+
+## Test of independence in a contingency table
+
+The same statistic tests whether two classifications of the $n$ observations are independent. In a table with $I$ rows and $J$ columns, the expected count of the cell in row $i$ and column $j$ under independence is
+
+> $$\frac{(\text{row } i \text{ total})(\text{column } j \text{ total})}{n}$$
+
+The statistic $Q$, summed over all $IJ$ cells, is compared with a chi-squared distribution with $(I - 1)(J - 1)$ degrees of freedom.
+
+> [!example]- Of 200 urban policies, 30 had a claim, and of 300 rural policies, 20 had a claim. Does a test at significance level 0.05 reject the hypothesis that having a claim is independent of territory? {Example}
+> - The row totals are 200 and 300, the column totals are 50 with a claim and 450 without, and $n = 500$.
+> - The expected counts are $\frac{200 \times 50}{500} = 20$ and 180 for urban, and 30 and 270 for rural.
+> - The terms are $\frac{(30 - 20)^2}{20} = 5.000$, 0.556, 3.333 and 0.370, so $Q = 9.26$.
+> - The table has $(2 - 1)(2 - 1) = 1$ degree of freedom, and $\chi^2_{0.05,1} = 3.841$.
+> - Because $9.26 > 3.841$, the test rejects independence.
+
+## Test for shifting risk parameters
+
+To test whether a claim frequency is constant over $m$ periods, the actual claim count of each period is compared with its expected claim count under a constant frequency. If period $i$ has exposure $w_i$ and $A_i$ claims, the test statistic is
+
+> $$Q = \sum_{i=1}^{m} \frac{(A_i - w_i \lambda)^2}{w_i \lambda}$$
+
+- $\lambda$ is the hypothesized claim frequency per unit of exposure, so $w_i \lambda$ is the expected claim count of period $i$.
+
+The periods' counts are independent rather than fixed in total, so with a given frequency the statistic has $m$ degrees of freedom. When the frequency is the overall mean estimated from the same data, it has $m - 1$. A statistic above the critical value rejects the null hypothesis that the frequency is not shifting.
+
+> [!example]- Four years have exposures of 1,000, 1,200, 1,100 and 900 and claim counts of 52, 70, 48 and 30. Does a test at significance level 0.05 show that the claim frequency is shifting? {Example}
+> - The overall mean frequency is $\frac{200}{4{,}200} = 0.04762$.
+> - The expected counts are the exposures times 0.04762: 47.62, 57.14, 52.38 and 42.86.
+> - The terms are 0.403, 2.893, 0.366 and 3.857, so the statistic is 7.52.
+> - The frequency was estimated from the data, so there are $4 - 1 = 3$ degrees of freedom and $\chi^2_{0.05,3} = 7.815$.
+> - Because $7.52 < 7.815$, the test does not reject the hypothesis that the frequency is constant.
+
+> [!trap] Forgetting the estimated parameters in the degrees of freedom
+> In the Poisson example, comparing $Q = 6.66$ with $\chi^2_{0.05,3} = 7.815$, as if no parameter had been estimated, would keep a model that the test with 2 degrees of freedom rejects.

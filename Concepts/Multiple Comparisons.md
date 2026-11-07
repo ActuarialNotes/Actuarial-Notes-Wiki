@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:2fb063db0e89921925f29378c698ac69a2cf7cee78784e70de82467520a8afc4
+  content_hash: sha256:8b0839cd4e6c1fb7baee07b46cf7e37e08d5e90958423654645f6f5e0a71e927
   sources:
     - "NIST/SEMATECH e-Handbook of Statistical Methods, §7.4.7 'How can we make multiple comparisons?' (repeated pairwise tests do not hold the overall level; Tukey for all pairs, Scheffé for all contrasts, Bonferroni for a pre-selected set), sha256:892f9bcd3cedeea1b5fef1abe94cabebd821262c7f8953965f4d36dff6a778d9 (HTML with the per-request Cloudflare challenge <script> removed) — https://www.itl.nist.gov/div898/handbook/prc/section4/prc47.htm"
     - "NIST/SEMATECH e-Handbook, §7.4.7.1 Tukey's method: exactly 1 - alpha for equal sample sizes, conservative for unequal; studentized range q = w/s; limits ybar_i - ybar_j ± (1/sqrt2) q(alpha; r, N-r) sigma_hat sqrt(2/n), sha256:32b171afa0472cdb878836b6686e71bd88d1dc45b80ab34d3ad1fa1ce55e43ae (Cloudflare <script> removed) — https://www.itl.nist.gov/div898/handbook/prc/section4/prc471.htm"
@@ -20,83 +20,87 @@ verification:
   log: .verify/Concepts/Multiple Comparisons.md
 ---
 
-**Multiple Comparisons** are procedures for testing several hypotheses about group means, or building several [[Confidence Interval|confidence intervals]] for them, at once while holding the **family-wise error rate** (FWER) at a chosen $\alpha$. The FWER is the probability of making at least one [[Type I Error]] anywhere in the family. They are used after an [[ANOVA]] F test to find which means differ.
+**Multiple Comparisons** is the testing of several hypotheses about group means, or the building of several [[Confidence Interval|confidence intervals]] for them, at once while holding the family-wise error rate at a chosen $\alpha$. Its procedures are used after an [[ANOVA]] $F$ test to find which means differ. The family-wise error rate is
 
-> $$\text{FWER} = P(\text{at least one true } H_0 \text{ is rejected})$$
+> $$\text{FWER} = P(\text{at least one true } H_0 \text{ in the family is rejected})$$
 
-> $$C = \sum_{i=1}^{k} c_i\,\mu_i, \quad \sum_{i=1}^{k} c_i = 0$$
+If $g$ independent tests are each run at level $\alpha$, the family-wise error rate is $1 - (1 - \alpha)^g$, which grows quickly with $g$.
 
-> $$s_{\hat{C}}^2 = \hat\sigma^2 \sum_{i=1}^{k} \frac{c_i^2}{n_i}$$
+> [!example]- An actuary tests 10 candidate rating variables, each at significance level 0.05. If none of them affects losses and the tests are independent, what is the probability that at least one variable is found significant? {Example}
+> - Each test fails to reject a true $H_0$ with probability 0.95.
+> - The probability that all 10 tests fail to reject is $0.95^{10} = 0.599$.
+> - The family-wise error rate is $1 - 0.599 = 0.401$.
 
-- $C$ is a **contrast** of the $k$ group means, estimated by $\hat{C} = \sum c_i \bar{y}_i$; a pairwise difference $\mu_i - \mu_j$ is the simplest one. $n_i$ is group $i$'s size, $N = \sum n_i$, and $\hat\sigma^2$ is the ANOVA's mean squared error on $N - k$ degrees of freedom.
-- **Why a family needs its own procedure:** $g$ independent tests each at level $\alpha$ have $\text{FWER} = 1 - (1 - \alpha)^g$. Six tests at 5% give $1 - 0.95^6 = 0.265$.
-- The three procedures below share the form $\hat{C} \pm (\text{multiplier}) \times s_{\hat{C}}$ and differ in the multiplier. Choose by the family you need: none is narrowest in every case.
+## Contrasts of group means
 
-**Bonferroni** covers $g$ comparisons chosen in advance:
+In a one-way ANOVA with $k$ groups, group $i$ has $n_i$ observations and sample mean $\bar{y}_i$, the total number of observations is $N = n_1 + \cdots + n_k$, and $\hat{\sigma}^2$ is the mean squared error on $N - k$ degrees of freedom. A contrast is a combination of the group means
 
-> $$\hat{C}_i \pm t_{\alpha/(2g),\,N - k}\; s_{\hat{C}_i}$$
+> $$\psi = \sum_{i=1}^{k} a_i \mu_i$$
 
-- Each interval is built at confidence $1 - \alpha/g$ (each test at level $\alpha/g$). The **Bonferroni inequality**, $P\left(\bigcap_{i=1}^{g} A_i\right) \geq 1 - \sum_{i=1}^{g} P(\bar{A}_i)$, then guarantees that all $g$ intervals hold together with probability at least $1 - \alpha$.
-- It works for equal or unequal group sizes and for any pre-chosen linear combinations. It is narrower than Scheffé when only a few comparisons are wanted, about as many as there are groups, and can be narrower than Tukey when only some of the pairs are wanted.
+- The coefficients $a_i$ satisfy $a_1 + \cdots + a_k = 0$.
 
-**Scheffé** covers every contrast at once, including ones chosen after looking at the data:
+A pairwise difference $\mu_i - \mu_j$ is the simplest contrast. The contrast is estimated by $\hat{\psi} = \sum a_i \bar{y}_i$, whose standard error is
 
-> $$\hat{C} \pm \sqrt{(k - 1)\,F_{\alpha;\,k - 1,\,N - k}}\; s_{\hat{C}}$$
+> $$\text{SE}(\hat{\psi}) = \sqrt{\hat{\sigma}^2 \sum_{i=1}^{k} \frac{a_i^2}{n_i}}$$
 
-- The simultaneous confidence is exactly $1 - \alpha$ over the infinitely many contrasts. It matches the ANOVA [[F-Distribution|F test]]: if the F test rejects at level $\alpha$, at least one contrast is significant by Scheffé's criterion.
-- For all linear combinations $\sum c_i\mu_i$, not only contrasts, the multiplier is $\sqrt{k\,F_{\alpha;\,k,\,N - k}}$: $k$ replaces $k - 1$ in both places.
+For one contrast on its own, the confidence interval is $\hat{\psi} \pm t_{\alpha/2,\,N-k}\,\text{SE}(\hat{\psi})$. The three methods below keep this form and replace the $t$ value with a larger multiplier.
 
-**Tukey** covers all pairwise differences when the groups have equal size $n$:
+## Bonferroni method
 
-> $$\bar{y}_i - \bar{y}_j \pm q_{\alpha;\,k,\,N - k}\;\hat\sigma\sqrt{\frac{1}{n}}$$
+For $g$ contrasts chosen before the data are seen, the Bonferroni method builds each interval at level $\alpha/g$:
 
-- $q$ is a percentile of the **studentized range**: the range of $k$ independent normal values divided by an independent estimate of their standard deviation. Coverage is exactly $1 - \alpha$ for equal sizes and conservative for unequal sizes. When all pairwise differences are wanted, Tukey gives narrower intervals than Bonferroni or Scheffé.
-- The CAS MAS-I tables include the t and F tables that Bonferroni and Scheffé need, but no studentized-range table.
-- Running ordinary t-tests on every pair after a significant F test (Fisher's LSD) does not control the FWER.
+> $$\hat{\psi} \pm t_{\alpha/(2g),\,N-k}\,\text{SE}(\hat{\psi})$$
 
-> [!example]- Testing Ten Rating Variables {Example}
-> An actuary tests 10 candidate rating variables, each with its own test at the 5% level. Suppose none of them affects losses and the tests are independent. Find the probability of at least one false finding, and the per-test level that keeps the FWER at or below 5% by Bonferroni.
->
-> > [!answer]-
-> > $$
-> > \begin{align*}
-> > \text{FWER} &= 1 - 0.95^{10} \\
-> > &= 0.401
-> > \end{align*}
-> > $$
-> >
-> > There is about a 40% chance that at least one useless variable looks significant. Bonferroni tests each variable at $0.05/10 = 0.005$. Then the FWER is at most $10 \times 0.005 = 0.05$, whether or not the tests are independent.
+- $t_{\alpha/(2g),\,N-k}$ is the upper $\alpha/(2g)$ point of the [[Student's t-Distribution|$t$ distribution]], which has two-sided tail area $\alpha/g$.
 
-> [!example]- Comparing Five Territories With a Base Territory {Example}
-> Mean claim severities (\$000s) are compared across six territories with $n = 4$ claims each, so $N = 24$ and the ANOVA has $\hat\sigma^2 = 2.25$ on 18 df. Before seeing the data, the actuary planned 5 comparisons: territories B to F each against base territory A, with 90% family confidence. The observed differences from A are B $1.1$, C $3.8$, D $-0.6$, E $2.9$ and F $0.8$. Which differ from A by Bonferroni, and which by Scheffé?
->
-> > [!answer]-
-> > For a pairwise difference, $\sum c_i^2/n_i = 1/4 + 1/4$:
-> >
-> > $$
-> > \begin{align*}
-> > s_{\hat{C}} &= \sqrt{2.25\left(\tfrac{1}{4} + \tfrac{1}{4}\right)} \\
-> > &= 1.061
-> > \end{align*}
-> > $$
-> >
-> > **Bonferroni:** each two-sided interval uses area $0.10/5 = 0.02$. The CAS t table (two-sided tail area $0.02$, $df = 18$) gives $2.552$:
-> >
-> > $$
-> > \begin{align*}
-> > \text{half-width} &= 2.552(1.061) \\
-> > &= 2.71
-> > \end{align*}
-> > $$
-> >
-> > **Scheffé:** the CAS F table gives $F_{0.10;\,5,\,18} = 2.196$:
-> >
-> > $$
-> > \begin{align*}
-> > \text{half-width} &= \sqrt{5(2.196)}\,(1.061) \\
-> > &= 3.314(1.061) \\
-> > &= 3.51
-> > \end{align*}
-> > $$
-> >
-> > Bonferroni finds C ($3.8$) and E ($2.9$) different from A; Scheffé finds only C. For 5 planned comparisons Bonferroni is narrower. Scheffé pays for covering every contrast, which is what you need only if the comparisons are chosen after looking at the data.
+The Bonferroni inequality guarantees that all $g$ intervals hold together with probability at least $1 - \alpha$, whether or not the comparisons are independent and whether or not the group sizes are equal.
+
+> [!example]- Six territories have 4 claims each, and the ANOVA gives $\hat{\sigma}^2 = 2.25$ on 18 degrees of freedom. Before seeing the data, the actuary planned to compare territories B to F with territory A at 90% family confidence. The differences from A are 1.1, 3.8, $-0.6$, 2.9 and 0.8. Which territories differ from A by the Bonferroni method? {Example}
+> - For a pairwise difference, $\sum a_i^2 / n_i = 1/4 + 1/4$, so $\text{SE}(\hat{\psi}) = \sqrt{2.25 \times 0.5} = 1.061$.
+> - There are $g = 5$ comparisons, so each interval uses two-sided tail area $0.10/5 = 0.02$, and the $t$ table with 18 degrees of freedom gives 2.552.
+> - The half-width is $2.552 \times 1.061 = 2.71$.
+> - Territories C (3.8) and E (2.9) differ from A by more than 2.71.
+
+## Scheffé method
+
+For all contrasts at once, including contrasts chosen after looking at the data, the Scheffé method uses the interval
+
+> $$\hat{\psi} \pm \sqrt{(k - 1)\,F_{\alpha,\,k-1,\,N-k}}\;\text{SE}(\hat{\psi})$$
+
+- $F_{\alpha,\,k-1,\,N-k}$ is the upper $\alpha$ point of the [[F-Distribution|$F$ distribution]] with $k - 1$ and $N - k$ degrees of freedom.
+
+The family confidence is exactly $1 - \alpha$ over every contrast. If the ANOVA $F$ test rejects at level $\alpha$, at least one contrast is significant by the Scheffé method.
+
+> [!example]- For the six territories above, with 90% family confidence, which territories differ from A by the Scheffé method? {Example}
+> - With $k = 6$ groups and 18 degrees of freedom, $F_{0.10,5,18} = 2.196$.
+> - The multiplier is $\sqrt{5 \times 2.196} = 3.314$, so the half-width is $3.314 \times 1.061 = 3.51$.
+> - Only territory C (3.8) differs from A by more than 3.51.
+
+## Tukey method
+
+For all pairwise differences when every group has the same size $n$, the Tukey method uses the interval
+
+> $$\bar{y}_i - \bar{y}_j \pm q_{\alpha,\,k,\,N-k} \sqrt{\frac{\hat{\sigma}^2}{n}}$$
+
+- $q_{\alpha,\,k,\,N-k}$ is the upper $\alpha$ point of the studentized range distribution, the distribution of the range of $k$ independent normal values divided by an independent estimate of their standard deviation.
+
+The family confidence is exactly $1 - \alpha$ over all pairwise differences.
+
+> [!example]- Four groups have 6 observations each, with means 10.2, 11.0, 12.5 and 9.8, and $\hat{\sigma}^2 = 1.5$ on 20 degrees of freedom. With $q_{0.05,4,20} = 3.958$, which pairs differ at 95% family confidence? {Example}
+> - The half-width is $3.958 \sqrt{1.5 / 6} = 3.958 \times 0.5 = 1.979$.
+> - Group 3 differs from group 1 by $12.5 - 10.2 = 2.3$ and from group 4 by $12.5 - 9.8 = 2.7$, both more than 1.979.
+> - Every other difference is at most $12.5 - 11.0 = 1.5$.
+> - Only the pairs of group 3 with groups 1 and 4 differ.
+
+## Choosing a method
+
+A comparison chosen after looking at the data, such as the largest difference of means, is in effect the largest of all the pairwise comparisons. An ordinary interval for it understates the error rate, so it needs a method that covers all pairs or all contrasts.
+
+| Family of comparisons | Method with the narrowest intervals |
+| --- | --- |
+| A few contrasts chosen in advance | Bonferroni |
+| All pairwise differences, equal group sizes | Tukey, which is exact, while Bonferroni is conservative and Scheffé is widest |
+| Any contrasts, including contrasts that are not pairwise or are chosen after the data | Scheffé |
+
+> [!trap] Running an ordinary $t$ test on every pair
+> Running an ordinary $t$ test at level $\alpha$ on each pair of means after a significant $F$ test does not hold the family-wise error rate at $\alpha$. With 6 groups there are 15 pairs, and the chance of at least one false difference is far above $\alpha$.

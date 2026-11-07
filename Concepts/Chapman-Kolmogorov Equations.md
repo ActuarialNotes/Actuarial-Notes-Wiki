@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:eebd9f0f480e27d7111071c2611df0ac28942af563bca1aca663e6e7d6a74e14
+  content_hash: sha256:56b51422119b324a94b8c5cb29c7aabe80145212b4c24e4a7eeb93fa1b0de988
   sources:
     - "Ross, Introduction to Probability Models, Ch. 4 'Markov Chains' (course-hosted copy on NTNU TMA4265 page; edition earlier than the 11th-13th the 2026 outline lists, file dated 2012-09-06): Sec. 4.2 n-step notation P^n_ij = P{X_{n+k}=j | X_k=i}, Chapman-Kolmogorov eq. (4.2) with derivation, P(n+m) = P(n)P(m), P(n) = P^n pp.189-190; unconditional P{X_n=j} = sum_i P^n_ij alpha_i p.191; absorbing-set technique for 'enters A by time n' and Ex. 4.10 pp.192-193, sha256:9f01ac6c0ef8a6a641de075fe6af109d7215bad8c33734807fd654d4a1ad53e1 - https://arvidn.folk.ntnu.no/TMA4265/Chap%204%20from%20Ross.pdf"
     - "Siegrist, Random, 'Discrete-Time Markov Chains' (Chapman-Kolmogorov P_m P_n = P_{m+n} and conditioning proof; P_n = P^n), sha256:808118b103e17cd5e31115b953663b0d8ff94da21f432e6fe7c104e9300380f0 - https://www.randomservices.org/random/markov/Discrete.html"
@@ -16,69 +16,74 @@ verification:
   log: .verify/Concepts/Chapman-Kolmogorov Equations.md
 ---
 
-The **Chapman-Kolmogorov Equations** give the $(n+m)$-step transition probabilities of a [[Markov Chain]] by conditioning on the state at the intermediate time: to go from $i$ to $j$ in $n + m$ steps, the chain must pass through some state $k$ after $n$ steps.
+The **Chapman-Kolmogorov Equations** express the multi-step transition probabilities of a [[Markov Chain]] by conditioning on the state the chain occupies at an intermediate time. The probability that a chain now in state $i$ is in state $j$ after $n + m$ steps is
 
-> $$P_{ij}^{\,n+m} = \sum_{k} P_{ik}^{\,n}\, P_{kj}^{\,m}$$
+> $$P_{ij}^{n+m} = \sum_k P_{ik}^{n}\, P_{kj}^{m}$$
 
-> $$\mathbf{P}^{(n)} = \mathbf{P}^{n}$$
+- $P_{ij}^{n} = P(X_n = j \mid X_0 = i)$ is the $n$-step transition probability from state $i$ to state $j$, with $P_{ij}^{1} = P_{ij}$.
+- $k$ runs over every state of the chain.
 
-- $P^n_{ij} = P(X_{m+n} = j \mid X_m = i)$ is Ross's notation for the $n$-step probability, the same as $(\mathbf{P}^n)_{ij}$. In matrix form the equations say $\mathbf{P}^{(n+m)} = \mathbf{P}^{(n)}\mathbf{P}^{(m)}$, so the $n$-step matrix is the $n$-th power of the one-step [[Transition Probability Matrix]].
-- They are the [[The Law of Total Probability|law of total probability]] plus the Markov property: once the chain is at $k$, how it got there is irrelevant.
-- **Compute only what you need.** For one starting state, carry a single row forward: row $i$ of $\mathbf{P}^n$ equals row $i$ of $\mathbf{P}^{n-1}$ times $\mathbf{P}$. Squaring a whole matrix for one entry wastes exam time. Unconditionally, $P(X_n = j) = \sum_i \alpha_i P^n_{ij}$.
-- **Being in a state at time $n$ is not the same as having visited it by time $n$.** For the probability of *ever* entering a set of states within $n$ steps, make those states absorbing and compute the $n$-step probability in the modified chain.
-- A non-homogeneous chain multiplies its one-step matrices in time order. In continuous time the equations read $P_{ij}(t+s) = \sum_k P_{ik}(t)P_{kj}(s)$.
+To go from $i$ to $j$ in $n + m$ steps, the chain must be in some state $k$ after the first $n$ steps. Given that state, the Markov property makes the last $m$ steps independent of how the chain reached $k$.
 
-> [!example]- Where a Claim Stands After Three Months {Example}
-> Each month a claim file is Open (O), Closed (C) or Reopened (R), with
-> $$\mathbf{P} = \begin{array}{c|ccc} & O & C & R \\ \hline O & 0.6 & 0.4 & 0 \\ C & 0 & 0.9 & 0.1 \\ R & 0 & 0.5 & 0.5 \end{array}$$
-> A claim is Open now. Find the probability it is Closed three months from now.
+> [!example]- Each month a claim is Open (O), Closed (C) or Reopened (R). The claim is Open now. What is the probability that it is Closed two months from now? {Example}
+> The transition probabilities are:
 >
-> > [!answer]-
-> > Row O of $\mathbf{P}^2$:
-> >
-> > $$
-> > \begin{align*}
-> > P^2_{OO} &= (0.6)(0.6) \\
-> > &= 0.36 \\
-> > P^2_{OC} &= (0.6)(0.4) + (0.4)(0.9) \\
-> > &= 0.60 \\
-> > P^2_{OR} &= (0.4)(0.1) \\
-> > &= 0.04
-> > \end{align*}
-> > $$
-> >
-> > Then one more step into C:
-> >
-> > $$
-> > \begin{align*}
-> > P^3_{OC} &= 0.36(0.4) + 0.60(0.9) + 0.04(0.5) \\
-> > &= 0.144 + 0.540 + 0.020 \\
-> > &= 0.704
-> > \end{align*}
-> > $$
-> >
-> > The claim is closed at month 3 with probability $70.4\%$.
-
-> [!example]- Ever Reopened Versus Reopened at Month 3 {Example}
-> For the same claim, find (a) the probability it is in state R at month 3 and (b) the probability it is reopened at some point within three months.
+> | From \ To | O | C | R |
+> | --- | --- | --- | --- |
+> | O | 0.6 | 0.4 | 0 |
+> | C | 0 | 0.9 | 0.1 |
+> | R | 0 | 0.5 | 0.5 |
 >
-> > [!answer]-
-> > (a) From row O of $\mathbf{P}^2$ above:
-> >
-> > $$
-> > \begin{align*}
-> > P^3_{OR} &= 0.60(0.1) + 0.04(0.5) \\
-> > &= 0.08
-> > \end{align*}
-> > $$
-> >
-> > (b) Make R absorbing ($P_{RR} = 1$). Row O of the modified $\mathbf{P}^2$ is unchanged, $(0.36, 0.60, 0.04)$, because a claim starting Open cannot reach R and leave it again within two steps:
-> >
-> > $$
-> > \begin{align*}
-> > P(\text{reopened by month 3}) &= 0.60(0.1) + 0.04(1) \\
-> > &= 0.10
-> > \end{align*}
-> > $$
-> >
-> > The gap of $0.02$ is the path O $\to$ C $\to$ R $\to$ C, $(0.4)(0.1)(0.5)$: reopened and closed again before month 3. A reopening-rate question wants (b).
+> - With $n = m = 1$, the sum runs over the state $k$ after one month.
+> - The probability that the claim is Closed two months from now is
+>
+> $$
+> \begin{aligned}
+> P_{OC}^{2} &= P_{OO}P_{OC} + P_{OC}P_{CC} + P_{OR}P_{RC} \\
+> &= 0.6(0.4) + 0.4(0.9) + 0(0.5) \\
+> &= 0.60
+> \end{aligned}
+> $$
+
+## The $n$-step transition matrix
+
+The matrix of $n$-step transition probabilities is the $n$th power of the one-step [[Transition Probability Matrix|transition probability matrix]] $\mathbf{P}$, and the equations in matrix form are
+
+> $$\mathbf{P}^{n+m} = \mathbf{P}^{n}\,\mathbf{P}^{m}$$
+
+- $\mathbf{P}^{n}$ is the matrix whose entry in row $i$ and column $j$ is $P_{ij}^{n}$.
+
+Row $i$ of $\mathbf{P}^{n}$ is the distribution of the state $n$ steps after the chain is in state $i$. For one starting state, only that row is needed: row $i$ of $\mathbf{P}^{n-1}$ multiplied by $\mathbf{P}$ gives row $i$ of $\mathbf{P}^{n}$.
+
+> [!example]- For the claim above, which is Open now, what is the probability that it is Closed three months from now? {Example}
+> - The previous example gives $P_{OC}^{2} = 0.60$. The other entries of row O of $\mathbf{P}^{2}$ are $P_{OO}^{2} = 0.6(0.6) = 0.36$ and $P_{OR}^{2} = 0.4(0.1) = 0.04$.
+> - Multiplying this row by column C of $\mathbf{P}$ gives
+>
+> $$
+> \begin{aligned}
+> P_{OC}^{3} &= 0.36(0.4) + 0.60(0.9) + 0.04(0.5) \\
+> &= 0.144 + 0.540 + 0.020 \\
+> &= 0.704
+> \end{aligned}
+> $$
+
+## Unconditional probabilities
+
+When the state at time 0 is random, the probability that the chain is in state $j$ at time $n$ is
+
+> $$P(X_n = j) = \sum_i P(X_0 = i)\, P_{ij}^{n}$$
+
+> [!example]- Half of a book of claims is Open and half is Closed now. What proportion is Reopened two months from now? {Example}
+> - From row O of $\mathbf{P}^{2}$, $P_{OR}^{2} = 0.4(0.1) = 0.04$.
+> - From row C of $\mathbf{P}^{2}$, $P_{CR}^{2} = 0.9(0.1) + 0.1(0.5) = 0.14$.
+> - The proportion Reopened is $0.5(0.04) + 0.5(0.14) = 0.09$.
+
+## Probability of entering a set of states within $n$ steps
+
+The probability that the chain is in a set of states at time $n$ is not the probability that it enters the set at some time up to $n$. For the second, make every state of the set absorbing, so that a chain that enters the set stays there, and compute the $n$-step probability of being in the set in the modified chain.
+
+> [!example]- For the claim above, which is Open now, what is the probability that it is reopened at some time within three months? {Example}
+> - Make R absorbing by replacing its row with $P_{RR} = 1$.
+> - In the modified chain, row O of $\mathbf{P}^{2}$ is still $(0.36, 0.60, 0.04)$.
+> - The probability of being in R at month 3 in the modified chain is $0.60(0.1) + 0.04(1) = 0.10$.
+> - The claim is reopened within three months with probability 0.10. The probability that it is in state R at month 3 in the original chain is only $0.60(0.1) + 0.04(0.5) = 0.08$, because a claim reopened in month 2 may close again in month 3.

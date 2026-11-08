@@ -659,6 +659,13 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   where the examiner's report lists what full credit needed ("Candidates were expected to:", "Any
   two of the following received full credit:"), that list is the checklist instead. 1,503 essay
   parts now have one, 46 of them from the report. *(2026-11-08.)*
+- **X10: Quiz Battle redesign, the Deck (design agreed 2026-11-08).** Quiz Battle redrawn as a
+  card game: a full-screen intro, a start screen of mode cards, a lobby you can browse the exam's
+  cards in, and a new topic draft. Each player draws 4, strikes 1 of the other's, and each
+  question is dealt to a pair, one card from each hand (a pair no question covers is settled by
+  a coin flip). Signed-in players also get Stats and a Bronze-to-Grandmaster leaderboard. Three
+  PRs: the look, the draft, the record. The record needs D36. See `docs/quiz-battle-redesign.md`
+  and its canvas. *(Proposed 2026-11-08.)*
 
 ---
 
@@ -845,6 +852,7 @@ Subplans: `daily-plan-email.md`, `daily-podcast.md`, `leagues.md`, `seo.md`,
 | X6 | Projects: more briefs and exams | ✅ 3 PCPA briefs | Later | Another exam's project is one entry in `data/projects.ts`. |
 | X7 | Store: Amazon prices | 🟢 | Later | Needs the `AMAZON_CREATORS_*` environment variables, or stays `price: null`. |
 | X9 | **Community** | 🟡 built 2026-10-19, Preview | Next | `community.md`. The `/community` tab: r/actuary's newest posts (live, through the Arctic Shift archive, as posted), 26 upcoming meetings and 39 communities (forums, the CAS regional affiliates, local clubs) transcribed from their own pages, followed and browsed by topic, sorted by distance from a chosen city. Next: a refresh routine for the events table, more sources in the feed (GoActuary's Discourse JSON), a server table for follows once it leaves Preview (D26). |
+| X10 | Quiz Battle redesign: the Deck | ⬜ design agreed 2026-11-08 | Proposed | `quiz-battle-redesign.md`. Phase 1 the look and flow, phase 2 the pairs draft, phase 3 stats and tiers (waits on D36). |
 | X8 | The visual-noise backlog | 🟡 §3.1, §3.2 and §3.9 done | Next | §3.3–§3.8 are open (the line references in the doc are stale), plus the style-guide edits in §6. The "Hover the graph" hint is false on touch screens. |
 
 ### 4.8 R: Parked
@@ -921,6 +929,7 @@ Where a default is given, sessions build with it until the decision is made.
 | D33 | A **held-out set** per exam (never served in quizzes; kept for practice exams and the forecast), and its share | `learning-review.md` §3.2 | L12, L11 | No held-out set; build novelty weighting and unseen-first draws only |
 | D34 | Ask readers **how their exam went** (opt-in, private, aggregate use only) | `learning-review.md` §3.8 | L18 | Ask, opt-in, pass / didn't pass / didn't sit / rather not say; no score |
 | D35 | The daily podcast: **when to move to ElevenLabs** (which voice, which model), and whether to build the **private RSS feed** | `daily-podcast.md` | G10 | Kokoro `af_heart` until then; no feed |
+| D36 | Quiz Battle **saves a record** for signed-in players (results, a rating per exam, an opt-in leaderboard), reversing §6.2's "Quiz Battle saves nothing". Still no mastery, XP or streak from a battle | `quiz-battle-redesign.md` §5 | X10 phase 3 | Nothing saved until decided; phases 1 and 2 don't need it |
 | D31 | Re-run `check-answerable --ids` after a page edit closes an item? | content plan §6 | C20 | ✅ settled 2026-10-30 by the maintainer: **no**; `resolve` proves the item closed in code. A question is re-run only when its own text changes |
 
 ### 6.2 Settled: don't re-open without a new reason
@@ -991,6 +1000,7 @@ Every planning document in the repo, what it is for, and how healthy it is. A do
 | `docs/ins-actbench.md` | Proposal: evaluating the connector, tools and skill (INS-ActBench) | A8 (§3.4) | Proposed | 2026-10-30 |
 | `docs/assumptions-bank.md` | Subplan: the Assumptions Bank, published figures and facts as data for the tools, Cowork and the connector | A9 | Active. Phases 0–1 built | 2026-11-08 |
 | `docs/actuaria-online.md` | Build spec: Actuaria | X3 | Phases 0–3 built; Phase 4 parked | 2026-10-05 |
+| `docs/quiz-battle-redesign.md` | Plan and build spec: Quiz Battle as a card game, the pairs draft, stats and tiers | X10 (§3.4), D36 | Proposed; design agreed | 2026-11-08 |
 | `docs/tutor.md` | Plan and build spec: the Tutor | L8 | Phase 1 built; Preview | 2026-10-18 |
 | `docs/community.md` | Build spec: the Community tab | X9 | Built; Preview | 2026-10-19 |
 | `docs/visual-noise-review.md` | Backlog: UI copy | X8 | Active. Its line references are stale | 2026-10-05 |
@@ -1091,6 +1101,10 @@ ls Concepts/*.md | wc -l; python3 -c "import sys; sys.path.insert(0, 'scripts');
 ```
 
 ## Appendix B: Revision history
+
+- **2026-11-08, the Quiz Battle redesign (X10).** A card-game redesign of Quiz Battle, agreed on
+  a canvas with the maintainer: `docs/quiz-battle-redesign.md`. It is proposed in §3.4, with
+  decision D36 (saving a battle record) opened in §6.1.
 
 - **2026-11-03, the Dashboard's Analytics section (L2, L19).** The Accuracy card says how much its
   numbers rest on and leads a new Analytics section with where marks are lost, pacing against the

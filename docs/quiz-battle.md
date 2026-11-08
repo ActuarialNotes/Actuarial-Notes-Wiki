@@ -521,6 +521,11 @@ the scoring, the sessions, the lobby and its handshake, the cues, the music and
 
 ## Next
 
+A redesign is agreed and not yet built: `docs/quiz-battle-redesign.md` (roadmap X10). It redraws
+the battle as a card game, replaces the topic pick with a draft (draw 4, strike 1, questions
+dealt to pairs), and, if D36 is decided that way, adds a battle record, a rating and a
+leaderboard for signed-in players. Until it ships, this doc describes the game as it is.
+
 Ideas deliberately left out so far: more than two players (the engine's seats
 are a pair throughout); a battle on the written CAS papers (it would need
 self-grading both players can trust); sudden death on a draw; a battle history;

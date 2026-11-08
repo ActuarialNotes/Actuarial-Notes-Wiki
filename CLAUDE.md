@@ -875,6 +875,14 @@ Other important `lib/` modules:
   graded no credit — never a free "correct"; the store's `effectiveIsCorrect` is that credit at 1.
   The results screen weights each question by its `points` too (`quizPoints` in `lib/quizScore.ts`).
   Pure and tested; the flow is in `e2e/quiz.spec.ts`.
+- `numericCheck.ts` — the **suggested grade** for a written part's final figure
+  (`docs/answer-checking.md`): the reader's last figure (`finalFigures`) against the part's
+  `### Answer` line (`keyFigures`) or where each sample answer ends, read through markdown and
+  LaTeX with labels — AY 2012, 36 months, `($000)` — left out (`parseNumbers`). Within 0.5% is a
+  match (Full credit), within 3% close (Partial), else No credit against a key and nothing against
+  a sample. `components/GradeSuggestion.tsx` says why, as `SelfGradeButtons`' `hint`, and the
+  suggested button is outlined until the reader picks — it never grades for them. No model.
+  `numericCheckVault.test.ts` holds every key to checking as a match against itself. Pure and tested.
 - `quizBankInfo.ts` — what the quiz builder's **info button** (`components/QuizExamInfoButton.tsx`,
   in the exam's strip — the study guide's strip, less the version menu and syllabus) says about
   one exam's bank: how many questions a quiz can draw, where they came from (the exam's own past

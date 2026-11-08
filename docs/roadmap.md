@@ -625,6 +625,14 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   against Pearson VUE's published function list, read off its file by
   `scripts/spreadsheet_functions.py`. See `docs/question-spreadsheet.md`. Its "Not yet" list is
   what's open. *(Built 2026-11-08.)*
+- **L21: a suggested grade for a written part's final figure (built 2026-11-08).** The numeric
+  check (`lib/numericCheck.ts`) reads the reader's final figure and the part's accepted figures —
+  its `### Answer` line, or where each sample answer ends — and suggests Full credit, Partial or
+  No credit beside the grade buttons, with the two figures it compared. The reader still grades.
+  No model. It also rescues the 217 keyed parts whose key is written in words, which the exact
+  match could never mark right. It is the calculation half of L14; the essay half is L14's
+  checklist, and an on-device model that pre-ticks that checklist is the optional third layer.
+  See `docs/answer-checking.md`. *(Built 2026-11-08.)*
 
 ---
 

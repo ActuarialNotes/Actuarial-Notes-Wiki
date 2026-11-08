@@ -3,8 +3,10 @@ import { X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { MarkdownText } from '@/components/MarkdownText'
 import { SelfGradeButtons } from '@/components/SelfGradeButtons'
+import { GradeSuggestion } from '@/components/GradeSuggestion'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
 import { stemPreview } from '@/lib/questionPreview'
+import { checkNumericAnswer } from '@/lib/numericCheck'
 import type { Part, SelfGrade } from '@/lib/parser'
 
 interface GradePartsDialogProps {
@@ -13,6 +15,8 @@ interface GradePartsDialogProps {
   /** Grades given so far, by part label — including any given in here. */
   grades: Record<string, SelfGrade | undefined>
   onGrade: (partLabel: string, grade: SelfGrade) => void
+  /** What the reader wrote for each part, by label — for the numeric check's suggested grade. */
+  responses?: Record<string, string>
   /** The question has this one part, so it is "your answer", not "Part A". */
   isOnlyPart: boolean
   /** What moving on means here: "Next Question", "Finish Quiz", … */
@@ -38,6 +42,7 @@ export function GradePartsDialog({
   parts,
   grades,
   onGrade,
+  responses = {},
   isOnlyPart,
   continueLabel,
   onContinue,
@@ -100,6 +105,7 @@ export function GradePartsDialog({
           {parts.map(part => {
             const name = isOnlyPart ? 'Your answer' : `Part ${part.label.toUpperCase()}`
             const preview = part.stem ? stemPreview(part.stem, 140) : ''
+            const check = checkNumericAnswer(responses[part.label] ?? '', part)
             return (
               <li key={part.label} className="space-y-2.5">
                 <div className="space-y-0.5">
@@ -120,6 +126,8 @@ export function GradePartsDialog({
                   onChange={grade => onGrade(part.label, grade)}
                   prompt={null}
                   label={isOnlyPart ? 'Grade for your answer' : `Grade for ${name}`}
+                  suggested={check?.suggestion}
+                  hint={check && <GradeSuggestion check={check} />}
                 />
               </li>
             )

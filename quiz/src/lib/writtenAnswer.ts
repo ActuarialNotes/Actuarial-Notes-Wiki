@@ -25,6 +25,23 @@ export function ungradedWrittenParts(
 }
 
 /**
+ * A multi-part answer as the reader's response to each part, by label. The
+ * quiz stores it as a JSON object; anything else is no responses.
+ */
+export function partResponses(chosen: string | null | undefined): Record<string, string> {
+  if (!chosen) return {}
+  try {
+    const parsed: unknown = JSON.parse(chosen)
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return {}
+    return Object.fromEntries(
+      Object.entries(parsed as Record<string, unknown>).filter((e): e is [string, string] => typeof e[1] === 'string'),
+    )
+  } catch {
+    return {}
+  }
+}
+
+/**
  * How far a question's written parts have been graded, for the self-grade
  * screen's question bar: `done` when every part has a grade, `partial` when
  * some do, `none` when none do. A question with no written parts is `done` —

@@ -202,3 +202,52 @@ test.describe('guest save prompt', () => {
     await expect(page.getByLabel('Confirm Password')).toBeVisible()
   })
 })
+
+// A calculation part's final figure is checked against the part's answer, and
+// the grade it points to is suggested — outlined, never chosen (lib/numericCheck.ts,
+// docs/answer-checking.md).
+test.describe('suggested grade', () => {
+  test('suggests full credit for the right figure, and leaves the grade to the reader', async ({ page }) => {
+    // cas5-2018f-q5: one part, keyed "Approximately \$17,735 (thousands)" —
+    // words the exact match can't read.
+    await page.goto('/quiz?ids=cas5-2018f-q5')
+    const startQuiz = page.getByRole('button', { name: 'Start Quiz' })
+    const input = page.getByPlaceholder('Enter your answer…').first()
+    await expect(startQuiz.or(input).first()).toBeVisible()
+    if (await startQuiz.isVisible()) await startQuiz.click()
+
+    await input.fill('17,736')
+    await page.getByRole('button', { name: 'Confirm Answer' }).click()
+
+    const suggestion = page.getByRole('note', { name: 'Suggested grade' })
+    await expect(suggestion).toHaveCount(1)
+    await expect(suggestion).toContainText('Suggested grade: Full credit')
+    await expect(suggestion).toContainText('Your final figure, 17,736, matches the answer, 17,735.')
+    // Suggested, not given.
+    await expect(page.getByRole('button', { name: /Full credit \(suggested\)/ })).toHaveAttribute('aria-pressed', 'false')
+
+    await page.getByRole('button', { name: /Full credit \(suggested\)/ }).click()
+    await expect(page.getByRole('button', { name: /Full credit/ }).first()).toHaveAttribute('aria-pressed', 'true')
+  })
+
+  test('suggests it in the grading popup, from where the sample answer ends', async ({ page }) => {
+    // cas5-2014f-q18 part a: an unkeyed Benktander calculation whose samples
+    // both end at 8,764.44; part b is an essay, with nothing to suggest.
+    await page.goto('/quiz?ids=cas5-2014f-q18')
+    const startQuiz = page.getByRole('button', { name: 'Start Quiz' })
+    const response = page.getByPlaceholder('Write your response here…').first()
+    await expect(startQuiz.or(response).first()).toBeVisible()
+    if (await startQuiz.isVisible()) await startQuiz.click()
+
+    await response.fill('BF IBNR = 7,720\nBenktander IBNR = 8,761')
+    await page.getByRole('button', { name: 'Confirm Answer' }).click()
+    await page.getByRole('button', { name: /Finish Quiz/ }).click()
+
+    const dialog = page.getByRole('dialog')
+    const note = dialog.getByRole('note', { name: 'Suggested grade' })
+    await expect(note).toHaveCount(1)
+    await expect(note).toContainText("Your final figure, 8,761, matches the sample answer's, 8,764.44.")
+    await dialog.getByRole('button', { name: /Full credit \(suggested\)/ }).click()
+    await expect(dialog.getByRole('button', { name: /Full credit/ }).first()).toHaveAttribute('aria-pressed', 'true')
+  })
+})

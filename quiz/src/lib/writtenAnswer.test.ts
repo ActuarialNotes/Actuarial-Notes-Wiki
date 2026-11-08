@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { gradingProgress, splitSampleAnswers, ungradedWrittenParts, writtenParts } from './writtenAnswer'
+import { gradingProgress, splitSampleAnswers, ungradedWrittenParts, writtenParts, partResponses } from './writtenAnswer'
 import { parseQuestion } from './parser'
 
 describe('splitSampleAnswers', () => {
@@ -191,5 +191,18 @@ describe('written parts', () => {
     expect(gradingProgress(q, { a: 'correct', b: 'partial' })).toEqual({ state: 'partial', graded: 1, total: 2 })
     expect(gradingProgress(q, { b: 'correct', c: 'incorrect' })).toEqual({ state: 'done', graded: 2, total: 2 })
     expect(gradingProgress({ ...q, type: 'free-entry' }, {})).toEqual({ state: 'done', graded: 0, total: 0 })
+  })
+})
+
+describe('partResponses', () => {
+  it('reads the stored JSON of a multi-part answer', () => {
+    expect(partResponses('{"a":"17,735","b":"Use BF"}')).toEqual({ a: '17,735', b: 'Use BF' })
+  })
+
+  it('is empty for nothing, malformed JSON, or something other than an object of strings', () => {
+    expect(partResponses(null)).toEqual({})
+    expect(partResponses('{oops')).toEqual({})
+    expect(partResponses('["a"]')).toEqual({})
+    expect(partResponses('{"a":3}')).toEqual({})
   })
 })

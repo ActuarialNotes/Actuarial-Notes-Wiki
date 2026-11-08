@@ -166,7 +166,7 @@ export function SubmitView({
         <p className="text-sm text-muted-foreground">
           {phase === 'submitted' ? `Submitted ${new Date(attempt.submittedAt!).toLocaleString()}. Submissions are final.`
             : phase === 'closed' ? 'The window has closed. A project can no longer be submitted after its deadline.'
-              : 'Everything below is checked before the portal will accept the submission. Once submitted, the report and code are final.'}
+              : 'Submit stays off until everything below passes. Once submitted, the report and code are final.'}
         </p>
       </header>
 
@@ -211,7 +211,7 @@ export function SubmitView({
           <div className="flex flex-wrap items-center gap-3">
             <div className="min-w-0 flex-1">
               <p className="text-sm font-medium">Clean run</p>
-              <p className="text-xs text-muted-foreground">Runs the selected scripts in a fresh session with only the data — as a grader would — and checks they rebuild your appendices.</p>
+              <p className="text-xs text-muted-foreground">Runs the selected scripts in a fresh session with only the data, as a grader would, and checks they rebuild your appendices.</p>
             </div>
             <Button variant="outline" size="sm" onClick={() => void runCheck()} disabled={check?.status === 'running' || chosen.length === 0}>
               {check?.status === 'running' ? <Loader2 className="mr-1.5 h-4 w-4 animate-spin" /> : <PlayCircle className="mr-1.5 h-4 w-4" />}
@@ -224,7 +224,7 @@ export function SubmitView({
                 <div className="space-y-1 text-sm">
                   <p className="flex items-center gap-2">
                     {check.ok ? <CheckMark className="h-4 w-4" /> : <XCircle className="h-4 w-4 text-red-600 dark:text-red-400" />}
-                    {check.ok ? 'Every script ran to the end without an error.' : 'A script stopped with an error — a grader running it would see the same.'}
+                    {check.ok ? 'Every script ran to the end without an error.' : 'A script stopped with an error. A grader running it would see the same.'}
                   </p>
                   {check.reproduced.length > 0 && <p className="text-xs text-muted-foreground">Rebuilt: {check.reproduced.join(', ')}</p>}
                   {check.missing.length > 0 && (

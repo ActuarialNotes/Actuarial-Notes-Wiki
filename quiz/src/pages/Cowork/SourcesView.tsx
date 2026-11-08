@@ -108,7 +108,7 @@ export default function SourcesView() {
         <p className="rounded-lg border border-dashed px-4 py-10 text-center text-sm text-muted-foreground">
           {libraryOnly && libraryCount === 0
             ? 'You are not following any sources yet. Turn My Library off to browse the catalogue.'
-            : 'Nothing matches those filters.'}
+            : 'No sources match these filters.'}
         </p>
       ) : (
         <div className="grid grid-cols-1 items-start gap-3 sm:grid-cols-2 lg:grid-cols-3">

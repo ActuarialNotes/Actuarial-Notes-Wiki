@@ -121,10 +121,10 @@ export interface FormIssue {
 export function submissionIssues(state: SubmissionState): FormIssue[] {
   const issues: FormIssue[] = []
   if (state.words.over) {
-    issues.push({ id: 'words', fatal: true, message: `The report is ${state.words.total.toLocaleString('en-US')} words including appendices — over the ${state.words.limit.toLocaleString('en-US')}-word limit. The CAS fails a report that exceeds it.` })
+    issues.push({ id: 'words', fatal: true, message: `The report is ${state.words.total.toLocaleString('en-US')} words including appendices, over the ${state.words.limit.toLocaleString('en-US')}-word limit. The CAS fails a report that exceeds it.` })
   }
   if (state.appendixCount > APPENDIX_LIMIT) {
-    issues.push({ id: 'appendices', fatal: true, message: `${state.appendixCount} appendices attached — the limit is ${APPENDIX_LIMIT}. Extra supporting material is an automatic fail.` })
+    issues.push({ id: 'appendices', fatal: true, message: `${state.appendixCount} appendices attached, and the limit is ${APPENDIX_LIMIT}. Extra supporting material is an automatic fail.` })
   }
   if (state.words.body < 150) {
     issues.push({ id: 'empty', fatal: true, message: 'The report is nearly empty.' })
@@ -240,7 +240,7 @@ const GENERIC_CHECKS: CheckSpec[] = [
   },
   {
     id: 'reasonableness', domain: 'C', label: 'Discusses whether the results are reasonable',
-    missing: 'No discussion of whether the coefficients make sense — "why each variable was included" is a named mistake.',
+    missing: 'No discussion of whether the coefficients make sense. Not saying "why each variable was included" is a named mistake.',
     test: t => /\b(reasonable|intuitive|expected|consistent with|makes sense|as expected|counter-?intuitive|plausib)/i.test(t),
   },
   {
@@ -258,7 +258,7 @@ const GENERIC_CHECKS: CheckSpec[] = [
 const CASE_CHECKS: Record<CaseId, CheckSpec[]> = {
   'bop-frequency': [
     { id: 'industry-grouping', domain: 'A', label: 'Groups industry to a credible level', missing: 'No sign that NAICS codes were grouped. Fitting six-digit codes is named in the post-project summary as too thin for a GLM.', test: t => /\b(sector|two-digit|2-digit|group(ed|ing)?)\b/i.test(t) && /naics|industry/i.test(t) },
-    { id: 'offset', domain: 'B', label: 'Uses exposure as an offset', missing: 'No offset for earned exposure. Frequency per policy year needs ln(exposure) as an offset (or exposure as a weight on the rate).', test: t => /offset|exposure/i.test(t) },
+    { id: 'offset', domain: 'B', label: 'Mentions exposure or an offset', missing: 'No mention of exposure or an offset. Frequency per policy year needs ln(exposure) as an offset (or exposure as a weight on the rate).', test: t => /offset|exposure/i.test(t) },
     { id: 'cwp', domain: 'A', label: 'Excludes claims closed without payment', missing: 'The scope counts only claims with incurred loss above zero; no mention of excluding the zero-incurred claims.', test: t => /(zero|\$0|no|without) (incurred|payment|loss)|closed without|incurred (loss )?(greater|above|>) ?(than )?(zero|0)/i.test(t) },
     { id: 'renewal', domain: 'C', label: 'Explains excluding renewal status', missing: 'renewal_status is decided after the term. The report should say why it cannot be a predictor.', test: t => /renewal/i.test(t) },
   ],
@@ -268,7 +268,7 @@ const CASE_CHECKS: Record<CaseId, CheckSpec[]> = {
     { id: 'aliasing', domain: 'B', label: 'Handles model year vs vehicle age', missing: 'model_year, vehicle_age and accident_year are exactly collinear; the report doesn\'t say which were kept.', test: t => /model[ _]year|vehicle[ _]age/i.test(t) },
   ],
   'ho-water': [
-    { id: 'shutoff', domain: 'C', label: 'Answers the shut-off device question', missing: 'The memo\'s specific question — is a shut-off discount supported, and how large — isn\'t answered.', test: t => /shut-?off/i.test(t) },
+    { id: 'shutoff', domain: 'C', label: 'Answers the shut-off device question', missing: 'The memo asks whether a shut-off discount is supported, and how large it should be. The report doesn\'t answer it.', test: t => /shut-?off/i.test(t) },
     { id: 'tweedie-power', domain: 'B', label: 'Explains the Tweedie power', missing: 'No mention of how the Tweedie power parameter was chosen.', test: t => /tweedie/i.test(t) ? /\bp\s?=|power|variance power|index parameter/i.test(t) : /frequency[\s\S]{0,200}severity|severity[\s\S]{0,200}frequency/i.test(t) },
     { id: 'large-losses', domain: 'A', label: 'Addresses large losses', missing: 'Losses are uncapped and the scope asks for a justified choice; no mention of large losses or capping.', test: t => /large loss|\bcap(ped|ping)?\b|extreme|catastroph|excess/i.test(t) },
   ],

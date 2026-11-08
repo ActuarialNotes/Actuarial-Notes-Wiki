@@ -10,7 +10,7 @@ export { MAX_BATCH_RUNS, runBatch, runTool, type BatchResult, type BatchRunResul
 export { describeTool, inputSchema, sourceLine, toolSummary } from './schema'
 export { CHECKS, checksFor, checkedValueCount, runQuestionCheck, verifyCheck, type SourceRef } from './checks'
 export { QUESTION_CHECKS, type QuestionCheck } from './questionChecks'
-export { defaultInput, evaluateArithmetic, normalizeInput, readNumber } from './input'
+export { defaultInput, evaluateArithmetic, normalizeInput, readNumber, readerMessage } from './input'
 export { formatValue } from './format'
 export { decodeRunInput, encodeRunInput, runPath } from './share'
 export { ToolInputError } from './types'

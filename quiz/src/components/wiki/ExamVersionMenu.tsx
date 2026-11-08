@@ -99,7 +99,7 @@ export function ExamVersionMenu({ progressKey }: { progressKey: string }) {
     <div
       data-exam-version-menu
       role="listbox"
-      aria-label="Exam version"
+      aria-label="Sitting"
       className={`fixed w-64 z-[70] overflow-y-auto ${INK_MENU}`}
       style={{
         // Portalled out of the strip, so it brings the exam's pick with it.

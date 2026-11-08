@@ -65,9 +65,9 @@ export function ConceptQuestionsModal({ conceptName, onClose, onQuizStart }: Con
         // Nothing starts picked — the reader chooses what to quiz on.
         setSelectedIds(new Set())
       })
-      .catch(err => {
+      .catch(() => {
         if (cancelled) return
-        setError(err instanceof Error ? err.message : 'Failed to load questions')
+        setError("Couldn't load the questions. Check your connection and try again.")
       })
       .finally(() => {
         if (!cancelled) setLoading(false)

@@ -160,7 +160,7 @@ export const CREDENTIAL_PATHS: Record<GuideBody, CredentialPath> = {
         short: 'ACAS',
         title: 'Associate (ACAS)',
         ref: concept(ACAS),
-        blurb: 'Statistics, ratemaking, reserving and the regulation of an insurer. At the end of it you are a credentialed P&C actuary.',
+        blurb: 'Statistics, ratemaking, reserving and the regulation of an insurer.',
         items: [
           {
             exam: 'MAS-I',
@@ -245,7 +245,7 @@ export const CREDENTIAL_PATHS: Record<GuideBody, CredentialPath> = {
         kind: 'ongoing',
         short: 'Ongoing',
         title: 'Keeping it current',
-        blurb: 'The letters are not the finish line. ACAS and FCAS members who provide actuarial services keep up continuing education and confirm it every year.',
+        blurb: 'ACAS and FCAS members who provide actuarial services keep up continuing education and confirm it every year.',
         items: [
           {
             icon: RefreshCw,
@@ -399,7 +399,7 @@ export const CREDENTIAL_PATHS: Record<GuideBody, CredentialPath> = {
         kind: 'ongoing',
         short: 'Ongoing',
         title: 'Keeping it current',
-        blurb: 'The letters are not the finish line. SOA members keep up professional development and confirm it every year.',
+        blurb: 'SOA members keep up professional development and confirm it every year.',
         items: [
           {
             icon: RefreshCw,
@@ -492,7 +492,7 @@ export const CREDENTIAL_PATHS: Record<GuideBody, CredentialPath> = {
         short: 'FCIA',
         title: 'Fellow (FCIA)',
         ref: concept(FCIA_PAGE),
-        blurb: 'One specialty track, a leadership course and three years of experience. Fellows may fill certain roles reserved in Canada.',
+        blurb: 'One specialty track, a leadership course and three years of experience. Some signing roles in Canada, like appointed actuary, need it.',
         items: [
           {
             icon: Signpost,

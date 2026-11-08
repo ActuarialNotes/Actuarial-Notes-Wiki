@@ -127,7 +127,7 @@ export function copySources(isbn?: string): CopySource[] {
   return [
     {
       id: 'worldcat',
-      label: 'WorldCat',
+      label: 'WorldCat (libraries)',
       url: `https://search.worldcat.org/search?q=bn%3A${digits}`,
       logo: COPY_SOURCE_LOGOS.worldcat,
     },

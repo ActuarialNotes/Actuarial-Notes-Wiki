@@ -2,7 +2,7 @@
 // `%%credential-map%%` line. Probability and Financial Mathematics are one
 // trunk that splits into the SOA's route (ASA, FSA) and the CAS's (ACAS,
 // FCAS); the CIA's route (ACIA, FCIA) starts from an accredited degree, and
-// dashed lines say an SOA or CAS credential carries credit into it, which is
+// dashed lines say a CAS credential counts toward it, which is
 // the CIA's Pathways 2 and 3 (`data/credentialPaths.ts`, the CIA's start).
 //
 // Each node is a button: tapping one lights its route from the start and
@@ -172,7 +172,7 @@ export function CredentialMap({ onOpen }: { onOpen: OpenRef }) {
         })}
       </div>
       <p className="mt-3 text-xs text-muted-foreground">
-        Dashed: an SOA or CAS credential carries credit into the CIA's.
+        Dashed lines: a CAS credential that counts toward the CIA's.
       </p>
 
       <div className="mt-4 border-t border-border/60 pt-4" aria-live="polite">

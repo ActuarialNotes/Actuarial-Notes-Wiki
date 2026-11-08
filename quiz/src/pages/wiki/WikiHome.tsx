@@ -159,7 +159,7 @@ function ExamGuideRow({ model, tourId }: { model: ExamCardModel; tourId?: string
           ]}
         />
       )}
-      trailing={isCompleted && <CheckMark className="h-5 w-5" label="Completed" />}
+      trailing={isCompleted && <CheckMark className="h-5 w-5" label="Passed" />}
     />
   )
 }

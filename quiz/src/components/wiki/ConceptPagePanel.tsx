@@ -230,7 +230,7 @@ export function ConceptPagePanel({
               aria-haspopup="menu"
               aria-expanded={showPlayMenu}
               title={entry.name}
-              aria-label={`${entry.name} — page actions`}
+              aria-label={`Actions for ${entry.name}`}
               className="truncate text-left font-semibold text-lg sm:text-xl min-w-0 action-title-underline"
             >
               {entry.name}

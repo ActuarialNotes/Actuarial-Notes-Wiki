@@ -197,7 +197,7 @@ export function ProgressGraph({
             role={selectable ? 'button' : undefined}
             tabIndex={selectable ? 0 : undefined}
             aria-pressed={selectable ? isSelected : undefined}
-            aria-label={selectable ? `${dot.isCorrect ? 'Correct' : 'Incorrect'} attempt on ${dot.at.toLocaleDateString()} — show this question` : undefined}
+            aria-label={selectable ? `${dot.isCorrect ? 'Correct' : 'Incorrect'} attempt on ${dot.at.toLocaleDateString()}. Show this question` : undefined}
             className={selectable ? 'cursor-pointer outline-none' : undefined}
             onClick={selectable ? e => { e.stopPropagation(); toggle() } : undefined}
             onKeyDown={selectable

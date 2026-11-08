@@ -146,8 +146,8 @@ describe('the export', () => {
   it('marks a judgment left at its default in the workpaper', () => {
     const s = spec('reserving.age_to_age_factors')
     const about = toolResultSheets(s, runTool(s, initialDraft(s))).find(x => x.name === 'About this run')!.rows
-    expect(about).toContainEqual(['Judgment: Average', 'volume (default — not chosen)'])
-    expect(about).toContainEqual(['Judgment: Latest years', '0 (default — not chosen)'])
+    expect(about).toContainEqual(['Judgment: Average', 'volume (default, not chosen)'])
+    expect(about).toContainEqual(['Judgment: Latest years', '0 (default, not chosen)'])
   })
 
   it('writes the run_tool call an agent would make', () => {

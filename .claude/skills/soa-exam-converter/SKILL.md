@@ -109,6 +109,10 @@ rendered to `/tmp/exam-p/pages/`. Read that image, write the prompt markdown to
 `/tmp/prompts/<id>.md`, and pass `--prompts`. Transcribe exactly:
 wording, numbers, dates, all five options, tables as markdown tables.
 
+## Writing for readers
+
+What a paper prints is transcribed as printed and is outside `docs/writing-style.md`: never "improve" a stem, an option or a published solution. The text this skill writes itself, such as an explanation added under *Explanations, only where needed*, follows that page: plain working, said once, no tells (an em dash hinging the sentence, a rule of three, a closing aphorism, exclamation marks).
+
 ## 5. Check
 
 ```bash

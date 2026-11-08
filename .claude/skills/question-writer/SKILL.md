@@ -202,6 +202,13 @@ is AI-assisted, not AI-final: tell the user what was written (per concept: level
 format, key), any concept page that disagreed with its reading, and that the set
 awaits their review.
 
+## Writing for readers
+
+Every sentence a reader sees follows `docs/writing-style.md`: true to its source, one name per thing, no code words, things don't act like people, say it once, and none of its tells (an em dash hinging the sentence, a rule of three, a closing aphorism, "not X, it's Y", a colon reveal, inflated words, feelings on the reader's behalf, rhetorical questions, exclamation marks). Read it before writing. In a question in particular:
+
+- A stem asks; it doesn't set a scene with flourishes. An explanation says why each option is right or wrong, once, and ends on the fact. No "Great question", no "Remember:" reveal, no closing moral.
+- Name the misconception a distractor catches in plain words ("adds the deductible instead of subtracting it"), not in labels from the authoring workflow ("fork B").
+
 ## Gotchas
 
 - **Parser shapes.** A `multiple-choice` file needs `- A) …` option lines and

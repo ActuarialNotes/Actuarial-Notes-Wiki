@@ -912,7 +912,7 @@ export function fallbackHead(pathname: string): PageHead {
 export const STORE_HEAD: PageHead = {
   title: STATIC_TITLES['/store']!,
   description:
-    'Exam registration, study manuals and courses, the calculators SOA and CAS allow, and the syllabus textbooks — every product linked to the seller who sells it.',
+    'Exam registration, study manuals and courses, the calculators SOA and CAS allow, and the syllabus textbooks, each linked to the seller who sells it.',
   canonical: absoluteUrl('/store'),
 }
 
@@ -920,7 +920,7 @@ export const STORE_HEAD: PageHead = {
 export const TOOLS_HEAD: PageHead = {
   title: STATIC_TITLES['/tools']!,
   description:
-    'Actuarial calculators that each do one thing — development factors, chain ladder, Bornhuetter-Ferguson, the indicated rate change, credibility standards, interest and annuities — with the working shown.',
+    'Actuarial calculators that each do one thing, from development factors and chain ladder to credibility standards and annuities, with the working shown.',
   canonical: absoluteUrl('/tools'),
 }
 

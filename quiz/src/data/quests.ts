@@ -1,4 +1,4 @@
-// Daily-quest catalogue (roadmap P1.4) — authored as data, like mnemonics.ts.
+// Daily-quest catalogue (roadmap P1.4), authored as data.
 //
 // Quests are what turn the flat gem economy (earn on quiz completion, spend in
 // the Store) into a daily loop: each day a small board of goals is generated,

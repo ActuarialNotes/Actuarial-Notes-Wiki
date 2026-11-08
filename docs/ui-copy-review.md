@@ -9,13 +9,13 @@ content (concept, resource and study-guide pages, questions), code comments, doc
 flag-gated Research tab, and anything transcribed from a third party (seller facts,
 reviews, Amazon's licensed wording).
 
-**Status (2026-11-08):** the full pass has been applied on `claude/brave-pasteur-xo3sn2`,
-§2 through §6, using the §5 glossary as decided (Store; British spelling; Quiz Battle's
-in-game exclamations kept). Codifying §1 and §5 into the skills (§8 step 5) is still to do.
-Not yet done: five unimported files whose deletion was held for the maintainer
-(`components/wiki/ConceptNav.tsx`, `MnemonicBubble.tsx`, `StoryBubble.tsx`,
-`WikiSearchPanel.tsx`, and `components/ui/progress.tsx`). Once agreed, the rules in §1 go into the `app-copy` skill
-and every other skill and guardrail that writes human-facing text.
+**Status (2026-11-08): done.** The full pass is applied on `claude/brave-pasteur-xo3sn2`
+(§2–§6), using the §5 glossary as decided (Store; British spelling; Quiz Battle's in-game
+exclamations kept). The unused files in §6 are deleted, with `data/mnemonics.ts` and
+`data/stories.ts`, which only they read. §1 and §5 are codified: the rules for every
+reader-facing word are `docs/writing-style.md`, the app's glossary and decisions log are the
+`app-copy` skill, every other writing skill and the validate agent link to them, and
+`quiz/src/lib/copyGuard.test.ts` is the mechanical guardrail.
 
 ---
 

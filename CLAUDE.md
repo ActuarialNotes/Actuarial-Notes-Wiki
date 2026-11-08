@@ -1587,11 +1587,20 @@ compile — don't "clean up" the flagged code as dead.
   too, naming itself — `%%credential-path ACAS%%` — so it opens on that society at that
   stage (`readCredentialPathMarker`; a name no stage has is left on the page as text). The continuing-education stage (CE/CPD rules, iCAS's CSPA and cat credentials,
   CERA, FCIA) has no track behind it and is transcribed from the societies' own pages.
-- The four credential pages — `Concepts/Associate of the Casualty Actuarial Society
-  (ACAS).md` and its ASA / FCAS / FSA siblings — are what the Study Guides page's track
-  headings open. `data/tracks.ts` names them (`Track.conceptPage`), so a renamed page is a
-  one-line change there. Each carries its `%%credential-path <designation>%%` line just above
-  `## Requirements`; `credentialPaths.test.ts` fails if one goes missing.
+- The six credential pages — `Concepts/Associate of the Casualty Actuarial Society
+  (ACAS).md` and its ASA / FCAS / FSA / ACIA / FCIA siblings — are what the Study Guides page's
+  track headings open. `data/tracks.ts` names them (`Track.conceptPage`), so a renamed page is a
+  one-line change there. Each is short: a one-sentence definition (no `##` heading repeating the
+  title), then its `%%credential-path <designation>%%` line — the **route**, drawn down the page
+  (`components/wiki/CredentialPath.tsx`: a stop per stage, the page's own open and marked *This
+  page*, a SOA / CAS / CIA switch), carrying the reader's own progress on each requirement
+  (`lib/credentialProgress.ts`: done, studying with the readiness score, from `exam_progress`;
+  nothing for a reader with nothing on the path) — then only what the route doesn't say. No
+  requirements list: the route is the list. `credentialPaths.test.ts` fails if a marker goes
+  missing. **`Concepts/Credential Path.md`** is the page about choosing between the societies:
+  its `%%credential-map%%` line is `components/wiki/CredentialMap.tsx`, the three societies'
+  credentials on one map (P and FM one trunk splitting into the SOA and CAS, the CIA from a
+  degree, dashed where credit carries over), a tapped node opening that stage underneath.
 - Every exam page ends with a `## Source Material` heading over a
   `> [!answer]- Source Material` callout: one top-level bullet per syllabus reading (a
   `[[wiki link]]`, normally to a `Resources/Books/` page) with an indented bullet naming the

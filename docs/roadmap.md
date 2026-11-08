@@ -504,6 +504,18 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   authors grant access, with the Practice items no tool answers ranked as a tools backlog.
   Three decisions (D-B1–D-B3). *(Proposed 2026-10-30.)*
 
+- **A9: an Assumptions Bank, under the Tools.** `docs/assumptions-bank.md` reviews where
+  published figures live today: the Tools' Data Sources (mechanical and hashed, but only time
+  series), Cowork's ~90 `assumptions` rows (free text in TypeScript seed data, not fact checked,
+  behind one account's gate, invisible to tools and MCP), Cowork's blank source tables, and
+  the `Resources/Benchmarks|Data` pages. It proposes one vault-backed layer: `Assumptions/<set>.md`
+  files, each a fact-checked table of typed rows (figure or fact, unit, kind, locator, edition,
+  effective date). A `data.assumption` tool and *From the bank* field menus feed the calculators.
+  Cowork derives its rows and tables from the bank instead of authoring them. The connector gains
+  `search_assumptions`, `get_assumption` and `run_tool` references, ahead of A7's `get_document`.
+  It would be built in phases: the bank and four re-read sets, then tools, then MCP, then
+  migration and extraction, then breadth. Five decisions (D-AB1–D-AB5). *(Proposed 2026-11-08.)*
+
 - ~~**C20: answerability as a content check, then a gate.**~~ Ranked 2026-10-25 and built as G8:
   see C20 in §4.3 and D29. The proposal as written: `simulations/check-answerable`
   (`docs/simulated-learner.md`, *Answerability*) asks of every served question whether its
@@ -753,6 +765,7 @@ Subplans:
 - `actuarial-tools.md` (§15 next, §16 built)
 - `cowork.md`, `workflows.md`, `cowork-source-inventory.md`
 - `cowork-agent-tools.md` (proposed, A7)
+- `assumptions-bank.md` (proposed, A9)
 - `actuarial-agent-product-plan.md`
 
 Shipped:
@@ -946,6 +959,7 @@ Every planning document in the repo, what it is for, and how healthy it is. A do
 | `docs/cowork-source-inventory.md` | Queue: Cowork sources | A3 | Active. **§4 counts are stale** | 2026-09-20 |
 | `docs/cowork-agent-tools.md` | Proposal: the tools a Cowork agent needs | A7 (§3.4) | Proposed | 2026-10-30 |
 | `docs/ins-actbench.md` | Proposal: evaluating the connector, tools and skill (INS-ActBench) | A8 (§3.4) | Proposed | 2026-10-30 |
+| `docs/assumptions-bank.md` | Proposal: the Assumptions Bank, published figures and facts as data for the tools, Cowork and the connector | A9 (§3.4) | Proposed | 2026-11-08 |
 | `docs/actuaria-online.md` | Build spec: Actuaria | X3 | Phases 0–3 built; Phase 4 parked | 2026-10-05 |
 | `docs/tutor.md` | Plan and build spec: the Tutor | L8 | Phase 1 built; Preview | 2026-10-18 |
 | `docs/community.md` | Build spec: the Community tab | X9 | Built; Preview | 2026-10-19 |

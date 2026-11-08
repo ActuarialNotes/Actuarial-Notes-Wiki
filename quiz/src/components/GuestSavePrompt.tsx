@@ -37,8 +37,8 @@ export function GuestSavePrompt({ onCreateAccount, onSignIn, onClose }: Props) {
           </div>
           <h2 id="guest-save-title" className="text-xl font-bold tracking-tight">Save your progress</h2>
           <p className="text-sm text-muted-foreground">
-            This quiz only lives in this browser right now. Make an account and it comes with
-            you — your scores, concept levels and streak, on any device.
+            Your quiz results are only saved in this browser for now. Create an account to
+            keep your learning progress.
           </p>
         </div>
 

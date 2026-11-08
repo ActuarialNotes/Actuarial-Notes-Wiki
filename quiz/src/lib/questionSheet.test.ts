@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url'
 import { parseQuestion } from './parser'
 import {
   cellAddress, clampDockWidth, columnWidths, clampWindowRect, defaultWindowRect, formulaFunctions, insertAtCaret,
-  markdownTables, offListCells, offListFunctions, parseCell, questionMarkdown, questionWorkbook, shownValue,
+  markdownTables, offListCells, offListFunctions, parseCell, partWantsSheet, questionMarkdown, questionWorkbook, shownValue,
 } from './questionSheet'
 import type { RichCell } from './project/sheetFile'
 import pearsonVue from '../data/pearsonVueFunctions.json'
@@ -213,5 +213,29 @@ describe('the CAS banks', () => {
     expect(rows[2]).toEqual([2009, 250, 400, 450, 500])
     const paid = rows.findIndex(r => (r[0] as RichCell | null)?.v === 'Cumulative Paid Claims ($000)')
     expect(rows[paid + 2][4]).toEqual({ v: 5425, m: '$5,425', ct: { fa: '"$"#,##0', t: 'n' } })
+  })
+})
+
+describe('partWantsSheet', () => {
+  it('marks a part that asks for numbers', () => {
+    expect(partWantsSheet('Construct an annual incremental accident year paid loss triangle as of December 31, 2012.')).toBe(true)
+    expect(partWantsSheet('Calculate the indicated rate change.')).toBe(true)
+    expect(partWantsSheet('Calculate the reserve and recommend a method.')).toBe(true)
+  })
+
+  it('leaves a part that asks for words', () => {
+    expect(partWantsSheet('Assess whether an accident year approach or a report year approach is more appropriate for reserving auto liability insurance.')).toBe(false)
+    expect(partWantsSheet('Briefly explain why the loss development pattern changed.')).toBe(false)
+    expect(partWantsSheet('Briefly describe a situation in which the actuary would not revise the estimate of ultimate claims.')).toBe(false)
+  })
+
+  it('reads the preamble when the part has no command word of its own', () => {
+    expect(partWantsSheet('Paid losses.', 'Calculate the following.')).toBe(true)
+    expect(partWantsSheet('A very long-tailed line.', 'Explain which method is preferable for each.')).toBe(false)
+    expect(partWantsSheet('', 'Using the data below, estimate the ultimate losses.')).toBe(true)
+  })
+
+  it('ignores the words in a table', () => {
+    expect(partWantsSheet('Explain the trend.\n| Calculated | 1.05 |')).toBe(false)
   })
 })

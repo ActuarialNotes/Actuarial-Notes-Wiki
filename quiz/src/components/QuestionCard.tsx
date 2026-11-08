@@ -7,7 +7,8 @@ import { SelfGradeButtons } from '@/components/SelfGradeButtons'
 import { SampleAnswerCards, ExaminerReportCard } from '@/components/AnswerReference'
 import { Button } from '@/components/ui/button'
 import { InsertCellButton } from '@/components/quiz/InsertCellButton'
-import { insertAtCaret } from '@/lib/questionSheet'
+import { insertAtCaret, partWantsSheet } from '@/lib/questionSheet'
+import { SpreadsheetPartButton } from '@/components/quiz/SpreadsheetButton'
 import { cn } from '@/lib/utils'
 import { isAnswerCorrect, normalizeAnswerText, estimateEssayScore } from '@/lib/parser'
 import type { Question, Part, SelfGrade } from '@/lib/parser'
@@ -38,6 +39,11 @@ interface QuestionCardProps {
    * a tap opens the concept (lib/conceptMentions.ts). The quiz handles the tap.
    */
   conceptNames?: readonly string[]
+  /**
+   * The exam is sat with a spreadsheet (data/examSpreadsheets.ts): a part that
+   * asks for numbers gets a **Use spreadsheet** button beside its label.
+   */
+  spreadsheet?: boolean
 }
 
 // ── Free-entry input ────────────────────────────────────────────────────────
@@ -159,9 +165,11 @@ interface PartCardProps {
   conceptNames?: readonly string[]
   /** The question this part belongs to — whose spreadsheet's selected cell Insert drops in. */
   questionId: string
+  /** The part asks for numbers and the exam is sat with a spreadsheet. */
+  wantsSheet?: boolean
 }
 
-function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, selfGrade: externalSelfGrade, onSelfGrade, isOnlyPart = false, conceptNames, questionId }: PartCardProps) {
+function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, selfGrade: externalSelfGrade, onSelfGrade, isOnlyPart = false, conceptNames, questionId, wantsSheet = false }: PartCardProps) {
   const isEssay = part.answer === ''
   const isAnswered = isLocked && (isEssay || partAnswer !== '')
   const autoIsRight = !isEssay && isAnswered && (
@@ -212,7 +220,9 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
               <span className="ml-1 font-normal">({part.points} pt{part.points !== 1 ? 's' : ''})</span>
             )}
           </span>
-          <span className="text-sm text-muted-foreground italic">Written response</span>
+          {!isLocked && wantsSheet
+            ? <SpreadsheetPartButton />
+            : <span className="text-sm text-muted-foreground italic">Written response</span>}
         </div>
 
         {part.stem && <MarkdownText className={PART_STEM_CLASS} conceptNames={conceptNames}>{part.stem}</MarkdownText>}
@@ -283,6 +293,7 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
             <span className="ml-1 font-normal">({part.points} pt{part.points !== 1 ? 's' : ''})</span>
           )}
         </span>
+        {!isLocked && wantsSheet && <SpreadsheetPartButton />}
         {isAnswered && (
           <span className={isRight ? 'text-green-600 dark:text-green-400 text-sm font-medium' : effectiveSelfGrade === 'partial' ? 'text-yellow-600 dark:text-yellow-400 text-sm font-medium' : 'text-red-600 dark:text-red-400 text-sm font-medium'}>
             {isRight ? '✓ Correct' : effectiveSelfGrade === 'partial' ? '~ Partial' : '✗ Incorrect'}
@@ -364,6 +375,7 @@ export function QuestionCard({
   partManualGrades,
   onPartManualGrade,
   conceptNames,
+  spreadsheet = false,
 }: QuestionCardProps) {
   // Per-part answer state for multi-part questions
   const [partAnswers, setPartAnswers] = useState<Record<string, string>>({})
@@ -563,6 +575,7 @@ export function QuestionCard({
             isOnlyPart={parts.length === 1}
             conceptNames={conceptNames}
             questionId={question.id}
+            wantsSheet={spreadsheet && part.type !== 'multiple-choice' && partWantsSheet(part.stem, question.stem)}
           />
         ))}
       </div>

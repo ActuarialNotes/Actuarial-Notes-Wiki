@@ -35,7 +35,7 @@ export const SITE_LOGO = `${SITE_ORIGIN}/actuarialnotes-logo-black-512.png`
 /** The site's own name and pitch — the home page, and every route with nothing better. */
 export const DEFAULT_TITLE = 'Actuarial Notes — Study Guides & Practice Questions for Actuarial Exams'
 export const DEFAULT_DESCRIPTION =
-  'Study guides, concept pages and practice questions for SOA and CAS actuarial exams — Exam P, FM, MAS-I, MAS-II, Exam 5 and beyond.'
+  'Study guides, concept pages and practice questions for the SOA and CAS actuarial exams, with worked solutions.'
 
 /** Where a search result's snippet is cut. Google shows roughly this much. */
 export const DESCRIPTION_MAX = 160
@@ -854,7 +854,7 @@ const STATIC_TITLES: Record<string, string> = {
   '/craft': `Concept Craft | ${SITE_NAME}`,
   '/settings': `Settings | ${SITE_NAME}`,
   '/upgrade': `Upgrade | ${SITE_NAME}`,
-  '/store': `Actuarial Exam Shop | ${SITE_NAME}`,
+  '/store': `Actuarial Exam Store | ${SITE_NAME}`,
   '/store/gems': `Gem Shop | ${SITE_NAME}`,
   '/tools': `Actuarial Tools | ${SITE_NAME}`,
   '/wiki': `SOA & CAS Actuarial Exam Study Guides | ${SITE_NAME}`,
@@ -920,7 +920,7 @@ export const STORE_HEAD: PageHead = {
 export const TOOLS_HEAD: PageHead = {
   title: STATIC_TITLES['/tools']!,
   description:
-    'Actuarial calculators that each do one thing — development factors, chain ladder, Bornhuetter-Ferguson, the indicated rate change, credibility standards, interest and annuities — with the working shown, for you and your AI assistant.',
+    'Actuarial calculators that each do one thing — development factors, chain ladder, Bornhuetter-Ferguson, the indicated rate change, credibility standards, interest and annuities — with the working shown.',
   canonical: absoluteUrl('/tools'),
 }
 

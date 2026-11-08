@@ -183,6 +183,9 @@ const STATIC_LABELS: Record<string, string> = {
   '/battle': 'Quiz Battle',
   '/craft': 'Concept Craft',
   '/project': 'Projects',
+  '/tools': 'Tools',
+  '/tools/assumptions': 'Assumptions Bank',
+  '/community': 'Community',
   '/store': 'Store',
   '/store/gems': 'Gem Shop',
   '/settings': 'Settings',
@@ -190,6 +193,7 @@ const STATIC_LABELS: Record<string, string> = {
   '/research': 'Research',
   '/cowork': 'Sources',
   '/cowork/sources': 'Sources',
+  '/cowork/resources': 'Resources',
   '/cowork/workflows': 'Workflows',
   '/actuaria': 'Actuaria',
   '/actuaria/map': 'Star map',
@@ -217,12 +221,15 @@ export function placeLabel(path: string): string {
   if (pathname.startsWith('/project/')) return 'Project'
   if (pathname.startsWith('/craft/')) return 'Concept Craft'
   if (pathname.startsWith('/cowork/sources/')) return 'Source'
+  if (pathname.startsWith('/tools/')) return 'Tools'
+  if (pathname.startsWith('/community/')) return 'Community'
   if (pathname.startsWith('/actuaria/sector')) return 'Sector'
   if (pathname.startsWith('/actuaria/simulation')) return 'Simulation'
   if (pathname.startsWith('/actuaria/raid')) return 'Raid'
   if (pathname.startsWith('/actuaria/')) return 'Actuaria'
   if (pathname.startsWith('/research/')) return 'Research'
-  return 'Back'
+  // Read as "Back to the previous page", never "Back to Back".
+  return 'the previous page'
 }
 
 /** An entry's name: the one its page gave it, or the one its path says. */

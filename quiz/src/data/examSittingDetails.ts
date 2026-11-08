@@ -44,6 +44,12 @@ export interface SittingDetails {
    */
   format?: ExamSitting['format']
   milestones: SittingMilestone[]
+  /**
+   * What the publisher says about sitting the window (or exam day) itself —
+   * SOA's booking cut-off, the paper sitting's hours. Drawn under the window's
+   * own row, where it applies, rather than apart from it.
+   */
+  windowNote?: string
   /** Anything else the publisher says about this sitting, in its words. */
   notes?: string[]
   sources: SittingSource[]
@@ -707,7 +713,7 @@ export const SITTING_DETAILS: SittingDetails[] = [
       { kind: 'results', label: 'Passing candidate numbers posted', date: '2026-12-11' },
       { kind: 'results', label: 'Transcripts released', date: '2026-12-14' },
     ],
-    notes: [SOA_CBT_BOOKING_NOTE],
+    windowNote: SOA_CBT_BOOKING_NOTE,
     sources: [
       { label: 'SOA — October 2026 FM application (CBT)', url: 'https://www.soa.org/globalassets/assets/files/edu/2026/fall/registration/2026-10-fm-cbt-app.pdf' },
       SOA_RESULTS,
@@ -723,7 +729,7 @@ export const SITTING_DETAILS: SittingDetails[] = [
       { kind: 'results', label: 'Passing candidate numbers posted', date: '2026-12-11' },
       { kind: 'results', label: 'Transcripts released', date: '2026-12-14' },
     ],
-    notes: ['The paper sitting runs 8:30 – 11:30 AM local time, at select international centres.'],
+    windowNote: 'The paper sitting runs 8:30 – 11:30 AM local time, at select international centres.',
     sources: [
       { label: 'SOA — October 2026 FM application (paper)', url: 'https://www.soa.org/globalassets/assets/files/edu/2026/fall/registration/2026-10-fm-pp-app.pdf' },
       SOA_RESULTS,
@@ -740,7 +746,7 @@ export const SITTING_DETAILS: SittingDetails[] = [
       { kind: 'results', label: 'Passing candidate numbers posted', date: '2027-01-15' },
       { kind: 'results', label: 'Transcripts released', date: '2027-01-18' },
     ],
-    notes: [SOA_CBT_BOOKING_NOTE],
+    windowNote: SOA_CBT_BOOKING_NOTE,
     sources: [
       SOA_SCHEDULE,
       { label: 'SOA — November 2026 P application', url: 'https://www.soa.org/globalassets/assets/files/edu/2026/fall/registration/2026-11-p-cbt-app.pdf' },
@@ -757,7 +763,7 @@ export const SITTING_DETAILS: SittingDetails[] = [
       // left out rather than corrected into a date SOA never printed.
       { kind: 'results', label: 'Transcripts released', date: '2027-02-08' },
     ],
-    notes: [SOA_CBT_BOOKING_NOTE],
+    windowNote: SOA_CBT_BOOKING_NOTE,
     sources: [
       SOA_SCHEDULE,
       { label: 'SOA — December 2026 FM application', url: 'https://www.soa.org/globalassets/assets/files/edu/2026/fall/registration/2026-12-fm-cbt-fill-app.pdf' },

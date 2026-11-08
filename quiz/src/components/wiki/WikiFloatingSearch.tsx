@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { BookMarked, FileText, GraduationCap, Play } from 'lucide-react'
+import { ConceptPageIcon } from '@/components/ConceptPageIcon'
 import {
   ExamStatusBanner,
   FloatingSearchBar,
@@ -307,7 +308,6 @@ function ConceptResultRow({
     BookMarked
   const iconColor =
     item.category === 'exam' ? 'text-teal-500' :
-    isConcept ? 'text-violet-500' :
     'text-muted-foreground'
   const display = item.title ?? item.name
 
@@ -325,7 +325,9 @@ function ConceptResultRow({
         }}
         className={`flex items-start gap-2 rounded-md px-2 py-1.5 hover:bg-accent/60 transition-colors min-w-0 ${isConcept ? '' : 'flex-1'}`}
       >
-        <Icon className={`h-4 w-4 shrink-0 mt-0.5 ${iconColor}`} />
+        {isConcept
+          ? <ConceptPageIcon concept={item.name} className="mt-0.5" />
+          : <Icon className={`h-4 w-4 shrink-0 mt-0.5 ${iconColor}`} />}
         <div className="min-w-0 flex-1">
           <div className="text-sm truncate">{highlightMatch(display, query)}</div>
           {(item.author || item.year) && (

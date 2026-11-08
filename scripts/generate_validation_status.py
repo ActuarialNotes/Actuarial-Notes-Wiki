@@ -51,6 +51,8 @@ def area_for(rel: str) -> str:
         return f"Questions — {parts[1]}" if len(parts) > 2 else "Questions"
     if rel.startswith("Concepts/"):
         return "Concepts"
+    if rel.startswith("Assumptions/"):
+        return "Assumptions"
     if rel.startswith("Resources/"):
         parts = rel.split("/")
         return f"Resources — {parts[1]}" if len(parts) > 2 else "Resources"

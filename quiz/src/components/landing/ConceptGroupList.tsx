@@ -134,7 +134,7 @@ function GroupSection({
             {allSelected ? (
               <CheckMark className="h-5 w-5" />
             ) : someSelected ? (
-              <CheckMark className="h-5 w-5 text-green-500/40" />
+              <CheckMark className="h-5 w-5 opacity-40" />
             ) : (
               <Circle className="h-5 w-5 text-muted-foreground/60" />
             )}

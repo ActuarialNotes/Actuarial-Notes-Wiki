@@ -363,7 +363,13 @@ function matchCallout(children: ReactNode): MatchResult | null {
       const newPKids: ReactNode[] = []
       if (remainingFirstText.length > 0) newPKids.push(remainingFirstText)
       for (const c of remainingPKids) newPKids.push(c)
-      body.push(<p key="callout-p-head">{newPKids}</p>)
+      // A formula on the line under the header is broken onto its own line
+      // (lib/displayMath.ts); with the header lifted out, that break would open
+      // the body on an empty line.
+      while (newPKids.length > 0 && isValidElement(newPKids[0]) && (newPKids[0] as ReactElement).type === 'br') {
+        newPKids.shift()
+      }
+      if (newPKids.length > 0) body.push(<p key="callout-p-head">{newPKids}</p>)
     }
   } else {
     const newlineIdx = headerString.indexOf('\n')

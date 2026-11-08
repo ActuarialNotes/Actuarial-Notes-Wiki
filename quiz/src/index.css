@@ -2366,6 +2366,17 @@ summary .katex-display,
 /* Fortune-sheet sizes itself to its parent; give it the whole pane. */
 .pcpa-sheet > div { height: 100%; }
 
+/* Open in Spreadsheet (components/quiz/QuestionSheet.tsx). Docked, the pane
+   takes the right of a wide screen or the bottom of a narrow one, and the quiz
+   moves out from under it; popped out, it floats and the page is left alone. */
+.question-sheet-grid > div { height: 100%; }
+@media (min-width: 1024px) {
+  html[data-question-sheet='docked'] .question-sheet-host { padding-right: var(--question-sheet-width, 0px); }
+}
+@media (max-width: 1023px) {
+  html[data-question-sheet='docked'] .question-sheet-host { padding-bottom: calc(var(--question-sheet-height, 0px) + 1rem); }
+}
+
 /* A header button that is switched on — the concept popup's figures toggle and
    Listen. The same sky→fuchsia→gold foil as the simulator card's edge, as a
    travelling ring plus a soft blurred wash of it behind the button, so "on"

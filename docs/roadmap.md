@@ -631,6 +631,13 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   proposed: the rest of Exam P (49 pages), FM, the 14 broken pages, then Exams 5, 7 and 9 —
   one PR per exam, the edit and its fact check together, so a ready exam's G4 is red for hours,
   not weeks. *(Proposed 2026-11-04.)*
+- **L20: Open in Spreadsheet (built 2026-11-08).** A question from an exam sat with a spreadsheet
+  (the CAS exams at Pearson VUE: MAS-I, MAS-II, 5–9) opens one beside it, docked by default and
+  able to pop out into a window, holding the question's own tables. An **Insert** button drops the
+  selected cell into the answer. Exam-day rules (Off / Warn / Enforce, per mode) check formulas
+  against Pearson VUE's published function list, read off its file by
+  `scripts/spreadsheet_functions.py`. See `docs/question-spreadsheet.md`. Its "Not yet" list is
+  what's open. *(Built 2026-11-08.)*
 
 ---
 

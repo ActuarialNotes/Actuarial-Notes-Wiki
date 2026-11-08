@@ -1,4 +1,4 @@
-import { test, expect, type Page } from '@playwright/test'
+import { test, expect, type Page } from './test'
 
 // Concept Craft (docs/concept-craft.md): the way in from the Quiz tab onto an
 // empty board, a starter pack added from the + menu, a connection found by dropping one concept on another — new concepts made,
@@ -49,6 +49,19 @@ async function drop(page: Page, from: string, onto: string) {
   await dragBetween(page, centre(a), centre(b))
 }
 
+/**
+ * Drop one card on another and wait for the line between them. On a slow
+ * machine the board can still be settling as the hand lets go, so a drop that
+ * lands beside its target is made again, as a reader would.
+ */
+async function connect(page: Page, from: string, onto: string) {
+  await expect(async () => {
+    if (await strength(page, from, onto).count()) return
+    await drop(page, from, onto)
+    await expect(strength(page, from, onto)).toBeVisible({ timeout: 2000 })
+  }).toPass({ timeout: 15000 })
+}
+
 /** The cards on the board, in the order they came into hand (the deck's order). */
 async function inHand(page: Page) {
   await expect(page.getByTestId('craft-deck-tile').first()).toBeVisible()
@@ -94,7 +107,7 @@ test.describe('concept craft', () => {
     await page.goto(TOPIC)
     const [a, b] = await inHand(page)
     const before = await page.locator('[data-craft-node]').count()
-    await drop(page, a, b)
+    await connect(page, a, b)
 
     await expect(strength(page, a, b)).toHaveText(/^\d+$/)
     await expect(page.getByTestId('craft-tally')).toContainText(/· 1 of \d+ key connections$/)
@@ -194,7 +207,7 @@ test.describe('concept craft', () => {
   test('opens a connection: its strength, what it made, and a quiz on its questions', async ({ page }) => {
     await page.goto(TOPIC)
     const [a, b] = await inHand(page)
-    await drop(page, a, b)
+    await connect(page, a, b)
     const made = await page.locator('[data-craft-node][data-new]').first().getAttribute('data-craft-node')
     // Off the cards, so nothing is lit and every strength shows.
     await page.mouse.move(5, 5)

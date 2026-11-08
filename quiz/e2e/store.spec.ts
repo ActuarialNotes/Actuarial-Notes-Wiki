@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './test'
 
 // The Store (docs/store.md): real products, each bought on its seller's own
 // page. Nothing here is bought in the app, so the smoke checks the shelf

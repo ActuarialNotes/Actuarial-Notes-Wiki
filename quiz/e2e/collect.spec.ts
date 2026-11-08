@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './test'
 
 // A flashcard is collected the first time its concept reaches Level 1 — there
 // is no comprehension check to pass (docs/flashcard-collection.md). This walks

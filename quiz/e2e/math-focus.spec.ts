@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './test'
 
 // Math focus mode: tapping a rendered equation anywhere in the app magnifies it
 // and lets the reader step through the equations around it. Driven by one
@@ -28,8 +28,10 @@ test.describe('math focus', () => {
 
     // Press near the top of the box: some boxes frame a chain of equations, and
     // the press should land on the one it sits beside — here, the first.
+    // Relative to the box at the moment of the click, so a figure above it that
+    // finishes loading late (and pushes it down) can't make the press miss.
     const bounds = (await box.boundingBox())!
-    await page.mouse.click(bounds.x + bounds.width / 2, bounds.y + 14)
+    await box.click({ position: { x: bounds.width / 2, y: 14 } })
 
     const overlay = page.getByRole('dialog', { name: 'Equation focus' })
     await expect(overlay).toBeVisible()

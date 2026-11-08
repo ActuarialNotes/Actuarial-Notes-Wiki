@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test'
+import { expect, test } from './test'
 import { PLACEHOLDER, signIn } from './fixtures/signedIn'
 
 // Analytics is Pro. A free account sees the section locked, with a way to

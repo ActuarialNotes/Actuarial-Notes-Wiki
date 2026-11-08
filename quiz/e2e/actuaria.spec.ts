@@ -1,4 +1,4 @@
-import { test, expect, type Page } from '@playwright/test'
+import { test, expect, type Page } from './test'
 
 // Actuaria Online (docs/actuaria-online.md). The e2e build turns its flag on
 // (VITE_ACTUARIA_PREVIEW=on in playwright.config.ts); a signed-out browser

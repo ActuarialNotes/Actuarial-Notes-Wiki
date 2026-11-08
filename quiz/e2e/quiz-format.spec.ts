@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './test'
 
 // The quiz setup screen (pages/Landing.tsx): a card for the reader's own quiz,
 // whose pills open the setup sheet, and tiles for the whole papers — a

@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './test'
 
 // The quiz builder's question search: every row carries the quiz's Info
 // button, whose dialog opens over the search panel without closing it or

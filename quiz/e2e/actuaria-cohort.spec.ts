@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './test'
 import { signIn } from './fixtures/signedIn'
 
 // Actuaria's social layer (docs/actuaria-online.md §6.11, §6.12, §7.6, §7.7)

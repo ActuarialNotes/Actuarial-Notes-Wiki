@@ -1,4 +1,4 @@
-import { test, expect, type Page } from '@playwright/test'
+import { test, expect, type Page } from './test'
 
 // Paper on a desk (lib/viewTransition.ts, components/PaperRouter.tsx): every
 // change of page is a view transition — the desk slides between tabs, a sheet

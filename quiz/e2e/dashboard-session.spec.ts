@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test'
+import { expect, test } from './test'
 import { PLACEHOLDER, USER_ID, signIn } from './fixtures/signedIn'
 
 // Today's session (lib/todaySession.ts): the Dashboard's wheel, the day's size

@@ -1,5 +1,5 @@
-import { test, expect } from '@playwright/test'
-import type { Page } from '@playwright/test'
+import { test, expect } from './test'
+import type { Page } from './test'
 
 // The reveal choice, end to end (see quiz/src/lib/revealMode.ts). The same
 // question answered with reveal=during unfolds its verdict and explanation, and

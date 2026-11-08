@@ -1,4 +1,4 @@
-import { expect, test, type Page } from '@playwright/test'
+import { expect, test, type Page } from './test'
 import { PLACEHOLDER, USER_ID, signIn } from './fixtures/signedIn'
 
 // The Dashboard's Analytics summary (lib/analyticsSummary.ts) and the registration

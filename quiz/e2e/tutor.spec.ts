@@ -1,4 +1,4 @@
-import { test, expect, type Page } from '@playwright/test'
+import { test, expect, type Page } from './test'
 
 /**
  * The Tutor (docs/tutor.md), from a signed-out browser.

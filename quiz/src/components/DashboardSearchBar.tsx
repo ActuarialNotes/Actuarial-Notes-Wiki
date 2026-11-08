@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { BookMarked, FileText, GraduationCap, Search } from 'lucide-react'
+import { ConceptPageIcon } from '@/components/ConceptPageIcon'
 import {
   FloatingSearchBar,
   FloatingSearchInput,
@@ -219,7 +220,7 @@ function EntryRow({
 }) {
   const Icon = entry.kind === 'exam' ? GraduationCap : entry.kind === 'concept' ? FileText : BookMarked
   const iconColor =
-    entry.kind === 'exam' ? 'text-teal-500' : entry.kind === 'concept' ? 'text-violet-500' : 'text-muted-foreground'
+    entry.kind === 'exam' ? 'text-teal-500' : 'text-muted-foreground'
 
   return (
     <button
@@ -227,7 +228,9 @@ function EntryRow({
       onClick={onSelect}
       className="flex w-full items-start gap-2 rounded-md px-2 py-1.5 text-left transition-colors hover:bg-accent/60"
     >
-      <Icon className={`mt-0.5 h-4 w-4 shrink-0 ${iconColor}`} aria-hidden />
+      {entry.kind === 'concept'
+        ? <ConceptPageIcon concept={entry.name} className="mt-0.5" />
+        : <Icon className={`mt-0.5 h-4 w-4 shrink-0 ${iconColor}`} aria-hidden />}
       <span className="min-w-0 flex-1">
         <span className="block truncate text-sm">{highlightMatch(entry.name, query)}</span>
         {entry.exams.length > 0 && (

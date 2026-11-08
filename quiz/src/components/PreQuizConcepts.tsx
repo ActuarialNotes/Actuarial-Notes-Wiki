@@ -6,7 +6,8 @@
 // the questions start.
 
 import { useEffect, useRef } from 'react'
-import { FileText, Play, X } from 'lucide-react'
+import { Play, X } from 'lucide-react'
+import { ConceptPageIcon } from '@/components/ConceptPageIcon'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { refKey, useConceptHighlight } from '@/hooks/useConceptHighlight'
@@ -26,13 +27,15 @@ interface Props {
    * is what moves today's plan forward.
    */
   planConcepts?: Set<string>
+  /** The quiz's exam (progress key), so each concept's icon is that exam's colour. */
+  exam?: string
   /** Proceed into the questions. */
   onStart: () => void
   /** Leave the quiz entirely. */
   onQuit: () => void
 }
 
-export function PreQuizConcepts({ concepts, planConcepts, onStart, onQuit }: Props) {
+export function PreQuizConcepts({ concepts, planConcepts, exam, onStart, onQuit }: Props) {
   const openAt = useConceptPopup(s => s.openAt)
   const popupOpen = useConceptPopup(s => s.open)
   const listRef = useRef<HTMLUListElement>(null)
@@ -92,7 +95,7 @@ export function PreQuizConcepts({ concepts, planConcepts, onStart, onQuit }: Pro
                       className={`concept-row w-full flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-left hover:bg-accent/60 transition-colors${highlight ? ' plan-foil-ring' : ''}`}
                       title={highlight ? "In today's study plan" : undefined}
                     >
-                      <FileText className="h-4 w-4 shrink-0 text-violet-500" aria-hidden="true" />
+                      <ConceptPageIcon concept={name} exam={exam} />
                       <span className="text-sm font-medium flex-1 min-w-0 truncate">{name}</span>
                     </button>
                   </li>

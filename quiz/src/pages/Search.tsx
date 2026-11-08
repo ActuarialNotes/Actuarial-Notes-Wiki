@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo, useRef } from 'react'
 import { highlightMatch } from '@/components/SearchHighlight'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { X, Search as SearchIcon, BookMarked, FileText, GraduationCap, ChevronDown, CalendarCheck, Lock } from 'lucide-react'
+import { ConceptPageIcon } from '@/components/ConceptPageIcon'
 import { CheckMark } from '@/components/CheckMark'
 import { fetchAllQuestions } from '@/lib/github'
 import { parseAllQuestions, filterQuestions } from '@/lib/parser'
@@ -214,7 +215,6 @@ function ConceptResultRow({ item, query, syllabi }: { item: WikiIndexItem; query
     BookMarked
   const iconColor =
     item.category === 'exam' ? 'text-teal-500' :
-    item.category === 'concept' ? 'text-violet-500' :
     'text-muted-foreground'
   const display = item.title ?? item.name
 
@@ -225,7 +225,9 @@ function ConceptResultRow({ item, query, syllabi }: { item: WikiIndexItem; query
         onClick={e => { if (isAmbiguous) { e.preventDefault(); setShowChooser(true) } }}
         className="flex items-start gap-3 px-4 py-3 hover:bg-accent/60 transition-colors"
       >
-        <Icon className={`h-4 w-4 shrink-0 mt-0.5 ${iconColor}`} />
+        {item.category === 'concept'
+          ? <ConceptPageIcon concept={item.name} className="mt-0.5" />
+          : <Icon className={`h-4 w-4 shrink-0 mt-0.5 ${iconColor}`} />}
         <div className="min-w-0 flex-1">
           <div className="text-sm truncate">{highlightMatch(display, query)}</div>
           {(item.author || item.year) && (

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { highlightMatch } from '@/components/SearchHighlight'
 import { Link, useLocation } from 'react-router-dom'
 import { BookMarked, FileText, GraduationCap, Search, X } from 'lucide-react'
+import { ConceptPageIcon } from '@/components/ConceptPageIcon'
 import { buildWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
 import { pathToEntryRef, wikiRoute, examIdFromFile, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
@@ -288,7 +289,6 @@ function SearchResultRow({ item, query }: { item: WikiIndexItem; query: string }
   const Icon = item.category === 'exam' ? GraduationCap : item.category === 'concept' ? FileText : BookMarked
   const iconColor =
     item.category === 'exam' ? 'text-teal-500' :
-    item.category === 'concept' ? 'text-violet-500' :
     'text-muted-foreground'
   const display = item.title ?? item.name
 
@@ -297,7 +297,9 @@ function SearchResultRow({ item, query }: { item: WikiIndexItem; query: string }
       to={route}
       className="flex items-start gap-2 rounded-md px-2 py-1.5 hover:bg-accent/60 transition-colors"
     >
-      <Icon className={`h-4 w-4 shrink-0 mt-0.5 ${iconColor}`} />
+      {item.category === 'concept'
+        ? <ConceptPageIcon concept={item.name} className="mt-0.5" />
+        : <Icon className={`h-4 w-4 shrink-0 mt-0.5 ${iconColor}`} />}
       <div className="min-w-0 flex-1">
         <div className="text-sm truncate">
           {highlightMatch(display, query)}

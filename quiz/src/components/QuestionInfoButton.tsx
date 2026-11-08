@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ChevronRight, ExternalLink, FileText, Info, X } from 'lucide-react'
+import { ChevronRight, ExternalLink, Info, X } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { cn } from '@/lib/utils'
 import { githubBlobUrl } from '@/lib/github'
@@ -14,6 +14,8 @@ import { factCheckBadge } from '@/lib/verification'
 import { FactCheckDialog } from '@/components/FactCheckBadge'
 import { PdfLinkButton } from '@/components/PdfLinkButton'
 import type { Question } from '@/lib/parser'
+import { EXAM_LABEL_TO_ID } from '@/lib/examIds'
+import { ConceptPageIcon } from '@/components/ConceptPageIcon'
 
 /**
  * **Question info** — where the question on screen came from.
@@ -208,6 +210,7 @@ export function QuestionInfoDialog({
 
           <QuestionConcepts
             links={question.wiki_link}
+            exam={EXAM_LABEL_TO_ID[question.exam]}
             onOpen={onClose}
             onRead={onOpenConcept && ((i: number) => { onClose(); onOpenConcept(question.wiki_link, i) })}
           />
@@ -278,10 +281,13 @@ export function QuestionInfoDialog({
  */
 function QuestionConcepts({
   links,
+  exam,
   onOpen,
   onRead,
 }: {
   links: string[]
+  /** The question's exam (progress key): each concept's icon is its colour. */
+  exam?: string
   onOpen: () => void
   /** Read the concept at this index in the popup, rather than going to its page. */
   onRead?: (index: number) => void
@@ -314,7 +320,7 @@ function QuestionConcepts({
               return (
                 <li key={link}>
                   <button type="button" data-sound="tap" onClick={() => onRead(i)} className={row}>
-                    <FileText className="h-4 w-4 shrink-0 text-violet-500" aria-hidden />
+                    <ConceptPageIcon concept={link} exam={exam} />
                     <span className="min-w-0 flex-1 truncate">{name}</span>
                     <span className="shrink-0 text-xs text-muted-foreground">Read</span>
                   </button>
@@ -328,7 +334,7 @@ function QuestionConcepts({
                   onClick={onOpen}
                   className="flex items-center gap-2.5 rounded-md px-2 py-1.5 text-sm transition-colors hover:bg-accent"
                 >
-                  <FileText className="h-4 w-4 shrink-0 text-violet-500" aria-hidden />
+                  <ConceptPageIcon concept={link} exam={exam} />
                   <span className="min-w-0 flex-1 truncate">{name}</span>
                 </Link>
               </li>

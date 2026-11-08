@@ -862,7 +862,7 @@ Other important `lib/` modules:
 - `writtenAnswer.ts` — the **written parts** of a long-answer question (`answer === ''`: a CAS
   essay or calculation part the reader marks against the sample answer). `splitSampleAnswers`
   cuts a part's sample answer into the separate answers the examiners printed — `Alternatively:`,
-  `Or:`, a lead-in such as `Alternatively, with phasing:`, `Sample Answer #1` headings — so
+  `Or:`, a lead-in such as `Alternatively, with phasing:`, `Sample Answer #1` and `Accepted Answer 2 — <title>` headings (the title kept) — so
   `components/AnswerReference.tsx` can draw each as its own card inside one *Sample answer*
   panel, with the examiner's report a card of its own. A bare `or`, and an alternative *inside*
   one section of a sectioned answer, split nothing: both are used within one answer as often as
@@ -875,6 +875,29 @@ Other important `lib/` modules:
   graded no credit — never a free "correct"; the store's `effectiveIsCorrect` is that credit at 1.
   The results screen weights each question by its `points` too (`quizPoints` in `lib/quizScore.ts`).
   Pure and tested; the flow is in `e2e/quiz.spec.ts`.
+- `numericCheck.ts` — the **suggested grade** for a written part's final figure
+  (`docs/answer-checking.md`): the reader's last figure (`finalFigures`) against the part's
+  `### Answer` line (`keyFigures`) or where each sample answer ends, read through markdown and
+  LaTeX with labels — AY 2012, 36 months, `($000)` — left out (`parseNumbers`). Within 0.5% is a
+  match (Full credit), within 3% close (Partial), else No credit against a key and nothing against
+  a sample. `components/GradeSuggestion.tsx` says why, as `SelfGradeButtons`' `hint`, and the
+  suggested button is outlined until the reader picks — it never grades for them. No model.
+  `numericCheckVault.test.ts` holds every key to checking as a match against itself. Pure and tested.
+- `essayChecklist.ts` — the **essay checklist** (roadmap L14, `docs/answer-checking.md` layer 2):
+  an essay part's sample answer cut into points where its text already breaks — a top-level
+  bullet or numbered item, a paragraph of prose — with headings, lead-ins, formulas and short
+  labels left as text and the "Other acceptable …" paragraph a box that stands in for a point
+  (`sampleChecklist`); a heading over candidates' responses ("Sample responses:", "Responses for
+  Model 1") makes its list a **pool**, any one (or the heading's or stem's count) making the point.
+  Where the examiner's report lists what full credit needed ("Candidates were expected to:", "Any
+  two of the following received full credit:"), that list is the checklist instead (`reportRubric`,
+  its boxes in the Examiner's report card, ticks under `RUBRIC` from `lib/checklistKeys.ts`). The reader ticks what their answer makes (`components/SampleChecklist.tsx`,
+  inside `SampleAnswerCards`; ticks in `stores/checklistStore.ts`), and the ticks suggest Full
+  credit or Partial against the sample the answer covers most of, as many points as the stem asks
+  for (`askedFor`, `checklistSuggestion`). `essayChecklistVault.test.ts` holds every cut to keeping
+  every word of the sample (and of a report used as the rubric). With `numericCheck.ts` it is one lazy chunk, `lib/answerChecks.ts`,
+  fetched by `hooks/useAnswerChecks.ts` when a written part is locked in — keep both off the first
+  page's bundle. Pure and tested.
 - `quizBankInfo.ts` — what the quiz builder's **info button** (`components/QuizExamInfoButton.tsx`,
   in the exam's strip — the study guide's strip, less the version menu and syllabus) says about
   one exam's bank: how many questions a quiz can draw, where they came from (the exam's own past

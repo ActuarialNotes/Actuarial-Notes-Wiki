@@ -26,7 +26,7 @@ import { loadConceptLinks, parseConceptLinksParam } from '@/lib/quizConceptLinks
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { isAnswerCorrect, isMultiPartAnswerComplete } from '@/lib/parser'
-import { ungradedWrittenParts, writtenParts } from '@/lib/writtenAnswer'
+import { partResponses, ungradedWrittenParts, writtenParts } from '@/lib/writtenAnswer'
 import { pendingAnswerFor, tagPendingAnswer } from '@/lib/pendingAnswer'
 import { resumesQuiz } from '@/lib/quizResume'
 import { loadRevealMode, parseRevealMode } from '@/lib/revealMode'
@@ -758,6 +758,9 @@ export default function Quiz() {
           parts={(currentQuestion.parts ?? []).filter(p => gradePrompt.includes(p.label))}
           grades={partGradeMap}
           onGrade={setPartGrade}
+          responses={partResponses(displayAnswer)}
+          questionId={currentQuestion.id}
+          questionStem={currentQuestion.stem}
           isOnlyPart={(currentQuestion.parts ?? []).length === 1}
           continueLabel={isLastQuestion ? `Finish ${mode === 'mock-exam' ? 'Exam' : 'Quiz'}` : 'Next Question'}
           onContinue={() => {

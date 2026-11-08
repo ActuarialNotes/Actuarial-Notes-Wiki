@@ -14,12 +14,18 @@ key. The same rules as the Tutor's (`docs/tutor.md`) and the AI connector's (`do
 
 | Layer | What it checks | How | Status |
 |---|---|---|---|
-| **1. Numeric check** | A calculation part's final figure | Read numbers off two texts and compare them. No model | ✅ Built (this doc) |
-| **2. Checklist** (roadmap L14) | An essay part's points | The sample answer's own lines and bullets as a checklist the reader ticks; the ticks suggest the grade (`docs/learning-review.md` §3.4). No model | Proposed |
+| **1. Numeric check** (L21) | A calculation part's final figure | Read numbers off two texts and compare them. No model | ✅ Built 2026-11-08 |
+| **2. Checklist** (L14) | An essay part's points | The sample answer's own bullets and paragraphs as a checklist the reader ticks; the ticks suggest the grade (`docs/learning-review.md` §3.4). No model | ✅ Built 2026-11-08 |
 | **3. On-device model** (optional) | Which checklist points the reader's text already covers | A small natural-language-inference model run in the browser (Transformers.js, tens of MB, lazy) pre-ticks layer 2's items. It ticks; it never writes | An idea. Only after layer 2, and only if it agrees with the readers' own ticks well enough to be worth the download |
 
 Layer 3 is the only one with a model in it, and it only ever does layer 2's job faster. If it
 is never built, layers 1 and 2 stand on their own.
+
+Both built layers live in one chunk, `lib/answerChecks.ts`, which `hooks/useAnswerChecks.ts`
+fetches the first time a written part is locked in: the quiz is on the first page's bundle, and
+nothing reads the checks before an answer is confirmed. A part or question with no lettered
+parts asks its question in the question's stem, so both checks are handed that stem when the
+part's own is empty.
 
 ## Layer 1: the numeric check (`lib/numericCheck.ts`)
 
@@ -90,18 +96,96 @@ popup Next opens (`GradePartsDialog`, its `responses` read by `partResponses` in
   the bank.
 - `numericCheckVault.test.ts`, over the whole bank: every figure the check reads as accepted must
   check as a match when typed back in (a part whose key, typed exactly, came out a miss would
-  tell a right reader "No credit"), and coverage must not quietly fall: 192 of 277 keyed parts
-  and 1,109 of 1,174 unkeyed calculation parts when written (2026-11-08).
+  tell a right reader "No credit"), and coverage must not quietly fall: 196 of 277 keyed parts
+  and 1,251 of 1,318 unkeyed calculation parts when written (2026-11-08).
 - `e2e/quiz.spec.ts`, *suggested grade*: the suggestion on a keyed part and in the popup.
 
 ### Not yet
 
-- **No measure of agreement with readers' own grades.** The bank says what the accepted figures
-  are, not what readers write. Once suggestions are live, the grade a reader gives beside the
-  one suggested is the measure; nothing records it yet.
 - A part asking for several figures (a triangle, three territories' relativities) is checked on
   its final line alone, which may hold one of them.
 - The keyed part's "Correct answer:" line prints the key as plain text, so its markdown shows
   (`\$17,735`). Older than this work.
+
+## Layer 2: the essay checklist (`lib/essayChecklist.ts`)
+
+Students grade their own written answers too leniently, the weakest most of all, and grade
+markedly more accurately against a checklist of the expected answer's points than against the
+answer read whole (Rawson & Dunlosky 2007; `docs/learning-review.md` §3.4). So an essay part's
+sample answer becomes its checklist, and the boxes sit on the examiners' own words.
+
+### Cutting the points
+
+`sampleChecklist` cuts one sample (each `Alternatively:` sample is its own — `splitSampleAnswers`)
+where its text already breaks, and changes nothing else:
+
+- **A point** is a top-level bullet or numbered item (its marker dropped, its sub-bullets kept
+  inside it) or a paragraph of prose.
+- **Text around the points**: a heading (`#`, or a line set wholly in bold or italics), a lead-in
+  ending in a colon ("Two likely consequences:"), a formula, table, image, callout or fence, and a
+  short label with no sentence in it ("ii. Reported Claims", "Accepted Answer 2 — …").
+- **The other accepted answers** ("Other acceptable factors include …") get a box of their own
+  that stands in for a point: an answer that made one of those instead has made a point, but it
+  isn't one more point every answer needs.
+- **A calculation set out in steps** (more than half its points are working: a figure after `=`,
+  two numbers multiplied) makes no checklist; its points would be arithmetic.
+
+A part has a checklist (`partChecklist`) when it is unkeyed, not a calculation (those have the
+numeric check), and some sample makes at least two points — one box beside a one-paragraph
+answer is the sample again.
+
+### How many points are needed
+
+Every point of the sample, unless the stem names fewer (`askedFor`): "List **two** likely
+consequences", "Briefly describe **the four** criteria", "Briefly describe **a** scenario", "describe
+**one** advantage **and one** disadvantage", "assess it **using two** social criteria". Every count
+the stem names is added up. "A"/"an" counts only straight after an asking verb, so "using a
+Berquist-Sherman adjustment" names a method, not a count.
+
+### The suggestion
+
+`checklistSuggestion` reads the ticks against the sample the answer covers most of (an answer that
+followed sample 2 is marked against sample 2): every point needed is Full credit, some is
+Partial. Nothing is suggested before a box is ticked, and it never suggests No credit: an answer
+that makes none of the points has nothing to tick, and the reader says so with the buttons. The
+words are `checklistMessage`: "You ticked 1 of the 2 points in the sample answer.", or "… of the 2
+points the question asks for, from sample 2."
+
+### Where it shows
+
+The sample answer card (`SampleAnswerCards` in `components/AnswerReference.tsx`, its `checklist`
+prop) draws each sample through `components/SampleChecklist.tsx`: a box (`role="checkbox"`, the
+app's `CheckMark` when ticked) beside each point, "Tick each point your answer makes." under the
+heading. The suggestion and the outlined button are the grade control's, as layer 1's. The ticks
+are `stores/checklistStore.ts`, by question and part, so the grading popup Next opens reads them
+too; a part open for answering again starts with none, and nothing is saved. A part with a
+checklist no longer shows the old keyword count (`estimateEssayScore`).
+
+### How it is held
+
+- `essayChecklist.test.ts`: the cut, the counts, the suggestion and the words.
+- `essayChecklistVault.test.ts`, over the whole bank: **every word of every sample answer is
+  still there, and none added**, read back off the blocks (list markers aside) — the cut is
+  never a rewrite. And coverage: 1,369 of 2,190 essay parts have a checklist (2026-11-08); most of
+  the rest are one-paragraph samples.
+- `e2e/quiz.spec.ts`, *essay checklist*: ticks, the suggestion moving with them, the stand-in box,
+  and the popup.
+
+### Not yet
+
+- **A sample that lists candidates' alternative responses** ("Sample Responses for Model 1",
+  then seven responses that each earned the credit) is cut into seven points all needed. Telling
+  those apart from a sample's own points needs the converter to mark them, the way
+  `Alternatively:` is marked.
+- An examiner's report's *Candidates were expected to* list is a rubric of its own and isn't
+  used yet; its *Common mistakes* are not points to tick.
+- One-paragraph samples (about a third of essay parts) get no checklist.
+
+## Both layers: not yet
+
+- **No measure of agreement with readers' own grades.** The bank says what the accepted answers
+  are, not what readers write. The grade a reader gives beside the one suggested is the measure,
+  and nothing records it yet. That record is also what would decide whether layer 3 is worth
+  building.
 - The Tutor's practice card (`components/tutor/TutorPractice.tsx`) and the mistakes review draw
-  their own grade controls and don't show the suggestion.
+  their own grade controls and don't show either suggestion.

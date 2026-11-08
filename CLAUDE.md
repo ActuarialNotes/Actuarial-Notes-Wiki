@@ -883,6 +883,17 @@ Other important `lib/` modules:
   a sample. `components/GradeSuggestion.tsx` says why, as `SelfGradeButtons`' `hint`, and the
   suggested button is outlined until the reader picks — it never grades for them. No model.
   `numericCheckVault.test.ts` holds every key to checking as a match against itself. Pure and tested.
+- `essayChecklist.ts` — the **essay checklist** (roadmap L14, `docs/answer-checking.md` layer 2):
+  an essay part's sample answer cut into points where its text already breaks — a top-level
+  bullet or numbered item, a paragraph of prose — with headings, lead-ins, formulas and short
+  labels left as text and the "Other acceptable …" paragraph a box that stands in for a point
+  (`sampleChecklist`). The reader ticks what their answer makes (`components/SampleChecklist.tsx`,
+  inside `SampleAnswerCards`; ticks in `stores/checklistStore.ts`), and the ticks suggest Full
+  credit or Partial against the sample the answer covers most of, as many points as the stem asks
+  for (`askedFor`, `checklistSuggestion`). `essayChecklistVault.test.ts` holds every cut to keeping
+  every word of the sample. With `numericCheck.ts` it is one lazy chunk, `lib/answerChecks.ts`,
+  fetched by `hooks/useAnswerChecks.ts` when a written part is locked in — keep both off the first
+  page's bundle. Pure and tested.
 - `quizBankInfo.ts` — what the quiz builder's **info button** (`components/QuizExamInfoButton.tsx`,
   in the exam's strip — the study guide's strip, less the version menu and syllabus) says about
   one exam's bank: how many questions a quiz can draw, where they came from (the exam's own past

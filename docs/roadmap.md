@@ -597,6 +597,7 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
      Forgotten; sure-and-wrong leads relearning.
   5. **L14, a checklist for self-marking written parts** (M). The sample answer's points, cut
      mechanically, ticked before the grade (idea-unit scoring; Rawson & Dunlosky 2007).
+     **Built 2026-11-08** (below, and `answer-checking.md` layer 2).
   6. **L11, a predicted score** (M). The expected share of points on the exam's blueprint,
      from first attempts on unseen questions, with a range, read against a transcribed pass
      mark where one is published. The same build as the Pro proposal's forecast; whether it
@@ -633,6 +634,13 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   match could never mark right. It is the calculation half of L14; the essay half is L14's
   checklist, and an on-device model that pre-ticks that checklist is the optional third layer.
   See `docs/answer-checking.md`. *(Built 2026-11-08.)*
+- **L14: the essay checklist (built 2026-11-08).** An essay part's sample answer is its own
+  checklist: a box beside each bullet and paragraph, cut where the examiners' text already
+  breaks, nothing reworded (a bank test holds every word in place). The reader ticks what their
+  answer makes; every point the question needs suggests Full credit, some suggests Partial,
+  read against the sample the answer covers most of. The stem's own count ("list two") sets how
+  many are needed, and the "Other acceptable …" paragraph stands in for a point. 1,369 of 2,190
+  essay parts have one. See `docs/answer-checking.md`, layer 2. *(Built 2026-11-08.)*
 
 ---
 
@@ -693,7 +701,7 @@ Shipped:
 | L11 | A predicted score beside coverage | ⬜ | Proposed | `learning-review.md` §3.1. Shares a build with the Pro proposal's forecast; D32. Needs L12; checked against L18. |
 | L12 | Novelty-weighted mastery; unseen-first draws; a held-out set | ⬜ | Proposed | `learning-review.md` §3.2; D33. |
 | L13 | The Tutor's scheduler behind the study plan, every ready exam | ⬜ | Proposed | `learning-review.md` §3.3. Merges L3, L5, L6; reuses `lib/tutor/memory.ts`, `log.ts`, `scheduler.ts`. |
-| L14 | Checklist self-marking for written parts | ⬜ | Proposed | `learning-review.md` §3.4. |
+| L14 | Checklist self-marking for written parts | ✅ 2026-11-08 | Built | `answer-checking.md` layer 2; `learning-review.md` §3.4. |
 | L15 | Pacing report, triage, fluency sets | ⬜ | Proposed | `learning-review.md` §3.5. The data is already in `quiz_sessions`. |
 | L16 | Completion problems (faded worked examples) | ⬜ | Proposed | `learning-review.md` §3.7. |
 | L17 | Placement check when an exam is added | ⬜ | Proposed | `learning-review.md` §3.7. |

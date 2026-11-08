@@ -759,6 +759,8 @@ export default function Quiz() {
           grades={partGradeMap}
           onGrade={setPartGrade}
           responses={partResponses(displayAnswer)}
+          questionId={currentQuestion.id}
+          questionStem={currentQuestion.stem}
           isOnlyPart={(currentQuestion.parts ?? []).length === 1}
           continueLabel={isLastQuestion ? `Finish ${mode === 'mock-exam' ? 'Exam' : 'Quiz'}` : 'Next Question'}
           onContinue={() => {

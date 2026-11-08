@@ -12,7 +12,8 @@ import { insertAtCaret, partWantsSheet } from '@/lib/questionSheet'
 import { SpreadsheetPartButton } from '@/components/quiz/SpreadsheetButton'
 import { cn } from '@/lib/utils'
 import { isAnswerCorrect, normalizeAnswerText, estimateEssayScore } from '@/lib/parser'
-import { checkNumericAnswer } from '@/lib/numericCheck'
+import { useAnswerChecks } from '@/hooks/useAnswerChecks'
+import { checklistKey, useChecklistStore, usePartTicks } from '@/stores/checklistStore'
 import type { Question, Part, SelfGrade } from '@/lib/parser'
 
 export type { SelfGrade }
@@ -79,11 +80,12 @@ function FreeEntryInput({ answer, isLocked, correctAnswer, showExplanation, onSu
   const isRight = selfGrade !== undefined ? selfGrade === 'correct' : autoIsRight
   // A key the exact match can't read ("Approximately \$17,735 (thousands)"):
   // the figures, compared, suggest the grade the reader then gives.
+  const checks = useAnswerChecks(isAnswered && !autoIsRight && !!checkSource)
   const check = useMemo(
-    () => (isAnswered && !autoIsRight && checkSource
-      ? checkNumericAnswer(answer, { ...checkSource, answer: correctAnswer })
+    () => (checks && isAnswered && !autoIsRight && checkSource
+      ? checks.checkNumericAnswer(answer, { ...checkSource, answer: correctAnswer })
       : null),
-    [isAnswered, autoIsRight, checkSource, answer, correctAnswer],
+    [checks, isAnswered, autoIsRight, checkSource, answer, correctAnswer],
   )
   // Not red while the figures say it matches and the reader hasn't graded it.
   const looksWrong = !isRight && !(selfGrade === undefined && check?.verdict === 'match')
@@ -155,7 +157,7 @@ function FreeEntryInput({ answer, isLocked, correctAnswer, showExplanation, onSu
               value={selfGrade ?? null}
               onChange={onSelfGrade}
               suggested={check?.suggestion}
-              hint={check && <GradeSuggestion check={check} />}
+              hint={check && checks && <GradeSuggestion {...checks.numericCheckMessage(check)} from="figure" />}
             />
           )}
           {!autoIsRight && !onSelfGrade && selfGrade && (
@@ -186,9 +188,27 @@ interface PartCardProps {
   questionId: string
   /** The part asks for numbers and the exam is sat with a spreadsheet. */
   wantsSheet?: boolean
+  /** The question's own stem: a question with no lettered parts asks its question there, not in the part. */
+  questionStem?: string
 }
 
-function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, selfGrade: externalSelfGrade, onSelfGrade, isOnlyPart = false, conceptNames, questionId, wantsSheet = false }: PartCardProps) {
+function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, selfGrade: externalSelfGrade, onSelfGrade, isOnlyPart = false, conceptNames, questionId, wantsSheet = false, questionStem = '' }: PartCardProps) {
+  // What the answer checks read: the part, asking its question in the
+  // question's stem when it has none of its own.
+  const asked = useMemo(() => (part.stem ? part : { ...part, stem: questionStem }), [part, questionStem])
+  const checks = useAnswerChecks(isLocked && part.answer === '')
+  const checklist = useMemo(
+    () => (checks && part.answer === '' ? checks.partChecklist(asked) : null),
+    [checks, part.answer, asked],
+  )
+  const ticksKey = checklistKey(questionId, part.label)
+  const ticks = usePartTicks(ticksKey)
+  const toggleTick = useChecklistStore(state => state.toggle)
+  const clearTicks = useChecklistStore(state => state.clear)
+  // A part open for answering again starts with no ticks.
+  useEffect(() => {
+    if (!isLocked) clearTicks(ticksKey)
+  }, [isLocked, ticksKey, clearTicks])
   const isEssay = part.answer === ''
   const isAnswered = isLocked && (isEssay || partAnswer !== '')
   const autoIsRight = !isEssay && isAnswered && (
@@ -223,11 +243,12 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
 
   // ── Essay part ─────────────────────────────────────────────────────────────
   if (isEssay) {
-    // A calculation part is checked on its final figure; the keyword count is
-    // for the words of an essay, and says nothing useful about a number.
-    const check = isLocked ? checkNumericAnswer(partAnswer, part) : null
+    // A calculation part is checked on its final figure, an essay against its
+    // checklist; the keyword count is left for a part with neither.
+    const check = isLocked && checks ? checks.checkNumericAnswer(partAnswer, asked) : null
+    const ticked = checklist && checks ? checks.checklistSuggestion(checklist, ticks) : null
     const keywordScore =
-      isLocked && partAnswer.trim() && !check
+      isLocked && checks && partAnswer.trim() && !check && !checklist
         ? estimateEssayScore(partAnswer, part.explanation ?? '')
         : null
 
@@ -289,7 +310,12 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
 
             {/* The reference first, then the grade: a reader marks themselves
                 against the sample answer, so they read it before being asked. */}
-            {showExplanation && part.explanation && <SampleAnswerCards markdown={part.explanation} />}
+            {showExplanation && part.explanation && (
+              <SampleAnswerCards
+                markdown={part.explanation}
+                checklist={checklist ? { list: checklist, ticks, onToggle: (sample, point) => toggleTick(ticksKey, sample, point) } : undefined}
+              />
+            )}
             {showExplanation && part.examiner_report && <ExaminerReportCard markdown={part.examiner_report} />}
 
             {showExplanation && (
@@ -297,8 +323,10 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
                 value={effectiveSelfGrade}
                 onChange={handleSelfGradeClick}
                 prompt={isOnlyPart ? 'How did you do?' : 'How did you do on this part?'}
-                suggested={check?.suggestion}
-                hint={check && <GradeSuggestion check={check} />}
+                suggested={check?.suggestion ?? ticked?.suggestion}
+                hint={checks && (check
+                  ? <GradeSuggestion {...checks.numericCheckMessage(check)} from="figure" />
+                  : ticked && checklist && <GradeSuggestion {...checks.checklistMessage(ticked, checklist)} from="checklist" />)}
               />
             )}
           </div>
@@ -353,7 +381,7 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
           selfGrade={effectiveSelfGrade ?? undefined}
           onSelfGrade={onSelfGrade ? handleSelfGradeClick : undefined}
           sheetQuestionId={questionId}
-          checkSource={part}
+          checkSource={asked}
         />
       )}
 
@@ -581,6 +609,7 @@ export function QuestionCard({
             // previous one's self-grade and typed answer.
             key={`${question.id}__${part.label}`}
             part={part}
+            questionStem={question.stem}
             partAnswer={isLocked && selectedAnswer
               ? (() => { try { return (JSON.parse(selectedAnswer) as Record<string, string>)[part.label] ?? '' } catch { return '' } })()
               : (partAnswers[part.label] ?? '')

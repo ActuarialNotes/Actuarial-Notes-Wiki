@@ -251,3 +251,42 @@ test.describe('suggested grade', () => {
     await expect(dialog.getByRole('button', { name: /Full credit/ }).first()).toHaveAttribute('aria-pressed', 'true')
   })
 })
+
+// An essay part's sample answer is a checklist: the reader ticks the points
+// their answer makes, and the ticks suggest the grade (lib/essayChecklist.ts).
+test.describe('essay checklist', () => {
+  test('suggests a grade from the points ticked, here and in the grading popup', async ({ page }) => {
+    // cas5-2018f-q8 part a: "List two likely consequences", two bulleted
+    // points and a paragraph of other accepted consequences.
+    await page.goto('/quiz?ids=cas5-2018f-q8')
+    const startQuiz = page.getByRole('button', { name: 'Start Quiz' })
+    const response = page.getByPlaceholder('Write your response here…').first()
+    await expect(startQuiz.or(response).first()).toBeVisible()
+    if (await startQuiz.isVisible()) await startQuiz.click()
+
+    await response.fill('Retention will drop as people shop around.')
+    await page.getByRole('button', { name: 'Confirm Answer' }).click()
+    const submitAnyway = page.getByRole('button', { name: 'Submit Anyway' })
+    if (await submitAnyway.isVisible()) await submitAnyway.click()
+
+    const sample = page.getByRole('region', { name: 'Sample answer' }).first()
+    await expect(sample.getByText('Tick each point your answer makes.')).toBeVisible()
+    // No ticks, no suggestion.
+    await expect(page.getByRole('note', { name: 'Suggested grade' })).toHaveCount(0)
+
+    await sample.getByRole('checkbox', { name: 'Point 1' }).click()
+    await expect(sample.getByRole('checkbox', { name: 'Point 1' })).toHaveAttribute('aria-checked', 'true')
+    const note = page.getByRole('note', { name: 'Suggested grade' })
+    await expect(note).toContainText('Suggested grade: Partial')
+    await expect(note).toContainText('You ticked 1 of the 2 points in the sample answer.')
+
+    // One of the other accepted consequences stands in for the second point.
+    await sample.getByRole('checkbox', { name: 'Other accepted answers' }).click()
+    await expect(note).toContainText('Suggested grade: Full credit')
+
+    await page.getByRole('button', { name: /Finish Quiz/ }).click()
+    const dialog = page.getByRole('dialog')
+    await expect(dialog.getByRole('note', { name: 'Suggested grade' })).toContainText('Full credit')
+    await expect(dialog.getByRole('button', { name: /Full credit \(suggested\)/ })).toHaveAttribute('aria-pressed', 'false')
+  })
+})

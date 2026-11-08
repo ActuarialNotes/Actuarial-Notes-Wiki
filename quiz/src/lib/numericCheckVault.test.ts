@@ -25,7 +25,9 @@ function freeEntryParts(): { id: string; part: Part }[] {
       const q = parseQuestion(readFileSync(path.join(QUESTIONS_DIR, dir.name, file), 'utf8'))
       if (q?.type !== 'multi-part') continue
       for (const part of q.parts ?? []) {
-        if (part.type === 'free-entry') out.push({ id: `${q.id}${part.label}`, part })
+        // A question with no lettered parts asks its question in its own
+        // stem, which the app hands the check in place of the part's.
+        if (part.type === 'free-entry') out.push({ id: `${q.id}${part.label}`, part: part.stem ? part : { ...part, stem: q.stem } })
       }
     }
   }
@@ -53,7 +55,7 @@ describe('the numeric answer check, over the question bank', () => {
     const keyedChecked = keyed.filter(p => answerTargets(p.part)?.source === 'answer')
     const calculations = parts.filter(p => p.part.answer === '' && isCalculationPart(p.part))
     const calculationsChecked = calculations.filter(p => answerTargets(p.part)?.source === 'sample')
-    // 192 of 277 and 1,109 of 1,174 when this was written (2026-11-08). The
+    // 196 of 277 and 1,251 of 1,318 when this was written (2026-11-08). The
     // keyed parts left are prose answers ("Use the BF method") and tables.
     expect(keyedChecked.length / keyed.length).toBeGreaterThan(0.6)
     expect(calculationsChecked.length / calculations.length).toBeGreaterThan(0.85)

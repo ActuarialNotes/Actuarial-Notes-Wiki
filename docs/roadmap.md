@@ -504,17 +504,19 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   authors grant access, with the Practice items no tool answers ranked as a tools backlog.
   Three decisions (D-B1–D-B3). *(Proposed 2026-10-30.)*
 
-- **A9: OSFI's P&C filings as data for Tools, the connector and Cowork.**
-  `docs/osfi-pc-data.md` covers the 2025 Q3 Beyond 20/20 release the maintainer downloaded
-  before the server was retired: PC1 (core statements, labelled by the blank return in hand),
-  PC2 (quarterly exhibits, incl. the provincial premium and IFRS 17 exhibits) and PC4 (MCT), for
-  66 Canadian companies and 69 foreign branches. Proposed, in order: a stdlib extract
-  (`scripts/osfi_extract.py`) into a hashed, dated snapshot labelled only from OSFI's own forms; an
-  **Insurer Return** Data Source; calculators proven against the filings themselves (every
-  company's filed MCT ratio and every 20.14 roll-forward as R6 cases); the same tools over MCP
-  plus `find_insurer`; each insurer's filing as a Cowork document whose table arrives filled in
-  from the extract; Exam 6C links and questions. Six decisions (D-OSFI-1–6), licence first.
-  Needs the blank PC2/PC4 returns before phases 2 and 4. *(Proposed 2026-11-08.)*
+- **A9: OSFI's insurer filings as data for Tools, the connector and Cowork.**
+  `docs/osfi-pc-data.md`. OSFI's filings moved from Beyond 20/20 (retired 2026-06-10) to the Open
+  Government Portal: CSVs and a filterable `datastore_search` API, 1996 to Q3 2026, under the Open
+  Government Licence – Canada, with OSFI's labels on every cell. The maintainer also holds the
+  Beyond 20/20 archive, 2000 to 2025 Q3, P&C and Life. A cell-by-cell check of one insurer's
+  quarter found the portal identical to the archive for PC2 and PC4. It is **missing PC1's IFRS
+  17 roll-forwards (20.12–20.18)**, which only the archive has. Proposed, in order: an extract
+  (API pager, CSV backfill, archive reader, full parity diff) into dated, hashed snapshots, kept
+  current by a weekly job that opens a PR; an **Insurer Return** Data Source; MCT Ratio proven
+  against every filed ratio; IFRS 17 roll-forward and KPI, market-share and peer tools; the same
+  over MCP plus `find_insurer`; filings as Cowork documents with tables filled from the extract;
+  the IFRS 4 history; then Life. Seven decisions (D-OSFI-1–7); the licence is settled.
+  *(Proposed 2026-11-08.)*
 
 - ~~**C20: answerability as a content check, then a gate.**~~ Ranked 2026-10-25 and built as G8:
   see C20 in §4.3 and D29. The proposal as written: `simulations/check-answerable`
@@ -958,7 +960,7 @@ Every planning document in the repo, what it is for, and how healthy it is. A do
 | `docs/cowork-source-inventory.md` | Queue: Cowork sources | A3 | Active. **§4 counts are stale** | 2026-09-20 |
 | `docs/cowork-agent-tools.md` | Proposal: the tools a Cowork agent needs | A7 (§3.4) | Proposed | 2026-10-30 |
 | `docs/ins-actbench.md` | Proposal: evaluating the connector, tools and skill (INS-ActBench) | A8 (§3.4) | Proposed | 2026-10-30 |
-| `docs/osfi-pc-data.md` | Proposal: OSFI's P&C filings across Tools, the connector and Cowork | A9 (§3.4) | Proposed | 2026-11-08 |
+| `docs/osfi-pc-data.md` | Proposal: OSFI's insurer filings (open-data API + Beyond 20/20 archive) across Tools, the connector and Cowork | A9 (§3.4) | Proposed | 2026-11-08 |
 | `docs/actuaria-online.md` | Build spec: Actuaria | X3 | Phases 0–3 built; Phase 4 parked | 2026-10-05 |
 | `docs/tutor.md` | Plan and build spec: the Tutor | L8 | Phase 1 built; Preview | 2026-10-18 |
 | `docs/community.md` | Build spec: the Community tab | X9 | Built; Preview | 2026-10-19 |

@@ -362,8 +362,8 @@ and Other Rate Tables site (CPM2014, Pri-2012 and the other pension and annuity 
 as XTbML), the Human Mortality Database (CC BY 4.0, behind a registration), the published
 loss-trend reviews of Canadian auto regulators, and OSFI's quarterly P&C returns, which the vault
 already describes (`Resources/Data/OSFI/`). The OSFI returns now have a plan of their own,
-`docs/osfi-pc-data.md` (roadmap A9): an *Insurer Return* data source, and MCT Ratio proven against
-every company's filed ratio.
+`docs/osfi-pc-data.md` (roadmap A9): OSFI's open-data API as the source, an *Insurer Return* data
+source, and MCT Ratio proven against every company's filed ratio.
 
 The Loss Development Data triangles are real filed data, not a worked example, so they're not
 the "Load an example" a card offers (R2 keeps that for cited worked examples). They're what a

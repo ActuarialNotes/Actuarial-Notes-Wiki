@@ -1,101 +1,151 @@
-# OSFI P&C returns: a strategy for Tools, the connector and Cowork
+# OSFI's insurer filings: a strategy for Tools, the connector and Cowork
 
-_Written 2026-11-08. A proposal (roadmap §3.4, **A9**), not a build spec. Nothing here is built._
+_Written 2026-11-08, revised the same day once the open-data API was found. A proposal (roadmap
+§3.4, **A9**), not a build spec. Nothing here is built._
 
-The maintainer downloaded the publicly available OSFI P&C filings from OSFI's Beyond 20/20 server
-(`Resources/Data/Historical OSFI Data.md`): the **2025 Q3** data files for Canadian companies and
-foreign branches, the Canadian **MCT** file, the company list and the blank **PC1** return. Beyond
-20/20 was retired on 2026-06-10, so these files may be the only copy the project will ever get of
-this release. This document covers what is in them, the rules any use of them has to keep, and one
-plan for using them across the three product lines that can carry real data: **Actuarial Tools**
-(`docs/actuarial-tools.md`), the **AI connector** (`docs/ai-connector.md`) and **Cowork**
-(`docs/cowork.md`, `docs/workflows.md`), plus the Exam 6C tie-in that is already waiting for it.
+OSFI publishes what federally regulated insurers file, as filed. Until 2026-06-10 that was the
+**Beyond 20/20** server (`Resources/Data/Historical OSFI Data.md`). It's now the **Open Government
+Portal**, as CSV files *and* a queryable API, under the Open Government Licence – Canada. The
+maintainer also holds a full Beyond 20/20 archive, **2000 to 2025 Q3, P&C and Life**, downloaded
+before the server went.
 
-The plan in one paragraph: **extract the files once, mechanically, into a dated and hashed
-snapshot. Label every cell from OSFI's own blank returns. Serve it as one Data Sources tool,
-*Insurer Return*, that the calculators chain from. Prove the calculators against the filed figures
-(every company's filed MCT ratio and every IFRS 17 roll-forward identity becomes a test). Hand the
-same tool to agents through `run_tool`. In Cowork, make each insurer's filing a document whose table
-arrives already filled in, because a script read it off the filing.**
+This document covers what each source holds, what the portal is missing that the archive has, the
+rules any use of the data has to keep, and one plan for using it across the three product lines
+that can carry real data: **Actuarial Tools** (`docs/actuarial-tools.md`), the **AI connector**
+(`docs/ai-connector.md`) and **Cowork** (`docs/cowork.md`, `docs/workflows.md`), plus the Exam 6C
+tie-in that is already waiting for it.
+
+The plan in one paragraph: **ingest each quarter from the portal's API into a dated, hashed
+snapshot. Keep the Beyond 20/20 archive as the second source: it holds the IFRS 17 roll-forwards
+the portal doesn't publish, and it's the frozen record to check the portal against. Serve the
+snapshot as one Data Sources tool, *Insurer Return*, that the calculators chain from. Prove the
+calculators against the filings themselves (every filed MCT ratio becomes a test). Hand the same
+tools to agents through `run_tool`. In Cowork, make each insurer's filing a document whose table
+arrives filled in from the extract. A scheduled job polls the API for a new quarter and opens the
+PR that adds it.**
 
 ---
 
-## 1. What the files are
+## 1. The sources
 
-### 1.1 The inventory
+### 1.1 The Open Government Portal (primary)
 
-| File | What it is | Rows | sha256 (first 16) |
-|---|---|---|---|
-| `CanadianPC_2025_Q3.txt` | PC1 + PC2 data points, Canadian companies | 667,588 | `4d50307592a7de86` |
-| `ForeignPC_2025_Q3.txt` | PC1 + PC2 data points, foreign branches | 687,578 | `e56640b3a372cde5` |
-| `CanadianPC_MCT_2025_Q3.txt` | PC4 (MCT) data points, Canadian companies | 14,338 | `65b831e5026e2d90` |
-| `2025_PC_Companies.csv` | Company code → name (141 entities) | 141 | `80b9b8a08721b27a` |
-| `PC1-PC_2025.xlsx` | The blank PC1 return: page, line and column labels | 16 sheets | `2a83f64b176e7d1e` |
+OSFI publishes one dataset per kind of institution. The two that matter here:
 
-The raw files total about 37 MB. They stay **out of the repo** (see §2.4). The full hashes go into
-the extract's manifest.
+- **[Property and casualty companies](https://open.canada.ca/data/en/dataset/4c6c515f-7c44-4bb6-ab56-c5f79f75f705)**,
+  updated quarterly, last changed 2026-10-21. It has 22 resources:
 
-### 1.2 The format
+  | Return | What it is | Periods on the API |
+  |---|---|---|
+  | PC1 | Core Financial Statement Return (IFRS 17) | Q4 2023 – Q3 2026 |
+  | PC2 | Supervisory Quarterly Return | Q4 2023 – Q3 2026 |
+  | PC3 | Supervisory Annual Return | Q4 2023 – Q4 2025 |
+  | PC4 | MCT, and the BAAT for foreign branches | Q1 2023 – Q3 2026 |
+  | MI, MI3, MI4, MI5 | The mortgage insurers' returns (CMHC, Sagen, Canada Guaranty) | current |
+  | 1Q | P&C Quarterly, the IFRS 4 return (inactive Q1 2024) | 2014 – 2023 |
+  | 1, 3 | PC-1 Canadian annual and interim (inactive Q3 2014) | 1996 – 2013/14 |
+  | 2, 4 | PC-2 Foreign annual and interim (inactive Q3 2014) | 1996 – 2013/14 |
+  | MI1 | Mortgage insurance quarterly (inactive Q4 2022) | to 2022 |
 
-Each data file starts with a period line (`Q3/25`, after a UTF-8 BOM). Every line after it is
-`company ⇥ return ⇥ address ⇥ value`, with CRLF line endings and values in **$ thousands**, as filed.
-The address is OSFI's *data point address*, **page + line + column**:
+  It also has a **Data Dictionary** (`.xlsx`), a **user manual**, a **list of subsidiaries**, a
+  Power BI / Excel API guide, and a **mapping of the legacy FINDAT reports** to these datasets.
+- **[Life insurance companies](https://open.canada.ca/data/en/dataset/1358284b-26e7-4c69-abd8-398d3da2c270)**:
+  LF1, LF2, LF3, LICAT quarterly (LCQ) and annual (LCA), and the inactive Life 10/10A/10Q/20 and
+  Returns 54, 55, 86 (TAAM) and 87 (MCCSR). It's the same shape as P&C. Life is §7.
+
+Both are under the **[Open Government Licence – Canada](https://open.canada.ca/en/open-government-licence-canada)**.
+That licence allows copying, redistribution and adaptation, commercial or not, with the attribution
+statement it specifies, and with no suggestion that OSFI endorses the use.
+
+### 1.2 The API
+
+The portal's CKAN datastore, one endpoint:
 
 ```
-A480  PC1  20108901   22149037.0000   → page 20.10 (Assets), line 89 (TOTAL ASSETS), column 01 (current period, total)
-A480  PC4  100014001       192.3900   → page 10.00, line 140, column 01 → the filed MCT ratio, %
+GET https://open.canada.ca/data/en/api/3/action/datastore_search
+    ?resource_id=<return's resource id>
+    &filters={"Fiscal Quarter":"Q3 - 2025","Id":"27906"}
+    &fields=Data Point Address/Adresse de point de donnee,Measure Value/Valeur de mesure
+    &limit=1000&offset=0
 ```
 
-The page is always four digits. The line is two or three digits (PC1 uses `01`–`89` on 20.10 and
-`030`–`799` elsewhere), so an address is 8 or 9 digits, and splitting it needs the page's line
-width. That comes from the blank return, not from a guess.
+What was found by using it (2026-11-08):
 
-### 1.3 What each return holds
+- **Filters are exact-match** and take a list (`"Id":["27906","27839"]`). Field ids are the CSV
+  headers **with the accents stripped** (`Fiscal Year/Annee fiscale`,
+  `Data Point Address/Adresse de point de donnee`). A field id written with its accents is rejected.
+- **Full-text search (`q`) is refused** on any resource over 100,000 rows, which is every return
+  that matters. `datastore_search_sql` isn't enabled. So every query is a filter.
+- **A response is capped at 1,000 records** whatever `limit` asks for. `total` gives the real count
+  and `_links.next` the next page.
+- **It's slow**: about 6 seconds a query. One company's quarter of PC1 is a single page. All of a
+  quarter's PC2 is about 192,000 rows, so 193 pages and about 20 minutes. `sort` and `distinct`
+  work, but a `distinct` over the large returns came back incomplete, so don't rely on it.
+- **Every value is text**, including the measure. The extract parses it and fails on anything that
+  isn't a number.
+- **Only non-zero cells are published.** Your Beyond 20/20 file carries explicit zeros, and the
+  portal omits them.
 
-- **PC1, the Core Return** (`Resources/Books/OSFI Core Return.md`): the IFRS 17 consolidated
-  statements. 20.10 assets, 20.11 liabilities and equity, 20.12–20.18 the insurance and
-  reinsurance liability roll-forwards (by measurement component, and by remaining coverage and
-  incurred claims), 20.22 profit or loss, 20.41, 20.42 OCI, 20.45 reserves and the head office
-  account (foreign), 20.54 changes in equity. **Labelled**: the uploaded workbook is this return's
-  blank form.
-- **PC2, the Quarterly Return** (`Resources/Books/OSFI Quarterly Return.md`): the supplementary
-  exhibits. 40.08 investments, 50.32 and 50.40 intra-group, 60.25 insurance service result, 60.80
-  onerous contracts, 70.50 and 70.60 registered and unregistered reinsurance, 80.15–80.35
-  commissions, expenses and other income, the 92.xx non-consolidated statements, and the
-  **provincial and territorial exhibits**: 67.40–67.70 and 94.10–94.40 (insurance revenue, service
-  expenses, net reinsurance expense and service result) and 93.30 (premiums written). These are
-  about 50 lines by 15 columns per company, which fits classes of insurance against provinces and
-  territories. **Not labelled yet**: the vault page names the pages, but the line and column
-  labels need OSFI's blank PC2 form.
-- **PC4, the MCT return** (`Resources/Books/OSFI MCT.md`): capital available, minimum capital
-  required by risk (pages 10.00–70.00) and the ratio. **Not labelled yet** either: it needs the
-  blank PC4 form. Foreign branches file the BAAT, not the MCT, and no BAAT file was uploaded.
+Each row carries the period, OSFI's numeric institution **`Id`** (Intact Insurance Company is
+`27906`), its name in English and French, its industry group, the return, the **data point
+address** (`P` + page + line + column, e.g. `P100014001`), **the address's label in English and
+French**, the date the institution became inactive (`9999-12-31` if it's still active) and the
+value, in $000. The labels come with the data, so the blank forms aren't needed to name a cell.
 
-### 1.4 What a first pass found (2025 Q3)
+### 1.3 The Beyond 20/20 archive (secondary)
+
+It's the maintainer's own download: **2000 to 2025 Q3, P&C and Life**, the data files, company
+lists and blank returns. The format is one row per cell: `company ⇥ return ⇥ address ⇥ value`,
+with a `Q3/25` period line, a UTF-8 BOM and CRLF line endings. Companies use OSFI's letter codes
+(`A480`, Intact), addresses have no `P` prefix (`100014001`), and zeros are explicit.
+
+### 1.4 How they compare: one quarter checked cell by cell
+
+Intact Insurance Company, Q3 2025, every non-zero cell in the archive compared with the API:
+
+| Return | Archive, non-zero cells | On the API | Values that differ | Missing from the API |
+|---|---|---|---|---|
+| PC1 | 587 | 216 | 0 | **371: every cell of pages 20.14, 20.16 and 20.18** |
+| PC2 | 4,991 | 4,991 | 0 | none |
+| PC4 | 91 | 91 | 0 | none |
+
+The filed MCT ratio matches too (192.39 in both). So:
+
+- **The portal is the archive, reformatted**, for everything it publishes. Where both have a cell,
+  the values are identical.
+- **The IFRS 17 liability roll-forwards (PC1 pages 20.12–20.18) aren't on the portal.** Intact's
+  20.12 is empty in both sources: it measures under the PAA, so it has no contracts for the
+  measurement-component roll-forward. The other three pages are in the archive only. This is the
+  data an IFRS 17 roll-forward tool would be proven on. **From Q4 2025 there's no public source for
+  it at all**, unless it turns up in a resource not yet checked (PC3 is the one to look at, §8
+  D-OSFI-7).
+- One quarter of one company isn't a proof. Phase 0 runs the same diff over **every company and
+  every period the two sources share** (2000 – 2025 Q3), and writes down each kind of gap.
+
+### 1.5 Other things a first pass found
 
 These are checks, not results to publish. They're the reason §2 has the rules it has.
 
-- **66 Canadian companies and 69 foreign branches** filed PC1. The company list also names
-  entities with no PC1 rows: the mortgage insurers (CMHC `A087`, Canada Guaranty `A018`, Sagen
-  `A387`), which file elsewhere. The extract has to say "not in this return", not show zeros.
-- **OSFI ships a `TOTAL` pseudo-company.** For foreign branches its total assets reconcile with
-  the sum of the branches ($62.9 bn). **For Canadian companies they don't**: the companies sum to
-  $140.1 bn against `TOTAL`'s $129.8 bn. The gap is probably consolidation (a subsidiary counted
-  inside its parent and again on its own), but that has to be confirmed. `TOTAL` also sums the
-  MCT ratio column (44,115 %). So `TOTAL` is never used for a ratio, and never used for a
-  total until the gap is explained.
-- **The MCT ratio is filed**, so a tool can be checked against it. Across the 66 companies the
-  median is about 311 %, the lowest is 192 %, and a handful of very small companies file ratios in
-  the thousands. A median is a judgment about which companies count; a ratio of 23,403 % is what
-  was filed, not an error.
-- **89 % of the cells are zero** (236k of 1.35M are non-zero). Only the non-zero cells need
-  storing, so a company's whole filing is tens of kilobytes.
-- **One period only, and it is interim.** Per OSFI, Q1–Q3 are a subset of the annual (Q4) return.
-  Anything that needs a year-end schedule or a history (claims development, a trend in a ratio)
-  isn't possible from this snapshot alone (§8, D-OSFI-4).
-- **IFRS 17 basis.** The returns changed shape on 2023-01-01. 2025 Q3 lines up with every IFRS 17
-  page in the vault. A history reaching back past 2023 would need a documented mapping, never a
-  silent join.
+- **The industry totals.** Both sources carry total rows ("Total Canadian Property & Casualty",
+  `Id 1000012`; `TOTAL` in the archive), and both are naive column sums. They sum the MCT ratio
+  column (44,114.83 % for Canadian P&C in Q3 2025, the same in both sources). For Canadian companies
+  the archive's total assets don't reconcile: the companies sum to $140.1 bn against `TOTAL`'s
+  $129.8 bn. The foreign branches do reconcile ($62.9 bn). The portal's description says industry
+  totals "require adding specific sub-totals", and the user manual is where that's explained. Until
+  it's read, **no total row is used, for anything.**
+- **The mortgage insurers** file the MI returns, not PC1. They are P&C companies in the list but
+  absent from PC1–PC4, so a tool says "not in this return" rather than showing zeros.
+- **Two accounting eras.** IFRS 17 from fiscal 2023, IFRS 4 before, in different returns (PC1–PC4
+  against 1Q and the old annual and interim returns). The portal's own description says they "are
+  not directly comparable". A series that crosses 2023 is two series, joined only through a mapping
+  someone has written down and cited. It's never a silent join.
+- **Identifiers.** The archive uses letter codes, the portal numeric `Id`s. Matching them by name
+  works for one quarter (names agree in 2025 Q3) but names change over 26 years, so the join is
+  built per period and every ambiguity is listed. The FINDAT mapping document is the first place
+  to look for an official crosswalk.
+- **Restatements.** An insurer can refile, and the portal shows the current figure. The archive is
+  a frozen record of what the portal's predecessor showed on the day it was downloaded. A
+  difference between them for an old period is a restatement to record, not an error to fix.
 
 ---
 
@@ -103,30 +153,30 @@ These are checks, not results to publish. They're the reason §2 has the rules i
 
 They're the vault's existing rules, applied to filed data. None of them is new.
 
-1. **Extracted mechanically, never retyped** (`actuarial-tools.md` §4.11). One script reads the
-   files. No model and no person types a figure. Each figure keeps its company code, return,
-   address and period.
-2. **Labelled only from OSFI's own forms.** A cell's name comes from the blank return
-   (`PC1-PC_2025.xlsx`, and the PC2/PC4 forms once in hand), never inferred from the numbers. A
-   cell whose label isn't in a form stays addressable by its address and has **no name** rather
-   than a plausible one.
-3. **As filed, and said so.** Every surface that shows a figure says *"as filed with OSFI, 2025 Q3,
-   $000"* and names the company and the address. The project corrects nothing. A figure that looks
-   wrong is reported, not fixed.
+1. **Extracted mechanically, never retyped** (`actuarial-tools.md` §4.11). One script reads the API
+   (or the archive). No model and no person types a figure. Each figure keeps its source, period,
+   institution `Id`, return and address.
+2. **Labelled only by OSFI.** A cell's name is the label the portal ships with it (both languages),
+   or, for an archive-only cell, the label on OSFI's blank return for that period. A cell with no
+   label from OSFI keeps its address and **no name**.
+3. **As filed, and said so.** Every surface that shows a figure says which source and period it's
+   from (*"OSFI, as filed, Q3 2025, $000"*) and names the institution and the address. The project
+   corrects nothing. A figure that looks wrong is reported, not fixed.
 4. **Derived ≠ filed.** A ratio the project computes (a combined ratio, a market share, a peer
-   median) is a **tool's output**, with its formula's source cited (IBC's IFRS 17 metrics paper
-   for the KPIs, the MCT guideline for capital), its inputs' addresses listed, and its judgments
-   explicit (which companies are peers, gross or net, consolidated or not). It is never presented
-   as an OSFI figure and never written back into the dataset.
-5. **A dated snapshot.** The data is the 2025 Q3 release read from the files with these hashes. A
-   run that uses it reproduces exactly (R4). A later period is a new snapshot beside it, never an
-   overwrite.
-6. **Licence first** (D-OSFI-1). Nothing of the data ships in the bundle or the export until the
-   terms that applied to the Beyond 20/20 download are on the dataset's page. Until then the
-   extract runs locally and in tests over a fixture of the maintainer's own copy.
+   median) is a **tool's output**, with its formula's source cited (IBC's IFRS 17 metrics paper for
+   the KPIs, the MCT guideline for capital), its inputs' addresses listed, and its judgments
+   explicit (which companies are peers, gross or net). It's never presented as an OSFI figure.
+5. **A dated snapshot, never a live query at run time.** A tool run must reproduce (R4), and the
+   portal changes when an insurer refiles. So tools read a snapshot: one period's extract, with the
+   hash of what the API returned and the date it was read. The API is how the snapshot is **made
+   and refreshed**, not something a tool calls when it runs. That also keeps a six-second query
+   out of every card and every agent call.
+6. **Attribution.** The licence's statement, *"Contains information licensed under the Open
+   Government Licence – Canada"*, goes on the dataset's page, in every card's ⋯ menu, and in every
+   connector result that carries a figure. Nothing says or implies OSFI endorses the app.
 7. **No league tables.** Ranking named insurers ("weakest capital in Canada") is a judgment about
-   real companies on interim, as-filed data. Tools compare a company with a peer set **the reader
-   picks**. Nothing ranks the market on its own (D-OSFI-3).
+   real companies on as-filed, often interim, data. Tools compare a company with a peer set **the
+   reader picks**. Nothing ranks the market on its own (D-OSFI-3).
 
 ---
 
@@ -134,52 +184,77 @@ They're the vault's existing rules, applied to filed data. None of them is new.
 
 ### 3.1 `scripts/osfi_extract.py`
 
-It has the same shape as `dataset_extract.py`: standard library only, raw files in a cache
-outside the repo (`--cache`, like `verify_sources.py`).
+It has the shape of `dataset_extract.py`: standard library only (`urllib`, `json`, `csv`).
 
-1. **Read** each data file (BOM, CRLF, period line), checking every row's shape and failing on
-   anything else.
-2. **Read the forms.** For each sheet of a blank return, record the page, each line's code and
-   label (with its indent level, which carries the hierarchy, *Insurance Contract Liabilities ›
-   Excluding Segregated Funds*) and each column's code and header path (*Current Period › Total*,
-   *Liabilities for remaining coverage › Loss Component*). Then the line width per page, which
-   is what splits an address.
-3. **Join** values to labels. Report every address with no label (`unlabelled.json`, expected to
-   be all of PC2 and PC4 until their forms arrive) and every labelled cell nobody filed.
-4. **Check** the identities the forms state. Each total equals the sum of its components, every
-   roll-forward runs opening + changes + cash flows = ending, and 20.10's total assets equals
-   20.11's total liabilities and equity. Then reconcile `TOTAL` against the company sums. Each
-   failure is a *finding about the filing*, written to `checks.json`, never a correction.
-5. **Write** the snapshot:
-   - `osfi/pc-2025q3/manifest.json`: the period, every source file's name, sha256, size and the
-     date read, the licence text (D-OSFI-1), the row counts and the check summary.
-   - `osfi/pc-2025q3/dictionary.json`: the forms, page → lines → columns, with labels.
-   - `osfi/pc-2025q3/companies.json`: code, name as OSFI lists it, kind (Canadian company /
-     foreign branch), the returns it filed.
-   - `osfi/pc-2025q3/<code>.json`: one company, non-zero cells only, `{ address: value }`.
-   - `osfi/pc-2025q3/industry/<page>.json`: one page for every company, for the peer and market
-     tools, so they don't load 135 files.
+- **`fetch --return PC1 --period "Q3 - 2025"`** pages the API (filter on the period, 1,000 rows a
+  page, `_links.next` until `total`, retrying with backoff) and caches each page's raw JSON outside
+  the repo (`--cache`, like `verify_sources.py`). It records each page's sha256 and the time read.
+  A quarter of all four P&C returns takes about 25 minutes. That's fine for a scheduled job and too
+  slow for anything interactive.
+- **`backfill`** is for the first load of history. It reads the same data from the resource's
+  **CSV download** (PC2's is about 1.1 GB, the inactive 1Q about 0.6 GB). That's one request
+  instead of thousands of pages, and the same rows, as the comparison in §1.4 shows. The CSV's
+  `Last-Modified` and sha256 go in the manifest.
+- **`archive --dir <Beyond 20/20 download>`** reads the archive. It fills in what the portal
+  doesn't publish (the 20.12–20.18 roll-forwards for Q1 2023 – Q3 2025) and runs the
+  **parity diff**: every cell both sources have, compared, written to `parity.json`.
+- **`check`** tests the identities the return states: each total against the sum of its
+  components, every roll-forward (opening + changes + cash flows = ending), and 20.10's total
+  assets against 20.11's total liabilities and equity. Each failure is a *finding about the
+  filing*, written to `checks.json`, never a correction.
+- **`write`** produces the snapshot, per period:
+  - `osfi/pc/<period>/manifest.json`: the source (`api`, `csv` or `archive`) for each return, with
+    resource ids, page counts, hashes and the date read; the licence and attribution; the check
+    and parity summaries.
+  - `osfi/pc/<period>/dictionary.json`: page → lines → columns, with OSFI's labels, read from the
+    rows themselves.
+  - `osfi/pc/<period>/institutions.json`: `Id`, names, industry group, inactive date, and the
+    archive's letter code where the crosswalk has one.
+  - `osfi/pc/<period>/<Id>.json`: one institution, non-zero cells only, `{ address: value }`.
+  - `osfi/pc/<period>/industry/<page>.json`: one page for every institution, for the peer and
+    market tools, so they don't load every company's file.
 
-Tests go in `scripts/test_osfi_extract.py` and run over a small committed fixture: a few companies'
-rows cut from the real files, with the real hashes recorded.
+Tests go in `scripts/test_osfi_extract.py` over a committed fixture: a few institutions' rows from
+both sources, with the real hashes. They include a recorded API page, so the pager is tested
+without the network.
 
-### 3.2 Where the snapshot lives
+### 3.2 Keeping it current
 
-At tens of kilobytes per company and a few MB in all, it's over the limit for tables the engine
-carries in its bundle (`actuarial-tools.md` §4.11: about 100 KB in all). It's the case that section
-already names: **fetched static files**, `ai/datasets/osfi/pc-2025q3/…`, emitted into the build the
-way `ai/knowledge-base.json` is. The Tools page fetches a company's file when it's picked. The MCP
-function reads the same files from its own deployment (as it reads the knowledge base), so the app
-and the agent can't disagree. If the licence forbids redistribution, the fallback is the
-reader's own copy: the tool accepts the OSFI files dropped in, parsed in the browser by the same
-code, and nothing leaves the device.
+`.github/workflows/osfi-data.yml` runs weekly, the way `podcast-segments.yml` runs nightly:
 
-### 3.3 A page in the vault
+1. It reads `package_show` for the dataset and compares each resource's `last_modified` with the
+   manifest's.
+2. If a resource moved, it fetches the newest period, plus the one before it, since that's where
+   refilings land.
+3. If anything changed, it **opens a PR** with the new snapshot and a summary: new period, cells
+   changed by restatement, check failures. It never pushes to `main`. A changed old figure
+   becomes a new edition of that period, and the old one stays addressable (R4).
 
-`Resources/Data/OSFI/Property and Casualty.md` already exists as a stub. It becomes the dataset's
-resource page (`docs/resource-pages.md`): what the release is, the period, the files and their
-hashes, the licence, the retirement notice, and links to the three return pages. It's what every
-card's title opens (R5), and its Fact Check verdict travels with every figure.
+### 3.3 Where the snapshot lives
+
+One period of P&C is a few MB (most cells are zero, and zeros aren't stored). That's over the
+limit for tables the engine carries in its bundle (`actuarial-tools.md` §4.11: about 100 KB in
+all), so it's the case that section names: **fetched static files**, `ai/datasets/osfi/pc/…`,
+emitted into the build. The Tools page fetches a company's file when it's picked. The MCP function
+reads the same files from its own deployment, so the app and the agent can't disagree.
+
+Twenty-six years of history is too much for every build: about 100 periods, and the IFRS 4 returns
+are larger. The current IFRS 17 periods ship in the build. The history goes to a public Supabase
+Storage bucket, the way the Listen recordings do, with the same layout, and is fetched on demand
+(D-OSFI-2).
+
+### 3.4 Pages in the vault
+
+- `Resources/Data/Historical OSFI Data.md` currently reads as if Beyond 20/20 is where the data
+  lives. It becomes the page about the **archive**: what it was, when it was retired, what the
+  maintainer's copy covers, and what only it holds. It points to the portal for everything current.
+- `Resources/Data/OSFI/Property and Casualty.md` becomes the dataset's resource page
+  (`docs/resource-pages.md`): the portal dataset, its returns and periods, the licence and its
+  attribution statement, and links to the return pages. It's what every card's title opens (R5).
+- `Resources/Data/OSFI/Life.md` is the same page for the Life dataset.
+
+Editing the first two stales their fact checks (P4). They're re-checked against the portal's
+dataset page.
 
 ---
 
@@ -187,78 +262,97 @@ card's title opens (R5), and its Fact Check verdict travels with every figure.
 
 ### 4.1 One Data Source: **Insurer Return**
 
-> *What did this insurer file?* Company, period, page (and optionally lines and columns) → the
-> page as filed, labelled, with each cell's address. It sends on: a value, a column, or the page as
-> a table.
+> *What did this insurer file?* Institution, period, page (and optionally lines and columns) → the
+> page as filed, labelled, each cell with its address and source. It sends on: a value, a column,
+> or the page as a table.
 
 It sits in the **Data Sources** area beside Life Table, Price Index and Yield Curve, and it computes
-nothing. Its company picker searches OSFI's names (`aka` for the common short names: *Intact*,
-*Aviva*, *Wawanesa*). The figure (R11) draws the page's own structure, for instance the assets
-stack or the LRC/LIC roll-forward as a waterfall, from filed numbers only. Every value it hands on
-carries `source: { dataset: 'osfi-pc', edition: '2025Q3', company, address }`, the provenance
-shape §4.11 already defines.
+nothing. Its institution picker searches OSFI's names in both languages (`aka` for the short
+names: *Intact*, *Aviva*, *Wawanesa*). The figure (R11) draws the page's own structure, for
+instance the assets stack or the LRC/LIC roll-forward as a waterfall, from filed numbers only.
+Every value it hands on carries
+`source: { dataset: 'osfi-pc', period, institution, address, origin: 'api' | 'archive' }`.
+
+A **series** mode (one cell across periods) is what history makes possible: twelve quarters of an
+IFRS 17 cell, or 24 years of an IFRS 4 one, with the 2023 break drawn as a break, never joined.
 
 ### 4.2 The calculators it feeds
 
-They're in order of what they unlock. Each does one thing (R-one-question), and the bigger jobs
-are chains.
+They're in order of what they unlock. Each does one thing, and the bigger jobs are chains.
 
 | Tool | Answers | In → out | Proven against | Exam |
 |---|---|---|---|---|
-| **MCT Ratio** (planned, §4.8) | What's the MCT ratio? | Capital available, each risk's required amount, the guideline's factors → the ratio | **Every company's filed ratio** (PC4 line 140), 66 R6 cases from one file, once the PC4 form labels the inputs | 6C |
-| **IFRS 17 Roll-Forward** (new) | How did the insurance liability move? | Opening LRC/LIC, revenue, service expenses, finance expense, cash flows → closing, with the loss component split out | Every company's 20.14 (and 20.18 for reinsurance held) against its own filed closing balance | 6C |
-| **Insurance Service Ratios** (new) | What are the IFRS 17 KPIs? | Insurance revenue, service expenses, net reinsurance expense, gross or net (a judgment) → the claims, expense and combined ratios as IBC defines them | IBC's worked examples, if the paper prints any; otherwise held to its definitions and labelled *untested* until a published example exists (R6) | 6C |
-| **Market Share** (new) | What share of this market does each insurer write? | Page 93.30 or 67.40 for the reader's chosen companies, a class and a province → shares and the HHI | Shares sum to 1 over the full filer set. The PC2 form must label the lines first | 6C, Cowork |
-| **Peer Position** (new) | Where does this insurer sit among its peers? | One figure (any filed cell or tool output), a peer set the reader picks → percentile, median, quartiles | Pure arithmetic, property-tested | Cowork |
-| **Capital Factors** (planned, §4.11) | What factor does the guideline set? | Unchanged. Gets its real use as MCT Ratio's input | The guideline | 6C |
+| **MCT Ratio** (planned, §4.8) | What's the MCT ratio? | Capital available, each risk's required amount, the guideline's factors → the ratio | **Every company's filed ratio** in PC4, about 130 companies a quarter over 12 quarters, all labelled already | 6C |
+| **IFRS 17 Roll-Forward** (new) | How did the insurance liability move? | Opening LRC/LIC, revenue, service expenses, finance expense, cash flows → closing, with the loss component split out | Each company's 20.14 and 20.18 against its own filed closing balance. **Archive only**, Q1 2023 – Q3 2025 (§1.4) | 6C |
+| **Insurance Service Ratios** (new) | What are the IFRS 17 KPIs? | Insurance revenue, service expenses, net reinsurance expense, gross or net (a judgment) → claims, expense and combined ratios as IBC defines them | IBC's worked examples if the paper prints any; otherwise held to its definitions and labelled *untested* (R6) | 6C |
+| **Market Share** (new) | What share of this market does each insurer write? | PC2 93.30 (premiums written) or 67.40 (insurance revenue) for a class and a province, over the companies the reader picks → shares and the HHI | Shares sum to 1 over the full filer set | 6C, Cowork |
+| **Peer Position** (new) | Where does this insurer sit among its peers? | One figure (a filed cell or a tool output) and a peer set the reader picks → percentile, median, quartiles | Pure arithmetic, property-tested | Cowork |
+| **Capital Factors** (planned, §4.11) | What factor does the guideline set? | Unchanged; gets its real use as MCT Ratio's input | The guideline | 6C |
 
 **What "proven against filings" means.** R6 says no tool leaves Preview until it reproduces a
-published worked example in CI. A filed return isn't a worked example, but it's better in one
-respect: a company's own filed ratio, recomputed from the same company's filed components, either
-matches or it doesn't, and there are 66 of them. The fixtures go in
-`lib/tools/fixtures/osfi-mct.json` with each company's inputs and its filed ratio, read by the
-extract. Where a company doesn't reconcile (a component the public file leaves out, rounding), the
-fixture records that and the card says so. It's never tuned away.
+published worked example in CI. A filing is better in one respect: a company's own filed ratio,
+recomputed from that company's own filed components, either matches or it doesn't. PC4 gives over
+a thousand such cases. The fixtures go in `lib/tools/fixtures/osfi-mct.json`. Where a company
+doesn't reconcile (a component the public return leaves out, rounding), the fixture records that
+and the card says so. It's never tuned away.
 
-### 4.3 Workflows templates
+### 4.3 What the history adds (2000 – 2022, IFRS 4)
+
+The 1Q and old annual returns are a different shape. They become their own Data Source,
+*Insurer Return (IFRS 4)*, not a mode of the IFRS 17 one. What they give that the current returns
+can't:
+
+- **Long series** for the Exam 5 and 6C ideas that need a cycle to show: the underwriting cycle in
+  the loss ratio and the combined ratio, market shares drifting over two decades, capital through
+  2008 and 2020. That's **Price Index**'s shape (*how has this moved?*) applied to filed figures.
+- **Claims development.** If the old annual returns carry the development exhibits the P&C-1 used
+  to (to be confirmed against the Data Dictionary, D-OSFI-7), they're a Canadian counterpart to the
+  CAS Loss Reserving Database planned as *Loss Development Data* (§4.11): real triangles, by
+  company and line, to practise the reserving chain on. Real filed data, so never the card's
+  "Load an example".
+
+### 4.4 Workflows templates
 
 The board (`docs/workflows.md`) gets a few templates, each a chain through `ToolSpec.next`:
 
-- **Capital check**: Insurer Return (PC4) → Capital Factors → MCT Ratio, and the filed ratio beside
+- **Capital check**: Insurer Return (PC4) → Capital Factors → MCT Ratio, with the filed ratio beside
   the recomputed one.
 - **IFRS 17 results walk**: Insurer Return (20.14) → IFRS 17 Roll-Forward → Insurance Service
-  Ratios.
+  Ratios. Archive periods only.
 - **Peer review**: Insurer Return × the reader's peers → Insurance Service Ratios → Peer Position.
-- **Provincial market**: Insurer Return (93.30) → Market Share, for one class in one province.
+- **Provincial market**: Insurer Return (93.30) → Market Share, one class in one province.
 
 ---
 
 ## 5. The AI connector
 
-Nothing new is needed to start: the Data Source and the calculators are tools, so `list_tools`,
+Nothing new is needed to start. The Data Source and the calculators are tools, so `list_tools`,
 `describe_tool` and `run_tool` reach them the day they ship, under the contract the connector
-already keeps (every figure from a tool, provenance and warnings quoted, an `app_url` to the same
-run). Agents will ask questions like these:
+already keeps: every figure from a tool, provenance and warnings quoted, an `app_url` to the same
+run. Agents will ask questions like these:
 
-- *"What was Aviva Insurance Company of Canada's insurance service result in 2025 Q3, and how is it
-  built?"* → Insurer Return (60.25).
-- *"Recompute Intact's MCT ratio from its filed components."* → the Capital check chain.
+- *"What was Aviva Insurance Company of Canada's insurance service result in Q2 2026, and how is it
+  built?"* → Insurer Return (PC2 60.25).
+- *"Recompute Intact's MCT ratio from its filed components for the last four quarters."* → the
+  Capital check chain, across periods.
 - *"Compare Wawanesa's combined ratio with these five insurers."* → the Peer review chain, with the
   peer set the user named, never one the agent picked silently.
 
-Three additions are worth making, in this order:
+The connector reads the snapshot, **not the portal API**, for rule 5's reasons. An agent that wants
+a period the snapshot hasn't reached yet can be told so, with the portal's dataset link, rather than
+being handed an unchecked live figure. Three additions are worth making, in this order:
 
-1. **`find_insurer`**: a name → OSFI code lookup over `companies.json`, so an agent never guesses a
-   code. It could equally be a `run_tool` data tool. Keep the tool count small.
-2. **The dictionary as a resource template**, `osfi://pc/2025Q3/<page>`, the labelled form. The
+1. **`find_insurer`**: name (English or French, current or former) → OSFI `Id`, industry group,
+   active or inactive, and the periods on file, so an agent never guesses an id.
+2. **The dictionary as a resource template**, `osfi://pc/<period>/<page>`, the labelled page. The
    agent can then say what a line means in OSFI's words before quoting its value.
 3. **A practitioner prompt**, *Read an insurer's return*. It's the third of the prompts
    `actuarial-tools.md` §7.1 plans and `docs/cowork-agent-tools.md` (A7) asks for, and it walks
-   statement → roll-forward → KPIs → capital with the "as filed, interim, $000" caveat said once,
-   up front.
+   statement → roll-forward → KPIs → capital, with the "as filed, $000, source and period" line said
+   once, up front.
 
-The usage log (`quiz/api/_mcp/usage.js`) may record the company code (public, not personal) once
-it's added to the argument allowlist. It doesn't record a peer set's other inputs.
+The usage log (`quiz/api/_mcp/usage.js`) may record the institution `Id` (public, not personal)
+once it's added to the argument allowlist.
 
 ---
 
@@ -267,40 +361,38 @@ it's added to the argument allowlist. It doesn't record a peer set's other input
 Cowork already follows **OSFI** as an entity (`quiz/src/data/coworkSources.ts`) and lists insurers
 as publishers. The filings make both real:
 
-- **Each insurer's filing is a document** under that insurer's entity: *"OSFI Core and Quarterly
-  Return, 2025 Q3 (as filed)"*, typed `Data`, dated, linked to the dataset page. Its
-  `SourceResource.table` is the pages a workflow wants (20.22, 60.25, 93.30, the MCT summary).
-- **Under OSFI**, one document for the release itself: the industry pages, with every filer's
-  value.
+- **Each insurer's filing is a document** under that insurer's entity: *"OSFI returns, Q2 2026 (as
+  filed)"*, typed `Data`, dated, linked to the dataset page. Its `SourceResource.table` is the pages
+  a workflow wants (20.22, 60.25, 93.30, the MCT summary). A new quarter is a new document, put
+  there by the weekly job's PR.
+- **Under OSFI**, one document per period for the release itself: the industry pages, with every
+  filer's value.
 - **The table arrives filled in.** Cowork's rule is *nothing is invented*. A source table's figures
-  stay blank until they're read off the publisher, because today a person reads them. Here a
-  script read them, with the file's hash recorded, which is exactly what the rule exists to
+  stay blank until they're read off the publisher, because today a person reads them. Here a script
+  read them, with the API response's hash recorded, which is exactly what the rule exists to
   guarantee. `docs/cowork.md` and `coworkContent.test.ts` get one clause: a table may carry figures
-  **only** when they come from a hashed extract (`table.source = { dataset, edition, address }`
-  per cell). A hand-typed figure stays forbidden.
+  **only** when every one comes from a hashed extract (`source = { dataset, period, address }`). A
+  hand-typed figure stays forbidden.
 - **No second reader.** The filing opens in `ConceptPopup` as a virtual vault page at a vault-shaped
-  path (`Resources/Data/OSFI/2025Q3/<code>.md`), generated at build time from the extract, the way
+  path (`Resources/Data/OSFI/<period>/<Id>.md`), generated at build time from the snapshot, the way
   Cowork's sample documents are registered now.
-- **Coverage.** About 135 filers would become documents, many under entities Cowork doesn't have
-  yet. Entities are authored seed data, so they get added for the insurers a reader is likely to
-  follow (the largest groups and the ones the vault already cites), and every other filer is
-  reachable through the OSFI release document. That's a catalogue choice (D-OSFI-5).
+- **Coverage.** About 135 P&C filers per quarter would become documents, many under entities Cowork
+  doesn't have yet. Entities are authored seed data, so they get added for the insurers a reader is
+  likely to follow, and every other filer is reachable through OSFI's release document (D-OSFI-5).
 
 ---
 
-## 7. Study Mode: Exam 6C
+## 7. Life insurers
 
-The Exam 6C page assigns pages of the 2023 Core and Quarterly Returns (objectives C1–C4) and the
-MCT guideline. Candidates study a blank form. The filings give them a filled one:
+The Life dataset has the same shape on the same API (LF1 core statements, LF2 quarterly, LF3
+annual, LICAT quarterly and annual; the IFRS 4 returns and the old MCCSR and TAAM tests behind
+them), and the archive covers Life from 2000 too. Everything in §§2–6 carries over: one extract
+with a `--dataset life` switch, *Insurer Return* with a Life mode, a **LICAT Ratio** tool proven
+against the filed ratios the way MCT Ratio is, and Life filers in Cowork.
 
-- **Concept pages.** The IFRS 17 pages (insurance service result, LRC, LIC, loss component, MCT
-  ratio) can link to the Insurer Return tool with a real company preselected, *"see it filed"*.
-  A link only, no figure copied onto the page, so no page's fact check goes stale.
-- **Questions.** The question-writer skill can write 6C questions built on a real filing, with
-  the company, period and addresses cited in the explanation, and the figures read through the
-  tool. They're `-an-` questions like every vault original. A question on one quarter's real
-  numbers dates fast, so each one names its period in the stem.
-- **PCPA.** Not a fit. The PCPA simulator's data is drawn from a known model on purpose.
+The Life exams are `development` (`lib/examStatus.ts`), and the Life tools wait for the vault
+(`actuarial-tools.md` §4.9). So Life is **phase 5**: the extract and the data source early, because
+they're nearly free once P&C works; the tools when the exams are ready.
 
 ---
 
@@ -308,30 +400,44 @@ MCT guideline. Candidates study a blank form. The filings give them a filled one
 
 | # | Decision | Default until decided |
 |---|---|---|
-| D-OSFI-1 | **Licence.** What terms applied to the Beyond 20/20 download, and do they allow redistribution in the app and the connector export? | Nothing ships. The extract and tests run on the maintainer's copy, and the reader's-own-copy mode (§3.2) is the only public use |
-| D-OSFI-2 | **Hosting.** Fetched static files in the build (`ai/datasets/osfi/…`) or the public Supabase Storage bucket pattern the Listen recordings use | Static files in the build |
+| D-OSFI-1 | ~~Licence~~ | **Settled** by the portal: Open Government Licence – Canada, with its attribution statement (§2 rule 6). The archive's figures are the same filings, published by the same office. Whether the archive itself was under the same terms is worth a line on its page |
+| D-OSFI-2 | **Hosting.** Current IFRS 17 periods in the build; history in a public Supabase Storage bucket | As stated |
 | D-OSFI-3 | **Naming and comparing real insurers.** May a tool's output name a company beside its peers? | Yes, but only for a peer set the reader picks. No market-wide ranking anywhere |
-| D-OSFI-4 | **History.** Is 2025 Q3 all there is, or are earlier periods (2020 Q1–2025 Q2, and the annual Q4 returns) on hand from before the server was retired? | Build for one snapshot, keyed by period so more slot in |
+| D-OSFI-4 | **How far back the product goes.** The IFRS 17 periods only, or the IFRS 4 history too (§4.3)? | IFRS 17 first. History is phase 4, starting with the long series and the development exhibits |
 | D-OSFI-5 | **Cowork coverage.** Which filers become Cowork entities | The ten largest groups by filed total assets, plus any the vault already cites |
 | D-OSFI-6 | **Filled tables in Cowork.** Accept the §6 rule change (figures allowed from a hashed extract only)? | Yes. It is the rule's intent |
+| D-OSFI-7 | **The roll-forwards.** Ask OSFI (`information@osfi-bsif.gc.ca`) whether PC1 20.12–20.18 are withheld from the portal on purpose and whether they'll be published, and check PC3 and the Data Dictionary for them and for the old development exhibits | Build the Roll-Forward tool on the archive's periods, and say on the card that later periods aren't published |
 
-## 9. What's needed to start
+## 9. Phases
 
-From the maintainer:
-
-1. The **blank PC2 and PC4 returns** (`.xls`), and the **record layout file** from the same
-   package (Beyond 20/20's package included one of each). Without the forms, PC2 and PC4 stay
-   unlabelled, and so do MCT Ratio's inputs and Market Share's classes.
-2. The **BAAT** file for foreign branches, if it was downloaded.
-3. **Any other periods** (D-OSFI-4).
-4. The **terms of use** as the site showed them, a screenshot or saved page (D-OSFI-1).
-
-Then, in order (each step a PR, each green before the next):
+Each step is a PR, and each is green before the next.
 
 | Phase | Work | Size |
 |---|---|---|
-| 0 | D-OSFI-1 settled. `osfi_extract.py` + tests over a committed fixture. Dataset resource page | M |
-| 1 | **Insurer Return** Data Source over PC1 (labelled today). The IFRS 17 Roll-Forward tool, proven against every filer's 20.14 | M |
-| 2 | PC4 labelled → **MCT Ratio** with 66 filed-ratio fixtures. Capital Factors | M |
-| 3 | Connector: `find_insurer`, the dictionary resource, the practitioner prompt. Cowork filing documents and the rule change | M |
-| 4 | PC2 labelled → **Market Share**, Insurance Service Ratios, Peer Position. Workflows templates. Exam 6C links and questions | L |
+| 0 | `osfi_extract.py` (API pager, CSV backfill, archive reader), its tests, the institution crosswalk, and the **full parity diff** (archive against portal, every shared cell, 2000 – 2025 Q3). Read the user manual and Data Dictionary (totals, D-OSFI-7). Rewrite the two OSFI data pages and add the Life one | M |
+| 1 | **Insurer Return** over PC1–PC4 for the IFRS 17 periods. **MCT Ratio** with every filed ratio as a fixture. Capital Factors. The weekly refresh job | M |
+| 2 | **IFRS 17 Roll-Forward** on the archive's 20.14/20.18. Insurance Service Ratios. Market Share. Peer Position. Workflows templates | M |
+| 3 | Connector: `find_insurer`, the dictionary resource, the practitioner prompt. Cowork filing documents and the rule change. Exam 6C links and questions (§10) | M |
+| 4 | History: *Insurer Return (IFRS 4)*, series mode, the bucket, and Loss Development Data from the old annual returns if the exhibits are there | L |
+| 5 | Life: the extract and data source, then LICAT Ratio when the Life exams are ready | M |
+
+What's needed from the maintainer to start phase 0: the archive's files (all periods, P&C and
+Life), in one directory the script can read, kept **outside the repo**. It's large, and it's
+input, not content. A cloud session can take them as an upload. The snapshots the script writes
+are what gets committed or published.
+
+---
+
+## 10. Study Mode: Exam 6C
+
+The Exam 6C page assigns pages of the 2023 Core and Quarterly Returns (objectives C1–C4) and the
+MCT guideline. Candidates study a blank form. The filings give them a filled one:
+
+- **Concept pages.** The IFRS 17 pages (insurance service result, LRC, LIC, loss component, MCT
+  ratio) can link to the Insurer Return tool with a real company preselected, *"see it filed"*.
+  A link only, no figure copied onto the page, so no page's fact check goes stale.
+- **Questions.** The question-writer skill can write 6C questions built on a real filing, with the
+  institution, period and addresses cited in the explanation, and the figures read through the
+  tool. They're `-an-` questions like every vault original. A question on one quarter's real numbers
+  dates fast, so each names its period in the stem.
+- **PCPA.** Not a fit. The PCPA simulator's data is drawn from a known model on purpose.

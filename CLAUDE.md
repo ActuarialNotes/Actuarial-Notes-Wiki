@@ -64,6 +64,9 @@ comprehension-checks/<exam-id>/*.md               — retired flashcard-collect 
                                                     concept, parsed by lib/comprehensionCheckParser.ts);
                                                     kept in the vault, rendered nowhere
 Media/Attachments/                                — images referenced via ![[...]]
+Assumptions/*.md                                  — the Assumptions Bank: one published document's figures
+                                                    and facts per file, a typed table with locators
+                                                    (docs/assumptions-bank.md; assumption_lint.py)
 .verify/<mirrors the vault path>.md               — VERIFY: one append-only fact-check log per
                                                     content file (+ `_runs/` batch summaries)
 scripts/                                          — Python content-maintenance scripts (one-off/batch)
@@ -169,6 +172,21 @@ before touching that area**:
   listed default, or ask), and an index of every subplan with its health. A PR that changes an
   item's status updates its line there in the same PR; new work goes under §3.4 *Proposed*.
   Read it before starting anything that isn't a small fix.
+- `docs/assumptions-bank.md` — the **Assumptions Bank** (roadmap A9; Phase 0 built): figures and
+  facts a published document states (OSFI's 150% MCT target, GISA's ULAE factors, the AIRB's
+  profit provision) as data. One file per set under `Assumptions/`, resource-style frontmatter
+  (`Source: "[[resource page]]"`, `Edition`, `Effective`, `Document`, `Source sha256`, `Read`)
+  then one table `| Assumption | Kind | Value | Unit | Locator |`. A figure is a plain number
+  (unit in its own column), a `fact` row is the document's words, and a blank is a row whose
+  figure hasn't been read yet. The kinds are `scripts/assumption_vocab.json`.
+  `scripts/assumption_lint.py` is the CI gate. **`--against <file>` is how a set is
+  transcribed**: it checks the file's sha256 and that every figure is printed in the document's
+  text, so nothing is retyped from memory. VERIFY covers the folder. `lib/assumptionBank.ts` is
+  the parser and lookups (`figuresOfKind`, `inForce`, `assumptionById`), bundled as
+  `virtual:assumption-bank`. Cowork's document rows are **derived** from it
+  (`withBankAssumptions`), so don't author `assumptions:` in `coworkSources.ts` for a document
+  the bank holds. Its tools surface (Phase 1) and MCP tools (Phase 2) are planned there. Read
+  before adding a set.
 - `docs/concept-learning-progression.md` — the 5-state mastery ladder (New → L1 → L2 → L3,
   with Forgotten/decay), implemented in `quiz/src/lib/mastery.ts`
 - `docs/study-plan-generation.md` — how daily study plans are scheduled/paced/cached,
@@ -1741,6 +1759,8 @@ modules that read directly from the repo root:
   registers where each lives — `lib/resourceFolders.ts`, `resourceRepoPath`)
 - `virtual:cowork-vault` — the practice resource pages read for Cowork's catalogue
   (`lib/coworkVault.ts`): title, publisher, type, year, link, the lead's first sentence
+- `virtual:assumption-bank` — every `Assumptions/*.md` set, parsed by `lib/assumptionBank.ts`
+  (small; Cowork's chunk reads it). A set the parser can't read fails the build
 - `virtual:questions-content` — `questions/`, as a chunk of its own: `fetchAllQuestions`
   (`lib/github.ts`) dynamic-imports it the first time anything asks for a question. It is
   ~11 MB, and it used to be imported eagerly in `main.tsx`, which put it in the entry chunk

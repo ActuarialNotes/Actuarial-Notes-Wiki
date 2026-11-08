@@ -11,6 +11,7 @@ import { buildResourceExamMap, examsForResource } from './src/lib/resourceExams'
 import { buildStoreBooks, type BookPageSource } from './src/lib/storeBooks'
 import { isResourcePage, RESOURCE_FOLDERS, SHARED_RESOURCE_FOLDERS } from './src/lib/resourceFolders'
 import { readVaultDocument, type VaultDocument } from './src/lib/coworkVault'
+import { parseAssumptionSet, type AssumptionSet } from './src/lib/assumptionBank'
 import { examDisplayName, examIdFromFile } from './src/lib/wikiRoutes'
 import { resourcePdfUrl } from './src/lib/examPdf'
 import {
@@ -263,6 +264,36 @@ function podcastScriptsPlugin(): Plugin {
         if (markdown != null) pages.push({ name: name.replace(/\.md$/i, ''), markdown })
       }
       return `export default ${JSON.stringify(buildScriptHashes(pages))}`
+    },
+  }
+}
+
+// ── The Assumptions Bank ─────────────────────────────────────────────────────
+// Every set under `Assumptions/` (docs/assumptions-bank.md), parsed by
+// `lib/assumptionBank.ts`: a published document's figures and facts, each with
+// its locator, edition and fact check. Small, and read only by the chunks that
+// use it (Cowork's catalogue now; the Tools in Phase 1). A file the parser
+// can't read fails the build — `scripts/assumption_lint.py` says why.
+async function collectAssumptionBank(): Promise<AssumptionSet[]> {
+  const names = await readdir(path.join(REPO_ROOT, 'Assumptions')).catch(() => [] as string[])
+  const sets: AssumptionSet[] = []
+  for (const name of names.sort()) {
+    if (!name.endsWith('.md')) continue
+    const rel = `Assumptions/${name}`
+    sets.push(parseAssumptionSet(rel, await readFile(path.join(REPO_ROOT, rel), 'utf-8')))
+  }
+  return sets
+}
+
+function assumptionBankPlugin(): Plugin {
+  const VIRTUAL_ID = 'virtual:assumption-bank'
+  const RESOLVED_ID = '\0' + VIRTUAL_ID
+  return {
+    name: 'assumption-bank',
+    resolveId: (id) => id === VIRTUAL_ID ? RESOLVED_ID : undefined,
+    load: async (id) => {
+      if (id !== RESOLVED_ID) return
+      return `export default ${JSON.stringify(await collectAssumptionBank())}`
     },
   }
 }
@@ -954,7 +985,7 @@ function seoPagesPlugin(): Plugin {
 }
 
 export default defineConfig({
-  plugins: [react(), examPagesPlugin(), wikiContentPlugin(), storeBooksPlugin(), coworkVaultPlugin(), podcastScriptsPlugin(), resourceTimelinePlugin(), questionsContentPlugin(), comprehensionChecksPlugin(), examGuidesPlugin(), pdfjsAssetsPlugin(), vaultMediaPlugin(), seoPagesPlugin(), aiConnectorAssetsPlugin()],
+  plugins: [react(), examPagesPlugin(), wikiContentPlugin(), storeBooksPlugin(), coworkVaultPlugin(), assumptionBankPlugin(), podcastScriptsPlugin(), resourceTimelinePlugin(), questionsContentPlugin(), comprehensionChecksPlugin(), examGuidesPlugin(), pdfjsAssetsPlugin(), vaultMediaPlugin(), seoPagesPlugin(), aiConnectorAssetsPlugin()],
   resolve: {
     alias: { '@': path.resolve(__dirname, 'src') },
   },

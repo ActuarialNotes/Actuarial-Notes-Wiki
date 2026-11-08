@@ -514,7 +514,8 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   Cowork derives its rows and tables from the bank instead of authoring them. The connector gains
   `search_assumptions`, `get_assumption` and `run_tool` references, ahead of A7's `get_document`.
   It would be built in phases: the bank and four re-read sets, then tools, then MCP, then
-  migration and extraction, then breadth. Five decisions (D-AB1–D-AB5). *(Proposed 2026-11-08.)*
+  migration and extraction, then breadth. Five decisions (D-AB1–D-AB5). *(Proposed 2026-11-08;
+  the maintainer settled all five and asked for Phase 0 the same day. Its status is row A9 in §4.5.)*
 
 - ~~**C20: answerability as a content check, then a gate.**~~ Ranked 2026-10-25 and built as G8:
   see C20 in §4.3 and D29. The proposal as written: `simulations/check-answerable`
@@ -765,7 +766,7 @@ Subplans:
 - `actuarial-tools.md` (§15 next, §16 built)
 - `cowork.md`, `workflows.md`, `cowork-source-inventory.md`
 - `cowork-agent-tools.md` (proposed, A7)
-- `assumptions-bank.md` (proposed, A9)
+- `assumptions-bank.md` (A9, Phase 0 built)
 - `actuarial-agent-product-plan.md`
 
 Shipped:
@@ -785,6 +786,7 @@ A standing rule: **the app calls no model and holds no key** (see the decision l
 | A4 | Cowork: who can see it | 🅿️ one account | — | Waits on D1. After Preview, Cowork is planned to be Pro-only (D13). |
 | A5 | An in-app Actuarial Agent | 🅿️ | Parked | Phase A was delivered *outside* the app, by the connector. Phases B–D (the ontology layer, an eval harness, task assistants) wait on D2. |
 | A6 | Doc hygiene in the AI plans | 🟡 | Next | §16's "not built … all of V2" line is fixed (2026-10-17). Still to fix: §11 says "tools mode". The datasets are bundled into `engine.js`, not under `ai/datasets/`. Workflows overtook Phase 4's "Analyses". |
+| A9 | The Assumptions Bank | 🟡 Phase 0 built 2026-11-08 | Next | `assumptions-bank.md` §5.1. Built: `Assumptions/` with three sets re-read off OSFI, GISA and the AIRB (every figure checked against the document's own text by `assumption_lint.py --against`); the lint in CI; VERIFY covers the folder; `lib/assumptionBank.ts` + `virtual:assumption-bank`; Cowork derives those documents' rows from the bank. Waiting: the AMF and FSRA documents (both sites refuse automated reads — supply the files). Next: Phase 1, the Tools shelf, `data.assumption` and *From the bank* field menus. D-AB1–D-AB5 settled: `Assumptions/`, under Tools, licences case by case, unverified figures offered with a warning, open to everyone. |
 
 ### 4.6 G: Growth, engagement and money
 
@@ -959,7 +961,7 @@ Every planning document in the repo, what it is for, and how healthy it is. A do
 | `docs/cowork-source-inventory.md` | Queue: Cowork sources | A3 | Active. **§4 counts are stale** | 2026-09-20 |
 | `docs/cowork-agent-tools.md` | Proposal: the tools a Cowork agent needs | A7 (§3.4) | Proposed | 2026-10-30 |
 | `docs/ins-actbench.md` | Proposal: evaluating the connector, tools and skill (INS-ActBench) | A8 (§3.4) | Proposed | 2026-10-30 |
-| `docs/assumptions-bank.md` | Proposal: the Assumptions Bank, published figures and facts as data for the tools, Cowork and the connector | A9 (§3.4) | Proposed | 2026-11-08 |
+| `docs/assumptions-bank.md` | Subplan: the Assumptions Bank, published figures and facts as data for the tools, Cowork and the connector | A9 | Active. Phase 0 built | 2026-11-08 |
 | `docs/actuaria-online.md` | Build spec: Actuaria | X3 | Phases 0–3 built; Phase 4 parked | 2026-10-05 |
 | `docs/tutor.md` | Plan and build spec: the Tutor | L8 | Phase 1 built; Preview | 2026-10-18 |
 | `docs/community.md` | Build spec: the Community tab | X9 | Built; Preview | 2026-10-19 |

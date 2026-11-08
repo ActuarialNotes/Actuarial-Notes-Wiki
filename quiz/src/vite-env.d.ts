@@ -60,6 +60,13 @@ declare module 'virtual:cowork-vault' {
   export default documents
 }
 
+declare module 'virtual:assumption-bank' {
+  import type { AssumptionSet } from '@/lib/assumptionBank'
+  /** Every `Assumptions/*.md` set, parsed — docs/assumptions-bank.md. */
+  const sets: AssumptionSet[]
+  export default sets
+}
+
 declare module 'virtual:exam-pages' {
   /** Every root `Exam *.md` syllabus page, keyed by file name. */
   const examPages: Record<string, string>

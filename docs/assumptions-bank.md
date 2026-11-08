@@ -1,6 +1,6 @@
 # Assumptions Bank: plan
 
-*Proposed 2026-11-08 (roadmap A9, §3.4). Nothing here is built yet.*
+*Proposed 2026-11-08 (roadmap A9). Decisions settled the same day (§6). **Phase 0 built 2026-11-08** (§5.1); Phases 1–4 are not.*
 
 An **assumption** is one figure or one fact that a published document states, such as OSFI's 150%
 supervisory target MCT ratio, GISA's accident-year-2025 ULAE factor of 1.1189, the AIRB's 6.0%
@@ -160,42 +160,45 @@ frontmatter, a lead sentence and a markdown table of rows, ending in `## Sources
 
 ```markdown
 ---
-Title: "MCT supervisory target and minimum (OSFI)"
+Title: "MCT capital ratios and target level"
 Source: "[[OSFI MCT]]"
-Publisher: "OSFI"
-Edition: "2025"
-Effective: "2025-01-01"
-Superseded by: ""
+Publisher: "Office of the Superintendent of Financial Institutions"
+Edition: "Guideline A, 2024"
+Effective: "2024-01-01"
 Jurisdiction: "CA"
 Practice: "pc"
-Extraction: "transcribed"         # or "extracted" + Source sha256 + the script that read it
-Source sha256: ""
-Licence: "Government of Canada (OSFI) — reproduction permitted with attribution"
+Extraction: "transcribed"
+Document: "https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/minimum-capital-test-guideline-2024"
+Source sha256: "30514b4d22846ffb8a0fb2ec2ccac87a360332dce43657bc321accbac55ddf59"
+Read: "2026-11-08"
 verification:
   status: unverified
   …
 ---
 
-OSFI's supervisory target and minimum for the Minimum Capital Test ratio.
+The capital ratios OSFI's Minimum Capital Test guideline sets for a federally regulated property and casualty insurer, and the confidence level its capital requirements are set at. Each insurer's own internal target is set by the insurer, under Guideline A-4, so the guideline gives it no figure.
 
 | Assumption | Kind | Value | Unit | Locator |
 |---|---|---|---|---|
-| Supervisory target MCT ratio | capital-ratio | 150 | % | Guideline, s. 1.2 |
-| Minimum MCT ratio | capital-ratio | 100 | % | Guideline, s. 1.2 |
-| Capital test | fact | Minimum Capital Test | | Guideline, s. 1 |
+| Capital test | fact | Minimum Capital Test | | Title |
+| Minimum MCT ratio | capital-ratio | 100 | % | 1.2.1 MCT supervisory capital ratio for federally regulated insurers |
+| Supervisory target MCT ratio | capital-ratio | 150 | % | 1.2.1 MCT supervisory capital ratio for federally regulated insurers |
+| Internal target capital ratio | capital-ratio | | % | 1.2.1, set by each insurer per Guideline A-4 |
+| Target confidence level (CTE, one-year horizon) | confidence-level | 99 | % | 1.1.1 Minimum and target capital requirements under the MCT |
+| Divisor from target-level to minimum capital required | capital-factor | 1.5 | factor | 1.1.1 Minimum and target capital requirements under the MCT |
 
 ## Sources
 - …
 ```
 
-*(The figures above are the ones `coworkSources.ts` already records. They would be re-read off
-the guideline in Phase 0, not copied.)*
+*(The real file, `Assumptions/OSFI MCT Capital Ratios (2024).md`, with its fact-check block and
+Sources abridged.)*
 
 This keeps assumptions separate from the resource page itself because P4 binds a verdict to a
 file's bytes. Corrected figures belong on a page of their own, so fixing one figure doesn't
 stale the resource page, and re-describing the resource page doesn't stale the figures. The
-alternative is an `## Assumptions` section on the resource page. It is simpler, but the two
-verdicts become one. That choice is D-AB1.
+alternative was an `## Assumptions` section on the resource page. It is simpler, but the two
+verdicts would become one. D-AB1 settled it as the folder.
 
 **Big tables stay Data Sources.** Life tables, CPI and yield curves remain
 `lib/tools/data/datasets/*.json` with their own tools. The bank *lists* them (a set whose
@@ -304,7 +307,7 @@ A7's `get_document` then returns its `assumptions` and `table` from here.
 
 ## 5. Phases
 
-**Phase 0: the bank exists (one PR).**
+**Phase 0: the bank exists (one PR). Built; see §5.1.**
 - `Assumptions/` with the frontmatter standard, `assumption_lint.py` and its tests, and
   `lib/assumptionBank.ts` (parse, index, lookup by kind and date) with tests.
 - `virtual:assumption-bank`, plus the collectors in the wiki bundle and `knowledgeBase.ts`.
@@ -313,6 +316,50 @@ A7's `get_document` then returns its `assumptions` and `table` from here.
   MCT targets. If FSRA's page can be read, FSRA's 2025 trend benchmarks become the fifth, and the
   first table to stop being blank.
 - Cowork reads those four from the bank, and their seed rows are deleted.
+
+### 5.1 Phase 0, as built (2026-11-08)
+
+- **`Assumptions/`**, three sets, each re-read off its publisher's copy on 2026-11-08 with the
+  bytes' sha256 recorded:
+  - `OSFI MCT Capital Ratios (2024)`: the 100% minimum and 150% supervisory target (s. 1.2.1),
+    CTE 99% and the 1.5 divisor (s. 1.1.1), and the insurer's own internal target as a blank row.
+  - `GISA Ontario PPA ULAE Factors (2025)`: the ULAE factors for accident years 2021–2025
+    (p. 12). The seed held only 2025's.
+  - `AIRB Expense and Profit Benchmarks (2026)`: acquisition 20.0%, general and operating 7.8%,
+    total 27.8%, ULAE 1.094 and the 6.0% profit provision (p. 7), with the trend and development
+    benchmarks as blank rows.
+- **The vocabulary** is `scripts/assumption_vocab.json`, the kinds and the units each may be
+  written in.
+- **The gate** is `scripts/assumption_lint.py`, in CI under `content-validation.yml`. It has one
+  mode that isn't a shape check: `--against <file>` hashes the file that was read against
+  `Source sha256` and checks that every figure, and every fact's words, is printed in its text.
+  All three sets pass it. It is how a model can transcribe a set without retyping a figure from
+  memory. If a figure is missing from the text, the set fails, and a figure that only a page image
+  carries goes to VERIFY instead. Tests: `scripts/test_assumption_lint.py`.
+- **Fact Check:** `Assumptions` is one of VERIFY's content roots (`verify_lib.CONTENT_DIRS`),
+  so each set carries a `verification:` block and a `.verify/` log.
+- **The app:**
+  - `lib/assumptionBank.ts` has the parser (`parseAssumptionSet`, which fails the build on a
+    figure it would misread), `formatAssumptionValue`, `inForce`, `figuresOfKind` (the lookup
+    Phase 1's field menus will call), `assumptionById` and `setsForResource`.
+  - `virtual:assumption-bank` bundles the parsed sets. Only Cowork's chunk imports it so far.
+  - Tests: `lib/assumptionBank.test.ts`, which also holds the vocabulary equal to the lint's.
+- **Cowork derives:** `withBankAssumptions` (`lib/coworkSources.ts`) gives a document the rows of
+  its current sets, each with its `bankId`. The seed rows of the three documents are deleted, and
+  a test fails any authored entry that keeps rows for a document the bank holds.
+
+What Phase 0 left for later, and why:
+
+- **The AMF capital guideline and FSRA's trend benchmarks** weren't re-read. Both sites answer
+  automated requests with a Cloudflare challenge, and the Internet Archive is unreachable from
+  the build container. The AMF rows stay in the Cowork seed until the PDF is supplied as a file.
+  FSRA's table stays blank until then.
+- **The knowledge-base export** moves to Phase 2. The connector bumps the export version in the
+  same change as the tools that read it (`docs/ai-connector.md`), and data no tool reads only
+  makes a 10 MB file bigger.
+- **A set's page in the concept popup** moves to Phase 1, with the shelf that links to it.
+
+### 5.2 The rest
 
 **Phase 1: tools take bank figures.**
 - `data.assumption`, the resolver, and `BANK_SOURCES` for the trend, expense, profit, ELR,
@@ -342,15 +389,15 @@ A7's `get_document` then returns its `assumptions` and `table` from here.
 
 ---
 
-## 6. Decisions for the maintainer
+## 6. Decisions (settled by the maintainer, 2026-11-08)
 
-| ID | Question | Default if not decided |
+| ID | Question | Decision |
 |---|---|---|
-| D-AB1 | A folder of its own (`Assumptions/`), or a section on each resource page? | `Assumptions/`, so the two verdicts stay separate (§4.1) |
-| D-AB2 | Where the shelf lives: an area on `/tools`, or its own sidebar row? | An area on `/tools`, beside Data Sources. The bank is *what tools take* |
-| D-AB3 | The licence line: which documents may have figures transcribed, and which only blank rows with locators? | Public regulators', statistical agencies' and standard-setters' documents get figures. Anything sold by subscription gets rows only |
-| D-AB4 | May an unverified figure be offered to a tool? | Yes, with its verdict pill and a warning, as unverified pages are served today. A critical finding withholds it, as `filterQuestions` does for a question |
-| D-AB5 | Open to everyone, or Pro? | Open, like Tools. Cowork's own gate (A4, D13) is unchanged |
+| D-AB1 | A folder of its own, or a section on each resource page? | **`Assumptions/`**, one structured markdown file per set (§4.1) |
+| D-AB2 | Where the shelf lives | **Under Tools**, beside Data Sources |
+| D-AB3 | Which documents may have figures transcribed, and which only blank rows with locators? | **Case by case.** A set's optional `Licence` key records the terms when they bear on it. The first three (OSFI, GISA's free high-level exhibit, the AIRB) are public regulators' and a statistical agency's free publications |
+| D-AB4 | May an unverified figure be offered to a tool? | **Yes, with a warning** (and its verdict pill). A critical finding withholds it |
+| D-AB5 | Open to everyone, or Pro? | **Open to everyone.** The bank makes public data easier to reach. It isn't a reason to gate it. Cowork's own gate (A4, D13) is unchanged |
 
 ---
 

@@ -166,7 +166,7 @@ export function SubmitView({
         <p className="text-sm text-muted-foreground">
           {phase === 'submitted' ? `Submitted ${new Date(attempt.submittedAt!).toLocaleString()}. Submissions are final.`
             : phase === 'closed' ? 'The window has closed. A project can no longer be submitted after its deadline.'
-              : 'Submit stays off until everything below passes. Once submitted, the report and code are final.'}
+              : 'Submit stays off until every item in this checklist passes. Once submitted, the report and code are final.'}
         </p>
       </header>
 

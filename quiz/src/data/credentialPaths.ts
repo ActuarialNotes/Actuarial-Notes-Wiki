@@ -1,22 +1,26 @@
-// The credential path on the "How to Study for Actuarial Exams" guide: the
-// whole route to a designation for one society, laid out as four stages — the
-// shared start, associateship, fellowship, and the continuing education that
-// keeps a credential current once it's held.
+// The credential paths: the whole route to a designation for one society —
+// the SOA, the CAS or the CIA — laid out as four stages: the start,
+// associateship, fellowship, and the continuing education that keeps a
+// credential current once it's held.
 //
-// The guide places it with a bare `%%credential-path%%` line (an Obsidian
-// comment, so the vault reads as plain prose there), and `WikiArticle` swaps
-// that line for `components/wiki/CredentialPath.tsx`. The four designation
-// pages place it too, naming themselves — `%%credential-path ACAS%%` — so the
-// path opens on their society at their stage (`readCredentialPathMarker`).
+// `WikiArticle` swaps a `%%credential-path%%` line (an Obsidian comment, so the
+// vault reads as plain prose there) for `components/wiki/CredentialPath.tsx`,
+// the route drawn down the page. The six designation pages place it naming
+// themselves — `%%credential-path ACAS%%` — so it opens on their society at
+// their stage (`readCredentialPathMarker`); the bare line, on the general
+// guide, opens on the reader's own society. `%%credential-map%%` draws all
+// three societies at once as a map (`components/wiki/CredentialMap.tsx`), on
+// the Credential Path page.
 //
 // The exam and course lists are the same requirements `data/tracks.ts` tracks,
 // grouped for reading rather than for progress. Each item names the track ids
 // it stands for, and `credentialPaths.test.ts` holds the two in step both ways:
 // a requirement added to a track has to appear here, and nothing here can name
-// one the track doesn't have. The continuing-education stage has no track
-// behind it — it is transcribed from the societies' own pages (the CAS CE
-// Policy, the SOA CPD Requirement, The CAS Institute's credentials and the
-// SOA's CERA requirements) and kept to what those pages say.
+// one the track doesn't have. What isn't tracked (the CIA's workshop and
+// experience, the continuing-education stage) is transcribed from the
+// societies' own pages (the CAS CE Policy, the SOA CPD Requirement, The CAS
+// Institute's credentials, the SOA's CERA requirements, the CIA's pathway and
+// CPD pages) and kept to what those pages say.
 
 import type { ComponentType } from 'react'
 import {
@@ -29,7 +33,7 @@ import {
   Scale,
   Signpost,
 } from 'lucide-react'
-import type { ExamBody } from '@/lib/bodyFilter'
+import type { GuideBody } from '@/lib/bodyFilter'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 
 /** The line in the guide's markdown that the path replaces. */
@@ -52,6 +56,15 @@ export interface PathItem {
   ref?: WikiEntryRef
   /** The `data/tracks.ts` item ids this entry stands for. */
   trackIds?: string[]
+  /**
+   * When the item counts as done on the reader's route (`lib/credentialProgress.ts`).
+   * By default, when every one of its `trackIds` is completed. `anyOf` is a
+   * choice — done when any one group is complete (ALTAM *or* ASTAM, one
+   * practice area's 101 and 201). `none` is an item whose rule the tracks can't
+   * express ("two more technical courses", from anywhere), so the route shows
+   * no state for it rather than a wrong one.
+   */
+  progress?: 'none' | { anyOf: string[][] }
 }
 
 export type StageKind = 'start' | 'associate' | 'fellow' | 'ongoing'
@@ -72,7 +85,7 @@ export interface PathStage {
 }
 
 export interface CredentialPath {
-  body: ExamBody
+  body: GuideBody
   name: string
   stages: PathStage[]
 }
@@ -84,6 +97,18 @@ const ACAS = 'Associate of the Casualty Actuarial Society (ACAS)'
 const FCAS = 'Fellow of the Casualty Actuarial Society (FCAS)'
 const ASA = 'Associate of the Society of Actuaries (ASA)'
 const FSA = 'Fellow of the Society of Actuaries (FSA)'
+const ACIA = 'Associate of the Canadian Institute of Actuaries (ACIA)'
+const FCIA_PAGE = 'Fellow of the Canadian Institute of Actuaries (FCIA)'
+
+// The FCIA's five specialty tracks: each two modules and three exams, and in
+// finance, investments and ERM F3BNK may stand in for F3FIE. A track is
+// complete when all five of one of its sets are.
+const CIA_TRACKS: { ids: string[]; complete: string[][] }[] = ['PC', 'ILA', 'GB', 'RET', 'FIE'].map(t => {
+  const core = [`CIA-${t}-M1`, `CIA-${t}-M2`, `CIA-F1${t}`, `CIA-F2${t}`]
+  return t === 'FIE'
+    ? { ids: [...core, 'CIA-F3FIE', 'CIA-F3BNK'], complete: [[...core, 'CIA-F3FIE'], [...core, 'CIA-F3BNK']] }
+    : { ids: [...core, `CIA-F3${t}`], complete: [[...core, `CIA-F3${t}`]] }
+})
 
 const EXAM_P: PathItem = {
   exam: 'P',
@@ -109,7 +134,7 @@ const FCIA: PathItem = {
   note: 'For practising in Canada. Some signing roles, like appointed actuary, require it.',
 }
 
-export const CREDENTIAL_PATHS: Record<ExamBody, CredentialPath> = {
+export const CREDENTIAL_PATHS: Record<GuideBody, CredentialPath> = {
   CAS: {
     body: 'CAS',
     name: 'Casualty Actuarial Society',
@@ -301,6 +326,7 @@ export const CREDENTIAL_PATHS: Record<ExamBody, CredentialPath> = {
             name: 'ALTAM or ASTAM',
             note: 'Advanced long-term or short-term actuarial mathematics, whichever fits where you\'re headed.',
             trackIds: ['ALTAM', 'ASTAM'],
+            progress: { anyOf: [['ALTAM'], ['ASTAM']] },
           },
           {
             icon: Laptop,
@@ -341,12 +367,18 @@ export const CREDENTIAL_PATHS: Record<ExamBody, CredentialPath> = {
               'FSA-INV101', 'FSA-INV201',
               'FSA-RET101', 'FSA-RET201', 'FSA-RET301',
             ],
+            progress: {
+              anyOf: ['CFE', 'GH', 'GI', 'ILA', 'INV', 'RET'].map(area => [`FSA-${area}101`, `FSA-${area}201`]),
+            },
           },
           {
             icon: BookOpen,
             name: 'Two more technical courses',
             note: 'From another practice area or the cross-practice (CP) catalogue.',
             trackIds: ['FSA-CP311', 'FSA-CP312', 'FSA-CP321', 'FSA-CP341', 'FSA-CP351'],
+            // Any two technical courses, from another area as well as the CP
+            // catalogue: no rule over these ids says when that's met.
+            progress: 'none',
           },
           {
             icon: Laptop,
@@ -393,11 +425,119 @@ export const CREDENTIAL_PATHS: Record<ExamBody, CredentialPath> = {
       },
     ],
   },
+  // The Canadian Institute of Actuaries' own route, transcribed from the
+  // designation pages (which cite the CIA's Pathway 1, FCIA syllabus and
+  // qualification-pathway pages) and, for the last stage, the CIA's CPD page
+  // (cia-ica.ca/professional-practice/continuing-professional-development,
+  // read 2026-11-08).
+  CIA: {
+    body: 'CIA',
+    name: 'Canadian Institute of Actuaries',
+    stages: [
+      {
+        kind: 'start',
+        short: 'Start',
+        title: 'Two ways in',
+        blurb: 'Most candidates come through a CIA-accredited university program. The rest bring associate-level credit from the SOA, the CAS or another body.',
+        items: [
+          {
+            icon: GraduationCap,
+            name: 'A CIA-accredited degree',
+            note: 'With the courses the CIA mandates, and Student membership from the first year.',
+          },
+          {
+            icon: Signpost,
+            name: 'Or another body\'s associate-level credit',
+            note: 'An ASA or ACAS, or credit for the exams leading to one. Module 2 is still required.',
+          },
+        ],
+      },
+      {
+        kind: 'associate',
+        short: 'ACIA',
+        title: 'Associate (ACIA)',
+        ref: concept(ACIA),
+        blurb: 'Two modules and a capstone exam, all set by the CIA itself.',
+        items: [
+          {
+            icon: BookOpen,
+            name: 'ACIA Module 1',
+            note: 'After the first year of the degree.',
+            ref: exam('Exam ACIA-M1 (CIA)'),
+            trackIds: ['CIA-ACIA-M1'],
+          },
+          {
+            icon: BookOpen,
+            name: 'ACIA Module 2',
+            note: 'In the final year.',
+            ref: exam('Exam ACIA-M2 (CIA)'),
+            trackIds: ['CIA-ACIA-M2'],
+          },
+          {
+            icon: GraduationCap,
+            name: 'ACIA Capstone Exam',
+            note: 'Open book, six hours, after the degree.',
+            ref: exam('Exam ACIA-CAPSTONE (CIA)'),
+            trackIds: ['CIA-ACIA-CAPSTONE'],
+          },
+          {
+            icon: Scale,
+            name: 'CIA Professionalism Workshop',
+            note: 'Then an application for membership.',
+          },
+        ],
+      },
+      {
+        kind: 'fellow',
+        short: 'FCIA',
+        title: 'Fellow (FCIA)',
+        ref: concept(FCIA_PAGE),
+        blurb: 'One specialty track, a leadership course and three years of experience. Fellows may fill certain roles reserved in Canada.',
+        items: [
+          {
+            icon: Signpost,
+            name: 'A specialty track',
+            note: 'Two modules and three open-book exams in PC, ILA, GB, RET or FIE.',
+            trackIds: CIA_TRACKS.flatMap(t => t.ids),
+            progress: { anyOf: CIA_TRACKS.flatMap(t => t.complete) },
+          },
+          {
+            icon: Scale,
+            name: 'Advanced Professionalism and Leadership Course',
+            note: 'The APLC.',
+          },
+          {
+            icon: MapPin,
+            name: 'Experience',
+            note: '36 months in the last six years as an ACIA, 12 of them in Canada in the last three.',
+          },
+        ],
+      },
+      {
+        kind: 'ongoing',
+        short: 'Ongoing',
+        title: 'Keeping it current',
+        blurb: 'Student, Candidate, Associate and Fellow credentials all have to be kept current.',
+        items: [
+          {
+            icon: RefreshCw,
+            name: 'The CIA\'s CPD requirement',
+            note: '80 hours over a rolling two years, at least 30 of them guided.',
+          },
+          {
+            icon: Scale,
+            name: 'The Professionalism Module',
+            note: 'Mandatory, with its required readings.',
+          },
+        ],
+      },
+    ],
+  },
 }
 
 /** Where a placed path opens: a society, and a stage along its path. */
 export interface PathPosition {
-  body: ExamBody
+  body: GuideBody
   stage: number
 }
 
@@ -422,4 +562,12 @@ export function readCredentialPathMarker(text: string): { at?: PathPosition } | 
     if (stage >= 0) return { at: { body: path.body, stage } }
   }
   return null
+}
+
+/** The line in a page's markdown that the three societies' map replaces (`CredentialMap`). */
+export const CREDENTIAL_MAP_MARKER = '%%credential-map%%'
+
+/** Whether a line is the map's marker. */
+export function isCredentialMapMarker(text: string): boolean {
+  return text.trim() === CREDENTIAL_MAP_MARKER
 }

@@ -3,11 +3,11 @@ import { useParams, Link, useNavigate } from 'react-router-dom'
 import { ChevronLeft, Loader2 } from 'lucide-react'
 import { fetchWikiFile } from '@/lib/github'
 import { resourceRepoPath } from '@/lib/resourceFolders'
-import { fromSlug, RESOURCES_ROUTE, wikiRoute } from '@/lib/wikiRoutes'
+import { fromSlug, RESOURCES_ROUTE, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { extractWikiLinksFromText } from '@/lib/wikiExtract'
 import { useWikiPage } from '@/hooks/useWikiPage'
 import { useWikiPageHead } from '@/hooks/useWikiPageHead'
-import { useConceptPopup } from '@/hooks/useConceptPopup'
+import { useStandalonePage } from '@/hooks/useStandalonePage'
 import { WikiArticle } from '@/components/wiki/WikiArticle'
 import { FactCheckBadge } from '@/components/FactCheckBadge'
 import { parseVerification } from '@/lib/verification'
@@ -22,7 +22,6 @@ export default function WikiResource() {
   const { slug = '' } = useParams()
   const resourceName = fromSlug(slug)
   const { setPageRefs, setExamId } = useWikiPage()
-  const { openAt } = useConceptPopup()
   const navigate = useNavigate()
   const back = useBack({ to: RESOURCES_ROUTE, label: 'All resources' })
   const [content, setContent] = useState<string | null>(null)
@@ -65,6 +64,11 @@ export default function WikiResource() {
     [content],
   )
 
+  // Read on its own, the page behaves as it does in the popup: the title opens
+  // its action menu, and a link opens in the popup over the page.
+  const resourceEntry = useMemo<WikiEntryRef>(() => ({ kind: 'resource', name: resourceName }), [resourceName])
+  const standalonePage = useStandalonePage(resourceEntry, content, pageRefs, resourceRepoPath(resourceName))
+
   useEffect(() => {
     setExamId(null)
     setPageRefs(pageRefs)
@@ -91,7 +95,8 @@ export default function WikiResource() {
           a reading for — one column, the page's width. */}
       {meta && (
         <div className="flex flex-col gap-3">
-          <ResourceMetaCard meta={meta} className="mb-0" />
+          <ResourceMetaCard meta={meta} className="mb-0" titleAction={standalonePage.titleAction} />
+          {standalonePage.menu}
           <ResourceSyllabusCard
             assignments={syllabusAssignments}
             onOpen={ref => navigate(wikiRoute(ref))}
@@ -116,22 +121,7 @@ export default function WikiResource() {
               />
             )
           }
-          onWikiLink={(ref, e) => {
-            if (ref.kind !== 'concept') return false
-            e.preventDefault()
-            const conceptList = pageRefs
-              .filter(r => r.kind === 'concept')
-              .filter(r => !/ \([^)]*\d{4}\)$/.test(r.name))
-            const idx = conceptList.findIndex(
-              r => r.name.toLowerCase() === ref.name.toLowerCase(),
-            )
-            openAt(
-              conceptList.length > 0 ? conceptList : [ref],
-              idx >= 0 ? idx : 0,
-              resourceRepoPath(resourceName),
-            )
-            return true
-          }}
+          onWikiLink={standalonePage.onWikiLink}
         />
       )}
     </div>

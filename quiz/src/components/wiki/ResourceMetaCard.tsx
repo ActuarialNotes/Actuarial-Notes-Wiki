@@ -5,6 +5,7 @@ import { PdfLinkButton } from '@/components/PdfLinkButton'
 import { GetCopyMenu } from '@/components/wiki/GetCopyMenu'
 import type { ResourceMeta } from '@/lib/resourceMeta'
 import type { PdfReaderDoc } from '@/hooks/usePdfReader'
+import type { WikiTitleAction } from '@/components/wiki/WikiArticle'
 
 /**
  * The metadata card at the top of a resource page — the jacket, who wrote it,
@@ -40,6 +41,11 @@ interface ResourceMetaCardProps {
    * card is on (`PdfLinkButton`'s `onRead`).
    */
   onReadPdf?: (doc: PdfReaderDoc) => void
+  /**
+   * Makes the title the page's action-menu trigger, underlined to say so —
+   * a resource page read on its own, the way the popup's title is.
+   */
+  titleAction?: WikiTitleAction
 }
 
 export function ResourceMetaCard({
@@ -48,6 +54,7 @@ export function ResourceMetaCard({
   note,
   className,
   onReadPdf,
+  titleAction,
 }: ResourceMetaCardProps) {
   // A cover that fails to load drops its column entirely — no empty gutter.
   const [coverFailed, setCoverFailed] = useState(false)
@@ -110,7 +117,22 @@ export function ResourceMetaCard({
           </p>
         )}
         {meta.title && (
-          <h2 className={cn('font-semibold leading-snug tracking-tight', heading)}>{meta.title}</h2>
+          <h2 className={cn('font-semibold leading-snug tracking-tight', heading)}>
+            {titleAction ? (
+              <button
+                ref={titleAction.ref}
+                type="button"
+                data-play-menu-trigger
+                onClick={titleAction.onToggle}
+                aria-haspopup="menu"
+                aria-expanded={titleAction.open}
+                aria-label={titleAction.label}
+                className="action-title-underline text-left"
+              >
+                {meta.title}
+              </button>
+            ) : meta.title}
+          </h2>
         )}
         {meta.author && (
           <p className="mt-0.5 text-sm leading-snug text-muted-foreground">{meta.author}</p>

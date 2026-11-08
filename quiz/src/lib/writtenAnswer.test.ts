@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { gradingProgress, splitSampleAnswers, ungradedWrittenParts, writtenParts } from './writtenAnswer'
+import { gradingProgress, splitSampleAnswers, ungradedWrittenParts, writtenParts, partResponses } from './writtenAnswer'
 import { parseQuestion } from './parser'
 
 describe('splitSampleAnswers', () => {
@@ -109,6 +109,18 @@ describe('splitSampleAnswers', () => {
     })
   })
 
+  // cas5-2014f-q14b part b: six accepted answers, each one triangle and what it shows.
+  it('splits on "Accepted Answer" headings, keeping the title after the number', () => {
+    const text = [
+      'Accepted Answer 1 — Paid / Reported Claims', '', 'The ratio has increased.', '',
+      'Accepted Answer 2 — Closed / Reported Claim Counts', '', 'Closure has slowed.',
+    ].join('\n')
+    expect(splitSampleAnswers(text)).toEqual({
+      intro: null,
+      samples: ['Paid / Reported Claims\n\nThe ratio has increased.', 'Closed / Reported Claim Counts\n\nClosure has slowed.'],
+    })
+  })
+
   it('keeps the text above the first numbered heading as a lead-in', () => {
     const text = 'Any two of:\n\n**Sample 1:**\n\nOne.\n\n**Sample 2:**\n\nTwo.'
     expect(splitSampleAnswers(text)).toEqual({ intro: 'Any two of:', samples: ['One.', 'Two.'] })
@@ -191,5 +203,18 @@ describe('written parts', () => {
     expect(gradingProgress(q, { a: 'correct', b: 'partial' })).toEqual({ state: 'partial', graded: 1, total: 2 })
     expect(gradingProgress(q, { b: 'correct', c: 'incorrect' })).toEqual({ state: 'done', graded: 2, total: 2 })
     expect(gradingProgress({ ...q, type: 'free-entry' }, {})).toEqual({ state: 'done', graded: 0, total: 0 })
+  })
+})
+
+describe('partResponses', () => {
+  it('reads the stored JSON of a multi-part answer', () => {
+    expect(partResponses('{"a":"17,735","b":"Use BF"}')).toEqual({ a: '17,735', b: 'Use BF' })
+  })
+
+  it('is empty for nothing, malformed JSON, or something other than an object of strings', () => {
+    expect(partResponses(null)).toEqual({})
+    expect(partResponses('{oops')).toEqual({})
+    expect(partResponses('["a"]')).toEqual({})
+    expect(partResponses('{"a":3}')).toEqual({})
   })
 })

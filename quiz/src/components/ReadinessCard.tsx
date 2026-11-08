@@ -1708,14 +1708,14 @@ function DayCompleteInfoPanel({
           </button>
         </div>
         <div className="p-5 space-y-4 text-sm leading-relaxed">
-          <div className="rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-3 py-2.5 flex items-center gap-2.5">
-            <Gem className="h-5 w-5 text-cyan-400 shrink-0" />
-            <p className="text-cyan-700 dark:text-cyan-300">
-              {bonusClaimed
-                ? <>Finishing the plan doubled your gems: <strong>+{bonusAmount}</strong> today.</>
-                : <>Signed-in readers who finish the plan get the day's gems again as a bonus.</>}
-            </p>
-          </div>
+          {bonusClaimed && (
+            <div className="rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-3 py-2.5 flex items-center gap-2.5">
+              <Gem className="h-5 w-5 text-cyan-400 shrink-0" />
+              <p className="text-cyan-700 dark:text-cyan-300">
+                Finishing the plan doubled your gems today (<strong>+{bonusAmount}</strong>).
+              </p>
+            </div>
+          )}
 
           <div>
             <p className="text-xs font-semibold text-muted-foreground mb-1.5">Today's achievements</p>

@@ -98,6 +98,23 @@ on one is.
 Each entry: the date, the screen, what the maintainer said, and the rule it
 implies. Newest first.
 
+- 2026-11-08 · Full UI copy review (`docs/ui-copy-review.md`) · Accepted the
+  first batch of rewrites. On the guest save prompt, flagged "This quiz only
+  lives in this browser" and "Make an account and it comes with you": "lives in"
+  and "comes with you" are awkward, and "This quiz" is impersonal next to "Your
+  quiz results". → Things don't act like people: say what is stored, where, and
+  what the reader can do. The reader's things are theirs ("your results").
+  Picked "Your results are only saved in this browser. Create an account to keep
+  your scores, concept levels and streak, and see them on any device."
+- 2026-11-08 · Plan-complete panel · The 2× gem bonus line for a reader who
+  can't get it (signed out, no gems): show nothing. → A line that doesn't apply
+  to the reader is removed, not reworded.
+- 2026-11-08 · Projects tab · "Rehearse the PCPA project with R and Python in
+  your browser." over a longer accurate version. → A subtitle is one short
+  sentence; the screen below explains the rest.
+- 2026-11-08 · Upgrade price card · Title "Get Pro", not "Try it for a month"
+  (there is no trial) nor "$10 a month". → Titles name the action or feature.
+
 - 2026-11-02 · Dashboard "?" guide · The old slide was confusing (and its
   "Day 1 › 3 › 7 › 14 › 30" chain wasn't the app's schedule). Rewritten as five
   slides: How It Works, Concept Levels, Today's Study Plan, Exam Readiness,

@@ -1025,7 +1025,14 @@ Other important `lib/` modules:
   has passed and a countdown on what comes next. This module merges a sittings row's own
   window / registration deadline with what `data/examSittingDetails.ts` transcribes (a
   transcribed one replaces the row's, under the publisher's label) and places today among
-  them — at most one step is *next*, none while a window is open. Which sitting is selected
+  them — at most one step is *next*, none while a window is open.
+  It also writes the panel's **status banner** — the headline and countdown
+  (`sittingHeadline`: "Exam window open · Closes Nov 15 · 7 days") and the to-scale
+  **ruler** under it (`sittingRuler`: every date placed by its distance in days, today
+  ticked) — and the rest of the panel is grouped lists (`components/ui/GroupedList.tsx`;
+  the fee first and long values under their label, sources folded past two —
+  `lib/sittingInfo.ts`). A note about sitting the window itself is the details'
+  `windowNote`, drawn under the window's row. Which sitting is selected
   is `hooks/useExamVersion.ts`, shared with `ExamVersionMenu` so the two can't disagree.
   Pure and tested. The drawing is `components/SittingTimeline.tsx`, which the Store's
   registration sheet draws too — its own small module, so the Store importing it doesn't

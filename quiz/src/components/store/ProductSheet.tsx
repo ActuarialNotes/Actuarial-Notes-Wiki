@@ -458,7 +458,7 @@ function registrationBody(item: Extract<StoreItem, { type: 'registration' }>, to
                     : `, and the ${registration.body} hasn’t published the one after it yet.`}
                 </p>
               )}
-              <SittingTimeline steps={steps} today={today} />
+              <SittingTimeline steps={steps} today={today} examKey={registration.examKey} windowNote={details?.windowNote} listClassName="bg-muted/40" />
             </>
           ) : (
             <p className="text-sm text-muted-foreground">The {registration.body} hasn’t published the next sitting yet.</p>

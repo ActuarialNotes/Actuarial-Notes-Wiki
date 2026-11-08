@@ -14,7 +14,8 @@ import { DistributionSimulator } from '@/components/wiki/DistributionSimulator'
 import { SourceMaterialGallery } from '@/components/wiki/SourceMaterialGallery'
 import { examPillLabel } from '@/lib/resourceExams'
 import { CredentialPath } from '@/components/wiki/CredentialPath'
-import { readCredentialPathMarker } from '@/data/credentialPaths'
+import { CredentialMap } from '@/components/wiki/CredentialMap'
+import { isCredentialMapMarker, readCredentialPathMarker } from '@/data/credentialPaths'
 import { extractSourceMaterial, parseSyllabusObjectives, SOURCE_MATERIAL_MARKER } from '@/lib/sourceMaterial'
 import { headingSlug, hrefToEntryRef, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { isInWikiIndex } from '@/lib/wikiIndex'
@@ -217,6 +218,10 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
       if (credentialPath) {
         const { at } = credentialPath
         return <CredentialPath key={at ? `${at.body}-${at.stage}` : 'reader'} onOpen={openRef} start={at} />
+      }
+      // The three societies on one map — the Credential Path page.
+      if (only && only.type === 'text' && isCredentialMapMarker(only.value)) {
+        return <CredentialMap onOpen={openRef} />
       }
       if (
         !hideImages &&

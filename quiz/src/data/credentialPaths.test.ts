@@ -2,8 +2,10 @@ import { describe, it, expect } from 'vitest'
 import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import {
+  CREDENTIAL_MAP_MARKER,
   CREDENTIAL_PATHS,
   CREDENTIAL_PATH_MARKER,
+  isCredentialMapMarker,
   readCredentialPathMarker,
   type PathItem,
   type StageKind,
@@ -14,6 +16,7 @@ import { buildListenContent } from '@/lib/listenTokens'
 
 const VAULT = resolve(__dirname, '../../..')
 const GUIDE = 'Guides/How to Study for Actuarial Exams.md'
+const MAP_PAGE = 'Concepts/Credential Path.md'
 
 function trackIds(key: string): Set<string> {
   const track = TRACKS.find(t => t.key === key)
@@ -21,7 +24,7 @@ function trackIds(key: string): Set<string> {
   return new Set(track.sections.flatMap(s => s.items.map(i => i.id)))
 }
 
-function pathIds(body: 'SOA' | 'CAS', kinds: StageKind[]): Set<string> {
+function pathIds(body: 'SOA' | 'CAS' | 'CIA', kinds: StageKind[]): Set<string> {
   return new Set(
     CREDENTIAL_PATHS[body].stages
       .filter(s => kinds.includes(s.kind))
@@ -48,6 +51,7 @@ describe('credential paths', () => {
   it.each([
     ['CAS', 'ACAS', ['start', 'associate']],
     ['SOA', 'ASA', ['start', 'associate']],
+    ['CIA', 'ACIA', ['start', 'associate']],
   ] as const)('%s start + associateship covers exactly the %s track', (body, key, kinds) => {
     expect(pathIds(body, [...kinds])).toEqual(trackIds(key))
   })
@@ -55,10 +59,25 @@ describe('credential paths', () => {
   it.each([
     ['CAS', 'FCAS', 'ACAS'],
     ['SOA', 'FSA', 'ASA'],
+    ['CIA', 'FCIA', 'ACIA'],
   ] as const)('%s fellowship covers exactly what %s adds to %s', (body, fellow, associate) => {
     const assoc = trackIds(associate)
     const added = new Set([...trackIds(fellow)].filter(id => !assoc.has(id)))
     expect(pathIds(body, ['fellow'])).toEqual(added)
+  })
+
+  // A choice's groups are drawn from the item's own ids, and a group is never
+  // empty — an empty group would count as done before anything was sat.
+  it('builds every choice out of the item\'s own track ids', () => {
+    for (const item of allItems()) {
+      if (!item.progress || item.progress === 'none') continue
+      const own = new Set(item.trackIds ?? [])
+      expect(item.progress.anyOf.length, item.name).toBeGreaterThan(1)
+      for (const group of item.progress.anyOf) {
+        expect(group.length, item.name).toBeGreaterThan(0)
+        for (const id of group) expect(own.has(id), `${item.name}: ${id}`).toBe(true)
+      }
+    }
   })
 
   it('gives every item a tile', () => {
@@ -113,5 +132,19 @@ describe('credential paths', () => {
     const md = readFileSync(resolve(VAULT, GUIDE), 'utf8')
     const { tokens } = buildListenContent(md)
     expect(tokens.map(t => t.speech).join(' ')).not.toContain('credential-path')
+  })
+
+  // The Credential Path page leads with the map and links every designation
+  // page the map's nodes stand for.
+  it('maps all three societies on the Credential Path page', () => {
+    const md = readFileSync(resolve(VAULT, MAP_PAGE), 'utf8')
+    expect(md.split('\n').filter(isCredentialMapMarker)).toHaveLength(1)
+    for (const path of Object.values(CREDENTIAL_PATHS)) {
+      for (const stage of path.stages) {
+        if (stage.ref) expect(md, stage.ref.name).toContain(`[[${stage.ref.name}|`)
+      }
+    }
+    expect(isCredentialMapMarker(`  ${CREDENTIAL_MAP_MARKER} `)).toBe(true)
+    expect(isCredentialMapMarker('%%credential-map SOA%%')).toBe(false)
   })
 })

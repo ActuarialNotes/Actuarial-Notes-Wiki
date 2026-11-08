@@ -50,7 +50,7 @@ export function SectionLeaksDialog({ leaks, examLabel, span, onClose }: {
     >
       <InfoBanner
         tile={examKey ? <ExamLogo examKey={examKey} size="md" /> : <BannerTile><BarChart3 className="h-5 w-5" /></BannerTile>}
-        eyebrow={span ? `${examLabel} · last ${span} days` : examLabel}
+        eyebrow={span ? `${examLabel} · past ${span} days` : examLabel}
         title="Where you’re losing marks"
         titleId="leaks-heading"
         onClose={onClose}

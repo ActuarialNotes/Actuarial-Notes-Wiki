@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import { CalendarCheck, ClipboardCheck, FileText, Lock } from 'lucide-react'
 import { CheckMark } from '@/components/CheckMark'
 import { cn } from '@/lib/utils'
+import { PRACTICE_EXAM_LABEL } from '@/lib/pastExams'
 
 // The tiles under the quiz setup screen's card: today's plan across the full
 // width, then the two ways to sit a whole paper — a practice exam drawn to the
@@ -52,7 +53,7 @@ export function TodaysPlanTile({
           ? <Lock className="h-5 w-5 shrink-0" aria-hidden />
           : <CalendarCheck className="h-5 w-5 shrink-0" aria-hidden />}
         <span className="min-w-0 flex-1">
-          <span className="block text-[15px] font-semibold">Today's plan</span>
+          <span className="block text-[15px] font-semibold">Today's Study Plan</span>
           <span className="block text-[13px] leading-snug">
             {state === 'locked' ? 'A daily set picked for your exam date' : 'Nothing scheduled for today'}
           </span>
@@ -73,7 +74,7 @@ export function TodaysPlanTile({
         ? <CheckMark className="h-5 w-5" />
         : <CalendarCheck className="h-5 w-5 shrink-0 text-[color:var(--exam-accent-vivid,currentColor)]" aria-hidden />}
       <span className="min-w-0 flex-1">
-        <span className="block text-[15px] font-semibold">Today's plan</span>
+        <span className="block text-[15px] font-semibold">Today's Study Plan</span>
         <span className="block text-[13px] leading-snug text-muted-foreground">
           {state === 'done'
             ? 'Done for today. Start it again to review'
@@ -130,7 +131,7 @@ export function PaperTiles({
     <div className="grid grid-cols-2 gap-3">
       <SourceTile
         icon={<ClipboardCheck className="h-5 w-5" aria-hidden />}
-        title="Practice exam"
+        title={PRACTICE_EXAM_LABEL}
         detail={practiceDetail}
         onOpen={onPractice}
       />

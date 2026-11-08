@@ -17,7 +17,7 @@ test('a free account sees Analytics locked, and nothing is read for it', async (
   await page.goto('/dashboard')
   const analytics = page.getByRole('region', { name: /Analytics/ })
   await expect(analytics).toBeVisible({ timeout: 20_000 })
-  await expect(analytics).toContainText('See where your marks go')
+  await expect(analytics).toContainText('Track Accuracy and Pace')
   await expect(analytics.getByRole('region', { name: 'Accuracy' })).toHaveCount(0)
   await analytics.screenshot({ path: 'test-results/analytics-locked.png' })
   expect(answersRead).toBe(0)

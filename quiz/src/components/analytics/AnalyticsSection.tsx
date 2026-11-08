@@ -68,7 +68,7 @@ export function AnalyticsSection({ trends, rows, examLabel, syllabus, questions 
             label="Period"
             value={String(span) as `${AccuracySpan}`}
             onChange={v => setSpan(Number(v) as AccuracySpan)}
-            options={ACCURACY_SPANS.map(s => ({ value: String(s) as `${AccuracySpan}`, label: `${s}D`, ariaLabel: `Last ${s} days` }))}
+            options={ACCURACY_SPANS.map(s => ({ value: String(s) as `${AccuracySpan}`, label: `${s}D`, ariaLabel: `Past ${s} days` }))}
             className="w-32 shrink-0"
           />
         </div>

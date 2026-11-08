@@ -74,7 +74,7 @@ test('the summary leads Analytics: the span’s tiles, day by day', async ({ pag
   await page.goto('/dashboard')
   const analytics = page.getByRole('region', { name: 'Analytics' })
   await expect(analytics).toBeVisible({ timeout: 20_000 })
-  await analytics.getByRole('radio', { name: 'Last 7 days' }).click()
+  await analytics.getByRole('radio', { name: 'Past 7 days' }).click()
   await expect(analytics.getByRole('heading', { name: /Past week/ })).toBeVisible()
   await expect(analytics).toContainText(/Accuracy\s*70%\s*7 of 10 right/)
   // Every answer took 200 s; Exam FM allows 5:00 a question.

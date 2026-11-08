@@ -86,7 +86,7 @@ function ShareButtons({ code }: { code: string }) {
         <Button
           variant="outline"
           className="gap-2"
-          onClick={() => { navigator.share({ title: skin.title, text: `${skin.invite} — room ${code}`, url: link }).catch(() => {}) }}
+          onClick={() => { navigator.share({ title: skin.title, text: `${skin.invite}, room ${code}`, url: link }).catch(() => {}) }}
         >
           <Share2 className="h-4 w-4" aria-hidden />
           Share
@@ -147,7 +147,7 @@ function Problem({ problem, onRetry, onExit, onFindAnother }: {
   onFindAnother?: () => void
 }) {
   const { title, body } = onFindAnother && problem !== 'version'
-    ? { title: 'Your opponent’s room closed', body: 'They left before the battle could start. Find someone else?' }
+    ? { title: 'Your opponent’s room closed', body: 'They left before the battle could start.' }
     : PROBLEM_TEXT[problem]
   return (
     <div className="mx-auto max-w-md space-y-4 py-12 text-center" data-testid="battle-problem">
@@ -403,7 +403,7 @@ function OnlineMatch({
           />
         ) : canPick ? (
           <div className="space-y-2">
-            <p className="text-center text-xs text-muted-foreground">Tap to lock in — you can’t change it. First right answer scores most.</p>
+            <p className="text-center text-xs text-muted-foreground">Tap to lock in. You can’t change it. The fastest right answer scores most.</p>
             <AnswerPad
               seat={me}
               options={battle.questions[round.index].options}
@@ -418,9 +418,9 @@ function OnlineMatch({
             {phase === 'countdown'
               ? 'Get ready…'
               : phase === 'closing'
-              ? 'Time’s up — revealing…'
+              ? 'Time’s up. Revealing…'
               : lockedChoice
-              ? round.locks[opp] ? 'Both in — revealing…' : `Locked in ${lockedChoice}. Waiting for ${names[opp]}…`
+              ? round.locks[opp] ? 'Both in. Revealing…' : `Locked in ${lockedChoice}. Waiting for ${names[opp]}…`
               : 'Waiting…'}
           </p>
         )}
@@ -468,7 +468,7 @@ function Results({
                 data-testid="battle-rematch"
               >
                 <RotateCcw className="h-4 w-4" aria-hidden />
-                {host ? 'Rematch' : iAsked ? 'Rematch asked for' : 'Ask for a rematch'}
+                {host ? 'Rematch' : iAsked ? 'Rematch requested' : 'Ask for a rematch'}
               </Button>
             )}
             {onFindAnother && <FindAnotherButton onClick={onFindAnother} />}
@@ -620,7 +620,7 @@ export function OnlineHost({
           <AlertCircle className="mx-auto h-8 w-8 text-muted-foreground" aria-hidden />
           <div className="space-y-1">
             <h2 className="text-lg font-semibold">Your opponent didn’t arrive</h2>
-            <p className="text-sm text-muted-foreground">They may have closed the page. Find someone else?</p>
+            <p className="text-sm text-muted-foreground">They may have closed the page.</p>
           </div>
           <div className="flex flex-wrap justify-center gap-2">
             {onFindAnother && <FindAnotherButton onClick={onFindAnother} solid />}
@@ -655,19 +655,19 @@ export function OnlineHost({
           >
             Start battle
           </Button>
-          <p className="text-sm text-muted-foreground">{guest.name} is in. Start when you’re both ready — you’ll each pick your topics first.</p>
+          <p className="text-sm text-muted-foreground">{guest.name} is in. Start when you’re both ready. You’ll each pick your topics first.</p>
         </div>
       ) : (
         <div className="space-y-3">
           <p className="text-sm text-muted-foreground">
-            Send this code to a friend — they open <span className="font-medium text-foreground">{joinHint}</span>.
+            Send this code to a friend. They open <span className="font-medium text-foreground">{joinHint}</span>.
           </p>
           <ShareButtons code={code} />
         </div>
       )}
       {snapshot.connection === 'error' && (
         <p className="flex items-center justify-center gap-2 text-sm text-amber-600 dark:text-amber-400">
-          <WifiOff className="h-4 w-4" aria-hidden /> Trouble reaching the battle server — retrying…
+          <WifiOff className="h-4 w-4" aria-hidden /> Can’t reach the battle server. Retrying…
         </p>
       )}
       <Button variant="ghost" onClick={onExit}>Close room</Button>

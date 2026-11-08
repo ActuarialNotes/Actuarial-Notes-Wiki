@@ -102,7 +102,7 @@ function SectorDetail({ sector, world, battleCount }: { sector: Sector; world: A
               onClick={() => navigate(`/actuaria/battle?exam=${encodeURIComponent(sector.bankLabel!)}`)}
               className={buttonVariants({ className: 'gap-2 rounded-full' })}
             >
-              <Swords className="h-4 w-4" aria-hidden /> Battle this sector
+              <Swords className="h-4 w-4" aria-hidden /> Quiz Battle on {sector.label}
             </button>
           ) : sector.bankLabel ? (
             <button
@@ -110,7 +110,7 @@ function SectorDetail({ sector, world, battleCount }: { sector: Sector; world: A
               onClick={() => navigate(`/?topic=${encodeURIComponent(sector.bankLabel!)}`)}
               className={buttonVariants({ className: 'gap-2 rounded-full' })}
             >
-              <Play className="h-4 w-4" aria-hidden /> Train in Quiz
+              <Play className="h-4 w-4" aria-hidden /> Practise in a quiz
             </button>
           ) : null}
         </div>
@@ -161,7 +161,7 @@ function SectorDetail({ sector, world, battleCount }: { sector: Sector; world: A
               <p className="actuaria-display text-[11px] text-muted-foreground"><Term id="sectorCredibility" /></p>
               {readiness && <p className="text-xs text-muted-foreground">{readiness.band.label}</p>}
             </div>
-            <CredibilityBar z={credibility.z} label={credibility.label} ariaLabel={`${sectorName(sector.key)} Credibility`} />
+            <CredibilityBar z={credibility.z} label={credibility.label} percent={credibility.percent} ariaLabel={`${sectorName(sector.key)} Credibility`} />
             {/* How the one readiness number is made — its two criteria, each at its weight. */}
             <ul className="space-y-2 pt-1">
               {readiness?.criteria.map(c => (
@@ -189,7 +189,7 @@ function SectorDetail({ sector, world, battleCount }: { sector: Sector; world: A
           <div className="space-y-2 rounded-xl bg-card p-4">
             <p className="actuaria-display text-[11px] text-muted-foreground"><Term id="orbitalDecay">Decaying now</Term></p>
             {soon.length === 0 ? (
-              <p className="text-sm text-muted-foreground">Nothing here is losing a level. Keep it that way.</p>
+              <p className="text-sm text-muted-foreground">Nothing here is losing a level.</p>
             ) : (
               <ul className="divide-y divide-border/60">
                 {soon.map(l => (
@@ -205,7 +205,7 @@ function SectorDetail({ sector, world, battleCount }: { sector: Sector; world: A
               </ul>
             )}
             <Link to="/actuaria/daily" className={buttonVariants({ variant: 'outline', className: 'w-full gap-2 rounded-full' })}>
-              <Radio className="h-4 w-4" aria-hidden /> Repair · <Term id="transmission" />
+              <Radio className="h-4 w-4" aria-hidden /> Review what’s decaying
             </Link>
           </div>
 
@@ -227,11 +227,11 @@ function LandmarkChart({ landmark, records, now }: { landmark: Landmark; records
     <div className="space-y-2 rounded-xl bg-card p-4" data-testid="actuaria-landmark-chart">
       <div className="flex items-center justify-between gap-2">
         <p className="min-w-0 truncate text-sm font-medium">{landmark.inWorldName ?? landmark.concept.name}</p>
-        {landmark.decay && landmark.decay.inDays <= 7 && <StatusChip variant="decaying">{`${landmark.decay.inDays}d`}</StatusChip>}
+        {landmark.decay && landmark.decay.inDays <= 7 && <StatusChip variant="decaying">{landmark.decay.inDays <= 0 ? 'Drops today' : landmark.decay.inDays === 1 ? 'Drops tomorrow' : `Drops in ${landmark.decay.inDays} days`}</StatusChip>}
       </div>
       <div className="rounded-lg bg-muted/30 p-1 text-foreground">
         {history.loading ? (
-          <p className="flex items-center gap-2 p-4 text-xs text-muted-foreground"><Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden /> Reading the log…</p>
+          <p className="flex items-center gap-2 p-4 text-xs text-muted-foreground"><Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden /> Loading history…</p>
         ) : (
           <ProgressGraph
             levelEvents={history.levelEvents}
@@ -243,7 +243,7 @@ function LandmarkChart({ landmark, records, now }: { landmark: Landmark; records
         )}
       </div>
       <p className="text-xs text-muted-foreground">
-        Dashes: the decay to come if it isn’t reviewed.
+        The dashed line is where its level goes if you don’t review it.
       </p>
     </div>
   )

@@ -33,7 +33,7 @@ export function ActuariaHubCard() {
             </LogoTile>
           }
           title="Actuaria Online"
-          subtitle="Your exams as a star system to chart"
+          subtitle="Your exams as a star map"
         />
       </ListPanel>
       <button

@@ -26,7 +26,7 @@ import { PHASES } from '@/lib/tutor/journey'
 const VIEWS: { value: TutorView; label: string }[] = [
   { value: 'now', label: 'Now' },
   { value: 'confusing', label: 'Confusing' },
-  { value: 'journey', label: 'Journey' },
+  { value: 'journey', label: 'Exam' },
 ]
 
 interface Props {

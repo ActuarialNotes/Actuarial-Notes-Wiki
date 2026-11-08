@@ -198,8 +198,8 @@ export function BattleSetupForm({
           />
           <p className="px-1 text-xs text-muted-foreground">
             {setup.abilities
-              ? `Each of you brings up to three from the Hangar — you’d bring ${loadoutSize}. Each works once.`
-              : 'The plain rules. Turn on to let each of you bring abilities from the Hangar.'}
+              ? `Each of you brings up to three abilities from the Hangar, and each works once. You’d bring ${loadoutSize}.`
+              : 'Turn on to let each of you bring abilities from the Hangar.'}
           </p>
         </Field>
       )}

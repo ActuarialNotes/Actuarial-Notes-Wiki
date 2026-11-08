@@ -77,7 +77,7 @@ describe('telling a round', () => {
   it('says who was faster when both got it', () => {
     const both = played('simultaneous',
       { type: 'answer', seat: 1, choice: 'B', now: 4000 }, { type: 'answer', seat: 0, choice: 'B', now: 9000 })
-    expect(roundHeadline(currentRound(both), NAMES)).toBe('Both got it — Bo was faster')
+    expect(roundHeadline(currentRound(both), NAMES)).toBe('Both got it. Bo was faster')
   })
 
   it('tells a miss from the clock running out', () => {
@@ -108,7 +108,7 @@ describe('telling a round', () => {
   it('heads the results', () => {
     expect(resultHeadline(0, null, NAMES)).toBe('Ada wins')
     expect(resultHeadline(null, null, NAMES)).toBe("It's a draw")
-    expect(resultHeadline(1, 0, NAMES)).toBe('Ada left — Bo wins')
+    expect(resultHeadline(1, 0, NAMES)).toBe('Ada left. Bo wins')
   })
 })
 

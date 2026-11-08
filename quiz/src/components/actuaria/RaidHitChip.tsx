@@ -33,7 +33,7 @@ export function RaidHitChip() {
       {hit && (
         <p className="rounded-full bg-card px-4 py-1.5 text-sm shadow-md ring-1 ring-border motion-safe:animate-in motion-safe:fade-in">
           {hit.damage > 0
-            ? `Hit Gambler’s Ruin for ${hit.damage}${hit.phase === 'defeated' ? ' — it’s down' : ''}`
+            ? `Hit Gambler’s Ruin for ${hit.damage}${hit.phase === 'defeated' ? '. It’s down' : ''}`
             : `Gambler’s Ruin healed ${hit.healed}`}
         </p>
       )}

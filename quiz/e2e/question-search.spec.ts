@@ -20,7 +20,7 @@ test.describe('question search', () => {
 
     // A press inside the dialog is the dialog's: the panel stays open and the
     // row is not selected by it.
-    await dialog.getByRole('heading', { name: 'Question info' }).click()
+    await dialog.getByRole('heading', { level: 2 }).click()
     await expect(dialog).toBeVisible()
 
     await page.keyboard.press('Escape')

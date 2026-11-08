@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { X, Palette, Trophy, Swords } from 'lucide-react'
+import { Palette, Trophy, Swords } from 'lucide-react'
+import { InfoBanner, InfoFinePrint, NEUTRAL_BANNER, Stat } from '@/components/ui/InfoSheet'
 import { useXp, type XpView } from '@/hooks/useXp'
 import { useQuests } from '@/hooks/useQuests'
 import { QUESTS_ENABLED, LEAGUES_ENABLED } from '@/lib/featureFlags'
@@ -177,53 +178,56 @@ function LevelPopup({
 
       {/* Popup — centered on all screen sizes */}
       <div
-        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[66] w-[calc(100vw-2rem)] max-w-[360px] bg-card rounded-2xl shadow-2xl p-4 outline-none text-left paper-drop"
+        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[66] flex w-[calc(100vw-2rem)] max-w-sm flex-col gap-4 bg-background rounded-2xl shadow-2xl p-3 outline-none text-left paper-drop"
         role="dialog"
         aria-modal="true"
         aria-label="Your progress, quests and league"
         onClick={e => e.stopPropagation()}
       >
-        {/* Header — level number with the level-progress bar beside it. */}
-        <div className="mb-4 flex items-start gap-3">
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-foreground/10 text-sm font-extrabold tabular-nums text-foreground">
-            {xp.level}
-          </span>
-          <div className="min-w-0 flex-1">
-            <div className="flex items-baseline justify-between gap-2">
-              <p className="text-sm font-semibold">Level {xp.level}</p>
-              <p className="text-xs text-muted-foreground tabular-nums">{xp.totalXp} XP total</p>
-            </div>
-            <div className="mt-1.5 flex items-center gap-2">
-              <div className="flex-1">
-                <ProgressBar ratio={levelRatio} color="hsl(var(--foreground))" />
-              </div>
-              <span className="shrink-0 text-[11px] tabular-nums text-muted-foreground">
-                {xp.xpIntoLevel}/{xp.xpForLevel}
-              </span>
-            </div>
+        {/* The banner: the level, its bar, and today's figures — the info
+            popup's shape (`InfoSheet`), on the neutral wash: no exam scopes it. */}
+        <InfoBanner
+          tile={(
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-foreground text-base font-extrabold tabular-nums text-background" aria-hidden>
+              {xp.level}
+            </span>
+          )}
+          eyebrow={`${xp.totalXp.toLocaleString()} XP total`}
+          title={`Level ${xp.level}`}
+          onClose={onClose}
+          tint={NEUTRAL_BANNER}
+          stats={[
+            <Stat
+              key="level"
+              value={<>{xp.xpIntoLevel}<span className="text-xs font-medium text-muted-foreground">/{xp.xpForLevel}</span></>}
+              label={`to level ${xp.level + 1}`}
+            />,
+            <Stat
+              key="goal"
+              value={<>{xp.earnedToday}<span className="text-xs font-medium text-muted-foreground">/{xp.target}</span></>}
+              label="daily goal"
+              tone={xp.met ? 'text-green-600 dark:text-green-400' : undefined}
+            />,
+            QUESTS_ENABLED ? <Stat key="quests" value={claimableCount} label="quests ready" /> : null,
+          ]}
+        >
+          <div className="mx-3.5 mb-3">
+            <ProgressBar ratio={levelRatio} color="hsl(var(--foreground))" />
           </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="-mr-1 -mt-0.5 shrink-0 rounded-md p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-            aria-label="Close"
-          >
-            <X className="h-4 w-4" />
-          </button>
-        </div>
+        </InfoBanner>
 
-        {/* Tabs */}
+        {/* Tabs — a two-way switch, the chosen side filled (Ink's pick). */}
         {!choosingGoal && visibleTabs.length > 1 && (
-          <div className="mb-4 flex gap-1 rounded-xl bg-muted/50 p-1">
+          <div className="flex gap-1 rounded-xl bg-card p-1">
             {visibleTabs.map(t => (
               <button
                 key={t.id}
                 type="button"
                 onClick={() => setTab(t.id)}
                 aria-pressed={tab === t.id}
-                className={`relative flex flex-1 items-center justify-center gap-1.5 rounded-lg px-2 py-1.5 text-xs font-semibold transition-colors ${
+                className={`relative flex h-8 flex-1 items-center justify-center gap-1.5 rounded-lg px-2 text-[13px] font-semibold transition-colors ${
                   tab === t.id
-                    ? 'bg-card text-foreground shadow-sm'
+                    ? 'bg-pick text-pick-foreground'
                     : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
@@ -247,7 +251,7 @@ function LevelPopup({
           {choosingGoal && <DailyGoalPicker />}
           {QUESTS_ENABLED && (
             <div className={!choosingGoal && tab === 'quests' ? '' : 'hidden'}>
-              <QuestsPanel context={questContext} xp={xp} />
+              <QuestsPanel context={questContext} />
             </div>
           )}
           {LEAGUES_ENABLED && (
@@ -257,12 +261,12 @@ function LevelPopup({
           )}
         </div>
 
-        {/* Footer actions */}
-        <div className="mt-3 flex items-center justify-between gap-2 pt-3">
+        {/* Fine print: the two settings the popup reaches. */}
+        <InfoFinePrint>
           <button
             type="button"
             onClick={() => setShowCharacter(true)}
-            className="flex items-center gap-1.5 text-xs text-primary hover:underline"
+            className="inline-flex items-center gap-1.5 transition-colors hover:text-foreground"
           >
             <Palette className="h-3.5 w-3.5" /> Change character
           </button>
@@ -270,11 +274,11 @@ function LevelPopup({
             type="button"
             onClick={() => setChoosingGoal(c => !c)}
             aria-pressed={choosingGoal}
-            className="text-xs text-muted-foreground hover:text-foreground hover:underline"
+            className="transition-colors hover:text-foreground"
           >
             {choosingGoal ? 'Done' : 'Change goal'}
           </button>
-        </div>
+        </InfoFinePrint>
       </div>
 
       {showCharacter && (

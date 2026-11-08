@@ -57,7 +57,8 @@ const SHARED_OVERLAYS = [
 describe('shared overlays', () => {
   it.each(SHARED_OVERLAYS)('%s portals to the body', rel => {
     const src = read(rel)
-    const portalled = src.includes('OverlayPortal') || src.includes('createPortal')
+    // `InfoSheet` (components/ui/InfoSheet.tsx) portals for the popups built on it.
+    const portalled = src.includes('OverlayPortal') || src.includes('createPortal') || src.includes('<InfoSheet')
     expect(portalled).toBe(true)
   })
 

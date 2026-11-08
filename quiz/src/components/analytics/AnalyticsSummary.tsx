@@ -182,7 +182,7 @@ export function AnalyticsSummary({ trend, span, leaks, pace, examLabel }: {
         </ul>
       </div>
 
-      {leaksOpen && <SectionLeaksDialog leaks={leaks} examLabel={examLabel} onClose={() => setLeaksOpen(false)} />}
+      {leaksOpen && <SectionLeaksDialog leaks={leaks} examLabel={examLabel} span={span} onClose={() => setLeaksOpen(false)} />}
     </div>
   )
 }

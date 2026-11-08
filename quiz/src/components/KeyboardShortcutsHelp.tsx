@@ -1,65 +1,88 @@
 import { useEffect } from 'react'
-import { Keyboard, X } from 'lucide-react'
+import { Keyboard } from 'lucide-react'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
-import { OverlayPortal } from '@/components/ui/OverlayPortal'
+import { Group, GroupRow } from '@/components/ui/GroupedList'
+import { BannerTile, InfoBanner, InfoSheet, NEUTRAL_BANNER } from '@/components/ui/InfoSheet'
 
 interface ShortcutRow {
   keys: string[]
   description: string
 }
 
-const QUIZ_SHORTCUTS: ShortcutRow[] = [
-  { keys: ['1', '2', '3', '4'], description: 'Select answer A / B / C / D' },
-  { keys: ['Enter'], description: 'Confirm selected answer, or next question' },
-  { keys: ['→'], description: 'Next question (after answering)' },
-  { keys: ['←'], description: 'Previous question' },
-  { keys: ['F'], description: 'Flag / unflag question' },
-  { keys: ['I'], description: 'Where this question came from' },
-  { keys: ['M'], description: 'Mute / unmute sounds' },
-  { keys: ['?'], description: 'Show this help' },
+interface ShortcutGroup {
+  title: string
+  rows: ShortcutRow[]
+}
+
+const QUIZ_SHORTCUTS: ShortcutGroup[] = [
+  {
+    title: 'Answering',
+    rows: [
+      { keys: ['1', '2', '3', '4'], description: 'Pick answer A–D' },
+      { keys: ['Enter'], description: 'Confirm, then next' },
+      { keys: ['→'], description: 'Next question' },
+      { keys: ['←'], description: 'Previous question' },
+    ],
+  },
+  {
+    title: 'The question',
+    rows: [
+      { keys: ['F'], description: 'Flag' },
+      { keys: ['I'], description: 'Where it came from' },
+      { keys: ['M'], description: 'Mute sounds' },
+    ],
+  },
 ]
 
-const FLASHCARD_SHORTCUTS: ShortcutRow[] = [
-  { keys: ['Space'], description: 'Flip card' },
-  { keys: ['1'], description: 'Again — keep card in rotation (after flip)' },
-  { keys: ['2'], description: 'Got it — mark card complete (after flip)' },
-  { keys: ['→'], description: 'Next card' },
-  { keys: ['←'], description: 'Previous card' },
-  { keys: ['S'], description: 'Shuffle deck' },
-  { keys: ['F'], description: 'Toggle focus mode' },
-  { keys: ['Esc'], description: 'Exit focus mode' },
-  { keys: ['?'], description: 'Show this help' },
+const FLASHCARD_SHORTCUTS: ShortcutGroup[] = [
+  {
+    title: 'Studying',
+    rows: [
+      { keys: ['Space'], description: 'Flip card' },
+      { keys: ['1'], description: 'Again (after flip)' },
+      { keys: ['2'], description: 'Got it (after flip)' },
+      { keys: ['→'], description: 'Next card' },
+      { keys: ['←'], description: 'Previous card' },
+    ],
+  },
+  {
+    title: 'The deck',
+    rows: [
+      { keys: ['S'], description: 'Shuffle' },
+      { keys: ['F'], description: 'Focus mode' },
+      { keys: ['Esc'], description: 'Leave focus mode' },
+    ],
+  },
 ]
 
 const GLOBAL_SHORTCUTS: ShortcutRow[] = [
-  { keys: ['⌘K', 'Ctrl+K'], description: 'Go to Search' },
-  { keys: ['Esc'], description: 'Close dialogs and modals' },
+  { keys: ['⌘K', 'Ctrl K'], description: 'Search' },
+  { keys: ['Esc'], description: 'Close a dialog' },
 ]
+
+/** `?` opens this help on the quiz and flashcard pages, which bind it. */
+const HELP_SHORTCUT: ShortcutRow = { keys: ['?'], description: 'Show this help' }
 
 function Kbd({ label }: { label: string }) {
   return (
-    <kbd className="inline-flex items-center justify-center min-w-[1.75rem] h-6 px-1.5 rounded border border-border bg-muted text-[11px] font-mono font-semibold text-muted-foreground shadow-sm">
+    <kbd className="inline-flex h-6 min-w-6 items-center justify-center rounded-md bg-muted px-1.5 font-mono text-[11px] font-semibold text-foreground/90 shadow-[inset_0_-1px_0_hsl(var(--foreground)/0.08)]">
       {label}
     </kbd>
   )
 }
 
-function ShortcutTable({ rows }: { rows: ShortcutRow[] }) {
+function ShortcutGroupList({ title, rows }: ShortcutGroup) {
   return (
-    <table className="w-full text-sm">
-      <tbody>
-        {rows.map(row => (
-          <tr key={row.description}>
-            <td className="py-2 pr-4 w-px whitespace-nowrap">
-              <span className="flex items-center gap-1 flex-wrap">
-                {row.keys.map(k => <Kbd key={k} label={k} />)}
-              </span>
-            </td>
-            <td className="py-2 text-muted-foreground">{row.description}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <Group label={title}>
+      {rows.map(row => (
+        <GroupRow
+          key={row.description}
+          label={row.description}
+          value={<span className="flex gap-1">{row.keys.map(k => <Kbd key={k} label={k} />)}</span>}
+          className="py-2"
+        />
+      ))}
+    </Group>
   )
 }
 
@@ -82,55 +105,20 @@ export function KeyboardShortcutsHelp({ context, onClose }: KeyboardShortcutsHel
     return () => window.removeEventListener('keydown', onKey)
   }, [onClose])
 
+  const groups = context === 'quiz' ? QUIZ_SHORTCUTS : context === 'flashcards' ? FLASHCARD_SHORTCUTS : []
+  const anywhere = context === 'general' ? GLOBAL_SHORTCUTS : [...GLOBAL_SHORTCUTS, HELP_SHORTCUT]
+
   return (
-    <OverlayPortal>
-    <div
-      className="fixed inset-0 z-[80] flex items-center justify-center p-4 paper-scrim"
-      role="dialog"
-      aria-modal="true"
-      aria-label="Keyboard shortcuts"
-    >
-      <div
-        className="absolute inset-0 bg-black/40"
-        onClick={onClose}
-        aria-hidden="true"
+    <InfoSheet onClose={onClose} labelledBy="shortcuts-title">
+      <InfoBanner
+        tile={<BannerTile><Keyboard className="h-5 w-5" /></BannerTile>}
+        title="Keyboard shortcuts"
+        titleId="shortcuts-title"
+        onClose={onClose}
+        tint={NEUTRAL_BANNER}
       />
-      <div className="relative z-10 w-full max-w-sm rounded-xl bg-background shadow-xl p-5 space-y-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Keyboard className="h-4 w-4 text-muted-foreground" />
-            <h2 className="text-sm font-semibold">Keyboard Shortcuts</h2>
-          </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="h-7 w-7 flex items-center justify-center rounded-md hover:bg-accent text-muted-foreground hover:text-foreground transition-colors"
-            aria-label="Close"
-          >
-            <X className="h-4 w-4" />
-          </button>
-        </div>
-
-        {(context === 'quiz') && (
-          <section>
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Quiz</p>
-            <ShortcutTable rows={QUIZ_SHORTCUTS} />
-          </section>
-        )}
-
-        {context === 'flashcards' && (
-          <section>
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Flashcards</p>
-            <ShortcutTable rows={FLASHCARD_SHORTCUTS} />
-          </section>
-        )}
-
-        <section>
-          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Global</p>
-          <ShortcutTable rows={GLOBAL_SHORTCUTS} />
-        </section>
-      </div>
-    </div>
-    </OverlayPortal>
+      {groups.map(g => <ShortcutGroupList key={g.title} {...g} />)}
+      <ShortcutGroupList title="Anywhere" rows={anywhere} />
+    </InfoSheet>
   )
 }

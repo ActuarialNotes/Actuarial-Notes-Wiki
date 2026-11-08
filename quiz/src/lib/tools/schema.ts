@@ -27,7 +27,8 @@ export function fieldSchema(f: ToolField): Record<string, unknown> {
         minimum: f.min,
         maximum: f.max,
         default: f.default,
-        description: `${f.description}${UNIT_HINT[f.unit]}${judgment}`,
+        description: `${f.description}${UNIT_HINT[f.unit]}${judgment}${f.bank?.length ? ` Or a published figure from the Assumptions Bank, given as {"assumption": "<id>"}, of kind ${f.bank.join(' or ')}: the run records its source.` : ''}`,
+        ...(f.bank?.length ? { 'x-assumption-kinds': f.bank } : {}),
       }
     case 'choice':
       return { type: 'string', enum: f.options.map(o => o.value), default: f.default, description: `${f.description}${judgment}` }

@@ -210,4 +210,50 @@ test.describe('tools', () => {
     await denominator.getByRole('button', { name: 'Clear every cell' }).click()
     await expect(denominator.getByLabel('Origin 2021, age 12')).toHaveValue('')
   })
+  // The Assumptions Bank (docs/assumptions-bank.md): a published figure taken
+  // into a tool, from the shelf or from the field's own From… menu, and the
+  // run saying where it came from.
+  test('takes a published figure from the Assumptions Bank into a tool, with its source', async ({ page }) => {
+    await page.goto('/tools')
+    await page.getByTestId('assumptions-row').click()
+    await expect(page).toHaveURL(/\/tools\/assumptions$/)
+    await expect(page.getByTestId('assumption-set').first()).toBeVisible()
+    await page.getByRole('button', { name: 'Profit provision', exact: true }).click()
+    await expect(page.getByTestId('assumption-set')).toHaveCount(1)
+    await page.getByTestId('assumption-row').filter({ hasText: 'Profit provision' }).getByText('Use in a tool').click()
+    await page.getByRole('link', { name: /Use Profit provision .* as Profit & contingency in Permissible Loss Ratio/ }).click()
+    await expect(page).toHaveURL(/\/tools\/permissible-loss-ratio#input=/)
+
+    const card = page.getByTestId('tool-card')
+    await expect(card.getByLabel('Profit & contingency value')).toHaveValue('6')
+    const source = card.getByTestId('tool-figure-source')
+    await expect(source).toContainText('Automobile Insurance Rate Board, 2026 Annual Review')
+    await expect(source).toContainText('Not fact checked')
+    await card.getByText('Show working').click()
+    await expect(card.getByText('Profit & contingency: Profit provision (pre-tax, maximum)')).toBeVisible()
+
+    // A number of the reader's own replaces the figure, and its source with it.
+    await card.getByLabel('Profit & contingency value').fill('5')
+    await expect(source).toHaveCount(0)
+  })
+
+  test('offers the bank\'s figures in a field\'s From… menu', async ({ page }) => {
+    await page.goto('/tools/loss-ratio-method')
+    const card = page.getByTestId('tool-card')
+    await card.getByRole('button', { name: 'Variable expense ratio from a tool or a published figure' }).click()
+    const figures = card.getByTestId('tool-bank-figures')
+    await expect(figures).toBeVisible()
+    await figures.getByRole('button', { name: /Total expenses, 27\.8%/ }).click()
+    await expect(card.getByLabel('Variable expense ratio value')).toHaveValue('27.8')
+    await expect(card.getByTestId('tool-figure-source')).toContainText('Operating Expenses & ULAE')
+  })
+
+  test('shows a document\'s figures on its resource page', async ({ page }) => {
+    await page.goto('/tools/assumptions')
+    const set = page.getByTestId('assumption-set').filter({ hasText: 'ULAE factors' })
+    await set.getByRole('button', { name: 'Read the source' }).click()
+    const assumptions = page.getByTestId('resource-assumptions')
+    await expect(assumptions).toBeVisible()
+    await expect(assumptions).toContainText('1.1189')
+  })
 })

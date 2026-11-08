@@ -16,3 +16,16 @@ export { decodeRunInput, encodeRunInput, runPath } from './share'
 export { ToolInputError } from './types'
 export type * from './types'
 export { DATASETS, datasetsFor, type Dataset } from './data/datasets'
+export {
+  assumptionRef,
+  bankFigure,
+  bankFigures,
+  figuresFor,
+  installAssumptionBank,
+  printedFigure,
+  sourceOf,
+  uncheckedWarning,
+  unitFits,
+  type AssumptionSource,
+  type BankFigure,
+} from './bank'

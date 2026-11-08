@@ -5,6 +5,7 @@
  */
 
 import { isoDate, parseDate } from './dates'
+import { assumptionRef, bankFigure, bankFigures, unitFits, type BankFigure } from './bank'
 import {
   ToolInputError,
   type ChoiceField,
@@ -26,6 +27,28 @@ export interface NormalizedInput {
   defaulted: string[]
   /** What was coerced or ignored on the way in. */
   notes: string[]
+  /** Fields given as a reference to an Assumptions Bank figure, with the figure read in. */
+  sources: Record<string, BankFigure>
+}
+
+/**
+ * A number field given as `{ "assumption": "<id>" }`: the bank's figure,
+ * checked against what the field takes (its kinds, its unit, its bounds).
+ */
+function bankField(f: NumberField, id: string): { value: number; figure: BankFigure } {
+  const figure = bankFigure(id)
+  if (!figure) {
+    const why = bankFigures().length ? 'Search the bank for its id' : 'The Assumptions Bank is not loaded here'
+    throw new ToolInputError(f.key, `"${f.key}" names "${id}", which is no figure in the Assumptions Bank. ${why}, or give a number.`)
+  }
+  if (!f.bank?.includes(figure.kind)) {
+    const takes = f.bank?.length ? `takes ${f.bank.join(' or ')} figures` : 'takes no figure from the bank'
+    throw new ToolInputError(f.key, `"${f.key}" ${takes}; "${figure.label}" is ${figure.kind}.`)
+  }
+  if (!unitFits(figure.unit, f.unit)) {
+    throw new ToolInputError(f.key, `"${f.key}" is a ${f.unit}; "${figure.label}" is in ${figure.unit}.`)
+  }
+  return { value: numberField(f, figure.value), figure }
 }
 
 const isObject = (v: unknown): v is Record<string, unknown> => v !== null && typeof v === 'object' && !Array.isArray(v)
@@ -229,8 +252,14 @@ export function normalizeInput(spec: ToolSpec, raw: unknown): NormalizedInput {
   const input: ToolInput = {}
   const defaulted: string[] = []
   const notes: string[] = []
+  const sources: Record<string, BankFigure> = {}
   for (const field of spec.fields) {
-    if (given[field.key] === undefined || given[field.key] === null) {
+    const ref = field.kind === 'number' ? assumptionRef(given[field.key]) : null
+    if (ref && field.kind === 'number') {
+      const { value, figure } = bankField(field, ref)
+      input[field.key] = value
+      sources[field.key] = figure
+    } else if (given[field.key] === undefined || given[field.key] === null) {
       input[field.key] = defaultValue(field)
       defaulted.push(field.key)
     } else {
@@ -241,5 +270,5 @@ export function normalizeInput(spec: ToolSpec, raw: unknown): NormalizedInput {
   for (const key of Object.keys(given)) {
     if (!known.has(key)) notes.push(`Ignored "${key}": ${spec.id} takes ${[...known].join(', ')}.`)
   }
-  return { input, defaulted, notes }
+  return { input, defaulted, notes, sources }
 }

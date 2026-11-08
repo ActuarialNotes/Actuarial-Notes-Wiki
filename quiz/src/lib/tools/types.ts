@@ -10,6 +10,8 @@
  * serverless functions (`npm run tools:bundle`), outside the app's `@/` alias.
  */
 
+import type { AssumptionSource } from './bank'
+
 export type PracticeArea = 'data' | 'reserving' | 'ratemaking' | 'distributions' | 'credibility' | 'finance'
 
 /** How a number is read and shown. A `percent` is stored as a decimal (0.05) and shown as 5%. */
@@ -42,6 +44,12 @@ export interface NumberField extends FieldBase {
   zeroLabel?: string
   default: number
   integer?: boolean
+  /**
+   * The Assumptions Bank kinds this field takes a published figure of
+   * (docs/assumptions-bank.md §4.2): its input may then be a reference,
+   * `{ "assumption": "<id>" }`, read in by `normalizeInput` with its source.
+   */
+  bank?: string[]
 }
 
 /** A date, held as 'YYYY-MM-DD' (an effective date, a valuation date). */
@@ -125,6 +133,8 @@ export interface Judgment {
   label: string
   value: FieldValue
   default: boolean
+  /** The published figure the value was taken from, when it came from the Assumptions Bank. */
+  source?: AssumptionSource
 }
 
 export interface ToolOutput {

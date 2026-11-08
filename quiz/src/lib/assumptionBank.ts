@@ -232,3 +232,18 @@ export function assumptionById(sets: readonly AssumptionSet[], id: string): Assu
   const row = set?.rows.find(r => r.id === id)
   return set && row ? { set, row } : null
 }
+
+/** A kind as a reader reads it: `profit-provision` → "Profit provision", `ulae-factor` → "ULAE factor". */
+export function kindLabel(kind: string): string {
+  const words = kind.split('-').map(w => (w === 'ulae' || w === 'cat' ? w.toUpperCase() : w))
+  const text = words.join(' ')
+  return text.charAt(0).toUpperCase() + text.slice(1)
+}
+
+/** `2026-10-01` → "Oct 1, 2026" — the date a set's figures apply from. */
+export function effectiveLabel(iso: string): string {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso)
+  if (!m) return iso
+  const month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][Number(m[2]) - 1]
+  return `${month} ${Number(m[3])}, ${m[1]}`
+}

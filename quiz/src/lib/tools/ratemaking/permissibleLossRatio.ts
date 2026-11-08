@@ -8,9 +8,9 @@ export const permissibleLossRatio: ToolSpec = {
   answers: 'What loss ratio do the rates allow?',
   aka: ['PLR', 'target loss ratio'],
   fields: [
-    { kind: 'number', key: 'fixed', label: 'Fixed expense ratio', symbol: 'F', unit: 'percent', min: 0, max: 1, sliderMax: 0.3, step: 0.0025, default: 0, description: 'Fixed expenses as a share of premium (0 when every expense is treated as variable).' },
-    { kind: 'number', key: 'variable', label: 'Variable expense ratio', symbol: 'V', unit: 'percent', min: 0, max: 1, sliderMax: 0.5, step: 0.0025, default: 0.25, description: 'Variable expenses as a share of premium.' },
-    { kind: 'number', key: 'profit', label: 'Profit & contingency', symbol: 'Q', unit: 'percent', judgment: true, min: -0.5, max: 1, sliderMax: 0.2, step: 0.0025, default: 0.05, description: 'The target underwriting profit and contingency provision, as a share of premium.' },
+    { kind: 'number', key: 'fixed', bank: ['fixed-expense', 'expense-ratio'], label: 'Fixed expense ratio', symbol: 'F', unit: 'percent', min: 0, max: 1, sliderMax: 0.3, step: 0.0025, default: 0, description: 'Fixed expenses as a share of premium (0 when every expense is treated as variable).' },
+    { kind: 'number', key: 'variable', bank: ['variable-expense', 'expense-ratio'], label: 'Variable expense ratio', symbol: 'V', unit: 'percent', min: 0, max: 1, sliderMax: 0.5, step: 0.0025, default: 0.25, description: 'Variable expenses as a share of premium.' },
+    { kind: 'number', key: 'profit', bank: ['profit-provision'], label: 'Profit & contingency', symbol: 'Q', unit: 'percent', judgment: true, min: -0.5, max: 1, sliderMax: 0.2, step: 0.0025, default: 0.05, description: 'The target underwriting profit and contingency provision, as a share of premium.' },
   ],
   notation: () => 'PLR = 1 − F − V − Q,  VPLR = 1 − V − Q',
   view: 'none',

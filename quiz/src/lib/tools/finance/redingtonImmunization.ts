@@ -13,7 +13,7 @@ export const redingtonImmunization: ToolSpec = {
   answers: 'Are these assets Redington-immunized against these liabilities?',
   aka: ['immunization', 'ALM', 'asset liability matching'],
   fields: [
-    { kind: 'number', key: 'i', label: 'Annual effective rate', symbol: 'i', unit: 'percent', min: -0.5, max: 2, sliderMax: 0.2, step: 0.0025, default: 0.05, description: 'The flat annual effective rate both sides are valued at. Times are in years.' },
+    { kind: 'number', key: 'i', bank: ['discount-rate'], label: 'Annual effective rate', symbol: 'i', unit: 'percent', min: -0.5, max: 2, sliderMax: 0.2, step: 0.0025, default: 0.05, description: 'The flat annual effective rate both sides are valued at. Times are in years.' },
     {
       kind: 'table', key: 'flows', label: 'Cash flows', minRows: 1, maxRows: 1200,
       description: 'Each time in years with the asset cash flow and the liability cash flow due then (0 where there is none).',

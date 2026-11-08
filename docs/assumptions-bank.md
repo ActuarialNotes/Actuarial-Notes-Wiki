@@ -1,6 +1,6 @@
 # Assumptions Bank: plan
 
-*Proposed 2026-11-08 (roadmap A9). Decisions settled the same day (§6). **Phase 0 built 2026-11-08** (§5.1); Phases 1–4 are not.*
+*Proposed 2026-11-08 (roadmap A9). Decisions settled the same day (§6). **Phases 0 and 1 built 2026-11-08** (§5.1, §5.2); Phases 2–4 are not.*
 
 An **assumption** is one figure or one fact that a published document states, such as OSFI's 150%
 supervisory target MCT ratio, GISA's accident-year-2025 ULAE factor of 1.1189, the AIRB's 6.0%
@@ -358,18 +358,54 @@ What Phase 0 left for later, and why:
   same change as the tools that read it (`docs/ai-connector.md`), and data no tool reads only
   makes a 10 MB file bigger.
 - **A set's page in the concept popup** moves to Phase 1, with the shelf that links to it.
+  (Phase 1 drew a set as a card on the shelf and on its resource page instead; see §5.2.)
 
-### 5.2 The rest
+### 5.2 Phase 1, as built (2026-11-08)
 
-**Phase 1: tools take bank figures.**
-- `data.assumption`, the resolver, and `BANK_SOURCES` for the trend, expense, profit, ELR,
-  ULAE and discount fields.
-- The Assumptions shelf on `/tools` and the resource page's Assumptions card.
-- An e2e flow: AIRB profit provision → Permissible Loss Ratio, with the verdict pill in the
-  trace.
-- `npm run tools:bundle`.
+- **The engine takes the bank as installed data** (`lib/tools/bank.ts`), never as bundled
+  data. `installAssumptionBank(figures)` is called by the app at load (`lib/toolBank.ts`,
+  imported by `ToolCard`, so every card has it) and will be called by the connector from its
+  export in Phase 2. A figure with an open critical finding is never installed.
+- **A field names the kinds it takes.** `NumberField.bank` (`['profit-provision']`) is set on
+  the expense, profit, trend, ELR and discount-rate fields of Permissible Loss Ratio, Loss Ratio
+  Method, Pure Premium Method, Trend Factor, Two-Step Trend, Expected Claims, Present Value,
+  Annuity, Duration & Convexity and Redington Immunization. One fact drives the card's menu
+  (`figuresFor`), the shelf's links (`figureUses`) and the schema an agent reads
+  (`describeTool`: `x-assumption-kinds`, plus a sentence on the field).
+- **A run takes a figure by reference.** A bank field's input may be
+  `{ "assumption": "<set>#<row>" }`. `normalizeInput` reads it in, after checking the kind, the
+  unit and the field's bounds. The run then records it in four places: the judgment's `source`
+  (document, edition, locator, verdict), a first step in the working, the input hash (as
+  `id@edition`), and a warning while the figure is unverified (D-AB4, written by
+  `uncheckedWarning`). A share link, a stored draft and a workflow step all carry the reference,
+  not the number. Typing over the field replaces it with the reader's own number, and the source
+  goes with it.
+- **On the card:** the field's **From…** menu lists *From the Assumptions Bank* (each figure,
+  its value, its publisher and edition) beside the tools that compute the field. A figure in use
+  shows one line under its field: publisher, edition, locator, *Not fact checked* or *Fact
+  checked*, and **Read the source**, which opens the resource page in the concept popup. The
+  card leaves the run's unchecked-figure warning out of its own warning list, since the line
+  under the field says it.
+- **The shelf** is `/tools/assumptions` (`components/assumptions/AssumptionsShelf.tsx`), a row
+  under Data Sources in the catalogue (D-AB2). It shows every current set, newest first,
+  filtered by kind (`?kind=`). Each set is an `AssumptionSetCard`: its Fact Check badge, its
+  rows with their locators, **Read the source** and the publisher's copy. Each figure has a
+  *Use in a tool* toggle, whose links open a tool with the figure already in it.
+- **The resource page** (and its page in the popup) shows the sets read from it under the
+  citation block (`ResourceAssumptionsCard`).
+- **Tests:** `lib/tools/bank.test.ts` (the engine), `lib/toolBank.test.ts` (the vault's bank
+  installed, `figureUses`), and three flows in `e2e/tools.spec.ts`: the shelf into Permissible
+  Loss Ratio with its source in the working, the **From…** menu, and the resource page's card.
 
-**Phase 2: over MCP.**
+Moved to Phase 2: **the `data.assumption` tool.** The engine holds every registered tool to
+running on its default input and drawing a figure, and the connector's bundled engine runs
+with no bank installed. A tool whose only data is the vault can't meet that until the
+connector installs the bank too, so it lands with the connector.
+
+### 5.3 The rest
+
+**Phase 2: over MCP.** The connector installs the bank from its export, which makes
+`run_tool`'s references work there, and adds `data.assumption`.
 - `search_assumptions`, `get_assumption` and `run_tool` references, plus the export bump, the
   skill line and `mcp*.test.ts`.
 - A7's `get_document` reads from the bank.

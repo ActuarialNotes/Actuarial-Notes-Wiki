@@ -185,8 +185,15 @@ before touching that area**:
   the parser and lookups (`figuresOfKind`, `inForce`, `assumptionById`), bundled as
   `virtual:assumption-bank`. Cowork's document rows are **derived** from it
   (`withBankAssumptions`), so don't author `assumptions:` in `coworkSources.ts` for a document
-  the bank holds. Its tools surface (Phase 1) and MCP tools (Phase 2) are planned there. Read
-  before adding a set.
+  the bank holds. **In the tools (Phase 1):** the engine never bundles the bank; the app
+  installs it (`lib/toolBank.ts`, imported by `ToolCard`) through `installAssumptionBank` in
+  `lib/tools/bank.ts`. A number field names the kinds it takes (`bank: ['profit-provision']`),
+  and its input may be `{ "assumption": "<set>#<row>" }`, which the run reads in and records:
+  the judgment's `source`, a working step, the hash, and a warning until fact checked. The card's
+  **From…** menu lists the figures; the shelf is `/tools/assumptions`
+  (`components/assumptions/`), with each figure linking into the tools that take it; a resource
+  page shows its sets (`ResourceAssumptionsCard`). The MCP tools are Phase 2. Read before adding
+  a set or a `bank:` field (and run `npm run tools:bundle` after touching `lib/tools/`).
 - `docs/concept-learning-progression.md` — the 5-state mastery ladder (New → L1 → L2 → L3,
   with Forgotten/decay), implemented in `quiz/src/lib/mastery.ts`
 - `docs/study-plan-generation.md` — how daily study plans are scheduled/paced/cached,

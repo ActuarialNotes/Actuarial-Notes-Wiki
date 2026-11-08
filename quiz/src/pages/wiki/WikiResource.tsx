@@ -16,6 +16,7 @@ import { RESTORE_SCROLL } from '@/lib/routeScrollMemory'
 import { backLabel, useBack } from '@/hooks/useBack'
 import { extractSyllabusAssignments, parseResourceMeta, RESOURCE_ARTICLE_CLASS, preprocessResourceMarkdown } from '@/lib/resourceMeta'
 import { ResourceSyllabusCard } from '@/components/wiki/ResourceSyllabusCard'
+import { ResourceAssumptionsCard } from '@/components/wiki/ResourceAssumptionsCard'
 
 export default function WikiResource() {
   const { slug = '' } = useParams()
@@ -96,6 +97,7 @@ export default function WikiResource() {
             onOpen={ref => navigate(wikiRoute(ref))}
             className="mb-0"
           />
+          <ResourceAssumptionsCard resource={resourceName} />
         </div>
       )}
 

@@ -59,7 +59,7 @@ function BriefOption({ brief, attempts, onSelect }: { brief: ProjectCase; attemp
       <span className="min-w-0 flex-1">
         <span className="flex items-center gap-2">
           <span className="min-w-0 flex-1 text-sm font-semibold leading-snug">{brief.title}</span>
-          {submitted && <CheckMark className="h-4 w-4 shrink-0 text-emerald-500" label="Submitted" />}
+          {submitted && <CheckMark className="h-4 w-4 shrink-0" label="Submitted" />}
         </span>
         <span className="mt-0.5 block text-xs text-muted-foreground">{brief.company}</span>
         <span className="mt-2 flex flex-wrap gap-1.5">

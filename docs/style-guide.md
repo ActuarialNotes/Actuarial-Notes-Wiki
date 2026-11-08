@@ -977,7 +977,11 @@ row, a pill or an overhung corner without carrying a background of its own — a
 the old "green circle, white tick" pattern is gone, since a white tick is only invisible
 against one surface.
 
-- **Colour** comes from `currentColor`, defaulting to the `green-500` of §4.1. Override only
+- **Colour** comes from `currentColor`. Inside an exam's scope (an ancestor spreads
+  `examAccentStyle`) it defaults to that exam's `--exam-accent-vivid`, so a topic picked in
+  the quiz setup sheet or a step done in an exam's kit is the exam's colour; outside any exam
+  it defaults to the `green-500` of §4.1. A pass/fail verdict that sits beside a red cross
+  pins its own green. Override only
   where the mark belongs to something that already owns a colour — the streak badge's check
   is orange because it marks the flame, not a finished plan.
 - **Sizes** follow §10: `h-3.5 w-3.5` in a chip, `h-4 w-4` in a row, `h-5 w-5` in a group

@@ -28,9 +28,13 @@ describe('CheckMark', () => {
     expect(new Set(ids).size).toBe(2)
   })
 
-  it('is the done green unless a surface says otherwise', () => {
-    expect(renderToStaticMarkup(<CheckMark />)).toContain('text-green-500')
-    expect(renderToStaticMarkup(<CheckMark className="text-orange-500" />)).toContain('text-orange-500')
+  it("is the exam's colour in an exam's scope, the done green outside one", () => {
+    const html = renderToStaticMarkup(<CheckMark />)
+    expect(html).toContain('var(--exam-accent-vivid,theme(colors.green.500))')
+    const custom = renderToStaticMarkup(<CheckMark className="text-orange-500" />)
+    expect(custom).toContain('text-orange-500')
+    // A surface's own colour replaces the default rather than fighting it.
+    expect(custom).not.toContain('--exam-accent-vivid')
   })
 
   it('is decorative without a label and named with one', () => {

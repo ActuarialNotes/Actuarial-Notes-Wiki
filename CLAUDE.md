@@ -676,6 +676,11 @@ Other important `lib/` modules:
   the vault, so no page's fact check goes stale. It splits only at top-level separators, only
   between pieces that each carry an `=`, and keeps an index range (`k = 1, 2, \ldots`) and
   anything with an implication arrow whole; `formulaBoxes.test.ts` holds it to the vault.
+  Because a one-line `$$…$$` parses as *inline* math, KaTeX would typeset every formula box in
+  text style (a small ∫ with its limits beside it, shrunk fractions); `displayMath.ts`
+  (`remarkDisplayFormulaBoxes`, after `remark-math` in `WikiArticle` and block `MarkdownText`)
+  prefixes `\displaystyle` to every `$$` span written on a line of its own, and breaks the line
+  either side of one that shares a paragraph with prose or with more lines of working.
 - `wikiParser.ts` / `wikiIndex.ts` / `wikiExtract.ts` — parse wiki pages, build search index, extract syllabus structure
 - `conceptMatch.ts` — resolves concept name variants/aliases to a canonical slug (`slugForLink`)
 - `examStatus.ts` — how far along each exam's material is, keyed by exam_progress key:

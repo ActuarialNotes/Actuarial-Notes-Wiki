@@ -3,6 +3,7 @@ import type { Components } from 'react-markdown'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
+import { remarkDisplayFormulaBoxes } from '@/lib/displayMath'
 import rehypeKatex from 'rehype-katex'
 import { codeComponents, inlineCodeComponents } from '@/components/codeComponents'
 import { ProseLink } from '@/components/PdfLinkButton'
@@ -92,6 +93,11 @@ const inlineComponents: Components = {
   a: ({ node: _node, ...props }) => <ProseLink {...props} />,
 }
 
+// A block's formula boxes (`$$…$$` on a line of its own) are typeset at display
+// size (lib/displayMath.ts); inline text — an answer option — keeps text style.
+const INLINE_REMARK_PLUGINS = [remarkGfm, remarkMath]
+const BLOCK_REMARK_PLUGINS = [remarkGfm, remarkMath, remarkDisplayFormulaBoxes]
+
 const blockComponents: Components = {
   ...codeComponents,
   table: scrollableTable,
@@ -117,7 +123,7 @@ export function MarkdownText({ children, className, inline, conceptNames }: Prop
     // (see lib/imageFocus.ts).
     <Wrapper className={className} data-math-scope="" data-image-scope="">
       <ReactMarkdown
-        remarkPlugins={[remarkGfm, remarkMath]}
+        remarkPlugins={inline ? INLINE_REMARK_PLUGINS : BLOCK_REMARK_PLUGINS}
         rehypePlugins={rehypePlugins}
         components={inline ? inlineComponents : blockComponents}
       >

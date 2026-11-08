@@ -4,6 +4,7 @@ import ReactMarkdown, { type Components } from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
 import { calloutComponents } from './calloutComponents'
+import { remarkDisplayFormulaBoxes } from '@/lib/displayMath'
 
 const MD = [
   '> [!example]- Time Value of Money {5-15%}',
@@ -135,5 +136,28 @@ describe('titles with math, and worked examples', () => {
     const example = md('> [!example]- $X$ and $Y$ are each 0 or 1. {Example}\n> Answer.')
     expect(example).not.toMatch(underlined)
     expect(example.match(/Example/g)).toHaveLength(1)
+  })
+})
+
+describe('a formula under a callout header', () => {
+  function renderMd(md: string): string {
+    return renderToStaticMarkup(
+      <ReactMarkdown remarkPlugins={[remarkGfm, remarkMath, remarkDisplayFormulaBoxes]} components={calloutComponents}>
+        {md}
+      </ReactMarkdown>,
+    )
+  }
+
+  it('opens the body on the formula, not on an empty line', () => {
+    const html = renderMd('> [!example]- Find the mean {Example}\n> $$E[X] = \\int_0^1 x\\,dx$$\n')
+    expect(html).toContain('Find the mean')
+    expect(html).not.toMatch(/<p><br\/?>/)
+    expect(html).toContain('\\displaystyle')
+  })
+
+  it('keeps the formula out of a title that ends in math', () => {
+    const html = renderMd('> [!example]- Find $a$\n> $$a = 1$$\n')
+    const title = html.slice(0, html.indexOf('data-callout-body'))
+    expect(title).not.toContain('a = 1')
   })
 })

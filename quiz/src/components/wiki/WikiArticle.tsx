@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
+import { remarkDisplayFormulaBoxes } from '@/lib/displayMath'
 import rehypeKatex from 'rehype-katex'
 import type { Components } from 'react-markdown'
 import { calloutComponents } from '@/components/calloutComponents'
@@ -90,6 +91,8 @@ function hastText(node: HastLike | undefined): string {
   return (node.children ?? []).map(hastText).join('')
 }
 
+// Formula boxes (`> $$…$$`) typeset at display size — see lib/displayMath.ts.
+const REMARK_PLUGINS = [remarkGfm, remarkMath, remarkDisplayFormulaBoxes]
 const REHYPE_PLUGINS = [rehypeKatex]
 const OUTLINE_REHYPE_PLUGINS = [rehypeKatex, rehypeOutlineItems]
 const SECTION_REHYPE_PLUGINS = [rehypeKatex, rehypeArticleSections]
@@ -302,7 +305,7 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
     >
       <TitleActionContext.Provider value={titleAction ?? null}>
         <ReactMarkdown
-          remarkPlugins={[remarkGfm, remarkMath]}
+          remarkPlugins={REMARK_PLUGINS}
           rehypePlugins={outlineItems ? OUTLINE_REHYPE_PLUGINS : stickyHeadings ? SECTION_REHYPE_PLUGINS : REHYPE_PLUGINS}
           components={components}
         >

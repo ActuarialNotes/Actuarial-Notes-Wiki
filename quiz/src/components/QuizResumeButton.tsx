@@ -100,7 +100,7 @@ export function QuizResumeButton() {
         >
           <div className="space-y-0.5">
             <h2 id={headingId} className="text-sm font-semibold">
-              {noun === 'exam' ? 'Practice exam in progress' : 'Quiz in progress'}
+              {noun === 'exam' ? 'Practice Exam in progress' : 'Quiz in progress'}
             </h2>
             {consequence && <p className="text-xs text-muted-foreground">{consequence}</p>}
           </div>
@@ -138,7 +138,7 @@ export function QuizResumeButton() {
         )}
       >
         <Play className="h-4 w-4 shrink-0 fill-current" aria-hidden />
-        <span>Return to {noun}</span>
+        <span>Return to {noun === 'exam' ? 'Practice Exam' : 'quiz'}</span>
         <span className="h-[18px] w-px bg-primary-foreground/30" aria-hidden />
         <span className="tabular-nums font-medium opacity-70">
           <span className="sr-only">question </span>

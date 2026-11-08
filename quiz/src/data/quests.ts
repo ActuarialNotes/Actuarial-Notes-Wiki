@@ -96,7 +96,7 @@ export const REVIVE_QUESTS: readonly QuestDef[] = [
   {
     id: 'revive-1',
     title: 'Back From the Brink',
-    description: 'Correctly answer a question on a forgotten concept',
+    description: 'Answer a question on a Forgotten concept correctly',
     kind: 'revive',
     target: 1,
     gems: 12,
@@ -105,7 +105,7 @@ export const REVIVE_QUESTS: readonly QuestDef[] = [
   {
     id: 'revive-2',
     title: 'Second Wind',
-    description: 'Correctly answer 2 questions on forgotten concepts',
+    description: 'Answer 2 questions on Forgotten concepts correctly',
     kind: 'revive',
     target: 2,
     gems: 18,
@@ -114,7 +114,7 @@ export const REVIVE_QUESTS: readonly QuestDef[] = [
   {
     id: 'revive-3',
     title: 'Memory Medic',
-    description: 'Correctly answer 3 questions on forgotten concepts',
+    description: 'Answer 3 questions on Forgotten concepts correctly',
     kind: 'revive',
     target: 3,
     gems: 24,
@@ -133,7 +133,7 @@ export const SPECIAL_QUESTS: readonly QuestDef[] = [
   {
     id: 'hard-2',
     title: 'Heavy Lifting',
-    description: 'Clear 2 hard questions',
+    description: 'Answer 2 hard questions correctly',
     kind: 'hard_correct',
     target: 2,
     gems: 15,
@@ -160,7 +160,7 @@ export const SPECIAL_QUESTS: readonly QuestDef[] = [
   {
     id: 'hard-3',
     title: 'Boss Fight',
-    description: 'Clear 3 hard questions',
+    description: 'Answer 3 hard questions correctly',
     kind: 'hard_correct',
     target: 3,
     gems: 20,

@@ -73,7 +73,7 @@ export function QuestCompleteOverlay({ onResolved }: { onResolved?: () => void }
             <Swords className="h-7 w-7 text-emerald-500" />
           </div>
           <h2 className="text-xl font-bold tracking-tight">
-            {quests.length === 1 ? 'Quest complete!' : `${quests.length} quests complete!`}
+            {quests.length === 1 ? 'Quest complete' : `${quests.length} quests complete`}
           </h2>
         </div>
 
@@ -104,7 +104,7 @@ export function QuestCompleteOverlay({ onResolved }: { onResolved?: () => void }
         </button>
         {!user && (
           <p className="text-center text-xs text-muted-foreground">
-            You&apos;ll get the XP now — sign in to bank the gems too.
+            Sign in to keep the gems. You get the XP either way.
           </p>
         )}
         <button

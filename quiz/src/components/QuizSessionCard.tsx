@@ -1,5 +1,6 @@
 import type { QuizSession } from '@/lib/supabase'
 import { formatTime } from '@/lib/sessionFormat'
+import { PRACTICE_EXAM_LABEL } from '@/lib/pastExams'
 
 function formatShortDate(iso: string): string {
   return new Date(iso).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
@@ -17,7 +18,7 @@ export function QuizSessionCard({ session, onClick }: Props) {
   const opacity = +(0.2 + 0.8 * (pct / 100)).toFixed(2)
   const bgStyle = { backgroundColor: `rgba(34, 197, 94, ${opacity})` }
 
-  const modeLabel = session.mode === 'mock-exam' ? 'Exam' : 'Quiz'
+  const modeLabel = session.mode === 'mock-exam' ? PRACTICE_EXAM_LABEL : 'Quiz'
   const topicLabel = session.topic ?? 'General'
 
   return (

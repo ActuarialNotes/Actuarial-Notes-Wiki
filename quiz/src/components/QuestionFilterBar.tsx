@@ -37,7 +37,7 @@ const DROPDOWN_LABEL: Record<Exclude<QuestionFacet, 'difficulty'>, string> = {
 
 const EMPTY_TITLE: Record<Exclude<QuestionFacet, 'difficulty'>, string> = {
   type: 'No questions to filter by type',
-  concept: 'These questions are tagged with no other concept',
+  concept: 'These questions cover no other concept',
   source: 'No questions to filter by source',
   exam: 'No questions to filter by exam',
   sitting: 'None of these questions names the sitting it was set on',

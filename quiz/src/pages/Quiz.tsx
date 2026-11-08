@@ -606,6 +606,7 @@ export default function Quiz() {
       <PreQuizConcepts
         concepts={newQuizConcepts}
         planConcepts={planConcepts}
+        exam={EXAM_LABEL_TO_ID[storeQuestions[0]?.exam ?? '']}
         onStart={dismissConceptList}
         onQuit={handleQuit}
       />

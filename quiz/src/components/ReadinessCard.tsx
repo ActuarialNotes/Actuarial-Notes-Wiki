@@ -1113,11 +1113,11 @@ export function ReadinessCard({
               </div>
               <div className="space-y-1">
                 <div className="flex items-center justify-center gap-1.5">
-                  <p className="text-base font-semibold">Custom Study Plan</p>
+                  <p className="text-base font-semibold">Today's Study Plan</p>
                   <ProBadge />
                 </div>
                 <p className="text-xs text-muted-foreground max-w-[220px]">
-                  A daily plan tailored to you
+                  The concepts to study each day, paced to your exam date
                 </p>
               </div>
             </div>
@@ -1712,8 +1712,8 @@ function DayCompleteInfoPanel({
             <Gem className="h-5 w-5 text-cyan-400 shrink-0" />
             <p className="text-cyan-700 dark:text-cyan-300">
               {bonusClaimed
-                ? <><strong>2× gem bonus applied</strong> — +{bonusAmount} bonus gem{bonusAmount === 1 ? '' : 's'} earned today.</>
-                : <>2× gem bonus is active for the rest of today.</>}
+                ? <>Finishing the plan doubled your gems: <strong>+{bonusAmount}</strong> today.</>
+                : <>Signed-in readers who finish the plan get the day's gems again as a bonus.</>}
             </p>
           </div>
 

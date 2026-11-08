@@ -96,9 +96,8 @@ export function examDateLine(exam: ExamDate, today: string): string {
 }
 
 export function phaseLine(phase: JourneyPhase, daysLeft: number | null): string {
-  if (phase === 'exam') return 'It’s exam time. Nothing more to do here — good luck.'
-  if (phase === 'after') return 'That sitting has passed. Set your next one when you know it.'
-  if (phase === 'setup') return 'Set your sitting, and the Tutor will pace the rest.'
+  // setup, exam and after say everything in their PHASES purpose, which is drawn beside this.
+  if (phase === 'exam' || phase === 'after' || phase === 'setup') return ''
   return daysLeft != null ? `${plural(daysLeft, 'day')} to go.` : ''
 }
 

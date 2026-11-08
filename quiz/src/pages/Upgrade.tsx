@@ -251,8 +251,7 @@ export default function Upgrade() {
         <Card className="mx-auto max-w-md ring-1 ring-primary/10 shadow-sm">
           <CardContent className="p-6 space-y-4 text-center">
             <div className="space-y-1">
-              <p className="text-lg font-semibold">Try it for a month</p>
-              <p className="text-sm text-muted-foreground">$10 / month. Cancel anytime.</p>
+              <p className="text-lg font-semibold">$10 a month</p>
             </div>
             {cta}
           </CardContent>

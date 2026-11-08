@@ -1772,7 +1772,7 @@ function StudySessionSummaryDialog({
           <button
             type="button"
             onClick={onClearCompleted}
-            title="Move completed cards into a dated pack and clear them from your deck"
+            title="Remove completed cards from your deck"
             className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-green-600 text-white text-sm font-semibold hover:bg-green-700 active:scale-[0.98] transition-all"
           >
             <CheckCircle2 className="h-4 w-4" /> Clear Completed Flashcards

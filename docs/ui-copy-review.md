@@ -63,6 +63,8 @@ findings below. Accept, change or drop each:
 | R10 | **Say it once per screen.** A legal notice, a status or a phase purpose appears once. Two strings drawn into one `<p>` must not repeat each other. | Tutor phases, Store "nothing is sold", Settings delete warning |
 | R11 | **Don't call it "mastered".** The app's nouns are the levels (Level 1–3, Forgotten). | ReadinessCard, email, quests, study-plan strategy |
 | R12 | **A status word is never shown bare.** "Beta", "In Development", "Vintage" and "Studio voice" get the plain meaning next to them. | Study-guide banner, ExamsPopout, Listen |
+| R13 | **Things don't act like people.** A quiz doesn't "live" anywhere, progress doesn't "come with you", and Cowork doesn't "carry" documents. Say what is stored, where, and what the reader can do about it. *(Added from the maintainer's note on the guest save prompt.)* | GuestSavePrompt, ActiveExamCard "hang off it", Cowork "carries", Raid "the boss is using", Tutor "follows you here, quietly" |
+| R14 | **The reader's things are theirs.** Say "your quiz results", not "this quiz"; speak to the reader, not about the system. *(Same note.)* | GuestSavePrompt and every "this X" that is really the reader's own record |
 
 ---
 

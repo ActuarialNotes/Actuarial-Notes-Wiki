@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react'
-import { ShieldCheck, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { FACT_CHECK_UI_ENABLED } from '@/lib/featureFlags'
-import { factCheckBadge, type Verification } from '@/lib/verification'
+import { factCheckBadge, factCheckOverview, formatCheckedDate, type FactCheckTone, type Verification } from '@/lib/verification'
 import { FACT_CHECK_TONE_CLASSES, FACT_CHECK_ICONS } from '@/lib/factCheckTone'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
 import { useIsReadingPdf } from '@/hooks/usePdfReader'
-import { OverlayPortal } from '@/components/ui/OverlayPortal'
+import { BannerTile, InfoBanner, InfoSheet, NEUTRAL_BANNER, Stat } from '@/components/ui/InfoSheet'
 import { FactCheckPanel } from '@/components/FactCheckPanel'
 
 /**
@@ -94,9 +93,11 @@ export function FactCheckDialog(props: FactCheckDialogProps) {
  * Mounted only while open, so the sound and the key handler belong to one
  * viewing rather than to the surface that owns the button.
  *
- * A bottom sheet on a phone and a centred dialog above `sm` — the same shape
- * the app's other record panels use (`docs/style-guide.md` §8.1), down to the
- * blurred scrim.
+ * An info popup (`components/ui/InfoSheet.tsx`): the verdict leads as the
+ * banner, tinted in its tone — the page's name over the verdict, and the
+ * strip's figures (when last checked, against how many sources, how many
+ * issues are open) — and the record follows as one grouped surface. A verdict
+ * the figures can't say (stale, under review, unchecked) keeps its sentence.
  */
 function FactCheckSheet({
   onClose,
@@ -122,50 +123,59 @@ function FactCheckSheet({
     return () => window.removeEventListener('keydown', onKey)
   }, [onClose, readingPdf])
 
-  return (
-    <OverlayPortal>
-      <div
-        className="fixed inset-0 z-[130] flex items-end justify-center bg-black/50 backdrop-blur-sm sm:items-center sm:p-4 paper-scrim"
-        onClick={onClose}
-        role="presentation"
-      >
-        <div
-          className="flex max-h-[85vh] w-full max-w-lg flex-col overflow-hidden rounded-t-2xl bg-card shadow-2xl sm:rounded-2xl"
-          onClick={(e) => e.stopPropagation()}
-          role="dialog"
-          aria-modal="true"
-          aria-label={`Fact check for ${contentName ?? contentPath}`}
-        >
-          <div className="flex items-start justify-between gap-3 border-b border-border px-5 py-4">
-            <div className="flex min-w-0 items-center gap-2">
-              <ShieldCheck className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
-              <div className="min-w-0">
-                <h2 className="text-sm font-semibold leading-tight">Fact check</h2>
-                <p className="truncate text-xs text-muted-foreground">
-                  {contentName ?? contentPath}
-                </p>
-              </div>
-            </div>
-            <button
-              type="button"
-              onClick={onClose}
-              aria-label="Close"
-              data-sound="tap"
-              className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            >
-              <X className="h-4 w-4" />
-            </button>
-          </div>
+  const badge = factCheckBadge(verification)
+  const overview = factCheckOverview(verification)
+  const VerdictIcon = FACT_CHECK_ICONS[badge.kind]
+  const checked = badge.kind === 'checked' || badge.kind === 'checked-open' || badge.kind === 'issue'
+  const date = formatCheckedDate(verification?.lastChecked ?? null)
+  const sources = verification?.sources.length ?? 0
 
-          <div className="min-h-0 flex-1 overflow-y-auto px-5 py-4">
-            <FactCheckPanel
-              verification={verification}
-              contentPath={contentPath}
-              contentName={contentName}
-            />
-          </div>
-        </div>
-      </div>
-    </OverlayPortal>
+  return (
+    <InfoSheet
+      onClose={onClose}
+      label={`Fact check for ${contentName ?? contentPath}`}
+      layer="z-[130]"
+    >
+      <InfoBanner
+        tile={(
+          <BannerTile className={FACT_CHECK_TONE_CLASSES[badge.tone]}>
+            <VerdictIcon className="h-5 w-5" />
+          </BannerTile>
+        )}
+        eyebrow={contentName ?? contentPath}
+        title={badge.label.split(' · ')[0]}
+        onClose={onClose}
+        tint={BANNER_TINT[badge.tone]}
+        stats={checked ? [
+          date ? <Stat key="date" value={date.endsWith(String(new Date().getFullYear())) ? date.replace(/ \d{4}$/, '') : date} label="last checked" tone={STAT_TONE[badge.tone]} /> : null,
+          sources > 0 ? <Stat key="sources" value={sources} label={sources === 1 ? 'source' : 'sources'} /> : null,
+          <Stat key="open" value={verification?.openFindings ?? 0} label={(verification?.openFindings ?? 0) === 1 ? 'open issue' : 'open issues'} />,
+        ] : undefined}
+      >
+        {!checked && <p className="px-3.5 pb-3.5 text-sm text-muted-foreground">{overview.sentence}</p>}
+      </InfoBanner>
+
+      <FactCheckPanel
+        verification={verification}
+        contentPath={contentPath}
+        contentName={contentName}
+      />
+    </InfoSheet>
   )
+}
+
+/** The banner's wash, in the verdict's tone. */
+const BANNER_TINT: Record<FactCheckTone, string> = {
+  green: 'bg-green-500/10',
+  amber: 'bg-amber-500/10',
+  red: 'bg-red-500/10',
+  grey: NEUTRAL_BANNER,
+}
+
+/** The date figure, in the verdict's colour. */
+const STAT_TONE: Record<FactCheckTone, string> = {
+  green: 'text-green-700 dark:text-green-400',
+  amber: 'text-amber-700 dark:text-amber-400',
+  red: 'text-red-700 dark:text-red-400',
+  grey: '',
 }

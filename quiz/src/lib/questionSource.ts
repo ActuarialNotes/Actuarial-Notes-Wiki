@@ -1,6 +1,8 @@
 import { getSittingPdfLink, type ExamPdfLink } from '@/data/examPdfLinks'
 import { EXAM_LABEL_TO_ID } from './examIds'
-import { normalizeSession, sittingLabel } from './pastExams'
+import { normalizeSession, paperQuestionNumber, sittingLabel } from './pastExams'
+import { isVaultQuestionId } from './questionPublisher'
+import { formatClock, paceForExam, secondsPerUnit } from './quizTiming'
 import { contentPathFromVerification } from './verification'
 import type { Question } from './parser'
 
@@ -107,4 +109,68 @@ export function questionSource(question: Question): QuestionSource {
       ? getSittingPdfLink(paperExamLabel, question.year, normalizeSession(question.session))
       : null,
   }
+}
+
+/**
+ * The question's own name, the title of its Info popup: its number on the
+ * paper it was sat on ("Question 3") — read off the id, where the converters
+ * record the paper's order (`-q3`, or a sitting's trailing `-003`) — or the
+ * number of a publisher's sample ("Sample question 12"). A question with no
+ * number to read (the vault's own) is just "Practice question".
+ */
+export function questionTitle(question: Pick<Question, 'id' | 'year'>): string {
+  if (isVaultQuestionId(question.id)) return 'Practice question'
+  const n = paperQuestionNumber(question.id) ?? trailingNumber(question.id)
+  if (n === null) return 'Practice question'
+  return question.year ? `Question ${n}` : `Sample question ${n}`
+}
+
+function trailingNumber(id: string): number | null {
+  const match = /-(\d+)$/.exec(id)
+  return match ? Number(match[1]) : null
+}
+
+/** One figure of the Info popup's strip. */
+export interface QuestionFigure {
+  key: 'points' | 'paper' | 'time' | 'format'
+  value: string
+  label?: string
+}
+
+const FORMAT_FIGURE: Record<Question['type'], { value: string; label: string }> = {
+  'multiple-choice': { value: 'Multiple', label: 'choice' },
+  'free-entry': { value: 'Short', label: 'answer' },
+  'multi-part': { value: 'Written', label: 'answer' },
+}
+
+/**
+ * The figures the Info popup's banner carries, each only where it is known:
+ * the question's points (none printed, none shown); the paper's points, for a
+ * question sat on a paper paced by the point; the time the question gets at its
+ * exam's pace (`quizTiming.ts` — nothing for an exam with no pace, or a
+ * point-paced question with no points); and its format.
+ */
+export function questionFigures(
+  question: Pick<Question, 'exam' | 'originally_exam' | 'year' | 'points' | 'type'>,
+): QuestionFigure[] {
+  const figures: QuestionFigure[] = []
+  if (question.points > 0) {
+    figures.push({ key: 'points', value: String(question.points), label: question.points === 1 ? 'point' : 'points' })
+  }
+  const paperPace = paceForExam(question.originally_exam?.trim() || question.exam)
+  if (question.year && paperPace?.per === 'point') {
+    figures.push({ key: 'paper', value: String(paperPace.units), label: 'points on the paper' })
+  }
+  const pace = paceForExam(question.exam)
+  if (pace && (pace.per === 'question' || question.points > 0)) {
+    const units = pace.per === 'point' ? question.points : 1
+    figures.push({ key: 'time', value: formatAllowance(Math.round(units * secondsPerUnit(pace))) })
+  }
+  figures.push({ key: 'format', ...FORMAT_FIGURE[question.type] })
+  return figures
+}
+
+/** "30 min" for whole minutes, else the clock ("4:22"). */
+export function formatAllowance(seconds: number): string {
+  return seconds >= 60 && seconds % 60 === 0 ? `${seconds / 60} min` : formatClock(seconds)
 }

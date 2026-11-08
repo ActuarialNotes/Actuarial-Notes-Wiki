@@ -48,22 +48,21 @@ export function AttemptedQuestionsList({
 
   return (
     <div className="space-y-2">
-      <div className="flex items-center gap-2">
-        <h3 className="text-sm font-semibold">Attempted questions</h3>
-        <span className="text-xs text-muted-foreground tabular-nums">
-          {selectedQuestionId ? `${visibleRows.length} of ${rows.length}` : rows.length}
-        </span>
-        {selectedQuestionId && (
+      {/* No heading: under the graph, the list is plainly the questions its
+          dots answered. A dot's filter is the one thing to say about it. */}
+      {selectedQuestionId && (
+        <div className="flex items-center gap-2 px-1.5 text-xs text-muted-foreground">
+          <span className="tabular-nums">{visibleRows.length} of {rows.length}</span>
           <button
             type="button"
             onClick={onClearSelection}
-            className="ml-auto inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground px-2 py-1 rounded-md hover:bg-muted transition-colors"
+            className="ml-auto inline-flex items-center gap-1 rounded-md px-2 py-1 transition-colors hover:bg-muted hover:text-foreground"
           >
             <X className="h-3 w-3" />
             Clear filter
           </button>
-        )}
-      </div>
+        </div>
+      )}
 
       {visibleRows.length === 0 ? (
         <p className="text-xs text-muted-foreground py-2">

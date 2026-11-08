@@ -23,14 +23,11 @@ import { cn } from '@/lib/utils'
 import {
   FACT_CHECK_DIFF,
   FACT_CHECK_TONE_CLASSES,
-  FACT_CHECK_ICONS,
   SEVERITY_TONE,
 } from '@/lib/factCheckTone'
 import {
   parseVerificationLog,
   checkerName,
-  factCheckBadge,
-  factCheckOverview,
   findingOutcome,
   formatCheckedDate,
   logField,
@@ -53,11 +50,11 @@ import {
  * A reader opens this with three questions, and the panel answers them in the
  * order they are asked:
  *
- *  1. **Can I trust it?** — the verdict and one sentence under it
- *     (`factCheckOverview`): whether the page was checked, when, against how
- *     many sources, and whether anything is still open. Always on screen, and
- *     never contradicted by what is below it: the counts come from the page's
- *     own `verification:` block, which needs no fetch.
+ *  1. **Can I trust it?** — the verdict, in the banner of the sheet this is
+ *     drawn in (`FactCheckBadge`): whether the page was checked, when, against
+ *     how many sources, and how many issues are still open. Always on screen,
+ *     and never contradicted by what is below it: the counts come from the
+ *     page's own `verification:` block, which needs no fetch.
  *  2. **What's wrong with it?** — **Open issues**, the one section that starts
  *     unfolded, each finding a row that opens into a diff.
  *  3. **How do they know?** — **Checked against** (the sources, as the resource
@@ -68,9 +65,9 @@ import {
  *     (`components/AnswerabilitySection.tsx`), the history of the check behind
  *     publication gate G8, last because it is about the notes, not the page.
  *
- * Every section is a card of one shape (`components/FactCheckSection.tsx`)
- * that names what it holds and how many, so the folded stack is itself the
- * summary. Everything the record carries beyond that — content hashes, run
+ * Every section is a row of one shape (`components/FactCheckSection.tsx`) on
+ * one grouped surface, naming what it holds and how many, so the folded stack
+ * is itself the summary. Everything the record carries beyond that — content hashes, run
  * ids, fingerprints, the page locator a finding was written against — is
  * auditor's material. It stays in the vault, where `verify_check.py` can
  * enforce it, and the footer's **Full record** link goes to it.
@@ -122,28 +119,14 @@ export function FactCheckPanel({
     return () => { cancelled = true }
   }, [logPath, everChecked])
 
-  const badge = factCheckBadge(verification)
-  const overview = factCheckOverview(verification)
-  const VerdictIcon = FACT_CHECK_ICONS[badge.kind]
   const log = state.kind === 'loaded' ? state.log : null
   const summary = log && log.entries.length > 0 ? summarizeLog(log) : null
 
   return (
     <div className="space-y-4 text-sm">
-      <div className="flex items-start gap-3">
-        <span
-          className={cn('flex h-9 w-9 shrink-0 items-center justify-center rounded-lg',
-            FACT_CHECK_TONE_CLASSES[badge.tone])}
-        >
-          <VerdictIcon className="h-4 w-4" aria-hidden />
-        </span>
-        <div className="min-w-0 flex-1">
-          <p className="font-medium leading-tight">{overview.headline}</p>
-          <p className="mt-1 text-sm text-muted-foreground">{overview.sentence}</p>
-        </div>
-      </div>
-
-      <div className="space-y-2">
+      {/* The verdict leads the sheet (`FactCheckBadge`'s banner); the record
+          is one grouped surface of folding rows under it. */}
+      <div className="overflow-hidden rounded-xl bg-card divide-y divide-border/60 empty:hidden">
         {summary && summary.open.length > 0 && (
           <FactCheckSection
             title="Open issues"
@@ -158,20 +141,8 @@ export function FactCheckPanel({
         )}
 
         {/* What the page was read against — folded, like the rest: the
-            count on the card is the summary, the shelf one tap away. */}
+            count on the row is the summary, the shelf one tap away. */}
         <FactCheckSources sources={verification?.sources ?? []} />
-
-        {state.kind === 'loading' && everChecked && (
-          <p className="flex items-center gap-2 px-1 py-2 text-sm text-muted-foreground">
-            <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
-            Loading the record
-          </p>
-        )}
-        {state.kind === 'failed' && (
-          <p className="px-1 py-2 text-sm text-muted-foreground">
-            Couldn’t load the details of this check. The full record has them.
-          </p>
-        )}
 
         {summary && <RecordSections summary={summary} />}
 
@@ -180,16 +151,28 @@ export function FactCheckPanel({
         <AnswerabilitySection contentPath={contentPath} />
       </div>
 
-      <div className="flex items-center justify-between gap-2 border-t border-border pt-4">
+      {state.kind === 'loading' && everChecked && (
+        <p className="flex items-center gap-2 px-1.5 text-sm text-muted-foreground">
+          <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+          Loading the record
+        </p>
+      )}
+      {state.kind === 'failed' && (
+        <p className="px-1.5 text-sm text-muted-foreground">
+          Couldn’t load the details of this check. The full record has them.
+        </p>
+      )}
+
+      <div className="flex items-center justify-between gap-2 px-1.5 pb-1">
         {everChecked || log ? (
           <a
             href={githubBlobUrl(logPath)}
             target="_blank"
             rel="noreferrer"
-            className={cn('inline-flex items-center gap-1.5 rounded-md px-1 py-0.5 text-xs text-muted-foreground transition-colors hover:text-foreground', ROW_FOCUS)}
+            className={cn('inline-flex items-center gap-1 rounded-md text-xs text-muted-foreground transition-colors hover:text-foreground', ROW_FOCUS)}
           >
-            Full record
             <ExternalLink className="h-3 w-3" aria-hidden />
+            Full record
           </a>
         ) : <span />}
         <Button size="sm" variant="outline" onClick={() => setReporting(true)} data-sound="tap">

@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import { playSound } from '@/lib/soundEngine'
-import { ChevronLeft, ChevronRight, Gem, Loader2, Target } from 'lucide-react'
-import { CheckMark } from '@/components/CheckMark'
+import { ChevronLeft, Gem, Loader2 } from 'lucide-react'
+import { GroupSurface } from '@/components/ui/GroupedList'
+import { GROUP_ACTION_ROW, RowChevron } from '@/components/ui/infoRows'
 import { useQuests } from '@/hooks/useQuests'
 import { CollectButton } from '@/components/QuestsCard'
 import { KIND_STYLE } from '@/components/questKindStyle'
 import { PERFECT_QUIZ_MIN, type QuestKind } from '@/data/quests'
 import type { QuestContext, QuestProgressView } from '@/lib/quests'
-import type { XpView } from '@/hooks/useXp'
 
 // Quests tab body for the Level popup (roadmap P1.4, folded into the Level badge
 // for P4.1). Non-modal: it renders inside the already-open popup, with an
@@ -24,8 +24,8 @@ const KIND_DETAIL: Record<QuestKind, string> = {
   concept_correct: 'Counts correct answers on this quest’s concept, pulled from today’s study plan.',
 }
 
-export function QuestsPanel({ context, xp }: { context?: QuestContext; xp?: XpView }) {
-  const { board, completedCount, totalCount, claimable, claimableGems, claimableXp, claim, loading } =
+export function QuestsPanel({ context }: { context?: QuestContext }) {
+  const { board, claimable, claimableGems, claimableXp, claim, loading } =
     useQuests(context)
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [claiming, setClaiming] = useState(false)
@@ -53,13 +53,8 @@ export function QuestsPanel({ context, xp }: { context?: QuestContext; xp?: XpVi
     )
   }
 
-  const allDone = totalCount > 0 && completedCount === totalCount
-
   return (
     <div>
-      {/* Today's daily goal, formatted like a quest and sitting above the board. */}
-      {xp && <DailyGoalRow xp={xp} />}
-
       {loading ? (
         <div className="flex justify-center py-6">
           <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
@@ -69,100 +64,38 @@ export function QuestsPanel({ context, xp }: { context?: QuestContext; xp?: XpVi
           Today’s quests appear once your study data has loaded.
         </p>
       ) : (
-        <>
-          <div className="mb-2 flex items-center justify-between">
-            <p className="text-xs tabular-nums text-muted-foreground">
-              {allDone ? `${completedCount}/${totalCount} · all done!` : `${completedCount}/${totalCount} completed`}
-            </p>
-          </div>
-
+        <GroupSurface>
           {claimable.length > 0 && (
-            <div className="mb-3 flex items-center justify-between gap-2 rounded-xl bg-emerald-500/10 px-3 py-2">
-              <span className="text-xs font-medium text-emerald-700 dark:text-emerald-400">
-                {claimable.length} quest{claimable.length > 1 ? 's' : ''} ready to collect
+            <div className="flex items-center gap-3 bg-emerald-500/10 px-3.5 py-2.5">
+              <span className="min-w-0 flex-1 text-sm font-medium text-emerald-700 dark:text-emerald-300">
+                {claimable.length} ready
               </span>
               <CollectButton gems={claimableGems} xp={claimableXp} busy={claiming} onClick={() => collect()} />
             </div>
           )}
-
-          <div className="space-y-1">
-            {board.map(view => (
-              <QuestRow key={view.quest.id} view={view} onClick={() => setSelectedId(view.quest.id)} />
-            ))}
-          </div>
-        </>
+          {board.map(view => (
+            <QuestRow key={view.quest.id} view={view} onClick={() => setSelectedId(view.quest.id)} />
+          ))}
+        </GroupSurface>
       )}
-    </div>
-  )
-}
-
-/**
- * Today's daily-goal progress rendered in the same row shape as a quest (icon
- * chip · title · count · progress bar) so it reads as the first item on the
- * Quests tab rather than a separate section. Static — the goal itself is
- * changed from the popup footer, so there's no drill-down here.
- */
-function DailyGoalRow({ xp }: { xp: XpView }) {
-  return (
-    <div className="mb-1 flex w-full items-center gap-3 rounded-xl px-2 py-2 text-left">
-      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-violet-500/10">
-        <Target className="h-5 w-5 text-violet-500" />
-      </div>
-      <div className="min-w-0 flex-1">
-        <div className="flex items-baseline justify-between gap-2">
-          <p className="truncate text-sm font-semibold">Daily goal</p>
-          {xp.met ? (
-            <span className="inline-flex shrink-0 items-center gap-1 text-xs font-semibold text-green-600 dark:text-green-400">
-              <CheckMark className="h-3.5 w-3.5 text-current" /> Reached
-            </span>
-          ) : (
-            <span className="shrink-0 text-xs tabular-nums text-muted-foreground">
-              {xp.earnedToday}/{xp.target}
-            </span>
-          )}
-        </div>
-        <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-muted">
-          <div
-            className={`h-full rounded-full transition-[width] duration-300 ${xp.met ? 'bg-green-500' : 'bg-primary'}`}
-            style={{ width: `${Math.min(100, Math.max(0, Math.round(xp.ratio * 100)))}%` }}
-          />
-        </div>
-      </div>
     </div>
   )
 }
 
 function QuestRow({ view, onClick }: { view: QuestProgressView; onClick: () => void }) {
-  const { quest, earned, target, ratio, done, claimed, claimable } = view
+  const { quest, earned, target, claimed, claimable } = view
   const { Icon, accent, chip } = KIND_STYLE[quest.kind]
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="flex w-full items-center gap-3 rounded-xl px-2 py-2 text-left transition-colors hover:bg-muted/60"
-    >
-      <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${chip}`}>
-        <Icon className={`h-5 w-5 ${accent}`} />
-      </div>
-      <div className="min-w-0 flex-1">
-        <div className="flex items-baseline justify-between gap-2">
-          <p className={`truncate text-sm font-semibold ${claimed ? 'text-muted-foreground line-through decoration-2' : ''}`}>
-            {quest.title}
-          </p>
-          <span className="shrink-0 text-xs tabular-nums text-muted-foreground">{earned}/{target}</span>
-        </div>
-        <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-muted">
-          <div
-            className={`h-full rounded-full transition-[width] duration-300 ${done ? 'bg-green-500' : 'bg-primary'}`}
-            style={{ width: `${Math.round(ratio * 100)}%` }}
-          />
-        </div>
-      </div>
-      {claimable ? (
-        <span className="h-2 w-2 shrink-0 rounded-full bg-emerald-500" aria-label="Ready to collect" />
-      ) : (
-        <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" />
-      )}
+    <button type="button" onClick={onClick} className={GROUP_ACTION_ROW}>
+      <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${chip}`}>
+        <Icon className={`h-4 w-4 ${accent}`} />
+      </span>
+      <span className={`min-w-0 flex-1 truncate ${claimed ? 'text-muted-foreground line-through decoration-2' : ''}`}>
+        {quest.title}
+      </span>
+      {claimable && <span className="h-2 w-2 shrink-0 rounded-full bg-emerald-500" aria-label="Ready to collect" />}
+      <span className="shrink-0 tabular-nums text-muted-foreground">{earned}/{target}</span>
+      <RowChevron />
     </button>
   )
 }

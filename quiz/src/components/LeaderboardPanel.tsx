@@ -141,8 +141,8 @@ export function LeaderboardPanel({
           )}
           <Board board={league.board} tierIndex={league.tier.index} tierLabel={league.tier.label} />
           <p className="text-[11px] text-muted-foreground">
-            Top finishers move up a league on Monday (00:00 UTC); the bottom — and anyone who
-            ends the week with 0 XP — move down.
+            Top finishers move up a league on Monday (00:00 UTC). The bottom finishers, and
+            anyone who ends the week with 0 XP, move down.
           </p>
           {confirmingLeave ? (
             <div className="space-y-2 rounded-xl bg-muted/40 p-3">
@@ -201,8 +201,8 @@ function JoinPrompt({
   return (
     <div className="space-y-3">
       <p className="text-sm text-muted-foreground">
-        Join a weekly league of up to 30 students studying this exam. Earn XP to climb the
-        board — finish near the top and you&apos;re promoted to the next league.
+        Join a weekly league of up to 30 students studying this exam. Finish near the top of
+        the board and you move up a league.
       </p>
       <div className="flex items-center gap-2.5 rounded-xl bg-muted/40 p-3">
         <AvatarDisplay avatarUrl={avatarUrl} initials={initials} size={32} />
@@ -212,8 +212,8 @@ function JoinPrompt({
         </div>
       </div>
       <p className="text-xs text-muted-foreground">
-        Joining shares only your display name, avatar, and weekly XP with your league — never
-        your email or study details. Leave anytime and the shared copies are deleted.
+        Joining shares only your display name, avatar and weekly XP with your league, never
+        your email or study details. If you leave, the shared copies are deleted.
       </p>
       <button
         type="button"
@@ -242,10 +242,10 @@ function ResultBanner({
 }) {
   const copy =
     result === 'promoted'
-      ? `You were promoted to ${tierLabel}!`
+      ? `You moved up to ${tierLabel}`
       : result === 'demoted'
-        ? `You dropped to ${tierLabel} — climb back this week.`
-        : `You held your place in ${tierLabel}.`
+        ? `You moved down to ${tierLabel}`
+        : `You stayed in ${tierLabel}`
   const Icon = result === 'promoted' ? ChevronUp : result === 'demoted' ? ChevronDown : Minus
   return (
     <div
@@ -259,7 +259,7 @@ function ResultBanner({
       <Icon className="h-4 w-4 shrink-0" />
       <span className="min-w-0 flex-1">
         {copy}
-        {rank ? ` (finished #${rank})` : ''}
+        {rank ? `, finishing #${rank}` : ''}.
       </span>
       <button type="button" onClick={onDismiss} aria-label="Dismiss" className="shrink-0 opacity-60 hover:opacity-100">
         <X className="h-3.5 w-3.5" />
@@ -287,7 +287,7 @@ function Board({
   if (board.length === 0) {
     return (
       <p className="py-2 text-sm text-muted-foreground">
-        Your {tierLabel} league forms as students join this week — earn XP to take the early lead.
+        Your {tierLabel} league fills up as students join this week.
       </p>
     )
   }

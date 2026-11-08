@@ -59,7 +59,7 @@ export function ContactDialog({ onClose }: ContactDialogProps) {
         <div>
           <h2 id="contact-dialog-title" className="text-base font-semibold">Contact us</h2>
           <p className="text-sm text-muted-foreground mt-0.5">
-            We'll reply to jordan@actuarialnotes.com
+            Your message goes to jordan@actuarialnotes.com, and we'll reply by email.
           </p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-4">

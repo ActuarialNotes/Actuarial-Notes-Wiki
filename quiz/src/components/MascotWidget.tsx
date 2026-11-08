@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { X, Lock } from 'lucide-react'
 import { parseAvatarUrl, serializeAvatar, type AnimalType, ANIMAL_TYPES, ANIMAL_LABELS } from '@/lib/avatar'
@@ -8,221 +8,36 @@ import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/hooks/useAuth'
 import { cn } from '@/lib/utils'
 
-// ── Per-character phrase lists ────────────────────────────────────────────────
-
-type PhraseContext = {
-  daysRemaining?: number | null
-  topicsMastered?: number
-  totalTopics?: number
-}
-
-type PhraseFn = (ctx: PhraseContext) => string
-
-function days(ctx: PhraseContext) {
-  return ctx.daysRemaining != null ? `${ctx.daysRemaining}` : 'a few'
-}
-
-const PHRASES: Record<AnimalType, PhraseFn[]> = {
-  fox: [
-    ctx => `${days(ctx)} days? I've hunted prey with worse odds.`,
-    () => 'A fox always knows the answer. Probably.',
-    () => 'Outsmart the exam. It\'s what we do.',
-    ctx => ctx.topicsMastered ? `${ctx.topicsMastered} topics mastered? Clever.` : 'Stay sharp. Always.',
-    () => 'The sly finish first. That\'s you.',
-  ],
-  koala: [
-    () => 'No rush. Eucalyptus first, probability second.',
-    () => 'You\'re doing great. I\'d high five you but I\'m very tired.',
-    () => 'Sleep on it. Literally.',
-    ctx => `${days(ctx)} days left. Plenty of time for a nap or two.`,
-    () => 'Slow and steady passes the exam.',
-  ],
-  frog: [
-    () => 'RIBBIT means you passed in frog. Probably.',
-    () => 'Flies AND probability theory? Today\'s wild.',
-    () => 'Jump to the next topic!! JUMP!!',
-    ctx => `${days(ctx)} days?! WE ARE THRIVING!!`,
-    () => 'Every correct answer is a lily pad forward!',
-  ],
-  owl: [
-    () => 'Statistically speaking, you will succeed.',
-    () => 'I\'ve read every actuarial textbook. You should too.',
-    () => 'Wisdom is just flashcards you didn\'t lose.',
-    ctx => ctx.totalTopics ? `${ctx.totalTopics} topics in the syllabus. I've memorized them all.` : 'Knowledge is power. Obviously.',
-    ctx => `${days(ctx)} days of preparation. Optimal.`,
-  ],
-  wolf: [
-    () => 'THE PACK DOESN\'T QUIT.',
-    ctx => `${days(ctx)} days. Run.`,
-    () => 'You didn\'t come this far to only come this far.',
-    () => 'Every session makes the pack stronger.',
-    ctx => ctx.topicsMastered ? `${ctx.topicsMastered} concepts conquered. Keep hunting.` : 'Hunt every concept down.',
-  ],
-  octopus: [
-    () => 'I\'m holding 8 concepts at once. You can hold 2.',
-    () => 'Did you know ink helps you think? I made that up.',
-    () => 'Three arms studying, two arms snacking, three arms rooting for you.',
-    ctx => `${days(ctx)} days?! My ink is literally vibrating with excitement.`,
-    () => 'Tentacles crossed for your success!!',
-  ],
-}
-
-const DEFAULT_PHRASES: PhraseFn[] = [
-  () => 'Keep studying! You\'ve got this.',
-  ctx => `${days(ctx)} days to go — stay focused!`,
-  () => 'Every session counts.',
-]
-
-const VARIANT_PHRASES: Partial<Record<string, PhraseFn[]>> = {
-  'fox:crimson': [
-    () => 'Red Fox energy: fast, fierce, unstoppable.',
-    ctx => `${days(ctx)} days? This Red Fox doesn't miss.`,
-    () => 'The crimson flash always arrives first.',
-    ctx => ctx.topicsMastered ? `${ctx.topicsMastered} topics? Red Foxes count in kills.` : 'Red Fox sharpens every edge.',
-    () => 'Bold color, bolder results.',
-  ],
-  'fox:arctic': [
-    () => 'Arctic Fox: thrives where others freeze.',
-    () => 'Cold climate, cool head. That\'s the Arctic way.',
-    ctx => `${days(ctx)} days. The tundra taught patience.`,
-    () => 'White as snow, sharp as ice.',
-    () => 'Even in a blizzard, the Arctic Fox finds the path.',
-  ],
-  'koala:rose': [
-    () => 'Northern Koalas take it slow. So can you.',
-    () => 'Warm tones, warm brain. Study time.',
-    ctx => `${days(ctx)} days? A Northern Koala naps between every study session. Take notes.`,
-    () => 'Brown and steady wins the race.',
-    () => 'The actuarial path is just a very long tree branch.',
-  ],
-  'koala:slate': [
-    () => 'White Koala, rare mind. That\'s you.',
-    () => 'In a forest of students, be the White Koala.',
-    ctx => `${days(ctx)} days left. Even rare koalas take naps.`,
-    () => 'Mastery is just eucalyptus you\'ve already chewed.',
-    () => 'Elegantly calm. Devastatingly prepared.',
-  ],
-  'frog:azure': [
-    () => 'Dart Frog: small, brilliant, and slightly toxic to exams.',
-    () => 'Blue is the color of probability distributions too.',
-    ctx => `${days(ctx)} days?! DART FROGGING THROUGH THE SYLLABUS!!`,
-    () => 'Tiny but unmatched. That\'s the Dart Frog way.',
-    () => 'Vibrant mind, vivid results.',
-  ],
-  'frog:tropical': [
-    () => 'Tomato Frog: red-hot and ready.',
-    () => 'Hot take: you\'re passing this exam.',
-    ctx => `${days(ctx)} days?! TROPICAL ENERGY ACTIVATED!!`,
-    () => 'Ripe, ready, and absolutely thriving.',
-    () => 'Every session is a tropical storm of knowledge.',
-  ],
-  'owl:emerald': [
-    () => 'Barn Owls hunt in silence. So do high scorers.',
-    () => 'Golden eyes, golden formulas.',
-    ctx => `${days(ctx)} days. The Barn Owl watches, waits, then aces.`,
-    ctx => ctx.totalTopics ? `${ctx.totalTopics} items in the syllabus. Catalogued.` : 'The barn is full of knowledge.',
-    () => 'Wisdom with a warm glow. That\'s you.',
-  ],
-  'owl:snowy': [
-    () => 'Snowy Owl: rare, wise, and impossible to ignore.',
-    () => 'The tundra has no distractions. Neither should your study session.',
-    ctx => `${days(ctx)} days. Pure white clarity.`,
-    () => 'Impossibly rare. Inevitably prepared.',
-    () => 'Silence is the Snowy Owl\'s study playlist.',
-  ],
-  'wolf:shadow': [
-    () => 'Timber Wolf: the classic. The unstoppable.',
-    () => 'The Timber Wolf howls at passing marks.',
-    ctx => `${days(ctx)} days. The forest trembles.`,
-    ctx => ctx.topicsMastered ? `${ctx.topicsMastered} concepts tracked by the pack.` : 'Track every concept down.',
-    () => 'Grey, grounded, relentless.',
-  ],
-  'wolf:ivory': [
-    () => 'Arctic Wolf: rare as a perfect score.',
-    () => 'The ivory pack runs further than the rest.',
-    ctx => `${days(ctx)} days. The Arctic Wolf endures.`,
-    () => 'White as snow, unstoppable as winter.',
-    () => 'Those who wear white shine brightest on exam day.',
-  ],
-  'octopus:coral': [
-    () => 'Giant Pacific: the biggest brain in the ocean.',
-    () => 'Eight arms of actuarial knowledge.',
-    ctx => `${days(ctx)} days?! The Giant Pacific is already ten steps ahead.`,
-    () => 'Deep red, deep thinker.',
-    () => 'You don\'t need to be fast — you need to be right.',
-  ],
-  'octopus:abyss': [
-    () => 'Blue-ringed: tiny, terrifying, and extremely well-read.',
-    () => 'Gold rings mean danger. Gold rings mean you\'ve mastered this.',
-    ctx => `${days(ctx)} days?! My ink is literally glowing.`,
-    () => 'The most dangerous octopus studied actuarial science.',
-    () => 'Small but precise. Every tentacle knows its formula.',
-  ],
-}
-
 // ── MascotWidget ──────────────────────────────────────────────────────────────
 
 interface MascotWidgetProps {
   avatarUrl: string
   initials: string
-  context?: PhraseContext
+  /** @deprecated Ignored: the phrase bubble these fed was never drawn and is gone. */
+  context?: unknown
+  /** @deprecated Ignored: the widget is always the compact button. */
   compact?: boolean
 }
 
-const CYCLE_MS = 7000
-
-export function MascotWidget({ avatarUrl, initials, context = {}, compact = false }: MascotWidgetProps) {
+/** The reader's character as a small button that opens the character and skin picker. */
+export function MascotWidget({ avatarUrl, initials }: MascotWidgetProps) {
   const parsed = parseAvatarUrl(avatarUrl)
-  const animalType = parsed.type === 'animal' ? parsed.value : null
   const variant = parsed.type === 'animal' ? parsed.variant : undefined
-  const variantId = animalType && variant ? `${animalType}:${variant}` : null
-
-  const phrases: PhraseFn[] =
-    (variantId ? VARIANT_PHRASES[variantId] : undefined) ??
-    (animalType ? (PHRASES as Record<string, PhraseFn[] | undefined>)[animalType] : undefined) ??
-    DEFAULT_PHRASES
-
-  const [phraseIdx, setPhraseIdx] = useState(() => Math.floor(Math.random() * phrases.length))
-  const [visible, setVisible] = useState(true)
   const [showSelector, setShowSelector] = useState(false)
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-
-  const advance = useCallback(() => {
-    setVisible(false)
-    setTimeout(() => {
-      setPhraseIdx(i => (i + 1) % phrases.length)
-      setVisible(true)
-    }, 250)
-  }, [phrases.length])
-
-  // Reset phrase index if avatar/variant changes
-  useEffect(() => {
-    setPhraseIdx(Math.floor(Math.random() * phrases.length))
-    setVisible(true)
-  }, [animalType, variantId, phrases.length])
-
-  // Auto-cycle phrases
-  useEffect(() => {
-    timerRef.current = setTimeout(advance, CYCLE_MS)
-    return () => { if (timerRef.current) clearTimeout(timerRef.current) }
-  }, [phraseIdx, advance])
 
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation()
     setShowSelector(true)
   }
 
-  const safeIdx = phraseIdx < phrases.length ? phraseIdx : 0
-  const currentPhrase = (phrases[safeIdx] ?? phrases[0])?.(context) ?? ''
-
-  const iconSize = compact ? 40 : 48
+  const iconSize = 40
   const icon = (() => {
     if (parsed.type === 'animal') return null
     if (parsed.type === 'image' || parsed.type === 'custom') {
       return (
         <img
           src={parsed.value}
-          alt="Mascot"
+          alt="Your character"
           style={{ width: iconSize, height: iconSize, borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }}
         />
       )
@@ -248,65 +63,17 @@ export function MascotWidget({ avatarUrl, initials, context = {}, compact = fals
     )
   })()
 
-  if (compact) {
-    return (
-      <div className="relative shrink-0">
-        <button
-          type="button"
-          onClick={handleClick}
-          aria-label="Change character or skin"
-          className="rounded-full transition-transform duration-150 active:scale-90 outline-none focus-visible:ring-2 focus-visible:ring-primary block"
-        >
-          {parsed.type === 'animal'
-            ? <MascotAnimalIcon animal={parsed.value} variant={variant} size={iconSize} />
-            : icon}
-        </button>
-        {showSelector && (
-          <CharacterSkinSelector
-            currentAvatarUrl={avatarUrl}
-            onClose={() => setShowSelector(false)}
-          />
-        )}
-      </div>
-    )
-  }
-
   return (
-    <>
+    <div className="relative shrink-0">
       <button
         type="button"
         onClick={handleClick}
         aria-label="Change character or skin"
-        className="flex items-center gap-3 group outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-2xl"
+        className="rounded-full transition-transform duration-150 active:scale-90 outline-none focus-visible:ring-2 focus-visible:ring-primary block"
       >
-        <div className="relative shrink-0 transition-transform duration-150 group-active:scale-90">
-          {parsed.type === 'animal'
-            ? <MascotAnimalIcon animal={parsed.value} variant={variant} size={iconSize} />
-            : icon}
-        </div>
-
-        <div className="relative flex items-center">
-          <div
-            className="absolute -left-2 top-1/2 -translate-y-1/2 w-0 h-0"
-            style={{
-              borderTop: '6px solid transparent',
-              borderBottom: '6px solid transparent',
-              borderRight: '8px solid',
-              borderRightColor: 'hsl(var(--card))',
-              filter: 'drop-shadow(-1px 0 0 hsl(var(--border)))',
-            }}
-          />
-          <div
-            className="rounded-2xl bg-card px-3 py-2 shadow-sm max-w-[220px] text-left"
-            style={{
-              transition: 'opacity 250ms ease, transform 250ms ease',
-              opacity: visible ? 1 : 0,
-              transform: visible ? 'translateY(0) scale(1)' : 'translateY(4px) scale(0.97)',
-            }}
-          >
-            <p className="text-xs leading-snug text-foreground">{currentPhrase}</p>
-          </div>
-        </div>
+        {parsed.type === 'animal'
+          ? <MascotAnimalIcon animal={parsed.value} variant={variant} size={iconSize} />
+          : icon}
       </button>
       {showSelector && (
         <CharacterSkinSelector
@@ -314,7 +81,7 @@ export function MascotWidget({ avatarUrl, initials, context = {}, compact = fals
           onClose={() => setShowSelector(false)}
         />
       )}
-    </>
+    </div>
   )
 }
 
@@ -481,7 +248,7 @@ export function CharacterSkinSelector({ currentAvatarUrl, onClose, onSelect }: C
         {/* Skins section */}
         <div className="space-y-2">
           <div className="text-xs font-medium text-muted-foreground">
-            Skins — {ANIMAL_LABELS[equippedAnimal]}
+            Skins · {ANIMAL_LABELS[equippedAnimal]}
           </div>
           <div className="flex gap-2 flex-wrap">
             {/* Default / base skin */}
@@ -536,7 +303,7 @@ export function CharacterSkinSelector({ currentAvatarUrl, onClose, onSelect }: C
             onClick={() => { navigate('/store/gems'); onClose() }}
             className="text-xs text-primary hover:underline"
           >
-            + Unlock more in the Gem Shop
+            + More in the Gem Shop
           </button>
         </div>
       </div>

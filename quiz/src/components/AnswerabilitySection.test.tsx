@@ -17,8 +17,8 @@ const ENTRY: AnswerabilityEntry = {
 describe('AnswerabilityHistory', () => {
   it('folds to a card naming the verdict and the latest check', () => {
     const html = renderToStaticMarkup(<AnswerabilityHistory entry={ENTRY} />)
-    expect(html).toContain('Answerability')
-    expect(html).toContain('Out of reach · Latest 25 Oct 2026')
+    expect(html).toContain('Taught in the Notes')
+    expect(html).toContain('Taught on other pages · Checked 25 Oct 2026')
     // Folded: the history is one tap away.
     expect(html).not.toContain('Independent events multiply.')
   })
@@ -27,7 +27,7 @@ describe('AnswerabilityHistory', () => {
     // The page came into reach after the check — the exam's syllabus (D30).
     const html = renderToStaticMarkup(
       <AnswerabilityHistory entry={ENTRY} reach={reachNow([], ['Probability Multiplication Rule'])} />)
-    expect(html).toContain('Answerable · Latest 25 Oct 2026')
-    expect(html).not.toContain('Out of reach')
+    expect(html).toContain('All taught · Checked 25 Oct 2026')
+    expect(html).not.toContain('Taught on other pages')
   })
 })

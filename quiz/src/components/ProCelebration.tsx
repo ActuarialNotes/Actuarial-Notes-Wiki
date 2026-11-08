@@ -133,7 +133,7 @@ function ProCelebrationOverlay({ onClose }: { onClose: () => void }) {
           <div className="space-y-1.5">
             <p className="text-xl font-bold tracking-tight">You have Pro</p>
             <p className="text-sm text-muted-foreground">
-              Your daily study plan, study strategies and the PCPA project are ready when you are.
+              Today's Study Plan, study strategies, Analytics and the PCPA project are now on your account.
             </p>
           </div>
         </div>

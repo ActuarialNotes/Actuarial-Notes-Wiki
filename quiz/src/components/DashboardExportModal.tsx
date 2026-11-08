@@ -58,8 +58,8 @@ export function DashboardExportModal({ open, onClose, user }: Props) {
         error: null,
         success: `Exported ${rows.length} ${rows.length === 1 ? 'question' : 'questions'} for ${scopeLabel} as ${format.toUpperCase()}.`,
       })
-    } catch (err) {
-      setState({ error: err instanceof Error ? err.message : 'Failed to export data.', success: null })
+    } catch {
+      setState({ error: "Couldn't export your data. Check your connection and try again.", success: null })
     } finally {
       setExporting(false)
     }
@@ -91,7 +91,7 @@ export function DashboardExportModal({ open, onClose, user }: Props) {
         <div className="p-5 space-y-4">
           <p className="text-sm text-muted-foreground">
             Download your answered questions as a <span className="font-medium text-foreground">CSV</span> spreadsheet
-            (date, exam, topic, your answer, correct answer, result and time), or a branded{' '}
+            (date, exam, topic, your answer, correct answer, result and time), or a{' '}
             <span className="font-medium text-foreground">PDF</span> progress report summarising your accuracy by exam and topic.
           </p>
 

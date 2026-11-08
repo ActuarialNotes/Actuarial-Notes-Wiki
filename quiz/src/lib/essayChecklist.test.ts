@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { askedFor, checklistMessage, checklistSuggestion, partChecklist, sampleChecklist } from './essayChecklist'
+import { RUBRIC, askedFor, checklistMessage, checklistSuggestion, partChecklist, reportRubric, sampleChecklist } from './essayChecklist'
 
 const points = (sample: string) =>
   sampleChecklist(sample).blocks.filter(b => b.kind === 'point' && !b.also).map(b => b.markdown)
 const texts = (sample: string) =>
   sampleChecklist(sample).blocks.filter(b => b.kind === 'text').map(b => b.markdown)
-const part = (stem: string, explanation: string) => ({ stem, answer: '', explanation })
+const part = (stem: string, explanation: string, examiner_report?: string) => ({ stem, answer: '', explanation, examiner_report })
 
 describe('sampleChecklist', () => {
   it('makes each top-level bullet a point, without its marker, keeping its sub-bullets', () => {
@@ -147,5 +147,116 @@ describe('checklistMessage', () => {
   it('names the sample when there are several, and the question when it asks for a count', () => {
     expect(checklistMessage({ suggestion: 'correct', sample: 1, ticked: 2, needed: 2 }, two).body)
       .toBe('You ticked 2 of the 2 points the question asks for, from sample 2.')
+  })
+})
+
+describe('pools of responses', () => {
+  const pooled = (sample: string) =>
+    sampleChecklist(sample).blocks.flatMap(b => (b.kind === 'point' ? [b.pool ?? null] : []))
+
+  it('makes the responses under a pool heading one pool, needing one of them', () => {
+    const list = sampleChecklist('Sample responses:\n\n- Retention falls.\n- Market share shrinks.\n- Profit rises.')
+    expect(list).toMatchObject({ boxes: 3, points: 1, pools: [{ need: 1, counted: false }] })
+    expect(pooled('Sample responses:\n\n- Retention falls.\n- Market share shrinks.')).toEqual([0, 0])
+  })
+
+  it('takes a pool\'s count from its heading', () => {
+    expect(sampleChecklist('Sample Answers (any two of which would earn full credit)\n\n- One answer.\n- Two answer.\n- Three answer.').pools)
+      .toEqual([{ need: 2, counted: true }])
+    expect(sampleChecklist('Sample Answers (needed three reasons for full credit)\n\n- Regulation.\n- Customers.\n- Competition.\n- Systems.').points).toBe(3)
+  })
+
+  it('keeps each heading\'s responses a pool of their own', () => {
+    const text = 'Sample Responses for "Advantage"\n- Uses the relationship.\n- Can be judged.\nSample Responses for "Disadvantage"\n- Mix may change.\n- Ratio may shift.'
+    expect(pooled(text)).toEqual([0, 0, 1, 1])
+    expect(sampleChecklist(text).points).toBe(2)
+  })
+
+  it('counts a short bullet as a response, and ends a pool at the next text', () => {
+    const text = 'Answers receiving full credit include:\n\n- Stable case reserve adequacy\n- Paid techniques\n\nThe report also notes a further point here.'
+    expect(pooled(text)).toEqual([0, 0, null])
+  })
+
+  it('answers the stem\'s count from a single uncounted pool', () => {
+    const list = partChecklist(part('List two likely consequences.', 'Sample responses:\n\n- Retention falls.\n- Share shrinks.\n- Profit rises.'))!
+    expect(list.samples[0].points).toBe(2)
+    expect(checklistSuggestion(list, { 0: [0] })).toMatchObject({ suggestion: 'partial', ticked: 1, needed: 2 })
+    expect(checklistSuggestion(list, { 0: [0, 2] })).toMatchObject({ suggestion: 'correct', ticked: 2, needed: 2 })
+  })
+
+  it('credits a pool no more than it needs', () => {
+    const list = partChecklist(part('Describe one advantage and one disadvantage.', 'Sample Responses for "Advantage"\n- Uses the relationship.\n- Can be judged.\nSample Responses for "Disadvantage"\n- Mix may change.\n- Ratio may shift.'))!
+    expect(checklistSuggestion(list, { 0: [0, 1] })).toMatchObject({ suggestion: 'partial', ticked: 1, needed: 2 })
+    expect(checklistSuggestion(list, { 0: [1, 3] })).toMatchObject({ suggestion: 'correct', ticked: 2, needed: 2 })
+  })
+
+  it('takes "this list is not exhaustive" for the other accepted answers', () => {
+    const list = sampleChecklist('Sample responses:\n\n- Regulation limits it.\n- Customers leave.\n- Note that this list is not exhaustive, and other reasonable answers were accepted.')
+    expect(list.blocks.at(-1)).toMatchObject({ kind: 'point', also: true })
+  })
+
+  it('leaves a numbered sample heading to splitSampleAnswers, never a pool', () => {
+    expect(sampleChecklist('Sample answer #2\n\n- First point made here.\n- Second point made here.').pools).toEqual([])
+  })
+})
+
+describe('reportRubric', () => {
+  const report = [
+    'Candidates were expected to:',
+    '',
+    '- List and define the 3 criteria of a good exposure base',
+    '- Justify how insured value meets each criterion',
+    '- Recommend and justify an exposure base',
+    '',
+    'Common mistakes include:',
+    '',
+    '- Not listing the criteria',
+  ].join('\n')
+
+  it('makes what candidates were expected to do the points, and the rest of the report text', () => {
+    const rubric = reportRubric(report)!
+    expect(rubric.points).toBe(3)
+    expect(rubric.blocks.filter(b => b.kind === 'point').map(b => b.markdown)).toEqual([
+      'List and define the 3 criteria of a good exposure base',
+      'Justify how insured value meets each criterion',
+      'Recommend and justify an exposure base',
+    ])
+    expect(rubric.blocks.at(-1)).toEqual({ kind: 'text', markdown: 'Common mistakes include:\n\n- Not listing the criteria' })
+  })
+
+  it('reads other lead-ins to what full credit needed', () => {
+    for (const lead of ['To earn full credit candidates needed to clearly state three key pieces of information:', 'To receive full credit, the candidate should have:', 'Few did well. In order to receive full credit a candidate needed to:']) {
+      expect(reportRubric(`${lead}\n\n1. There are only certain risks that qualify\n2. These risks have better experience`)?.points, lead).toBe(2)
+    }
+  })
+
+  it('makes a list that any so many of received full credit a pool', () => {
+    const rubric = reportRubric('Any two of the following received full credit:\n\n- Flood maps\n- Infrastructure\n- Awareness')!
+    expect(rubric).toMatchObject({ boxes: 3, points: 2, pools: [{ need: 2, counted: true }] })
+  })
+
+  it('leaves guidance on the list as text', () => {
+    const rubric = reportRubric('Candidates were expected to:\n\n- Provide two factors to consider.\n- Describe the effect on the pattern.\n- Responses could include concerns about the data.')!
+    expect(rubric.points).toBe(2)
+  })
+
+  it('has none for a report of errors, of commentary, or of one item', () => {
+    expect(reportRubric('Those who didn\'t get full credit typically made one of the following common errors:\n\n- One error\n- Another error')).toBeNull()
+    expect(reportRubric('Candidates were expected to know the three criteria.\n\n- Most did well\n- Some did not')).toBeNull()
+    expect(reportRubric('Candidates were expected to:\n\n- Recommend a base')).toBeNull()
+    expect(reportRubric(undefined)).toBeNull()
+  })
+
+  it('becomes the checklist, read under RUBRIC, with its own words', () => {
+    const list = partChecklist(part('Evaluate the change.', '- One point made here.\n- Two point made here.', report))!
+    expect(list.rubric?.points).toBe(3)
+    expect(checklistSuggestion(list, { 0: [0, 1] })).toBeNull()
+    const s = checklistSuggestion(list, { [RUBRIC]: [0, 2] })!
+    expect(s).toEqual({ suggestion: 'partial', sample: RUBRIC, ticked: 2, needed: 3 })
+    expect(checklistMessage(s, list).body).toBe("You ticked 2 of the 3 points the examiner's report asks for.")
+  })
+
+  it('gives a part whose sample makes one point a checklist from its rubric', () => {
+    expect(partChecklist(part('Evaluate the change.', 'A single paragraph of answer.', report))?.rubric?.points).toBe(3)
   })
 })

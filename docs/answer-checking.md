@@ -116,27 +116,62 @@ sample answer becomes its checklist, and the boxes sit on the examiners' own wor
 
 ### Cutting the points
 
-`sampleChecklist` cuts one sample (each `Alternatively:` sample is its own — `splitSampleAnswers`)
-where its text already breaks, and changes nothing else:
+`sampleChecklist` cuts one sample (each `Alternatively:` sample is its own, and so is each one
+under a numbered heading — "Sample Answer 2", "Accepted Answer 2 — Closed / Reported Claim Counts",
+its title kept as the sample's first line — `splitSampleAnswers`) where its text already breaks, and
+changes nothing else:
 
 - **A point** is a top-level bullet or numbered item (its marker dropped, its sub-bullets kept
   inside it) or a paragraph of prose.
 - **Text around the points**: a heading (`#`, or a line set wholly in bold or italics), a lead-in
   ending in a colon ("Two likely consequences:"), a formula, table, image, callout or fence, and a
-  short label with no sentence in it ("ii. Reported Claims", "Accepted Answer 2 — …").
-- **The other accepted answers** ("Other acceptable factors include …") get a box of their own
-  that stands in for a point: an answer that made one of those instead has made a point, but it
-  isn't one more point every answer needs.
+  paragraph that is a short label with no sentence in it ("ii. Reported Claims"). A bullet is never
+  a label: "Stable case reserve adequacy" is a response.
+- **The other accepted answers** ("Other acceptable factors include …", "Note that this list is not
+  exhaustive, and other reasonable answers were accepted") get a box of their own that stands in
+  for a point: an answer that made one of those instead has made a point, but it isn't one more
+  point every answer needs.
+- **A pool of responses.** A heading over candidates' responses — "Sample responses:", "Answers
+  receiving full credit include:", "Sample Responses for \"Advantage\"", "Responses for Model 1" —
+  makes the list under it a pool: each response earned the credit on its own, so one tick from the
+  pool makes the point. The heading's own count wins ("Sample Answers (any two of which would earn
+  full credit)", "needed three reasons for full credit"); a sample that is one uncounted pool takes
+  the stem's ("List two …" needs two of its responses). Each heading is a pool of its own, so
+  "Advantage" and "Disadvantage" need one each. A pool is the list under its heading: the next
+  paragraph ends it.
 - **A calculation set out in steps** (more than half its points are working: a figure after `=`,
   two numbers multiplied) makes no checklist; its points would be arithmetic.
 
+### The examiner's report as the checklist
+
+Where the report says what full credit needed, that list is the checklist instead of the sample's
+(`reportRubric`): the examiners' own idea units, at the grain they marked, and the sample answer
+reads as the worked example of meeting them. A list counts when the paragraph above it ends on a
+lead-in to it — its last sentence, so commentary before it doesn't matter:
+
+- **Every item needed**: "Candidates were expected to:", "In order to receive full credit a
+  candidate needed to:", "To receive full credit, the candidate should have:", "To earn full
+  credit candidates needed to clearly state three key pieces of information:". An item that is
+  guidance on the list rather than a thing to do ("Responses could include …", "While responses
+  could …", "Examples include …") stays as text.
+- **Any so many**: "Any two of the following received full credit:", "Responses that received full
+  credit for this subpart include:" — a pool, with the lead's count or the stem's. A report with one
+  such list per category ("for the first of these categories …", "for the second …") has a pool for
+  each.
+- **Not a rubric**: a lead-in about what went wrong ("…typically made one of the following common
+  errors:") and the *Common mistakes* lists, which are not points to tick.
+
+A rubric needs two or more boxes. It is rare: 46 essay parts have one (2026-11-08), most reports
+saying what candidates were expected to *know* in a sentence rather than listing it.
+
 A part has a checklist (`partChecklist`) when it is unkeyed, not a calculation (those have the
-numeric check), and some sample makes at least two points — one box beside a one-paragraph
-answer is the sample again.
+numeric check), and its report has a rubric or some sample has two or more boxes — one box beside
+a one-paragraph answer is the sample again.
 
 ### How many points are needed
 
-Every point of the sample, unless the stem names fewer (`askedFor`): "List **two** likely
+Every point of the sample — a pool counting as its need — or of the rubric, unless the stem names
+fewer (`askedFor`): "List **two** likely
 consequences", "Briefly describe **the four** criteria", "Briefly describe **a** scenario", "describe
 **one** advantage **and one** disadvantage", "assess it **using two** social criteria". Every count
 the stem names is added up. "A"/"an" counts only straight after an asking verb, so "using a
@@ -144,19 +179,24 @@ Berquist-Sherman adjustment" names a method, not a count.
 
 ### The suggestion
 
-`checklistSuggestion` reads the ticks against the sample the answer covers most of (an answer that
-followed sample 2 is marked against sample 2): every point needed is Full credit, some is
-Partial. Nothing is suggested before a box is ticked, and it never suggests No credit: an answer
+`checklistSuggestion` reads the ticks against the rubric when there is one, else against the sample
+the answer covers most of (an answer that followed sample 2 is marked against sample 2): every point
+needed is Full credit, some is Partial. A pool is credited no more than it needs, so two ticks in
+"Advantage" and none in "Disadvantage" is one point of two. Nothing is suggested before a box is ticked, and it never suggests No credit: an answer
 that makes none of the points has nothing to tick, and the reader says so with the buttons. The
-words are `checklistMessage`: "You ticked 1 of the 2 points in the sample answer.", or "… of the 2
-points the question asks for, from sample 2."
+words are `checklistMessage`: "You ticked 1 of the 2 points in the sample answer.", "… of the 2
+points the question asks for, from sample 2.", or "… of the 3 points the examiner's report asks
+for."
 
 ### Where it shows
 
 The sample answer card (`SampleAnswerCards` in `components/AnswerReference.tsx`, its `checklist`
 prop) draws each sample through `components/SampleChecklist.tsx`: a box (`role="checkbox"`, the
 app's `CheckMark` when ticked) beside each point, "Tick each point your answer makes." under the
-heading. The suggestion and the outlined button are the grade control's, as layer 1's. The ticks
+heading. With a rubric, the boxes are in the Examiner's report card instead (`ExaminerReportCard`,
+its `rubric` prop), its ticks kept under `RUBRIC` (`lib/checklistKeys.ts`, a module of its own so the
+quiz card can name it without pulling the checklist into the first page's bundle), and the sample
+answer reads plain. The suggestion and the outlined button are the grade control's, as layer 1's. The ticks
 are `stores/checklistStore.ts`, by question and part, so the grading popup Next opens reads them
 too; a part open for answering again starts with none, and nothing is saved. A part with a
 checklist no longer shows the old keyword count (`estimateEssayScore`).
@@ -164,22 +204,21 @@ checklist no longer shows the old keyword count (`estimateEssayScore`).
 ### How it is held
 
 - `essayChecklist.test.ts`: the cut, the counts, the suggestion and the words.
-- `essayChecklistVault.test.ts`, over the whole bank: **every word of every sample answer is
-  still there, and none added**, read back off the blocks (list markers aside) — the cut is
-  never a rewrite. And coverage: 1,369 of 2,190 essay parts have a checklist (2026-11-08); most of
-  the rest are one-paragraph samples.
-- `e2e/quiz.spec.ts`, *essay checklist*: ticks, the suggestion moving with them, the stand-in box,
-  and the popup.
+- `essayChecklistVault.test.ts`, over the whole bank: **every word of every sample answer, and of
+  every report whose rubric is the checklist, is still there, and none added**, read back off the
+  blocks (list markers aside) — the cut is never a rewrite. And coverage: 1,503 of 2,190 essay parts
+  have a checklist (2026-11-08), 136 of them with a pool and 46 with a rubric; most of the rest are
+  one-paragraph samples.
+- `e2e/quiz.spec.ts`, *essay checklist* (ticks, the suggestion moving with them, the stand-in box,
+  the popup) and *examiner rubric* (the boxes in the report, none on the sample).
 
 ### Not yet
 
-- **A sample that lists candidates' alternative responses** ("Sample Responses for Model 1",
-  then seven responses that each earned the credit) is cut into seven points all needed. Telling
-  those apart from a sample's own points needs the converter to mark them, the way
-  `Alternatively:` is marked.
-- An examiner's report's *Candidates were expected to* list is a rubric of its own and isn't
-  used yet; its *Common mistakes* are not points to tick.
-- One-paragraph samples (about a third of essay parts) get no checklist.
+- A pool is found by its heading. Responses listed with no heading saying so are read as points
+  all needed; a converter that marks them would make the pool certain.
+- A report that says what candidates were expected to know in a sentence, not a list, has no
+  rubric; its sentence isn't cut into points.
+- One-paragraph samples (just under a third of essay parts) get no checklist.
 
 ## Both layers: not yet
 

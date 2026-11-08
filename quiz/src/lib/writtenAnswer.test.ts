@@ -109,6 +109,18 @@ describe('splitSampleAnswers', () => {
     })
   })
 
+  // cas5-2014f-q14b part b: six accepted answers, each one triangle and what it shows.
+  it('splits on "Accepted Answer" headings, keeping the title after the number', () => {
+    const text = [
+      'Accepted Answer 1 — Paid / Reported Claims', '', 'The ratio has increased.', '',
+      'Accepted Answer 2 — Closed / Reported Claim Counts', '', 'Closure has slowed.',
+    ].join('\n')
+    expect(splitSampleAnswers(text)).toEqual({
+      intro: null,
+      samples: ['Paid / Reported Claims\n\nThe ratio has increased.', 'Closed / Reported Claim Counts\n\nClosure has slowed.'],
+    })
+  })
+
   it('keeps the text above the first numbered heading as a lead-in', () => {
     const text = 'Any two of:\n\n**Sample 1:**\n\nOne.\n\n**Sample 2:**\n\nTwo.'
     expect(splitSampleAnswers(text)).toEqual({ intro: 'Any two of:', samples: ['One.', 'Two.'] })

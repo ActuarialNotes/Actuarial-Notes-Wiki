@@ -2,8 +2,9 @@
 //
 // The checklist is the sample answer cut where the examiners' text already
 // breaks — nothing reworded, nothing added (docs/answer-checking.md). This
-// holds every cut to that: the words of a sample, read back off its blocks,
-// are the sample's words, list markers aside. And it keeps the checklist reaching the parts it
+// holds every cut to that: the words of a sample (or of the examiner's report,
+// when its rubric is the checklist), read back off its blocks, are its own
+// words, list markers aside. And it keeps the checklist reaching the parts it
 // was built for.
 
 import { describe, it, expect } from 'vitest'
@@ -43,7 +44,7 @@ const words = (s: string) =>
 describe('the essay checklist, over the question bank', () => {
   const parts = writtenParts()
 
-  it('keeps every word of every sample answer, and adds none', () => {
+  it('keeps every word of every sample answer and examiner\'s report, and adds none', () => {
     const changed: string[] = []
     for (const { id, part } of parts) {
       const list = partChecklist(part)
@@ -52,6 +53,9 @@ describe('the essay checklist, over the question bank', () => {
       list.samples.forEach((sample, i) => {
         if (words(sample.blocks.map(b => b.markdown).join('\n')) !== words(samples[i])) changed.push(`${id} sample ${i + 1}`)
       })
+      if (list.rubric && words(list.rubric.blocks.map(b => b.markdown).join('\n')) !== words(part.examiner_report ?? '')) {
+        changed.push(`${id} examiner's report`)
+      }
     }
     expect(changed).toEqual([])
   })
@@ -59,8 +63,8 @@ describe('the essay checklist, over the question bank', () => {
   it('gives most essay parts a checklist', () => {
     const essays = parts.filter(p => !isCalculationPart(p.part))
     const listed = essays.filter(p => partChecklist(p.part) !== null)
-    // 1,369 of 2,190 when this was written (2026-11-08). Most of the rest are
+    // 1,503 of 2,190 when this was written (2026-11-08). Most of the rest are
     // samples of a single paragraph, where a checklist would be one box.
-    expect(listed.length / essays.length).toBeGreaterThan(0.55)
+    expect(listed.length / essays.length).toBeGreaterThan(0.6)
   })
 })

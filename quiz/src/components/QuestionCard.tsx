@@ -13,6 +13,7 @@ import { SpreadsheetPartButton } from '@/components/quiz/SpreadsheetButton'
 import { cn } from '@/lib/utils'
 import { isAnswerCorrect, normalizeAnswerText, estimateEssayScore } from '@/lib/parser'
 import { useAnswerChecks } from '@/hooks/useAnswerChecks'
+import { RUBRIC } from '@/lib/checklistKeys'
 import { checklistKey, useChecklistStore, usePartTicks } from '@/stores/checklistStore'
 import type { Question, Part, SelfGrade } from '@/lib/parser'
 
@@ -316,7 +317,12 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
                 checklist={checklist ? { list: checklist, ticks, onToggle: (sample, point) => toggleTick(ticksKey, sample, point) } : undefined}
               />
             )}
-            {showExplanation && part.examiner_report && <ExaminerReportCard markdown={part.examiner_report} />}
+            {showExplanation && part.examiner_report && (
+              <ExaminerReportCard
+                markdown={part.examiner_report}
+                rubric={checklist?.rubric ? { list: checklist.rubric, ticked: ticks[RUBRIC] ?? [], onToggle: point => toggleTick(ticksKey, RUBRIC, point) } : undefined}
+              />
+            )}
 
             {showExplanation && (
               <SelfGradeButtons

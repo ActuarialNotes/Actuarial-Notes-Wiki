@@ -862,7 +862,7 @@ Other important `lib/` modules:
 - `writtenAnswer.ts` — the **written parts** of a long-answer question (`answer === ''`: a CAS
   essay or calculation part the reader marks against the sample answer). `splitSampleAnswers`
   cuts a part's sample answer into the separate answers the examiners printed — `Alternatively:`,
-  `Or:`, a lead-in such as `Alternatively, with phasing:`, `Sample Answer #1` headings — so
+  `Or:`, a lead-in such as `Alternatively, with phasing:`, `Sample Answer #1` and `Accepted Answer 2 — <title>` headings (the title kept) — so
   `components/AnswerReference.tsx` can draw each as its own card inside one *Sample answer*
   panel, with the examiner's report a card of its own. A bare `or`, and an alternative *inside*
   one section of a sectioned answer, split nothing: both are used within one answer as often as
@@ -887,11 +887,15 @@ Other important `lib/` modules:
   an essay part's sample answer cut into points where its text already breaks — a top-level
   bullet or numbered item, a paragraph of prose — with headings, lead-ins, formulas and short
   labels left as text and the "Other acceptable …" paragraph a box that stands in for a point
-  (`sampleChecklist`). The reader ticks what their answer makes (`components/SampleChecklist.tsx`,
+  (`sampleChecklist`); a heading over candidates' responses ("Sample responses:", "Responses for
+  Model 1") makes its list a **pool**, any one (or the heading's or stem's count) making the point.
+  Where the examiner's report lists what full credit needed ("Candidates were expected to:", "Any
+  two of the following received full credit:"), that list is the checklist instead (`reportRubric`,
+  its boxes in the Examiner's report card, ticks under `RUBRIC` from `lib/checklistKeys.ts`). The reader ticks what their answer makes (`components/SampleChecklist.tsx`,
   inside `SampleAnswerCards`; ticks in `stores/checklistStore.ts`), and the ticks suggest Full
   credit or Partial against the sample the answer covers most of, as many points as the stem asks
   for (`askedFor`, `checklistSuggestion`). `essayChecklistVault.test.ts` holds every cut to keeping
-  every word of the sample. With `numericCheck.ts` it is one lazy chunk, `lib/answerChecks.ts`,
+  every word of the sample (and of a report used as the rubric). With `numericCheck.ts` it is one lazy chunk, `lib/answerChecks.ts`,
   fetched by `hooks/useAnswerChecks.ts` when a written part is locked in — keep both off the first
   page's bundle. Pure and tested.
 - `quizBankInfo.ts` — what the quiz builder's **info button** (`components/QuizExamInfoButton.tsx`,

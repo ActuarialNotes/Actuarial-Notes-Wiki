@@ -111,9 +111,11 @@ const ALTERNATIVELY = /^\s*(\*\*|__)?alternatively\b\1?\s*[:,]?\s*\1?\s*:?\s*(?<
 // insurer is the buyer:". A bare "or" is not one (see above).
 const OR = /^\s*(\*\*|__)?or(?:\s*:\s*\1?\s*$|,\s+(?<lead>\S.*:(?:\*\*|__)?)\s*$)/i
 // "Sample Answer #1", "Sample Answer 2", "Sample Response 3", "**Sample 1:**",
-// "### Sample Answer 1".
+// "### Sample Answer 1", "Accepted Answer 2". A title after the number —
+// "Accepted Answer 2 — Closed / Reported Claim Counts" — names what that
+// answer does, so it is kept as the sample's first line.
 const NUMBERED_SAMPLE =
-  /^\s*(?:#{1,6}\s+)?(?:\*\*|__)?\s*Sample\s+(?:(?:Answer|Response)\s*)?#?\s*\d+\s*:?\s*(?:\*\*|__)?\s*:?\s*$/i
+  /^\s*(?:#{1,6}\s+)?(?:\*\*|__)?\s*(?:Sample|Accepted|Acceptable)\s+(?:(?:Answer|Response)\s*)?#?\s*\d+\s*(?:[:.]\s*)?(?:\*\*|__)?\s*(?:[—–:-]\s*(?<title>\S.*?))?\s*:?\s*$/i
 
 const FENCE = /^\s*(?:```|~~~)/
 // A line that heads a section: "**Advantages**", "**i. Return on Equity:**",
@@ -156,8 +158,10 @@ export function splitSampleAnswers(markdown: string): SampleAnswers {
     // A separator only counts between blocks — never inside a fenced code
     // block or a `$$ … $$` display, where "or" can be a line of the working.
     if (!inCode && !inMath) {
-      if (NUMBERED_SAMPLE.test(line)) {
-        chunks.push({ lines: [], numbered: true })
+      const numbered = NUMBERED_SAMPLE.exec(line)
+      if (numbered) {
+        const title = numbered.groups?.title?.trim()
+        chunks.push({ lines: title ? [title] : [], numbered: true })
         continue
       }
       const separator = ALTERNATIVELY.exec(line) ?? OR.exec(line)

@@ -290,3 +290,33 @@ test.describe('essay checklist', () => {
     await expect(dialog.getByRole('button', { name: /Full credit \(suggested\)/ })).toHaveAttribute('aria-pressed', 'false')
   })
 })
+
+// Where the examiner's report lists what full credit needed, that list is the
+// checklist, not the sample answer (reportRubric in lib/essayChecklist.ts).
+test.describe('examiner rubric', () => {
+  test('puts the boxes on what candidates were expected to do', async ({ page }) => {
+    // cas5-2018f-q1 part a: "Candidates were expected to:" and three things to do.
+    await page.goto('/quiz?ids=cas5-2018f-q1')
+    const startQuiz = page.getByRole('button', { name: 'Start Quiz' })
+    const response = page.getByPlaceholder('Write your response here…').first()
+    await expect(startQuiz.or(response).first()).toBeVisible()
+    if (await startQuiz.isVisible()) await startQuiz.click()
+
+    await response.fill('Proportional, practical, historical precedence. Keep boat-years.')
+    await page.getByRole('button', { name: 'Confirm Answer' }).click()
+    const submitAnyway = page.getByRole('button', { name: 'Submit Anyway' })
+    if (await submitAnyway.isVisible()) await submitAnyway.click()
+
+    const report = page.getByRole('region', { name: "Examiner's report" }).first()
+    await expect(report.getByText('Tick each point your answer makes.')).toBeVisible()
+    await expect(report.getByRole('checkbox')).toHaveCount(3)
+    // The sample answer reads as written, with no boxes of its own.
+    await expect(page.getByRole('region', { name: 'Sample answer' }).first().getByRole('checkbox')).toHaveCount(0)
+
+    await report.getByRole('checkbox', { name: 'Point 1' }).click()
+    await report.getByRole('checkbox', { name: 'Point 3' }).click()
+    const note = page.getByRole('note', { name: 'Suggested grade' }).first()
+    await expect(note).toContainText('Suggested grade: Partial')
+    await expect(note).toContainText("You ticked 2 of the 3 points the examiner's report asks for.")
+  })
+})

@@ -640,7 +640,12 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   answer makes; every point the question needs suggests Full credit, some suggests Partial,
   read against the sample the answer covers most of. The stem's own count ("list two") sets how
   many are needed, and the "Other acceptable …" paragraph stands in for a point. 1,369 of 2,190
-  essay parts have one. See `docs/answer-checking.md`, layer 2. *(Built 2026-11-08.)*
+  essay parts have one. See `docs/answer-checking.md`, layer 2. *(Built 2026-11-08.)* Since: a
+  heading over candidates' responses ("Sample responses:", "Responses for Model 1") makes its list a
+  pool, any one of which makes the point; "Accepted Answer N" headings split whole answers; and
+  where the examiner's report lists what full credit needed ("Candidates were expected to:", "Any
+  two of the following received full credit:"), that list is the checklist instead. 1,503 essay
+  parts now have one, 46 of them from the report. *(2026-11-08.)*
 
 ---
 

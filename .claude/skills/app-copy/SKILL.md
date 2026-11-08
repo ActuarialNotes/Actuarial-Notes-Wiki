@@ -98,6 +98,16 @@ on one is.
 Each entry: the date, the screen, what the maintainer said, and the rule it
 implies. Newest first.
 
+- 2026-11-08 · Quiz Battle redesign, start screen · A pass changed "3 questions,
+  each pairing a card from your hand with one of theirs. 2:00 each." to "Three
+  questions, each on one of your topics and one of theirs. Two minutes a
+  question." The maintainer put the original back: it was best. The rest of the
+  pass stood (no taglines, no puns like "strong suits", no invented counts, no
+  hint repeated on every card, the app's existing "No one's in the lobby right
+  now"). → Inside a game, keep the game's own nouns (card, hand) and the figures
+  as the screen shows them (3, 2:00). Plainer isn't better when it loses the
+  game's words.
+
 - 2026-11-02 · Dashboard "?" guide · The old slide was confusing (and its
   "Day 1 › 3 › 7 › 14 › 30" chain wasn't the app's schedule). Rewritten as five
   slides: How It Works, Concept Levels, Today's Study Plan, Exam Readiness,

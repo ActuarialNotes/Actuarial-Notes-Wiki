@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { ExternalLink, Info, X } from 'lucide-react'
+import { ChevronDown, ExternalLink, Info, X } from 'lucide-react'
 import { ExamLogo } from '@/components/ExamLogo'
 import { OverlayPortal } from '@/components/ui/OverlayPortal'
 import { useExamVersion } from '@/hooks/useExamVersion'
@@ -7,7 +7,10 @@ import { useSoundOnMount } from '@/hooks/useSoundEffects'
 import { examAbout, sittingDetailsFor } from '@/data/examSittingDetails'
 import { sittingVersionLabel, type ExamSitting } from '@/data/examSittings'
 import { sittingTimeline } from '@/lib/sittingTimeline'
-import { SittingTimeline } from '@/components/SittingTimeline'
+import { SittingDates, SittingStatus } from '@/components/SittingTimeline'
+import { Group, GroupRow } from '@/components/ui/GroupedList'
+import { examAccentStyle } from '@/lib/examColors'
+import { aboutRows, sourceRows } from '@/lib/sittingInfo'
 import { todayISO } from '@/lib/studyPlan'
 import { inkToolTile } from '@/components/ui/ink'
 
@@ -128,6 +131,10 @@ function ExamSittingInfoDialog({
   ].filter((s, i, all) => all.findIndex(o => o.url === s.url) === i)
 
 
+  const [allSources, setAllSources] = useState(false)
+  const { shown: shownSources, hidden: hiddenSources } = sourceRows(sources, allSources)
+  const facts = about ? aboutRows(about.facts) : []
+
   return (
     <OverlayPortal>
       <div
@@ -138,16 +145,20 @@ function ExamSittingInfoDialog({
       >
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} aria-hidden="true" />
         {/* `m-auto`, not `items-center`: a panel taller than the screen
-            (PCPA's) then scrolls from its top instead of losing it. */}
-        <div className="relative z-10 m-auto flex w-full max-w-sm flex-col gap-5 rounded-2xl bg-card p-5 shadow-2xl">
-          <header className="flex items-start gap-3">
+            (PCPA's) then scrolls from its top instead of losing it. The sheet
+            is `bg-background` so its groups (`bg-card`) read as cards on it. */}
+        <div
+          className="relative z-10 m-auto flex w-full max-w-sm flex-col gap-4 rounded-2xl bg-background p-4 shadow-2xl"
+          style={examAccentStyle(progressKey)}
+        >
+          <header className="flex items-center gap-3 px-1 pt-1">
             <ExamLogo examKey={progressKey} size="md" />
             <div className="min-w-0 flex-1">
               <h2 id="exam-sitting-info-title" className="text-base font-semibold leading-tight">
-                {sitting ? `${sittingVersionLabel(sitting)} sitting` : examLabel}
+                {examLabel}
               </h2>
               <p className="mt-0.5 text-xs text-muted-foreground">
-                {sitting ? `${examLabel} · ${FORMAT_LABEL[sitting.format]}` : 'No sitting on file'}
+                {sitting ? `${sittingMonthYear(sitting)} sitting · ${FORMAT_LABEL[sitting.format]}` : 'No sitting on file'}
               </p>
             </div>
             <button
@@ -155,58 +166,82 @@ function ExamSittingInfoDialog({
               type="button"
               onClick={onClose}
               aria-label="Close"
-              className="-mr-1 -mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="-mr-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <X className="h-4 w-4" />
             </button>
           </header>
 
           {sitting ? (
-            <SittingTimeline steps={steps} today={today} />
+            <>
+              <SittingStatus steps={steps} today={today} examKey={progressKey} />
+              <SittingDates
+                steps={steps}
+                today={today}
+                windowNote={details?.windowNote}
+                footer={details?.notes?.map(n => <p key={n}>{n}</p>)}
+              />
+            </>
           ) : (
-            <p className="text-sm">
+            <p className="rounded-xl bg-card px-3.5 py-3 text-sm">
               {about?.noSittings ?? `No upcoming sitting of ${examLabel} has been published yet.`}
             </p>
           )}
 
-          {details?.notes && details.notes.length > 0 && (
-            <ul className="space-y-1.5 rounded-lg bg-muted/50 p-3 text-xs leading-relaxed">
-              {details.notes.map(n => <li key={n}>{n}</li>)}
-            </ul>
-          )}
-
-          {about && about.facts.length > 0 && (
-            <section>
-              <h3 className="mb-2 text-xs font-medium text-muted-foreground">The exam</h3>
-              <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-sm">
-                {about.facts.map(f => (
-                  <div key={f.label} className="contents">
-                    <dt className="text-muted-foreground">{f.label}</dt>
-                    <dd className="min-w-0">{f.value}</dd>
-                  </div>
-                ))}
-              </dl>
-            </section>
+          {facts.length > 0 && (
+            <Group label="The exam">
+              {facts.map(f => (
+                <GroupRow
+                  key={f.label}
+                  label={f.label}
+                  value={f.inline ? f.value : undefined}
+                  detail={f.inline ? undefined : f.value}
+                />
+              ))}
+            </Group>
           )}
 
           {sources.length > 0 && (
-            <footer className="flex flex-wrap gap-x-4 gap-y-1.5 border-t pt-3">
-              {sources.map(s => (
+            <Group label="Sources">
+              {shownSources.map(s => (
                 <a
                   key={s.url}
                   href={s.url}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-1 text-xs text-muted-foreground transition-colors hover:text-foreground"
+                  className="flex items-center gap-3 px-3.5 py-2.5 text-sm transition-colors hover:bg-accent focus-visible:bg-accent focus-visible:outline-none"
                 >
-                  <ExternalLink className="h-3 w-3" aria-hidden />
-                  {s.label}
+                  {s.publisher && (
+                    <span className="flex h-6 min-w-6 shrink-0 items-center justify-center rounded-md bg-muted px-1 text-[9px] font-extrabold tracking-wide text-muted-foreground">
+                      {s.publisher}
+                    </span>
+                  )}
+                  <span className="min-w-0 flex-1">{s.title}</span>
+                  <ExternalLink className="h-3.5 w-3.5 shrink-0 text-muted-foreground" aria-hidden />
                 </a>
               ))}
-            </footer>
+              {hiddenSources > 0 && (
+                <button
+                  type="button"
+                  onClick={() => setAllSources(true)}
+                  className="flex w-full items-center gap-3 px-3.5 py-2.5 text-left text-sm text-muted-foreground transition-colors hover:bg-accent focus-visible:bg-accent focus-visible:outline-none"
+                >
+                  <span className="min-w-0 flex-1">{hiddenSources} more</span>
+                  <ChevronDown className="h-3.5 w-3.5 shrink-0" aria-hidden />
+                </button>
+              )}
+            </Group>
           )}
         </div>
       </div>
     </OverlayPortal>
   )
+}
+
+const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+
+/** "November 2026" — the subtitle has room the version menu's "Nov 2026" doesn't. */
+function sittingMonthYear(sitting: ExamSitting): string {
+  const [year, month] = sitting.startDate.split('-').map(Number)
+  return `${MONTH_NAMES[month - 1]} ${year}`
 }

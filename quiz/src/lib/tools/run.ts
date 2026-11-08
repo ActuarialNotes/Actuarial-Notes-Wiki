@@ -1,3 +1,4 @@
+import { sourceOf, uncheckedWarning } from './bank'
 import { formatValue } from './format'
 import { canonicalJson, sha256Hex } from './hash'
 import { normalizeInput } from './input'
@@ -10,26 +11,51 @@ import { ToolInputError, type ResultTable, type ToolResult, type ToolSpec } from
  * `ToolInputError` for an input it can't read; the caller decides how to say so.
  */
 export function runTool(spec: ToolSpec, raw: unknown): ToolResult {
-  const { input, defaulted, notes } = normalizeInput(spec, raw)
+  const { input, defaulted, notes, sources } = normalizeInput(spec, raw)
   const output = spec.compute(input)
   const judgments = spec.fields
-    .filter(f => f.judgment)
-    .map(f => ({ field: f.key, label: f.label, value: input[f.key], default: defaulted.includes(f.key) }))
+    .filter(f => f.judgment || sources[f.key])
+    .map(f => ({
+      field: f.key,
+      label: f.label,
+      value: input[f.key],
+      default: defaulted.includes(f.key),
+      ...(sources[f.key] ? { source: sourceOf(sources[f.key]) } : {}),
+    }))
+  // A figure from the Assumptions Bank says where it was read, first in the
+  // working, and warns until it has been fact checked (docs/assumptions-bank.md, D-AB4).
+  const sourced = spec.fields.filter(f => sources[f.key])
+  const sourceSteps = sourced.map(f => {
+    const s = sources[f.key]
+    return {
+      label: `${f.label}: ${s.label}`,
+      formula: `${s.title}, ${s.edition} (${s.publisher}), ${s.locator}`,
+      result: input[f.key] as number,
+      unit: f.kind === 'number' ? f.unit : 'plain' as const,
+    }
+  })
+  const sourceWarnings = sourced
+    .filter(f => sources[f.key].verdict !== 'verified')
+    .map(f => uncheckedWarning(f.label, sources[f.key]))
+  // The figures' ids and editions are part of what was run (R4).
+  const hashed = sourced.length
+    ? { ...input, $sources: Object.fromEntries(sourced.map(f => [f.key, `${sources[f.key].id}@${sources[f.key].edition}`])) }
+    : input
   const summary = output.summary
     ?? `${spec.name}: ${output.tiles.map(t => `${t.label === 'Total' ? t.symbol : t.label} ${formatValue(t.value, t.unit)}`).join('; ')}.`
   return {
     tool: spec.id,
     version: spec.version,
     engine: ENGINE_VERSION,
-    inputHash: `sha256:${sha256Hex(canonicalJson(input))}`,
+    inputHash: `sha256:${sha256Hex(canonicalJson(hashed))}`,
     input,
     summary,
     tiles: output.tiles,
     table: output.table,
     values: output.values,
     judgments,
-    warnings: [...notes, ...output.warnings],
-    trace: output.trace,
+    warnings: [...notes, ...sourceWarnings, ...output.warnings],
+    trace: [...sourceSteps, ...output.trace],
     method: spec.method,
   }
 }

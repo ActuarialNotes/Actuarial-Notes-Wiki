@@ -10,7 +10,7 @@ export const expectedClaims: ToolSpec = {
   answers: "What's the a priori ultimate?",
   aka: ['ELR', 'a priori', 'expected loss ratio'],
   fields: [
-    { kind: 'number', key: 'elr', label: 'Expected loss ratio', symbol: 'ELR', unit: 'percent', judgment: true, min: 0, max: 3, sliderMax: 1.5, step: 0.005, default: 0.65, description: 'The a priori expected claim ratio, as a decimal.' },
+    { kind: 'number', key: 'elr', bank: ['loss-ratio'], label: 'Expected loss ratio', symbol: 'ELR', unit: 'percent', judgment: true, min: 0, max: 3, sliderMax: 1.5, step: 0.005, default: 0.65, description: 'The a priori expected claim ratio, as a decimal.' },
     {
       kind: 'table', key: 'rows', label: 'Origins', minRows: 1, maxRows: 100,
       description: 'Each origin with its earned premium (on-level and trended, if that is what the ELR is set against), and optionally its own ELR — left blank, the origin takes the expected loss ratio above.',

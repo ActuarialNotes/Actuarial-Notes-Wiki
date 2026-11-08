@@ -88,7 +88,7 @@ FINDING_ID_RE = re.compile(r"^F-\d{3,}$")
 # ─── Content roots ────────────────────────────────────────────────────────────
 
 #: Directories under the vault root whose every `.md` file carries a block.
-CONTENT_DIRS = ("questions", "Concepts", "Resources")
+CONTENT_DIRS = ("questions", "Concepts", "Resources", "Assumptions")
 
 #: Root-level exam pages, matched by filename.
 EXAM_PAGE_RE = re.compile(r"^Exam\b.*\.md$", re.IGNORECASE)

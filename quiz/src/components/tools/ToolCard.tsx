@@ -21,6 +21,12 @@ import { Link, useNavigate } from 'react-router-dom'
 import { ArrowDownToLine, BadgeCheck, BookOpen, Database, ListChecks, RotateCcw, Undo2 } from 'lucide-react'
 import {
   ToolInputError,
+  assumptionRef,
+  bankFigure,
+  figuresFor,
+  printedFigure,
+  uncheckedWarning,
+  type BankFigure,
   checksFor,
   datasetsFor,
   formatValue,
@@ -52,6 +58,21 @@ import { EditableTable, ResultTableView, TriangleGrid, type DraftRow, type Draft
 import { ToolMenu, type ToolMenuItem } from './ToolMenu'
 import { PdfLinkButton } from '@/components/PdfLinkButton'
 import { cn } from '@/lib/utils'
+import { useConceptPopup } from '@/hooks/useConceptPopup'
+import { installWikiBundle } from '@/lib/wikiBundle'
+// Installs the vault's Assumptions Bank into the engine, for every card.
+import '@/lib/toolBank'
+
+/**
+ * Open the resource page a published figure was read from, in the concept
+ * popup — the one reader (docs/cowork.md). The wiki bundle is fetched on the
+ * first tap, as a tool's method is.
+ */
+async function openResourcePage(name: string) {
+  const { default: bundle } = await import('virtual:wiki-content')
+  installWikiBundle(bundle)
+  useConceptPopup.getState().openAt([{ kind: 'resource', name }], 0, null, null, null, { walk: 'corpus' })
+}
 
 export function ToolCard({
   spec,
@@ -139,6 +160,25 @@ export function ToolCard({
 
   const set = (key: string, value: unknown) => setDraft(d => ({ ...d, [key]: value }))
   const valueOf = (f: ToolSpec['fields'][number]) => draft[f.key] ?? (f as { default: unknown }).default
+  // A field given a published figure holds a reference to it, not a number
+  // (docs/assumptions-bank.md): the card draws the figure's value, and typing
+  // or sliding replaces the reference with the reader's own number.
+  const drawnFigure = (f: NumberField): BankFigure | null => {
+    const ref = assumptionRef(draft[f.key])
+    return ref ? bankFigure(ref) ?? null : null
+  }
+  // The "not fact checked yet" warning of a figure the card already says it
+  // of, under its field — said once, where the figure is.
+  const shownUnderField = new Set(
+    spec.fields.flatMap(f => {
+      const fig = f.kind === 'number' ? drawnFigure(f) : null
+      return fig && fig.verdict !== 'verified' ? [uncheckedWarning(f.label, fig)] : []
+    }),
+  )
+  const bankValue = (f: NumberField): number | null => {
+    if (!assumptionRef(draft[f.key])) return null
+    return drawnFigure(f)?.value ?? f.default
+  }
 
   /** Open the tool a column's values come from, filled from this grid where it can be (§6.6). */
   const fillFrom = (field: TableField, key: string, source: ColumnSource) => {
@@ -259,7 +299,7 @@ export function ToolCard({
       )}
 
       {looseError && <FieldError message={looseError} />}
-      {!stale && result?.warnings.map(w => (
+      {!stale && result?.warnings.filter(w => !shownUnderField.has(w)).map(w => (
         <p key={w} className="text-sm text-amber-700 dark:text-amber-400">{w}</p>
       ))}
 
@@ -317,10 +357,14 @@ export function ToolCard({
               {f.kind === 'number' ? (
                 <NumberControl
                   field={f}
-                  value={Number(valueOf(f))}
+                  value={bankValue(f) ?? Number(valueOf(f))}
                   chosen={draft[f.key] !== undefined}
                   linked={linked?.has(f.key)}
                   onChange={v => set(f.key, v)}
+                  figure={drawnFigure(f)}
+                  figures={embedded ? [] : figuresFor(f)}
+                  onPickFigure={id => set(f.key, { assumption: id })}
+                  onOpenSource={name => void openResourcePage(name)}
                   sources={embedded ? [] : scalarSources(spec.id, f.key).map(source => ({
                     label: toolById(source.tool)?.name ?? source.tool,
                     open: () => {
@@ -573,6 +617,10 @@ function NumberControl({
   linked = false,
   onChange,
   sources = [],
+  figure = null,
+  figures = [],
+  onPickFigure,
+  onOpenSource,
 }: {
   field: NumberField
   value: number
@@ -582,7 +630,15 @@ function NumberControl({
   onChange: (v: number) => void
   /** The tools this value can be taken from (§6.6), each opening in the source sheet. */
   sources?: { label: string; open: () => void }[]
+  /** The published figure the value is, when it was taken from the Assumptions Bank. */
+  figure?: BankFigure | null
+  /** The bank's figures this field takes (`figuresFor`), offered beside the tools. */
+  figures?: BankFigure[]
+  onPickFigure?: (id: string) => void
+  /** Open the resource page a figure was read from. */
+  onOpenSource?: (resource: string) => void
 }) {
+  const choices = sources.length + figures.length
   const shown = toDisplay(value, field.unit)
   const [text, setText] = useState<string | null>(null)
   const [picking, setPicking] = useState(false)
@@ -597,15 +653,15 @@ function NumberControl({
           {field.judgment && <DefaultDot show={!chosen} />}
         </label>
         <span className="flex shrink-0 items-center gap-1">
-          {sources.length > 0 && (
+          {choices > 0 && (
             // One pill that says what it does (a bare arrow icon read as
             // "download"); with several sources it opens the choice of them.
             <button
               type="button"
-              onClick={sources.length === 1 ? sources[0].open : () => setPicking(p => !p)}
-              aria-label={sources.length === 1 ? `${field.label} from ${sources[0].label}` : `${field.label} from another tool`}
-              aria-expanded={sources.length > 1 ? picking : undefined}
-              title={sources.length === 1 ? `Take it from ${sources[0].label}` : 'Take it from another tool'}
+              onClick={choices === 1 && sources.length === 1 ? sources[0].open : () => setPicking(p => !p)}
+              aria-label={choices === 1 && sources.length === 1 ? `${field.label} from ${sources[0].label}` : figures.length ? `${field.label} from a tool or a published figure` : `${field.label} from another tool`}
+              aria-expanded={choices > 1 || figures.length ? picking : undefined}
+              title={choices === 1 && sources.length === 1 ? `Take it from ${sources[0].label}` : figures.length ? 'Take it from a tool or a published figure' : 'Take it from another tool'}
               className="inline-flex h-7 items-center gap-1 rounded-full border border-border px-2.5 text-xs font-medium text-muted-foreground hover:bg-accent hover:text-foreground"
             >
               <ArrowDownToLine className="h-3.5 w-3.5" aria-hidden /> From…
@@ -643,7 +699,43 @@ function NumberControl({
         onChange={e => onChange(Number(e.target.value))}
         className="sim-slider"
       />
-      {picking && sources.length > 1 && (
+      {figure && (
+        <p className="flex flex-wrap items-baseline gap-x-1.5 pb-1 text-xs text-muted-foreground" data-testid="tool-figure-source">
+          <Database className="h-3 w-3 shrink-0 self-center" aria-hidden />
+          <span>
+            {figure.publisher}, {figure.edition} · {figure.locator}
+          </span>
+          <span className={figure.verdict === 'verified' ? 'font-medium text-emerald-700 dark:text-emerald-400' : 'font-medium text-amber-700 dark:text-amber-400'}>
+            {figure.verdict === 'verified' ? 'Fact checked' : 'Not fact checked'}
+          </span>
+          {onOpenSource && (
+            <button type="button" onClick={() => onOpenSource(figure.resource)} className="font-medium text-foreground underline underline-offset-2 hover:no-underline">
+              Read the source
+            </button>
+          )}
+        </p>
+      )}
+      {picking && figures.length > 0 && (
+        <div className="space-y-1 pb-2" role="group" aria-label={`${field.label} from the Assumptions Bank`} data-testid="tool-bank-figures">
+          <p className="text-xs font-medium text-muted-foreground">From the Assumptions Bank</p>
+          {figures.map(f => (
+            <button
+              key={f.id}
+              type="button"
+              onClick={() => { setPicking(false); onPickFigure?.(f.id) }}
+              aria-label={`${field.label}: ${f.label}, ${printedFigure(f)}, ${f.publisher} ${f.edition}`}
+              className="flex w-full items-baseline justify-between gap-3 rounded-lg border border-border px-3 py-2 text-left hover:bg-accent"
+            >
+              <span className="min-w-0">
+                <span className="block text-sm font-medium">{f.label}</span>
+                <span className="block truncate text-xs text-muted-foreground">{f.publisher}, {f.edition}{f.verdict === 'verified' ? '' : ' · Not fact checked'}</span>
+              </span>
+              <span className="shrink-0 text-sm font-semibold tabular-nums">{printedFigure(f)}</span>
+            </button>
+          ))}
+        </div>
+      )}
+      {picking && (sources.length > 1 || (sources.length > 0 && figures.length > 0)) && (
         <div className="flex flex-wrap items-center gap-1.5 pb-1" role="group" aria-label={`Take ${field.label} from`}>
           {sources.map(s => (
             <button

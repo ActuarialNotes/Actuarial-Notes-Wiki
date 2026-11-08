@@ -158,7 +158,7 @@ var annuity = {
     },
     { kind: "number", key: "payment", label: "Payment", symbol: "P", unit: "money", min: 0, max: 1e12, sliderMax: 1e4, step: 10, default: 100, description: "The level payment each period." },
     { kind: "number", key: "n", label: "Periods", symbol: "n", unit: "count", integer: true, min: 1, max: 1200, sliderMax: 60, step: 1, default: 10, description: "How many payments." },
-    { kind: "number", key: "i", label: "Rate per period", symbol: "i", unit: "percent", min: 0, max: 1, sliderMax: 0.2, step: 25e-4, default: 0.05, description: "The effective rate per payment period, as a decimal." }
+    { kind: "number", key: "i", bank: ["discount-rate"], label: "Rate per period", symbol: "i", unit: "percent", min: 0, max: 1, sliderMax: 0.2, step: 25e-4, default: 0.05, description: "The effective rate per payment period, as a decimal." }
   ],
   notation: (input) => {
     const due = input.timing === "due";
@@ -207,7 +207,7 @@ var presentValue = {
   answers: "What are these cash flows worth today?",
   aka: ["NPV", "PV", "discount", "accumulated value", "FV"],
   fields: [
-    { kind: "number", key: "i", label: "Rate", symbol: "i", unit: "percent", min: -0.5, max: 1, sliderMax: 0.2, step: 25e-4, default: 0.05, description: "The effective annual rate, as a decimal." },
+    { kind: "number", key: "i", bank: ["discount-rate"], label: "Rate", symbol: "i", unit: "percent", min: -0.5, max: 1, sliderMax: 0.2, step: 25e-4, default: 0.05, description: "The effective annual rate, as a decimal." },
     {
       kind: "table",
       key: "flows",
@@ -932,7 +932,7 @@ var durationConvexity = {
   answers: "How sensitive is the value of these cash flows to the rate?",
   aka: ["Macaulay", "modified duration", "convexity"],
   fields: [
-    { kind: "number", key: "i", label: "Annual effective rate", symbol: "i", unit: "percent", min: -0.5, max: 2, sliderMax: 0.2, step: 25e-4, default: 0.05, description: "The annual effective rate (the yield), as a decimal. Times are in years." },
+    { kind: "number", key: "i", bank: ["discount-rate"], label: "Annual effective rate", symbol: "i", unit: "percent", min: -0.5, max: 2, sliderMax: 0.2, step: 25e-4, default: 0.05, description: "The annual effective rate (the yield), as a decimal. Times are in years." },
     {
       kind: "table",
       key: "flows",
@@ -1004,7 +1004,7 @@ var redingtonImmunization = {
   answers: "Are these assets Redington-immunized against these liabilities?",
   aka: ["immunization", "ALM", "asset liability matching"],
   fields: [
-    { kind: "number", key: "i", label: "Annual effective rate", symbol: "i", unit: "percent", min: -0.5, max: 2, sliderMax: 0.2, step: 25e-4, default: 0.05, description: "The flat annual effective rate both sides are valued at. Times are in years." },
+    { kind: "number", key: "i", bank: ["discount-rate"], label: "Annual effective rate", symbol: "i", unit: "percent", min: -0.5, max: 2, sliderMax: 0.2, step: 25e-4, default: 0.05, description: "The flat annual effective rate both sides are valued at. Times are in years." },
     {
       kind: "table",
       key: "flows",
@@ -1440,7 +1440,7 @@ var expectedClaims = {
   answers: "What's the a priori ultimate?",
   aka: ["ELR", "a priori", "expected loss ratio"],
   fields: [
-    { kind: "number", key: "elr", label: "Expected loss ratio", symbol: "ELR", unit: "percent", judgment: true, min: 0, max: 3, sliderMax: 1.5, step: 5e-3, default: 0.65, description: "The a priori expected claim ratio, as a decimal." },
+    { kind: "number", key: "elr", bank: ["loss-ratio"], label: "Expected loss ratio", symbol: "ELR", unit: "percent", judgment: true, min: 0, max: 3, sliderMax: 1.5, step: 5e-3, default: 0.65, description: "The a priori expected claim ratio, as a decimal." },
     {
       kind: "table",
       key: "rows",
@@ -1910,9 +1910,9 @@ var lossRatioMethod = {
       default: 0.65,
       description: "Projected ultimate loss and LAE over projected earned premium at current rates, as a decimal."
     },
-    { kind: "number", key: "fixed", label: "Fixed expense ratio", symbol: "F", unit: "percent", min: 0, max: 1, sliderMax: 0.3, step: 25e-4, default: 0.05, description: "Projected fixed expenses over projected premium at current rates." },
-    { kind: "number", key: "variable", label: "Variable expense ratio", symbol: "V", unit: "percent", min: 0, max: 1, sliderMax: 0.5, step: 25e-4, default: 0.2, description: "Variable expenses as a share of premium." },
-    { kind: "number", key: "profit", label: "Profit & contingency", symbol: "Q", unit: "percent", judgment: true, min: -0.5, max: 1, sliderMax: 0.2, step: 25e-4, default: 0.05, description: "The target underwriting profit and contingency provision, as a share of premium." }
+    { kind: "number", key: "fixed", bank: ["fixed-expense", "expense-ratio"], label: "Fixed expense ratio", symbol: "F", unit: "percent", min: 0, max: 1, sliderMax: 0.3, step: 25e-4, default: 0.05, description: "Projected fixed expenses over projected premium at current rates." },
+    { kind: "number", key: "variable", bank: ["variable-expense", "expense-ratio"], label: "Variable expense ratio", symbol: "V", unit: "percent", min: 0, max: 1, sliderMax: 0.5, step: 25e-4, default: 0.2, description: "Variable expenses as a share of premium." },
+    { kind: "number", key: "profit", bank: ["profit-provision"], label: "Profit & contingency", symbol: "Q", unit: "percent", judgment: true, min: -0.5, max: 1, sliderMax: 0.2, step: 25e-4, default: 0.05, description: "The target underwriting profit and contingency provision, as a share of premium." }
   ],
   notation: () => "\u0394R = (LR + F) / (1 \u2212 V \u2212 Q) \u2212 1",
   view: "none",
@@ -2558,7 +2558,7 @@ var trendFactor = {
   answers: "How far do these losses trend to the period the rates will cover?",
   aka: ["trend period", "projected trend"],
   fields: [
-    { kind: "number", key: "trend", label: "Annual trend", symbol: "t", unit: "percent", judgment: true, min: -0.5, max: 1, sliderMax: 0.15, step: 25e-4, default: 0.03, description: "The selected annual trend, as a decimal (from Trend Fit, or chosen)." },
+    { kind: "number", key: "trend", bank: ["trend"], label: "Annual trend", symbol: "t", unit: "percent", judgment: true, min: -0.5, max: 1, sliderMax: 0.15, step: 25e-4, default: 0.03, description: "The selected annual trend, as a decimal (from Trend Fit, or chosen)." },
     {
       kind: "choice",
       key: "basis",
@@ -2629,8 +2629,8 @@ var twoStepTrend = {
   answers: "How far do these losses trend when the past and the future trend differ?",
   aka: ["two-step trend", "current trend", "projected trend", "experience trend"],
   fields: [
-    { kind: "number", key: "past_trend", label: "Past trend", symbol: "t\u2081", unit: "percent", judgment: true, min: -0.5, max: 1, sliderMax: 0.15, step: 25e-4, default: 0.03, description: "The trend from the experience period to the latest data point (the current, or experience, trend), as a decimal." },
-    { kind: "number", key: "future_trend", label: "Future trend", symbol: "t\u2082", unit: "percent", judgment: true, min: -0.5, max: 1, sliderMax: 0.15, step: 25e-4, default: 0.03, description: "The trend from the latest data point to the period the rates cover (the projected, or prospective, trend), as a decimal." },
+    { kind: "number", key: "past_trend", bank: ["trend"], label: "Past trend", symbol: "t\u2081", unit: "percent", judgment: true, min: -0.5, max: 1, sliderMax: 0.15, step: 25e-4, default: 0.03, description: "The trend from the experience period to the latest data point (the current, or experience, trend), as a decimal." },
+    { kind: "number", key: "future_trend", bank: ["trend"], label: "Future trend", symbol: "t\u2082", unit: "percent", judgment: true, min: -0.5, max: 1, sliderMax: 0.15, step: 25e-4, default: 0.03, description: "The trend from the latest data point to the period the rates cover (the projected, or prospective, trend), as a decimal." },
     { kind: "number", key: "year", label: "Accident year", symbol: "Y", unit: "count", integer: true, min: 1900, max: 2200, sliderMin: 2e3, sliderMax: 2030, step: 1, default: 2023, description: "The accident year being trended; its losses occur, on average, mid-year." },
     { kind: "date", key: "trend_to", label: "Latest data point", symbol: "L", default: "2024-07-01", description: "Where the past trend ends and the future one begins: the average accident date of the latest point in the trend data (the middle of the latest year-ending period)." },
     { kind: "date", key: "future", label: "Future average date", symbol: "F", default: "2026-01-01", description: 'The average accident date under the new rates: the effective date plus half the time the rates are in effect and half a policy term. Trend Factor works it out (its "to").' }
@@ -2842,9 +2842,9 @@ var permissibleLossRatio = {
   answers: "What loss ratio do the rates allow?",
   aka: ["PLR", "target loss ratio"],
   fields: [
-    { kind: "number", key: "fixed", label: "Fixed expense ratio", symbol: "F", unit: "percent", min: 0, max: 1, sliderMax: 0.3, step: 25e-4, default: 0, description: "Fixed expenses as a share of premium (0 when every expense is treated as variable)." },
-    { kind: "number", key: "variable", label: "Variable expense ratio", symbol: "V", unit: "percent", min: 0, max: 1, sliderMax: 0.5, step: 25e-4, default: 0.25, description: "Variable expenses as a share of premium." },
-    { kind: "number", key: "profit", label: "Profit & contingency", symbol: "Q", unit: "percent", judgment: true, min: -0.5, max: 1, sliderMax: 0.2, step: 25e-4, default: 0.05, description: "The target underwriting profit and contingency provision, as a share of premium." }
+    { kind: "number", key: "fixed", bank: ["fixed-expense", "expense-ratio"], label: "Fixed expense ratio", symbol: "F", unit: "percent", min: 0, max: 1, sliderMax: 0.3, step: 25e-4, default: 0, description: "Fixed expenses as a share of premium (0 when every expense is treated as variable)." },
+    { kind: "number", key: "variable", bank: ["variable-expense", "expense-ratio"], label: "Variable expense ratio", symbol: "V", unit: "percent", min: 0, max: 1, sliderMax: 0.5, step: 25e-4, default: 0.25, description: "Variable expenses as a share of premium." },
+    { kind: "number", key: "profit", bank: ["profit-provision"], label: "Profit & contingency", symbol: "Q", unit: "percent", judgment: true, min: -0.5, max: 1, sliderMax: 0.2, step: 25e-4, default: 0.05, description: "The target underwriting profit and contingency provision, as a share of premium." }
   ],
   notation: () => "PLR = 1 \u2212 F \u2212 V \u2212 Q,  VPLR = 1 \u2212 V \u2212 Q",
   view: "none",
@@ -2887,9 +2887,9 @@ var purePremiumMethod = {
   aka: ["indicated rate", "PP method"],
   fields: [
     { kind: "number", key: "pure_premium", label: "Pure premium", symbol: "PP", unit: "money", min: 0, max: 1e12, sliderMax: 2e3, step: 1, default: 300, description: "Projected ultimate loss and LAE per exposure (any per-exposure cost, such as net reinsurance, added in)." },
-    { kind: "number", key: "fixed", label: "Fixed expense per exposure", symbol: "F", unit: "money", min: 0, max: 1e12, sliderMax: 500, step: 1, default: 50, description: "Projected fixed expenses per exposure." },
-    { kind: "number", key: "variable", label: "Variable expense ratio", symbol: "V", unit: "percent", min: 0, max: 1, sliderMax: 0.5, step: 25e-4, default: 0.2, description: "Variable expenses as a share of premium." },
-    { kind: "number", key: "profit", label: "Profit & contingency", symbol: "Q", unit: "percent", judgment: true, min: -0.5, max: 1, sliderMax: 0.2, step: 25e-4, default: 0.05, description: "The target underwriting profit and contingency provision, as a share of premium." },
+    { kind: "number", key: "fixed", bank: ["fixed-expense"], label: "Fixed expense per exposure", symbol: "F", unit: "money", min: 0, max: 1e12, sliderMax: 500, step: 1, default: 50, description: "Projected fixed expenses per exposure." },
+    { kind: "number", key: "variable", bank: ["variable-expense", "expense-ratio"], label: "Variable expense ratio", symbol: "V", unit: "percent", min: 0, max: 1, sliderMax: 0.5, step: 25e-4, default: 0.2, description: "Variable expenses as a share of premium." },
+    { kind: "number", key: "profit", bank: ["profit-provision"], label: "Profit & contingency", symbol: "Q", unit: "percent", judgment: true, min: -0.5, max: 1, sliderMax: 0.2, step: 25e-4, default: 0.05, description: "The target underwriting profit and contingency provision, as a share of premium." },
     { kind: "number", key: "current", label: "Current average rate", symbol: "R\u2080", unit: "money", min: 0, max: 1e12, sliderMax: 2e3, step: 1, default: 0, zeroLabel: "Not given", description: "The current average rate per exposure, for the indicated change (0 to leave it out)." }
   ],
   notation: () => "R = (PP + F) / (1 \u2212 V \u2212 Q)",
@@ -4207,6 +4207,57 @@ function toolSearchText(spec) {
   return [spec.name, ...spec.aka ?? [], spec.answers, ...spec.method.concepts, area];
 }
 
+// src/lib/tools/bank.ts
+var installed = [];
+function installAssumptionBank(figures) {
+  installed = figures.filter((f) => f.openCritical === 0 && Number.isFinite(f.value));
+}
+function bankFigures() {
+  return installed;
+}
+function bankFigure(id) {
+  return installed.find((f) => f.id === id);
+}
+function unitFits(figureUnit, unit) {
+  if (figureUnit === "%") return unit === "percent";
+  if (figureUnit === "factor") return unit === "factor";
+  if (figureUnit === "CAD" || figureUnit === "USD") return unit === "money";
+  return false;
+}
+function figuresFor(field) {
+  if (!field.bank?.length) return [];
+  return installed.filter((f) => field.bank.includes(f.kind) && unitFits(f.unit, field.unit) && !f.supersededBy).sort((a, b) => b.effective.localeCompare(a.effective) || a.title.localeCompare(b.title));
+}
+function assumptionRef(raw) {
+  if (raw && typeof raw === "object" && !Array.isArray(raw)) {
+    const id = raw.assumption;
+    if (typeof id === "string" && id.trim()) return id.trim();
+  }
+  return null;
+}
+function sourceOf(f) {
+  return {
+    assumption: f.id,
+    label: f.label,
+    publisher: f.publisher,
+    title: f.title,
+    edition: f.edition,
+    effective: f.effective,
+    locator: f.locator,
+    document: f.document,
+    resource: f.resource,
+    verdict: f.verdict
+  };
+}
+function uncheckedWarning(fieldLabel, f) {
+  return `${fieldLabel} is ${f.publisher}'s ${printedFigure(f)} (${f.label}), which has not been fact checked yet: read it off the document (${f.locator}) before relying on it.`;
+}
+function printedFigure(f) {
+  if (f.unit === "%") return `${f.raw}%`;
+  if (f.unit === "factor") return f.raw;
+  return `${f.unit} ${f.raw}`;
+}
+
 // src/lib/tools/hash.ts
 function canonicalJson(value) {
   if (Array.isArray(value)) return `[${value.map(canonicalJson).join(",")}]`;
@@ -4331,6 +4382,21 @@ function sha256Hex(text) {
 }
 
 // src/lib/tools/input.ts
+function bankField(f, id) {
+  const figure = bankFigure(id);
+  if (!figure) {
+    const why = bankFigures().length ? "Search the bank for its id" : "The Assumptions Bank is not loaded here";
+    throw new ToolInputError(f.key, `"${f.key}" names "${id}", which is no figure in the Assumptions Bank. ${why}, or give a number.`);
+  }
+  if (!f.bank?.includes(figure.kind)) {
+    const takes2 = f.bank?.length ? `takes ${f.bank.join(" or ")} figures` : "takes no figure from the bank";
+    throw new ToolInputError(f.key, `"${f.key}" ${takes2}; "${figure.label}" is ${figure.kind}.`);
+  }
+  if (!unitFits(figure.unit, f.unit)) {
+    throw new ToolInputError(f.key, `"${f.key}" is a ${f.unit}; "${figure.label}" is in ${figure.unit}.`);
+  }
+  return { value: numberField(f, figure.value), figure };
+}
 var isObject = (v) => v !== null && typeof v === "object" && !Array.isArray(v);
 function readNumber(raw, percent) {
   if (typeof raw === "number") return Number.isFinite(raw) ? raw : null;
@@ -4513,8 +4579,14 @@ function normalizeInput(spec, raw) {
   const input = {};
   const defaulted = [];
   const notes = [];
+  const sources = {};
   for (const field of spec.fields) {
-    if (given[field.key] === void 0 || given[field.key] === null) {
+    const ref = field.kind === "number" ? assumptionRef(given[field.key]) : null;
+    if (ref && field.kind === "number") {
+      const { value, figure } = bankField(field, ref);
+      input[field.key] = value;
+      sources[field.key] = figure;
+    } else if (given[field.key] === void 0 || given[field.key] === null) {
       input[field.key] = defaultValue(field);
       defaulted.push(field.key);
     } else {
@@ -4525,28 +4597,46 @@ function normalizeInput(spec, raw) {
   for (const key of Object.keys(given)) {
     if (!known.has(key)) notes.push(`Ignored "${key}": ${spec.id} takes ${[...known].join(", ")}.`);
   }
-  return { input, defaulted, notes };
+  return { input, defaulted, notes, sources };
 }
 
 // src/lib/tools/run.ts
 function runTool(spec, raw) {
-  const { input, defaulted, notes } = normalizeInput(spec, raw);
+  const { input, defaulted, notes, sources } = normalizeInput(spec, raw);
   const output = spec.compute(input);
-  const judgments = spec.fields.filter((f) => f.judgment).map((f) => ({ field: f.key, label: f.label, value: input[f.key], default: defaulted.includes(f.key) }));
+  const judgments = spec.fields.filter((f) => f.judgment || sources[f.key]).map((f) => ({
+    field: f.key,
+    label: f.label,
+    value: input[f.key],
+    default: defaulted.includes(f.key),
+    ...sources[f.key] ? { source: sourceOf(sources[f.key]) } : {}
+  }));
+  const sourced = spec.fields.filter((f) => sources[f.key]);
+  const sourceSteps = sourced.map((f) => {
+    const s = sources[f.key];
+    return {
+      label: `${f.label}: ${s.label}`,
+      formula: `${s.title}, ${s.edition} (${s.publisher}), ${s.locator}`,
+      result: input[f.key],
+      unit: f.kind === "number" ? f.unit : "plain"
+    };
+  });
+  const sourceWarnings = sourced.filter((f) => sources[f.key].verdict !== "verified").map((f) => uncheckedWarning(f.label, sources[f.key]));
+  const hashed = sourced.length ? { ...input, $sources: Object.fromEntries(sourced.map((f) => [f.key, `${sources[f.key].id}@${sources[f.key].edition}`])) } : input;
   const summary = output.summary ?? `${spec.name}: ${output.tiles.map((t) => `${t.label === "Total" ? t.symbol : t.label} ${formatValue(t.value, t.unit)}`).join("; ")}.`;
   return {
     tool: spec.id,
     version: spec.version,
     engine: ENGINE_VERSION,
-    inputHash: `sha256:${sha256Hex(canonicalJson(input))}`,
+    inputHash: `sha256:${sha256Hex(canonicalJson(hashed))}`,
     input,
     summary,
     tiles: output.tiles,
     table: output.table,
     values: output.values,
     judgments,
-    warnings: [...notes, ...output.warnings],
-    trace: output.trace,
+    warnings: [...notes, ...sourceWarnings, ...output.warnings],
+    trace: [...sourceSteps, ...output.trace],
     method: spec.method
   };
 }
@@ -10178,7 +10268,8 @@ function fieldSchema(f) {
         minimum: f.min,
         maximum: f.max,
         default: f.default,
-        description: `${f.description}${UNIT_HINT[f.unit]}${judgment}`
+        description: `${f.description}${UNIT_HINT[f.unit]}${judgment}${f.bank?.length ? ` Or a published figure from the Assumptions Bank, given as {"assumption": "<id>"}, of kind ${f.bank.join(" or ")}: the run records its source.` : ""}`,
+        ...f.bank?.length ? { "x-assumption-kinds": f.bank } : {}
       };
     case "choice":
       return { type: "string", enum: f.options.map((o) => o.value), default: f.default, description: `${f.description}${judgment}` };
@@ -10294,6 +10385,9 @@ export {
   QUESTION_CHECKS,
   TOOLS,
   ToolInputError,
+  assumptionRef,
+  bankFigure,
+  bankFigures,
   checkedValueCount,
   checksFor,
   datasetsFor,
@@ -10302,19 +10396,25 @@ export {
   describeTool,
   encodeRunInput,
   evaluateArithmetic,
+  figuresFor,
   formatValue,
   inputSchema,
+  installAssumptionBank,
   normalizeInput,
+  printedFigure,
   readNumber,
   runBatch,
   runPath,
   runQuestionCheck,
   runTool,
   sourceLine,
+  sourceOf,
   toolById,
   toolBySlug,
   toolSearchText,
   toolSlug,
   toolSummary,
+  uncheckedWarning,
+  unitFits,
   verifyCheck
 };

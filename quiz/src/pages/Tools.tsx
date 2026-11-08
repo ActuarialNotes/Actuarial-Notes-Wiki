@@ -6,10 +6,14 @@
 //                   naming the one question its tool answers
 //   /tools/:slug    one tool's card, alone; `#input=…` opens a given run (a
 //                   share link, a Send to…, an agent's app_url)
+//   /tools/assumptions
+//                   the Assumptions Bank's shelf (docs/assumptions-bank.md):
+//                   published figures, each linking into the tools that take it
 
 import { useCallback, useEffect, useMemo } from 'react'
 import { Navigate, useLocation, useParams, useSearchParams } from 'react-router-dom'
-import { Calculator, Database, Sigma, Landmark, Scale, TrendingUp, type LucideIcon } from 'lucide-react'
+import { BookMarked, Calculator, Database, Sigma, Landmark, Scale, TrendingUp, type LucideIcon } from 'lucide-react'
+import { AssumptionsShelf } from '@/components/assumptions/AssumptionsShelf'
 import { AREAS, TOOLS, checksFor, decodeRunInput, toolBySlug, toolSlug, type PracticeArea, type ToolSpec } from '@/lib/tools'
 import { searchTools } from '@/lib/toolSearch'
 import { highlightMatch } from '@/components/SearchHighlight'
@@ -49,6 +53,16 @@ async function openMethod(concepts: string[]) {
   if (refs.length) useConceptPopup.getState().openAt(refs, 0, null, null, null, { walk: 'corpus' })
 }
 
+/** Open the resource page a set of published figures was read from, in the popup. */
+async function openResource(name: string) {
+  const { default: bundle } = await import('virtual:wiki-content')
+  installWikiBundle(bundle)
+  useConceptPopup.getState().openAt([{ kind: 'resource', name }], 0, null, null, null, { walk: 'corpus' })
+}
+
+/** The route segment of the Assumptions Bank's shelf — never a tool's slug. */
+const ASSUMPTIONS_SLUG = 'assumptions'
+
 export default function Tools() {
   const { slug } = useParams()
   useEffect(() => () => useConceptPopup.getState().close(), [])
@@ -56,7 +70,7 @@ export default function Tools() {
   // would be a second child of the app's content row.
   return (
     <div className="min-w-0">
-      {slug ? <ToolPage slug={slug} /> : <Catalogue />}
+      {slug === ASSUMPTIONS_SLUG ? <AssumptionsPage /> : slug ? <ToolPage slug={slug} /> : <Catalogue />}
       <ConceptPopup />
     </div>
   )
@@ -106,6 +120,8 @@ function Catalogue() {
                   <h2 id={`area-${a.id}`} className="px-1 text-sm font-semibold text-muted-foreground">{a.label}</h2>
                   <ListPanel>
                     {tools.map(t => <ToolRow key={t.id} spec={t} />)}
+                    {/* Beside the published tables, the published figures (D-AB2). */}
+                    {a.id === 'data' && <AssumptionsRow />}
                   </ListPanel>
                 </section>
               )
@@ -150,6 +166,38 @@ function ToolRow({ spec, query = '' }: { spec: ToolSpec; query?: string }) {
       trailing={checksFor(spec.id).length > 0 ? <CheckMark className="h-4 w-4" label="Tested against a published worked example" /> : undefined}
       data-testid="tool-row"
     />
+  )
+}
+
+/** The Assumptions Bank's row in the catalogue, under the Data Sources. */
+function AssumptionsRow() {
+  return (
+    <ListRow
+      to={`/tools/${ASSUMPTIONS_SLUG}`}
+      leading={
+        <LogoTile size="lg" className="bg-muted text-foreground">
+          <BookMarked className="h-6 w-6" aria-hidden />
+        </LogoTile>
+      }
+      title="Assumptions Bank"
+      subtitle="What does the published document say the figure is?"
+      subtitleLines={2}
+      data-testid="assumptions-row"
+    />
+  )
+}
+
+function AssumptionsPage() {
+  usePageHead(TOOLS_HEAD)
+  usePageLabel('Assumptions Bank')
+  const back = useBack({ to: '/tools', label: 'All tools' })
+  return (
+    <>
+      <ToolsSearchBar kind="tool" title="Assumptions Bank" back={back} />
+      <div className="container mx-auto max-w-2xl space-y-3 px-4 py-4">
+        <AssumptionsShelf onReadSource={name => void openResource(name)} />
+      </div>
+    </>
   )
 }
 

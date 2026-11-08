@@ -684,6 +684,13 @@ None of this adds a row to the card (R10). The menu lives in the header that's a
 the stepper replaces the keyboard rather than sitting beside it, and the candidates appear only
 while a cell is being edited.
 
+**A published figure** is the seventh source (2026-11-08, `docs/assumptions-bank.md` §5.2): a
+number field that names Assumptions Bank kinds (`bank` on the field) lists the bank's figures of
+those kinds under its **From…** menu. A figure taken is a reference, `{ "assumption": id }`, and
+the run records its document, edition, locator and fact check in the judgment's `source` (R3),
+the working and the input hash (R4). The bank is installed into the engine, never bundled
+(`lib/tools/bank.ts`).
+
 ### 6.7 A figure on every card
 
 Every tool has one small figure, drawn under the tiles and redrawn on every change, including

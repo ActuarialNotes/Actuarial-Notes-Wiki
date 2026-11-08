@@ -28,12 +28,16 @@
  * (`virtual:cowork-vault`, `lib/coworkVault.ts`) and filed under the entity
  * `PUBLISHER_ENTITY` names for its `Publisher:` — so a new resource page joins
  * Cowork by being written. An authored entry below wins over the derived one
- * for the same page: it is where a document's assumptions and table are said.
+ * for the same page: it is where a document's table is said. Its assumption
+ * rows come from the Assumptions Bank (`Assumptions/`, docs/assumptions-bank.md)
+ * wherever the bank has a set for its page — `withBankAssumptions`, applied
+ * below — and are authored here only for a document the bank doesn't hold yet.
  */
 
-import type { SourceEntity, SourceResource } from '@/lib/coworkSources'
+import { withBankAssumptions, type SourceEntity, type SourceResource } from '@/lib/coworkSources'
 import { vaultResource } from '@/lib/coworkVault'
 import vaultDocuments from 'virtual:cowork-vault'
+import assumptionSets from 'virtual:assumption-bank'
 
 const DOC_ROOT = 'Cowork/Sources'
 
@@ -691,7 +695,7 @@ export const COWORK_ENTITIES: SourceEntity[] = [
  * The documents. `wikiRef` entries name real vault pages by their repo path;
  * `sample` entries name a class of document and carry no date or link.
  */
-const AUTHORED_RESOURCES: SourceResource[] = [
+export const AUTHORED_RESOURCES: SourceResource[] = [
   /* ------------------------------------------------------------------ OSFI */
   {
     id: 'osfi-mct',
@@ -703,11 +707,6 @@ const AUTHORED_RESOURCES: SourceResource[] = [
     wikiRef: { kind: 'resource', name: 'OSFI MCT' },
     practiceAreas: ['pc', 'erm'],
     functions: ['capital', 'financial-reporting'],
-    assumptions: [
-      { label: 'Capital basis', value: 'MCT (OSFI guideline)', locator: 'Guideline, s. 1' },
-      { label: 'Supervisory target MCT ratio', value: '150%', locator: 'Guideline, s. 1.2' },
-      { label: 'Minimum MCT ratio', value: '100%', locator: 'Guideline, s. 1.2' },
-    ],
   },
   {
     id: 'osfi-orsa',
@@ -923,12 +922,6 @@ const AUTHORED_RESOURCES: SourceResource[] = [
     url: 'https://www.airbfordrivers.ca/wp-content/uploads/2026/09/Annual-Review-Report-2026.pdf',
     practiceAreas: ['pc'],
     functions: ['pricing', 'advisory'],
-    assumptions: [
-      { label: 'Industry loss trend, by coverage', locator: 'Industry Benchmarks, Loss Trends (PPV table, 2026 Annual Review column)' },
-      { label: 'Loss development factors', locator: 'Industry Benchmarks, Loss Development Factors (RCS final report, Appendix A)' },
-      { label: 'Total expenses (IFRS 4 basis)', value: '27.8%', locator: 'Industry Benchmarks, Operating Expenses & ULAE' },
-      { label: 'Profit provision', value: '6.0% of premium', locator: 'Industry Benchmarks, Profit' },
-    ],
   },
 
   /* ------------------------------------------------------------------- CCIR */
@@ -1255,11 +1248,6 @@ const AUTHORED_RESOURCES: SourceResource[] = [
     url: 'https://www.gisa.ca/Documents/View/6325',
     practiceAreas: ['pc'],
     functions: ['pricing', 'reserving'],
-    assumptions: [
-      { label: 'Industry benchmark experience', locator: 'Exhibit, Private Passenger Excluding Farmers: by coverage and accident year' },
-      { label: 'Loss development benchmark', locator: 'Notes to Users: Implied Age-to-Ultimate Development Factors (pp. 10–11)' },
-      { label: 'ULAE factor, accident year 2025', value: '1.1189', locator: 'Notes to Users: Other Factors, 1 Unallocated Loss Adjustment Expense Factors (p. 12)' },
-    ],
   },
 
   /* --------------------------------------------------------- Bank of Canada */
@@ -1607,4 +1595,7 @@ export const VAULT_RESOURCES: SourceResource[] = vaultDocuments.flatMap(doc => {
   return entity ? [vaultResource(doc, entity)] : []
 })
 
-export const COWORK_RESOURCES: SourceResource[] = [...AUTHORED_RESOURCES, ...VAULT_RESOURCES]
+/** Every Cowork document, its assumption rows read from the bank where it has a set. */
+export const COWORK_RESOURCES: SourceResource[] = [...AUTHORED_RESOURCES, ...VAULT_RESOURCES].map(r =>
+  withBankAssumptions(r, assumptionSets),
+)

@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useMemo, useRef, type ReactNode, type RefObject } from 'react'
+import { Suspense, createContext, lazy, useCallback, useContext, useMemo, useRef, type ReactNode, type RefObject } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
@@ -13,9 +13,13 @@ import type { PdfReaderDoc } from '@/hooks/usePdfReader'
 import { DistributionSimulator } from '@/components/wiki/DistributionSimulator'
 import { SourceMaterialGallery } from '@/components/wiki/SourceMaterialGallery'
 import { examPillLabel } from '@/lib/resourceExams'
-import { CredentialPath } from '@/components/wiki/CredentialPath'
-import { CredentialMap } from '@/components/wiki/CredentialMap'
 import { isCredentialMapMarker, readCredentialPathMarker } from '@/data/credentialPaths'
+
+// The credential path and map are drawn on a handful of pages (the general
+// study guide, the six designation pages, Credential Path), so they load with
+// the page that places them rather than riding in the first page's bundle.
+const CredentialPath = lazy(() => import('@/components/wiki/CredentialPath').then(m => ({ default: m.CredentialPath })))
+const CredentialMap = lazy(() => import('@/components/wiki/CredentialMap').then(m => ({ default: m.CredentialMap })))
 import { extractSourceMaterial, parseSyllabusObjectives, SOURCE_MATERIAL_MARKER } from '@/lib/sourceMaterial'
 import { headingSlug, hrefToEntryRef, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { isInWikiIndex } from '@/lib/wikiIndex'
@@ -217,11 +221,19 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
       const credentialPath = only && only.type === 'text' ? readCredentialPathMarker(only.value) : null
       if (credentialPath) {
         const { at } = credentialPath
-        return <CredentialPath key={at ? `${at.body}-${at.stage}` : 'reader'} onOpen={openRef} start={at} />
+        return (
+          <Suspense key={at ? `${at.body}-${at.stage}` : 'reader'} fallback={null}>
+            <CredentialPath onOpen={openRef} start={at} />
+          </Suspense>
+        )
       }
       // The three societies on one map — the Credential Path page.
       if (only && only.type === 'text' && isCredentialMapMarker(only.value)) {
-        return <CredentialMap onOpen={openRef} />
+        return (
+          <Suspense fallback={null}>
+            <CredentialMap onOpen={openRef} />
+          </Suspense>
+        )
       }
       if (
         !hideImages &&

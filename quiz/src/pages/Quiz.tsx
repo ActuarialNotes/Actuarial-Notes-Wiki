@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { Suspense, useEffect, useMemo, useRef, useState } from 'react'
 import { useBack } from '@/hooks/useBack'
 import { useSearchParams, useNavigate, useLocation } from 'react-router-dom'
 import { Loader2, X, ChevronLeft, Volume2, VolumeX, AlertCircle, Keyboard } from 'lucide-react'
@@ -47,6 +47,14 @@ import { useSoundEffects } from '@/hooks/useSoundEffects'
 import { usePageKeyboard } from '@/hooks/useKeyboard'
 import { trackQuizStarted, trackQuestionAnswered, trackQuizCompleted, trackFirstQuiz, trackFirstCorrect, trackReminderSession } from '@/lib/analytics'
 import { LoadingMark } from '@/components/LoadingMark'
+import { SpreadsheetButton } from '@/components/quiz/SpreadsheetButton'
+import { spreadsheetProfileFor } from '@/data/examSpreadsheets'
+import { examAccentStyle } from '@/lib/examColors'
+import { lazyRoute } from '@/lib/lazyRoute'
+
+// Open in Spreadsheet (docs/question-spreadsheet.md): Fortune-sheet is the
+// heaviest thing the quiz can show, so the pane is its own chunk.
+const { Component: QuestionSheet } = lazyRoute(() => import('@/components/quiz/QuestionSheet'))
 
 export default function Quiz() {
   const [searchParams] = useSearchParams()
@@ -142,6 +150,10 @@ export default function Quiz() {
     setPending,
     conceptListDismissed,
     dismissConceptList,
+    sheets,
+    sheetOpen,
+    setSheet,
+    setSheetOpen,
   } = useQuizStore()
 
   // A quiz outlives this page: the reader can go anywhere in the app mid-quiz
@@ -642,9 +654,12 @@ export default function Quiz() {
 
   // The exam this question is from, as its logo in the header's right corner.
   const examLogoKey = EXAM_LABEL_TO_ID[currentQuestion.exam]
+  // The spreadsheet the exam is sat with, if any — what Open in Spreadsheet offers.
+  const sheetProfile = spreadsheetProfileFor(examLogoKey)
 
   return (
     <>
+    <div className="question-sheet-host">
     <div
       className="container max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-5"
       // Below lg the concept popup docks as a bottom sheet; keep the question
@@ -701,6 +716,10 @@ export default function Quiz() {
           isFlagged={isFlagged}
           onFlag={() => toggleFlag(currentQuestion.id)}
           info={
+            <>
+            {sheetProfile && (
+              <SpreadsheetButton open={sheetOpen} onToggle={() => setSheetOpen(!sheetOpen)} />
+            )}
             <QuestionInfoButton
               question={currentQuestion}
               open={showQuestionInfo}
@@ -710,6 +729,7 @@ export default function Quiz() {
               showStudyMeta={isLocked}
               onOpenConcept={openTaggedConcept}
             />
+            </>
           }
         />
       </div>
@@ -850,6 +870,21 @@ export default function Quiz() {
         </div>
       )}
     </div>
+    </div>
+    {sheetOpen && sheetProfile && (
+      <div style={examLogoKey ? examAccentStyle(examLogoKey) : undefined}>
+        <Suspense fallback={null}>
+          <QuestionSheet
+            question={currentQuestion}
+            mode={mode}
+            profile={sheetProfile}
+            workbook={sheets[currentQuestion.id]}
+            onWorkbookChange={setSheet}
+            onClose={() => setSheetOpen(false)}
+          />
+        </Suspense>
+      </div>
+    )}
     <ConceptPopup />
     </>
   )

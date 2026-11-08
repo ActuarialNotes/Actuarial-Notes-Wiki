@@ -6,6 +6,8 @@ import { MarkdownText, MARKDOWN_LIST_CLASS, READING_MD_CLASS } from '@/component
 import { SelfGradeButtons } from '@/components/SelfGradeButtons'
 import { SampleAnswerCards, ExaminerReportCard } from '@/components/AnswerReference'
 import { Button } from '@/components/ui/button'
+import { InsertCellButton } from '@/components/quiz/InsertCellButton'
+import { insertAtCaret } from '@/lib/questionSheet'
 import { cn } from '@/lib/utils'
 import { isAnswerCorrect, normalizeAnswerText, estimateEssayScore } from '@/lib/parser'
 import type { Question, Part, SelfGrade } from '@/lib/parser'
@@ -49,9 +51,11 @@ interface FreeEntryInputProps {
   autoSubmit?: boolean
   selfGrade?: SelfGrade
   onSelfGrade?: (grade: SelfGrade) => void
+  /** The question whose spreadsheet's selected cell this box can take (Insert). */
+  sheetQuestionId?: string
 }
 
-function FreeEntryInput({ answer, isLocked, correctAnswer, showExplanation, onSubmit, autoSubmit = false, selfGrade, onSelfGrade }: FreeEntryInputProps) {
+function FreeEntryInput({ answer, isLocked, correctAnswer, showExplanation, onSubmit, autoSubmit = false, selfGrade, onSelfGrade, sheetQuestionId }: FreeEntryInputProps) {
   const [text, setText] = useState(answer)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -68,6 +72,17 @@ function FreeEntryInput({ answer, isLocked, correctAnswer, showExplanation, onSu
     const val = e.target.value
     setText(val)
     if (autoSubmit) onSubmit(val)
+  }
+
+  function insertCell(value: string) {
+    const el = inputRef.current
+    const { text: next, caret } = insertAtCaret(text, el?.selectionStart ?? text.length, el?.selectionEnd ?? text.length, value)
+    setText(next)
+    if (autoSubmit) onSubmit(next)
+    requestAnimationFrame(() => {
+      el?.focus()
+      el?.setSelectionRange(caret, caret)
+    })
   }
 
   function handleKeyDown(e: React.KeyboardEvent) {
@@ -106,6 +121,7 @@ function FreeEntryInput({ answer, isLocked, correctAnswer, showExplanation, onSu
           </Button>
         )}
       </div>
+      {!isLocked && sheetQuestionId && <InsertCellButton questionId={sheetQuestionId} onInsert={insertCell} />}
 
       {showExplanation && isAnswered && (
         <div className="space-y-2 text-sm">
@@ -141,9 +157,11 @@ interface PartCardProps {
   /** The question's one part — asked about as the question, not "this part". */
   isOnlyPart?: boolean
   conceptNames?: readonly string[]
+  /** The question this part belongs to — whose spreadsheet's selected cell Insert drops in. */
+  questionId: string
 }
 
-function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, selfGrade: externalSelfGrade, onSelfGrade, isOnlyPart = false, conceptNames }: PartCardProps) {
+function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, selfGrade: externalSelfGrade, onSelfGrade, isOnlyPart = false, conceptNames, questionId }: PartCardProps) {
   const isEssay = part.answer === ''
   const isAnswered = isLocked && (isEssay || partAnswer !== '')
   const autoIsRight = !isEssay && isAnswered && (
@@ -153,6 +171,17 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
   )
 
   const [internalSelfGrade, setInternalSelfGrade] = useState<SelfGrade | null>(null)
+  const responseRef = useRef<HTMLTextAreaElement>(null)
+
+  function insertCell(value: string) {
+    const el = responseRef.current
+    const { text, caret } = insertAtCaret(partAnswer, el?.selectionStart ?? partAnswer.length, el?.selectionEnd ?? partAnswer.length, value)
+    onPartAnswer(part.label, text)
+    requestAnimationFrame(() => {
+      el?.focus()
+      el?.setSelectionRange(caret, caret)
+    })
+  }
   const effectiveSelfGrade = externalSelfGrade ?? internalSelfGrade
 
   // For free-entry parts, if user manually graded, use that for display
@@ -189,13 +218,17 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
         {part.stem && <MarkdownText className={PART_STEM_CLASS} conceptNames={conceptNames}>{part.stem}</MarkdownText>}
 
         {!isLocked ? (
+          <div className="space-y-2">
           <textarea
+            ref={responseRef}
             value={partAnswer}
             onChange={e => onPartAnswer(part.label, e.target.value)}
             placeholder="Write your response here…"
             rows={5}
             className="w-full rounded-md border px-3 py-2 text-base leading-relaxed bg-background resize-y focus:outline-none focus:ring-2 focus:ring-ring"
           />
+          <InsertCellButton questionId={questionId} onInsert={insertCell} />
+          </div>
         ) : (
           <div className="space-y-4">
             {partAnswer.trim() ? (
@@ -284,6 +317,7 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
           autoSubmit={true}
           selfGrade={effectiveSelfGrade ?? undefined}
           onSelfGrade={onSelfGrade ? handleSelfGradeClick : undefined}
+          sheetQuestionId={questionId}
         />
       )}
 
@@ -457,6 +491,7 @@ export function QuestionCard({
             onSubmit={onAnswer}
             selfGrade={selfGrade}
             onSelfGrade={onSelfGrade}
+            sheetQuestionId={question.id}
           />
 
           {showExplanation && answered && (
@@ -527,6 +562,7 @@ export function QuestionCard({
             }
             isOnlyPart={parts.length === 1}
             conceptNames={conceptNames}
+            questionId={question.id}
           />
         ))}
       </div>

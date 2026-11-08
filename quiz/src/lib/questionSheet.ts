@@ -323,3 +323,31 @@ export function defaultWindowRect(viewport: Viewport): WindowRect {
   const height = 520
   return clampWindowRect({ x: viewport.width - width - 32, y: viewport.height - height - 32, width, height }, viewport)
 }
+
+// ── Which parts are worked in the spreadsheet ───────────────────────────────
+
+// A part that asks for numbers — a triangle constructed, a factor calculated —
+// is one the exam day's spreadsheet is for. Read off the command word, as the
+// Tutor reads a part's kind (lib/tutor/items.ts); a table row is data, not an
+// instruction, so it never counts.
+// "estimate" is the verb, not "the estimate of …".
+const NUMBER_WORDS = /\b(calculate|calculating|compute|computing|construct|constructing|create|build|produce|determine|(?<!\b(?:the|an|this|that|your|its|their)\s)estimate(?!s?\s+of\b)|derive|quantify|develop|complete|prepare|fill|tabulate|reconcile)\b/i
+const ANY_COMMAND = /\b(calculate|compute|construct|create|build|produce|determine|estimate|derive|quantify|develop|complete|prepare|fill|tabulate|reconcile|explain|discuss|describe|identify|define|state|list|give|provide|name|outline|summari[sz]e|contrast|compare|differentiate|distinguish|interpret|comment|recommend|justify|evaluate|assess|critique|argue|propose|select|choose|decide|why|which)\b/i
+
+function instructionText(markdown: string): string {
+  return markdown
+    .split('\n')
+    .filter(line => !/^\s*\|/.test(line))
+    .join('\n')
+}
+
+/**
+ * Whether a part asks to be worked in the spreadsheet: its own instruction
+ * names a calculation. A part with no command word of its own ("Paid losses.")
+ * answers the question's preamble, so the preamble decides.
+ */
+export function partWantsSheet(partStem: string, preamble = ''): boolean {
+  const own = instructionText(partStem)
+  if (ANY_COMMAND.test(own)) return NUMBER_WORDS.test(own)
+  return NUMBER_WORDS.test(instructionText(preamble))
+}

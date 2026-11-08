@@ -14,7 +14,16 @@ in that environment is part of preparing for the exam.
 
 - **The Spreadsheet button** in the question bar, beside Flag and Info. It shows only for a question
   whose exam has a spreadsheet profile (below). It is solid while the sheet is open, and the sheet
-  stays open from question to question until it is closed.
+  stays open from question to question until it is closed. It is outlined and labelled at rest, so
+  it reads as a tool rather than one more grey icon.
+- **Use spreadsheet, at the part.** A part that asks for numbers carries the same toggle beside its
+  *Part A* label ("Construct an … triangle", "Calculate the indicated rate change"), so the reader
+  is shown where the sheet is meant to be used. Which parts is `partWantsSheet` in
+  `lib/questionSheet.ts`: the part's own command word, as the Tutor reads a part's kind — a
+  calculation word (calculate, construct, determine, estimate the …) marks it; a part whose words
+  are all *explain*, *assess*, *recommend* doesn't; a part with no command word of its own answers
+  the question's preamble, so the preamble decides. Table rows are data and never count. Multiple
+  choice never gets it.
 - **Docked, by default.** On a wide screen the sheet takes the right of the window and the question
   moves out from under it (`html[data-question-sheet='docked'] .question-sheet-host` in
   `index.css`). The left edge drags to resize. On a narrow screen it is a sheet up from the bottom,

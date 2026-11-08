@@ -803,6 +803,7 @@ export default function Quiz() {
           essaySelfGrades={currentQuestion.type === 'multi-part' ? partGradeMap : undefined}
           onEssaySelfGrade={currentQuestion.type === 'multi-part' ? setPartGrade : undefined}
           conceptNames={conceptNames}
+          spreadsheet={!!sheetProfile}
         />
       </div>
 

@@ -29,6 +29,8 @@ export interface RichCell {
   bg?: string
   fs?: number
   ht?: number
+  /** Text overflow: '1' lets a long label run into the empty cells beside it. */
+  tb?: string
 }
 
 export type StoredCell = Primitive | RichCell | null
@@ -63,7 +65,7 @@ export interface FortuneSheet {
 /** Rows the editor opens a CSV with, at most — past this a grid stops being usable. */
 export const SHEET_ROW_LIMIT = 30_000
 
-const STYLE_KEYS = ['bl', 'it', 'fc', 'bg', 'fs', 'ht'] as const
+const STYLE_KEYS = ['bl', 'it', 'fc', 'bg', 'fs', 'ht', 'tb'] as const
 
 function compactCell(cell: FortuneCell | null | undefined): StoredCell {
   if (!cell) return null

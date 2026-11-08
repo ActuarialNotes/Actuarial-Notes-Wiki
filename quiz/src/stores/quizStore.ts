@@ -347,6 +347,14 @@ export interface QuizStore {
   pending: PendingAnswer | null
   /** The pre-quiz concept list has been read past. */
   conceptListDismissed: boolean
+  /**
+   * Each question's spreadsheet (Open in Spreadsheet), as the workbook JSON of
+   * `lib/project/sheetFile.ts`, keyed by question id — kept with the session so
+   * leaving /quiz to look something up doesn't lose the working.
+   */
+  sheets: Record<string, string>
+  /** Whether the spreadsheet pane is open; it follows the reader from question to question. */
+  sheetOpen: boolean
 
   // Actions
   startQuiz: (questions: Question[], mode: QuizMode, search?: string) => void
@@ -365,6 +373,8 @@ export interface QuizStore {
   startTimer: (allowanceSeconds: number) => void
   setPending: (pending: PendingAnswer | null) => void
   dismissConceptList: () => void
+  setSheet: (questionId: string, workbook: string | null) => void
+  setSheetOpen: (open: boolean) => void
 }
 
 function computeMasteryTransitions(
@@ -594,6 +604,8 @@ const initialState = {
   timer: null as QuizTimerState | null,
   pending: null as PendingAnswer | null,
   conceptListDismissed: false,
+  sheets: {} as Record<string, string>,
+  sheetOpen: false,
 }
 
 export const useQuizStore = create<QuizStore>((set, get) => ({
@@ -820,6 +832,17 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
     // quiz alone; leaving it would seed the next `selection=stored` launch.
     try { sessionStorage.removeItem('actuarial_selected_ids') } catch { /* ignore */ }
     get().resetQuiz()
+  },
+
+  setSheet(questionId, workbook) {
+    set(state => {
+      const { [questionId]: _old, ...rest } = state.sheets
+      return { sheets: workbook === null ? rest : { ...rest, [questionId]: workbook } }
+    })
+  },
+
+  setSheetOpen(open) {
+    set({ sheetOpen: open })
   },
 
   startTimer(allowanceSeconds) {

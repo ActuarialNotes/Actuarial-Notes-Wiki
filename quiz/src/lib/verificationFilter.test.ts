@@ -150,12 +150,12 @@ describe('factCheckBadge with a critical finding', () => {
     const badge = factCheckBadge(parseVerification(`---\n${FLAGGED}---\n`))
     expect(badge.tone).toBe('red')
     expect(badge.label).toBe('Known issue')
-    expect(badge.detail).toContain('1 unresolved critical finding')
+    expect(badge.detail).toContain('1 critical issue open')
   })
 
   it('leaves a minor-findings page amber rather than red', () => {
     const badge = factCheckBadge(parseVerification(`---\n${NITS_ONLY}---\n`))
     expect(badge.tone).toBe('amber')
-    expect(badge.detail).toContain('3 open findings')
+    expect(badge.detail).toContain('3 open issues')
   })
 })

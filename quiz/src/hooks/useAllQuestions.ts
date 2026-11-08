@@ -22,8 +22,8 @@ export function useAllQuestions(): UseAllQuestionsResult {
         if (cancelled) return
         setQuestions(parseAllQuestions(raw))
       })
-      .catch(err => {
-        if (!cancelled) setError(err instanceof Error ? err.message : 'Failed to load questions')
+      .catch(() => {
+        if (!cancelled) setError("The questions didn't load. Check your connection and try again.")
       })
       .finally(() => {
         if (!cancelled) setLoading(false)

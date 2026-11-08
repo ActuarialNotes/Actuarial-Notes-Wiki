@@ -56,7 +56,7 @@ const BENEFITS: { title: string; body: string; Art: () => React.JSX.Element }[] 
   },
   {
     title: 'Track Your Accuracy',
-    body: 'See how often you get questions right over the last week, month or three months, and whether that’s going up. The topics you miss most are listed first, each one a tap from a quiz on it.',
+    body: 'See how often you get questions right over the last week, month or three months, and whether that’s going up. The syllabus sections costing you the most marks are listed first, each one a tap from a quiz on it.',
     Art: AnalyticsArt,
   },
   {
@@ -65,6 +65,20 @@ const BENEFITS: { title: string; body: string; Art: () => React.JSX.Element }[] 
     Art: ProjectArt,
   },
 ]
+
+// What a reader sees when checkout or a code fails: never the server's own
+// words (R5 in the app-copy skill), which can be a config error or "Unauthorized".
+const CHECKOUT_FAILED = 'Checkout didn’t open. Try again in a minute, or contact us from Settings if it keeps happening.'
+
+/** The redeem-beta-code function's errors, said the way a reader needs them. */
+function betaCodeMessage(raw: string): string {
+  const msg = raw.toLowerCase()
+  if (msg.includes('invalid or already used')) return 'That code isn’t valid or has already been used. Check it and try again.'
+  if (msg.includes('already redeemed')) return 'You’ve already redeemed a code on this account.'
+  if (msg.includes('already have a pro')) return 'You already have Pro, so there’s nothing to redeem.'
+  if (msg.includes('unauthorized')) return 'Your sign-in has expired. Sign in again, then redeem the code.'
+  return 'That code couldn’t be redeemed just now. Try again in a minute.'
+}
 
 export default function Upgrade() {
   const navigate = useNavigate()
@@ -105,7 +119,7 @@ export default function Upgrade() {
       setBetaSuccess(true)
       requestProCelebration({ confirmed: true })
     } catch (err) {
-      setBetaError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
+      setBetaError(betaCodeMessage(err instanceof Error ? err.message : ''))
     } finally {
       setBetaSubmitting(false)
     }
@@ -138,7 +152,7 @@ export default function Upgrade() {
       window.location.assign(data.url)
     } catch (err) {
       console.error('upgrade: checkout failed:', err)
-      setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
+      setError(CHECKOUT_FAILED)
       setSubmitting(false)
     }
   }

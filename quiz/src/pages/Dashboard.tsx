@@ -76,7 +76,7 @@ function WelcomeModal({ onAddExam, onClose }: { onAddExam: () => void; onClose: 
         </div>
 
         <div className="text-center space-y-1.5">
-          <h2 className="text-xl font-bold tracking-tight">Welcome to Actuarial Notes!</h2>
+          <h2 className="text-xl font-bold tracking-tight">Welcome to Actuarial Notes</h2>
           {/* No promise of a study plan here — that's Pro, and a free
               account seeing it promised and then locked is a worse first
               minute than not hearing about it. Everything named below is
@@ -118,14 +118,14 @@ function SignInOverlay({ onSignIn }: { onSignIn: () => void }) {
           <LogIn className="h-6 w-6 text-primary" />
         </div>
         <p className="text-base font-semibold text-foreground text-center">Sign in to view your dashboard</p>
-        <p className="text-sm text-muted-foreground text-center">Track your progress, study plans, and exam readiness.</p>
+        <p className="text-sm text-muted-foreground text-center">See your concept levels and how ready you are for each exam.</p>
         <button
           type="button"
           onClick={onSignIn}
           className="mt-1 w-full inline-flex items-center justify-center gap-2 rounded-lg bg-primary text-primary-foreground px-4 py-2.5 text-sm font-medium hover:bg-primary/90 transition-colors"
         >
           <LogIn className="h-4 w-4" />
-          Sign In
+          Sign in
         </button>
       </div>
     </div>
@@ -509,7 +509,7 @@ export default function Dashboard() {
 
   const isGuest = !user
   const displayName = isGuest
-    ? 'Actuarial Student'
+    ? 'Guest'
     : (user.user_metadata?.display_name as string | undefined)
         ?? user.email?.split('@')[0]
         ?? 'You'
@@ -536,7 +536,7 @@ export default function Dashboard() {
       ? `${session.minutes} min`
       : session?.done ? 'Extra' : 'Start'
   const startPillLabel = session
-    ? `${session.label}${!session.done && session.questions > 0 ? ` — ${session.questions} question${session.questions === 1 ? '' : 's'}${session.minutes !== null ? `, ${session.minutes} minutes` : ''}` : ''}`
+    ? `${session.label}${!session.done && session.questions > 0 ? ` · ${session.questions} question${session.questions === 1 ? '' : 's'}${session.minutes !== null ? `, ${session.minutes} minutes` : ''}` : ''}`
     : 'Start'
 
   return (
@@ -680,7 +680,7 @@ export default function Dashboard() {
                 onClick={() => setExportOpen(true)}
                 className="p-2.5 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
                 aria-label="Export your data"
-                title="Export your data (CSV or PDF)"
+                title="Export your data"
               >
                 <Download className="h-6 w-6" />
               </button>
@@ -689,8 +689,8 @@ export default function Dashboard() {
                   type="button"
                   onClick={() => setRemindersOpen(true)}
                   className="p-2.5 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-                  aria-label="Daily reminder email settings"
-                  title="Daily reminder email settings"
+                  aria-label="Daily study plan email"
+                  title="Daily study plan email"
                 >
                   <Bell className="h-6 w-6" />
                 </button>

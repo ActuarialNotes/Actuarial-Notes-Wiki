@@ -61,9 +61,9 @@ export function useQuestions(filters: QuestionFilter) {
           : shuffle(filtered).slice(0, limit)
         setQuestions(result)
       })
-      .catch(err => {
+      .catch(() => {
         if (!cancelled) {
-          setError(err instanceof Error ? err.message : 'Failed to load questions')
+          setError("The questions didn't load. Check your connection and try again.")
         }
       })
       .finally(() => {

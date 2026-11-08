@@ -50,8 +50,8 @@ test.describe('quiz setup', () => {
   test('a practice exam is drawn from the whole bank', async ({ page }) => {
     await page.goto('/?topic=Exam%205')
     await page.getByRole('button', { name: /Practice exam/i }).click()
-    await page.getByRole('dialog', { name: 'Practice exam' })
-      .getByRole('button', { name: 'Start practice exam' }).click()
+    await page.getByRole('dialog', { name: 'Practice Exam' })
+      .getByRole('button', { name: 'Start Practice Exam' }).click()
     await expect(page).toHaveURL(/mode=mock-exam/)
     await expect(page.getByRole('button', { name: /Quit exam/ })).toBeVisible()
   })

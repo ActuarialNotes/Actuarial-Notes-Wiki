@@ -26,6 +26,7 @@ import { TOUR_ENABLED } from '@/lib/featureFlags'
 import { AvatarDisplay } from '@/components/AvatarDisplay'
 import { ProBadge } from '@/components/ProBadge'
 import { CharacterSkinSelector } from '@/components/MascotWidget'
+import { authErrorMessage } from '@/lib/authMessages'
 import { supabase } from '@/lib/supabase'
 import { useTheme } from '@/hooks/useTheme'
 import { RESETTABLE_EXAMS, EXAM_ID_TO_LABEL } from '@/lib/examIds'
@@ -36,8 +37,8 @@ import { buildProgressReport, generateProgressReportPdf, buildPdfFilename } from
 // ---- Exam status icons ----
 
 const STATUS_LABEL: Record<ItemStatus, string> = {
-  not_started: 'Not Started',
-  in_progress: 'In Progress',
+  not_started: 'Not started',
+  in_progress: 'In progress',
   completed: 'Passed',
 }
 
@@ -142,7 +143,7 @@ function InlineAuthForm() {
     e.preventDefault()
     setError(null)
     if (mode === 'signup' && password !== confirmPassword) {
-      setError('Passwords do not match')
+      setError('The two passwords don’t match. Type the same one in both boxes.')
       return
     }
     setSubmitting(true)
@@ -161,7 +162,7 @@ function InlineAuthForm() {
         setSignupSuccess(true)
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Authentication failed')
+      setError(authErrorMessage(err instanceof Error ? err.message : '', mode))
     } finally {
       setSubmitting(false)
     }
@@ -178,7 +179,7 @@ function InlineAuthForm() {
         </CardHeader>
         <CardContent>
           <Button variant="outline" className="w-full" onClick={() => { setSignupSuccess(false); setMode('signin') }}>
-            Back to Sign In
+            Back to sign in
           </Button>
         </CardContent>
       </Card>
@@ -188,9 +189,9 @@ function InlineAuthForm() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{mode === 'signin' ? 'Sign In' : 'Create Account'}</CardTitle>
+        <CardTitle>{mode === 'signin' ? 'Sign in' : 'Create account'}</CardTitle>
         <CardDescription>
-          {mode === 'signin' ? 'Sign in to track your quiz progress' : 'Create an account to save results'}
+          {mode === 'signin' ? 'Sign in to keep your progress on every device.' : 'Create an account to keep your results on every device.'}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -213,7 +214,7 @@ function InlineAuthForm() {
           </div>
           {mode === 'signup' && (
             <div className="space-y-2">
-              <Label htmlFor="inline-confirm-password">Confirm Password</Label>
+              <Label htmlFor="inline-confirm-password">Confirm password</Label>
               <Input
                 id="inline-confirm-password"
                 type="password"
@@ -231,7 +232,7 @@ function InlineAuthForm() {
             </Alert>
           )}
           <Button type="submit" className="w-full" disabled={submitting}>
-            {submitting ? 'Please wait…' : mode === 'signin' ? 'Sign In' : 'Create Account'}
+            {submitting ? 'Please wait…' : mode === 'signin' ? 'Sign in' : 'Create account'}
           </Button>
         </form>
         <div className="mt-4 text-center text-sm text-muted-foreground">
@@ -239,7 +240,7 @@ function InlineAuthForm() {
             <>
               Don&apos;t have an account?{' '}
               <button type="button" className="text-primary hover:underline" onClick={() => { setMode('signup'); setError(null) }}>
-                Sign up
+                Create account
               </button>
             </>
           ) : (
@@ -262,7 +263,7 @@ function InlineAuthForm() {
 const ACCOUNT_NAV_ITEMS = [
   { id: 'profile',    label: 'Profile' },
   { id: 'pro',        label: 'Pro' },
-  { id: 'exams',      label: 'Credential Path & Exams' },
+  { id: 'exams',      label: 'Credential Track & Exams' },
 ]
 
 // ---- Main page ----
@@ -290,7 +291,7 @@ export default function Settings() {
   )
 
   const navItems = [
-    ...(user ? [] : [{ id: 'signin', label: 'Sign In' }]),
+    ...(user ? [] : [{ id: 'signin', label: 'Sign in' }]),
     ...(user ? ACCOUNT_NAV_ITEMS : []),
     { id: 'appearance', label: 'Appearance' },
     { id: 'sound', label: 'Sound' },
@@ -336,12 +337,13 @@ export default function Settings() {
       const { data, error } = await supabase.functions.invoke('stripe-sync-session', { body: {} })
       if (error) throw new Error(error.message)
       if (data?.synced && data?.tier === 'premium') {
-        setRestoreMessage('Pro restored! Your features should appear shortly.')
+        setRestoreMessage('Pro restored. Reload the page if the Pro features don’t show yet.')
       } else {
-        setRestoreMessage('No active subscription found. If you believe this is an error, contact support.')
+        setRestoreMessage('There’s no active Pro subscription on this account. If you paid with another email, sign in with that one, or contact us below.')
       }
     } catch (err) {
-      setRestoreMessage(err instanceof Error ? err.message : 'Something went wrong.')
+      console.error('settings: restore purchase failed:', err)
+      setRestoreMessage('Your purchase couldn’t be checked just now. Try again in a minute.')
     } finally {
       setRestoreLoading(false)
     }
@@ -354,10 +356,11 @@ export default function Settings() {
       const { data, error } = await supabase.functions.invoke('stripe-create-portal', {
         body: { return_url: window.location.href },
       })
-      if (error || !data?.url) throw new Error(error?.message ?? 'Could not open billing portal.')
+      if (error || !data?.url) throw new Error('portal')
       window.location.href = data.url
     } catch (err) {
-      setPortalError(err instanceof Error ? err.message : 'Something went wrong.')
+      console.error('settings: billing portal failed:', err)
+      setPortalError('The billing page didn’t open. Try again in a minute, or contact us below.')
       setPortalLoading(false)
     }
   }
@@ -371,9 +374,9 @@ export default function Settings() {
 
   const handlePasswordSave = async () => {
     setPwValidErr(null)
-    if (!newPw) { setPwValidErr('New password is required.'); return }
-    if (newPw.length < 8) { setPwValidErr('Password must be at least 8 characters.'); return }
-    if (newPw !== confirmPw) { setPwValidErr('Passwords do not match.'); return }
+    if (!newPw) { setPwValidErr('Type a new password.'); return }
+    if (newPw.length < 8) { setPwValidErr('Your new password needs at least 8 characters.'); return }
+    if (newPw !== confirmPw) { setPwValidErr('The two new passwords don’t match.'); return }
     const ok = await changePassword(currentPw, newPw)
     if (ok) {
       setCurrentPw(''); setNewPw(''); setConfirmPw('')
@@ -435,7 +438,7 @@ export default function Settings() {
     const scopeLabel = examId ? EXAM_ID_TO_LABEL[examId] ?? examId : 'all exams'
     setDataActionState({
       saving: false,
-      error: ok ? null : 'Failed to reset history.',
+      error: ok ? null : 'Your study history couldn’t be reset. Try again in a minute.',
       success: ok ? `Study history and learning progress cleared for ${scopeLabel}.` : null,
     })
   }
@@ -470,7 +473,8 @@ export default function Settings() {
         success: `Exported ${rows.length} ${rows.length === 1 ? 'question' : 'questions'} for ${scopeLabel} as ${format}.`,
       })
     } catch (err) {
-      setDataActionState({ saving: false, error: err instanceof Error ? err.message : 'Failed to export data.', success: null })
+      console.error('settings: export failed:', err)
+      setDataActionState({ saving: false, error: 'Your data couldn’t be exported. Try again in a minute.', success: null })
     } finally {
       setExporting(false)
     }
@@ -481,7 +485,7 @@ export default function Settings() {
     setDataActionState({ saving: true, error: null, success: null })
     const ok = await deleteAccount()
     if (ok) navigate('/')
-    else setDataActionState({ saving: false, error: 'Failed to delete account. Please try again.', success: null })
+    else setDataActionState({ saving: false, error: 'Your account couldn’t be deleted. Try again, or contact us under Support.', success: null })
   }
 
   const totalSessions = sessions.length
@@ -520,32 +524,29 @@ export default function Settings() {
       <ConfirmModal
         open={showResetModal}
         title="Reset study history?"
-        confirmLabel="Reset History"
+        confirmLabel="Reset history"
         onConfirm={handleResetHistory}
         onCancel={() => setShowResetModal(false)}
         destructive
       >
         <p>
-          This will permanently delete all quiz sessions, question responses, and learning progress
-          (concept mastery, daily completions, and cached study plans)
+          This deletes your quiz history, your answers and your concept levels
           {resetScope === 'all' ? ' for every exam' : ` for ${EXAM_ID_TO_LABEL[resetScope] ?? resetScope}`}.
-          This cannot be undone.
+          It can’t be undone.
         </p>
       </ConfirmModal>
 
       <ConfirmModal
         open={showDeleteModal}
         title="Delete account"
-        confirmLabel="Permanently Delete Account"
+        confirmLabel="Delete account"
         confirmDisabled={deleteConfirmText !== 'DELETE'}
         onConfirm={handleDeleteAccount}
         onCancel={() => { setShowDeleteModal(false); setDeleteConfirmText('') }}
         destructive
       >
-        <p className="font-medium text-destructive">This action is irreversible.</p>
         <p>
-          Deleting your account will permanently remove all your data including quiz history and exam progress.
-          In accordance with GDPR/CCPA, all your personal data will be erased and cannot be recovered.
+          This deletes your account, your quiz history and your exam progress. It can’t be undone.
         </p>
         <div className="mt-3">
           <Label htmlFor="delete-confirm">Type <span className="font-mono font-bold">DELETE</span> to confirm</Label>
@@ -563,7 +564,7 @@ export default function Settings() {
         <div className="mb-6">
           <h1 className="text-2xl font-bold tracking-tight flex items-center gap-2">
             <User className="h-6 w-6" />
-            You
+            Settings
           </h1>
           {user && <p className="text-sm text-muted-foreground mt-1">{user.email}</p>}
         </div>
@@ -614,7 +615,7 @@ export default function Settings() {
                       <div className="flex items-center gap-4">
                         <AvatarDisplay avatarUrl={localAvatarUrl} initials={initials} size={64} />
                         <Button variant="outline" onClick={() => setShowCharacterPicker(true)}>
-                          Change Character
+                          Change character
                         </Button>
                       </div>
                       {showCharacterPicker && (
@@ -667,7 +668,7 @@ export default function Settings() {
                         disabled={!profileDirty || profileState.saving}
                         className="w-full sm:w-auto"
                       >
-                        {profileState.saving ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Saving…</> : 'Save Profile'}
+                        {profileState.saving ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Saving…</> : 'Save profile'}
                       </Button>
 
                       {/* Password change — hidden by default, not shown for SSO users */}
@@ -725,7 +726,7 @@ export default function Settings() {
                                   disabled={accountState.saving}
                                   className="w-full sm:w-auto"
                                 >
-                                  {accountState.saving ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Saving…</> : 'Save Password'}
+                                  {accountState.saving ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Saving…</> : 'Save password'}
                                 </Button>
                                 <Button
                                   variant="ghost"
@@ -759,11 +760,11 @@ export default function Settings() {
                         <ProBadge size="md" />
                         <span className="inline-flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-full bg-violet-500/15 text-violet-600 dark:text-violet-400">
                           <Star className="h-3 w-3 fill-current" />
-                          Beta Tester
+                          Beta tester
                         </span>
                       </div>
                       <p className="text-sm text-muted-foreground">
-                        You have Pro access via a beta tester code. Thank you for helping us build Actuarial Notes!
+                        You have Pro through a beta tester code. Thanks for testing.
                       </p>
                     </>
                   ) : isPro ? (
@@ -782,7 +783,7 @@ export default function Settings() {
                           onClick={handleManageSubscription}
                           disabled={portalLoading}
                         >
-                          {portalLoading ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Opening…</> : 'Manage Subscription'}
+                          {portalLoading ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Opening…</> : 'Manage subscription'}
                         </Button>
                         {portalError && (
                           <p className="text-sm text-destructive mt-2">{portalError}</p>
@@ -797,18 +798,18 @@ export default function Settings() {
                         </span>
                       </div>
                       <p className="text-sm text-muted-foreground">
-                        Upgrade to Pro for a custom study plan and exclusive features.
+                        Pro plans what to study each day until your exam.
                       </p>
                       <div className="flex flex-wrap gap-3">
                         <Link to="/upgrade">
-                          <Button variant="default">Upgrade to Pro →</Button>
+                          <Button variant="default">Get Pro</Button>
                         </Link>
                         <Button
                           variant="outline"
                           onClick={handleRestorePurchase}
                           disabled={restoreLoading}
                         >
-                          {restoreLoading ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Checking…</> : 'Restore Purchase'}
+                          {restoreLoading ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Checking…</> : 'Restore purchase'}
                         </Button>
                       </div>
                       {restoreMessage && (
@@ -824,9 +825,9 @@ export default function Settings() {
             <section ref={el => { sectionRefs.current.exams = el }} id="exams">
               <Card>
                 <CardHeader>
-                  <CardTitle>Credential Path &amp; Exams</CardTitle>
+                  <CardTitle>Credential Track &amp; Exams</CardTitle>
                   <CardDescription>
-                    Your track and the exams you&rsquo;re working through. Add or update exams in the exams panel.
+                    The exams you&rsquo;ve started or passed on your track. Add an exam or change its status with Add exams.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -887,7 +888,7 @@ export default function Settings() {
 
                   <Button variant="outline" onClick={openExams} className="w-full sm:w-auto">
                     <Plus className="h-4 w-4 mr-2" />
-                    Add Exams
+                    Add exams
                   </Button>
                 </CardContent>
               </Card>
@@ -980,7 +981,7 @@ export default function Settings() {
                     <div>
                       <p className="text-sm font-medium">Contact us</p>
                       <p className="text-xs text-muted-foreground">
-                        Have a question or found a bug? Send us a message.
+                        Send a question or report a bug.
                       </p>
                     </div>
                     <Button
@@ -1011,7 +1012,7 @@ export default function Settings() {
                     <div className="flex gap-6 text-sm text-muted-foreground">
                       <span><span className="text-foreground font-medium">{totalSessions}</span> sessions</span>
                       {avgScore !== null && (
-                        <span>avg score <span className="text-foreground font-medium">{avgScore}%</span></span>
+                        <span>average score <span className="text-foreground font-medium">{avgScore}%</span></span>
                       )}
                     </div>
                   </div>
@@ -1023,8 +1024,7 @@ export default function Settings() {
                     <div>
                       <p className="text-sm font-medium">Reset study history</p>
                       <p className="text-xs text-muted-foreground">
-                        Permanently delete quiz sessions, question responses, and learning progress (concept mastery,
-                        daily completions, cached study plans).
+                        Delete your quiz history, answers and concept levels.
                       </p>
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
@@ -1044,7 +1044,7 @@ export default function Settings() {
                         onClick={() => setShowResetModal(true)}
                         disabled={dataState.saving || dataActionState.saving}
                       >
-                        Reset History
+                        Reset history
                       </Button>
                     </div>
                   </div>
@@ -1057,8 +1057,8 @@ export default function Settings() {
                       <p className="text-sm font-medium">Export performance data</p>
                       <p className="text-xs text-muted-foreground">
                         Download your answered questions as a <span className="font-medium">CSV</span> spreadsheet
-                        (date, exam, topic, your answer, correct answer, result and time), or a branded{' '}
-                        <span className="font-medium">PDF</span> progress report summarising your accuracy by exam and topic.
+                        (date, exam, topic, your answer, correct answer, result and time), or a{' '}
+                        <span className="font-medium">PDF</span> report of your accuracy by exam and topic.
                       </p>
                     </div>
                     <div className="flex flex-wrap items-center gap-2 sm:shrink-0">
@@ -1099,7 +1099,7 @@ export default function Settings() {
                       <div>
                         <p className="text-sm font-medium">Delete account</p>
                         <p className="text-xs text-muted-foreground">
-                          Permanently delete your account and all data. This action cannot be undone.
+                          Delete your account and everything saved with it.
                         </p>
                       </div>
                       <Button
@@ -1108,7 +1108,7 @@ export default function Settings() {
                         disabled={dataState.saving || dataActionState.saving}
                         className="shrink-0"
                       >
-                        Delete Account
+                        Delete account
                       </Button>
                     </div>
                   </div>

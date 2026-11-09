@@ -40,14 +40,14 @@ test.describe('tools', () => {
     await expect(card.getByText('% unreported, 2023')).toBeVisible()
 
     // The menu says what the tool was tested against: Friedland's Chapter 9 exhibit.
-    await page.getByRole('button', { name: 'More' }).click()
+    await page.getByRole('button', { name: 'More', exact: true }).click()
     await expect(page.getByText('Tested against', { exact: true })).toBeVisible()
     await expect(page.getByRole('link', { name: /Friedland \(2010\), Ch\. 9, Exhibit I, Sheet 1, p\. 162/ })).toBeVisible()
   })
 
   test('sends age-to-age averages on to Development to Ultimate', async ({ page }) => {
     await page.goto('/tools/age-to-age-factors')
-    await page.getByRole('button', { name: 'More' }).click()
+    await page.getByRole('button', { name: 'More', exact: true }).click()
     await page.getByRole('menuitem', { name: 'Send to Development to Ultimate' }).click()
     await expect(page).toHaveURL(/\/tools\/development-to-ultimate\?from=age-to-age-factors#input=/)
     // The averages arrive as the selected factors: 12–24 is 1,500 + 1,700 + 1,800 over 1,000 + 1,100 + 1,200.
@@ -185,7 +185,7 @@ test.describe('tools', () => {
     await page.goto('/tools/age-to-age-factors')
     await page.getByRole('button', { name: 'Select Simple all at every age' }).click()
     await expect(page.getByTestId('selected-factor').first()).toContainText('Simple all')
-    await page.getByRole('button', { name: 'More' }).click()
+    await page.getByRole('button', { name: 'More', exact: true }).click()
     await page.getByRole('menuitem', { name: 'Send selections to Development to Ultimate' }).click()
     await expect(page).toHaveURL(/\/tools\/development-to-ultimate\?from=age-to-age-factors#input=/)
     // 12–24, the simple mean: (1.5 + 1700/1100 + 1.5) / 3.

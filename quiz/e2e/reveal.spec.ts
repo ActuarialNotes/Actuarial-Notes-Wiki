@@ -44,8 +44,8 @@ test.describe('answer reveal', () => {
 
   test('the builder checkbox is remembered across visits', async ({ page }) => {
     const label = 'Show answers after each question'
-    // The choice lives in the setup sheet, which any pill on the card opens.
-    const settings = page.getByTestId('quiz-pill').first()
+    // The choice lives in the card's settings, which unfold from their icons.
+    const settings = page.getByTestId('quiz-settings-toggle')
     await page.goto('/?topic=Probability')
     await settings.click()
     const box = page.getByRole('switch', { name: label })

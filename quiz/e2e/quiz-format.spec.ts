@@ -7,21 +7,18 @@ import { test, expect } from './test'
 // highlighted on the card, the way a study guide's link is.
 
 test.describe('quiz setup', () => {
-  test("a pill opens the sheet, and the card's count follows it", async ({ page }) => {
+  test('the topic pill opens a sheet of topics alone', async ({ page }) => {
     await page.goto('/?topic=Exam%205')
     await page.getByTestId('quiz-pill').first().click()
     const sheet = page.getByRole('dialog', { name: 'Your quiz' })
     await expect(sheet).toBeVisible()
-    await sheet.getByRole('radio', { name: '5 questions' }).click()
-    await expect(sheet.getByRole('button', { name: 'Start 5 questions' })).toBeVisible()
+    await expect(sheet.getByText('Topics', { exact: true })).toBeVisible()
+    // The count and the settings are the card's, not the sheet's.
+    await expect(sheet.getByRole('radio', { name: '5 questions' })).toHaveCount(0)
+    await expect(sheet.getByRole('switch')).toHaveCount(0)
 
     await sheet.getByRole('button', { name: 'Close' }).click()
     await expect(sheet).toBeHidden()
-    const card = page.getByRole('region', { name: 'Your quiz' })
-    await expect(card).toContainText('5questions')
-    await card.getByRole('button', { name: 'Start quiz' }).click()
-    await expect(page).toHaveURL(/mode=quiz/)
-    await expect(page).toHaveURL(/count=5/)
   })
 
   test('the count opens its choices on the card, which take any number', async ({ page }) => {

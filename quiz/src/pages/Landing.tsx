@@ -61,8 +61,6 @@ import { QuizTitleRow } from '@/components/landing/QuizTitleRow'
 import { QuizHeroCard, type SetupSection } from '@/components/landing/QuizHeroCard'
 import { PaperTiles, TodaysPlanTile } from '@/components/landing/QuizLaunchTiles'
 import {
-  CountChoice,
-  DifficultyChoice,
   QuizSetupSheet,
   SheetSection,
   SittingChoices,
@@ -79,9 +77,9 @@ import type { Question } from '@/lib/parser'
 //
 // The setup screen is a card and three tiles. The card is the reader's own
 // quiz — its count, how long it should take, a pill for each topic, its
-// settings as icons, and Start; each opens the setup sheet at its own section
-// (the count at How many), where the topics, count, levels and how it's sat
-// are changed. Under it, today's plan (Pro's;
+// settings as icons, and Start. The count and the settings change on the card
+// itself; the topic pill opens the setup sheet, which holds only the topics.
+// Under it, today's plan (Pro's;
 // shown locked to anyone else, so the plan never stands above building your
 // own), then a practice exam drawn to the paper's shape and the exam's past
 // papers, each opening the sheet in its own form.
@@ -303,14 +301,23 @@ export default function Landing() {
     return filterQuestions(allQuestions, { concept: selectedConcept }).filter(inLevels).length
   }, [allQuestions, selectedConcept, inLevels])
 
+  // A quiz opened on one concept (a `?concept=` link) becomes an ordinary
+  // topic selection the moment the reader changes it in the sheet.
   function toggleConcept(concept: string) {
+    if (selectedConcept) {
+      setSelectedConcepts(toggleConceptIn([selectedConcept], concept))
+      setSelectedConcept('')
+      return
+    }
     setSelectedConcepts(prev => toggleConceptIn(prev, concept))
   }
 
   function selectAllInGroup(group: { subtopics: string[] }, e: React.MouseEvent) {
     e.stopPropagation()
-    const allSelected = group.subtopics.every(s => selectedConcepts.includes(s))
-    setSelectedConcepts(prev => selectGroup(prev, group.subtopics, !allSelected))
+    const current = selectedConcept ? [selectedConcept] : selectedConcepts
+    const allSelected = group.subtopics.every(s => current.includes(s))
+    setSelectedConcepts(selectGroup(current, group.subtopics, !allSelected))
+    if (selectedConcept) setSelectedConcept('')
   }
 
   // The exam's past sittings — the authored catalogue merged with whatever the
@@ -605,42 +612,29 @@ export default function Landing() {
         onStart={startQuiz}
         focus={sheetFocus}
       >
-        {!selectedConcept && (
-          <SheetSection
-            section="topics"
-            title="Topics"
-            aside={selectedConcepts.length > 0 ? (
-              <button
-                type="button"
-                onClick={() => setSelectedConcepts([])}
-                className="font-semibold text-foreground hover:underline"
-              >
-                Clear
-              </button>
-            ) : 'All topics'}
-          >
-            <ConceptGroupList
-              loading={conceptsLoading && orderedConcepts.length === 0}
-              groups={groupedConcepts}
-              selected={selectedConcepts}
-              today={todayConcepts}
-              onToggle={toggleConcept}
-              onSelectAll={selectAllInGroup}
-              levels={conceptLevelMap}
-            />
-          </SheetSection>
-        )}
-        <SheetSection section="count" title="How many" aside={`${quizPool.length} available`}>
-          <CountChoice options={countOptions} value={String(count)} onChange={handleCountChange} max={quizPool.length} />
-        </SheetSection>
-        <SheetSection section="difficulty" title="Difficulty">
-          <DifficultyChoice
-            levels={difficulties}
-            onChange={quizSettings.onDifficultiesChange}
-            counts={difficultyCounts}
+        <SheetSection
+          section="topics"
+          title="Topics"
+          aside={selectedConcept || selectedConcepts.length > 0 ? (
+            <button
+              type="button"
+              onClick={() => { setSelectedConcept(''); setSelectedConcepts([]) }}
+              className="font-semibold text-foreground hover:underline"
+            >
+              Clear
+            </button>
+          ) : 'All topics'}
+        >
+          <ConceptGroupList
+            loading={conceptsLoading && orderedConcepts.length === 0}
+            groups={groupedConcepts}
+            selected={selectedConcept ? [selectedConcept] : selectedConcepts}
+            today={todayConcepts}
+            onToggle={toggleConcept}
+            onSelectAll={selectAllInGroup}
+            levels={conceptLevelMap}
           />
         </SheetSection>
-        {sittingSettings(quizSettings)}
       </QuizSetupSheet>
     )}
 

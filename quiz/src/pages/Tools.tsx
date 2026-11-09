@@ -180,7 +180,7 @@ function AssumptionsRow() {
         </LogoTile>
       }
       title="Assumptions Bank"
-      subtitle="What does the published document say the figure is?"
+      subtitle="Figures transcribed from published documents, each with where to find it"
       subtitleLines={2}
       data-testid="assumptions-row"
     />

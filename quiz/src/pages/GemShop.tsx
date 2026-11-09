@@ -34,6 +34,11 @@ import { RESTORE_SCROLL } from '@/lib/routeScrollMemory'
 import { backLabel, useBack } from '@/hooks/useBack'
 import { cn } from '@/lib/utils'
 
+// The Custom Badge is in the catalogue but nothing draws a profile badge yet,
+// so it isn't offered: a reader would pay 100 gems for something shown
+// nowhere. Put it back once a surface shows it.
+const SHOP_COSMETICS = COSMETICS.filter(c => c.type !== 'badge')
+
 type StoreTab = 'characters' | 'skins' | 'banners' | 'ships'
 
 // Ships are Actuaria's (docs/actuaria-online.md §7.3): sold here with the
@@ -292,7 +297,7 @@ export default function GemShop() {
       </div>
 
       <p className="text-muted-foreground">
-        Earn 1 gem for every correct answer. Unlock characters, skins, and banners.
+        Signed in, you earn a gem for every correct answer and more from daily quests. Spend them on characters, skins and banners.
       </p>
 
       {error && (
@@ -423,7 +428,7 @@ export default function GemShop() {
 
           {/* Skins grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {COSMETICS
+            {SHOP_COSMETICS
               .filter(c => skinAnimalFilter ? c.animal === skinAnimalFilter : true)
               .map(cosmetic => {
                 const isOwned = ownedIds.has(cosmetic.id)
@@ -460,7 +465,7 @@ export default function GemShop() {
                       {isOwned ? (
                         cosmetic.type === 'badge' ? (
                           <Button size="sm" variant="outline" disabled className="w-full gap-1.5">
-                            <Check className="h-4 w-4" />Unlocked
+                            <Check className="h-4 w-4" />Owned
                           </Button>
                         ) : isEquipped ? (
                           <Button size="sm" variant="outline" disabled className="w-full gap-1.5">
@@ -574,7 +579,7 @@ export default function GemShop() {
                 className="underline font-medium"
               >
                 Sign in
-              </button>{' '}to unlock and equip banners.
+              </button>{' '}to get and equip banners.
             </p>
           ) : (
             <>
@@ -582,7 +587,7 @@ export default function GemShop() {
               <section className="space-y-3">
                 <div>
                   <h2 className="font-semibold">Designation Banners</h2>
-                  <p className="text-sm text-muted-foreground">Complete all exam requirements to unlock for free.</p>
+                  <p className="text-sm text-muted-foreground">Free once you’ve passed every requirement for the designation.</p>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {DESIGNATION_BANNERS.map(banner => {
@@ -664,7 +669,7 @@ export default function GemShop() {
               <section className="space-y-3">
                 <div>
                   <h2 className="font-semibold">Special Banners</h2>
-                  <p className="text-sm text-muted-foreground">Granted for special achievements.</p>
+                  <p className="text-sm text-muted-foreground">Given to beta testers.</p>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <Card>
@@ -721,8 +726,8 @@ export default function GemShop() {
                   <h2 className="font-semibold">Custom Banner</h2>
                   <p className="text-sm text-muted-foreground">
                     {ownedIds.has(CUSTOM_BANNER_PURCHASE_ID)
-                      ? 'Your custom slot is unlocked — update the text for free anytime.'
-                      : `Purchase a custom banner for ${CUSTOM_BANNER_PRICE} gems. Up to ${CUSTOM_BANNER_MAX_CHARS} characters.`}
+                      ? 'You own a custom banner. Changing its text is free.'
+                      : `Buy a custom banner for ${CUSTOM_BANNER_PRICE} gems. Up to ${CUSTOM_BANNER_MAX_CHARS} characters.`}
                   </p>
                 </div>
                 <Card>

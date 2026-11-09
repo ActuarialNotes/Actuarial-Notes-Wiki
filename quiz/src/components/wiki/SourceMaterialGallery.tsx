@@ -157,7 +157,7 @@ export function SourceMaterialGallery({ entries, objectives = NO_OBJECTIVES, exa
           )
         })}
         <MultiSelectDropdown
-          label="Vintage"
+          label="Syllabus edition"
           options={vintageOptions}
           selected={new Set(vintage ? [vintage.edition.label] : [])}
           onToggle={chooseVintage}
@@ -198,7 +198,7 @@ export function SourceMaterialGallery({ entries, objectives = NO_OBJECTIVES, exa
       )}
       {shown.length === 0 && (
         <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed px-4 py-10 text-center">
-          <p className="text-sm text-muted-foreground">No sources match these filters.</p>
+          <p className="text-sm text-muted-foreground">No resources match these filters.</p>
           <button
             type="button"
             onClick={() => update(noChoice())}

@@ -22,7 +22,7 @@ export const KIT_STEP_TITLE: Record<KitStepId, string> = {
   calculator: 'Calculator',
   learn: 'Learn the syllabus',
   practise: 'Practise questions',
-  review: 'Review on the go',
+  review: 'Review with flashcards',
 }
 
 /** Which study kinds each study step holds. Every kind is in exactly one. */

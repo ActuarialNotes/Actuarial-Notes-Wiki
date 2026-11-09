@@ -5,8 +5,8 @@ const plan = (relearn: number, due: number, newConcepts: string[], minutes = 20)
 
 describe('the Tutor’s own sentences', () => {
   it('brief the day in one line', () => {
-    expect(offerLine({ kind: 'arrival' }, plan(2, 6, ['Ratemaking']))).toBe('Today: 2 misses to relearn · 6 due, then Ratemaking.')
-    expect(offerLine({ kind: 'arrival' }, plan(1, 0, []))).toBe('Today: 1 miss to relearn.')
+    expect(offerLine({ kind: 'arrival' }, plan(2, 6, ['Ratemaking']))).toBe('2 misses to relearn and 6 due today, then Ratemaking.')
+    expect(offerLine({ kind: 'arrival' }, plan(1, 0, []))).toBe('1 miss to relearn today.')
     expect(offerLine({ kind: 'arrival' }, plan(0, 0, ['Ratemaking']))).toBe('Today starts with Ratemaking.')
     expect(offerLine({ kind: 'arrival' }, plan(0, 0, []))).toBe('Nothing due today.')
   })
@@ -16,7 +16,7 @@ describe('the Tutor’s own sentences', () => {
   })
 
   it('say the plan and the minutes plainly', () => {
-    expect(planLine(plan(0, 3, ['A', 'B'], 31))).toBe('3 due · 2 new — about 31 min')
+    expect(planLine(plan(0, 3, ['A', 'B'], 31))).toBe('3 due · 2 new, about 31 min')
     expect(formatMinutes(0)).toBe('0 min')
     expect(formatMinutes(75)).toBe('1 h 15 min')
   })

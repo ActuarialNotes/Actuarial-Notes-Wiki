@@ -123,14 +123,14 @@ export const useProjectRuntime = create<RuntimeStore>((set, get) => {
       if (!touched) continue
       seen[language].set(entry.path, entry.mtime)
       if (entry.size > MAX_SYNC_BYTES) {
-        print(language, 'info', `${entry.path} is ${(entry.size / 1_048_576).toFixed(0)} MB — too large to keep in the project; it stays in this session only.`)
+        print(language, 'info', `${entry.path} is ${(entry.size / 1_048_576).toFixed(0)} MB, too large to keep in the project. It stays in this session only.`)
         continue
       }
       const current = usePcpaWorkspace.getState().files[entry.path]
       const bytes = await rt.readFile(entry.path)
       if (current && sameBytes(fileBytes(current), bytes)) continue
       if (current?.readOnly) {
-        print(language, 'info', `${entry.path} is one of the project's data sets and can't be overwritten — the original has been restored. Write cleaned data to output/ instead.`)
+        print(language, 'info', `${entry.path} is one of the project's data sets and can't be overwritten, so the original has been restored. Write cleaned data to output/ instead.`)
         pushed[language].delete(entry.path)
         continue
       }
@@ -156,7 +156,7 @@ export const useProjectRuntime = create<RuntimeStore>((set, get) => {
         return true
       } catch (e) {
         patch(language, { status: 'error', progress: '' })
-        print(language, 'error', `Could not start ${language === 'r' ? 'R' : 'Python'}: ${e instanceof Error ? e.message : String(e)}\nThe runtime is downloaded from its CDN the first time — check the connection and try again.`)
+        print(language, 'error', `Could not start ${language === 'r' ? 'R' : 'Python'}: ${e instanceof Error ? e.message : String(e)}\nThe runtime is downloaded from its CDN the first time. Check your connection and try again.`)
         return false
       } finally {
         delete starting[language]

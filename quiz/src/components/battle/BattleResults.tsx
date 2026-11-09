@@ -213,7 +213,7 @@ export function BattleResults({
           {summary.forfeit !== null
             ? `${summary.played} of ${battle.config.rounds} questions played`
             : summary.winner === null
-            ? `Level on ${battle.scores[0].toLocaleString('en-US')} after ${summary.played} questions`
+            ? `Tied on ${battle.scores[0].toLocaleString('en-US')} after ${summary.played} questions`
             : `by ${summary.margin.toLocaleString('en-US')} points · ${battleExamName(battle.config.exam)}, ${summary.played} questions`}
         </p>
       </div>

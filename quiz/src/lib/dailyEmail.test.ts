@@ -71,10 +71,10 @@ describe('deriveTodaysConcepts', () => {
 
 describe('describePacing', () => {
   it('maps every pacing status to a phrase and unknowns to empty', () => {
-    expect(describePacing('on_track')).toContain('on track')
-    expect(describePacing('ahead')).toContain('ahead')
-    expect(describePacing('behind')).toContain('behind')
-    expect(describePacing('review_mode')).toContain('review')
+    expect(describePacing('on_track')).toBe('On track')
+    expect(describePacing('ahead')).toBe('Ahead of schedule')
+    expect(describePacing('behind')).toBe('Behind schedule')
+    expect(describePacing('review_mode')).toBe('Every concept is at Level 3')
     expect(describePacing('target_passed')).toContain('exam date')
     expect(describePacing(undefined)).toBe('')
     expect(describePacing('unknown')).toBe('')

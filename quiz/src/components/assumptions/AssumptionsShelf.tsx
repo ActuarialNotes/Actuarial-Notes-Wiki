@@ -27,12 +27,12 @@ export function AssumptionsShelf({ onReadSource }: { onReadSource: (resource: st
   const sets = [...bank]
     .filter(s => !s.supersededBy && (!kind || s.rows.some(r => r.kind === kind)))
     .sort((a, b) => b.effective.localeCompare(a.effective) || a.title.localeCompare(b.title))
-  const figures = bank.reduce((n, s) => n + s.rows.filter(r => r.decimal != null).length, 0)
+  const figures = sets.reduce((n, s) => n + s.rows.filter(r => r.decimal != null).length, 0)
 
   return (
     <div className="space-y-4">
       <p className="text-sm text-muted-foreground">
-        {figures} published figures from {bank.length} documents, each with where it is printed. Take one into a tool and the run records its source.
+        {figures} published {figures === 1 ? 'figure' : 'figures'} from {sets.length} {sets.length === 1 ? 'document' : 'documents'}, each with where it is printed. Take one into a tool and the run records its source.
       </p>
       <div className="flex flex-wrap gap-1.5" role="group" aria-label="Kind">
         <button type="button" onClick={() => choose(null)} className={inkChip(kind === null)} aria-pressed={kind === null}>All</button>

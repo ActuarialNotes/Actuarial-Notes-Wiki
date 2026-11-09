@@ -90,15 +90,15 @@ describe('the history', () => {
 
   it('says what the solution uses and where it is taught', () => {
     expect(checkSentence(entry)).toBe(
-      'The official solution uses 3 things: 1 is taught within its reach, 1 elsewhere in the notes and 1 on no page.')
+      'The official solution uses 3 things. 1 is taught on pages a candidate for this exam would read, 1 elsewhere in the notes and 1 not taught yet.')
     const answerable = parseAnswerabilityRecord(RECORD)!.questions['p-005']
-    expect(checkSentence(answerable)).toBe('The official solution uses 1 thing, and every one is taught within its reach.')
+    expect(checkSentence(answerable)).toBe('The official solution uses 1 thing, and every one is taught on pages a candidate for this exam would read.')
   })
 
   it('labels a verdict and a requirement, a resolution over the check', () => {
-    expect(verdictLabel('gap')).toEqual({ label: 'Gap', tone: 'red' })
-    expect(verdictLabel('untagged').label).toBe('Out of reach')
-    expect(requirementLabel(entry.requirements[0]).label).toBe('One link away')
+    expect(verdictLabel('gap')).toEqual({ label: 'Not all taught', tone: 'red' })
+    expect(verdictLabel('untagged').label).toBe('Taught on other pages')
+    expect(requirementLabel(entry.requirements[0]).label).toBe('On a linked page')
     expect(requirementLabel(entry.requirements[2]).label).toBe('Not required')
   })
 
@@ -130,11 +130,11 @@ describe('where a requirement stands now', () => {
 
   it('reads the verdict and the sentence from the states, not the stored verdict', () => {
     expect(verdictNow(entry)).toBe('untagged')
-    expect(nowSentence(entry)).toBe('1 of the 3 things the solution uses is still open.')
+    expect(nowSentence(entry)).toBe('1 of the 3 things the solution uses isn’t yet taught on pages a candidate for this exam would read.')
     const reach = reachNow([], ['Probability Multiplication Rule'])
     expect(verdictNow(entry, reach)).toBe('answerable')
     expect(nowSentence(entry, reach)).toBe(
-      'Everything the solution uses is taught within its reach, but for 1 step the notes needn’t teach.')
+      'Everything the solution uses is taught on pages a candidate for this exam would read, apart from 1 step the notes don’t need to teach.')
     const gap = { ...entry, requirements: [{ ...elsewhere, status: 'missing', places: [] }] }
     expect(verdictNow(gap, reach)).toBe('gap')
   })

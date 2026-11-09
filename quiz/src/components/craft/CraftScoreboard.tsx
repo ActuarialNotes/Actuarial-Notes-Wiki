@@ -77,8 +77,8 @@ const count = (n: number, word: string) => `${n.toLocaleString()} ${word}${n ===
 /** What a medal's row says about where the board stands. */
 function standingLine(t: MedalProgress): string {
   if (t.status === 'won') return `Won with ${t.scored.toLocaleString()} in ${count(t.used, 'connection')}`
-  if (t.status === 'lost') return `Missed: ${t.scored.toLocaleString()} in its ${count(t.budget, 'connection')}`
-  return `${(t.target - t.scored).toLocaleString()} to go · ${count(t.budget - t.used, 'connection')} left`
+  if (t.status === 'lost') return `Scored ${t.scored.toLocaleString()} in the first ${count(t.budget, 'connection')}. Not enough for this medal.`
+  return `${(t.target - t.scored).toLocaleString()} points to go, ${count(t.budget - t.used, 'connection')} left`
 }
 
 export function CraftScoreboard({
@@ -132,8 +132,8 @@ export function CraftScoreboard({
   let top: string
   let bottom: string
   if (chasing) {
-    top = `${(chasing.target - chasing.scored).toLocaleString()} to go`
-    bottom = `in ${chasing.budget - chasing.used} for ${chasing.label}`
+    top = `${(chasing.target - chasing.scored).toLocaleString()} to ${chasing.label}`
+    bottom = `${count(chasing.budget - chasing.used, 'connection')} left`
   } else if (medal) {
     top = medal.label
     bottom = 'medal won'
@@ -213,12 +213,12 @@ export function CraftScoreboard({
                   <p className="text-sm font-semibold">
                     {t.label}
                     <span className="ml-1.5 font-normal text-muted-foreground">
-                      {Math.round(t.score * 100)}% in {Math.round(t.connections * 100)}%
+                      {Math.round(t.score * 100)}% of the score in your first {Math.round(t.connections * 100)}% of pairs
                     </span>
                   </p>
                   <p className="text-xs tabular-nums text-muted-foreground">
-                    {t.target.toLocaleString()} in your first {count(t.budget, 'connection')}
-                    {t.capped ? ' — the most any play can reach' : ''}
+                    {t.target.toLocaleString()} points in your first {count(t.budget, 'connection')}
+                    {t.capped ? ', the most any play can reach' : ''}
                   </p>
                   {/* How far the first `budget` connections have got toward the target. */}
                   <div className="mt-1.5 h-1 rounded-full bg-muted" role="img" aria-label={`${t.scored} of ${t.target}`}>

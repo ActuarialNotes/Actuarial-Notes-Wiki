@@ -137,6 +137,13 @@ describe('placeLabel', () => {
     expect(placeLabel('/search?q=x')).toBe('Search')
     expect(placeLabel('/store/gems')).toBe('Gem Shop')
     expect(placeLabel('/project/pcpa/p-1?view=report')).toBe('Project')
+    expect(placeLabel('/store')).toBe('Store')
+    expect(placeLabel('/cowork/resources')).toBe('Resources')
+    expect(placeLabel('/tools/chain-ladder')).toBe('Tools')
+  })
+
+  it('never names an unknown place "Back", which would read "Back to Back"', () => {
+    expect(placeLabel('/somewhere/new')).toBe('the previous page')
   })
 
   it('names a wiki page by its own name', () => {

@@ -43,7 +43,7 @@ export function SpreadsheetPartButton() {
       type="button"
       onClick={() => setSheetOpen(!open)}
       aria-pressed={open}
-      title={open ? 'Close the spreadsheet' : 'Work this part in the spreadsheet'}
+      title={open ? 'Close the spreadsheet' : 'Open in spreadsheet'}
       className={cn(
         'inline-flex h-8 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border px-3 text-sm font-semibold transition-colors',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
@@ -51,7 +51,7 @@ export function SpreadsheetPartButton() {
       )}
     >
       <Sheet className="h-4 w-4" aria-hidden="true" />
-      {open ? 'Spreadsheet open' : 'Use spreadsheet'}
+      Use spreadsheet
     </button>
   )
 }

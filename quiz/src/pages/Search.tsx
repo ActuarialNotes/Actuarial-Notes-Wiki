@@ -299,7 +299,7 @@ export default function Search() {
     setError(null)
     fetchAllQuestions()
       .then(raw => setAllQuestions(parseAllQuestions(raw)))
-      .catch(err => setError(err instanceof Error ? err.message : 'Failed to load questions'))
+      .catch(err => { console.error('search: loading questions failed:', err); setError('The questions didn’t load. Check your connection.') })
       .finally(() => setLoading(false))
   }, [retryCount])
 
@@ -683,10 +683,7 @@ export default function Search() {
 
   return (
     <div className="container max-w-4xl mx-auto px-4 sm:px-6 py-8 pb-28 space-y-6">
-      <div className="space-y-1">
-        <h1 className="text-2xl font-bold tracking-tight">Search</h1>
-        <p className="text-muted-foreground">Search questions, concepts, and resources</p>
-      </div>
+      <h1 className="text-2xl font-bold tracking-tight">Search</h1>
 
       {/* Search type toggle */}
       <div className="flex gap-2 flex-wrap">

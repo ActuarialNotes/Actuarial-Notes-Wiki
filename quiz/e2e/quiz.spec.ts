@@ -199,7 +199,7 @@ test.describe('guest save prompt', () => {
     await pastCelebrations(page, prompt)
     await prompt.getByRole('button', { name: 'Create an account' }).click()
     await expect(page).toHaveURL(/\/auth/)
-    await expect(page.getByLabel('Confirm Password')).toBeVisible()
+    await expect(page.getByLabel('Confirm password')).toBeVisible()
   })
 })
 

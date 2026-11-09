@@ -123,7 +123,7 @@ export default function SourcePage({ entityId, onOpenResource, onBack, backLabel
 
         {resources.length === 0 ? (
           <p className="rounded-lg border border-dashed px-4 py-10 text-center text-sm text-muted-foreground">
-            Cowork carries nothing from this source yet.
+            No documents from this source yet.
           </p>
         ) : (
           <ResourceCardGrid>

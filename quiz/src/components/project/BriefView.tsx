@@ -71,7 +71,7 @@ function sectionsFor(projectCase: ProjectCase): SectionSpec[] {
   const { memo, stakeholders, scope, dictionary } = projectCase
   const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`
   return [
-    { id: 'problem', title: 'Statement of the business problem', short: 'Business problem', icon: FileText, summary: `${memo.subject} — from ${memo.from.split(',')[0]}` },
+    { id: 'problem', title: 'Statement of the business problem', short: 'Business problem', icon: FileText, summary: `${memo.subject}, from ${memo.from.split(',')[0]}` },
     { id: 'stakeholders', title: 'Information from stakeholders', short: 'Stakeholders', icon: Users, summary: `${plural(stakeholders.length, 'note', 'notes')} from colleagues, to weigh for relevance`, count: stakeholders.length },
     { id: 'scope', title: 'Scope parameters', short: 'Scope', icon: Crosshair, summary: `${plural(scope.length, 'parameter', 'parameters')} the analysis must keep to`, count: scope.length },
     { id: 'data', title: 'Data sets', short: 'Data sets', icon: Database, summary: dictionary.map(d => d.file).join(' · '), count: dictionary.length },
@@ -338,7 +338,7 @@ export function BriefView({
         </BriefSection>
 
         <BriefSection spec={spec('stakeholders')} open={open.has('stakeholders')} onToggle={() => toggle('stakeholders')} sectionRef={setRef('stakeholders')}>
-          <p className="text-sm text-muted-foreground">Weigh each note for its relevance to the problem — not everything a stakeholder expects is true.</p>
+          <p className="text-sm text-muted-foreground">Weigh each note for its relevance to the problem. Not everything a stakeholder expects is true.</p>
           <div className="space-y-2">
             {projectCase.stakeholders.map((s, i) => (
               <div key={i} className="rounded-lg bg-muted/50 p-4">
@@ -421,7 +421,7 @@ export function BriefView({
         <BriefSection spec={spec('submit')} open={open.has('submit')} onToggle={() => toggle('submit')} sectionRef={setRef('submit')}>
           <p className="text-sm">
             A brief technical report that describes how you explored the data and managed its problems, how you built,
-            evaluated and improved a GLM to address the business problem, and what the model means — technically, and
+            evaluated and improved a GLM to address the business problem, and what the model means, both technically and
             for the business decision to be made.
           </p>
           <div className="rounded-lg bg-muted/50 p-4">

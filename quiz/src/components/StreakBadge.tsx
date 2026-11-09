@@ -31,7 +31,7 @@ export function StreakNavBadge({ size = 'sm' }: { size?: 'sm' | 'md' }) {
       )}
       title={
         status === 'at_risk'
-          ? 'Study today to keep your streak alive'
+          ? 'Answer a question correctly today to keep your streak'
           : `${currentStreak}-day study streak`
       }
     >

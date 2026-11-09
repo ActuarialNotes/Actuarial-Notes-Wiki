@@ -47,7 +47,7 @@ export function TutorJourneyView({ engine, actions, character }: Props) {
 
   return (
     <div className="space-y-5">
-      <ol className="space-y-1" aria-label="Your walk through the exam">
+      <ol className="space-y-1" aria-label="Phases to the exam">
         {JOURNEY_STEPS.map((step, i) => {
           const done = i < at
           const here = i === at
@@ -102,7 +102,7 @@ export function TutorJourneyView({ engine, actions, character }: Props) {
           </Button>
         </div>
         <p className="text-xs text-muted-foreground">
-          This is your Exam 5 date everywhere in the app — the dashboard and the study plan read it too.
+          The dashboard and study plan use this date too.
         </p>
       </section>
 
@@ -118,7 +118,7 @@ export function TutorJourneyView({ engine, actions, character }: Props) {
           <div className="min-w-0 flex-1">
             <p className="text-sm font-medium">Your Tutor: {character.name}</p>
             <p className="text-xs text-muted-foreground">
-              {character.chosen ? 'Your character — dress it in the Gem Shop.' : 'Pick your character, and it tutors you.'}
+              {character.chosen ? 'Your character. Dress it in the Gem Shop.' : 'Pick a character.'}
             </p>
           </div>
           <Button size="sm" variant="outline" onClick={() => setPicking(true)}>Change</Button>
@@ -147,8 +147,8 @@ export function TutorJourneyView({ engine, actions, character }: Props) {
             className="mt-0.5 h-4 w-4 accent-[hsl(var(--primary))]"
           />
           <span>
-            Quiet — no bubbles
-            <span className="block text-xs text-muted-foreground">The Tutor keeps a count of what’s waiting, and nothing more.</span>
+            No bubbles
+            <span className="block text-xs text-muted-foreground">The Tutor only shows a count of what’s waiting.</span>
           </span>
         </label>
         <Button size="sm" variant="ghost" onClick={() => setSettings({ hidden: true })}>Tuck the Tutor away</Button>

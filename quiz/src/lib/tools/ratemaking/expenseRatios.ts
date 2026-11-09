@@ -16,7 +16,7 @@ export const expenseRatios: ToolSpec = {
   fields: [
     {
       kind: 'table', key: 'rows', label: 'Expense types', minRows: 1, maxRows: 50,
-      description: 'Each expense type with its expenses and the premium they are measured against (earned premium for general expenses, written for acquisition costs, taxes, licenses and fees — over the same years), and the share of it treated as fixed (a judgment).',
+      description: 'Each expense type with its expenses and the premium they are measured against (earned premium for general expenses, written for acquisition costs, taxes, licenses and fees, over the same years), and the share of it treated as fixed (a judgment).',
       columns: [TYPE, EXPENSES, PREMIUM, FIXED_SHARE],
       default: [
         { type: 'General expenses', expenses: 900000, premium: 14000000, fixed_share: 0.75 },

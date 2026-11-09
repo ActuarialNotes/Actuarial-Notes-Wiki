@@ -208,7 +208,7 @@ describe('buildKnowledgeBase', () => {
   it('writes an llms.txt that points at the connector', () => {
     const txt = buildLlmsTxt(kb, 'https://quiz.actuarialnotes.com/api/mcp', 'https://quiz.actuarialnotes.com/ai/skill.zip')
     expect(txt).toMatch(/^# Actuarial Notes\n/)
-    expect(txt).toContain('- [Exam P-1 — Probability](https://quiz.actuarialnotes.com/wiki/exam/Exam+P-1+%28SOA%29): SOA · complete, 1 practice questions')
+    expect(txt).toContain('- [Exam P-1 — Probability](https://quiz.actuarialnotes.com/wiki/exam/Exam+P-1+%28SOA%29): SOA · ready · 1 practice question')
     expect(txt).toContain('[How to Study for Actuarial Exams]')
     expect(txt).toContain('(https://quiz.actuarialnotes.com/api/mcp)')
   })

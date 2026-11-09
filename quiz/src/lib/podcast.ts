@@ -28,7 +28,7 @@ export * from './podcastPlayback'
 export const PODCAST_BRIDGES = {
   intro: "Welcome to today's study session from Actuarial Notes. Here's what's on your plan.",
   refreshers: 'Next, a few concepts you know that are worth a quick refresher.',
-  outro: "That's today's session. When you're ready, open Actuarial Notes and take today's quiz to lock these in.",
+  outro: "That's today's session. When you're ready, take today's quiz.",
 } as const
 
 export type PodcastBridge = keyof typeof PODCAST_BRIDGES

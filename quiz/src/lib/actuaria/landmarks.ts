@@ -9,10 +9,11 @@
 
 import { landmarkName } from '@/data/actuariaLandmarks'
 import { buildMasteryLookup, lookupConceptRecord, resolveConceptState } from '@/lib/conceptMatch'
+import { MASTERY_LABEL } from '@/lib/masteryBadge'
 import { isSyllabusConcept } from '@/lib/syllabusChapters'
 import type { ConceptMasteryRecord, MasteryState } from '@/lib/mastery'
 import type { WikiConcept, WikiExamSyllabus } from '@/lib/wikiParser'
-import { describeDecayStep, landmarkZ, nextDecayStep, type DecayStep } from './credibility'
+import { landmarkZ, nextDecayStep, type DecayStep } from './credibility'
 
 export interface Landmark {
   concept: WikiConcept
@@ -134,8 +135,14 @@ export interface LandmarkChip {
  * danger says nothing beyond its Z.
  */
 export function landmarkChip(l: Pick<Landmark, 'state' | 'decay'>): LandmarkChip | null {
-  if (l.state === 'forgotten') return { variant: 'decaying', label: 'Decayed' }
-  if (l.decay && l.decay.inDays <= DECAY_SOON_DAYS) return { variant: 'decaying', label: describeDecayStep(l.decay) }
-  if (l.state === 'level3') return { variant: 'cleared', label: 'Cleared' }
+  if (l.state === 'forgotten') return { variant: 'decaying', label: 'Forgotten' }
+  if (l.decay && l.decay.inDays <= DECAY_SOON_DAYS) return { variant: 'decaying', label: decayChipLabel(l.decay) }
+  if (l.state === 'level3') return { variant: 'cleared', label: 'Level 3' }
   return null
+}
+
+/** "Down to Level 1 in 3 days", "Forgotten tomorrow": the step, in the app's level names. */
+function decayChipLabel(step: DecayStep): string {
+  const when = step.inDays <= 0 ? 'today' : step.inDays === 1 ? 'tomorrow' : `in ${step.inDays} days`
+  return step.to === 'forgotten' ? `Forgotten ${when}` : `Down to ${MASTERY_LABEL[step.to]} ${when}`
 }

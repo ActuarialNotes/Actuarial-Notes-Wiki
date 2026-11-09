@@ -173,7 +173,7 @@ function packGroups(): PackGroup[] {
 
 const HEAD = {
   title: 'Concept Craft | Actuarial Notes',
-  description: 'Craft the syllabus out of a few of its concepts: add an exam section, drop one concept on another, and see what they make.',
+  description: 'Connect an exam’s concepts on one board and see what each pair makes.',
   noindex: true,
 }
 
@@ -613,9 +613,9 @@ function CraftPlay({
               <div className="space-y-1.5">
                 <h2 className="text-lg font-semibold">Start with a starter pack</h2>
                 <p className="text-sm text-muted-foreground">
-                  Add any exam section and its first concepts land here. Drop one on another: every pair connects,
-                  and the stronger the connection, the more it scores. Most of a board&rsquo;s score is in a few of its
-                  connections: find 80% of it in your first 20% for gold.
+                  A starter pack deals one syllabus topic&rsquo;s first concepts onto the board. Drop one card on
+                  another to connect them, and stronger connections score more. For Gold, reach 80% of the board&rsquo;s
+                  score before you&rsquo;ve found a fifth of its pairs.
                 </p>
               </div>
               <button
@@ -801,7 +801,7 @@ function MedalBanner({ kind, medal, next }: { kind: 'won' | 'lost'; medal: Medal
         <MedalDisc medal={medal} size={20} />
       )}
       <div className="min-w-0 leading-tight">
-        <p className="text-sm font-semibold">{kind === 'won' ? `${medal.label} medal!` : `${medal.label} is out of reach`}</p>
+        <p className="text-sm font-semibold">{kind === 'won' ? `${medal.label} medal` : `${medal.label} is out of reach`}</p>
         <p className="text-xs tabular-nums text-muted-foreground">
           {kind === 'won'
             ? `${Math.round(medal.score * 100)}% of the score in ${medal.used} ${medal.used === 1 ? 'connection' : 'connections'}${next ? ` · ${next.label} still in play` : ''}`

@@ -122,9 +122,9 @@ describe('sittingHeadline', () => {
     const today = '2026-11-08'
     const fm: ExamSitting = { examId: 'FM', format: 'CBT', startDate: '2026-12-03', endDate: '2026-12-14', registrationDeadline: '2026-11-04' }
     expect(sittingHeadline(sittingTimeline(fm, [], today), today)).toEqual({
-      title: 'Exam window opens in', detail: 'Dec 3', count: '25 days', state: 'next',
+      title: 'Exam window opens', detail: 'Dec 3', count: '25 days', state: 'next',
     })
-    expect(sittingHeadline(sittingTimeline(p, [], '2026-09-29'), '2026-09-29')?.title).toBe('Registration deadline in')
+    expect(sittingHeadline(sittingTimeline(p, [], '2026-09-29'), '2026-09-29')?.title).toBe('Registration deadline')
     expect(sittingHeadline(sittingTimeline(p, [], '2026-09-29'), '2026-09-29')?.count).toBe('Tomorrow')
   })
   it('says nothing once every date has passed', () => {

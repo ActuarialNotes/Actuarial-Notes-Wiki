@@ -224,7 +224,7 @@ export default function Store() {
           </LogoTile>
         }
         title="Actuarial Notes Pro"
-        subtitle="A daily study plan paced to your exam date, so you walk in confident"
+        subtitle="A daily study plan paced to your exam date"
         trailing={
           isPro
             ? <span className="text-sm font-semibold text-green-700 dark:text-green-400">Active</span>
@@ -240,7 +240,7 @@ export default function Store() {
       <div className="container mx-auto max-w-5xl space-y-6 px-4 py-8 sm:px-6">
         {/* The Resources page's title row, picker and all. */}
         <header className="flex items-center gap-2">
-          <h1 className="min-w-0 flex-1 truncate text-2xl font-bold tracking-tight">Shop</h1>
+          <h1 className="min-w-0 flex-1 truncate text-2xl font-bold tracking-tight">Store</h1>
           <SegmentedControl
             label="Examining body"
             size="lg"
@@ -541,7 +541,7 @@ function EmptyAisle({ examName, aisle, refined, onReset }: { examName: string | 
         <ShoppingBag className="h-6 w-6" />
       </LogoTile>
       <p className="text-sm font-medium">
-        Nothing in {aisle ? AISLE_LABEL[aisle].toLowerCase() : 'the Shop'}
+        Nothing in {aisle ? AISLE_LABEL[aisle].toLowerCase() : 'the Store'}
         {examName ? ` for ${examName}` : ''}
         {refined ? ' matches these filters.' : ' yet.'}
       </p>

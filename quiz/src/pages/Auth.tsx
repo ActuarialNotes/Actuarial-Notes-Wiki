@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
+import { authErrorMessage } from '@/lib/authMessages'
 import { supabase } from '@/lib/supabase'
 import { identifyUser, trackLogin, trackSignup } from '@/lib/analytics'
 import { useAuth } from '@/hooks/useAuth'
@@ -64,7 +65,7 @@ export default function Auth() {
     setError(null)
 
     if (mode === 'signup' && password !== confirmPassword) {
-      setError('Passwords do not match')
+      setError('The two passwords don’t match. Type the same one in both boxes.')
       return
     }
 
@@ -89,7 +90,7 @@ export default function Auth() {
         setSignupSuccess(true)
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Authentication failed')
+      setError(authErrorMessage(err instanceof Error ? err.message : '', mode))
     } finally {
       setSubmitting(false)
     }
@@ -127,7 +128,7 @@ export default function Auth() {
           </CardHeader>
           <CardContent>
             <Button variant="outline" className="w-full" onClick={() => { setSignupSuccess(false); setMode('signin') }}>
-              Back to Sign In
+              Back to sign in
             </Button>
           </CardContent>
         </Card>
@@ -139,11 +140,11 @@ export default function Auth() {
     <div className="container max-w-md mx-auto px-4 py-12">
       <Card>
         <CardHeader>
-          <CardTitle>{mode === 'signin' ? 'Sign In' : 'Create Account'}</CardTitle>
+          <CardTitle>{mode === 'signin' ? 'Sign in' : 'Create account'}</CardTitle>
           <CardDescription>
             {mode === 'signin'
-              ? 'Sign in to track your quiz progress'
-              : 'Create an account to save results'}
+              ? 'Sign in to keep your progress on every device.'
+              : 'Create an account to keep your results on every device.'}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -175,7 +176,7 @@ export default function Auth() {
 
             {mode === 'signup' && (
               <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Confirm Password</Label>
+                <Label htmlFor="confirmPassword">Confirm password</Label>
                 <Input
                   id="confirmPassword"
                   type="password"
@@ -198,8 +199,8 @@ export default function Auth() {
               {submitting
                 ? 'Please wait…'
                 : mode === 'signin'
-                  ? 'Sign In'
-                  : 'Create Account'}
+                  ? 'Sign in'
+                  : 'Create account'}
             </Button>
           </form>
 
@@ -212,7 +213,7 @@ export default function Auth() {
                   className="text-primary hover:underline"
                   onClick={() => { setMode('signup'); setError(null) }}
                 >
-                  Sign up
+                  Create account
                 </button>
               </>
             ) : (

@@ -256,11 +256,11 @@ export function RecordSections({ summary }: { summary: LogSummary }) {
 }
 
 const STATUS_LABEL: Record<string, { label: string; tone: FactCheckTone }> = {
-  verified: { label: 'Verified', tone: 'green' },
+  verified: { label: 'Fact checked', tone: 'green' },
   in_review: { label: 'Under review', tone: 'amber' },
   stale: { label: 'Re-check needed', tone: 'amber' },
   disputed: { label: 'Disputed', tone: 'red' },
-  unverified: { label: 'Not verified', tone: 'grey' },
+  unverified: { label: 'Not fact checked', tone: 'grey' },
 }
 
 /**
@@ -361,7 +361,7 @@ function EntryRow({ group }: { group: LogEntryGroup }) {
         {applied && <CheckMark className="mt-0.5 h-4 w-4" />}
         <span className={cn('min-w-0 flex-1 break-words text-sm', open && 'font-medium')}>
           {entry.title || entry.id}
-          {applied && <span className="sr-only"> — already corrected on the page</span>}
+          {applied && <span className="sr-only">, already corrected on the page</span>}
         </span>
         {isOpenFinding && entry.severity && (
           <span className={cn('shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide',

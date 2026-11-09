@@ -291,7 +291,7 @@ function TopicPicker({
                     data-sound="none"
                     data-testid="battle-topic"
                     data-topic={topic.name}
-                    title={`${topic.name} — ${topic.questions} ${topic.questions === 1 ? 'question' : 'questions'}${collected ? '' : ' · not collected yet'}`}
+                    title={`${topic.name} · ${topic.questions} ${topic.questions === 1 ? 'question' : 'questions'}${collected ? '' : ' · not collected yet'}`}
                     aria-label={`${topic.name}, ${topic.questions} ${topic.questions === 1 ? 'question' : 'questions'}`}
                   />
                 )
@@ -304,7 +304,7 @@ function TopicPicker({
       <BattleActionBar>
         {locked ? (
           <p className="py-2 text-center text-sm text-muted-foreground" aria-live="polite" data-testid="battle-topics-locked">
-            {oppLocked ? 'Both in — drawing the questions…' : `Locked in. Waiting for ${oppName}…`}
+            {oppLocked ? 'Both in. Drawing the questions…' : `Locked in. Waiting for ${oppName}…`}
           </p>
         ) : (
           <div className="flex items-center gap-3">
@@ -344,7 +344,7 @@ function PickPanel({ seat, player, isMe, picks, levels }: {
       <div className="flex items-center gap-2">
         <PlayerTile seat={seat} player={player} size={26} />
         <p className="min-w-0 truncate text-sm font-medium">
-          {isMe ? 'Your topics' : `${player?.name ?? 'Their'}’s topics`}
+          {isMe ? 'Your topics' : player?.name ? `${player.name}’s topics` : 'Their topics'}
         </p>
       </div>
       {picks && picks.length > 0 ? (
@@ -360,7 +360,7 @@ function PickPanel({ seat, player, isMe, picks, levels }: {
           ))}
         </div>
       ) : (
-        <p className="py-2 text-sm text-muted-foreground">No topics — any question from the exam.</p>
+        <p className="py-2 text-sm text-muted-foreground">No topics, so any question from the exam.</p>
       )}
     </div>
   )
@@ -423,7 +423,7 @@ function TopicDraw({ snapshot, draft, levels }: { snapshot: SessionSnapshot; dra
           return (
             <li key={`${d.id}-${i}`} className="flex w-20 flex-col items-center gap-1.5" data-testid="battle-drawn" data-drawn={up || undefined}>
               {up ? (
-                <div className="battle-draw-card w-full" title={`${d.topic ?? 'Any topic'} — ${topicCredit(draft.picks, d.topic, names)}`}>
+                <div className="battle-draw-card w-full" title={`${d.topic ?? 'Any topic'} · ${topicCredit(draft.picks, d.topic, names)}`}>
                   {d.topic ? (
                     <ConceptTileStatic name={d.topic} state={levels.levelOf(d.topic)} collected={levels.isCollected(d.topic)} />
                   ) : (

@@ -172,13 +172,13 @@ function HowPointsWork() {
   const skin = useBattleSkin()
   const rows: [string, string][] = [
     ['Right answer', `${BASE_POINTS}`],
-    ['Speed', `up to +${SPEED_BONUS_MAX} — the sooner, the more`],
+    ['Speed', `up to +${SPEED_BONUS_MAX}, more for a faster answer`],
     ['Streak', `+${STREAK_STEP} for two in a row, up to +${STREAK_STEP * STREAK_STEPS_MAX}`],
     ['Final question', `×${FINAL_ROUND_MULTIPLIER} everything`],
     [skin.local.title, `${skin.claim} costs ${WRONG_BUZZ_PENALTY} and hands your rival the steal`],
     ['Online', `the first right answer gets +${FASTEST_BONUS}; a wrong one costs nothing`],
     ...(skin.abilities
-      ? [['Abilities', 'a private channel’s host can turn them on — each once per battle, scored on its own line'] as [string, string]]
+      ? [['Abilities', 'a private channel’s host can turn them on. Each is used once per battle and scored on its own line'] as [string, string]]
       : []),
   ]
   return (
@@ -617,8 +617,7 @@ function BattlePage({
           <div className="flex items-center gap-3 rounded-xl bg-card p-5">
             <SkinLogo size="lg" />
             <p className="text-sm text-muted-foreground">
-              <span className="font-medium text-foreground">Two players, the same questions, one scoreboard.</span>{' '}
-              Fast right answers score more, streaks score more again, and the final question counts double.
+              Race another player through the same questions. How each answer scores is under How points work.
             </p>
           </div>
           <div className="grid gap-3 md:grid-cols-3">
@@ -647,7 +646,7 @@ function BattlePage({
               icon={<Users className="h-5 w-5" />}
               title={skin.local.title}
               plain={skin.local.plain}
-              body="Two players, one device. First to buzz answers — miss, and your rival gets to steal."
+              body="Two players, one device. The first to buzz answers, and a miss lets the other player steal."
             >
               <Button size="lg" variant="outline" className="h-12 gap-2 rounded-xl" onClick={() => setScreen({ kind: 'setup', mode: 'local' })} data-testid="battle-mode-local">
                 <Play className="h-4 w-4" aria-hidden />
@@ -808,7 +807,7 @@ function JoinForm({
             data-testid="battle-join-code"
           />
           {code.length === ROOM_CODE_LENGTH && !valid && (
-            <p className="px-1 text-xs text-red-600 dark:text-red-400">That isn’t a room code — codes use letters and the digits 2–9.</p>
+            <p className="px-1 text-xs text-red-600 dark:text-red-400">That isn’t a room code. Codes use letters and the digits 2–9.</p>
           )}
         </div>
         <div className="space-y-2">

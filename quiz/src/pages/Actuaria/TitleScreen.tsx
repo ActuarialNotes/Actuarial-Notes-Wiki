@@ -42,7 +42,7 @@ export function TitleScreen({ lobbyCount, onEnter }: { lobbyCount: number | null
         <ActuariaMark size={112} />
         <h1 className="sr-only">Actuaria Online</h1>
         <ActuariaWordmark size="lg" />
-        <p className="max-w-md text-base text-muted-foreground sm:text-lg">Pass actuarial exams like it’s a game.</p>
+        <p className="max-w-md text-base text-muted-foreground sm:text-lg">Your exams as a star map, played with your own concept levels and streak.</p>
         <div className="flex w-full max-w-xs flex-col gap-2 sm:max-w-none sm:flex-row sm:justify-center">
           <Button size="lg" className="h-12 rounded-full px-8 text-base" onClick={onEnter} data-testid="actuaria-enter" data-sound="begin">
             Enter Actuaria

@@ -60,7 +60,7 @@ export function CohortView({ world }: { world: ActuariaWorld }) {
         <SignInCard />
       ) : !sector ? (
         <section className="rounded-xl bg-card p-5 text-sm text-muted-foreground">
-          A cohort studies one sector. <Link to="/actuaria/map" className="underline">Chart one on the map</Link> first.
+          A cohort studies one sector. <Link to="/actuaria/map" className="underline">Start studying one from the map</Link> first.
         </section>
       ) : loading ? (
         <p className="flex items-center gap-2 text-sm text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" aria-hidden /> Hailing your cohort…</p>
@@ -112,7 +112,7 @@ function SectorPicker({ world, selected }: { world: ActuariaWorld; selected: Sec
 function SignInCard() {
   return (
     <section className="space-y-3 rounded-xl bg-card p-5">
-      <p className="text-sm">A cohort is other candidates sitting the same exam — so it needs an account.</p>
+      <p className="text-sm">A cohort is other candidates sitting the same exam, so it needs an account.</p>
       <Link to="/auth" state={{ from: '/actuaria/cohort' }} className={buttonVariants({ size: 'sm' })}>Sign in</Link>
     </section>
   )
@@ -209,7 +209,7 @@ function NoCrew({ sector }: { sector: Sector }) {
         <AvatarDisplay avatarUrl={me.avatar} initials={me.name.slice(0, 2).toUpperCase()} size={32} />
         <p>
           You’ll appear as <span className="font-medium text-foreground">{me.name}</span>. A cohort sees your name, avatar,
-          Credibility on this sector and whether you studied today — never your email. Leave anytime and it’s deleted.
+          readiness for this exam and whether you studied today, never your email. Leave anytime and it’s deleted.
         </p>
       </div>
     </div>
@@ -235,7 +235,7 @@ function CrewHome({ crew, sector, world }: { crew: CrewView; sector: Sector; wor
         </div>
         <div className="w-full max-w-[14rem] space-y-1">
           <p className="text-xs text-muted-foreground">Cohort <Term id="sectorCredibility" /></p>
-          <CredibilityBar z={c.cohortZ ?? 0} label={c.cohortZ === null ? '—' : formatZ(c.cohortZ)} size="sm" ariaLabel="Cohort Credibility, the members’ mean" />
+          <CredibilityBar z={c.cohortZ ?? 0} label={c.cohortZ === null ? '—' : formatZ(c.cohortZ)} percent={c.cohortZ === null ? undefined : Math.round(c.cohortZ * 100)} size="sm" ariaLabel="Cohort Credibility, the members’ mean" />
         </div>
       </header>
 
@@ -284,7 +284,7 @@ function Messages({ crew }: { crew: CrewView }) {
       {crew.nudges.length > 0 && (
         <p className="flex items-center gap-2 rounded-xl bg-card px-4 py-3 text-sm">
           <Bell className="h-4 w-4 text-muted-foreground" aria-hidden />
-          {crew.nudges.map(n => n.from).join(', ')} nudged you — the pool is waiting on today’s study.
+          {crew.nudges.map(n => n.from).join(', ')} nudged you. The cohort’s gem bonus needs you to study today.
           <Link to="/actuaria/daily" className="ml-auto shrink-0 underline">Daily</Link>
         </p>
       )}
@@ -314,19 +314,19 @@ function RiskPool({ crew }: { crew: CrewView }) {
     <section className="space-y-3 rounded-xl bg-card p-5" aria-labelledby="cohort-pool" data-testid="cohort-pool">
       <div className="flex items-center justify-between gap-3">
         <h3 id="cohort-pool" className="actuaria-display text-[11px] text-muted-foreground"><Term id="riskPool" /></h3>
-        {pool.active && <StatusChip variant="cleared">Bonus active · +25% gems</StatusChip>}
+        {pool.active && <StatusChip variant="cleared">+25% gems today</StatusChip>}
       </div>
-      <div className="flex gap-1" role="img" aria-label={`${pool.covered} of ${pool.members} covered today`}>
+      <div className="flex gap-1" role="img" aria-label={`${pool.covered} of ${pool.members} studied today`}>
         {members.map(m => (
           <span key={m.memberId} className={cn('h-2 flex-1 rounded-full', m.coveredToday ? 'bg-orange-500' : 'bg-muted')} />
         ))}
       </div>
       <p className="text-sm text-muted-foreground">
         {forming
-          ? `Forming — ${CREW_MIN - pool.members} more ${CREW_MIN - pool.members === 1 ? 'member opens' : 'members open'} the pool and the raid.`
+          ? `${CREW_MIN - pool.members} more ${CREW_MIN - pool.members === 1 ? 'member' : 'members'} needed to start the gem bonus and the raid.`
           : pool.active
-          ? `${pool.covered} / ${pool.members} covered today. Every gem you earn today pays a quarter more.`
-          : `${pool.covered} / ${pool.members} covered today — ${need - pool.covered} more and every gem pays a quarter more.`}
+          ? `${pool.covered} / ${pool.members} studied today. Gems from quizzes and quests pay 25% more today.`
+          : `${pool.covered} / ${pool.members} studied today. ${need - pool.covered} more and gems from quizzes and quests pay 25% more.`}
       </p>
     </section>
   )
@@ -363,11 +363,11 @@ function Members({ crew, bankLabel }: { crew: CrewView; bankLabel: string | null
                 {m.name}{m.isSelf && <span className="text-muted-foreground"> (you)</span>}
               </p>
               <p className="text-xs text-muted-foreground">
-                {m.sectorZ === null ? 'Z —' : `Z ${formatZ(m.sectorZ)}`}{m.role === 'guide' ? ' · Guide (self-reported)' : ''}
+                {m.sectorZ === null ? 'Z —' : `Z ${formatZ(m.sectorZ)} · ${Math.round(m.sectorZ * 100)}% ready`}{m.role === 'guide' ? ' · Guide (self-reported)' : ''}
               </p>
             </div>
             {m.coveredToday ? (
-              <CheckMark className="h-5 w-5" label="Covered today" />
+              <CheckMark className="h-5 w-5" label="Studied today" />
             ) : !m.isSelf ? (
               <Button
                 size="sm"
@@ -414,7 +414,7 @@ function RaidMiniCard({ crew }: { crew: CrewView }) {
         <p className="text-xs text-muted-foreground">Opens when the cohort has {CREW_MIN} members.</p>
       )}
       {crew.me.lastLoot !== null && crew.me.lastLoot > 0 && (
-        <p className="text-xs text-muted-foreground">Last week’s loot: {crew.me.lastLoot} gems</p>
+        <p className="text-xs text-muted-foreground">Your share of last week’s raid: {crew.me.lastLoot} gems</p>
       )}
     </Link>
   )
@@ -496,7 +496,7 @@ function LeaveCrew({ crewId }: { crewId: string }) {
   }
   return (
     <div className="space-y-2 rounded-xl bg-card p-4 text-sm">
-      <p>Leave? What you shared — your name, avatar, Credibility, questions, replies and raid damage — is deleted.</p>
+      <p>Leaving deletes what you shared: your name, avatar, readiness, questions, replies and raid damage.</p>
       <div className="flex gap-2">
         <Button size="sm" variant="destructive" disabled={busy} onClick={async () => { setBusy(true); await crewStore.leaveCrew(crewId); setBusy(false) }} data-testid="cohort-leave">
           Leave

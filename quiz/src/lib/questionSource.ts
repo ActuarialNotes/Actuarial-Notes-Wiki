@@ -1,7 +1,7 @@
 import { getSittingPdfLink, type ExamPdfLink } from '@/data/examPdfLinks'
 import { EXAM_LABEL_TO_ID } from './examIds'
 import { normalizeSession, paperQuestionNumber, sittingLabel } from './pastExams'
-import { isVaultQuestionId } from './questionPublisher'
+import { isVaultQuestionId, questionPublisher } from './questionPublisher'
 import { formatClock, paceForExam, secondsPerUnit } from './quizTiming'
 import { contentPathFromVerification } from './verification'
 import type { Question } from './parser'
@@ -90,7 +90,13 @@ export function questionSource(question: Question): QuestionSource {
     detail = `Sat on the ${exam} paper in ${sitting}.`
     if (movedTo) detail += ` The material is now on the ${movedTo} syllabus.`
   } else {
-    detail = `A practice question for ${exam} — its file names no past sitting.`
+    // No sitting: say who wrote it rather than attributing it to a paper.
+    const publisher = questionPublisher(question)
+    detail = publisher === 'Actuarial Notes'
+      ? `Written for Actuarial Notes. It isn’t from a past ${exam} paper.`
+      : publisher === 'SOA'
+        ? `From the SOA’s sample questions for ${exam}. It isn’t from a past paper.`
+        : `A practice question for ${exam}. It isn’t from a past paper.`
   }
 
   return {

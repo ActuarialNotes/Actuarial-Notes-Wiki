@@ -308,7 +308,7 @@ export default function TutorApp() {
           data-sound={panelOpen ? 'close' : 'open'}
           onClick={() => (panelOpen ? useTutorStore.getState().closePanel() : useTutorStore.getState().openPanel())}
           aria-expanded={panelOpen}
-          aria-label={waiting > 0 ? `Tutor — ${waiting} waiting` : 'Tutor'}
+          aria-label={waiting > 0 ? `Tutor, ${waiting} waiting` : 'Tutor'}
           title="Tutor"
           className="pointer-events-auto relative flex h-[3.25rem] w-[3.25rem] items-center justify-center rounded-full bg-card shadow-lg ring-1 ring-border transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring motion-reduce:hover:scale-100"
         >

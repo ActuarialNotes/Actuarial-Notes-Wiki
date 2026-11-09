@@ -47,7 +47,7 @@ describe('questionSource', () => {
     const source = questionSource(q({ exam: 'Probability' }))
     expect(source.sitting).toBeNull()
     expect(source.label).toBe('Exam P')
-    expect(source.detail).toContain('names no past sitting')
+    expect(source.detail).toBe('From the SOA’s sample questions for Exam P. It isn’t from a past paper.')
     expect(source.document).toBeNull()
   })
 

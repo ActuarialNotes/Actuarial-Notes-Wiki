@@ -324,6 +324,10 @@ git add -A && git commit && git push -u origin HEAD
 PR title: `Validate: <exam/topic> (<n> files, <m> findings)`. Body: the run
 summary, **critical findings first**. Never push to `main`.
 
+## Writing for readers
+
+A finding's text is shown to readers in the app's Fact Check panel (`FactCheckPanel`, *Open issues*), so it follows `docs/writing-style.md`. Write it as what is wrong, where, and what the source says, in plain words: "Step 3 uses 1.05 as the trend factor; Werner & Modlin, Ex. 6.2, uses 1.050²". On screen a problem is an *issue*, and no gate or toolchain vocabulary ("packet", "fingerprint", "G8", "reach") goes in the text. No tells: an em dash hinging the sentence, a rule of three, a closing aphorism, exclamation marks.
+
 ## Idempotency
 
 Before you write, read the open findings you were given in the context bundle. If

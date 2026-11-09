@@ -214,7 +214,7 @@ var presentValue = {
       label: "Cash flows",
       minRows: 1,
       maxRows: 500,
-      description: "Each cash flow: its time from today (in years, or in whatever period the rate is per), its amount (negative for an outflow), and optionally the t-year spot rate to discount it at \u2014 left blank, the flow is discounted at the rate above.",
+      description: "Each cash flow: its time from today (in years, or in whatever period the rate is per), its amount (negative for an outflow), and optionally the t-year spot rate to discount it at. Left blank, the flow is discounted at the rate above.",
       columns: [
         { key: "time", label: "Time t", kind: "number", unit: "years" },
         { key: "amount", label: "Amount", kind: "number", unit: "money" },
@@ -1447,7 +1447,7 @@ var expectedClaims = {
       label: "Origins",
       minRows: 1,
       maxRows: 100,
-      description: "Each origin with its earned premium (on-level and trended, if that is what the ELR is set against), and optionally its own ELR \u2014 left blank, the origin takes the expected loss ratio above.",
+      description: "Each origin with its earned premium (on-level and trended, if that is what the ELR is set against), and optionally its own ELR. Left blank, the origin takes the expected loss ratio above.",
       columns: [
         ORIGIN_COLUMN,
         { key: "premium", label: "Earned premium", kind: "number", unit: "money" },
@@ -2773,7 +2773,7 @@ var expenseRatios = {
       label: "Expense types",
       minRows: 1,
       maxRows: 50,
-      description: "Each expense type with its expenses and the premium they are measured against (earned premium for general expenses, written for acquisition costs, taxes, licenses and fees \u2014 over the same years), and the share of it treated as fixed (a judgment).",
+      description: "Each expense type with its expenses and the premium they are measured against (earned premium for general expenses, written for acquisition costs, taxes, licenses and fees, over the same years), and the share of it treated as fixed (a judgment).",
       columns: [TYPE, EXPENSES, PREMIUM, FIXED_SHARE],
       default: [
         { type: "General expenses", expenses: 9e5, premium: 14e6, fixed_share: 0.75 },
@@ -3714,7 +3714,7 @@ var limitedExpectedValue = {
       tiles: [
         { symbol: "E[X\u2227u]", label: "Limited", value: lev, unit: "money" },
         { symbol: "E[X]", label: "Unlimited", value: model.mean, unit: "money" },
-        { symbol: "LER", label: "Share kept under u", value: ler, unit: "percent" }
+        { symbol: "LER", label: "Share below u", value: ler, unit: "percent" }
       ],
       trace: [
         { label: "Probability the loss exceeds u", formula: `S(${u})`, result: model.survival(u), unit: "percent" },
@@ -4598,6 +4598,14 @@ function normalizeInput(spec, raw) {
     if (!known.has(key)) notes.push(`Ignored "${key}": ${spec.id} takes ${[...known].join(", ")}.`);
   }
   return { input, defaulted, notes, sources };
+}
+function readerMessage(spec, err) {
+  const field = spec.fields.find((f) => f.key === err.field);
+  if (!field) return err.message;
+  const labels = /* @__PURE__ */ new Map([[field.key, field.label]]);
+  if (field.kind === "table") for (const c of field.columns) labels.set(c.key, c.label);
+  const swapped = err.message.replace(/"([^"]+)"/g, (whole, key) => labels.get(key) ?? whole);
+  return swapped.charAt(0).toUpperCase() + swapped.slice(1);
 }
 
 // src/lib/tools/run.ts
@@ -10403,6 +10411,7 @@ export {
   normalizeInput,
   printedFigure,
   readNumber,
+  readerMessage,
   runBatch,
   runPath,
   runQuestionCheck,

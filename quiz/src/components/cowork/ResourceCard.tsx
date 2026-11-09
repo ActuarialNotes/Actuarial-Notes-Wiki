@@ -121,7 +121,7 @@ export function ResourceCard({
             <MetaPill>{formatPublished(resource.published)}</MetaPill>
             {resource.wikiRef && (
               <span
-                title="This document is a page in the Actuarial Notes wiki"
+                title="A page in the Actuarial Notes wiki"
                 className="rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-semibold text-emerald-700 dark:text-emerald-300"
               >
                 In wiki
@@ -129,7 +129,7 @@ export function ResourceCard({
             )}
             {resource.sample && (
               <span
-                title="A sample entry: it stands for this kind of document rather than naming one Cowork carries. Cite the real document."
+                title="A stand-in for this kind of document, not a real one"
                 className="rounded-full bg-amber-500/15 px-2 py-0.5 text-[10px] font-semibold text-amber-600 dark:text-amber-400"
               >
                 Sample

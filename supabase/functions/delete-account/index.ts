@@ -32,7 +32,10 @@ Deno.serve(async (req: Request) => {
   if (userErr || !user) return json({ error: 'Unauthorized' }, 401)
 
   const { error: deleteErr } = await adminClient.auth.admin.deleteUser(user.id)
-  if (deleteErr) return json({ error: deleteErr.message }, 500)
+  if (deleteErr) {
+    console.error('delete-account: deleteUser failed:', deleteErr)
+    return json({ error: 'Your account couldn’t be deleted just now. Nothing was removed. Try again in a minute.' }, 500)
+  }
 
   return json({ success: true })
 })

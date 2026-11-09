@@ -54,6 +54,7 @@ import { useTodaysPlanQuiz } from '@/hooks/useTodaysPlanQuiz'
 import { ConceptGroupList } from '@/components/landing/ConceptGroupList'
 import { QuizExamLadder } from '@/components/landing/QuizExamLadder'
 import { QuizGamesPanel } from '@/components/landing/QuizGamesPanel'
+import { GAMES_ENABLED } from '@/lib/featureFlags'
 import { PastPaperShelf } from '@/components/landing/PastPaperShelf'
 import { QuizTitleRow } from '@/components/landing/QuizTitleRow'
 import { QuizHeroCard, type SetupSection } from '@/components/landing/QuizHeroCard'
@@ -528,7 +529,7 @@ export default function Landing() {
         onClearConcept={() => setSelectedConcept('')}
       />
 
-      {!hasTopic && <QuizGamesPanel />}
+      {GAMES_ENABLED && !hasTopic && <QuizGamesPanel />}
 
       {hasTopic && currentExam?.progressKey && (
         <Suspense fallback={null}>

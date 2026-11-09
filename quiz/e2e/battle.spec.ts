@@ -41,6 +41,54 @@ async function chooseThreeQuestions(page: Page) {
   await page.getByRole('radiogroup', { name: 'Questions' }).getByRole('radio', { name: '3' }).click()
 }
 
+/**
+ * The Deck's intro plays once per visit: a tap skips it. (The suite runs with
+ * reduced motion, where it is a short fade that may be gone before the tap.)
+ */
+async function skipIntro(page: Page) {
+  await expect(page.getByTestId('battle-home')).toBeVisible()
+  const intro = page.getByTestId('battle-intro')
+  if (await intro.count()) await intro.click({ timeout: 2000 }).catch(() => {})
+  await expect(intro).toHaveCount(0)
+}
+
+/** The battle's setup, as the browser remembers it — names, exam — written before the page reads it. */
+async function rememberSetup(page: Page, setup: { names?: [string, string]; exam?: string; lobbyExam?: string }) {
+  await page.evaluate(s => {
+    const stored = JSON.parse(localStorage.getItem('actuarial_battle_setup_v1') ?? '{}')
+    localStorage.setItem('actuarial_battle_setup_v1', JSON.stringify({ ...stored, ...s }))
+  }, setup)
+}
+
+/** Raise a mode's card in the start screen's hand, and press the button under it. */
+async function startMode(page: Page, mode: 'local' | 'lobby' | 'friend') {
+  await page.getByTestId(`battle-card-${mode}`).click()
+  await expect(page.getByTestId(`battle-card-${mode}`)).toHaveAttribute('aria-pressed', 'true')
+  await page.getByTestId(mode === 'friend' ? 'battle-mode-host' : `battle-mode-${mode}`).click()
+}
+
+/** The friend room's settings tiles step on with a tap: to three questions. */
+async function roomToThreeQuestions(page: Page) {
+  const tile = page.getByTestId('battle-room-rounds')
+  for (let i = 0; i < 4 && !((await tile.textContent()) ?? '').startsWith('3'); i++) await tile.click()
+  await expect(tile).toContainText('3questions')
+}
+
+async function roomCode(page: Page): Promise<string> {
+  const codeTiles = page.getByTestId('battle-room-code')
+  await expect(codeTiles).toBeVisible()
+  const code = ((await codeTiles.getAttribute('aria-label')) ?? '').replace('Room code ', '').replace(/ /g, '')
+  expect(code).toMatch(/^[A-Z2-9]{4}$/)
+  return code
+}
+
+/** An online round on the Deck: choose an option, then lock it in. */
+async function lockIn(page: Page, option: string) {
+  await page.getByTestId(`battle-option-${option}`).click()
+  await expect(page.getByTestId('battle-lock-in')).toHaveText(`Lock in ${option}`)
+  await page.getByTestId('battle-lock-in').click()
+}
+
 /** Picks the `nth` topic tile on the page and locks it in; returns its name. */
 async function pickTopicAndLock(page: Page, nth: number): Promise<string> {
   await expect(page.getByTestId('battle-topic-picker')).toBeVisible({ timeout: 15_000 })
@@ -65,22 +113,67 @@ test.describe('quiz battle', () => {
     await context.addInitScript(() => { localStorage.setItem('actuarial-notes-sounds', 'false') })
   })
 
-  test('is reached from the Quiz tab', async ({ page }) => {
+  test('is reached from the Quiz tab, through the intro', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'no-preference' })
     await page.goto('/')
     await page.getByTestId('quiz-games-entry').click()
     await expect(page).toHaveURL(/\/games$/)
     await page.getByTestId('quiz-battle-entry').click()
     await expect(page).toHaveURL(/\/battle$/)
+    await skipIntro(page)
     await expect(page.getByRole('heading', { name: 'Quiz Battle' })).toBeVisible()
+  })
+
+  test('the intro plays once per visit, and ends on its own', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'no-preference' })
+    await page.goto('/battle')
+    // Left alone, it runs its course and lands on the start screen.
+    await expect(page.getByTestId('battle-intro')).toBeVisible()
+    await expect(page.getByTestId('battle-intro')).toHaveCount(0, { timeout: 6000 })
+    await expect(page.getByTestId('battle-home')).toBeVisible()
+    // Out to a screen and back up to the start screen is the same visit: no intro.
+    await startMode(page, 'local')
+    await expect(page.getByTestId('battle-seating')).toBeVisible()
+    await page.getByRole('button', { name: 'Back' }).first().click()
+    await expect(page.getByTestId('battle-home')).toBeVisible()
+    await expect(page.getByTestId('battle-intro')).toHaveCount(0)
+  })
+
+  test('under reduced motion the intro is a short fade', async ({ browser }) => {
+    const context = await browser.newContext({ reducedMotion: 'reduce' })
+    const page = await context.newPage()
+    await page.goto('/battle')
+    await expect(page.getByTestId('battle-intro')).toHaveCount(0, { timeout: 2500 })
+    await expect(page.getByTestId('battle-home')).toBeVisible()
+    await context.close()
+  })
+
+  test('raises a card of the hand, and the button follows it', async ({ page }) => {
+    await page.goto('/battle')
+    await skipIntro(page)
+    await expect(page.getByTestId('battle-card-lobby')).toHaveAttribute('aria-pressed', 'true')
+    await expect(page.getByTestId('battle-mode-lobby')).toHaveText('Find an opponent')
+    await page.getByTestId('battle-card-friend').click()
+    await expect(page.getByTestId('battle-mode-host')).toHaveText('Create a room')
+    await page.getByTestId('battle-card-local').click()
+    await expect(page.getByTestId('battle-mode-local')).toHaveText('Play on this device')
+    // The exam is a deck, changed from its own sheet.
+    await page.getByTestId('battle-exam-deck').click()
+    await page.getByTestId('battle-exam-Financial Mathematics').click()
+    await expect(page.getByTestId('battle-exam-deck')).toContainText('Exam FM deck')
   })
 
   test('plays a same-screen battle to the end: buzz, miss, steal, results, rematch', async ({ page }) => {
     await page.goto('/battle')
-    await page.getByTestId('battle-mode-local').click()
+    await skipIntro(page)
+    await startMode(page, 'local')
+    // The players sit at either end of the phone: player 2's half is turned to face them.
     await page.getByTestId('battle-name-0').fill('Ada')
     await page.getByTestId('battle-name-1').fill('Sam')
+    await page.getByTestId('battle-settings').click()
     await page.getByTestId('battle-exam-Probability').click()
     await chooseThreeQuestions(page)
+    await page.getByRole('button', { name: 'Done' }).click()
     await page.getByTestId('battle-begin').click()
 
     await expect(page.getByTestId('battle-countdown')).toBeVisible()
@@ -93,7 +186,7 @@ test.describe('quiz battle', () => {
       await page.getByTestId(`battle-option-${wrong}`).click()
       await expect(page.getByTestId('battle-player-0')).toContainText('Locked out')
       await expect(page.getByTestId('battle-buzz-0')).toBeDisabled()
-      // …and Sam steals it, on the answer pad the bar becomes.
+      // …and Sam steals it, tapping his half of the phone, on the pad it becomes.
       await page.getByTestId('battle-buzz-1').click()
       await expect(page.getByTestId(`battle-pad-${wrong}`)).toBeDisabled()
       await page.getByTestId(`battle-pad-${right}`).click()
@@ -103,8 +196,13 @@ test.describe('quiz battle', () => {
 
     await expect(page.getByTestId('battle-result-headline')).toHaveText('Sam wins')
     // Three wrong buzzes, the last on the double-points question.
-    await expect(page.getByTestId('battle-result-0')).toContainText('-200')
-    await expect(page.getByTestId('battle-result-1')).toContainText('3 of 3')
+    await expect(page.getByTestId('battle-result-0')).toHaveText('-200')
+    await expect(page.getByTestId('battle-rounds').locator('tbody tr')).toHaveCount(3)
+    // Ada lost every round: one of them is offered as practice, a quiz on its topic.
+    await expect(page.getByTestId('battle-lost-round')).toContainText('The round you lost')
+    await expect(page.getByTestId('battle-practice')).toHaveAttribute('href', /^\/quiz\?concept=/)
+    await page.getByTestId('battle-review').click()
+    await expect(page.getByRole('region', { name: 'Review questions' }).locator('li')).toHaveCount(3)
 
     await page.getByTestId('battle-rematch').click()
     await expect(page.getByTestId('battle-countdown')).toBeVisible()
@@ -117,16 +215,20 @@ test.describe('quiz battle', () => {
     const guest = await context.newPage()
 
     await host.goto('/battle')
-    await host.getByTestId('battle-mode-host').click()
-    await host.getByTestId('battle-name-0').fill('Ada')
-    await host.getByTestId('battle-exam-Financial Mathematics').click()
-    await chooseThreeQuestions(host)
-    await host.getByTestId('battle-begin').click()
+    await rememberSetup(host, { names: ['Ada', ''] })
+    await host.reload()
+    await skipIntro(host)
+    await startMode(host, 'friend')
 
-    const codeTiles = host.getByTestId('battle-room-code')
-    await expect(codeTiles).toBeVisible()
-    const code = ((await codeTiles.getAttribute('aria-label')) ?? '').replace('Room code ', '').replace(/ /g, '')
-    expect(code).toMatch(/^[A-Z2-9]{4}$/)
+    // The room opens at once: the code as four cards, an empty seat, its settings.
+    const code = await roomCode(host)
+    await expect(host.getByTestId('battle-lobby')).toContainText('Empty seat')
+    await expect(host.getByTestId('battle-start-online')).toHaveText('Waiting for your friend')
+    await expect(host.getByTestId('battle-start-online')).toBeDisabled()
+    await roomToThreeQuestions(host)
+    await host.getByTestId('battle-room-exam').click()
+    await host.getByTestId('battle-exam-Financial Mathematics').click()
+    await expect(host.getByTestId('battle-room-exam')).toContainText('FM')
 
     // The invite link opens straight onto joining.
     await guest.goto(`/battle?join=${code}`)
@@ -157,13 +259,14 @@ test.describe('quiz battle', () => {
     for (let round = 0; round < 3; round++) {
       const { right, wrong } = await currentQuestion(host)
       await expect(guest.getByTestId('battle-question')).toBeVisible({ timeout: 10_000 })
+      await expect(host.getByTestId('battle-question')).toContainText(round === 2 ? 'Final ×2' : `Round ${round + 1} of 3`)
 
-      await host.getByTestId(`battle-option-${right}`).click()
+      await lockIn(host, right)
       // Bo sees that Ada is in — and not what she picked.
       await expect(guest.getByTestId('battle-player-0')).toContainText('Locked in')
       await expect(guest.getByTestId(`battle-option-${right}`)).not.toContainText('Locked in')
 
-      await guest.getByTestId(`battle-option-${wrong}`).click()
+      await lockIn(guest, wrong)
       for (const page of [host, guest]) {
         await expect(page.getByTestId('battle-round-result')).toContainText('Ada got it')
       }
@@ -175,8 +278,12 @@ test.describe('quiz battle', () => {
     for (const page of [host, guest]) {
       await expect(page.getByTestId('battle-result-headline')).toHaveText('Ada wins')
     }
+    // Bo lost them all and is offered one as practice; Ada lost none.
+    await expect(guest.getByTestId('battle-lost-round')).toBeVisible()
+    await expect(host.getByTestId('battle-lost-round')).toHaveCount(0)
 
     // Bo asks for a rematch; Ada starts it, and both pick their topics again.
+    await expect(guest.getByTestId('battle-rematch')).toHaveText('Rematch Ada')
     await guest.getByTestId('battle-rematch').click()
     await expect(host.getByText('Bo wants a rematch!')).toBeVisible()
     await host.getByTestId('battle-rematch').click()
@@ -186,12 +293,45 @@ test.describe('quiz battle', () => {
     }
   })
 
-  test('says so when nobody is in the lobby — on the way in, and inside it', async ({ page }) => {
+  test('a friend room is joined from its own Join tab, and switched back to Host', async ({ page }) => {
     await page.goto('/battle')
+    await skipIntro(page)
+    await startMode(page, 'friend')
+    await roomCode(page)
+    await page.getByTestId('battle-room-join').click()
+    // Four empty card slots to type into; a code that can't be one says so.
+    await expect(page.getByTestId('battle-join')).toBeDisabled()
+    await page.getByTestId('battle-join-code').fill('ab1c')
+    await expect(page.getByText('That isn’t a room code')).toBeVisible()
+    await page.getByTestId('battle-room-host').click()
+    await roomCode(page)
+  })
+
+  test('says so when nobody is in the lobby, and lets the player browse while they wait', async ({ context }) => {
+    const page = await context.newPage()
+    const other = await context.newPage()
+    await page.goto('/battle')
+    await skipIntro(page)
     await expect(page.getByTestId('battle-lobby-status')).toHaveText('No one’s in the lobby right now')
     await page.getByTestId('battle-mode-lobby').click()
-    await expect(page.getByTestId('battle-lobby-empty')).toContainText('No one else is in the lobby right now.')
-    await expect(page.getByTestId('battle-lobby-count')).toHaveText('0')
+    // Find an opponent is the Ready: straight into the queue, the clock running.
+    await expect(page.getByTestId('battle-lobby-state')).toContainText('Finding an opponent · 0:0')
+
+    // A concept card opens in the concept popup above the lobby…
+    const card = page.getByTestId('battle-browse-card').first()
+    const name = ((await card.getAttribute('aria-label')) ?? '').replace(/^Read /, '')
+    await card.click()
+    await expect(page.getByRole('complementary', { name: `Concept: ${name}` })).toBeVisible()
+    // …and the queue doesn't pause for it: the player is still waiting, as others see.
+    await expect(page.getByTestId('battle-lobby-state')).toContainText('Finding an opponent')
+    await other.goto('/battle')
+    await skipIntro(other)
+    await expect(other.getByTestId('battle-lobby-status')).toHaveText('1 player waiting now')
+
+    // Leaving the lobby takes the player out of it.
+    await page.getByTestId('battle-lobby-leave').click()
+    await expect(page.getByTestId('battle-home')).toBeVisible()
+    await expect(other.getByTestId('battle-lobby-status')).toHaveText('No one’s in the lobby right now', { timeout: 10_000 })
   })
 
   test('matches two strangers from the lobby into a battle, and back to it', async ({ context }) => {
@@ -200,36 +340,32 @@ test.describe('quiz battle', () => {
     const bo = await context.newPage()
 
     await ada.goto('/battle')
+    await rememberSetup(ada, { names: ['Ada', ''], exam: 'Probability', lobbyExam: 'Probability' })
+    await ada.reload()
+    await skipIntro(ada)
     await ada.getByTestId('battle-mode-lobby').click()
-    await ada.getByTestId('battle-lobby-name').fill('Ada')
-    await ada.getByTestId('battle-lobby-name').press('Enter')
-    await ada.getByTestId('battle-lobby-exam-Probability').click()
-    await ada.getByTestId('battle-lobby-ready').click()
-    await expect(ada.getByTestId('battle-lobby-empty')).toBeVisible()
+    await expect(ada.getByTestId('battle-lobby-state')).toContainText('Finding an opponent')
+    // Ada reads a card while she waits.
+    await ada.getByTestId('battle-browse-card').first().click()
+    await expect(ada.getByRole('complementary', { name: /^Concept:/ })).toBeVisible()
 
     // One browser profile plays both: give Bo his own name and exam first.
     await bo.goto('/battle')
-    await expect(bo.getByTestId('battle-lobby-status')).toHaveText('1 player waiting now')
-    await bo.evaluate(() => {
-      const setup = JSON.parse(localStorage.getItem('actuarial_battle_setup_v1') ?? '{}')
-      localStorage.setItem('actuarial_battle_setup_v1', JSON.stringify({ ...setup, names: ['Bo', ''], lobbyExam: 'Exam MAS-I' }))
-    })
+    await rememberSetup(bo, { names: ['Bo', ''], exam: 'Exam MAS-I', lobbyExam: 'Exam MAS-I' })
     await bo.reload()
+    await skipIntro(bo)
+    await expect(bo.getByTestId('battle-lobby-status')).toHaveText('1 player waiting now')
     await bo.getByTestId('battle-mode-lobby').click()
-    // Not ready: Bo sees Ada, but Ada can't see Bo until he presses Ready.
-    await expect(bo.getByTestId('battle-lobby-player')).toContainText('Ada')
-    await expect(ada.getByTestId('battle-lobby-count')).toHaveText('0')
-    await bo.getByTestId('battle-lobby-ready').click()
 
     // Different exams: they see each other, and nobody is matched…
-    await expect(bo.getByTestId('battle-lobby-player')).toContainText('Ada')
-    await expect(ada.getByTestId('battle-lobby-player')).toContainText('Bo')
-    await expect(ada.getByTestId('battle-lobby-count')).toHaveText('1')
-    // …until Bo goes to Ada's exam.
+    await expect(bo.getByTestId('battle-lobby-player')).toContainText('Ada is waiting for Exam P')
+    await expect(ada.getByTestId('battle-lobby-player')).toContainText('Bo is waiting for Exam MAS-I')
+    // …until Bo goes to Ada's exam. The match closes the card Ada was reading.
     await bo.getByRole('button', { name: 'Play Exam P' }).click()
     for (const page of [ada, bo]) {
       await expect(page.getByTestId('battle-match-intro')).toBeVisible()
     }
+    await expect(ada.getByRole('complementary', { name: /^Concept:/ })).toHaveCount(0)
     // A topic each — Bo locks in none, and plays on Ada's and the whole exam.
     await pickTopicAndLock(ada, 2)
     await expect(bo.getByTestId('battle-topic-picker')).toBeVisible()
@@ -246,8 +382,8 @@ test.describe('quiz battle', () => {
     for (let round = 0; round < 3; round++) {
       const { right, wrong } = await currentQuestion(ada)
       await expect(bo.getByTestId('battle-question')).toBeVisible({ timeout: 10_000 })
-      await ada.getByTestId(`battle-pad-${right}`).click()
-      await bo.getByTestId(`battle-pad-${wrong}`).click()
+      await lockIn(ada, right)
+      await lockIn(bo, wrong)
       await expect(bo.getByTestId('battle-round-result')).toContainText('Ada got it')
       await ada.getByTestId('battle-next').click()
       await bo.getByTestId('battle-next').click()
@@ -255,6 +391,7 @@ test.describe('quiz battle', () => {
     await expect(bo.getByTestId('battle-result-headline')).toHaveText('Ada wins')
 
     // And back into the lobby for someone new.
+    await expect(bo.getByTestId('battle-find-another')).toHaveText('New opponent')
     await bo.getByTestId('battle-find-another').click()
     await expect(bo.getByTestId('battle-matchmaking')).toBeVisible()
   })
@@ -264,12 +401,11 @@ test.describe('quiz battle', () => {
   // how long they've waited, and the match brings them back to the battle.
   async function queueAsAda(ada: Page) {
     await ada.goto('/battle')
+    await rememberSetup(ada, { names: ['Ada', ''], exam: 'Probability', lobbyExam: 'Probability' })
+    await ada.reload()
+    await skipIntro(ada)
     await ada.getByTestId('battle-mode-lobby').click()
-    await ada.getByTestId('battle-lobby-name').fill('Ada')
-    await ada.getByTestId('battle-lobby-name').press('Enter')
-    await ada.getByTestId('battle-lobby-exam-Probability').click()
-    await ada.getByTestId('battle-lobby-ready').click()
-    await expect(ada.getByTestId('battle-lobby-empty')).toBeVisible()
+    await expect(ada.getByTestId('battle-lobby-state')).toContainText('Finding an opponent')
   }
   const queuePill = (page: Page) => page.getByRole('button', { name: /Return to lobby/ })
 
@@ -287,26 +423,25 @@ test.describe('quiz battle', () => {
 
     // Still in the lobby, as everyone else sees it.
     await bo.goto('/battle')
+    await skipIntro(bo)
     await expect(bo.getByTestId('battle-lobby-status')).toHaveText('1 player waiting now')
 
-    // Return: the same lobby, still ready.
+    // Return: the same lobby, still in the queue — and no intro on the way back.
     await queuePill(ada).click()
     await ada.getByRole('dialog', { name: 'Looking for an opponent' }).getByRole('button', { name: 'Return' }).click()
     await ada.waitForURL('**/battle')
-    await expect(ada.getByTestId('battle-lobby-ready')).toHaveText('Cancel')
+    await expect(ada.getByTestId('battle-lobby-state')).toContainText('Finding an opponent')
+    await expect(ada.getByTestId('battle-intro')).toHaveCount(0)
     await expect(queuePill(ada)).toHaveCount(0)
 
     // Away again — and an opponent arriving fetches her back to play.
     await ada.getByRole('link', { name: 'Study Guides' }).first().click()
     await ada.waitForURL('**/wiki')
     await expect(queuePill(ada)).toBeVisible()
-    await bo.evaluate(() => {
-      const setup = JSON.parse(localStorage.getItem('actuarial_battle_setup_v1') ?? '{}')
-      localStorage.setItem('actuarial_battle_setup_v1', JSON.stringify({ ...setup, names: ['Bo', ''], lobbyExam: 'Probability' }))
-    })
+    await rememberSetup(bo, { names: ['Bo', ''], exam: 'Probability', lobbyExam: 'Probability' })
     await bo.reload()
+    await skipIntro(bo)
     await bo.getByTestId('battle-mode-lobby').click()
-    await bo.getByTestId('battle-lobby-ready').click()
     await ada.waitForURL('**/battle')
     for (const page of [ada, bo]) {
       await expect(page.getByTestId('battle-match-intro')).toBeVisible()
@@ -326,6 +461,7 @@ test.describe('quiz battle', () => {
     await expect(queuePill(ada)).toHaveCount(0)
 
     await bo.goto('/battle')
+    await skipIntro(bo)
     await expect(bo.getByTestId('battle-lobby-status')).toHaveText('No one’s in the lobby right now')
   })
 
@@ -371,10 +507,11 @@ test.describe('quiz battle', () => {
       if (round === 0) {
         missed = (await host.getByTestId('battle-question').getAttribute('data-question-id')) ?? ''
         await host.getByTestId(`battle-option-${wrong}`).click()
-        await guest.getByTestId(`battle-option-${right}`).click()
+        // Quiz Battle's own page is the Deck: an option is chosen, then locked in.
+        await lockIn(guest, right)
       } else {
         await host.getByTestId(`battle-option-${right}`).click()
-        await guest.getByTestId(`battle-option-${wrong}`).click()
+        await lockIn(guest, wrong)
       }
       await expect(host.getByTestId('battle-round-result')).toBeVisible()
       await host.getByTestId('battle-next').click()
@@ -445,10 +582,14 @@ test.describe('quiz battle', () => {
     const host = await context.newPage()
     const guest = await context.newPage()
 
-    // Quiz Battle's own page doesn't offer the setting.
-    await host.goto('/battle')
-    await host.getByTestId('battle-mode-host').click()
-    await expect(host.getByRole('radiogroup', { name: 'Abilities' })).toHaveCount(0)
+    // Quiz Battle's own page doesn't offer the setting: its room opens at once.
+    const plain = await context.newPage()
+    await plain.goto('/battle')
+    await skipIntro(plain)
+    await startMode(plain, 'friend')
+    await roomCode(plain)
+    await expect(plain.getByRole('radiogroup', { name: 'Abilities' })).toHaveCount(0)
+    await plain.close()
 
     await host.goto('/actuaria/battle')
     await host.getByTestId('battle-mode-host').click()
@@ -481,13 +622,7 @@ test.describe('quiz battle', () => {
     const ada = await context.newPage()
     const bo = await context.newPage()
 
-    await ada.goto('/battle')
-    await ada.getByTestId('battle-mode-lobby').click()
-    await ada.getByTestId('battle-lobby-name').fill('Ada')
-    await ada.getByTestId('battle-lobby-name').press('Enter')
-    await ada.getByTestId('battle-lobby-exam-Probability').click()
-    await ada.getByTestId('battle-lobby-ready').click()
-    await expect(ada.getByTestId('battle-lobby-empty')).toBeVisible()
+    await queueAsAda(ada)
 
     await bo.goto('/actuaria/battle')
     await expect(bo.getByTestId('battle-lobby-status')).toHaveText('1 pilot waiting')

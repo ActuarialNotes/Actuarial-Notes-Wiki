@@ -1,3 +1,4 @@
+import '@/components/battle/battle.css'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { backLabel as backName, useBack } from '@/hooks/useBack'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
@@ -9,6 +10,15 @@ import { BattleSetupForm } from '@/components/battle/BattleSetupForm'
 import { LocalBattle } from '@/components/battle/LocalBattle'
 import { OnlineGuest, OnlineHost } from '@/components/battle/OnlineBattle'
 import { Matchmaking } from '@/components/battle/Matchmaking'
+import { DeckScope } from '@/components/battle/deck/DeckParts'
+import { DeckIntro } from '@/components/battle/deck/DeckIntro'
+import { DeckHome } from '@/components/battle/deck/DeckHome'
+import { DeckLobby } from '@/components/battle/deck/DeckLobby'
+import { DeckJoin } from '@/components/battle/deck/DeckRoom'
+import { DeckLocalBattle, DeckSeating } from '@/components/battle/deck/DeckLocal'
+import { useBattleIntro } from '@/hooks/useBattleIntro'
+import { ANY_EXAM } from '@/lib/battleLobby'
+import type { DeckMode } from '@/lib/battleDeck'
 import { useAuth } from '@/hooks/useAuth'
 import { useAllQuestions } from '@/hooks/useAllQuestions'
 import { useLobbyCount } from '@/hooks/useBattle'
@@ -225,7 +235,10 @@ export default function Battle({
   const skin = battleSkin(skinId)
   return (
     <BattleSkinContext.Provider value={skin}>
-      <BattlePage onPlayingChange={onPlayingChange} loadout={skin.abilities ? loadout : undefined} onRoomOpen={onRoomOpen} />
+      {/* The scope the battle's own utilities are generated under (tailwind.battle.config.ts). */}
+      <div className="battle-css" style={{ display: 'contents' }}>
+        <BattlePage onPlayingChange={onPlayingChange} loadout={skin.abilities ? loadout : undefined} onRoomOpen={onRoomOpen} />
+      </div>
     </BattleSkinContext.Provider>
   )
 }
@@ -276,6 +289,9 @@ function BattlePage({
       ? { kind: 'lobby' }
       : { kind: 'home' },
   )
+
+  // The Deck's intro: once per visit, when the visit opens on the start screen.
+  const intro = useBattleIntro(skin.deck && screen.kind === 'home')
 
   // Every screen here is one address, so the router never sees a change of
   // screen: the page draws it, as a sheet laid over going in and swiped off
@@ -405,6 +421,24 @@ function BattlePage({
     else setScreen({ kind: 'host', config, player: player(0, myAvatar), difficulty })
   }
 
+  // The Deck has no room setup screen: a friend room opens at once, and its
+  // settings are on the room itself (a `?host=1` way in lands here too).
+  useEffect(() => {
+    if (skin.deck && screen.kind === 'setup' && screen.mode === 'host' && !loading && exam) begin('host')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [skin.deck, screen, loading, exam])
+
+  /** The start screen's button, for whichever card of the hand is raised. */
+  function deckGo(mode: DeckMode) {
+    if (mode === 'lobby') {
+      // The deck the start screen shows is the one the lobby asks for — unless
+      // the player last asked for any exam.
+      setSetup({ ...effectiveSetup, lobbyExam: effectiveSetup.lobbyExam === ANY_EXAM ? ANY_EXAM : exam })
+      enterLobby()
+    } else if (mode === 'local') setScreen({ kind: 'setup', mode: 'local' })
+    else begin('host')
+  }
+
   function home() {
     if (params.has('join')) {
       const next = new URLSearchParams(params)
@@ -436,9 +470,21 @@ function BattlePage({
 
   // ── The battles ───────────────────────────────────────────────────────────
   const shell = (children: ReactNode) => (
-    <div className="mx-auto w-full max-w-4xl px-4 sm:px-6">{children}</div>
+    skin.deck ? <DeckScope>{children}</DeckScope> : <div className="mx-auto w-full max-w-4xl px-4 sm:px-6">{children}</div>
   )
 
+  if (skin.deck && screen.kind === 'local') {
+    return shell(
+      <DeckLocalBattle
+        config={screen.config}
+        players={screen.players}
+        draw={drawFor(screen.config, screen.difficulty)}
+        questionsById={questionsById}
+        onSettings={() => setScreen({ kind: 'setup', mode: 'local' })}
+        onExit={home}
+      />,
+    )
+  }
   if (screen.kind === 'local') {
     return shell(
       <LocalBattle
@@ -465,6 +511,12 @@ function BattlePage({
         opponent={screen.opponent}
         loadout={screen.code ? undefined : loadout}
         onRoomOpen={screen.code ? undefined : onRoomOpen}
+        room={screen.code ? undefined : {
+          setup: effectiveSetup,
+          exams,
+          onSetup: setSetup,
+          onJoinTab: () => setScreen({ kind: 'join', code: '' }),
+        }}
       />,
     )
   }
@@ -485,6 +537,75 @@ function BattlePage({
   }
 
   // ── The way in ────────────────────────────────────────────────────────────
+  if (skin.deck) {
+    return (
+      <DeckScope>
+        {intro.showing && <DeckIntro me={{ name: effectiveSetup.names[0] || myName || DEFAULT_PLAYER_NAMES[0] }} onDone={intro.finish} />}
+        {screen.kind === 'home' && (
+          <DeckHome
+            exams={exams}
+            exam={exam}
+            onExamChange={next => setSetup({ ...effectiveSetup, exam: next })}
+            lobbyCount={lobbyCount}
+            loading={loading}
+            onBack={back.go}
+            backLabel={backName(back)}
+            onGo={deckGo}
+          />
+        )}
+        {screen.kind === 'lobby' && (loading ? (
+          <div className="flex items-center gap-2 px-5 py-8 text-sm text-[var(--deck-soft)]">
+            <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> Loading questions…
+          </div>
+        ) : (
+          <DeckLobby
+            key={effectiveSetup.names[0]}
+            player={player(0, myAvatar)}
+            exam={lobbyExam}
+            deckExam={exam}
+            exams={exams}
+            catalogueFor={catalogueFor}
+            signedIn={!!user}
+            onExamChange={next => setSetup({ ...effectiveSetup, lobbyExam: next })}
+            onLeave={home}
+          />
+        ))}
+        {screen.kind === 'setup' && screen.mode === 'local' && (
+          <DeckSeating
+            setup={effectiveSetup}
+            exams={exams}
+            onChange={setSetup}
+            onBack={home}
+            onDeal={() => begin('local')}
+            loading={loading}
+          />
+        )}
+        {screen.kind === 'setup' && screen.mode === 'host' && (
+          <div className="flex items-center gap-2 px-5 py-8 text-sm text-[var(--deck-soft)]">
+            <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> Loading questions…
+          </div>
+        )}
+        {screen.kind === 'join' && (
+          <DeckJoin
+            code={screen.code}
+            name={effectiveSetup.names[0]}
+            loading={loading}
+            onBack={home}
+            onHost={() => begin('host')}
+            onJoin={(code, name) => {
+              setSetup({ ...effectiveSetup, names: [name, effectiveSetup.names[1]] })
+              setScreen({
+                kind: 'guest',
+                code,
+                player: { name: cleanPlayerName(name, DEFAULT_PLAYER_NAMES[1]), ...(myAvatar ? { avatarUrl: myAvatar } : {}) },
+              })
+            }}
+          />
+        )}
+      </DeckScope>
+    )
+  }
+
   return (
     <div className="mx-auto w-full max-w-4xl space-y-6 px-4 py-8 sm:px-6">
       {screen.kind === 'home' && (

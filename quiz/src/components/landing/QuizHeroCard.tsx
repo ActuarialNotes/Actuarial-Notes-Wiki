@@ -1,7 +1,9 @@
 import { useId, useState, type ReactNode } from 'react'
-import { BookOpen, ChevronRight, Eye, Minus, Play, Plus, Timer } from 'lucide-react'
+import { BookOpen, BookX, ChevronDown, ChevronRight, Eye, EyeOff, Minus, Play, Plus, Timer, TimerOff } from 'lucide-react'
+import { DifficultyBars } from '@/components/QuizSettingsButton'
 import type { SegmentedOption } from '@/components/ui/SegmentedControl'
 import type { Difficulty } from '@/lib/parser'
+import { difficultySummary } from '@/lib/quizSetup'
 import { cn } from '@/lib/utils'
 import { CountChoice, DifficultyChoice } from './QuizSetupSheet'
 
@@ -16,11 +18,13 @@ export type SetupSection = 'topics' | 'count' | 'difficulty' | 'sitting'
  * by one; the time it should take sits under it. Tapping the count opens the
  * presets and a field for any number under it. Then three labelled sections:
  * **Topics**, a field naming what is picked, which opens the setup sheet at
- * its topic list (the one choice too long for the card); **Difficulty**, the
- * three levels as a segmented row with how many questions each holds; and
- * **While you answer**, the on/off settings as chips that fill white when on
- * and go hollow and dashed when off. One action, Start, white on the exam's
- * colour.
+ * its topic list (the one choice too long for the card). The settings fold
+ * away under one row of icons that sums them up — difficulty, timed, when
+ * answers show, concept links, an off one drawn hollow — and a tap on the row
+ * unfolds them: **Difficulty**, the three levels as a segmented row with how
+ * many questions each holds, and **While you answer**, the on/off settings as
+ * chips that fill white when on and go hollow and dashed when off. One
+ * action, Start, white on the exam's colour.
  *
  * The card is painted in the exam's opaque accent (`--exam-accent-vivid`),
  * which carries white text in either theme; an exam with no accent falls back
@@ -77,7 +81,15 @@ export function QuizHeroCard({
   onStart: () => void
 }) {
   const [countOpen, setCountOpen] = useState(false)
+  const [settingsOpen, setSettingsOpen] = useState(false)
   const countId = useId()
+  const settingsId = useId()
+  const summary = [
+    `Difficulty: ${difficultySummary(levels)}`,
+    timed ? 'Timed' : 'Untimed',
+    revealDuring ? 'Answers after each question' : 'Answers at the end',
+    conceptLinks ? 'Concept links on' : 'Concept links off',
+  ].join(', ')
   const empty = count === 0
   const word = count === 1 ? 'question' : 'questions'
   const topics = pills.join(', ')
@@ -140,36 +152,70 @@ export function QuizHeroCard({
         </button>
       </CardSection>
 
-      <CardSection title="Difficulty">
-        <DifficultyChoice levels={levels} onChange={onLevelsChange} counts={levelCounts} tone="card" />
-      </CardSection>
+      <div className="space-y-4 border-t border-white/20 pt-3">
+        <button
+          type="button"
+          data-testid="quiz-settings-toggle"
+          aria-expanded={settingsOpen}
+          aria-controls={settingsId}
+          aria-label={`Settings: ${summary}. ${settingsOpen ? 'Hide' : 'Change'}`}
+          onClick={() => setSettingsOpen(open => !open)}
+          className="flex w-full items-center gap-2 rounded-xl text-left transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+        >
+          <span className="flex flex-1 gap-2" aria-hidden>
+            <SummaryIcon>
+              <DifficultyBars levels={levels} />
+            </SummaryIcon>
+            <SummaryIcon on={timed}>
+              {timed ? <Timer className="h-[22px] w-[22px]" /> : <TimerOff className="h-[22px] w-[22px]" />}
+            </SummaryIcon>
+            <SummaryIcon on={revealDuring}>
+              {revealDuring ? <Eye className="h-[22px] w-[22px]" /> : <EyeOff className="h-[22px] w-[22px]" />}
+            </SummaryIcon>
+            <SummaryIcon on={conceptLinks}>
+              {conceptLinks ? <BookOpen className="h-[22px] w-[22px]" /> : <BookX className="h-[22px] w-[22px]" />}
+            </SummaryIcon>
+          </span>
+          <ChevronDown
+            className={cn('h-5 w-5 shrink-0 opacity-70 transition-transform motion-reduce:transition-none', settingsOpen && 'rotate-180')}
+            aria-hidden
+          />
+        </button>
+        {settingsOpen && (
+          <div id={settingsId} className="space-y-5">
+            <CardSection title="Difficulty">
+              <DifficultyChoice levels={levels} onChange={onLevelsChange} counts={levelCounts} tone="card" />
+            </CardSection>
 
-      <CardSection title="While you answer">
-        <div role="group" aria-label="While you answer" className="flex flex-wrap gap-2">
-          <SettingChip
-            on={timed}
-            onToggle={() => onTimedChange(!timed)}
-            name="Timed"
-            icon={<Timer className="h-[18px] w-[18px]" aria-hidden />}
-            label="Timed"
-            title={timedPace ? `Exam pace: ${timedPace}` : undefined}
-          />
-          <SettingChip
-            on={revealDuring}
-            onToggle={() => onRevealDuringChange(!revealDuring)}
-            name="Show answers after each question"
-            icon={<Eye className="h-[18px] w-[18px]" aria-hidden />}
-            label="Answers as you go"
-          />
-          <SettingChip
-            on={conceptLinks}
-            onToggle={() => onConceptLinksChange(!conceptLinks)}
-            name="Tap concepts to read them"
-            icon={<BookOpen className="h-[18px] w-[18px]" aria-hidden />}
-            label="Concept links"
-          />
-        </div>
-      </CardSection>
+            <CardSection title="While you answer">
+              <div role="group" aria-label="While you answer" className="flex flex-wrap gap-2">
+                <SettingChip
+                  on={timed}
+                  onToggle={() => onTimedChange(!timed)}
+                  name="Timed"
+                  icon={<Timer className="h-[18px] w-[18px]" aria-hidden />}
+                  label="Timed"
+                  title={timedPace ? `Exam pace: ${timedPace}` : undefined}
+                />
+                <SettingChip
+                  on={revealDuring}
+                  onToggle={() => onRevealDuringChange(!revealDuring)}
+                  name="Show answers after each question"
+                  icon={<Eye className="h-[18px] w-[18px]" aria-hidden />}
+                  label="Answers as you go"
+                />
+                <SettingChip
+                  on={conceptLinks}
+                  onToggle={() => onConceptLinksChange(!conceptLinks)}
+                  name="Tap concepts to read them"
+                  icon={<BookOpen className="h-[18px] w-[18px]" aria-hidden />}
+                  label="Concept links"
+                />
+              </div>
+            </CardSection>
+          </div>
+        )}
+      </div>
 
       {empty && (
         <p className="text-sm text-white/80">No questions match. Pick other topics or difficulties.</p>
@@ -203,6 +249,26 @@ function CardSection({ title, children }: { title: string; children: ReactNode }
       <h3 className="text-xs font-semibold uppercase tracking-wide text-white/70">{title}</h3>
       {children}
     </div>
+  )
+}
+
+/**
+ * One setting in the folded row's summary: no text, its state in the row's
+ * name. An on/off setting that is off is drawn hollow — no fill, a dashed
+ * edge, the struck icon dimmed — so off reads at a glance.
+ */
+function SummaryIcon({ on = true, children }: { on?: boolean; children: ReactNode }) {
+  return (
+    <span
+      data-testid="quiz-setting-summary"
+      data-on={on}
+      className={cn(
+        'flex h-11 w-11 items-center justify-center rounded-xl text-white',
+        on ? 'bg-white/20' : 'border-[1.5px] border-dashed border-white/50 [&>svg]:opacity-60',
+      )}
+    >
+      {children}
+    </span>
   )
 }
 

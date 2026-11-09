@@ -95,7 +95,8 @@ test.describe('tools', () => {
     await page.goto('/tools/trend-factor')
     const card = page.getByTestId('tool-card')
     await card.getByLabel(/Rates effective/).fill('2026-01-01')
-    await expect(card.getByTestId('tool-tile').nth(1)).toHaveText('3.5')
+    // The trend period is drawn by the figure (the answer card doesn't say it twice).
+    await expect(card.getByTestId('tool-figure')).toContainText('3.5 years')
   })
 
   // The tool template (§19) trades this for an answer that rides in the title
@@ -300,12 +301,13 @@ test.describe('tools', () => {
     await page.goto('/tools/trend-factor')
     const card = page.getByTestId('tool-card')
     await expect(card.getByTestId('tool-tile').first()).toHaveText('1.0767')
-    const takes = card.getByTestId('tool-takes-from')
-    await expect(takes).toContainText('+ 2 more')
+    // The three tools are alternatives for the one annual trend: offered on that row, not above the card.
+    await expect(card.getByTestId('tool-takes-from')).toHaveCount(0)
     await expect(card.getByTestId('shared-default')).toBeVisible()
-    await card.getByRole('button', { name: /^Annual trend/ }).click()
+    await card.getByRole('button', { name: /^Annual trend:/ }).click()
+    await expect(card.getByTestId('take-from').getByRole('button')).toHaveCount(3)
+    await card.getByRole('button', { name: 'Annual trend value' }).click()
     const sheet = page.getByTestId('value-sheet')
-    await expect(sheet.getByTestId('sheet-handoff')).toHaveCount(3)
     await expect(sheet.getByTestId('pending-figure')).toContainText('Loss cost trends, by coverage')
     await expect(sheet.getByTestId('pending-figure')).toContainText('haven’t been entered here yet')
   })
@@ -315,11 +317,13 @@ test.describe('tools', () => {
     await page.setViewportSize({ width: 390, height: 600 })
     await page.goto('/tools/bond-price')
     const card = page.getByTestId('tool-card')
-    // Six inputs: no slider on the rows; a row opens the sheet, which has one.
+    // Six inputs: no slider until a row is tapped, and then in place; the number opens the keypad.
     await expect(card.getByRole('slider')).toHaveCount(0)
-    await card.getByRole('button', { name: /^Yield, convertible m-thly/ }).click()
+    await card.getByRole('button', { name: /^Yield, convertible m-thly: / }).click()
+    await expect(card.getByRole('slider')).toHaveCount(1)
+    await card.getByRole('button', { name: /^Yield, convertible m-thly.* value$/ }).click()
     const sheet = page.getByTestId('value-sheet')
-    await expect(sheet.getByRole('slider')).toBeVisible()
+    await expect(sheet.getByRole('slider')).toHaveCount(0)
     for (const k of ['6', 'Point', '5']) await sheet.getByRole('button', { name: k, exact: true }).click()
     await sheet.getByRole('button', { name: 'Done' }).click()
     await expect(card.getByTestId('tool-tile').first()).not.toHaveText('1,077.95')

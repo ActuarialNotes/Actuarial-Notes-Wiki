@@ -3,7 +3,7 @@
 // value came from, how a grid numbers its columns, and the keypad the edit
 // sheet types with. Pure; `components/tools/ToolTemplate.tsx` draws it.
 
-import { TOOLS, runTool, toolById, type ChoiceField, type DateField, type NumberField, type TableColumn, type ToolField, type ToolHandoff, type ToolInput, type ToolResult, type ToolSpec } from './tools'
+import { TOOLS, formatValue, runTool, toolById, type ChoiceField, type DateField, type NumberField, type TableColumn, type ToolField, type ToolHandoff, type ToolInput, type ToolResult, type ToolSpec } from './tools'
 
 /**
  * The tools drawn by the template while it is checked on a phone, before
@@ -61,6 +61,13 @@ export function inputGroups(fields: readonly ScalarField[]): { judgments: Scalar
     judgments: fields.filter(f => f.judgment),
     inputs: fields.filter(f => !f.judgment),
   }
+}
+
+/** A number as an input shows it: an amount without the cents it doesn't have, a year without a separator. */
+export function fieldText(value: number, f: Pick<NumberField, 'unit' | 'integer' | 'min'>): string {
+  if (f.unit === 'money') return value.toLocaleString('en-US', { maximumFractionDigits: 2 })
+  if (f.integer && f.min >= 1000) return String(value)
+  return formatValue(value, f.unit)
 }
 
 /** Whether a tool's number rows carry their own slider (the count is of the inputs on screen). */

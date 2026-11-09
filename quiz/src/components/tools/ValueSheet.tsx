@@ -1,29 +1,26 @@
-// The tool template's **edit sheet** (docs/actuarial-tools.md §19,
-// docs/tool-template-v2.md §3.7): what a value pill opens. For a number,
-// everything a value can come from, in this order — the slider; the tools in
-// front of this one that fill the field, each with its result this session or
-// a way to open it; the published figures the Assumptions Bank holds for it,
-// each one line that opens in place (and the ones the document holds that
-// haven't been entered yet, listed but not selectable); and the reader's own
-// value typed on the app's keypad (so the phone's keyboard never covers the
-// sheet), with the way back to the default. For a choice, its options.
+// The tool template's **keypad sheet** (docs/actuarial-tools.md §19,
+// docs/tool-template-v2.md §3.7): what tapping a value's number opens. The
+// slider and the tools a value can be taken from stay on the row, in place;
+// the sheet is for typing — the published figures the Assumptions Bank holds
+// for the field, each one line that opens in place (and the ones the document
+// holds that haven't been entered yet, listed but not selectable), then the
+// reader's own value on the app's keypad (so the phone's keyboard never covers
+// the sheet) and the way back to the default. For a choice, its options.
 //
 // A bottom sheet on a phone, a centred one from `sm` — the quiz setup sheet's
 // frame. Every change applies as it is made; the card behind recomputes live.
 
 import { useEffect, useId, useState, type CSSProperties, type ReactNode } from 'react'
-import { ChevronRight, Delete, X } from 'lucide-react'
+import { Delete, X } from 'lucide-react'
 import type { PendingFigure } from '@/lib/toolBank'
-import type { Neighbour } from '@/lib/toolTemplate'
 import { FigureDetails, FigureLine } from './FigureNote'
 import { GHOST, readFigure, readLabel } from './figureRead'
-import { formatValue, type BankFigure, type ChoiceField, type NumberField } from '@/lib/tools'
+import { type BankFigure, type ChoiceField, type NumberField } from '@/lib/tools'
 import { fromDisplay } from '@/lib/tools/format'
 import { keypadValue, pressKey, type KeypadKey, type ValueSource } from '@/lib/toolTemplate'
 import { OverlayPortal } from '@/components/ui/OverlayPortal'
 import { CheckMark } from '@/components/CheckMark'
 import { cn } from '@/lib/utils'
-import type { ScalarSourceLink } from './useToolCard'
 
 export function BottomSheet({ title, symbol, value, onClose, style, children }: {
   title: string
@@ -137,14 +134,11 @@ export function NumberSheet({
   source,
   figure,
   figures,
-  sources,
-  handoffs = [],
   pending = [],
   error,
+  format,
   onChange,
   onPickFigure,
-  onTake,
-  onOpenTool,
   onDefault,
   onClose,
   style,
@@ -156,17 +150,13 @@ export function NumberSheet({
   figure: BankFigure | null
   /** The bank's figures this field takes. */
   figures: BankFigure[]
-  /** The tools it can be taken from through a source sheet (§6.6). */
-  sources: ScalarSourceLink[]
-  /** The tools in front of this one whose hand-off fills the field, each with its value from this session's last run (null: not run). */
-  handoffs?: { neighbour: Neighbour; value: number | null }[]
   /** Figures the document holds for the field that haven't been entered yet. */
   pending?: PendingFigure[]
   error: string | null
+  /** How the field prints a value ("2022", not "2,022", for a year). */
+  format: (v: number) => string
   onChange: (v: number) => void
   onPickFigure: (id: string) => void
-  onTake?: (n: Neighbour, value: number) => void
-  onOpenTool?: (n: Neighbour) => void
   onDefault: () => void
   onClose: () => void
   style?: CSSProperties
@@ -180,65 +170,14 @@ export function NumberSheet({
     const n = keypadValue(next)
     if (n !== null) onChange(fromDisplay(n, field.unit))
   }
-  const sliderMax = Math.max(field.sliderMax ?? field.max, Math.min(value, field.max))
-  const sliderMin = Math.min(field.sliderMin ?? field.min, Math.max(value, field.min))
   const suffix = field.unit === 'percent' ? '%' : ''
   const own = source.kind === 'yours' || source.kind === 'linked'
   // The published figure opened to its details (level 2): the one in use, to begin with.
   const [opened, setOpened] = useState<string | null>(figure?.id ?? null)
 
   return (
-    <BottomSheet title={field.label} symbol={field.symbol} value={formatValue(value, field.unit)} onClose={onClose} style={style}>
-      <input
-        type="range"
-        aria-label={`${field.label} slider`}
-        min={sliderMin}
-        max={sliderMax}
-        step={field.step}
-        value={value}
-        onChange={e => { setText(''); onChange(Number(e.target.value)) }}
-        className="sim-slider"
-      />
+    <BottomSheet title={field.label} symbol={field.symbol} value={format(value)} onClose={onClose} style={style}>
       {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
-
-      {(handoffs.length > 0 || sources.length > 0) && (
-        <SheetGroup label="Take from a tool">
-          {handoffs.map(({ neighbour: n, value: v }) => (
-            <button
-              key={n.tool.id}
-              type="button"
-              onClick={() => {
-                if (v != null && onTake) { setText(''); onTake(n, v) }
-                else { onClose(); onOpenTool?.(n) }
-              }}
-              aria-label={v != null ? `${field.label} from ${n.tool.name}, ${formatValue(v, field.unit)}` : `Open ${n.tool.name}`}
-              className="flex w-full items-center gap-3 px-3.5 py-2.5 text-left transition-colors hover:bg-muted/60"
-              data-testid="sheet-handoff"
-            >
-              <span className="min-w-0 flex-1">
-                <span className="block text-sm font-semibold">{n.tool.name}</span>
-                <span className="block text-xs text-muted-foreground">{v != null ? 'Your last run' : 'Not run this session'}</span>
-              </span>
-              {v != null ? (
-                <span className="shrink-0 rounded-full bg-muted px-2.5 py-1 text-sm font-semibold tabular-nums">{formatValue(v, field.unit)}</span>
-              ) : (
-                <span className="inline-flex shrink-0 items-center text-sm text-muted-foreground">open <ChevronRight className="h-4 w-4" aria-hidden /></span>
-              )}
-            </button>
-          ))}
-          {sources.filter(s => !handoffs.some(h => h.neighbour.tool.name === s.label)).map(s => (
-            <button
-              key={s.label}
-              type="button"
-              onClick={() => { onClose(); s.open() }}
-              aria-label={`${field.label} from ${s.label}`}
-              className="flex w-full items-center justify-between px-3.5 py-2.5 text-left text-sm font-medium hover:bg-muted/60"
-            >
-              {s.label} <ChevronRight className="h-4 w-4 text-muted-foreground" aria-hidden />
-            </button>
-          ))}
-        </SheetGroup>
-      )}
 
       {(figures.length > 0 || pending.length > 0) && (
         <SheetGroup label="Published">
@@ -250,7 +189,7 @@ export function NumberSheet({
                   <div className="pb-2">
                     <FigureDetails
                       figure={f}
-                      yours={figure?.id === f.id ? null : { value, shown: formatValue(value, field.unit) }}
+                      yours={figure?.id === f.id ? null : { value, shown: format(value) }}
                       onUse={figure?.id === f.id ? undefined : () => { setText(''); onPickFigure(f.id) }}
                     />
                     {figure?.id === f.id && <p className="pt-1 text-xs font-medium" data-testid="figure-in-use">In use</p>}
@@ -290,7 +229,7 @@ export function NumberSheet({
             label="Type a value"
             value={
               <span className={cn('rounded-md bg-muted px-2 py-1', !typing && 'text-muted-foreground')} data-testid="keypad-entry">
-                {typing ? text : formatValue(value, field.unit).replace(/[%$,]/g, '')}
+                {typing ? text : format(value).replace(/[%$,]/g, '')}
                 {suffix}
               </span>
             }
@@ -299,7 +238,7 @@ export function NumberSheet({
             on={source.kind === 'default' && !typing}
             onPick={() => { setText(''); onDefault() }}
             label="Back to the default"
-            value={formatValue(field.default, field.unit)}
+            value={format(field.default)}
           />
         </div>
         <div className="grid grid-cols-3 gap-1.5 p-2" role="group" aria-label="Keypad">

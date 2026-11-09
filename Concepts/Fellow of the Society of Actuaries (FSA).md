@@ -4,14 +4,14 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:04159937095439f51677d493c3536e15fe878cab589e31741983613e990069ad
+  content_hash: sha256:84ce10b35165fce9fde7c83f96513e4650e2e651d7a375bfef7d3774fc62ef24
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Fellow of the Society of Actuaries (FSA).md
 ---
 
-A **Fellow of the Society of Actuaries (FSA)** is an [[Associate of the Society of Actuaries (ASA)|Associate]] of the Society of Actuaries (SOA) who has specialised in one practice area. It is the senior of the SOA's two designations.
+A **Fellow of the Society of Actuaries (FSA)** is an [[Associate of the Society of Actuaries (ASA)|Associate]] of the Society of Actuaries (SOA) who has specialised in one practice area.
 
 %%credential-path FSA%%
 

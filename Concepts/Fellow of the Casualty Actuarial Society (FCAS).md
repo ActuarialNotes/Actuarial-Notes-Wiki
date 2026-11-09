@@ -4,14 +4,14 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:0c684d6866065662f082efbdb1f125880e2b4bd01e9650107c5e1ad0fb300550
+  content_hash: sha256:336d8672dfa1fbea50172e775fe252b641980164e7df6a5896e430a9bd996954
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Fellow of the Casualty Actuarial Society (FCAS).md
 ---
 
-A **Fellow of the Casualty Actuarial Society (FCAS)** is an [[Associate of the Casualty Actuarial Society (ACAS)|Associate]] of the Casualty Actuarial Society (CAS) who has passed three further exams on the same material at a more advanced level: reserving, ratemaking, and an insurer's capital and risk. It is the senior of the CAS's two designations.
+A **Fellow of the Casualty Actuarial Society (FCAS)** is an [[Associate of the Casualty Actuarial Society (ACAS)|Associate]] of the Casualty Actuarial Society (CAS) who has passed three further exams on the same material at a more advanced level: reserving, ratemaking, and an insurer's capital and risk.
 
 %%credential-path FCAS%%
 

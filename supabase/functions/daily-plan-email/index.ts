@@ -28,7 +28,16 @@ const PREFS_URL = `${APP_URL}/dashboard?reminders=1`
 // and the app reads `utm_source` on boot to fire `reminder_opened` (roadmap L1).
 // The source must be a key of REMINDER_SOURCES in quiz/src/lib/learningSignals.ts
 // — learningSignals.test.ts reads this file to hold the two together.
-const SESSION_URL = `${APP_URL}/quiz?utm_source=daily-plan-email&utm_medium=email&utm_campaign=study-plan`
+const UTM = 'utm_source=daily-plan-email&utm_medium=email&utm_campaign=study-plan'
+// With no exam to quiz on (no bank behind it), the button opens the Dashboard.
+const SESSION_URL = `${APP_URL}/dashboard?${UTM}`
+
+// Each exam's Start button opens that exam's quiz on today's concepts
+// (planQuizPath, mirrored below). utm_content tells it from the Listen button.
+function quizUrl(examId: string, concepts: string[]): string | null {
+  const path = planQuizPath(examId, concepts)
+  return path ? `${APP_URL}${path}&${UTM}&utm_content=quiz` : null
+}
 const DEFAULT_FROM = 'Actuarial Notes <notifications@actuarialnotes.com>'
 
 // Keyed like EXAM_ID_TO_LABEL in quiz/src/lib/examIds.ts (exam_progress keys),
@@ -93,6 +102,64 @@ function describePacing(status: string | undefined): string {
 }
 
 const MAX_EMAIL_CONCEPTS = 12
+
+// ── The quiz link ─────────────────────────────────────────────────────────────
+
+/**
+ * The question bank's `exam:` label for each exam_progress key — the inverse of
+ * EXAM_LABEL_TO_ID in lib/examIds.ts (duplicationContracts.test.ts holds the
+ * two equal). An exam with no bank (PCPA) has no quiz to link to.
+ */
+const EMAIL_BANK_LABELS: Record<string, string> = {
+  'P': 'Probability',
+  'FM': 'Financial Mathematics',
+  'SRM': 'Exam SRM',
+  'FAM': 'Exam FAM',
+  'ASTAM': 'Exam ASTAM',
+  'ALTAM': 'Exam ALTAM',
+  'MAS-I': 'Exam MAS-I',
+  'MAS-II': 'Exam MAS-II',
+  'CAS-DA': 'Exam DISC-DA',
+  'CAS-RM': 'Exam DISC-RM',
+  'CAS-IA': 'Exam DISC-IA',
+  'CAS-5': 'Exam 5',
+  'CAS-6': 'Exam 6C',
+  'CAS-7': 'Exam 7',
+  'CAS-8': 'Exam 8',
+  'CAS-9': 'Exam 9',
+}
+
+/** Most concepts a quiz link carries, so the address stays a sensible length. */
+const MAX_QUIZ_LINK_CONCEPTS = 40
+
+/**
+ * The `/quiz` path (with its query) of today's quiz for one exam: the bank,
+ * the day's concepts and `plan=1`, which has the quiz page draw the fewest
+ * questions that cover them (as the app's own Today's Plan quiz does) rather
+ * than every question on them. The concepts ride the URL, so the link works
+ * for a reader who isn't signed in; `from=email` is what has the quiz offer
+ * them a sign-in first. Null when there is no bank or nothing to quiz.
+ * A name with a comma can't ride the comma-separated list and is left out.
+ */
+function planQuizPath(examId: string, concepts: string[]): string | null {
+  const exam = EMAIL_BANK_LABELS[examId]
+  if (!exam) return null
+  const seen = new Set<string>()
+  const names: string[] = []
+  for (const c of concepts) {
+    if (typeof c !== 'string' || !c.trim() || c.includes(',')) continue
+    const key = c.toLowerCase()
+    if (seen.has(key)) continue
+    seen.add(key)
+    names.push(c.trim())
+    if (names.length >= MAX_QUIZ_LINK_CONCEPTS) break
+  }
+  if (names.length === 0) return null
+  const params = new URLSearchParams({
+    exam, concepts: names.join(','), plan: '1', mode: 'quiz', from: 'email',
+  })
+  return `/quiz?${params.toString()}`
+}
 
 function localDateHour(timeZone: string, now: Date = new Date()): { date: string; hour: number } {
   let fmt: Intl.DateTimeFormat
@@ -253,6 +320,8 @@ interface ExamSection {
   catchUp: boolean
   /** Today's episode, when any of today's concepts is recorded. */
   episode: { minutes: string; concepts: number } | null
+  /** Today's quiz on this exam's concepts, when it has a question bank. */
+  quizUrl: string | null
 }
 
 function daysBetweenISO(fromISO: string, toISO: string): number {
@@ -289,6 +358,9 @@ function buildSection(examId: string, plan: EmailPlanSnapshot, today: string, cl
     pacingLine: pieces.join(' · '),
     catchUp: !!plan.generatedDate && plan.generatedDate < today,
     episode: episode.concepts > 0 ? { minutes: episodeMinutesLabel(episode.seconds), concepts: episode.concepts } : null,
+    // The app's own Today's Plan quiz: the review list in review mode, else the
+    // day's concepts (planConceptsToday in quiz/src/lib/planCompletion.ts).
+    quizUrl: quizUrl(examId, plan.status === 'review_mode' || concepts.length === 0 ? reviewConcepts : concepts),
   }
 }
 
@@ -296,7 +368,7 @@ function buildSection(examId: string, plan: EmailPlanSnapshot, today: string, cl
 // (`?episode=`). Same utm_source as the session link, so reminder_opened counts
 // it; utm_content tells the two buttons apart.
 function episodeUrl(examId: string): string {
-  return `${APP_URL}/dashboard?episode=${encodeURIComponent(examId)}&utm_source=daily-plan-email&utm_medium=email&utm_campaign=study-plan&utm_content=podcast`
+  return `${APP_URL}/dashboard?episode=${encodeURIComponent(examId)}&${UTM}&utm_content=podcast`
 }
 
 function escapeHtml(s: string): string {
@@ -329,6 +401,9 @@ function renderHtml(sections: ExamSection[], friendlyDate: string): string {
         <p style="margin:14px 0 0;font-size:14px;font-weight:600;color:#111827;">Worth a refresher</p>
         ${renderConceptList(s.reviewConcepts)}
       ` : ''}
+      ${s.quizUrl ? `
+        <a href="${escapeHtml(s.quizUrl)}" style="display:inline-block;margin-top:16px;margin-right:8px;padding:8px 16px;background:#4f46e5;color:#ffffff;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600;">Start today's quiz</a>
+      ` : ''}
       ${s.episode ? `
         <a href="${escapeHtml(episodeUrl(s.examId))}" style="display:inline-block;margin-top:16px;padding:8px 16px;border:1px solid #c7d2fe;background:#eef2ff;color:#3730a3;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600;">&#127911; Listen to today's plan &middot; ${escapeHtml(s.episode.minutes)}</a>
       ` : ''}
@@ -338,7 +413,7 @@ function renderHtml(sections: ExamSection[], friendlyDate: string): string {
   <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;max-width:560px;margin:0 auto;padding:24px 16px;">
     <h1 style="font-size:20px;color:#111827;margin:0;">Your study plan for ${escapeHtml(friendlyDate)}</h1>
     ${body}
-    <a href="${escapeHtml(SESSION_URL)}" style="display:inline-block;margin-top:4px;padding:10px 22px;background:#4f46e5;color:#ffffff;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600;">Start today's session</a>
+    ${sections.some(s => s.quizUrl) ? '' : `<a href="${escapeHtml(SESSION_URL)}" style="display:inline-block;margin-top:4px;padding:10px 22px;background:#4f46e5;color:#ffffff;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600;">Start today's session</a>`}
     <p style="margin-top:28px;font-size:12px;color:#9ca3af;">
       You're receiving this because you turned on the daily study plan email.
       You can change the time or turn it off from the bell on your
@@ -362,10 +437,11 @@ function renderText(sections: ExamSection[], friendlyDate: string): string {
       lines.push('Worth a refresher:')
       for (const c of s.reviewConcepts.slice(0, MAX_EMAIL_CONCEPTS)) lines.push(`  - ${c}`)
     }
+    if (s.quizUrl) lines.push(`Start today's quiz: ${s.quizUrl}`)
     if (s.episode) lines.push(`Listen to today's plan (${s.episode.minutes}): ${episodeUrl(s.examId)}`)
     lines.push('')
   }
-  lines.push(`Start today's session: ${SESSION_URL}`)
+  if (!sections.some(s => s.quizUrl)) lines.push(`Start today's session: ${SESSION_URL}`)
   lines.push(`Change the time or turn this email off: ${PREFS_URL}`)
   return lines.join('\n')
 }

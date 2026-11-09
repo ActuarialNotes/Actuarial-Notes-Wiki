@@ -587,8 +587,9 @@ before touching that area**:
   whose tables `scripts/dataset_extract.py` reads off NCHS's, Statistics Canada's, BLS's and the
   Treasury's own files with each file's sha256 and licence, into
   `lib/tools/data/datasets/*.json` — never hand-edited; re-run the script for a new edition.
-  **§19 is the tool template** (`components/tools/ToolTemplate.tsx`, on the tools in `TEMPLATE_TOOLS`
-  in `lib/toolTemplate.ts` — the rest still draw `ToolCard`, both over `useToolCard.ts`): the answer card in
+  **§19 is the tool template** (`components/tools/ToolTemplate.tsx`, which every tool's page draws;
+  `ToolCard` remains for the cards embedded in a workflow step or a source sheet, both over
+  `useToolCard.ts`): the answer card in
   the colour of the earliest exam that teaches the method (`lib/toolExam.ts`), judgments first, inline sliders
   at three inputs or fewer, a source tag on every input, the edit sheet with the app's own keypad
   (`ValueSheet.tsx`), and grids numbered as an exhibit (`TableColumn.formula`). **Template v2**
@@ -596,7 +597,9 @@ before touching that area**:
   (`QUANTITY_STEPS` in `lib/toolFigures.ts`), a breadcrumb, *Takes from* / *Gives to* read off
   `spec.next` both ways (`takesFrom` / `givesTo` in `lib/toolTemplate.ts`; a hand-off's URL carries
   `?from=<sender>` and its values arrive linked), one "from" chip (`SourceTag.tsx`), and published
-  figures and links explained in place (`FigureNote.tsx`).
+  figures and links explained in place (`FigureNote.tsx`). Its §8.1 is the simplified card every tool
+  now draws: a row's slider opens in place (open at three inputs or fewer), the number alone opens the
+  keypad sheet, and several tools able to supply one value are offered on that row as alternatives.
   Read before building any of it.
 - `docs/stacked-pages.md` — the concept popup's **page stack** (Obsidian's stacked pages):
   a link followed inside the popup opens a new page on top of the one being read, and the

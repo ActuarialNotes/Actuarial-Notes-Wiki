@@ -437,8 +437,8 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   `spec.next` both ways, one "from" chip on every input, published figures and links explained in
   place, and per-row basis and meaning in the Assumptions Bank. Final mock-ups:
   `docs/tool-template-v2-mockups.html`. Decisions D-TT1 to D-TT3 there, built with their
-  defaults (D-TT1 as columns). Built on the seven template tools, Trend Factor and Expense Ratios
-  added; the spec's §8 records what was built.
+  defaults (D-TT1 as columns). Built on the seven template tools, then simplified and moved to
+  every tool (variation A, the spec's §8.1); §8 records what was built.
 
 - **L2: show a reader they're improving (from a reader's review, built 2026-10-31).** An FM
   candidate wrote that they *estimated* their hit rate climbing from 20% to 70%, only learned a

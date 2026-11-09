@@ -279,3 +279,25 @@ added). Where the build differs from the text above, this section is the record.
   Ratios → Permissible Loss Ratio arriving linked, Unlink, back through the breadcrumb; Trend
   Factor's three senders and the AIRB trends listed but not selectable; a figure used from its
   level-2 details.
+
+### 8.1 Simplified, then every tool (2026-11-09)
+
+A phone review of the build asked for less. Three variations of the simplified card were put up
+(<https://claude.ai/artifact/R91jbHjo2QhXhxyNxy8xc6>) and **A, "tap a row to slide it"**, was
+chosen. What changed from §3:
+
+- **The slider is in the card.** Three inputs or fewer keep their sliders open. Past three, a row
+  is one line with a faint track showing where its value sits; tapping the row opens its slider in
+  place. Only the **number** opens the sheet, and the sheet is the keypad (with the published
+  figures, where a field has them): no slider, no list of tools (§3.7 superseded).
+- **Several tools in front are alternatives**, so they aren't named above the card. Tapping a row
+  lists, under its slider, "Or take it from" each tool whose hand-off fills that value, with this
+  session's result to take at a tap, else a way to open it. The *Takes from* line above the card
+  stays only when one tool feeds it (§3.3 superseded for several).
+- **The answer card says less**: the formula moves to *Show working*; the label over the answer
+  is dropped where it repeats the tool's name; a span's length is said once, by the figure; dates
+  read "Jul 1, 2023"; a year prints without a separator (`fieldText`).
+- **Every tool's page draws the template.** `TEMPLATE_TOOLS` and `usesTemplate` are gone;
+  `ToolCard` remains for the cards embedded in a workflow step and a source sheet. R10 becomes
+  "the answer card is on the first phone screen" (`e2e/tools.spec.ts`), and every tool has an exam
+  colour (`toolExam.test.ts`).

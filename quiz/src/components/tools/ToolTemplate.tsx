@@ -1,7 +1,8 @@
 // The **tool template** (docs/actuarial-tools.md §19, and its second pass,
 // docs/tool-template-v2.md): one tool on its own page, drawn the way the app's
 // info popups are — and the shape every tool moves to once it has been checked
-// on a phone (`TEMPLATE_TOOLS`).
+// on a phone. Every tool's page draws it; `ToolCard` remains for the cards
+// embedded in a workflow step and a source sheet.
 //
 //   Takes from        the tools in front of this one (hidden when none)
 //   the answer card   tinted in the exam that first teaches the method (no
@@ -610,6 +611,16 @@ function InputRow({ model: m, field: f, inline, open, onSlide, source, step, not
           onChange={e => m.set(f.key, Number(e.target.value))}
           className="sim-slider"
         />
+      )}
+      {!showSlider && !linked && (
+        // A closed row keeps a faint track where its slider is, so a reader can see
+        // there is one to open; tapping the row opens it.
+        <div className="pointer-events-none relative mx-0.5 mb-1 mt-0.5 h-0.5 rounded-full bg-foreground/10" aria-hidden data-testid="closed-track">
+          <span
+            className="absolute -top-[3px] h-2 w-2 rounded-full bg-foreground/30"
+            style={{ left: `calc(${Math.max(0, Math.min(100, ((value - sliderMin) / Math.max(1e-12, sliderMax - sliderMin)) * 100))}% - 4px)` }}
+          />
+        </div>
       )}
       {open && <TakeFrom model={m} field={f} onOpenTool={onOpenTool} />}
       {chips}

@@ -26,9 +26,8 @@ import { useBack, usePageLabel } from '@/hooks/useBack'
 import { CheckMark } from '@/components/CheckMark'
 import { ListPanel, ListRow } from '@/components/ui/ListPanel'
 import { LogoTile } from '@/components/LogoTile'
-import { ToolCard } from '@/components/tools/ToolCard'
 import { ToolTemplate, type PinnedAnswer } from '@/components/tools/ToolTemplate'
-import { FROM_PARAM, usesTemplate } from '@/lib/toolTemplate'
+import { FROM_PARAM } from '@/lib/toolTemplate'
 import { examForConcepts } from '@/lib/toolExam'
 import { examAccentStyle } from '@/lib/examColors'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
@@ -234,7 +233,6 @@ function ToolPage({ slug }: { slug: string }) {
   const examKey = useMemo(() => (spec ? examForConcepts(spec.method.concepts, syllabi) : null), [spec, syllabi])
   const [pinned, setPinned] = useState<PinnedAnswer | null>(null)
   if (!spec) return <Navigate to="/tools" replace />
-  const templated = usesTemplate(spec)
   const areaLabel = AREAS.find(a => a.id === spec.area)?.label ?? spec.area
   const senderPath = sender ? `/tools/${toolSlug(sender)}` : null
   const crumbs: Crumb[] = [
@@ -251,13 +249,12 @@ function ToolPage({ slug }: { slug: string }) {
         kind="tool"
         title={spec.name}
         back={back}
-        crumbs={templated ? crumbs : undefined}
-        pinned={templated && pinned ? <PinnedPill answer={pinned} examKey={examKey} /> : null}
+        crumbs={crumbs}
+        pinned={pinned ? <PinnedPill answer={pinned} examKey={examKey} /> : null}
       />
       <div className="container mx-auto max-w-2xl space-y-3 px-4 py-4">
         {/* Keyed by the run, so a Send to… or a pasted link starts the card afresh. */}
-        {templated ? (
-          <ToolTemplate
+        <ToolTemplate
             key={`${slug}${location.search}${location.hash}`}
             spec={spec}
             initialInput={decodeRunInput(location.hash) ?? undefined}
@@ -267,9 +264,6 @@ function ToolPage({ slug }: { slug: string }) {
             examKey={examKey}
             onPinAnswer={setPinned}
           />
-        ) : (
-          <ToolCard key={`${slug}${location.hash}`} spec={spec} initialInput={decodeRunInput(location.hash) ?? undefined} onOpenMethod={open} persist />
-        )}
       </div>
     </>
   )

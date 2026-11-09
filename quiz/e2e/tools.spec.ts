@@ -86,7 +86,9 @@ test.describe('tools', () => {
     await page.goto('/tools/distribution')
     const card = page.getByTestId('tool-card')
     await expect(card.getByLabel('Mean value')).toBeVisible()
-    await card.getByRole('combobox').selectOption('poisson')
+    // A long choice opens its own sheet of options.
+    await card.getByRole('button', { name: /^Distribution: / }).click()
+    await page.getByTestId('value-sheet').getByRole('radio', { name: 'Poisson' }).click()
     await expect(card.getByLabel('Mean count value')).toBeVisible()
     await expect(card.getByLabel('Mean value')).toHaveCount(0)
   })
@@ -99,18 +101,19 @@ test.describe('tools', () => {
     await expect(card.getByTestId('tool-figure')).toContainText('3.5 years')
   })
 
-  // The tool template (§19) trades this for an answer that rides in the title
-  // strip once its card scrolls away — its own test is below.
-  test('fits every scalar card, figure and all, on a phone without scrolling', async ({ page }) => {
+  // R10 under the tool template (§19): the answer card is on the first phone
+  // screen; the inputs may run on below it, and the answer rides in the title
+  // strip once its card scrolls away (its own test is below).
+  test('puts every tool\'s answer on the first phone screen', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 })
     for (const slug of [
       'annuity', 'bond-yield', 'buhlmann-credibility', 'partial-credibility',
-      'full-credibility-standard', 'expected-payment',
-      'loss-ratio-method', 'pure-premium-method', 'interest-converter',
+      'full-credibility-standard', 'expected-payment', 'trend-factor',
+      'loss-ratio-method', 'pure-premium-method', 'interest-converter', 'life-table',
     ]) {
       await page.goto(`/tools/${slug}`)
       await expect(page.getByTestId('tool-figure')).toBeVisible()
-      const box = await page.getByTestId('tool-card').boundingBox()
+      const box = await page.getByTestId('tool-answer').boundingBox()
       expect(box, slug).not.toBeNull()
       expect(box!.y + box!.height, slug).toBeLessThanOrEqual(844)
     }
@@ -333,15 +336,16 @@ test.describe('tools', () => {
     await expect(page.getByTestId('tool-pinned-answer')).toBeVisible()
   })
 
-  test('offers the bank\'s figures in a field\'s From… menu', async ({ page }) => {
+  test('offers the bank\'s figures on a field\'s row, and uses one in place', async ({ page }) => {
     await page.goto('/tools/loss-ratio-method')
     const card = page.getByTestId('tool-card')
-    await card.getByRole('button', { name: 'Variable expense ratio from a tool or a published figure' }).click()
-    const figures = card.getByTestId('tool-bank-figures')
-    await expect(figures).toBeVisible()
-    await figures.getByRole('button', { name: /Total expenses, 27\.8%/ }).click()
-    await expect(card.getByLabel('Variable expense ratio value')).toHaveValue('27.8')
-    await expect(card.getByTestId('tool-figure-source')).toContainText('Operating Expenses & ULAE')
+    const row = card.locator('[data-field="variable"]')
+    await row.getByTestId('published-count').click()
+    const list = row.getByTestId('published-list')
+    await list.getByTestId('figure-line').filter({ hasText: '27.8%' }).click()
+    await list.getByRole('button', { name: 'Use 27.8%' }).click()
+    await expect(card.getByRole('button', { name: /^Variable expense ratio.* value$/ })).toHaveText('27.8%')
+    await expect(row.locator('[data-source="published"]')).toContainText('AIRB, Alberta')
   })
 
   test('shows a document\'s figures on its resource page', async ({ page }) => {

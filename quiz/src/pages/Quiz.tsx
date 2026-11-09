@@ -31,9 +31,10 @@ import { partResponses, ungradedWrittenParts, writtenParts } from '@/lib/written
 import { pendingAnswerFor, tagPendingAnswer } from '@/lib/pendingAnswer'
 import { resumesQuiz } from '@/lib/quizResume'
 import { loadRevealMode, parseRevealMode } from '@/lib/revealMode'
-import { difficultyFromParam, difficultyLevelsFromParam } from '@/lib/quizDifficulty'
+import { DIFFICULTY_LEVELS, difficultyFromParam, difficultyLevelsFromParam } from '@/lib/quizDifficulty'
 import { timeAllowanceSeconds } from '@/lib/quizTiming'
 import { QuizTimer } from '@/components/QuizTimer'
+import { QuizSettingsButton, QuizSettingsDialog, type QuizSettings } from '@/components/QuizSettingsButton'
 import { RaidHitChip } from '@/components/actuaria/RaidHitChip'
 import { reportRaidHit } from '@/lib/actuaria/raidClient'
 import { ACTUARIA_ENABLED } from '@/lib/featureFlags'
@@ -128,6 +129,16 @@ export default function Quiz() {
   }, [searchParams])  // eslint-disable-line react-hooks/exhaustive-deps
 
   const { questions, loading, error } = useQuestions(filters)
+
+  // What the setup card's icons showed, kept in the header while the quiz runs.
+  // A link with no `levels` draws from every level (an old `level` lean only
+  // weights the draw, so it is every level too).
+  const quizSettings: QuizSettings = useMemo(() => ({
+    levels: filters.difficulties ?? (filters.difficulty ? [filters.difficulty] : [...DIFFICULTY_LEVELS]),
+    timed,
+    revealDuring: reveal === 'during',
+    conceptLinks: linkConcepts,
+  }), [filters, timed, reveal, linkConcepts])
 
   const {
     questions: storeQuestions,
@@ -230,6 +241,7 @@ export default function Quiz() {
   // keyed by `${questionId}__${partLabel}`
   const [essaySelfGrades, setEssaySelfGrades] = useState<Record<string, SelfGrade>>({})
   const [showShortcutsHelp, setShowShortcutsHelp] = useState(false)
+  const [showSettings, setShowSettings] = useState(false)
   // Where the current question came from — its sitting and its vault file.
   const [showQuestionInfo, setShowQuestionInfo] = useState(false)
 
@@ -403,7 +415,7 @@ export default function Quiz() {
   // for a pending selection) — incomplete submissions are caught with a confirm dialog
   const showConfirmButton = !isLocked && (pendingAnswer !== null || currentQuestion?.type === 'multi-part')
 
-  const anyDialogOpen = showSignInPrompt || showQuitDialog || showIncompletePartsDialog || showSelfGradeScreen || showShortcutsHelp || showQuestionInfo || gradePrompt !== null
+  const anyDialogOpen = showSignInPrompt || showQuitDialog || showIncompletePartsDialog || showSelfGradeScreen || showShortcutsHelp || showSettings || showQuestionInfo || gradePrompt !== null
 
   // Per-part grades for a multi-part question, read back from the store keyed
   // by part label (the store keys them as `${id}__${label}`).
@@ -686,10 +698,12 @@ export default function Quiz() {
           className="-ml-3 h-11 px-3 text-base text-muted-foreground hover:text-foreground"
         >
           <X className="h-5 w-5 mr-1.5" />
-          Quit {mode === 'mock-exam' ? 'exam' : 'quiz'}
+          {/* On a phone the word after Quit gives its room to the settings. */}
+          Quit <span className="sr-only sm:not-sr-only sm:ml-1">{mode === 'mock-exam' ? 'exam' : 'quiz'}</span>
         </Button>
 
-        <div className="flex items-center gap-2">
+        <div className="flex min-w-0 items-center gap-2">
+          <QuizSettingsButton settings={quizSettings} open={showSettings} onOpenChange={setShowSettings} />
           {examLogoKey && <ExamLogo examKey={examLogoKey} size="sm" />}
           {timer !== null && (
             <QuizTimer startedAt={timer.startedAt} allowanceSeconds={timer.allowanceSeconds} />
@@ -749,6 +763,15 @@ export default function Quiz() {
         <QuizSignInPrompt
           onSignIn={() => navigate('/auth', { state: { from: `/quiz${search}` } })}
           onContinue={() => setSignInPromptDismissed(true)}
+        />
+      )}
+
+      {showSettings && (
+        <QuizSettingsDialog
+          settings={quizSettings}
+          examKey={examLogoKey}
+          practiceExam={mode === 'mock-exam'}
+          onClose={() => setShowSettings(false)}
         />
       )}
 

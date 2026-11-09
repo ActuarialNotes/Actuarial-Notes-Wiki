@@ -53,6 +53,7 @@ import { useBuilderPool } from '@/hooks/useBuilderPool'
 import { useTodaysPlanQuiz } from '@/hooks/useTodaysPlanQuiz'
 import { ConceptGroupList } from '@/components/landing/ConceptGroupList'
 import { QuizExamLadder } from '@/components/landing/QuizExamLadder'
+import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { QuizGamesPanel } from '@/components/landing/QuizGamesPanel'
 import { GAMES_ENABLED } from '@/lib/featureFlags'
 import { PastPaperShelf } from '@/components/landing/PastPaperShelf'
@@ -549,6 +550,8 @@ export default function Landing() {
           onOpenExam={openExam}
         />
       )}
+      {/* A track heading opens its credential's page here, as on Study Guides. */}
+      {!hasTopic && <ConceptPopup />}
 
       {hasTopic && (
         <div className="mx-auto max-w-xl space-y-3">

@@ -18,6 +18,7 @@ import { StudyGuidesPageRow } from '@/components/wiki/StudyGuidesPageRow'
 import { useExamProgress } from '@/contexts/examProgress'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
+import { StickyGroupHeading, TrackHeading } from '@/components/TrackHeading'
 import { computeExamReadiness, type ExamReadinessAssessment } from '@/lib/readiness'
 import { examStatus, type ExamStatus } from '@/lib/examStatus'
 import { useWikiPageHead } from '@/hooks/useWikiPageHead'
@@ -33,9 +34,6 @@ function examNameToTrackKey(name: string): string {
 }
 
 const TRACK_ORDER = ['ACAS', 'FCAS', 'ASA', 'FSA', 'ACIA', 'FCIA']
-
-// WikiFloatingSearch height: h-[calc(3.5rem-1px)] + 1px border = 56px (sticky top-0 on mobile)
-const SEARCH_BAR_H = 56
 
 
 function formatTargetDate(dateStr: string): string {
@@ -64,21 +62,6 @@ interface ExamCardModel {
   readiness: ExamReadinessAssessment | null
   /** An exam in progress with something to be ready for. */
   showReadiness: boolean
-}
-
-/**
- * A group's heading bar — sticky, just below the search bar, so the group
- * being scrolled through stays named.
- */
-function GroupHeading({ children }: { children: ReactNode }) {
-  return (
-    <div
-      className="sticky z-10 -mx-4 sm:-mx-6 px-4 sm:px-6 py-1.5 mb-3 bg-background/95 backdrop-blur-sm"
-      style={{ top: `${SEARCH_BAR_H}px` }}
-    >
-      {children}
-    </div>
-  )
 }
 
 function ChunkHeading({ children }: { children: ReactNode }) {
@@ -379,11 +362,11 @@ export default function WikiHome() {
                 ladder below, which keeps showing it in its place too. */}
             {inProgressModels.length > 0 && (
               <div>
-                <GroupHeading>
+                <StickyGroupHeading>
                   <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                     In progress
                   </p>
-                </GroupHeading>
+                </StickyGroupHeading>
                 <ListPanel columns={2}>
                   {inProgressModels.map(model => (
                     <ExamGuideRow key={model.exam.path} model={model} />
@@ -394,32 +377,7 @@ export default function WikiHome() {
 
             {filteredTrackGroups.filter(g => g.exams.length > 0).map(({ track, exams: trackExams, chunks }) => (
               <div key={track.key}>
-                <GroupHeading>
-                  {/* The designation as a heading of its own — the short
-                      label as the title, a step below the page's own, with
-                      the long form beneath it. It is a button: the
-                      designation is a page of its own (what it is, what it
-                      takes, what it lets an actuary sign), so the heading is
-                      the way into it. */}
-                  {track.conceptPage ? (
-                    <button
-                      type="button"
-                      onClick={() => openAt([{ kind: 'concept', name: track.conceptPage! }], 0, '/wiki')}
-                      className="group block min-w-0 max-w-full text-left appearance-none bg-transparent p-0"
-                    >
-                      <h2 className="text-xl font-bold tracking-tight underline-offset-4 group-hover:underline">
-                        {track.label}
-                      </h2>
-                      {track.fullName && (
-                        <p className="text-sm text-muted-foreground transition-colors group-hover:text-foreground">
-                          {track.fullName}
-                        </p>
-                      )}
-                    </button>
-                  ) : (
-                    <h2 className="text-xl font-bold tracking-tight">{track.name}</h2>
-                  )}
-                </GroupHeading>
+                <TrackHeading track={track} sourcePath="/wiki" />
 
                 {/* One grouped list per credential, a row per exam, two
                     columns from `sm` up. A credential with elective tracks

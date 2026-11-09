@@ -8,7 +8,7 @@
 export { TOOLS, AREAS, ENGINE_VERSION, toolById, toolBySlug, toolSearchText, toolSlug } from './registry'
 export { MAX_BATCH_RUNS, runBatch, runTool, type BatchResult, type BatchRunResult } from './run'
 export { describeTool, inputSchema, sourceLine, toolSummary } from './schema'
-export { CHECKS, checksFor, checkedValueCount, runQuestionCheck, verifyCheck, type SourceRef } from './checks'
+export { CHECKS, FILED_CHECKS, checksFor, checkedValueCount, runQuestionCheck, verifyCheck, type SourceRef } from './checks'
 export { QUESTION_CHECKS, type QuestionCheck } from './questionChecks'
 export { defaultInput, evaluateArithmetic, normalizeInput, readNumber, readerMessage } from './input'
 export { formatValue } from './format'
@@ -30,3 +30,24 @@ export {
   type AssumptionSource,
   type BankFigure,
 } from './bank'
+export {
+  FILINGS_DATASET,
+  MCT_LINES,
+  filedCell,
+  filedPlace,
+  filedRef,
+  filedRefOf,
+  filedValue,
+  filersIn,
+  filingLine,
+  filingPeriods,
+  filingsDataset,
+  filingsInstalled,
+  installFilings,
+  institutionName,
+  isBranch,
+  periodLabel,
+  type FiledCell,
+  type FiledSource,
+  type FilingsFile,
+} from './filings'

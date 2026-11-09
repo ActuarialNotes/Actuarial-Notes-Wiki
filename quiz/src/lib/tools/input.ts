@@ -6,6 +6,7 @@
 
 import { isoDate, parseDate } from './dates'
 import { assumptionRef, bankFigure, bankFigures, unitFits, type BankFigure } from './bank'
+import { filedCell, filedRef, filingLine, isRatioLine, type FiledCell } from './filings'
 import {
   ToolInputError,
   type ChoiceField,
@@ -29,6 +30,8 @@ export interface NormalizedInput {
   notes: string[]
   /** Fields given as a reference to an Assumptions Bank figure, with the figure read in. */
   sources: Record<string, BankFigure>
+  /** Fields given as a reference to a filed cell, with the cell read in. */
+  filed: Record<string, FiledCell>
 }
 
 /**
@@ -49,6 +52,28 @@ function bankField(f: NumberField, id: string): { value: number; figure: BankFig
     throw new ToolInputError(f.key, `"${f.key}" is a ${f.unit}; "${figure.label}" is in ${figure.unit}.`)
   }
   return { value: numberField(f, figure.value), figure }
+}
+
+/**
+ * A number field given as `{ "filed": "osfi-pc:<quarter>:<id>:<address>" }`:
+ * the filed value, checked against the lines the field takes.
+ */
+function filedField(f: NumberField, ref: string): FiledCell {
+  let cell: FiledCell
+  try {
+    cell = filedCell(ref)
+  } catch (err) {
+    throw new ToolInputError(f.key, `"${f.key}": ${(err as Error).message}`)
+  }
+  if (!f.filed?.includes(cell.source.address)) {
+    const takes = f.filed?.length
+      ? `takes ${f.filed.map(a => `line ${filingLine(a)?.line ?? a} (${a})`).join(' or ')}`
+      : 'takes no filed value'
+    throw new ToolInputError(f.key, `"${f.key}" ${takes}; ${cell.source.address} is line ${cell.source.line}, "${cell.source.label}".`)
+  }
+  // A ratio is filed in %; a percent field holds a decimal.
+  const value = isRatioLine(cell.source.address) && f.unit === 'percent' ? cell.value / 100 : cell.value
+  return { value: numberField(f, value), source: cell.source }
 }
 
 const isObject = (v: unknown): v is Record<string, unknown> => v !== null && typeof v === 'object' && !Array.isArray(v)
@@ -253,9 +278,15 @@ export function normalizeInput(spec: ToolSpec, raw: unknown): NormalizedInput {
   const defaulted: string[] = []
   const notes: string[] = []
   const sources: Record<string, BankFigure> = {}
+  const filed: Record<string, FiledCell> = {}
   for (const field of spec.fields) {
     const ref = field.kind === 'number' ? assumptionRef(given[field.key]) : null
-    if (ref && field.kind === 'number') {
+    const cellRef = field.kind === 'number' ? filedRef(given[field.key]) : null
+    if (cellRef && field.kind === 'number') {
+      const cell = filedField(field, cellRef)
+      input[field.key] = cell.value
+      filed[field.key] = cell
+    } else if (ref && field.kind === 'number') {
       const { value, figure } = bankField(field, ref)
       input[field.key] = value
       sources[field.key] = figure
@@ -270,7 +301,7 @@ export function normalizeInput(spec: ToolSpec, raw: unknown): NormalizedInput {
   for (const key of Object.keys(given)) {
     if (!known.has(key)) notes.push(`Ignored "${key}": ${spec.id} takes ${[...known].join(', ')}.`)
   }
-  return { input, defaulted, notes, sources }
+  return { input, defaulted, notes, sources, filed }
 }
 
 /**

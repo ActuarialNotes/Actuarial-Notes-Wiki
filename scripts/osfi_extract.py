@@ -14,6 +14,7 @@ the labels OSFI ships with each cell, and hashed. See docs/osfi-pc-data.md.
     python3 scripts/osfi_extract.py extract --period 2026Q2 --returns PC1,PC4
     python3 scripts/osfi_extract.py extract --dataset life --period 2026Q2
     python3 scripts/osfi_extract.py extract --period 2026Q2 --offline   # from the cache only
+    python3 scripts/osfi_extract.py export-summary --to 2026Q2         # PC4 page 10.00 for the tools
 
 What the API is like (found 2026-11-08, and the reason for the code below):
 filters are exact-match and the only way in (full-text search is refused over
@@ -553,6 +554,151 @@ def cmd_extract(api: Api, dataset: str, period: str, returns: list[str], out_roo
     return 0
 
 
+# ── The MCT summary page, for the tools ───────────────────────────────────────
+
+# PC4 page 10.00 is the MCT (and, for a branch, the BAAT) line by line: capital
+# available, each risk's margin at target, the diversification credit, the
+# total, the minimum and the ratio. The Actuarial Tools read it — Insurer Return
+# shows it, MCT Ratio recomputes it (docs/osfi-tools-design.md) — so this writes
+# every quarter's page 10.00 into one compact file the app fetches and the
+# connector loads. Values only, as filed; labels only OSFI's.
+SUMMARY_PAGE = "P1000"
+SUMMARY_OUT = ROOT / "quiz" / "src" / "lib" / "tools" / "data" / "filings" / "osfi-pc4-summary.json"
+VAULT_PAGE = "Resources/Data/OSFI/Property and Casualty.md"
+
+
+def address_parts(address: str) -> tuple[str, str, str]:
+    """``P100014001`` → page ``10.00``, line ``140``, column ``01`` (P + page + line + column)."""
+    m = re.match(r"^P(\d{2})(\d{2})(\d{3})(\d{2})$", address)
+    if not m:
+        raise ValueError(f"address {address!r} isn't P + page + line + column")
+    return f"{int(m.group(1))}.{m.group(2)}", str(int(m.group(3))), m.group(4)
+
+
+def number(v: float) -> int | float:
+    """A whole value as an int, so the file prints ``5076308`` rather than ``5076308.0``."""
+    return int(v) if float(v).is_integer() else v
+
+
+def summary_hash(period: str, values: dict[str, list]) -> str:
+    """sha256 over one period's slice, one ``institution⇥address⇥value`` line each, sorted."""
+    h = hashlib.sha256()
+    for inst in sorted(values):
+        for k, v in enumerate(values[inst]["_cells"]):
+            if v is not None:
+                h.update(f"{period}\t{inst}\t{k}\t{json.dumps(v)}\n".encode())
+    return "sha256:" + h.hexdigest()
+
+
+def build_summary(per_period: dict[str, tuple[dict, dict, dict, dict]]) -> dict:
+    """{period: (institutions, PC4 labels, PC4 values, PC4 source)} → the summary file."""
+    periods = sorted(per_period)
+    lines: dict[str, dict] = {}
+    for p in periods:
+        _, labels, _, _ = per_period[p]
+        for address, label in labels.items():
+            if not address.startswith(SUMMARY_PAGE):
+                continue
+            if address in lines and lines[address] != label:
+                raise RuntimeError(f"{address} is labelled {label!r} in {p} but {lines[address]!r} before; "
+                                   "the summary file keeps one label per line")
+            lines[address] = label
+    addresses = sorted(lines)
+    institutions: dict[str, dict] = {}
+    out_periods = []
+    for p in periods:
+        insts, _, values, source = per_period[p]
+        rows = {}
+        for inst, cells in values.items():
+            if insts[inst]["aggregate"]:
+                continue
+            row = [number(cells[a]) if a in cells else None for a in addresses]
+            if all(v is None for v in row):
+                continue
+            rows[inst] = {"_cells": row}
+            i = insts[inst]
+            institutions[inst] = {"en": i["name"]["en"], "fr": i["name"]["fr"],
+                                  "group": i["group"]["en"], "group_fr": i["group"]["fr"]}
+        out_periods.append({
+            "period": p,
+            "resource_last_modified": source["resource_last_modified"],
+            "read_at": source["read_at"],
+            "pc4_sha256": source["content_sha256"],
+            "sha256": summary_hash(p, rows),
+            "values": {inst: rows[inst]["_cells"] for inst in sorted(rows)},
+        })
+    return {
+        "id": "osfi-pc4-summary",
+        "title": "Property and casualty companies",
+        "publisher": "Office of the Superintendent of Financial Institutions (OSFI)",
+        "return": "PC4",
+        "return_title": "PC4 - P&C Minimum Capital Test and Branch Adequacy of Assets Test",
+        "page": "10.00",
+        "portal": f"https://open.canada.ca/data/en/dataset/{DATASETS['pc']['package']}",
+        "vault_page": VAULT_PAGE,
+        "units": "$ thousands (ratios in %), as filed",
+        "licence": LICENCE,
+        "note": "Only non-zero cells are published, so a blank is a zero. OSFI's industry total rows are left out.",
+        "lines": [{"address": a, "page": address_parts(a)[0], "line": address_parts(a)[1],
+                   "column": address_parts(a)[2], "en": lines[a]["en"], "fr": lines[a]["fr"]} for a in addresses],
+        "institutions": {k: institutions[k] for k in sorted(institutions)},
+        "periods": out_periods,
+    }
+
+
+def write_summary(path: Path, summary: dict) -> None:
+    """Compact, but one period and one institution per line, so a new quarter is a readable diff."""
+    head = {k: v for k, v in summary.items() if k not in ("institutions", "periods")}
+    parts = [json.dumps(head, ensure_ascii=False, separators=(",", ":"))[:-1]]
+    parts.append(',"institutions":{\n' + ",\n".join(
+        f"{json.dumps(k)}:{json.dumps(v, ensure_ascii=False, separators=(',', ':'))}"
+        for k, v in summary["institutions"].items()) + "\n}")
+    periods = []
+    for p in summary["periods"]:
+        meta = {k: v for k, v in p.items() if k != "values"}
+        rows = ",\n".join(f"{json.dumps(i)}:{json.dumps(r, separators=(',', ':'))}" for i, r in p["values"].items())
+        periods.append(json.dumps(meta, separators=(",", ":"))[:-1] + ',"values":{\n' + rows + "\n}}")
+    parts.append(',"periods":[\n' + ",\n".join(periods) + "\n]}\n")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("".join(parts))
+
+
+def cmd_export_summary(api: Api, start: str, end: str, out: Path) -> int:
+    resources, _ = api.resources(DATASETS["pc"]["package"]) if not api.offline else ({}, None)
+    per_period = {}
+    for period in quarters(start, end):
+        cache_dir = api.cache / "pc" / "PC4" / period
+        resource = resources.get("PC4", {}).get("id")
+        if resource is None:
+            first = cache_dir / "page-000000.json"
+            if not first.exists():
+                print(f"{period}: not cached, and offline", file=sys.stderr)
+                return 1
+            resource = "offline"
+        pages = api.all_pages(resource, {"Fiscal Quarter": api_period(period)}, cache_dir)
+        rows = read_rows(pages, period, "PC4")
+        if not rows:
+            print(f"{period}: no PC4 rows", file=sys.stderr)
+            return 1
+        institutions, dictionary, values, findings, tallies = build({"PC4": rows})
+        mismatches = [f for f in findings if f["kind"] == "mismatch"]
+        manifest = OUT / "pc" / period / "manifest.json"
+        recorded = json.loads(manifest.read_text())["returns"].get("PC4", {}) if manifest.exists() else {}
+        source = {
+            "resource_last_modified": resources.get("PC4", {}).get("last_modified") or recorded.get("resource_last_modified"),
+            "read_at": min(p["read_at"] for p in pages),
+            "content_sha256": content_hash(rows),
+        }
+        per_period[period] = (institutions, dictionary["PC4"], values["PC4"], source)
+        print(f"{period}: {tallies['mct_ratio']['filed']} ratios, {len(mismatches)} mismatches")
+    summary = build_summary(per_period)
+    write_summary(out, summary)
+    print(f"wrote {out.relative_to(ROOT) if out.is_relative_to(ROOT) else out}: "
+          f"{len(summary['periods'])} quarters, {len(summary['institutions'])} institutions, "
+          f"{len(summary['lines'])} lines")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--cache", type=Path, default=Path.home() / ".cache" / "actuarial-notes" / "osfi")
@@ -568,10 +714,16 @@ def main(argv: list[str] | None = None) -> int:
     e.add_argument("--period", required=True, help="YYYYQn, e.g. 2026Q2")
     e.add_argument("--returns", help="comma-separated, default every current return")
     e.add_argument("--out", type=Path, default=OUT)
+    x = sub.add_parser("export-summary", help="PC4 page 10.00, every quarter → the tools' summary file")
+    x.add_argument("--from", dest="start", default="2023Q1")
+    x.add_argument("--to", dest="end", required=True, help="the last complete quarter, e.g. 2026Q2")
+    x.add_argument("--out", type=Path, default=SUMMARY_OUT)
     args = ap.parse_args(argv)
     api = Api(args.cache, offline=args.offline, refresh=args.refresh)
     if args.cmd == "periods":
         return cmd_periods(api, args.dataset, args.start, args.end)
+    if args.cmd == "export-summary":
+        return cmd_export_summary(api, args.start, args.end, args.out)
     returns = args.returns.split(",") if args.returns else DATASETS[args.dataset]["returns"]
     return cmd_extract(api, args.dataset, args.period, returns, args.out)
 

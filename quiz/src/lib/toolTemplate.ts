@@ -12,6 +12,8 @@ import { TOOLS, runTool, toolById, type ChoiceField, type DateField, type Number
  * changes which inputs exist, and a triangle with its selection exhibit.
  */
 export const TEMPLATE_TOOLS: ReadonlySet<string> = new Set([
+  'data.insurer_return',
+  'capital.mct_ratio',
   'reserving.bornhuetter_ferguson',
   'ratemaking.permissible_loss_ratio',
   'finance.bond_price',
@@ -75,6 +77,8 @@ export type ValueSource =
   | { kind: 'yours' }
   | { kind: 'published'; label: string; checked: boolean; figure?: string }
   | { kind: 'linked'; label: string; tool?: string }
+  /** A value as filed with OSFI: where it was filed, and OSFI's label for the line. */
+  | { kind: 'filed'; label: string; title: string }
 
 /**
  * A value taken from another tool, remembered with the value it brought: the
@@ -100,6 +104,7 @@ export function scalarSource({
   origin,
   value,
   linkedBy,
+  filed,
 }: {
   /** The draft holds a value of its own for the field. */
   touched: boolean
@@ -109,8 +114,11 @@ export function scalarSource({
   value: unknown
   /** Filled by a workflow's link. */
   linkedBy?: string | null
+  /** The filed cell it is, when it is one. */
+  filed?: { label: string; title: string } | null
 }): ValueSource {
   if (published) return { kind: 'published', ...published }
+  if (filed) return { kind: 'filed', ...filed }
   if (linkedBy) return { kind: 'linked', label: linkedBy }
   if (originHolds(origin, value)) return origin.tool ? { kind: 'linked', label: origin.label, tool: origin.tool } : { kind: 'linked', label: origin.label }
   return touched ? { kind: 'yours' } : { kind: 'default' }

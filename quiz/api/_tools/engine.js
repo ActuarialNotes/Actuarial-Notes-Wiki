@@ -134,8 +134,8 @@ function formatValue(value, unit) {
       return trim(value, 4);
   }
 }
-function trim(value, places) {
-  const fixed = value.toFixed(places);
+function trim(value, places2) {
+  const fixed = value.toFixed(places2);
   return fixed.includes(".") ? fixed.replace(/\.?0+$/, "") : fixed;
 }
 
@@ -239,9 +239,9 @@ var presentValue = {
         throw new ToolInputError("flows", `The spot rate at t = ${r.time} must be a decimal: write ${Number(r.spot) / 100} or "${r.spot}%".`);
       }
       const t = Number(r.time);
-      const amount = Number(r.amount);
+      const amount2 = Number(r.amount);
       const discount = r.spot == null ? v ** t : (1 + Number(r.spot)) ** -t;
-      return Object.assign({}, r, { discount, pv: amount * discount });
+      return Object.assign({}, r, { discount, pv: amount2 * discount });
     });
     const pv = rows.reduce((s, r) => s + r.pv, 0);
     const total = rows.reduce((s, r) => s + Number(r.amount), 0);
@@ -3808,6 +3808,138 @@ var statcan_cpi_default = { id: "statcan-cpi", kind: "index_series", title: "Con
 // src/lib/tools/data/datasets/us-treasury-par-yields.json
 var us_treasury_par_yields_default = { id: "us-treasury-par-yields", kind: "yield_curve", title: "Daily Treasury Par Yield Curve Rates, month-end", publisher: "U.S. Department of the Treasury", edition: "2026-10-09", report: "https://home.treasury.gov/policy-issues/financing-the-government/interest-rate-statistics", licence: { name: "Public domain (a work of the US federal government)", url: "https://www.usa.gov/government-copyright" }, page: "Resources/Data/Daily Treasury Par Yield Curve Rates.md", basis: "Par yields on a bond-equivalent basis: nominal annual rates convertible semiannually, read off the most recently auctioned securities.", sources: [{ url: "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2000/all?type=daily_treasury_yield_curve&field_tdr_date_value=2000&page&_format=csv", sha256: "a8cde4c7a757ac74f7b6257d3778db73a215483002317e19ee9e3f3c524a8a24", read: "2026-10-10", title: "Daily Treasury Par Yield Curve Rates, 2000" }, { url: "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2001/all?type=daily_treasury_yield_curve&field_tdr_date_value=2001&page&_format=csv", sha256: "bc48181de2b452d19b159bc12354653f64ce3b119d7072dbf4aa92fa6998799c", read: "2026-10-10", title: "Daily Treasury Par Yield Curve Rates, 2001" }, { url: "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2002/all?type=daily_treasury_yield_curve&field_tdr_date_value=2002&page&_format=csv", sha256: "33f84b7c6f50bf3ea0ca4703cb51c8d469bbb93dad92f181d42132b7e2359bf7", read: "2026-10-10", title: "Daily Treasury Par Yield Curve Rates, 2002" }, { url: "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2003/all?type=daily_treasury_yield_curve&field_tdr_date_value=2003&page&_format=csv", sha256: "0c255188cf596e5bc42a4e00b9a60649df01fb95a58a3382d7586da83e5cc0e0", read: "2026-10-10", title: "Daily Treasury Par Yield Curve Rates, 2003" }, { url: "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2004/all?type=daily_treasury_yield_curve&field_tdr_date_value=2004&page&_format=csv", sha256: "0f0561773c7a3220fe1eded9a7ba0645790e9239fd3cf569158171fedf2dc969", read: "2026-10-10", title: "Daily Treasury Par Yield Curve Rates, 2004" }, { url: "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2005/all?type=daily_treasury_yield_curve&field_tdr_date_value=2005&page&_format=csv", sha256: "ecf2ab3d1ca1b6ee8e916fee90474028c2d1221b8d236131621ad58020db0552", read: "2026-10-10", title: "Daily Treasury Par Yield Curve Rates, 2005" }, { url: "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2006/all?type=daily_treasury_yield_curve&field_tdr_date_value=2006&page&_format=csv", sha256: "cdbdcd8b32735caa453e00280232ff70c7012c055b7daf7b8cf1d9aaa8c66bfe", read: "2026-10-10", title: "Daily Treasury Par Yield Curve Rates, 2006" }, { url: "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2007/all?type=daily_treasury_yield_curve&field_tdr_date_value=2007&page&_format=csv", sha256: "297f6be4059a605b1ec0f266eb7b8467c3d40504a0dd53341746223276e6e6d8", read: "2026-10-10", title: "Daily Treasury Par Yield Curve Rates, 2007" }, { url: "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2008/all?type=daily_treasury_yield_curve&field_tdr_date_value=2008&page&_format=csv", sha256: "686db01584dd45f67addc243ee0c42339d491171a0e947c8f88ecac78ee0e9ea", read: "2026-10-10", title: "Daily Treasury Par Yield Curve Rates, 2008" }, { url: "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2009/all?type=daily_treasury_yield_curve&field_tdr_date_value=2009&page&_format=csv", sha256: "3c9294cfa71136e1d5330b09a00bf996ecf86c865d593d7ee954d11984a5bdb1", read: "2026-10-10", title: "Daily Treasury Par Yield Curve Rates, 2009" }, { url: "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2010/all?type=daily_treasury_yield_curve&field_tdr_date_value=2010&page&_format=csv", sha256: "f973bd3988989d3e408655cbc7fed89faefbaa8a1c111ec313241fb47fc75e2d", read: "2026-10-10", title: "Daily Treasury Par Yield Curve Rates, 2010" }, { url: "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2011/all?type=daily_treasury_yield_curve&field_tdr_date_value=2011&page&_format=csv", sha256: "224eaf29d6fe7cbccc746c7a8c845f189cf91424bab43f46ca386a74e98d81f7", read: "2026-10-10", title: "Daily Treasury Par Yield Curve Rates, 2011" }, { url: "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2012/all?type=daily_treasury_yield_curve&field_tdr_date_value=2012&page&_format=csv", sha256: "9c889b6e3cb87f40f3760bddb69f05f7525800ac480ef5712b2cf318765fa184", read: "2026-10-10", title: "Daily Treasury Par Yield Curve Rates, 2012" }, { url: "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2013/all?type=daily_treasury_yield_curve&field_tdr_date_value=2013&page&_format=csv", sha256: "1e1a98426d9274afcc68467962f9238104db775b8765e48f45ac7488b33ff338", read: "2026-10-10", title: "Daily Treasury Par Yield Curve Rates, 2013" }, { url: "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2014/all?type=daily_treasury_yield_curve&field_tdr_date_value=2014&page&_format=csv", sha256: "8d560698e03e4c0d8d22ff8be7f5f7c5c0d472b1e33a22b6a75373a57e84aa0f", read: "2026-10-10", title: "Daily Treasury Par Yield Curve Rates, 2014" }, { url: "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2015/all?type=daily_treasury_yield_curve&field_tdr_date_value=2015&page&_format=csv", sha256: "b7665d1ce46d6ed6d08fbda34aae1831de38e274e3c7caed81904042aac9b5bc", read: "2026-10-10", title: "Daily Treasury Par Yield Curve Rates, 2015" }, { url: "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2016/all?type=daily_treasury_yield_curve&field_tdr_date_value=2016&page&_format=csv", sha256: "b4d0a8d86e2734bc64d84d9a9824434d841737621582daeac58f13c7129f325c", read: "2026-10-10", title: "Daily Treasury Par Yield Curve Rates, 2016" }, { url: "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2017/all?type=daily_treasury_yield_curve&field_tdr_date_value=2017&page&_format=csv", sha256: "56074da7c32103a28cf4ba2bdf5eaa12f98fd49852047aef1a6eb16e64bd6e83", read: "2026-10-10", title: "Daily Treasury Par Yield Curve Rates, 2017" }, { url: "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2018/all?type=daily_treasury_yield_curve&field_tdr_date_value=2018&page&_format=csv", sha256: "e8375524a7a8d3e8091bbe7690d0378b9365be09efff5b18b8eefddc25f718d3", read: "2026-10-10", title: "Daily Treasury Par Yield Curve Rates, 2018" }, { url: "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2019/all?type=daily_treasury_yield_curve&field_tdr_date_value=2019&page&_format=csv", sha256: "83fc47c17325e222c45fd3a1eb26c69ae01f62d33b793030b4b8b350ca0a290b", read: "2026-10-10", title: "Daily Treasury Par Yield Curve Rates, 2019" }, { url: "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2020/all?type=daily_treasury_yield_curve&field_tdr_date_value=2020&page&_format=csv", sha256: "edcf1c8be9622f3cd92eb7de1847aefc3977e2118e2ff9af67f46614a5c306a7", read: "2026-10-10", title: "Daily Treasury Par Yield Curve Rates, 2020" }, { url: "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2021/all?type=daily_treasury_yield_curve&field_tdr_date_value=2021&page&_format=csv", sha256: "1be57e49c63a99f6002431a1030c8fbe539b71066c3eaf14f9f58ddc34492cea", read: "2026-10-10", title: "Daily Treasury Par Yield Curve Rates, 2021" }, { url: "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2022/all?type=daily_treasury_yield_curve&field_tdr_date_value=2022&page&_format=csv", sha256: "c33cb2758e5e34c2c23b7ab759d18681091860f3f9e5960112859f64f31cd814", read: "2026-10-10", title: "Daily Treasury Par Yield Curve Rates, 2022" }, { url: "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2023/all?type=daily_treasury_yield_curve&field_tdr_date_value=2023&page&_format=csv", sha256: "edb7f3904e11dcaa502cdcc03ad9b1b16c893802d166ce9bc5fa1118251249d4", read: "2026-10-10", title: "Daily Treasury Par Yield Curve Rates, 2023" }, { url: "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2024/all?type=daily_treasury_yield_curve&field_tdr_date_value=2024&page&_format=csv", sha256: "6775840b76cd7fd41121f61d6f6c60184eca6b2ba49954ec7372c463cbeef34d", read: "2026-10-10", title: "Daily Treasury Par Yield Curve Rates, 2024" }, { url: "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2025/all?type=daily_treasury_yield_curve&field_tdr_date_value=2025&page&_format=csv", sha256: "cf2fa3da7f160384b63d2ead698532b1d76cd9f789ce4911e2304db85b14e6d5", read: "2026-10-10", title: "Daily Treasury Par Yield Curve Rates, 2025" }, { url: "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2026/all?type=daily_treasury_yield_curve&field_tdr_date_value=2026&page&_format=csv", sha256: "0e7164f6f348497a4541b61ce9b3e76fc00902c988540d08332a7d956350c764", read: "2026-10-10", title: "Daily Treasury Par Yield Curve Rates, 2026" }], terms: [0.08333333333333333, 0.16666666666666666, 0.25, 0.5, 1, 2, 3, 5, 7, 10, 20, 30], term_labels: ["1 Mo", "2 Mo", "3 Mo", "6 Mo", "1 Yr", "2 Yr", "3 Yr", "5 Yr", "7 Yr", "10 Yr", "20 Yr", "30 Yr"], curves: [{ date: "2000-01-31", yields: [null, null, 0.0576, 0.0597, 0.063, 0.0661, 0.0665, 0.0671, 0.0675, 0.0668, 0.0672, 0.0649] }, { date: "2000-02-29", yields: [null, null, 0.0578, 0.0602, 0.062, 0.0653, 0.0658, 0.0661, 0.0667, 0.0642, 0.0646, 0.0615] }, { date: "2000-03-31", yields: [null, null, 0.0588, 0.0615, 0.0628, 0.065, 0.0644, 0.0632, 0.0628, 0.0603, 0.062, 0.0584] }, { date: "2000-04-28", yields: [null, null, 0.0582, 0.0612, 0.0624, 0.0668, 0.0664, 0.0656, 0.0649, 0.0623, 0.0631, 0.0597] }, { date: "2000-05-31", yields: [null, null, 0.0563, 0.0635, 0.0637, 0.0669, 0.0666, 0.0654, 0.0652, 0.0629, 0.0642, 0.0602] }, { date: "2000-06-30", yields: [null, null, 0.0588, 0.0623, 0.0608, 0.0638, 0.0631, 0.0618, 0.0625, 0.0603, 0.0626, 0.059] }, { date: "2000-07-31", yields: [null, null, 0.0627, 0.0642, 0.0607, 0.063, 0.0624, 0.0616, 0.0619, 0.0604, 0.0613, 0.0579] }, { date: "2000-08-31", yields: [null, null, 0.0631, 0.0638, 0.0622, 0.0618, 0.0609, 0.0598, 0.0598, 0.0573, 0.0596, 0.0567] }, { date: "2000-09-29", yields: [null, null, 0.0623, 0.0628, 0.0607, 0.0598, 0.0591, 0.0585, 0.0593, 0.058, 0.0613, 0.0588] }, { date: "2000-10-31", yields: [null, null, 0.0638, 0.0636, 0.0612, 0.0594, 0.0587, 0.0583, 0.0587, 0.0577, 0.0602, 0.0579] }, { date: "2000-11-30", yields: [null, null, 0.0621, 0.0618, 0.0592, 0.0561, 0.0552, 0.0542, 0.055, 0.0548, 0.0578, 0.056] }, { date: "2000-12-29", yields: [null, null, 0.0589, 0.057, 0.0532, 0.0511, 0.0506, 0.0499, 0.0516, 0.0512, 0.0559, 0.0546] }, { date: "2001-01-31", yields: [null, null, 0.0499, 0.0483, 0.046, 0.0462, 0.0467, 0.0485, 0.0508, 0.0519, 0.0565, 0.0554] }, { date: "2001-02-28", yields: [null, null, 0.0485, 0.047, 0.0447, 0.0441, 0.0448, 0.047, 0.0493, 0.0492, 0.0551, 0.0534] }, { date: "2001-03-30", yields: [null, null, 0.043, 0.0409, 0.0409, 0.0418, 0.0433, 0.0462, 0.0486, 0.0493, 0.056, 0.0546] }, { date: "2001-04-30", yields: [null, null, 0.0395, 0.0397, 0.0394, 0.043, 0.0455, 0.0497, 0.0522, 0.0535, 0.0592, 0.0578] }, { date: "2001-05-31", yields: [null, null, 0.0363, 0.0359, 0.0363, 0.0422, 0.0449, 0.0494, 0.0527, 0.0543, 0.0595, 0.0578] }, { date: "2001-06-29", yields: [null, null, 0.0365, 0.0363, 0.0372, 0.0425, 0.0452, 0.0497, 0.0528, 0.0542, 0.0591, 0.0575] }, { date: "2001-07-31", yields: [0.0367, null, 0.0354, 0.0347, 0.0353, 0.0379, 0.0406, 0.0457, 0.0486, 0.0507, 0.0561, 0.0551] }, { date: "2001-08-31", yields: [0.034, null, 0.0337, 0.0331, 0.0341, 0.0364, 0.0391, 0.0446, 0.0472, 0.0485, 0.0547, 0.0539] }, { date: "2001-09-28", yields: [0.0228, null, 0.024, 0.0236, 0.0249, 0.0286, 0.0322, 0.0393, 0.0437, 0.046, 0.0545, 0.0542] }, { date: "2001-10-31", yields: [0.0215, null, 0.0205, 0.0195, 0.0207, 0.0244, 0.0287, 0.0366, 0.0403, 0.043, 0.0505, 0.0489] }, { date: "2001-11-30", yields: [0.0187, null, 0.0178, 0.0179, 0.0206, 0.0284, 0.033, 0.0408, 0.0455, 0.0478, 0.0554, 0.0527] }, { date: "2001-12-31", yields: [0.0168, null, 0.0174, 0.0183, 0.0217, 0.0307, 0.0359, 0.0438, 0.0484, 0.0507, 0.0574, 0.0548] }, { date: "2002-01-31", yields: [0.0169, null, 0.0176, 0.0189, 0.0229, 0.0316, 0.037, 0.0442, 0.0482, 0.0507, 0.0568, 0.0544] }, { date: "2002-02-28", yields: [0.0176, null, 0.0179, 0.0187, 0.0225, 0.0306, 0.0364, 0.0427, 0.047, 0.0488, 0.0561, null] }, { date: "2002-03-28", yields: [0.0176, null, 0.0179, 0.0212, 0.027, 0.0372, 0.0431, 0.0491, 0.0529, 0.0542, 0.0603, null] }, { date: "2002-04-30", yields: [0.0177, null, 0.0177, 0.0191, 0.0235, 0.0324, 0.0383, 0.0453, 0.0488, 0.0511, 0.0574, null] }, { date: "2002-05-31", yields: [0.0172, null, 0.0174, 0.0191, 0.0234, 0.0322, 0.0373, 0.0437, 0.0477, 0.0508, 0.0577, null] }, { date: "2002-06-28", yields: [0.0169, null, 0.017, 0.0175, 0.0206, 0.029, 0.0337, 0.0409, 0.0452, 0.0486, 0.0565, null] }, { date: "2002-07-31", yields: [0.0173, null, 0.0171, 0.017, 0.018, 0.0223, 0.0267, 0.0353, 0.0409, 0.0451, 0.0541, null] }, { date: "2002-08-30", yields: [0.017, null, 0.0169, 0.0167, 0.0174, 0.0214, 0.025, 0.0322, 0.0378, 0.0414, 0.0506, null] }, { date: "2002-09-30", yields: [0.016, null, 0.0157, 0.0151, 0.0153, 0.0172, 0.0202, 0.0263, 0.0325, 0.0363, 0.0475, null] }, { date: "2002-10-31", yields: [0.0148, null, 0.0144, 0.0143, 0.0146, 0.0168, 0.0205, 0.0281, 0.0345, 0.0393, 0.0503, null] }, { date: "2002-11-29", yields: [0.0125, null, 0.0122, 0.013, 0.0156, 0.0208, 0.0251, 0.0328, 0.0388, 0.0422, 0.0518, null] }, { date: "2002-12-31", yields: [0.012, null, 0.0122, 0.0123, 0.0132, 0.0161, 0.0199, 0.0278, 0.0336, 0.0383, 0.0483, null] }, { date: "2003-01-31", yields: [0.0117, null, 0.0118, 0.0119, 0.0131, 0.0172, 0.0216, 0.0302, 0.0355, 0.04, 0.0493, null] }, { date: "2003-02-28", yields: [0.0121, null, 0.012, 0.0119, 0.0124, 0.0153, 0.0191, 0.0269, 0.0324, 0.0371, 0.047, null] }, { date: "2003-03-31", yields: [0.0116, null, 0.0114, 0.0113, 0.0119, 0.0151, 0.0193, 0.0278, 0.0335, 0.0383, 0.0484, null] }, { date: "2003-04-30", yields: [0.0113, null, 0.0113, 0.0115, 0.0122, 0.0151, 0.0195, 0.0285, 0.0339, 0.0389, 0.0479, null] }, { date: "2003-05-30", yields: [0.0116, null, 0.0111, 0.0109, 0.0113, 0.0133, 0.0158, 0.023, 0.0287, 0.0337, 0.0436, null] }, { date: "2003-06-30", yields: [81e-4, null, 9e-3, 98e-4, 0.0109, 0.0132, 0.0166, 0.0246, 0.0303, 0.0354, 0.0452, null] }, { date: "2003-07-31", yields: [91e-4, null, 96e-4, 0.0102, 0.0128, 0.018, 0.0233, 0.0338, 0.0398, 0.0449, 0.0543, null] }, { date: "2003-08-29", yields: [98e-4, null, 98e-4, 0.0106, 0.0135, 0.0195, 0.0251, 0.0346, 0.04, 0.0445, 0.0533, null] }, { date: "2003-09-30", yields: [87e-4, null, 95e-4, 0.0101, 0.0115, 0.015, 0.0195, 0.0285, 0.0341, 0.0396, 0.0491, null] }, { date: "2003-10-31", yields: [96e-4, null, 96e-4, 0.0104, 0.0131, 0.0185, 0.0236, 0.0327, 0.038, 0.0433, 0.052, null] }, { date: "2003-11-28", yields: [96e-4, null, 93e-4, 0.0104, 0.0139, 0.0206, 0.0256, 0.0338, 0.0389, 0.0434, 0.052, null] }, { date: "2003-12-31", yields: [9e-3, null, 95e-4, 0.0102, 0.0126, 0.0184, 0.0237, 0.0325, 0.0377, 0.0427, 0.051, null] }, { date: "2004-01-30", yields: [85e-4, null, 92e-4, 0.0101, 0.0128, 0.0184, 0.0235, 0.0317, 0.0368, 0.0416, 0.05, null] }, { date: "2004-02-27", yields: [95e-4, null, 96e-4, 0.0101, 0.0121, 0.0166, 0.0213, 0.0301, 0.0348, 0.0399, 0.0485, null] }, { date: "2004-03-31", yields: [96e-4, null, 95e-4, 0.0101, 0.012, 0.016, 0.0199, 0.028, 0.0333, 0.0386, 0.0477, null] }, { date: "2004-04-30", yields: [83e-4, null, 98e-4, 0.0117, 0.0155, 0.0231, 0.0286, 0.0363, 0.0411, 0.0453, 0.0531, null] }, { date: "2004-05-28", yields: [94e-4, null, 0.0108, 0.0139, 0.0183, 0.0254, 0.031, 0.0381, 0.0426, 0.0466, 0.0539, null] }, { date: "2004-06-30", yields: [0.0117, null, 0.0133, 0.0168, 0.0209, 0.027, 0.0316, 0.0381, 0.0424, 0.0462, 0.0533, null] }, { date: "2004-07-30", yields: [0.0127, null, 0.0145, 0.0177, 0.0213, 0.0268, 0.0309, 0.0371, 0.0413, 0.045, 0.0524, null] }, { date: "2004-08-31", yields: [0.0145, null, 0.0159, 0.0179, 0.0199, 0.0241, 0.0275, 0.0333, 0.0376, 0.0413, 0.0493, null] }, { date: "2004-09-30", yields: [0.0147, null, 0.0171, 0.02, 0.0221, 0.0263, 0.0289, 0.0338, 0.0379, 0.0414, 0.0489, null] }, { date: "2004-10-29", yields: [0.0173, null, 0.0191, 0.0213, 0.0228, 0.0256, 0.0282, 0.033, 0.037, 0.0405, 0.0479, null] }, { date: "2004-11-30", yields: [0.0207, null, 0.0223, 0.0244, 0.0263, 0.0302, 0.0329, 0.0372, 0.0407, 0.0436, 0.0503, null] }, { date: "2004-12-31", yields: [0.0189, null, 0.0222, 0.0259, 0.0275, 0.0308, 0.0325, 0.0363, 0.0394, 0.0424, 0.0485, null] }, { date: "2005-01-31", yields: [0.0206, null, 0.0251, 0.0279, 0.0296, 0.0329, 0.0343, 0.0371, 0.0392, 0.0414, 0.0464, null] }, { date: "2005-02-28", yields: [0.0251, null, 0.0276, 0.0301, 0.032, 0.0359, 0.0375, 0.04, 0.0418, 0.0436, 0.0479, null] }, { date: "2005-03-31", yields: [0.0263, null, 0.0279, 0.0313, 0.0335, 0.038, 0.0396, 0.0418, 0.0433, 0.045, 0.0488, null] }, { date: "2005-04-29", yields: [0.027, null, 0.029, 0.0317, 0.0333, 0.0366, 0.0373, 0.039, 0.0403, 0.0421, 0.0461, null] }, { date: "2005-05-31", yields: [0.028, null, 0.0299, 0.0318, 0.0332, 0.036, 0.0365, 0.0376, 0.0386, 0.04, 0.044, null] }, { date: "2005-06-30", yields: [0.0299, null, 0.0313, 0.0334, 0.0345, 0.0366, 0.0367, 0.0372, 0.038, 0.0394, 0.0428, null] }, { date: "2005-07-29", yields: [0.0325, null, 0.0342, 0.0369, 0.038, 0.0402, 0.0406, 0.0412, 0.0419, 0.0428, 0.0456, null] }, { date: "2005-08-31", yields: [0.0341, null, 0.0352, 0.0374, 0.0377, 0.0384, 0.0383, 0.0387, 0.0393, 0.0402, 0.043, null] }, { date: "2005-09-30", yields: [0.0315, null, 0.0355, 0.0393, 0.0401, 0.0418, 0.0418, 0.0418, 0.0423, 0.0434, 0.0462, null] }, { date: "2005-10-31", yields: [0.0377, null, 0.0398, 0.0426, 0.0431, 0.044, 0.0441, 0.0445, 0.0449, 0.0457, 0.0484, null] }, { date: "2005-11-30", yields: [0.04, null, 0.0395, 0.0431, 0.0434, 0.0442, 0.0441, 0.0442, 0.0445, 0.0449, 0.0481, null] }, { date: "2005-12-30", yields: [0.0401, null, 0.0408, 0.0437, 0.0438, 0.0441, 0.0437, 0.0435, 0.0436, 0.0439, 0.0461, null] }, { date: "2006-01-31", yields: [0.0437, null, 0.0447, 0.0459, 0.0458, 0.0454, 0.0449, 0.0447, 0.0449, 0.0453, 0.0474, null] }, { date: "2006-02-28", yields: [0.0447, null, 0.0462, 0.0474, 0.0473, 0.0469, 0.0467, 0.0461, 0.0457, 0.0455, 0.047, 0.0451] }, { date: "2006-03-31", yields: [0.0465, null, 0.0463, 0.0481, 0.0482, 0.0482, 0.0483, 0.0482, 0.0483, 0.0486, 0.0507, 0.049] }, { date: "2006-04-28", yields: [0.046, null, 0.0477, 0.0491, 0.049, 0.0487, 0.0487, 0.0492, 0.0498, 0.0507, 0.0531, 0.0517] }, { date: "2006-05-31", yields: [0.0475, null, 0.0486, 0.0508, 0.0507, 0.0504, 0.0503, 0.0504, 0.0506, 0.0512, 0.0535, 0.0521] }, { date: "2006-06-30", yields: [0.0454, null, 0.0501, 0.0524, 0.0521, 0.0516, 0.0513, 0.051, 0.0511, 0.0515, 0.0531, 0.0519] }, { date: "2006-07-31", yields: [0.0502, null, 0.051, 0.0518, 0.0511, 0.0497, 0.0493, 0.0491, 0.0493, 0.0499, 0.0517, 0.0507] }, { date: "2006-08-31", yields: [0.0512, null, 0.0505, 0.0511, 0.0501, 0.0479, 0.0471, 0.047, 0.047, 0.0474, 0.0495, 0.0488] }, { date: "2006-09-29", yields: [0.046, null, 0.0489, 0.0502, 0.0491, 0.0471, 0.0462, 0.0459, 0.046, 0.0464, 0.0484, 0.0477] }, { date: "2006-10-31", yields: [0.0518, null, 0.0508, 0.0513, 0.0499, 0.0471, 0.0462, 0.0457, 0.0457, 0.0461, 0.0481, 0.0472] }, { date: "2006-11-30", yields: [0.0522, null, 0.0503, 0.051, 0.0494, 0.0462, 0.0452, 0.0445, 0.0445, 0.0446, 0.0466, 0.0456] }, { date: "2006-12-29", yields: [0.0475, null, 0.0502, 0.0509, 0.05, 0.0482, 0.0474, 0.047, 0.047, 0.0471, 0.0491, 0.0481] }, { date: "2007-01-31", yields: [0.05, null, 0.0512, 0.0516, 0.0509, 0.0494, 0.0485, 0.0482, 0.0482, 0.0483, 0.0502, 0.0493] }, { date: "2007-02-28", yields: [0.0524, null, 0.0516, 0.0512, 0.0496, 0.0465, 0.0455, 0.0452, 0.0453, 0.0456, 0.0478, 0.0468] }, { date: "2007-03-30", yields: [0.0507, null, 0.0504, 0.0506, 0.049, 0.0458, 0.0454, 0.0454, 0.0458, 0.0465, 0.0492, 0.0484] }, { date: "2007-04-30", yields: [0.048, null, 0.0491, 0.0503, 0.0489, 0.046, 0.0454, 0.0451, 0.0455, 0.0463, 0.0488, 0.0481] }, { date: "2007-05-31", yields: [0.0478, null, 0.0473, 0.0496, 0.0495, 0.0492, 0.0488, 0.0486, 0.0487, 0.049, 0.051, 0.0501] }, { date: "2007-06-29", yields: [0.0428, null, 0.0482, 0.0493, 0.0491, 0.0487, 0.0489, 0.0492, 0.0496, 0.0503, 0.0521, 0.0512] }, { date: "2007-07-31", yields: [0.0513, null, 0.0496, 0.0499, 0.0485, 0.0456, 0.0455, 0.046, 0.0467, 0.0478, 0.05, 0.0492] }, { date: "2007-08-31", yields: [0.0402, null, 0.0401, 0.0421, 0.0419, 0.0415, 0.0416, 0.0425, 0.0436, 0.0454, 0.0487, 0.0483] }, { date: "2007-09-28", yields: [0.0343, null, 0.0382, 0.0409, 0.0405, 0.0397, 0.0403, 0.0423, 0.0438, 0.0459, 0.0489, 0.0483] }, { date: "2007-10-31", yields: [0.0401, null, 0.0394, 0.0409, 0.0404, 0.0394, 0.0394, 0.0416, 0.0429, 0.0448, 0.0479, 0.0474] }, { date: "2007-11-30", yields: [0.0363, null, 0.0315, 0.0337, 0.0326, 0.0304, 0.0309, 0.0341, 0.0364, 0.0397, 0.0444, 0.044] }, { date: "2007-12-31", yields: [0.0276, null, 0.0336, 0.0349, 0.0334, 0.0305, 0.0307, 0.0345, 0.037, 0.0404, 0.045, 0.0445] }, { date: "2008-01-31", yields: [0.0164, null, 0.0196, 0.0207, 0.0211, 0.0217, 0.0227, 0.0282, 0.0319, 0.0367, 0.0435, 0.0435] }, { date: "2008-02-29", yields: [0.0207, null, 0.0185, 0.0183, 0.0177, 0.0165, 0.0187, 0.025, 0.0296, 0.0353, 0.0437, 0.0441] }, { date: "2008-03-31", yields: [0.0122, null, 0.0138, 0.0151, 0.0155, 0.0162, 0.0179, 0.0246, 0.0288, 0.0345, 0.043, 0.043] }, { date: "2008-04-30", yields: [0.0117, null, 0.0143, 0.0164, 0.0185, 0.0229, 0.0249, 0.0303, 0.0334, 0.0377, 0.0449, 0.0449] }, { date: "2008-05-30", yields: [0.0198, null, 0.0189, 0.0201, 0.0222, 0.0266, 0.0293, 0.0341, 0.0368, 0.0406, 0.0474, 0.0472] }, { date: "2008-06-30", yields: [0.016, null, 0.019, 0.0217, 0.0236, 0.0263, 0.0291, 0.0334, 0.0361, 0.0399, 0.0459, 0.0453] }, { date: "2008-07-31", yields: [0.0155, null, 0.0168, 0.0189, 0.0227, 0.0252, 0.0281, 0.0325, 0.0356, 0.0399, 0.0463, 0.0459] }, { date: "2008-08-29", yields: [0.0163, null, 0.0172, 0.0197, 0.0217, 0.0236, 0.026, 0.031, 0.0345, 0.0383, 0.0447, 0.0443] }, { date: "2008-09-30", yields: [0.0102, null, 92e-4, 0.016, 0.0178, 0.02, 0.0228, 0.0298, 0.0338, 0.0385, 0.0443, 0.0431] }, { date: "2008-10-31", yields: [12e-4, null, 46e-4, 94e-4, 0.0134, 0.0156, 0.018, 0.028, 0.0329, 0.0401, 0.0474, 0.0435] }, { date: "2008-11-28", yields: [2e-4, null, 1e-4, 44e-4, 9e-3, 0.01, 0.0127, 0.0193, 0.0235, 0.0293, 0.0371, 0.0345] }, { date: "2008-12-31", yields: [11e-4, null, 11e-4, 27e-4, 37e-4, 76e-4, 0.01, 0.0155, 0.0187, 0.0225, 0.0305, 0.0269] }, { date: "2009-01-30", yields: [15e-4, null, 24e-4, 36e-4, 51e-4, 94e-4, 0.0132, 0.0185, 0.0227, 0.0287, 0.0386, 0.0358] }, { date: "2009-02-27", yields: [16e-4, null, 26e-4, 45e-4, 72e-4, 0.01, 0.014, 0.0199, 0.0269, 0.0302, 0.0398, 0.0371] }, { date: "2009-03-31", yields: [17e-4, null, 21e-4, 43e-4, 57e-4, 81e-4, 0.0115, 0.0167, 0.0228, 0.0271, 0.0361, 0.0356] }, { date: "2009-04-30", yields: [4e-4, null, 14e-4, 29e-4, 49e-4, 91e-4, 0.0138, 0.0202, 0.027, 0.0316, 0.041, 0.0405] }, { date: "2009-05-29", yields: [14e-4, null, 14e-4, 3e-3, 47e-4, 92e-4, 0.0142, 0.0234, 0.0306, 0.0347, 0.0434, 0.0434] }, { date: "2009-06-30", yields: [17e-4, null, 19e-4, 35e-4, 56e-4, 0.0111, 0.0164, 0.0254, 0.0319, 0.0353, 0.043, 0.0432] }, { date: "2009-07-31", yields: [14e-4, null, 18e-4, 26e-4, 48e-4, 0.0113, 0.0162, 0.0253, 0.0314, 0.0352, 0.0429, 0.0431] }, { date: "2009-08-31", yields: [11e-4, null, 15e-4, 24e-4, 43e-4, 97e-4, 0.0149, 0.0239, 0.0303, 0.034, 0.0414, 0.0418] }, { date: "2009-09-30", yields: [6e-4, null, 14e-4, 18e-4, 4e-3, 95e-4, 0.0145, 0.0231, 0.0293, 0.0331, 0.0402, 0.0403] }, { date: "2009-10-30", yields: [1e-4, null, 5e-4, 16e-4, 37e-4, 9e-3, 0.0143, 0.0231, 0.0298, 0.0341, 0.0419, 0.0423] }, { date: "2009-11-30", yields: [8e-4, null, 6e-4, 15e-4, 27e-4, 67e-4, 0.0112, 0.0201, 0.0269, 0.0321, 0.0407, 0.042] }, { date: "2009-12-31", yields: [4e-4, null, 6e-4, 2e-3, 47e-4, 0.0114, 0.017, 0.0269, 0.0339, 0.0385, 0.0458, 0.0463] }, { date: "2010-01-29", yields: [2e-4, null, 8e-4, 15e-4, 3e-3, 82e-4, 0.0138, 0.0234, 0.0308, 0.0363, 0.0438, 0.0451] }, { date: "2010-02-26", yields: [9e-4, null, 13e-4, 19e-4, 32e-4, 81e-4, 0.0136, 0.023, 0.0305, 0.0361, 0.044, 0.0455] }, { date: "2010-03-31", yields: [15e-4, null, 16e-4, 24e-4, 41e-4, 0.0102, 0.016, 0.0255, 0.0328, 0.0384, 0.0455, 0.0472] }, { date: "2010-04-30", yields: [14e-4, null, 16e-4, 25e-4, 41e-4, 97e-4, 0.0151, 0.0243, 0.0312, 0.0369, 0.0436, 0.0453] }, { date: "2010-05-28", yields: [15e-4, null, 16e-4, 22e-4, 34e-4, 76e-4, 0.0126, 0.021, 0.0275, 0.0331, 0.0405, 0.0422] }, { date: "2010-06-30", yields: [17e-4, null, 18e-4, 22e-4, 32e-4, 61e-4, 0.01, 0.0179, 0.0242, 0.0297, 0.0374, 0.0391] }, { date: "2010-07-30", yields: [14e-4, null, 15e-4, 2e-3, 29e-4, 55e-4, 84e-4, 0.016, 0.023, 0.0294, 0.0374, 0.0398] }, { date: "2010-08-31", yields: [16e-4, null, 14e-4, 19e-4, 25e-4, 47e-4, 72e-4, 0.0133, 0.0192, 0.0247, 0.0323, 0.0352] }, { date: "2010-09-30", yields: [14e-4, null, 16e-4, 19e-4, 27e-4, 42e-4, 64e-4, 0.0127, 0.0191, 0.0253, 0.0338, 0.0369] }, { date: "2010-10-29", yields: [14e-4, null, 12e-4, 17e-4, 22e-4, 34e-4, 51e-4, 0.0117, 0.0189, 0.0263, 0.0364, 0.0399] }, { date: "2010-11-30", yields: [18e-4, null, 17e-4, 21e-4, 27e-4, 45e-4, 72e-4, 0.0147, 0.0216, 0.0281, 0.038, 0.0412] }, { date: "2010-12-31", yields: [7e-4, null, 12e-4, 19e-4, 29e-4, 61e-4, 0.0102, 0.0201, 0.0271, 0.033, 0.0413, 0.0434] }, { date: "2011-01-31", yields: [15e-4, null, 15e-4, 17e-4, 26e-4, 58e-4, 98e-4, 0.0195, 0.0271, 0.0342, 0.0433, 0.0458] }, { date: "2011-02-28", yields: [13e-4, null, 15e-4, 18e-4, 25e-4, 69e-4, 0.0118, 0.0213, 0.0282, 0.0342, 0.0425, 0.0449] }, { date: "2011-03-31", yields: [5e-4, null, 9e-4, 17e-4, 3e-3, 8e-3, 0.0129, 0.0224, 0.029, 0.0347, 0.0429, 0.0451] }, { date: "2011-04-29", yields: [2e-4, null, 4e-4, 11e-4, 22e-4, 61e-4, 0.0101, 0.0197, 0.0266, 0.0332, 0.0415, 0.044] }, { date: "2011-05-31", yields: [4e-4, null, 6e-4, 12e-4, 18e-4, 45e-4, 79e-4, 0.0168, 0.0237, 0.0305, 0.0391, 0.0422] }, { date: "2011-06-30", yields: [1e-4, null, 3e-4, 1e-3, 19e-4, 45e-4, 81e-4, 0.0176, 0.025, 0.0318, 0.0409, 0.0438] }, { date: "2011-07-29", yields: [16e-4, null, 1e-3, 16e-4, 2e-3, 36e-4, 55e-4, 0.0135, 0.0209, 0.0282, 0.0377, 0.0412] }, { date: "2011-08-31", yields: [1e-4, null, 2e-4, 5e-4, 1e-3, 2e-3, 33e-4, 96e-4, 0.0156, 0.0223, 0.0319, 0.036] }, { date: "2011-09-30", yields: [2e-4, null, 2e-4, 6e-4, 13e-4, 25e-4, 42e-4, 96e-4, 0.0143, 0.0192, 0.0266, 0.029] }, { date: "2011-10-31", yields: [2e-4, null, 1e-4, 6e-4, 12e-4, 25e-4, 41e-4, 99e-4, 0.0158, 0.0217, 0.0289, 0.0316] }, { date: "2011-11-30", yields: [2e-4, null, 1e-4, 6e-4, 12e-4, 25e-4, 41e-4, 96e-4, 0.0153, 0.0208, 0.0277, 0.0306] }, { date: "2011-12-30", yields: [1e-4, null, 2e-4, 6e-4, 12e-4, 25e-4, 36e-4, 83e-4, 0.0135, 0.0189, 0.0257, 0.0289] }, { date: "2012-01-31", yields: [4e-4, null, 6e-4, 8e-4, 13e-4, 22e-4, 3e-3, 71e-4, 0.0124, 0.0183, 0.0259, 0.0294] }, { date: "2012-02-29", yields: [8e-4, null, 8e-4, 13e-4, 18e-4, 3e-3, 43e-4, 87e-4, 0.0139, 0.0198, 0.0273, 0.0308] }, { date: "2012-03-30", yields: [5e-4, null, 7e-4, 15e-4, 19e-4, 33e-4, 51e-4, 0.0104, 0.0161, 0.0223, 0.03, 0.0335] }, { date: "2012-04-30", yields: [7e-4, null, 1e-3, 15e-4, 2e-3, 27e-4, 38e-4, 82e-4, 0.0133, 0.0195, 0.0273, 0.0312] }, { date: "2012-05-31", yields: [3e-4, null, 7e-4, 14e-4, 18e-4, 27e-4, 35e-4, 67e-4, 0.0103, 0.0159, 0.0227, 0.0267] }, { date: "2012-06-29", yields: [4e-4, null, 9e-4, 16e-4, 21e-4, 33e-4, 41e-4, 72e-4, 0.0111, 0.0167, 0.0238, 0.0276] }, { date: "2012-07-31", yields: [7e-4, null, 11e-4, 14e-4, 16e-4, 23e-4, 3e-3, 6e-3, 98e-4, 0.0151, 0.0221, 0.0256] }, { date: "2012-08-31", yields: [9e-4, null, 9e-4, 14e-4, 16e-4, 22e-4, 3e-3, 59e-4, 0.0101, 0.0157, 0.0229, 0.0268] }, { date: "2012-09-28", yields: [6e-4, null, 1e-3, 14e-4, 17e-4, 23e-4, 31e-4, 62e-4, 0.0104, 0.0165, 0.0242, 0.0282] }, { date: "2012-10-31", yields: [9e-4, null, 11e-4, 16e-4, 18e-4, 3e-3, 38e-4, 72e-4, 0.0114, 0.0172, 0.0246, 0.0285] }, { date: "2012-11-30", yields: [11e-4, null, 8e-4, 13e-4, 18e-4, 25e-4, 34e-4, 61e-4, 0.0104, 0.0162, 0.0237, 0.0281] }, { date: "2012-12-31", yields: [2e-4, null, 5e-4, 11e-4, 16e-4, 25e-4, 36e-4, 72e-4, 0.0118, 0.0178, 0.0254, 0.0295] }, { date: "2013-01-31", yields: [4e-4, null, 7e-4, 12e-4, 15e-4, 27e-4, 42e-4, 88e-4, 0.0138, 0.0202, 0.0279, 0.0317] }, { date: "2013-02-28", yields: [7e-4, null, 11e-4, 13e-4, 17e-4, 25e-4, 36e-4, 77e-4, 0.0126, 0.0189, 0.0271, 0.031] }, { date: "2013-03-28", yields: [4e-4, null, 7e-4, 11e-4, 14e-4, 25e-4, 36e-4, 77e-4, 0.0124, 0.0187, 0.0271, 0.031] }, { date: "2013-04-30", yields: [3e-4, null, 5e-4, 9e-4, 11e-4, 22e-4, 32e-4, 68e-4, 0.0111, 0.017, 0.0249, 0.0288] }, { date: "2013-05-31", yields: [3e-4, null, 4e-4, 7e-4, 14e-4, 3e-3, 52e-4, 0.0105, 0.0155, 0.0216, 0.0295, 0.033] }, { date: "2013-06-28", yields: [2e-4, null, 4e-4, 1e-3, 15e-4, 36e-4, 66e-4, 0.0141, 0.0196, 0.0252, 0.0322, 0.0352] }, { date: "2013-07-31", yields: [3e-4, null, 4e-4, 8e-4, 11e-4, 31e-4, 61e-4, 0.0138, 0.02, 0.026, 0.0334, 0.0364] }, { date: "2013-08-30", yields: [2e-4, null, 3e-4, 5e-4, 13e-4, 39e-4, 79e-4, 0.0162, 0.0224, 0.0278, 0.0346, 0.037] }, { date: "2013-09-30", yields: [3e-4, null, 2e-4, 4e-4, 1e-3, 33e-4, 63e-4, 0.0139, 0.0202, 0.0264, 0.0341, 0.0369] }, { date: "2013-10-31", yields: [3e-4, null, 4e-4, 8e-4, 1e-3, 31e-4, 57e-4, 0.0131, 0.0195, 0.0257, 0.0333, 0.0363] }, { date: "2013-11-29", yields: [5e-4, null, 6e-4, 11e-4, 13e-4, 28e-4, 56e-4, 0.0137, 0.021, 0.0275, 0.0354, 0.0382] }, { date: "2013-12-31", yields: [1e-4, null, 7e-4, 1e-3, 13e-4, 38e-4, 78e-4, 0.0175, 0.0245, 0.0304, 0.0372, 0.0396] }, { date: "2014-01-31", yields: [3e-4, null, 2e-4, 6e-4, 1e-3, 34e-4, 69e-4, 0.0149, 0.0213, 0.0267, 0.0335, 0.0361] }, { date: "2014-02-28", yields: [4e-4, null, 5e-4, 8e-4, 12e-4, 33e-4, 69e-4, 0.0151, 0.0213, 0.0266, 0.0331, 0.0359] }, { date: "2014-03-31", yields: [3e-4, null, 5e-4, 7e-4, 13e-4, 44e-4, 9e-3, 0.0173, 0.023, 0.0273, 0.0331, 0.0356] }, { date: "2014-04-30", yields: [2e-4, null, 3e-4, 5e-4, 11e-4, 42e-4, 87e-4, 0.0169, 0.0225, 0.0267, 0.0322, 0.0347] }, { date: "2014-05-30", yields: [5e-4, null, 4e-4, 6e-4, 1e-3, 37e-4, 79e-4, 0.0154, 0.0206, 0.0248, 0.0305, 0.0333] }, { date: "2014-06-30", yields: [2e-4, null, 4e-4, 7e-4, 11e-4, 47e-4, 88e-4, 0.0162, 0.0213, 0.0253, 0.0308, 0.0334] }, { date: "2014-07-31", yields: [1e-4, null, 3e-4, 5e-4, 12e-4, 53e-4, 0.0102, 0.0176, 0.0224, 0.0258, 0.0307, 0.0332] }, { date: "2014-08-29", yields: [2e-4, null, 3e-4, 5e-4, 9e-4, 48e-4, 94e-4, 0.0163, 0.0205, 0.0235, 0.0283, 0.0309] }, { date: "2014-09-30", yields: [2e-4, null, 2e-4, 3e-4, 13e-4, 58e-4, 0.0107, 0.0178, 0.0222, 0.0252, 0.0298, 0.0321] }, { date: "2014-10-31", yields: [1e-4, null, 1e-4, 5e-4, 11e-4, 5e-3, 95e-4, 0.0162, 0.0205, 0.0235, 0.0281, 0.0307] }, { date: "2014-11-28", yields: [4e-4, null, 2e-4, 7e-4, 13e-4, 47e-4, 88e-4, 0.0149, 0.0189, 0.0218, 0.0262, 0.0289] }, { date: "2014-12-31", yields: [3e-4, null, 4e-4, 12e-4, 25e-4, 67e-4, 0.011, 0.0165, 0.0197, 0.0217, 0.0247, 0.0275] }, { date: "2015-01-30", yields: [1e-4, null, 2e-4, 7e-4, 18e-4, 47e-4, 77e-4, 0.0118, 0.0149, 0.0168, 0.0204, 0.0225] }, { date: "2015-02-27", yields: [2e-4, null, 2e-4, 7e-4, 22e-4, 63e-4, 0.0101, 0.015, 0.0182, 0.02, 0.0238, 0.026] }, { date: "2015-03-31", yields: [5e-4, null, 3e-4, 14e-4, 26e-4, 56e-4, 89e-4, 0.0137, 0.0171, 0.0194, 0.0231, 0.0254] }, { date: "2015-04-30", yields: [0, null, 1e-4, 6e-4, 24e-4, 58e-4, 91e-4, 0.0143, 0.0179, 0.0205, 0.0249, 0.0275] }, { date: "2015-05-29", yields: [1e-4, null, 1e-4, 6e-4, 26e-4, 61e-4, 94e-4, 0.0149, 0.0186, 0.0212, 0.0263, 0.0288] }, { date: "2015-06-30", yields: [2e-4, null, 1e-4, 11e-4, 28e-4, 64e-4, 0.0101, 0.0163, 0.0207, 0.0235, 0.0283, 0.0311] }, { date: "2015-07-31", yields: [4e-4, null, 8e-4, 14e-4, 33e-4, 67e-4, 0.01, 0.0154, 0.0193, 0.022, 0.0261, 0.0292] }, { date: "2015-08-31", yields: [0, null, 8e-4, 27e-4, 39e-4, 74e-4, 0.0107, 0.0154, 0.0194, 0.0221, 0.0264, 0.0295] }, { date: "2015-09-30", yields: [0, null, 0, 8e-4, 33e-4, 64e-4, 92e-4, 0.0137, 0.0175, 0.0206, 0.0251, 0.0287] }, { date: "2015-10-30", yields: [1e-4, null, 8e-4, 23e-4, 34e-4, 75e-4, 0.0105, 0.0152, 0.0188, 0.0216, 0.0257, 0.0293] }, { date: "2015-11-30", yields: [11e-4, null, 22e-4, 42e-4, 51e-4, 94e-4, 0.0124, 0.0165, 0.0199, 0.0221, 0.0263, 0.0298] }, { date: "2015-12-31", yields: [14e-4, null, 16e-4, 49e-4, 65e-4, 0.0106, 0.0131, 0.0176, 0.0209, 0.0227, 0.0267, 0.0301] }, { date: "2016-01-29", yields: [22e-4, null, 33e-4, 43e-4, 47e-4, 76e-4, 97e-4, 0.0133, 0.0167, 0.0194, 0.0236, 0.0275] }, { date: "2016-02-29", yields: [23e-4, null, 33e-4, 49e-4, 62e-4, 78e-4, 91e-4, 0.0122, 0.0152, 0.0174, 0.0219, 0.0261] }, { date: "2016-03-31", yields: [18e-4, null, 21e-4, 39e-4, 59e-4, 73e-4, 87e-4, 0.0121, 0.0154, 0.0178, 0.022, 0.0261] }, { date: "2016-04-29", yields: [16e-4, null, 22e-4, 4e-3, 56e-4, 77e-4, 92e-4, 0.0128, 0.016, 0.0183, 0.0226, 0.0266] }, { date: "2016-05-31", yields: [27e-4, null, 34e-4, 49e-4, 68e-4, 87e-4, 0.0103, 0.0137, 0.0166, 0.0184, 0.0223, 0.0264] }, { date: "2016-06-30", yields: [2e-3, null, 26e-4, 36e-4, 45e-4, 58e-4, 71e-4, 0.0101, 0.0129, 0.0149, 0.0186, 0.023] }, { date: "2016-07-29", yields: [19e-4, null, 28e-4, 38e-4, 5e-3, 67e-4, 76e-4, 0.0103, 0.0129, 0.0146, 0.0178, 0.0218] }, { date: "2016-08-31", yields: [26e-4, null, 33e-4, 47e-4, 61e-4, 8e-3, 92e-4, 0.0119, 0.0145, 0.0158, 0.019, 0.0223] }, { date: "2016-09-30", yields: [2e-3, null, 29e-4, 45e-4, 59e-4, 77e-4, 88e-4, 0.0114, 0.0142, 0.016, 0.0199, 0.0232] }, { date: "2016-10-31", yields: [2e-3, null, 34e-4, 51e-4, 66e-4, 86e-4, 0.01, 0.0131, 0.0162, 0.0184, 0.0225, 0.0258] }, { date: "2016-11-30", yields: [38e-4, null, 48e-4, 62e-4, 8e-3, 0.0111, 0.014, 0.0183, 0.0218, 0.0237, 0.0273, 0.0302] }, { date: "2016-12-30", yields: [44e-4, null, 51e-4, 62e-4, 85e-4, 0.012, 0.0147, 0.0193, 0.0225, 0.0245, 0.0279, 0.0306] }, { date: "2017-01-31", yields: [5e-3, null, 52e-4, 64e-4, 84e-4, 0.0119, 0.0146, 0.019, 0.0224, 0.0245, 0.0278, 0.0305] }, { date: "2017-02-28", yields: [4e-3, null, 53e-4, 69e-4, 88e-4, 0.0122, 0.0149, 0.0189, 0.0219, 0.0236, 0.027, 0.0297] }, { date: "2017-03-31", yields: [74e-4, null, 76e-4, 91e-4, 0.0103, 0.0127, 0.015, 0.0193, 0.0222, 0.024, 0.0276, 0.0302] }, { date: "2017-04-28", yields: [68e-4, null, 8e-3, 99e-4, 0.0107, 0.0128, 0.0145, 0.0181, 0.021, 0.0229, 0.0267, 0.0296] }, { date: "2017-05-31", yields: [86e-4, null, 98e-4, 0.0108, 0.0117, 0.0128, 0.0144, 0.0175, 0.0202, 0.0221, 0.026, 0.0287] }, { date: "2017-06-30", yields: [84e-4, null, 0.0103, 0.0114, 0.0124, 0.0138, 0.0155, 0.0189, 0.0214, 0.0231, 0.0261, 0.0284] }, { date: "2017-07-31", yields: [0.01, null, 0.0107, 0.0113, 0.0123, 0.0134, 0.0151, 0.0184, 0.0211, 0.023, 0.0266, 0.0289] }, { date: "2017-08-31", yields: [95e-4, null, 0.0101, 0.0108, 0.0123, 0.0133, 0.0144, 0.017, 0.0195, 0.0212, 0.0247, 0.0273] }, { date: "2017-09-29", yields: [96e-4, null, 0.0106, 0.012, 0.0131, 0.0147, 0.0162, 0.0192, 0.0216, 0.0233, 0.0263, 0.0286] }, { date: "2017-10-31", yields: [99e-4, null, 0.0115, 0.0128, 0.0143, 0.016, 0.0173, 0.0201, 0.0223, 0.0238, 0.0266, 0.0288] }, { date: "2017-11-30", yields: [0.0114, null, 0.0127, 0.0144, 0.0162, 0.0178, 0.019, 0.0214, 0.0231, 0.0242, 0.0265, 0.0283] }, { date: "2017-12-29", yields: [0.0128, null, 0.0139, 0.0153, 0.0176, 0.0189, 0.0198, 0.022, 0.0233, 0.024, 0.0258, 0.0274] }, { date: "2018-01-31", yields: [0.0143, null, 0.0146, 0.0166, 0.019, 0.0214, 0.0229, 0.0252, 0.0266, 0.0272, 0.0283, 0.0295] }, { date: "2018-02-28", yields: [0.015, null, 0.0165, 0.0186, 0.0207, 0.0225, 0.0242, 0.0265, 0.028, 0.0287, 0.0302, 0.0313] }, { date: "2018-03-29", yields: [0.0163, null, 0.0173, 0.0193, 0.0209, 0.0227, 0.0239, 0.0256, 0.0268, 0.0274, 0.0285, 0.0297] }, { date: "2018-04-30", yields: [0.0165, null, 0.0187, 0.0204, 0.0224, 0.0249, 0.0262, 0.0279, 0.0291, 0.0295, 0.0301, 0.0311] }, { date: "2018-05-31", yields: [0.0176, null, 0.0193, 0.0208, 0.0223, 0.024, 0.0254, 0.0268, 0.0278, 0.0283, 0.0291, 0.03] }, { date: "2018-06-29", yields: [0.0177, null, 0.0193, 0.0211, 0.0233, 0.0252, 0.0263, 0.0273, 0.0281, 0.0285, 0.0291, 0.0298] }, { date: "2018-07-31", yields: [0.0194, null, 0.0203, 0.0221, 0.0244, 0.0267, 0.0277, 0.0285, 0.0292, 0.0296, 0.0303, 0.0308] }, { date: "2018-08-31", yields: [0.0195, null, 0.0211, 0.0228, 0.0246, 0.0262, 0.027, 0.0274, 0.0281, 0.0286, 0.0295, 0.0302] }, { date: "2018-09-28", yields: [0.0212, null, 0.0219, 0.0236, 0.0259, 0.0281, 0.0288, 0.0294, 0.0301, 0.0305, 0.0313, 0.0319] }, { date: "2018-10-31", yields: [0.022, 0.0226, 0.0234, 0.0249, 0.0269, 0.0287, 0.0293, 0.0298, 0.0307, 0.0315, 0.033, 0.0339] }, { date: "2018-11-30", yields: [0.0231, 0.0233, 0.0237, 0.0252, 0.027, 0.028, 0.0283, 0.0284, 0.0292, 0.0301, 0.0319, 0.033] }, { date: "2018-12-31", yields: [0.0244, 0.0245, 0.0245, 0.0256, 0.0263, 0.0248, 0.0246, 0.0251, 0.0259, 0.0269, 0.0287, 0.0302] }, { date: "2019-01-31", yields: [0.0242, 0.0243, 0.0241, 0.0246, 0.0255, 0.0245, 0.0243, 0.0243, 0.0251, 0.0263, 0.0283, 0.0299] }, { date: "2019-02-28", yields: [0.0244, 0.0247, 0.0245, 0.025, 0.0254, 0.0252, 0.025, 0.0252, 0.0263, 0.0273, 0.0294, 0.0309] }, { date: "2019-03-29", yields: [0.0243, 0.0244, 0.024, 0.0244, 0.024, 0.0227, 0.0221, 0.0223, 0.0231, 0.0241, 0.0263, 0.0281] }, { date: "2019-04-30", yields: [0.0243, 0.0244, 0.0243, 0.0246, 0.0239, 0.0227, 0.0224, 0.0228, 0.0239, 0.0251, 0.0275, 0.0293] }, { date: "2019-05-31", yields: [0.0235, 0.0238, 0.0235, 0.0235, 0.0221, 0.0195, 0.019, 0.0193, 0.0203, 0.0214, 0.0239, 0.0258] }, { date: "2019-06-28", yields: [0.0218, 0.0215, 0.0212, 0.0209, 0.0192, 0.0175, 0.0171, 0.0176, 0.0187, 0.02, 0.0231, 0.0252] }, { date: "2019-07-31", yields: [0.0201, 0.0207, 0.0208, 0.021, 0.02, 0.0189, 0.0184, 0.0184, 0.0192, 0.0202, 0.0231, 0.0253] }, { date: "2019-08-30", yields: [0.021, 0.0204, 0.0199, 0.0189, 0.0176, 0.015, 0.0142, 0.0139, 0.0145, 0.015, 0.0178, 0.0196] }, { date: "2019-09-30", yields: [0.0191, 0.0187, 0.0188, 0.0183, 0.0175, 0.0163, 0.0156, 0.0155, 0.0162, 0.0168, 0.0194, 0.0212] }, { date: "2019-10-31", yields: [0.0159, 0.0159, 0.0154, 0.0157, 0.0153, 0.0152, 0.0152, 0.0151, 0.016, 0.0169, 0.02, 0.0217] }, { date: "2019-11-29", yields: [0.0162, 0.016, 0.0159, 0.0163, 0.016, 0.0161, 0.0161, 0.0162, 0.0173, 0.0178, 0.0207, 0.0221] }, { date: "2019-12-31", yields: [0.0148, 0.0151, 0.0155, 0.016, 0.0159, 0.0158, 0.0162, 0.0169, 0.0183, 0.0192, 0.0225, 0.0239] }, { date: "2020-01-31", yields: [0.0156, 0.0157, 0.0155, 0.0154, 0.0145, 0.0133, 0.013, 0.0132, 0.0142, 0.0151, 0.0183, 0.0199] }, { date: "2020-02-28", yields: [0.0145, 0.0137, 0.0127, 0.0111, 97e-4, 86e-4, 85e-4, 89e-4, 0.0103, 0.0113, 0.0146, 0.0165] }, { date: "2020-03-31", yields: [5e-4, 12e-4, 11e-4, 15e-4, 17e-4, 23e-4, 29e-4, 37e-4, 55e-4, 7e-3, 0.0115, 0.0135] }, { date: "2020-04-30", yields: [1e-3, 1e-3, 9e-4, 11e-4, 16e-4, 2e-3, 24e-4, 36e-4, 53e-4, 64e-4, 0.0105, 0.0128] }, { date: "2020-05-29", yields: [13e-4, 14e-4, 14e-4, 18e-4, 17e-4, 16e-4, 19e-4, 3e-3, 5e-3, 65e-4, 0.0118, 0.0141] }, { date: "2020-06-30", yields: [13e-4, 14e-4, 16e-4, 18e-4, 16e-4, 16e-4, 18e-4, 29e-4, 49e-4, 66e-4, 0.0118, 0.0141] }, { date: "2020-07-31", yields: [9e-4, 9e-4, 9e-4, 1e-3, 11e-4, 11e-4, 11e-4, 21e-4, 39e-4, 55e-4, 98e-4, 0.012] }, { date: "2020-08-31", yields: [8e-4, 1e-3, 11e-4, 13e-4, 12e-4, 14e-4, 15e-4, 28e-4, 5e-3, 72e-4, 0.0126, 0.0149] }, { date: "2020-09-30", yields: [8e-4, 8e-4, 1e-3, 11e-4, 12e-4, 13e-4, 16e-4, 28e-4, 47e-4, 69e-4, 0.0123, 0.0146] }, { date: "2020-10-30", yields: [8e-4, 9e-4, 9e-4, 11e-4, 13e-4, 14e-4, 19e-4, 38e-4, 64e-4, 88e-4, 0.0143, 0.0165] }, { date: "2020-11-30", yields: [8e-4, 8e-4, 8e-4, 9e-4, 11e-4, 16e-4, 19e-4, 36e-4, 62e-4, 84e-4, 0.0137, 0.0158] }, { date: "2020-12-31", yields: [8e-4, 8e-4, 9e-4, 9e-4, 1e-3, 13e-4, 17e-4, 36e-4, 65e-4, 93e-4, 0.0145, 0.0165] }, { date: "2021-01-29", yields: [7e-4, 7e-4, 6e-4, 7e-4, 1e-3, 11e-4, 19e-4, 45e-4, 79e-4, 0.0111, 0.0168, 0.0187] }, { date: "2021-02-26", yields: [4e-4, 4e-4, 4e-4, 5e-4, 8e-4, 14e-4, 3e-3, 75e-4, 0.0115, 0.0144, 0.0208, 0.0217] }, { date: "2021-03-31", yields: [1e-4, 1e-4, 3e-4, 5e-4, 7e-4, 16e-4, 35e-4, 92e-4, 0.014, 0.0174, 0.0231, 0.0241] }, { date: "2021-04-30", yields: [1e-4, 2e-4, 1e-4, 3e-4, 5e-4, 16e-4, 35e-4, 86e-4, 0.0132, 0.0165, 0.0219, 0.023] }, { date: "2021-05-28", yields: [1e-4, 1e-4, 1e-4, 3e-4, 5e-4, 14e-4, 3e-3, 79e-4, 0.0124, 0.0158, 0.0218, 0.0226] }, { date: "2021-06-30", yields: [5e-4, 5e-4, 5e-4, 6e-4, 7e-4, 25e-4, 46e-4, 87e-4, 0.0121, 0.0145, 0.02, 0.0206] }, { date: "2021-07-30", yields: [5e-4, 5e-4, 6e-4, 5e-4, 7e-4, 19e-4, 35e-4, 69e-4, 0.01, 0.0124, 0.0181, 0.0189] }, { date: "2021-08-31", yields: [3e-4, 5e-4, 4e-4, 6e-4, 7e-4, 2e-3, 4e-3, 77e-4, 0.0108, 0.013, 0.0185, 0.0192] }, { date: "2021-09-30", yields: [7e-4, 5e-4, 4e-4, 5e-4, 9e-4, 28e-4, 53e-4, 98e-4, 0.0132, 0.0152, 0.0202, 0.0208] }, { date: "2021-10-29", yields: [6e-4, 8e-4, 5e-4, 7e-4, 15e-4, 48e-4, 75e-4, 0.0118, 0.0144, 0.0155, 0.0198, 0.0193] }, { date: "2021-11-30", yields: [11e-4, 5e-4, 5e-4, 1e-3, 24e-4, 52e-4, 81e-4, 0.0114, 0.0136, 0.0143, 0.0185, 0.0178] }, { date: "2021-12-31", yields: [6e-4, 5e-4, 6e-4, 19e-4, 39e-4, 73e-4, 97e-4, 0.0126, 0.0144, 0.0152, 0.0194, 0.019] }, { date: "2022-01-31", yields: [3e-4, 13e-4, 22e-4, 49e-4, 78e-4, 0.0118, 0.0139, 0.0162, 0.0175, 0.0179, 0.0217, 0.0211] }, { date: "2022-02-28", yields: [6e-4, 2e-3, 35e-4, 69e-4, 0.0101, 0.0144, 0.0162, 0.0171, 0.0181, 0.0183, 0.0225, 0.0217] }, { date: "2022-03-31", yields: [17e-4, 35e-4, 52e-4, 0.0106, 0.0163, 0.0228, 0.0245, 0.0242, 0.024, 0.0232, 0.0259, 0.0244] }, { date: "2022-04-29", yields: [37e-4, 73e-4, 85e-4, 0.0141, 0.021, 0.027, 0.0287, 0.0292, 0.0294, 0.0289, 0.0314, 0.0296] }, { date: "2022-05-31", yields: [73e-4, 89e-4, 0.0116, 0.0164, 0.0208, 0.0253, 0.0271, 0.0281, 0.0287, 0.0285, 0.0328, 0.0307] }, { date: "2022-06-30", yields: [0.0128, 0.0168, 0.0172, 0.0251, 0.028, 0.0292, 0.0299, 0.0301, 0.0304, 0.0298, 0.0338, 0.0314] }, { date: "2022-07-29", yields: [0.0222, 0.0228, 0.0241, 0.0291, 0.0298, 0.0289, 0.0283, 0.027, 0.027, 0.0267, 0.032, 0.03] }, { date: "2022-08-31", yields: [0.024, 0.0272, 0.0296, 0.0332, 0.035, 0.0345, 0.0346, 0.033, 0.0325, 0.0315, 0.0353, 0.0327] }, { date: "2022-09-30", yields: [0.0279, 0.032, 0.0333, 0.0392, 0.0405, 0.0422, 0.0425, 0.0406, 0.0397, 0.0383, 0.0408, 0.0379] }, { date: "2022-10-31", yields: [0.0373, 0.04, 0.0422, 0.0457, 0.0466, 0.0451, 0.0445, 0.0427, 0.0418, 0.041, 0.0444, 0.0422] }, { date: "2022-11-30", yields: [0.0407, 0.0425, 0.0437, 0.047, 0.0474, 0.0438, 0.0413, 0.0382, 0.0376, 0.0368, 0.04, 0.038] }, { date: "2022-12-30", yields: [0.0412, 0.0441, 0.0442, 0.0476, 0.0473, 0.0441, 0.0422, 0.0399, 0.0396, 0.0388, 0.0414, 0.0397] }, { date: "2023-01-31", yields: [0.0458, 0.0464, 0.047, 0.048, 0.0468, 0.0421, 0.039, 0.0363, 0.0359, 0.0352, 0.0378, 0.0365] }, { date: "2023-02-28", yields: [0.0465, 0.0481, 0.0488, 0.0517, 0.0502, 0.0481, 0.0451, 0.0418, 0.0407, 0.0392, 0.041, 0.0393] }, { date: "2023-03-31", yields: [0.0474, 0.0479, 0.0485, 0.0494, 0.0464, 0.0406, 0.0381, 0.036, 0.0355, 0.0348, 0.0381, 0.0367] }, { date: "2023-04-28", yields: [0.0435, 0.0514, 0.051, 0.0506, 0.048, 0.0404, 0.0375, 0.0351, 0.0349, 0.0344, 0.038, 0.0367] }, { date: "2023-05-31", yields: [0.0528, 0.0537, 0.0552, 0.0546, 0.0518, 0.044, 0.0404, 0.0374, 0.0369, 0.0364, 0.0401, 0.0385] }, { date: "2023-06-30", yields: [0.0524, 0.0539, 0.0543, 0.0547, 0.054, 0.0487, 0.0449, 0.0413, 0.0397, 0.0381, 0.0406, 0.0385] }, { date: "2023-07-31", yields: [0.0548, 0.0554, 0.0555, 0.0553, 0.0537, 0.0488, 0.0451, 0.0418, 0.0408, 0.0397, 0.0422, 0.0402] }, { date: "2023-08-31", yields: [0.0552, 0.0555, 0.0556, 0.0548, 0.0537, 0.0485, 0.0454, 0.0423, 0.0419, 0.0409, 0.0439, 0.042] }, { date: "2023-09-29", yields: [0.0555, 0.056, 0.0555, 0.0553, 0.0546, 0.0503, 0.048, 0.046, 0.0461, 0.0459, 0.0492, 0.0473] }, { date: "2023-10-31", yields: [0.0556, 0.0557, 0.0559, 0.0554, 0.0544, 0.0507, 0.049, 0.0482, 0.0489, 0.0488, 0.0521, 0.0504] }, { date: "2023-11-30", yields: [0.0556, 0.0554, 0.0545, 0.0538, 0.0516, 0.0473, 0.0448, 0.0431, 0.0438, 0.0437, 0.0472, 0.0454] }, { date: "2023-12-29", yields: [0.056, 0.0559, 0.054, 0.0526, 0.0479, 0.0423, 0.0401, 0.0384, 0.0388, 0.0388, 0.042, 0.0403] }, { date: "2024-01-31", yields: [0.0553, 0.0546, 0.0542, 0.0518, 0.0473, 0.0427, 0.0405, 0.0391, 0.0395, 0.0399, 0.0434, 0.0422] }, { date: "2024-02-29", yields: [0.0553, 0.055, 0.0545, 0.053, 0.0501, 0.0464, 0.0443, 0.0426, 0.0428, 0.0425, 0.0451, 0.0438] }, { date: "2024-03-28", yields: [0.0549, 0.0548, 0.0546, 0.0538, 0.0503, 0.0459, 0.044, 0.0421, 0.042, 0.042, 0.0445, 0.0434] }, { date: "2024-04-30", yields: [0.0548, 0.0551, 0.0546, 0.0544, 0.0525, 0.0504, 0.0487, 0.0472, 0.0471, 0.0469, 0.049, 0.0479] }, { date: "2024-05-31", yields: [0.0548, 0.0548, 0.0546, 0.0542, 0.0518, 0.0489, 0.0469, 0.0452, 0.0452, 0.0451, 0.0473, 0.0465] }, { date: "2024-06-28", yields: [0.0547, 0.0547, 0.0548, 0.0533, 0.0509, 0.0471, 0.0452, 0.0433, 0.0433, 0.0436, 0.0461, 0.0451] }, { date: "2024-07-31", yields: [0.0549, 0.0551, 0.0541, 0.0514, 0.0473, 0.0429, 0.041, 0.0397, 0.04, 0.0409, 0.0444, 0.0435] }, { date: "2024-08-30", yields: [0.0541, 0.0532, 0.0521, 0.0489, 0.0438, 0.0391, 0.0379, 0.0371, 0.038, 0.0391, 0.0428, 0.042] }, { date: "2024-09-30", yields: [0.0493, 0.0487, 0.0473, 0.0438, 0.0398, 0.0366, 0.0358, 0.0358, 0.0367, 0.0381, 0.0419, 0.0414] }, { date: "2024-10-31", yields: [0.0476, 0.0476, 0.0464, 0.0443, 0.0427, 0.0416, 0.0412, 0.0415, 0.0421, 0.0428, 0.0458, 0.0447] }, { date: "2024-11-29", yields: [0.0476, 0.0469, 0.0458, 0.0442, 0.043, 0.0413, 0.041, 0.0405, 0.041, 0.0418, 0.0445, 0.0436] }, { date: "2024-12-31", yields: [0.044, 0.0439, 0.0437, 0.0424, 0.0416, 0.0425, 0.0427, 0.0438, 0.0448, 0.0458, 0.0486, 0.0478] }, { date: "2025-01-31", yields: [0.0437, 0.0437, 0.0431, 0.0428, 0.0417, 0.0422, 0.0427, 0.0436, 0.0447, 0.0458, 0.0488, 0.0483] }, { date: "2025-02-28", yields: [0.0438, 0.0438, 0.0432, 0.0425, 0.0408, 0.0399, 0.0399, 0.0403, 0.0414, 0.0424, 0.0455, 0.0451] }, { date: "2025-03-31", yields: [0.0438, 0.0435, 0.0432, 0.0423, 0.0403, 0.0389, 0.0389, 0.0396, 0.0409, 0.0423, 0.0462, 0.0459] }, { date: "2025-04-30", yields: [0.0435, 0.0436, 0.0431, 0.0419, 0.0385, 0.036, 0.0358, 0.0372, 0.0393, 0.0417, 0.0468, 0.0466] }, { date: "2025-05-30", yields: [0.0433, 0.0435, 0.0436, 0.0436, 0.0411, 0.0389, 0.0387, 0.0396, 0.0418, 0.0441, 0.0493, 0.0492] }, { date: "2025-06-30", yields: [0.0428, 0.0445, 0.0441, 0.0429, 0.0396, 0.0372, 0.0368, 0.0379, 0.0398, 0.0424, 0.0479, 0.0478] }, { date: "2025-07-31", yields: [0.0449, 0.0446, 0.0441, 0.0431, 0.041, 0.0394, 0.0389, 0.0396, 0.0414, 0.0437, 0.0489, 0.0489] }, { date: "2025-08-29", yields: [0.0441, 0.043, 0.0423, 0.0401, 0.0383, 0.0359, 0.0358, 0.0368, 0.0392, 0.0423, 0.0486, 0.0492] }, { date: "2025-09-30", yields: [0.042, 0.0415, 0.0402, 0.0383, 0.0368, 0.036, 0.0361, 0.0374, 0.0393, 0.0416, 0.0471, 0.0473] }, { date: "2025-10-31", yields: [0.0406, 0.0404, 0.0389, 0.0379, 0.037, 0.036, 0.036, 0.0371, 0.0389, 0.0411, 0.0465, 0.0467] }, { date: "2025-11-28", yields: [0.0405, 0.0399, 0.0388, 0.0374, 0.0361, 0.0347, 0.0349, 0.0359, 0.0378, 0.0402, 0.0462, 0.0467] }, { date: "2025-12-31", yields: [0.0374, 0.0367, 0.0367, 0.0359, 0.0348, 0.0347, 0.0355, 0.0373, 0.0394, 0.0418, 0.0479, 0.0484] }, { date: "2026-01-30", yields: [0.0372, 0.0375, 0.0367, 0.0361, 0.0348, 0.0352, 0.036, 0.0379, 0.0401, 0.0426, 0.0482, 0.0487] }, { date: "2026-02-27", yields: [0.0374, 0.0373, 0.0367, 0.036, 0.0348, 0.0338, 0.0339, 0.0351, 0.0372, 0.0397, 0.0457, 0.0464] }, { date: "2026-03-31", yields: [0.0374, 0.0372, 0.037, 0.0372, 0.0368, 0.0379, 0.0381, 0.0392, 0.0411, 0.043, 0.0488, 0.0488] }, { date: "2026-04-30", yields: [0.0372, 0.0371, 0.0368, 0.0371, 0.0372, 0.0388, 0.0391, 0.0402, 0.042, 0.044, 0.0497, 0.0498] }, { date: "2026-05-29", yields: [0.0372, 0.0371, 0.0369, 0.0378, 0.0379, 0.0398, 0.0406, 0.0413, 0.0427, 0.0445, 0.0498, 0.0499] }, { date: "2026-06-30", yields: [0.037, 0.0377, 0.0387, 0.0401, 0.0398, 0.0414, 0.0415, 0.0419, 0.043, 0.0444, 0.0493, 0.0491] }, { date: "2026-07-31", yields: [0.0378, 0.0385, 0.0383, 0.0398, 0.0408, 0.0428, 0.0434, 0.0445, 0.0459, 0.0475, 0.0528, 0.0527] }, { date: "2026-08-31", yields: [0.0385, 0.0388, 0.0391, 0.0399, 0.0416, 0.0434, 0.044, 0.0449, 0.0462, 0.0475, 0.0524, 0.0525] }, { date: "2026-09-30", yields: [0.0402, 0.0416, 0.042, 0.0433, 0.0454, 0.0488, 0.05, 0.0509, 0.0519, 0.0529, 0.0568, 0.0564] }, { date: "2026-10-09", yields: [0.0413, 0.0413, 0.0425, 0.0432, 0.0447, 0.048, 0.0489, 0.0502, 0.0513, 0.0524, 0.0565, 0.056] }] };
 
+// src/lib/tools/filings.ts
+var FILINGS_DATASET = "osfi-pc";
+var MCT_LINES = {
+  capital: "P100001001",
+  // 10 Total capital available
+  netAssets: "P100002501",
+  // 25 Total net assets available (a branch)
+  insurance: "P100005001",
+  // 50 Insurance risk margin
+  market: "P100008001",
+  // 80 Market risk margin
+  credit: "P100010001",
+  // 100 Credit risk margin
+  operational: "P100010501",
+  // 105 Operational risk margin
+  diversification: "P100011001",
+  // 110 Less: diversification credit
+  target: "P100011501",
+  // 115 Total capital required at target
+  minimum: "P100013001",
+  // 130 Total minimum capital required
+  ratio: "P100014001"
+  // 140 Ratio (line 10 or line 25 as a % of line 130)
+};
+var isRatioLine = (address) => address === MCT_LINES.ratio;
+var installed = null;
+var lineAt = /* @__PURE__ */ new Map();
+function installFilings(file) {
+  installed = file;
+  lineAt = new Map((file?.lines ?? []).map((l, k) => [l.address, k]));
+}
+function filingsInstalled() {
+  return installed;
+}
+var NOT_LOADED = "OSFI's filings aren't loaded here. Open the tool in the app, or try again in a moment.";
+function periodLabel(period) {
+  const m = /^(\d{4})Q([1-4])$/.exec(period);
+  return m ? `Q${m[2]} ${m[1]}` : period;
+}
+function filingPeriods() {
+  return (installed?.periods ?? []).map((p2) => p2.period).sort().reverse();
+}
+function filingPeriod(period) {
+  return installed?.periods.find((p2) => p2.period === period);
+}
+function filingLine(address) {
+  const k = lineAt.get(address);
+  return k === void 0 ? void 0 : installed.lines[k];
+}
+function institutionName(id) {
+  return installed?.institutions[id]?.en;
+}
+function isBranch(id) {
+  return installed?.institutions[id]?.group.startsWith("Foreign") ?? false;
+}
+function filersIn(period) {
+  const p2 = filingPeriod(period);
+  if (!p2) return [];
+  return Object.keys(p2.values).sort((a, b) => (institutionName(a) ?? a).localeCompare(institutionName(b) ?? b));
+}
+function filedValue(period, institution, address) {
+  const row2 = filingPeriod(period)?.values[institution];
+  const k = lineAt.get(address);
+  if (!row2 || k === void 0) return null;
+  return row2[k] ?? 0;
+}
+var filedRefOf = (period, institution, address) => `${FILINGS_DATASET}:${period}:${institution}:${address}`;
+function filedRef(raw) {
+  if (raw && typeof raw === "object" && !Array.isArray(raw)) {
+    const ref = raw.filed;
+    if (typeof ref === "string" && ref.trim()) return ref.trim();
+  }
+  return null;
+}
+function filedCell(ref) {
+  if (!installed) throw new Error(NOT_LOADED);
+  const m = /^([a-z-]+):(\d{4}Q[1-4]):(\d+):(P\d{9})$/.exec(ref);
+  if (!m || m[1] !== FILINGS_DATASET) {
+    throw new Error(`"${ref}" isn't a filed cell: write it "${FILINGS_DATASET}:<quarter>:<OSFI id>:<address>", e.g. "${filedRefOf("2026Q2", "27906", MCT_LINES.insurance)}".`);
+  }
+  const [, , period, institution, address] = m;
+  const p2 = filingPeriod(period);
+  if (!p2) throw new Error(`OSFI's filings here run ${filingPeriods().at(-1)} to ${filingPeriods()[0]}; ${period} isn't one of them.`);
+  const line2 = filingLine(address);
+  if (!line2) throw new Error(`${address} isn't a line of PC4 page ${installed.page}, the page loaded here.`);
+  const row2 = p2.values[institution];
+  if (!row2) throw new Error(`OSFI has no PC4 filing from institution ${institution} for ${periodLabel(period)}.`);
+  const raw = row2[lineAt.get(address)];
+  return {
+    value: raw ?? 0,
+    source: {
+      filed: ref,
+      dataset: FILINGS_DATASET,
+      publisher: installed.publisher,
+      institution,
+      name: institutionName(institution) ?? institution,
+      period,
+      return: installed.return,
+      page: line2.page,
+      line: line2.line,
+      address,
+      label: line2.en,
+      label_fr: line2.fr,
+      units: isRatioLine(address) ? "%" : "$000",
+      sha256: p2.sha256,
+      blank: raw == null,
+      attribution: installed.licence.attribution
+    }
+  };
+}
+var filedPlace = (s) => `${s.name}, ${periodLabel(s.period)}, ${s.return} page ${s.page} line ${s.line}`;
+function filingsDataset() {
+  if (!installed) return null;
+  const periods = installed.periods.map((p2) => p2.period).sort();
+  return {
+    kind: "filings",
+    id: installed.id,
+    title: `${installed.title}: ${installed.return_title}, page ${installed.page}`,
+    publisher: installed.publisher,
+    edition: `${periodLabel(periods[0])} to ${periodLabel(periods[periods.length - 1])}`,
+    report: installed.portal,
+    licence: { name: installed.licence.name, url: installed.licence.url },
+    page: installed.vault_page,
+    sources: installed.periods.map((p2) => ({
+      url: installed.portal,
+      sha256: p2.pc4_sha256.replace(/^sha256:/, ""),
+      read: p2.read_at.slice(0, 10),
+      title: `${installed.return}, ${periodLabel(p2.period)}`
+    }))
+  };
+}
+
 // src/lib/tools/data/datasets.ts
 var LIFE_TABLES = [nchs_us_life_tables_default, statcan_life_table_default];
 var INDEX_DATASETS = [bls_price_indexes_default, statcan_cpi_default];
@@ -3848,6 +3980,11 @@ function datasetsFor(toolId) {
       return INDEX_DATASETS;
     case "data.yield_curve":
       return YIELD_CURVES;
+    case "data.insurer_return":
+    case "capital.mct_ratio": {
+      const filings = filingsDataset();
+      return filings ? [filings] : [];
+    }
     default:
       return [];
   }
@@ -4142,6 +4279,254 @@ var yieldCurve = {
   ]
 };
 
+// src/lib/tools/data/insurerReturn.ts
+var lineLabel = (address) => {
+  const l = filingLine(address);
+  return l ? `${l.line} \xB7 ${l.en}` : address;
+};
+var insurer = {
+  kind: "choice",
+  key: "insurer",
+  label: "Insurer",
+  description: "The insurer, by OSFI's institution id (or its name as OSFI files it). Every federally regulated P&C insurer that filed PC4 in a quarter on file is an option.",
+  get options() {
+    const file = filingsInstalled();
+    if (!file) return [];
+    return Object.entries(file.institutions).map(([id, i]) => ({ value: id, label: i.en })).sort((a, b) => a.label.localeCompare(b.label));
+  },
+  // A neutral first pick: the first insurer by name in the newest quarter (no ranking — docs/osfi-pc-data.md §2 rule 7).
+  get default() {
+    return filersIn(filingPeriods()[0] ?? "")[0] ?? "";
+  }
+};
+var quarter = {
+  kind: "choice",
+  key: "quarter",
+  label: "Quarter",
+  description: "The quarter filed, as YYYYQn (2026Q2). The IFRS 17 quarters from 2023Q1 are on file.",
+  get options() {
+    return filingPeriods().map((p2) => ({ value: p2, label: periodLabel(p2) }));
+  },
+  get default() {
+    return filingPeriods()[0] ?? "";
+  }
+};
+var line = {
+  kind: "choice",
+  key: "line",
+  label: "Line",
+  description: "The line of PC4 page 10.00, by its address (P100014001 is line 140, the ratio). OSFI's own labels name each.",
+  get options() {
+    return (filingsInstalled()?.lines ?? []).map((l) => ({ value: l.address, label: lineLabel(l.address) }));
+  },
+  default: MCT_LINES.ratio
+};
+var insurerReturn = {
+  id: "data.insurer_return",
+  version: "1.0.0",
+  name: "Insurer Return",
+  area: "data",
+  answers: "What did this insurer file with OSFI?",
+  aka: ["OSFI", "PC4", "regulatory return", "filed MCT", "BAAT", "Minimum Capital Test", "insurer filing", "capital available"],
+  fields: [insurer, quarter, line],
+  notation: () => "OSFI PC4, page 10.00: the line as filed",
+  view: "table",
+  compute: (input) => {
+    const file = filingsInstalled();
+    if (!file) throw new ToolInputError("insurer", NOT_LOADED);
+    const id = String(input.insurer);
+    const period = String(input.quarter);
+    const address = String(input.line);
+    const name = institutionName(id) ?? id;
+    if (filedValue(period, id, MCT_LINES.ratio) === null && filedValue(period, id, MCT_LINES.minimum) === null) {
+      const filed = filingPeriods().filter((p2) => filedValue(p2, id, MCT_LINES.minimum) !== null);
+      throw new ToolInputError("quarter", filed.length ? `${name} filed no PC4 for ${periodLabel(period)}. It filed for ${filed.map(periodLabel).reverse().join(", ")}.` : `${name} filed no PC4 in the quarters on file.`);
+    }
+    const read = (a) => filedValue(period, id, a) ?? 0;
+    const branch = isBranch(id);
+    const test = branch ? "BAAT" : "MCT";
+    const asTile = (a) => isRatioLine(a) ? read(a) / 100 : read(a);
+    const l = filingLine(address);
+    if (!l) throw new ToolInputError("line", `${address} isn't a line of PC4 page ${file.page}.`);
+    const filedRow = file.periods.find((p2) => p2.period === period)?.values[id] ?? [];
+    const blank = filedRow[file.lines.indexOf(l)] == null;
+    const rows = file.lines.filter((x) => filedValue(period, id, x.address) !== 0).map((x) => ({ line: x.line, label: x.en, value: read(x.address), unit: isRatioLine(x.address) ? "%" : "$000" }));
+    const history = filingPeriods().slice().reverse().map((p2) => ({ period: p2, value: filedValue(p2, id, address) })).filter((p2) => p2.value !== null);
+    const tiles = [
+      { symbol: l.line, label: l.en, value: asTile(address), unit: isRatioLine(address) ? "percent" : "money" },
+      ...address !== MCT_LINES.ratio ? [{ symbol: test, label: `${test} ratio`, value: asTile(MCT_LINES.ratio), unit: "percent" }] : []
+    ];
+    const ref = (a) => ({ filed: filedRefOf(period, id, a) });
+    const shown = isRatioLine(address) ? `${read(address)}%` : `$${read(address).toLocaleString("en-US")}k`;
+    return {
+      tiles,
+      table: {
+        columns: [
+          { key: "line", label: "Line", kind: "text" },
+          { key: "label", label: "OSFI's label", kind: "text" },
+          { key: "value", label: "As filed", kind: "number", unit: "plain", computed: true },
+          { key: "unit", label: "Unit", kind: "text" }
+        ],
+        rows
+      },
+      trace: [
+        { label: `Read off: ${file.return_title}, page ${l.page}, line ${l.line} (${address})`, formula: `${name}, ${periodLabel(period)}: "${l.en}"`, result: read(address), unit: "plain" }
+      ],
+      warnings: blank ? [`${name} published nothing on line ${l.line} for ${periodLabel(period)}; OSFI publishes only non-zero cells, so it reads as zero.`] : [],
+      values: {
+        value: read(address),
+        filed: filedRefOf(period, id, address),
+        institution: id,
+        name,
+        period,
+        address,
+        line: l.line,
+        label: l.en,
+        label_fr: l.fr,
+        test,
+        history_periods: history.map((h) => h.period),
+        history: history.map((h) => h.value),
+        handoff: {
+          test: branch ? "baat" : "mct",
+          capital: ref(branch ? MCT_LINES.netAssets : MCT_LINES.capital),
+          insurance: ref(MCT_LINES.insurance),
+          market: ref(MCT_LINES.market),
+          credit: ref(MCT_LINES.credit),
+          operational: ref(MCT_LINES.operational)
+        }
+      },
+      summary: `${name} filed ${shown} on ${file.return} page ${l.page} line ${l.line} ("${l.en}") for ${periodLabel(period)}, as filed with OSFI. ${file.licence.attribution}`
+    };
+  },
+  method: {
+    concepts: ["MCT", "Capital Available"],
+    readings: [{ resource: "OSFI MCT", locator: "Ch. 1" }]
+  },
+  next: [
+    {
+      tool: "capital.mct_ratio",
+      label: "MCT Ratio",
+      build: (_input, output) => output.values.handoff ?? {}
+    }
+  ]
+};
+
+// src/lib/tools/capital/mctRatio.ts
+var MCT_CORRELATION = 0.5;
+var MCT_DIVISOR = 1.5;
+var MCT_MINIMUM = 1;
+var MCT_TARGET = 1.5;
+var places = (v) => {
+  const s = String(v);
+  return s.includes("e") ? 6 : s.includes(".") ? s.split(".")[1].length : 0;
+};
+var half = (v) => v ? 0.5 * 10 ** -places(v) : 0;
+function filedTolerance(input, filedRatio) {
+  const { capital, minimum } = mct(input);
+  const total = 2 * (half(Number(input.insurance)) + half(Number(input.market)) + half(Number(input.credit))) + half(Number(input.operational));
+  const e = half(Number(input.capital)) / minimum + capital * total / MCT_DIVISOR / minimum ** 2;
+  return e + 0.5 * 10 ** -places(filedRatio) / 100 + 5e-5;
+}
+function mct(input) {
+  const capital = Number(input.capital);
+  const I = Number(input.insurance);
+  const M = Number(input.market);
+  const C = Number(input.credit);
+  const O = Number(input.operational);
+  const A = M + C;
+  const diversification = A + I - Math.sqrt(A * A + I * I + 2 * MCT_CORRELATION * A * I);
+  const target = I + M + C + O - diversification;
+  const minimum = target / MCT_DIVISOR;
+  return { capital, I, M, C, O, A, diversification, target, minimum };
+}
+var amount = (key, label, symbol, filed, dflt, description, min = 0) => ({
+  kind: "number",
+  key,
+  label,
+  symbol,
+  unit: "money",
+  min,
+  sliderMin: 0,
+  max: 1e12,
+  sliderMax: Math.max(dflt * 3, 1e3),
+  step: 1,
+  default: dflt,
+  filed,
+  description
+});
+var mctRatio = {
+  id: "capital.mct_ratio",
+  version: "1.0.0",
+  name: "MCT Ratio",
+  area: "capital",
+  answers: "What's the MCT ratio?",
+  aka: ["MCT", "Minimum Capital Test", "BAAT", "Branch Adequacy of Assets Test", "capital ratio", "diversification credit", "OSFI capital"],
+  fields: [
+    {
+      kind: "choice",
+      key: "test",
+      label: "Test",
+      options: [
+        { value: "mct", label: "MCT" },
+        { value: "baat", label: "BAAT" }
+      ],
+      default: "mct",
+      description: "Which test: the MCT for a Canadian insurer, or the BAAT for a foreign company's Canadian branch, which sets net assets available against the same margins."
+    },
+    amount("capital", "Capital available", "CA", [MCT_LINES.capital, MCT_LINES.netAssets], 53e3, "Capital available (MCT line 10), or net assets available for a branch (line 25), in $000. It can be negative: a branch has filed net assets below zero.", -1e12),
+    amount("insurance", "Insurance risk", "I", [MCT_LINES.insurance], 21e3, "The insurance risk margin at target (line 50), in $000."),
+    amount("market", "Market risk", "M", [MCT_LINES.market], 24470, "The market risk margin at target (line 80), in $000."),
+    amount("credit", "Credit risk", "C", [MCT_LINES.credit], 2500, "The credit risk margin at target (line 100), in $000."),
+    amount("operational", "Operational risk", "OR", [MCT_LINES.operational], 11349.95, "The operational risk margin (line 105), in $000.")
+  ],
+  notation: (input) => `${input.test === "baat" ? "BAAT" : "MCT"} = CA / ((I + M + C + OR \u2212 DC) / 1.5),  DC = A + I \u2212 \u221A(A\xB2 + I\xB2 + 2\xB7R\xB7A\xB7I),  A = M + C,  R = 0.5`,
+  view: "none",
+  compute: (input) => {
+    const { capital, I, M, C, O, A, diversification, target, minimum } = mct(input);
+    if (!(minimum > 0)) throw new ToolInputError("insurance", "The margins add up to nothing, so there is no minimum to measure against.");
+    const ratio = capital / minimum;
+    const test = input.test === "baat" ? "BAAT" : "MCT";
+    const warnings = [];
+    if (test === "MCT" && ratio < MCT_MINIMUM) warnings.push("Below the 100% minimum the MCT guideline requires (\xA71.2.1).");
+    else if (test === "MCT" && ratio < MCT_TARGET) warnings.push("Below OSFI's supervisory target of 150% (MCT guideline, \xA71.2.1).");
+    return {
+      tiles: [
+        { symbol: test, label: "Total", value: ratio, unit: "percent" },
+        { symbol: "MCR", label: "Minimum required", value: minimum, unit: "money" },
+        { symbol: "DC", label: "Diversification credit", value: diversification, unit: "money" }
+      ],
+      trace: [
+        { label: "Market and credit risk", formula: `A = ${M} + ${C}`, result: A, unit: "money" },
+        { label: "Diversification credit (\xA78.1)", formula: `${A} + ${I} \u2212 \u221A(${A}\xB2 + ${I}\xB2 + 2 \xD7 ${MCT_CORRELATION} \xD7 ${A} \xD7 ${I})`, result: diversification, unit: "money" },
+        { label: "Total required at target", formula: `${I} + ${M} + ${C} + ${O} \u2212 ${diversification.toFixed(2)}`, result: target, unit: "money" },
+        { label: "Minimum required (\xA71.1.1)", formula: `${target.toFixed(2)} / ${MCT_DIVISOR}`, result: minimum, unit: "money" },
+        { label: `${test} ratio`, formula: `${capital} / ${minimum.toFixed(2)}`, result: ratio, unit: "percent" }
+      ],
+      warnings,
+      values: {
+        ratio,
+        minimum,
+        target,
+        diversification,
+        excess: capital - minimum,
+        capital,
+        margins: { insurance: I, market: M, credit: C, operational: O },
+        test
+      }
+    };
+  },
+  method: {
+    concepts: ["MCT", "Capital Available", "Insurance Risk Margin", "Market Risk Margin", "Credit Risk Margin", "Operational Risk Margin", "Diversification Credit"],
+    readings: [{ resource: "OSFI MCT", locator: "Ch. 1, 8" }]
+  },
+  filedAnswer: { tile: 0, address: MCT_LINES.ratio, scale: 0.01, tolerance: filedTolerance },
+  compare: [
+    { key: "ratio", label: "Ratio", unit: "percent" },
+    { key: "minimum", label: "Minimum required", unit: "money" },
+    { key: "excess", label: "Excess", unit: "money" }
+  ]
+};
+
 // src/lib/tools/registry.ts
 var ENGINE_VERSION = "0.1.0";
 var AREAS = [
@@ -4151,12 +4536,14 @@ var AREAS = [
   { id: "ratemaking", label: "Ratemaking" },
   { id: "distributions", label: "Loss distributions" },
   { id: "credibility", label: "Credibility" },
-  { id: "finance", label: "Financial mathematics" }
+  { id: "finance", label: "Financial mathematics" },
+  { id: "capital", label: "Risk and capital" }
 ];
 var TOOLS = [
   lifeTable,
   priceIndex,
   yieldCurve,
+  insurerReturn,
   ratioTriangle,
   ageToAgeFactors,
   developmentToUltimate,
@@ -4190,7 +4577,8 @@ var TOOLS = [
   bondYield,
   bondAmortization,
   durationConvexity,
-  redingtonImmunization
+  redingtonImmunization,
+  mctRatio
 ];
 var BY_ID = new Map(TOOLS.map((t) => [t.id, t]));
 function toolById(id) {
@@ -4208,15 +4596,15 @@ function toolSearchText(spec) {
 }
 
 // src/lib/tools/bank.ts
-var installed = [];
+var installed2 = [];
 function installAssumptionBank(figures) {
-  installed = figures.filter((f) => f.openCritical === 0 && Number.isFinite(f.value));
+  installed2 = figures.filter((f) => f.openCritical === 0 && Number.isFinite(f.value));
 }
 function bankFigures() {
-  return installed;
+  return installed2;
 }
 function bankFigure(id) {
-  return installed.find((f) => f.id === id);
+  return installed2.find((f) => f.id === id);
 }
 function unitFits(figureUnit, unit) {
   if (figureUnit === "%") return unit === "percent";
@@ -4226,10 +4614,10 @@ function unitFits(figureUnit, unit) {
 }
 function figuresFor(field) {
   if (!field.bank?.length) return [];
-  return installed.filter((f) => field.bank.includes(f.kind) && unitFits(f.unit, field.unit) && !f.supersededBy).sort((a, b) => b.effective.localeCompare(a.effective) || a.title.localeCompare(b.title));
+  return installed2.filter((f) => field.bank.includes(f.kind) && unitFits(f.unit, field.unit) && !f.supersededBy).sort((a, b) => b.effective.localeCompare(a.effective) || a.title.localeCompare(b.title));
 }
 function figuresFitting(toolId) {
-  return installed.filter((f) => f.fits?.split("#")[0] === toolId && !f.supersededBy);
+  return installed2.filter((f) => f.fits?.split("#")[0] === toolId && !f.supersededBy);
 }
 function assumptionRef(raw) {
   if (raw && typeof raw === "object" && !Array.isArray(raw)) {
@@ -4399,6 +4787,20 @@ function bankField(f, id) {
     throw new ToolInputError(f.key, `"${f.key}" is a ${f.unit}; "${figure.label}" is in ${figure.unit}.`);
   }
   return { value: numberField(f, figure.value), figure };
+}
+function filedField(f, ref) {
+  let cell;
+  try {
+    cell = filedCell(ref);
+  } catch (err) {
+    throw new ToolInputError(f.key, `"${f.key}": ${err.message}`);
+  }
+  if (!f.filed?.includes(cell.source.address)) {
+    const takes2 = f.filed?.length ? `takes ${f.filed.map((a) => `line ${filingLine(a)?.line ?? a} (${a})`).join(" or ")}` : "takes no filed value";
+    throw new ToolInputError(f.key, `"${f.key}" ${takes2}; ${cell.source.address} is line ${cell.source.line}, "${cell.source.label}".`);
+  }
+  const value = isRatioLine(cell.source.address) && f.unit === "percent" ? cell.value / 100 : cell.value;
+  return { value: numberField(f, value), source: cell.source };
 }
 var isObject = (v) => v !== null && typeof v === "object" && !Array.isArray(v);
 function readNumber(raw, percent) {
@@ -4583,9 +4985,15 @@ function normalizeInput(spec, raw) {
   const defaulted = [];
   const notes = [];
   const sources = {};
+  const filed = {};
   for (const field of spec.fields) {
     const ref = field.kind === "number" ? assumptionRef(given[field.key]) : null;
-    if (ref && field.kind === "number") {
+    const cellRef = field.kind === "number" ? filedRef(given[field.key]) : null;
+    if (cellRef && field.kind === "number") {
+      const cell = filedField(field, cellRef);
+      input[field.key] = cell.value;
+      filed[field.key] = cell;
+    } else if (ref && field.kind === "number") {
       const { value, figure } = bankField(field, ref);
       input[field.key] = value;
       sources[field.key] = figure;
@@ -4600,7 +5008,7 @@ function normalizeInput(spec, raw) {
   for (const key of Object.keys(given)) {
     if (!known.has(key)) notes.push(`Ignored "${key}": ${spec.id} takes ${[...known].join(", ")}.`);
   }
-  return { input, defaulted, notes, sources };
+  return { input, defaulted, notes, sources, filed };
 }
 function readerMessage(spec, err) {
   const field = spec.fields.find((f) => f.key === err.field);
@@ -4613,14 +5021,15 @@ function readerMessage(spec, err) {
 
 // src/lib/tools/run.ts
 function runTool(spec, raw) {
-  const { input, defaulted, notes, sources } = normalizeInput(spec, raw);
+  const { input, defaulted, notes, sources, filed } = normalizeInput(spec, raw);
   const output = spec.compute(input);
-  const judgments = spec.fields.filter((f) => f.judgment || sources[f.key]).map((f) => ({
+  const judgments = spec.fields.filter((f) => f.judgment || sources[f.key] || filed[f.key]).map((f) => ({
     field: f.key,
     label: f.label,
     value: input[f.key],
     default: defaulted.includes(f.key),
-    ...sources[f.key] ? { source: sourceOf(sources[f.key]) } : {}
+    ...sources[f.key] ? { source: sourceOf(sources[f.key]) } : {},
+    ...filed[f.key] ? { filed: filed[f.key].source } : {}
   }));
   const sourced = spec.fields.filter((f) => sources[f.key]);
   const sourceSteps = sourced.map((f) => {
@@ -4633,7 +5042,47 @@ function runTool(spec, raw) {
     };
   });
   const sourceWarnings = sourced.filter((f) => sources[f.key].verdict !== "verified").map((f) => uncheckedWarning(f.label, sources[f.key]));
-  const hashed = sourced.length ? { ...input, $sources: Object.fromEntries(sourced.map((f) => [f.key, `${sources[f.key].id}@${sources[f.key].edition}`])) } : input;
+  const fromFilings = spec.fields.filter((f) => filed[f.key]);
+  const filedSteps = fromFilings.map((f) => {
+    const s = filed[f.key].source;
+    return {
+      label: `${f.label}: as filed with OSFI`,
+      formula: `${filedPlace(s)} (${s.address}), "${s.label}", ${s.units}${s.blank ? "; nothing published, so a zero" : ""}`,
+      result: input[f.key],
+      unit: f.kind === "number" ? f.unit : "plain"
+    };
+  });
+  const filings = new Set(fromFilings.map((f) => `${filed[f.key].source.period}:${filed[f.key].source.institution}`));
+  const filedWarnings = filings.size > 1 ? ["The filed values come from more than one filing, so they describe no one insurer at one date."] : [];
+  let filedAnswer = null;
+  const answer = spec.filedAnswer;
+  if (answer && filings.size === 1 && output.tiles[answer.tile]) {
+    const [period, institution] = [...filings][0].split(":");
+    const raw2 = filedValue(period, institution, answer.address);
+    if (raw2 != null && raw2 !== 0) {
+      const value = raw2 * answer.scale;
+      const tile = output.tiles[answer.tile];
+      const tolerance = answer.tolerance(input, raw2);
+      const agrees = Math.abs(tile.value - value) <= tolerance;
+      const line2 = filingLine(answer.address);
+      const name = institutionName(institution) ?? institution;
+      filedAnswer = { value, unit: tile.unit, agrees, institution, name, period, address: answer.address, line: line2?.line, label: line2?.en };
+      filedSteps.push({
+        label: `Filed with OSFI: ${line2?.en ?? answer.address}`,
+        formula: `${name}, ${periodLabel(period)}, line ${line2?.line} (${answer.address}): ${agrees ? "agrees with" : "differs from"} the ${formatValue(tile.value, tile.unit)} recomputed here`,
+        result: value,
+        unit: tile.unit
+      });
+      if (!agrees) {
+        filedWarnings.unshift(`${name} filed ${formatValue(value, tile.unit)} for ${periodLabel(period)}; recomputed from its own lines it is ${formatValue(tile.value, tile.unit)}, further apart than the filed figures' rounding allows.`);
+      }
+    }
+  }
+  const hashed = sourced.length || fromFilings.length ? {
+    ...input,
+    ...sourced.length ? { $sources: Object.fromEntries(sourced.map((f) => [f.key, `${sources[f.key].id}@${sources[f.key].edition}`])) } : {},
+    ...fromFilings.length ? { $filed: Object.fromEntries(fromFilings.map((f) => [f.key, `${filed[f.key].source.filed}@${filed[f.key].source.sha256}`])) } : {}
+  } : input;
   const summary = output.summary ?? `${spec.name}: ${output.tiles.map((t) => `${t.label === "Total" ? t.symbol : t.label} ${formatValue(t.value, t.unit)}`).join("; ")}.`;
   return {
     tool: spec.id,
@@ -4644,10 +5093,10 @@ function runTool(spec, raw) {
     summary,
     tiles: output.tiles,
     table: output.table,
-    values: output.values,
+    values: filedAnswer ? { ...output.values, filed_answer: filedAnswer } : output.values,
     judgments,
-    warnings: [...notes, ...sourceWarnings, ...output.warnings],
-    trace: [...sourceSteps, ...output.trace],
+    warnings: [...notes, ...sourceWarnings, ...output.warnings, ...filedWarnings],
+    trace: [...sourceSteps, ...filedSteps, ...output.trace],
     method: spec.method
   };
 }
@@ -9386,7 +9835,7 @@ var last = (rs) => rs[rs.length - 1];
 var val = (key) => (rs) => Number(last(rs).values[key]);
 var at = (key, k) => (rs) => last(rs).values[key][k];
 var one = (tool, input) => [{ tool, input: () => input }];
-var flows = (n, from, amount, step = 1) => Array.from({ length: n }, (_, k) => ({ time: (from + k) * step, amount: amount(k) }));
+var flows = (n, from, amount2, step = 1) => Array.from({ length: n }, (_, k) => ({ time: (from + k) * step, amount: amount2(k) }));
 var fm = (n, check) => ({
   question: `fm-${String(n).padStart(3, "0")}`,
   bank: "exam-fm",
@@ -9535,7 +9984,7 @@ var QUESTION_CHECKS = [
   }),
   fm(228, {
     quotes: ["| 1 | 10 |", "| 2 | 12 |", "| 3 | 15 |", "| 4 | 20 |", "| 5 | 30 |", "8% annual effective"],
-    steps: one("finance.duration_convexity", { i: 0.08, flows: [10, 12, 15, 20, 30].map((amount, k) => ({ time: k + 1, amount })) }),
+    steps: one("finance.duration_convexity", { i: 0.08, flows: [10, 12, 15, 20, 30].map((amount2, k) => ({ time: k + 1, amount: amount2 })) }),
     tolerance: 0.05,
     value: val("macaulay")
   }),
@@ -10238,8 +10687,24 @@ function verifyCheck(check) {
   }
   return out;
 }
+var FILED_CHECKS = [
+  {
+    tool: "capital.mct_ratio",
+    filings: { count: 1909, from: "2023Q1", to: "2026Q2" },
+    source: {
+      title: "Every MCT and BAAT ratio filed with OSFI, Q1 2023 to Q2 2026 (1,909 filings)",
+      url: "https://open.canada.ca/data/en/dataset/4c6c515f-7c44-4bb6-ab56-c5f79f75f705",
+      locator: "PC4 page 10.00, lines 10\u2013140"
+    }
+  },
+  {
+    tool: "capital.mct_ratio",
+    source: { question: "cas6c-2017s-q24", title: "CAS Exam 6C, Spring 2017, question 24", url: "/quiz?ids=cas6c-2017s-q24", locator: "part a" }
+  }
+];
 function checksFor(toolId) {
   return [
+    ...FILED_CHECKS.filter((c) => c.tool === toolId).map((c) => c.source),
     ...CHECKS.filter((c) => c.tool === toolId).map((c) => c.source),
     ...QUESTION_CHECKS.filter((q) => q.steps.some((s) => s.tool === toolId)).map(questionRef)
   ];
@@ -10279,8 +10744,9 @@ function fieldSchema(f) {
         minimum: f.min,
         maximum: f.max,
         default: f.default,
-        description: `${f.description}${UNIT_HINT[f.unit]}${judgment}${f.bank?.length ? ` Or a published figure from the Assumptions Bank, given as {"assumption": "<id>"}, of kind ${f.bank.join(" or ")}: the run records its source.` : ""}`,
-        ...f.bank?.length ? { "x-assumption-kinds": f.bank } : {}
+        description: `${f.description}${UNIT_HINT[f.unit]}${judgment}${f.bank?.length ? ` Or a published figure from the Assumptions Bank, given as {"assumption": "<id>"}, of kind ${f.bank.join(" or ")}: the run records its source.` : ""}${f.filed?.length ? ` Or a value as filed with OSFI, given as {"filed": "osfi-pc:<quarter>:<OSFI id>:<address>"} for address ${f.filed.join(" or ")} (data.insurer_return hands these on): the run records the filing.` : ""}`,
+        ...f.bank?.length ? { "x-assumption-kinds": f.bank } : {},
+        ...f.filed?.length ? { "x-filed-lines": f.filed } : {}
       };
     case "choice":
       return { type: "string", enum: f.options.map((o) => o.value), default: f.default, description: `${f.description}${judgment}` };
@@ -10319,7 +10785,8 @@ function inputSchema(spec) {
   };
 }
 function sourceLine(s) {
-  return s.question ? s.title : `${s.title}, ${s.locator}, p. ${s.page}`;
+  if (s.question) return s.title;
+  return s.page === void 0 ? `${s.title}, ${s.locator}` : `${s.title}, ${s.locator}, p. ${s.page}`;
 }
 function toolSummary(spec) {
   return {
@@ -10392,7 +10859,10 @@ export {
   CHECKS,
   DATASETS,
   ENGINE_VERSION,
+  FILED_CHECKS,
+  FILINGS_DATASET,
   MAX_BATCH_RUNS,
+  MCT_LINES,
   QUESTION_CHECKS,
   TOOLS,
   ToolInputError,
@@ -10409,10 +10879,24 @@ export {
   evaluateArithmetic,
   figuresFitting,
   figuresFor,
+  filedCell,
+  filedPlace,
+  filedRef,
+  filedRefOf,
+  filedValue,
+  filersIn,
+  filingLine,
+  filingPeriods,
+  filingsDataset,
+  filingsInstalled,
   formatValue,
   inputSchema,
   installAssumptionBank,
+  installFilings,
+  institutionName,
+  isBranch,
   normalizeInput,
+  periodLabel,
   printedFigure,
   readNumber,
   readerMessage,

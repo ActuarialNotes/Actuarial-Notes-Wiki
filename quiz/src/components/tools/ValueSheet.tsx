@@ -339,6 +339,9 @@ export function NumberSheet({
   )
 }
 
+/** Past this many options, a choice's sheet has a search box. */
+const CHOICE_SEARCH_FROM = 12
+
 export function ChoiceSheet({ field, value, onChange, onClose, style }: {
   field: ChoiceField
   value: string
@@ -346,10 +349,26 @@ export function ChoiceSheet({ field, value, onChange, onClose, style }: {
   onClose: () => void
   style?: CSSProperties
 }) {
+  // A long list (every insurer that files with OSFI) gets a search box over it.
+  const [query, setQuery] = useState('')
+  const searchable = field.options.length > CHOICE_SEARCH_FROM
+  const words = query.trim().toLowerCase().split(/\s+/).filter(Boolean)
+  const shown = words.length ? field.options.filter(o => words.every(w => o.label.toLowerCase().includes(w))) : field.options
   return (
     <BottomSheet title={field.label} onClose={onClose} style={style}>
+      {searchable && (
+        <input
+          type="search"
+          value={query}
+          onChange={e => setQuery(e.target.value)}
+          placeholder={`Search ${field.options.length} ${field.label.toLowerCase()}s`}
+          aria-label={`Search ${field.label.toLowerCase()}`}
+          className="mb-2 h-10 w-full rounded-xl bg-muted px-3.5 text-sm outline-none focus:ring-2 focus:ring-ring"
+        />
+      )}
+      {searchable && shown.length === 0 && <p className="px-1 py-3 text-sm text-muted-foreground">Nothing matches "{query.trim()}".</p>}
       <div role="radiogroup" aria-label={field.label} className="divide-y divide-border/60 overflow-hidden rounded-xl bg-card">
-        {field.options.map(o => (
+        {shown.map(o => (
           <button
             key={o.value}
             type="button"

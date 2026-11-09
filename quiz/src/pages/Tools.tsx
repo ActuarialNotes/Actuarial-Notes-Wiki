@@ -13,7 +13,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Navigate, useLocation, useParams, useSearchParams } from 'react-router-dom'
 import type { Back } from '@/hooks/useBack'
-import { BookMarked, Calculator, Database, Sigma, Landmark, Scale, TrendingUp, type LucideIcon } from 'lucide-react'
+import { BookMarked, Calculator, Database, Sigma, Landmark, Scale, ShieldCheck, TrendingUp, type LucideIcon } from 'lucide-react'
 import { AssumptionsShelf } from '@/components/assumptions/AssumptionsShelf'
 import { AREAS, TOOLS, checksFor, decodeRunInput, toolBySlug, toolSlug, type PracticeArea, type ToolSpec } from '@/lib/tools'
 import { searchTools } from '@/lib/toolSearch'
@@ -45,6 +45,7 @@ const AREA_ICON: Record<PracticeArea, LucideIcon> = {
   distributions: Sigma,
   credibility: Scale,
   finance: Calculator,
+  capital: ShieldCheck,
 }
 
 /**

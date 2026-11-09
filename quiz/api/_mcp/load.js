@@ -75,4 +75,44 @@ export function loadIndex(url, { fetchImpl = fetch, headers = knowledgeBaseHeade
 /** For tests. */
 export function clearIndexCache() {
   cache.clear()
+  filingsCache.clear()
 }
+
+// ── OSFI's filings, for the calculators ──────────────────────────────────────
+// Insurer Return and a filed MCT Ratio read OSFI's PC4 summary
+// (docs/osfi-tools-design.md). The engine never carries it; like the
+// knowledge base, it is an asset of this deployment, fetched once per warm
+// instance and installed into the engine before a calculator runs.
+
+/** Mirrors FILINGS_ASSET in vite.config.ts. */
+export const FILINGS_PATH = '/ai/osfi-pc4-summary.json'
+
+/** The filings' URL: beside the knowledge base, wherever that is read from. */
+export function filingsUrl(headers, env = process.env) {
+  return knowledgeBaseUrl(headers, env).replace(/\/[^/]*$/, FILINGS_PATH.slice(FILINGS_PATH.lastIndexOf('/')))
+}
+
+const filingsCache = new Map()
+
+/** The filings file at `url`, fetched on first use; a failed load is dropped so the next request retries. */
+export function loadFilings(url, { fetchImpl = fetch, headers = knowledgeBaseHeaders() } = {}) {
+  let entry = filingsCache.get(url)
+  if (!entry) {
+    const controller = new AbortController()
+    const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS)
+    entry = fetchImpl(url, { headers, signal: controller.signal })
+      .then(response => {
+        if (!response.ok) throw new Error(`OSFI's filings responded ${response.status}`)
+        return response.json()
+      })
+      .finally(() => clearTimeout(timer))
+      .catch(err => {
+        filingsCache.delete(url)
+        throw err
+      })
+    filingsCache.set(url, entry)
+    if (filingsCache.size > MAX_CACHED) filingsCache.delete(filingsCache.keys().next().value)
+  }
+  return entry
+}
+

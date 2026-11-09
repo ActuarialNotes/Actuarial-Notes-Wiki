@@ -4,14 +4,14 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:b9ba05c8e17622301a7a1b97cd7ea5b5447e5c63471135d578a513d87edbe542
+  content_hash: sha256:04159937095439f51677d493c3536e15fe878cab589e31741983613e990069ad
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Fellow of the Society of Actuaries (FSA).md
 ---
 
-A **Fellow of the Society of Actuaries (FSA)** is an [[Associate of the Society of Actuaries (ASA)|Associate]] of the Society of Actuaries (SOA) who has gone on to specialise in one practice area. It is the senior of the SOA's two designations.
+A **Fellow of the Society of Actuaries (FSA)** is an [[Associate of the Society of Actuaries (ASA)|Associate]] of the Society of Actuaries (SOA) who has specialised in one practice area. It is the senior of the SOA's two designations.
 
 %%credential-path FSA%%
 
@@ -26,9 +26,9 @@ A Fellow takes the 101 and 201 courses in one practice area:
 - Investment (INV)
 - Retirement Benefits (RET)
 
-The two further technical courses may come from another area or from the cross-practice (CP) catalogue.
+Their remaining technical courses may come from another area or from the cross-practice (CP) catalogue.
 
-General insurance is one practice area of the SOA's fellowship, while for the CAS it is the whole syllabus, from the first exam after FM to the [[Fellow of the Casualty Actuarial Society (FCAS)|FCAS]].
+For the CAS, general insurance is the whole syllabus, from the first exam after FM to the [[Fellow of the Casualty Actuarial Society (FCAS)|FCAS]].
 
 ## Further Reading
 - [Fellowship (FSA) Requirements](https://www.soa.org/education/exam-req/edu-fsa-req/) — Society of Actuaries

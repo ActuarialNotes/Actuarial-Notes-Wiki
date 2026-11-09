@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:2d67aa19be4c9d24eb82d6bdbcac32cfe9b4ddb028f63bb100448ecec64024e8
+  content_hash: sha256:3527adff87e8a2f14738707364fe2133e64a990cf1e0b02e84d10c5e0424f1fd
   sources: []
   open_findings: 0
   open_critical: 0
@@ -17,11 +17,11 @@ An **Associate of the Casualty Actuarial Society (ACAS)** is an actuary who has 
 
 The CAS's route shares its first two exams with the SOA's, so a candidate can choose between the [[Credential Path|societies' routes]] after starting.
 
-The CAS restructures this route from time to time: PCPA and the DISCs are recent changes. Check its transition rules before you plan a sitting order.
+The CAS changes this route from time to time; PCPA and the DISCs are recent additions. Check its transition rules before you plan a sitting order.
 
 ## What an Associate can do
 
-An ACAS is a voting member of the CAS, bound by the profession's code of conduct and standards of practice, and subject to its continuing-education requirements. Whether a member may sign a particular [[Statement of Actuarial Opinion]] is set by the regulator of the jurisdiction, not by the designation on its own: in Canada through the [[Canadian Institute of Actuaries (CIA)]] and the [[Appointed Actuary]] regime, in the United States through the applicable qualification standards.
+An ACAS is a voting member of the CAS, bound by the profession's code of conduct and standards of practice, and subject to its continuing-education requirements. Whether a member may sign a particular [[Statement of Actuarial Opinion]] is decided in each jurisdiction. In Canada that is through the [[Canadian Institute of Actuaries (CIA)]] and the [[Appointed Actuary]] rules, and in the United States through the applicable qualification standards.
 
 ## Further Reading
 - [Credential Requirements](https://www.casact.org/credential-requirements) — Casualty Actuarial Society

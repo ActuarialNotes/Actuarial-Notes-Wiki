@@ -293,6 +293,9 @@ dataset page.
 
 ### 4.1 One Data Source: **Insurer Return**
 
+Three designs for this tool and MCT Ratio, held to the tool template and template v2, are in
+`docs/osfi-tools-design.md` (2026-11-09).
+
 > *What did this insurer file?* Institution, period, page (and optionally lines and columns) → the
 > page as filed, labelled, each cell with its address and source. It sends on: a value, a column,
 > or the page as a table.

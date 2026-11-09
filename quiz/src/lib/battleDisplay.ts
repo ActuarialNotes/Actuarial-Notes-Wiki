@@ -5,7 +5,7 @@
 import type { CSSProperties } from 'react'
 import { EXAM_LABEL_TO_ID } from './examIds'
 import type { MusicIntensity } from './battleMusic'
-import { HAND_SIZE, type BattleDraft } from './battleDraft'
+import type { BattleDraft } from './battleDraft'
 import {
   currentRound,
   isFinalRound,
@@ -169,40 +169,6 @@ export function resultHeadline(
   if (winner === null) return "It's a draw"
   if (forfeit !== null) return `${names[forfeit]} left. ${names[winner]} wins`
   return `${names[winner]} wins`
-}
-
-// ── Telling the draft ───────────────────────────────────────────────────────
-
-/** "0 of 4", "3 of 4" — a hand as it is drawn. */
-export function handCountLine(drawn: number): string {
-  return `${Math.min(drawn, HAND_SIZE)} of ${HAND_SIZE}`
-}
-
-/**
- * A topic as short as a chip or a card's name line can take it: a trailing
- * *Method* says nothing a pair of method names doesn't (*Bornhuetter-Ferguson*
- * against *Chain Ladder*).
- */
-export function shortTopic(name: string): string {
-  const short = name.replace(/\s+Method$/i, '')
-  return short.length > 0 ? short : name
-}
-
-/**
- * Who struck what, from `viewer`'s seat, the other player first: "Sam struck
- * Pure Premium. You struck Cape Cod Method."
- */
-export function strikeLine(strikes: BattleDraft['strikes'], viewer: Seat, names: readonly [string, string]): string {
-  const other: Seat = viewer === 0 ? 1 : 0
-  const parts: string[] = []
-  if (strikes[other]) parts.push(`${names[other]} struck ${strikes[other]}.`)
-  if (strikes[viewer]) parts.push(`You struck ${strikes[viewer]}.`)
-  return parts.join(' ')
-}
-
-/** A dealt pair's names, under its card: "Benktander + Chain Ladder", or "… or …" for a coin round. */
-export function pairLine(cards: readonly [string, string], paired: boolean): [string, string] {
-  return [shortTopic(cards[0]), `${paired ? '+' : 'or'} ${shortTopic(cards[1])}`]
 }
 
 // ── Heard ───────────────────────────────────────────────────────────────────

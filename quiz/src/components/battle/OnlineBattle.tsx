@@ -30,8 +30,8 @@ import {
   type BattlePlayer,
   type Seat,
 } from '@/lib/battle'
-import { answerFor, battleExamName, battleMusicIntensity, shortTopic } from '@/lib/battleDisplay'
-import { isCoinRound, roundChips, roundTopics } from '@/lib/battleDraft'
+import { answerFor, battleExamName, battleMusicIntensity } from '@/lib/battleDisplay'
+import { isCoinRound, roundChips, roundTopics, shortTopic } from '@/lib/battleDraft'
 import { generateRoomCode } from '@/lib/battleRoom'
 import { skinJoinPath } from '@/lib/battleSkin'
 import {

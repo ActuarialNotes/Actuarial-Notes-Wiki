@@ -281,8 +281,8 @@ export function DeckRound({
           <p className="flex-1 text-center text-sm text-[var(--deck-soft)]" aria-live="polite">
             {coin ? ''
               : phase === 'countdown' ? 'Get ready…'
-              : phase === 'closing' ? 'Time’s up — revealing…'
-              : lockedChoice ? (oppLocked ? 'Both in — revealing…' : `Locked in ${lockedChoice}. Waiting for ${names[opp]}…`)
+              : phase === 'closing' ? 'Time’s up. Revealing…'
+              : lockedChoice ? (oppLocked ? 'Both in. Revealing…' : `Locked in ${lockedChoice}. Waiting for ${names[opp]}…`)
               : 'Waiting…'}
           </p>
         )}

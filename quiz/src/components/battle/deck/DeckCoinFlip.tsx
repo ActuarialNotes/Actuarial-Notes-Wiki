@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { useNow } from '@/hooks/useBattle'
 import { COUNTDOWN_MS, otherSeat, type BattleState, type Seat } from '@/lib/battle'
-import { playerAccentStyle, shortTopic } from '@/lib/battleDisplay'
+import { playerAccentStyle } from '@/lib/battleDisplay'
 import { cardLevelTag } from '@/lib/battleDeck'
-import { COIN_MS, cardLevel, roundCards, type BattleDraft } from '@/lib/battleDraft'
+import { COIN_MS, cardLevel, roundCards, shortTopic, type BattleDraft } from '@/lib/battleDraft'
 import { playSound } from '@/lib/soundEngine'
 import { cn } from '@/lib/utils'
 

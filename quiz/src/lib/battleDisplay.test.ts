@@ -6,10 +6,6 @@ import {
   battleExamKey,
   battleExamName,
   draftMusicIntensity,
-  handCountLine,
-  pairLine,
-  shortTopic,
-  strikeLine,
   playerAccentStyle,
   playerInitials,
   pointsChips,
@@ -18,7 +14,7 @@ import {
   roundLabel,
   signedPoints,
 } from './battleDisplay'
-import { TOPIC_PICK_MS, emptyDraft } from './battleDraft'
+import { TOPIC_PICK_MS, emptyDraft, handCountLine, pairLine, shortTopic, strikeLine } from './battleDraft'
 
 const NAMES = ['Ada', 'Bo'] as const
 

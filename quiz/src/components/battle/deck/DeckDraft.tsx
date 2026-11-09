@@ -5,7 +5,7 @@ import { DeckPrimaryButton, DeckTable, LeaveButton, StepHeader } from '@/compone
 import { useBattleMusic, useNow } from '@/hooks/useBattle'
 import { useConceptLevels, type ConceptLevels } from '@/hooks/useConceptLevels'
 import { otherSeat, type Seat } from '@/lib/battle'
-import { battleExamName, draftMusicIntensity, handCountLine, pairLine, playerAccentStyle, strikeLine } from '@/lib/battleDisplay'
+import { battleExamName, draftMusicIntensity, playerAccentStyle } from '@/lib/battleDisplay'
 import { cardLevelTag, levelTag } from '@/lib/battleDeck'
 import {
   DEAL_MS,
@@ -13,6 +13,9 @@ import {
   cardLevel,
   dealStartedAt,
   dealtOrder,
+  handCountLine,
+  pairLine,
+  strikeLine,
   toggleCard,
   type BattleDraft,
 } from '@/lib/battleDraft'

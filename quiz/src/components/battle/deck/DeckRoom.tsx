@@ -325,7 +325,7 @@ export function DeckJoin({
           />
         </div>
         {code.length === ROOM_CODE_LENGTH && !valid && (
-          <p className="text-sm text-red-300">That isn’t a room code — codes use letters and the digits 2–9.</p>
+          <p className="text-sm text-red-300">That isn’t a room code. Codes use letters and the digits 2–9.</p>
         )}
       </div>
       <div className="flex flex-col gap-2">

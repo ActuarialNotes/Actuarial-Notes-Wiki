@@ -1,0 +1,12 @@
+{
+  "ga_property": "506926323",
+  "supabase_project": "<supabase project ref, from the dashboard URL>",
+  "team_emails": ["you@example.com", "team@example.com"],
+  "team_devices": [
+    {"city": "<your city as GA4 reports it>", "resolutions": ["<WIDTHxHEIGHT, e.g. 1170x2532>"], "keep_sources": ["google"]},
+    {"city": "<your city>", "resolutions": ["<WIDTHxHEIGHT>"], "keep_sources": ["google"]}
+  ],
+  "window_start": "2026-08-01",
+  "timezone": "America/Toronto",
+  "artifact_url": "<the published report's claude.ai link, optional>"
+}

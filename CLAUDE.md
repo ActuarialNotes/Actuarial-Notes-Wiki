@@ -377,6 +377,15 @@ before touching that area**:
   box (`hooks/useSearchTracking.ts`) and `first_interaction`, the human signal. Every
   event is typed in `AnalyticsEventMap`; no personal data in a param. The doc ends with
   the GA4 property settings the code depends on. Read before adding an event.
+- `docs/usage-report.md` — the **usage report**: real people's use of the app, from GA4 and
+  Supabase with bots and the team taken out, in one command (`scripts/usage_report/run.py`,
+  stdlib only). Who counts as a person (the human segment, `segments.py`; the headline is
+  *engaged* people because a distributed bot passes every other filter), what each figure
+  means, and the traps (GA4's cohort engine changes with the metrics requested, so returns
+  come from a plain `firstSessionDate × date` report; one phone is many GA4 IDs; GA4 misses
+  readers who block it). The team's emails and devices are a private config
+  (`USAGE_REPORT_CONFIG` or the git-ignored `config.local.json`), never committed; outputs go
+  to the git-ignored `usage-reports/`. Read before answering any question about usage.
 - `docs/writing-style.md` — **writing for readers**: the one set of rules for every reader-facing
   word (true to the code or the source, one name per thing, no code words, say it once, and the
   table of tells to cut), written from the UI copy review (`docs/ui-copy-review.md`). Every

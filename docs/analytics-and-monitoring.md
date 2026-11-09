@@ -205,6 +205,9 @@ Several of these must be done in GA4 itself — the code can't:
 8. Check it works: open `https://quiz.actuarialnotes.com/?ga_debug=1` and watch
    **Admin → DebugView**.
 
+Reporting on real people (bots and the team taken out, joined with Supabase) is
+`docs/usage-report.md`.
+
 ### Reading the learning events
 
 The roadmap's §7 *Learning* and *Re-engagement* rows, as GA4 explorations:

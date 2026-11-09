@@ -1550,8 +1550,8 @@ var bornhuetterFerguson = {
           LATEST_COLUMN,
           CDF_COLUMN,
           EXPECTED_COLUMN,
-          { key: "ultimate", label: "Ultimate", kind: "number", unit: "money", computed: true },
-          { key: "reserve", label: reserve, kind: "number", unit: "money", computed: true }
+          { key: "ultimate", label: "Ultimate", kind: "number", unit: "money", computed: true, formula: "{latest} + {reserve}" },
+          { key: "reserve", label: reserve, kind: "number", unit: "money", computed: true, formula: "{expected} \xB7 [1 \u2212 1/{cdf}]" }
         ],
         rows: out,
         footer: {

@@ -576,6 +576,11 @@ before touching that area**:
   whose tables `scripts/dataset_extract.py` reads off NCHS's, Statistics Canada's, BLS's and the
   Treasury's own files with each file's sha256 and licence, into
   `lib/tools/data/datasets/*.json` — never hand-edited; re-run the script for a new edition.
+  **§19 is the tool template** (`components/tools/ToolTemplate.tsx`, on the tools in `TEMPLATE_TOOLS`
+  in `lib/toolTemplate.ts` — the rest still draw `ToolCard`, both over `useToolCard.ts`): the answer card in
+  the colour of the earliest exam that teaches the method (`lib/toolExam.ts`), judgments first, inline sliders
+  at three inputs or fewer, a source tag on every input, the edit sheet with the app's own keypad
+  (`ValueSheet.tsx`), and grids numbered as an exhibit (`TableColumn.formula`).
   Read before building any of it.
 - `docs/stacked-pages.md` — the concept popup's **page stack** (Obsidian's stacked pages):
   a link followed inside the popup opens a new page on top of the one being read, and the

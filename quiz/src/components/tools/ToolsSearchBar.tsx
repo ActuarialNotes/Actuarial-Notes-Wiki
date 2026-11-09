@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ChevronRight } from 'lucide-react'
 import {
@@ -36,11 +36,17 @@ type Props =
       onQuery: (q: string) => void
       onArea: (area: PracticeArea | null) => void
     }
-  | { kind: 'tool'; title: string; back: Back }
+  | {
+      kind: 'tool'
+      title: string
+      back: Back
+      /** At the strip's right edge: the tool's answer, once its card has scrolled away (§19). */
+      pinned?: ReactNode
+    }
 
 export function ToolsSearchBar(props: Props) {
   if (props.kind === 'catalogue') return <CatalogueBar {...props} />
-  return <ToolPageBar title={props.title} back={props.back} />
+  return <ToolPageBar title={props.title} back={props.back} pinned={props.pinned} />
 }
 
 function AreaPills({ query, area, onArea }: { query: string; area: PracticeArea | null; onArea: (a: PracticeArea | null) => void }) {
@@ -82,7 +88,7 @@ function CatalogueBar({ query, area, onQuery, onArea }: Extract<Props, { kind: '
   )
 }
 
-function ToolPageBar({ title, back }: { title: string; back: Back }) {
+function ToolPageBar({ title, back, pinned }: { title: string; back: Back; pinned?: ReactNode }) {
   const navigate = useNavigate()
   const [query, setQuery] = useState('')
   const [area, setArea] = useState<PracticeArea | null>(null)
@@ -138,7 +144,7 @@ function ToolPageBar({ title, back }: { title: string; back: Back }) {
             <ToolResults tools={results} query={query} onOpen={open} />
           </div>
         ) : (
-          <FloatingSearchStrip title={title} backLink={<FloatingSearchBack back={back} />} />
+          <FloatingSearchStrip title={title} backLink={<FloatingSearchBack back={back} />}>{pinned}</FloatingSearchStrip>
         )}
       </FloatingSearchBar>
     </>

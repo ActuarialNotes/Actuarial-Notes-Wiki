@@ -16,63 +16,35 @@
 // inputs between visits (`persist`), and a problem with an input is said under
 // that input, with the input ringed — not in a line at the top of the card.
 
-import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useState, type ReactNode } from 'react'
+import { Link } from 'react-router-dom'
 import { ArrowDownToLine, BadgeCheck, BookOpen, Database, ListChecks, RotateCcw, Undo2 } from 'lucide-react'
 import {
-  ToolInputError,
-  assumptionRef,
-  bankFigure,
-  figuresFor,
-  printedFigure,
-  uncheckedWarning,
-  type BankFigure,
   checksFor,
+  figuresFor,
   datasetsFor,
   formatValue,
-  runPath,
-  runTool,
-  toolById,
-  toolSlug,
+  printedFigure,
+  type BankFigure,
   type ChoiceField,
   type DateField,
   type NumberField,
-  type TableField,
-  type TriangleField,
-  type ToolInput,
   type ToolResult,
   type ToolSpec,
 } from '@/lib/tools'
-import { fillColumn, scalarSources, selectionsToFactors, type ColumnSource, type Selection } from '@/lib/toolColumns'
 import { FactorSelection } from './FactorSelection'
 import { ToolFigure } from './ToolFigure'
-import { figureFor } from '@/lib/toolFigures'
-import { lastRun, rememberRun } from '@/lib/toolRuns'
-import { SourceSheet, type Sourcing } from './SourceSheet'
+import { SourceSheet } from './SourceSheet'
 import { fromDisplay, toDisplay } from '@/lib/tools/format'
-import { runToolCall, toolResultSheets } from '@/lib/toolExport'
-import { draftFromStore, draftToStore, fieldVisible, groupSources, initialDraft, type Draft } from '@/lib/toolDraft'
-import { downloadWorkbook } from '@/lib/xlsx'
+import { groupSources } from '@/lib/toolDraft'
 import { SegmentedControl } from '@/components/ui/SegmentedControl'
 import { EditableTable, ResultTableView, TriangleGrid, type DraftRow, type DraftTriangle } from './ToolGrid'
-import { ToolMenu, type ToolMenuItem } from './ToolMenu'
+import { ToolMenu } from './ToolMenu'
 import { PdfLinkButton } from '@/components/PdfLinkButton'
 import { cn } from '@/lib/utils'
-import { useConceptPopup } from '@/hooks/useConceptPopup'
-import { installWikiBundle } from '@/lib/wikiBundle'
-// Installs the vault's Assumptions Bank into the engine, for every card.
-import '@/lib/toolBank'
+import { openResourcePage } from './openResource'
+import { useToolCard } from './useToolCard'
 
-/**
- * Open the resource page a published figure was read from, in the concept
- * popup — the one reader (docs/cowork.md). The wiki bundle is fetched on the
- * first tap, as a tool's method is.
- */
-async function openResourcePage(name: string) {
-  const { default: bundle } = await import('virtual:wiki-content')
-  installWikiBundle(bundle)
-  useConceptPopup.getState().openAt([{ kind: 'resource', name }], 0, null, null, null, { walk: 'corpus' })
-}
 
 export function ToolCard({
   spec,
@@ -101,137 +73,11 @@ export function ToolCard({
    */
   persist?: boolean
 }) {
-  const navigate = useNavigate()
-  const storeKey = `${DRAFT_STORE}${spec.id}`
-  const [draft, setDraft] = useState<Draft>(() =>
-    (persist && initialInput === undefined ? draftFromStore(spec, readStore(storeKey)) : null) ?? initialDraft(spec, initialInput),
-  )
-  useEffect(() => {
-    if (persist) writeStore(storeKey, draftToStore(spec, draft))
-  }, [persist, storeKey, spec, draft])
-  // A reset can be taken back for a few seconds: one tap shouldn't cost a
-  // reader the triangle they typed in.
-  const [undo, setUndo] = useState<Draft | null>(null)
-  useEffect(() => {
-    if (!undo) return
-    const t = window.setTimeout(() => setUndo(null), 8000)
-    return () => window.clearTimeout(t)
-  }, [undo])
-  const reset = () => {
-    if (draftToStore(spec, draft) !== null) setUndo(draft)
-    setDraft(initialDraft(spec))
-  }
-  const lastGood = useRef<ToolResult | null>(null)
-  const [sourcing, setSourcing] = useState<Sourcing | null>(null)
-  // Age-to-Age Factors' selection exhibit (§6.6): the picks, one per interval.
-  // A new triangle starts them over.
-  const selecting = spec.id === SELECTING_TOOL
-  const [selections, setSelections] = useState<(Selection | null)[]>([])
-  useEffect(() => setSelections([]), [draft.triangle])
-
-  const outcome = useMemo(() => {
-    try {
-      const result = runTool(spec, draft)
-      lastGood.current = result
-      return { result, error: null as string | null, errorField: null as string | null }
-    } catch (err) {
-      if (err instanceof ToolInputError) return { result: lastGood.current, error: err.message, errorField: err.field }
-      throw err
-    }
-  }, [spec, draft])
-  const result = outcome.result
-  const stale = outcome.error !== null
-  // The figure (§6.7), from the same run as the tiles.
-  const figure = useMemo(() => (result ? figureFor(result) : null), [result])
-  /** A figure's dragged point sets its input, held to the field's step and bounds as a slider is. */
-  const dragTo = (key: string, value: number) => {
-    const f = spec.fields.find(x => x.key === key)
-    if (!f || f.kind !== 'number') return
-    const stepped = f.integer ? Math.round(value) : Math.round(value / f.step) * f.step
-    set(key, Math.min(f.max, Math.max(f.min, Number(stepped.toFixed(10)))))
-  }
-
-  // The session remembers each tool's last good run, for the candidates a
-  // cell's stepper offers elsewhere (§6.6); a source sheet is told each result.
-  useEffect(() => {
-    if (result && !stale) rememberRun(spec.id, result.input)
-    onResult?.(stale ? null : result)
-  }, [result, stale, spec.id, onResult])
-
-  const set = (key: string, value: unknown) => setDraft(d => ({ ...d, [key]: value }))
-  const valueOf = (f: ToolSpec['fields'][number]) => draft[f.key] ?? (f as { default: unknown }).default
-  // A field given a published figure holds a reference to it, not a number
-  // (docs/assumptions-bank.md): the card draws the figure's value, and typing
-  // or sliding replaces the reference with the reader's own number.
-  const drawnFigure = (f: NumberField): BankFigure | null => {
-    const ref = assumptionRef(draft[f.key])
-    return ref ? bankFigure(ref) ?? null : null
-  }
-  // The "not fact checked yet" warning of a figure the card already says it
-  // of, under its field — said once, where the figure is.
-  const shownUnderField = new Set(
-    spec.fields.flatMap(f => {
-      const fig = f.kind === 'number' ? drawnFigure(f) : null
-      return fig && fig.verdict !== 'verified' ? [uncheckedWarning(f.label, fig)] : []
-    }),
-  )
-  const bankValue = (f: NumberField): number | null => {
-    if (!assumptionRef(draft[f.key])) return null
-    return drawnFigure(f)?.value ?? f.default
-  }
-
-  /** Open the tool a column's values come from, filled from this grid where it can be (§6.6). */
-  const fillFrom = (field: TableField, key: string, source: ColumnSource) => {
-    const tool = toolById(source.tool)
-    if (!tool) return
-    const column = field.columns.find(c => c.key === key)
-    const rows = valueOf(field) as DraftRow[]
-    setSourcing({
-      title: `${column?.label ?? key} from ${tool.name}`,
-      how: source.how,
-      tool,
-      initial: source.prefill?.(rows) ?? (lastRun(tool.id) as ToolInput | undefined),
-      apply: r => set(field.key, fillColumn(valueOf(field) as DraftRow[], key, source.take(r, rows))),
-    })
-  }
-
-  const slug = toolSlug(spec)
-  const menu: ToolMenuItem[] = [
-    ...(onOpenMethod ? [{ key: 'method', label: 'Read about the method', icon: 'method' as const, run: onOpenMethod }] : []),
-    { key: 'link', label: 'Copy link to this run', icon: 'link', run: () => `${window.location.origin}${runPath(slug, draft)}` },
-    { key: 'ai', label: 'Copy for AI (run_tool call)', icon: 'ai', run: () => runToolCall(spec, draft) },
-    { key: 'json', label: 'Copy result as JSON', icon: 'json', disabled: !result, run: () => JSON.stringify(result, null, 2) },
-    {
-      key: 'xlsx', label: 'Download .xlsx', icon: 'download', disabled: !result || stale,
-      run: () => { if (result) downloadWorkbook(`${slug}.xlsx`, toolResultSheets(spec, result)) },
-    },
-    ...(embedded ? [] : spec.next ?? []).flatMap(next => {
-      const target = toolById(next.tool)
-      if (!target || !result || stale) return []
-      const picked = selecting && selections.some(Boolean)
-      return [{
-        key: `next-${next.tool}`, label: `Send ${picked ? 'selections ' : ''}to ${next.label}`, icon: 'next' as const,
-        run: () => {
-          const built = picked
-            ? selectionsToFactors(result.values.ages as number[], result.values.averages as (number | null)[], selections)
-            : next.build(result.input, result)
-          navigate(runPath(toolSlug(target), built))
-        },
-      }]
-    }),
-  ]
-
-  const grid = spec.grid ? (spec.fields.find(f => f.key === spec.grid) as TableField) : null
-  // Every grid-shaped input is drawn: a tool may take two triangles (a ratio) or
-  // a table beside its result (rate changes beside the on-level factors).
-  const triangles = spec.fields.filter((f): f is TriangleField => f.kind === 'triangle')
-  const tables = spec.fields.filter((f): f is TableField => f.kind === 'table' && f.key !== spec.grid)
-  const labelled = triangles.length + tables.length + (grid ? 1 : 0) > 1
-  const scalars = spec.fields.filter(f => (f.kind === 'number' || f.kind === 'choice' || f.kind === 'date') && fieldVisible(spec, f, draft)) as (NumberField | ChoiceField | DateField)[]
-  // An input's problem is said where the input is; one the card draws nowhere is said under the tiles.
-  const drawn = new Set([...triangles, ...tables, ...(grid ? [grid] : []), ...scalars].map(f => f.key))
-  const errorAt = (key: string) => (outcome.errorField === key ? outcome.error : null)
-  const looseError = outcome.error && !drawn.has(outcome.errorField ?? '') ? outcome.error : null
+  const {
+    draft, set, valueOf, undo, reset, undoReset, result, stale, figure, dragTo,
+    sourcing, setSourcing, selecting, selections, setSelections, drawnFigure, shownUnderField,
+    bankValue, fillFrom, sourcesFor, menu, grid, triangles, tables, labelled, scalars, errorAt, looseError,
+  } = useToolCard({ spec, initialInput, onOpenMethod, onResult, embedded, persist })
 
   return (
     <div className="rounded-xl border border-border bg-card p-3 text-card-foreground space-y-2.5 sm:space-y-3 sm:p-4" data-testid="tool-card">
@@ -256,7 +102,7 @@ export function ToolCard({
           {undo ? (
             <button
               type="button"
-              onClick={() => { setDraft(undo); setUndo(null) }}
+              onClick={undoReset}
               className="inline-flex h-10 items-center gap-1.5 rounded-lg border border-border px-3 text-sm font-medium transition-colors hover:bg-accent"
               data-testid="tool-undo-reset"
             >
@@ -365,23 +211,7 @@ export function ToolCard({
                   figures={embedded ? [] : figuresFor(f)}
                   onPickFigure={id => set(f.key, { assumption: id })}
                   onOpenSource={name => void openResourcePage(name)}
-                  sources={embedded ? [] : scalarSources(spec.id, f.key).map(source => ({
-                    label: toolById(source.tool)?.name ?? source.tool,
-                    open: () => {
-                      const tool = toolById(source.tool)
-                      if (!tool) return
-                      setSourcing({
-                        title: `${f.label} from ${tool.name}`,
-                        how: source.how,
-                        tool,
-                        initial: lastRun(tool.id),
-                        apply: r => {
-                          const v = source.take(r)
-                          if (v != null && Number.isFinite(v)) set(f.key, v)
-                        },
-                      })
-                    },
-                  }))}
+                  sources={sourcesFor(f)}
                 />
               ) : f.kind === 'date' ? (
                 <DateControl field={f} value={String(valueOf(f))} linked={linked?.has(f.key)} onChange={v => set(f.key, v)} />
@@ -415,15 +245,13 @@ export function ToolCard({
   )
 }
 
-/** The tool whose card carries the LDF selection exhibit (§6.6). */
-const SELECTING_TOOL = 'reserving.age_to_age_factors'
 
 /**
  * The menu's head: the question the tool answers, then what it was tested
  * against (R6) — each source opening in the app's reader. Drawn only for a
  * check `lib/tools/checks.ts` runs, so the line can't claim one that isn't.
  */
-function MenuHeader({ spec, onRead }: { spec: ToolSpec; onRead: () => void }) {
+export function MenuHeader({ spec, onRead }: { spec: ToolSpec; onRead: () => void }) {
   const sources = checksFor(spec.id)
   const datasets = datasetsFor(spec.id)
   return (
@@ -531,7 +359,7 @@ function InputBlock({
 }
 
 /** An input's name, led by the symbol the notation uses for it. */
-function FieldName({ symbol, label }: { symbol?: string; label: string }) {
+export function FieldName({ symbol, label }: { symbol?: string; label: string }) {
   return (
     <>
       {symbol && <Sym className="font-semibold">{symbol}</Sym>}
@@ -541,7 +369,7 @@ function FieldName({ symbol, label }: { symbol?: string; label: string }) {
 }
 
 /** What's wrong with an input, said where the input is. */
-function FieldError({ message }: { message: string }) {
+export function FieldError({ message }: { message: string }) {
   return <p role="alert" className="text-sm text-destructive">{message}</p>
 }
 
@@ -551,7 +379,7 @@ function FieldError({ message }: { message: string }) {
  * "R" beside the first tile's. Each barred letter is drawn with a rule over it
  * (a border, not an overline, which a clamped label's box clips away).
  */
-function Sym({ children, className }: { children: string; className?: string }) {
+export function Sym({ children, className }: { children: string; className?: string }) {
   const parts = children.split(/(.[\u0304\u0305])/u).filter(Boolean)
   return (
     <span className={className}>
@@ -560,31 +388,11 @@ function Sym({ children, className }: { children: string; className?: string }) 
   )
 }
 
-/** The key a tool page keeps its draft under (localStorage, this device only — R7). */
-const DRAFT_STORE = 'actuarial_tool_draft:'
-
-function readStore(key: string): string | null {
-  try {
-    return window.localStorage.getItem(key)
-  } catch {
-    return null
-  }
-}
-
-function writeStore(key: string, value: string | null) {
-  try {
-    if (value === null) window.localStorage.removeItem(key)
-    else window.localStorage.setItem(key, value)
-  } catch {
-    // Storage blocked (a private window): the card works, it just won't remember.
-  }
-}
-
 /** A date input: the browser's own picker, holding the ISO date the engine reads. */
 /** A linked value's paint: the primary colour, which is what a link is (docs/workflows.md). */
 const LINKED = 'border-primary bg-primary text-primary-foreground'
 
-function DateControl({ field, value, linked = false, onChange }: { field: DateField; value: string; linked?: boolean; onChange: (v: string) => void }) {
+export function DateControl({ field, value, linked = false, onChange }: { field: DateField; value: string; linked?: boolean; onChange: (v: string) => void }) {
   const id = `tool-${field.key}`
   return (
     <div className="flex items-center justify-between gap-3 py-1" data-field={field.key} data-linked={linked || undefined}>
@@ -754,7 +562,7 @@ function NumberControl({
   )
 }
 
-function ChoiceControl({ field, value, chosen, linked = false, onChange }: { field: ChoiceField; value: string; chosen: boolean; linked?: boolean; onChange: (v: string) => void }) {
+export function ChoiceControl({ field, value, chosen, linked = false, onChange }: { field: ChoiceField; value: string; chosen: boolean; linked?: boolean; onChange: (v: string) => void }) {
   const label = (
     <span className="text-sm text-muted-foreground">
       {field.label}

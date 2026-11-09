@@ -10,7 +10,7 @@
 //                   the Assumptions Bank's shelf (docs/assumptions-bank.md):
 //                   published figures, each linking into the tools that take it
 
-import { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Navigate, useLocation, useParams, useSearchParams } from 'react-router-dom'
 import { BookMarked, Calculator, Database, Sigma, Landmark, Scale, TrendingUp, type LucideIcon } from 'lucide-react'
 import { AssumptionsShelf } from '@/components/assumptions/AssumptionsShelf'
@@ -26,6 +26,11 @@ import { CheckMark } from '@/components/CheckMark'
 import { ListPanel, ListRow } from '@/components/ui/ListPanel'
 import { LogoTile } from '@/components/LogoTile'
 import { ToolCard } from '@/components/tools/ToolCard'
+import { ToolTemplate, type PinnedAnswer } from '@/components/tools/ToolTemplate'
+import { usesTemplate } from '@/lib/toolTemplate'
+import { examForConcepts } from '@/lib/toolExam'
+import { examAccentStyle } from '@/lib/examColors'
+import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { usePageHead } from '@/hooks/usePageHead'
@@ -208,14 +213,50 @@ function ToolPage({ slug }: { slug: string }) {
   usePageLabel(spec?.name)
   const back = useBack({ to: '/tools', label: 'All tools' })
   const open = useCallback(() => { if (spec) void openMethod(spec.method.concepts) }, [spec])
+  const { syllabi } = useWikiSyllabus()
+  // The exam that first teaches the method: the colour the template takes (§19).
+  const examKey = useMemo(() => (spec ? examForConcepts(spec.method.concepts, syllabi) : null), [spec, syllabi])
+  const [pinned, setPinned] = useState<PinnedAnswer | null>(null)
   if (!spec) return <Navigate to="/tools" replace />
+  const templated = usesTemplate(spec)
   return (
     <>
-      <ToolsSearchBar kind="tool" title={spec.name} back={back} />
+      <ToolsSearchBar
+        kind="tool"
+        title={spec.name}
+        back={back}
+        pinned={templated && pinned ? <PinnedPill answer={pinned} examKey={examKey} /> : null}
+      />
       <div className="container mx-auto max-w-2xl space-y-3 px-4 py-4">
         {/* Keyed by the run, so a Send to… or a pasted link starts the card afresh. */}
-        <ToolCard key={`${slug}${location.hash}`} spec={spec} initialInput={decodeRunInput(location.hash) ?? undefined} onOpenMethod={open} persist />
+        {templated ? (
+          <ToolTemplate
+            key={`${slug}${location.hash}`}
+            spec={spec}
+            initialInput={decodeRunInput(location.hash) ?? undefined}
+            onOpenMethod={open}
+            persist
+            examKey={examKey}
+            onPinAnswer={setPinned}
+          />
+        ) : (
+          <ToolCard key={`${slug}${location.hash}`} spec={spec} initialInput={decodeRunInput(location.hash) ?? undefined} onOpenMethod={open} persist />
+        )}
       </div>
     </>
+  )
+}
+
+/** The answer in the title strip, in the exam's wash, while the answer card is scrolled away. */
+function PinnedPill({ answer, examKey }: { answer: PinnedAnswer; examKey: string | null }) {
+  return (
+    <span
+      style={examKey ? examAccentStyle(examKey) : undefined}
+      className="inline-flex shrink-0 items-baseline gap-1.5 rounded-full bg-[var(--exam-accent-soft,hsl(var(--foreground)/0.07))] px-3 py-1 text-sm"
+      data-testid="tool-pinned-answer"
+    >
+      <span className="text-xs text-muted-foreground">{answer.symbol}</span>
+      <span className="font-bold tabular-nums">{answer.value}</span>
+    </span>
   )
 }

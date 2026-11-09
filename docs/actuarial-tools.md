@@ -1576,3 +1576,66 @@ with no triangle of their own, or an analyst wanting the latest medical CPI, lea
 it. → Data Sources (§4.11).
 
 The changes are planned as **V2**, ahead of Phase 2 (§11).
+
+---
+
+## 19. The tool template (2026-11-09)
+
+A redesign of the tool page, worked out over three rounds of mock-ups and built first on five
+tools so it can be checked on a phone before the other tools move over. `TEMPLATE_TOOLS` in
+`lib/toolTemplate.ts` lists them: **Bornhuetter-Ferguson** (a grid), **Permissible Loss Ratio**
+(three inputs, one a published figure), **Bond Price** (six inputs), and two test tools,
+**Limited Expected Value** (a choice that changes which inputs exist) and **Age-to-Age Factors**
+(a triangle with its selection exhibit). Every other tool still draws `ToolCard`; both run one
+hook, `components/tools/useToolCard.ts`, so moving a tool changes how it looks and nothing it
+computes. The workflow board's embedded cards stay `ToolCard`. The **Assumptions Bank** shelf
+(`/tools/assumptions`) takes the same shape. The catalogue (`/tools`) is next, after the template.
+
+**The page** (`components/tools/ToolTemplate.tsx`), top to bottom:
+
+- **The answer card**: the info popup's banner (style guide §7.2c), tinted in the tool's exam
+  (below). The exam's logo, the area and the reading ("Reserving · Friedland, Ch. 9"), the name
+  (which opens the method), then the answer as one big figure with the rest beside it, and the
+  live figure (§6.7) inside the card. Reset and the ⋯ menu sit at its corner. The question the
+  tool answers is not repeated under the name: it is in the menu and the page's description.
+- **The answer stays on screen.** Once the card scrolls under the search bar, the first figure
+  rides in the title strip at the right (`PinnedPill` in `pages/Tools.tsx`, through
+  `ToolsSearchBar`'s `pinned`). That replaces R10's "fits a phone without scrolling" for template
+  tools, which a six-input tool can't keep with a slider per row.
+- **Your judgments first** (`inputGroups`): the inputs flagged `judgment` (R3), in their own
+  group above the rest.
+- **The grid** is numbered as a published exhibit: every column but the origin, inputs then
+  computed (`columnNumbers`), and each computed column carrying a `formula` (on `TableColumn`,
+  written in `{key}`s) printed under the grid in those numbers, `(4) = (1) + (5)`. Each input
+  column carries its source tag under its name.
+- **Input rows**: label, value pill, source tag. A tool with **three scalar inputs or fewer**
+  keeps a slider on every row (`INLINE_SLIDER_LIMIT`); past that, a row is one line and opens the
+  edit sheet, which has the slider. A short choice is a segmented control in its row; a long one
+  opens a sheet of options.
+- **The edit sheet** (`components/tools/ValueSheet.tsx`), opened by a value pill: the slider,
+  the published figures the bank holds for the field, the tools it can be taken from, the reader's
+  own value typed on **the app's own keypad** (so the phone's keyboard never covers the sheet;
+  `pressKey` / `keypadValue`), and the way back to the default. A field with none of the first
+  two gets just the slider and the keypad.
+- Then the working (one fold, the notation at its head), where the result can go next, Download
+  .xlsx, and one line of fine print: what it was tested against.
+
+**Where a value came from** — the source tag on every input (`components/tools/SourceTag.tsx`,
+`scalarSource` / `columnSource`): **Default** (still the example's value: the draft holds every
+non-judgment input from the start, so "in the draft" is not the test, `touched` is), **Yours**,
+**Published** (the document and locator, plus *Not fact checked* in amber until it is), and
+**Linked** (taken from another tool, for as long as the input still holds what that tool gave
+it — an `Origin` is remembered with its value, so no edit has to clear it). Colour belongs to the
+exam, so a tag is told by its mark and its words.
+
+**A tool's colour** is the **earliest exam whose syllabus teaches its method** (`lib/toolExam.ts`):
+the exam pages whose learning objectives link any of `spec.method.concepts`, and of those the one
+lowest on the ladder, read off the exam hues themselves. Both bodies' ladders count, so a method
+the SOA's FAM teaches before CAS Exam 5 takes FAM's colour (Bornhuetter-Ferguson, Loss Ratio
+Method). A bank set takes the exam whose Source Material lists its document (OSFI's MCT → Exam 6);
+one on no syllabus is neutral. `toolExam.test.ts` pins the template tools' exams against the vault.
+
+**The Assumptions Bank shelf**: each document is a banner (its exam's tint, the publisher over
+the title, "N of M figures read" and the effective date), its figures as rows (value, locator, how
+many tools take it), the Fact Check badge and the source links under it. A figure a tool takes
+opens **Use in…**, a sheet of those tools, each with its exam's logo.

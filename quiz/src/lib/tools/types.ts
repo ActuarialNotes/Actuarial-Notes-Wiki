@@ -73,6 +73,12 @@ export interface TableColumn {
   optional?: boolean
   /** What an empty cell of it shows, faintly: the words it takes ("exclude…"). */
   placeholder?: string
+  /**
+   * A computed column's formula in terms of the table's other columns, each
+   * written `{key}` — the card prints it with the exhibit's column numbers,
+   * `(4) = (1) + (5)` (docs/actuarial-tools.md §19).
+   */
+  formula?: string
 }
 
 /** Rows of named columns: origins with their figures, cash flows with their times. */

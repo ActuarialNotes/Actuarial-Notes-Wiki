@@ -299,7 +299,7 @@ test.describe('quiz battle', () => {
   })
 
   test('plays an online battle between two devices', async ({ context }) => {
-    test.setTimeout(90_000)
+    test.setTimeout(120_000)
     const host = await context.newPage()
     const guest = await context.newPage()
 

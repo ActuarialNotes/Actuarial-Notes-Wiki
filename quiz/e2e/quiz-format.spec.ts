@@ -24,17 +24,29 @@ test.describe('quiz setup', () => {
     await expect(page).toHaveURL(/count=5/)
   })
 
-  test('the count opens the sheet at How many, which takes any number', async ({ page }) => {
+  test('the count opens its choices on the card, which take any number', async ({ page }) => {
     await page.goto('/?topic=Exam%205')
+    const card = page.getByRole('region', { name: 'Your quiz' })
     await page.getByTestId('quiz-count').click()
-    const sheet = page.getByRole('dialog', { name: 'Your quiz' })
-    await expect(sheet).toBeVisible()
-    const other = sheet.getByRole('textbox', { name: /Other number of questions/ })
-    await expect(other).toBeInViewport()
-    await other.fill('12')
-    await expect(sheet.getByRole('button', { name: 'Start 12 questions' })).toBeVisible()
-    await sheet.getByRole('button', { name: 'Close' }).click()
-    await expect(page.getByRole('region', { name: 'Your quiz' })).toContainText('12questions')
+    await expect(page.getByRole('dialog', { name: 'Your quiz' })).toHaveCount(0)
+    await card.getByRole('radio', { name: '5 questions' }).click()
+    await expect(card).toContainText('5questions')
+    await card.getByRole('textbox', { name: /Other number of questions/ }).fill('12')
+    await expect(card).toContainText('12questions')
+  })
+
+  test("the card's settings switch in place", async ({ page }) => {
+    await page.goto('/?topic=Exam%205')
+    const card = page.getByRole('region', { name: 'Your quiz' })
+    const timed = card.getByRole('switch', { name: 'Timed' })
+    const was = await timed.getAttribute('aria-checked')
+    await timed.click()
+    await expect(timed).toHaveAttribute('aria-checked', was === 'true' ? 'false' : 'true')
+    await expect(page.getByRole('dialog', { name: 'Your quiz' })).toHaveCount(0)
+
+    await card.getByRole('button', { name: /^Difficulty:/ }).click()
+    await card.getByRole('checkbox', { name: /Hard/ }).click()
+    await expect(card.getByRole('button', { name: /^Difficulty: Easy \+ Medium/ })).toBeVisible()
   })
 
   test('a past paper is sat whole, as a practice exam', async ({ page }) => {

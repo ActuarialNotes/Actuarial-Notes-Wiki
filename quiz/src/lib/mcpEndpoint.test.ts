@@ -3,7 +3,7 @@ import { describe, it, expect, afterEach, vi } from 'vitest'
 // (quiz/api/_mcp/load.js), with the network stubbed: CORS, the origin and rate
 // policies, body parsing, and how the knowledge base is found and cached.
 import handler, { allowedOrigin, rateLimitWait } from '../../api/mcp.js'
-import { clearIndexCache, knowledgeBaseHeaders, knowledgeBaseUrl, loadIndex } from '../../api/_mcp/load.js'
+import { clearIndexCache, filingsUrl, knowledgeBaseHeaders, knowledgeBaseUrl, loadFilings, loadIndex } from '../../api/_mcp/load.js'
 import { buildKnowledgeBase } from './knowledgeBase'
 
 const KB = buildKnowledgeBase({
@@ -138,6 +138,19 @@ describe('the knowledge base loader', () => {
     for (const host of ['', 'evil.example/path?', 'a b', 'user@evil.example']) {
       expect(() => knowledgeBaseUrl({ host }, {}), host).toThrow()
     }
+  })
+
+  it("reads OSFI's filings from beside the knowledge base, once per URL", async () => {
+    expect(filingsUrl({ host: 'quiz.actuarialnotes.com' }, {})).toBe('https://quiz.actuarialnotes.com/ai/osfi-pc4-summary.json')
+    expect(filingsUrl({ host: 'x.test' }, { MCP_KB_URL: 'https://cdn.example/ai/kb.json' })).toBe('https://cdn.example/ai/osfi-pc4-summary.json')
+    const fetchImpl = vi.fn(async () => new Response('{"periods":[]}', { status: 200 }))
+    expect(await loadFilings('https://a.test/f.json', { fetchImpl, headers: {} })).toEqual({ periods: [] })
+    await loadFilings('https://a.test/f.json', { fetchImpl, headers: {} })
+    expect(fetchImpl).toHaveBeenCalledTimes(1)
+    const missing = vi.fn(async () => new Response('', { status: 404 }))
+    await expect(loadFilings('https://b.test/f.json', { fetchImpl: missing, headers: {} })).rejects.toThrow(/404/)
+    await expect(loadFilings('https://b.test/f.json', { fetchImpl: missing, headers: {} })).rejects.toThrow(/404/)
+    expect(missing).toHaveBeenCalledTimes(2)
   })
 
   it('sends the deployment-protection bypass only when the project has one', () => {

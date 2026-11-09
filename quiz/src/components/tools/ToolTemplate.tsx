@@ -22,12 +22,14 @@
 // be taken from, the app's own keypad, and the way back to the default.
 
 import { useEffect, useRef, useState, type ReactNode } from 'react'
-import { BookOpen, Calculator, ChevronRight, RotateCcw, Undo2 } from 'lucide-react'
+import { BookOpen, Calculator, ChevronRight, Landmark, RotateCcw, Undo2 } from 'lucide-react'
 import {
   AREAS,
   checksFor,
   figuresFor,
+  filedPlace,
   formatValue,
+  periodLabel,
   type ChoiceField,
   type DateField,
   type NumberField,
@@ -49,6 +51,7 @@ import { ExamLogo } from '@/components/ExamLogo'
 import { EXAM_BANNER, NEUTRAL_BANNER } from '@/components/ui/InfoSheet'
 import { SegmentedControl } from '@/components/ui/SegmentedControl'
 import { cn } from '@/lib/utils'
+import { CheckMark } from '@/components/CheckMark'
 import { FactorSelection } from './FactorSelection'
 import { ToolFigure } from './ToolFigure'
 import { SourceSheet } from './SourceSheet'
@@ -130,9 +133,14 @@ export function ToolTemplate({
 
   const sourceOf = (f: ScalarField): ValueSource => {
     const fig = f.kind === 'number' ? m.drawnFigure(f) : null
+    const cell = f.kind === 'number' ? m.drawnFiling(f) : null
     return scalarSource({
       touched: m.touched(f),
       published: fig ? { label: `${fig.edition} · ${fig.locator}`, checked: fig.verdict === 'verified' } : null,
+      filed: cell ? {
+        label: `OSFI · ${cell.source.name}, ${periodLabel(cell.source.period)} · line ${cell.source.line}`,
+        title: `As filed with OSFI: ${filedPlace(cell.source)}, "${cell.source.label}" (${cell.source.address}, ${cell.source.units}). ${cell.source.attribution}`,
+      } : null,
       origin: m.origins[f.key],
       value: m.draft[f.key],
     })
@@ -220,6 +228,7 @@ export function ToolTemplate({
             </div>
           </div>
         )}
+        {m.result && !m.stale && <FiledAnswerLine result={m.result} />}
         {m.figure ? (
           <div className={cn('px-2.5 pb-3 pt-1', m.stale && 'opacity-50')}>
             <ToolFigure figure={m.figure} onDrag={m.dragTo} height={inline ? 96 : 72} />
@@ -342,6 +351,26 @@ export function ToolTemplate({
       )}
       {m.sourcing && <SourceSheet sourcing={m.sourcing} onClose={() => m.setSourcing(null)} />}
     </div>
+  )
+}
+
+/**
+ * The filing's own figure under the answer, when every filed input came from
+ * one filing (docs/osfi-tools-design.md): it agrees, or the run's warning
+ * says how far apart they are.
+ */
+function FiledAnswerLine({ result }: { result: ToolResult }) {
+  const filed = result.values.filed_answer as { value: number; unit: NumberUnit; agrees: boolean; name: string; period: string; line: string } | undefined
+  if (!filed) return null
+  return (
+    <p className="flex items-center gap-1.5 px-3.5 pb-1 text-sm text-foreground/80" data-testid="tool-filed-answer">
+      <Landmark className="h-3.5 w-3.5 shrink-0" aria-hidden />
+      <span className="min-w-0">
+        Filed <b className="font-semibold tabular-nums text-foreground">{formatValue(filed.value, filed.unit)}</b> · {filed.name}, {periodLabel(filed.period)}
+        {filed.agrees ? '' : ' · differs'}
+      </span>
+      {filed.agrees && <CheckMark className="h-3.5 w-3.5 shrink-0" />}
+    </p>
   )
 }
 

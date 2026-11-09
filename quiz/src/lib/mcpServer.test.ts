@@ -9,6 +9,7 @@ import { TOOLS, DEFAULT_SITE_URL, createActuarialNotesServer, normalizeAnswerTex
 import { indexKnowledgeBase, normalizeTerm as mcpNormalizeTerm, objectiveKey as mcpObjectiveKey, examLookupKey } from '../../api/_mcp/knowledgeBase.js'
 import { KNOWLEDGE_BASE_PATH } from '../../api/_mcp/load.js'
 import { ErrorCode } from '../../api/_mcp/protocol.js'
+import { installFilings as installInBundle } from '../../api/_tools/engine.js'
 import { KNOWLEDGE_BASE_ASSET, buildKnowledgeBase, normalizeTerm, readKnowledgeBaseSources, type KnowledgeBaseSources } from './knowledgeBase'
 import { PUBLIC_SITE_URL } from './aiConnector'
 import { normalizeAnswerText, objectiveKey } from './parser'
@@ -527,6 +528,36 @@ describe('the calculators — list_tools, describe_tool, run_tool', () => {
     const body = JSON.parse(out.content[0].text)
     expect(body.values.present_value).toBeCloseTo(772.17, 2)
     expect(body.method.concepts).toEqual([{ name: 'Annuity Immediate' }, { name: 'Annuity Due' }])
+  })
+
+  it("reads OSFI's filings, loading them into the engine first when it has none", async () => {
+    const file = JSON.parse(await readFile(path.join(REPO_ROOT, 'quiz/src/lib/tools/data/filings/osfi-pc4-summary.json'), 'utf8'))
+    installInBundle(null)
+    let loads = 0
+    const withFilings = createActuarialNotesServer({ loadIndex: async () => ix, loadFilings: async () => { loads++; return file } })
+    const call = async (args: Record<string, unknown>) =>
+      JSON.parse(((await withFilings.methods['tools/call']({ name: 'run_tool', arguments: args }, ctx)) as ToolResult).content[0].text)
+    const read = await call({ tool: 'data.insurer_return', input: { insurer: 'Intact Insurance Company', quarter: '2026Q2' } })
+    expect(loads).toBe(1)
+    expect(read.summary).toBe('Intact Insurance Company filed 191.75% on PC4 page 10.00 line 140 ("Ratio (Line 10 or line 25 as a % of line 130)") for Q2 2026, as filed with OSFI. Contains information licensed under the Open Government Licence – Canada.')
+    // The filed lines go on to MCT Ratio as references, and the filing's own ratio comes back beside the recomputed one.
+    const ratio = await call({ tool: 'capital.mct_ratio', input: read.values.handoff })
+    expect(loads).toBe(1)
+    expect(ratio.values.filed_answer).toMatchObject({ agrees: true, name: 'Intact Insurance Company', period: '2026Q2' })
+    expect(ratio.judgments.find((j: { field: string }) => j.field === 'insurance').filed.attribution).toBe('Contains information licensed under the Open Government Licence – Canada.')
+    expect(ratio.tested_against[0]).toBe('Every MCT and BAAT ratio filed with OSFI, Q1 2023 to Q2 2026 (1,909 filings), PC4 page 10.00, lines 10–140')
+  })
+
+  it("says the filings aren't loaded rather than inventing a figure", async () => {
+    installInBundle(null)
+    try {
+      const offline = createActuarialNotesServer({ loadIndex: async () => ix, loadFilings: async () => { throw new Error('404') } })
+      const out = (await offline.methods['tools/call']({ name: 'run_tool', arguments: { tool: 'data.insurer_return' } }, ctx)) as ToolResult
+      expect(out.isError).toBe(true)
+      expect(out.content[0].text).toMatch(/OSFI's filings aren't loaded here/)
+    } finally {
+      installInBundle(JSON.parse(await readFile(path.join(REPO_ROOT, 'quiz/src/lib/tools/data/filings/osfi-pc4-summary.json'), 'utf8')))
+    }
   })
 
   it('answers a bad input with a tool error that points at describe_tool', async () => {

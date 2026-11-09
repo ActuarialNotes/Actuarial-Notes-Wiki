@@ -589,8 +589,33 @@ export function verifyCheck(check: ToolCheck): CheckMismatch[] {
 }
 
 /** What a tool says it was tested against: the sources of its checks — one per exhibit, then the questions. */
+/**
+ * What MCT Ratio is tested against beyond the published examples: OSFI's own
+ * filings, every insurer's filed ratio recomputed from its filed lines
+ * (`filings.test.ts` runs every one, and holds the count and quarters said
+ * here to the filings file), and the one MCT calculation the question bank
+ * prints — a written question, so `filings.test.ts` marks it rather than the
+ * multiple-choice checks in `questionChecks.ts`.
+ */
+export const FILED_CHECKS: { tool: string; source: SourceRef; filings?: { count: number; from: string; to: string } }[] = [
+  {
+    tool: 'capital.mct_ratio',
+    filings: { count: 1909, from: '2023Q1', to: '2026Q2' },
+    source: {
+      title: 'Every MCT and BAAT ratio filed with OSFI, Q1 2023 to Q2 2026 (1,909 filings)',
+      url: 'https://open.canada.ca/data/en/dataset/4c6c515f-7c44-4bb6-ab56-c5f79f75f705',
+      locator: 'PC4 page 10.00, lines 10–140',
+    },
+  },
+  {
+    tool: 'capital.mct_ratio',
+    source: { question: 'cas6c-2017s-q24', title: 'CAS Exam 6C, Spring 2017, question 24', url: '/quiz?ids=cas6c-2017s-q24', locator: 'part a' },
+  },
+]
+
 export function checksFor(toolId: string): SourceRef[] {
   return [
+    ...FILED_CHECKS.filter(c => c.tool === toolId).map(c => c.source),
     ...CHECKS.filter(c => c.tool === toolId).map(c => c.source),
     ...QUESTION_CHECKS.filter(q => q.steps.some(s => s.tool === toolId)).map(questionRef),
   ]

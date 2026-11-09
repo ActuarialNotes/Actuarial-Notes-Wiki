@@ -2,7 +2,9 @@ import { describe, it, expect } from 'vitest'
 import { draftFromStore, draftToStore, fieldVisible, fromMode, groupSources, initialDraft, parseClipboardBlock, pastedTriangle, shortSource, toMode, withoutHeader } from './toolDraft'
 import { checksFor } from './tools'
 import { toolResultSheets, runToolCall } from './toolExport'
-import { runTool, toolById, type ToolSpec } from './tools'
+import { installFilings, runTool, toolById, type ToolSpec } from './tools'
+import { readFileSync } from 'node:fs'
+import { FILINGS_FILE } from '../test/installFilings'
 
 const spec = (id: string) => toolById(id) as ToolSpec
 
@@ -18,6 +20,19 @@ describe('the card draft', () => {
     const draft = initialDraft(spec('ratemaking.loss_ratio_method'), { profit: 0.03, nonsense: 1 })
     expect(draft.profit).toBe(0.03)
     expect(draft).not.toHaveProperty('nonsense')
+  })
+
+  it('leaves out a default not known yet, so it is read once the filings are in', () => {
+    const ir = spec('data.insurer_return')
+    installFilings(null)
+    try {
+      const draft = initialDraft(ir)
+      expect(draft).not.toHaveProperty('insurer')
+      expect(draft).not.toHaveProperty('quarter')
+    } finally {
+      installFilings(JSON.parse(readFileSync(FILINGS_FILE, 'utf8')))
+    }
+    expect(initialDraft(ir)).toHaveProperty('quarter', '2026Q2')
   })
 
   it('shows a field only while its controlling field allows it', () => {

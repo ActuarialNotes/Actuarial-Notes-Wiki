@@ -628,6 +628,9 @@ function examGuidesPlugin(): Plugin {
 //                                zipped the way Claude and ChatGPT upload it
 //   llms.txt                     a short index for an assistant that is only
 //                                browsing the site
+//   ai/osfi-pc4-summary.json     OSFI's filed MCT summaries, which the
+//                                connector's calculators install (the app
+//                                fetches its own hashed copy, lib/toolFilings.ts)
 //
 // Emitted into the build rather than bundled: the app itself never imports any
 // of it, and the export is ~10 MB.
@@ -674,11 +677,16 @@ async function buildSkillZip(): Promise<Uint8Array> {
   return buildZip(files)
 }
 
+/** Mirrors FILINGS_PATH in api/_mcp/load.js. */
+const FILINGS_ASSET = 'ai/osfi-pc4-summary.json'
+const readFilings = () => readFile(path.join(REPO_ROOT, 'quiz/src/lib/tools/data/filings/osfi-pc4-summary.json'), 'utf-8')
+
 function aiConnectorAssetsPlugin(): Plugin {
   const origin = _buildEnv.VITE_SITE_URL || PUBLIC_SITE_URL
   const assets: Record<string, { type: string; build: () => Promise<string | Uint8Array> }> = {
     [KNOWLEDGE_BASE_ASSET]: { type: 'application/json', build: async () => JSON.stringify(await collectKnowledgeBase()) },
     [SKILL_ASSET]: { type: 'application/zip', build: buildSkillZip },
+    [FILINGS_ASSET]: { type: 'application/json', build: readFilings },
     'llms.txt': {
       type: 'text/plain; charset=utf-8',
       build: async () => buildLlmsTxt(await collectKnowledgeBase(), connectorUrl(origin), skillUrl(origin)),
@@ -706,6 +714,7 @@ function aiConnectorAssetsPlugin(): Plugin {
       const kb = await collectKnowledgeBase()
       this.emitFile({ type: 'asset', fileName: KNOWLEDGE_BASE_ASSET, source: JSON.stringify(kb) })
       this.emitFile({ type: 'asset', fileName: SKILL_ASSET, source: await buildSkillZip() })
+      this.emitFile({ type: 'asset', fileName: FILINGS_ASSET, source: await readFilings() })
       this.emitFile({ type: 'asset', fileName: 'llms.txt', source: buildLlmsTxt(kb, connectorUrl(origin), skillUrl(origin)) })
     },
   }
@@ -1006,5 +1015,7 @@ export default defineConfig({
   // up by vitest's default **/*.spec.ts glob.
   test: {
     include: ['src/**/*.{test,spec}.{ts,tsx}'],
+    // OSFI's filings, installed into the engine for every test (src/test/installFilings.ts).
+    setupFiles: ['src/test/installFilings.ts'],
   },
 })

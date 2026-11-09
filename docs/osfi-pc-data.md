@@ -316,7 +316,7 @@ They're in order of what they unlock. Each does one thing, and the bigger jobs a
 
 | Tool | Answers | In → out | Proven against | Exam |
 |---|---|---|---|---|
-| **MCT Ratio** (planned, §4.8) | What's the MCT ratio? | Capital available, each risk's required amount, the guideline's factors → the ratio | **Every company's filed ratio** in PC4, about 130 companies a quarter over 12 quarters, all labelled already | 6C |
+| **MCT Ratio** (built, `osfi-tools-design.md` §8) | What's the MCT ratio? | Capital available, each risk's required amount, the guideline's factors → the ratio | **Every company's filed ratio** in PC4, about 130 companies a quarter over 12 quarters, all labelled already | 6C |
 | **IFRS 17 Roll-Forward** (new) | How did the insurance liability move? | Opening LRC/LIC, revenue, service expenses, finance expense, cash flows → closing, with the loss component split out | Each company's 20.14 and 20.18 against its own filed closing balance. **Archive only**, Q1 2023 – Q3 2025 (§1.4) | 6C |
 | **Insurance Service Ratios** (new) | What are the IFRS 17 KPIs? | Insurance revenue, service expenses, net reinsurance expense, gross or net (a judgment) → claims, expense and combined ratios as IBC defines them | IBC's worked examples if the paper prints any; otherwise held to its definitions and labelled *untested* (R6) | 6C |
 | **Market Share** (new) | What share of this market does each insurer write? | PC2 93.30 (premiums written) or 67.40 (insurance revenue) for a class and a province, over the companies the reader picks → shares and the HHI | Shares sum to 1 over the full filer set | 6C, Cowork |
@@ -449,7 +449,7 @@ Each step is a PR, and each is green before the next.
 | Phase | Work | Size |
 |---|---|---|
 | 0 | ✅ `osfi_extract.py`'s API pager, checks and tests (2026-11-09). Still to do: the CSV backfill, the archive reader, the institution crosswalk, and the **full parity diff** (archive against portal, every shared cell, 2000 – 2025 Q3). Read the user manual and Data Dictionary (totals, D-OSFI-7). Rewrite the two OSFI data pages and add the Life one | M |
-| 1 | **Insurer Return** over PC1–PC4 for the IFRS 17 periods. **MCT Ratio** with every filed ratio as a fixture. Capital Factors. The weekly refresh job | M |
+| 1 | ◐ **Insurer Return** over PC4 page 10.00 and **MCT Ratio** with every filed ratio as a test, Q1 2023 – Q2 2026 (built 2026-11-09, `docs/osfi-tools-design.md` §8). Still to do: PC1–PC3 lines, Capital Factors, the weekly refresh job | M |
 | 2 | **IFRS 17 Roll-Forward** on the archive's 20.14/20.18. Insurance Service Ratios. Market Share. Peer Position. Workflows templates | M |
 | 3 | Connector: `find_insurer`, the dictionary resource, the practitioner prompt. Cowork filing documents and the rule change. Exam 6C links and questions (§10) | M |
 | 4 | History: *Insurer Return (IFRS 4)*, series mode, the bucket, and Loss Development Data from the old annual returns if the exhibits are there | L |

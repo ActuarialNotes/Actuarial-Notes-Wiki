@@ -1,7 +1,8 @@
 # Insurer Return and MCT Ratio: three designs
 
-_Written 2026-11-09. A design proposal under roadmap **A11** (`docs/osfi-pc-data.md`, phase 1),
-not a build spec. It picks up where §4.1–4.2 of that plan stop, and holds both tools to the
+_Written 2026-11-09. A design proposal under roadmap **A11** (`docs/osfi-pc-data.md`, phase 1).
+**Design C's step 1 was built the same day (D-OT1 = C); §8 is what was built and where it
+departs from the text above.** It picks up where §4.1–4.2 of that plan stop, and holds both tools to the
 latest tool specs: the ground rules R1–R11 and Data Source rules (`docs/actuarial-tools.md` §3,
 §4.11), the tool template (§19) and template v2 (`docs/tool-template-v2.md`)._
 
@@ -296,3 +297,67 @@ next, rather than adding a parallel track.
    `e2e/tools.spec.ts` with Insurer Return → MCT Ratio arriving Linked (or Filed).
 
 Every reader-facing string here is a draft for the `app-copy` pass.
+
+---
+
+## 8. As built (2026-11-09)
+
+Design C, step 1, with all fourteen IFRS 17 quarters (Q1 2023 – Q2 2026; D-OT2 answered "as many
+as is reasonable in one go"). Q3 2026 is left out because insurers are still filing it.
+
+**The data.** `scripts/osfi_extract.py export-summary --to 2026Q2` reads PC4 page 10.00 for every
+quarter (from the page cache or the API) into `quiz/src/lib/tools/data/filings/osfi-pc4-summary.json`:
+26 lines with OSFI's English and French labels (identical in all fourteen quarters; a relabelled
+line stops the export), 149 insurers, each quarter's values with its slice hash and the hash of
+the whole PC4 return. That return hash equals the committed manifest's (`test_osfi_extract.py`
+holds them equal), so the file is tied to the audit trail. 407 KB.
+
+**Installed, not carried.** The file is too big for the engine (`api/_tools/engine.js` is 112 KB
+gzipped; the file is 145 KB), so `lib/tools/filings.ts` holds it installed, as `bank.ts` holds the
+Assumptions Bank. The app fetches it as a hashed asset the first time a card needs it
+(`lib/toolFilings.ts`, through `useToolCard`); the connector fetches `/ai/osfi-pc4-summary.json`
+from its own deployment before a calculator runs (`api/_mcp/load.js`, emitted by the
+`ai-connector-assets` plugin). Every unit test runs with it installed (`src/test/installFilings.ts`).
+
+**Filed references.** A number field names the addresses it takes (`filed` on `NumberField`), and
+takes `{ "filed": "osfi-pc:2026Q2:27906:P100005001" }`. `normalizeInput` reads it in; `runTool`
+puts the filing on the judgment (`Judgment.filed`, with the licence's attribution), adds a working
+step in OSFI's words, and puts the reference and its quarter's hash into the input hash. A spec's
+`filedAnswer` names the line its answer recomputes: when every filed input comes from one filing,
+the run reads that filing's figure into `values.filed_answer`, says in the working whether the two
+agree within the filed precision, and warns when they don't. Inputs from two filings are warned
+about. The template draws a filed value's source tag (`OSFI · Intact Insurance Company, Q2 2026 ·
+line 50`) and the filed line under the answer (`Filed 191.75% · Intact Insurance Company, Q2
+2026`, ticked when it agrees).
+
+**The tools.** `data.insurer_return` (Insurer, Quarter, Line; the page as filed; the line's
+fourteen-quarter history as its figure; hands the five lines on to MCT Ratio, a branch on its
+net assets and the BAAT) and `capital.mct_ratio` (in a new practice area, *Risk and capital*:
+Test, then capital available and the four margins; the diversification credit, the minimum and
+the ratio). Both are on the tool template. The insurer list's sheet has a search box (any choice
+with more than twelve options).
+
+**Tested against.** Every one of the 1,909 MCT and BAAT ratios filed Q1 2023 – Q2 2026 recomputes
+from its five filed inputs within the filed precision (`filings.test.ts`), including a branch that
+filed negative net assets (−414.05%), which is why capital available takes a negative number. The
+card's default is CAS Exam 6C Spring 2017 Q24 (150.00%), its figures quoted from the question by
+the test. Both are listed in the card's *Tested against* (`FILED_CHECKS` in `lib/tools/checks.ts`).
+
+**Departures from the text above.**
+
+- **The guideline's figures ride in the engine** (`MCT_CORRELATION`, `MCT_DIVISOR`), not as bank
+  reads (D-OT4's default). The connector doesn't install the Assumptions Bank yet (its Phase 2),
+  so a bank read would leave `run_tool` without them. The bank set holds the same figures (the
+  correlation row was added, transcribed with `assumption_lint.py --against` from the guideline's
+  §8.1 and the set re-read on 2026-11-09, since the page's bytes had changed), and the test holds
+  them equal.
+- **Insurer Return reads one line at a time** with the page around it as its table, as design C
+  said; it has no PC1 or PC2 lines yet (step 2).
+- **No Operational Risk Margin or Diversification Credit tool**: MCT Ratio takes the operational
+  margin as filed and computes the credit itself (step 2, if the 6C pages want them apart).
+- **The dataset page** `Resources/Data/OSFI/Property and Casualty.md` was rewritten as the
+  portal dataset's page, in the shape of the other Data Sources' pages.
+
+**Next.** The weekly refresh job (`osfi-pc-data.md` §3.2) re-running `export-summary`; PC1 and PC2
+lines (step 2, with per-filing files); `find_insurer` for agents.
+

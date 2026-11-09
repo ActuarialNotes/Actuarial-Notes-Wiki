@@ -76,7 +76,7 @@ export function ToolCard({
   const {
     draft, set, valueOf, undo, reset, undoReset, result, stale, figure, dragTo,
     sourcing, setSourcing, selecting, selections, setSelections, drawnFigure, shownUnderField,
-    bankValue, fillFrom, sourcesFor, menu, grid, triangles, tables, labelled, scalars, errorAt, looseError,
+    numberOf, fillFrom, sourcesFor, menu, grid, triangles, tables, labelled, scalars, errorAt, looseError,
   } = useToolCard({ spec, initialInput, onOpenMethod, onResult, embedded, persist })
 
   return (
@@ -203,7 +203,7 @@ export function ToolCard({
               {f.kind === 'number' ? (
                 <NumberControl
                   field={f}
-                  value={bankValue(f) ?? Number(valueOf(f))}
+                  value={numberOf(f)}
                   chosen={draft[f.key] !== undefined}
                   linked={linked?.has(f.key)}
                   onChange={v => set(f.key, v)}

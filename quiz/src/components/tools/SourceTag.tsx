@@ -1,11 +1,11 @@
 // The **source tag** every input of the tool template carries
 // (docs/actuarial-tools.md §19): where its value came from — the example's
 // default, the reader's own, a published figure from the Assumptions Bank, or
-// another tool. Colour belongs to the exam a tool is in, so a tag is told by
+// another tool, or a filing with OSFI. Colour belongs to the exam a tool is in, so a tag is told by
 // its mark and its words; only "Not fact checked" keeps its amber, because
 // it is a warning.
 
-import { BookOpen, CornerDownRight } from 'lucide-react'
+import { BookOpen, CornerDownRight, Landmark } from 'lucide-react'
 import type { ValueSource } from '@/lib/toolTemplate'
 import { cn } from '@/lib/utils'
 
@@ -35,6 +35,13 @@ export function SourceTag({ source, className }: { source: ValueSource; classNam
             <span className="truncate">{source.label}</span>
           </span>
           {!source.checked && <UncheckedTag />}
+        </span>
+      )
+    case 'filed':
+      return (
+        <span className={cn(TAG, 'bg-muted text-foreground', className)} data-source="filed" title={source.title}>
+          <Landmark className="h-3 w-3 shrink-0" aria-hidden />
+          <span className="truncate">{source.label}</span>
         </span>
       )
     case 'linked':

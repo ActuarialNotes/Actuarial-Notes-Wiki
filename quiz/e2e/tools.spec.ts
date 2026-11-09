@@ -296,4 +296,22 @@ test.describe('tools', () => {
     await expect(assumptions).toBeVisible()
     await expect(assumptions).toContainText('1.1189')
   })
+  test('reads an insurer\'s OSFI filing and recomputes its MCT ratio from the filed lines', async ({ page }) => {
+    await page.goto('/tools/insurer-return')
+    const card = page.getByTestId('tool-card')
+    // The insurer is picked from every filer, through the sheet's search.
+    await card.locator('[data-field="insurer"]').click()
+    await page.getByRole('searchbox').fill('intact insurance')
+    await page.getByRole('radio', { name: 'Intact Insurance Company', exact: true }).click()
+    await expect(card.getByTestId('tool-tile').first()).toHaveText('191.75%')
+
+    // Its lines go on to MCT Ratio as filed values, and the filing's own ratio sits under the answer.
+    await card.getByRole('button', { name: 'Send to MCT Ratio' }).click()
+    await expect(page).toHaveURL(/\/tools\/mct-ratio#input=/)
+    const mct = page.getByTestId('tool-card')
+    await expect(mct.getByTestId('tool-tile').first()).toHaveText('191.75%')
+    await expect(mct.getByTestId('tool-filed-answer')).toContainText('Filed 191.75% · Intact Insurance Company, Q2 2026')
+    await expect(mct.locator('[data-source="filed"]').first()).toContainText('OSFI · Intact Insurance Company, Q2 2026 · line')
+    await expect(page.getByText('Something went wrong')).toHaveCount(0)
+  })
 })

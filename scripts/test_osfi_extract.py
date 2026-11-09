@@ -163,5 +163,74 @@ class Paging(unittest.TestCase):
                 FakeApi(Path(d), offline=True).page("r", {}, 0, Path(d) / "none.json")
 
 
+class Summary(unittest.TestCase):
+    """The PC4 page 10.00 file the Actuarial Tools read (export-summary)."""
+
+    def test_addresses_split_into_page_line_and_column(self):
+        self.assertEqual(ox.address_parts("P100014001"), ("10.00", "140", "01"))
+        self.assertEqual(ox.address_parts("P602017510"), ("60.20", "175", "10"))
+        with self.assertRaises(ValueError):
+            ox.address_parts("100014001")
+
+    def test_keeps_page_10_only_and_leaves_out_the_total_rows(self):
+        rows = ox.read_rows(pages("PC4"), "2026Q2", "PC4")
+        institutions, dictionary, values, _, _ = ox.build({"PC4": rows})
+        source = {"resource_last_modified": None, "read_at": "x", "content_sha256": ox.content_hash(rows)}
+        s = ox.build_summary({"2026Q2": (institutions, dictionary["PC4"], values["PC4"], source)})
+        self.assertTrue(all(line["address"].startswith("P1000") for line in s["lines"]))
+        self.assertTrue(all(not institutions[i]["aggregate"] for i in s["institutions"]))
+        ratio = next(k for k, line in enumerate(s["lines"]) if line["address"] == ox.MCT_RATIO)
+        for inst, row in s["periods"][0]["values"].items():
+            self.assertEqual(len(row), len(s["lines"]))
+            self.assertEqual(row[ratio], ox.number(values["PC4"][inst][ox.MCT_RATIO]))
+
+    def test_a_line_relabelled_between_quarters_stops_the_export(self):
+        labels = {ox.MCT_RATIO: {"en": "Ratio", "fr": "Ratio"}}
+        inst = {"1": {"aggregate": False, "name": {"en": "A", "fr": "A"}, "group": {"en": "g", "fr": "g"}}}
+        src = {"resource_last_modified": None, "read_at": "x", "content_sha256": "sha256:0"}
+        with self.assertRaises(RuntimeError):
+            ox.build_summary({
+                "2026Q1": (inst, labels, {"1": {ox.MCT_RATIO: 150.0}}, src),
+                "2026Q2": (inst, {ox.MCT_RATIO: {"en": "Other", "fr": "Autre"}}, {"1": {ox.MCT_RATIO: 151.0}}, src),
+            })
+
+
+class CommittedSummary(unittest.TestCase):
+    """The committed file against the committed manifests: same PC4 content, and its own hashes hold."""
+
+    def setUp(self):
+        if not ox.SUMMARY_OUT.exists():
+            self.skipTest("no summary file")
+        self.summary = json.loads(ox.SUMMARY_OUT.read_text())
+
+    def test_every_quarter_is_the_pc4_its_manifest_hashed(self):
+        for p in self.summary["periods"]:
+            manifest = ox.OUT / "pc" / p["period"] / "manifest.json"
+            self.assertTrue(manifest.exists(), p["period"])
+            recorded = json.loads(manifest.read_text())["returns"]["PC4"]["content_sha256"]
+            self.assertEqual(p["pc4_sha256"], recorded, p["period"])
+
+    def test_each_quarter_hashes_to_what_it_records(self):
+        for p in self.summary["periods"]:
+            rows = {inst: {"_cells": cells} for inst, cells in p["values"].items()}
+            self.assertEqual(ox.summary_hash(p["period"], rows), p["sha256"], p["period"])
+
+    def test_every_filed_ratio_reproduces_from_its_own_lines(self):
+        at = {line["address"]: k for k, line in enumerate(self.summary["lines"])}
+        n = 0
+        for p in self.summary["periods"]:
+            for inst, row in p["values"].items():
+                ratio = row[at[ox.MCT_RATIO]]
+                if ratio is None:
+                    continue
+                num = row[at["P100002501"]] or row[at["P100001001"]]
+                den = row[at[ox.MCT_DENOMINATOR]]
+                # Held to what the filed precision allows, as the extract's own check is.
+                band = ox.rounding_band(num, ox.decimals(str(num)), den, ox.decimals(str(den)), ox.decimals(str(ratio)))
+                self.assertLessEqual(abs(100 * num / den - ratio), band + 0.005, f"{p['period']} {inst}")
+                n += 1
+        self.assertGreater(n, 1900)
+
+
 if __name__ == "__main__":
     unittest.main()

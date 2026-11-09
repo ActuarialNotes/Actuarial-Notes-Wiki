@@ -14,6 +14,9 @@ import {
   ToolInputError,
   assumptionRef,
   bankFigure,
+  filedCell,
+  filedRef,
+  filingsInstalled,
   readerMessage,
   runPath,
   runTool,
@@ -21,6 +24,7 @@ import {
   toolSlug,
   uncheckedWarning,
   type BankFigure,
+  type FiledCell,
   type ChoiceField,
   type DateField,
   type NumberField,
@@ -42,6 +46,7 @@ import type { ToolMenuItem } from './ToolMenu'
 import type { DraftRow } from './ToolGrid'
 // Installs the vault's Assumptions Bank into the engine, for every card.
 import '@/lib/toolBank'
+import { loadFilings, needsFilings } from '@/lib/toolFilings'
 
 /** The tool whose card carries the LDF selection exhibit (§6.6). */
 export const SELECTING_TOOL = 'reserving.age_to_age_factors'
@@ -108,6 +113,17 @@ export function useToolCard({ spec, initialInput, onOpenMethod, onResult, embedd
     setUndo(null)
   }
 
+  // OSFI's filings are fetched the first time a card needs them; the run waits for them.
+  const wantsFilings = needsFilings(spec, draft)
+  const [filingsReady, setFilingsReady] = useState(() => filingsInstalled() !== null)
+  const [filingsFailed, setFilingsFailed] = useState(false)
+  useEffect(() => {
+    if (!wantsFilings || filingsReady) return
+    let live = true
+    loadFilings().then(() => live && setFilingsReady(true), () => live && setFilingsFailed(true))
+    return () => { live = false }
+  }, [wantsFilings, filingsReady])
+
   const lastGood = useRef<ToolResult | null>(null)
   const [sourcing, setSourcing] = useState<Sourcing | null>(null)
   // What another tool filled, and with what (the template's "linked" tag).
@@ -119,15 +135,23 @@ export function useToolCard({ spec, initialInput, onOpenMethod, onResult, embedd
   useEffect(() => setSelections([]), [draft.triangle])
 
   const outcome = useMemo(() => {
+    if (wantsFilings && !filingsReady) {
+      return {
+        result: null as ToolResult | null,
+        error: filingsFailed ? "OSFI's filings couldn't be loaded. Check your connection and reload the page." : (null as string | null),
+        errorField: null as string | null,
+        loading: !filingsFailed,
+      }
+    }
     try {
       const result = runTool(spec, draft)
       lastGood.current = result
-      return { result, error: null as string | null, errorField: null as string | null }
+      return { result, error: null as string | null, errorField: null as string | null, loading: false }
     } catch (err) {
-      if (err instanceof ToolInputError) return { result: lastGood.current, error: readerMessage(spec, err), errorField: err.field }
+      if (err instanceof ToolInputError) return { result: lastGood.current, error: readerMessage(spec, err), errorField: err.field, loading: false }
       throw err
     }
-  }, [spec, draft])
+  }, [spec, draft, wantsFilings, filingsReady, filingsFailed])
   const result = outcome.result
   const stale = outcome.error !== null
   // The figure (§6.7), from the same run as the tiles.
@@ -188,8 +212,24 @@ export function useToolCard({ spec, initialInput, onOpenMethod, onResult, embedd
     if (!assumptionRef(draft[f.key])) return null
     return drawnFigure(f)?.value ?? f.default
   }
-  /** A number field's value as drawn: the published figure's, or the draft's, or the default. */
-  const numberOf = (f: NumberField): number => bankValue(f) ?? Number(valueOf(f))
+  // A field given a filed value holds a reference to the filing's cell: the card
+  // draws the value as filed, and an edit replaces it with the reader's own.
+  const drawnFiling = (f: NumberField): FiledCell | null => {
+    const ref = filedRef(draft[f.key])
+    if (!ref || !filingsReady) return null
+    try {
+      return filedCell(ref)
+    } catch {
+      return null
+    }
+  }
+  const filedNumber = (f: NumberField): number | null => {
+    const cell = drawnFiling(f)
+    if (!cell) return filedRef(draft[f.key]) ? f.default : null
+    return cell.source.units === '%' && f.unit === 'percent' ? cell.value / 100 : cell.value
+  }
+  /** A number field's value as drawn: the published figure's, the filed one, or the draft's, or the default. */
+  const numberOf = (f: NumberField): number => bankValue(f) ?? filedNumber(f) ?? Number(valueOf(f))
 
   /** Open the tool a column's values come from, filled from this grid where it can be (§6.6). */
   const fillFrom = (field: TableField, key: string, source: ColumnSource) => {
@@ -278,7 +318,7 @@ export function useToolCard({ spec, initialInput, onOpenMethod, onResult, embedd
     outcome, result, stale, figure, dragTo,
     sourcing, setSourcing, origins,
     selecting, selections, setSelections,
-    drawnFigure, shownUnderField, bankValue, fillFrom, sourcesFor,
+    drawnFigure, drawnFiling, shownUnderField, bankValue, filedNumber, fillFrom, sourcesFor,
     menu, sends, download,
     grid, triangles, tables, labelled, scalars, errorAt, looseError,
   }

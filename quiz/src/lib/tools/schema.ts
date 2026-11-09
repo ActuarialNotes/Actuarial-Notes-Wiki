@@ -27,8 +27,9 @@ export function fieldSchema(f: ToolField): Record<string, unknown> {
         minimum: f.min,
         maximum: f.max,
         default: f.default,
-        description: `${f.description}${UNIT_HINT[f.unit]}${judgment}${f.bank?.length ? ` Or a published figure from the Assumptions Bank, given as {"assumption": "<id>"}, of kind ${f.bank.join(' or ')}: the run records its source.` : ''}`,
+        description: `${f.description}${UNIT_HINT[f.unit]}${judgment}${f.bank?.length ? ` Or a published figure from the Assumptions Bank, given as {"assumption": "<id>"}, of kind ${f.bank.join(' or ')}: the run records its source.` : ''}${f.filed?.length ? ` Or a value as filed with OSFI, given as {"filed": "osfi-pc:<quarter>:<OSFI id>:<address>"} for address ${f.filed.join(' or ')} (data.insurer_return hands these on): the run records the filing.` : ''}`,
         ...(f.bank?.length ? { 'x-assumption-kinds': f.bank } : {}),
+        ...(f.filed?.length ? { 'x-filed-lines': f.filed } : {}),
       }
     case 'choice':
       return { type: 'string', enum: f.options.map(o => o.value), default: f.default, description: `${f.description}${judgment}` }
@@ -71,7 +72,8 @@ export function inputSchema(spec: ToolSpec): Record<string, unknown> {
 
 /** "Friedland, … (CAS, 2010), Chapter 7, Exhibit I, Sheet 1, p. 106" — a check's source as one line. */
 export function sourceLine(s: SourceRef): string {
-  return s.question ? s.title : `${s.title}, ${s.locator}, p. ${s.page}`
+  if (s.question) return s.title
+  return s.page === undefined ? `${s.title}, ${s.locator}` : `${s.title}, ${s.locator}, p. ${s.page}`
 }
 
 /** What `list_tools` says about a tool. */

@@ -11,8 +11,9 @@
  */
 
 import type { AssumptionSource } from './bank'
+import type { FiledSource } from './filings'
 
-export type PracticeArea = 'data' | 'reserving' | 'ratemaking' | 'distributions' | 'credibility' | 'finance'
+export type PracticeArea = 'data' | 'reserving' | 'ratemaking' | 'distributions' | 'credibility' | 'finance' | 'capital'
 
 /** How a number is read and shown. A `percent` is stored as a decimal (0.05) and shown as 5%. */
 export type NumberUnit = 'percent' | 'money' | 'factor' | 'count' | 'years' | 'plain'
@@ -50,6 +51,12 @@ export interface NumberField extends FieldBase {
    * `{ "assumption": "<id>" }`, read in by `normalizeInput` with its source.
    */
   bank?: string[]
+  /**
+   * The OSFI filing lines this field takes a filed value of (their addresses,
+   * `P100005001`): its input may then be `{ "filed": "osfi-pc:<quarter>:<id>:<address>" }`,
+   * read in by `normalizeInput` with where it was filed (`filings.ts`).
+   */
+  filed?: string[]
 }
 
 /** A date, held as 'YYYY-MM-DD' (an effective date, a valuation date). */
@@ -141,6 +148,8 @@ export interface Judgment {
   default: boolean
   /** The published figure the value was taken from, when it came from the Assumptions Bank. */
   source?: AssumptionSource
+  /** The filing the value was read from, when it came from OSFI's returns. */
+  filed?: FiledSource
 }
 
 export interface ToolOutput {
@@ -200,6 +209,21 @@ export interface ToolSpec {
    * the comparison takes the tiles.
    */
   compare?: { key: string; label: string; unit: NumberUnit | 'text' }[]
+  /**
+   * The filed line a tool's answer recomputes (MCT Ratio's line 140). When
+   * every filed input comes from one filing, the run reads that filing's own
+   * figure beside its answer: in `values.filed_answer`, the working, and a
+   * warning when the two differ by more than `tolerance` allows.
+   */
+  filedAnswer?: {
+    /** Which tile the filed figure is the counterpart of. */
+    tile: number
+    address: string
+    /** From the filed unit to the tile's (a ratio filed in % is 0.01). */
+    scale: number
+    /** How far apart the two may be, in the tile's unit, given the filed inputs' precision. */
+    tolerance: (input: ToolInput, filed: number) => number
+  }
 }
 
 /** The result of one run, as every surface receives it (§5). */

@@ -50,6 +50,20 @@ export interface BankFigure {
   /** The set's fact-check status (`verified`, `unverified`, `stale` …). */
   verdict: string
   openCritical: number
+  /** The set's short name for the publisher ("AIRB"), for the from chip; else the publisher. */
+  shortName?: string
+  /** The line of business the set's figures are for ("Private passenger auto"). */
+  line?: string
+  /** What kind of figure it is: a `cap`, a `selected` figure, a `benchmark`, `observed`, a `minimum`, a `target`. */
+  basis?: string
+  /** One sentence saying what the figure is, the document's words where it has them. */
+  meaning?: string
+  /** The set's lead paragraph: what the figures are, where a row has no meaning of its own. */
+  lead?: string
+  /** A figure that matches a tool's answer rather than an input: `<tool id>#<tile>`. */
+  fits?: string
+  /** The PDF's page number less the printed one, so a locator's "p. 7" opens at the right page. */
+  pageOffset?: number
 }
 
 /** Where a figure in a run came from — on its judgment, in the envelope. */
@@ -99,6 +113,15 @@ export function figuresFor(field: Pick<NumberField, 'bank' | 'unit'>): BankFigur
   return installed
     .filter(f => field.bank!.includes(f.kind) && unitFits(f.unit, field.unit) && !f.supersededBy)
     .sort((a, b) => b.effective.localeCompare(a.effective) || a.title.localeCompare(b.title))
+}
+
+/**
+ * The figures that match a tool's **answer** rather than an input
+ * (`fits: <tool id>#<tile>`): shown under the answer for comparison, never
+ * offered to a field (docs/tool-template-v2.md §3.1).
+ */
+export function figuresFitting(toolId: string): BankFigure[] {
+  return installed.filter(f => f.fits?.split('#')[0] === toolId && !f.supersededBy)
 }
 
 /** A field's input that names a figure rather than giving a number. */

@@ -178,7 +178,9 @@ before touching that area**:
   facts a published document states (OSFI's 150% MCT target, GISA's ULAE factors, the AIRB's
   profit provision) as data. One file per set under `Assumptions/`, resource-style frontmatter
   (`Source: "[[resource page]]"`, `Edition`, `Effective`, `Document`, `Source sha256`, `Read`)
-  then one table `| Assumption | Kind | Value | Unit | Locator |`. A figure is a plain number
+  then one table `| Assumption | Kind | Value | Unit | Locator |`, optionally followed by
+  `| Basis | Meaning | Fits |` (what the tools' in-place explanations read — `docs/tool-template-v2.md` §4),
+  with `Short name`, `Line` and `Page offset` the optional keys that go with them. A figure is a plain number
   (unit in its own column), a `fact` row is the document's words, and a blank is a row whose
   figure hasn't been read yet. The kinds are `scripts/assumption_vocab.json`.
   `scripts/assumption_lint.py` is the CI gate. **`--against <file>` is how a set is
@@ -589,7 +591,12 @@ before touching that area**:
   in `lib/toolTemplate.ts` — the rest still draw `ToolCard`, both over `useToolCard.ts`): the answer card in
   the colour of the earliest exam that teaches the method (`lib/toolExam.ts`), judgments first, inline sliders
   at three inputs or fewer, a source tag on every input, the edit sheet with the app's own keypad
-  (`ValueSheet.tsx`), and grids numbered as an exhibit (`TableColumn.formula`).
+  (`ValueSheet.tsx`), and grids numbered as an exhibit (`TableColumn.formula`). **Template v2**
+  (`docs/tool-template-v2.md`, built) is the pass on top: one swatch per quantity
+  (`QUANTITY_STEPS` in `lib/toolFigures.ts`), a breadcrumb, *Takes from* / *Gives to* read off
+  `spec.next` both ways (`takesFrom` / `givesTo` in `lib/toolTemplate.ts`; a hand-off's URL carries
+  `?from=<sender>` and its values arrive linked), one "from" chip (`SourceTag.tsx`), and published
+  figures and links explained in place (`FigureNote.tsx`).
   Read before building any of it.
 - `docs/stacked-pages.md` — the concept popup's **page stack** (Obsidian's stacked pages):
   a link followed inside the popup opens a new page on top of the one being read, and the

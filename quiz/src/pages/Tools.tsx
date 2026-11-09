@@ -12,12 +12,13 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Navigate, useLocation, useParams, useSearchParams } from 'react-router-dom'
+import type { Back } from '@/hooks/useBack'
 import { BookMarked, Calculator, Database, Sigma, Landmark, Scale, TrendingUp, type LucideIcon } from 'lucide-react'
 import { AssumptionsShelf } from '@/components/assumptions/AssumptionsShelf'
 import { AREAS, TOOLS, checksFor, decodeRunInput, toolBySlug, toolSlug, type PracticeArea, type ToolSpec } from '@/lib/tools'
 import { searchTools } from '@/lib/toolSearch'
 import { highlightMatch } from '@/components/SearchHighlight'
-import { ToolsSearchBar } from '@/components/tools/ToolsSearchBar'
+import { ToolsSearchBar, type Crumb } from '@/components/tools/ToolsSearchBar'
 import { ToolFigure } from '@/components/tools/ToolFigure'
 import { figureFor, type FigureSpec } from '@/lib/toolFigures'
 import { runTool } from '@/lib/tools'
@@ -27,7 +28,7 @@ import { ListPanel, ListRow } from '@/components/ui/ListPanel'
 import { LogoTile } from '@/components/LogoTile'
 import { ToolCard } from '@/components/tools/ToolCard'
 import { ToolTemplate, type PinnedAnswer } from '@/components/tools/ToolTemplate'
-import { usesTemplate } from '@/lib/toolTemplate'
+import { FROM_PARAM, usesTemplate } from '@/lib/toolTemplate'
 import { examForConcepts } from '@/lib/toolExam'
 import { examAccentStyle } from '@/lib/examColors'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
@@ -99,6 +100,8 @@ function Catalogue() {
   }
   const results = useMemo(() => searchTools(query, area), [query, area])
   const searching = query.trim().length > 0
+  // An area with no query (a breadcrumb's "Ratemaking") shows that area alone.
+  const shownAreas = !searching && area ? AREAS.filter(a => a.id === area) : AREAS
 
   return (
     <>
@@ -117,7 +120,12 @@ function Catalogue() {
           )
         ) : (
           <>
-            {AREAS.map(a => {
+            {area && (
+              <button type="button" onClick={() => setParam('area', null)} className="px-1 text-sm font-medium underline underline-offset-2 hover:no-underline" data-testid="tool-all-areas">
+                All tools
+              </button>
+            )}
+            {shownAreas.map(a => {
               const tools = TOOLS.filter(t => t.area === a.id)
               if (!tools.length) return null
               return (
@@ -198,7 +206,7 @@ function AssumptionsPage() {
   const back = useBack({ to: '/tools', label: 'All tools' })
   return (
     <>
-      <ToolsSearchBar kind="tool" title="Assumptions Bank" back={back} />
+      <ToolsSearchBar kind="tool" title="Assumptions Bank" back={back} crumbs={[toolsCrumb(back), { label: 'Assumptions Bank' }]} />
       <div className="container mx-auto max-w-2xl space-y-3 px-4 py-4">
         <AssumptionsShelf onReadSource={name => void openResource(name)} />
       </div>
@@ -206,9 +214,17 @@ function AssumptionsPage() {
   )
 }
 
+/** The breadcrumb's first step: Back when the page left was the catalogue, else a link to it. */
+function toolsCrumb(back: Back): Crumb {
+  return back.fromTrail && /^\/tools\/?(\?|$)/.test(back.to) ? { label: 'Tools', back } : { label: 'Tools', to: '/tools' }
+}
+
 function ToolPage({ slug }: { slug: string }) {
   const location = useLocation()
+  const [params] = useSearchParams()
   const spec = toolBySlug(slug)
+  // The tool that sent this run (Gives to): its values arrive linked, and it joins the breadcrumb.
+  const sender = toolBySlug(params.get(FROM_PARAM) ?? '')
   usePageHead(spec ? toolHead(spec.name, spec.answers, toolSlug(spec)) : TOOLS_HEAD)
   usePageLabel(spec?.name)
   const back = useBack({ to: '/tools', label: 'All tools' })
@@ -219,21 +235,33 @@ function ToolPage({ slug }: { slug: string }) {
   const [pinned, setPinned] = useState<PinnedAnswer | null>(null)
   if (!spec) return <Navigate to="/tools" replace />
   const templated = usesTemplate(spec)
+  const areaLabel = AREAS.find(a => a.id === spec.area)?.label ?? spec.area
+  const senderPath = sender ? `/tools/${toolSlug(sender)}` : null
+  const crumbs: Crumb[] = [
+    toolsCrumb(back),
+    { label: areaLabel, to: `/tools?area=${spec.area}` },
+    ...(sender && senderPath
+      ? [back.fromTrail && back.to.split(/[?#]/)[0] === senderPath ? { label: sender.name, back } : { label: sender.name, to: senderPath }]
+      : []),
+    { label: spec.name },
+  ]
   return (
     <>
       <ToolsSearchBar
         kind="tool"
         title={spec.name}
         back={back}
+        crumbs={templated ? crumbs : undefined}
         pinned={templated && pinned ? <PinnedPill answer={pinned} examKey={examKey} /> : null}
       />
       <div className="container mx-auto max-w-2xl space-y-3 px-4 py-4">
         {/* Keyed by the run, so a Send to… or a pasted link starts the card afresh. */}
         {templated ? (
           <ToolTemplate
-            key={`${slug}${location.hash}`}
+            key={`${slug}${location.search}${location.hash}`}
             spec={spec}
             initialInput={decodeRunInput(location.hash) ?? undefined}
+            sender={sender ? toolSlug(sender) : null}
             onOpenMethod={open}
             persist
             examKey={examKey}

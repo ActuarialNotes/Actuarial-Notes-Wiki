@@ -3,7 +3,7 @@
 // value came from, how a grid numbers its columns, and the keypad the edit
 // sheet types with. Pure; `components/tools/ToolTemplate.tsx` draws it.
 
-import type { ChoiceField, DateField, NumberField, TableColumn, ToolField, ToolSpec } from './tools'
+import { TOOLS, runTool, toolById, type ChoiceField, type DateField, type NumberField, type TableColumn, type ToolField, type ToolHandoff, type ToolInput, type ToolResult, type ToolSpec } from './tools'
 
 /**
  * The tools drawn by the template while it is checked on a phone, before
@@ -17,7 +17,27 @@ export const TEMPLATE_TOOLS: ReadonlySet<string> = new Set([
   'finance.bond_price',
   'distributions.limited_expected_value',
   'reserving.age_to_age_factors',
+  // Template v2's stress test (docs/tool-template-v2.md §5.7): six inputs
+  // with three tools in front, and a table with two tools after it.
+  'ratemaking.trend_factor',
+  'ratemaking.expense_ratios',
 ])
+
+/**
+ * The tile a template tool leads its answer card with, where it isn't the
+ * first: Expense Ratios answers with the total, F + V, and prints F and V
+ * beside it (the engine's tile order is public API, so it stays).
+ */
+export const LEAD_TILE: Readonly<Record<string, string>> = {
+  'ratemaking.expense_ratios': 'F + V',
+}
+
+/** The run's tiles in the order the answer card draws them: the lead first. */
+export function tilesInOrder<T extends { symbol: string }>(toolId: string, tiles: readonly T[]): T[] {
+  const lead = LEAD_TILE[toolId]
+  const k = lead ? tiles.findIndex(t => t.symbol === lead) : -1
+  return k <= 0 ? [...tiles] : [tiles[k], ...tiles.slice(0, k), ...tiles.slice(k + 1)]
+}
 
 export const usesTemplate = (spec: ToolSpec) => TEMPLATE_TOOLS.has(spec.id)
 
@@ -29,11 +49,14 @@ export type ScalarField = NumberField | ChoiceField | DateField
 export const isScalar = (f: ToolField): f is ScalarField => f.kind === 'number' || f.kind === 'choice' || f.kind === 'date'
 
 /**
- * The scalar inputs on screen, split into the reader's **judgments** (R3: the
- * choices a run must report as made or left at their default) and the rest.
- * Each keeps the spec's order.
+ * The scalar inputs on screen, in the order the formula takes them (the
+ * spec's). Past `INLINE_SLIDER_LIMIT` inputs the reader's **judgments** (R3:
+ * the choices a run must report as made or left at their default) lead in a
+ * group of their own; at or under it they stay in the formula's order, marked
+ * ◆ (docs/tool-template-v2.md §3.2).
  */
 export function inputGroups(fields: readonly ScalarField[]): { judgments: ScalarField[]; inputs: ScalarField[] } {
+  if (fields.length <= INLINE_SLIDER_LIMIT) return { judgments: [], inputs: [...fields] }
   return {
     judgments: fields.filter(f => f.judgment),
     inputs: fields.filter(f => !f.judgment),
@@ -50,8 +73,8 @@ export const slidersInline = (scalars: readonly ScalarField[]) => scalars.length
 export type ValueSource =
   | { kind: 'default' }
   | { kind: 'yours' }
-  | { kind: 'published'; label: string; checked: boolean }
-  | { kind: 'linked'; label: string }
+  | { kind: 'published'; label: string; checked: boolean; figure?: string }
+  | { kind: 'linked'; label: string; tool?: string }
 
 /**
  * A value taken from another tool, remembered with the value it brought: the
@@ -61,9 +84,12 @@ export type ValueSource =
 export interface Origin {
   label: string
   value: string
+  /** The tool it came from, when it is one: what "Open" opens. */
+  tool?: string
 }
 
-export const originOf = (label: string, value: unknown): Origin => ({ label, value: JSON.stringify(value) })
+export const originOf = (label: string, value: unknown, tool?: string): Origin =>
+  tool ? { label, value: JSON.stringify(value), tool } : { label, value: JSON.stringify(value) }
 export const originHolds = (origin: Origin | undefined, value: unknown): origin is Origin =>
   !!origin && origin.value === JSON.stringify(value)
 
@@ -78,7 +104,7 @@ export function scalarSource({
   /** The draft holds a value of its own for the field. */
   touched: boolean
   /** The published figure it is, when it is one. */
-  published?: { label: string; checked: boolean } | null
+  published?: { label: string; checked: boolean; figure?: string } | null
   origin?: Origin
   value: unknown
   /** Filled by a workflow's link. */
@@ -86,7 +112,7 @@ export function scalarSource({
 }): ValueSource {
   if (published) return { kind: 'published', ...published }
   if (linkedBy) return { kind: 'linked', label: linkedBy }
-  if (originHolds(origin, value)) return { kind: 'linked', label: origin.label }
+  if (originHolds(origin, value)) return origin.tool ? { kind: 'linked', label: origin.label, tool: origin.tool } : { kind: 'linked', label: origin.label }
   return touched ? { kind: 'yours' } : { kind: 'default' }
 }
 
@@ -106,6 +132,20 @@ export function columnSource(
   if (originHolds(origin, column(rows))) return { kind: 'linked', label: origin.label }
   const same = rows.length === defaults.length && rows.every((r, i) => Number(r[key]) === Number(defaults[i][key]) || String(r[key] ?? '') === String(defaults[i][key] ?? ''))
   return same ? { kind: 'default' } : { kind: 'yours' }
+}
+
+/**
+ * Whether a row says where its value came from with a chip of its own: a
+ * judgment always does, and any input not at its default (§3.4). The rest of
+ * a group shares one "All ● Default" line.
+ */
+export const ownChip = (judgment: boolean | undefined, source: ValueSource) => !!judgment || source.kind !== 'default'
+
+/** The shared line's word: "All" when every row of the group is at its default, else "The rest". */
+export function sharedDefaultLabel(rows: readonly { judgment?: boolean; source: ValueSource }[]): string | null {
+  const shared = rows.filter(r => !ownChip(r.judgment, r.source)).length
+  if (!shared) return null
+  return shared === rows.length ? 'All' : 'The rest'
 }
 
 /** A column's values, as the origin a fill records. */
@@ -137,6 +177,171 @@ export function readingLabel(readings: readonly { resource: string; locator?: st
   const author = first.resource.match(/\(([^()–-]+?)\s*[-–]\s*\d{4}\)\s*$/)?.[1]?.trim()
   const name = author ?? first.resource.replace(/\s*\([^)]*\)\s*$/, '')
   return first.locator ? `${name}, ${first.locator}` : name
+}
+
+// ---------------------------------------------------------------------------
+// Takes from / Gives to (docs/tool-template-v2.md §3.3): a tool's neighbours,
+// read off every tool's hand-offs (`spec.next`) in both directions.
+
+export interface Neighbour {
+  /** The tool on the other side. */
+  tool: ToolSpec
+  /** The hand-off between the two: the sender's `next` entry. */
+  handoff: ToolHandoff
+}
+
+let senders: Map<string, Neighbour[]> | null = null
+
+/** The reverse index: for each tool, the tools whose `next` names it. Built once from the registry. */
+export function buildSenders(tools: readonly ToolSpec[]): Map<string, Neighbour[]> {
+  const out = new Map<string, Neighbour[]>()
+  for (const tool of tools) {
+    for (const handoff of tool.next ?? []) {
+      if (!toolById(handoff.tool)) continue
+      const list = out.get(handoff.tool) ?? []
+      list.push({ tool, handoff })
+      out.set(handoff.tool, list)
+    }
+  }
+  return out
+}
+
+/** The tools in front of this one: every tool whose `next` names it. */
+export function takesFrom(toolId: string): Neighbour[] {
+  senders ??= buildSenders(TOOLS)
+  return senders.get(toolId) ?? []
+}
+
+/** The tools after this one: its own `next`, each target a real tool. */
+export function givesTo(spec: ToolSpec): Neighbour[] {
+  return (spec.next ?? []).flatMap(handoff => {
+    const tool = toolById(handoff.tool)
+    return tool ? [{ tool, handoff }] : []
+  })
+}
+
+/** One value a hand-off carries: the field it fills on the arriving tool, and the value. */
+export interface Carried {
+  field: ToolField
+  value: unknown
+}
+
+/** What a hand-off would carry from a result, field by field, in the arriving tool's order. */
+export function carried(target: ToolSpec, built: Partial<ToolInput>): Carried[] {
+  return target.fields.flatMap(field => (field.key in built && built[field.key] !== undefined ? [{ field, value: built[field.key] }] : []))
+}
+
+/**
+ * The value a sender's hand-off would put in one of this tool's fields, from
+ * a run of the sender — its last this session, or null when it hasn't run.
+ * A hand-off that doesn't fill the field gives undefined.
+ */
+export function handoffValue(neighbour: Neighbour, key: string, input: ToolInput | undefined): number | null | undefined {
+  if (!fills(neighbour, key)) return undefined
+  if (!input) return null
+  try {
+    const result: ToolResult = runTool(neighbour.tool, input)
+    const v = neighbour.handoff.build(result.input, result)[key]
+    return typeof v === 'number' && Number.isFinite(v) ? v : null
+  } catch {
+    return null
+  }
+}
+
+const FILLS = new Map<string, Set<string>>()
+
+/** Whether a hand-off fills a field at all: read once from the sender's example run. */
+export function fills(neighbour: Neighbour, key: string): boolean {
+  const id = `${neighbour.tool.id}>${neighbour.handoff.tool}`
+  if (!FILLS.has(id)) {
+    let keys: string[] = []
+    try {
+      const r = runTool(neighbour.tool, {})
+      keys = Object.keys(neighbour.handoff.build(r.input, r))
+    } catch {
+      keys = []
+    }
+    FILLS.set(id, new Set(keys))
+  }
+  return FILLS.get(id)!.has(key)
+}
+
+/** The query a run's URL carries to name the tool that sent it, so its values arrive linked. */
+export const FROM_PARAM = 'from'
+
+/** The path that opens a hand-off's run on the arriving tool, naming the sender. */
+export function handoffPath(runPath: string, senderSlug: string): string {
+  const hash = runPath.indexOf('#')
+  const path = hash < 0 ? runPath : runPath.slice(0, hash)
+  const rest = hash < 0 ? '' : runPath.slice(hash)
+  return `${path}?${FROM_PARAM}=${encodeURIComponent(senderSlug)}${rest}`
+}
+
+/**
+ * The origins a run arriving from another tool records: each value it
+ * carried, as linked to the sender, for as long as the field still holds it.
+ */
+export function arrivalOrigins(spec: ToolSpec, sender: ToolSpec | undefined, input: unknown): Record<string, Origin> {
+  if (!sender || !input || typeof input !== 'object') return {}
+  const out: Record<string, Origin> = {}
+  for (const f of spec.fields) {
+    const v = (input as Record<string, unknown>)[f.key]
+    if (v !== undefined) out[f.key] = originOf(sender.name, v, sender.id)
+  }
+  return out
+}
+
+// ---------------------------------------------------------------------------
+// A published figure's context (§3.5): where it applies and on what basis.
+
+const PLACES: Record<string, string> = {
+  CA: 'Canada', US: 'United States',
+  'CA-AB': 'Alberta', 'CA-BC': 'British Columbia', 'CA-MB': 'Manitoba', 'CA-NB': 'New Brunswick',
+  'CA-NL': 'Newfoundland and Labrador', 'CA-NS': 'Nova Scotia', 'CA-NT': 'Northwest Territories',
+  'CA-NU': 'Nunavut', 'CA-ON': 'Ontario', 'CA-PE': 'Prince Edward Island', 'CA-QC': 'Quebec',
+  'CA-SK': 'Saskatchewan', 'CA-YT': 'Yukon',
+}
+
+/** A jurisdiction code as a place: `CA-AB` → "Alberta". An unknown code is printed as it is. */
+export const placeName = (jurisdiction: string) => PLACES[jurisdiction] ?? jurisdiction
+
+/** The chip's words for a published figure: "AIRB, Alberta". */
+export function publishedLabel(f: { shortName?: string; publisher: string; jurisdiction: string }): string {
+  return `${f.shortName || f.publisher}, ${placeName(f.jurisdiction)}`
+}
+
+/** What a basis means, said as the level-1 line says it. */
+export const BASIS_LABELS: Readonly<Record<string, string>> = {
+  cap: 'cap',
+  selected: 'selection',
+  benchmark: 'benchmark',
+  observed: 'observed',
+  minimum: 'minimum',
+  target: 'target',
+}
+
+/** Level 1: one line of context — "Alberta, private passenger auto · cap". */
+export function contextLine(f: { jurisdiction: string; line?: string; basis?: string }): string {
+  const where = [placeName(f.jurisdiction), f.line ? f.line.toLowerCase() : ''].filter(Boolean).join(', ')
+  const basis = f.basis ? BASIS_LABELS[f.basis] ?? f.basis : ''
+  return [where, basis].filter(Boolean).join(' · ')
+}
+
+/** The page a locator cites ("Profit (p. 7)" → 7), for the PDF reader to open at. */
+export function locatorPage(locator: string): number | null {
+  const m = /\bpp?\.\s*(\d+)/.exec(locator)
+  return m ? Number(m[1]) : null
+}
+
+/**
+ * How the reader's value stands against a published figure, said only when
+ * they differ: "Your 20% is above this cap." Within half a percent of the
+ * figure, nothing is said.
+ */
+export function comparison(yours: number, figure: number, basis: string | undefined, shown: string): string | null {
+  if (Math.abs(yours - figure) <= Math.max(1e-9, Math.abs(figure) * 0.005)) return null
+  const word = basis === 'cap' || basis === 'minimum' || basis === 'target' ? `this ${basis}` : 'this figure'
+  return `Your ${shown} is ${yours > figure ? 'above' : 'below'} ${word}.`
 }
 
 // ---------------------------------------------------------------------------

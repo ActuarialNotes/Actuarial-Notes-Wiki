@@ -194,6 +194,25 @@ The capital ratios OSFI's Minimum Capital Test guideline sets for a federally re
 *(The real file, `Assumptions/OSFI MCT Capital Ratios (2024).md`, with its fact-check block and
 Sources abridged.)*
 
+**Explaining each figure (tool template v2, `docs/tool-template-v2.md` §4).** A tool explains a
+published figure in place: where it applies, on what basis and what it is. The table may carry
+three more columns after `Locator`, and every set written since carries them (D-TT1, settled as
+columns):
+
+| Column | Holds | Example |
+|---|---|---|
+| `Basis` | What kind of figure it is: `cap`, `selected`, `benchmark`, `observed`, `minimum` or `target` (`bases` in `scripts/assumption_vocab.json`) | `cap` |
+| `Meaning` | One sentence saying what the figure is, in the document's words where it has them | "The maximum profit provision permitted for use by insurers…" |
+| `Fits` | Only for a figure that matches a tool's **answer** rather than an input: `<tool id>#<tile>` | `ratemaking.expense_ratios#total` |
+
+A blank `Meaning` falls back to the set's lead paragraph; a blank `Basis` says nothing. Three
+optional frontmatter keys go with them: `Short name` after `Publisher` (the tool's chip, "AIRB"),
+`Line` after `Jurisdiction` (the line of business, "Private passenger vehicles") and `Page offset`
+after `Read` (the PDF's page number less the page number the document prints, so a locator's
+"p. 7" opens the PDF reader at the right page — the AIRB report's p. 7 is its ninth page). These
+words are transcribed like the figures: `--against` checks the figures, and a reviewer checks the
+words against the locator.
+
 This keeps assumptions separate from the resource page itself because P4 binds a verdict to a
 file's bytes. Corrected figures belong on a page of their own, so fixing one figure doesn't
 stale the resource page, and re-describing the resource page doesn't stale the figures. The
@@ -390,7 +409,12 @@ What Phase 0 left for later, and why:
   under Data Sources in the catalogue (D-AB2). It shows every current set, newest first,
   filtered by kind (`?kind=`). Each set is an `AssumptionSetCard`: its Fact Check badge, its
   rows with their locators, **Read the source** and the publisher's copy. Each figure has a
-  *Use in a tool* toggle, whose links open a tool with the figure already in it.
+  *Use in a tool* toggle, whose links open a tool with the figure already in it. *(Template v2,
+  2026-11-09, replaced this shape: no exam logo on the banner, "N figures still to enter" in place
+  of "N of M figures read", a kind filter that shows only that kind's rows with the rest of the
+  document folded into one line and a blank row never first (`shelfRows` in `lib/toolBank.ts`),
+  and each figure naming the tools that take it, "to **Permissible Loss Ratio**", where the count
+  was — see `docs/tool-template-v2.md` §3.8.)*
 - **The resource page** (and its page in the popup) shows the sets read from it under the
   citation block (`ResourceAssumptionsCard`).
 - **Tests:** `lib/tools/bank.test.ts` (the engine), `lib/toolBank.test.ts` (the vault's bank

@@ -41,6 +41,9 @@ export const EXAM_PDF_HOSTS = [
   // PACICC's report on the actuary's role in safeguarding solvency.
   'pacicc.ca',
   'www.pacicc.ca',
+  // Alberta's Automobile Insurance Rate Board: its annual review report, whose
+  // benchmarks the Assumptions Bank holds (Read p. 7 opens it here).
+  'www.airbfordrivers.ca',
   // The Canadian Institute of Actuaries' syllabi — through the one download
   // endpoint below, never any other path on the host.
   'www.cia-ica.ca',

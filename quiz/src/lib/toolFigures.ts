@@ -59,9 +59,99 @@ export type FigureSpec =
     }
   | { kind: 'heat'; rows: (number | null)[][]; rowLabels?: string[]; colLabels?: string[] }
   | { kind: 'flows'; items: { t: number; amount: number; pv: number }[] }
-  | { kind: 'split'; bars: { name: string; parts: { name: string; value: number; role: Role }[] }[]; unit: NumberUnit }
+  | {
+      kind: 'split'
+      bars: { name: string; parts: SplitPart[] }[]
+      unit: NumberUnit
+      /** Scale each bar to its own total rather than to a whole premium dollar (the expense split alone). */
+      fit?: boolean
+    }
   | { kind: 'axis'; ticks: { name: string; value: number; role: Role }[]; unit: NumberUnit }
   | { kind: 'span'; from: string; to: string; years: number }
+
+/**
+ * One segment of a split bar. Its colour belongs to the **quantity**, not to
+ * the tool (docs/tool-template-v2.md §3.1): fixed expense wears the same
+ * swatch on Expense Ratios as on Permissible Loss Ratio.
+ */
+export interface SplitPart {
+  name: string
+  value: number
+  role: Role
+  /** What it is, across tools (`QUANTITY_STEPS`). */
+  quantity: Quantity
+  /** Its symbol, printed inside the segment with its value ("F 11"). */
+  symbol: string
+  /** The input it is, where it is one: the row that wears its swatch. */
+  field?: string
+}
+
+/**
+ * The quantities a split draws, each on a fixed step of the exam-hue ramp:
+ * 1 the lightest (a tool's result), 2 and 3 darker, 4 the darkest and
+ * hatched, so two neighbours never match. A quantity keeps its step on every
+ * tool; `toolFigures.test.ts` holds every split to distinct steps.
+ */
+export const QUANTITY_STEPS = {
+  'permissible-loss-ratio': 1,
+  'variable-permissible-loss-ratio': 1,
+  'pure-premium': 1,
+  'fixed-expense': 2,
+  'variable-expense': 3,
+  profit: 4,
+  'loss-and-lae': 4,
+  'variable-expense-and-profit': 4,
+  'losses-and-profit': 1,
+} as const
+
+export type Quantity = keyof typeof QUANTITY_STEPS
+export type QuantityStep = (typeof QUANTITY_STEPS)[Quantity]
+
+export const quantityStep = (q: Quantity): QuantityStep => QUANTITY_STEPS[q]
+
+/**
+ * What a segment prints inside itself, given its width in pixels: the symbol
+ * and value, then the symbol alone, then nothing (its name stays on the input
+ * row's swatch). Never a truncated word.
+ */
+export function segmentLabel(symbol: string, value: string, width: number, charWidth = 6.2): string {
+  const full = `${symbol} ${value}`
+  if (width >= full.length * charWidth + 10) return full
+  if (width >= symbol.length * charWidth + 8) return symbol
+  return ''
+}
+
+/**
+ * The exam-hue ramp a split's quantities are drawn on (docs/tool-template-v2.md
+ * §3.1): step 1 the lightest (dark text), 2 and 3 darker, 4 the darkest and
+ * hatched. Outside an exam the ramp is the primary colour's.
+ */
+export const HUE = 'var(--exam-accent-vivid, hsl(var(--primary)))'
+export const STEP_FILL: Record<QuantityStep, string> = {
+  1: `color-mix(in oklab, ${HUE} 45%, white)`,
+  2: HUE,
+  3: `color-mix(in oklab, ${HUE} 60%, black)`,
+  4: 'url(#quantity-hatch)',
+}
+export const STEP_TEXT: Record<QuantityStep, string> = { 1: 'black', 2: 'white', 3: 'white', 4: 'white' }
+
+/** The background a quantity's swatch takes off the page (an input row's, a Gives to row's). */
+export function stepBackground(step: QuantityStep): string {
+  if (step === 4) {
+    const a = `color-mix(in oklab, ${HUE} 45%, black)`
+    const b = `color-mix(in oklab, ${HUE} 25%, black)`
+    return `repeating-linear-gradient(135deg, ${a} 0 3px, ${b} 3px 6px)`
+  }
+  return STEP_FILL[step]
+}
+
+/** The quantity an input is drawn as in a run's figure, where its tool's figure is a split. */
+export function fieldQuantities(figure: FigureSpec | null): Map<string, Quantity> {
+  const out = new Map<string, Quantity>()
+  if (figure?.kind !== 'split') return out
+  for (const b of figure.bars) for (const p of b.parts) if (p.field) out.set(p.field, p.quantity)
+  return out
+}
 
 const num = (v: unknown) => Number(v)
 const rowsOf = (input: ToolInput, key = 'rows') => (input[key] as TableRow[]) ?? []
@@ -311,22 +401,24 @@ const BUILDERS: Record<string, Builder> = {
     const V = num(r.values.variable_provision)
     return {
       kind: 'split',
-      bars: [{ name: 'Premium', parts: [
-        { name: 'Fixed expense', value: F, role: 'result' },
-        { name: 'Variable expense', value: V, role: 'base' },
-        { name: 'Losses and profit', value: Math.max(0, 1 - F - V), role: 'muted' },
+      // The provision alone, fixed beside variable (the mock-ups' bar): what
+      // is left of the premium is another tool's answer.
+      bars: [{ name: 'Expense provision', parts: [
+        { name: 'Fixed expense', value: F, role: 'result', quantity: 'fixed-expense', symbol: 'F' },
+        { name: 'Variable expense', value: V, role: 'result', quantity: 'variable-expense', symbol: 'V' },
       ] }],
       unit: 'percent',
+      fit: true,
     }
   },
 
   'ratemaking.permissible_loss_ratio': r => ({
     kind: 'split',
     bars: [{ name: 'Premium', parts: [
-      { name: 'Permissible loss ratio', value: num(r.values.permissible_loss_ratio), role: 'result' },
-      { name: 'Fixed expense', value: num(r.input.fixed), role: 'base' },
-      { name: 'Variable expense', value: num(r.input.variable), role: 'base' },
-      { name: 'Profit', value: num(r.input.profit), role: 'muted' },
+      { name: 'Permissible loss ratio', value: num(r.values.permissible_loss_ratio), role: 'result', quantity: 'permissible-loss-ratio', symbol: 'PLR' },
+      { name: 'Fixed expense', value: num(r.input.fixed), role: 'base', quantity: 'fixed-expense', symbol: 'F', field: 'fixed' },
+      { name: 'Variable expense', value: num(r.input.variable), role: 'base', quantity: 'variable-expense', symbol: 'V', field: 'variable' },
+      { name: 'Profit', value: num(r.input.profit), role: 'muted', quantity: 'profit', symbol: 'Q', field: 'profit' },
     ] }],
     unit: 'percent',
   }),
@@ -338,12 +430,16 @@ const BUILDERS: Record<string, Builder> = {
     const lr = num(r.input.loss_ratio)
     const fixed = num(r.input.fixed)
     const allowed = num(r.values.variable_permissible_loss_ratio)
-    const part = (name: string, value: number, role: Role) => ({ name, value, role })
     return {
       kind: 'split',
       bars: [
-        { name: 'Needed', parts: [part('Loss & LAE ratio', lr, 'base'), part('Fixed expense', fixed, 'muted')] },
-        { name: 'Allowed', parts: [part('Variable permissible loss ratio', allowed, 'result')] },
+        { name: 'Needed', parts: [
+          { name: 'Loss & LAE ratio', value: lr, role: 'base', quantity: 'loss-and-lae', symbol: 'LR', field: 'loss_ratio' },
+          { name: 'Fixed expense', value: fixed, role: 'muted', quantity: 'fixed-expense', symbol: 'F', field: 'fixed' },
+        ] },
+        { name: 'Allowed', parts: [
+          { name: 'Variable permissible loss ratio', value: allowed, role: 'result', quantity: 'variable-permissible-loss-ratio', symbol: 'VPLR' },
+        ] },
       ],
       unit: 'percent',
     }
@@ -356,9 +452,9 @@ const BUILDERS: Record<string, Builder> = {
     return {
       kind: 'split',
       bars: [{ name: 'Indicated rate', parts: [
-        { name: 'Pure premium', value: pp / rate, role: 'result' },
-        { name: 'Fixed expense', value: fixed / rate, role: 'base' },
-        { name: 'Variable expense and profit', value: Math.max(0, 1 - (pp + fixed) / rate), role: 'muted' },
+        { name: 'Pure premium', value: pp / rate, role: 'result', quantity: 'pure-premium', symbol: 'PP' },
+        { name: 'Fixed expense', value: fixed / rate, role: 'base', quantity: 'fixed-expense', symbol: 'F' },
+        { name: 'Variable expense and profit', value: Math.max(0, 1 - (pp + fixed) / rate), role: 'muted', quantity: 'variable-expense-and-profit', symbol: 'V + Q' },
       ] }],
       unit: 'percent',
     }

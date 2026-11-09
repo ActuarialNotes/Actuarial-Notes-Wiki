@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import glob
 import hashlib
+import re
 import os
 import sys
 import tempfile
@@ -59,6 +60,38 @@ class LintTest(unittest.TestCase):
 
     def test_good_set_passes(self):
         self.assertEqual(self.errors(GOOD), [])
+
+    def explained(self) -> str:
+        table = GOOD.split("| Assumption |", 1)[1].split("\n\n", 1)[0]
+        return GOOD.replace("| Assumption |" + table, """| Assumption | Kind | Value | Unit | Locator | Basis | Meaning | Fits |
+|---|---|---|---|---|---|---|---|
+| Capital test | fact | Minimum Capital Test | | Title | | | |
+| Minimum ratio | capital-ratio | 100 | % | s. 1.2 | minimum | | |
+| Target ratio | capital-ratio | 150 | % | s. 1.2 | target | The supervisory target. | |
+| Divisor | capital-factor | 1.5 | factor | s. 1.1 | | | |
+| Internal target | capital-ratio | | % | s. 1.2 | target | | |""")
+
+    def test_explained_table_passes(self):
+        text = self.explained()
+        self.assertIn("| target | The supervisory target. |", text)
+        self.assertEqual(self.errors(text), [])
+
+    def test_basis_from_the_vocabulary(self):
+        errs = self.errors(self.explained().replace("| target |", "| guessed |"))
+        self.assertTrue(any("basis 'guessed'" in e for e in errs), errs)
+
+    def test_fits_names_a_real_tool(self):
+        good = self.explained().replace("| The supervisory target. | |", "| The supervisory target. | ratemaking.expense_ratios#total |")
+        self.assertEqual(self.errors(good), [])
+        errs = self.errors(good.replace("ratemaking.expense_ratios", "ratemaking.no_such_tool"))
+        self.assertTrue(any("not a tool" in e for e in errs), errs)
+        errs = self.errors(good.replace("#total", ""))
+        self.assertTrue(any("Fits is" in e for e in errs), errs)
+
+    def test_page_offset_is_a_number(self):
+        text = GOOD.replace('Read: "2026-11-08"', 'Read: "2026-11-08"\nPage offset: "two"')
+        errs = self.errors(text)
+        self.assertTrue(any("Page offset" in e for e in errs), errs)
 
     def test_figure_must_be_a_plain_number(self):
         errs = self.errors(GOOD.replace("| 150 | % |", "| 150% | % |"))

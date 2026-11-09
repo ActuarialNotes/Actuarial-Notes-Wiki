@@ -1640,6 +1640,25 @@ the title, "N of M figures read" and the effective date), its figures as rows (v
 many tools take it), the Fact Check badge and the source links under it. A figure a tool takes
 opens **Use in…**, a sheet of those tools, each with its exam's logo.
 
-**Next: template v2** (proposed 2026-11-09). A phone review of this template led to a second
-pass on navigation and connection: `docs/tool-template-v2.md`, with its mock-ups in
-`docs/tool-template-v2-mockups.html`.
+**Template v2, built 2026-11-09.** A phone review of this template led to a second pass on
+navigation and connection, `docs/tool-template-v2.md` (mock-ups in
+`docs/tool-template-v2-mockups.html`; §8 there records what was built). What changed from the
+description above:
+
+- **No exam logo** on the answer card or the shelf; the tint stays.
+- **One colour per quantity**: a split's segments carry their symbol and value inside the bar
+  ("F 11.028"), each quantity on a fixed step of the exam's hue (`QUANTITY_STEPS` in
+  `lib/toolFigures.ts`), and the input it is wears the same swatch on its row.
+- **A breadcrumb** (`Tools › Ratemaking › Permissible Loss Ratio`) replaces the back arrow.
+- **Takes from** above the answer card and **Gives to** below the inputs, read off `spec.next`
+  both ways (`takesFrom` / `givesTo` in `lib/toolTemplate.ts`). Gives to lists what each tool
+  would receive; following it opens the run with `?from=<sender>`, and the carried values arrive
+  **linked**.
+- **Inputs in the formula's order** at three or fewer; past three, judgments still lead.
+- **One "from" chip** on a judgment and on any changed input; rows at their default share "All ●
+  Default". A published figure or a link opens its explanation **in place**, in two levels.
+- **The edit sheet**: slider, *Take from a tool* (with this session's result), *Published* (and
+  figures the document holds that the bank hasn't entered, listed but not selectable), *Your own*.
+- **The bank** carries each figure's basis, meaning and, for a figure that matches an answer, the
+  tool it fits (`docs/assumptions-bank.md` §4.1).
+- **Trend Factor** and **Expense Ratios** moved to the template.

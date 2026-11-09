@@ -184,6 +184,7 @@ export function EditableTable({
                       className="-mx-1 inline-flex items-center gap-0.5 whitespace-nowrap rounded px-1 py-0.5 hover:bg-accent hover:text-foreground"
                     >
                       {c.label}
+                      {c.judgment && <span title="A judgment: yours to choose" aria-label="a judgment"> ◆</span>}
                       <ChevronDown className="h-3 w-3" aria-hidden />
                     </button>
                   ) : (

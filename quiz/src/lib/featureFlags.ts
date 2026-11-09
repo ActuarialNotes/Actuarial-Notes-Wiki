@@ -309,3 +309,13 @@ export const COMMUNITY_ENABLED: boolean = true
  * (playwright.config.ts); no deployed build does.
  */
 export const COMMUNITY_OPEN_TO_ALL: boolean = import.meta.env.VITE_COMMUNITY_PREVIEW === 'on'
+
+/**
+ * Games — Quiz Battle and Concept Craft — are still under development, so the
+ * Quiz tab's Games row (`components/landing/QuizGamesPanel.tsx`) is hidden.
+ * The pages themselves (`/games`, `/battle`, `/craft`) are left intact and still
+ * open by address. Only the e2e suite's build sets `VITE_GAMES_PREVIEW=on`
+ * (playwright.config.ts), so its flows through the Games row keep running.
+ * Re-enabling is a one-line change: set this to `true`.
+ */
+export const GAMES_ENABLED: boolean = import.meta.env.VITE_GAMES_PREVIEW === 'on'

@@ -18,6 +18,7 @@ import { MobileNavButton } from '@/components/MobileNavButton'
 import { QuestionSearchRow } from '@/components/QuestionSearchRow'
 import { dialogOpenOver } from '@/lib/layeredDialog'
 import { QuestionFilterBar } from '@/components/QuestionFilterBar'
+import { QuizSearchOpenContext } from '@/components/quizSearchContext'
 import { FloatingSearchStrip } from '@/components/FloatingSearchBar'
 
 /** Attempt-history filter, cycled by a single button: all → attempted → new → all. */
@@ -142,6 +143,10 @@ export function QuizFloatingSearch({ filter, strip, banner }: QuizFloatingSearch
     closeDropdown()
   }
 
+  // The strip's info sheet opens the panel without the keyboard: the panel
+  // alone, as the first tap on touch does.
+  const openPanel = useCallback(() => setActive(true), [])
+
   // Expand whenever the search bar is active (focus), regardless of query
   const isExpanded = active
 
@@ -208,7 +213,7 @@ export function QuizFloatingSearch({ filter, strip, banner }: QuizFloatingSearch
   }
 
   return (
-    <>
+    <QuizSearchOpenContext.Provider value={openPanel}>
       {isExpanded && (
         <div
           // z-[44] dims the concept popup (z-40) as well: at a tied z-40 the popup
@@ -426,6 +431,6 @@ export function QuizFloatingSearch({ filter, strip, banner }: QuizFloatingSearch
         </div>
         {!isExpanded && banner}
       </div>
-    </>
+    </QuizSearchOpenContext.Provider>
   )
 }

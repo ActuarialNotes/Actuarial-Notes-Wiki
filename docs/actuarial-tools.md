@@ -1639,3 +1639,7 @@ one on no syllabus is neutral. `toolExam.test.ts` pins the template tools' exams
 the title, "N of M figures read" and the effective date), its figures as rows (value, locator, how
 many tools take it), the Fact Check badge and the source links under it. A figure a tool takes
 opens **Use in…**, a sheet of those tools, each with its exam's logo.
+
+**Next: template v2** (proposed 2026-11-09). A phone review of this template led to a second
+pass on navigation and connection: `docs/tool-template-v2.md`, with its mock-ups in
+`docs/tool-template-v2-mockups.html`.

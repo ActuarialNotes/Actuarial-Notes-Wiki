@@ -516,7 +516,9 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   against every filed ratio; IFRS 17 roll-forward and KPI, market-share and peer tools; the same
   over MCP plus `find_insurer`; filings as Cowork documents with tables filled from the extract;
   the IFRS 4 history; then Life. Seven decisions (D-OSFI-1–7); the licence is settled.
-  *(Proposed 2026-11-08.)*
+  *(Proposed 2026-11-08.)* **Phase 0 started 2026-11-09:** `scripts/osfi_extract.py` pages the
+  API into hashed quarterly snapshots (Q1 2023 – Q2 2026 extracted), and every filed MCT ratio
+  reproduces from its own lines.
 
 - ~~**C20: answerability as a content check, then a gate.**~~ Ranked 2026-10-25 and built as G8:
   see C20 in §4.3 and D29. The proposal as written: `simulations/check-answerable`

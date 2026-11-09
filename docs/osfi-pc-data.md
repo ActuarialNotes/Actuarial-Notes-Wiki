@@ -37,8 +37,8 @@ OSFI publishes one dataset per kind of institution. The two that matter here:
 
   | Return | What it is | Periods on the API |
   |---|---|---|
-  | PC1 | Core Financial Statement Return (IFRS 17) | Q4 2023 – Q3 2026 |
-  | PC2 | Supervisory Quarterly Return | Q4 2023 – Q3 2026 |
+  | PC1 | Core Financial Statement Return (IFRS 17) | Q1 2023 – Q3 2026 |
+  | PC2 | Supervisory Quarterly Return | Q1 2023 – Q3 2026 |
   | PC3 | Supervisory Annual Return | Q4 2023 – Q4 2025 |
   | PC4 | MCT, and the BAAT for foreign branches | Q1 2023 – Q3 2026 |
   | MI, MI3, MI4, MI5 | The mortgage insurers' returns (CMHC, Sagen, Canada Guaranty) | current |
@@ -78,9 +78,15 @@ What was found by using it (2026-11-08):
   that matters. `datastore_search_sql` isn't enabled. So every query is a filter.
 - **A response is capped at 1,000 records** whatever `limit` asks for. `total` gives the real count
   and `_links.next` the next page.
-- **It's slow**: about 6 seconds a query. One company's quarter of PC1 is a single page. All of a
-  quarter's PC2 is about 192,000 rows, so 193 pages and about 20 minutes. `sort` and `distinct`
-  work, but a `distinct` over the large returns came back incomplete, so don't rely on it.
+- **A single query is slow** (up to about 6 seconds), but pages fetched four at a time go much
+  faster: a whole quarter of PC1 and PC4 (25 pages) in about 15 seconds, and a quarter of PC2
+  (about 179,000 rows, 179 pages) in about 6 minutes. `sort` and `distinct` work, but a `distinct`
+  over the large returns came back incomplete, so don't rely on it.
+- **Per-quarter row counts** (`osfi_extract.py periods`) show every IFRS 17 quarter from Q1 2023
+  in PC1, PC2 and PC4, and the year-ends in PC3. The newest quarter fills in as insurers file:
+  Q3 2026 had 1,125 PC1 rows on 2026-11-09 against about 16,000 for a whole quarter.
+- **Labels are full paths**, e.g. *"PC1: ASSETS:TOTAL ASSETS, Current Period, Total"*, so the
+  column (current or prior period) is in the label as well as the address.
 - **Every value is text**, including the measure. The extract parses it and fails on anything that
   isn't a number.
 - **Only non-zero cells are published.** Your Beyond 20/20 file carries explicit zeros, and the
@@ -182,41 +188,66 @@ They're the vault's existing rules, applied to filed data. None of them is new.
 
 ## 3. The pipeline
 
-### 3.1 `scripts/osfi_extract.py`
+### 3.1 `scripts/osfi_extract.py` — built (2026-11-09)
 
-It has the shape of `dataset_extract.py`: standard library only (`urllib`, `json`, `csv`).
+It has the shape of `dataset_extract.py`: standard library only, with tests in
+`scripts/test_osfi_extract.py` over real rows saved from the API
+(`scripts/fixtures/osfi_pc_sample.json`).
 
-- **`fetch --return PC1 --period "Q3 - 2025"`** pages the API (filter on the period, 1,000 rows a
-  page, `_links.next` until `total`, retrying with backoff) and caches each page's raw JSON outside
-  the repo (`--cache`, like `verify_sources.py`). It records each page's sha256 and the time read.
-  A quarter of all four P&C returns takes about 25 minutes. That's fine for a scheduled job and too
-  slow for anything interactive.
-- **`backfill`** is for the first load of history. It reads the same data from the resource's
-  **CSV download** (PC2's is about 1.1 GB, the inactive 1Q about 0.6 GB). That's one request
-  instead of thousands of pages, and the same rows, as the comparison in §1.4 shows. The CSV's
-  `Last-Modified` and sha256 go in the manifest.
-- **`archive --dir <Beyond 20/20 download>`** reads the archive. It fills in what the portal
-  doesn't publish (the 20.12–20.18 roll-forwards for Q1 2023 – Q3 2025) and runs the
-  **parity diff**: every cell both sources have, compared, written to `parity.json`.
-- **`check`** tests the identities the return states: each total against the sum of its
-  components, every roll-forward (opening + changes + cash flows = ending), and 20.10's total
-  assets against 20.11's total liabilities and equity. Each failure is a *finding about the
-  filing*, written to `checks.json`, never a correction.
-- **`write`** produces the snapshot, per period:
-  - `osfi/pc/<period>/manifest.json`: the source (`api`, `csv` or `archive`) for each return, with
-    resource ids, page counts, hashes and the date read; the licence and attribution; the check
-    and parity summaries.
-  - `osfi/pc/<period>/dictionary.json`: page → lines → columns, with OSFI's labels, read from the
-    rows themselves.
-  - `osfi/pc/<period>/institutions.json`: `Id`, names, industry group, inactive date, and the
-    archive's letter code where the crosswalk has one.
-  - `osfi/pc/<period>/<Id>.json`: one institution, non-zero cells only, `{ address: value }`.
-  - `osfi/pc/<period>/industry/<page>.json`: one page for every institution, for the peer and
-    market tools, so they don't load every company's file.
+- **`periods [--dataset pc|life]`** lists each return's row count per quarter.
+- **`extract --period 2026Q2 [--returns PC1,PC4] [--dataset life]`** pages the API for one period
+  (filtered on `Fiscal Quarter`, `_id` order, 1,000 rows a page, four pages at a time, retried with
+  backoff), caches each page outside the repo (`~/.cache/actuarial-notes/osfi`; `--offline` reads
+  only the cache, `--refresh` re-reads everything), checks every row belongs to the period and
+  return asked for and that the pages add up to the API's `total`, and writes `.osfi/<dataset>/<period>/`:
+  - `manifest.json`: the dataset and its page, each return's resource id, name and
+    `last_modified`, its row and page counts, the time read, and the **content hash** (sha256 over
+    the rows in canonical order, so paging and `_id` don't change it). Also the licence and its
+    attribution line, and the check tallies.
+  - `institutions.json`: OSFI `Id`, English and French names and industry group, inactive date,
+    which returns it filed, and `aggregate: true` on OSFI's total rows.
+  - `<return>.labels.json` (address → English and French label) and `<return>.values.json`
+    (institution → address → value, non-zero cells only), one key per line so a refiling is a
+    one-line diff.
+  - `checks.json`: the findings.
+- **Checks**, each a finding about the filing and never a correction:
+  - **MCT/BAAT ratio** (PC4 line 140 = line 10, or 25 for a branch, as a % of line 130), allowing
+    only what each input's filed precision permits (a company filing 7,063 over 228.50 can't be
+    held to the cent).
+  - **Balance**: total assets (20.10 line 89) = total liabilities and equity (20.11 line 799, or
+    line 999 for a branch, which files both).
+  - **Asset lines**: 20.10's lines sum to its total.
+  - Duplicate cells and conflicting labels.
 
-Tests go in `scripts/test_osfi_extract.py` over a committed fixture: a few institutions' rows from
-both sources, with the real hashes. They include a recorded API page, so the pager is tested
-without the network.
+What the first run found, every quarter Q1 2023 – Q2 2026:
+
+- **Every filed MCT and BAAT ratio reproduces** from the filer's own lines: 1,909 ratios over 14
+  quarters, 1,735 to the cent and 174 within what their inputs' filed precision allows. That's what
+  makes them R6 fixtures for MCT Ratio (§4.2). Two things the check had to learn, both from
+  OSFI's own label (*"Line 10 or line 25 as a % of line 130"*): a branch files line 10 and line 25
+  and is tested on 25. And the API pads every value to two decimals ("5020.00"), so a whole number
+  may have been filed whole: N.V. Hagelunie files its ratio to a whole percent.
+- **Every company's asset lines sum to its total assets.**
+- **A few filers don't balance**, as filed: 15 findings over the 14 quarters, 0 to 3 a quarter.
+  Most are under $10k. N.V. Hagelunie is $104k out in Q4 2023, Q1 2024 and Q2 2024. In Q2 2026 they're
+  AXIS Reinsurance Company ($1,057,912k of assets against $1,057,909k) and Ecclesiastical
+  Insurance Office ($409,893.99k against $409,898.48k).
+- **Q4 2024 mixes two versions of the PC1 form.** 128 addresses carry two labels in that quarter:
+  most rows say *"Prior Period"*, a few say *"Prior Period Restated"*. Each is one finding, listing
+  both labels with their row counts, and the dictionary keeps the label most rows carry. One of
+  them shows a translation slip in OSFI's own labels: the French for *"Revenue from PAA
+  Contracts"* (P202201001) names the general measurement model (MGE).
+- **The industry total rows still sum the ratio column**, as the archive's did, so they stay
+  marked `aggregate` and out of every check.
+
+Not built yet: the CSV `backfill` for the IFRS 4 history, the `archive` reader and its parity diff
+(waiting on the upload), and the identities of the roll-forward pages (archive only).
+
+**What's committed.** The script, its tests, and each period's `manifest.json`, `institutions.json`
+and `checks.json`, which are small and are the audit trail: a re-run must reproduce each return's
+content hash. The labels and values (about 0.6 MB a quarter for PC1 and PC4, 4.6 MB more for PC2)
+are git-ignored until D-OSFI-2 settles where the data lives, and are rebuilt by re-running the
+extract. Twenty-six quarters of PC2 in git history would be about 120 MB.
 
 ### 3.2 Keeping it current
 
@@ -414,7 +445,7 @@ Each step is a PR, and each is green before the next.
 
 | Phase | Work | Size |
 |---|---|---|
-| 0 | `osfi_extract.py` (API pager, CSV backfill, archive reader), its tests, the institution crosswalk, and the **full parity diff** (archive against portal, every shared cell, 2000 – 2025 Q3). Read the user manual and Data Dictionary (totals, D-OSFI-7). Rewrite the two OSFI data pages and add the Life one | M |
+| 0 | ✅ `osfi_extract.py`'s API pager, checks and tests (2026-11-09). Still to do: the CSV backfill, the archive reader, the institution crosswalk, and the **full parity diff** (archive against portal, every shared cell, 2000 – 2025 Q3). Read the user manual and Data Dictionary (totals, D-OSFI-7). Rewrite the two OSFI data pages and add the Life one | M |
 | 1 | **Insurer Return** over PC1–PC4 for the IFRS 17 periods. **MCT Ratio** with every filed ratio as a fixture. Capital Factors. The weekly refresh job | M |
 | 2 | **IFRS 17 Roll-Forward** on the archive's 20.14/20.18. Insurance Service Ratios. Market Share. Peer Position. Workflows templates | M |
 | 3 | Connector: `find_insurer`, the dictionary resource, the practitioner prompt. Cowork filing documents and the rule change. Exam 6C links and questions (§10) | M |

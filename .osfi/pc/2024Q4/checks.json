@@ -1,0 +1,2306 @@
+[
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20100103",
+  "variants": [
+   {
+    "en": "PC1: ASSETS:Cash and Cash Equivalents, Prior Period, Total",
+    "fr": "PC1: ACTIF: Encaisse et quasi-espèces, Exercice précédent, Total",
+    "rows": 132
+   },
+   {
+    "en": "PC1: ASSETS:Cash and Cash Equivalents, Prior Period Restated, Total",
+    "fr": "PC1: ACTIF: Encaisse et quasi-espèces, Exercice précédent, retraité, Total",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20101103",
+  "variants": [
+   {
+    "en": "PC1: ASSETS:Accrued Investment Income, Prior Period, Total",
+    "fr": "PC1: ACTIF: Revenu d'investissement couru, Exercice précédent, Total",
+    "rows": 120
+   },
+   {
+    "en": "PC1: ASSETS:Accrued Investment Income, Prior Period Restated, Total",
+    "fr": "PC1: ACTIF: Revenu d'investissement couru, Exercice précédent, retraité, Total",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20101403",
+  "variants": [
+   {
+    "en": "PC1: ASSETS:Investments, Prior Period, Total",
+    "fr": "PC1: ACTIF: Investissements, Exercice précédent, Total",
+    "rows": 127
+   },
+   {
+    "en": "PC1: ASSETS:Investments, Prior Period Restated, Total",
+    "fr": "PC1: ACTIF: Investissements, Exercice précédent, retraité, Total",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20101603",
+  "variants": [
+   {
+    "en": "PC1: ASSETS:Financial Instrument Derivative Assets, Prior Period, Total",
+    "fr": "PC1: ACTIF: Instruments financiers dérivés - Actifs, Exercice précédent, Total",
+    "rows": 11
+   },
+   {
+    "en": "PC1: ASSETS:Financial Instrument Derivative Assets, Prior Period Restated, Total",
+    "fr": "PC1: ACTIF: Instruments financiers dérivés - Actifs, Exercice précédent, retraité, Total",
+    "rows": 4
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20104103",
+  "variants": [
+   {
+    "en": "PC1: ASSETS:Property and Equipment, Prior Period, Total",
+    "fr": "PC1: ACTIF: Immobilisations corporelles, Exercice précédent, Total",
+    "rows": 59
+   },
+   {
+    "en": "PC1: ASSETS:Property and Equipment, Prior Period Restated, Total",
+    "fr": "PC1: ACTIF: Immobilisations corporelles, Exercice précédent, retraité, Total",
+    "rows": 1
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20104403",
+  "variants": [
+   {
+    "en": "PC1: ASSETS:Deferred Tax Assets, Prior Period, Total",
+    "fr": "PC1: ACTIF: Actifs d'impôt différé, Exercice précédent, Total",
+    "rows": 84
+   },
+   {
+    "en": "PC1: ASSETS:Deferred Tax Assets, Prior Period Restated, Total",
+    "fr": "PC1: ACTIF: Actifs d'impôt différé, Exercice précédent, retraité, Total",
+    "rows": 5
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20105203",
+  "variants": [
+   {
+    "en": "PC1: ASSETS:Current Tax Assets, Prior Period, Total",
+    "fr": "PC1: ACTIF: Actifs d'impôt exigible,Exercice précédent, Total",
+    "rows": 43
+   },
+   {
+    "en": "PC1: ASSETS:Current Tax Assets, Prior Period Restated, Total",
+    "fr": "PC1: ACTIF: Actifs d'impôt exigible,Exercice précédent, retraité, Total",
+    "rows": 4
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20105403",
+  "variants": [
+   {
+    "en": "PC1: ASSETS:Goodwill, Prior Period, Total",
+    "fr": "PC1: ACTIF: Écart d'acquisition, Exercice précédent, Total",
+    "rows": 10
+   },
+   {
+    "en": "PC1: ASSETS:Goodwill, Prior Period Restated, Total",
+    "fr": "PC1: ACTIF: Écart d'acquisition, Exercice précédent, retraité, Total",
+    "rows": 2
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20105603",
+  "variants": [
+   {
+    "en": "PC1: ASSETS:Intangible Assets, Prior Period, Total",
+    "fr": "PC1: ACTIF: Immobilisations incorporelles, Exercice précédent, Total",
+    "rows": 30
+   },
+   {
+    "en": "PC1: ASSETS:Intangible Assets, Prior Period Restated, Total",
+    "fr": "PC1: ACTIF: Immobilisations incorporelles, Exercice précédent, retraité, Total",
+    "rows": 2
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20105803",
+  "variants": [
+   {
+    "en": "PC1: ASSETS:Defined Benefit Pension Plan, Prior Period, Total",
+    "fr": "PC1: ACTIF: Actifs des régimes de retraite à prestations définies, Exercice précédent, Total",
+    "rows": 18
+   },
+   {
+    "en": "PC1: ASSETS:Defined Benefit Pension Plan, Prior Period Restated, Total",
+    "fr": "PC1: ACTIF: Actifs des régimes de retraite à prestations définies, Exercice précédent, retraité, Total",
+    "rows": 1
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20106401",
+  "variants": [
+   {
+    "en": "PC1: ASSETS:Reinsurance Contract Held Assets, Current Period, Total",
+    "fr": "PC1: ACTIF: Actifs au titre des contrats de réassurance détenus, Exercice courant, Total",
+    "rows": 113
+   },
+   {
+    "en": "PC1: ASSETS:Reinsurance Contract Held Assets, Current Period, Total",
+    "fr": "PC1: ACTIF: Actifs au titre des traités de réassurance détenus, Exercice courant, Total",
+    "rows": 5
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20106403",
+  "variants": [
+   {
+    "en": "PC1: ASSETS:Reinsurance Contract Held Assets, Prior Period, Total",
+    "fr": "PC1: ACTIF: Actifs au titre des contrats de réassurance détenus, Exercice précédent, Total",
+    "rows": 114
+   },
+   {
+    "en": "PC1: ASSETS:Reinsurance Contract Held Assets, Prior Period Restated, Total",
+    "fr": "PC1: ACTIF: Actifs au titre des traités de réassurance détenus, Exercice précédent, retraité, Total",
+    "rows": 4
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20108803",
+  "variants": [
+   {
+    "en": "PC1: ASSETS:Other Assets, Prior Period, Total",
+    "fr": "PC1: ACTIF: Autres éléments d'actif, Exercice précédent, Total",
+    "rows": 121
+   },
+   {
+    "en": "PC1: ASSETS:Other Assets, Prior Period Restated, Total",
+    "fr": "PC1: ACTIF: Autres éléments d'actif, Exercice précédent, retraité, Total",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20108903",
+  "variants": [
+   {
+    "en": "PC1: ASSETS:TOTAL ASSETS, Prior Period, Total",
+    "fr": "PC1: ACTIF: TOTAL DE L'ACTIF, Exercice précédent, Total",
+    "rows": 135
+   },
+   {
+    "en": "PC1: ASSETS:TOTAL ASSETS, Prior Period Restated, Total",
+    "fr": "PC1: ACTIF: TOTAL DE L'ACTIF, Exercice précédent, retraité, Total",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P201103003",
+  "variants": [
+   {
+    "en": "PC1: LIABILITIES: Provisions, Accruals and Other Liabilities, Prior Period",
+    "fr": "PC1: PASSIF: Provisions, charges à payer et autres éléments de passif, Exercice précédent",
+    "rows": 131
+   },
+   {
+    "en": "PC1: LIABILITIES: Provisions, Accruals and Other Liabilities, Prior Period Restated",
+    "fr": "PC1: PASSIF: Provisions, charges à payer et autres éléments de passif, Exercice précédent, retraité",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P201105003",
+  "variants": [
+   {
+    "en": "PC1: LIABILITIES: Current Tax Liabilities, Prior Period",
+    "fr": "PC1: PASSIF: Passifs d'impôt exigible, Exercice précédent",
+    "rows": 83
+   },
+   {
+    "en": "PC1: LIABILITIES: Current Tax Liabilities, Prior Period Restated",
+    "fr": "PC1: PASSIF: Passifs d'impôt exigible, Exercice précédent, retraité",
+    "rows": 4
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P201107003",
+  "variants": [
+   {
+    "en": "PC1: LIABILITIES: Financial Instrument Derivative Liabilities, Prior Period",
+    "fr": "PC1: PASSIF: Instruments financiers dérivés - Passifs, Exercice précédent",
+    "rows": 13
+   },
+   {
+    "en": "PC1: LIABILITIES: Financial Instrument Derivative Liabilities, Prior Period Restated",
+    "fr": "PC1: PASSIF: Instruments financiers dérivés - Passifs, Exercice précédent, retraité",
+    "rows": 4
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P201110003",
+  "variants": [
+   {
+    "en": "PC1: LIABILITIES: Deferred Tax Liabilities, Prior Period",
+    "fr": "PC1: PASSIF: Passifs d'impôt différé, Exercice précédent",
+    "rows": 37
+   },
+   {
+    "en": "PC1: LIABILITIES: Deferred Tax Liabilities, Prior Period Restated",
+    "fr": "PC1: PASSIF: Passifs d'impôt différé, Exercice précédent, retraité",
+    "rows": 2
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P201111003",
+  "variants": [
+   {
+    "en": "PC1: LIABILITIES: Defined Benefit Pension Plan, Prior Period",
+    "fr": "PC1: PASSIF: Régimes de retraite à prestations définies, Exercice précédent",
+    "rows": 18
+   },
+   {
+    "en": "PC1: LIABILITIES: Defined Benefit Pension Plan, Prior Period Restated",
+    "fr": "PC1: PASSIF: Régimes de retraite à prestations définies, Exercice précédent, retraité",
+    "rows": 1
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P201112003",
+  "variants": [
+   {
+    "en": "PC1: LIABILITIES: Employment Benefits (not including amounts in line above), Prior Period",
+    "fr": "PC1: PASSIF: Avantages du personnel (autres que les montants susmentionnés), Exercice précédent",
+    "rows": 28
+   },
+   {
+    "en": "PC1: LIABILITIES: Employment Benefits (not including amounts in line above), Prior Period Restated",
+    "fr": "PC1: PASSIF: Avantages du personnel (autres que les montants susmentionnés), Exercice précédent, retraité",
+    "rows": 1
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P201113003",
+  "variants": [
+   {
+    "en": "PC1: LIABILITIES: Subordinated Debt, Prior Period",
+    "fr": "PC1: PASSIF: Dettes subordonnées, Exercice précédent",
+    "rows": 6
+   },
+   {
+    "en": "PC1: LIABILITIES: Subordinated Debt, Prior Period Restated",
+    "fr": "PC1: PASSIF: Dettes subordonnées, Exercice précédent, retraité",
+    "rows": 1
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P201116903",
+  "variants": [
+   {
+    "en": "PC1: LIABILITIES: Total Insurance Contract Liabilities , Prior Period",
+    "fr": "PC1: PASSIF: Total des passifs au titre des contrats d'assurance, Exercice précédent",
+    "rows": 129
+   },
+   {
+    "en": "PC1: LIABILITIES: Total Insurance Contract Liabilities , Prior Period Restated",
+    "fr": "PC1: PASSIF: Total des passifs au titre des contrats d'assurance, Exercice précédent, retraité",
+    "rows": 5
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P201129903",
+  "variants": [
+   {
+    "en": "PC1: LIABILITIES: Liabilities before Policyholders' Liabilities, Prior Period",
+    "fr": "PC1: PASSIF: Passifs avant les obligations envers les titulaires de polices, Exercice précédent",
+    "rows": 135
+   },
+   {
+    "en": "PC1: LIABILITIES: Liabilities before Policyholders' Liabilities, Prior Period Restated",
+    "fr": "PC1: PASSIF: Passifs avant les obligations envers les titulaires de polices, Exercice précédent, retraité",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P201139903",
+  "variants": [
+   {
+    "en": "PC1: LIABILITIES: TOTAL LIABILITIES, Prior Period",
+    "fr": "PC1: PASSIF: TOTAL DU PASSIF, Exercice précédent",
+    "rows": 135
+   },
+   {
+    "en": "PC1: LIABILITIES: TOTAL LIABILITIES, Prior Period Restated",
+    "fr": "PC1: PASSIF: TOTAL DU PASSIF, Exercice précédent, retraité",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P201151003",
+  "variants": [
+   {
+    "en": "PC1: EQUITY - CANADIAN INSURERS ONLY:Shareholders' Equity , Common Shares, Prior Period",
+    "fr": "PC1: CAPITAUX PROPRES - ASSUREURS CANADIENS SEULEMENT: Avoir des actionnaires, Actions ordinaires, Exercice précédent",
+    "rows": 57
+   },
+   {
+    "en": "PC1: EQUITY - CANADIAN INSURERS ONLY:Shareholders' Equity , Common Shares, Prior Period Restated",
+    "fr": "PC1: CAPITAUX PROPRES - ASSUREURS CANADIENS SEULEMENT: Avoir des actionnaires, Actions ordinaires, Exercice précédent, retraité",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P201152003",
+  "variants": [
+   {
+    "en": "PC1: EQUITY - CANADIAN INSURERS ONLY:Shareholders' Equity , Preferred Shares, Prior Period",
+    "fr": "PC1: CAPITAUX PROPRES - ASSUREURS CANADIENS SEULEMENT: Avoir des actionnaires, Actions privilégiées, Exercice précédent",
+    "rows": 13
+   },
+   {
+    "en": "PC1: EQUITY - CANADIAN INSURERS ONLY:Shareholders' Equity , Preferred Shares, Prior Period Restated",
+    "fr": "PC1: CAPITAUX PROPRES - ASSUREURS CANADIENS SEULEMENT: Avoir des actionnaires, Actions privilégiées, Exercice précédent, retraité",
+    "rows": 2
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P201153003",
+  "variants": [
+   {
+    "en": "PC1: EQUITY - CANADIAN INSURERS ONLY:Shareholders' Equity , Contributed Surplus, Prior Period",
+    "fr": "PC1: CAPITAUX PROPRES - ASSUREURS CANADIENS SEULEMENT: Avoir des actionnaires, Surplus d'apport, Exercice précédent",
+    "rows": 36
+   },
+   {
+    "en": "PC1: EQUITY - CANADIAN INSURERS ONLY:Shareholders' Equity , Contributed Surplus, Prior Period Restated",
+    "fr": "PC1: CAPITAUX PROPRES - ASSUREURS CANADIENS SEULEMENT: Avoir des actionnaires, Surplus d'apport, Exercice précédent, retraité",
+    "rows": 4
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P201155003",
+  "variants": [
+   {
+    "en": "PC1: EQUITY - CANADIAN INSURERS ONLY:Shareholders' Equity , Retained Earnings, Prior Period",
+    "fr": "PC1: CAPITAUX PROPRES - ASSUREURS CANADIENS SEULEMENT: Avoir des actionnaires, Bénéfices non répartis, Exercice précédent",
+    "rows": 60
+   },
+   {
+    "en": "PC1: EQUITY - CANADIAN INSURERS ONLY:Shareholders' Equity , Retained Earnings, Prior Period Restated",
+    "fr": "PC1: CAPITAUX PROPRES - ASSUREURS CANADIENS SEULEMENT: Avoir des actionnaires, Bénéfices non répartis, Exercice précédent, retraité",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P201157001",
+  "variants": [
+   {
+    "en": "PC1: EQUITY - CANADIAN INSURERS ONLY:Shareholders' Equity , Accumulated Other Comprehensive Income (Loss), Current Period",
+    "fr": "PC1: CAPITAUX PROPRES - ASSUREURS CANADIENS SEULEMENT: Avoir des actionnaires, Cumul des autres éléments du résultat global (perte), Exercice courant",
+    "rows": 38
+   },
+   {
+    "en": "PC1: EQUITY - CANADIAN INSURERS ONLY:Shareholders' Equity , Accumulated Other Comprehensive Income (Loss), Current Period",
+    "fr": "PC1: CAPITAUX PROPRES - ASSUREURS CANADIENS SEULEMENT: Avoir des actionnaires, Cumul des autres éléments du résultat étendu (perte), Exercice courant",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P201157003",
+  "variants": [
+   {
+    "en": "PC1: EQUITY - CANADIAN INSURERS ONLY:Shareholders' Equity , Accumulated Other Comprehensive Income (Loss), Prior Period",
+    "fr": "PC1: CAPITAUX PROPRES - ASSUREURS CANADIENS SEULEMENT: Avoir des actionnaires, Cumul des autres éléments du résultat global (perte), Exercice précédent",
+    "rows": 38
+   },
+   {
+    "en": "PC1: EQUITY - CANADIAN INSURERS ONLY:Shareholders' Equity , Accumulated Other Comprehensive Income (Loss), Prior Period Restated",
+    "fr": "PC1: CAPITAUX PROPRES - ASSUREURS CANADIENS SEULEMENT: Avoir des actionnaires, Cumul des autres éléments du résultat étendu (perte), Exercice précédent, retraité",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P201159903",
+  "variants": [
+   {
+    "en": "PC1: EQUITY - CANADIAN INSURERS ONLY:Total Shareholders' Equity, Prior Period",
+    "fr": "PC1: CAPITAUX PROPRES - ASSUREURS CANADIENS SEULEMENT: Total de l'avoir des actionnaires, Exercice précédent",
+    "rows": 63
+   },
+   {
+    "en": "PC1: EQUITY - CANADIAN INSURERS ONLY:Total Shareholders' Equity, Prior Period Restated",
+    "fr": "PC1: CAPITAUX PROPRES - ASSUREURS CANADIENS SEULEMENT: Total de l'avoir des actionnaires, Exercice précédent, retraité",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P201169903",
+  "variants": [
+   {
+    "en": "PC1: EQUITY - CANADIAN INSURERS ONLY:Total Equity, Prior Period",
+    "fr": "PC1: CAPITAUX PROPRES - ASSUREURS CANADIENS SEULEMENT: Total des capitaux propres, Exercice précédent",
+    "rows": 65
+   },
+   {
+    "en": "PC1: EQUITY - CANADIAN INSURERS ONLY:Total Equity, Prior Period Restated",
+    "fr": "PC1: CAPITAUX PROPRES - ASSUREURS CANADIENS SEULEMENT: Total des capitaux propres, Exercice précédent, retraité",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P201179903",
+  "variants": [
+   {
+    "en": "PC1: EQUITY - CANADIAN INSURERS ONLY: TOTAL LIABILITIES AND EQUITY, Prior Period",
+    "fr": "PC1: CAPITAUX PROPRES - ASSUREURS CANADIENS SEULEMENT: TOTAL DU PASSIF ET DES CAPITAUX PROPRES, Exercice précédent",
+    "rows": 135
+   },
+   {
+    "en": "PC1: EQUITY - CANADIAN INSURERS ONLY: TOTAL LIABILITIES AND EQUITY, Prior Period Restated",
+    "fr": "PC1: CAPITAUX PROPRES - ASSUREURS CANADIENS SEULEMENT: TOTAL DU PASSIF ET DES CAPITAUX PROPRES, Exercice précédent, retraité",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P201199901",
+  "variants": [
+   {
+    "en": "PC1: EQUITY - FOREIGN INSURERS ONLY: TOTAL LIABILITIES, EQUITY, HEAD OFFICE ACCOUNT, RESERVES & AOCI, Current Period",
+    "fr": "PC1: CAPITAUX PROPRES - ASSUREURS ÉTRANGERS SEULEMENT: TOTAL : PASSIF, CAPITAUX PROPRES, FONDS DU SIÈGE SOCIAL, RÉSERVES ET CAÉRG, Exercice courant",
+    "rows": 136
+   },
+   {
+    "en": "PC1: EQUITY - FOREIGN INSURERS ONLY: TOTAL LIABILITIES, EQUITY, HEAD OFFICE ACCOUNT, RESERVES & AOCI, Current Period",
+    "fr": "PC1: CAPITAUX PROPRES - ASSUREURS ÉTRANGERS SEULEMENT: TOTAL : PASSIF, CAPITAUX PROPRES, FONDS DU SIÈGE SOCIAL, RÉSERVES ET CAÉRÉ, Exercice courant",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P201199903",
+  "variants": [
+   {
+    "en": "PC1: EQUITY - FOREIGN INSURERS ONLY: TOTAL LIABILITIES, EQUITY, HEAD OFFICE ACCOUNT, RESERVES & AOCI, Prior Period",
+    "fr": "PC1: CAPITAUX PROPRES - ASSUREURS ÉTRANGERS SEULEMENT: TOTAL : PASSIF, CAPITAUX PROPRES, FONDS DU SIÈGE SOCIAL, RÉSERVES ET CAÉRG, Exercice précédent",
+    "rows": 135
+   },
+   {
+    "en": "PC1: EQUITY - FOREIGN INSURERS ONLY: TOTAL LIABILITIES, EQUITY, HEAD OFFICE ACCOUNT, RESERVES & AOCI, Prior Period Restated",
+    "fr": "PC1: CAPITAUX PROPRES - ASSUREURS ÉTRANGERS SEULEMENT: TOTAL : PASSIF, CAPITAUX PROPRES, FONDS DU SIÈGE SOCIAL, RÉSERVES ET CAÉRÉ, Exercice précédent, retraité",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P202201001",
+  "variants": [
+   {
+    "en": "PC1: Revenue from PAA Contracts,Current Period",
+    "fr": "PC1: Produits tirés des contrats comptabilisés selon la méthode générale d'évaluation (MGE) (excluant les contrats ayant recours à la méthode des honoraires variables [MHV]), Exercice courant",
+    "rows": 114
+   },
+   {
+    "en": "PC1: Revenue from PAA Contracts,Current Period",
+    "fr": "PC1: Produits tirés des contrats comptabilisés selon la méthode de la répartition des primes (MRP), Exercice courant",
+    "rows": 5
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P202201003",
+  "variants": [
+   {
+    "en": "PC1: Revenue from PAA Contracts,Prior Period",
+    "fr": "PC1: Produits tirés des contrats comptabilisés selon la méthode générale d'évaluation (MGE) (excluant les contrats ayant recours à la méthode des honoraires variables [MHV]), Exercice précédent",
+    "rows": 111
+   },
+   {
+    "en": "PC1: Revenue from PAA Contracts,Prior Period Restated",
+    "fr": "PC1: Produits tirés des contrats comptabilisés selon la méthode de la répartition des primes (MRP), Exercice précédent, retraité",
+    "rows": 5
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P202209903",
+  "variants": [
+   {
+    "en": "PC1: Total Insurance Revenue, Prior Period",
+    "fr": "PC1: Total des produits des activités d'assurance, Exercice précédent",
+    "rows": 123
+   },
+   {
+    "en": "PC1: Total Insurance Revenue, Prior Period Restated",
+    "fr": "PC1: Total des produits des activités d'assurance, Exercice précédent, retraité",
+    "rows": 5
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P202211003",
+  "variants": [
+   {
+    "en": "PC1: Insurance service expenses, Prior Period",
+    "fr": "PC1: Charges afférentes aux activités d'assurance, Exercice précédent",
+    "rows": 130
+   },
+   {
+    "en": "PC1: Insurance service expenses, Prior Period Restated",
+    "fr": "PC1: Charges afférentes aux activités d'assurance, Exercice précédent, retraité",
+    "rows": 5
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P202212001",
+  "variants": [
+   {
+    "en": "PC1: Net expenses from reinsurance contracts held, Current Period",
+    "fr": "PC1: Charges nettes afférentes aux contrats de réassurance détenus, Exercice courant",
+    "rows": 122
+   },
+   {
+    "en": "PC1: Net expenses from reinsurance contracts held, Current Period",
+    "fr": "PC1: Charges nettes afférentes aux traités de réassurance détenus, Exercice courant",
+    "rows": 5
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P202212003",
+  "variants": [
+   {
+    "en": "PC1: Net expenses from reinsurance contracts held, Prior Period",
+    "fr": "PC1: Charges nettes afférentes aux contrats de réassurance détenus, Exercice précédent",
+    "rows": 119
+   },
+   {
+    "en": "PC1: Net expenses from reinsurance contracts held, Prior Period Restated",
+    "fr": "PC1: Charges nettes afférentes aux traités de réassurance détenus, Exercice précédent, retraité",
+    "rows": 5
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P202219903",
+  "variants": [
+   {
+    "en": "PC1: INSURANCE SERVICE RESULT, Prior Period",
+    "fr": "PC1: RÉSULTAT DES ACTIVITÉS D'ASSURANCE, Exercice précédent",
+    "rows": 130
+   },
+   {
+    "en": "PC1: INSURANCE SERVICE RESULT, Prior Period Restated",
+    "fr": "PC1: RÉSULTAT DES ACTIVITÉS D'ASSURANCE, Exercice précédent, retraité",
+    "rows": 5
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P202222001",
+  "variants": [
+   {
+    "en": "PC1: Interest revenue on financial assets, Current Period",
+    "fr": "PC1: Revenu d'intérêt sur les actifs financiers, Exercice courant",
+    "rows": 118
+   },
+   {
+    "en": "PC1: Interest revenue on financial assets not measured at FVTPL, Current Period",
+    "fr": "PC1: Revenu d'intérêt sur les actifs financiers qui ne sont pas évalués à la JVRN, Exercice courant",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P202222003",
+  "variants": [
+   {
+    "en": "PC1: Interest revenue on financial assets, Prior Period",
+    "fr": "PC1: Revenu d'intérêt sur les actifs financiers, Exercice précédent",
+    "rows": 111
+   },
+   {
+    "en": "PC1: Interest revenue on financial assets not measured at FVTPL, Prior Period Restated",
+    "fr": "PC1: Revenu d'intérêt sur les actifs financiers qui ne sont pas évalués à la JVRN, Exercice précédent, retraité",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P202223003",
+  "variants": [
+   {
+    "en": "PC1: Net investment income excluding segregated funds, Prior Period",
+    "fr": "PC1: Résultat d'investissement net, excluant le résultat au titre des fonds distincts, Exercice précédent",
+    "rows": 123
+   },
+   {
+    "en": "PC1: Net investment income excluding segregated funds, Prior Period Restated",
+    "fr": "PC1: Résultat d'investissement net, excluant le résultat au titre des fonds distincts, Exercice précédent, retraité",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P202225003",
+  "variants": [
+   {
+    "en": "PC1: Provision for Credit Losses, Prior Period",
+    "fr": "PC1: Provisions pour pertes sur créances, Exercice précédent",
+    "rows": 35
+   },
+   {
+    "en": "PC1: Provision for Credit Losses, Prior Period Restated",
+    "fr": "PC1: Provisions pour pertes sur créances, Exercice précédent, retraité",
+    "rows": 1
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P202230003",
+  "variants": [
+   {
+    "en": "PC1: Investment Return, Prior Period",
+    "fr": "PC1: Rendement d'investissement, Exercice précédent",
+    "rows": 133
+   },
+   {
+    "en": "PC1: Investment Return, Prior Period Restated",
+    "fr": "PC1: Rendement d'investissement, Exercice précédent, retraité",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P202231003",
+  "variants": [
+   {
+    "en": "PC1: Net finance income (expenses) from insurance contracts excluding segregated funds, Prior Period",
+    "fr": "PC1: Produits financiers ou charges financières nets afférents aux contrats d'assurance, excluant le résultat au titre des fonds distincts, Exercice précédent",
+    "rows": 123
+   },
+   {
+    "en": "PC1: Net finance income (expenses) from insurance contracts excluding segregated funds, Prior Period Restated",
+    "fr": "PC1: Produits financiers ou charges financières nets afférents aux contrats d'assurance, excluant le résultat au titre des fonds distincts, Exercice précédent, retraité",
+    "rows": 4
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P202232001",
+  "variants": [
+   {
+    "en": "PC1: Net finance income (expenses) from reinsurance contracts held, Current Period",
+    "fr": "PC1: Produits financiers ou charges financières nets afférents aux contrats de réassurance détenus, Exercice courant",
+    "rows": 111
+   },
+   {
+    "en": "PC1: Net finance income (expenses) from reinsurance contracts held, Current Period",
+    "fr": "PC1: Produits financiers ou charges financières nets afférents aux traités de réassurance détenus, Exercice courant",
+    "rows": 4
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P202232003",
+  "variants": [
+   {
+    "en": "PC1: Net finance income (expenses) from reinsurance contracts held, Prior Period",
+    "fr": "PC1: Produits financiers ou charges financières nets afférents aux contrats de réassurance détenus, Exercice précédent",
+    "rows": 109
+   },
+   {
+    "en": "PC1: Net finance income (expenses) from reinsurance contracts held, Prior Period Restated",
+    "fr": "PC1: Produits financiers ou charges financières nets afférents aux traités de réassurance détenus, Exercice précédent, retraité",
+    "rows": 4
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P202239903",
+  "variants": [
+   {
+    "en": "PC1: NET INVESTMENT RESULT, Prior Period",
+    "fr": "PC1: RÉSULTAT D'INVESTISSEMENT NET, Exercice précédent",
+    "rows": 134
+   },
+   {
+    "en": "PC1: NET INVESTMENT RESULT, Prior Period Restated",
+    "fr": "PC1: RÉSULTAT D'INVESTISSEMENT NET, Exercice précédent, retraité",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P202241003",
+  "variants": [
+   {
+    "en": "PC1: Other Income, Prior Period",
+    "fr": "PC1: Autres produits, Exercice précédent",
+    "rows": 113
+   },
+   {
+    "en": "PC1: Other Income, Prior Period Restated",
+    "fr": "PC1: Autres produits, Exercice précédent, retraité",
+    "rows": 5
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P202242003",
+  "variants": [
+   {
+    "en": "PC1: General and Operating Expenses, Prior Period",
+    "fr": "PC1: Frais généraux et frais d’exploitation, Exercice précédent",
+    "rows": 120
+   },
+   {
+    "en": "PC1: General and Operating Expenses, Prior Period Restated",
+    "fr": "PC1: Frais généraux et frais d’exploitation, Exercice précédent, retraité",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P202243003",
+  "variants": [
+   {
+    "en": "PC1: OTHER INCOME AND EXPENSES, Prior Period",
+    "fr": "PC1: AUTRES PRODUITS ET CHARGES, Exercice précédent",
+    "rows": 132
+   },
+   {
+    "en": "PC1: OTHER INCOME AND EXPENSES, Prior Period Restated",
+    "fr": "PC1: AUTRES PRODUITS ET CHARGES, Exercice précédent, retraité",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P202244003",
+  "variants": [
+   {
+    "en": "PC1: PROFIT (LOSS) BEFORE TAXES, Prior Period",
+    "fr": "PC1: RÉSULTAT NET AVANT IMPÔT, Exercice précédent",
+    "rows": 135
+   },
+   {
+    "en": "PC1: PROFIT (LOSS) BEFORE TAXES, Prior Period Restated",
+    "fr": "PC1: RÉSULTAT NET AVANT IMPÔT, Exercice précédent, retraité",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P202245003",
+  "variants": [
+   {
+    "en": "PC1: Current Taxes, Prior Period",
+    "fr": "PC1: Impôt exigible, Exercice précédent",
+    "rows": 119
+   },
+   {
+    "en": "PC1: Current Taxes, Prior Period Restated",
+    "fr": "PC1: Impôt exigible, Exercice précédent, retraité",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P202246003",
+  "variants": [
+   {
+    "en": "PC1: Deferred Taxes, Prior Period",
+    "fr": "PC1: Impôt différé, Exercice précédent",
+    "rows": 117
+   },
+   {
+    "en": "PC1: Deferred Taxes, Prior Period Restated",
+    "fr": "PC1: Impôt différé, Exercice précédent, retraité",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P202249903",
+  "variants": [
+   {
+    "en": "PC1: Total Income Taxes, Prior Period",
+    "fr": "PC1: Total - impôt sur les bénéfices, Exercice précédent",
+    "rows": 122
+   },
+   {
+    "en": "PC1: Total Income Taxes, Prior Period Restated",
+    "fr": "PC1: Total - impôt sur les bénéfices, Exercice précédent, retraité",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P202251003",
+  "variants": [
+   {
+    "en": "PC1: PROFIT (LOSS) AFTER TAXES, Prior Period",
+    "fr": "PC1: RÉSULTAT NET APRÈS IMPÔT, Exercice précédent",
+    "rows": 135
+   },
+   {
+    "en": "PC1: PROFIT (LOSS) AFTER TAXES, Prior Period Restated",
+    "fr": "PC1: RÉSULTAT NET APRÈS IMPÔT, Exercice précédent, retraité",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P202265003",
+  "variants": [
+   {
+    "en": "PC1: ATTRIBUTABLE TO:Equity Holders, Prior Period",
+    "fr": "PC1: ATTRIBUABLE AUX :Détenteurs d'instruments de capitaux propres, Exercice précédent",
+    "rows": 62
+   },
+   {
+    "en": "PC1: ATTRIBUTABLE TO:Equity Holders, Prior Period Restated",
+    "fr": "PC1: ATTRIBUABLE AUX :Détenteurs d'instruments de capitaux propres, Exercice précédent, retraité",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P202299903",
+  "variants": [
+   {
+    "en": "PC1: NET INCOME (LOSS) FOR THE YEAR, Prior Period",
+    "fr": "PC1: BÉNÉFICE (PERTE) NET DE L'EXERCICE, Exercice précédent",
+    "rows": 135
+   },
+   {
+    "en": "PC1: NET INCOME (LOSS) FOR THE YEAR, Prior Period Restated",
+    "fr": "PC1: BÉNÉFICE (PERTE) NET DE L'EXERCICE, Exercice précédent, retraité",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20420101",
+  "variants": [
+   {
+    "en": "PC1: Comprehensive Income (Loss), Net Income (Loss), Current Period",
+    "fr": "PC1: Résultat global (perte), Bénéfice net, Exercice courant",
+    "rows": 136
+   },
+   {
+    "en": "PC1: Comprehensive Income (Loss), Net Income (Loss), Current Period",
+    "fr": "PC1: Résultat étendu (perte), Bénéfice net, Exercice courant",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20420103",
+  "variants": [
+   {
+    "en": "PC1: Comprehensive Income (Loss), Net Income (Loss), Prior Period",
+    "fr": "PC1: Résultat global (perte), Bénéfice net, Exercice précédent",
+    "rows": 135
+   },
+   {
+    "en": "PC1: Comprehensive Income (Loss), Net Income (Loss), Prior Period Restated",
+    "fr": "PC1: Résultat étendu (perte), Bénéfice net, Exercice précédent, retraité",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20420301",
+  "variants": [
+   {
+    "en": "PC1: Comprehensive Income (Loss), Other Comprehensive Income (Loss):Items that may be reclassified subsequently to Net Income (Loss):Fair Value through Other Comprehensive Income (FVOCI):Change in Unrealized Gains and Losses:- Bonds and Debentures, Current Period",
+    "fr": "PC1: Résultat global (perte), Autres éléments du résultat global (perte) :Postes pouvant être reclassés par la suite dans le revenu net :Juste valeur par le biais des autres éléments du résultat global (JVAÉRG) : Variation des gains et des pertes non réalisés :- Obligations et débentures  Exercice courant",
+    "rows": 50
+   },
+   {
+    "en": "PC1: Comprehensive Income (Loss), Other Comprehensive Income (Loss):Items that may be reclassified subsequently to Net Income (Loss):Fair Value through Other Comprehensive Income (FVOCI):Change in Unrealized Gains and Losses:- Bonds and Debentures, Current Period",
+    "fr": "PC1: Résultat étendu (perte), Autres éléments du résultat étendu (perte) :Postes pouvant être reclassés par la suite dans le revenu net :Juste valeur par le biais des autres éléments du résultat étendu (JVAÉRÉ) : Variation des gains et des pertes non réalisés :- Obligations et débentures  Exercice courant",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20420303",
+  "variants": [
+   {
+    "en": "PC1: Comprehensive Income (Loss), Other Comprehensive Income (Loss):Items that may be reclassified subsequently to Net Income (Loss):Fair Value through Other Comprehensive Income (FVOCI):Change in Unrealized Gains and Losses:- Bonds and Debentures, Prior Period",
+    "fr": "PC1: Résultat global (perte), Autres éléments du résultat global (perte) :Postes pouvant être reclassés par la suite dans le revenu net :Juste valeur par le biais des autres éléments du résultat global (JVAÉRG) : Variation des gains et des pertes non réalisés :- Obligations et débentures  Exercice précédent",
+    "rows": 49
+   },
+   {
+    "en": "PC1: Comprehensive Income (Loss), Other Comprehensive Income (Loss):Items that may be reclassified subsequently to Net Income (Loss):Fair Value through Other Comprehensive Income (FVOCI):Change in Unrealized Gains and Losses:- Bonds and Debentures, Prior Period Restated",
+    "fr": "PC1: Résultat étendu (perte), Autres éléments du résultat étendu (perte) :Postes pouvant être reclassés par la suite dans le revenu net :Juste valeur par le biais des autres éléments du résultat étendu (JVAÉRÉ) : Variation des gains et des pertes non réalisés :- Obligations et débentures  Exercice précédent, retraité",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20420501",
+  "variants": [
+   {
+    "en": "PC1: Comprehensive Income (Loss), Other Comprehensive Income (Loss):Items that may be reclassified subsequently to Net Income (Loss):Fair Value through Other Comprehensive Income (FVOCI):Reclassification of (Gains) Losses to Net Income (Loss), Current Period",
+    "fr": "PC1: Résultat global (perte), Autres éléments du résultat global (perte) :Postes pouvant être reclassés par la suite dans le revenu net :Juste valeur par le biais des autres éléments du résultat global (JVAÉRG) : Reclassement des (gains) pertes dans le revenu net, Exercice courant",
+    "rows": 34
+   },
+   {
+    "en": "PC1: Comprehensive Income (Loss), Other Comprehensive Income (Loss):Items that may be reclassified subsequently to Net Income (Loss):Fair Value through Other Comprehensive Income (FVOCI):Reclassification of (Gains) Losses to Net Income (Loss), Current Period",
+    "fr": "PC1: Résultat étendu (perte), Autres éléments du résultat étendu (perte) :Postes pouvant être reclassés par la suite dans le revenu net :Juste valeur par le biais des autres éléments du résultat étendu (JVAÉRÉ) : Reclassement des (gains) pertes dans le revenu net, Exercice courant",
+    "rows": 5
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20420503",
+  "variants": [
+   {
+    "en": "PC1: Comprehensive Income (Loss), Other Comprehensive Income (Loss):Items that may be reclassified subsequently to Net Income (Loss):Fair Value through Other Comprehensive Income (FVOCI):Reclassification of (Gains) Losses to Net Income (Loss), Prior Period",
+    "fr": "PC1: Résultat global (perte), Autres éléments du résultat global (perte) :Postes pouvant être reclassés par la suite dans le revenu net :Juste valeur par le biais des autres éléments du résultat global (JVAÉRG) : Reclassement des (gains) pertes dans le revenu net, Exercice précédent",
+    "rows": 33
+   },
+   {
+    "en": "PC1: Comprehensive Income (Loss), Other Comprehensive Income (Loss):Items that may be reclassified subsequently to Net Income (Loss):Fair Value through Other Comprehensive Income (FVOCI):Reclassification of (Gains) Losses to Net Income (Loss), Prior Period Restated",
+    "fr": "PC1: Résultat étendu (perte), Autres éléments du résultat étendu (perte) :Postes pouvant être reclassés par la suite dans le revenu net :Juste valeur par le biais des autres éléments du résultat étendu (JVAÉRÉ) : Reclassement des (gains) pertes dans le revenu net, Exercice précédent, retraité",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20421901",
+  "variants": [
+   {
+    "en": "PC1: Comprehensive Income (Loss), Other Comprehensive Income (Loss):Subtotal of items that may be reclassified subsequently to Net Income (Loss), Current Period",
+    "fr": "PC1: Résultat global (perte), Autres éléments du résultat global (perte) :Total partiel des postes pouvant être reclassés par la suite dans le revenu net, Exercice courant",
+    "rows": 62
+   },
+   {
+    "en": "PC1: Comprehensive Income (Loss), Other Comprehensive Income (Loss):Subtotal of items that may be reclassified subsequently to Net Income (Loss), Current Period",
+    "fr": "PC1: Résultat étendu (perte), Autres éléments du résultat étendu (perte) :Total partiel des postes pouvant être reclassés par la suite dans le revenu net, Exercice courant",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20421903",
+  "variants": [
+   {
+    "en": "PC1: Comprehensive Income (Loss), Other Comprehensive Income (Loss):Subtotal of items that may be reclassified subsequently to Net Income (Loss), Prior Period",
+    "fr": "PC1: Résultat global (perte), Autres éléments du résultat global (perte) :Total partiel des postes pouvant être reclassés par la suite dans le revenu net, Exercice précédent",
+    "rows": 62
+   },
+   {
+    "en": "PC1: Comprehensive Income (Loss), Other Comprehensive Income (Loss):Subtotal of items that may be reclassified subsequently to Net Income (Loss), Prior Period Restated",
+    "fr": "PC1: Résultat étendu (perte), Autres éléments du résultat étendu (perte) :Total partiel des postes pouvant être reclassés par la suite dans le revenu net, Exercice précédent, retraité",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20422101",
+  "variants": [
+   {
+    "en": "PC1: Comprehensive Income (Loss), Total Other Comprehensive Income (Loss), Current Period",
+    "fr": "PC1: Résultat global (perte), Total des autres éléments de résultat global (perte), Exercice courant",
+    "rows": 75
+   },
+   {
+    "en": "PC1: Comprehensive Income (Loss), Total Other Comprehensive Income (Loss), Current Period",
+    "fr": "PC1: Résultat étendu (perte), Total des autres éléments de résultat étendu (perte), Exercice courant",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20422103",
+  "variants": [
+   {
+    "en": "PC1: Comprehensive Income (Loss), Total Other Comprehensive Income (Loss), Prior Period",
+    "fr": "PC1: Résultat global (perte), Total des autres éléments de résultat global (perte), Exercice précédent",
+    "rows": 76
+   },
+   {
+    "en": "PC1: Comprehensive Income (Loss), Total Other Comprehensive Income (Loss), Prior Period Restated",
+    "fr": "PC1: Résultat étendu (perte), Total des autres éléments de résultat étendu (perte), Exercice précédent, retraité",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20422501",
+  "variants": [
+   {
+    "en": "PC1: Comprehensive Income (Loss), Other Comprehensive Income (Loss):Items that will not be reclassified subsequently to Net Income (Loss):Fair Value through Other Comprehensive Income (FVOCI):Change in Unrealized Gains and Losses:- Equities, Current Period",
+    "fr": "PC1: Résultat global (perte), Autres éléments du résultat global (perte) :Postes qui ne seront pas reclassés dans le revenu net :Juste valeur par le biais des autres éléments du résultat global (JVAÉRG) : Variation des gains et des pertes non réalisés :- Actions, Exercice courant",
+    "rows": 15
+   },
+   {
+    "en": "PC1: Comprehensive Income (Loss), Other Comprehensive Income (Loss):Items that will not be reclassified subsequently to Net Income (Loss):Fair Value through Other Comprehensive Income (FVOCI):Change in Unrealized Gains and Losses:- Equities, Current Period",
+    "fr": "PC1: Résultat étendu (perte), Autres éléments du résultat étendu (perte) :Postes qui ne seront pas reclassés dans le revenu net :Juste valeur par le biais des autres éléments du résultat étendu (JVAÉRÉ) : Variation des gains et des pertes non réalisés :- Actions, Exercice courant",
+    "rows": 3
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20422503",
+  "variants": [
+   {
+    "en": "PC1: Comprehensive Income (Loss), Other Comprehensive Income (Loss):Items that will not be reclassified subsequently to Net Income (Loss):Fair Value through Other Comprehensive Income (FVOCI):Change in Unrealized Gains and Losses:- Equities, Prior Period",
+    "fr": "PC1: Résultat global (perte), Autres éléments du résultat global (perte) :Postes qui ne seront pas reclassés dans le revenu net :Juste valeur par le biais des autres éléments du résultat global (JVAÉRG) : Variation des gains et des pertes non réalisés :- Actions, Exercice précédent",
+    "rows": 15
+   },
+   {
+    "en": "PC1: Comprehensive Income (Loss), Other Comprehensive Income (Loss):Items that will not be reclassified subsequently to Net Income (Loss):Fair Value through Other Comprehensive Income (FVOCI):Change in Unrealized Gains and Losses:- Equities, Prior Period Restated",
+    "fr": "PC1: Résultat étendu (perte), Autres éléments du résultat étendu (perte) :Postes qui ne seront pas reclassés dans le revenu net :Juste valeur par le biais des autres éléments du résultat étendu (JVAÉRÉ) : Variation des gains et des pertes non réalisés :- Actions, Exercice précédent, retraité",
+    "rows": 3
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20422901",
+  "variants": [
+   {
+    "en": "PC1: Comprehensive Income (Loss), Other Comprehensive Income (Loss):Subtotal of items that will not be reclassified subsequently to Net Income (Loss), Current Period",
+    "fr": "PC1: Résultat global (perte), Autres éléments du résultat global (perte) :Total partiel des postes qui ne sont pas reclassés dans le revenu net, Exercice courant",
+    "rows": 46
+   },
+   {
+    "en": "PC1: Comprehensive Income (Loss), Other Comprehensive Income (Loss):Subtotal of items that will not be reclassified subsequently to Net Income (Loss), Current Period",
+    "fr": "PC1: Résultat étendu (perte), Autres éléments du résultat étendu (perte) :Total partiel des postes qui ne sont pas reclassés dans le revenu net, Exercice courant",
+    "rows": 4
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20422903",
+  "variants": [
+   {
+    "en": "PC1: Comprehensive Income (Loss), Other Comprehensive Income (Loss):Subtotal of items that will not be reclassified subsequently to Net Income (Loss), Prior Period",
+    "fr": "PC1: Résultat global (perte), Autres éléments du résultat global (perte) :Total partiel des postes qui ne sont pas reclassés dans le revenu net, Exercice précédent",
+    "rows": 48
+   },
+   {
+    "en": "PC1: Comprehensive Income (Loss), Other Comprehensive Income (Loss):Subtotal of items that will not be reclassified subsequently to Net Income (Loss), Prior Period Restated",
+    "fr": "PC1: Résultat étendu (perte), Autres éléments du résultat étendu (perte) :Total partiel des postes qui ne sont pas reclassés dans le revenu net, Exercice précédent, retraité",
+    "rows": 4
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20423401",
+  "variants": [
+   {
+    "en": "PC1: Comprehensive Income (Loss), Other Comprehensive Income (Loss):Items that will not be reclassified subsequently to Net Income (Loss):Remeasurements of Defined Benefit Pension Plans, Current Period",
+    "fr": "PC1: Résultat global (perte), Autres éléments du résultat global (perte) :Postes qui ne seront pas reclassés dans le revenu net :Réévaluations des régimes de retraite à prestations définies, Exercice courant",
+    "rows": 26
+   },
+   {
+    "en": "PC1: Comprehensive Income (Loss), Other Comprehensive Income (Loss):Items that will not be reclassified subsequently to Net Income (Loss):Remeasurements of Defined Benefit Pension Plans, Current Period",
+    "fr": "PC1: Résultat étendu (perte), Autres éléments du résultat étendu (perte) :Postes qui ne seront pas reclassés dans le revenu net :Réévaluations des régimes de retraite à prestations définies, Exercice courant",
+    "rows": 1
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20423403",
+  "variants": [
+   {
+    "en": "PC1: Comprehensive Income (Loss), Other Comprehensive Income (Loss):Items that will not be reclassified subsequently to Net Income (Loss):Remeasurements of Defined Benefit Pension Plans, Prior Period",
+    "fr": "PC1: Résultat global (perte), Autres éléments du résultat global (perte) :Postes qui ne seront pas reclassés dans le revenu net :Réévaluations des régimes de retraite à prestations définies, Exercice précédent",
+    "rows": 28
+   },
+   {
+    "en": "PC1: Comprehensive Income (Loss), Other Comprehensive Income (Loss):Items that will not be reclassified subsequently to Net Income (Loss):Remeasurements of Defined Benefit Pension Plans, Prior Period Restated",
+    "fr": "PC1: Résultat étendu (perte), Autres éléments du résultat étendu (perte) :Postes qui ne seront pas reclassés dans le revenu net :Réévaluations des régimes de retraite à prestations définies, Exercice précédent, retraité",
+    "rows": 1
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20423901",
+  "variants": [
+   {
+    "en": "PC1: Total Comprehensive Income (Loss), Current Period",
+    "fr": "PC1: Total du résultat global (perte), Exercice courant",
+    "rows": 136
+   },
+   {
+    "en": "PC1: Total Comprehensive Income (Loss), Current Period",
+    "fr": "PC1: Total du résultat étendu (perte), Exercice courant",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20423903",
+  "variants": [
+   {
+    "en": "PC1: Total Comprehensive Income (Loss), Prior Period",
+    "fr": "PC1: Total du résultat global (perte), Exercice précédent",
+    "rows": 135
+   },
+   {
+    "en": "PC1: Total Comprehensive Income (Loss), Prior Period Restated",
+    "fr": "PC1: Total du résultat étendu (perte), Exercice précédent, retraité",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20424101",
+  "variants": [
+   {
+    "en": "PC1: Accumulated Other Comprehensive Income (Loss), Accumulated Gains (Losses), net of tax, on:Items that may be reclassified subsequently to Net Income (Loss):Fair Value through Other Comprehensive Income (FVOCI), Current Period",
+    "fr": "PC1: Cumul des autres éléments du résultat global (perte), Cumul des gains (pertes), nets d'impôt, relativement aux éléments suivants : Postes pouvant être reclassés par la suite dans le revenu net :Juste valeur par le biais des autres éléments du résultat global (JVAÉRG), Exercice courant",
+    "rows": 52
+   },
+   {
+    "en": "PC1: Accumulated Other Comprehensive Income (Loss), Accumulated Gains (Losses), net of tax, on:Items that may be reclassified subsequently to Net Income (Loss):Fair Value through Other Comprehensive Income (FVOCI), Current Period",
+    "fr": "PC1: Cumul des autres éléments du résultat étendu (perte), Cumul des gains (pertes), nets d'impôt, relativement aux éléments suivants : Postes pouvant être reclassés par la suite dans le revenu net :Juste valeur par le biais des autres éléments du résultat étendu (JVAÉRÉ), Exercice courant",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20424103",
+  "variants": [
+   {
+    "en": "PC1: Accumulated Other Comprehensive Income (Loss), Accumulated Gains (Losses), net of tax, on:Items that may be reclassified subsequently to Net Income (Loss):Fair Value through Other Comprehensive Income (FVOCI), Prior Period",
+    "fr": "PC1: Cumul des autres éléments du résultat global (perte), Cumul des gains (pertes), nets d'impôt, relativement aux éléments suivants : Postes pouvant être reclassés par la suite dans le revenu net :Juste valeur par le biais des autres éléments du résultat global (JVAÉRG), Exercice précédent",
+    "rows": 54
+   },
+   {
+    "en": "PC1: Accumulated Other Comprehensive Income (Loss), Accumulated Gains (Losses), net of tax, on:Items that may be reclassified subsequently to Net Income (Loss):Fair Value through Other Comprehensive Income (FVOCI), Prior Period Restated",
+    "fr": "PC1: Cumul des autres éléments du résultat étendu (perte), Cumul des gains (pertes), nets d'impôt, relativement aux éléments suivants : Postes pouvant être reclassés par la suite dans le revenu net :Juste valeur par le biais des autres éléments du résultat étendu (JVAÉRÉ), Exercice précédent, retraité",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20425901",
+  "variants": [
+   {
+    "en": "PC1: Accumulated Other Comprehensive Income (Loss), Balance at end of Period, Current Period",
+    "fr": "PC1: Cumul des autres éléments du résultat global (perte), Solde à la fin de l'exercice, Exercice courant",
+    "rows": 74
+   },
+   {
+    "en": "PC1: Accumulated Other Comprehensive Income (Loss), Balance at end of Period, Current Period",
+    "fr": "PC1: Cumul des autres éléments du résultat étendu (perte), Solde à la fin de l'exercice, Exercice courant",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20425903",
+  "variants": [
+   {
+    "en": "PC1: Accumulated Other Comprehensive Income (Loss), Balance at end of Period, Prior Period",
+    "fr": "PC1: Cumul des autres éléments du résultat global (perte), Solde à la fin de l'exercice, Exercice précédent",
+    "rows": 73
+   },
+   {
+    "en": "PC1: Accumulated Other Comprehensive Income (Loss), Balance at end of Period, Prior Period Restated",
+    "fr": "PC1: Cumul des autres éléments du résultat étendu (perte), Solde à la fin de l'exercice, Exercice précédent, retraité",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20426203",
+  "variants": [
+   {
+    "en": "PC1: Attributable to:Equity Holders, Prior Period",
+    "fr": "PC1: ATTRIBUABLE AUX :Détenteurs d'instruments de capitaux propres,  Exercice précédent",
+    "rows": 62
+   },
+   {
+    "en": "PC1: Attributable to:Equity Holders, Prior Period Restated",
+    "fr": "PC1: ATTRIBUABLE AUX :Détenteurs d'instruments de capitaux propres,  Exercice précédent, retraité",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20426901",
+  "variants": [
+   {
+    "en": "PC1: Accumulated Other Comprehensive Income (Loss), Accumulated Gains (Losses), net of tax, on:Subtotal of items that may be reclassified subsequently to Net Income (Loss), Current Period",
+    "fr": "PC1: Cumul des autres éléments du résultat global (perte), Cumul des gains (pertes), nets d'impôt, relativement aux éléments suivants : Total partiel des postes pouvant être reclassés par la suite dans le revenu net, Exercice courant",
+    "rows": 62
+   },
+   {
+    "en": "PC1: Accumulated Other Comprehensive Income (Loss), Accumulated Gains (Losses), net of tax, on:Subtotal of items that may be reclassified subsequently to Net Income (Loss), Current Period",
+    "fr": "PC1: Cumul des autres éléments du résultat étendu (perte), Cumul des gains (pertes), nets d'impôt, relativement aux éléments suivants : Total partiel des postes pouvant être reclassés par la suite dans le revenu net, Exercice courant",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20426903",
+  "variants": [
+   {
+    "en": "PC1: Accumulated Other Comprehensive Income (Loss), Accumulated Gains (Losses), net of tax, on:Subtotal of items that may be reclassified subsequently to Net Income (Loss), Prior Period",
+    "fr": "PC1: Cumul des autres éléments du résultat global (perte), Cumul des gains (pertes), nets d'impôt, relativement aux éléments suivants : Total partiel des postes pouvant être reclassés par la suite dans le revenu net, Exercice précédent",
+    "rows": 62
+   },
+   {
+    "en": "PC1: Accumulated Other Comprehensive Income (Loss), Accumulated Gains (Losses), net of tax, on:Subtotal of items that may be reclassified subsequently to Net Income (Loss), Prior Period Restated",
+    "fr": "PC1: Cumul des autres éléments du résultat étendu (perte), Cumul des gains (pertes), nets d'impôt, relativement aux éléments suivants : Total partiel des postes pouvant être reclassés par la suite dans le revenu net, Exercice précédent, retraité",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20427001",
+  "variants": [
+   {
+    "en": "PC1: Accumulated Other Comprehensive Income (Loss), Accumulated Gains (Losses), net of tax, on:Items that will not be reclassified subsequently to Net Income (Loss):Fair Value through Other Comprehensive Income (FVOCI), Current Period",
+    "fr": "PC1: Cumul des autres éléments du résultat global (perte), Cumul des gains (pertes), nets d'impôt, relativement aux éléments suivants : Postes qui ne seront pas reclassés dans le revenu net :Juste valeur par le biais des autres éléments du résultat global (JVAÉRG), Exercice courant",
+    "rows": 10
+   },
+   {
+    "en": "PC1: Accumulated Other Comprehensive Income (Loss), Accumulated Gains (Losses), net of tax, on:Items that will not be reclassified subsequently to Net Income (Loss):Fair Value through Other Comprehensive Income (FVOCI), Current Period",
+    "fr": "PC1: Cumul des autres éléments du résultat étendu (perte), Cumul des gains (pertes), nets d'impôt, relativement aux éléments suivants : Postes qui ne seront pas reclassés dans le revenu net :Juste valeur par le biais des autres éléments du résultat étendu (JVAÉRÉ), Exercice courant",
+    "rows": 3
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20427003",
+  "variants": [
+   {
+    "en": "PC1: Accumulated Other Comprehensive Income (Loss), Accumulated Gains (Losses), net of tax, on:Items that will not be reclassified subsequently to Net Income (Loss):Fair Value through Other Comprehensive Income (FVOCI), Prior Period",
+    "fr": "PC1: Cumul des autres éléments du résultat global (perte), Cumul des gains (pertes), nets d'impôt, relativement aux éléments suivants : Postes qui ne seront pas reclassés dans le revenu net :Juste valeur par le biais des autres éléments du résultat global (JVAÉRG), Exercice précédent",
+    "rows": 11
+   },
+   {
+    "en": "PC1: Accumulated Other Comprehensive Income (Loss), Accumulated Gains (Losses), net of tax, on:Items that will not be reclassified subsequently to Net Income (Loss):Fair Value through Other Comprehensive Income (FVOCI), Prior Period Restated",
+    "fr": "PC1: Cumul des autres éléments du résultat étendu (perte), Cumul des gains (pertes), nets d'impôt, relativement aux éléments suivants : Postes qui ne seront pas reclassés dans le revenu net :Juste valeur par le biais des autres éléments du résultat étendu (JVAÉRÉ), Exercice précédent, retraité",
+    "rows": 3
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20427401",
+  "variants": [
+   {
+    "en": "PC1: Accumulated Other Comprehensive Income (Loss), Accumulated Gains (Losses), net of tax, on:Items that will not be reclassified subsequently to Net Income (Loss):Remeasurements of Defined Benefit Pension Plans, Current Period",
+    "fr": "PC1: Cumul des autres éléments du résultat global (perte), Cumul des gains (pertes), nets d'impôt, relativement aux éléments suivants : Postes qui ne seront pas reclassés dans le revenu net :Réévaluations des régimes de retraite à prestations définies, Exercice courant",
+    "rows": 21
+   },
+   {
+    "en": "PC1: Accumulated Other Comprehensive Income (Loss), Accumulated Gains (Losses), net of tax, on:Items that will not be reclassified subsequently to Net Income (Loss):Remeasurements of Defined Benefit Pension Plans, Current Period",
+    "fr": "PC1: Cumul des autres éléments du résultat étendu (perte), Cumul des gains (pertes), nets d'impôt, relativement aux éléments suivants : Postes qui ne seront pas reclassés dans le revenu net :Réévaluations des régimes de retraite à prestations définies, Exercice courant",
+    "rows": 1
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20427403",
+  "variants": [
+   {
+    "en": "PC1: Accumulated Other Comprehensive Income (Loss), Accumulated Gains (Losses), net of tax, on:Items that will not be reclassified subsequently to Net Income (Loss):Remeasurements of Defined Benefit Pension Plans, Prior Period",
+    "fr": "PC1: Cumul des autres éléments du résultat global (perte), Cumul des gains (pertes), nets d'impôt, relativement aux éléments suivants : Postes qui ne seront pas reclassés dans le revenu net :Réévaluations des régimes de retraite à prestations définies, Exercice précédent",
+    "rows": 21
+   },
+   {
+    "en": "PC1: Accumulated Other Comprehensive Income (Loss), Accumulated Gains (Losses), net of tax, on:Items that will not be reclassified subsequently to Net Income (Loss):Remeasurements of Defined Benefit Pension Plans, Prior Period Restated",
+    "fr": "PC1: Cumul des autres éléments du résultat étendu (perte), Cumul des gains (pertes), nets d'impôt, relativement aux éléments suivants : Postes qui ne seront pas reclassés dans le revenu net :Réévaluations des régimes de retraite à prestations définies, Exercice précédent, retraité",
+    "rows": 1
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20427901",
+  "variants": [
+   {
+    "en": "PC1: Accumulated Other Comprehensive Income (Loss), Accumulated Gains (Losses), net of tax, on:Subtotal of items that will not be reclassified subsequently to Net Income (Loss), Current Period",
+    "fr": "PC1: Cumul des autres éléments du résultat global (perte), Cumul des gains (pertes), nets d'impôt, relativement aux éléments suivants : Total partiel des postes qui ne sont pas reclassés dans le revenu net, Exercice courant",
+    "rows": 29
+   },
+   {
+    "en": "PC1: Accumulated Other Comprehensive Income (Loss), Accumulated Gains (Losses), net of tax, on:Subtotal of items that will not be reclassified subsequently to Net Income (Loss), Current Period",
+    "fr": "PC1: Cumul des autres éléments du résultat étendu (perte), Cumul des gains (pertes), nets d'impôt, relativement aux éléments suivants : Total partiel des postes qui ne sont pas reclassés dans le revenu net, Exercice courant",
+    "rows": 4
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20427903",
+  "variants": [
+   {
+    "en": "PC1: Accumulated Other Comprehensive Income (Loss), Accumulated Gains (Losses), net of tax, on:Subtotal of items that will not be reclassified subsequently to Net Income (Loss), Prior Period",
+    "fr": "PC1: Cumul des autres éléments du résultat global (perte), Cumul des gains (pertes), nets d'impôt, relativement aux éléments suivants : Total partiel des postes qui ne sont pas reclassés dans le revenu net, Exercice précédent",
+    "rows": 29
+   },
+   {
+    "en": "PC1: Accumulated Other Comprehensive Income (Loss), Accumulated Gains (Losses), net of tax, on:Subtotal of items that will not be reclassified subsequently to Net Income (Loss), Prior Period Restated",
+    "fr": "PC1: Cumul des autres éléments du résultat étendu (perte), Cumul des gains (pertes), nets d'impôt, relativement aux éléments suivants : Total partiel des postes qui ne sont pas reclassés dans le revenu net, Exercice précédent, retraité",
+    "rows": 4
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20429803",
+  "variants": [
+   {
+    "en": "PC1: Attributable to:Equity Holders, Prior Period",
+    "fr": "PC1: ATTRIBUABLE AUX :Détenteurs d'instruments de capitaux propres, Exercice précédent",
+    "rows": 33
+   },
+   {
+    "en": "PC1: Attributable to:Equity Holders, Prior Period Restated",
+    "fr": "PC1: ATTRIBUABLE AUX :Détenteurs d'instruments de capitaux propres, Exercice précédent, retraité",
+    "rows": 1
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20540101",
+  "variants": [
+   {
+    "en": "PC1: Opening Balance of Prior Year, Share Capital",
+    "fr": "PC1: Solde d'ouverture de l'exercice précédent, Capital-actions",
+    "rows": 56
+   },
+   {
+    "en": "PC1: Opening Balance of Prior Year as previously reported, Share Capital",
+    "fr": "PC1: Solde au début de l'exercice précédent tel que déclaré précédemment, Capital-actions",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20540103",
+  "variants": [
+   {
+    "en": "PC1: Opening Balance of Prior Year, Retained Earnings",
+    "fr": "PC1: Solde d'ouverture de l'exercice précédent, Bénéfices non répartis",
+    "rows": 59
+   },
+   {
+    "en": "PC1: Opening Balance of Prior Year as previously reported, Retained Earnings",
+    "fr": "PC1: Solde au début de l'exercice précédent tel que déclaré précédemment, Bénéfices non répartis",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20540107",
+  "variants": [
+   {
+    "en": "PC1: Opening Balance of Prior Year, Accumulated Other Comprehensive Income (Loss), FVOCI Financial Assets",
+    "fr": "PC1: Solde d'ouverture de l'exercice précédent, Cumul des autres éléments du résultat global (perte), Actifs financiers évalués à la JVAÉRG",
+    "rows": 29
+   },
+   {
+    "en": "PC1: Opening Balance of Prior Year as previously reported, Accumulated Other Comprehensive Income (Loss), FVOCI Financial Assets",
+    "fr": "PC1: Solde au début de l'exercice précédent tel que déclaré précédemment, Cumul des autres éléments du résultat étendu (perte), Actifs financiers évalués à la JVAÉRÉ",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20540119",
+  "variants": [
+   {
+    "en": "PC1: Opening Balance of Prior Year, Total Equity",
+    "fr": "PC1: Solde d'ouverture de l'exercice précédent, Total des capitaux propres",
+    "rows": 64
+   },
+   {
+    "en": "PC1: Opening Balance of Prior Year as previously reported, Total Equity",
+    "fr": "PC1: Solde au début de l'exercice précédent tel que déclaré précédemment, Total des capitaux propres",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20540121",
+  "variants": [
+   {
+    "en": "PC1: Opening Balance of Prior Year, Contributed Surplus",
+    "fr": "PC1: Solde d'ouverture de l'exercice précédent, Surplus d'apport",
+    "rows": 35
+   },
+   {
+    "en": "PC1: Opening Balance of Prior Year as previously reported, Contributed Surplus",
+    "fr": "PC1: Solde au début de l'exercice précédent tel que déclaré précédemment, Surplus d'apport",
+    "rows": 4
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20540139",
+  "variants": [
+   {
+    "en": "PC1: Opening Balance of Prior Year, Accumulated Other Comprehensive Income (Loss), Total AOCI",
+    "fr": "PC1: Solde d'ouverture de l'exercice précédent, Cumul des autres éléments du résultat global (perte), Total AÉRG",
+    "rows": 41
+   },
+   {
+    "en": "PC1: Opening Balance of Prior Year as previously reported, Accumulated Other Comprehensive Income (Loss), Total AOCI",
+    "fr": "PC1: Solde au début de l'exercice précédent tel que déclaré précédemment, Cumul des autres éléments du résultat étendu (perte), Total AÉRÉ",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20540149",
+  "variants": [
+   {
+    "en": "PC1: Opening Balance of Prior Year, Total Shareholders' Equity",
+    "fr": "PC1: Solde d'ouverture de l'exercice précédent, Total de l'avoir des titulaires de polices",
+    "rows": 62
+   },
+   {
+    "en": "PC1: Opening Balance of Prior Year as previously reported, Total Shareholders' Equity",
+    "fr": "PC1: Solde au début de l'exercice précédent tel que déclaré précédemment, Total de l'avoir des titulaires de polices",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20540903",
+  "variants": [
+   {
+    "en": "PC1: Changes in Equity for Prior Period, Total Comprehensive Income for the year, Retained Earnings",
+    "fr": "PC1: Variations des capitaux propres de l'exercice précédent, Total du résultat global de l'exercice, Bénéfices non répartis",
+    "rows": 57
+   },
+   {
+    "en": "PC1: Changes in Equity for Prior Period, Total Comprehensive Income for the year (restated), Retained Earnings",
+    "fr": "PC1: Variations des capitaux propres de l'exercice précédent, Total du résultat étendu de l'exercice, retraité, Bénéfices non répartis",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20540907",
+  "variants": [
+   {
+    "en": "PC1: Changes in Equity for Prior Period, Total Comprehensive Income for the year, Accumulated Other Comprehensive Income (Loss), FVOCI Financial Assets",
+    "fr": "PC1: Variations des capitaux propres de l'exercice précédent, Total du résultat global de l'exercice, Cumul des autres éléments du résultat global (perte), Actifs financiers évalués à la JVAÉRG",
+    "rows": 25
+   },
+   {
+    "en": "PC1: Changes in Equity for Prior Period, Total Comprehensive Income for the year (restated), Accumulated Other Comprehensive Income (Loss), FVOCI Financial Assets",
+    "fr": "PC1: Variations des capitaux propres de l'exercice précédent, Total du résultat étendu de l'exercice, retraité, Cumul des autres éléments du résultat étendu (perte), Actifs financiers évalués à la JVAÉRÉ",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20540919",
+  "variants": [
+   {
+    "en": "PC1: Changes in Equity for Prior Period, Total Comprehensive Income for the year, Total Equity",
+    "fr": "PC1: Variations des capitaux propres de l'exercice précédent, Total du résultat global de l'exercice, Total des capitaux propres",
+    "rows": 62
+   },
+   {
+    "en": "PC1: Changes in Equity for Prior Period, Total Comprehensive Income for the year (restated), Total Equity",
+    "fr": "PC1: Variations des capitaux propres de l'exercice précédent, Total du résultat étendu de l'exercice, retraité, Total des capitaux propres",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20540927",
+  "variants": [
+   {
+    "en": "PC1: Changes in Equity for Prior Period, Total Comprehensive Income for the year, Accumulated Other Comprehensive Income (Loss), Remeasurements of Defined Benefit Pension Plans",
+    "fr": "PC1: Variations des capitaux propres de l'exercice précédent, Total du résultat global de l'exercice, Cumul des autres éléments du résultat global (perte), Réévaluation des régimes de retraite à prestations définies",
+    "rows": 15
+   },
+   {
+    "en": "PC1: Changes in Equity for Prior Period, Total Comprehensive Income for the year (restated), Accumulated Other Comprehensive Income (Loss), Remeasurements of Defined Benefit Pension Plans",
+    "fr": "PC1: Variations des capitaux propres de l'exercice précédent, Total du résultat étendu de l'exercice, retraité, Cumul des autres éléments du résultat étendu (perte), Réévaluation des régimes de retraite à prestations définies",
+    "rows": 1
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20540939",
+  "variants": [
+   {
+    "en": "PC1: Changes in Equity for Prior Period, Total Comprehensive Income for the year, Accumulated Other Comprehensive Income (Loss), Total AOCI",
+    "fr": "PC1: Variations des capitaux propres de l'exercice précédent, Total du résultat global de l'exercice, Cumul des autres éléments du résultat global (perte), Total AÉRG",
+    "rows": 40
+   },
+   {
+    "en": "PC1: Changes in Equity for Prior Period, Total Comprehensive Income for the year (restated), Accumulated Other Comprehensive Income (Loss), Total AOCI",
+    "fr": "PC1: Variations des capitaux propres de l'exercice précédent, Total du résultat étendu de l'exercice, retraité, Cumul des autres éléments du résultat étendu (perte), Total AÉRÉ",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20540949",
+  "variants": [
+   {
+    "en": "PC1: Changes in Equity for Prior Period, Total Comprehensive Income for the year, Total Shareholders' Equity",
+    "fr": "PC1: Variations des capitaux propres de l'exercice précédent, Total du résultat global de l'exercice, Total de l'avoir des titulaires de polices",
+    "rows": 60
+   },
+   {
+    "en": "PC1: Changes in Equity for Prior Period, Total Comprehensive Income for the year (restated), Total Shareholders' Equity",
+    "fr": "PC1: Variations des capitaux propres de l'exercice précédent, Total du résultat étendu de l'exercice, retraité, Total de l'avoir des titulaires de polices",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20541607",
+  "variants": [
+   {
+    "en": "PC1: Changes in Equity for Prior Period, Other, Accumulated Other Comprehensive Income (Loss), FVOCI Financial Assets",
+    "fr": "PC1: Variations des capitaux propres de l'exercice précédent, Autres, Cumul des autres éléments du résultat global (perte), Actifs financiers évalués à la JVAÉRG",
+    "rows": 2
+   },
+   {
+    "en": "PC1: Changes in Equity for Prior Period, Other, Accumulated Other Comprehensive Income (Loss), FVOCI Financial Assets",
+    "fr": "PC1: Variations des capitaux propres de l'exercice précédent, Autres, Cumul des autres éléments du résultat étendu (perte), Actifs financiers évalués à la JVAÉRÉ",
+    "rows": 1
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20541627",
+  "variants": [
+   {
+    "en": "PC1: Changes in Equity for Prior Period, Other, Accumulated Other Comprehensive Income (Loss), Remeasurements of Defined Benefit Pension Plans",
+    "fr": "PC1: Variations des capitaux propres de l'exercice précédent, Autres, Cumul des autres éléments du résultat global (perte), Réévaluation des régimes de retraite à prestations définies",
+    "rows": 3
+   },
+   {
+    "en": "PC1: Changes in Equity for Prior Period, Other, Accumulated Other Comprehensive Income (Loss), Remeasurements of Defined Benefit Pension Plans",
+    "fr": "PC1: Variations des capitaux propres de l'exercice précédent, Autres, Cumul des autres éléments du résultat étendu (perte), Réévaluation des régimes de retraite à prestations définies",
+    "rows": 1
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20541901",
+  "variants": [
+   {
+    "en": "PC1: Balance at End of Prior Year, Share Capital",
+    "fr": "PC1: Solde à la fin de l'exercice précédent, Capital-actions",
+    "rows": 57
+   },
+   {
+    "en": "PC1: Restated Balance at End of Prior Year, Share Capital",
+    "fr": "PC1: Solde à la fin de l'exercice précédent retraité, Capital-actions",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20541903",
+  "variants": [
+   {
+    "en": "PC1: Balance at End of Prior Year, Retained Earnings",
+    "fr": "PC1: Solde à la fin de l'exercice précédent, Bénéfices non répartis",
+    "rows": 60
+   },
+   {
+    "en": "PC1: Restated Balance at End of Prior Year, Retained Earnings",
+    "fr": "PC1: Solde à la fin de l'exercice précédent retraité, Bénéfices non répartis",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20541907",
+  "variants": [
+   {
+    "en": "PC1: Balance at End of Prior Year, Accumulated Other Comprehensive Income (Loss), FVOCI Financial Assets",
+    "fr": "PC1: Solde à la fin de l'exercice précédent, Cumul des autres éléments du résultat global (perte), Actifs financiers évalués à la JVAÉRG",
+    "rows": 28
+   },
+   {
+    "en": "PC1: Restated Balance at End of Prior Year, Accumulated Other Comprehensive Income (Loss), FVOCI Financial Assets",
+    "fr": "PC1: Solde à la fin de l'exercice précédent retraité, Cumul des autres éléments du résultat étendu (perte), Actifs financiers évalués à la JVAÉRÉ",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20541919",
+  "variants": [
+   {
+    "en": "PC1: Balance at End of Prior Year, Total Equity",
+    "fr": "PC1: Solde à la fin de l'exercice précédent, Total des capitaux propres",
+    "rows": 65
+   },
+   {
+    "en": "PC1: Restated Balance at End of Prior Year, Total Equity",
+    "fr": "PC1: Solde à la fin de l'exercice précédent retraité, Total des capitaux propres",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20541921",
+  "variants": [
+   {
+    "en": "PC1: Balance at End of Prior Year, Contributed Surplus",
+    "fr": "PC1: Solde à la fin de l'exercice précédent, Surplus d'apport",
+    "rows": 36
+   },
+   {
+    "en": "PC1: Restated Balance at End of Prior Year, Contributed Surplus",
+    "fr": "PC1: Solde à la fin de l'exercice précédent retraité, Surplus d'apport",
+    "rows": 4
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20541927",
+  "variants": [
+   {
+    "en": "PC1: Balance at End of Prior Year, Accumulated Other Comprehensive Income (Loss), Remeasurements of Defined Benefit Pension Plans",
+    "fr": "PC1: Solde à la fin de l'exercice précédent, Cumul des autres éléments du résultat global (perte), Réévaluation des régimes de retraite à prestations définies",
+    "rows": 12
+   },
+   {
+    "en": "PC1: Restated Balance at End of Prior Year, Accumulated Other Comprehensive Income (Loss), Remeasurements of Defined Benefit Pension Plans",
+    "fr": "PC1: Solde à la fin de l'exercice précédent retraité, Cumul des autres éléments du résultat étendu (perte), Réévaluation des régimes de retraite à prestations définies",
+    "rows": 1
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20541939",
+  "variants": [
+   {
+    "en": "PC1: Balance at End of Prior Year, Accumulated Other Comprehensive Income (Loss), Total AOCI",
+    "fr": "PC1: Solde à la fin de l'exercice précédent, Cumul des autres éléments du résultat global (perte), Total AÉRG",
+    "rows": 38
+   },
+   {
+    "en": "PC1: Restated Balance at End of Prior Year, Accumulated Other Comprehensive Income (Loss), Total AOCI",
+    "fr": "PC1: Solde à la fin de l'exercice précédent retraité, Cumul des autres éléments du résultat étendu (perte), Total AÉRÉ",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20541949",
+  "variants": [
+   {
+    "en": "PC1: Balance at End of Prior Year, Total Shareholders' Equity",
+    "fr": "PC1: Solde à la fin de l'exercice précédent, Total de l'avoir des titulaires de polices",
+    "rows": 63
+   },
+   {
+    "en": "PC1: Restated Balance at End of Prior Year, Total Shareholders' Equity",
+    "fr": "PC1: Solde à la fin de l'exercice précédent retraité, Total de l'avoir des titulaires de polices",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20542107",
+  "variants": [
+   {
+    "en": "PC1: Opening Balance of Current Year, Accumulated Other Comprehensive Income (Loss), FVOCI Financial Assets",
+    "fr": "PC1: Solde d'ouverture de l'exercice courant, Cumul des autres éléments du résultat global (perte), Actifs financiers évalués à la JVAÉRG",
+    "rows": 28
+   },
+   {
+    "en": "PC1: Opening Balance of Current Year, Accumulated Other Comprehensive Income (Loss), FVOCI Financial Assets",
+    "fr": "PC1: Solde d'ouverture de l'exercice courant, Cumul des autres éléments du résultat étendu (perte), Actifs financiers évalués à la JVAÉRÉ",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20542127",
+  "variants": [
+   {
+    "en": "PC1: Opening Balance of Current Year, Accumulated Other Comprehensive Income (Loss), Remeasurements of Defined Benefit Pension Plans",
+    "fr": "PC1: Solde d'ouverture de l'exercice courant, Cumul des autres éléments du résultat global (perte), Réévaluation des régimes de retraite à prestations définies",
+    "rows": 12
+   },
+   {
+    "en": "PC1: Opening Balance of Current Year, Accumulated Other Comprehensive Income (Loss), Remeasurements of Defined Benefit Pension Plans",
+    "fr": "PC1: Solde d'ouverture de l'exercice courant, Cumul des autres éléments du résultat étendu (perte), Réévaluation des régimes de retraite à prestations définies",
+    "rows": 1
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20542139",
+  "variants": [
+   {
+    "en": "PC1: Opening Balance of Current Year, Accumulated Other Comprehensive Income (Loss), Total AOCI",
+    "fr": "PC1: Solde d'ouverture de l'exercice courant, Cumul des autres éléments du résultat global (perte), Total AÉRG",
+    "rows": 38
+   },
+   {
+    "en": "PC1: Opening Balance of Current Year, Accumulated Other Comprehensive Income (Loss), Total AOCI",
+    "fr": "PC1: Solde d'ouverture de l'exercice courant, Cumul des autres éléments du résultat étendu (perte), Total AÉRÉ",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20542903",
+  "variants": [
+   {
+    "en": "PC1: Changes in Equity for Current Period, Total Comprehensive Income for the period, Retained Earnings",
+    "fr": "PC1: Variations des capitaux propres de l'exercice courant, Total du résultat global de l'exercice, Bénéfices non répartis",
+    "rows": 60
+   },
+   {
+    "en": "PC1: Changes in Equity for Current Period, Total Comprehensive Income for the period, Retained Earnings",
+    "fr": "PC1: Variations des capitaux propres de l'exercice courant, Total du résultat étendu de l'exercice, retraité, Bénéfices non répartis",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20542907",
+  "variants": [
+   {
+    "en": "PC1: Changes in Equity for Current Period, Total Comprehensive Income for the period, Accumulated Other Comprehensive Income (Loss), FVOCI Financial Assets",
+    "fr": "PC1: Variations des capitaux propres de l'exercice courant, Total du résultat global de l'exercice, Cumul des autres éléments du résultat global (perte), Actifs financiers évalués à la JVAÉRG",
+    "rows": 26
+   },
+   {
+    "en": "PC1: Changes in Equity for Current Period, Total Comprehensive Income for the period, Accumulated Other Comprehensive Income (Loss), FVOCI Financial Assets",
+    "fr": "PC1: Variations des capitaux propres de l'exercice courant, Total du résultat étendu de l'exercice, retraité, Cumul des autres éléments du résultat étendu (perte), Actifs financiers évalués à la JVAÉRÉ",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20542919",
+  "variants": [
+   {
+    "en": "PC1: Changes in Equity for Current Period, Total Comprehensive Income for the period, Total Equity",
+    "fr": "PC1: Variations des capitaux propres de l'exercice courant, Total du résultat global de l'exercice, Total des capitaux propres",
+    "rows": 65
+   },
+   {
+    "en": "PC1: Changes in Equity for Current Period, Total Comprehensive Income for the period, Total Equity",
+    "fr": "PC1: Variations des capitaux propres de l'exercice courant, Total du résultat étendu de l'exercice, retraité, Total des capitaux propres",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20542927",
+  "variants": [
+   {
+    "en": "PC1: Changes in Equity for Current Period, Total Comprehensive Income for the period, Accumulated Other Comprehensive Income (Loss), Remeasurements of Defined Benefit Pension Plans",
+    "fr": "PC1: Variations des capitaux propres de l'exercice courant, Total du résultat global de l'exercice, Cumul des autres éléments du résultat global (perte), Réévaluation des régimes de retraite à prestations définies",
+    "rows": 13
+   },
+   {
+    "en": "PC1: Changes in Equity for Current Period, Total Comprehensive Income for the period, Accumulated Other Comprehensive Income (Loss), Remeasurements of Defined Benefit Pension Plans",
+    "fr": "PC1: Variations des capitaux propres de l'exercice courant, Total du résultat étendu de l'exercice, retraité, Cumul des autres éléments du résultat étendu (perte), Réévaluation des régimes de retraite à prestations définies",
+    "rows": 1
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20542939",
+  "variants": [
+   {
+    "en": "PC1: Changes in Equity for Current Period, Total Comprehensive Income for the period, Accumulated Other Comprehensive Income (Loss), Total AOCI",
+    "fr": "PC1: Variations des capitaux propres de l'exercice courant, Total du résultat global de l'exercice, Cumul des autres éléments du résultat global (perte), Total AÉRG",
+    "rows": 39
+   },
+   {
+    "en": "PC1: Changes in Equity for Current Period, Total Comprehensive Income for the period, Accumulated Other Comprehensive Income (Loss), Total AOCI",
+    "fr": "PC1: Variations des capitaux propres de l'exercice courant, Total du résultat étendu de l'exercice, retraité, Cumul des autres éléments du résultat étendu (perte), Total AÉRÉ",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20542949",
+  "variants": [
+   {
+    "en": "PC1: Changes in Equity for Current Period, Total Comprehensive Income for the period, Total Shareholders' Equity",
+    "fr": "PC1: Variations des capitaux propres de l'exercice courant, Total du résultat global de l'exercice, Total de l'avoir des titulaires de polices",
+    "rows": 63
+   },
+   {
+    "en": "PC1: Changes in Equity for Current Period, Total Comprehensive Income for the period, Total Shareholders' Equity",
+    "fr": "PC1: Variations des capitaux propres de l'exercice courant, Total du résultat étendu de l'exercice, retraité, Total de l'avoir des titulaires de polices",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20543907",
+  "variants": [
+   {
+    "en": "PC1: Balance at End of Current Period, Accumulated Other Comprehensive Income (Loss), FVOCI Financial Assets",
+    "fr": "PC1: Solde à la fin de l'exercice courant, Cumul des autres éléments du résultat global (perte), Actifs financiers évalués à la JVAÉRG",
+    "rows": 26
+   },
+   {
+    "en": "PC1: Balance at End of Current Period, Accumulated Other Comprehensive Income (Loss), FVOCI Financial Assets",
+    "fr": "PC1: Solde à la fin de l'exercice courant, Cumul des autres éléments du résultat étendu (perte), Actifs financiers évalués à la JVAÉRÉ",
+    "rows": 6
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20543927",
+  "variants": [
+   {
+    "en": "PC1: Balance at End of Current Period, Accumulated Other Comprehensive Income (Loss), Remeasurements of Defined Benefit Pension Plans",
+    "fr": "PC1: Solde à la fin de l'exercice courant, Cumul des autres éléments du résultat global (perte), Réévaluation des régimes de retraite à prestations définies",
+    "rows": 12
+   },
+   {
+    "en": "PC1: Balance at End of Current Period, Accumulated Other Comprehensive Income (Loss), Remeasurements of Defined Benefit Pension Plans",
+    "fr": "PC1: Solde à la fin de l'exercice courant, Cumul des autres éléments du résultat étendu (perte), Réévaluation des régimes de retraite à prestations définies",
+    "rows": 1
+   }
+  ]
+ },
+ {
+  "check": "label",
+  "kind": "conflict",
+  "return": "PC1",
+  "address": "P20543939",
+  "variants": [
+   {
+    "en": "PC1: Balance at End of Current Period, Accumulated Other Comprehensive Income (Loss), Total AOCI",
+    "fr": "PC1: Solde à la fin de l'exercice courant, Cumul des autres éléments du résultat global (perte), Total AÉRG",
+    "rows": 38
+   },
+   {
+    "en": "PC1: Balance at End of Current Period, Accumulated Other Comprehensive Income (Loss), Total AOCI",
+    "fr": "PC1: Solde à la fin de l'exercice courant, Cumul des autres éléments du résultat étendu (perte), Total AÉRÉ",
+    "rows": 6
+   }
+  ]
+ }
+]

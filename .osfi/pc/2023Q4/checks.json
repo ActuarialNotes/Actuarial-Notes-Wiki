@@ -1,0 +1,16 @@
+[
+ {
+  "check": "balance",
+  "kind": "mismatch",
+  "institution": "28284",
+  "total_assets": 469394.0,
+  "total_liabilities_and_equity": 469388.0
+ },
+ {
+  "check": "balance",
+  "kind": "mismatch",
+  "institution": "219440",
+  "total_assets": 24753.0,
+  "total_liabilities_and_equity": 24857.0
+ }
+]

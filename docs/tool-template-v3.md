@@ -220,6 +220,9 @@ Round 0 of the review, then §3 and §4 on the rest of the tools.
   given"), schedules folding under a "row k" input, MCT Ratio loading a filed insurer from its own
   page, a linked value recomputing from its sender, the Assumptions Bank grouped by locator, desktop
   side by side.
+- A result table (not a grid) still clips its last column on a phone with no "more columns" line:
+  Loan Schedule's *Balance* at 390 px, the figure that proves the loan is repaid. §2.7's rule
+  should reach `ResultTableView` too.
 - Solve-for on the remaining tools where an exam asks the inverse (Bond Amortization's row k,
   Trend Factor's trend from a factor).
 - A life annuity tool, for Life Table to hand to.

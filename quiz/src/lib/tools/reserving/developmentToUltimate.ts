@@ -1,8 +1,13 @@
 import { ToolInputError, type TableRow, type ToolSpec } from '../types'
+import { benktander } from './benktander'
+import { bornhuetterFerguson } from './bornhuetterFerguson'
+import { capeCod } from './capeCod'
+import { chainLadder } from './chainLadder'
+import { cdfHandoff } from './handoffs'
 
 export const developmentToUltimate: ToolSpec = {
   id: 'reserving.development_to_ultimate',
-  version: '1.0.0',
+  version: '1.1.0',
   name: 'Development to Ultimate',
   area: 'reserving',
   answers: 'What are the cumulative development factors to ultimate?',
@@ -81,4 +86,6 @@ export const developmentToUltimate: ToolSpec = {
     concepts: ['Cumulative Development Factor', 'Tail Factor'],
     readings: [{ resource: 'Estimating Unpaid Claims Using Basic Techniques (Friedland - 2010)', locator: 'Ch. 7' }],
   },
+  // The CDFs into each method that takes them, laid over its own origins by position.
+  next: [chainLadder, bornhuetterFerguson, benktander, capeCod].map(cdfHandoff),
 }

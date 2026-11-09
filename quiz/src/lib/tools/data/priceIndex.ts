@@ -26,7 +26,7 @@ const DEFAULT_START = `${Number(DEFAULT_END.slice(0, 4)) - 5}${DEFAULT_END.slice
 
 export const priceIndex: ToolSpec = {
   id: 'data.price_index',
-  version: '1.0.0',
+  version: '1.0.1',
   name: 'Price Index',
   area: 'data',
   answers: 'How has this price index moved?',
@@ -81,6 +81,8 @@ export const priceIndex: ToolSpec = {
           { key: 'change', label: lag === 12 ? '12-month change' : '4-quarter change', kind: 'number', unit: 'percent', computed: true },
         ],
         rows,
+        // The period the index tile names: the last one read.
+        highlight: rows.length - 1,
       },
       trace: [
         { label: `Index, ${first.period}`, formula: provenance(dataset), result: Number(first.value), unit: 'plain' },

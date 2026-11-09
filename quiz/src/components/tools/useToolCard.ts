@@ -36,7 +36,20 @@ import {
   type ToolSpec,
   type TriangleField,
 } from '@/lib/tools'
-import { fillColumn, scalarSources, selectionsToFactors, type ColumnSource, type Selection } from '@/lib/toolColumns'
+import {
+  averageRows,
+  fillColumn,
+  picksFragment,
+  picksFromHash,
+  picksFromStore,
+  picksToSelections,
+  scalarSources,
+  selectionsToFactors,
+  selectionsToPicks,
+  type ColumnSource,
+  type Pick,
+  type Selection,
+} from '@/lib/toolColumns'
 import { figureFor } from '@/lib/toolFigures'
 import { lastRun, rememberRun } from '@/lib/toolRuns'
 import { runToolCall, toolResultSheets } from '@/lib/toolExport'
@@ -71,6 +84,12 @@ function writeStore(key: string, value: string | null) {
   } catch {
     // Storage blocked (a private window): the card works, it just won't remember.
   }
+}
+
+/** The draft a tool keeps on this device, for a hand-off to lay one column over. */
+function receiverDraft(toolId: string): Partial<ToolInput> | undefined {
+  const spec = toolById(toolId)
+  return spec ? (draftFromStore(spec, readStore(`${DRAFT_STORE}${toolId}`)) ?? undefined) as Partial<ToolInput> | undefined : undefined
 }
 
 /** A tool another value can be taken from, opening in the source sheet. */
@@ -112,12 +131,18 @@ export function useToolCard({ spec, initialInput, onOpenMethod, onResult, embedd
     const t = window.setTimeout(() => setUndo(null), 8000)
     return () => window.clearTimeout(t)
   }, [undo])
+  const undonePicks = useRef<Pick[]>([])
   const reset = () => {
     if (draftToStore(spec, draft) !== null) setUndo(draft)
+    undonePicks.current = picks
     setDraft(initialDraft(spec))
+    setPicks([])
   }
   const undoReset = () => {
-    if (undo) setDraft(undo)
+    if (undo) {
+      setDraft(undo)
+      setPicks(undonePicks.current)
+    }
     setUndo(null)
   }
 
@@ -149,11 +174,21 @@ export function useToolCard({ spec, initialInput, onOpenMethod, onResult, embedd
     set(key, value)
     setOrigins(o => ({ ...o, [key]: originOf(tool.name, value, tool.id) }))
   }
-  // Age-to-Age Factors' selection exhibit (§6.6): the picks, one per interval.
-  // A new triangle starts them over.
+  // Age-to-Age Factors' selection exhibit (§6.6): the picks, one per interval,
+  // each the average it names (`Pick`), so an edit to the triangle keeps them.
+  // They are kept with the draft on this device and ride a run link after its
+  // input, so Back and a shared link come back to them.
   const selecting = spec.id === SELECTING_TOOL
-  const [selections, setSelections] = useState<(Selection | null)[]>([])
-  useEffect(() => setSelections([]), [draft.triangle])
+  const picksKey = `${storeKey}:picks`
+  const [picks, setPicks] = useState<Pick[]>(() => {
+    if (!selecting) return []
+    const fromLink = typeof window === 'undefined' ? null : picksFromHash(window.location.hash)
+    if (fromLink) return fromLink
+    return (persist && initialInput === undefined ? picksFromStore(readStore(picksKey)) : null) ?? []
+  })
+  useEffect(() => {
+    if (persist && selecting) writeStore(picksKey, picks.some(Boolean) ? JSON.stringify(picks) : null)
+  }, [persist, selecting, picksKey, picks])
 
   const outcome = useMemo(() => {
     if (wantsFilings && !filingsReady) {
@@ -295,13 +330,19 @@ export function useToolCard({ spec, initialInput, onOpenMethod, onResult, embedd
     }))
 
   const slug = toolSlug(spec)
+  const averages = useMemo(() => (selecting && result ? averageRows(result.input) : []), [selecting, result])
+  const selections = useMemo<(Selection | null)[]>(
+    () => (selecting && result ? picksToSelections(picks, averages, (result.values.intervals as string[] | undefined)?.length ?? 0) : []),
+    [selecting, result, picks, averages],
+  )
+  const setSelections = (next: (Selection | null)[]) => setPicks(selectionsToPicks(next))
   const picked = selecting && selections.some(Boolean)
   /** What a hand-off would carry from the current result, or null while there is no good one. */
   const buildFor = (next: ToolHandoff): Partial<ToolInput> | null => {
     if (!result || stale) return null
     return picked && next.tool === 'reserving.development_to_ultimate'
       ? selectionsToFactors(result.values.ages as number[], result.values.averages as (number | null)[], selections)
-      : next.build(result.input, result)
+      : next.build(result.input, result, receiverDraft(next.tool))
   }
   /** Open the next tool with what this one gives it, naming this one as the sender so the values arrive linked. */
   const sendTo = (n: Neighbour) => {
@@ -323,7 +364,10 @@ export function useToolCard({ spec, initialInput, onOpenMethod, onResult, embedd
   const download = () => { if (result) downloadWorkbook(`${slug}.xlsx`, toolResultSheets(spec, result)) }
   const menu: ToolMenuItem[] = [
     ...(onOpenMethod ? [{ key: 'method', label: 'Read about the method', icon: 'method' as const, run: onOpenMethod }] : []),
-    { key: 'link', label: 'Copy link to this run', icon: 'link', run: () => `${window.location.origin}${runPath(slug, draft)}` },
+    { key: 'link', label: 'Copy link to this run', icon: 'link', run: () => {
+      const extra = selecting ? picksFragment(picks) : null
+      return `${window.location.origin}${runPath(slug, draft)}${extra ? `&${extra}` : ''}`
+    } },
     { key: 'ai', label: 'Copy for Claude or ChatGPT', icon: 'ai', run: () => runToolCall(spec, draft) },
     { key: 'json', label: 'Copy result as JSON', icon: 'json', disabled: !result, run: () => JSON.stringify(result, null, 2) },
     { key: 'xlsx', label: 'Download .xlsx', icon: 'download', disabled: !result || stale, run: download },

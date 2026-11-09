@@ -21,7 +21,8 @@ const PROFIT: BankFigure = {
   verdict: 'unverified',
   openCritical: 0,
 }
-const EXPENSE: BankFigure = { ...PROFIT, id: 'AIRB Benchmarks (2026)#total-expenses', label: 'Total expenses', kind: 'expense-ratio', value: 0.278, raw: '27.8', locator: 'p. 7' }
+const EXPENSE: BankFigure = { ...PROFIT, id: 'AIRB Benchmarks (2026)#acquisition', label: 'Amortization of insurance acquisition cash flows', kind: 'variable-expense', value: 0.2, raw: '20.0', locator: 'p. 7' }
+const TOTAL: BankFigure = { ...PROFIT, id: 'AIRB Benchmarks (2026)#total-expenses', label: 'Total expenses', kind: 'total-expense', value: 0.278, raw: '27.8', locator: 'p. 7' }
 const ULAE: BankFigure = { ...PROFIT, id: 'AIRB Benchmarks (2026)#ulae', label: 'ULAE', kind: 'ulae-factor', unit: 'factor', value: 1.094, raw: '1.094' }
 
 const plr = toolById('ratemaking.permissible_loss_ratio')!
@@ -80,6 +81,13 @@ describe('what a field is offered', () => {
       { ...PROFIT, id: 'bad#p', openCritical: 1 },
     ])
     expect(figuresFor(profitField as never).map(f => f.id)).toEqual([PROFIT.id])
+    expect(figuresFor(plr.fields.find(f => f.key === 'variable') as never).map(f => f.id)).toEqual([EXPENSE.id])
+  })
+
+  it('offers an expense figure only to the expense it measures', () => {
+    installAssumptionBank([EXPENSE, TOTAL])
+    // Acquisition costs are a variable expense; a total is neither the fixed nor the variable ratio.
+    expect(figuresFor(plr.fields.find(f => f.key === 'fixed') as never)).toEqual([])
     expect(figuresFor(plr.fields.find(f => f.key === 'variable') as never).map(f => f.id)).toEqual([EXPENSE.id])
   })
 

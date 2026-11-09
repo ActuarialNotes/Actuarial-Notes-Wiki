@@ -22,6 +22,40 @@ export const CHAINS: readonly Chain[] = [
       ['reserving.chain_ladder', 'reserving.expected_claims', 'reserving.bornhuetter_ferguson', 'reserving.benktander', 'reserving.cape_cod'],
     ],
   },
+  {
+    // A rate indication in Werner & Modlin's order: premium at current rates,
+    // losses trended to the future period, expenses, then the indication.
+    id: 'ratemaking',
+    label: 'Ratemaking chain',
+    steps: [
+      ['ratemaking.earned_premium'],
+      ['ratemaking.on_level_factors'],
+      ['ratemaking.trend_fit', 'ratemaking.combined_trend'],
+      ['ratemaking.trend_factor', 'ratemaking.two_step_trend'],
+      ['ratemaking.expense_ratios'],
+      ['ratemaking.permissible_loss_ratio'],
+      ['ratemaking.loss_ratio_method', 'ratemaking.pure_premium_method'],
+    ],
+  },
+  {
+    // A rate in the form the payments need, what the payments are worth, and the yield back.
+    id: 'interest',
+    label: 'Interest chain',
+    steps: [
+      ['finance.interest_converter'],
+      ['finance.annuity', 'finance.present_value', 'finance.loan_schedule'],
+      ['finance.internal_rate_of_return'],
+    ],
+  },
+  {
+    id: 'bonds',
+    label: 'Bond chain',
+    steps: [
+      ['finance.bond_price', 'finance.bond_yield'],
+      ['finance.bond_amortization', 'finance.duration_convexity'],
+      ['finance.redington_immunization'],
+    ],
+  },
 ]
 
 export interface ChainPlace {

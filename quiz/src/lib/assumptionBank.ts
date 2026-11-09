@@ -26,9 +26,9 @@ import { verificationFromAttributes, type Verification } from './verification'
 export const ASSUMPTION_KINDS = {
   trend: ['%'],
   'loss-ratio': ['%'],
-  'expense-ratio': ['%'],
   'fixed-expense': ['%', 'CAD', 'USD'],
   'variable-expense': ['%'],
+  'total-expense': ['%'],
   'profit-provision': ['%'],
   'development-factor': ['factor'],
   'ulae-factor': ['factor'],

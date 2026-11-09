@@ -58,3 +58,19 @@ describe('datasets', () => {
     expect(c.curves.every(x => x.yields.every(y => y === null || (y > -0.01 && y < 0.2)))).toBe(true)
   })
 })
+
+// A Data Source marks the row its run is about (docs/tool-template-v3.md §2.5).
+describe('the row a run is about', () => {
+  it('Life Table marks age x, the row eₓ and qₓ are read off', async () => {
+    const { runTool, toolById } = await import('../index')
+    const r = runTool(toolById('data.life_table')!, { x: 40, t: 25 })
+    expect(r.table!.highlight).toBe(0)
+    expect(r.table!.rows[r.table!.highlight!].age).toBe(40)
+  })
+  it('Price Index marks the period its index tile names', async () => {
+    const { runTool, toolById } = await import('../index')
+    const r = runTool(toolById('data.price_index')!, {})
+    const row = r.table!.rows[r.table!.highlight!]
+    expect(row.period).toBe(r.tiles[2].label)
+  })
+})

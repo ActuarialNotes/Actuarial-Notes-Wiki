@@ -39,9 +39,23 @@ export function inputGroups(fields: readonly ScalarField[]): { choices: ScalarFi
   }
 }
 
-/** A number as an input shows it: an amount without the cents it doesn't have, a year without a separator. */
+/**
+ * A triangle's name as its grid shows it: a "Cumulative triangle" reads
+ * "Incremental triangle" while the switch beside it shows the increments.
+ */
+export function triangleLabel(label: string, mode: 'cumulative' | 'incremental' = 'cumulative'): string {
+  if (mode === 'cumulative') return label
+  return /^cumulative\b/i.test(label) ? label.replace(/^cumulative/i, m => (m[0] === 'C' ? 'Incremental' : 'incremental')) : `${label}, incremental`
+}
+
+/**
+ * A number as an input shows it: as it was typed, not at a result's fixed
+ * precision — an amount without the cents it doesn't have, a percent without
+ * zeros it doesn't have (5%, 3.125%), a year without a separator.
+ */
 export function fieldText(value: number, f: Pick<NumberField, 'unit' | 'integer' | 'min'>): string {
   if (f.unit === 'money') return value.toLocaleString('en-US', { maximumFractionDigits: 2 })
+  if (f.unit === 'percent') return `${Number((value * 100).toFixed(6))}%`
   if (f.integer && f.min >= 1000) return String(value)
   return formatValue(value, f.unit)
 }

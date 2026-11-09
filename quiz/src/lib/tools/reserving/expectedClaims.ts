@@ -1,10 +1,13 @@
 import { ToolInputError, type TableRow, type ToolSpec } from '../types'
 import { formatValue } from '../format'
 import { ORIGIN_COLUMN } from './chainLadder'
+import { benktander } from './benktander'
+import { bornhuetterFerguson } from './bornhuetterFerguson'
+import { expectedHandoff } from './handoffs'
 
 export const expectedClaims: ToolSpec = {
   id: 'reserving.expected_claims',
-  version: '1.0.0',
+  version: '1.1.0',
   name: 'Expected Claims',
   area: 'reserving',
   answers: "What's the a priori ultimate?",
@@ -62,4 +65,6 @@ export const expectedClaims: ToolSpec = {
     concepts: ['Expected Loss Method'],
     readings: [{ resource: 'Estimating Unpaid Claims Using Basic Techniques (Friedland - 2010)', locator: 'Ch. 8' }],
   },
+  // The expected claims, by origin, into the methods that weigh them against the chain ladder.
+  next: [bornhuetterFerguson, benktander].map(expectedHandoff),
 }

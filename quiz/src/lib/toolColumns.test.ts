@@ -18,9 +18,9 @@ describe('formatCell', () => {
     expect(formatCell('1700', 'money')).toBe('1,700')
     expect(formatCell(1234.5, 'money')).toBe('1,234.5')
     expect(formatCell('1.6995', 'factor')).toBe('1.6995')
-    expect(formatCell(1, 'factor')).toBe('1.000')
+    expect(formatCell(1, 'factor')).toBe('1.0000')
     expect(formatCell(1.5151515152, 'factor')).toBe('1.5152')
-    expect(formatCell(0.05, 'percent')).toBe('5%')
+    expect(formatCell(0.05, 'percent')).toBe('5.00%')
     expect(formatCell('1700*1.05', 'money')).toBe('1,785')
   })
   it('leaves what it cannot read as typed', () => {
@@ -160,6 +160,32 @@ describe('the selection grid', () => {
       { age: 36, factor: rows[0].values[2] },
       { age: 48, factor: null },
     ])
+  })
+  it('keeps a pick as the average it names, so a cell edit moves it with its average', async () => {
+    const { averageRows, picksToSelections, selectionsToPicks } = await import('./toolColumns')
+    const spec = toolById('reserving.age_to_age_factors')!
+    const tri = (spec.fields[0] as { default: { origins: string[]; ages: number[]; values: (number | null)[][] } }).default
+    const picks = [null, 'Simple all', null]
+    const before = picksToSelections(picks, averageRows({ triangle: tri } as never), 3)
+    expect(before[1]?.from).toBe('Simple all')
+    // Edit one cell: the pick stays, and its value is the new Simple all.
+    const edited = { ...tri, values: tri.values.map((row, r) => row.map((v, c) => (r === 0 && c === 1 && v != null ? v * 1.1 : v))) }
+    const rows = averageRows({ triangle: edited } as never)
+    const after = picksToSelections(picks, rows, 3)
+    expect(after[1]).toEqual({ value: rows.find(r => r.label === 'Simple all')!.values[1], from: 'Simple all' })
+    expect(after[1]!.value).not.toBe(before[1]!.value)
+    expect(selectionsToPicks(after)).toEqual(picks)
+  })
+
+  it('carries the picks in a run link and on this device', async () => {
+    const { picksFragment, picksFromHash, picksFromStore } = await import('./toolColumns')
+    expect(picksFragment([null, null])).toBeNull()
+    const frag = picksFragment(['Vol-wtd 3', null, 'Medial 5'])!
+    expect(picksFromHash(`#input=abc&${frag}`)).toEqual(['Vol-wtd 3', null, 'Medial 5'])
+    expect(picksFromHash('#input=abc')).toBeNull()
+    expect(picksFromHash('#picks=Nonsense')).toBeNull()
+    expect(picksFromStore(JSON.stringify(['Simple 5', null]))).toEqual(['Simple 5', null])
+    expect(picksFromStore('{"x":1}')).toBeNull()
   })
 })
 

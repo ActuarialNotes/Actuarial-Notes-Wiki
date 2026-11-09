@@ -25,9 +25,10 @@ export function formatCell(raw: unknown, unit: NumberUnit | undefined): string {
     case 'percent':
       return formatValue(n, 'percent')
     case 'factor':
-      // A column of factors reads down its decimal points: 1.000 over 1.030 over
-      // 1.6995. The cell keeps every digit typed; focusing it shows them.
-      return n.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 4, useGrouping: false })
+      // A column of factors reads down its decimal points, all to 4 places like
+      // every factor the tools print: 1.0000 over 1.0300 over 1.6995. The cell
+      // keeps every digit typed; focusing it shows them.
+      return n.toFixed(4)
     default:
       return String(Math.round(n * 1e10) / 1e10)
   }
@@ -405,5 +406,57 @@ export function selectionsToFactors(ages: number[], averages: (number | null)[],
       age,
       factor: j < averages.length ? selections[j]?.value ?? averages[j] ?? 1 : null,
     })),
+  }
+}
+
+/**
+ * A pick is kept as the average it names, one per interval (null for none),
+ * not as a number: the value is read off that average every run, so a pick
+ * follows the triangle through every cell edit instead of being wiped by it.
+ */
+export type Pick = string | null
+
+/** The picks as selections against the averages of this run; a pick whose average has no value there is none. */
+export function picksToSelections(picks: readonly Pick[], rows: readonly AverageRow[], intervals: number): (Selection | null)[] {
+  return Array.from({ length: intervals }, (_, j) => {
+    const label = picks[j]
+    const v = label ? rows.find(r => r.label === label)?.values[j] : null
+    return label && v != null ? { value: v, from: label } : null
+  })
+}
+
+/** The picks a list of selections makes. */
+export function selectionsToPicks(selections: readonly (Selection | null)[]): Pick[] {
+  return selections.map(s => s?.from ?? null)
+}
+
+const PICK_LABELS = new Set(AVERAGE_CHOICES.map(c => c.label))
+
+/** The picks as a run link carries them, after its input: `picks=Vol-wtd%203|Simple%205|`. Null with none. */
+export function picksFragment(picks: readonly Pick[]): string | null {
+  if (!picks.some(Boolean)) return null
+  return `picks=${picks.map(p => encodeURIComponent(p ?? '')).join('|')}`
+}
+
+/** The picks a link's fragment carries, or null when it carries none that can be read. */
+export function picksFromHash(hash: string): Pick[] | null {
+  const m = /(?:^#?|&)picks=([^&]*)/.exec(hash)
+  if (!m) return null
+  try {
+    const picks = m[1].split('|').map(p => decodeURIComponent(p) || null)
+    return picks.every(p => p === null || PICK_LABELS.has(p)) ? picks : null
+  } catch {
+    return null
+  }
+}
+
+/** Picks as they are kept on this device, read back: anything unreadable is none. */
+export function picksFromStore(raw: string | null): Pick[] | null {
+  if (!raw) return null
+  try {
+    const v: unknown = JSON.parse(raw)
+    return Array.isArray(v) && v.every(p => p === null || (typeof p === 'string' && PICK_LABELS.has(p))) ? (v as Pick[]) : null
+  } catch {
+    return null
   }
 }

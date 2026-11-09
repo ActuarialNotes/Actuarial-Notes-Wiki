@@ -171,7 +171,13 @@ export interface ToolOutput {
 export interface ToolHandoff {
   tool: string
   label: string
-  build: (input: ToolInput, output: ToolOutput) => Partial<ToolInput>
+  /**
+   * What the next tool receives. `into` is that tool's own input where there
+   * is one (its draft on this device, a workflow step's own values): a hand-off
+   * carrying one column of a table (the CDFs) lays it over the reader's rows
+   * rather than replacing them, and falls back to the next tool's example.
+   */
+  build: (input: ToolInput, output: ToolOutput, into?: Partial<ToolInput>) => Partial<ToolInput>
 }
 
 export interface ToolSpec {

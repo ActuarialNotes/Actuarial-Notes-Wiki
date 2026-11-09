@@ -18,7 +18,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:331abaa4dae3e95d96291661472d743e1780ffcf179fc85761058a1010645514
+  content_hash: sha256:175a8b5b44c31bb9da381e1eee686544e4b09544a9baf91d9a7c1d15c88985fe
   sources: []
   open_findings: 0
   open_critical: 0
@@ -29,9 +29,9 @@ The industry benchmarks the AIRB will consider for Alberta automobile rate filin
 
 | Assumption | Kind | Value | Unit | Locator | Basis | Meaning | Fits |
 |---|---|---|---|---|---|---|---|
-| Amortization of insurance acquisition cash flows | expense-ratio | 20.0 | % | Operating Expenses & ULAE, AIRB Selections (p. 7) | selected | The AIRB's selection for acquisition costs, which include compensation paid to agents and brokers for selling insurance policies, on the 2022 IFRS 4 expense ratio. | |
-| General and operating expenses | expense-ratio | 7.8 | % | Operating Expenses & ULAE, AIRB Selections (p. 7) | selected | The AIRB's selection for general and operating expenses, on the 2022 IFRS 4 expense ratio. | |
-| Total expenses | expense-ratio | 27.8 | % | Operating Expenses & ULAE, AIRB Selections (p. 7) | selected | The AIRB's selection for total operating expenses, on the 2022 IFRS 4 expense ratio: a reference point when considering administrative expenses in individual insurer filings. | ratemaking.expense_ratios#total |
+| Amortization of insurance acquisition cash flows | variable-expense | 20.0 | % | Operating Expenses & ULAE, AIRB Selections (p. 7) | selected | The AIRB's selection for acquisition costs, which include compensation paid to agents and brokers for selling insurance policies, on the 2022 IFRS 4 expense ratio. | |
+| General and operating expenses | fixed-expense | 7.8 | % | Operating Expenses & ULAE, AIRB Selections (p. 7) | selected | The AIRB's selection for general and operating expenses, on the 2022 IFRS 4 expense ratio. | |
+| Total expenses | total-expense | 27.8 | % | Operating Expenses & ULAE, AIRB Selections (p. 7) | selected | The AIRB's selection for total operating expenses, on the 2022 IFRS 4 expense ratio: a reference point when considering administrative expenses in individual insurer filings. | ratemaking.expense_ratios#total |
 | ULAE | ulae-factor | 1.094 | factor | Operating Expenses & ULAE, AIRB Selections (p. 7) | selected | The Alberta ULAE ratio presented in the GISA exhibit, adjusted to reflect a percentage of direct earned premium. | |
 | Profit provision (pre-tax, maximum) | profit-provision | 6.0 | % | Profit (p. 7) | cap | The maximum profit provision permitted for use by insurers: the AIRB's pre-tax profit benchmark for all coverages and vehicle types, as a percentage of premium. | |
 | Loss cost trends, by coverage | trend | | % | Loss Cost Trends (p. 5); Appendix B, Industry Benchmark Schedule | selected | The loss trend rates RCS selected for each coverage, projections of future accident losses based on historical loss patterns. | |

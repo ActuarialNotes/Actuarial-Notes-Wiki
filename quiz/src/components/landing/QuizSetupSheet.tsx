@@ -276,7 +276,8 @@ const LEVEL_NAME: Record<Difficulty, string> = { easy: 'Easy', medium: 'Medium',
 /**
  * Which difficulties: three pills, any combination, solid when in. A filter —
  * an unticked level is out of the pool — so each says how many it holds. The
- * last level in can't be taken out (lib/quizDifficulty.ts).
+ * last level in can't be taken out (lib/quizDifficulty.ts). On the quiz card
+ * (`tone="card"`) the three share one well, a segmented row.
  */
 export function DifficultyChoice({
   levels,
@@ -291,7 +292,12 @@ export function DifficultyChoice({
 }) {
   const onCard = tone === 'card'
   return (
-    <div role="group" aria-label="Difficulty" className="flex flex-wrap gap-2">
+    <div
+      role="group"
+      aria-label="Difficulty"
+      // On the card the three sit in one well, a segmented row.
+      className={onCard ? 'flex gap-1 rounded-2xl bg-black/15 p-1' : 'flex flex-wrap gap-2'}
+    >
       {DIFFICULTY_LEVELS.map(level => {
         const on = levels.includes(level)
         const n = counts?.[level]
@@ -304,10 +310,11 @@ export function DifficultyChoice({
             data-sound="tick"
             onClick={() => onChange(toggleDifficultyLevel(levels, level))}
             className={cn(
-              'inline-flex h-10 items-center gap-1.5 rounded-full px-4 text-[15px] font-semibold transition-colors',
+              'inline-flex h-10 items-center font-semibold transition-colors',
+              onCard ? 'min-w-0 flex-1 justify-center gap-1 rounded-xl px-1.5 text-sm' : 'gap-1.5 rounded-full px-4 text-[15px]',
               'focus-visible:outline-none focus-visible:ring-2',
               onCard
-                ? cn('focus-visible:ring-white', on ? 'bg-white text-black' : 'bg-black/15 text-white/80 hover:text-white')
+                ? cn('focus-visible:ring-white', on ? 'bg-white text-black' : 'text-white/80 hover:bg-white/10 hover:text-white')
                 : cn('focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background', on ? PICK : 'bg-card text-muted-foreground hover:text-foreground'),
             )}
           >

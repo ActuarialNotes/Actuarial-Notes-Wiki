@@ -44,9 +44,19 @@ test.describe('quiz setup', () => {
     await expect(timed).toHaveAttribute('aria-checked', was === 'true' ? 'false' : 'true')
     await expect(page.getByRole('dialog', { name: 'Your quiz' })).toHaveCount(0)
 
-    await card.getByRole('button', { name: /^Difficulty:/ }).click()
-    await card.getByRole('checkbox', { name: /Hard/ }).click()
-    await expect(card.getByRole('button', { name: /^Difficulty: Easy \+ Medium/ })).toBeVisible()
+    const hard = card.getByRole('checkbox', { name: /Hard/ })
+    await hard.click()
+    await expect(hard).toHaveAttribute('aria-checked', 'false')
+  })
+
+  test('the − and + either side of the count step it by one', async ({ page }) => {
+    await page.goto('/?topic=Exam%205')
+    const card = page.getByRole('region', { name: 'Your quiz' })
+    await card.getByRole('button', { name: 'One question more' }).click()
+    await expect(card).toContainText('4questions')
+    await card.getByRole('button', { name: 'One question fewer' }).click()
+    await card.getByRole('button', { name: 'One question fewer' }).click()
+    await expect(card).toContainText('2questions')
   })
 
   test('a past paper is sat whole, as a practice exam', async ({ page }) => {

@@ -1,29 +1,26 @@
-import { useState, type ReactNode } from 'react'
-import { BookOpen, BookX, ChevronDown, Eye, EyeOff, Play, Timer, TimerOff } from 'lucide-react'
+import { useId, useState, type ReactNode } from 'react'
+import { BookOpen, ChevronRight, Eye, Minus, Play, Plus, Timer } from 'lucide-react'
 import type { SegmentedOption } from '@/components/ui/SegmentedControl'
 import type { Difficulty } from '@/lib/parser'
-import { difficultySummary } from '@/lib/quizSetup'
 import { cn } from '@/lib/utils'
-import { DifficultyBars } from '@/components/QuizSettingsButton'
 import { CountChoice, DifficultyChoice } from './QuizSetupSheet'
 
 /** The part of the setup sheet a tap on the card opens to. */
 export type SetupSection = 'topics' | 'count' | 'difficulty' | 'sitting'
 
-/** What a tap on the card opens in place, under the row it was tapped in. */
-type Inline = 'count' | 'difficulty' | null
-
 /**
- * The quiz setup screen's card: the reader's own quiz, ready to start. The
- * count is the headline, with the time it should take beside it. Under them a
- * pill for each topic, which opens the setup sheet at its topics, then the
- * settings, each an icon with words saying what it is set to.
+ * The quiz setup screen's card: the reader's own quiz, ready to start, with
+ * every choice on it set in place.
  *
- * Nothing but the topics leaves the card. The count and the difficulty open
- * their choices in place, under the row they were tapped in; the on/off
- * settings (timed, when answers show, tappable concepts) switch on a tap, the
- * words beside the icon changing with them. One action, Start, white on the
- * exam's colour.
+ * The headline is the count, "3 questions", between a − and a + that step it
+ * by one; the time it should take sits under it. Tapping the count opens the
+ * presets and a field for any number under it. Then three labelled sections:
+ * **Topics**, a field naming what is picked, which opens the setup sheet at
+ * its topic list (the one choice too long for the card); **Difficulty**, the
+ * three levels as a segmented row with how many questions each holds; and
+ * **While you answer**, the on/off settings as chips that fill white when on
+ * and go hollow and dashed when off. One action, Start, white on the exam's
+ * colour.
  *
  * The card is painted in the exam's opaque accent (`--exam-accent-vivid`),
  * which carries white text in either theme; an exam with no accent falls back
@@ -53,7 +50,7 @@ export function QuizHeroCard({
   count: number
   /** "~53 min", or null when the exam has no pace on file. */
   estimate: string | null
-  /** The topics' pills, in order — each opens the sheet at the topics. */
+  /** The topics picked, as the card names them ("All topics" when none). */
   pills: string[]
   /** The preset counts, the same the sheet offers. */
   countOptions: SegmentedOption<string>[]
@@ -79,121 +76,100 @@ export function QuizHeroCard({
   onChange: (section: SetupSection) => void
   onStart: () => void
 }) {
-  const [inline, setInline] = useState<Inline>(null)
-  const toggle = (which: Exclude<Inline, null>) => setInline(open => (open === which ? null : which))
+  const [countOpen, setCountOpen] = useState(false)
+  const countId = useId()
   const empty = count === 0
   const word = count === 1 ? 'question' : 'questions'
+  const topics = pills.join(', ')
+  const canLess = count > 1
+  const canMore = count > 0 && (maxCount === 0 || count < maxCount)
   return (
     <section
       aria-label="Your quiz"
-      className="space-y-4 rounded-3xl p-5 text-white shadow-sm"
+      className="space-y-5 rounded-3xl p-5 text-white shadow-sm"
       style={{ backgroundColor: 'var(--exam-accent-vivid, #4f46e5)' }}
     >
-      <div className="flex items-center gap-4">
-        <button
-          type="button"
-          data-testid="quiz-count"
-          aria-label={`${count} ${word}. Change how many`}
-          aria-expanded={inline === 'count'}
-          aria-controls="quiz-card-count"
-          onClick={() => toggle('count')}
-          className="-mx-1 flex items-end gap-1 rounded-xl px-1 text-6xl font-bold leading-none tracking-tight tabular-nums transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
-        >
-          {count}
-          <ChevronDown
-            className={cn('mb-1 h-6 w-6 opacity-70 transition-transform', inline === 'count' && 'rotate-180')}
-            aria-hidden
-          />
-        </button>
-        <span className="min-w-0 text-xl font-bold leading-tight">
-          <span className="block">{word}</span>
-          {estimate && <span className="block opacity-60">{estimate}</span>}
-        </span>
-      </div>
-
-      {inline === 'count' && (
-        <div id="quiz-card-count">
-          <CountChoice
-            options={countOptions}
-            value={String(count)}
-            onChange={onCountChange}
-            max={maxCount}
-            tone="card"
-          />
+      <div className="space-y-3">
+        <div className="flex items-center gap-2">
+          <StepButton label="One question fewer" disabled={!canLess} onClick={() => onCountChange(String(count - 1))}>
+            <Minus className="h-6 w-6" aria-hidden />
+          </StepButton>
+          <div className="min-w-0 flex-1 text-center">
+            <button
+              type="button"
+              data-testid="quiz-count"
+              aria-label={`${count} ${word}. Change how many`}
+              aria-expanded={countOpen}
+              aria-controls={countId}
+              onClick={() => setCountOpen(open => !open)}
+              className="inline-flex max-w-full items-baseline gap-2 whitespace-nowrap rounded-xl px-1 font-bold leading-none tracking-tight transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+            >
+              <span className="text-6xl font-extrabold tabular-nums">{count}</span>
+              <span className="text-[28px]">{word}</span>
+            </button>
+            {estimate && <p className="mt-1.5 text-base font-semibold text-white/70">{estimate}</p>}
+          </div>
+          <StepButton label="One question more" disabled={!canMore} onClick={() => onCountChange(String(count + 1))}>
+            <Plus className="h-6 w-6" aria-hidden />
+          </StepButton>
         </div>
-      )}
-
-      <div className="flex flex-wrap gap-2">
-        {pills.map(label => (
-          <button
-            key={label}
-            type="button"
-            data-testid="quiz-pill"
-            aria-label={`${label}. Change topics`}
-            aria-haspopup="dialog"
-            onClick={() => onChange('topics')}
-            className={cn(
-              'max-w-full truncate rounded-full bg-white/20 px-3 py-1.5 text-sm font-semibold text-white underline decoration-white/70 underline-offset-4 transition-colors',
-              'hover:bg-white/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white',
-            )}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
-
-      <div className="space-y-2 border-t border-white/20 pt-3">
-        <div role="group" aria-label="Quiz settings" className="grid grid-cols-2 gap-2">
-          <SettingButton
-            icon={<DifficultyBars levels={levels} />}
-            label={difficultySummary(levels)}
-            aria-label={`Difficulty: ${difficultySummary(levels)}. Change`}
-            aria-expanded={inline === 'difficulty'}
-            aria-controls="quiz-card-difficulty"
-            onClick={() => toggle('difficulty')}
-            trailing={
-              <ChevronDown
-                className={cn('h-4 w-4 shrink-0 opacity-70 transition-transform', inline === 'difficulty' && 'rotate-180')}
-                aria-hidden
-              />
-            }
-          />
-          <SettingSwitch
-            on={timed}
-            onToggle={() => onTimedChange(!timed)}
-            name="Timed"
-            onIcon={<Timer className="h-5 w-5" aria-hidden />}
-            offIcon={<TimerOff className="h-5 w-5" aria-hidden />}
-            onLabel="Timed"
-            offLabel="Untimed"
-            title={timed && timedPace ? `Exam pace: ${timedPace}` : undefined}
-          />
-          <SettingSwitch
-            on={revealDuring}
-            onToggle={() => onRevealDuringChange(!revealDuring)}
-            name="Show answers after each question"
-            onIcon={<Eye className="h-5 w-5" aria-hidden />}
-            offIcon={<EyeOff className="h-5 w-5" aria-hidden />}
-            onLabel="Answers as you go"
-            offLabel="Answers at the end"
-          />
-          <SettingSwitch
-            on={conceptLinks}
-            onToggle={() => onConceptLinksChange(!conceptLinks)}
-            name="Tap concepts to read them"
-            onIcon={<BookOpen className="h-5 w-5" aria-hidden />}
-            offIcon={<BookX className="h-5 w-5" aria-hidden />}
-            onLabel="Concept links on"
-            offLabel="Concept links off"
-          />
-        </div>
-
-        {inline === 'difficulty' && (
-          <div id="quiz-card-difficulty" className="pt-1">
-            <DifficultyChoice levels={levels} onChange={onLevelsChange} counts={levelCounts} tone="card" />
+        {countOpen && (
+          <div id={countId}>
+            <CountChoice
+              options={countOptions}
+              value={String(count)}
+              onChange={onCountChange}
+              max={maxCount}
+              tone="card"
+            />
           </div>
         )}
       </div>
+
+      <CardSection title="Topics">
+        <button
+          type="button"
+          data-testid="quiz-pill"
+          aria-label={`${topics}. Change topics`}
+          aria-haspopup="dialog"
+          onClick={() => onChange('topics')}
+          className="flex h-12 w-full items-center gap-2 rounded-2xl bg-black/15 px-4 text-left text-[15px] font-semibold transition-colors hover:bg-black/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+        >
+          <span className="min-w-0 flex-1 truncate">{topics}</span>
+          <ChevronRight className="h-5 w-5 shrink-0 opacity-70" aria-hidden />
+        </button>
+      </CardSection>
+
+      <CardSection title="Difficulty">
+        <DifficultyChoice levels={levels} onChange={onLevelsChange} counts={levelCounts} tone="card" />
+      </CardSection>
+
+      <CardSection title="While you answer">
+        <div role="group" aria-label="While you answer" className="flex flex-wrap gap-2">
+          <SettingChip
+            on={timed}
+            onToggle={() => onTimedChange(!timed)}
+            name="Timed"
+            icon={<Timer className="h-[18px] w-[18px]" aria-hidden />}
+            label="Timed"
+            title={timedPace ? `Exam pace: ${timedPace}` : undefined}
+          />
+          <SettingChip
+            on={revealDuring}
+            onToggle={() => onRevealDuringChange(!revealDuring)}
+            name="Show answers after each question"
+            icon={<Eye className="h-[18px] w-[18px]" aria-hidden />}
+            label="Answers as you go"
+          />
+          <SettingChip
+            on={conceptLinks}
+            onToggle={() => onConceptLinksChange(!conceptLinks)}
+            name="Tap concepts to read them"
+            icon={<BookOpen className="h-[18px] w-[18px]" aria-hidden />}
+            label="Concept links"
+          />
+        </div>
+      </CardSection>
 
       {empty && (
         <p className="text-sm text-white/80">No questions match. Pick other topics or difficulties.</p>
@@ -220,63 +196,59 @@ export function QuizHeroCard({
   )
 }
 
-const SETTING_CLASS =
-  'flex min-h-11 min-w-0 items-center gap-2 rounded-xl px-3 py-1.5 text-left text-sm font-semibold leading-tight text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white'
+/** A labelled part of the card: a small-capitals heading over its choice. */
+function CardSection({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <div className="space-y-2">
+      <h3 className="text-xs font-semibold uppercase tracking-wide text-white/70">{title}</h3>
+      {children}
+    </div>
+  )
+}
 
-/** A setting with a value rather than a switch: icon, value, chevron. */
-function SettingButton({
-  icon,
+/** The round − and + either side of the count. */
+function StepButton({
   label,
-  trailing,
+  disabled,
   onClick,
-  ...aria
+  children,
 }: {
-  icon: ReactNode
   label: string
-  trailing?: ReactNode
+  disabled: boolean
   onClick: () => void
-  'aria-label': string
-  'aria-expanded': boolean
-  'aria-controls': string
+  children: ReactNode
 }) {
   return (
     <button
       type="button"
-      data-testid="quiz-setting"
+      aria-label={label}
+      disabled={disabled}
       onClick={onClick}
-      className={cn(SETTING_CLASS, 'bg-white/20 hover:bg-white/30')}
-      {...aria}
+      className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/20 text-white transition-colors enabled:hover:bg-white/30 disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
     >
-      <span className="shrink-0">{icon}</span>
-      <span className="min-w-0 flex-1">{label}</span>
-      {trailing}
+      {children}
     </button>
   )
 }
 
 /**
- * An on/off setting, switched by a tap. Its words say what it is set to; off
- * is drawn hollow — no fill, a dashed edge, the struck icon dimmed — so off
- * reads at a glance, not only by the slash in the glyph.
+ * An on/off setting as a chip, switched by a tap: solid white when on, hollow
+ * with a dashed edge when off, so the state reads at a glance.
  */
-function SettingSwitch({
+function SettingChip({
   on,
   onToggle,
   name,
-  onIcon,
-  offIcon,
-  onLabel,
-  offLabel,
+  icon,
+  label,
   title,
 }: {
   on: boolean
   onToggle: () => void
   /** The switch's accessible name, the same as the sheet's row. */
   name: string
-  onIcon: ReactNode
-  offIcon: ReactNode
-  onLabel: string
-  offLabel: string
+  icon: ReactNode
+  label: string
   title?: string
 }) {
   return (
@@ -291,14 +263,14 @@ function SettingSwitch({
       title={title}
       onClick={onToggle}
       className={cn(
-        SETTING_CLASS,
+        'inline-flex h-10 items-center gap-2 rounded-full border-[1.5px] px-3.5 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-transparent',
         on
-          ? 'bg-white/20 hover:bg-white/30'
-          : 'border-[1.5px] border-dashed border-white/50 bg-transparent hover:bg-white/10 [&>span:first-child]:opacity-60',
+          ? 'border-white bg-white text-black'
+          : 'border-dashed border-white/50 text-white/80 hover:bg-white/10 hover:text-white',
       )}
     >
-      <span className="shrink-0">{on ? onIcon : offIcon}</span>
-      <span className={cn('min-w-0 flex-1', !on && 'text-white/80')}>{on ? onLabel : offLabel}</span>
+      {icon}
+      {label}
     </button>
   )
 }

@@ -30,6 +30,8 @@ import {
   ToolInputError as CalculatorInputError,
   MAX_BATCH_RUNS,
   describeTool,
+  filingsInstalled,
+  installFilings,
   runBatch,
   runPath,
   runTool,
@@ -58,7 +60,7 @@ export const INSTRUCTIONS = `Actuarial Notes is a set of study notes for the SOA
 - Every result carries a fact-check status. Nearly every practice question has been checked against its source; most concept and source pages have not, and read "Not fact checked". When an exact figure, formula or rule on an unchecked page matters, say so and point to the official reading. A "Known issue" or "Disputed" page has an unresolved problem: say so before relying on it.
 - To quiz someone, get_practice_questions returns questions without their answers. Ask one at a time, wait for the student's answer, then call check_answer to mark it and show the official solution. Never reveal or hint at an answer first.
 - An exam marked "in development" has a syllabus outline, few written concept pages and little or no question bank.
-- For any actuarial calculation the calculators cover (development factors, chain ladder, Bornhuetter-Ferguson, Benktander, Cape Cod, on-level factors, trend fits (with intervals, exclusions, level shifts and breaks), frequency × severity and two-step trends, trend factors, expense provisions, indicated rates, deductibles and limited expected values, distribution probabilities, credibility, interest, annuities, loans, bonds, duration and immunization), use list_tools / describe_tool / run_tool rather than doing the arithmetic yourself. For published figures — US and Canadian life tables, CPI and wage indexes, US Treasury yield curves — the Data Sources tools (area "data") read the publisher's own table and name its edition and licence; never quote such a figure from memory. Each tool does one thing; chain them by passing one result into the next. A result's judgments are choices the user owns: say which were left at their default and ask before treating a default as a selection. Quote its warnings, and give the user its app_url to open the same run.
+- For any actuarial calculation the calculators cover (development factors, chain ladder, Bornhuetter-Ferguson, Benktander, Cape Cod, on-level factors, trend fits (with intervals, exclusions, level shifts and breaks), frequency × severity and two-step trends, trend factors, expense provisions, indicated rates, deductibles and limited expected values, distribution probabilities, credibility, interest, annuities, loans, bonds, duration and immunization, and the MCT ratio), use list_tools / describe_tool / run_tool rather than doing the arithmetic yourself. For published figures — US and Canadian life tables, CPI and wage indexes, US Treasury yield curves, and what each Canadian P&C insurer filed with OSFI on its MCT summary — the Data Sources tools (area "data") read the publisher's own table and name its edition and licence; never quote such a figure from memory. Each tool does one thing; chain them by passing one result into the next. A result's judgments are choices the user owns: say which were left at their default and ask before treating a default as a selection. Quote its warnings, and give the user its app_url to open the same run.
 - This is study material, not professional actuarial advice.`
 
 const STATUS_WORDS = {
@@ -619,6 +621,9 @@ export const TOOLS = [
 
 const AREA_IDS = TOOL_AREAS.map(a => a.id)
 
+/** The MCP tools that run the calculators, which may read OSFI's filings. */
+const CALCULATOR_TOOLS = new Set(['list_tools', 'describe_tool', 'run_tool'])
+
 function calculator(args) {
   const id = text(args, 'tool', { required: true, max: 120 })
   const spec = toolById(id)
@@ -1017,10 +1022,20 @@ Use only what the syllabus says; don't invent readings or weights. Mention that 
 // ── The server ───────────────────────────────────────────────────────────────
 
 /**
- * @param {{ loadIndex: () => Promise<ReturnType<import('./knowledgeBase.js').indexKnowledgeBase>>, siteUrl?: string }} options
+ * @param {{ loadIndex: () => Promise<ReturnType<import('./knowledgeBase.js').indexKnowledgeBase>>, loadFilings?: () => Promise<unknown>, siteUrl?: string }} options
  */
-export function createActuarialNotesServer({ loadIndex, siteUrl = DEFAULT_SITE_URL }) {
+export function createActuarialNotesServer({ loadIndex, loadFilings, siteUrl = DEFAULT_SITE_URL }) {
   const site = siteUrl.replace(/\/+$/, '')
+  // OSFI's filings, installed into the engine before a calculator runs. A
+  // failed load leaves them out: the tools that read them then say so.
+  const ensureFilings = async () => {
+    if (!loadFilings || filingsInstalled()) return
+    try {
+      installFilings(await loadFilings())
+    } catch {
+      // Insurer Return answers that the filings aren't loaded.
+    }
+  }
   const index = async () => {
     try {
       return await loadIndex()
@@ -1059,6 +1074,7 @@ export function createActuarialNotesServer({ loadIndex, siteUrl = DEFAULT_SITE_U
         // A calculator needs the notes only to link its method pages, so it
         // still answers — unlinked — when the knowledge base can't be loaded.
         const ix = tool.standalone ? await index().catch(() => null) : await index()
+        if (CALCULATOR_TOOLS.has(params.name)) await ensureFilings()
         try {
           return await tool.run(isObject(params.arguments) ? params.arguments : {}, ix, { site })
         } catch (err) {

@@ -4,14 +4,14 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:bf28696d2990a1c7431c5394e6e60e6af1b398e7001a6c7805d1951f880eda1d
+  content_hash: sha256:23d1835a382f0eb71c827260747061705f3ec7d25c2f69e4b89c0700f6b4029d
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Associate of the Society of Actuaries (ASA).md
 ---
 
-An **Associate of the Society of Actuaries (ASA)** is an actuary who has finished the basic education of the Society of Actuaries (SOA), the professional body for actuaries in life and health insurance, pensions and investments. It is the first of the SOA's two designations, and a [[Fellow of the Society of Actuaries (FSA)|Fellow]] holds it first.
+An **Associate of the Society of Actuaries (ASA)** is an actuary who has finished the basic education of the Society of Actuaries (SOA), the professional body for actuaries in life and health insurance, pensions and investments. An ASA is the first requirement for an [[Fellow of the Society of Actuaries (FSA)|FSA]].
 
 %%credential-path ASA%%
 

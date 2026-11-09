@@ -1,14 +1,15 @@
 // The **from chip** every input of the tool template carries
 // (docs/tool-template-v2.md §3.4): where its value came from, in one shape for
 // every origin — `● Default`, `● Yours`, `▤ AIRB, Alberta` (with *Not fact
-// checked* in amber beside it until it is) and `↳ Trend Fit`. Colour belongs
+// checked* in amber beside it until it is) and `↳ Trend Fit`, and a value filed with OSFI (`OSFI · Intact Insurance
+// Company, Q2 2026 · line 50`, a landmark for its mark). Colour belongs
 // to the exam a tool is in, so a chip is told by its mark and its words; only
 // "Not fact checked" keeps its amber, because it is a warning.
 //
 // Given `onClick`, the chip is a button: a published or linked chip opens its
 // explanation in place, Default and Yours open the edit sheet.
 
-import { BookOpen, ChevronDown, CornerDownRight } from 'lucide-react'
+import { BookOpen, ChevronDown, CornerDownRight, Landmark } from 'lucide-react'
 import type { ValueSource } from '@/lib/toolTemplate'
 import { cn } from '@/lib/utils'
 
@@ -23,6 +24,8 @@ function ChipFace({ source }: { source: ValueSource }) {
       return <><span className="h-1.5 w-1.5 shrink-0 rounded-full bg-current" aria-hidden />Yours</>
     case 'published':
       return <><BookOpen className="h-3 w-3 shrink-0" aria-hidden /><span className="truncate">{source.label}</span></>
+    case 'filed':
+      return <><Landmark className="h-3 w-3 shrink-0" aria-hidden /><span className="truncate">{source.label}</span></>
     case 'linked':
       return <><CornerDownRight className="h-3 w-3 shrink-0" aria-hidden /><span className="truncate">{source.label}</span></>
   }
@@ -33,6 +36,7 @@ const TITLES: Record<ValueSource['kind'], string> = {
   yours: 'Your own value',
   published: 'A published figure, from the Assumptions Bank',
   linked: 'Taken from another tool',
+  filed: 'As filed with OSFI',
 }
 
 export function SourceTag({ source, className, onClick, open }: {
@@ -51,14 +55,14 @@ export function SourceTag({ source, className, onClick, open }: {
       onClick={onClick}
       className={cn(cls, 'transition-colors hover:bg-muted')}
       data-source={source.kind}
-      title={TITLES[source.kind]}
+      title={source.kind === 'filed' ? source.title : TITLES[source.kind]}
       aria-expanded={open}
     >
       <ChipFace source={source} />
       {open !== undefined && <ChevronDown className={cn('h-3 w-3 shrink-0 transition-transform', open && 'rotate-180')} aria-hidden />}
     </button>
   ) : (
-    <span className={cls} data-source={source.kind} title={TITLES[source.kind]}>
+    <span className={cls} data-source={source.kind} title={source.kind === 'filed' ? source.title : TITLES[source.kind]}>
       <ChipFace source={source} />
     </span>
   )

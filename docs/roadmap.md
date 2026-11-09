@@ -549,7 +549,10 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   the IFRS 4 history; then Life. Seven decisions (D-OSFI-1–7); the licence is settled.
   *(Proposed 2026-11-08.)* **Phase 0 started 2026-11-09:** `scripts/osfi_extract.py` pages the
   API into hashed quarterly snapshots (Q1 2023 – Q2 2026 extracted), and every filed MCT ratio
-  reproduces from its own lines.
+  reproduces from its own lines. Three designs for Insurer Return and MCT Ratio (phase 1) are in
+  `docs/osfi-tools-design.md`, recommending filed cells as a source an input can take. **Design C
+  step 1 built 2026-11-09:** Insurer Return and MCT Ratio over PC4's summary page, Q1 2023 – Q2
+  2026, every filed ratio reproduced (§8 of that doc).
 
 - ~~**C20: answerability as a content check, then a gate.**~~ Ranked 2026-10-25 and built as G8:
   see C20 in §4.3 and D29. The proposal as written: `simulations/check-answerable`
@@ -1044,6 +1047,7 @@ Every planning document in the repo, what it is for, and how healthy it is. A do
 | `docs/assumptions-bank.md` | Subplan: the Assumptions Bank, published figures and facts as data for the tools, Cowork and the connector | A9 | Active. Phases 0–1 built | 2026-11-08 |
 | `docs/tool-template-v2.md` | Build spec: the tool page's second template (navigation, connection, published figures in place) | A10 (§3.4) | Built; §8 records the build; mock-ups in `tool-template-v2-mockups.html` | 2026-11-09 |
 | `docs/osfi-pc-data.md` | Proposal: OSFI's insurer filings (open-data API + Beyond 20/20 archive) across Tools, the connector and Cowork | A11 (§3.4) | Proposed; Phase 0 started | 2026-11-09 |
+| `docs/osfi-tools-design.md` | Three designs for Insurer Return and MCT Ratio, and what was built | A11 (§3.4) | Design C step 1 built | 2026-11-09 |
 | `docs/actuaria-online.md` | Build spec: Actuaria | X3 | Phases 0–3 built; Phase 4 parked | 2026-10-05 |
 | `docs/quiz-battle-redesign.md` | Plan and build spec: Quiz Battle as a card game, the pairs draft, stats and tiers | X10 (§3.4), D36 | Active: phases 1–2 built, phase 3 open | 2026-11-09 |
 | `docs/tutor.md` | Plan and build spec: the Tutor | L8 | Phase 1 built; Preview | 2026-10-18 |

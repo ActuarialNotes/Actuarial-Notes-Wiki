@@ -25,7 +25,7 @@
 
 import { ErrorCode, handleMcpHttp } from './_mcp/protocol.js'
 import { DEFAULT_SITE_URL, createActuarialNotesServer } from './_mcp/server.js'
-import { knowledgeBaseUrl, loadIndex } from './_mcp/load.js'
+import { filingsUrl, knowledgeBaseUrl, loadFilings, loadIndex } from './_mcp/load.js'
 
 const RATE_WINDOW_MS = 60 * 1000
 const DEFAULT_RATE_LIMIT = 600
@@ -123,6 +123,7 @@ export default async function handler(req, res) {
 
   const server = createActuarialNotesServer({
     loadIndex: () => loadIndex(knowledgeBaseUrl(req.headers)),
+    loadFilings: () => loadFilings(filingsUrl(req.headers)),
     siteUrl: process.env.MCP_PUBLIC_SITE_URL || DEFAULT_SITE_URL,
   })
   const { body, bodyError } = readBody(req)

@@ -15,7 +15,9 @@ export type Draft = Record<string, unknown>
 export function initialDraft(spec: ToolSpec, given?: unknown): Draft {
   const defaults = defaultInput(spec) as Draft
   const draft: Draft = {}
-  for (const f of spec.fields) if (!f.judgment) draft[f.key] = defaults[f.key]
+  // A default not known yet (a choice read off OSFI's filings before they have
+  // loaded is '') stays out of the draft, so it is read when it is drawn.
+  for (const f of spec.fields) if (!f.judgment && defaults[f.key] !== '') draft[f.key] = defaults[f.key]
   if (given && typeof given === 'object' && !Array.isArray(given)) {
     for (const f of spec.fields) {
       const v = (given as Draft)[f.key]
@@ -58,10 +60,12 @@ export function groupSources(sources: SourceRef[]): SourceLink[] {
   const out: SourceLink[] = [...docs.values()].map(refs => {
     const first = refs[0]
     const short = shortSource(first.resource ?? first.title)
-    const label = refs.length === 1
+    const label = first.page === undefined
+      ? short
+      : refs.length === 1
       ? `${short}, ${first.locator.replace('Chapter ', 'Ch. ')}, p. ${first.page}`
       : `${short}, pp. ${refs.map(r => r.page).join(', ')}`
-    return { kind: 'document', url: first.url, title: first.title, label, page: first.pdfPage, subtitle: refs.map(r => `${r.locator}, p. ${r.page}`).join('; ') }
+    return { kind: 'document', url: first.url, title: first.title, label, page: first.pdfPage, subtitle: refs.map(r => (r.page === undefined ? r.locator : `${r.locator}, p. ${r.page}`)).join('; ') }
   })
   // One line per set of questions — "SOA Exam FM sample questions 26, 71",
   // "CAS Exam MAS-I, Fall 2019, questions 1, 23" — each opening them together in the quiz.

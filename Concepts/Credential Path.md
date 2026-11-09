@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:fc74e711ef633bf5d5bb4713139679b21ee910a3e70261eda173a93ca34a88c0
+  content_hash: sha256:8824b93d745dd6ffdd6dcac13ea503f4087ce99068dad523b4d1d68224aab8f4
   sources: []
   open_findings: 0
   open_critical: 0
@@ -17,9 +17,9 @@ A **Credential Path** is the sequence of exams, courses and experience an actuar
 
 ## Choosing a society
 
-The choice follows the kind of insurance you want to work in. The SOA's path leads to life and health insurance, pensions and investments. The CAS's leads to property and casualty insurance: auto, home, commercial liability, workers' compensation and the reinsurance behind them.
+Choose by the kind of work you want. The SOA's path leads to life and health insurance, pensions and investments. The CAS's leads to property and casualty insurance: auto, home, commercial liability, workers' compensation and the reinsurance behind them.
 
-The SOA and the CAS share their first two exams, [[Exam P-1 (SOA)|Probability]] and [[Exam FM-2 (SOA)|Financial Mathematics]], and a pass counts toward either. Many candidates choose a society after they are hired, because the job decides it.
+The SOA and the CAS share their first two exams, [[Exam P-1 (SOA)|Probability]] and [[Exam FM-2 (SOA)|Financial Mathematics]], and a pass counts toward either, so you can start before you choose. Many candidates choose once they are hired, since an employer usually works in one or the other.
 
 ## Associate, then Fellow
 
@@ -37,7 +37,7 @@ The CIA's own path starts from a CIA-accredited degree. An associate-level crede
 
 ## Keeping a credential
 
-A credential has to be kept current once it is held. CAS members who provide actuarial services meet its continuing-education policy and attest each year, and SOA members attest each year to its CPD requirement. The CIA asks for 80 hours of continuing professional development over a rolling two years, at least 30 of them guided.
+CAS members who provide actuarial services meet its continuing-education policy and attest each year, and SOA members attest each year to its CPD requirement. The CIA asks for 80 hours of continuing professional development over a rolling two years, at least 30 of them guided.
 
 ## Further Reading
 - [Exams and Requirements](https://www.soa.org/education/exam-req/) — Society of Actuaries

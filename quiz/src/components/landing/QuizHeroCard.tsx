@@ -1,22 +1,26 @@
-import type { ReactNode } from 'react'
-import { BookOpen, BookX, Eye, EyeOff, Play, Timer, TimerOff } from 'lucide-react'
+import { useId, useState, type ReactNode } from 'react'
+import { BookOpen, ChevronRight, Eye, Minus, Play, Plus, Timer } from 'lucide-react'
+import type { SegmentedOption } from '@/components/ui/SegmentedControl'
 import type { Difficulty } from '@/lib/parser'
-import { difficultySummary } from '@/lib/quizSetup'
 import { cn } from '@/lib/utils'
-import { DifficultyBars } from '@/components/QuizSettingsButton'
+import { CountChoice, DifficultyChoice } from './QuizSetupSheet'
 
 /** The part of the setup sheet a tap on the card opens to. */
 export type SetupSection = 'topics' | 'count' | 'difficulty' | 'sitting'
 
 /**
- * The quiz setup screen's card: the reader's own quiz, ready to start. The
- * count is the headline — itself a button, opening the sheet at *How many* —
- * with the time it should take beside it. Under them a pill for each topic,
- * then the settings as a row of icons (difficulty, timed, when answers show,
- * whether concepts can be tapped — an off one drawn hollow):
- * the topics are names worth reading, the settings are states worth glancing
- * at. Every one of them opens the setup sheet at its own section
- * (`onChange`). One action, Start, white on the exam's colour.
+ * The quiz setup screen's card: the reader's own quiz, ready to start, with
+ * every choice on it set in place.
+ *
+ * The headline is the count, "3 questions", between a − and a + that step it
+ * by one; the time it should take sits under it. Tapping the count opens the
+ * presets and a field for any number under it. Then three labelled sections:
+ * **Topics**, a field naming what is picked, which opens the setup sheet at
+ * its topic list (the one choice too long for the card); **Difficulty**, the
+ * three levels as a segmented row with how many questions each holds; and
+ * **While you answer**, the on/off settings as chips that fill white when on
+ * and go hollow and dashed when off. One action, Start, white on the exam's
+ * colour.
  *
  * The card is painted in the exam's opaque accent (`--exam-accent-vivid`),
  * which carries white text in either theme; an exam with no accent falls back
@@ -26,10 +30,19 @@ export function QuizHeroCard({
   count,
   estimate,
   pills,
+  countOptions,
+  maxCount,
+  onCountChange,
   levels,
+  levelCounts,
+  onLevelsChange,
   timed,
+  timedPace,
+  onTimedChange,
   revealDuring,
+  onRevealDuringChange,
   conceptLinks,
+  onConceptLinksChange,
   onChange,
   onStart,
 }: {
@@ -37,94 +50,129 @@ export function QuizHeroCard({
   count: number
   /** "~53 min", or null when the exam has no pace on file. */
   estimate: string | null
-  /** The topics' pills, in order — each opens the sheet at the topics. */
+  /** The topics picked, as the card names them ("All topics" when none). */
   pills: string[]
+  /** The preset counts, the same the sheet offers. */
+  countOptions: SegmentedOption<string>[]
+  /** What the pool holds; 0 while unknown. */
+  maxCount: number
+  onCountChange: (value: string) => void
   /** The difficulties the draw is from. */
   levels: Difficulty[]
+  /** How many questions each difficulty holds. */
+  levelCounts?: Record<Difficulty, number>
+  onLevelsChange: (next: Difficulty[]) => void
   timed: boolean
+  /** The exam's pace, e.g. "5:20 per question". */
+  timedPace?: string
+  onTimedChange: (next: boolean) => void
   /** Answers marked as each is confirmed (`during`), or held for the end. */
   revealDuring: boolean
+  onRevealDuringChange: (next: boolean) => void
   /** Concepts a question names can be tapped to read. */
   conceptLinks: boolean
+  onConceptLinksChange: (next: boolean) => void
+  /** Opens the setup sheet at a section (the topics). */
   onChange: (section: SetupSection) => void
   onStart: () => void
 }) {
+  const [countOpen, setCountOpen] = useState(false)
+  const countId = useId()
   const empty = count === 0
   const word = count === 1 ? 'question' : 'questions'
+  const topics = pills.join(', ')
+  const canLess = count > 1
+  const canMore = count > 0 && (maxCount === 0 || count < maxCount)
   return (
     <section
       aria-label="Your quiz"
-      className="space-y-4 rounded-3xl p-5 text-white shadow-sm"
+      className="space-y-5 rounded-3xl p-5 text-white shadow-sm"
       style={{ backgroundColor: 'var(--exam-accent-vivid, #4f46e5)' }}
     >
-      <div className="flex items-center gap-4">
+      <div className="space-y-3">
+        <div className="flex items-center gap-2">
+          <StepButton label="One question fewer" disabled={!canLess} onClick={() => onCountChange(String(count - 1))}>
+            <Minus className="h-6 w-6" aria-hidden />
+          </StepButton>
+          <div className="min-w-0 flex-1 text-center">
+            <button
+              type="button"
+              data-testid="quiz-count"
+              aria-label={`${count} ${word}. Change how many`}
+              aria-expanded={countOpen}
+              aria-controls={countId}
+              onClick={() => setCountOpen(open => !open)}
+              className="inline-flex max-w-full items-baseline gap-2 whitespace-nowrap rounded-xl px-1 font-bold leading-none tracking-tight transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+            >
+              <span className="text-6xl font-extrabold tabular-nums">{count}</span>
+              <span className="text-[28px]">{word}</span>
+            </button>
+            {estimate && <p className="mt-1.5 text-base font-semibold text-white/70">{estimate}</p>}
+          </div>
+          <StepButton label="One question more" disabled={!canMore} onClick={() => onCountChange(String(count + 1))}>
+            <Plus className="h-6 w-6" aria-hidden />
+          </StepButton>
+        </div>
+        {countOpen && (
+          <div id={countId}>
+            <CountChoice
+              options={countOptions}
+              value={String(count)}
+              onChange={onCountChange}
+              max={maxCount}
+              tone="card"
+            />
+          </div>
+        )}
+      </div>
+
+      <CardSection title="Topics">
         <button
           type="button"
-          data-testid="quiz-count"
-          aria-label={`${count} ${word}. Change how many`}
+          data-testid="quiz-pill"
+          aria-label={`${topics}. Change topics`}
           aria-haspopup="dialog"
-          onClick={() => onChange('count')}
-          className="-mx-1 rounded-xl px-1 text-6xl font-bold leading-none tracking-tight tabular-nums transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+          onClick={() => onChange('topics')}
+          className="flex h-12 w-full items-center gap-2 rounded-2xl bg-black/15 px-4 text-left text-[15px] font-semibold transition-colors hover:bg-black/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
         >
-          {count}
+          <span className="min-w-0 flex-1 truncate">{topics}</span>
+          <ChevronRight className="h-5 w-5 shrink-0 opacity-70" aria-hidden />
         </button>
-        <span className="min-w-0 text-xl font-bold leading-tight">
-          <span className="block">{word}</span>
-          {estimate && <span className="block opacity-60">{estimate}</span>}
-        </span>
-      </div>
+      </CardSection>
 
-      <div className="flex flex-wrap gap-2">
-        {pills.map(label => (
-          <button
-            key={label}
-            type="button"
-            data-testid="quiz-pill"
-            aria-label={`${label}. Change topics`}
-            aria-haspopup="dialog"
-            onClick={() => onChange('topics')}
-            className={cn(
-              'max-w-full truncate rounded-full bg-white/20 px-3 py-1.5 text-sm font-semibold text-white underline decoration-white/70 underline-offset-4 transition-colors',
-              'hover:bg-white/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white',
-            )}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
+      <CardSection title="Difficulty">
+        <DifficultyChoice levels={levels} onChange={onLevelsChange} counts={levelCounts} tone="card" />
+      </CardSection>
 
-      <div role="group" aria-label="Quiz settings" className="flex gap-2 border-t border-white/20 pt-3">
-        <SettingIcon
-          label={`Difficulty: ${difficultySummary(levels)}`}
-          onClick={() => onChange('difficulty')}
-        >
-          <DifficultyBars levels={levels} />
-        </SettingIcon>
-        <SettingIcon
-          label={timed ? 'Timed' : 'Untimed'}
-          on={timed}
-          onClick={() => onChange('sitting')}
-        >
-          {timed ? <Timer className="h-[22px] w-[22px]" aria-hidden /> : <TimerOff className="h-[22px] w-[22px]" aria-hidden />}
-        </SettingIcon>
-        <SettingIcon
-          label={revealDuring ? 'Answers after each question' : 'Answers at the end'}
-          on={revealDuring}
-          onClick={() => onChange('sitting')}
-        >
-          {revealDuring ? <Eye className="h-[22px] w-[22px]" aria-hidden /> : <EyeOff className="h-[22px] w-[22px]" aria-hidden />}
-        </SettingIcon>
-        <SettingIcon
-          label={conceptLinks ? 'Tap concepts to read them' : 'Concept links off'}
-          on={conceptLinks}
-          onClick={() => onChange('sitting')}
-        >
-          {conceptLinks ? <BookOpen className="h-[22px] w-[22px]" aria-hidden /> : <BookX className="h-[22px] w-[22px]" aria-hidden />}
-        </SettingIcon>
-      </div>
+      <CardSection title="While you answer">
+        <div role="group" aria-label="While you answer" className="flex flex-wrap gap-2">
+          <SettingChip
+            on={timed}
+            onToggle={() => onTimedChange(!timed)}
+            name="Timed"
+            icon={<Timer className="h-[18px] w-[18px]" aria-hidden />}
+            label="Timed"
+            title={timedPace ? `Exam pace: ${timedPace}` : undefined}
+          />
+          <SettingChip
+            on={revealDuring}
+            onToggle={() => onRevealDuringChange(!revealDuring)}
+            name="Show answers after each question"
+            icon={<Eye className="h-[18px] w-[18px]" aria-hidden />}
+            label="Answers as you go"
+          />
+          <SettingChip
+            on={conceptLinks}
+            onToggle={() => onConceptLinksChange(!conceptLinks)}
+            name="Tap concepts to read them"
+            icon={<BookOpen className="h-[18px] w-[18px]" aria-hidden />}
+            label="Concept links"
+          />
+        </div>
+      </CardSection>
 
       {empty && (
-        <p className="text-sm text-white/80">No questions match. Tap a topic or the difficulty to change them.</p>
+        <p className="text-sm text-white/80">No questions match. Pick other topics or difficulties.</p>
       )}
 
       <button
@@ -148,40 +196,81 @@ export function QuizHeroCard({
   )
 }
 
-/**
- * One setting as an icon button: no text, its state in its name. An on/off
- * setting that is off is drawn hollow — no fill, a dashed edge, the struck
- * icon dimmed — so off reads at a glance, not only by the slash in the glyph.
- */
-function SettingIcon({
+/** A labelled part of the card: a small-capitals heading over its choice. */
+function CardSection({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <div className="space-y-2">
+      <h3 className="text-xs font-semibold uppercase tracking-wide text-white/70">{title}</h3>
+      {children}
+    </div>
+  )
+}
+
+/** The round − and + either side of the count. */
+function StepButton({
   label,
-  on = true,
+  disabled,
   onClick,
   children,
 }: {
   label: string
-  /** Omitted for a setting with a value rather than a switch (difficulty). */
-  on?: boolean
+  disabled: boolean
   onClick: () => void
   children: ReactNode
 }) {
   return (
     <button
       type="button"
-      data-testid="quiz-setting"
-      data-on={on}
-      aria-label={`${label}. Change`}
-      title={label}
-      aria-haspopup="dialog"
+      aria-label={label}
+      disabled={disabled}
       onClick={onClick}
-      className={cn(
-        'flex h-11 w-11 items-center justify-center rounded-xl text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white',
-        on
-          ? 'bg-white/20 hover:bg-white/30'
-          : 'border-[1.5px] border-dashed border-white/50 bg-transparent hover:bg-white/10 [&>svg]:opacity-60',
-      )}
+      className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/20 text-white transition-colors enabled:hover:bg-white/30 disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
     >
       {children}
+    </button>
+  )
+}
+
+/**
+ * An on/off setting as a chip, switched by a tap: solid white when on, hollow
+ * with a dashed edge when off, so the state reads at a glance.
+ */
+function SettingChip({
+  on,
+  onToggle,
+  name,
+  icon,
+  label,
+  title,
+}: {
+  on: boolean
+  onToggle: () => void
+  /** The switch's accessible name, the same as the sheet's row. */
+  name: string
+  icon: ReactNode
+  label: string
+  title?: string
+}) {
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={on}
+      aria-label={name}
+      data-testid="quiz-setting"
+      data-on={on}
+      data-sound="tick"
+      title={title}
+      onClick={onToggle}
+      className={cn(
+        'inline-flex h-10 items-center gap-2 rounded-full border-[1.5px] px-3.5 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-transparent',
+        on
+          ? 'border-white bg-white text-black'
+          : 'border-dashed border-white/50 text-white/80 hover:bg-white/10 hover:text-white',
+      )}
+    >
+      {icon}
+      {label}
     </button>
   )
 }

@@ -10,6 +10,13 @@ import { DIFFICULTY_LEVELS, toggleDifficultyLevel } from '@/lib/quizDifficulty'
 import { cn } from '@/lib/utils'
 
 /**
+ * Where a choice is drawn: in the sheet (on the page's own surface, picks in
+ * the exam's colour) or on the quiz card itself (white on the exam's colour,
+ * the pick inverted to solid white).
+ */
+export type ChoiceTone = 'sheet' | 'card'
+
+/**
  * The quiz setup screen's **sheet** — what a pill on the card, the Practice
  * exam tile and the Past papers tile open. It holds what the card only names:
  * the topics, how many questions, which difficulties and how the quiz is sat,
@@ -184,19 +191,23 @@ export function SheetSection({
  * colour, ending in a field for any other number. A number typed there is
  * held to `max` (what the pool holds) and picked as soon as it is a count; a
  * count that isn't one of the presets shows in the field, picked.
+ * `tone="card"` draws it on the quiz card, where it opens in place.
  */
 export function CountChoice({
   options,
   value,
   onChange,
   max,
+  tone = 'sheet',
 }: {
   options: SegmentedOption<string>[]
   value: string
   onChange: (value: string) => void
   /** The most the field takes; 0 while unknown, which caps nothing. */
   max?: number
+  tone?: ChoiceTone
 }) {
+  const onCard = tone === 'card'
   const custom = !options.some(o => o.value === value)
   const [draft, setDraft] = useState(custom ? value : '')
   const typing = useRef(false)
@@ -212,7 +223,7 @@ export function CountChoice({
   }
 
   return (
-    <div role="radiogroup" aria-label="Question count" className="flex gap-1 rounded-2xl bg-card p-1">
+    <div role="radiogroup" aria-label="Question count" className={cn('flex gap-1 rounded-2xl p-1', onCard ? 'bg-black/15' : 'bg-card')}>
       {options.map(o => {
         const on = o.value === value
         return (
@@ -227,8 +238,10 @@ export function CountChoice({
             className={cn(
               'h-11 min-w-0 flex-1 rounded-xl text-base font-semibold tabular-nums transition-colors',
               'disabled:cursor-not-allowed disabled:opacity-30',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring',
-              on ? PICK : 'text-muted-foreground enabled:hover:bg-muted enabled:hover:text-foreground',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset',
+              onCard
+                ? cn('focus-visible:ring-white', on ? 'bg-white text-black' : 'text-white/80 enabled:hover:bg-white/15 enabled:hover:text-white')
+                : cn('focus-visible:ring-ring', on ? PICK : 'text-muted-foreground enabled:hover:bg-muted enabled:hover:text-foreground'),
             )}
           >
             {o.label}
@@ -248,8 +261,10 @@ export function CountChoice({
         onBlur={() => { typing.current = false; setDraft(custom ? value : '') }}
         className={cn(
           'h-11 min-w-0 flex-[1.4] rounded-xl bg-transparent text-center text-base font-semibold tabular-nums outline-none transition-colors',
-          'placeholder:font-medium placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring',
-          custom ? PICK : 'ring-1 ring-inset ring-border',
+          'placeholder:font-medium focus-visible:ring-2 focus-visible:ring-inset',
+          onCard
+            ? cn('placeholder:text-white/70 focus-visible:ring-white', custom ? 'bg-white text-black' : 'text-white ring-1 ring-inset ring-white/40')
+            : cn('placeholder:text-muted-foreground focus-visible:ring-ring', custom ? PICK : 'ring-1 ring-inset ring-border'),
         )}
       />
     </div>
@@ -261,19 +276,28 @@ const LEVEL_NAME: Record<Difficulty, string> = { easy: 'Easy', medium: 'Medium',
 /**
  * Which difficulties: three pills, any combination, solid when in. A filter —
  * an unticked level is out of the pool — so each says how many it holds. The
- * last level in can't be taken out (lib/quizDifficulty.ts).
+ * last level in can't be taken out (lib/quizDifficulty.ts). On the quiz card
+ * (`tone="card"`) the three share one well, a segmented row.
  */
 export function DifficultyChoice({
   levels,
   onChange,
   counts,
+  tone = 'sheet',
 }: {
   levels: Difficulty[]
   onChange: (next: Difficulty[]) => void
   counts?: Record<Difficulty, number>
+  tone?: ChoiceTone
 }) {
+  const onCard = tone === 'card'
   return (
-    <div role="group" aria-label="Difficulty" className="flex flex-wrap gap-2">
+    <div
+      role="group"
+      aria-label="Difficulty"
+      // On the card the three sit in one well, a segmented row.
+      className={onCard ? 'flex gap-1 rounded-2xl bg-black/15 p-1' : 'flex flex-wrap gap-2'}
+    >
       {DIFFICULTY_LEVELS.map(level => {
         const on = levels.includes(level)
         const n = counts?.[level]
@@ -286,9 +310,12 @@ export function DifficultyChoice({
             data-sound="tick"
             onClick={() => onChange(toggleDifficultyLevel(levels, level))}
             className={cn(
-              'inline-flex h-10 items-center gap-1.5 rounded-full px-4 text-[15px] font-semibold transition-colors',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
-              on ? PICK : 'bg-card text-muted-foreground hover:text-foreground',
+              'inline-flex h-10 items-center font-semibold transition-colors',
+              onCard ? 'min-w-0 flex-1 justify-center gap-1 rounded-xl px-1.5 text-sm' : 'gap-1.5 rounded-full px-4 text-[15px]',
+              'focus-visible:outline-none focus-visible:ring-2',
+              onCard
+                ? cn('focus-visible:ring-white', on ? 'bg-white text-black' : 'text-white/80 hover:bg-white/10 hover:text-white')
+                : cn('focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background', on ? PICK : 'bg-card text-muted-foreground hover:text-foreground'),
             )}
           >
             {LEVEL_NAME[level]}

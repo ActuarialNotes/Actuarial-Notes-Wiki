@@ -102,6 +102,9 @@ export const QUANTITY_STEPS = {
   'loss-and-lae': 4,
   'variable-expense-and-profit': 4,
   'losses-and-profit': 1,
+  'capital-available': 1,
+  'minimum-capital': 2,
+  'capital-to-target': 4,
 } as const
 
 export type Quantity = keyof typeof QUANTITY_STEPS
@@ -264,6 +267,27 @@ const BUILDERS: Record<string, Builder> = {
       xTicks: [1, 5, 10, 20, 30].map(t => ({ x: t, label: `${t}y` })),
       xUnit: 'years',
       yUnit: 'percent',
+    }
+  },
+
+  // The line in every quarter the insurer filed, the chosen quarter marked:
+  // filed figures only, nothing joined across a quarter it didn't file.
+  'data.insurer_return': r => {
+    const periods = r.values.history_periods as string[]
+    const ratio = r.values.address === 'P100014001'
+    const ys = (r.values.history as number[]).map(v => (ratio ? v / 100 : v))
+    const at = periods.indexOf(String(r.values.period))
+    if (periods.length === 0) return null
+    const step = Math.max(1, Math.ceil(periods.length / 4))
+    return {
+      kind: 'lines',
+      series: [{ name: String(r.values.label), points: ys.map((y, k) => ({ x: k, y })), role: 'base' }],
+      dots: ys.map((y, k) => ({ x: k, y, role: 'muted' as Role, name: periods[k].replace(/^(\d{4})Q(\d)$/, 'Q$2 $1') })),
+      point: at >= 0 ? { x: at, y: ys[at], name: String(r.values.period).replace(/^(\d{4})Q(\d)$/, 'Q$2 $1') } : undefined,
+      xTicks: periods.flatMap((p, k) => (k % step === 0 ? [{ x: k, label: p.replace(/^\d{2}(\d{2})Q(\d)$/, 'Q$2 ’$1') }] : [])),
+      zero: !ratio,
+      xUnit: 'plain',
+      yUnit: ratio ? 'percent' : 'money',
     }
   },
 
@@ -565,6 +589,26 @@ const BUILDERS: Record<string, Builder> = {
   },
 
   // ── Financial mathematics ────────────────────────────────────────────────
+  // ── Risk and capital ─────────────────────────────────────────────────────
+
+  // Capital available beside what the test requires: the minimum, and on to
+  // the target level it is 1/1.5 of. The ratio is how far the first bar reaches
+  // against the minimum.
+  'capital.mct_ratio': r => {
+    const minimum = num(r.values.minimum)
+    return {
+      kind: 'split',
+      bars: [
+        { name: 'Required', parts: [
+          { name: 'Minimum', value: minimum, role: 'base', quantity: 'minimum-capital', symbol: 'MCR' },
+          { name: 'To target', value: num(r.values.target) - minimum, role: 'muted', quantity: 'capital-to-target', symbol: 'T' },
+        ] },
+        { name: 'Available', parts: [{ name: String(r.values.test === 'BAAT' ? 'Net assets' : 'Capital'), value: num(r.values.capital), role: 'result', quantity: 'capital-available', symbol: 'CA', field: 'capital' }] },
+      ],
+      unit: 'money',
+    }
+  },
+
   'finance.interest_converter': r => ({
     kind: 'axis',
     ticks: [

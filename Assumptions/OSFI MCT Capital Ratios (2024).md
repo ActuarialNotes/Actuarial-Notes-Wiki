@@ -9,14 +9,14 @@ Jurisdiction: "CA"
 Practice: "pc"
 Extraction: "transcribed"
 Document: "https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/minimum-capital-test-guideline-2024"
-Source sha256: "30514b4d22846ffb8a0fb2ec2ccac87a360332dce43657bc321accbac55ddf59"
-Read: "2026-11-08"
+Source sha256: "d326630e9312b69bd6d8e53c95bced2588cbebb694b661c6323f02f379ed8e5f"
+Read: "2026-11-09"
 verification:
   status: unverified
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:ff51ff2ec5ad24d861328bf32802d266d72838b3bd1ff0c3e520566f3105d65d
+  content_hash: sha256:583dacca4f284c3d9ad732a903b646dfe4da182156679f67d540bd5f3d6cd7b2
   sources: []
   open_findings: 0
   open_critical: 0
@@ -33,6 +33,7 @@ The capital ratios OSFI's Minimum Capital Test guideline sets for a federally re
 | Internal target capital ratio | capital-ratio | | % | 1.2.1, set by each insurer per Guideline A-4 | target | Each insurer's own internal target, set by the insurer under Guideline A-4: the guideline gives no figure for it. | |
 | Target confidence level (CTE, one-year horizon) | confidence-level | 99 | % | 1.1.1 Minimum and target capital requirements under the MCT | target | | |
 | Divisor from target-level to minimum capital required | capital-factor | 1.5 | factor | 1.1.1 Minimum and target capital requirements under the MCT | | | |
+| Correlation between insurance risk and market and credit risk | capital-factor | 50 | % | 8.1 Risk Aggregation and Diversification Credit | | | |
 
 ## Sources
-- [Minimum Capital Test – Guideline (2024) (OSFI)](https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/minimum-capital-test-guideline-2024) — the guideline's web edition, dated January 1, 2024: the ratios in 1.2.1 and the target level and divisor in 1.1.1, read 2026-11-08
+- [Minimum Capital Test – Guideline (2024) (OSFI)](https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/minimum-capital-test-guideline-2024) — the guideline's web edition, dated January 1, 2024: the ratios in 1.2.1 and the target level and divisor in 1.1.1, read 2026-11-08; the correlation in 8.1, read 2026-11-09

@@ -12,6 +12,7 @@ import { ProgressBar } from '@/components/ProgressBar'
 import { ExamLogo } from '@/components/ExamLogo'
 import { EXAM_LABEL_TO_ID } from '@/lib/examIds'
 import { QuitQuizDialog } from '@/components/QuitQuizDialog'
+import { QuizSignInPrompt } from '@/components/QuizSignInPrompt'
 import { IncompletePartsDialog } from '@/components/IncompletePartsDialog'
 import { GradePartsDialog } from '@/components/GradePartsDialog'
 import { SelfGradeScreen } from '@/components/SelfGradeScreen'
@@ -113,6 +114,7 @@ export default function Quiz() {
       exam: searchParams.get('exam') ?? undefined,
       topics: topicsParam ? topicsParam.split(',') : undefined,
       concepts: conceptsParam ? conceptsParam.split(',') : undefined,
+      cover: searchParams.get('plan') === '1',
       difficulty: (searchParams.get('difficulty') as Difficulty | null) ?? undefined,
       difficulties: difficultyLevelsFromParam(searchParams.get('levels')) ?? undefined,
       difficultyTarget: difficultyFromParam(searchParams.get('level')) ?? undefined,
@@ -210,6 +212,10 @@ export default function Quiz() {
 
 
   const [showQuitDialog, setShowQuitDialog] = useState(false)
+  // Today's quiz opened from the daily email by a reader who isn't signed in:
+  // once they start it, offer a sign-in (back to this same quiz) before the
+  // first question. They can carry on as a guest; the quiz works either way.
+  const [signInPromptDismissed, setSignInPromptDismissed] = useState(false)
   const [showIncompletePartsDialog, setShowIncompletePartsDialog] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
@@ -315,6 +321,9 @@ export default function Quiz() {
   )
   const questionOnScreen =
     status !== 'idle' && status !== 'complete' && !showConceptList && !awaitingConceptListDecision
+  const showSignInPrompt =
+    quizFrom === 'email' && !user && !signInPromptDismissed &&
+    questionOnScreen && Object.keys(responses).length === 0
   useEffect(() => {
     if (timeAllowance !== null && questionOnScreen && timer === null) startTimer(timeAllowance)
   }, [timeAllowance, questionOnScreen, timer, startTimer])
@@ -394,7 +403,7 @@ export default function Quiz() {
   // for a pending selection) — incomplete submissions are caught with a confirm dialog
   const showConfirmButton = !isLocked && (pendingAnswer !== null || currentQuestion?.type === 'multi-part')
 
-  const anyDialogOpen = showQuitDialog || showIncompletePartsDialog || showSelfGradeScreen || showShortcutsHelp || showQuestionInfo || gradePrompt !== null
+  const anyDialogOpen = showSignInPrompt || showQuitDialog || showIncompletePartsDialog || showSelfGradeScreen || showShortcutsHelp || showQuestionInfo || gradePrompt !== null
 
   // Per-part grades for a multi-part question, read back from the store keyed
   // by part label (the store keys them as `${id}__${label}`).
@@ -735,6 +744,13 @@ export default function Quiz() {
           }
         />
       </div>
+
+      {showSignInPrompt && (
+        <QuizSignInPrompt
+          onSignIn={() => navigate('/auth', { state: { from: `/quiz${search}` } })}
+          onContinue={() => setSignInPromptDismissed(true)}
+        />
+      )}
 
       {showQuitDialog && (
         <QuitQuizDialog

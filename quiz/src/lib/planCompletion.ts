@@ -123,6 +123,35 @@ export function planConceptKeys(
 }
 
 /**
+ * Today's concepts as the names questions are tagged with: a syllabus display
+ * name swapped for its link's page (`Price` → `Bond Price`), anything else as
+ * given. Lets a link that carries the plan's names — the daily email's quiz,
+ * `/quiz?plan=1&concepts=…` — draw the questions the plan means.
+ */
+export function planConceptTargets(
+  concepts: readonly string[],
+  syllabus: WikiExamSyllabus | null,
+): string[] {
+  const targetByName = new Map<string, string>()
+  for (const topic of syllabus?.topics ?? []) {
+    for (const c of topic.concepts) {
+      const base = c.target?.split('/').pop()?.replace(/\.md$/i, '')
+      if (base) targetByName.set(c.name.toLowerCase(), base)
+    }
+  }
+  const seen = new Set<string>()
+  const out: string[] = []
+  for (const name of concepts) {
+    const target = targetByName.get(name.toLowerCase()) ?? name
+    const key = target.toLowerCase()
+    if (seen.has(key)) continue
+    seen.add(key)
+    out.push(target)
+  }
+  return out
+}
+
+/**
  * Decay-adjusted mastery for every concept in a syllabus, keyed by lower-cased
  * display name — the map `buildTodayTargets`/`isConceptDoneToday` read.
  *

@@ -352,9 +352,10 @@ export default function WikiHome() {
                 onClick={() => openAt([guide.ref], 0, '/wiki')}
                 // The exam rows' tile, carrying an icon instead of a
                 // monogram — a guide has no place on the colour ramp, so
-                // it takes the wiki's teal rather than borrowing a hue.
+                // it takes the ink (the foreground colour) rather than
+                // borrowing a hue.
                 leading={
-                  <LogoTile size="lg" className="bg-teal-500 text-white shadow-sm">
+                  <LogoTile size="lg" className="bg-foreground text-background shadow-sm">
                     <Compass className="h-6 w-6" />
                   </LogoTile>
                 }

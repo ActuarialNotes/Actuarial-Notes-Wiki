@@ -35,9 +35,13 @@ test.describe('quiz setup', () => {
     await expect(card).toContainText('12questions')
   })
 
-  test("the card's settings switch in place", async ({ page }) => {
+  test("the card's settings unfold from their icons and switch in place", async ({ page }) => {
     await page.goto('/?topic=Exam%205')
     const card = page.getByRole('region', { name: 'Your quiz' })
+    const toggle = page.getByTestId('quiz-settings-toggle')
+    await expect(toggle).toHaveAttribute('aria-expanded', 'false')
+    await expect(card.getByRole('switch', { name: 'Timed' })).toHaveCount(0)
+    await toggle.click()
     const timed = card.getByRole('switch', { name: 'Timed' })
     const was = await timed.getAttribute('aria-checked')
     await timed.click()

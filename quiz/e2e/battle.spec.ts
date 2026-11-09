@@ -27,7 +27,8 @@ const ANSWERS = answerKey()
 /** The question on screen, its right option and a wrong one. */
 async function currentQuestion(page: Page): Promise<{ right: string; wrong: string }> {
   const card = page.getByTestId('battle-question')
-  await expect(card).toBeVisible({ timeout: 10_000 })
+  // The first question follows the deal (7 s) and its count-in, and a coin round a toss.
+  await expect(card).toBeVisible({ timeout: 25_000 })
   const id = await card.getAttribute('data-question-id')
   const right = ANSWERS.get(id ?? '')
   expect(right, `answer for ${id}`).toBeTruthy()
@@ -89,19 +90,107 @@ async function lockIn(page: Page, option: string) {
   await page.getByTestId('battle-lock-in').click()
 }
 
-/** Picks the `nth` topic tile on the page and locks it in; returns its name. */
-async function pickTopicAndLock(page: Page, nth: number): Promise<string> {
+/** Every topic tile the draw offers on this page, by name. */
+async function topicNames(page: Page): Promise<string[]> {
   await expect(page.getByTestId('battle-topic-picker')).toBeVisible({ timeout: 15_000 })
-  const tile = page.getByTestId('battle-topic').nth(nth)
-  const name = (await tile.getAttribute('data-topic')) ?? ''
-  await tile.click()
-  await expect(tile).toHaveAttribute('aria-pressed', 'true')
-  await expect(page.getByTestId('battle-topic-count')).toHaveText('1 of 3 picked')
+  return page.getByTestId('battle-topic').evaluateAll(els => els.map(el => el.getAttribute('data-topic') ?? ''))
+}
+
+/**
+ * Draws a hand of four and locks it in: the named topics, or the tiles from
+ * `from` on. Returns the hand.
+ */
+async function drawHandAndLock(page: Page, hand: string[] | { from: number }): Promise<string[]> {
+  const names = Array.isArray(hand) ? hand : (await topicNames(page)).slice(hand.from, hand.from + 4)
+  await expect(page.getByTestId('battle-topic-picker')).toBeVisible({ timeout: 15_000 })
+  for (const [i, name] of names.entries()) {
+    const tile = page.locator(`[data-testid="battle-topic"][data-topic="${name.replace(/"/g, '\\"')}"]`)
+    await tile.scrollIntoViewIfNeeded()
+    await tile.click()
+    await expect(tile).toHaveAttribute('aria-pressed', 'true')
+    await expect(page.getByTestId('battle-topic-count')).toHaveText(`${i + 1} of 4`)
+  }
   await page.getByTestId('battle-topics-lock').click()
   // Locked in: the button goes — to a wait for the other player, or (the
-  // second in) straight to the draw.
+  // second in) straight to the strikes.
   await expect(page.getByTestId('battle-topics-lock')).toBeHidden()
-  return name
+  return names
+}
+
+/** Strikes one of the other player's cards — tapped, then Discard. */
+async function strikeCard(page: Page, topic?: string) {
+  await expect(page.getByTestId('battle-strike')).toBeVisible({ timeout: 15_000 })
+  const card = topic
+    ? page.locator(`[data-testid="battle-strike-card"][data-topic="${topic.replace(/"/g, '\\"')}"]`)
+    : page.getByTestId('battle-strike-card').first()
+  await card.click()
+  await expect(card).toHaveAttribute('aria-pressed', 'true')
+  await page.getByTestId('battle-discard').click()
+  await expect(page.getByTestId('battle-strike-made')).toBeVisible()
+}
+
+/** The whole draft, for a battle that is about something else: four tiles each, a strike each, the deal skipped. */
+async function draftThrough(a: Page, b: Page) {
+  await drawHandAndLock(a, { from: 0 })
+  await drawHandAndLock(b, { from: 4 })
+  await strikeCard(a)
+  await strikeCard(b)
+  for (const page of [a, b]) {
+    await expect(page.getByTestId('battle-deal')).toBeVisible({ timeout: 15_000 })
+    await page.getByTestId('battle-deal').click()
+  }
+}
+
+/** Each concept the bank tags, with every concept a question tags it beside — all questions, or only those a battle races. */
+function coTags(raceable: boolean): Map<string, Set<string>> {
+  const root = fileURLToPath(new URL('../../questions/exam-fm/', import.meta.url))
+  const tags = new Map<string, Set<string>>()
+  for (const file of readdirSync(root)) {
+    if (!file.endsWith('.md')) continue
+    const text = readFileSync(`${root}${file}`, 'utf8')
+    const head = text.split(/^---$/m)[1] ?? ''
+    if (raceable && (!/^type:\s*multiple-choice/m.test(head) || /^off_syllabus:\s*true/m.test(head))) continue
+    const block = /^wiki_link:\s*\n((?:\s+-.*\n)+)/m.exec(head)?.[1] ?? ''
+    const names = [...block.matchAll(/-\s*"?([^"\n]+)"?/g)].map(m => m[1].trim().split('/').pop()!.replace(/\+/g, ' ').toLowerCase())
+    for (const n of names) {
+      const set = tags.get(n) ?? new Set<string>()
+      for (const o of names) if (o !== n) set.add(o)
+      tags.set(n, set)
+    }
+  }
+  return tags
+}
+
+/**
+ * Two hands of four on Exam FM whose deal is known: once each player strikes
+ * the other's fourth card, exactly one cross pair (`mine[0]`–`theirs[0]`) has
+ * a question that tests both, and none of the other cards share a question
+ * with anything — so that pair is the final, and the first two rounds go to a
+ * coin.
+ */
+function knownDeal(offered: readonly string[]): { mine: string[]; theirs: string[] } {
+  const any = coTags(false)
+  const raced = coTags(true)
+  const byKey = new Map(offered.map(n => [n.toLowerCase(), n]))
+  const tied = (a: string, b: string) => any.get(a.toLowerCase())?.has(b.toLowerCase()) ?? false
+  for (const [x, partners] of raced) {
+    if (!byKey.has(x)) continue
+    for (const y of partners) {
+      if (!byKey.has(y)) continue
+      const loners: string[] = []
+      for (const n of offered) {
+        const k = n.toLowerCase()
+        if (k === x || k === y || !any.has(k)) continue
+        if ([x, y, ...loners].some(o => tied(k, o))) continue
+        loners.push(n)
+        if (loners.length === 6) {
+          const [a, b] = [byKey.get(x)!, byKey.get(y)!]
+          return { mine: [a, loners[0], loners[1], loners[4]], theirs: [b, loners[2], loners[3], loners[5]] }
+        }
+      }
+    }
+  }
+  throw new Error('No known deal on Exam FM')
 }
 
 test.describe('quiz battle', () => {
@@ -240,26 +329,64 @@ test.describe('quiz battle', () => {
     await expect(guest.getByTestId('battle-lobby')).toContainText('Waiting for Ada to start')
     await host.getByTestId('battle-start-online').click()
 
-    // Each picks a topic. Bo sees that Ada is in — and not what she picked.
-    const adaTopic = await pickTopicAndLock(host, 0)
+    // The draw: four cards each, from two hands whose deal is known (one
+    // pair a question tests both of — the final — and two settled by a coin).
+    const { mine, theirs } = knownDeal(await topicNames(host))
+    // Bo watches Ada's hand fill as face-down pips; she can't lock in short of four.
+    for (const [i, name] of mine.entries()) {
+      await host.locator(`[data-testid="battle-topic"][data-topic="${name}"]`).click()
+      await expect(host.getByTestId('battle-topic-count')).toHaveText(`${i + 1} of 4`)
+      if (i === 1) {
+        await expect(guest.getByTestId('battle-player-0')).toHaveAttribute('data-drawn', '2')
+        await expect(host.getByTestId('battle-topics-lock')).toBeDisabled()
+      }
+    }
+    await host.getByTestId('battle-topics-lock').click()
+    // Bo sees that Ada is in — and not what she drew.
     await expect(guest.getByTestId('battle-player-0')).toContainText('Locked in')
-    const boTopic = await pickTopicAndLock(guest, 1)
+    await expect(guest.getByTestId('battle-player-0')).toHaveAttribute('data-drawn', '4')
+    await drawHandAndLock(guest, theirs)
 
-    // Both picks go up on both screens, and the questions are drawn from them.
+    // The strikes: both hands face up, each strikes the other's fourth card,
+    // and neither sees the other's until both are in.
     for (const page of [host, guest]) {
-      await expect(page.getByTestId('battle-topic-draw')).toBeVisible()
-      await expect(page.getByTestId('battle-picks-0')).toContainText(adaTopic)
-      await expect(page.getByTestId('battle-picks-1')).toContainText(boTopic)
-      await expect(page.locator('[data-testid="battle-drawn"][data-drawn]')).toHaveCount(3)
+      await expect(page.getByTestId('battle-strike')).toBeVisible()
+      await expect(page.locator('ol[aria-label="Before the battle"] [aria-current="step"]')).toHaveText('Strike')
     }
+    await strikeCard(host, theirs[3])
+    await expect(guest.getByTestId('battle-strike-status')).toContainText('Ada has struck one of yours')
+    await expect(guest.getByTestId('battle-strike-card').first()).toBeVisible()
+    await strikeCard(guest, mine[3])
+
+    // The deal: the grid, the pairs drawn out — the final tests both, the
+    // other two go to a coin — and who struck what, the same on both screens.
     for (const page of [host, guest]) {
-      await expect(page.getByTestId('battle-countdown-topic')).toBeVisible({ timeout: 15_000 })
+      await expect(page.getByTestId('battle-deal')).toBeVisible()
+      await expect(page.getByTestId('battle-deal-grid').getByRole('cell')).toHaveCount(9)
+      await expect(page.getByTestId('battle-deal-card')).toHaveCount(3)
+      await expect(page.locator('[data-testid="battle-deal-card"][data-coin]')).toHaveCount(2)
+      await expect(page.locator('[data-testid="battle-deal-card"][data-final]')).not.toHaveAttribute('data-coin', /.*/)
     }
+    await expect(host.getByTestId('battle-deal-strikes')).toHaveText(`Bo struck ${mine[3]}. You struck ${theirs[3]}.`)
+    await expect(guest.getByTestId('battle-deal-strikes')).toHaveText(`Ada struck ${theirs[3]}. You struck ${mine[3]}.`)
+    // A tap skips to the deal's last frame; it holds through Round 1's count-in.
+    await host.getByTestId('battle-deal').click()
+    await expect(host.getByTestId('battle-deal')).toHaveAttribute('data-done', 'true')
 
     for (let round = 0; round < 3; round++) {
+      if (round < 2) {
+        // A coin round: the host tosses, and both screens land on the same card.
+        for (const page of [host, guest]) await expect(page.getByTestId('battle-coin')).toBeVisible({ timeout: 20_000 })
+        const winner = await host.getByTestId('battle-coin').getAttribute('data-winner')
+        await expect(guest.getByTestId('battle-coin')).toHaveAttribute('data-winner', winner ?? '')
+        const topic = winner === '0' ? mine[round + 1] : theirs[round + 1]
+        for (const page of [host, guest]) await expect(page.getByTestId('battle-coin-result')).toContainText(topic)
+      }
       const { right, wrong } = await currentQuestion(host)
       await expect(guest.getByTestId('battle-question')).toBeVisible({ timeout: 10_000 })
       await expect(host.getByTestId('battle-question')).toContainText(round === 2 ? 'Final ×2' : `Round ${round + 1} of 3`)
+      // The chips: a coin round's one topic, the final's pair in both colours.
+      await expect(host.getByTestId('battle-round-topic')).toHaveAttribute('data-chips', round === 2 ? '2' : '1')
 
       await lockIn(host, right)
       // Bo sees that Ada is in — and not what she picked.
@@ -282,14 +409,15 @@ test.describe('quiz battle', () => {
     await expect(guest.getByTestId('battle-lost-round')).toBeVisible()
     await expect(host.getByTestId('battle-lost-round')).toHaveCount(0)
 
-    // Bo asks for a rematch; Ada starts it, and both pick their topics again.
+    // Bo asks for a rematch; Ada starts it, and both draw again.
     await expect(guest.getByTestId('battle-rematch')).toHaveText('Rematch Ada')
     await guest.getByTestId('battle-rematch').click()
     await expect(host.getByText('Bo wants a rematch!')).toBeVisible()
     await host.getByTestId('battle-rematch').click()
     for (const page of [host, guest]) {
       await expect(page.getByTestId('battle-topic-picker')).toBeVisible()
-      await expect(page.getByTestId('battle-topic-count')).toHaveText('Pick up to 3 topics')
+      await expect(page.getByTestId('battle-topic-count')).toHaveText('0 of 4')
+      await expect(page.locator('ol[aria-label="Before the battle"] [aria-current="step"]')).toHaveText('Draw')
     }
   })
 
@@ -366,17 +494,8 @@ test.describe('quiz battle', () => {
       await expect(page.getByTestId('battle-match-intro')).toBeVisible()
     }
     await expect(ada.getByRole('complementary', { name: /^Concept:/ })).toHaveCount(0)
-    // A topic each — Bo locks in none, and plays on Ada's and the whole exam.
-    await pickTopicAndLock(ada, 2)
-    await expect(bo.getByTestId('battle-topic-picker')).toBeVisible()
-    await bo.getByTestId('battle-topics-lock').click()
-    for (const page of [ada, bo]) {
-      await expect(page.getByTestId('battle-topic-draw')).toBeVisible()
-      await expect(page.getByTestId('battle-picks-1')).toContainText('No topics')
-    }
-    for (const page of [ada, bo]) {
-      await expect(page.getByTestId('battle-countdown')).toBeVisible({ timeout: 15_000 })
-    }
+    // The draft, then the deal on both screens.
+    await draftThrough(ada, bo)
 
     // A matched battle is three questions. Ada's device hosts: she was waiting first.
     for (let round = 0; round < 3; round++) {
@@ -493,9 +612,8 @@ test.describe('quiz battle', () => {
     await guest.getByTestId('battle-join').click()
     await expect(host.getByTestId('battle-lobby')).toContainText('Bo is in')
     await host.getByTestId('battle-start-online').click()
-    // The topic pick is the same under both skins.
-    await pickTopicAndLock(host, 0)
-    await pickTopicAndLock(guest, 1)
+    // The draft is the Deck's under both skins.
+    await draftThrough(host, guest)
 
     let missed = ''
     for (let round = 0; round < 3; round++) {
@@ -555,8 +673,7 @@ test.describe('quiz battle', () => {
     await guest.getByTestId('battle-join').click()
     await expect(host.getByTestId('battle-lobby')).toContainText('Bo is in')
     await host.getByTestId('battle-start-online').click()
-    await pickTopicAndLock(host, 0)
-    await pickTopicAndLock(guest, 1)
+    await draftThrough(host, guest)
 
     const { right, wrong } = await currentQuestion(host)
     await expect(guest.getByTestId('battle-question')).toBeVisible({ timeout: 10_000 })
@@ -608,8 +725,7 @@ test.describe('quiz battle', () => {
     await guest.getByTestId('battle-join').click()
     await expect(host.getByTestId('battle-lobby')).toContainText('Bo is in')
     await host.getByTestId('battle-start-online').click()
-    await pickTopicAndLock(host, 0)
-    await pickTopicAndLock(guest, 1)
+    await draftThrough(host, guest)
     await currentQuestion(host)
     await expect(guest.getByTestId('battle-question')).toBeVisible({ timeout: 10_000 })
     await expect(guest.getByTestId('ability-reinsurance')).toHaveCount(0)
@@ -635,11 +751,8 @@ test.describe('quiz battle', () => {
     for (const page of [ada, bo]) {
       await expect(page.getByTestId('battle-match-intro')).toBeVisible({ timeout: 15_000 })
     }
-    // Through the topic pick, the same on both pages, to the count-in.
-    await pickTopicAndLock(ada, 0)
-    await pickTopicAndLock(bo, 1)
-    for (const page of [ada, bo]) {
-      await expect(page.getByTestId('battle-countdown')).toBeVisible({ timeout: 15_000 })
-    }
+    // Through the draft, the same on both pages, to the first question.
+    await draftThrough(ada, bo)
+    for (const page of [ada, bo]) await currentQuestion(page)
   })
 })

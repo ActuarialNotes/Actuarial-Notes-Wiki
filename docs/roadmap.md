@@ -668,8 +668,13 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   and its canvas. *(Proposed 2026-11-08.)* **Phase 1 built 2026-11-09:** the intro, the start
   screen's hand, the lobby with browsing, the friend room, same-screen seating with half-screen
   buzzing, the round as a question card, the results with Practice, and today's topic pick in
-  the deck look — no rule changed (`components/battle/deck/`, `e2e/battle.spec.ts`). Phases 2
-  and 3 are open.
+  the deck look — no rule changed (`components/battle/deck/`, `e2e/battle.spec.ts`). **Phase 2
+  built 2026-11-09:** the pairs draft in place of the topic pick, on every online room and both
+  skins — draw 4, strike 1, the deal to pairs by Concept Craft's strength, and a coin the host
+  tosses for a pair no question covers (`lib/battleDraft.ts`, protocol 4). Measured first: on
+  random hands a coin settles 71% of rounds on Exam P, 66% on FM, 89% on MAS-I and 85% on
+  MAS-II (25–70% when hands favour well-stocked topics); showing the strongest pairs on the
+  draw screen is proposed, not built (redesign doc O9). Phase 3 is open.
 
 ---
 
@@ -856,7 +861,7 @@ Subplans: `daily-plan-email.md`, `daily-podcast.md`, `leagues.md`, `seo.md`,
 | X6 | Projects: more briefs and exams | ✅ 3 PCPA briefs | Later | Another exam's project is one entry in `data/projects.ts`. |
 | X7 | Store: Amazon prices | 🟢 | Later | Needs the `AMAZON_CREATORS_*` environment variables, or stays `price: null`. |
 | X9 | **Community** | 🟡 built 2026-10-19, Preview | Next | `community.md`. The `/community` tab: r/actuary's newest posts (live, through the Arctic Shift archive, as posted), 26 upcoming meetings and 39 communities (forums, the CAS regional affiliates, local clubs) transcribed from their own pages, followed and browsed by topic, sorted by distance from a chosen city. Next: a refresh routine for the events table, more sources in the feed (GoActuary's Discourse JSON), a server table for follows once it leaves Preview (D26). |
-| X10 | Quiz Battle redesign: the Deck | 🟡 phase 1 built 2026-11-09 | Proposed | `quiz-battle-redesign.md`. Phase 1 the look and flow (built), phase 2 the pairs draft, phase 3 stats and tiers (waits on D36). |
+| X10 | Quiz Battle redesign: the Deck | 🟡 phases 1–2 built 2026-11-09 | Proposed | `quiz-battle-redesign.md`. Phase 1 the look and flow (built), phase 2 the pairs draft (built; a coin settles most rounds on random hands, §4), phase 3 stats and tiers (waits on D36). |
 | X8 | The visual-noise backlog | 🟡 §3.1, §3.2 and §3.9 done | Next | §3.3–§3.8 are open (the line references in the doc are stale), plus the style-guide edits in §6. The "Hover the graph" hint is false on touch screens. |
 
 ### 4.8 R: Parked
@@ -1004,7 +1009,7 @@ Every planning document in the repo, what it is for, and how healthy it is. A do
 | `docs/ins-actbench.md` | Proposal: evaluating the connector, tools and skill (INS-ActBench) | A8 (§3.4) | Proposed | 2026-10-30 |
 | `docs/assumptions-bank.md` | Subplan: the Assumptions Bank, published figures and facts as data for the tools, Cowork and the connector | A9 | Active. Phases 0–1 built | 2026-11-08 |
 | `docs/actuaria-online.md` | Build spec: Actuaria | X3 | Phases 0–3 built; Phase 4 parked | 2026-10-05 |
-| `docs/quiz-battle-redesign.md` | Plan and build spec: Quiz Battle as a card game, the pairs draft, stats and tiers | X10 (§3.4), D36 | Active: phase 1 built, phases 2–3 open | 2026-11-09 |
+| `docs/quiz-battle-redesign.md` | Plan and build spec: Quiz Battle as a card game, the pairs draft, stats and tiers | X10 (§3.4), D36 | Active: phases 1–2 built, phase 3 open | 2026-11-09 |
 | `docs/tutor.md` | Plan and build spec: the Tutor | L8 | Phase 1 built; Preview | 2026-10-18 |
 | `docs/community.md` | Build spec: the Community tab | X9 | Built; Preview | 2026-10-19 |
 | `docs/visual-noise-review.md` | Backlog: UI copy | X8 | Active. Its line references are stale | 2026-10-05 |

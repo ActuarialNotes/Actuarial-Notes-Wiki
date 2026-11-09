@@ -324,8 +324,8 @@ export function ToolFigure({
           <circle cx={x1} cy={mid} r={compact ? 2.5 : 5} fill="hsl(var(--primary))" />
           {!compact && (
             <>
-              <text x={x0 - 6} y={mid + 20} textAnchor="start" fontSize={10} fill="currentColor" fillOpacity={0.7}>{figure.from}</text>
-              <text x={x1 + 6} y={mid + 20} textAnchor="end" fontSize={10} fill="currentColor" fillOpacity={0.7}>{figure.to}</text>
+              <text x={x0 - 6} y={mid + 20} textAnchor="start" fontSize={10} fill="currentColor" fillOpacity={0.7}>{dateLabel(figure.from)}</text>
+              <text x={x1 + 6} y={mid + 20} textAnchor="end" fontSize={10} fill="currentColor" fillOpacity={0.7}>{dateLabel(figure.to)}</text>
               <text x={(x0 + x1) / 2} y={mid - 10} textAnchor="middle" fontSize={11} fontWeight={600} fill="currentColor">{formatValue(figure.years, 'years')} years</text>
             </>
           )}
@@ -385,6 +385,14 @@ function BarsLegend({ figure }: { figure: Extract<FigureSpec, { kind: 'bars' }> 
       ))}
     </ul>
   )
+}
+
+/** An ISO date as a reader reads it, "2022-07-01" → "Jul 1, 2022"; anything else as it is. */
+function dateLabel(text: string): string {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(text)
+  if (!m) return text
+  const month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][Number(m[2]) - 1]
+  return `${month} ${Number(m[3])}, ${m[1]}`
 }
 
 /** Where an axis label sits, by row: above the line, below it, then further out each way. */

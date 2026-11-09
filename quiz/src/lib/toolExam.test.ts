@@ -2,8 +2,7 @@ import { describe, expect, it } from 'vitest'
 import examPages from 'virtual:exam-pages'
 import { parseExamMetadata, parseExamSyllabus, type WikiExamSyllabus } from './wikiParser'
 import { earliestExam, examForConcepts, examForResource } from './toolExam'
-import { TEMPLATE_TOOLS } from './toolTemplate'
-import { toolById } from './tools'
+import { TOOLS, toolById } from './tools'
 
 const syllabi: WikiExamSyllabus[] = Object.entries(examPages as Record<string, string>).flatMap(([name, md]) => {
   const meta = parseExamMetadata(md)
@@ -20,7 +19,7 @@ describe('earliestExam', () => {
 
 describe('the vault', () => {
   it('gives every template tool an exam', () => {
-    for (const id of TEMPLATE_TOOLS) expect(examForConcepts(toolById(id)!.method.concepts, syllabi), id).not.toBeNull()
+    for (const t of TOOLS) expect(examForConcepts(t.method.concepts, syllabi), t.id).not.toBeNull()
   })
   it('puts Bond Price on FM and Limited Expected Value on MAS-I', () => {
     expect(examForConcepts(toolById('finance.bond_price')!.method.concepts, syllabi)).toBe('FM')

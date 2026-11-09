@@ -3,27 +3,7 @@
 // value came from, how a grid numbers its columns, and the keypad the edit
 // sheet types with. Pure; `components/tools/ToolTemplate.tsx` draws it.
 
-import { TOOLS, runTool, toolById, type ChoiceField, type DateField, type NumberField, type TableColumn, type ToolField, type ToolHandoff, type ToolInput, type ToolResult, type ToolSpec } from './tools'
-
-/**
- * The tools drawn by the template while it is checked on a phone, before
- * the other tools move over: the three shapes a tool comes in (a grid,
- * a short scalar tool, a long one) and the two test tools — a choice that
- * changes which inputs exist, and a triangle with its selection exhibit.
- */
-export const TEMPLATE_TOOLS: ReadonlySet<string> = new Set([
-  'data.insurer_return',
-  'capital.mct_ratio',
-  'reserving.bornhuetter_ferguson',
-  'ratemaking.permissible_loss_ratio',
-  'finance.bond_price',
-  'distributions.limited_expected_value',
-  'reserving.age_to_age_factors',
-  // Template v2's stress test (docs/tool-template-v2.md §5.7): six inputs
-  // with three tools in front, and a table with two tools after it.
-  'ratemaking.trend_factor',
-  'ratemaking.expense_ratios',
-])
+import { TOOLS, formatValue, runTool, toolById, type ChoiceField, type DateField, type NumberField, type TableColumn, type ToolField, type ToolHandoff, type ToolInput, type ToolResult, type ToolSpec } from './tools'
 
 /**
  * The tile a template tool leads its answer card with, where it isn't the
@@ -40,8 +20,6 @@ export function tilesInOrder<T extends { symbol: string }>(toolId: string, tiles
   const k = lead ? tiles.findIndex(t => t.symbol === lead) : -1
   return k <= 0 ? [...tiles] : [tiles[k], ...tiles.slice(0, k), ...tiles.slice(k + 1)]
 }
-
-export const usesTemplate = (spec: ToolSpec) => TEMPLATE_TOOLS.has(spec.id)
 
 /** A tool with this many scalar inputs or fewer keeps a slider on each row; past it, a row opens the edit sheet. */
 export const INLINE_SLIDER_LIMIT = 3
@@ -63,6 +41,13 @@ export function inputGroups(fields: readonly ScalarField[]): { judgments: Scalar
     judgments: fields.filter(f => f.judgment),
     inputs: fields.filter(f => !f.judgment),
   }
+}
+
+/** A number as an input shows it: an amount without the cents it doesn't have, a year without a separator. */
+export function fieldText(value: number, f: Pick<NumberField, 'unit' | 'integer' | 'min'>): string {
+  if (f.unit === 'money') return value.toLocaleString('en-US', { maximumFractionDigits: 2 })
+  if (f.integer && f.min >= 1000) return String(value)
+  return formatValue(value, f.unit)
 }
 
 /** Whether a tool's number rows carry their own slider (the count is of the inputs on screen). */

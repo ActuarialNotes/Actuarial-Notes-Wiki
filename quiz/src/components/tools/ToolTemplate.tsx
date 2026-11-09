@@ -1,7 +1,8 @@
 // The **tool template** (docs/actuarial-tools.md §19, and its second pass,
 // docs/tool-template-v2.md): one tool on its own page, drawn the way the app's
 // info popups are — and the shape every tool moves to once it has been checked
-// on a phone (`TEMPLATE_TOOLS`).
+// on a phone. Every tool's page draws it; `ToolCard` remains for the cards
+// embedded in a workflow step and a source sheet.
 //
 //   Takes from        the tools in front of this one (hidden when none)
 //   the answer card   tinted in the exam that first teaches the method (no
@@ -58,6 +59,7 @@ import {
   readingLabel,
   scalarSource,
   sharedDefaultLabel,
+  fieldText,
   slidersInline,
   tilesInOrder,
   type Neighbour,
@@ -89,11 +91,15 @@ export interface PinnedAnswer {
   value: string
 }
 
-/** A value as an input shows it: an amount without the cents it doesn't have, a year without a separator. */
-function inputText(value: number, f: Pick<NumberField, 'unit' | 'integer' | 'min'>): string {
-  if (f.unit === 'money') return value.toLocaleString('en-US', { maximumFractionDigits: 2 })
-  if (f.integer && f.min >= 1000) return String(value)
-  return formatValue(value, f.unit)
+/**
+ * The words over the answer, where they add something: not the tool's own name
+ * again ("Trend factor" under Trend Factor), and not "Total" or a fragment of
+ * the name ("Permissible").
+ */
+function leadLabel(name: string, lead: { label: string }): string | null {
+  const label = lead.label.trim().toLowerCase()
+  if (!label || label === 'total' || name.toLowerCase().includes(label)) return null
+  return lead.label
 }
 
 /** A choice short enough to sit beside its label as a segmented control. */
@@ -130,6 +136,8 @@ export function ToolTemplate({
   const accent = examKey ? examAccentStyle(examKey) : undefined
   const [editing, setEditing] = useState<string | null>(null)
   const [note, setNote] = useState<Note>(null)
+  // Past three inputs, the one row whose slider is open in place.
+  const [sliding, setSliding] = useState<string | null>(null)
   const toggle = (key: string, kind: NonNullable<Note>['kind']) => setNote(n => (n?.key === key && n.kind === kind ? null : { key, kind }))
   const inline = slidersInline(m.scalars)
   const { judgments, inputs } = inputGroups(m.scalars)
@@ -189,6 +197,8 @@ export function ToolTemplate({
       model={m}
       field={f}
       inline={inline}
+      open={sliding === f.key}
+      onSlide={() => setSliding(k => (k === f.key ? null : f.key))}
       source={sourceOf(f)}
       step={quantities.has(f.key) ? quantityStep(quantities.get(f.key)!) : null}
       note={note?.key === f.key ? note.kind : null}
@@ -226,7 +236,9 @@ export function ToolTemplate({
 
   return (
     <div className="space-y-3" style={accent} data-testid="tool-card" data-template>
-      <TakesFrom neighbours={m.neighbours.before} linked={m.linkedTool} />
+      {/* One tool in front is named above the card; several are alternatives for one
+          value, so they are offered on the input they fill instead (TakeFrom). */}
+      {(m.neighbours.before.length === 1 || m.linkedTool) && <TakesFrom neighbours={m.neighbours.before} linked={m.linkedTool} />}
 
       <section className={cn('overflow-hidden rounded-2xl', examKey ? EXAM_BANNER : NEUTRAL_BANNER)} data-testid="tool-answer">
         <header className="flex items-start gap-3 px-3.5 pt-3.5">
@@ -279,19 +291,28 @@ export function ToolTemplate({
 
         {m.result && lead && (
           <div ref={answerRef} className={cn('px-3.5 pb-1 pt-3', m.stale && 'opacity-50')}>
-            <p className="text-xs text-foreground/75">
-              <Sym className="font-semibold text-foreground">{lead.symbol}</Sym> {lead.label === 'Total' ? '' : lead.label}
-            </p>
+            {leadLabel(spec.name, lead) && (
+              <p className="text-xs text-foreground/75">
+                <Sym className="font-semibold text-foreground">{lead.symbol}</Sym> {leadLabel(spec.name, lead)}
+              </p>
+            )}
             <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
               <p className="text-[34px] font-bold leading-tight tracking-tight tabular-nums" data-testid="tool-tile">{formatValue(lead.value, lead.unit)}</p>
-              {tiles.slice(1).map(t => (
+              {/* A span's length is drawn by the figure under it; it isn't said twice. */}
+              {tiles.slice(1).filter(t => !(t.unit === 'years' && m.figure?.kind === 'span')).map(t => (
                 <p key={t.symbol + t.label} className="text-sm text-foreground/75" title={`${t.symbol} ${t.label}`}>
-                  <Sym>{t.symbol}</Sym>{' '}
-                  <b className="font-semibold tabular-nums text-foreground" data-testid="tool-tile">{formatValue(t.value, t.unit)}</b>
+                  {t.unit === 'years' ? (
+                    // A span says how long it is in words, not by a symbol.
+                    <>over <b className="font-semibold tabular-nums text-foreground" data-testid="tool-tile">{formatValue(t.value, t.unit)}</b> years</>
+                  ) : (
+                    <>
+                      <Sym>{t.symbol}</Sym>{' '}
+                      <b className="font-semibold tabular-nums text-foreground" data-testid="tool-tile">{formatValue(t.value, t.unit)}</b>
+                    </>
+                  )}
                 </p>
               ))}
             </div>
-            {notation && <p className="mt-1 font-mono text-[11px] text-foreground/70" data-testid="tool-notation">{notation}</p>}
           </div>
         )}
         {m.result && !m.stale && <FiledAnswerLine result={m.result} />}
@@ -388,7 +409,7 @@ export function ToolTemplate({
       <GivesTo neighbours={m.neighbours.after} build={n => m.buildFor(n.handoff)} onSend={m.sendTo} />
 
       <div className="divide-y divide-border/60 overflow-hidden rounded-xl bg-card">
-        {m.result && m.result.trace.length > 0 && <Working result={m.result} />}
+        {m.result && m.result.trace.length > 0 && <Working result={m.result} notation={notation} />}
         <ActionRow onClick={m.download} disabled={!m.result || m.stale}>Download .xlsx</ActionRow>
       </div>
 
@@ -405,16 +426,11 @@ export function ToolTemplate({
           source={sourceOf(editField)}
           figure={m.drawnFigure(editField)}
           figures={figuresFor(editField)}
-          sources={m.sourcesFor(editField)}
-          handoffs={m.neighbours.before
-            .filter(n => fills(n, editField.key))
-            .map(n => ({ neighbour: n, value: handoffValue(n, editField.key, lastRun(n.tool.id)) ?? null }))}
           pending={pendingFiguresFor(editField)}
           error={m.errorAt(editField.key)}
+          format={v => fieldText(v, editField)}
           onChange={v => m.set(editField.key, v)}
           onPickFigure={id => m.set(editField.key, { assumption: id })}
-          onTake={(n, v) => m.takeFrom(editField.key, v, n.tool)}
-          onOpenTool={openTool}
           onDefault={() => m.unset(editField.key)}
           onClose={() => setEditing(null)}
           style={accent}
@@ -490,7 +506,7 @@ function ActionRow({ onClick, disabled, children }: { onClick: () => void; disab
   )
 }
 
-function Working({ result }: { result: ToolResult }) {
+function Working({ result, notation }: { result: ToolResult; notation: string | null }) {
   return (
     <details className="group">
       <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-3.5 py-3 text-sm font-semibold hover:bg-muted/60 [&::-webkit-details-marker]:hidden">
@@ -498,6 +514,7 @@ function Working({ result }: { result: ToolResult }) {
         <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-open:rotate-90" aria-hidden />
       </summary>
       <div className="space-y-1.5 px-3.5 pb-3" data-math-scope>
+        {notation && <p className="font-mono text-xs text-muted-foreground" data-testid="tool-notation">{notation}</p>}
         <ol className="space-y-1.5">
           {result.trace.map((step, k) => (
             <li key={k} className="flex items-baseline justify-between gap-3 border-b border-border/50 pb-1.5 text-sm last:border-0">
@@ -536,10 +553,13 @@ function Judged({ on }: { on?: boolean }) {
   return on ? <span className="ml-1 text-muted-foreground" title="A judgment: yours to choose" aria-label="a judgment">◆</span> : null
 }
 
-function InputRow({ model: m, field: f, inline, source, step, note, onToggle, onEdit, onOpenTool }: {
+function InputRow({ model: m, field: f, inline, open, onSlide, source, step, note, onToggle, onEdit, onOpenTool }: {
   model: ToolCardModel
   field: ScalarField
   inline: boolean
+  /** Past three inputs: whether this row's slider is open in place. */
+  open: boolean
+  onSlide: () => void
   source: ValueSource
   step: QuantityStep | null
   note: NonNullable<Note>['kind'] | null
@@ -580,37 +600,40 @@ function InputRow({ model: m, field: f, inline, source, step, note, onToggle, on
   }
 
   const value = m.numberOf(f)
-  const shown = f.zeroLabel && value === 0 ? f.zeroLabel : inputText(value, f)
+  const shown = f.zeroLabel && value === 0 ? f.zeroLabel : fieldText(value, f)
   const linked = source.kind === 'linked'
-  if (!inline) {
-    return (
-      <div data-field={f.key}>
-        <button type="button" onClick={onEdit} className="flex w-full items-center gap-3 px-3.5 py-2.5 text-left transition-colors hover:bg-muted/60" aria-label={`${f.label}: ${shown}`}>
-          <Swatch step={step} />
-          {f.symbol && <Symbol>{f.symbol}</Symbol>}
-          <span className="min-w-0 flex-1 text-sm font-semibold">{f.label}<Judged on={f.judgment} /></span>
-          <ValuePill linked={linked}>{shown}</ValuePill>
-          <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
-        </button>
-        <div className="px-3.5 pb-1 empty:hidden">{chips}</div>
-        {error && <div className="px-3.5 pb-2">{errorLine}</div>}
-      </div>
-    )
-  }
+  // Three inputs or fewer keep the slider open; past that a row opens its own
+  // slider in place when tapped. Tapping a row also lists the tools that can
+  // supply its value. The number opens the keypad, nothing else does.
+  const showSlider = (inline || open) && !linked
   const sliderMax = Math.max(f.sliderMax ?? f.max, Math.min(value, f.max))
   const sliderMin = Math.min(f.sliderMin ?? f.min, Math.max(value, f.min))
+  const head = (
+    <>
+      <Swatch step={step} />
+      {f.symbol && <Symbol>{f.symbol}</Symbol>}
+      <span className="min-w-0 flex-1 text-sm font-semibold">{f.label}<Judged on={f.judgment} /></span>
+    </>
+  )
   return (
-    <div className="px-3.5 pb-2.5 pt-2.5" data-field={f.key}>
+    <div className={cn('px-3.5', showSlider ? 'pb-2.5 pt-2.5' : 'py-1.5')} data-field={f.key}>
       <div className="flex items-center gap-3">
-        <Swatch step={step} />
-        {f.symbol && <Symbol>{f.symbol}</Symbol>}
-        <label htmlFor={`tool-${f.key}`} className="min-w-0 flex-1 text-sm font-semibold">{f.label}<Judged on={f.judgment} /></label>
+        <button
+          type="button"
+          onClick={onSlide}
+          aria-expanded={open}
+          aria-label={`${f.label}: ${shown}`}
+          className="flex min-h-9 min-w-0 flex-1 items-center gap-3 text-left"
+        >
+          {head}
+        </button>
         <ValuePill onClick={onEdit} label={`${f.label} value`} linked={linked}>{shown}</ValuePill>
       </div>
-      {!linked && (
+      {showSlider && (
         <input
           id={`tool-${f.key}`}
           type="range"
+          aria-label={`${f.label} slider`}
           min={sliderMin}
           max={sliderMax}
           step={f.step}
@@ -619,8 +642,54 @@ function InputRow({ model: m, field: f, inline, source, step, note, onToggle, on
           className="sim-slider"
         />
       )}
+      {!showSlider && !linked && (
+        // A closed row keeps a faint track where its slider is, so a reader can see
+        // there is one to open; tapping the row opens it.
+        <div className="pointer-events-none relative mx-0.5 mb-1 mt-0.5 h-0.5 rounded-full bg-foreground/10" aria-hidden data-testid="closed-track">
+          <span
+            className="absolute -top-[3px] h-2 w-2 rounded-full bg-foreground/30"
+            style={{ left: `calc(${Math.max(0, Math.min(100, ((value - sliderMin) / Math.max(1e-12, sliderMax - sliderMin)) * 100))}% - 4px)` }}
+          />
+        </div>
+      )}
+      {open && <TakeFrom model={m} field={f} onOpenTool={onOpenTool} />}
       {chips}
       {errorLine}
+    </div>
+  )
+}
+
+/**
+ * The tools that can supply this one value, each an alternative: only one is
+ * used, so they are listed on the input they fill, never above the card as if
+ * all three went in. A tool run this session gives its value at a tap; one
+ * that hasn't been run opens.
+ */
+function TakeFrom({ model: m, field: f, onOpenTool }: { model: ToolCardModel; field: NumberField; onOpenTool: (n: Neighbour) => void }) {
+  const handoffs = m.neighbours.before.filter(n => fills(n, f.key))
+  const extra = m.sourcesFor(f).filter(s => !handoffs.some(n => n.tool.name === s.label))
+  if (!handoffs.length && !extra.length) return null
+  const chip = 'inline-flex max-w-full items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium ring-1 ring-inset ring-border transition-colors hover:bg-muted'
+  return (
+    <div className="mt-1.5 flex flex-wrap items-center gap-1.5" data-testid="take-from">
+      <span className="text-xs text-muted-foreground">Or take it from</span>
+      {handoffs.map(n => {
+        const v = handoffValue(n, f.key, lastRun(n.tool.id))
+        return v != null ? (
+          <button key={n.tool.id} type="button" className={chip} onClick={() => m.takeFrom(f.key, v, n.tool)} aria-label={`${f.label} from ${n.tool.name}, ${fieldText(v, f)}`}>
+            {n.tool.name} <b className="tabular-nums">{fieldText(v, f)}</b>
+          </button>
+        ) : (
+          <button key={n.tool.id} type="button" className={chip} onClick={() => onOpenTool(n)} aria-label={`Open ${n.tool.name}`}>
+            {n.tool.name} <ChevronRight className="h-3 w-3" aria-hidden />
+          </button>
+        )
+      })}
+      {extra.map(s => (
+        <button key={s.label} type="button" className={chip} onClick={s.open} aria-label={`${f.label} from ${s.label}`}>
+          {s.label} <ChevronRight className="h-3 w-3" aria-hidden />
+        </button>
+      ))}
     </div>
   )
 }

@@ -86,7 +86,9 @@ test.describe('tools', () => {
     await page.goto('/tools/distribution')
     const card = page.getByTestId('tool-card')
     await expect(card.getByLabel('Mean value')).toBeVisible()
-    await card.getByRole('combobox').selectOption('poisson')
+    // A long choice opens its own sheet of options.
+    await card.getByRole('button', { name: /^Distribution: / }).click()
+    await page.getByTestId('value-sheet').getByRole('radio', { name: 'Poisson' }).click()
     await expect(card.getByLabel('Mean count value')).toBeVisible()
     await expect(card.getByLabel('Mean value')).toHaveCount(0)
   })
@@ -95,21 +97,23 @@ test.describe('tools', () => {
     await page.goto('/tools/trend-factor')
     const card = page.getByTestId('tool-card')
     await card.getByLabel(/Rates effective/).fill('2026-01-01')
-    await expect(card.getByTestId('tool-tile').nth(1)).toHaveText('3.5')
+    // The trend period is drawn by the figure (the answer card doesn't say it twice).
+    await expect(card.getByTestId('tool-figure')).toContainText('3.5 years')
   })
 
-  // The tool template (§19) trades this for an answer that rides in the title
-  // strip once its card scrolls away — its own test is below.
-  test('fits every scalar card, figure and all, on a phone without scrolling', async ({ page }) => {
+  // R10 under the tool template (§19): the answer card is on the first phone
+  // screen; the inputs may run on below it, and the answer rides in the title
+  // strip once its card scrolls away (its own test is below).
+  test('puts every tool\'s answer on the first phone screen', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 })
     for (const slug of [
       'annuity', 'bond-yield', 'buhlmann-credibility', 'partial-credibility',
-      'full-credibility-standard', 'expected-payment',
-      'loss-ratio-method', 'pure-premium-method', 'interest-converter',
+      'full-credibility-standard', 'expected-payment', 'trend-factor',
+      'loss-ratio-method', 'pure-premium-method', 'interest-converter', 'life-table',
     ]) {
       await page.goto(`/tools/${slug}`)
       await expect(page.getByTestId('tool-figure')).toBeVisible()
-      const box = await page.getByTestId('tool-card').boundingBox()
+      const box = await page.getByTestId('tool-answer').boundingBox()
       expect(box, slug).not.toBeNull()
       expect(box!.y + box!.height, slug).toBeLessThanOrEqual(844)
     }
@@ -300,12 +304,13 @@ test.describe('tools', () => {
     await page.goto('/tools/trend-factor')
     const card = page.getByTestId('tool-card')
     await expect(card.getByTestId('tool-tile').first()).toHaveText('1.0767')
-    const takes = card.getByTestId('tool-takes-from')
-    await expect(takes).toContainText('+ 2 more')
+    // The three tools are alternatives for the one annual trend: offered on that row, not above the card.
+    await expect(card.getByTestId('tool-takes-from')).toHaveCount(0)
     await expect(card.getByTestId('shared-default')).toBeVisible()
-    await card.getByRole('button', { name: /^Annual trend/ }).click()
+    await card.getByRole('button', { name: /^Annual trend:/ }).click()
+    await expect(card.getByTestId('take-from').getByRole('button')).toHaveCount(3)
+    await card.getByRole('button', { name: 'Annual trend value' }).click()
     const sheet = page.getByTestId('value-sheet')
-    await expect(sheet.getByTestId('sheet-handoff')).toHaveCount(3)
     await expect(sheet.getByTestId('pending-figure')).toContainText('Loss cost trends, by coverage')
     await expect(sheet.getByTestId('pending-figure')).toContainText('haven’t been entered here yet')
   })
@@ -315,11 +320,13 @@ test.describe('tools', () => {
     await page.setViewportSize({ width: 390, height: 600 })
     await page.goto('/tools/bond-price')
     const card = page.getByTestId('tool-card')
-    // Six inputs: no slider on the rows; a row opens the sheet, which has one.
+    // Six inputs: no slider until a row is tapped, and then in place; the number opens the keypad.
     await expect(card.getByRole('slider')).toHaveCount(0)
-    await card.getByRole('button', { name: /^Yield, convertible m-thly/ }).click()
+    await card.getByRole('button', { name: /^Yield, convertible m-thly: / }).click()
+    await expect(card.getByRole('slider')).toHaveCount(1)
+    await card.getByRole('button', { name: /^Yield, convertible m-thly.* value$/ }).click()
     const sheet = page.getByTestId('value-sheet')
-    await expect(sheet.getByRole('slider')).toBeVisible()
+    await expect(sheet.getByRole('slider')).toHaveCount(0)
     for (const k of ['6', 'Point', '5']) await sheet.getByRole('button', { name: k, exact: true }).click()
     await sheet.getByRole('button', { name: 'Done' }).click()
     await expect(card.getByTestId('tool-tile').first()).not.toHaveText('1,077.95')
@@ -329,15 +336,16 @@ test.describe('tools', () => {
     await expect(page.getByTestId('tool-pinned-answer')).toBeVisible()
   })
 
-  test('offers the bank\'s figures in a field\'s From… menu', async ({ page }) => {
+  test('offers the bank\'s figures on a field\'s row, and uses one in place', async ({ page }) => {
     await page.goto('/tools/loss-ratio-method')
     const card = page.getByTestId('tool-card')
-    await card.getByRole('button', { name: 'Variable expense ratio from a tool or a published figure' }).click()
-    const figures = card.getByTestId('tool-bank-figures')
-    await expect(figures).toBeVisible()
-    await figures.getByRole('button', { name: /Total expenses, 27\.8%/ }).click()
-    await expect(card.getByLabel('Variable expense ratio value')).toHaveValue('27.8')
-    await expect(card.getByTestId('tool-figure-source')).toContainText('Operating Expenses & ULAE')
+    const row = card.locator('[data-field="variable"]')
+    await row.getByTestId('published-count').click()
+    const list = row.getByTestId('published-list')
+    await list.getByTestId('figure-line').filter({ hasText: '27.8%' }).click()
+    await list.getByRole('button', { name: 'Use 27.8%' }).click()
+    await expect(card.getByRole('button', { name: /^Variable expense ratio.* value$/ })).toHaveText('27.8%')
+    await expect(row.locator('[data-source="published"]')).toContainText('AIRB, Alberta')
   })
 
   test('shows a document\'s figures on its resource page', async ({ page }) => {

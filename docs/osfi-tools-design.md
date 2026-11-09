@@ -293,7 +293,7 @@ next, rather than adding a parallel track.
    line can fill) to the engine's data file, with the manifest's hash.
 3. A fixture script that writes `osfi-mct.json` from the extract (every filer, every quarter,
    lines 50–140), and the Exam 6C question check.
-4. Write the specs onto the template (`TEMPLATE_TOOLS`), run `npm run tools:bundle`, extend
+4. Write the specs onto the template (every tool page draws `ToolTemplate`), run `npm run tools:bundle`, extend
    `e2e/tools.spec.ts` with Insurer Return → MCT Ratio arriving Linked (or Filed).
 
 Every reader-facing string here is a draft for the `app-copy` pass.

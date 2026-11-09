@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { TOOLS, runTool, toolById } from './tools'
 import {
-  TEMPLATE_TOOLS,
   columnNumbers,
   columnSource,
   formulaText,
@@ -30,11 +29,8 @@ import {
   slidersInline,
 } from './toolTemplate'
 
-describe('the template tools', () => {
-  it('are all real tools', () => {
-    for (const id of TEMPLATE_TOOLS) expect(toolById(id), id).toBeDefined()
-  })
-  it('keep sliders inline on Permissible Loss Ratio and move them to the sheet on Bond Price', () => {
+describe('the template', () => {
+  it('keeps sliders open on Permissible Loss Ratio and opens them row by row on Bond Price', () => {
     const scalars = (id: string) => toolById(id)!.fields.filter(isScalar)
     expect(slidersInline(scalars('ratemaking.permissible_loss_ratio'))).toBe(true)
     expect(slidersInline(scalars('finance.bond_price'))).toBe(false)

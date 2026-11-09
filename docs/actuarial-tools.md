@@ -1585,8 +1585,8 @@ The changes are planned as **V2**, ahead of Phase 2 (§11).
 ## 19. The tool template (2026-11-09)
 
 A redesign of the tool page, worked out over three rounds of mock-ups and built first on five
-tools so it can be checked on a phone before the other tools move over. `TEMPLATE_TOOLS` in
-`lib/toolTemplate.ts` lists them: **Bornhuetter-Ferguson** (a grid), **Permissible Loss Ratio**
+tools so it could be checked on a phone before the other tools moved over (**every tool's page
+draws it since 2026-11-09**; see the end of this section). The five were: **Bornhuetter-Ferguson** (a grid), **Permissible Loss Ratio**
 (three inputs, one a published figure), **Bond Price** (six inputs), and two test tools,
 **Limited Expected Value** (a choice that changes which inputs exist) and **Age-to-Age Factors**
 (a triangle with its selection exhibit). Every other tool still draws `ToolCard`; both run one
@@ -1642,6 +1642,12 @@ one on no syllabus is neutral. `toolExam.test.ts` pins the template tools' exams
 the title, "N of M figures read" and the effective date), its figures as rows (value, locator, how
 many tools take it), the Fact Check badge and the source links under it. A figure a tool takes
 opens **Use in…**, a sheet of those tools, each with its exam's logo.
+
+**Every tool, simplified (2026-11-09).** After template v2 every tool page moved to the template,
+in variation A of the simplified card (`docs/tool-template-v2.md` §8.1): sliders in place (a row
+opens its own past three inputs), the keypad only from the number, tools that can supply a value
+offered on that value as alternatives, and less text on the answer card. `ToolCard` remains for
+the embedded cards (a workflow step, a source sheet).
 
 **Template v2, built 2026-11-09.** A phone review of this template led to a second pass on
 navigation and connection, `docs/tool-template-v2.md` (mock-ups in

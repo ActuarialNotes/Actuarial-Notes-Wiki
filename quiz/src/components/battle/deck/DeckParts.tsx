@@ -1,4 +1,4 @@
-import { useEffect, type ButtonHTMLAttributes, type CSSProperties, type ReactNode } from 'react'
+import { useEffect, useState, type ButtonHTMLAttributes, type CSSProperties, type ReactNode } from 'react'
 import { ChevronLeft, X } from 'lucide-react'
 import { OverlayPortal } from '@/components/ui/OverlayPortal'
 import { battleExamKey, battleExamName, playerAccentStyle, playerInitials } from '@/lib/battleDisplay'
@@ -329,5 +329,27 @@ export function ExamSheet({
         })}
       </div>
     </DeckSheet>
+  )
+}
+
+/** Leave, with a second tap to confirm, so a stray one doesn't throw a close game away. */
+export function LeaveButton({ onLeave }: { onLeave: () => void }) {
+  const [confirming, setConfirming] = useState(false)
+  useEffect(() => {
+    if (!confirming) return
+    const id = window.setTimeout(() => setConfirming(false), 3000)
+    return () => window.clearTimeout(id)
+  }, [confirming])
+  return confirming ? (
+    <button
+      type="button"
+      onClick={onLeave}
+      className="h-11 shrink-0 rounded-[14px] bg-red-950 px-3 text-sm font-semibold text-red-100"
+      data-testid="battle-leave"
+    >
+      Tap again to end
+    </button>
+  ) : (
+    <DeckBackButton onClick={() => setConfirming(true)} label="Leave" data-testid="battle-leave" />
   )
 }

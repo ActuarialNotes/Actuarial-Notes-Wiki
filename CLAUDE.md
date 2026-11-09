@@ -140,7 +140,7 @@ registered as a *virtual* vault file so it opens in the same popup viewer as a r
   See `docs/style-guide.md` §7.2a.
   `components/ConceptTile.tsx` is **the** concept tile — a concept as a small static card, its
   foil edge its level (`lib/flashcardFoil.ts`), a padlock while uncollected, the green wash and
-  tick when picked. The add-flashcards picker, Quiz Battle's topic pick and Concept Craft's deck
+  tick when picked. The add-flashcards picker, Quiz Battle's draw and Concept Craft's deck
   all draw it (levels read through `latestMasteryStates` in `lib/mastery.ts` — for the latter
   two via `hooks/useConceptLevels.ts`), so one concept is the same card in each. The craft deck
   passes `showLock={false}`: every card in hand can be played.
@@ -481,11 +481,14 @@ before touching that area**:
   Supabase Realtime broadcast channel named after a 4-character code (no table, nothing
   stored); the guest times its own answers and the host holds a round open 1.5 s for them;
   every message is untrusted and parsed field by field. Before every online battle (a room's,
-  a matched one's, each rematch's) comes a **topic pick** — up to 3 concepts each in 30 s,
-  drawn as flashcard tiles, hidden from the other player until both are in — and a **draw**
-  that deals the questions from both picks, the players taking turns, shown on both screens
-  before the count-in (`lib/battleTopics.ts`, `components/battle/TopicPick.tsx`); same-screen
-  battles have no pick. **Random opponent** is a matchmaking
+  a matched one's, each rematch's, on either skin) comes the **draft** — each player draws
+  4 topics as flashcard tiles in 30 s and strikes 1 of the other's in 15 s, each hidden until
+  both are in; the 3 cards left in each hand are **dealt to pairs** by Concept Craft's strength
+  (`readPair`), the most pairs some question tests both of first, the strongest of those the
+  final; a pair no question covers is settled by a **coin** the host tosses when its round
+  comes up (`lib/battleDraft.ts`, `components/battle/deck/DeckDraft.tsx` and `DeckCoinFlip.tsx`
+  — Monte Carlo Station draws them in a Deck scope of its own). On random hands a coin settles
+  most rounds (measured, `docs/quiz-battle-redesign.md` §4); same-screen battles have no draft. **Random opponent** is a matchmaking
   lobby on one more public channel (`quiz-battle:lobby`, presence): every device computes the
   same pairing from the same queue (oldest first, same exam or *any*; the older hosts) and an
   offer → accept → go handshake seals each match, so nobody ends up in two rooms; a matched
@@ -1497,7 +1500,7 @@ Other important `lib/` modules:
   `knowledgeBase.js` index + search, `load.js`, `usage.js` the usage log and link tags); a few helpers are mirrored there
   (`normalizeTerm`, `objectiveKey`, `normalizeAnswerText`) and pinned by `mcpServer.test.ts`.
 - `battle.ts` / `battleDisplay.ts` / `battleSetup.ts` / `battleRoom.ts` / `battleSession.ts` /
-  `battleTransport.ts` / `battleLobby.ts` / `battleMatchmaking.ts` / `battleTopics.ts` /
+  `battleTransport.ts` / `battleLobby.ts` / `battleMatchmaking.ts` / `battleTopics.ts` / `battleDraft.ts` /
   `battleMusic.ts` / `battleMusicPlayer.ts` — **Quiz Battle** (`docs/quiz-battle.md`). `battle.ts` is the game as a
   pure reducer (`battleReducer`: tick / buzz / answer / ready / next / forfeit, each carrying its
   own time; a disallowed event returns the state by identity), the scoring constants, the
@@ -1510,11 +1513,16 @@ Other important `lib/` modules:
   `battleSession.ts` is `HostSession` (runs the reducer, sends the redacted room on every change
   and every 2 s) and `GuestSession` (sends moves, draws the room shifted onto its own clock),
   framework-free and tested against each other over an in-memory channel — the host also runs
-  the **topic pick** (`openTopics`, the pick's clock and its grace, the draw, then `start`);
-  `battleTopics.ts` is that pick as data: the topics an exam offers (`topicCatalogue`, grouped
-  by the syllabus), the rules a pick is held to (`cleanTopicPick`), the draw from two picks
-  (`drawFromTopics` — turns, every pick before any twice, the whole exam last) and the
-  `BattleDraft` the room carries, hidden per player until the draw; `battleTransport.ts`
+  the **draft** (`openDraft`, the draw's and the strikes' clocks and their grace, the deal, then
+  `start`, and each coin round's toss — `settleCoin`, after the reducer, so its rules are
+  untouched); `battleTopics.ts` is the topics an exam offers (`topicCatalogue`, grouped by the
+  syllabus); `battleDraft.ts` is the draft as data: a hand (`cleanHand`, `topUpHand`), a missed
+  strike (`autoStrike`), the pairing and its order (`dealPairs`, `orderPairs`, `roundPairs`), a
+  round's question and its fallbacks (`drawRound`), the pair reader over Concept Craft's
+  `readPair` (`battlePairReader`), and the `BattleDraft` the room carries, redacted per seat
+  (`redactDraft`) — plus the words the draft is told in, kept out of `battleDisplay.ts` because
+  that module is in the first-paint bundle; `battleDraftVault.test.ts` plays it on the real bank
+  (`BATTLE_DRAFT_MEASURE=1` prints the coin share); `battleTransport.ts`
   is the channel — Supabase Realtime broadcast, or BroadcastChannel with
   `VITE_BATTLE_TRANSPORT=local` (the e2e suite). The **matchmaking lobby**: `battleLobby.ts` is
   its rules as data (entries and handshake messages validated, the queue, `planMatches` — the

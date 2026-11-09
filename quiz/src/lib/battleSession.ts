@@ -7,10 +7,12 @@
 // `GuestSession` only asks: it sends its player's moves, and draws the last
 // room it was sent, moved onto its own clock.
 //
-// Before each battle the room goes through a topic pick and a draw
-// (lib/battleTopics.ts): the host opens the pick, holds both players to its
-// clock, draws the questions from the two picks and shows the draw on both
-// screens, and the battle starts when the draw is done.
+// Before each battle the room goes through a draft (lib/battleDraft.ts): the
+// host opens it, holds both players to its clock while they draw their hands
+// and strike one of each other's cards, deals the six cards left to pairs and
+// shows the deal on both screens, and the battle starts when the deal is done.
+// A pair no question covers is settled by a coin the host tosses when its
+// round comes up.
 //
 // Neither touches React, a network API or a global clock directly: the
 // transport and the clock are handed in, so both ends are tested talking to
@@ -48,14 +50,26 @@ import {
   type RoomStage,
 } from './battleRoom'
 import {
-  MAX_TOPICS,
+  COIN_MS,
+  DEAL_MS,
+  HAND_SIZE,
+  STRIKE_MS,
   TOPIC_PICK_MS,
-  cleanTopicPick,
-  drawDurationMs,
+  autoStrike,
+  cleanHand,
+  cleanLevel,
+  dealPairs,
+  emptyDraft,
+  keptHand,
   redactDraft,
+  roundPairs,
   shiftDraftClock,
+  topUpHand,
   type BattleDraft,
-} from './battleTopics'
+  type DraftRound,
+  type ReadPair,
+  type RoundBasis,
+} from './battleDraft'
 
 // ── The transport ───────────────────────────────────────────────────────────
 
@@ -141,20 +155,39 @@ export interface SessionSnapshot {
   /** Guest: an ability used and not yet in a room the host sent back. */
   pendingPower: { round: number; ability: AbilityId } | null
   /**
-   * The topic pick and the draw (lib/battleTopics.ts), on this device's clock,
-   * the other player's picks hidden until the draw. Kept through the battle it
-   * drew, for the topic each question came from.
+   * The draft (lib/battleDraft.ts), on this device's clock, the other
+   * player's hand and strike hidden until both are in. Kept through the
+   * battle it dealt, for each round's pair and coin.
    */
   draft: BattleDraft | null
-  /** This player's topics while they are still choosing — not yet locked in. */
+  /** This player's hand while they are still drawing — not yet locked in. */
   topicChoice: string[]
 }
 
-/** A draft with `seat`'s pick in it. */
-function withPick(draft: BattleDraft, seat: Seat, topics: string[]): BattleDraft {
-  const picks: [string[] | null, string[] | null] = [...draft.picks]
-  picks[seat] = topics
-  return { ...draft, picks }
+/** A draft with `seat`'s hand locked in. */
+function withHand(draft: BattleDraft, seat: Seat, hand: string[], levels: number[]): BattleDraft {
+  const hands: BattleDraft['hands'] = [...draft.hands]
+  const levelPair: BattleDraft['levels'] = [...draft.levels]
+  const counts: BattleDraft['counts'] = [...draft.counts]
+  hands[seat] = hand
+  levelPair[seat] = levels
+  counts[seat] = hand.length
+  return { ...draft, hands, levels: levelPair, counts }
+}
+
+/** A draft with `seat`'s count of cards drawn so far. */
+function withCount(draft: BattleDraft, seat: Seat, count: number): BattleDraft {
+  if (draft.counts[seat] === count) return draft
+  const counts: BattleDraft['counts'] = [...draft.counts]
+  counts[seat] = count
+  return { ...draft, counts }
+}
+
+/** A draft with `seat`'s strike made. */
+function withStrike(draft: BattleDraft, seat: Seat, topic: string): BattleDraft {
+  const strikes: BattleDraft['strikes'] = [...draft.strikes]
+  strikes[seat] = topic
+  return { ...draft, strikes }
 }
 
 type Listener = () => void
@@ -271,14 +304,22 @@ abstract class Session {
 // ── The host ────────────────────────────────────────────────────────────────
 
 /**
- * What a room's battles are drawn from: the page's question bank, behind two
- * calls, so the session never holds a question's text.
+ * What a room's battles are drawn from: the page's question bank and its
+ * notes, behind a few calls, so the session never holds a question's text.
  */
-export interface TopicSource {
+export interface DraftSource {
   /** The topics a battle on `exam` can be played on. */
   topics(exam: string): readonly string[]
-  /** The battle's questions, drawn from both players' picks, each with the topic it was drawn for. */
-  draw(config: BattleConfig, picks: [string[], string[]]): { key: BattleQuestionKey; topic: string | null }[]
+  /** How two topics of `exam` pair: the notes' strength, and the battle questions that test both. */
+  pair(exam: string): ReadPair
+  /**
+   * One round's question, never one in `used`: on both cards (`'both'`), or
+   * on one, falling back to the other and then the whole exam.
+   */
+  draw(config: BattleConfig, cards: readonly [string, string], on: 'both' | string, used: ReadonlySet<string>):
+    { key: BattleQuestionKey; basis: RoundBasis; topic: string | null } | null
+  /** The host player's own level on a topic, 0–3. */
+  level?(topic: string): number
 }
 
 export interface HostOptions {
@@ -287,12 +328,12 @@ export interface HostOptions {
   host: BattlePlayer
   config: BattleConfig
   clientId: string
-  /** Where the topic pick's topics and the draw come from. Without it, `openTopics` does nothing. */
-  topics?: TopicSource
+  /** Where the draft's topics, pairs and questions come from. Without it, `openDraft` does nothing. */
+  topics?: DraftSource
   clock?: Clock
   /** The host's own abilities — used only in a room with abilities on. */
   loadout?: readonly AbilityId[]
-  /** Picks Bayesian Update's option — the reducer draws nothing at random itself. */
+  /** Picks Bayesian Update's option, tops up a hand, makes a missed strike, breaks a tie in the deal and tosses a coin. */
   random?: () => number
 }
 
@@ -305,12 +346,15 @@ export class HostSession extends Session {
   /** The battle on the host's clock, unredacted — the one true copy. */
   private battle: BattleState | null = null
   private roomStage: RoomStage = 'lobby'
-  private readonly topicSource: TopicSource | null
-  /** The pick and the draw on the host's clock, unredacted. */
+  private readonly topicSource: DraftSource | null
+  /** The draft on the host's clock, unredacted. */
   private draft: BattleDraft | null = null
-  /** The questions the draw came up with, answers and all — never sent until the battle is. */
+  /**
+   * The questions the deal came up with, answers and all — never sent until
+   * the battle is. A coin round's is a stand-in until its coin is tossed.
+   */
   private drawnKeys: BattleQuestionKey[] = []
-  /** Battles opened in this room, so a pick can say which one it is for. */
+  /** Battles opened in this room, so a hand or a strike can say which one it is for. */
   private games = 0
 
   constructor(options: HostOptions) {
@@ -346,41 +390,50 @@ export class HostSession extends Session {
   }
 
   /**
-   * Open the topic pick — from the lobby, or as a rematch from the results.
-   * Each player has `TOPIC_PICK_MS` to lock in up to three topics; then the
-   * questions are drawn from both picks, the draw is shown, and the battle
-   * starts. Needs a second player.
+   * Open the draft — from the lobby, or as a rematch from the results. Each
+   * player has `TOPIC_PICK_MS` to draw a hand of four, then `STRIKE_MS` to
+   * strike one of the other's; then the six cards left are dealt to pairs,
+   * the deal is shown, and the battle starts. Needs a second player.
    */
-  openTopics(): void {
+  openDraft(): void {
     const [host, guest] = this.snapshot.players
     if (!host || !guest || !this.topicSource) return
     if (this.roomStage !== 'lobby' && this.roomStage !== 'finished') return
     this.games += 1
     this.battle = null
     this.drawnKeys = []
-    this.draft = { game: this.games, phase: 'picking', deadline: this.clock.now() + TOPIC_PICK_MS, picks: [null, null], drawn: [] }
-    this.roomStage = 'picking'
+    this.draft = emptyDraft(this.games, this.clock.now() + TOPIC_PICK_MS)
+    this.roomStage = 'drafting'
     this.publish({ rematch: [false, false], topicChoice: [] })
   }
 
-  /** This player's topics while they choose — on this screen only, until `lockTopics` (or the clock) sends them in. */
-  chooseTopics(topics: readonly string[]): void {
-    if (this.roomStage !== 'picking' || this.draft?.picks[0]) return
-    this.set({ topicChoice: cleanTopicPick(topics, this.offeredTopics()) })
+  /** This player's hand while they draw — on this screen only, until `lockHand` (or the clock) sends it in. */
+  chooseHand(topics: readonly string[]): void {
+    const draft = this.draft
+    if (this.roomStage !== 'drafting' || draft?.phase !== 'draw' || draft.hands[0]) return
+    const hand = cleanHand(topics, this.offeredTopics())
+    this.draft = withCount(draft, 0, hand.length)
+    this.publish({ topicChoice: hand })
   }
 
-  /** Lock this player's topics in. */
-  lockTopics(): void {
-    this.setPick(0, this.snapshot.topicChoice)
+  /** Lock this player's hand in — topped up at random if it is short. */
+  lockHand(): void {
+    this.setHand(0, this.snapshot.topicChoice, this.snapshot.topicChoice.map(t => cleanLevel(this.topicSource?.level?.(t))))
+  }
+
+  /** Strike one of the other player's cards. */
+  strike(topic: string): void {
+    this.setStrike(0, topic)
   }
 
   /**
-   * Start a battle on these questions — at the end of a draw, or straight
+   * Start a battle on these questions — at the end of a deal, or straight
    * from the lobby or the results. Needs a second player.
    */
   start(questions: BattleQuestionKey[]): void {
     const [host, guest] = this.snapshot.players
-    if (!host || !guest || this.roomStage === 'playing' || this.roomStage === 'picking' || questions.length === 0) return
+    if (!host || !guest || this.roomStage === 'playing' || questions.length === 0) return
+    if (this.roomStage === 'drafting' && this.draft?.phase !== 'deal') return
     this.battle = createBattle({
       config: { ...this.snapshot.config, rules: 'simultaneous' },
       players: [host, guest],
@@ -389,9 +442,9 @@ export class HostSession extends Session {
       graceMs: ONLINE_GRACE_MS,
       loadouts: [this.hostLoadout, this.guestLoadout],
     })
-    // A battle that wasn't drawn from a pick has no topics to tell.
-    if (this.roomStage !== 'drawing') this.draft = null
-    this.drawnKeys = []
+    // A battle that wasn't dealt from a draft has no pairs to tell.
+    if (this.roomStage !== 'drafting') this.draft = null
+    this.settleCoin(0)
     this.roomStage = 'playing'
     this.publish({ rematch: [false, false] })
   }
@@ -409,52 +462,145 @@ export class HostSession extends Session {
     return this.topicSource?.topics(this.snapshot.config.exam) ?? []
   }
 
-  /** A player's pick is in; with both in, the draw. */
-  private setPick(seat: Seat, topics: readonly unknown[]): void {
+  /** A player's hand is in, topped up to four; with both in, the strikes. */
+  private setHand(seat: Seat, topics: readonly unknown[], levels: readonly unknown[]): void {
     const draft = this.draft
-    if (this.roomStage !== 'picking' || !draft || draft.picks[seat]) return
-    this.draft = withPick(draft, seat, cleanTopicPick(topics, this.offeredTopics()))
-    if (this.draft.picks[0] && this.draft.picks[1]) this.closeTopics()
+    if (this.roomStage !== 'drafting' || draft?.phase !== 'draw' || draft.hands[seat]) return
+    const offered = this.offeredTopics()
+    const clean = cleanHand(topics, offered)
+    const levelOf = new Map(clean.map(t => [t, 0]))
+    topics.forEach((t, i) => {
+      const name = typeof t === 'string' ? clean.find(c => c.toLowerCase() === t.trim().toLowerCase()) : undefined
+      if (name) levelOf.set(name, cleanLevel(levels[i]))
+    })
+    const hand = topUpHand(clean, offered, this.random)
+    // A card the clock dealt is one the host can level only for its own player.
+    const handLevels = hand.map(t => levelOf.get(t) ?? (seat === 0 ? cleanLevel(this.topicSource?.level?.(t)) : 0))
+    this.draft = withHand(draft, seat, hand, handLevels)
+    if (this.draft.hands[0] && this.draft.hands[1]) this.openStrikes()
+    else this.publish(seat === 0 ? { topicChoice: hand } : {})
+  }
+
+  /** Both hands are in, face up: each player strikes one of the other's. */
+  private openStrikes(): void {
+    if (!this.draft) return
+    this.draft = { ...this.draft, phase: 'strike', deadline: this.clock.now() + STRIKE_MS }
+    this.publish()
+  }
+
+  /** A strike, held to a card in the other player's hand; with both in, the deal. */
+  private setStrike(seat: Seat, topic: unknown): void {
+    const draft = this.draft
+    if (this.roomStage !== 'drafting' || draft?.phase !== 'strike' || draft.strikes[seat] || typeof topic !== 'string') return
+    const card = draft.hands[otherSeat(seat)]?.find(t => t.toLowerCase() === topic.trim().toLowerCase())
+    if (!card) return
+    this.draft = withStrike(draft, seat, card)
+    if (this.draft.strikes[0] && this.draft.strikes[1]) this.deal()
     else this.publish()
   }
 
-  /** The picks are in, or out of time: draw the questions, and show the draw. */
-  private closeTopics(): void {
-    const draft = this.draft
-    if (this.roomStage !== 'picking' || !draft || !this.topicSource) return
-    const picks: [string[], string[]] = [draft.picks[0] ?? [], draft.picks[1] ?? []]
-    const drawn = this.topicSource.draw({ ...this.snapshot.config, rules: 'simultaneous' }, picks)
-    if (drawn.length === 0) {
+  /**
+   * The strikes are in, or out of time: deal the six cards left to pairs,
+   * draw each paired round's question (a coin round's waits for its coin),
+   * and show the deal.
+   */
+  private deal(): void {
+    let draft = this.draft
+    if (this.roomStage !== 'drafting' || !draft || !this.topicSource) return
+    for (const seat of [0, 1] as const) {
+      if (draft.strikes[seat]) continue
+      const target = otherSeat(seat)
+      draft = withStrike(draft, seat, autoStrike(draft.hands[target] ?? [], draft.levels[target], this.random))
+    }
+    const config: BattleConfig = { ...this.snapshot.config, rules: 'simultaneous' }
+    const rows = keptHand(draft, 0)
+    const cols = keptHand(draft, 1)
+    const { grid, pairs } = dealPairs(rows, cols, this.topicSource.pair(config.exam), this.random)
+    const used = new Set<string>()
+    const keys: BattleQuestionKey[] = []
+    const rounds: DraftRound[] = []
+    const plan = roundPairs(pairs.length, config.rounds)
+    // Paired rounds first, so no coin round's stand-in can take their question.
+    const paired = new Map<number, { key: BattleQuestionKey; basis: RoundBasis; topic: string | null }>()
+    plan.forEach((p, i) => {
+      if (pairs[p].shared === 0) return
+      const drawn = this.topicSource!.draw(config, pairs[p].cards, 'both', used)
+      if (!drawn) return
+      used.add(drawn.key.id)
+      paired.set(i, drawn)
+    })
+    for (let i = 0; i < plan.length; i++) {
+      const pair = pairs[plan[i]]
+      const drawn = paired.get(i)
+      if (drawn) {
+        keys.push(drawn.key)
+        rounds.push({ pair: plan[i], paired: true, coin: null, basis: drawn.basis, topic: drawn.topic })
+        continue
+      }
+      // A coin round: a stand-in from the pool until the coin is tossed.
+      const standIn = this.topicSource.draw(config, pair.cards, pair.cards[0], new Set())
+      if (!standIn) break
+      keys.push(standIn.key)
+      rounds.push({ pair: plan[i], paired: false, coin: null, basis: null, topic: null })
+    }
+    if (keys.length === 0) {
       // Nothing to play on — the bank has no battle questions for this exam.
       this.draft = null
       this.roomStage = 'lobby'
       this.publish()
       return
     }
-    this.drawnKeys = drawn.map(d => d.key)
-    this.draft = {
-      ...draft,
-      phase: 'drawing',
-      picks,
-      deadline: this.clock.now() + drawDurationMs(drawn.length),
-      drawn: drawn.map(d => ({ id: d.key.id, topic: d.topic })),
-    }
-    this.roomStage = 'drawing'
+    this.drawnKeys = keys
+    this.draft = { ...draft, phase: 'deal', deadline: this.clock.now() + DEAL_MS, rows, cols, grid, pairs, rounds }
     this.publish()
+  }
+
+  /**
+   * Round `index` has come up: if no question covers its pair, toss the coin
+   * between its two cards, draw the question on the winner, and hold the
+   * count-in back long enough for the toss to be watched.
+   */
+  private settleCoin(index: number): void {
+    const draft = this.draft
+    const battle = this.battle
+    const round = draft?.rounds[index]
+    if (!draft || !battle || !round || round.paired || round.coin !== null || !this.topicSource) return
+    const pair = draft.pairs[round.pair]
+    const coin: Seat = this.random() < 0.5 ? 0 : 1
+    // Every question already played, and every paired round's still to come.
+    const used = new Set(battle.questions.filter((_, i) => i < index || draft.rounds[i]?.paired).map(q => q.id))
+    const drawn = this.topicSource.draw({ ...battle.config }, pair.cards, pair.cards[coin], used)
+    const key = drawn?.key ?? battle.questions[index]
+    const questions = battle.questions.map((q, i) => (i === index ? key : q))
+    const live = battle.rounds[index]
+    const rounds = battle.rounds.map((r, i) =>
+      i === index ? { ...r, questionId: key.id, opensAt: live.opensAt + COIN_MS, deadline: live.deadline + COIN_MS } : r,
+    )
+    this.battle = { ...battle, questions, rounds }
+    this.drawnKeys = questions
+    const settled: DraftRound = { ...round, coin, basis: drawn?.basis ?? 'any', topic: drawn ? drawn.topic : null }
+    this.draft = { ...draft, rounds: draft.rounds.map((r, i) => (i === index ? settled : r)) }
   }
 
   private tickDraft(now: number): void {
     const draft = this.draft
     if (!draft) return
-    if (this.roomStage === 'drawing') {
+    if (draft.phase === 'deal') {
       if (now >= draft.deadline) this.start(this.drawnKeys)
       return
     }
-    // Out of time: this player's choice goes in as it stands. The other
-    // player's device does the same on its own clock, and its pick still has
-    // the grace an answer gets to arrive.
-    if (now >= draft.deadline && !draft.picks[0]) this.lockTopics()
-    if (now >= draft.deadline + ONLINE_GRACE_MS) this.closeTopics()
+    if (draft.phase === 'draw') {
+      // Out of time: this player's hand goes in as it stands, topped up. The
+      // other player's device does the same on its own clock, and its hand
+      // still has the grace an answer gets to arrive.
+      if (now >= draft.deadline && !draft.hands[0]) this.lockHand()
+      if (now >= draft.deadline + ONLINE_GRACE_MS) {
+        if (!this.draft?.hands[1]) this.setHand(1, [], [])
+      }
+      return
+    }
+    // The strikes: whoever hasn't struck by the grace has one made for them.
+    if (now >= draft.deadline + ONLINE_GRACE_MS) this.deal()
   }
 
   answer(choice: string): void {
@@ -491,7 +637,10 @@ export class HostSession extends Session {
     if (!this.battle || this.roomStage !== 'playing') return
     const next = battleReducer(this.battle, event)
     if (next === this.battle) return
+    const grew = next.rounds.length > this.battle.rounds.length
     this.battle = next
+    // A new round has come up: a coin round tosses its coin now.
+    if (grew) this.settleCoin(next.rounds.length - 1)
     if (next.finished) this.roomStage = 'finished'
     this.publish()
   }
@@ -529,7 +678,7 @@ export class HostSession extends Session {
     if (this.guestId) this.checkPresence()
     this.pruneReactions()
     const now = this.clock.now()
-    if (this.roomStage === 'picking' || this.roomStage === 'drawing') this.tickDraft(now)
+    if (this.roomStage === 'drafting') this.tickDraft(now)
     else this.apply({ type: 'tick', now })
   }
 
@@ -579,9 +728,18 @@ export class HostSession extends Session {
       this.publish({ rematch: [this.snapshot.rematch[0], true] })
       return
     }
-    if (action.kind === 'topics') {
-      // A pick for an earlier battle in the room is a resend that crossed the draw.
-      if (this.draft?.game === action.game) this.setPick(1, action.topics)
+    if (action.kind === 'hand' || action.kind === 'strike') {
+      // A move for an earlier battle in the room is a resend that crossed the deal.
+      if (this.draft?.game !== action.game) return
+      if (action.kind === 'strike') return this.setStrike(1, action.topic)
+      if (action.topics) return this.setHand(1, action.topics, action.levels ?? [])
+      if (this.roomStage === 'drafting' && this.draft.phase === 'draw' && !this.draft.hands[1]) {
+        const next = withCount(this.draft, 1, Math.min(HAND_SIZE, action.count))
+        if (next !== this.draft) {
+          this.draft = next
+          this.publish()
+        }
+      }
       return
     }
     if (!this.battle) return
@@ -628,6 +786,8 @@ export interface GuestOptions {
   clock?: Clock
   /** The abilities this player brings, declared to the host on joining. */
   loadout?: readonly AbilityId[]
+  /** This player's own level on a topic, 0–3 — sent with the hand, for the cards' foil and a missed strike. */
+  level?: (topic: string) => number
 }
 
 const PLACEHOLDER_CONFIG: BattleConfig = { rules: 'simultaneous', exam: '', rounds: 0, roundSeconds: 60 }
@@ -641,8 +801,11 @@ export class GuestSession extends Session {
   private readonly knows: (questionId: string) => boolean
   /** A Ready not yet seen in a room the host sent back. */
   private pendingReady: number | null = null
-  /** Topics locked in and not yet seen in a room the host sent back. */
-  private pendingTopics: { game: number; topics: string[] } | null = null
+  /** A hand locked in and not yet seen in a room the host sent back. */
+  private pendingHand: { game: number; topics: string[]; levels: number[] } | null = null
+  /** A strike made and not yet seen in a room the host sent back. */
+  private pendingStrike: { game: number; topic: string } | null = null
+  private readonly level: (topic: string) => number
   /** The battle in the room the last draft was for — a new one clears this player's choice. */
   private draftGame: number | null = null
 
@@ -669,6 +832,7 @@ export class GuestSession extends Session {
     this.player = options.me
     this.loadout = cleanLoadout(options.loadout)
     this.knows = options.knows
+    this.level = options.level ?? (() => 0)
     this.joinStartedAt = clock.now()
     this.begin()
   }
@@ -704,30 +868,53 @@ export class GuestSession extends Session {
     this.send({ t: 'act', ...this.envelope(), action: { kind: 'power', round, ability } })
   }
 
-  /** This player's topics while they choose — on this screen only, until `lockTopics` (or the clock) sends them in. */
-  chooseTopics(topics: readonly string[]): void {
-    if (!this.canPick()) return
-    // The host holds a pick to the exam's topics; this only keeps it to size.
-    this.set({ topicChoice: topics.slice(0, MAX_TOPICS) })
+  /**
+   * This player's hand while they draw — on this screen, with only its size
+   * sent on, for the other player's pips, until `lockHand` (or the clock)
+   * sends the cards in.
+   */
+  chooseHand(topics: readonly string[]): void {
+    const draft = this.snapshot.draft
+    if (!draft || !this.canDraw()) return
+    // The host holds a hand to the exam's topics; this only keeps it to size.
+    const hand = topics.slice(0, HAND_SIZE)
+    this.set({ topicChoice: hand })
+    this.send({ t: 'act', ...this.envelope(), action: { kind: 'hand', game: draft.game, count: hand.length } })
   }
 
-  /** Lock this player's topics in. Sent again with each heartbeat until the host's room shows them. */
-  lockTopics(): void {
+  /** Lock this player's hand in. Sent again with each heartbeat until the host's room shows it. */
+  lockHand(): void {
     const draft = this.snapshot.draft
-    if (!draft || !this.canPick()) return
+    if (!draft || !this.canDraw()) return
     const topics = this.snapshot.topicChoice
-    this.pendingTopics = { game: draft.game, topics }
-    this.set({ draft: withPick(draft, 1, topics) })
-    this.sendTopics()
+    const levels = topics.map(t => cleanLevel(this.level(t)))
+    this.pendingHand = { game: draft.game, topics, levels }
+    this.set({ draft: withHand(draft, 1, topics, levels) })
+    this.sendHand()
   }
 
-  private canPick(): boolean {
+  /** Strike one of the host's cards. Sent again with each heartbeat until the host's room shows it. */
+  strike(topic: string): void {
     const draft = this.snapshot.draft
-    return this.snapshot.stage === 'picking' && !!draft && draft.phase === 'picking' && !draft.picks[1] && !this.pendingTopics
+    if (!draft || this.snapshot.stage !== 'drafting' || draft.phase !== 'strike' || draft.strikes[1] || this.pendingStrike) return
+    if (!draft.hands[0]?.includes(topic)) return
+    this.pendingStrike = { game: draft.game, topic }
+    this.set({ draft: withStrike(draft, 1, topic) })
+    this.sendStrike()
   }
 
-  private sendTopics(): void {
-    if (this.pendingTopics) this.send({ t: 'act', ...this.envelope(), action: { kind: 'topics', ...this.pendingTopics } })
+  private canDraw(): boolean {
+    const draft = this.snapshot.draft
+    return this.snapshot.stage === 'drafting' && !!draft && draft.phase === 'draw' && !draft.hands[1] && !this.pendingHand
+  }
+
+  private sendHand(): void {
+    const hand = this.pendingHand
+    if (hand) this.send({ t: 'act', ...this.envelope(), action: { kind: 'hand', game: hand.game, count: hand.topics.length, topics: hand.topics, levels: hand.levels } })
+  }
+
+  private sendStrike(): void {
+    if (this.pendingStrike) this.send({ t: 'act', ...this.envelope(), action: { kind: 'strike', ...this.pendingStrike } })
   }
 
   requestRematch(): void {
@@ -772,18 +959,20 @@ export class GuestSession extends Session {
     }
     if (this.hostId) this.checkPresence()
     this.pruneReactions()
-    // Out of time on this device's clock: the choice goes in as it stands.
+    // Out of time on this device's clock: the hand goes in as it stands (the
+    // host tops it up). A strike not made is made by the host.
     const draft = this.snapshot.draft
-    if (draft && this.canPick() && this.clock.now() >= draft.deadline) this.lockTopics()
+    if (draft && this.canDraw() && this.clock.now() >= draft.deadline) this.lockHand()
   }
 
   protected heartbeat(): void {
     if (!this.hostId || this.snapshot.stage === 'ended') return
     this.send({ t: 'ping', ...this.envelope() })
-    // The answer, the topics and Ready go again until the host's room shows
-    // them: a broadcast has no receipt, and the host ignores a repeat.
+    // The answer, the hand, the strike and Ready go again until the host's
+    // room shows them: a broadcast has no receipt, and the host ignores a repeat.
     this.sendAnswer()
-    this.sendTopics()
+    this.sendHand()
+    this.sendStrike()
     const power = this.snapshot.pendingPower
     if (power) this.send({ t: 'act', ...this.envelope(), action: { kind: 'power', round: power.round, ability: power.ability } })
     if (this.pendingReady !== null) {
@@ -811,8 +1000,7 @@ export class GuestSession extends Session {
         return
       case 'room': {
         if (this.snapshot.stage === 'ended') return
-        const unknown = (message.battle && !message.battle.questions.every(q => this.knows(q.id)))
-          || (message.draft && !message.draft.drawn.every(d => this.knows(d.id)))
+        const unknown = message.battle && !message.battle.questions.every(q => this.knows(q.id))
         if (unknown) {
           this.set({ stage: 'ended', problem: 'version' })
           return
@@ -844,11 +1032,18 @@ export class GuestSession extends Session {
     // A new battle in the room starts this player's choice afresh.
     const newGame = !!draft && draft.game !== this.draftGame
     if (draft) this.draftGame = draft.game
-    if (this.pendingTopics) {
-      const acknowledged = !draft || draft.game !== this.pendingTopics.game || draft.phase !== 'picking' || !!draft.picks[1]
-      if (acknowledged) this.pendingTopics = null
+    if (this.pendingHand) {
+      const pending = this.pendingHand
+      const acknowledged = !draft || draft.game !== pending.game || draft.phase !== 'draw' || !!draft.hands[1]
+      if (acknowledged) this.pendingHand = null
       // Still on its way: shown locked in here, as it was when it was sent.
-      else if (draft) draft = withPick(draft, 1, this.pendingTopics.topics)
+      else if (draft) draft = withHand(draft, 1, pending.topics, pending.levels)
+    }
+    if (this.pendingStrike) {
+      const pending = this.pendingStrike
+      const acknowledged = !draft || draft.game !== pending.game || draft.phase !== 'strike' || !!draft.strikes[1]
+      if (acknowledged) this.pendingStrike = null
+      else if (draft) draft = withStrike(draft, 1, pending.topic)
     }
     let pendingAnswer = this.snapshot.pendingAnswer
     if (pendingAnswer && battle) {

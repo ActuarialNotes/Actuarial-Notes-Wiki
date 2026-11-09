@@ -36,8 +36,8 @@ export function nextInCycle<T>(list: readonly T[], current: T): T {
 
 export interface DeckRoundRow {
   index: number
-  /** The topic the round was on, if one is known. */
-  topic: string | null
+  /** What the round was on: its pair when a question tested both, the coin's topic, or nothing (the whole exam). */
+  topics: string[]
   /** The final round, which counts double. */
   final: boolean
   /** What each seat took from it, every part of every answer included. */
@@ -45,11 +45,11 @@ export interface DeckRoundRow {
 }
 
 /** Each round played, with what it was worth to each player. */
-export function roundRows(battle: BattleState, topicOf: (index: number) => string | null): DeckRoundRow[] {
+export function roundRows(battle: BattleState, topicsOf: (index: number) => readonly string[]): DeckRoundRow[] {
   const played = battle.rounds.filter(r => r.phase === 'revealed')
   return played.map(round => ({
     index: round.index,
-    topic: topicOf(round.index),
+    topics: [...topicsOf(round.index)],
     final: isFinalRound(battle, round.index),
     points: SEATS.map(seat =>
       round.answers.filter(a => a.seat === seat).reduce((n, a) => n + a.points.total, 0),
@@ -67,22 +67,22 @@ export function lostRounds(battle: BattleState, seat: Seat): number[] {
 const LEVEL_RANK: Record<MasteryState, number> = { new: 0, forgotten: 1, level1: 2, level2: 3, level3: 4 }
 
 /**
- * The topic the results offer as practice: of the rounds this seat lost, the
- * one on the topic they hold at the lowest level — the earliest such round
- * when two tie. Null when they lost none, or none had a topic.
+ * The topic the results offer as practice: of the topics of the rounds this
+ * seat lost (a paired round has two), the one they hold at the lowest level —
+ * the earliest when two tie. Null when they lost none, or none had a topic.
  */
 export function weakestLostTopic(
   battle: BattleState,
   seat: Seat,
-  topicOf: (index: number) => string | null,
+  topicsOf: (index: number) => readonly string[],
   levelOf: (topic: string) => MasteryState,
 ): string | null {
   let best: { topic: string; rank: number } | null = null
   for (const index of lostRounds(battle, seat)) {
-    const topic = topicOf(index)
-    if (!topic) continue
-    const rank = LEVEL_RANK[levelOf(topic)] ?? 0
-    if (!best || rank < best.rank) best = { topic, rank }
+    for (const topic of topicsOf(index)) {
+      const rank = LEVEL_RANK[levelOf(topic)] ?? 0
+      if (!best || rank < best.rank) best = { topic, rank }
+    }
   }
   return best?.topic ?? null
 }
@@ -99,5 +99,15 @@ export function deckRoundLabel(battle: Pick<BattleState, 'config'>, index: numbe
 
 /** A concept's level as its card prints it: New, L1, L2, L3 — a lapsed one is New again. */
 export function levelTag(state: MasteryState): string {
-  return state === 'level1' ? 'L1' : state === 'level2' ? 'L2' : state === 'level3' ? 'L3' : 'New'
+  return cardLevelTag(levelNumber(state))
+}
+
+/** A level as the draft carries it, 0 (New) to 3 — a lapsed concept is New again. */
+export function levelNumber(state: MasteryState): number {
+  return state === 'level1' ? 1 : state === 'level2' ? 2 : state === 'level3' ? 3 : 0
+}
+
+/** A level the draft carries, as a card prints it. */
+export function cardLevelTag(level: number): string {
+  return level === 1 ? 'L1' : level === 2 ? 'L2' : level === 3 ? 'L3' : 'New'
 }

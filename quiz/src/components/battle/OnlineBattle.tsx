@@ -10,8 +10,9 @@ import { BattleTopRow, MusicToggle } from '@/components/battle/BattleTopRow'
 import { PlayerTile } from '@/components/battle/PlayerTile'
 import { SkinQuestionFrame } from '@/components/battle/SkinParts'
 import { AbilityTray } from '@/components/battle/AbilityTray'
-import { BattleDraftScreen } from '@/components/battle/TopicPick'
-import { DeckDraftScreen } from '@/components/battle/deck/DeckTopicPick'
+import { DeckDraftScreen } from '@/components/battle/deck/DeckDraft'
+import { DeckCoinFlip } from '@/components/battle/deck/DeckCoinFlip'
+import { DeckScope } from '@/components/battle/deck/DeckParts'
 import { DeckRound } from '@/components/battle/deck/DeckRound'
 import { DeckResults } from '@/components/battle/deck/DeckResults'
 import { DeckGuestRoom, DeckHostRoom, DeckMatchIntro } from '@/components/battle/deck/DeckRoom'
@@ -29,7 +30,8 @@ import {
   type BattlePlayer,
   type Seat,
 } from '@/lib/battle'
-import { answerFor, battleExamName, battleMusicIntensity, topicCredit } from '@/lib/battleDisplay'
+import { answerFor, battleExamName, battleMusicIntensity } from '@/lib/battleDisplay'
+import { isCoinRound, roundChips, roundTopics, shortTopic } from '@/lib/battleDraft'
 import { generateRoomCode } from '@/lib/battleRoom'
 import { skinJoinPath } from '@/lib/battleSkin'
 import {
@@ -38,8 +40,8 @@ import {
   displayPhase,
   tabClientId,
   type SessionProblem,
+  type DraftSource,
   type SessionSnapshot,
-  type TopicSource,
 } from '@/lib/battleSession'
 import { questionTopics, type TopicGroup } from '@/lib/battleTopics'
 import type { BattleSetup } from '@/lib/battleSetup'
@@ -339,11 +341,12 @@ function OnlineMatch({
 
   const isLast = round.index + 1 >= battle.config.rounds
   const waiting = round.ready.includes(me) ? `Waiting for ${names[opp]}…` : null
-  // The topic this question was drawn for, from the draw that dealt it.
-  const drawn = snapshot.draft?.drawn[round.index]
-  const topic = drawn && drawn.id === round.questionId
-    ? { name: drawn.topic ?? 'Any topic', credit: drawn.topic ? topicCredit(snapshot.draft!.picks, drawn.topic, names) : 'from the whole exam' }
+  // What this round is on, from the deal: its pair, or the topic its coin chose.
+  const chips = roundChips(snapshot.draft, round.index, me)
+  const topic = chips
+    ? { name: chips.map(c => shortTopic(c.name)).join(' × '), credit: chips.length === 2 ? 'tests both' : isCoinRound(snapshot.draft, round.index) ? 'by the coin' : 'from the whole exam' }
     : null
+  const coin = phase === 'countdown' && isCoinRound(snapshot.draft, round.index)
 
   return (
     <div style={{ paddingBottom: 'calc(var(--action-bar-height, 7rem) + 1.5rem)' }}>
@@ -363,7 +366,11 @@ function OnlineMatch({
       )}
 
       <div className="mt-4">
-        {phase === 'countdown' ? (
+        {coin ? (
+          <DeckScope className="rounded-[28px] px-5 py-4">
+            <DeckCoinFlip battle={battle} draft={snapshot.draft!} index={round.index} me={me} opensAt={round.opensAt} />
+          </DeckScope>
+        ) : phase === 'countdown' ? (
           <BattleCountdown battle={battle} topic={topic} />
         ) : question ? (
           <div className="paper-sheet">
@@ -463,20 +470,21 @@ function Results({
     : null
 
   if (skin.deck) {
-    // The round's topic: the draw's, where it dealt this question, else the question's own first.
-    const topicOf = (index: number): string | null => {
+    // What the round was on: the deal's pair or coin, else the question's own first topic.
+    const topicsOf = (index: number): string[] => {
+      const dealt = roundTopics(snapshot.draft, index)
+      if (dealt.length > 0) return dealt
       const round = battle.rounds[index]
-      const drawn = snapshot.draft?.drawn[index]
-      if (round && drawn && drawn.id === round.questionId && drawn.topic) return drawn.topic
       const q = round ? questionsById.get(round.questionId) : undefined
-      return q ? questionTopics(q)[0] ?? null : null
+      const first = q ? questionTopics(q)[0] : undefined
+      return first ? [first] : []
     }
     return (
       <DeckResults
         battle={battle}
         questionsById={questionsById}
         me={snapshot.me}
-        topicOf={topicOf}
+        topicsOf={topicsOf}
         primary={gone ? null : {
           label: !host && iAsked ? 'Rematch asked for' : `Rematch ${oppName}`,
           onClick: onRematch,
@@ -524,6 +532,14 @@ function Results({
   )
 }
 
+/**
+ * The draft is drawn with the Deck's screens on every skin. Quiz Battle's own
+ * page is already on the table; Monte Carlo Station lays one down for it.
+ */
+function DraftOnTable({ deck, children }: { deck: boolean; children: ReactNode }) {
+  return deck ? <>{children}</> : <DeckScope className="-mx-4 rounded-[28px] lg:mx-0">{children}</DeckScope>
+}
+
 // ── Hosting ─────────────────────────────────────────────────────────────────
 
 /** How long a matched host waits for the other player to walk into the room. */
@@ -561,8 +577,8 @@ export function OnlineHost({
   loadout?: AbilityId[]
   /** Told the room's code once it is open (a private room only). */
   onRoomOpen?: (code: string) => void
-  /** The topics a pick offers, and the draw from two picks — for the first battle and every rematch. */
-  topics: TopicSource
+  /** The draft's topics, pairs and questions — for the first battle and every rematch. */
+  topics: DraftSource
   /** The topics an exam offers, grouped for the picker. */
   catalogueFor: (exam: string) => readonly TopicGroup[]
   questionsById: ReadonlyMap<string, Question>
@@ -603,13 +619,13 @@ export function OnlineHost({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session])
 
-  // Matched: nobody presses Start — the intro plays, and the topic pick follows.
+  // Matched: nobody presses Start — the intro plays, and the draft follows.
   const started = useRef(false)
   useEffect(() => {
     if (!matched || !session || !inLobby || !guestIn || started.current) return
     const id = window.setTimeout(() => {
       started.current = true
-      session.openTopics()
+      session.openDraft()
     }, MATCH_INTRO_MS)
     return () => window.clearTimeout(id)
   }, [matched, session, inLobby, guestIn])
@@ -624,16 +640,18 @@ export function OnlineHost({
 
   if (!session || !snapshot) return null
 
-  if ((snapshot.stage === 'picking' || snapshot.stage === 'drawing') && snapshot.draft) {
-    const Draft = skin.deck ? DeckDraftScreen : BattleDraftScreen
+  if (snapshot.stage === 'drafting' && snapshot.draft) {
     return (
-      <Draft
-        snapshot={snapshot}
-        catalogue={catalogueFor(snapshot.config.exam)}
-        onChoose={t => session.chooseTopics(t)}
-        onLock={() => session.lockTopics()}
-        onLeave={onExit}
-      />
+      <DraftOnTable deck={skin.deck}>
+        <DeckDraftScreen
+          snapshot={snapshot}
+          catalogue={catalogueFor(snapshot.config.exam)}
+          onChoose={t => session.chooseHand(t)}
+          onLock={() => session.lockHand()}
+          onStrike={t => session.strike(t)}
+          onLeave={onExit}
+        />
+      </DraftOnTable>
     )
   }
 
@@ -654,7 +672,7 @@ export function OnlineHost({
       <Results
         snapshot={snapshot}
         questionsById={questionsById}
-        onRematch={() => session.openTopics()}
+        onRematch={() => session.openDraft()}
         onLeave={onExit}
         onFindAnother={onFindAnother}
       />
@@ -711,7 +729,7 @@ export function OnlineHost({
         <div className="space-y-2">
           <Button
             size="lg"
-            onClick={() => session.openTopics()}
+            onClick={() => session.openDraft()}
             className="h-14 w-full gap-3 rounded-xl text-base font-semibold"
             data-sound="begin"
             data-testid="battle-start-online"
@@ -750,11 +768,14 @@ export function OnlineGuest({
   onFindAnother,
   opponent,
   loadout,
+  level,
 }: {
   code: string
   player: BattlePlayer
   /** The abilities this player declares on joining. */
   loadout?: AbilityId[]
+  /** This player's own level on a topic, 0–3, sent with their hand. */
+  level?: (topic: string) => number
   /** The topics an exam offers, grouped for the picker. */
   catalogueFor: (exam: string) => readonly TopicGroup[]
   questionsById: ReadonlyMap<string, Question>
@@ -776,6 +797,7 @@ export function OnlineGuest({
       clientId: tabClientId(typeof sessionStorage === 'undefined' ? null : sessionStorage),
       knows: id => questionsById.has(id),
       loadout,
+      level,
     }),
     `${code}:${attempt}`,
   )
@@ -794,16 +816,18 @@ export function OnlineGuest({
     )
   }
 
-  if ((snapshot.stage === 'picking' || snapshot.stage === 'drawing') && snapshot.draft) {
-    const Draft = skin.deck ? DeckDraftScreen : BattleDraftScreen
+  if (snapshot.stage === 'drafting' && snapshot.draft) {
     return (
-      <Draft
-        snapshot={snapshot}
-        catalogue={catalogueFor(snapshot.config.exam)}
-        onChoose={t => session.chooseTopics(t)}
-        onLock={() => session.lockTopics()}
-        onLeave={onExit}
-      />
+      <DraftOnTable deck={skin.deck}>
+        <DeckDraftScreen
+          snapshot={snapshot}
+          catalogue={catalogueFor(snapshot.config.exam)}
+          onChoose={t => session.chooseHand(t)}
+          onLock={() => session.lockHand()}
+          onStrike={t => session.strike(t)}
+          onLeave={onExit}
+        />
+      </DraftOnTable>
     )
   }
 

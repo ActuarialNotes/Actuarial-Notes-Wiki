@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { Flame, Loader2, WifiOff } from 'lucide-react'
-import { DeckBackButton, DeckPrimaryButton, PlayerCard } from '@/components/battle/deck/DeckParts'
-import { DeckCountdown, DeckQuestionCard, TopicChip } from '@/components/battle/deck/DeckQuestionCard'
+import { DeckPrimaryButton, LeaveButton, PlayerCard } from '@/components/battle/deck/DeckParts'
+import { DeckCountdown, DeckQuestionCard, PairChips } from '@/components/battle/deck/DeckQuestionCard'
+import { DeckCoinFlip } from '@/components/battle/deck/DeckCoinFlip'
+import { DeckDeal } from '@/components/battle/deck/DeckDraft'
 import { DeckMusicButton } from '@/components/battle/deck/DeckLobby'
 import { ReactionRow, RoundResult } from '@/components/battle/BattleActionBar'
 import { AbilityTray } from '@/components/battle/AbilityTray'
@@ -16,10 +18,10 @@ import {
   type AbilityId,
   type Seat,
 } from '@/lib/battle'
-import { answerFor, battleExamName, battleMusicIntensity, playerAccentStyle, topicCredit } from '@/lib/battleDisplay'
+import { answerFor, battleExamName, battleMusicIntensity, playerAccentStyle } from '@/lib/battleDisplay'
 import { deckRoundLabel } from '@/lib/battleDeck'
 import { displayPhase, type HostSession, type SessionSnapshot } from '@/lib/battleSession'
-import { topicPickers } from '@/lib/battleTopics'
+import { isCoinRound, roundChips } from '@/lib/battleDraft'
 import type { Question } from '@/lib/parser'
 import { cn } from '@/lib/utils'
 
@@ -160,12 +162,12 @@ export function DeckRound({
 
   const question = questionsById.get(round.questionId)
   const names = [battle.players[0].name, battle.players[1].name] as const
-  const drawn = snapshot.draft?.drawn[round.index]
-  const topicName = drawn && drawn.id === round.questionId ? drawn.topic : undefined
-  const pickers = topicName ? topicPickers(snapshot.draft!.picks, topicName) : []
-  const topicChip = topicName !== undefined
-    ? <TopicChip name={topicName ?? 'Any topic'} pickers={pickers} />
-    : null
+  const draft = snapshot.draft
+  const chips = roundChips(draft, round.index, me)
+  const topicChip = chips ? <PairChips chips={chips} /> : null
+  const coin = phase === 'countdown' && isCoinRound(draft, round.index)
+  // The first question's count-in is the deal's last frame, counting down.
+  const dealHeld = phase === 'countdown' && round.index === 0 && !coin && draft?.phase === 'deal'
   const final = isFinalRound(battle, round.index)
   const label = deckRoundLabel(battle, round.index)
 
@@ -191,6 +193,14 @@ export function DeckRound({
   const isLast = round.index + 1 >= battle.config.rounds
   const waiting = round.ready.includes(me) ? `Waiting for ${names[opp]}…` : null
 
+  if (dealHeld && draft) {
+    return (
+      <div className="flex min-h-[calc(100dvh-3.5rem)] flex-col gap-4 px-5 pb-6 pt-4 lg:min-h-screen">
+        <DeckDeal snapshot={snapshot} draft={draft} onLeave={onLeave} opensAt={round.opensAt} />
+      </div>
+    )
+  }
+
   return (
     <div className="flex min-h-[calc(100dvh-3.5rem)] flex-col gap-3 px-5 pb-6 pt-3 lg:min-h-screen">
       <div className="flex items-center justify-between gap-2">
@@ -212,17 +222,14 @@ export function DeckRound({
       )}
 
       <div className="flex-1">
-        {phase === 'countdown' ? (
+        {coin && draft ? (
+          <DeckCoinFlip battle={battle} draft={draft} index={round.index} me={me} opensAt={round.opensAt} />
+        ) : phase === 'countdown' ? (
           <DeckCountdown
             label={label}
             final={final}
             opensAt={round.opensAt}
-            topic={topicName !== undefined ? (
-              <p className="space-x-1.5 text-sm" data-testid="battle-countdown-topic">
-                <span className="font-semibold">{topicName ?? 'Any topic'}</span>
-                <span className="text-[var(--deck-label)]">· {topicName ? topicCredit(snapshot.draft!.picks, topicName, names) : 'from the whole exam'}</span>
-              </p>
-            ) : null}
+            topic={topicChip ? <span className="flex justify-center" data-testid="battle-countdown-topic">{topicChip}</span> : null}
           />
         ) : question ? (
           <div className="paper-sheet">
@@ -272,35 +279,14 @@ export function DeckRound({
           </DeckPrimaryButton>
         ) : (
           <p className="flex-1 text-center text-sm text-[var(--deck-soft)]" aria-live="polite">
-            {phase === 'countdown' ? 'Get ready…'
-              : phase === 'closing' ? 'Time’s up — revealing…'
-              : lockedChoice ? (oppLocked ? 'Both in — revealing…' : `Locked in ${lockedChoice}. Waiting for ${names[opp]}…`)
+            {coin ? ''
+              : phase === 'countdown' ? 'Get ready…'
+              : phase === 'closing' ? 'Time’s up. Revealing…'
+              : lockedChoice ? (oppLocked ? 'Both in. Revealing…' : `Locked in ${lockedChoice}. Waiting for ${names[opp]}…`)
               : 'Waiting…'}
           </p>
         )}
       </div>
     </div>
-  )
-}
-
-/** Leave, with a second tap to confirm, so a stray one doesn't throw a close game away. */
-export function LeaveButton({ onLeave }: { onLeave: () => void }) {
-  const [confirming, setConfirming] = useState(false)
-  useEffect(() => {
-    if (!confirming) return
-    const id = window.setTimeout(() => setConfirming(false), 3000)
-    return () => window.clearTimeout(id)
-  }, [confirming])
-  return confirming ? (
-    <button
-      type="button"
-      onClick={onLeave}
-      className="h-11 shrink-0 rounded-[14px] bg-red-950 px-3 text-sm font-semibold text-red-100"
-      data-testid="battle-leave"
-    >
-      Tap again to end
-    </button>
-  ) : (
-    <DeckBackButton onClick={() => setConfirming(true)} label="Leave" data-testid="battle-leave" />
   )
 }

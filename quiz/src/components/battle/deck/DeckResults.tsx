@@ -7,6 +7,7 @@ import { useConceptLevels } from '@/hooks/useConceptLevels'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
 import { SEATS, summarizeBattle, type BattleState, type Seat } from '@/lib/battle'
 import { playerAccentStyle, resultHeadline, signedPoints } from '@/lib/battleDisplay'
+import { shortTopic } from '@/lib/battleDraft'
 import { levelTag, practicePath, roundRows, weakestLostTopic } from '@/lib/battleDeck'
 import type { Question } from '@/lib/parser'
 import { cn } from '@/lib/utils'
@@ -49,7 +50,7 @@ export function DeckResults({
   battle,
   questionsById,
   me,
-  topicOf,
+  topicsOf,
   primary,
   secondary,
   note,
@@ -59,8 +60,8 @@ export function DeckResults({
   questionsById: ReadonlyMap<string, Question>
   /** This device's own seat — on one screen, the first (the account holder's). */
   me: Seat
-  /** The topic a round was on. */
-  topicOf: (index: number) => string | null
+  /** What a round was on: its pair, or the one topic a coin chose. */
+  topicsOf: (index: number) => readonly string[]
   /** Rematch. */
   primary: DeckAction | null
   /** New opponent, Leave room, Change settings — whichever way on this battle has. */
@@ -71,8 +72,8 @@ export function DeckResults({
   const summary = summarizeBattle(battle)
   const levels = useConceptLevels()
   const names = [battle.players[0].name, battle.players[1].name] as const
-  const rows = useMemo(() => roundRows(battle, topicOf), [battle, topicOf])
-  const lost = weakestLostTopic(battle, me, topicOf, levels.levelOf)
+  const rows = useMemo(() => roundRows(battle, topicsOf), [battle, topicsOf])
+  const lost = weakestLostTopic(battle, me, topicsOf, levels.levelOf)
   const [reviewing, setReviewing] = useState(false)
   const reviewRef = useRef<HTMLElement>(null)
   useSoundOnMount('complete')
@@ -128,7 +129,7 @@ export function DeckResults({
                   <td className="py-1.5 pr-2">
                     <span className="flex flex-col text-[13px] text-[var(--deck-label)]">
                       {r.final ? 'Final ×2' : `Round ${r.index + 1}`}
-                      {r.topic && <small className="truncate text-[11px] text-[var(--deck-dim)]">{r.topic}</small>}
+                      {r.topics.length > 0 && <small className="truncate text-[11px] text-[var(--deck-dim)]" title={r.topics.join(' + ')}>{r.topics.map(shortTopic).join(' + ')}</small>}
                     </span>
                   </td>
                   {SEATS.map(seat => (

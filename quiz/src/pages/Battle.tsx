@@ -61,8 +61,11 @@ import {
 import type { MatchFound } from '@/lib/battleMatchmaking'
 import { isQueued } from '@/lib/battleQueue'
 import { useBattleQueueStore } from '@/stores/battleQueueStore'
-import type { TopicSource } from '@/lib/battleSession'
-import { catalogueTopics, drawFromTopics, topicCatalogue, type TopicGroup } from '@/lib/battleTopics'
+import type { DraftSource } from '@/lib/battleSession'
+import { catalogueTopics, topicCatalogue, type TopicGroup } from '@/lib/battleTopics'
+import { battlePairReader, drawRound, type ReadPair } from '@/lib/battleDraft'
+import { filterQuestions } from '@/lib/parser'
+import { useConceptPages, usePlayerLevel } from '@/hooks/useBattleDraft'
 import { EXAM_LABEL_TO_ID, bankLabelFor } from '@/lib/examIds'
 import { cn } from '@/lib/utils'
 import { trackBattleStarted } from '@/lib/analytics'
@@ -384,9 +387,8 @@ function BattlePage({
     return () => drawBattleQuestions(battlePool(questions, config.exam), config.rounds, difficulty).map(questionKey)
   }
 
-  // Online, a battle is drawn from the topics both players pick
-  // (lib/battleTopics.ts): each exam's topics, grouped the way its syllabus
-  // groups them, worked out once per exam.
+  // Online, a battle is dealt from a draft (lib/battleDraft.ts): each exam's
+  // topics, grouped the way its syllabus groups them, worked out once per exam.
   const catalogueFor = useMemo(() => {
     const cache = new Map<string, TopicGroup[]>()
     return (exam: string): TopicGroup[] => {
@@ -399,12 +401,40 @@ function BattlePage({
     }
   }, [questions, syllabi])
 
-  function topicsFor(difficulty: number): TopicSource {
+  // How closely two topics pair — Concept Craft's strength, read off the
+  // pages (fetched once a room is hosted) and the whole bank — and the battle
+  // questions that test both. Each pair read once per exam.
+  const conceptPage = useConceptPages(screen.kind === 'host')
+  const playerLevel = usePlayerLevel()
+  const pairFor = useMemo(() => {
+    const graphQuestions = filterQuestions([...questions], {}).map(q => ({ id: q.id, links: q.wiki_link }))
+    const cache = new Map<string, ReadPair>()
+    return (exam: string): ReadPair => {
+      let read = cache.get(exam)
+      if (!read) {
+        const reader = battlePairReader({ pool: battlePool(questions, exam), graphQuestions, page: conceptPage })
+        const seen = new Map<string, ReturnType<ReadPair>>()
+        read = (a, b) => {
+          const key = `${a}\u0000${b}`
+          let hit = seen.get(key)
+          if (!hit) seen.set(key, (hit = reader(a, b)))
+          return hit
+        }
+        cache.set(exam, read)
+      }
+      return read
+    }
+  }, [questions, conceptPage])
+
+  function topicsFor(difficulty: number): DraftSource {
     return {
       topics: exam => catalogueTopics(catalogueFor(exam)).map(t => t.name),
-      draw: (config, picks) =>
-        drawFromTopics(battlePool(questions, config.exam), picks, config.rounds, difficulty)
-          .map(d => ({ key: questionKey(d.question), topic: d.topic })),
+      pair: pairFor,
+      draw: (config, cards, on, used) => {
+        const drawn = drawRound(battlePool(questions, config.exam), cards, on, used, difficulty)
+        return drawn ? { key: questionKey(drawn.question), basis: drawn.basis, topic: drawn.topic } : null
+      },
+      level: playerLevel,
     }
   }
 
@@ -532,6 +562,7 @@ function BattlePage({
         onFindAnother={screen.matched ? findAnother : undefined}
         opponent={screen.opponent}
         loadout={screen.matched ? undefined : loadout}
+        level={playerLevel}
       />,
     )
   }

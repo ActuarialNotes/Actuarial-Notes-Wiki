@@ -6,8 +6,6 @@ import {
   battleExamKey,
   battleExamName,
   draftMusicIntensity,
-  pickCountLine,
-  topicCredit,
   playerAccentStyle,
   playerInitials,
   pointsChips,
@@ -16,7 +14,7 @@ import {
   roundLabel,
   signedPoints,
 } from './battleDisplay'
-import { TOPIC_PICK_MS, type BattleDraft } from './battleTopics'
+import { TOPIC_PICK_MS, emptyDraft, handCountLine, pairLine, shortTopic, strikeLine } from './battleDraft'
 
 const NAMES = ['Ada', 'Bo'] as const
 
@@ -142,24 +140,33 @@ describe('the music, heard from the game', () => {
   })
 })
 
-describe('the topics', () => {
-  it('credits a drawn question to whoever picked its topic', () => {
-    const picks: BattleDraft['picks'] = [['Bayes Theorem', 'Expected Value'], ['Expected Value']]
-    expect(topicCredit(picks, 'Bayes Theorem', NAMES)).toBe('Ada’s pick')
-    expect(topicCredit(picks, 'Expected Value', NAMES)).toBe('You both picked it')
-    expect(topicCredit(picks, null, NAMES)).toBe('Any topic')
+describe('the draft', () => {
+  it('counts a hand', () => {
+    expect(handCountLine(0)).toBe('0 of 4')
+    expect(handCountLine(3)).toBe('3 of 4')
   })
 
-  it('counts a choice', () => {
-    expect(pickCountLine(0, 3)).toBe('Pick up to 3 topics')
-    expect(pickCountLine(2, 3)).toBe('2 of 3 picked')
+  it('shortens a method to its name, and nothing else', () => {
+    expect(shortTopic('Bornhuetter-Ferguson Method')).toBe('Bornhuetter-Ferguson')
+    expect(shortTopic('Loss Ratio')).toBe('Loss Ratio')
+    expect(shortTopic('Method')).toBe('Method')
   })
 
-  it('plays under the pick, leaning in for its last ten seconds, and through the draw', () => {
-    const draft: BattleDraft = { game: 1, phase: 'picking', deadline: TOPIC_PICK_MS, picks: [null, null], drawn: [] }
+  it('says who struck what, the other player first', () => {
+    expect(strikeLine(['Cape Cod Method', 'Pure Premium'], 0, NAMES)).toBe('Bo struck Pure Premium. You struck Cape Cod Method.')
+    expect(strikeLine(['Cape Cod Method', null], 1, NAMES)).toBe('Ada struck Cape Cod Method.')
+  })
+
+  it('names a pair, joined by what settles it', () => {
+    expect(pairLine(['Bornhuetter-Ferguson Method', 'Chain Ladder Method'], true)).toEqual(['Bornhuetter-Ferguson', '+ Chain Ladder'])
+    expect(pairLine(['Benktander Method', 'Loss Ratio'], false)).toEqual(['Benktander', 'or Loss Ratio'])
+  })
+
+  it('plays under the draw and the strikes, leaning in for their last ten seconds, and through the deal', () => {
+    const draft = emptyDraft(1, TOPIC_PICK_MS)
     expect(draftMusicIntensity(draft, 0)).toBe(1)
     expect(draftMusicIntensity(draft, TOPIC_PICK_MS - 9000)).toBe(2)
-    expect(draftMusicIntensity({ ...draft, phase: 'drawing', drawn: [{ id: 'a', topic: null }] }, TOPIC_PICK_MS - 1000)).toBe(1)
+    expect(draftMusicIntensity({ ...draft, phase: 'strike' }, TOPIC_PICK_MS - 9000)).toBe(2)
+    expect(draftMusicIntensity({ ...draft, phase: 'deal' }, TOPIC_PICK_MS - 1000)).toBe(1)
   })
 })
-

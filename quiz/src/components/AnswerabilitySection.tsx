@@ -113,9 +113,9 @@ export function AnswerabilityHistory({ entry, reach }: { entry: AnswerabilityEnt
   const latest = formatCheckedDate(history[0]?.date ?? null)
   return (
     <FactCheckSection
-      title="Answerability"
+      title="Taught in the Notes"
       count={history.length}
-      detail={[verdict.label, latest && `Latest ${latest}`].filter(Boolean).join(' · ')}
+      detail={[verdict.label, latest && `Checked ${latest}`].filter(Boolean).join(' · ')}
       tone={verdict.tone}
       icon={<ListChecks className="h-4 w-4" aria-hidden />}
     >

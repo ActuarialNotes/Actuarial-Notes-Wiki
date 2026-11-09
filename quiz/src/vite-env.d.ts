@@ -32,6 +32,7 @@ interface ImportMetaEnv {
   readonly VITE_ACTUARIA_PREVIEW?: string
   readonly VITE_COWORK_PREVIEW?: string
   readonly VITE_COMMUNITY_PREVIEW?: string
+  readonly VITE_GAMES_PREVIEW?: string
   /**
    * `on` lets a page that asks for it (localStorage `actuarial_tutor_preview`)
    * see the Tutor signed out — the e2e suite's build. See `TUTOR_OPEN_TO_ALL`.
@@ -58,6 +59,13 @@ declare module 'virtual:cowork-vault' {
   import type { VaultDocument } from '@/lib/coworkVault'
   const documents: VaultDocument[]
   export default documents
+}
+
+declare module 'virtual:assumption-bank' {
+  import type { AssumptionSet } from '@/lib/assumptionBank'
+  /** Every `Assumptions/*.md` set, parsed — docs/assumptions-bank.md. */
+  const sets: AssumptionSet[]
+  export default sets
 }
 
 declare module 'virtual:exam-pages' {

@@ -72,9 +72,9 @@ describe('a sector’s landmarks', () => {
   })
 
   it('puts a chip on a landmark only when it has something to say', () => {
-    expect(landmarkChip(byName('Expected Value'))).toEqual({ variant: 'decaying', label: 'Decayed' })
-    expect(landmarkChip(byName('Covariance'))).toEqual({ variant: 'decaying', label: 'L1 → Forgotten tomorrow' })
-    expect(landmarkChip(byName('Variance'))).toEqual({ variant: 'cleared', label: 'Cleared' })
+    expect(landmarkChip(byName('Expected Value'))).toEqual({ variant: 'decaying', label: 'Forgotten' })
+    expect(landmarkChip(byName('Covariance'))).toEqual({ variant: 'decaying', label: 'Forgotten tomorrow' })
+    expect(landmarkChip(byName('Variance'))).toEqual({ variant: 'cleared', label: 'Level 3' })
     // A New concept, in no danger, says nothing beyond its Z.
     const untouched = landmarks.find(l => l.state === 'new')!
     expect(landmarkChip(untouched)).toBeNull()

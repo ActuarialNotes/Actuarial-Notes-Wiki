@@ -121,11 +121,12 @@ function PlayerCard({ world }: { world: ActuariaWorld }) {
           <CredibilityBar
             z={credibility.z}
             label={credibility.label}
+            percent={credibility.percent}
             size="sm"
             ariaLabel={`${sectorName(active.key)} Credibility`}
           />
         ) : (
-          <p className="text-xs text-muted-foreground">No sector charted yet</p>
+          <p className="text-xs text-muted-foreground">Not studying an exam yet</p>
         )}
       </div>
       <Link to="/actuaria/hangar" aria-label={`Your ship: hull ${ship.labels.hull}, trail ${ship.labels.trail}. Open the Hangar`} data-testid="actuaria-player-ship" className="rounded-md p-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
@@ -184,7 +185,7 @@ function SectorPanel({ sector, world, battleCount }: { sector: Sector; world: Ac
       onClick={() => navigate(`/actuaria/battle?exam=${encodeURIComponent(sector.bankLabel!)}`)}
       data-testid="actuaria-battle-sector"
     >
-      <Swords className="h-4 w-4" aria-hidden /> Battle this sector
+      <Swords className="h-4 w-4" aria-hidden /> Quiz Battle on {sector.label}
     </Button>
   ) : sector.bankLabel ? (
     <Button
@@ -194,12 +195,12 @@ function SectorPanel({ sector, world, battleCount }: { sector: Sector; world: Ac
       onClick={() => navigate(`/?topic=${encodeURIComponent(sector.bankLabel!)}`)}
       data-testid="actuaria-train-sector"
     >
-      <Play className="h-4 w-4" aria-hidden /> Train in Quiz
+      <Play className="h-4 w-4" aria-hidden /> Practise in a quiz
     </Button>
   ) : null
 
   return (
-    <HudFrame as="aside" radius="2xl" className="space-y-4 p-4" aria-label={`${sectorName(sector.key)} — selected sector`} data-testid="actuaria-sector-panel">
+    <HudFrame as="aside" radius="2xl" className="space-y-4 p-4" aria-label={`${sectorName(sector.key)}, selected sector`} data-testid="actuaria-sector-panel">
       <div
         style={examAccentStyle(sector.key)}
         className="flex items-center gap-3 rounded-xl border border-[var(--exam-accent-muted)] bg-[var(--exam-accent-soft)] p-3"
@@ -221,7 +222,7 @@ function SectorPanel({ sector, world, battleCount }: { sector: Sector; world: Ac
           <p className="actuaria-display text-[11px] text-muted-foreground"><Term id="sectorCredibility" /></p>
           {readiness && <p className="text-xs text-muted-foreground">{readiness.band.label}</p>}
         </div>
-        <CredibilityBar z={credibility.z} label={credibility.label} ariaLabel={`${sectorName(sector.key)} Credibility`} />
+        <CredibilityBar z={credibility.z} label={credibility.label} percent={credibility.percent} ariaLabel={`${sectorName(sector.key)} Credibility`} />
       </div>
 
       {landmarks.length > 0 && (
@@ -247,19 +248,19 @@ function SectorPanel({ sector, world, battleCount }: { sector: Sector; world: Ac
           world.signedIn ? (
             <Button size="lg" className="w-full rounded-full" onClick={chart} disabled={charting} data-testid="actuaria-chart">
               {charting && <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden />}
-              Chart this sector
+              Start studying {sector.label}
             </Button>
           ) : (
             <Link to="/auth" className={buttonVariants({ size: 'lg', className: 'w-full rounded-full' })}>
-              Sign in to chart this sector
+              Sign in to start studying {sector.label}
             </Link>
           )
         )}
-        {chartError && <p className="text-xs text-destructive">That didn’t save — try again in a moment.</p>}
+        {chartError && <p className="text-xs text-destructive">That didn’t save. Try again in a moment.</p>}
         {battleAction}
         {!raceable && sector.bankLabel && (
           <p className="text-xs text-muted-foreground">
-            Battles need multiple-choice questions, and this exam’s are written — train on them in a quiz.
+            Battles need multiple-choice questions, and this exam’s are written. Practise them in a quiz.
           </p>
         )}
         <Link to={studyGuide} className={buttonVariants({ variant: 'outline', size: 'lg', className: 'w-full gap-2 rounded-full' })}>

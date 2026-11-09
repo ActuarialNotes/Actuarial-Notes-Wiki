@@ -5,13 +5,14 @@ import { Button } from '@/components/ui/button'
 import { PlayerTile } from '@/components/battle/PlayerTile'
 import { MusicToggle } from '@/components/battle/BattleTopRow'
 import { useBattleMusic, useNow } from '@/hooks/useBattle'
-import { ANY_EXAM, MATCH_ROUNDS, compatible, type LobbyEntry } from '@/lib/battleLobby'
+import { ANY_EXAM, MATCH_ROUNDS, MATCH_TIME, compatible, type LobbyEntry } from '@/lib/battleLobby'
 import { MatchmakingSession, type LobbySnapshot } from '@/lib/battleMatchmaking'
 import { lobbyOwnerKey, waitedClock } from '@/lib/battleQueue'
 import { battleExamName, playerAccentStyle } from '@/lib/battleDisplay'
 import { tabClientId } from '@/lib/battleSession'
 import { lobbyTransport } from '@/lib/battleTransport'
-import type { BattlePlayer } from '@/lib/battle'
+import { roundSecondsFor, type BattlePlayer } from '@/lib/battle'
+import { formatClock } from '@/lib/quizTiming'
 import { useBattleQueueStore } from '@/stores/battleQueueStore'
 import { cn } from '@/lib/utils'
 
@@ -142,7 +143,7 @@ export function Matchmaking({
               {connecting ? 'Connecting to the lobby…' : ready ? 'Looking for an opponent…' : 'Ready when you are'}
             </p>
             <p className="text-sm text-muted-foreground">
-              {current === ANY_EXAM ? 'Any exam' : battleExamName(current)} · {MATCH_ROUNDS} questions · 2:00 each
+              {current === ANY_EXAM ? 'Any exam' : battleExamName(current)} · {MATCH_ROUNDS} questions · {formatClock(roundSecondsFor(MATCH_TIME, current))} each
             </p>
             {me && searching && (
               <p className="text-xs tabular-nums text-muted-foreground">Waiting {waitedClock(me.since, now)}</p>
@@ -188,7 +189,7 @@ export function Matchmaking({
 
         {trouble && (
           <p className="flex items-center gap-2 text-sm text-amber-600 dark:text-amber-400">
-            <WifiOff className="h-4 w-4" aria-hidden /> Trouble reaching the lobby — retrying…
+            <WifiOff className="h-4 w-4" aria-hidden /> Can’t reach the lobby. Retrying…
           </p>
         )}
       </div>
@@ -209,8 +210,8 @@ export function Matchmaking({
               <p className="font-medium">No one else is in the lobby right now.</p>
               <p className="text-sm text-muted-foreground">
                 {ready
-                  ? 'You’ll be matched the moment someone joins, even if you leave this page — or battle a friend instead.'
-                  : 'Press Ready and you’ll be matched the moment someone joins — or battle a friend instead.'}
+                  ? 'You’ll be matched the moment someone joins, even if you leave this page. Or battle a friend instead.'
+                  : 'Press Ready and you’ll be matched the moment someone joins. Or battle a friend instead.'}
               </p>
             </div>
             <Button variant="outline" onClick={onPlayFriend} className="gap-2">
@@ -227,7 +228,7 @@ export function Matchmaking({
             </ul>
             {me && !others.some(o => compatible(me, o)) && (
               <p className="px-1 text-sm text-muted-foreground">
-                Nobody here wants {current === ANY_EXAM ? 'to play' : battleExamName(current)} yet — join one of them, or keep waiting.
+                Nobody here wants {current === ANY_EXAM ? 'to play' : battleExamName(current)} yet. Join one of them, or keep waiting.
               </p>
             )}
           </>

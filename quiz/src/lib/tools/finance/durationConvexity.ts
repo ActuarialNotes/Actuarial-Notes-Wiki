@@ -37,7 +37,7 @@ export const durationConvexity: ToolSpec = {
   answers: 'How sensitive is the value of these cash flows to the rate?',
   aka: ['Macaulay', 'modified duration', 'convexity'],
   fields: [
-    { kind: 'number', key: 'i', label: 'Annual effective rate', symbol: 'i', unit: 'percent', min: -0.5, max: 2, sliderMax: 0.2, step: 0.0025, default: 0.05, description: 'The annual effective rate (the yield), as a decimal. Times are in years.' },
+    { kind: 'number', key: 'i', bank: ['discount-rate'], label: 'Annual effective rate', symbol: 'i', unit: 'percent', min: -0.5, max: 2, sliderMax: 0.2, step: 0.0025, default: 0.05, description: 'The annual effective rate (the yield), as a decimal. Times are in years.' },
     {
       kind: 'table', key: 'flows', label: 'Cash flows', minRows: 1, maxRows: 1200,
       description: 'Each cash flow: its time in years and its amount. A semiannual coupon at the end of year 1½ has time 1.5.',

@@ -108,7 +108,7 @@ interface Props {
 }
 
 export function ResourceMonthCards({ entries, selected, onClear, onOpenEntry, action }: Props) {
-  const emptyMessage = selected ? 'Nothing recorded this month.' : 'No resources match the current filters.'
+  const emptyMessage = selected ? 'Nothing recorded this month.' : 'No resources match these filters.'
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">

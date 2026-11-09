@@ -215,7 +215,7 @@ export function StarMap({
       <button
         type="button"
         onClick={onStation}
-        aria-label={`Monte Carlo Station — Quiz Battle. ${stationLabel}`}
+        aria-label={`Monte Carlo Station, Quiz Battle. ${stationLabel}`}
         className="absolute rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         style={{
           left: pct(layout.station.x - layout.station.r * 1.6, layout.width),
@@ -229,7 +229,7 @@ export function StarMap({
         <button
           type="button"
           onClick={raid.onOpen}
-          aria-label={`Gambler’s Ruin — this week’s raid. ${raid.label}`}
+          aria-label={`Gambler’s Ruin, this week’s raid. ${raid.label}`}
           className="absolute rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           style={{
             left: pct(ruin.x - ruin.s * 0.7, layout.width),

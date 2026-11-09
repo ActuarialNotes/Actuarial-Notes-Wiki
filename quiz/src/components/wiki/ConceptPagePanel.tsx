@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react'
 import { Headphones, ImageIcon, Loader2, X } from 'lucide-react'
 import { fetchWikiFile } from '@/lib/github'
 import { entryRefToRepoPath, type WikiEntryRef } from '@/lib/wikiRoutes'
@@ -16,6 +16,13 @@ import { ConceptActionMenu } from '@/components/ConceptActionMenu'
 import type { PdfReaderDoc } from '@/hooks/usePdfReader'
 import { useFiguresCollapsed } from '@/hooks/useFiguresCollapsed'
 import { figureLabel, pictureImages } from '@/lib/conceptFigures'
+
+// The Assumptions Bank's card for a resource page (docs/assumptions-bank.md),
+// fetched with the bank only when a resource page is opened: the popup is in
+// the first-paint bundle, and the bank isn't something every reader needs.
+const ResourceAssumptionsCard = lazy(() =>
+  import('@/components/wiki/ResourceAssumptionsCard').then(m => ({ default: m.ResourceAssumptionsCard })),
+)
 
 // A section heading is drawn at the pane title's size (text-lg, sm:text-xl
 // in the header above), so a page's `##` never reads bigger than its name.
@@ -223,7 +230,7 @@ export function ConceptPagePanel({
               aria-haspopup="menu"
               aria-expanded={showPlayMenu}
               title={entry.name}
-              aria-label={`${entry.name} — page actions`}
+              aria-label={`Actions for ${entry.name}`}
               className="truncate text-left font-semibold text-lg sm:text-xl min-w-0 action-title-underline"
             >
               {entry.name}
@@ -343,6 +350,11 @@ export function ConceptPagePanel({
                     compact
                     className="mb-0"
                   />
+                  {entry.kind === 'resource' && (
+                    <Suspense fallback={null}>
+                      <ResourceAssumptionsCard resource={entry.name} compact />
+                    </Suspense>
+                  )}
                 </div>
               )}
               <WikiArticle

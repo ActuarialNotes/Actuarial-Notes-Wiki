@@ -5,6 +5,26 @@ const config: Config = {
   content: [
     './index.html',
     './src/**/*.{ts,tsx}',
+    // Quiz Battle's screens are the battle page's lazy chunk alone, so their
+    // utilities go into its own stylesheet (tailwind.battle.config.ts), not the
+    // first-paint CSS. BattleLogo (Games) and AbilityButton (the Hangar) are
+    // drawn elsewhere too, so they stay in.
+    '!./src/components/battle/deck/**',
+    '!./src/pages/Battle.tsx',
+    '!./src/components/battle/AbilityTray.tsx',
+    '!./src/components/battle/BattleActionBar.tsx',
+    '!./src/components/battle/BattleCountdown.tsx',
+    '!./src/components/battle/BattleQuestionCard.tsx',
+    '!./src/components/battle/BattleResults.tsx',
+    '!./src/components/battle/BattleScoreboard.tsx',
+    '!./src/components/battle/BattleSetupForm.tsx',
+    '!./src/components/battle/BattleTopRow.tsx',
+    '!./src/components/battle/LocalBattle.tsx',
+    '!./src/components/battle/Matchmaking.tsx',
+    '!./src/components/battle/OnlineBattle.tsx',
+    '!./src/components/battle/PlayerTile.tsx',
+    '!./src/components/battle/SkinParts.tsx',
+    '!./src/components/battle/TopicPick.tsx',
   ],
   theme: {
     extend: {

@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Final design for docs/tool-template-v2.md. Also published at https://claude.ai/artifact/7zwMX2YgNhNtnhMiajnVbq -->
+<title>Tool Template v2</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: issue review on top, then three design columns, each a stack of phone screens with notes beside. Phones always dark, as in the screenshots. */
+:root{
+  --bg:#f3f2f5; --fg:#17151b; --muted:#5f5a69; --rule:#dcd8e2; --panel:#ffffff;
+  --accent:hsl(290 70% 45%);
+  /* phone (app dark theme, fixed) */
+  --p-bg:#000; --p-card:#171717; --p-row:#202020; --p-fg:#f5f5f5; --p-mut:#9a9a9a;
+  --ex:hsl(290 75% 60%); --ex-wash:hsl(290 45% 11%); --ex-vivid:hsl(290 80% 42%);
+  --amber:#e8b64c; --amber-bg:#3a2d10; --ok:#5fc48a;
+  --sans:'Inter Tight',ui-sans-serif,system-ui,sans-serif; --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e0d11;--fg:#ece9f1;--muted:#a19bab;--rule:#2a2730;--panel:#16141b;--accent:hsl(290 75% 68%);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0e0d11;--fg:#ece9f1;--muted:#a19bab;--rule:#2a2730;--panel:#16141b;--accent:hsl(290 75% 68%);color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:15px;line-height:1.5;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:32px 64px}
+.wrap{max-width:1240px;margin:0 auto;display:grid;gap:40px}
+h1{font-size:32px;line-height:1.15;margin:0;text-wrap:balance;letter-spacing:-.01em}
+h2{font-size:22px;margin:0;text-wrap:balance}
+h3{font-size:15px;margin:0}
+p{margin:0}
+.lede{color:var(--muted);max-width:68ch;margin-top:8px}
+.eyebrow{font:500 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.issues{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.issue{background:var(--panel);border:1px solid var(--rule);border-radius:12px;padding:16px;display:grid;gap:6px;min-width:0}
+.issue .cause{font-size:13px;color:var(--muted)}
+code{font-family:var(--mono);font-size:12px}
+.design{display:grid;gap:16px;border-top:1px solid var(--rule);padding-top:28px}
+.dhead{display:grid;gap:6px;max-width:72ch}
+.screens{display:flex;gap:20px;overflow-x:auto;padding-bottom:8px}
+.shot{flex:0 0 300px;display:grid;gap:10px;align-content:start}
+.shot figcaption{font-size:13px;color:var(--muted)}
+.shot figcaption b{color:var(--fg)}
+figure{margin:0}
+.fixes{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.fix{font-size:13px;display:grid;gap:4px;min-width:0}
+.fix h4{margin:0;font:500 11px/1.2 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.tradeoff{font-size:13px;color:var(--muted);max-width:72ch}
+.rec{background:var(--panel);border:1px solid var(--rule);border-radius:12px;padding:20px;display:grid;gap:8px;max-width:80ch}
+
+/* ---------- phone ---------- */
+.phone{background:var(--p-bg);color:var(--p-fg);border-radius:28px;padding:14px 12px 16px;border:1px solid #2b2b2b;font-size:12px;line-height:1.35;display:grid;gap:10px;align-content:start;min-height:520px}
+.ph-top{display:flex;align-items:center;gap:8px;font-weight:600;font-size:13px;padding:2px 4px}
+.ph-top .chev{color:var(--p-mut)}
+.crumb{font-size:10.5px;color:var(--p-mut);padding:0 4px}
+.crumb b{color:var(--p-fg);font-weight:500}
+.ans{background:var(--ex-wash);border-radius:16px;padding:12px;display:grid;gap:8px}
+.ans .meta{font-size:10.5px;color:var(--p-mut)}
+.ans .name{font-weight:700;font-size:15px}
+.big{font-size:30px;font-weight:700;letter-spacing:-.02em;line-height:1}
+.big small{font-size:12px;font-weight:500;color:var(--p-mut);margin-left:6px;letter-spacing:0}
+.lab{font:600 9.5px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--p-mut);padding:4px 4px 0}
+.card{background:var(--p-card);border-radius:14px;padding:10px;display:grid;gap:8px}
+.row{display:flex;align-items:center;gap:8px}
+.row .grow{flex:1;min-width:0}
+.pill{background:var(--p-row);border-radius:999px;padding:3px 9px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.sym{width:22px;height:22px;border-radius:6px;background:var(--p-row);display:grid;place-items:center;font-family:Georgia,serif;font-style:italic;font-weight:700;font-size:12px;flex:none}
+.slider{height:5px;border-radius:9px;background:#333;position:relative}
+.slider i{position:absolute;top:-5px;width:15px;height:15px;border-radius:50%;background:#fff}
+.tag{font-size:10px;color:var(--p-mut);display:inline-flex;gap:4px;align-items:center}
+.amber{color:var(--amber);background:var(--amber-bg);border-radius:999px;padding:1px 7px;font-size:9.5px;font-weight:600}
+.okc{color:var(--ok)}
+.mut{color:var(--p-mut)}
+.sm{font-size:10.5px}
+.btn{background:#fff;color:#000;border-radius:999px;text-align:center;padding:7px;font-weight:600}
+.btn.ghost{background:transparent;color:var(--p-fg);border:1px solid #3a3a3a}
+.hr{height:1px;background:#2a2a2a}
+.sw{width:10px;height:10px;border-radius:3px;flex:none;display:inline-block}
+/* exam-hue ramp: lightness steps plus a hatch on one, so neighbours never match */
+.s1{background:hsl(290 80% 72%)}
+.s2{background:hsl(290 55% 46%)}
+.s3{background:repeating-linear-gradient(135deg,hsl(290 40% 30%) 0 3px,hsl(290 35% 20%) 3px 6px)}
+.s4{background:hsl(290 20% 16%);box-shadow:inset 0 0 0 1px hsl(290 30% 40%)}
+.bar{display:flex;height:26px;border-radius:6px;overflow:hidden;font-size:9.5px;font-weight:600}
+.bar span{display:grid;place-items:center;color:#000}
+.bar .s2,.bar .s3,.bar .s4{color:#fff}
+.num{font:600 9px/1 var(--mono);color:var(--p-mut)}
+.chip{border:1px solid #3a3a3a;border-radius:999px;padding:2px 8px;font-size:10px;white-space:nowrap}
+.chip.on{background:#fff;color:#000;border-color:#fff}
+.chips{display:flex;gap:6px;overflow:hidden}
+.disc{border-left:2px solid var(--ex);padding-left:8px;display:grid;gap:4px}
+.kv{display:grid;grid-template-columns:72px 1fr;gap:3px 8px;font-size:10.5px}
+.kv dt{color:var(--p-mut)} .kv dd{margin:0}
+dl{margin:0}
+.warn{background:var(--amber-bg);color:var(--amber);border-radius:8px;padding:6px 8px;font-size:10.5px}
+.tabs{display:flex;background:var(--p-card);border-radius:999px;padding:3px;gap:2px}
+.tabs span{flex:1;text-align:center;padding:5px 0;border-radius:999px;font-weight:600;color:var(--p-mut)}
+.tabs span.on{background:#fff;color:#000}
+.wf{display:grid;gap:4px}
+.wf .r{display:grid;grid-template-columns:96px 1fr 44px;gap:6px;align-items:center}
+.wf .track{height:14px;position:relative}
+.wf .track b{position:absolute;top:0;height:14px;border-radius:3px}
+.ring{width:96px;height:96px;flex:none}
+</style>
+
+<style>
+.parts{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.part{background:var(--panel);border:1px solid var(--rule);border-radius:12px;padding:16px;display:grid;gap:10px;align-content:start;min-width:0}
+.part .demo{background:#000;color:#f5f5f5;border-radius:12px;padding:10px;display:grid;gap:8px;font-size:12px}
+.part p{font-size:13px;color:var(--muted)}
+.toc{display:flex;flex-wrap:wrap;gap:8px}
+.toc a{color:var(--fg);border:1px solid var(--rule);border-radius:999px;padding:4px 12px;text-decoration:none;font-size:13px}
+.toc a:hover,.toc a:focus-visible{border-color:var(--accent);outline:none}
+ol.rules{margin:0;padding-left:20px;display:grid;gap:6px;max-width:80ch}
+</style>
+
+<div class="wrap">
+
+<header style="display:grid;gap:10px">
+  <div class="eyebrow">Actuarial Tools · final design · 9 Nov 2026</div>
+  <h1>Tool template v2</h1>
+  <p class="lede">The final design for the tool page: one colour per quantity, a breadcrumb, the tools before and after each tool, a "from" chip on every input, and published figures explained in place. Three tools are drawn to show every case. The build spec is <code>docs/tool-template-v2.md</code>; where the two differ, the spec wins.</p>
+  <nav class="toc" aria-label="Sections">
+    <a href="#parts">Parts</a><a href="#plr">Permissible Loss Ratio</a><a href="#trend">Trend Factor</a><a href="#expense">Expense Ratios</a><a href="#bank">Assumptions Bank</a><a href="#rules">Rules</a>
+  </nav>
+</header>
+
+<!-- ================= Parts ================= -->
+<section class="design" id="parts">
+  <div class="dhead">
+    <div class="eyebrow">The parts</div>
+    <h2>Four pieces used on every tool</h2>
+  </div>
+  <div class="parts">
+    <div class="part">
+      <h3>Quantity swatches</h3>
+      <div class="demo">
+        <div class="bar"><span class="s1" style="width:52%">PLR 51.9</span><span class="s2" style="width:11%">F</span><span class="s3" style="width:17%">V 17</span><span class="s4" style="width:20%">Q 20</span></div>
+        <div class="row sm"><span class="sw s1"></span>result <span class="sw s2"></span>fixed <span class="sw s3"></span>variable <span class="sw s4"></span>profit</div>
+      </div>
+      <p>Four steps of the exam hue, one hatched, so neighbours never match. A quantity keeps its swatch on every tool. Labels sit inside the bar; a narrow segment drops its value first.</p>
+    </div>
+    <div class="part">
+      <h3>The "from" chip</h3>
+      <div class="demo">
+        <div class="row sm" style="flex-wrap:wrap"><span class="chip">● Default</span><span class="chip">● Yours</span><span class="chip">↳ Expense Ratios</span></div>
+        <div class="row sm"><span class="chip">▤ AIRB, Alberta</span><span class="amber">Not fact checked</span></div>
+      </div>
+      <p>One shape for every origin. Always on a judgment and on any changed input. Inputs still at their default share one "All ● Default" line.</p>
+    </div>
+    <div class="part">
+      <h3>Takes from / Gives to</h3>
+      <div class="demo">
+        <div class="card" style="padding:7px 9px"><div class="row sm"><span class="mut">Takes from</span><span class="grow"><b>Trend Fit</b> <span class="mut">+ 2 more</span></span><span class="mut">⌄</span></div></div>
+        <div class="card" style="padding:7px 9px"><div class="row sm"><span class="mut">Gives to</span><span class="grow"><b>Two-Step Loss Trend</b></span><span class="mut">open ›</span></div></div>
+      </div>
+      <p>Read off each tool's hand-offs in both directions. Hidden when empty. One tool is named; more show "+ N more" and open a list.</p>
+    </div>
+    <div class="part">
+      <h3>In-place explanation</h3>
+      <div class="demo">
+        <div class="row"><div class="grow"><b>6.0%</b> <span class="mut">Alberta auto · pre-tax cap</span></div><span class="mut">⌄</span></div>
+        <div class="disc"><div class="sm">The highest profit provision the AIRB allows in a filed rate.</div><div class="row"><span class="btn" style="flex:1;padding:4px">Use 6.0%</span><span class="btn ghost" style="flex:1;padding:4px">Read p. 7</span></div></div>
+      </div>
+      <p>Opens under the row, never over the page. Level 1 is one line; level 2 adds the meaning, place, basis, date, source and buttons. A link opens the same way.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PLR ================= -->
+<section class="design" id="plr">
+  <div class="dhead">
+    <div class="eyebrow">Tool 1 · three inputs, one tool on each side</div>
+    <h2>Permissible Loss Ratio</h2>
+    <p class="tradeoff">F and V linked from an Expense Ratios run at its defaults; Q set by the reader to 20%.</p>
+  </div>
+  <div class="screens">
+    <figure class="shot">
+      <div class="phone">
+        <div class="crumb">Tools › Ratemaking › <b>Permissible Loss Ratio</b></div>
+        <div class="card" style="padding:8px 10px"><div class="row sm"><span class="mut">Takes from</span><span class="grow"><b>Expense Ratios</b></span><span class="mut">‹ open</span></div></div>
+        <div class="ans">
+          <div class="meta">Ratemaking · Werner, Ch. 7</div>
+          <div class="name">Permissible Loss Ratio</div>
+          <div class="big">51.9%<small>VPLR 62.9%</small></div>
+          <div class="sm mut" style="font-family:var(--mono)">PLR = 1 − F − V − Q</div>
+          <div class="bar"><span class="s1" style="width:52%">PLR 51.9</span><span class="s2" style="width:11%">F 11</span><span class="s3" style="width:17%">V 17</span><span class="s4" style="width:20%">Q 20</span></div>
+        </div>
+        <div class="card">
+          <div class="row"><span class="sw s2"></span><span class="sym">F</span><span class="grow">Fixed expense</span><span class="pill" style="box-shadow:inset 0 0 0 1px var(--ex)">11.0%</span></div>
+          <div class="row sm"><span class="mut">from</span><span class="chip">↳ Expense Ratios</span></div>
+          <div class="hr"></div>
+          <div class="row"><span class="sw s3"></span><span class="sym">V</span><span class="grow">Variable expense</span><span class="pill" style="box-shadow:inset 0 0 0 1px var(--ex)">17.1%</span></div>
+          <div class="row sm"><span class="mut">from</span><span class="chip">↳ Expense Ratios</span></div>
+          <div class="hr"></div>
+          <div class="row"><span class="sw s4"></span><span class="sym">Q</span><span class="grow">Profit &amp; contingency ◆</span><span class="pill">20%</span></div>
+          <div class="slider"><i style="left:92%"></i></div>
+          <div class="row sm"><span class="mut">from</span><span class="chip">● Yours</span><span class="grow"></span><span class="mut">1 published ⌄</span></div>
+        </div>
+        <div class="card" style="padding:8px 10px"><div class="row sm"><span class="mut">Gives to</span><span class="grow"><b>Loss Ratio Method</b></span><span class="mut">open ›</span></div></div>
+      </div>
+      <figcaption><b>Tool.</b> No exam logo; the tint carries the exam. Inputs in formula order, each with its swatch. Linked values are outlined.</figcaption>
+    </figure>
+    <figure class="shot">
+      <div class="phone">
+        <div class="crumb">Tools › Ratemaking › <b>Permissible Loss Ratio</b></div>
+        <div class="card">
+          <div class="row"><span class="sw s4"></span><span class="sym">Q</span><span class="grow">Profit &amp; contingency ◆</span><span class="pill">20%</span></div>
+          <div class="slider"><i style="left:92%"></i></div>
+          <div class="row sm"><span class="mut">from</span><span class="chip">● Yours</span><span class="grow"></span><span class="mut">1 published ⌃</span></div>
+          <div class="row"><div class="grow"><b>6.0%</b> <span class="mut">Alberta auto · pre-tax cap</span></div></div>
+          <div class="disc">
+            <div class="sm">The highest profit provision the AIRB allows in a filed rate.</div>
+            <dl class="kv">
+              <dt>Where</dt><dd>Alberta, private passenger auto</dd>
+              <dt>Basis</dt><dd>Pre-tax cap, share of premium</dd>
+              <dt>In force</dt><dd>From Oct 1, 2026</dd>
+              <dt>Source</dt><dd>AIRB 2026 Annual Review, p. 7</dd>
+            </dl>
+            <div class="warn">Not fact checked yet. Your 20% is above this cap.</div>
+            <div class="row"><span class="btn" style="flex:1">Use 6.0%</span><span class="btn ghost" style="flex:1">Read p. 7</span></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="row"><span class="sw s2"></span><span class="sym">F</span><span class="grow">Fixed expense</span><span class="pill" style="box-shadow:inset 0 0 0 1px var(--ex)">11.0%</span></div>
+          <div class="row sm"><span class="mut">from</span><span class="chip">↳ Expense Ratios</span><span class="grow"></span><span class="mut">⌄</span></div>
+        </div>
+      </div>
+      <figcaption><b>Published figure, in place.</b> Level 1 is the line under the chip; level 2 opens beneath it. Read opens the document in the app's PDF reader at p. 7.</figcaption>
+    </figure>
+    <figure class="shot">
+      <div class="phone">
+        <div class="ph-top" style="justify-content:space-between"><span>Profit &amp; contingency (Q)</span><span style="font-size:20px;font-weight:700">20%</span></div>
+        <div class="slider"><i style="left:92%"></i></div>
+        <div class="lab">Published</div>
+        <div class="card" style="gap:4px">
+          <div class="row"><div class="grow"><b>6.0%</b> <span class="mut">Alberta auto · pre-tax cap</span><div class="sm mut">AIRB 2026 Annual Review · p. 7</div></div><span class="mut">⌄</span></div>
+          <span class="amber" style="justify-self:start">Not fact checked</span>
+        </div>
+        <div class="lab">Your own</div>
+        <div class="card" style="gap:6px"><div class="row"><span class="grow">Type a value</span><span class="pill">20%</span></div><div class="row"><span class="grow mut">Back to the default</span><span class="mut">5%</span></div></div>
+        <div class="card" style="grid-template-columns:repeat(3,1fr);gap:4px;text-align:center;font-size:14px;padding:6px">
+          <span class="pill">7</span><span class="pill">8</span><span class="pill">9</span><span class="pill">4</span><span class="pill">5</span><span class="pill">6</span><span class="pill">1</span><span class="pill">2</span><span class="pill">3</span><span class="pill">.</span><span class="pill">0</span><span class="pill">⌫</span>
+        </div>
+      </div>
+      <figcaption><b>Edit sheet</b> (tap the value). Slider, then tools that fill the field (none for Q), then published figures with the same level-1 line, then your own value and the keypad.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ================= Trend Factor ================= -->
+<section class="design" id="trend">
+  <div class="dhead">
+    <div class="eyebrow">Tool 2 · six inputs, three tools in front</div>
+    <h2>Trend Factor</h2>
+    <p class="tradeoff">Defaults: 3% trend, accident year 2023, rates effective Jan 1, 2025, 12 months in effect, 12-month policies. The 3.42% Trend Fit run is illustrative.</p>
+  </div>
+  <div class="screens">
+    <figure class="shot">
+      <div class="phone">
+        <div class="crumb">Tools › Ratemaking › <b>Trend Factor</b></div>
+        <div class="card" style="padding:8px 10px"><div class="row sm"><span class="mut">Takes from</span><span class="grow"><b>Trend Fit</b> <span class="mut">+ 2 more</span></span><span class="mut">⌄</span></div></div>
+        <div class="ans">
+          <div class="meta">Ratemaking · Werner, Ch. 6</div>
+          <div class="name">Trend Factor</div>
+          <div class="big">1.0767<small>over 2.50 years</small></div>
+          <div style="display:grid;gap:4px">
+            <div style="position:relative;height:6px;background:hsl(290 20% 22%);border-radius:3px"><b style="position:absolute;left:12%;right:12%;top:0;height:6px;background:var(--ex);border-radius:3px"></b></div>
+            <div class="row sm"><span class="grow">Jul 1, 2023<div class="mut">experience</div></span><span style="text-align:right">Jan 1, 2026<div class="mut">new rates</div></span></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="row"><span class="sym">t</span><span class="grow">Annual trend ◆</span><span class="pill">3.00%</span></div>
+          <div class="slider"><i style="left:18%"></i></div>
+          <div class="row sm"><span class="mut">from</span><span class="chip">● Default</span><span class="grow"></span><span class="mut">Change ›</span></div>
+        </div>
+        <div class="card" style="gap:7px">
+          <div class="row sm"><span class="grow">Experience period</span><span class="chip on">Accident yr</span><span class="chip">Policy yr</span></div>
+          <div class="hr"></div>
+          <div class="row sm"><span class="sym">Y</span><span class="grow">Experience year</span><span class="pill">2023</span></div>
+          <div class="row sm"><span class="sym">E</span><span class="grow">Rates effective</span><span class="pill">Jan 1, 2025</span></div>
+          <div class="row sm"><span class="sym">R</span><span class="grow">In effect</span><span class="pill">12 mo</span></div>
+          <div class="row sm"><span class="sym">T</span><span class="grow">Policy term</span><span class="pill">12 mo</span></div>
+          <div class="row sm"><span class="mut">All</span><span class="chip">● Default</span></div>
+        </div>
+        <div class="card" style="padding:8px 10px"><div class="row sm"><span class="mut">Gives to</span><span class="grow"><b>Two-Step Loss Trend</b></span><span class="mut">open ›</span></div></div>
+      </div>
+      <figcaption><b>Tool.</b> Past three inputs, only the judgment keeps a slider. Rows at their default share one chip line.</figcaption>
+    </figure>
+    <figure class="shot">
+      <div class="phone">
+        <div class="ph-top" style="justify-content:space-between"><span>Annual trend (t)</span><span style="font-size:20px;font-weight:700">3.00%</span></div>
+        <div class="slider"><i style="left:18%"></i></div>
+        <div class="lab">Take from a tool</div>
+        <div class="card" style="gap:7px">
+          <div class="row"><div class="grow"><b>Trend Fit</b><div class="sm mut">Fitted annual trend · your last run</div></div><span class="pill">3.42%</span></div>
+          <div class="hr"></div>
+          <div class="row"><div class="grow"><b>Combined Trend</b><div class="sm mut">Not run this session</div></div><span class="mut">open ›</span></div>
+          <div class="hr"></div>
+          <div class="row"><div class="grow"><b>Price Index</b><div class="sm mut">Not run this session</div></div><span class="mut">open ›</span></div>
+        </div>
+        <div class="lab">Published</div>
+        <div class="card" style="gap:6px">
+          <div class="mut sm">AIRB 2026 Annual Review · Alberta</div>
+          <div class="row"><div class="grow"><b>Loss cost trends, by coverage</b><div class="sm mut">p. 5; Appendix B</div></div><span class="pill mut">—</span></div>
+          <div class="sm mut">The figures are in the document but haven't been entered here yet.</div>
+          <span class="btn ghost">Read p. 5</span>
+        </div>
+        <div class="lab">Your own</div>
+        <div class="card" style="gap:4px"><div class="row"><span class="grow">Type a value</span><span class="pill">3.00%</span></div><div class="row"><span class="grow mut">Back to the default</span><span class="mut">3.00%</span></div></div>
+      </div>
+      <figcaption><b>Edit sheet.</b> Every tool in front, with its result this session or a way to open it. A published figure with no value yet is listed and explained, but can't be picked.</figcaption>
+    </figure>
+    <figure class="shot">
+      <div class="phone">
+        <div class="crumb">Tools › Ratemaking › <b>Trend Factor</b></div>
+        <div class="card" style="padding:8px 10px"><div class="row sm"><span class="mut">Takes from</span><span class="grow"><b>Trend Fit</b></span><span class="mut">‹ open</span></div></div>
+        <div class="ans">
+          <div class="meta">Ratemaking · Werner, Ch. 6</div>
+          <div class="name">Trend Factor</div>
+          <div class="big">1.0877<small>over 2.50 years</small></div>
+        </div>
+        <div class="card">
+          <div class="row"><span class="sym">t</span><span class="grow">Annual trend ◆</span><span class="pill" style="box-shadow:inset 0 0 0 1px var(--ex)">3.42%</span></div>
+          <div class="row sm"><span class="mut">from</span><span class="chip">↳ Trend Fit</span><span class="grow"></span><span class="mut">⌃</span></div>
+          <div class="disc">
+            <div class="sm">Set by <b>Trend Fit</b>: its fitted annual trend, 3.42%.</div>
+            <div class="sm mut">Changes there carry here while this link stands.</div>
+            <div class="row"><span class="btn ghost" style="flex:1">Open Trend Fit</span><span class="btn ghost" style="flex:1">Unlink</span></div>
+          </div>
+        </div>
+      </div>
+      <figcaption><b>Linked.</b> "Takes from" now names only Trend Fit. A link opens in place like a published figure. Unlink keeps 3.42% as Yours.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ================= Expense Ratios ================= -->
+<section class="design" id="expense">
+  <div class="dhead">
+    <div class="eyebrow">Tool 3 · a table, two tools after</div>
+    <h2>Expense Ratios</h2>
+    <p class="tradeoff">At its defaults: four expense types, general and other acquisition 75% fixed.</p>
+  </div>
+  <div class="screens">
+    <figure class="shot">
+      <div class="phone">
+        <div class="crumb">Tools › Ratemaking › <b>Expense Ratios</b></div>
+        <div class="ans">
+          <div class="meta">Ratemaking · Werner, Ch. 7</div>
+          <div class="name">Expense Ratios</div>
+          <div class="big">28.1%<small>of premium</small></div>
+          <div class="bar"><span class="s2" style="width:39%">F 11.0</span><span class="s3" style="width:61%">V 17.1</span></div>
+          <div class="row sm"><span class="mut grow">Alberta auto, AIRB selection</span><b>27.8%</b><span class="mut">⌄</span></div>
+        </div>
+        <div class="lab">Expense types</div>
+        <div class="card" style="padding:8px;overflow-x:auto">
+          <table style="border-collapse:collapse;font-size:10px;width:100%;font-variant-numeric:tabular-nums">
+            <thead><tr class="mut"><th style="text-align:left;font-weight:500"></th><th style="font-weight:500">(1)<br>Exp.</th><th style="font-weight:500">(2)<br>Prem.</th><th style="font-weight:500">(3)<br>% fixed ◆</th><th style="font-weight:500">(4)<br>Ratio</th></tr></thead>
+            <tbody>
+              <tr><td>General</td><td>900K</td><td>14.0M</td><td><b>75%</b></td><td>6.4%</td></tr>
+              <tr><td>Other acq.</td><td>1.2M</td><td>14.5M</td><td><b>75%</b></td><td>8.3%</td></tr>
+              <tr><td>Commission</td><td>1.6M</td><td>14.5M</td><td><b>0%</b></td><td>11.0%</td></tr>
+              <tr><td>Taxes</td><td>340K</td><td>14.5M</td><td><b>0%</b></td><td>2.3%</td></tr>
+            </tbody>
+          </table>
+          <div class="row sm" style="margin-top:4px"><span class="mut">All</span><span class="chip">● Default</span></div>
+          <div class="sm mut" style="font-family:var(--mono)">(4) = (1) / (2) · Fixed = (4)·(3) · scroll ›</div>
+        </div>
+        <div class="card" style="padding:8px 10px"><div class="row sm"><span class="mut">Gives to</span><span class="grow"><b>2 tools</b></span><span class="mut">⌄</span></div></div>
+      </div>
+      <figcaption><b>Tool.</b> Nothing feeds it, so there's no "Takes from" line. F and V wear the same swatches as on Permissible Loss Ratio.</figcaption>
+    </figure>
+    <figure class="shot">
+      <div class="phone">
+        <div class="crumb">Tools › Ratemaking › <b>Expense Ratios</b></div>
+        <div class="ans">
+          <div class="big">28.1%<small>of premium</small></div>
+          <div class="bar"><span class="s2" style="width:39%">F 11.0</span><span class="s3" style="width:61%">V 17.1</span></div>
+          <div class="row sm"><span class="mut grow">Alberta auto, AIRB selection</span><b>27.8%</b><span class="mut">⌃</span></div>
+          <div class="disc">
+            <div class="sm">The operating expenses the AIRB selected for Alberta private passenger auto, as a share of premium. An industry figure, not one company's.</div>
+            <dl class="kv">
+              <dt>Made of</dt><dd>Acquisition 20.0% + general 7.8%</dd>
+              <dt>In force</dt><dd>From Oct 1, 2026</dd>
+              <dt>Source</dt><dd>AIRB 2026 Annual Review, p. 7</dd>
+            </dl>
+            <div class="warn">Not fact checked yet. For comparison only: it isn't split into fixed and variable, so it can't fill this table.</div>
+            <span class="btn ghost">Read p. 7</span>
+          </div>
+        </div>
+      </div>
+      <figcaption><b>A figure that matches the answer.</b> It sits under the bar, opens the same way, and has no Use button. It says why.</figcaption>
+    </figure>
+    <figure class="shot">
+      <div class="phone">
+        <div class="crumb">Tools › Ratemaking › <b>Expense Ratios</b></div>
+        <div class="card" style="gap:8px">
+          <div class="row sm"><span class="mut">Gives to</span><span class="grow"><b>2 tools</b></span><span class="mut">⌃</span></div>
+          <div class="hr"></div>
+          <div class="row"><b class="grow">Permissible Loss Ratio</b><span class="mut">open ›</span></div>
+          <div class="row sm"><span class="sw s2"></span><span class="grow">F 11.0% → Fixed expense</span></div>
+          <div class="row sm"><span class="sw s3"></span><span class="grow">V 17.1% → Variable expense</span></div>
+          <div class="hr"></div>
+          <div class="row"><b class="grow">Loss Ratio Method</b><span class="mut">open ›</span></div>
+          <div class="row sm"><span class="sw s2"></span><span class="grow">F 11.0% → Fixed expense</span></div>
+          <div class="row sm"><span class="sw s3"></span><span class="grow">V 17.1% → Variable expense</span></div>
+        </div>
+        <div class="sm mut" style="padding:0 4px">Opening one carries both values. The other isn't changed.</div>
+      </div>
+      <figcaption><b>Gives to, open.</b> Each tool with the values it would receive, so the reader knows what moves before leaving. The arriving tool shows them as linked (Tool 1).</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ================= Bank ================= -->
+<section class="design" id="bank">
+  <div class="dhead">
+    <div class="eyebrow">The shelf</div>
+    <h2>Assumptions Bank</h2>
+  </div>
+  <div class="screens">
+    <figure class="shot">
+      <div class="phone">
+        <div class="crumb">Tools › <b>Assumptions Bank</b></div>
+        <div class="chips"><span class="chip">All</span><span class="chip on">Profit provision</span><span class="chip">Expense ratio</span><span class="chip">Trend</span></div>
+        <div class="ans">
+          <div class="meta">Automobile Insurance Rate Board · Alberta</div>
+          <div class="name">Expense, ULAE and profit benchmarks, 2026</div>
+          <div class="sm mut">In force Oct 1, 2026 · 2 figures still to enter</div>
+        </div>
+        <div class="card">
+          <div class="row"><div class="grow"><b>Profit provision</b><div class="mut sm">Pre-tax cap · p. 7</div></div><span class="pill">6.0%</span></div>
+          <div class="row sm"><span class="mut">to</span><span class="chip">Permissible Loss Ratio ›</span></div>
+        </div>
+        <div class="sm mut" style="padding:0 4px">4 other figures in this document ›</div>
+        <span class="amber" style="justify-self:start">Not fact checked</span>
+      </div>
+      <figcaption><b>Filtered.</b> Only matching rows show; the rest fold into one line. No exam logo. Each figure names the tools it goes to, the mirror of the tool's "from" chip.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="rec" id="rules">
+  <div class="eyebrow">Acceptance criteria</div>
+  <h2>Rules the build must keep</h2>
+  <ol class="rules">
+    <li>No exam logo on tool cards or the bank. The tint stays.</li>
+    <li>A quantity has one swatch on every tool. Bar segments carry their own labels.</li>
+    <li>A breadcrumb on every tool and on the bank. Back returns to the same place.</li>
+    <li>"Takes from" and "Gives to" come from the tools' hand-offs, both ways. Hidden when empty; "+ N more" opens a list; "Gives to" shows which value fills which field.</li>
+    <li>A value carried by "Gives to" arrives linked, not as the reader's own.</li>
+    <li>One "from" chip shape. Always on a judgment and on changed inputs; default rows share one line.</li>
+    <li>Published figures and links explain themselves in place, in two levels.</li>
+    <li>A published figure with no value yet is listed, explained and unselectable.</li>
+    <li>A figure that matches the answer is a comparison under the bar, with no Use button.</li>
+  </ol>
+</section>
+
+</div>
+
+</html>

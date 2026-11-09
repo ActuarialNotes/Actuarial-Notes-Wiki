@@ -122,3 +122,34 @@ export function formatYearSpan(first: number | null, last: number | null): strin
   if (first === null || last === null) return null
   return first === last ? String(first) : `${first}–${last}`
 }
+
+/** One piece of the bank's mix — the info popup's bar and its key. */
+export interface BankMixPart {
+  key: 'pastPapers' | 'samples' | 'carried' | 'vault' | 'offSyllabus'
+  label: string
+  count: number
+}
+
+/**
+ * Where a bank's questions come from, as the pieces of one bar: the exam's own
+ * papers, the body's samples, papers carried over, the vault's own, and last
+ * the off-syllabus questions kept for the record (counted apart from `total`).
+ * Empty pieces are left out.
+ */
+export function bankMix(info: Pick<QuizBankInfo, 'sources' | 'offSyllabus'>): BankMixPart[] {
+  const { sources } = info
+  const parts: BankMixPart[] = [
+    { key: 'pastPapers', label: 'Past papers', count: sources.pastPapers },
+    { key: 'samples', label: sources.samplePublisher ? `${sources.samplePublisher} samples` : 'Samples', count: sources.samples },
+    { key: 'carried', label: 'From other exams', count: sources.carried },
+    { key: 'vault', label: 'Actuarial Notes', count: sources.vault },
+    { key: 'offSyllabus', label: 'Off syllabus', count: info.offSyllabus },
+  ]
+  return parts.filter(p => p.count > 0)
+}
+
+/** "SOA — Exam FM" → the publisher's initials and the page's name. */
+export function splitSourceLabel(label: string): { publisher: string | null; title: string } {
+  const match = /^([A-Z]{2,5})\s+[—–-]\s+(.+)$/.exec(label.trim())
+  return match ? { publisher: match[1], title: match[2] } : { publisher: null, title: label.trim() }
+}

@@ -144,7 +144,7 @@ describe('factCheckBadge', () => {
     const v = parseVerification(VERIFIED)!
     const badge = factCheckBadge({ ...v, openFindings: 1 })
     expect(badge.tone).toBe('amber')
-    expect(badge.detail).toContain('1 open finding')
+    expect(badge.detail).toContain('1 open issue')
   })
 
   it('asks for a re-check once the page has changed underneath the pass', () => {
@@ -191,7 +191,7 @@ describe('factCheckOverview', () => {
   it('leads with a critical issue', () => {
     expect(factCheckOverview({ ...v, openFindings: 1, openCritical: 1 })).toEqual({
       headline: 'Known issue',
-      sentence: '1 critical issue open. Read it before relying on this page.',
+      sentence: '1 critical issue open. Read it before relying on this.',
     })
   })
 

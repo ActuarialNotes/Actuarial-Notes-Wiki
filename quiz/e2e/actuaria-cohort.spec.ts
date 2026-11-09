@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './test'
 import { signIn } from './fixtures/signedIn'
 
 // Actuaria's social layer (docs/actuaria-online.md §6.11, §6.12, §7.6, §7.7)
@@ -71,7 +71,7 @@ test.describe('actuaria cohorts', () => {
     await expect(home).toBeVisible()
     expect(calls.find(c => c.name === 'create')?.args).toMatchObject({ p_exam: 'P', p_name: 'The Bayesians', p_display_name: 'Ada' })
     await expect(page.getByTestId('cohort-invite-code')).toHaveText('AB2C3D')
-    await expect(page.getByTestId('cohort-pool')).toContainText('2 / 3 covered today')
+    await expect(page.getByTestId('cohort-pool')).toContainText('2 / 3 studied today')
     await expect(page.getByTestId('cohort-members').getByRole('listitem')).toHaveCount(3)
 
     // Opening the screen shares this member's Credibility, for the raid's weak spots.
@@ -143,6 +143,6 @@ test.describe('actuaria cohorts', () => {
     await expect(page.getByTestId('actuaria-raid')).toBeVisible()
     await page.goto('/actuaria/daily')
     await expect(page.getByTestId('actuaria-risk-pool')).toContainText('3 / 3')
-    await expect(page.getByTestId('actuaria-risk-pool')).toContainText('+25% gems active')
+    await expect(page.getByTestId('actuaria-risk-pool')).toContainText('+25% gems today')
   })
 })

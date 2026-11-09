@@ -31,7 +31,7 @@ export function ActuariaHud({ leagueExams }: { leagueExams: LeagueExamOption[] }
         <MobileNavButton className="-ml-0.5" />
         <Link
           to="/actuaria/map"
-          aria-label="Actuaria Online — the star map"
+          aria-label="Actuaria Online, the star map"
           className="flex shrink-0 items-center rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           <ActuariaWordmark markSize={28} size="sm" />

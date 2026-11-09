@@ -56,7 +56,7 @@ const CAPTION = 'px-4 pb-2 text-xs font-semibold uppercase tracking-wider text-m
 /** How long the Undo bar stays after a step is sorted. */
 const UNDO_MS = 5000
 
-/** The row a study step ends its products with, for what the Shop doesn't list. */
+/** The row a study step ends its products with, for what the Store doesn't list. */
 const OTHER_LABEL = 'Something not listed here'
 
 export function ExamKit({
@@ -124,14 +124,14 @@ export function ExamKit({
       <div className="space-y-2">
         <div className="flex items-baseline justify-between gap-3 px-1 text-sm">
           <span className="font-semibold">
-            {sorted === kit.steps.length ? `Your ${examName} kit is complete` : `${sorted} of ${kit.steps.length} sorted`}
+            {sorted === kit.steps.length ? `Your ${examName} kit is complete` : `${sorted} of ${kit.steps.length} done`}
           </span>
           {sitting && <span className="shrink-0 text-muted-foreground">Sitting {dayLabel(sitting, today)}</span>}
         </div>
         <div
           className="flex gap-1"
           role="img"
-          aria-label={`${sorted} of ${kit.steps.length} steps sorted for ${examName}`}
+          aria-label={`${sorted} of ${kit.steps.length} steps done for ${examName}`}
           data-testid="store-kit-progress"
         >
           {kit.steps.map(step => (
@@ -201,7 +201,7 @@ export function ExamKit({
           className="fixed inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-[46] mx-auto flex max-w-md items-center gap-3 rounded-2xl bg-foreground py-1.5 pl-4 pr-1.5 text-background shadow-xl lg:left-[calc(var(--sidebar-width)+1rem)]"
           data-testid="store-kit-undo"
         >
-          <span className="min-w-0 flex-1 truncate text-sm font-semibold">{KIT_STEP_TITLE[undo.step]} sorted</span>
+          <span className="min-w-0 flex-1 truncate text-sm font-semibold">Marked done: {KIT_STEP_TITLE[undo.step]}</span>
           <button
             type="button"
             onClick={() => {
@@ -260,7 +260,7 @@ function sortedSubtitle(step: KitStep, pick: string): string {
     const item = step.items.find(i => i.id === pick)
     if (item) return `You have the ${item.name}`
   }
-  return step.id === 'register' ? 'You’ve registered' : step.id === 'calculator' ? 'You have one' : 'You have this sorted'
+  return step.id === 'register' ? 'You’ve registered' : step.id === 'calculator' ? 'You have one' : 'Done'
 }
 
 /** The lowest price a step's products start at, in the first currency listed. */
@@ -311,7 +311,7 @@ function Step({
           type="button"
           onClick={() => onPick(done ? null : KIT_OWN)}
           aria-pressed={done}
-          aria-label={done ? `${title}: sorted. Mark not sorted` : `Mark ${title} sorted`}
+          aria-label={done ? `${title}: done. Mark not done` : `Mark ${title} done`}
           data-sound="select"
           className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full transition-colors hover:bg-accent/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
@@ -413,7 +413,7 @@ function StepBody({
       <div>
         <div className="flex items-baseline justify-between gap-3 pb-1 pl-11 sm:pl-0">
           <span className="text-xs font-medium text-muted-foreground">
-            {step.id === 'calculator' ? 'Which one do you have?' : 'Have one? Tick it'}
+            {step.id === 'calculator' ? 'Which one do you have?' : 'Tick what you have'}
           </span>
           {scale && (
             <span className="flex w-20 shrink-0 justify-between text-[10px] font-medium tabular-nums text-muted-foreground sm:w-28" aria-hidden>

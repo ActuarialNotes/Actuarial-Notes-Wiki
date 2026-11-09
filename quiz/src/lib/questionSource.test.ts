@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { examDisplayName, questionSource } from './questionSource'
+import { examDisplayName, formatAllowance, questionFigures, questionSource, questionTitle } from './questionSource'
 import { UNVERIFIED } from './verification'
 import type { Question } from './parser'
 
@@ -47,7 +47,7 @@ describe('questionSource', () => {
     const source = questionSource(q({ exam: 'Probability' }))
     expect(source.sitting).toBeNull()
     expect(source.label).toBe('Exam P')
-    expect(source.detail).toContain('names no past sitting')
+    expect(source.detail).toBe('From the SOA’s sample questions for Exam P. It isn’t from a past paper.')
     expect(source.document).toBeNull()
   })
 
@@ -92,5 +92,57 @@ describe('questionSource', () => {
 
   it('offers no paper for a sitting the table has not located', () => {
     expect(questionSource(q({ exam: 'Exam 5', year: 1998, session: 'Fall' })).document).toBeNull()
+  })
+})
+
+describe('questionTitle', () => {
+  it('numbers a past-paper question by its place on the paper', () => {
+    expect(questionTitle({ id: 'altam-2024f-q3', year: 2024 })).toBe('Question 3')
+    expect(questionTitle({ id: 'cas5-2013f-012', year: 2013 })).toBe('Question 12')
+  })
+
+  it('numbers a publisher\'s sample as a sample', () => {
+    expect(questionTitle({ id: 'p-004', year: undefined })).toBe('Sample question 4')
+  })
+
+  it('gives the vault\'s own questions no number', () => {
+    expect(questionTitle({ id: 'masi-an-001', year: undefined })).toBe('Practice question')
+  })
+})
+
+describe('questionFigures', () => {
+  const figure = (question: Question, key: string) =>
+    questionFigures(question).find(f => f.key === key)
+
+  it('reads a point-paced paper\'s question: its points, the paper\'s, and its time', () => {
+    const question = { ...q({ exam: 'Exam ALTAM', year: 2024, type: 'multi-part' }), points: 10 } as Question
+    expect(questionFigures(question).map(f => f.key)).toEqual(['points', 'paper', 'time', 'format'])
+    expect(figure(question, 'paper')).toMatchObject({ value: '60', label: 'points on the paper' })
+    expect(figure(question, 'time')).toMatchObject({ value: '30 min' })
+    expect(figure(question, 'time')?.label).toBeUndefined()
+    expect(figure(question, 'format')).toMatchObject({ value: 'Written', label: 'answer' })
+  })
+
+  it('shows no paper total for an undated question, and no time without points on a point-paced exam', () => {
+    const question = { ...q({ exam: 'Exam ALTAM' }), points: 0 } as Question
+    expect(questionFigures(question).map(f => f.key)).toEqual(['format'])
+  })
+
+  it('gives a question-paced exam\'s question the time per question', () => {
+    const question = { ...q({ exam: 'Financial Mathematics' }), points: 0 } as Question
+    expect(figure(question, 'time')).toMatchObject({ value: '5 min' })
+    expect(figure(question, 'paper')).toBeUndefined()
+  })
+
+  it('shows nothing it would have to invent for an exam with no pace', () => {
+    const question = { ...q({ exam: 'Something Else', year: 2020 }), points: 2 } as Question
+    expect(questionFigures(question).map(f => f.key)).toEqual(['points', 'format'])
+  })
+})
+
+describe('formatAllowance', () => {
+  it('says whole minutes as minutes and anything else as the clock', () => {
+    expect(formatAllowance(1800)).toBe('30 min')
+    expect(formatAllowance(262)).toBe('4:22')
   })
 })

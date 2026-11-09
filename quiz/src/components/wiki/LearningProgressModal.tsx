@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { ChevronDown, Loader2, X } from 'lucide-react'
+import { ChevronDown, Loader2, TrendingUp } from 'lucide-react'
 import { useConceptLearningHistory, type ConceptLearningHistory } from '@/hooks/useConceptLearningHistory'
 import type { MasteryState } from '@/lib/mastery'
 import { summarizeAttemptedQuestions } from '@/lib/learningHistory'
@@ -7,7 +7,12 @@ import { ProgressGraph } from '@/components/ui/LearningProgressGraph'
 import { AttemptedQuestionsList } from '@/components/wiki/AttemptedQuestionsList'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
 import { MasteryBadge } from '@/components/MasteryBadge'
-import { OverlayPortal } from '@/components/ui/OverlayPortal'
+import { BannerTile, EXAM_BANNER, InfoBanner, InfoSheet, NEUTRAL_BANNER, Stat } from '@/components/ui/InfoSheet'
+import { ExamLogo } from '@/components/ExamLogo'
+import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
+import { findSyllabiForConcept, wikiExamIdToProgressKey } from '@/lib/wikiParser'
+import { examAccentStyle } from '@/lib/examColors'
+import { MASTERY_LABEL } from '@/lib/masteryBadge'
 import { dialogOpenOver } from '@/lib/layeredDialog'
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -30,10 +35,8 @@ export function LevelPill({ level, size = 'md' }: { level: MasteryState; size?: 
 interface PanelProps {
   /** Hide the internal "Current level" row — used when the level is shown elsewhere (e.g. beside a title). */
   showLevelRow?: boolean
-  /** Hide the "Hover the graph…" hint below the graph. */
-  showHint?: boolean
   /**
-   * Put the legend + graph behind a "Show exam history" toggle, collapsed by
+   * Put the legend + graph behind a "Show history" toggle, collapsed by
    * default. Used where the graph is a secondary detail rather than the point of
    * the view.
    */
@@ -54,7 +57,6 @@ export function LearningProgressPanel({ conceptName, ...props }: PanelProps & { 
 export function LearningProgressPanelView({
   history,
   showLevelRow = true,
-  showHint = true,
   collapsible = false,
   onLevelChange,
 }: PanelProps & { history: ConceptLearningHistory }) {
@@ -132,7 +134,7 @@ export function LearningProgressPanelView({
                 aria-expanded={graphOpen}
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-border bg-transparent text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
               >
-                {graphOpen ? 'Hide exam history' : 'Show exam history'}
+                {graphOpen ? 'Hide history' : 'Show history'}
                 <ChevronDown
                   className={`h-4 w-4 shrink-0 transition-transform duration-200 ${graphOpen ? '' : '-rotate-90'}`}
                 />
@@ -142,20 +144,18 @@ export function LearningProgressPanelView({
 
           {graphVisible && (
             <>
-              {/* Legend */}
-              <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                <span className="flex items-center gap-2">
-                  <span className="inline-block h-3 w-3 rounded-full bg-green-500 shrink-0" />
-                  Correct attempt
-                </span>
-                <span className="flex items-center gap-2">
-                  <span className="inline-block h-3 w-3 rounded-full bg-red-500 shrink-0" />
-                  Incorrect attempt
-                </span>
-              </div>
-
-              {/* Graph */}
-              <div className="rounded-lg bg-muted/30 p-2">
+              {/* Graph, with its legend */}
+              <div className="rounded-xl bg-card px-2 pb-2 pt-3">
+                <div className="flex items-center gap-4 px-2 text-[11px] text-muted-foreground">
+                  <span className="flex items-center gap-1.5">
+                    <span className="inline-block h-2 w-2 shrink-0 rounded-full bg-green-500" />
+                    Right
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <span className="inline-block h-2 w-2 shrink-0 rounded-full bg-red-500" />
+                    Wrong
+                  </span>
+                </div>
                 <ProgressGraph
                   levelEvents={levelEvents}
                   attemptDots={attemptDots}
@@ -164,12 +164,6 @@ export function LearningProgressPanelView({
                   onSelectQuestion={setSelectedQuestionId}
                 />
               </div>
-
-              {showHint && (
-                <p className="text-xs text-muted-foreground text-center">
-                  Hover the graph to explore your level at any point in time
-                </p>
-              )}
 
               {/* The questions behind the dots — filtered to one question while
                   a dot is selected. */}
@@ -197,7 +191,8 @@ interface LearningProgressModalProps {
 export function LearningProgressModal({ conceptName, onClose }: LearningProgressModalProps) {
   // Paper: the panel sliding in.
   useSoundOnMount('open')
-  const [headerLevel, setHeaderLevel] = useState<MasteryState | null>(null)
+  const history = useConceptLearningHistory(conceptName)
+  const [shownLevel, setShownLevel] = useState<MasteryState | null>(null)
   const dialogRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -208,46 +203,51 @@ export function LearningProgressModal({ conceptName, onClose }: LearningProgress
     return () => window.removeEventListener('keydown', onKey)
   }, [onClose])
 
-  return (
-    <OverlayPortal>
-    <div
-      ref={dialogRef}
-      // z-[130] — same hosts as ConceptQuestionsModal; see the note there.
-      className="fixed inset-0 z-[130] flex items-start justify-center bg-background/80 backdrop-blur-sm p-4 overflow-y-auto paper-scrim"
-      role="dialog"
-      aria-modal="true"
-      aria-label={`Learning Progress: ${conceptName}`}
-      onClick={e => { if (e.target === e.currentTarget) onClose() }}
-    >
-      <div className="w-full max-w-xl bg-card rounded-xl shadow-2xl flex flex-col my-8">
-        {/* Header */}
-        <div className="flex items-center gap-3 px-4 h-16 shrink-0">
-          <span className="flex-1 truncate text-xl font-bold">
-            {conceptName}
-          </span>
-          {headerLevel && <LevelPill level={headerLevel} />}
-          <button
-            type="button"
-            onClick={onClose}
-            className="text-muted-foreground hover:text-foreground p-1 transition-colors"
-            title="Close"
-            aria-label="Close"
-          >
-            <X className="h-4 w-4" />
-          </button>
-        </div>
+  // The exam whose syllabus names the concept: its logo, colour and name lead
+  // the banner. A concept on no syllabus gets the neutral banner.
+  const { syllabi } = useWikiSyllabus()
+  const syllabus = useMemo(() => findSyllabiForConcept(syllabi, conceptName)[0] ?? null, [syllabi, conceptName])
+  const examKey = syllabus ? wikiExamIdToProgressKey(syllabus.examId) : null
 
-        {/* Body */}
-        <div className="p-5">
-          <LearningProgressPanel
-            conceptName={conceptName}
-            showLevelRow={false}
-            showHint={false}
-            onLevelChange={setHeaderLevel}
-          />
-        </div>
-      </div>
-    </div>
-    </OverlayPortal>
+  const attempts = history.attemptDots.length
+  const right = history.attemptDots.filter(d => d.isCorrect).length
+  const level = shownLevel ? levelFigure(shownLevel) : null
+
+  return (
+    <InfoSheet
+      onClose={onClose}
+      label={`Learning Progress: ${conceptName}`}
+      // z-[130] — same hosts as ConceptQuestionsModal; see the note there.
+      layer="z-[130]"
+      dialogRef={dialogRef}
+      style={examKey ? examAccentStyle(examKey) : undefined}
+    >
+      <InfoBanner
+        tile={examKey
+          ? <ExamLogo examKey={examKey} size="md" />
+          : <BannerTile><TrendingUp className="h-5 w-5" /></BannerTile>}
+        eyebrow={syllabus?.examLabel}
+        title={conceptName}
+        onClose={onClose}
+        tint={examKey ? EXAM_BANNER : NEUTRAL_BANNER}
+        stats={level && attempts > 0 ? [
+          <Stat key="level" value={level.value} label={level.label} accent />,
+          <Stat key="attempts" value={attempts} label={attempts === 1 ? 'attempt' : 'attempts'} />,
+          <Stat key="right" value={`${Math.round((100 * right) / attempts)}%`} label="right" />,
+        ] : undefined}
+      />
+      <LearningProgressPanelView
+        history={history}
+        showLevelRow={false}
+        onLevelChange={setShownLevel}
+      />
+    </InfoSheet>
   )
+}
+
+/** "Level 2" → 2 over "level"; New and Forgotten are their own word. */
+function levelFigure(level: MasteryState): { value: string; label?: string } {
+  const label = MASTERY_LABEL[level]
+  const n = /^Level (\d)$/.exec(label)
+  return n ? { value: n[1], label: 'level' } : { value: label }
 }

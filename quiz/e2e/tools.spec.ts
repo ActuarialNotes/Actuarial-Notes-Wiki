@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './test'
 
 // Actuarial Tools (docs/actuarial-tools.md): calculators that each do one
 // thing, one live card each. The smoke checks the tab is in the sidebar, the
@@ -32,7 +32,7 @@ test.describe('tools', () => {
 
     // A cell that isn't a number is named, and the last result is kept.
     await card.getByLabel('Latest, row 1').fill('lots')
-    await expect(card.getByRole('alert')).toContainText('"latest" must be a number')
+    await expect(card.getByRole('alert')).toContainText('Latest must be a number')
     await card.getByLabel('Latest, row 1').fill('1700')
     await expect(card.getByRole('alert')).toHaveCount(0)
 
@@ -41,7 +41,7 @@ test.describe('tools', () => {
 
     // The menu says what the tool was tested against: Friedland's Chapter 9 exhibit.
     await page.getByRole('button', { name: 'More' }).click()
-    await expect(page.getByText('Tested against')).toBeVisible()
+    await expect(page.getByText('Tested against', { exact: true })).toBeVisible()
     await expect(page.getByRole('link', { name: /Friedland \(2010\), Ch\. 9, Exhibit I, Sheet 1, p\. 162/ })).toBeVisible()
   })
 
@@ -98,11 +98,13 @@ test.describe('tools', () => {
     await expect(card.getByTestId('tool-tile').nth(1)).toHaveText('3.5')
   })
 
+  // The tool template (§19) trades this for an answer that rides in the title
+  // strip once its card scrolls away — its own test is below.
   test('fits every scalar card, figure and all, on a phone without scrolling', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 })
     for (const slug of [
-      'annuity', 'trend-factor', 'bond-price', 'bond-yield', 'buhlmann-credibility', 'partial-credibility',
-      'full-credibility-standard', 'limited-expected-value', 'expected-payment', 'permissible-loss-ratio',
+      'annuity', 'trend-factor', 'bond-yield', 'buhlmann-credibility', 'partial-credibility',
+      'full-credibility-standard', 'expected-payment',
       'loss-ratio-method', 'pure-premium-method', 'interest-converter',
     ]) {
       await page.goto(`/tools/${slug}`)
@@ -155,7 +157,7 @@ test.describe('tools', () => {
     const card = page.getByTestId('tool-card')
     // The ultimate column is pinned at the right edge, inside the card.
     const cardBox = (await card.boundingBox())!
-    const ult = (await card.getByRole('columnheader', { name: 'Ultimate' }).boundingBox())!
+    const ult = (await card.getByRole('columnheader', { name: /Ultimate/ }).boundingBox())!
     expect(ult.x + ult.width).toBeLessThanOrEqual(cardBox.x + cardBox.width)
     // A typed amount prints with its separators once the cell is left.
     await card.getByLabel('Latest, row 1').fill('1700*2')
@@ -209,5 +211,89 @@ test.describe('tools', () => {
     await expect(denominator.getByRole('alert')).toContainText('row 3')
     await denominator.getByRole('button', { name: 'Clear every cell' }).click()
     await expect(denominator.getByLabel('Origin 2021, age 12')).toHaveValue('')
+  })
+  // The Assumptions Bank (docs/assumptions-bank.md): a published figure taken
+  // into a tool, from the shelf or from the field's own From… menu, and the
+  // run saying where it came from.
+  test('takes a published figure from the Assumptions Bank into a tool, with its source', async ({ page }) => {
+    await page.goto('/tools')
+    await page.getByTestId('assumptions-row').click()
+    await expect(page).toHaveURL(/\/tools\/assumptions$/)
+    await expect(page.getByTestId('assumption-set').first()).toBeVisible()
+    await page.getByRole('button', { name: 'Profit provision', exact: true }).click()
+    await expect(page.getByTestId('assumption-set')).toHaveCount(1)
+    await page.getByRole('button', { name: /^Use Profit provision/ }).click()
+    await page.getByRole('link', { name: /Use Profit provision .* as Profit & contingency in Permissible Loss Ratio/ }).click()
+    await expect(page).toHaveURL(/\/tools\/permissible-loss-ratio#input=/)
+
+    // The template (§19): the value pill, and a source tag naming the document.
+    const card = page.getByTestId('tool-card')
+    const pill = card.getByRole('button', { name: 'Profit & contingency value' })
+    await expect(pill).toHaveText('6%')
+    const row = card.locator('[data-field="profit"]')
+    await expect(row.locator('[data-source="published"]')).toContainText('2026 Annual Review')
+    await expect(row.getByTestId('tool-unchecked')).toBeVisible()
+    await expect(card.getByTestId('tool-tile').first()).toHaveText('69%')
+
+    // A number of the reader's own, typed on the sheet's keypad, replaces the figure and its source.
+    await pill.click()
+    const sheet = page.getByTestId('value-sheet')
+    await sheet.getByRole('button', { name: '4', exact: true }).click()
+    await expect(sheet.getByTestId('keypad-entry')).toHaveText('4%')
+    await sheet.getByRole('button', { name: 'Done' }).click()
+    await expect(pill).toHaveText('4%')
+    await expect(row.locator('[data-source="yours"]')).toBeVisible()
+    await expect(row.locator('[data-source="published"]')).toHaveCount(0)
+  })
+
+  test('picks a published figure in a template tool\'s edit sheet, and goes back to the default', async ({ page }) => {
+    await page.goto('/tools/permissible-loss-ratio')
+    const card = page.getByTestId('tool-card')
+    await card.getByRole('button', { name: 'Profit & contingency value' }).click()
+    const sheet = page.getByTestId('value-sheet')
+    await sheet.getByTestId('tool-bank-figures').getByRole('radio', { name: /Automobile Insurance Rate Board/ }).click()
+    await expect(sheet.getByTestId('value-sheet-value')).toHaveText('6%')
+    await sheet.getByRole('radio', { name: /Back to the default/ }).click()
+    await expect(sheet.getByTestId('value-sheet-value')).toHaveText('5%')
+    await sheet.getByRole('button', { name: 'Done' }).click()
+    await expect(card.locator('[data-field="profit"] [data-source="default"]')).toBeVisible()
+  })
+
+  test('opens a long tool\'s inputs in the sheet, and keeps its answer in the title strip once scrolled', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.goto('/tools/bond-price')
+    const card = page.getByTestId('tool-card')
+    // Six inputs: no slider on the rows; a row opens the sheet, which has one.
+    await expect(card.getByRole('slider')).toHaveCount(0)
+    await card.getByRole('button', { name: /^Yield, convertible m-thly/ }).click()
+    const sheet = page.getByTestId('value-sheet')
+    await expect(sheet.getByRole('slider')).toBeVisible()
+    for (const k of ['6', 'Point', '5']) await sheet.getByRole('button', { name: k, exact: true }).click()
+    await sheet.getByRole('button', { name: 'Done' }).click()
+    await expect(card.getByTestId('tool-tile').first()).not.toHaveText('1,077.95')
+    await page.evaluate(() => window.scrollTo(0, 0))
+    await expect(page.getByTestId('tool-pinned-answer')).toHaveCount(0)
+    await page.mouse.wheel(0, 600)
+    await expect(page.getByTestId('tool-pinned-answer')).toBeVisible()
+  })
+
+  test('offers the bank\'s figures in a field\'s From… menu', async ({ page }) => {
+    await page.goto('/tools/loss-ratio-method')
+    const card = page.getByTestId('tool-card')
+    await card.getByRole('button', { name: 'Variable expense ratio from a tool or a published figure' }).click()
+    const figures = card.getByTestId('tool-bank-figures')
+    await expect(figures).toBeVisible()
+    await figures.getByRole('button', { name: /Total expenses, 27\.8%/ }).click()
+    await expect(card.getByLabel('Variable expense ratio value')).toHaveValue('27.8')
+    await expect(card.getByTestId('tool-figure-source')).toContainText('Operating Expenses & ULAE')
+  })
+
+  test('shows a document\'s figures on its resource page', async ({ page }) => {
+    await page.goto('/tools/assumptions')
+    const set = page.getByTestId('assumption-set').filter({ hasText: 'ULAE factors' })
+    await set.getByRole('button', { name: 'Read the source' }).click()
+    const assumptions = page.getByTestId('resource-assumptions')
+    await expect(assumptions).toBeVisible()
+    await expect(assumptions).toContainText('1.1189')
   })
 })

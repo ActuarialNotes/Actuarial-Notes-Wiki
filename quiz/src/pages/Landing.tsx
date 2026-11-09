@@ -19,7 +19,8 @@ import { filterQuestions } from '@/lib/parser'
 import type { QuizMode } from '@/lib/parser'
 import { useQuestionAttempts } from '@/hooks/useQuestionAttempts'
 import { cn } from '@/lib/utils'
-import { buildPastExamRows, examSourceLabel, practiceExamQuestions, sittingLabel } from '@/lib/pastExams'
+import { buildPastExamRows, examSourceLabel, PRACTICE_EXAM_LABEL, practiceExamQuestions, sittingLabel } from '@/lib/pastExams'
+import { PUBLISHER_ORDER, questionPublisher } from '@/lib/questionPublisher'
 import { applyPassRates } from '@/lib/passRates'
 import { useExamPassRates } from '@/hooks/useExamPassRates'
 import { examStatus } from '@/lib/examStatus'
@@ -52,7 +53,9 @@ import { useBuilderPool } from '@/hooks/useBuilderPool'
 import { useTodaysPlanQuiz } from '@/hooks/useTodaysPlanQuiz'
 import { ConceptGroupList } from '@/components/landing/ConceptGroupList'
 import { QuizExamLadder } from '@/components/landing/QuizExamLadder'
+import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { QuizGamesPanel } from '@/components/landing/QuizGamesPanel'
+import { GAMES_ENABLED } from '@/lib/featureFlags'
 import { PastPaperShelf } from '@/components/landing/PastPaperShelf'
 import { QuizTitleRow } from '@/components/landing/QuizTitleRow'
 import { QuizHeroCard, type SetupSection } from '@/components/landing/QuizHeroCard'
@@ -66,6 +69,7 @@ import {
 } from '@/components/landing/QuizSetupSheet'
 import { useQuizExamStrip } from '@/components/landing/useQuizExamStrip'
 import { countOptions as buildCountOptions } from '@/components/landing/builderOptions'
+import type { Question } from '@/lib/parser'
 
 // The Quiz tab: the exam list, and one exam's quiz setup screen laid over it.
 // What the builder decides — the exams, the syllabus order, today's plan's
@@ -87,6 +91,14 @@ const RegistrationNudge = lazy(() => import('@/components/RegistrationNudge'))
 
 /** Which form of the setup sheet is open. */
 type Sheet = 'quiz' | 'practice' | 'papers'
+
+/** Who wrote an exam's questions, for a bank with no past papers: "SOA sample questions", "Actuarial Notes questions". */
+function sourceDetail(questions: readonly Question[]): string {
+  const found = new Set(questions.map(q => questionPublisher(q)).filter(p => p !== null))
+  const names = PUBLISHER_ORDER.filter(p => found.has(p))
+  if (names.length === 0) return 'No past papers'
+  return names.map(p => (p === 'Actuarial Notes' ? 'Actuarial Notes questions' : `${p} sample questions`)).join(' · ')
+}
 
 export default function Landing() {
   const navigate = useNavigate()
@@ -459,7 +471,7 @@ export default function Landing() {
         const hi = Math.max(...years)
         return `${pastExamRows.length} sitting${pastExamRows.length === 1 ? '' : 's'} · ${lo === hi ? lo : `${lo}–${hi}`}`
       })()
-    : 'Sample questions'
+    : sourceDetail(allQuestions.filter(q => q.exam === topic))
 
   const accent = hasTopic ? examAccentStyle(currentExam?.progressKey ?? '') : undefined
 
@@ -475,7 +487,7 @@ export default function Landing() {
   }
 
   const sittingSettings = (s: typeof quizSettings) => (
-    <SheetSection section="sitting" title="How it's sat">
+    <SheetSection section="sitting" title="While you answer">
       <SittingChoices
         reveal={s.reveal}
         onRevealChange={s.onRevealChange}
@@ -518,7 +530,7 @@ export default function Landing() {
         onClearConcept={() => setSelectedConcept('')}
       />
 
-      {!hasTopic && <QuizGamesPanel />}
+      {GAMES_ENABLED && !hasTopic && <QuizGamesPanel />}
 
       {hasTopic && currentExam?.progressKey && (
         <Suspense fallback={null}>
@@ -538,6 +550,8 @@ export default function Landing() {
           onOpenExam={openExam}
         />
       )}
+      {/* A track heading opens its credential's page here, as on Study Guides. */}
+      {!hasTopic && <ConceptPopup />}
 
       {hasTopic && (
         <div className="mx-auto max-w-xl space-y-3">
@@ -623,12 +637,12 @@ export default function Landing() {
 
     {hasTopic && sheet === 'practice' && (
       <QuizSetupSheet
-        title="Practice exam"
+        title={PRACTICE_EXAM_LABEL}
         style={accent}
         onClose={closeSheet}
-        startLabel="Start practice exam"
+        startLabel={`Start ${PRACTICE_EXAM_LABEL}`}
         startDisabled={practiceCount === 0}
-        emptyNote="This exam has no questions to draw a practice exam from yet."
+        emptyNote="This exam has no questions to draw a Practice Exam from yet."
         onStart={startPractice}
       >
         <div className="flex items-center gap-4 rounded-2xl bg-card p-4">
@@ -639,7 +653,7 @@ export default function Landing() {
           </span>
         </div>
         <p className="text-[15px] text-muted-foreground">
-          Drawn from the whole {examLabel} bank in the paper's shape, every difficulty, the way the exam is set.
+          Drawn from the whole {examLabel} bank, in the real paper's shape and mix of difficulty.
         </p>
         {sittingSettings(examSettings)}
       </QuizSetupSheet>
@@ -650,7 +664,7 @@ export default function Landing() {
         title={examSourceName}
         style={accent}
         onClose={closeSheet}
-        startLabel={selectedSitting ? `Start ${sittingLabel(selectedSitting.year, selectedSitting.session)}` : 'Start practice exam'}
+        startLabel={selectedSitting ? `Start ${sittingLabel(selectedSitting.year, selectedSitting.session)}` : `Start ${PRACTICE_EXAM_LABEL}`}
         startDisabled={papersCount === 0}
         emptyNote="This paper hasn't been added yet."
         onStart={startPapers}

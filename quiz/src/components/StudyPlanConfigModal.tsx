@@ -397,7 +397,7 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
                 <div className="flex items-start gap-2 rounded-lg bg-primary/5 px-3 py-2 text-xs text-muted-foreground">
                   <Lock className="h-3.5 w-3.5 shrink-0 mt-0.5 text-primary/60" />
                   <span>
-                    Study strategy customization is a{' '}
+                    Choosing a study strategy is a{' '}
                     <Link to="/upgrade" className="rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"><ProBadge /></Link>{' '}
                     feature.
                   </span>
@@ -415,8 +415,8 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
                 {([
                   {
                     value: 'strong_all' as TargetStrengthLevel,
-                    label: 'Master everything',
-                    desc: 'Work through the syllabus in the order it teaches it.',
+                    label: 'Syllabus order',
+                    desc: 'Study the concepts in the order the syllabus lists them.',
                     icon: BookOpen,
                   },
                   {

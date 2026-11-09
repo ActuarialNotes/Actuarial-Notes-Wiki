@@ -40,7 +40,7 @@ export function DashboardRemindersModal({ open, onClose, email, isPro, subscript
       className="fixed inset-0 z-[70] flex items-start justify-center bg-background/80 backdrop-blur-sm p-4 overflow-y-auto paper-scrim"
       role="dialog"
       aria-modal="true"
-      aria-label="Daily reminder email settings"
+      aria-label="Daily study plan email"
       onClick={e => { if (e.target === e.currentTarget) onClose() }}
     >
       <div className="w-full max-w-lg bg-card rounded-xl shadow-2xl flex flex-col my-12">

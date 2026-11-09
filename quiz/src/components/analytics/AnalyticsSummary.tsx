@@ -63,7 +63,6 @@ export function AnalyticsSummary({ trend, span, leaks, pace, examLabel }: {
   const first = trend.attempts?.first ?? null
   const retry = trend.attempts?.retry ?? null
   const firstPct = first ? accuracyPercent(first) : null
-  const retryPct = retry ? accuracyPercent(retry) : null
 
   const days = dailyColumns(trend, todayISO())
   const most = Math.max(1, ...days.map(d => d.answered))
@@ -72,7 +71,7 @@ export function AnalyticsSummary({ trend, span, leaks, pace, examLabel }: {
   const paceNote = !pace
     ? 'No pace on file for this exam'
     : pace.overall.median !== null
-      ? `${pace.pace.per === 'point' ? 'a point' : 'a question'} · the exam allows ${clock(pace.allowed)}`
+      ? `per ${pace.pace.per === 'point' ? 'point' : 'question'}, against the exam's ${clock(pace.allowed)}`
       : pace.overall.answered === 0
         ? 'Needs a timed quiz'
         : `${MIN_TIMED_ANSWERS - pace.overall.answered} more timed answers`
@@ -89,7 +88,7 @@ export function AnalyticsSummary({ trend, span, leaks, pace, examLabel }: {
         <Tile
           label="Marks at risk"
           value={leak ? `−${formatMarks(leak.marksLost!)}` : '—'}
-          note={leak ? `${leak.name} · ${Math.round(leak.share)}% of the exam` : 'Answer 3 in a section'}
+          note={leak ? `of 100, in ${leak.name}` : 'Answer 3 questions in a section'}
           tone={leak ? 'loss' : undefined}
           onOpen={leaks.length > 0 ? () => setLeaksOpen(true) : undefined}
         />
@@ -97,8 +96,8 @@ export function AnalyticsSummary({ trend, span, leaks, pace, examLabel }: {
           label="First try"
           value={firstPct === null ? '—' : `${firstPct}%`}
           note={first && first.answered > 0
-            ? <>of {first.answered}{retry && retry.answered > 0 && retryPct !== null ? ` · retry ${retryPct}% of ${retry.answered}` : ''}</>
-            : retry && retry.answered > 0 ? `Every answer a retry · ${retryPct}% of ${retry.answered}` : 'No first tries yet'}
+            ? `right of ${first.answered} first ${first.answered === 1 ? 'try' : 'tries'}`
+            : retry && retry.answered > 0 ? `All ${retry.answered} ${retry.answered === 1 ? 'answer was a retry' : 'answers were retries'}` : 'No first tries yet'}
           tone={first && firstPct !== null && isThin(first) ? 'thin' : undefined}
         />
         <Tile
@@ -182,7 +181,7 @@ export function AnalyticsSummary({ trend, span, leaks, pace, examLabel }: {
         </ul>
       </div>
 
-      {leaksOpen && <SectionLeaksDialog leaks={leaks} examLabel={examLabel} onClose={() => setLeaksOpen(false)} />}
+      {leaksOpen && <SectionLeaksDialog leaks={leaks} examLabel={examLabel} span={span} onClose={() => setLeaksOpen(false)} />}
     </div>
   )
 }

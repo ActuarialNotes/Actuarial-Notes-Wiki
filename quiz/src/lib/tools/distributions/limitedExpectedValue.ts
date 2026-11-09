@@ -26,7 +26,7 @@ export const limitedExpectedValue: ToolSpec = {
       tiles: [
         { symbol: 'E[X∧u]', label: 'Limited', value: lev, unit: 'money' },
         { symbol: 'E[X]', label: 'Unlimited', value: model.mean, unit: 'money' },
-        { symbol: 'LER', label: 'Share kept under u', value: ler, unit: 'percent' },
+        { symbol: 'LER', label: 'Share below u', value: ler, unit: 'percent' },
       ],
       trace: [
         { label: 'Probability the loss exceeds u', formula: `S(${u})`, result: model.survival(u), unit: 'percent' },

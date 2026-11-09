@@ -1,12 +1,19 @@
 import { useEffect, useRef } from 'react'
 
+/**
+ * Whether a key press belongs to something the reader is typing into: a text
+ * field, an editable region, or anything inside `[data-own-keys]` — a surface
+ * that handles every key itself, like the question spreadsheet's grid, where
+ * Enter moves down a row rather than confirming the answer.
+ */
 export function isTypingTarget(e: KeyboardEvent): boolean {
   const target = e.target as HTMLElement | null
   return !!(
     target && (
       target.tagName === 'INPUT' ||
       target.tagName === 'TEXTAREA' ||
-      target.isContentEditable
+      target.isContentEditable ||
+      (typeof target.closest === 'function' && target.closest('[data-own-keys]') !== null)
     )
   )
 }

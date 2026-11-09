@@ -364,9 +364,9 @@ export function ConceptCoverageSection({
           {/* Sign-in prompt */}
           {!score.isLoggedIn && (
             <div className="mt-4 rounded-lg bg-muted/40 px-4 py-3 text-sm flex flex-col sm:flex-row sm:items-center gap-3 sm:justify-between">
-              <span className="text-muted-foreground">Sign in to keep your results and see your accuracy over time</span>
+              <span className="text-muted-foreground">Sign in to keep your results.</span>
               <Button size="sm" variant="outline" onClick={score.onSignIn}>
-                Sign In
+                Sign in
               </Button>
             </div>
           )}

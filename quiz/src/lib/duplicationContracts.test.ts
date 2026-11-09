@@ -22,12 +22,16 @@ import { readFileSync, readdirSync } from 'node:fs'
 import { resolve } from 'node:path'
 import ts from 'typescript'
 import {
+  EMAIL_BANK_LABELS,
   MAX_EMAIL_CONCEPTS,
+  MAX_QUIZ_LINK_CONCEPTS,
   deriveTodaysConcepts,
+  planQuizPath,
   describePacing,
   localDateHour,
   type EmailPlanSnapshot,
 } from './dailyEmail'
+import { EXAM_ID_TO_LABEL } from './examIds'
 import { episodeMinutesLabel, planEpisode, podcastClipKey, podcastSlug } from './podcast'
 import { EPISODE_CLIPS } from './podcast.fixtures'
 import { COHORT_CAP, LEAGUE_TIERS, TOP_TIER_INDEX, demoteCount, promoteCount, zoneForRank } from './leagues'
@@ -113,7 +117,7 @@ describe('daily email: the edge function mirrors lib/dailyEmail.ts', () => {
     for (const status of ['on_track', 'ahead', 'behind', 'review_mode', 'target_passed', 'unknown', undefined]) {
       expect(mirror.describePacing(status)).toBe(describePacing(status))
     }
-    expect(describePacing('on_track')).toBe("You're on track")
+    expect(describePacing('on_track')).toBe('On track')
   })
 
   it('localDateHour: the same local date and hour, bad zones falling back to UTC', () => {
@@ -131,6 +135,32 @@ describe('daily email: the edge function mirrors lib/dailyEmail.ts', () => {
 
   it('MAX_EMAIL_CONCEPTS agrees', () => {
     expect(mirror.MAX_EMAIL_CONCEPTS).toBe(MAX_EMAIL_CONCEPTS)
+  })
+
+  it('planQuizPath: the same quiz link for both, over every bank', () => {
+    const consts = ['EMAIL_BANK_LABELS', 'MAX_QUIZ_LINK_CONCEPTS'].map(name => {
+      const start = EDGE.indexOf(`const ${name}`)
+      if (start < 0) throw new Error(`${name} not found in the edge function`)
+      const end = EDGE.indexOf(name === 'EMAIL_BANK_LABELS' ? '\n}\n' : '\n', start)
+      return EDGE.slice(start, end + (name === 'EMAIL_BANK_LABELS' ? 2 : 0))
+    })
+    const body = [...consts, functionSource(EDGE, 'planQuizPath')].join('\n\n')
+    const js = ts.transpileModule(body, { compilerOptions: { target: ts.ScriptTarget.ES2022 } }).outputText
+    const mirror = new Function(`${js}\nreturn { planQuizPath, EMAIL_BANK_LABELS, MAX_QUIZ_LINK_CONCEPTS }`)() as {
+      planQuizPath: typeof planQuizPath
+      EMAIL_BANK_LABELS: Record<string, string>
+      MAX_QUIZ_LINK_CONCEPTS: number
+    }
+    expect(mirror.EMAIL_BANK_LABELS).toEqual(EMAIL_BANK_LABELS)
+    expect(mirror.MAX_QUIZ_LINK_CONCEPTS).toBe(MAX_QUIZ_LINK_CONCEPTS)
+    const lists = [['Bayes Theorem', 'bayes theorem', 'A, B', ''], [], ['Price']]
+    for (const key of [...Object.keys(EMAIL_BANK_LABELS), 'CAS-PCPA']) {
+      for (const list of lists) expect(mirror.planQuizPath(key, list)).toBe(planQuizPath(key, list))
+    }
+  })
+
+  it("names each exam's bank as the question bank does", () => {
+    expect(EMAIL_BANK_LABELS).toEqual(EXAM_ID_TO_LABEL)
   })
 
   it('mails only the exams being studied, as the Dashboard shows them', () => {

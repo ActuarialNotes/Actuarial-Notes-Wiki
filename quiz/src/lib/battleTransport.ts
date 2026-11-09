@@ -21,21 +21,68 @@ import { presenceOverBroadcast, type LobbyTransport, type RawChannel } from './b
 
 const EVENT = 'battle'
 
+// ── Opening and closing a channel ────────────────────────────────────────────
+//
+// Two things in the Realtime client would leave a battle's channel joined to
+// nothing, and both happen on the way from a match into its room:
+//
+// - `supabase.removeChannel` disconnects the whole socket once no channel is
+//   left. The lobby's channel is closed the moment a match is found and the
+//   room's is opened a moment later, on the battle screen — so the socket
+//   could be torn down under the room's join, which then never answers.
+//   Channels here are left with `unsubscribe` instead, and the socket stays up.
+// - `supabase.channel(name)` hands back a channel of that name that is still
+//   leaving, and subscribing to it does nothing. A channel opened under a name
+//   that is still closing (a retried join, the lobby's watcher handing over to
+//   the player's own entry) waits until the old one has gone.
+
+type ChannelParams = Parameters<typeof supabase.channel>[1]
+
+/** Names whose channel is still being left, and when it will have gone. */
+const closing = new Map<string, Promise<void>>()
+
+/** Leave a channel, without taking the socket down with it. */
+function leaveChannel(name: string, channel: RealtimeChannel): void {
+  const gone: Promise<void> = channel.unsubscribe()
+    .then(() => { channel.teardown() })
+    .catch(() => { /* gone either way */ })
+    .finally(() => { if (closing.get(name) === gone) closing.delete(name) })
+  closing.set(name, gone)
+}
+
+/**
+ * Open a channel by name once any channel of that name has finished closing.
+ * Returns a cancel for a channel not yet opened.
+ */
+function openChannel(name: string, params: ChannelParams, opened: (channel: RealtimeChannel) => void): () => void {
+  let cancelled = false
+  const open = () => { if (!cancelled) opened(supabase.channel(name, params)) }
+  const pending = closing.get(name)
+  if (pending) void pending.then(open)
+  else open()
+  return () => { cancelled = true }
+}
+
 export function supabaseTransport(code: string): BattleTransport {
+  const name = roomChannel(code)
   let channel: RealtimeChannel | null = null
   let open = false
+  let cancel: (() => void) | null = null
   return {
     connect({ message, status }) {
       status('connecting')
-      channel = supabase.channel(roomChannel(code), { config: { broadcast: { self: false, ack: false } } })
-      channel
-        .on('broadcast', { event: EVENT }, ({ payload }) => message(payload))
-        .subscribe(state => {
-          open = state === 'SUBSCRIBED'
-          const mapped: ConnectionStatus =
-            state === 'SUBSCRIBED' ? 'open' : state === 'CLOSED' ? 'closed' : 'error'
-          status(mapped)
-        })
+      cancel = openChannel(name, { config: { broadcast: { self: false, ack: false } } }, ch => {
+        channel = ch
+        ch
+          .on('broadcast', { event: EVENT }, ({ payload }) => message(payload))
+          .subscribe(state => {
+            if (channel !== ch) return
+            open = state === 'SUBSCRIBED'
+            const mapped: ConnectionStatus =
+              state === 'SUBSCRIBED' ? 'open' : state === 'CLOSED' ? 'closed' : 'error'
+            status(mapped)
+          })
+      })
     },
     send(payload: BattleMessage) {
       // Before the channel is joined a send would go by REST instead; the
@@ -44,7 +91,8 @@ export function supabaseTransport(code: string): BattleTransport {
       void channel.send({ type: 'broadcast', event: EVENT, payload }).catch(() => { /* resent on the heartbeat */ })
     },
     close() {
-      if (channel) void supabase.removeChannel(channel)
+      cancel?.()
+      if (channel) leaveChannel(name, channel)
       channel = null
       open = false
     },
@@ -103,23 +151,25 @@ export function supabaseLobbyTransport(presenceKey: string): LobbyTransport {
   let channel: RealtimeChannel | null = null
   let open = false
   let wanted: LobbyEntry | null = null
+  let cancel: (() => void) | null = null
   return {
     connect({ presence, message, status }) {
       status('connecting')
-      const ch = supabase.channel(LOBBY_CHANNEL, {
-        config: { broadcast: { self: false, ack: false }, presence: { key: presenceKey } },
+      const params = { config: { broadcast: { self: false, ack: false }, presence: { key: presenceKey } } }
+      cancel = openChannel(LOBBY_CHANNEL, params, ch => {
+        channel = ch
+        ch
+          .on('presence', { event: 'sync' }, () => {
+            if (channel === ch) presence(Object.values(ch.presenceState()).flat())
+          })
+          .on('broadcast', { event: LOBBY_EVENT }, ({ payload }) => { if (channel === ch) message(payload) })
+          .subscribe(state => {
+            if (channel !== ch) return
+            open = state === 'SUBSCRIBED'
+            status(state === 'SUBSCRIBED' ? 'open' : state === 'CLOSED' ? 'closed' : 'error')
+            if (open && wanted) void ch.track(wanted).catch(() => { /* re-tracked on the next change */ })
+          })
       })
-      channel = ch
-      ch
-        .on('presence', { event: 'sync' }, () => {
-          presence(Object.values(ch.presenceState()).flat())
-        })
-        .on('broadcast', { event: LOBBY_EVENT }, ({ payload }) => message(payload))
-        .subscribe(state => {
-          open = state === 'SUBSCRIBED'
-          status(state === 'SUBSCRIBED' ? 'open' : state === 'CLOSED' ? 'closed' : 'error')
-          if (open && wanted) void ch.track(wanted).catch(() => { /* re-tracked on the next change */ })
-        })
     },
     track(entry) {
       wanted = entry
@@ -134,7 +184,8 @@ export function supabaseLobbyTransport(presenceKey: string): LobbyTransport {
       void channel.send({ type: 'broadcast', event: LOBBY_EVENT, payload }).catch(() => {})
     },
     close() {
-      if (channel) void supabase.removeChannel(channel)
+      cancel?.()
+      if (channel) leaveChannel(LOBBY_CHANNEL, channel)
       channel = null
       open = false
     },

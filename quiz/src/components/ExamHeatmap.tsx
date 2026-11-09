@@ -544,13 +544,13 @@ export function ExamHeatmap({
               <Calendar className="h-3.5 w-3.5 shrink-0 text-amber-500" />
               {readyDateLabel ? (
                 <>
-                  <span className="font-medium">Target ready: {readyDateLabel}</span>
+                  <span className="font-medium">Ready date: {readyDateLabel}</span>
                   {readyDaysLeft !== null && (readyDaysLeft > 0
                     ? <span className="opacity-60">· {readyDaysLeft} days</span>
                     : <span className="opacity-60">passed</span>)}
                 </>
               ) : (
-                <span>Set target ready date</span>
+                <span>Set ready date</span>
               )}
             </button>
           ) : (

@@ -63,7 +63,7 @@ function StorageNote({ signedIn }: { signedIn: boolean }) {
     return (
       <p className="flex items-center gap-2 text-xs text-muted-foreground">
         <Cloud className="h-3.5 w-3.5 shrink-0" aria-hidden />
-        Saved to your account — open your projects on any device you sign in on.
+        Saved to your account. Open your projects on any device you sign in on.
       </p>
     )
   }
@@ -72,7 +72,7 @@ function StorageNote({ signedIn }: { signedIn: boolean }) {
       <HardDrive className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
       <p className="min-w-0 flex-1 text-xs text-muted-foreground">
         <span className="font-medium text-foreground">Saved in this browser only.</span>{' '}
-        Not permanent: clearing site data, a private window or another device won't have them.
+        Clearing site data deletes them, and a private window or another device won't see them.
       </p>
       <Link to="/auth" state={{ from: '/project' }} className={buttonVariants({ variant: 'outline', size: 'sm', className: 'h-7 px-2.5 text-xs' })}>
         Sign in to keep them

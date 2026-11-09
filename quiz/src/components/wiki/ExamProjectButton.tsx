@@ -16,7 +16,7 @@ export function ExamProjectButton() {
       to="/project"
       icon={FlaskConical}
       label="Project"
-      title="The PCPA project — build, validate and report on a GLM in a simulated project window"
+      title="Rehearse the PCPA project"
     />
   )
 }

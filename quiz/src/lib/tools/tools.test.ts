@@ -9,6 +9,7 @@ import {
   defaultInput,
   describeTool,
   normalizeInput,
+  readerMessage,
   runTool,
   toolById,
   toolBySlug,
@@ -569,5 +570,29 @@ describe('arithmetic in a cell (§6.6)', () => {
     expect(evaluateArithmetic('1+')).toBeNull()
     expect(evaluateArithmetic('(1+2')).toBeNull()
     expect(evaluateArithmetic('alert(1)')).toBeNull()
+  })
+})
+
+describe('readerMessage', () => {
+  const caught = (id: string, input: unknown): ToolInputError => {
+    try {
+      runTool(toolById(id)!, input)
+    } catch (err) {
+      if (err instanceof ToolInputError) return err
+    }
+    throw new Error('expected an input error')
+  }
+
+  it('names the field by its label on the card, and leaves the engine message for agents', () => {
+    const spec = toolById('ratemaking.trend_fit')!
+    const err = caught('ratemaking.trend_fit', { ...defaultInput(spec), per_year: 0 })
+    expect(err.message).toContain('"per_year"')
+    expect(readerMessage(spec, err)).toBe(err.message.replace('"per_year"', 'Points a year'))
+  })
+
+  it('names a table column by its label', () => {
+    const spec = toolById('ratemaking.trend_fit')!
+    const err = caught('ratemaking.trend_fit', { ...defaultInput(spec), points: [{ period: 'Q1', value: 1 }, { period: 'Q2' }] })
+    expect(readerMessage(spec, err)).toBe('Row 2 of Points is missing Value.')
   })
 })

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:e47a1656651dac8ed44105b2a65b4a7b27ae818d7ff349fb076f2c726c018dc4
+  content_hash: sha256:630af785e190345c7bad46fcb4f222b7ae3590e1abbbc52deb5b5061f3f5a8f1
   sources:
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.9 pp.155-158 (PDF pp.167-170), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch.3 pp.29-30 (PDF pp.35-36), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
@@ -18,11 +18,20 @@ verification:
 
 **Homogeneity** is the property of a group of risks with similar expected costs, so that their experience can be averaged into one rate, or projected with one development pattern, without material distortion. It is about expected costs, not actual ones: even identical risks have different loss experience in a policy period, because insured events are random. A classification aims for groups that are homogeneous within and heterogeneous between, and it is traded against [[Credibility|credibility]], because a finer group has less data.
 
-> [!example]- A commercial auto class of light trucks is rated at one rate. By radius of operation, local trucks have 6,000 exposures and $\$3{,}600{,}000$ of losses, intermediate 2,500 and $\$2{,}125{,}000$, and long haul 1,500 and $\$2{,}250{,}000$. Is the class homogeneous? {Example}
-> - The pure premiums are $\$600$ local, $\$850$ intermediate and $\$1{,}500$ long haul.
-> - The class pure premium is $7{,}975{,}000/10{,}000 = \$797.50$, so the relativities are $0.75$, $1.07$ and $1.88$.
-> - Long-haul risks cost more than twice as much as local ones, so the class is not homogeneous.
-> - The single rate is 33% above the local trucks' cost and 47% below the long-haul trucks'. Radius of operation should become a [[Rating Variable|rating variable]], with credibility-weighted relativities.
+> [!example]- Is this commercial auto class of light trucks homogeneous? {Example}
+> A commercial auto class of light trucks is rated at one rate. Its experience by radius of operation is:
+>
+> | Radius | Exposures | Losses ($) |
+> | :--- | ---: | ---: |
+> | Local | 6,000 | 3,600,000 |
+> | Intermediate | 2,500 | 2,125,000 |
+> | Long haul | 1,500 | 2,250,000 |
+>
+> > [!answer]-
+> > - The pure premiums are $\$600$ local, $\$850$ intermediate and $\$1{,}500$ long haul.
+> > - The class pure premium is $7{,}975{,}000/10{,}000 = \$797.50$, so the relativities are $0.75$, $1.07$ and $1.88$.
+> > - Long-haul risks cost more than twice as much as local ones, so the class is not homogeneous.
+> > - The single rate is 33% above the local trucks' cost and 47% below the long-haul trucks'. Radius of operation should become a [[Rating Variable|rating variable]], with credibility-weighted relativities.
 
 ## Homogeneity as a criterion for a rating variable
 

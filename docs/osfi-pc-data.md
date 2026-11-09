@@ -1,7 +1,7 @@
 # OSFI's insurer filings: a strategy for Tools, the connector and Cowork
 
 _Written 2026-11-08, revised the same day once the open-data API was found. A proposal (roadmap
-§3.4, **A9**), not a build spec. Nothing here is built._
+§3.4, **A11**), not a build spec. Phase 0 started 2026-11-09 (§3.1)._
 
 OSFI publishes what federally regulated insurers file, as filed. Until 2026-06-10 that was the
 **Beyond 20/20** server (`Resources/Data/Historical OSFI Data.md`). It's now the **Open Government

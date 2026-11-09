@@ -31,7 +31,7 @@ const PDF_SURFACES = [
   // A resource page's metadata card: "Read PDF".
   'components/wiki/ResourceMetaCard.tsx',
   // The quiz's Question info panel: the paper this question was sat on.
-  'components/QuestionInfoButton.tsx',
+  'components/QuestionInfoDialog.tsx',
   // The research feed's PDF chip (flag-gated, and mostly publishers the proxy
   // doesn't serve — it still has to ask rather than assume).
   'components/research/DocumentCard.tsx',
@@ -67,9 +67,11 @@ function readerZ(): number {
   return fromClass
 }
 
-/** The z on a component's full-screen overlay root. */
+/** The z on a component's full-screen overlay root — its own, or the `layer` it gives an `InfoSheet`. */
 function overlayZ(rel: string): number {
   const src = read(rel)
+  const layer = src.match(/<InfoSheet[^>]*?\slayer="(z-\[\d+\])"/s)?.[1]
+  if (layer) return Number(layer.replace(/^z-\[|\]$/g, ''))
   const root = src.match(/className=\{?[`"](fixed inset-(?:0|x-0) [^`"]*)/)?.[1]
   if (!root) throw new Error(`no overlay root found in ${rel}`)
   const z = root.split(/\s+/).find(c => /^z-(\[\d+\]|\d+)$/.test(c))
@@ -93,7 +95,7 @@ describe('the PDF reader clears every host that can open it', () => {
     // info panel. Both sit well above the popup stack because a collect dialog
     // can open them, so the reader has to sit above *them*.
     expect(readerZ()).toBeGreaterThan(overlayZ('components/FactCheckBadge.tsx'))
-    expect(readerZ()).toBeGreaterThan(overlayZ('components/QuestionInfoButton.tsx'))
+    expect(readerZ()).toBeGreaterThan(overlayZ('components/QuestionInfoDialog.tsx'))
   })
 
   it('stays below the onboarding tour, which spotlights things inside it', () => {

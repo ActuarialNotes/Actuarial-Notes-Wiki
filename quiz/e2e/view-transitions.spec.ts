@@ -1,4 +1,4 @@
-import { test, expect, type Page } from '@playwright/test'
+import { test, expect, type Page } from './test'
 
 // Paper on a desk (lib/viewTransition.ts, components/PaperRouter.tsx): every
 // change of page is a view transition — the desk slides between tabs, a sheet
@@ -176,10 +176,16 @@ test.describe('tab-switch view transitions', () => {
     await page.waitForURL('**/games')
     await page.getByTestId('quiz-battle-entry').click()
     await page.waitForURL('**/battle')
+    // The Deck's intro plays first; a tap skips it.
+    await expect(page.getByTestId('battle-home')).toBeVisible()
+    const intro = page.getByTestId('battle-intro')
+    if (await intro.count()) await intro.click({ timeout: 2000 }).catch(() => {})
+    await expect(intro).toHaveCount(0)
+    await page.getByTestId('battle-card-local').click()
     await page.getByTestId('battle-mode-local').click()
     await expect(page.getByTestId('battle-begin')).toBeVisible()
     await page.getByRole('button', { name: 'Back', exact: true }).click()
-    await expect(page.getByTestId('battle-mode-local')).toBeVisible()
+    await expect(page.getByTestId('battle-home')).toBeVisible()
 
     await expect.poll(moves).toEqual(['push', 'pop', 'push', 'push', 'push', 'pop'])
     await expect.poll(() => page.evaluate(() => ({ ...document.documentElement.dataset }))).toEqual({})

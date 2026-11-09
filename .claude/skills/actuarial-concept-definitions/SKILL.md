@@ -1,6 +1,6 @@
 ---
 name: actuarial-concept-definitions
-description: Write or improve a concept page in Concepts/*.md — its figure, a precise one-paragraph definition, the formula in a box followed by one bullet per term the words before it did not define, a folded worked example (green card, the whole question as its title) right under each formula, short `##` sections for each variation of the concept, and an optional "The idea" card and trap card. Use when the user asks to create, write, draft, fill in, explain better, or clean up a Concepts/ page (SOA Exam P / FM / FAM / ALTAM, CAS MAS-I / MAS-II / Exam 5–9, the DISCs, CIA modules), or to standardize existing pages to this shape. Not for Resources/Books pages (resource-pages skill) or for auditing a whole exam's syllabus and coverage (exam-material-review).
+description: Write or improve a concept page in Concepts/*.md — its figure, a precise one-paragraph definition, the formula in a box followed by one bullet per term the words before it did not define, a folded worked example (green card, the question as its title; a long question's setup inside and its answer in a box of its own) right under each formula, short `##` sections for each variation of the concept, and an optional "The idea" card and trap card. Use when the user asks to create, write, draft, fill in, explain better, or clean up a Concepts/ page (SOA Exam P / FM / FAM / ALTAM, CAS MAS-I / MAS-II / Exam 5–9, the DISCs, CIA modules), or to standardize existing pages to this shape. Not for Resources/Books pages (resource-pages skill) or for auditing a whole exam's syllabus and coverage (exam-material-review).
 ---
 
 # Actuarial Concept Page Writer
@@ -56,6 +56,13 @@ A **Term** is <the definition, with [[wiki-links]]>. <Optional second sentence.>
 >
 > - <one step of the reasoning per bullet>
 > - <the last bullet gives the answer>
+
+> [!example]- <a long question: only the question itself> {Example}   ← over 25 words
+> <the setup: its facts, sentences and table>
+>
+> > [!answer]-
+> > - <one step of the reasoning per bullet>
+> > - <the last bullet gives the answer>
 
 ## <A variation: a case, a special case, a related rule>
 
@@ -174,6 +181,40 @@ the reader sees the formula used straight away. Usually one per formula.
   are $E \cap F$, $E \cup F$ and $E^c$? {Example}`. Its setup is part of the
   question, never a first line of the body. Math in a title is fine. No
   "Example:" prefix, and the type written in lower case.
+- **A long question is split: the question in the title, the setup in the
+  body, the answer in a box of its own.** When the whole question runs past
+  **25 words** (count each `$…$` as one word), the title keeps only the
+  question the reader is asked, written so it stands alone, with "this"
+  pointing at the setup: *Is this commercial auto class of light trucks
+  homogeneous?* The setup (every fact, figure and table the question needs)
+  is the card's first block, so it shows when the card is opened. The working
+  goes in a folded, untitled `> > [!answer]-` box nested under it, which draws
+  as a second card titled *Answer*, so the reader can read the setup and try
+  it before opening the answer. Data the setup gives by category goes in a
+  table rather than a sentence. `Concepts/Homogeneity.md`'s first example is
+  the model:
+
+  ```markdown
+  > [!example]- Is this commercial auto class of light trucks homogeneous? {Example}
+  > A commercial auto class of light trucks is rated at one rate. Its experience by radius of operation is:
+  >
+  > | Radius | Exposures | Losses ($) |
+  > | :--- | ---: | ---: |
+  > | Local | 6,000 | 3,600,000 |
+  > | Intermediate | 2,500 | 2,125,000 |
+  > | Long haul | 1,500 | 2,250,000 |
+  >
+  > > [!answer]-
+  > > - The pure premiums are $\$600$ local, $\$850$ intermediate and $\$1{,}500$ long haul.
+  > > - …
+  > > - Long-haul risks cost more than twice as much as local ones, so the class is not homogeneous.
+  ```
+
+  Every line of the answer box starts with `> > `, and a bare `>` line
+  separates it from the setup. A question of 25 words or fewer keeps the whole
+  question as its title and its bullets directly in the card.
+  `python3 .claude/skills/actuarial-concept-definitions/long_example_titles.py`
+  lists every example title over the limit.
 - **The body is bullets, one step per bullet**, each saying what is being done
   and why. The last bullet states the answer. A short lead-in sentence may come
   first ("The sample space lists every outcome of the experiment:").
@@ -309,6 +350,15 @@ bullets answer it, each a claim with its reason.
 8. **Present the page for review**: per `CLAUDE.md`, no concept content ships
    100% AI-written without human review.
 
+## Writing for readers
+
+Every sentence a reader sees follows `docs/writing-style.md`: true to its source, one name per thing, no code words, things don't act like people, say it once, and none of its tells (an em dash hinging the sentence, a rule of three, a closing aphorism, "not X, it's Y", a colon reveal, inflated words, feelings on the reader's behalf, rhetorical questions, exclamation marks). Read it before writing. On a concept page in particular:
+
+- The definition, bullets and sections are plain statements. A bullet that defines a term is a sentence, not a slogan.
+- *The idea* is one sentence that says how the concept works. It is not an aphorism ("Risk is the price of return") and not a rule of three.
+- A trap card names the mistake and the right move. No "Don't fall for it!".
+- Use the levels and the app's nouns as the app spells them (`.claude/skills/app-copy/`, Glossary) when a page mentions the app.
+
 ## Quality checklist (per page)
 
 **Shape**
@@ -320,6 +370,7 @@ bullets answer it, each a claim with its reason.
 - [ ] No bullet that justifies the formula, restates a definition or introduces a new term (that is a sentence)
 - [ ] `[!idea] The idea` only if it says something the definition doesn't — one sentence, anything more as plain text below it
 - [ ] Each formula followed by `> [!example]- <the whole question> {Example}` — folded, tagged, the setup in the title
+- [ ] An example title over 25 words is split: the question alone in the title, the setup as the card's first block, the working in a nested `> > [!answer]-` box (`long_example_titles.py` finds none on the page)
 - [ ] Example bodies: one reasoning step per bullet, the answer last; no "By <this page's rule> (see …)"
 - [ ] At least one example ends in a probability, where the page is a counting tool or a component of one
 - [ ] `##` sections are variations, simple → general, each sentence → box → bullets → example

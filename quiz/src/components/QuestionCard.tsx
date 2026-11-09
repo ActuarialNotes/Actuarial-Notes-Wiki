@@ -1,13 +1,20 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import { AnswerOption, AnswerList } from '@/components/AnswerOption'
 import { ExplanationPanel } from '@/components/ExplanationPanel'
 import { TopicBadge } from '@/components/TopicBadge'
 import { MarkdownText, MARKDOWN_LIST_CLASS, READING_MD_CLASS } from '@/components/MarkdownText'
 import { SelfGradeButtons } from '@/components/SelfGradeButtons'
+import { GradeSuggestion } from '@/components/GradeSuggestion'
 import { SampleAnswerCards, ExaminerReportCard } from '@/components/AnswerReference'
 import { Button } from '@/components/ui/button'
+import { InsertCellButton } from '@/components/quiz/InsertCellButton'
+import { insertAtCaret, partWantsSheet } from '@/lib/questionSheetPart'
+import { SpreadsheetPartButton } from '@/components/quiz/SpreadsheetButton'
 import { cn } from '@/lib/utils'
 import { isAnswerCorrect, normalizeAnswerText, estimateEssayScore } from '@/lib/parser'
+import { useAnswerChecks } from '@/hooks/useAnswerChecks'
+import { RUBRIC } from '@/lib/checklistKeys'
+import { checklistKey, useChecklistStore, usePartTicks } from '@/stores/checklistStore'
 import type { Question, Part, SelfGrade } from '@/lib/parser'
 
 export type { SelfGrade }
@@ -36,6 +43,11 @@ interface QuestionCardProps {
    * a tap opens the concept (lib/conceptMentions.ts). The quiz handles the tap.
    */
   conceptNames?: readonly string[]
+  /**
+   * The exam is sat with a spreadsheet (data/examSpreadsheets.ts): a part that
+   * asks for numbers gets a **Use spreadsheet** button beside its label.
+   */
+  spreadsheet?: boolean
 }
 
 // ── Free-entry input ────────────────────────────────────────────────────────
@@ -49,9 +61,13 @@ interface FreeEntryInputProps {
   autoSubmit?: boolean
   selfGrade?: SelfGrade
   onSelfGrade?: (grade: SelfGrade) => void
+  /** The question whose spreadsheet's selected cell this box can take (Insert). */
+  sheetQuestionId?: string
+  /** The stem and explanation the answer belongs to, for the numeric check's suggested grade. */
+  checkSource?: { stem: string; explanation: string }
 }
 
-function FreeEntryInput({ answer, isLocked, correctAnswer, showExplanation, onSubmit, autoSubmit = false, selfGrade, onSelfGrade }: FreeEntryInputProps) {
+function FreeEntryInput({ answer, isLocked, correctAnswer, showExplanation, onSubmit, autoSubmit = false, selfGrade, onSelfGrade, sheetQuestionId, checkSource }: FreeEntryInputProps) {
   const [text, setText] = useState(answer)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -63,11 +79,33 @@ function FreeEntryInput({ answer, isLocked, correctAnswer, showExplanation, onSu
   const autoIsRight = isAnswered && normalizeAnswerText(answer) === normalizeAnswerText(correctAnswer)
   // If user has manually graded, use that; otherwise use auto-grade
   const isRight = selfGrade !== undefined ? selfGrade === 'correct' : autoIsRight
+  // A key the exact match can't read ("Approximately \$17,735 (thousands)"):
+  // the figures, compared, suggest the grade the reader then gives.
+  const checks = useAnswerChecks(isAnswered && !autoIsRight && !!checkSource)
+  const check = useMemo(
+    () => (checks && isAnswered && !autoIsRight && checkSource
+      ? checks.checkNumericAnswer(answer, { ...checkSource, answer: correctAnswer })
+      : null),
+    [checks, isAnswered, autoIsRight, checkSource, answer, correctAnswer],
+  )
+  // Not red while the figures say it matches and the reader hasn't graded it.
+  const looksWrong = !isRight && !(selfGrade === undefined && check?.verdict === 'match')
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const val = e.target.value
     setText(val)
     if (autoSubmit) onSubmit(val)
+  }
+
+  function insertCell(value: string) {
+    const el = inputRef.current
+    const { text: next, caret } = insertAtCaret(text, el?.selectionStart ?? text.length, el?.selectionEnd ?? text.length, value)
+    setText(next)
+    if (autoSubmit) onSubmit(next)
+    requestAnimationFrame(() => {
+      el?.focus()
+      el?.setSelectionRange(caret, caret)
+    })
   }
 
   function handleKeyDown(e: React.KeyboardEvent) {
@@ -92,7 +130,7 @@ function FreeEntryInput({ answer, isLocked, correctAnswer, showExplanation, onSu
             'focus:outline-none focus:ring-2 focus:ring-ring',
             isLocked ? 'opacity-70 cursor-not-allowed' : '',
             isAnswered && isRight ? 'border-green-400 dark:border-green-600' : '',
-            isAnswered && !isRight ? 'border-red-400 dark:border-red-600' : '',
+            isAnswered && looksWrong ? 'border-red-400 dark:border-red-600' : '',
           ].join(' ')}
         />
         {!isLocked && !autoSubmit && (
@@ -106,6 +144,7 @@ function FreeEntryInput({ answer, isLocked, correctAnswer, showExplanation, onSu
           </Button>
         )}
       </div>
+      {!isLocked && sheetQuestionId && <InsertCellButton questionId={sheetQuestionId} onInsert={insertCell} />}
 
       {showExplanation && isAnswered && (
         <div className="space-y-2 text-sm">
@@ -115,7 +154,12 @@ function FreeEntryInput({ answer, isLocked, correctAnswer, showExplanation, onSu
             </p>
           )}
           {!autoIsRight && onSelfGrade && (
-            <SelfGradeButtons value={selfGrade ?? null} onChange={onSelfGrade} />
+            <SelfGradeButtons
+              value={selfGrade ?? null}
+              onChange={onSelfGrade}
+              suggested={check?.suggestion}
+              hint={check && checks && <GradeSuggestion {...checks.numericCheckMessage(check)} from="figure" />}
+            />
           )}
           {!autoIsRight && !onSelfGrade && selfGrade && (
             <p className={`text-xs font-medium ${selfGrade === 'correct' ? 'text-green-600 dark:text-green-400' : selfGrade === 'partial' ? 'text-yellow-600 dark:text-yellow-400' : 'text-red-600 dark:text-red-400'}`}>
@@ -141,9 +185,31 @@ interface PartCardProps {
   /** The question's one part — asked about as the question, not "this part". */
   isOnlyPart?: boolean
   conceptNames?: readonly string[]
+  /** The question this part belongs to — whose spreadsheet's selected cell Insert drops in. */
+  questionId: string
+  /** The part asks for numbers and the exam is sat with a spreadsheet. */
+  wantsSheet?: boolean
+  /** The question's own stem: a question with no lettered parts asks its question there, not in the part. */
+  questionStem?: string
 }
 
-function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, selfGrade: externalSelfGrade, onSelfGrade, isOnlyPart = false, conceptNames }: PartCardProps) {
+function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, selfGrade: externalSelfGrade, onSelfGrade, isOnlyPart = false, conceptNames, questionId, wantsSheet = false, questionStem = '' }: PartCardProps) {
+  // What the answer checks read: the part, asking its question in the
+  // question's stem when it has none of its own.
+  const asked = useMemo(() => (part.stem ? part : { ...part, stem: questionStem }), [part, questionStem])
+  const checks = useAnswerChecks(isLocked && part.answer === '')
+  const checklist = useMemo(
+    () => (checks && part.answer === '' ? checks.partChecklist(asked) : null),
+    [checks, part.answer, asked],
+  )
+  const ticksKey = checklistKey(questionId, part.label)
+  const ticks = usePartTicks(ticksKey)
+  const toggleTick = useChecklistStore(state => state.toggle)
+  const clearTicks = useChecklistStore(state => state.clear)
+  // A part open for answering again starts with no ticks.
+  useEffect(() => {
+    if (!isLocked) clearTicks(ticksKey)
+  }, [isLocked, ticksKey, clearTicks])
   const isEssay = part.answer === ''
   const isAnswered = isLocked && (isEssay || partAnswer !== '')
   const autoIsRight = !isEssay && isAnswered && (
@@ -153,6 +219,17 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
   )
 
   const [internalSelfGrade, setInternalSelfGrade] = useState<SelfGrade | null>(null)
+  const responseRef = useRef<HTMLTextAreaElement>(null)
+
+  function insertCell(value: string) {
+    const el = responseRef.current
+    const { text, caret } = insertAtCaret(partAnswer, el?.selectionStart ?? partAnswer.length, el?.selectionEnd ?? partAnswer.length, value)
+    onPartAnswer(part.label, text)
+    requestAnimationFrame(() => {
+      el?.focus()
+      el?.setSelectionRange(caret, caret)
+    })
+  }
   const effectiveSelfGrade = externalSelfGrade ?? internalSelfGrade
 
   // For free-entry parts, if user manually graded, use that for display
@@ -167,8 +244,12 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
 
   // ── Essay part ─────────────────────────────────────────────────────────────
   if (isEssay) {
+    // A calculation part is checked on its final figure, an essay against its
+    // checklist; the keyword count is left for a part with neither.
+    const check = isLocked && checks ? checks.checkNumericAnswer(partAnswer, asked) : null
+    const ticked = checklist && checks ? checks.checklistSuggestion(checklist, ticks) : null
     const keywordScore =
-      isLocked && partAnswer.trim()
+      isLocked && checks && partAnswer.trim() && !check && !checklist
         ? estimateEssayScore(partAnswer, part.explanation ?? '')
         : null
 
@@ -183,19 +264,25 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
               <span className="ml-1 font-normal">({part.points} pt{part.points !== 1 ? 's' : ''})</span>
             )}
           </span>
-          <span className="text-sm text-muted-foreground italic">Written response</span>
+          {!isLocked && wantsSheet
+            ? <SpreadsheetPartButton />
+            : <span className="text-sm text-muted-foreground italic">Written response</span>}
         </div>
 
         {part.stem && <MarkdownText className={PART_STEM_CLASS} conceptNames={conceptNames}>{part.stem}</MarkdownText>}
 
         {!isLocked ? (
+          <div className="space-y-2">
           <textarea
+            ref={responseRef}
             value={partAnswer}
             onChange={e => onPartAnswer(part.label, e.target.value)}
             placeholder="Write your response here…"
             rows={5}
             className="w-full rounded-md border px-3 py-2 text-base leading-relaxed bg-background resize-y focus:outline-none focus:ring-2 focus:ring-ring"
           />
+          <InsertCellButton questionId={questionId} onInsert={insertCell} />
+          </div>
         ) : (
           <div className="space-y-4">
             {partAnswer.trim() ? (
@@ -224,14 +311,28 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
 
             {/* The reference first, then the grade: a reader marks themselves
                 against the sample answer, so they read it before being asked. */}
-            {showExplanation && part.explanation && <SampleAnswerCards markdown={part.explanation} />}
-            {showExplanation && part.examiner_report && <ExaminerReportCard markdown={part.examiner_report} />}
+            {showExplanation && part.explanation && (
+              <SampleAnswerCards
+                markdown={part.explanation}
+                checklist={checklist ? { list: checklist, ticks, onToggle: (sample, point) => toggleTick(ticksKey, sample, point) } : undefined}
+              />
+            )}
+            {showExplanation && part.examiner_report && (
+              <ExaminerReportCard
+                markdown={part.examiner_report}
+                rubric={checklist?.rubric ? { list: checklist.rubric, ticked: ticks[RUBRIC] ?? [], onToggle: point => toggleTick(ticksKey, RUBRIC, point) } : undefined}
+              />
+            )}
 
             {showExplanation && (
               <SelfGradeButtons
                 value={effectiveSelfGrade}
                 onChange={handleSelfGradeClick}
                 prompt={isOnlyPart ? 'How did you do?' : 'How did you do on this part?'}
+                suggested={check?.suggestion ?? ticked?.suggestion}
+                hint={checks && (check
+                  ? <GradeSuggestion {...checks.numericCheckMessage(check)} from="figure" />
+                  : ticked && checklist && <GradeSuggestion {...checks.checklistMessage(ticked, checklist)} from="checklist" />)}
               />
             )}
           </div>
@@ -250,6 +351,7 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
             <span className="ml-1 font-normal">({part.points} pt{part.points !== 1 ? 's' : ''})</span>
           )}
         </span>
+        {!isLocked && wantsSheet && <SpreadsheetPartButton />}
         {isAnswered && (
           <span className={isRight ? 'text-green-600 dark:text-green-400 text-sm font-medium' : effectiveSelfGrade === 'partial' ? 'text-yellow-600 dark:text-yellow-400 text-sm font-medium' : 'text-red-600 dark:text-red-400 text-sm font-medium'}>
             {isRight ? '✓ Correct' : effectiveSelfGrade === 'partial' ? '~ Partial' : '✗ Incorrect'}
@@ -284,6 +386,8 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
           autoSubmit={true}
           selfGrade={effectiveSelfGrade ?? undefined}
           onSelfGrade={onSelfGrade ? handleSelfGradeClick : undefined}
+          sheetQuestionId={questionId}
+          checkSource={asked}
         />
       )}
 
@@ -330,6 +434,7 @@ export function QuestionCard({
   partManualGrades,
   onPartManualGrade,
   conceptNames,
+  spreadsheet = false,
 }: QuestionCardProps) {
   // Per-part answer state for multi-part questions
   const [partAnswers, setPartAnswers] = useState<Record<string, string>>({})
@@ -398,7 +503,7 @@ export function QuestionCard({
 
           {isLocked && onNext && (
             <p className="text-xs text-center text-muted-foreground pt-1 select-none">
-              Tap any answer to continue →
+              Choose any answer to continue
             </p>
           )}
 
@@ -457,6 +562,8 @@ export function QuestionCard({
             onSubmit={onAnswer}
             selfGrade={selfGrade}
             onSelfGrade={onSelfGrade}
+            sheetQuestionId={question.id}
+            checkSource={question}
           />
 
           {showExplanation && answered && (
@@ -508,6 +615,7 @@ export function QuestionCard({
             // previous one's self-grade and typed answer.
             key={`${question.id}__${part.label}`}
             part={part}
+            questionStem={question.stem}
             partAnswer={isLocked && selectedAnswer
               ? (() => { try { return (JSON.parse(selectedAnswer) as Record<string, string>)[part.label] ?? '' } catch { return '' } })()
               : (partAnswers[part.label] ?? '')
@@ -527,6 +635,8 @@ export function QuestionCard({
             }
             isOnlyPart={parts.length === 1}
             conceptNames={conceptNames}
+            questionId={question.id}
+            wantsSheet={spreadsheet && part.type !== 'multiple-choice' && partWantsSheet(part.stem, question.stem)}
           />
         ))}
       </div>

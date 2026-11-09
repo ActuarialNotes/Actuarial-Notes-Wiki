@@ -9,10 +9,10 @@ export const presentValue: ToolSpec = {
   answers: 'What are these cash flows worth today?',
   aka: ['NPV', 'PV', 'discount', 'accumulated value', 'FV'],
   fields: [
-    { kind: 'number', key: 'i', label: 'Rate', symbol: 'i', unit: 'percent', min: -0.5, max: 1, sliderMax: 0.2, step: 0.0025, default: 0.05, description: 'The effective annual rate, as a decimal.' },
+    { kind: 'number', key: 'i', bank: ['discount-rate'], label: 'Rate', symbol: 'i', unit: 'percent', min: -0.5, max: 1, sliderMax: 0.2, step: 0.0025, default: 0.05, description: 'The effective annual rate, as a decimal.' },
     {
       kind: 'table', key: 'flows', label: 'Cash flows', minRows: 1, maxRows: 500,
-      description: 'Each cash flow: its time from today (in years, or in whatever period the rate is per), its amount (negative for an outflow), and optionally the t-year spot rate to discount it at — left blank, the flow is discounted at the rate above.',
+      description: 'Each cash flow: its time from today (in years, or in whatever period the rate is per), its amount (negative for an outflow), and optionally the t-year spot rate to discount it at. Left blank, the flow is discounted at the rate above.',
       columns: [
         { key: 'time', label: 'Time t', kind: 'number', unit: 'years' },
         { key: 'amount', label: 'Amount', kind: 'number', unit: 'money' },

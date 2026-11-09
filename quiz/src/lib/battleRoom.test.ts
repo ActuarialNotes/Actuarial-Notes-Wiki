@@ -13,7 +13,7 @@ import {
   parseMessage,
   roomChannel,
 } from './battleRoom'
-import type { BattleDraft } from './battleTopics'
+import { emptyDraft, type BattleDraft } from './battleDraft'
 
 function sampleBattle(): BattleState {
   const s = createBattle({
@@ -79,24 +79,57 @@ describe('parseBattleState', () => {
 })
 
 describe('parseDraft', () => {
-  const picking: BattleDraft = { game: 2, phase: 'picking', deadline: 31_000, picks: [['Bayes Theorem'], null], drawn: [] }
-  const drawing: BattleDraft = {
-    game: 2, phase: 'drawing', deadline: 40_000, picks: [['Bayes Theorem'], []],
-    drawn: [{ id: 'p-1', topic: 'Bayes Theorem' }, { id: 'p-2', topic: null }],
+  const HAND_A = ['Bayes Theorem', 'Variance', 'Expected Value', 'Poisson Distribution']
+  const HAND_B = ['Covariance', 'Moment Generating Function', 'Variance', 'Binomial Distribution']
+  const drawing: BattleDraft = { ...emptyDraft(2, 31_000), counts: [4, 2], hands: [HAND_A, null], levels: [[1, 0, 3, 2], null] }
+  const striking: BattleDraft = { ...drawing, phase: 'strike', counts: [4, 4], hands: [HAND_A, HAND_B], levels: [[1, 0, 3, 2], [0, 0, 1, 2]], strikes: ['Covariance', ''] }
+  const dealing: BattleDraft = {
+    ...striking,
+    phase: 'deal',
+    strikes: ['Covariance', 'Bayes Theorem'],
+    rows: ['Variance', 'Expected Value', 'Poisson Distribution'],
+    cols: ['Moment Generating Function', 'Variance', 'Binomial Distribution'],
+    grid: [[40, 100, 12], [61, 70, 8], [10, 45, 76]],
+    pairs: [
+      { cards: ['Expected Value', 'Moment Generating Function'], strength: 61, shared: 4, cell: [1, 0] },
+      { cards: ['Poisson Distribution', 'Binomial Distribution'], strength: 76, shared: 0, cell: [2, 2] },
+      { cards: ['Variance', 'Variance'], strength: 100, shared: 30, cell: [0, 1] },
+    ],
+    rounds: [
+      { pair: 0, paired: true, coin: null, basis: 'both', topic: 'Expected Value' },
+      { pair: 1, paired: false, coin: 1, basis: 'one', topic: 'Binomial Distribution' },
+      { pair: 2, paired: true, coin: null, basis: 'both', topic: 'Variance' },
+    ],
   }
 
-  it('round-trips a pick and a draw through JSON', () => {
-    for (const d of [picking, drawing]) expect(parseDraft(JSON.parse(JSON.stringify(d)))).toEqual(d)
+  it('round-trips the draw, the strikes and the deal through JSON', () => {
+    for (const d of [drawing, striking, dealing]) expect(parseDraft(JSON.parse(JSON.stringify(d)))).toEqual(d)
   })
 
-  it('refuses a draw before the picks close, or a draw of nothing', () => {
-    expect(parseDraft({ ...picking, drawn: drawing.drawn })).toBeNull()
-    expect(parseDraft({ ...drawing, drawn: [] })).toBeNull()
+  it('takes a hidden hand as locked in, and nothing else short of four', () => {
+    expect(parseDraft({ ...drawing, hands: [HAND_A, []], levels: [[1, 0, 3, 2], []] })).not.toBeNull()
+    expect(parseDraft({ ...drawing, hands: [HAND_A.slice(0, 3), null] })).toBeNull()
+    expect(parseDraft({ ...drawing, hands: [[...HAND_A, 'Mean'], null] })).toBeNull()
+    expect(parseDraft({ ...drawing, levels: [[1, 0, 3], null] })).toBeNull()
+    expect(parseDraft({ ...drawing, levels: [[1, 0, 3, 4], null] })).toBeNull()
   })
 
-  it('refuses more than three topics, and the wrong shapes, rather than throwing', () => {
-    expect(parseDraft({ ...picking, picks: [['a', 'b', 'c', 'd'], null] })).toBeNull()
-    for (const bad of [null, 'x', {}, { ...picking, phase: 'voting' }, { ...picking, picks: [null] }, { ...picking, game: -1 }]) {
+  it('holds the phases together: no strike while drawing, no deal before dealing, a full deal once dealing', () => {
+    expect(parseDraft({ ...drawing, strikes: ['Covariance', null] })).toBeNull()
+    expect(parseDraft({ ...striking, hands: [HAND_A, null] })).toBeNull()
+    expect(parseDraft({ ...striking, pairs: dealing.pairs })).toBeNull()
+    expect(parseDraft({ ...dealing, pairs: dealing.pairs.slice(0, 2) })).toBeNull()
+    expect(parseDraft({ ...dealing, rounds: [] })).toBeNull()
+    expect(parseDraft({ ...dealing, grid: [[1, 2, 3]] })).toBeNull()
+    expect(parseDraft({ ...dealing, rounds: [{ ...dealing.rounds[0], pair: 5 }] })).toBeNull()
+  })
+
+  it('refuses the wrong shapes rather than throwing', () => {
+    for (const bad of [
+      null, 'x', {}, { ...drawing, phase: 'picking' }, { ...drawing, hands: [null] }, { ...drawing, game: -1 },
+      { ...drawing, counts: [5, 0] }, { ...dealing, grid: [[101, 0, 0], [0, 0, 0], [0, 0, 0]] },
+      { ...dealing, rounds: [{ ...dealing.rounds[0], basis: 'luck' }] }, { ...dealing, rounds: [{ ...dealing.rounds[0], coin: 2 }] },
+    ]) {
       expect(parseDraft(bad)).toBeNull()
     }
   })
@@ -117,10 +150,15 @@ describe('parseMessage', () => {
       config: sampleBattle().config, battle: sampleBattle(), rematch: [false, true],
     }
     expect(parseMessage(JSON.parse(JSON.stringify(room)))).toMatchObject({ t: 'room', stage: 'playing', rematch: [false, true], draft: null })
-    const draft: BattleDraft = { game: 1, phase: 'picking', deadline: 30_000, picks: [null, []], drawn: [] }
-    expect(parseMessage({ ...room, stage: 'picking', battle: null, draft })).toMatchObject({ stage: 'picking', draft })
-    expect(parseMessage({ ...base, t: 'act', action: { kind: 'topics', game: 1, topics: ['Bayes Theorem'] } }))
-      .toMatchObject({ action: { kind: 'topics', game: 1, topics: ['Bayes Theorem'] } })
+    const draft: BattleDraft = { ...emptyDraft(1, 30_000), counts: [2, 4], hands: [null, []], levels: [null, []] }
+    expect(parseMessage({ ...room, stage: 'drafting', battle: null, draft })).toMatchObject({ stage: 'drafting', draft })
+    expect(parseMessage({ ...base, t: 'act', action: { kind: 'hand', game: 1, count: 3 } }))
+      .toEqual({ ...base, t: 'act', action: { kind: 'hand', game: 1, count: 3 } })
+    const hand = ['Bayes Theorem', 'Variance', 'Mean', 'Mode']
+    expect(parseMessage({ ...base, t: 'act', action: { kind: 'hand', game: 1, count: 4, topics: hand, levels: [0, 1, 2, 3] } }))
+      .toMatchObject({ action: { kind: 'hand', game: 1, count: 4, topics: hand, levels: [0, 1, 2, 3] } })
+    expect(parseMessage({ ...base, t: 'act', action: { kind: 'strike', game: 1, topic: 'Variance' } }))
+      .toMatchObject({ action: { kind: 'strike', game: 1, topic: 'Variance' } })
   })
 
   it('drops anything it does not recognise', () => {
@@ -128,9 +166,17 @@ describe('parseMessage', () => {
     expect(parseMessage({ ...base, t: 'react', seat: 1, emoji: '<script>' })).toBeNull()
     expect(parseMessage({ ...base, t: 'react', seat: 2, emoji: '🔥' })).toBeNull()
     expect(parseMessage({ ...base, t: 'act', action: { kind: 'win' } })).toBeNull()
-    expect(parseMessage({ ...base, t: 'act', action: { kind: 'topics', game: 1, topics: ['a', 'b', 'c', 'd'] } })).toBeNull()
-    expect(parseMessage({ ...base, t: 'act', action: { kind: 'topics', game: 1, topics: ['x'.repeat(500)] } })).toBeNull()
-    expect(parseMessage({ ...base, t: 'room', to: 'c2', sentAt: 1, stage: 'picking', host: { name: 'A' }, guest: { name: 'B' }, config: sampleBattle().config, battle: null, draft: { junk: true }, rematch: [false, false] })).toBeNull()
+    // The old topic pick, and a stage that went with it, are gone.
+    expect(parseMessage({ ...base, t: 'act', action: { kind: 'topics', game: 1, topics: ['a'] } })).toBeNull()
+    expect(parseMessage({ ...base, t: 'act', action: { kind: 'hand', game: 1, count: 5 } })).toBeNull()
+    expect(parseMessage({ ...base, t: 'act', action: { kind: 'hand', game: 1, count: 4, topics: ['a', 'b', 'c', 'd', 'e'] } })).toBeNull()
+    expect(parseMessage({ ...base, t: 'act', action: { kind: 'hand', game: 1, count: 4, topics: ['x'.repeat(500)] } })).toBeNull()
+    expect(parseMessage({ ...base, t: 'act', action: { kind: 'hand', game: 1, count: 1, levels: [1] } })).toBeNull()
+    expect(parseMessage({ ...base, t: 'act', action: { kind: 'hand', game: 1, count: 2, topics: ['a', 'b'], levels: [1] } })).toBeNull()
+    expect(parseMessage({ ...base, t: 'act', action: { kind: 'strike', game: 1, topic: 7 } })).toBeNull()
+    expect(parseMessage({ ...base, t: 'act', action: { kind: 'strike', game: -1, topic: 'Variance' } })).toBeNull()
+    expect(parseMessage({ ...base, t: 'room', to: 'c2', sentAt: 1, stage: 'picking', host: { name: 'A' }, guest: { name: 'B' }, config: sampleBattle().config, battle: null, draft: null, rematch: [false, false] })).toBeNull()
+    expect(parseMessage({ ...base, t: 'room', to: 'c2', sentAt: 1, stage: 'drafting', host: { name: 'A' }, guest: { name: 'B' }, config: sampleBattle().config, battle: null, draft: { junk: true }, rematch: [false, false] })).toBeNull()
     expect(parseMessage({ t: 'ping', from: 'c1' })).toBeNull()
     expect(parseMessage({ ...base, t: 'room', to: 'c2', sentAt: 1, stage: 'playing', host: { name: 'A' }, guest: { name: 'B' }, config: sampleBattle().config, battle: { junk: true }, rematch: [false, false] })).toBeNull()
   })
@@ -155,8 +201,8 @@ describe('abilities on the wire (docs/actuaria-online.md §7.2)', () => {
   }
 
   it('is a new version of the protocol — an older bundle refuses the room', () => {
-    // 2 was the topic pick; abilities came after it.
-    expect(PROTOCOL_VERSION).toBe(3)
+    // 2 was the topic pick, 3 abilities, 4 the pairs draft.
+    expect(PROTOCOL_VERSION).toBe(4)
   })
 
   it('round-trips a battle with abilities through JSON', () => {

@@ -211,7 +211,7 @@ function AbilityLoadout({
         </span>
       </div>
       <p className="text-sm text-muted-foreground">
-        Taken into a <Term id="privateChannel" /> battle when the host turns abilities on. Each works once.
+        Used in a battle with a friend online, when the host turns abilities on. Each works once.
       </p>
 
       {groups.map(group => (
@@ -239,7 +239,7 @@ function AbilityLoadout({
           </ul>
         </div>
       ))}
-      {full && <p className="text-xs text-muted-foreground">Loadout full — take one off to equip another.</p>}
+      {full && <p className="text-xs text-muted-foreground">Loadout full. Take one off to equip another.</p>}
     </section>
   )
 }
@@ -266,7 +266,7 @@ function Requirement({ status, onReview }: { status: AbilityStatus; onReview: (c
       {status.state && <MasteryBadge state={status.state} />}
       {status.lapsed && (
         <span className="w-full text-amber-600 dark:text-amber-400">
-          Requirement lapsed: review {concept}
+          Dropped below {MASTERY_LABEL[def.minLevel]}. Review {concept} to use it again.
         </span>
       )}
     </div>

@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './test'
 
 // Boot smoke: the signed-out app shell renders and the error boundary never
 // fires. This is the cheapest guard that a bundle/routing regression didn't

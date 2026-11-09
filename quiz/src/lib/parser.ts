@@ -86,6 +86,12 @@ export interface QuestionFilter {
   concept?: string      // filter by wiki_link concept name (single)
   concepts?: string[]   // filter by wiki_link concept names (multi-select)
   /**
+   * Today's plan (`plan=1`, the daily email's quiz): with `concepts`, draw the
+   * fewest questions that cover them rather than every question on them —
+   * the app's own Today's Plan quiz, for a link that carries the concepts.
+   */
+  cover?: boolean
+  /**
    * Include questions the fact-check record flags as critically wrong. Off by
    * default — see `hasCriticalFinding`. Review surfaces turn it on so the
    * flagged questions can actually be fixed.

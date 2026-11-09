@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test'
+import { expect, test } from './test'
 import { PLACEHOLDER, USER_ID, signIn } from './fixtures/signedIn'
 
 // Today's session (lib/todaySession.ts): the Dashboard's wheel, the day's size
@@ -34,7 +34,7 @@ test('the session lists the day in steps, and Start does the first one', async (
   await expect(card.getByRole('heading', { name: /^Learn \d+ new concepts?$/ })).toBeVisible()
   // Exam P is paced at 6:00 a question: the size is questions and minutes.
   await expect(card).toContainText(/\d+\s*questions?\s*\d+\s*min/)
-  await expect(card.getByRole('button', { name: /Exam readiness \d+%.*open the study guide/ })).toBeVisible()
+  await expect(card.getByRole('button', { name: /Exam readiness \d+%.*open the study guide/i })).toBeVisible()
   await page.screenshot({ path: 'test-results/dashboard-session.png', fullPage: true })
 
   // The pinned row carries the same Start, sized.
@@ -67,8 +67,8 @@ test('a tapped row walks the list on screen, the row it is on held highlighted',
   }
 })
 
-test('the wheel opens the Study Guide', async ({ page }) => {
+test('the wheel opens Exam Readiness', async ({ page }) => {
   await page.goto('/dashboard')
-  await page.getByRole('button', { name: /Exam readiness \d+%.*open the study guide/ }).click({ timeout: 30_000 })
-  await expect(page.getByRole('dialog', { name: 'Study Guide' })).toBeVisible()
+  await page.getByRole('button', { name: /Exam readiness \d+%.*open the study guide/i }).click({ timeout: 30_000 })
+  await expect(page.getByRole('dialog', { name: 'Exam Readiness' })).toBeVisible()
 })

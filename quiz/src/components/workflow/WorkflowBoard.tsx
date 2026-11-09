@@ -502,7 +502,7 @@ export const WorkflowBoard = forwardRef<WorkflowBoardCommands, WorkflowBoardProp
               onPointerDown={ev => ev.stopPropagation()}
               onClick={() => onSelectEdge(e)}
               aria-label={name}
-              title={e.note ? `${name} — ${e.note}` : name}
+              title={e.note ? `${name}: ${e.note}` : name}
               data-testid="workflow-edge-label"
               className={cn(
                 'absolute z-[5] whitespace-nowrap rounded-full font-medium leading-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',

@@ -15,7 +15,7 @@ export const annuity: ToolSpec = {
     },
     { kind: 'number', key: 'payment', label: 'Payment', symbol: 'P', unit: 'money', min: 0, max: 1e12, sliderMax: 10000, step: 10, default: 100, description: 'The level payment each period.' },
     { kind: 'number', key: 'n', label: 'Periods', symbol: 'n', unit: 'count', integer: true, min: 1, max: 1200, sliderMax: 60, step: 1, default: 10, description: 'How many payments.' },
-    { kind: 'number', key: 'i', label: 'Rate per period', symbol: 'i', unit: 'percent', min: 0, max: 1, sliderMax: 0.2, step: 0.0025, default: 0.05, description: 'The effective rate per payment period, as a decimal.' },
+    { kind: 'number', key: 'i', bank: ['discount-rate'], label: 'Rate per period', symbol: 'i', unit: 'percent', min: 0, max: 1, sliderMax: 0.2, step: 0.0025, default: 0.05, description: 'The effective rate per payment period, as a decimal.' },
   ],
   notation: input => {
     const due = input.timing === 'due'

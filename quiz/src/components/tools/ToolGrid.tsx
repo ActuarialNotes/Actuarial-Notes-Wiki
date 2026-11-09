@@ -30,6 +30,7 @@ import {
   type ColumnSource,
 } from '@/lib/toolColumns'
 import { lastRun } from '@/lib/toolRuns'
+import { columnNumbers, formulaText } from '@/lib/toolTemplate'
 import { fromMode, labelledTriangle, parseClipboardBlock, pastedTriangle, toMode, withoutHeader, type TriangleMode } from '@/lib/toolDraft'
 import { SegmentedControl } from '@/components/ui/SegmentedControl'
 import { cn } from '@/lib/utils'
@@ -61,6 +62,8 @@ export function EditableTable({
   toolId,
   onFillFrom,
   linked = false,
+  numbered = false,
+  headerNote,
 }: {
   field: TableField
   rows: DraftRow[]
@@ -72,9 +75,22 @@ export function EditableTable({
   toolId?: string
   /** Open a source tool's card to fill a column from its result. */
   onFillFrom?: (key: string, source: ColumnSource) => void
+  /**
+   * Number the columns as a published exhibit does, and write each computed
+   * column's formula under the grid in those numbers (the tool template, §19).
+   */
+  numbered?: boolean
+  /** Drawn under an input column's name: the template's source tag. */
+  headerNote?: (key: string) => ReactNode
 }) {
   const inputKeys = new Set(field.columns.map(c => c.key))
   const computed = (result?.columns ?? []).filter(c => c.computed && !inputKeys.has(c.key))
+  const numbers = numbered ? columnNumbers(field.columns, computed) : null
+  const numberOf = (key: string) => {
+    const n = numbers?.get(key)
+    return n === undefined ? null : <span className="block font-mono text-[10px] font-normal leading-3 text-muted-foreground">({n})</span>
+  }
+  const formulas = numbers ? computed.filter(c => c.formula) : []
   const tableRef = useRef<HTMLTableElement>(null)
   const coarse = useCoarsePointer()
   const [panel, setPanel] = useState<Panel>(null)
@@ -156,8 +172,9 @@ export function EditableTable({
                 <th
                   key={c.key}
                   scope="col"
-                  className={cn('px-2 py-1.5 font-medium', c.kind === 'number' ? 'text-right' : 'text-left', ci === 0 && PIN_LEFT)}
+                  className={cn('px-2 py-1.5 font-medium', numbers && 'align-top', c.kind === 'number' ? 'text-right' : 'text-left', ci === 0 && PIN_LEFT)}
                 >
+                  {numberOf(c.key)}
                   {c.kind === 'number' ? (
                     <button
                       type="button"
@@ -172,10 +189,12 @@ export function EditableTable({
                   ) : (
                     c.label
                   )}
+                  {headerNote && c.kind === 'number' && <span className="mt-0.5 flex justify-end">{headerNote(c.key)}</span>}
                 </th>
               ))}
               {computed.map((c, k) => (
-                <th key={c.key} scope="col" style={pinRight(k)} className={cn('px-2 py-1.5 text-right font-semibold text-foreground', SHADED, k === 0 && EDGE)}>
+                <th key={c.key} scope="col" style={pinRight(k)} className={cn('px-2 py-1.5 text-right font-semibold text-foreground', numbers && 'align-top', SHADED, k === 0 && EDGE)}>
+                  {numberOf(c.key)}
                   {c.label}
                 </th>
               ))}
@@ -239,6 +258,13 @@ export function EditableTable({
           )}
         </table>
       </div>
+      {formulas.length > 0 && (
+        <p className="flex flex-wrap gap-x-4 px-1 font-mono text-[11px] text-muted-foreground" data-testid="grid-formulas">
+          {formulas.map(c => (
+            <span key={c.key}>({numbers!.get(c.key)}) = {formulaText(c.formula!, numbers!)}</span>
+          ))}
+        </p>
+      )}
       <GridToolbar
         axes={[{
           name: 'Rows',

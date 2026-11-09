@@ -1,7 +1,7 @@
 import { readFileSync, readdirSync, statSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { expect, test, type Page } from '@playwright/test'
+import { expect, test, type Page } from './test'
 import { PLACEHOLDER, signIn } from './fixtures/signedIn'
 import { PODCAST_BRIDGES, podcastClipKey, podcastIndexFile, scriptHash, type PodcastClip } from '../src/lib/podcast'
 import { briefScript, refresherScript } from '../src/lib/podcastScripts'

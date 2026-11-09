@@ -28,7 +28,7 @@ export const ACTUARIA_ABILITIES: readonly AbilityDef[] = [
   {
     id: 'reinsurance',
     name: 'Reinsurance',
-    effect: 'Halve your next claim (−50 → −25).',
+    effect: 'Halve your next penalty (−50 → −25).',
     exam: null,
     concept: null,
     minLevel: null,
@@ -44,7 +44,7 @@ export const ACTUARIA_ABILITIES: readonly AbilityDef[] = [
   {
     id: 'double-down',
     name: 'Double Down',
-    effect: 'Arm before answering: this round ×2 — but a miss is a claim of −50.',
+    effect: 'Arm before answering. This round scores ×2, but a miss costs 50 points.',
     exam: 'P',
     concept: 'Expected Value',
     minLevel: 'level2',

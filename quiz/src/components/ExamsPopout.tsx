@@ -29,8 +29,8 @@ const STATUS_CYCLE: Record<ItemStatus, ItemStatus> = {
 }
 
 const STATUS_LABEL: Record<ItemStatus, string> = {
-  not_started: 'Not Started',
-  in_progress: 'In Progress',
+  not_started: 'Not started',
+  in_progress: 'In progress',
   completed: 'Passed',
 }
 
@@ -245,7 +245,7 @@ export default function ExamsPopout({ open, onClose }: Props) {
       <div
         role="dialog"
         aria-modal="true"
-        aria-label="Credential Path & Exams"
+        aria-label="Credential Track & Exams"
         className={cn(
           'fixed z-[60] flex flex-col bg-background shadow-xl overflow-hidden',
           // Mobile: full-width bottom sheet
@@ -259,7 +259,7 @@ export default function ExamsPopout({ open, onClose }: Props) {
         <div className="flex items-center justify-between px-4 py-3 shrink-0">
           <div className="flex items-center gap-2">
             <GraduationCap className="h-4 w-4 text-muted-foreground" />
-            <span className="font-semibold text-sm">Credential Path &amp; Exams</span>
+            <span className="font-semibold text-sm">Credential Track &amp; Exams</span>
           </div>
           <button
             type="button"
@@ -325,8 +325,8 @@ export default function ExamsPopout({ open, onClose }: Props) {
                               <button
                                 type="button"
                                 onClick={() => setExamStatus(item.id, STATUS_CYCLE[row.status])}
-                                title={`${STATUS_LABEL[row.status]} — click to cycle ${item.name} status`}
-                                aria-label={`${STATUS_LABEL[row.status]} — click to cycle ${item.name} status`}
+                                title={`${item.name}: ${STATUS_LABEL[row.status]}. Change status`}
+                                aria-label={`${item.name}: ${STATUS_LABEL[row.status]}. Change status`}
                                 className={cn(
                                   'inline-flex items-center justify-center w-[22px] h-[22px] shrink-0 rounded-full transition-all duration-100 hover:scale-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary [&>svg]:w-[18px] [&>svg]:h-[18px]',
                                   statusColor,
@@ -352,7 +352,10 @@ export default function ExamsPopout({ open, onClose }: Props) {
                                   the row with its own control, or with
                                   nothing. */}
                               {availability === 'beta' && action === 'add' && (
-                                <span className="shrink-0 rounded-full bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
+                                <span
+                                  className="shrink-0 rounded-full bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground"
+                                  title="Questions and pages are still being added and checked."
+                                >
                                   Beta
                                 </span>
                               )}
@@ -360,17 +363,17 @@ export default function ExamsPopout({ open, onClose }: Props) {
                               {availability === 'development' && (
                                 <span
                                   className="shrink-0 inline-flex items-center gap-1 rounded-full border border-dashed border-muted-foreground/40 px-2 py-0.5 text-[11px] font-medium text-muted-foreground"
-                                  title="The syllabus is here, but there are no questions to study from yet."
+                                  title="Syllabus outline only. No practice questions yet."
                                 >
                                   <Hammer className="h-3 w-3" aria-hidden="true" />
-                                  In development
+                                  In Development
                                 </span>
                               )}
 
                               {availability === 'unavailable' && (
                                 <span
                                   className="shrink-0 rounded-full px-2 py-0.5 text-[11px] font-medium text-muted-foreground/70"
-                                  title="No study material for this exam yet — you can still track it on your credential path."
+                                  title="No study material for this exam yet. It still counts on your credential track."
                                 >
                                   Not covered yet
                                 </span>
@@ -399,7 +402,7 @@ export default function ExamsPopout({ open, onClose }: Props) {
                                     {hasPlan
                                       ? <CalendarDays className="h-4 w-4" />
                                       : <Play className="h-4 w-4 fill-current" />}
-                                    {hasPlan ? 'Change Exam Date' : 'Set Exam Date'}
+                                    {hasPlan ? 'Change exam date' : 'Set exam date'}
                                   </button>
                                 )
                               })()}
@@ -409,6 +412,22 @@ export default function ExamsPopout({ open, onClose }: Props) {
                       </div>
                     </div>
                   ))}
+                  {/* The two status pills, said in words once: a tooltip never
+                      shows on a phone. */}
+                  {(() => {
+                    const shown = new Set(currentTrack.sections.flatMap(sec => sec.items.map(i => availabilityOf(i.id))))
+                    if (!shown.has('beta') && !shown.has('development')) return null
+                    return (
+                      <dl className="space-y-1 text-xs text-muted-foreground">
+                        {shown.has('beta') && (
+                          <div><dt className="inline font-medium text-foreground">Beta: </dt><dd className="inline">Questions and pages are still being added and checked.</dd></div>
+                        )}
+                        {shown.has('development') && (
+                          <div><dt className="inline font-medium text-foreground">In Development: </dt><dd className="inline">Syllabus outline only. No practice questions yet.</dd></div>
+                        )}
+                      </dl>
+                    )
+                  })()}
                 </div>
               )}
             </div>
@@ -417,7 +436,7 @@ export default function ExamsPopout({ open, onClose }: Props) {
             <div className="px-4 py-3 shrink-0 min-h-[2.75rem] flex items-center">
               {examsState.error ? (
                 <p className="text-xs text-destructive">
-                  Couldn&apos;t save that — {examsState.error}
+                  Couldn&apos;t save that change. Check your connection and try again.
                 </p>
               ) : examsState.saving ? (
                 <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
@@ -444,7 +463,7 @@ export default function ExamsPopout({ open, onClose }: Props) {
                   className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-primary text-primary-foreground px-6 py-3 text-sm font-medium hover:bg-primary/90 transition-colors"
                 >
                   <LogIn className="h-4 w-4" />
-                  Sign In
+                  Sign in
                 </button>
               </div>
             </div>

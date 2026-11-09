@@ -20,9 +20,12 @@ export function CredibilityBar({
   showLabel = true,
   className,
   ariaLabel,
+  percent,
 }: {
   /** 0–1. */
   z: number
+  /** A sector's readiness %, printed beside the Z so the readout reads as the app's one readiness number. */
+  percent?: number
   /** The readout, when it isn't `formatZ(z)` (a sector prints its rounded %). */
   label?: string
   /** A landmark's mastery state — picks the fill off the ladder. */
@@ -47,7 +50,7 @@ export function CredibilityBar({
         aria-valuemin={0}
         aria-valuemax={1}
         aria-valuenow={Number(readout)}
-        aria-valuetext={`Z ${readout}`}
+        aria-valuetext={percent != null ? `Z ${readout}, ${percent}% ready` : `Z ${readout}`}
         className={cn('relative min-w-0 flex-1 overflow-hidden rounded-full bg-muted', size === 'md' ? 'h-2' : 'h-1.5')}
       >
         <div className="h-full rounded-full" style={{ width: `${value * 100}%`, background: color }} />
@@ -55,6 +58,7 @@ export function CredibilityBar({
       {showLabel && (
         <span className={cn('shrink-0 font-mono tabular-nums', size === 'md' ? 'text-xs' : 'text-[11px]', 'text-muted-foreground')}>
           Z <span className="text-foreground">{readout}</span>
+          {percent != null && <> · <span className="text-foreground">{percent}%</span> ready</>}
         </span>
       )}
     </div>

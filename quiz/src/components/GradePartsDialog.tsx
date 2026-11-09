@@ -3,8 +3,11 @@ import { X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { MarkdownText } from '@/components/MarkdownText'
 import { SelfGradeButtons } from '@/components/SelfGradeButtons'
+import { GradeSuggestion } from '@/components/GradeSuggestion'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
 import { stemPreview } from '@/lib/questionPreview'
+import { useAnswerChecks } from '@/hooks/useAnswerChecks'
+import { checklistKey, useChecklistStore } from '@/stores/checklistStore'
 import type { Part, SelfGrade } from '@/lib/parser'
 
 interface GradePartsDialogProps {
@@ -13,6 +16,11 @@ interface GradePartsDialogProps {
   /** Grades given so far, by part label — including any given in here. */
   grades: Record<string, SelfGrade | undefined>
   onGrade: (partLabel: string, grade: SelfGrade) => void
+  /** What the reader wrote for each part, by label — for the numeric check's suggested grade. */
+  responses?: Record<string, string>
+  /** The question: its id finds each part's checklist ticks, its stem stands in for a part with none. */
+  questionId: string
+  questionStem: string
   /** The question has this one part, so it is "your answer", not "Part A". */
   isOnlyPart: boolean
   /** What moving on means here: "Next Question", "Finish Quiz", … */
@@ -38,6 +46,9 @@ export function GradePartsDialog({
   parts,
   grades,
   onGrade,
+  responses = {},
+  questionId,
+  questionStem,
   isOnlyPart,
   continueLabel,
   onContinue,
@@ -45,6 +56,8 @@ export function GradePartsDialog({
 }: GradePartsDialogProps) {
   // Paper: the panel sliding in.
   useSoundOnMount('open')
+  const allTicks = useChecklistStore(state => state.ticks)
+  const checks = useAnswerChecks(true)
   const panelRef = useRef<HTMLDivElement>(null)
 
   // Focus moves into the dialog once, as it opens — not on every render, or
@@ -100,6 +113,10 @@ export function GradePartsDialog({
           {parts.map(part => {
             const name = isOnlyPart ? 'Your answer' : `Part ${part.label.toUpperCase()}`
             const preview = part.stem ? stemPreview(part.stem, 140) : ''
+            const asked = part.stem ? part : { ...part, stem: questionStem }
+            const check = checks?.checkNumericAnswer(responses[part.label] ?? '', asked) ?? null
+            const checklist = checks && !check ? checks.partChecklist(asked) : null
+            const ticked = checks && checklist ? checks.checklistSuggestion(checklist, allTicks[checklistKey(questionId, part.label)] ?? {}) : null
             return (
               <li key={part.label} className="space-y-2.5">
                 <div className="space-y-0.5">
@@ -120,6 +137,10 @@ export function GradePartsDialog({
                   onChange={grade => onGrade(part.label, grade)}
                   prompt={null}
                   label={isOnlyPart ? 'Grade for your answer' : `Grade for ${name}`}
+                  suggested={check?.suggestion ?? ticked?.suggestion}
+                  hint={checks && (check
+                    ? <GradeSuggestion {...checks.numericCheckMessage(check)} from="figure" />
+                    : ticked && checklist && <GradeSuggestion {...checks.checklistMessage(ticked, checklist)} from="checklist" />)}
                 />
               </li>
             )

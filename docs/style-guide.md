@@ -643,6 +643,30 @@ for the one thing on the page the reader must not miss; anything that can wait �
 the closing *Exam traps* list — stays a folding callout. Don't add a fourth card without a meaning
 that none of these carries.
 
+### 7.2c Info popups (`ui/InfoSheet.tsx`)
+
+A popup that reads out **what something is** — a question's Info, the quiz builder's bank
+info, Fact Check, *Where you're losing marks*, the level popup, Learning Progress, the
+keyboard shortcuts — is an **info popup**, built from `InfoSheet` and modelled on the study
+guide's sitting panel (`ExamSittingInfoButton`):
+
+- **A black sheet** (`bg-background`, `rounded-2xl`, `max-w-sm`) so its grouped lists
+  (`GroupedList`, `bg-card`) read as cards on it.
+- **A banner** leads (`InfoBanner`): a tinted card holding the popup's own header — a tile
+  (the exam logo, a verdict mark, the level), a small line naming what the title belongs to,
+  the title, a round close — and, along its foot, a **stat strip** (`Stat`) of the two to
+  four figures that matter. Tinted in the exam's accent when an exam scopes the popup
+  (`examAccentStyle` on the sheet, `EXAM_BANNER`), in a verdict's tone for Fact Check, and
+  the neutral wash otherwise (`NEUTRAL_BANNER`). A figure that isn't known is left out, never
+  estimated — the strip simply has fewer columns.
+- **Rows** below, in grouped lists: a link or button row is `GROUP_ACTION_ROW` with a small
+  `RowTile` or `PublisherChip` and a `RowChevron`; a fact is a `GroupRow`. A group gets a
+  label only when it has a neighbour to be told apart from.
+- **Fine print** last (`InfoFinePrint`): an id, a link to the file, a secondary action.
+- **No captions.** A heading over a list that says what the list plainly is, a line repeating
+  a figure the banner shows, an explanation of what a row does when tapped — cut them
+  (`docs/visual-noise-review.md`).
+
 ### 7.3 Badges & chips (`badge.tsx`)
 
 `rounded-full`, `text-xs font-semibold`. Variants: `default`, `secondary`, `destructive`,

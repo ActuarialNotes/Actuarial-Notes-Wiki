@@ -2,6 +2,8 @@ import { useMemo } from 'react'
 import { ClipboardList } from 'lucide-react'
 import { MarkdownText, READING_MD_CLASS } from '@/components/MarkdownText'
 import { splitSampleAnswers } from '@/lib/writtenAnswer'
+import { SampleChecklist } from '@/components/SampleChecklist'
+import type { ChecklistTicks, PartChecklist, SampleChecklist as SampleChecklistData } from '@/lib/essayChecklist'
 
 // The reference a written part reveals once it is answered: the examiners'
 // sample answer, then their report. Two different things — what full credit
@@ -13,15 +15,45 @@ import { splitSampleAnswers } from '@/lib/writtenAnswer'
  * own, numbered, inside the one "Sample answer" panel they all belong to; a
  * single sample is the panel alone.
  */
-export function SampleAnswerCards({ markdown }: { markdown: string }) {
+export function SampleAnswerCards({ markdown, checklist }: {
+  markdown: string
+  /**
+   * The part's checklist (lib/essayChecklist.ts): when given, each sample's
+   * points carry a box the reader ticks for what their answer makes — unless
+   * the examiner's report has a rubric, which carries the boxes instead.
+   */
+  checklist?: {
+    list: PartChecklist
+    ticks: ChecklistTicks
+    onToggle: (sample: number, point: number) => void
+  }
+}) {
   const { intro, samples } = useMemo(() => splitSampleAnswers(markdown), [markdown])
   if (samples.length === 0) return null
+  if (checklist?.list.rubric) checklist = undefined
+
+  const body = (i: number) => {
+    const sample = checklist?.list.samples[i]
+    if (!checklist || !sample || sample.boxes === 0) {
+      return <MarkdownText className={READING_MD_CLASS}>{samples[i]}</MarkdownText>
+    }
+    return (
+      <SampleChecklist
+        sample={sample}
+        ticked={checklist.ticks[i] ?? []}
+        onToggle={point => checklist.onToggle(i, point)}
+        name={samples.length > 1 ? `Sample ${i + 1}` : undefined}
+      />
+    )
+  }
+  const instruction = checklist && <ChecklistInstruction />
 
   if (samples.length === 1) {
     return (
       <section aria-label="Sample answer" className="space-y-2 rounded-xl bg-muted p-4">
         <h4 className="text-sm font-semibold text-foreground">Sample answer</h4>
-        <MarkdownText className={READING_MD_CLASS}>{samples[0]}</MarkdownText>
+        {instruction}
+        {body(0)}
       </section>
     )
   }
@@ -29,11 +61,12 @@ export function SampleAnswerCards({ markdown }: { markdown: string }) {
   return (
     <section aria-label="Sample answer" className="space-y-2 rounded-xl bg-muted p-2 sm:p-3">
       <h4 className="px-2 pt-1 text-sm font-semibold text-foreground">Sample answer</h4>
+      {instruction && <div className="px-2">{instruction}</div>}
       {intro && (
         <MarkdownText className={`${READING_MD_CLASS} px-2`}>{intro}</MarkdownText>
       )}
       <ol className="space-y-2">
-        {samples.map((sample, i) => (
+        {samples.map((_, i) => (
           <li
             key={i}
             aria-label={`Sample ${i + 1} of ${samples.length}`}
@@ -42,7 +75,7 @@ export function SampleAnswerCards({ markdown }: { markdown: string }) {
             <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
               Sample {i + 1}
             </p>
-            <MarkdownText className={READING_MD_CLASS}>{sample}</MarkdownText>
+            {body(i)}
           </li>
         ))}
       </ol>
@@ -55,7 +88,18 @@ export function SampleAnswerCards({ markdown }: { markdown: string }) {
  * credit. Tinted as an informational note (style guide §4.1) so it reads as
  * commentary on the answer rather than more of it.
  */
-export function ExaminerReportCard({ markdown }: { markdown: string }) {
+export function ExaminerReportCard({ markdown, rubric }: {
+  markdown: string
+  /**
+   * The report's rubric (lib/essayChecklist.ts `reportRubric`): what full
+   * credit needed, each with a box the reader ticks for what their answer did.
+   */
+  rubric?: {
+    list: SampleChecklistData
+    ticked: readonly number[]
+    onToggle: (point: number) => void
+  }
+}) {
   return (
     <section
       aria-label="Examiner's report"
@@ -65,7 +109,16 @@ export function ExaminerReportCard({ markdown }: { markdown: string }) {
         <ClipboardList aria-hidden="true" className="h-4 w-4" />
         Examiner&apos;s report
       </h4>
-      <MarkdownText className={READING_MD_CLASS}>{markdown}</MarkdownText>
+      {rubric
+        ? <>
+            <ChecklistInstruction />
+            <SampleChecklist sample={rubric.list} ticked={rubric.ticked} onToggle={rubric.onToggle} />
+          </>
+        : <MarkdownText className={READING_MD_CLASS}>{markdown}</MarkdownText>}
     </section>
   )
+}
+
+function ChecklistInstruction() {
+  return <p className="text-sm text-foreground">Tick each point your answer makes.</p>
 }

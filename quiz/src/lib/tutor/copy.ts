@@ -23,11 +23,15 @@ export const REASON_LABEL: Record<StepReason, string> = {
 /** Why this item, in a sentence — the card's subtitle. */
 export const REASON_LINE: Record<StepReason, string> = {
   relearn: 'You missed this earlier. Getting it back is what makes it stick.',
-  due: 'Due for a check — recall is fading.',
+  due: 'Due for a check. Recall is fading.',
   new: 'Your first check, with the page fresh in mind.',
   'sure-wrong': 'You were sure last time and lost points. Corrected confident errors stick best.',
   confused: 'You said this was confusing.',
-  practice: 'Extra practice, on what has faded most.',
+  practice: 'Extra practice on what has faded most.',
+}
+
+function capitalise(s: string): string {
+  return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
 function plural(n: number, one: string, many = `${one}s`): string {
@@ -58,12 +62,12 @@ export function offerLine(offer: Offer, plan: DayPlan | null): string {
       if (plan.due) parts.push(`${plan.due} due`)
       const next = plan.newConcepts[0]
       if (parts.length === 0) return next ? `Today starts with ${next}.` : 'Nothing due today.'
-      return `Today: ${parts.join(' · ')}${next ? `, then ${next}` : ''}.`
+      return `${capitalise(parts.join(' and '))} today${next ? `, then ${next}` : ''}.`
     }
     case 'relearn':
       return 'Something you missed is ready to try again.'
     case 'debrief':
-      return 'Want to look at what that quiz cost you?'
+      return 'Go over the points your last quiz lost?'
   }
 }
 
@@ -73,8 +77,8 @@ export function planLine(plan: DayPlan): string {
   if (plan.relearn) parts.push(`${plan.relearn} to relearn`)
   if (plan.due) parts.push(`${plan.due} due`)
   if (plan.newConcepts.length) parts.push(`${plan.newConcepts.length} new`)
-  if (parts.length === 0) return 'Nothing waiting. Extra practice is still spaced.'
-  return `${parts.join(' · ')} — about ${formatMinutes(plan.minutes)}`
+  if (parts.length === 0) return 'Nothing due today. Extra practice picks what has faded most.'
+  return `${parts.join(' · ')}, about ${formatMinutes(plan.minutes)}`
 }
 
 export function historyLine(h: ExamHistory): string | null {
@@ -88,17 +92,16 @@ function formatDay(day: string): string {
 
 /** The exam date, and where it came from. */
 export function examDateLine(exam: ExamDate, today: string): string {
-  if (!exam.day) return 'No sitting set. CAS hasn’t published the next window — set the date you’re aiming for.'
+  if (!exam.day) return 'No sitting set. CAS hasn’t published the next window, so set the date you’re aiming for.'
   const days = daysFromTo(today, exam.day)
   const when = days > 1 ? `in ${days} days` : days === 1 ? 'tomorrow' : days === 0 ? 'today' : `${-days} days ago`
   const source = exam.source === 'target' ? 'your exam date' : 'the next published window'
-  return `${formatDay(exam.day)} — ${when} (${source})`
+  return `${formatDay(exam.day)}, ${when} (${source})`
 }
 
 export function phaseLine(phase: JourneyPhase, daysLeft: number | null): string {
-  if (phase === 'exam') return 'It’s exam time. Nothing more to do here — good luck.'
-  if (phase === 'after') return 'That sitting has passed. Set your next one when you know it.'
-  if (phase === 'setup') return 'Set your sitting, and the Tutor will pace the rest.'
+  // setup, exam and after say everything in their PHASES purpose, which is drawn beside this.
+  if (phase === 'exam' || phase === 'after' || phase === 'setup') return ''
   return daysLeft != null ? `${plural(daysLeft, 'day')} to go.` : ''
 }
 
@@ -118,7 +121,7 @@ export function findingLine(f: Finding): string {
     case 'siblings':
       return `${f.concepts[0]} and ${f.concepts[1]} sit on one syllabus line, and you've missed both. They're easy to mix up.`
     case 'foundation':
-      return `${f.concept} is defined in terms of ${f.foundations.join(' and ')}, which you haven't got yet.`
+      return `${f.concept} is defined in terms of ${f.foundations.join(' and ')}, which ${f.foundations.length === 1 ? 'isn’t' : 'aren’t'} at Level 2 yet.`
     case 'kind-gap':
       return `You score ${pct(f.strongRate)} on ${PART_KIND_LABEL[f.strong].toLowerCase()} parts and ${pct(f.weakRate)} on ${PART_KIND_LABEL[f.weak].toLowerCase()} parts.`
     case 'calibration':
@@ -132,22 +135,22 @@ export function findingLine(f: Finding): string {
 export function findingAdvice(f: Finding): string {
   switch (f.type) {
     case 'sure-wrong':
-      return 'A confident error, once corrected, is corrected for good. Try it again.'
+      return 'Confident errors are the ones that stick best once corrected. Try it again.'
     case 'confused':
       return 'Two full-credit answers and the flag clears.'
     case 'persistent':
-      return 'Read the page again — the worked example first — then try a different part.'
+      return 'Read the page again, starting with the worked example, then try a different part.'
     case 'siblings':
       return 'Read them side by side, then answer one of each.'
     case 'foundation':
-      return 'Start underneath: get the foundation first.'
+      return `Get ${f.foundations.join(' and ')} to Level 2 first.`
     case 'kind-gap':
       return f.weak === 'calculation'
         ? 'Work the page’s worked examples, then the calculations.'
         : 'CAS gives these points for naming the reason. Practise saying why.'
     case 'calibration':
       return f.overconfident
-        ? 'Sure should mean sure. When you’re not, say so — it decides what comes back first.'
+        ? 'Pick Sure only when you’d bet on it. Your rating decides what comes back first.'
         : 'Your confidence is a good guide. Keep rating it honestly.'
   }
 }

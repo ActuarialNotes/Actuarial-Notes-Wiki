@@ -1,11 +1,13 @@
 import { describe, it, expect } from 'vitest'
 import type { Question } from './parser'
 import {
+  bankMix,
   formatExamLength,
   formatExamUnits,
   formatUnitTime,
   formatYearSpan,
   quizBankInfo,
+  splitSourceLabel,
 } from './quizBankInfo'
 import { EXAM_PACE } from './quizTiming'
 
@@ -75,5 +77,27 @@ describe('formatting', () => {
     expect(formatYearSpan(2012, 2019)).toBe('2012–2019')
     expect(formatYearSpan(2019, 2019)).toBe('2019')
     expect(formatYearSpan(null, null)).toBeNull()
+  })
+})
+
+describe('bankMix', () => {
+  const sources = { pastPapers: 0, sittings: 0, firstYear: null, lastYear: null, samples: 459, samplePublisher: 'SOA' as const, vault: 1, carried: 0 }
+
+  it('lists where the questions come from, the record last, and drops what is empty', () => {
+    expect(bankMix({ sources, offSyllabus: 1 })).toEqual([
+      { key: 'samples', label: 'SOA samples', count: 459 },
+      { key: 'vault', label: 'Actuarial Notes', count: 1 },
+      { key: 'offSyllabus', label: 'Off syllabus', count: 1 },
+    ])
+  })
+})
+
+describe('splitSourceLabel', () => {
+  it('splits a publisher off a page label', () => {
+    expect(splitSourceLabel('SOA — Exam FM')).toEqual({ publisher: 'SOA', title: 'Exam FM' })
+  })
+
+  it('leaves a label with no publisher whole', () => {
+    expect(splitSourceLabel('Exam FM')).toEqual({ publisher: null, title: 'Exam FM' })
   })
 })

@@ -19,7 +19,7 @@ export function ChangePill({ change, edition }: { change: VintageChange; edition
       )}
     >
       <Icon className="h-3 w-3 shrink-0" aria-hidden />
-      {change === 'added' ? `New in ${edition}` : `Dropped in ${edition}`}
+      {change === 'added' ? `Added in ${edition}` : `Dropped in ${edition}`}
     </span>
   )
 }

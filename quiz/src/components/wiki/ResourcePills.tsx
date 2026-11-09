@@ -35,7 +35,7 @@ export function ExamPill({ children }: { children: React.ReactNode }) {
 export function PdfPill() {
   return (
     <span
-      title="PDF — read it in the app"
+      title="PDF, opens in the app"
       className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-[10px] font-semibold text-foreground"
     >
       <FileText className="h-3 w-3 shrink-0 text-primary" aria-hidden />

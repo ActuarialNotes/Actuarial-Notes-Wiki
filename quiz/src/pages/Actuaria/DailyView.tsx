@@ -86,10 +86,10 @@ function Transmission({ world, questions, questionsLoading }: { world: ActuariaW
         <h2 id="transmission-heading" className="text-base font-semibold">
           {decaying.length === 0
             ? 'No decay today'
-            : `${decaying.length} ${decaying.length === 1 ? 'landmark is' : 'landmarks are'} decaying`}
+            : `${decaying.length} ${decaying.length === 1 ? 'concept is' : 'concepts are'} about to lose a level`}
         </h2>
         {decaying.length === 0 && picks.length > 0 && (
-          <p className="text-sm text-muted-foreground">Today’s study plan fills the transmission instead.</p>
+          <p className="text-sm text-muted-foreground">Today’s questions come from today’s study plan instead.</p>
         )}
       </div>
 
@@ -120,7 +120,7 @@ function Transmission({ world, questions, questionsLoading }: { world: ActuariaW
             data-testid="actuaria-receive-transmission"
           >
             <Radio className="h-5 w-5" aria-hidden />
-            Receive transmission
+            Start the review
           </Button>
           <p className="text-center text-xs text-muted-foreground">
             {drawn.length} {drawn.length === 1 ? 'question' : 'questions'}
@@ -137,7 +137,7 @@ function Transmission({ world, questions, questionsLoading }: { world: ActuariaW
               : 'Nothing you have learned is about to slip. Today’s study plan is the next thing to do.'}
           </p>
           <Link to="/dashboard" className={buttonVariants({ size: 'lg', className: 'w-full rounded-full' })}>
-            Open today’s study plan
+            Open Today’s Study Plan
           </Link>
         </div>
       )}
@@ -159,9 +159,9 @@ function RiskPoolStrip({ exam }: { exam: string | null }) {
       className="flex items-center justify-between gap-3 rounded-xl bg-card px-5 py-3 text-sm transition-colors hover:bg-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       data-testid="actuaria-risk-pool"
     >
-      <span><Term id="riskPool" /> · <span className="font-mono tabular-nums">{covered} / {members}</span> covered</span>
+      <span><Term id="riskPool" /> · <span className="font-mono tabular-nums">{covered} / {members}</span> studied today</span>
       {active
-        ? <StatusChip variant="cleared" size="sm">+25% gems active</StatusChip>
+        ? <StatusChip variant="cleared" size="sm">+25% gems today</StatusChip>
         : <span className="text-xs text-muted-foreground">{poolThreshold(members) - covered} more for +25%</span>}
     </Link>
   )
@@ -199,7 +199,7 @@ function Coverage() {
         canGoForward={month < monthOf(today)}
       />
       <p className="text-xs text-muted-foreground">
-        <span className="font-mono tabular-nums">{covered}</span> {covered === 1 ? 'day' : 'days'} covered this month
+        <span className="font-mono tabular-nums">{covered}</span> {covered === 1 ? 'day' : 'days'} studied this month
       </p>
     </section>
   )

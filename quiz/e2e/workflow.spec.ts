@@ -1,4 +1,4 @@
-import { test, expect, type Locator, type Page } from '@playwright/test'
+import { test, expect, type Locator, type Page } from './test'
 
 // Workflows (docs/workflows.md), Cowork's second place: the way in from
 // Cowork's sidebar onto an empty board, steps added through the + menu's pages

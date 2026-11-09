@@ -6,7 +6,7 @@ import { test, expect } from './test'
 // button), a result can be sent on to the next tool, a run link opens the run
 // it names, and a scalar card fits a phone without scrolling (R10).
 /** A factor as a grid cell prints it once it isn't being edited: 1.000, 1.5152 (every digit is kept). */
-const factor = (n: number) => n.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 4, useGrouping: false })
+const factor = (n: number) => n.toFixed(4)
 
 test.describe('tools', () => {
   test('opens from the sidebar and lists the tools by area', async ({ page }) => {
@@ -178,7 +178,7 @@ test.describe('tools', () => {
     await card.getByRole('button', { name: 'CDF column' }).click()
     await page.getByLabel('Every row').fill('1.1')
     await page.getByRole('button', { name: 'Set', exact: true }).click()
-    await expect(card.getByLabel('CDF, row 1')).toHaveValue('1.100')
+    await expect(card.getByLabel('CDF, row 1')).toHaveValue('1.1000')
   })
 
   test('selects the factors from the averages and sends the selections on', async ({ page }) => {
@@ -241,7 +241,7 @@ test.describe('tools', () => {
     await expect(row.getByTestId('figure-details')).toContainText('maximum profit provision')
     await expect(row.getByTestId('figure-details')).toContainText('Private passenger vehicles')
     await expect(row.getByTestId('tool-unchecked')).toBeVisible()
-    await expect(card.getByTestId('tool-tile').first()).toHaveText('69%')
+    await expect(card.getByTestId('tool-tile').first()).toHaveText('69.00%')
 
     // A number of the reader's own, typed on the sheet's keypad, replaces the figure and its source.
     await pill.click()
@@ -279,11 +279,11 @@ test.describe('tools', () => {
     const card = page.getByTestId('tool-card')
     // Nothing feeds it; the answer leads with the total, the published total under the bar.
     await expect(card.getByTestId('tool-takes-from')).toHaveCount(0)
-    await expect(card.getByTestId('tool-tile').first()).toHaveText('28.084%')
+    await expect(card.getByTestId('tool-tile').first()).toHaveText('28.08%')
     await expect(card.getByTestId('tool-comparison')).toContainText('27.8%')
     const gives = card.getByTestId('tool-gives-to')
     // Two tools: listed open, each with what it would receive.
-    await expect(gives.getByTestId('carried-value').first()).toContainText('F 11.028%')
+    await expect(gives.getByTestId('carried-value').first()).toContainText('F 11.03%')
     await gives.getByRole('button', { name: 'Open Permissible Loss Ratio' }).click()
     await expect(page).toHaveURL(/\/tools\/permissible-loss-ratio\?from=expense-ratios#input=/)
 
@@ -339,14 +339,17 @@ test.describe('tools', () => {
   })
 
   test('offers the bank\'s figures on a field\'s row, and uses one in place', async ({ page }) => {
-    await page.goto('/tools/loss-ratio-method')
+    await page.goto('/tools/permissible-loss-ratio')
     const card = page.getByTestId('tool-card')
     const row = card.locator('[data-field="variable"]')
     await row.getByTestId('published-count').click()
     const list = row.getByTestId('published-list')
-    await list.getByTestId('figure-line').filter({ hasText: '27.8%' }).click()
-    await list.getByRole('button', { name: 'Use 27.8%' }).click()
-    await expect(card.getByRole('button', { name: /^Variable expense ratio.* value$/ })).toHaveText('27.8%')
+    // Only the variable expenses are offered: the AIRB's acquisition costs, not its total.
+    await expect(list.getByTestId('figure-line')).toHaveCount(1)
+    await expect(list.getByTestId('figure-line')).toContainText('Amortization of insurance acquisition cash flows')
+    // The one figure on offer is open already.
+    await list.getByRole('button', { name: 'Use 20.0%' }).click()
+    await expect(card.getByRole('button', { name: /^Variable expense ratio.* value$/ })).toHaveText('20%')
     await expect(row.locator('[data-source="published"]')).toContainText('AIRB, Alberta')
   })
 
@@ -384,7 +387,7 @@ test.describe('tools', () => {
     const card = page.getByTestId('tool-card')
     await expect(card.getByTestId('tool-tile').first()).toHaveText('1,077.95')
     await card.getByTestId('tool-solve-for').getByRole('radio', { name: 'Yield' }).click()
-    await expect(card.getByTestId('tool-tile').first()).toHaveText('5.348%')
+    await expect(card.getByTestId('tool-tile').first()).toHaveText('5.35%')
     await expect(card.locator('[data-field="price"]')).toBeVisible()
     await expect(card.locator('[data-field="yield"]')).toHaveCount(0)
     // One line per number, at any count: no slider until a row is tapped.
@@ -415,6 +418,65 @@ test.describe('tools', () => {
     await expect(card.getByTestId('tool-capital')).toContainText('minimum required (line 130)')
     await expect(card.locator('[data-marked]')).toContainText('140')
     await expect(card.getByTestId('result-fold')).toContainText('All')
+  })
+
+  // The Ledger's second pass (docs/tool-template-v3.md §7.1).
+  test('keeps Age-to-Age picks through a cell edit, a reload and a shared link', async ({ page, context }) => {
+    await context.grantPermissions(['clipboard-read', 'clipboard-write'])
+    await page.goto('/tools/age-to-age-factors')
+    const card = page.getByTestId('tool-card')
+    await page.getByRole('button', { name: 'Select Simple all at every age' }).click()
+    await card.getByLabel('Origin 2020, age 12').fill('1010')
+    await card.getByLabel('Origin 2020, age 12').blur()
+    // The pick follows its average: still Simple all, at the new value.
+    await expect(page.getByTestId('selected-factor').first()).toContainText('Simple all')
+    await page.reload()
+    await expect(page.getByTestId('selected-factor').first()).toContainText('Simple all')
+    await page.getByRole('button', { name: 'More', exact: true }).click()
+    const link = await page.evaluate(async () => {
+      const items = [...document.querySelectorAll('[role="menuitem"]')] as HTMLElement[]
+      items.find(el => el.textContent?.includes('Copy link'))?.click()
+      await new Promise(r => setTimeout(r, 200))
+      return navigator.clipboard.readText().catch(() => null)
+    })
+    expect(link).toContain('&picks=')
+    // The triangle names what its switch shows.
+    await page.keyboard.press('Escape')
+    await card.getByRole('radio', { name: 'Incremental' }).click()
+    await expect(card.getByText('Incremental triangle')).toBeVisible()
+  })
+
+  test('solves Annuity for the number of payments and Loan Schedule for its balance', async ({ page }) => {
+    await page.goto('/tools/annuity')
+    const card = page.getByTestId('tool-card')
+    await expect(card.getByTestId('tool-tile').first()).toHaveText('772.17')
+    await card.getByTestId('tool-solve-for').getByRole('radio', { name: 'Periods' }).click()
+    await expect(card.getByTestId('tool-tile').first()).toHaveText('10')
+    await expect(card.locator('[data-field="pv"]')).toBeVisible()
+    await expect(card.locator('[data-field="n"]')).toHaveCount(0)
+    await page.goto('/tools/loan-schedule')
+    await page.getByTestId('tool-solve-for').getByRole('radio', { name: 'Balance' }).click()
+    await expect(page.getByTestId('tool-tile').first()).toHaveText('0.00')
+  })
+
+  test('hands Development to Ultimate CDFs to Chain Ladder, keeping its latest values', async ({ page }) => {
+    await page.goto('/tools/chain-ladder')
+    const cl = page.getByTestId('tool-card')
+    await cl.getByLabel('Latest, row 4').fill('1400')
+    await cl.getByLabel('Latest, row 4').blur()
+    await page.goto('/tools/development-to-ultimate')
+    // Four tools take its CDFs: listed folded, opened by the line.
+    const gives = page.getByTestId('tool-gives-to')
+    await gives.getByRole('button', { name: /Gives to/ }).click()
+    await gives.getByRole('button', { name: 'Open Chain Ladder' }).click()
+    await expect(page).toHaveURL(/\/tools\/chain-ladder\?from=development-to-ultimate#input=/)
+    await expect(page.getByLabel('Latest, row 4')).toHaveValue('1,400')
+    await expect(page.getByLabel('CDF, row 4')).toHaveValue('1.6995')
+  })
+
+  test('draws the ratemaking chain on Permissible Loss Ratio', async ({ page }) => {
+    await page.goto('/tools/permissible-loss-ratio')
+    await expect(page.getByTestId('tool-chain')).toContainText('Expense Ratios')
   })
 
   test('remembers the tools used last on the catalogue', async ({ page }) => {

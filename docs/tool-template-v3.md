@@ -7,7 +7,8 @@ maintainer's answers to its four questions (§7.1 there), and three directions d
 piece of B: Insurer Return's bars setting capital against the minimum, as a card of their own under
 the timeline.
 
-Status: **first four pages built 2026-11-09** (§7 records what was built). Roadmap row: A12, §3.4
+Status: **built 2026-11-09**: the first four pages, then round 0 of the review, solve-for on the
+finance tools and the chains (§7 records both passes; §8 is what's left). Roadmap row: A12, §3.4
 *Proposed*.
 
 ## 1. In one paragraph
@@ -93,8 +94,22 @@ The maintainer's answer 3: a tool solves for any one of its unknowns, as one too
 term (closed form for N; a term that isn't a whole number of coupons is warned about). Bond Yield
 stays a tool (public API, R8) and still hands to Bond Price.
 
-Next to convert: Annuity (payment, n, i, PV), Present Value, Loan Schedule, Interest Converter
-(any rate from any rate already).
+**Annuity** (`finance.annuity`, 1.1.0) solves for the present value (default), the payment
+(`PV / a⌉n`), the number of payments (closed form, `n = −ln(1 − i · PV/P) / ln(1 + i)`, with a
+warning when it isn't whole and an error past the perpetuity) and the rate (bisection), immediate
+or due. A *Present value* field appears while it isn't the answer.
+
+**Present Value** (`finance.present_value`, 1.1.0) solves for the present value (default) or the
+rate at which the flows are worth a given price; flows with their own spot rate keep it, and several
+roots are named as Internal Rate of Return names them.
+
+**Loan Schedule** (`finance.loan_schedule`, **2.0.0**) solves for the level payment (default), the
+term (payments of P as long as needed, the last a drop payment), the amount borrowed, the rate, or
+the balance after n payments of P. These replace the 1.x switches, a payment of 0 meaning "level"
+and a count of 0 meaning "as many as needed", which a slider stop hid (the review's headline #11);
+an input from 1.x that used them names `solve` instead (`questionChecks.ts` does).
+
+Interest Converter already gives any rate from any rate.
 
 ## 4. Chains
 
@@ -103,8 +118,30 @@ tools that are alternatives (`CHAINS`, `chainPlace`). A tool in a chain draws th
 above its answer card (`ChainStrip` in `components/tools/LedgerParts.tsx`): up to two steps back,
 then the tool, then "or" its alternatives, each a link. Only the reserving chain is written so far
 (Ratio Triangle › Age-to-Age Factors › Development to Ultimate › Chain Ladder / Expected Claims /
-Bornhuetter-Ferguson / Benktander / Cape Cod). The strip navigates; hand-offs are still `spec.next`
-(the missing ones are in the review, §3.7).
+Bornhuetter-Ferguson / Benktander / Cape Cod). The strip navigates; hand-offs are still `spec.next`.
+
+Three more chains (built in the second pass):
+
+- **Ratemaking**, in Werner & Modlin's order: Earned Premium › On-Level Factors › Trend Fit /
+  Combined Trend › Trend Factor / Two-Step Trend › Expense Ratios › Permissible Loss Ratio › Loss
+  Ratio Method / Pure Premium Method.
+- **Interest**: Interest Converter › Annuity / Present Value / Loan Schedule › Internal Rate of
+  Return.
+- **Bonds**: Bond Price / Bond Yield › Bond Amortization / Duration & Convexity › Redington
+  Immunization.
+
+A tool is in one chain at most (`toolChains.test.ts`). A chain is the order of the work, not of the
+hand-offs: Internal Rate of Return still hands its yield back to Interest Converter.
+
+**The hand-offs the review found missing** (§3.7) are in: Development to Ultimate → Chain Ladder,
+Bornhuetter-Ferguson, Benktander and Cape Cod; Expected Claims → Bornhuetter-Ferguson and
+Benktander; Interest Converter → Annuity and Loan Schedule (the rate per period, `i⁽ᵐ⁾/m`, which it
+now prints); Annuity → Internal Rate of Return; Bond Price → Bond Yield. (Life Table → the annuity
+tools waits for a life annuity tool.) The reserving ones carry **one column** of an origin table,
+so `ToolHandoff.build` takes a third argument, `into`: the next tool's own input (its draft on this
+device, a workflow step's values). The column is laid over the reader's rows (CDFs by position,
+expected claims by origin, `reserving/handoffs.ts`) and falls back to the next tool's example, so a
+CDF never replaces the latest values a reader typed.
 
 ## 5. The catalogue
 
@@ -143,10 +180,49 @@ Bornhuetter-Ferguson, Insurer Return and the catalogue for §3–§6.
   choice-first and column count, Insurer Return asking first with the capital card and the folded,
   marked table, and the catalogue's recent tools and area chips.
 
+### 7.1 Second pass (2026-11-09)
+
+Round 0 of the review, then §3 and §4 on the rest of the tools.
+
+- **MCT Ratio's example** (1.0.1): the defaults come to 149.9995% (the solution's market risk is
+  rounded to the thousand), printed 150.00%. The warnings compare the ratio as printed, to 0.01%,
+  so the published example no longer opens on "below 150%". `filings.test.ts` holds both sides.
+- **The bank's expense kinds**: `expense-ratio` is gone; `fixed-expense`, `variable-expense` and a
+  new `total-expense` (`assumption_vocab.json`, `assumptionBank.ts`). The AIRB's acquisition costs
+  are a variable expense, its general and operating expenses fixed, its total neither, so Permissible
+  Loss Ratio and Loss Ratio Method offer each field only its own kind (`bank.test.ts`).
+- **Each published figure names itself** in the list a row or the keypad sheet opens: "20.0%
+  Amortization of insurance acquisition cash flows", its place and basis under it (`FigureLine`).
+- **One precision per quantity** (`formatValue`): a percent to 2 decimals, a factor to 4, a count
+  to none, money to 2. An input's pill shows what was typed (`fieldText`: 5%, 3.125%); a grid cell
+  of factors or percents reads at its column's precision until focused (`formatCell`).
+- **Age-to-Age Factors' picks** are kept as the averages they name, not as numbers
+  (`picksToSelections`, `selectionsToPicks` in `toolColumns.ts`): an edit to the triangle moves each
+  pick with its average instead of wiping it. They are kept on this device beside the draft, ride a
+  run link after its input (`&picks=…`, `picksFragment` / `picksFromHash`) and survive Back, and a
+  reset takes them with it (and its undo brings them back). The triangle's name follows the switch:
+  "Incremental triangle" while it shows increments (`triangleLabel`).
+- **The Data Sources mark their row**: Life Table the age x (1.0.1), Price Index the period its
+  index tile names (1.0.1), as Insurer Return marks its line.
+- **Solve for** on Annuity, Present Value and Loan Schedule (§3).
+- **Chains and hand-offs** (§4); Interest Converter (1.1.0) leads with i, i⁽ᵐ⁾ and the rate per
+  period j, and lists j in its table; Bond Price is 1.2.0, Development to Ultimate and Expected
+  Claims 1.1.0.
+- Tests: `tools.test.ts` (each solve-for fed back, the column hand-offs), `toolColumns.test.ts`
+  (picks), `toolChains.test.ts` (the chains, the §3.7 hand-offs), `datasets.test.ts` (marked rows),
+  `workflow.test.ts` and `workflowBrief.test.ts` (Development to Ultimate → Chain Ladder is now a
+  link), `e2e/tools.spec.ts`.
+
 ## 8. Not yet
 
-- Solve-for on the other finance tools (§3).
-- Chains for ratemaking and finance (§4), and the missing `next`s the review lists.
-- The rest of the review's round 0: MCT Ratio's 149.999%, the bank's expense kinds, per-quantity
-  decimals, Age-to-Age's lost picks, the Data Sources' highlighted rows (Life Table's age, Price
-  Index's period).
+- The review's rounds 2–5 beyond what §2 already covers: Trend Fit's marks as a per-row menu, the
+  other hidden slider modes (Expected Payment's "No limit", Trend Fit's "All", Pure Premium's "Not
+  given"), schedules folding under a "row k" input, MCT Ratio loading a filed insurer from its own
+  page, a linked value recomputing from its sender, the Assumptions Bank grouped by locator, desktop
+  side by side.
+- A result table (not a grid) still clips its last column on a phone with no "more columns" line:
+  Loan Schedule's *Balance* at 390 px, the figure that proves the loan is repaid. §2.7's rule
+  should reach `ResultTableView` too.
+- Solve-for on the remaining tools where an exam asks the inverse (Bond Amortization's row k,
+  Trend Factor's trend from a factor).
+- A life annuity tool, for Life Table to hand to.

@@ -10,7 +10,7 @@ const tableLabel = (id: string) => {
 
 export const lifeTable: ToolSpec = {
   id: 'data.life_table',
-  version: '1.0.0',
+  version: '1.0.1',
   name: 'Life Table',
   area: 'data',
   answers: 'What does this published life table give at each age?',
@@ -59,6 +59,8 @@ export const lifeTable: ToolSpec = {
           { key: 'ex', label: 'eₓ', kind: 'number', unit: 'years', computed: true },
         ],
         rows,
+        // The age the tiles are about: eₓ and qₓ are read off this row.
+        highlight: 0,
       },
       trace: [
         { label: `l${x}, read from the table`, formula: provenance(ds), result: col.lx[k], unit: 'count' },

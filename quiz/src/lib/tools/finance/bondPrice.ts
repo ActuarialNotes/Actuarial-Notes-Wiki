@@ -65,7 +65,7 @@ const annuity = (j: number, N: number) => (j === 0 ? N : (1 - (1 + j) ** -N) / j
 
 export const bondPrice: ToolSpec = {
   id: 'finance.bond_price',
-  version: '1.1.0',
+  version: '1.2.0',
   name: 'Bond Price',
   area: 'finance',
   answers: "What's this bond worth at this yield?",
@@ -197,6 +197,12 @@ export const bondPrice: ToolSpec = {
   },
   method: { concepts: ['Bond Price', 'Bonds'], readings: [] },
   next: [
+    {
+      // The other way round: this bond at the price found, for the yield Bond Yield reads off it.
+      tool: 'finance.bond_yield',
+      label: 'Bond Yield',
+      build: (input, output) => ({ face: input.face, coupon: output.values.coupon_rate as number, redemption: input.redemption, years: output.values.years as number, m: input.m, price: output.values.price as number }),
+    },
     {
       tool: 'finance.bond_amortization',
       label: 'Bond Amortization',

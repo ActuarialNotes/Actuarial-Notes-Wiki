@@ -22,7 +22,7 @@ describe('the brief for Claude', () => {
     expect(at.every(i => i > 0)).toBe(true)
     expect([...at].sort((a, b) => a - b)).toEqual(at)
     expect(brief).toContain('step 2 (Age-to-Age Factors) — linked: carries factors')
-    expect(brief).toContain('step 3 (Development to Ultimate) — its result is used by the next step')
+    expect(brief).toContain('step 3 (Development to Ultimate) — linked: carries rows')
     expect(brief).toContain('step 1 (Chain Ladder Method) — the concept it rests on')
     expect(brief).toMatch(/Current input: \{/)
     expect(brief).toMatch(/Current result: Age-to-age averages/)

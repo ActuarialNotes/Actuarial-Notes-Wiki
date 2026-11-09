@@ -11,7 +11,7 @@ export const purePremiumMethod: ToolSpec = {
   fields: [
     { kind: 'number', key: 'pure_premium', label: 'Pure premium', symbol: 'PP', unit: 'money', min: 0, max: 1e12, sliderMax: 2000, step: 1, default: 300, description: 'Projected ultimate loss and LAE per exposure (any per-exposure cost, such as net reinsurance, added in).' },
     { kind: 'number', key: 'fixed', bank: ['fixed-expense'], label: 'Fixed expense per exposure', symbol: 'F', unit: 'money', min: 0, max: 1e12, sliderMax: 500, step: 1, default: 50, description: 'Projected fixed expenses per exposure.' },
-    { kind: 'number', key: 'variable', bank: ['variable-expense', 'expense-ratio'], label: 'Variable expense ratio', symbol: 'V', unit: 'percent', min: 0, max: 1, sliderMax: 0.5, step: 0.0025, default: 0.2, description: 'Variable expenses as a share of premium.' },
+    { kind: 'number', key: 'variable', bank: ['variable-expense'], label: 'Variable expense ratio', symbol: 'V', unit: 'percent', min: 0, max: 1, sliderMax: 0.5, step: 0.0025, default: 0.2, description: 'Variable expenses as a share of premium.' },
     { kind: 'number', key: 'profit', bank: ['profit-provision'], label: 'Profit & contingency', symbol: 'Q', unit: 'percent', judgment: true, min: -0.5, max: 1, sliderMax: 0.2, step: 0.0025, default: 0.05, description: 'The target underwriting profit and contingency provision, as a share of premium.' },
     { kind: 'number', key: 'current', label: 'Current average rate', symbol: 'R₀', unit: 'money', min: 0, max: 1e12, sliderMax: 2000, step: 1, default: 0, zeroLabel: 'Not given', description: 'The current average rate per exposure, for the indicated change (0 to leave it out).' },
   ],

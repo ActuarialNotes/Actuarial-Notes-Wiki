@@ -78,10 +78,10 @@ const amount = (key: string, label: string, symbol: string, filed: string[], dfl
 // The default is CAS Exam 6C, Spring 2017, Q24 (questions/exam-6c/cas6c-2017s-q24.md), $000:
 // capital available 53,000, insurance risk 21,000, credit risk 2,500, the market risk its
 // solution finds (24,470), and the operational risk its own formula gives at that market
-// risk, 8.5% × 47,970 + 9,270 = 11,349.95. The ratio comes to 150.00%.
+// risk, 8.5% × 47,970 + 9,270 = 11,349.95. The ratio comes to 149.9995%, printed 150.00%.
 export const mctRatio: ToolSpec = {
   id: 'capital.mct_ratio',
-  version: '1.0.0',
+  version: '1.0.1',
   name: 'MCT Ratio',
   area: 'capital',
   answers: "What's the MCT ratio?",
@@ -109,9 +109,13 @@ export const mctRatio: ToolSpec = {
     if (!(minimum > 0)) throw new ToolInputError('insurance', 'The margins add up to nothing, so there is no minimum to measure against.')
     const ratio = capital / minimum
     const test = input.test === 'baat' ? 'BAAT' : 'MCT'
+    // Measured against the 100% and 150% lines as the card prints it (to 0.01%), so a ratio
+    // shown as 150.00% never reads as below the target: the published example's market risk is
+    // rounded to the thousand, which puts its exact ratio a thousandth of a percent short.
+    const shown = Math.round(ratio * 1e4) / 1e4
     const warnings: string[] = []
-    if (test === 'MCT' && ratio < MCT_MINIMUM) warnings.push('Below the 100% minimum the MCT guideline requires (§1.2.1).')
-    else if (test === 'MCT' && ratio < MCT_TARGET) warnings.push("Below OSFI's supervisory target of 150% (MCT guideline, §1.2.1).")
+    if (test === 'MCT' && shown < MCT_MINIMUM) warnings.push('Below the 100% minimum the MCT guideline requires (§1.2.1).')
+    else if (test === 'MCT' && shown < MCT_TARGET) warnings.push("Below OSFI's supervisory target of 150% (MCT guideline, §1.2.1).")
     return {
       tiles: [
         { symbol: test, label: 'Total', value: ratio, unit: 'percent' },

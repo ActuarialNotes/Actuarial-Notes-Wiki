@@ -39,7 +39,7 @@ function toEffective(form, rate, m) {
 }
 var interestConverter = {
   id: "finance.interest_converter",
-  version: "1.0.0",
+  version: "1.1.0",
   name: "Interest Converter",
   area: "finance",
   answers: "What's this rate in another form?",
@@ -77,18 +77,20 @@ var interestConverter = {
     const im = m * ((1 + i) ** (1 / m) - 1);
     const dm = m * (1 - (1 + i) ** (-1 / m));
     const v = 1 / (1 + i);
+    const j = im / m;
     const rows = [
       { form: "Effective interest", symbol: "i", value: i },
       { form: "Effective discount", symbol: "d", value: d },
       { form: `Nominal interest, m = ${m}`, symbol: `i${sup(m)}`, value: im },
       { form: `Nominal discount, m = ${m}`, symbol: `d${sup(m)}`, value: dm },
+      { form: `Per period, 1/${m} of a year`, symbol: `i${sup(m)}/${m}`, value: j },
       { form: "Force of interest", symbol: "\u03B4", value: delta }
     ];
     return {
       tiles: [
         { symbol: "i", label: "Effective", value: i, unit: "percent" },
-        { symbol: "d", label: "Discount", value: d, unit: "percent" },
-        { symbol: "\u03B4", label: "Force", value: delta, unit: "percent" }
+        { symbol: `i${sup(m)}`, label: "Nominal", value: im, unit: "percent" },
+        { symbol: "j", label: `Per period, 1/${m} of a year`, value: j, unit: "percent" }
       ],
       table: {
         columns: [
@@ -104,16 +106,22 @@ var interestConverter = {
         { label: "Force of interest", formula: "\u03B4 = ln(1 + i)", result: delta, unit: "percent" },
         { label: `Nominal interest, m = ${m}`, formula: `i${sup(m)} = m[(1 + i)^(1/m) \u2212 1]`, result: im, unit: "percent" },
         { label: `Nominal discount, m = ${m}`, formula: `d${sup(m)} = m[1 \u2212 (1 + i)^(\u22121/m)]`, result: dm, unit: "percent" },
+        { label: "Rate per period", formula: `j = i${sup(m)} / ${m}`, result: j, unit: "percent" },
         { label: "Discount factor", formula: "v = 1 / (1 + i)", result: v, unit: "factor" }
       ],
       warnings: [],
-      values: { i, d, delta, nominal_interest: im, nominal_discount: dm, v, m }
+      values: { i, d, delta, nominal_interest: im, nominal_discount: dm, per_period: j, v, m }
     };
   },
   method: {
     concepts: ["Effective Rate", "Effective Discount Rate", "Nominal Interest Rate Convertible m-thly", "Force of Interest"],
     readings: []
-  }
+  },
+  // The rate per payment period, for payments m times a year.
+  next: [
+    { tool: "finance.annuity", label: "Annuity", build: (_input, output) => ({ i: Number(output.values.per_period) }) },
+    { tool: "finance.loan_schedule", label: "Loan Schedule", build: (_input, output) => ({ i: Number(output.values.per_period) }) }
+  ]
 };
 
 // src/lib/tools/format.ts
@@ -121,13 +129,13 @@ function formatValue(value, unit) {
   if (!Number.isFinite(value)) return "\u2014";
   switch (unit) {
     case "percent":
-      return `${trim(value * 100, 3)}%`;
+      return `${(value * 100).toFixed(2)}%`;
     case "factor":
       return value.toFixed(4);
     case "money":
       return value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     case "count":
-      return value.toLocaleString("en-US", { maximumFractionDigits: Number.isInteger(value) ? 0 : 2 });
+      return value.toLocaleString("en-US", { maximumFractionDigits: 0 });
     case "years":
       return trim(value, 2);
     default:
@@ -138,147 +146,6 @@ function trim(value, places2) {
   const fixed = value.toFixed(places2);
   return fixed.includes(".") ? fixed.replace(/\.?0+$/, "") : fixed;
 }
-
-// src/lib/tools/finance/annuity.ts
-var annuity = {
-  id: "finance.annuity",
-  version: "1.0.0",
-  name: "Annuity",
-  area: "finance",
-  answers: "What's a level annuity worth today, and when it ends?",
-  aka: ["annuity immediate", "annuity due", "perpetuity"],
-  fields: [
-    {
-      kind: "choice",
-      key: "timing",
-      label: "Payments",
-      description: "Whether each payment is at the end of its period (immediate) or the start (due).",
-      options: [{ value: "immediate", label: "Immediate" }, { value: "due", label: "Due" }],
-      default: "immediate"
-    },
-    { kind: "number", key: "payment", label: "Payment", symbol: "P", unit: "money", min: 0, max: 1e12, sliderMax: 1e4, step: 10, default: 100, description: "The level payment each period." },
-    { kind: "number", key: "n", label: "Periods", symbol: "n", unit: "count", integer: true, min: 1, max: 1200, sliderMax: 60, step: 1, default: 10, description: "How many payments." },
-    { kind: "number", key: "i", bank: ["discount-rate"], label: "Rate per period", symbol: "i", unit: "percent", min: 0, max: 1, sliderMax: 0.2, step: 25e-4, default: 0.05, description: "The effective rate per payment period, as a decimal." }
-  ],
-  notation: (input) => {
-    const due = input.timing === "due";
-    return due ? "PV = P \xB7 \xE4\u2309n = P(1 \u2212 v\u207F)/d" : "PV = P \xB7 a\u2309n = P(1 \u2212 v\u207F)/i";
-  },
-  view: "none",
-  compute: (input) => {
-    const due = input.timing === "due";
-    const P2 = Number(input.payment);
-    const n = Number(input.n);
-    const i = Number(input.i);
-    const v = 1 / (1 + i);
-    const an = i === 0 ? n : (1 - v ** n) / i;
-    const sn = i === 0 ? n : ((1 + i) ** n - 1) / i;
-    const factor = due ? an * (1 + i) : an;
-    const accumulation = due ? sn * (1 + i) : sn;
-    const symbol = due ? "\xE4" : "a";
-    const ssymbol = due ? "s\u0308" : "s";
-    return {
-      tiles: [
-        { symbol: "PV", label: "Today", value: P2 * factor, unit: "money" },
-        { symbol: "FV", label: "At n", value: P2 * accumulation, unit: "money" },
-        { symbol: `${symbol}\u2309n`, label: "Factor", value: factor, unit: "factor" }
-      ],
-      trace: [
-        { label: "Discount factor", formula: `v = 1/(1 + ${i})`, result: v, unit: "factor" },
-        { label: "Annuity-immediate factor", formula: i === 0 ? "a\u2309n = n" : `a\u2309n = (1 \u2212 v^${n}) / ${i}`, result: an, unit: "factor" },
-        ...due ? [{ label: "Annuity-due factor", formula: "\xE4\u2309n = a\u2309n \xB7 (1 + i)", result: factor, unit: "factor" }] : [],
-        { label: "Present value", formula: `PV = ${P2} \xD7 ${symbol}\u2309n`, result: P2 * factor, unit: "money" },
-        { label: "Accumulated value", formula: `FV = ${P2} \xD7 ${ssymbol}\u2309n`, result: P2 * accumulation, unit: "money" }
-      ],
-      warnings: [],
-      values: { present_value: P2 * factor, accumulated_value: P2 * accumulation, annuity_factor: factor, accumulation_factor: accumulation },
-      summary: `Annuity-${due ? "due" : "immediate"}: present value ${formatValue(P2 * factor, "money")}, accumulated value ${formatValue(P2 * accumulation, "money")} at the end of period ${n} (factor ${formatValue(factor, "factor")}).`
-    };
-  },
-  method: { concepts: ["Annuity Immediate", "Annuity Due"], readings: [] }
-};
-
-// src/lib/tools/finance/presentValue.ts
-var presentValue = {
-  id: "finance.present_value",
-  version: "1.0.0",
-  name: "Present Value",
-  area: "finance",
-  answers: "What are these cash flows worth today?",
-  aka: ["NPV", "PV", "discount", "accumulated value", "FV"],
-  fields: [
-    { kind: "number", key: "i", bank: ["discount-rate"], label: "Rate", symbol: "i", unit: "percent", min: -0.5, max: 1, sliderMax: 0.2, step: 25e-4, default: 0.05, description: "The effective annual rate, as a decimal." },
-    {
-      kind: "table",
-      key: "flows",
-      label: "Cash flows",
-      minRows: 1,
-      maxRows: 500,
-      description: "Each cash flow: its time from today (in years, or in whatever period the rate is per), its amount (negative for an outflow), and optionally the t-year spot rate to discount it at. Left blank, the flow is discounted at the rate above.",
-      columns: [
-        { key: "time", label: "Time t", kind: "number", unit: "years" },
-        { key: "amount", label: "Amount", kind: "number", unit: "money" },
-        { key: "spot", label: "Spot rate", kind: "number", unit: "percent", optional: true }
-      ],
-      default: [
-        { time: 1, amount: 100, spot: null },
-        { time: 2, amount: 100, spot: null },
-        { time: 3, amount: 100, spot: null }
-      ]
-    }
-  ],
-  notation: () => "PV = \u03A3 CF\u209C \xB7 (1 + i\u209C)\u207B\u1D57",
-  view: "table",
-  grid: "flows",
-  compute: (input) => {
-    const i = Number(input.i);
-    const flows2 = input.flows;
-    const v = 1 / (1 + i);
-    const rows = flows2.map((r) => {
-      if (r.spot != null && Math.abs(Number(r.spot)) > 1) {
-        throw new ToolInputError("flows", `The spot rate at t = ${r.time} must be a decimal: write ${Number(r.spot) / 100} or "${r.spot}%".`);
-      }
-      const t = Number(r.time);
-      const amount2 = Number(r.amount);
-      const discount = r.spot == null ? v ** t : (1 + Number(r.spot)) ** -t;
-      return Object.assign({}, r, { discount, pv: amount2 * discount });
-    });
-    const pv = rows.reduce((s, r) => s + r.pv, 0);
-    const total = rows.reduce((s, r) => s + Number(r.amount), 0);
-    const warnings = flows2.some((r) => Number(r.time) < 0) ? ["A cash flow has a negative time: it is accumulated to today, not discounted."] : [];
-    return {
-      tiles: [
-        { symbol: "PV", label: "Today", value: pv, unit: "money" },
-        { symbol: "\u03A3CF", label: "Undiscounted", value: total, unit: "money" }
-      ],
-      table: {
-        columns: [
-          { key: "time", label: "Time t", kind: "number", unit: "years" },
-          { key: "amount", label: "Amount", kind: "number", unit: "money" },
-          { key: "spot", label: "Spot rate", kind: "number", unit: "percent" },
-          { key: "discount", label: "v\u1D57", kind: "number", unit: "factor", computed: true },
-          { key: "pv", label: "PV", kind: "number", unit: "money", computed: true }
-        ],
-        rows,
-        footer: { time: "Total", amount: total, spot: null, discount: null, pv }
-      },
-      trace: [
-        { label: "Discount factor", formula: `v = 1/(1 + ${i})`, result: v, unit: "factor" },
-        ...rows.slice(0, 12).map((r) => ({
-          label: `PV at t = ${r.time}`,
-          formula: r.spot == null ? `${r.amount} \xD7 v^${r.time}` : `${r.amount} \xD7 (1 + ${r.spot})^\u2212${r.time}`,
-          result: r.pv,
-          unit: "money"
-        })),
-        { label: "Present value", formula: "\u03A3 CF\u209C v\u1D57", result: pv, unit: "money" }
-      ],
-      warnings,
-      values: { present_value: pv, undiscounted: total, v },
-      summary: `Present value ${formatValue(pv, "money")} of ${formatValue(total, "money")} in undiscounted cash flows at ${formatValue(i, "percent")}.`
-    };
-  },
-  method: { concepts: ["Present Value", "Discount Function"], readings: [] }
-};
 
 // src/lib/distributionMath.ts
 var LANCZOS_COEFFS = [
@@ -515,6 +382,295 @@ var RATE_GRID = (() => {
   return grid;
 })();
 
+// src/lib/tools/finance/annuity.ts
+var UNKNOWNS = ["pv", "payment", "n", "i"];
+var SOLVE = {
+  kind: "choice",
+  key: "solve",
+  label: "Solve for",
+  description: "Which quantity is the answer: the present value (the default), the payment, the number of payments or the rate per period. The field for the chosen quantity is not read; every other one is.",
+  options: [
+    { value: "pv", label: "PV" },
+    { value: "payment", label: "Payment" },
+    { value: "n", label: "Periods" },
+    { value: "i", label: "Rate" }
+  ],
+  default: "pv"
+};
+var unless = (u) => ({ field: "solve", in: UNKNOWNS.filter((x) => x !== u) });
+var PV = {
+  kind: "number",
+  key: "pv",
+  label: "Present value",
+  symbol: "PV",
+  unit: "money",
+  min: 0.01,
+  max: 1e12,
+  sliderMax: 1e4,
+  step: 10,
+  default: 772.1735,
+  description: "The present value of the payments. Read only when solving for the payment, the number of payments or the rate.",
+  showWhen: unless("pv")
+};
+function annuityFactor(i, n, due) {
+  const an = i === 0 ? n : (1 - (1 + i) ** -n) / i;
+  return due ? an * (1 + i) : an;
+}
+var annuity = {
+  id: "finance.annuity",
+  version: "1.1.0",
+  name: "Annuity",
+  area: "finance",
+  answers: "What's a level annuity worth today, and when it ends?",
+  aka: ["annuity immediate", "annuity due", "perpetuity", "payment", "number of payments", "solve"],
+  fields: [
+    SOLVE,
+    {
+      kind: "choice",
+      key: "timing",
+      label: "Payments",
+      description: "Whether each payment is at the end of its period (immediate) or the start (due).",
+      options: [{ value: "immediate", label: "Immediate" }, { value: "due", label: "Due" }],
+      default: "immediate"
+    },
+    { kind: "number", key: "payment", label: "Payment", symbol: "P", unit: "money", min: 0, max: 1e12, sliderMax: 1e4, step: 10, default: 100, description: "The level payment each period. Not read when solving for it.", showWhen: unless("payment") },
+    { kind: "number", key: "n", label: "Periods", symbol: "n", unit: "count", integer: true, min: 1, max: 1200, sliderMax: 60, step: 1, default: 10, description: "How many payments. Not read when solving for it.", showWhen: unless("n") },
+    { kind: "number", key: "i", bank: ["discount-rate"], label: "Rate per period", symbol: "i", unit: "percent", min: 0, max: 1, sliderMax: 0.2, step: 25e-4, default: 0.05, description: "The effective rate per payment period, as a decimal. Not read when solving for it.", showWhen: unless("i") },
+    PV
+  ],
+  solveFor: "solve",
+  notation: (input) => {
+    const due = input.timing === "due";
+    const a = due ? "\xE4\u2309n" : "a\u2309n";
+    switch (String(input.solve ?? "pv")) {
+      case "payment":
+        return `P = PV / ${a}`;
+      case "n":
+        return due ? "n = \u2212ln(1 \u2212 d \xB7 PV/P) / ln(1 + i)" : "n = \u2212ln(1 \u2212 i \xB7 PV/P) / ln(1 + i)";
+      case "i":
+        return `PV = P \xB7 ${a}, solved for i`;
+      default:
+        return due ? "PV = P \xB7 \xE4\u2309n = P(1 \u2212 v\u207F)/d" : "PV = P \xB7 a\u2309n = P(1 \u2212 v\u207F)/i";
+    }
+  },
+  view: "none",
+  compute: (input) => {
+    const solve = String(input.solve ?? "pv");
+    const due = input.timing === "due";
+    let P2 = Number(input.payment);
+    let n = Number(input.n);
+    let i = Number(input.i);
+    const warnings = [];
+    const steps = [];
+    const a = due ? "\xE4" : "a";
+    if (solve === "payment") {
+      const pv2 = Number(input.pv);
+      P2 = pv2 / annuityFactor(i, n, due);
+      steps.push({ label: "Payment", formula: `${formatValue(pv2, "money")} / ${a}\u2309${n}`, result: P2, unit: "money" });
+    } else if (solve === "n") {
+      const pv2 = Number(input.pv);
+      if (!(P2 > 0)) throw new ToolInputError("payment", "Give a payment above zero: with none, no number of payments adds up to a present value.");
+      const target = pv2 / P2 / (due ? 1 + i : 1);
+      if (i === 0) {
+        n = target;
+      } else {
+        const vn = 1 - i * target;
+        if (vn <= 0) {
+          const perpetuity = P2 * (due ? 1 + i : 1) / i;
+          throw new ToolInputError("pv", `A present value of ${formatValue(pv2, "money")} is at least what the payments are worth forever (${formatValue(perpetuity, "money")}), so no number of them reaches it.`);
+        }
+        n = -Math.log(vn) / Math.log(1 + i);
+      }
+      if (Math.abs(n - Math.round(n)) > 1e-6) {
+        warnings.push(`It takes ${n.toFixed(4)} payments, not a whole number: ${Math.floor(n)} full payments fall short of the present value and ${Math.ceil(n)} pass it.`);
+      }
+      steps.push({ label: "Number of payments", formula: `\u2212ln(1 \u2212 i \xB7 ${a}\u2309n) / ln(1 + i), ${a}\u2309n = ${formatValue(pv2, "money")} / ${formatValue(P2, "money")}`, result: n, unit: "count" });
+    } else if (solve === "i") {
+      const pv2 = Number(input.pv);
+      if (!(P2 > 0)) throw new ToolInputError("payment", "Give a payment above zero: with none, no rate makes the payments worth the present value.");
+      const roots = rootsOn((r) => P2 * annuityFactor(r, n, due) - pv2, RATE_GRID);
+      if (!roots.length) throw new ToolInputError("pv", `No rate between \u221299% and 1,000% makes ${n} payments of ${formatValue(P2, "money")} worth ${formatValue(pv2, "money")}.`);
+      i = roots[0];
+      if (i < 0) warnings.push(`The payments add up to less than the present value, so the rate is negative.`);
+      steps.push({ label: "Rate per period", formula: `the i where ${formatValue(P2, "money")} \xD7 ${a}\u2309${n} = ${formatValue(pv2, "money")}, by bisection`, result: i, unit: "percent" });
+    }
+    const v = 1 / (1 + i);
+    const an = i === 0 ? n : (1 - v ** n) / i;
+    const sn = i === 0 ? n : ((1 + i) ** n - 1) / i;
+    const factor2 = due ? an * (1 + i) : an;
+    const accumulation = due ? sn * (1 + i) : sn;
+    const pv = P2 * factor2;
+    const fv = P2 * accumulation;
+    const symbol = due ? "\xE4" : "a";
+    const ssymbol = due ? "s\u0308" : "s";
+    const pvTile = { symbol: "PV", label: "Present value", value: pv, unit: "money" };
+    const fvTile = { symbol: "FV", label: "Accumulated at n", value: fv, unit: "money" };
+    const factorTile = { symbol: `${symbol}\u2309n`, label: "Annuity factor", value: factor2, unit: "factor" };
+    const tiles = solve === "payment" ? [{ symbol: "P", label: "Payment", value: P2, unit: "money" }, fvTile, factorTile] : solve === "n" ? [{ symbol: "n", label: "Periods", value: n, unit: "plain" }, fvTile, factorTile] : solve === "i" ? [{ symbol: "i", label: "Rate per period", value: i, unit: "percent" }, fvTile, factorTile] : [pvTile, fvTile, factorTile];
+    return {
+      tiles,
+      trace: [
+        ...steps,
+        { label: "Discount factor", formula: `v = 1/(1 + ${Number(i.toFixed(8))})`, result: v, unit: "factor" },
+        { label: "Annuity-immediate factor", formula: i === 0 ? "a\u2309n = n" : `a\u2309n = (1 \u2212 v^${Number(n.toFixed(4))}) / ${Number(i.toFixed(8))}`, result: an, unit: "factor" },
+        ...due ? [{ label: "Annuity-due factor", formula: "\xE4\u2309n = a\u2309n \xB7 (1 + i)", result: factor2, unit: "factor" }] : [],
+        { label: "Present value", formula: `PV = ${Number(P2.toFixed(6))} \xD7 ${symbol}\u2309n`, result: pv, unit: "money" },
+        { label: "Accumulated value", formula: `FV = ${Number(P2.toFixed(6))} \xD7 ${ssymbol}\u2309n`, result: fv, unit: "money" }
+      ],
+      warnings,
+      values: {
+        solve,
+        payment: P2,
+        n,
+        i,
+        timing: due ? "due" : "immediate",
+        present_value: pv,
+        accumulated_value: fv,
+        annuity_factor: factor2,
+        accumulation_factor: accumulation
+      },
+      summary: solve === "payment" ? `A payment of ${formatValue(P2, "money")} a period for ${n} periods (annuity-${due ? "due" : "immediate"}) is worth ${formatValue(pv, "money")} at ${formatValue(i, "percent")}.` : solve === "n" ? `${Number(n.toFixed(4))} payments of ${formatValue(P2, "money")} (annuity-${due ? "due" : "immediate"}) are worth ${formatValue(pv, "money")} at ${formatValue(i, "percent")}.` : solve === "i" ? `A rate of ${formatValue(i, "percent")} a period makes ${n} payments of ${formatValue(P2, "money")} (annuity-${due ? "due" : "immediate"}) worth ${formatValue(pv, "money")}.` : `Annuity-${due ? "due" : "immediate"}: present value ${formatValue(pv, "money")}, accumulated value ${formatValue(fv, "money")} at the end of period ${n} (factor ${formatValue(factor2, "factor")}).`
+    };
+  },
+  method: { concepts: ["Annuity Immediate", "Annuity Due"], readings: [] },
+  next: [
+    {
+      // The annuity as cash flows: the present value paid at 0, the payments received.
+      tool: "finance.internal_rate_of_return",
+      label: "Internal Rate of Return",
+      build: (_input, output) => {
+        const n = Math.round(Number(output.values.n));
+        const P2 = Number(output.values.payment);
+        const due = output.values.timing === "due";
+        if (!(n >= 1 && n <= 500)) return {};
+        const flows2 = Array.from({ length: n }, (_, k) => ({ time: due ? k : k + 1, amount: P2 }));
+        if (due) flows2[0] = { time: 0, amount: P2 - Number(output.values.present_value) };
+        else flows2.unshift({ time: 0, amount: -Number(output.values.present_value) });
+        return { flows: flows2 };
+      }
+    }
+  ]
+};
+
+// src/lib/tools/finance/presentValue.ts
+var discountAt = (r, i) => r.spot == null ? (1 + i) ** -Number(r.time) : (1 + Number(r.spot)) ** -Number(r.time);
+var presentValue = {
+  id: "finance.present_value",
+  version: "1.1.0",
+  name: "Present Value",
+  area: "finance",
+  answers: "What are these cash flows worth today?",
+  aka: ["NPV", "PV", "discount", "accumulated value", "FV", "yield", "solve"],
+  fields: [
+    {
+      kind: "choice",
+      key: "solve",
+      label: "Solve for",
+      description: "Which quantity is the answer: the present value (the default), or the rate at which the flows are worth the present value given. The field for the chosen quantity is not read.",
+      options: [{ value: "pv", label: "PV" }, { value: "i", label: "Rate" }],
+      default: "pv"
+    },
+    { kind: "number", key: "i", bank: ["discount-rate"], label: "Rate", symbol: "i", unit: "percent", min: -0.5, max: 1, sliderMax: 0.2, step: 25e-4, default: 0.05, description: "The effective annual rate, as a decimal. Not read when solving for it.", showWhen: { field: "solve", in: ["pv"] } },
+    {
+      kind: "number",
+      key: "pv",
+      label: "Present value",
+      symbol: "PV",
+      unit: "money",
+      min: -1e12,
+      max: 1e12,
+      sliderMin: 0,
+      sliderMax: 1e3,
+      step: 1,
+      default: 272.32,
+      description: "What the flows are worth today: the price paid for them. Read only when solving for the rate.",
+      showWhen: { field: "solve", in: ["i"] }
+    },
+    {
+      kind: "table",
+      key: "flows",
+      label: "Cash flows",
+      minRows: 1,
+      maxRows: 500,
+      description: "Each cash flow: its time from today (in years, or in whatever period the rate is per), its amount (negative for an outflow), and optionally the t-year spot rate to discount it at. Left blank, the flow is discounted at the rate above.",
+      columns: [
+        { key: "time", label: "Time t", kind: "number", unit: "years" },
+        { key: "amount", label: "Amount", kind: "number", unit: "money" },
+        { key: "spot", label: "Spot rate", kind: "number", unit: "percent", optional: true }
+      ],
+      default: [
+        { time: 1, amount: 100, spot: null },
+        { time: 2, amount: 100, spot: null },
+        { time: 3, amount: 100, spot: null }
+      ]
+    }
+  ],
+  solveFor: "solve",
+  notation: (input) => input.solve === "i" ? "PV = \u03A3 CF\u209C \xB7 (1 + i)\u207B\u1D57, solved for i" : "PV = \u03A3 CF\u209C \xB7 (1 + i\u209C)\u207B\u1D57",
+  view: "table",
+  grid: "flows",
+  compute: (input) => {
+    const solve = String(input.solve ?? "pv");
+    const flows2 = input.flows;
+    for (const r of flows2) {
+      if (r.spot != null && Math.abs(Number(r.spot)) > 1) {
+        throw new ToolInputError("flows", `The spot rate at t = ${r.time} must be a decimal: write ${Number(r.spot) / 100} or "${r.spot}%".`);
+      }
+    }
+    let i = Number(input.i);
+    const solving = [];
+    const warnings = [];
+    if (solve === "i") {
+      const target = Number(input.pv);
+      if (flows2.every((r) => r.spot != null)) throw new ToolInputError("flows", "Every flow has its own spot rate, so no one rate changes what they are worth. Clear the spot rates to solve for the rate.");
+      const roots = rootsOn((x) => flows2.reduce((s, r) => s + Number(r.amount) * discountAt(r, x), 0) - target, RATE_GRID);
+      if (!roots.length) throw new ToolInputError("pv", `No rate between \u221299% and 1,000% makes these flows worth ${formatValue(target, "money")}.`);
+      i = [...roots].sort((a, b) => Math.abs(a) - Math.abs(b))[0];
+      if (roots.length > 1) warnings.push(`${roots.length} rates make these flows worth ${formatValue(target, "money")}: ${roots.map((r) => formatValue(r, "percent")).join(", ")}. The one nearest zero is shown.`);
+      solving.push({ label: "Rate", formula: `the i where \u03A3 CF\u209C v\u1D57 = ${formatValue(target, "money")}, by bisection`, result: i, unit: "percent" });
+    }
+    const v = 1 / (1 + i);
+    const rows = flows2.map((r) => {
+      const discount = discountAt(r, i);
+      return Object.assign({}, r, { discount, pv: Number(r.amount) * discount });
+    });
+    const pv = rows.reduce((s, r) => s + r.pv, 0);
+    const total = rows.reduce((s, r) => s + Number(r.amount), 0);
+    if (flows2.some((r) => Number(r.time) < 0)) warnings.push("A cash flow has a negative time: it is accumulated to today, not discounted.");
+    const pvTile = { symbol: "PV", label: "Present value", value: pv, unit: "money" };
+    const totalTile = { symbol: "\u03A3CF", label: "Undiscounted", value: total, unit: "money" };
+    return {
+      tiles: solve === "i" ? [{ symbol: "i", label: "Rate", value: i, unit: "percent" }, pvTile, totalTile] : [pvTile, totalTile],
+      table: {
+        columns: [
+          { key: "time", label: "Time t", kind: "number", unit: "years" },
+          { key: "amount", label: "Amount", kind: "number", unit: "money" },
+          { key: "spot", label: "Spot rate", kind: "number", unit: "percent" },
+          { key: "discount", label: "v\u1D57", kind: "number", unit: "factor", computed: true },
+          { key: "pv", label: "PV", kind: "number", unit: "money", computed: true }
+        ],
+        rows,
+        footer: { time: "Total", amount: total, spot: null, discount: null, pv }
+      },
+      trace: [
+        ...solving,
+        { label: "Discount factor", formula: `v = 1/(1 + ${Number(i.toFixed(8))})`, result: v, unit: "factor" },
+        ...rows.slice(0, 12).map((r) => ({
+          label: `PV at t = ${r.time}`,
+          formula: r.spot == null ? `${r.amount} \xD7 v^${r.time}` : `${r.amount} \xD7 (1 + ${r.spot})^\u2212${r.time}`,
+          result: r.pv,
+          unit: "money"
+        })),
+        { label: "Present value", formula: "\u03A3 CF\u209C v\u1D57", result: pv, unit: "money" }
+      ],
+      warnings,
+      values: { solve, present_value: pv, undiscounted: total, v, i },
+      summary: solve === "i" ? `At ${formatValue(i, "percent")} the cash flows are worth ${formatValue(pv, "money")} (${formatValue(total, "money")} undiscounted).` : `Present value ${formatValue(pv, "money")} of ${formatValue(total, "money")} in undiscounted cash flows at ${formatValue(i, "percent")}.`
+    };
+  },
+  method: { concepts: ["Present Value", "Discount Function"], readings: [] }
+};
+
 // src/lib/tools/finance/internalRateOfReturn.ts
 var TIME = { key: "time", label: "Time t", kind: "number", unit: "years" };
 var AMOUNT = { key: "amount", label: "Amount", kind: "number", unit: "money" };
@@ -599,84 +755,114 @@ function signChanges(flows2) {
 
 // src/lib/tools/finance/loanSchedule.ts
 var MAX_PAYMENTS = 1200;
+var UNKNOWNS2 = ["payment", "n", "amount", "i", "balance"];
+var SOLVE2 = {
+  kind: "choice",
+  key: "solve",
+  label: "Solve for",
+  description: "Which quantity is the answer: the level payment (the default), the number of payments of a given P (the last a smaller drop payment), the amount borrowed, the rate per period, or the balance left after n payments of P. The field for the chosen quantity is not read; every other one is.",
+  options: [
+    { value: "payment", label: "Payment" },
+    { value: "n", label: "Term" },
+    { value: "amount", label: "Amount" },
+    { value: "i", label: "Rate" },
+    { value: "balance", label: "Balance" }
+  ],
+  default: "payment"
+};
+var unless2 = (...u) => ({ field: "solve", in: UNKNOWNS2.filter((x) => !u.includes(x)) });
+var AMOUNT2 = { kind: "number", key: "amount", label: "Amount borrowed", symbol: "L", unit: "money", min: 0.01, max: 1e12, sliderMax: 1e5, step: 100, default: 1e4, description: "The loan amount at time 0. Not read when solving for it.", showWhen: unless2("amount") };
+var RATE = { kind: "number", key: "i", label: "Rate per period", symbol: "i", unit: "percent", min: 0, max: 1, sliderMax: 0.2, step: 25e-4, default: 0.05, description: "The effective rate per payment period, as a decimal (a quarterly loan at 16% convertible quarterly is 0.04). Not read when solving for it.", showWhen: unless2("i") };
+var PAYMENT = { kind: "number", key: "payment", label: "Payment", symbol: "P", unit: "money", min: 0, max: 1e12, sliderMax: 1e4, step: 10, default: 1295.0457, description: "The payment each period. Not read when solving for it.", showWhen: unless2("payment") };
+var COUNT = { kind: "number", key: "n", label: "Payments", symbol: "n", unit: "count", integer: true, min: 1, max: MAX_PAYMENTS, sliderMax: 60, step: 1, default: 10, description: `How many payments, at most ${MAX_PAYMENTS}. Not read when solving for the number of payments.`, showWhen: unless2("n") };
+var factor = (i, n) => i === 0 ? n : (1 - (1 + i) ** -n) / i;
+function schedule(L, i, P2, n, level) {
+  const rows = [];
+  let balance = L;
+  for (let k = 1; k <= (n ?? MAX_PAYMENTS); k++) {
+    const interest = balance * i;
+    const payment = n === null && balance + interest <= P2 ? balance + interest : P2;
+    balance = balance + interest - payment;
+    if (level && k === n) balance = 0;
+    rows.push({ k, payment, interest, principal: payment - interest, balance });
+    if (n === null && balance <= 1e-9) {
+      rows[rows.length - 1].balance = 0;
+      break;
+    }
+  }
+  return rows;
+}
 var loanSchedule = {
   id: "finance.loan_schedule",
-  version: "1.0.0",
+  version: "2.0.0",
   name: "Loan Schedule",
   area: "finance",
   answers: "How is this loan repaid, payment by payment?",
-  aka: ["amortization", "outstanding balance", "mortgage"],
-  fields: [
-    { kind: "number", key: "amount", label: "Amount borrowed", symbol: "L", unit: "money", min: 0.01, max: 1e12, sliderMax: 1e5, step: 100, default: 1e4, description: "The loan amount at time 0." },
-    { kind: "number", key: "i", label: "Rate per period", symbol: "i", unit: "percent", min: 0, max: 1, sliderMax: 0.2, step: 25e-4, default: 0.05, description: "The effective rate per payment period, as a decimal (a quarterly loan at 16% convertible quarterly is 0.04)." },
-    {
-      kind: "number",
-      key: "payment",
-      label: "Payment",
-      symbol: "P",
-      unit: "money",
-      min: 0,
-      max: 1e12,
-      sliderMax: 1e4,
-      step: 10,
-      default: 0,
-      zeroLabel: "Level",
-      description: "The payment each period. 0 means the level payment that repays the loan in n payments; any other amount is paid as given."
-    },
-    {
-      kind: "number",
-      key: "n",
-      label: "Payments",
-      symbol: "n",
-      unit: "count",
-      integer: true,
-      min: 0,
-      max: MAX_PAYMENTS,
-      sliderMax: 60,
-      step: 1,
-      default: 10,
-      zeroLabel: "As needed",
-      description: `How many payments. With a payment given, 0 means as many as it takes, the last a smaller drop payment; at most ${MAX_PAYMENTS}.`
+  aka: ["amortization", "outstanding balance", "mortgage", "drop payment", "level payment", "solve"],
+  fields: [SOLVE2, AMOUNT2, RATE, PAYMENT, COUNT],
+  solveFor: "solve",
+  notation: (input) => {
+    switch (String(input.solve ?? "payment")) {
+      case "n":
+        return "B\u2096 = B\u2096\u208B\u2081(1 + i) \u2212 P, until it is repaid";
+      case "amount":
+        return "L = P \xB7 a\u2309n";
+      case "i":
+        return "L = P \xB7 a\u2309n, solved for i";
+      case "balance":
+        return "B\u2099 = L(1 + i)\u207F \u2212 P \xB7 s\u2309n";
+      default:
+        return "P = L / a\u2309n,  B\u2096 = B\u2096\u208B\u2081(1 + i) \u2212 P";
     }
-  ],
-  notation: (input) => Number(input.payment) === 0 ? "P = L / a\u2309n,  B\u2096 = B\u2096\u208B\u2081(1 + i) \u2212 P" : "B\u2096 = B\u2096\u208B\u2081(1 + i) \u2212 P",
+  },
   view: "table",
   compute: (input) => {
-    const L = Number(input.amount);
-    const i = Number(input.i);
-    const given = Number(input.payment);
+    const solve = String(input.solve ?? "payment");
+    let L = Number(input.amount);
+    let i = Number(input.i);
+    let P2 = Number(input.payment);
     const n = Number(input.n);
-    const level = given === 0;
-    if (level && n === 0) throw new ToolInputError("n", "Give the number of payments, or a payment: with neither there is no schedule.");
-    if (!level && n === 0 && given <= L * i) {
-      throw new ToolInputError("payment", `A payment of ${formatValue(given, "money")} doesn't cover the first period's interest of ${formatValue(L * i, "money")}, so the loan is never repaid.`);
+    const warnings = [];
+    const steps = [];
+    if (solve !== "payment" && !(P2 > 0)) throw new ToolInputError("payment", "Give a payment above zero.");
+    if (solve === "payment") {
+      const an = factor(i, n);
+      P2 = L / an;
+      steps.push({ label: "Annuity factor", formula: `a\u2309${n} at ${formatValue(i, "percent")}`, result: an, unit: "factor" }, { label: "Level payment", formula: `${L} / a\u2309${n}`, result: P2, unit: "money" });
+    } else if (solve === "amount") {
+      const an = factor(i, n);
+      L = P2 * an;
+      steps.push({ label: "Annuity factor", formula: `a\u2309${n} at ${formatValue(i, "percent")}`, result: an, unit: "factor" }, { label: "Amount borrowed", formula: `${P2} \xD7 a\u2309${n}`, result: L, unit: "money" });
+    } else if (solve === "i") {
+      const roots = rootsOn((r) => P2 * factor(r, n) - L, RATE_GRID);
+      if (!roots.length) throw new ToolInputError("payment", `No rate between \u221299% and 1,000% has ${n} payments of ${formatValue(P2, "money")} repay ${formatValue(L, "money")}.`);
+      i = roots[0];
+      if (i < 0) warnings.push("The payments add up to less than the amount borrowed, so the rate is negative.");
+      steps.push({ label: "Rate per period", formula: `the i where ${P2} \xD7 a\u2309${n} = ${L}, by bisection`, result: i, unit: "percent" });
+    } else if (solve === "n" && P2 <= L * i) {
+      throw new ToolInputError("payment", `A payment of ${formatValue(P2, "money")} doesn't cover the first period's interest of ${formatValue(L * i, "money")}, so the loan is never repaid.`);
     }
-    const an = i === 0 ? n : (1 - (1 + i) ** -n) / i;
-    const P2 = level ? L / an : given;
-    const rows = [];
-    let balance = L;
-    for (let k = 1; k <= (n || MAX_PAYMENTS); k++) {
-      const interest = balance * i;
-      const payment = !level && n === 0 && balance + interest <= P2 ? balance + interest : P2;
-      balance = balance + interest - payment;
-      if (level && k === n) balance = 0;
-      rows.push({ k, payment, interest, principal: payment - interest, balance });
-      if (!level && n === 0 && balance <= 1e-9) {
-        balance = 0;
-        break;
-      }
-    }
-    if (!level && n === 0 && balance > 0) throw new ToolInputError("payment", `The loan isn't repaid within ${MAX_PAYMENTS} payments.`);
+    const level = solve === "payment" || solve === "amount" || solve === "i";
+    const rows = schedule(L, i, P2, solve === "n" ? null : n, level);
+    const last2 = rows[rows.length - 1];
+    if (Math.abs(last2.balance) < 5e-3) last2.balance = 0;
+    if (solve === "n" && last2.balance > 0) throw new ToolInputError("payment", `The loan isn't repaid within ${MAX_PAYMENTS} payments.`);
+    if (solve === "balance" && last2.balance < -1e-9) warnings.push(`The payments overpay the loan: the balance after payment ${n} is negative.`);
     const totalPaid = rows.reduce((s, r) => s + r.payment, 0);
     const totalInterest = rows.reduce((s, r) => s + r.interest, 0);
-    const last2 = rows[rows.length - 1];
-    const warnings = !level && n > 0 && balance < -1e-9 ? [`The payments overpay the loan: the balance after payment ${n} is negative.`] : [];
+    const interestTile = { symbol: "\u03A3I", label: "Total interest", value: totalInterest, unit: "money" };
+    const paidTile = { symbol: "\u03A3P\u2096", label: "Total paid", value: totalPaid, unit: "money" };
+    const tiles = solve === "n" ? [
+      { symbol: "n", label: "Payments", value: rows.length, unit: "count" },
+      { symbol: `P${subscript(last2.k)}`, label: "Drop payment", value: last2.payment, unit: "money" },
+      interestTile
+    ] : [
+      solve === "amount" ? { symbol: "L", label: "Amount borrowed", value: L, unit: "money" } : solve === "i" ? { symbol: "i", label: "Rate per period", value: i, unit: "percent" } : solve === "balance" ? { symbol: `B${subscript(n)}`, label: `Balance after payment ${n}`, value: last2.balance, unit: "money" } : { symbol: "P", label: "Level payment", value: P2, unit: "money" },
+      interestTile,
+      paidTile
+    ];
     return {
-      tiles: [
-        level ? { symbol: "P", label: "Level payment", value: P2, unit: "money" } : n === 0 ? { symbol: "P\u2099", label: `Final (no. ${last2.k})`, value: last2.payment, unit: "money" } : { symbol: `B${n}`, label: `Balance after ${n}`, value: balance, unit: "money" },
-        { symbol: "\u03A3I", label: "Total interest", value: totalInterest, unit: "money" },
-        { symbol: "\u03A3P", label: "Total paid", value: totalPaid, unit: "money" }
-      ],
+      tiles,
       table: {
         columns: [
           { key: "k", label: "k", kind: "number", unit: "count" },
@@ -689,14 +875,18 @@ var loanSchedule = {
         footer: { k: "Total", payment: totalPaid, interest: totalInterest, principal: totalPaid - totalInterest, balance: null }
       },
       trace: [
-        ...level ? [{ label: "Annuity factor", formula: `a\u2309${n} at ${i}`, result: an, unit: "factor" }, { label: "Level payment", formula: `${L} / a\u2309${n}`, result: P2, unit: "money" }] : [],
-        { label: "Interest in payment 1", formula: `${L} \xD7 ${i}`, result: rows[0].interest, unit: "money" },
+        ...steps,
+        { label: "Interest in payment 1", formula: `${Number(L.toFixed(6))} \xD7 ${Number(i.toFixed(8))}`, result: rows[0].interest, unit: "money" },
         { label: "Principal in payment 1", formula: "P \u2212 I\u2081", result: rows[0].principal, unit: "money" },
-        { label: `Balance after payment ${last2.k}`, formula: "B\u2096 = B\u2096\u208B\u2081(1 + i) \u2212 P\u2096", result: balance, unit: "money" }
+        { label: `Balance after payment ${last2.k}`, formula: "B\u2096 = B\u2096\u208B\u2081(1 + i) \u2212 P\u2096", result: last2.balance, unit: "money" }
       ],
       warnings,
       values: {
+        solve,
+        amount: L,
+        i,
         payment: P2,
+        n: rows.length,
         payments: rows.map((r) => r.payment),
         interest: rows.map((r) => r.interest),
         principal: rows.map((r) => r.principal),
@@ -705,11 +895,13 @@ var loanSchedule = {
         count: rows.length,
         total_interest: totalInterest
       },
-      summary: level ? `Level payment ${formatValue(P2, "money")} for ${n} periods; total interest ${formatValue(totalInterest, "money")}.` : `${rows.length} payments, the last ${formatValue(last2.payment, "money")}; balance after them ${formatValue(balance, "money")}; total interest ${formatValue(totalInterest, "money")}.`
+      summary: solve === "n" ? `${rows.length} payments, the last a drop payment of ${formatValue(last2.payment, "money")}; total interest ${formatValue(totalInterest, "money")}.` : solve === "balance" ? `After ${n} payments of ${formatValue(P2, "money")}, ${formatValue(last2.balance, "money")} is still owed; interest paid ${formatValue(totalInterest, "money")}.` : solve === "amount" ? `${n} payments of ${formatValue(P2, "money")} repay a loan of ${formatValue(L, "money")} at ${formatValue(i, "percent")}.` : solve === "i" ? `${n} payments of ${formatValue(P2, "money")} repay ${formatValue(L, "money")} at ${formatValue(i, "percent")} a period.` : `Level payment ${formatValue(P2, "money")} for ${n} periods; total interest ${formatValue(totalInterest, "money")}.`
     };
   },
   method: { concepts: ["Loan Amortization", "Amortization Schedule", "Outstanding Balance"], readings: [] }
 };
+var SUB = "\u2080\u2081\u2082\u2083\u2084\u2085\u2086\u2087\u2088\u2089";
+var subscript = (k) => String(k).replace(/\d/g, (d) => SUB[Number(d)]);
 
 // src/lib/tools/finance/bondTerms.ts
 var FACE = { kind: "number", key: "face", label: "Face amount", symbol: "F", unit: "money", min: 0.01, max: 1e12, sliderMax: 1e4, step: 100, default: 1e3, description: "The face (par) amount coupons are paid on." };
@@ -748,7 +940,7 @@ function bondPriceAt(t, j) {
 }
 
 // src/lib/tools/finance/bondPrice.ts
-var SOLVE = {
+var SOLVE3 = {
   kind: "choice",
   key: "solve",
   label: "Solve for",
@@ -761,7 +953,7 @@ var SOLVE = {
   ],
   default: "price"
 };
-var unless = (u) => ({ field: "solve", in: ["price", "yield", "coupon", "term"].filter((x) => x !== u) });
+var unless3 = (u) => ({ field: "solve", in: ["price", "yield", "coupon", "term"].filter((x) => x !== u) });
 var PRICE = {
   kind: "number",
   key: "price",
@@ -774,7 +966,7 @@ var PRICE = {
   step: 1,
   default: 1050,
   description: "The price paid, on a coupon date. Read only when solving for the yield, the coupon rate or the term.",
-  showWhen: unless("price")
+  showWhen: unless3("price")
 };
 function termsOf(input, N) {
   const F2 = Number(input.face);
@@ -802,19 +994,19 @@ function yieldFor(t, P2) {
 var annuity2 = (j, N) => j === 0 ? N : (1 - (1 + j) ** -N) / j;
 var bondPrice = {
   id: "finance.bond_price",
-  version: "1.1.0",
+  version: "1.2.0",
   name: "Bond Price",
   area: "finance",
   answers: "What's this bond worth at this yield?",
   aka: ["bond", "price", "coupon rate", "term", "solve"],
   fields: [
-    SOLVE,
+    SOLVE3,
     FACE,
-    { ...COUPON, showWhen: unless("coupon") },
+    { ...COUPON, showWhen: unless3("coupon") },
     REDEMPTION,
-    { ...YEARS, showWhen: unless("term") },
+    { ...YEARS, showWhen: unless3("term") },
     FREQUENCY,
-    { ...YIELD, showWhen: unless("yield") },
+    { ...YIELD, showWhen: unless3("yield") },
     PRICE
   ],
   solveFor: "solve",
@@ -923,6 +1115,12 @@ var bondPrice = {
   },
   method: { concepts: ["Bond Price", "Bonds"], readings: [] },
   next: [
+    {
+      // The other way round: this bond at the price found, for the yield Bond Yield reads off it.
+      tool: "finance.bond_yield",
+      label: "Bond Yield",
+      build: (input, output) => ({ face: input.face, coupon: output.values.coupon_rate, redemption: input.redemption, years: output.values.years, m: input.m, price: output.values.price })
+    },
     {
       tool: "finance.bond_amortization",
       label: "Bond Amortization",
@@ -1053,7 +1251,7 @@ var bondAmortization = {
 
 // src/lib/tools/finance/durationConvexity.ts
 var TIME2 = { key: "time", label: "Time t", kind: "number", unit: "years" };
-var AMOUNT2 = { key: "amount", label: "Amount", kind: "number", unit: "money" };
+var AMOUNT3 = { key: "amount", label: "Amount", kind: "number", unit: "money" };
 function flowMeasures(flows2, i, amountKey = "amount") {
   const v = 1 / (1 + i);
   let pv = 0;
@@ -1085,7 +1283,7 @@ var durationConvexity = {
       minRows: 1,
       maxRows: 1200,
       description: "Each cash flow: its time in years and its amount. A semiannual coupon at the end of year 1\xBD has time 1.5.",
-      columns: [TIME2, AMOUNT2],
+      columns: [TIME2, AMOUNT3],
       default: [
         { time: 1, amount: 60 },
         { time: 2, amount: 60 },
@@ -1117,7 +1315,7 @@ var durationConvexity = {
       table: {
         columns: [
           TIME2,
-          AMOUNT2,
+          AMOUNT3,
           { key: "pv", label: "PV", kind: "number", unit: "money", computed: true },
           { key: "weight", label: "Weight", kind: "number", unit: "percent", computed: true }
         ],
@@ -1403,94 +1601,6 @@ var ageToAgeFactors = {
   ]
 };
 
-// src/lib/tools/reserving/developmentToUltimate.ts
-var developmentToUltimate = {
-  id: "reserving.development_to_ultimate",
-  version: "1.0.0",
-  name: "Development to Ultimate",
-  area: "reserving",
-  answers: "What are the cumulative development factors to ultimate?",
-  aka: ["CDF", "LDF to ultimate", "percent reported", "percent developed"],
-  fields: [
-    { kind: "number", key: "tail", label: "Tail factor", symbol: "T", unit: "factor", judgment: true, min: 0.5, max: 5, sliderMax: 1.5, step: 1e-3, default: 1, description: "Development beyond the last age. 1 assumes none." },
-    {
-      kind: "choice",
-      key: "rounding",
-      label: "CDFs",
-      options: [{ value: "none", label: "Unrounded" }, { value: "three", label: "3 decimals" }],
-      default: "none",
-      description: "Whether each CDF is rounded to three decimals before the percent developed is taken from it, as Friedland's exhibits do (Estimating Unpaid Claims Using Basic Techniques, Chapter 7). Unrounded carries full precision."
-    },
-    {
-      kind: "table",
-      key: "factors",
-      label: "Selected factors",
-      minRows: 1,
-      maxRows: 60,
-      description: "Each evaluation age with the selected age-to-age factor from it to the next age. Leave the last age's factor blank: only the tail develops it.",
-      columns: [
-        { key: "age", label: "Age", kind: "number", unit: "count" },
-        { key: "factor", label: "Factor to next", kind: "number", unit: "factor", optional: true }
-      ],
-      default: [
-        { age: 12, factor: 1.5 },
-        { age: 24, factor: 1.1 },
-        { age: 36, factor: 1.03 },
-        { age: 48, factor: null }
-      ]
-    }
-  ],
-  notation: () => "CDF\u2C7C = f\u2C7C \xB7 f\u2C7C\u208A\u2081 \u22EF \xB7 T",
-  view: "table",
-  grid: "factors",
-  compute: (input) => {
-    const tail = Number(input.tail);
-    const rows = input.factors;
-    rows.forEach((r, k) => {
-      if (r.factor == null && k < rows.length - 1) {
-        throw new ToolInputError("factors", `Age ${r.age} has no factor. Only the last age may be left blank.`);
-      }
-      if (r.factor != null && Number(r.factor) <= 0) throw new ToolInputError("factors", `Age ${r.age}'s factor must be positive.`);
-    });
-    const cdfs = new Array(rows.length);
-    let running = tail;
-    for (let k = rows.length - 1; k >= 0; k--) {
-      running *= rows[k].factor == null ? 1 : Number(rows[k].factor);
-      cdfs[k] = running;
-    }
-    if (input.rounding === "three") for (let k = 0; k < cdfs.length; k++) cdfs[k] = Math.round(cdfs[k] * 1e3) / 1e3;
-    const out = rows.map((r, k) => Object.assign({}, r, { cdf: cdfs[k], developed: 1 / cdfs[k] }));
-    const warnings = rows.some((r) => r.factor != null && Number(r.factor) < 1) ? ["A factor below 1 develops downward: usual for reported claims with redundant case reserves, unusual for paid."] : [];
-    return {
-      tiles: [
-        { symbol: `CDF${rows[0].age}`, label: "First age", value: cdfs[0], unit: "factor" },
-        { symbol: "T", label: "Tail", value: tail, unit: "factor" }
-      ],
-      table: {
-        columns: [
-          { key: "age", label: "Age", kind: "number", unit: "count" },
-          { key: "factor", label: "Factor to next", kind: "number", unit: "factor", optional: true },
-          { key: "cdf", label: "CDF", kind: "number", unit: "factor", computed: true },
-          { key: "developed", label: "% developed", kind: "number", unit: "percent", computed: true }
-        ],
-        rows: out
-      },
-      trace: out.map((r) => ({
-        label: `CDF at ${r.age}`,
-        formula: r.factor == null ? "T" : `${Number(r.factor).toFixed(4)} \xD7 CDF at the next age`,
-        result: r.cdf,
-        unit: "factor"
-      })),
-      warnings,
-      values: { ages: rows.map((r) => r.age), cdfs, percent_developed: out.map((r) => r.developed), tail }
-    };
-  },
-  method: {
-    concepts: ["Cumulative Development Factor", "Tail Factor"],
-    readings: [{ resource: "Estimating Unpaid Claims Using Basic Techniques (Friedland - 2010)", locator: "Ch. 7" }]
-  }
-};
-
 // src/lib/tools/reserving/chainLadder.ts
 var BASIS_FIELD = {
   kind: "choice",
@@ -1576,161 +1686,8 @@ var chainLadder = {
   }
 };
 
-// src/lib/tools/reserving/expectedClaims.ts
-var expectedClaims = {
-  id: "reserving.expected_claims",
-  version: "1.0.0",
-  name: "Expected Claims",
-  area: "reserving",
-  answers: "What's the a priori ultimate?",
-  aka: ["ELR", "a priori", "expected loss ratio"],
-  fields: [
-    { kind: "number", key: "elr", bank: ["loss-ratio"], label: "Expected loss ratio", symbol: "ELR", unit: "percent", judgment: true, min: 0, max: 3, sliderMax: 1.5, step: 5e-3, default: 0.65, description: "The a priori expected claim ratio, as a decimal." },
-    {
-      kind: "table",
-      key: "rows",
-      label: "Origins",
-      minRows: 1,
-      maxRows: 100,
-      description: "Each origin with its earned premium (on-level and trended, if that is what the ELR is set against), and optionally its own ELR. Left blank, the origin takes the expected loss ratio above.",
-      columns: [
-        ORIGIN_COLUMN,
-        { key: "premium", label: "Earned premium", kind: "number", unit: "money" },
-        { key: "elr", label: "Own ELR", kind: "number", unit: "percent", optional: true }
-      ],
-      default: [
-        { origin: "2020", premium: 2600, elr: null },
-        { origin: "2021", premium: 2800, elr: null },
-        { origin: "2022", premium: 3e3, elr: null },
-        { origin: "2023", premium: 3e3, elr: null }
-      ]
-    }
-  ],
-  notation: () => "E = ELR \xB7 EP",
-  view: "table",
-  grid: "rows",
-  compute: (input) => {
-    const elr = Number(input.elr);
-    const rows = input.rows.map((r) => {
-      if (r.elr != null && (Number(r.elr) < 0 || Number(r.elr) > 3)) {
-        throw new ToolInputError("rows", `Origin ${r.origin}'s ELR must be a decimal between 0 and 3: write ${Number(r.elr) / 100} or "${r.elr}%".`);
-      }
-      const ratio = r.elr == null ? elr : Number(r.elr);
-      return Object.assign({}, r, { ratio, expected: Number(r.premium) * ratio });
-    });
-    const total = rows.reduce((s, r) => s + r.expected, 0);
-    const premium = rows.reduce((s, r) => s + Number(r.premium), 0);
-    return {
-      tiles: [{ symbol: "E", label: "Expected claims", value: total, unit: "money" }],
-      table: {
-        columns: [
-          ORIGIN_COLUMN,
-          { key: "premium", label: "Earned premium", kind: "number", unit: "money" },
-          { key: "elr", label: "Own ELR", kind: "number", unit: "percent" },
-          { key: "expected", label: "Expected claims", kind: "number", unit: "money", computed: true }
-        ],
-        rows,
-        footer: { origin: "Total", premium, elr: null, expected: total }
-      },
-      trace: rows.map((r) => ({ label: `Expected, ${r.origin}`, formula: `${formatValue(r.ratio, "percent")} \xD7 ${r.premium}`, result: r.expected, unit: "money" })),
-      warnings: [],
-      values: { expected: rows.map((r) => r.expected), total_expected: total }
-    };
-  },
-  method: {
-    concepts: ["Expected Loss Method"],
-    readings: [{ resource: "Estimating Unpaid Claims Using Basic Techniques (Friedland - 2010)", locator: "Ch. 8" }]
-  }
-};
-
-// src/lib/tools/reserving/bornhuetterFerguson.ts
-var EXPECTED_COLUMN = { key: "expected", label: "Expected", kind: "number", unit: "money" };
-var bornhuetterFerguson = {
-  id: "reserving.bornhuetter_ferguson",
-  version: "1.0.0",
-  name: "Bornhuetter-Ferguson",
-  area: "reserving",
-  answers: "What's the Bornhuetter-Ferguson ultimate?",
-  aka: ["BF", "B-F", "IBNR"],
-  fields: [
-    BASIS_FIELD,
-    {
-      kind: "table",
-      key: "rows",
-      label: "Origins",
-      minRows: 1,
-      maxRows: 100,
-      description: "Each origin with its latest cumulative value, the CDF to ultimate at its age, and its expected (a priori) claims.",
-      columns: [ORIGIN_COLUMN, LATEST_COLUMN, CDF_COLUMN, EXPECTED_COLUMN],
-      default: [
-        { origin: "2020", latest: 1700, cdf: 1, expected: 1690 },
-        { origin: "2021", latest: 1850, cdf: 1.03, expected: 1820 },
-        { origin: "2022", latest: 1800, cdf: 1.133, expected: 1950 },
-        { origin: "2023", latest: 1300, cdf: 1.6995, expected: 1950 }
-      ]
-    }
-  ],
-  notation: () => "U = L + E \xB7 (1 \u2212 1/CDF)",
-  view: "table",
-  grid: "rows",
-  compute: (input) => {
-    const rows = input.rows;
-    const warnings = checkCdfs(rows);
-    const reserve = reserveLabel(input.basis);
-    const out = rows.map((r) => {
-      const unreported = 1 - 1 / Number(r.cdf);
-      const res2 = Number(r.expected) * unreported;
-      return Object.assign({}, r, { unreported, reserve: res2, ultimate: Number(r.latest) + res2 });
-    });
-    const ult = out.reduce((s, r) => s + r.ultimate, 0);
-    const res = out.reduce((s, r) => s + r.reserve, 0);
-    return {
-      tiles: [
-        { symbol: "U", label: "Ultimate", value: ult, unit: "money" },
-        { symbol: reserve, label: "Total", value: res, unit: "money" }
-      ],
-      table: {
-        columns: [
-          ORIGIN_COLUMN,
-          LATEST_COLUMN,
-          CDF_COLUMN,
-          EXPECTED_COLUMN,
-          { key: "ultimate", label: "Ultimate", kind: "number", unit: "money", computed: true, formula: "{latest} + {reserve}" },
-          { key: "reserve", label: reserve, kind: "number", unit: "money", computed: true, formula: "{expected} \xB7 [1 \u2212 1/{cdf}]" }
-        ],
-        rows: out,
-        footer: {
-          origin: "Total",
-          latest: out.reduce((s, r) => s + Number(r.latest), 0),
-          cdf: null,
-          expected: out.reduce((s, r) => s + Number(r.expected), 0),
-          ultimate: ult,
-          reserve: res
-        }
-      },
-      trace: out.flatMap((r) => [
-        { label: `% unreported, ${r.origin}`, formula: `1 \u2212 1/${Number(r.cdf).toFixed(4)}`, result: r.unreported, unit: "percent" },
-        { label: `${reserve}, ${r.origin}`, formula: `${r.expected} \xD7 ${r.unreported.toFixed(4)}`, result: r.reserve, unit: "money" }
-      ]),
-      warnings,
-      values: {
-        ultimate: out.map((r) => r.ultimate),
-        reserve: out.map((r) => r.reserve),
-        percent_unreported: out.map((r) => r.unreported),
-        total_ultimate: ult,
-        total_reserve: res,
-        reserve_label: reserve
-      }
-    };
-  },
-  method: {
-    concepts: ["Bornhuetter-Ferguson Method"],
-    readings: [{ resource: "Estimating Unpaid Claims Using Basic Techniques (Friedland - 2010)", locator: "Ch. 9" }]
-  }
-};
-
 // src/lib/tools/reserving/benktander.ts
-var EXPECTED_COLUMN2 = { key: "expected", label: "Expected", kind: "number", unit: "money" };
+var EXPECTED_COLUMN = { key: "expected", label: "Expected", kind: "number", unit: "money" };
 var benktander = {
   id: "reserving.benktander",
   version: "1.0.0",
@@ -1762,7 +1719,7 @@ var benktander = {
       minRows: 1,
       maxRows: 100,
       description: "Each origin with its latest cumulative value, the CDF to ultimate at its age, and its a priori expected claims.",
-      columns: [ORIGIN_COLUMN, LATEST_COLUMN, CDF_COLUMN, EXPECTED_COLUMN2],
+      columns: [ORIGIN_COLUMN, LATEST_COLUMN, CDF_COLUMN, EXPECTED_COLUMN],
       default: [
         { origin: "2020", latest: 1700, cdf: 1, expected: 1690 },
         { origin: "2021", latest: 1850, cdf: 1.03, expected: 1820 },
@@ -1801,7 +1758,7 @@ var benktander = {
           ORIGIN_COLUMN,
           LATEST_COLUMN,
           CDF_COLUMN,
-          EXPECTED_COLUMN2,
+          EXPECTED_COLUMN,
           { key: "ultimate", label: "Ultimate", kind: "number", unit: "money", computed: true },
           { key: "reserve", label: reserve, kind: "number", unit: "money", computed: true }
         ],
@@ -1833,6 +1790,92 @@ var benktander = {
   },
   method: {
     concepts: ["Benktander Method", "Bornhuetter-Ferguson Method"],
+    readings: [{ resource: "Estimating Unpaid Claims Using Basic Techniques (Friedland - 2010)", locator: "Ch. 9" }]
+  }
+};
+
+// src/lib/tools/reserving/bornhuetterFerguson.ts
+var EXPECTED_COLUMN2 = { key: "expected", label: "Expected", kind: "number", unit: "money" };
+var bornhuetterFerguson = {
+  id: "reserving.bornhuetter_ferguson",
+  version: "1.0.0",
+  name: "Bornhuetter-Ferguson",
+  area: "reserving",
+  answers: "What's the Bornhuetter-Ferguson ultimate?",
+  aka: ["BF", "B-F", "IBNR"],
+  fields: [
+    BASIS_FIELD,
+    {
+      kind: "table",
+      key: "rows",
+      label: "Origins",
+      minRows: 1,
+      maxRows: 100,
+      description: "Each origin with its latest cumulative value, the CDF to ultimate at its age, and its expected (a priori) claims.",
+      columns: [ORIGIN_COLUMN, LATEST_COLUMN, CDF_COLUMN, EXPECTED_COLUMN2],
+      default: [
+        { origin: "2020", latest: 1700, cdf: 1, expected: 1690 },
+        { origin: "2021", latest: 1850, cdf: 1.03, expected: 1820 },
+        { origin: "2022", latest: 1800, cdf: 1.133, expected: 1950 },
+        { origin: "2023", latest: 1300, cdf: 1.6995, expected: 1950 }
+      ]
+    }
+  ],
+  notation: () => "U = L + E \xB7 (1 \u2212 1/CDF)",
+  view: "table",
+  grid: "rows",
+  compute: (input) => {
+    const rows = input.rows;
+    const warnings = checkCdfs(rows);
+    const reserve = reserveLabel(input.basis);
+    const out = rows.map((r) => {
+      const unreported = 1 - 1 / Number(r.cdf);
+      const res2 = Number(r.expected) * unreported;
+      return Object.assign({}, r, { unreported, reserve: res2, ultimate: Number(r.latest) + res2 });
+    });
+    const ult = out.reduce((s, r) => s + r.ultimate, 0);
+    const res = out.reduce((s, r) => s + r.reserve, 0);
+    return {
+      tiles: [
+        { symbol: "U", label: "Ultimate", value: ult, unit: "money" },
+        { symbol: reserve, label: "Total", value: res, unit: "money" }
+      ],
+      table: {
+        columns: [
+          ORIGIN_COLUMN,
+          LATEST_COLUMN,
+          CDF_COLUMN,
+          EXPECTED_COLUMN2,
+          { key: "ultimate", label: "Ultimate", kind: "number", unit: "money", computed: true, formula: "{latest} + {reserve}" },
+          { key: "reserve", label: reserve, kind: "number", unit: "money", computed: true, formula: "{expected} \xB7 [1 \u2212 1/{cdf}]" }
+        ],
+        rows: out,
+        footer: {
+          origin: "Total",
+          latest: out.reduce((s, r) => s + Number(r.latest), 0),
+          cdf: null,
+          expected: out.reduce((s, r) => s + Number(r.expected), 0),
+          ultimate: ult,
+          reserve: res
+        }
+      },
+      trace: out.flatMap((r) => [
+        { label: `% unreported, ${r.origin}`, formula: `1 \u2212 1/${Number(r.cdf).toFixed(4)}`, result: r.unreported, unit: "percent" },
+        { label: `${reserve}, ${r.origin}`, formula: `${r.expected} \xD7 ${r.unreported.toFixed(4)}`, result: r.reserve, unit: "money" }
+      ]),
+      warnings,
+      values: {
+        ultimate: out.map((r) => r.ultimate),
+        reserve: out.map((r) => r.reserve),
+        percent_unreported: out.map((r) => r.unreported),
+        total_ultimate: ult,
+        total_reserve: res,
+        reserve_label: reserve
+      }
+    };
+  },
+  method: {
+    concepts: ["Bornhuetter-Ferguson Method"],
     readings: [{ resource: "Estimating Unpaid Claims Using Basic Techniques (Friedland - 2010)", locator: "Ch. 9" }]
   }
 };
@@ -1934,6 +1977,202 @@ var capeCod = {
     concepts: ["Cape Cod Method"],
     readings: [{ resource: "Estimating Unpaid Claims Using Basic Techniques (Friedland - 2010)", locator: "Ch. 10" }]
   }
+};
+
+// src/lib/tools/reserving/handoffs.ts
+function baseRows(spec, into) {
+  const own = into?.rows;
+  if (Array.isArray(own) && own.length) return own;
+  const field = spec.fields.find((f) => f.key === "rows");
+  return field ? field.default : [];
+}
+function cdfsOnto(rows, cdfs) {
+  if (!cdfs.length) return rows;
+  return rows.map((r, i) => ({ ...r, cdf: cdfs[Math.min(rows.length - 1 - i, cdfs.length - 1)] }));
+}
+function byOriginOnto(rows, key, origins, values2) {
+  const index = new Map(origins.map((o, k) => [o, k]));
+  const named = rows.every((r) => index.has(String(r.origin ?? "")));
+  return rows.map((r, k) => {
+    const v = values2[named ? index.get(String(r.origin)) : k];
+    return v == null ? r : { ...r, [key]: v };
+  });
+}
+function cdfHandoff(spec) {
+  return {
+    tool: spec.id,
+    label: spec.name,
+    build: (_input, output, into) => ({ rows: cdfsOnto(baseRows(spec, into), output.values.cdfs) })
+  };
+}
+function expectedHandoff(spec) {
+  return {
+    tool: spec.id,
+    label: spec.name,
+    build: (input, output, into) => {
+      const origins = input.rows.map((r) => String(r.origin ?? ""));
+      return { rows: byOriginOnto(baseRows(spec, into), "expected", origins, output.values.expected) };
+    }
+  };
+}
+
+// src/lib/tools/reserving/developmentToUltimate.ts
+var developmentToUltimate = {
+  id: "reserving.development_to_ultimate",
+  version: "1.1.0",
+  name: "Development to Ultimate",
+  area: "reserving",
+  answers: "What are the cumulative development factors to ultimate?",
+  aka: ["CDF", "LDF to ultimate", "percent reported", "percent developed"],
+  fields: [
+    { kind: "number", key: "tail", label: "Tail factor", symbol: "T", unit: "factor", judgment: true, min: 0.5, max: 5, sliderMax: 1.5, step: 1e-3, default: 1, description: "Development beyond the last age. 1 assumes none." },
+    {
+      kind: "choice",
+      key: "rounding",
+      label: "CDFs",
+      options: [{ value: "none", label: "Unrounded" }, { value: "three", label: "3 decimals" }],
+      default: "none",
+      description: "Whether each CDF is rounded to three decimals before the percent developed is taken from it, as Friedland's exhibits do (Estimating Unpaid Claims Using Basic Techniques, Chapter 7). Unrounded carries full precision."
+    },
+    {
+      kind: "table",
+      key: "factors",
+      label: "Selected factors",
+      minRows: 1,
+      maxRows: 60,
+      description: "Each evaluation age with the selected age-to-age factor from it to the next age. Leave the last age's factor blank: only the tail develops it.",
+      columns: [
+        { key: "age", label: "Age", kind: "number", unit: "count" },
+        { key: "factor", label: "Factor to next", kind: "number", unit: "factor", optional: true }
+      ],
+      default: [
+        { age: 12, factor: 1.5 },
+        { age: 24, factor: 1.1 },
+        { age: 36, factor: 1.03 },
+        { age: 48, factor: null }
+      ]
+    }
+  ],
+  notation: () => "CDF\u2C7C = f\u2C7C \xB7 f\u2C7C\u208A\u2081 \u22EF \xB7 T",
+  view: "table",
+  grid: "factors",
+  compute: (input) => {
+    const tail = Number(input.tail);
+    const rows = input.factors;
+    rows.forEach((r, k) => {
+      if (r.factor == null && k < rows.length - 1) {
+        throw new ToolInputError("factors", `Age ${r.age} has no factor. Only the last age may be left blank.`);
+      }
+      if (r.factor != null && Number(r.factor) <= 0) throw new ToolInputError("factors", `Age ${r.age}'s factor must be positive.`);
+    });
+    const cdfs = new Array(rows.length);
+    let running = tail;
+    for (let k = rows.length - 1; k >= 0; k--) {
+      running *= rows[k].factor == null ? 1 : Number(rows[k].factor);
+      cdfs[k] = running;
+    }
+    if (input.rounding === "three") for (let k = 0; k < cdfs.length; k++) cdfs[k] = Math.round(cdfs[k] * 1e3) / 1e3;
+    const out = rows.map((r, k) => Object.assign({}, r, { cdf: cdfs[k], developed: 1 / cdfs[k] }));
+    const warnings = rows.some((r) => r.factor != null && Number(r.factor) < 1) ? ["A factor below 1 develops downward: usual for reported claims with redundant case reserves, unusual for paid."] : [];
+    return {
+      tiles: [
+        { symbol: `CDF${rows[0].age}`, label: "First age", value: cdfs[0], unit: "factor" },
+        { symbol: "T", label: "Tail", value: tail, unit: "factor" }
+      ],
+      table: {
+        columns: [
+          { key: "age", label: "Age", kind: "number", unit: "count" },
+          { key: "factor", label: "Factor to next", kind: "number", unit: "factor", optional: true },
+          { key: "cdf", label: "CDF", kind: "number", unit: "factor", computed: true },
+          { key: "developed", label: "% developed", kind: "number", unit: "percent", computed: true }
+        ],
+        rows: out
+      },
+      trace: out.map((r) => ({
+        label: `CDF at ${r.age}`,
+        formula: r.factor == null ? "T" : `${Number(r.factor).toFixed(4)} \xD7 CDF at the next age`,
+        result: r.cdf,
+        unit: "factor"
+      })),
+      warnings,
+      values: { ages: rows.map((r) => r.age), cdfs, percent_developed: out.map((r) => r.developed), tail }
+    };
+  },
+  method: {
+    concepts: ["Cumulative Development Factor", "Tail Factor"],
+    readings: [{ resource: "Estimating Unpaid Claims Using Basic Techniques (Friedland - 2010)", locator: "Ch. 7" }]
+  },
+  // The CDFs into each method that takes them, laid over its own origins by position.
+  next: [chainLadder, bornhuetterFerguson, benktander, capeCod].map(cdfHandoff)
+};
+
+// src/lib/tools/reserving/expectedClaims.ts
+var expectedClaims = {
+  id: "reserving.expected_claims",
+  version: "1.1.0",
+  name: "Expected Claims",
+  area: "reserving",
+  answers: "What's the a priori ultimate?",
+  aka: ["ELR", "a priori", "expected loss ratio"],
+  fields: [
+    { kind: "number", key: "elr", bank: ["loss-ratio"], label: "Expected loss ratio", symbol: "ELR", unit: "percent", judgment: true, min: 0, max: 3, sliderMax: 1.5, step: 5e-3, default: 0.65, description: "The a priori expected claim ratio, as a decimal." },
+    {
+      kind: "table",
+      key: "rows",
+      label: "Origins",
+      minRows: 1,
+      maxRows: 100,
+      description: "Each origin with its earned premium (on-level and trended, if that is what the ELR is set against), and optionally its own ELR. Left blank, the origin takes the expected loss ratio above.",
+      columns: [
+        ORIGIN_COLUMN,
+        { key: "premium", label: "Earned premium", kind: "number", unit: "money" },
+        { key: "elr", label: "Own ELR", kind: "number", unit: "percent", optional: true }
+      ],
+      default: [
+        { origin: "2020", premium: 2600, elr: null },
+        { origin: "2021", premium: 2800, elr: null },
+        { origin: "2022", premium: 3e3, elr: null },
+        { origin: "2023", premium: 3e3, elr: null }
+      ]
+    }
+  ],
+  notation: () => "E = ELR \xB7 EP",
+  view: "table",
+  grid: "rows",
+  compute: (input) => {
+    const elr = Number(input.elr);
+    const rows = input.rows.map((r) => {
+      if (r.elr != null && (Number(r.elr) < 0 || Number(r.elr) > 3)) {
+        throw new ToolInputError("rows", `Origin ${r.origin}'s ELR must be a decimal between 0 and 3: write ${Number(r.elr) / 100} or "${r.elr}%".`);
+      }
+      const ratio = r.elr == null ? elr : Number(r.elr);
+      return Object.assign({}, r, { ratio, expected: Number(r.premium) * ratio });
+    });
+    const total = rows.reduce((s, r) => s + r.expected, 0);
+    const premium = rows.reduce((s, r) => s + Number(r.premium), 0);
+    return {
+      tiles: [{ symbol: "E", label: "Expected claims", value: total, unit: "money" }],
+      table: {
+        columns: [
+          ORIGIN_COLUMN,
+          { key: "premium", label: "Earned premium", kind: "number", unit: "money" },
+          { key: "elr", label: "Own ELR", kind: "number", unit: "percent" },
+          { key: "expected", label: "Expected claims", kind: "number", unit: "money", computed: true }
+        ],
+        rows,
+        footer: { origin: "Total", premium, elr: null, expected: total }
+      },
+      trace: rows.map((r) => ({ label: `Expected, ${r.origin}`, formula: `${formatValue(r.ratio, "percent")} \xD7 ${r.premium}`, result: r.expected, unit: "money" })),
+      warnings: [],
+      values: { expected: rows.map((r) => r.expected), total_expected: total }
+    };
+  },
+  method: {
+    concepts: ["Expected Loss Method"],
+    readings: [{ resource: "Estimating Unpaid Claims Using Basic Techniques (Friedland - 2010)", locator: "Ch. 8" }]
+  },
+  // The expected claims, by origin, into the methods that weigh them against the chain ladder.
+  next: [bornhuetterFerguson, benktander].map(expectedHandoff)
 };
 
 // src/lib/tools/reserving/ratioTriangle.ts
@@ -2055,8 +2294,8 @@ var lossRatioMethod = {
       default: 0.65,
       description: "Projected ultimate loss and LAE over projected earned premium at current rates, as a decimal."
     },
-    { kind: "number", key: "fixed", bank: ["fixed-expense", "expense-ratio"], label: "Fixed expense ratio", symbol: "F", unit: "percent", min: 0, max: 1, sliderMax: 0.3, step: 25e-4, default: 0.05, description: "Projected fixed expenses over projected premium at current rates." },
-    { kind: "number", key: "variable", bank: ["variable-expense", "expense-ratio"], label: "Variable expense ratio", symbol: "V", unit: "percent", min: 0, max: 1, sliderMax: 0.5, step: 25e-4, default: 0.2, description: "Variable expenses as a share of premium." },
+    { kind: "number", key: "fixed", bank: ["fixed-expense"], label: "Fixed expense ratio", symbol: "F", unit: "percent", min: 0, max: 1, sliderMax: 0.3, step: 25e-4, default: 0.05, description: "Projected fixed expenses over projected premium at current rates." },
+    { kind: "number", key: "variable", bank: ["variable-expense"], label: "Variable expense ratio", symbol: "V", unit: "percent", min: 0, max: 1, sliderMax: 0.5, step: 25e-4, default: 0.2, description: "Variable expenses as a share of premium." },
     { kind: "number", key: "profit", bank: ["profit-provision"], label: "Profit & contingency", symbol: "Q", unit: "percent", judgment: true, min: -0.5, max: 1, sliderMax: 0.2, step: 25e-4, default: 0.05, description: "The target underwriting profit and contingency provision, as a share of premium." }
   ],
   notation: () => "\u0394R = (LR + F) / (1 \u2212 V \u2212 Q) \u2212 1",
@@ -2728,21 +2967,21 @@ var trendFactor = {
     const from = input.basis === "policy" ? Y + 0.5 + T / 2 : Y + 0.5;
     const to = E + R / 2 + T / 2;
     const period = to - from;
-    const factor = (1 + t) ** period;
+    const factor2 = (1 + t) ** period;
     return {
       tiles: [
-        { symbol: "TF", label: "Trend factor", value: factor, unit: "factor" },
+        { symbol: "TF", label: "Trend factor", value: factor2, unit: "factor" },
         { symbol: "p", label: "Years", value: period, unit: "years" }
       ],
       trace: [
         { label: `Average accident date, ${input.basis === "policy" ? "policy" : "accident"} year ${Y}`, formula: `${dateOfYear(from)}${input.basis === "policy" ? ": mid-year plus half a term" : ": mid-year"}`, result: from, unit: "years" },
         { label: "Average accident date under the new rates", formula: `${dateOfYear(to)}: the effective date, plus half the time in effect and half a term`, result: to, unit: "years" },
         { label: "Trend period", formula: `${dateOfYear(from)} to ${dateOfYear(to)}`, result: period, unit: "years" },
-        { label: "Trend factor", formula: `(1 + ${t})^${formatValue(period, "years")}`, result: factor, unit: "factor" }
+        { label: "Trend factor", formula: `(1 + ${t})^${formatValue(period, "years")}`, result: factor2, unit: "factor" }
       ],
       warnings: period < 0 ? ["The experience period is later than the period the rates cover: the trend runs backwards."] : [],
-      values: { factor, period, from: dateOfYear(from), to: dateOfYear(to) },
-      summary: `Trend factor ${formatValue(factor, "factor")} over ${formatValue(period, "years")} years, from ${dateOfYear(from)} to ${dateOfYear(to)}.`
+      values: { factor: factor2, period, from: dateOfYear(from), to: dateOfYear(to) },
+      summary: `Trend factor ${formatValue(factor2, "factor")} over ${formatValue(period, "years")} years, from ${dateOfYear(from)} to ${dateOfYear(to)}.`
     };
   },
   compare: [
@@ -2793,13 +3032,13 @@ var twoStepTrend = {
     const p2 = to - pivot;
     const f1 = (1 + t1) ** p1;
     const f2 = (1 + t2) ** p2;
-    const factor = f1 * f2;
+    const factor2 = f1 * f2;
     const warnings = [];
     if (p1 < 0) warnings.push(`The latest data point (${dateOfYear(pivot)}) is before accident year ${Y}'s average date: the past trend runs backwards.`);
     if (p2 < 0) warnings.push(`The future average date (${dateOfYear(to)}) is before the latest data point: the future trend runs backwards.`);
     return {
       tiles: [
-        { symbol: "TF", label: "Total trend factor", value: factor, unit: "factor" },
+        { symbol: "TF", label: "Total trend factor", value: factor2, unit: "factor" },
         { symbol: "TF\u2081", label: `Past, ${formatValue(p1, "years")} yrs`, value: f1, unit: "factor" },
         { symbol: "TF\u2082", label: `Future, ${formatValue(p2, "years")} yrs`, value: f2, unit: "factor" }
       ],
@@ -2809,11 +3048,11 @@ var twoStepTrend = {
         { label: "Past trend factor", formula: `(1 + ${t1})^${formatValue(p1, "years")}`, result: f1, unit: "factor" },
         { label: "Future trend period", formula: `${dateOfYear(pivot)} to ${dateOfYear(to)}`, result: p2, unit: "years" },
         { label: "Future trend factor", formula: `(1 + ${t2})^${formatValue(p2, "years")}`, result: f2, unit: "factor" },
-        { label: "Total trend factor", formula: `${formatValue(f1, "factor")} \xD7 ${formatValue(f2, "factor")}`, result: factor, unit: "factor" }
+        { label: "Total trend factor", formula: `${formatValue(f1, "factor")} \xD7 ${formatValue(f2, "factor")}`, result: factor2, unit: "factor" }
       ],
       warnings,
-      values: { factor, past_factor: f1, future_factor: f2, past_period: p1, future_period: p2, from: dateOfYear(from), pivot: dateOfYear(pivot), to: dateOfYear(to) },
-      summary: `Two-step trend factor ${formatValue(factor, "factor")}: ${formatValue(f1, "factor")} over ${formatValue(p1, "years")} years at ${formatValue(t1, "percent")}, then ${formatValue(f2, "factor")} over ${formatValue(p2, "years")} years at ${formatValue(t2, "percent")}.`
+      values: { factor: factor2, past_factor: f1, future_factor: f2, past_period: p1, future_period: p2, from: dateOfYear(from), pivot: dateOfYear(pivot), to: dateOfYear(to) },
+      summary: `Two-step trend factor ${formatValue(factor2, "factor")}: ${formatValue(f1, "factor")} over ${formatValue(p1, "years")} years at ${formatValue(t1, "percent")}, then ${formatValue(f2, "factor")} over ${formatValue(p2, "years")} years at ${formatValue(t2, "percent")}.`
     };
   },
   compare: [
@@ -2987,8 +3226,8 @@ var permissibleLossRatio = {
   answers: "What loss ratio do the rates allow?",
   aka: ["PLR", "target loss ratio"],
   fields: [
-    { kind: "number", key: "fixed", bank: ["fixed-expense", "expense-ratio"], label: "Fixed expense ratio", symbol: "F", unit: "percent", min: 0, max: 1, sliderMax: 0.3, step: 25e-4, default: 0, description: "Fixed expenses as a share of premium (0 when every expense is treated as variable)." },
-    { kind: "number", key: "variable", bank: ["variable-expense", "expense-ratio"], label: "Variable expense ratio", symbol: "V", unit: "percent", min: 0, max: 1, sliderMax: 0.5, step: 25e-4, default: 0.25, description: "Variable expenses as a share of premium." },
+    { kind: "number", key: "fixed", bank: ["fixed-expense"], label: "Fixed expense ratio", symbol: "F", unit: "percent", min: 0, max: 1, sliderMax: 0.3, step: 25e-4, default: 0, description: "Fixed expenses as a share of premium (0 when every expense is treated as variable)." },
+    { kind: "number", key: "variable", bank: ["variable-expense"], label: "Variable expense ratio", symbol: "V", unit: "percent", min: 0, max: 1, sliderMax: 0.5, step: 25e-4, default: 0.25, description: "Variable expenses as a share of premium." },
     { kind: "number", key: "profit", bank: ["profit-provision"], label: "Profit & contingency", symbol: "Q", unit: "percent", judgment: true, min: -0.5, max: 1, sliderMax: 0.2, step: 25e-4, default: 0.05, description: "The target underwriting profit and contingency provision, as a share of premium." }
   ],
   notation: () => "PLR = 1 \u2212 F \u2212 V \u2212 Q,  VPLR = 1 \u2212 V \u2212 Q",
@@ -3033,7 +3272,7 @@ var purePremiumMethod = {
   fields: [
     { kind: "number", key: "pure_premium", label: "Pure premium", symbol: "PP", unit: "money", min: 0, max: 1e12, sliderMax: 2e3, step: 1, default: 300, description: "Projected ultimate loss and LAE per exposure (any per-exposure cost, such as net reinsurance, added in)." },
     { kind: "number", key: "fixed", bank: ["fixed-expense"], label: "Fixed expense per exposure", symbol: "F", unit: "money", min: 0, max: 1e12, sliderMax: 500, step: 1, default: 50, description: "Projected fixed expenses per exposure." },
-    { kind: "number", key: "variable", bank: ["variable-expense", "expense-ratio"], label: "Variable expense ratio", symbol: "V", unit: "percent", min: 0, max: 1, sliderMax: 0.5, step: 25e-4, default: 0.2, description: "Variable expenses as a share of premium." },
+    { kind: "number", key: "variable", bank: ["variable-expense"], label: "Variable expense ratio", symbol: "V", unit: "percent", min: 0, max: 1, sliderMax: 0.5, step: 25e-4, default: 0.2, description: "Variable expenses as a share of premium." },
     { kind: "number", key: "profit", bank: ["profit-provision"], label: "Profit & contingency", symbol: "Q", unit: "percent", judgment: true, min: -0.5, max: 1, sliderMax: 0.2, step: 25e-4, default: 0.05, description: "The target underwriting profit and contingency provision, as a share of premium." },
     { kind: "number", key: "current", label: "Current average rate", symbol: "R\u2080", unit: "money", min: 0, max: 1e12, sliderMax: 2e3, step: 1, default: 0, zeroLabel: "Not given", description: "The current average rate per exposure, for the indicated change (0 to leave it out)." }
   ],
@@ -4142,7 +4381,7 @@ var tableLabel = (id) => {
 };
 var lifeTable = {
   id: "data.life_table",
-  version: "1.0.0",
+  version: "1.0.1",
   name: "Life Table",
   area: "data",
   answers: "What does this published life table give at each age?",
@@ -4194,7 +4433,9 @@ var lifeTable = {
           { key: "lx", label: "l\u2093", kind: "number", unit: "count", computed: true },
           { key: "ex", label: "e\u2093", kind: "number", unit: "years", computed: true }
         ],
-        rows
+        rows,
+        // The age the tiles are about: eₓ and qₓ are read off this row.
+        highlight: 0
       },
       trace: [
         { label: `l${x}, read from the table`, formula: provenance(ds), result: col.lx[k], unit: "count" },
@@ -4242,7 +4483,7 @@ var DEFAULT_END = periodDate(latestPeriod(DEFAULT_SERIES));
 var DEFAULT_START = `${Number(DEFAULT_END.slice(0, 4)) - 5}${DEFAULT_END.slice(4)}`;
 var priceIndex = {
   id: "data.price_index",
-  version: "1.0.0",
+  version: "1.0.1",
   name: "Price Index",
   area: "data",
   answers: "How has this price index moved?",
@@ -4298,7 +4539,9 @@ var priceIndex = {
           { key: "value", label: "Index", kind: "number", unit: "plain", computed: true },
           { key: "change", label: lag === 12 ? "12-month change" : "4-quarter change", kind: "number", unit: "percent", computed: true }
         ],
-        rows
+        rows,
+        // The period the index tile names: the last one read.
+        highlight: rows.length - 1
       },
       trace: [
         { label: `Index, ${first.period}`, formula: provenance(dataset), result: Number(first.value), unit: "plain" },
@@ -4608,7 +4851,7 @@ var amount = (key, label, symbol, filed, dflt, description, min = 0) => ({
 });
 var mctRatio = {
   id: "capital.mct_ratio",
-  version: "1.0.0",
+  version: "1.0.1",
   name: "MCT Ratio",
   area: "capital",
   answers: "What's the MCT ratio?",
@@ -4638,9 +4881,10 @@ var mctRatio = {
     if (!(minimum > 0)) throw new ToolInputError("insurance", "The margins add up to nothing, so there is no minimum to measure against.");
     const ratio = capital / minimum;
     const test = input.test === "baat" ? "BAAT" : "MCT";
+    const shown = Math.round(ratio * 1e4) / 1e4;
     const warnings = [];
-    if (test === "MCT" && ratio < MCT_MINIMUM) warnings.push("Below the 100% minimum the MCT guideline requires (\xA71.2.1).");
-    else if (test === "MCT" && ratio < MCT_TARGET) warnings.push("Below OSFI's supervisory target of 150% (MCT guideline, \xA71.2.1).");
+    if (test === "MCT" && shown < MCT_MINIMUM) warnings.push("Below the 100% minimum the MCT guideline requires (\xA71.2.1).");
+    else if (test === "MCT" && shown < MCT_TARGET) warnings.push("Below OSFI's supervisory target of 150% (MCT guideline, \xA71.2.1).");
     return {
       tiles: [
         { symbol: test, label: "Total", value: ratio, unit: "percent" },
@@ -10093,26 +10337,26 @@ var QUESTION_CHECKS = [
   fm(190, {
     // 16% convertible quarterly is 4% a quarter.
     quotes: ["loan of 10,000", "payments of 1,000 at the end of each quarter for as long as necessary", "16% convertible quarterly", "the tenth payment"],
-    steps: one("finance.loan_schedule", { amount: 1e4, i: 0.04, payment: 1e3, n: 0 }),
+    steps: one("finance.loan_schedule", { solve: "n", amount: 1e4, i: 0.04, payment: 1e3 }),
     tolerance: 0.5,
     value: at("interest", 9)
   }),
   fm(380, {
     quotes: ["Annual payments of 240", "loan of 3400", "annual effective interest rate of 4.5%", "drop payment"],
-    steps: one("finance.loan_schedule", { amount: 3400, i: 0.045, payment: 240, n: 0 }),
+    steps: one("finance.loan_schedule", { solve: "n", amount: 3400, i: 0.045, payment: 240 }),
     tolerance: 5e-3,
     value: val("final_payment")
   }),
   fm(212, {
     quotes: ["Payments of 1000 at the end of each year", "loan of 12,000", "annual effective interest rate of 10%", "immediately after the 12th payment"],
-    steps: one("finance.loan_schedule", { amount: 12e3, i: 0.1, payment: 1e3, n: 12 }),
+    steps: one("finance.loan_schedule", { solve: "balance", amount: 12e3, i: 0.1, payment: 1e3, n: 12 }),
     tolerance: 0.5,
     value: at("balance", 11)
   }),
   fm(232, {
     // The beginning of the seventh year is the moment after the sixth payment.
     quotes: ["loan of 4000", "annual effective interest rate of 5%", "payments of 250 at the end of each year for ten years", "beginning of the seventh year"],
-    steps: one("finance.loan_schedule", { amount: 4e3, i: 0.05, payment: 250, n: 10 }),
+    steps: one("finance.loan_schedule", { solve: "balance", amount: 4e3, i: 0.05, payment: 250, n: 10 }),
     tolerance: 0.5,
     value: at("balance", 5)
   }),
@@ -10121,8 +10365,8 @@ var QUESTION_CHECKS = [
     quotes: ["5-year loan of 500,000", "annual effective discount rate of 8%", "level end-of-year payments", "next multiple of 1,000"],
     steps: [
       { tool: "finance.interest_converter", input: () => ({ form: "effective_discount", rate: 0.08, m: 1 }) },
-      { tool: "finance.loan_schedule", input: ([rate]) => ({ amount: 5e5, i: rate.values.i, n: 5, payment: 0 }) },
-      { tool: "finance.loan_schedule", input: ([rate, level]) => ({ amount: 5e5, i: rate.values.i, n: 0, payment: Math.ceil(Number(level.values.payment) / 1e3) * 1e3 }) }
+      { tool: "finance.loan_schedule", input: ([rate]) => ({ solve: "payment", amount: 5e5, i: rate.values.i, n: 5 }) },
+      { tool: "finance.loan_schedule", input: ([rate, level]) => ({ solve: "n", amount: 5e5, i: rate.values.i, payment: Math.ceil(Number(level.values.payment) / 1e3) * 1e3 }) }
     ],
     tolerance: 50,
     value: val("final_payment")

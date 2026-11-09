@@ -686,12 +686,15 @@ export function TriangleGrid({
   onChange,
   linked = false,
   title,
+  onModeChange,
 }: {
   value: DraftTriangle
   onChange: (t: DraftTriangle) => void
   linked?: boolean
   /** The triangle's name, on the line its cumulative ↔ incremental switch sits on. */
   title?: ReactNode
+  /** Told when the switch moves, so the triangle's name can say which it now shows. */
+  onModeChange?: (mode: TriangleMode) => void
 }) {
   const [mode, setMode] = useState<TriangleMode>('cumulative')
   const [display, setDisplay] = useState<unknown[][]>(() => toMode(value.values, mode))
@@ -759,6 +762,7 @@ export function TriangleGrid({
     const cumulative = fromMode(display, mode)
     setMode(m)
     setDisplay(toMode(cumulative, m))
+    onModeChange?.(m)
   }
 
   /** Focus another cell, if there is one there. */

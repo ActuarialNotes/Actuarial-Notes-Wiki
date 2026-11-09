@@ -122,9 +122,13 @@ describe('connections', () => {
     let wf = chain('reserving.age_to_age_factors', 'reserving.development_to_ultimate', 'reserving.chain_ladder', 'Chain Ladder Method')
     wf = connect(connect(connect(wf, 'n1', 'n2', 1), 'n2', 'n3', 1), 'n4', 'n3', 1)
     expect(edgeKind(wf, { from: 'n1', to: 'n2' })).toBe('handoff')
-    expect(edgeKind(wf, { from: 'n2', to: 'n3' })).toBe('feeds')
+    expect(edgeKind(wf, { from: 'n2', to: 'n3' })).toBe('handoff')
     expect(edgeKind(wf, { from: 'n4', to: 'n3' })).toBe('informs')
     expect(edgeKind(wf, { from: 'n3', to: 'n4' })).toBe('applies')
+    // Two calculations with no hand-off between them: the one only feeds the other.
+    let two = chain('reserving.chain_ladder', 'reserving.bornhuetter_ferguson')
+    two = connect(two, 'n1', 'n2', 1)
+    expect(edgeKind(two, { from: 'n1', to: 'n2' })).toBe('feeds')
   })
 
   it('puts a word only on a concept’s connection', () => {

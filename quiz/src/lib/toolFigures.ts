@@ -621,12 +621,13 @@ const BUILDERS: Record<string, Builder> = {
     unit: 'percent',
   }),
 
+  // Drawn from the solved values (docs/tool-template-v3.md §3): whichever letter is the answer.
   'finance.annuity': r => {
-    const n = Math.min(num(r.input.n), 120)
+    const n = Math.min(Math.ceil(num(r.values.n ?? r.input.n) - 1e-9), 120)
     if (!Number.isFinite(n) || n <= 0) return null
     const due = r.input.timing === 'due'
-    const flows = Array.from({ length: n }, (_, k) => ({ time: due ? k : k + 1, amount: num(r.input.payment) }))
-    const pvs = presentValues(flows, num(r.input.i))
+    const flows = Array.from({ length: n }, (_, k) => ({ time: due ? k : k + 1, amount: num(r.values.payment ?? r.input.payment) }))
+    const pvs = presentValues(flows, num(r.values.i ?? r.input.i))
     return { kind: 'flows', items: flows.map((f, k) => ({ t: f.time, amount: f.amount, pv: pvs[k] })) }
   },
 

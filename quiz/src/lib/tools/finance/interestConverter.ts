@@ -31,7 +31,7 @@ function toEffective(form: string, rate: number, m: number): number {
 
 export const interestConverter: ToolSpec = {
   id: 'finance.interest_converter',
-  version: '1.0.0',
+  version: '1.1.0',
   name: 'Interest Converter',
   area: 'finance',
   answers: "What's this rate in another form?",
@@ -59,18 +59,21 @@ export const interestConverter: ToolSpec = {
     const im = m * ((1 + i) ** (1 / m) - 1)
     const dm = m * (1 - (1 + i) ** (-1 / m))
     const v = 1 / (1 + i)
+    // The rate per conversion period: what Annuity and Loan Schedule take for payments m times a year.
+    const j = im / m
     const rows = [
       { form: 'Effective interest', symbol: 'i', value: i },
       { form: 'Effective discount', symbol: 'd', value: d },
       { form: `Nominal interest, m = ${m}`, symbol: `i${sup(m)}`, value: im },
       { form: `Nominal discount, m = ${m}`, symbol: `d${sup(m)}`, value: dm },
+      { form: `Per period, 1/${m} of a year`, symbol: `i${sup(m)}/${m}`, value: j },
       { form: 'Force of interest', symbol: 'δ', value: delta },
     ]
     return {
       tiles: [
         { symbol: 'i', label: 'Effective', value: i, unit: 'percent' },
-        { symbol: 'd', label: 'Discount', value: d, unit: 'percent' },
-        { symbol: 'δ', label: 'Force', value: delta, unit: 'percent' },
+        { symbol: `i${sup(m)}`, label: 'Nominal', value: im, unit: 'percent' },
+        { symbol: 'j', label: `Per period, 1/${m} of a year`, value: j, unit: 'percent' },
       ],
       table: {
         columns: [
@@ -86,14 +89,20 @@ export const interestConverter: ToolSpec = {
         { label: 'Force of interest', formula: 'δ = ln(1 + i)', result: delta, unit: 'percent' },
         { label: `Nominal interest, m = ${m}`, formula: `i${sup(m)} = m[(1 + i)^(1/m) − 1]`, result: im, unit: 'percent' },
         { label: `Nominal discount, m = ${m}`, formula: `d${sup(m)} = m[1 − (1 + i)^(−1/m)]`, result: dm, unit: 'percent' },
+        { label: 'Rate per period', formula: `j = i${sup(m)} / ${m}`, result: j, unit: 'percent' },
         { label: 'Discount factor', formula: 'v = 1 / (1 + i)', result: v, unit: 'factor' },
       ],
       warnings: [],
-      values: { i, d, delta, nominal_interest: im, nominal_discount: dm, v, m },
+      values: { i, d, delta, nominal_interest: im, nominal_discount: dm, per_period: j, v, m },
     }
   },
   method: {
     concepts: ['Effective Rate', 'Effective Discount Rate', 'Nominal Interest Rate Convertible m-thly', 'Force of Interest'],
     readings: [],
   },
+  // The rate per payment period, for payments m times a year.
+  next: [
+    { tool: 'finance.annuity', label: 'Annuity', build: (_input, output) => ({ i: Number(output.values.per_period) }) },
+    { tool: 'finance.loan_schedule', label: 'Loan Schedule', build: (_input, output) => ({ i: Number(output.values.per_period) }) },
+  ],
 }

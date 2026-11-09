@@ -212,9 +212,54 @@ describe('Loan Schedule', () => {
   })
 
   it('ends a given payment with a drop payment, and refuses one below the interest', () => {
-    const out = run('finance.loan_schedule', { amount: 1000, i: 0.1, payment: 300, n: 0 })
+    const out = run('finance.loan_schedule', { solve: 'n', amount: 1000, i: 0.1, payment: 300 })
     expect(out.values.final_payment as number).toBeLessThan(300)
-    expect(() => run('finance.loan_schedule', { amount: 1000, i: 0.1, payment: 100, n: 0 })).toThrow(/never repaid/)
+    expect(out.tiles[0]).toMatchObject({ symbol: 'n', value: out.values.count })
+    expect(() => run('finance.loan_schedule', { solve: 'n', amount: 1000, i: 0.1, payment: 100 })).toThrow(/never repaid/)
+  })
+
+  // Solve for any unknown (docs/tool-template-v3.md §3): each answer, fed back, gives the others.
+  it('solves for the amount, the rate and the balance, each the inverse of the level payment', () => {
+    const level = run('finance.loan_schedule', { amount: 10000, i: 0.05, n: 10 })
+    const P = level.values.payment as number
+    expect(run('finance.loan_schedule', { solve: 'amount', payment: P, i: 0.05, n: 10 }).values.amount as number).toBeCloseTo(10000, 6)
+    expect(run('finance.loan_schedule', { solve: 'i', amount: 10000, payment: P, n: 10 }).values.i as number).toBeCloseTo(0.05, 10)
+    const b = run('finance.loan_schedule', { solve: 'balance', amount: 10000, i: 0.05, payment: 1000, n: 4 })
+    expect(b.tiles[0].value).toBeCloseTo(10000 * 1.05 ** 4 - 1000 * ((1.05 ** 4 - 1) / 0.05), 8)
+    expect(b.tiles[0].symbol).toBe('B₄')
+  })
+})
+
+describe('Annuity, solved for any unknown', () => {
+  const pv = (100 * (1 - 1.05 ** -10)) / 0.05
+  it('gives the payment, the number of payments and the rate a present value implies', () => {
+    expect(run('finance.annuity', { solve: 'payment', pv, n: 10, i: 0.05 }).values.payment as number).toBeCloseTo(100, 9)
+    expect(run('finance.annuity', { solve: 'n', pv, payment: 100, i: 0.05 }).values.n as number).toBeCloseTo(10, 9)
+    expect(run('finance.annuity', { solve: 'i', pv, payment: 100, n: 10 }).values.i as number).toBeCloseTo(0.05, 10)
+    const due = run('finance.annuity', { solve: 'n', timing: 'due', pv: pv * 1.05, payment: 100, i: 0.05 })
+    expect(due.values.n as number).toBeCloseTo(10, 9)
+    expect(due.warnings).toEqual([])
+  })
+  it('says so when the payments never reach the present value, or reach it between two payments', () => {
+    expect(() => run('finance.annuity', { solve: 'n', pv: 2500, payment: 100, i: 0.05 })).toThrow(/worth forever/)
+    expect(run('finance.annuity', { solve: 'n', pv: 800, payment: 100, i: 0.05 }).warnings[0]).toMatch(/not a whole number/)
+  })
+  it('hands the solved annuity to Internal Rate of Return as cash flows that give back the rate', () => {
+    const spec = toolById('finance.annuity')!
+    const out = run('finance.annuity', { solve: 'payment', pv: 1000, n: 5, i: 0.06 })
+    const flows = spec.next!.find(n => n.tool === 'finance.internal_rate_of_return')!.build(out.input, out as never)
+    expect(run('finance.internal_rate_of_return', flows).values.irr as number).toBeCloseTo(0.06, 9)
+  })
+})
+
+describe('Present Value, solved for the rate', () => {
+  it('finds the rate at which the flows are worth a price, keeping spot rates where given', () => {
+    const flows = [{ time: 1, amount: 100 }, { time: 2, amount: 100 }, { time: 3, amount: 1100 }]
+    const at6 = run('finance.present_value', { i: 0.06, flows }).values.present_value as number
+    const r = run('finance.present_value', { solve: 'i', pv: at6, flows })
+    expect(r.values.i as number).toBeCloseTo(0.06, 10)
+    expect(r.tiles[0]).toMatchObject({ symbol: 'i' })
+    expect(() => run('finance.present_value', { solve: 'i', pv: 100, flows: [{ time: 1, amount: 100, spot: 0.05 }] })).toThrow(/spot rate/)
   })
 })
 
@@ -595,5 +640,37 @@ describe('readerMessage', () => {
     const spec = toolById('ratemaking.trend_fit')!
     const err = caught('ratemaking.trend_fit', { ...defaultInput(spec), points: [{ period: 'Q1', value: 1 }, { period: 'Q2' }] })
     expect(readerMessage(spec, err)).toBe('Row 2 of Points is missing Value.')
+  })
+})
+
+// Hand-offs that carry one column (docs/tool-template-v3.md §4): laid over the receiver's own rows.
+describe('column hand-offs', () => {
+  const handoff = (from: string, to: string) => toolById(from)!.next!.find(h => h.tool === to)!
+
+  it('lays Development to Ultimate CDFs over Chain Ladder rows by position, keeping the latest values', () => {
+    const dtu = run('reserving.development_to_ultimate', { factors: [{ age: 12, factor: 1.5 }, { age: 24, factor: 1.1 }, { age: 36, factor: null }] })
+    const own = { rows: [{ origin: 'A', latest: 10, cdf: 9 }, { origin: 'B', latest: 20, cdf: 9 }, { origin: 'C', latest: 30, cdf: 9 }, { origin: 'D', latest: 40, cdf: 9 }] }
+    const built = handoff('reserving.development_to_ultimate', 'reserving.chain_ladder').build(dtu.input, dtu as never, own)
+    const cdfs = dtu.values.cdfs as number[]
+    // The latest origin takes the first age's CDF; one older than every age, the last.
+    expect((built.rows as { latest: number; cdf: number }[]).map(r => [r.latest, r.cdf])).toEqual([[10, cdfs[2]], [20, cdfs[2]], [30, cdfs[1]], [40, cdfs[0]]])
+    // With no rows of its own, the receiver's example takes the CDFs.
+    const example = handoff('reserving.development_to_ultimate', 'reserving.cape_cod').build(dtu.input, dtu as never)
+    expect(() => run('reserving.cape_cod', example)).not.toThrow()
+  })
+
+  it('carries Expected Claims into Bornhuetter-Ferguson by origin', () => {
+    const ec = run('reserving.expected_claims', {})
+    const built = handoff('reserving.expected_claims', 'reserving.bornhuetter_ferguson').build(ec.input, ec as never)
+    const bf = run('reserving.bornhuetter_ferguson', built)
+    expect((bf.input.rows as { expected: number }[]).map(r => r.expected)).toEqual(ec.values.expected)
+  })
+
+  it('carries the rate per period from Interest Converter, and a solved price into Bond Yield', () => {
+    const conv = run('finance.interest_converter', { form: 'nominal_interest', rate: 0.12, m: 12 })
+    expect(handoff('finance.interest_converter', 'finance.annuity').build(conv.input, conv as never)).toEqual({ i: expect.closeTo(0.01, 12) })
+    const bp = run('finance.bond_price', { yield: 0.05 })
+    const y = run('finance.bond_yield', handoff('finance.bond_price', 'finance.bond_yield').build(bp.input, bp as never))
+    expect(y.values.nominal_yield as number).toBeCloseTo(0.05, 9)
   })
 })

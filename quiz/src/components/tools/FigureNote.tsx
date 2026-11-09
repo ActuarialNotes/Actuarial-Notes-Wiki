@@ -16,7 +16,7 @@ const BUTTON = 'inline-flex h-9 flex-1 items-center justify-center rounded-full 
 const SOLID = `${BUTTON} bg-foreground text-background hover:bg-foreground/85`
 const GHOST = `${BUTTON} ring-1 ring-inset ring-border hover:bg-muted`
 
-/** Level 1: the value and one line of context, a button that opens level 2. */
+/** Level 1: the value and what it is, its context under it; a button that opens level 2. */
 export function FigureLine({ figure, open, onToggle }: { figure: BankFigure; open: boolean; onToggle: () => void }) {
   return (
     <button
@@ -27,8 +27,8 @@ export function FigureLine({ figure, open, onToggle }: { figure: BankFigure; ope
       data-testid="figure-line"
     >
       <span className="min-w-0 flex-1 text-sm">
-        <b className="font-bold tabular-nums">{printedFigure(figure)}</b>{' '}
-        <span className="text-muted-foreground">{contextLine(figure)}</span>
+        <b className="font-bold tabular-nums">{printedFigure(figure)}</b> {figure.label}{' '}
+        <span className="block text-xs text-muted-foreground">{contextLine(figure)}</span>
       </span>
       <ChevronDown className={cn('h-4 w-4 shrink-0 text-muted-foreground transition-transform', open && 'rotate-180')} aria-hidden />
     </button>

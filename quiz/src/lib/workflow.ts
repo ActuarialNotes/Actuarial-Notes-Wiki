@@ -489,6 +489,8 @@ function carriedInto(
   edge: WorkflowEdge,
   upstream: StepRun | undefined,
   spec: ToolSpec,
+  /** The receiving step's own input, which a hand-off of one column lays its values over. */
+  own?: Partial<ToolInput>,
 ): Partial<ToolInput> {
   if (from.ref === CSV_DATA || from.kind === 'source') {
     const table = stepTable(from)
@@ -499,7 +501,7 @@ function carriedInto(
     const handoff = toolById(result.tool)?.next?.find(h => h.tool === spec.id)
     if (!handoff) continue
     try {
-      Object.assign(out, handoff.build(result.input, result))
+      Object.assign(out, handoff.build(result.input, result, own))
     } catch {
       // A hand-off that can't read its source carries nothing.
     }
@@ -564,7 +566,7 @@ export function evaluateWorkflow(
     for (const e of into) {
       const from = byId.get(e.from)
       if (!from) continue
-      const values = carriedInto(from, e, runs.get(from.id), spec)
+      const values = carriedInto(from, e, runs.get(from.id), spec, { ...(node.input ?? {}), ...carried } as Partial<ToolInput>)
       if (!Object.keys(values).length) continue
       Object.assign(carried, values)
       piped.push({ from: e.from, fields: Object.keys(values) })

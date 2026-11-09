@@ -155,26 +155,26 @@ export const QUESTION_CHECKS: QuestionCheck[] = [
   fm(190, {
     // 16% convertible quarterly is 4% a quarter.
     quotes: ['loan of 10,000', 'payments of 1,000 at the end of each quarter for as long as necessary', '16% convertible quarterly', 'the tenth payment'],
-    steps: one('finance.loan_schedule', { amount: 10000, i: 0.04, payment: 1000, n: 0 }),
+    steps: one('finance.loan_schedule', { solve: 'n', amount: 10000, i: 0.04, payment: 1000 }),
     tolerance: 0.5,
     value: at('interest', 9),
   }),
   fm(380, {
     quotes: ['Annual payments of 240', 'loan of 3400', 'annual effective interest rate of 4.5%', 'drop payment'],
-    steps: one('finance.loan_schedule', { amount: 3400, i: 0.045, payment: 240, n: 0 }),
+    steps: one('finance.loan_schedule', { solve: 'n', amount: 3400, i: 0.045, payment: 240 }),
     tolerance: 0.005,
     value: val('final_payment'),
   }),
   fm(212, {
     quotes: ['Payments of 1000 at the end of each year', 'loan of 12,000', 'annual effective interest rate of 10%', 'immediately after the 12th payment'],
-    steps: one('finance.loan_schedule', { amount: 12000, i: 0.1, payment: 1000, n: 12 }),
+    steps: one('finance.loan_schedule', { solve: 'balance', amount: 12000, i: 0.1, payment: 1000, n: 12 }),
     tolerance: 0.5,
     value: at('balance', 11),
   }),
   fm(232, {
     // The beginning of the seventh year is the moment after the sixth payment.
     quotes: ['loan of 4000', 'annual effective interest rate of 5%', 'payments of 250 at the end of each year for ten years', 'beginning of the seventh year'],
-    steps: one('finance.loan_schedule', { amount: 4000, i: 0.05, payment: 250, n: 10 }),
+    steps: one('finance.loan_schedule', { solve: 'balance', amount: 4000, i: 0.05, payment: 250, n: 10 }),
     tolerance: 0.5,
     value: at('balance', 5),
   }),
@@ -183,8 +183,8 @@ export const QUESTION_CHECKS: QuestionCheck[] = [
     quotes: ['5-year loan of 500,000', 'annual effective discount rate of 8%', 'level end-of-year payments', 'next multiple of 1,000'],
     steps: [
       { tool: 'finance.interest_converter', input: () => ({ form: 'effective_discount', rate: 0.08, m: 1 }) },
-      { tool: 'finance.loan_schedule', input: ([rate]) => ({ amount: 500000, i: rate.values.i, n: 5, payment: 0 }) },
-      { tool: 'finance.loan_schedule', input: ([rate, level]) => ({ amount: 500000, i: rate.values.i, n: 0, payment: Math.ceil(Number(level.values.payment) / 1000) * 1000 }) },
+      { tool: 'finance.loan_schedule', input: ([rate]) => ({ solve: 'payment', amount: 500000, i: rate.values.i, n: 5 }) },
+      { tool: 'finance.loan_schedule', input: ([rate, level]) => ({ solve: 'n', amount: 500000, i: rate.values.i, payment: Math.ceil(Number(level.values.payment) / 1000) * 1000 }) },
     ],
     tolerance: 50,
     value: val('final_payment'),

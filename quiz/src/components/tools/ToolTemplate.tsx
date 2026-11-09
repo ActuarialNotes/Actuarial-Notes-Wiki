@@ -60,6 +60,7 @@ import {
   scalarSource,
   fieldText,
   tilesInOrder,
+  triangleLabel,
   type Neighbour,
   type ScalarField,
   type ValueSource,
@@ -136,6 +137,8 @@ export function ToolTemplate({
   const accent = examKey ? examAccentStyle(examKey) : undefined
   const [editing, setEditing] = useState<string | null>(null)
   const [note, setNote] = useState<Note>(null)
+  // Which way each triangle is shown (cumulative or incremental), for its name.
+  const [triModes, setTriModes] = useState<Record<string, 'cumulative' | 'incremental'>>({})
   // Past three inputs, the one row whose slider is open in place.
   const [sliding, setSliding] = useState<string | null>(null)
   const toggle = (key: string, kind: NonNullable<Note>['kind']) => setNote(n => (n?.key === key && n.kind === kind ? null : { key, kind }))
@@ -357,12 +360,13 @@ export function ToolTemplate({
 
       {m.triangles.map(t => (
         <section key={t.key} className="space-y-1.5" aria-label={t.label} data-field={t.key}>
-          {m.labelled ? null : <GroupLabel>{t.label}</GroupLabel>}
+          {m.labelled ? null : <GroupLabel>{triangleLabel(t.label, triModes[t.key])}</GroupLabel>}
           <div className={cn(m.errorAt(t.key) && 'rounded-lg ring-2 ring-destructive/70')}>
             <TriangleGrid
               value={m.valueOf(t) as DraftTriangle}
               onChange={v => m.set(t.key, v)}
-              title={m.labelled ? <span className="text-sm font-semibold">{t.label}</span> : null}
+              title={m.labelled ? <span className="text-sm font-semibold">{triangleLabel(t.label, triModes[t.key])}</span> : null}
+              onModeChange={mode => setTriModes(s => ({ ...s, [t.key]: mode }))}
             />
           </div>
           {m.touched(t) && <SourceTag source={{ kind: 'yours' }} />}
@@ -720,7 +724,7 @@ function ChipLine({ model: m, field: f, source, note, onToggle, onEdit, onOpenTo
         : onEdit
   const open = note === 'figure' && source.kind === 'published' ? true : note === 'link' && source.kind === 'linked' ? true : undefined
   const value = f.kind === 'number' ? m.numberOf(f) : null
-  const shown = f.kind === 'number' && value !== null ? formatValue(value, f.unit) : ''
+  const shown = f.kind === 'number' && value !== null ? fieldText(value, f) : ''
   const fromTool = source.kind === 'linked' && source.tool ? m.neighbours.before.find(n => n.tool.id === source.tool) : undefined
   return (
     <div className="mt-1 space-y-1.5" data-testid="chip-line">

@@ -232,7 +232,9 @@ the app knows, but it doesn't migrate them.
 |---|---|---|
 | `trend` | % per year | Trend Factor, Two-Step Trend (past, future), Combined Trend |
 | `loss-ratio` | % | Expected Claims (ELR), Permissible Loss Ratio |
-| `expense-ratio`, `fixed-expense`, `variable-expense` | % | Loss Ratio Method, Pure Premium Method, Permissible Loss Ratio |
+| `fixed-expense` | % | Loss Ratio Method, Permissible Loss Ratio (fixed expense ratio) |
+| `variable-expense` | % | Loss Ratio Method, Pure Premium Method, Permissible Loss Ratio (variable expense ratio) |
+| `total-expense` | % | none: Expense Ratios' total is set against it (`Fits`) |
 | `profit-provision` | % | Permissible Loss Ratio, Indicated Rate |
 | `development-factor`, `ulae-factor`, `tail-factor` | factor | Development to Ultimate (column), the Phase 2 Tail Factor |
 | `reform-factor` | factor | Loss Ratio Method (an adjustment), via a workflow step |

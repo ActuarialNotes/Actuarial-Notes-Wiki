@@ -46,6 +46,6 @@ describe('kindsIn', () => {
     const kinds = kindsIn(bank, Object.keys(ASSUMPTION_KINDS))
     expect(kinds).toContain('profit-provision')
     expect(kinds).toContain('ulae-factor')
-    expect(kinds.indexOf('expense-ratio')).toBeLessThan(kinds.indexOf('ulae-factor'))
+    expect(kinds.indexOf('variable-expense')).toBeLessThan(kinds.indexOf('ulae-factor'))
   })
 })

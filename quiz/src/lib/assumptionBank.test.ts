@@ -45,11 +45,11 @@ The board's benchmarks.
 
 | Assumption | Kind | Value | Unit | Locator |
 |---|---|---|---|---|
-| Total expenses | expense-ratio | 27.8 | % | p. 7 |
+| Total expenses | total-expense | 27.8 | % | p. 7 |
 | ULAE | ulae-factor | 1.094 | factor | p. 7 |
 | Loss trend | trend | | % | p. 5 |
 | Basis | fact | IFRS 4 expense ratio | | p. 7 |
-| Total expenses | expense-ratio | 28.0 | % | p. 8 |
+| Total expenses | total-expense | 28.0 | % | p. 8 |
 
 ## Sources
 - [r](https://example.org/r.pdf) — all of it
@@ -94,7 +94,7 @@ describe('parseAssumptionSet', () => {
       .replace('Jurisdiction: "CA-AB"', 'Jurisdiction: "CA-AB"\nLine: "Private passenger vehicles"')
       .replace('Read: "2026-11-08"', 'Read: "2026-11-08"\nPage offset: "2"')
       .replace('| Assumption | Kind | Value | Unit | Locator |\n|---|---|---|---|---|', '| Assumption | Kind | Value | Unit | Locator | Basis | Meaning | Fits |\n|---|---|---|---|---|---|---|---|')
-      .replace('| Total expenses | expense-ratio | 27.8 | % | p. 7 |', '| Total expenses | expense-ratio | 27.8 | % | p. 7 | selected | The board\'s selection. | ratemaking.expense_ratios#total |')
+      .replace('| Total expenses | total-expense | 27.8 | % | p. 7 |', '| Total expenses | total-expense | 27.8 | % | p. 7 | selected | The board\'s selection. | ratemaking.expense_ratios#total |')
       .replace(/\| (p\. [578]) \|\n/g, '| $1 | | | |\n')
     const s = parseAssumptionSet('Assumptions/X.md', text)
     expect(s.shortName).toBe('AB')
@@ -131,10 +131,10 @@ describe('lookups', () => {
   })
 
   it('offers only figures of the kind, in force, in the place', () => {
-    const now = figuresOfKind(sets, ['expense-ratio'], { asOf: '2026-11-01' })
+    const now = figuresOfKind(sets, ['total-expense'], { asOf: '2026-11-01' })
     expect(now.map(m => `${m.set.id}:${m.row.raw}`)).toEqual(['Benchmarks:27.8', 'Benchmarks:28.0'])
     expect(figuresOfKind(sets, ['trend'], { asOf: '2026-11-01' })).toEqual([])
-    expect(figuresOfKind(sets, ['expense-ratio'], { asOf: '2026-11-01', jurisdiction: 'CA-ON' })).toEqual([])
+    expect(figuresOfKind(sets, ['total-expense'], { asOf: '2026-11-01', jurisdiction: 'CA-ON' })).toEqual([])
     expect(figuresOfKind(sets, ['ulae-factor'], { asOf: '2026-11-01', jurisdiction: 'CA-AB' })).toHaveLength(1)
   })
 
